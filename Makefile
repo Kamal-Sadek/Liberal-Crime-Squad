@@ -84,7 +84,7 @@ CFLAGS=-g -DDEBUG $(PFLAGS) -Wno-unused-variable -Wno-sign-compare
 all	: crimesquad dumpcaps
 
 crimesquad	: game.o cursesmovie.o lcsio.o compat.o cursesgraphics.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ game.o cursesmovie.o lcsio.o compat.o cursesgraphics.o\
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ game.o cursesmovie.o lcsio.o compat.o cursesgraphics.o \
 	$(CURSESLIBS)
 	
 game.o	: game.cpp lcsio.h compat.h cursesgraphics.h cursesmovie.h
