@@ -23,7 +23,9 @@
 /* Windows will use original Windows API Code unless GO_PORTABLE is defined
  * (this will need to be defined in you Makefile/Visual C++ Project), in which
  * case the portable routines will be used instead. */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
    
 #ifdef WIN32
    #include <windows.h>
