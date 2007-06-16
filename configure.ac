@@ -17,8 +17,9 @@ AC_DEFINE([Linux],[],[Defined if running on Linux])
 AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
 
 test "$prefix" = NONE && prefix=/usr/local
+test "$datadir" = NONE && datadir=${prefix}/share
 AC_DEFINE_UNQUOTED([INSTALL_PREFIX],["$prefix"],[Prefix we are installing to])
-
+AC_DEFINE_UNQUOTED([INSTALL_DATA_DIR],["$datadir"],[Directory for data.])
 
 AC_CHECK_LIB(ncurses, initscr, [], [AC_MSG_ERROR([You need ncurses!])], [])
 
