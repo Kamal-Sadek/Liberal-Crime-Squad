@@ -59,7 +59,7 @@
 	"/usr/local/share/lcs/art",
 	"./art",
 	#ifdef HAVE_CONFIG_H
-	INSTALL_PREFIX "/share/lcs/art",
+	INSTALL_DATA_DIR "/lcs/art",
 	#endif
   };
   #ifndef HAVE_CONFIG_H
