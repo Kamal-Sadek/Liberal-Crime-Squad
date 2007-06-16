@@ -11,9 +11,14 @@ AC_PROG_CXX
 AC_PROG_CC
 
 # Defines
+# TODO: Conditionally set these depending on build system.
 AC_DEFINE([UNIX],[],[Defined if on a UNIX based system])
 AC_DEFINE([Linux],[],[Defined if running on Linux])
 AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
+
+test "$prefix" = NONE && prefix=/usr/local
+AC_DEFINE_UNQUOTED([INSTALL_PREFIX],["$prefix"],[Prefix we are installing to])
+
 
 AC_CHECK_LIB(ncurses, initscr, [], [AC_MSG_ERROR([You need ncurses!])], [])
 

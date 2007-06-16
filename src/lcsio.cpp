@@ -26,6 +26,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 /* 
  * For UNIX platforms we will create a .lcs directory in the user's home
  * directory which will contain the save file and high scores.
@@ -54,8 +58,15 @@
 	"/usr/share/lcs/art",
 	"/usr/local/share/lcs/art",
 	"./art",
+	#ifdef HAVE_CONFIG_H
+	INSTALL_PREFIX "/share/lcs/art",
+	#endif
   };
+  #ifndef HAVE_CONFIG_H
   #define NUM_POSSIBLE_ART_DIR 3
+  #else
+  #define NUM_POSSIBLE_ART_DIR 4
+  #endif
 
 #endif
 
