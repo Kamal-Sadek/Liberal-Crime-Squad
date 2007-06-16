@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.6)
-AC_INIT([Liberal Crime Squad], [3.11],[jonathansfox@users.sourceforge.net])
+AC_INIT([crimesquad], [3.11],[jonathansfox@users.sourceforge.net])
 AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
@@ -17,7 +17,8 @@ AC_DEFINE([Linux],[],[Defined if running on Linux])
 AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
 
 test "$prefix" = NONE && prefix=/usr/local
-test "$datadir" = NONE && datadir=${prefix}/share
+test "$datarootdir" = NONE && datarootdir=${prefix}/share
+test "$datadir" = NONE && datadir=${datarootdir}
 AC_DEFINE_UNQUOTED([INSTALL_PREFIX],["$prefix"],[Prefix we are installing to])
 AC_DEFINE_UNQUOTED([INSTALL_DATA_DIR],["$datadir"],[Directory for data.])
 
