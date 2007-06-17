@@ -134,6 +134,4 @@ extern creaturest encounter[ENCMAX];
 extern highscorest score[SCORENUM];
 extern int yourscore;
 
-extern int LawflagHeat[LAWFLAGNUM];
-
 #endif // EXTERNS_H_INCLUDED
