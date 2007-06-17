@@ -12,7 +12,15 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-   
+ 
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION "3.11.1"
+#endif
+
+const unsigned long version=31101;
+const unsigned long lowestloadversion=31005;
+const unsigned long lowestloadscoreversion=30001;
+
 #ifdef WIN32
    #include <windows.h>
    #include <string.h>

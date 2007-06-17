@@ -22,9 +22,6 @@ extern short exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][80];
 
-extern unsigned long version;
-extern unsigned long lowestloadversion;
-extern unsigned long lowestloadscoreversion;
 
 extern unsigned long stat_recruits;
 extern unsigned long stat_kidnappings;

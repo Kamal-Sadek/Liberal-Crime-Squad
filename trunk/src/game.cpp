@@ -194,9 +194,6 @@ short exec[EXECNUM];
 short execterm=1;
 char execname[EXECNUM][80];
 
-unsigned long version=31100;
-unsigned long lowestloadversion=31005;
-unsigned long lowestloadscoreversion=30001;
 
 unsigned long stat_recruits=0;
 unsigned long stat_kidnappings=0;

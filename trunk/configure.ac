@@ -2,7 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.6)
-AC_INIT([crimesquad], [3.11],[jonathansfox@users.sourceforge.net])
+
+#The following line has the program name, the program version, and the bug report address.
+AC_INIT([crimesquad], [3.11.1],[jonathansfox@users.sourceforge.net])
 AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE

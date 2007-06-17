@@ -323,7 +323,8 @@ void savehighscore(char endtype)
    h=LCSCreateFile("score.dat", LCSIO_WRITE);
    if(h!=NULL)
    {
-      WriteFile(h,&version,sizeof(unsigned long),&numbytes,NULL);
+      unsigned int lversion=version;
+      WriteFile(h,&lversion,sizeof(unsigned long),&numbytes,NULL);
 
       WriteFile(h,&ustat_recruits,sizeof(unsigned long),&numbytes,NULL);
       WriteFile(h,&ustat_dead,sizeof(unsigned long),&numbytes,NULL);
