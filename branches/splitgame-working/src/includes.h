@@ -1759,6 +1759,8 @@ int monthday(void);
 /*
  activities.cpp
 */
+/* adjust blog power */
+void adjustblogpower(int &power);
 /* hostage tending */
 void tendhostage(creaturest *cr,char &clearformess);
 /* armor repair */

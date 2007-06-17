@@ -338,3 +338,4 @@ void savehighscore(char endtype)
       CloseHandle(h);
    }
 }
+

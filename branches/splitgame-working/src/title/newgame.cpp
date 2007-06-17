@@ -773,3 +773,4 @@ void initliberal(creaturest &cr)
       startsknum--;
    }
 }
+

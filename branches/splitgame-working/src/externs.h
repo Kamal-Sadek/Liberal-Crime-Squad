@@ -2,6 +2,12 @@
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
 
+
+extern CursesMoviest movie;
+extern unsigned char bigletters[27][5][7][4];
+extern unsigned char newstops[5][80][5][4];
+extern unsigned char newspic[20][78][18][4];
+
 extern unsigned long seed;
 extern short law[LAWNUM];
 
