@@ -96,7 +96,7 @@ void mode_title(void)
    strcpy(str,"www.bay12games.com");
    move(15,39-((strlen(str)-1)>>1));
    addstr(str);
-   strcpy(str,"v3.11 Maintained by the Open Source Community");
+   strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
    move(17,39-((strlen(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press ESC now to quit.  Quitting later causes your progress to be saved.");

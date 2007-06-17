@@ -57,7 +57,8 @@ void savegame(char *str)
    h=LCSCreateFile(str, LCSIO_WRITE);
    if(h!=NULL)
    {
-      WriteFile(h,&version,sizeof(unsigned long),&numbytes,NULL);
+      unsigned int lversion;
+      WriteFile(h,&lversion,sizeof(unsigned long),&numbytes,NULL);
 
       WriteFile(h,&seed,sizeof(unsigned long),&numbytes,NULL);
 
