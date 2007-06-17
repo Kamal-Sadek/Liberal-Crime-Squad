@@ -371,6 +371,64 @@ void getarmorfull(char *str,int type,int subtype)
 }
 
 
+void getmaskdesc(char *str,short mask)
+{
+   switch(mask)
+   {
+      //LIMIT-------------------------------------:--------------------------------------:
+      case MASK_ASHCROFT:            strcpy(str,"U.S. Senator, Attorney General");break;
+      case MASK_BARR:               strcpy(str,"U.S. Representative");break;
+      case MASK_BLAIR:            strcpy(str,"British Prime Minister");break;
+      case MASK_BUSH_BARBARA:         strcpy(str,"U.S. First Lady");break;
+      case MASK_BUSH_GEORGE:         strcpy(str,"U.S. President");break;
+      case MASK_BUSH_GEORGE2:         strcpy(str,"U.S. President");break;
+      case MASK_CARTER:            strcpy(str,"U.S. President");break;
+      case MASK_CHENEY:            strcpy(str,"U.S. Vice President, CEO");break;
+      case MASK_CLINTON_BILL:         strcpy(str,"U.S. President");break;
+      case MASK_CLINTON_HILLARY:      strcpy(str,"U.S. Senator, First Lady");break;
+      case MASK_FALWELL:            strcpy(str,"Reverend");break;
+      case MASK_FORD:               strcpy(str,"U.S. President");break;
+      case MASK_GORE_AL:            strcpy(str,"U.S. Vice President");break;
+      //LIMIT-------------------------------------:--------------------------------------:
+      case MASK_GORE_TIPPER:         strcpy(str,"U.S. Second Lady");break;
+      case MASK_HELMS:            strcpy(str,"U.S. Senator");break;
+      case MASK_JASON:            strcpy(str,"A Hockey Mask a la Friday the 13th");break;
+      case MASK_LINCOLN:            strcpy(str,"U.S. President, Assassinated");break;
+      case MASK_KENNEDY_JOHN:         strcpy(str,"U.S. President, Assassinated");break;
+      case MASK_KENNEDY_ROBERT:      strcpy(str,"U.S. Senator, Assassinated");break;
+      case MASK_KISSINGER:         strcpy(str,"U.S. Secretary of State");break;
+      case MASK_NIXON:            strcpy(str,"U.S. President, Resigned");break;
+      case MASK_POWELL:            strcpy(str,"U.S. Secretary of State, General");break;
+      case MASK_REAGAN_NANCY:         strcpy(str,"U.S. First Lady");break;
+      case MASK_REAGAN_RONALD:      strcpy(str,"U.S. President");break;
+      case MASK_RICE:               strcpy(str,"U.S. National Security Advisor");break;
+      case MASK_ROBERTSON:         strcpy(str,"Televangelist");break;
+      case MASK_RUMSFELD:            strcpy(str,"U.S. Secretary of Defense");break;
+      case MASK_SATAN:            strcpy(str,"Prince of Darkness, Red with Horns");break;
+      case MASK_STARR:            strcpy(str,"Independent Counsel");break;
+      case MASK_THURMOND:            strcpy(str,"U.S. Senator");break;
+      case MASK_WASHINGTON:         strcpy(str,"U.S. President");break;
+      case MASK_WAXMAN:            strcpy(str,"U.S. Representative");break;
+      case MASK_JESUS:            strcpy(str,"The Son of God, The Lamb, He died 4 U");break;
+      case MASK_COLEMAN_GARY:         strcpy(str,"Actor, Candidate for Governor");break;
+      case MASK_MADONNA:            strcpy(str,"Singer, Actor");break;
+      case MASK_SPEARS:            strcpy(str,"Singer, Actor");break;
+      case MASK_EMINEM:            strcpy(str,"Rapper, Actor");break;
+      case MASK_AGUILERA:            strcpy(str,"Singer");break;
+      case MASK_WAHLBERG:            strcpy(str,"Actor, Rapper");break;
+      //LIMIT-------------------------------------:--------------------------------------:
+      case MASK_IGGYPOP:            strcpy(str,"Singer, Actor");break;
+      case MASK_CASH:               strcpy(str,"Singer");break;
+      case MASK_BINLADEN:            strcpy(str,"Terrorist");break;
+      case MASK_LORDS:            strcpy(str,"Actor");break;
+      case MASK_SHIELDS:            strcpy(str,"Actor");break;
+      case MASK_JACKSON_MICHAEL:      strcpy(str,"Singer");break;
+      case MASK_CRUTHERS:            strcpy(str,"Singer, Actor");break;
+      case MASK_KING_DON:            strcpy(str,"Boxing Promoter");break;
+   }
+}
+
+
 void getarmorfull(char *str,armorst &armor,char superfull)
 {
    if(superfull)getarmorfull(str,armor.type,armor.subtype);

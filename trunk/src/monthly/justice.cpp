@@ -62,7 +62,7 @@ void trial(creaturest &g)
       {
          typenum++;
          breaker[i]=1;
-         scarefactor+=LawflagHeat[i]>>4;
+         scarefactor+=lawflagheat(i)>>3;
       }
    }
 
@@ -374,7 +374,7 @@ void trial(creaturest &g)
 
       //PROSECUTION MESSAGE
       int prosecution;
-      if(scarefactor>6)prosecution=LCSrandom(101)+50; // *JDS* If you have a long list of crimes, the prosecution won't suck
+      if(scarefactor>10)prosecution=LCSrandom(101)+50; // *JDS* If you have a long list of crimes, the prosecution won't suck
       else prosecution=LCSrandom(101);
       if(sleeperjudge)prosecution>>=1;
 

@@ -1355,6 +1355,8 @@ void locatesquad(squadst *st,long loc);
 void basesquad(squadst *st,long loc);
 /* common - shifts public opinion on an issue */
 void change_public_opinion(int v,int power,char affect,char cap=1);
+/* returns the amount of heat associated with a given crime */
+int lawflagheat(int lawflag);
 
 /*
  consolesupport.cpp
