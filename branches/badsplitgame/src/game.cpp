@@ -30,7 +30,7 @@
       #include <sys/time.h>   
       #include <signal.h>
    #endif 
-#endif
+
 
 
 
@@ -507,15 +507,15 @@ void translategetch(int &c)
       if(c==';')c='.';
       if(c==':')c='/';
       if(c=='&')c='1';
-      if(c=='�')c='2';
+      if(c=='���')c='2';
       if(c=='\"')c='3';
       if(c=='\'')c='4';
       if(c=='(')c='5';
       if(c=='-')c='6';
-      if(c=='�')c='7';
+      if(c=='���')c='7';
       if(c=='_')c='8';
-      if(c=='�')c='9';
-      if(c=='�')c='0';
+      if(c=='���')c='9';
+      if(c=='���')c='0';
    }
 
    if(c>='A'&&c<='Z'){c-='A';c+='a';}
