@@ -8,4 +8,5 @@ dist_art_DATA = art/abort.cmv  art/glamshow.cmv  art/largecap.cpc  art/newspic.c
 man_MANS = man/crimesquad.6
 dist_man_MANS = man/crimesquad.6
 EXTRA_DIST = TODO workspaces/game.dsp workspaces/game.dsw workspaces/game.ncb\
- workspaces/game.sln workspaces/game.suo workspaces/game.vcproj LINUX_README.txt
+ workspaces/game.sln workspaces/game.suo workspaces/game.vcproj LINUX_README.txt\
+ docs/CrimeSquadManual.txt
