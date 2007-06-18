@@ -7,7 +7,12 @@ ChangeLog for Version 3.11.1svn:
 * lcsio.cpp: Changed mode for read only to actually be read only.
 Changed order of art search paths.
 
-
+2007-06-18   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp: Fixed a sneaky bug in which having high health doesn't protect you
+from damage, it protects your opponent from recieving damage from you. Fighter
+archetype characters and people with high health stats are now much more
+powerful, because they were actually being weakened by their own health rather
+than strengthened by it.
 
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
