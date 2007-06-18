@@ -1121,7 +1121,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       mod+=aroll-droll-5;
 
       //DO THE HEALTH MOD ON THE WOUND
-      mod-=a.attval(ATTRIBUTE_HEALTH)-5;
+      mod-=t.attval(ATTRIBUTE_HEALTH)-5;
 
       damagemod(t,damtype,damamount,mod);
 
