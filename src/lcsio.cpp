@@ -55,14 +55,15 @@
 
   const char *possible_art_dir[] =
   { 
+	#ifdef INSTALL_DATA_DIR
+	INSTALL_DATA_DIR "/lcs/art",
+	#endif
 	"/usr/share/lcs/art",
 	"/usr/local/share/lcs/art",
 	"./art",
-	#ifdef HAVE_CONFIG_H
-	INSTALL_DATA_DIR "/lcs/art",
-	#endif
+	
   };
-  #ifndef HAVE_CONFIG_H
+  #ifndef INSTALL_DATA_DIR
   #define NUM_POSSIBLE_ART_DIR 3
   #else
   #define NUM_POSSIBLE_ART_DIR 4
@@ -97,7 +98,7 @@ int tofree = 0;
 int n = 0;
 
 static const char *fopen_write = "w+b";
-static const char *fopen_read = "r+b";
+static const char *fopen_read = "rb";
 const char *fopen_flag = fopen_read;
 char *home = NULL;
 char *art = NULL;

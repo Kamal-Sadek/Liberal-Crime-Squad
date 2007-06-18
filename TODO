@@ -1,1 +1,4 @@
-Add the workspaces to extra dist so they will be packaged too.
+Add actual release notes for 3.11.2 in NEWS when that is released.
+Look into possible failure to delete save game on Linux when game is over.
+Make a real README.
+Make a real Manual.
