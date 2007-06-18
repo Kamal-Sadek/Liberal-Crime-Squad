@@ -8,7 +8,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp cursesgraphic
  basemode/reviewmode.cpp sitemode/advance.cpp sitemode/mapspecials.cpp \
  sitemode/newencounter.cpp sitemode/sitemode.cpp sitemode/talk.cpp sitemode/map.cpp\
  sitemode/miscactions.cpp sitemode/sitedisplay.cpp sitemode/stealth.cpp combat/chase.cpp\
- combat/flight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
+ combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
  daily/date.cpp daily/news.cpp daily/shopsnstuff.cpp daily/siege.cpp monthly/endgame.cpp\
  monthly/justice.cpp monthly/lcsmonthly.cpp monthly/monthly.cpp monthly/politics.cpp
 
