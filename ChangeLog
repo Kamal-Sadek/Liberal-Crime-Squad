@@ -14,6 +14,10 @@ archetype characters and people with high health stats are now much more
 powerful, because they were actually being weakened by their own health rather
 than strengthened by it.
 
+2007-06-18   Chris Johnson   <grundee@users.sourceforge.net>
+* src/Makefile.am, f[l]ight.cpp: Renamed flight.cpp to fight.cpp, which it was
+supposed to be called. Modified Makefile.am to reflect this change.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
