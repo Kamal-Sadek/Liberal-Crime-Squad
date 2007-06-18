@@ -1,0 +1,14 @@
+ChangeLog for Version 3.11.1svn:
+
+2007-06-17   Jonathan Stickles & Chris Johnson
+* baseactions.cpp: Fixed Linux flag burning bug.
+
+2007-06-17   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h: Changed order of art directory search.
+* lcsio.cpp: Changed mode for read only to actually be read only. 
+
+
+RELEASE VERSION 3.11.1:
+Fixed crash when squad is disbanded.
+Split up game.cpp into smaller files.
+Support for GNU Autotools
