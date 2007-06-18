@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 void burnflag(void)
 {
    int flagparts=112;
-   short flag[16][7][4];
+   long flag[16][7][4];
    int x;
    int y;
 
@@ -97,7 +97,7 @@ void burnflag(void)
          {
             for(y=0;y<7;y++)
             {
-               if(flag[x][y][0]==CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0]--;
+               if(flag[x][y][0]==CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0]=CH_DARK_SHADE;
                else if(flag[x][y][0]==CH_DARK_SHADE)
                {
                   flag[x][y][0]=CH_MEDIUM_SHADE;
@@ -115,7 +115,7 @@ void burnflag(void)
                else if(flag[x][y][0]==CH_LIGHT_SHADE)
                {
                   flagparts--;
-                  flag[x][y][0]=CH_FULL_BLOCK;
+                  flag[x][y][0]=' ';
                   flag[x][y][1]=COLOR_BLACK;
                   flag[x][y][2]=COLOR_BLACK;
                   flag[x][y][3]=0;
@@ -144,7 +144,7 @@ void burnflag(void)
          x=LCSrandom(16);
          y=LCSrandom(7);
          char conf=0;
-         if(flag[x][y][0]==':'||flag[x][y][0]==CH_UPPER_HALF_BLOCK||flag[x][y][0]==220)
+         if(flag[x][y][0]==':'||flag[x][y][0]==CH_UPPER_HALF_BLOCK||flag[x][y][0]==CH_LOWER_HALF_BLOCK)
          {
             if(x>0)
             {
