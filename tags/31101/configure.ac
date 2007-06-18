@@ -9,8 +9,8 @@ AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CXX
 
 # Defines
 # TODO: Conditionally set these depending on build system.
