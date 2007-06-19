@@ -156,7 +156,7 @@
 				RelativePath="..\src\combat\chase.cpp">
 			</File>
 			<File
-				RelativePath="..\src\combat\flight.cpp">
+				RelativePath="..\src\combat\fight.cpp">
 			</File>
 			<File
 				RelativePath="..\src\combat\haulkidnap.cpp">
