@@ -29,7 +29,7 @@ as Jonathan's changes with the art may break compatability with older
 versions.
 
 2007-06-19   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
-* chase.cpc: Fixed a crash bug relating to squad members not being
+* chase.cpp: Fixed a crash bug relating to squad members not being
 removed from their squad if killed in a car chase away from their
 squad.
 
