@@ -1,3 +1,13 @@
+Release Notes for LCS 3.11.1 (Chris Johnson, June 19th, 2007)
+
+Note: These are the release notes for 3.11.1, but they were not included in 
+that release. 3.11.1 was released on June 17th.
+
+* Fix for bug #1738212 (Segfault when members of a squad lose contact)
+	submitted by Xavior
+* Split up game.cpp into many different files in different directories.
+* GNU Autotools support.
+
 Release Notes for LCS 3.09 (Tarn Adams, August 20th, 2004)
 
 * Fixed a crash that game from generating truckers in a non-existent work location.
