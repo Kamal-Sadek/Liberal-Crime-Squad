@@ -732,8 +732,8 @@ struct activityst
 #define CREATURE_NAMELEN 40
 struct creaturest
 {
-   char name[CREATURE_NAMELEN+1];
-   char propername[CREATURE_NAMELEN+1];
+   char name[CREATURE_NAMELEN];
+   char propername[CREATURE_NAMELEN];
    long squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
    char exists;
    char align;
@@ -1219,7 +1219,7 @@ struct highscorest
    char valid;
    char endtype;
 
-   char slogan[SLOGAN_LEN+1];
+   char slogan[SLOGAN_LEN];
    int month;
    int year;
    unsigned long stat_recruits;

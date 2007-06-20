@@ -580,6 +580,7 @@ void review_mode(short mode)
                   echo();
                   curs_set(1);
                   mvgetnstr(24,0,temppool[p]->name,CREATURE_NAMELEN);
+		  temppool[p]->name[CREATURE_NAMELEN-1]='\0';
                   curs_set(0);
                   noecho();
                   raw_output(TRUE);
