@@ -14,7 +14,7 @@
 #endif
  
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.11.1svn"
+#define PACKAGE_VERSION "3.11.1svn2"
 #endif
 
 const unsigned long version=31101;
