@@ -839,6 +839,7 @@ void enter_name(char *name, int len, char* defname)
 	{
 		strncpy(name,defname,len);
 	}
+	name[len-1]='\0';
 }
 
 

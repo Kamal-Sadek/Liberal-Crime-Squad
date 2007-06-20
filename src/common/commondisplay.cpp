@@ -785,7 +785,8 @@ void fullstatus(int p)
          raw_output(FALSE);
          echo();
          curs_set(1);
-         mvgetstr(24,0,activesquad->squad[p]->name);
+         mvgetnstr(24,0,activesquad->squad[p]->name,CREATURE_NAMELEN);
+	 activesquad->squad[p]->name[CREATURE_NAMELEN-1]='\0';
          curs_set(0);
          noecho();
          raw_output(TRUE);

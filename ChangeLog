@@ -52,6 +52,16 @@ of the creature's name.
 * basemode/baseactions.cpp: Changed mvgetstr to mvgetnstr to prevent overflows
 of the slogan.
 
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* reviewmode.cpp (review_mode): Terminated string to prevent overflow.
+* baseactions.cpp (getslogan): Terminated string to prevent overflow.
+* newgame.cpp (makecharacter): Changed mvgetstr to mvgetnstr and terminated
+string to prevent overflow.
+* commondisplay.cpp (fullstatus): Changed mvgetstr to mvgetnstr and terminated
+string to prevent overflow.
+* getnames.cpp (enter_name): Terminated string to prevent overflow.
+* includes.h: Took away the +1's as they are no longer needed.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
