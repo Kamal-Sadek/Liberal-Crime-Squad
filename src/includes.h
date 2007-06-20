@@ -729,11 +729,11 @@ struct activityst
 #define CREATUREFLAG_KIDNAPPED BIT4
 #define CREATUREFLAG_SLEEPER BIT5
 #define CREATUREFLAG_ILLEGALALIEN BIT6
-
+#define CREATURE_NAMELEN 40
 struct creaturest
 {
-   char name[40];
-   char propername[40];
+   char name[CREATURE_NAMELEN];
+   char propername[CREATURE_NAMELEN];
    long squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
    char exists;
    char align;
@@ -1388,6 +1388,8 @@ void getcar(char *str,int type);
 void getcarcolor(char *str,int type);
 short naturalcarcolor(int type); /* support function for getcarcolor */
 void cityname(char *story); /* random city name */
+/* Allow player to enter a name with an optional default name */
+void enter_name(char *name, int len, char *defname=NULL);
 
 /*
  translateid.cpp
