@@ -28,6 +28,11 @@ turned into a major newspaper later.
 as Jonathan's changes with the art may break compatability with older
 versions.
 
+2007-06-19   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpc: Fixed a crash bug relating to squad members not being
+removed from their squad if killed in a car chase away from their
+squad.
+
 
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.

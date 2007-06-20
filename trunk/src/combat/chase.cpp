@@ -1431,5 +1431,17 @@ char chasesequence(creaturest &cr,vehiclest &v)
       cr.squadid=oldsqid;
       cr.carid=-1;
    }
+   else for(int i=0;i<6;i++)
+   {
+      if(activesquad->squad[i]!=NULL && activesquad->squad[i]==&cr)
+      {
+         for(int j=i+1;j<6;j++,i++)
+         {
+            activesquad->squad[i]=activesquad->squad[j];
+         }
+         activesquad->squad[5]=NULL;
+         break;
+      }
+   }
    return ret;
 }
