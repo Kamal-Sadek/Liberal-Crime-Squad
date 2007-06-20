@@ -197,7 +197,7 @@ void getslogan(void)
    raw_output(FALSE);
    echo();
    curs_set(1);
-   mvgetstr(24,0,slogan);
+   mvgetnstr(24,0,slogan,SLOGAN_LEN);
    curs_set(0);
    noecho();
    raw_output(TRUE);

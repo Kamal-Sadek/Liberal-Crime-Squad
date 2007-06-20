@@ -42,6 +42,15 @@ the maximum name length. Used this value in declaration of creaturest.
 * date.cpp (completedate, completevacation): Used enter_name for name entry.
 * haulkidnap.cpp (kidnaptransfer): Used enter_name for name entry.
 
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h: Added SLOGAN_LEN which is set to the length of the slogan.
+Changed the declarations of slogan to SLOGAN_LEN+1, and the declaration of 
+name and propername in creaturest to CREATURE_NAMELEN+1. The last character
+is for a NULL that will not be overwritten by mvgetnstr().
+* basemode/reviewmode.cpp: Changed mvgetstr to mvgetnstr to prevent overflows
+of the creature's name.
+* basemode/baseactions.cpp: Changed mvgetstr to mvgetnstr to prevent overflows
+of the slogan.
 
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.

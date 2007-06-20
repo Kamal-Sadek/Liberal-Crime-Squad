@@ -579,7 +579,7 @@ void review_mode(short mode)
                   raw_output(FALSE);
                   echo();
                   curs_set(1);
-                  mvgetstr(24,0,temppool[p]->name);
+                  mvgetnstr(24,0,temppool[p]->name,CREATURE_NAMELEN);
                   curs_set(0);
                   noecho();
                   raw_output(TRUE);
