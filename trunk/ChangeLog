@@ -33,6 +33,15 @@ versions.
 removed from their squad if killed in a car chase away from their
 squad.
 
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* getnames.cpp (enter_name): Added a function to allow a player to enter 
+a name. Supports a default value and length.
+* includes.h: Added a function prototype for enter_name.
+* includes.h: Added a #define called CREATURE_NAMELEN and set it to
+the maximum name length. Used this value in declaration of creaturest.
+* date.cpp (completedate, completevacation): Used enter_name for name entry.
+* haulkidnap.cpp (kidnaptransfer): Used enter_name for name entry.
+
 
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.

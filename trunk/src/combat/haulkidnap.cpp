@@ -553,15 +553,13 @@ void kidnaptransfer(creaturest &cr)
    addstr(str);
    addstr(" in its presence?");
 
-   keypad(stdscr,FALSE);
-   raw_output(FALSE);
-   echo();
-   curs_set(1);
-   mvgetstr(3,0,newcr->name);
-   curs_set(0);
-   noecho();
-   raw_output(TRUE);
-   keypad(stdscr,TRUE);
+   move(3,0);
+   addstr("If you do not enter anything, their real name will be used.");
+	 
+   move(4,0);
+   enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
+   
+   
 
    pool.push_back(newcr);
    stat_kidnappings++;

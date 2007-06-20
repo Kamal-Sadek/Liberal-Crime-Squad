@@ -821,3 +821,24 @@ void cityname(char *story)
       case 19:strcpy(story,"Philadelphia, PA");break;
    }
 }
+
+/* Allow the player to enter a name with an optional default */
+void enter_name(char *name, int len, char* defname)
+{
+	keypad(stdscr,FALSE);
+        raw_output(FALSE);
+        echo();
+        curs_set(1);
+        getnstr(name,len);
+        curs_set(0);
+        noecho();
+        raw_output(TRUE);
+        keypad(stdscr,TRUE);
+	
+	if((defname!=NULL) && (strncmp(name,"",len)==0))
+	{
+		strncpy(name,defname,len);
+	}
+}
+
+
