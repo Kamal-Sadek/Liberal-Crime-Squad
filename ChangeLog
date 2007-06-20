@@ -19,6 +19,10 @@ than strengthened by it.
 supposed to be called. Modified Makefile.am to reflect this change.
 * Makefile.am, workspaces/game.cbp: Added workspace for Code::Blocks.
 
+2007-06-19   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* news.cpp, newstops.cpc: Added art for the Liberal Guardian to be
+turned into a major newspaper later.
+
 2007-06-19   Chris Johnson   <grundee@users.sourceforge.net>
 * configure.ac, includes.h: Changed version to "3.11.1svn2"
 as Jonathan's changes with the art may break compatability with older
