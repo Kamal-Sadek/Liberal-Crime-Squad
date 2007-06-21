@@ -58,7 +58,6 @@
 		<Unit filename="..\src\common\translateid.cpp" />
 		<Unit filename="..\src\compat.cpp" />
 		<Unit filename="..\src\compat.h" />
-		<Unit filename="..\src\curses.h" />
 		<Unit filename="..\src\cursesgraphics.cpp" />
 		<Unit filename="..\src\cursesgraphics.h" />
 		<Unit filename="..\src\cursesmovie.cpp" />

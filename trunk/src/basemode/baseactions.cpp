@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -197,8 +197,9 @@ void getslogan(void)
    raw_output(FALSE);
    echo();
    curs_set(1);
-   mvgetnstr(24,0,slogan,SLOGAN_LEN);
-   slogan[CREATURE_NAMELEN-1]='\0';
+   move(24,0);
+   enter_name(slogan,SLOGAN_LEN);
+
    curs_set(0);
    noecho();
    raw_output(TRUE);
@@ -258,7 +259,7 @@ void stopevil(void)
 {
  int l = 0;
  int p = 0;
- 
+
    if(activesquad==NULL)return;
 
    char havecar=0;
@@ -1211,7 +1212,7 @@ void setvehicles(void)
          {
             addstr("[ - Previous");
          }
-         
+
          else if(interface_pgup=='.')
          {
             addstr("; - Previous");
@@ -1229,7 +1230,7 @@ void setvehicles(void)
          {
             addstr("] - Next");
          }
-         
+
          else if(interface_pgup=='.')
          {
             addstr(": - Next");

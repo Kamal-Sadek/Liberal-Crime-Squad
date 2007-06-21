@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -785,8 +785,9 @@ void fullstatus(int p)
          raw_output(FALSE);
          echo();
          curs_set(1);
-         mvgetnstr(24,0,activesquad->squad[p]->name,CREATURE_NAMELEN);
-	 activesquad->squad[p]->name[CREATURE_NAMELEN-1]='\0';
+         move(24,0);
+         enter_name(activesquad->squad[p]->name,CREATURE_NAMELEN);
+
          curs_set(0);
          noecho();
          raw_output(TRUE);

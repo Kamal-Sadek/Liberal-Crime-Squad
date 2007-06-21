@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -579,8 +579,9 @@ void review_mode(short mode)
                   raw_output(FALSE);
                   echo();
                   curs_set(1);
-                  mvgetnstr(24,0,temppool[p]->name,CREATURE_NAMELEN);
-		  temppool[p]->name[CREATURE_NAMELEN-1]='\0';
+                  move(24,0);
+                  enter_name(temppool[p]->name,CREATURE_NAMELEN);
+
                   curs_set(0);
                   noecho();
                   raw_output(TRUE);
@@ -1058,7 +1059,7 @@ int l = 0;
          {
             addstr("[] to view other Liberal pages.");
          }
-         
+
          else if(interface_pgup=='.')
          {
             addstr("; and : to view other liberal pages.");
@@ -1136,7 +1137,7 @@ void promoteliberals(void)
    short page=0;
 
    char num[20];
-   
+
    do
    {
       erase();
@@ -1156,7 +1157,7 @@ void promoteliberals(void)
       addstr("CONTACT AFTER PROMOTION");
 
       int y=2;
-      
+
       for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1165,8 +1166,8 @@ void promoteliberals(void)
 
          move(y,27);
          int p2 = 0;
-         
-         
+
+
          for(p2=0;p2<pool.size();p2++)
          {
             int p3 = 0;
@@ -1315,7 +1316,7 @@ void promoteliberals(void)
          {
             addstr("[] to view other Liberal pages.");
          }
-         
+
          else if(interface_pgup=='.')
          {
             addstr("; and : to view other liberal pages.");

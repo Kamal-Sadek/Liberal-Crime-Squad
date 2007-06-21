@@ -62,6 +62,15 @@ string to prevent overflow.
 * getnames.cpp (enter_name): Terminated string to prevent overflow.
 * includes.h: Took away the +1's as they are no longer needed.
 
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* reviewmode.cpp, baseactions.cpp, newgame.cpp, commondisplay.cpp: 
+mvgetnstr does not work with my PDcurses, and I am assuming that other people
+will have trouble as well. I changed everything from my previous change to use
+enter_name for string entry.
+* includes.h: Changed SLOGAN_LEN to 79. I think that the code that centers 
+the slogan on the screen can not handle a slogan that is 80 chars long, as 
+that is the size of the screen. No crashes for the slogan now.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
