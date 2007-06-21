@@ -340,7 +340,7 @@ int main(int argc, char* argv[])
    mode_title();
 
    //deinitialize curses
-   endwin();
+   end_game();
 
    return 0;
 }
@@ -618,5 +618,22 @@ void creaturest::creatureinit(void)
       enemycar.clear();
 
       friendcar.clear(); 
+   }
+   
+   
+   /* Free memory and exit the game */
+   void end_game(int err)
+   {
+	   for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
+	   {
+		   delete (*it);
+	   }
+	   int i=0;
+	   for(i=0;i<squad.size();++i)
+	   {
+		   delete squad[i];
+	   }
+	   endwin();
+	   exit(err);
    }
    

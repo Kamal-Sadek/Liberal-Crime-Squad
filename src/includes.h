@@ -1295,6 +1295,10 @@ enum ReviewModes
 	Created by jonathansfox.
 */
 
+
+/* end the game and clean up */
+void end_game(int err=0);
+
 /*******************************************************************************
 *
 *                                Common Stuff
