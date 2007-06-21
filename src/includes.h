@@ -12,7 +12,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
- 
+
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION "3.11.1svn2"
 #endif
@@ -44,11 +44,12 @@ const unsigned long lowestloadscoreversion=30001;
          #include "vector.h"
       #endif
    #endif
-   #include "curses.h"
+
+   #include <curses.h>
    //undo PDCurses macros that break vector class
    #undef erase
    #undef clear
-      
+
    #define CH_USE_CP437
 #else
    #include <vector>
@@ -57,7 +58,7 @@ const unsigned long lowestloadscoreversion=30001;
    #include <fstream>
    #include <ctype.h>
    #define GO_PORTABLE
-   
+
    #define CH_USE_ASCII_HACK
    #ifdef HAVE_LIBXCURSES
    	#define XCURSES
@@ -69,7 +70,7 @@ const unsigned long lowestloadscoreversion=30001;
       #define HAVE_PROTO 1
       #define CPLUSPLUS   1
       /* Try these PDCurses/Xcurses options later...
-      #define FAST_VIDEO 
+      #define FAST_VIDEO
       #define REGISTERWINDOWS
       */
       #include <xcurses.h> //This is the X11 Port of PDCurses
@@ -79,10 +80,10 @@ const unsigned long lowestloadscoreversion=30001;
    #else
       #ifdef NCURSES
          #include <ncurses.h>
-      #else       
+      #else
          #include <curses.h>
-      #endif   
-   #endif   
+      #endif
+   #endif
 #endif
 
 /* Headers for Portability */
@@ -91,9 +92,9 @@ const unsigned long lowestloadscoreversion=30001;
 
    #ifdef Linux // And BSD and SVr4
       #include <unistd.h>
-      #include <sys/time.h>   
+      #include <sys/time.h>
       #include <signal.h>
-   #endif 
+   #endif
 #endif
 
 
@@ -117,28 +118,28 @@ using namespace std;
  * (b) Write portable alternatives for use by Windows and ports.
  * (c) Do (a) and (b) and decide what Windows does (API or portable)
  *       based on the value of a MACRO GO_PORTABLE.
- * 
+ *
  * compat.cpp is the place for non-trivial or more global functions.
  *--------------------------------------------------------------------------*/
- 
+
  inline unsigned long getSeed(void)
  {
  unsigned long t;
- 
+
  #ifdef GO_PORTABLE
- 
+
  t = (unsigned long)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
- 
+
  #else // WIN32
- 
+
  t = (unsigned long)GetTickCount(); /* ms since system boot */
- 
+
  #endif
 
  return(t);
  }
- 
- 
+
+
  /* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
    * This function is for compatibility and is currently a do nothing function.
    */
@@ -148,9 +149,9 @@ using namespace std;
     raw();
  return OK;
  }
- 
+
  #endif
-   
+
 /*--------------------------------------------------------------------------
  * End of Portability Functions
  *--------------------------------------------------------------------------*/
@@ -1212,7 +1213,7 @@ struct blogpostst
 };
 
 
-#define SLOGAN_LEN 80 
+#define SLOGAN_LEN 79
 
 struct highscorest
 {
@@ -1268,7 +1269,7 @@ enum Execs
    EXECNUM
 };
 
-                                                                     
+
 enum TalkModes
 {
    TALKMODE_START,
@@ -1293,7 +1294,7 @@ enum ReviewModes
 	Declarations for every function grouped by folder and file.
 	Created by jonathansfox.
 */
-                                             
+
 /*******************************************************************************
 *
 *                                Common Stuff
