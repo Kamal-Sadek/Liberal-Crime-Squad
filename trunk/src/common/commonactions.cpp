@@ -65,8 +65,7 @@ char endcheck(short cause)
 
       reset();
       viewhighscores();
-      endwin();
-      exit(0);
+      end_game();
    }
 
    return 0;

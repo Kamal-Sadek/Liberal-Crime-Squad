@@ -323,8 +323,7 @@ void reaganify(char canseethings)
       }
       reset();
       viewhighscores();
-      endwin();
-      exit(0);
+      end_game();
    }
    else
    {

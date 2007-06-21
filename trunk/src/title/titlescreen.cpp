@@ -110,8 +110,7 @@ void mode_title(void)
    translategetch(c);
    if(c==27)
    {
-      endwin();
-      exit(0);
+      end_game();
    }
 
    viewhighscores();

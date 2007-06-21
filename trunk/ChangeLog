@@ -71,6 +71,14 @@ enter_name for string entry.
 the slogan on the screen can not handle a slogan that is 80 chars long, as 
 that is the size of the screen. No crashes for the slogan now.
 
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* game.cpp, includes.h: Created function called end_game which will clean up
+memory and close the game to prevent memory leaks.
+* lcsio.cpp: Fixed lcs_home memory leak by freeing and reallocating it each 
+time it is needed.
+* titlescreen.cpp, commonactions.cpp, endgame.cpp, monthly.cpp: Modified
+some of the exit code to use new end_game function.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
