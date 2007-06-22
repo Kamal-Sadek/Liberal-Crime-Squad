@@ -103,7 +103,7 @@ siteblockst map[MAPX][MAPY][MAPZ];
 
 chaseseqst chaseseq;
 
-char slogan[80];
+char slogan[SLOGAN_LEN+1];
 
 vector<creaturest *> pool;
 

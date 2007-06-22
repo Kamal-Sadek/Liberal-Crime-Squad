@@ -1220,7 +1220,7 @@ struct highscorest
    char valid;
    char endtype;
 
-   char slogan[SLOGAN_LEN];
+   char slogan[SLOGAN_LEN+1];
    int month;
    int year;
    unsigned long stat_recruits;
