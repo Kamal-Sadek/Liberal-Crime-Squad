@@ -79,6 +79,11 @@ time it is needed.
 * titlescreen.cpp, commonactions.cpp, endgame.cpp, monthly.cpp: Modified
 some of the exit code to use new end_game function.
 
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* game.cpp, includes.h: Redefined all slogan vars to have length SLOGAN_LEN+1.
+The save/load system does not like 79 byte slogans. The other code
+that sets slogan still uses SLOGAN_LEN, so only 79 bytes will be shown.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
