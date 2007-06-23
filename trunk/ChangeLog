@@ -104,6 +104,9 @@ calculated.
 * game.cpp, includes.h: Moved debug defines from game.cpp to includes.h.
 * includes.h: Advanced version to 3.11.1svn3. Old saves are now obsolete.
 
+2007-06-22   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h: Changed version of lowest save to 3.11.2.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
