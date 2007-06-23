@@ -9,16 +9,29 @@
 #ifndef INCLUDES_H_INCLUDED
 #define INCLUDES_H_INCLUDED
 
+
+/*
+   DEBUG DEFINES
+*/
+//#define NOENEMYATTACK
+//#define SHITLAWS
+//#define GIVEBLOODYARMOR
+#define HIGHFUNDS
+//#define AUTOENLIGHTEN
+//#define SHOWWAIT
+
+
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.11.1svn2"
+#define PACKAGE_VERSION "3.11.1svn3"
 #endif
 
-const unsigned long version=31101;
-const unsigned long lowestloadversion=31005;
+const unsigned long version=31102;
+const unsigned long lowestloadversion=31002;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
@@ -1196,7 +1209,7 @@ struct newsstoryst
    short view;
    creaturest *cr;
    vector<int> crime;
-   long loc,priority,page;
+   long loc,priority,page,guardianpage;
    char positive;
    short siegetype;
    newsstoryst()
@@ -1204,14 +1217,6 @@ struct newsstoryst
       cr=NULL;
    }
 };
-
-struct blogpostst
-{
-   char type;
-   char power;
-   char issue;
-};
-
 
 #define SLOGAN_LEN 79
 
@@ -1362,7 +1367,7 @@ void locatesquad(squadst *st,long loc);
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st,long loc);
 /* common - shifts public opinion on an issue */
-void change_public_opinion(int v,int power,char affect,char cap=1);
+void change_public_opinion(int v,int power,char affect,char cap=100);
 /* returns the amount of heat associated with a given crime */
 int lawflagheat(int lawflag);
 
@@ -1541,7 +1546,7 @@ long armor_makedifficulty(int type,creaturest *cr);
 long armor_makeprice(int type);
 /* base - activate - trouble */
 long select_troublefundinglevel(creaturest *cr);
-/* base - activate - select a topic to write about (uncalled function!!!) */
+/* base - activate - select a topic to write about */
 char select_view(creaturest *cr,long &v);
 
 /*
@@ -1856,7 +1861,7 @@ void statebrokenlaws(int loc);
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns);
 /* news - show major news story */
-void displaystory(newsstoryst &ns);
+void displaystory(newsstoryst &ns, bool liberalguardian, int header);
 /* news - graphics */
 void loadgraphics(void);
 void displaycenterednewsfont(char *str,int y);

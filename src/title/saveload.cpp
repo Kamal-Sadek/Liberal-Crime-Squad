@@ -93,7 +93,6 @@ void savegame(char *str)
       WriteFile(h,&selectedsiege,sizeof(long),&numbytes,NULL);
       WriteFile(h,lcityname,sizeof(char)*80,&numbytes,NULL);
       WriteFile(h,&newscherrybusted,sizeof(char),&numbytes,NULL);
-      WriteFile(h,newspaper_topicwork,sizeof(short)*VIEWNUM,&numbytes,NULL);
       WriteFile(h,&moneygained_donate,sizeof(long),&numbytes,NULL);
       WriteFile(h,&moneygained_brownies,sizeof(long),&numbytes,NULL);
       WriteFile(h,&moneygained_goods,sizeof(long),&numbytes,NULL);
@@ -250,13 +249,9 @@ void savegame(char *str)
          }
       }
 
-      //blog posts
-      dummy=blogpost.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
-      for(int bp=0;bp<blogpost.size();bp++)
-      {
-         WriteFile(h,blogpost[l],sizeof(blogpostst),&numbytes,NULL);
-      }
+      // Liberal Media
+      WriteFile(h,newspaper_topicwork1,sizeof(newspaper_topicwork1),&numbytes,NULL);
+      WriteFile(h,newspaper_topicwork2,sizeof(newspaper_topicwork2),&numbytes,NULL);
 
       CloseHandle(h);
    }
@@ -324,7 +319,6 @@ char load(void)
       ReadFile(h,&selectedsiege,sizeof(long),&numbytes,NULL);
       ReadFile(h,lcityname,sizeof(char)*80,&numbytes,NULL);
       ReadFile(h,&newscherrybusted,sizeof(char),&numbytes,NULL);
-      ReadFile(h,newspaper_topicwork,sizeof(short)*VIEWNUM,&numbytes,NULL);
       ReadFile(h,&moneygained_donate,sizeof(long),&numbytes,NULL);
       ReadFile(h,&moneygained_brownies,sizeof(long),&numbytes,NULL);
       ReadFile(h,&moneygained_goods,sizeof(long),&numbytes,NULL);
@@ -515,15 +509,9 @@ char load(void)
          }
       }
 
-      //blog posts
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
-      blogpost.resize(dummy);
-      for(int bp=0;bp<blogpost.size();bp++)
-      {
-         blogpost[bp]=new blogpostst;
-         ReadFile(h,blogpost[l],sizeof(blogpostst),&numbytes,NULL);
-      }
-
+      // Liberal Media
+      ReadFile(h,newspaper_topicwork1,sizeof(newspaper_topicwork1),&numbytes,NULL);
+      ReadFile(h,newspaper_topicwork2,sizeof(newspaper_topicwork2),&numbytes,NULL);
       CloseHandle(h);
 
       return 1;

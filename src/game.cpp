@@ -70,13 +70,6 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-//#define NOENEMYATTACK
-//#define SHITLAWS
-//#define GIVEBLOODYARMOR
-//#define HIGHFUNDS
-//#define AUTOENLIGHTEN
-//#define SHOWWAIT
-
 #include <includes.h>
 
 
@@ -141,7 +134,10 @@ int amendnum=28;
 
 short attitude[VIEWNUM];
 
-short newspaper_topicwork[VIEWNUM];
+// Topicwork1 is editorials that are waiting to be written
+// Topicwork2 is editorials that have been written
+short newspaper_topicwork1[VIEWNUM];
+short newspaper_topicwork2[VIEWNUM];
 
 
 short law[LAWNUM];
@@ -220,9 +216,6 @@ vector<newsstoryst *> newsstory;
 newsstoryst *sitestory=NULL;
 
 
-vector<blogpostst *> blogpost;
-
-
 #define SCORENUM 5
 highscorest score[SCORENUM];
 int yourscore=-1;
@@ -274,7 +267,8 @@ int main(int argc, char* argv[])
    for(int v=0;v<VIEWNUM;v++)
    {
       attitude[v]=45;
-      newspaper_topicwork[v]=0;
+      newspaper_topicwork1[v]=0;
+      newspaper_topicwork2[v]=0;
    }
    attitude[VIEW_LIBERALCRIMESQUAD]=0;
    attitude[VIEW_LIBERALCRIMESQUADPOS]=20;

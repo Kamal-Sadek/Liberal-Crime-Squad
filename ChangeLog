@@ -84,6 +84,26 @@ some of the exit code to use new end_game function.
 The save/load system does not like 79 byte slogans. The other code
 that sets slogan still uses SLOGAN_LEN, so only 79 bytes will be shown.
 
+2007-06-22   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* extern.h, game.cpp, includes.h, activate.cpp, baseactions.cpp, basemode.cpp,
+commondisplay.cpp, activities.cpp, siege.cpp, monthly.cpp, saveload.cpp:
+Continuation of the ongoing massive overhaul of the Liberal Guardian design.
+This may be the final design for the system for now.
+* commonactions.cpp, activities.cpp, lcsmonthly.cpp, miscactions.cpp:
+change_public_opinion no longer has a default cap of 10 points of public opinion
+shift per call. Formerly this cap was changable through an optional fourth
+parameter. Now the fourth parameter is the maximum to increase public opinion
+to, and defaults to 100. Calls throughout the code changed appropriately.
+* news.cpp: Changed the way the public opinion changes from news stories and
+site actions is calculated.
+* commonactions.cpp, siege.cpp: Changed the way law enforcement "heat" is
+calculated.
+* justice.cpp: Changed the way the strength of legal prosecution is calculated.
+* monthly.cpp: Changed the way public opinion drifts are calculated.
+* news.cpp: Unlawful entry no longer generates a news story.
+* game.cpp, includes.h: Moved debug defines from game.cpp to includes.h.
+* includes.h: Advanced version to 3.11.1svn3. Old saves are now obsolete.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.

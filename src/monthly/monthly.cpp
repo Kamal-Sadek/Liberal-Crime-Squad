@@ -61,55 +61,6 @@ void passmonth(char &clearformess,char canseethings)
    int guardianpower=0;
    if(nploc.size()>0&&!disbanding)
    {
-      /*short power=nploc.size();
-      
-      //CRIMINALIZE THE PRINTERS
-      long writingpower=0;
-      for(int l=0;l<nploc.size();l++)
-      {
-         criminalizepool(LAWFLAG_SPEECH,-1,nploc[l]);
-         for(int p=0;p<pool.size();p++)
-         {
-            if(pool[p]->location==nploc[l]&&
-               pool[p]->alive&&
-               pool[p]->align==1)
-            {
-               writingpower+=LCSrandom(pool[p]->skill[SKILL_PERSUASION]+
-                  pool[p]->skill[SKILL_WRITING]*3+
-                  pool[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-                  pool[p]->attval(ATTRIBUTE_CHARISMA)+
-                  pool[p]->attval(ATTRIBUTE_HEART)*2+1);
-               pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(2)+1;
-               pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
-            }
-         }
-      }*/
-
-      /*
-      //DO EMPHASIS OF SITE EVENTS
-      int vpower,val;
-      for(int v=0;v<VIEWNUM;v++)
-      {
-         val=0; // *JDS* Newspaper's emphasis strength starts at 0, increases with writing power
-         if(LCSrandom(100)<writingpower)val++;
-         if(LCSrandom(100)<writingpower)val++;
-         if(LCSrandom(100)<writingpower)val++;
-         if(LCSrandom(1000)<writingpower)val++;
-         if(LCSrandom(1000)<writingpower)val++;
-         if(LCSrandom(1000)<writingpower)val++;
-         if(LCSrandom(10000)<writingpower)val++;
-         if(LCSrandom(10000)<writingpower)val++;
-         if(LCSrandom(10000)<writingpower)val++;
-         if(LCSrandom(10000)<writingpower)val++;
-         if(val>newspaper_topicwork[v])val=newspaper_topicwork[v];
-         vpower=power*val;
-         if(vpower>0)
-         {
-            change_public_opinion(v,vpower,1,0);
-         }
-      }
-      */
-
       //DO SPECIAL EDITIONS
       int loottype=choosespecialedition(clearformess);
 
@@ -151,109 +102,9 @@ void passmonth(char &clearformess,char canseethings)
 
    int libpower[VIEWNUM]={0};
    int computernum=0;
-   /*
-
-   for(int dude=0;dude<pool.size();dude++)
-   {
-      if(pool[dude]->alive&&pool[dude]->align==1&&
-         pool[dude]->clinic==0&&pool[dude]->dating==0&&
-         pool[dude]->hiding==0&&pool[dude]->skill[SKILL_COMPUTERS])
-      {
-         if(pool[dude]->location!=-1)
-         {
-            if(location[pool[dude]->location]->type!=SITE_GOVERNMENT_PRISON&&
-               location[pool[dude]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-               location[pool[dude]->location]->type!=SITE_GOVERNMENT_POLICESTATION)
-            {
-               computernum++;
-            }
-         }
-      }
-   }*/
-
-   if(blogpost.size()&&!disbanding)
-   {
-      blogpostst* bp=blogpost.back();
-      while(blogpost.size())
-      {
-         if(bp->type==REPORT_NEWS)
-         {
-            guardianpower+=bp->power;
-            libpower[bp->issue]+=bp->power;
-         }
-         else
-         {
-            // Persuasive arguments tend to popularize the LCS
-            if(bp->power>=3)
-            {
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,2,0);
-               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0);
-            }
-            else if(bp->power>0&&(attitude[VIEW_LIBERALCRIMESQUAD]<20||!LCSrandom(20)))
-            {
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,1,0);
-               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,LCSrandom(2),0);
-            }
-
-            if(bp->type==REPORT_ATTACK)
-            {
-               // Offensive or libellous attack articles by shoddy writers
-               // on topics that the public largely disagrees with the LCS
-               // on tend to scandalize the public and hurt the cause for
-               // free speech (not to mention offend their view of the LCS)
-               if(bp->power<0&&attitude[bp->issue]<50)
-               {
-                  change_public_opinion(VIEW_FREESPEECH,(attitude[bp->issue]-50)/25,0);
-                  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(attitude[bp->issue]-50)/10,0);
-               }
-               // But they are more effective
-               bp->power+=1;
-            }
-
-            // Modify power by lcs popularity
-            bp->power+=(attitude[VIEW_LIBERALCRIMESQUADPOS]-50)/26;
-            bp->power*=static_cast<long>((attitude[VIEW_LIBERALCRIMESQUAD]*(nploc.size()+1))/100.0f);
-            
-            if(bp->issue<VIEWNUM-2)
-            {
-               if(bp->power>0)
-               {
-                  if(attitude[bp->issue]<30+newspaper_topicwork[bp->issue]+LCSrandom(20))
-                  {
-                     guardianpower+=bp->power;
-                     libpower[bp->issue]+=3*bp->power;
-                  }
-               }
-               else
-               {
-                  if(attitude[bp->issue]>70-LCSrandom(20))
-                  {
-                     guardianpower+=bp->power;
-                     libpower[bp->issue]+=3*bp->power;
-                  }
-               }
-            }
-            else 
-            {
-               guardianpower+=bp->power;
-               libpower[bp->issue]+=3*bp->power;
-            }
-         }
-         delete bp;
-         blogpost.pop_back();
-         bp=blogpost.back();
-      }
-      /*for(int i=0;i<VIEWNUM;i++)
-      {
-         libpower[i]+=guardianpower;
-      }*/
-      clearformess=1;
-
-      guardianupdate(nploc.size(),guardianpower);
-   }
 
    //STORIES STALE EVEN IF NOT PRINTED
-   for(v=0;v<VIEWNUM;v++)newspaper_topicwork[v]=0;
+   for(v=0;v<VIEWNUM;v++)newspaper_topicwork1[v]=0;
 
    int conspower=200-attitude[VIEW_AMRADIO]-attitude[VIEW_CABLENEWS];
    
@@ -269,34 +120,34 @@ void passmonth(char &clearformess,char canseethings)
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
    {
-      
+      // Liberal essays add their power to the effect of sleepers
+      libpower[v]+=newspaper_topicwork2[v];
+      newspaper_topicwork2[v]=0;
+
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
       if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS)
       {
-         //DRIFTS DOWN DEPENDING ON AM RADIO AND CABLE NEWS
-         
-         
-         if(LCSrandom(200)>conspower)
+         // Natural movement
+         if(LCSrandom(200)>conspower||LCSrandom(3))
          {
             change_public_opinion(v,LCSrandom(2)*2-1,0);
          }
+         // Or the CONSERVATIVE MEDIA forces public opinion down
          else
          {
             change_public_opinion(v,-1,0);
 
-            //Crushing conservative media silences liberal influence
-            if(LCSrandom(200)<conspower/2)
-            {
-               libpower[v]-=75;
-            }
+            // Crushing conservative media silences liberal influence!
+            libpower[v]=0;
          }
       }
+      // Sleepers and editorials act as the Liberal counterpart to the conservative media
       if(LCSrandom(200)<libpower[v])
       {
          change_public_opinion(v,1,0);
       }
-      
+      // AM Radio and Cable News become more influential over time
       if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)
       {
          if(!LCSrandom(3))change_public_opinion(v,-1,0);

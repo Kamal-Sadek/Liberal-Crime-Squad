@@ -953,6 +953,12 @@ char confirmdisband(void)
 void investlocation(void)
 {
    int loc=selectedsiege;
+   int ppress=0;
+
+   for(int i=0;i<location.size();i++)
+   {
+      if(location[i]->compound_walls==COMPOUND_PRINTINGPRESS)ppress=1;
+   }
 
    do
    {
@@ -961,7 +967,8 @@ void investlocation(void)
       locheader();
       printlocation(loc);
 
-      if(!(location[loc]->compound_walls & COMPOUND_BASIC))
+      if(!(location[loc]->compound_walls & COMPOUND_BASIC)&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=2000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -969,7 +976,8 @@ void investlocation(void)
          addstr("W - Fortify the Compound for a Siege ($2000)");
       }
 
-      if(!(location[loc]->compound_walls & COMPOUND_CAMERAS))
+      if(!(location[loc]->compound_walls & COMPOUND_CAMERAS)&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=2000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -977,7 +985,8 @@ void investlocation(void)
          addstr("C - Place Security Cameras around the Compound ($2000)");
       }
 
-      if(!(location[loc]->compound_walls & COMPOUND_TRAPS))
+      if(!(location[loc]->compound_walls & COMPOUND_TRAPS)&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -985,7 +994,8 @@ void investlocation(void)
          addstr("B - Place Booby Traps throughout the Compound ($3000)");
       }
 
-      if(!(location[loc]->compound_walls & COMPOUND_TANKTRAPS))
+      if(!(location[loc]->compound_walls & COMPOUND_TANKTRAPS)&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -993,7 +1003,8 @@ void investlocation(void)
          addstr("T - Ring the Compound with Tank Traps ($3000)");
       }
 
-      if(!(location[loc]->compound_walls & COMPOUND_GENERATOR))
+      if(!(location[loc]->compound_walls & COMPOUND_GENERATOR)&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -1001,15 +1012,19 @@ void investlocation(void)
          addstr("G - Buy a Generator for Electricity ($3000)");
       }
 
-      if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
+      if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&
+         !ppress)
       {
-         if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,1);
-         addstr("P - Setup a Printing Press ($3000)");
+         addstr("P - Establish the Liberal Guardian Newspaper ($10000)");
+         if(location[loc]->compound_walls)
+            addstr(" (dismantles compound)");
       }
 
-      if(location[loc]->front_business==-1)
+      if(location[loc]->front_business==-1&&
+         !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -1020,7 +1035,8 @@ void investlocation(void)
       if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(15,1);
-      addstr("R - Buy 20 more daily rations ($150)");
+      if(!location[loc]->compound_walls==COMPOUND_PRINTINGPRESS)
+         addstr("R - Buy 20 more daily rations ($150)");
 
       move(16,1);
       addstr("Enter - Done");
@@ -1032,7 +1048,8 @@ void investlocation(void)
 
       if(c=='w')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_BASIC)&&funds>=2000)
+         if(!(location[loc]->compound_walls & COMPOUND_BASIC)&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=2000)
          {
             funds-=2000;
             stat_spent+=2000;
@@ -1043,7 +1060,8 @@ void investlocation(void)
 
       if(c=='c')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_CAMERAS)&&funds>=2000)
+         if(!(location[loc]->compound_walls & COMPOUND_CAMERAS)&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=2000)
          {
             funds-=2000;
             stat_spent+=2000;
@@ -1054,7 +1072,8 @@ void investlocation(void)
 
       if(c=='b')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_TRAPS)&&funds>=3000)
+         if(!(location[loc]->compound_walls & COMPOUND_TRAPS)&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
          {
             funds-=3000;
             stat_spent+=3000;
@@ -1065,7 +1084,8 @@ void investlocation(void)
 
       if(c=='t')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_TANKTRAPS)&&funds>=3000)
+         if(!(location[loc]->compound_walls & COMPOUND_TANKTRAPS)&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
          {
             funds-=3000;
             stat_spent+=3000;
@@ -1076,7 +1096,8 @@ void investlocation(void)
 
       if(c=='g')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_GENERATOR)&&funds>=3000)
+         if(!(location[loc]->compound_walls & COMPOUND_GENERATOR)&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
          {
             funds-=3000;
             stat_spent+=3000;
@@ -1087,12 +1108,16 @@ void investlocation(void)
 
       if(c=='p')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
+         if(!ppress&&funds>=10000)
          {
-            funds-=3000;
-            stat_spent+=3000;
-            moneylost_compound+=3000;
-            location[loc]->compound_walls|=COMPOUND_PRINTINGPRESS;
+            strcpy(location[loc]->name,"Liberal Guardian Headquarters");
+            strcpy(location[loc]->shortname,"Guardian");
+            funds-=10000;
+            stat_spent+=10000;
+            moneylost_compound+=10000;
+            location[loc]->compound_walls=COMPOUND_PRINTINGPRESS;
+            location[loc]->front_business=-1;
+            break;
          }
       }
 
@@ -1109,7 +1134,8 @@ void investlocation(void)
 
       if(c=='f')
       {
-         if(location[loc]->front_business==-1&&funds>=3000)
+         if(location[loc]->front_business==-1&&
+            !(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
          {
             funds-=3000;
             stat_spent+=3000;
