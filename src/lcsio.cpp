@@ -61,12 +61,13 @@
 	"/usr/share/lcs/art",
 	"/usr/local/share/lcs/art",
 	"./art",
+	"../art",
 	
   };
   #ifndef INSTALL_DATA_DIR
-  #define NUM_POSSIBLE_ART_DIR 3
-  #else
   #define NUM_POSSIBLE_ART_DIR 4
+  #else
+  #define NUM_POSSIBLE_ART_DIR 5
   #endif
 
 #endif
@@ -89,7 +90,31 @@ HANDLE h;
    if(h==INVALID_HANDLE_VALUE)
    {
       h = NULL;
+      char* str=new char[strlen(filename)+5];
+      strncpy(str,"../",4);
+      strncat(str,filename,strlen(filename)+5);
+      
+      
+      if(flag==LCSIO_READ)
+      {
+      h=CreateFile(str,GENERIC_READ|GENERIC_WRITE,
+                   0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+      }
+      
+      else
+      {
+      h=CreateFile(str,GENERIC_READ|GENERIC_WRITE,
+                   0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+      }
+      
+      if(h==INVALID_HANDLE_VALUE)
+      {
+	      h=NULL;
+      }
    }
+   
+   
+   
 #else
    char *p = NULL;
    char *p1 = NULL;

@@ -116,6 +116,9 @@ important. The speed of your car is also more important. Having an injured
 driver is now very bad. Shooting the enemy driver is now very good.
 * justice.cpp: Tweaked the way scarefactor works in court again.
 
+2007-06-23   Chris Johnson   <grundee@users.sourceforge.net>
+* lcsio.cpp: Added ../art to the art search path. Forced Windows to search
+../art as well.
 
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
