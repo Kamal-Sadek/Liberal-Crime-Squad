@@ -346,6 +346,10 @@ void freehostage(creaturest &cr,char situation)
             else addstr(" is captured.");
          }
       }
+      else if(situation==2)
+      {
+	      //Don't print anything.
+      }
 
       if(cr.prisoner->squadid==-1)
       {
