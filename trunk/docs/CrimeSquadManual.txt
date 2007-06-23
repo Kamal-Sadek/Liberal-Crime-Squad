@@ -1,4 +1,7 @@
 (Note this document is a parody of the original Oubliette 2.5 Manual from 1983)
+(This document does not include information for new features added after
+the Open Source community took over development, this will be updated in
+the future).
 
 Liberal Crime Squad
 A Liberal Adventure
@@ -17,6 +20,8 @@ Tarn Adams and Bay 12 Games make no representations or warranties with respect t
 the contents hereof and disclaim any implied warranties of merchantability or fitness
 for any purpose.  Tarn Adams and Bay 12 Games reserve the right to make changes at
 any time without prior notification.  
+
+See the file COPYING for license information.
 
 www.bay12games.com
 
