@@ -660,9 +660,21 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(a.prisoner!=NULL)aroll-=LCSrandom(10);
    int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
    if(t.prisoner!=NULL)droll-=LCSrandom(10);
+   // Harder to hit people during a chase: 5 points for being on the
+   // move, another 5 points for having to hit them in the car
+   if(mode==GAMEMODE_CHASECAR){droll+=LCSrandom(6);droll+=LCSrandom(6);}
+   if(mode==GAMEMODE_CHASEFOOT)droll+=LCSrandom(6);
 
    healthmodroll(aroll,a);
    healthmodroll(droll,t);
+
+   if(droll<0)droll=0;
+   // If in a foot chance, double the debilitating effect of injuries
+   if(mode==GAMEMODE_CHASEFOOT)
+   {
+      healthmodroll(aroll,a);
+      healthmodroll(droll,t);
+   }
 
    if(aroll<0)aroll=1;
    if(droll<0)droll=1;
