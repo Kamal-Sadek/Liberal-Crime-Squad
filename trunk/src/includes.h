@@ -16,7 +16,7 @@
 //#define NOENEMYATTACK
 //#define SHITLAWS
 //#define GIVEBLOODYARMOR
-#define HIGHFUNDS
+//#define HIGHFUNDS
 //#define AUTOENLIGHTEN
 //#define SHOWWAIT
 
