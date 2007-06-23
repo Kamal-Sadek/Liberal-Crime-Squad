@@ -59,8 +59,8 @@ notice and set the <date of release> to the current date.
 * Fixed some buffer overflows with text handling.
 
 * Allowed for default names. You no longer have to pick a code name for 
-people kidnapped or recruited through dating. Pressing enter without 
-entering any code name will use that person's actual name by default.
+  people kidnapped or recruited through dating. Pressing enter without 
+  entering any code name will use that person's actual name by default.
 
 * New art added for the Liberal Guardian.
 
@@ -77,10 +77,12 @@ entering any code name will use that person's actual name by default.
 * Fixed Linux flag-burning bug that has been around since the original Linux
   port.
 
+* You can now be charged with multiple counts of the same crime.
+
+* ../art has been added to the search path for art on both Windows and Linux.
 
 
-
-
+------------------------------------------------------------------------------
 Release Notes for LCS 3.11.1 (Chris Johnson, June 19th, 2007)
 
 Note: These are the release notes for 3.11.1, but they were not included in 
@@ -92,9 +94,7 @@ that release. 3.11.1 was released on June 17th.
 * GNU Autotools support.
 
 
-
-
-
+------------------------------------------------------------------------------
 Release Notes for LCS 3.09 (Tarn Adams, August 20th, 2004)
 
 * Fixed a crash that game from generating truckers in a non-existent work location.
@@ -103,8 +103,8 @@ Release Notes for LCS 3.09 (Tarn Adams, August 20th, 2004)
 * Fixed a crash bug in the squad movement code.
 * Kevin Sadler added cursor key support and auto saving (see linux_readme for details on his additions).
 
----
 
+------------------------------------------------------------------------------
 Release Notes for LCS 3.06 (Tarn Adams)
 
 * In setvehicles(), there was a bug where it printed the car coloraccording to index instead of ID number.
@@ -113,6 +113,6 @@ Release Notes for LCS 3.06 (Tarn Adams)
 * Added addlocationname(locationst *loc) and used it to print business front names instead of location names in some places.
 * Added loadinitfile() and used it to handle an init file with key changes.
 
----
 
+------------------------------------------------------------------------------
 General porting note 3.05:I use verase() instead of erase() in the STL vector because erase() conflicts witha macro in PDCurses.  It's also possible that they are fighting over clear().Tarn Adams
