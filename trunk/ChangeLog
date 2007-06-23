@@ -107,6 +107,15 @@ calculated.
 2007-06-22   Chris Johnson   <grundee@users.sourceforge.net>
 * includes.h: Changed version of lowest save to 3.11.2.
 
+2007-06-22   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpp: The cops now play mercifully nice. You can always pull over or give
+up in a police chace, even if you start shooting earlier in the fight. You still
+can't surrender to death squads or non-police enemies.
+* chase.cpp: Changed the driveskill calculation. Driving skill is now more
+important. The speed of your car is also more important. Having an injured
+driver is now very bad. Shooting the enemy driver is now very good.
+* justice.cpp: Tweaked the way scarefactor works in court again.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.

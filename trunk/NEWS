@@ -1,8 +1,43 @@
-Release Notes for LCS 3.11.2 (<authors>,<date of release>)
+Release Notes for LCS 3.11.2 (Jonathan Stickles,<date of release>)
 Note: This is a preliminary release note. Put your news in here and your name
 in the authors list. When this is to be included in the actual release, delete this
 notice and set the <date of release> to the current date.
 
+* New file in docs documenting the .cpc graphics files used in the game.
+* You can't buy a printing press anymore -- now you need to pay $10,000 to
+  establish the Liberal Guardian offices. This still serves as a safehouse, but
+  the change is permanent: it permanently changes the name of the facility, is
+  never dismantled, provides no extra cover from police, and can't be fortified.
+  It essentially fixes one of your safehouses as unupgradable, but your writers
+  need to be at that location or they can't write.
+* Writing is now: pick an issue, *silently* write on that issue in the
+  background as long as there's public interest. Public interest is determined
+  by news stories about you earlier that month. You can see how much public
+  interest there is on the "pick an issue" screen.
+* If you're writing on an issue, and that day, you make the news on the same
+  issue, the Liberal Guardian will run a front page news story following the
+  normal news story, putting your spin on it, with your heading, your title,
+  your article text. This triples the power of the news story, and increases
+  how much interest it will generate for future editorials.
+* Site actions will no longer influence the issues up beyond about 4 times
+  the amount of shift they create. If you just sneak around and steal stuff,
+  you'll get maybe 10% of the population on your side at best. If you kill
+  janators outside the front door, you'll get around 30% tops. If you storm the
+  place shooting everything in sight and manage not to upset moderates, steal
+  anything not locked down, kick in a dozen doors, and bust open the lock-up,
+  then that will actually make some waves that could carry you to 100%. If you
+  use the Liberal Guardian to multiply your news strength, you'll push this cap
+  up as well.
+* Picking locks no longer generates news.
+* In court, the prosecution is a standard roll that is now strengthened for
+  each charge brought against you, including how many counts.
+* The cops are now much more benevolent than the LCS gives them credit for. ;)
+  You can always pull over or give up in a police chace, even if you start
+  shooting earlier in the fight. You still can't surrender to death squads or
+  non-police enemies.
+* Changed the driveskill calculation. Driving skill is now more important. The
+  speed of your car is also more important. Having an injured driver is now
+  very bad. Shooting the enemy driver is now very good.
 
 
 Release Notes for LCS 3.11.1 (Chris Johnson, June 19th, 2007)

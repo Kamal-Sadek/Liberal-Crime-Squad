@@ -407,7 +407,7 @@ void printlocation(long loc)
       if(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(5,30);
+         move(6,31);
          addstr("LIBERAL GUARDIAN HQ");
       }
 
