@@ -120,6 +120,9 @@ driver is now very bad. Shooting the enemy driver is now very good.
 * lcsio.cpp: Added ../art to the art search path. Forced Windows to search
 ../art as well.
 
+2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* justice.cpp: You can now be charged with multiple counts of the same crime.
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
