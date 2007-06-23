@@ -868,7 +868,7 @@ void penalize(creaturest &g,char lenient)
       }
       else
       {
-         if(!(g.sentence<0))g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
+         if(!(g.sentence<0))g.sentence-=-1*g.lawflag[LAWFLAG_MURDER];
          else if(g.lawflag[LAWFLAG_BURNFLAG])g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
       }
       if(g.sentence<0)g.sentence-=1*g.lawflag[LAWFLAG_ESCAPED];
