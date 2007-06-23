@@ -1035,7 +1035,7 @@ void investlocation(void)
       if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(15,1);
-      if(!location[loc]->compound_walls==COMPOUND_PRINTINGPRESS)
+      if(!(location[loc]->compound_walls==COMPOUND_PRINTINGPRESS))
          addstr("R - Buy 20 more daily rations ($150)");
 
       move(16,1);

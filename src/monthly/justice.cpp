@@ -35,6 +35,7 @@ void trial(creaturest &g)
    g.sentence=0;
    g.deathpenalty=0;
    g.location=g.base;
+   bool breaker[LAWFLAGNUM]={0};
 
    erase();
 
@@ -50,7 +51,6 @@ void trial(creaturest &g)
    if(!iscriminal(g))g.lawflag[LAWFLAG_LOITERING]++;
 
    int typenum=0;
-   bool breaker[LAWFLAGNUM] = {0};
    int scarefactor=0;
       // *JDS* Scarefactor is the severity of the case against you; if you're a really
       // nasty person with a wide variety of major charges against you, then scarefactor
@@ -61,8 +61,8 @@ void trial(creaturest &g)
       if(g.lawflag[i])
       {
          typenum++;
-         breaker[i]=1;
          scarefactor+=lawflagheat(i)*g.lawflag[i]/10;
+         breaker[i]=1;
       }
    }
 
@@ -116,30 +116,65 @@ void trial(creaturest &g)
       typenum--;
 
       x++;
-      if(x>=3){x=0;y++;move(y,1);}
+      if(x>=2){x=0;y++;move(y,1);}
 
       if(breaker[LAWFLAG_TREASON])
       {
+         if(g.lawflag[LAWFLAG_TREASON]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_TREASON],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("treason");
          breaker[LAWFLAG_TREASON]=0;
       }
       else if(breaker[LAWFLAG_MURDER])
       {
+         if(g.lawflag[LAWFLAG_MURDER]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_MURDER],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("murder");
          breaker[LAWFLAG_MURDER]=0;
       }
       else if(breaker[LAWFLAG_TERRORISM])
       {
+         if(g.lawflag[LAWFLAG_TERRORISM]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_TERRORISM],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("terrorism");
          breaker[LAWFLAG_TERRORISM]=0;
       }
       else if(breaker[LAWFLAG_KIDNAPPING])
       {
+         if(g.lawflag[LAWFLAG_KIDNAPPING]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_KIDNAPPING],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("kidnapping");
          breaker[LAWFLAG_KIDNAPPING]=0;
       }
       else if(breaker[LAWFLAG_BURNFLAG])
       {
+         if(g.lawflag[LAWFLAG_BURNFLAG]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_BURNFLAG],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          if(law[LAW_FLAGBURNING]==-2)
             addstr("Flag Murder");
          else if(law[LAW_FLAGBURNING]==-1)
@@ -150,109 +185,253 @@ void trial(creaturest &g)
       }
       else if(breaker[LAWFLAG_SPEECH])
       {
+         if(g.lawflag[LAWFLAG_SPEECH]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_SPEECH],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("harmful speech");
          breaker[LAWFLAG_SPEECH]=0;
       }
       else if(breaker[LAWFLAG_BROWNIES])
       {
+         if(g.lawflag[LAWFLAG_BROWNIES]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_BROWNIES],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("selling brownies");
          breaker[LAWFLAG_BROWNIES]=0;
       }
       else if(breaker[LAWFLAG_ESCAPED])
       {
+         if(g.lawflag[LAWFLAG_ESCAPED]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_ESCAPED],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("escaping prison");
          breaker[LAWFLAG_ESCAPED]=0;
       }
       else if(breaker[LAWFLAG_HELPESCAPE])
       {
+         if(g.lawflag[LAWFLAG_HELPESCAPE]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_HELPESCAPE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("aiding a prison escape");
          breaker[LAWFLAG_HELPESCAPE]=0;
       }
       else if(breaker[LAWFLAG_JURY])
       {
+         if(g.lawflag[LAWFLAG_JURY]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_JURY],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("jury tampering");
          breaker[LAWFLAG_JURY]=0;
       }
       else if(breaker[LAWFLAG_RACKETEERING])
       {
+         if(g.lawflag[LAWFLAG_RACKETEERING]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_RACKETEERING],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("racketeering");
          breaker[LAWFLAG_RACKETEERING]=0;
       }
       else if(breaker[LAWFLAG_ASSAULT])
       {
+         if(g.lawflag[LAWFLAG_ASSAULT]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_ASSAULT],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("assault");
          breaker[LAWFLAG_ASSAULT]=0;
       }
       else if(breaker[LAWFLAG_GUNCARRY])
       {
-         if(x>=1){x=1;y++;move(y,1);}
+         if(g.lawflag[LAWFLAG_GUNCARRY]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_GUNCARRY],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("carrying an illegal weapon");
          breaker[LAWFLAG_GUNCARRY]=0;
       }
       else if(breaker[LAWFLAG_CARTHEFT])
       {
+         if(g.lawflag[LAWFLAG_CARTHEFT]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_CARTHEFT],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("car theft");
          breaker[LAWFLAG_CARTHEFT]=0;
       }
       else if(breaker[LAWFLAG_CCFRAUD])
       {
+         if(g.lawflag[LAWFLAG_CCFRAUD]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_CCFRAUD],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("credit card fraud");
          breaker[LAWFLAG_CCFRAUD]=0;
       }
       else if(breaker[LAWFLAG_THEFT])
       {
+         if(g.lawflag[LAWFLAG_THEFT]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_THEFT],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("theft");
          breaker[LAWFLAG_THEFT]=0;
       }
       else if(breaker[LAWFLAG_PROSTITUTION])
       {
+         if(g.lawflag[LAWFLAG_PROSTITUTION]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_PROSTITUTION],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("prostitution");
          breaker[LAWFLAG_PROSTITUTION]=0;
       }
       else if(breaker[LAWFLAG_HIREILLEGAL])
       {
+         if(g.lawflag[LAWFLAG_HIREILLEGAL]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_HIREILLEGAL],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("hiring an illegal alien");
          breaker[LAWFLAG_HIREILLEGAL]=0;
       }
       else if(breaker[LAWFLAG_COMMERCE])
       {
-         if(x>=1){x=1;y++;move(y,1);}
+         if(g.lawflag[LAWFLAG_COMMERCE]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_COMMERCE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("interference with interstate commerce");
          breaker[LAWFLAG_COMMERCE]=0;
       }
       else if(breaker[LAWFLAG_INFORMATION])
       {
-         if(x>=1){x=1;y++;move(y,1);}
+         if(g.lawflag[LAWFLAG_INFORMATION]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_INFORMATION],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("unlawful access of an information system");
          breaker[LAWFLAG_INFORMATION]=0;
       }
       else if(breaker[LAWFLAG_BURIAL])
       {
+         if(g.lawflag[LAWFLAG_BURIAL]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_BURIAL],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("unlawful burial");
          breaker[LAWFLAG_BURIAL]=0;
       }
       else if(breaker[LAWFLAG_BREAKING])
       {
+         if(g.lawflag[LAWFLAG_BREAKING]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_BREAKING],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("breaking and entering");
          breaker[LAWFLAG_BREAKING]=0;
       }
       else if(breaker[LAWFLAG_VANDALISM])
       {
+         if(g.lawflag[LAWFLAG_VANDALISM]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_VANDALISM],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("vandalism");
          breaker[LAWFLAG_VANDALISM]=0;
       }
       else if(breaker[LAWFLAG_RESIST])
       {
+         if(g.lawflag[LAWFLAG_RESIST]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_RESIST],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("resisting arrest");
          breaker[LAWFLAG_RESIST]=0;
       }
       else if(breaker[LAWFLAG_DISTURBANCE])
       {
+         if(g.lawflag[LAWFLAG_DISTURBANCE]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_DISTURBANCE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("disturbing the peace");
          breaker[LAWFLAG_DISTURBANCE]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
       {
+         if(g.lawflag[LAWFLAG_LOITERING]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_LOITERING],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("loitering");
          breaker[LAWFLAG_LOITERING]=0;
       }
@@ -469,7 +648,7 @@ void trial(creaturest &g)
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
-         defensepower+=LCSrandom(min(defenseskill*2,200));
+         defensepower+=LCSrandom(min(defenseskill*2,max(200,prosecution+100)));
          g.skill_ip[SKILL_PERSUASION]+=50;
          g.skill_ip[SKILL_LAW]+=50;
 
@@ -630,9 +809,9 @@ void penalize(creaturest &g,char lenient)
 
    g.deathpenalty=0;
 
-   if((g.lawflag[LAWFLAG_MURDER])||(g.lawflag[LAWFLAG_TREASON])||
+   if(!lenient&&((g.lawflag[LAWFLAG_MURDER])||(g.lawflag[LAWFLAG_TREASON])||
       ((g.lawflag[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
-      law[LAW_DEATHPENALTY]==-2)
+      law[LAW_DEATHPENALTY]==-2))
    {
       if(law[LAW_DEATHPENALTY]==-2)g.deathpenalty=1;
       if(law[LAW_DEATHPENALTY]==-1)g.deathpenalty=LCSrandom(3);
@@ -644,55 +823,60 @@ void penalize(creaturest &g,char lenient)
    //CALC TIME
    if(!g.deathpenalty)
    {
-      if((g.lawflag[LAWFLAG_KIDNAPPING])&&g.sentence!=-1)g.sentence+=36+LCSrandom(18);
-      if((g.lawflag[LAWFLAG_THEFT])&&g.sentence!=-1)g.sentence+=3+LCSrandom(8);
-      if((g.lawflag[LAWFLAG_GUNCARRY])&&g.sentence!=-1)g.sentence+=12+LCSrandom(48);
-      if((g.lawflag[LAWFLAG_CARTHEFT])&&g.sentence!=-1)g.sentence+=6+LCSrandom(7);
-      if((g.lawflag[LAWFLAG_INFORMATION])&&g.sentence!=-1)g.sentence+=1+LCSrandom(13);
-      if((g.lawflag[LAWFLAG_COMMERCE])&&g.sentence!=-1)g.sentence+=1+LCSrandom(13);
-      if((g.lawflag[LAWFLAG_CCFRAUD])&&g.sentence!=-1)g.sentence+=6+LCSrandom(25);
-      if((g.lawflag[LAWFLAG_BURIAL])&&g.sentence!=-1)g.sentence+=3+LCSrandom(12);
-      if((g.lawflag[LAWFLAG_PROSTITUTION])&&g.sentence!=-1)g.sentence+=1+LCSrandom(6);
-      if((g.lawflag[LAWFLAG_DISTURBANCE])&&g.sentence!=-1)g.sentence+=1;
-      if((g.lawflag[LAWFLAG_LOITERING])&&g.sentence!=-1)g.sentence+=1;
-      if((g.lawflag[LAWFLAG_HIREILLEGAL])&&g.sentence!=-1)g.sentence+=1;
-      if((g.lawflag[LAWFLAG_RACKETEERING])&&g.sentence!=-1)g.sentence+=6+LCSrandom(100);
-      if((g.lawflag[LAWFLAG_BROWNIES])&&g.sentence!=-1)
+      if(!(g.sentence<0))
       {
-         if(LCSrandom(3))g.sentence+=3+LCSrandom(12);
+         g.sentence+=(36+LCSrandom(18))*g.lawflag[LAWFLAG_KIDNAPPING];
+         g.sentence+=(1+LCSrandom(4))*g.lawflag[LAWFLAG_THEFT];
+         g.sentence+=(4+LCSrandom(12))*g.lawflag[LAWFLAG_GUNCARRY];
+         g.sentence+=(6+LCSrandom(7))*g.lawflag[LAWFLAG_CARTHEFT];
+         g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_INFORMATION];
+         g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_COMMERCE];
+         g.sentence+=(6+LCSrandom(25))*g.lawflag[LAWFLAG_CCFRAUD];
+         g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BURIAL];
+         g.sentence+=(1+LCSrandom(6))*g.lawflag[LAWFLAG_PROSTITUTION];
+         g.sentence+=1*g.lawflag[LAWFLAG_DISTURBANCE];
+         g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
+         g.sentence+=1*g.lawflag[LAWFLAG_HIREILLEGAL];
+         g.sentence+=(6+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];
+         if(LCSrandom(3))g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BROWNIES];
          else
          {
-            if(LCSrandom(3))g.sentence+=3+LCSrandom(120);
-            else g.sentence+=3+LCSrandom(360);
+            if(LCSrandom(3))g.sentence+=(3+LCSrandom(120))*g.lawflag[LAWFLAG_BROWNIES];
+            else g.sentence+=(3+LCSrandom(360))*g.lawflag[LAWFLAG_BROWNIES];
          }
+         g.sentence+=1*g.lawflag[LAWFLAG_BREAKING];
+         g.sentence+=(60+LCSrandom(181))*g.lawflag[LAWFLAG_TERRORISM];
+         g.sentence+=(30+LCSrandom(61))*g.lawflag[LAWFLAG_JURY];
+         g.sentence+=(30+LCSrandom(61))*g.lawflag[LAWFLAG_HELPESCAPE];
+         g.sentence+=(1+LCSrandom(1))*g.lawflag[LAWFLAG_RESIST];
+         
+         g.sentence+=(4+LCSrandom(3))*g.lawflag[LAWFLAG_SPEECH];
+         g.sentence+=1*g.lawflag[LAWFLAG_VANDALISM];
+         g.sentence+=(3+LCSrandom(1))*g.lawflag[LAWFLAG_ASSAULT];
       }
-      if((g.lawflag[LAWFLAG_BREAKING])&&g.sentence!=-1)g.sentence+=1;
-      if((g.lawflag[LAWFLAG_TERRORISM])&&g.sentence!=-1)g.sentence+=60+LCSrandom(181);
-      if((g.lawflag[LAWFLAG_JURY])&&g.sentence!=-1)g.sentence+=30+LCSrandom(61);
-      if((g.lawflag[LAWFLAG_ESCAPED])&&g.sentence!=-1)g.sentence=-1;
-      if((g.lawflag[LAWFLAG_HELPESCAPE])&&g.sentence!=-1)g.sentence+=30+LCSrandom(61);
-      if((g.lawflag[LAWFLAG_RESIST])&&g.sentence!=-1)g.sentence+=1+LCSrandom(1);
-      if((g.lawflag[LAWFLAG_BURNFLAG])&&g.sentence!=-1)
+      if(law[LAW_FLAGBURNING]==-2)
       {
-         if(law[LAW_FLAGBURNING]==-2)
-         {
-            if(!LCSrandom(2))g.sentence+=120+LCSrandom(241);
-            else g.sentence=-1;
-         }
-         else if(law[LAW_FLAGBURNING]==-1)g.sentence+=36;
-         else if(law[LAW_FLAGBURNING]==0)g.sentence+=1;
+         if(!LCSrandom(2))g.sentence+=(120+LCSrandom(241))*g.lawflag[LAWFLAG_BURNFLAG];
+         else if(g.lawflag[LAWFLAG_BURNFLAG])g.sentence=-1*g.lawflag[LAWFLAG_BURNFLAG];
       }
-      if((g.lawflag[LAWFLAG_SPEECH])&&g.sentence!=-1)g.sentence+=4+LCSrandom(3);
-      if((g.lawflag[LAWFLAG_VANDALISM])&&g.sentence!=-1)g.sentence+=1;
-      if((g.lawflag[LAWFLAG_ASSAULT])&&g.sentence!=-1)g.sentence+=3+LCSrandom(1);
-      if((g.lawflag[LAWFLAG_MURDER])&&g.sentence!=-1)
+      else if(law[LAW_FLAGBURNING]==-1)g.sentence+=36*g.lawflag[LAWFLAG_BURNFLAG];
+      else if(law[LAW_FLAGBURNING]==0)g.sentence+=1*g.lawflag[LAWFLAG_BURNFLAG];
+      
+      if((LCSrandom(4)-g.lawflag[LAWFLAG_MURDER])>0)
       {
-         if(!LCSrandom(2))g.sentence+=120+LCSrandom(241);
-         else g.sentence=-1;
+         if(!(g.sentence<0))g.sentence+=(120+LCSrandom(241))*g.lawflag[LAWFLAG_MURDER];
       }
-      if((g.lawflag[LAWFLAG_TREASON])&&g.sentence!=-1)g.sentence=-1;
-      if(lenient&&g.sentence!=-1)g.sentence/=2;
+      else
+      {
+         if(!(g.sentence<0))g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
+         else if(g.lawflag[LAWFLAG_BURNFLAG])g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
+      }
+      if(g.sentence<0)g.sentence-=1*g.lawflag[LAWFLAG_ESCAPED];
+      else if(g.lawflag[LAWFLAG_ESCAPED]) g.sentence=-1*g.lawflag[LAWFLAG_ESCAPED];
+      if(g.sentence<0)g.sentence-=1*g.lawflag[LAWFLAG_TREASON];
+      else if(g.lawflag[LAWFLAG_TREASON]) g.sentence=-1*g.lawflag[LAWFLAG_TREASON];
       if(lenient&&g.sentence==-1)g.sentence=240+LCSrandom(120);
+      if(lenient&&g.sentence!=-1)g.sentence/=2;
    }
    //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
    else if(g.deathpenalty&&lenient)
@@ -744,9 +928,27 @@ void penalize(creaturest &g,char lenient)
       move(7,1);
       addstr(g.propername);
       addstr(", you are sentenced to ");
-      if(g.sentence==-1)
+      if(g.sentence<=-1)
       {
-         addstr("life in prison.");
+         if(g.sentence<-4)
+         {
+            char num[20];
+            itoa(-(g.sentence+3),num,10);
+            addstr(num);
+            addstr(" consecutive lifetimes in prison.");
+            
+            if(g.sentence<12)
+            {
+               refresh();
+               getch();
+
+               move(9,1);
+               addstr("Have a nice day, ");
+               addstr(g.propername);
+               addstr(".");
+            }
+         }
+         else addstr("life in prison.");
       }
       else if(g.sentence>=36)
       {
@@ -756,6 +958,17 @@ void penalize(creaturest &g,char lenient)
          addstr(" year");
          if(g.sentence/12>1)addstr("s");
          addstr(" in prison.");
+
+         if(g.sentence>5600)
+         {
+            refresh();
+            getch();
+
+            move(9,1);
+            addstr("Have a nice day, ");
+            addstr(g.propername);
+            addstr(".");
+         }
       }
       else
       {
