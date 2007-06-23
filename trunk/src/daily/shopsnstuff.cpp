@@ -555,7 +555,7 @@ void pawnshop(int loc)
             stat_spent+=350;
             moneylost_goods+=350;
          }
-         if(funds>=1200&&c=='k'&&law[LAW_GUNCONTROL]==-2)
+         if(funds>=1200&&c=='s'&&law[LAW_GUNCONTROL]==-2)
          {
             gunbought=WEAPON_SMG_MP5;
             funds-=1200;
