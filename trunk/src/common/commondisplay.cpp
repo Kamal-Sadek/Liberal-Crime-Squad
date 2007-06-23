@@ -376,7 +376,7 @@ void printlocation(long loc)
 
    if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
    {
-      if(numbereating(loc)>0)
+      if(numbereating(loc)>0&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
       {
          if(fooddaysleft(loc))
          {
@@ -406,9 +406,9 @@ void printlocation(long loc)
 
       if(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
       {
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         move(4,30);
-         addstr("PRINTING PRESS");
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(5,30);
+         addstr("LIBERAL GUARDIAN HQ");
       }
 
       if(location[loc]->front_business!=-1)
@@ -465,7 +465,7 @@ void printlocation(long loc)
       int days=fooddaysleft(loc);
       char num[20];
 
-      if(eaters>0)
+      if(eaters>0&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
       {
          if(days>=1)
          {
@@ -484,19 +484,21 @@ void printlocation(long loc)
             addstr("Not Enough Food");
          }
       }
+      if(location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         itoa(location[loc]->compound_stores,num,10);
+         move(6,1);
+         addstr(num);
+         addstr(" Daily Ration");
+         if(location[loc]->compound_stores!=1)addstr("s");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      itoa(location[loc]->compound_stores,num,10);
-      move(6,1);
-      addstr(num);
-      addstr(" Daily Ration");
-      if(location[loc]->compound_stores!=1)addstr("s");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      itoa(eaters,num,10);
-      move(6,30);
-      addstr(num);
-      addstr(" Eating");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         itoa(eaters,num,10);
+         move(6,30);
+         addstr(num);
+         addstr(" Eating");
+      }
    }
 }
 

@@ -60,7 +60,10 @@ extern int day;
 
 extern short attitude[VIEWNUM];
 
-extern short newspaper_topicwork[VIEWNUM];
+// Topicwork1 is editorials that are waiting to be written
+// Topicwork2 is editorials that have been written
+extern short newspaper_topicwork1[VIEWNUM];
+extern short newspaper_topicwork2[VIEWNUM];
 
 extern unsigned long funds;
 
@@ -114,8 +117,6 @@ extern chaseseqst chaseseq;
 extern char slogan[80];
 
 extern vector<creaturest *> pool;
-
-extern vector<blogpostst *> blogpost;
 
 extern vector<squadst *> squad;
 extern squadst *activesquad;

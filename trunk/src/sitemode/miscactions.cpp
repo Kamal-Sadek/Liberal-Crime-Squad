@@ -524,9 +524,9 @@ char radio_broadcast(void)
 
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10,0);
-   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-10)/2,0,0);
-   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-10)/2,1,0);
-   else change_public_opinion(viewhit,segmentpower/2,1,0);
+   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-10)/2,0);
+   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-10)/2,1,80);
+   else change_public_opinion(viewhit,segmentpower/2,1);
 
    //PRISONER PARTS
    for(p=0;p<6;p++)
@@ -575,8 +575,8 @@ char radio_broadcast(void)
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_CHARISMA));
                usegmentpower+=activesquad->squad[p]->prisoner->skill[SKILL_PERSUASION];
 
-               if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2,1,0);
-               else change_public_opinion(viewhit,usegmentpower/2,1,0);
+               if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2,1,80);
+               else change_public_opinion(viewhit,usegmentpower/2,1);
 
                segmentpower+=usegmentpower;
 
@@ -762,9 +762,9 @@ char news_broadcast(void)
 
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10,0);
-   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-50)/10,0,0);
-   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-50)/10,1,0);
-   else change_public_opinion(viewhit,segmentpower/10,1,0);
+   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-50)/10,0);
+   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-50)/10,1,80);
+   else change_public_opinion(viewhit,segmentpower/10,1);
 
    //PRISONER PARTS
    for(p=0;p<6;p++)
@@ -813,8 +813,8 @@ char news_broadcast(void)
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_CHARISMA));
                usegmentpower+=activesquad->squad[p]->prisoner->skill[SKILL_PERSUASION];
 
-               if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2,1,0);
-               else change_public_opinion(viewhit,usegmentpower/2,1,0);
+               if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2,1);
+               else change_public_opinion(viewhit,usegmentpower/2,1);
 
                segmentpower+=usegmentpower;
 
