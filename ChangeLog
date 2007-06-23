@@ -123,6 +123,12 @@ driver is now very bad. Shooting the enemy driver is now very good.
 2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * justice.cpp: You can now be charged with multiple counts of the same crime.
 
+2007-06-23   Chris Johnson & Jonathan Stickles
+* chase.cpp: Fixed bug #1741974, Hostages not freed if arrested during
+car chase.
+* haulkidnap.cpp: Added new situation to freehostage to not print anything.
+
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.

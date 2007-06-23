@@ -1,9 +1,5 @@
 Release Notes for LCS 3.11.2 
-(Jonathan Stickles & Chris Johnson,<date of release>)
-
-Note: This is a preliminary release note. Put your news in here and your name
-in the authors list. When this is to be included in the actual release, delete this
-notice and set the <date of release> to the current date.
+(Jonathan Stickles & Chris Johnson, June 23rd, 2007)
 
 * New file in docs documenting the .cpc graphics files used in the game.
 
@@ -81,6 +77,7 @@ notice and set the <date of release> to the current date.
 
 * ../art has been added to the search path for art on both Windows and Linux.
 
+* Fixed bug #1741974, Hostages not freed if arrested during chase.
 
 ------------------------------------------------------------------------------
 Release Notes for LCS 3.11.1 (Chris Johnson, June 19th, 2007)
