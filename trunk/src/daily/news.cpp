@@ -226,11 +226,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
    }
    else
    {
-      if(ns.page>=3)adnumber++;
-      if(ns.page>=6)adnumber+=LCSrandom(2)+1;
-      if(ns.page>=9)adnumber+=LCSrandom(2)+1;
-      if(ns.page>=12)adnumber+=LCSrandom(2)+1;
-      if(ns.page>=15)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=3)adnumber++;
+      if(ns.guardianpage>=6)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=9)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=12)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=15)adnumber+=LCSrandom(2)+1;
    }
    char addplace[2][3]={0,0,0,0,0,0};
    if(adnumber>6)adnumber=6;
@@ -2913,7 +2913,6 @@ void majornewspaper(char &clearformess,char canseethings)
             pool[i]->lawflag[LAWFLAG_SPEECH]++; // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
-         break;
       }
    }
  
@@ -3245,188 +3244,185 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             bool liberalguardian=0;
             int header = -1;
-            if(newsstory[n]->page==1)
+            switch(newsstory[n]->type)
             {
-               switch(newsstory[n]->type)
-               {
-                  case NEWSSTORY_SQUAD_SITE:
-                  case NEWSSTORY_SQUAD_KILLED_SITE:
-                     switch(location[newsstory[n]->loc]->type)
-                     {
-                        case SITE_LABORATORY_COSMETICS:
-                           if(writers[VIEW_ANIMALRESEARCH])
-                           {
-                              writers[VIEW_ANIMALRESEARCH]--;
-                              liberalguardian=1;
-                              header=VIEW_ANIMALRESEARCH;
-                           }
-                           break;
-                        case SITE_LABORATORY_GENETIC:
-                           if(writers[VIEW_GENETICS])
-                           {
-                              writers[VIEW_GENETICS]--;
-                              liberalguardian=1;
-                              header=VIEW_GENETICS;
-                           }
-                           break;
-                        case SITE_GOVERNMENT_POLICESTATION:
-                           if(writers[VIEW_POLICEBEHAVIOR])
-                           {
-                              writers[VIEW_POLICEBEHAVIOR]--;
-                              liberalguardian=1;
-                              header=VIEW_POLICEBEHAVIOR;
-                           }
-                           break;
-                        case SITE_GOVERNMENT_COURTHOUSE:
-                           if(writers[VIEW_DEATHPENALTY])
-                           {
-                              writers[VIEW_DEATHPENALTY]--;
-                              liberalguardian=1;
-                              header=VIEW_DEATHPENALTY;
-                           }
-                           else if(writers[VIEW_JUSTICES])
-                           {
-                              writers[VIEW_JUSTICES]--;
-                              liberalguardian=1;
-                              header=VIEW_JUSTICES;
-                           }
-                           else if(writers[VIEW_FREESPEECH])
-                           {
-                              writers[VIEW_FREESPEECH]--;
-                              liberalguardian=1;
-                              header=VIEW_FREESPEECH;
-                           }
-                           break;
-                        case SITE_GOVERNMENT_PRISON:
-                           if(writers[VIEW_PRISONS])
-                           {
-                              writers[VIEW_PRISONS]--;
-                              liberalguardian=1;
-                              header=VIEW_PRISONS;
-                           }
-                           break;
-                        case SITE_GOVERNMENT_INTELLIGENCEHQ:
-                           if(writers[VIEW_INTELLIGENCE])
-                           {
-                              writers[VIEW_INTELLIGENCE]--;
-                              liberalguardian=1;
-                              header=VIEW_INTELLIGENCE;
-                           }
-                           break;
-                        case SITE_INDUSTRY_SWEATSHOP:
-                           if(writers[VIEW_SWEATSHOPS])
-                           {
-                              writers[VIEW_SWEATSHOPS]--;
-                              liberalguardian=1;
-                              header=VIEW_SWEATSHOPS;
-                           }
-                           break;
-                        case SITE_INDUSTRY_POLLUTER:
-                           if(writers[VIEW_POLLUTION])
-                           {
-                              writers[VIEW_POLLUTION]--;
-                              liberalguardian=1;
-                              header=VIEW_POLLUTION;
-                           }
-                           break;
-                        case SITE_INDUSTRY_NUCLEAR:
-                           if(writers[VIEW_NUCLEARPOWER])
-                           {
-                              writers[VIEW_NUCLEARPOWER]--;
-                              liberalguardian=1;
-                              header=VIEW_NUCLEARPOWER;
-                           }
-                           break;
-                        case SITE_CORPORATE_HEADQUARTERS:
-					            if(writers[VIEW_CORPORATECULTURE])
-                           {
-                              writers[VIEW_CORPORATECULTURE]--;
-                              liberalguardian=1;
-                              header=VIEW_CORPORATECULTURE;
-                           }
-                           else if(writers[VIEW_CEOSALARY])
-                           {
-                              writers[VIEW_CEOSALARY]--;
-                              liberalguardian=1;
-                              header=VIEW_CEOSALARY;
-                           }
-                           break;
-                        case SITE_CORPORATE_HOUSE:
-					            if(writers[VIEW_TAXES])
-                           {
-                              writers[VIEW_TAXES]--;
-                              liberalguardian=1;
-                              header=VIEW_TAXES;
-                           }
-                           else if(writers[VIEW_CEOSALARY])
-                           {
-                              writers[VIEW_CEOSALARY]--;
-                              liberalguardian=1;
-                              header=VIEW_CEOSALARY;
-                           }
-                           break;
-                        case SITE_MEDIA_AMRADIO:
-                           if(writers[VIEW_AMRADIO])
-                           {
-                              writers[VIEW_AMRADIO]--;
-                              liberalguardian=1;
-                              header=VIEW_AMRADIO;
-                           }
-                           break;
-                        case SITE_MEDIA_CABLENEWS:
-                           if(writers[VIEW_CABLENEWS])
-                           {
-                              writers[VIEW_CABLENEWS]--;
-                              liberalguardian=1;
-                              header=VIEW_CABLENEWS;
-                           }
-                           break;
-                        case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-					            if(writers[VIEW_TAXES])
-                           {
-                              writers[VIEW_TAXES]--;
-                              liberalguardian=1;
-                              header=VIEW_TAXES;
-                           }
-                           else if(writers[VIEW_CEOSALARY])
-                           {
-                              writers[VIEW_CEOSALARY]--;
-                              liberalguardian=1;
-                              header=VIEW_CEOSALARY;
-                           }
-                           break;
-                        case SITE_BUSINESS_CIGARBAR:
-					            if(writers[VIEW_TAXES])
-                           {
-                              writers[VIEW_TAXES]--;
-                              liberalguardian=1;
-                              header=VIEW_TAXES;
-                           }
-                           else if(writers[VIEW_CEOSALARY])
-                           {
-                              writers[VIEW_CEOSALARY]--;
-                              liberalguardian=1;
-                              header=VIEW_CEOSALARY;
-                           }
-                           break;
-                     }
-                     break;
-                  case NEWSSTORY_SQUAD_ESCAPED:
-                  case NEWSSTORY_SQUAD_FLEDATTACK:
-                  case NEWSSTORY_SQUAD_DEFENDED:
-                  case NEWSSTORY_SQUAD_BROKESIEGE:
-                  case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
-                  case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
-                     for(int i=0;i<VIEWNUM;++i)
-                     {
-                        if(writers[i])
+               case NEWSSTORY_SQUAD_SITE:
+               case NEWSSTORY_SQUAD_KILLED_SITE:
+                  switch(location[newsstory[n]->loc]->type)
+                  {
+                     case SITE_LABORATORY_COSMETICS:
+                        if(writers[VIEW_ANIMALRESEARCH])
                         {
-                           --writers[i];
+                           writers[VIEW_ANIMALRESEARCH]--;
                            liberalguardian=1;
+                           header=VIEW_ANIMALRESEARCH;
                         }
+                        break;
+                     case SITE_LABORATORY_GENETIC:
+                        if(writers[VIEW_GENETICS])
+                        {
+                           writers[VIEW_GENETICS]--;
+                           liberalguardian=1;
+                           header=VIEW_GENETICS;
+                        }
+                        break;
+                     case SITE_GOVERNMENT_POLICESTATION:
+                        if(writers[VIEW_POLICEBEHAVIOR])
+                        {
+                           writers[VIEW_POLICEBEHAVIOR]--;
+                           liberalguardian=1;
+                           header=VIEW_POLICEBEHAVIOR;
+                        }
+                        break;
+                     case SITE_GOVERNMENT_COURTHOUSE:
+                        if(writers[VIEW_DEATHPENALTY])
+                        {
+                           writers[VIEW_DEATHPENALTY]--;
+                           liberalguardian=1;
+                           header=VIEW_DEATHPENALTY;
+                        }
+                        else if(writers[VIEW_JUSTICES])
+                        {
+                           writers[VIEW_JUSTICES]--;
+                           liberalguardian=1;
+                           header=VIEW_JUSTICES;
+                        }
+                        else if(writers[VIEW_FREESPEECH])
+                        {
+                           writers[VIEW_FREESPEECH]--;
+                           liberalguardian=1;
+                           header=VIEW_FREESPEECH;
+                        }
+                        break;
+                     case SITE_GOVERNMENT_PRISON:
+                        if(writers[VIEW_PRISONS])
+                        {
+                           writers[VIEW_PRISONS]--;
+                           liberalguardian=1;
+                           header=VIEW_PRISONS;
+                        }
+                        break;
+                     case SITE_GOVERNMENT_INTELLIGENCEHQ:
+                        if(writers[VIEW_INTELLIGENCE])
+                        {
+                           writers[VIEW_INTELLIGENCE]--;
+                           liberalguardian=1;
+                           header=VIEW_INTELLIGENCE;
+                        }
+                        break;
+                     case SITE_INDUSTRY_SWEATSHOP:
+                        if(writers[VIEW_SWEATSHOPS])
+                        {
+                           writers[VIEW_SWEATSHOPS]--;
+                           liberalguardian=1;
+                           header=VIEW_SWEATSHOPS;
+                        }
+                        break;
+                     case SITE_INDUSTRY_POLLUTER:
+                        if(writers[VIEW_POLLUTION])
+                        {
+                           writers[VIEW_POLLUTION]--;
+                           liberalguardian=1;
+                           header=VIEW_POLLUTION;
+                        }
+                        break;
+                     case SITE_INDUSTRY_NUCLEAR:
+                        if(writers[VIEW_NUCLEARPOWER])
+                        {
+                           writers[VIEW_NUCLEARPOWER]--;
+                           liberalguardian=1;
+                           header=VIEW_NUCLEARPOWER;
+                        }
+                        break;
+                     case SITE_CORPORATE_HEADQUARTERS:
+					         if(writers[VIEW_CORPORATECULTURE])
+                        {
+                           writers[VIEW_CORPORATECULTURE]--;
+                           liberalguardian=1;
+                           header=VIEW_CORPORATECULTURE;
+                        }
+                        else if(writers[VIEW_CEOSALARY])
+                        {
+                           writers[VIEW_CEOSALARY]--;
+                           liberalguardian=1;
+                           header=VIEW_CEOSALARY;
+                        }
+                        break;
+                     case SITE_CORPORATE_HOUSE:
+					         if(writers[VIEW_TAXES])
+                        {
+                           writers[VIEW_TAXES]--;
+                           liberalguardian=1;
+                           header=VIEW_TAXES;
+                        }
+                        else if(writers[VIEW_CEOSALARY])
+                        {
+                           writers[VIEW_CEOSALARY]--;
+                           liberalguardian=1;
+                           header=VIEW_CEOSALARY;
+                        }
+                        break;
+                     case SITE_MEDIA_AMRADIO:
+                        if(writers[VIEW_AMRADIO])
+                        {
+                           writers[VIEW_AMRADIO]--;
+                           liberalguardian=1;
+                           header=VIEW_AMRADIO;
+                        }
+                        break;
+                     case SITE_MEDIA_CABLENEWS:
+                        if(writers[VIEW_CABLENEWS])
+                        {
+                           writers[VIEW_CABLENEWS]--;
+                           liberalguardian=1;
+                           header=VIEW_CABLENEWS;
+                        }
+                        break;
+                     case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+					         if(writers[VIEW_TAXES])
+                        {
+                           writers[VIEW_TAXES]--;
+                           liberalguardian=1;
+                           header=VIEW_TAXES;
+                        }
+                        else if(writers[VIEW_CEOSALARY])
+                        {
+                           writers[VIEW_CEOSALARY]--;
+                           liberalguardian=1;
+                           header=VIEW_CEOSALARY;
+                        }
+                        break;
+                     case SITE_BUSINESS_CIGARBAR:
+					         if(writers[VIEW_TAXES])
+                        {
+                           writers[VIEW_TAXES]--;
+                           liberalguardian=1;
+                           header=VIEW_TAXES;
+                        }
+                        else if(writers[VIEW_CEOSALARY])
+                        {
+                           writers[VIEW_CEOSALARY]--;
+                           liberalguardian=1;
+                           header=VIEW_CEOSALARY;
+                        }
+                        break;
+                  }
+                  break;
+               case NEWSSTORY_SQUAD_ESCAPED:
+               case NEWSSTORY_SQUAD_FLEDATTACK:
+               case NEWSSTORY_SQUAD_DEFENDED:
+               case NEWSSTORY_SQUAD_BROKESIEGE:
+               case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
+               case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
+                  for(int i=0;i<VIEWNUM;++i)
+                  {
+                     if(writers[i])
+                     {
+                        --writers[i];
+                        liberalguardian=1;
                      }
-                     break;
-               }
+                  }
+                  break;
             }
             displaystory(*newsstory[n],0,-1);
             if(liberalguardian)
