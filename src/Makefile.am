@@ -12,5 +12,5 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp cursesgraphic
  daily/date.cpp daily/news.cpp daily/shopsnstuff.cpp daily/siege.cpp monthly/endgame.cpp\
  monthly/justice.cpp monthly/lcsmonthly.cpp monthly/monthly.cpp monthly/politics.cpp
 
-crimesquad_CPPFLAGS = $(CPPFLAGS) -DINSTALL_DATA_DIR=\"$(datadir)\"
-crimesquad_CXXFLAGS = $(CXXFLAGS) -I$(top_srcdir)/src
+crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
+crimesquad_CXXFLAGS = -I$(top_srcdir)/src
