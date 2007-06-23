@@ -735,13 +735,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          aroll+=4; // "Easy to use" for shooting with SMG
          aroll+=LCSrandom((a.skill[SKILL_PISTOL]+a.skill[SKILL_ASSAULTRIFLE])/2+1);
          a.skill_ip[SKILL_PISTOL]+=droll/2;
-         a.skill_ip[SKILL_ASSAULTRIFLE]+=droll/2;
+         a.skill_ip[SKILL_ASSAULTRIFLE]+=droll;
          break;
          // AR15 draws on both the assault rifle and rifle skills, because it
          // is a rifle which is very similar to an M16
       case WEAPON_SEMIRIFLE_AR15:
          aroll+=LCSrandom((a.skill[SKILL_RIFLE]+a.skill[SKILL_ASSAULTRIFLE])/2+1);
-         a.skill_ip[SKILL_RIFLE]+=droll/2;
+         a.skill_ip[SKILL_RIFLE]+=droll;
          a.skill_ip[SKILL_ASSAULTRIFLE]+=droll/2;
          break;
       case WEAPON_AUTORIFLE_M16:
