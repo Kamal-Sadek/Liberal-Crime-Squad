@@ -31,7 +31,7 @@
 #endif
 
 const unsigned long version=31102;
-const unsigned long lowestloadversion=31002;
+const unsigned long lowestloadversion=31102;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
