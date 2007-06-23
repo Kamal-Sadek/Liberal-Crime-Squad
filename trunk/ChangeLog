@@ -1,4 +1,4 @@
-ChangeLog for Version 3.11.1svn:
+ChangeLog for Version 3.11.2:
 
 2007-06-17   Jonathan Stickles & Chris Johnson
 * baseactions.cpp: Fixed Linux flag burning bug.
