@@ -116,6 +116,7 @@ important. The speed of your car is also more important. Having an injured
 driver is now very bad. Shooting the enemy driver is now very good.
 * justice.cpp: Tweaked the way scarefactor works in court again.
 
+
 RELEASE VERSION 3.11.1:
 Fixed crash when squad is disbanded.
 Split up game.cpp into smaller files.
