@@ -2,6 +2,10 @@ ChangeLog for Version 3.11.2svn:
 (add new messages to the top)
 
 2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp: You will now only be charged with assault for attacking people who
+aren't already hostile to you.
+
+2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * justice.cpp: Fixed a bug which would give you a warning 1 in 4 times if you
 didn't commit murder instead of your proper sentence.
 

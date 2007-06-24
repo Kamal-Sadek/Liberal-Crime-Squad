@@ -151,15 +151,15 @@ void youattack(void)
                if(mistake)
                {
                   sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
+                  criminalizeparty(LAWFLAG_ASSAULT);
                   sitecrime+=10;
                }
                else if(!wasalarm)
                {
                   sitestory->crime.push_back(CRIME_ATTACKED);
+                  criminalizeparty(LAWFLAG_ASSAULT);
                   sitecrime+=3;
                }
-
-               criminalizeparty(LAWFLAG_ASSAULT);
 
                if(!encounter[target].alive)delenc(target,1);
             }
