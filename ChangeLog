@@ -1,6 +1,14 @@
 ChangeLog for Version 3.11.2svn:
 (add new messages to the top)
 
+2007-06-30   Chris Johnson   <grundee@users.sourceforge.net>
+* lcsio.h, lcsio.cpp: Completely rewrote the LCS I/O system. Use LCSOpenFile
+and LCSCloseFile now, see documentation in lcsio.h for help.
+* cursesmovie.h, cursesmovie.cpp, news.cpp, highscore.cpp, saveload.cpp:
+Changed saving and loading to use C I/O with file handle returned by the new
+IO functions. This system should be portable, further testing on Linux will
+be necessary.
+
 2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * fight.cpp: You will now only be charged with assault for attacking people who
 aren't already hostile to you.

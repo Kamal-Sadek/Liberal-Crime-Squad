@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -163,7 +163,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                set_color(newstops[pap][x][y][1],
                          newstops[pap][x][y][2],
                          newstops[pap][x][y][3]);
-               
+
                addch(translateGraphicsChar(newstops[pap][x][y][0]));
             }
          }
@@ -643,7 +643,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          if(ns.page==1||(liberalguardian&&ns.guardianpage==1))
          {
             y=21;
-            
+
             switch(ns.type)
             {
                case NEWSSTORY_CARTHEFT:
@@ -1196,7 +1196,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         strcat(story,"liberated abused lab animals");
                      }
-                     
+
                      if(typesum>=3)strcat(story,", ");
                      else if(typesum==2)strcat(story," and ");
                      typesum--;
@@ -1226,7 +1226,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         strcat(story,"forced entry into a secure area");
                      }
-                     
+
                      if(typesum>=3)strcat(story,", ");
                      else if(typesum==2)strcat(story," and ");
                      typesum--;
@@ -1241,7 +1241,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         strcat(story,"evaded Conservative security measures");
                      }
-                     
+
                      if(typesum>=3)strcat(story,", ");
                      else if(typesum==2)strcat(story," and ");
                      typesum--;
@@ -1489,67 +1489,68 @@ void loadgraphics(void)
 {
    unsigned long picnum,dimx,dimy;
 
-   DWORD numbytes;
-   HANDLE h;
+   unsigned int numbytes;
+   FILE *h;
 
-   h=LCSCreateFile("art\\largecap.cpc", LCSIO_READ);
-   
+   h=LCSOpenFile("largecap.cpc", "rb", LCSIO_PRE_ART);
    if(h!=NULL)
    {
-      ReadFile(h,&picnum,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimx,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimy,sizeof(unsigned long),&numbytes,NULL);
+
+      numbytes=fread(&picnum,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimx,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimy,sizeof(unsigned long),1,h);
       for(int p=0;p<picnum;p++)
       {
          for(int x=0;x<dimx;x++)
          {
             for(int y=0;y<dimy;y++)
             {
-               ReadFile(h,&bigletters[p][x][y][0],sizeof(unsigned char)*4,&numbytes,NULL);
+               numbytes=fread(&bigletters[p][x][y][0],sizeof(unsigned char),4,h);
             }
          }
       }
-      CloseHandle(h);
+      LCSCloseFile(h);
    }
 
-   h=LCSCreateFile("art\\newstops.cpc", LCSIO_READ);
+   h=LCSOpenFile("newstops.cpc", "rb", LCSIO_PRE_ART);
    if(h!=NULL)
    {
-      ReadFile(h,&picnum,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimx,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimy,sizeof(unsigned long),&numbytes,NULL);
-      for(int p=0;p<picnum;p++)
-      {
-         for(int x=0;x<dimx;x++)
-         {
-            for(int y=0;y<dimy;y++)
-            {
-               ReadFile(h,&newstops[p][x][y][0],sizeof(unsigned char)*4,&numbytes,NULL);
-            }
-         }
-      }
-      CloseHandle(h);
-   }
-   
 
-   h=LCSCreateFile("art\\newspic.cpc", LCSIO_READ);
-   
-   if(h!=NULL)
-   {
-      ReadFile(h,&picnum,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimx,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&dimy,sizeof(unsigned long),&numbytes,NULL);
+      numbytes=fread(&picnum,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimx,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimy,sizeof(unsigned long),1,h);
       for(int p=0;p<picnum;p++)
       {
          for(int x=0;x<dimx;x++)
          {
             for(int y=0;y<dimy;y++)
             {
-               ReadFile(h,&newspic[p][x][y][0],sizeof(unsigned char)*4,&numbytes,NULL);
+               numbytes=fread(&newstops[p][x][y][0],sizeof(unsigned char),4,h);
             }
          }
       }
-      CloseHandle(h);
+      LCSCloseFile(h);
+   }
+
+
+  h=LCSOpenFile("newspic.cpc", "rb", LCSIO_PRE_ART);
+   if(h!=NULL)
+   {
+
+      numbytes=fread(&picnum,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimx,sizeof(unsigned long),1,h);
+      numbytes=fread(&dimy,sizeof(unsigned long),1,h);
+      for(int p=0;p<picnum;p++)
+      {
+         for(int x=0;x<dimx;x++)
+         {
+            for(int y=0;y<dimy;y++)
+            {
+               numbytes=fread(&newspic[p][x][y][0],sizeof(unsigned char),4,h);
+            }
+         }
+      }
+      LCSCloseFile(h);
    }
 }
 
@@ -1787,7 +1788,7 @@ void constructeventstory(char *story,short view,char positive)
             lastname(jstr);
             strcat(story,jstr);
             strcat(story," Correctional Facility.&r");
-            
+
             strcat(story,"  ");
             strcat(story,dstr3);
             strcat(story," was convicted in ");
@@ -1844,7 +1845,7 @@ void constructeventstory(char *story,short view,char positive)
             lastname(jstr);
             strcat(story,jstr);
             strcat(story," High School, before committing suicide.&r");
-            
+
             strcat(story,"  ");
             strcat(story,dstr);
             strcat(story," was considered an outcast ");
@@ -2729,7 +2730,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
 {
    vector<char *> text;
    vector<char> centered;
-   
+
    int totalwidth;
    int curpos=0;
 
@@ -2915,7 +2916,7 @@ void majornewspaper(char &clearformess,char canseethings)
          else pool[i]->activity.type=ACTIVITY_NONE;
       }
    }
- 
+
    //SET UP MAJOR EVENTS
    if(!LCSrandom(VIEWNUM*5))
    {
@@ -3488,7 +3489,7 @@ void majornewspaper(char &clearformess,char canseethings)
 
          if(newsstory[n]->positive==2)power*=3;
          if(power>maxpower)power=maxpower;
-         
+
          power/=10;
          power++;
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power,0);

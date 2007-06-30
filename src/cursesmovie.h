@@ -44,8 +44,8 @@ struct filelistst
 		list.clear();
 		}
 
-	void open_diskload(HANDLE &h);
-	void open_disksave(HANDLE &h);
+	void open_diskload(FILE *h);
+	void open_disksave(FILE *h);
 	void smartappend(filelistst &list2);
 	};
 
@@ -90,7 +90,7 @@ struct CursesMoviest
 		clean();
 		}
 
-	void savemovie(char *filename);
+	void savemovie(char *filename, int flags);
 	void loadmovie(char *filename);
 	void clean(void);
 	void convertindices_song(filelistst &master);

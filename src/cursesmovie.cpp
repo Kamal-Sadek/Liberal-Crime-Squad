@@ -38,12 +38,12 @@
       #define WIN32_PRE_DOTNET
       #include "vector.h"
     #endif
-  #endif 
+  #endif
   #include "curses.h"
   //undo PDCurses macros that break vector class
   #undef erase
   #undef clear
-  
+
   #define HAS_ITOA
   #define HAS_STRICMP
 #else
@@ -57,7 +57,7 @@
     #define HAVE_PROTO 1
     #define CPLUSPLUS  1
     /* Try these PDCurses/Xcurses options later...
-    #define FAST_VIDEO 
+    #define FAST_VIDEO
     #define REGISTERWINDOWS
     */
     #include <xcurses.h> //This is the X11 Port of PDCurses
@@ -67,10 +67,10 @@
   #else
     #ifdef NCURSES
       #include <ncurses.h>
-    #else     
+    #else
       #include <curses.h>
-    #endif  
-  #endif  
+    #endif
+  #endif
 #endif
 #include <string.h>
 #include "lcsio.h"
@@ -100,7 +100,7 @@ extern CursesMoviest movie;
 void set_color(short f,short b,char bright);
 void translategetch(int &c);
 
-void filelistst::open_diskload(HANDLE &h)
+void filelistst::open_diskload(FILE* h)
 {
 	int dummy;
 	short dummy2;
@@ -108,45 +108,49 @@ void filelistst::open_diskload(HANDLE &h)
 
 	clean();
 
-	ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+    numbytes=fread(&dummy,sizeof(int),1,h);
 	list.resize(dummy);
 
 	for(int l=0;l<list.size();l++)
 	{
-	ReadFile(h,&dummy2,sizeof(short),&numbytes,NULL);
-	if(dummy2>0)
+	    numbytes=fread(&dummy2,sizeof(short),1,h);
+
+        if(dummy2>0)
 		{
 		list[l]=new char[dummy2+1];
-		ReadFile(h,list[l],dummy2,&numbytes,NULL);
+		numbytes=fread(list[l],1,dummy2,h);
 		list[l][dummy2]='\x0';
 		}
-	else list[l]=NULL;
+        else list[l]=NULL;
 	}
 }
 
-void filelistst::open_disksave(HANDLE &h)
+void filelistst::open_disksave(FILE *h)
 {
 	int dummy;
 	short dummy2;
-	DWORD numbytes;
+	unsigned int numbytes;
 
 	dummy=list.size();
-	WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+	numbytes=fwrite(&dummy,sizeof(int),1,h);
 
 	for(int l=0;l<list.size();l++)
 	{
 	if(list[l]!=NULL)
-		{
+    {
 		dummy2=strlen(list[l]);
-		WriteFile(h,&dummy2,sizeof(short),&numbytes,NULL);
-		if(dummy2>0)WriteFile(h,list[l],dummy2,&numbytes,NULL);
-		}
-	else
+		numbytes=fwrite(&dummy2,sizeof(short),1,h);
+		if(dummy2>0)
 		{
-		dummy2=0;
-		WriteFile(h,&dummy2,sizeof(short),&numbytes,NULL);
+		    numbytes=fwrite(list[l],dummy2,1,h);
+		}
+        else
+		{
+            dummy2=0;
+            numbytes=fwrite(&dummy2,sizeof(short),1,h);
 		}
 	}
+    }
 }
 
 void filelistst::smartappend(filelistst &list2)
@@ -177,38 +181,38 @@ void filelistst::smartappend(filelistst &list2)
 	}
 }
 
-void CursesMoviest::savemovie(char *filename)
+void CursesMoviest::savemovie(char *filename,int flags=0)
 {
 	DWORD numbytes;
-	HANDLE h;
-	h=LCSCreateFile(filename, LCSIO_WRITE);
+	FILE *h;
+	h=LCSOpenFile(filename, "wb", flags);
 
 	long dummy;
 
 	if(h!=NULL)
 	{
-		WriteFile(h,&picnum,sizeof(unsigned long),&numbytes,NULL);
-		WriteFile(h,&dimx,sizeof(unsigned long),&numbytes,NULL);
-		WriteFile(h,&dimy,sizeof(unsigned long),&numbytes,NULL);
-		WriteFile(h,picture,sizeof(unsigned char)*80*25*4*picnum,&numbytes,NULL);
-
+        numbytes=fwrite(&picnum,sizeof(unsigned long),1,h);
+		numbytes=fwrite(&dimx,sizeof(unsigned long),1,h);
+		numbytes=fwrite(&dimy,sizeof(unsigned long),1,h);
+		numbytes=fwrite(picture,sizeof(unsigned char),80*25*4*picnum,h);
 		dummy=frame.size();
-		WriteFile(h,&dummy,sizeof(long),&numbytes,NULL);
+		numbytes=fwrite(&dummy,sizeof(long),1,h);
 		for(int f=0;f<dummy;f++)
 		{
-			WriteFile(h,&frame[f]->frame,sizeof(short),&numbytes,NULL);
-			WriteFile(h,&frame[f]->start,sizeof(long),&numbytes,NULL);
-			WriteFile(h,&frame[f]->stop,sizeof(long),&numbytes,NULL);
-			WriteFile(h,&frame[f]->sound,sizeof(short),&numbytes,NULL);
-			WriteFile(h,&frame[f]->song,sizeof(short),&numbytes,NULL);
-			WriteFile(h,&frame[f]->effect,sizeof(short),&numbytes,NULL);
-			WriteFile(h,&frame[f]->flag,sizeof(unsigned short),&numbytes,NULL);
+		    numbytes=fwrite(&frame[f]->frame,sizeof(short),1,h);
+			numbytes=fwrite(&frame[f]->start,sizeof(long),1,h);
+			numbytes=fwrite(&frame[f]->stop,sizeof(long),1,h);
+			numbytes=fwrite(&frame[f]->sound,sizeof(short),1,h);
+			numbytes=fwrite(&frame[f]->song,sizeof(short),1,h);
+			numbytes=fwrite(&frame[f]->effect,sizeof(short),1,h);
+			numbytes=fwrite(&frame[f]->flag,sizeof(short),1,h);
+
 		}
 
 		songlist.open_disksave(h);
 		soundlist.open_disksave(h);
 
-		CloseHandle(h);
+		LCSCloseFile(h);
 	}
 }
 
@@ -216,37 +220,37 @@ void CursesMoviest::loadmovie(char *filename)
 {
 	clean();
 
-	DWORD numbytes;
-	HANDLE h; 
-	h=LCSCreateFile(filename, LCSIO_READ);
+	unsigned int numbytes;
+	FILE* h;
+	h=LCSOpenFile(filename,"rb", LCSIO_PRE_ART);
 
 	long dummy;
 
 	if(h!=NULL)
 	{
-		ReadFile(h,&picnum,sizeof(unsigned long),&numbytes,NULL);
-		ReadFile(h,&dimx,sizeof(unsigned long),&numbytes,NULL);
-		ReadFile(h,&dimy,sizeof(unsigned long),&numbytes,NULL);
-		ReadFile(h,picture,sizeof(unsigned char)*80*25*4*picnum,&numbytes,NULL);
+		fread(&picnum,sizeof(unsigned long),1,h);
+		fread(&dimx,sizeof(unsigned long),1,h);
+		fread(&dimy,sizeof(unsigned long),1,h);
+		fread(picture,sizeof(unsigned char)*80*25*4*picnum,1,h);
 
-		ReadFile(h,&dummy,sizeof(long),&numbytes,NULL);
+		fread(&dummy,sizeof(long),1,h);
 		frame.resize(dummy);
 		for(int f=0;f<dummy;f++)
 		{
 			frame[f]=new CursesMovie_framest;
-			ReadFile(h,&frame[f]->frame,sizeof(short),&numbytes,NULL);
-			ReadFile(h,&frame[f]->start,sizeof(long),&numbytes,NULL);
-			ReadFile(h,&frame[f]->stop,sizeof(long),&numbytes,NULL);
-			ReadFile(h,&frame[f]->sound,sizeof(short),&numbytes,NULL);
-			ReadFile(h,&frame[f]->song,sizeof(short),&numbytes,NULL);
-			ReadFile(h,&frame[f]->effect,sizeof(short),&numbytes,NULL);
-			ReadFile(h,&frame[f]->flag,sizeof(unsigned short),&numbytes,NULL);
+			fread(&frame[f]->frame,sizeof(short),1,h);
+			fread(&frame[f]->start,sizeof(long),1,h);
+			fread(&frame[f]->stop,sizeof(long),1,h);
+			fread(&frame[f]->sound,sizeof(short),1,h);
+			fread(&frame[f]->song,sizeof(short),1,h);
+			fread(&frame[f]->effect,sizeof(short),1,h);
+			fread(&frame[f]->flag,sizeof(unsigned short),1,h);
 		}
 
 		songlist.open_diskload(h);
 		soundlist.open_diskload(h);
 
-		CloseHandle(h);
+		LCSCloseFile(h);
 	}
 }
 
