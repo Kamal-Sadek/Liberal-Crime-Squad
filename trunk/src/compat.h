@@ -34,11 +34,11 @@
 * <HR>
 * \b Liberal Crime Squad
 *
-* 
+*
 * <HR>
-* 
+*
 * \par Abstract
-* 
+*
 * \par Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
@@ -49,7 +49,7 @@
 * (b) Write portable alternatives for use by Windows and ports.
 * (c) Do (a) and (b) and decide what Windows does (API or portable)
 *     based on the value of a MACRO GO_PORTABLE.
-* 
+*
 * compat.cpp is the place for non-trivial or more global functions,
 *
 *
@@ -70,13 +70,13 @@
  // Portable equivalent of Windows stricmp() function.
  // This is strcmp() on lowercase versions of the
  //string.
- 
+
  //strToLower() allocates a string and converts it to
  //Lower Case using POSIX tolower() function.
  //Free returned string after use.
- 
- char *strToLower(const char *str);
- 
+
+ char *strToLower (const char *str);
+
  int stricmp(const char *str1, const char *str2);
  #endif
 
@@ -89,8 +89,8 @@ void alarmHandler(int signal);
 
 void setTimeval(struct  timeval *value, long sec, long usec);
 void msToItimerval(int ms, struct  itimerval *value);
-#endif 
-  
+#endif
+
 void pause_ms(int t);
 void alarmset(int t);
 void alarmwait();

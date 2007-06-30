@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -229,32 +229,32 @@ void loadhighscores(void)
    //LOAD FILE
    unsigned long loadversion;
 
-   DWORD numbytes;
-   HANDLE h;
+   unsigned int numbytes;
+   FILE *h;
 
-   h =LCSCreateFile("score.dat", LCSIO_READ);
-   
+   h=LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
+
    if(h!=NULL)
-   {   
-      ReadFile(h,&loadversion,sizeof(unsigned long),&numbytes,NULL);
+   {
+      numbytes=fread(&loadversion,sizeof(unsigned long),1,h);
 
       if(loadversion<lowestloadscoreversion)
       {
-         CloseHandle(h);
+         LCSCloseFile(h);
          return;
       }
 
-      ReadFile(h,&ustat_recruits,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_dead,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_kills,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_kidnappings,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_funds,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_spent,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_buys,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&ustat_burns,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,score,sizeof(highscorest)*SCORENUM,&numbytes,NULL);
+      numbytes=fread(&ustat_recruits,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_dead,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_kills,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_kidnappings,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_funds,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_spent,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_buys,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_burns,sizeof(unsigned long),1,h);
+      numbytes=fread(score,sizeof(highscorest),SCORENUM,h);
 
-      CloseHandle(h);
+      LCSCloseFile(h);
    }
 }
 
@@ -318,25 +318,25 @@ void savehighscore(char endtype)
    }
 
 
-   DWORD numbytes;
-   HANDLE h;
-   h=LCSCreateFile("score.dat", LCSIO_WRITE);
+   unsigned int numbytes;
+   FILE *h;
+   h=LCSOpenFile("score.dat","wb",LCSIO_PRE_HOME);
    if(h!=NULL)
    {
       unsigned int lversion=version;
-      WriteFile(h,&lversion,sizeof(unsigned long),&numbytes,NULL);
+      numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
 
-      WriteFile(h,&ustat_recruits,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_dead,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_kills,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_kidnappings,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_funds,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_spent,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_buys,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&ustat_burns,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,score,sizeof(highscorest)*SCORENUM,&numbytes,NULL);
+      numbytes=fwrite(&ustat_recruits,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_dead,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_kills,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_kidnappings,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_funds,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_spent,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_buys,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_burns,sizeof(unsigned long),1,h);
+      numbytes=fwrite(score,sizeof(highscorest),SCORENUM,h);
 
-      CloseHandle(h);
+      LCSCloseFile(h);
    }
 }
 

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -50,210 +50,210 @@ void savegame(char *str)
 {
    char dummy_c;
    int dummy;
-   DWORD numbytes;
-   HANDLE h;
+   unsigned int numbytes;
+   FILE *h;
    int l;
-   
-   h=LCSCreateFile(str, LCSIO_WRITE);
+
+   h=LCSOpenFile(str, "wb", LCSIO_PRE_HOME);
    if(h!=NULL)
    {
-      unsigned int lversion;
-      WriteFile(h,&lversion,sizeof(unsigned long),&numbytes,NULL);
+      unsigned int lversion=version;
+      numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
 
-      WriteFile(h,&seed,sizeof(unsigned long),&numbytes,NULL);
+      numbytes=fwrite(&seed,sizeof(unsigned long),1,h);
 
-      WriteFile(h,&mode,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&mode,sizeof(int),1,h);
 
-      WriteFile(h,&day,sizeof(int),&numbytes,NULL);
-      WriteFile(h,&month,sizeof(int),&numbytes,NULL);
-      WriteFile(h,&year,sizeof(int),&numbytes,NULL);
-      WriteFile(h,&execterm,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&amendnum,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&day,sizeof(int),1,h);
+      numbytes=fwrite(&month,sizeof(int),1,h);
+      numbytes=fwrite(&year,sizeof(int),1,h);
+      numbytes=fwrite(&execterm,sizeof(short),1,h);
+      numbytes=fwrite(&amendnum,sizeof(int),1,h);
 
-      WriteFile(h,&stat_recruits,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_dead,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_kills,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_kidnappings,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_funds,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_spent,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_buys,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&stat_burns,sizeof(unsigned long),&numbytes,NULL);
+      numbytes=fwrite(&stat_recruits,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_dead,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_kills,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_kidnappings,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_funds,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_spent,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_buys,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_burns,sizeof(unsigned long),1,h);
 
-      WriteFile(h,&curcarid,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&showcarprefs,sizeof(char),&numbytes,NULL);
-      WriteFile(h,&curcreatureid,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&cursquadid,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&offended_cops,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&police_heat,sizeof(int),&numbytes,NULL);
-      WriteFile(h,&offended_corps,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&offended_cia,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&offended_amradio,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&offended_cablenews,sizeof(short),&numbytes,NULL);
-      WriteFile(h,&attorneyseed,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&selectedsiege,sizeof(long),&numbytes,NULL);
-      WriteFile(h,lcityname,sizeof(char)*80,&numbytes,NULL);
-      WriteFile(h,&newscherrybusted,sizeof(char),&numbytes,NULL);
-      WriteFile(h,&moneygained_donate,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneygained_brownies,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneygained_goods,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneygained_ccfraud,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneygained_hustling,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneygained_thievery,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_goods,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_trouble,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_rent,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_manufacture,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_legal,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_compound,sizeof(long),&numbytes,NULL);
-      WriteFile(h,&moneylost_hostage,sizeof(long),&numbytes,NULL);
+      numbytes=fwrite(&curcarid,sizeof(long),1,h);
+      numbytes=fwrite(&showcarprefs,sizeof(char),1,h);
+      numbytes=fwrite(&curcreatureid,sizeof(long),1,h);
+      numbytes=fwrite(&cursquadid,sizeof(long),1,h);
+      numbytes=fwrite(&offended_cops,sizeof(short),1,h);
+      numbytes=fwrite(&police_heat,sizeof(int),1,h);
+      numbytes=fwrite(&offended_corps,sizeof(short),1,h);
+      numbytes=fwrite(&offended_cia,sizeof(short),1,h);
+      numbytes=fwrite(&offended_amradio,sizeof(short),1,h);
+      numbytes=fwrite(&offended_cablenews,sizeof(short),1,h);
+      numbytes=fwrite(&attorneyseed,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&selectedsiege,sizeof(long),1,h);
+      numbytes=fwrite(lcityname,sizeof(char),80,h);
+      numbytes=fwrite(&newscherrybusted,sizeof(char),1,h);
+      numbytes=fwrite(&moneygained_donate,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_brownies,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_goods,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_ccfraud,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_hustling,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_thievery,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_goods,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_trouble,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_rent,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_manufacture,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_legal,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_compound,sizeof(long),1,h);
+      numbytes=fwrite(&moneylost_hostage,sizeof(long),1,h);
 
-      WriteFile(h,slogan,sizeof(char)*80,&numbytes,NULL);
-      WriteFile(h,&funds,sizeof(unsigned long),&numbytes,NULL);
-      WriteFile(h,&party_status,sizeof(short),&numbytes,NULL);
+      numbytes=fwrite(slogan,sizeof(char),80,h);
+      numbytes=fwrite(&funds,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&party_status,sizeof(short),1,h);
 
-      WriteFile(h,attitude,sizeof(short)*VIEWNUM,&numbytes,NULL);
-      WriteFile(h,law,sizeof(short)*LAWNUM,&numbytes,NULL);
-      WriteFile(h,house,sizeof(short)*435,&numbytes,NULL);
-      WriteFile(h,senate,sizeof(short)*100,&numbytes,NULL);
-      WriteFile(h,court,sizeof(short)*9,&numbytes,NULL);
-      WriteFile(h,courtname,sizeof(char)*9*80,&numbytes,NULL);
-      WriteFile(h,exec,sizeof(short)*EXECNUM,&numbytes,NULL);
-      WriteFile(h,execname,sizeof(char)*EXECNUM*80,&numbytes,NULL);
+      numbytes=fwrite(attitude,sizeof(short),VIEWNUM,h);
+      numbytes=fwrite(law,sizeof(short),LAWNUM,h);
+      numbytes=fwrite(house,sizeof(short),435,h);
+      numbytes=fwrite(senate,sizeof(short),100,h);
+      numbytes=fwrite(court,sizeof(short),9,h);
+      numbytes=fwrite(courtname,sizeof(char)*80,9,h);
+      numbytes=fwrite(exec,sizeof(short),EXECNUM,h);
+      numbytes=fwrite(execname,sizeof(char)*80,EXECNUM,h);
 
       //LOCATIONS
       dummy=location.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(l=0;l<location.size();l++)
       {
          dummy=location[l]->loot.size();
-         WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int l2=0;l2<location[l]->loot.size();l2++)
          {
-            WriteFile(h,location[l]->loot[l2],sizeof(itemst),&numbytes,NULL);
+            numbytes=fwrite(location[l]->loot[l2],sizeof(itemst),1,h);
          }
 
-         WriteFile(h,location[l]->name,sizeof(char)*40,&numbytes,NULL);
-         WriteFile(h,location[l]->shortname,sizeof(char)*20,&numbytes,NULL);
-         WriteFile(h,&location[l]->type,sizeof(short),&numbytes,NULL);
-         WriteFile(h,&location[l]->parent,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&location[l]->renting,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&location[l]->newrental,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&location[l]->needcar,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&location[l]->closed,sizeof(short),&numbytes,NULL);
-         WriteFile(h,&location[l]->highsecurity,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&location[l]->siege,sizeof(siegest),&numbytes,NULL);
-         WriteFile(h,&location[l]->heat,sizeof(int),&numbytes,NULL);
-         WriteFile(h,&location[l]->compound_walls,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&location[l]->compound_stores,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&location[l]->front_business,sizeof(short),&numbytes,NULL);
-         WriteFile(h,location[l]->front_name,sizeof(char)*40,&numbytes,NULL);
-         WriteFile(h,&location[l]->haveflag,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&location[l]->mapseed,sizeof(unsigned long),&numbytes,NULL);
+         numbytes=fwrite(location[l]->name,sizeof(char),40,h);
+         numbytes=fwrite(location[l]->shortname,sizeof(char),20,h);
+         numbytes=fwrite(&location[l]->type,sizeof(short),1,h);
+         numbytes=fwrite(&location[l]->parent,sizeof(long),1,h);
+         numbytes=fwrite(&location[l]->renting,sizeof(long),1,h);
+         numbytes=fwrite(&location[l]->newrental,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->closed,sizeof(short),1,h);
+         numbytes=fwrite(&location[l]->highsecurity,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
+         numbytes=fwrite(&location[l]->heat,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->compound_walls,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->compound_stores,sizeof(long),1,h);
+         numbytes=fwrite(&location[l]->front_business,sizeof(short),1,h);
+         numbytes=fwrite(location[l]->front_name,sizeof(char),40,h);
+         numbytes=fwrite(&location[l]->haveflag,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->mapseed,sizeof(unsigned long),1,h);
       }
 
       //VEHICLES
       dummy=vehicle.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(l=0;l<vehicle.size();l++)
       {
-         WriteFile(h,vehicle[l],sizeof(vehiclest),&numbytes,NULL);
+         numbytes=fwrite(vehicle[l],sizeof(vehiclest),1,h);
       }
 
       //POOL
       dummy=pool.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(int pl=0;pl<pool.size();pl++)
       {
-         WriteFile(h,pool[pl],sizeof(creaturest),&numbytes,NULL);
+         numbytes=fwrite(pool[pl],sizeof(creaturest),1,h);
       }
 
       //SQUADS
       dummy=squad.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(int sq=0;sq<squad.size();sq++)
       {
-         WriteFile(h,squad[sq]->name,sizeof(char)*40,&numbytes,NULL);
-         WriteFile(h,&squad[sq]->activity,sizeof(activityst),&numbytes,NULL);
-         WriteFile(h,&squad[sq]->id,sizeof(int),&numbytes,NULL);
+         numbytes=fwrite(squad[sq]->name,sizeof(char),40,h);
+         numbytes=fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
+         numbytes=fwrite(&squad[sq]->id,sizeof(int),1,h);
 
          for(int pos=0;pos<6;pos++)
          {
             if(squad[sq]->squad[pos]==NULL)dummy_c=0;
             else dummy_c=1;
-            WriteFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+            numbytes=fwrite(&dummy_c,sizeof(char),1,h);
 
             if(squad[sq]->squad[pos]!=NULL)
             {
-               WriteFile(h,&squad[sq]->squad[pos]->id,sizeof(long),&numbytes,NULL);
+               numbytes=fwrite(&squad[sq]->squad[pos]->id,sizeof(long),1,h);
             }
          }
 
          dummy=squad[sq]->loot.size();
-         WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int l2=0;l2<squad[sq]->loot.size();l2++)
          {
-            WriteFile(h,squad[sq]->loot[l2],sizeof(itemst),&numbytes,NULL);
+            numbytes=fwrite(squad[sq]->loot[l2],sizeof(itemst),1,h);
          }
       }
 
       if(activesquad==NULL)dummy_c=0;
       else dummy_c=1;
-      WriteFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+      numbytes=fwrite(&dummy_c,sizeof(char),1,h);
       if(activesquad!=NULL)
       {
-         WriteFile(h,&activesquad->id,sizeof(long),&numbytes,NULL);
+         numbytes=fwrite(&activesquad->id,sizeof(long),1,h);
       }
 
       //DATES
       dummy=date.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(int dt=0;dt<date.size();dt++)
       {
-         WriteFile(h,&date[dt]->mac_id,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&date[dt]->timeleft,sizeof(short),&numbytes,NULL);
+         numbytes=fwrite(&date[dt]->mac_id,sizeof(long),1,h);
+         numbytes=fwrite(&date[dt]->timeleft,sizeof(short),1,h);
          dummy=date[dt]->date.size();
-         WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
-            WriteFile(h,date[dt]->date[dt2],sizeof(creaturest),&numbytes,NULL);
+            numbytes=fwrite(date[dt]->date[dt2],sizeof(creaturest),1,h);
          }
       }
 
       //NEWS STORIES
       dummy=newsstory.size();
-      WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(int ns=0;ns<newsstory.size();ns++)
       {
-         WriteFile(h,&newsstory[ns]->type,sizeof(short),&numbytes,NULL);
-         WriteFile(h,&newsstory[ns]->view,sizeof(short),&numbytes,NULL);
+         numbytes=fwrite(&newsstory[ns]->type,sizeof(short),1,h);
+         numbytes=fwrite(&newsstory[ns]->view,sizeof(short),1,h);
 
-         WriteFile(h,&newsstory[ns]->loc,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&newsstory[ns]->priority,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&newsstory[ns]->page,sizeof(long),&numbytes,NULL);
-         WriteFile(h,&newsstory[ns]->positive,sizeof(char),&numbytes,NULL);
-         WriteFile(h,&newsstory[ns]->siegetype,sizeof(short),&numbytes,NULL);
+         numbytes=fwrite(&newsstory[ns]->loc,sizeof(long),1,h);
+         numbytes=fwrite(&newsstory[ns]->priority,sizeof(long),1,h);
+         numbytes=fwrite(&newsstory[ns]->page,sizeof(long),1,h);
+         numbytes=fwrite(&newsstory[ns]->positive,sizeof(char),1,h);
+         numbytes=fwrite(&newsstory[ns]->siegetype,sizeof(short),1,h);
 
          if(newsstory[ns]->cr==NULL)dummy_c=0;
          else dummy_c=1;
-         WriteFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+         numbytes=fwrite(&dummy_c,sizeof(char),1,h);
          if(newsstory[ns]->cr!=NULL)
          {
-            WriteFile(h,&newsstory[ns]->cr->id,sizeof(long),&numbytes,NULL);
+            numbytes=fwrite(&newsstory[ns]->cr->id,sizeof(long),1,h);
          }
 
          dummy=newsstory[ns]->crime.size();
-         WriteFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
          {
-            WriteFile(h,&newsstory[ns]->crime[dt2],sizeof(int),&numbytes,NULL);
+            numbytes=fwrite(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }
       }
 
       // Liberal Media
-      WriteFile(h,newspaper_topicwork1,sizeof(newspaper_topicwork1),&numbytes,NULL);
-      WriteFile(h,newspaper_topicwork2,sizeof(newspaper_topicwork2),&numbytes,NULL);
+      numbytes=fwrite(newspaper_topicwork1,sizeof(newspaper_topicwork1),1,h);
+      numbytes=fwrite(newspaper_topicwork2,sizeof(newspaper_topicwork2),1,h);
 
-      CloseHandle(h);
+      LCSCloseFile(h);
    }
 }
 
@@ -267,157 +267,157 @@ char load(void)
    char dummy_c;
    int dummy;
    long dummy_l;
-   DWORD numbytes;
-   HANDLE h;
-   
-   h=LCSCreateFile("save.dat", LCSIO_READ);
-      
+   unsigned int numbytes;
+   FILE *h;
+
+   h=LCSOpenFile("save.dat", "rb", LCSIO_PRE_HOME);
+
    if(h!=NULL)
    {
-      ReadFile(h,&loadversion,sizeof(unsigned long),&numbytes,NULL);
+      fread(&loadversion,sizeof(unsigned long),1,h);
 
       //NUKE INVALID SAVE GAMES
       if(loadversion<lowestloadversion)
       {
-         CloseHandle(h);
+         LCSCloseFile(h);
 
          reset();
 
          return 0;
       }
 
-      ReadFile(h,&seed,sizeof(unsigned long),&numbytes,NULL);
+      fread(&seed,sizeof(unsigned long),1,h);
 
-      ReadFile(h,&mode,sizeof(int),&numbytes,NULL);
+      fread(&mode,sizeof(int),1,h);
 
-      ReadFile(h,&day,sizeof(int),&numbytes,NULL);
-      ReadFile(h,&month,sizeof(int),&numbytes,NULL);
-      ReadFile(h,&year,sizeof(int),&numbytes,NULL);
-      ReadFile(h,&execterm,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&amendnum,sizeof(int),&numbytes,NULL);
+      fread(&day,sizeof(int),1,h);
+      fread(&month,sizeof(int),1,h);
+      fread(&year,sizeof(int),1,h);
+      fread(&execterm,sizeof(short),1,h);
+      fread(&amendnum,sizeof(int),1,h);
 
-      ReadFile(h,&stat_recruits,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_dead,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_kills,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_kidnappings,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_funds,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_spent,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_buys,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&stat_burns,sizeof(unsigned long),&numbytes,NULL);
+      fread(&stat_recruits,sizeof(unsigned long),1,h);
+      fread(&stat_dead,sizeof(unsigned long),1,h);
+      fread(&stat_kills,sizeof(unsigned long),1,h);
+      fread(&stat_kidnappings,sizeof(unsigned long),1,h);
+      fread(&stat_funds,sizeof(unsigned long),1,h);
+      fread(&stat_spent,sizeof(unsigned long),1,h);
+      fread(&stat_buys,sizeof(unsigned long),1,h);
+      fread(&stat_burns,sizeof(unsigned long),1,h);
 
-      ReadFile(h,&curcarid,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&showcarprefs,sizeof(char),&numbytes,NULL);
-      ReadFile(h,&curcreatureid,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&cursquadid,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&offended_cops,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&police_heat,sizeof(int),&numbytes,NULL);
-      ReadFile(h,&offended_corps,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&offended_cia,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&offended_amradio,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&offended_cablenews,sizeof(short),&numbytes,NULL);
-      ReadFile(h,&attorneyseed,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&selectedsiege,sizeof(long),&numbytes,NULL);
-      ReadFile(h,lcityname,sizeof(char)*80,&numbytes,NULL);
-      ReadFile(h,&newscherrybusted,sizeof(char),&numbytes,NULL);
-      ReadFile(h,&moneygained_donate,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneygained_brownies,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneygained_goods,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneygained_ccfraud,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneygained_hustling,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneygained_thievery,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_goods,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_trouble,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_rent,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_manufacture,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_legal,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_compound,sizeof(long),&numbytes,NULL);
-      ReadFile(h,&moneylost_hostage,sizeof(long),&numbytes,NULL);
+      fread(&curcarid,sizeof(long),1,h);
+      fread(&showcarprefs,sizeof(char),1,h);
+      fread(&curcreatureid,sizeof(long),1,h);
+      fread(&cursquadid,sizeof(long),1,h);
+      fread(&offended_cops,sizeof(short),1,h);
+      fread(&police_heat,sizeof(int),1,h);
+      fread(&offended_corps,sizeof(short),1,h);
+      fread(&offended_cia,sizeof(short),1,h);
+      fread(&offended_amradio,sizeof(short),1,h);
+      fread(&offended_cablenews,sizeof(short),1,h);
+      fread(&attorneyseed,sizeof(unsigned long),1,h);
+      fread(&selectedsiege,sizeof(long),1,h);
+      fread(lcityname,sizeof(char),80,h);
+      fread(&newscherrybusted,sizeof(char),1,h);
+      fread(&moneygained_donate,sizeof(long),1,h);
+      fread(&moneygained_brownies,sizeof(long),1,h);
+      fread(&moneygained_goods,sizeof(long),1,h);
+      fread(&moneygained_ccfraud,sizeof(long),1,h);
+      fread(&moneygained_hustling,sizeof(long),1,h);
+      fread(&moneygained_thievery,sizeof(long),1,h);
+      fread(&moneylost_goods,sizeof(long),1,h);
+      fread(&moneylost_trouble,sizeof(long),1,h);
+      fread(&moneylost_rent,sizeof(long),1,h);
+      fread(&moneylost_manufacture,sizeof(long),1,h);
+      fread(&moneylost_legal,sizeof(long),1,h);
+      fread(&moneylost_compound,sizeof(long),1,h);
+      fread(&moneylost_hostage,sizeof(long),1,h);
 
-      ReadFile(h,slogan,sizeof(char)*80,&numbytes,NULL);
-      ReadFile(h,&funds,sizeof(unsigned long),&numbytes,NULL);
-      ReadFile(h,&party_status,sizeof(short),&numbytes,NULL);
+      fread(slogan,sizeof(char),80,h);
+      fread(&funds,sizeof(unsigned long),1,h);
+      fread(&party_status,sizeof(short),1,h);
 
-      ReadFile(h,attitude,sizeof(short)*VIEWNUM,&numbytes,NULL);
-      ReadFile(h,law,sizeof(short)*LAWNUM,&numbytes,NULL);
-      ReadFile(h,house,sizeof(short)*435,&numbytes,NULL);
-      ReadFile(h,senate,sizeof(short)*100,&numbytes,NULL);
-      ReadFile(h,court,sizeof(short)*9,&numbytes,NULL);
-      ReadFile(h,courtname,sizeof(char)*9*80,&numbytes,NULL);
-      ReadFile(h,exec,sizeof(short)*EXECNUM,&numbytes,NULL);
-      ReadFile(h,execname,sizeof(char)*EXECNUM*80,&numbytes,NULL);
+      fread(attitude,sizeof(short)*VIEWNUM,1,h);
+      fread(law,sizeof(short)*LAWNUM,1,h);
+      fread(house,sizeof(short),435,h);
+      fread(senate,sizeof(short),100,h);
+      fread(court,sizeof(short),9,h);
+      fread(courtname,sizeof(char)*80,9,h);
+      fread(exec,sizeof(short)*EXECNUM,1,h);
+      fread(execname,sizeof(char)*80,EXECNUM,h);
 
       //LOCATIONS
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       location.resize(dummy);
       for(l=0;l<location.size();l++)
       {
          location[l]=new locationst;
 
-         ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         fread(&dummy,sizeof(int),1,h);
          location[l]->loot.resize(dummy);
          for(int l2=0;l2<location[l]->loot.size();l2++)
          {
             location[l]->loot[l2]=new itemst;
-            ReadFile(h,location[l]->loot[l2],sizeof(itemst),&numbytes,NULL);
+            fread(location[l]->loot[l2],sizeof(itemst),1,h);
          }
 
-         ReadFile(h,location[l]->name,sizeof(char)*40,&numbytes,NULL);
-         ReadFile(h,location[l]->shortname,sizeof(char)*20,&numbytes,NULL);
-         ReadFile(h,&location[l]->type,sizeof(short),&numbytes,NULL);
-         ReadFile(h,&location[l]->parent,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&location[l]->renting,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&location[l]->newrental,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&location[l]->needcar,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&location[l]->closed,sizeof(short),&numbytes,NULL);
-         ReadFile(h,&location[l]->highsecurity,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&location[l]->siege,sizeof(siegest),&numbytes,NULL);
-         ReadFile(h,&location[l]->heat,sizeof(int),&numbytes,NULL);
-         ReadFile(h,&location[l]->compound_walls,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&location[l]->compound_stores,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&location[l]->front_business,sizeof(short),&numbytes,NULL);
-         ReadFile(h,location[l]->front_name,sizeof(char)*40,&numbytes,NULL);
-         ReadFile(h,&location[l]->haveflag,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&location[l]->mapseed,sizeof(unsigned long),&numbytes,NULL);
+         fread(location[l]->name,sizeof(char),40,h);
+         fread(location[l]->shortname,sizeof(char),20,h);
+         fread(&location[l]->type,sizeof(short),1,h);
+         fread(&location[l]->parent,sizeof(long),1,h);
+         fread(&location[l]->renting,sizeof(long),1,h);
+         fread(&location[l]->newrental,sizeof(char),1,h);
+         fread(&location[l]->needcar,sizeof(char),1,h);
+         fread(&location[l]->closed,sizeof(short),1,h);
+         fread(&location[l]->highsecurity,sizeof(char),1,h);
+         fread(&location[l]->siege,sizeof(siegest),1,h);
+         fread(&location[l]->heat,sizeof(int),1,h);
+         fread(&location[l]->compound_walls,sizeof(char),1,h);
+         fread(&location[l]->compound_stores,sizeof(long),1,h);
+         fread(&location[l]->front_business,sizeof(short),1,h);
+         fread(location[l]->front_name,sizeof(char),40,h);
+         fread(&location[l]->haveflag,sizeof(char),1,h);
+         fread(&location[l]->mapseed,sizeof(unsigned long),1,h);
       }
 
       //VEHICLES
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       vehicle.resize(dummy);
       for(l=0;l<vehicle.size();l++)
       {
          vehicle[l]=new vehiclest;
-         ReadFile(h,vehicle[l],sizeof(vehiclest),&numbytes,NULL);
+         fread(vehicle[l],sizeof(vehiclest),1,h);
       }
 
       //POOL
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       pool.resize(dummy);
       for(int pl=0;pl<pool.size();pl++)
       {
          pool[pl]=new creaturest;
-         ReadFile(h,pool[pl],sizeof(creaturest),&numbytes,NULL);
+         fread(pool[pl],sizeof(creaturest),1,h);
       }
 
       //SQUADS
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       squad.resize(dummy);
       for(int sq=0;sq<squad.size();sq++)
       {
          squad[sq]=new squadst;
 
-         ReadFile(h,squad[sq]->name,sizeof(char)*40,&numbytes,NULL);
-         ReadFile(h,&squad[sq]->activity,sizeof(activityst),&numbytes,NULL);
-         ReadFile(h,&squad[sq]->id,sizeof(int),&numbytes,NULL);
+         fread(squad[sq]->name,sizeof(char),40,h);
+         fread(&squad[sq]->activity,sizeof(activityst),1,h);
+         fread(&squad[sq]->id,sizeof(int),1,h);
 
          for(int pos=0;pos<6;pos++)
          {
-            ReadFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+            fread(&dummy_c,sizeof(char),1,h);
 
             //REBUILD SQUAD FROM POOL
             squad[sq]->squad[pos]=NULL;
             if(dummy_c)
             {
-               ReadFile(h,&dummy_l,sizeof(long),&numbytes,NULL);
+               fread(&dummy_l,sizeof(long),1,h);
                for(int pl=0;pl<pool.size();pl++)
                {
                   if(pool[pl]->id==dummy_l)
@@ -428,20 +428,20 @@ char load(void)
             }
          }
 
-         ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         fread(&dummy,sizeof(int),1,h);
          squad[sq]->loot.resize(dummy);
          for(int l2=0;l2<squad[sq]->loot.size();l2++)
          {
             squad[sq]->loot[l2]=new itemst;
-            ReadFile(h,squad[sq]->loot[l2],sizeof(itemst),&numbytes,NULL);
+            fread(squad[sq]->loot[l2],sizeof(itemst),1,h);
          }
       }
 
       activesquad=NULL;
-      ReadFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+      fread(&dummy_c,sizeof(char),1,h);
       if(dummy_c)
       {
-         ReadFile(h,&dummy_l,sizeof(long),&numbytes,NULL);
+         fread(&dummy_l,sizeof(long),1,h);
          for(int sq=0;sq<squad.size();sq++)
          {
             if(squad[sq]->id==dummy_l)
@@ -453,44 +453,44 @@ char load(void)
       }
 
       //DATES
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       date.resize(dummy);
       for(int dt=0;dt<date.size();dt++)
       {
          date[dt]=new datest;
 
-         ReadFile(h,&date[dt]->mac_id,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&date[dt]->timeleft,sizeof(short),&numbytes,NULL);
+         fread(&date[dt]->mac_id,sizeof(long),1,h);
+         fread(&date[dt]->timeleft,sizeof(short),1,h);
 
-         ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         fread(&dummy,sizeof(int),1,h);
          date[dt]->date.resize(dummy);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
             date[dt]->date[dt2]=new creaturest;
-            ReadFile(h,date[dt]->date[dt2],sizeof(creaturest),&numbytes,NULL);
+            fread(date[dt]->date[dt2],sizeof(creaturest),1,h);
          }
       }
 
       //NEWS STORIES
-      ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+      fread(&dummy,sizeof(int),1,h);
       newsstory.resize(dummy);
       for(int ns=0;ns<newsstory.size();ns++)
       {
          newsstory[ns]=new newsstoryst;
 
-         ReadFile(h,&newsstory[ns]->type,sizeof(short),&numbytes,NULL);
-         ReadFile(h,&newsstory[ns]->view,sizeof(short),&numbytes,NULL);
+         fread(&newsstory[ns]->type,sizeof(short),1,h);
+         fread(&newsstory[ns]->view,sizeof(short),1,h);
 
-         ReadFile(h,&newsstory[ns]->loc,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&newsstory[ns]->priority,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&newsstory[ns]->page,sizeof(long),&numbytes,NULL);
-         ReadFile(h,&newsstory[ns]->positive,sizeof(char),&numbytes,NULL);
-         ReadFile(h,&newsstory[ns]->siegetype,sizeof(short),&numbytes,NULL);
+         fread(&newsstory[ns]->loc,sizeof(long),1,h);
+         fread(&newsstory[ns]->priority,sizeof(long),1,h);
+         fread(&newsstory[ns]->page,sizeof(long),1,h);
+         fread(&newsstory[ns]->positive,sizeof(char),1,h);
+         fread(&newsstory[ns]->siegetype,sizeof(short),1,h);
 
-         ReadFile(h,&dummy_c,sizeof(char),&numbytes,NULL);
+         fread(&dummy_c,sizeof(char),1,h);
          if(dummy_c)
          {
-            WriteFile(h,&dummy_l,sizeof(long),&numbytes,NULL);
+            fwrite(&dummy_l,sizeof(long),1,h);
             for(int pl=0;pl<pool.size();pl++)
             {
                if(pool[pl]->id==dummy_l)
@@ -501,18 +501,18 @@ char load(void)
             }
          }
 
-         ReadFile(h,&dummy,sizeof(int),&numbytes,NULL);
+         fread(&dummy,sizeof(int),1,h);
          newsstory[ns]->crime.resize(dummy);
          for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
          {
-            ReadFile(h,&newsstory[ns]->crime[dt2],sizeof(int),&numbytes,NULL);
+            fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }
       }
 
       // Liberal Media
-      ReadFile(h,newspaper_topicwork1,sizeof(newspaper_topicwork1),&numbytes,NULL);
-      ReadFile(h,newspaper_topicwork2,sizeof(newspaper_topicwork2),&numbytes,NULL);
-      CloseHandle(h);
+      fread(newspaper_topicwork1,sizeof(newspaper_topicwork1),1,h);
+      fread(newspaper_topicwork2,sizeof(newspaper_topicwork2),1,h);
+      LCSCloseFile(h);
 
       return 1;
    }
@@ -524,6 +524,6 @@ char load(void)
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset(void)
 {
-   unlink("save.dat");
+    LCSDeleteFile("save.dat",LCSIO_PRE_HOME);
 }
 
