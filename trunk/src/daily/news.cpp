@@ -971,9 +971,9 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
                {
-                  if(liberalguardian)strcat(story,"Everyone in the LCS group was tragically slain by the forces of evil.  ");
-                  else if(ns.positive)strcat(story,"Everyone in the LCS group was killed by conservatives.  ");
-                  else strcat(story,"Everyone in the LCS group was killed by brave citizens.  ");
+                  if(liberalguardian)strcat(story,"Unfortunately, the LCS group was defeated by the forces of evil.  ");
+                  else if(ns.positive)strcat(story,"Everyone in the LCS group was arrested or killed.  ");
+                  else strcat(story,"Fortunately, the LCS thugs was stopped by brave citizens.  ");
                }
                strcat(story,"&r");
 

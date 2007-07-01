@@ -34,6 +34,19 @@ void trial(creaturest &g)
 {
    g.sentence=0;
    g.deathpenalty=0;
+   // If their old base is no longer under LCS control, wander back to the
+   // homeless shelter instead.
+   if(location[g.base]->renting==-1)
+   {
+      for(int i=0;i<location.size();++i)
+      {
+         if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
+         {
+            g.base=i;
+            break;
+         }
+      }
+   }
    g.location=g.base;
    bool breaker[LAWFLAGNUM]={0};
 
@@ -1111,6 +1124,19 @@ char prison(creaturest &g)
             g.armor.type=ARMOR_CLOTHES;
             g.armor.quality='1';
             g.armor.flag=0;
+            // If their old base is no longer under LCS control, wander back to the
+            // homeless shelter instead.
+            if(location[g.base]->renting==-1)
+            {
+               for(int i=0;i<location.size();++i)
+               {
+                  if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
+                  {
+                     g.base=i;
+                     break;
+                  }
+               }
+            }
             g.location=g.base;
             showed=1;
          }

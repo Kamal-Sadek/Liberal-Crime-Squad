@@ -96,7 +96,7 @@ bool LCSInitHomeDir()
     if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
     {
         #ifdef WIN32
-        if(mkdir(homedir)!=0)
+        if(_mkdir(homedir)!=0)
             return false;
         #else
         if(mkdir(homedir,0750)!=0)
