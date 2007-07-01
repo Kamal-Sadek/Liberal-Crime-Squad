@@ -39,6 +39,7 @@ This file is part of Liberal Crime Squad.
 #include <windows.h>
 #include <stdio.h>
 #include <io.h>
+#include <direct.h>
 #else
 #include <stdio.h>
 

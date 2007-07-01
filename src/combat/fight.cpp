@@ -2010,6 +2010,12 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
 /* abandoned liberal is captured by conservatives */
 void capturecreature(creaturest &t)
 {
+   freehostage(t,2); // situation 2 = no message; this may want to be changed to 0 or 1
+   if(t.prisoner)
+   {
+      if(t.prisoner->alive)
+      t.prisoner=NULL; // Stop hauling people
+   }
    if(t.flag & CREATUREFLAG_JUSTESCAPED)
    {
       t.location=cursite;

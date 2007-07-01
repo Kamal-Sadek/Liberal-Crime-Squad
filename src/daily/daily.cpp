@@ -644,7 +644,10 @@ void advanceday(char &clearformess,char canseethings)
       if(disbanding)break;
 
       int p=getpoolcreature(date[d]->mac_id);
-      if(p!=-1)
+      // Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehous today (and is not in the hospital)
+      if(p!=-1&&pool[p]->location!=-1&&(location[pool[p]->location]->renting!=-1||
+         location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
+         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
       {
          //VACATION
          if(date[d]->timeleft>0)
@@ -665,10 +668,10 @@ void advanceday(char &clearformess,char canseethings)
                   }
                }
                if (hs==-1)
-            {
+               {
                   //TODO: Error unable to find location
                   hs=0;
-            }
+               }
 
                if(location[pool[p]->base]->siege.siege)
                {
@@ -990,6 +993,7 @@ int p = 0;
                }
                pool[p]->location=-1;
                pool[p]->base=hs;
+               pool[p]->activity.type=ACTIVITY_NONE;
                pool[p]->hiding=-1; // Hide indefinately
             }
          }

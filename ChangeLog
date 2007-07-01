@@ -1,6 +1,22 @@
 ChangeLog for Version 3.11.2svn:
 (add new messages to the top)
 
+2007-06-30   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* lcsio.cpp, lcsio.h: Windows version of the new I/O uses _mkdir and includes
+direct.h for VC++ support.
+* fight.cpp: Liberals that are captured now lose their hostages.
+* daily.cpp: Liberals that lose contact and go into hiding now stop their
+current actions.
+* daily.cpp: Dates can now only be gone on if the Liberal is either in the
+hospital or at a safehouse.
+* news.cpp: The news no longer specifies whether you were killed when the LCS
+squad is wiped out on site, in order to support cases where you were really just
+arrested.
+* siege.cpp: Hostages which are rescued can no longer continue to be tended.
+* justice.cpp: During trials and on release from prison, Liberals are now
+transferred to the homeless shelter as their new base if their current base is
+no longer a safehouse.
+
 2007-06-30   Chris Johnson   <grundee@users.sourceforge.net>
 * lcsio.h, lcsio.cpp: Completely rewrote the LCS I/O system. Use LCSOpenFile
 and LCSCloseFile now, see documentation in lcsio.h for help.
