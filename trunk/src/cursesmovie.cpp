@@ -104,7 +104,7 @@ void filelistst::open_diskload(FILE* h)
 {
 	int dummy;
 	short dummy2;
-	DWORD numbytes;
+	unsigned int numbytes;
 
 	clean();
 
@@ -183,7 +183,7 @@ void filelistst::smartappend(filelistst &list2)
 
 void CursesMoviest::savemovie(char *filename,int flags=0)
 {
-	DWORD numbytes;
+	unsigned int numbytes;
 	FILE *h;
 	h=LCSOpenFile(filename, "wb", flags);
 
