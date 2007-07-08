@@ -1,3 +1,41 @@
+Release Notes for LCS 3.11.3 
+(Jonathan Stickles & Chris Johnson, July 8th, 2007)
+
+* Complete rewrite of LCSIO system. New system uses C I/O functions with 
+  special functions to open up files with certain prefixes. This allows
+  greater portability and compatibility with Unix-like operating systems.
+  Rewrite by Chris Johnson, VC++ compatibility by Jonathan Stickles.
+
+* Fixed: Bug that caused vacation dates to never end (was not in 3.11.2).
+
+* Fix for bug #1745455: Liberals that are captured now lose their hostages.
+
+* Fix for bug #1742330: Liberals that lose contact and go into hiding now
+  stop their current actions. Bug submitted by Xavior (geminirai).
+
+* Fix for bug #1744460: Dates can now only be gone on if the liberal is either
+  in the hospital or at the safehouse.
+  
+* Fix for bug #1742347: The news no longer specifies whether you were killed
+  when the LCS squad is wiped out on site, in order to support cases where you
+  were really just arrested. Bug submitted by Xotes.
+  
+* Fixed: Hostages which are rescued can no longer continue to be tended.
+
+* Fixed: During trials and on release from prison, Liberals are now
+  transferred to the homeless shelter as their new base if their current base is
+  no longer a safehouse.
+  
+* Fixed: Bug with previous I/O system that caused save games to not be deleted
+  on Linux has been fixed in the new system.
+  
+* Fixed: You will now only be charged with assault for attacking people who
+  aren't already hostile to you.
+
+* Fixed: Bug which would give you a warning instead of your proper sentence
+  1 in 4 times if you didn't commit murder.
+
+------------------------------------------------------------------------------
 Release Notes for LCS 3.11.2 
 (Jonathan Stickles & Chris Johnson, June 23rd, 2007)
 
