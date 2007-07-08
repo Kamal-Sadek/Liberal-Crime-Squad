@@ -647,7 +647,8 @@ void advanceday(char &clearformess,char canseethings)
       // Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehous today (and is not in the hospital)
       if(p!=-1&&pool[p]->location!=-1&&(location[pool[p]->location]->renting!=-1||
          location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
-         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
+         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY)||
+         date[d]->timeleft)
       {
          //VACATION
          if(date[d]->timeleft>0)
