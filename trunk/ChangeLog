@@ -1,6 +1,9 @@
 ChangeLog for Version 3.11.2svn:
 (add new messages to the top)
 
+2007-07-8   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* daily.cpp: Fixed a bug causing vacation dates to never end.
+
 2007-06-30   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * lcsio.cpp, lcsio.h: Windows version of the new I/O uses _mkdir and includes
 direct.h for VC++ support.
