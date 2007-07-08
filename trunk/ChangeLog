@@ -1,5 +1,7 @@
-ChangeLog for Version 3.11.2svn:
-(add new messages to the top)
+ChangeLog for Version 3.11.3:
+
+2007-07-8   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* includes.h, configure.ac: Updated to version 3.11.3 for release.
 
 2007-07-8   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * daily.cpp: Fixed a bug causing vacation dates to never end.
