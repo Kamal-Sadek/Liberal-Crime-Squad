@@ -27,7 +27,7 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.11.3"
+#define PACKAGE_VERSION "3.11.3svn"
 #endif
 
 const unsigned long version=31103;
@@ -1332,6 +1332,8 @@ void makedelimiter(int y,int x);
 void addlocationname(locationst *loc);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(creaturest &g,int y,int x,char smll);
+/* prints amount of money the player has, with optional formatting */
+void printfunds(unsigned int offset, char* formatting=NULL);
 
 /*
  commonactions.cpp
