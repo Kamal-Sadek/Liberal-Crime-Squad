@@ -666,8 +666,11 @@ long select_hostagefundinglevel(creaturest *cr,creaturest *hs)
    long flevel=-1;
 
    erase();
+   
+   
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
+   printfunds(0,1,"Money: ");
    move(0,0);
    addstr("Select a Funding Level for this Operation:");
 
@@ -984,6 +987,7 @@ long select_troublefundinglevel(creaturest *cr)
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
+   printfunds(0,1,"Money: ");
    move(0,0);
    addstr("Select a Funding Level for this Operation:");
 

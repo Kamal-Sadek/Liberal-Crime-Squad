@@ -1,6 +1,9 @@
 ChangeLog for Version 3.11.4:
 
 2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
+* activate.cpp: Added funds to more screens.
+
+2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
 * commondisplay.h: Added real name to the profile of a liberal/conservative
 page.
 
