@@ -1008,13 +1008,9 @@ int l = 0;
    {
       erase();
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      itoa(funds,num,10);
-      move(0,78-strlen(num));
-      addstr("$");
-      addstr(num);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+      
       move(0,0);
       addstr("New Bases for Squadless Liberals");
       move(1,0);
@@ -1142,13 +1138,9 @@ void promoteliberals(void)
    {
       erase();
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      itoa(funds,num,10);
-      move(0,78-strlen(num));
-      addstr("$");
-      addstr(num);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+      
       move(0,0);
       addstr("Promote the Elite Liberals");
       move(1,0);

@@ -96,11 +96,8 @@ void locheader(void)
    itoa(year,num,10);
    addstr(num);
 
-   set_color(COLOR_GREEN,COLOR_BLACK,1);
-   itoa(funds,num,10);
-   move(0,78-strlen(num));
-   addstr("$");
-   addstr(num);
+   
+    printfunds(0,1,"Money: ");
 
    if(activesquad!=NULL)
    {
@@ -1255,4 +1252,63 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
          addstr("Liberal");
       }
    }
+}
+
+/*
+  This function prints the cash the player has with optional prefix as 
+  well as screen coordinates.
+  
+  Please note that offsetx is the offset from the right of the screen, y is 
+  the offset from the top as always.
+  
+
+*/
+void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
+{
+	
+	char moneystr[50];
+	
+	char prefixbuffer[50];
+	
+	if(prefix==NULL)
+	{
+		strncpy(prefixbuffer,"",50);
+	}
+	else
+	{
+		strncpy(prefixbuffer,prefix,50);
+	}
+	
+	sprintf(moneystr,"$%d",funds);
+	
+	
+	//Save screen coordinates for later.
+	int begy,begx;
+	getyx(stdscr,begy,begx);
+	
+	//Save color and brightness information for later.
+	short colorpair;
+	short front, back;
+	short dim;
+	
+	attr_t attrs;
+	attr_get(&attrs,&colorpair,NULL);
+	if((attrs & WA_DIM)==0)
+		dim=0;
+	else
+		dim=1;
+	pair_content(colorpair,&front,&back);
+	
+	
+	//Move, set color, and write.
+	move(y,80-strlen(moneystr)-strlen(prefixbuffer)-offsetx);
+	addstr(prefixbuffer);
+	set_color(COLOR_GREEN,COLOR_BLACK,1);
+	addstr(moneystr);
+	
+	//Recover old settings
+	move(begy,begx);
+	set_color(front,back,dim);
+	
+	
 }

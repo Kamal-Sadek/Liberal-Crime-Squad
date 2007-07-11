@@ -1333,7 +1333,7 @@ void addlocationname(locationst *loc);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(creaturest &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
-void printfunds(unsigned int offset, char* formatting=NULL);
+void printfunds(unsigned int y, unsigned int offset, char* prefix=NULL);
 
 /*
  commonactions.cpp

@@ -235,14 +235,9 @@ char completedate(datest &d,int p,char &clearformess)
          case 1:addstr("Liberal");break;
       }
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      move(0,66);
-      addstr("$");
-      char num[20];
-      itoa(funds,num,10);
-      addstr(num);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+
       move(2,0);
       addstr("How should ");
       addstr(pool[p]->name);

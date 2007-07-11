@@ -70,14 +70,11 @@ void activate(void)
    do
    {
       erase();
+      
+      set_color(COLOR_WHITE,COLOR_BLACK,0);     
+      printfunds(0,1,"Money: ");
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      itoa(funds,num,10);
-      move(0,78-strlen(num));
-      addstr("$");
-      addstr(num);
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      
       move(0,0);
       addstr("Activate Uninvolved Liberals");
       move(1,0);
@@ -187,13 +184,9 @@ void activate(creaturest *cr)
    {
       erase();
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      itoa(funds,num,10);
-      move(0,78-strlen(num));
-      addstr("$");
-      addstr(num);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+      
       move(0,0);
       addstr("Taking Action:   What will ");
       addstr(cr->name);
@@ -400,11 +393,8 @@ void activatebulk(void)
    {
       erase();
 
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      itoa(funds,num,10);
-      move(0,78-strlen(num));
-      addstr("$");
-      addstr(num);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(0,0);

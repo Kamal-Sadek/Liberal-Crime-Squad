@@ -426,13 +426,11 @@ void makecharacter(void)
    move(0,0);
    addstr("What is your name to the People?");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-   keypad(stdscr,FALSE);
-   raw_output(FALSE);
-   echo();
-   curs_set(1);
    move(1,0);
-   enter_name(newcr->name,CREATURE_NAMELEN);
+   addstr("Press enter to be known by your real name instead.");
+  
+   move(2,0);
+   enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
 
    curs_set(0);
    noecho();
