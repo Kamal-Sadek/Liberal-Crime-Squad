@@ -211,6 +211,7 @@ void makecreature(creaturest &cr,short type)
             cr.clip[CLIP_22]=3;
          }
          cr.align=LCSrandom(3)-1;
+         sk=LCSrandom(2)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
          break;
       case CREATURE_LANDLORD:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))

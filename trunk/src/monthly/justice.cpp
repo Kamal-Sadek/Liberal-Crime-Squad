@@ -414,37 +414,16 @@ void trial(creaturest &g)
       }
       else if(breaker[LAWFLAG_RESIST])
       {
-         if(g.lawflag[LAWFLAG_RESIST]>1)
-         {
-            char str[10];
-            itoa(g.lawflag[LAWFLAG_RESIST],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
          addstr("resisting arrest");
          breaker[LAWFLAG_RESIST]=0;
       }
       else if(breaker[LAWFLAG_DISTURBANCE])
       {
-         if(g.lawflag[LAWFLAG_DISTURBANCE]>1)
-         {
-            char str[10];
-            itoa(g.lawflag[LAWFLAG_DISTURBANCE],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
          addstr("disturbing the peace");
          breaker[LAWFLAG_DISTURBANCE]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
       {
-         if(g.lawflag[LAWFLAG_LOITERING]>1)
-         {
-            char str[10];
-            itoa(g.lawflag[LAWFLAG_LOITERING],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
          addstr("loitering");
          breaker[LAWFLAG_LOITERING]=0;
       }

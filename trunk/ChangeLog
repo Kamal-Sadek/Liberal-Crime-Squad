@@ -1,5 +1,17 @@
 ChangeLog for Version 3.11.4:
 
+2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpp: Fixed multiple crashes related to car theft chases.
+* creature.cpp: Secretaries now get a little bit of writing skill.
+* activities.cpp: Car locks are harder to jimmy and it is harder to hotwire
+cars. Chance of getting caught pulling away now considers whether you broke
+the window and whether you are trying to steal a police car.
+* daily.cpp: You are now charged with car theft if you give up to police when
+stealing a car.
+* justice.cpp: Resisting arrest, disturbing the peace, and loitering no longer
+report how many charges you are faced with.
+* talk.cpp: You may now voluntarily surrender to the police on site.
+
 2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
 * activate.cpp: Added funds to more screens.
 

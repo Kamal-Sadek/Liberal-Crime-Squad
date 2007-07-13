@@ -1973,6 +1973,7 @@ char stealcar(creaturest &cr,char &clearformess)
       if(LCSrandom(100)<sensealarmchance(cartype))sensealarm=1;
       char touchalarm=0;
       if(LCSrandom(100)<touchalarmchance(cartype))touchalarm=1;
+      char windowdamage=0;
 
       do
       {
@@ -2055,10 +2056,9 @@ char stealcar(creaturest &cr,char &clearformess)
          //PICK LOCK
          if(method==0)
          {
-            int attack=cr.attval(ATTRIBUTE_INTELLIGENCE)+
-               cr.skill[SKILL_SECURITY];
+            int attack=cr.skill[SKILL_SECURITY];
 
-            cr.skill_ip[SKILL_SECURITY]+=2;
+            cr.skill_ip[SKILL_SECURITY]+=7;
 
             if(LCSrandom(11)<attack)
             {
@@ -2085,7 +2085,7 @@ char stealcar(creaturest &cr,char &clearformess)
             int attack=cr.attval(ATTRIBUTE_STRENGTH)+
                bashstrengthmod(cr.weapon.type);
 
-            if(LCSrandom(11)<attack)
+            if(LCSrandom(11)<attack+windowdamage)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
@@ -2100,6 +2100,8 @@ char stealcar(creaturest &cr,char &clearformess)
                }
                addstr(".");
                refresh();getch();
+               
+               windowdamage=10;
 
                entered=1;
             }
@@ -2117,6 +2119,9 @@ char stealcar(creaturest &cr,char &clearformess)
                   addstr(str);
                }
                addstr(" but it is still somewhat intact.");
+
+               windowdamage+=1;
+
                refresh();getch();
             }
          }
@@ -2150,7 +2155,6 @@ char stealcar(creaturest &cr,char &clearformess)
             //FOOT CHASE
             chaseseq.clean();
             chaseseq.location=0;
-            cr.lawflag[LAWFLAG_CARTHEFT];
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_CARTHEFT;
             newsstory.push_back(ns);
@@ -2235,10 +2239,9 @@ char stealcar(creaturest &cr,char &clearformess)
          //HOTWIRE CAR
          if(method==0)
          {
-            int attack=cr.attval(ATTRIBUTE_INTELLIGENCE)+
-               cr.skill[SKILL_SECURITY];
+            int attack=cr.skill[SKILL_SECURITY];
 
-            cr.skill_ip[SKILL_SECURITY]+=2;
+            cr.skill_ip[SKILL_SECURITY]+=7;
 
             if(LCSrandom(11)<attack)
             {
@@ -2268,8 +2271,8 @@ char stealcar(creaturest &cr,char &clearformess)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;
-               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!   ");
-               else addstr("Holy shit!   ");
+               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  ");
+               else addstr("Holy shit!  ");
                addstr(cr.name);
                addstr(" found the keys ");
                switch(LCSrandom(5))
@@ -2323,7 +2326,6 @@ char stealcar(creaturest &cr,char &clearformess)
             //FOOT CHASE
             chaseseq.clean();
             chaseseq.location=0;
-            cr.lawflag[LAWFLAG_CARTHEFT];
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_CARTHEFT;
             newsstory.push_back(ns);
@@ -2344,15 +2346,14 @@ char stealcar(creaturest &cr,char &clearformess)
       //CHASE SEQUENCE
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
       if(v->type==VEHICLE_SUV||
-         v->type==VEHICLE_POLICECAR)addjuice(cr,2,20);
+         v->type==VEHICLE_POLICECAR)addjuice(cr,2,50);
 
       chaseseq.clean();
       chaseseq.location=0;
-      int chaselev=!LCSrandom(4);
-      if(chaselev>0)
+      int chaselev=!LCSrandom(13-windowdamage);
+      if(chaselev>0||(v->type==VEHICLE_POLICECAR&&LCSrandom(2)))
       {
          chaselev=1;
-         cr.lawflag[LAWFLAG_CARTHEFT];
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_CARTHEFT;
          newsstory.push_back(ns);
