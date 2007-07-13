@@ -259,7 +259,7 @@ void passmonth(char &clearformess,char canseethings)
             if(law[LAW_POLICEBEHAVIOR]==1)copstrength=75;
             if(law[LAW_POLICEBEHAVIOR]==2)copstrength=50;
 
-            if(LCSrandom(copstrength)>pool[p]->juice+pool[p]->attval(ATTRIBUTE_HEART,0)*5&&pool[p]->hireid!=-1)
+            if(LCSrandom(copstrength)>pool[p]->juice+pool[p]->attval(ATTRIBUTE_HEART)*5-pool[p]->attval(ATTRIBUTE_WISDOM)*5&&pool[p]->hireid!=-1)
             {
                if(pool[p]->hireid!=-1)
                {

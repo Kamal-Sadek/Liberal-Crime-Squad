@@ -300,7 +300,7 @@ char completedate(datest &d,int p,char &clearformess)
                getch();
 
                if(d.date[e]->att[ATTRIBUTE_WISDOM]<=1||
-                  LCSrandom(10)>d.date[e]->att[ATTRIBUTE_WISDOM])
+                  LCSrandom(d.date[e]->att[ATTRIBUTE_HEART])>d.date[e]->att[ATTRIBUTE_WISDOM])
                {
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(y,0);y++;
@@ -349,7 +349,8 @@ char completedate(datest &d,int p,char &clearformess)
                }
                else
                {
-                  d.date[e]->att[ATTRIBUTE_WISDOM]--;
+                  if(d.date[e]->att[ATTRIBUTE_HEART]<6)d.date[e]->att[ATTRIBUTE_HEART]++;
+                  else d.date->att[ATTRIBUTE_WISDOM]--;
 
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   move(y,0);y++;
@@ -534,7 +535,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" has failed to kidnap the Conservative.");
 
                   // Charge with kidnapping
-                  pool[p]->lawflag[LAWFLAG_KIDNAPPING]++;
+                  ++pool[p]->lawflag[LAWFLAG_KIDNAPPING];
 
                   refresh();
                   getch();
@@ -573,7 +574,7 @@ char completedate(datest &d,int p,char &clearformess)
                   pool[p]->activity.type=ACTIVITY_NONE;
 
                   // Charge with kidnapping
-                  pool[p]->lawflag[LAWFLAG_KIDNAPPING];
+                  ++pool[p]->lawflag[LAWFLAG_KIDNAPPING];
 
                   refresh();
                   getch();

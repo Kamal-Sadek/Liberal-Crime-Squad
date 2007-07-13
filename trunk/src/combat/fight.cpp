@@ -408,7 +408,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                strcat(str,t.name);
                strcat(str,"!");
                resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                  t.attval(ATTRIBUTE_HEART,0)+t.skill[SKILL_LAW];
+                  t.attval(ATTRIBUTE_HEART,0)+t.skill[SKILL_LAW]-
+                  t.attval(ATTRIBUTE_WISDOM,0);
                attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE)/2+1)+LCSrandom(a.skill[SKILL_LAW]+1);
                break;
             case CREATURE_SCIENTIST_EMINENT:
@@ -422,7 +423,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                strcat(str,t.name);
                strcat(str,"!");
                resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                  t.attval(ATTRIBUTE_HEART,0);
+                  t.attval(ATTRIBUTE_HEART,0)-
+                  t.attval(ATTRIBUTE_WISDOM,0);
                attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE));
                break;
             case CREATURE_CORPORATE_CEO:
@@ -442,7 +444,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                strcat(str," ");
                strcat(str,t.name);
                strcat(str,"!");
-               resist=t.attval(ATTRIBUTE_HEART,0);
+               resist=t.attval(ATTRIBUTE_HEART,0)-
+                  t.attval(ATTRIBUTE_WISDOM,0);
                attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1);
                break;
             case CREATURE_RADIOPERSONALITY:
@@ -459,7 +462,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                strcat(str,t.name);
                strcat(str,"!");
                resist=t.attval(ATTRIBUTE_CHARISMA,0)+
-                  t.attval(ATTRIBUTE_HEART,0);
+                  t.attval(ATTRIBUTE_HEART,0)-
+                  t.attval(ATTRIBUTE_WISDOM,0);
                attack+=LCSrandom(a.attval(ATTRIBUTE_CHARISMA));
                break;
          }

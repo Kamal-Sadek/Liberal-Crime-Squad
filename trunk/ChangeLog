@@ -1,6 +1,11 @@
 ChangeLog for Version 3.11.4:
 
 2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp, monthly.cpp: Added more places where Wisdom is used.
+* date.cpp: Bug causing liberals who are caught trying to kidnap their dates
+to be not properly charged with kidnapping has been fixed.
+
+2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * chase.cpp: Fixed multiple crashes related to car theft chases.
 * creature.cpp: Secretaries now get a little bit of writing skill.
 * activities.cpp: Car locks are harder to jimmy and it is harder to hotwire
