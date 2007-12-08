@@ -288,6 +288,7 @@ int skillatt(int skill)
    case SKILL_COMPUTERS:
    case SKILL_GARMENTMAKING:
    case SKILL_WRITING:
+   case SKILL_STREETSENSE:
       return ATTRIBUTE_INTELLIGENCE;
    default:
       return -1;
@@ -511,32 +512,32 @@ int lawflagheat(int lawflag)
 {
    switch(lawflag)
    {
-   case LAWFLAG_KIDNAPPING:return 30;
-   case LAWFLAG_MURDER:return 30;
-   case LAWFLAG_THEFT:return 2;
-   case LAWFLAG_BREAKING:return 1;
-   case LAWFLAG_TERRORISM:return 100;
-   case LAWFLAG_JURY:return 30;
-   case LAWFLAG_TREASON:return 100;
-   case LAWFLAG_ESCAPED:return 50;
-   case LAWFLAG_HELPESCAPE:return 50;
-   case LAWFLAG_RESIST:return 5;
-   case LAWFLAG_BURNFLAG:return 5;
-   case LAWFLAG_SPEECH:return 5;
-   case LAWFLAG_VANDALISM:return 4;
-   case LAWFLAG_ASSAULT:return 10;
-   case LAWFLAG_CARTHEFT:return 5;
-   case LAWFLAG_INFORMATION:return 5;
-   case LAWFLAG_COMMERCE:return 1;
-   case LAWFLAG_CCFRAUD:return 10;
-   case LAWFLAG_BROWNIES:return 10;
-   case LAWFLAG_BURIAL:return 5;
-   case LAWFLAG_PROSTITUTION:return 1;
-   case LAWFLAG_DISTURBANCE:return 1;
-   case LAWFLAG_HIREILLEGAL:return 1;
-   case LAWFLAG_RACKETEERING:return 10;
+   case LAWFLAG_KIDNAPPING:return 2;
+   case LAWFLAG_MURDER:return 2;
+   case LAWFLAG_THEFT:return 0;
+   case LAWFLAG_BREAKING:return 0;
+   case LAWFLAG_TERRORISM:return 10;
+   case LAWFLAG_JURY:return 0;
+   case LAWFLAG_TREASON:return 10;
+   case LAWFLAG_ESCAPED:return 5;
+   case LAWFLAG_HELPESCAPE:return 5;
+   case LAWFLAG_RESIST:return 0;
+   case LAWFLAG_BURNFLAG:return 0;
+   case LAWFLAG_SPEECH:return 0;
+   case LAWFLAG_VANDALISM:return 0;
+   case LAWFLAG_ASSAULT:return 0;
+   case LAWFLAG_CARTHEFT:return 0;
+   case LAWFLAG_INFORMATION:return 0;
+   case LAWFLAG_COMMERCE:return 0;
+   case LAWFLAG_CCFRAUD:return 1;
+   case LAWFLAG_BROWNIES:return 1;
+   case LAWFLAG_BURIAL:return 0;
+   case LAWFLAG_PROSTITUTION:return 0;
+   case LAWFLAG_DISTURBANCE:return 0;
+   case LAWFLAG_HIREILLEGAL:return 0;
+   case LAWFLAG_RACKETEERING:return 5;
    case LAWFLAG_LOITERING:return 0;
-   case LAWFLAG_GUNCARRY:return 20;
+   case LAWFLAG_GUNCARRY:return 0;
    default:return 0;
    }
 }

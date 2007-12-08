@@ -95,6 +95,21 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_SELL_ART:
          strcat(str,"Selling Art");
          break;
+      case ACTIVITY_TEACH_GENERALED:
+         strcat(str,"Teaching General ED");
+         break;
+      case ACTIVITY_TEACH_POLITICS:
+         strcat(str,"Teaching Politics");
+         break;
+      case ACTIVITY_TEACH_SURVIVAL:
+         strcat(str,"Teaching Survival");
+         break;
+      case ACTIVITY_TEACH_FIGHTING:
+         strcat(str,"Teaching Fighting");
+         break;
+      case ACTIVITY_TEACH_COVERT:
+         strcat(str,"Teaching Covert Ops");
+         break;
       case ACTIVITY_SELL_MUSIC:
          strcat(str,"Selling Music");
          break;
@@ -533,7 +548,7 @@ void getskill(char *str,int type)
       case SKILL_STREETSENSE:strcpy(str,"Street Sense");break;
       case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
       case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
-      case SKILL_MEDICAL:strcpy(str,"Medicine");break;
+      case SKILL_MEDICAL:strcpy(str,"First Aid");break;
    }
 }
 
@@ -671,6 +686,8 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_ATHLETE:strcat(str,"Athlete");break;
       case CREATURE_TEENAGER:strcat(str,"Teenager");break;
       case CREATURE_PRISONER:strcat(str,"Prisoner");break;
+      case CREATURE_DOCTOR:strcat(str,"Doctor");break;
+      case CREATURE_NURSE:strcat(str,"Nurse");break;
       default:
          strcat(str,"Liberal");
          break;

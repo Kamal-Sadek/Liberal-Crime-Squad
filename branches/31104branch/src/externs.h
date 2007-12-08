@@ -62,8 +62,8 @@ extern short attitude[VIEWNUM];
 
 // Topicwork1 is editorials that are waiting to be written
 // Topicwork2 is editorials that have been written
-extern short newspaper_topicwork1[VIEWNUM];
-extern short newspaper_topicwork2[VIEWNUM];
+extern short public_interest[VIEWNUM];
+extern short background_liberal_influence[VIEWNUM];
 
 extern unsigned long funds;
 

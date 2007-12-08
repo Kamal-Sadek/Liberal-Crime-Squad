@@ -14,7 +14,7 @@
    DEBUG DEFINES
 */
 //#define NOENEMYATTACK
-//#define SHITLAWS
+#define SHITLAWS
 //#define GIVEBLOODYARMOR
 //#define HIGHFUNDS
 //#define AUTOENLIGHTEN
@@ -348,6 +348,8 @@ enum CreatureTypes
    CREATURE_TAXIDRIVER,
    CREATURE_NUN,
    CREATURE_MUTANT,
+   CREATURE_DOCTOR,
+   CREATURE_NURSE,
    CREATURENUM
 };
 
@@ -758,11 +760,13 @@ enum Activity
    ACTIVITY_TEACH_FIGHTING,
    ACTIVITY_TEACH_COVERT,
    ACTIVITY_CLINIC,
+   ACTIVITY_HEAL,
    ACTIVITYNUM
 };
 
 struct activityst
 {
+   activityst() : type(0), arg(0), arg2(0) { }
    long type;
    long arg;
    long arg2;
@@ -804,8 +808,8 @@ struct creaturest
    char forceinc;
 
    long att[ATTNUM];
-   unsigned long skill[SKILLNUM];
-   unsigned long skill_ip[SKILLNUM];
+   int skill[SKILLNUM];
+   int skill_ip[SKILLNUM];
 
    weaponst weapon;
    armorst armor;

@@ -104,7 +104,7 @@ void passmonth(char &clearformess,char canseethings)
    int computernum=0;
 
    //STORIES STALE EVEN IF NOT PRINTED
-   for(v=0;v<VIEWNUM;v++)newspaper_topicwork1[v]/=2;
+   for(v=0;v<VIEWNUM;v++)public_interest[v]/=2;
 
    int conspower=200-attitude[VIEW_AMRADIO]-attitude[VIEW_CABLENEWS];
    
@@ -121,8 +121,8 @@ void passmonth(char &clearformess,char canseethings)
    for(v=0;v<VIEWNUM;v++)
    {
       // Liberal essays add their power to the effect of sleepers
-      libpower[v]+=newspaper_topicwork2[v];
-      newspaper_topicwork2[v]=0;
+      libpower[v]+=background_liberal_influence[v];
+      background_liberal_influence[v]=0;
 
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
@@ -346,129 +346,7 @@ void passmonth(char &clearformess,char canseethings)
    //FUND REPORTS
    fundreport(clearformess);
 
-   //HEAL CLINIC PEOPLE AND TRAIN
-   for(p=0;p<pool.size();p++)
-   {
-      if(disbanding)break;
-
-      if(pool[p]->clinic>0)
-      {
-         pool[p]->clinic--;
-
-         for(int w=0;w<BODYPARTNUM;w++)
-         {
-            if((pool[p]->wound[w] & WOUND_NASTYOFF)||
-               (pool[p]->wound[w] & WOUND_CLEANOFF))
-            {
-               pool[p]->wound[w]=(char)WOUND_CLEANOFF;
-            }
-            else pool[p]->wound[w]=0;
-         }
-
-         if(pool[p]->special[SPECIALWOUND_RIGHTLUNG]!=1)
-         {
-            pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
-            if(LCSrandom(2))
-            {
-               pool[p]->att[ATTRIBUTE_HEALTH]--;
-               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]=1;
-               }
-            }
-         }
-         if(pool[p]->special[SPECIALWOUND_LEFTLUNG]!=1)
-         {
-            pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
-            if(LCSrandom(2))
-            {
-               pool[p]->att[ATTRIBUTE_HEALTH]--;
-               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]=1;
-               }
-            }
-         }
-         if(pool[p]->special[SPECIALWOUND_HEART]!=1)
-         {
-            pool[p]->special[SPECIALWOUND_HEART]=1;
-            if(LCSrandom(3))
-            {
-               pool[p]->att[ATTRIBUTE_HEALTH]--;
-               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]=1;
-               }
-            }
-         }
-         pool[p]->special[SPECIALWOUND_LIVER]=1;
-         pool[p]->special[SPECIALWOUND_STOMACH]=1;
-         pool[p]->special[SPECIALWOUND_RIGHTKIDNEY]=1;
-         pool[p]->special[SPECIALWOUND_LEFTKIDNEY]=1;
-         pool[p]->special[SPECIALWOUND_SPLEEN]=1;
-         pool[p]->special[SPECIALWOUND_RIBS]=RIBNUM;
-         if(!pool[p]->special[SPECIALWOUND_NECK])
-         {
-            pool[p]->special[SPECIALWOUND_NECK]=2;
-         }
-         if(!pool[p]->special[SPECIALWOUND_UPPERSPINE])
-         {
-            pool[p]->special[SPECIALWOUND_UPPERSPINE]=2;
-         }
-         if(!pool[p]->special[SPECIALWOUND_LOWERSPINE])
-         {
-            pool[p]->special[SPECIALWOUND_LOWERSPINE]=2;
-         }
-
-         if(pool[p]->blood<=20&&pool[p]->clinic<=2)pool[p]->blood=50;
-         if(pool[p]->blood<=50&&pool[p]->clinic<=1)pool[p]->blood=75;
-
-         if(pool[p]->clinic==0)
-         {
-            pool[p]->blood=100;
-            if(clearformess)
-            {
-               erase();
-            }
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(pool[p]->name);
-            addstr(" has left ");
-            addstr(location[pool[p]->location]->name);
-            addstr(".");
-
-            int hs=-1;
-            for(int l=0;l<location.size();l++)
-            {
-               if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-               {
-                  hs=l;
-                  break;
-               }
-            }
-            if (hs==-1)
-            {
-               //TODO: Error unable to find location
-               hs=0;
-            }
-
-            if(location[pool[p]->base]->siege.siege)
-            {
-               pool[p]->base=hs;
-            }
-
-            pool[p]->location=pool[p]->base;
-
-            refresh();
-            getch();
-         }
-      }
-   }
+   
 }
 
 

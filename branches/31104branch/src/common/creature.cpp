@@ -250,6 +250,33 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(4)+4;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
 			randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          break;
+      case CREATURE_DOCTOR:
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         {
+            cr.weapon.type=WEAPON_REVOLVER_22;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_22]=0;
+         }
+         strcpy(cr.name,"Doctor");
+         cr.armor.type=ARMOR_LABCOAT;
+         cr.money=LCSrandom(21)+20;
+         cr.align=LCSrandom(3)-1;
+
+         sk=LCSrandom(4)+4;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
+         break;
+      case CREATURE_NURSE:
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         {
+            cr.weapon.type=WEAPON_REVOLVER_22;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_22]=0;
+         }
+         strcpy(cr.name,"Nurse");
+         cr.armor.type=ARMOR_LABCOAT;
+         cr.align=LCSrandom(3)-1;
+
+         sk=LCSrandom(4)+1;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
+         break;
       case CREATURE_WORKER_FACTORY_UNION:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
@@ -1836,6 +1863,15 @@ void verifyworklocation(creaturest &cr)
       case CREATURE_LAWYER:
          okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
          break;
+      case CREATURE_DOCTOR:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_NURSE:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
       case CREATURE_SEWERWORKER:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
@@ -2074,6 +2110,8 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
          break;
+      default:
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
    }
 
    char swap=0;

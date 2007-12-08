@@ -2958,7 +2958,7 @@ void majornewspaper(char &clearformess,char canseethings)
 
       if(ns->positive)change_public_opinion(ns->view,20,0);
       else change_public_opinion(ns->view,-20,0);
-      newspaper_topicwork1[ns->view]+=50;
+      public_interest[ns->view]+=50;
    }
 
    //DELETE STORIES THAT HAVE NO CONTENT
@@ -3451,21 +3451,21 @@ void majornewspaper(char &clearformess,char canseethings)
    //Essay writing
    for(int w=0;w<VIEWNUM;w++)
    {
-      if(!newspaper_topicwork1[w])
+      if(!public_interest[w])
       {
          continue;
       }
       else
       {
-         if(newspaper_topicwork1[w]>writers[w])
+         if(public_interest[w]>writers[w])
          {
-            newspaper_topicwork1[w]-=writers[w];
-            newspaper_topicwork2[w]+=writers[w];
+            public_interest[w]-=writers[w];
+            background_liberal_influence[w]+=writers[w];
          }
          else
          {
-            newspaper_topicwork2[w]=newspaper_topicwork1[w];
-            newspaper_topicwork1[w]=0;
+            background_liberal_influence[w]=public_interest[w];
+            public_interest[w]=0;
          }
       }
    }
@@ -3516,15 +3516,15 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             case SITE_LABORATORY_COSMETICS:
                change_public_opinion(VIEW_ANIMALRESEARCH,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_ANIMALRESEARCH]+=power/2+1;
+               public_interest[VIEW_ANIMALRESEARCH]+=power/2+1;
                break;
             case SITE_LABORATORY_GENETIC:
                change_public_opinion(VIEW_GENETICS,power/4+1,colored);
-               newspaper_topicwork1[VIEW_GENETICS]+=power/2+1;
+               public_interest[VIEW_GENETICS]+=power/2+1;
                break;
             case SITE_GOVERNMENT_POLICESTATION:
                change_public_opinion(VIEW_POLICEBEHAVIOR,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_POLICEBEHAVIOR]+=power/2+1;
+               public_interest[VIEW_POLICEBEHAVIOR]+=power/2+1;
                break;
             case SITE_GOVERNMENT_COURTHOUSE:
                change_public_opinion(VIEW_DEATHPENALTY,power/4+1,colored,power);
@@ -3532,65 +3532,65 @@ void majornewspaper(char &clearformess,char canseethings)
                change_public_opinion(VIEW_FREESPEECH,power/4+1,colored,power);
                change_public_opinion(VIEW_ABORTION,power/4+1,colored,power);
                change_public_opinion(VIEW_GAY,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_DEATHPENALTY]+=power/2+1;
-               newspaper_topicwork1[VIEW_JUSTICES]+=power/2+1;
-               newspaper_topicwork1[VIEW_FREESPEECH]+=power/2+1;
-               newspaper_topicwork1[VIEW_ABORTION]+=power/2+1;
-               newspaper_topicwork1[VIEW_GAY]+=power/2+1;
+               public_interest[VIEW_DEATHPENALTY]+=power/2+1;
+               public_interest[VIEW_JUSTICES]+=power/2+1;
+               public_interest[VIEW_FREESPEECH]+=power/2+1;
+               public_interest[VIEW_ABORTION]+=power/2+1;
+               public_interest[VIEW_GAY]+=power/2+1;
                break;
             case SITE_GOVERNMENT_PRISON:
                change_public_opinion(VIEW_DEATHPENALTY,power/4+1,colored,power);
                change_public_opinion(VIEW_PRISONS,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_PRISONS]+=power/2+1;
-               newspaper_topicwork1[VIEW_DEATHPENALTY]+=power/2+1;
+               public_interest[VIEW_PRISONS]+=power/2+1;
+               public_interest[VIEW_DEATHPENALTY]+=power/2+1;
                break;
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
                change_public_opinion(VIEW_INTELLIGENCE,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_INTELLIGENCE]+=power/2+1;
+               public_interest[VIEW_INTELLIGENCE]+=power/2+1;
                break;
             case SITE_INDUSTRY_SWEATSHOP:
                change_public_opinion(VIEW_SWEATSHOPS,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_SWEATSHOPS]+=power/2+1;
+               public_interest[VIEW_SWEATSHOPS]+=power/2+1;
                break;
             case SITE_INDUSTRY_POLLUTER:
                change_public_opinion(VIEW_POLLUTION,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_POLLUTION]+=power/2+1;
+               public_interest[VIEW_POLLUTION]+=power/2+1;
                break;
             case SITE_INDUSTRY_NUCLEAR:
                change_public_opinion(VIEW_NUCLEARPOWER,power/4+1,colored,power);
-               newspaper_topicwork1[VIEW_NUCLEARPOWER]+=power/2+1;
+               public_interest[VIEW_NUCLEARPOWER]+=power/2+1;
                break;
             case SITE_CORPORATE_HEADQUARTERS:
 					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
                change_public_opinion(VIEW_CORPORATECULTURE,power/4+1,colored,power);
-					newspaper_topicwork1[VIEW_TAXES]+=power/2+1;
-               newspaper_topicwork1[VIEW_CORPORATECULTURE]+=power/2+1;
+					public_interest[VIEW_TAXES]+=power/2+1;
+               public_interest[VIEW_CORPORATECULTURE]+=power/2+1;
                break;
             case SITE_CORPORATE_HOUSE:
 					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
 					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power);
-					newspaper_topicwork1[VIEW_TAXES]+=power/2+1;
-					newspaper_topicwork1[VIEW_CEOSALARY]+=power/2+1;
+					public_interest[VIEW_TAXES]+=power/2+1;
+					public_interest[VIEW_CEOSALARY]+=power/2+1;
                break;
             case SITE_MEDIA_AMRADIO:
                change_public_opinion(VIEW_AMRADIO,power/8+1,colored,power);
-               newspaper_topicwork1[VIEW_AMRADIO]+=power/2+1;
+               public_interest[VIEW_AMRADIO]+=power/2+1;
                break;
             case SITE_MEDIA_CABLENEWS:
                change_public_opinion(VIEW_CABLENEWS,power/8+1,colored,power);
-               newspaper_topicwork1[VIEW_CABLENEWS]+=power/2+1;
+               public_interest[VIEW_CABLENEWS]+=power/2+1;
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 					change_public_opinion(VIEW_TAXES,power/8+1,colored,power);
 					change_public_opinion(VIEW_CEOSALARY,power/8+1,colored,power);
-					newspaper_topicwork1[VIEW_TAXES]+=power/2+1;
-					newspaper_topicwork1[VIEW_CEOSALARY]+=power/2+1;
+					public_interest[VIEW_TAXES]+=power/2+1;
+					public_interest[VIEW_CEOSALARY]+=power/2+1;
                break;
             case SITE_BUSINESS_CIGARBAR:
 					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
 					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power);
-					newspaper_topicwork1[VIEW_TAXES]+=power/2+1;
-					newspaper_topicwork1[VIEW_CEOSALARY]+=power/2+1;
+					public_interest[VIEW_TAXES]+=power/2+1;
+					public_interest[VIEW_CEOSALARY]+=power/2+1;
                break;
          }
       }

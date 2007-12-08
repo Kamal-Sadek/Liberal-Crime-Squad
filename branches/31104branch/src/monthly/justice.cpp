@@ -920,25 +920,24 @@ void penalize(creaturest &g,char lenient)
       move(7,1);
       addstr(g.propername);
       addstr(", you are sentenced to ");
+      if(g.sentence>1200) g.sentence/=-1200;
+      
       if(g.sentence<=-1)
       {
-         if(g.sentence<-4)
+         if(g.sentence<-1)
          {
             char num[20];
-            itoa(-(g.sentence+3),num,10);
+            itoa(-(g.sentence),num,10);
             addstr(num);
-            addstr(" consecutive lifetimes in prison.");
+            addstr(" consecutive life terms in prison.");
             
-            if(g.sentence<12)
-            {
-               refresh();
-               getch();
+            refresh();
+            getch();
 
-               move(9,1);
-               addstr("Have a nice day, ");
-               addstr(g.propername);
-               addstr(".");
-            }
+            move(9,1);
+            addstr("Have a nice day, ");
+            addstr(g.propername);
+            addstr(".");
          }
          else addstr("life in prison.");
       }
@@ -950,17 +949,6 @@ void penalize(creaturest &g,char lenient)
          addstr(" year");
          if(g.sentence/12>1)addstr("s");
          addstr(" in prison.");
-
-         if(g.sentence>5600)
-         {
-            refresh();
-            getch();
-
-            move(9,1);
-            addstr("Have a nice day, ");
-            addstr(g.propername);
-            addstr(".");
-         }
       }
       else
       {

@@ -1390,8 +1390,8 @@ char footchase(creaturest &cr)
    creaturest *crp=&cr;
    squadst *sq=new squadst;
       sq->squad[0]=&cr;
-      sq->squad[0]->id=cursquadid;cursquadid++;
-      cr.squadid=sq->squad[0]->id;
+      sq->squad[0]->squadid=cursquadid;cursquadid++;
+      cr.squadid=sq->squad[0]->squadid;
       cr.carid=-1;
 
    squadst *oact=activesquad;
@@ -1435,9 +1435,9 @@ char chasesequence(creaturest &cr,vehiclest &v)
    long oldsqid=cr.squadid;
    squadst *sq=new squadst;
       sq->squad[0]=&cr;
-      sq->squad[0]->id=cursquadid;cursquadid++;
+      sq->squad[0]->squadid=cursquadid;cursquadid++;
       sq->id=cursquadid;cursquadid++;
-      cr.squadid=sq->squad[0]->id;
+      cr.squadid=sq->squad[0]->squadid;
       cr.carid=v.id;
       cr.is_driver=1;
 

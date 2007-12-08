@@ -243,10 +243,10 @@ void advanceday(char &clearformess,char canseethings)
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
                         if(v >= 0) 
                         {
-                              if(driveskill(*squad[sq]->squad[passenger[p]],vehicle[v])>max&&
-                                 squad[sq]->squad[passenger[p]]->canwalk())
-                              {
-                                    max=driveskill(*squad[sq]->squad[passenger[p]],vehicle[v]);
+                           if(driveskill(*squad[sq]->squad[passenger[p]],vehicle[v])>max&&
+                              squad[sq]->squad[passenger[p]]->canwalk())
+                           {
+                                 max=driveskill(*squad[sq]->squad[passenger[p]],vehicle[v]);
                            }
                         }
                      }
@@ -282,9 +282,9 @@ void advanceday(char &clearformess,char canseethings)
                      if (v >= 0)
                      {
                         if(driveskill(*squad[sq]->squad[driver[p]],vehicle[v])>max)
-                     {
-                           max=driveskill(*squad[sq]->squad[driver[p]],vehicle[v]);
-                     }
+                        {
+                              max=driveskill(*squad[sq]->squad[driver[p]],vehicle[v]);
+                        }
                      }
                   }
                   vector<int> goodp;
@@ -576,6 +576,290 @@ void advanceday(char &clearformess,char canseethings)
 
    funds_and_trouble(clearformess);
 
+   // Healing - determine medical support at each location
+   int *healing=new int[location.size()];
+   int *healing2=new int[location.size()];
+   for(p=0;p<location.size();++p)
+   {
+      // Clinic is equal to a skill 4 liberal
+      if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=4;
+      // Hospital is equal to a skill 8 liberal
+      else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY)healing[p]=8;
+      else healing[p]=0;
+      healing2[p]=0;
+   }
+   for(p=0;p<pool.size();p++)
+   {
+      // People will help heal even if they aren't specifically assigned to do so
+      // Having a specific healing activity helps bookkeeping for the player, though
+      // Only the highest medical skill is considered
+      if(pool[p]->activity.type==ACTIVITY_HEAL||pool[p]->activity.type==ACTIVITY_NONE)
+      {
+         if(pool[p]->location>-1&&
+            healing[pool[p]->location]<pool[p]->skill[SKILL_MEDICAL])
+            healing[pool[p]->location]=pool[p]->skill[SKILL_MEDICAL];
+      }
+   }
+
+   //HEAL CLINIC PEOPLE AND TRAIN
+   for(p=0;p<pool.size();p++)
+   {
+      if(disbanding)break;
+
+      if(pool[p]->blood<100)
+      {
+         int damage=0; // Amount health degrades
+         int release=1;
+
+         // Give experience to caretakers
+         if(pool[p]->location>-1)healing2[pool[p]->location]+=100-pool[p]->blood;
+         // Add health
+         if(pool[p]->location>-1)pool[p]->blood+=1+healing[pool[p]->location]/10;
+         // Cap at 100
+         if(pool[p]->blood>100)pool[p]->blood=100;
+
+         for(int w=0;w<BODYPARTNUM;w++)
+         {
+            // Limbs blown off
+            if(pool[p]->wound[w] & WOUND_NASTYOFF)
+            {
+               // Chance to stabilize/amputate wound
+               // Difficulty 12 (Will die if not treated)
+               if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>12)
+               {
+                  pool[p]->wound[w]=(char)WOUND_CLEANOFF;
+               }
+               // Else take bleed damage (4)
+               else damage+=4;
+            }
+            // Bleeding wounds
+            else if(pool[p]->wound[w] & WOUND_BLEEDING)
+            {
+               // Chance to stabilize wound
+               // Difficulty 8 (1 in 10 of happening naturally)
+               if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>8)
+               {
+                  // Toggle bleeding off
+                  pool[p]->wound[w] ^= WOUND_BLEEDING;
+               }
+               // Else take bleed damage (1)
+               else damage+=1;
+            }
+            // Non-bleeding wounds
+            else
+            {
+               // Erase wound if almost fully healed
+               if(pool[p]->blood>=95)
+               {
+                  pool[p]->wound[w]=0;
+               }
+            }
+         }
+
+         // Lungs blasted
+         if(pool[p]->special[SPECIALWOUND_RIGHTLUNG]!=1)
+         {
+            // Chance to stabilize wound
+            // Difficulty 10 (Will die if not treated)
+            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>10)
+            {
+               pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
+               // May take permanent health damage depending on
+               // quality of care
+               if(LCSrandom(10)<healing[pool[p]->location])
+               {
+                  pool[p]->att[ATTRIBUTE_HEALTH]--;
+                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+                  {
+                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
+                  }
+               }
+            }
+            // Else take bleed damage (4)
+            else damage+=1;
+         }
+         if(pool[p]->special[SPECIALWOUND_LEFTLUNG]!=1)
+         {
+            // Chance to stabilize wound
+            // Difficulty 10 (Will die if not treated)
+            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>10)
+            {
+               pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
+               // May take permanent health damage depending on
+               // quality of care
+               if(LCSrandom(10)>healing[pool[p]->location])
+               {
+                  pool[p]->att[ATTRIBUTE_HEALTH]--;
+                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+                  {
+                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
+                  }
+               }
+            }
+            // Else take bleed damage (1)
+            else damage+=1;
+         }
+         if(pool[p]->special[SPECIALWOUND_HEART]!=1)
+         {
+            // Chance to stabilize wound
+            // Difficulty 15 (Will die if not treated)
+            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>15)
+            {
+               pool[p]->special[SPECIALWOUND_HEART]=1;
+               // May take permanent health damage depending on
+               // quality of care
+               if(LCSrandom(20)>healing[pool[p]->location])
+               {
+                  pool[p]->att[ATTRIBUTE_HEALTH]--;
+                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+                  {
+                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
+                  }
+               }
+            }
+            // Else take bleed damage (1)
+            else damage+=1;
+         }
+
+         // Critical hit wounds
+         for(int i=SPECIALWOUND_RIGHTLUNG;i<SPECIALWOUND_RIBS;++i)
+         {
+            int healdiff=14;
+            int permdamage=0;
+            // Wounds that have special treatment difficulties
+            if(i==SPECIALWOUND_HEART) healdiff=16;
+            // Wounds that may have permanent health damage
+            if(i==SPECIALWOUND_HEART    ||
+               i==SPECIALWOUND_RIGHTLUNG||
+               i==SPECIALWOUND_LEFTLUNG   )permdamage=1;
+            // If wounded
+            if(pool[p]->special[i]!=1)
+            {
+               // Chance to stabilize wound
+               if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>healdiff)
+               {
+                  // Remove wound
+                  pool[p]->special[i]=1;
+
+                  if(permdamage)
+                  {
+                     // May take permanent health damage depending on
+                     // quality of care
+                     if(healing[pool[p]->location]+LCSrandom(10)>healdiff)
+                     {
+                        pool[p]->att[ATTRIBUTE_HEALTH]--;
+                        if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+                        {
+                           pool[p]->att[ATTRIBUTE_HEALTH]=1;
+                        }
+                     }
+                  }
+               }
+               // Else take bleed damage
+               else damage+=1;
+            }
+         }
+         if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>14)pool[p]->special[SPECIALWOUND_RIBS]=RIBNUM;
+         if(!pool[p]->special[SPECIALWOUND_NECK]&&
+            pool[p]->location>-1&&
+            healing[pool[p]->location]+LCSrandom(10)>14)
+         {
+            pool[p]->special[SPECIALWOUND_NECK]=2;
+         }
+         if(!pool[p]->special[SPECIALWOUND_UPPERSPINE])
+         {
+            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>14)
+            {
+               pool[p]->special[SPECIALWOUND_UPPERSPINE]=2;
+            }
+            else
+            {
+               release=0;
+            }
+         }
+         if(!pool[p]->special[SPECIALWOUND_LOWERSPINE]&&
+            pool[p]->location>-1&&
+            healing[pool[p]->location]+LCSrandom(10)>14)
+         {
+            pool[p]->special[SPECIALWOUND_LOWERSPINE]=2;
+         }
+
+         // Apply damage
+         pool[p]->blood-=damage;
+
+         // If at clinic and in critical condition, transfer to university hospital
+         if(pool[p]->blood<=20&&pool[p]->location>-1&&location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
+         {
+            int hospital;
+            for(hospital=0;hospital<location.size();++i)
+            {
+               if(location[i]->type==SITE_HOSPITAL_UNIVERSITY)break;
+            }
+            if(hospital!=location.size())
+            {
+               pool[p]->location=hospital;
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr(pool[p]->name);
+               addstr(" has been transferred to ");
+               addstr(location[hospital]->name);
+               addstr(".");
+               refresh();
+               getch();
+            }
+         }
+      }
+      // Release healed people
+
+      if(pool[p]->blood==100&&(pool[p]->location>0)&&
+                               (location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
+                                location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
+      {
+         if(clearformess)
+         {
+            erase();
+         }
+         else
+         {
+            makedelimiter(8,0);
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(pool[p]->name);
+         addstr(" has left ");
+         addstr(location[pool[p]->location]->name);
+         addstr(".");
+
+         int hs=-1;
+         for(int l=0;l<location.size();l++)
+         {
+            if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
+            {
+               hs=l;
+               break;
+            }
+         }
+         if (hs==-1)
+         {
+            //TODO: Error unable to find location
+            hs=0;
+         }
+
+         if(location[pool[p]->base]->siege.siege)
+         {
+            pool[p]->base=hs;
+         }
+
+         pool[p]->location=pool[p]->base;
+
+         refresh();
+         getch();
+      }
+   }
+   delete[] healing;
+   delete[] healing2;
+
    //DISPERSAL CHECK
    dispersalcheck(clearformess);
 
@@ -747,8 +1031,10 @@ void advanceday(char &clearformess,char canseethings)
    day++;
    for(p=0;p<pool.size();p++)
    {
+      // Heal over time
       if(pool[p]->blood<100)pool[p]->blood+=1;
 
+      // Updating for in hiding
       if(pool[p]->hiding>0)
       {
          pool[p]->hiding--;
@@ -772,6 +1058,7 @@ void advanceday(char &clearformess,char canseethings)
          }
       }
 
+      // Check if news reports kidnapping
       if((pool[p]->flag & CREATUREFLAG_MISSING)&&
          !(pool[p]->flag & CREATUREFLAG_KIDNAPPED))
       {
@@ -786,21 +1073,24 @@ void advanceday(char &clearformess,char canseethings)
          }
       }
 
+      // Increment number of days since joined/kidnapped
       pool[p]->joindays++;
 
+      // Increment number of days been dead if dead
       if(!pool[p]->alive)
       {
          pool[p]->deathdays++;
          continue;
       }
 
+      // Gain skill levels for anything where you have enough experience
       for(int s=0;s<SKILLNUM;s++)
       {
-         while(pool[p]->skill_ip[s]>=100*((10+pool[p]->skill[s])/10)&&
+         while(pool[p]->skill_ip[s]>=100+10*pool[p]->skill[s]&&
                pool[p]->skill[s]<pool[p]->attval(skillatt(s))*2)
          {
-            pool[p]->skill_ip[s]-=100*((10+pool[p]->skill[s])/10);
-            pool[p]->skill[s]+=1;
+            pool[p]->skill_ip[s]-=100+10*pool[p]->skill[s];
+            pool[p]->skill[s]++;
          }
       }
    }

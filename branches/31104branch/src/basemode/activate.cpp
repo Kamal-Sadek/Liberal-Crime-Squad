@@ -204,21 +204,28 @@ void activate(creaturest *cr)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(11,1);
-      addstr("B - Legal Fundraising");
+      addstr("L - Legal Fundraising");
       
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(12,1);
-      addstr("C - Illegal Fundraising");
+      addstr("I - Illegal Fundraising");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(13,1);
-      addstr("D - Make/Repair Clothing");
+      addstr("C - Make/Repair Clothing");
       
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(14,1);
-      addstr("T - Training Liberals");
+      addstr("T - Teaching Other Liberals");
       
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(cr->skill[SKILL_MEDICAL]!=0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      }
+      else
+      {
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      }
       move(15,1);
       addstr("H - Heal Liberals");
 
@@ -273,13 +280,19 @@ void activate(creaturest *cr)
          move(12,40);
          addstr("3 - Pro-LCS Graffiti");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_ATTACKS);
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
          move(13,40);
-         addstr("4 - DoS Cyber Activism");
+         addstr("4 - Check Opinion Polls");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_ATTACKS);
+         move(14,40);
+         addstr("5 - DoS Cyber Activism");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HACKING);
-         move(14,40);
-         addstr("5 - Hack Secure Networks");
+         move(15,40);
+         addstr("6 - Hack Secure Networks");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(choice)
          {
          case '1':
@@ -288,27 +301,33 @@ void activate(creaturest *cr)
             break;
          case '2':
             move(22,1);
-            addstr("  Cause trouble and disrupt society with aggressive activism.");
+            addstr("  Cause trouble and disrupt society with aggressive activism to try to get");
+            move(23,1);
+            addstr("people to question their Conservative assumptions.");
             break;
          case '3':
             move(22,1);
-            addstr("  Everything from throw up tags indicating support for the LCS to elaborate");
+            addstr("  Create name recognition and put artistic skills to work creating street art");
             move(23,1);
-            addstr("street art with a deep political message.");
+            addstr("with a deep political message.");
             break;
          case '4':
+            move(22,1);
+            addstr("  Spend the day searching for the latest public opinion polls online.");
+            break;
+         case '5':
             move(22,1);
             addstr("  Attack Conservative web sites by launching massive denial of service attacks");
             move(23,1);
             addstr("to effectively knock them offline. No warning, no demands, no mercy.");
             break;
-         case '5':
+         case '6':
             move(22,1);
             addstr("  Break into private networks to steal and publish their Conservative secrets.");
             break;
          }
          break;
-      case 'b':
+      case 'l':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
          move(10,40);
          addstr("1 - Solicit Donations");
@@ -325,6 +344,7 @@ void activate(creaturest *cr)
          move(13,40);
          addstr("4 - Sell Liberal Music");
 
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(choice)
          {
          case '1':
@@ -345,10 +365,10 @@ void activate(creaturest *cr)
             break;
          }
          break;
-      case 'c':
+      case 'i':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
          move(10,40);
-         addstr("1 - Sell Drugs");
+         addstr("1 - Sell Brownies");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_PROSTITUTION);
          move(11,40);
@@ -361,11 +381,13 @@ void activate(creaturest *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
          move(13,40);
          addstr("4 - DoS Protection Racket");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(choice)
          {
          case '1':
             move(22,1);
-            addstr("  Sell narcotics at high prices to users and addicts. High demand, but");
+            addstr("  Sell drugs at high prices to users and addicts. High demand, but");
             move(23,1);
             addstr("equally illegal, and there is risk of conflict with local gangs.");
             break;
@@ -381,7 +403,7 @@ void activate(creaturest *cr)
             move(23,1);
             addstr("limit the risk of law enforcement. The authorities usually don't bother to");
             move(24,1);
-            addstr("investigate cases involving less than $200.");
+            addstr("investigate cases involving less than $200, at least in theory...");
             break;
          case '4':
             move(22,1);
@@ -391,7 +413,7 @@ void activate(creaturest *cr)
             break;
          }
          break;
-      case 'd':
+      case 'c':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
          move(10,40);
          addstr("1 - Make Clothing");
@@ -401,55 +423,60 @@ void activate(creaturest *cr)
          addstr("2 - Repair Clothing");
          break;
       case 't':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_GENERALED);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(10,40);
+         addstr("Teach Liberals About What?");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_GENERALED);
+         move(12,40);
          addstr("1 - General Education");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_POLITICS);
-         move(11,40);
+         move(13,40);
          addstr("2 - Politics and Law");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_SURVIVAL);
-         move(12,40);
+         move(14,40);
          addstr("3 - Street Survival");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_FIGHTING);
-         move(13,40);
+         move(15,40);
          addstr("4 - Fighting and Killing");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
-         move(14,40);
+         move(16,40);
          addstr("5 - Covert Actions");
 
-         switch(choice)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         switch(cr->activity.type)
          {
-         case '1':
+         case ACTIVITY_TEACH_GENERALED:
             move(22,1);
             addstr("  Attributes Trained: Intelligence");
             move(23,1);
             addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion, Business");
             break;
-         case '2':
+         case ACTIVITY_TEACH_POLITICS:
             move(22,1);
             addstr("  Attributes Trained: Intelligence, Charisma, Heart, Wisdom");
             move(23,1);
             addstr("  Skills Trained: Law, Persuasion, Training, Leadership");
             break;
-         case '3':
+         case ACTIVITY_TEACH_SURVIVAL:
             move(22,1);
             addstr("  Attributes Trained: Intelligence, Health, Agility");
             move(23,1);
-            addstr("  Skills Trained: Hand to Hand, Survival, Driving, Cooking, Street Sense,");
+            addstr("  Skills Trained: Driving, First Aid, Cooking, Survival, Street Sense,");
             move(24,1);
-            addstr("Improvised Weapons, Garment Making");
+            addstr("Garment Making, Hand to Hand, Improvised Weapons");
             break;
-         case '4':
+         case ACTIVITY_TEACH_FIGHTING:
             move(22,1);
             addstr("  Attributes Trained: Health, Agility, Strength");
             move(23,1);
             addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun, Gangsterism");
             break;
-         case '5':
+         case ACTIVITY_TEACH_COVERT:
             move(22,1);
             addstr("  Attributes Trained: Intelligence, Agility, Charisma");
             move(23,1);
@@ -475,12 +502,14 @@ void activate(creaturest *cr)
             {
             case '1':cr->activity.type=ACTIVITY_COMMUNITYSERVICE;break;
             case '2':cr->activity.type=ACTIVITY_TROUBLE;break;
-            case '3':cr->activity.type=ACTIVITY_GRAFFITI;break;
-            case '4':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
-            case '5':cr->activity.type=ACTIVITY_HACKING;break;
+            case '3':cr->activity.type=ACTIVITY_GRAFFITI;
+                     cr->activity.arg=0;break;
+            case '4':cr->activity.type=ACTIVITY_POLLS;break;
+            case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
+            case '6':cr->activity.type=ACTIVITY_HACKING;break;
             }
             break;
-         case 'b':
+         case 'l':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_DONATIONS;break;
@@ -489,7 +518,7 @@ void activate(creaturest *cr)
             case '4':cr->activity.type=ACTIVITY_SELL_MUSIC;break;
             }
             break;
-         case 'c':
+         case 'i':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
@@ -498,14 +527,28 @@ void activate(creaturest *cr)
             case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             }
             break;
-         case 'd':
-            if(choice=='0')cr->activity.type=ACTIVITY_REPAIR_ARMOR;
+         case 'c':
+            if(choice=='2')cr->activity.type=ACTIVITY_REPAIR_ARMOR;
+            break;
+         case 't':
+            switch(choice)
+            {
+            case '1':cr->activity.type=ACTIVITY_TEACH_GENERALED;break;
+            case '2':cr->activity.type=ACTIVITY_TEACH_POLITICS;break;
+            case '3':cr->activity.type=ACTIVITY_TEACH_SURVIVAL;break;
+            case '4':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
+            case '5':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
+            }
             break;
          }
       }
-      else 
 
-      if(state=='d'&&c=='1')
+      if(c=='h'&&cr->skill[SKILL_MEDICAL]!=0)
+      {
+         cr->activity.type=ACTIVITY_HEAL;
+         break;
+      }
+      if(state=='d'&&choice=='1')
       {
          activityst oact=cr->activity;
          cr->activity.type=ACTIVITY_NONE;
@@ -520,11 +563,6 @@ void activate(creaturest *cr)
          select_tendhostage(cr);
          if(cr->activity.type==ACTIVITY_HOSTAGETENDING)break;
          else cr->activity=oact;
-      }
-      if(c=='p')
-      {
-         cr->activity.type=ACTIVITY_POLLS;
-         break;
       }
       if(c=='s')
       {
@@ -1276,25 +1314,30 @@ char select_view(creaturest *cr,long &v)
          addstr(str);
 
          move(y,44);
-         if(newspaper_topicwork1[p]>40)
+         if(public_interest[p]>100)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Major Controversy");
+            addstr("Extremely Controvertial");
          }
-         else if(newspaper_topicwork1[p]>10)
+         else if(public_interest[p]>50)
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("Dinner Table Topic");
+         }
+         else if(public_interest[p]>10)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Significant");
+            addstr("Significant Interest");
          }
-         else if(newspaper_topicwork1[p]>0)
+         else if(public_interest[p]>0)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr("Minor");
+            addstr("Minor Discussion");
          }
          else
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            addstr("None");
+            addstr("Exhausted");
          }
 
          y++;

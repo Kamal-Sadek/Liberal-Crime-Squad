@@ -136,8 +136,8 @@ short attitude[VIEWNUM];
 
 // Topicwork1 is editorials that are waiting to be written
 // Topicwork2 is editorials that have been written
-short newspaper_topicwork1[VIEWNUM];
-short newspaper_topicwork2[VIEWNUM];
+short public_interest[VIEWNUM];
+short background_liberal_influence[VIEWNUM];
 
 
 short law[LAWNUM];
@@ -267,8 +267,8 @@ int main(int argc, char* argv[])
    for(int v=0;v<VIEWNUM;v++)
    {
       attitude[v]=45;
-      newspaper_topicwork1[v]=0;
-      newspaper_topicwork2[v]=0;
+      public_interest[v]=20;
+      background_liberal_influence[v]=0;
    }
    attitude[VIEW_LIBERALCRIMESQUAD]=0;
    attitude[VIEW_LIBERALCRIMESQUADPOS]=20;

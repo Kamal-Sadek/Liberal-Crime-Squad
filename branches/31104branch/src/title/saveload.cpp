@@ -250,8 +250,8 @@ void savegame(char *str)
       }
 
       // Liberal Media
-      numbytes=fwrite(newspaper_topicwork1,sizeof(newspaper_topicwork1),1,h);
-      numbytes=fwrite(newspaper_topicwork2,sizeof(newspaper_topicwork2),1,h);
+      numbytes=fwrite(public_interest,sizeof(public_interest),1,h);
+      numbytes=fwrite(background_liberal_influence,sizeof(background_liberal_influence),1,h);
 
       LCSCloseFile(h);
    }
@@ -510,8 +510,8 @@ char load(void)
       }
 
       // Liberal Media
-      fread(newspaper_topicwork1,sizeof(newspaper_topicwork1),1,h);
-      fread(newspaper_topicwork2,sizeof(newspaper_topicwork2),1,h);
+      fread(public_interest,sizeof(public_interest),1,h);
+      fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
       LCSCloseFile(h);
 
       return 1;

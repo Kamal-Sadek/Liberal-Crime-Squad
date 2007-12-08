@@ -156,7 +156,7 @@ void advancecreature(creaturest &cr)
       {
          printparty();
          if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+            mode==GAMEMODE_CHASEFOOT)printchaseencounter();
          else printencounter();
 
          refresh();
@@ -165,10 +165,45 @@ void advancecreature(creaturest &cr)
    }
 
    int bleed=0;
+   int topmedicalskill=0;
+   creaturest* topmedical=NULL;
+   for(int i=0;i<6;++i)
+   {
+      if(activesquad->squad[i]&&
+         activesquad->squad[i]->alive&&
+         activesquad->squad[i]->blood>40&&
+         activesquad->squad[i]->id!=cr.id&&
+         activesquad->squad[i]->skill[SKILL_MEDICAL]>topmedicalskill)
+      {
+         topmedical=activesquad->squad[i];
+         topmedicalskill=activesquad->squad[i]->skill[SKILL_MEDICAL];
+      }
+   }
 
    for(int w=0;w<BODYPARTNUM;w++)
    {
-      if(cr.wound[w] & WOUND_BLEEDING)bleed++;
+      if(cr.wound[w] & WOUND_BLEEDING)
+      {
+         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH))
+         {
+            cr.wound[w]^=WOUND_BLEEDING;
+         }
+         else if(cr.squadid!=-1&&topmedical&&LCSrandom(40)<topmedicalskill)
+         {
+            clearmessagearea();
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            move(16,1);
+            addstr(topmedical->name);
+            addstr(" was able to slow the bleeding of");
+            move(17,1);
+            addstr(cr.name);
+            addstr("'s wounds.");
+            topmedical->skill_ip[SKILL_MEDICAL]+=max(50-topmedicalskill*2,0);
+            refresh();
+            getch();
+         }
+         else bleed++;
+      }
    }
 
    if(bleed>0)

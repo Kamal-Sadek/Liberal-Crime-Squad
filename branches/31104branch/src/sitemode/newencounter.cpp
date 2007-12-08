@@ -84,6 +84,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_OFFICEWORKER]=1;
          creaturearray[CREATURE_MAILMAN]=1;
          creaturearray[CREATURE_CHEF]=1;
+         creaturearray[CREATURE_NURSE]=1;
          creaturearray[CREATURE_AMATEURMAGICIAN]=1;
          creaturearray[CREATURE_HIPPIE]=6;
          creaturearray[CREATURE_CRITIC_ART]=1;
@@ -128,6 +129,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_RADIOPERSONALITY]=1;
          creaturearray[CREATURE_NEWSANCHOR]=1;
          creaturearray[CREATURE_LAWYER]=15;
+         creaturearray[CREATURE_DOCTOR]=10;
          creaturearray[CREATURE_MUSICIAN]=1;
          creaturearray[CREATURE_ENGINEER]=10;
          creaturearray[CREATURE_FOOTBALLCOACH]=1;
@@ -142,6 +144,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_DANCER]=1;
          creaturearray[CREATURE_PHOTOGRAPHER]=1;
          creaturearray[CREATURE_FASHIONDESIGNER]=1;
+         creaturearray[CREATURE_THIEF]=1;
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
 
@@ -173,7 +176,9 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_AGENT]=1;
          creaturearray[CREATURE_RADIOPERSONALITY]=1;
          creaturearray[CREATURE_NEWSANCHOR]=1;
-         creaturearray[CREATURE_LAWYER]=10;
+         creaturearray[CREATURE_LAWYER]=5;
+         creaturearray[CREATURE_DOCTOR]=5;
+         creaturearray[CREATURE_NURSE]=5;
          creaturearray[CREATURE_SEWERWORKER]=1;
          creaturearray[CREATURE_COLLEGESTUDENT]=30;
          creaturearray[CREATURE_MUSICIAN]=5;
@@ -280,6 +285,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_MATHEMATICIAN]=1;
          creaturearray[CREATURE_TEACHER]=5;
          creaturearray[CREATURE_ENGINEER]=15;
+         creaturearray[CREATURE_DOCTOR]=1;
          creaturearray[CREATURE_OFFICEWORKER]=15;
          creaturearray[CREATURE_WORKER_SECRETARY]=5;
          creaturearray[CREATURE_HIPPIE]=1;
@@ -315,12 +321,13 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_PROSTITUTE]=20;
          creaturearray[CREATURE_AMATEURMAGICIAN]=1;
          creaturearray[CREATURE_HIPPIE]=1;
+         creaturearray[CREATURE_NURSE]=5;
          creaturearray[CREATURE_BIKER]=1;
          creaturearray[CREATURE_PAINTER]=1;
          creaturearray[CREATURE_SCULPTOR]=1;
          creaturearray[CREATURE_DANCER]=1;
          creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_THIEF]=1;
+         creaturearray[CREATURE_THIEF]=5;
          creaturearray[CREATURE_ACTOR]=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
@@ -412,6 +419,8 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_OFFICEWORKER]=1;
          creaturearray[CREATURE_FOOTBALLCOACH]=1;
          creaturearray[CREATURE_MAILMAN]=1;
+         creaturearray[CREATURE_DOCTOR]=1;
+         creaturearray[CREATURE_NURSE]=1;
          creaturearray[CREATURE_GARBAGEMAN]=1;
          creaturearray[CREATURE_PLUMBER]=1;
          creaturearray[CREATURE_CHEF]=1;
@@ -462,6 +471,8 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_RADIOPERSONALITY]=1;
          creaturearray[CREATURE_NEWSANCHOR]=1;
          creaturearray[CREATURE_LAWYER]=5;
+         creaturearray[CREATURE_DOCTOR]=5;
+         creaturearray[CREATURE_NURSE]=1;
          creaturearray[CREATURE_COLLEGESTUDENT]=1;
          creaturearray[CREATURE_MUSICIAN]=1;
          creaturearray[CREATURE_PROSTITUTE]=3;
@@ -476,6 +487,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_DANCER]=1;
          creaturearray[CREATURE_PHOTOGRAPHER]=1;
          creaturearray[CREATURE_FASHIONDESIGNER]=1;
+         creaturearray[CREATURE_THIEF]=1;
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
 
@@ -529,6 +541,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_SCIENTIST_LABTECH]=1000;
          creaturearray[CREATURE_SCIENTIST_EMINENT]=100;
          creaturearray[CREATURE_CORPORATE_MANAGER]=100;
+         creaturearray[CREATURE_DOCTOR]=100;
          creaturearray[CREATURE_WORKER_JANITOR]=1000;
          creaturearray[CREATURE_WORKER_SECRETARY]=1000;
          creaturearray[CREATURE_OFFICEWORKER]=1000;
@@ -560,26 +573,28 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_RADIOPERSONALITY]=1;
          creaturearray[CREATURE_NEWSANCHOR]=1;
          creaturearray[CREATURE_LAWYER]=1;
+         creaturearray[CREATURE_DOCTOR]=1;
+         creaturearray[CREATURE_NURSE]=1;
          creaturearray[CREATURE_SEWERWORKER]=1;
          creaturearray[CREATURE_COLLEGESTUDENT]=1;
          creaturearray[CREATURE_MUSICIAN]=1;
          creaturearray[CREATURE_MATHEMATICIAN]=1;
          creaturearray[CREATURE_TEACHER]=1;
-         creaturearray[CREATURE_HSDROPOUT]=5;
-         creaturearray[CREATURE_BUM]=5;
+         creaturearray[CREATURE_HSDROPOUT]=10;
+         creaturearray[CREATURE_BUM]=10;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=5;
-         creaturearray[CREATURE_GANGMEMBER]=5;
-         creaturearray[CREATURE_CRACKHEAD]=5;
+         creaturearray[CREATURE_GANGMEMBER]=10;
+         creaturearray[CREATURE_CRACKHEAD]=10;
          creaturearray[CREATURE_PRIEST]=5;
          creaturearray[CREATURE_ENGINEER]=1;
          creaturearray[CREATURE_FASTFOODWORKER]=1;
          creaturearray[CREATURE_TELEMARKETER]=1;
          creaturearray[CREATURE_OFFICEWORKER]=1;
          creaturearray[CREATURE_FOOTBALLCOACH]=1;
-         creaturearray[CREATURE_PROSTITUTE]=5;
+         creaturearray[CREATURE_PROSTITUTE]=10;
          creaturearray[CREATURE_MAILMAN]=1;
          creaturearray[CREATURE_GARBAGEMAN]=1;
          creaturearray[CREATURE_PLUMBER]=1;
@@ -611,7 +626,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_HAIRSTYLIST]=1;
          creaturearray[CREATURE_FASHIONDESIGNER]=1;
          creaturearray[CREATURE_CLERK]=1;
-         creaturearray[CREATURE_THIEF]=5;
+         creaturearray[CREATURE_THIEF]=10;
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
@@ -697,7 +712,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_HAIRSTYLIST]=1;
          creaturearray[CREATURE_FASHIONDESIGNER]=1;
          creaturearray[CREATURE_CLERK]=1;
-         creaturearray[CREATURE_THIEF]=1;
+         creaturearray[CREATURE_THIEF]=3;
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;

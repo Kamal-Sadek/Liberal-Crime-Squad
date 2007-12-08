@@ -80,17 +80,20 @@ void siegecheck(char canseethings)
          int crimes=0;
          for(int p=0;p<pool.size();p++)
          {
-            if(!pool[p]->alive)continue;
-            if(pool[p]->location!=l)continue;
-            if(pool[p]->align!=1)continue;
+            if(!pool[p]->alive)continue; // Dead people don't count
+            if(pool[p]->location!=l)continue; // People not at this base don't count
+            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)crimes+=5; // Kidnapped persons increase heat
+            if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)crimes+=16;
             
             // Cleanse record on things that aren't illegal right now
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
             // Check for wanted persons!
+            // Divide the crimes value by 2^heatprotection
+            // So the upscale apartment takes 16 times less heat than a warehouse!
+            // Small crimes are thus ignored completely for police sieges.
             for(int i=0;i<LAWFLAGNUM;i++)
             {
                if(pool[p]->lawflag[i])
@@ -120,32 +123,30 @@ void siegecheck(char canseethings)
             {
             case SITE_INDUSTRY_WAREHOUSE:
                if(location[l]->front_business!=-1)
-                  heatprotection=2; // Business front -- medium protection
+                  heatprotection+=2; // Business front -- medium protection
                else
-                  heatprotection=0; // Abandoned warehouse -- no protection
+                  heatprotection+=0; // Abandoned warehouse -- no protection
                break;
             case SITE_RESIDENTIAL_SHELTER:
-               heatprotection=0; // Homeless shelter -- no protection
+               heatprotection+=0; // Homeless shelter -- no protection
                break;
             case SITE_RESIDENTIAL_TENEMENT:
-               heatprotection=1; // Lower class housing -- low protection
+               heatprotection+=1; // Lower class housing -- low protection
                break;
             case SITE_RESIDENTIAL_APARTMENT:
-               heatprotection=2; // Middle class housing -- medium protection
+               heatprotection+=2; // Middle class housing -- medium protection
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-               heatprotection=3; // Upper class housing -- high protection
+               heatprotection+=3; // Upper class housing -- high protection
                break;
             }
 
-            // Divide the crimes value by 2^heatprotection
-            // So the upscale apartment takes 16 times less heat than a warehouse!
-            crimes >>= heatprotection;
-            if(crimes > 200)crimes = 200;
+            crimes>>=heatprotection;
+            if(crimes > 20)crimes = 20;
             location[l]->heat+=crimes;
 
             if(location[l]->siege.timeuntillocated==-1 &&
-               location[l]->heat > 500)
+               location[l]->heat > 100)
             {
                // Begin planning siege if high heat on location
                int siegetime = 5*(1 + 1 * heatprotection);

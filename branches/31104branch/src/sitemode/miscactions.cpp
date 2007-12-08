@@ -66,8 +66,7 @@ char unlock(short type,char &actual)
       {
          if(activesquad->squad[p]->alive)
          {
-            if((activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-               activesquad->squad[p]->skill[SKILL_SECURITY])==maxattack)
+            if(activesquad->squad[p]->skill[SKILL_SECURITY]==maxattack)
             {
                goodp.push_back(p);
             }
