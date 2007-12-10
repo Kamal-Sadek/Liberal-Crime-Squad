@@ -92,7 +92,7 @@ long curcarid=0;
 char showcarprefs=1;
 
 
-siteblockst map[MAPX][MAPY][MAPZ];
+siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 chaseseqst chaseseq;
 
@@ -209,6 +209,7 @@ long moneylost_hostage=0;
 short party_status=-1;
 
 vector<datest *> date;
+vector<recruitst *> recruit;
 
 
 

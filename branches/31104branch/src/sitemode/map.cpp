@@ -66,28 +66,28 @@ void initsite(locationst &loc)
       {
          for(int z=0;z<MAPZ;z++)
          {
-            map[x][y][z].flag=SITEBLOCK_BLOCK;
-            map[x][y][z].special=-1;
-            map[x][y][z].siegeflag=0;
+            levelmap[x][y][z].flag=SITEBLOCK_BLOCK;
+            levelmap[x][y][z].special=-1;
+            levelmap[x][y][z].siegeflag=0;
          }
       }
    }
 
-   map[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
-   map[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
-   map[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
-   map[(MAPX>>1)-1][0][0].flag=SITEBLOCK_EXIT;
-   map[(MAPX>>1)-1][1][0].flag=SITEBLOCK_EXIT;
+   levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
+   levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
+   levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
+   levelmap[(MAPX>>1)-1][0][0].flag=SITEBLOCK_EXIT;
+   levelmap[(MAPX>>1)-1][1][0].flag=SITEBLOCK_EXIT;
 
-   map[MAPX>>1][1][0].flag=0;
+   levelmap[MAPX>>1][1][0].flag=0;
 
-   map[MAPX>>1][2][0].flag=SITEBLOCK_DOOR;
+   levelmap[MAPX>>1][2][0].flag=SITEBLOCK_DOOR;
 
    if(loc.type==SITE_RESIDENTIAL_APARTMENT_UPSCALE||
       loc.type==SITE_RESIDENTIAL_APARTMENT||
       loc.type==SITE_RESIDENTIAL_TENEMENT)
    {
-      map[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
+      levelmap[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
       short height;
       int floors=LCSrandom(6)+1;
       int swap;
@@ -95,33 +95,33 @@ void initsite(locationst &loc)
       {
          for(int y=3;y<MAPY-3;y++)
          {
-            map[MAPX>>1][y][z].flag=0;
+            levelmap[MAPX>>1][y][z].flag=0;
             if(y%4==0)
             {
                height=y+LCSrandom(3)-1;
-               map[(MAPX>>1)-1][height][z].flag=SITEBLOCK_DOOR;
+               levelmap[(MAPX>>1)-1][height][z].flag=SITEBLOCK_DOOR;
                generateroom((MAPX>>1)-8,y-1,7,3,z);
 
                height=y+LCSrandom(3)-1;
-               map[(MAPX>>1)+1][height][z].flag=SITEBLOCK_DOOR;
+               levelmap[(MAPX>>1)+1][height][z].flag=SITEBLOCK_DOOR;
                generateroom((MAPX>>1)+2,y-1,7,3,z);
                if(y==4&&z==0)
                {
-                  map[(MAPX>>1)+2][height][z].flag=0;
-                  map[(MAPX>>1)+2][height][z].special=SPECIAL_APARTMENT_LANDLORD;
+                  levelmap[(MAPX>>1)+2][height][z].flag=0;
+                  levelmap[(MAPX>>1)+2][height][z].special=SPECIAL_APARTMENT_LANDLORD;
                }
             }
          }
          swap=(z%2)*2-1;
          if(z>0)
          {
-            map[(MAPX>>1)+1*swap][MAPY-4][z].flag=0;
-            map[(MAPX>>1)+1*swap][MAPY-4][z].special=SPECIAL_STAIRS_DOWN;
+            levelmap[(MAPX>>1)+1*swap][MAPY-4][z].flag=0;
+            levelmap[(MAPX>>1)+1*swap][MAPY-4][z].special=SPECIAL_STAIRS_DOWN;
          }
          if(z<floors-1)
          {
-            map[(MAPX>>1)-1*swap][MAPY-4][z].flag=0;
-            map[(MAPX>>1)-1*swap][MAPY-4][z].special=SPECIAL_STAIRS_UP;
+            levelmap[(MAPX>>1)-1*swap][MAPY-4][z].flag=0;
+            levelmap[(MAPX>>1)-1*swap][MAPY-4][z].special=SPECIAL_STAIRS_UP;
          }
       }
    }
@@ -136,10 +136,10 @@ void initsite(locationst &loc)
                for(int y=0;y<7;y++)
                {
                   if(x==(MAPX>>1)-4||x==(MAPX>>1)+4||
-                     y==0||y==6)map[x][y][0].flag=SITEBLOCK_EXIT;
-                  else map[x][y][0].flag=0;
-                  map[x][y][0].special=-1;
-                  map[x][y][0].siegeflag=0;
+                     y==0||y==6)levelmap[x][y][0].flag=SITEBLOCK_EXIT;
+                  else levelmap[x][y][0].flag=0;
+                  levelmap[x][y][0].special=-1;
+                  levelmap[x][y][0].siegeflag=0;
                }
             }
             break;
@@ -153,9 +153,9 @@ void initsite(locationst &loc)
             {
                for(int y=3;y<10;y++)
                {
-                  map[x][y][0].flag=0;
-                  map[x][y][0].special=-1;
-                  map[x][y][0].siegeflag=0;
+                  levelmap[x][y][0].flag=0;
+                  levelmap[x][y][0].special=-1;
+                  levelmap[x][y][0].siegeflag=0;
                }
             }
             break;
@@ -190,46 +190,46 @@ void initsite(locationst &loc)
       {
          for(int z=0;z<MAPZ;z++)
          {
-            if(map[x][y][z].flag & SITEBLOCK_DOOR)
+            if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
             {
                block=BIT1 | BIT2 | BIT3 | BIT4;
                opennum=0;
 
-               if(x>0)if(!(map[x-1][y][z].flag&SITEBLOCK_BLOCK)){block&=~BIT2;opennum++;}
-               if(x<MAPX-1)if(!(map[x+1][y][z].flag&SITEBLOCK_BLOCK)){block&=~BIT3;opennum++;}
-               if(y>0)if(!(map[x][y-1][z].flag&SITEBLOCK_BLOCK)){block&=~BIT1;opennum++;}
-               if(y<MAPY-1)if(!(map[x][y+1][z].flag&SITEBLOCK_BLOCK)){block&=~BIT4;opennum++;}
+               if(x>0)if(!(levelmap[x-1][y][z].flag&SITEBLOCK_BLOCK)){block&=~BIT2;opennum++;}
+               if(x<MAPX-1)if(!(levelmap[x+1][y][z].flag&SITEBLOCK_BLOCK)){block&=~BIT3;opennum++;}
+               if(y>0)if(!(levelmap[x][y-1][z].flag&SITEBLOCK_BLOCK)){block&=~BIT1;opennum++;}
+               if(y<MAPY-1)if(!(levelmap[x][y+1][z].flag&SITEBLOCK_BLOCK)){block&=~BIT4;opennum++;}
 
                if(opennum>=2)continue;
 
                //BLAST EVERYTHING AROUND TOTALLY BLOCKED DOOR
                if(block==(BIT1 | BIT2 | BIT3 | BIT4))
                {
-                  if(x>0)map[x-1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  if(x<MAPX-1)map[x+1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  if(y>0)map[x][y-1][z].flag&=~SITEBLOCK_BLOCK;
-                  if(y<MAPY-1)map[x][y+1][z].flag&=~SITEBLOCK_BLOCK;
+                  if(x>0)levelmap[x-1][y][z].flag&=~SITEBLOCK_BLOCK;
+                  if(x<MAPX-1)levelmap[x+1][y][z].flag&=~SITEBLOCK_BLOCK;
+                  if(y>0)levelmap[x][y-1][z].flag&=~SITEBLOCK_BLOCK;
+                  if(y<MAPY-1)levelmap[x][y+1][z].flag&=~SITEBLOCK_BLOCK;
                }
                //DEAD-END OR OPEN A THREE-BLOCKED DOOR
                else if(!(block&BIT1))
                {
-                  if(y<MAPY-1)map[x][y+1][z].flag&=~SITEBLOCK_BLOCK;
-                  else map[x][y+1][z].flag=SITEBLOCK_BLOCK;
+                  if(y<MAPY-1)levelmap[x][y+1][z].flag&=~SITEBLOCK_BLOCK;
+                  else levelmap[x][y+1][z].flag=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT4))
                {
-                  if(y>0)map[x][y-1][z].flag&=~SITEBLOCK_BLOCK;
-                  else map[x][y-1][z].flag=SITEBLOCK_BLOCK;
+                  if(y>0)levelmap[x][y-1][z].flag&=~SITEBLOCK_BLOCK;
+                  else levelmap[x][y-1][z].flag=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT2))
                {
-                  if(x<MAPX-1)map[x+1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  else map[x+1][y][z].flag=SITEBLOCK_BLOCK;
+                  if(x<MAPX-1)levelmap[x+1][y][z].flag&=~SITEBLOCK_BLOCK;
+                  else levelmap[x+1][y][z].flag=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT3))
                {
-                  if(x>0)map[x-1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  else map[x-1][y][z].flag=SITEBLOCK_BLOCK;
+                  if(x>0)levelmap[x-1][y][z].flag&=~SITEBLOCK_BLOCK;
+                  else levelmap[x-1][y][z].flag=SITEBLOCK_BLOCK;
                }
             }
          }
@@ -243,20 +243,20 @@ void initsite(locationst &loc)
       {
          for(int z=0;z<MAPZ;z++)
          {
-            if(map[x][y][z].flag & SITEBLOCK_DOOR)
+            if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
             {
                block=BIT1 | BIT2 | BIT3 | BIT4;
 
-               if(x>0)if(!(map[x-1][y][z].flag&SITEBLOCK_BLOCK))block&=~BIT2;
-               if(x<MAPX-1)if(!(map[x+1][y][z].flag&SITEBLOCK_BLOCK))block&=~BIT3;
-               if(y>0)if(!(map[x][y-1][z].flag&SITEBLOCK_BLOCK))block&=~BIT1;
-               if(y<MAPY-1)if(!(map[x][y+1][z].flag&SITEBLOCK_BLOCK))block&=~BIT4;
+               if(x>0)if(!(levelmap[x-1][y][z].flag&SITEBLOCK_BLOCK))block&=~BIT2;
+               if(x<MAPX-1)if(!(levelmap[x+1][y][z].flag&SITEBLOCK_BLOCK))block&=~BIT3;
+               if(y>0)if(!(levelmap[x][y-1][z].flag&SITEBLOCK_BLOCK))block&=~BIT1;
+               if(y<MAPY-1)if(!(levelmap[x][y+1][z].flag&SITEBLOCK_BLOCK))block&=~BIT4;
 
                if((block & BIT1) && (block & BIT4))continue;
                if((block & BIT2) && (block & BIT3))continue;
 
-               map[x][y][z].flag&=~SITEBLOCK_DOOR;
-               map[x][y][z].flag&=~SITEBLOCK_LOCKED;
+               levelmap[x][y][z].flag&=~SITEBLOCK_DOOR;
+               levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
             }
          }
       }
@@ -281,7 +281,7 @@ void initsite(locationst &loc)
             {
                for(int z=0;z<MAPZ;z++)
                {
-                  map[x][y][z].flag|=SITEBLOCK_RESTRICTED;
+                  levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
                }
             }
          }
@@ -290,7 +290,7 @@ void initsite(locationst &loc)
 
    //NOW CLEAR FIRST FLOOR RESTRICTIONS NEAR TO DOOR
    char acted;
-   map[MAPX>>1][2][0].flag&=~SITEBLOCK_RESTRICTED;
+   levelmap[MAPX>>1][2][0].flag&=~SITEBLOCK_RESTRICTED;
    do
    {
       acted=0;
@@ -299,16 +299,16 @@ void initsite(locationst &loc)
       {
          for(int y=2;y<MAPY-2;y++)
          {
-            if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
-               (map[x][y][0].flag & SITEBLOCK_RESTRICTED))
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED))
             {
-               if(!(map[x-1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(map[x+1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(map[x][y-1][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(map[x][y+1][0].flag & SITEBLOCK_RESTRICTED))
+               if(!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED))
                {
-                  map[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
+                  levelmap[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
                   acted=1;
                   continue;
                }
@@ -325,8 +325,8 @@ void initsite(locationst &loc)
       {
          for(int z=0;z<MAPZ;z++)
          {
-            if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
                !LCSrandom(10))
             {
                switch(loc.type)
@@ -341,50 +341,50 @@ void initsite(locationst &loc)
                   case SITE_INDUSTRY_WAREHOUSE:
                      break;
                   default:
-                     map[x][y][z].flag|=SITEBLOCK_LOOT;
+                     levelmap[x][y][z].flag|=SITEBLOCK_LOOT;
                      break;
                }
             }
 
-            if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
-               !(map[x][y][0].flag & SITEBLOCK_LOOT)&&
-               (map[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
                loc.type==SITE_LABORATORY_COSMETICS&&!LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_LAB_COSMETICS_CAGEDANIMALS;
+               levelmap[x][y][z].special=SPECIAL_LAB_COSMETICS_CAGEDANIMALS;
             }
-            if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
-               !(map[x][y][0].flag & SITEBLOCK_LOOT)&&
-               (map[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
                loc.type==SITE_LABORATORY_GENETIC&&!LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_LAB_GENETIC_CAGEDANIMALS;
+               levelmap[x][y][z].special=SPECIAL_LAB_GENETIC_CAGEDANIMALS;
             }
-            if(map[x][y][0].flag==0&&
+            if(levelmap[x][y][0].flag==0&&
                loc.type==SITE_INDUSTRY_SWEATSHOP&&!LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_SWEATSHOP_EQUIPMENT;
+               levelmap[x][y][z].special=SPECIAL_SWEATSHOP_EQUIPMENT;
             }
-            if(map[x][y][0].flag==0&&
+            if(levelmap[x][y][0].flag==0&&
                loc.type==SITE_INDUSTRY_POLLUTER&&!LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_POLLUTER_EQUIPMENT;
+               levelmap[x][y][z].special=SPECIAL_POLLUTER_EQUIPMENT;
             }
-            if(map[x][y][0].flag==0&&
+            if(levelmap[x][y][0].flag==0&&
                (loc.type==SITE_BUSINESS_JUICEBAR||
                loc.type==SITE_BUSINESS_CIGARBAR||
                loc.type==SITE_BUSINESS_LATTESTAND||
                loc.type==SITE_BUSINESS_INTERNETCAFE)&&
                !LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_RESTAURANT_TABLE;
+               levelmap[x][y][z].special=SPECIAL_RESTAURANT_TABLE;
             }
-            if(map[x][y][z].flag==0&&loc.type==SITE_BUSINESS_INTERNETCAFE&&
+            if(levelmap[x][y][z].flag==0&&loc.type==SITE_BUSINESS_INTERNETCAFE&&
                !LCSrandom(10))
             {
-               map[x][y][z].special=SPECIAL_CAFE_COMPUTER;
+               levelmap[x][y][z].special=SPECIAL_CAFE_COMPUTER;
             }
          }
       }
@@ -402,39 +402,39 @@ void initsite(locationst &loc)
       if(freex>=(MAPX>>1)-2&&
          freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
       count--;
-   }while(( map[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
-            map[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-            map[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
-            map[freex][freey][freez].special!=-1   )&&count>0);
+   }while(( levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+            levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+            levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+            levelmap[freex][freey][freez].special!=-1   )&&count>0);
 
    switch(loc.type)
    {
       case SITE_INDUSTRY_NUCLEAR:
-         map[freex][freey][freez].special=SPECIAL_NUCLEAR_ONOFF;
+         levelmap[freex][freey][freez].special=SPECIAL_NUCLEAR_ONOFF;
          break;
       case SITE_GOVERNMENT_POLICESTATION:
-         map[freex][freey][freez].special=SPECIAL_POLICESTATION_LOCKUP;
+         levelmap[freex][freey][freez].special=SPECIAL_POLICESTATION_LOCKUP;
          break;
       case SITE_GOVERNMENT_COURTHOUSE:
-         map[freex][freey][freez].special=SPECIAL_COURTHOUSE_LOCKUP;
+         levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_LOCKUP;
          break;
       case SITE_GOVERNMENT_PRISON:
-         map[freex][freey][freez].special=SPECIAL_PRISON_CONTROL;
+         levelmap[freex][freey][freez].special=SPECIAL_PRISON_CONTROL;
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         map[freex][freey][freez].special=SPECIAL_INTEL_SUPERCOMPUTER;
+         levelmap[freex][freey][freez].special=SPECIAL_INTEL_SUPERCOMPUTER;
          break;
       case SITE_CORPORATE_HEADQUARTERS:
-         map[freex][freey][freez].special=SPECIAL_CORPORATE_FILES;
+         levelmap[freex][freey][freez].special=SPECIAL_CORPORATE_FILES;
          break;
       case SITE_CORPORATE_HOUSE:
-         map[freex][freey][freez].special=SPECIAL_HOUSE_PHOTOS;
+         levelmap[freex][freey][freez].special=SPECIAL_HOUSE_PHOTOS;
          break;
       case SITE_MEDIA_AMRADIO:
-         map[freex][freey][freez].special=SPECIAL_RADIO_BROADCASTSTUDIO;
+         levelmap[freex][freey][freez].special=SPECIAL_RADIO_BROADCASTSTUDIO;
          break;
       case SITE_MEDIA_CABLENEWS:
-         map[freex][freey][freez].special=SPECIAL_NEWS_BROADCASTSTUDIO;
+         levelmap[freex][freey][freez].special=SPECIAL_NEWS_BROADCASTSTUDIO;
          break;
    }
 
@@ -448,15 +448,15 @@ void initsite(locationst &loc)
       if(freex>=(MAPX>>1)-2&&
          freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
       count--;
-   }while(( map[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
-            map[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-            map[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
-            map[freex][freey][freez].special!=-1   )&&count>0);
+   }while(( levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+            levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+            levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+            levelmap[freex][freey][freez].special!=-1   )&&count>0);
 
    switch(loc.type)
    {
       case SITE_GOVERNMENT_COURTHOUSE:
-         map[freex][freey][freez].special=SPECIAL_COURTHOUSE_JURYROOM;
+         levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_JURYROOM;
          break;
    }
 }
@@ -470,7 +470,7 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       for(int y=ry;y<ry+dy;y++)
       {
-         map[x][y][z].flag=0;
+         levelmap[x][y][z].flag=0;
       }
    }
 
@@ -483,10 +483,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       int wx=rx+LCSrandom(dx-2)+1;
 
-      for(int wy=0;wy<dy;wy++)map[wx][ry+wy][z].flag=SITEBLOCK_BLOCK;
+      for(int wy=0;wy<dy;wy++)levelmap[wx][ry+wy][z].flag=SITEBLOCK_BLOCK;
       int rny=LCSrandom(dy);
-      map[wx][ry+rny][z].flag=SITEBLOCK_DOOR;
-      if(!LCSrandom(3))map[wx][ry+rny][z].flag|=SITEBLOCK_LOCKED;
+      levelmap[wx][ry+rny][z].flag=SITEBLOCK_DOOR;
+      if(!LCSrandom(3))levelmap[wx][ry+rny][z].flag|=SITEBLOCK_LOCKED;
 
       generateroom(rx,ry,wx-rx,dy,z);
 
@@ -496,10 +496,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       int wy=ry+LCSrandom(dy-2)+1;
 
-      for(int wx=0;wx<dx;wx++)map[rx+wx][wy][z].flag=SITEBLOCK_BLOCK;
+      for(int wx=0;wx<dx;wx++)levelmap[rx+wx][wy][z].flag=SITEBLOCK_BLOCK;
       int rnx=LCSrandom(dx);
-      map[rx+rnx][wy][z].flag=SITEBLOCK_DOOR;
-      if(!LCSrandom(3))map[rx+rnx][wy][z].flag|=SITEBLOCK_LOCKED;
+      levelmap[rx+rnx][wy][z].flag=SITEBLOCK_DOOR;
+      if(!LCSrandom(3))levelmap[rx+rnx][wy][z].flag|=SITEBLOCK_LOCKED;
 
       generateroom(rx,ry,dx,wy-ry,z);
 
@@ -512,43 +512,43 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
 /* marks the area around the specified tile as explored */
 void knowmap(int locx,int locy,int locz)
 {
-   map[locx][locy][locz].flag|=SITEBLOCK_KNOWN;
+   levelmap[locx][locy][locz].flag|=SITEBLOCK_KNOWN;
 
-   if(locx>0)map[locx-1][locy][locz].flag|=SITEBLOCK_KNOWN;
-   if(locx<MAPX-1)map[locx+1][locy][locz].flag|=SITEBLOCK_KNOWN;
-   if(locy>0)map[locx][locy-1][locz].flag|=SITEBLOCK_KNOWN;
-   if(locy<MAPY-1)map[locx][locy+1][locz].flag|=SITEBLOCK_KNOWN;
+   if(locx>0)levelmap[locx-1][locy][locz].flag|=SITEBLOCK_KNOWN;
+   if(locx<MAPX-1)levelmap[locx+1][locy][locz].flag|=SITEBLOCK_KNOWN;
+   if(locy>0)levelmap[locx][locy-1][locz].flag|=SITEBLOCK_KNOWN;
+   if(locy<MAPY-1)levelmap[locx][locy+1][locz].flag|=SITEBLOCK_KNOWN;
 
    if(locx>0&&locy>0)
    {
-      if(!(map[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
-         !(map[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
+      if(!(levelmap[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
+         !(levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
       {
-         map[locx-1][locy-1][locz].flag|=SITEBLOCK_KNOWN;
+         levelmap[locx-1][locy-1][locz].flag|=SITEBLOCK_KNOWN;
       }
    }
    if(locx<MAPX-1&&locy>0)
    {
-      if(!(map[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
-         !(map[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
+      if(!(levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
+         !(levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
       {
-         map[locx+1][locy-1][locz].flag|=SITEBLOCK_KNOWN;
+         levelmap[locx+1][locy-1][locz].flag|=SITEBLOCK_KNOWN;
       }
    }
    if(locx>0&&locy<MAPY-1)
    {
-      if(!(map[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
-         !(map[locx][locy+1][locz].flag & SITEBLOCK_BLOCK))
+      if(!(levelmap[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
+         !(levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK))
       {
-         map[locx-1][locy+1][locz].flag|=SITEBLOCK_KNOWN;
+         levelmap[locx-1][locy+1][locz].flag|=SITEBLOCK_KNOWN;
       }
    }
    if(locx<MAPX-1&&locy<MAPY-1)
    {
-      if(!(map[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
-         !(map[locx][locy+1][locz].flag & SITEBLOCK_BLOCK))
+      if(!(levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
+         !(levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK))
       {
-         map[locx+1][locy+1][locz].flag|=SITEBLOCK_KNOWN;
+         levelmap[locx+1][locy+1][locz].flag|=SITEBLOCK_KNOWN;
       }
    }
 }

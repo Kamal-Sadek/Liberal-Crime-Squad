@@ -278,29 +278,32 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
 
-      move(2,0);
+      printcreatureinfo(d.date[e]);
+      makedelimiter(8,0);
+
+      move(10,0);
       addstr("How should ");
       addstr(pool[p]->name);
       addstr(" approach the situation?");
 
       if(funds>=100&&!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(4,0);
+      move(11,0);
       addstr("A - Spend a hundred bucks tonight to get the ball rolling.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(5,0);
+      move(12,0);
       addstr("B - Try to get through the evening without spending a penny.");
       if(!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(6,0);
+      move(13,0);
       addstr("C - Spend a week on a cheap vacation (stands up any other dates).");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,0);
+      move(14,0);
       addstr("D - Break it off.");
       if(d.date[e]->align==-1&&!pool[p]->clinic)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(8,0);
+         move(15,0);
          addstr("E - Just kidnap the Conservative bitch.");
       }
 
@@ -352,7 +355,7 @@ char completedate(datest &d,int p,char &clearformess)
 
          if(test)
          {
-            int y=10;
+            int y=17;
             if(aroll>troll)
             {
                set_color(COLOR_BLUE,COLOR_BLACK,1);
@@ -572,6 +575,9 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->location=pool[p]->location;
                d.date[e]->base=pool[p]->base;
                d.date[e]->flag|=CREATUREFLAG_MISSING;
+
+               //Create interrogation data
+               d.date[e]->activity.arg=reinterpret_cast<int>(new interrogation);
 
                erase();
 

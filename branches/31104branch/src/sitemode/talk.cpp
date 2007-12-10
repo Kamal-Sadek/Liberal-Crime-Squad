@@ -560,7 +560,7 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(aroll>troll)
+                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->align==-1)))
                   {
                      y++;
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -588,12 +588,13 @@ char talk(creaturest &a,int t)
                         *newcr=*tk;
                      namecreature(*newcr);
 
-                     newcr->location=a.location;
-                     newcr->base=a.base;
-                     newcr->hireid=a.id;
-                     newcr->align=1;
+                     recruitst *newrst=new recruitst;
+                     newrst->recruit=newcr;
+                     newrst->recruiter_id = a.id;
 
-                     pool.push_back(newcr);
+                     //newcr->align=1;
+
+                     recruit.push_back(newrst);
                      stat_recruits++;
 
                      delenc(t,0);
@@ -712,7 +713,8 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(talkreceptive(*tk))
+                  if(talkreceptive(*tk)||
+                     a.skill[SKILL_PERSUASION]+a.attval(ATTRIBUTE_CHARISMA)>LCSrandom(20))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(12,1);addstr(tk->name);addstr(" responds,");

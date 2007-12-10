@@ -958,6 +958,8 @@ void giveup(void)
             strcpy(kname,pool[p]->propername);
             if(pool[p]->type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
             if(pool[p]->type==CREATURE_NEWSANCHOR)offended_cablenews=1;
+            //clear interrogation data if deleted
+            if(pool[p]->align==-1) delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
          }
       }
 

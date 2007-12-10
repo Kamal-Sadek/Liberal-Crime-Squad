@@ -88,9 +88,9 @@ void printsitemap(int x,int y,int z)
    px=65;py=9;
    if(y>0)
    {
-      if(map[x][y-1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(map[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(py+4,px);addch(CH_FULL_BLOCK);
          move(py+4,px+1);addch(CH_FULL_BLOCK);
@@ -110,9 +110,9 @@ void printsitemap(int x,int y,int z)
    px=65;py=19;
    if(y<MAPY-1)
    {
-      if(map[x][y+1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(map[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(py,px);addch(CH_FULL_BLOCK);
          move(py,px+1);addch(CH_FULL_BLOCK);
@@ -132,9 +132,9 @@ void printsitemap(int x,int y,int z)
    px=58;py=14;
    if(x>0)
    {
-      if(map[x-1][y][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK)
       {
-         if(map[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(py,px+6);addch(CH_FULL_BLOCK);
          move(py+1,px+6);addch(CH_FULL_BLOCK);
@@ -152,9 +152,9 @@ void printsitemap(int x,int y,int z)
    px=72;py=14;
    if(x<MAPX-1)
    {
-      if(map[x+1][y][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK)
       {
-         if(map[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(py,px);addch(CH_FULL_BLOCK);
          move(py+1,px);addch(CH_FULL_BLOCK);
@@ -172,11 +172,11 @@ void printsitemap(int x,int y,int z)
    px=72;py=9;
    if(x<MAPX-1&&y>0)
    {
-      if(map[x+1][y-1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x+1][y-1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(!(map[x][y-1][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px);addch(CH_FULL_BLOCK);
             move(py+1,px);addch(CH_FULL_BLOCK);
@@ -184,9 +184,9 @@ void printsitemap(int x,int y,int z)
             move(py+3,px);addch(CH_FULL_BLOCK);
             move(py+4,px);addch(CH_FULL_BLOCK);
          }
-         if(!(map[x+1][y][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py+4,px);addch(CH_FULL_BLOCK);
             move(py+4,px+1);addch(CH_FULL_BLOCK);
@@ -207,11 +207,11 @@ void printsitemap(int x,int y,int z)
    px=72;py=19;
    if(x<MAPX-1&&y<MAPY-1)
    {
-      if(map[x+1][y+1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x+1][y+1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(!(map[x][y+1][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px);addch(CH_FULL_BLOCK);
             move(py+1,px);addch(CH_FULL_BLOCK);
@@ -219,9 +219,9 @@ void printsitemap(int x,int y,int z)
             move(py+3,px);addch(CH_FULL_BLOCK);
             move(py+4,px);addch(CH_FULL_BLOCK);
          }
-         if(!(map[x+1][y][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px);addch(CH_FULL_BLOCK);
             move(py,px+1);addch(CH_FULL_BLOCK);
@@ -242,11 +242,11 @@ void printsitemap(int x,int y,int z)
    px=58;py=9;
    if(x>0&&y>0)
    {
-      if(map[x-1][y-1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x-1][y-1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(!(map[x][y-1][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px+6);addch(CH_FULL_BLOCK);
             move(py+1,px+6);addch(CH_FULL_BLOCK);
@@ -254,9 +254,9 @@ void printsitemap(int x,int y,int z)
             move(py+3,px+6);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
          }
-         if(!(map[x-1][y][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py+4,px);addch(CH_FULL_BLOCK);
             move(py+4,px+1);addch(CH_FULL_BLOCK);
@@ -277,11 +277,11 @@ void printsitemap(int x,int y,int z)
    px=58;py=19;
    if(x>0&&y<MAPY-1)
    {
-      if(map[x-1][y+1][z].flag & SITEBLOCK_BLOCK)
+      if(levelmap[x-1][y+1][z].flag & SITEBLOCK_BLOCK)
       {
-         if(!(map[x][y+1][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px+6);addch(CH_FULL_BLOCK);
             move(py+1,px+6);addch(CH_FULL_BLOCK);
@@ -289,9 +289,9 @@ void printsitemap(int x,int y,int z)
             move(py+3,px+6);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
          }
-         if(!(map[x-1][y][z].flag & SITEBLOCK_BLOCK))
+         if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
          {
-            if(map[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
+            if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(py,px);addch(CH_FULL_BLOCK);
             move(py,px+1);addch(CH_FULL_BLOCK);
@@ -310,7 +310,7 @@ void printsitemap(int x,int y,int z)
 
    //PRINT SPECIAL
    char str[200];
-   switch(map[locx][locy][locz].special)
+   switch(levelmap[locx][locy][locz].special)
    {
       case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:strcpy(str,"Caged Animals");break;
       case SPECIAL_NUCLEAR_ONOFF:strcpy(str,"The On/Off Switch");break;
@@ -333,7 +333,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_RESTAURANT_TABLE:strcpy(str,"Table");break;
       case SPECIAL_CAFE_COMPUTER:strcpy(str,"Computer");break;
    }
-   if(map[locx][locy][locz].special!=-1)
+   if(levelmap[locx][locy][locz].special!=-1)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(24,68-(strlen(str)>>1));
@@ -351,15 +351,15 @@ void printsitemap(int x,int y,int z)
    {
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(17,65);
-      if(map[locx][locx][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
+      if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
       {
          addstr("ENC+ARM");
       }
-      else if(map[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT)
+      else if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT)
       {
          addstr("ENC+ENM");
       }
-      else if(map[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
+      else if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
       {
          addstr("ENC+enm");
       }
@@ -382,7 +382,7 @@ void printsitemap(int x,int y,int z)
 
 void printblock(int x,int y,int z,int px,int py)
 {
-   if(map[x][y][z].flag & SITEBLOCK_RESTRICTED)
+   if(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED)
    {
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       for(int px2=px;px2<px+7;px2++)
@@ -395,7 +395,7 @@ void printblock(int x,int y,int z,int px,int py)
       }
    }
 
-   if(map[x][y][z].flag & SITEBLOCK_BLOODY2)
+   if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)
    {
       set_color(COLOR_RED,COLOR_BLACK,0);
       move(py+3,px+2);
@@ -411,7 +411,7 @@ void printblock(int x,int y,int z,int px,int py)
       move(py+4,px+4);
       addch('.');
    }
-   else if(map[x][y][z].flag & SITEBLOCK_BLOODY)
+   else if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY)
    {
       set_color(COLOR_RED,COLOR_BLACK,0);
       move(py+2,px+1);
@@ -422,23 +422,23 @@ void printblock(int x,int y,int z,int px,int py)
       addch('.');
    }
 
-   if(map[x][y][z].flag & SITEBLOCK_EXIT)
+   if(levelmap[x][y][z].flag & SITEBLOCK_EXIT)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(py+1,px+1);
       addstr("EXIT");
    }
-   else if(map[x][y][z].flag & SITEBLOCK_DOOR)
+   else if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
    {
-      if((map[x][y][z].flag & SITEBLOCK_CLOCK) &&
-         (map[x][y][z].flag & SITEBLOCK_LOCKED))
+      if((levelmap[x][y][z].flag & SITEBLOCK_CLOCK) &&
+         (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(py+1,px);
          addstr("L. DOOR");
       }
-      else if((map[x][y][z].flag & SITEBLOCK_KLOCK) &&
-         (map[x][y][z].flag & SITEBLOCK_LOCKED))
+      else if((levelmap[x][y][z].flag & SITEBLOCK_KLOCK) &&
+         (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
          set_color(COLOR_YELLOW,COLOR_BLACK,0);
          move(py+1,px);
@@ -451,31 +451,31 @@ void printblock(int x,int y,int z,int px,int py)
          addstr("DOOR");
       }
    }
-   else if(map[x][y][z].flag & SITEBLOCK_LOOT)
+   else if(levelmap[x][y][z].flag & SITEBLOCK_LOOT)
    {
       set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       move(py+1,px+1);
       addstr("GOODS");
    }
 
-   if(map[x][y][z].siegeflag & SIEGEFLAG_TRAP)
+   if(levelmap[x][y][z].siegeflag & SIEGEFLAG_TRAP)
    {
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(py,px+1);
       addstr("TRAP!");
    }
-   else if(map[x][y][z].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
+   else if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
    {
       set_color(COLOR_RED,COLOR_BLACK,0);
       move(py,px+1);
       addstr("enemy");
    }
-   else if(map[x][y][z].special!=-1)
+   else if(levelmap[x][y][z].special!=-1)
    {
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(py,px);
 
-      switch(map[x][y][z].special)
+      switch(levelmap[x][y][z].special)
       {
          case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:addstr("ANIMALS");break;
          case SPECIAL_NUCLEAR_ONOFF:addstr("ON/OFF!");break;
@@ -499,13 +499,13 @@ void printblock(int x,int y,int z,int px,int py)
          case SPECIAL_CAFE_COMPUTER:addstr("COMPUTR");break;
       }
    }
-   if(map[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
+   if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
    {
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(py+3,px+1);
       addstr("ARMOR");
    }
-   else if(map[x][y][z].siegeflag & SIEGEFLAG_UNIT)
+   else if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT)
    {
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(py+3,px+1);

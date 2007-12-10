@@ -67,7 +67,7 @@ void special_lab_cosmetics_cagedanimals(void)
          {
             alienationcheck(0);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
          }
 
          return;
@@ -112,7 +112,7 @@ void special_nuclear_onoff(void)
       if(c=='y')
       {
          clearmessagearea();
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
 
          char succeed=0;
 
@@ -157,7 +157,7 @@ void special_nuclear_onoff(void)
          }
          sitealarm=1;
          alienationcheck(1);
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
          sitecrime+=5;
          criminalizeparty(LAWFLAG_TERRORISM);
 
@@ -244,7 +244,7 @@ void special_lab_genetic_cagedanimals(void)
 
          if(actual)
          {
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
          }
 
          return;
@@ -306,7 +306,7 @@ void special_policestation_lockup(void)
          {
             alienationcheck(1);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_POLICE_LOCKUP);
             criminalizeparty(LAWFLAG_HELPESCAPE);
@@ -371,7 +371,7 @@ void special_courthouse_lockup(void)
          {
             alienationcheck(1);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_COURTHOUSE_LOCKUP);
             criminalizeparty(LAWFLAG_HELPESCAPE);
@@ -421,7 +421,7 @@ void special_courthouse_jury(void)
 
       if(c=='y')
       {
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
 
          char succeed=0;
 
@@ -603,7 +603,7 @@ void special_prison_control(void)
 
          alienationcheck(1);
          noticecheck(-1);
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
          sitecrime+=3;
          sitestory->crime.push_back(CRIME_PRISON_RELEASE);
          criminalizeparty(LAWFLAG_HELPESCAPE);
@@ -678,7 +678,7 @@ void special_intel_supercomputer(void)
 
             alienationcheck(1);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_HACK_INTEL);
 
@@ -719,7 +719,7 @@ void special_sweatshop_equipment(void)
          
          alienationcheck(0);
          noticecheck(-1);
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
          sitecrime++;
          sitestory->crime.push_back(CRIME_BREAK_SWEATSHOP);
 
@@ -761,7 +761,7 @@ void special_polluter_equipment(void)
          
          alienationcheck(1);
          noticecheck(-1);
-         map[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].special=-1;
          sitecrime+=2;
          sitestory->crime.push_back(CRIME_BREAK_FACTORY);
 
@@ -822,7 +822,7 @@ void special_house_photos(void)
          {
             alienationcheck(1);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_HOUSE_PHOTOS);
 
@@ -884,7 +884,7 @@ void special_corporate_files(void)
          {
             alienationcheck(1);
             noticecheck(-1);
-            map[locx][locy][locz].special=-1;
+            levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_CORP_FILES);
 
@@ -929,7 +929,7 @@ void special_radio_broadcaststudio(void)
 
       if(c=='y')
       {
-         if(radio_broadcast())map[locx][locy][locz].special=-1;
+         if(radio_broadcast())levelmap[locx][locy][locz].special=-1;
 
          return;
       }
@@ -966,7 +966,7 @@ void special_news_broadcaststudio(void)
 
       if(c=='y')
       {
-         if(news_broadcast())map[locx][locy][locz].special=-1;
+         if(news_broadcast())levelmap[locx][locy][locz].special=-1;
 
          return;
       }

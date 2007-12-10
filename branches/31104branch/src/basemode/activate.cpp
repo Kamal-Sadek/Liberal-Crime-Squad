@@ -198,29 +198,29 @@ void activate(creaturest *cr)
 
       makedelimiter(8,0);
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
       move(10,1);
       addstr("A - Engaging in Liberal Activism");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='b');
       move(11,1);
-      addstr("L - Legal Fundraising");
+      addstr("B - Legal Fundraising");
       
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='c');
       move(12,1);
-      addstr("I - Illegal Fundraising");
+      addstr("C - Illegal Fundraising");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='d');
       move(13,1);
-      addstr("C - Make/Repair Clothing");
+      addstr("D - Make/Repair Clothing");
       
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='e');
       move(14,1);
-      addstr("T - Teaching Other Liberals");
+      addstr("E - Teaching Other Liberals");
       
       if(cr->skill[SKILL_MEDICAL]!=0)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
       }
       else
       {
@@ -232,27 +232,27 @@ void activate(creaturest *cr)
       move(16,1);
       if(cr->canwalk())
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS&&state==0);
          addstr("S - Stealing a Car");
       }
       else
       {
-         if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR&&state==0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          addstr("S - Procuring a Wheelchair");
       }
 
-      if(clinictime(*cr))set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(clinictime(*cr))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(18,1);
       addstr("M - Move to the Free CLINIC");
 
-      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(17,1);
       addstr("I - Interrogate a Conservative hostage");
       
-      if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_BURY&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(19,1);
       addstr("Z - Dispose of bodies");
@@ -327,7 +327,7 @@ void activate(creaturest *cr)
             break;
          }
          break;
-      case 'l':
+      case 'b':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
          move(10,40);
          addstr("1 - Solicit Donations");
@@ -365,7 +365,7 @@ void activate(creaturest *cr)
             break;
          }
          break;
-      case 'i':
+      case 'c':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
          move(10,40);
          addstr("1 - Sell Brownies");
@@ -413,7 +413,7 @@ void activate(creaturest *cr)
             break;
          }
          break;
-      case 'c':
+      case 'd':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
          move(10,40);
          addstr("1 - Make Clothing");
@@ -422,7 +422,7 @@ void activate(creaturest *cr)
          move(11,40);
          addstr("2 - Repair Clothing");
          break;
-      case 't':
+      case 'e':
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(10,40);
          addstr("Teach Liberals About What?");
@@ -509,7 +509,7 @@ void activate(creaturest *cr)
             case '6':cr->activity.type=ACTIVITY_HACKING;break;
             }
             break;
-         case 'l':
+         case 'b':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_DONATIONS;break;
@@ -518,7 +518,7 @@ void activate(creaturest *cr)
             case '4':cr->activity.type=ACTIVITY_SELL_MUSIC;break;
             }
             break;
-         case 'i':
+         case 'c':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
@@ -527,10 +527,10 @@ void activate(creaturest *cr)
             case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             }
             break;
-         case 'c':
+         case 'd':
             if(choice=='2')cr->activity.type=ACTIVITY_REPAIR_ARMOR;
             break;
-         case 't':
+         case 'e':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_TEACH_GENERALED;break;

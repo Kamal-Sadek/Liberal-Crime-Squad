@@ -104,6 +104,7 @@ extern short party_status;
 
 
 extern vector<datest *> date;
+extern vector<recruitst *> recruit;
 
 extern vector<locationst *> location;
 
@@ -130,7 +131,7 @@ extern vector<vehiclest *> vehicle;
 extern long curcarid;
 extern char showcarprefs;
 
-extern siteblockst map[MAPX][MAPY][MAPZ];
+extern siteblockst levelmap[MAPX][MAPY][MAPZ];
 extern creaturest encounter[ENCMAX];
 extern highscorest score[SCORENUM];
 extern int yourscore;

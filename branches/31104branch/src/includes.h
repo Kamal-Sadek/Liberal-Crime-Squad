@@ -43,6 +43,7 @@ const unsigned long lowestloadscoreversion=30001;
       #include <iostream>
       #include <fstream>
       #include <vector>
+      #include <map>
       #include <io.h> //needed for unlink()
    #else
       #if _MSC_VER > 1200
@@ -50,11 +51,13 @@ const unsigned long lowestloadscoreversion=30001;
          #include <iostream>
          #include <fstream>
          #include <vector>
+         #include <map>
       #else
          #define WIN32_PRE_DOTNET
          #include <iostream.h>
          #include <fstream.h>
          #include "vector.h"
+         #include "map.h"
       #endif
    #endif
 
@@ -66,6 +69,7 @@ const unsigned long lowestloadscoreversion=30001;
    #define CH_USE_CP437
 #else
    #include <vector>
+   #include <map>
    #include <string.h>
    #include <iostream>
    #include <fstream>
@@ -1197,6 +1201,29 @@ struct datest
    }
 };
 
+enum RecruitTasks
+{
+   TASK_NONE,
+   TASK_COMMUNITYSERVICE,
+   TASK_ACTIVISM,
+   TASK_CRIMES,
+   TASK_BUYWEAPON,
+   TASK_ARRESTED,
+   TASKNUM
+};
+
+struct recruitst
+{
+   long recruiter_id;
+   creaturest* recruit;
+   short timeleft;
+   char level;
+   char eagerness1;
+   char task;
+   recruitst();
+   char eagerness();
+};
+
 enum Crimes
 {
    CRIME_STOLEGROUND,
@@ -1273,6 +1300,50 @@ struct highscorest
    unsigned long stat_spent;
    unsigned long stat_buys;
    unsigned long stat_burns;
+};
+
+//just a float that is initialized to 0
+struct float_zero
+{
+   float_zero() : n(0.0f) {};
+   operator float&() { return n; };
+   float n;
+};
+
+//Interrogation information for the interrogation system, to be
+//dynamically created on capture and deleted when interrogation ends,
+//referenced using a pointer typecast into one of the arguments
+//of the target's current action.
+struct interrogation
+{
+   //default constructor
+   interrogation() : nofood(0), nowater(0), nosleep(0), nolight(0),
+      totalspiritcrush(0), druguse(0)
+   {
+      techniques[0]=1;
+      techniques[1]=1;
+      techniques[2]=0;
+      techniques[3]=0;
+      techniques[4]=0;
+      techniques[5]=0;
+      techniques[6]=0;
+      techniques[7]=0;
+      techniques[8]=0;
+   };
+
+   int nofood;  //days without food
+   int nowater; //days without water
+   int nosleep; //days without sleep
+   int nolight; //days without light
+
+   bool techniques[9]; //yesterday's interrogation plan
+
+   int totalspiritcrush; //total amount of spirit crush applied over time
+
+   int druguse; //total days of drug use
+
+   //Maps individual characters to the rapport built with them
+   map<long,struct float_zero> rapport;
 };
 
 #define SCORENUM 5
@@ -1873,6 +1944,14 @@ void choose_buyer(short &buyer);
 char completevacation(datest &d,int p,char &clearformess);
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d,int p,char &clearformess);
+
+/*
+ recruit.cpp
+*/
+/* daily - recruit - recruit finishes task */
+char completerecruittask(recruitst &d,int p,char &clearformess);
+/* daily - recruit - recruit meeting*/
+char completerecruitmeeting(recruitst &d,int p,char &clearformess);
 
 /*
  siege.cpp

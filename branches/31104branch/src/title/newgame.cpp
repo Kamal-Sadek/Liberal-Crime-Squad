@@ -36,7 +36,7 @@ void makecharacter(void)
    creaturest *newcr=new creaturest;
    initliberal(*newcr);
 
-   newcr->att[ATTRIBUTE_HEART]=5;
+   newcr->att[ATTRIBUTE_HEART]=6;
    newcr->att[ATTRIBUTE_WISDOM]=1;
    newcr->att[ATTRIBUTE_INTELLIGENCE]=1;
    newcr->att[ATTRIBUTE_AGILITY]=4;

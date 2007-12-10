@@ -698,9 +698,13 @@ void getrecruitcreature(char *str,int type)
 
 void gettitle(char *str,creaturest &cr)
 {
-   if(cr.align!=1)
+   if(cr.align==-1)
    {
-      strcpy(str,"Hostage");
+      strcpy(str,"Mindless Conservative");
+   }
+   else if(cr.align==0)
+   {
+      strcpy(str,"Non-Liberal");
    }
    else
    {

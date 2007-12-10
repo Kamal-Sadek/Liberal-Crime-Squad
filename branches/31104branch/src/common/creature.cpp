@@ -1393,6 +1393,14 @@ void makecreature(creaturest &cr,short type)
       }
    }
 
+   if(cr.align==1)cr.att[ATTRIBUTE_HEART]+=4;
+   else if(cr.align==0)
+   {
+      cr.att[ATTRIBUTE_HEART]+=2;
+      cr.att[ATTRIBUTE_HEART]+=2;
+   }
+   else cr.att[ATTRIBUTE_WISDOM]+=4;
+
    //RANDOM STARTING SKILLS
    while(randomskills>0)
    {

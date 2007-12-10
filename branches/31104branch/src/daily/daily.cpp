@@ -791,9 +791,9 @@ void advanceday(char &clearformess,char canseethings)
          if(pool[p]->blood<=20&&pool[p]->location>-1&&location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
          {
             int hospital;
-            for(hospital=0;hospital<location.size();++i)
+            for(hospital=0;hospital<location.size();++hospital)
             {
-               if(location[i]->type==SITE_HOSPITAL_UNIVERSITY)break;
+               if(location[hospital]->type==SITE_HOSPITAL_UNIVERSITY)break;
             }
             if(hospital!=location.size())
             {
@@ -830,6 +830,8 @@ void advanceday(char &clearformess,char canseethings)
          addstr(" has left ");
          addstr(location[pool[p]->location]->name);
          addstr(".");
+
+         pool[p]->clinic=0;
 
          int hs=-1;
          for(int l=0;l<location.size();l++)
@@ -923,6 +925,62 @@ void advanceday(char &clearformess,char canseethings)
                location[l]->front_business=-1;
             }
          }
+      }
+   }
+
+   //MEET WITH POTENTIAL RECRUITS
+   for(int r=recruit.size()-1;r>=0;r--)
+   {
+      if(disbanding)break;
+
+      int p=getpoolcreature(recruit[r]->recruiter_id);
+      // Stand up recruits if 1) recruiter does not exist, or 2) recruiter was not able to return to a safehouse today
+      if((p!=-1&&pool[p]->location!=-1&&location[pool[p]->location]->renting!=-1)||
+         recruit[r]->timeleft>0)
+      {
+         //RECRUIT TASKS
+         if(recruit[r]->timeleft>0)
+         {
+            recruit[r]->timeleft--;
+            if(recruit[r]->task==TASK_CRIMES && !LCSrandom(25))
+            {
+               recruit[r]->task=TASK_ARRESTED;
+            }
+
+            if(recruit[r]->timeleft==0)
+            {
+               if(completerecruittask(*recruit[r],p,clearformess))
+               {
+                  delete recruit[r];
+                  recruit.erase(recruit.begin() + r);
+                  continue;
+               }
+            }
+         }
+         //MEET WITH RECRUIT
+         else
+         {
+            //TERMINATE NULL RECRUIT MEETINGS
+            if(location[pool[p]->location]->siege.siege)
+            {
+               delete recruit[r];
+               recruit.erase(recruit.begin() + r);
+               continue;
+            }
+            //DO MEETING
+            else if(completerecruitmeeting(*recruit[r],p,clearformess))
+            {
+               delete recruit[r];
+               recruit.erase(recruit.begin() + r);
+               continue;
+            }
+         }
+      }
+      else
+      {
+         delete recruit[r];
+         recruit.erase(recruit.begin() + r);
+         continue;
       }
    }
 

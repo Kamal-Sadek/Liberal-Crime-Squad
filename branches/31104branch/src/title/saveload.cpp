@@ -165,6 +165,29 @@ void savegame(char *str)
       for(int pl=0;pl<pool.size();pl++)
       {
          numbytes=fwrite(pool[pl],sizeof(creaturest),1,h);
+         //write extra interrogation data if applicable
+         if(pool[pl]->align==-1 && pool[pl]->alive)
+         {
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nofood,sizeof(int),1,h);
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nowater,sizeof(int),1,h);
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nosleep,sizeof(int),1,h);
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nolight,sizeof(int),1,h);
+            numbytes=fwrite(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[9]),1,h);
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->totalspiritcrush,sizeof(int),1,h);
+            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
+
+            //deep write rapport map
+            unsigned int size = reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.size();
+            numbytes=fwrite(&size,sizeof(unsigned int),1,h);
+            
+            map<long,float_zero>::iterator i;
+            for(i=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.begin();
+                i!=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.end();++i)
+            {
+               numbytes=fwrite(&((*i).first),sizeof(long),1,h);
+               numbytes=fwrite(&((*i).second),sizeof(float_zero),1,h);
+            }
+         }
       }
 
       //SQUADS
@@ -217,6 +240,19 @@ void savegame(char *str)
          {
             numbytes=fwrite(date[dt]->date[dt2],sizeof(creaturest),1,h);
          }
+      }
+
+      //RECRUITS
+      dummy=recruit.size();
+      numbytes=fwrite(&dummy,sizeof(int),1,h);
+      for(int rt=0;rt<recruit.size();rt++)
+      {
+         numbytes=fwrite(&recruit[rt]->recruiter_id,sizeof(long),1,h);
+         numbytes=fwrite(&recruit[rt]->timeleft,sizeof(short),1,h);
+         numbytes=fwrite(&recruit[rt]->level,sizeof(char),1,h);
+         numbytes=fwrite(&recruit[rt]->eagerness1,sizeof(char),1,h);
+         numbytes=fwrite(&recruit[rt]->task,sizeof(char),1,h);
+         numbytes=fwrite(recruit[rt]->recruit,sizeof(creaturest),1,h);
       }
 
       //NEWS STORIES
@@ -396,6 +432,31 @@ char load(void)
       {
          pool[pl]=new creaturest;
          fread(pool[pl],sizeof(creaturest),1,h);
+         //read extra interrogation data if applicable
+         if(pool[pl]->align==-1 && pool[pl]->alive)
+         {
+            pool[pl]->activity.arg = reinterpret_cast<int>(new interrogation);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nofood,sizeof(int),1,h);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nowater,sizeof(int),1,h);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nosleep,sizeof(int),1,h);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nolight,sizeof(int),1,h);
+            fread(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[9]),1,h);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->totalspiritcrush,sizeof(int),1,h);
+            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
+
+            reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.clear();
+            int size;
+            fread(&size,sizeof(int),1,h);
+            int i;
+            for(i=0;i<size;++i)
+            {
+               long id;
+               float_zero value;
+               fread(&id,sizeof(long),1,h);
+               fread(&value,sizeof(float_zero),1,h);
+               reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport[id]=value;
+            }
+         }
       }
 
       //SQUADS
@@ -469,6 +530,21 @@ char load(void)
             date[dt]->date[dt2]=new creaturest;
             fread(date[dt]->date[dt2],sizeof(creaturest),1,h);
          }
+      }
+
+      //RECRUITS
+      fread(&dummy,sizeof(int),1,h);
+      recruit.resize(dummy);
+      for(int rt=0;rt<recruit.size();rt++)
+      {
+         recruit[rt]=new recruitst;
+         fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
+         fread(&recruit[rt]->timeleft,sizeof(short),1,h);
+         fread(&recruit[rt]->level,sizeof(char),1,h);
+         fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
+         fread(&recruit[rt]->task,sizeof(char),1,h);
+         recruit[rt]->recruit = new creaturest;
+         fread(recruit[rt]->recruit,sizeof(creaturest),1,h);
       }
 
       //NEWS STORIES

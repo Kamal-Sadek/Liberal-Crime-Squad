@@ -212,7 +212,7 @@ void advancecreature(creaturest &cr)
 
       cr.blood-=bleed;
 
-      map[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
+      levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
       if(cr.armor.type!=ARMOR_NONE)cr.armor.flag|=ARMORFLAG_BLOODY;
 

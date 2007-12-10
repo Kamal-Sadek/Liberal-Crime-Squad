@@ -1167,7 +1167,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
          t.blood-=damamount;
 
-         map[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
+         levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
          if((t.wound[BODYPART_HEAD] & WOUND_CLEANOFF)||
             (t.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
@@ -1905,7 +1905,7 @@ void bloodblast(armorst &armor)
 
    if(mode!=GAMEMODE_SITE)return;
 
-   map[locx][locy][locz].flag|=SITEBLOCK_BLOODY2;
+   levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY2;
 
    //HIT EVERYTHING
    for(int p=0;p<6;p++)
@@ -2006,6 +2006,7 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
 /* abandoned liberal is captured by conservatives */
 void capturecreature(creaturest &t)
 {
+   t.activity.type=0;
    freehostage(t,2); // situation 2 = no message; this may want to be changed to 0 or 1
    if(t.prisoner)
    {

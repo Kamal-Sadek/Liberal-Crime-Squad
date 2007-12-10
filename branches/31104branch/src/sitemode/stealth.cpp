@@ -196,7 +196,7 @@ void disguisecheck(void)
    if(sitealarmtimer==-1 && weapon<2)
    {
       if(!disguisesite(location[cursite]->type)&&
-         !(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))return;
+         !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))return;
    }
 
    char noticed=0;
@@ -502,7 +502,7 @@ char hasdisguise(creaturest &cr,short type)
             break;
          case SITE_LABORATORY_COSMETICS:
          case SITE_LABORATORY_GENETIC:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_LABCOAT)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
@@ -510,7 +510,7 @@ char hasdisguise(creaturest &cr,short type)
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_POLICESTATION:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)uniformed=1;
@@ -518,7 +518,7 @@ char hasdisguise(creaturest &cr,short type)
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_COURTHOUSE:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_BLACKROBE)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
@@ -528,7 +528,7 @@ char hasdisguise(creaturest &cr,short type)
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_PRISON:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(law[LAW_DEATHPENALTY]==-2&&
                    law[LAW_POLICEBEHAVIOR]==-2)
@@ -541,7 +541,7 @@ char hasdisguise(creaturest &cr,short type)
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
@@ -578,14 +578,14 @@ char hasdisguise(creaturest &cr,short type)
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             break;
          case SITE_MEDIA_AMRADIO:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_MEDIA_CABLENEWS:
-            if(map[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }

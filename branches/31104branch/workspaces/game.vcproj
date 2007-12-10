@@ -203,6 +203,9 @@
 				RelativePath="..\src\daily\news.cpp">
 			</File>
 			<File
+				RelativePath="..\src\daily\recruit.cpp">
+			</File>
+			<File
 				RelativePath="..\src\daily\shopsnstuff.cpp">
 			</File>
 			<File

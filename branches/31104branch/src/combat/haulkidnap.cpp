@@ -542,6 +542,9 @@ void kidnaptransfer(creaturest &cr)
    newcr->base=activesquad->squad[0]->base;
    newcr->flag|=CREATUREFLAG_MISSING;
 
+   //Create interrogation data
+   newcr->activity.arg=reinterpret_cast<int>(new interrogation);
+
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
