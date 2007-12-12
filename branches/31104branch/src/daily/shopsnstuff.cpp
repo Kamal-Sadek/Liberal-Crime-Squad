@@ -178,41 +178,82 @@ void pawnshop(int loc)
       }
       else if(in_gunshop==2)
       {
-         if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,1);
-         if(law[LAW_GUNCONTROL]<2)
-         addstr("P - Buy Shotgun Shells        ($20)");
-         if(funds>=15)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,40);
-         if(law[LAW_GUNCONTROL]<2)
-         addstr("T - Buy a .22 Speedloader     ($15)");
-         if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,1);
-         if(law[LAW_GUNCONTROL]<1)
-         addstr("N - Buy a 9mm Pistol Magazine ($30)");
-         if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,40);
-         if(law[LAW_GUNCONTROL]<1)
-         addstr("F - Buy a .45 Pistol Magazine ($30)");
-         if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,1);
-         if(law[LAW_GUNCONTROL]<1)
-            addstr("M - Buy a .44 Speedloader     ($20)");
-         if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,40);
-         if(law[LAW_GUNCONTROL]<0)
-            addstr("R - Buy a Rifle/Aslt.Rifle Mag($35)");
-         if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,1);
-         if(law[LAW_GUNCONTROL]<-1)
-            addstr("S - Buy a 9mm SMG Magazine    ($35)");
+         if(year<2100)
+         {
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            if(law[LAW_GUNCONTROL]<2)
+            addstr("P - Buy Shotgun Shells        ($20)");
+            if(funds>=15)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            if(law[LAW_GUNCONTROL]<2)
+            addstr("T - Buy a .22 Speedloader     ($15)");
+            if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            if(law[LAW_GUNCONTROL]<1)
+            addstr("N - Buy a 9mm Pistol Magazine ($30)");
+            if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            if(law[LAW_GUNCONTROL]<1)
+            addstr("F - Buy a .45 Pistol Magazine ($30)");
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            if(law[LAW_GUNCONTROL]<1)
+               addstr("M - Buy a .44 Speedloader     ($20)");
+            if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            if(law[LAW_GUNCONTROL]<0)
+               addstr("R - Buy a Rifle/Aslt.Rifle Mag($35)");
+            if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            if(law[LAW_GUNCONTROL]<-1)
+               addstr("S - Buy a 9mm SMG Magazine    ($35)");
+         }
+         else
+         {
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            if(law[LAW_GUNCONTROL]<2)
+            addstr("P - Buy a Shotgun Plasma Pack ($20)");
+            if(funds>=15)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            if(law[LAW_GUNCONTROL]<2)
+            addstr("T - Buy a .22 Slug Magazine   ($15)");
+            if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            if(law[LAW_GUNCONTROL]<1)
+            addstr("N - Buy a 9mm Powerpack       ($30)");
+            if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            if(law[LAW_GUNCONTROL]<1)
+            addstr("F - Buy a .45 Powerpack       ($30)");
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            if(law[LAW_GUNCONTROL]<1)
+               addstr("M - Buy a .44 Heavy Slug Mag  ($20)");
+            if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            if(law[LAW_GUNCONTROL]<0)
+               addstr("R - Buy a Rifle Powerpack     ($35)");
+            if(funds>=35)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            if(law[LAW_GUNCONTROL]<-1)
+               addstr("S - Buy a SMG Powerpack       ($35)");
+         }
          
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -221,57 +262,115 @@ void pawnshop(int loc)
       }
       else if(in_gunshop==1)
       {
-         if(law[LAW_GUNCONTROL]<2)
+         if(year<2100)
          {
-            if(funds>=400)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(10,1);
-            addstr("G - Buy a Shotgun             ($400)");
-            if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(10,40);
-            addstr("T - Buy a .22 Revolver        ($150)");
+            if(law[LAW_GUNCONTROL]<2)
+            {
+               if(funds>=400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(10,1);
+               addstr("G - Buy a Shotgun             ($400)");
+               if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(10,40);
+               addstr("T - Buy a .22 Revolver        ($150)");
+            }
+            if(law[LAW_GUNCONTROL]<1)
+            {
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(11,1);
+               addstr("N - Buy a 9mm Semi-automatic  ($300)");
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(11,40);
+               addstr("F - Buy a .45 Semi-automatic  ($300)");
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(12,1);
+               addstr("M - Buy a .44 Magnum          ($300)");
+            }
+            if(law[LAW_GUNCONTROL]<0)
+            {
+               if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(12,40);
+               addstr("R - Buy a Civilian AR-15      ($350)");
+            }
+            if(law[LAW_GUNCONTROL]==-2)
+            {
+               if(funds>=1200)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(13,1);
+               addstr("S - Buy a 9mm MP5 SMG         ($1200)");
+               if(funds>=1400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(13,40);
+               addstr("C - Buy an M4 Carbine         ($1400)");
+               if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(14,1);
+               addstr("A - Buy an M16                ($1500)");
+               if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(14,40);
+               addstr("K - Buy an AK-47              ($1500)");
+            }
          }
-         if(law[LAW_GUNCONTROL]<1)
+         else
          {
-            if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(11,1);
-            addstr("N - Buy a 9mm Semi-automatic  ($300)");
-            if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(11,40);
-            addstr("F - Buy a .45 Semi-automatic  ($300)");
-            if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(12,1);
-            addstr("M - Buy a .44 Magnum          ($300)");
-         }
-         if(law[LAW_GUNCONTROL]<0)
-         {
-            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(12,40);
-            addstr("R - Buy a Civilian AR-15      ($350)");
-         }
-         if(law[LAW_GUNCONTROL]==-2)
-         {
-            if(funds>=1200)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(13,1);
-            addstr("S - Buy a 9mm MP5 SMG         ($1200)");
-            if(funds>=1400)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(13,40);
-            addstr("C - Buy an M4 Carbine         ($1400)");
-            if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(14,1);
-            addstr("A - Buy an M16                ($1500)");
-            if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(14,40);
-            addstr("K - Buy an AK-47              ($1500)");
+            if(law[LAW_GUNCONTROL]<2)
+            {
+               if(funds>=400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(10,1);
+               addstr("G - Buy a Plasma Shotgun      ($400)");
+               if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(10,40);
+               addstr("T - Buy a .22 Slug Pistol     ($150)");
+            }
+            if(law[LAW_GUNCONTROL]<1)
+            {
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(11,1);
+               addstr("N - Buy a 9mm Laser Pistol    ($300)");
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(11,40);
+               addstr("F - Buy a .45 Laser Pistol    ($300)");
+               if(funds>=300)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(12,1);
+               addstr("M - Buy a .44 Slug Pistol     ($300)");
+            }
+            if(law[LAW_GUNCONTROL]<0)
+            {
+               if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(12,40);
+               addstr("R - Buy a Personal X-15 Rifle ($350)");
+            }
+            if(law[LAW_GUNCONTROL]==-2)
+            {
+               if(funds>=1200)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(13,1);
+               addstr("S - Buy a Beijing Prince SMG  ($1200)");
+               if(funds>=1400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(13,40);
+               addstr("C - Buy an X4 Laser Carbine   ($1400)");
+               if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(14,1);
+               addstr("A - Buy an Army X-15 Rifle    ($1500)");
+               if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
+               else set_color(COLOR_BLACK,COLOR_BLACK,1);
+               move(14,40);
+               addstr("K - Buy a P74 War Laser       ($1500)");
+            }
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(16,40);
@@ -1003,20 +1102,40 @@ void halloweenstore(int loc)
       }
       else if(in_halloween==2)
       {
-         if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,1);
-         addstr("K - Buy a Knife                 ($20)");
+         if(year<2100)
+         {
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("K - Buy a Knife                 ($20)");
 
-         if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,1);
-         addstr("S - Buy the Sword of Morfiegor ($250)");
+            if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("S - Buy the Sword of Morfiegor ($250)");
 
-         if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,1);
-         addstr("A - Buy a Katana and Wakizashi ($250)");
+            if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("A - Buy a Katana and Wakizashi ($250)");
+         }
+         else
+         {
+            if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("K - Buy a Vibro-Knife          ($20)");
+
+            if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("S - Buy a Light Sword          ($250)");
+
+            if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("A - Buy the Liberal Twin Swords($250)");
+         }
 
          if(funds>=250)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);

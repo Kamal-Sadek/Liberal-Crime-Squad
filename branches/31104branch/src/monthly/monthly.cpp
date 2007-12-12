@@ -254,54 +254,71 @@ void passmonth(char &clearformess,char canseethings)
          {
             //TRY TO GET RACKETEERING CHARGE
             int copstrength=100;
+            float heat=0;
             if(law[LAW_POLICEBEHAVIOR]==-2)copstrength=200;
             if(law[LAW_POLICEBEHAVIOR]==-1)copstrength=150;
             if(law[LAW_POLICEBEHAVIOR]==1)copstrength=75;
             if(law[LAW_POLICEBEHAVIOR]==2)copstrength=50;
 
-            if(LCSrandom(copstrength)>pool[p]->juice+pool[p]->attval(ATTRIBUTE_HEART)*5-pool[p]->attval(ATTRIBUTE_WISDOM)*5&&pool[p]->hireid!=-1)
+            for(int i=0;i<LAWFLAGNUM;i++)
             {
-               if(pool[p]->hireid!=-1)
+               if(pool[p]->lawflag[i])
                {
-                  for(int p2=0;p2<pool.size();p2++)
-                  {
-                     if(pool[p2]->alive==1&&pool[p2]->id==pool[p]->hireid)
-                     {
-                        char conf=0;
-                        if(pool[p2]->location==-1)conf=1;
-                        else if(location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON)conf=1;
+                  heat=(lawflagheat(i)*pool[p]->lawflag[i])/10.0f;
+               }
+            }
 
-                        if(conf)
-                        {
-                           pool[p2]->lawflag[LAWFLAG_RACKETEERING]++;
-                        }
-                     }
+            copstrength=static_cast<int>(copstrength*heat);
+            if(copstrength>200)copstrength=200;
+
+            //Confession check
+            if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
+                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5 &&
+                                      pool[p]->hireid!=-1)
+            {
+               int nullify=0;
+               int p2=getpoolcreature(pool[p]->hireid);
+
+               if(pool[p2]->alive && (pool[p2]->location==-1 || location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON))
+               {
+                  //Leadership check to nullify subordinate's confession
+                  if(LCSrandom(pool[p2]->skill[SKILL_LEADERSHIP]+1))nullify=1;
+                  else
+                  {
+                     //Charge the boss with racketeering!
+                     pool[p2]->lawflag[LAWFLAG_RACKETEERING]++;
+                     //Rack up testimonies against the boss in court!
+                     pool[p2]->confessions++;
                   }
                }
+               if(!nullify)
+               {
+                  //Issue a raid on this guy's base!
+                  if(pool[p]->base>=0)location[pool[p]->base]->heat+=300;
 
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(pool[p]->name);
-               addstr(" has broken under the pressure and ratted you out!");
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr(pool[p]->name);
+                  addstr(" has broken under the pressure and ratted you out!");
 
-               refresh();
-               getch();
+                  refresh();
+                  getch();
 
-               removesquadinfo(*pool[p]);
-               delete pool[p];
-               pool.erase(pool.begin() + p);
-               continue;
+                  removesquadinfo(*pool[p]);
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+                  continue; //no trial for this person; skip to next person
+               }
+               //else continue to trial
             }
-            else
-            {
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(pool[p]->name);
-               addstr(" is moved to the courthouse for trial.");
 
-               refresh();
-               getch();
-            }
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(pool[p]->name);
+            addstr(" is moved to the courthouse for trial.");
+
+            refresh();
+            getch();
 
             for(int l=0;l<location.size();l++)
             {

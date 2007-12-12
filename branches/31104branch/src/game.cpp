@@ -128,7 +128,7 @@ char lcityname[80];
 char newscherrybusted=0;
 
 int month=1;
-int year=2005;
+int year=2008;
 int amendnum=28;
 
 
@@ -533,6 +533,7 @@ void creaturest::creatureinit(void)
       activity.type=ACTIVITY_NONE;
       for(int i=0;i<LAWFLAGNUM;i++)
          lawflag[i]=0;
+      confessions=0;
       clinic=0;
       dating=0;
       hiding=0;
@@ -597,6 +598,7 @@ void creaturest::creatureinit(void)
       newrental=0;
       heat=0;
       closed=0;
+      interrogated=0;
       highsecurity=0;
       mapseed=seed;r_num();
       compound_walls=0;

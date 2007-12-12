@@ -595,7 +595,6 @@ char talk(creaturest &a,int t)
                      //newcr->align=1;
 
                      recruit.push_back(newrst);
-                     stat_recruits++;
 
                      delenc(t,0);
                      return 1;
@@ -612,7 +611,90 @@ char talk(creaturest &a,int t)
                      {
                         addstr("\"Ugh.  Pfft.\"");
                      }
-                     else addstr("\"Whatever.\"");
+                     else
+                     {
+                        if(tk->align<1 && aroll>troll)
+                        {
+                           switch(lw)
+                           {
+                           case LAW_ABORTION:
+                              addstr("\"Abortion is murder.\"");
+                              break;
+                           case LAW_ANIMALRESEARCH:
+                              addstr("\"Animals don't deserve human rights.\"");
+                              break;
+                           case LAW_POLICEBEHAVIOR:
+                              addstr("\"Are you a criminal?\"");
+                              break;
+                           case LAW_PRIVACY:
+                              addstr("\"National security is important.\"");
+                              break;
+                           case LAW_DEATHPENALTY:
+                              addstr("\"Some people deserve to die.\"");
+                              break;
+                           case LAW_NUCLEARPOWER:
+                              addstr("\"Nuclear power is cheap.\"");
+                              break;
+                           case LAW_POLLUTION:
+                              addstr("\"It's not that bad.\"");
+                              break;
+                           case LAW_LABOR:
+                              addstr("\"Trust the free market, it hasn't failed us yet.\"");
+                              break;
+                           case LAW_GAY:
+                              addstr("\"Homosexuality is a sin.\"");
+                              break;
+                           case LAW_CORPORATE:
+                              addstr("\"Corporations are part of capitalism.\"");
+                              break;
+                           case LAW_FREESPEECH:
+                              addstr("\"Don't be offensive and you'll be fine.\"");
+                              break;
+                           case LAW_FLAGBURNING:
+                              addstr("\"That flag is the sacred symbol of our country.\"");
+                              break;
+                           case LAW_TAX:
+									   addstr("\"High taxes are a threat to prosperity.\"");
+									   break;
+                           case LAW_GUNCONTROL:
+                              addstr("\"Without guns, we're slaves to the Government.\"");
+                              break;
+                           }
+                        }
+                        else if(tk->align==-1)
+                        {
+                           if(tk->type==CREATURE_COP || tk->type==CREATURE_GANGUNIT)
+                           {
+                              addstr("\"Go away before I arrest you.\"");
+                           }
+                           else if(tk->type==CREATURE_DEATHSQUAD)
+                           {
+                              addstr("\"Go away before I shoot you.\"");
+                           }
+                           else if(tk->skill[SKILL_RELIGION])
+                           {
+                              addstr("\"Repent, sinner!\"");
+                           }
+                           else if(tk->skill[SKILL_BUSINESS])
+                           {
+                              addstr("\"If I was your boss, I'd fire you.\"");
+                           }
+                           else switch(LCSrandom(10))
+                           {
+                           case 0:addstr("\"Don't they put people like you in zoos?\"");break;
+                           case 1:addstr("\"Save your breath. You'll need it to blow up your date.\"");break;
+                           case 2:addstr("\"Ohh! Your breath is foul!\"");break;
+                           case 3:addstr("\"The exit is that way. Go.\"");break;
+                           case 4:addstr("\"People like you are the reason I'm on medication.\"");break;
+                           case 5:addstr("\"Everyone is entitled to be stupid, but you abuse the privilege.\"");break;
+                           case 6:addstr("\"Earth is full. Go home.\"");break;
+                           case 7:addstr("\"Jesus loves even idiots like you.\"");break;
+                           case 8:addstr("\"Wow. Why am I talking to you again?\"");break;
+                           case 9:addstr("\"Were you dropped as a child?\"");break;
+                           }
+                        }
+                        else addstr("\"Whatever.\"");
+                     }
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      addstr(" <turns away>");
                      refresh();

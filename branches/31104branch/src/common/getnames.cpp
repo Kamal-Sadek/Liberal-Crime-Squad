@@ -145,36 +145,73 @@ void getweapon(char *str,int type)
 {
    strcpy(str,"");
 
-   switch(type)
+   if(year<2100)
    {
-      //LIMIT ----------------------------------------:----: (-5 for guns)
-      case WEAPON_NONE:         strcpy(str,"None");break;
-      case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
-      case WEAPON_BASEBALLBAT:   strcpy(str,"Baseball Bat");break;
-      case WEAPON_KNIFE:         strcpy(str,"Knife");break;
-      case WEAPON_SHANK:         strcpy(str,"Shank");break;
-      case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
-      case WEAPON_REVOLVER_22:   strcpy(str,".22 Rev.");break;
-      case WEAPON_REVOLVER_44:   strcpy(str,".44 Mag.");break;
-      case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semi.");break;
-      case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semi.");break;
-      case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR15");break;
-      case WEAPON_SMG_MP5:       strcpy(str,"MP5");break;
-      case WEAPON_CARBINE_M4:    strcpy(str,"M4");break;
-      case WEAPON_AUTORIFLE_M16:   strcpy(str,"M16");break;
-      case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK47");break;
-      case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Shotgun");break;
-      case WEAPON_SWORD:         strcpy(str,"Sword");break;
-      case WEAPON_DAISHO:         strcpy(str,"Daisho");break;
-      case WEAPON_HAMMER:         strcpy(str,"Hammer");break;
-      case WEAPON_MAUL:         strcpy(str,"Maul");break;
-      case WEAPON_CROSS:         strcpy(str,"Cross");break;
-      case WEAPON_STAFF:         strcpy(str,"Staff");break;
-      case WEAPON_CHAIN:         strcpy(str,"Chain");break;
-      case WEAPON_NIGHTSTICK:      strcpy(str,"Nightstick");break;
-      case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
-      case WEAPON_PITCHFORK:      strcpy(str,"Pitchfork");break;
-      case WEAPON_TORCH:         strcpy(str,"Torch");break;
+      switch(type)
+      {
+         //LIMIT ----------------------------------------:----: (-5 for guns)
+         case WEAPON_NONE:         strcpy(str,"None");break;
+         case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
+         case WEAPON_BASEBALLBAT:   strcpy(str,"Baseball Bat");break;
+         case WEAPON_KNIFE:         strcpy(str,"Knife");break;
+         case WEAPON_SHANK:         strcpy(str,"Shank");break;
+         case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
+         case WEAPON_REVOLVER_22:   strcpy(str,".22 Rev.");break;
+         case WEAPON_REVOLVER_44:   strcpy(str,".44 Mag.");break;
+         case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semi.");break;
+         case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semi.");break;
+         case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR15");break;
+         case WEAPON_SMG_MP5:       strcpy(str,"MP5");break;
+         case WEAPON_CARBINE_M4:    strcpy(str,"M4");break;
+         case WEAPON_AUTORIFLE_M16:   strcpy(str,"M16");break;
+         case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK47");break;
+         case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Shotgun");break;
+         case WEAPON_SWORD:         strcpy(str,"Sword");break;
+         case WEAPON_DAISHO:         strcpy(str,"Daisho");break;
+         case WEAPON_HAMMER:         strcpy(str,"Hammer");break;
+         case WEAPON_MAUL:         strcpy(str,"Maul");break;
+         case WEAPON_CROSS:         strcpy(str,"Cross");break;
+         case WEAPON_STAFF:         strcpy(str,"Staff");break;
+         case WEAPON_CHAIN:         strcpy(str,"Chain");break;
+         case WEAPON_NIGHTSTICK:      strcpy(str,"Nightstick");break;
+         case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
+         case WEAPON_PITCHFORK:      strcpy(str,"Pitchfork");break;
+         case WEAPON_TORCH:         strcpy(str,"Torch");break;
+      }
+   }
+   else
+   {
+      switch(type)
+      {
+         //LIMIT ----------------------------------------:----: (-5 for guns)
+         case WEAPON_NONE:         strcpy(str,"None");break;
+         case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
+         case WEAPON_BASEBALLBAT:   strcpy(str,"Spaceball Bat");break;
+         case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
+         case WEAPON_SHANK:         strcpy(str,"Shank");break;
+         case WEAPON_SYRINGE:       strcpy(str,"Injector");break;
+         case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug");break;
+         case WEAPON_REVOLVER_44:   strcpy(str,".44 Slug");break;
+         case WEAPON_SEMIPISTOL_9MM:strcpy(str,"9mm Las.");break;
+         case WEAPON_SEMIPISTOL_45: strcpy(str,".45 Las.");break;
+         case WEAPON_SEMIRIFLE_AR15:strcpy(str,"X15 Semi");break;
+         case WEAPON_SMG_MP5:       strcpy(str,"Prince SMG");break;
+         case WEAPON_CARBINE_M4:    strcpy(str,"J4 Laser");break;
+         case WEAPON_AUTORIFLE_M16: strcpy(str,"X15 Full");break;
+         case WEAPON_AUTORIFLE_AK47:strcpy(str,"P74 War");break;
+         case WEAPON_SHOTGUN_PUMP:  strcpy(str,"Burstgun");break;
+         case WEAPON_SWORD:         strcpy(str,"Light Sword");break;
+         case WEAPON_DAISHO:        strcpy(str,"Twin Sword");break;
+         case WEAPON_HAMMER:        strcpy(str,"Hammer");break;
+         case WEAPON_MAUL:          strcpy(str,"Maul");break;
+         case WEAPON_CROSS:         strcpy(str,"Cross");break;
+         case WEAPON_STAFF:         strcpy(str,"Staff");break;
+         case WEAPON_CHAIN:         strcpy(str,"CyberArm");break;
+         case WEAPON_NIGHTSTICK:    strcpy(str,"Shock Stick");break;
+         case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
+         case WEAPON_PITCHFORK:     strcpy(str,"Pitchfork");break;
+         case WEAPON_TORCH:         strcpy(str,"Flare");break;
+      }
    }
 }
 
@@ -182,43 +219,84 @@ void getweaponfull(char *str,int type,int subtype)
 {
    strcpy(str,"");
 
-   switch(type)
+   if(year<2100)
    {
-      //LIMIT -----------------------------------------------:----: (-5 for guns)
-      case WEAPON_NONE:         strcpy(str,"None");break;
-      case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
-      case WEAPON_BASEBALLBAT:   strcpy(str,"Baseball Bat");break;
-      case WEAPON_KNIFE:         strcpy(str,"Knife");break;
+      switch(type)
+      {
+         //LIMIT -----------------------------------------------:----: (-5 for guns)
+         case WEAPON_NONE:         strcpy(str,"None");break;
+         case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
+         case WEAPON_BASEBALLBAT:   strcpy(str,"Baseball Bat");break;
+         case WEAPON_KNIFE:         strcpy(str,"Knife");break;
+         case WEAPON_SHANK:         strcpy(str,"Shank");break;
+         case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
+         case WEAPON_REVOLVER_22:   strcpy(str,".22 Revolver");break;
+         case WEAPON_REVOLVER_44:   strcpy(str,".44 Magnum");break;
+         case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semiauto");break;
+         case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semiauto");break;
+         case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR15");break;
+         case WEAPON_SMG_MP5:       strcpy(str,"MP5 SMG");break;
+         case WEAPON_CARBINE_M4:    strcpy(str,"M4 Carbine");break;
+         case WEAPON_AUTORIFLE_M16:   strcpy(str,"M16");break;
+         case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK47");break;
+         case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Shotgun");break;
+         case WEAPON_SWORD:         strcpy(str,"Sword of Morfiegor");break;
+         case WEAPON_DAISHO:
+            switch(subtype)
+            {
+            case 0: strcpy(str,"Daisho");break;
+            case 1: strcpy(str,"Katana");break;
+            case 2: strcpy(str,"Wakizashi");break;
+            }
+            break;
+         case WEAPON_HAMMER:         strcpy(str,"Dwarven Hammer");break;
+         case WEAPON_MAUL:         strcpy(str,"Maul of Anrin");break;
+         case WEAPON_CROSS:         strcpy(str,"Silver Cross");break;
+         case WEAPON_STAFF:         strcpy(str,"Wizard's Staff");break;
+         case WEAPON_CHAIN:         strcpy(str,"Chain");break;
+         case WEAPON_NIGHTSTICK:      strcpy(str,"Nightstick");break;
+         case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
+         case WEAPON_PITCHFORK:      strcpy(str,"Pitchfork");break;
+         case WEAPON_TORCH:         strcpy(str,"Torch");break;
+      }
+   }
+   else
+   {
+      switch(type)
+      {
+      case WEAPON_BASEBALLBAT:   strcpy(str,"Spaceball Bat");break;
+      case WEAPON_KNIFE:         strcpy(str,"Vibro--Knife");break;
       case WEAPON_SHANK:         strcpy(str,"Shank");break;
-      case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
-      case WEAPON_REVOLVER_22:   strcpy(str,".22 Revolver");break;
-      case WEAPON_REVOLVER_44:   strcpy(str,".44 Magnum");break;
-      case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semiauto");break;
-      case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semiauto");break;
-      case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR15");break;
-      case WEAPON_SMG_MP5:       strcpy(str,"MP5 SMG");break;
-      case WEAPON_CARBINE_M4:    strcpy(str,"M4 Carbine");break;
-      case WEAPON_AUTORIFLE_M16:   strcpy(str,"M16");break;
-      case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK47");break;
-      case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Shotgun");break;
-      case WEAPON_SWORD:         strcpy(str,"Sword of Morfiegor");break;
+      case WEAPON_SYRINGE:      strcpy(str,"Medical Injector");break;
+      case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug Pistol");break;
+      case WEAPON_REVOLVER_44:   strcpy(str,".44 Heavy Slug Pistol");break;
+      case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Laser Pistol");break;
+      case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Laser Pistol");break;
+      case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"X15 Personal Laser");break;
+      case WEAPON_SMG_MP5:       strcpy(str,"Beijing Prince SMG");break;
+      case WEAPON_CARBINE_M4:    strcpy(str,"J4 Laser Carbine");break;
+      case WEAPON_AUTORIFLE_M16:   strcpy(str,"X15 Military Laser");break;
+      case WEAPON_AUTORIFLE_AK47:   strcpy(str,"P74 War Laser");break;
+      case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Plasma Shotgun");break;
+      case WEAPON_SWORD:         strcpy(str,"Light Sword");break;
       case WEAPON_DAISHO:
          switch(subtype)
          {
-         case 0: strcpy(str,"Daisho");break;
-         case 1: strcpy(str,"Katana");break;
-         case 2: strcpy(str,"Wakizashi");break;
+         case 0: strcpy(str,"Twin Swords of Liberalism");break;
+         case 1: strcpy(str,"Retribution Sword");break;
+         case 2: strcpy(str,"Justice Blade");break;
          }
          break;
       case WEAPON_HAMMER:         strcpy(str,"Dwarven Hammer");break;
       case WEAPON_MAUL:         strcpy(str,"Maul of Anrin");break;
       case WEAPON_CROSS:         strcpy(str,"Silver Cross");break;
       case WEAPON_STAFF:         strcpy(str,"Wizard's Staff");break;
-      case WEAPON_CHAIN:         strcpy(str,"Chain");break;
-      case WEAPON_NIGHTSTICK:      strcpy(str,"Nightstick");break;
+      case WEAPON_CHAIN:         strcpy(str,"Industrial Cyber-Arm");break;
+      case WEAPON_NIGHTSTICK:      strcpy(str,"Electro-Shock Stick");break;
       case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
       case WEAPON_PITCHFORK:      strcpy(str,"Pitchfork");break;
-      case WEAPON_TORCH:         strcpy(str,"Torch");break;
+      case WEAPON_TORCH:         strcpy(str,"Burning Flare");break;
+      }
    }
 }
 
@@ -558,15 +636,31 @@ void getclip(char *str,int clip)
 {
    strcpy(str,"");
 
-   switch(clip)
+   if(year<2100)
    {
-      case CLIP_9:strcat(str,"9mm Pistol Mag");break;
-      case CLIP_45:strcat(str,".45 Pistol Mag");break;
-      case CLIP_ASSAULT:strcat(str,"Aslt/Rifle Mag");break;
-      case CLIP_SMG:strcat(str,"9mm SMG Mag");break;
-      case CLIP_22:strcat(str,".22 Speedloader");break;
-      case CLIP_44:strcat(str,".44 Speedloader");break;
-      case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
+      switch(clip)
+      {
+         case CLIP_9:strcat(str,"9mm Pistol Mag");break;
+         case CLIP_45:strcat(str,".45 Pistol Mag");break;
+         case CLIP_ASSAULT:strcat(str,"Aslt/Rifle Mag");break;
+         case CLIP_SMG:strcat(str,"9mm SMG Mag");break;
+         case CLIP_22:strcat(str,".22 Speedloader");break;
+         case CLIP_44:strcat(str,".44 Speedloader");break;
+         case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
+      }
+   }
+   else
+   {
+      switch(clip)
+      {
+         case CLIP_9:strcat(str,"9mm Powerpack");break;
+         case CLIP_45:strcat(str,".45 Powerpack");break;
+         case CLIP_ASSAULT:strcat(str,"Rifle Powerpack");break;
+         case CLIP_SMG:strcat(str,"SMG Powerpack");break;
+         case CLIP_22:strcat(str,".22 Slug Mag");break;
+         case CLIP_44:strcat(str,".44 Heavy Slug Mag");break;
+         case CLIP_BUCKSHOT:strcat(str,"Shotgun Plasma Pack");break;
+      }
    }
 }
 

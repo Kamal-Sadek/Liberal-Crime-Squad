@@ -258,13 +258,6 @@ void trial(creaturest &g)
       }
       else if(breaker[LAWFLAG_RACKETEERING])
       {
-         if(g.lawflag[LAWFLAG_RACKETEERING]>1)
-         {
-            char str[10];
-            itoa(g.lawflag[LAWFLAG_RACKETEERING],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
          addstr("racketeering");
          breaker[LAWFLAG_RACKETEERING]=0;
       }
@@ -436,6 +429,24 @@ void trial(creaturest &g)
       getch();
    }
 
+   if(g.confessions)
+   {
+      move(y+=2,1);
+
+      if(g.confessions>1)
+      {
+         char str[10];
+         itoa(g.confessions,str,10);
+         addstr(str);
+         addstr(" former LCS members will testify against ");
+      }
+      else addstr("A former LCS member will testify against ");
+      addstr(g.name);
+      addstr(".");
+      refresh();
+      getch();
+   }
+
    //CHOOSE DEFENSE
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(y+2,1);
@@ -515,7 +526,7 @@ void trial(creaturest &g)
       //JURY MAKEUP MESSAGE
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(5,1);
-      int jury=LCSrandom(61)-30; // *JDS* reduced the effect of the jury, and the effect sleeper judges have on the jury
+      int jury=LCSrandom(61)-(60*publicmood(-1))/100; // Political leanings of the population determine your jury
       if(sleeperjudge)jury-=20;
       if(jury<=-29)
       {
@@ -548,6 +559,7 @@ void trial(creaturest &g)
       // *JDS* The bigger your record, the stronger the evidence
       prosecution=LCSrandom(101);
       prosecution+=scarefactor;
+      prosecution+=20*g.confessions;
       if(sleeperjudge)prosecution>>=1;
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -636,7 +648,7 @@ void trial(creaturest &g)
          // A character build spefically to be strong in this area *will* still start out
          // slightly stronger than the public defender (and will be notably better once they
          // hit activist level).
-         int defenseskill=5*g.skill[SKILL_PERSUASION]+5*g.skill[SKILL_LAW];
+         int defenseskill=3*g.skill[SKILL_PERSUASION]+6*g.skill[SKILL_LAW];
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
@@ -685,7 +697,7 @@ void trial(creaturest &g)
          getch();
 
          //RE-TRY
-         if(LCSrandom(2)||scarefactor>10)
+         if(LCSrandom(2)||scarefactor>=10||g.confessions)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(5,1);
@@ -746,6 +758,8 @@ void trial(creaturest &g)
       {
          g.lawflag[i]=0;
       }
+      //Clean up confessions
+      g.confessions=0;
       //PLACE PRISONER
       if(g.sentence!=0)
       {
@@ -774,6 +788,8 @@ void trial(creaturest &g)
       {
          g.lawflag[i]=0;
       }
+      //Clean up confessions
+      g.confessions=0;
       //PLACE PRISONER
       if(g.sentence!=0)
       {
@@ -829,7 +845,7 @@ void penalize(creaturest &g,char lenient)
          g.sentence+=1*g.lawflag[LAWFLAG_DISTURBANCE];
          g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
          g.sentence+=1*g.lawflag[LAWFLAG_HIREILLEGAL];
-         g.sentence+=(6+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];
+         g.sentence+=(12+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];
          if(LCSrandom(3))g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BROWNIES];
          else
          {

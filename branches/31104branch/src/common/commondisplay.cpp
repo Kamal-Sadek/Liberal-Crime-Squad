@@ -184,8 +184,8 @@ void printparty(void)
             for(int sk=0;sk<SKILLNUM;sk++)
             {
                skill+=(unsigned long)party[p]->skill[sk];
-               if(party[p]->skill_ip[sk]>=100*((10+party[p]->skill[sk])/10)&&
-                  party[p]->skill[sk]<party[p]->attval(skillatt(sk))*2)bright=1;
+               if(party[p]->skill_ip[sk]>=100+(10*party[p]->skill[sk])&&
+                  party[p]->skill[sk]<maxskill(sk,*party[p]))bright=1;
             }
 
             set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -193,51 +193,7 @@ void printparty(void)
             itoa(skill,num,10);
             addstr(num);
             addstr("/");
-            int wsk=SKILL_HANDTOHAND;
-            switch(party[p]->weapon.type)
-            {
-               case WEAPON_KNIFE:
-                  wsk=SKILL_KNIFE;
-                  break;
-               case WEAPON_SHANK:
-               case WEAPON_SYRINGE:
-               case WEAPON_CROWBAR:
-               case WEAPON_HAMMER:
-               case WEAPON_CHAIN:
-               case WEAPON_GAVEL:
-               case WEAPON_CROSS:
-               case WEAPON_TORCH:
-               case WEAPON_PITCHFORK:
-                  wsk=SKILL_IMPROVISED;
-                  break;
-               case WEAPON_BASEBALLBAT:
-               case WEAPON_NIGHTSTICK:
-               case WEAPON_MAUL:
-               case WEAPON_STAFF:
-                  wsk=SKILL_CLUB;
-                  break;
-               case WEAPON_SWORD:
-               case WEAPON_DAISHO:
-                  wsk=SKILL_SWORD;
-                  break;
-               case WEAPON_REVOLVER_22:
-               case WEAPON_REVOLVER_44:
-               case WEAPON_SEMIPISTOL_9MM:
-               case WEAPON_SEMIPISTOL_45:
-                  wsk=SKILL_PISTOL;
-                  break;
-               case WEAPON_SHOTGUN_PUMP:
-                  wsk=SKILL_SHOTGUN;
-               case WEAPON_SMG_MP5:
-                  wsk=SKILL_SMG;
-                  break;
-               case WEAPON_AUTORIFLE_M16:
-               case WEAPON_AUTORIFLE_AK47:
-               case WEAPON_CARBINE_M4:
-               case WEAPON_SEMIRIFLE_AR15:
-                  wsk=SKILL_RIFLE;
-                  break;
-            }
+            int wsk=weaponskill(party[p]->weapon.type);
             itoa(party[p]->skill[wsk],num,10);
             addstr(num);
 
@@ -633,8 +589,8 @@ void printcreatureinfo(creaturest *cr)
          used[maxs]=1;
          printed=1;
 
-         if(cr->skill_ip[maxs]>=100*((10+cr->skill[maxs])/10)&&
-            cr->skill[maxs]<cr->attval(skillatt(maxs))*2)set_color(COLOR_WHITE,COLOR_BLACK,1);
+         if(cr->skill_ip[maxs]>=100+(10*cr->skill[maxs])&&
+            cr->skill[maxs]<maxskill(maxs,*cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(3+5-snum,31);
@@ -888,8 +844,8 @@ void printliberalstats(creaturest &cr,char smll)
          used[maxs]=1;
          printed=1;
 
-         if(cr.skill_ip[maxs]>=100*((10+cr.skill[maxs])/10)&&
-            cr.skill[maxs]<cr.attval(skillatt(maxs))*2)set_color(COLOR_WHITE,COLOR_BLACK,1);
+         if(cr.skill_ip[maxs]>=100+(10*cr.skill[maxs])&&
+            cr.skill[maxs]<maxskill(maxs,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          if(!smll)move(5+14-snum,40);

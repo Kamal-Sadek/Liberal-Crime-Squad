@@ -1039,7 +1039,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          {
             move(y,0);
             addstr(cr->name);
-            switch(LCSrandom(5))
+            switch(LCSrandom(7))
             {
             case 0:addstr(" babbles mindlessly.");break;
             case 1:addstr(" just whimpers.");break;
@@ -1086,6 +1086,26 @@ void tendhostage(creaturest *cr,char &clearformess)
             case 4:addstr(" grudgingly admits sympathy for LCS ideals.");break;
             }
             y++;
+            if(location[cr->worklocation]->interrogated==0 && !LCSrandom(5))
+            {
+               y++;
+               move(y++,0);
+               addstr(cr->name);
+               addstr(" reveals details about the ");
+               addstr(location[cr->worklocation]->name);
+               addstr(".");
+               move(y++,0);
+               if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
+               {
+                  addstr("(Rather useless details.)");
+               }
+               else
+               {
+                  addstr(a->name);
+                  addstr(" was able to create a map of the site with this information.");
+               }
+               location[cr->worklocation]->interrogated=1;
+            }
          }
          //Target is not sold on the LCS arguments and holds firm
          else if(aroll+spiritcrush>(troll>>2)||a->attval(ATTRIBUTE_WISDOM)>=cr->attval(ATTRIBUTE_WISDOM))
@@ -1246,6 +1266,10 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr("'s disappearance has not yet been reported.");
          move(y,0);y+=2;
          addstr("You now have a sleeper infiltrating Conservative Society.");
+         move(y,0);y++;
+         addstr("Your sleeper agent will provide you with a complete map of its workplace");
+         move(y,0);y+=2;
+         addstr("and attempt to slowly influence public opinions from its position.");
          cr->flag&=~CREATUREFLAG_MISSING;
          cr->flag|=CREATUREFLAG_SLEEPER;
          cr->location=cr->worklocation;

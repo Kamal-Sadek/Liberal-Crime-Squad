@@ -686,68 +686,14 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(droll<0)droll=1;
 
    //SKILL EFFECTS
-   switch(a.weapon.type)
-   {
-      case WEAPON_NONE:
-         aroll+=LCSrandom(a.skill[SKILL_HANDTOHAND]+1);
-         a.skill_ip[SKILL_HANDTOHAND]+=droll;
-         break;
-      case WEAPON_KNIFE:
-         aroll+=LCSrandom(a.skill[SKILL_KNIFE]+1);
-         a.skill_ip[SKILL_KNIFE]+=droll;
-         break;
-      case WEAPON_SHANK:
-      case WEAPON_SYRINGE:
-      case WEAPON_CROWBAR:
-      case WEAPON_HAMMER:
-      case WEAPON_CHAIN:
-      case WEAPON_GAVEL:
-      case WEAPON_CROSS:
-      case WEAPON_TORCH:
-      case WEAPON_PITCHFORK:
-         aroll+=LCSrandom(a.skill[SKILL_IMPROVISED]+1);
-         a.skill_ip[SKILL_IMPROVISED]+=droll;
-         break;
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_MAUL:
-      case WEAPON_STAFF:
-         aroll+=LCSrandom(a.skill[SKILL_CLUB]+1);
-         a.skill_ip[SKILL_CLUB]+=droll;
-         break;
-      case WEAPON_SWORD:
-      case WEAPON_DAISHO:
-         aroll+=LCSrandom(a.skill[SKILL_SWORD]+1);
-         a.skill_ip[SKILL_SWORD]+=droll;
-         break;
-      case WEAPON_REVOLVER_22:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-         aroll+=LCSrandom(a.skill[SKILL_PISTOL]+1);
-         a.skill_ip[SKILL_PISTOL]+=droll;
-         break;
-      case WEAPON_SHOTGUN_PUMP:
-         //aroll+=4; // "Easy to use" for shooting with shotgun
-         aroll+=LCSrandom(a.skill[SKILL_SHOTGUN]+1);
-         a.skill_ip[SKILL_SHOTGUN]+=droll;
-         break;
-         // SMGs draw on both the assault rifle and pistol skills, because they
-         // require skill with both small weapons and with fully auto weapons
-      case WEAPON_SMG_MP5:
-         aroll+=4; // "Easy to use" for shooting with SMG
-         aroll+=LCSrandom(a.skill[SKILL_SMG]+1);
-         a.skill_ip[SKILL_SMG]+=droll;
-         break;
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-         aroll-=4; // Penalty for using full scale assault rifles, but not carbine
-      case WEAPON_CARBINE_M4:
-      case WEAPON_SEMIRIFLE_AR15:
-         aroll+=LCSrandom(a.skill[SKILL_RIFLE]+1);
-         a.skill_ip[SKILL_RIFLE]+=droll;
-         break;
-   }
+   int wsk=weaponskill(a.weapon.type);
+   aroll+=LCSrandom(a.skill[wsk]+1);
+   a.skill_ip[wsk]+=droll;
+   // "Easy to use" when shooting with shotgun (currently disabled for balance) and SMG
+   //if(a.weapon.type==WEAPON_SHOTGUN_PUMP)aroll+=4;
+   if(a.weapon.type==WEAPON_SMG_MP5)aroll+=4;
+   // Penalty for using full scale assault rifles, but not carbine
+   if(a.weapon.type==WEAPON_AUTORIFLE_M16 || a.weapon.type==WEAPON_AUTORIFLE_AK47)aroll-=4;
 
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits

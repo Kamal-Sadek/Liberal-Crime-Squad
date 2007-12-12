@@ -942,7 +942,11 @@ void advanceday(char &clearformess,char canseethings)
          if(recruit[r]->timeleft>0)
          {
             recruit[r]->timeleft--;
-            if(recruit[r]->task==TASK_CRIMES && !LCSrandom(25))
+            //chance of being arrested
+            if(recruit[r]->task==TASK_CRIMES &&
+               !LCSrandom(8*(recruit[r]->recruit->skill[SKILL_SECURITY]+recruit[r]->recruit->skill[SKILL_DISGUISE]+
+                             weaponskill(recruit[r]->recruit->weapon.type)+recruit[r]->recruit->skill[SKILL_STREETSENSE]+
+                             recruit[r]->recruit->attval(ATTRIBUTE_AGILITY))))
             {
                recruit[r]->task=TASK_ARRESTED;
             }
@@ -1145,7 +1149,7 @@ void advanceday(char &clearformess,char canseethings)
       for(int s=0;s<SKILLNUM;s++)
       {
          while(pool[p]->skill_ip[s]>=100+10*pool[p]->skill[s]&&
-               pool[p]->skill[s]<pool[p]->attval(skillatt(s))*2)
+               pool[p]->skill[s]<maxskill(s,*pool[p]))
          {
             pool[p]->skill_ip[s]-=100+10*pool[p]->skill[s];
             pool[p]->skill[s]++;
@@ -1240,11 +1244,12 @@ int p = 0;
                {
                   // Roll to see if you go into hiding or not
                   if(!pool[p]->hiding&&
-                     pool[p]->attval(ATTRIBUTE_HEART)*5+pool[p]->juice<LCSrandom(200))
+                     pool[p]->attval(ATTRIBUTE_HEART)*5+
+                     pool[p]->juice<LCSrandom(200))
                   {
-                     nukeme[p]=1;
+                     nukeme[p]=1;//Vanish forever
                   }
-                  else nukeme[p]=3;
+                  else nukeme[p]=3;//Go into hiding
                }
                else nukeme[p]=-1; // Else you're in prison; you're guaranteed contactable
                

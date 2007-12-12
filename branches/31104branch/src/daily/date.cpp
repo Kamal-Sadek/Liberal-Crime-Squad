@@ -139,7 +139,7 @@ char completevacation(datest &d,int p,char &clearformess)
       }
       else
       {
-         if(d.date[e]->att[ATTRIBUTE_HEART]<5)d.date[e]->att[ATTRIBUTE_HEART]+=LCSrandom(3);
+         if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-2)d.date[e]->att[ATTRIBUTE_HEART]+=LCSrandom(3);
          d.date[e]->att[ATTRIBUTE_WISDOM]-=LCSrandom(3)+1;
          if(d.date[e]->att[ATTRIBUTE_WISDOM]<1)d.date[e]->att[ATTRIBUTE_WISDOM]=1;
 
@@ -607,7 +607,7 @@ char completedate(datest &d,int p,char &clearformess)
             }
             else
             {
-               int y=10;
+               int y=17;
                if(LCSrandom(2))
                {
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);

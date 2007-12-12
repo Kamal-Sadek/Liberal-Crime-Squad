@@ -804,7 +804,7 @@ void siegeturn(char clearformess)
                   sum+=pool[p]->attval(ATTRIBUTE_HEART);
                   sum+=pool[p]->attval(ATTRIBUTE_CHARISMA)*2;
                   sum+=pool[p]->skill[SKILL_PERSUASION]*3;
-                  sum+=pool[p]->skill[SKILL_LEADERSHIP]*2;
+                  sum+=pool[p]->skill[SKILL_LEADERSHIP]*5;
 
                   if(sum>bestvalue||best==-1)
                   {
@@ -1429,6 +1429,7 @@ void statebrokenlaws(int loc)
    int criminalcount=0;
    char kname[100];
    int kidnapped=0;
+   int confessed=0;
 
    for(int p=0;p<pool.size();p++)
    {
@@ -1448,6 +1449,7 @@ void statebrokenlaws(int loc)
          if(pool[p]->lawflag[i])
             breakercount[i]++;
       }
+      if(pool[p]->confessions)confessed=1;
    }
    for(int i=0;i<LAWFLAGNUM;i++)
    {

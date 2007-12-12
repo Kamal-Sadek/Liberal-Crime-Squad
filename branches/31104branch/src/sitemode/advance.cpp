@@ -118,6 +118,26 @@ void creatureadvance(void)
    if(mode==GAMEMODE_SITE)
    {
       if(sitealarm)postalarmtimer++;
+
+      //Attacking government agencies results in the rapid
+      //deployment of overwhelming force to the site -- especially
+      //if there are a lot of heavily armed people already on site
+      
+      //Police Station -- SWAT teams are on site already and
+      //only need to suit up to respond almost instantly
+      if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
+         postalarmtimer<70 && sitealarm)postalarmtimer=75;
+      //Courthouse -- Big police response, not far to come
+      if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
+         postalarmtimer<65 && sitealarm)postalarmtimer=65;
+      //Prison -- Big police response but has to get from downtown
+      if(location[cursite]->type==SITE_GOVERNMENT_PRISON &&
+         postalarmtimer<50 && sitealarm)postalarmtimer=50;
+      //Intelligence HQ -- Agents are deadly, but the site is not
+      //is not designed to be called to action that quickly
+      if(location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ &&
+         postalarmtimer<50 && sitealarm)postalarmtimer=50;
+
       if(sitealarmtimer>0&&!sitealarm)
       {
          sitealarmtimer--;

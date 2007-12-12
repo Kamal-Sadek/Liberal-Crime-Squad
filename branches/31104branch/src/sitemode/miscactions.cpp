@@ -208,6 +208,18 @@ char bash(short type,char &actual)
          addstr("!");
          refresh();
          getch();
+         //Bashing doors in secure areas sets off alarms
+         if((location[cursite]->type==SITE_GOVERNMENT_PRISON ||
+             location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) &&
+             sitealarm==0)
+         {
+            sitealarm=1;
+            move(17,1);
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Alarms go off!");
+            refresh();
+            getch();
+         }
 
          actual=1;
          return 1;

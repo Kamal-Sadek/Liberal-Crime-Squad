@@ -44,6 +44,8 @@ void makecharacter(void)
    newcr->att[ATTRIBUTE_HEALTH]=6;
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
    for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
+   //1 point of free leadership
+   newcr->skill[SKILL_LEADERSHIP]=1;
 
    name(newcr->propername);
 
@@ -72,7 +74,13 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 3
             //SKILL_COMPUTERS 2
 
-            move(12,0);
+            //move(11,0);addstr("D - was the day Islamic Jihad captured the CIA station chief in Beirut.");
+            //SKILL_INTERROGATION 2
+            //ATTRIBUTE_INTELLIGENCE 1
+            //ATTRIBUTE_CHARISMA 1
+            //ATTRIBUTE_STRENGTH 1
+
+            move(14,0);
             addstr("My parents named me ");
             addstr(newcr->propername);
             addstr(".");
@@ -90,6 +98,10 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 1
 				//SKILL_COMPUTERS 1
             //SKILL_WRITING 1
+            //move(11,0);addstr("D - I was grounded from everything.  I was five the first time I snuck out.");
+            //SKILL_DISGUISE 1
+            //ATTRIBUTE_AGILITY 2
+
             break;
          case 2:
             move(2,0);addstr("In elementary school...");
@@ -104,6 +116,9 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 1
             //SKILL_WRITING 1
             //SKILL_COMPUTERS 1
+            //move(11,0);addstr("D - I was homeschooled.  My parents were very religious.");
+            //SKILL_RELIGION 2
+            //ATTRIBUTE_HEART 1
             break;
          case 3:
             move(2,0);addstr("When I turned 10...");
@@ -118,6 +133,9 @@ void makecharacter(void)
             move(9,0);addstr("C - my parents divorced.  My studies suffered but I continued working.");
             //ATTRIBUTE_INTELLIGENCE 2
             //SKILL_COMPUTERS 1
+            //move(11,0);addstr("D - my parents divorced.  I hated my mom, and wrote stories about hurting her.");
+            //SKILL_INTERROGATION 1
+            //SKILL_WRITING 2
             break;
          case 4:
             move(2,0);addstr("When I hit junior high school...");
@@ -129,6 +147,8 @@ void makecharacter(void)
             //SKILL_CLUB 1
             move(9,0);addstr("C - I got into chess and go.  I was a total outcast.");
             //ATTRIBUTE_INTELLIGENCE 2
+            //move(11,0);addstr("D - I started lifting weights and looked like a thug.  I rebelled against everything.");
+            //ATTRIBUTE_STRENGTH 2
             break;
          case 5:
             move(2,0);addstr("Things were getting really bad...");
@@ -143,6 +163,10 @@ void makecharacter(void)
             move(9,0);addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
             //SKILL_DISGUISE 1
             //SKILL_GARMENTMAKING 2
+            //move(11,0);addstr("D - and I fell in with a gang.  One of my only friends was killed in a shooting.");
+            //SKILL_PISTOL 1
+            //SKILL_GANGSTERISM 1
+            //ATTRBITUE_AGILITY 1
             break;
          case 6:
             move(2,0);addstr("Well, I knew it had reached a crescendo when...");
@@ -157,13 +181,16 @@ void makecharacter(void)
             move(9,0);addstr("C - I tried sports for a quarter, desperate to fit in.");
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_AGILITY 2
+            //move(11,0);addstr("D - I was expelled from school for threatening a teacher.  With a gun.");
+            //SKILL_PISTOL 2
+            //SKILL_STREETSENSE 1
             break;
          case 7:
             move(2,0);addstr("I was only 15 when I ran away, and...");
             move(5,0);addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");
             //SKILL_SECURITY 1
             //SKILL_DISGUISE 1
-            //ATTRIBUTE_INTELLIGENCE 1
+            //ATTRIBUTE_AGILITY 1
             move(7,0);addstr("B - I hung out with thugs and beat the shit out of people.");
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_HEALTH 1
@@ -172,6 +199,10 @@ void makecharacter(void)
             //ATTRIBUTE_HEART 1
             //SKILL_LAW 1
             //SKILL_PERSUASION 1
+            //move(11,0);addstr("D - I had a clean job for a year, but was laid off with the dot com collapse.");
+            //SKILL_BUSINESS 1
+            //SKILL_COMPUTERS 1
+            //ATTRIBUTE_INTELLIGENCE 1
             break;
          case 8:
             move(2,0);addstr("Life went on.  On my 18th birthday...");
@@ -203,7 +234,7 @@ void makecharacter(void)
             //SKILL_LAW 2
             //SKILL_WRITING 2
             //SKILL_PERSUASION 1
-            move(12,0);addstr("I live in ");
+            move(15,0);addstr("I live in ");
             addstr(lcityname);addstr(", and it's about to experience real change.");
             break;
       }

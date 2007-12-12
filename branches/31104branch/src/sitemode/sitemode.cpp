@@ -49,6 +49,28 @@ void mode_site(long loc)
       locx=MAPX>>1;
       locy=1;
       locz=0;
+
+      //check for sleeper infiltration
+      for(int p=0;p<pool.size();p++)
+      {
+         //sleeper infiltration :D
+         if(pool[p]->base==loc || location[loc]->interrogated)
+         {
+            //make entire site known
+            for(int x=0;x<MAPX;x++)
+            {
+               for(int y=0;y<MAPY;y++)
+               {
+                  for(int z=0;z<MAPZ;z++)
+                  {
+                     levelmap[x][y][z].flag|=SITEBLOCK_KNOWN;
+                  }
+               }
+            }
+            break;
+         }
+      }
+      
    }
    else
    {
@@ -1283,7 +1305,7 @@ void mode_site(void)
                      if(!sitealienate)
                      {
                         long addjuice=sitecrime;
-                        if(addjuice>40)addjuice=40; // *JDS* increased the max juice from one operation
+                        if(addjuice>20)addjuice=20;
                         juiceparty(addjuice);
                      }
                      resolvesite();
@@ -1306,7 +1328,7 @@ void mode_site(void)
                      if(!sitealienate)
                      {
                         long addjuice=sitecrime;
-                        if(addjuice>40)addjuice=40; // *JDS* increased the max juice from one operation
+                        if(addjuice>25)addjuice=25;
                         juiceparty(addjuice);
                      }
                      resolvesite();

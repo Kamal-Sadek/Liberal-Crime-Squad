@@ -630,6 +630,7 @@ void evasivedrive(void)
          yourrolls.push_back(driveskill(*activesquad->squad[p],vehicle[v])+LCSrandom(10));
       }
    }
+   if(yourrolls.size()==0)yourrolls.push_back(0);//error -- and for this you get a 0
 
    vector<long> theirrolls;
    vector<long> theirrolls_id;

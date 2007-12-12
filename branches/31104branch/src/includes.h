@@ -803,6 +803,7 @@ struct creaturest
    short trainingsubject;
    creaturest *prisoner;
    short sentence;
+   char confessions;
    char deathpenalty;
    long joindays;
    long deathdays;
@@ -811,7 +812,7 @@ struct creaturest
 
    char forceinc;
 
-   long att[ATTNUM];
+   long att[ATTNUM+1];
    int skill[SKILLNUM];
    int skill_ip[SKILLNUM];
 
@@ -1001,6 +1002,7 @@ struct locationst
    char newrental;
    char needcar;
    short closed;
+   char interrogated;
    char highsecurity;
    siegest siege;
    int heat;
@@ -1458,8 +1460,10 @@ void hospitalize(int loc, creaturest &patient);
 int clinictime(creaturest &g);
 /* common - purges squad of loot and vehicles if it has no members */
 int testsquadclear(squadst &thissquad, int obase);
-/* common - returns the associated attribute for the given skill */
-int skillatt(int skill);
+/* common - returns the creature's maximum level in the given skill */
+int maxskill(int skill, creaturest& cr);
+/* common - returns the associated skill for the given weapon type */
+int weaponskill(int weapon);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */

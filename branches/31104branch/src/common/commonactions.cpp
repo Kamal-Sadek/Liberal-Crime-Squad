@@ -246,14 +246,14 @@ int testsquadclear(squadst &thissquad, int obase)
 
 
 
-/* common - returns the associated attribute for the given skill */
-int skillatt(int skill)
+/* common - returns the creature's maximum level in the given skill */
+int maxskill(int skill,creaturest& cr)
 {
    switch(skill)
    {
    case SKILL_HANDTOHAND:
    case SKILL_CLUB:
-      return ATTRIBUTE_STRENGTH;
+      return cr.attval(ATTRIBUTE_STRENGTH)*2;
    case SKILL_KNIFE:
    case SKILL_SWORD:
    case SKILL_PISTOL:
@@ -264,20 +264,19 @@ int skillatt(int skill)
    case SKILL_IMPROVISED:
    case SKILL_SLIGHTOFHAND:
    case SKILL_STEALTH:
-      return ATTRIBUTE_AGILITY;
+      return cr.attval(ATTRIBUTE_AGILITY)*2;
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
    case SKILL_GANGSTERISM:
    case SKILL_TEACHING:
-   case SKILL_LEADERSHIP:
    case SKILL_SEDUCTION:
-      return ATTRIBUTE_CHARISMA;
+      return cr.attval(ATTRIBUTE_CHARISMA)*2;
    case SKILL_ART:
    case SKILL_MUSIC:
-      return ATTRIBUTE_HEART;
+      return cr.attval(ATTRIBUTE_HEART)*2;
    case SKILL_RELIGION:
    case SKILL_BUSINESS:
-      return ATTRIBUTE_WISDOM;
+      return cr.attval(ATTRIBUTE_WISDOM)*2;
    case SKILL_SCIENCE:
    case SKILL_LAW:
    case SKILL_SURVIVAL:
@@ -289,10 +288,68 @@ int skillatt(int skill)
    case SKILL_GARMENTMAKING:
    case SKILL_WRITING:
    case SKILL_STREETSENSE:
-      return ATTRIBUTE_INTELLIGENCE;
+      return cr.attval(ATTRIBUTE_INTELLIGENCE)*2;
+   case SKILL_LEADERSHIP:
+      if(cr.juice<10)return 0;
+      if(cr.juice<50)return 1;
+      if(cr.juice<100)return 2;
+      if(cr.juice<200)return 3;
+      if(cr.juice<500)return 4;
+      return 5;
    default:
       return -1;
    }
+}
+
+/* common - returns the associated skill for the given weapon type */
+int weaponskill(int weapon)
+{
+   int wsk=SKILL_HANDTOHAND;
+   switch(weapon)
+   {
+      case WEAPON_KNIFE:
+         wsk=SKILL_KNIFE;
+         break;
+      case WEAPON_SHANK:
+      case WEAPON_SYRINGE:
+      case WEAPON_CROWBAR:
+      case WEAPON_HAMMER:
+      case WEAPON_CHAIN:
+      case WEAPON_GAVEL:
+      case WEAPON_CROSS:
+      case WEAPON_TORCH:
+      case WEAPON_PITCHFORK:
+         wsk=SKILL_IMPROVISED;
+         break;
+      case WEAPON_BASEBALLBAT:
+      case WEAPON_NIGHTSTICK:
+      case WEAPON_MAUL:
+      case WEAPON_STAFF:
+         wsk=SKILL_CLUB;
+         break;
+      case WEAPON_SWORD:
+      case WEAPON_DAISHO:
+         wsk=SKILL_SWORD;
+         break;
+      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_44:
+      case WEAPON_SEMIPISTOL_9MM:
+      case WEAPON_SEMIPISTOL_45:
+         wsk=SKILL_PISTOL;
+         break;
+      case WEAPON_SHOTGUN_PUMP:
+         wsk=SKILL_SHOTGUN;
+      case WEAPON_SMG_MP5:
+         wsk=SKILL_SMG;
+         break;
+      case WEAPON_AUTORIFLE_M16:
+      case WEAPON_AUTORIFLE_AK47:
+      case WEAPON_CARBINE_M4:
+      case WEAPON_SEMIRIFLE_AR15:
+         wsk=SKILL_RIFLE;
+         break;
+   }
+   return wsk;
 }
 
 
@@ -352,8 +409,27 @@ void addjuice(creaturest &cr,long juice,long cap)
 {
    if(cr.juice>=cap)return;
 
-   if(cr.juice+juice>cap)cr.juice=cap;
-   else cr.juice+=juice;
+   if(cr.juice+juice>cap)juice=cap-cr.juice;
+   
+   cr.juice+=juice;
+   
+   //For juice gains over 50, leader gets
+   //half of that in leadership skill
+   if(cr.juice>50 && juice>=2 && cr.hireid!=-1)
+   {
+      for(int i=0;i<pool.size();i++)
+      {
+         if(pool[i]->id==cr.hireid)
+         {
+            //If your maximum leadership skill is greater than
+            //current skill. In other words, you need to be able
+            //to gain a level before you'll be given the experience
+            if(maxskill(SKILL_LEADERSHIP,*pool[i])>pool[i]->skill[SKILL_LEADERSHIP])
+               pool[i]->skill_ip[SKILL_LEADERSHIP]+=juice>>1;
+            break;
+         }
+      }
+   }
    if(cr.juice>1000)cr.juice=1000;
    if(cr.juice<-50)cr.juice=-50;
 }

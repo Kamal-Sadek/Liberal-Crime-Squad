@@ -95,8 +95,8 @@ void activate(void)
          for(int sk=0;sk<SKILLNUM;sk++)
          {
             skill+=(unsigned long)temppool[p]->skill[sk];
-            if(temppool[p]->skill_ip[sk]>=100*((10+temppool[p]->skill[sk])/10)&&
-               temppool[p]->skill[sk]<temppool[p]->attval(skillatt(sk))*2)bright=1;
+            if(temppool[p]->skill_ip[sk]>=100+(10*temppool[p]->skill[sk])&&
+               temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -842,8 +842,8 @@ void select_tendhostage(creaturest *cr)
          for(int sk=0;sk<SKILLNUM;sk++)
          {
             skill+=(unsigned long)temppool[p]->skill[sk];
-            if(temppool[p]->skill_ip[sk]>=100*((10+temppool[p]->skill[sk])/10)&&
-               temppool[p]->skill[sk]<temppool[p]->attval(skillatt(sk))*2)bright=1;
+            if(temppool[p]->skill_ip[sk]>=100+(10*temppool[p]->skill[sk])&&
+               temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);

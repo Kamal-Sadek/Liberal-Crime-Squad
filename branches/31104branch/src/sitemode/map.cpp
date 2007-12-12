@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 /* re-create site from seed before squad arrives */
 void initsite(locationst &loc)
 {
- int x = 0;
+   int x = 0;
  
    //PREP
    if(activesquad==NULL)return;
