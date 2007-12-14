@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -33,16 +33,16 @@ This file is part of Liberal Crime Squad.                                       
 /* attack handling for each side as a whole */
 void youattack(void)
 {
-   short wasalarm=sitealarm;
+   int16 wasalarm=sitealarm;
 
-   for(int e=0;e<ENCMAX;e++)
+   for(int32 e=0;e<ENCMAX;e++)
    {
       encounter[e].cantbluff=2;
    }
 
    sitealarm=1;
 
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
@@ -50,10 +50,10 @@ void youattack(void)
       if(mode==GAMEMODE_CHASECAR&&
          !activesquad->squad[p]->weapon.ranged())continue;
 
-      vector<int> goodtarg;
-      vector<int> badtarg;
+      vector<int32> goodtarg;
+      vector<int32> badtarg;
 
-      for(int e=0;e<ENCMAX;e++)
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(encounter[e].alive&&encounter[e].exists)
          {
@@ -64,13 +64,13 @@ void youattack(void)
 
       if(goodtarg.size()==0)return;
 
-      int target=goodtarg[LCSrandom(goodtarg.size())];
+      int32 target=goodtarg[LCSrandom(goodtarg.size())];
 
       char mistake=0;
       // *JDS* less likely to accidentally hit bystanders,
       // and never hit the wrong person if not using a ranged
       // weapon
-      if(badtarg.size()>0 && !LCSrandom(20) && activesquad->squad[p]->weapon.ranged()) 
+      if(badtarg.size()>0 && !LCSrandom(20) && activesquad->squad[p]->weapon.ranged())
       {
          target=badtarg[LCSrandom(badtarg.size())];
          mistake=1;
@@ -101,7 +101,7 @@ void youattack(void)
    //COVER FIRE
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(int32 p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->align!=1)continue;
@@ -119,10 +119,10 @@ void youattack(void)
 
             if(conf)
             {
-               vector<int> goodtarg;
-               vector<int> badtarg;
+               vector<int32> goodtarg;
+               vector<int32> badtarg;
 
-               for(int e=0;e<ENCMAX;e++)
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].alive&&encounter[e].exists)
                   {
@@ -133,7 +133,7 @@ void youattack(void)
 
                if(goodtarg.size()==0)return;
 
-               int target=goodtarg[LCSrandom(goodtarg.size())];
+               int32 target=goodtarg[LCSrandom(goodtarg.size())];
 
                char mistake=0;
 
@@ -172,10 +172,10 @@ void youattack(void)
 
 void enemyattack(void)
 {
-   for(int i=0;i<6;i++)
+   for(int32 i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
+      int32 thisweapon=weaponcheck(*activesquad->squad[i],cursite);
       if(thisweapon==-1||thisweapon==2)activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
    }
 
@@ -183,7 +183,7 @@ void enemyattack(void)
    return;
 #endif
 
-   int e2, e;
+   int32 e2, e;
    char printed;
    for(e=0;e<ENCMAX;e++)
    {
@@ -251,10 +251,10 @@ void enemyattack(void)
          continue;
       }
 
-      vector<int> goodtarg;
-      vector<int> badtarg;
+      vector<int32> goodtarg;
+      vector<int32> badtarg;
 
-      for(int p=0;p<6;p++)
+      for(int32 p=0;p<6;p++)
       {
          if(activesquad->squad[p]!=NULL)
          {
@@ -273,11 +273,11 @@ void enemyattack(void)
 
       if(goodtarg.size()==0)return;
 
-      int target=goodtarg[LCSrandom(goodtarg.size())];
+      int32 target=goodtarg[LCSrandom(goodtarg.size())];
 
       char canmistake=1;
 
-      int encnum=0;
+      int32 encnum=0;
       for(e2=0;e2<ENCMAX;e2++)if(encounter[e2].exists)encnum++;
 
       if((encounter[e].type==CREATURE_SCIENTIST_EMINENT||
@@ -329,7 +329,7 @@ void enemyattack(void)
 
          if(!LCSrandom(10)&&badtarg.size()>0)
          {
-            int target=badtarg[LCSrandom(badtarg.size())];
+            int32 target=badtarg[LCSrandom(badtarg.size())];
             attack(encounter[e],encounter[target],1,actual);
             if(!encounter[target].alive)delenc(target,1);
             continue;
@@ -373,8 +373,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
 
    //SPECIAL ATTACK!
-   int encnum=0;
-   for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
+   int32 encnum=0;
+   for(int32 e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
    if((a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
@@ -385,12 +385,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    {
       if(encnum<ENCMAX)
       {
-         int resist=0;
+         int32 resist=0;
 
          strcpy(str,a.name);
          strcat(str," ");
 
-         int attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+
+         int32 attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+
             t.attval(ATTRIBUTE_WISDOM,0);
 
          switch(a.type)
@@ -498,7 +498,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                }
                addstr("!");
 
-               for(int e=0;e<ENCMAX;e++)
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists==0)
                   {
@@ -511,11 +511,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                }
 
                char flipstart=0;
-               for(int p=0;p<6;p++)
+               for(int32 p=0;p<6;p++)
                {
                   if(activesquad->squad[p]==&t)
                   {
-                     for(int pl=pool.size()-1;pl>=0;pl--)
+                     for(int32 pl=pool.size()-1;pl>=0;pl--)
                      {
                         if(pool[pl]==activesquad->squad[p])
                         {
@@ -660,9 +660,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
 
    //BASIC ROLL
-   int aroll=LCSrandom(20)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
+   int32 aroll=LCSrandom(20)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
    if(a.prisoner!=NULL)aroll-=LCSrandom(10);
-   int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+   int32 droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
    if(t.prisoner!=NULL)droll-=LCSrandom(10);
    // Harder to hit people during a chase: 5 points for being on the
    // move, another 5 points for having to hit them in the car
@@ -758,8 +758,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
 
    //USE BULLETS
-   int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
-   int shotgun=0; // *JDS* Used for shotguns; enables "just missed" hits for reduced damage
+   int32 bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
+   int32 shotgun=0; // *JDS* Used for shotguns; enables "just missed" hits for reduced damage
    if(a.weapon.ammo>0)
    {
       switch(a.weapon.type)
@@ -776,9 +776,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          // *JDS* automatic weapons fire and maybe hit with three shots
          case WEAPON_CARBINE_M4:
          case WEAPON_SMG_MP5:
-         case WEAPON_AUTORIFLE_M16: 
+         case WEAPON_AUTORIFLE_M16:
          case WEAPON_AUTORIFLE_AK47:
-            for(int i=0;i<3&&a.weapon.ammo;i++)
+            for(int32 i=0;i<3&&a.weapon.ammo;i++)
             {
                a.weapon.ammo--;
                // Each shot in a burst is increasingly less likely to hit
@@ -797,7 +797,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       // of calculating damage
       switch(a.weapon.type)
       {
-      
+
       case WEAPON_SMG_MP5:
          aroll-=4;
          break;
@@ -808,8 +808,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          break;
       }
       strcat(str,"hits the ");
-      int w;
-      
+      int32 w;
+
       do
       {
          w=LCSrandom(BODYPARTNUM);
@@ -865,9 +865,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       }
 
       char damtype=0;
-      int damamount=0;
+      int32 damamount=0;
       char strengthmod=0;
-      int severtype=-1;
+      int32 severtype=-1;
 
       char damagearmor=0;
 
@@ -1087,7 +1087,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                else
                   damamount=LCSrandom(200)+10;
                severtype=WOUND_NASTYOFF; // *JDS* dismemberment OK with shotgun
-               
+
                damagearmor=1;
             }
             else
@@ -1126,7 +1126,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
       }
 
-      int mod=0;
+      int32 mod=0;
 
       if(strengthmod)
       {
@@ -1145,7 +1145,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       {
          t.wound[w]|=damtype;
 
-         int severamount=100;
+         int32 severamount=100;
 
          switch(w)
          {
@@ -1187,7 +1187,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                (t.wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(t.armor);
 
             char alreadydead=!t.alive;
-            
+
             if(!alreadydead)
             {
                t.blood=0;
@@ -1316,7 +1316,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                      case 1:
                         if(t.special[SPECIALWOUND_TEETH]>0)
                         {
-                           int teethminus=LCSrandom(TOOTHNUM)+1;
+                           int32 teethminus=LCSrandom(TOOTHNUM)+1;
                            if(teethminus>t.special[SPECIALWOUND_TEETH])teethminus=t.special[SPECIALWOUND_TEETH];
                            char num[20];
                            itoa(teethminus,num,10);
@@ -1608,7 +1608,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                         if(t.special[SPECIALWOUND_RIBS]>0&&
                            breakdam)
                         {
-                           int ribminus=LCSrandom(RIBNUM)+1;
+                           int32 ribminus=LCSrandom(RIBNUM)+1;
                            if(ribminus>t.special[SPECIALWOUND_RIBS])ribminus=t.special[SPECIALWOUND_RIBS];
                            char num[20];
                            itoa(ribminus,num,10);
@@ -1647,7 +1647,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                severloot(t,groundloot);
             }
 
-            set_color(COLOR_WHITE,COLOR_BLACK,1);            
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
          }
       }
       else
@@ -1687,7 +1687,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
 
 /* modifies a combat roll based on the creature's critical injuries */
-void healthmodroll(int &aroll,creaturest &a)
+void healthmodroll(int32 &aroll,creaturest &a)
 {
    if(a.special[SPECIALWOUND_RIGHTEYE]!=1)aroll-=LCSrandom(2);
    if(a.special[SPECIALWOUND_LEFTEYE]!=1)aroll-=LCSrandom(2);
@@ -1712,9 +1712,9 @@ void healthmodroll(int &aroll,creaturest &a)
 
 
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
+void damagemod(creaturest &t,char &damtype,int32 &damamount,int32 mod)
 {
-   int prot=0;
+   int32 prot=0;
 
    switch(t.armor.type)
    {
@@ -1751,16 +1751,16 @@ void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
    else if(mod<=-3)damamount>>=3;
    else if(mod<=-2)damamount>>=2;
    else if(mod<=-1)damamount>>=1;
-   else if(mod>=10)damamount=(int)((float)damamount * mod);
-   else if(mod>=9)damamount=(int)((float)damamount * 8.0f);
-   else if(mod>=8)damamount=(int)((float)damamount * 6.0f);
-   else if(mod>=7)damamount=(int)((float)damamount * 4.0f);
-   else if(mod>=6)damamount=(int)((float)damamount * 2.0f);
-   else if(mod>=5)damamount=(int)((float)damamount * 1.75f);
-   else if(mod>=4)damamount=(int)((float)damamount * 1.5f);
-   else if(mod>=3)damamount=(int)((float)damamount * 1.4f);
-   else if(mod>=2)damamount=(int)((float)damamount * 1.3f);
-   else if(mod>=1)damamount=(int)((float)damamount * 1.2f);
+   else if(mod>=10)damamount=(int32)((float)damamount * mod);
+   else if(mod>=9)damamount=(int32)((float)damamount * 8.0f);
+   else if(mod>=8)damamount=(int32)((float)damamount * 6.0f);
+   else if(mod>=7)damamount=(int32)((float)damamount * 4.0f);
+   else if(mod>=6)damamount=(int32)((float)damamount * 2.0f);
+   else if(mod>=5)damamount=(int32)((float)damamount * 1.75f);
+   else if(mod>=4)damamount=(int32)((float)damamount * 1.5f);
+   else if(mod>=3)damamount=(int32)((float)damamount * 1.4f);
+   else if(mod>=2)damamount=(int32)((float)damamount * 1.3f);
+   else if(mod>=1)damamount=(int32)((float)damamount * 1.2f);
 
    if(damamount<0)damamount=0;
 
@@ -1772,7 +1772,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(creaturest &cr,vector<itemst *> &loot)
 {
-   int armok=2;
+   int32 armok=2;
    if((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
        (cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
    if((cr.wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
@@ -1807,11 +1807,11 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       cr.weapon.type=WEAPON_NONE;
       cr.weapon.ammo=0;
 
-      for(int c=0;c<CLIPNUM;c++)
+      for(int32 c=0;c<CLIPNUM;c++)
       {
          if(mode==GAMEMODE_SITE)
          {
-            for(int p=0;p<cr.clip[c];p++)
+            for(int32 p=0;p<cr.clip[c];p++)
             {
                itemst *newi=new itemst;
                   newi->type=ITEM_CLIP;
@@ -1870,7 +1870,7 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
 
 
 /* damages the selected armor if it covers the body part specified */
-void armordamage(armorst &armor,int bp)
+void armordamage(armorst &armor,int32 bp)
 {
    switch(armor.type)
    {
@@ -1916,7 +1916,7 @@ void bloodblast(armorst &armor)
    map[locx][locy][locz].flag|=SITEBLOCK_BLOODY2;
 
    //HIT EVERYTHING
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->armor.type!=ARMOR_NONE)
@@ -1925,7 +1925,7 @@ void bloodblast(armorst &armor)
       }
    }
 
-   for(int e=0;e<ENCMAX;e++)
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
       if(encounter[e].armor.type!=ARMOR_NONE)
@@ -1942,14 +1942,14 @@ void bloodblast(armorst &armor)
 
 
 /* kills the specified creature from the encounter, dropping loot */
-void delenc(short e,char loot)
+void delenc(int16 e,char loot)
 {
    //MAKE GROUND LOOT
    if(mode!=GAMEMODE_SITE)loot=0;
    if(loot)makeloot(encounter[e],groundloot);
 
    //BURY IT
-   for(int en=e;en<ENCMAX;en++)
+   for(int32 en=e;en<ENCMAX;en++)
    {
       if(!encounter[en].exists)break;
       if(en<ENCMAX-1)encounter[en]=encounter[en+1];
@@ -1995,9 +1995,9 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
       cr.money=0;
    }
 
-   for(int c=0;c<CLIPNUM;c++)
+   for(int32 c=0;c<CLIPNUM;c++)
    {
-      for(int p=0;p<cr.clip[c];p++)
+      for(int32 p=0;p<cr.clip[c];p++)
       {
          itemst *newi=new itemst;
             newi->type=ITEM_CLIP;
@@ -2031,7 +2031,7 @@ void capturecreature(creaturest &t)
       if(sitetype==SITE_GOVERNMENT_PRISON)
       {
          // Clear criminal record?
-         for(int i=0;i<LAWFLAGNUM;i++)
+         for(int32 i=0;i<LAWFLAGNUM;i++)
          {
             t.lawflag[i]=0;
          }
@@ -2039,7 +2039,7 @@ void capturecreature(creaturest &t)
    }
    else
    {
-      for(int l=0;l<location.size();l++)
+      for(int32 l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
          {
@@ -2507,13 +2507,13 @@ void adddeathmessage(creaturest &cr)
 
 
 /* pushes people into the current squad (used in a siege) */
-void autopromote(int loc)
+void autopromote(int32 loc)
 {
    if(activesquad==NULL)return;
 
-   int partysize=0;
-   int partydead=0;
-   int p;
+   int32 partysize=0;
+   int32 partydead=0;
+   int32 p;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)partysize++;
@@ -2522,8 +2522,8 @@ void autopromote(int loc)
       if(!activesquad->squad[p]->alive)partydead++;
    }
 
-   int libnum=0;
-   for(int pl=0;pl<pool.size();pl++)
+   int32 libnum=0;
+   for(int32 pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->location!=loc)continue;
       if(pool[pl]->alive&&pool[pl]->align==1)libnum++;
@@ -2541,7 +2541,7 @@ void autopromote(int loc)
 
       if(conf)
       {
-         for(int pl=0;pl<pool.size();pl++)
+         for(int32 pl=0;pl<pool.size();pl++)
          {
             if(pool[pl]->location!=loc)continue;
             if(pool[pl]->alive&&pool[pl]->squadid==-1&&

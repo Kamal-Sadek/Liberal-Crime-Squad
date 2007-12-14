@@ -68,45 +68,9 @@
 #ifndef COMPAT_H
 #define COMPAT_H
 
- #ifndef HAS_SRTICMP
- // Portable equivalent of Windows stricmp() function.
- // This is strcmp() on lowercase versions of the
- //string.
-
- //strToLower() allocates a string and converts it to
- //Lower Case using POSIX tolower() function.
- //Free returned string after use.
-
- char *strToLower (const char *str);
-
- int stricmp(const char *str1, const char *str2);
- #endif
-
-  #ifdef Linux // BSD and SVr4 too
-
-  extern int init_alarm;
-  extern struct itimerval timer_off;
-
-void alarmHandler(int signal);
-
-void setTimeval(struct  timeval *value, long sec, long usec);
-void msToItimerval(int ms, struct  itimerval *value);
+#ifdef HAVE_CONFIG_H
+#include <config.h>
 #endif
-
-void pause_ms(int t);
-void alarmset(int t);
-void alarmwait();
-
- #ifndef HAS_ITOA
- // Portable equivalent of Windows itoa() function.
- // Note the radix parameter is expected to be 10.
- // The function is not fully ported and doesn't support
- //other bases, it's just enough for this program to be
- //ported.
- // Ensure buffer is of sufficient size.
- char *itoa(int value, char *buffer, int radix);
- #endif
-
 
 #ifdef PACKAGE_NAME
 
@@ -151,14 +115,58 @@ void alarmwait();
 #else
 
 //Assume we are on Windows
-typedef unsigned int uint32;
-typedef int int32;
-typedef unsigned short uint16;
-typedef short int16;
+typedef uint32 uint32;
+typedef int32 int32;
+typedef uint16 uint16;
+typedef int16 int16;
 typedef unsigned char uint8;
 typedef char int8;
 
 #endif
+
+
+
+ #ifndef HAS_SRTICMP
+ // Portable equivalent of Windows stricmp() function.
+ // This is strcmp() on lowercase versions of the
+ //string.
+
+ //strToLower() allocates a string and converts it to
+ //Lower Case using POSIX tolower() function.
+ //Free returned string after use.
+
+ char *strToLower (const char *str);
+
+ int32 stricmp(const char *str1, const char *str2);
+ #endif
+
+  #ifdef Linux // BSD and SVr4 too
+
+  extern int32 init_alarm;
+  extern struct itimerval timer_off;
+
+void alarmHandler(int32 signal);
+
+void setTimeval(struct  timeval *value, int32 sec, int32 usec);
+void msToItimerval(int32 ms, struct  itimerval *value);
+#endif
+
+void pause_ms(int32 t);
+void alarmset(int32 t);
+void alarmwait();
+
+ #ifndef HAS_ITOA
+ // Portable equivalent of Windows itoa() function.
+ // Note the radix parameter is expected to be 10.
+ // The function is not fully ported and doesn't support
+ //other bases, it's just enough for this program to be
+ //ported.
+ // Ensure buffer is of sufficient size.
+ char *itoa(int32 value, char *buffer, int32 radix);
+ #endif
+
+
+
 
 
 #endif //guard

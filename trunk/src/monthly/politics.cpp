@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 void elections(char clearformess,char canseethings)
 {
    char num[20];
-   int l, p, c;
+   int32 l, p, c;
 
    if(canseethings)
    {
@@ -55,7 +55,7 @@ void elections(char clearformess,char canseethings)
       getch();
    }
 
-   int mood=publicmood(-1);
+   int32 mood=publicmood(-1);
 
    //PRESIDENTIAL
    if(year%4==0)
@@ -73,8 +73,8 @@ void elections(char clearformess,char canseethings)
       }
 
       char candidate[5][80];
-      int votes[5]={0,0,0,0,0};
-      int oldwinnerspot=-1;
+      int32 votes[5]={0,0,0,0,0};
+      int32 oldwinnerspot=-1;
       for(c=0;c<5;c++)
       {
          if(c==0)set_color(COLOR_RED,COLOR_BLACK,1);
@@ -110,11 +110,11 @@ void elections(char clearformess,char canseethings)
          nodelay(stdscr,TRUE);
       }
 
-      int winner=-1;
+      int32 winner=-1;
       char recount=0;
       char oldwinner=0;
-      int vote;
-      for(int l=0;l<100;l++)
+      int32 vote;
+      for(int32 l=0;l<100;l++)
       {
          vote=0;
 
@@ -127,14 +127,14 @@ void elections(char clearformess,char canseethings)
 
          if(l==99)
          {
-            int maxvote=0;
+            int32 maxvote=0;
 
             for(c=0;c<5;c++)
             {
                if(votes[c]>maxvote)maxvote=votes[c];
             }
 
-            vector<int> eligible;
+            vector<int32> eligible;
 
             for(c=0;c<5;c++)
             {
@@ -154,7 +154,7 @@ void elections(char clearformess,char canseethings)
 
          if(canseethings)
          {
-            for(int c=0;c<5;c++)
+            for(int32 c=0;c<5;c++)
             {
                if(winner>=0&&c!=winner)set_color(COLOR_BLACK,COLOR_BLACK,1);
                else if(c==winner)set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -198,7 +198,7 @@ void elections(char clearformess,char canseethings)
          exec[EXEC_PRESIDENT]=winner-2;
          strcpy(execname[EXEC_PRESIDENT],candidate[winner]);
 
-         for(int e=0;e<EXECNUM;e++)
+         for(int32 e=0;e<EXECNUM;e++)
          {
             if(e==EXEC_PRESIDENT)continue;
             if(winner-2==-2)exec[e]=-2;
@@ -212,7 +212,7 @@ void elections(char clearformess,char canseethings)
    //SENATE
    if(year%2==0)
    {
-      int senmod=-1;
+      int32 senmod=-1;
       if(year%6==0)
       {
          senmod=0;
@@ -225,7 +225,7 @@ void elections(char clearformess,char canseethings)
       {
          senmod=2;
       }
-         
+
       if(canseethings)
       {
          erase();
@@ -238,7 +238,7 @@ void elections(char clearformess,char canseethings)
          addstr(num);
       }
 
-      int x=0,y=2, s=0;
+      int32 x=0,y=2, s=0;
 
       for(s=0;s<100;s++)
       {
@@ -295,7 +295,7 @@ void elections(char clearformess,char canseethings)
          nodelay(stdscr,TRUE);
       }
 
-      int vote;
+      int32 vote;
 
       x=0;
       y=2;
@@ -388,7 +388,7 @@ void elections(char clearformess,char canseethings)
          addstr(num);
       }
 
-      int x=0,y=2, h=0;
+      int32 x=0,y=2, h=0;
 
       for(h=0;h<435;h++)
       {
@@ -443,7 +443,7 @@ void elections(char clearformess,char canseethings)
          nodelay(stdscr,TRUE);
       }
 
-      int vote;
+      int32 vote;
 
       x=0;
       y=2;
@@ -533,9 +533,9 @@ void elections(char clearformess,char canseethings)
       addstr(num);
    }
 
-   vector<int> prop;
-   vector<int> propdir;
-   int pnum=LCSrandom(5)+2;
+   vector<int32> prop;
+   vector<int32> propdir;
+   int32 pnum=LCSrandom(5)+2;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
@@ -544,7 +544,7 @@ void elections(char clearformess,char canseethings)
    char lawdir[LAWNUM];
    memset(lawdir,0,LAWNUM*sizeof(char));
    //DETERMINE PROPS
-   int pmood,pvote;
+   int32 pmood,pvote;
    for(l=0;l<LAWNUM;l++)
    {
       pmood=publicmood(l);
@@ -570,13 +570,13 @@ void elections(char clearformess,char canseethings)
       lawpriority[l]=abs(pvote-pmood)+LCSrandom(10);
    }
 
-   vector<int> canlaw;
+   vector<int32> canlaw;
 
    prop.resize(pnum);
    propdir.resize(pnum);
    for(p=0;p<pnum;p++)
    {
-      int maxprior=0;
+      int32 maxprior=0;
       for(l=0;l<LAWNUM;l++)
       {
          if(lawpriority[l]>maxprior&&!lawtaken[l])maxprior=lawpriority[l];
@@ -599,7 +599,7 @@ void elections(char clearformess,char canseethings)
       if(canseethings)
       {
          move(p*3+2,0);
-         int propnum=0;
+         int32 propnum=0;
          switch(p)
          {
             case 0:propnum=2*(17-LCSrandom(2)*6)*(19-LCSrandom(2)*6);break;
@@ -692,11 +692,11 @@ void elections(char clearformess,char canseethings)
    for(p=0;p<pnum;p++)
    {
       char yeswin=0;
-      int yesvotes=0;
+      int32 yesvotes=0;
       char recount=0;
-      int vote;
+      int32 vote;
       mood=publicmood(prop[p]);
-      for(int l=0;l<100;l++)
+      for(int32 l=0;l<100;l++)
       {
          vote=0;
          if(LCSrandom(100)<mood)vote++;
@@ -774,7 +774,7 @@ void elections(char clearformess,char canseethings)
 /* politics - causes the supreme court to hand down decisions */
 void supremecourt(char clearformess,char canseethings)
 {
-   int c;
+   int32 c;
    if(canseethings)
    {
       if(clearformess)
@@ -807,9 +807,9 @@ void supremecourt(char clearformess,char canseethings)
       addstr(num);
    }
 
-   vector<int> scase;
-   vector<int> scasedir;
-   int cnum=LCSrandom(5)+2;
+   vector<int32> scase;
+   vector<int32> scasedir;
+   int32 cnum=LCSrandom(5)+2;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
@@ -925,11 +925,11 @@ void supremecourt(char clearformess,char canseethings)
    for(c=0;c<cnum;c++)
    {
       char yeswin=0;
-      int yesvotes=0;
+      int32 yesvotes=0;
 
-      int vote;
+      int32 vote;
 
-      for(int l=0;l<9;l++)
+      for(int32 l=0;l<9;l++)
       {
          vote=court[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
@@ -996,7 +996,7 @@ void supremecourt(char clearformess,char canseethings)
          addstr("Changing the Guard!");
       }
 
-      int j=LCSrandom(9);
+      int32 j=LCSrandom(9);
 
       if(canseethings)
       {
@@ -1026,7 +1026,7 @@ void supremecourt(char clearformess,char canseethings)
       name(courtname[j]);
       float president=exec[EXEC_PRESIDENT];
       float sen=0;
-      for(int s=0;s<100;s++)sen+=senate[s];
+      for(int32 s=0;s<100;s++)sen+=senate[s];
       sen/=100.0f;
 
       float consensus=(president+sen)*.5f;
@@ -1070,7 +1070,7 @@ void supremecourt(char clearformess,char canseethings)
 /* politics - causes congress to act on legislation */
 void congress(char clearformess,char canseethings)
 {
-   int l, c;
+   int32 l, c;
    if(canseethings)
    {
       if(clearformess)
@@ -1103,20 +1103,20 @@ void congress(char clearformess,char canseethings)
       addstr(num);
    }
 
-   vector<int> bill;
-   vector<int> billdir;
-   vector<int> killbill;
-   int cnum=LCSrandom(5)+2;
+   vector<int32> bill;
+   vector<int32> billdir;
+   vector<int32> killbill;
+   int32 cnum=LCSrandom(5)+2;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
-   int lawpriority[LAWNUM];
-   memset(lawpriority,0,LAWNUM*sizeof(int));
+   int32 lawpriority[LAWNUM];
+   memset(lawpriority,0,LAWNUM*sizeof(int32));
    char lawdir[LAWNUM];
    memset(lawdir,0,LAWNUM*sizeof(char));
 
    //DETERMINE BILLS
-   int pup,pdown,pprior;
+   int32 pup,pdown,pprior;
    for(l=0;l<LAWNUM;l++)
    {
       pup=0;
@@ -1125,7 +1125,7 @@ void congress(char clearformess,char canseethings)
 
       if(!LCSrandom(3))
       {
-         for(int cl=0;cl<435;cl++)
+         for(int32 cl=0;cl<435;cl++)
          {
             if(law[l]<house[cl])pup=1;
             else if(law[l]>house[cl])pdown=1;
@@ -1134,7 +1134,7 @@ void congress(char clearformess,char canseethings)
       }
       else if(LCSrandom(2))
       {
-         for(int sl=0;sl<100;sl++)
+         for(int32 sl=0;sl<100;sl++)
          {
             if(law[l]<senate[sl])pup++;
             else if(law[l]>senate[sl])pdown++;
@@ -1143,13 +1143,13 @@ void congress(char clearformess,char canseethings)
       }
       else
       {
-         for(int cl=0;cl<435;cl++)
+         for(int32 cl=0;cl<435;cl++)
          {
             if(law[l]<house[cl])pup++;
             else if(law[l]>house[cl])pdown++;
             pprior+=abs(house[cl]-law[l]);
          }
-         for(int sl=0;sl<100;sl++)
+         for(int32 sl=0;sl<100;sl++)
          {
             if(law[l]<senate[sl])pup+=4;
             else if(law[l]>senate[sl])pdown+=4;
@@ -1167,7 +1167,7 @@ void congress(char clearformess,char canseethings)
       lawpriority[l]=pprior;
    }
 
-   vector<int> canlaw;
+   vector<int32> canlaw;
 
    bill.resize(cnum);
    billdir.resize(cnum);
@@ -1176,7 +1176,7 @@ void congress(char clearformess,char canseethings)
    {
       killbill[c]=0;
 
-      int maxprior=0;
+      int32 maxprior=0;
       for(l=0;l<LAWNUM;l++)
       {
          if(lawpriority[l]>maxprior&&!lawtaken[l])maxprior=lawpriority[l];
@@ -1294,13 +1294,13 @@ void congress(char clearformess,char canseethings)
    {
       char yeswin_h=0;
       char yeswin_s=0;
-      int yesvotes_h=0;
-      int yesvotes_s=0;
+      int32 yesvotes_h=0;
+      int32 yesvotes_s=0;
 
-      int vote;
-      int s=-1;
+      int32 vote;
+      int32 s=-1;
 
-      for(int l=0;l<435;l++)
+      for(int32 l=0;l<435;l++)
       {
          vote=house[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
@@ -1349,7 +1349,7 @@ void congress(char clearformess,char canseethings)
             if(yesvotes_s==50)
             {
                //TIE BREAKER
-               int vote=(exec[EXEC_PRESIDENT]+
+               int32 vote=(exec[EXEC_PRESIDENT]+
                   exec[EXEC_VP]+
                   exec[EXEC_STATE]+
                   exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
@@ -1411,7 +1411,7 @@ void congress(char clearformess,char canseethings)
 
    if(canseethings)nodelay(stdscr,FALSE);
 
-   int havebill=0;
+   int32 havebill=0;
    for(c=0;c<cnum;c++)
    {
       if(killbill[c]<=0)havebill++;
@@ -1437,16 +1437,16 @@ void congress(char clearformess,char canseethings)
          pause_ms(500);
       }
 
-      for(int c=0;c<bill.size();c++)
+      for(int32 c=0;c<bill.size();c++)
       {
          char sign=0;
          if(killbill[c]==1)sign=-1;
          else
          {
-            int vote=(exec[EXEC_PRESIDENT]+
+            int32 vote=(exec[EXEC_PRESIDENT]+
                exec[EXEC_VP]+
                exec[EXEC_STATE]+
-               exec[EXEC_ATTORNEY]+(short)LCSrandom(9)-4)/4;
+               exec[EXEC_ATTORNEY]+(int16)LCSrandom(9)-4)/4;
             if(exec[EXEC_PRESIDENT]==2)vote=2;
             if(exec[EXEC_PRESIDENT]==-2)vote=-2;
 
@@ -1510,21 +1510,21 @@ void congress(char clearformess,char canseethings)
    }
 
    //CONGRESS CONSTITUTION CHANGES
-   int housemake[5]={0,0,0,0,0};
-   for(int h=0;h<435;h++)
+   int32 housemake[5]={0,0,0,0,0};
+   for(int32 h=0;h<435;h++)
    {
       housemake[house[h]+2]++;
    }
 
-   int senatemake[5]={0,0,0,0,0};
-   for(int s=0;s<100;s++)
+   int32 senatemake[5]={0,0,0,0,0};
+   for(int32 s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
 
    //TOSS JUSTICES?
    char tossj=0;
-   for(int j=0;j<9;j++)
+   for(int32 j=0;j<9;j++)
    {
       if(court[j]<=1)
       {
@@ -1544,32 +1544,32 @@ void congress(char clearformess,char canseethings)
 /* politics - checks if the game is won */
 char wincheck(void)
 {
-   for(int e=0;e<EXECNUM;e++)
+   for(int32 e=0;e<EXECNUM;e++)
    {
       if(exec[e]!=2)return 0;
    }
 
-   for(int l=0;l<LAWNUM;l++)
+   for(int32 l=0;l<LAWNUM;l++)
    {
       if(law[l]!=2)return 0;
    }
 
-   int housemake[5]={0,0,0,0,0};
-   for(int h=0;h<435;h++)
+   int32 housemake[5]={0,0,0,0,0};
+   for(int32 h=0;h<435;h++)
    {
       housemake[house[h]+2]++;
    }
    if(housemake[4]<290)return 0;
 
-   int senatemake[5]={0,0,0,0,0};
-   for(int s=0;s<100;s++)
+   int32 senatemake[5]={0,0,0,0,0};
+   for(int32 s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
    if(senatemake[4]<67)return 0;
 
-   int elibjudge=0;
-   for(int c=0;c<9;c++)
+   int32 elibjudge=0;
+   for(int32 c=0;c<9;c++)
    {
       if(court[c]==2)elibjudge++;
    }
@@ -1582,13 +1582,13 @@ char wincheck(void)
 
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l)
+int32 publicmood(int32 l)
 {
    if(l==-1)
    {
-      int sum=0;
+      int32 sum=0;
 
-      for(int v=0;v<VIEWNUM;v++)
+      for(int32 v=0;v<VIEWNUM;v++)
       {
          if(v==VIEW_LIBERALCRIMESQUAD)continue;
          if(v==VIEW_LIBERALCRIMESQUADPOS)continue;

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,13 +32,13 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* checks if your liberal activity is noticed */
-void noticecheck(int exclude)
+void noticecheck(int32 exclude)
 {
    if(sitealarm)return;
 
    char noticed=0;
-   vector<int> noticer;
-   for(int e=0;e<ENCMAX;e++)
+   vector<int32> noticer;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(e==exclude)continue;
       if(encounter[e].type==CREATURE_PRISONER)continue;
@@ -51,7 +51,7 @@ void noticecheck(int exclude)
 
    if(noticer.size()>0)
    {
-      int n,an;
+      int32 n,an;
 
       do
       {
@@ -59,7 +59,7 @@ void noticecheck(int exclude)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
+         int32 chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
          if(chance>LCSrandom(21))
          {
             noticed=1;
@@ -95,9 +95,9 @@ char alienationcheck(char mistake)
 
    char alienate=0;
 
-   int oldsitealienate=sitealienate;
+   int32 oldsitealienate=sitealienate;
 
-   for(int e=0;e<ENCMAX;e++)
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].type==CREATURE_PRISONER)continue;
       if(encounter[e].alive&&encounter[e].exists&&
@@ -139,20 +139,20 @@ char alienationcheck(char mistake)
 /* checks if conservatives see through your disguise */
 void disguisecheck(void)
 {
-   int weapon=0;
-   int weaponar[6]={0};
+   int32 weapon=0;
+   int32 weaponar[6]={0};
 
-   for(int i=0;i<6;i++)
+   for(int32 i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
+      int32 thisweapon=weaponcheck(*activesquad->squad[i],cursite);
       if(thisweapon>weapon)weapon=thisweapon;
       if(thisweapon==2)weaponar[i]=1;
    }
 
    if(sitealarm)
    {
-      for(int i=0;i<6;i++)
+      for(int32 i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
          if(weaponar[i])activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
@@ -167,8 +167,8 @@ void disguisecheck(void)
    }
 
    char noticed=0;
-   vector<int> noticer;
-   for(int e=0;e<ENCMAX;e++)
+   vector<int32> noticer;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].type==CREATURE_PRISONER)continue;
       if(encounter[e].exists&&encounter[e].alive&&
@@ -180,15 +180,15 @@ void disguisecheck(void)
 
    if(noticer.size()>0)
    {
-      int disguise=disguiseskill();
+      int32 disguise=disguiseskill();
 
-      for(int i=0;i<6;i++)
+      for(int32 i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
          if(weaponar[i])activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
       }
 
-      int n,an;
+      int32 n,an;
 
       do
       {
@@ -196,12 +196,12 @@ void disguisecheck(void)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int chance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
+         int32 chance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
                     encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
          if(weapon==2 ||
             sitealarmtimer ?
-            chance+10*weapon > (int)LCSrandom(21)+disguise :
-            chance+10*weapon+sitecrime > (int)LCSrandom(21)+disguise)
+            chance+10*weapon > (int32)LCSrandom(21)+disguise :
+            chance+10*weapon+sitecrime > (int32)LCSrandom(21)+disguise)
          {
             noticed=1;
             break;
@@ -220,7 +220,7 @@ void disguisecheck(void)
       {
          addstr(" looks at the Squad suspiciously.");
 
-         int time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
+         int32 time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
          if(time<1)time=1;
 
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
@@ -251,11 +251,11 @@ void disguisecheck(void)
 
 
 /* returns the difficulty of seeing through your squad's disguise */
-int disguiseskill(void)
+int32 disguiseskill(void)
 {
-   int lowest=10000;
+   int32 lowest=10000;
 
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -263,7 +263,7 @@ int disguiseskill(void)
 
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
-         int skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
+         int32 skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
             activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
             activesquad->squad[p]->skill[SKILL_DISGUISE]*3;
 
@@ -308,7 +308,7 @@ int disguiseskill(void)
 
 
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(creaturest &cr,short type)
+char weaponcheck(creaturest &cr,int16 type)
 {
    char suspicious=1;
    char illegal=1;
@@ -389,7 +389,7 @@ char weaponcheck(creaturest &cr,short type)
 
 
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(creaturest &cr,short type)
+char hasdisguise(creaturest &cr,int16 type)
 {
    char uniformed=0;
 
@@ -538,7 +538,7 @@ char hasdisguise(creaturest &cr,short type)
 
 
 /* returns true if the entire site is not open to public */
-char disguisesite(long type)
+char disguisesite(int32 type)
 {
    switch(type)
    {

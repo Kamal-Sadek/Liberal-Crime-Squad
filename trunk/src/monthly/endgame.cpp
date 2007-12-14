@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 /* endgame - attempts to pass a constitutional amendment to win the game */
 void tossjustices(char canseethings)
 {
-   int j;
+   int32 j;
    if(canseethings)
    {
       erase();
@@ -51,7 +51,7 @@ void tossjustices(char canseethings)
    //STATE THE AMENDMENT
    if(canseethings)
    {
-      int tossnum=0;
+      int32 tossnum=0;
       for(j=0;j<9;j++)
       {
          if(court[j]<=1)tossnum++;
@@ -65,7 +65,7 @@ void tossjustices(char canseethings)
       else addstr(" is");
       addstr(" branded Arch-Conservative:");
 
-      int y=4;
+      int32 y=4;
 
       for(j=0;j<9;j++)
       {
@@ -93,7 +93,7 @@ void tossjustices(char canseethings)
       do
       {
          refresh();
-         int c=getch();
+         int32 c=getch();
          translategetch(c);
          if(c=='c')break;
       }while(1);
@@ -102,7 +102,7 @@ void tossjustices(char canseethings)
    if(ratify(2,-1,-1,1,canseethings))
    {
       //BLAST JUSTICES
-      for(int j=0;j<9;j++)
+      for(int32 j=0;j<9;j++)
       {
          if(court[j]!=2)
          {
@@ -185,7 +185,7 @@ void reaganify(char canseethings)
       do
       {
          refresh();
-         int c=getch();
+         int32 c=getch();
          translategetch(c);
          if(c=='c')break;
       }while(1);
@@ -208,7 +208,7 @@ void reaganify(char canseethings)
          strcpy(execname[EXEC_VP],"Strom Thurmond");
          strcpy(execname[EXEC_STATE],"Jesse Helms");
          strcpy(execname[EXEC_ATTORNEY],"Jerry Falwell");
-         for(int e=0;e<EXECNUM;e++)exec[e]=-2;
+         for(int32 e=0;e<EXECNUM;e++)exec[e]=-2;
          liberalagenda(-1);
          savehighscore(END_REAGAN);
       }
@@ -340,7 +340,7 @@ void reaganify(char canseethings)
 
 
 /* endgame - checks if a constitutional amendment is ratified */
-char ratify(int level,int view,int lawview,char congress,char canseethings)
+char ratify(int32 level,int32 view,int32 lawview,char congress,char canseethings)
 {
    if(canseethings)
    {
@@ -353,7 +353,7 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
    }
 
    //THE STATE VOTE WILL BE BASED ON VIEW OF LAW
-   int mood=publicmood(lawview);
+   int32 mood=publicmood(lawview);
    //OR OF A PARTICULAR ISSUE
    if(view!=-1)mood=attitude[view];
 
@@ -361,7 +361,7 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
    char num[20];
    char ratified=0;
 
-   int y=0;
+   int32 y=0;
 
    if(congress)
    {
@@ -385,13 +385,13 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
 
       char yeswin_h=0;
       char yeswin_s=0;
-      int yesvotes_h=0;
-      int yesvotes_s=0;
+      int32 yesvotes_h=0;
+      int32 yesvotes_s=0;
 
-      int vote;
-      int s=-1;
+      int32 vote;
+      int32 s=-1;
 
-      for(int l=0;l<435;l++)
+      for(int32 l=0;l<435;l++)
       {
          vote=house[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
@@ -481,13 +481,13 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
    {
       ratified=0;
 
-      int yesstate=0;
+      int32 yesstate=0;
 
       if(canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-         for(int s=0;s<50;s++)
+         for(int32 s=0;s<50;s++)
          {
             if(s<17)move(5+s,0);
             else if(s<34)move(5+s-17,27);
@@ -556,9 +556,9 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
          nodelay(stdscr,TRUE);
       }
 
-      int vote;
-      int smood;
-      for(int s=0;s<50;s++)
+      int32 vote;
+      int32 smood;
+      for(int32 s=0;s<50;s++)
       {
          smood=mood;
 
@@ -576,10 +576,10 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
          }
 
          vote=0;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
+         if((int16)LCSrandom(100)<smood)vote++;
+         if((int16)LCSrandom(100)<smood)vote++;
+         if((int16)LCSrandom(100)<smood)vote++;
+         if((int16)LCSrandom(100)<smood)vote++;
          vote-=2;
 
          if(canseethings)
@@ -678,7 +678,7 @@ void amendmentheading(void)
 
 
 /* endgame - converts an integer into a roman numeral for amendments */
-void romannumeral(int amendnum)
+void romannumeral(int32 amendnum)
 {
    while(amendnum>=1000)
    {

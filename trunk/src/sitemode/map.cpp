@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -34,14 +34,14 @@ This file is part of Liberal Crime Squad.                                       
 /* re-create site from seed before squad arrives */
 void initsite(locationst &loc)
 {
- int x = 0;
- 
+ int32 x = 0;
+
    //PREP
    if(activesquad==NULL)return;
 
-   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int32 e=0;e<ENCMAX;e++)encounter[e].exists=0;
 
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -49,7 +49,7 @@ void initsite(locationst &loc)
       }
    }
 
-   for(int l=0;l<groundloot.size();l++)
+   for(int32 l=0;l<groundloot.size();l++)
    {
       delete groundloot[l];
    }
@@ -57,14 +57,14 @@ void initsite(locationst &loc)
 
 
    //MAKE MAP
-   unsigned long oldseed=seed;
+   uint32 oldseed=seed;
    seed=loc.mapseed;
-   
+
    for(x=0;x<MAPX;x++)
    {
-      for(int y=0;y<MAPY;y++)
+      for(int32 y=0;y<MAPY;y++)
       {
-         for(int z=0;z<MAPZ;z++)
+         for(int32 z=0;z<MAPZ;z++)
          {
             map[x][y][z].flag=SITEBLOCK_BLOCK;
             map[x][y][z].special=-1;
@@ -88,12 +88,12 @@ void initsite(locationst &loc)
       loc.type==SITE_RESIDENTIAL_TENEMENT)
    {
       map[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
-      short height;
-      int floors=LCSrandom(6)+1;
-      int swap;
-      for(int z=0;z<floors;z++)
+      int16 height;
+      int32 floors=LCSrandom(6)+1;
+      int32 swap;
+      for(int32 z=0;z<floors;z++)
       {
-         for(int y=3;y<MAPY-3;y++)
+         for(int32 y=3;y<MAPY-3;y++)
          {
             map[MAPX>>1][y][z].flag=0;
             if(y%4==0)
@@ -131,9 +131,9 @@ void initsite(locationst &loc)
       {
          case SITE_BUSINESS_LATTESTAND:
          {
-            for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
+            for(int32 x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
             {
-               for(int y=0;y<7;y++)
+               for(int32 y=0;y<7;y++)
                {
                   if(x==(MAPX>>1)-4||x==(MAPX>>1)+4||
                      y==0||y==6)map[x][y][0].flag=SITEBLOCK_EXIT;
@@ -149,9 +149,9 @@ void initsite(locationst &loc)
          case SITE_BUSINESS_VEGANCOOP:
          case SITE_BUSINESS_INTERNETCAFE:
          {
-            for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
+            for(int32 x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
             {
-               for(int y=3;y<10;y++)
+               for(int32 y=3;y<10;y++)
                {
                   map[x][y][0].flag=0;
                   map[x][y][0].special=-1;
@@ -162,19 +162,19 @@ void initsite(locationst &loc)
          }
          case SITE_BUSINESS_CRACKHOUSE:
          {
-            int dx=LCSrandom(5)*2+19;
-            int dy=LCSrandom(3)*2+7;
-            int rx=(MAPX>>1)-(dx>>1);
-            int ry=3;
+            int32 dx=LCSrandom(5)*2+19;
+            int32 dy=LCSrandom(3)*2+7;
+            int32 rx=(MAPX>>1)-(dx>>1);
+            int32 ry=3;
             generateroom(rx,ry,dx,dy,0);
             break;
          }
          default:
          {
-            int dx=LCSrandom(5)*2+35;
-            int dy=LCSrandom(3)*2+15;
-            int rx=(MAPX>>1)-(dx>>1);
-            int ry=3;
+            int32 dx=LCSrandom(5)*2+35;
+            int32 dy=LCSrandom(3)*2+15;
+            int32 rx=(MAPX>>1)-(dx>>1);
+            int32 ry=3;
             generateroom(rx,ry,dx,dy,0);
             break;
          }
@@ -186,9 +186,9 @@ void initsite(locationst &loc)
    char opennum;
    for(x=0;x<MAPX;x++)
    {
-      for(int y=0;y<MAPY;y++)
+      for(int32 y=0;y<MAPY;y++)
       {
-         for(int z=0;z<MAPZ;z++)
+         for(int32 z=0;z<MAPZ;z++)
          {
             if(map[x][y][z].flag & SITEBLOCK_DOOR)
             {
@@ -239,9 +239,9 @@ void initsite(locationst &loc)
    //DELETE NON-DOORS
    for(x=0;x<MAPX;x++)
    {
-      for(int y=0;y<MAPY;y++)
+      for(int32 y=0;y<MAPY;y++)
       {
-         for(int z=0;z<MAPZ;z++)
+         for(int32 z=0;z<MAPZ;z++)
          {
             if(map[x][y][z].flag & SITEBLOCK_DOOR)
             {
@@ -277,9 +277,9 @@ void initsite(locationst &loc)
          restricted=1;
          for(x=2;x<MAPX-2;x++)
          {
-            for(int y=2;y<MAPY-2;y++)
+            for(int32 y=2;y<MAPY-2;y++)
             {
-               for(int z=0;z<MAPZ;z++)
+               for(int32 z=0;z<MAPZ;z++)
                {
                   map[x][y][z].flag|=SITEBLOCK_RESTRICTED;
                }
@@ -295,9 +295,9 @@ void initsite(locationst &loc)
    {
       acted=0;
 
-      for(int x=2;x<MAPX-2;x++)
+      for(int32 x=2;x<MAPX-2;x++)
       {
-         for(int y=2;y<MAPY-2;y++)
+         for(int32 y=2;y<MAPY-2;y++)
          {
             if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
                !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
@@ -321,9 +321,9 @@ void initsite(locationst &loc)
    seed=oldseed;
    for(x=2;x<MAPX-2;x++)
    {
-      for(int y=2;y<MAPY-2;y++)
+      for(int32 y=2;y<MAPY-2;y++)
       {
-         for(int z=0;z<MAPZ;z++)
+         for(int32 z=0;z<MAPZ;z++)
          {
             if(!(map[x][y][0].flag & SITEBLOCK_DOOR)&&
                !(map[x][y][0].flag & SITEBLOCK_BLOCK)&&
@@ -390,10 +390,10 @@ void initsite(locationst &loc)
       }
    }
 
-   int freex,freey,freez=0;
+   int32 freex,freey,freez=0;
 
    //ADD FIRST SPECIAL
-   int count=100000;
+   int32 count=100000;
 
    do
    {
@@ -464,11 +464,11 @@ void initsite(locationst &loc)
 
 
 /* recursive dungeon-generating algorithm */
-void generateroom(int rx,int ry,int dx,int dy,int z)
+void generateroom(int32 rx,int32 ry,int32 dx,int32 dy,int32 z)
 {
-   for(int x=rx;x<rx+dx;x++)
+   for(int32 x=rx;x<rx+dx;x++)
    {
-      for(int y=ry;y<ry+dy;y++)
+      for(int32 y=ry;y<ry+dy;y++)
       {
          map[x][y][z].flag=0;
       }
@@ -481,10 +481,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    //LAY DOWN WALL AND ITERATE
    if((!LCSrandom(2)||dy<=2)&&dx>2)
    {
-      int wx=rx+LCSrandom(dx-2)+1;
+      int32 wx=rx+LCSrandom(dx-2)+1;
 
-      for(int wy=0;wy<dy;wy++)map[wx][ry+wy][z].flag=SITEBLOCK_BLOCK;
-      int rny=LCSrandom(dy);
+      for(int32 wy=0;wy<dy;wy++)map[wx][ry+wy][z].flag=SITEBLOCK_BLOCK;
+      int32 rny=LCSrandom(dy);
       map[wx][ry+rny][z].flag=SITEBLOCK_DOOR;
       if(!LCSrandom(3))map[wx][ry+rny][z].flag|=SITEBLOCK_LOCKED;
 
@@ -494,10 +494,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    }
    else
    {
-      int wy=ry+LCSrandom(dy-2)+1;
+      int32 wy=ry+LCSrandom(dy-2)+1;
 
-      for(int wx=0;wx<dx;wx++)map[rx+wx][wy][z].flag=SITEBLOCK_BLOCK;
-      int rnx=LCSrandom(dx);
+      for(int32 wx=0;wx<dx;wx++)map[rx+wx][wy][z].flag=SITEBLOCK_BLOCK;
+      int32 rnx=LCSrandom(dx);
       map[rx+rnx][wy][z].flag=SITEBLOCK_DOOR;
       if(!LCSrandom(3))map[rx+rnx][wy][z].flag|=SITEBLOCK_LOCKED;
 
@@ -510,7 +510,7 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
 
 
 /* marks the area around the specified tile as explored */
-void knowmap(int locx,int locy,int locz)
+void knowmap(int32 locx,int32 locy,int32 locz)
 {
    map[locx][locy][locz].flag|=SITEBLOCK_KNOWN;
 

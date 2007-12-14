@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,9 +32,9 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess)
+char completevacation(datest &d,int32 p,char &clearformess)
 {
-   int e=0;
+   int32 e=0;
 
    clearformess=1;
 
@@ -44,11 +44,11 @@ char completevacation(datest &d,int p,char &clearformess)
    addstr(pool[p]->name);
    addstr(" is back from vacation.");
 
-   short aroll=LCSrandom(51)+10+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_PERSUASION]*2+1);
-   short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
+   int16 aroll=LCSrandom(51)+10+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_PERSUASION]*2+1);
+   int16 troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
    pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(14)+7;
 
-   int y=2;
+   int32 y=2;
    if(aroll>troll)
    {
       set_color(COLOR_BLUE,COLOR_BLACK,1);
@@ -96,11 +96,11 @@ char completevacation(datest &d,int p,char &clearformess)
          addstr(" in its presence?");
 	 move(3,0);
 	 addstr("If you do not enter anything, their real name will be used.");
-	 
+
          move(4,0);
 	 enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
-	
-         
+
+
 	 pool.push_back(d.date[e]);
          stat_recruits++;
 
@@ -108,7 +108,7 @@ char completevacation(datest &d,int p,char &clearformess)
          d.date[e]->base=pool[p]->base;
          d.date[e]->align=1;
          d.date.erase(d.date.begin() + e);
-         
+
          return 1;
       }
       else
@@ -164,9 +164,9 @@ char completevacation(datest &d,int p,char &clearformess)
 
 
 /* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess)
+char completedate(datest &d,int32 p,char &clearformess)
 {
-   int e;
+   int32 e;
    clearformess=1;
 
    erase();
@@ -184,8 +184,8 @@ char completedate(datest &d,int p,char &clearformess)
    {
       addstr(d.date[e]->name);
 
-      if(e<=(int)d.date.size()-3)addstr(", ");
-      else if(e==(int)d.date.size()-2)addstr(" and ");
+      if(e<=(int32)d.date.size()-3)addstr(", ");
+      else if(e==(int32)d.date.size()-2)addstr(" and ");
       else
       {
          if(pool[p]->clinic>0)
@@ -267,11 +267,11 @@ char completedate(datest &d,int p,char &clearformess)
       do
       {
          refresh();
-         int c=getch();
+         int32 c=getch();
          translategetch(c);
 
-         short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_PERSUASION]*2+1);
-         short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
+         int16 aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_PERSUASION]*2+1);
+         int16 troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
          pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
 
          char test=0;
@@ -287,7 +287,7 @@ char completedate(datest &d,int p,char &clearformess)
 
          if(test)
          {
-            int y=10;
+            int32 y=10;
             if(aroll>troll)
             {
                set_color(COLOR_BLUE,COLOR_BLACK,1);
@@ -320,7 +320,7 @@ char completedate(datest &d,int p,char &clearformess)
                   d.date[e]->hireid=pool[p]->id;
 
                   erase();
-   
+
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(0,0);
                   addstr("The Self-Nullifying Infatuation of ");
@@ -335,10 +335,10 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" in its presence?");
 		  move(3,0);
 		  addstr("If you do not enter anything, their real name will be used.");
-	 
+
 		  move(4,0);
 		  enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
-                 
+
                   pool.push_back(d.date[e]);
                   stat_recruits++;
 
@@ -366,7 +366,7 @@ char completedate(datest &d,int p,char &clearformess)
                {
 						set_color(COLOR_RED,COLOR_BLACK,1);
                   move(y,0);y++;
-                  
+
                   addstr("Talking with ");
                   addstr(d.date[e]->name);
                   addstr(" actually increases ");
@@ -379,7 +379,7 @@ char completedate(datest &d,int p,char &clearformess)
                }
 
                //BREAK UP
-               
+
                // *JDS* If your squad member is wanted by the police, a conservative who breaks up with
                // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
                // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance.
@@ -402,8 +402,8 @@ char completedate(datest &d,int p,char &clearformess)
                   if((pool[p]->juice<50 && LCSrandom(2)) || LCSrandom(2))
                   {
                      // Find the police station
-                     long ps=-1;
-                     for(long l=0;l<location.size();l++)
+                     int32 ps=-1;
+                     for(int32 l=0;l<location.size();l++)
                      {
                         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                         {
@@ -414,7 +414,7 @@ char completedate(datest &d,int p,char &clearformess)
                      set_color(COLOR_MAGENTA,COLOR_BLACK,1);
                      addstr(pool[p]->name);
                      addstr(" has been arrested.");
-                     
+
                      removesquadinfo(*pool[p]);
                      pool[p]->carid=-1;
                      pool[p]->location=ps;
@@ -445,7 +445,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(d.date[e]->name);
                   addstr(" can sense that things just aren't working out.");
                   move(y,0);y++;
-                  
+
                   addstr("This relationship is over.");
                }
                refresh();
@@ -459,7 +459,7 @@ char completedate(datest &d,int p,char &clearformess)
 
          if(c=='c'&&!pool[p]->clinic)
          {
-            for(int e2=d.date.size()-1;e2>=0;e2--)
+            for(int32 e2=d.date.size()-1;e2>=0;e2--)
             {
                if(e2==e)continue;
                delete d.date[e2];
@@ -512,7 +512,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                move(3,0);
 	       addstr("If you do not enter anything, their real name will be used.");
-	 
+
 	       move(4,0);
 	       enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
@@ -523,7 +523,7 @@ char completedate(datest &d,int p,char &clearformess)
             }
             else
             {
-               int y=10;
+               int32 y=10;
                if(LCSrandom(2))
                {
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -539,7 +539,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   refresh();
                   getch();
-                  
+
                   delete d.date[e];
                   d.date.erase(d.date.begin() + e);
                   break;
@@ -556,15 +556,15 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr("The Liberal has been arrested!");
 
                   // Find the police station
-                  long ps=-1;
-                  for(long l=0;l<location.size();l++)
+                  int32 ps=-1;
+                  for(int32 l=0;l<location.size();l++)
                   {
                      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                      {
                         ps=l;
                      }
                   }
-                     
+
                   // Arrest the Liberal
                   removesquadinfo(*pool[p]);
                   pool[p]->carid=-1;
@@ -578,7 +578,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   refresh();
                   getch();
-                  
+
                   delete d.date[e];
                   d.date.erase(d.date.begin() + e);
                   return 1;

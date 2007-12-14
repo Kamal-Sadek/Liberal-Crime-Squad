@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -30,10 +30,10 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* unlock attempt */
-char unlock(short type,char &actual)
+char unlock(int16 type,char &actual)
 {
-   int p;
-   int difficulty=0;
+   int32 p;
+   int32 difficulty=0;
 
    switch(type)
    {
@@ -42,7 +42,7 @@ char unlock(short type,char &actual)
       case UNLOCK_SAFE:difficulty=20;break;
    }
 
-   int maxattack=0;
+   int32 maxattack=0;
 
    for(p=0;p<6;p++)
    {
@@ -60,7 +60,7 @@ char unlock(short type,char &actual)
       }
    }
 
-   vector<int> goodp;
+   vector<int32> goodp;
 
    for(p=0;p<6;p++)
    {
@@ -79,9 +79,9 @@ char unlock(short type,char &actual)
 
    if(goodp.size()>0)
    {
-      int p=goodp[LCSrandom(goodp.size())];
+      int32 p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(11)+maxattack;
+      int32 aroll=LCSrandom(11)+maxattack;
       activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=difficulty;
 
       if(aroll>difficulty)
@@ -135,11 +135,11 @@ char unlock(short type,char &actual)
 
 
 /* bash attempt */
-char bash(short type,char &actual)
+char bash(int16 type,char &actual)
 {
-   int difficulty=0;
+   int32 difficulty=0;
    char crowable=0;
-   int p = 0;
+   int32 p = 0;
 
    switch(type)
    {
@@ -151,7 +151,7 @@ char bash(short type,char &actual)
       if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))crowable=0;
    }
 
-   int maxattack=0;
+   int32 maxattack=0;
 
    for(p=0;p<6;p++)
    {
@@ -169,7 +169,7 @@ char bash(short type,char &actual)
       }
    }
 
-   vector<int> goodp;
+   vector<int32> goodp;
 
    for(p=0;p<6;p++)
    {
@@ -188,9 +188,9 @@ char bash(short type,char &actual)
 
    if(goodp.size()>0)
    {
-      int p=goodp[LCSrandom(goodp.size())];
+      int32 p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(11)+maxattack;
+      int32 aroll=LCSrandom(11)+maxattack;
 
       if(aroll>difficulty||crowable)
       {
@@ -250,7 +250,7 @@ char bash(short type,char &actual)
 
 
 /* returns the bash bonus provided by the specified weapon */
-long bashstrengthmod(int t)
+int32 bashstrengthmod(int32 t)
 {
    switch(t)
    {
@@ -290,17 +290,17 @@ long bashstrengthmod(int t)
 
 
 /* computer hack attempt */
-char hack(short type,char &actual)
+char hack(int16 type,char &actual)
 {
-   int difficulty=0;
-   int p;
+   int32 difficulty=0;
+   int32 p;
 
    switch(type)
    {
       case HACK_SUPERCOMPUTER:difficulty=20;break;
    }
 
-   int maxattack=0;
+   int32 maxattack=0;
    char blind=0;
 
    for(p=0;p<6;p++)
@@ -330,7 +330,7 @@ char hack(short type,char &actual)
       }
    }
 
-   vector<int> goodp;
+   vector<int32> goodp;
 
    for(p=0;p<6;p++)
    {
@@ -356,9 +356,9 @@ char hack(short type,char &actual)
 
    if(goodp.size()>0)
    {
-      int p=goodp[LCSrandom(goodp.size())];
+      int32 p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(11)+maxattack;
+      int32 aroll=LCSrandom(11)+maxattack;
       activesquad->squad[p]->skill_ip[SKILL_COMPUTERS]+=difficulty;
 
       if(aroll>difficulty)
@@ -425,8 +425,8 @@ char radio_broadcast(void)
 {
    sitealarm=1;
 
-   int enemy=0;
-   for(int e=0;e<ENCMAX;e++)
+   int32 enemy=0;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
@@ -455,7 +455,7 @@ char radio_broadcast(void)
    move(16,1);
    addstr("The Squad takes control of the microphone and");
    move(17,1);
-   int viewhit=LCSrandom(VIEWNUM);
+   int32 viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
       case VIEW_ABORTION:addstr("discusses abortion.");break;
@@ -482,10 +482,10 @@ char radio_broadcast(void)
    refresh();
    getch();
 
-   int segmentpower=0;
-   int usegmentpower;
-   int partysize=0;
-   int p = 0;
+   int32 segmentpower=0;
+   int32 usegmentpower;
+   int32 partysize=0;
+   int32 p = 0;
 
    for(p=0;p<6;p++)
    {
@@ -502,7 +502,7 @@ char radio_broadcast(void)
       }
    }
 
-   int segmentbonus=segmentpower/4;
+   int32 segmentbonus=segmentpower/4;
    if(partysize>1)segmentpower/=partysize;
    segmentpower+=segmentbonus;
 
@@ -629,8 +629,8 @@ char radio_broadcast(void)
       refresh();
       getch();
 
-      int numleft=LCSrandom(8)+2;
-      for(int e=0;e<ENCMAX;e++)
+      int32 numleft=LCSrandom(8)+2;
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(!encounter[e].exists)
          {
@@ -663,10 +663,10 @@ char radio_broadcast(void)
 char news_broadcast(void)
 {
    sitealarm=1;
-   int p;
+   int32 p;
 
-   int enemy=0;
-   for(int e=0;e<ENCMAX;e++)
+   int32 enemy=0;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
@@ -695,7 +695,7 @@ char news_broadcast(void)
    move(16,1);
    addstr("The Squad steps in front of the cameras and");
    move(17,1);
-   int viewhit=LCSrandom(VIEWNUM);
+   int32 viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
       case VIEW_ABORTION:addstr("discusses abortion.");break;
@@ -722,9 +722,9 @@ char news_broadcast(void)
    refresh();
    getch();
 
-   int segmentpower=0;
-   int usegmentpower;
-   int partysize=0;
+   int32 segmentpower=0;
+   int32 usegmentpower;
+   int32 partysize=0;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
@@ -740,7 +740,7 @@ char news_broadcast(void)
       }
    }
 
-   int segmentbonus=segmentpower/4;
+   int32 segmentbonus=segmentpower/4;
    if(partysize>1)segmentpower/=partysize;
    segmentpower+=segmentbonus;
 
@@ -867,8 +867,8 @@ char news_broadcast(void)
       refresh();
       getch();
 
-      int numleft=LCSrandom(8)+2;
-      for(int e=0;e<ENCMAX;e++)
+      int32 numleft=LCSrandom(8)+2;
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(!encounter[e].exists)
          {
@@ -900,13 +900,13 @@ char news_broadcast(void)
 /* rescues people held at the activeparty's current location */
 void partyrescue(void)
 {
-   int freeslots=0;
-   int p, pl;
+   int32 freeslots=0;
+   int32 p, pl;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)freeslots++;
    }
-   int hostslots=0;
+   int32 hostslots=0;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
@@ -925,7 +925,7 @@ void partyrescue(void)
       {
          if(LCSrandom(2)&&freeslots)
          {
-            for(int p=0;p<6;p++)
+            for(int32 p=0;p<6;p++)
             {
                if(activesquad->squad[p]==NULL)
                {
@@ -963,7 +963,7 @@ void partyrescue(void)
       {
          if(hostslots)
          {
-            for(int p=0;p<6;p++)
+            for(int32 p=0;p<6;p++)
             {
                if(activesquad->squad[p]!=NULL)
                {
@@ -1017,7 +1017,7 @@ void partyrescue(void)
       }
    }
 
-   int stillpcount=0;
+   int32 stillpcount=0;
    char stillpname[200];
    for(pl=0;pl<pool.size();pl++)
    {
@@ -1062,14 +1062,14 @@ void partyrescue(void)
 /* everybody reload! */
 void reloadparty(void)
 {
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
 
       if(ammotype(activesquad->squad[p]->weapon.type)!=-1)
       {
-         int ammomax=2;
+         int32 ammomax=2;
          switch(ammotype(activesquad->squad[p]->weapon.type))
          {
             case CLIP_9:ammomax=15;break;

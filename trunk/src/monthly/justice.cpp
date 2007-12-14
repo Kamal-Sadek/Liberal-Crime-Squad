@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -38,7 +38,7 @@ void trial(creaturest &g)
    // homeless shelter instead.
    if(location[g.base]->renting==-1)
    {
-      for(int i=0;i<location.size();++i)
+      for(int32 i=0;i<location.size();++i)
       {
          if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
          {
@@ -63,13 +63,13 @@ void trial(creaturest &g)
 
    if(!iscriminal(g))g.lawflag[LAWFLAG_LOITERING]++;
 
-   int typenum=0;
-   int scarefactor=0;
+   int32 typenum=0;
+   int32 scarefactor=0;
       // *JDS* Scarefactor is the severity of the case against you; if you're a really
       // nasty person with a wide variety of major charges against you, then scarefactor
       // can get up there
 
-   for(int i=0;i<LAWFLAGNUM;i++)
+   for(int32 i=0;i<LAWFLAGNUM;i++)
    {
       if(g.lawflag[i])
       {
@@ -80,12 +80,12 @@ void trial(creaturest &g)
    }
 
    //CHECK FOR SLEEPERS
-   vector<int> sjudge;
+   vector<int32> sjudge;
    char sleeperlawyer=0;
    char sleeperjudge=0;
    char *sleeperjname=NULL;
    char *sleepername=NULL;
-   for(int p=0;p<pool.size();p++)
+   for(int32 p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER))
       {
@@ -123,7 +123,7 @@ void trial(creaturest &g)
    addstr("The defendant, ");
    addstr(g.propername);
    addstr(", is charged with ");
-   int x=2,y=5;
+   int32 x=2,y=5;
    while(typenum>0)
    {
       typenum--;
@@ -442,7 +442,7 @@ void trial(creaturest &g)
    addstr("How will you conduct the defense?");
 
    char attorneyname[200];
-   unsigned long oldseed=seed;
+   uint32 oldseed=seed;
    seed=attorneyseed;
    name(attorneyname);
    seed=oldseed;
@@ -469,9 +469,9 @@ void trial(creaturest &g)
       addstr(".");
    }
 
-   short defense;
+   int16 defense;
 
-   int c;
+   int32 c;
    do
    {
       refresh();
@@ -515,7 +515,7 @@ void trial(creaturest &g)
       //JURY MAKEUP MESSAGE
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(5,1);
-      int jury=LCSrandom(61)-30; // *JDS* reduced the effect of the jury, and the effect sleeper judges have on the jury
+      int32 jury=LCSrandom(61)-30; // *JDS* reduced the effect of the jury, and the effect sleeper judges have on the jury
       if(sleeperjudge)jury-=20;
       if(jury<=-29)
       {
@@ -544,7 +544,7 @@ void trial(creaturest &g)
       getch();
 
       //PROSECUTION MESSAGE
-      int prosecution;
+      int32 prosecution;
       // *JDS* The bigger your record, the stronger the evidence
       prosecution=LCSrandom(101);
       prosecution+=scarefactor;
@@ -569,7 +569,7 @@ void trial(creaturest &g)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(9,1);
 
-      int defensepower=0;
+      int32 defensepower=0;
       if(defense==0||defense==3)
       {
          if(defense==0)defensepower=LCSrandom(71); // *JDS* gave you a better shake with the court-appointed attorney
@@ -636,7 +636,7 @@ void trial(creaturest &g)
          // A character build spefically to be strong in this area *will* still start out
          // slightly stronger than the public defender (and will be notably better once they
          // hit activist level).
-         int defenseskill=(g.skill[SKILL_PERSUASION]+1)*(((g.skill[SKILL_LAW]*3)/2)+1)+1;
+         int32 defenseskill=(g.skill[SKILL_PERSUASION]+1)*(((g.skill[SKILL_LAW]*3)/2)+1)+1;
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
@@ -693,8 +693,8 @@ void trial(creaturest &g)
             refresh();
             getch();
 
-            long ps=-1;
-            for(long l=0;l<location.size();l++)
+            int32 ps=-1;
+            for(int32 l=0;l<location.size();l++)
             {
                if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE)
                {
@@ -742,7 +742,7 @@ void trial(creaturest &g)
          penalize(g,0);
       }
       //CLEAN UP LAW FLAGS
-      for(int i=0;i<LAWFLAGNUM;i++)
+      for(int32 i=0;i<LAWFLAGNUM;i++)
       {
          g.lawflag[i]=0;
       }
@@ -770,7 +770,7 @@ void trial(creaturest &g)
 
       penalize(g,LCSrandom(2));
       //CLEAN UP LAW FLAGS
-      for(int i=0;i<LAWFLAGNUM;i++)
+      for(int32 i=0;i<LAWFLAGNUM;i++)
       {
          g.lawflag[i]=0;
       }
@@ -841,7 +841,7 @@ void penalize(creaturest &g,char lenient)
          g.sentence+=(30+LCSrandom(61))*g.lawflag[LAWFLAG_JURY];
          g.sentence+=(30+LCSrandom(61))*g.lawflag[LAWFLAG_HELPESCAPE];
          g.sentence+=(1+LCSrandom(1))*g.lawflag[LAWFLAG_RESIST];
-         
+
          g.sentence+=(4+LCSrandom(3))*g.lawflag[LAWFLAG_SPEECH];
          g.sentence+=1*g.lawflag[LAWFLAG_VANDALISM];
          g.sentence+=(3+LCSrandom(1))*g.lawflag[LAWFLAG_ASSAULT];
@@ -853,7 +853,7 @@ void penalize(creaturest &g,char lenient)
       }
       else if(law[LAW_FLAGBURNING]==-1)g.sentence+=36*g.lawflag[LAWFLAG_BURNFLAG];
       else if(law[LAW_FLAGBURNING]==0)g.sentence+=1*g.lawflag[LAWFLAG_BURNFLAG];
-      
+
       if((LCSrandom(4)-g.lawflag[LAWFLAG_MURDER])>0)
       {
          if(!(g.sentence<0))g.sentence+=(120+LCSrandom(241))*g.lawflag[LAWFLAG_MURDER];
@@ -928,7 +928,7 @@ void penalize(creaturest &g,char lenient)
             itoa(-(g.sentence+3),num,10);
             addstr(num);
             addstr(" consecutive lifetimes in prison.");
-            
+
             if(g.sentence<12)
             {
                refresh();
@@ -981,8 +981,8 @@ void penalize(creaturest &g,char lenient)
 /* monthly - move a liberal to jail */
 void imprison(creaturest &g)
 {
-   long ps=-1;
-   for(long l=0;l<location.size();l++)
+   int32 ps=-1;
+   for(int32 l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_GOVERNMENT_PRISON)
       {
@@ -1107,7 +1107,7 @@ char prison(creaturest &g)
             // homeless shelter instead.
             if(location[g.base]->renting==-1)
             {
-               for(int i=0;i<location.size();++i)
+               for(int32 i=0;i<location.size();++i)
                {
                   if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
                   {

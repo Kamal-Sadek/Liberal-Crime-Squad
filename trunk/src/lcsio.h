@@ -83,7 +83,7 @@ enum LCSIO_FLAGS
     \return FILE* handle. NULL on error.
 
 */
-FILE* LCSOpenFile(char* filename,char* mode,int flags);
+FILE* LCSOpenFile(char* filename,char* mode,int32 flags);
 
 /**
     \brief LCSIO Close an open file.

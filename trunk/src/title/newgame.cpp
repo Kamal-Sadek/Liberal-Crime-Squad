@@ -43,11 +43,11 @@ void makecharacter(void)
    newcr->att[ATTRIBUTE_STRENGTH]=4;
    newcr->att[ATTRIBUTE_HEALTH]=6;
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
-   for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
+   for(int32 sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
 
    name(newcr->propername);
 
-   for(int q=0;q<10;q++)
+   for(int32 q=0;q<10;q++)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -210,7 +210,7 @@ void makecharacter(void)
 
       refresh();
 
-      int c;
+      int32 c;
       do
       {
          c=getch();
@@ -428,7 +428,7 @@ void makecharacter(void)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(1,0);
    addstr("Press enter to be known by your real name instead.");
-  
+
    move(2,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
 
@@ -725,7 +725,7 @@ void makecharacter(void)
       newsq->squad[0]=newcr;
       newcr->squadid=0;
       strcpy(newsq->name,"The Liberal Crime Squad");
-      for(int l=0;l<location.size();l++)
+      for(int32 l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
          {
@@ -765,7 +765,7 @@ void initliberal(creaturest &cr)
    namecreature(cr);
 
    //STARTING SKILLS
-   int startsknum=cr.attval(ATTRIBUTE_WISDOM);
+   int32 startsknum=cr.attval(ATTRIBUTE_WISDOM);
 
    while(startsknum>0)
    {

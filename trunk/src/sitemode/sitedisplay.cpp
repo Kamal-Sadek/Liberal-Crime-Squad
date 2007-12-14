@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,23 +32,23 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* prints the 'map graphics' on the bottom right */
-void printsitemap(int x,int y,int z)
+void printsitemap(int32 x,int32 y,int32 z)
 {
-   int partysize=0;
-   int partyalive=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   int32 partyalive=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)partysize++;
       else continue;
 
       if(activesquad->squad[p]->alive==1)partyalive++;
    }
-   int encsize=0;
-   int freeable=0;
-   int enemy=0;
-   int majorenemy=0;
-   int talkers=0;
-   for(int e=0;e<ENCMAX;e++)
+   int32 encsize=0;
+   int32 freeable=0;
+   int32 enemy=0;
+   int32 majorenemy=0;
+   int32 talkers=0;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists)
       {
@@ -67,9 +67,9 @@ void printsitemap(int x,int y,int z)
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   for(int sx=57;sx<80;sx++)
+   for(int32 sx=57;sx<80;sx++)
    {
-      for(int sy=9;sy<25;sy++)
+      for(int32 sy=9;sy<25;sy++)
       {
          move(sy,sx);
          if(sy==24)addch('-');
@@ -78,7 +78,7 @@ void printsitemap(int x,int y,int z)
       }
    }
 
-   int px,py;
+   int32 px,py;
 
    //YOUR BLOCK
    px=65;py=14;
@@ -380,14 +380,14 @@ void printsitemap(int x,int y,int z)
 
 
 
-void printblock(int x,int y,int z,int px,int py)
+void printblock(int32 x,int32 y,int32 z,int32 px,int32 py)
 {
    if(map[x][y][z].flag & SITEBLOCK_RESTRICTED)
    {
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      for(int px2=px;px2<px+7;px2++)
+      for(int32 px2=px;px2<px+7;px2++)
       {
-         for(int py2=py;py2<py+5;py2++)
+         for(int32 py2=py;py2<py+5;py2++)
          {
             move(py2,px2);
             addstr("x");
@@ -518,14 +518,14 @@ void printblock(int x,int y,int z,int px,int py)
 /* prints the names of creatures you see */
 void printencounter(void)
 {
-   for(int i=19;i<=24;i++)
+   for(int32 i=19;i<=24;i++)
    {
       move(i,1);
       addstr("                                                        ");
    }
 
-   int px=1,py=19;
-   for(int e=0;e<ENCMAX;e++)
+   int32 px=1,py=19;
+   for(int32 e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists)
       {
@@ -553,16 +553,16 @@ void printchaseencounter(void)
 {
    if(chaseseq.enemycar.size()>0)
    {
-      for(int i=19;i<=24;i++)
+      for(int32 i=19;i<=24;i++)
       {
          move(i,1);
          addstr("                                                     ");
       }
 
-      int carsy[4]={20,20,20,20};
+      int32 carsy[4]={20,20,20,20};
 
       char str[80];
-      for(int v=0;v<chaseseq.enemycar.size();v++)
+      for(int32 v=0;v<chaseseq.enemycar.size();v++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(19,v*20+1);
@@ -570,11 +570,11 @@ void printchaseencounter(void)
          addstr(str);
       }
 
-      for(int e=0;e<ENCMAX;e++)
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists)
          {
-            for(int v=0;v<chaseseq.enemycar.size();v++)
+            for(int32 v=0;v<chaseseq.enemycar.size();v++)
             {
                if(chaseseq.enemycar[v]->id==encounter[e].carid)
                {
@@ -597,7 +597,7 @@ void printchaseencounter(void)
 void clearcommandarea(void)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   for(int y=9;y<16;y++)
+   for(int32 y=9;y<16;y++)
    {
       move(y,1);
       addstr("                                                        ");
@@ -620,7 +620,7 @@ void clearmessagearea(void)
 void clearmaparea(void)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   for(int y=9;y<24;y++)
+   for(int32 y=9;y<24;y++)
    {
       move(y,57);
       addstr("                       ");

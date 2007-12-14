@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -88,20 +88,20 @@ void guardianupdate(char size, char power)
 
 
 /* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess)
+int32 choosespecialedition(char &clearformess)
 {
-   int page=0;
+   int32 page=0;
 
    char havetype[LOOTNUM];
-   for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-   vector<int> loottype;
+   for(int32 l=0;l<LOOTNUM;l++)havetype[l]=0;
+   vector<int32> loottype;
 
    //FIND ALL LOOT TYPES
-   for(int loc=0;loc<location.size();loc++)
+   for(int32 loc=0;loc<location.size();loc++)
    {
       if(location[loc]->renting==-1)continue;
 
-      for(int l=0;l<location[loc]->loot.size();l++)
+      for(int32 l=0;l<location[loc]->loot.size();l++)
       {
          if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -118,9 +118,9 @@ int choosespecialedition(char &clearformess)
          }
       }
    }
-   for(int sq=0;sq<squad.size();sq++)
+   for(int32 sq=0;sq<squad.size();sq++)
    {
-      for(int l=0;l<squad[sq]->loot.size();l++)
+      for(int32 l=0;l<squad[sq]->loot.size();l++)
       {
          if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -141,7 +141,7 @@ int choosespecialedition(char &clearformess)
    if(loottype.size()==0)return -1;
 
    clearformess=1;
-   
+
    //PICK ONE
    do
    {
@@ -151,10 +151,10 @@ int choosespecialedition(char &clearformess)
       move(0,0);
       addstr("Do you want to run a special edition?");
 
-      int x=1,y=10;
+      int32 x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<loottype.size()&&l<page*18+18;l++)
+      for(int32 l=page*18;l<loottype.size()&&l<page*18+18;l++)
       {
          getloot(str2,loottype[l]);
          str[0]=l-page*18+'A';
@@ -213,21 +213,21 @@ int choosespecialedition(char &clearformess)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         int32 slot=c-'a'+page*18;
 
          if(slot>=0&&slot<loottype.size())
          {
             //DELETE THE ITEM
-            for(int loc=0;loc<location.size();loc++)
+            for(int32 loc=0;loc<location.size();loc++)
             {
                if(location[loc]->renting==-1)continue;
 
-               for(int l=0;l<location[loc]->loot.size();l++)
+               for(int32 l=0;l<location[loc]->loot.size();l++)
                {
                   if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -239,9 +239,9 @@ int choosespecialedition(char &clearformess)
                   }
                }
             }
-            for(int sq=0;sq<squad.size();sq++)
+            for(int32 sq=0;sq<squad.size();sq++)
             {
-               for(int l=0;l<squad[sq]->loot.size();l++)
+               for(int32 l=0;l<squad[sq]->loot.size();l++)
                {
                   if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -277,7 +277,7 @@ int choosespecialedition(char &clearformess)
 
 
 /* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l,short newspaper)
+void printnews(int16 l,int16 newspaper)
 {
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -463,9 +463,9 @@ void fundreport(char &clearformess)
       move(0,0);
       addstr("Liberal Crime Squad:   Monthly Action Report");
 
-      int y=2;
+      int32 y=2;
 
-      long totalmoney=0;
+      int32 totalmoney=0;
 
       //DONATIONS
       if(moneygained_donate>0)
@@ -766,7 +766,7 @@ void fundreport(char &clearformess)
 ** into the "abstracted debate" on that issue.
 ** - After all of the sleepers have contributed to the liberal power
 ** stats, a roll is made on each issue to see whether the liberals
-** make background progress on those issues. 
+** make background progress on those issues.
 ** - Several sleepers have special abilities. Lawyers and Judges, as
 ** always, can aid your people in the legal system. Police officers,
 ** corporate managers, CEOs, and agents can all now leak secret
@@ -778,9 +778,9 @@ void fundreport(char &clearformess)
 ** - News Anchors and Radio Personalities remain the two most powerful
 ** sleepers.
 **********************************************************************/
-void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int32 *libpower)
 {
-   int power=(cr.attval(ATTRIBUTE_CHARISMA)+
+   int32 power=(cr.attval(ATTRIBUTE_CHARISMA)+
                cr.attval(ATTRIBUTE_HEART)+cr.attval(ATTRIBUTE_INTELLIGENCE)+
                cr.skill[SKILL_PERSUASION]);
 
@@ -801,8 +801,8 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
          power*=2;
          break;
    }
-   int homes=-1; // find homeless shelter
-   for(int l=0;l<location.size();l++)
+   int32 homes=-1; // find homeless shelter
+   for(int32 l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
       {
@@ -826,7 +826,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
       case CREATURE_CRITIC_ART:
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
-         for(int i=0;i<VIEWNUM;i++)
+         for(int32 i=0;i<VIEWNUM;i++)
          {
             libpower[i]+=power/4;
          }
@@ -852,7 +852,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
       /* Corporate block */
       case CREATURE_CORPORATE_CEO:
          // CEO can leak corporate files to you
-         if(!LCSrandom(10)&&!location[homes]->siege.siege&&canseethings) 
+         if(!LCSrandom(10)&&!location[homes]->siege.siege&&canseethings)
          {
             itemst *it=new itemst;
             it->type=ITEM_LOOT;
@@ -867,14 +867,14 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
             move(7,1);
             addstr("They are stashed at the homeless shelter.");
          }
-         
+
          libpower[VIEW_CEOSALARY]+=power;
          libpower[VIEW_TAXES]+=power;
          libpower[VIEW_CORPORATECULTURE]+=power;
          break;
       case CREATURE_CORPORATE_MANAGER:
          // Corporate manager can leak corporate files to you
-         if(!LCSrandom(70)&&!location[homes]->siege.siege&&canseethings) 
+         if(!LCSrandom(70)&&!location[homes]->siege.siege&&canseethings)
          {
             itemst *it=new itemst;
             it->type=ITEM_LOOT;
@@ -927,7 +927,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
       /* Intelligence block */
       case CREATURE_AGENT:
          // Agents can leak intelligence files to you
-         if(!LCSrandom(20)&&!location[homes]->siege.siege&&canseethings) 
+         if(!LCSrandom(20)&&!location[homes]->siege.siege&&canseethings)
          {
             itemst *it=new itemst;
             it->type=ITEM_LOOT;

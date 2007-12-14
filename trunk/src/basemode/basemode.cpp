@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -35,32 +35,32 @@ This file is part of Liberal Crime Squad.                                       
 
 void mode_base(void)
 {
-   short advanced=0;
-   short directing=0;
-   short in_newspaper=0;
-   short in_halloween=0;
-   short in_halloween2=0;
-   short in_training=0;
-   short in_compound=0;
+   int16 advanced=0;
+   int16 directing=0;
+   int16 in_newspaper=0;
+   int16 in_halloween=0;
+   int16 in_halloween2=0;
+   int16 in_training=0;
+   int16 in_compound=0;
 
-   short investing=0;
-   short investing_newspaper=0;
-   short investing_halloween=0;
-   short investing_training=0;
-   short investing_compound=0;
-   short investing_stores=0;
+   int16 investing=0;
+   int16 investing_newspaper=0;
+   int16 investing_halloween=0;
+   int16 investing_training=0;
+   int16 investing_compound=0;
+   int16 investing_stores=0;
 
-   short buyer=0;
+   int16 buyer=0;
 
    char forcewait,canseethings;
-   long nonsighttime=0;
+   int32 nonsighttime=0;
    #ifdef SHOWWAIT
-      int oldforcemonth=month;
+      int32 oldforcemonth=month;
    #endif
-   
-   int length=0;
 
-   long l = 0;
+   int32 length=0;
+
+   int32 l = 0;
 
    do
    {
@@ -69,7 +69,7 @@ void mode_base(void)
       cantseereason=3;
       if(!disbanding)
       {
-         for(int p=0;p<pool.size();p++)
+         for(int32 p=0;p<pool.size();p++)
          {
             if(pool[p]->alive&&
                pool[p]->align==1&&
@@ -109,9 +109,9 @@ void mode_base(void)
          addstr(num);
 
 
-         int y=2;
+         int32 y=2;
 
-         for(int v=0;v<VIEWNUM;v++)
+         for(int32 v=0;v<VIEWNUM;v++)
          {
             if(attitude[VIEW_LIBERALCRIMESQUAD]==0&&
                v==VIEW_LIBERALCRIMESQUADPOS)continue;
@@ -195,11 +195,11 @@ void mode_base(void)
          nonsighttime=0;
       }
 
-      int partysize=0;
-      int partydead=0;
+      int32 partysize=0;
+      int32 partydead=0;
       if(activesquad!=NULL)
       {
-         for(int p=0;p<6;p++)
+         for(int32 p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)partysize++;
             else
@@ -218,7 +218,7 @@ void mode_base(void)
          }
       }
 
-      long safenumber=0;
+      int32 safenumber=0;
       for(l=0;l<location.size();l++)
       {
          if(location[l]->renting>=0)safenumber++;
@@ -234,7 +234,7 @@ void mode_base(void)
       {
          if(sieged)underattack=siege->underattack;
       }
-      
+
       char haveflag=0;
       if(selectedsiege!=-1)haveflag=location[selectedsiege]->haveflag;
       if(activesquad!=NULL)haveflag=location[activesquad->squad[0]->location]->haveflag;
@@ -297,7 +297,7 @@ void mode_base(void)
 
          if(haveflag)
          {
-            for(int p=0;p<7;p++)
+            for(int32 p=0;p<7;p++)
             {
                move(p+17,32);
                if(p<3)
@@ -307,13 +307,13 @@ void mode_base(void)
                   addstr("::::::");
                   set_color(COLOR_WHITE,COLOR_RED,1);
                   move(p+17,38);
-                  for(int i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
+                  for(int32 i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
                }
                else
                {
                   if(p<6)set_color(COLOR_WHITE,COLOR_RED,1);
                   else set_color(COLOR_RED,COLOR_BLACK,0);
-                  for(int i=0;i<16;i++)
+                  for(int32 i=0;i<16;i++)
                   {
                      if(p==6)addch(CH_UPPER_HALF_BLOCK);
                      else addch(CH_LOWER_HALF_BLOCK);
@@ -435,7 +435,7 @@ void mode_base(void)
          refresh();
       }
 
-      int c='w';
+      int32 c='w';
       if(!forcewait)
       {
          c=getch();
@@ -496,7 +496,7 @@ void mode_base(void)
          if(activesquad==NULL)activesquad=squad[0];
          else
          {
-            for(int sq=0;sq<squad.size();sq++)
+            for(int32 sq=0;sq<squad.size();sq++)
             {
                if(squad[sq]==activesquad)
                {
@@ -511,11 +511,11 @@ void mode_base(void)
       if(c=='z'&&safenumber>0)
       {
          activesquad=NULL;
-         long sl;
+         int32 sl;
          if(selectedsiege==-1)sl=0;
          else sl=selectedsiege+1;
 
-         for(long l=sl;l<location.size();l++)
+         for(int32 l=sl;l<location.size();l++)
          {
             if(location[l]->renting>=0)
             {

@@ -1,23 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
-//																				
-//Copyright (c) 2004 by Kevin Sadler											
-//																				
+//
+//Copyright (c) 2004 by Kevin Sadler
+//
 ////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.										
-//																				
+//This file is part of Liberal Crime Squad.
+//
 //    Liberal Crime Squad is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by		
-//    the Free Software Foundation; either version 2 of the License, or			
-//    (at your option) any later version.										
-//																				
-//    Liberal Crime Squad is distributed in the hope that it will be useful,	
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of			
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the				
-//    GNU General Public License for more details.								
-//																				
-//    You should have received a copy of the GNU General Public License			
-//    along with Liberal Crime Squad; if not, write to the Free Software		
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA	
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    Liberal Crime Squad is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Liberal Crime Squad; if not, write to the Free Software
+//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -34,13 +34,13 @@
 * <HR>
 * \b Liberal Crime Squad
 *
-* 
+*
 * <HR>
 *
 * \par Abstract
 *
 * Translate character codes, stored in cp437 within files in the arts directory
-* into native alternative characters. 
+* into native alternative characters.
 *
 * <HR>
 *
@@ -74,22 +74,22 @@
 #include "cursesgraphics.h"
 
 #ifdef CH_USE_CP437
-int translateGraphicsChar(int c)
+int32 translateGraphicsChar(int32 c)
 {
 	return c;
 }
 #else
-int translateGraphicsChar(int c)
+int32 translateGraphicsChar(int32 c)
 {
 	// This will be no good for Unicode...
-	
-	int cin = c;
-	int cout = cin;
-	
+
+	int32 cin = c;
+	int32 cout = cin;
+
 //	if ((cin >= 0) && (cin <32))
 //	{
 //		cout = (cin | A_ALTCHARSET);
-//	} 
+//	}
 	if ((cin >= 0) && (cin < 256))
 	{
 		cout = gchar[cin].native_code;

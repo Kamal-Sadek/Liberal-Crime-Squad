@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* bluff, date, issues */
-char talk(creaturest &a,int t)
+char talk(creaturest &a,int32 t)
 {
    //BLUFFING
    if((sitealarm||location[cursite]->siege.siege)&&encounter[t].align==-1)
@@ -48,7 +48,7 @@ char talk(creaturest &a,int t)
       addstr(encounter[t].name);
       addstr(":");
 
-      int c=0;
+      int32 c=0;
 
       if(encounter[t].type==CREATURE_COP||
          encounter[t].type==CREATURE_GANGUNIT||
@@ -112,8 +112,8 @@ char talk(creaturest &a,int t)
          refresh();
          getch();
 
-         vector<int> noticer;
-         for(int e=0;e<ENCMAX;e++)
+         vector<int32> noticer;
+         for(int32 e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
                encounter[e].align==-1)
@@ -124,16 +124,16 @@ char talk(creaturest &a,int t)
 
          if(noticer.size()>0)
          {
-            int disguise=disguiseskill();
-            int weapon=0;
-            for(int i=0;i>0;i--)
+            int32 disguise=disguiseskill();
+            int32 weapon=0;
+            for(int32 i=0;i>0;i--)
             {
                if(activesquad->squad[i]==NULL)break;
                weapon+=weaponcheck(*activesquad->squad[i],cursite);
             }
 
             char noticed=0,bluff=0;
-            int n,an;
+            int32 n,an;
 
             do
             {
@@ -141,10 +141,10 @@ char talk(creaturest &a,int t)
                n=noticer[an];
                noticer.erase(noticer.begin() + an);
 
-               int chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+
+               int32 chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+
                   encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
 
-               if(chance+10*weapon+sitecrime > (int)LCSrandom(21)+disguise)
+               if(chance+10*weapon+sitecrime > (int32)LCSrandom(21)+disguise)
                {
                   noticed=1;
                   break;
@@ -155,11 +155,11 @@ char talk(creaturest &a,int t)
             //NOW MUST BLUFF
             if(!noticed)
             {
-               short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
+               int16 aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
                   a.attval(ATTRIBUTE_WISDOM)*3+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
 
-               int maxtroll=0,troll;
-               for(int e=0;e<ENCMAX;e++)
+               int32 maxtroll=0,troll;
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
                      encounter[e].align==-1)
@@ -240,7 +240,7 @@ char talk(creaturest &a,int t)
 
             if(bluff)
             {
-               for(int e=ENCMAX-1;e>=0;e--)
+               for(int32 e=ENCMAX-1;e>=0;e--)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
                      encounter[e].align==-1)
@@ -257,7 +257,7 @@ char talk(creaturest &a,int t)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("The police arrest the Squad.");
          getch();
-         for(int i=0;i<6;++i)
+         for(int32 i=0;i<6;++i)
          {
             if(activesquad->squad[i])capturecreature(*activesquad->squad[i]);
             activesquad->squad[i]=NULL;
@@ -267,7 +267,7 @@ char talk(creaturest &a,int t)
    }
 
    //TALKING
-   short talkmode=TALKMODE_START;
+   int16 talkmode=TALKMODE_START;
 
    creaturest *tk=&encounter[t];
 
@@ -277,7 +277,7 @@ char talk(creaturest &a,int t)
       clearmessagearea();
       clearmaparea();
 
-      int c='a';
+      int32 c='a';
       if(talkmode!=TALKMODE_ISSUES)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -345,10 +345,10 @@ char talk(creaturest &a,int t)
                if(a.armor.type==ARMOR_NONE)addstr(" while naked");
                addstr("?");
 
-               int lw=-1;
+               int32 lw=-1;
                char str[50];
-               int x=1,y=11;
-               for(int l2=0;l2<LAWNUM;l2++)
+               int32 x=1,y=11;
+               for(int32 l2=0;l2<LAWNUM;l2++)
                {
                   if(law[l2]<2)set_color(COLOR_WHITE,COLOR_BLACK,1);
                   else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -369,7 +369,7 @@ char talk(creaturest &a,int t)
                do
                {
                   refresh();
-                  int c=getch();
+                  int32 c=getch();
                   translategetch(c);
                   if(c>='a'&&c<='z')
                   {
@@ -384,12 +384,12 @@ char talk(creaturest &a,int t)
 
                if(lw!=-1)
                {
-                  short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
+                  int16 aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
                      a.attval(ATTRIBUTE_HEART)+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
                   char badthing=0;
                   if(aroll<15)badthing=1;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+
+                  int16 troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+
                      tk->attval(ATTRIBUTE_WISDOM);
                   a.skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
 
@@ -397,7 +397,7 @@ char talk(creaturest &a,int t)
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(9,1);addstr(a.name);addstr(" says,");
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
-                  int y=10;
+                  int32 y=10;
                   move(y,1);y++;
                   if(badthing)
                   {
@@ -620,7 +620,7 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  long rent=200;
+                  int32 rent=200;
                   switch(location[cursite]->type)
                   {
                      case SITE_RESIDENTIAL_APARTMENT:rent=650;break;
@@ -703,13 +703,13 @@ char talk(creaturest &a,int t)
                }
                if(c=='b'&&!kid(*tk)&&!kid(a))
                {
-                  int y=12;
+                  int32 y=12;
                   clearcommandarea();clearmessagearea();clearmaparea();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(9,1);addstr(a.name);addstr(" says,");
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(10,1);
-                  int line;
+                  int32 line;
                   if(law[LAW_FREESPEECH]==-2)
                   {
                      line=LCSrandom(3);
@@ -788,9 +788,9 @@ case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
                   refresh();
                   getch();
 
-                  short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
+                  int16 aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
+                  int16 troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
                   a.skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
 
                   if(aroll>troll)
@@ -883,9 +883,9 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                      refresh();
                      getch();
 
-                     int olddate=0;
+                     int32 olddate=0;
                      datest *newd=NULL;
-                     for(int d=0;d<date.size();d++)
+                     for(int32 d=0;d<date.size();d++)
                      {
                         if(date[d]->mac_id==a.id)
                         {
@@ -955,7 +955,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                         return 1;
                      }
 
-                     long rent=200;
+                     int32 rent=200;
                      switch(location[cursite]->type)
                      {
                         case SITE_RESIDENTIAL_APARTMENT:rent=650;break;

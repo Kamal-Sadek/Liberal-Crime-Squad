@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 //sets current color to desired setting
-void set_color(short f,short b,char bright)
+void set_color(int16 f,int16 b,char bright)
 {
    //color swap required for PDcurses
    if(f==7&&b==0)
@@ -55,7 +55,7 @@ void set_color(short f,short b,char bright)
 
 
 //IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
-void translategetch(int &c)
+void translategetch(int32 &c)
 {
    //if(c==-63)c='7';
    //if(c==-62)c='8';
@@ -111,7 +111,7 @@ void translategetch(int &c)
 
 
 
-void translategetch_cap(int &c)
+void translategetch_cap(int32 &c)
 {
    //if(c==-63)c='7';
    //if(c==-62)c='8';

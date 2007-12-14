@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -50,7 +50,7 @@ void mode_title(void)
    {
       char num[20];
 
-      int l=strlen(slogan);
+      int32 l=strlen(slogan);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,40-(l>>1));
       addstr(slogan);
@@ -106,7 +106,7 @@ void mode_title(void)
    move(22,39-((strlen(str)-1)>>1));
    addstr(str);
 
-   int c=getch();
+   int32 c=getch();
    translategetch(c);
    if(c==27)
    {
@@ -136,17 +136,17 @@ void loadinitfile(void)
    #endif
    if(fseed.is_open())
    {
-      int count=0;
+      int32 count=0;
       char str[200];
       char word[3][205];
-      int wordnum,pos;
+      int32 wordnum,pos;
       char begin;
       while(fseed.getline(str,198)&&count<10000)
       {
          if(str[0]!='#')
          {
             wordnum=0;pos=0;begin=1;
-            for(int l=0;l<strlen(str);l++)
+            for(int32 l=0;l<strlen(str);l++)
             {
                if(str[l]==' '||str[l]=='\t')
                {
@@ -188,7 +188,7 @@ void loadinitfile(void)
             }
          }
          count++;
-         
+
       }
    }
    fseed.close();

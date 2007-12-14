@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -32,13 +32,13 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* active squad visits the hospital */
-void hospital(int loc)
+void hospital(int32 loc)
 {
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   int partydead=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   int32 partydead=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -70,7 +70,7 @@ void hospital(int loc)
       move(14,1);
       addstr("0 - Show the squad's Liberal status");
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c==10)break;
@@ -88,7 +88,7 @@ void hospital(int loc)
 
       if(c=='f')
       {
-         for(int p=5;p>=0;p--)
+         for(int32 p=5;p>=0;p--)
          {
             if(activesquad->squad[p]==NULL)continue;
             hospitalize(loc,*activesquad->squad[p]);
@@ -101,18 +101,18 @@ void hospital(int loc)
 
 
 /* active squad visits the pawn shop */
-void pawnshop(int loc)
+void pawnshop(int32 loc)
 {
-   short buyer=0;
-   short in_tools=0;
-   short in_gunshop=0;
-   short in_fence=0;
-   int l;
+   int16 buyer=0;
+   int16 in_tools=0;
+   int16 in_gunshop=0;
+   int16 in_fence=0;
+   int32 l;
 
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -213,7 +213,7 @@ void pawnshop(int loc)
          move(13,1);
          if(law[LAW_GUNCONTROL]<-1)
             addstr("S - Buy a 9mm SMG Magazine    ($35)");
-         
+
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(16,40);
@@ -333,7 +333,7 @@ void pawnshop(int loc)
       move(15,40);
       addstr("# - Check the status of a squad Liberal");
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(in_fence)
@@ -345,20 +345,20 @@ void pawnshop(int loc)
          if((c=='p'||c=='r'||c=='w'||c=='a'||c=='l'||c=='f')&&
             activesquad->loot.size()>0)
          {
-            unsigned long fenceamount=0;
+            uint32 fenceamount=0;
 
             if(c=='f')fenceamount=fenceselect();
             else
             {
-               int fenceweapon[WEAPONNUM];
-               int fencearmor[ARMORNUM];
-               int fenceclip[CLIPNUM];
-               int fenceloot[LOOTNUM];
+               int32 fenceweapon[WEAPONNUM];
+               int32 fencearmor[ARMORNUM];
+               int32 fenceclip[CLIPNUM];
+               int32 fenceloot[LOOTNUM];
 
-               memset(fenceweapon,0,WEAPONNUM*sizeof(int));
-               memset(fencearmor,0,ARMORNUM*sizeof(int));
-               memset(fenceclip,0,CLIPNUM*sizeof(int));
-               memset(fenceloot,0,LOOTNUM*sizeof(int));
+               memset(fenceweapon,0,WEAPONNUM*sizeof(int32));
+               memset(fencearmor,0,ARMORNUM*sizeof(int32));
+               memset(fenceclip,0,CLIPNUM*sizeof(int32));
+               memset(fenceloot,0,LOOTNUM*sizeof(int32));
 
                for(l=activesquad->loot.size()-1;l>=0;l--)
                {
@@ -375,37 +375,37 @@ void pawnshop(int loc)
                   }
                }
 
-               if(c=='l'||c=='a'||c=='r'||c=='c')memset(fenceweapon,0,WEAPONNUM*sizeof(int));
+               if(c=='l'||c=='a'||c=='r'||c=='c')memset(fenceweapon,0,WEAPONNUM*sizeof(int32));
                else if(c=='w')
                {
-                  for(int w=0;w<WEAPONNUM;w++)
+                  for(int32 w=0;w<WEAPONNUM;w++)
                   {
                      if(fenceweapon[w]>6)fenceweapon[w]-=6;
                      else fenceweapon[w]=0;
                   }
                }
 
-               if(c=='l'||c=='p'||c=='w'||c=='c')memset(fencearmor,0,ARMORNUM*sizeof(int));
+               if(c=='l'||c=='p'||c=='w'||c=='c')memset(fencearmor,0,ARMORNUM*sizeof(int32));
                else if(c=='a')
                {
-                  for(int a=0;a<ARMORNUM;a++)
+                  for(int32 a=0;a<ARMORNUM;a++)
                   {
                      if(fencearmor[a]>6)fencearmor[a]-=6;
                      else fencearmor[a]=0;
                   }
                }
 
-               if(c!='c')memset(fenceclip,0,CLIPNUM*sizeof(int));
+               if(c!='c')memset(fenceclip,0,CLIPNUM*sizeof(int32));
                else
                {
-                  for(int c=0;c<CLIPNUM;c++)
+                  for(int32 c=0;c<CLIPNUM;c++)
                   {
                      if(fenceclip[c]>54)fenceclip[c]-=54;
                      else fenceclip[c]=0;
                   }
                }
 
-               if(c!='l')memset(fenceloot,0,LOOTNUM*sizeof(int));
+               if(c!='l')memset(fenceloot,0,LOOTNUM*sizeof(int32));
                else
                {
                   fenceloot[LOOT_CEOPHOTOS]=0;
@@ -422,7 +422,7 @@ void pawnshop(int loc)
                      case ITEM_WEAPON:
                         if(fenceweapon[activesquad->loot[l]->weapon.type]>0)
                         {
-                           long numbersold=fenceweapon[activesquad->loot[l]->weapon.type];
+                           int32 numbersold=fenceweapon[activesquad->loot[l]->weapon.type];
                            if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
                            fenceweapon[activesquad->loot[l]->weapon.type]-=numbersold;
                            activesquad->loot[l]->number-=numbersold;
@@ -440,7 +440,7 @@ void pawnshop(int loc)
                         if(activesquad->loot[l]->armor.flag!=0)break;
                         if(fencearmor[activesquad->loot[l]->armor.type]>0)
                         {
-                           long numbersold=fencearmor[activesquad->loot[l]->armor.type];
+                           int32 numbersold=fencearmor[activesquad->loot[l]->armor.type];
                            if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
                            fencearmor[activesquad->loot[l]->armor.type]-=numbersold;
                            activesquad->loot[l]->number-=numbersold;
@@ -456,7 +456,7 @@ void pawnshop(int loc)
                      case ITEM_CLIP:
                         if(fenceclip[activesquad->loot[l]->cliptype]>0)
                         {
-                           long numbersold=fenceclip[activesquad->loot[l]->cliptype];
+                           int32 numbersold=fenceclip[activesquad->loot[l]->cliptype];
                            if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
                            fenceclip[activesquad->loot[l]->cliptype]-=numbersold;
                            activesquad->loot[l]->number-=numbersold;
@@ -472,7 +472,7 @@ void pawnshop(int loc)
                      case ITEM_LOOT:
                         if(fenceloot[activesquad->loot[l]->loottype]>0)
                         {
-                           long numbersold=fenceloot[activesquad->loot[l]->loottype];
+                           int32 numbersold=fenceloot[activesquad->loot[l]->loottype];
                            if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
                            fenceloot[activesquad->loot[l]->loottype]-=numbersold;
                            activesquad->loot[l]->number-=numbersold;
@@ -511,7 +511,7 @@ void pawnshop(int loc)
       }
       else if(in_gunshop==1)
       {
-         int gunbought=-1;
+         int32 gunbought=-1;
 
          if(funds>=150&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
@@ -600,11 +600,11 @@ void pawnshop(int loc)
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
+            for(int32 cl=0;cl<CLIPNUM;cl++)
             {
                if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
-               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
+               for(int32 p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
                {
                   itemst *newi=new itemst;
                      newi->type=ITEM_CLIP;
@@ -620,7 +620,7 @@ void pawnshop(int loc)
       }
       else if(in_gunshop==2)
       {
-         int clipbought=-1;
+         int32 clipbought=-1;
 
          if(funds>=15&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
@@ -737,14 +737,14 @@ void pawnshop(int loc)
 
 
 /* active squad visits the department store */
-void deptstore(int loc)
+void deptstore(int32 loc)
 {
-   short buyer=0;
+   int16 buyer=0;
 
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -754,8 +754,8 @@ void deptstore(int loc)
 
    do
    {
-      int weaponbought=-1;
-      int armorbought=-1;
+      int32 weaponbought=-1;
+      int32 armorbought=-1;
 
       erase();
 
@@ -815,7 +815,7 @@ void deptstore(int loc)
       move(14,40);
       addstr("# - Check the status of a squad Liberal");
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c==10)break;
@@ -891,11 +891,11 @@ void deptstore(int loc)
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
+         for(int32 cl=0;cl<CLIPNUM;cl++)
          {
             if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
-            for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
+            for(int32 p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
             {
                itemst *newi=new itemst;
                   newi->type=ITEM_CLIP;
@@ -925,15 +925,15 @@ void deptstore(int loc)
 
 
 /* active squad visits the oubliette */
-void halloweenstore(int loc)
+void halloweenstore(int32 loc)
 {
-   short buyer=0;
-   short in_halloween=0;
+   int16 buyer=0;
+   int16 in_halloween=0;
 
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -943,8 +943,8 @@ void halloweenstore(int loc)
 
    do
    {
-      int weaponbought=-1;
-      int armorbought=-1,armorbought2=-1;
+      int32 weaponbought=-1;
+      int32 armorbought=-1,armorbought2=-1;
 
       erase();
 
@@ -1076,7 +1076,7 @@ void halloweenstore(int loc)
       move(14,40);
       addstr("# - Check the status of a squad Liberal");
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(in_halloween==1)
@@ -1133,7 +1133,7 @@ void halloweenstore(int loc)
 
          if(c=='m'&&funds>=15)
          {
-            short mask;
+            int16 mask;
             if(maskselect(activesquad->squad[buyer],mask))
             {
                armorbought=ARMOR_MASK;
@@ -1256,11 +1256,11 @@ void halloweenstore(int loc)
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
+         for(int32 cl=0;cl<CLIPNUM;cl++)
          {
             if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
-            for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
+            for(int32 p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
             {
                itemst *newi=new itemst;
                   newi->type=ITEM_CLIP;
@@ -1290,12 +1290,12 @@ void halloweenstore(int loc)
 
 
 /* oubliette - buy a mask */
-char maskselect(creaturest *cr,short &mask)
+char maskselect(creaturest *cr,int16 &mask)
 {
    mask=-1;
 
-   vector<int> masktype;
-   for(int a=0;a<MASKNUM;a++)
+   vector<int32> masktype;
+   for(int32 a=0;a<MASKNUM;a++)
    {
       switch(a)
       {
@@ -1320,7 +1320,7 @@ char maskselect(creaturest *cr,short &mask)
       }
    }
 
-   short page=0;
+   int16 page=0;
 
    char str[200];
 
@@ -1337,8 +1337,8 @@ char maskselect(creaturest *cr,short &mask)
       move(1,0);
       addstr("----PRODUCT NAME-----------------------DESCRIPTION------------------------------");
 
-      int y=2;
-      for(int p=page*19;p<masktype.size()&&p<page*19+19;p++)
+      int32 y=2;
+      for(int32 p=page*19;p<masktype.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1377,7 +1377,7 @@ char maskselect(creaturest *cr,short &mask)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       //PAGE UP
@@ -1387,7 +1387,7 @@ char maskselect(creaturest *cr,short &mask)
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
+         int32 p=page*19+(int32)(c-'a');
          if(p<masktype.size())
          {
             mask=masktype[p];
@@ -1409,17 +1409,17 @@ char maskselect(creaturest *cr,short &mask)
 
 
 /* pick stuff to fence */
-unsigned long fenceselect(void)
+uint32 fenceselect(void)
 {
-   unsigned long ret=0;
+   uint32 ret=0;
 
    consolidateloot(activesquad->loot);
 
-   int page=0;
+   int32 page=0;
 
    vector<char> selected;
    selected.resize(activesquad->loot.size());
-   for(int s=0;s<selected.size();s++)selected[s]=0;
+   for(int32 s=0;s<selected.size();s++)selected[s]=0;
 
    do
    {
@@ -1440,10 +1440,10 @@ unsigned long fenceselect(void)
 
       printparty();
 
-      int x=1,y=10;
+      int32 x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
+      for(int32 l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1546,12 +1546,12 @@ unsigned long fenceselect(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         int32 slot=c-'a'+page*18;
 
          if(slot>=0&&slot<activesquad->loot.size())
          {
@@ -1626,7 +1626,7 @@ unsigned long fenceselect(void)
 
    }while(1);
 
-   for(int l=activesquad->loot.size()-1;l>=0;l--)
+   for(int32 l=activesquad->loot.size()-1;l>=0;l--)
    {
       if(selected[l]>0)
       {
@@ -1645,9 +1645,9 @@ unsigned long fenceselect(void)
 
 
 /* value of stuff to fence */
-unsigned long fencevalue(itemst &it)
+uint32 fencevalue(itemst &it)
 {
-   unsigned long fenceamount=0;
+   uint32 fenceamount=0;
 
    switch(it.type)
    {
@@ -1754,14 +1754,14 @@ unsigned long fencevalue(itemst &it)
 
 
 /* choose buyer */
-void choose_buyer(short &buyer)
+void choose_buyer(int16 &buyer)
 {
    if(activesquad==NULL)return;
 
    party_status=-1;
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
+   int32 partysize=0;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)partysize++;
    }
@@ -1778,7 +1778,7 @@ void choose_buyer(short &buyer)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c==10)return;

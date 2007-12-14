@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -30,9 +30,9 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* transforms a squad id number into the index of that squad in the global vector */
-long getsquad(long id)
+int32 getsquad(int32 id)
 {
-   for(int sq=0;sq<squad.size();sq++)
+   for(int32 sq=0;sq<squad.size();sq++)
    {
       if(squad[sq]->id==id)return sq;
    }
@@ -41,9 +41,9 @@ long getsquad(long id)
 }
 
 /* transforms a car id number into the index of that car in the global vector */
-long id_getcar(long id)
+int32 id_getcar(int32 id)
 {
-   for(long v=0;v<vehicle.size();v++)
+   for(int32 v=0;v<vehicle.size();v++)
    {
       if(vehicle[v]->id==id)return v;
    }
@@ -51,9 +51,9 @@ long id_getcar(long id)
 }
 
 /* transforms a creature id number into the index of that person in the pool */
-int getpoolcreature(long id)
+int32 getpoolcreature(int32 id)
 {
-   for(int pl=0;pl<pool.size();pl++)
+   for(int32 pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->id==id)return pl;
    }

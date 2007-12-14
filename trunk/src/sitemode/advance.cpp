@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -34,8 +34,8 @@ This file is part of Liberal Crime Squad.                                       
 /* handles end of round stuff for everyone */
 void creatureadvance(void)
 {
-   int e;
-   for(int p=0;p<6;p++)
+   int32 e;
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
@@ -80,7 +80,7 @@ void creatureadvance(void)
 
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(int32 p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->squadid!=-1)continue;
@@ -164,9 +164,9 @@ void advancecreature(creaturest &cr)
       }
    }
 
-   int bleed=0;
+   int32 bleed=0;
 
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(int32 w=0;w<BODYPARTNUM;w++)
    {
       if(cr.wound[w] & WOUND_BLEEDING)bleed++;
    }

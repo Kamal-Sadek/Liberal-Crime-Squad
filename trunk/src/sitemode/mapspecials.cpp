@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -45,7 +45,7 @@ void special_lab_cosmetics_cagedanimals(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -54,7 +54,7 @@ void special_lab_cosmetics_cagedanimals(void)
 
          if(unlock(UNLOCK_CAGE,actual))
          {
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -62,7 +62,7 @@ void special_lab_cosmetics_cagedanimals(void)
             sitestory->crime.push_back(CRIME_FREE_RABBITS);
             criminalizeparty(LAWFLAG_VANDALISM);
          }
-         
+
          if(actual)
          {
             alienationcheck(0);
@@ -79,7 +79,7 @@ void special_lab_cosmetics_cagedanimals(void)
 
 
 
-void special_readsign(int sign)
+void special_readsign(int32 sign)
 {
    clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -106,7 +106,7 @@ void special_nuclear_onoff(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -151,7 +151,7 @@ void special_lab_genetic_cagedanimals(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -160,7 +160,7 @@ void special_lab_genetic_cagedanimals(void)
 
          if(unlock(UNLOCK_CAGE,actual))
          {
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -176,8 +176,8 @@ void special_lab_genetic_cagedanimals(void)
                move(16,1);
                addstr("Uh, maybe that idea was Conservative in retrospect...");
 
-               int numleft=LCSrandom(6)+1;
-               for(int e=0;e<ENCMAX;e++)
+               int32 numleft=LCSrandom(6)+1;
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)
                   {
@@ -237,7 +237,7 @@ void special_policestation_lockup(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -246,8 +246,8 @@ void special_policestation_lockup(void)
 
          if(unlock(UNLOCK_DOOR,actual))
          {
-            int numleft=LCSrandom(8)+2;
-            for(int e=0;e<ENCMAX;e++)
+            int32 numleft=LCSrandom(8)+2;
+            for(int32 e=0;e<ENCMAX;e++)
             {
                if(!encounter[e].exists)
                {
@@ -257,7 +257,7 @@ void special_policestation_lockup(void)
                if(numleft==0)break;
             }
 
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -302,7 +302,7 @@ void special_courthouse_lockup(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -311,8 +311,8 @@ void special_courthouse_lockup(void)
 
          if(unlock(UNLOCK_DOOR,actual))
          {
-            int numleft=LCSrandom(8)+2;
-            for(int e=0;e<ENCMAX;e++)
+            int32 numleft=LCSrandom(8)+2;
+            for(int32 e=0;e<ENCMAX;e++)
             {
                if(!encounter[e].exists)
                {
@@ -322,7 +322,7 @@ void special_courthouse_lockup(void)
                if(numleft==0)break;
             }
 
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -355,7 +355,7 @@ void special_courthouse_lockup(void)
 
 void special_courthouse_jury(void)
 {
-   int p;
+   int32 p;
    if(sitealarm||sitealienate)
    {
       clearmessagearea();
@@ -383,7 +383,7 @@ void special_courthouse_jury(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -392,7 +392,7 @@ void special_courthouse_jury(void)
 
          char succeed=0;
 
-         int maxattack=0;
+         int32 maxattack=0;
 
          for(p=0;p<6;p++)
          {
@@ -414,7 +414,7 @@ void special_courthouse_jury(void)
             }
          }
 
-         vector<int> goodp;
+         vector<int32> goodp;
 
          for(p=0;p<6;p++)
          {
@@ -435,12 +435,12 @@ void special_courthouse_jury(void)
 
          if(goodp.size()>0)
          {
-            int p=goodp[LCSrandom(goodp.size())];
+            int32 p=goodp[LCSrandom(goodp.size())];
 
-            short aroll=LCSrandom(21)+activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
+            int16 aroll=LCSrandom(21)+activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                activesquad->squad[p]->attval(ATTRIBUTE_HEART)+LCSrandom(activesquad->squad[p]->skill[SKILL_PERSUASION]+1)+
                LCSrandom(activesquad->squad[p]->skill[SKILL_LAW]+1)*2;
-            short troll=LCSrandom(21)+20;
+            int16 troll=LCSrandom(21)+20;
             activesquad->squad[p]->skill_ip[SKILL_PERSUASION]+=troll;
             activesquad->squad[p]->skill_ip[SKILL_LAW]+=troll;
 
@@ -493,8 +493,8 @@ void special_courthouse_jury(void)
                refresh();
                getch();
 
-               int numleft=12;
-               for(int e=0;e<ENCMAX;e++)
+               int32 numleft=12;
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)
                   {
@@ -541,13 +541,13 @@ void special_prison_control(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
       {
-         int numleft=LCSrandom(8)+2;
-         for(int e=0;e<ENCMAX;e++)
+         int32 numleft=LCSrandom(8)+2;
+         for(int32 e=0;e<ENCMAX;e++)
          {
             if(!encounter[e].exists)
             {
@@ -557,7 +557,7 @@ void special_prison_control(void)
             if(numleft==0)break;
          }
 
-         int time=20+LCSrandom(10);
+         int32 time=20+LCSrandom(10);
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -613,7 +613,7 @@ void special_intel_supercomputer(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -639,7 +639,7 @@ void special_intel_supercomputer(void)
 
          if(actual)
          {
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -675,15 +675,15 @@ void special_sweatshop_equipment(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
       {
-         int time=20+LCSrandom(10);
+         int32 time=20+LCSrandom(10);
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-         
+
          alienationcheck(0);
          noticecheck(-1);
          map[locx][locy][locz].special=-1;
@@ -715,17 +715,17 @@ void special_polluter_equipment(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
       {
-         int time=20+LCSrandom(10);
+         int32 time=20+LCSrandom(10);
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
          change_public_opinion(VIEW_POLLUTION,2,0);
-         
+
          alienationcheck(1);
          noticecheck(-1);
          map[locx][locy][locz].special=-1;
@@ -757,7 +757,7 @@ void special_house_photos(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -777,7 +777,7 @@ void special_house_photos(void)
                it->loottype=LOOT_CEOPHOTOS;
             activesquad->loot.push_back(it);
 
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -819,7 +819,7 @@ void special_corporate_files(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -839,7 +839,7 @@ void special_corporate_files(void)
                it->loottype=LOOT_CORPFILES;
             activesquad->loot.push_back(it);
 
-            int time=20+LCSrandom(10);
+            int32 time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -891,7 +891,7 @@ void special_radio_broadcaststudio(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')
@@ -928,7 +928,7 @@ void special_news_broadcaststudio(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c=='y')

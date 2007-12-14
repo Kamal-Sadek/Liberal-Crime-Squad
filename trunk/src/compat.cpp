@@ -34,11 +34,11 @@
 * <HR>
 * \b Liberal Crime Squad
 *
-* 
+*
 * <HR>
 *
 * \par Abstract
-* 
+*
 * \par Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
@@ -49,7 +49,7 @@
 * (b) Write portable alternatives for use by Windows and ports.
 * (c) Do (a) and (b) and decide what Windows does (API or portable)
 *     based on the value of a MACRO GO_PORTABLE.
-* 
+*
 * compat.cpp is the place for non-trivial or more global functions,
 *
 * <HR>
@@ -73,6 +73,7 @@
 /* Headers for Portability */
   #include <string.h>
   #include <stdlib.h>
+  #include "compat.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -97,10 +98,10 @@
  #include <iostream>
  #ifdef Linux // And BSD and SVr4
     #include <unistd.h>
-    #include <sys/time.h>  
+    #include <sys/time.h>
     #include <signal.h>
     #include <ctype.h>
-  #endif 
+  #endif
 #endif
 
 #ifndef WIN32_PRE_DOTNET
@@ -111,81 +112,81 @@ using namespace std;
  // Portable equivalent of Windows stricmp() function.
  // This is strcmp() on lowercase versions of the
  //string.
- 
+
  //strToLower() allocates a string and converts it to
  //Lower Case using POSIX tolower() function.
  //Free returned string after use.
- 
+
  char *strToLower(const char *str)
  {
- int len = strlen(str);
+ int32 len = strlen(str);
  char *lstr = NULL;
- int i = 0;
- 
+ int32 i = 0;
+
  lstr = (char *)malloc((len+1)*sizeof(char));
- 
+
  for (i=0; i< len; i++)
  {
  lstr[i] = tolower(str[i]);
  }
  return(lstr);
  }
- 
- int stricmp(const char *str1, const char *str2)
+
+ int32 stricmp(const char *str1, const char *str2)
  {
  char *lstr1 = NULL;
  char *lstr2 = NULL;
- int result = 0;
-  
+ int32 result = 0;
+
  lstr1=strToLower(str1);
  lstr2=strToLower(str2);
-   
+
  result = strcmp(lstr1, lstr2);
- 
+
  free(lstr1);
  free(lstr2);
- 
+
  return(result);
  }
  #endif
- 
- 
+
+
  #ifdef Linux // BSD and SVr4 too
- 
-  int init_alarm = 0; // Flag to indicate if alarmHandler() has been registered.
+
+  int32 init_alarm = 0; // Flag to indicate if alarmHandler() has been registered.
   struct itimerval timer_off;
   struct itimerval timer_on;
 
 
-void alarmHandler(int signal)
+void alarmHandler(int32 signal)
 {
  //WAKE UP and turn the timer off, this will un-pause().
-  setitimer(ITIMER_REAL, &timer_off, NULL); 
-}  
+  setitimer(ITIMER_REAL, &timer_off, NULL);
+}
 
-void setTimeval(struct  timeval *value, long sec, long usec)
+void setTimeval(struct  timeval *value, int32 sec, int32 usec)
 {
   value->tv_sec = sec;
   value->tv_usec = usec;
 }
 
-void msToItimerval(int ms, struct  itimerval *value)
+void msToItimerval(int32 ms, struct  itimerval *value)
 {
-long sec=0;
-long usec=0;
+int32 sec=0;
+int32 usec=0;
 
   if (ms > 999)
     {
-     sec = (long)(ms/1000);
-     usec = (long)((ms%1000)*1000);
+     sec = (int32)(ms/1000);
+     usec = (int32)((ms%1000)*1000);
     }
     else
     {
-      usec = (long)(ms*1000);    
+      usec = (int32)(ms*1000);
     }
-    
+
  setTimeval(&value->it_interval, sec, usec);
- setTimeval(&value->it_value, sec, usec);    
+ setTimeval(&value->it_value, sec, usec);
 }
 
 void initalarm()
@@ -196,13 +197,13 @@ void initalarm()
      setTimeval(&timer_off.it_interval, 0, 0);
      setTimeval(&timer_off.it_value, 0, 0);
     }
-#endif 
-
-#ifdef WIN32
-  unsigned long ptime=GetTickCount();
 #endif
 
-void alarmset(int t)
+#ifdef WIN32
+  uint32 ptime=GetTickCount();
+#endif
+
+void alarmset(int32 t)
 {
 #ifdef WIN32
   ptime=GetTickCount() + t;
@@ -214,9 +215,9 @@ void alarmset(int t)
     }
   // setitimer() will start a timer, pause() will stop the process until a
   // SGIALRM from the timer is recieved. This will be caught be alarmHandler()
-  // which will turn off the timer and the process will resume.  
+  // which will turn off the timer and the process will resume.
   msToItimerval(t, &timer_on);
-  setitimer(ITIMER_REAL, &timer_on, NULL); 
+  setitimer(ITIMER_REAL, &timer_on, NULL);
 #endif
 }
 
@@ -238,26 +239,26 @@ void alarmwait()
   }
 #endif
 }
-  
-void pause_ms(int t)
+
+void pause_ms(int32 t)
 {
   #ifdef Linux // BSD and SVr4 too
 
   alarmset(t);
-  
+
   pause();
-  
+
  #else
    #ifdef WIN32
   ptime=GetTickCount() + t;
- 
+
  // Sadler - In 3.05 this while() was also checking that time <= GetTickCount()
  //          but as that should always be true it is removed.
  while(ptime > GetTickCount());
    #endif
- 
+
  #endif
-  
+
 }
 
 #ifndef HAS_ITOA
@@ -267,13 +268,13 @@ void pause_ms(int t)
  //other bases, it's just enough for this program to be
  //ported.
  // Ensure buffer is of sufficient size.
- char *itoa(int value, char *buffer, int radix)
+ char *itoa(int32 value, char *buffer, int32 radix)
  {
  if (radix != 10)
    {
     // Error - base other than 10 not supported.
     cerr << "Error: itoa() - Ported function does not support bases other than 10." << endl;
-    exit(1); 
+    exit(1);
    }
    else if (buffer != NULL)
    {
@@ -282,4 +283,4 @@ void pause_ms(int t)
    return buffer;
  }
  #endif
- 
+

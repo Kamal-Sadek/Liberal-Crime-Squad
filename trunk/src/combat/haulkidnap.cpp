@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -34,13 +34,13 @@ This file is part of Liberal Crime Squad.                                       
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt(void)
 {
-   short kidnapper=-1;
+   int16 kidnapper=-1;
 
    party_status=-1;
 
-   int available=0;
+   int32 available=0;
    char availslot[6]={0,0,0,0,0,0};
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -76,7 +76,7 @@ void kidnapattempt(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c==10)return;
@@ -94,9 +94,9 @@ void kidnapattempt(void)
 
    if(kidnapper>=0)
    {
-      vector<int> target;
+      vector<int32> target;
 
-      for(int e=0;e<ENCMAX;e++)
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&!encounter[e].animalgloss)
          {
@@ -110,7 +110,7 @@ void kidnapattempt(void)
 
       if(target.size()>0)
       {
-         int t=target[0];
+         int32 t=target[0];
 
          if(target.size()>1)
          {
@@ -124,8 +124,8 @@ void kidnapattempt(void)
                move(9,1);
                addstr("Kidnap whom?");
 
-               int x=1,y=11;
-               for(int t2=0;t2<target.size();t2++)
+               int32 x=1,y=11;
+               for(int32 t2=0;t2<target.size();t2++)
                {
                   move(y,x);
                   addch(t2+'A');
@@ -141,7 +141,7 @@ void kidnapattempt(void)
                }
 
                refresh();
-               int c=getch();
+               int32 c=getch();
                translategetch(c);
                if(c>='a'&&c<='z')
                {
@@ -161,7 +161,7 @@ void kidnapattempt(void)
             {
                delenc(t,0);
 
-               int time=20+LCSrandom(10);
+               int32 time=20+LCSrandom(10);
                if(time<1)time=1;
                if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
             }
@@ -170,7 +170,7 @@ void kidnapattempt(void)
             if(amateur)
             {
                char present=0;
-               for(int e=0;e<ENCMAX;e++)
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive){present=1;break;}
                }
@@ -232,8 +232,8 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
       amateur=1;
 
       //BASIC ROLL
-      int aroll=LCSrandom(15)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
-      int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+      int32 aroll=LCSrandom(15)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
+      int32 droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
 
       aroll+=LCSrandom(a.skill[SKILL_HANDTOHAND]+1);
       a.skill_ip[SKILL_HANDTOHAND]+=droll;
@@ -353,7 +353,7 @@ void freehostage(creaturest &cr,char situation)
 
       if(cr.prisoner->squadid==-1)
       {
-         for(int e=0;e<ENCMAX;e++)
+         for(int32 e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists==0)
             {
@@ -372,7 +372,7 @@ void freehostage(creaturest &cr,char situation)
       if(cr.prisoner->squadid!=-1)
       {
          //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
-         for(int pl=0;pl<pool.size();pl++)
+         for(int32 pl=0;pl<pool.size();pl++)
          {
             if(pool[pl]==cr.prisoner)
             {
@@ -403,9 +403,9 @@ void freehostage(creaturest &cr,char situation)
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
-   int p;
+   int32 p;
    //DRAGGING PEOPLE OUT IF POSSIBLE
-   int hostslots=0;
+   int32 hostslots=0;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
@@ -461,7 +461,7 @@ void squadgrab_immobile(char dead)
                   makeloot(*activesquad->squad[p],groundloot);
 
                   //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
-                  for(int pl=0;pl<pool.size();pl++)
+                  for(int32 pl=0;pl<pool.size();pl++)
                   {
                      if(pool[pl]==activesquad->squad[p])
                      {
@@ -484,7 +484,7 @@ void squadgrab_immobile(char dead)
             }
             else
             {
-               for(int p2=0;p2<6;p2++)
+               for(int32 p2=0;p2<6;p2++)
                {
                   if(p2==p)continue;
                   if(activesquad->squad[p2]!=NULL)
@@ -513,7 +513,7 @@ void squadgrab_immobile(char dead)
 
             //SHUFFLE SQUAD
             char flipstart=0;
-            for(int pt=0;pt<6;pt++)
+            for(int32 pt=0;pt<6;pt++)
             {
                if(pt==p-1)continue;
                if(pt==p){flipstart=1;}
@@ -559,11 +559,11 @@ void kidnaptransfer(creaturest &cr)
 
    move(3,0);
    addstr("If you do not enter anything, their real name will be used.");
-	 
+
    move(4,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
-   
-   
+
+
 
    pool.push_back(newcr);
    stat_kidnappings++;

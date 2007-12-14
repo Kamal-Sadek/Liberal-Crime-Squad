@@ -28,7 +28,7 @@ struct filelistst
 
 	~filelistst()
 		{
-		for(int l=0;l<list.size();l++)
+		for(int32 l=0;l<list.size();l++)
 			{
 			delete list[l];
 			}
@@ -37,7 +37,7 @@ struct filelistst
 
 	void clean(void)
 		{
-		for(int l=0;l<list.size();l++)
+		for(int32 l=0;l<list.size();l++)
 			{
 			delete list[l];
 			}
@@ -53,12 +53,12 @@ struct filelistst
 
 struct CursesMovie_framest
 {
-	short frame;
-	long start,stop;
-	short sound;
-	short song;
-	short effect;
-	unsigned short flag;
+	int16 frame;
+	int32 start,stop;
+	int16 sound;
+	int16 song;
+	int16 effect;
+	uint16 flag;
 
 	CursesMovie_framest()
 		{
@@ -75,8 +75,8 @@ struct CursesMovie_framest
 struct CursesMoviest
 {
 	unsigned char picture[PICMAX][80][25][4];
-	unsigned long picnum;
-	unsigned long dimx,dimy;
+	uint32 picnum;
+	uint32 dimx,dimy;
 	filelistst songlist;
 	filelistst soundlist;
 	vector<CursesMovie_framest *> frame;
@@ -90,10 +90,10 @@ struct CursesMoviest
 		clean();
 		}
 
-	void savemovie(char *filename, int flags);
+	void savemovie(char *filename, int32 flags);
 	void loadmovie(char *filename);
 	void clean(void);
 	void convertindices_song(filelistst &master);
 	void convertindices_sound(filelistst &master);
-	void playmovie(int x,int y);
+	void playmovie(int32 x,int32 y);
 };

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -31,14 +31,14 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* review squad equipment */
-void equip(vector<itemst *> &loot,int loc)
+void equip(vector<itemst *> &loot,int32 loc)
 {
    if(activesquad==NULL)return;
 
    consolidateloot(loot);
    if(loc!=-1)consolidateloot(location[loc]->loot);
 
-   int page=0;
+   int32 page=0;
 
    do
    {
@@ -50,10 +50,10 @@ void equip(vector<itemst *> &loot,int loc)
 
       printparty();
 
-      int x=1,y=10;
+      int32 x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<loot.size()&&l<page*18+18;l++)
+      for(int32 l=page*18;l<loot.size()&&l<page*18+18;l++)
       {
          if(loot[l]->type==ITEM_WEAPON)
          {
@@ -174,12 +174,12 @@ void equip(vector<itemst *> &loot,int loc)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         int32 slot=c-'a'+page*18;
 
          if(slot>=0&&slot<loot.size())
          {
@@ -189,14 +189,14 @@ void equip(vector<itemst *> &loot,int loc)
 
             refresh();
 
-            int c=getch();
+            int32 c=getch();
             translategetch(c);
 
             if(c>='1'&&c<='6')
             {
                if(activesquad->squad[c-'1']!=NULL)
                {
-                  int armok=2;
+                  int32 armok=2;
                   if((activesquad->squad[c-'1']->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
                      (activesquad->squad[c-'1']->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
                   if((activesquad->squad[c-'1']->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
@@ -224,11 +224,11 @@ void equip(vector<itemst *> &loot,int loc)
                      }
 
                      //DROP ALL CLIPS THAT DON'T WORK
-                     for(int cl=0;cl<CLIPNUM;cl++)
+                     for(int32 cl=0;cl<CLIPNUM;cl++)
                      {
                         if(cl==ammotype(activesquad->squad[c-'1']->weapon.type))continue;
 
-                        for(int p2=0;p2<activesquad->squad[c-'1']->clip[cl];p2++)
+                        for(int32 p2=0;p2<activesquad->squad[c-'1']->clip[cl];p2++)
                         {
                            itemst *newi=new itemst;
                               newi->type=ITEM_CLIP;
@@ -293,7 +293,7 @@ void equip(vector<itemst *> &loot,int loc)
 
          refresh();
 
-         int c=getch();
+         int32 c=getch();
          translategetch(c);
 
          if(c>='1'&&c<='6')
@@ -327,7 +327,7 @@ void equip(vector<itemst *> &loot,int loc)
 
       if(c>='1'&&c<='6')
       {
-         int p=c-'1';
+         int32 p=c-'1';
          if(activesquad->squad[p]!=NULL)
          {
             if(activesquad->squad[p]->weapon.type!=WEAPON_NONE)
@@ -341,9 +341,9 @@ void equip(vector<itemst *> &loot,int loc)
                activesquad->squad[p]->weapon.ammo=0;
 
                //DROP ALL CLIPS
-               for(int c=0;c<CLIPNUM;c++)
+               for(int32 c=0;c<CLIPNUM;c++)
                {
-                  for(int p2=0;p2<activesquad->squad[p]->clip[c];p2++)
+                  for(int32 p2=0;p2<activesquad->squad[p]->clip[c];p2++)
                   {
                      itemst *newi=new itemst;
                         newi->type=ITEM_CLIP;
@@ -372,13 +372,13 @@ void equip(vector<itemst *> &loot,int loc)
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 {
-   unsigned long ret=0;
+   uint32 ret=0;
 
-   int page=0;
+   int32 page=0;
 
    vector<char> selected;
    selected.resize(source.size());
-   for(int s=0;s<selected.size();s++)selected[s]=0;
+   for(int32 s=0;s<selected.size();s++)selected[s]=0;
 
    do
    {
@@ -390,10 +390,10 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
       printparty();
 
-      int x=1,y=10;
+      int32 x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<source.size()&&l<page*18+18;l++)
+      for(int32 l=page*18;l<source.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -496,12 +496,12 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         int32 slot=c-'a'+page*18;
 
          if(slot>=0&&slot<source.size())
          {
@@ -553,7 +553,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
    }while(1);
 
-   for(int l=source.size()-1;l>=0;l--)
+   for(int32 l=source.size()-1;l>=0;l--)
    {
       if(selected[l]>0)
       {
@@ -577,7 +577,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<itemst *> &loot)
 {
-   int l,l2;
+   int32 l,l2;
 
    //PUT THINGS TOGETHER
    for(l=loot.size()-1;l>=1;l--)
@@ -705,7 +705,7 @@ char itemcompare(itemst *a,itemst *b)
 
 
 /* returns the type of ammo used by the given weapon, if any */
-short ammotype(int type)
+int16 ammotype(int32 type)
 {
    switch(type)
    {
@@ -757,9 +757,9 @@ char rangedweapon(weaponst &w)
 
 
 /* check if the squad has a certain weapon */
-char squadhasitem(squadst &sq,int type,int subtype)
+char squadhasitem(squadst &sq,int32 type,int32 subtype)
 {
-   for(int p=0;p<6;p++)
+   for(int32 p=0;p<6;p++)
    {
       if(sq.squad[p]!=NULL)
       {
@@ -772,7 +772,7 @@ char squadhasitem(squadst &sq,int type,int subtype)
       }
    }
 
-   for(int l=0;l<sq.loot.size();l++)
+   for(int32 l=0;l<sq.loot.size();l++)
    {
       if(sq.loot[l]->type!=type)continue;
       switch(type)

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -38,7 +38,7 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_HOSTAGETENDING:
       {
          strcat(str,"Tending to ");
-         int pl=getpoolcreature(act.arg);
+         int32 pl=getpoolcreature(act.arg);
          if(pl!=-1)
          {
             strcat(str,pool[pl]->name);
@@ -96,7 +96,7 @@ void getactivity(char *str,activityst &act)
 
 
 
-void getweapon(char *str,int type)
+void getweapon(char *str,int32 type)
 {
    strcpy(str,"");
 
@@ -133,7 +133,7 @@ void getweapon(char *str,int type)
    }
 }
 
-void getweaponfull(char *str,int type)
+void getweaponfull(char *str,int32 type)
 {
    strcpy(str,"");
 
@@ -171,7 +171,7 @@ void getweaponfull(char *str,int type)
 }
 
 
-void getarmor(char *str,int type,int subtype)
+void getarmor(char *str,int32 type,int32 subtype)
 {
    switch(type)
    {
@@ -271,7 +271,7 @@ void getarmor(char *str,int type,int subtype)
 }
 
 
-void getarmorfull(char *str,int type,int subtype)
+void getarmorfull(char *str,int32 type,int32 subtype)
 {
    switch(type)
    {
@@ -371,7 +371,7 @@ void getarmorfull(char *str,int type,int subtype)
 }
 
 
-void getmaskdesc(char *str,short mask)
+void getmaskdesc(char *str,int16 mask)
 {
    switch(mask)
    {
@@ -458,7 +458,7 @@ void getarmorfull(char *str,armorst &armor,char superfull)
 
 
 
-void getskill(char *str,int type)
+void getskill(char *str,int32 type)
 {
    strcpy(str,"");
 
@@ -486,7 +486,7 @@ void getskill(char *str,int type)
 
 
 
-void getclip(char *str,int clip)
+void getclip(char *str,int32 clip)
 {
    strcpy(str,"");
 
@@ -503,7 +503,7 @@ void getclip(char *str,int clip)
 }
 
 
-void getloot(char *str,int loot)
+void getloot(char *str,int32 loot)
 {
    strcpy(str,"");
 
@@ -531,7 +531,7 @@ void getloot(char *str,int loot)
 
 
 
-void getrecruitcreature(char *str,int type)
+void getrecruitcreature(char *str,int32 type)
 {
    strcpy(str,"");
 
@@ -651,7 +651,7 @@ void gettitle(char *str,creaturest &cr)
 }
 
 
-void getview(char *str,short view)
+void getview(char *str,int16 view)
 {
    strcpy(str,"");
 
@@ -682,7 +682,7 @@ void getview(char *str,short view)
 
 
 
-void getlaw(char *str,int l)
+void getlaw(char *str,int32 l)
 {
    switch(l)
    {
@@ -705,7 +705,7 @@ void getlaw(char *str,int l)
 
 
 
-void getcarfull(char *str,int type)
+void getcarfull(char *str,int32 type)
 {
    strcpy(str,"");
 
@@ -747,7 +747,7 @@ void getcarfull(char *str,vehiclest &car,char halffull)
 }
 
 
-void getcar(char *str,int type)
+void getcar(char *str,int32 type)
 {
    strcpy(str,"");
    switch(type)
@@ -768,7 +768,7 @@ void getcar(char *str,int type)
 
 
 
-void getcarcolor(char *str,int type)
+void getcarcolor(char *str,int32 type)
 {
    strcpy(str,"");
    switch(type)
@@ -783,7 +783,7 @@ void getcarcolor(char *str,int type)
    }
 }
 
-short naturalcarcolor(int type)
+int16 naturalcarcolor(int32 type)
 {
    switch(type)
    {
@@ -823,7 +823,7 @@ void cityname(char *story)
 }
 
 /* Allow the player to enter a name with an optional default */
-void enter_name(char *name, int len, char* defname)
+void enter_name(char *name, int32 len, char* defname)
 {
 	keypad(stdscr,FALSE);
         raw_output(FALSE);
@@ -834,7 +834,7 @@ void enter_name(char *name, int len, char* defname)
         noecho();
         raw_output(TRUE);
         keypad(stdscr,TRUE);
-	
+
 	if((defname!=NULL) && (strncmp(name,"",len)==0))
 	{
 		strncpy(name,defname,len);

@@ -949,8 +949,8 @@
 
 struct graphicschar
 {
-	unsigned int native_code;
-	unsigned int cp437_code;
+	uint32 native_code;
+	uint32 cp437_code;
 };
 
 #ifdef CURSES_GRAPHICS
@@ -1220,4 +1220,4 @@ extern struct graphicschar *gchar;
 
 #define CH_MAXIMUM 256
 
-int translateGraphicsChar(int c);
+int32 translateGraphicsChar(int32 c);

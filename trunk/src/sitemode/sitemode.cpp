@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
 	This file was created by Chris Johnson (grundee@users.sourceforge.net)
 	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
+	To see descriptions of files and functions, see the list at
 	the bottom of includes.h in the top src folder.
 */
 
@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 
-void mode_site(long loc)
+void mode_site(int32 loc)
 {
    sitetype=location[loc]->type;
    cursite=loc;
@@ -58,13 +58,13 @@ void mode_site(long loc)
       location[loc]->siege.kills=0;
 
       //PLACE YOU
-      int maxy=0;
+      int32 maxy=0;
 
-      for(int x=0;x<MAPX;x++)
+      for(int32 x=0;x<MAPX;x++)
       {
-         for(int y=0;y<MAPY;y++)
+         for(int32 y=0;y<MAPY;y++)
          {
-            for(int z=0;z<MAPZ;z++)
+            for(int32 z=0;z<MAPZ;z++)
             {
                if(!location[loc]->siege.lights_off)map[x][y][z].flag|=SITEBLOCK_KNOWN;
                map[x][y][z].flag&=~SITEBLOCK_LOCKED;
@@ -83,11 +83,11 @@ void mode_site(long loc)
       }while(map[locx][locy][locz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR));
 
       //PLACE LOOT
-      int lootnum=location[loc]->loot.size();
+      int32 lootnum=location[loc]->loot.size();
       if(lootnum>10)lootnum=10;
 
-      int lx,ly,lz;
-      for(int l=0;l<lootnum;l++)
+      int32 lx,ly,lz;
+      for(int32 l=0;l<lootnum;l++)
       {
          do
          {
@@ -101,8 +101,8 @@ void mode_site(long loc)
       //PLACE TRAPS
       if(location[loc]->compound_walls & COMPOUND_TRAPS)
       {
-         int trapnum=30;
-         for(int t=0;t<trapnum;t++)
+         int32 trapnum=30;
+         for(int32 t=0;t<trapnum;t++)
          {
             do
             {
@@ -115,9 +115,9 @@ void mode_site(long loc)
       }
 
       //PLACE UNITS
-      int unitnum=10;
-      int count=50000;
-      for(int t=0;t<unitnum;t++)
+      int32 unitnum=10;
+      int32 count=50000;
+      for(int32 t=0;t<unitnum;t++)
       {
          do
          {
@@ -136,8 +136,8 @@ void mode_site(long loc)
          location[loc]->siege.escalationstate>=2)
       {
          count=50000;
-         int hunitnum=3;
-         for(int t=0;t<hunitnum;t++)
+         int32 hunitnum=3;
+         for(int32 t=0;t<hunitnum;t++)
          {
             do
             {
@@ -160,7 +160,7 @@ void mode_site(long loc)
 
 void mode_site(void)
 {
-   int p, x, u;
+   int32 p, x, u;
    if(activesquad==NULL)return;
 
    reloadparty();
@@ -176,8 +176,8 @@ void mode_site(void)
 
    do
    {
-      int partysize=0;
-      int partyalive=0;
+      int32 partysize=0;
+      int32 partyalive=0;
       for(p=0;p<6;p++)
       {
          if(activesquad->squad[p]!=NULL)partysize++;
@@ -185,12 +185,12 @@ void mode_site(void)
 
          if(activesquad->squad[p]->alive==1)partyalive++;
       }
-      int encsize=0;
-      int freeable=0;
-      int enemy=0;
-      int majorenemy=0;
-      int talkers=0;
-      for(int e=0;e<ENCMAX;e++)
+      int32 encsize=0;
+      int32 freeable=0;
+      int32 enemy=0;
+      int32 majorenemy=0;
+      int32 talkers=0;
+      for(int32 e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists)
          {
@@ -207,7 +207,7 @@ void mode_site(void)
                encounter[e].type==CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
          }
       }
-      int libnum=0;
+      int32 libnum=0;
       for(p=0;p<pool.size();p++)
       {
          if(pool[p]->align==1&&
@@ -353,7 +353,7 @@ void mode_site(void)
       if(hostcheck)
       {
          char havehostage=0;
-         for(int p=0;p<6;p++)
+         for(int32 p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
             {
@@ -384,7 +384,7 @@ void mode_site(void)
 
       refresh();
 
-      int c=getch();
+      int32 c=getch();
       translategetch(c);
 
       if(partyalive==0&&c=='c')
@@ -392,12 +392,12 @@ void mode_site(void)
          //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
          if(!location[cursite]->siege.siege)
          {
-            for(int p=0;p<6;p++)
+            for(int32 p=0;p<6;p++)
             {
                if(activesquad->squad[p]==NULL)continue;
                if(activesquad->squad[p]->carid!=-1)
                {
-                  long v=id_getcar(activesquad->squad[p]->carid);
+                  int32 v=id_getcar(activesquad->squad[p]->carid);
                   if(v!=-1)
                   {
                      removecarprefs_pool(vehicle[v]->id);
@@ -408,11 +408,11 @@ void mode_site(void)
             }
          }
 
-         for(int p=0;p<6;p++)
+         for(int32 p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL)continue;
 
-            for(int pl=pool.size()-1;pl>=0;pl--)
+            for(int32 pl=pool.size()-1;pl>=0;pl--)
             {
                if(pool[pl]==activesquad->squad[p])
                {
@@ -439,7 +439,7 @@ void mode_site(void)
             {
                if(!sitealienate)
                {
-                  long addjuice=sitecrime;if(addjuice>20)addjuice=20;
+                  int32 addjuice=sitecrime;if(addjuice>20)addjuice=20;
                   juiceparty(addjuice);
                }
                resolvesite();
@@ -454,9 +454,9 @@ void mode_site(void)
 
       if(partyalive>0)
       {
-         int olocx=locx;
-         int olocy=locy;
-         int olocz=locz;
+         int32 olocx=locx;
+         int32 olocy=locy;
+         int32 olocz=locz;
 
          char override=0;
 
@@ -472,7 +472,7 @@ void mode_site(void)
 
             do
             {
-               int c2=getch();
+               int32 c2=getch();
                translategetch(c2);
 
                if(c2=='w'||c2=='a'||c2=='d'||c2=='x')
@@ -534,10 +534,10 @@ void mode_site(void)
 
          if(c=='t'&&talkers)
          {
-            int forcesp=-1;
-            int forcetk=-1;
+            int32 forcesp=-1;
+            int32 forcetk=-1;
 
-            for(int p=0;p<6;p++)
+            for(int32 p=0;p<6;p++)
             {
                if(activesquad->squad[p]!=NULL)
                {
@@ -549,7 +549,7 @@ void mode_site(void)
                }
             }
 
-            for(int e=0;e<ENCMAX;e++)
+            for(int32 e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists&&encounter[e].alive&&
                   !(encounter[e].type==CREATURE_WORKER_SERVANT||
@@ -565,7 +565,7 @@ void mode_site(void)
 
             if(forcetk!=-1&&forcesp!=-1)
             {
-               int tk=-1,sp=-1;
+               int32 tk=-1,sp=-1;
                if(forcesp==-2)
                {
                   clearcommandarea();
@@ -583,8 +583,8 @@ void mode_site(void)
                   addstr("Bluff");
 
                   char num[20];
-                  int y=11;
-                  for(int p=0;p<6;p++)
+                  int32 y=11;
+                  for(int32 p=0;p<6;p++)
                   {
                      if(activesquad->squad[p]!=NULL)
                      {
@@ -616,7 +616,7 @@ void mode_site(void)
                   do
                   {
                      refresh();
-                     int c=getch();
+                     int32 c=getch();
                      translategetch(c);
                      if(c>='1'&&c<='6')
                      {
@@ -645,8 +645,8 @@ void mode_site(void)
                         move(9,1);
                         addstr("To whom?");
 
-                        int x=1,y=11;
-                        for(int t=0;t<ENCMAX;t++)
+                        int32 x=1,y=11;
+                        for(int32 t=0;t<ENCMAX;t++)
                         {
                            if(encounter[t].exists)
                            {
@@ -665,7 +665,7 @@ void mode_site(void)
                         }
 
                         refresh();
-                        int c=getch();
+                        int32 c=getch();
                         translategetch(c);
                         if(c>='a'&&c<='z')
                         {
@@ -755,9 +755,9 @@ void mode_site(void)
 
          if(c=='m')
          {
-            for(int x=0;x<MAPX;x++)
+            for(int32 x=0;x<MAPX;x++)
             {
-               for(int y=0;y<MAPY;y++)
+               for(int32 y=0;y<MAPY;y++)
                {
                   if(map[x][y][locz].flag & SITEBLOCK_KNOWN)
                   {
@@ -846,8 +846,8 @@ void mode_site(void)
 
          if(freeable&&(!enemy||!sitealarm)&&c=='r'&&!location[cursite]->siege.siege)
          {
-            short followers=0;
-            short actgot=0;
+            int16 followers=0;
+            int16 actgot=0;
 
             if(enemy)sitealarm=1;
             char freed;
@@ -856,7 +856,7 @@ void mode_site(void)
             {
                flipstart=0;
                freed=0;
-               for(int e=0;e<ENCMAX;e++)
+               for(int32 e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)break;
                   if((encounter[e].type==CREATURE_WORKER_SERVANT||
@@ -880,7 +880,7 @@ void mode_site(void)
                         pool.push_back(newcr);
                         stat_recruits++;
 
-                        for(int p=0;p<6;p++)
+                        for(int32 p=0;p<6;p++)
                         {
                            if(activesquad->squad[p]==NULL)
                            {
@@ -903,7 +903,7 @@ void mode_site(void)
 
                if(freed)
                {
-                  int time=20+LCSrandom(10);
+                  int32 time=20+LCSrandom(10);
                   if(time<1)time=1;
                   if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
                }
@@ -975,13 +975,13 @@ void mode_site(void)
                if(location[cursite]->siege.siege)
                {
                   //GRAB SOME OF THE BASE LOOT
-                  int lcount=1; //1 FROM THE ONE DELETED ABOVE
+                  int32 lcount=1; //1 FROM THE ONE DELETED ABOVE
 
-                  for(int x=0;x<MAPX;x++)
+                  for(int32 x=0;x<MAPX;x++)
                   {
-                     for(int y=0;y<MAPY;y++)
+                     for(int32 y=0;y<MAPY;y++)
                      {
-                        for(int z=0;z<MAPZ;z++)
+                        for(int32 z=0;z<MAPZ;z++)
                         {
                            if(map[x][y][z].flag&SITEBLOCK_LOOT)
                            {
@@ -991,11 +991,11 @@ void mode_site(void)
                      }
                   }
 
-                  int lplus=location[cursite]->loot.size()/lcount;
+                  int32 lplus=location[cursite]->loot.size()/lcount;
                   if(lcount==1)lplus=location[cursite]->loot.size();
 
                   itemst *it;
-                  int b;
+                  int32 b;
 
                   while(lplus>0)
                   {
@@ -1009,7 +1009,7 @@ void mode_site(void)
                }
                else
                {
-                  int time=20+LCSrandom(10);
+                  int32 time=20+LCSrandom(10);
                   if(time<1)time=1;
                   if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
@@ -1127,7 +1127,7 @@ void mode_site(void)
             }
 
             //MAKE GROUND LOOT INTO MISSION LOOT
-            for(int l=0;l<groundloot.size();l++)
+            for(int32 l=0;l<groundloot.size();l++)
             {
                activesquad->loot.push_back(groundloot[l]);
             }
@@ -1149,7 +1149,7 @@ void mode_site(void)
             creatureadvance();
          }
 
-         int cbase=-1;
+         int32 cbase=-1;
          if(activesquad->squad[0]!=NULL)
          {
             cbase=activesquad->squad[0]->base;
@@ -1160,9 +1160,9 @@ void mode_site(void)
          {
             //NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
                //REFRESHES THE SCREEN
-            long nlocx=locx;
-            long nlocy=locy;
-            long nlocz=locz;
+            int32 nlocx=locx;
+            int32 nlocy=locy;
+            int32 nlocz=locz;
             locx=olocx;
             locy=olocy;
             locz=olocz;
@@ -1181,12 +1181,12 @@ void mode_site(void)
             }
 
             if(partyalive==0)continue;
-            
+
             //AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
             locx=nlocx;
             locy=nlocy;
             locz=nlocz;
-            
+
             //CHECK FOR EXIT
             if((map[locx][locy][locz].flag & SITEBLOCK_EXIT)||
                (cbase==cursite&&!location[cursite]->siege.siege&&
@@ -1198,7 +1198,7 @@ void mode_site(void)
                //CHASE SEQUENCE OR FOOT CHASE
                chaseseq.clean();
                chaseseq.location=cursite;
-               long level=sitecrime;
+               int32 level=sitecrime;
                if(sitealarm==0)level=0;
                if(LCSrandom(3)&&level<4)level=0;
                if(LCSrandom(2)&&level<8)level=0;
@@ -1264,7 +1264,7 @@ void mode_site(void)
                   for(p=0;p<pool.size();p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
-                     for(int w=0;w<BODYPARTNUM;w++)
+                     for(int32 w=0;w<BODYPARTNUM;w++)
                      {
                         pool[p]->wound[w]&=~WOUND_BLEEDING;
                      }
@@ -1279,7 +1279,7 @@ void mode_site(void)
                   {
                      if(!sitealienate)
                      {
-                        long addjuice=sitecrime;
+                        int32 addjuice=sitecrime;
                         if(addjuice>40)addjuice=40; // *JDS* increased the max juice from one operation
                         juiceparty(addjuice);
                      }
@@ -1302,7 +1302,7 @@ void mode_site(void)
                   {
                      if(!sitealienate)
                      {
-                        long addjuice=sitecrime;
+                        int32 addjuice=sitecrime;
                         if(addjuice>40)addjuice=40; // *JDS* increased the max juice from one operation
                         juiceparty(addjuice);
                      }
@@ -1322,13 +1322,13 @@ void mode_site(void)
                newenc=1;
             }
 
-            for(int e=0;e<ENCMAX;e++)
+            for(int32 e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists)newenc=0;
             }
 
             //LOOK FOR SPECIALS
-            long makespecial=-1;
+            int32 makespecial=-1;
             switch(map[locx][locy][locz].special)
             {
                case SPECIAL_APARTMENT_LANDLORD:
@@ -1359,7 +1359,7 @@ void mode_site(void)
 
                      refresh();
 
-                     int c=getch();
+                     int32 c=getch();
                      translategetch(c);
 
                      if(c=='y')
@@ -1400,7 +1400,7 @@ void mode_site(void)
                      addstr("Force it open? (Yes or No)");
 
                      refresh();
-                     int c=getch();
+                     int32 c=getch();
                      translategetch(c);
 
                      if(c=='y')
@@ -1410,7 +1410,7 @@ void mode_site(void)
                         if(bash(BASH_DOOR,actual))
                         {
                            map[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
-                           int time=20+LCSrandom(10);
+                           int32 time=20+LCSrandom(10);
                            if(time<1)time=1;
                            if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
                            sitecrime++;
@@ -1445,20 +1445,20 @@ void mode_site(void)
             {
                if(locx!=olocx||locy!=olocy||locz!=olocz)
                {
-                  for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+                  for(int32 e=0;e<ENCMAX;e++)encounter[e].exists=0;
                }
 
                //MOVE SIEGE UNITS AROUND
                   //MOVE UNITS
-               vector<int> unitx;
-               vector<int> unity;
-               vector<int> unitz;
+               vector<int32> unitx;
+               vector<int32> unity;
+               vector<int32> unitz;
 
                for(x=0;x<MAPX;x++)
                {
-                  for(int y=0;y<MAPY;y++)
+                  for(int32 y=0;y<MAPY;y++)
                   {
-                     for(int z=0;z<MAPZ;z++)
+                     for(int32 z=0;z<MAPZ;z++)
                      {
                         if(map[x][y][z].siegeflag & SIEGEFLAG_UNIT)
                         {
@@ -1470,7 +1470,7 @@ void mode_site(void)
                   }
                }
 
-               int sx=0,sy=0,sz=0;
+               int32 sx=0,sy=0,sz=0;
                for(u=0;u<unitx.size();u++)
                {
                   sz=0;
@@ -1535,9 +1535,9 @@ void mode_site(void)
                   //MOVE HEAVY UNITS
                for(x=0;x<MAPX;x++)
                {
-                  for(int y=0;y<MAPY;y++)
+                  for(int32 y=0;y<MAPY;y++)
                   {
-                     for(int z=0;z<MAPZ;z++)
+                     for(int32 z=0;z<MAPZ;z++)
                      {
                         if(map[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
                         {
@@ -1672,10 +1672,10 @@ void mode_site(void)
                   location[cursite]->siege.attacktime=0;
 
                   //PLACE UNITS
-                  int lx,ly,lz;
-                  int unitnum=5;
-                  int count=10000;
-                  for(int t=0;t<unitnum;t++)
+                  int32 lx,ly,lz;
+                  int32 unitnum=5;
+                  int32 count=10000;
+                  for(int32 t=0;t<unitnum;t++)
                   {
                      do
                      {
@@ -1694,8 +1694,8 @@ void mode_site(void)
                      location[cursite]->siege.escalationstate>=2)
                   {
                      count=10000;
-                     int hunitnum=1;
-                     for(int t=0;t<hunitnum;t++)
+                     int32 hunitnum=1;
+                     for(int32 t=0;t<hunitnum;t++)
                      {
                         do
                         {
@@ -1767,7 +1767,7 @@ void mode_site(void)
                   for(p=0;p<pool.size();p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
-                     for(int w=0;w<BODYPARTNUM;w++)
+                     for(int32 w=0;w<BODYPARTNUM;w++)
                      {
                         pool[p]->wound[w]&=~WOUND_BLEEDING;
                      }
@@ -1820,7 +1820,7 @@ void mode_site(void)
                         getch();
 
                         prepareencounter(sitetype,0);
-                        for(int e=1;e<ENCMAX;e++)encounter[e].exists=0;
+                        for(int32 e=1;e<ENCMAX;e++)encounter[e].exists=0;
                      }
                      break;
                   case SPECIAL_RESTAURANT_TABLE:
@@ -1869,7 +1869,7 @@ void mode_site(void)
                         refresh();
                         getch();
 
-                        for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+                        for(int32 e=0;e<ENCMAX;e++)encounter[e].exists=0;
                         makecreature(encounter[0],CREATURE_LANDLORD);
                      }
                      break;
@@ -1890,7 +1890,7 @@ void mode_site(void)
                if((locx!=olocx||locy!=olocy||locz!=olocz)&&!newenc)
                {
                   //PUT BACK SPECIALS
-                  for(int e=0;e<ENCMAX;e++)
+                  for(int32 e=0;e<ENCMAX;e++)
                   {
                      if(encounter[e].exists)
                      {
@@ -1908,7 +1908,7 @@ void mode_site(void)
             if(locx!=olocx||locy!=olocy||locz!=olocz)
             {
                //NUKE GROUND LOOT
-               for(int l=0;l<groundloot.size();l++)
+               for(int32 l=0;l<groundloot.size();l++)
                {
                   delete groundloot[l];
                }
@@ -1925,7 +1925,7 @@ void mode_site(void)
             knowmap(locx,locy,locz);
          }
       }
-      
+
    }while(1);
 }
 

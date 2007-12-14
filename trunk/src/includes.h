@@ -20,7 +20,7 @@
 //#define AUTOENLIGHTEN
 //#define SHOWWAIT
 
-
+#include "compat.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,9 +30,9 @@
 #define PACKAGE_VERSION "3.11.3svn"
 #endif
 
-const unsigned long version=31103;
-const unsigned long lowestloadversion=31102;
-const unsigned long lowestloadscoreversion=30001;
+const uint32 version=31103;
+const uint32 lowestloadversion=31102;
+const uint32 lowestloadscoreversion=30001;
 
 #ifdef WIN32
    #include <windows.h>
@@ -114,7 +114,7 @@ const unsigned long lowestloadscoreversion=30001;
 
 using namespace std;
 #include "lcsio.h"
-#include "compat.h"
+
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
 
@@ -135,17 +135,17 @@ using namespace std;
  * compat.cpp is the place for non-trivial or more global functions.
  *--------------------------------------------------------------------------*/
 
- inline unsigned long getSeed(void)
+ inline uint32 getSeed(void)
  {
- unsigned long t;
+ uint32 t;
 
  #ifdef GO_PORTABLE
 
- t = (unsigned long)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
+ t = (uint32)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
 
  #else // WIN32
 
- t = (unsigned long)GetTickCount(); /* ms since system boot */
+ t = (uint32)GetTickCount(); /* ms since system boot */
 
  #endif
 
@@ -157,7 +157,7 @@ using namespace std;
    * This function is for compatibility and is currently a do nothing function.
    */
  #ifdef NCURSES
- inline int raw_output(bool bf)
+ inline int32 raw_output(bool bf)
  {
     raw();
  return OK;
@@ -196,8 +196,8 @@ using namespace std;
 
 
 
-unsigned long r_num(void);
-long LCSrandom(unsigned long max);
+uint32 r_num(void);
+int32 LCSrandom(uint32 max);
 
 enum UnlockTypes
 {
@@ -439,8 +439,8 @@ enum Weapons
 
 struct weaponst
 {
-   short type;
-   short ammo;
+   int16 type;
+   int16 ammo;
 
    char ranged(void)
    {
@@ -575,10 +575,10 @@ enum Armors
 
 struct armorst
 {
-   short type;
-   short subtype;
+   int16 type;
+   int16 subtype;
    char quality;
-   unsigned short flag;
+   uint16 flag;
 
    armorst()
    {
@@ -730,9 +730,9 @@ enum Activity
 
 struct activityst
 {
-   long type;
-   long arg;
-   long arg2;
+   int32 type;
+   int32 arg;
+   int32 arg2;
 };
 
 
@@ -748,57 +748,57 @@ struct creaturest
 {
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
-   long squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+   int32 squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
    char exists;
    char align;
    char alive;
-   short type;
+   int16 type;
    char animalgloss;
-   short specialattack;
-   short clinic;
-   short dating;
-   short hiding;
-   short trainingtime;
-   short trainingsubject;
+   int16 specialattack;
+   int16 clinic;
+   int16 dating;
+   int16 hiding;
+   int16 trainingtime;
+   int16 trainingsubject;
    creaturest *prisoner;
-   short sentence;
+   int16 sentence;
    char deathpenalty;
-   long joindays;
-   long deathdays;
-   long id;
-   long hireid;
+   int32 joindays;
+   int32 deathdays;
+   int32 id;
+   int32 hireid;
 
    char forceinc;
 
-   long att[ATTNUM];
-   unsigned long skill[SKILLNUM];
-   unsigned long skill_ip[SKILLNUM];
+   int32 att[ATTNUM];
+   uint32 skill[SKILLNUM];
+   uint32 skill_ip[SKILLNUM];
 
    weaponst weapon;
    armorst armor;
-   int clip[CLIPNUM];
+   int32 clip[CLIPNUM];
 
-   unsigned long money;
-   long juice;
+   uint32 money;
+   int32 juice;
 
    char wound[BODYPARTNUM];
-   short blood;
+   int16 blood;
    char special[SPECIALWOUNDNUM];
 
-   unsigned int lawflag[LAWFLAGNUM];
-   long location;
-   long worklocation;
+   uint32 lawflag[LAWFLAGNUM];
+   int32 location;
+   int32 worklocation;
 
    char cantbluff;
 
-   long base;
+   int32 base;
    activityst activity;
 
-   long carid;
+   int32 carid;
    char is_driver;
-   long pref_carid;
+   int32 pref_carid;
    char pref_is_driver;
-   unsigned short flag;
+   uint16 flag;
 
    creaturest()
    {
@@ -814,7 +814,7 @@ struct creaturest
    char canwalk(void)
    {
       if(!alive)return 0;
-      int legok=2;
+      int32 legok=2;
       if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
           (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
       if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
@@ -827,7 +827,7 @@ struct creaturest
       return 1;
    }
    void creatureinit(void);
-   long attval(short a,char usejuice=1);
+   int32 attval(int16 a,char usejuice=1);
 };
 
 #define SITEBLOCK_EXIT BIT1
@@ -874,8 +874,8 @@ enum SpecialBlocks
 
 struct siteblockst
 {
-   short special;
-   unsigned short flag;
+   int16 special;
+   uint16 flag;
    unsigned char siegeflag;
 };
 
@@ -893,11 +893,11 @@ struct itemst
 {
    weaponst weapon;
    armorst armor;
-   unsigned long money;
-   short cliptype;
-   short loottype;
-   short type;
-   long number;
+   uint32 money;
+   int16 cliptype;
+   int16 loottype;
+   int16 type;
+   int32 number;
 
    itemst()
    {
@@ -919,16 +919,16 @@ enum SiegeTypes
 struct siegest
 {
    char siege;
-   short siegetype;
+   int16 siegetype;
    char underattack;
-   long attacktime;
-   short kills;
-   short escalationstate;
+   int32 attacktime;
+   int16 kills;
+   int16 escalationstate;
    char lights_off;
    char cameras_off;
-   short timeuntillocated;
-   short timeuntilcorps;
-   short timeuntilcia;
+   int16 timeuntillocated;
+   int16 timeuntilcorps;
+   int16 timeuntilcia;
 
    siegest()
    {
@@ -953,23 +953,23 @@ struct locationst
 {
    char name[40];
    char shortname[20];
-   short type;
-   long parent;
+   int16 type;
+   int32 parent;
    vector<itemst *> loot;
-   long renting;
+   int32 renting;
    char newrental;
    char needcar;
-   short closed;
+   int16 closed;
    char highsecurity;
    siegest siege;
-   int heat;
+   int32 heat;
    char compound_walls;
-   long compound_stores;
-   short front_business;
+   int32 compound_stores;
+   int16 front_business;
    char front_name[40];
    char haveflag;
 
-   unsigned long mapseed;
+   uint32 mapseed;
 
    locationst()
    {
@@ -1011,13 +1011,13 @@ enum VehicleColors
 
 struct vehiclest
 {
-   short type;
-   short color;
-   long location;
-   int myear;
-   long id;
+   int16 type;
+   int16 color;
+   int32 location;
+   int32 myear;
+   int32 id;
 
-   void init(int t);
+   void init(int32 t);
 };
 
 
@@ -1036,7 +1036,7 @@ enum CarChaseObstacles
 //struct chaseseqst
 struct chaseseqst
 {
-   long location;
+   int32 location;
    vector<vehiclest *> friendcar;
    vector<vehiclest *> enemycar;
    char canpullover;
@@ -1057,19 +1057,19 @@ struct squadst
    char name[40];
    creaturest *squad[6];
    activityst activity;
-   int id;
+   int32 id;
    vector<itemst *> loot;
 
    squadst()
    {
-      for(int p=0;p<6;p++)squad[p]=NULL;
+      for(int32 p=0;p<6;p++)squad[p]=NULL;
       strcpy(name,"");
       activity.type=ACTIVITY_NONE;
       id=-1;
    }
    ~squadst()
    {
-      for(unsigned int l=0;l<loot.size();l++)
+      for(uint32 l=0;l<loot.size();l++)
       {
          delete loot[l];
       }
@@ -1146,16 +1146,16 @@ enum Laws
 
 struct datest
 {
-   long mac_id;
+   int32 mac_id;
    vector<creaturest *> date;
-   short timeleft;
+   int16 timeleft;
    datest()
    {
       timeleft=0;
    }
    ~datest()
    {
-      for(unsigned int d=0;d<date.size();d++)delete date[d];
+      for(uint32 d=0;d<date.size();d++)delete date[d];
       date.clear();
    }
 };
@@ -1205,13 +1205,13 @@ enum NewsStories
 
 struct newsstoryst
 {
-   short type;
-   short view;
+   int16 type;
+   int16 view;
    creaturest *cr;
-   vector<int> crime;
-   long loc,priority,page,guardianpage;
+   vector<int32> crime;
+   int32 loc,priority,page,guardianpage;
    char positive;
-   short siegetype;
+   int16 siegetype;
    newsstoryst()
    {
       cr=NULL;
@@ -1226,16 +1226,16 @@ struct highscorest
    char endtype;
 
    char slogan[SLOGAN_LEN+1];
-   int month;
-   int year;
-   unsigned long stat_recruits;
-   unsigned long stat_kidnappings;
-   unsigned long stat_dead;
-   unsigned long stat_kills;
-   unsigned long stat_funds;
-   unsigned long stat_spent;
-   unsigned long stat_buys;
-   unsigned long stat_burns;
+   int32 month;
+   int32 year;
+   uint32 stat_recruits;
+   uint32 stat_kidnappings;
+   uint32 stat_dead;
+   uint32 stat_kills;
+   uint32 stat_funds;
+   uint32 stat_spent;
+   uint32 stat_buys;
+   uint32 stat_burns;
 };
 
 #define SCORENUM 5
@@ -1302,7 +1302,7 @@ enum ReviewModes
 
 
 /* end the game and clean up */
-void end_game(int err=0);
+void end_game(int32 err=0);
 
 /*******************************************************************************
 *
@@ -1319,7 +1319,7 @@ void locheader(void);
 /* party info at top of screen */
 void printparty(void);
 /* location info at top of screen */
-void printlocation(long loc);
+void printlocation(int32 loc);
 /* character info at top of screen */
 void printcreatureinfo(creaturest *cr);
 /* full character sheet (with surrounding interface) */
@@ -1327,100 +1327,100 @@ void fullstatus(int p);
 /* full screen character sheet */
 void printliberalstats(creaturest &cr,char smll);
 /* draws a horizontal line across the screen */
-void makedelimiter(int y,int x);
+void makedelimiter(int32 y,int32 x);
 /* print location name (is aware of business fronts) */
 void addlocationname(locationst *loc);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
-void printhealthstat(creaturest &g,int y,int x,char smll);
+void printhealthstat(creaturest &g,int32 y,int32 x,char smll);
 /* prints amount of money the player has, with optional formatting */
-void printfunds(unsigned int y, unsigned int offset, char* prefix=NULL);
+void printfunds(uint32 y, uint32 offset, char* prefix=NULL);
 
 /*
  commonactions.cpp
 */
 /* common - test for possible game over */
-char endcheck(short cause=-1);
+char endcheck(int16 cause=-1);
 /* common - detatches all liberals from a specified car */
-void removecarprefs_pool(long carid);
+void removecarprefs_pool(int32 carid);
 /* common - tests if the person is a wanted criminal */
 bool iscriminal(creaturest &cr);
 /* common - sends somebody to the hospital */
-void hospitalize(int loc, creaturest &patient);
-/* common - determines how long a creature's injuries will take to heal */
-int clinictime(creaturest &g);
+void hospitalize(int32 loc, creaturest &patient);
+/* common - determines how int32 a creature's injuries will take to heal */
+int32 clinictime(creaturest &g);
 /* common - purges squad of loot and vehicles if it has no members */
-int testsquadclear(squadst &thissquad, int obase);
+int32 testsquadclear(squadst &thissquad, int32 obase);
 /* common - returns the associated attribute for the given skill */
-int skillatt(int skill);
+int32 skillatt(int32 skill);
 /* common - applies a crime to everyone in the active party */
-void criminalizeparty(short crime);
+void criminalizeparty(int16 crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */
-void criminalizepool(short crime,long exclude=-1,short loc=-1);
+void criminalizepool(int16 crime,int32 exclude=-1,int16 loc=-1);
 /* common - gives juice to everyone in the active party */
-void juiceparty(long juice);
+void juiceparty(int32 juice);
 /* common - gives juice to a given creature */
-void addjuice(creaturest &cr,long juice,long cap=1000);
+void addjuice(creaturest &cr,int32 juice,int32 cap=1000);
 /* common - removes the liberal from all squads */
 void removesquadinfo(creaturest &cr);
 /* common - purges empty squads from existance */
 void cleangonesquads(void);
 /* common - moves all squad members and their cars to a new location */
-void locatesquad(squadst *st,long loc);
+void locatesquad(squadst *st,int32 loc);
 /* common - assigns a new base to all members of a squad */
-void basesquad(squadst *st,long loc);
+void basesquad(squadst *st,int32 loc);
 /* common - shifts public opinion on an issue */
-void change_public_opinion(int v,int power,char affect,char cap=100);
+void change_public_opinion(int32 v,int32 power,char affect,char cap=100);
 /* returns the amount of heat associated with a given crime */
-int lawflagheat(int lawflag);
+int32 lawflagheat(int32 lawflag);
 
 /*
  consolesupport.cpp
 */
-void set_color(short f,short b,char bright);
-void translategetch(int &c);
-void translategetch_cap(int &c);
+void set_color(int16 f,int16 b,char bright);
+void translategetch(int32 &c);
+void translategetch_cap(int32 &c);
 
 /*
  getnames.cpp
 */
 void getactivity(char *str,activityst &act);
-void getweapon(char *str,int type);
-void getweaponfull(char *str,int type);
-void getarmor(char *str,int type,int subtype=-1);
+void getweapon(char *str,int32 type);
+void getweaponfull(char *str,int32 type);
+void getarmor(char *str,int32 type,int32 subtype=-1);
 void getarmorfull(char *str,armorst &armor,char superfull);
-void getarmorfull(char *str,int type,int subtype=-1);
-void getmaskdesc(char *str,short mask);
-void getskill(char *str,int type);
-void getclip(char *str,int clip);
-void getloot(char *str,int loot);
-void getrecruitcreature(char *str,int type);
+void getarmorfull(char *str,int32 type,int32 subtype=-1);
+void getmaskdesc(char *str,int16 mask);
+void getskill(char *str,int32 type);
+void getclip(char *str,int32 clip);
+void getloot(char *str,int32 loot);
+void getrecruitcreature(char *str,int32 type);
 void gettitle(char *str,creaturest &cr);
-void getview(char *str,short view);
-void getlaw(char *str,int l);
+void getview(char *str,int16 view);
+void getlaw(char *str,int32 l);
 void getcarfull(char *str,vehiclest &car,char halffull=0);
-void getcarfull(char *str,int type);
-void getcar(char *str,int type);
-void getcarcolor(char *str,int type);
-short naturalcarcolor(int type); /* support function for getcarcolor */
+void getcarfull(char *str,int32 type);
+void getcar(char *str,int32 type);
+void getcarcolor(char *str,int32 type);
+int16 naturalcarcolor(int32 type); /* support function for getcarcolor */
 void cityname(char *story); /* random city name */
 /* Allow player to enter a name with an optional default name */
-void enter_name(char *name, int len, char *defname=NULL);
+void enter_name(char *name, int32 len, char *defname=NULL);
 
 /*
  translateid.cpp
 */
 /* transforms a squad id number into the index of that squad in the global vector */
-long getsquad(long id);
+int32 getsquad(int32 id);
 /* transforms a car id number into the index of that car in the global vector */
-long id_getcar(long id);
+int32 id_getcar(int32 id);
 /* transforms a creature id number into the index of that person in the pool */
-int getpoolcreature(long id);
+int32 getpoolcreature(int32 id);
 
 /*
  equipment.cpp
 */
 /* review squad equipment */
-void equip(vector<itemst *> &loot,int loc);
+void equip(vector<itemst *> &loot,int32 loc);
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<itemst *> &dest,vector<itemst *> &source);
 /* combines multiple items of the same type into stacks */
@@ -1428,17 +1428,17 @@ void consolidateloot(vector<itemst *> &loot);
 /* compares two items, used in sorting gear */
 char itemcompare(itemst *a,itemst *b);
 /* returns the type of ammo used by the given weapon, if any */
-short ammotype(int type);
+int16 ammotype(int32 type);
 /* check if a weapon is ranged */
 char rangedweapon(weaponst &w);
 /* check if the squad has a certain weapon */
-char squadhasitem(squadst &sq,int type,int subtype);
+char squadhasitem(squadst &sq,int32 type,int32 subtype);
 
 /*
  creature.cpp
 */
 /* rolls up a creature's stats and equipment */
-void makecreature(creaturest &cr,short type);
+void makecreature(creaturest &cr,int16 type);
 /* rolls up a proper name for a creature */
 void namecreature(creaturest &cr);
 /* fills a string with a proper name */
@@ -1541,29 +1541,29 @@ void activate(creaturest *cr);
 void activatebulk(void);
 /* base - activate - hostages */
 void select_tendhostage(creaturest *cr);
-long select_hostagefundinglevel(creaturest *cr,creaturest *hs);
+int32 select_hostagefundinglevel(creaturest *cr,creaturest *hs);
 /* base - activate - make clothing */
 void select_makeclothing(creaturest *cr);
-long armor_makedifficulty(int type,creaturest *cr);
-long armor_makeprice(int type);
+int32 armor_makedifficulty(int32 type,creaturest *cr);
+int32 armor_makeprice(int32 type);
 /* base - activate - trouble */
-long select_troublefundinglevel(creaturest *cr);
+int32 select_troublefundinglevel(creaturest *cr);
 /* base - activate - select a topic to write about */
-char select_view(creaturest *cr,long &v);
+char select_view(creaturest *cr,int32 &v);
 
 /*
  reviewmode.cpp
 */
 /* base - review and reorganize liberals */
 void review(void);
-void review_mode(short mode);
+void review_mode(int16 mode);
 /* base - review - assemble a squad */
 void assemblesquad(squadst *cursquad);
 /* base - review - assign new bases to the squadless */
 void squadlessbaseassign(void);
 /* base - review - promote liberals */
 void promoteliberals(void);
-void sortbyhire(vector<creaturest *> &temppool,vector<int> &level);
+void sortbyhire(vector<creaturest *> &temppool,vector<int32> &level);
 
 /*******************************************************************************
 *
@@ -1575,7 +1575,7 @@ void sortbyhire(vector<creaturest *> &temppool,vector<int> &level);
 /*
  sitemode.cpp
 */
-void mode_site(long loc);
+void mode_site(int32 loc);
 void mode_site(void);
 /* site - determines spin on site news story, "too hot" timer */
 void resolvesite(void);
@@ -1586,26 +1586,26 @@ void resolvesite(void);
 /* re-create site from seed before squad arrives */
 void initsite(locationst &loc);
 /* recursive dungeon-generating algorithm */
-void generateroom(int rx,int ry,int dx,int dy,int z=0);
+void generateroom(int32 rx,int32 ry,int32 dx,int32 dy,int32 z=0);
 /* marks the area around the specified tile as explored */
-void knowmap(int locx,int locy,int locz);
+void knowmap(int32 locx,int32 locy,int32 locz);
 
 /*
  newencounter.cpp
 */
 /* generates a new random encounter */
-void prepareencounter(short type,char sec);
+void prepareencounter(int16 type,char sec);
 /* generates a new siege encounter */
 char addsiegeencounter(char type);
 /* rolls up a random creature type according to the passed weighting array */
-int getrandomcreaturetype(int cr[CREATURENUM]);
+int32 getrandomcreaturetype(int32 cr[CREATURENUM]);
 
 /*
  sitedisplay.cpp
 */
 /* prints the 'map graphics' on the bottom right */
-void printsitemap(int x,int y,int z);
-void printblock(int x,int y,int z,int px,int py);
+void printsitemap(int32 x,int32 y,int32 z);
+void printblock(int32 x,int32 y,int32 z,int32 px,int32 py);
 /* prints the names of creatures you see */
 void printencounter(void);
 /* prints the names of creatures you see in car chases */
@@ -1619,13 +1619,13 @@ void clearmaparea(void);
  miscactions.cpp
 */
 /* unlock attempt */
-char unlock(short type,char &actual);
+char unlock(int16 type,char &actual);
 /* bash attempt */
-char bash(short type,char &actual);
+char bash(int16 type,char &actual);
 /* returns the bash bonus provided by the specified weapon */
-long bashstrengthmod(int t);
+int32 bashstrengthmod(int t);
 /* computer hack attempt */
-char hack(short type,char &actual);
+char hack(int16 type,char &actual);
 /* run a radio broadcast */
 char radio_broadcast(void);
 /* run a tv broadcast */
@@ -1639,7 +1639,7 @@ void reloadparty(void);
  mapspecials.cpp
 */
 void special_lab_cosmetics_cagedanimals(void);
-void special_readsign(int sign);
+void special_readsign(int32 sign);
 void special_nuclear_onoff(void);
 void special_lab_genetic_cagedanimals(void);
 void special_policestation_lockup(void);
@@ -1658,7 +1658,7 @@ void special_news_broadcaststudio(void);
  talk.cpp
 */
 /* bluff, date, issues */
-char talk(creaturest &a,int t);
+char talk(creaturest &a,int32 t);
 /* are they interested in talking about the issues? */
 char talkreceptive(creaturest &cr);
 /* is the character too young to be dating? */
@@ -1668,19 +1668,19 @@ char kid(creaturest &cr);
  stealth.cpp
 */
 /* checks if your liberal activity is noticed */
-void noticecheck(int exclude);
+void noticecheck(int32 exclude);
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
 void disguisecheck(void);
 /* returns the difficulty of seeing through your squad's disguise */
-int disguiseskill(void);
+int32 disguiseskill(void);
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(creaturest &cr,short type);
+char weaponcheck(creaturest &cr,int16 type);
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(creaturest &cr,short type);
+char hasdisguise(creaturest &cr,int16 type);
 /* returns true if the entire site is not open to public */
-char disguisesite(long type);
+char disguisesite(int32 type);
 
 /*
  advance.cpp
@@ -1706,17 +1706,17 @@ void enemyattack(void);
 /* attack handling for an individual creature and its target */
 void attack(creaturest &a,creaturest &t,char mistake,char &actual);
 /* modifies a combat roll based on the creature's critical injuries */
-void healthmodroll(int &aroll,creaturest &a);
+void healthmodroll(int32 &aroll,creaturest &a);
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,int mod);
+void damagemod(creaturest &t,char &damtype,int32 &damamount,int32 mod);
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(creaturest &cr,vector<itemst *> &loot);
 /* damages the selected armor if it covers the body part specified */
-void armordamage(armorst &armor,int bp);
+void armordamage(armorst &armor,int32 bp);
 /* blood explosions */
 void bloodblast(armorst &armor);
 /* kills the specified creature from the encounter, dropping loot */
-void delenc(short e,char loot);
+void delenc(int16 e,char loot);
 /* generates the loot dropped by a creature when it dies */
 void makeloot(creaturest &cr,vector<itemst *> &loot);
 /* abandoned liberal is captured by conservatives */
@@ -1726,7 +1726,7 @@ char incapacitated(creaturest &a,char noncombat,char &printed);
 /* describes a character's death */
 void adddeathmessage(creaturest &cr);
 /* pushes people into the current squad (used in a siege) */
-void autopromote(int loc);
+void autopromote(int32 loc);
 
 /*
  chase.cpp
@@ -1735,13 +1735,13 @@ char chasesequence(void);
 char footchase(void);
 void evasivedrive(void);
 void evasiverun(void);
-long driveskill(creaturest &cr,vehiclest *v);
-void drivingupdate(short &obstacle);
-void makechasers(long sitetype,long sitecrime);
-void obstacledrive(short obstacle,char choice);
+int32 driveskill(creaturest &cr,vehiclest *v);
+void drivingupdate(int16 &obstacle);
+void makechasers(int32 sitetype,int32 sitecrime);
+void obstacledrive(int16 obstacle,char choice);
 void dodgedrive(void);
-void crashfriendlycar(int v);
-void crashenemycar(int v);
+void crashfriendlycar(int32 v);
+void crashenemycar(int32 v);
 void chase_giveup(void);
 /* the next two functions force a chase sequence with a specific liberal */
 char footchase(creaturest &cr);
@@ -1777,17 +1777,17 @@ void dispersalcheck(char &clearformess);
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
 void advancelocations(void);
 /* daily - returns true if the site type supports high security */
-char securityable(int type);
+char securityable(int32 type);
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(locationst &loc);
 /* daily - returns the number of days in the current month */
-int monthday(void);
+int32 monthday(void);
 
 /*
  activities.cpp
 */
 /* adjust blog power */
-void adjustblogpower(int &power);
+void adjustblogpower(int32 &power);
 /* hostage tending */
 void tendhostage(creaturest *cr,char &clearformess);
 /* armor repair */
@@ -1800,10 +1800,10 @@ void survey(creaturest *cr);
 void funds_and_trouble(char &clearformess);
 /* steal a car */
 char stealcar(creaturest &cr,char &clearformess);
-long difficulty_carfind(int type);
-char carselect(creaturest &cr,short &cartype);
-long sensealarmchance(int ct);
-long touchalarmchance(int ct);
+int32 difficulty_carfind(int32 type);
+char carselect(creaturest &cr,int16 &cartype);
+int32 sensealarmchance(int32 ct);
+int32 touchalarmchance(int32 ct);
 /* get a wheelchair */
 void getwheelchair(creaturest &cr,char &clearformess);
 
@@ -1811,29 +1811,29 @@ void getwheelchair(creaturest &cr,char &clearformess);
  shopsnstuff.cpp
 */
 /* active squad visits the hospital */
-void hospital(int loc);
+void hospital(int32 loc);
 /* active squad visits the pawn shop */
-void pawnshop(int loc);
+void pawnshop(int32 loc);
 /* active squad visits the department store */
-void deptstore(int loc);
+void deptstore(int32 loc);
 /* active squad visits the oubliette */
-void halloweenstore(int loc);
+void halloweenstore(int32 loc);
 /* oubliette - buy a mask */
-char maskselect(creaturest *cr,short &mask);
+char maskselect(creaturest *cr,int16 &mask);
 /* pick stuff to fence */
-unsigned long fenceselect(void);
+uint32 fenceselect(void);
 /* value of stuff to fence */
-unsigned long fencevalue(itemst &it);
+uint32 fencevalue(itemst &it);
 /* choose buyer */
-void choose_buyer(short &buyer);
+void choose_buyer(int16 &buyer);
 
 /*
  date.cpp
 */
 /* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess);
+char completevacation(datest &d,int32 p,char &clearformess);
 /* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess);
+char completedate(datest &d,int32 p,char &clearformess);
 
 /*
  siege.cpp
@@ -1845,9 +1845,9 @@ void siegeturn(char clearformess);
 /* siege - handles giving up */
 void giveup(void);
 /* siege - checks how many days of food left at the site */
-int fooddaysleft(int loc);
+int32 fooddaysleft(int32 loc);
 /* siege - checks how many people are eating at the site */
-int numbereating(int loc);
+int32 numbereating(int32 loc);
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage(void);
 /* siege - what happens when you escaped the siege */
@@ -1855,7 +1855,7 @@ void escapesiege(char won);
 /* siege - flavor text when you fought off the raid */
 void conquertext(void);
 /* siege - "you are wanted for _______ and other crimes..." */
-void statebrokenlaws(int loc);
+void statebrokenlaws(int32 loc);
 
 /*
  news.cpp
@@ -1863,18 +1863,18 @@ void statebrokenlaws(int loc);
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns);
 /* news - show major news story */
-void displaystory(newsstoryst &ns, bool liberalguardian, int header);
+void displaystory(newsstoryst &ns, bool liberalguardian, int32 header);
 /* news - graphics */
 void loadgraphics(void);
-void displaycenterednewsfont(char *str,int y);
-void displaycenteredsmallnews(char *str,int y);
-void displaynewspicture(int p,int y);
+void displaycenterednewsfont(char *str,int32 y);
+void displaycenteredsmallnews(char *str,int32 y);
+void displaynewspicture(int32 p,int32 y);
 /* news - constructs non-LCS related event stories */
-void constructeventstory(char *story,short view,char positive);
+void constructeventstory(char *story,int16 view,char positive);
 /* news - draws the specified block of text to the screen */
-void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
+void displaynewsstory(char *story,int16 *storyx_s,int16 *storyx_e,int32 y);
 /* news - make some filler junk */
-void generatefiller(char *story,int amount);
+void generatefiller(char *story,int32 amount);
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings);
 
@@ -1891,7 +1891,7 @@ void majornewspaper(char &clearformess,char canseethings);
 /* does end of month actions */
 void passmonth(char &clearformess,char canseethings);
 /* rename prison according to the new laws (add more buildings to this) */
-void updateworld_laws(short *law,short *oldlaw);
+void updateworld_laws(int16 *law,int16 *oldlaw);
 
 /*
  lcsmonthly.cpp
@@ -1899,13 +1899,13 @@ void updateworld_laws(short *law,short *oldlaw);
 /* monthly - reports the guardian's power to the player */
 void guardianupdate(char size,char power);
 /* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess);
+int32 choosespecialedition(char &clearformess);
 /* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l,short newspaper);
+void printnews(int16 l,int16 newspaper);
 /* monthly - LCS finances report */
 void fundreport(char &clearformess);
 /* monthly - sleeper behavior */
-void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int32 *libpower);
 
 /*
  justice.cpp
@@ -1931,7 +1931,7 @@ void congress(char clearformess,char canseethings);
 /* politics - checks if the game is won */
 char wincheck(void);
 /* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l);
+int32 publicmood(int32 l);
 
 /*
  endgame.cpp
@@ -1941,11 +1941,11 @@ void tossjustices(char canseethings);
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */
-char ratify(int level,int view,int lawview,char congress,char canseethings);
+char ratify(int32 level,int32 view,int32 lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */
 void amendmentheading(void);
 /* endgame - converts an integer into a roman numeral for amendments */
-void romannumeral(int amendnum);
+void romannumeral(int32 amendnum);
 
 
 // Garbage bin
@@ -1953,7 +1953,7 @@ void romannumeral(int amendnum);
 /* does not exist! */
 //int testclearallsquads();
 /* does not exist! */
-//void chooseview(short &view);
+//void chooseview(int16 &view);
 
 
 #endif // INCLUDES_H_INCLUDED
