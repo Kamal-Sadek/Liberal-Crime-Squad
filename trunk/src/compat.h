@@ -65,6 +65,8 @@
 *
 */
 
+#ifndef COMPAT_H
+#define COMPAT_H
 
  #ifndef HAS_SRTICMP
  // Portable equivalent of Windows stricmp() function.
@@ -157,3 +159,6 @@ typedef unsigned char uint8;
 typedef char int8;
 
 #endif
+
+
+#endif //guard

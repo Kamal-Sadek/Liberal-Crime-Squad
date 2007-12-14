@@ -35,6 +35,8 @@ This file is part of Liberal Crime Squad.
 #ifndef LCSIO_H_INCLUDED
 #define LCSIO_H_INCLUDED
 
+#include "compat.h"
+
 #ifdef WIN32
 #include <windows.h>
 #include <stdio.h>
