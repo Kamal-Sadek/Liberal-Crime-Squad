@@ -105,3 +105,55 @@ void alarmwait();
  char *itoa(int value, char *buffer, int radix);
  #endif
 
+
+#ifdef PACKAGE_NAME
+
+#if SIZEOF_LONG==4
+    typedef unsigned long uint32;
+    typedef long int32;
+#endif
+
+#if SIZEOF_INT<SIZEOF_LONG
+
+    #if SIZEOF_INT==4
+        typedef unsigned int uint32;
+        typedef int int32;
+    #endif
+
+    #if SIZEOF_INT==2
+        typedef unsigned int uint16;
+        typedef int int16;
+    #endif
+
+#endif
+
+#if SIZEOF_SHORT<SIZEOF_INT
+    #if SIZEOF_SHORT==2
+        typedef unsigned short uint16;
+        typedef short int16;
+    #endif
+
+    #if SIZEOF_SHORT==1
+        typedef unsigned short uint8;
+        typedef short int8;
+    #endif
+#endif
+
+#if SIZEOF_CHAR<SIZEOF_SHORT
+    #if SIZEOF_CHAR==1
+    typedef unsigned char uint8;
+    typedef char int8;
+    #endif
+#endif
+
+#else
+
+//Assume we are on Windows
+typedef unsigned int uint32;
+typedef int int32;
+typedef unsigned short uint16;
+typedef short int16;
+typedef unsigned char uint8;
+typedef char int8;
+
+#endif

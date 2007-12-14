@@ -1,5 +1,9 @@
 ChangeLog for Version 3.11.4:
 
+2007-12-14   Chris Johnson   <grundee@users.sourceforge.net>
+* configure.ac: Added sizeof checks for data types.
+* compat.h: Added typedefs for integer sizes using new sizeof macros.
+
 2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * fight.cpp, monthly.cpp: Added more places where Wisdom is used.
 * date.cpp: Bug causing liberals who are caught trying to kidnap their dates

@@ -19,6 +19,16 @@ AC_DEFINE([Linux],[],[Defined if running on Linux])
 AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
 
 
+AC_CHECK_SIZEOF([int])
+
+AC_CHECK_SIZEOF([long])
+
+AC_CHECK_SIZEOF([short])
+
+AC_CHECK_SIZEOF([char])
+
+AC_CHECK_SIZEOF([void *])
+
 AC_CHECK_LIB(ncurses, initscr, [], [AC_MSG_ERROR([You need ncurses!])], [])
 
 # Checks for header files.
