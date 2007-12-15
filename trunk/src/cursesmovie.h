@@ -20,6 +20,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 #include "compat.h"
+#include "endian.h"
 #define PICMAX 1000
 
 struct filelistst
@@ -43,9 +44,11 @@ struct filelistst
 			}
 		list.clear();
 		}
-
-	void open_diskload(FILE *h);
-	void open_disksave(FILE *h);
+
+	void open_diskload(FILE *h);
+	void open_disksave(FILE *h);
+
+    //Deprecated
 	void smartappend(filelistst &list2);
 	};
 

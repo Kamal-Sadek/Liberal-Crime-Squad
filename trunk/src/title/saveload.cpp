@@ -54,81 +54,168 @@ void savegame(char *str)
    FILE *h;
    int32 l;
 
+   uint32 temp;
+   uint16 temp2;
+
    h=LCSOpenFile(str, "wb", LCSIO_PRE_HOME);
    if(h!=NULL)
    {
       uint32 lversion=version;
-      numbytes=fwrite(&lversion,sizeof(uint32),1,h);
+      temp=swap_endian_32(lversion);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
 
-      numbytes=fwrite(&seed,sizeof(uint32),1,h);
+      temp=swap_endian_32(seed);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
 
-      numbytes=fwrite(&mode,sizeof(int32),1,h);
+      temp=swap_endian_32(mode);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
 
-      numbytes=fwrite(&day,sizeof(int32),1,h);
-      numbytes=fwrite(&month,sizeof(int32),1,h);
-      numbytes=fwrite(&year,sizeof(int32),1,h);
-      numbytes=fwrite(&execterm,sizeof(int16),1,h);
-      numbytes=fwrite(&amendnum,sizeof(int32),1,h);
+      temp=swap_endian_32(day);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(month);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(year);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_16(execterm);
+      numbytes=fwrite(&temp,sizeof(int16),1,h);
+      temp=swap_endian_32(amendnum);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
 
-      numbytes=fwrite(&stat_recruits,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_dead,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_kills,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_kidnappings,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_funds,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_spent,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_buys,sizeof(uint32),1,h);
-      numbytes=fwrite(&stat_burns,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_recruits);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_dead);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_kills);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_kidnappings);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_funds);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_spent);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_buys);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(stat_burns);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
 
-      numbytes=fwrite(&curcarid,sizeof(int32),1,h);
+      temp=swap_endian_32(curcarid);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
       numbytes=fwrite(&showcarprefs,sizeof(char),1,h);
-      numbytes=fwrite(&curcreatureid,sizeof(int32),1,h);
-      numbytes=fwrite(&cursquadid,sizeof(int32),1,h);
-      numbytes=fwrite(&offended_cops,sizeof(int16),1,h);
-      numbytes=fwrite(&police_heat,sizeof(int32),1,h);
-      numbytes=fwrite(&offended_corps,sizeof(int16),1,h);
-      numbytes=fwrite(&offended_cia,sizeof(int16),1,h);
-      numbytes=fwrite(&offended_amradio,sizeof(int16),1,h);
-      numbytes=fwrite(&offended_cablenews,sizeof(int16),1,h);
-      numbytes=fwrite(&attorneyseed,sizeof(uint32),1,h);
-      numbytes=fwrite(&selectedsiege,sizeof(int32),1,h);
+      temp=swap_endian_32(curcreatureid);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(cursquadid);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp2=swap_endian_16(offended_cops);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
+      temp=swap_endian_32(police_heat);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp2=swap_endian_16(offended_corps);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
+      temp2=swap_endian_16(offended_cia);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
+      temp2=swap_endian_16(offended_amradio);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
+      temp2=swap_endian_16(offended_cablenews);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
+      temp=swap_endian_32(attorneyseed);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp=swap_endian_32(selectedsiege);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
       numbytes=fwrite(lcityname,sizeof(char),80,h);
       numbytes=fwrite(&newscherrybusted,sizeof(char),1,h);
-      numbytes=fwrite(&moneygained_donate,sizeof(int32),1,h);
-      numbytes=fwrite(&moneygained_brownies,sizeof(int32),1,h);
-      numbytes=fwrite(&moneygained_goods,sizeof(int32),1,h);
-      numbytes=fwrite(&moneygained_ccfraud,sizeof(int32),1,h);
-      numbytes=fwrite(&moneygained_hustling,sizeof(int32),1,h);
-      numbytes=fwrite(&moneygained_thievery,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_goods,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_trouble,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_rent,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_manufacture,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_legal,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_compound,sizeof(int32),1,h);
-      numbytes=fwrite(&moneylost_hostage,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_donate);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_brownies);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_goods);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_ccfraud);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_hustling);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneygained_thievery);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_goods);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_trouble);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_rent);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_manufacture);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_legal);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_compound);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+      temp=swap_endian_32(moneylost_hostage);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
 
       numbytes=fwrite(slogan,sizeof(char),80,h);
-      numbytes=fwrite(&funds,sizeof(uint32),1,h);
-      numbytes=fwrite(&party_status,sizeof(int16),1,h);
+      temp=swap_endian_32(funds);
+      numbytes=fwrite(&temp,sizeof(uint32),1,h);
+      temp2=swap_endian_16(party_status);
+      numbytes=fwrite(&temp2,sizeof(int16),1,h);
 
-      numbytes=fwrite(attitude,sizeof(int16),VIEWNUM,h);
-      numbytes=fwrite(law,sizeof(int16),LAWNUM,h);
-      numbytes=fwrite(house,sizeof(int16),435,h);
-      numbytes=fwrite(senate,sizeof(int16),100,h);
-      numbytes=fwrite(court,sizeof(int16),9,h);
+      int16 *temparr=new int16[VIEWNUM];
+      for(int i=0;i<VIEWNUM;i++)
+        temparr[i]=swap_endian_16(attitude[i]);
+      numbytes=fwrite(temparr,sizeof(int16),VIEWNUM,h);
+      delete temparr;
+
+      temparr=new int16[LAWNUM];
+      for(int i=0;i<LAWNUM;i++)
+        temparr[i]=swap_endian_16(law[i]);
+      numbytes=fwrite(temparr,sizeof(int16),LAWNUM,h);
+      delete temparr;
+
+      temparr=new int16[435];
+      for(int i=0;i<435;i++)
+        temparr[i]=swap_endian_16(house[i]);
+      numbytes=fwrite(temparr,sizeof(int16),435,h);
+      delete temparr;
+
+      temparr=new int16[100];
+      for(int i=0;i<100;i++)
+        temparr[i]=swap_endian_16(senate[i]);
+      numbytes=fwrite(temparr,sizeof(int16),100,h);
+      delete temparr;
+
+
+      temparr=new int16[100];
+      for(int i=0;i<100;i++)
+        temparr[i]=swap_endian_16(court[i]);
+      numbytes=fwrite(temparr,sizeof(int16),9,h);
+      delete temparr;
+
       numbytes=fwrite(courtname,sizeof(char)*80,9,h);
-      numbytes=fwrite(exec,sizeof(int16),EXECNUM,h);
+      temp=swap_endian_32(mode);
+
+      temparr=new int16[EXECNUM];
+      for(int i=0;i<EXECNUM;i++)
+        temparr[i]=swap_endian_16(exec[i]);
+      numbytes=fwrite(temparr,sizeof(int16),EXECNUM,h);
+      delete temparr;
+
       numbytes=fwrite(execname,sizeof(char)*80,EXECNUM,h);
 
+
       //LOCATIONS
+
       dummy=location.size();
-      numbytes=fwrite(&dummy,sizeof(int32),1,h);
+      temp=swap_endian_32(mode);
+      numbytes=fwrite(&temp,sizeof(int32),1,h);
+
+
+
+      //todo: continue converting from here
+
       for(l=0;l<location.size();l++)
       {
-         dummy=location[l]->loot.size();
+         dummy=swap_endian_32(location[l]->loot.size());
          numbytes=fwrite(&dummy,sizeof(int32),1,h);
          for(int32 l2=0;l2<location[l]->loot.size();l2++)
          {
+
             numbytes=fwrite(location[l]->loot[l2],sizeof(itemst),1,h);
          }
 
