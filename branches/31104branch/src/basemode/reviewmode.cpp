@@ -756,8 +756,8 @@ void assemblesquad(squadst *cursquad)
          addstr("PGUP/PGDN to view other Liberal pages.");
       }
       move(24,0);
-      if(squadsize>0)addstr("1 - The squad is ready.");
-      else addstr("1 - I need no squad!");
+      if(squadsize>0)addstr("Enter - The squad is ready.");
+      else addstr("Enter - I need no squad!");
       if(squadsize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(24,40);
@@ -843,7 +843,7 @@ void assemblesquad(squadst *cursquad)
             }
          }
       }
-      if(c=='1')
+      if(c==10)
       {
          //CHECK IF GOOD
          char good=1;

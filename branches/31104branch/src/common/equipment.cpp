@@ -170,7 +170,7 @@ void equip(vector<itemst *> &loot,int loc)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(24,1);
-      addstr("X - Done");
+      addstr("Enter - Done");
 
       refresh();
 
@@ -317,7 +317,7 @@ void equip(vector<itemst *> &loot,int loc)
          }
       }
 
-      if(c=='x')return;
+      if(c==10)return;
 
       if(loc!=-1)
       {
@@ -492,7 +492,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       move(23,1);
       addstr("Press a letter to select an item.");
       move(24,1);
-      addstr("X - Done");
+      addstr("Enter - Done");
 
       refresh();
 
@@ -544,7 +544,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
          }
       }
 
-      if(c=='x')break;
+      if(c==10)break;
 
       //PAGE UP
       if(c==interface_pgup&&page>0)page--;

@@ -96,6 +96,18 @@ void locheader(void)
    itoa(year,num,10);
    addstr(num);
 
+   if(activesquad==NULL && selectedsiege==-1)
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(3,6);
+      addstr("To form a new squad:");
+      move(4,6);
+      addstr("1) R - Review and reorganize Liberals");
+      move(5,6);
+      addstr("2) Press Z to Assemble a New Squad");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+   }
+
    
     printfunds(0,1,"Money: ");
 
