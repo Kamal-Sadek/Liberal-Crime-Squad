@@ -278,8 +278,20 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
 
+      //Others come to dates unarmed and wearing normal
+      //clothing
+      weaponst *weapon;
+      *weapon = d.date[e]->weapon;
+      d.date[e]->weapon.type = WEAPON_NONE;
+      armorst *armor;
+      *armor = d.date[e]->armor;
+      d.date[e]->armor.type = ARMOR_CLOTHES;
+
       printcreatureinfo(d.date[e]);
       makedelimiter(8,0);
+
+      d.date[e]->weapon = *weapon;
+      d.date[e]->armor = *armor;
 
       move(10,0);
       addstr("How should ");
@@ -576,6 +588,11 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->base=pool[p]->base;
                d.date[e]->flag|=CREATUREFLAG_MISSING;
 
+               //Kidnapped wearing normal clothes and no weapon
+               d.date[e]->weapon.ammo = ARMOR_NONE;
+               d.date[e]->weapon.type = WEAPON_NONE;
+               d.date[e]->armor.type = ARMOR_CLOTHES;
+
                //Create interrogation data
                d.date[e]->activity.arg=reinterpret_cast<int>(new interrogation);
 
@@ -619,7 +636,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" has failed to kidnap the Conservative.");
 
                   // Charge with kidnapping
-                  ++pool[p]->lawflag[LAWFLAG_KIDNAPPING];
+                  criminalize(*pool[p],LAWFLAG_KIDNAPPING);
 
                   refresh();
                   getch();
@@ -658,7 +675,7 @@ char completedate(datest &d,int p,char &clearformess)
                   pool[p]->activity.type=ACTIVITY_NONE;
 
                   // Charge with kidnapping
-                  ++pool[p]->lawflag[LAWFLAG_KIDNAPPING];
+                  criminalize(*pool[p],LAWFLAG_KIDNAPPING);
 
                   refresh();
                   getch();

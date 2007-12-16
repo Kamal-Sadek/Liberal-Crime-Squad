@@ -2911,7 +2911,7 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             pool[i]->skill_ip[SKILL_WRITING]+=LCSrandom(3); // Experience gain
             writers[pool[i]->activity.arg]+=pool[i]->skill[SKILL_WRITING]; // Record the writer on this topic
-            pool[i]->lawflag[LAWFLAG_SPEECH]++; // Record possibly illegal speech activity
+            criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
       }

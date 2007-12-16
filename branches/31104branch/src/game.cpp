@@ -533,6 +533,7 @@ void creaturest::creatureinit(void)
       activity.type=ACTIVITY_NONE;
       for(int i=0;i<LAWFLAGNUM;i++)
          lawflag[i]=0;
+      heat=0;
       confessions=0;
       clinic=0;
       dating=0;

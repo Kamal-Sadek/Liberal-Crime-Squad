@@ -14,7 +14,7 @@
    DEBUG DEFINES
 */
 //#define NOENEMYATTACK
-#define SHITLAWS
+//#define SHITLAWS
 //#define GIVEBLOODYARMOR
 //#define HIGHFUNDS
 //#define AUTOENLIGHTEN
@@ -27,11 +27,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.11.3svn"
+#define PACKAGE_VERSION "3.12.0 Alpha"
 #endif
 
-const unsigned long version=31103;
-const unsigned long lowestloadversion=31102;
+const unsigned long version=31190;
+const unsigned long lowestloadversion=31190;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
@@ -812,7 +812,7 @@ struct creaturest
 
    char forceinc;
 
-   long att[ATTNUM+1];
+   long att[ATTNUM];
    int skill[SKILLNUM];
    int skill_ip[SKILLNUM];
 
@@ -828,6 +828,7 @@ struct creaturest
    char special[SPECIALWOUNDNUM];
 
    unsigned int lawflag[LAWFLAGNUM];
+   int heat;
    long location;
    long worklocation;
 
@@ -1468,6 +1469,8 @@ int weaponskill(int weapon);
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */
 void criminalizepool(short crime,long exclude=-1,short loc=-1);
+/* common - applies a crime to a person */
+void criminalize(creaturest &cr,short crime);
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice);
 /* common - gives juice to a given creature */
@@ -1888,6 +1891,8 @@ void kidnaptransfer(creaturest &cr);
 void advanceday(char &clearformess,char canseethings);
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess);
+/* promote a subordinate to maintain chain of command when boss is lost */
+bool promotesubordinates(creaturest &cr, char &clearformess);
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
 void advancelocations(void);
 /* daily - returns true if the site type supports high security */

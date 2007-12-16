@@ -61,7 +61,7 @@ void trial(creaturest &g)
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   if(!iscriminal(g))g.lawflag[LAWFLAG_LOITERING]++;
+   if(!iscriminal(g))criminalize(g,LAWFLAG_LOITERING);
 
    int typenum=0;
    int scarefactor=0;
@@ -74,7 +74,7 @@ void trial(creaturest &g)
       if(g.lawflag[i])
       {
          typenum++;
-         scarefactor+=lawflagheat(i)*g.lawflag[i]/10;
+         scarefactor+=lawflagheat(i)*g.lawflag[i];
          breaker[i]=1;
       }
    }
@@ -83,6 +83,7 @@ void trial(creaturest &g)
    vector<int> sjudge;
    char sleeperlawyer=0;
    char sleeperjudge=0;
+   bool autoconvict=0;
    char *sleeperjname=NULL;
    char *sleepername=NULL;
    for(int p=0;p<pool.size();p++)
@@ -217,7 +218,7 @@ void trial(creaturest &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("selling brownies");
+         addstr("selling drugs");
          breaker[LAWFLAG_BROWNIES]=0;
       }
       else if(breaker[LAWFLAG_ESCAPED])
@@ -231,6 +232,7 @@ void trial(creaturest &g)
          }
          addstr("escaping prison");
          breaker[LAWFLAG_ESCAPED]=0;
+         autoconvict=1; // *Impossible* to beat this charge
       }
       else if(breaker[LAWFLAG_HELPESCAPE])
       {
@@ -557,7 +559,7 @@ void trial(creaturest &g)
       //PROSECUTION MESSAGE
       int prosecution;
       // *JDS* The bigger your record, the stronger the evidence
-      prosecution=LCSrandom(101);
+      prosecution=40+LCSrandom(61);
       prosecution+=scarefactor;
       prosecution+=20*g.confessions;
       if(sleeperjudge)prosecution>>=1;
@@ -565,12 +567,25 @@ void trial(creaturest &g)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(7,1);
 
-      if(prosecution<=25)addstr("The prosecution's presentation is terrible.");
-      else if(prosecution<=50)addstr("The prosecution's arguments are shaky.");
-      else if(prosecution<=75)addstr("The prosecution gives a standard presentation.");
-      else if(prosecution<=100)addstr("The prosecution's case is solid.");
-      else if(prosecution<=150)addstr("The prosecution makes an airtight case.");
-      else addstr("The prosecution's case seems insurmountable.");
+      if(autoconvict)
+      {
+         addstr("There is no question of ");
+         addstr(g.name);
+         addstr("'s guilt.");
+      }
+      else
+      {
+         if(prosecution<=50)addstr("The prosecution's presentation is terrible.");
+         else if(prosecution<=75)addstr("The prosecution gives a standard presentation.");
+         else if(prosecution<=100)addstr("The prosecution's case is solid.");
+         else if(prosecution<=150)addstr("The prosecution makes an airtight case.");
+         else
+         {
+            addstr("The jury it totally convinced of ");
+            addstr(g.name);
+            addstr("'s guilt before the defense begins.");
+         }
+      }
 
       refresh();
       getch();
@@ -584,39 +599,45 @@ void trial(creaturest &g)
       int defensepower=0;
       if(defense==0||defense==3)
       {
-         if(defense==0)defensepower=LCSrandom(71); // *JDS* gave you a better shake with the court-appointed attorney
+         if(autoconvict)
+         {
+            addstr("The defense makes a noble attempt, but the outcome is inevitable.");
+         }
          else
          {
-            defensepower=LCSrandom(101)+50;
-         }
+            if(defense==0)defensepower=LCSrandom(71); // *JDS* gave you a better shake with the court-appointed attorney
+            else
+            {
+               defensepower=LCSrandom(101)+50;
+            }
 
-         if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
-         else if(defensepower<=25)addstr("The defense is totally lame.");
-         else if(defensepower<=50)addstr("The defense was lackluster.");
-         else if(defensepower<=75)addstr("Defense arguments were pretty good.");
-         else if(defensepower<=100)addstr("The defense was really slick.");
-         else if(defensepower<=145)
-         {
-            if(prosecution<100)addstr("The defense makes the prosecution look like amateurs.");
-            else
+            if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
+            else if(defensepower<=25)addstr("The defense is totally lame.");
+            else if(defensepower<=50)addstr("The defense was lackluster.");
+            else if(defensepower<=75)addstr("Defense arguments were pretty good.");
+            else if(defensepower<=100)addstr("The defense was really slick.");
+            else if(defensepower<=145)
             {
-               addstr("But the defense is just as impressive.");
-            }
-         }
-         else
-         {
-            if(prosecution<100)
-            {
-               addstr(attorneyname);
-               addstr("'s arguments made several of the jurors stand up");
-               move(10,1);
-               addstr("and shout \"NOT GUILTY!\" before deliberations even began.");
+               if(prosecution<100)addstr("The defense makes the prosecution look like amateurs.");
+               else
+               {
+                  addstr("The defense is extremely compelling.");
+               }
             }
             else
             {
-               addstr("But ");
-               addstr(attorneyname);
-               addstr(" conducts an incredible defense!");
+               if(prosecution<100)
+               {
+                  addstr(attorneyname);
+                  addstr("'s arguments made several of the jurors stand up");
+                  move(10,1);
+                  addstr("and shout \"NOT GUILTY!\" before deliberations even began.");
+               }
+               else
+               {
+                  addstr(attorneyname);
+                  addstr(" conducts an incredible defense.");
+               }
             }
          }
       }
@@ -656,16 +677,33 @@ void trial(creaturest &g)
          g.skill_ip[SKILL_PERSUASION]+=max(50-g.skill[SKILL_PERSUASION]*2,0);
          g.skill_ip[SKILL_LAW]+=max(50-g.skill[SKILL_LAW]*2,0);
 
-         addstr(g.name);
-         if(defensepower<=15)addstr("'s defense looks like Colin Ferguson's.");
-         else if(defensepower<=25)addstr("'s case really sucked.");
-         else if(defensepower<=50)addstr(" did all right, but made some mistakes.");
-         else if(defensepower<=75)addstr("'s arguments were pretty good.");
-         else if(defensepower<=100)addstr(" worked the jury very well.");
-         else if(defensepower<=150)addstr(" made a very powerful case.");
+         if(autoconvict)
+         {
+            if(defensepower<=50)
+            {
+               addstr(g.name);
+               addstr("'s defense is humiliating.");
+            }
+            else
+            {
+               addstr("The jury is completely impassive as ");
+               addstr(g.name);
+               addstr(" argues the defense.");
+            }
+         }
          else
          {
-            addstr(" had the jurors crying for freedom.");
+            addstr(g.name);
+            if(defensepower<=15)addstr("'s defense looks like Colin Ferguson's.");
+            else if(defensepower<=25)addstr("'s case really sucked.");
+            else if(defensepower<=50)addstr(" did all right, but made some mistakes.");
+            else if(defensepower<=75)addstr("'s arguments were pretty good.");
+            else if(defensepower<=100)addstr(" worked the jury very well.");
+            else if(defensepower<=150)addstr(" made a very powerful case.");
+            else
+            {
+               addstr(" had the jurors crying for freedom.");
+            }
          }
       }
 
@@ -730,7 +768,7 @@ void trial(creaturest &g)
          }
       }
       //ACQUITTAL!
-      else if(defensepower>jury)
+      else if(!autoconvict && defensepower>jury)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(3,1);
@@ -745,7 +783,7 @@ void trial(creaturest &g)
          getch();
       }
       //LENIENCE
-      else if(defensepower/3>=jury/4 || sleeperjudge) // *JDS* sleeper judge will always reduce the sentence
+      else if(!autoconvict && (defensepower/3>=jury/4 || sleeperjudge)) // *JDS* sleeper judge will always reduce the sentence
       {
          penalize(g,1);
       }
@@ -758,6 +796,7 @@ void trial(creaturest &g)
       {
          g.lawflag[i]=0;
       }
+      g.heat=0;
       //Clean up confessions
       g.confessions=0;
       //PLACE PRISONER
@@ -788,6 +827,7 @@ void trial(creaturest &g)
       {
          g.lawflag[i]=0;
       }
+      g.heat=0;
       //Clean up confessions
       g.confessions=0;
       //PLACE PRISONER
@@ -815,7 +855,12 @@ void penalize(creaturest &g,char lenient)
    refresh();
    getch();
 
-   g.deathpenalty=0;
+   if(g.lawflag[LAWFLAG_ESCAPED])
+   {
+      lenient=0;
+      if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
+   }
+   else g.deathpenalty=0;
 
    if(!lenient&&((g.lawflag[LAWFLAG_MURDER])||(g.lawflag[LAWFLAG_TREASON])||
       ((g.lawflag[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
@@ -835,7 +880,7 @@ void penalize(creaturest &g,char lenient)
       {
          g.sentence+=(36+LCSrandom(18))*g.lawflag[LAWFLAG_KIDNAPPING];
          g.sentence+=(1+LCSrandom(4))*g.lawflag[LAWFLAG_THEFT];
-         g.sentence+=(4+LCSrandom(12))*g.lawflag[LAWFLAG_GUNCARRY];
+         g.sentence+=(4+LCSrandom(12))/**g.lawflag[LAWFLAG_GUNCARRY]*/;
          g.sentence+=(6+LCSrandom(7))*g.lawflag[LAWFLAG_CARTHEFT];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_INFORMATION];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_COMMERCE];
@@ -883,8 +928,8 @@ void penalize(creaturest &g,char lenient)
       else if(g.lawflag[LAWFLAG_ESCAPED]) g.sentence=-1*g.lawflag[LAWFLAG_ESCAPED];
       if(g.sentence<0)g.sentence-=1*g.lawflag[LAWFLAG_TREASON];
       else if(g.lawflag[LAWFLAG_TREASON]) g.sentence=-1*g.lawflag[LAWFLAG_TREASON];
-      if(lenient&&g.sentence==-1)g.sentence=240+LCSrandom(120);
       if(lenient&&g.sentence!=-1)g.sentence/=2;
+      if(lenient&&g.sentence==-1)g.sentence=240+LCSrandom(120);
    }
    //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
    else if(g.deathpenalty&&lenient)

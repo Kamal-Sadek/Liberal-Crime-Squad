@@ -176,7 +176,7 @@ void enemyattack(void)
    {
       if(activesquad->squad[i]==NULL)break;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
-      if(thisweapon==-1||thisweapon==2)activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
+      if(thisweapon==-1||thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
    }
 
 #ifdef NOENEMYATTACK
@@ -521,8 +521,10 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                      {
                         if(pool[pl]==activesquad->squad[p])
                         {
-                           delete pool[pl];
-                           pool.erase(pool.begin() + pl);
+                           pool[pl]->alive=0;
+                           pool[pl]->location=-1;
+                           //delete pool[pl];
+                           //pool.erase(pool.begin() + pl);
                            break;
                         }
                      }
@@ -662,19 +664,14 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
 
    //BASIC ROLL
-   int aroll=LCSrandom(20)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
+   int aroll=LCSrandom(20)+1;
    if(a.prisoner!=NULL)aroll-=LCSrandom(10);
-   int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+   int droll=LCSrandom(20)+1;
    if(t.prisoner!=NULL)droll-=LCSrandom(10);
-   // Harder to hit people during a chase: 5 points for being on the
-   // move, another 5 points for having to hit them in the car
-   if(mode==GAMEMODE_CHASECAR){droll+=LCSrandom(6);droll+=LCSrandom(6);}
-   if(mode==GAMEMODE_CHASEFOOT)droll+=LCSrandom(6);
 
    healthmodroll(aroll,a);
    healthmodroll(droll,t);
 
-   if(droll<0)droll=0;
    // If in a foot chance, double the debilitating effect of injuries
    if(mode==GAMEMODE_CHASEFOOT)
    {
@@ -682,18 +679,40 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       healthmodroll(droll,t);
    }
 
-   if(aroll<0)aroll=1;
-   if(droll<0)droll=1;
+   if(aroll<0)aroll=0;
+   if(droll<0)droll=0;
 
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
+   if(rangedweapon(a.weapon) && a.weapon.ammo==0)wsk=SKILL_IMPROVISED;
    aroll+=LCSrandom(a.skill[wsk]+1);
-   a.skill_ip[wsk]+=droll;
-   // "Easy to use" when shooting with shotgun (currently disabled for balance) and SMG
-   //if(a.weapon.type==WEAPON_SHOTGUN_PUMP)aroll+=4;
-   if(a.weapon.type==WEAPON_SMG_MP5)aroll+=4;
-   // Penalty for using full scale assault rifles, but not carbine
-   if(a.weapon.type==WEAPON_AUTORIFLE_M16 || a.weapon.type==WEAPON_AUTORIFLE_AK47)aroll-=4;
+
+   // Harder to hit people during a chase: 5 points for being on the
+   // move, another 5 points for having to hit them in the car
+   if(mode==GAMEMODE_CHASECAR){droll+=LCSrandom(6);droll+=LCSrandom(6);}
+   if(mode==GAMEMODE_CHASEFOOT)droll+=LCSrandom(6);
+
+   //Agility bonuses used for melee attack
+   if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
+   {
+      aroll+=LCSrandom(a.attval(ATTRIBUTE_AGILITY));
+      droll+=LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+   }
+
+   
+   int bonus=0;
+   //Penalty for improvised weapons
+   if(wsk==SKILL_IMPROVISED)bonus=-4;
+   else
+   {
+      // Weapon accuracy bonuses and pentalties
+      if(a.weapon.type==WEAPON_SHOTGUN_PUMP)bonus=2;
+      if(a.weapon.type==WEAPON_SMG_MP5)bonus=4;
+      if(a.weapon.type==WEAPON_CARBINE_M4)bonus=1;
+      if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
+      if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
+   }
+   
 
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
@@ -712,45 +731,39 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             a.weapon.ammo--;
             break;
          // *JDS* automatic weapons fire and maybe hit with three shots
-         case WEAPON_CARBINE_M4:
          case WEAPON_SMG_MP5:
+            for(int i=0;i<3&&a.weapon.ammo;i++)
+            {
+               a.weapon.ammo--;
+               // Each shot in a burst is increasingly less likely to hit
+               if(aroll+bonus-i*7>droll)bursthits++;
+            }
+            if(bursthits==0)bursthits=1;
+            break;
+         case WEAPON_CARBINE_M4:
          case WEAPON_AUTORIFLE_M16: 
          case WEAPON_AUTORIFLE_AK47:
             for(int i=0;i<3&&a.weapon.ammo;i++)
             {
                a.weapon.ammo--;
                // Each shot in a burst is increasingly less likely to hit
-               if(aroll-i*5>droll)bursthits++;
+               if(aroll+bonus-i*3>droll)bursthits++;
             }
             break;
       }
    }
 
    //HIT!
-   if(aroll>droll)
+   if(aroll+bonus>droll)
    {
-      // *JDS* compensate for "to hit" bonus for shotguns and SMG,
-      // and "to hit" penalties for assault rifles, by
-      // returning the attack roll to normal for the purpose
-      // of calculating damage
-      switch(a.weapon.type)
-      {
-      
-      case WEAPON_SMG_MP5:
-         aroll-=4;
-         break;
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-      case WEAPON_SHOTGUN_PUMP:
-         aroll+=4;
-         break;
-      }
       strcat(str,"hits the ");
       int w;
       
       do
       {
-         w=LCSrandom(BODYPARTNUM);
+         //Body gets two entries
+         w=LCSrandom(BODYPARTNUM+1);
+         if(w>BODYPART_BODY)w--;
       }while((t.wound[w]&WOUND_CLEANOFF) || (t.wound[w]&WOUND_NASTYOFF));
 
       if(t.animalgloss==ANIMALGLOSS_TANK)
@@ -1021,10 +1034,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
                if(!LCSrandom(3))
+               {
                   damamount=LCSrandom(300)+10;
+                  severtype=WOUND_NASTYOFF; // *JDS* dismemberment OK with shotgun
+               }
                else
+               {
                   damamount=LCSrandom(200)+10;
-               severtype=WOUND_NASTYOFF; // *JDS* dismemberment OK with shotgun
+               }
+               
                
                damagearmor=1;
             }
@@ -1679,8 +1697,8 @@ void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
       case ARMOR_PRISONER:prot=1;break;
       case ARMOR_TOGA:prot=0;break;
       case ARMOR_MITHRIL:prot=0;break;
-      case ARMOR_BALLISTICVEST:prot=3;break;
-      case ARMOR_HEAVYBALLISTICVEST:prot=5;break;
+      case ARMOR_BALLISTICVEST:prot=4;break;
+      case ARMOR_HEAVYBALLISTICVEST:prot=6;break;
    }
 
    mod-=prot;
@@ -1970,6 +1988,7 @@ void capturecreature(creaturest &t)
       if(sitetype==SITE_GOVERNMENT_PRISON)
       {
          // Clear criminal record?
+         t.heat=0;
          for(int i=0;i<LAWFLAGNUM;i++)
          {
             t.lawflag[i]=0;

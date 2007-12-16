@@ -120,7 +120,7 @@ void getactivity(char *str,activityst &act)
          strcat(str,"Soliciting Donations");
          break;
       case ACTIVITY_SELL_DRUGS:
-         strcat(str,"Selling Drugs");
+         strcat(str,"Selling Brownies");
          break;
       case ACTIVITY_VISIT:
       {
@@ -717,8 +717,8 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_WORKER_FACTORY_UNION:strcat(str,"Factory Worker");break;
       case CREATURE_LANDLORD:strcat(str,"Landlord");break;
       case CREATURE_COP:strcat(str,"Police Officer");break;
-      case CREATURE_SWAT:strcat(str,"Police SWAT");break;
-      case CREATURE_DEATHSQUAD:strcat(str,"Death Squad");break;
+      case CREATURE_SWAT:strcat(str,"SWAT Officer");break;
+      case CREATURE_DEATHSQUAD:strcat(str,"Death Squad Officer");break;
       case CREATURE_GANGUNIT:strcat(str,"Police Gang Unit");break;
       case CREATURE_PRISONGUARD:strcat(str,"Prison Guard");break;
       case CREATURE_EDUCATOR:strcat(str,"Educator");break;

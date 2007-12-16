@@ -930,6 +930,7 @@ char confirmdisband(void)
                   {
                      pool[p]->lawflag[i]=0;
                   }
+                  pool[p]->heat=0;
                   pool[p]->dating=0;
                   pool[p]->hiding=0;
                }

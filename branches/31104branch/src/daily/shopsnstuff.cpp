@@ -966,6 +966,8 @@ void deptstore(int loc)
       {
          armorst swap=activesquad->squad[buyer]->armor;
          activesquad->squad[buyer]->armor.type=armorbought;
+         activesquad->squad[buyer]->armor.flag=0;
+         activesquad->squad[buyer]->armor.quality='1';
 
          if(swap.type!=ARMOR_NONE)
          {
@@ -1351,6 +1353,8 @@ void halloweenstore(int loc)
          armorst swap=activesquad->squad[buyer]->armor;
          activesquad->squad[buyer]->armor.type=armorbought;
          activesquad->squad[buyer]->armor.subtype=armorbought2;
+         activesquad->squad[buyer]->armor.flag=0;
+         activesquad->squad[buyer]->armor.quality='1';
 
          if(swap.type!=ARMOR_NONE)
          {

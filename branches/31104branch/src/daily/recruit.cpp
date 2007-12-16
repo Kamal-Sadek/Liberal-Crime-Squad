@@ -313,8 +313,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       break;
    }
    move(15,0);
-   int y=17;
-   if(r.recruit->weapon.type==WEAPON_NONE && r.level>1)
+   int y;
+   if(r.recruit->weapon.type==WEAPON_NONE && r.level>=2)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);      
       addstr("C - Tell ");
@@ -334,12 +334,21 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       addstr(r.recruit->name);
       addstr("to get a weapon. Give them $1500.");
       move(18,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("F - ");
+      addstr(r.recruit->name);
+      addstr(" is not LCS material. Just go home.");
       y=20;
    }
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
-   addstr("H - ");
-   addstr(r.recruit->name);
-   addstr(" is not LCS material. Just go home.");
+   else
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("C - ");
+      addstr(r.recruit->name);
+      addstr(" is not LCS material. Just go home.");
+      y=17;
+   }
+   
 
    do
    {
@@ -478,7 +487,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             return 1;
          }
       }
-      if(c=='e' && funds>=1500 && r.recruit->weapon.type==WEAPON_NONE)
+      if(c=='e' && r.level>=2 && funds>=1500 && r.recruit->weapon.type==WEAPON_NONE)
       {
          move(y,0);
          set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -531,7 +540,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             return 0;
          }
       }
-      if(c=='d' && funds>=500 && r.recruit->weapon.type==WEAPON_NONE)
+      if(c=='d' && r.level>=2 && funds>=500 && r.recruit->weapon.type==WEAPON_NONE)
       {
          move(y,0);
          set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -567,7 +576,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             return 0;
          }
       }
-      if(c=='c' && r.recruit->weapon.type==WEAPON_NONE)
+      if(c=='c' && r.level>=2 && r.recruit->weapon.type==WEAPON_NONE)
       {
          move(y,0);
          set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -582,7 +591,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
          return 0;
       }
-      if(c=='f')
+      if(c=='f' || c=='c')
       {
          move(y,0);
          addstr(pool[p]->name);

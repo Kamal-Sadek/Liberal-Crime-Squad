@@ -44,8 +44,6 @@ void makecharacter(void)
    newcr->att[ATTRIBUTE_HEALTH]=6;
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
    for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
-   //1 point of free leadership
-   newcr->skill[SKILL_LEADERSHIP]=1;
 
    name(newcr->propername);
 
@@ -181,7 +179,7 @@ void makecharacter(void)
             move(9,0);addstr("C - I tried sports for a quarter, desperate to fit in.");
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_AGILITY 2
-            //move(11,0);addstr("D - I was expelled from school for threatening a teacher.  With a gun.");
+            //move(11,0);addstr("D - I was expelled from school for threatening a teacher with a gun.");
             //SKILL_PISTOL 2
             //SKILL_STREETSENSE 1
             break;

@@ -262,10 +262,7 @@ void passmonth(char &clearformess,char canseethings)
 
             for(int i=0;i<LAWFLAGNUM;i++)
             {
-               if(pool[p]->lawflag[i])
-               {
-                  heat=(lawflagheat(i)*pool[p]->lawflag[i])/10.0f;
-               }
+               heat=+(pool[p]->heat)/4.0f;
             }
 
             copstrength=static_cast<int>(copstrength*heat);
@@ -273,8 +270,8 @@ void passmonth(char &clearformess,char canseethings)
 
             //Confession check
             if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
-                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5 &&
-                                      pool[p]->hireid!=-1)
+                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5  +
+                                      pool[p]->skill[SKILL_SURVIVAL]*5  &&  pool[p]->hireid!=-1)
             {
                int nullify=0;
                int p2=getpoolcreature(pool[p]->hireid);
@@ -286,7 +283,7 @@ void passmonth(char &clearformess,char canseethings)
                   else
                   {
                      //Charge the boss with racketeering!
-                     pool[p2]->lawflag[LAWFLAG_RACKETEERING]++;
+                     criminalize(*pool[p2],LAWFLAG_RACKETEERING);
                      //Rack up testimonies against the boss in court!
                      pool[p2]->confessions++;
                   }
@@ -349,8 +346,10 @@ void passmonth(char &clearformess,char canseethings)
       if(location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&!pool[p]->alive)
       {
          removesquadinfo(*pool[p]);
-         delete pool[p];
-         pool.erase(pool.begin() + p);
+         pool[p]->alive=0;
+         pool[p]->location=-1;
+         //delete pool[p];
+         //pool.erase(pool.begin() + p);
       }
    }
 

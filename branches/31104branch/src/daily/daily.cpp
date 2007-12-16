@@ -546,7 +546,7 @@ void advanceday(char &clearformess,char canseethings)
             }
             else if(location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
             {
-               ++pool[p]->lawflag[LAWFLAG_CARTHEFT];
+               criminalize(*pool[p],LAWFLAG_CARTHEFT);
             }
             break;
          case ACTIVITY_POLLS:
@@ -666,7 +666,7 @@ void advanceday(char &clearformess,char canseethings)
                pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
                // May take permanent health damage depending on
                // quality of care
-               if(LCSrandom(10)<healing[pool[p]->location])
+               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
                {
                   pool[p]->att[ATTRIBUTE_HEALTH]--;
                   if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -687,7 +687,7 @@ void advanceday(char &clearformess,char canseethings)
                pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
                // May take permanent health damage depending on
                // quality of care
-               if(LCSrandom(10)>healing[pool[p]->location])
+               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
                {
                   pool[p]->att[ATTRIBUTE_HEALTH]--;
                   if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -708,7 +708,7 @@ void advanceday(char &clearformess,char canseethings)
                pool[p]->special[SPECIALWOUND_HEART]=1;
                // May take permanent health damage depending on
                // quality of care
-               if(LCSrandom(20)>healing[pool[p]->location])
+               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
                {
                   pool[p]->att[ATTRIBUTE_HEALTH]--;
                   if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -745,7 +745,7 @@ void advanceday(char &clearformess,char canseethings)
                   {
                      // May take permanent health damage depending on
                      // quality of care
-                     if(healing[pool[p]->location]+LCSrandom(10)>healdiff)
+                     if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
                      {
                         pool[p]->att[ATTRIBUTE_HEALTH]--;
                         if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -1178,7 +1178,7 @@ void advanceday(char &clearformess,char canseethings)
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess)
 {
-int p = 0;
+   int p = 0;
    //NUKE DISPERSED SQUAD MEMBERS WHOSE MASTERS ARE NOT AVAILABLE
    if(pool.size()>0)
    {
@@ -1206,15 +1206,37 @@ int p = 0;
       vector<int> nukeme;
       nukeme.resize(pool.size());
 
-      for(p=pool.size()-1;p>=0;p--)
+      bool promotion;
+      do
       {
-         // If member is dead or has no boss (founder level), mark
-         // them nukeme = 0, using them as a starting point at the top
-         // of the chain.
-         if(!pool[p]->alive||pool[p]->hireid==-1)nukeme[p]=0;
-         // All remaining members are marked nukeme = 1.
-         else nukeme[p]=1;
-      }
+         promotion=0;
+         for(p=0;p<pool.size();p++)
+         {
+            // Default: members are marked nukeme = 1
+            //(no contact verified)
+            nukeme[p]=1;
+            // If member has no boss (founder level), mark
+            // them nukeme = 0, using them as a starting point
+            // at the top of the chain.
+            if(pool[p]->hireid==-1)nukeme[p]=0;
+            // If they're dead, mark them nukeme = -1, so they
+            // don't ever have their subordinates checked
+            // and aren't lost themselves (they're a corpse,
+            // corpses don't lose contact)
+            if(!pool[p]->alive)
+            {
+               nukeme[p]=-1;
+               //Attempt to promote their subordinates
+               if(promotesubordinates(*pool[p], clearformess))promotion=1;
+
+               if(pool[p]->location==-1 || location[pool[p]->location]->renting != -1)
+               {
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+               }
+            }
+         }
+      }while(promotion);
 
       char changed;
 
@@ -1222,7 +1244,7 @@ int p = 0;
       {
          changed=0;
 
-         char inprison, alive;
+         char inprison;
 
          // Go through the entire pool to locate people at nukeme = 0,
          // so we can verify that their subordinates can reach them.
@@ -1232,12 +1254,9 @@ int p = 0;
                inprison=1;
             else inprison=0;
 
-            if(pool[p]->alive)alive=1;
-            else alive=0;
-
             // If in prison or unreachable due to a member of the command structure
             // above being in prison
-            if(nukeme[p]==0&&alive&&inprison||nukeme[p]==2)
+            if(nukeme[p]==0&&inprison||nukeme[p]==2)
             {
                // If you're here because you're unreachable, mark as checked and unreachable
                if(!inprison)
@@ -1245,6 +1264,7 @@ int p = 0;
                   // Roll to see if you go into hiding or not
                   if(!pool[p]->hiding&&
                      pool[p]->attval(ATTRIBUTE_HEART)*5+
+                     pool[p]->skill[SKILL_SURVIVAL]*10+
                      pool[p]->juice<LCSrandom(200))
                   {
                      nukeme[p]=1;//Vanish forever
@@ -1258,7 +1278,7 @@ int p = 0;
                {
                   for(int p2=pool.size()-1;p2>=0;p2--)
                   {
-                     if(pool[p2]->hireid==pool[p]->id)
+                     if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
                      {
                         nukeme[p2]=2; // Mark them as unreachable
                         changed=1; // Need another iteration
@@ -1266,8 +1286,8 @@ int p = 0;
                   }
                }
             }
-            // Otherwise, if they're both alive and reachable
-            else if(nukeme[p]==0&&alive&&!inprison)
+            // Otherwise, if they're reachable
+            else if(nukeme[p]==0&&!inprison)
             {
                // Start looking through the pool again.
                for(int p2=pool.size()-1;p2>=0;p2--)
@@ -1365,6 +1385,145 @@ int p = 0;
 
    cleangonesquads();
 }
+
+
+
+/* promote a subordinate to maintain chain of command when boss is lost */
+bool promotesubordinates(creaturest &cr, char &clearformess)
+{
+   int p;
+
+   int newboss=-1;
+   int bigboss=-2;
+   if(cr.hireid==-1)bigboss=-1;//Special: Founder
+   int maxjuice=0; //Need more than 0 juice to get promoted
+   int subordinates=0;
+
+   //Need REVOLUTIONARY (100+) juice to take over founder role
+   //-or- SOCIALIST THREAT (50+) and a level of leadership skill
+   if(cr.hireid==-1)maxjuice=99;
+
+   //Identify big boss and top subordinate
+   for(p=0;p<pool.size();p++)
+   {
+      if(pool[p]->id==cr.id)continue;
+      if(pool[p]->id==cr.hireid)bigboss=p;
+      if(pool[p]->hireid==cr.id && pool[p]->alive && pool[p]->align==1)
+      {
+         subordinates++;
+         //Brainwashed people inelligible for promotion to founder
+         if(bigboss==-1 && pool[p]->flag & CREATUREFLAG_KIDNAPPED)continue;
+
+         if(pool[p]->juice+pool[p]->skill[SKILL_LEADERSHIP]*50>maxjuice)
+         {
+            maxjuice=pool[p]->juice+pool[p]->skill[SKILL_LEADERSHIP]*50;
+            newboss=p;
+         }
+      }
+   }
+
+   //No subordinates or none with sufficient juice to carry on
+   if(subordinates==0 || newboss==-1)
+   {
+      if(cr.hireid!=-1)return 0;
+
+      if(subordinates>0) // Disintegration of the LCS
+      {
+         if(clearformess)
+         {
+            erase();
+         }
+         else
+         {
+            makedelimiter(8,0);
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(cr.name);
+         addstr(" has died.");
+         refresh();
+         getch();
+
+         move(10,1);
+         addstr("There are none left with the courage and conviction to lead....");
+         refresh();
+         getch();
+      }
+      return 0;
+   }
+   
+   //Chain of command totally destroyed if dead person's boss also dead
+   if(bigboss==-2 || (cr.hireid!=-1 && !pool[bigboss]->alive))return 0;
+   
+   //One subordinate -- just promote them
+   if(subordinates==1)
+   {
+      pool[newboss]->hireid=cr.hireid;
+   }
+   //Else need to replace dead person with the best subordinate
+   else
+   {
+      pool[newboss]->hireid=cr.hireid;
+
+      for(p=0;p<pool.size();p++)
+      {
+         if(pool[p]->hireid==cr.id && p!=newboss)
+         {
+            pool[p]->hireid=pool[newboss]->id;
+         }
+      }
+   }
+
+   if(clearformess)
+   {
+      erase();
+   }
+   else
+   {
+      makedelimiter(8,0);
+   }
+
+   if(bigboss!=-1) // Normal promotion
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(8,1);
+      addstr(pool[bigboss]->name);
+      addstr(" has promoted ");
+      addstr(pool[newboss]->name);
+      move(9,1);
+      addstr("due to the death of ");
+      addstr(cr.name);
+      addstr(".");
+      if(subordinates>1)
+      {
+         move(11,1);
+         addstr(pool[newboss]->name);
+         addstr(" will take over for ");
+         addstr(cr.name);
+         addstr(" in the command chain.");
+      }
+      refresh();
+      getch();
+   }
+   else // Founder level promotion
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(8,1);
+      addstr(cr.name);
+      addstr(" has died.");
+      refresh();
+      getch();
+
+      move(10,1);
+      addstr(pool[newboss]->name);
+      addstr(" is the new leader of the Liberal Crime Squad!");
+      refresh();
+      getch();
+   }
+   return 1;
+}
+
 
 
 

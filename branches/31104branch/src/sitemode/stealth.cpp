@@ -188,7 +188,7 @@ void disguisecheck(void)
       for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
-         if(weaponar[i])activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
+         if(weaponar[i])criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
       }
       return;
    }
@@ -221,7 +221,10 @@ void disguisecheck(void)
       for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
-         if(weaponar[i])activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY]=1;
+         if(weaponar[i])
+         {
+            criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+         }
       }
 
       int n,an;
@@ -358,8 +361,7 @@ int stealthskill(void)
 
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
-         int skill=activesquad->squad[p]->attval(ATTRIBUTE_AGILITY)+
-            activesquad->squad[p]->skill[SKILL_STEALTH]*3;
+         int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3;
 
          activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=5;
 
@@ -368,7 +370,7 @@ int stealthskill(void)
       }
    }
 
-   return lowest+highest/4;
+   return lowest+highest/8;
 }
 
 

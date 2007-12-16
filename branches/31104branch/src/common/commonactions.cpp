@@ -158,7 +158,7 @@ void hospitalize(int loc, creaturest &patient)
                }
             }
          }
-         testsquadclear(*activesquad, patient.base); 
+         testsquadclear(*patientsquad, patient.base); 
       }  
    }
 }
@@ -339,6 +339,7 @@ int weaponskill(int weapon)
          break;
       case WEAPON_SHOTGUN_PUMP:
          wsk=SKILL_SHOTGUN;
+         break;
       case WEAPON_SMG_MP5:
          wsk=SKILL_SMG;
          break;
@@ -364,6 +365,7 @@ void criminalizeparty(short crime)
       {
          if(!activesquad->squad[p]->alive)continue;
          activesquad->squad[p]->lawflag[crime]++;
+         activesquad->squad[p]->heat+=lawflagheat(crime);
       }
    }
 }
@@ -379,7 +381,15 @@ void criminalizepool(short crime,long exclude,short loc)
       if(loc!=-1&&pool[p]->location!=loc)continue;
 
       pool[p]->lawflag[crime]++;
+      pool[p]->heat+=lawflagheat(crime);
    }
+}
+
+/* common - applies a crime to a person */
+void criminalize(creaturest &cr,short crime)
+{
+   cr.lawflag[crime]++;
+   cr.heat+=lawflagheat(crime);
 }
 
 
@@ -413,9 +423,9 @@ void addjuice(creaturest &cr,long juice,long cap)
    
    cr.juice+=juice;
    
-   //For juice gains over 50, leader gets
+   //For juice gains over 20, leader gets
    //half of that in leadership skill
-   if(cr.juice>50 && juice>=2 && cr.hireid!=-1)
+   if(cr.juice>20 && juice>=2 && cr.hireid!=-1)
    {
       for(int i=0;i<pool.size();i++)
       {
@@ -543,17 +553,29 @@ void change_public_opinion(int v,int power,char affect,char cap)
    int effpower=power;
    if(affect)
    {
+      // Aff is the % of people who know about the LCS
       int aff=attitude[VIEW_LIBERALCRIMESQUAD];
+      // Rawpower is the amount of the action proportional
+      // to the people who, not having heard of the LCS,
+      // do not allow the LCS' reputation to affect their
+      // opinions
       int rawpower=(int)((float)power * (float)(100-aff)/100.0f);
+      // Affected power is the remainder of the action besides
+      // rawpower, the amount of the people who know of the LCS
+      // and have it alter their opinion
       int affectedpower=power-rawpower;
 
       if(affectedpower>0)
       {
-         int dist=attitude[VIEW_LIBERALCRIMESQUADPOS]-50;
+         // Dist is the difference between the LCS popularity and
+         // the issue's popularity -- if the LCS is less popular
+         // than the issue, the action will backfire for these
+         // people, else it will be extra powerful
+         int dist=attitude[VIEW_LIBERALCRIMESQUADPOS]-attitude[v];
          if(dist<0)dist*=-1;
          affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f);
 
-         if(attitude[VIEW_LIBERALCRIMESQUADPOS]<50)affectedpower*=-1;
+         if(attitude[VIEW_LIBERALCRIMESQUADPOS]<attitude[v])affectedpower*=-1;
       }
 
       effpower=rawpower+affectedpower;

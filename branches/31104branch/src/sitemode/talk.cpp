@@ -262,6 +262,7 @@ char talk(creaturest &a,int t)
             if(activesquad->squad[i])capturecreature(*activesquad->squad[i]);
             activesquad->squad[i]=NULL;
          }
+         location[cursite]->siege.siege=0;
       }
       return 1;
    }
@@ -1000,7 +1001,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                         move(y,1);y++;
                         addstr(tk->name);
                         addstr(" breaks for the exit");
-                        tk->lawflag[LAWFLAG_ESCAPED]++;
+                        criminalize(*tk,LAWFLAG_ESCAPED);
                      }
                      addstr(".  ");
                      refresh();

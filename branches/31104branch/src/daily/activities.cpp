@@ -191,6 +191,19 @@ void tendhostage(creaturest *cr,char &clearformess)
                addstr(" has escaped!");
                refresh();
                getch();
+               
+               //clear activities for tenders
+               for(int i=0;i<pool.size();i++)
+               {
+                  if(!pool[i]->alive)continue;
+                  if(pool[i]->activity.type==ACTIVITY_HOSTAGETENDING)
+                  {
+                     if(pool[i]->activity.arg==cr->id)
+                     {
+                        pool[i]->activity.type=ACTIVITY_NONE;
+                     }
+                  }
+               }
 
                //delete interrogation data
                delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
@@ -385,15 +398,15 @@ void tendhostage(creaturest *cr,char &clearformess)
          printhealthstat(*cr,y,48,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(++y,40);
-         itoa(cr->att[ATTRIBUTE_HEART],num2,10);
+         itoa(cr->attval(ATTRIBUTE_HEART),num2,10);
          addstr("Heart: ");
          addstr(num2);
          move(++y,40);
-         itoa(cr->att[ATTRIBUTE_WISDOM],num2,10);
+         itoa(cr->attval(ATTRIBUTE_WISDOM),num2,10);
          addstr("Wisdom: ");
          addstr(num2);
          move(++y,40);
-         itoa(cr->att[ATTRIBUTE_HEALTH],num2,10);
+         itoa(cr->attval(ATTRIBUTE_HEALTH),num2,10);
          addstr("Health: ");
          addstr(num2);
          if(nofood)
@@ -429,11 +442,11 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr(num2);
          move(++y,40);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         itoa(a->att[ATTRIBUTE_HEART],num2,10);
+         itoa(a->attval(ATTRIBUTE_HEART),num2,10);
          addstr("Heart: ");
          addstr(num2);
          move(++y,40);
-         itoa(a->att[ATTRIBUTE_WISDOM],num2,10);
+         itoa(a->attval(ATTRIBUTE_WISDOM),num2,10);
          addstr("Wisdom: ");
          addstr(num2);
          
@@ -551,7 +564,21 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(cr->alive==0)return;
+         if(cr->alive==0)
+         {
+            for(int p=0;p<pool.size();p++)
+            {
+               if(!pool[p]->alive)continue;
+               if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
+               {
+                  if(pool[p]->activity.arg==cr->id)
+                  {
+                     pool[p]->activity.type=ACTIVITY_NONE;
+                  }
+               }
+            }
+            return;
+         }
       }
 
       erase();
@@ -735,8 +762,8 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          forceroll=LCSrandom(forceroll)+1;
          
-         //Torture captive if lead interrogator has very low heart and high skill
-         if(a->skill[SKILL_INTERROGATION]>=4&&a->attval(ATTRIBUTE_HEART)<4)
+         //Torture captive if lead interrogator has low heart and high skill
+         if(a->skill[SKILL_INTERROGATION]>=4&&a->att[ATTRIBUTE_HEART]<4)
          {
             //Torture much more devastating than normal beating
             forceroll*=a->skill[SKILL_INTERROGATION]/4+1;
@@ -745,8 +772,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
             addstr(a->name);
             addstr(" sadistically tortures");
-            a->att[ATTRIBUTE_HEART]--;
-            if(a->att[ATTRIBUTE_HEART]<1)a->att[ATTRIBUTE_HEART]=1;
+            if(a->attval(ATTRIBUTE_HEART)>1)a->att[ATTRIBUTE_HEART]--;
          }
          else if(temppool.size()==1)
          {
@@ -1307,15 +1333,14 @@ void tendhostage(creaturest *cr,char &clearformess)
 /* armor repair */
 void repairarmor(creaturest &cr,char &clearformess)
 {
-   armorst *it=NULL;
-   itemst *itm=NULL;
-   vector<itemst *> *lar=NULL;
+   armorst *armor=NULL;
+   itemst *pile=NULL;
+   vector<itemst *> *pilelist=NULL;
 
    if(cr.armor.type!=ARMOR_NONE&&
-      ((cr.armor.flag & ARMORFLAG_DAMAGED)||
-      (cr.armor.flag & ARMORFLAG_BLOODY)))
+      cr.armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
    {
-      it=&cr.armor;
+      armor=&cr.armor;
    }
    else if(cr.squadid!=-1)
    {
@@ -1323,33 +1348,31 @@ void repairarmor(creaturest &cr,char &clearformess)
       for(int l=0;l<squad[sq]->loot.size();l++)
       {
          if(squad[sq]->loot[l]->type==ITEM_ARMOR&&
-            ((squad[sq]->loot[l]->armor.flag & ARMORFLAG_DAMAGED)||
-            (squad[sq]->loot[l]->armor.flag & ARMORFLAG_BLOODY)))
+            squad[sq]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
          {
-            it=&squad[sq]->loot[l]->armor;
-            itm=squad[sq]->loot[l];
-            lar=&squad[sq]->loot;
+            armor=&squad[sq]->loot[l]->armor;
+            pile=squad[sq]->loot[l];
+            pilelist=&squad[sq]->loot;
             break;
          }
       }
    }
-   if(it==NULL&&cr.location!=-1)
+   if(armor==NULL&&cr.location!=-1)
    {
       for(int l=0;l<location[cr.location]->loot.size();l++)
       {
          if(location[cr.location]->loot[l]->type==ITEM_ARMOR&&
-            ((location[cr.location]->loot[l]->armor.flag & ARMORFLAG_DAMAGED)||
-            (location[cr.location]->loot[l]->armor.flag & ARMORFLAG_BLOODY)))
+            location[cr.location]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
          {
-            it=&location[cr.location]->loot[l]->armor;
-            itm=location[cr.location]->loot[l];
-            lar=&location[cr.location]->loot;
+            armor=&location[cr.location]->loot[l]->armor;
+            pile=location[cr.location]->loot[l];
+            pilelist=&location[cr.location]->loot;
             break;
          }
       }
    }
 
-   if(it!=NULL)
+   if(armor!=NULL)
    {
       if(clearformess)erase();
       else
@@ -1360,39 +1383,42 @@ void repairarmor(creaturest &cr,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr(cr.name);
-      if(it->flag & ARMORFLAG_DAMAGED)addstr(" repairs ");
+      if(armor->flag & ARMORFLAG_DAMAGED)addstr(" repairs ");
       else addstr(" cleans ");
       char str[80];
-      getarmorfull(str,it->type,it->subtype);
+      getarmorfull(str,armor->type,armor->subtype);
       addstr(str);
 
-      if(itm!=NULL)
+      if(pile!=NULL)
       {
-         if(itm->number>1)
+         if(pile->number>1)
          {
-            itemst *newi=new itemst;
-               *newi=*itm;
-            lar->push_back(newi);
-            newi->number=itm->number-1;
-            itm->number=1;
+            itemst *newpile=new itemst;
+               *newpile=*pile;
+            pilelist->push_back(newpile);
+            newpile->number=pile->number-1;
+            pile->number=1;
          }
       }
 
-      it->flag&=~ARMORFLAG_BLOODY;
-      it->flag&=~ARMORFLAG_DAMAGED;
+      armor->flag&=~ARMORFLAG_BLOODY;
+      armor->flag&=~ARMORFLAG_DAMAGED;
 
-      long dif=(armor_makedifficulty(it->type,&cr)>>1);
-      cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
-
-      if((LCSrandom(10)<dif||LCSrandom(10)<dif)&&it->quality!='4'&&
-         (it->flag & ARMORFLAG_DAMAGED))
+      if(armor->flag & ARMORFLAG_DAMAGED)
       {
-         addstr(" but it is not quite the same.");
-         it->quality++;
-         if((LCSrandom(10)<dif||LCSrandom(10)<dif)&&it->quality!='4')it->quality++;
-         if((LCSrandom(10)<dif||LCSrandom(10)<dif)&&it->quality!='4')it->quality++;
+         long dif=(armor_makedifficulty(armor->type,&cr)>>1);
+         cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
+
+         if((LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif)&&armor->quality!='4')
+         {
+            addstr(" but it is not quite the same");
+            armor->quality++;
+            if(LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif && armor->quality!='4')armor->quality++;
+            if(LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif && armor->quality!='4')armor->quality++;
+         }
       }
-      else addstr(".");
+      
+      addstr(".");
 
       refresh();
       getch();
@@ -1722,6 +1748,7 @@ void funds_and_trouble(char &clearformess)
             break;
          case ACTIVITY_COMMUNITYSERVICE:
             addjuice(*pool[p],1,0);
+            if(!LCSrandom(20))pool[p]->heat--;
             change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,70);
             break;
          case ACTIVITY_SELL_TSHIRTS:
@@ -1826,32 +1853,37 @@ void funds_and_trouble(char &clearformess)
          brownies[s]->skill[SKILL_GANGSTERISM]+
          brownies[s]->skill[SKILL_STREETSENSE]+
          brownies[s]->attval(ATTRIBUTE_CHARISMA)+
-         brownies[s]->attval(ATTRIBUTE_AGILITY)+
          brownies[s]->attval(ATTRIBUTE_INTELLIGENCE)+1);
 
-      if(dodgelawroll==0)
+      if(dodgelawroll==0) // Busted! Sort of
       {
-         if(clearformess)erase();
-         else
+         criminalize(*brownies[s],LAWFLAG_BROWNIES);
+
+         // Check if an immediate arrest is made, or they're
+         // just quietly watched
+         if(!LCSrandom(brownies[s]->skill[SKILL_STREETSENSE]+2))
          {
-            makedelimiter(8,0);
-         }
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
 
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(8,1);
-         addstr(brownies[s]->name);
-         addstr(" has been arrested while selling brownies.");
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(brownies[s]->name);
+            addstr(" has been arrested while selling brownies.");
 
-         refresh();
-         getch();
+            refresh();
+            getch();
 
-         removesquadinfo(*brownies[s]);
-         brownies[s]->carid=-1;
-         brownies[s]->location=ps;
-         brownies[s]->weapon.type=WEAPON_NONE;
-         brownies[s]->weapon.ammo=0;
-         brownies[s]->activity.type=ACTIVITY_NONE;
-         brownies[s]->lawflag[LAWFLAG_BROWNIES]++;
+            removesquadinfo(*brownies[s]);
+            brownies[s]->carid=-1;
+            brownies[s]->location=ps;
+            brownies[s]->weapon.type=WEAPON_NONE;
+            brownies[s]->weapon.ammo=0;
+            brownies[s]->activity.type=ACTIVITY_NONE;
+         }         
       }
    }
 
@@ -1915,7 +1947,7 @@ void funds_and_trouble(char &clearformess)
          {
             for(int h=0;h<hack.size();h++)
             {
-               hack[h]->lawflag[crime]++;
+               criminalize(*hack[h],crime);
             }
          }
 
@@ -1999,7 +2031,7 @@ void funds_and_trouble(char &clearformess)
          {
             for(int h=0;h<hack.size();h++)
             {
-               hack[h]->lawflag[crime]++;
+               criminalize(*hack[h],crime);
             }
          }
 
@@ -2086,8 +2118,8 @@ void funds_and_trouble(char &clearformess)
          
 
 
-         if(!LCSrandom((graffiti[s]->skill[SKILL_STREETSENSE]+
-                       graffiti[s]->attval(ATTRIBUTE_INTELLIGENCE))*3))
+         if(!LCSrandom((graffiti[s]->skill[SKILL_STREETSENSE]*3+
+                        graffiti[s]->attval(ATTRIBUTE_INTELLIGENCE))*3))
          {
             if(clearformess)erase();
             else
@@ -2097,12 +2129,12 @@ void funds_and_trouble(char &clearformess)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            if(LCSrandom((graffiti[s]->skill[SKILL_STREETSENSE]+
-                          graffiti[s]->attval(ATTRIBUTE_AGILITY))*3))
+            if(LCSrandom(graffiti[s]->skill[SKILL_STREETSENSE]*3+
+                         graffiti[s]->attval(ATTRIBUTE_AGILITY)*3))
             {
                addstr(graffiti[s]->name);
                addstr(" was spotted by the police");
-               graffiti[s]->lawflag[LAWFLAG_VANDALISM]++;
+               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
                graffiti[s]->skill_ip[SKILL_STREETSENSE]+=20;
 
                if(graffiti[s]->activity.arg)
@@ -2131,7 +2163,7 @@ void funds_and_trouble(char &clearformess)
                graffiti[s]->weapon.type=WEAPON_NONE;
                graffiti[s]->weapon.ammo=0;
                graffiti[s]->activity.type=ACTIVITY_NONE;
-               graffiti[s]->lawflag[LAWFLAG_VANDALISM]++;
+               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
             }
          }
 
@@ -2214,7 +2246,7 @@ void funds_and_trouble(char &clearformess)
          prostitutes[p]->weapon.type=WEAPON_NONE;
          prostitutes[p]->weapon.ammo=0;
          prostitutes[p]->activity.type=ACTIVITY_NONE;
-         prostitutes[p]->lawflag[LAWFLAG_PROSTITUTION]++;
+         criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
       }
       else prostitutes[p]->skill_ip[SKILL_STREETSENSE]+=max(5-prostitutes[p]->skill[SKILL_STREETSENSE],0);
 
@@ -2442,7 +2474,7 @@ void funds_and_trouble(char &clearformess)
                   trouble[t]->weapon.type=WEAPON_NONE;
                   trouble[t]->weapon.ammo=0;
                   trouble[t]->activity.type=ACTIVITY_NONE;
-                  trouble[t]->lawflag[crime]++;
+                  criminalize(*trouble[t],crime);
                }
                else if(trouble[t]->weapon.type==WEAPON_NONE)
                {
@@ -2642,7 +2674,8 @@ void funds_and_trouble(char &clearformess)
             bury[b]->weapon.type=WEAPON_NONE;
             bury[b]->weapon.ammo=0;
             bury[b]->activity.type=ACTIVITY_NONE;
-            bury[b]->lawflag[LAWFLAG_BURIAL]++;
+            criminalize(*bury[b],LAWFLAG_BURIAL);
+
          }
       }
    }

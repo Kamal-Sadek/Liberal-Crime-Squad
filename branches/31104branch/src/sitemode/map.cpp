@@ -299,6 +299,8 @@ void initsite(locationst &loc)
       {
          for(int y=2;y<MAPY-2;y++)
          {
+            //Un-restrict blocks if they have neighboring
+            //restricted blocks
             if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
                !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
                (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED))
@@ -309,6 +311,37 @@ void initsite(locationst &loc)
                   !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED))
                {
                   levelmap[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
+                  acted=1;
+                  continue;
+               }
+            }
+            //Un-restrict and unlock doors if they lead between two
+            //unrestricted sections. If they lead between one
+            //unrestricted section and a restricted section, lock
+            //them instead.
+            else if((levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED))
+            {
+               //Unrestricted on two opposite sides?
+               if((!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)&&
+                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED))||
+                  (!(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)&&
+                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED)))
+               {
+                  levelmap[x][y][0].flag&=~SITEBLOCK_LOCKED;
+                  levelmap[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
+                  acted=1;
+                  continue;
+               }
+               //Unrestricted on at least one side and I'm not locked?
+               else if((!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)||
+                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED))&&
+                  !(levelmap[x][y][0].flag & SITEBLOCK_LOCKED))
+               {
+                  levelmap[x][y][0].flag|=SITEBLOCK_LOCKED;
                   acted=1;
                   continue;
                }

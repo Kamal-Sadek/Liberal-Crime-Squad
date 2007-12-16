@@ -78,11 +78,12 @@ void siegecheck(char canseethings)
 
          //CHECK FOR CRIMINALS AT THIS BASE
          int crimes=0;
+         int kidnapped=0;
          for(int p=0;p<pool.size();p++)
          {
             if(!pool[p]->alive)continue; // Dead people don't count
             if(pool[p]->location!=l)continue; // People not at this base don't count
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)crimes+=5; // Kidnapped persons increase heat
+            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)kidnapped++; // Kidnapped persons increase heat
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
             
@@ -90,18 +91,8 @@ void siegecheck(char canseethings)
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
-            // Check for wanted persons!
-            // Divide the crimes value by 2^heatprotection
-            // So the upscale apartment takes 16 times less heat than a warehouse!
-            // Small crimes are thus ignored completely for police sieges.
-            for(int i=0;i<LAWFLAGNUM;i++)
-            {
-               if(pool[p]->lawflag[i])
-               {
-                  // Count up crimes (extra pressure for high intensity)
-                  crimes+=pool[p]->lawflag[i]*lawflagheat(i);
-               }
-            }
+            //Contribute to the investigation based on person's heat
+            crimes+=pool[p]->heat;
          }
 
          // Let the place slowly cool off if there are no criminals there
@@ -123,7 +114,7 @@ void siegecheck(char canseethings)
             {
             case SITE_INDUSTRY_WAREHOUSE:
                if(location[l]->front_business!=-1)
-                  heatprotection+=2; // Business front -- medium protection
+                  heatprotection+=3; // Business front -- high protection
                else
                   heatprotection+=0; // Abandoned warehouse -- no protection
                break;
@@ -141,15 +132,29 @@ void siegecheck(char canseethings)
                break;
             }
 
+            //Having hostages reduces protection
+            if(kidnapped)
+            {
+               heatprotection-=kidnapped;
+               crimes+=kidnapped*5;
+            }
+            //Protection varies with how many people in the safehouse
+            if(numpres>20)heatprotection-=1;
+            if(numpres<10)heatprotection+=1;
+            if(numpres<4)heatprotection+=1;
+
+            if(heatprotection<0)heatprotection=0;
+
             crimes>>=heatprotection;
-            if(crimes > 20)crimes = 20;
+            if(crimes > 20-heatprotection)crimes = 20-heatprotection;
             location[l]->heat+=crimes;
 
             if(location[l]->siege.timeuntillocated==-1 &&
                location[l]->heat > 100)
             {
                // Begin planning siege if high heat on location
-               int siegetime = 5*(1 + 1 * heatprotection);
+               int siegetime = 5*(1 + 1 * heatprotection - kidnapped);
+               if(siegetime<5)siegetime=5;
                location[l]->siege.timeuntillocated += siegetime + LCSrandom(siegetime);
             }
          }
@@ -157,17 +162,17 @@ void siegecheck(char canseethings)
          // *JDS* Sleepers at the police department may give a warning just before police raids
          if(location[l]->siege.timeuntillocated==1)
          {
-            int policesleepercount=0;
+            int policesleeperwarning=0;
             for(int pl=0;pl<pool.size();pl++)
             {
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
                   pool[pl]->location!=-1&& // <- this must be executed before the line below it
                   location[pool[pl]->location]->type==SITE_GOVERNMENT_POLICESTATION)
                {
-                  policesleepercount++;
+                  if(LCSrandom(2)) { policesleeperwarning=1; break; }
                }
             }
-            if(policesleepercount>LCSrandom(15))
+            if(policesleeperwarning)
             {
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -190,7 +195,7 @@ void siegecheck(char canseethings)
                }
                if(location[l]->siege.escalationstate>=3)
                {
-                  move(9,1);
+                  move(11,1);
                   addstr("The Air Force and National Guard are working closely on this.");
                }
                refresh();
@@ -202,8 +207,8 @@ void siegecheck(char canseethings)
          if(!location[l]->siege.timeuntillocated)
          {
             location[l]->siege.timeuntillocated=-2;
-            location[l]->heat-=250;
-            if(location[l]->heat<0)location[l]->heat=0;
+            /*location[l]->heat-=250;
+            if(location[l]->heat<0)*/location[l]->heat=0;
 
             if(numpres>0)
             {
@@ -241,7 +246,7 @@ void siegecheck(char canseethings)
                if(location[l]->siege.escalationstate>=3)
                {
                   move(9,1);
-                  addstr("You hear tanks and aircraft outside.");
+                  addstr("You hear tanks and helicopters outside.");
                }
 
                refresh();
@@ -495,11 +500,81 @@ void siegeturn(char clearformess)
 {
    if(disbanding)return;
 
+   // Count people at each location
+   int* liberalcount = new int[location.size()];
+   for(int p=0;p<pool.size();p++)
+   {
+      if(!pool[p]->alive)continue; // Dead people don't count
+      if(pool[p]->align!=1)continue; // Non-liberals don't count
+      if(pool[p]->location==-1)continue; // Vacationers don't count
+      liberalcount[pool[p]->location]++;
+   }
+
    for(int l=0;l<location.size();l++)
    {
-      if(location[l]->siege.siege&&
-         !location[l]->siege.underattack)
+      if(location[l]->siege.siege && !location[l]->siege.underattack)
       {
+         //resolve sieges with no people
+         if(liberalcount[l]==0)
+         {
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("The cops have raided the ");
+            addlocationname(location[l]);
+            addstr(", an unoccupied safehouse.");
+
+            refresh();
+            getch();
+
+            int y=9;
+
+            for(int p=pool.size()-1;p>=0;p--)
+            {
+               if(pool[p]->location!=l)continue;
+               if(!pool[p]->alive)
+               {
+                  move(y,1);y++;
+                  addstr(pool[p]->name);
+                  addstr("'s corpse has been recovered.");
+                  refresh();
+                  getch();
+
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+                  continue;
+               }
+               if(pool[p]->align!=1)
+               {
+                  move(y,1);y++;
+                  addstr(pool[p]->name);
+                  addstr(" has been rescued.");
+                  refresh();
+                  getch();
+
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+                  continue;
+               }
+            }
+            for(int l2=0;l2<location[l]->loot.size();l2++)
+            {
+               delete location[l]->loot[l2];
+            }
+            location[l]->loot.clear();
+
+            for(int v=(int)vehicle.size()-1;v>=0;v--)
+            {
+               if(vehicle[v]->location==l)
+               {
+                  removecarprefs_pool(vehicle[v]->id);
+                  delete vehicle[v];
+                  vehicle.erase(vehicle.begin() + v);
+               }
+            }
+         }
+
          //EAT
          int eat=numbereating(l);
          if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
@@ -577,21 +652,27 @@ void siegeturn(char clearformess)
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   int targ=pol[LCSrandom(pol.size())];
-                  if(LCSrandom(50)>pool[targ]->juice)
+                  if(LCSrandom(50)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
                   {
                      addstr("A National Guard sniper takes out ");
                      addstr(pool[targ]->name);
                      addstr("!");
 
-                     if(pool[targ]->align==1)stat_dead++;
+                     if(pool[targ]->align==1)
+                     {
+                        stat_dead++;
+                        liberalcount[l]--;
+                     }
 
                      removesquadinfo(*pool[targ]);
-                     delete pool[targ];
-                     pool.erase(pool.begin() + targ);
+
+                     pool[targ]->alive=0;
+                     //delete pool[targ];
+                     //pool.erase(pool.begin() + targ);
                   }
                   else
                   {
-                     addstr("A police sniper nearly hits ");
+                     addstr("A National Guard sniper nearly hits ");
                      addstr(pool[targ]->name);
                      addstr("!");
                   }
@@ -650,7 +731,7 @@ void siegeturn(char clearformess)
                   getch();
                }
 
-               if(!LCSrandom(20))
+               if(!LCSrandom(2))
                {
                   vector<int> pol;
                   for(int p=0;p<pool.size();p++)
@@ -668,16 +749,22 @@ void siegeturn(char clearformess)
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      int targ=pol[LCSrandom(pol.size())];
-                     if(LCSrandom(100)>pool[targ]->juice)
+                     if(LCSrandom(100)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
                      {
                         addstr(pool[targ]->name);
-                        addstr(" died in the bombing!");
+                        addstr(" was killed in the bombing!");
 
-                        if(pool[targ]->align==1)stat_dead++;
+                        if(pool[targ]->align==1)
+                        {
+                           stat_dead++;
+                           liberalcount[l]--;
+                        }
 
                         removesquadinfo(*pool[targ]);
-                        delete pool[targ];
-                        pool.erase(pool.begin() + targ);
+
+                        pool[targ]->alive=0;
+                        //delete pool[targ];
+                        //pool.erase(pool.begin() + targ);
                      }
                      else
                      {
@@ -728,16 +815,9 @@ void siegeturn(char clearformess)
             }
 
             //NEED GOOD THINGS TO BALANCE THE BAD
-            int livingpool=0;
-            for(int p=0;p<pool.size();p++)
-            {
-               if(!pool[p]->alive)continue;
-               if(pool[p]->align!=1)continue;
-               if(pool[p]->location!=l)continue;
-               livingpool++;
-            }
 
-            if(!LCSrandom(50)&&no_bad&&livingpool)
+            // ELITE REPORTER SNEAKS IN
+            if(!LCSrandom(50)&&no_bad&&liberalcount[l]>0)
             {
                char repname[200];
                name(repname);
@@ -904,6 +984,7 @@ void siegeturn(char clearformess)
          }
       }
    }
+   delete[] liberalcount;
 }
 
 
@@ -1096,8 +1177,10 @@ void giveup(void)
 
          killnumber++;
          removesquadinfo(*pool[p]);
-         delete pool[p];
-         pool.erase(pool.begin() + p);
+         pool[p]->alive=0;
+         pool[p]->location=-1;
+         //delete pool[p];
+         //pool.erase(pool.begin() + p);
       }
 
       erase();
@@ -1527,7 +1610,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_BROWNIES])
    {
       move(4,1);
-      addstr("You are wanted for selling brownies");
+      addstr("You are wanted for selling drugs");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

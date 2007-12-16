@@ -943,7 +943,7 @@ void partyrescue(void)
                {
                   activesquad->squad[p]=pool[pl];
                   activesquad->squad[p]->squadid=activesquad->id;
-                  activesquad->squad[p]->lawflag[LAWFLAG_ESCAPED]++;
+                  criminalize(*activesquad->squad[p],LAWFLAG_ESCAPED);
                   activesquad->squad[p]->flag|=CREATUREFLAG_JUSTESCAPED;
                   break;
                }
@@ -983,7 +983,7 @@ void partyrescue(void)
                   {
                      activesquad->squad[p]->prisoner=pool[pl];
                      pool[pl]->squadid=activesquad->id;
-                     pool[pl]->lawflag[LAWFLAG_ESCAPED]++;
+                     criminalize(*pool[pl],LAWFLAG_ESCAPED);
                      pool[pl]->flag|=CREATUREFLAG_JUSTESCAPED;
 
                      clearmessagearea();

@@ -209,8 +209,10 @@ char chasesequence(void)
             {
                if(pool[pl]==activesquad->squad[p])
                {
-                  delete pool[pl];
-                  pool.erase(pool.begin() + pl);
+                  pool[pl]->alive=0;
+                  pool[pl]->location=-1;
+                  //delete pool[pl];
+                  //pool.erase(pool.begin() + pl);
                   break;
                }
             }
@@ -500,8 +502,10 @@ char footchase(void)
             {
                if(pool[pl]==activesquad->squad[p])
                {
-                  delete pool[pl];
-                  pool.erase(pool.begin() + pl);
+                  pool[pl]->alive=0;
+                  pool[pl]->location=-1;
+                  //delete pool[pl];
+                  //pool.erase(pool.begin() + pl);
                   break;
                }
             }
@@ -690,7 +694,9 @@ void evasivedrive(void)
                   encounter[e2]=encounter[e2+1];
                }
                encounter[ENCMAX-1].exists=0;
-               e--;
+               //e--; this causes an infinite loop...
+               //     I'm not sure whether I introduced a bug
+               //     by removing it or not
             }
          }
          for(int v=0;v<chaseseq.enemycar.size();v++)
@@ -731,31 +737,70 @@ void evasivedrive(void)
 
 void evasiverun(void)
 {
-   vector<long> yourrolls;
+   vector<long> yourspeed;
+   yourspeed.resize(6);
+   int yourworst=10000, yourbest=0;
+   int wheelchair=0, notwheelchair=0;
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->alive)
       {
-         yourrolls.push_back(activesquad->squad[p]->attval(ATTRIBUTE_AGILITY)+
-            activesquad->squad[p]->attval(ATTRIBUTE_HEALTH)+LCSrandom(10));
+         yourspeed[p]=activesquad->squad[p]->attval(ATTRIBUTE_AGILITY)+
+                      activesquad->squad[p]->attval(ATTRIBUTE_HEALTH);
+         if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)wheelchair++;
+         else 
+         {
+            notwheelchair++;
+            if(yourworst>yourspeed[p])yourworst=yourspeed[p];
+            if(yourbest<yourspeed[p])yourworst=yourspeed[p];
+         }
       }
    }
+   
+   if(wheelchair>notwheelchair)
+   {
+      yourworst=0;
+   }
+   else if(wheelchair!=0)
+   {
+      yourworst<<=1;
+   }
 
-   clearmessagearea();
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(16,1);
-   addstr("You suddenly dart into an alley!");
-   refresh();
-   getch();
+   if(yourworst>5)
+   {
+      yourworst+=LCSrandom(10);
+      
+      clearmessagearea();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
 
-   int cnt;
+      addstr("You suddenly dart into an alley!");
+      
+      refresh();
+      getch();
+   }
+   else
+   {
+      clearmessagearea();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("Your group can't move very fast!");
+      refresh();
+      getch();
+   }
+
+   int theirbest=0;
    for(int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
-      cnt=yourrolls[LCSrandom(yourrolls.size())];
-      if(encounter[e].attval(ATTRIBUTE_AGILITY)+
-         encounter[e].attval(ATTRIBUTE_HEALTH)+LCSrandom(10)<cnt)
+
+      int chaser=encounter[e].attval(ATTRIBUTE_AGILITY)+
+                 encounter[e].attval(ATTRIBUTE_HEALTH) + LCSrandom(10);
+
+      if(theirbest<chaser)theirbest=chaser;
+
+      if(chaser<yourworst)
       {
          clearmessagearea();
          set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -781,6 +826,30 @@ void evasiverun(void)
          getch();
       }
    }
+   //This last loop can be used to have fast people in
+   //your squad escape one by one just as the enemy
+   //falls behind one by one
+   /*for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]==NULL)continue;
+      if(activesquad->squad[p]->alive)
+      {
+         if(yourrolls[p]>theirbest)
+         {
+            clearmessagearea();
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(16,1);
+            addstr(activesquad->squad[p]->name);
+            addstr(" breaks away!");
+
+            removesquadinfo(*activesquad->squad[p]);
+
+            printchaseencounter();
+            refresh();
+            getch();
+         }
+      }
+   }*/
 }
 
 
@@ -804,7 +873,7 @@ long driveskill(creaturest &cr,vehiclest *v)
          vbonus=3;
          break;
    }
-   int driveskill=cr.attval(ATTRIBUTE_AGILITY)/4+cr.skill[SKILL_DRIVING]*(3+vbonus);
+   int driveskill=cr.skill[SKILL_DRIVING]*(3+vbonus);
    healthmodroll(driveskill,cr);
    driveskill*=static_cast<int>(cr.blood/50.0);
    return driveskill;
@@ -1196,8 +1265,10 @@ void crashfriendlycar(int v)
                {
                   if(pool[pl]==activesquad->squad[p]->prisoner)
                   {
-                     delete pool[pl];
-                     pool.erase(pool.begin() + pl);
+                     pool[pl]->alive=0;
+                     pool[pl]->location=-1;
+                     //delete pool[pl];
+                     //pool.erase(pool.begin() + pl);
                      break;
                   }
                }

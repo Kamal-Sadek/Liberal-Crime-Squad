@@ -204,7 +204,7 @@ void advancecreature(creaturest &cr)
    {
       if(cr.wound[w] & WOUND_BLEEDING)
       {
-         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH))
+         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)+cr.skill[SKILL_SURVIVAL])
          {
             cr.wound[w]^=WOUND_BLEEDING;
          }
@@ -219,6 +219,7 @@ void advancecreature(creaturest &cr)
             addstr(cr.name);
             addstr("'s wounds.");
             topmedical->skill_ip[SKILL_MEDICAL]+=max(50-topmedicalskill*2,0);
+            cr.wound[w]^=WOUND_BLEEDING;
             refresh();
             getch();
          }

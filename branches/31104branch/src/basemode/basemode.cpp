@@ -238,24 +238,43 @@ void mode_base(void)
       char haveflag=0;
       if(selectedsiege!=-1)haveflag=location[selectedsiege]->haveflag;
       if(activesquad!=NULL)haveflag=location[activesquad->squad[0]->location]->haveflag;
+      
+      // Count people at each location
+      int* location2 = new int[location.size()];
+      for(int i=0;i<location.size();i++)
+      {
+         location2[i]=0;
+      }
+      for(int p=0;p<pool.size();p++)
+      {
+         if(!pool[p]->alive)continue; // Dead people don't count
+         if(pool[p]->align!=1)continue; // Non-liberals don't count
+         if(pool[p]->location==-1)continue; // Vacationers don't count
+         location2[pool[p]->location]++;
+      }
 
       char cannotwait=0;
       for(l=0;l<location.size();l++)
       {
          if(!location[l]->siege.siege)continue;
 
+         
+
          if(location[l]->siege.underattack)
          {
-            cannotwait=1;
+            // Allow siege if no liberals present
+            if(location2[l])cannotwait=1;
             break;
          }
          //NOTE: returns -1 if no eaters, so is okay
          if(fooddaysleft(l)==0)
          {
-            cannotwait=1;
+            // Allow siege if no liberals present
+            if(location2[l])cannotwait=1;
             break;
          }
       }
+      delete[] location2;
 
       if(!forcewait)
       {

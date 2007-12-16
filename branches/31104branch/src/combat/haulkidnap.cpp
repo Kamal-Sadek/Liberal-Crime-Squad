@@ -372,13 +372,16 @@ void freehostage(creaturest &cr,char situation)
       if(cr.prisoner->squadid!=-1)
       {
          //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
+         //(That may not be the case any longer -jds)
          for(int pl=0;pl<pool.size();pl++)
          {
             if(pool[pl]==cr.prisoner)
             {
                removesquadinfo(*pool[pl]);
-               delete pool[pl];
-               pool.erase(pool.begin() + pl);
+               pool[pl]->alive=0;
+               pool[pl]->location=-1;
+               //delete pool[pl];
+               //pool.erase(pool.begin() + pl);
                break;
             }
          }
@@ -461,12 +464,15 @@ void squadgrab_immobile(char dead)
                   makeloot(*activesquad->squad[p],groundloot);
 
                   //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
+                  //(that may not be the case any longer -jds)
                   for(int pl=0;pl<pool.size();pl++)
                   {
                      if(pool[pl]==activesquad->squad[p])
                      {
-                        delete pool[pl];
-                        pool.erase(pool.begin() + pl);
+                        pool[pl]->alive=0;
+                        pool[pl]->location=-1;
+                        //delete pool[pl];
+                        //pool.erase(pool.begin() + pl);
                         break;
                      }
                   }
@@ -542,6 +548,17 @@ void kidnaptransfer(creaturest &cr)
    newcr->base=activesquad->squad[0]->base;
    newcr->flag|=CREATUREFLAG_MISSING;
 
+   //disarm them and stash their weapon back at the base
+   if(newcr->weapon.type != WEAPON_NONE)
+   {
+      itemst *newweapon = new itemst;
+      newweapon->type = ITEM_WEAPON;
+      newweapon->weapon = newcr->weapon;
+      location[newcr->location]->loot.push_back(newweapon);
+      newcr->weapon.ammo = 0;
+      newcr->weapon.type = WEAPON_NONE;
+   }
+
    //Create interrogation data
    newcr->activity.arg=reinterpret_cast<int>(new interrogation);
 
@@ -565,8 +582,6 @@ void kidnaptransfer(creaturest &cr)
 	 
    move(4,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
-   
-   
 
    pool.push_back(newcr);
    stat_kidnappings++;
