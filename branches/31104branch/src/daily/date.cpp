@@ -280,18 +280,16 @@ char completedate(datest &d,int p,char &clearformess)
 
       //Others come to dates unarmed and wearing normal
       //clothing
-      weaponst *weapon;
-      *weapon = d.date[e]->weapon;
+      weaponst weapon = weapon = d.date[e]->weapon;
       d.date[e]->weapon.type = WEAPON_NONE;
-      armorst *armor;
-      *armor = d.date[e]->armor;
+      armorst armor = d.date[e]->armor;
       d.date[e]->armor.type = ARMOR_CLOTHES;
 
       printcreatureinfo(d.date[e]);
       makedelimiter(8,0);
 
-      d.date[e]->weapon = *weapon;
-      d.date[e]->armor = *armor;
+      d.date[e]->weapon = weapon;
+      d.date[e]->armor = armor;
 
       move(10,0);
       addstr("How should ");

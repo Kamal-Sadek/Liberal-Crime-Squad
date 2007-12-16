@@ -584,7 +584,7 @@ void creaturest::creatureinit(void)
       special[SPECIALWOUND_RIGHTKIDNEY]=1;
       special[SPECIALWOUND_LEFTKIDNEY]=1;
       special[SPECIALWOUND_SPLEEN]=1;
-      special[SPECIALWOUND_RIBS]=RIBNUM;
+      special[SPECIALWOUND_RIBS]=LCSrandom(RIBNUM);//RIBNUM;
       special[SPECIALWOUND_NECK]=1;
       special[SPECIALWOUND_UPPERSPINE]=1;
       special[SPECIALWOUND_LOWERSPINE]=1;

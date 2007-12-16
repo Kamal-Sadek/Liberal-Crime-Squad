@@ -433,12 +433,12 @@ void review_mode(short mode)
             {
                set_color(COLOR_CYAN,COLOR_BLACK,1);
                char num[20];
-               addstr("Out in ");
                itoa(temppool[p]->clinic,num,10);
+               addstr("Out in ");
                addstr(num);
                addstr(" ");
-               if(temppool[p]->clinic>1)addstr("Months");
-               else addstr("Month");
+               if(temppool[p]->clinic>1)addstr("Weeks");
+               else addstr("Week");
                break;
             }
             case REVIEWMODE_SLEEPERS:

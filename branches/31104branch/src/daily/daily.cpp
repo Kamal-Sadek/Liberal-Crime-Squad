@@ -581,8 +581,8 @@ void advanceday(char &clearformess,char canseethings)
    int *healing2=new int[location.size()];
    for(p=0;p<location.size();++p)
    {
-      // Clinic is equal to a skill 4 liberal
-      if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=4;
+      // Clinic is equal to a skill 6 liberal
+      if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=6;
       // Hospital is equal to a skill 8 liberal
       else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY)healing[p]=8;
       else healing[p]=0;
@@ -606,17 +606,25 @@ void advanceday(char &clearformess,char canseethings)
    {
       if(disbanding)break;
 
-      if(pool[p]->blood<100)
+      if(clinictime(*pool[p]))
       {
          int damage=0; // Amount health degrades
          int release=1;
+         int transfer=0;
+
+         if(pool[p]->clinic)pool[p]->clinic=clinictime(*pool[p]);
 
          // Give experience to caretakers
          if(pool[p]->location>-1)healing2[pool[p]->location]+=100-pool[p]->blood;
-         // Add health
-         if(pool[p]->location>-1)pool[p]->blood+=1+healing[pool[p]->location]/10;
-         // Cap at 100
-         if(pool[p]->blood>100)pool[p]->blood=100;
+         
+         // Cap blood at 100-injurylevel*20
+         if(pool[p]->blood<100-(clinictime(*pool[p])-1)*20)
+         {
+            // Add health
+            if(pool[p]->location>-1)pool[p]->blood+=1+healing[pool[p]->location]/10;
+            if(pool[p]->blood>100-(clinictime(*pool[p])-1)*20)
+               pool[p]->blood=100-(clinictime(*pool[p])-1)*20;
+         }
 
          for(int w=0;w<BODYPARTNUM;w++)
          {
@@ -630,7 +638,13 @@ void advanceday(char &clearformess,char canseethings)
                   pool[p]->wound[w]=(char)WOUND_CLEANOFF;
                }
                // Else take bleed damage (4)
-               else damage+=4;
+               else
+               {
+                  damage+=4;
+                  release=0;
+                  if(pool[p]->location>-1&&healing[pool[p]->location]+9<=12)
+                     transfer=1;
+               }
             }
             // Bleeding wounds
             else if(pool[p]->wound[w] & WOUND_BLEEDING)
@@ -643,7 +657,11 @@ void advanceday(char &clearformess,char canseethings)
                   pool[p]->wound[w] ^= WOUND_BLEEDING;
                }
                // Else take bleed damage (1)
-               else damage+=1;
+               else
+               {
+                  damage+=1;
+                  release=0;
+               }
             }
             // Non-bleeding wounds
             else
@@ -655,91 +673,47 @@ void advanceday(char &clearformess,char canseethings)
                }
             }
          }
-
-         // Lungs blasted
-         if(pool[p]->special[SPECIALWOUND_RIGHTLUNG]!=1)
-         {
-            // Chance to stabilize wound
-            // Difficulty 10 (Will die if not treated)
-            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>10)
-            {
-               pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
-               // May take permanent health damage depending on
-               // quality of care
-               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]--;
-                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-                  {
-                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
-                  }
-               }
-            }
-            // Else take bleed damage (4)
-            else damage+=1;
-         }
-         if(pool[p]->special[SPECIALWOUND_LEFTLUNG]!=1)
-         {
-            // Chance to stabilize wound
-            // Difficulty 10 (Will die if not treated)
-            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>10)
-            {
-               pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
-               // May take permanent health damage depending on
-               // quality of care
-               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]--;
-                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-                  {
-                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
-                  }
-               }
-            }
-            // Else take bleed damage (1)
-            else damage+=1;
-         }
-         if(pool[p]->special[SPECIALWOUND_HEART]!=1)
-         {
-            // Chance to stabilize wound
-            // Difficulty 15 (Will die if not treated)
-            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>15)
-            {
-               pool[p]->special[SPECIALWOUND_HEART]=1;
-               // May take permanent health damage depending on
-               // quality of care
-               if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
-               {
-                  pool[p]->att[ATTRIBUTE_HEALTH]--;
-                  if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
-                  {
-                     pool[p]->att[ATTRIBUTE_HEALTH]=1;
-                  }
-               }
-            }
-            // Else take bleed damage (1)
-            else damage+=1;
-         }
-
          // Critical hit wounds
-         for(int i=SPECIALWOUND_RIGHTLUNG;i<SPECIALWOUND_RIBS;++i)
+         for(int i=SPECIALWOUND_RIGHTLUNG;i<SPECIALWOUNDNUM;++i)
          {
             int healdiff=14;
             int permdamage=0;
-            // Wounds that have special treatment difficulties
-            if(i==SPECIALWOUND_HEART) healdiff=16;
-            // Wounds that may have permanent health damage
-            if(i==SPECIALWOUND_HEART    ||
-               i==SPECIALWOUND_RIGHTLUNG||
-               i==SPECIALWOUND_LEFTLUNG   )permdamage=1;
+            int bleed=0;
+            int healed;
+            // Specific treatment information on wounds
+            switch(i)
+            {
+            case SPECIALWOUND_HEART:
+               healdiff=16;
+               bleed=8;
+            case SPECIALWOUND_RIGHTLUNG:
+            case SPECIALWOUND_LEFTLUNG:
+               permdamage=1;
+            case SPECIALWOUND_LIVER:
+            case SPECIALWOUND_STOMACH:
+            case SPECIALWOUND_RIGHTKIDNEY:
+            case SPECIALWOUND_LEFTKIDNEY:
+            case SPECIALWOUND_SPLEEN:
+               healed=1;
+               bleed++;
+               break;
+            case SPECIALWOUND_RIBS:
+               healed=RIBNUM;
+               break;
+            case SPECIALWOUND_NECK:
+            case SPECIALWOUND_UPPERSPINE:
+            case SPECIALWOUND_LOWERSPINE:
+               healed=2;
+               break;
+            }
             // If wounded
-            if(pool[p]->special[i]!=1)
+            if(pool[p]->special[i]!=healed&&(i==SPECIALWOUND_RIBS || pool[p]->special[i]!=1))
             {
                // Chance to stabilize wound
                if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>healdiff)
                {
                   // Remove wound
-                  pool[p]->special[i]=1;
+                  pool[p]->special[i]=healed;
 
                   if(permdamage)
                   {
@@ -756,39 +730,25 @@ void advanceday(char &clearformess,char canseethings)
                   }
                }
                // Else take bleed damage
-               else damage+=1;
+               else
+               {
+                  damage+=bleed;
+                  release=0;
+                  if(healing[pool[p]->location]+9<=healdiff)
+                  {
+                     transfer=1;
+                  }
+               }
             }
-         }
-         if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>14)pool[p]->special[SPECIALWOUND_RIBS]=RIBNUM;
-         if(!pool[p]->special[SPECIALWOUND_NECK]&&
-            pool[p]->location>-1&&
-            healing[pool[p]->location]+LCSrandom(10)>14)
-         {
-            pool[p]->special[SPECIALWOUND_NECK]=2;
-         }
-         if(!pool[p]->special[SPECIALWOUND_UPPERSPINE])
-         {
-            if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>14)
-            {
-               pool[p]->special[SPECIALWOUND_UPPERSPINE]=2;
-            }
-            else
-            {
-               release=0;
-            }
-         }
-         if(!pool[p]->special[SPECIALWOUND_LOWERSPINE]&&
-            pool[p]->location>-1&&
-            healing[pool[p]->location]+LCSrandom(10)>14)
-         {
-            pool[p]->special[SPECIALWOUND_LOWERSPINE]=2;
          }
 
          // Apply damage
          pool[p]->blood-=damage;
 
          // If at clinic and in critical condition, transfer to university hospital
-         if(pool[p]->blood<=20&&pool[p]->location>-1&&location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
+         if((pool[p]->blood<=20 | transfer)&&
+            pool[p]->location>-1&&
+            location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
          {
             int hospital;
             for(hospital=0;hospital<location.size();++hospital)
@@ -808,10 +768,22 @@ void advanceday(char &clearformess,char canseethings)
                getch();
             }
          }
+         else if(transfer&&pool[p]->location>-1&&
+            location[pool[p]->location]->renting!=-1&&
+            location[pool[p]->location]->type!=SITE_HOSPITAL_UNIVERSITY)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(pool[p]->name);
+            addstr("'s injuries require professional treatment.");
+            pool[p]->activity.type=ACTIVITY_CLINIC;
+            refresh();
+            getch();
+         }
       }
       // Release healed people
 
-      if(pool[p]->blood==100&&(pool[p]->location>0)&&
+      if(!clinictime(*pool[p])&&(pool[p]->location>0)&&
                                (location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
                                 location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
       {

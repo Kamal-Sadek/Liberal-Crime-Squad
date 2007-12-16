@@ -1022,6 +1022,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                      {
                         newd=new datest;
                            newd->mac_id=a.id;
+
                         date.push_back(newd);
                      }
 

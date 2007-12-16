@@ -131,8 +131,8 @@ void hospitalize(int loc, creaturest &patient)
       itoa(time,num,10);
       addstr(num);
       addstr(" ");
-      if(time>1)addstr("months");
-      else addstr("month");
+      if(time>1)addstr("weeks");
+      else addstr("week");
       addstr(".");
 
       refresh();
