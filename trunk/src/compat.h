@@ -137,22 +137,22 @@ typedef char int8;
 
  char *strToLower (const char *str);
 
- int32 stricmp(const char *str1, const char *str2);
+ int stricmp(const char *str1, const char *str2);
  #endif
 
   #ifdef Linux // BSD and SVr4 too
 
-  extern int32 init_alarm;
+  extern int init_alarm;
   extern struct itimerval timer_off;
 
-void alarmHandler(int32 signal);
+void alarmHandler(int signal);
 
-void setTimeval(struct  timeval *value, int32 sec, int32 usec);
-void msToItimerval(int32 ms, struct  itimerval *value);
+void setTimeval(struct  timeval *value, int sec, int usec);
+void msToItimerval(int ms, struct  itimerval *value);
 #endif
 
-void pause_ms(int32 t);
-void alarmset(int32 t);
+void pause_ms(int t);
+void alarmset(int t);
 void alarmwait();
 
  #ifndef HAS_ITOA
@@ -162,7 +162,7 @@ void alarmwait();
  //other bases, it's just enough for this program to be
  //ported.
  // Ensure buffer is of sufficient size.
- char *itoa(int32 value, char *buffer, int32 radix);
+ char *itoa(int value, char *buffer, int radix);
  #endif
 
 

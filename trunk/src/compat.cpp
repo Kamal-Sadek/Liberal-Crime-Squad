@@ -119,9 +119,9 @@ using namespace std;
 
  char *strToLower(const char *str)
  {
- int32 len = strlen(str);
+ int len = strlen(str);
  char *lstr = NULL;
- int32 i = 0;
+ int i = 0;
 
  lstr = (char *)malloc((len+1)*sizeof(char));
 
@@ -132,11 +132,11 @@ using namespace std;
  return(lstr);
  }
 
- int32 stricmp(const char *str1, const char *str2)
+ int stricmp(const char *str1, const char *str2)
  {
  char *lstr1 = NULL;
  char *lstr2 = NULL;
- int32 result = 0;
+ int result = 0;
 
  lstr1=strToLower(str1);
  lstr2=strToLower(str2);
@@ -153,36 +153,36 @@ using namespace std;
 
  #ifdef Linux // BSD and SVr4 too
 
-  int32 init_alarm = 0; // Flag to indicate if alarmHandler() has been registered.
+  int init_alarm = 0; // Flag to indicate if alarmHandler() has been registered.
   struct itimerval timer_off;
   struct itimerval timer_on;
 
 
-void alarmHandler(int32 signal)
+void alarmHandler(int signal)
 {
  //WAKE UP and turn the timer off, this will un-pause().
   setitimer(ITIMER_REAL, &timer_off, NULL);
 }
 
-void setTimeval(struct  timeval *value, int32 sec, int32 usec)
+void setTimeval(struct  timeval *value, int sec, int usec)
 {
   value->tv_sec = sec;
   value->tv_usec = usec;
 }
 
-void msToItimerval(int32 ms, struct  itimerval *value)
+void msToItimerval(int ms, struct  itimerval *value)
 {
-int32 sec=0;
-int32 usec=0;
+int sec=0;
+int usec=0;
 
   if (ms > 999)
     {
-     sec = (int32)(ms/1000);
-     usec = (int32)((ms%1000)*1000);
+     sec = (int)(ms/1000);
+     usec = (int)((ms%1000)*1000);
     }
     else
     {
-      usec = (int32)(ms*1000);
+      usec = (int)(ms*1000);
     }
 
  setTimeval(&value->it_interval, sec, usec);
@@ -200,10 +200,10 @@ void initalarm()
 #endif
 
 #ifdef WIN32
-  uint32 ptime=GetTickCount();
+  unsigned int ptime=GetTickCount();
 #endif
 
-void alarmset(int32 t)
+void alarmset(int t)
 {
 #ifdef WIN32
   ptime=GetTickCount() + t;
@@ -240,7 +240,7 @@ void alarmwait()
 #endif
 }
 
-void pause_ms(int32 t)
+void pause_ms(int t)
 {
   #ifdef Linux // BSD and SVr4 too
 
@@ -268,7 +268,7 @@ void pause_ms(int32 t)
  //other bases, it's just enough for this program to be
  //ported.
  // Ensure buffer is of sufficient size.
- char *itoa(int32 value, char *buffer, int32 radix)
+ char *itoa(int value, char *buffer, int radix)
  {
  if (radix != 10)
    {
