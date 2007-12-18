@@ -21,7 +21,7 @@
 //#define SHOWWAIT
 
 #include "compat.h"
-#include "endian.h"
+#include "lcsendian.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -31,9 +31,9 @@
 #define PACKAGE_VERSION "3.11.3svn"
 #endif
 
-const uint32 version=31103;
-const uint32 lowestloadversion=31102;
-const uint32 lowestloadscoreversion=30001;
+const unsigned int version=31103;
+const unsigned int lowestloadversion=31102;
+const unsigned int lowestloadscoreversion=30001;
 
 #ifdef WIN32
    #include <windows.h>

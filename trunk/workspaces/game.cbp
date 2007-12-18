@@ -3,6 +3,8 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="game" />
+		<Option makefile="../src/Makefile" />
+		<Option makefile_is_custom="1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -45,7 +47,8 @@
 				</ResourceCompiler>
 			</Target>
 			<Target title="Debug_Linux">
-				<Option output="Debug/crimesquad" prefix_auto="1" extension_auto="1" />
+				<Option output="../src/crimesquad" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../src/" />
 				<Option object_output="Debug" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -92,11 +95,11 @@
 		<Unit filename="../src/daily/news.cpp" />
 		<Unit filename="../src/daily/shopsnstuff.cpp" />
 		<Unit filename="../src/daily/siege.cpp" />
-		<Unit filename="../src/endian.cpp" />
-		<Unit filename="../src/endian.h" />
 		<Unit filename="../src/externs.h" />
 		<Unit filename="../src/game.cpp" />
 		<Unit filename="../src/includes.h" />
+		<Unit filename="../src/lcsendian.cpp" />
+		<Unit filename="../src/lcsendian.h" />
 		<Unit filename="../src/lcsio.cpp" />
 		<Unit filename="../src/lcsio.h" />
 		<Unit filename="../src/monthly/endgame.cpp" />

@@ -131,7 +131,7 @@
  */
 
 #include "compat.h"
-#include "endian.h"
+#include "lcsendian.h"
 
 #ifdef WIN32
   #include "curses.h"

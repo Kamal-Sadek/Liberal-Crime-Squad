@@ -1,6 +1,6 @@
 // This file was created by Scott C. Walton
 
-#include "endian.h"
+#include "lcsendian.h"
 
 
 /*
