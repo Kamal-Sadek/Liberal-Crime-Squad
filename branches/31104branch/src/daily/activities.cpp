@@ -1099,7 +1099,7 @@ void funds_and_trouble(char &clearformess)
             }
          }
 
-         if(msg)
+         if(msg[0])
          {
             if(clearformess)erase();
             else
@@ -1165,7 +1165,7 @@ void funds_and_trouble(char &clearformess)
                }
             }
          }
-         if(msg)
+         if(msg[0])
          {
             if(clearformess)erase();
             else
@@ -1248,7 +1248,7 @@ void funds_and_trouble(char &clearformess)
                }
             }
          }
-         if(msg)
+         if(msg[0])
          {
             if(clearformess)erase();
             else
@@ -1321,7 +1321,7 @@ void funds_and_trouble(char &clearformess)
                }
             }
          }
-         if(msg)
+         if(msg[0])
          {
             if(clearformess)erase();
             else
