@@ -150,7 +150,7 @@ void passmonth(char &clearformess,char canseethings)
       // AM Radio and Cable News become more influential over time
       if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)
       {
-         if(!LCSrandom(3))change_public_opinion(v,-1,0);
+         if(!LCSrandom(3))change_public_opinion(v,-1);
       }
    }
 
@@ -246,6 +246,16 @@ void passmonth(char &clearformess,char canseethings)
             getch();
 
             removesquadinfo(*pool[p]);
+            if(pool[p]->align==1)
+            {
+               int boss=getpoolcreature(pool[p]->hireid);
+               if(boss!=-1&&pool[boss]->juice>50)
+               {
+                  int juice=pool[boss]->juice-50;
+                  if(juice>10)juice=10;
+                  addjuice(*pool[boss],-juice);
+               }
+            }
             delete pool[p];
             pool.erase(pool.begin() + p);
             continue;
@@ -302,6 +312,15 @@ void passmonth(char &clearformess,char canseethings)
                   getch();
 
                   removesquadinfo(*pool[p]);
+
+                  int boss=getpoolcreature(pool[p]->hireid);
+                  if(boss!=-1&&pool[boss]->juice>50)
+                  {
+                     int juice=pool[boss]->juice-50;
+                     if(juice>5)juice=5;
+                     addjuice(*pool[boss],-juice);
+                  }
+
                   delete pool[p];
                   pool.erase(pool.begin() + p);
                   continue; //no trial for this person; skip to next person

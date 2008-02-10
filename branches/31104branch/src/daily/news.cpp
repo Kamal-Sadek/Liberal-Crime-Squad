@@ -678,13 +678,23 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   {
                      if(newscherrybusted||liberalguardian)
                      {
-                        y=13;
+                        
                         if(!liberalguardian)
                         {
-                           displaycenterednewsfont("LCS STRIKES",5);
+                           if(ns.priority>150)
+                           {
+                              displaycenterednewsfont("LIBERAL CRIME",5);
+                              displaycenterednewsfont("SQUAD STRIKES",13);
+                           }
+                           else
+                           {
+                              y=13;
+                              displaycenterednewsfont("LCS STRIKES",5);
+                           }
                         }
                         else
                         {
+                           y=13;
                            if(ns.priority>150)
                            {
                               change_public_opinion(header,5,1); // Bonus for big story
@@ -773,7 +783,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case NEWSSTORY_CARTHEFT:
             {
                int crime[CRIMENUM];
-               memset(crime,0,sizeof(int)*CRIMENUM);
+               std::memset(crime,0,sizeof(int)*CRIMENUM);
                for(int c=0;c<ns.crime.size();c++)
                {
                   crime[ns.crime[c]]++;
@@ -952,7 +962,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   case SITE_INDUSTRY_SWEATSHOP:
                      strcat(story,", a Conservative sweatshop and human rights abuser.  ");break;
                   case SITE_INDUSTRY_POLLUTER:
-                     strcat(story,", a factory whose Conservative smokestacks pollute choke the city with deadly pollutants.  ");break;
+                     strcat(story,", a factory whose Conservative smokestacks choke the city with deadly pollutants.  ");break;
                   case SITE_INDUSTRY_NUCLEAR:
                      strcat(story,", also known to be a Conservative storage facility for radioactive waste.  ");break;
                   case SITE_CORPORATE_HEADQUARTERS:
@@ -1403,31 +1413,39 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          if(ns.page==1)
          {
             y=21;
-            switch(ns.cr->type)
+            if(liberalguardian)
             {
-               case CREATURE_CORPORATE_CEO:
-                  displaycenterednewsfont("CEO",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               case CREATURE_RADIOPERSONALITY:
-                  displaycenterednewsfont("RADIO HOST",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               case CREATURE_NEWSANCHOR:
-                  displaycenterednewsfont("NEWS ANCHOR",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               case CREATURE_SCIENTIST_EMINENT:
-                  displaycenterednewsfont("SCIENTIST",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               case CREATURE_JUDGE_CONSERVATIVE:
-                  displaycenterednewsfont("JUDGE",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               case CREATURE_COP:
-               case CREATURE_GANGUNIT:
-               case CREATURE_DEATHSQUAD:
-                  displaycenterednewsfont("COP",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
-               default:
-                  displaycenterednewsfont("PERSON",5);
-                  displaycenterednewsfont("KIDNAPPED",13);break;
+               displaycenterednewsfont("LCS DENIES",5);
+               displaycenterednewsfont("KIDNAPPING",13);break;
+            }
+            else
+            {
+               switch(ns.cr->type)
+               {
+                  case CREATURE_CORPORATE_CEO:
+                     displaycenterednewsfont("CEO",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  case CREATURE_RADIOPERSONALITY:
+                     displaycenterednewsfont("RADIO HOST",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  case CREATURE_NEWSANCHOR:
+                     displaycenterednewsfont("NEWS ANCHOR",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  case CREATURE_SCIENTIST_EMINENT:
+                     displaycenterednewsfont("SCIENTIST",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  case CREATURE_JUDGE_CONSERVATIVE:
+                     displaycenterednewsfont("JUDGE",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  case CREATURE_COP:
+                  case CREATURE_GANGUNIT:
+                  case CREATURE_DEATHSQUAD:
+                     displaycenterednewsfont("COP",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+                  default:
+                     displaycenterednewsfont("PERSON",5);
+                     displaycenterednewsfont("KIDNAPPED",13);break;
+               }
             }
          }
 
@@ -2901,7 +2919,7 @@ void majornewspaper(char &clearformess,char canseethings)
    int n = 0;
    int i;
 
-   int writers[VIEWNUM]={0};
+   int writers=0;
 
    for(i=0;i<pool.size();i++)
    {
@@ -2910,7 +2928,7 @@ void majornewspaper(char &clearformess,char canseethings)
          if(location[pool[i]->location]->compound_walls==COMPOUND_PRINTINGPRESS)
          {
             pool[i]->skill_ip[SKILL_WRITING]+=LCSrandom(3); // Experience gain
-            writers[pool[i]->activity.arg]+=pool[i]->skill[SKILL_WRITING]; // Record the writer on this topic
+            writers+=pool[i]->skill[SKILL_WRITING]; // Record the writer on this topic
             criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
@@ -3246,6 +3264,11 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             bool liberalguardian=0;
             int header = -1;
+            if(writers&&newsstory[n]->type!=NEWSSTORY_MAJOREVENT)
+            {
+               --writers;
+               liberalguardian=1;
+            }
             switch(newsstory[n]->type)
             {
                case NEWSSTORY_SQUAD_SITE:
@@ -3253,172 +3276,47 @@ void majornewspaper(char &clearformess,char canseethings)
                   switch(location[newsstory[n]->loc]->type)
                   {
                      case SITE_LABORATORY_COSMETICS:
-                        if(writers[VIEW_ANIMALRESEARCH])
-                        {
-                           writers[VIEW_ANIMALRESEARCH]--;
-                           liberalguardian=1;
-                           header=VIEW_ANIMALRESEARCH;
-                        }
+                        header=VIEW_ANIMALRESEARCH;
                         break;
                      case SITE_LABORATORY_GENETIC:
-                        if(writers[VIEW_GENETICS])
-                        {
-                           writers[VIEW_GENETICS]--;
-                           liberalguardian=1;
-                           header=VIEW_GENETICS;
-                        }
+                        header=VIEW_GENETICS;
                         break;
                      case SITE_GOVERNMENT_POLICESTATION:
-                        if(writers[VIEW_POLICEBEHAVIOR])
-                        {
-                           writers[VIEW_POLICEBEHAVIOR]--;
-                           liberalguardian=1;
-                           header=VIEW_POLICEBEHAVIOR;
-                        }
+                        header=VIEW_POLICEBEHAVIOR;
                         break;
                      case SITE_GOVERNMENT_COURTHOUSE:
-                        if(writers[VIEW_DEATHPENALTY])
-                        {
-                           writers[VIEW_DEATHPENALTY]--;
-                           liberalguardian=1;
-                           header=VIEW_DEATHPENALTY;
-                        }
-                        else if(writers[VIEW_JUSTICES])
-                        {
-                           writers[VIEW_JUSTICES]--;
-                           liberalguardian=1;
-                           header=VIEW_JUSTICES;
-                        }
-                        else if(writers[VIEW_FREESPEECH])
-                        {
-                           writers[VIEW_FREESPEECH]--;
-                           liberalguardian=1;
-                           header=VIEW_FREESPEECH;
-                        }
-                        else if(writers[VIEW_ABORTION])
-                        {
-                           writers[VIEW_ABORTION]--;
-                           liberalguardian=1;
-                           header=VIEW_ABORTION;
-                        }
-                        else if(writers[VIEW_GAY])
-                        {
-                           writers[VIEW_GAY]--;
-                           liberalguardian=1;
-                           header=VIEW_GAY;
-                        }
+                        header=VIEW_JUSTICES;
                         break;
                      case SITE_GOVERNMENT_PRISON:
-                        if(writers[VIEW_PRISONS])
-                        {
-                           writers[VIEW_PRISONS]--;
-                           liberalguardian=1;
-                           header=VIEW_PRISONS;
-                        }
+                        header=VIEW_PRISONS;
                         break;
                      case SITE_GOVERNMENT_INTELLIGENCEHQ:
-                        if(writers[VIEW_INTELLIGENCE])
-                        {
-                           writers[VIEW_INTELLIGENCE]--;
-                           liberalguardian=1;
-                           header=VIEW_INTELLIGENCE;
-                        }
+                        header=VIEW_INTELLIGENCE;
                         break;
                      case SITE_INDUSTRY_SWEATSHOP:
-                        if(writers[VIEW_SWEATSHOPS])
-                        {
-                           writers[VIEW_SWEATSHOPS]--;
-                           liberalguardian=1;
-                           header=VIEW_SWEATSHOPS;
-                        }
+                        header=VIEW_SWEATSHOPS;
                         break;
                      case SITE_INDUSTRY_POLLUTER:
-                        if(writers[VIEW_POLLUTION])
-                        {
-                           writers[VIEW_POLLUTION]--;
-                           liberalguardian=1;
-                           header=VIEW_POLLUTION;
-                        }
+                        header=VIEW_POLLUTION;
                         break;
                      case SITE_INDUSTRY_NUCLEAR:
-                        if(writers[VIEW_NUCLEARPOWER])
-                        {
-                           writers[VIEW_NUCLEARPOWER]--;
-                           liberalguardian=1;
-                           header=VIEW_NUCLEARPOWER;
-                        }
+                        header=VIEW_NUCLEARPOWER;
                         break;
                      case SITE_CORPORATE_HEADQUARTERS:
-					         if(writers[VIEW_CORPORATECULTURE])
-                        {
-                           writers[VIEW_CORPORATECULTURE]--;
-                           liberalguardian=1;
-                           header=VIEW_CORPORATECULTURE;
-                        }
-                        else if(writers[VIEW_TAXES])
-                        {
-                           writers[VIEW_TAXES]--;
-                           liberalguardian=1;
-                           header=VIEW_CEOSALARY;
-                        }
+					         header=VIEW_CORPORATECULTURE;
                         break;
                      case SITE_CORPORATE_HOUSE:
-					         if(writers[VIEW_TAXES])
-                        {
-                           writers[VIEW_TAXES]--;
-                           liberalguardian=1;
-                           header=VIEW_TAXES;
-                        }
-                        else if(writers[VIEW_CEOSALARY])
-                        {
-                           writers[VIEW_CEOSALARY]--;
-                           liberalguardian=1;
-                           header=VIEW_CEOSALARY;
-                        }
+                        header=VIEW_CEOSALARY;
                         break;
                      case SITE_MEDIA_AMRADIO:
-                        if(writers[VIEW_AMRADIO])
-                        {
-                           writers[VIEW_AMRADIO]--;
-                           liberalguardian=1;
-                           header=VIEW_AMRADIO;
-                        }
+                        header=VIEW_AMRADIO;
                         break;
                      case SITE_MEDIA_CABLENEWS:
-                        if(writers[VIEW_CABLENEWS])
-                        {
-                           writers[VIEW_CABLENEWS]--;
-                           liberalguardian=1;
-                           header=VIEW_CABLENEWS;
-                        }
+                        header=VIEW_CABLENEWS;
                         break;
                      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-					         if(writers[VIEW_TAXES])
-                        {
-                           writers[VIEW_TAXES]--;
-                           liberalguardian=1;
-                           header=VIEW_TAXES;
-                        }
-                        else if(writers[VIEW_CEOSALARY])
-                        {
-                           writers[VIEW_CEOSALARY]--;
-                           liberalguardian=1;
-                           header=VIEW_CEOSALARY;
-                        }
-                        break;
                      case SITE_BUSINESS_CIGARBAR:
-					         if(writers[VIEW_TAXES])
-                        {
-                           writers[VIEW_TAXES]--;
-                           liberalguardian=1;
-                           header=VIEW_TAXES;
-                        }
-                        else if(writers[VIEW_CEOSALARY])
-                        {
-                           writers[VIEW_CEOSALARY]--;
-                           liberalguardian=1;
-                           header=VIEW_CEOSALARY;
-                        }
+                        header=VIEW_TAXES;
                         break;
                   }
                   break;
@@ -3428,24 +3326,24 @@ void majornewspaper(char &clearformess,char canseethings)
                case NEWSSTORY_SQUAD_BROKESIEGE:
                case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
                case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
-                  for(int i=0;i<VIEWNUM;++i)
-                  {
-                     if(writers[i])
-                     {
-                        --writers[i];
-                        liberalguardian=1;
-                     }
-                  }
                   break;
             }
             displaystory(*newsstory[n],0,-1);
             if(liberalguardian)
             {
                displaystory(*newsstory[n],liberalguardian,header);
-               newsstory[n]->positive+=1;
+               if(newsstory[n]->positive)newsstory[n]->positive+=1;
             }
          }
       }
+   }
+
+   //Letters to the editor
+   for(int p=0;p<pool.size();p++)
+   {
+      //Yes, crappy letters to the editor may backfire
+      if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
+         writers+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
    }
 
    //Essay writing
@@ -3457,15 +3355,11 @@ void majornewspaper(char &clearformess,char canseethings)
       }
       else
       {
-         if(public_interest[w]>writers[w])
+         if(writers)
          {
-            public_interest[w]-=writers[w];
-            background_liberal_influence[w]+=writers[w];
-         }
-         else
-         {
-            background_liberal_influence[w]=public_interest[w];
-            public_interest[w]=0;
+            public_interest[w]--;
+            writers--;
+            background_liberal_influence[w]++;
          }
       }
    }
@@ -3505,9 +3399,9 @@ void majornewspaper(char &clearformess,char canseethings)
 
          power/=10;
          power++;
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power,0);
-         if(newsstory[n]->positive)change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power,0);
-         else change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-power,0);
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power);
+         if(newsstory[n]->positive)change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power);
+         else change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-power);
 
          char colored=0;
          if(newsstory[n]->positive)colored=1;
@@ -3516,15 +3410,12 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             case SITE_LABORATORY_COSMETICS:
                change_public_opinion(VIEW_ANIMALRESEARCH,power/4+1,colored,power);
-               public_interest[VIEW_ANIMALRESEARCH]+=power/2+1;
                break;
             case SITE_LABORATORY_GENETIC:
                change_public_opinion(VIEW_GENETICS,power/4+1,colored);
-               public_interest[VIEW_GENETICS]+=power/2+1;
                break;
             case SITE_GOVERNMENT_POLICESTATION:
                change_public_opinion(VIEW_POLICEBEHAVIOR,power/4+1,colored,power);
-               public_interest[VIEW_POLICEBEHAVIOR]+=power/2+1;
                break;
             case SITE_GOVERNMENT_COURTHOUSE:
                change_public_opinion(VIEW_DEATHPENALTY,power/4+1,colored,power);
@@ -3532,65 +3423,44 @@ void majornewspaper(char &clearformess,char canseethings)
                change_public_opinion(VIEW_FREESPEECH,power/4+1,colored,power);
                change_public_opinion(VIEW_ABORTION,power/4+1,colored,power);
                change_public_opinion(VIEW_GAY,power/4+1,colored,power);
-               public_interest[VIEW_DEATHPENALTY]+=power/2+1;
-               public_interest[VIEW_JUSTICES]+=power/2+1;
-               public_interest[VIEW_FREESPEECH]+=power/2+1;
-               public_interest[VIEW_ABORTION]+=power/2+1;
-               public_interest[VIEW_GAY]+=power/2+1;
                break;
             case SITE_GOVERNMENT_PRISON:
-               change_public_opinion(VIEW_DEATHPENALTY,power/4+1,colored,power);
-               change_public_opinion(VIEW_PRISONS,power/4+1,colored,power);
-               public_interest[VIEW_PRISONS]+=power/2+1;
-               public_interest[VIEW_DEATHPENALTY]+=power/2+1;
+               change_public_opinion(VIEW_DEATHPENALTY,power/4+1,colored,power*10);
+               change_public_opinion(VIEW_PRISONS,power/4+1,colored,power*10);
                break;
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
-               change_public_opinion(VIEW_INTELLIGENCE,power/4+1,colored,power);
-               public_interest[VIEW_INTELLIGENCE]+=power/2+1;
+               change_public_opinion(VIEW_INTELLIGENCE,power/4+1,colored,power*10);
                break;
             case SITE_INDUSTRY_SWEATSHOP:
-               change_public_opinion(VIEW_SWEATSHOPS,power/4+1,colored,power);
-               public_interest[VIEW_SWEATSHOPS]+=power/2+1;
+               change_public_opinion(VIEW_SWEATSHOPS,power/4+1,colored,power*10);
                break;
             case SITE_INDUSTRY_POLLUTER:
-               change_public_opinion(VIEW_POLLUTION,power/4+1,colored,power);
-               public_interest[VIEW_POLLUTION]+=power/2+1;
+               change_public_opinion(VIEW_POLLUTION,power/4+1,colored,power*10);
                break;
             case SITE_INDUSTRY_NUCLEAR:
-               change_public_opinion(VIEW_NUCLEARPOWER,power/4+1,colored,power);
-               public_interest[VIEW_NUCLEARPOWER]+=power/2+1;
+               change_public_opinion(VIEW_NUCLEARPOWER,power/4+1,colored,power*10);
                break;
             case SITE_CORPORATE_HEADQUARTERS:
 					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
-               change_public_opinion(VIEW_CORPORATECULTURE,power/4+1,colored,power);
-					public_interest[VIEW_TAXES]+=power/2+1;
-               public_interest[VIEW_CORPORATECULTURE]+=power/2+1;
+               change_public_opinion(VIEW_CORPORATECULTURE,power/4+1,colored,power*10);
                break;
             case SITE_CORPORATE_HOUSE:
-					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
-					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power);
-					public_interest[VIEW_TAXES]+=power/2+1;
-					public_interest[VIEW_CEOSALARY]+=power/2+1;
+					change_public_opinion(VIEW_TAXES,power/4+1,colored,power*10);
+					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power*10);
                break;
             case SITE_MEDIA_AMRADIO:
-               change_public_opinion(VIEW_AMRADIO,power/8+1,colored,power);
-               public_interest[VIEW_AMRADIO]+=power/2+1;
+               change_public_opinion(VIEW_AMRADIO,power/4+1,colored,power*10);
                break;
             case SITE_MEDIA_CABLENEWS:
-               change_public_opinion(VIEW_CABLENEWS,power/8+1,colored,power);
-               public_interest[VIEW_CABLENEWS]+=power/2+1;
+               change_public_opinion(VIEW_CABLENEWS,power/4+1,colored,power*10);
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-					change_public_opinion(VIEW_TAXES,power/8+1,colored,power);
-					change_public_opinion(VIEW_CEOSALARY,power/8+1,colored,power);
-					public_interest[VIEW_TAXES]+=power/2+1;
-					public_interest[VIEW_CEOSALARY]+=power/2+1;
+					change_public_opinion(VIEW_TAXES,power/4+1,colored,power*10);
+					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power*10);
                break;
             case SITE_BUSINESS_CIGARBAR:
-					change_public_opinion(VIEW_TAXES,power/4+1,colored,power);
-					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power);
-					public_interest[VIEW_TAXES]+=power/2+1;
-					public_interest[VIEW_CEOSALARY]+=power/2+1;
+					change_public_opinion(VIEW_TAXES,power/4+1,colored,power*10);
+					change_public_opinion(VIEW_CEOSALARY,power/4+1,colored,power*10);
                break;
          }
       }

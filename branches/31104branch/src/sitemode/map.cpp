@@ -263,18 +263,23 @@ void initsite(locationst &loc)
    }
 
    //ADD RESTRICTIONS
-   bool restricted=0;
+   char restricted=0;
    switch(loc.type)
    {
+      case SITE_INDUSTRY_SWEATSHOP:
+      case SITE_INDUSTRY_POLLUTER:
+      case SITE_INDUSTRY_NUCLEAR:
+         restricted++;
       case SITE_LABORATORY_COSMETICS:
       case SITE_LABORATORY_GENETIC:
       case SITE_GOVERNMENT_POLICESTATION:
       case SITE_GOVERNMENT_COURTHOUSE:
       case SITE_GOVERNMENT_PRISON:
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
+      case SITE_CORPORATE_HEADQUARTERS:
       case SITE_MEDIA_AMRADIO:
       case SITE_MEDIA_CABLENEWS:
-         restricted=1;
+         restricted++;
          for(x=2;x<MAPX-2;x++)
          {
             for(int y=2;y<MAPY-2;y++)
@@ -290,7 +295,7 @@ void initsite(locationst &loc)
 
    //NOW CLEAR FIRST FLOOR RESTRICTIONS NEAR TO DOOR
    char acted;
-   levelmap[MAPX>>1][2][0].flag&=~SITEBLOCK_RESTRICTED;
+   if(restricted<2)levelmap[MAPX>>1][2][0].flag&=~SITEBLOCK_RESTRICTED;
    do
    {
       acted=0;
@@ -360,6 +365,7 @@ void initsite(locationst &loc)
          {
             if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
                !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
                !LCSrandom(10))
             {
                switch(loc.type)

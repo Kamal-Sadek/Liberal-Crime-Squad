@@ -265,7 +265,7 @@ void getweaponfull(char *str,int type,int subtype)
       switch(type)
       {
       case WEAPON_BASEBALLBAT:   strcpy(str,"Spaceball Bat");break;
-      case WEAPON_KNIFE:         strcpy(str,"Vibro--Knife");break;
+      case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
       case WEAPON_SHANK:         strcpy(str,"Shank");break;
       case WEAPON_SYRINGE:      strcpy(str,"Medical Injector");break;
       case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug Pistol");break;

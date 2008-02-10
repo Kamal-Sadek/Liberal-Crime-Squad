@@ -102,10 +102,10 @@ void translategetch(int &c)
    if(c>='A'&&c<='Z'){c-='A';c+='a';}
 
    /* Support Cursor Keys...*/
-   if(c==KEY_LEFT)c='a';
-   if(c==KEY_RIGHT)c='d';
-   if(c==KEY_UP)c='w';
-   if(c==KEY_DOWN)c='x';
+   //if(c==KEY_LEFT)c='a';
+   //if(c==KEY_RIGHT)c='d';
+   //if(c==KEY_UP)c='w';
+   //if(c==KEY_DOWN)c='x';
 
 }
 

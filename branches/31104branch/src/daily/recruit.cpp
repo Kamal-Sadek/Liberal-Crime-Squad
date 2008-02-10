@@ -109,7 +109,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
          r.recruit->skill[SKILL_RIFLE] &&
          (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_GANGSTERISM]))
       {
-         switch(LCSrandom(4))
+         switch(LCSrandom(3))
          {
          case 0:r.recruit->weapon.type=WEAPON_CARBINE_M4;break;
          case 1:r.recruit->weapon.type=WEAPON_AUTORIFLE_M16;break;

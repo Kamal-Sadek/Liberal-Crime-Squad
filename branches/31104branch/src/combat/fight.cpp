@@ -686,6 +686,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int wsk=weaponskill(a.weapon.type);
    if(rangedweapon(a.weapon) && a.weapon.ammo==0)wsk=SKILL_IMPROVISED;
    aroll+=LCSrandom(a.skill[wsk]+1);
+   a.skill_ip[wsk]+=droll;
 
    // Harder to hit people during a chase: 5 points for being on the
    // move, another 5 points for having to hit them in the car
@@ -693,7 +694,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(mode==GAMEMODE_CHASEFOOT)droll+=LCSrandom(6);
 
    //Agility bonuses used for melee attack
-   if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
+   //if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
    {
       aroll+=LCSrandom(a.attval(ATTRIBUTE_AGILITY));
       droll+=LCSrandom(t.attval(ATTRIBUTE_AGILITY));
@@ -1220,7 +1221,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                char heavydam=0;
                char breakdam=0;
                char pokedam=0;
-               if(damamount>=6)
+               if(damamount>=18) //JDS -- 3x damage needed
                {
                   if(damtype & WOUND_SHOT)heavydam=1;
                   if(damtype & WOUND_BURNED)heavydam=1;
@@ -1228,7 +1229,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   if(damtype & WOUND_CUT)heavydam=1;
                }
 
-               if(damamount>=5)
+               if(damamount>=15) //JDS -- 3x damage needed
                {
                   if(damtype & WOUND_SHOT)pokedam=1;
                   if(damtype & WOUND_TORN)pokedam=1;
@@ -1707,7 +1708,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
    else if(mod<=-3)damamount>>=3;
    else if(mod<=-2)damamount>>=2;
    else if(mod<=-1)damamount>>=1;
-   else if(mod>=10)damamount=(int)((float)damamount * mod);
+   else if(mod>=10)damamount=(int)((float)damamount * 10.0f);
    else if(mod>=9)damamount=(int)((float)damamount * 8.0f);
    else if(mod>=8)damamount=(int)((float)damamount * 6.0f);
    else if(mod>=7)damamount=(int)((float)damamount * 4.0f);

@@ -394,9 +394,9 @@ void stopevil(void)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*11<temploc.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*11<temploc.size())page++;
 
       if(c>='a'&&c<='k')
       {
@@ -580,10 +580,10 @@ char liberalagenda(char won)
 				break;
          case LAW_ABORTION:
             if(won==-1)addstr("Use of contraception and abortion are capital offenses.");
-            else if(law[l]==-2)addstr("Abortion is illegal in all cases.");
-            else if(law[l]==-1)addstr("Abortion is illegal except in extreme circumstances.");
-            else if(law[l]==0)addstr("Abortion is illegal in the second and third trimesters.");
-            else if(law[l]==1)addstr("Abortion is illegal in the third trimester.");
+            else if(law[l]==-2)addstr("Abortion is a felony equal to murder.");
+            else if(law[l]==-1)addstr("Abortion is prohibited except in extreme circumstances.");
+            else if(law[l]==0)addstr("Abortion is limited to early pregnancy.");
+            else if(law[l]==1)addstr("Abortion is mostly legal, but discouraged by law.");
             else addstr("Abortion is legal.");
             break;
          case LAW_ANIMALRESEARCH:
@@ -1346,9 +1346,9 @@ void setvehicles(void)
       if(c=='x')return;
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*18<vehicle.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<vehicle.size())page++;
 
    }while(1);
 }

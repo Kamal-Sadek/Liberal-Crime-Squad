@@ -265,9 +265,9 @@ int choosespecialedition(char &clearformess)
       }
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*18<loottype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<loottype.size())page++;
 
    }while(1);
 
@@ -287,30 +287,32 @@ void printnews(short l,short newspaper)
          move(6,1);
          addstr("The Liberal Guardian runs a story featuring photos of a major CEO");
          move(7,1);
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
          switch(LCSrandom(10))
          {
             case 0:
                addstr("engaging in lude behavior with animals.");
-               change_public_opinion(VIEW_ANIMALRESEARCH,15,0);
+               change_public_opinion(VIEW_ANIMALRESEARCH,15);
                break;
             case 1:addstr("digging up graves and sleeping with the dead.");break;
             case 2:
                addstr("participating in a murder.");
-               change_public_opinion(VIEW_POLICEBEHAVIOR,15,0);
-               change_public_opinion(VIEW_JUSTICES,10,0);
+               change_public_opinion(VIEW_POLICEBEHAVIOR,15);
+               change_public_opinion(VIEW_JUSTICES,10);
                break;
             case 3:addstr("engaging in heavy bondage.  A cucumber was involved in some way.");break;
             case 4:addstr("tongue-kissing an infamous dictator.");break;
             case 5:
                addstr("making out with an FDA official overseeing the CEO's products.");
-               change_public_opinion(VIEW_GENETICS,10,0);
-               change_public_opinion(VIEW_POLLUTION,10,0);
+               change_public_opinion(VIEW_GENETICS,10);
+               change_public_opinion(VIEW_POLLUTION,10);
                break;
             case 6:addstr("castrating himself.");break;
             case 7:addstr("waving a Nazi flag at a supremacist rally.");break;
             case 8:
                addstr("torturing an employee with a hot iron.");
-               change_public_opinion(VIEW_SWEATSHOPS,10,0);
+               change_public_opinion(VIEW_SWEATSHOPS,10);
                break;
             case 9:addstr("playing with feces and urine.");break;
          }
@@ -319,37 +321,38 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the Corporations a little riled up.");
 
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10,0);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10,0);
-         change_public_opinion(VIEW_CEOSALARY,50,0);
-         change_public_opinion(VIEW_CORPORATECULTURE,50,0);
+         change_public_opinion(VIEW_CEOSALARY,50);
+         change_public_opinion(VIEW_CORPORATECULTURE,50);
          offended_corps=1;
          break;
       case LOOT_CORPFILES:
          move(6,1);
          addstr("The Liberal Guardian runs a story featuring Corporate files");
          move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,newspaper*10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,newspaper*10);
          switch(LCSrandom(5))
          {
             case 0:
                addstr("describing a genetic monster created in a lab.");
-               change_public_opinion(VIEW_GENETICS,50,0);
+               change_public_opinion(VIEW_GENETICS,50);
                break;
             case 1:
                addstr("with a list of gay employees entitled \"Homo-workers\".");
-               change_public_opinion(VIEW_GAY,50,0);
+               change_public_opinion(VIEW_GAY,50);
                break;
             case 2:
                addstr("containing a memo: \"Terminate the pregnancy, I terminate you.\"");
-               change_public_opinion(VIEW_ABORTION,50,0);
+               change_public_opinion(VIEW_ABORTION,50);
                break;
             case 3:
                addstr("cheerfully describing foreign corporate sweatshops.");
-               change_public_opinion(VIEW_SWEATSHOPS,50,0);
+               change_public_opinion(VIEW_SWEATSHOPS,50);
                break;
 				case 4:
 					addstr("describing an intricate tax scheme.");
-					change_public_opinion(VIEW_TAXES,50,0);
+					change_public_opinion(VIEW_TAXES,50);
 					break;
          }
          move(8,1);
@@ -357,10 +360,8 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the Corporations a little riled up.");
 
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,newspaper*10,0);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,newspaper*10,0);
-         change_public_opinion(VIEW_CEOSALARY,50,0);
-         change_public_opinion(VIEW_CORPORATECULTURE,50,0);
+         change_public_opinion(VIEW_CEOSALARY,50);
+         change_public_opinion(VIEW_CORPORATECULTURE,50);
          offended_corps=1;
          break;
       case LOOT_INTHQDISK:
@@ -368,25 +369,28 @@ void printnews(short l,short newspaper)
          move(6,1);
          addstr("The Liberal Guardian runs a story featuring CIA and other intelligence files");
          move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
          switch(LCSrandom(6))
          {
             case 0:addstr("documenting the overthrow of a government.");break;
             case 1:
                addstr("documenting the planned assassination of a Liberal federal judge.");
-               change_public_opinion(VIEW_JUSTICES,50,0);
+               change_public_opinion(VIEW_JUSTICES,50);
                break;
             case 2:addstr("containing private information on innocent citizens.");break;
             case 3:
                addstr("documenting \"harmful speech\" made by innocent citizens.");
-               change_public_opinion(VIEW_FREESPEECH,50,0);
+               change_public_opinion(VIEW_FREESPEECH,50);
                break;
             case 4:
                addstr("used to keep tabs on gay citizens.");
-               change_public_opinion(VIEW_GAY,50,0);
+               change_public_opinion(VIEW_GAY,50);
                break;
             case 5:
                addstr("documenting the infiltration of a pro-choice group.");
-               change_public_opinion(VIEW_ABORTION,50,0);
+               change_public_opinion(VIEW_ABORTION,50);
                break;
          }
          move(8,1);
@@ -394,28 +398,29 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the Government a little riled up.");
 
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10,0);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10,0);
-         change_public_opinion(VIEW_INTELLIGENCE,50,0);
+         change_public_opinion(VIEW_INTELLIGENCE,50);
          offended_cia=1;
          break;
       case LOOT_POLICERECORDS:
          move(6,1);
          addstr("The Liberal Guardian runs a story featuring police records");
          move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
          switch(LCSrandom(6))
          {
             case 0:addstr("documenting human rights abuses by the force.");break;
             case 1:addstr("documenting a police torture case.");break;
             case 2:
                addstr("documenting a systematic invasion of privacy by the force.");
-               change_public_opinion(VIEW_INTELLIGENCE,15,0);
+               change_public_opinion(VIEW_INTELLIGENCE,15);
                break;
             case 3:addstr("documenting a forced confession.");break;
             case 4:addstr("documenting widespread corruption in the force.");break;
             case 5:
                addstr("documenting gladiatory matches held between prisoners by guards.");
-               change_public_opinion(VIEW_PRISONS,50,0);
+               change_public_opinion(VIEW_PRISONS,50);
                break;
          }
          move(8,1);
@@ -423,9 +428,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the police a little riled up.");
 
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10,0);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10,0);
-         change_public_opinion(VIEW_POLICEBEHAVIOR,50,0);
+         change_public_opinion(VIEW_POLICEBEHAVIOR,50);
          offended_cops=1;
          break;
    }
@@ -452,6 +455,8 @@ void fundreport(char &clearformess)
       moneygained_hustling>0||
       moneygained_thievery>0||
       moneylost_goods>0||
+      moneylost_food>0||
+      moneylost_training>0||
       moneylost_compound>0||
       moneylost_hostage>0)
    {
@@ -472,7 +477,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Donations . . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Donations . . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -491,7 +496,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Brownies   . . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Brownies. . . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -510,7 +515,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Credit Card Fraud . . . . . . . . . . . . . . . . . . . .");
+         addstr("Credit Card Fraud . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -529,7 +534,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Hustling   . . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Hustling. . . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -548,7 +553,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Thievery   . . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Thievery. . . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -567,7 +572,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Sale of Goods . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Sale of Goods . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          move(y,60);
@@ -586,7 +591,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Purchase of Goods . . . . . . . . . . . . . . . . . . . .");
+         addstr("Purchase of Goods . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -605,7 +610,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Liberal Disobedience   . . . . . . . . . . . . . . . . . .");
+         addstr("Liberal Disobedience. . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -624,7 +629,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Rent   . . . . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Rent. . . . . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -638,12 +643,31 @@ void fundreport(char &clearformess)
          totalmoney-=moneylost_rent;
       }
 
+      //Training
+      if(moneylost_training>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Training. . . . . . . . . . . . . . . . . . . . . . . . . .");
+
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneylost_training,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney-=moneylost_rent;
+      }
+
       //MANUFACTURE
       if(moneylost_manufacture>0)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Manufacture . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Manufacture . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -662,7 +686,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Legal Fees   . . . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Legal Fees. . . . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -676,12 +700,31 @@ void fundreport(char &clearformess)
          totalmoney-=moneylost_legal;
       }
 
+      //Food
+      if(moneylost_food>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Groceries Subsidy . . . . . . . . . . . . . . . . . . . . .");
+
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneylost_food,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney-=moneylost_food;
+      }
+
       //COMPOUND
       if(moneylost_compound>0)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Infrastructure   . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Infrastructure. . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -700,7 +743,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Hostage Tending . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Hostage Tending . . . . . . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -747,7 +790,9 @@ void fundreport(char &clearformess)
       moneylost_trouble=0;
       moneylost_manufacture=0;
       moneylost_rent=0;
+      moneylost_training=0;
       moneylost_legal=0;
+      moneylost_food=0;
       moneylost_compound=0;
       moneylost_hostage=0;
    }

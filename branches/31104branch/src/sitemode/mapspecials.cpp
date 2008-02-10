@@ -114,28 +114,46 @@ void special_nuclear_onoff(void)
          clearmessagearea();
          levelmap[locx][locy][locz].special=-1;
 
-         char succeed=0;
+         char max=30;
+         creaturest* maxs=0;
 
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL&&activesquad->squad[p]->alive)
             {
-               if(activesquad->squad[p]->skill[SKILL_SCIENCE]+
-                  activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)>15)
+               if(activesquad->squad[p]->skill[SKILL_SCIENCE]*6+
+                  activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)>max)
                {
-                  succeed=1;
-                  break;
+                  maxs=activesquad->squad[p];
+                  max=activesquad->squad[p]->skill[SKILL_SCIENCE]*6+
+                      activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE);
                }
             }
          }
 
-         if(succeed)
+         if(maxs)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
+            addstr(maxs->name);
+            addstr(" presses the big red button!");
+            refresh();
+            getch();
+            move(17,1);
+            addstr(".");
+            refresh();
+            getch();
+            addstr(".");
+            refresh();
+            getch();
+            addstr(".");
+            refresh();
+            getch();
+
+            move(17,1);
             addstr("The lights dim...  power must be out state-wide.");
 
-            change_public_opinion(VIEW_NUCLEARPOWER,5,0);
+            change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
 
             refresh();
             getch();
@@ -757,7 +775,7 @@ void special_polluter_equipment(void)
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
-         change_public_opinion(VIEW_POLLUTION,2,0);
+         change_public_opinion(VIEW_POLLUTION,2,1,70);
          
          alienationcheck(1);
          noticecheck(-1);

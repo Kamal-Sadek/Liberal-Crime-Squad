@@ -360,9 +360,9 @@ void equip(vector<itemst *> &loot,int loc)
       }
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*18<loot.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<loot.size())page++;
 
    }while(1);
 }
@@ -547,9 +547,9 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       if(c==10)break;
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*18<source.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<source.size())page++;
 
    }while(1);
 

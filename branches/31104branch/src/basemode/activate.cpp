@@ -145,9 +145,9 @@ void activate(void)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -270,7 +270,7 @@ void activate(creaturest *cr)
       case 'a':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_COMMUNITYSERVICE);
          move(10,40);
-         addstr("1 - Peaceful Community Service");
+         addstr("1 - Community Service");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TROUBLE);
          move(11,40);
@@ -278,52 +278,79 @@ void activate(creaturest *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
          move(12,40);
-         addstr("3 - Pro-LCS Graffiti");
+         addstr("3 - Spray Graffiti");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
          move(13,40);
-         addstr("4 - Check Opinion Polls");
+         addstr("4 - Search Opinion Polls");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_ATTACKS);
          move(14,40);
-         addstr("5 - DoS Cyber Activism");
+         addstr("5 - Harass Websites");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HACKING);
          move(15,40);
-         addstr("6 - Hack Secure Networks");
+         addstr("6 - Hacking");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_LETTERS);
+         move(16,40);
+         addstr("7 - Write to Newspapers");
+
+         if(cr->location!=-1&&
+            location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_GUARDIAN);
+            move(17,40);
+            addstr("8 - Write for The Liberal Guardian");
+         }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(choice)
          {
          case '1':
-            move(22,1);
-            addstr("  Spend time working on a non-political cause and ask for nothing in return.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will help old ladies cross the street.");
             break;
          case '2':
-            move(22,1);
-            addstr("  Cause trouble and disrupt society with aggressive activism to try to get");
-            move(23,1);
-            addstr("people to question their Conservative assumptions.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will create public disturbances.");
             break;
          case '3':
-            move(22,1);
-            addstr("  Create name recognition and put artistic skills to work creating street art");
-            move(23,1);
-            addstr("with a deep political message.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will spray political graffiti.");
             break;
          case '4':
-            move(22,1);
-            addstr("  Spend the day searching for the latest public opinion polls online.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will search the internet for public opinion polls.");
             break;
          case '5':
-            move(22,1);
-            addstr("  Attack Conservative web sites by launching massive denial of service attacks");
-            move(23,1);
-            addstr("to effectively knock them offline. No warning, no demands, no mercy.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will harass Conservative websites.");
             break;
          case '6':
-            move(22,1);
-            addstr("  Break into private networks to steal and publish their Conservative secrets.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will hack into private Conservative networks.");
+            break;
+         case '7':
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will write letters to newspapers about current events.");
+            break;
+         case '8':
+            if(cr->location!=-1&&
+               location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
+            {
+               move(22,3);
+               addstr(cr->name);
+               addstr(" will write articles for the LCS's newspaper.");
+               break;
+            }
             break;
          }
          break;
@@ -331,7 +358,7 @@ void activate(creaturest *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
          move(10,40);
          addstr("1 - Solicit Donations");
-
+         
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
          move(11,40);
          addstr("2 - Sell T-Shirts");
@@ -348,20 +375,24 @@ void activate(creaturest *cr)
          switch(choice)
          {
          case '1':
-            move(22,1);
-            addstr("  Ask people to give money to directly support the Liberal Crime Squad.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will walk around and ask for donations to the LCS.");
             break;
          case '2':
-            move(22,1);
-            addstr("  Make and sell Liberal T-Shirts with slogans and tie-dye patterns.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will tie-dye T-shirts and sell them on the street.");
             break;
          case '3':
-            move(22,1);
-            addstr("  Create and sell avant-garde Liberal art to raise money for a good cause.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will sketch and sell potraits on street corners.");
             break;
          case '4':
-            move(22,1);
-            addstr("  Record and sell political protest music written by LCS members.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will work as a street musician.");
             break;
          }
          break;
@@ -376,40 +407,38 @@ void activate(creaturest *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CCFRAUD);
          move(12,40);
-         addstr("3 - Credit Card Fraud");
+         addstr("3 - Steal Credit Card Numbers");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
          move(13,40);
-         addstr("4 - DoS Protection Racket");
+         addstr("4 - Electronic Protection Racket");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(choice)
          {
          case '1':
-            move(22,1);
-            addstr("  Sell drugs at high prices to users and addicts. High demand, but");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will bake and sell special adult brownies that open");
             move(23,1);
-            addstr("equally illegal, and there is risk of conflict with local gangs.");
+            addstr("magical shimmering portals to the adamantium pits.");
             break;
          case '2':
-            move(22,1);
-            addstr("  Trade sex for money. A misdemeanor. The police have a special vice team");
-            move(23,1);
-            addstr("dedicated to tracking down and gathering evidence against street workers.");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will trade sex for money.");
             break;
          case '3':
-            move(22,1);
-            addstr("  Systematic electronic fraud, in small amounts and across legal boundries that");
-            move(23,1);
-            addstr("limit the risk of law enforcement. The authorities usually don't bother to");
-            move(24,1);
-            addstr("investigate cases involving less than $200, at least in theory...");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will commit credit card fraud online.");
             break;
          case '4':
-            move(22,1);
-            addstr("  Extortion of web sites with the threat of launching massive denial of service");
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will demand money in exchange for not bringing down");
             move(23,1);
-            addstr("attacks to effectively knock them offline. Most pay. A few fight.");
+            addstr("major websites.");
             break;
          }
          break;
@@ -433,7 +462,7 @@ void activate(creaturest *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_POLITICS);
          move(13,40);
-         addstr("2 - Politics and Law");
+         addstr("2 - Political Leadership");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_SURVIVAL);
          move(14,40);
@@ -448,41 +477,49 @@ void activate(creaturest *cr)
          addstr("5 - Covert Actions");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(cr->activity.type)
+         switch(choice)
          {
-         case ACTIVITY_TEACH_GENERALED:
+         case '1':
             move(22,1);
-            addstr("  Attributes Trained: Intelligence");
-            move(23,1);
             addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion, Business");
+            move(24,1);
+            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case ACTIVITY_TEACH_POLITICS:
+         case '2':
+            //move(22,1);
+            //addstr("  Attributes Trained: Intelligence, Charisma, Heart, Wisdom");
             move(22,1);
-            addstr("  Attributes Trained: Intelligence, Charisma, Heart, Wisdom");
-            move(23,1);
-            addstr("  Skills Trained: Law, Persuasion, Training, Leadership");
+            addstr("  Skills Trained: Law, Persuasion, Leadership");
+            move(24,1);
+            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case ACTIVITY_TEACH_SURVIVAL:
+         case '3':
+            //move(22,1);
+            //addstr("  Attributes Trained: Intelligence, Health, Agility");
             move(22,1);
-            addstr("  Attributes Trained: Intelligence, Health, Agility");
-            move(23,1);
             addstr("  Skills Trained: Driving, First Aid, Cooking, Survival, Street Sense,");
-            move(24,1);
+            move(23,1);
             addstr("Garment Making, Hand to Hand, Improvised Weapons");
-            break;
-         case ACTIVITY_TEACH_FIGHTING:
-            move(22,1);
-            addstr("  Attributes Trained: Health, Agility, Strength");
-            move(23,1);
-            addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun, Gangsterism");
-            break;
-         case ACTIVITY_TEACH_COVERT:
-            move(22,1);
-            addstr("  Attributes Trained: Intelligence, Agility, Charisma");
-            move(23,1);
-            addstr("  Skills Trained: Persuasion, Security, Disguise, Stealth, Seduction,");
             move(24,1);
+            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            break;
+         case '4':
+            //move(22,1);
+            //addstr("  Attributes Trained: Health, Agility, Strength");
+            move(22,1);
+            addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun, Gangsterism");
+            move(24,1);
+            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            break;
+         case '5':
+            //move(22,1);
+            //addstr("  Attributes Trained: Intelligence, Agility, Charisma");
+            move(22,1);
+            addstr("  Skills Trained: Persuasion, Security, Disguise, Stealth, Seduction,");
+            move(23,1);
             addstr("Interrogation");
+            move(24,1);
+            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
          }
          break;
@@ -491,8 +528,11 @@ void activate(creaturest *cr)
       refresh();
       int c=getch();
       translategetch(c);
+      
+      
+      
       if(c>='a'&&c<='z'){state=c;}
-      if(c>='1'&&c<='9')
+      if(c>='a'&&c<='z' || c>='1'&&c<='9')
       {
          choice=c;
          switch(state)
@@ -507,6 +547,42 @@ void activate(creaturest *cr)
             case '4':cr->activity.type=ACTIVITY_POLLS;break;
             case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
             case '6':cr->activity.type=ACTIVITY_HACKING;break;
+            case '7':cr->activity.type=ACTIVITY_WRITE_LETTERS;break;
+            case '8':
+               if(cr->location!=-1&&
+                  location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
+               {
+                  cr->activity.type=ACTIVITY_WRITE_GUARDIAN;break;
+               }
+            default:
+               if(cr->attval(ATTRIBUTE_WISDOM)>7)
+               {
+                  cr->activity.type=ACTIVITY_COMMUNITYSERVICE;
+                  choice='1';
+               }
+               else if(cr->attval(ATTRIBUTE_WISDOM)>4)
+               {
+                  cr->activity.type=ACTIVITY_TROUBLE;
+                  choice='2';
+               }
+               else
+               {
+                  if(cr->skill[SKILL_COMPUTERS]>1)
+                  {
+                     cr->activity.type=ACTIVITY_DOS_ATTACKS;
+                     choice='5';
+                  }
+                  else if(cr->skill[SKILL_ART]>1)
+                  {
+                     cr->activity.type=ACTIVITY_GRAFFITI;
+                     choice='3';
+                  }
+                  else
+                  {
+                     cr->activity.type=ACTIVITY_TROUBLE;
+                     choice='2';
+                  }
+               }
             }
             break;
          case 'b':
@@ -516,6 +592,27 @@ void activate(creaturest *cr)
             case '2':cr->activity.type=ACTIVITY_SELL_TSHIRTS;break;
             case '3':cr->activity.type=ACTIVITY_SELL_ART;break;
             case '4':cr->activity.type=ACTIVITY_SELL_MUSIC;break;
+            default:
+               if(cr->skill[SKILL_ART]>1)
+               {
+                  cr->activity.type=ACTIVITY_SELL_ART;
+                  choice='3';
+               }
+               else if(cr->skill[SKILL_GARMENTMAKING]>1)
+               {
+                  cr->activity.type=ACTIVITY_SELL_TSHIRTS;
+                  choice='2';
+               }
+               else if(cr->skill[SKILL_MUSIC]>1)
+               {
+                  cr->activity.type=ACTIVITY_SELL_MUSIC;
+                  choice='4';
+               }
+               else
+               {
+                  cr->activity.type=ACTIVITY_DONATIONS;
+                  choice='1';
+               }
             }
             break;
          case 'c':
@@ -525,6 +622,22 @@ void activate(creaturest *cr)
             case '2':cr->activity.type=ACTIVITY_PROSTITUTION;break;
             case '3':cr->activity.type=ACTIVITY_CCFRAUD;break;
             case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
+            default:
+               if(cr->skill[SKILL_COMPUTERS]>1)
+               {
+                  cr->activity.type=ACTIVITY_CCFRAUD;
+                  choice='3';
+               }
+               else if(cr->skill[SKILL_SEDUCTION]>1)
+               {
+                  cr->activity.type=ACTIVITY_PROSTITUTION;
+                  choice='2';
+               }
+               else
+               {
+                  cr->activity.type=ACTIVITY_SELL_DRUGS;
+                  choice='1';
+               }
             }
             break;
          case 'd':
@@ -538,6 +651,49 @@ void activate(creaturest *cr)
             case '3':cr->activity.type=ACTIVITY_TEACH_SURVIVAL;break;
             case '4':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
             case '5':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
+            default:
+               switch(cr->type)
+               {
+               case CREATURE_MERC:
+               case CREATURE_SWAT:
+               case CREATURE_DEATHSQUAD:
+               case CREATURE_GANGUNIT:
+               case CREATURE_SOLDIER:
+               case CREATURE_GANGMEMBER:
+                  cr->activity.type=ACTIVITY_TEACH_FIGHTING;
+                  choice='4';
+                  break;
+               case CREATURE_PRISONER:
+               case CREATURE_HSDROPOUT:
+               case CREATURE_BUM:
+               case CREATURE_CRACKHEAD:
+               case CREATURE_MUTANT:
+               case CREATURE_PROSTITUTE:
+                  cr->activity.type=ACTIVITY_TEACH_SURVIVAL;
+                  choice='3';
+                  break;
+               case CREATURE_JUDGE_LIBERAL:
+               case CREATURE_JUDGE_CONSERVATIVE:
+               case CREATURE_RADIOPERSONALITY:
+               case CREATURE_NEWSANCHOR:
+               case CREATURE_CRITIC_ART:
+               case CREATURE_CRITIC_MUSIC:
+               case CREATURE_SOCIALITE:
+               case CREATURE_JOURNALIST:
+                  cr->activity.type=ACTIVITY_TEACH_POLITICS;
+                  choice='2';
+                  break;
+               case CREATURE_AGENT:
+               case CREATURE_AMATEURMAGICIAN:
+               case CREATURE_THIEF:
+                  cr->activity.type=ACTIVITY_TEACH_COVERT;
+                  choice='4';
+                  break;
+               default:
+                  cr->activity.type=ACTIVITY_TEACH_GENERALED;
+                  break;
+               }
+               break;
             }
             break;
          }
@@ -666,35 +822,23 @@ void activatebulk(void)
       if(selectedactivity==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(2,51);
-      addstr("1 - Causing Trouble ($0).");
+      addstr("1 - Engaging in Liberal Activism");
       if(selectedactivity==1)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,51);
-      addstr("2 - Causing Trouble ($20).");
+      addstr("2 - Legal Fundraising");
       if(selectedactivity==2)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(4,51);
-      addstr("3 - Causing Trouble ($50).");
+      addstr("3 - Illegal Fundraising");
       if(selectedactivity==3)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(5,51);
-      addstr("4 - Causing Trouble ($100).");
+      addstr("4 - Checking Polls");
       if(selectedactivity==4)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(6,51);
-      addstr("5 - Causing Trouble ($500).");
-      if(selectedactivity==5)set_color(COLOR_WHITE,COLOR_BLACK,1);
-      else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,51);
-      addstr("6 - Soliciting Donations.");
-      if(selectedactivity==6)set_color(COLOR_WHITE,COLOR_BLACK,1);
-      else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(8,51);
-      addstr("7 - Selling Brownies.");
-      if(selectedactivity==7)set_color(COLOR_WHITE,COLOR_BLACK,1);
-      else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(9,51);
-      addstr("8 - Stealing Cars.");
+      addstr("5 - Stealing Cars");
 
       int y=2;
       for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
@@ -708,13 +852,13 @@ void activatebulk(void)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          getactivity(str,temppool[p]->activity);
          addstr(str);
-         if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
+         /*if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
          {
             addstr(" ($");
             itoa(temppool[p]->activity.arg,num,10);
             addstr(num);
             addstr(")");
-         }
+         }*/
 
          y++;
       }
@@ -743,9 +887,9 @@ void activatebulk(void)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -754,39 +898,47 @@ void activatebulk(void)
          {
             switch(selectedactivity)
             {
-               case 0:
-                  temppool[p]->activity.type=ACTIVITY_TROUBLE;
-                  temppool[p]->activity.arg=0;
+               case 0: //Activism
+                  if(temppool[p]->attval(ATTRIBUTE_WISDOM)>7)
+                     temppool[p]->activity.type=ACTIVITY_COMMUNITYSERVICE;
+                  else if(temppool[p]->attval(ATTRIBUTE_WISDOM)>4)
+                     temppool[p]->activity.type=ACTIVITY_TROUBLE;
+                  else
+                  {
+                     if(temppool[p]->skill[SKILL_COMPUTERS]>1)
+                        temppool[p]->activity.type=ACTIVITY_DOS_ATTACKS;
+                     else if(temppool[p]->skill[SKILL_ART]>1)
+                        temppool[p]->activity.type=ACTIVITY_GRAFFITI;
+                     else temppool[p]->activity.type=ACTIVITY_TROUBLE;
+                  }
                   break;
-               case 1:
-                  temppool[p]->activity.type=ACTIVITY_TROUBLE;
-                  temppool[p]->activity.arg=20;
+               case 1: //Fundraising
+                  if(temppool[p]->skill[SKILL_ART]>1)
+                     temppool[p]->activity.type=ACTIVITY_SELL_ART;
+                  else if(temppool[p]->skill[SKILL_GARMENTMAKING]>1)
+                     temppool[p]->activity.type=ACTIVITY_SELL_TSHIRTS;
+                  else if(temppool[p]->skill[SKILL_MUSIC]>1)
+                     temppool[p]->activity.type=ACTIVITY_SELL_MUSIC;
+                  else temppool[p]->activity.type=ACTIVITY_DONATIONS;
                   break;
-               case 2:
-                  temppool[p]->activity.type=ACTIVITY_TROUBLE;
-                  temppool[p]->activity.arg=50;
+               case 2: //Illegal Fundraising
+                  if(temppool[p]->skill[SKILL_COMPUTERS]>1)
+                     temppool[p]->activity.type=ACTIVITY_CCFRAUD;
+                  else if(temppool[p]->skill[SKILL_SEDUCTION]>1)
+                     temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
+                  else
+                     temppool[p]->activity.type=ACTIVITY_SELL_DRUGS;
                   break;
-               case 3:
-                  temppool[p]->activity.type=ACTIVITY_TROUBLE;
-                  temppool[p]->activity.arg=100;
+               case 3: //Check polls
+                  temppool[p]->activity.type=ACTIVITY_POLLS;
                   break;
-               case 4:
-                  temppool[p]->activity.type=ACTIVITY_TROUBLE;
-                  temppool[p]->activity.arg=500;
-                  break;
-               case 5:
-                  temppool[p]->activity.type=ACTIVITY_DONATIONS;
-                  break;
-               case 6:
-                  temppool[p]->activity.type=ACTIVITY_SELL_DRUGS;
-                  break;
-               case 7:
+               case 4: //Steal cars
                   temppool[p]->activity.type=ACTIVITY_STEALCARS;
                   break;
             }
          }
       }
-      if(c>='1'&&c<='8')
+      if(c>='1'&&c<='5')
       {
          selectedactivity=c-'1';
       }
@@ -894,9 +1046,9 @@ void select_tendhostage(creaturest *cr)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -1107,9 +1259,9 @@ void select_makeclothing(creaturest *cr)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<armortype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<armortype.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -1317,7 +1469,7 @@ char select_view(creaturest *cr,long &v)
          if(public_interest[p]>100)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Extremely Controvertial");
+            addstr("Extremely Controversial");
          }
          else if(public_interest[p]>50)
          {
@@ -1366,9 +1518,9 @@ char select_view(creaturest *cr,long &v)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*16<VIEWNUM-2)page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*16<VIEWNUM-2)page++;
 
       if(c>='a'&&c<='a'+18)
       {

@@ -172,8 +172,7 @@ int clinictime(creaturest &g)
 
    for(int w=0;w<BODYPARTNUM;w++)
    {
-      if(((g.wound[w] & WOUND_NASTYOFF)||
-          (g.wound[w] & WOUND_CLEANOFF))&&
+      if(((g.wound[w] & WOUND_NASTYOFF))&&
           (g.blood < 100))
       {
          time++;
@@ -550,7 +549,16 @@ void change_public_opinion(int v,int power,char affect,char cap)
    if(v==VIEW_LIBERALCRIMESQUAD)affect=0;
    if(v==VIEW_LIBERALCRIMESQUADPOS)affect=0;
 
+   if(v==VIEW_LIBERALCRIMESQUADPOS)
+   {
+      int mood = publicmood(-1);
+      if(cap>mood)cap=mood;
+   }
+
    int effpower=power;
+
+   // Affect is whether the LCS is publically known to be behind
+   // the circumstances creating the public opinion change
    if(affect)
    {
       // Aff is the % of people who know about the LCS
@@ -572,27 +580,52 @@ void change_public_opinion(int v,int power,char affect,char cap)
          // than the issue, the action will backfire for these
          // people, else it will be extra powerful
          int dist=attitude[VIEW_LIBERALCRIMESQUADPOS]-attitude[v];
-         if(dist<0)dist*=-1;
-         affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f);
+         // If the issue is more popular than the LCS, dist will be
+         // negative. Not good for you!
 
-         if(attitude[VIEW_LIBERALCRIMESQUADPOS]<attitude[v])affectedpower*=-1;
+         // Then we increase dist by ten points, so you have a 10%
+         // bonus to your effective popularity when doing this
+         // calculation. This helps to make things a little easier.
+         dist+=10;
+         // Affected power is then scaled by dist -- if the LCS is
+         // equally popular as the issue, it's equally powerful as
+         // the rawpower. For every 10% up or down past there, it's
+         // 1x the effect -- so if the LCS is 10% more popular than
+         // the issue, you get 2x power, if the LCS is 20% less
+         // popular than the issue, it'll not just nullify the effect,
+         // but backfire with 1x power! So if the LCS is unpopular,
+         // people will gravitate away from the causes the LCS fights
+         // for.
+         affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f);
       }
 
+      // Effpower is then the sum of the rawpower (people who don't know
+      // about the LCS) and the affectedpower (people who do know
+      // about the LCS and had their judgment swayed by their opinion
+      // of it).
       effpower=rawpower+affectedpower;
    }
 
    if(v==VIEW_LIBERALCRIMESQUAD)
    {
-      if(effpower<-50)effpower=-50;
+      //Only half the country will ever hear about the LCS at one time,
+      //and nobody will ever forget about it
+      if(effpower<0)effpower=0;
       if(effpower>50)effpower=50;
    }
    else if(v==VIEW_LIBERALCRIMESQUADPOS)
    {
+      //Only 80% of the country can be swayed at once in their views
+      //of the LCS.
       if(effpower<-80)effpower=-80;
       if(effpower>80)effpower=80;
    }
-   else if(effpower>0)
+   
+   if(effpower>0)
    {
+      //Some things will never persuade the last x% of the population.
+      //If there's a cap on how many people will be impressed, this
+      //is where that's handled.
       if(attitude[v]+effpower>cap)
       {
          if(attitude[v]>cap)effpower=0;
@@ -600,7 +633,14 @@ void change_public_opinion(int v,int power,char affect,char cap)
       }
    }
 
+   //Scale the magnitude of the effect based on how much
+   //people are paying attention to the issue
+   effpower*=1+(float)public_interest[v]/50;
+
+   //Finally, apply the effect.
    attitude[v]+=effpower;
+   if(public_interest[v]<cap)
+      public_interest[v]+=abs(effpower);
    if(attitude[v]<0)attitude[v]=0;
    if(attitude[v]>100)attitude[v]=100;
 }
@@ -619,14 +659,14 @@ int lawflagheat(int lawflag)
    case LAWFLAG_TREASON:return 10;
    case LAWFLAG_ESCAPED:return 5;
    case LAWFLAG_HELPESCAPE:return 5;
-   case LAWFLAG_RESIST:return 0;
+   case LAWFLAG_RESIST:return 2;
    case LAWFLAG_BURNFLAG:return 0;
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
    case LAWFLAG_ASSAULT:return 0;
-   case LAWFLAG_CARTHEFT:return 0;
-   case LAWFLAG_INFORMATION:return 0;
-   case LAWFLAG_COMMERCE:return 0;
+   case LAWFLAG_CARTHEFT:return 1;
+   case LAWFLAG_INFORMATION:return 2;
+   case LAWFLAG_COMMERCE:return 2;
    case LAWFLAG_CCFRAUD:return 1;
    case LAWFLAG_BROWNIES:return 1;
    case LAWFLAG_BURIAL:return 0;

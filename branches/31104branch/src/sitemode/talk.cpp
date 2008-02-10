@@ -622,10 +622,10 @@ char talk(creaturest &a,int t)
                               addstr("\"Abortion is murder.\"");
                               break;
                            case LAW_ANIMALRESEARCH:
-                              addstr("\"Animals don't deserve human rights.\"");
+                              addstr("\"Don't pretend animals are human.\"");
                               break;
                            case LAW_POLICEBEHAVIOR:
-                              addstr("\"Are you a criminal?\"");
+                              addstr("\"Only criminals have reason to fear police.\"");
                               break;
                            case LAW_PRIVACY:
                               addstr("\"National security is important.\"");
@@ -634,7 +634,7 @@ char talk(creaturest &a,int t)
                               addstr("\"Some people deserve to die.\"");
                               break;
                            case LAW_NUCLEARPOWER:
-                              addstr("\"Nuclear power is cheap.\"");
+                              addstr("\"Nuclear power is clean.\"");
                               break;
                            case LAW_POLLUTION:
                               addstr("\"It's not that bad.\"");
@@ -655,7 +655,7 @@ char talk(creaturest &a,int t)
                               addstr("\"That flag is the sacred symbol of our country.\"");
                               break;
                            case LAW_TAX:
-									   addstr("\"High taxes are a threat to prosperity.\"");
+									   addstr("\"Conservatives want low taxes, and I do too.\"");
 									   break;
                            case LAW_GUNCONTROL:
                               addstr("\"Without guns, we're slaves to the Government.\"");

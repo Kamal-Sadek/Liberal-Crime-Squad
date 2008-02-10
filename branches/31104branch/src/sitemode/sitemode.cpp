@@ -375,15 +375,19 @@ void mode_site(void)
       if(hostcheck)
       {
          char havehostage=0;
+         //Check your whole squad
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
             {
+               //If they're unarmed and dragging someone
                if(activesquad->squad[p]->prisoner!=NULL&&
                   activesquad->squad[p]->weapon.type==WEAPON_NONE)
                {
+                  //And that someone is not an LCS member
                   if(activesquad->squad[p]->prisoner->squadid==-1)
                   {
+                     //They scream for help -- flag them kidnapped, cause alarm
                      activesquad->squad[p]->prisoner->flag|=CREATUREFLAG_KIDNAPPED;
                      if(activesquad->squad[p]->type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
                      if(activesquad->squad[p]->type==CREATURE_NEWSANCHOR)offended_cablenews=1;
@@ -457,15 +461,12 @@ void mode_site(void)
                if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
                else sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
             }
-            else sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
+            else 
 
             if(!location[cursite]->siege.siege)
             {
-               if(!sitealienate)
-               {
-                  long addjuice=sitecrime;if(addjuice>20)addjuice=20;
-                  juiceparty(addjuice);
-               }
+               sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
+
                resolvesite();
             }
 
@@ -499,7 +500,8 @@ void mode_site(void)
                int c2=getch();
                translategetch(c2);
 
-               if(c2=='w'||c2=='a'||c2=='d'||c2=='x')
+               if(c2=='w'||c2=='a'||c2=='d'||c2=='x'||
+                  c2==KEY_LEFT||c2==KEY_RIGHT||c2==KEY_UP||c2==KEY_DOWN)
                {
                   c=c2;
                   override=1;
@@ -510,19 +512,19 @@ void mode_site(void)
             }while(1);
          }
 
-         if(c=='w'&&locy>0&&(!enemy||!sitealarm||override))
+         if((c=='w'||c==KEY_UP)&&locy>0&&(!enemy||!sitealarm||override))
          {
             if(!(levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))locy--;
          }
-         if(c=='a'&&locx>0&&(!enemy||!sitealarm||override))
+         if((c=='a'||c==KEY_LEFT)&&locx>0&&(!enemy||!sitealarm||override))
          {
             if(!(levelmap[locx-1][locy][locz].flag & SITEBLOCK_BLOCK))locx--;
          }
-         if(c=='d'&&locx<MAPX-1&&(!enemy||!sitealarm||override))
+         if((c=='d'||c==KEY_RIGHT)&&locx<MAPX-1&&(!enemy||!sitealarm||override))
          {
             if(!(levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK))locx++;
          }
-         if(c=='x'&&locy<MAPY-1&&(!enemy||!sitealarm||override))
+         if((c=='x'||c==KEY_DOWN)&&locy<MAPY-1&&(!enemy||!sitealarm||override))
          {
             if(!(levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK))locy++;
          }
@@ -1093,7 +1095,7 @@ void mode_site(void)
                         item=new itemst;item->type=ITEM_LOOT;
                            if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
                            else if(!LCSrandom(2))item->loottype=LOOT_TV;
-                           else if(LCSrandom(199))item->loottype=LOOT_COMPUTER;
+                           else if(LCSrandom(49))item->loottype=LOOT_COMPUTER;
                            else item->loottype=LOOT_SECRETDOCUMENTS;
                         activesquad->loot.push_back(item);
                         break;
@@ -1263,31 +1265,34 @@ void mode_site(void)
                if(havecar)gotout=chasesequence();
                else gotout=footchase();
 
+               //If you survived
                if(gotout)
                {
-                  //DEAL WITH PRISONERS AND STOP BLEEDING
+                  //Check for hauled prisoners/corpses
                   for(p=0;p<6;p++)
                   {
                      if(activesquad->squad[p]==NULL)continue;
                      if(activesquad->squad[p]->prisoner!=NULL)
                      {
+                        //If this is an LCS member or corpse being hauled (marked as in the squad)
                         if(activesquad->squad[p]->prisoner->squadid!=-1)
                         {
-                           //RESTORE POOL MEMBER
+                           //Take them out of the squad
                            activesquad->squad[p]->prisoner->squadid=-1;
-                           //MUST LOCATE THE MEMBER
+                           //Set base and current location to squad's safehouse
                            activesquad->squad[p]->prisoner->location=activesquad->squad[p]->base;
                            activesquad->squad[p]->prisoner->base=activesquad->squad[p]->base;
                         }
-                        else
+                        else //A kidnapped conservative
                         {
-                           //CONVERT KIDNAP VICTIM
+                           //Convert them into a prisoner
                            kidnaptransfer(*activesquad->squad[p]->prisoner);
                            delete activesquad->squad[p]->prisoner;
                         }
                         activesquad->squad[p]->prisoner=NULL;
                      }
                   }
+                  //Clear all bleeding and prison escape flags
                   for(p=0;p<pool.size();p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
@@ -1300,10 +1305,12 @@ void mode_site(void)
                   //END SITE MODE
                   if(location[cursite]->siege.siege)
                   {
+                     //Special handling for escaping siege
                      escapesiege(0);
                   }
                   else
                   {
+                     //Juice party for successful raid
                      if(!sitealienate)
                      {
                         long addjuice=sitecrime;
@@ -1313,26 +1320,23 @@ void mode_site(void)
                      resolvesite();
                   }
                }
-               //END OF GAME CHECK
+               //You didn't survive -- handle squad death (unless that ended the game)
                else if(!endcheck())
                {
+                  
                   if(location[cursite]->siege.siege)
                   {
+                     //Report on squad killed during siege
                      if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
                      else sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
 
                      location[cursite]->siege.siege=0;
                   }
-                  else sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
-
-                  if(!location[cursite]->siege.siege)
+                  else 
                   {
-                     if(!sitealienate)
-                     {
-                        long addjuice=sitecrime;
-                        if(addjuice>25)addjuice=25;
-                        juiceparty(addjuice);
-                     }
+                     //Or report on your failed raid
+                     sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
+                     //Would juice the party here, but you're all dead, so...
                      resolvesite();
                   }
                }

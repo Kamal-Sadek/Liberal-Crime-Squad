@@ -245,6 +245,7 @@ void trial(creaturest &g)
          }
          addstr("aiding a prison escape");
          breaker[LAWFLAG_HELPESCAPE]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_JURY])
       {
@@ -286,6 +287,7 @@ void trial(creaturest &g)
          }
          addstr("carrying an illegal weapon");
          breaker[LAWFLAG_GUNCARRY]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_CARTHEFT])
       {
@@ -346,6 +348,7 @@ void trial(creaturest &g)
          }
          addstr("hiring an illegal alien");
          breaker[LAWFLAG_HIREILLEGAL]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_COMMERCE])
       {
@@ -358,6 +361,7 @@ void trial(creaturest &g)
          }
          addstr("interference with interstate commerce");
          breaker[LAWFLAG_COMMERCE]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_INFORMATION])
       {
@@ -370,6 +374,7 @@ void trial(creaturest &g)
          }
          addstr("unlawful access of an information system");
          breaker[LAWFLAG_INFORMATION]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_BURIAL])
       {
@@ -581,9 +586,8 @@ void trial(creaturest &g)
          else if(prosecution<=150)addstr("The prosecution makes an airtight case.");
          else
          {
-            addstr("The jury it totally convinced of ");
             addstr(g.name);
-            addstr("'s guilt before the defense begins.");
+            addstr("'s chances are beyond bleak.");
          }
       }
 
@@ -880,7 +884,7 @@ void penalize(creaturest &g,char lenient)
       {
          g.sentence+=(36+LCSrandom(18))*g.lawflag[LAWFLAG_KIDNAPPING];
          g.sentence+=(1+LCSrandom(4))*g.lawflag[LAWFLAG_THEFT];
-         g.sentence+=(4+LCSrandom(12))/**g.lawflag[LAWFLAG_GUNCARRY]*/;
+         g.sentence+=(4+LCSrandom(12))*(!!g.lawflag[LAWFLAG_GUNCARRY]);
          g.sentence+=(6+LCSrandom(7))*g.lawflag[LAWFLAG_CARTHEFT];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_INFORMATION];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_COMMERCE];
@@ -888,7 +892,7 @@ void penalize(creaturest &g,char lenient)
          g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BURIAL];
          g.sentence+=(1+LCSrandom(6))*g.lawflag[LAWFLAG_PROSTITUTION];
          g.sentence+=1*g.lawflag[LAWFLAG_DISTURBANCE];
-         g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
+         //g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
          g.sentence+=1*g.lawflag[LAWFLAG_HIREILLEGAL];
          g.sentence+=(12+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];
          if(LCSrandom(3))g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BROWNIES];
@@ -1020,6 +1024,16 @@ void penalize(creaturest &g,char lenient)
          if(g.sentence>1)addstr("s");
          addstr(" in prison.");
       }
+
+      //dejuice boss
+      int boss=getpoolcreature(g.hireid);
+      if(boss!=-1&&pool[boss]->juice>50)
+      {
+         int juice=pool[boss]->juice-50;
+         if(juice>5)juice=5;
+         addjuice(*pool[boss],-juice);
+      }
+
       refresh();
       getch();
    }
@@ -1131,6 +1145,13 @@ char prison(creaturest &g)
             addstr(".");
             refresh();
             getch();
+
+            //dejuice boss
+            int boss=getpoolcreature(g.hireid);
+            if(boss!=-1)
+            {
+               addjuice(*pool[boss],-15);
+            }
 
             g.alive=0;
             stat_dead++;

@@ -42,7 +42,13 @@ void makecreature(creaturest &cr,short type)
    getrecruitcreature(cr.name,type);
    cr.armor.type=ARMOR_CLOTHES;
    cr.money=LCSrandom(21)+20;
-   cr.align=LCSrandom(3)-1;
+   {
+      int mood=publicmood(-1);
+      cr.align=-1;
+      if(LCSrandom(100)<mood)cr.align++;
+      if(LCSrandom(100)<mood)cr.align++;
+   }
+   //cr.align=LCSrandom(3)-1;
    cr.worklocation=cursite;
    verifyworklocation(cr);
 
@@ -72,6 +78,10 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_SECURITYUNIFORM;
          sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
          cr.align=-1;
+         for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=25;
+         cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_STRENGTH]=2;
          break;
       case CREATURE_SCIENTIST_LABTECH:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -106,7 +116,7 @@ void makecreature(creaturest &cr,short type)
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=19;
          cr.att[ATTRIBUTE_INTELLIGENCE]=5;
          cr.att[ATTRIBUTE_WISDOM]=10;
-         cr.att[ATTRIBUTE_HEART]=1;attcap[ATTRIBUTE_HEART]=1;
+         attcap[ATTRIBUTE_HEART]=1;
          break;
       case CREATURE_JUDGE_LIBERAL:
          strcpy(cr.name,"Liberal Judge");
@@ -204,7 +214,8 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Nonunion Worker");
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
-         cr.align=LCSrandom(2)-1;
+         if(cr.align==1)
+            cr.align=LCSrandom(2)-1;
 
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=28;
          cr.att[ATTRIBUTE_STRENGTH]=5;
@@ -216,7 +227,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(2)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
          break;
       case CREATURE_LANDLORD:
@@ -232,7 +243,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(4)+3;cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
          break;
       case CREATURE_TEENAGER:
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          randomskills>>=1;
          break;
       case CREATURE_LAWYER:
@@ -245,7 +256,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Lawyer");
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(51)+50;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+4;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
 			randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
@@ -260,7 +271,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Doctor");
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(21)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+4;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
          break;
@@ -273,7 +284,7 @@ void makecreature(creaturest &cr,short type)
          }
          strcpy(cr.name,"Nurse");
          cr.armor.type=ARMOR_LABCOAT;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
          break;
@@ -705,7 +716,8 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_PRISONER;
          cr.money=0;
          cr.juice=-5;
-         cr.align=LCSrandom(2);
+         if(cr.align==-1)
+            cr.align=LCSrandom(2);
 
          sk=LCSrandom(5)+1;cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
          break;
@@ -742,7 +754,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Sewer Worker");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_COLLEGESTUDENT:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -754,7 +766,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"College Student");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
 			randomskills-=cr.skill[SKILL_COMPUTERS]=LCSrandom(2);
 			randomskills-=cr.skill[SKILL_WRITING]=LCSrandom(2)+1;
@@ -774,7 +786,7 @@ void makecreature(creaturest &cr,short type)
          cr.money=LCSrandom(11);
          sk=LCSrandom(4)+2;cr.skill[SKILL_MUSIC]=sk;randomskills-=sk;
          sk=LCSrandom(2);cr.skill[SKILL_SEDUCTION]=sk;randomskills-=sk;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_MATHEMATICIAN:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -786,7 +798,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Mathematician");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(3);cr.skill[SKILL_COMPUTERS]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_SCIENCE]=sk;randomskills-=sk;
@@ -804,7 +816,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(4)+3;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_HSDROPOUT:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -816,7 +828,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Highschool Dropout");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_BUM:
          strcpy(cr.name,"Transient");
@@ -829,7 +841,8 @@ void makecreature(creaturest &cr,short type)
          else if(!LCSrandom(5))cr.weapon.type=WEAPON_KNIFE;
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(2);
+         if(cr.align==-1)
+            cr.align=LCSrandom(2);
          break;
       case CREATURE_MUTANT:
          strcpy(cr.name,"Mutant");
@@ -894,7 +907,8 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          cr.juice=-5;
-         cr.align=LCSrandom(2);
+         if(cr.align==-1)
+            cr.align=LCSrandom(2);
 
          sk=LCSrandom(2)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
          sk=LCSrandom(2)+1;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
@@ -913,7 +927,8 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          cr.juice=-20;
-         cr.align=LCSrandom(2);
+         if(cr.align==-1)
+            cr.align=LCSrandom(2);
 
          //NOTE: DO NOT REDISTRIBUTE
          cr.att[ATTRIBUTE_INTELLIGENCE]=1;
@@ -923,7 +938,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Priest");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(5)+3;cr.skill[SKILL_RELIGION]=sk;randomskills-=sk;
          break;
       case CREATURE_ENGINEER:
@@ -936,7 +951,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Engineer");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(2)+1;cr.skill[SKILL_COMPUTERS]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_SCIENCE]=sk;randomskills-=sk;
@@ -952,7 +967,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(3);cr.skill[SKILL_COOKING]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_TELEMARKETER:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -964,7 +979,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Telemarketer");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
 			randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(3)+1;
          break;
@@ -979,7 +994,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(3);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_FOOTBALLCOACH:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -993,7 +1008,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(3)+1;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_LEADERSHIP]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          if(LCSrandom(2))
          {
@@ -1016,7 +1031,8 @@ void makecreature(creaturest &cr,short type)
          else cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          cr.juice=-5;
-         cr.align=LCSrandom(2);
+         if(cr.align==-1)
+            cr.align=LCSrandom(2);
 			randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          sk=LCSrandom(4)+2;cr.skill[SKILL_SEDUCTION]=sk;randomskills-=sk;
          break;
@@ -1030,7 +1046,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Mail Carrier");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_GARBAGEMAN:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -1042,7 +1058,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Garbage Collector");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(2)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
          break;
       case CREATURE_PLUMBER:
@@ -1055,7 +1071,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Plumber");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_CHEF:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -1068,7 +1084,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(5)+3;cr.skill[SKILL_COOKING]=sk;randomskills-=sk;
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_CONSTRUCTIONWORKER:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -1080,7 +1096,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Construction Worker");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=20;
          cr.att[ATTRIBUTE_STRENGTH]=7;
@@ -1097,7 +1113,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Amateur Magician");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(3)+2;cr.skill[SKILL_SLIGHTOFHAND]=sk;randomskills-=sk;
          break;
       case CREATURE_HIPPIE:
@@ -1122,7 +1138,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(131)+100;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4);cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
          sk=LCSrandom(4)+4;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
@@ -1136,7 +1152,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(131)+100;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
          sk=LCSrandom(4)+2;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
@@ -1150,7 +1166,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(131)+100;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
          sk=LCSrandom(4)+2;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
@@ -1165,7 +1181,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(131)+100;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
          sk=LCSrandom(4)+2;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
@@ -1182,7 +1198,7 @@ void makecreature(creaturest &cr,short type)
          if(LCSrandom(2))cr.armor.type=ARMOR_EXPENSIVEDRESS;
          else cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(131)+100;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(3)+1;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
          sk=LCSrandom(3);cr.skill[SKILL_ART]=sk;randomskills-=sk;
@@ -1198,7 +1214,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Biker");
          cr.armor.type=ARMOR_TRENCHCOAT;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(3)+3;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
          break;
       case CREATURE_TRUCKER:
@@ -1211,7 +1227,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Truck Driver");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(3)+3;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
          break;
       case CREATURE_TAXIDRIVER:
@@ -1224,7 +1240,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Taxi Driver");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(3)+3;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
          break;
       case CREATURE_PROGRAMMER:
@@ -1237,7 +1253,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Programmer");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
-         cr.align=LCSrandom(3)-1;
+         //cr.align=LCSrandom(3)-1;
 
          sk=LCSrandom(5)+4;cr.skill[SKILL_COMPUTERS]=sk;randomskills-=sk;
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=30;
@@ -1397,7 +1413,7 @@ void makecreature(creaturest &cr,short type)
    else if(cr.align==0)
    {
       cr.att[ATTRIBUTE_HEART]+=2;
-      cr.att[ATTRIBUTE_HEART]+=2;
+      cr.att[ATTRIBUTE_WISDOM]+=2;
    }
    else cr.att[ATTRIBUTE_WISDOM]+=4;
 

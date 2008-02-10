@@ -1504,9 +1504,9 @@ char maskselect(creaturest *cr,short &mask)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<masktype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<masktype.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -1743,9 +1743,9 @@ unsigned long fenceselect(void)
       if(c=='x')break;
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*18<activesquad->loot.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<activesquad->loot.size())page++;
 
    }while(1);
 

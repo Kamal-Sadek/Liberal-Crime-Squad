@@ -720,10 +720,10 @@ void fullstatus(int p)
       int c=getch();
       translategetch(c);
 
-      if(activesquad->squad[1]!=NULL&&(c==interface_pgup||c==interface_pgdn))
+      if(activesquad->squad[1]!=NULL&&((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)||(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)))
       {
          int sx=1;
-         if(c==interface_pgup)sx=-1;
+         if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT))sx=-1;
          do
          {
             p=(p+6+sx)%6;

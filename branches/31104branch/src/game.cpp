@@ -149,8 +149,9 @@ char courtname[9][80];
 
 
 short exec[EXECNUM];
-short execterm=1;
+short execterm=2;
 char execname[EXECNUM][80];
+short presparty=1;
 
 
 unsigned long stat_recruits=0;
@@ -201,8 +202,10 @@ long moneygained_thievery=0;
 long moneylost_goods=0;
 long moneylost_trouble=0;
 long moneylost_rent=0;
+long moneylost_training=0;
 long moneylost_manufacture=0;
 long moneylost_legal=0;
+long moneylost_food=0;
 long moneylost_compound=0;
 long moneylost_hostage=0;
 
@@ -268,16 +271,16 @@ int main(int argc, char* argv[])
    for(int v=0;v<VIEWNUM;v++)
    {
       attitude[v]=45;
-      public_interest[v]=20;
+      public_interest[v]=0;
       background_liberal_influence[v]=0;
    }
    attitude[VIEW_LIBERALCRIMESQUAD]=0;
    attitude[VIEW_LIBERALCRIMESQUADPOS]=20;
 
-   law[LAW_ABORTION]=2;
-   law[LAW_ANIMALRESEARCH]=-2;
+   law[LAW_ABORTION]=1;
+   law[LAW_ANIMALRESEARCH]=-1;
    law[LAW_POLICEBEHAVIOR]=0;
-   law[LAW_PRIVACY]=0;
+   law[LAW_PRIVACY]=-1;
    law[LAW_DEATHPENALTY]=-1;
    law[LAW_NUCLEARPOWER]=-1;
    law[LAW_POLLUTION]=-1;
@@ -513,125 +516,125 @@ void vehiclest::init(int t)
 }
 
 void creaturest::creatureinit(void)
+{
+   hireid=-1;
+   worklocation=0;
+   juice=0;
+   flag=0;
+   carid=-1;
+   is_driver=0;
+   pref_carid=-1;
+   pref_is_driver=0;
+   id=curcreatureid;
+      curcreatureid++;
+   joindays=0;
+   deathdays=0;
+   squadid=-1;
+   cantbluff=0;
+   location=0;
+   base=0;
+   activity.type=ACTIVITY_NONE;
+   for(int i=0;i<LAWFLAGNUM;i++)
+      lawflag[i]=0;
+   heat=0;
+   confessions=0;
+   clinic=0;
+   dating=0;
+   hiding=0;
+   trainingtime=0;
+   trainingsubject=-1;
+   specialattack=-1;
+   animalgloss=0;
+   prisoner=NULL;
+   alive=1;
+   blood=100;
+   for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
+   weapon.type=WEAPON_NONE;
+   weapon.ammo=0;
+   armor.type=ARMOR_CLOTHES;
+   armor.quality='1';
+   armor.flag=0;
+   for(int a=0;a<ATTNUM;a++)
    {
-      hireid=-1;
-      worklocation=0;
-      juice=0;
-      flag=0;
-      carid=-1;
-      is_driver=0;
-      pref_carid=-1;
-      pref_is_driver=0;
-      id=curcreatureid;
-         curcreatureid++;
-      joindays=0;
-      deathdays=0;
-      squadid=-1;
-      cantbluff=0;
-      location=0;
-      base=0;
-      activity.type=ACTIVITY_NONE;
-      for(int i=0;i<LAWFLAGNUM;i++)
-         lawflag[i]=0;
-      heat=0;
-      confessions=0;
-      clinic=0;
-      dating=0;
-      hiding=0;
-      trainingtime=0;
-      trainingsubject=-1;
-      specialattack=-1;
-      animalgloss=0;
-      prisoner=NULL;
-      alive=1;
-      blood=100;
-      for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
-      weapon.type=WEAPON_NONE;
-      weapon.ammo=0;
-      armor.type=ARMOR_CLOTHES;
-      armor.quality='1';
-      armor.flag=0;
-      for(int a=0;a<ATTNUM;a++)
-      {
-         att[a]=1;
-      }
-      int attnum=32;
-      while(attnum>0)
-      {
-         int a=LCSrandom(ATTNUM);
-         if(att[a]<10)
-         {
-            att[a]++;
-            attnum--;
-         }
-      }
-      for(int s=0;s<SKILLNUM;s++)
-      {
-         skill[s]=0;
-         skill_ip[s]=0;
-      }
-      for(int c=0;c<CLIPNUM;c++)clip[c]=0;
-      special[SPECIALWOUND_TEETH]=TOOTHNUM;
-      special[SPECIALWOUND_RIGHTEYE]=1;
-      special[SPECIALWOUND_LEFTEYE]=1;
-      special[SPECIALWOUND_NOSE]=1;
-      special[SPECIALWOUND_TONGUE]=1;
-      special[SPECIALWOUND_RIGHTLUNG]=1;
-      special[SPECIALWOUND_LEFTLUNG]=1;
-      special[SPECIALWOUND_HEART]=1;
-      special[SPECIALWOUND_LIVER]=1;
-      special[SPECIALWOUND_STOMACH]=1;
-      special[SPECIALWOUND_RIGHTKIDNEY]=1;
-      special[SPECIALWOUND_LEFTKIDNEY]=1;
-      special[SPECIALWOUND_SPLEEN]=1;
-      special[SPECIALWOUND_RIBS]=LCSrandom(RIBNUM);//RIBNUM;
-      special[SPECIALWOUND_NECK]=1;
-      special[SPECIALWOUND_UPPERSPINE]=1;
-      special[SPECIALWOUND_LOWERSPINE]=1;
-      forceinc=0;
-      sentence=0;
-      deathpenalty=0;
+      att[a]=1;
    }
+   int attnum=32;
+   while(attnum>0)
+   {
+      int a=LCSrandom(ATTNUM);
+      if(att[a]<10)
+      {
+         att[a]++;
+         attnum--;
+      }
+   }
+   for(int s=0;s<SKILLNUM;s++)
+   {
+      skill[s]=0;
+      skill_ip[s]=0;
+   }
+   for(int c=0;c<CLIPNUM;c++)clip[c]=0;
+   special[SPECIALWOUND_TEETH]=TOOTHNUM;
+   special[SPECIALWOUND_RIGHTEYE]=1;
+   special[SPECIALWOUND_LEFTEYE]=1;
+   special[SPECIALWOUND_NOSE]=1;
+   special[SPECIALWOUND_TONGUE]=1;
+   special[SPECIALWOUND_RIGHTLUNG]=1;
+   special[SPECIALWOUND_LEFTLUNG]=1;
+   special[SPECIALWOUND_HEART]=1;
+   special[SPECIALWOUND_LIVER]=1;
+   special[SPECIALWOUND_STOMACH]=1;
+   special[SPECIALWOUND_RIGHTKIDNEY]=1;
+   special[SPECIALWOUND_LEFTKIDNEY]=1;
+   special[SPECIALWOUND_SPLEEN]=1;
+   special[SPECIALWOUND_RIBS]=RIBNUM;
+   special[SPECIALWOUND_NECK]=1;
+   special[SPECIALWOUND_UPPERSPINE]=1;
+   special[SPECIALWOUND_LOWERSPINE]=1;
+   forceinc=0;
+   sentence=0;
+   deathpenalty=0;
+}
 
-   void locationst::init(void)
-   {
-      haveflag=0;
-      newrental=0;
-      heat=0;
-      closed=0;
-      interrogated=0;
-      highsecurity=0;
-      mapseed=seed;r_num();
-      compound_walls=0;
-      compound_stores=0;
-      front_business=-1;
-   }
-   
-   void chaseseqst::clean(void)
-   {
-      for(int v=0;v<enemycar.size();v++)
-      {
-         delete enemycar[v];
-      }
-      enemycar.clear();
+void locationst::init(void)
+{
+   haveflag=0;
+   newrental=0;
+   heat=0;
+   closed=0;
+   interrogated=0;
+   highsecurity=0;
+   mapseed=seed;r_num();
+   compound_walls=0;
+   compound_stores=0;
+   front_business=-1;
+}
 
-      friendcar.clear(); 
-   }
-   
-   
-   /* Free memory and exit the game */
-   void end_game(int err)
+void chaseseqst::clean(void)
+{
+   for(int v=0;v<enemycar.size();v++)
    {
-	   for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
-	   {
-		   delete (*it);
-	   }
-	   int i=0;
-	   for(i=0;i<squad.size();++i)
-	   {
-		   delete squad[i];
-	   }
-	   endwin();
-	   exit(err);
+      delete enemycar[v];
    }
-   
+   enemycar.clear();
+
+   friendcar.clear(); 
+}
+
+
+/* Free memory and exit the game */
+void end_game(int err)
+{
+	for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
+	{
+		delete (*it);
+	}
+	int i=0;
+	for(i=0;i<squad.size();++i)
+	{
+		delete squad[i];
+	}
+	endwin();
+	exit(err);
+}
+

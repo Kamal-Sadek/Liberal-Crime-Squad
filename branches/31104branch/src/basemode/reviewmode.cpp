@@ -164,8 +164,8 @@ void review(void)
       int c=getch();
       translategetch(c);
 
-      if(c==interface_pgup&&page>0)page--;
-      if(c==interface_pgdn&&(page+1)*19<squad.size()+REVIEWMODENUM)page++;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<squad.size()+REVIEWMODENUM)page++;
 
       if(c==10)return;
 
@@ -507,9 +507,9 @@ void review_mode(short mode)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -559,10 +559,10 @@ void review_mode(short mode)
                int c=getch();
                translategetch(c);
 
-               if(temppool.size()>0&&(c==interface_pgup||c==interface_pgdn))
+               if(temppool.size()>0&&((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)||(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)))
                {
                   int sx=1;
-                  if(c==interface_pgup)sx=-1;
+                  if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT))sx=-1;
                   p=(p+(int)temppool.size()+sx)%((int)temppool.size());
                   continue;
                }
@@ -624,7 +624,8 @@ void assemblesquad(squadst *cursquad)
          pool[p]->align==1&&
          pool[p]->clinic==0&&
          pool[p]->dating==0&&
-         pool[p]->hiding==0)
+         pool[p]->hiding==0&&
+         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
       {
          if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
             location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
@@ -769,9 +770,9 @@ void assemblesquad(squadst *cursquad)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -1077,9 +1078,9 @@ int l = 0;
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page_lib>0)page_lib--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_lib>0)page_lib--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page_lib+1)*19<temppool.size())page_lib++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_lib+1)*19<temppool.size())page_lib++;
 
       //PAGE UP
       if(c==','&&page_loc>0)page_loc--;
@@ -1325,9 +1326,9 @@ void promoteliberals(void)
       translategetch(c);
 
       //PAGE UP
-      if(c==interface_pgup&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if(c==interface_pgdn&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {

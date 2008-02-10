@@ -586,22 +586,22 @@ void mode_base(void)
             //ESPECIALLY IF IT IS REALLY ILLEGAL
          if(sieged)
          {
-            change_public_opinion(VIEW_LIBERALCRIMESQUAD,1,0);
-            change_public_opinion(VIEW_FREESPEECH,1,1);
+            change_public_opinion(VIEW_LIBERALCRIMESQUAD,1);
+            change_public_opinion(VIEW_FREESPEECH,1,1,30);
             if(law[LAW_FLAGBURNING]<=0)
             {
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,1,0);
-               change_public_opinion(VIEW_FREESPEECH,1,1);
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,1);
+               change_public_opinion(VIEW_FREESPEECH,1,1,50);
             }
             if(law[LAW_FLAGBURNING]<=-1)
             {
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,5,0);
-               change_public_opinion(VIEW_FREESPEECH,2,1);
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,5);
+               change_public_opinion(VIEW_FREESPEECH,2,1,70);
             }
             if(law[LAW_FLAGBURNING]==-2)
             {
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,15,0);
-               change_public_opinion(VIEW_FREESPEECH,5,1);
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,15);
+               change_public_opinion(VIEW_FREESPEECH,5,1,90);
             }
          }
       }

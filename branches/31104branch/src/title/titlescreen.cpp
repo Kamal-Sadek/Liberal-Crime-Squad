@@ -105,6 +105,8 @@ void mode_title(void)
    strcpy(str,"Press any other key to pursue your Liberal Agenda!");
    move(22,39-((strlen(str)-1)>>1));
    addstr(str);
+   move(24,79);
+   addstr("+");
 
    int c=getch();
    translategetch(c);

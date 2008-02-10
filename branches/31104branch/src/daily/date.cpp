@@ -87,7 +87,7 @@ char completevacation(datest &d,int p,char &clearformess)
       getch();
 
       if(d.date[e]->att[ATTRIBUTE_WISDOM]-pool[p]->skill[SKILL_SEDUCTION]<=1||
-         LCSrandom(d.date[e]->att[ATTRIBUTE_HEART])>d.date[e]->att[ATTRIBUTE_WISDOM])
+         LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM])
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,0);y++;
@@ -96,6 +96,7 @@ char completevacation(datest &d,int p,char &clearformess)
          addstr(" is ");
          addstr(pool[p]->name);
          addstr("'s totally unconditional love-slave!");
+         location[d.date[e]->worklocation]->interrogated=1;
          refresh();
          getch();
 
@@ -139,9 +140,12 @@ char completevacation(datest &d,int p,char &clearformess)
       }
       else
       {
-         if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-2)d.date[e]->att[ATTRIBUTE_HEART]+=LCSrandom(3);
-         d.date[e]->att[ATTRIBUTE_WISDOM]-=LCSrandom(3)+1;
-         if(d.date[e]->att[ATTRIBUTE_WISDOM]<1)d.date[e]->att[ATTRIBUTE_WISDOM]=1;
+         if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-4)d.date[e]->att[ATTRIBUTE_HEART]+=LCSrandom(3);
+         if(aroll>troll*2)
+         {
+            d.date[e]->att[ATTRIBUTE_WISDOM]-=LCSrandom(3)+1;
+            if(d.date[e]->att[ATTRIBUTE_WISDOM]<1)d.date[e]->att[ATTRIBUTE_WISDOM]=1;
+         }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y++;
@@ -155,7 +159,7 @@ char completevacation(datest &d,int p,char &clearformess)
    else
    {
       //WISDOM POSSIBLE INCREASE
-      if(d.date[e]->align==-1&&!LCSrandom(2))
+      if(d.date[e]->align==-1&&aroll<troll/2)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(y,0);y++;
@@ -168,15 +172,15 @@ char completevacation(datest &d,int p,char &clearformess)
 
          if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
          {
-            pool[p]->skill_ip[SKILL_RELIGION]+=10*d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION];
+            pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
          }
          if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
          {
-            pool[p]->skill_ip[SKILL_SCIENCE]+=10*d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE];
+            pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
          }
          if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
          {
-            pool[p]->skill_ip[SKILL_BUSINESS]+=10*d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS];
+            pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
          }
 
          refresh();
@@ -240,7 +244,7 @@ char completedate(datest &d,int p,char &clearformess)
    refresh();
    getch();
 
-   if(d.date.size()>1&&!LCSrandom(3))
+   if(d.date.size()>1&&!LCSrandom(5))
    {
       move(2,0);
       addstr("Unfortunately, they all know each other and had been discussing");
@@ -378,7 +382,7 @@ char completedate(datest &d,int p,char &clearformess)
                getch();
 
                if(d.date[e]->att[ATTRIBUTE_WISDOM]<=1||
-                  LCSrandom(d.date[e]->att[ATTRIBUTE_HEART])>d.date[e]->att[ATTRIBUTE_WISDOM])
+                  LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+aroll-troll)>d.date[e]->att[ATTRIBUTE_WISDOM])
                {
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(y,0);y++;
@@ -387,6 +391,8 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" is ");
                   addstr(pool[p]->name);
                   addstr("'s totally unconditional love-slave!");
+                  //Get map of their workplace
+                  location[d.date[e]->worklocation]->interrogated=1;
                   refresh();
                   getch();
 
@@ -427,8 +433,39 @@ char completedate(datest &d,int p,char &clearformess)
                }
                else
                {
-                  if(d.date[e]->att[ATTRIBUTE_HEART]<6)d.date[e]->att[ATTRIBUTE_HEART]++;
-                  else d.date[e]->att[ATTRIBUTE_WISDOM]--;
+                  if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-4)
+                  {
+                     d.date[e]->att[ATTRIBUTE_HEART]++;
+                  }
+                  else
+                  {
+                     //Posibly date reveals map of location
+                     if(location[d.date[e]->worklocation]->interrogated==0 && !LCSrandom(d.date[e]->att[ATTRIBUTE_WISDOM]))
+                     {
+                        y++;
+                        move(y++,0);
+                        addstr(d.date[e]->name);
+                        addstr(" turns the topic of discussion to the ");
+                        addstr(location[d.date[e]->worklocation]->name);
+                        addstr(".");
+                        move(y++,0);
+                        if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
+                        {
+                           addstr(pool[p]->name);
+                           addstr(" was able to create a map of the site with this information.");
+                           y++;                           
+                        }
+                        else
+                        {
+                           addstr(pool[p]->name);
+                           addstr(" is bored stiff by this conversation.");
+                           y++;
+                        }
+                        location[d.date[e]->worklocation]->interrogated=1;
+                     }
+
+                     if(aroll>troll*2) d.date[e]->att[ATTRIBUTE_WISDOM]--;
+                  }
 
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   move(y,0);y++;
@@ -440,7 +477,7 @@ char completedate(datest &d,int p,char &clearformess)
             else
             {
                //WISDOM POSSIBLE INCREASE
-               if(d.date[e]->align==-1)
+               if(d.date[e]->align==-1&&aroll<troll/2)
                {
 						set_color(COLOR_RED,COLOR_BLACK,1);
                   move(y,0);y++;
@@ -454,15 +491,15 @@ char completedate(datest &d,int p,char &clearformess)
 
                   if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
                   {
-                     pool[p]->skill_ip[SKILL_RELIGION]+=10*d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION];
+                     pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
                   }
                   if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
                   {
-                     pool[p]->skill_ip[SKILL_SCIENCE]+=10*d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE];
+                     pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
                   }
                   if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
                   {
-                     pool[p]->skill_ip[SKILL_BUSINESS]+=10*d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS];
+                     pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
                   }
 
                   refresh();

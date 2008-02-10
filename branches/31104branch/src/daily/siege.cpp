@@ -83,7 +83,8 @@ void siegecheck(char canseethings)
          {
             if(!pool[p]->alive)continue; // Dead people don't count
             if(pool[p]->location!=l)continue; // People not at this base don't count
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)kidnapped++; // Kidnapped persons increase heat
+            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
+               pool[p]->align!=1)kidnapped++; // Kidnapped persons increase heat
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
             
@@ -104,7 +105,7 @@ void siegecheck(char canseethings)
                location[l]->heat-=50-police_heat*10;
             if(location[l]->heat<0)location[l]->heat=0;
          }
-         else if(crimes)
+         else if(crimes||kidnapped)
          {
             int heatprotection=0;
 
@@ -286,6 +287,16 @@ void siegecheck(char canseethings)
                      getch();
 
                      delete pool[p];
+                     if(pool[p]->align==1)
+                     {
+                        int boss=getpoolcreature(pool[p]->hireid);
+                        if(boss!=-1&&pool[boss]->juice>50)
+                        {
+                           int juice=pool[boss]->juice-50;
+                           if(juice>10)juice=10;
+                           addjuice(*pool[boss],-juice);
+                        }
+                     }
                      pool.erase(pool.begin() + p);
                      continue;
                   }
@@ -336,7 +347,7 @@ void siegecheck(char canseethings)
                ceosleepercount++;
             }
          }
-         if(LCSrandom(ceosleepercount+1)||!LCSrandom(40))
+         if(LCSrandom(ceosleepercount+1)||!LCSrandom(10))
          {
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -346,7 +357,7 @@ void siegecheck(char canseethings)
             else("an anonymous tip");
             addstr(" that the Corporations");
             move(9,1);
-            addstr("are planning to attack ");
+            addstr("are hiring mercinaries to attack ");
             if(ceosleepercount)addstr(location[l]->name);
             else addstr("the LCS");
             addstr(".");
@@ -362,7 +373,7 @@ void siegecheck(char canseethings)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(8,1);
-         addstr("The Corporations are raiding the ");
+         addstr("Corporate mercinaries are raiding the ");
          addlocationname(location[l]);
          addstr("!");
 
@@ -381,7 +392,7 @@ void siegecheck(char canseethings)
       if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(600)&&numpres>0)
       {
          location[l]->siege.timeuntilcia=LCSrandom(3)+1;
-         // *JDS* agent sleepers may give a warning before corp raids
+         // *JDS* agent sleepers may give a warning before cia raids
          int agentsleepercount=0;
          for(int pl=0;pl<pool.size();pl++)
          {
@@ -398,7 +409,7 @@ void siegecheck(char canseethings)
             move(8,1);
             addstr("A sleeper agent has reported that the CIA is planning");
             move(9,1);
-            addstr("to attack ");
+            addstr("to launch an attack on ");
             addstr(location[l]->name);
             addstr(".");
             refresh();
@@ -413,7 +424,7 @@ void siegecheck(char canseethings)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(8,1);
-         addstr("The CIA is raiding the ");
+         addstr("Unmarked black vans are surrounding the ");
          addlocationname(location[l]);
          addstr("!");
 
@@ -422,19 +433,19 @@ void siegecheck(char canseethings)
             move(9,1);
             addstr("Through some form of high technology, they've managed");
             move(10,1);
-            addstr("to shut off the lights and the cameras.");
+            addstr("to shut off the lights and the cameras!");
          }
          else if(location[l]->compound_walls & COMPOUND_GENERATOR)
          {
             move(9,1);
             addstr("Through some form of high technology, they've managed");
             move(10,1);
-            addstr("to shut off the lights.");
+            addstr("to shut off the lights!");
          }
          else
          {
             move(9,1);
-            addstr("They've shut off the lights.");
+            addstr("They've shut off the lights!");
          }
 
          refresh();
@@ -501,18 +512,80 @@ void siegeturn(char clearformess)
    if(disbanding)return;
 
    // Count people at each location
+   int l,hs;
    int* liberalcount = new int[location.size()];
+   char* gourmet      = new char[location.size()];
+
+   // Clear gourmet list
+   std::memset(gourmet,0,location.size());
+
    for(int p=0;p<pool.size();p++)
    {
       if(!pool[p]->alive)continue; // Dead people don't count
       if(pool[p]->align!=1)continue; // Non-liberals don't count
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
+      //Get the best cooking skill for each location
+      if(gourmet[pool[p]->location]<pool[p]->skill[SKILL_COOKING])
+         gourmet[pool[p]->location]=pool[p]->skill[SKILL_COOKING];
+   }
+   for(l=0;l<location.size();l++)
+   {
+      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
+      {
+         hs=l;
+         break;
+      }
    }
 
-   for(int l=0;l<location.size();l++)
+   for(l=0;l<location.size();l++)
    {
-      if(location[l]->siege.siege && !location[l]->siege.underattack)
+      if(!location[l]->siege.siege && location[l]->renting!=-1 && location[l]->type!=SITE_RESIDENTIAL_SHELTER)
+      {
+         //locations not under siege eat
+         int eat=numbereating(l);
+         int price=(int)(eat*((10-gourmet[l])/10.0f)+0.5f);
+         if(price<0)price=0;
+         if(funds>price)
+         {
+            funds-=price;
+            moneylost_food+=price;
+         }
+         else
+         {
+            if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
+            else if(liberalcount[l])
+            {
+               for(int p=0;p<pool.size();p++)
+               {
+                  if(!pool[p]->alive)continue; // Dead people don't move
+                  if(pool[p]->align!=1)continue; // Non-liberals don't move
+                  if(pool[p]->location==l)
+                  {
+                     pool[p]->base=hs;
+                     pool[p]->location=hs;
+                  }
+               }
+               
+               erase();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               move(8,1);
+               addstr("The LCS has no money for food.");
+               move(10,1);
+               addlocationname(location[l]);
+               addstr(" has been abandoned.");
+               move(12,1);
+               addstr("The Liberals will return to the homeless shelter for handouts.");
+               move(14,1);
+               addstr("Neither Governments nor Revolutions are free. . .");
+
+               refresh();
+               getch();
+            }
+         }
+      }
+      else if(location[l]->siege.siege && !location[l]->siege.underattack)
       {
          //resolve sieges with no people
          if(liberalcount[l]==0)
@@ -542,6 +615,16 @@ void siegeturn(char clearformess)
                   getch();
 
                   delete pool[p];
+                  if(pool[p]->align==1)
+                  {
+                     int boss=getpoolcreature(pool[p]->hireid);
+                     if(boss!=-1&&pool[boss]->juice>50)
+                     {
+                        int juice=pool[boss]->juice-50;
+                        if(juice>10)juice=10;
+                        addjuice(*pool[boss],-juice);
+                     }
+                  }
                   pool.erase(pool.begin() + p);
                   continue;
                }
@@ -968,8 +1051,8 @@ void siegeturn(char clearformess)
                getch();
 
                //CHECK PUBLIC OPINION
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,20,0);
-               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-25)/2,0);
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,20);
+               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-25)/2,segmentpower+50);
                int viewhit;
                for(int v=0;v<5;v++)
                {
@@ -977,8 +1060,8 @@ void siegeturn(char clearformess)
                   {
                      viewhit=LCSrandom(VIEWNUM);
                   }while(viewhit==VIEW_LIBERALCRIMESQUADPOS);
-                  if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-25)/2,1);
-                  else change_public_opinion(viewhit,segmentpower/4,1);
+                  if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-25)/2);
+                  else change_public_opinion(viewhit,segmentpower/4);
                }
             }
          }
@@ -1139,6 +1222,16 @@ void giveup(void)
 
             removesquadinfo(*pool[p]);
             delete pool[p];
+            if(pool[p]->align==1)
+            {
+               int boss=getpoolcreature(pool[p]->hireid);
+               if(boss!=-1&&pool[boss]->juice>50)
+               {
+                  int juice=pool[boss]->juice-50;
+                  if(juice>10)juice=10;
+                  addjuice(*pool[boss],-juice);
+               }
+            }
             pool.erase(pool.begin() + p);
             continue;
          }
@@ -1244,8 +1337,15 @@ int numbereating(int loc)
 
    for(int p=0;p<pool.size();p++)
    {
+      //Not here? Not eating here!
       if(pool[p]->location!=loc)continue;
-      if(pool[p]->alive)eaters++;
+      //Not alive? Not eating!
+      if(!pool[p]->alive)continue;
+      //You're a prisoner getting starved? Not eating!
+      if(pool[p]->align==-1 &&
+         reinterpret_cast<interrogation*>(pool[p]->activity.arg)->nofood)continue;
+      //None of the above? You're eating!
+      eaters++;
    }
 
    return eaters;
@@ -1412,6 +1512,16 @@ void escapesiege(char won)
          if(!pool[p]->alive)
          {
             delete pool[p];
+            if(pool[p]->align==1)
+            {
+               int boss=getpoolcreature(pool[p]->hireid);
+               if(boss!=-1&&pool[boss]->juice>50)
+               {
+                  int juice=pool[boss]->juice-50;
+                  if(juice>10)juice=10;
+                  addjuice(*pool[boss],-juice);
+               }
+            }
             pool.erase(pool.begin() + p);
             continue;
          }

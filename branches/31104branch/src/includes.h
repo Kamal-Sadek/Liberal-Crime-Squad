@@ -776,15 +776,17 @@ struct activityst
    long arg2;
 };
 
-
-
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
 #define CREATUREFLAG_MISSING BIT3
 #define CREATUREFLAG_KIDNAPPED BIT4
 #define CREATUREFLAG_SLEEPER BIT5
 #define CREATUREFLAG_ILLEGALALIEN BIT6
+#define CREATUREFLAG_LOVESLAVE BIT7
+#define CREATUREFLAG_BRAINWASHED BIT8
+
 #define CREATURE_NAMELEN 40
+
 struct creaturest
 {
    char name[CREATURE_NAMELEN];
@@ -1484,7 +1486,7 @@ void locatesquad(squadst *st,long loc);
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st,long loc);
 /* common - shifts public opinion on an issue */
-void change_public_opinion(int v,int power,char affect,char cap=100);
+void change_public_opinion(int v,int power,char affect=1,char cap=100);
 /* returns the amount of heat associated with a given crime */
 int lawflagheat(int lawflag);
 

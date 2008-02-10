@@ -523,6 +523,12 @@ char hasdisguise(creaturest &cr,short type)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_BLACKROBE)uniformed=1;
+               if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
+               if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_CHEAPDRESS)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
@@ -546,6 +552,7 @@ char hasdisguise(creaturest &cr,short type)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
@@ -556,6 +563,8 @@ char hasdisguise(creaturest &cr,short type)
             if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
             if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
             if(cr.armor.type==ARMOR_CHEAPDRESS)uniformed=1;
+            if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
+            if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
             break;
          case SITE_INDUSTRY_SWEATSHOP:
             if(cr.armor.type==ARMOR_NONE)uniformed=1;
@@ -583,6 +592,10 @@ char hasdisguise(creaturest &cr,short type)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
+               if(cr.armor.type==ARMOR_CHEAPDRESS)uniformed=1;
             }
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
@@ -590,6 +603,8 @@ char hasdisguise(creaturest &cr,short type)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
+               if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
             }
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;

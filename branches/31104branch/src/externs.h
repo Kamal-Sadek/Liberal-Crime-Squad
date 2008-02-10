@@ -21,7 +21,7 @@ extern char courtname[9][80];
 extern short exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][80];
-
+extern short presparty;
 
 extern unsigned long stat_recruits;
 extern unsigned long stat_kidnappings;
@@ -60,8 +60,6 @@ extern int day;
 
 extern short attitude[VIEWNUM];
 
-// Topicwork1 is editorials that are waiting to be written
-// Topicwork2 is editorials that have been written
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
 
@@ -95,8 +93,10 @@ extern long moneygained_thievery;
 extern long moneylost_goods;
 extern long moneylost_trouble;
 extern long moneylost_rent;
+extern long moneylost_training;
 extern long moneylost_manufacture;
 extern long moneylost_legal;
+extern long moneylost_food;
 extern long moneylost_compound;
 extern long moneylost_hostage;
 

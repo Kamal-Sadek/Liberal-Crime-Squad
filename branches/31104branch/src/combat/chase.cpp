@@ -1281,6 +1281,13 @@ void crashfriendlycar(int v)
             if(pool[pl]==activesquad->squad[p])
             {
                delete pool[pl];
+               int boss=getpoolcreature(pool[pl]->hireid);
+               if(boss!=-1&&pool[boss]->juice>50)
+               {
+                  int juice=pool[boss]->juice-50;
+                  if(juice>10)juice=10;
+                  addjuice(*pool[boss],-juice);
+               }
                pool.erase(pool.begin() + pl);
                break;
             }

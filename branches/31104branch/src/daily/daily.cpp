@@ -57,11 +57,11 @@ void advanceday(char &clearformess,char canseethings)
          break;
       }
    }
-      if (homes==-1)
-      {
-         //TODO: Error unable to find location
-         homes=0;
-      }
+   if (homes==-1)
+   {
+      //TODO: Error unable to find location
+      homes=0;
+   }
       
    for(p=0;p<pool.size();p++)
    {
@@ -626,6 +626,22 @@ void advanceday(char &clearformess,char canseethings)
                pool[p]->blood=100-(clinictime(*pool[p])-1)*20;
          }
 
+         if(pool[p]->alive&&pool[p]->blood<0)
+         {
+            if(clearformess)
+            {
+               erase();
+            }
+            else
+            {
+               makedelimiter(8,0);
+            }
+            move(8,1);
+            pool[p]->alive=0;
+            addstr(pool[p]->name);
+            addstr(" has died of injuries.");
+         }
+
          for(int w=0;w<BODYPARTNUM;w++)
          {
             // Limbs blown off
@@ -748,7 +764,8 @@ void advanceday(char &clearformess,char canseethings)
          // If at clinic and in critical condition, transfer to university hospital
          if((pool[p]->blood<=20 | transfer)&&
             pool[p]->location>-1&&
-            location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
+            location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC &&
+            pool[p]->align == 1)
          {
             int hospital;
             for(hospital=0;hospital<location.size();++hospital)
@@ -769,6 +786,8 @@ void advanceday(char &clearformess,char canseethings)
             }
          }
          else if(transfer&&pool[p]->location>-1&&
+            pool[p]->alive==1&&
+            pool[p]->align==1&&
             location[pool[p]->location]->renting!=-1&&
             location[pool[p]->location]->type!=SITE_HOSPITAL_UNIVERSITY)
          {
@@ -907,8 +926,8 @@ void advanceday(char &clearformess,char canseethings)
 
       int p=getpoolcreature(recruit[r]->recruiter_id);
       // Stand up recruits if 1) recruiter does not exist, or 2) recruiter was not able to return to a safehouse today
-      if((p!=-1&&pool[p]->location!=-1&&location[pool[p]->location]->renting!=-1)||
-         recruit[r]->timeleft>0)
+      if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=-1)||
+         recruit[r]->timeleft>0))
       {
          //RECRUIT TASKS
          if(recruit[r]->timeleft>0)
@@ -1096,7 +1115,7 @@ void advanceday(char &clearformess,char canseethings)
       if((pool[p]->flag & CREATUREFLAG_MISSING)&&
          !(pool[p]->flag & CREATUREFLAG_KIDNAPPED))
       {
-         if(LCSrandom(10)+2<pool[p]->joindays)
+         if(LCSrandom(14)+4<pool[p]->joindays)
          {
             pool[p]->flag|=CREATUREFLAG_KIDNAPPED;
 
@@ -1201,7 +1220,7 @@ void dispersalcheck(char &clearformess)
                //Attempt to promote their subordinates
                if(promotesubordinates(*pool[p], clearformess))promotion=1;
 
-               if(pool[p]->location==-1 || location[pool[p]->location]->renting != -1)
+               if(pool[p]->location==-1 || location[pool[p]->location]->renting == -1)
                {
                   delete pool[p];
                   pool.erase(pool.begin() + p);
@@ -1916,7 +1935,7 @@ int monthday(void)
       case 9:return 30;
       case 11:return 30;
       case 2:
-         if(year%4==0)return 29;
+         if(year%4==0&&(year%100!=0||year%400==0))return 29;
          else return 28;
       default:
          return 31;
