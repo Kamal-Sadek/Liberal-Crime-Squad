@@ -198,6 +198,7 @@ long moneygained_brownies=0;
 long moneygained_goods=0;
 long moneygained_ccfraud=0;
 long moneygained_hustling=0;
+long moneygained_extortion=0;
 long moneygained_thievery=0;
 long moneylost_goods=0;
 long moneylost_trouble=0;
@@ -206,6 +207,7 @@ long moneylost_training=0;
 long moneylost_manufacture=0;
 long moneylost_legal=0;
 long moneylost_food=0;
+long moneylost_dating=0;
 long moneylost_compound=0;
 long moneylost_hostage=0;
 

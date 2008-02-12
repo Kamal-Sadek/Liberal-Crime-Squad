@@ -89,6 +89,7 @@ extern long moneygained_brownies;
 extern long moneygained_goods;
 extern long moneygained_ccfraud;
 extern long moneygained_hustling;
+extern long moneygained_extortion;
 extern long moneygained_thievery;
 extern long moneylost_goods;
 extern long moneylost_trouble;
@@ -97,6 +98,7 @@ extern long moneylost_training;
 extern long moneylost_manufacture;
 extern long moneylost_legal;
 extern long moneylost_food;
+extern long moneylost_dating;
 extern long moneylost_compound;
 extern long moneylost_hostage;
 

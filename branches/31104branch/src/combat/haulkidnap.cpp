@@ -560,7 +560,7 @@ void kidnaptransfer(creaturest &cr)
    }
 
    //Create interrogation data
-   newcr->activity.arg=reinterpret_cast<int>(new interrogation);
+   newcr->activity.arg=reinterpret_cast<long>(new interrogation);
 
    erase();
 

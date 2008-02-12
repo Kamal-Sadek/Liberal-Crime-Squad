@@ -596,7 +596,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
          // but backfire with 1x power! So if the LCS is unpopular,
          // people will gravitate away from the causes the LCS fights
          // for.
-         affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f);
+         affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f+0.5f);
       }
 
       // Effpower is then the sum of the rawpower (people who don't know
@@ -621,6 +621,14 @@ void change_public_opinion(int v,int power,char affect,char cap)
       if(effpower>80)effpower=80;
    }
    
+   //Scale the magnitude of the effect based on how much
+   //people are paying attention to the issue
+   effpower=(int)(effpower*(1+(float)public_interest[v]/50));
+
+   //Then affect public interest
+   if(public_interest[v]<cap || (v==VIEW_LIBERALCRIMESQUADPOS && public_interest[v]<100))
+      public_interest[v]+=abs(effpower);
+
    if(effpower>0)
    {
       //Some things will never persuade the last x% of the population.
@@ -633,14 +641,11 @@ void change_public_opinion(int v,int power,char affect,char cap)
       }
    }
 
-   //Scale the magnitude of the effect based on how much
-   //people are paying attention to the issue
-   effpower*=1+(float)public_interest[v]/50;
+   
 
    //Finally, apply the effect.
    attitude[v]+=effpower;
-   if(public_interest[v]<cap)
-      public_interest[v]+=abs(effpower);
+   
    if(attitude[v]<0)attitude[v]=0;
    if(attitude[v]>100)attitude[v]=100;
 }

@@ -336,7 +336,7 @@ char completedate(datest &d,int p,char &clearformess)
          {
             funds-=100;
             stat_spent+=100;
-            moneylost_compound+=100;
+            moneylost_dating+=100;
             aroll+=LCSrandom(10);
             test=1;
          }
@@ -629,7 +629,7 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->armor.type = ARMOR_CLOTHES;
 
                //Create interrogation data
-               d.date[e]->activity.arg=reinterpret_cast<int>(new interrogation);
+               d.date[e]->activity.arg=reinterpret_cast<long>(new interrogation);
 
                erase();
 

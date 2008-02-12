@@ -83,6 +83,41 @@ void initsite(locationst &loc)
 
    levelmap[MAPX>>1][2][0].flag=SITEBLOCK_DOOR;
 
+   //ADD RESTRICTIONS
+   char restricted=0;
+   switch(loc.type)
+   {
+      case SITE_INDUSTRY_SWEATSHOP:
+      case SITE_INDUSTRY_POLLUTER:
+      case SITE_INDUSTRY_NUCLEAR:
+      case SITE_GOVERNMENT_INTELLIGENCEHQ:
+      case SITE_CORPORATE_HEADQUARTERS:
+      case SITE_CORPORATE_HOUSE:
+         restricted++;
+      case SITE_LABORATORY_COSMETICS:
+      case SITE_LABORATORY_GENETIC:
+      case SITE_GOVERNMENT_POLICESTATION:
+      case SITE_GOVERNMENT_COURTHOUSE:
+      case SITE_GOVERNMENT_PRISON:
+      case SITE_MEDIA_AMRADIO:
+      case SITE_MEDIA_CABLENEWS:
+      case SITE_RESIDENTIAL_APARTMENT:
+      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+      case SITE_RESIDENTIAL_TENEMENT:
+         restricted++;
+         for(x=2;x<MAPX-2;x++)
+         {
+            for(int y=2;y<MAPY-2;y++)
+            {
+               for(int z=0;z<MAPZ;z++)
+               {
+                  levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
+               }
+            }
+         }
+         break;
+   }
+
    if(loc.type==SITE_RESIDENTIAL_APARTMENT_UPSCALE||
       loc.type==SITE_RESIDENTIAL_APARTMENT||
       loc.type==SITE_RESIDENTIAL_TENEMENT)
@@ -99,11 +134,13 @@ void initsite(locationst &loc)
             if(y%4==0)
             {
                height=y+LCSrandom(3)-1;
-               levelmap[(MAPX>>1)-1][height][z].flag=SITEBLOCK_DOOR;
+               levelmap[(MAPX>>1)-1][height][z].flag&=~SITEBLOCK_BLOCK;
+               levelmap[(MAPX>>1)-1][height][z].flag|=SITEBLOCK_DOOR;
                generateroom((MAPX>>1)-8,y-1,7,3,z);
 
                height=y+LCSrandom(3)-1;
-               levelmap[(MAPX>>1)+1][height][z].flag=SITEBLOCK_DOOR;
+               levelmap[(MAPX>>1)+1][height][z].flag&=~SITEBLOCK_BLOCK;
+               levelmap[(MAPX>>1)+1][height][z].flag|=SITEBLOCK_DOOR;
                generateroom((MAPX>>1)+2,y-1,7,3,z);
                if(y==4&&z==0)
                {
@@ -262,40 +299,10 @@ void initsite(locationst &loc)
       }
    }
 
-   //ADD RESTRICTIONS
-   char restricted=0;
-   switch(loc.type)
-   {
-      case SITE_INDUSTRY_SWEATSHOP:
-      case SITE_INDUSTRY_POLLUTER:
-      case SITE_INDUSTRY_NUCLEAR:
-         restricted++;
-      case SITE_LABORATORY_COSMETICS:
-      case SITE_LABORATORY_GENETIC:
-      case SITE_GOVERNMENT_POLICESTATION:
-      case SITE_GOVERNMENT_COURTHOUSE:
-      case SITE_GOVERNMENT_PRISON:
-      case SITE_GOVERNMENT_INTELLIGENCEHQ:
-      case SITE_CORPORATE_HEADQUARTERS:
-      case SITE_MEDIA_AMRADIO:
-      case SITE_MEDIA_CABLENEWS:
-         restricted++;
-         for(x=2;x<MAPX-2;x++)
-         {
-            for(int y=2;y<MAPY-2;y++)
-            {
-               for(int z=0;z<MAPZ;z++)
-               {
-                  levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
-               }
-            }
-         }
-         break;
-   }
-
-   //NOW CLEAR FIRST FLOOR RESTRICTIONS NEAR TO DOOR
+   //CLEAR FIRST FLOOR RESTRICTIONS NEAR TO DOOR
    char acted;
    if(restricted<2)levelmap[MAPX>>1][2][0].flag&=~SITEBLOCK_RESTRICTED;
+   //Clear out restrictions
    do
    {
       acted=0;
@@ -304,51 +311,54 @@ void initsite(locationst &loc)
       {
          for(int y=2;y<MAPY-2;y++)
          {
-            //Un-restrict blocks if they have neighboring
-            //restricted blocks
-            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
-               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED))
+            for(int z=0;z<MAPZ;z++)
             {
-               if(!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED))
+               //Un-restrict blocks if they have neighboring
+               //restricted blocks
+               if(!(levelmap[x][y][z].flag & SITEBLOCK_DOOR)&&
+                  !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
+                  (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
                {
-                  levelmap[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
-                  acted=1;
-                  continue;
+                  if(!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED))
+                  {
+                     levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
+                     acted=1;
+                     continue;
+                  }
                }
-            }
-            //Un-restrict and unlock doors if they lead between two
-            //unrestricted sections. If they lead between one
-            //unrestricted section and a restricted section, lock
-            //them instead.
-            else if((levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
-               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
-               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED))
-            {
-               //Unrestricted on two opposite sides?
-               if((!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)&&
-                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED))||
-                  (!(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)&&
-                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED)))
+               //Un-restrict and unlock doors if they lead between two
+               //unrestricted sections. If they lead between one
+               //unrestricted section and a restricted section, lock
+               //them instead.
+               else if((levelmap[x][y][z].flag & SITEBLOCK_DOOR)&&
+                  !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
+                  (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
                {
-                  levelmap[x][y][0].flag&=~SITEBLOCK_LOCKED;
-                  levelmap[x][y][0].flag&=~SITEBLOCK_RESTRICTED;
-                  acted=1;
-                  continue;
-               }
-               //Unrestricted on at least one side and I'm not locked?
-               else if((!(levelmap[x-1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x+1][y][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x][y-1][0].flag & SITEBLOCK_RESTRICTED)||
-                  !(levelmap[x][y+1][0].flag & SITEBLOCK_RESTRICTED))&&
-                  !(levelmap[x][y][0].flag & SITEBLOCK_LOCKED))
-               {
-                  levelmap[x][y][0].flag|=SITEBLOCK_LOCKED;
-                  acted=1;
-                  continue;
+                  //Unrestricted on two opposite sides?
+                  if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED))||
+                     (!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED)))
+                  {
+                     levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
+                     levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
+                     acted=1;
+                     continue;
+                  }
+                  //Unrestricted on at least one side and I'm not locked?
+                  else if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED))&&
+                     !(levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
+                  {
+                     levelmap[x][y][z].flag|=SITEBLOCK_LOCKED;
+                     acted=1;
+                     continue;
+                  }
                }
             }
          }
@@ -401,12 +411,18 @@ void initsite(locationst &loc)
             {
                levelmap[x][y][z].special=SPECIAL_LAB_GENETIC_CAGEDANIMALS;
             }
-            if(levelmap[x][y][0].flag==0&&
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
                loc.type==SITE_INDUSTRY_SWEATSHOP&&!LCSrandom(10))
             {
                levelmap[x][y][z].special=SPECIAL_SWEATSHOP_EQUIPMENT;
             }
-            if(levelmap[x][y][0].flag==0&&
+            if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+               !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+               (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
                loc.type==SITE_INDUSTRY_POLLUTER&&!LCSrandom(10))
             {
                levelmap[x][y][z].special=SPECIAL_POLLUTER_EQUIPMENT;
@@ -509,7 +525,7 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       for(int y=ry;y<ry+dy;y++)
       {
-         levelmap[x][y][z].flag=0;
+         levelmap[x][y][z].flag&=~SITEBLOCK_BLOCK;
       }
    }
 
@@ -522,9 +538,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       int wx=rx+LCSrandom(dx-2)+1;
 
-      for(int wy=0;wy<dy;wy++)levelmap[wx][ry+wy][z].flag=SITEBLOCK_BLOCK;
+      for(int wy=0;wy<dy;wy++)levelmap[wx][ry+wy][z].flag|=SITEBLOCK_BLOCK;
       int rny=LCSrandom(dy);
-      levelmap[wx][ry+rny][z].flag=SITEBLOCK_DOOR;
+      levelmap[wx][ry+rny][z].flag&=~SITEBLOCK_BLOCK;
+      levelmap[wx][ry+rny][z].flag|=SITEBLOCK_DOOR;
       if(!LCSrandom(3))levelmap[wx][ry+rny][z].flag|=SITEBLOCK_LOCKED;
 
       generateroom(rx,ry,wx-rx,dy,z);
@@ -535,9 +552,10 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
    {
       int wy=ry+LCSrandom(dy-2)+1;
 
-      for(int wx=0;wx<dx;wx++)levelmap[rx+wx][wy][z].flag=SITEBLOCK_BLOCK;
+      for(int wx=0;wx<dx;wx++)levelmap[rx+wx][wy][z].flag|=SITEBLOCK_BLOCK;
       int rnx=LCSrandom(dx);
-      levelmap[rx+rnx][wy][z].flag=SITEBLOCK_DOOR;
+      levelmap[wx+rnx][ry][z].flag&=~SITEBLOCK_BLOCK;
+      levelmap[wx+rnx][ry][z].flag|=SITEBLOCK_DOOR;
       if(!LCSrandom(3))levelmap[rx+rnx][wy][z].flag|=SITEBLOCK_LOCKED;
 
       generateroom(rx,ry,dx,wy-ry,z);

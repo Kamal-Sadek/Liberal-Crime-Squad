@@ -548,6 +548,25 @@ void fundreport(char &clearformess)
          totalmoney+=moneygained_hustling;
       }
 
+      //HUSTLING
+      if(moneygained_extortion>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Extortion . . . . . . . . . . . . . . . . . . . . . . . . .");
+
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneygained_extortion,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney+=moneygained_extortion;
+      }
+
       //THIEVERY
       if(moneygained_thievery>0)
       {
@@ -659,7 +678,7 @@ void fundreport(char &clearformess)
 
          y++;
 
-         totalmoney-=moneylost_rent;
+         totalmoney-=moneylost_training;
       }
 
       //MANUFACTURE
@@ -717,6 +736,25 @@ void fundreport(char &clearformess)
          y++;
 
          totalmoney-=moneylost_food;
+      }
+
+      //Dating
+      if(moneylost_dating>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Dating. . . . . . . . . . . . . . . . . . . . . . . . . . .");
+
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneylost_dating,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney-=moneylost_dating;
       }
 
       //COMPOUND
@@ -785,6 +823,7 @@ void fundreport(char &clearformess)
       moneygained_goods=0;
       moneygained_ccfraud=0;
       moneygained_hustling=0;
+      moneygained_extortion=0;
       moneygained_thievery=0;
       moneylost_goods=0;
       moneylost_trouble=0;
@@ -793,6 +832,7 @@ void fundreport(char &clearformess)
       moneylost_training=0;
       moneylost_legal=0;
       moneylost_food=0;
+      moneylost_dating=0;
       moneylost_compound=0;
       moneylost_hostage=0;
    }

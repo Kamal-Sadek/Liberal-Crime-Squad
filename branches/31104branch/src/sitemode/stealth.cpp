@@ -608,6 +608,10 @@ char hasdisguise(creaturest &cr,short type)
             }
             else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
+         case SITE_RESIDENTIAL_TENEMENT:
+         case SITE_RESIDENTIAL_APARTMENT:
+         case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)break;
          default:
             if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;

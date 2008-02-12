@@ -1696,18 +1696,20 @@ void mode_site(void)
                         //MORE WAVES WILL ATTACK
                            //AND IT GETS WORSE AND WORSE
                location[cursite]->siege.attacktime++;
-               if((!(postalarmtimer % 100) || location[cursite]->siege.attacktime>=100+LCSrandom(10))&&
+               if(!(postalarmtimer % 100) || (location[cursite]->siege.attacktime>=100+LCSrandom(10)&&
                   (locz!=0||locx<(MAPX/2-3)||locx>(MAPX/2+3)||
-                  locy>5))
+                  locy>5)))
                {
                   location[cursite]->siege.attacktime=0;
 
                   //PLACE UNITS
                   int lx,ly,lz;
                   int unitnum=5;
+                  if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION)unitnum=20;
                   int count=10000;
                   for(int t=0;t<unitnum;t++)
                   {
+                     count=10000;
                      do
                      {
                         lx=LCSrandom(7)+(MAPX/2)-3;

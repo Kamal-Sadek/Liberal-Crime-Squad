@@ -1225,14 +1225,14 @@ void funds_and_trouble(char &clearformess)
             strcat(msg,", netting $");
             char num[20];
 
-            long fundgain=1000;
-            for(int i=0;i<9 && LCSrandom(ddos_skill/4);i++)
+            long fundgain=500;
+            for(int i=0;i<19 && LCSrandom(ddos_skill/2);i++)
             {
-               fundgain+=1000;
+               fundgain+=500;
             }
             funds+=fundgain;
             stat_funds+=fundgain;
-            moneygained_ccfraud+=fundgain;
+            moneygained_extortion+=fundgain;
             itoa(fundgain,num,10);
             strcat(msg,num);
             strcat(msg,".");
@@ -1996,18 +1996,24 @@ void funds_and_trouble(char &clearformess)
                   funds>cost&&
                   pool[p]->skill[skillarray[i]]<maxskill(skillarray[i],*pool[p]))
                {
-                  pool[p]->skill_ip[skillarray[i]]+=(teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]])*
+                  int teach=(teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]])*
                                                     (teachers[t]->skill[SKILL_TEACHING]+1);
-                  students++;
-                  funds-=cost;
+                  if(teach>10)teach=10;
+                  pool[p]->skill_ip[skillarray[i]]+=teach;
+
+                  if(students<10)
+                  {
+                     students++;
+                     funds-=cost;
+                     moneylost_training+=cost;
+                     if(students==10)cost=0;
+                  }
                   if(pool[p]->heat>teachers[t]->heat)
                   {
                      teachers[t]->heat++;
                      if(teachers[t]->lawflag[LAWFLAG_RACKETEERING]==0)
                         teachers[t]->lawflag[LAWFLAG_RACKETEERING]=1;
                   }
-                  moneylost_training+=cost;
-                  if(students==10)cost=0;
                }
             }
          }
