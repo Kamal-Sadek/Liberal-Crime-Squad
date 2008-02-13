@@ -1996,8 +1996,8 @@ void funds_and_trouble(char &clearformess)
                   funds>cost&&
                   pool[p]->skill[skillarray[i]]<maxskill(skillarray[i],*pool[p]))
                {
-                  int teach=(teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]])*
-                                                    (teachers[t]->skill[SKILL_TEACHING]+1);
+                  int teach=teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]]+
+                                                    teachers[t]->skill[SKILL_TEACHING];
                   if(teach>10)teach=10;
                   pool[p]->skill_ip[skillarray[i]]+=teach;
 

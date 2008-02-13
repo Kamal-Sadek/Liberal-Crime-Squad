@@ -218,8 +218,9 @@ void trial(creaturest &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("selling drugs");
+         addstr("distribution of a controlled substance");
          breaker[LAWFLAG_BROWNIES]=0;
+         x=2;
       }
       else if(breaker[LAWFLAG_ESCAPED])
       {

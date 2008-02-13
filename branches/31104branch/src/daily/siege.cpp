@@ -1720,7 +1720,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_BROWNIES])
    {
       move(4,1);
-      addstr("You are wanted for selling drugs");
+      addstr("You are wanted for drug dealing");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

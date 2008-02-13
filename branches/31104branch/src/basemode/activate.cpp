@@ -421,7 +421,7 @@ void activate(creaturest *cr)
             addstr(cr->name);
             addstr(" will bake and sell special adult brownies that open");
             move(23,1);
-            addstr("magical shimmering portals to the adamantium pits.");
+            addstr("magical shimmering doorways to the adamantium pits.");
             break;
          case '2':
             move(22,3);

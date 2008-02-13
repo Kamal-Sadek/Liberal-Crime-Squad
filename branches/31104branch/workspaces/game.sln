@@ -6,11 +6,16 @@ EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
+		debug2 = debug2
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{CA438C67-7A74-4797-BC09-8C866F965240}.Debug.ActiveCfg = Debug|Win32
 		{CA438C67-7A74-4797-BC09-8C866F965240}.Debug.Build.0 = Debug|Win32
+		{CA438C67-7A74-4797-BC09-8C866F965240}.debug2.ActiveCfg = debug2|Win32
+		{CA438C67-7A74-4797-BC09-8C866F965240}.debug2.Build.0 = debug2|Win32
 		{CA438C67-7A74-4797-BC09-8C866F965240}.Release.ActiveCfg = Release|Win32
 		{CA438C67-7A74-4797-BC09-8C866F965240}.Release.Build.0 = Release|Win32
 	EndGlobalSection
