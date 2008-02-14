@@ -544,9 +544,9 @@ void siegeturn(char clearformess)
       {
          //locations not under siege eat
          int eat=numbereating(l);
-         int price=(int)(eat*((10-gourmet[l])/10.0f)+0.5f);
+         int price=(int)(3*eat*((10-gourmet[l])/10.0f)+0.5f);
          if(price<0)price=0;
-         if(funds>price)
+         if(funds>=price)
          {
             funds-=price;
             moneylost_food+=price;

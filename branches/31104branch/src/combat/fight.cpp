@@ -653,15 +653,22 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
    if(a.weapon.type!=WEAPON_NONE)
    {
-      strcat(str,"with a ");
+      strcat(str," with a ");
       getweaponfull(str2,a.weapon.type,1);
       strcat(str,str2);
-      strcat(str," and ");
+      //strcat(str," and ");
    }
    else
    {
-      strcat(str,"and ");
+      //strcat(str,"and ");
    }
+   strcat(str,"!");
+   addstr(str);
+
+   refresh();
+   getch();
+
+   strcpy(str,a.name);
 
    //BASIC ROLL
    int aroll=LCSrandom(20)+1;
@@ -757,7 +764,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    //HIT!
    if(aroll+bonus>droll)
    {
-      strcat(str,"hits the ");
+      strcat(str," hits the ");
       int w;
       
       do
@@ -1100,7 +1107,37 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
       if(damamount>0)
       {
-         t.wound[w]|=damtype;
+         creaturest *target=0;
+         if(t.squadid!=-1&&t.hireid==-1&& //if the founder is hit...
+            (damamount>t.blood||damamount>=10)&& //and lethal or potentially crippling damage is done...
+            (w==BODYPART_HEAD||w==BODYPART_BODY)&& //to a critical bodypart...
+            LCSrandom(200)<t.juice) //and the founder gets lucky...
+         {
+            //Oh Noes!!!! Find a liberal to jump in front of the bullet!!!
+            for(int i=0;i<6;i++)
+            {
+               if(activesquad->squad[i]==&t)break;
+               if(activesquad->squad[i]->attval(ATTRIBUTE_HEART)>10&&
+                  activesquad->squad[i]->attval(ATTRIBUTE_AGILITY)>6)
+               {
+                  target=activesquad->squad[i];
+                  
+                  clearmessagearea();
+                  move(16,1);
+                  addstr(target->name);
+                  addstr(" JUMPS IN FRONT OF THE ATTACK!");
+                  
+                  addjuice(*target,10);//Instant juice!!
+                  
+                  refresh();
+                  getch();
+                  break;
+               }
+            }
+         }
+         if(!target)target=&t;//If nobody jumps in front of the attack, 
+
+         target->wound[w]|=damtype;
 
          int severamount=100;
 
@@ -1116,49 +1153,49 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
          if(severtype!=-1 && damamount>=severamount)
          {
-            t.wound[w]|=(char)severtype;
+            target->wound[w]|=(char)severtype;
          }
 
          if(w!=BODYPART_HEAD && w!=BODYPART_BODY && t.blood-damamount<=0 &&
-            t.blood>0)
+            target->blood>0)
          {
             do
             {
                damamount>>=1;
-            }while(t.blood-damamount<=0);
+            }while(target->blood-damamount<=0);
          }
 
-         if(damagearmor)armordamage(t.armor,w);
+         if(damagearmor)armordamage(target->armor,w);
 
-         t.blood-=damamount;
+         target->blood-=damamount;
 
          levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
-         if((t.wound[BODYPART_HEAD] & WOUND_CLEANOFF)||
-            (t.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
-            (t.wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
-            (t.wound[BODYPART_BODY] & WOUND_NASTYOFF)||
-            t.blood<=0)
+         if((target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)||
+            (target->wound[BODYPART_BODY] & WOUND_CLEANOFF)||
+            (target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
+            (target->wound[BODYPART_BODY] & WOUND_NASTYOFF)||
+            target->blood<=0)
          {
-            if((t.wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
-               (t.wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(t.armor);
+            if((target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
+               (target->wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(target->armor);
 
-            char alreadydead=!t.alive;
+            char alreadydead=!target->alive;
             
             if(!alreadydead)
             {
-               t.blood=0;
-               t.alive=0;
-               if(t.squadid!=-1)
+               target->blood=0;
+               target->alive=0;
+               if(target->squadid!=-1)
                {
-                  if(t.align==1)stat_dead++;
+                  if(target->align==1)stat_dead++;
                }
-               else if(t.align==-1&&t.animalgloss!=ANIMALGLOSS_ANIMAL)
+               else if(target->align==-1&&t.animalgloss!=ANIMALGLOSS_ANIMAL)
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
                }
-               if(t.squadid==-1)
+               if(target->squadid==-1)
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -1166,10 +1203,10 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                }
             }
 
-            if(t.wound[BODYPART_HEAD] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
-            else if(t.wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
-            else if(t.wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
-            else if(t.wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
+            if(target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
+            else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
+            else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
+            else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
             else strcat(str,".");
             move(17,1);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1183,12 +1220,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                severloot(t,groundloot);
 
                clearmessagearea();
-               adddeathmessage(t);
+               adddeathmessage(*target);
 
                refresh();
                getch();
 
-               if(t.prisoner!=NULL)
+               if(target->prisoner!=NULL)
                {
                   freehostage(t,1);
                }
@@ -1196,14 +1233,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          }
          else
          {
-            if(t.wound[w] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
-            else if(t.wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
+            if(target->wound[w] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
+            else if(target->wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
             else strcat(str,".");
+            
             move(17,1);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
 
-            if(t.wound[w] & WOUND_NASTYOFF)bloodblast(t.armor);
+            if(target->wound[w] & WOUND_NASTYOFF)bloodblast(target->armor);
 
             printparty();
             if(mode==GAMEMODE_CHASECAR||
@@ -1214,14 +1252,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             getch();
 
             //SPECIAL WOUNDS
-            if(!(t.wound[w] & WOUND_CLEANOFF)&&
-               !(t.wound[w] & WOUND_NASTYOFF)&&
-               !t.animalgloss)
+            if(!(target->wound[w] & (WOUND_CLEANOFF|WOUND_NASTYOFF))&&
+               !target->animalgloss)
             {
                char heavydam=0;
                char breakdam=0;
                char pokedam=0;
-               if(damamount>=18) //JDS -- 3x damage needed
+               if(damamount>=12) //JDS -- 2x damage needed
                {
                   if(damtype & WOUND_SHOT)heavydam=1;
                   if(damtype & WOUND_BURNED)heavydam=1;
@@ -1229,7 +1266,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   if(damtype & WOUND_CUT)heavydam=1;
                }
 
-               if(damamount>=15) //JDS -- 3x damage needed
+               if(damamount>=10) //JDS -- 2x damage needed
                {
                   if(damtype & WOUND_SHOT)pokedam=1;
                   if(damtype & WOUND_TORN)pokedam=1;
@@ -1249,13 +1286,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   switch(LCSrandom(7))
                   {
                      case 0:
-                        if((t.special[SPECIALWOUND_RIGHTEYE]||
-                           t.special[SPECIALWOUND_LEFTEYE]||
-                           t.special[SPECIALWOUND_NOSE])&&
+                        if((target->special[SPECIALWOUND_RIGHTEYE]||
+                           target->special[SPECIALWOUND_LEFTEYE]||
+                           target->special[SPECIALWOUND_NOSE])&&
                            heavydam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s face is blasted off!");
                            else if(damtype & WOUND_BURNED)addstr("'s face is burned away!");
                            else if(damtype & WOUND_TORN)addstr("'s face is torn off!");
@@ -1264,17 +1301,17 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_RIGHTEYE]=0;
-                           t.special[SPECIALWOUND_LEFTEYE]=0;
-                           t.special[SPECIALWOUND_NOSE]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_RIGHTEYE]=0;
+                           target->special[SPECIALWOUND_LEFTEYE]=0;
+                           target->special[SPECIALWOUND_NOSE]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                      case 1:
-                        if(t.special[SPECIALWOUND_TEETH]>0)
+                        if(target->special[SPECIALWOUND_TEETH]>0)
                         {
                            int teethminus=LCSrandom(TOOTHNUM)+1;
-                           if(teethminus>t.special[SPECIALWOUND_TEETH])teethminus=t.special[SPECIALWOUND_TEETH];
+                           if(teethminus>target->special[SPECIALWOUND_TEETH])teethminus=target->special[SPECIALWOUND_TEETH];
                            char num[20];
                            itoa(teethminus,num,10);
 
@@ -1283,18 +1320,18 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            {
                               addstr(num);
                               addstr(" of ");
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s teeth are ");
                            }
-                           else if(t.special[SPECIALWOUND_TEETH]>1)
+                           else if(target->special[SPECIALWOUND_TEETH]>1)
                            {
                               addstr("One of ");
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s teeth is ");
                            }
                            else
                            {
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s last tooth is ");
                            }
 
@@ -1306,15 +1343,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_TEETH]-=teethminus;
+                           target->special[SPECIALWOUND_TEETH]-=teethminus;
                         }
                         break;
                      case 2:
-                        if(t.special[SPECIALWOUND_RIGHTEYE]&&
+                        if(target->special[SPECIALWOUND_RIGHTEYE]&&
                            heavydam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s right eye is blasted out!");
                            else if(damtype & WOUND_BURNED)addstr("'s right eye is burned away!");
                            else if(damtype & WOUND_TORN)addstr("'s right eye is torn out!");
@@ -1323,15 +1360,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_RIGHTEYE]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_RIGHTEYE]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 3:
-                        if(t.special[SPECIALWOUND_LEFTEYE]&&heavydam)
+                        if(target->special[SPECIALWOUND_LEFTEYE]&&heavydam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s left eye is blasted out!");
                            else if(damtype & WOUND_BURNED)addstr("'s left eye is burned away!");
                            else if(damtype & WOUND_TORN)addstr("'s left eye is torn out!");
@@ -1340,15 +1377,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_LEFTEYE]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_LEFTEYE]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 4:
-                        if(t.special[SPECIALWOUND_TONGUE]&&heavydam)
+                        if(target->special[SPECIALWOUND_TONGUE]&&heavydam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s tongue is blasted off!");
                            else if(damtype & WOUND_BURNED)addstr("'s tongue is burned away!");
                            else if(damtype & WOUND_TORN)addstr("'s tongue is torn out!");
@@ -1357,16 +1394,16 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_TONGUE]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_TONGUE]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 5:
-                        if(t.special[SPECIALWOUND_NOSE]&&
+                        if(target->special[SPECIALWOUND_NOSE]&&
                            heavydam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s nose is blasted off!");
                            else if(damtype & WOUND_BURNED)addstr("'s nose is burned away!");
                            else if(damtype & WOUND_TORN)addstr("'s nose is torn off!");
@@ -1375,23 +1412,23 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_NOSE]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_NOSE]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 6:
-                        if(t.special[SPECIALWOUND_NECK]&&
+                        if(target->special[SPECIALWOUND_NECK]&&
                            breakdam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s neck bones are shattered!");
                            else addstr("'s neck is broken!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_NECK]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_NECK]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                   }
@@ -1404,169 +1441,169 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   switch(LCSrandom(11))
                   {
                      case 0:
-                        if(t.special[SPECIALWOUND_UPPERSPINE]&&
+                        if(target->special[SPECIALWOUND_UPPERSPINE]&&
                            breakdam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s upper spine is shattered!");
                            else addstr("'s upper spine is broken!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_UPPERSPINE]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_UPPERSPINE]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                      case 1:
-                        if(t.special[SPECIALWOUND_LOWERSPINE]&&
+                        if(target->special[SPECIALWOUND_LOWERSPINE]&&
                            breakdam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s lower spine is shattered!");
                            else addstr("'s lower spine is broken!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_LOWERSPINE]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_LOWERSPINE]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                      case 2:
-                        if(t.special[SPECIALWOUND_RIGHTLUNG]&&
+                        if(target->special[SPECIALWOUND_RIGHTLUNG]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s right lung is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s right lung is torn!");
                            else addstr("'s right lung is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_RIGHTLUNG]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_RIGHTLUNG]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                      case 3:
-                        if(t.special[SPECIALWOUND_LEFTLUNG]&&
+                        if(target->special[SPECIALWOUND_LEFTLUNG]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s left lung is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s left lung is torn!");
                            else addstr("'s left lung is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_LEFTLUNG]=0;
-                           if(t.blood>20)t.blood=20;
+                           target->special[SPECIALWOUND_LEFTLUNG]=0;
+                           if(target->blood>20)target->blood=20;
                         }
                         break;
                      case 4:
-                        if(t.special[SPECIALWOUND_HEART]&&
+                        if(target->special[SPECIALWOUND_HEART]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s heart is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s heart is torn!");
                            else addstr("'s heart is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_HEART]=0;
-                           if(t.blood>3)t.blood=3;
+                           target->special[SPECIALWOUND_HEART]=0;
+                           if(target->blood>3)target->blood=3;
                         }
                         break;
                      case 5:
-                        if(t.special[SPECIALWOUND_LIVER]&&
+                        if(target->special[SPECIALWOUND_LIVER]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s liver is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s liver is torn!");
                            else addstr("'s liver is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_LIVER]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_LIVER]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 6:
-                        if(t.special[SPECIALWOUND_STOMACH]&&
+                        if(target->special[SPECIALWOUND_STOMACH]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s stomach is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s stomach is torn!");
                            else addstr("'s stomach is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_STOMACH]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_STOMACH]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 7:
-                        if(t.special[SPECIALWOUND_RIGHTKIDNEY]&&
+                        if(target->special[SPECIALWOUND_RIGHTKIDNEY]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s right kidney is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s right kidney is torn!");
                            else addstr("'s right kidney is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_RIGHTKIDNEY]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_RIGHTKIDNEY]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 8:
-                        if(t.special[SPECIALWOUND_LEFTKIDNEY]&&
+                        if(target->special[SPECIALWOUND_LEFTKIDNEY]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s left kidney is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s left kidney is torn!");
                            else addstr("'s left kidney is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_LEFTKIDNEY]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_LEFTKIDNEY]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 9:
-                        if(t.special[SPECIALWOUND_SPLEEN]&&
+                        if(target->special[SPECIALWOUND_SPLEEN]&&
                            pokedam)
                         {
                            move(16,1);
-                           addstr(t.name);
+                           addstr(target->name);
                            if(damtype & WOUND_SHOT)addstr("'s spleen is blasted!");
                            else if(damtype & WOUND_TORN)addstr("'s spleen is torn!");
                            else addstr("'s spleen is punctured!");
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_SPLEEN]=0;
-                           if(t.blood>50)t.blood=50;
+                           target->special[SPECIALWOUND_SPLEEN]=0;
+                           if(target->blood>50)target->blood=50;
                         }
                         break;
                      case 10:
-                        if(t.special[SPECIALWOUND_RIBS]>0&&
+                        if(target->special[SPECIALWOUND_RIBS]>0&&
                            breakdam)
                         {
                            int ribminus=LCSrandom(RIBNUM)+1;
-                           if(ribminus>t.special[SPECIALWOUND_RIBS])ribminus=t.special[SPECIALWOUND_RIBS];
+                           if(ribminus>target->special[SPECIALWOUND_RIBS])ribminus=target->special[SPECIALWOUND_RIBS];
                            char num[20];
                            itoa(ribminus,num,10);
 
@@ -1575,18 +1612,18 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            {
                               addstr(num);
                               addstr(" of ");
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s ribs are ");
                            }
-                           else if(t.special[SPECIALWOUND_RIBS]>1)
+                           else if(target->special[SPECIALWOUND_RIBS]>1)
                            {
                               addstr("One of ");
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s rib is ");
                            }
                            else
                            {
-                              addstr(t.name);
+                              addstr(target->name);
                               addstr("'s last unbroken rib is ");
                            }
 
@@ -1595,13 +1632,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            refresh();
                            getch();
 
-                           t.special[SPECIALWOUND_RIBS]-=ribminus;
+                           target->special[SPECIALWOUND_RIBS]-=ribminus;
                         }
                         break;
                   }
                }
 
-               severloot(t,groundloot);
+               severloot(*target,groundloot);
             }
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);            
@@ -1624,7 +1661,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
    else
    {
-      strcat(str,"misses.");
+      strcat(str," misses.");
       move(17,1);
       addstr(str);
 

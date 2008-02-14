@@ -251,22 +251,22 @@ void initsite(locationst &loc)
                else if(!(block&BIT1))
                {
                   if(y<MAPY-1)levelmap[x][y+1][z].flag&=~SITEBLOCK_BLOCK;
-                  else levelmap[x][y+1][z].flag=SITEBLOCK_BLOCK;
+                  else levelmap[x][y+1][z].flag|=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT4))
                {
                   if(y>0)levelmap[x][y-1][z].flag&=~SITEBLOCK_BLOCK;
-                  else levelmap[x][y-1][z].flag=SITEBLOCK_BLOCK;
+                  else levelmap[x][y-1][z].flag|=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT2))
                {
                   if(x<MAPX-1)levelmap[x+1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  else levelmap[x+1][y][z].flag=SITEBLOCK_BLOCK;
+                  else levelmap[x+1][y][z].flag|=SITEBLOCK_BLOCK;
                }
                else if(!(block&BIT3))
                {
                   if(x>0)levelmap[x-1][y][z].flag&=~SITEBLOCK_BLOCK;
-                  else levelmap[x-1][y][z].flag=SITEBLOCK_BLOCK;
+                  else levelmap[x-1][y][z].flag|=SITEBLOCK_BLOCK;
                }
             }
          }
@@ -554,8 +554,8 @@ void generateroom(int rx,int ry,int dx,int dy,int z)
 
       for(int wx=0;wx<dx;wx++)levelmap[rx+wx][wy][z].flag|=SITEBLOCK_BLOCK;
       int rnx=LCSrandom(dx);
-      levelmap[wx+rnx][ry][z].flag&=~SITEBLOCK_BLOCK;
-      levelmap[wx+rnx][ry][z].flag|=SITEBLOCK_DOOR;
+      levelmap[rx+rnx][wy][z].flag&=~SITEBLOCK_BLOCK;
+      levelmap[rx+rnx][wy][z].flag|=SITEBLOCK_DOOR;
       if(!LCSrandom(3))levelmap[rx+rnx][wy][z].flag|=SITEBLOCK_LOCKED;
 
       generateroom(rx,ry,dx,wy-ry,z);
