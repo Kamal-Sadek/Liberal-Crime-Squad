@@ -570,6 +570,9 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
          }
       }
    }
+
+   // Avoid stuff jumping around the next time you equip.
+   consolidateloot(dest);
 }
 
 
@@ -608,7 +611,7 @@ void consolidateloot(vector<itemst *> &loot)
                      loot[l]->loottype!=LOOT_INTHQDISK&&
                      loot[l]->loottype!=LOOT_CORPFILES&&
                      loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
-                     loot[l]->loottype!=LOOT_POLICERECORDS)continue;
+                     loot[l]->loottype!=LOOT_POLICERECORDS)conf=1;
                   break;
                case ITEM_MONEY:
                   conf=1;
