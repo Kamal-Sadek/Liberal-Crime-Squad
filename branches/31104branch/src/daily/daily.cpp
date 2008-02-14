@@ -1573,6 +1573,18 @@ char securityable(int type)
 }
 
 
+// Helper function for initlocation.
+// Checks if a site (typically safehouse) has a unique short name.
+char duplicatelocation(locationst &loc) {
+   for (int l = 0; l < location.size(); l++) {
+      if (location[l] == &loc)
+	 continue;
+
+      if (!strcmp(location[l]->shortname, loc.shortname))
+	 return 1;
+   }
+   return 0;
+}
 
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(locationst &loc)
@@ -1671,55 +1683,57 @@ void initlocation(locationst &loc)
          break;
       case SITE_INDUSTRY_WAREHOUSE:
       {
-         strcpy(loc.name,"Abandoned ");
-         char str[50];
-         lastname(str);
-         strcat(loc.name,str);
-         strcat(loc.name," ");
-
-         switch(LCSrandom(10))
-         {
-            case 0:
-               strcat(loc.name,"Meat Plant");
-               strcpy(loc.shortname,"Meat Plant");
-               break;
-            case 1:
-               strcat(loc.name,"Warehouse");
-               strcpy(loc.shortname,"Warehouse");
-               break;
-            case 2:
-               strcat(loc.name,"Paper Mill");
-               strcpy(loc.shortname,"Paper Mill");
-               break;
-            case 3:
-               strcat(loc.name,"Cement Factory");
-               strcpy(loc.shortname,"Cement");
-               break;
-            case 4:
-               strcat(loc.name,"Fertilizer Plant");
-               strcpy(loc.shortname,"Fertilizer");
-               break;
-            case 5:
-               strcat(loc.name,"Drill Factory");
-               strcpy(loc.shortname,"Drill");
-               break;
-            case 6:
-               strcat(loc.name,"Steel Plant");
-               strcpy(loc.shortname,"Steel");
-               break;
-            case 7:
-               strcat(loc.name,"Packing Plant");
-               strcpy(loc.shortname,"Packing");
-               break;
-            case 8:
-               strcat(loc.name,"Toy Factory");
-               strcpy(loc.shortname,"Toy");
-               break;
-            case 9:
-               strcat(loc.name,"Building Site");
-               strcpy(loc.shortname,"Building");
-               break;
-         }
+         do {
+            strcpy(loc.name,"Abandoned ");
+            char str[50];
+            lastname(str);
+            strcat(loc.name,str);
+            strcat(loc.name," ");
+	      
+	         switch(LCSrandom(10))
+	         {
+	            case 0:
+		      strcat(loc.name,"Meat Plant");
+		      strcpy(loc.shortname,"Meat Plant");
+		      break;
+	            case 1:
+		      strcat(loc.name,"Warehouse");
+		      strcpy(loc.shortname,"Warehouse");
+		      break;
+	            case 2:
+		      strcat(loc.name,"Paper Mill");
+		      strcpy(loc.shortname,"Paper Mill");
+		      break;
+	            case 3:
+		      strcat(loc.name,"Cement Factory");
+		      strcpy(loc.shortname,"Cement");
+		      break;
+	            case 4:
+		      strcat(loc.name,"Fertilizer Plant");
+		      strcpy(loc.shortname,"Fertilizer");
+		      break;
+	            case 5:
+		      strcat(loc.name,"Drill Factory");
+		      strcpy(loc.shortname,"Drill");
+		      break;
+	            case 6:
+		      strcat(loc.name,"Steel Plant");
+		      strcpy(loc.shortname,"Steel");
+		      break;
+	            case 7:
+		      strcat(loc.name,"Packing Plant");
+		      strcpy(loc.shortname,"Packing");
+		      break;
+	            case 8:
+		      strcat(loc.name,"Toy Factory");
+		      strcpy(loc.shortname,"Toy");
+		      break;
+	            case 9:
+		      strcat(loc.name,"Building Site");
+		      strcpy(loc.shortname,"Building");
+		      break;
+	         }
+	      } while (duplicatelocation(loc));
          break;
       }
       case SITE_INDUSTRY_POLLUTER:
@@ -1756,25 +1770,15 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Radio Station");
          break;
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Apartments");
-         strcpy(loc.shortname,str);
-         strcat(loc.shortname," Apts");
-         break;
       case SITE_RESIDENTIAL_APARTMENT:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Apartments");
-         strcpy(loc.shortname,str);
-         strcat(loc.shortname," Apts");
-         break;
       case SITE_RESIDENTIAL_TENEMENT:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Apartments");
-         strcpy(loc.shortname,str);
-         strcat(loc.shortname," Apts");
+	 do {
+	    lastname(str);
+	    strcpy(loc.name,str);
+	    strcat(loc.name," Apartments");
+	    strcpy(loc.shortname,str);
+	    strcat(loc.shortname," Apts");
+	 } while (duplicatelocation(loc));
          break;
       case SITE_HOSPITAL_UNIVERSITY:
          strcpy(loc.name,"The University Hospital");
