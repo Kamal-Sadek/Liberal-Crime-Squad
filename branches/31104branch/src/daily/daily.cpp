@@ -544,7 +544,7 @@ void advanceday(char &clearformess,char canseethings)
             {
                pool[p]->activity.type=ACTIVITY_NONE;
             }
-            else if(location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
+            else if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
             {
                criminalize(*pool[p],LAWFLAG_CARTHEFT);
             }

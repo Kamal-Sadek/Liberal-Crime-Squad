@@ -1110,24 +1110,25 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          creaturest *target=0;
          if(t.squadid!=-1&&t.hireid==-1&& //if the founder is hit...
             (damamount>t.blood||damamount>=10)&& //and lethal or potentially crippling damage is done...
-            (w==BODYPART_HEAD||w==BODYPART_BODY)&& //to a critical bodypart...
-            LCSrandom(200)<t.juice) //and the founder gets lucky...
+            (w==BODYPART_HEAD||w==BODYPART_BODY)) //to a critical bodypart...
          {
             //Oh Noes!!!! Find a liberal to jump in front of the bullet!!!
             for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==&t)break;
-               if(activesquad->squad[i]->attval(ATTRIBUTE_HEART)>10&&
-                  activesquad->squad[i]->attval(ATTRIBUTE_AGILITY)>6)
+               if(activesquad->squad[i]->attval(ATTRIBUTE_HEART)>8&&
+                  activesquad->squad[i]->attval(ATTRIBUTE_AGILITY)>4)
                {
                   target=activesquad->squad[i];
                   
                   clearmessagearea();
                   move(16,1);
                   addstr(target->name);
-                  addstr(" JUMPS IN FRONT OF THE ATTACK!");
+                  addstr(" courageously shields ");
+                  addstr(t.name);
+                  addstr("!");
                   
-                  addjuice(*target,10);//Instant juice!!
+                  addjuice(*target,10);//Instant juice!! Way to take the bullet!!
                   
                   refresh();
                   getch();

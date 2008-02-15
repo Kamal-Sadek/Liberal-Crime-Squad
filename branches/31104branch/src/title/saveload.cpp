@@ -379,7 +379,6 @@ char load(void)
       fread(&moneylost_dating,sizeof(long),1,h);
       fread(&moneylost_compound,sizeof(long),1,h);
       fread(&moneylost_hostage,sizeof(long),1,h);
-
       fread(slogan,sizeof(char),80,h);
       fread(&funds,sizeof(unsigned long),1,h);
       fread(&party_status,sizeof(short),1,h);
