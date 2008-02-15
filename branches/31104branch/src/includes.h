@@ -174,6 +174,14 @@ using namespace std;
  *--------------------------------------------------------------------------*/
 
 
+/* Macro definition */
+#ifndef MAX
+   #define MAX(a,b) (((a)<(b))?(b):(a))
+#endif
+
+#ifndef MIN
+   #define MIN(a,b) (((a)>(b))?(b):(a))
+#endif
 
 
 
@@ -1090,13 +1098,6 @@ struct chaseseqst
    //public:
    void clean(void);
 };
-
-
-
-
-
-
-
 
 struct squadst
 {

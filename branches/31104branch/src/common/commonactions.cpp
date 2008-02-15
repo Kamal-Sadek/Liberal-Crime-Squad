@@ -664,12 +664,12 @@ int lawflagheat(int lawflag)
    case LAWFLAG_TREASON:return 10;
    case LAWFLAG_ESCAPED:return 5;
    case LAWFLAG_HELPESCAPE:return 5;
-   case LAWFLAG_RESIST:return 2;
+   case LAWFLAG_RESIST:return 0;
    case LAWFLAG_BURNFLAG:return 0;
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
    case LAWFLAG_ASSAULT:return 0;
-   case LAWFLAG_CARTHEFT:return 1;
+   case LAWFLAG_CARTHEFT:return 0;
    case LAWFLAG_INFORMATION:return 2;
    case LAWFLAG_COMMERCE:return 2;
    case LAWFLAG_CCFRAUD:return 1;

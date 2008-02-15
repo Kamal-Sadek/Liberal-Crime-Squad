@@ -20,15 +20,56 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+    This file was created by Chris Johnson (grundee@users.sourceforge.net)
+    by copying code from game.cpp.
+    To see descriptions of files and functions, see the list at 
+    the bottom of includes.h in the top src folder.
 */
 
 #include <includes.h>
 #include <externs.h>
 
+// Helper function for equip and moveloot.
+// Prompts for how many items to equip / move.
+long prompt_amount(long min, long max)
+{ 
+   printparty();
+
+   move(8,15);
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   addstr("     How many?          ");
+
+   refresh();
+
+   char str[100];
+
+   keypad(stdscr,FALSE);
+   raw_output(FALSE);
+   echo();
+   curs_set(1);
+   mvgetstr(8,30,str);
+   curs_set(0);
+   noecho();
+   raw_output(TRUE);
+   keypad(stdscr,TRUE);
+
+   int amount;
+   //If no amount entered, assume the maximum
+   //amount is desired
+   if(str[0])
+   {
+      amount = atoi(str);
+      amount = MAX(amount, min);
+      amount = MIN(amount, max);
+   }
+   else
+   {
+      amount = max;
+   }
+   
+
+   return amount;
+}
 
 /* review squad equipment */
 void equip(vector<itemst *> &loot,int loc)
@@ -39,6 +80,7 @@ void equip(vector<itemst *> &loot,int loc)
    if(loc!=-1)consolidateloot(location[loc]->loot);
 
    int page=0;
+   const char *errmsg = NULL;
 
    do
    {
@@ -49,6 +91,14 @@ void equip(vector<itemst *> &loot,int loc)
       addstr("Equip the Squad");
 
       printparty();
+
+      if (errmsg != NULL) {
+         move(8,20);
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         addstr(errmsg);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         errmsg = NULL;
+      }
 
       int x=1,y=10;
       char str[200],str2[200];
@@ -181,8 +231,14 @@ void equip(vector<itemst *> &loot,int loc)
       {
          int slot=c-'a'+page*18;
 
-         if(slot>=0&&slot<loot.size())
-         {
+         if (slot < 0 || slot >= loot.size()) {
+            // Out of range.
+         } else if (loot[slot]->type != ITEM_WEAPON
+                 && loot[slot]->type != ITEM_ARMOR
+                 && loot[slot]->type != ITEM_CLIP) {
+            errmsg = "You can't equip that.";
+            continue;
+         } else {
             move(8,20);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr("Choose a Liberal squad member to receive it.");
@@ -194,27 +250,29 @@ void equip(vector<itemst *> &loot,int loc)
 
             if(c>='1'&&c<='6')
             {
-               if(activesquad->squad[c-'1']!=NULL)
+               creaturest *squaddie = activesquad->squad[c - '1'];
+
+               if(squaddie!=NULL)
                {
                   int armok=2;
-                  if((activesquad->squad[c-'1']->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
-                     (activesquad->squad[c-'1']->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
-                  if((activesquad->squad[c-'1']->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
-                     (activesquad->squad[c-'1']->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
-                  if(activesquad->squad[c-'1']->special[SPECIALWOUND_NECK]!=1)armok=0;
-                  if(activesquad->squad[c-'1']->special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
+                  if((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
+                     (squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
+                  if((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
+                     (squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
+                  if(squaddie->special[SPECIALWOUND_NECK]!=1)armok=0;
+                  if(squaddie->special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
 
                   if(loot[slot]->type==ITEM_WEAPON && armok)
                   {
-                     if(activesquad->squad[c-'1']->weapon.type!=WEAPON_NONE)
+                     if(squaddie->weapon.type!=WEAPON_NONE)
                      {
                         itemst *newloot=new itemst;
                            newloot->type=ITEM_WEAPON;
-                           newloot->weapon=activesquad->squad[c-'1']->weapon;
+                           newloot->weapon=squaddie->weapon;
                         loot.push_back(newloot);
                      }
 
-                     activesquad->squad[c-'1']->weapon=loot[slot]->weapon;
+                     squaddie->weapon=loot[slot]->weapon;
 
                      loot[slot]->number--;
                      if(loot[slot]->number==0)
@@ -226,9 +284,9 @@ void equip(vector<itemst *> &loot,int loc)
                      //DROP ALL CLIPS THAT DON'T WORK
                      for(int cl=0;cl<CLIPNUM;cl++)
                      {
-                        if(cl==ammotype(activesquad->squad[c-'1']->weapon.type))continue;
+                        if(cl==ammotype(squaddie->weapon.type))continue;
 
-                        for(int p2=0;p2<activesquad->squad[c-'1']->clip[cl];p2++)
+                        for(int p2=0;p2<squaddie->clip[cl];p2++)
                         {
                            itemst *newi=new itemst;
                               newi->type=ITEM_CLIP;
@@ -236,22 +294,22 @@ void equip(vector<itemst *> &loot,int loc)
                            loot.push_back(newi);
                         }
 
-                        activesquad->squad[c-'1']->clip[cl]=0;
+                        squaddie->clip[cl]=0;
                      }
 
                      if(page*18>=loot.size()&&page!=0)page--;
                   }
                   else if(loot[slot]->type==ITEM_ARMOR)
                   {
-                     if(activesquad->squad[c-'1']->armor.type!=ARMOR_NONE)
+                     if(squaddie->armor.type!=ARMOR_NONE)
                      {
                         itemst *newloot=new itemst;
                            newloot->type=ITEM_ARMOR;
-                           newloot->armor=activesquad->squad[c-'1']->armor;
+                           newloot->armor=squaddie->armor;
                         loot.push_back(newloot);
                      }
 
-                     activesquad->squad[c-'1']->armor=loot[slot]->armor;
+                     squaddie->armor=loot[slot]->armor;
 
                      loot[slot]->number--;
                      if(loot[slot]->number==0)
@@ -264,12 +322,26 @@ void equip(vector<itemst *> &loot,int loc)
                   }
                   else if(loot[slot]->type==ITEM_CLIP && armok)
                   {
-                     if(ammotype(activesquad->squad[c-'1']->weapon.type)==loot[slot]->cliptype&&
-                        activesquad->squad[c-'1']->clip[ammotype(activesquad->squad[c-'1']->weapon.type)]<9)
-                     {
-                        activesquad->squad[c-'1']->clip[ammotype(activesquad->squad[c-'1']->weapon.type)]++;
+                     short ammo_type = ammotype(squaddie->weapon.type);
+                     int space = 9 - squaddie->clip[ammo_type];
 
-                        loot[slot]->number--;
+                     if (ammo_type != loot[slot]->cliptype) {
+                        errmsg = (ammo_type < 0 ?
+                              "Can't carry ammo without a gun." :
+                              "That ammo doesn't fit.");
+                        continue;
+                     } else if (space < 1) {
+                        errmsg = "Can't carry any more ammo.";
+                        continue;
+                     } else {
+                        int amount = 1;
+                        if (loot[slot]->number > 1)
+                           amount = prompt_amount(0,
+                                 MIN(loot[slot]->number, space));
+
+                        squaddie->clip[ammo_type] += amount;
+                        loot[slot]->number -= amount;
+
                         if(loot[slot]->number==0)
                         {
                            delete loot[slot];
@@ -512,33 +584,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
             else
             {
                if(source[slot]->number>1)
-               {
-                  selected[slot]=1;
-
-                  printparty();
-
-                  move(8,15);
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  addstr("       How many?          ");
-
-                  refresh();
-
-                  char str[100];
-
-                  keypad(stdscr,FALSE);
-                  raw_output(FALSE);
-                  echo();
-                  curs_set(1);
-                  mvgetstr(8,30,str);
-                  curs_set(0);
-                  noecho();
-                  raw_output(TRUE);
-                  keypad(stdscr,TRUE);
-
-                  selected[slot]=atoi(str);
-                  if(selected[slot]<0)selected[slot]=0;
-                  else if(selected[slot]>source[slot]->number)selected[slot]=source[slot]->number;
-               }
+                  selected[slot] = prompt_amount(0, source[slot]->number);
                else selected[slot]=1;
             }
          }

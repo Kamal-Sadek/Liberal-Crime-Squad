@@ -207,7 +207,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       r.level++;
       break;
    default:
-      addstr("chill out.");
+      addstr("finished chilling out. THIS IS A BUG, btw.");
       break;
    }
 
