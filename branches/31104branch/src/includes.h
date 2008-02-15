@@ -30,8 +30,8 @@
 #define PACKAGE_VERSION "3.12.0 Alpha"
 #endif
 
-const unsigned long version=31190;
-const unsigned long lowestloadversion=31190;
+const unsigned long version=31191;
+const unsigned long lowestloadversion=31191;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
