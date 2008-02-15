@@ -30,6 +30,57 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 // Helper function for equip and moveloot.
+// Gets the full title of an item for display, without quantity.
+void get_equip_title(char *str2, itemst* item)
+{
+   switch (item->type)
+   {
+      case ITEM_WEAPON:
+         getweaponfull(str2,item->weapon.type);
+         if(item->weapon.ammo>0)
+         {
+            char num[20];
+            itoa(item->weapon.ammo,num,10);
+            strcat(str2," (");
+            strcat(str2,num);
+            strcat(str2,")");
+         }
+         break;
+
+      case ITEM_ARMOR:
+         getarmorfull(str2,item->armor,0);
+         break;
+
+      case ITEM_CLIP:
+         getclip(str2,item->cliptype);
+         break;
+
+      case ITEM_LOOT:
+         getloot(str2,item->loottype);
+         break;
+
+      case ITEM_MONEY:
+         strcpy(str2,"$");
+         {
+            char num[20];
+            itoa(item->money,num,10);
+            strcat(str2,num);
+         }
+         break;
+
+      default:
+         strcpy(str2, "(BUG #");
+         {
+            char num[20];
+            itoa(item->type,num,10);
+            strcat(str2,num);
+         }
+         strcat(str2, ", report me!)");
+
+   }
+}
+
+// Helper function for equip and moveloot.
 // Prompts for how many items to equip / move.
 long prompt_amount(long min, long max)
 { 
@@ -105,37 +156,8 @@ void equip(vector<itemst *> &loot,int loc)
 
       for(int l=page*18;l<loot.size()&&l<page*18+18;l++)
       {
-         if(loot[l]->type==ITEM_WEAPON)
-         {
-            getweaponfull(str2,loot[l]->weapon.type);
-            if(loot[l]->weapon.ammo>0)
-            {
-               char num[20];
-               itoa(loot[l]->weapon.ammo,num,10);
-               strcat(str2," (");
-               strcat(str2,num);
-               strcat(str2,")");
-            }
-         }
-         if(loot[l]->type==ITEM_ARMOR)
-         {
-            getarmorfull(str2,loot[l]->armor,0);
-         }
-         if(loot[l]->type==ITEM_CLIP)
-         {
-            getclip(str2,loot[l]->cliptype);
-         }
-         if(loot[l]->type==ITEM_LOOT)
-         {
-            getloot(str2,loot[l]->loottype);
-         }
-         if(loot[l]->type==ITEM_MONEY)
-         {
-            strcpy(str2,"$");
-            char num[20];
-            itoa(loot[l]->money,num,10);
-            strcat(str2,num);
-         }
+         get_equip_title(str2, loot[l]);
+
          if(loot[l]->number>1)
          {
             char num[20];
@@ -469,30 +491,9 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         if(source[l]->type==ITEM_WEAPON)
-         {
-            getweaponfull(str2,source[l]->weapon.type);
-            if(source[l]->weapon.ammo>0)
-            {
-               char num[20];
-               itoa(source[l]->weapon.ammo,num,10);
-               strcat(str2," (");
-               strcat(str2,num);
-               strcat(str2,")");
-            }
-         }
-         if(source[l]->type==ITEM_ARMOR)
-         {
-            getarmorfull(str2,source[l]->armor,0);
-         }
-         if(source[l]->type==ITEM_CLIP)
-         {
-            getclip(str2,source[l]->cliptype);
-         }
-         if(source[l]->type==ITEM_LOOT)
-         {
-            getloot(str2,source[l]->loottype);
-         }
+
+         get_equip_title(str2, source[l]);
+
          if(source[l]->number>1)
          {
             char num[20];
