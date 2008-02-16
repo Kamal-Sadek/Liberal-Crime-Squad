@@ -348,6 +348,12 @@ int weaponskill(int weapon)
       case WEAPON_SEMIRIFLE_AR15:
          wsk=SKILL_RIFLE;
          break;
+      case WEAPON_GUITAR:
+         wsk=SKILL_MUSIC;
+         break;
+      case WEAPON_SPRAYCAN:
+         wsk=SKILL_ART;
+         break;
    }
    return wsk;
 }

@@ -383,6 +383,16 @@ void pawnshop(int loc)
          move(10,1);
          addstr("C - Buy a Crowbar              ($20)");
 
+         if(funds>=20)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(10,40);
+         addstr("S - Buy Spray Paint            ($20)");
+
+         if(funds>=200)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(11,1);
+         addstr("G - Buy a Guitar              ($200)");
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(16,40);
          addstr("Enter - Leave");
@@ -803,6 +813,28 @@ void pawnshop(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_WEAPON;
                newi->weapon.type=WEAPON_CROWBAR;
+            activesquad->loot.push_back(newi);
+         }
+         if(c=='s'&&funds>=20)
+         {
+            funds-=20;
+            stat_spent+=20;
+            moneylost_goods+=20;
+
+            itemst *newi=new itemst;
+               newi->type=ITEM_WEAPON;
+               newi->weapon.type=WEAPON_SPRAYCAN;
+            activesquad->loot.push_back(newi);
+         }
+         if(c=='g'&&funds>=200)
+         {
+            funds-=200;
+            stat_spent+=200;
+            moneylost_goods+=200;
+
+            itemst *newi=new itemst;
+               newi->type=ITEM_WEAPON;
+               newi->weapon.type=WEAPON_GUITAR;
             activesquad->loot.push_back(newi);
          }
          if(c==10)in_tools=0;
@@ -1798,11 +1830,13 @@ unsigned long fencevalue(itemst &it)
             case WEAPON_CROSS:fenceamount=100;break;
             case WEAPON_STAFF:fenceamount=100;break;
             case WEAPON_SWORD:fenceamount=100;break;
+            case WEAPON_GUITAR:fenceamount=100;break;
             case WEAPON_CHAIN:fenceamount=10;break;
             case WEAPON_NIGHTSTICK:fenceamount=20;break;
             case WEAPON_GAVEL:fenceamount=20;break;
             case WEAPON_PITCHFORK:fenceamount=20;break;
             case WEAPON_TORCH:fenceamount=2;break;
+            case WEAPON_SPRAYCAN:fenceamount=2;break;
          }
          break;
       case ITEM_ARMOR:

@@ -465,6 +465,8 @@ enum Weapons
    WEAPON_STAFF,
    WEAPON_PITCHFORK,
    WEAPON_TORCH,
+   WEAPON_GUITAR,
+   WEAPON_SPRAYCAN,
    WEAPONNUM
 };
 
@@ -898,6 +900,7 @@ struct creaturest
 #define SITEBLOCK_GRASSY BIT12
 #define SITEBLOCK_OUTDOOR BIT13
 #define SITEBLOCK_DEBRIS BIT14
+#define SITEBLOCK_GRAFFITI BIT15
 
 enum SpecialBlocks
 {
@@ -919,6 +922,7 @@ enum SpecialBlocks
    SPECIAL_APARTMENT_SIGN,
    SPECIAL_RESTAURANT_TABLE,
    SPECIAL_CAFE_COMPUTER,
+   SPECIAL_PARK_BENCH,
    SPECIAL_STAIRS_UP,
    SPECIAL_STAIRS_DOWN,
    SPECIALNUM
@@ -1775,6 +1779,7 @@ void special_house_photos(void);
 void special_corporate_files(void);
 void special_radio_broadcaststudio(void);
 void special_news_broadcaststudio(void);
+void special_graffiti(void);
 
 /*
  talk.cpp

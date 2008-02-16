@@ -327,6 +327,28 @@ void mode_site(void)
          addstr("T - Talk");
 
          if(levelmap[locx][locy][locz].special!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2)))
+         {
+            if((levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
+               (levelmap[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
+               (levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK)||
+               (levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
+            {
+               for(int i=0;i<6;i++)
+               {
+                  if(!activesquad->squad[i])
+                  {
+                     i=6;
+                  }
+                  else if(activesquad->squad[i]->weapon.type==WEAPON_SPRAYCAN)
+                  {
+                     set_color(COLOR_WHITE,COLOR_BLACK,0);
+                     break;
+                  }
+               }
+               if(i==6)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            }
+         }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,45);
          addstr("U - Use");
@@ -534,27 +556,51 @@ void mode_site(void)
             kidnapattempt();
          }
 
-         if(c=='u'&&levelmap[locx][locy][locz].special!=-1)
+         if(c=='u')
          {
-            switch(levelmap[locx][locy][locz].special)
+            if(levelmap[locx][locy][locz].special!=-1)
             {
-               case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:special_lab_cosmetics_cagedanimals();break;
-               case SPECIAL_NUCLEAR_ONOFF:special_nuclear_onoff();break;
-               case SPECIAL_LAB_GENETIC_CAGEDANIMALS:special_lab_genetic_cagedanimals();break;
-               case SPECIAL_POLICESTATION_LOCKUP:special_policestation_lockup();break;
-               case SPECIAL_COURTHOUSE_LOCKUP:special_courthouse_lockup();break;
-               case SPECIAL_COURTHOUSE_JURYROOM:special_courthouse_jury();break;
-               case SPECIAL_PRISON_CONTROL:special_prison_control();break;
-               case SPECIAL_INTEL_SUPERCOMPUTER:special_intel_supercomputer();break;
-               case SPECIAL_SWEATSHOP_EQUIPMENT:special_sweatshop_equipment();break;
-               case SPECIAL_POLLUTER_EQUIPMENT:special_polluter_equipment();break;
-               case SPECIAL_HOUSE_PHOTOS:special_house_photos();break;
-               case SPECIAL_CORPORATE_FILES:special_corporate_files();break;
-               case SPECIAL_RADIO_BROADCASTSTUDIO:special_radio_broadcaststudio();break;
-               case SPECIAL_NEWS_BROADCASTSTUDIO:special_news_broadcaststudio();break;
-               case SPECIAL_APARTMENT_SIGN:special_readsign(SPECIAL_APARTMENT_SIGN);break;
-               case SPECIAL_STAIRS_UP:locz++;break;
-               case SPECIAL_STAIRS_DOWN:locz--;break;
+               switch(levelmap[locx][locy][locz].special)
+               {
+                  case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:special_lab_cosmetics_cagedanimals();break;
+                  case SPECIAL_NUCLEAR_ONOFF:special_nuclear_onoff();break;
+                  case SPECIAL_LAB_GENETIC_CAGEDANIMALS:special_lab_genetic_cagedanimals();break;
+                  case SPECIAL_POLICESTATION_LOCKUP:special_policestation_lockup();break;
+                  case SPECIAL_COURTHOUSE_LOCKUP:special_courthouse_lockup();break;
+                  case SPECIAL_COURTHOUSE_JURYROOM:special_courthouse_jury();break;
+                  case SPECIAL_PRISON_CONTROL:special_prison_control();break;
+                  case SPECIAL_INTEL_SUPERCOMPUTER:special_intel_supercomputer();break;
+                  case SPECIAL_SWEATSHOP_EQUIPMENT:special_sweatshop_equipment();break;
+                  case SPECIAL_POLLUTER_EQUIPMENT:special_polluter_equipment();break;
+                  case SPECIAL_HOUSE_PHOTOS:special_house_photos();break;
+                  case SPECIAL_CORPORATE_FILES:special_corporate_files();break;
+                  case SPECIAL_RADIO_BROADCASTSTUDIO:special_radio_broadcaststudio();break;
+                  case SPECIAL_NEWS_BROADCASTSTUDIO:special_news_broadcaststudio();break;
+                  case SPECIAL_APARTMENT_SIGN:special_readsign(SPECIAL_APARTMENT_SIGN);break;
+                  case SPECIAL_STAIRS_UP:locz++;break;
+                  case SPECIAL_STAIRS_DOWN:locz--;break;
+               }
+            }
+            else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2))&&
+                    ((levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
+                     (levelmap[locx-1][locy][locz].flag & SITEBLOCK_BLOCK)||
+                     (levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK)||
+                     (levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK)))
+            {
+               int spray=0;
+               for(int i=0;i<6;i++)
+               {
+                  if(!activesquad->squad[i])break;
+                  if(activesquad->squad[i]->weapon.type==WEAPON_SPRAYCAN)
+                  {
+                     spray=1;
+                     break;
+                  }
+               }
+               if(spray)
+               {
+                  special_graffiti();
+               }
             }
          }
 
@@ -1365,6 +1411,7 @@ void mode_site(void)
                case SPECIAL_APARTMENT_LANDLORD:
                case SPECIAL_RESTAURANT_TABLE:
                case SPECIAL_CAFE_COMPUTER:
+               case SPECIAL_PARK_BENCH:
                   makespecial=levelmap[locx][locy][locz].special;
                   newenc=1;
                   break;
@@ -1874,6 +1921,30 @@ void mode_site(void)
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(16,1);
                         addstr("The table is occupied.");
+                        levelmap[locx][locy][locz].special=-1;
+                        refresh();
+                        getch();
+
+                        prepareencounter(sitetype,0);
+                     }
+                     break;
+                  case SPECIAL_PARK_BENCH:
+                     if(sitealarm||sitealienate)
+                     {
+                        clearmessagearea();
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("The bench is empty.");
+                        levelmap[locx][locy][locz].special=-1;
+                        refresh();
+                        getch();
+                     }
+                     else
+                     {
+                        clearmessagearea();
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("The there are people sitting here.");
                         levelmap[locx][locy][locz].special=-1;
                         refresh();
                         getch();

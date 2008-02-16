@@ -99,6 +99,15 @@ void printsitemap(int x,int y,int z)
          move(py+4,px+4);addch(CH_FULL_BLOCK);
          move(py+4,px+5);addch(CH_FULL_BLOCK);
          move(py+4,px+6);addch(CH_FULL_BLOCK);
+         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI &&
+            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
+         {
+            set_color(COLOR_GREEN,COLOR_WHITE,0);
+            move(py+4,px+2);addch('L');
+            move(py+4,px+3);addch('C');
+            move(py+4,px+4);addch('S');
+         }
+         
       }
       else
       {
@@ -121,6 +130,14 @@ void printsitemap(int x,int y,int z)
          move(py,px+4);addch(CH_FULL_BLOCK);
          move(py,px+5);addch(CH_FULL_BLOCK);
          move(py,px+6);addch(CH_FULL_BLOCK);
+         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
+         {
+            set_color(COLOR_GREEN,COLOR_WHITE,0);
+            move(py,px+2);addch('L');
+            move(py,px+3);addch('C');
+            move(py,px+4);addch('S');
+         }
       }
       else
       {
@@ -141,6 +158,15 @@ void printsitemap(int x,int y,int z)
          move(py+2,px+6);addch(CH_FULL_BLOCK);
          move(py+3,px+6);addch(CH_FULL_BLOCK);
          move(py+4,px+6);addch(CH_FULL_BLOCK);
+
+         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
+         {
+            set_color(COLOR_GREEN,COLOR_WHITE,0);
+            move(py+1,px+6);addch('L');
+            move(py+2,px+6);addch('C');
+            move(py+3,px+6);addch('S');
+         }
       }
       else
       {
@@ -161,6 +187,15 @@ void printsitemap(int x,int y,int z)
          move(py+2,px);addch(CH_FULL_BLOCK);
          move(py+3,px);addch(CH_FULL_BLOCK);
          move(py+4,px);addch(CH_FULL_BLOCK);
+
+         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
+         {
+            set_color(COLOR_GREEN,COLOR_WHITE,0);
+            move(py+1,px);addch('L');
+            move(py+2,px);addch('C');
+            move(py+3,px);addch('S');
+         }
       }
       else
       {
@@ -183,6 +218,15 @@ void printsitemap(int x,int y,int z)
             move(py+2,px);addch(CH_FULL_BLOCK);
             move(py+3,px);addch(CH_FULL_BLOCK);
             move(py+4,px);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+1,px);addch('L');
+               move(py+2,px);addch('C');
+               move(py+3,px);addch('S');
+            }
          }
          if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
          {
@@ -195,6 +239,15 @@ void printsitemap(int x,int y,int z)
             move(py+4,px+4);addch(CH_FULL_BLOCK);
             move(py+4,px+5);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+4,px+2);addch('L');
+               move(py+4,px+3);addch('C');
+               move(py+4,px+4);addch('S');
+            }
          }
       }
       else
@@ -218,6 +271,15 @@ void printsitemap(int x,int y,int z)
             move(py+2,px);addch(CH_FULL_BLOCK);
             move(py+3,px);addch(CH_FULL_BLOCK);
             move(py+4,px);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+1,px);addch('L');
+               move(py+2,px);addch('C');
+               move(py+3,px);addch('S');
+            }
          }
          if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
          {
@@ -230,6 +292,15 @@ void printsitemap(int x,int y,int z)
             move(py,px+4);addch(CH_FULL_BLOCK);
             move(py,px+5);addch(CH_FULL_BLOCK);
             move(py,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py,px+2);addch('L');
+               move(py,px+3);addch('C');
+               move(py,px+4);addch('S');
+            }
          }
       }
       else
@@ -253,6 +324,15 @@ void printsitemap(int x,int y,int z)
             move(py+2,px+6);addch(CH_FULL_BLOCK);
             move(py+3,px+6);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+1,px+6);addch('L');
+               move(py+2,px+6);addch('C');
+               move(py+3,px+6);addch('S');
+            }
          }
          if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
          {
@@ -265,6 +345,15 @@ void printsitemap(int x,int y,int z)
             move(py+4,px+4);addch(CH_FULL_BLOCK);
             move(py+4,px+5);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+4,px+2);addch('L');
+               move(py+4,px+3);addch('C');
+               move(py+4,px+4);addch('S');
+            }
          }
       }
       else
@@ -288,6 +377,15 @@ void printsitemap(int x,int y,int z)
             move(py+2,px+6);addch(CH_FULL_BLOCK);
             move(py+3,px+6);addch(CH_FULL_BLOCK);
             move(py+4,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py+1,px+6);addch('L');
+               move(py+2,px+6);addch('C');
+               move(py+3,px+6);addch('S');
+            }
          }
          if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
          {
@@ -300,6 +398,15 @@ void printsitemap(int x,int y,int z)
             move(py,px+4);addch(CH_FULL_BLOCK);
             move(py,px+5);addch(CH_FULL_BLOCK);
             move(py,px+6);addch(CH_FULL_BLOCK);
+
+            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI&&
+            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
+            {
+               set_color(COLOR_GREEN,COLOR_WHITE,0);
+               move(py,px+2);addch('L');
+               move(py,px+3);addch('C');
+               move(py,px+4);addch('S');
+            }
          }
       }
       else
@@ -332,6 +439,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_STAIRS_DOWN:strcpy(str,"Stairs Down");break;
       case SPECIAL_RESTAURANT_TABLE:strcpy(str,"Table");break;
       case SPECIAL_CAFE_COMPUTER:strcpy(str,"Computer");break;
+      case SPECIAL_PARK_BENCH:strcpy(str,"Bench");break;
    }
    if(levelmap[locx][locy][locz].special!=-1)
    {
@@ -343,10 +451,10 @@ void printsitemap(int x,int y,int z)
    //PRINT PARTY
    int backcolor=COLOR_BLACK;
    char blink=0;
-   if(levelmap[locx][locy][locz].flag & SITEBLOCK_GRASSY)
-      backcolor=COLOR_GREEN;
-   else if(levelmap[locx][locy][locz].flag & SITEBLOCK_OUTDOOR)
-      blink=1;
+   //if(levelmap[locx][locy][locz].flag & SITEBLOCK_GRASSY)
+      //backcolor=COLOR_GREEN;
+   //else if(levelmap[locx][locy][locz].flag & SITEBLOCK_OUTDOOR)
+      //blink=1;
 
    if(partyalive>0)set_color(COLOR_GREEN,backcolor,1,blink);
    else set_color(COLOR_BLACK,backcolor,1,blink);
@@ -356,7 +464,7 @@ void printsitemap(int x,int y,int z)
    //PRINT ANY OPPOSING FORCE INFO
    if(encsize>0)
    {
-      set_color(COLOR_YELLOW,backcolor,1);
+      set_color(COLOR_YELLOW,backcolor,1,blink);
       move(17,65);
       if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
       {
@@ -389,42 +497,36 @@ void printsitemap(int x,int y,int z)
 
 void printblock(int x,int y,int z,int px,int py)
 {
-   int backcolor=0;
+   int backcolor=COLOR_BLACK;
    char blink=0;
+   char ch=' ';
    if(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED)
    {
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      for(int px2=px;px2<px+7;px2++)
-      {
-         for(int py2=py;py2<py+5;py2++)
-         {
-            move(py2,px2);
-            addstr("x");
-         }
-      }
+      ch='+';
    }
-   else 
+   else if(levelmap[x][y][z].flag & SITEBLOCK_GRASSY)
    {
-      if(levelmap[x][y][z].flag & SITEBLOCK_GRASSY)
+      set_color(COLOR_GREEN,COLOR_BLACK,0);
+      ch='.';
+   }
+   else if(levelmap[x][y][z].flag & SITEBLOCK_OUTDOOR)
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      ch=' ';
+   }
+   else
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      ch=' ';
+   }
+
+   for(int px2=px;px2<px+7;px2++)
+   {
+      for(int py2=py;py2<py+5;py2++)
       {
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         backcolor=COLOR_GREEN;
-      }
-      else if(levelmap[x][y][z].flag & SITEBLOCK_OUTDOOR)
-      {
-         set_color(COLOR_BLACK,COLOR_BLACK,1);
-         backcolor=COLOR_BLACK;
-         blink=1;
-      }
-      else
-         set_color(COLOR_BLACK,COLOR_BLACK,0);
-      for(int px2=px;px2<px+7;px2++)
-      {
-         for(int py2=py;py2<py+5;py2++)
-         {
-            move(py2,px2);
-            addch(CH_FULL_BLOCK);
-         }
+         move(py2,px2);
+         addch(ch);
       }
    }
 
@@ -488,7 +590,7 @@ void printblock(int x,int y,int z,int px,int py)
 
    if(levelmap[x][y][z].flag & SITEBLOCK_EXIT)
    {
-      set_color(COLOR_WHITE,backcolor,1,blink);
+      set_color(COLOR_WHITE,backcolor,0,blink);
       move(py+1,px+1);
       addstr("EXIT");
    }
@@ -561,6 +663,7 @@ void printblock(int x,int y,int z,int px,int py)
          case SPECIAL_STAIRS_DOWN:addstr("STAIRS");addch(25);break;
          case SPECIAL_RESTAURANT_TABLE:move(py,px+1);addstr("TABLE");break;
          case SPECIAL_CAFE_COMPUTER:addstr("COMPUTR");break;
+         case SPECIAL_PARK_BENCH:move(py,px+1);addstr("BENCH");break;
       }
    }
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)

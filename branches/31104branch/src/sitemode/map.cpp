@@ -172,10 +172,28 @@ void initsite(locationst &loc)
             {
                for(int y=0;y<15;y++)
                {
-                  if(x==(MAPX>>1)-7||x==(MAPX>>1)+7||
-                     y==0||y==14)levelmap[x][y][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
-                  else if(x==(MAPX>>1)||y==7)levelmap[x][y][0].flag=SITEBLOCK_OUTDOOR;
-                  else levelmap[x][y][0].flag=SITEBLOCK_GRASSY;
+                  //Park exits
+                  if(x==(MAPX>>1)-7||x==(MAPX>>1)+7||y==0||y==14)
+                  {
+                     levelmap[x][y][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+                  }
+                  //Park walls (partial outline with exits)
+                  else if(((x==(MAPX>>1)-6||x==(MAPX>>1)+6)&&(y<6||y>8))||
+                          ((y==1||y==13)&&(x<(MAPX>>1)-1||x>(MAPX>>1)+1)))
+                  {
+                     levelmap[x][y][0].flag=SITEBLOCK_BLOCK;
+                  }
+                  //Park paths
+                  else if(x==(MAPX>>1)||y==7)
+                  {
+                     levelmap[x][y][0].flag=SITEBLOCK_OUTDOOR;
+                  }
+                  //Park grass
+                  else
+                  {
+                     levelmap[x][y][0].flag=SITEBLOCK_GRASSY|SITEBLOCK_OUTDOOR;
+                  }
+
                   levelmap[x][y][0].special=-1;
                   levelmap[x][y][0].siegeflag=0;
                }
@@ -224,7 +242,7 @@ void initsite(locationst &loc)
          }
          default:
          {
-            int dx=LCSrandom(5)*2+35;
+            int dx=LCSrandom(3)*2+25;
             int dy=LCSrandom(3)*2+15;
             int rx=(MAPX>>1)-(dx>>1);
             int ry=3;
@@ -443,7 +461,7 @@ void initsite(locationst &loc)
             {
                levelmap[x][y][z].special=SPECIAL_POLLUTER_EQUIPMENT;
             }
-            if(levelmap[x][y][0].flag==0&&
+            if(!(levelmap[x][y][z].flag & ~(SITEBLOCK_OUTDOOR))&&
                (loc.type==SITE_BUSINESS_JUICEBAR||
                loc.type==SITE_BUSINESS_CIGARBAR||
                loc.type==SITE_BUSINESS_LATTESTAND||
@@ -457,6 +475,14 @@ void initsite(locationst &loc)
             {
                levelmap[x][y][z].special=SPECIAL_CAFE_COMPUTER;
             }
+            /****************************************************************
+            if(levelmap[x][y][z].flag==(SITEBLOCK_OUTDOOR|SITEBLOCK_GRASSY)&&
+               loc.type==SITE_OUTDOOR_PUBLICPARK&&
+               !LCSrandom(10))
+            {
+               levelmap[x][y][z].special=SPECIAL_PARK_BENCH;
+            }
+            *****************************************************************/
          }
       }
    }

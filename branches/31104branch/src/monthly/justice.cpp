@@ -473,10 +473,10 @@ void trial(creaturest &g)
    addstr("B - Defend self!");
    move(y,1);y++;
    addstr("C - Plead guilty.");
-   if(sleeperlawyer)
+   if(sleeperlawyer&&funds>=100)
    {
       move(y,1);y++;
-      addstr("D - Use Sleeper ");
+      addstr("D - Pay a nominal $100 to use sleeper ");
       addstr(sleepername);
       addstr(" as your attorney.");
    }
@@ -499,9 +499,13 @@ void trial(creaturest &g)
       if(c=='a'){defense=0;break;}
       if(c=='b'){defense=1;break;}
       if(c=='c'){defense=2;break;}
-      if(c=='d'&&sleeperlawyer)
+      if(c=='d'&&sleeperlawyer&&funds>=100)
       {
+         funds-=100;
+         stat_spent+=100;
          defense=3;
+         moneylost_legal+=100;
+         strcpy(attorneyname,sleepername);
          break;
       }
       else if(c=='d'&&funds>=5000)

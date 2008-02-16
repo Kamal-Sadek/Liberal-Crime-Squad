@@ -2008,12 +2008,12 @@ void funds_and_trouble(char &clearformess)
                      moneylost_training+=cost;
                      if(students==10)cost=0;
                   }
-                  if(pool[p]->heat>teachers[t]->heat)
+                  //No crime for now
+                  /*if(pool[p]->heat>teachers[t]->heat)
                   {
-                     teachers[t]->heat++;
                      if(teachers[t]->lawflag[LAWFLAG_RACKETEERING]==0)
                         teachers[t]->lawflag[LAWFLAG_RACKETEERING]=1;
-                  }
+                  }*/
                }
             }
          }

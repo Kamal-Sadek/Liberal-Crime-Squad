@@ -711,6 +711,31 @@ void special_intel_supercomputer(void)
 }
 
 
+void special_graffiti(void)
+{
+   clearmessagearea();
+
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(16,1);
+   addstr("The squad sprays Liberal Graffiti!");
+
+   refresh();
+   getch();
+
+   int time=20+LCSrandom(10);
+   if(time<1)time=1;
+   if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+   
+   alienationcheck(0);
+   noticecheck(-1);
+   levelmap[locx][locy][locz].flag|=SITEBLOCK_GRAFFITI;
+   sitecrime++;
+
+   criminalizeparty(LAWFLAG_VANDALISM);
+
+   return;
+}
+
 
 void special_sweatshop_equipment(void)
 {

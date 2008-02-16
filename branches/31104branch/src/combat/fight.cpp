@@ -80,20 +80,22 @@ void youattack(void)
       char actual;
       attack(*activesquad->squad[p],encounter[target],mistake,actual);
 
-      if(actual)alienationcheck(mistake);
-
-      if(mistake)
+      if(actual)
       {
-         sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-         sitecrime+=10;
-      }
-      else if(!wasalarm)
-      {
-         sitestory->crime.push_back(CRIME_ATTACKED);
-         sitecrime+=3;
-      }
+         alienationcheck(mistake);
 
-      criminalizeparty(LAWFLAG_ASSAULT);
+         if(mistake)
+         {
+            sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
+            sitecrime+=10;
+         }
+         else if(!wasalarm)
+         {
+            sitestory->crime.push_back(CRIME_ATTACKED);
+            sitecrime+=3;
+         }
+         criminalizeparty(LAWFLAG_ASSAULT);
+      }
 
       if(!encounter[target].alive)delenc(target,1);
    }
@@ -146,19 +148,22 @@ void youattack(void)
                char actual;
                attack(*pool[p],encounter[target],mistake,actual);
 
-               if(actual)alienationcheck(mistake);
+               if(actual)
+               {
+                  alienationcheck(mistake);
 
-               if(mistake)
-               {
-                  sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-                  criminalizeparty(LAWFLAG_ASSAULT);
-                  sitecrime+=10;
-               }
-               else if(!wasalarm)
-               {
-                  sitestory->crime.push_back(CRIME_ATTACKED);
-                  criminalizeparty(LAWFLAG_ASSAULT);
-                  sitecrime+=3;
+                  if(mistake)
+                  {
+                     sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
+                     criminalizeparty(LAWFLAG_ASSAULT);
+                     sitecrime+=10;
+                  }
+                  else if(!wasalarm)
+                  {
+                     sitestory->crime.push_back(CRIME_ATTACKED);
+                     criminalizeparty(LAWFLAG_ASSAULT);
+                     sitecrime+=3;
+                  }
                }
 
                if(!encounter[target].alive)delenc(target,1);
@@ -229,7 +234,7 @@ void enemyattack(void)
             {
                switch(LCSrandom(5))
                {
-                  case 0:addstr(" runs off screaming!");break;
+                  case 0:addstr(" makes a break for it!");break;
                   case 1:addstr(" escapes crying!");break;
                   case 2:addstr(" runs away!");break;
                   case 3:addstr(" gets out of there!");break;
@@ -376,12 +381,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int encnum=0;
    for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
-   if((a.type==CREATURE_SCIENTIST_EMINENT||
+   if(((a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
       a.type==CREATURE_CORPORATE_CEO||
       a.type==CREATURE_RADIOPERSONALITY||
-      a.type==CREATURE_NEWSANCHOR)&&!mistake&&a.align==-1)
+      a.type==CREATURE_NEWSANCHOR)&&!mistake&&a.align==-1)||
+      (a.weapon.type==WEAPON_GUITAR&&a.align==1))
    {
       if(encnum<ENCMAX)
       {
@@ -390,8 +396,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          strcpy(str,a.name);
          strcat(str," ");
 
-         int attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+
-            t.attval(ATTRIBUTE_WISDOM,0);
+         int attack=0;
+         if(a.align==-1)
+         {
+            attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+t.attval(ATTRIBUTE_WISDOM,0);
+         }
+         else if(a.align==1)
+         {
+            attack=LCSrandom(a.attval(ATTRIBUTE_HEART))+t.attval(ATTRIBUTE_HEART,0);
+         }
 
          switch(a.type)
          {
@@ -468,6 +481,27 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   t.attval(ATTRIBUTE_WISDOM,0);
                attack+=LCSrandom(a.attval(ATTRIBUTE_CHARISMA));
                break;
+            default:
+               if(a.weapon.type==WEAPON_GUITAR)
+               {
+                  switch(LCSrandom(5))
+                  {
+                     case 0:strcat(str,"plays a song for");break;
+                     case 1:strcat(str,"sings to");break;
+                     case 2:strcat(str,"strums the guitar at");break;
+                     case 3:strcat(str,"plays protest songs at");break;
+                     case 4:strcat(str,"rocks out at");break;
+                  }
+                  strcat(str," ");
+                  strcat(str,t.name);
+                  strcat(str,"!");
+                  resist=t.attval(ATTRIBUTE_CHARISMA,0)+
+                     t.attval(ATTRIBUTE_WISDOM,0)-
+                     t.attval(ATTRIBUTE_HEART,0);
+                  attack=LCSrandom(a.skill[SKILL_MUSIC]*3+1);
+                  a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist);
+               }
+               break;
          }
 
          move(16,1);
@@ -475,66 +509,88 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
          if(attack>resist)
          {
-            if(t.juice>=100)
+            if(a.align==-1)
             {
-               move(17,1);
-               addstr(t.name);
-               addstr(" loses juice!");
-               addjuice(t,-50);
-            }
-            else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) && t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
-            {
-               move(17,1);
-               addstr(t.name);
-               addstr(" becomes Wiser!");
-               t.att[ATTRIBUTE_WISDOM]++;
+               if(t.juice>=100)
+               {
+                  move(17,1);
+                  addstr(t.name);
+                  addstr(" loses juice!");
+                  addjuice(t,-50);
+               }
+               else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) && t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
+               {
+                  move(17,1);
+                  addstr(t.name);
+                  addstr(" becomes Wiser!");
+                  t.att[ATTRIBUTE_WISDOM]++;
+               }
+               else
+               {
+                  move(17,1);
+                  addstr(t.name);
+                  addstr(" is turned Conservative");
+                  if(t.prisoner!=NULL)
+                  {
+                     freehostage(t,0);
+                  }
+                  addstr("!");
+
+                  for(int e=0;e<ENCMAX;e++)
+                  {
+                     if(encounter[e].exists==0)
+                     {
+                        encounter[e]=t;
+                        encounter[e].exists=1;
+                        encounter[e].align=-1;
+                        encounter[e].squadid=-1;
+                        break;
+                     }
+                  }
+
+                  char flipstart=0;
+                  for(int p=0;p<6;p++)
+                  {
+                     if(activesquad->squad[p]==&t)
+                     {
+                        for(int pl=pool.size()-1;pl>=0;pl--)
+                        {
+                           if(pool[pl]==activesquad->squad[p])
+                           {
+                              pool[pl]->alive=0;
+                              pool[pl]->location=-1;
+                              //delete pool[pl];
+                              //pool.erase(pool.begin() + pl);
+                              break;
+                           }
+                        }
+
+                        activesquad->squad[p]=NULL;
+                        flipstart=1;
+                     }
+                     if(flipstart&&p<5)activesquad->squad[p]=activesquad->squad[p+1];
+                  }
+                  if(flipstart)activesquad->squad[5]=NULL;
+               }
             }
             else
             {
-               move(17,1);
-               addstr(t.name);
-               addstr(" is turned Conservative");
-               if(t.prisoner!=NULL)
+               if(LCSrandom(15)>t.attval(ATTRIBUTE_HEART) &&
+                  t.attval(ATTRIBUTE_HEART) < t.attval(ATTRIBUTE_WISDOM))
                {
-                  freehostage(t,0);
+                  move(17,1);
+                  addstr(t.name);
+                  addstr("'s Heart swells!");
+                  t.att[ATTRIBUTE_HEART]++;
                }
-               addstr("!");
-
-               for(int e=0;e<ENCMAX;e++)
+               else
                {
-                  if(encounter[e].exists==0)
-                  {
-                     encounter[e]=t;
-                     encounter[e].exists=1;
-                     encounter[e].align=-1;
-                     encounter[e].squadid=-1;
-                     break;
-                  }
-               }
+                  move(17,1);
+                  addstr(t.name);
+                  addstr(" has turned Liberal!");
 
-               char flipstart=0;
-               for(int p=0;p<6;p++)
-               {
-                  if(activesquad->squad[p]==&t)
-                  {
-                     for(int pl=pool.size()-1;pl>=0;pl--)
-                     {
-                        if(pool[pl]==activesquad->squad[p])
-                        {
-                           pool[pl]->alive=0;
-                           pool[pl]->location=-1;
-                           //delete pool[pl];
-                           //pool.erase(pool.begin() + pl);
-                           break;
-                        }
-                     }
-
-                     activesquad->squad[p]=NULL;
-                     flipstart=1;
-                  }
-                  if(flipstart&&p<5)activesquad->squad[p]=activesquad->squad[p+1];
+                  t.align=1;
                }
-               if(flipstart)activesquad->squad[5]=NULL;
             }
          }
          else
@@ -643,6 +699,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          strcat(str,"swings at");break;
       case WEAPON_PITCHFORK:
          strcat(str,"stabs at");break;
+      case WEAPON_SPRAYCAN:
+         strcat(str,"sprays");break;
    }
    strcat(str," ");
    strcat(str,t.name);
@@ -1087,6 +1145,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(20)+5;
             strengthmod=1;
+            break;
+         case WEAPON_SPRAYCAN:
+            damtype|=WOUND_BURNED;
+            damamount=LCSrandom(5);
+            damagearmor=1;
             break;
       }
 
@@ -2010,6 +2073,14 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
 void capturecreature(creaturest &t)
 {
    t.activity.type=0;
+
+   t.weapon.ammo=0;
+   t.weapon.type=0;
+   t.armor.type=ARMOR_CLOTHES;
+   t.armor.subtype=0;
+   t.armor.quality='1';
+   t.armor.flag=0;
+
    freehostage(t,2); // situation 2 = no message; this may want to be changed to 0 or 1
    if(t.prisoner)
    {
