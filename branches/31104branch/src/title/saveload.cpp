@@ -136,6 +136,12 @@ void savegame(char *str)
          {
             numbytes=fwrite(location[l]->loot[l2],sizeof(itemst),1,h);
          }
+         dummy=location[l]->changes.size();
+         numbytes=fwrite(&dummy,sizeof(int),1,h);
+         for(int l2=0;l2<location[l]->changes.size();l2++)
+         {
+            numbytes=fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
+         }
 
          numbytes=fwrite(location[l]->name,sizeof(char),40,h);
          numbytes=fwrite(location[l]->shortname,sizeof(char),20,h);
@@ -405,6 +411,12 @@ char load(void)
          {
             location[l]->loot[l2]=new itemst;
             fread(location[l]->loot[l2],sizeof(itemst),1,h);
+         }
+         fread(&dummy,sizeof(int),1,h);
+         location[l]->changes.resize(dummy);
+         for(int l2=0;l2<location[l]->changes.size();l2++)
+         {
+            fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
          }
 
          fread(location[l]->name,sizeof(char),40,h);

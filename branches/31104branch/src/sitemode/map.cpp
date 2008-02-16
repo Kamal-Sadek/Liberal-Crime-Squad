@@ -556,6 +556,27 @@ void initsite(locationst &loc)
          levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_JURYROOM;
          break;
    }
+
+   /*******************************************************
+   * Add semi-permanent changes inflicted by LCS and others
+   *******************************************************/
+   for(int i=0;i<loc.changes.size();i++)
+   {
+      int x=loc.changes[i].x;
+      int y=loc.changes[i].y;
+      int z=loc.changes[i].z;
+      switch(loc.changes[i].flag)
+      {
+      default:
+      case SITEBLOCK_GRAFFITI: // LCS tags
+         levelmap[x][y][z].flag|=loc.changes[i].flag;
+         break;
+      case SITEBLOCK_DEBRIS: // Smashed walls
+         levelmap[x][y][z].flag&=~SITEBLOCK_BLOCK;
+         levelmap[x][y][z].flag|=loc.changes[i].flag;
+         break;
+      }
+   }
 }
 
 

@@ -1682,6 +1682,8 @@ void mode_site(void)
                         //BREAK WALLS
                         if(sy>=3&&sx>0&&sx<MAPX-1&&sy<MAPY-1)
                         {
+                           sitechangest change(sx,sy,sz,SITEBLOCK_DEBRIS);
+                           location[cursite]->changes.push_back(change);
                            levelmap[sx][sy][sz].flag&=~SITEBLOCK_BLOCK;
                            levelmap[sx][sy][sz].flag|=SITEBLOCK_DEBRIS;
                         }

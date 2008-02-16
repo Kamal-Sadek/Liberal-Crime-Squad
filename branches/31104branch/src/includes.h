@@ -30,8 +30,8 @@
 #define PACKAGE_VERSION "3.12.0 Alpha"
 #endif
 
-const unsigned long version=31191;
-const unsigned long lowestloadversion=31191;
+const unsigned long version=31192;
+const unsigned long lowestloadversion=31192;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
@@ -940,6 +940,17 @@ struct siteblockst
    unsigned char siegeflag;
 };
 
+struct sitechangest
+{
+   char x;
+   char y;
+   char z;
+   unsigned short flag;
+   sitechangest() {}
+   sitechangest(char x_, char y_, char z_, unsigned short flag_) :
+      x(x_), y(y_), z(z_), flag(flag_) {}
+};
+
 enum ItemTypes
 {
    ITEM_WEAPON,
@@ -1017,6 +1028,7 @@ struct locationst
    short type;
    long parent;
    vector<itemst *> loot;
+   vector<sitechangest> changes;
    long renting;
    char newrental;
    char needcar;

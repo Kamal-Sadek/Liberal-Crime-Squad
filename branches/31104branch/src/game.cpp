@@ -149,7 +149,7 @@ char courtname[9][80];
 
 
 short exec[EXECNUM];
-short execterm=2;
+short execterm=1;
 char execname[EXECNUM][80];
 short presparty=1;
 
