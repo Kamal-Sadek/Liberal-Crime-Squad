@@ -607,6 +607,7 @@ void locationst::init(void)
    interrogated=0;
    highsecurity=0;
    mapseed=seed;r_num();
+   changes.clear();
    compound_walls=0;
    compound_stores=0;
    front_business=-1;

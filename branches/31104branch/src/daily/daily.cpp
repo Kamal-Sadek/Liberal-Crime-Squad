@@ -1541,6 +1541,13 @@ void advancelocations(void)
             }
          }
       }
+      else if(location[l]->highsecurity)
+      {
+         if(!LCSrandom(60))
+         {
+            location[l]->highsecurity=0;
+         }
+      }
    }
 }
 
