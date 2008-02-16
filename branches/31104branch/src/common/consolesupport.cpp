@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 //sets current color to desired setting
-void set_color(short f,short b,char bright)
+void set_color(short f,short b,char bright,char blink)
 {
    //color swap required for PDcurses
    if(f==7&&b==0)
@@ -44,8 +44,13 @@ void set_color(short f,short b,char bright)
       f=7;b=0;
    }
 
+   chtype blinky=0, brighty=0;
+   
+   if(blink)blinky=A_BLINK;
+   if(bright)brighty=A_BOLD;
+
    //pick color pair based on foreground and background
-   if(bright)attrset(A_BOLD | COLOR_PAIR(f*8+b));
+   if(bright)attrset(brighty | blinky | COLOR_PAIR(f*8+b));
    else
    {
       attrset(COLOR_PAIR(f*8+b));

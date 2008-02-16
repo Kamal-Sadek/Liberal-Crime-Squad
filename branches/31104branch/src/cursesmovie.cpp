@@ -97,7 +97,7 @@ using namespace std;
 
 #include "cursesmovie.h"
 extern CursesMoviest movie;
-void set_color(short f,short b,char bright);
+void set_color(short f,short b,char bright,char blink=0);
 void translategetch(int &c);
 
 void filelistst::open_diskload(FILE* h)

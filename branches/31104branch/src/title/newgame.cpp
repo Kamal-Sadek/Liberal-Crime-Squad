@@ -978,6 +978,12 @@ void makecharacter(void)
       initlocation(*newl);
    location.push_back(newl);
 
+   newl=new locationst;
+      newl->type=SITE_OUTDOOR_PUBLICPARK;
+      newl->parent=0;
+      initlocation(*newl);
+   location.push_back(newl);
+
    squadst *newsq=new squadst;
       newsq->id=0;cursquadid++;
       newsq->squad[0]=newcr;

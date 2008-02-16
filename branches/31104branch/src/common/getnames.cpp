@@ -128,9 +128,11 @@ void getactivity(char *str,activityst &act)
          strcat(str,location[act.arg]->shortname);
          break;
       }
+      case ACTIVITY_HEAL:
       case ACTIVITY_NONE:
          strcat(str,"Hanging Out");
          break;
+      case ACTIVITY_WRITE_LETTERS:
       case ACTIVITY_WRITE_GUARDIAN:
          strcat(str,"Writing");
          break;

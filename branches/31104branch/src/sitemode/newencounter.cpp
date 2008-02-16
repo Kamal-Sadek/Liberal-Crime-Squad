@@ -155,6 +155,7 @@ void prepareencounter(short type,char sec)
          }
          break;
       }
+      case SITE_OUTDOOR_PUBLICPARK:
       case SITE_BUSINESS_LATTESTAND:
       {
          creaturearray[CREATURE_SECURITYGUARD]=5;

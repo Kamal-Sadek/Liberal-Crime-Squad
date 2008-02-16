@@ -1924,6 +1924,11 @@ void initlocation(locationst &loc)
          strcat(loc.name," Latte Stand");
          strcpy(loc.shortname,"Latte Stand");
          break;
+      case SITE_OUTDOOR_PUBLICPARK:
+         lastname(loc.name);
+         strcat(loc.name," Park");
+         strcpy(loc.shortname,"Park");
+         break;
    }
 }
 

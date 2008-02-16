@@ -274,6 +274,7 @@ enum SiteTypes
    SITE_BUSINESS_INTERNETCAFE,
    SITE_BUSINESS_DEPTSTORE,
    SITE_BUSINESS_HALLOWEEN,
+   SITE_OUTDOOR_PUBLICPARK,
    SITENUM
 };
 
@@ -894,6 +895,9 @@ struct creaturest
 #define SITEBLOCK_RESTRICTED BIT9
 #define SITEBLOCK_BLOODY BIT10
 #define SITEBLOCK_BLOODY2 BIT11
+#define SITEBLOCK_GRASSY BIT12
+#define SITEBLOCK_OUTDOOR BIT13
+#define SITEBLOCK_DEBRIS BIT14
 
 enum SpecialBlocks
 {
@@ -1494,7 +1498,7 @@ int lawflagheat(int lawflag);
 /*
  consolesupport.cpp
 */
-void set_color(short f,short b,char bright);
+void set_color(short f,short b,char bright,char blink=0);
 void translategetch(int &c);
 void translategetch_cap(int &c);
 

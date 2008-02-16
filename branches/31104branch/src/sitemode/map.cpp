@@ -73,13 +73,13 @@ void initsite(locationst &loc)
       }
    }
 
-   levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
-   levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
-   levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
-   levelmap[(MAPX>>1)-1][0][0].flag=SITEBLOCK_EXIT;
-   levelmap[(MAPX>>1)-1][1][0].flag=SITEBLOCK_EXIT;
+   levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+   levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+   levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+   levelmap[(MAPX>>1)-1][0][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+   levelmap[(MAPX>>1)-1][1][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
 
-   levelmap[MAPX>>1][1][0].flag=0;
+   levelmap[MAPX>>1][1][0].flag=SITEBLOCK_OUTDOOR;
 
    levelmap[MAPX>>1][2][0].flag=SITEBLOCK_DOOR;
 
@@ -166,6 +166,22 @@ void initsite(locationst &loc)
    {
       switch(loc.type)
       {
+         case SITE_OUTDOOR_PUBLICPARK:
+         {
+            for(int x=(MAPX>>1)-7;x<=(MAPX>>1)+7;x++)
+            {
+               for(int y=0;y<15;y++)
+               {
+                  if(x==(MAPX>>1)-7||x==(MAPX>>1)+7||
+                     y==0||y==14)levelmap[x][y][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
+                  else if(x==(MAPX>>1)||y==7)levelmap[x][y][0].flag=SITEBLOCK_OUTDOOR;
+                  else levelmap[x][y][0].flag=SITEBLOCK_GRASSY;
+                  levelmap[x][y][0].special=-1;
+                  levelmap[x][y][0].siegeflag=0;
+               }
+            }
+            break;
+         }
          case SITE_BUSINESS_LATTESTAND:
          {
             for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)

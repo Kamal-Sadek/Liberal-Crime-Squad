@@ -1636,6 +1636,7 @@ void mode_site(void)
                         if(sy>=3&&sx>0&&sx<MAPX-1&&sy<MAPY-1)
                         {
                            levelmap[sx][sy][sz].flag&=~SITEBLOCK_BLOCK;
+                           levelmap[sx][sy][sz].flag|=SITEBLOCK_DEBRIS;
                         }
                      }
                   }
