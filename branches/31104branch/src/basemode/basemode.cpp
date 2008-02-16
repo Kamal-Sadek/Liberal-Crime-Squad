@@ -153,7 +153,7 @@ void mode_base(void)
                case VIEW_POLLUTION:addstr("thought industry should lower pollution.");break;
                case VIEW_CORPORATECULTURE:addstr("were disgusted by corporate malfeasance.");break;
                case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great.");break;
-               case VIEW_LIBERALCRIMESQUAD:addstr("had heard of the Liberal Crime Squad.");break;
+               case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad.");break;
                case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard.");break;
                case VIEW_PRISONS:addstr("think the prison system needs reform.");break;
                case VIEW_AMRADIO:addstr("do not like AM radio.");break;

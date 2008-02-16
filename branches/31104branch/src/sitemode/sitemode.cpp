@@ -2042,9 +2042,9 @@ void mode_site(void)
 void resolvesite(void)
 {
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&location[cursite]->renting==-1)
+   if(sitealarm==1&&sitecrime>50&&location[cursite]->renting==-1)
    {
-      location[cursite]->closed=LCSrandom(3)+2;
+      location[cursite]->closed=LCSrandom(8)+7;
    }
 }
 

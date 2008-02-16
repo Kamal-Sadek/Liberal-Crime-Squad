@@ -328,7 +328,7 @@ void stopevil(void)
          if(location[temploc[p]]->closed>0)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr(" (Too Hot)");
+            addstr(" (Closed Down)");
          }
          if(location[temploc[p]]->highsecurity)
          {

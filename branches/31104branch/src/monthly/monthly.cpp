@@ -116,6 +116,29 @@ void passmonth(char &clearformess,char canseethings)
          sleepereffect(*pool[pl],clearformess,canseethings,libpower);
       }
    }
+
+   //Manage graffiti
+   for(int l=0;l<location.size();l++)
+   {
+      for(int c=location[l]->changes.size()-1;c>=0;c--)
+      {
+         if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI)
+         {
+            int power;
+            //Purge graffiti from more secure sites (or from non-secure
+            //sites about once every five years), but these will
+            //influence people more for the current month
+            if(securityable(location[l]->type)||!LCSrandom(60))
+            {
+               location[l]->changes.erase(&location[l]->changes[c]);
+               power=5;
+            }
+            else power=1;
+
+            background_liberal_influence[VIEW_LIBERALCRIMESQUAD]+=power;
+         }
+      }
+   }
    
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
