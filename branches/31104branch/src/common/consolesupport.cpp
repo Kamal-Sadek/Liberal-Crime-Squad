@@ -181,11 +181,11 @@ int addch_unicode(int c) {
       // We can do this because we've already verified
       // that __STDC_ISO_10646__ is set.
       wch = c;
-   } else {
-      wch = lookup_unicode_hack(c);
-   }
 
-   setcchar(&cch, &wch, 0, 0, NULL);
-   return add_wch(&cch);
+      setcchar(&cch, &wch, 0, 0, NULL);
+      return add_wch(&cch);
+   } else {
+      return addch(lookup_unicode_hack(c));
+   }
 }
 #endif

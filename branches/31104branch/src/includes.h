@@ -110,8 +110,12 @@ const unsigned long lowestloadscoreversion=30001;
    #endif
 
    #ifdef CH_USE_UNICODE
-     #undef addch
-     #define addch(a) addch_unicode(a)
+     // Make sure we don't override addch for consolesupport.cpp,
+     // because addch_unicode may use addch internally.
+     #ifndef CONSOLE_SUPPORT
+        #undef addch
+        #define addch(a) addch_unicode(a)
+     #endif
    #endif
 #endif
 
