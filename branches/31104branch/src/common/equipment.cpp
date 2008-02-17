@@ -470,7 +470,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
    int page=0;
 
-   vector<char> selected;
+   vector<unsigned int> selected;
    selected.resize(source.size());
    for(int s=0;s<selected.size();s++)selected[s]=0;
 
