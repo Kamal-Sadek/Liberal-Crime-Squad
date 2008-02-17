@@ -76,7 +76,12 @@ const unsigned long lowestloadscoreversion=30001;
    #include <ctype.h>
    #define GO_PORTABLE
 
-   #define CH_USE_ASCII_HACK
+   #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
+     #define CH_USE_UNICODE
+   #else
+     #define CH_USE_ASCII_HACK
+   #endif
+
    #ifdef HAVE_LIBXCURSES
    	#define XCURSES
    #endif
@@ -95,11 +100,18 @@ const unsigned long lowestloadscoreversion=30001;
       #undef erase
       #undef clear
    #else
-      #ifdef NCURSES
+      #if defined(USE_NCURSES)
          #include <ncurses.h>
+      #elif defined(USE_NCURSES_W)
+         #include <ncursesw/ncurses.h>
       #else
-         #include <curses.h>
+         #error "You must define either USE_NCURSES or USE_NCURSES_W."
       #endif
+   #endif
+
+   #ifdef CH_USE_UNICODE
+     #undef addch
+     #define addch(a) addch_unicode(a)
    #endif
 #endif
 

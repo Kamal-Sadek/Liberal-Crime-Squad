@@ -18,12 +18,46 @@ AC_DEFINE([UNIX],[],[Defined if on a UNIX based system])
 AC_DEFINE([Linux],[],[Defined if running on Linux])
 AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
 
-
-AC_CHECK_LIB(ncurses, initscr, [], [AC_MSG_ERROR([You need ncurses!])], [])
-
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h sys/time.h unistd.h ncurses.h])
+AC_CHECK_HEADERS([stdlib.h string.h sys/time.h unistd.h ncurses.h ncursesw/ncurses.h])
+
+# Check for ncurses libraries, preferring wide character ones:
+for lib in ncurses ncursesw; do
+   if test "$lib" = ncursesw; then
+      name="NCURSES_W"
+      header="$ac_cv_header_ncursesw_ncurses_h"
+   else
+      name="NCURSES"
+      header="$ac_cv_header_ncurses_h"
+   fi
+
+   if test "$header" = "yes"; then
+      AC_CHECK_LIB($lib, addch, [
+         AC_CHECK_LIB($lib, add_wch,
+            [wide_ncurses="$wide_ncurses $lib"],
+            [plain_ncurses="$plain_ncurses $lib"]
+         )
+      ])
+   fi
+done
+
+AC_SEARCH_LIBS(initscr, [$wide_ncurses $plain_ncurses], [],
+   [AC_MSG_ERROR([You need ncurses!])])
+
+for lib in $wide_ncurses; do
+   if test "$ac_cv_search_initscr" = "-l$lib"; then
+      AC_DEFINE(HAVE_WIDE_NCURSES, [],
+         [Define if you have wide character support in your ncurses.])
+   fi
+done
+
+# Tell the headers which one to use.
+if test "$ac_cv_search_initscr" = "-lncurses"; then
+   AC_DEFINE(USE_NCURSES, [], [Define to use libncurses.])
+elif test "$ac_cv_search_initscr" = "-lncursesw"; then
+   AC_DEFINE(USE_NCURSES_W, [], [Define to use libncursesw.])
+fi
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

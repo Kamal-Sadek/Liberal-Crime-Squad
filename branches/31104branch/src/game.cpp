@@ -232,6 +232,9 @@ int yourscore=-1;
 int main(int argc, char* argv[])
 {
    //start curses
+#ifdef CH_USE_UNICODE
+   setup_unicode();
+#endif
    initscr();
 
    noecho();
