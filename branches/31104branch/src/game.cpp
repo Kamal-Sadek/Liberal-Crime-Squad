@@ -153,6 +153,10 @@ short execterm=1;
 char execname[EXECNUM][80];
 short presparty=1;
 
+char amradio_closed=0;
+char cablenews_closed=0;
+char policestation_closed=0;
+
 
 unsigned long stat_recruits=0;
 unsigned long stat_kidnappings=0;
