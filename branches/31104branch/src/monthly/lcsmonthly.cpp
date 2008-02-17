@@ -292,7 +292,7 @@ void printnews(short l,short newspaper)
          switch(LCSrandom(10))
          {
             case 0:
-               addstr("engaging in lude behavior with animals.");
+               addstr("engaging in lewd behavior with animals.");
                change_public_opinion(VIEW_ANIMALRESEARCH,15);
                break;
             case 1:addstr("digging up graves and sleeping with the dead.");break;

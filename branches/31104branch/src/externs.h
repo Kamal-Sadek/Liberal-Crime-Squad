@@ -63,6 +63,10 @@ extern short attitude[VIEWNUM];
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
 
+extern char policestation_closed;
+extern char amradio_closed;
+extern char cablenews_closed;
+
 extern unsigned long funds;
 
 extern char loaded;

@@ -630,7 +630,7 @@ void getskill(char *str,int type)
       case SKILL_BUSINESS:strcpy(str,"Business");break;
       case SKILL_GANGSTERISM:strcpy(str,"Gangsterism");break;
       case SKILL_STEALTH:strcpy(str,"Stealth");break;
-      case SKILL_SLIGHTOFHAND:strcpy(str,"Slight of Hand");break;
+      case SKILL_SLEIGHTOFHAND:strcpy(str,"Sleight of Hand");break;
       case SKILL_TEACHING:strcpy(str,"Teaching");break;
       case SKILL_SURVIVAL:strcpy(str,"Survival");break;
       case SKILL_STREETSENSE:strcpy(str,"Street Sense");break;

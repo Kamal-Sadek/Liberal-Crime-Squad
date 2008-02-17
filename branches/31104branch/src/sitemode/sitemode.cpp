@@ -334,7 +334,8 @@ void mode_site(void)
                (levelmap[locx][locy+1][locz].flag & SITEBLOCK_BLOCK)||
                (levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK))
             {
-               for(int i=0;i<6;i++)
+               int i;
+               for(i=0;i<6;i++)
                {
                   if(!activesquad->squad[i])
                   {
@@ -1877,7 +1878,8 @@ void mode_site(void)
                   return;
                }
             }
-            else if(newenc)
+            
+            if(!location[cursite]->siege.siege&&newenc)
             {
                switch(makespecial)
                {
@@ -2045,6 +2047,12 @@ void resolvesite(void)
    if(sitealarm==1&&sitecrime>50&&location[cursite]->renting==-1)
    {
       location[cursite]->closed=LCSrandom(8)+7;
+      if(location[cursite]->type==SITE_MEDIA_AMRADIO)
+         amradio_closed=1;
+      if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION)
+         policestation_closed=1;
+      if(location[cursite]->type==SITE_MEDIA_CABLENEWS)
+         cablenews_closed=1;
    }
 }
 

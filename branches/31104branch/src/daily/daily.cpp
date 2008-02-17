@@ -1532,7 +1532,13 @@ void advancelocations(void)
             switch(LCSrandom(2))
             {
                case 0:
-                  if(securityable(location[l]->type))location[l]->highsecurity=1;
+                  if(securityable(location[l]->type))
+                  {
+                     //Throw guards everywhere
+                     location[l]->highsecurity=1;
+                     //Clean up graffiti, patch up walls
+                     location[l]->changes.clear();
+                  }
                   else initlocation(*location[l]);
                   break;
                case 1:

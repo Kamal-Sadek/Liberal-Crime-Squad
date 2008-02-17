@@ -1114,7 +1114,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
-         sk=LCSrandom(3)+2;cr.skill[SKILL_SLIGHTOFHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+2;cr.skill[SKILL_SLEIGHTOFHAND]=sk;randomskills-=sk;
          break;
       case CREATURE_HIPPIE:
          strcpy(cr.name,"Hippie");
@@ -1359,7 +1359,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(5)+3;cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
          sk=LCSrandom(5)+3;cr.skill[SKILL_DISGUISE]=sk;randomskills-=sk;
          sk=LCSrandom(5)+3;cr.skill[SKILL_STEALTH]=sk;randomskills-=sk;
-         sk=LCSrandom(5)+3;cr.skill[SKILL_SLIGHTOFHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(5)+3;cr.skill[SKILL_SLEIGHTOFHAND]=sk;randomskills-=sk;
          break;
       case CREATURE_ACTOR:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))

@@ -52,8 +52,8 @@ void noticecheck(int exclude)
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
-         activesquad->squad[i]->skill[SKILL_SLIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
-         sneak=activesquad->squad[i]->skill[SKILL_SLIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
+         activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
+         sneak=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
    }
 
    if(noticer.size()>0)
@@ -119,8 +119,8 @@ char alienationcheck(char mistake)
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
-         activesquad->squad[i]->skill[SKILL_SLIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
-         sneak=activesquad->squad[i]->skill[SKILL_SLIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
+         activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
+         sneak=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
    }
 
    if(noticer.size()>0)

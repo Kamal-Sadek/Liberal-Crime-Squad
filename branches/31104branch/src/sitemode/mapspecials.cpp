@@ -729,8 +729,11 @@ void special_graffiti(void)
    alienationcheck(0);
    noticecheck(-1);
    levelmap[locx][locy][locz].flag|=SITEBLOCK_GRAFFITI;
-   struct sitechangest change(locx,locy,locz,SITEBLOCK_GRAFFITI);
-   location[cursite]->changes.push_back(change);
+   if(!location[cursite]->highsecurity)
+   {
+      struct sitechangest change(locx,locy,locz,SITEBLOCK_GRAFFITI);
+      location[cursite]->changes.push_back(change);
+   }
    sitecrime++;
 
    criminalizeparty(LAWFLAG_VANDALISM);

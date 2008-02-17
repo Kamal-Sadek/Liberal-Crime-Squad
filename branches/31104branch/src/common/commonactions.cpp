@@ -261,7 +261,7 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_SHOTGUN:
    case SKILL_DRIVING:
    case SKILL_IMPROVISED:
-   case SKILL_SLIGHTOFHAND:
+   case SKILL_SLEIGHTOFHAND:
    case SKILL_STEALTH:
       return cr.attval(ATTRIBUTE_AGILITY)*2;
    case SKILL_PERSUASION:

@@ -80,6 +80,10 @@ void savegame(char *str)
       numbytes=fwrite(&stat_buys,sizeof(unsigned long),1,h);
       numbytes=fwrite(&stat_burns,sizeof(unsigned long),1,h);
 
+      numbytes=fwrite(&policestation_closed,sizeof(char),1,h);
+      numbytes=fwrite(&amradio_closed,sizeof(char),1,h);
+      numbytes=fwrite(&cablenews_closed,sizeof(char),1,h);
+
       numbytes=fwrite(&curcarid,sizeof(long),1,h);
       numbytes=fwrite(&showcarprefs,sizeof(char),1,h);
       numbytes=fwrite(&curcreatureid,sizeof(long),1,h);
@@ -353,6 +357,10 @@ char load(void)
       fread(&stat_spent,sizeof(unsigned long),1,h);
       fread(&stat_buys,sizeof(unsigned long),1,h);
       fread(&stat_burns,sizeof(unsigned long),1,h);
+
+      fread(&policestation_closed,sizeof(char),1,h);
+      fread(&amradio_closed,sizeof(char),1,h);
+      fread(&cablenews_closed,sizeof(char),1,h);
 
       fread(&curcarid,sizeof(long),1,h);
       fread(&showcarprefs,sizeof(char),1,h);

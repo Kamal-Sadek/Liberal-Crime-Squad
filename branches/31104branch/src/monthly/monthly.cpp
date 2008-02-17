@@ -130,7 +130,7 @@ void passmonth(char &clearformess,char canseethings)
             //influence people more for the current month
             if(securityable(location[l]->type)||!LCSrandom(60))
             {
-               location[l]->changes.erase(&location[l]->changes[c]);
+               location[l]->changes.erase(location[l]->changes.begin()+c);
                power=5;
             }
             else power=1;
@@ -138,6 +138,26 @@ void passmonth(char &clearformess,char canseethings)
             background_liberal_influence[VIEW_LIBERALCRIMESQUAD]+=power;
          }
       }
+   }
+
+   if(policestation_closed)
+   {
+      //People generally want to give police more power if they
+      //get closed down
+      change_public_opinion(VIEW_POLICEBEHAVIOR,-10);
+      policestation_closed=0;
+   }
+   if(amradio_closed)
+   {
+      //AM Radio less effective if brought offline
+      change_public_opinion(VIEW_AMRADIO,10);
+      amradio_closed=0;
+   }
+   if(cablenews_closed)
+   {
+      //Cable News less influential if brought offline
+      change_public_opinion(VIEW_CABLENEWS,10);
+      cablenews_closed=0;
    }
    
    //PUBLIC OPINION NATURAL MOVES

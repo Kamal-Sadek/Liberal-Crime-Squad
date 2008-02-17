@@ -40,28 +40,57 @@ void prepareencounter(short type,char sec)
 
    int creaturearray[CREATURENUM];
    memset(creaturearray,0,CREATURENUM*sizeof(int));
+   
+   if(postalarmtimer>100)
+   {
+      switch(sitetype)
+      {
+         case SITE_GOVERNMENT_INTELLIGENCEHQ:
+            creaturearray[CREATURE_AGENT]=1000;
+            break;
+         case SITE_CORPORATE_HEADQUARTERS:
+         case SITE_CORPORATE_HOUSE:
+            creaturearray[CREATURE_MERC]=1000;
+            break;
+         case SITE_MEDIA_AMRADIO:
+         case SITE_MEDIA_CABLENEWS:
+            creaturearray[CREATURE_HICK]=1000;
+            break;
+         case SITE_GOVERNMENT_POLICESTATION:
+            if(law[LAW_DEATHPENALTY]==-2&&
+               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=1000;
+            else creaturearray[CREATURE_SWAT]=1000;
+            break;
+         default:
+            if(law[LAW_DEATHPENALTY]==-2&&
+               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=1000;
+            else if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=1000;
+            else creaturearray[CREATURE_COP]=1000;
+            break;
+      }
+   }
 
    switch(type)
    {
       case SITE_BUSINESS_CRACKHOUSE:
       {
-         creaturearray[CREATURE_TEENAGER]=100;
-         creaturearray[CREATURE_MUSICIAN]=1;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_HSDROPOUT]=30;
-         creaturearray[CREATURE_BUM]=200;
+         creaturearray[CREATURE_TEENAGER]+=100;
+         creaturearray[CREATURE_MUSICIAN]+=1;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_HSDROPOUT]+=30;
+         creaturearray[CREATURE_BUM]+=200;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
-         creaturearray[CREATURE_GANGMEMBER]=200;
-         creaturearray[CREATURE_CRACKHEAD]=200;
-         creaturearray[CREATURE_PROSTITUTE]=200;
-         creaturearray[CREATURE_BIKER]=5;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_THIEF]=3;
-         creaturearray[CREATURE_ACTOR]=1;
+         creaturearray[CREATURE_GANGMEMBER]+=200;
+         creaturearray[CREATURE_CRACKHEAD]+=200;
+         creaturearray[CREATURE_PROSTITUTE]+=200;
+         creaturearray[CREATURE_BIKER]+=5;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_THIEF]+=3;
+         creaturearray[CREATURE_ACTOR]+=1;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -71,41 +100,41 @@ void prepareencounter(short type,char sec)
       }
       case SITE_BUSINESS_JUICEBAR:
       {
-         creaturearray[CREATURE_TEENAGER]=10;
-         creaturearray[CREATURE_JUDGE_LIBERAL]=1;
-         creaturearray[CREATURE_COLLEGESTUDENT]=10;
-         creaturearray[CREATURE_MUSICIAN]=2;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_TEACHER]=1;
-         creaturearray[CREATURE_HSDROPOUT]=1;
-         creaturearray[CREATURE_ENGINEER]=1;
-         creaturearray[CREATURE_FASTFOODWORKER]=1;
-         creaturearray[CREATURE_TELEMARKETER]=1;
-         creaturearray[CREATURE_OFFICEWORKER]=1;
-         creaturearray[CREATURE_MAILMAN]=1;
-         creaturearray[CREATURE_CHEF]=1;
-         creaturearray[CREATURE_NURSE]=1;
-         creaturearray[CREATURE_AMATEURMAGICIAN]=1;
-         creaturearray[CREATURE_HIPPIE]=6;
-         creaturearray[CREATURE_CRITIC_ART]=1;
-         creaturearray[CREATURE_CRITIC_MUSIC]=1;
-         creaturearray[CREATURE_AUTHOR]=1;
-         creaturearray[CREATURE_JOURNALIST]=1;
-         creaturearray[CREATURE_SOCIALITE]=2;
-         creaturearray[CREATURE_PROGRAMMER]=1;
-         creaturearray[CREATURE_RETIREE]=1;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_CAMERAMAN]=1;
-         creaturearray[CREATURE_HAIRSTYLIST]=1;
-         creaturearray[CREATURE_FASHIONDESIGNER]=1;
-         creaturearray[CREATURE_CLERK]=1;
-         creaturearray[CREATURE_THIEF]=1;
-         creaturearray[CREATURE_ACTOR]=1;
-         creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
-         creaturearray[CREATURE_ATHLETE]=1;
+         creaturearray[CREATURE_TEENAGER]+=10;
+         creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
+         creaturearray[CREATURE_COLLEGESTUDENT]+=10;
+         creaturearray[CREATURE_MUSICIAN]+=2;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_TEACHER]+=1;
+         creaturearray[CREATURE_HSDROPOUT]+=1;
+         creaturearray[CREATURE_ENGINEER]+=1;
+         creaturearray[CREATURE_FASTFOODWORKER]+=1;
+         creaturearray[CREATURE_TELEMARKETER]+=1;
+         creaturearray[CREATURE_OFFICEWORKER]+=1;
+         creaturearray[CREATURE_MAILMAN]+=1;
+         creaturearray[CREATURE_CHEF]+=1;
+         creaturearray[CREATURE_NURSE]+=1;
+         creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
+         creaturearray[CREATURE_HIPPIE]+=6;
+         creaturearray[CREATURE_CRITIC_ART]+=1;
+         creaturearray[CREATURE_CRITIC_MUSIC]+=1;
+         creaturearray[CREATURE_AUTHOR]+=1;
+         creaturearray[CREATURE_JOURNALIST]+=1;
+         creaturearray[CREATURE_SOCIALITE]+=2;
+         creaturearray[CREATURE_PROGRAMMER]+=1;
+         creaturearray[CREATURE_RETIREE]+=1;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_CAMERAMAN]+=1;
+         creaturearray[CREATURE_HAIRSTYLIST]+=1;
+         creaturearray[CREATURE_FASHIONDESIGNER]+=1;
+         creaturearray[CREATURE_CLERK]+=1;
+         creaturearray[CREATURE_THIEF]+=1;
+         creaturearray[CREATURE_ACTOR]+=1;
+         creaturearray[CREATURE_YOGAINSTRUCTOR]+=1;
+         creaturearray[CREATURE_ATHLETE]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -116,37 +145,37 @@ void prepareencounter(short type,char sec)
       }
       case SITE_BUSINESS_CIGARBAR:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=1000;
-         else creaturearray[CREATURE_SECURITYGUARD]=100;
-         creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=30;
-         creaturearray[CREATURE_CORPORATE_CEO]=1;
-         creaturearray[CREATURE_COP]=5;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=1000;
+         else creaturearray[CREATURE_SECURITYGUARD]+=100;
+         creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=30;
+         creaturearray[CREATURE_CORPORATE_CEO]+=1;
+         creaturearray[CREATURE_COP]=+5;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=2;
-         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=2;
-         creaturearray[CREATURE_JUDGE_CONSERVATIVE]=1;
-         creaturearray[CREATURE_RADIOPERSONALITY]=1;
-         creaturearray[CREATURE_NEWSANCHOR]=1;
-         creaturearray[CREATURE_LAWYER]=15;
-         creaturearray[CREATURE_DOCTOR]=10;
-         creaturearray[CREATURE_MUSICIAN]=1;
-         creaturearray[CREATURE_ENGINEER]=10;
-         creaturearray[CREATURE_FOOTBALLCOACH]=1;
-         creaturearray[CREATURE_CRITIC_ART]=1;
-         creaturearray[CREATURE_CRITIC_MUSIC]=1;
-         creaturearray[CREATURE_AUTHOR]=1;
-         creaturearray[CREATURE_JOURNALIST]=1;
-         creaturearray[CREATURE_SOCIALITE]=2;
-         creaturearray[CREATURE_RETIREE]=1;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_FASHIONDESIGNER]=1;
-         creaturearray[CREATURE_THIEF]=1;
-         creaturearray[CREATURE_ACTOR]=1;
-         creaturearray[CREATURE_ATHLETE]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=2;
+         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=2;
+         creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
+         creaturearray[CREATURE_RADIOPERSONALITY]+=1;
+         creaturearray[CREATURE_NEWSANCHOR]+=1;
+         creaturearray[CREATURE_LAWYER]+=15;
+         creaturearray[CREATURE_DOCTOR]+=10;
+         creaturearray[CREATURE_MUSICIAN]+=1;
+         creaturearray[CREATURE_ENGINEER]+=10;
+         creaturearray[CREATURE_FOOTBALLCOACH]+=1;
+         creaturearray[CREATURE_CRITIC_ART]+=1;
+         creaturearray[CREATURE_CRITIC_MUSIC]+=1;
+         creaturearray[CREATURE_AUTHOR]+=1;
+         creaturearray[CREATURE_JOURNALIST]+=1;
+         creaturearray[CREATURE_SOCIALITE]+=2;
+         creaturearray[CREATURE_RETIREE]+=1;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_FASHIONDESIGNER]+=1;
+         creaturearray[CREATURE_THIEF]+=1;
+         creaturearray[CREATURE_ACTOR]+=1;
+         creaturearray[CREATURE_ATHLETE]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -158,82 +187,82 @@ void prepareencounter(short type,char sec)
       case SITE_OUTDOOR_PUBLICPARK:
       case SITE_BUSINESS_LATTESTAND:
       {
-         creaturearray[CREATURE_SECURITYGUARD]=5;
-         creaturearray[CREATURE_SCIENTIST_LABTECH]=10;
-         creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=10;
-         creaturearray[CREATURE_CORPORATE_CEO]=1;
-         creaturearray[CREATURE_WORKER_JANITOR]=5;
-         if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=5;
-         creaturearray[CREATURE_WORKER_SECRETARY]=15;
-         if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=5;
-         creaturearray[CREATURE_TEENAGER]=5;
-         creaturearray[CREATURE_COP]=5;
+         creaturearray[CREATURE_SECURITYGUARD]+=5;
+         creaturearray[CREATURE_SCIENTIST_LABTECH]+=10;
+         creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=10;
+         creaturearray[CREATURE_CORPORATE_CEO]+=1;
+         creaturearray[CREATURE_WORKER_JANITOR]+=5;
+         if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=5;
+         creaturearray[CREATURE_WORKER_SECRETARY]+=15;
+         if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]+=5;
+         creaturearray[CREATURE_TEENAGER]+=5;
+         creaturearray[CREATURE_COP]+=5;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=2;
-         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=2;
-         creaturearray[CREATURE_JUDGE_LIBERAL]=1;
-         creaturearray[CREATURE_JUDGE_CONSERVATIVE]=1;
-         creaturearray[CREATURE_AGENT]=1;
-         creaturearray[CREATURE_RADIOPERSONALITY]=1;
-         creaturearray[CREATURE_NEWSANCHOR]=1;
-         creaturearray[CREATURE_LAWYER]=5;
-         creaturearray[CREATURE_DOCTOR]=5;
-         creaturearray[CREATURE_NURSE]=5;
-         creaturearray[CREATURE_SEWERWORKER]=1;
-         creaturearray[CREATURE_COLLEGESTUDENT]=30;
-         creaturearray[CREATURE_MUSICIAN]=5;
-         creaturearray[CREATURE_MATHEMATICIAN]=5;
-         creaturearray[CREATURE_TEACHER]=5;
-         creaturearray[CREATURE_HSDROPOUT]=1;
-         creaturearray[CREATURE_BUM]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=2;
+         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=2;
+         creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
+         creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
+         creaturearray[CREATURE_AGENT]+=1;
+         creaturearray[CREATURE_RADIOPERSONALITY]+=1;
+         creaturearray[CREATURE_NEWSANCHOR]+=1;
+         creaturearray[CREATURE_LAWYER]+=5;
+         creaturearray[CREATURE_DOCTOR]+=5;
+         creaturearray[CREATURE_NURSE]+=5;
+         creaturearray[CREATURE_SEWERWORKER]+=1;
+         creaturearray[CREATURE_COLLEGESTUDENT]+=30;
+         creaturearray[CREATURE_MUSICIAN]+=5;
+         creaturearray[CREATURE_MATHEMATICIAN]+=5;
+         creaturearray[CREATURE_TEACHER]+=5;
+         creaturearray[CREATURE_HSDROPOUT]+=1;
+         creaturearray[CREATURE_BUM]+=1;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=1;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=1;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-         creaturearray[CREATURE_GANGMEMBER]=1;
-         creaturearray[CREATURE_CRACKHEAD]=1;
-         creaturearray[CREATURE_PRIEST]=1;
-         creaturearray[CREATURE_ENGINEER]=5;
-         creaturearray[CREATURE_FASTFOODWORKER]=5;
-         creaturearray[CREATURE_TELEMARKETER]=5;
-         creaturearray[CREATURE_OFFICEWORKER]=10;
-         creaturearray[CREATURE_FOOTBALLCOACH]=1;
-         creaturearray[CREATURE_PROSTITUTE]=1;
-         creaturearray[CREATURE_MAILMAN]=1;
-         creaturearray[CREATURE_GARBAGEMAN]=1;
-         creaturearray[CREATURE_PLUMBER]=1;
-         creaturearray[CREATURE_CHEF]=1;
-         creaturearray[CREATURE_CONSTRUCTIONWORKER]=3;
-         creaturearray[CREATURE_AMATEURMAGICIAN]=1;
-         creaturearray[CREATURE_MERC]=1;
-         creaturearray[CREATURE_SOLDIER]=1;
+         creaturearray[CREATURE_GANGMEMBER]+=1;
+         creaturearray[CREATURE_CRACKHEAD]+=1;
+         creaturearray[CREATURE_PRIEST]+=1;
+         creaturearray[CREATURE_ENGINEER]+=5;
+         creaturearray[CREATURE_FASTFOODWORKER]+=5;
+         creaturearray[CREATURE_TELEMARKETER]+=5;
+         creaturearray[CREATURE_OFFICEWORKER]+=10;
+         creaturearray[CREATURE_FOOTBALLCOACH]+=1;
+         creaturearray[CREATURE_PROSTITUTE]+=1;
+         creaturearray[CREATURE_MAILMAN]+=1;
+         creaturearray[CREATURE_GARBAGEMAN]+=1;
+         creaturearray[CREATURE_PLUMBER]+=1;
+         creaturearray[CREATURE_CHEF]+=1;
+         creaturearray[CREATURE_CONSTRUCTIONWORKER]+=3;
+         creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
+         creaturearray[CREATURE_MERC]+=1;
+         creaturearray[CREATURE_SOLDIER]+=1;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
-         else creaturearray[CREATURE_PRISONGUARD]=1;
-         creaturearray[CREATURE_HIPPIE]=1;
-         creaturearray[CREATURE_CRITIC_ART]=1;
-         creaturearray[CREATURE_CRITIC_MUSIC]=1;
-         creaturearray[CREATURE_AUTHOR]=1;
-         creaturearray[CREATURE_JOURNALIST]=1;
-         creaturearray[CREATURE_SOCIALITE]=1;
-         creaturearray[CREATURE_BIKER]=1;
-         creaturearray[CREATURE_TRUCKER]=1;
-         creaturearray[CREATURE_TAXIDRIVER]=1;
-         creaturearray[CREATURE_PROGRAMMER]=5;
-         creaturearray[CREATURE_RETIREE]=3;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_CAMERAMAN]=1;
-         creaturearray[CREATURE_HAIRSTYLIST]=1;
-         creaturearray[CREATURE_FASHIONDESIGNER]=1;
-         creaturearray[CREATURE_CLERK]=1;
-         creaturearray[CREATURE_THIEF]=1;
-         creaturearray[CREATURE_ACTOR]=1;
-         creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
-         creaturearray[CREATURE_ATHLETE]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+         else creaturearray[CREATURE_PRISONGUARD]+=1;
+         creaturearray[CREATURE_HIPPIE]+=1;
+         creaturearray[CREATURE_CRITIC_ART]+=1;
+         creaturearray[CREATURE_CRITIC_MUSIC]+=1;
+         creaturearray[CREATURE_AUTHOR]+=1;
+         creaturearray[CREATURE_JOURNALIST]+=1;
+         creaturearray[CREATURE_SOCIALITE]+=1;
+         creaturearray[CREATURE_BIKER]+=1;
+         creaturearray[CREATURE_TRUCKER]+=1;
+         creaturearray[CREATURE_TAXIDRIVER]+=1;
+         creaturearray[CREATURE_PROGRAMMER]+=5;
+         creaturearray[CREATURE_RETIREE]+=3;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_CAMERAMAN]+=1;
+         creaturearray[CREATURE_HAIRSTYLIST]+=1;
+         creaturearray[CREATURE_FASHIONDESIGNER]+=1;
+         creaturearray[CREATURE_CLERK]+=1;
+         creaturearray[CREATURE_THIEF]+=1;
+         creaturearray[CREATURE_ACTOR]+=1;
+         creaturearray[CREATURE_YOGAINSTRUCTOR]+=1;
+         creaturearray[CREATURE_ATHLETE]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -244,29 +273,29 @@ void prepareencounter(short type,char sec)
       }
       case SITE_BUSINESS_VEGANCOOP:
       {
-         creaturearray[CREATURE_TEENAGER]=5;
-         creaturearray[CREATURE_JUDGE_LIBERAL]=1;
-         creaturearray[CREATURE_COLLEGESTUDENT]=50;
-         creaturearray[CREATURE_MUSICIAN]=20;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_TEACHER]=1;
-         creaturearray[CREATURE_HSDROPOUT]=10;
-         creaturearray[CREATURE_BUM]=1;
+         creaturearray[CREATURE_TEENAGER]+=5;
+         creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
+         creaturearray[CREATURE_COLLEGESTUDENT]+=50;
+         creaturearray[CREATURE_MUSICIAN]+=20;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_TEACHER]+=1;
+         creaturearray[CREATURE_HSDROPOUT]+=10;
+         creaturearray[CREATURE_BUM]+=1;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=1;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=1;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-         creaturearray[CREATURE_HIPPIE]=50;
-         creaturearray[CREATURE_CRITIC_ART]=1;
-         creaturearray[CREATURE_CRITIC_MUSIC]=1;
-         creaturearray[CREATURE_AUTHOR]=1;
-         creaturearray[CREATURE_JOURNALIST]=1;
-         creaturearray[CREATURE_RETIREE]=1;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_YOGAINSTRUCTOR]=2;
+         creaturearray[CREATURE_HIPPIE]+=50;
+         creaturearray[CREATURE_CRITIC_ART]+=1;
+         creaturearray[CREATURE_CRITIC_MUSIC]+=1;
+         creaturearray[CREATURE_AUTHOR]+=1;
+         creaturearray[CREATURE_JOURNALIST]+=1;
+         creaturearray[CREATURE_RETIREE]+=1;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_YOGAINSTRUCTOR]+=2;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -277,27 +306,27 @@ void prepareencounter(short type,char sec)
       }
       case SITE_BUSINESS_INTERNETCAFE:
       {
-         creaturearray[CREATURE_SCIENTIST_LABTECH]=5;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=3;
-         creaturearray[CREATURE_TEENAGER]=15;
-         creaturearray[CREATURE_LAWYER]=3;
-         creaturearray[CREATURE_COLLEGESTUDENT]=25;
-         creaturearray[CREATURE_MUSICIAN]=2;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_TEACHER]=5;
-         creaturearray[CREATURE_ENGINEER]=15;
-         creaturearray[CREATURE_DOCTOR]=1;
-         creaturearray[CREATURE_OFFICEWORKER]=15;
-         creaturearray[CREATURE_WORKER_SECRETARY]=5;
-         creaturearray[CREATURE_HIPPIE]=1;
-         creaturearray[CREATURE_PROGRAMMER]=15;
-         creaturearray[CREATURE_RETIREE]=5;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_CAMERAMAN]=1;
-         creaturearray[CREATURE_CLERK]=1;
+         creaturearray[CREATURE_SCIENTIST_LABTECH]+=5;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=3;
+         creaturearray[CREATURE_TEENAGER]+=15;
+         creaturearray[CREATURE_LAWYER]+=3;
+         creaturearray[CREATURE_COLLEGESTUDENT]+=25;
+         creaturearray[CREATURE_MUSICIAN]+=2;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_TEACHER]+=5;
+         creaturearray[CREATURE_ENGINEER]+=15;
+         creaturearray[CREATURE_DOCTOR]+=1;
+         creaturearray[CREATURE_OFFICEWORKER]+=15;
+         creaturearray[CREATURE_WORKER_SECRETARY]+=5;
+         creaturearray[CREATURE_HIPPIE]+=1;
+         creaturearray[CREATURE_PROGRAMMER]+=15;
+         creaturearray[CREATURE_RETIREE]+=5;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_CAMERAMAN]+=1;
+         creaturearray[CREATURE_CLERK]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -308,28 +337,28 @@ void prepareencounter(short type,char sec)
       }
       case SITE_RESIDENTIAL_SHELTER:
       {
-         creaturearray[CREATURE_WORKER_JANITOR]=5;
-         creaturearray[CREATURE_TEENAGER]=20;
-         creaturearray[CREATURE_MUSICIAN]=3;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_BUM]=200;
+         creaturearray[CREATURE_WORKER_JANITOR]+=5;
+         creaturearray[CREATURE_TEENAGER]+=20;
+         creaturearray[CREATURE_MUSICIAN]+=3;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_BUM]+=200;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
-         creaturearray[CREATURE_GANGMEMBER]=20;
-         creaturearray[CREATURE_CRACKHEAD]=50;
-         creaturearray[CREATURE_PROSTITUTE]=20;
-         creaturearray[CREATURE_AMATEURMAGICIAN]=1;
-         creaturearray[CREATURE_HIPPIE]=1;
-         creaturearray[CREATURE_NURSE]=5;
-         creaturearray[CREATURE_BIKER]=1;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_THIEF]=5;
-         creaturearray[CREATURE_ACTOR]=1;
+         creaturearray[CREATURE_GANGMEMBER]+=20;
+         creaturearray[CREATURE_CRACKHEAD]+=50;
+         creaturearray[CREATURE_PROSTITUTE]+=20;
+         creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
+         creaturearray[CREATURE_HIPPIE]+=1;
+         creaturearray[CREATURE_NURSE]+=5;
+         creaturearray[CREATURE_BIKER]+=1;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_THIEF]+=5;
+         creaturearray[CREATURE_ACTOR]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -340,51 +369,51 @@ void prepareencounter(short type,char sec)
       }
       case SITE_RESIDENTIAL_TENEMENT:
       {
-         creaturearray[CREATURE_SECURITYGUARD]=1;
-         creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
-         creaturearray[CREATURE_WORKER_JANITOR]=3;
-         if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
-         creaturearray[CREATURE_WORKER_SECRETARY]=2;
-         if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
-         creaturearray[CREATURE_TEENAGER]=5;
-         creaturearray[CREATURE_SEWERWORKER]=1;
-         creaturearray[CREATURE_COLLEGESTUDENT]=1;
-         creaturearray[CREATURE_MUSICIAN]=1;
-         creaturearray[CREATURE_MATHEMATICIAN]=1;
-         creaturearray[CREATURE_TEACHER]=1;
-         creaturearray[CREATURE_HSDROPOUT]=3;
-         creaturearray[CREATURE_BUM]=3;
+         creaturearray[CREATURE_SECURITYGUARD]+=1;
+         creaturearray[CREATURE_SCIENTIST_LABTECH]+=1;
+         creaturearray[CREATURE_WORKER_JANITOR]+=3;
+         if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=1;
+         creaturearray[CREATURE_WORKER_SECRETARY]+=2;
+         if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]+=1;
+         creaturearray[CREATURE_TEENAGER]+=5;
+         creaturearray[CREATURE_SEWERWORKER]+=1;
+         creaturearray[CREATURE_COLLEGESTUDENT]+=1;
+         creaturearray[CREATURE_MUSICIAN]+=1;
+         creaturearray[CREATURE_MATHEMATICIAN]+=1;
+         creaturearray[CREATURE_TEACHER]+=1;
+         creaturearray[CREATURE_HSDROPOUT]+=3;
+         creaturearray[CREATURE_BUM]+=3;
          if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
          if(law[LAW_POLLUTION]==-2&&
             law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=5;
-         creaturearray[CREATURE_GANGMEMBER]=3;
-         creaturearray[CREATURE_CRACKHEAD]=3;
-         creaturearray[CREATURE_FASTFOODWORKER]=1;
-         creaturearray[CREATURE_TELEMARKETER]=1;
-         creaturearray[CREATURE_OFFICEWORKER]=1;
-         creaturearray[CREATURE_PROSTITUTE]=3;
-         creaturearray[CREATURE_MAILMAN]=1;
-         creaturearray[CREATURE_GARBAGEMAN]=1;
-         creaturearray[CREATURE_CONSTRUCTIONWORKER]=1;
-         creaturearray[CREATURE_AMATEURMAGICIAN]=1;
-         creaturearray[CREATURE_HICK]=1;
-         creaturearray[CREATURE_SOLDIER]=1;
+         creaturearray[CREATURE_GANGMEMBER]+=3;
+         creaturearray[CREATURE_CRACKHEAD]+=3;
+         creaturearray[CREATURE_FASTFOODWORKER]+=1;
+         creaturearray[CREATURE_TELEMARKETER]+=1;
+         creaturearray[CREATURE_OFFICEWORKER]+=1;
+         creaturearray[CREATURE_PROSTITUTE]+=3;
+         creaturearray[CREATURE_MAILMAN]+=1;
+         creaturearray[CREATURE_GARBAGEMAN]+=1;
+         creaturearray[CREATURE_CONSTRUCTIONWORKER]+=1;
+         creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
+         creaturearray[CREATURE_HICK]+=1;
+         creaturearray[CREATURE_SOLDIER]+=1;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
-         else creaturearray[CREATURE_PRISONGUARD]=1;
-         creaturearray[CREATURE_HIPPIE]=1;
-         creaturearray[CREATURE_BIKER]=1;
-         creaturearray[CREATURE_TAXIDRIVER]=1;
-         creaturearray[CREATURE_RETIREE]=1;
-         creaturearray[CREATURE_PAINTER]=1;
-         creaturearray[CREATURE_SCULPTOR]=1;
-         creaturearray[CREATURE_DANCER]=1;
-         creaturearray[CREATURE_PHOTOGRAPHER]=1;
-         creaturearray[CREATURE_HAIRSTYLIST]=1;
-         creaturearray[CREATURE_CLERK]=1;
-         creaturearray[CREATURE_THIEF]=1;
-         creaturearray[CREATURE_ACTOR]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+         else creaturearray[CREATURE_PRISONGUARD]+=1;
+         creaturearray[CREATURE_HIPPIE]+=1;
+         creaturearray[CREATURE_BIKER]+=1;
+         creaturearray[CREATURE_TAXIDRIVER]+=1;
+         creaturearray[CREATURE_RETIREE]+=1;
+         creaturearray[CREATURE_PAINTER]+=1;
+         creaturearray[CREATURE_SCULPTOR]+=1;
+         creaturearray[CREATURE_DANCER]+=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+         creaturearray[CREATURE_HAIRSTYLIST]+=1;
+         creaturearray[CREATURE_CLERK]+=1;
+         creaturearray[CREATURE_THIEF]+=1;
+         creaturearray[CREATURE_ACTOR]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -395,7 +424,7 @@ void prepareencounter(short type,char sec)
       }
       case SITE_RESIDENTIAL_APARTMENT:
       {
-         creaturearray[CREATURE_SECURITYGUARD]=1;
+         creaturearray[CREATURE_SECURITYGUARD]+=1;
          creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
          creaturearray[CREATURE_CORPORATE_MANAGER]=1;
          creaturearray[CREATURE_WORKER_JANITOR]=1;
@@ -403,10 +432,10 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_WORKER_SECRETARY]=1;
          if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
          creaturearray[CREATURE_TEENAGER]=3;
-         creaturearray[CREATURE_COP]=1;
+         creaturearray[CREATURE_COP]+=1;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=1;
-         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=1;
+         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=1;
          creaturearray[CREATURE_LAWYER]=1;
          creaturearray[CREATURE_SEWERWORKER]=1;
          creaturearray[CREATURE_COLLEGESTUDENT]=1;
@@ -427,10 +456,10 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_CHEF]=1;
          creaturearray[CREATURE_CONSTRUCTIONWORKER]=1;
          creaturearray[CREATURE_AMATEURMAGICIAN]=1;
-         creaturearray[CREATURE_SOLDIER]=1;
+         creaturearray[CREATURE_SOLDIER]+=1;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
-         else creaturearray[CREATURE_PRISONGUARD]=1;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+         else creaturearray[CREATURE_PRISONGUARD]+=1;
          creaturearray[CREATURE_HIPPIE]=1;
          creaturearray[CREATURE_CRITIC_ART]=1;
          creaturearray[CREATURE_CRITIC_MUSIC]=1;
@@ -460,10 +489,10 @@ void prepareencounter(short type,char sec)
       }
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
-         else creaturearray[CREATURE_SECURITYGUARD]=10;
-         creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=5;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+         else creaturearray[CREATURE_SECURITYGUARD]+=10;
+         creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=5;
          creaturearray[CREATURE_WORKER_JANITOR]=5;
          creaturearray[CREATURE_WORKER_SECRETARY]=1;
          creaturearray[CREATURE_TEENAGER]=3;
@@ -501,8 +530,8 @@ void prepareencounter(short type,char sec)
       }
       case SITE_LABORATORY_COSMETICS:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
-         else creaturearray[CREATURE_SECURITYGUARD]=10;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+         else creaturearray[CREATURE_SECURITYGUARD]+=10;
          creaturearray[CREATURE_SCIENTIST_LABTECH]=10;
          creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
          creaturearray[CREATURE_CORPORATE_MANAGER]=1;
@@ -519,8 +548,8 @@ void prepareencounter(short type,char sec)
       }
       case SITE_INDUSTRY_NUCLEAR:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
-         else creaturearray[CREATURE_SECURITYGUARD]=10;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+         else creaturearray[CREATURE_SECURITYGUARD]+=10;
          creaturearray[CREATURE_SCIENTIST_LABTECH]=10;
          creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
          creaturearray[CREATURE_CORPORATE_MANAGER]=1;
@@ -537,16 +566,15 @@ void prepareencounter(short type,char sec)
       }
       case SITE_LABORATORY_GENETIC:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=10000;
-         else creaturearray[CREATURE_SECURITYGUARD]=1000;
-         creaturearray[CREATURE_SCIENTIST_LABTECH]=1000;
-         creaturearray[CREATURE_SCIENTIST_EMINENT]=100;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=100;
-         creaturearray[CREATURE_DOCTOR]=100;
-         creaturearray[CREATURE_WORKER_JANITOR]=1000;
-         creaturearray[CREATURE_WORKER_SECRETARY]=1000;
-         creaturearray[CREATURE_OFFICEWORKER]=1000;
-         creaturearray[CREATURE_GENETIC]=1;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+         else creaturearray[CREATURE_SECURITYGUARD]+=10;
+         creaturearray[CREATURE_SCIENTIST_LABTECH]=10;
+         creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
+         creaturearray[CREATURE_CORPORATE_MANAGER]=1;
+         creaturearray[CREATURE_DOCTOR]=1;
+         creaturearray[CREATURE_WORKER_JANITOR]=10;
+         creaturearray[CREATURE_WORKER_SECRETARY]=10;
+         creaturearray[CREATURE_OFFICEWORKER]=10;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -563,11 +591,11 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_WORKER_SECRETARY]=1;
          if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
          creaturearray[CREATURE_TEENAGER]=5;
-         if(sec)creaturearray[CREATURE_COP]=2000;
-         else creaturearray[CREATURE_COP]=1000;
+         if(sec)creaturearray[CREATURE_COP]+=1000;
+         else creaturearray[CREATURE_COP]+=500;
          if(law[LAW_DEATHPENALTY]==-2&&
-             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=400;
-         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=400;
+             law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=400;
+         if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=400;
          creaturearray[CREATURE_JUDGE_LIBERAL]=1;
          creaturearray[CREATURE_JUDGE_CONSERVATIVE]=1;
          creaturearray[CREATURE_AGENT]=1;
@@ -603,7 +631,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_CONSTRUCTIONWORKER]=1;
          creaturearray[CREATURE_AMATEURMAGICIAN]=1;
          creaturearray[CREATURE_HICK]=1;
-         creaturearray[CREATURE_SOLDIER]=1;
+         creaturearray[CREATURE_SOLDIER]+=1;
          if(law[LAW_DEATHPENALTY]==-2&&
              law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
          else creaturearray[CREATURE_PRISONGUARD]=1;
@@ -731,14 +759,14 @@ void prepareencounter(short type,char sec)
          if(sec)
          {
             if(law[LAW_DEATHPENALTY]==-2&&
-                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=3;
-            else creaturearray[CREATURE_PRISONGUARD]=3;
+                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=3;
+            else creaturearray[CREATURE_PRISONGUARD]+=3;
          }
          else
          {
             if(law[LAW_DEATHPENALTY]==-2&&
-                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=2;
-            else creaturearray[CREATURE_PRISONGUARD]=2;
+                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=2;
+            else creaturearray[CREATURE_PRISONGUARD]+=2;
          }
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -749,14 +777,14 @@ void prepareencounter(short type,char sec)
       }
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=1000;
-         else creaturearray[CREATURE_SECURITYGUARD]=100;
-         creaturearray[CREATURE_WORKER_JANITOR]=50;
-         creaturearray[CREATURE_WORKER_SECRETARY]=50;
-         creaturearray[CREATURE_AGENT]=100;
-         creaturearray[CREATURE_GUARDDOG]=50;
-         creaturearray[CREATURE_MATHEMATICIAN]=5;
-         creaturearray[CREATURE_PROGRAMMER]=5;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=1000;
+         else creaturearray[CREATURE_SECURITYGUARD]+=100;
+         creaturearray[CREATURE_WORKER_JANITOR]+=50;
+         creaturearray[CREATURE_WORKER_SECRETARY]+=50;
+         creaturearray[CREATURE_AGENT]+=100;
+         creaturearray[CREATURE_GUARDDOG]+=50;
+         creaturearray[CREATURE_MATHEMATICIAN]+=5;
+         creaturearray[CREATURE_PROGRAMMER]+=5;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -767,10 +795,10 @@ void prepareencounter(short type,char sec)
       }
       case SITE_INDUSTRY_SWEATSHOP:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=2000;
-         else creaturearray[CREATURE_SECURITYGUARD]=200;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=5;
-         creaturearray[CREATURE_WORKER_SWEATSHOP]=800;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=2000;
+         else creaturearray[CREATURE_SECURITYGUARD]+=200;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=5;
+         creaturearray[CREATURE_WORKER_SWEATSHOP]+=800;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -780,33 +808,33 @@ void prepareencounter(short type,char sec)
       }
       case SITE_INDUSTRY_POLLUTER:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=1000;
-         else creaturearray[CREATURE_SECURITYGUARD]=100;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=5;
-         creaturearray[CREATURE_WORKER_JANITOR]=50;
-         creaturearray[CREATURE_WORKER_SECRETARY]=100;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+         else creaturearray[CREATURE_SECURITYGUARD]+=10;
+         creaturearray[CREATURE_CORPORATE_MANAGER]+=1;
+         creaturearray[CREATURE_WORKER_JANITOR]+=10;
+         creaturearray[CREATURE_WORKER_SECRETARY]+=10;
 
          if(law[LAW_LABOR]==-2)
          {
-            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=200;
-            creaturearray[CREATURE_WORKER_FACTORY_CHILD]=1400;
+            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=20;
+            creaturearray[CREATURE_WORKER_FACTORY_CHILD]+=140;
          }
          else if(law[LAW_LABOR]==-1)
          {
-            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1600;
-            creaturearray[CREATURE_WORKER_FACTORY_CHILD]=5;
+            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=160;
+            creaturearray[CREATURE_WORKER_FACTORY_CHILD]+=1;
          }
          else if(law[LAW_LABOR]==0)
          {
-            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=800;
-            creaturearray[CREATURE_WORKER_FACTORY_UNION]=800;
+            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=80;
+            creaturearray[CREATURE_WORKER_FACTORY_UNION]+=80;
          }
          else if(law[LAW_LABOR]==1)
          {
-            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=500;
-            creaturearray[CREATURE_WORKER_FACTORY_UNION]=1100;
+            creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=50;
+            creaturearray[CREATURE_WORKER_FACTORY_UNION]=110;
          }
-         else creaturearray[CREATURE_WORKER_FACTORY_UNION]=1600;
+         else creaturearray[CREATURE_WORKER_FACTORY_UNION]=160;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -816,16 +844,16 @@ void prepareencounter(short type,char sec)
       }
       case SITE_CORPORATE_HEADQUARTERS:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=4000;
-         else creaturearray[CREATURE_SECURITYGUARD]=400;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=200;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]=400;
+         else creaturearray[CREATURE_SECURITYGUARD]=40;
+         creaturearray[CREATURE_CORPORATE_MANAGER]=20;
          creaturearray[CREATURE_CORPORATE_CEO]=1;
-         creaturearray[CREATURE_WORKER_JANITOR]=200;
-         creaturearray[CREATURE_WORKER_SECRETARY]=400;
+         creaturearray[CREATURE_WORKER_JANITOR]=20;
+         creaturearray[CREATURE_WORKER_SECRETARY]=40;
          creaturearray[CREATURE_JUDGE_CONSERVATIVE]=1;
-         creaturearray[CREATURE_LAWYER]=200;
+         creaturearray[CREATURE_LAWYER]=20;
          creaturearray[CREATURE_PRIEST]=1;
-         creaturearray[CREATURE_OFFICEWORKER]=800;
+         creaturearray[CREATURE_OFFICEWORKER]=80;
          creaturearray[CREATURE_PROSTITUTE]=1;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -836,17 +864,17 @@ void prepareencounter(short type,char sec)
       }
       case SITE_CORPORATE_HOUSE:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=10000;
-         else creaturearray[CREATURE_SECURITYGUARD]=1000;
-         creaturearray[CREATURE_CORPORATE_CEO]=50;
-         creaturearray[CREATURE_WORKER_SERVANT]=3000;
-         creaturearray[CREATURE_WORKER_SECRETARY]=50;
-         creaturearray[CREATURE_TEENAGER]=50;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
+         else creaturearray[CREATURE_SECURITYGUARD]=10;
+         creaturearray[CREATURE_CORPORATE_CEO]=5;
+         creaturearray[CREATURE_WORKER_SERVANT]=30;
+         creaturearray[CREATURE_WORKER_SECRETARY]=5;
+         creaturearray[CREATURE_TEENAGER]=5;
          creaturearray[CREATURE_GENETIC]=1;
-         creaturearray[CREATURE_GUARDDOG]=1000;
-         creaturearray[CREATURE_LAWYER]=50;
+         creaturearray[CREATURE_GUARDDOG]=10;
+         creaturearray[CREATURE_LAWYER]=5;
          creaturearray[CREATURE_PRIEST]=1;
-         creaturearray[CREATURE_PROSTITUTE]=50;
+         creaturearray[CREATURE_PROSTITUTE]=1;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -856,14 +884,14 @@ void prepareencounter(short type,char sec)
       }
       case SITE_MEDIA_AMRADIO:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=2000;
-         else creaturearray[CREATURE_SECURITYGUARD]=200;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=50;
-         creaturearray[CREATURE_WORKER_JANITOR]=200;
-         creaturearray[CREATURE_WORKER_SECRETARY]=200;
-         creaturearray[CREATURE_RADIOPERSONALITY]=20;
-         creaturearray[CREATURE_ENGINEER]=400;
-         creaturearray[CREATURE_OFFICEWORKER]=400;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
+         else creaturearray[CREATURE_SECURITYGUARD]=10;
+         creaturearray[CREATURE_CORPORATE_MANAGER]=2;
+         creaturearray[CREATURE_WORKER_JANITOR]=10;
+         creaturearray[CREATURE_WORKER_SECRETARY]=10;
+         creaturearray[CREATURE_RADIOPERSONALITY]=2;
+         creaturearray[CREATURE_ENGINEER]=20;
+         creaturearray[CREATURE_OFFICEWORKER]=40;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -873,16 +901,16 @@ void prepareencounter(short type,char sec)
       }
       case SITE_MEDIA_CABLENEWS:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]=2000;
-         else creaturearray[CREATURE_SECURITYGUARD]=200;
-         creaturearray[CREATURE_CORPORATE_MANAGER]=50;
-         creaturearray[CREATURE_WORKER_JANITOR]=200;
-         creaturearray[CREATURE_WORKER_SECRETARY]=200;
-         creaturearray[CREATURE_NEWSANCHOR]=20;
-         creaturearray[CREATURE_ENGINEER]=400;
-         creaturearray[CREATURE_OFFICEWORKER]=400;
-         creaturearray[CREATURE_PHOTOGRAPHER]=50;
-         creaturearray[CREATURE_CAMERAMAN]=50;
+         if(sec)creaturearray[CREATURE_SECURITYGUARD]=100;
+         else creaturearray[CREATURE_SECURITYGUARD]=10;
+         creaturearray[CREATURE_CORPORATE_MANAGER]=5;
+         creaturearray[CREATURE_WORKER_JANITOR]=20;
+         creaturearray[CREATURE_WORKER_SECRETARY]=20;
+         creaturearray[CREATURE_NEWSANCHOR]=2;
+         creaturearray[CREATURE_ENGINEER]=40;
+         creaturearray[CREATURE_OFFICEWORKER]=40;
+         creaturearray[CREATURE_PHOTOGRAPHER]=5;
+         creaturearray[CREATURE_CAMERAMAN]=5;
 
    #ifdef SHOWWAIT
       creaturearray[CREATURE_NEWSANCHOR]=20000;
@@ -924,6 +952,7 @@ char addsiegeencounter(char type)
             if(encounter[e].exists)continue;
 
             if(location[cursite]->siege.siege)
+            {
                switch(location[cursite]->siege.siegetype)
                {
                   case SIEGE_POLICE:
@@ -941,33 +970,6 @@ char addsiegeencounter(char type)
                      break;
                   case SIEGE_CORPORATE:
                      makecreature(encounter[e],CREATURE_MERC);
-                     break;
-               }
-            else
-            {
-               switch(sitetype)
-               {
-                  case SITE_GOVERNMENT_INTELLIGENCEHQ:
-                     makecreature(encounter[e],CREATURE_AGENT);
-                     break;
-                  case SITE_CORPORATE_HEADQUARTERS:
-                  case SITE_CORPORATE_HOUSE:
-                     makecreature(encounter[e],CREATURE_MERC);
-                     break;
-                  case SITE_MEDIA_AMRADIO:
-                  case SITE_MEDIA_CABLENEWS:
-                     makecreature(encounter[e],CREATURE_HICK);
-                     break;
-                  case SITE_GOVERNMENT_POLICESTATION:
-                     if(law[LAW_DEATHPENALTY]==-2&&
-                        law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
-                     else makecreature(encounter[e],CREATURE_SWAT);
-                     break;
-                  default:
-                     if(law[LAW_DEATHPENALTY]==-2&&
-                        law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
-                     else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[e],CREATURE_GANGUNIT);
-                     else makecreature(encounter[e],CREATURE_COP);
                      break;
                }
             }
