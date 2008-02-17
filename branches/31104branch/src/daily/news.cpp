@@ -271,7 +271,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          ey=24;
       }
 
-      unsigned char ch='?';
+      unsigned int ch='?';
       switch(LCSrandom(6))
       {
          case 0:ch=CH_LIGHT_SHADE;break;
@@ -294,7 +294,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             if(y==sy||y==8||y==16||y==24||x==sx||x==ex)
             {
                move(y,x);
-               addch(translateGraphicsChar(ch));
+               addch(ch);
             }
          }
       }
