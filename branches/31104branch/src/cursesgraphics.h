@@ -1347,7 +1347,7 @@
 /*  #define CH_BLACK_SQUARE 0x25a0 */
 /*  #define CH_NO_BREAK_SPACE 0x00a0 */
 
-#ifdef CURSES_GRAPHICS
+#ifdef CONSOLE_SUPPORT
 struct unicodechar
 {
 	unsigned int unicode_char;
@@ -1658,7 +1658,7 @@ struct unicodechar unicode_hacks[] = {
 
     {UNICODE_HACKS_END, '?'}
 };
-#endif /* CURSES_GRAPHICS */
+#endif /* CONSOLE_SUPPORT */
 
 #endif /* CH_USE_UNICODE */
 
@@ -1937,7 +1937,3 @@ extern struct graphicschar *gchar;
 #define CH_MAXIMUM 256
 
 int translateGraphicsChar(int c);
-#ifdef CH_USE_UNICODE
-  char setup_unicode();
-  int addch_unicode(int c);
-#endif

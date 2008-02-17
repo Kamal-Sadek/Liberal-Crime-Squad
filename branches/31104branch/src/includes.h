@@ -1529,6 +1529,10 @@ int lawflagheat(int lawflag);
 void set_color(short f,short b,char bright,char blink=0);
 void translategetch(int &c);
 void translategetch_cap(int &c);
+#ifdef CH_USE_UNICODE
+  char setup_unicode();
+  int addch_unicode(int c);
+#endif
 
 /*
  getnames.cpp
