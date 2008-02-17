@@ -1602,6 +1602,14 @@ void displaycenterednewsfont(char *str,int y)
             for(int y2=0;y2<7;y2++)
             {
                move(y+y2,x+x2);
+
+#ifdef NCURSES
+               // Clean the square first.
+               set_color(COLOR_BLACK, COLOR_BLACK, 0);
+               addch(CH_FULL_BLOCK);
+               move(y+y2,x+x2);
+#endif
+
                if(x2==5)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
