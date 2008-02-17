@@ -837,7 +837,7 @@ void mode_site(void)
                      if(x==locx&&y==locy)
                      {
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
-                        addch(1);
+                        addch(CH_WHITE_SMILING_FACE);
                      }
                      else
                      {
@@ -854,23 +854,23 @@ void mode_site(void)
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,1);
-                           addch(2);
+                           addch(CH_BLACK_SMILING_FACE);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,0);
-                           addch(2);
+                           addch(CH_BLACK_SMILING_FACE);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_UP)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch(24);
+                           addch(CH_UPWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_DOWN)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch(25);
+                           addch(CH_DOWNWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special!=-1)
                         {

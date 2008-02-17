@@ -659,8 +659,9 @@ void printblock(int x,int y,int z,int px,int py)
          case SPECIAL_NEWS_BROADCASTSTUDIO:addstr("STUDIO!");break;
          case SPECIAL_APARTMENT_LANDLORD:addstr("LANDLRD");break;
          case SPECIAL_APARTMENT_SIGN:move(py,px+1);addstr("SIGN!");break;
-         case SPECIAL_STAIRS_UP:addstr("STAIRS");addch(24);break;
-         case SPECIAL_STAIRS_DOWN:addstr("STAIRS");addch(25);break;
+         case SPECIAL_STAIRS_UP:addstr("STAIRS");addch(CH_UPWARDS_ARROW);break;
+         case SPECIAL_STAIRS_DOWN:addstr("STAIRS");
+                                  addch(CH_DOWNWARDS_ARROW);break;
          case SPECIAL_RESTAURANT_TABLE:move(py,px+1);addstr("TABLE");break;
          case SPECIAL_CAFE_COMPUTER:addstr("COMPUTR");break;
          case SPECIAL_PARK_BENCH:move(py,px+1);addstr("BENCH");break;
