@@ -221,12 +221,25 @@ void mode_site(void)
             if(encounter[e].type==CREATURE_WORKER_SERVANT||
                encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
                encounter[e].type==CREATURE_WORKER_SWEATSHOP)freeable++;
-            else if(!encounter[e].cantbluff)talkers++;
+            else if(!encounter[e].cantbluff&&!(encounter[e].align==1&&sitealarm&&enemy))talkers++;
             if(encounter[e].type==CREATURE_CORPORATE_CEO||
                encounter[e].type==CREATURE_RADIOPERSONALITY||
                encounter[e].type==CREATURE_NEWSANCHOR||
                encounter[e].type==CREATURE_SCIENTIST_EMINENT||
                encounter[e].type==CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
+         }
+      }
+
+      //If in combat, do a second check
+      if(talkers&&sitealarm&&enemy)
+      {
+         talkers=0;
+         for(int e=0;e<ENCMAX;e++)
+         {
+            if(encounter[e].exists)
+            {
+               if(encounter[e].align==-1&&!encounter[e].cantbluff)talkers++;
+            }
          }
       }
       int libnum=0;

@@ -63,7 +63,8 @@ void creatureadvance(void)
 
                sitecrime+=10;
                sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-               criminalizeparty(LAWFLAG_MURDER);
+               //criminalizeparty(LAWFLAG_MURDER);
+               //<-- might not die from squad's attacks
 
                if(activesquad->squad[p]->prisoner->type==CREATURE_CORPORATE_CEO||
                   activesquad->squad[p]->prisoner->type==CREATURE_RADIOPERSONALITY||
@@ -257,7 +258,8 @@ void advancecreature(creaturest &cr)
          {
             sitecrime+=10;
             sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-            criminalizeparty(LAWFLAG_MURDER);
+            //criminalizeparty(LAWFLAG_MURDER);
+            //<-- might not die from squad attacking
          }
          adddeathmessage(cr);
 

@@ -37,7 +37,8 @@ void youattack(void)
 
    for(int e=0;e<ENCMAX;e++)
    {
-      encounter[e].cantbluff=2;
+      if(encounter[e].align==-1)
+         encounter[e].cantbluff=2;
    }
 
    sitealarm=1;
@@ -198,8 +199,9 @@ void enemyattack(void)
       if(mode==GAMEMODE_CHASECAR&&
          !encounter[e].weapon.ranged())continue;
 
-      encounter[e].cantbluff=2;
-      if(encounter[e].align!=-1)
+      if(encounter[e].align==-1)
+         encounter[e].cantbluff=2;
+      if(encounter[e].align!=-1&&!(encounter[e].flag & CREATUREFLAG_CONVERTED))
       {
          if(!incapacitated(encounter[e],0,printed))
          {
@@ -259,19 +261,33 @@ void enemyattack(void)
       vector<int> goodtarg;
       vector<int> badtarg;
 
-      for(int p=0;p<6;p++)
+      if(encounter[e].align==-1)
       {
-         if(activesquad->squad[p]!=NULL)
+         for(int p=0;p<6;p++)
          {
-            if(activesquad->squad[p]->alive)goodtarg.push_back(p);
+            if(activesquad->squad[p]!=NULL)
+            {
+               if(activesquad->squad[p]->alive)goodtarg.push_back(p);
+            }
+         }
+      }
+      else
+      {
+         for(e2=0;e2<ENCMAX;e2++)
+         {
+            if(!encounter[e2].exists)continue;
+            if(!encounter[e2].alive)continue;
+            if(encounter[e2].align!=-1)continue;
+
+            goodtarg.push_back(e2);
          }
       }
 
       for(e2=0;e2<ENCMAX;e2++)
       {
-         if(!encounter[e].exists)continue;
-         if(!encounter[e].alive)continue;
-         if(encounter[e].align==-1)continue;
+         if(!encounter[e2].exists)continue;
+         if(!encounter[e2].alive)continue;
+         if(encounter[e2].align==-1)continue;
 
          badtarg.push_back(e2);
       }
@@ -295,53 +311,63 @@ void enemyattack(void)
       char actual;
       if(canmistake)
       {
-         if(activesquad->squad[target]->prisoner!=NULL && !LCSrandom(2))
+         if(encounter[e].align==-1)
          {
-            attack(encounter[e],*activesquad->squad[target]->prisoner,1,actual);
-            if(!activesquad->squad[target]->prisoner->alive)
+            if(activesquad->squad[target]->prisoner!=NULL && !LCSrandom(2))
             {
-               if(activesquad->squad[target]->prisoner->squadid==-1)
+               attack(encounter[e],*activesquad->squad[target]->prisoner,1,actual);
+               if(!activesquad->squad[target]->prisoner->alive)
                {
-                  clearmessagearea();
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(16,1);
-                  addstr(activesquad->squad[target]->name);
-                  addstr(" drops ");
-                  addstr(activesquad->squad[target]->prisoner->name);
-                  addstr("'s body.");
+                  if(activesquad->squad[target]->prisoner->squadid==-1)
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr(activesquad->squad[target]->name);
+                     addstr(" drops ");
+                     addstr(activesquad->squad[target]->prisoner->name);
+                     addstr("'s body.");
 
-                  sitecrime+=10;
-                  sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                  criminalizeparty(LAWFLAG_MURDER);
+                     sitecrime+=10;
+                     sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+                     //criminalizeparty(LAWFLAG_MURDER);
+                     //<-- don't penalize for shots the enemy takes
 
-                  if(activesquad->squad[target]->prisoner->type==CREATURE_CORPORATE_CEO||
-                     activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
-                     activesquad->squad[target]->prisoner->type==CREATURE_NEWSANCHOR||
-                     activesquad->squad[target]->prisoner->type==CREATURE_SCIENTIST_EMINENT||
-                     activesquad->squad[target]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE)sitecrime+=30;
+                     if(activesquad->squad[target]->prisoner->type==CREATURE_CORPORATE_CEO||
+                        activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
+                        activesquad->squad[target]->prisoner->type==CREATURE_NEWSANCHOR||
+                        activesquad->squad[target]->prisoner->type==CREATURE_SCIENTIST_EMINENT||
+                        activesquad->squad[target]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE)sitecrime+=30;
 
-                  makeloot(*activesquad->squad[target]->prisoner,groundloot);
+                     makeloot(*activesquad->squad[target]->prisoner,groundloot);
 
-                  refresh();
-                  getch();
+                     refresh();
+                     getch();
 
-                  delete activesquad->squad[target]->prisoner;
-                  activesquad->squad[target]->prisoner=NULL;
+                     delete activesquad->squad[target]->prisoner;
+                     activesquad->squad[target]->prisoner=NULL;
+                  }
                }
+               continue;
             }
-            continue;
          }
 
          if(!LCSrandom(10)&&badtarg.size()>0)
          {
-            int target=badtarg[LCSrandom(badtarg.size())];
-            attack(encounter[e],encounter[target],1,actual);
+            target=badtarg[LCSrandom(badtarg.size())];
+            if(encounter[target].flag & CREATUREFLAG_CONVERTED)
+               attack(encounter[e],encounter[target],0,actual);
+            else
+               attack(encounter[e],encounter[target],1,actual);
             if(!encounter[target].alive)delenc(target,1);
             continue;
          }
       }
 
-      attack(encounter[e],*activesquad->squad[target],0,actual);
+      if(encounter[e].align==-1)
+         attack(encounter[e],*activesquad->squad[target],0,actual);
+      else
+         attack(encounter[e],encounter[target],0,actual);
    }
 }
 
@@ -563,7 +589,10 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                         t.attval(ATTRIBUTE_HEART,0);
                   }
                   attack=LCSrandom(a.skill[SKILL_MUSIC]*2+1);
-                  a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist);
+                  if(resist>0)
+                     a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist)+1;
+                  else
+                     a.skill_ip[SKILL_MUSIC]+=1;
                }
                break;
          }
@@ -582,7 +611,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   addstr(" loses juice!");
                   addjuice(t,-50);
                }
-               else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) && t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
+               else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) || t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
                {
                   move(17,1);
                   addstr(t.name);
@@ -654,6 +683,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   addstr(" has turned Liberal!");
 
                   t.align=1;
+                  t.flag|=CREATUREFLAG_CONVERTED;
+                  t.cantbluff=0;
                }
             }
          }
@@ -1327,7 +1358,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                  criminalizeparty(LAWFLAG_MURDER);
+                  if(a.squadid!=-1)criminalizeparty(LAWFLAG_MURDER);
                }
             }
 
