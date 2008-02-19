@@ -1529,6 +1529,12 @@ void advancelocations(void)
          location[l]->closed--;
          if(location[l]->closed==0)
          {
+            if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
+               policestation_closed=0;
+            if(location[l]->type==SITE_MEDIA_AMRADIO)
+               amradio_closed=0;
+            if(location[l]->type==SITE_MEDIA_CABLENEWS)
+               cablenews_closed=0;
             switch(LCSrandom(2))
             {
                case 0:
@@ -1941,6 +1947,18 @@ void initlocation(locationst &loc)
          lastname(loc.name);
          strcat(loc.name," Park");
          strcpy(loc.shortname,"Park");
+         break;
+      case SITE_RESIDENTIAL_BOMBSHELTER:
+         strcpy(loc.name,"Fallout Shelter");
+         strcpy(loc.shortname,"Bomb Shelter");
+         break;
+      case SITE_BUSINESS_BARANDGRILL:
+         strcpy(loc.name,"Desert Eagle Bar & Grill");
+         strcpy(loc.shortname,"Bar & Grill");
+         break;
+      case SITE_OUTDOOR_BUNKER:
+         strcpy(loc.name,"Robert E. Lee Bunker");
+         strcpy(loc.shortname,"Bunker");
          break;
    }
 }

@@ -792,6 +792,8 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_PRISONER:strcat(str,"Prisoner");break;
       case CREATURE_DOCTOR:strcat(str,"Doctor");break;
       case CREATURE_NURSE:strcat(str,"Nurse");break;
+      case CREATURE_CCS_VIGILANTE:strcat(str,"CCS Member");break;
+      case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"CCS Ringleader");break;
       default:
          strcat(str,"Liberal");
          break;

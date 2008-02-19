@@ -40,6 +40,7 @@ void siegecheck(char canseethings)
    int numpres;
    for(int l=0;l<location.size();l++)
    {
+      if(policestation_closed)continue;
       if(location[l]->siege.siege)continue;
       if(location[l]->renting==-1)continue;
       numpres=0;
@@ -92,17 +93,20 @@ void siegecheck(char canseethings)
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
+            //Heat doesn't matter for sieges until it gets high
+            int pheat=pool[p]->heat-50;
+
             //Contribute to the investigation based on person's heat
-            crimes+=pool[p]->heat;
+            if(pheat>0)crimes+=pheat;
          }
 
          // Let the place slowly cool off if there are no criminals there
          if(!crimes&&location[l]->heat)
          {
-            if(location[l]->heat > 2000)
+            if(location[l]->heat > 500)
                location[l]->heat-=200-police_heat*40;
             else
-               location[l]->heat-=50-police_heat*10;
+               location[l]->heat-=5-police_heat;
             if(location[l]->heat<0)location[l]->heat=0;
          }
          else if(crimes||kidnapped)
@@ -147,7 +151,7 @@ void siegecheck(char canseethings)
             if(heatprotection<0)heatprotection=0;
 
             crimes>>=heatprotection;
-            if(crimes > 20-heatprotection)crimes = 20-heatprotection;
+            if(crimes > 20-heatprotection*3)crimes = 20-heatprotection*3;
             location[l]->heat+=crimes;
 
             if(location[l]->siege.timeuntillocated==-1 &&

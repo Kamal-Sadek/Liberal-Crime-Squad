@@ -217,6 +217,9 @@ long moneylost_hostage=0;
 
 short party_status=-1;
 
+char endgamestate=ENDGAME_NONE;
+char ccs_kills=0;
+
 vector<datest *> date;
 vector<recruitst *> recruit;
 

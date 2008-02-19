@@ -1037,56 +1037,69 @@ void makechasers(long sitetype,long sitecrime)
    long pnum;
 
    chaseseq.canpullover=0;
-
-   switch(sitetype)
+   if(endgamestate<ENDGAME_CCS_DEFEATED&&LCSrandom(10)<endgamestate)
    {
-      case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         cartype=VEHICLE_AGENTCAR;
-         pnum=LCSrandom(sitecrime/5 + 1)+1;
-         if(pnum>6)pnum=6;
-         for(n=0;n<pnum;n++)
-         {
-            makecreature(encounter[encslot],CREATURE_AGENT);
-            encslot++;
-         }
-         break;
-      case SITE_CORPORATE_HEADQUARTERS:
-      case SITE_CORPORATE_HOUSE:
-         if(LCSrandom(2))cartype=VEHICLE_SUV;
-         else cartype=VEHICLE_JEEP;
-         pnum=LCSrandom(sitecrime/5 + 1)+1;
-         if(pnum>6)pnum=6;
-         for(n=0;n<pnum;n++)
-         {
-            makecreature(encounter[encslot],CREATURE_MERC);
-            encslot++;
-         }
-         break;
-      case SITE_MEDIA_AMRADIO:
-      case SITE_MEDIA_CABLENEWS:
-         cartype=VEHICLE_PICKUP;
-         pnum=LCSrandom(sitecrime/5 + 1)+1;
-         if(pnum>18)pnum=18;
-         for(n=0;n<pnum;n++)
-         {
-            makecreature(encounter[encslot],CREATURE_HICK);
-            encslot++;
-         }
-         break;
-      default:
-         chaseseq.canpullover=1;
-         cartype=VEHICLE_POLICECAR;
-         pnum=LCSrandom(sitecrime/5 + 1)+1;
-         if(pnum>6)pnum=6;
-         for(n=0;n<pnum;n++)
-         {
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
-            else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot],CREATURE_GANGUNIT);
-            else makecreature(encounter[encslot],CREATURE_COP);
-            encslot++;
-         }
-         break;
+      cartype=VEHICLE_SUV;
+      pnum=LCSrandom(sitecrime/5 + 1)+1;
+      if(pnum>12)pnum=12;
+      for(n=0;n<pnum;n++)
+      {
+         makecreature(encounter[encslot],CREATURE_CCS_VIGILANTE);
+         encslot++;
+      }
+   }
+   else
+   {
+      switch(sitetype)
+      {
+         case SITE_GOVERNMENT_INTELLIGENCEHQ:
+            cartype=VEHICLE_AGENTCAR;
+            pnum=LCSrandom(sitecrime/5 + 1)+1;
+            if(pnum>6)pnum=6;
+            for(n=0;n<pnum;n++)
+            {
+               makecreature(encounter[encslot],CREATURE_AGENT);
+               encslot++;
+            }
+            break;
+         case SITE_CORPORATE_HEADQUARTERS:
+         case SITE_CORPORATE_HOUSE:
+            if(LCSrandom(2))cartype=VEHICLE_SUV;
+            else cartype=VEHICLE_JEEP;
+            pnum=LCSrandom(sitecrime/5 + 1)+1;
+            if(pnum>6)pnum=6;
+            for(n=0;n<pnum;n++)
+            {
+               makecreature(encounter[encslot],CREATURE_MERC);
+               encslot++;
+            }
+            break;
+         case SITE_MEDIA_AMRADIO:
+         case SITE_MEDIA_CABLENEWS:
+            cartype=VEHICLE_PICKUP;
+            pnum=LCSrandom(sitecrime/5 + 1)+1;
+            if(pnum>18)pnum=18;
+            for(n=0;n<pnum;n++)
+            {
+               makecreature(encounter[encslot],CREATURE_HICK);
+               encslot++;
+            }
+            break;
+         default:
+            chaseseq.canpullover=1;
+            cartype=VEHICLE_POLICECAR;
+            pnum=LCSrandom(sitecrime/5 + 1)+1;
+            if(pnum>6)pnum=6;
+            for(n=0;n<pnum;n++)
+            {
+               if(law[LAW_DEATHPENALTY]==-2&&
+                  law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
+               else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot],CREATURE_GANGUNIT);
+               else makecreature(encounter[encslot],CREATURE_COP);
+               encslot++;
+            }
+            break;
+      }
    }
 
    for(n=0;n<pnum;n++)encounter[n].align=-1;

@@ -1133,6 +1133,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   addstr(" was able to create a map of the site with this information.");
                }
                location[cr->worklocation]->interrogated=1;
+               location[cr->worklocation]->hidden=0;
             }
          }
          //Target is not sold on the LCS arguments and holds firm

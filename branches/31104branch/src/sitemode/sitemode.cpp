@@ -2059,7 +2059,19 @@ void resolvesite(void)
    if(sitealienate)sitestory->positive=0;
    if(sitealarm==1&&sitecrime>50&&location[cursite]->renting==-1)
    {
-      location[cursite]->closed=LCSrandom(8)+7;
+      location[cursite]->closed=30;
+      if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
+         location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
+         location[cursite]->type==SITE_OUTDOOR_BUNKER)
+      {
+         location[cursite]->hidden=1;
+         location[cursite]->renting=-1;
+         ccs_kills++;
+         if(ccs_kills<3)
+            endgamestate--;
+         else
+            endgamestate=ENDGAME_CCS_DEFEATED;
+      }
       if(location[cursite]->type==SITE_MEDIA_AMRADIO)
          amradio_closed=1;
       if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION)

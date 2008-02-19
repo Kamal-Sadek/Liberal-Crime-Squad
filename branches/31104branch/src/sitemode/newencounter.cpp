@@ -72,6 +72,31 @@ void prepareencounter(short type,char sec)
 
    switch(type)
    {
+      case SITE_RESIDENTIAL_BOMBSHELTER:
+      case SITE_BUSINESS_BARANDGRILL:
+      case SITE_OUTDOOR_BUNKER:
+      {
+         //if ccs here is not purged
+         if((ccs_kills==0&&type==SITE_BUSINESS_BARANDGRILL)||
+            (ccs_kills<=1&&type==SITE_RESIDENTIAL_BOMBSHELTER)||
+            (ccs_kills<=2&&type==SITE_OUTDOOR_BUNKER))
+         {
+            creaturearray[CREATURE_CCS_VIGILANTE]+=50;
+            creaturearray[CREATURE_CCS_ARCHCONSERVATIVE]+=endgamestate;
+            creaturearray[CREATURE_PROSTITUTE]+=5;
+            creaturearray[CREATURE_CRACKHEAD]+=5;
+            creaturearray[CREATURE_PRIEST]+=5;
+            creaturearray[CREATURE_RADIOPERSONALITY]+=1;
+            for(int n=0;n<LCSrandom(6)+1;n++)
+            {
+               makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+               encounter[encslot].align=-1;
+               encslot++;
+            }
+            break;
+         }
+         //else, ccs here is destroyed... fall through to crackhouse
+      }
       case SITE_BUSINESS_CRACKHOUSE:
       {
          creaturearray[CREATURE_TEENAGER]+=100;
@@ -91,6 +116,8 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_SCULPTOR]+=1;
          creaturearray[CREATURE_THIEF]+=3;
          creaturearray[CREATURE_ACTOR]+=1;
+         if(endgamestate<ENDGAME_CCS_DEFEATED)
+            creaturearray[CREATURE_CCS_VIGILANTE]+=1;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -176,6 +203,8 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_THIEF]+=1;
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
+         if(endgamestate<ENDGAME_CCS_DEFEATED)
+            creaturearray[CREATURE_CCS_VIGILANTE]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -204,6 +233,8 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
          creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
          creaturearray[CREATURE_AGENT]+=1;
+         if(endgamestate<ENDGAME_CCS_DEFEATED)
+            creaturearray[CREATURE_CCS_VIGILANTE]+=endgamestate;
          creaturearray[CREATURE_RADIOPERSONALITY]+=1;
          creaturearray[CREATURE_NEWSANCHOR]+=1;
          creaturearray[CREATURE_LAWYER]+=5;

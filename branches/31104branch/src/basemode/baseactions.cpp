@@ -281,11 +281,16 @@ void stopevil(void)
    vector<long> temploc;
    for(l=0;l<location.size();l++)
    {
-      if(location[l]->parent==loc&&location[l]->renting>=0)temploc.push_back(l);
+      if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
    }
    for(l=0;l<location.size();l++)
    {
-      if(location[l]->parent==loc&&location[l]->renting==-1)temploc.push_back(l);
+      locationst* loc2 = location[l];
+      if(location[l]->parent==loc&&location[l]->renting==-2&&!location[l]->hidden)temploc.push_back(l);
+   }
+   for(l=0;l<location.size();l++)
+   {
+      if(location[l]->parent==loc&&location[l]->renting==-1&&!location[l]->hidden)temploc.push_back(l);
    }
 
    do
@@ -325,7 +330,12 @@ void stopevil(void)
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr(" (Safe House)");
          }
-         if(location[temploc[p]]->closed>0)
+         if(location[temploc[p]]->renting==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr(" (Enemy Safe House)");
+         }
+         if(location[temploc[p]]->closed)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(" (Closed Down)");
@@ -409,11 +419,15 @@ void stopevil(void)
 
             for(l=0;l<location.size();l++)
             {
-               if(location[l]->parent==loc&&location[l]->renting>=0)temploc.push_back(l);
+               if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
             }
             for(l=0;l<location.size();l++)
             {
-               if(location[l]->parent==loc&&location[l]->renting==-1)temploc.push_back(l);
+               if(location[l]->parent==loc&&location[l]->renting==-2&&!location[l]->hidden)temploc.push_back(l);
+            }
+            for(l=0;l<location.size();l++)
+            {
+               if(location[l]->parent==loc&&location[l]->renting==-1&&!location[l]->hidden)temploc.push_back(l);
             }
 
             if(temploc.size()==0)

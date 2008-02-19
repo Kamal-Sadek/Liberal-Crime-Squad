@@ -84,6 +84,9 @@ void savegame(char *str)
       numbytes=fwrite(&amradio_closed,sizeof(char),1,h);
       numbytes=fwrite(&cablenews_closed,sizeof(char),1,h);
 
+      numbytes=fwrite(&endgamestate,sizeof(char),1,h);
+      numbytes=fwrite(&ccs_kills,sizeof(char),1,h);
+
       numbytes=fwrite(&curcarid,sizeof(long),1,h);
       numbytes=fwrite(&showcarprefs,sizeof(char),1,h);
       numbytes=fwrite(&curcreatureid,sizeof(long),1,h);
@@ -155,6 +158,7 @@ void savegame(char *str)
          numbytes=fwrite(&location[l]->newrental,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->closed,sizeof(short),1,h);
+         numbytes=fwrite(&location[l]->hidden,sizeof(short),1,h);
          numbytes=fwrite(&location[l]->interrogated,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->highsecurity,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
@@ -362,6 +366,9 @@ char load(void)
       fread(&amradio_closed,sizeof(char),1,h);
       fread(&cablenews_closed,sizeof(char),1,h);
 
+      fread(&endgamestate,sizeof(char),1,h);
+      fread(&ccs_kills,sizeof(char),1,h);
+
       fread(&curcarid,sizeof(long),1,h);
       fread(&showcarprefs,sizeof(char),1,h);
       fread(&curcreatureid,sizeof(long),1,h);
@@ -435,6 +442,7 @@ char load(void)
          fread(&location[l]->newrental,sizeof(char),1,h);
          fread(&location[l]->needcar,sizeof(char),1,h);
          fread(&location[l]->closed,sizeof(short),1,h);
+         fread(&location[l]->hidden,sizeof(short),1,h);
          fread(&location[l]->interrogated,sizeof(char),1,h);
          fread(&location[l]->highsecurity,sizeof(char),1,h);
          fread(&location[l]->siege,sizeof(siegest),1,h);

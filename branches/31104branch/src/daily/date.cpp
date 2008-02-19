@@ -97,6 +97,7 @@ char completevacation(datest &d,int p,char &clearformess)
          addstr(pool[p]->name);
          addstr("'s totally unconditional love-slave!");
          location[d.date[e]->worklocation]->interrogated=1;
+         location[d.date[e]->worklocation]->hidden=0;
          refresh();
          getch();
 
@@ -393,6 +394,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr("'s totally unconditional love-slave!");
                   //Get map of their workplace
                   location[d.date[e]->worklocation]->interrogated=1;
+                  location[d.date[e]->worklocation]->hidden=0;
                   refresh();
                   getch();
 
@@ -462,6 +464,7 @@ char completedate(datest &d,int p,char &clearformess)
                            y++;
                         }
                         location[d.date[e]->worklocation]->interrogated=1;
+                        location[d.date[e]->worklocation]->hidden=0;
                      }
 
                      if(aroll>troll*2) d.date[e]->att[ATTRIBUTE_WISDOM]--;

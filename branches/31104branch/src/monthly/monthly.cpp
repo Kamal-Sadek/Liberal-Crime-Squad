@@ -47,6 +47,30 @@ void passmonth(char &clearformess,char canseethings)
       year++;
    }
 
+   switch(endgamestate)
+   {
+   case ENDGAME_NONE:
+      if(newscherrybusted&&
+         !LCSrandom(5))
+         endgamestate=ENDGAME_CCS_APPEARANCE;
+      break;
+   case ENDGAME_CCS_APPEARANCE:
+      if(attitude[VIEW_LIBERALCRIMESQUADPOS]>45&&
+         !LCSrandom(10))
+         endgamestate=ENDGAME_CCS_ATTACKS;
+      break;
+   case ENDGAME_CCS_ATTACKS:
+      if(attitude[VIEW_LIBERALCRIMESQUADPOS]>65&&
+         !LCSrandom(10))
+         endgamestate=ENDGAME_CCS_SIEGES;
+      break;
+   case ENDGAME_CCS_SIEGES:
+   case ENDGAME_CCS_DEFEATED:
+      if(publicmood(-1)>85&&presparty==1)
+         endgamestate=ENDGAME_MARTIALLAW;
+      break;
+   }
+
    //CLEAR RENT EXEMPTIONS
    for(l=0;l<location.size();l++)location[l]->newrental=0;
 
@@ -128,12 +152,17 @@ void passmonth(char &clearformess,char canseethings)
             //Purge graffiti from more secure sites (or from non-secure
             //sites about once every five years), but these will
             //influence people more for the current month
-            if(securityable(location[l]->type)||!LCSrandom(60))
+            if(securityable(location[l]->type))
             {
                location[l]->changes.erase(location[l]->changes.begin()+c);
                power=5;
             }
-            else power=1;
+            else if(location[l]->renting!=0) //Your permanent safehouses not counted
+            {
+               power=1;
+               if(!LCSrandom(60))
+                  location[l]->changes.erase(location[l]->changes.begin()+c);
+            }
 
             background_liberal_influence[VIEW_LIBERALCRIMESQUAD]+=power;
          }
@@ -145,19 +174,16 @@ void passmonth(char &clearformess,char canseethings)
       //People generally want to give police more power if they
       //get closed down
       change_public_opinion(VIEW_POLICEBEHAVIOR,-10);
-      policestation_closed=0;
    }
    if(amradio_closed)
    {
       //AM Radio less effective if brought offline
       change_public_opinion(VIEW_AMRADIO,10);
-      amradio_closed=0;
    }
    if(cablenews_closed)
    {
       //Cable News less influential if brought offline
       change_public_opinion(VIEW_CABLENEWS,10);
-      cablenews_closed=0;
    }
    
    //PUBLIC OPINION NATURAL MOVES

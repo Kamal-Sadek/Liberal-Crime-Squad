@@ -784,6 +784,7 @@ void makecharacter(void)
       newl->type=SITE_INDUSTRY_WAREHOUSE;
       newl->parent=2;
       newl->renting=0;
+      newl->hidden=0;
       initlocation(*newl);
    location.push_back(newl);
 
@@ -791,6 +792,7 @@ void makecharacter(void)
       newl->type=SITE_INDUSTRY_WAREHOUSE;
       newl->parent=2;
       newl->renting=0;
+      newl->hidden=0;
       initlocation(*newl);
    location.push_back(newl);
 
@@ -798,6 +800,7 @@ void makecharacter(void)
       newl->type=SITE_INDUSTRY_WAREHOUSE;
       newl->parent=2;
       newl->renting=0;
+      newl->hidden=0;
       initlocation(*newl);
    location.push_back(newl);
 
@@ -981,6 +984,31 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_OUTDOOR_PUBLICPARK;
       newl->parent=0;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
+      newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
+      newl->parent=2;
+      newl->renting=-2;
+      newl->hidden=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
+      newl->type=SITE_BUSINESS_BARANDGRILL;
+      newl->parent=0;
+      newl->renting=-2;
+      newl->hidden=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
+      newl->type=SITE_OUTDOOR_BUNKER;
+      newl->parent=3;
+      newl->renting=-2;
+      newl->needcar=1;
+      newl->hidden=1;
       initlocation(*newl);
    location.push_back(newl);
 

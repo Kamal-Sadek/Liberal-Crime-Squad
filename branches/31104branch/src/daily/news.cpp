@@ -123,6 +123,42 @@ void setpriority(newsstoryst &ns)
       case NEWSSTORY_MASSACRE:
          ns.priority=10 + ns.crime[1]*5;
          break;
+      case NEWSSTORY_CCS_SITE:
+      case NEWSSTORY_CCS_KILLED_SITE:
+      
+         ns.crime.push_back(CRIME_BROKEDOWNDOOR);
+         ns.priority=1;
+         if(ns.positive==0)
+         {
+            ns.crime.push_back(CRIME_ATTACKED_MISTAKE);
+            ns.priority+=7;
+         }
+         ns.crime.push_back(CRIME_ATTACKED);
+         ns.priority+=4*(LCSrandom(10)+1);
+         if(LCSrandom(endgamestate+1))
+         {
+            ns.crime.push_back(CRIME_KILLEDSOMEBODY);
+            ns.priority+=LCSrandom(10)*30;
+         }
+         if(LCSrandom(endgamestate+1))
+         {
+            ns.crime.push_back(CRIME_STOLEGROUND);
+            ns.priority+=LCSrandom(10);
+         }
+         if(!LCSrandom(endgamestate+4))
+         {
+            ns.crime.push_back(CRIME_BREAK_FACTORY);
+            ns.priority+=LCSrandom(10)*2;
+         }
+         if(LCSrandom(2))
+         {
+            ns.crime.push_back(CRIME_CARCHASE);
+         }
+         break;
+      case NEWSSTORY_CCS_DEFENDED:
+      case NEWSSTORY_CCS_KILLED_SIEGEATTACK:
+         ns.priority=40+attitude[VIEW_LIBERALCRIMESQUAD]/3;
+         break;
    }
 }
 
@@ -637,6 +673,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
       case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
       case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
       case NEWSSTORY_SQUAD_KILLED_SITE:
+      case NEWSSTORY_CCS_SITE:
+      case NEWSSTORY_CCS_KILLED_SITE:
       case NEWSSTORY_CARTHEFT:
       {
          int y=2;
@@ -672,6 +710,14 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      displaycenterednewsfont("POLICE KILL",5);
                      displaycenterednewsfont("LCS MARTYRS",13);
                   }
+                  break;
+               case NEWSSTORY_CCS_SITE:
+               case NEWSSTORY_CCS_KILLED_SITE:
+                  if(ns.positive)
+                     displaycenterednewsfont("CCS STRIKES",5);
+                  else
+                     displaycenterednewsfont("CCS RAMPAGE",5);
+                  y=13;
                   break;
                default:
                   if(ns.positive)
@@ -865,6 +911,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                break;
             default:
             {
+               int ccs=0;
                if(ns.type==NEWSSTORY_SQUAD_SITE)
                {
                   if(!newscherrybusted&&!liberalguardian)
@@ -900,6 +947,71 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      }
                   }
                }
+               else if(ns.type==NEWSSTORY_CCS_SITE)
+               {
+                  if(newscherrybusted<2)
+                  {
+                     if(ns.positive&&!liberalguardian)
+                     {
+                        strcat(story,"A group of M16-wielding vigilantes calling itself the Conservative Crime Squad ");
+                        strcat(story,"burst onto the scene of political activism yesterday, according ");
+                        strcat(story,"to a spokesperson from the police department.");
+                        strcat(story,"&r");
+                     }
+                     else
+                     {
+                        strcat(story,"A group of worthless M16-toting hicks calling itself the Conservative Crime Squad ");
+                        strcat(story,"went on a rampage yesterday, according ");
+                        strcat(story,"to a spokesperson from the police department.");
+                     }
+                  }
+                  else
+                  {
+                     if(ns.positive&&!liberalguardian)
+                     {
+                        strcat(story,"The Conservative Crime Squad has struck again.  ");
+                        strcat(story,"&r");
+                     }
+                     else
+                     {
+                        strcat(story,"The Conservative Crime Squad has gone on a rampage.  ");
+                        strcat(story,"&r");
+                     }
+                  }
+               }
+               else if(ns.type==NEWSSTORY_CCS_KILLED_SITE)
+               {
+                  if(newscherrybusted<2)
+                  {
+                     if(ns.positive&&!liberalguardian)
+                     {
+                        strcat(story,"A group of M16-wielding vigilantes calling itself the Conservative Crime Squad ");
+                        strcat(story,"burst briefly onto the scene of political activism yesterday, according ");
+                        strcat(story,"to a spokesperson from the police department.  ");
+                        strcat(story,"&r");
+                     }
+                     else
+                     {
+                        strcat(story,"A group of worthless M16-toting hicks calling itself the Conservative Crime Squad ");
+                        strcat(story,"went on a suicidal rampage yesterday, according ");
+                        strcat(story,"to a spokesperson from the police department.  ");
+                        strcat(story,"&r");
+                     }
+                  }
+                  else
+                  {
+                     if(ns.positive&&!liberalguardian)
+                     {
+                        strcat(story,"The Conservative Crime Squad has struck again, albeit with a tragic end.  ");
+                        strcat(story,"&r");
+                     }
+                     else
+                     {
+                        strcat(story,"The Conservative Crime Squad has gone on a rampage, and they got what they deserved.  ");
+                        strcat(story,"&r");
+                     }
+                  }
+               }
                else
                {
                   if(!newscherrybusted&&!liberalguardian)
@@ -915,7 +1027,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         strcat(story,"A group of thugs calling itself the Liberal Crime Squad ");
                         strcat(story,"went on a suicidal rampage yesterday, according ");
-                        strcat(story,"to a spokesperson from the police department.");
+                        strcat(story,"to a spokesperson from the police department.  ");
+                        strcat(story,"&r");
                      }
                   }
                   else
@@ -935,11 +1048,53 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      }
                   }
                }
+               if(ns.type==NEWSSTORY_CCS_KILLED_SITE||
+                  ns.type==NEWSSTORY_CCS_SITE)
+                  ccs=1;
 
                strcat(story,"  The events took place at the ");
-               if(liberalguardian)strcat(story,"notorious ");
-               strcat(story,location[ns.loc]->name);
-               if(liberalguardian)
+               if(liberalguardian&&!ccs)strcat(story,"notorious ");
+               if(ccs)
+               {
+                  switch(location[ns.loc]->type)
+                  {
+                  case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+                     strcat(story,"University Dormitory.  ");break;
+                  case SITE_BUSINESS_CIGARBAR:
+                     strcat(story,"Lady Luck Strip Club.  ");break;
+                  case SITE_LABORATORY_COSMETICS:
+                     strcat(story,"Animal Shelter.  ");break;
+                  case SITE_LABORATORY_GENETIC:
+                     strcat(story,"Research Ethics Commission HQ.  ");break;
+                  case SITE_GOVERNMENT_POLICESTATION:
+                     strcat(story,"Seedy Back Alley(tm).  ");break;
+                  case SITE_GOVERNMENT_COURTHOUSE:
+                     strcat(story,"Abortion Clinic.  ");break;
+                  case SITE_GOVERNMENT_PRISON:
+                     strcat(story,"Ace Ghetto Pool Hall.  ");break;
+                  case SITE_GOVERNMENT_INTELLIGENCEHQ:
+                     strcat(story,"ACLU Branch Office.  ");break;
+                  case SITE_INDUSTRY_SWEATSHOP:
+                     strcat(story,"Labor Union HQ.  ");break;
+                  case SITE_INDUSTRY_POLLUTER:
+                     strcat(story,"Greenpeace Offices.  ");break;
+                  case SITE_INDUSTRY_NUCLEAR:
+                     strcat(story,"Whirled Peas Museum.  ");break;
+                  case SITE_CORPORATE_HEADQUARTERS:
+                     strcat(story,"Welfare Assistance Agency.  ");break;
+                  case SITE_CORPORATE_HOUSE:
+                     strcat(story,"Food Bank.  ");break;
+                  case SITE_MEDIA_AMRADIO:
+                     strcat(story,"Public Radio Station.  ");break;
+                  case SITE_MEDIA_CABLENEWS:
+                     strcat(story,"Network News Station.  ");break;
+                  default:
+                     strcat(story,location[ns.loc]->name);
+                     strcat(story,".  ");break;
+                  }
+               }
+               else strcat(story,location[ns.loc]->name);
+               if(liberalguardian&&!ccs)
                {
                   switch(location[ns.loc]->type)
                   {
@@ -976,14 +1131,19 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      strcat(story,".  ");break;
                   }
                }
-               else
+               else if(!ccs)
                   strcat(story,".  ");
 
                if(ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
                {
                   if(liberalguardian)strcat(story,"Unfortunately, the LCS group was defeated by the forces of evil.  ");
                   else if(ns.positive)strcat(story,"Everyone in the LCS group was arrested or killed.  ");
-                  else strcat(story,"Fortunately, the LCS thugs was stopped by brave citizens.  ");
+                  else strcat(story,"Fortunately, the LCS thugs were stopped by brave citizens.  ");
+               }
+               if(ns.type==NEWSSTORY_CCS_KILLED_SITE)
+               {
+                  if(ns.positive&&!liberalguardian)strcat(story,"Everyone in the CCS group was arrested or killed.  ");
+                  else strcat(story,"Fortunately, the CCS thugs were stopped by brave citizens.  ");
                }
                strcat(story,"&r");
 
@@ -1138,16 +1298,24 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(typesum>0)
                {
-                  if(!liberalguardian)
+                  if(!ccs)
                   {
-                     strcat(story,"  Further details are sketchy, but police sources suggest that the LCS ");
-                     strcat(story,"engaged in ");
+                     if(!liberalguardian)
+                     {
+                        strcat(story,"  Further details are sketchy, but police sources suggest that the LCS ");
+                        strcat(story,"engaged in ");
+                     }
+                     else
+                     {
+                        strcat(story,"  The Liberal Crime Squad ");
+                     }
                   }
                   else
                   {
-                     strcat(story,"  The Liberal Crime Squad ");
+                     strcat(story,"  Further details are sketchy, but police sources suggest that the CCS ");
+                        strcat(story,"engaged in ");
                   }
-                  if(!liberalguardian)
+                  if(!liberalguardian||ccs)
                   {
                      if(crime[CRIME_KILLEDSOMEBODY])
                      {
@@ -1184,7 +1352,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   if(crime[CRIME_STOLEGROUND])
                   {
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                      {
                         strcat(story,"theft");
                      }
@@ -1213,7 +1381,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   if(crime[CRIME_BREAK_SWEATSHOP]||crime[CRIME_BREAK_FACTORY])
                   {
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                      {
                         strcat(story,"destruction of private property");
                      }
@@ -1228,7 +1396,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   if(crime[CRIME_BROKEDOWNDOOR])
                   {
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                      {
                         strcat(story,"breaking and entering");
                      }
@@ -1243,7 +1411,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   if(crime[CRIME_UNLOCKEDDOOR])
                   {
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                      {
                         strcat(story,"unlawful entry");
                      }
@@ -1261,7 +1429,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(crime[CRIME_CARCHASE])
                {
-                  if(!liberalguardian)
+                  if(!liberalguardian||ccs)
                   {
                      strcat(story,"  It is known that there was a high-speed chase ");
                      strcat(story,"following the incident.  ");
@@ -1281,13 +1449,13 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         strcat(story," vehicles crashed.  ");
                      }
                      else strcat(story,"One vehicle crashed.  ");
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                         strcat(story,"Details about injuries were not released.  ");
                   }
 
                   if(crime[CRIME_FOOTCHASE])
                   {
-                     if(!liberalguardian)
+                     if(!liberalguardian||ccs)
                         strcat(story,"There was also a foot chase when the suspect or suspects bailed out after the high-speed pursuit.  ");
                      else
                         strcat(story,"The Liberal Crime Squad ended the dangerous high-speed chase to protect the public, and attempted to escape on foot.  ");
@@ -1302,7 +1470,9 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          generatefiller(story,200);
          displaynewsstory(story,storyx_s,storyx_e,y);
 
-         newscherrybusted=1;
+         if(!newscherrybusted)newscherrybusted=1;
+         if(ns.type==NEWSSTORY_CCS_SITE||
+            ns.type==NEWSSTORY_CCS_KILLED_SITE)newscherrybusted=2;
          break;
       }
       case NEWSSTORY_MASSACRE:
@@ -2943,8 +3113,26 @@ void majornewspaper(char &clearformess,char canseethings)
       }
    }
 
+   //Conservative Crime Squad Strikes!
+   if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate)
+   {
+      newsstoryst *ns=new newsstoryst;
+      if(LCSrandom(10))ns->type=NEWSSTORY_CCS_SITE;
+      else ns->type=NEWSSTORY_CCS_KILLED_SITE;
+
+      ns->positive=LCSrandom(5);
+      if(ns->positive)ns->positive=1;
+
+      do
+      {
+         ns->loc=LCSrandom(location.size());
+      } while(location[ns->loc]->renting!=-1);
+
+      newsstory.push_back(ns);
+   }
+
    //SET UP MAJOR EVENTS
-   if(!LCSrandom(VIEWNUM*5))
+   if(!LCSrandom(60))
    {
       newsstoryst *ns=new newsstoryst;
          ns->type=NEWSSTORY_MAJOREVENT;
@@ -3339,6 +3527,9 @@ void majornewspaper(char &clearformess,char canseethings)
             displaystory(*newsstory[n],0,-1);
             if(liberalguardian)
             {
+               if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
+                  newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+                  newsstory[n]->positive=0;
                displaystory(*newsstory[n],liberalguardian,header);
                if(newsstory[n]->positive)newsstory[n]->positive+=1;
             }
@@ -3351,7 +3542,10 @@ void majornewspaper(char &clearformess,char canseethings)
    {
       //Yes, crappy letters to the editor may backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
+      {
          writers+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
+         pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
+      }
    }
 
    //Essay writing
@@ -3384,9 +3578,17 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_SQUAD_BROKESIEGE||
          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEATTACK||
          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE||
-         newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SITE)
+         newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SITE||
+         newsstory[n]->type==NEWSSTORY_CCS_SITE||
+         newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
       {
          power=newsstory[n]->priority;
+
+         if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
+            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+         {
+            newsstory[n]->positive=!newsstory[n]->positive;
+         }
 
          //PAGE BONUS
          if(newsstory[n]->page==1)power*=5;
@@ -3407,12 +3609,19 @@ void majornewspaper(char &clearformess,char canseethings)
 
          power/=10;
          power++;
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power);
-         if(newsstory[n]->positive)change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power);
-         else change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-power);
+         if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
+            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))
+         {
+            change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power);
+            if(newsstory[n]->positive)change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power);
+            else change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-power);
+         }
 
          char colored=0;
-         if(newsstory[n]->positive)colored=1;
+         if(newsstory[n]->positive&&
+            !(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
+            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))colored=1;
+         else power=-power;
 
          switch(location[newsstory[n]->loc]->type)
          {

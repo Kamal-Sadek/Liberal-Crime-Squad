@@ -316,7 +316,7 @@ void makecreature(creaturest &cr,short type)
          {
             cr.weapon.type=WEAPON_AUTORIFLE_M16;
             cr.weapon.ammo=30;
-            cr.clip[CLIP_ASSAULT]=3;
+            cr.clip[CLIP_ASSAULT]=6;
          }
          else
          {
@@ -478,6 +478,102 @@ void makecreature(creaturest &cr,short type)
 			cr.att[ATTRIBUTE_AGILITY]=3;
 			cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=6;
+         break;
+      case CREATURE_CCS_VIGILANTE:
+      {
+         cr.armor.type=ARMOR_MILITARY;
+         switch(LCSrandom(5)+endgamestate)
+         {
+         case 1:
+            break;
+         case 2:
+            cr.weapon.type=WEAPON_SEMIPISTOL_9MM;
+            cr.clip[CLIP_9]=6;
+            cr.weapon.ammo=15;
+            break;
+         case 3:
+            cr.weapon.type=WEAPON_REVOLVER_44;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_44]=6;
+            break;
+         case 4:
+            cr.weapon.type=WEAPON_SHOTGUN_PUMP;
+            cr.clip[CLIP_BUCKSHOT]=6;
+            cr.weapon.ammo=6;
+            break;
+         case 5:
+            cr.weapon.type=WEAPON_SEMIRIFLE_AR15;
+            cr.clip[CLIP_ASSAULT]=6;
+            cr.weapon.ammo=30;
+            break;
+         case 6:
+            cr.weapon.type=WEAPON_SEMIRIFLE_AR15;
+            cr.clip[CLIP_ASSAULT]=6;
+            cr.weapon.ammo=30;
+            cr.armor.type=ARMOR_BALLISTICVEST;
+            cr.armor.subtype=BVEST_MILITARY;
+            break;
+         case 7:
+            cr.weapon.type=WEAPON_AUTORIFLE_M16;
+            cr.clip[CLIP_ASSAULT]=6;
+            cr.weapon.ammo=30;
+            cr.armor.type=ARMOR_BALLISTICVEST;
+            cr.armor.subtype=BVEST_MILITARY;
+            break;
+         }
+         cr.money=LCSrandom(21)+20;
+         cr.align=-1;
+
+         sk=LCSrandom(4)+3;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+3;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+3;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_RELIGION]=sk;randomskills-=sk;
+
+			for(a=0;a<ATTNUM;a++)
+         {
+            cr.att[a]=1;
+            attcap[a]=20;
+         }
+         attcap[ATTRIBUTE_HEART]=4;
+         redistatts=15;
+         cr.att[ATTRIBUTE_STRENGTH]=4;
+			cr.att[ATTRIBUTE_AGILITY]=4;
+			cr.att[ATTRIBUTE_HEALTH]=4;
+         cr.att[ATTRIBUTE_WISDOM]=8;
+         break;
+      }
+      case CREATURE_CCS_ARCHCONSERVATIVE:
+         cr.weapon.type=WEAPON_AUTORIFLE_M16;
+         cr.clip[CLIP_ASSAULT]=9;
+         cr.weapon.ammo=30;
+         cr.armor.type=ARMOR_HEAVYBALLISTICVEST;
+         cr.money=LCSrandom(51)+150;
+         cr.align=-1;
+
+         sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+6;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+6;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+4;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+4;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(6);cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+         sk=LCSrandom(6);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
+         sk=LCSrandom(6)+2;cr.skill[SKILL_RELIGION]=sk;randomskills-=sk;
+
+			for(a=0;a<ATTNUM;a++)
+         {
+            cr.att[a]=1;
+            attcap[a]=25;
+         }
+         attcap[ATTRIBUTE_HEART]=1;
+         redistatts=40;
+         cr.att[ATTRIBUTE_STRENGTH]=8;
+			cr.att[ATTRIBUTE_AGILITY]=8;
+			cr.att[ATTRIBUTE_HEALTH]=8;
+         cr.att[ATTRIBUTE_WISDOM]=16;
          break;
       case CREATURE_GANGUNIT:
          
@@ -1895,6 +1991,11 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_CCS_VIGILANTE:
+         if(ccs_kills==2)okaysite[SITE_OUTDOOR_BUNKER]=1;
+         if(ccs_kills==1)okaysite[SITE_RESIDENTIAL_BOMBSHELTER]=1;
+         if(ccs_kills==0)okaysite[SITE_BUSINESS_BARANDGRILL]=1;
          break;
       case CREATURE_SEWERWORKER:
          okaysite[SITE_DOWNTOWN]=1;

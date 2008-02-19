@@ -67,6 +67,9 @@ extern char policestation_closed;
 extern char amradio_closed;
 extern char cablenews_closed;
 
+extern char endgamestate;
+extern char ccs_kills;
+
 extern unsigned long funds;
 
 extern char loaded;
