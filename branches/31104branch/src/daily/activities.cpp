@@ -709,6 +709,9 @@ int checkforarrest(creaturest & liberal,const char* string,long ps,int clearform
          addstr(string);
          addstr(".");
 
+         refresh();
+         getch();
+
          removesquadinfo(liberal);
          liberal.carid=-1;
          liberal.location=ps;
