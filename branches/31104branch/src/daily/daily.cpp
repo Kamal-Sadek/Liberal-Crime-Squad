@@ -79,7 +79,10 @@ void advanceday(char &clearformess,char canseethings)
                   location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
       {
 
-         if(location[pool[p]->base]->siege.siege)
+         // Prevent moving people to a sieged location,
+         // but don't evacuate people already under siege. - wisq
+         if(pool[p]->location != pool[p]->base &&
+               location[pool[p]->base]->siege.siege)
          {
             pool[p]->base=homes;
          }
