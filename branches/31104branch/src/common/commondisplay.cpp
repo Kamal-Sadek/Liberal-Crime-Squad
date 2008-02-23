@@ -232,6 +232,7 @@ void printparty(void)
             }
             else if(ammotype(party[p]->weapon.type)!=-1)
             {
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
                if(party[p]->clip[ammotype(party[p]->weapon.type)]>0)
                {
                   char num[20];
@@ -242,7 +243,6 @@ void printparty(void)
                }
                else
                {
-                  set_color(COLOR_BLACK,COLOR_BLACK,1);
                   addstr(" (XX)");
                }
             }
