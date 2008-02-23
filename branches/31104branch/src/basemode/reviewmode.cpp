@@ -580,7 +580,8 @@ void review_mode(short mode)
                   echo();
                   curs_set(1);
                   move(24,0);
-                  enter_name(temppool[p]->name,CREATURE_NAMELEN);
+                  enter_name(temppool[p]->name,CREATURE_NAMELEN,
+                        temppool[p]->propername);
 
                   curs_set(0);
                   noecho();
