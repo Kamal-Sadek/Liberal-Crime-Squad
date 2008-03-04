@@ -570,7 +570,7 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->skill_ip[SKILL_COMPUTERS]+=max(3-pool[p]->skill[SKILL_COMPUTERS],0);
 
             survey(pool[p]);
-            pool[p]->activity.type=ACTIVITY_NONE;
+            //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
 
             clearformess=1;
             break;
