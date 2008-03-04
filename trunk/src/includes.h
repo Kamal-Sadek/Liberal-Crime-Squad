@@ -837,12 +837,12 @@ struct creaturest
         temp2=swap_endian_16(type);
         fwrite(&temp2,1,sizeof(int16),f);
         fwrite(&animalgloss,1,sizeof(char),f);
-        int16 specialattack;
-        int16 clinic;
-        int16 dating;
-        int16 hiding;
-        int16 trainingtime;
-        int16 trainingsubject;
+        temp2=swap_endian_16(specialattack);
+        temp2=swap_endian_16(clinic);
+        temp2=swap_endian_16(dating);
+        temp2=swap_endian_16(hiding);
+        temp2=swap_endian_16(trainingtime);
+        temp2=swap_endian_16(trainingsubject);
         creaturest *prisoner;
         int16 sentence;
         char deathpenalty;

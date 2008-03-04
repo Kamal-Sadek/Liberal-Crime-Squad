@@ -235,7 +235,8 @@ void savegame(char *str)
 
          numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
 
-         temp2=swap_endian_16(&location[l]->closed);
+
+         temp2=swap_endian_16(location[l]->closed);
          numbytes=fwrite(&temp2,sizeof(int16),1,h);
 
 
