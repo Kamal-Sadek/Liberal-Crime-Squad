@@ -641,8 +641,13 @@ void activate(creaturest *cr)
             }
             break;
          case 'd':
-            if(choice=='2')cr->activity.type=ACTIVITY_REPAIR_ARMOR;
-            break;
+         	switch(choice)
+         	{
+         	case '1':break;
+         	case '2':cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
+         	default:cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
+         	}
+         	break;
          case 'e':
             switch(choice)
             {
