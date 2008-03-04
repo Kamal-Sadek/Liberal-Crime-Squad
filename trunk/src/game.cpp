@@ -511,6 +511,15 @@ void vehiclest::init(int32 t)
    }
 }
 
+void vehiclest::makeSwapped(vehiclest* vst)
+{
+   vst->type=swap_endian_16(type);
+   vst->color=swap_endian_16(color);
+   vst->location=swap_endian_32(location);
+   vst->myear=swap_endian_32(myear);
+   vst->id=swap_endian_32(id);
+}
+
 void creaturest::creatureinit(void)
    {
       hireid=-1;

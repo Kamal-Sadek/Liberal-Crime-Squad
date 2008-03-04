@@ -206,48 +206,82 @@ void savegame(char *str)
       numbytes=fwrite(&temp,sizeof(int32),1,h);
 
 
-
-      //todo: continue converting from here
-
       for(l=0;l<location.size();l++)
       {
          dummy=swap_endian_32(location[l]->loot.size());
          numbytes=fwrite(&dummy,sizeof(int32),1,h);
+         itemst tempist;
          for(int32 l2=0;l2<location[l]->loot.size();l2++)
          {
-
-            numbytes=fwrite(location[l]->loot[l2],sizeof(itemst),1,h);
+            location[l]->loot[l2]->makeSwapped(&tempist);
+            numbytes=fwrite(&tempist,sizeof(itemst),1,h);
          }
 
          numbytes=fwrite(location[l]->name,sizeof(char),40,h);
          numbytes=fwrite(location[l]->shortname,sizeof(char),20,h);
-         numbytes=fwrite(&location[l]->type,sizeof(int16),1,h);
-         numbytes=fwrite(&location[l]->parent,sizeof(int32),1,h);
-         numbytes=fwrite(&location[l]->renting,sizeof(int32),1,h);
+
+         temp2=swap_endian_16(location[l]->type);
+         numbytes=fwrite(&temp2,sizeof(int16),1,h);
+
+         temp=swap_endian_32(location[l]->parent);
+         numbytes=fwrite(&temp,sizeof(int32),1,h);
+
+         temp=swap_endian_32(location[l]->renting);
+         numbytes=fwrite(&temp,sizeof(int32),1,h);
+
+
          numbytes=fwrite(&location[l]->newrental,sizeof(char),1,h);
+
+
          numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->closed,sizeof(int16),1,h);
+
+         temp2=swap_endian_16(&location[l]->closed);
+         numbytes=fwrite(&temp2,sizeof(int16),1,h);
+
+
          numbytes=fwrite(&location[l]->highsecurity,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
-         numbytes=fwrite(&location[l]->heat,sizeof(int32),1,h);
+
+         siegest* sstemp=new siegest();
+         location[l]->siege.makeSwapped(sstemp);
+         numbytes=fwrite(&sstemp,sizeof(siegest),1,h);
+         delete sstemp;
+
+         temp=swap_endian_32(location[l]->heat);
+         numbytes=fwrite(&temp,sizeof(int32),1,h);
+
+
          numbytes=fwrite(&location[l]->compound_walls,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->compound_stores,sizeof(int32),1,h);
-         numbytes=fwrite(&location[l]->front_business,sizeof(int16),1,h);
+
+         temp=swap_endian_32(location[l]->compound_stores);
+         numbytes=fwrite(&temp,sizeof(int32),1,h);
+
+         temp2=swap_endian_16(location[l]->front_business);
+         numbytes=fwrite(&temp2,sizeof(int16),1,h);
+
+
          numbytes=fwrite(location[l]->front_name,sizeof(char),40,h);
+
+
          numbytes=fwrite(&location[l]->haveflag,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->mapseed,sizeof(uint32),1,h);
+
+         temp=swap_endian_32(location[l]->mapseed);
+         numbytes=fwrite(&temp,sizeof(uint32),1,h);
       }
+
 
       //VEHICLES
-      dummy=vehicle.size();
+      dummy=swap_endian_32(vehicle.size());
       numbytes=fwrite(&dummy,sizeof(int32),1,h);
+      vehiclest vstemp;
       for(l=0;l<vehicle.size();l++)
       {
-         numbytes=fwrite(vehicle[l],sizeof(vehiclest),1,h);
+         vehicle[l]->makeSwapped(&vstemp);
+         numbytes=fwrite(&vstemp,sizeof(vehiclest),1,h);
       }
 
+    //Continue conversion from here, finish output function for creatures.
       //POOL
-      dummy=pool.size();
+      dummy=swap_endian_32(pool.size());
       numbytes=fwrite(&dummy,sizeof(int32),1,h);
       for(int32 pl=0;pl<pool.size();pl++)
       {
