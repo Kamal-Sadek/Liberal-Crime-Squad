@@ -237,6 +237,11 @@ void disguisecheck(void)
 
          int chance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
                     encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
+		 for(int i=0;i<6;i++)
+		 {
+		 	if (disguise>stealth)disguisepractice(i, chance);
+		 	else stealthpractice(i, chance);
+         }
          if(weapon==2 ||
             sitealarmtimer ?
             chance+10*weapon > (int)LCSrandom(21)+disguise :
@@ -318,7 +323,7 @@ int disguiseskill(void)
          }
          else
          {
-            activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=5;
+            //activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=5;
          }
 
          if(activesquad->squad[p]->armor.quality!='1')
@@ -346,6 +351,35 @@ int disguiseskill(void)
    return lowest+highest/4;
 }
 
+/* practices p's stealth skill */
+void disguisepractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
+{
+	if(activesquad->squad[p]!=NULL)
+	{
+	    if(!activesquad->squad[p]->alive)return;
+
+	    if(activesquad->squad[p]->prisoner!=NULL)return;
+		
+		//spread is how overwhelmed your disguise ability is by the Conservative
+		int spread = diff-(activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
+            activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
+            activesquad->squad[p]->skill[SKILL_DISGUISE]*3+
+            activesquad->squad[p]->skill_ip[SKILL_DISGUISE]/(100+10*activesquad->squad[p]->skill[SKILL_DISGUISE])*3);
+
+        if(hasdisguise(*activesquad->squad[p],sitetype))
+        {
+        	if (spread>10)
+        	{
+        		activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=10;  //getting crushed isn't a great way to learn
+        	}
+        	else if(spread>0)
+        	{
+           		activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=spread;
+       		}
+        }
+	}
+}
+
 
 /* returns the difficulty of spotting the squad if it is sneaking */
 int stealthskill(void)
@@ -363,7 +397,7 @@ int stealthskill(void)
 
          int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3;
 
-         activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=5;
+         //activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=5;
 
          if(lowest>skill)lowest=skill;
          if(highest<skill)highest=skill;
@@ -373,6 +407,28 @@ int stealthskill(void)
    return lowest+highest/8;
 }
 
+/* practices p's stealth skill */
+void stealthpractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
+{
+	if(activesquad->squad[p]!=NULL)
+	{
+	    if(!activesquad->squad[p]->alive)return;
+
+	    if(activesquad->squad[p]->prisoner!=NULL)return;
+	    
+		//spread is how overwhelmed your stealth ability is by the Conservative
+		int spread = diff-(activesquad->squad[p]->skill[SKILL_STEALTH]*3+activesquad->squad[p]->skill_ip[SKILL_STEALTH]/(100+10*activesquad->squad[p]->skill[SKILL_STEALTH])*3);
+			
+		if(spread>10)
+		{
+			activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=10;    //getting crushed isn't a great way to learn
+		}
+		else if (spread>0)
+		{
+			activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=spread;
+		}
+	}
+}
 
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(creaturest &cr,short type)
