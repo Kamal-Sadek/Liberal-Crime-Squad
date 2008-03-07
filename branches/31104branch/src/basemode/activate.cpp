@@ -176,7 +176,7 @@ void activate(creaturest *cr)
    char havedead=0;
    for(int p=0;p<pool.size();p++)
    {
-      if(pool[p]->alive&&pool[p]->align!=1)hostagecount++;
+      if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location)hostagecount++;
       if(!pool[p]->alive)havedead=1;
    }
 
@@ -957,16 +957,25 @@ void activatebulk(void)
 void select_tendhostage(creaturest *cr)
 {
    vector<creaturest *> temppool;
+   int tempindex;
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->align!=1&&
-         pool[p]->alive)
+         pool[p]->alive&&
+         pool[p]->location==cr->location)
       {
          temppool.push_back(pool[p]);
       }
    }
 
    if(temppool.size()==0)return;
+   if(temppool.size()==1)
+   {
+	cr->activity.type=ACTIVITY_HOSTAGETENDING;
+	cr->activity.arg=temppool[0]->id;
+	return;
+   }
+   
 
    short page=0;
 
