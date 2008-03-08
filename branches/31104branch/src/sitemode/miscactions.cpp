@@ -96,7 +96,7 @@ char unlock(short type,char &actual)
          }
          addstr("!");
          refresh();
-        for(j=0;j<6;p++)		//If people witness a successful unlock, they learn a little bit.
+        for(int j=0;j<6;p++)		//If people witness a successful unlock, they learn a little bit.
 		{
 			if (j==p) continue;
 			if(activesquad->squad[j]!=NULL)
