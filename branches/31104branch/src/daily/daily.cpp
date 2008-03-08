@@ -577,7 +577,7 @@ void advanceday(char &clearformess,char canseethings)
          case ACTIVITY_NONE:
          	if (pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
          	{
-         		repairarmor(*pool[p],clearformess);
+         		pool[p]->activity.type=ACTIVITY_REPAIR_ARMOR;
          	}
          	break;
       }
