@@ -96,6 +96,18 @@ char unlock(short type,char &actual)
          }
          addstr("!");
          refresh();
+        for(j=0;j<6;p++)		//If people witness a successful unlock, they learn a little bit.
+		{
+			if (j==p) continue;
+			if(activesquad->squad[j]!=NULL)
+			{
+				if(activesquad->squad[j]->alive)
+				{
+					activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=difficulty/4+1;
+				}
+			}
+		}
+
          getch();
 
          actual=1;
