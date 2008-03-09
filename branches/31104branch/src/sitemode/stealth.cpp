@@ -239,7 +239,7 @@ void disguisecheck(void)
                     encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
 		 for(int i=0;i<6;i++)
 		 {
-		 	if (disguise>stealth)disguisepractice(i, chance);
+		 	if (disguise==stealth)disguisepractice(i, chance);
 		 	else stealthpractice(i, chance);
          }
          if(weapon==2 ||
