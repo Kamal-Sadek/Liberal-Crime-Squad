@@ -55,13 +55,11 @@ void passmonth(char &clearformess,char canseethings)
          endgamestate=ENDGAME_CCS_APPEARANCE;
       break;
    case ENDGAME_CCS_APPEARANCE:
-      if(attitude[VIEW_LIBERALCRIMESQUADPOS]>45&&
-         !LCSrandom(10))
+      if(!LCSrandom(12))
          endgamestate=ENDGAME_CCS_ATTACKS;
       break;
    case ENDGAME_CCS_ATTACKS:
-      if(attitude[VIEW_LIBERALCRIMESQUADPOS]>65&&
-         !LCSrandom(10))
+      if(!LCSrandom(12))
          endgamestate=ENDGAME_CCS_SIEGES;
       break;
    case ENDGAME_CCS_SIEGES:

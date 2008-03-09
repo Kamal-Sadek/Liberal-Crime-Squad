@@ -2288,6 +2288,7 @@ char stealcar(creaturest &cr,char &clearformess)
          if(method==0)
          {
             int attack=cr.skill[SKILL_SECURITY];
+            if(!LCSrandom(20))attack++;
 
             if(LCSrandom(11)<attack)
             {
@@ -2470,6 +2471,7 @@ char stealcar(creaturest &cr,char &clearformess)
          if(method==0)
          {
             int attack=cr.skill[SKILL_SECURITY];
+            if(!LCSrandom(20))attack++;
 
             if(LCSrandom(11)<attack)
             {

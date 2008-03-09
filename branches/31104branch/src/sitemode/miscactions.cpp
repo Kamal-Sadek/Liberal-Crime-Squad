@@ -79,7 +79,7 @@ char unlock(short type,char &actual)
       int p=goodp[LCSrandom(goodp.size())];
 
       int aroll=LCSrandom(11)+maxattack;
-      activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=difficulty;
+      activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=difficulty-maxattack;
 
       if(aroll>difficulty)
       {

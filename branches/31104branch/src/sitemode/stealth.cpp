@@ -447,6 +447,7 @@ char weaponcheck(creaturest &cr,short type)
    case WEAPON_SWORD:
    case WEAPON_PITCHFORK:
    case WEAPON_TORCH:
+   case WEAPON_SPRAYCAN:
       break;
    case WEAPON_SHANK:
    case WEAPON_KNIFE:
