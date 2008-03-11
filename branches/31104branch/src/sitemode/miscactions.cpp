@@ -79,7 +79,10 @@ char unlock(short type,char &actual)
       int p=goodp[LCSrandom(goodp.size())];
 
       int aroll=LCSrandom(11)+maxattack;
-      activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=difficulty-maxattack;
+      if(maxattack=<difficulty)
+      {
+      	activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=1+difficulty-maxattack;
+      }
 
       if(aroll>difficulty)
       {
@@ -99,11 +102,13 @@ char unlock(short type,char &actual)
         for(int j=0;j<6;j++)		//If people witness a successful unlock, they learn a little bit.
 		{
 			if (j==p) continue;
-			if(activesquad->squad[j]!=NULL)
+			if(activesquad->squad[j]!=NULL&&
+				activesquad->squad[j]->alive&&
+				activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty/2)
 			{
 				if(activesquad->squad[j]->alive)
 				{
-					activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty/4+1;
+					activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty/2-activesquad->squad[j]->skill[SKILL_SECURITY];
 				}
 			}
 		}
