@@ -844,9 +844,9 @@ void printliberalstats(creaturest &cr,char smll)
       long maxs=-1;
       for(int s=0;s<SKILLNUM;s++)
       {
-         if(cr.skill[s]>max && !used[s])
+         if((cr.skill[s]*10000+cr.skill_ip[s])>max && !used[s])
          {
-            max=cr.skill[s];
+            max=(cr.skill[s]*10000+cr.skill_ip[s]);
             maxs=s;
          }
       }
@@ -867,7 +867,22 @@ void printliberalstats(creaturest &cr,char smll)
          itoa(cr.skill[maxs],num,10);
          strcat(str,num);
          addstr(str);
-
+         if(cr.skill_ip[maxs]<100+(10*cr.skill[maxs]))
+         {
+	         addstr(".");
+	         if ((cr.skill_ip[maxs]*100)/(100+(10*cr.skill[maxs]))!=0)
+	         {
+	         	itoa((cr.skill_ip[maxs]*100)/(100+(10*cr.skill[maxs])),num,10);
+	         	if ((cr.skill_ip[maxs]*100)/(100+(10*cr.skill[maxs]))<10)
+	         	{
+		           addstr("0");
+		        }
+		        addstr(num);
+		     }
+		     else addstr("00");
+		 }
+		 else addstr("+");
+		 
          if((snum==14&&!smll)||(snum==7&&smll))
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
