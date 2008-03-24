@@ -1089,7 +1089,7 @@ void partyrescue(void)
 
 
 /* everybody reload! */
-void reloadparty(void)
+void reloadparty(bool wasteful)
 {
    for(int p=0;p<6;p++)
    {
@@ -1109,7 +1109,8 @@ void reloadparty(void)
             case CLIP_44:ammomax=6;break;
             case CLIP_BUCKSHOT:ammomax=6;break;
          }
-
+		if(wasteful)
+		{
          if(activesquad->squad[p]->weapon.ammo<ammomax&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
          {
             activesquad->squad[p]->weapon.ammo=ammomax;
@@ -1117,6 +1118,17 @@ void reloadparty(void)
             activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
 
          }
+        }
+        else
+        {
+         if(activesquad->squad[p]->weapon.ammo==0&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
+         {
+            activesquad->squad[p]->weapon.ammo=ammomax;
+
+            activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
+
+         }        
+        }
       }
    }
 }
