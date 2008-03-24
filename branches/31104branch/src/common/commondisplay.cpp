@@ -858,6 +858,7 @@ void printliberalstats(creaturest &cr,char smll)
 
          if(cr.skill_ip[maxs]>=100+(10*cr.skill[maxs])&&
             cr.skill[maxs]<maxskill(maxs,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+         else if(cr.skill[maxs]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          if(!smll)move(5+14-snum,40);
