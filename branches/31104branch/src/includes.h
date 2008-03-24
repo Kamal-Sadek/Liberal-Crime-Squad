@@ -1814,7 +1814,7 @@ char news_broadcast(void);
 /* rescues people held at the activeparty's current location */
 void partyrescue(void);
 /* everybody reload! */
-void reloadparty(void);
+void reloadparty(bool wasteful=false);
 
 /*
  mapspecials.cpp
@@ -1857,12 +1857,12 @@ char alienationcheck(char mistake);
 void disguisecheck(void);
 /* returns the difficulty of seeing through your squad's disguise */
 int disguiseskill(void);
-/* practices p's disguise skill */
-void disguisepractice(int p, int diff);
+/* practices squads disguise skill */
+void disguisepractice(int diff);
 /* returns the difficulty of spotting the squad if it is sneaking */
 int stealthskill(void);
-/* practices p's stealth skill */
-void stealthpractice(int p, int diff);
+/* practices squads stealth skill */
+void stealthpractice(int diff);
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(creaturest &cr,short type);
 /* checks if a creature's uniform is appropriate to the location */
