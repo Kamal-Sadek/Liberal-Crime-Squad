@@ -1201,6 +1201,14 @@ void promoteliberals(void)
                   addstr("]");
                   //addstr("[H]");
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
+               }
+               // If contact can accept more subordinates
+               else if(subordinatesleft(*pool[p2]))
+               {
+                  // Print their name in green
+                  set_color(COLOR_GREEN,COLOR_BLACK,1);
+                  addstr(pool[p2]->name);
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
                }else addstr(pool[p2]->name);
 
                move(y,54);
@@ -1242,7 +1250,15 @@ void promoteliberals(void)
                         addstr("]");
                         //addstr("[H]");
                         set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     }addstr(pool[p3]->name);
+                     }
+                     // If contact's contact can accept more subordinates
+                     else if(subordinatesleft(*pool[p3]))
+                     {
+                        // Print their name in green
+                        set_color(COLOR_GREEN,COLOR_BLACK,1);
+                        addstr(pool[p3]->name);
+                        set_color(COLOR_WHITE,COLOR_BLACK,0);
+                     } else addstr(pool[p3]->name);
                      break;
                   }
                }
@@ -1287,6 +1303,14 @@ void promoteliberals(void)
             //addstr("[H]");
             set_color(COLOR_WHITE,COLOR_BLACK,0);
          }
+         // If can accept more subordinates
+         else if(subordinatesleft(*temppool[p]))
+         {
+            // Print their name in green
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr(temppool[p]->name);
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         }
          else addstr(temppool[p]->name);
 
          y++;
@@ -1301,8 +1325,14 @@ void promoteliberals(void)
       move(21,57);
       addstr("[In Hiding]");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(23,0);
+      move(22,0);
       addstr("Press a Letter to Promote a Liberal. You can not Promote Liberals in Hiding.");
+      move(23,0);
+      addstr("Only Liberals in");
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      addstr(" Green");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr(" have the Ability to Lead Additional Subordinates.");
       if(temppool.size()>19)
       {
          move(24,0);
@@ -1345,7 +1375,8 @@ void promoteliberals(void)
 
                   for(int p3=0;p3<pool.size();p3++)
                   {
-                     if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid)
+                     // Can't promote if new boss can't accept more subordinates
+                     if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid&&subordinatesleft(*pool[p2]))
                      {
                         temppool[p]->hireid=pool[p2]->hireid;
                         sortbyhire(temppool,level);

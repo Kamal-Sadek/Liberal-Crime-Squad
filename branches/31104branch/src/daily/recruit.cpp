@@ -180,30 +180,19 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(LCSrandom(2))r.recruit->weapon.type=WEAPON_KNIFE;
       else r.recruit->weapon.type=WEAPON_SHANK;
-      addjuice(*pool[p],LCSrandom(5),50);
-      pool[p]->skill_ip[SKILL_LEADERSHIP]+=LCSrandom(4);
       break;
 
    case TASK_COMMUNITYSERVICE:
       addstr("finished doing community service.");
-      addjuice(*r.recruit,10+LCSrandom(11),0);
-      addjuice(*pool[p],LCSrandom(5),50);
-      pool[p]->skill_ip[SKILL_LEADERSHIP]+=LCSrandom(3);
       r.level++;
       break;
 
    case TASK_ACTIVISM:
       addstr("finished causing trouble.");
-      addjuice(*r.recruit,10+LCSrandom(11),20);
-      addjuice(*pool[p],LCSrandom(5),50);
-      pool[p]->skill_ip[SKILL_LEADERSHIP]+=LCSrandom(4);
       r.level++;
       break;
    case TASK_CRIMES:
       addstr("finished committing crimes.");
-      addjuice(*r.recruit,10+LCSrandom(11),40);
-      addjuice(*pool[p],LCSrandom(5),50);
-      pool[p]->skill_ip[SKILL_LEADERSHIP]+=LCSrandom(5);
       r.level++;
       break;
    default:
@@ -245,19 +234,19 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    switch(r.level)
    {
    case 0:
-      if(r.eagerness()>6)addstr(" hopes this is about joining the LCS.");
+      if(r.eagerness()>6 && subordinatesleft(*pool[p]))addstr(" hopes this is about joining the LCS.");
       else addstr(" is curious what this is all about.");
       break;
    case 1:
-      if(r.eagerness()>7)addstr(" is taking this pretty seriously.");
+      if(r.eagerness()>7 && subordinatesleft(*pool[p]))addstr(" is taking this pretty seriously.");
       else addstr(" has completed the community service.");
       break;
    case 2:
-      if(r.eagerness()>8)addstr(" is determined and eager to join.");
+      if(r.eagerness()>8 && subordinatesleft(*pool[p]))addstr(" is determined and eager to join.");
       else addstr(" did well with the assigned tasks.");
       break;
    case 3:
-      if(r.eagerness()>9)addstr(" is ready to fight for the Liberal Cause.");
+      if(r.eagerness()>9 && subordinatesleft(*pool[p]))addstr(" is ready to fight for the Liberal Cause.");
       else
       {
          addstr(" has done everything ");
@@ -368,7 +357,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          refresh();
          getch();
 
-         if(r.eagerness()>6)
+         if(r.eagerness()>6 && subordinatesleft(*pool[p]))
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             move(y+2,0);
@@ -398,7 +387,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y+2,0);
             addstr(r.recruit->name);
             addstr(" is not that insane. ");
-            addstr("Thanks, but no thanks.");    
+            addstr("Thanks, but no thanks.");
 
             refresh();
             getch();

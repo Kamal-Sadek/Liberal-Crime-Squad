@@ -691,4 +691,32 @@ int lawflagheat(int lawflag)
    }
 }
 
+// Determines the number of subordinates a creature may command
+int maxsubordinates(const creaturest& cr)
+{
+  int recruitcap = 0;
+  //Cap based on juice
+  if(cr.juice >= 500)      recruitcap += 11;
+  else if(cr.juice >= 200) recruitcap += 8;
+  else if(cr.juice >= 100) recruitcap += 5;
+  else if(cr.juice >= 50)  recruitcap += 1;
+  //Cap based on leadership
+  recruitcap += cr.skill[SKILL_LEADERSHIP] * 2;
+  //Cap for founder
+  if(cr.hireid == -1) recruitcap += 11;
+  return recruitcap;
+}
+
+// Determines the number of subordinates a creature may recruit,
+// based on their max and the number they already command
+int subordinatesleft(const creaturest& cr)
+{
+  int recruitcap = maxsubordinates(cr);
+  for(int p=0; p<pool.size(); p++)
+  {
+    if(pool[p]->hireid == cr.id) recruitcap--;
+  }
+  if(recruitcap > 0) return recruitcap;
+  else return 0;
+}
 

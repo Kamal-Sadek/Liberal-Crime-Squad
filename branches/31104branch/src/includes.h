@@ -30,8 +30,8 @@
 #define PACKAGE_VERSION "3.12.0 Alpha"
 #endif
 
-const unsigned long version=31192;
-const unsigned long lowestloadversion=31192;
+const unsigned long version=31193;
+const unsigned long lowestloadversion=31193;
 const unsigned long lowestloadscoreversion=30001;
 
 #ifdef WIN32
@@ -445,6 +445,7 @@ enum Skills
    SKILL_SEDUCTION,
    SKILL_LEADERSHIP,
    SKILL_MEDICAL,
+   SKILL_TACTICS,
    SKILLNUM
 };
 
@@ -1549,6 +1550,11 @@ void basesquad(squadst *st,long loc);
 void change_public_opinion(int v,int power,char affect=1,char cap=100);
 /* returns the amount of heat associated with a given crime */
 int lawflagheat(int lawflag);
+/* Determines the number of subordinates a creature may command */
+int maxsubordinates(const creaturest& cr);
+/* Determines the number of subordinates a creature may recruit,
+   based on their max and the number they already command */
+int subordinatesleft(const creaturest& cr);
 
 /*
  consolesupport.cpp
@@ -1858,11 +1864,11 @@ void disguisecheck(void);
 /* returns the difficulty of seeing through your squad's disguise */
 int disguiseskill(void);
 /* practices squads disguise skill */
-void disguisepractice(int diff);
+void disguisepractice(int p,int diff);
 /* returns the difficulty of spotting the squad if it is sneaking */
 int stealthskill(void);
 /* practices squads stealth skill */
-void stealthpractice(int diff);
+void stealthpractice(int p,int diff);
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(creaturest &cr,short type);
 /* checks if a creature's uniform is appropriate to the location */

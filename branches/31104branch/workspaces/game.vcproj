@@ -1,195 +1,288 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="game"
 	ProjectGUID="{CA438C67-7A74-4797-BC09-8C866F965240}"
-	SccProjectName=""
-	SccLocalPath="">
+	RootNamespace="game"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Debug/game.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/wd4996"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\src"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				UsePrecompiledHeader="2"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/game.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="2"
-				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"/>
+				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="Debug/crimesquad.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/crimesquad.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/game.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Release/game.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				StringPooling="TRUE"
-				RuntimeLibrary="4"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/game.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
-				SuppressStartupBanner="TRUE"/>
+				SuppressStartupBanner="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="Release/crimesquad.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\Release/crimesquad.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/game.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="debug2|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			CharacterSet="2">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName=".\Debug/game.tlb"
+				HeaderFileName=""
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="5"
-				UsePrecompiledHeader="2"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/game.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="2"
-				WarnAsError="FALSE"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				WarnAsError="false"
+				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="Debug/crimesquad.exe"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/crimesquad.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/game.tlb"
-				HeaderFileName=""/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -197,197 +290,251 @@
 	<Files>
 		<Filter
 			Name="basemode"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\basemode\activate.cpp">
+				RelativePath="..\src\basemode\activate.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\basemode\baseactions.cpp">
+				RelativePath="..\src\basemode\baseactions.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\basemode\basemode.cpp">
+				RelativePath="..\src\basemode\basemode.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\basemode\reviewmode.cpp">
+				RelativePath="..\src\basemode\reviewmode.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="combat"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\combat\chase.cpp">
+				RelativePath="..\src\combat\chase.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\combat\fight.cpp">
+				RelativePath="..\src\combat\fight.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\combat\haulkidnap.cpp">
+				RelativePath="..\src\combat\haulkidnap.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="common"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\common\commonactions.cpp">
+				RelativePath="..\src\common\commonactions.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\commondisplay.cpp">
+				RelativePath="..\src\common\commondisplay.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\consolesupport.cpp">
+				RelativePath="..\src\common\consolesupport.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\creature.cpp">
+				RelativePath="..\src\common\creature.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\equipment.cpp">
+				RelativePath="..\src\common\equipment.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\getnames.cpp">
+				RelativePath="..\src\common\getnames.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\common\translateid.cpp">
+				RelativePath="..\src\common\translateid.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="daily"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\daily\activities.cpp">
+				RelativePath="..\src\daily\activities.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\daily.cpp">
+				RelativePath="..\src\daily\daily.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\date.cpp">
+				RelativePath="..\src\daily\date.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\interrogation.cpp">
+				RelativePath="..\src\daily\interrogation.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\news.cpp">
+				RelativePath="..\src\daily\news.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\recruit.cpp">
+				RelativePath="..\src\daily\recruit.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\shopsnstuff.cpp">
+				RelativePath="..\src\daily\shopsnstuff.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\daily\siege.cpp">
+				RelativePath="..\src\daily\siege.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="monthly"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\monthly\endgame.cpp">
+				RelativePath="..\src\monthly\endgame.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\monthly\justice.cpp">
+				RelativePath="..\src\monthly\justice.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\monthly\lcsmonthly.cpp">
+				RelativePath="..\src\monthly\lcsmonthly.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\monthly\monthly.cpp">
+				RelativePath="..\src\monthly\monthly.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\monthly\politics.cpp">
+				RelativePath="..\src\monthly\politics.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="sitemode"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\sitemode\advance.cpp">
+				RelativePath="..\src\sitemode\advance.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\map.cpp">
+				RelativePath="..\src\sitemode\map.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\mapspecials.cpp">
+				RelativePath="..\src\sitemode\mapspecials.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\miscactions.cpp">
+				RelativePath="..\src\sitemode\miscactions.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\newencounter.cpp">
+				RelativePath="..\src\sitemode\newencounter.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\sitedisplay.cpp">
+				RelativePath="..\src\sitemode\sitedisplay.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\sitemode.cpp">
+				RelativePath="..\src\sitemode\sitemode.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\stealth.cpp">
+				RelativePath="..\src\sitemode\stealth.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\talk.cpp">
+				RelativePath="..\src\sitemode\talk.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="title"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\title\highscore.cpp">
+				RelativePath="..\src\title\highscore.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\title\newgame.cpp">
+				RelativePath="..\src\title\newgame.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\title\saveload.cpp">
+				RelativePath="..\src\title\saveload.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\src\title\titlescreen.cpp">
+				RelativePath="..\src\title\titlescreen.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="headers"
-			Filter="">
+			>
 			<File
-				RelativePath="..\src\compat.h">
+				RelativePath="..\src\compat.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\curses.h">
+				RelativePath="..\src\curses.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\cursesgraphics.h">
+				RelativePath="..\src\cursesgraphics.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\cursesmovie.h">
+				RelativePath="..\src\cursesmovie.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\externs.h">
+				RelativePath="..\src\externs.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\includes.h">
+				RelativePath="..\src\includes.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\lcsio.h">
+				RelativePath="..\src\lcsio.h"
+				>
 			</File>
 			<File
-				RelativePath="..\src\vector.h">
+				RelativePath="..\src\vector.h"
+				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\src\compat.cpp">
+			RelativePath="..\src\compat.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\src\cursesgraphics.cpp">
+			RelativePath="..\src\cursesgraphics.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\src\cursesmovie.cpp">
+			RelativePath="..\src\cursesmovie.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\src\game.cpp">
+			RelativePath="..\src\game.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\src\lcsio.cpp">
+			RelativePath="..\src\lcsio.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\src\pdcurses.lib">
+			RelativePath="..\src\pdcurses.lib"
+			>
 		</File>
 	</Files>
 	<Globals>
