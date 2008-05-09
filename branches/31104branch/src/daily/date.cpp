@@ -29,7 +29,234 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+#define DATERESULT_MEETTOMORROW 0
+#define DATERESULT_BREAKUP      1
+#define DATERESULT_JOINED       2
+#define DATERESULT_ARRESTED     3
 
+
+// Handles the result of a date or vacation
+static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
+{
+   if(aroll>troll)
+   {
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      move(y,0);y++;
+      addstr(d.date[e]->name);
+      addstr(" is quite taken with ");
+      addstr(pool[p]->name);
+      addstr("'s unique life philosophy...");
+      refresh();
+      getch();
+
+      if(LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM]&&
+         loveslavesleft(*pool[p]))
+      {
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(y,0);y++;
+         addstr("In fact, ");
+         addstr(d.date[e]->name);
+         addstr(" is ");
+         addstr(pool[p]->name);
+         addstr("'s totally unconditional love-slave!");
+         //Get map of their workplace
+         location[d.date[e]->worklocation]->interrogated=1;
+         location[d.date[e]->worklocation]->hidden=0;
+         refresh();
+         getch();
+
+         name(d.date[e]->name);
+         strcpy(d.date[e]->propername,d.date[e]->name);
+
+         d.date[e]->location=pool[p]->location;
+         d.date[e]->base=pool[p]->base;
+         d.date[e]->hireid=pool[p]->id;
+
+         erase();
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(0,0);
+         addstr("The Self-Nullifying Infatuation of ");
+         addstr(d.date[e]->propername);
+
+         move(2,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("What name will you use for this ");
+         char str[80];
+         getrecruitcreature(str,d.date[e]->type);
+         addstr(str);
+         addstr(" in its presence?");
+         move(3,0);
+         addstr("If you do not enter anything, their real name will be used.");
+         
+         move(4,0);
+         enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
+         
+         pool.push_back(d.date[e]);
+         stat_recruits++;
+
+         d.date[e]->location=pool[p]->location;
+         d.date[e]->base=pool[p]->base;
+         d.date[e]->align=1;
+         d.date.erase(d.date.begin() + e);
+
+         return DATERESULT_JOINED;
+      }
+      else
+      {
+         if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-4)
+         {
+            d.date[e]->att[ATTRIBUTE_HEART]++;
+         }
+         else
+         {
+            //Posibly date reveals map of location
+            if(location[d.date[e]->worklocation]->interrogated==0 && !LCSrandom(d.date[e]->att[ATTRIBUTE_WISDOM]))
+            {
+               y++;
+               move(y++,0);
+               addstr(d.date[e]->name);
+               addstr(" turns the topic of discussion to the ");
+               addstr(location[d.date[e]->worklocation]->name);
+               addstr(".");
+               move(y++,0);
+               if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
+               {
+                  addstr(pool[p]->name);
+                  addstr(" was able to create a map of the site with this information.");
+                  y++;                           
+               }
+               else
+               {
+                  addstr(pool[p]->name);
+                  addstr(" knows all about that already.");
+                  y++;
+               }
+               location[d.date[e]->worklocation]->interrogated=1;
+               location[d.date[e]->worklocation]->hidden=0;
+            }
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);y++;
+         addstr("They'll meet again tomorrow.");
+         refresh();
+         getch();
+         
+         return DATERESULT_MEETTOMORROW;
+      }
+   }
+   else
+   {
+      //WISDOM POSSIBLE INCREASE
+      if(d.date[e]->align==-1&&aroll<troll/2)
+      {
+			set_color(COLOR_RED,COLOR_BLACK,1);
+         move(y,0);y++;
+         
+         addstr("Talking with ");
+         addstr(d.date[e]->name);
+         addstr(" actually increases ");
+         addstr(pool[p]->name);
+         addstr("'s wisdom!!!");
+         pool[p]->att[ATTRIBUTE_WISDOM]++;
+
+         if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
+         {
+            pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
+         }
+         if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
+         {
+            pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
+         }
+         if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
+         {
+            pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
+         }
+
+         refresh();
+         getch();
+      }
+
+      //BREAK UP
+      
+      // *JDS* If your squad member is wanted by the police, a conservative who breaks up with
+      // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
+      // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance.
+      if((iscriminal(*pool[p])) &&
+         (!LCSrandom(50) ||(LCSrandom(2) && (d.date[e]->type==CREATURE_AGENT||
+         d.date[e]->type==CREATURE_COP||d.date[e]->type==CREATURE_GANGUNIT||
+         d.date[e]->type==CREATURE_SWAT||
+         d.date[e]->type==CREATURE_DEATHSQUAD||d.date[e]->type==CREATURE_PRISONGUARD||
+         d.date[e]->type==CREATURE_EDUCATOR))))
+      {
+         move(y,0);y++;
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         addstr(d.date[e]->name);
+         addstr(" was leaking information to the police the whole time!");
+         refresh();
+         getch();
+         move(y,0);y++;
+         // 3/4 chance of being arrested if less than 50 juice,
+         // 1/2 chance of being arrested if more than 50 juice
+         if((pool[p]->juice<50 && LCSrandom(2)) || LCSrandom(2))
+         {
+            // Find the police station
+            long ps=-1;
+            for(long l=0;l<location.size();l++)
+            {
+               if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
+               {
+                  ps=l;
+               }
+            }
+
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr(pool[p]->name);
+            addstr(" has been arrested.");
+            
+            removesquadinfo(*pool[p]);
+            pool[p]->carid=-1;
+            pool[p]->location=ps;
+            pool[p]->weapon.type=WEAPON_NONE;
+            pool[p]->weapon.ammo=0;
+            pool[p]->activity.type=ACTIVITY_NONE;
+
+            refresh();
+            getch();
+
+            delete d.date[e];
+            d.date.erase(d.date.begin() + e);
+
+            return DATERESULT_ARRESTED;
+         }
+         else
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("But ");
+            addstr(pool[p]->name);
+            addstr(" escapes the police ambush!");
+         }
+      }
+      else
+      {
+         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         move(y,0);y++;
+         addstr(d.date[e]->name);
+         addstr(" can sense that things just aren't working out.");
+         move(y,0);y++;
+         
+         addstr("This relationship is over.");
+      }
+      refresh();
+      getch();
+
+      delete d.date[e];
+      d.date.erase(d.date.begin() + e);
+
+      return DATERESULT_BREAKUP;
+   }
+}
 
 /* daily - date - dater p gets back from vacation */
 char completevacation(datest &d,int p,char &clearformess)
@@ -44,8 +271,8 @@ char completevacation(datest &d,int p,char &clearformess)
    addstr(pool[p]->name);
    addstr(" is back from vacation.");
 
-   short aroll=LCSrandom(51)+10+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_SEDUCTION]*2+1);
-   short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
+   short aroll=LCSrandom(51+pool[p]->attval(ATTRIBUTE_CHARISMA)*4+LCSrandom(pool[p]->skill[SKILL_SEDUCTION]*4))+10;
+   short troll=LCSrandom(21+d.date[e]->attval(ATTRIBUTE_CHARISMA)*2+d.date[e]->attval(ATTRIBUTE_WISDOM)*4);
    pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(14)+7;
 
    if(d.date[e]->skill[SKILL_BUSINESS])
@@ -75,134 +302,12 @@ char completevacation(datest &d,int p,char &clearformess)
 
 
    int y=2;
-   if(aroll>troll)
+   switch(dateresult(aroll,troll,d,e,p,y))
    {
-      set_color(COLOR_BLUE,COLOR_BLACK,1);
-      move(y,0);y++;
-      addstr(d.date[e]->name);
-      addstr(" learned a lot from ");
-      addstr(pool[p]->name);
-      addstr(" during their time together.");
-      refresh();
-      getch();
-
-      if(d.date[e]->att[ATTRIBUTE_WISDOM]-pool[p]->skill[SKILL_SEDUCTION]<=1||
-         LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM])
-      {
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(y,0);y++;
-         addstr("In fact, ");
-         addstr(d.date[e]->name);
-         addstr(" is ");
-         addstr(pool[p]->name);
-         addstr("'s totally unconditional love-slave!");
-         location[d.date[e]->worklocation]->interrogated=1;
-         location[d.date[e]->worklocation]->hidden=0;
-         refresh();
-         getch();
-
-         name(d.date[e]->name);
-         strcpy(d.date[e]->propername,d.date[e]->name);
-
-         d.date[e]->location=pool[p]->location;
-         d.date[e]->base=pool[p]->base;
-         d.date[e]->hireid=pool[p]->id;
-
-         erase();
-
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(0,0);
-         addstr("The Self-Nullifying Infatuation of ");
-         addstr(d.date[e]->propername);
-
-         move(2,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("What name will you use for this ");
-         char str[80];
-         getrecruitcreature(str,d.date[e]->type);
-         addstr(str);
-         addstr(" in its presence?");
-	      move(3,0);
-	      addstr("If you do not enter anything, their real name will be used.");
-      	 
-               move(4,0);
-	      enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
-      	
-               
-	      pool.push_back(d.date[e]);
-         stat_recruits++;
-
-         d.date[e]->location=pool[p]->location;
-         d.date[e]->base=pool[p]->base;
-         d.date[e]->align=1;
-         d.date.erase(d.date.begin() + e);
-         
-         return 1;
-      }
-      else
-      {
-         if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-4)d.date[e]->att[ATTRIBUTE_HEART]+=LCSrandom(3);
-         if(aroll>troll*2)
-         {
-            d.date[e]->att[ATTRIBUTE_WISDOM]-=LCSrandom(3)+1;
-            if(d.date[e]->att[ATTRIBUTE_WISDOM]<1)d.date[e]->att[ATTRIBUTE_WISDOM]=1;
-         }
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);y++;
-         addstr("They'll meet again tomorrow.");
-         refresh();
-         getch();
-
-         return 0;
-      }
-   }
-   else
-   {
-      //WISDOM POSSIBLE INCREASE
-      if(d.date[e]->align==-1&&aroll<troll/2)
-      {
-         set_color(COLOR_RED,COLOR_BLACK,1);
-         move(y,0);y++;
-         addstr("Spending time with ");
-         addstr(d.date[e]->name);
-         addstr(" actually increases ");
-         addstr(pool[p]->name);
-         addstr("'s wisdom!!!");
-         pool[p]->att[ATTRIBUTE_WISDOM]+=LCSrandom(5)+1;
-
-         if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
-         {
-            pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
-         }
-         if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
-         {
-            pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
-         }
-         if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
-         {
-            pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
-         }
-
-         refresh();
-         getch();
-      }
-
-      //BREAK UP
-      set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-      move(y,0);y++;
-      addstr(d.date[e]->name);
-      addstr(" can sense that things just aren't working out.");
-      move(y,0);y++;
-      addstr("This relationship is over.");
-
-      refresh();
-      getch();
-
-      delete d.date[e];
-      d.date.erase(d.date.begin() + e);
-
-      return 1;
+   case DATERESULT_MEETTOMORROW:return 0;
+   case DATERESULT_BREAKUP:     return 1;
+   case DATERESULT_JOINED:      return 1;
+   case DATERESULT_ARRESTED:    return 1;
    }
 }
 
@@ -371,220 +476,8 @@ char completedate(datest &d,int p,char &clearformess)
          if(test)
          {
             int y=17;
-            if(aroll>troll)
-            {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
-               move(y,0);y++;
-               addstr(d.date[e]->name);
-               addstr(" is quite taken with ");
-               addstr(pool[p]->name);
-               addstr("'s unique life philosophy...");
-               refresh();
-               getch();
-
-               if(d.date[e]->att[ATTRIBUTE_WISDOM]<=1||
-                  LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+aroll-troll)>d.date[e]->att[ATTRIBUTE_WISDOM])
-               {
-                  set_color(COLOR_GREEN,COLOR_BLACK,1);
-                  move(y,0);y++;
-                  addstr("In fact, ");
-                  addstr(d.date[e]->name);
-                  addstr(" is ");
-                  addstr(pool[p]->name);
-                  addstr("'s totally unconditional love-slave!");
-                  //Get map of their workplace
-                  location[d.date[e]->worklocation]->interrogated=1;
-                  location[d.date[e]->worklocation]->hidden=0;
-                  refresh();
-                  getch();
-
-                  name(d.date[e]->name);
-                  strcpy(d.date[e]->propername,d.date[e]->name);
-
-                  d.date[e]->location=pool[p]->location;
-                  d.date[e]->base=pool[p]->base;
-                  d.date[e]->hireid=pool[p]->id;
-
-                  erase();
-   
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(0,0);
-                  addstr("The Self-Nullifying Infatuation of ");
-                  addstr(d.date[e]->propername);
-
-                  move(2,0);
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("What name will you use for this ");
-                  char str[80];
-                  getrecruitcreature(str,d.date[e]->type);
-                  addstr(str);
-                  addstr(" in its presence?");
-		            move(3,0);
-                  addstr("If you do not enter anything, their real name will be used.");
-                  
-                  move(4,0);
-                  enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
-                  
-                  pool.push_back(d.date[e]);
-                  stat_recruits++;
-
-                  d.date[e]->location=pool[p]->location;
-                  d.date[e]->base=pool[p]->base;
-                  d.date[e]->align=1;
-                  d.date.erase(d.date.begin() + e);
-               }
-               else
-               {
-                  if(d.date[e]->att[ATTRIBUTE_HEART]<pool[p]->att[ATTRIBUTE_HEART]-4)
-                  {
-                     d.date[e]->att[ATTRIBUTE_HEART]++;
-                  }
-                  else
-                  {
-                     //Posibly date reveals map of location
-                     if(location[d.date[e]->worklocation]->interrogated==0 && !LCSrandom(d.date[e]->att[ATTRIBUTE_WISDOM]))
-                     {
-                        y++;
-                        move(y++,0);
-                        addstr(d.date[e]->name);
-                        addstr(" turns the topic of discussion to the ");
-                        addstr(location[d.date[e]->worklocation]->name);
-                        addstr(".");
-                        move(y++,0);
-                        if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
-                        {
-                           addstr(pool[p]->name);
-                           addstr(" was able to create a map of the site with this information.");
-                           y++;                           
-                        }
-                        else
-                        {
-                           addstr(pool[p]->name);
-                           addstr(" is bored stiff by this conversation.");
-                           y++;
-                        }
-                        location[d.date[e]->worklocation]->interrogated=1;
-                        location[d.date[e]->worklocation]->hidden=0;
-                     }
-
-                     if(aroll>troll*2) d.date[e]->att[ATTRIBUTE_WISDOM]--;
-                  }
-
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  move(y,0);y++;
-                  addstr("They'll meet again tomorrow.");
-                  refresh();
-                  getch();
-               }
-            }
-            else
-            {
-               //WISDOM POSSIBLE INCREASE
-               if(d.date[e]->align==-1&&aroll<troll/2)
-               {
-						set_color(COLOR_RED,COLOR_BLACK,1);
-                  move(y,0);y++;
-                  
-                  addstr("Talking with ");
-                  addstr(d.date[e]->name);
-                  addstr(" actually increases ");
-                  addstr(pool[p]->name);
-                  addstr("'s wisdom!!!");
-                  pool[p]->att[ATTRIBUTE_WISDOM]++;
-
-                  if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
-                  {
-                     pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
-                  }
-                  if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
-                  {
-                     pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
-                  }
-                  if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
-                  {
-                     pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
-                  }
-
-                  refresh();
-                  getch();
-               }
-
-               //BREAK UP
-               
-               // *JDS* If your squad member is wanted by the police, a conservative who breaks up with
-               // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
-               // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance.
-               if((iscriminal(*pool[p])) &&
-                  !LCSrandom(50) ||(LCSrandom(2) && (d.date[e]->type==CREATURE_AGENT||
-                  d.date[e]->type==CREATURE_COP||d.date[e]->type==CREATURE_GANGUNIT||
-                  d.date[e]->type==CREATURE_SWAT||
-                  d.date[e]->type==CREATURE_DEATHSQUAD||d.date[e]->type==CREATURE_PRISONGUARD||
-                  d.date[e]->type==CREATURE_EDUCATOR)))
-               {
-                  move(y,0);y++;
-                  set_color(COLOR_RED,COLOR_BLACK,1);
-                  addstr(d.date[e]->name);
-                  addstr(" was leaking information to the police the whole time!");
-                  refresh();
-                  getch();
-                  move(y,0);y++;
-                  // 3/4 chance of being arrested if less than 50 juice,
-                  // 1/2 chance of being arrested if more than 50 juice
-                  if((pool[p]->juice<50 && LCSrandom(2)) || LCSrandom(2))
-                  {
-                     // Find the police station
-                     long ps=-1;
-                     for(long l=0;l<location.size();l++)
-                     {
-                        if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-                        {
-                           ps=l;
-                        }
-                     }
-
-                     set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-                     addstr(pool[p]->name);
-                     addstr(" has been arrested.");
-                     
-                     removesquadinfo(*pool[p]);
-                     pool[p]->carid=-1;
-                     pool[p]->location=ps;
-                     pool[p]->weapon.type=WEAPON_NONE;
-                     pool[p]->weapon.ammo=0;
-                     pool[p]->activity.type=ACTIVITY_NONE;
-
-                     refresh();
-                     getch();
-
-                     delete d.date[e];
-                     d.date.erase(d.date.begin() + e);
-
-                     return 1;
-                  }
-                  else
-                  {
-                     set_color(COLOR_GREEN,COLOR_BLACK,1);
-                     addstr("But ");
-                     addstr(pool[p]->name);
-                     addstr(" escapes the police ambush!");
-                  }
-               }
-               else
-               {
-                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-                  move(y,0);y++;
-                  addstr(d.date[e]->name);
-                  addstr(" can sense that things just aren't working out.");
-                  move(y,0);y++;
-                  
-                  addstr("This relationship is over.");
-               }
-               refresh();
-               getch();
-
-               delete d.date[e];
-               d.date.erase(d.date.begin() + e);
-            }
+            int result = dateresult(aroll,troll,d,e,p,y);
+            if(result == DATERESULT_ARRESTED)return 1;
             break;
          }
 

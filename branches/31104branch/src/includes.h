@@ -292,6 +292,7 @@ enum SiteTypes
    SITE_BUSINESS_DEPTSTORE,
    SITE_BUSINESS_HALLOWEEN,
    SITE_BUSINESS_BARANDGRILL,
+   SITE_BUSINESS_ARMSDEALER,
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
    SITENUM
@@ -1555,6 +1556,9 @@ int maxsubordinates(const creaturest& cr);
 /* Determines the number of subordinates a creature may recruit,
    based on their max and the number they already command */
 int subordinatesleft(const creaturest& cr);
+/* Determines the number of loveslaves a creature may recruit,
+   based on their max and the number they already command */
+int loveslavesleft(const creaturest& cr);
 
 /*
  consolesupport.cpp
@@ -2010,6 +2014,8 @@ void getwheelchair(creaturest &cr,char &clearformess);
 void hospital(int loc);
 /* active squad visits the pawn shop */
 void pawnshop(int loc);
+/* active squad visits the arms dealer */
+void armsdealer(int loc);
 /* active squad visits the department store */
 void deptstore(int loc);
 /* active squad visits the oubliette */

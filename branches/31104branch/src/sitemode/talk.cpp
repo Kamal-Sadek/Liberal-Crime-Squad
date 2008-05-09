@@ -334,7 +334,7 @@ char talk(creaturest &a,int t)
          {
             case TALKMODE_ISSUES:
             {
-               clearcommandarea();
+               /*clearcommandarea();
                clearmessagearea();
                clearmaparea();
 
@@ -381,14 +381,16 @@ char talk(creaturest &a,int t)
                      }
                   }
                   if(c==10||c==27||c==32){lw=-1;break;}
-               }while(1);
+               }while(1);*/
+
+               int lw = LCSrandom(LAWNUM); // pick a random law to talk about
 
                if(lw!=-1)
                {
                   short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
                      a.attval(ATTRIBUTE_HEART)+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
                   char badthing=0;
-                  if(aroll<15)badthing=1;
+                  if(aroll-a.attval(ATTRIBUTE_HEART)<25-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
                   short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+
                      tk->attval(ATTRIBUTE_WISDOM);
@@ -532,7 +534,7 @@ char talk(creaturest &a,int t)
                            if(tk->skill[SKILL_BUSINESS])troll+=tk->skill[SKILL_BUSINESS]-a.skill[SKILL_BUSINESS];
                            break;
                         case LAW_FREESPEECH:
-                           addstr("\"Protests and demonstrations are regularly and often brutally suppressed in\"");
+                           addstr("\"Protests and demonstrations are regularly and often brutally suppressed in");
                            move(y,1);y++;
                            addstr("this country.  People have to watch what they write -- even what they read.\"");
                            if(tk->skill[SKILL_LAW])troll+=tk->skill[SKILL_LAW]-a.skill[SKILL_LAW];

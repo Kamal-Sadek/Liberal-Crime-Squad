@@ -1258,7 +1258,7 @@ void promoteliberals(void)
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
                         addstr(pool[p3]->name);
                         set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     } else addstr(pool[p3]->name);
+                     }
                      break;
                   }
                }

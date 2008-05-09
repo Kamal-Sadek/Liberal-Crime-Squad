@@ -988,6 +988,13 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
+      newl->type=SITE_BUSINESS_ARMSDEALER;
+      newl->parent=3;
+      newl->needcar=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
       newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
       newl->parent=2;
       newl->renting=-2;

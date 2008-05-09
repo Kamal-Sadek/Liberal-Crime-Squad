@@ -357,6 +357,16 @@ void advanceday(char &clearformess,char canseethings)
                continue;
             }
          }
+         
+         // Give drivers experience if they actually travel
+         if(squad[sq]->activity.arg != squad[sq]->squad[0]->base)
+         {
+            for(int i=0;i<6;i++)
+            {
+               if(squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
+                  squad[sq]->squad[i]->skill_ip[SKILL_DRIVING]+=5;
+            }
+         }
 
          //GO PLACES
          switch(location[squad[sq]->activity.arg]->type)
@@ -364,6 +374,7 @@ void advanceday(char &clearformess,char canseethings)
             case SITE_BUSINESS_DEPTSTORE:
             case SITE_BUSINESS_HALLOWEEN:
             case SITE_BUSINESS_PAWNSHOP:
+            case SITE_BUSINESS_ARMSDEALER:
                if(clearformess)erase();
                else
                {
@@ -391,6 +402,9 @@ void advanceday(char &clearformess,char canseethings)
                      break;
                   case SITE_BUSINESS_PAWNSHOP:
                      pawnshop(squad[sq]->activity.arg);
+                     break;
+                  case SITE_BUSINESS_ARMSDEALER:
+                     armsdealer(squad[sq]->activity.arg);
                      break;
                }
                showcarprefs=0;
@@ -1969,6 +1983,9 @@ void initlocation(locationst &loc)
          strcpy(loc.name,"Robert E. Lee Bunker");
          strcpy(loc.shortname,"Bunker");
          break;
+      case SITE_BUSINESS_ARMSDEALER:
+         strcpy(loc.name,"Black Market");
+         strcpy(loc.shortname,"Black Market");
    }
 }
 

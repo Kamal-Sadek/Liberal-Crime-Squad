@@ -99,6 +99,396 @@ void hospital(int loc)
 }
 
 
+/* active squad visits the arms dealer */
+void armsdealer(int loc)
+{
+   short buyer=0;
+   short in_gunshop=0;
+   int l;
+
+   locatesquad(activesquad,loc);
+
+   int partysize=0;
+   for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]!=NULL)
+      {
+         partysize++;
+      }
+   }
+
+   do
+   {
+      erase();
+
+      locheader();
+      printparty();
+
+      move(8,60);
+      addstr("Buyer: ");
+      addstr(activesquad->squad[buyer]->name);
+      
+      if(in_gunshop==2)
+      {
+         if(year<2100)
+         {
+            if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("P - Buy Shotgun Shells        ($25)");
+            if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            addstr("T - Buy a .22 Speedloader     ($25)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("N - Buy a 9mm Pistol Magazine ($40)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            addstr("F - Buy a .45 Pistol Magazine ($40)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("M - Buy a .44 Speedloader     ($40)");
+            if(funds>=50)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            addstr("S - Buy a 9mm SMG Magazine    ($50)");
+            if(funds>=50)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            addstr("R - Buy an Assault Rifle Mag  ($50)");
+         }
+         else
+         {
+            if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("P - Buy a Shotgun Plasma Pack ($25)");
+            if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            addstr("T - Buy a .22 Slug Magazine   ($25)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("N - Buy a 9mm Powerpack       ($40)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            addstr("F - Buy a .45 Powerpack       ($40)");
+            if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("M - Buy a .44 Heavy Slug Mag  ($40)");
+            if(funds>=50)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            addstr("S - Buy a SMG Powerpack       ($50)");
+            if(funds>=50)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            addstr("R - Buy a Rifle Powerpack     ($50)");
+         }
+         
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(16,40);
+         addstr("Enter - Done buying Liberal clips");
+      }
+      else if(in_gunshop==1)
+      {
+         if(year<2100)
+         {
+            if(funds>=400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("G - Buy a Shotgun              ($400)");
+            if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            addstr("T - Buy a .22 Revolver         ($150)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("N - Buy a 9mm Semi-automatic   ($350)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            addstr("F - Buy a .45 Semi-automatic   ($350)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("M - Buy a .44 Magnum           ($350)");
+            if(funds>=2000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            addstr("S - Buy a 9mm MP5 SMG         ($2000)");
+            if(funds>=2800)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            addstr("K - Buy an AK-47              ($2800)");
+         }
+         else
+         {
+            if(funds>=400)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("G - Buy a Plasma Shotgun       ($400)");
+            if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,40);
+            addstr("T - Buy a .22 Slug Pistol      ($150)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("N - Buy a 9mm Laser Pistol     ($350)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,40);
+            addstr("F - Buy a .45 Laser Pistol     ($350)");
+            if(funds>=350)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,1);
+            addstr("M - Buy a .44 Slug Pistol      ($350)");
+            if(funds>=2000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            addstr("S - Buy a Beijing Prince SMG  ($2000)");
+            if(funds>=2800)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            addstr("K - Buy a P74 War Laser       ($2800)");
+         }
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(16,40);
+         addstr("Enter - Done buying Liberal guns");
+      }
+      else
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(10,1);
+         addstr("G - Buy a Liberal gun");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(10,40);
+         addstr("C - Buy Liberal clips");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(11,1);
+         addstr("E - Look over Equipment");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(16,40);
+         addstr("Enter - Leave");
+      }
+
+      if(partysize>=2)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(16,1);
+      addstr("B - Choose a buyer");
+
+      if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(15,1);
+      addstr("0 - Show the squad's Liberal status");
+      if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(15,40);
+      addstr("# - Check the status of a squad Liberal");
+
+      int c=getch();
+      translategetch(c);
+      if(in_gunshop==1)
+      {
+         int gunbought=-1;
+
+         if(funds>=150&&c=='t')
+         {
+            gunbought=WEAPON_REVOLVER_22;
+            funds-=150;
+            stat_spent+=150;
+            moneylost_goods+=150;
+         }
+         if(funds>=350&&c=='m')
+         {
+            gunbought=WEAPON_REVOLVER_44;
+            funds-=350;
+            stat_spent+=350;
+            moneylost_goods+=350;
+         }
+         if(funds>=350&&c=='n')
+         {
+            gunbought=WEAPON_SEMIPISTOL_9MM;
+            funds-=350;
+            stat_spent+=350;
+            moneylost_goods+=350;
+         }
+         if(funds>=350&&c=='f')
+         {
+            gunbought=WEAPON_SEMIPISTOL_45;
+            funds-=350;
+            stat_spent+=350;
+            moneylost_goods+=350;
+         }
+         if(funds>=400&&c=='g')
+         {
+            gunbought=WEAPON_SHOTGUN_PUMP;
+            funds-=400;
+            stat_spent+=400;
+            moneylost_goods+=400;
+         }
+         if(funds>=2000&&c=='s')
+         {
+            gunbought=WEAPON_SMG_MP5;
+            funds-=2000;
+            stat_spent+=2000;
+            moneylost_goods+=2000;
+         }
+         if(funds>=2800&&c=='k')
+         {
+            gunbought=WEAPON_AUTORIFLE_AK47;
+            funds-=2800;
+            stat_spent+=2800;
+            moneylost_goods+=2800;
+         }
+
+
+         if(gunbought!=-1)
+         {
+            weaponst swap=activesquad->squad[buyer]->weapon;
+            activesquad->squad[buyer]->weapon.type=gunbought;
+            activesquad->squad[buyer]->weapon.ammo=0;
+
+            if(swap.type!=WEAPON_NONE)
+            {
+               itemst *newi=new itemst;
+                  newi->type=ITEM_WEAPON;
+                  newi->weapon=swap;
+               activesquad->loot.push_back(newi);
+            }
+
+            //DROP ALL CLIPS THAT DON'T WORK
+            for(int cl=0;cl<CLIPNUM;cl++)
+            {
+               if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
+
+               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
+               {
+                  itemst *newi=new itemst;
+                     newi->type=ITEM_CLIP;
+                     newi->cliptype=cl;
+                  activesquad->loot.push_back(newi);
+               }
+
+               activesquad->squad[buyer]->clip[cl]=0;
+            }
+         }
+
+         if(c==10)in_gunshop=0;
+      }
+      else if(in_gunshop==2)
+      {
+         int clipbought=-1;
+
+         if(funds>=25&&c=='t')
+         {
+            clipbought=CLIP_22;
+            funds-=25;
+            stat_spent+=25;
+            moneylost_goods+=25;
+         }
+         if(funds>=40&&c=='m')
+         {
+            clipbought=CLIP_44;
+            funds-=20;
+            stat_spent+=20;
+            moneylost_goods+=20;
+         }
+         if(funds>=40&&c=='n')
+         {
+            clipbought=CLIP_9;
+            funds-=30;
+            stat_spent+=30;
+            moneylost_goods+=30;
+         }
+         if(funds>=40&&c=='f')
+         {
+            clipbought=CLIP_45;
+            funds-=30;
+            stat_spent+=30;
+            moneylost_goods+=30;
+         }
+         if(funds>=25&&c=='p')
+         {
+            clipbought=CLIP_BUCKSHOT;
+            funds-=25;
+            stat_spent+=25;
+            moneylost_goods+=25;
+         }
+         if(funds>=50&&c=='r')
+         {
+            clipbought=CLIP_ASSAULT;
+            funds-=50;
+            stat_spent+=50;
+            moneylost_goods+=50;
+         }
+         if(funds>=50&&c=='s')
+         {
+            clipbought=CLIP_SMG;
+            funds-=50;
+            stat_spent+=50;
+            moneylost_goods+=50;
+         }
+
+         char conf=1;
+
+         if(ammotype(activesquad->squad[buyer]->weapon.type)==clipbought&&clipbought!=-1)
+         {
+            if(activesquad->squad[buyer]->clip[clipbought]<9)
+            {
+               activesquad->squad[buyer]->clip[clipbought]++;
+               conf=0;
+            }
+         }
+
+         if(conf&&clipbought!=-1)
+         {
+            itemst *newi=new itemst;
+               newi->type=ITEM_CLIP;
+               newi->cliptype=clipbought;
+            activesquad->loot.push_back(newi);
+         }
+
+         if(c==10)in_gunshop=0;
+      }
+      else
+      {
+         if(c==10)break;
+         if(c=='c')in_gunshop=2;
+         if(c=='g')in_gunshop=1;
+         if(c=='e')equip(activesquad->loot,-1);
+      }
+
+      if(c=='b')choose_buyer(buyer);
+
+      if(c=='0')party_status=-1;
+
+      if(c>='1'&&c<='6'&&activesquad!=NULL)
+      {
+         if(activesquad->squad[c-'1']!=NULL)
+         {
+            if(party_status==c-'1')fullstatus(party_status);
+            else party_status=c-'1';
+         }
+      }
+
+   }while(1);
+}
+
+
 
 /* active squad visits the pawn shop */
 void pawnshop(int loc)

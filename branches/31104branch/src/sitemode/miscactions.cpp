@@ -37,9 +37,9 @@ char unlock(short type,char &actual)
 
    switch(type)
    {
-      case UNLOCK_DOOR:difficulty=10;break;
+      case UNLOCK_DOOR:difficulty=5;break;
       case UNLOCK_CAGE:difficulty=10;break;
-      case UNLOCK_SAFE:difficulty=20;break;
+      case UNLOCK_SAFE:difficulty=15;break;
    }
 
    int maxattack=0;
@@ -99,19 +99,19 @@ char unlock(short type,char &actual)
          }
          addstr("!");
          refresh();
-        for(int j=0;j<6;j++)		//If people witness a successful unlock, they learn a little bit.
-		{
-			if (j==p) continue;
-			if(activesquad->squad[j]!=NULL&&
-				activesquad->squad[j]->alive&&
-				activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty/2)
-			{
-				if(activesquad->squad[j]->alive)
-				{
-					activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty/2-activesquad->squad[j]->skill[SKILL_SECURITY];
-				}
-			}
-		}
+         for(int j=0;j<6;j++) //If people witness a successful unlock, they learn a little bit.
+         {
+	         if (j==p) continue;
+	         if(activesquad->squad[j]!=NULL&&
+		         activesquad->squad[j]->alive&&
+		         activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty/2)
+	         {
+		         if(activesquad->squad[j]->alive)
+		         {
+			         activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty/2-activesquad->squad[j]->skill[SKILL_SECURITY];
+		         }
+	         }
+         }
 
          getch();
 
@@ -204,7 +204,7 @@ char bash(short type,char &actual)
    {
       int p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(11)+maxattack;
+      int aroll=LCSrandom(6)+maxattack;
 
       if(aroll>difficulty||crowable)
       {

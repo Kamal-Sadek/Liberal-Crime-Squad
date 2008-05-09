@@ -2288,9 +2288,9 @@ char stealcar(creaturest &cr,char &clearformess)
          if(method==0)
          {
             int attack=cr.skill[SKILL_SECURITY];
-            if(!LCSrandom(20))attack++;
+            //if(!LCSrandom(20))attack++;
 
-            if(LCSrandom(11)<attack)
+            if(LCSrandom(6)<attack)
             {
                cr.skill_ip[SKILL_SECURITY]+=max(5-cr.skill[SKILL_SECURITY],0);
                set_color(COLOR_WHITE,COLOR_BLACK,1);

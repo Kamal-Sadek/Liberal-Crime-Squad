@@ -252,7 +252,7 @@ int maxskill(int skill,creaturest& cr)
    {
    case SKILL_HANDTOHAND:
    case SKILL_CLUB:
-      return cr.attval(ATTRIBUTE_STRENGTH)*2;
+      return cr.attval(ATTRIBUTE_STRENGTH);
    case SKILL_KNIFE:
    case SKILL_SWORD:
    case SKILL_PISTOL:
@@ -263,19 +263,19 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_IMPROVISED:
    case SKILL_SLEIGHTOFHAND:
    case SKILL_STEALTH:
-      return cr.attval(ATTRIBUTE_AGILITY)*2;
+      return cr.attval(ATTRIBUTE_AGILITY);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
    case SKILL_GANGSTERISM:
    case SKILL_TEACHING:
    case SKILL_SEDUCTION:
-      return cr.attval(ATTRIBUTE_CHARISMA)*2;
+      return cr.attval(ATTRIBUTE_CHARISMA);
    case SKILL_ART:
    case SKILL_MUSIC:
-      return cr.attval(ATTRIBUTE_HEART)*2;
+      return cr.attval(ATTRIBUTE_HEART);
    case SKILL_RELIGION:
    case SKILL_BUSINESS:
-      return cr.attval(ATTRIBUTE_WISDOM)*2;
+      return cr.attval(ATTRIBUTE_WISDOM);
    case SKILL_SCIENCE:
    case SKILL_LAW:
    case SKILL_SURVIVAL:
@@ -287,7 +287,7 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_GARMENTMAKING:
    case SKILL_WRITING:
    case SKILL_STREETSENSE:
-      return cr.attval(ATTRIBUTE_INTELLIGENCE)*2;
+      return cr.attval(ATTRIBUTE_INTELLIGENCE);
    case SKILL_LEADERSHIP:
       if(cr.juice<10)return 0;
       if(cr.juice<50)return 1;
@@ -694,29 +694,46 @@ int lawflagheat(int lawflag)
 // Determines the number of subordinates a creature may command
 int maxsubordinates(const creaturest& cr)
 {
-  int recruitcap = 0;
-  //Cap based on juice
-  if(cr.juice >= 500)      recruitcap += 11;
-  else if(cr.juice >= 200) recruitcap += 8;
-  else if(cr.juice >= 100) recruitcap += 5;
-  else if(cr.juice >= 50)  recruitcap += 1;
-  //Cap based on leadership
-  recruitcap += cr.skill[SKILL_LEADERSHIP] * 2;
-  //Cap for founder
-  if(cr.hireid == -1) recruitcap += 11;
-  return recruitcap;
+   int recruitcap = 0;
+   //Cap based on juice
+   if(cr.juice >= 500)      recruitcap += 11;
+   else if(cr.juice >= 200) recruitcap += 8;
+   else if(cr.juice >= 100) recruitcap += 5;
+   else if(cr.juice >= 50)  recruitcap += 1;
+   //Cap based on leadership
+   recruitcap += cr.skill[SKILL_LEADERSHIP] * 2;
+   //Cap for founder
+   if(cr.hireid == -1) recruitcap += 5;
+   return recruitcap;
 }
 
 // Determines the number of subordinates a creature may recruit,
 // based on their max and the number they already command
 int subordinatesleft(const creaturest& cr)
 {
-  int recruitcap = maxsubordinates(cr);
-  for(int p=0; p<pool.size(); p++)
-  {
-    if(pool[p]->hireid == cr.id) recruitcap--;
-  }
-  if(recruitcap > 0) return recruitcap;
-  else return 0;
+   int recruitcap = maxsubordinates(cr);
+   for(int p=0; p<pool.size(); p++)
+   {
+      // ignore seduced and brainwashed characters
+      if(pool[p]->hireid == cr.id && !(cr.flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
+         recruitcap--;
+   }
+   if(recruitcap > 0) return recruitcap;
+   else return 0;
+}
+
+// Determines the number of love slaves a creature may recruit,
+// based on max minus number they already command
+int loveslavesleft(const creaturest& cr)
+{
+   int loveslavecap = cr.skill[SKILL_SEDUCTION];
+   for(int p=0; p<pool.size(); p++)
+   {
+      // count seduced characters
+      if(pool[p]->hireid == cr.id && cr.flag == CREATUREFLAG_LOVESLAVE)
+         loveslavecap--;
+   }
+   if(loveslavecap > 0) return loveslavecap;
+   else return 0;
 }
 

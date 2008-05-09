@@ -624,6 +624,7 @@ void evasivedrive(void)
 {
    int e;
    vector<long> yourrolls;
+   long yourworst=10000;
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
@@ -632,6 +633,8 @@ void evasivedrive(void)
       {
          long v=id_getcar(activesquad->squad[p]->carid);
          yourrolls.push_back(driveskill(*activesquad->squad[p],vehicle[v])+LCSrandom(10));
+         activesquad->squad[p]->skill_ip[SKILL_DRIVING]+=LCSrandom(20);
+         if(yourworst>yourrolls.back())yourworst=yourrolls.back();
       }
    }
    if(yourrolls.size()==0)yourrolls.push_back(0);//error -- and for this you get a 0
@@ -662,7 +665,21 @@ void evasivedrive(void)
    clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   addstr("You swerve around the next corner!");
+   switch(LCSrandom(yourworst/5))
+   {
+   default:
+      addstr("You accelerate rapidly!");
+      break;
+   case 1:
+      addstr("You swerve around the next corner!");
+      break;
+   case 2:
+      addstr("You screech through an empty lot to the next street!");
+      break;
+   case 3:
+      addstr("You boldly weave through oncoming traffic!");
+      break;
+   }
    refresh();
    getch();
 
@@ -683,7 +700,21 @@ void evasivedrive(void)
                break;
             }
          }
-         addstr(" fails to negotiate the turn!");
+         switch(LCSrandom(cnt/5))
+         {
+         default:
+            addstr(" falls behind!");
+            break;
+         case 1:
+            addstr(" skids out!");
+            break;
+         case 2:
+            addstr(" backs off for safety.");
+            break;
+         case 3:
+            addstr(" breaks hard and nearly crashes!");
+            break;
+         }
 
          for(e=0;e<ENCMAX;e++)
          {
@@ -769,13 +800,26 @@ void evasiverun(void)
 
    if(yourworst>5)
    {
-      yourworst+=LCSrandom(10);
+      yourworst+=LCSrandom(5);
       
       clearmessagearea();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
 
-      addstr("You suddenly dart into an alley!");
+      switch(LCSrandom(yourworst/5))
+      {
+      default:
+         addstr("You suddenly dart into an alley!");
+         break;
+      case 1:
+         addstr("You run as fast as you can!");
+         break;
+      case 2:
+         addstr("You climb a fence in record time!");
+         break;
+      case 3:
+         addstr("You scale a small building and leap between rooftops!");
+      }
       
       refresh();
       getch();
@@ -796,7 +840,7 @@ void evasiverun(void)
       if(!encounter[e].exists)continue;
 
       int chaser=encounter[e].attval(ATTRIBUTE_AGILITY)+
-                 encounter[e].attval(ATTRIBUTE_HEALTH) + LCSrandom(10);
+                 encounter[e].attval(ATTRIBUTE_HEALTH) + LCSrandom(20);
 
       if(theirbest<chaser)theirbest=chaser;
 
@@ -1213,7 +1257,7 @@ void dodgedrive(void)
 
       if(driver!=-1)
       {
-         if(LCSrandom(11)>driveskill(*activesquad->squad[driver],chaseseq.friendcar[v]))
+         if(LCSrandom(11)>activesquad->squad[driver]->skill[SKILL_DRIVING])
          {
             crashfriendlycar(v);
             sitestory->crime.push_back(CRIME_CARCHASE);

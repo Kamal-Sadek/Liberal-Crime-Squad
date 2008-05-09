@@ -849,9 +849,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    a.skill_ip[wsk]+=droll;
 
    // Harder to hit people during a chase: 5 points for being on the
-   // move, another 5 points for having to hit them in the car
-   if(mode==GAMEMODE_CHASECAR){droll+=LCSrandom(6);droll+=LCSrandom(6);}
-   if(mode==GAMEMODE_CHASEFOOT)droll+=LCSrandom(6);
+   // move, 5-15 points for having to hit them in the car, depending
+   // on which side is shooting. Your side has the advantage, since
+   // you're leading the chase.
+   if(mode==GAMEMODE_CHASECAR)
+   {
+      if(a.align==-1)droll+=15;
+      else droll+=5;
+   }
+   if(mode==GAMEMODE_CHASEFOOT)droll+=5;
 
    //Agility bonuses used for melee attack
    //if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
