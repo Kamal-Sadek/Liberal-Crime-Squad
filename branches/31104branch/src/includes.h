@@ -27,10 +27,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.12.0 Alpha"
+#define PACKAGE_VERSION "3.12.0"
 #endif
 
-const unsigned long version=31193;
+const unsigned long version=31200;
 const unsigned long lowestloadversion=31193;
 const unsigned long lowestloadscoreversion=30001;
 
