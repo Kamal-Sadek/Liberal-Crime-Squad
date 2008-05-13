@@ -727,7 +727,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             else if(LCSrandom(spiritcrush+1)+LCSrandom(healthcrush+1) >
                cr->att[ATTRIBUTE_WISDOM]+cr->att[ATTRIBUTE_HEART]+cr->att[ATTRIBUTE_HEALTH])
             {
-               move(y,0);
+               move(y++,0);
                addstr(cr->name);
                switch(LCSrandom(4))
                {
@@ -748,7 +748,29 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
                }
                if(cr->att[ATTRIBUTE_HEART]>1)cr->att[ATTRIBUTE_HEART]--;
-               y++;
+               if(location[cr->worklocation]->interrogated==0 && !LCSrandom(5))
+               {
+                  refresh();
+                  getch();
+                  move(y++,0);
+                  addstr(a->name);
+                  addstr(" beats information out of the pathetic thing.");
+                  move(y++,0);
+                  refresh();
+                  getch();
+                  if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
+                  {
+                     addstr("Unfortunately, none of it is useful to the LCS.");
+                  }
+                  else
+                  {
+                     addstr("A detailed map has been created of ");
+                     addstr(location[cr->worklocation]->name);
+                     addstr(".");
+                  }
+                  location[cr->worklocation]->interrogated=1;
+                  location[cr->worklocation]->hidden=0;
+               }
             }
             else 
             {
@@ -1304,11 +1326,34 @@ void tendhostage(creaturest *cr,char &clearformess)
          cr->flag&=~CREATUREFLAG_MISSING;
          cr->flag&=~CREATUREFLAG_KIDNAPPED;
       }
+      cr->flag|=CREATUREFLAG_BRAINWASHED;
       
       y+=2;
       cr->align=1;
       cr->hireid=a->id;
       stat_recruits++;
+
+      if(location[cr->worklocation]->interrogated==0 || location[cr->worklocation]->hidden==1)
+      {
+         move(y,0);
+         addstr(cr->name);
+         addstr(" reveals details about the ");
+         addstr(location[cr->worklocation]->name);
+         addstr(".");
+         move(y++,0);
+         if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
+         {
+            addstr("Unfortunately, none of it is useful to the LCS.");
+         }
+         else
+         {
+            addstr(a->name);
+            addstr(" was able to create a map of the site with this information.");
+         }
+         location[cr->worklocation]->interrogated=1;
+         location[cr->worklocation]->hidden=0;
+         y+=2;
+      }
 
       if(cr->flag & CREATUREFLAG_MISSING && !(cr->flag & CREATUREFLAG_KIDNAPPED))
       {

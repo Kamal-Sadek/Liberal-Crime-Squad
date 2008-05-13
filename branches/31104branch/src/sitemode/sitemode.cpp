@@ -2057,14 +2057,14 @@ void mode_site(void)
 void resolvesite(void)
 {
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&sitecrime>50&&location[cursite]->renting==-1)
+   if(sitealarm==1&&sitecrime>50&&location[cursite]->renting<=-1)
    {
       location[cursite]->closed=30;
       if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
          location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
          location[cursite]->type==SITE_OUTDOOR_BUNKER)
       {
-         location[cursite]->hidden=1;
+         //location[cursite]->hidden=1;
          location[cursite]->renting=-1;
          ccs_kills++;
          if(ccs_kills<3)

@@ -94,8 +94,23 @@ void youattack(void)
          {
             sitestory->crime.push_back(CRIME_ATTACKED);
             sitecrime+=3;
+            // Don't charge with assault for nonviolent attacks, instead
+            // charge with disturbing the peace
+            if(!(activesquad->squad[p]->type==CREATURE_SCIENTIST_EMINENT||
+                 activesquad->squad[p]->type==CREATURE_JUDGE_LIBERAL||
+                 activesquad->squad[p]->type==CREATURE_JUDGE_CONSERVATIVE||
+                 activesquad->squad[p]->type==CREATURE_CORPORATE_CEO||
+                 activesquad->squad[p]->type==CREATURE_RADIOPERSONALITY||
+                 activesquad->squad[p]->type==CREATURE_NEWSANCHOR||
+                 activesquad->squad[p]->weapon.type==WEAPON_GUITAR))
+            {
+               criminalize(*activesquad->squad[p],LAWFLAG_ASSAULT);
+            }
+            else
+            {
+               criminalize(*activesquad->squad[p],LAWFLAG_DISTURBANCE);
+            }
          }
-         criminalizeparty(LAWFLAG_ASSAULT);
       }
 
       if(!encounter[target].alive)delenc(target,1);
@@ -156,13 +171,13 @@ void youattack(void)
                   if(mistake)
                   {
                      sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-                     criminalizeparty(LAWFLAG_ASSAULT);
+                     criminalize(*pool[p],LAWFLAG_ASSAULT);
                      sitecrime+=10;
                   }
                   else if(!wasalarm)
                   {
                      sitestory->crime.push_back(CRIME_ATTACKED);
-                     criminalizeparty(LAWFLAG_ASSAULT);
+                     criminalize(*pool[p],LAWFLAG_ASSAULT);
                      sitecrime+=3;
                   }
                }
@@ -791,11 +806,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_CROSS:
       case WEAPON_STAFF:
       case WEAPON_TORCH:
+      case WEAPON_SPRAYCAN:
          strcat(str,"swings at");break;
       case WEAPON_PITCHFORK:
          strcat(str,"stabs at");break;
-      case WEAPON_SPRAYCAN:
-         strcat(str,"sprays");break;
+      
    }
    strcat(str," ");
    strcat(str,t.name);
@@ -1248,8 +1263,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             strengthmod=1;
             break;
          case WEAPON_SPRAYCAN:
-            damtype|=WOUND_BURNED;
-            damamount=LCSrandom(5);
+            damtype|=WOUND_BRUISED;
+            damamount=LCSrandom(10)+5;
             damagearmor=1;
             break;
       }
@@ -1899,7 +1914,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
       case ARMOR_PRISONGUARD:prot=1;break;
       case ARMOR_PRISONER:prot=1;break;
       case ARMOR_TOGA:prot=0;break;
-      case ARMOR_MITHRIL:prot=0;break;
+      case ARMOR_MITHRIL:prot=2;break;
       case ARMOR_BALLISTICVEST:prot=4;break;
       case ARMOR_HEAVYBALLISTICVEST:prot=6;break;
    }

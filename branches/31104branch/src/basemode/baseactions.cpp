@@ -444,11 +444,15 @@ void stopevil(void)
                   loc=oldloc;
                   for(l=0;l<location.size();l++)
                   {
-                     if(location[l]->parent==loc&&location[l]->renting>=0)temploc.push_back(l);
+                     if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
                   }
                   for(l=0;l<location.size();l++)
                   {
-                     if(location[l]->parent==loc&&location[l]->renting==-1)temploc.push_back(l);
+                     if(location[l]->parent==loc&&location[l]->renting==-2&&!location[l]->hidden)temploc.push_back(l);
+                  }
+                  for(l=0;l<location.size();l++)
+                  {
+                     if(location[l]->parent==loc&&location[l]->renting==-1&&!location[l]->hidden)temploc.push_back(l);
                   }
                }
             }

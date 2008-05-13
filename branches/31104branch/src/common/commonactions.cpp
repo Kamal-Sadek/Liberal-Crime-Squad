@@ -581,28 +581,19 @@ void change_public_opinion(int v,int power,char affect,char cap)
 
       if(affectedpower>0)
       {
-         // Dist is the difference between the LCS popularity and
-         // the issue's popularity -- if the LCS is less popular
-         // than the issue, the action will backfire for these
-         // people, else it will be extra powerful
-         int dist=attitude[VIEW_LIBERALCRIMESQUADPOS]-attitude[v];
-         // If the issue is more popular than the LCS, dist will be
-         // negative. Not good for you!
+         // Dist is a combination of the relative popularity of the LCS
+         // to the issue and the absolute popularity of the LCS. Very
+         // popular LCS on a very unpopular issue is very influential.
+         // Very unpopular LCS on a very popular issue has the ability
+         // to actually have a reverse effect.
+         int dist=attitude[VIEW_LIBERALCRIMESQUADPOS]-attitude[v] +
+                  attitude[VIEW_LIBERALCRIMESQUADPOS]-50;
 
-         // Then we increase dist by ten points, so you have a 10%
-         // bonus to your effective popularity when doing this
-         // calculation. This helps to make things a little easier.
-         dist+=10;
          // Affected power is then scaled by dist -- if the LCS is
          // equally popular as the issue, it's equally powerful as
          // the rawpower. For every 10% up or down past there, it's
-         // 1x the effect -- so if the LCS is 10% more popular than
-         // the issue, you get 2x power, if the LCS is 20% less
-         // popular than the issue, it'll not just nullify the effect,
-         // but backfire with 1x power! So if the LCS is unpopular,
-         // people will gravitate away from the causes the LCS fights
-         // for.
-         affectedpower=(int)(((float)affectedpower*(float)dist)/10.0f+0.5f);
+         // 10% more or less powerful.
+         affectedpower=(int)(((float)affectedpower*(100.0+(float)dist))/100.0f);
       }
 
       // Effpower is then the sum of the rawpower (people who don't know
@@ -694,16 +685,19 @@ int lawflagheat(int lawflag)
 // Determines the number of subordinates a creature may command
 int maxsubordinates(const creaturest& cr)
 {
+   //brainwashed recruits can't recruit normally
+   if(cr.flag & CREATUREFLAG_BRAINWASHED)return 0;
+
    int recruitcap = 0;
    //Cap based on juice
-   if(cr.juice >= 500)      recruitcap += 11;
-   else if(cr.juice >= 200) recruitcap += 8;
-   else if(cr.juice >= 100) recruitcap += 5;
+   if(cr.juice >= 500)      recruitcap += 6;
+   else if(cr.juice >= 200) recruitcap += 5;
+   else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
    //Cap based on leadership
    recruitcap += cr.skill[SKILL_LEADERSHIP] * 2;
    //Cap for founder
-   if(cr.hireid == -1) recruitcap += 5;
+   if(cr.hireid == -1) recruitcap += 6;
    return recruitcap;
 }
 
@@ -726,14 +720,23 @@ int subordinatesleft(const creaturest& cr)
 // based on max minus number they already command
 int loveslavesleft(const creaturest& cr)
 {
-   int loveslavecap = cr.skill[SKILL_SEDUCTION];
+   // Get maximum lovers
+   int loveslavecap = cr.skill[SKILL_SEDUCTION]+1;
+
+   // -1 if they're a love slave (their boss is a lover)
+   if(cr.flag & CREATUREFLAG_LOVESLAVE)loveslavecap--;
+
+   // Then count the number of subordinates that are lovers
    for(int p=0; p<pool.size(); p++)
    {
-      // count seduced characters
-      if(pool[p]->hireid == cr.id && cr.flag == CREATUREFLAG_LOVESLAVE)
+      // If subordinate and a love slave
+      if(pool[p]->hireid == cr.id && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
          loveslavecap--;
    }
+
+   // If they can have more, return that number
    if(loveslavecap > 0) return loveslavecap;
+   // If they're at 0 or less, return 0
    else return 0;
 }
 

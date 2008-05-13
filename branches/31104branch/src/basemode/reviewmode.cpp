@@ -1109,11 +1109,71 @@ int l = 0;
    }while(1);
 }
 
+// prints a formatted name, used by promoteliberals
+static void printname(creaturest &cr)
+{
+   int bracketcolor=-1;
+   int namecolor;
+   int brightness;
 
+   // Determine bracket color, if any, based on location
+   if(cr.location!=-1)
+   {
+      switch(location[cr.location]->type)
+      {
+      case SITE_GOVERNMENT_POLICESTATION:
+      case SITE_GOVERNMENT_COURTHOUSE:
+         bracketcolor=COLOR_YELLOW;
+         break;
+      case SITE_GOVERNMENT_PRISON:
+         bracketcolor=COLOR_RED;
+         break;
+      default:
+         if(cr.hiding)
+            bracketcolor=COLOR_BLACK;
+         break;
+      }
+   }
+
+   // Determine name color, based on recruitment style
+   if(cr.flag & CREATUREFLAG_LOVESLAVE)
+      namecolor=COLOR_MAGENTA;
+   else if(cr.flag & CREATUREFLAG_BRAINWASHED)
+      namecolor=COLOR_YELLOW;
+   else
+      namecolor=COLOR_WHITE;
+
+   // Determine name brightness, based on subordinates left
+   /*if(subordinatesleft(cr))
+      brightness=1;
+   else*/
+      brightness=0;
+
+   // add bracket (if used)
+   if(bracketcolor!=-1)
+   {
+      set_color(bracketcolor,COLOR_BLACK,1);
+      addstr("[");
+   }
+   
+   // add name
+   set_color(namecolor,COLOR_BLACK,brightness);
+   addstr(cr.name);
+
+   // add close bracket (if used)
+   if(bracketcolor!=-1)
+   {
+      set_color(bracketcolor,COLOR_BLACK,1);
+      addstr("]");
+   }
+
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+}
 
 /* base - review - promote liberals */
 void promoteliberals(void)
 {
+   const static int PAGELENGTH=19;
    vector<creaturest *> temppool;
    vector<int> level;
    for(int p=0;p<pool.size();p++)
@@ -1152,7 +1212,7 @@ void promoteliberals(void)
 
       int y=2;
 
-      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*PAGELENGTH;p<temppool.size()&&p<page*PAGELENGTH+PAGELENGTH;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1167,180 +1227,73 @@ void promoteliberals(void)
             int p3 = 0;
             if(pool[p2]->alive==1&&pool[p2]->id==temppool[p]->hireid)
             {
-               // *JDS* If contact is in the justice system
-               if(pool[p2]->location!=-1&&
-                  (location[pool[p2]->location]->type==SITE_GOVERNMENT_POLICESTATION||
-                   location[pool[p2]->location]->type==SITE_GOVERNMENT_COURTHOUSE))
-               {
-                  // print name in yellow if arrested
-                  set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                  addstr("[");
-                  addstr(pool[p2]->name);
-                  addstr("]");
-                  //addstr("[A]");
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-               }
-               else if(pool[p2]->location!=-1&&
-                  location[pool[p2]->location]->type==SITE_GOVERNMENT_PRISON)
-               {
-                  // print name in red if in prison
-                  set_color(COLOR_RED,COLOR_BLACK,1);
-                  addstr("[");
-                  addstr(pool[p2]->name);
-                  addstr("]");
-                  //addstr("[P]");
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-               }
-               // If contact is hiding
-               else if(pool[p2]->hiding)
-               {
-                  // Print their name in light black
-                  set_color(COLOR_BLACK,COLOR_BLACK,1);
-                  addstr("[");
-                  addstr(pool[p2]->name);
-                  addstr("]");
-                  //addstr("[H]");
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-               }
-               // If contact can accept more subordinates
-               else if(subordinatesleft(*pool[p2]))
-               {
-                  // Print their name in green
-                  set_color(COLOR_GREEN,COLOR_BLACK,1);
-                  addstr(pool[p2]->name);
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-               }else addstr(pool[p2]->name);
+               printname(*pool[p2]);
 
                move(y,54);
                for(p3=0;p3<pool.size();p3++)
                {
                   if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid)
                   {
-                     // If contact's contact is in the justice system
-                     if(pool[p3]->location!=-1&&
-                        (location[pool[p3]->location]->type==SITE_GOVERNMENT_POLICESTATION||
-                         location[pool[p3]->location]->type==SITE_GOVERNMENT_COURTHOUSE))
-                     {
-                        // Print their name in yellow if arrested
-                        set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                        addstr("[");
-                        addstr(pool[p3]->name);
-                        addstr("]");
-                        //addstr("[A]");
-                        set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     }
-                     else if(pool[p3]->location!=-1&&
-                        location[pool[p3]->location]->type==SITE_GOVERNMENT_PRISON)
-                     {
-                        // Print their name in red if in prison
-                        set_color(COLOR_RED,COLOR_BLACK,1);
-                        addstr("[");
-                        addstr(pool[p3]->name);
-                        addstr("]");
-                        //addstr("[P]");
-                        set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     }
-                     // If contact's contact is hiding
-                     else if(pool[p3]->hiding)
-                     {
-                        // Print their name in light black
-                        set_color(COLOR_BLACK,COLOR_BLACK,1);
-                        addstr("[");
-                        addstr(pool[p3]->name);
-                        addstr("]");
-                        //addstr("[H]");
-                        set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     }
-                     // If contact's contact can accept more subordinates
-                     else if(subordinatesleft(*pool[p3]))
-                     {
-                        // Print their name in green
-                        set_color(COLOR_GREEN,COLOR_BLACK,1);
-                        addstr(pool[p3]->name);
-                        set_color(COLOR_WHITE,COLOR_BLACK,0);
-                     }
+                     if(temppool[p]->flag&CREATUREFLAG_LOVESLAVE)
+                        addstr("<Refuses Promotion>");
+                     else if(!subordinatesleft(*pool[p3])&&!(temppool[p]->flag&CREATUREFLAG_BRAINWASHED))
+                        addstr("<Can't Lead More>");
+                     else
+                        printname(*pool[p3]);
                      break;
                   }
                }
-               //if(p3==pool.size())addstr("<Liberal Comrade>");
+               
                break;
             }
          }
          if(p2==pool.size())addstr("<LCS Founder>");
 
          move(y,4+level[p]);
-         // *JDS* If in the justice system
-         if(temppool[p]->location!=-1&&
-            (location[temppool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION||
-             location[temppool[p]->location]->type==SITE_GOVERNMENT_COURTHOUSE))
-         {
-            // print name in yellow
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("[");
-            addstr(temppool[p]->name);
-            addstr("]");
-            //addstr("[A]");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
-         else if(temppool[p]->location!=-1&&location[temppool[p]->location]->type==SITE_GOVERNMENT_PRISON)
-         {
-            // print name in red
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("[");
-            addstr(temppool[p]->name);
-            addstr("]");
-            //addstr("[P]");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
-         // If hiding
-         else if(temppool[p]->hiding)
-         {
-            // Print their name in light black
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-            addstr("[");
-            addstr(temppool[p]->name);
-            addstr("]");
-            //addstr("[H]");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
-         // If can accept more subordinates
-         else if(subordinatesleft(*temppool[p]))
-         {
-            // Print their name in green
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(temppool[p]->name);
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
-         else addstr(temppool[p]->name);
+         printname(*temppool[p]);
 
          y++;
       }
+      
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(21,0);
+      addstr("Recruited/");
+      set_color(COLOR_MAGENTA,COLOR_BLACK,0);
+      addstr("Seduced");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("/");
+      set_color(COLOR_YELLOW,COLOR_BLACK,0);
+      addstr("Brainwashed");
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
-      move(21,8);
-      addstr("[Arrested]");
+      addstr("   [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Arrested");
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      addstr("]");
       set_color(COLOR_RED,COLOR_BLACK,1);
-      move(21,32);
-      addstr("[In Prison]");
+      addstr("   [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("In Jail");
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      addstr("]");
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(21,57);
-      addstr("[In Hiding]");
+      addstr("   [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("In Hiding");
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr("]");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
       addstr("Press a Letter to Promote a Liberal. You can not Promote Liberals in Hiding.");
       move(23,0);
-      addstr("Only Liberals in");
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      addstr(" Green");
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      addstr(" have the Ability to Lead Additional Subordinates.");
-      if(temppool.size()>19)
+      addstr("Brainwashed liberals follow anyone. Seduced liberals follow only their lover.");
+      if(temppool.size()>PAGELENGTH)
       {
          move(24,0);
          if(interface_pgup=='[')
          {
             addstr("[] to view other Liberal pages.");
          }
-
          else if(interface_pgup=='.')
          {
             addstr("; and : to view other liberal pages.");
@@ -1359,13 +1312,13 @@ void promoteliberals(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*PAGELENGTH<temppool.size())page++;
 
-      if(c>='a'&&c<='s')
+      if(c>='a'&&c<='a'+PAGELENGTH)
       {
-         int p=page*19+(int)(c-'a');
-         // *JDS* can't promote liberals in hiding
-         if(p<temppool.size()&&!pool[p]->hiding)
+         int p=page*PAGELENGTH+(int)(c-'a');
+         // *JDS* can't promote liberals in hiding OR loveslaves
+         if(p<temppool.size()&&!temppool[p]->hiding&&!(temppool[p]->flag&CREATUREFLAG_LOVESLAVE))
          {
             for(int p2=0;p2<pool.size();p2++)
             {
@@ -1376,7 +1329,8 @@ void promoteliberals(void)
                   for(int p3=0;p3<pool.size();p3++)
                   {
                      // Can't promote if new boss can't accept more subordinates
-                     if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid&&subordinatesleft(*pool[p2]))
+                     if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid&&
+                        (temppool[p]->flag&CREATUREFLAG_BRAINWASHED||subordinatesleft(*pool[p2])))
                      {
                         temppool[p]->hireid=pool[p2]->hireid;
                         sortbyhire(temppool,level);

@@ -49,9 +49,31 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       refresh();
       getch();
 
-      if(LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM]&&
-         loveslavesleft(*pool[p]))
+      if(LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM])
       {
+         if(loveslavesleft(*pool[p]) == 0)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            
+            move(y++,0);
+            addstr("But when ");
+            addstr(pool[p]->name);
+            addstr(" mentions having other lovers, things go downhill fast.");
+
+            refresh();
+            getch();
+
+            move(y++,0);
+            addstr("This relationship is over.");
+
+            refresh();
+            getch();
+
+            delete d.date[e];
+            d.date.erase(d.date.begin() + e);
+
+            return DATERESULT_BREAKUP;
+         }
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,0);y++;
          addstr("In fact, ");
@@ -68,6 +90,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          name(d.date[e]->name);
          strcpy(d.date[e]->propername,d.date[e]->name);
 
+         d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->location=pool[p]->location;
          d.date[e]->base=pool[p]->base;
          d.date[e]->hireid=pool[p]->id;
@@ -304,6 +327,7 @@ char completevacation(datest &d,int p,char &clearformess)
    int y=2;
    switch(dateresult(aroll,troll,d,e,p,y))
    {
+   default:
    case DATERESULT_MEETTOMORROW:return 0;
    case DATERESULT_BREAKUP:     return 1;
    case DATERESULT_JOINED:      return 1;

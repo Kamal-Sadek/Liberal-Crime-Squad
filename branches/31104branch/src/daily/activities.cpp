@@ -904,12 +904,12 @@ void funds_and_trouble(char &clearformess)
       if(brownies[s]->skill[SKILL_STREETSENSE]<5)
          brownies[s]->skill_ip[SKILL_STREETSENSE]+=LCSrandom(5)+2;
 
-      dodgelawroll=LCSrandom(brownies[s]->skill[SKILL_PERSUASION]+
-                             brownies[s]->skill[SKILL_DISGUISE]+
-                             brownies[s]->skill[SKILL_GANGSTERISM]+
-                             brownies[s]->skill[SKILL_STREETSENSE]+
-                             brownies[s]->attval(ATTRIBUTE_CHARISMA)+
-                             brownies[s]->attval(ATTRIBUTE_INTELLIGENCE)+21);
+      //Check for police search
+      dodgelawroll=LCSrandom(100);
+
+      //Saved by street sense?
+      if(dodgelawroll==0)
+         dodgelawroll=LCSrandom(brownies[s]->skill[SKILL_STREETSENSE]+1);
 
       if(dodgelawroll==0) // Busted! Sort of
       {
@@ -917,7 +917,7 @@ void funds_and_trouble(char &clearformess)
 
          // Check if an immediate arrest is made, or they're
          // just quietly watched
-         if(!LCSrandom(brownies[s]->skill[SKILL_STREETSENSE]+6))
+         if(brownies[s]->heat > 5 || LCSrandom(2))
          {
             if(clearformess)erase();
             else
@@ -1051,7 +1051,7 @@ void funds_and_trouble(char &clearformess)
          }
          else
          {
-            if(LCSrandom(1000)<=hack_skill)
+            if(LCSrandom(150)<=hack_skill)
             {
                if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
                else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
@@ -1061,7 +1061,7 @@ void funds_and_trouble(char &clearformess)
 
                long juiceval=0;
 
-               switch(LCSrandom(2))
+               switch(LCSrandom(5))
                {
                   case 0:
                   {
@@ -1074,7 +1074,7 @@ void funds_and_trouble(char &clearformess)
 
                      trackdif=20;
                      crime=LAWFLAG_INFORMATION;
-                     juiceval=10;
+                     juiceval=5;
                      break;
                   }
                   case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
@@ -1084,6 +1084,30 @@ void funds_and_trouble(char &clearformess)
                      crime=LAWFLAG_INFORMATION;
                      juiceval=20;
                      change_public_opinion(VIEW_INTELLIGENCE,10,0,75);
+                     break;
+                  case 2:
+                     strcat(msg,"sabotaged a genetics research company's network.");
+
+                     trackdif=20;
+                     crime=LAWFLAG_INFORMATION;
+                     juiceval=5;
+                     change_public_opinion(VIEW_GENETICS,2,0,75);
+                     break;
+                  case 3:
+                     strcat(msg,"intercepted and published biased internal media emails.");
+
+                     trackdif=20;
+                     crime=LAWFLAG_INFORMATION;
+                     juiceval=5;
+                     change_public_opinion(VIEW_CABLENEWS,5,0,75);
+                     break;
+                  case 4:
+                     strcat(msg,"broke into military networks leaving LCS slogans.");
+
+                     trackdif=30;
+                     crime=LAWFLAG_INFORMATION;
+                     juiceval=5;
+                     change_public_opinion(VIEW_LIBERALCRIMESQUAD,5,0,75);
                      break;
                }
 
@@ -1135,7 +1159,7 @@ void funds_and_trouble(char &clearformess)
             default:strcpy(msg,"");break;
             }
          }
-         else if(LCSrandom(100)<=cc_skill)
+         else if(LCSrandom(15)<=cc_skill)
          {
             if(cc.size()>1)strcpy(msg,"Your credit card fraud team has ");
             else {strcpy(msg,cc[0]->name);strcat(msg," has ");}
@@ -1201,7 +1225,7 @@ void funds_and_trouble(char &clearformess)
             default:strcpy(msg,"");break;
             }
          }
-         else if(LCSrandom(500)<=ddos_skill)
+         else if(LCSrandom(100)<=ddos_skill)
          {
             if(ddos.size()>1)strcpy(msg,"Your DoS team has ");
             else {strcpy(msg,ddos[0]->name);strcat(msg," has ");}
@@ -1228,10 +1252,10 @@ void funds_and_trouble(char &clearformess)
             strcat(msg,", netting $");
             char num[20];
 
-            long fundgain=500;
-            for(int i=0;i<19 && LCSrandom(ddos_skill/2);i++)
+            long fundgain=200;
+            for(int i=0;i<19 && LCSrandom(ddos_skill/(2+i));i++)
             {
-               fundgain+=500;
+               fundgain+=200;
             }
             funds+=fundgain;
             stat_funds+=fundgain;
@@ -1284,7 +1308,7 @@ void funds_and_trouble(char &clearformess)
             default:strcpy(msg,"");break;
             }
          }
-         else if(LCSrandom(25)<=web_skill)
+         else if(LCSrandom(10)<=web_skill)
          {
             int issue=LCSrandom(VIEWNUM-4); 
             int crime;
@@ -1517,10 +1541,8 @@ void funds_and_trouble(char &clearformess)
       getch();
 
 
-      if(!LCSrandom((prostitutes[p]->skill[SKILL_SEDUCTION]+
-                     prostitutes[p]->skill[SKILL_STREETSENSE]+
-                     prostitutes[p]->skill[SKILL_GANGSTERISM]+
-                     prostitutes[p]->attval(ATTRIBUTE_INTELLIGENCE))*3))
+      if(!LCSrandom(100) &&                                    // Police sting?
+         !LCSrandom(prostitutes[p]->skill[SKILL_STREETSENSE])) // Street sense to avoid
       {
          if(clearformess)erase();
          else
@@ -1743,14 +1765,11 @@ void funds_and_trouble(char &clearformess)
       {
          for(int t=0;t<trouble.size();t++)
          {
-            dodgelawroll=LCSrandom(trouble[t]->skill[SKILL_PERSUASION]+
-               trouble[t]->skill[SKILL_DISGUISE]+
-               trouble[t]->skill[SKILL_STREETSENSE]+
-               trouble[t]->attval(ATTRIBUTE_CHARISMA)+
-               trouble[t]->attval(ATTRIBUTE_AGILITY)+
-               trouble[t]->attval(ATTRIBUTE_INTELLIGENCE)+1);
-
-            if(dodgelawroll==0)
+            if(!LCSrandom(10) &&                                         // Police called?
+               !LCSrandom(trouble[t]->attval(ATTRIBUTE_AGILITY)+
+                          trouble[t]->attval(ATTRIBUTE_INTELLIGENCE)+    // Use your instincts...
+                          trouble[t]->skill[SKILL_DISGUISE]+
+                          trouble[t]->skill[SKILL_STREETSENSE]))         // ...and your skills!
             {
                if(clearformess)erase();
                else

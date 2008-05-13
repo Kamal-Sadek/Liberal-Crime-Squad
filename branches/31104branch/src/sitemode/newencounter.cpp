@@ -117,7 +117,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_THIEF]+=3;
          creaturearray[CREATURE_ACTOR]+=1;
          if(endgamestate<ENDGAME_CCS_DEFEATED)
-            creaturearray[CREATURE_CCS_VIGILANTE]+=1;
+            creaturearray[CREATURE_CCS_VIGILANTE]+=5;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
             makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -204,7 +204,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
          if(endgamestate<ENDGAME_CCS_DEFEATED)
-            creaturearray[CREATURE_CCS_VIGILANTE]+=1;
+            creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -234,7 +234,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
          creaturearray[CREATURE_AGENT]+=1;
          if(endgamestate<ENDGAME_CCS_DEFEATED)
-            creaturearray[CREATURE_CCS_VIGILANTE]+=endgamestate;
+            creaturearray[CREATURE_CCS_VIGILANTE]+=endgamestate*4;
          creaturearray[CREATURE_RADIOPERSONALITY]+=1;
          creaturearray[CREATURE_NEWSANCHOR]+=1;
          creaturearray[CREATURE_LAWYER]+=5;

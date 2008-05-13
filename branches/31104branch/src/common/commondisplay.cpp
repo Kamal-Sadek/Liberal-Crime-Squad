@@ -793,12 +793,12 @@ void printliberalstats(creaturest &cr,char smll)
    
    
 
-   move(5,25);addstr("Juice: ");
+   move(5,20);addstr("Juice: ");
    itoa(cr.juice,num,10);
    addstr(num);
    if(cr.juice<500)
    {
-      move(6,25);addstr("Next: ");
+      move(6,20);addstr("Next:  ");
       if(cr.juice<0)addstr("0");
       else if(cr.juice<10)addstr("10");
       else if(cr.juice<50)addstr("50");
@@ -806,6 +806,14 @@ void printliberalstats(creaturest &cr,char smll)
       else if(cr.juice<200)addstr("200");
       else addstr("500");
    }
+   move(8,20);
+   itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
+   addstr(num);
+   addstr(" Subordinates");
+   move(9,20);
+   itoa(maxsubordinates(cr),num,10);
+   addstr(num);
+   addstr(" Max");
 
    move(5,0);addstr("Heart: ");
    itoa(cr.attval(ATTRIBUTE_HEART),num,10);
@@ -865,8 +873,11 @@ void printliberalstats(creaturest &cr,char smll)
          else move(5+7-snum,40);
          getskill(str,maxs);
          strcat(str,": ");
+         addstr(str);
+         if(!smll)move(5+14-snum,56);
+         else move(5+7-snum,54);
          itoa(cr.skill[maxs],num,10);
-         strcat(str,num);
+         strcpy(str,num);
          addstr(str);
          if(cr.skill_ip[maxs]<100+(10*cr.skill[maxs]))
          {
@@ -877,13 +888,16 @@ void printliberalstats(creaturest &cr,char smll)
 	         	if ((cr.skill_ip[maxs]*100)/(100+(10*cr.skill[maxs]))<10)
 	         	{
 		           addstr("0");
-		        }
-		        addstr(num);
-		     }
-		     else addstr("00");
-		 }
-		 else addstr("+");
-		 
+		         }
+		         addstr(num);
+		      }
+		      else addstr("00");
+		   }
+		   else
+         {
+            addstr(".99+");
+         }
+		   
          if((snum==14&&!smll)||(snum==7&&smll))
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);

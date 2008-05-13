@@ -422,7 +422,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             refresh();
             getch();
 
-            if(r.eagerness()>5)
+            if(r.eagerness()>5&&subordinatesleft(*pool[p]))
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y+2,0);

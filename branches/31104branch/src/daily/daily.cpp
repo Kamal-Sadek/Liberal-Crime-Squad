@@ -589,7 +589,7 @@ void advanceday(char &clearformess,char canseethings)
             clearformess=1;
             break;
          case ACTIVITY_NONE:
-         	if (pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
+         	if (pool[p]->align == 1 && pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
          	{
          		pool[p]->activity.type=ACTIVITY_REPAIR_ARMOR;
          	}
@@ -871,6 +871,18 @@ void advanceday(char &clearformess,char canseethings)
 
          refresh();
          getch();
+      }
+   }
+
+   //Give experience to medics
+   for(int p=0;p<pool.size();p++)
+   {
+      //If present, qualified to heal, and doing so
+      if(pool[p]->skill[SKILL_MEDICAL]!=0 && pool[p]->location>=0 &&
+         (pool[p]->activity.type == ACTIVITY_HEAL || pool[p]->activity.type == ACTIVITY_NONE))
+      {
+         //Give experience based on work done and current skill
+         pool[p]->skill_ip[SKILL_MEDICAL]+=max(0,healing2[pool[p]->location]/5-pool[p]->skill[SKILL_MEDICAL]*2);
       }
    }
    delete[] healing;

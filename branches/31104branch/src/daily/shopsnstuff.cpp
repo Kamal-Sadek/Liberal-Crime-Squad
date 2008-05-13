@@ -1581,10 +1581,10 @@ void halloweenstore(int loc)
          move(12,40);
          addstr("W - Buy a Wizard's Staff       ($250)");
 
-         if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(funds>=1000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,40);
-         addstr("! - Buy Mithril Mail         ($10000)");
+         addstr("! - Buy Mithril Mail          ($1000)");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(15,30);
@@ -1755,12 +1755,12 @@ void halloweenstore(int loc)
             moneylost_goods+=250;
          }
 
-         if(c=='!'&&funds>=10000)
+         if(c=='!'&&funds>=1000)
          {
             armorbought=ARMOR_MITHRIL;
-            funds-=10000;
-            stat_spent+=10000;
-            moneylost_goods+=10000;
+            funds-=1000;
+            stat_spent+=1000;
+            moneylost_goods+=1000;
          }
       }
       else
@@ -2254,7 +2254,7 @@ unsigned long fencevalue(itemst &it)
             case ARMOR_PRISONGUARD:fenceamount=80;break;
             case ARMOR_PRISONER:fenceamount=40;break;
             case ARMOR_TOGA:fenceamount=10;break;
-            case ARMOR_MITHRIL:fenceamount=20;break;
+            case ARMOR_MITHRIL:fenceamount=50;break;
             case ARMOR_BALLISTICVEST:fenceamount=200;break;
             case ARMOR_HEAVYBALLISTICVEST:fenceamount=400;break;
          }
