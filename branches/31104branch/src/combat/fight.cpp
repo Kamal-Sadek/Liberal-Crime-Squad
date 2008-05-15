@@ -238,7 +238,8 @@ void enemyattack(void)
             if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
                (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
                (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-               (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))
+               (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
+               (encounter[e].blood<20))
             {
                switch(LCSrandom(3))
                {

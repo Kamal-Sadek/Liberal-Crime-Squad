@@ -132,6 +132,9 @@ void siegecheck(char canseethings)
             case SITE_RESIDENTIAL_APARTMENT:
                heatprotection+=2; // Middle class housing -- medium protection
                break;
+            case SITE_RESIDENTIAL_BOMBSHELTER:
+            case SITE_OUTDOOR_BUNKER:
+            case SITE_BUSINESS_BARANDGRILL:
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
                heatprotection+=3; // Upper class housing -- high protection
                break;
@@ -151,11 +154,12 @@ void siegecheck(char canseethings)
             if(heatprotection<0)heatprotection=0;
 
             crimes>>=heatprotection;
-            if(crimes > 20-heatprotection*3)crimes = 20-heatprotection*3;
-            location[l]->heat+=crimes;
+            if(location[l]->heat<crimes)
+               location[l]->heat=crimes;
 
             if(location[l]->siege.timeuntillocated==-1 &&
-               location[l]->heat > 100)
+               location[l]->heat > 100 &&
+               !LCSrandom(30))
             {
                // Begin planning siege if high heat on location
                int siegetime = 5*(1 + 1 * heatprotection - kidnapped);
@@ -1060,12 +1064,8 @@ void siegeturn(char clearformess)
                int viewhit;
                for(int v=0;v<5;v++)
                {
-                  do
-                  {
-                     viewhit=LCSrandom(VIEWNUM);
-                  }while(viewhit==VIEW_LIBERALCRIMESQUADPOS);
-                  if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-25)/2);
-                  else change_public_opinion(viewhit,segmentpower/4);
+                  viewhit=LCSrandom(VIEWNUM-2);
+                  change_public_opinion(viewhit,(segmentpower-25)/2);
                }
             }
          }

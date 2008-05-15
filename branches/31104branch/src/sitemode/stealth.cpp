@@ -213,18 +213,14 @@ void disguisecheck(void)
 
    if(noticer.size()>0)
    {
-      int disguise=disguiseskill();
-      int stealth=stealthskill();
+      int disguise = disguiseskill();
+      int stealth  = stealthskill();
+      bool sneaking=false;
 
-      if(stealth>disguise)disguise=stealth;
-
-      for(int i=0;i<6;i++)
+      if(stealth>disguise || weapon==2)
       {
-         if(activesquad->squad[i]==NULL)break;
-         if(weaponar[i])
-         {
-            criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
-         }
+         disguise=stealth;
+         sneaking=true;
       }
 
       int n,an;
@@ -235,17 +231,16 @@ void disguisecheck(void)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int chance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
-                    encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
-		 for(int i=0;i<6;i++)
-		 {
-		 	if (disguise==stealth)disguisepractice(i, chance);
-		 	else stealthpractice(i, chance);
+         int spotchance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
+                        encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
+         for(int i=0;i<6;i++)
+         {
+            if(!sneaking)disguisepractice(i, spotchance);
+            else stealthpractice(i, spotchance);
          }
-         if(weapon==2 ||
-            sitealarmtimer ?
-            chance+10*weapon > (int)LCSrandom(21)+disguise :
-            chance+10*weapon+sitecrime > (int)LCSrandom(21)+disguise)
+         if(sitealarmtimer ?
+            spotchance > (int)LCSrandom(21)+disguise :
+            spotchance+sitecrime > (int)LCSrandom(21)+disguise)
          {
             noticed=1;
             break;
@@ -276,6 +271,15 @@ void disguisecheck(void)
             addstr(" sees the Squad's Liberal Weapons");
             move(17,1);
             addstr("and lets forth a piercing Conservative alarm cry!");
+
+            for(int i=0;i<6;i++)
+            {
+               if(activesquad->squad[i]==NULL)break;
+               if(weaponar[i])
+               {
+                  criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+               }
+            }
          }
          else
          {
@@ -309,8 +313,8 @@ int disguiseskill(void)
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
          int skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-            activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-            activesquad->squad[p]->skill[SKILL_DISGUISE]*3;
+                   activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
+                   activesquad->squad[p]->skill[SKILL_DISGUISE]*3;
 
          //ALSO NEED APPROPRIATE UNIFORM
          char uniformed=hasdisguise(*activesquad->squad[p],sitetype);
@@ -361,10 +365,9 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
 	    if(activesquad->squad[p]->prisoner!=NULL)return;
 		
 		//spread is how overwhelmed your disguise ability is by the Conservative
-		int spread = diff-(activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-            activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-            activesquad->squad[p]->skill[SKILL_DISGUISE]*3+
-            activesquad->squad[p]->skill_ip[SKILL_DISGUISE]/(100+10*activesquad->squad[p]->skill[SKILL_DISGUISE])*3);
+		int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
+                         activesquad->squad[p]->skill[SKILL_DISGUISE]*3+
+                         activesquad->squad[p]->skill_ip[SKILL_DISGUISE]/(100+10*activesquad->squad[p]->skill[SKILL_DISGUISE])*3);
 
         if(hasdisguise(*activesquad->squad[p],sitetype))
         {
@@ -404,7 +407,7 @@ int stealthskill(void)
       }
    }
 
-   return lowest+highest/8;
+   return lowest;
 }
 
 /* practices p's stealth skill */

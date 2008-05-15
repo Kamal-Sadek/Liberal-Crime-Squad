@@ -1053,6 +1053,7 @@ void makecharacter(void)
       makecreature(*judge,CREATURE_JUDGE_LIBERAL);
       namecreature(*judge);
       judge->flag|=CREATUREFLAG_SLEEPER;
+      judge->hireid=newcr->id;
       pool.push_back(judge);
       judge->location=judge->base;
    }

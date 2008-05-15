@@ -129,6 +129,8 @@ void getactivity(char *str,activityst &act)
          break;
       }
       case ACTIVITY_HEAL:
+         strcat(str,"Tending to Injuries");
+         break;
       case ACTIVITY_NONE:
          strcat(str,"Hanging Out");
          break;
@@ -632,11 +634,11 @@ void getskill(char *str,int type)
       case SKILL_STEALTH:strcpy(str,"Stealth");break;
       case SKILL_SLEIGHTOFHAND:strcpy(str,"Sleight of Hand");break;
       case SKILL_TEACHING:strcpy(str,"Teaching");break;
-      case SKILL_SURVIVAL:strcpy(str,"Survival");break;
       case SKILL_STREETSENSE:strcpy(str,"Street Sense");break;
       case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
       case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
       case SKILL_MEDICAL:strcpy(str,"First Aid");break;
+      case SKILL_TACTICS:strcpy(str,"Tactics");break;
    }
 }
 

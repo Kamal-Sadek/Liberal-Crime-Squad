@@ -105,7 +105,8 @@ void advanceday(char &clearformess,char canseethings)
          {
             if(squad[sq]->squad[p]!=NULL)
             {
-               if(squad[sq]->squad[p]->activity.type!=ACTIVITY_NONE)
+               if(squad[sq]->squad[p]->activity.type!=ACTIVITY_NONE&&
+                  squad[sq]->squad[p]->activity.type!=ACTIVITY_VISIT)
                {
                   if(clearformess)erase();
                   else
@@ -125,9 +126,8 @@ void advanceday(char &clearformess,char canseethings)
 
                   refresh();
                   getch();
-
-                  squad[sq]->squad[p]->activity.type=ACTIVITY_NONE;
                }
+               squad[sq]->squad[p]->activity.type=ACTIVITY_VISIT;
             }
          }
       }
@@ -588,11 +588,17 @@ void advanceday(char &clearformess,char canseethings)
 
             clearformess=1;
             break;
+         case ACTIVITY_VISIT:
+            pool[p]->activity.type=ACTIVITY_NONE;
+            break;
          case ACTIVITY_NONE:
-         	if (pool[p]->align == 1 && pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
-         	{
-         		pool[p]->activity.type=ACTIVITY_REPAIR_ARMOR;
-         	}
+         	if(pool[p]->align == 1)
+            {
+               if(pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
+         	   {
+         		   repairarmor(*pool[p],clearformess);
+         	   }
+            }
          	break;
       }
    }
@@ -620,7 +626,10 @@ void advanceday(char &clearformess,char canseethings)
       {
          if(pool[p]->location>-1&&
             healing[pool[p]->location]<pool[p]->skill[SKILL_MEDICAL])
+         {
             healing[pool[p]->location]=pool[p]->skill[SKILL_MEDICAL];
+            pool[p]->activity.type=ACTIVITY_HEAL;
+         }
       }
    }
 
@@ -878,9 +887,11 @@ void advanceday(char &clearformess,char canseethings)
    for(int p=0;p<pool.size();p++)
    {
       //If present, qualified to heal, and doing so
-      if(pool[p]->skill[SKILL_MEDICAL]!=0 && pool[p]->location>=0 &&
-         (pool[p]->activity.type == ACTIVITY_HEAL || pool[p]->activity.type == ACTIVITY_NONE))
+      if(pool[p]->location>=0 && pool[p]->activity.type == ACTIVITY_HEAL)
       {
+         //Clear activity if their location doesn't have healing work to do
+         if(healing2[pool[p]->location]==0)
+            pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
          pool[p]->skill_ip[SKILL_MEDICAL]+=max(0,healing2[pool[p]->location]/5-pool[p]->skill[SKILL_MEDICAL]*2);
       }

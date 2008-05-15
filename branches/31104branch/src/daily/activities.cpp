@@ -278,8 +278,12 @@ void makearmor(creaturest &cr,char &clearformess)
             if(squad[sq]->loot[l]->type==ITEM_LOOT&&
                squad[sq]->loot[l]->loottype==LOOT_FINECLOTH)
             {
-               delete squad[sq]->loot[l];
-               squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
+               if(squad[sq]->loot[l]->number==1)
+               {
+                  delete squad[sq]->loot[l];
+                  squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
+               }
+               else squad[sq]->loot[l]->number--;
                foundcloth=1;
                break;
             }
@@ -292,8 +296,12 @@ void makearmor(creaturest &cr,char &clearformess)
             if(location[cr.location]->loot[l]->type==ITEM_LOOT&&
                location[cr.location]->loot[l]->loottype==LOOT_FINECLOTH)
             {
-               delete location[cr.location]->loot[l];
-               location[cr.location]->loot.erase(location[cr.location]->loot.begin() + l);
+               if(location[cr.location]->loot[l]->number==1)
+               {
+                  delete location[cr.location]->loot[l];
+                  location[cr.location]->loot.erase(location[cr.location]->loot.begin() + l);
+               }
+               else location[cr.location]->loot[l]->number--;
                foundcloth=1;
                break;
             }
@@ -387,6 +395,8 @@ void makearmor(creaturest &cr,char &clearformess)
 /* search for polls */
 void survey(creaturest *cr)
 {
+   static const char SURVEY_PAGE_SIZE=14;
+
    int v;
    int creatureskill=cr->skill[SKILL_COMPUTERS]+cr->attval(ATTRIBUTE_INTELLIGENCE);
    int misschance=30-creatureskill,noise=2;
@@ -455,49 +465,34 @@ void survey(creaturest *cr)
 
    char num[20];
 
-   { //Calculate and show Presidental approval rating
-      char mood=publicmood(-1);
-      int approve=0;
-      int i;
-      for(i=0;i<100;i++)
-      {
-         int k=-2;
-         if(LCSrandom(50)<mood)k++;
-         if(LCSrandom(75)<mood)k++;
-         if(LCSrandom(75)+25<mood)k++;
-         if(LCSrandom(50)+50<mood)k++;
-
-         if(k==exec[EXEC_PRESIDENT]||(abs(exec[EXEC_PRESIDENT]-k)==1 && !LCSrandom(4)))approve++;
-      }
-      move(2,0);
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      itoa(approve,num,10);
-      addstr(num);
-      addstr("% ");
-      addstr("had a favorable opinion of ");
-      switch(exec[EXEC_PRESIDENT])
-      {
-      case -2:
-         set_color(COLOR_RED,COLOR_BLACK,1);
-         break;
-      case -1:
-         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         break;
-      case 0:
-         set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         break;
-      case 1:
-         set_color(COLOR_BLUE,COLOR_BLACK,1);
-         break;
-      case 2:
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         break;
-      }
-      addstr("President ");
-      addstr(execname[EXEC_PRESIDENT]);
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      addstr(".");
+   int approval=presidentapproval();
+   move(2,0);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   itoa(approval/10+(LCSrandom(noise*2+1)-noise),num,10);
+   addstr(num);
+   addstr("% had a favorable opinion of ");
+   switch(exec[EXEC_PRESIDENT])
+   {
+   case -2:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      break;
+   case -1:
+      set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+      break;
+   case 0:
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      break;
+   case 1:
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      break;
+   case 2:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      break;
    }
+   addstr("President ");
+   addstr(execname[EXEC_PRESIDENT]);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr(".");
 
    //Top excitement issue
    if(maxview!=-1)
@@ -593,89 +588,13 @@ void survey(creaturest *cr)
       addstr("The public is not concerned with politics right now.");
    }
 
+   //Header for issue box
    move(6,0);
    addstr("Additional notable findings:");
    move(7,0);
    addstr("XX% Issue ------------------------------------------------- Public Interest");
 
-   for(v=0;v<VIEWNUM;v++)
-   {
-      if(survey[VIEW_LIBERALCRIMESQUAD]==0&&
-         v==VIEW_LIBERALCRIMESQUADPOS)continue;
-      if(survey[v]==-1)continue;
-      if(y>21)continue;
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(y,4);
-      addstr("........................................................");
-      if(public_interest[v]>100)
-      {
-         addstr("Extreme");
-      }
-      else if(public_interest[v]>50)
-      {
-         addstr("Dinner Table Topic");
-      }
-      else if(public_interest[v]>10)
-      {
-         addstr("Significant");
-      }
-      else if(public_interest[v])
-      {
-         addstr("Some Discussion");
-      }
-      else
-      {
-         addstr("Off the Radar");
-      }
-
-      if(survey[v]==-1)set_color(COLOR_BLACK,COLOR_BLACK,1);
-      else if(survey[v]<10)set_color(COLOR_RED,COLOR_BLACK,1);
-      else if(survey[v]<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-      else if(survey[v]<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-      else if(survey[v]<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
-      else if(survey[v]<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
-      else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
-      move(y,0);
-      if(survey[v]==-1)
-      {
-         addstr("Unknown how many ");
-      }
-      else
-      {
-         itoa(survey[v],num,10);
-         if(strlen(num)==1)addstr("0");
-         addstr(num);
-         addstr("% ");
-      }
-
-      switch(v)
-      {
-         case VIEW_ABORTION:addstr("supported abortion");break;
-         case VIEW_GAY:addstr("were in favor of equal rights for homosexuals");break;
-         case VIEW_DEATHPENALTY:addstr("opposed the death penalty");break;
-			case VIEW_TAXES:addstr("were against cutting taxes");break;
-         case VIEW_NUCLEARPOWER:addstr("were terrified of nuclear power");break;
-         case VIEW_ANIMALRESEARCH:addstr("deplored animal research");break;
-         case VIEW_POLICEBEHAVIOR:addstr("were critical of the police");break;
-         case VIEW_INTELLIGENCE:addstr("thought the intelligence community invades privacy");break;
-         case VIEW_FREESPEECH:addstr("believed in unfettered free speech");break;
-         case VIEW_GENETICS:addstr("abhorred genetically altered food products");break;
-         case VIEW_JUSTICES:addstr("were for the appointment of Liberal justices");break;
-         case VIEW_SWEATSHOPS:addstr("would boycott companies that used sweatshops");break;
-         case VIEW_POLLUTION:addstr("thought industry should lower pollution");break;
-         case VIEW_CORPORATECULTURE:addstr("were disgusted by corporate malfeasance");break;
-         case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
-         case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
-         case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
-         case VIEW_PRISONS:addstr("think the prison system needs reform");break;
-         case VIEW_AMRADIO:addstr("do not like AM radio");break;
-         case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
-      }
-      y++;
-   }
-
+   //Footer
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(23,0);
    addstr("Results are +/- ");
@@ -683,10 +602,138 @@ void survey(creaturest *cr)
    addstr(num);
    addstr(" Liberal percentage points.");
    move(24,0);
-   addstr("Press any key to reflect on these results.");
+   addstr("Enter - Done");
+   move(24,40);
+   addprevpagestr();
+   addstr("    ");
+   addnextpagestr();
 
-   refresh();
-   getch();
+   int page=0;
+   const int maxpage=VIEWNUM/SURVEY_PAGE_SIZE;
+   while(1)
+   {
+      //Keep pages within bounds
+      if(page<0)page=maxpage;
+      if(page>maxpage)page=0;
+      //Start from the top
+      y=8;
+      //Draw each line
+      for(v=page*SURVEY_PAGE_SIZE;v<(page+1)*SURVEY_PAGE_SIZE;v++)
+      {
+         if(v>=VIEWNUM)
+         {
+            move(y++,0);
+            addstr("                                                                                ");
+            continue;
+         }
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,4);
+         addstr("........................................................");
+         if(noise>=7||survey[v]==-1)
+         {
+            addstr("Unknown  ");
+         }
+         else if(noise>=4)
+         {
+            if(public_interest[v]>50)
+            {
+               addstr("High     ");
+            }
+            else
+            {
+               addstr("Low      ");
+            }
+         }
+         else
+         {
+            if(public_interest[v]>100)
+            {
+               addstr("Very High");
+            }
+            else if(public_interest[v]>50)
+            {
+               addstr("High     ");
+            }
+            else if(public_interest[v]>10)
+            {
+               addstr("Moderate ");
+            }
+            else if(public_interest[v])
+            {
+               addstr("Low      ");
+            }
+            else
+            {
+               addstr("None     ");
+            }
+         }
+
+         if(survey[v]==-1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else if(survey[v]<10)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(survey[v]<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(survey[v]<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(survey[v]<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else if(survey[v]<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+
+         move(y,0);
+         if(survey[v]==-1)
+         {
+            addstr("??");
+         }
+         else
+         {
+            itoa(survey[v],num,10);
+            if(strlen(num)==1)addstr("0");
+            addstr(num);
+         }
+         addstr("% ");
+
+         switch(v)
+         {
+            case VIEW_ABORTION:addstr("supported abortion");break;
+            case VIEW_GAY:addstr("were in favor of equal rights for homosexuals");break;
+            case VIEW_DEATHPENALTY:addstr("opposed the death penalty");break;
+			   case VIEW_TAXES:addstr("were against cutting taxes");break;
+            case VIEW_NUCLEARPOWER:addstr("were terrified of nuclear power");break;
+            case VIEW_ANIMALRESEARCH:addstr("deplored animal research");break;
+            case VIEW_POLICEBEHAVIOR:addstr("were critical of the police");break;
+            case VIEW_INTELLIGENCE:addstr("thought the intelligence community invades privacy");break;
+            case VIEW_FREESPEECH:addstr("believed in unfettered free speech");break;
+            case VIEW_GENETICS:addstr("abhorred genetically altered food products");break;
+            case VIEW_JUSTICES:addstr("were for the appointment of Liberal justices");break;
+            case VIEW_SWEATSHOPS:addstr("would boycott companies that used sweatshops");break;
+            case VIEW_POLLUTION:addstr("thought industry should lower pollution");break;
+            case VIEW_CORPORATECULTURE:addstr("were disgusted by corporate malfeasance");break;
+            case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
+            case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
+            case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
+            case VIEW_PRISONS:addstr("think the prison system needs reform");break;
+            case VIEW_AMRADIO:addstr("do not like AM radio");break;
+            case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
+         }
+         y++;
+      }
+
+      while(1)
+      {
+         refresh();
+         char key=getch();
+         if(key==10)return;
+         else if(key==interface_pgup)
+         {
+            page--;
+            break;
+         }
+         else if(key==interface_pgdn)
+         {
+            page++;
+            break;
+         }
+      }
+   }
+
+   
 }
 
 
@@ -1423,7 +1470,7 @@ void funds_and_trouble(char &clearformess)
          }
          else if(!LCSrandom(max(30-graffiti[s]->skill[SKILL_ART]*2,5)))
          {
-            issue=LCSrandom(VIEWNUM);
+            issue=randomissue();
             char issuestr[60];
             getview(issuestr,issue);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2737,18 +2784,7 @@ char carselect(creaturest &cr,short &cartype)
       move(22,0);
       addstr("Press a Letter to select a Type of Car");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other Liberal pages.");
-         }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 

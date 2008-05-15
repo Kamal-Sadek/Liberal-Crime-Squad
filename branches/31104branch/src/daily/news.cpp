@@ -3543,7 +3543,7 @@ void majornewspaper(char &clearformess,char canseethings)
       //Yes, crappy letters to the editor may backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
       {
-         writers+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
+         background_liberal_influence[randomissue()]+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
          pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
       }
    }

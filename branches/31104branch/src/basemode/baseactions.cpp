@@ -362,35 +362,13 @@ void stopevil(void)
       if(page>0)
       {
          move(10,60);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*11<temploc.size())
       {
          move(20,60);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1253,37 +1231,13 @@ void setvehicles(void)
       if(page>0)
       {
          move(17,1);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*18<vehicle.size())
       {
          move(17,53);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);

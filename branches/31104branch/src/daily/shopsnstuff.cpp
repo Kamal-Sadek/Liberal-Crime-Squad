@@ -1903,18 +1903,7 @@ char maskselect(creaturest *cr,short &mask)
       move(22,0);
       addstr("Press a Letter to select a Mask");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other Liberal pages.");
-         }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
       move(24,0);
       addstr("Z - Surprise ");
       addstr(cr->name);
@@ -2052,35 +2041,13 @@ unsigned long fenceselect(void)
       if(page>0)
       {
          move(17,1);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*18<activesquad->loot.size())
       {
          move(17,53);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);

@@ -214,10 +214,13 @@ void passmonth(char &clearformess,char canseethings)
       {
          change_public_opinion(v,1,0);
       }
-      // AM Radio and Cable News become more influential over time
+      // AM Radio and Cable News popularity slowly shift to reflect public
+      // opinion over time -- if left unchecked, their subtle influence
+      // on society will become a self-perpetuating Conservative nightmare!
       if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)
       {
-         if(!LCSrandom(3))change_public_opinion(v,-1);
+         if(publicmood(-1)<attitude[v])change_public_opinion(v,-1);
+         else change_public_opinion(v,1);
       }
    }
 

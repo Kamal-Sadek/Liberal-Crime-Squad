@@ -700,18 +700,10 @@ void fullstatus(int p)
       addstr("Press N to change this Liberal's Code Name");
       if(activesquad->squad[1]!=NULL)
       {
-         if(interface_pgup=='[')
-         {
-            addstr(", [] to view the others");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(", ; and : to view the others");
-         }
-         else
-         {
-            addstr(", PGUP/PGDN to view the others");
-         }
+         addstr("    ");
+         addprevpagestr();
+         addstr("    ");
+         addnextpagestr();
       }
       move(24,0);
       addstr("Press any other key to continue the Struggle");
@@ -809,11 +801,19 @@ void printliberalstats(creaturest &cr,char smll)
    move(8,20);
    itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
    addstr(num);
-   addstr(" Subordinates");
+   addstr(" Followers");
    move(9,20);
    itoa(maxsubordinates(cr),num,10);
    addstr(num);
    addstr(" Max");
+   move(10,20);
+   int lovers = loveslaves(cr);
+   if(lovers)
+   {
+      itoa(lovers,num,10);
+      addstr(num);
+      addstr(" Seduced Liberals");
+   }
 
    move(5,0);addstr("Heart: ");
    itoa(cr.attval(ATTRIBUTE_HEART),num,10);
@@ -1271,12 +1271,9 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
   
   Please note that offsetx is the offset from the right of the screen, y is 
   the offset from the top as always.
-  
-
 */
 void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
 {
-	
 	char moneystr[50];
 	
 	char prefixbuffer[50];
@@ -1320,6 +1317,37 @@ void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
 	//Recover old settings
 	move(begy,begx);
 	set_color(front,back,dim);
-	
-	
+}
+
+/* prints a short blurb showing how to page forward */
+void addnextpagestr()
+{
+   if(interface_pgup=='[')
+      addstr("] - Next");
+   else if(interface_pgup=='.')
+      addstr(": - Next");
+   else
+      addstr("PGDN - Next");
+}
+
+/* prints a short blurb showing how to page back */
+void addprevpagestr()
+{
+   if(interface_pgup=='[')
+      addstr("[ - Previous");
+   else if(interface_pgup=='.')
+      addstr("; - Previous");
+   else
+      addstr("PGUP - Previous");
+}
+
+/* prints a long blurb showing how to page forward and back */
+void addpagestr()
+{
+   if(interface_pgup=='[')
+      addstr("[] to view other Liberal pages.");
+   else if(interface_pgup=='.')
+      addstr("; and : to view other Liberal pages.");
+   else
+      addstr("PGUP/PGDN to view other Liberal pages.");
 }

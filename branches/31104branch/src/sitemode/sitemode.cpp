@@ -1833,7 +1833,7 @@ void mode_site(void)
                }
 
                //BAIL UPON VICTORY
-               if(location[cursite]->siege.kills>=10&&location[cursite]->siege.siege)
+               if(location[cursite]->siege.kills>=25&&location[cursite]->siege.siege)
                {
                   if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_DEFENDED;
                   else sitestory->type=NEWSSTORY_SQUAD_BROKESIEGE;
@@ -2057,7 +2057,7 @@ void mode_site(void)
 void resolvesite(void)
 {
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&sitecrime>50&&location[cursite]->renting<=-1)
+   if(sitealarm==1&&sitecrime>100&&location[cursite]->renting<=-1)
    {
       location[cursite]->closed=30;
       if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
@@ -2065,7 +2065,8 @@ void resolvesite(void)
          location[cursite]->type==SITE_OUTDOOR_BUNKER)
       {
          //location[cursite]->hidden=1;
-         location[cursite]->renting=-1;
+         location[cursite]->renting=0;
+         location[cursite]->closed=0;
          ccs_kills++;
          if(ccs_kills<3)
             endgamestate--;

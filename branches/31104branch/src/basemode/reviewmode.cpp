@@ -144,18 +144,8 @@ void review(void)
       move(22,0);
       addstr("Press a Letter to select a squad.  1-7 to view Liberal groups.");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.  Press U to Promote Liberals.");
-      }
-      else if(interface_pgup=='.')
-      {
-         addstr("; and : to view other Liberal pages. Press U to Promote Liberals.");
-      }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.  Press U to Promote Liberals.");
-      }
+      addpagestr();
+      addstr("  Press U to Promote Liberals.");
       move(24,0);
       addstr("Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
 
@@ -488,18 +478,7 @@ void review_mode(short mode)
       move(22,0);
       addstr("Press a Letter to View Status.");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      else if(interface_pgup=='.')
-      {
-         addstr("; and : to view other Liberal pages.");
-      }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 
@@ -539,18 +518,10 @@ void review_mode(short mode)
                else addstr("Press N to change this Liberal's Code Name");
                if(temppool.size()>1)
                {
-                  if(interface_pgup=='[')
-                  {
-                     addstr(", [] to view the others");
-                  }
-                  else if(interface_pgup=='.')
-                  {
-                     addstr(", ; and : to view the others");
-                  }
-                  else
-                  {
-                     addstr(", PGUP/PGDN to view the others");
-                  }
+                  addstr("    ");
+                  addprevpagestr();
+                  addstr("    ");
+                  addnextpagestr();
                }
                move(24,0);
                addstr("Press any other key to continue the Struggle");
@@ -745,18 +716,7 @@ void assemblesquad(squadst *cursquad)
       move(22,0);
       addstr("Press a Letter to add or remove a Liberal from the squad.");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      else if(interface_pgup=='.')
-      {
-         addstr("; and : to view other Liberal pages.");
-      }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
       move(24,0);
       if(squadsize>0)addstr("Enter - The squad is ready.");
       else addstr("Enter - I need no squad!");
@@ -1053,19 +1013,7 @@ int l = 0;
       if(temppool.size()>19)
       {
          move(23,0);
-         if(interface_pgup=='[')
-         {
-            addstr("[] to view other Liberal pages.");
-         }
-
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other liberal pages.");
-         }
-         else
-         {
-            addstr("PGUP/PGDN to view other Liberal pages.");
-         }
+         addpagestr();
       }
       if(temploc.size()>9)
       {
@@ -1290,18 +1238,7 @@ void promoteliberals(void)
       if(temppool.size()>PAGELENGTH)
       {
          move(24,0);
-         if(interface_pgup=='[')
-         {
-            addstr("[] to view other Liberal pages.");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other liberal pages.");
-         }
-         else
-         {
-            addstr("PGUP/PGDN to view other Liberal pages.");
-         }
+         addpagestr();
       }
 
       refresh();

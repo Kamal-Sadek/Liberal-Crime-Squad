@@ -29,6 +29,89 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+/* politics - calculate presidential approval */
+int presidentapproval()
+{
+   //Calculate Presidental approval rating
+   char mood=publicmood(-1);
+   int approval=0;
+   int i;
+   for(i=0;i<1000;i++)
+   {
+      if(i%2==0&&LCSrandom(2))      // Partyline supporter (~25%)
+      {
+         approval++;
+      }
+      else if(i%2==1&&LCSrandom(2)) // Partyline opponent  (~25%)
+      {
+         continue;
+      }
+      else                          // Swing issue voter   (~50%) (should be more than in the real election)
+      {
+         // Get their leanings as an issue voter
+         int vote = getswingvoter();
+
+         // If their views are close to the President's views, they should
+         // approve, but might not if their party leaning conflicts with
+         // the president's
+         if(abs(exec[EXEC_PRESIDENT]-vote)<=1)
+         {
+            // Moderate president from the Conservative party is only supported
+            // by moderates and Conservatives
+            if(presparty==1)
+            {
+               if(vote<=0)
+               {
+                  approval++;
+               }
+            }
+            // Moderate president from the Liberal party is only supported
+            // by moderates and Liberals
+            else
+            {
+               if(vote>=0)
+               {
+                  approval++;
+               }
+            }
+         }
+      }
+   }
+   return approval;
+}
+
+/* politics -- gets the leaning of an issue voter for an election */
+int getswingvoter()
+{
+   // Take a random voter, calculate how liberal or conservative they are
+   int bias = publicmood(-1)-LCSrandom(100);
+   if(bias >  25) bias =  25;
+   if(bias < -25) bias = -25;
+
+   // Each issue they roll for their opinion on a 50-point subset of the
+   // spectrum, determined by bias -- high liberal bias only rolls on the
+   // liberal end of the spectrum, high conservative bias only rolls on
+   // the conservative end of the spectrum
+   int vote=-2;
+   for(int i=0;i<4;i++)
+   {
+      if(25+LCSrandom(50)-bias<attitude[randomissue(true)])vote++;
+   }
+
+   return vote;
+}
+
+/* politics -- gets the leaning of a partyline voter for an election */
+int getsimplevoter(int leaning)
+{
+   int vote=leaning-1;
+   for(int i=0;i<2;i++)
+   {
+      if(LCSrandom(100)<attitude[randomissue(true)])vote++;
+   }
+
+   return vote;
+}
 
 
 /* politics - causes the people to vote (presidential, congressional, propositions) */
@@ -80,48 +163,135 @@ void elections(char clearformess,char canseethings)
       int votes[2]={0,0};
 
       //Primaries
-      if(execterm==1)
+      int approvepres=0; // presidential approval within own party
+      int approveveep=0; // vice-presidential approval within own party
+      int libvotes[3];   // liberal party's candidates votes recieved
+      int consvotes[3];  // conservative party's candidates votes recieved
+
+      // run primaries for 100 voters
+      for(int i=0;i<100;i++)
       {
-         candidate[presparty][0]=exec[EXEC_PRESIDENT];
-         
-         int vote;
-         if(presparty==1)
+         int voters[2]={0,0};
+         // liberal party voter decides
+         voters[0]+=getsimplevoter(1);
+         // conservative party voter decides
+         voters[1]+=getsimplevoter(1);
+
+         // Incumbent can win primary automatically if their approval in their party is over 50%,
+         // so we need to know what their inter-party approval rating is.
+
+         // check if this voter supports the president (1/2 chance if closely aligned)
+         if(voters[presparty]==abs(exec[EXEC_PRESIDENT])||
+            (abs(exec[EXEC_PRESIDENT]-abs(voters[presparty]))==1 && !LCSrandom(2)))approvepres++;
+         // check if this voter supports the vice-president (1/3 chance if closely aligned)
+         if(voters[presparty]==abs(exec[EXEC_VP])||
+            (abs(exec[EXEC_VP]-abs(voters[presparty]))==1 && !LCSrandom(3)))approveveep++;
+
+         // count ballots
+         consvotes[voters[1]]++;
+         libvotes[voters[0]]++;
+      }
+
+      // determine conservative winner
+      if(consvotes[0] > consvotes[1])
+         if(consvotes[0] > consvotes[2])
+            candidate[1][0]=-2;
+         else candidate[1][0]=0;
+      else if(consvotes[1] > consvotes[2])
+         candidate[1][0]=-1;
+      else candidate[1][0]=0;
+
+      // determine liberal winner
+      if(libvotes[0] > libvotes[1])
+         if(libvotes[0] > libvotes[2])
+            candidate[0][0]=0;
+         else candidate[0][0]=2;
+      else if(libvotes[1] > libvotes[2])
+         candidate[0][0]=1;
+      else candidate[0][0]=2;
+
+      // name the candidates
+      name(candidate[0]+1);
+      name(candidate[1]+1);
+
+      // Special Incumbency Rules: If the incumbent president or vice president
+      // has approval of over 50% in their party, they win their primary
+      // automatically. Even if they don't have over 50%, if their alignment wins
+      // using the normal primary process, they are the chosen candidate for
+      // that alignment (this last bit only applies to President; unpopular VP
+      // candidates just don't run, and if their alignment wins it will be
+      // someone else).
+      if(execterm==1) // President running for re-election
+      {
+         if(approvepres>=50)
          {
-            candidate[0][0]=exec[EXEC_PRESIDENT]+1;
+            candidate[presparty][0]=exec[EXEC_PRESIDENT];
+         }
+         
+         if(candidate[presparty][0]==exec[EXEC_PRESIDENT])
+         {
+            strcpy(candidate[presparty]+1,execname[EXEC_PRESIDENT]);
          }
          else
          {
-            candidate[1][0]=exec[EXEC_PRESIDENT]-1;
+            execterm=2; // Boom! Incumbent president was defeated in their
+                        // own party. New candidate works with a clean slate.
          }
       }
-      else
+      else if(approveveep>=50) // Vice-President running for President
       {
-         candidate[0][0]=exec[EXEC_PRESIDENT]+1;
-         if(candidate[0][0]>2)candidate[0][0]=2;
-         candidate[1][0]=exec[EXEC_PRESIDENT]-1;
-         if(candidate[1][0]<-2)candidate[1][0]=-2;
+         if(approvepres>=50)
+         {
+            candidate[presparty][0]=exec[EXEC_PRESIDENT];
+            strcpy(candidate[presparty]+1,execname[EXEC_PRESIDENT]);
+         }
       }
-      if(candidate[0][0]==-1)candidate[0][0]=0;
-      if(candidate[1][0]==1)candidate[1][0]=0;
 
       //Print candidates
-      for(c=0;c<2;c++)
+      if(canseethings)
       {
-         if(candidate[c][0]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(candidate[c][0]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(candidate[c][0]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(candidate[c][0]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
-         if(execterm==1&&c==presparty)
+         for(c=0;c<2;c++)
          {
-            strcpy(candidate[c]+1,execname[EXEC_PRESIDENT]);
-         }
-         else name(candidate[c]+1);
+            // Pick color by political orientation
+            if(candidate[c][0]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(candidate[c][0]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(candidate[c][0]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(candidate[c][0]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+            else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
-         if(canseethings)
-         {
             move(6-c*2,0);
+            // Choose title -- president or vice president special titles, otherwise
+            // pick based on historically likely titles (eg, governor most likely...)
+            if(c==presparty&&execterm==1)addstr("President ");
+            else if(c==presparty&&!strcmp(candidate[c]+1,execname[EXEC_VP]))addstr("Vice President ");
+            else
+            {
+               if(LCSrandom(2))
+               {
+                  addstr("Governor ");
+               }
+               else if(LCSrandom(2))
+               {
+                  addstr("Senator ");
+               }
+               else if(LCSrandom(2))
+               {
+                  addstr("Ret. General ");
+               }
+               else if(LCSrandom(2))
+               {
+                  addstr("Representative ");
+               }
+               else if(LCSrandom(2))
+               {
+                  addstr("Mr. ");
+               }
+               else
+               {
+                  addstr("Mrs. ");
+               }
+            }
+            
             addstr(candidate[c]+1);
             switch(candidate[c][0])
             {
@@ -131,12 +301,8 @@ void elections(char clearformess,char canseethings)
             case 1:addstr(", Liberal");break;
             case 2:addstr(", Elite Liberal");break;
             }
-            if(c==presparty&&execterm==1)addstr(" (Incumbent)");
          }
-      }
 
-      if(canseethings)
-      {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(8,0);
          addstr("Press any key to watch the election unfold.");
@@ -151,29 +317,38 @@ void elections(char clearformess,char canseethings)
       char recount=0;
       char oldwinner=0;
       int vote;
-      for(int l=0;l<100;l++)
+
+      for(int l=0;l<1000;l++) // 1000 Voters!
       {
          vote=-2;
-         if(l%2==0&&LCSrandom(2))
+         if(l%2==0&&LCSrandom(5))      // Partyline Liberals (~40%)
          {
             votes[0]++;
          }
-         else if(l%2==1&&LCSrandom(2))
+         else if(l%2==1&&LCSrandom(5)) // Partyline Conservatives (~40%)
          {
             votes[1]++;
          }
-         else
+         else                          // Swing Issue Voters (~20%)
          {
-            if(LCSrandom(50)<mood)vote++;
-            if(LCSrandom(75)<mood)vote++;
-            if(LCSrandom(75)+25<mood)vote++;
-            if(LCSrandom(50)+50<mood)vote++;
+            // Get the leanings of an issue voter
+            vote = getswingvoter();
 
-            if(vote>=candidate[0][0]&&(vote!=candidate[1][0] || LCSrandom(2)))
+            // If they are to the left or equal to the liberal candidate,
+            // and they disagree with the conservative candidate, cast a
+            // vote for the liberal candidate.
+            if(vote>=candidate[0][0] && vote!=candidate[1][0])
             {
                votes[0]++;
             }
-            else if(vote<=candidate[1][0])votes[1]++;
+            // If they are to the right or equal to the conservative candidate,
+            // or they disagree with the liberal candidate, cast a vote
+            // for the conservative candidate.
+            else if(vote<=candidate[1][0] && vote!=candidate[0][0])
+            {
+               votes[1]++;
+            }
+            // If both candidates agree with them, vote randomly.
             else
             {
                if(LCSrandom(2))votes[0]++;
@@ -181,7 +356,7 @@ void elections(char clearformess,char canseethings)
             }
          }
 
-         if(l==99)
+         if(l==999)
          {
             int maxvote=0;
 
@@ -205,18 +380,24 @@ void elections(char clearformess,char canseethings)
                winner=eligible[LCSrandom(eligible.size())];
                recount=1;
             }
-            else winner=eligible[0];
+            else
+            {
+               winner=eligible[0];
+            }
          }
 
-         if(canseethings)
+         if(canseethings && l%5==4)
          {
             for(int c=0;c<2;c++)
             {
-               if(winner>=0&&c!=winner)set_color(COLOR_BLACK,COLOR_BLACK,1);
-               else if(c==winner)set_color(COLOR_WHITE,COLOR_BLACK,1);
+               if(votes[c]<votes[!c] || (winner>=0&&c!=winner))set_color(COLOR_BLACK,COLOR_BLACK,1);
+               else if(votes[c]>votes[!c] || c==winner)set_color(COLOR_WHITE,COLOR_BLACK,1);
                else set_color(COLOR_WHITE,COLOR_BLACK,0);
-               move(6-c*2,50);
-               itoa(votes[c],num,10);
+               move(6-c*2,45);
+               itoa(votes[c]/10,num,10);
+               addstr(num);
+               itoa(votes[c]%10,num,10);
+               addch('.');
                addstr(num);
                addch('%');
                if(c==winner&&recount)addstr(" (After Recount)");
@@ -363,13 +544,13 @@ void elections(char clearformess,char canseethings)
          if(s%3!=senmod)continue;
 
          vote=0;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
+
 
          change[senate[s]+2]--;
-
-         if(LCSrandom(50)<mood)vote++;
-         if(LCSrandom(75)<mood)vote++;
-         if(LCSrandom(75)+25<mood)vote++;
-         if(LCSrandom(50)+50<mood)vote++;
 
          if(senate[s]>1 && vote<4)vote++;
 
@@ -581,13 +762,12 @@ void elections(char clearformess,char canseethings)
       for(h=0;h<435;h++)
       {
          vote=0;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
+         if(mood>LCSrandom(100))vote++;
 
          change[house[h]+2]--;
-
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
 
          if(house[h]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
          if(house[h]>1 && vote<4)vote++;
@@ -785,7 +965,7 @@ void elections(char clearformess,char canseethings)
       else if(law[l]==1)pvote=75;
       else pvote=100;
 
-      lawpriority[l]=abs(pvote-pmood)+LCSrandom(10);
+      lawpriority[l]=abs(pvote-pmood)+LCSrandom(10)+public_interest[l];
    }
 
    vector<int> canlaw;
@@ -914,9 +1094,10 @@ void elections(char clearformess,char canseethings)
       char recount=0;
       int vote;
       mood=publicmood(prop[p]);
-      for(int l=0;l<100;l++)
+      for(int l=0;l<1000;l++)
       {
-         vote=0;
+         if(LCSrandom(100)<mood)yesvotes++;
+         /*vote=0;
          if(LCSrandom(100)<mood)vote++;
          if(LCSrandom(100)<mood)vote++;
          if(LCSrandom(100)<mood)vote++;
@@ -924,33 +1105,39 @@ void elections(char clearformess,char canseethings)
          vote-=2;
 
          if(law[prop[p]]>vote && propdir[p]==-1)yesvotes++;
-         if(law[prop[p]]<vote && propdir[p]==1)yesvotes++;
+         if(law[prop[p]]<vote && propdir[p]==1)yesvotes++;*/
 
-         if(l==99)
+         if(l==999)
          {
-            if(yesvotes>50)yeswin=1;
-            else if(yesvotes==50)
+            if(yesvotes>500)yeswin=1;
+            else if(yesvotes==500)
             {
                if(!LCSrandom(2))yeswin=1;
                recount=1;
             }
          }
 
-         if(canseethings)
+         if(canseethings && (l%10 == 0 || l==999))
          {
-            if(l==99&&yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==99)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(yesvotes>l/2 || yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes<l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(p*3+2,72);
-            itoa(yesvotes,num,10);
+            move(p*3+2,70);
+            itoa(yesvotes/10,num,10);
+            addstr(num);
+            addch('.');
+            itoa(yesvotes%10,num,10);
             addstr(num);
             addstr("% Yes");
 
-            if(l==99&&!yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==99)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(yesvotes<1/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes>1/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(p*3+3,72);
-            itoa(l+1-yesvotes,num,10);
+            move(p*3+3,70);
+            itoa((l+1-yesvotes)/10,num,10);
+            addstr(num);
+            addch('.');
+            itoa((l+1-yesvotes)%10,num,10);
             addstr(num);
             addstr("% No");
 

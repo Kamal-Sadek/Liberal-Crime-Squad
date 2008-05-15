@@ -177,35 +177,13 @@ int choosespecialedition(char &clearformess)
       if(page>0)
       {
          move(17,1);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*18<loottype.size())
       {
          move(17,53);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       move(24,1);

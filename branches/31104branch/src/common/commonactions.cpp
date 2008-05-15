@@ -288,6 +288,7 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_WRITING:
    case SKILL_STREETSENSE:
       return cr.attval(ATTRIBUTE_INTELLIGENCE);
+   case SKILL_TACTICS:
    case SKILL_LEADERSHIP:
       if(cr.juice<10)return 0;
       if(cr.juice<50)return 1;
@@ -695,9 +696,9 @@ int maxsubordinates(const creaturest& cr)
    else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
    //Cap based on leadership
-   recruitcap += cr.skill[SKILL_LEADERSHIP] * 2;
+   recruitcap += cr.skill[SKILL_LEADERSHIP] * 2; 
    //Cap for founder
-   if(cr.hireid == -1) recruitcap += 6;
+   if(cr.hireid == -1 && cr.align == 1) recruitcap += 6;
    return recruitcap;
 }
 
@@ -709,11 +710,24 @@ int subordinatesleft(const creaturest& cr)
    for(int p=0; p<pool.size(); p++)
    {
       // ignore seduced and brainwashed characters
-      if(pool[p]->hireid == cr.id && !(cr.flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
+      if(pool[p]->hireid == cr.id && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
          recruitcap--;
    }
    if(recruitcap > 0) return recruitcap;
    else return 0;
+}
+
+// Determines the number of love slaves a creature has
+int loveslaves(const creaturest& cr)
+{
+   int loveslaves=0;
+   for(int p=0; p<pool.size(); p++)
+   {
+      // If subordinate and a love slave
+      if(pool[p]->hireid == cr.id && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+         loveslaves++;
+   }
+   return loveslaves;
 }
 
 // Determines the number of love slaves a creature may recruit,
@@ -721,18 +735,13 @@ int subordinatesleft(const creaturest& cr)
 int loveslavesleft(const creaturest& cr)
 {
    // Get maximum lovers
-   int loveslavecap = cr.skill[SKILL_SEDUCTION]+1;
+   int loveslavecap = cr.skill[SKILL_SEDUCTION]/2+1;
 
    // -1 if they're a love slave (their boss is a lover)
    if(cr.flag & CREATUREFLAG_LOVESLAVE)loveslavecap--;
 
-   // Then count the number of subordinates that are lovers
-   for(int p=0; p<pool.size(); p++)
-   {
-      // If subordinate and a love slave
-      if(pool[p]->hireid == cr.id && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
-         loveslavecap--;
-   }
+   // Subtract number of love slaves they have
+   loveslavecap -= loveslaves(cr);
 
    // If they can have more, return that number
    if(loveslavecap > 0) return loveslavecap;
@@ -740,3 +749,22 @@ int loveslavesleft(const creaturest& cr)
    else return 0;
 }
 
+/* common - random issue by public interest */
+int randomissue(bool core_only)
+{
+   int interest_array[VIEWNUM];
+   int i;
+   int total_interest=0;
+   for(i=0;i<VIEWNUM-(core_only*4);i++)
+   {
+      interest_array[i]=public_interest[i]+total_interest+25;
+      total_interest+=public_interest[i]+25;
+   }
+   int roll = LCSrandom(total_interest);
+   for(i=0;i<VIEWNUM-(core_only*4);i++)
+   {
+      if(roll<interest_array[i])
+         return i;
+   }
+   return -1;
+}

@@ -124,18 +124,7 @@ void activate(void)
       move(22,0);
       addstr("Press a Letter to Assign an Activity.");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      else if(interface_pgup=='.')
-      {
-         addstr("; and : to view other Liberal pages.");
-      }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
       move(24,0);
       addstr("Press Z to assign simple tasks in bulk.");
 
@@ -844,6 +833,10 @@ void activatebulk(void)
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(6,51);
       addstr("5 - Stealing Cars");
+      if(selectedactivity==5)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      else set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(7,51);
+      addstr("6 - Community Service");
 
       int y=2;
       for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
@@ -872,19 +865,7 @@ void activatebulk(void)
       move(22,0);
       addstr("Press a Letter to Assign an Activity.  Press a Number to select an Activity.");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other Liberal pages");
-         }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 
@@ -940,10 +921,13 @@ void activatebulk(void)
                case 4: //Steal cars
                   temppool[p]->activity.type=ACTIVITY_STEALCARS;
                   break;
+               case 5: //Volunteer
+                  temppool[p]->activity.type=ACTIVITY_COMMUNITYSERVICE;
+                  break;
             }
          }
       }
-      if(c>='1'&&c<='5')
+      if(c>='1'&&c<='6')
       {
          selectedactivity=c-'1';
       }
@@ -1041,18 +1025,7 @@ void select_tendhostage(creaturest *cr)
       move(22,0);
       addstr("Press a Letter to select a Conservative");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other Liberal pages.");
-         }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 
@@ -1253,19 +1226,7 @@ void select_makeclothing(creaturest *cr)
       move(22,0);
       addstr("Press a Letter to select a Type of Clothing");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      
-         else if(interface_pgup=='.')
-         {
-            addstr("; and : to view other Liberal pages.");
-         }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 
@@ -1513,18 +1474,7 @@ char select_view(creaturest *cr,long &v)
       move(22,0);
       addstr("Press a Letter to select a Topic");
       move(23,0);
-      if(interface_pgup=='[')
-      {
-         addstr("[] to view other Liberal pages.");
-      }
-      else if(interface_pgup=='.')
-      {
-         addstr("; and : to view other Liberal pages.");
-      }
-      else
-      {
-         addstr("PGUP/PGDN to view other Liberal pages.");
-      }
+      addpagestr();
 
       refresh();
 

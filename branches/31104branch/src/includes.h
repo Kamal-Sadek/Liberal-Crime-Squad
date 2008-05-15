@@ -27,10 +27,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.12.0"
+#define PACKAGE_VERSION "3.12.1"
 #endif
 
-const unsigned long version=31200;
+const unsigned long version=31201;
 const unsigned long lowestloadversion=31193;
 const unsigned long lowestloadscoreversion=30001;
 
@@ -1509,6 +1509,12 @@ void addlocationname(locationst *loc);
 void printhealthstat(creaturest &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
 void printfunds(unsigned int y, unsigned int offset, char* prefix=NULL);
+/* prints a short blurb showing how to page forward */
+void addnextpagestr();
+/* prints a short blurb showing how to page back */
+void addprevpagestr();
+/* prints a long blurb showing how to page forward and back */
+void addpagestr();
 
 /*
  commonactions.cpp
@@ -1556,9 +1562,13 @@ int maxsubordinates(const creaturest& cr);
 /* Determines the number of subordinates a creature may recruit,
    based on their max and the number they already command */
 int subordinatesleft(const creaturest& cr);
+// Determines the number of love slaves a creature has
+int loveslaves(const creaturest& cr);
 /* Determines the number of loveslaves a creature may recruit,
    based on their max and the number they already command */
 int loveslavesleft(const creaturest& cr);
+/* common - random issue by public interest */
+int randomissue(bool core_only=0);
 
 /*
  consolesupport.cpp
@@ -2132,6 +2142,10 @@ char prison(creaturest &g);
 /*
  politics.cpp
 */
+/* politics - calculate presidential approval */
+int presidentapproval();
+/* politics -- gets the leaning of an issue voter for an election */
+int getswingvoter();
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings);
 /* politics - causes the supreme court to hand down decisions */

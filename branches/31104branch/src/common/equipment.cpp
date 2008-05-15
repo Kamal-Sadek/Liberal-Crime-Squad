@@ -186,35 +186,13 @@ void equip(vector<itemst *> &loot,int loc)
       if(page>0)
       {
          move(17,1);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*18<loot.size())
       {
          move(17,53);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -530,35 +508,13 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       if(page>0)
       {
          move(17,1);
-         if(interface_pgup=='[')
-         {
-            addstr("[ - Previous");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr("; - Previous");
-         }
-         else
-         {
-            addstr("PGUP - Previous");
-         }
+         addprevpagestr();
       }
       //PAGE DOWN
       if((page+1)*18<source.size())
       {
          move(17,53);
-         if(interface_pgup=='[')
-         {
-            addstr("] - Next");
-         }
-         else if(interface_pgup=='.')
-         {
-            addstr(": - Next");
-         }
-         else
-         {
-            addstr("PGDN - Next");
-         }
+         addnextpagestr();
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
