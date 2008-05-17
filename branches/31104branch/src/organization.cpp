@@ -25,7 +25,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <externs.h>
-#include "organization.h"
 
 
 
@@ -36,6 +35,7 @@ organization::organization(int newID)
 
 void organization::swayOthers()
 {
+	orgHandler gOrgHandler;
 	vector<int> candidates;
 	for(int i = 0; i < orgs.size(); i++)
 	{
@@ -50,7 +50,7 @@ void organization::swayOthers()
 		{
 			for(int j = 0; j < candidates.size(); j++)
 			{
-				//gOrgHandler.swayOrg(ID, orgs[candidates[j]].ID, orgs[candidates[j]].allyLevel);
+				gOrgHandler.swayOrg(ID, orgs[candidates[j]].ID, orgs[candidates[j]].allyLevel);
 			}
 		}
 	}
@@ -58,4 +58,13 @@ void organization::swayOthers()
 
 void organization::attackedHandler()
 {
+}
+
+interOrgData::interOrgData(int IDin, float swayLevelin, float affiliationin, int respectLevelin, int allyLevelin)
+{
+	ID = IDin;
+	swayLevel = swayLevelin;
+	affiliation = affiliationin;
+	respectLevel = respectLevelin;
+	allyLevel = allyLevelin;
 }

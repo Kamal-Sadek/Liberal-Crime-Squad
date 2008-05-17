@@ -22,27 +22,53 @@ This file is part of Liberal Crime Squad.                                       
 
 /*
 	This file was made by Brad (AKA Puzzlemaker)
-*/ 
-#ifndef ORGHANDLER_H_INCLUDED
-#define ORGHANDLER_H_INCLUDED
+*/
 
-class orgHandler
+#ifndef ORGANIZATION_H_INCLUDED
+#define ORGANIZATION_H_INCLUDED
+
+//Allignment macroes
+#define LIBERAL			 1
+#define MODERATE		 0
+#define CONSERVATIVE	-1
+
+class interOrgData
 {
 public:
-	//This handles all organizations
-	orgHandler();
+	interOrgData(int ID, float swayLevel, float affiliation, int respectLevel, int allyLevel);
 
-	vector<organization> orgs;
+	int ID;
+	//These are percentages that you are willing to be swayed and are affiliated with this org
+	float affiliation;
+	float swayLevel;
 
-	void addOrg(organization org);
-	void deleteOrg(organization org);
-	
-	//This makes all organizations sway each other.
-	void swayAll();
-
-	void swayOrg(int ID, int opinionOrgID, int power);
-
-
-	int newID;
+	//this is how much you respect them, and how much they are your ally
+	//difference between allyLevel and affiliation is, affiliation is more like partial ownership.
+	//allyLevel can go negative, respect level cannot.
+	int respectLevel;
+	int allyLevel;
 };
+
+class organization
+{
+public:
+	organization(int newID);
+	vector<interOrgData> orgs;
+	vector<int> specialInterests;
+
+	//this says if they care about stuff other then special interests
+	bool swayable;
+	char alignment;
+
+	//These handle changing other organizations viewpoints
+	void swayOthers();
+	void attackedHandler();
+	void calcAllyLevel(int ID);
+
+	short attackPower;
+	//Soldiers they will send to attack
+	int soldiers[5];
+	int ID;
+};
+
 #endif

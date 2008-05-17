@@ -1,7 +1,6 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
-#include "organization.h"
 #include "orghandler.h"
 
 //Puzz:  Here we go...

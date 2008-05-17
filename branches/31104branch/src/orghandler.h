@@ -22,22 +22,30 @@ This file is part of Liberal Crime Squad.                                       
 
 /*
 	This file was made by Brad (AKA Puzzlemaker)
-*/
-
-#include <includes.h>
-#include <externs.h>
+*/ 
+#ifndef ORGHANDLER_H_INCLUDED
+#define ORGHANDLER_H_INCLUDED
 #include "organization.h"
-#include "orghandler.h"
- 
-orgHandler::orgHandler()
-{
-}
 
-void orgHandler::swayAll()
+class orgHandler
 {
-}
+public:
+	//This handles all organizations
+	orgHandler();
 
-void orgHandler::swayOrg(int ID, int opinionOrgID, int power)
-{
-	return;
-}
+	vector<organization> gOrgs;
+
+	organization *getOrg(int ID);
+
+	void addOrg(organization org);
+	void deleteOrg(organization org);
+	
+	//This makes all organizations sway each other.
+	void swayAll();
+
+	void swayOrg(int ID, int opinionOrgID, int power);
+
+
+	int newID;
+};
+#endif
