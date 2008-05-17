@@ -60,7 +60,7 @@ void orgHandler::addOrg(organization org)
    {
       // If this organization is using the lowest potentially available ID,
       // then I can't use that ID for the new org; try the next one
-      if(iter->ID = nextID)nextID++;
+      if(iter->ID == nextID)nextID++;
       else break; // Otherwise, stop; we've found an ID and spot to insert the org
    }
    

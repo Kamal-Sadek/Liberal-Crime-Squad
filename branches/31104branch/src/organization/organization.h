@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <list>
 #include <stdexcept>
+#include <string>
 
 class interOrgData
 {
@@ -53,6 +54,8 @@ public:
 	vector<enum Views> specialInterests;
 
 	organization(int newID);
+	organization(string newName);
+	organization(int newID, string newName);
 
 	//this says if they care about stuff other then special interests
 	bool swayable;
@@ -72,6 +75,8 @@ public:
 	//Soldiers they will send to attack
 	enum CreatureType soldiers[5];
 	int ID;
+	string name;
+	
 };
 
 #endif

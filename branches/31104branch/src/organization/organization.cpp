@@ -30,6 +30,17 @@ organization::organization(int newID)
 	ID = newID;
 }
 
+organization::organization(string newName)
+{
+	name = newName;
+}
+
+organization::organization(int newID, string newName)
+{
+	ID = newID;
+	name = newName;
+}
+
 void organization::swayOthers()
 {
 	orgHandler gOrgHandler;
@@ -105,7 +116,7 @@ void organization::addOrgRecord(const organization& org)
 			if(*iter1 == *iter2)
 			{
 				matchNum++; // Count this as a match
-            break;      // Continue to next interest pair
+				break;      // Continue to next interest pair
 			}
 		}
 	}

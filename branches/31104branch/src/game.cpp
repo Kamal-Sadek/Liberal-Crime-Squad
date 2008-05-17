@@ -71,7 +71,10 @@
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
 #include <includes.h>
+#include "orghandler.h"
+#include "testdriver.h"
 
+orgHandler gOrgHandler = orgHandler();
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
@@ -346,6 +349,8 @@ int main(int argc, char* argv[])
    cityname(lcityname);
 
    loaded=load();
+
+   testdriver();
 
    mode_title();
 
