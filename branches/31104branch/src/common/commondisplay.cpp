@@ -29,6 +29,37 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+// Sets the text color to the thematic color for the given alignment
+// extended_range forces colors to be set on a 5 point scale instead
+// of just basic liberal-moderate-conservative
+void set_alignment_color(signed char alignment, bool extended_range)
+{
+   switch(alignment)
+   {
+   case ALIGN_ARCHCONSERVATIVE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      break;
+   case ALIGN_CONSERVATIVE:
+      if(extended_range)
+         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+      else
+         set_color(COLOR_RED,COLOR_BLACK,1);
+      break;
+   case ALIGN_MODERATE:
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      break;
+   case ALIGN_LIBERAL:
+      if(extended_range)
+         set_color(COLOR_BLUE,COLOR_BLACK,1);
+      else
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+      break;
+   case ALIGN_ELITELIBERAL:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      break;
+   }
+}
+
 /* location and squad header */
 void locheader(void)
 {

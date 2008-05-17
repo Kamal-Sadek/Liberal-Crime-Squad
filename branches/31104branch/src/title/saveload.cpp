@@ -33,7 +33,7 @@ This file is part of Liberal Crime Squad.                                       
 /* saves the game to save.dat */
 void save(void)
 {
- savegame("save.dat");
+   savegame("save.dat");
 }
 
 
@@ -41,7 +41,7 @@ void save(void)
 /* saves the game to autosave.dat */
 void autosave(void)
 {
- savegame("autosave.dat");
+   savegame("autosave.dat");
 }
 
 

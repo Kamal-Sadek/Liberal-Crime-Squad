@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/wd4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\src\organization&quot;;..\src"
+				AdditionalIncludeDirectories="..\src\politics;..\src\organization;..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -411,10 +411,6 @@
 				RelativePath="..\src\monthly\monthly.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\src\monthly\politics.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="sitemode"
@@ -593,6 +589,26 @@
 			</File>
 			<File
 				RelativePath="..\src\organization\testdriver.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="politics"
+			>
+			<File
+				RelativePath="..\src\politics\alignment.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\politics\law.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\politics\law.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\politics\politics.cpp"
 				>
 			</File>
 		</Filter>

@@ -512,11 +512,11 @@ char liberalagenda(char won)
    addstr("Vice President: ");addstr(execname[EXEC_VP]);addstr(", ");
    switch(exec[EXEC_VP])
    {
-      case -2:addstr("Arch-Conservative");break;
-      case -1:addstr("Conservative");break;
-      case 0:addstr("moderate");break;
-      case 1:addstr("Liberal");break;
-      case 2:addstr("Elite Liberal");break;
+      case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+      case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+      case ALIGN_MODERATE:addstr("moderate");break;
+      case ALIGN_LIBERAL:addstr("Liberal");break;
+      case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
    }
    if(exec[EXEC_STATE]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
    else if(exec[EXEC_STATE]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
@@ -527,11 +527,11 @@ char liberalagenda(char won)
    addstr("Secretary of State: ");addstr(execname[EXEC_STATE]);addstr(", ");
    switch(exec[EXEC_STATE])
    {
-      case -2:addstr("Arch-Conservative");break;
-      case -1:addstr("Conservative");break;
-      case 0:addstr("moderate");break;
-      case 1:addstr("Liberal");break;
-      case 2:addstr("Elite Liberal");break;
+      case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+      case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+      case ALIGN_MODERATE:addstr("moderate");break;
+      case ALIGN_LIBERAL:addstr("Liberal");break;
+      case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
    }
    if(exec[EXEC_ATTORNEY]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
    else if(exec[EXEC_ATTORNEY]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
@@ -542,11 +542,11 @@ char liberalagenda(char won)
    addstr("Attorney General: ");addstr(execname[EXEC_ATTORNEY]);addstr(", ");
    switch(exec[EXEC_ATTORNEY])
    {
-      case -2:addstr("Arch-Conservative");break;
-      case -1:addstr("Conservative");break;
-      case 0:addstr("moderate");break;
-      case 1:addstr("Liberal");break;
-      case 2:addstr("Elite Liberal");break;
+      case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+      case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+      case ALIGN_MODERATE:addstr("moderate");break;
+      case ALIGN_LIBERAL:addstr("Liberal");break;
+      case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
    }
 
    int y=22-LAWNUM;
@@ -555,10 +555,10 @@ char liberalagenda(char won)
       if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
       else
       {
-         if(law[l]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(law[l]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(law[l]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(law[l]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_BLUE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
       }
 
@@ -568,7 +568,8 @@ char liberalagenda(char won)
       {
          case LAW_TAX:
 				if(won==-1)addstr("There are no taxes, yet most people have no money.");
-				else if(law[l]==-2)addstr("The tax code is a nightmare designed to maintain class structure.");
+				else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("The tax code is a nightmare designed to maintain class structure.");
 				else if(law[l]==-1)addstr("A flat tax is in effect.");
 				else if(law[l]==0)addstr("Taxes are moderate, and the code has loop-holes.");
 				else if(law[l]==1)addstr("Taxes are very high and steeply graded.");
@@ -576,7 +577,8 @@ char liberalagenda(char won)
 				break;
          case LAW_ABORTION:
             if(won==-1)addstr("Use of contraception and abortion are capital offenses.");
-            else if(law[l]==-2)addstr("Abortion is a felony equal to murder.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Abortion is a felony equal to murder.");
             else if(law[l]==-1)addstr("Abortion is prohibited except in extreme circumstances.");
             else if(law[l]==0)addstr("Abortion is limited to early pregnancy.");
             else if(law[l]==1)addstr("Abortion is mostly legal, but discouraged by law.");
@@ -584,7 +586,8 @@ char liberalagenda(char won)
             break;
          case LAW_ANIMALRESEARCH:
             if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
-            else if(law[l]==-2)addstr("Animal research is completely unregulated.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Animal research is completely unregulated.");
             else if(law[l]==-1)addstr("Animal research is lightly regulated.");
             else if(law[l]==0)addstr("Animal research is moderately regulated.");
             else if(law[l]==1)addstr("Animal research is stiffly regulated.");
@@ -592,7 +595,8 @@ char liberalagenda(char won)
             break;
          case LAW_POLICEBEHAVIOR:
             if(won==-1)addstr("Policing is administered by corporations and has a draft.");
-            else if(law[l]==-2)addstr("Law enforcement is given free reign.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Law enforcement is given free reign.");
             else if(law[l]==-1)addstr("Law enforcement is lightly regulated.");
             else if(law[l]==0)addstr("Law enforcement is moderately regulated.");
             else if(law[l]==1)addstr("Law enforcement is strictly controlled.");
@@ -600,7 +604,8 @@ char liberalagenda(char won)
             break;
          case LAW_PRIVACY:
             if(won==-1)addstr("Files on each citizen are easily accessible to corporations.");
-            else if(law[l]==-2)addstr("Any corporation requesting private information is granted access.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Any corporation requesting private information is granted access.");
             else if(law[l]==-1)addstr("Privacy laws are weak.");
             else if(law[l]==0)addstr("Privacy laws are moderate.");
             else if(law[l]==1)addstr("Privacy laws are strong.");
@@ -608,7 +613,8 @@ char liberalagenda(char won)
             break;
          case LAW_DEATHPENALTY:
             if(won==-1)addstr("Poor criminals receive mandatory death sentences.");
-            else if(law[l]==-2)addstr("People can be put to death for minor offenses.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("People can be put to death for minor offenses.");
             else if(law[l]==-1)addstr("The death penalty is actively enforced in many states.");
             else if(law[l]==0)addstr("The death penalty is in effect but under scrutiny.");
             else if(law[l]==1)addstr("The death penalty is not permitted in many circumstances.");
@@ -616,7 +622,8 @@ char liberalagenda(char won)
             break;
          case LAW_NUCLEARPOWER:
             if(won==-1)addstr("Nuclear power plants are ubiquitous.");
-            else if(law[l]==-2)addstr("Nuclear power is proliferating with no controls.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Nuclear power is proliferating with no controls.");
             else if(law[l]==-1)addstr("Nuclear power is a preferred energy source.");
             else if(law[l]==0)addstr("Nuclear power is often an energy source.");
             else if(law[l]==1)addstr("Nuclear power is intensely regulated and seldom used.");
@@ -624,7 +631,8 @@ char liberalagenda(char won)
             break;
          case LAW_POLLUTION:
             if(won==-1)addstr("Deformed children are the norm in industrial zones.");
-            else if(law[l]==-2)addstr("Industry may pollute as much as they like.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Industry may pollute as much as they like.");
             else if(law[l]==-1)addstr("Industry voluntarily regulates pollution.");
             else if(law[l]==0)addstr("Industry is subject to moderate pollution regulations.");
             else if(law[l]==1)addstr("Industry is subject to strict pollution regulations.");
@@ -632,7 +640,8 @@ char liberalagenda(char won)
             break;
          case LAW_LABOR:
             if(won==-1)addstr("People are bred in pens to be farmed out to corporations like beasts.");
-            else if(law[l]==-2)addstr("There is no weekend and children are forced to work.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("There is no weekend and children are forced to work.");
             else if(law[l]==-1)addstr("Working conditions are miserable and the minimum wage is low.");
             else if(law[l]==0)addstr("Workers still require some benefits.");
             else if(law[l]==1)addstr("Workers are fairly compensated and have benefits.");
@@ -640,7 +649,8 @@ char liberalagenda(char won)
             break;
          case LAW_GAY:
             if(won==-1)addstr("Homosexuals are executed regularly.");
-            else if(law[l]==-2)addstr("Homosexuals are routinely persecuted with no recourse.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Homosexuals are routinely persecuted with no recourse.");
             else if(law[l]==-1)addstr("Homosexuals are not tolerated.");
             else if(law[l]==0)addstr("Homosexuals are grudgingly tolerated but have few equal rights.");
             else if(law[l]==1)addstr("Homosexuals have many rights shared by heterosexuals.");
@@ -648,7 +658,8 @@ char liberalagenda(char won)
             break;
          case LAW_CORPORATE:
             if(won==-1)addstr("Corporations under the King run the country in a feudal system.");
-            else if(law[l]==-2)addstr("Corporations essentially run the country in a feudal system.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Corporations essentially run the country in a feudal system.");
             else if(law[l]==-1)addstr("Corporate culture is corrupt and there is a great disparity in wages.");
             else if(law[l]==0)addstr("Corporations are moderately regulated, although wages are still unfair.");
             else if(law[l]==1)addstr("Corporations are stiffly regulated, and executives are fairly compensated.");
@@ -656,7 +667,8 @@ char liberalagenda(char won)
             break;
          case LAW_FREESPEECH:
             if(won==-1)addstr("Unacceptable speech is a capital crime.");
-            else if(law[l]==-2)addstr("Speech is routinely suppressed.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Speech is routinely suppressed.");
             else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
             else if(law[l]==0)addstr("Free speech is tolerated.");
             else if(law[l]==1)addstr("Free speech is encouraged.");
@@ -664,7 +676,8 @@ char liberalagenda(char won)
             break;
          case LAW_FLAGBURNING:
             if(won==-1)addstr("Images or words describing flag burning are punished by death.");
-            else if(law[l]==-2)addstr("Burning the flag is a crime on par with murder.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Burning the flag is a crime on par with murder.");
             else if(law[l]==-1)addstr("Burning the flag is a felony.");
             else if(law[l]==0)addstr("Flag-burning is a misdemeanor.");
             else if(law[l]==1)addstr("Flag-burning is legal but stigmatized.");
@@ -672,7 +685,8 @@ char liberalagenda(char won)
             break;
          case LAW_GUNCONTROL:
             if(won==-1)addstr("Gangs of young children carrying AK-47s roam the streets.");
-            else if(law[l]==-2)addstr("Machine guns can be bought and sold freely.");
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+               addstr("Machine guns can be bought and sold freely.");
             else if(law[l]==-1)addstr("Military weapons are banned, but similar-looking guns are available.");
             else if(law[l]==0)addstr("A comprehensive ban on military-style weapons is in effect.");
             else if(law[l]==1)addstr("Most guns cannot be sold to anyone outside of law enforcement.");

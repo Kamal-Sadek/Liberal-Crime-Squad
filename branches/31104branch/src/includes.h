@@ -137,6 +137,7 @@ using namespace std;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
+#include <alignment.h>
 
 
 
@@ -296,15 +297,6 @@ enum SiteTypes
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
    SITENUM
-};
-
-enum Alignment
-{
-   ALIGN_ARCHCONSERVATIVE = -2,
-   ALIGN_CONSERVATIVE,
-   ALIGN_MODERATE,
-   ALIGN_LIBERAL,
-   ALIGN_ELITELIBERAL
 };
 
 enum CreatureType
@@ -1498,6 +1490,10 @@ void end_game(int err=0);
 /*
  commondisplay.cpp
 */
+// Sets the text color to the thematic color for the given alignment
+// extended_range forces colors to be set on a 5 point scale instead
+// of just basic liberal-moderate-conservative
+void set_alignment_color(signed char alignment, bool extended_range=false);
 /* location and squad header */
 void locheader(void);
 /* party info at top of screen */

@@ -59,7 +59,7 @@ public:
 
 	//this says if they care about stuff other then special interests
 	bool swayable;
-	enum Alignment alignment;
+	signed char alignment;
 
 	//These handle changing other organizations viewpoints
 	void swayOthers();
