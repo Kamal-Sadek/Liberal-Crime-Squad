@@ -33,6 +33,7 @@ orgHandler::orgHandler()
 
 organization *orgHandler::getOrg(int ID)
 {
+	//Loop through, find the org, return it
 	int i = 0;
 	while(gOrgs[i].ID != ID && i < gOrgs.size())
 	{
@@ -47,15 +48,19 @@ organization *orgHandler::getOrg(int ID)
 
 void orgHandler::addOrg(organization org)
 {
+	//This is confusing.
 	int size = gOrgs.size();
 	int i;
 	int k;
 	int matchNum = 0;
+	//Loop through the orgs
 	for(i = 0; i < gOrgs.size(); i++)
 	{
-		for(int j = 0; j < gOrgs.size(); j++)
+		//loop through the special interests of the org you are comparing to
+		for(int j = 0; j < gOrgs[i].specialInterests.size(); j++)
 		{
 			int opposedSpecSize = org.specialInterests.size();
+			//loop through the org you want to add, and compare to see if there are any matches
 			for(k = 0; k < opposedSpecSize; k++);
 			{
 				if(org.specialInterests.at(k) == gOrgs.at(i).specialInterests.at(j))
@@ -64,8 +69,10 @@ void orgHandler::addOrg(organization org)
 				}
 			}
 		}
+		//if there are matches...
 		if(matchNum > 0)
 		{
+			//Find if they are allied
 			char allied;
 			if(gOrgs[i].alignment == org.alignment)
 			{
@@ -89,15 +96,20 @@ void orgHandler::addOrg(organization org)
 
 void orgHandler::deleteOrg(organization org)
 {
+	//Now to delete an org
 	vector<organization>::iterator iter1;
 	vector<interOrgData>::iterator iter2;
 	int i = 0;
+	//this is confusing.
 	for(iter1 = gOrgs.begin(); iter1 != gOrgs.end(); iter1++)
 	{
+		//If this is the org to be deleted, remove it
 		if(gOrgs[i].ID == org.ID)
 		{
 			gOrgs.erase(iter1);
+			//after removal, go back one, so we don't skip the next one.
 			iter1--;
+			i--;
 		}
 		else
 		{
@@ -107,6 +119,7 @@ void orgHandler::deleteOrg(organization org)
 				if(gOrgs[i].orgs[j].ID == org.ID)
 				{
 					gOrgs[i].orgs.erase(iter2);
+					//DELETED
 					iter2--;
 					j--;
 				}
