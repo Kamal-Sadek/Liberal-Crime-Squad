@@ -131,7 +131,7 @@ char lcityname[80];
 char newscherrybusted=0;
 
 int month=1;
-int year=2008;
+int year=2007;
 int amendnum=28;
 
 
@@ -152,7 +152,7 @@ char courtname[9][80];
 
 
 short exec[EXECNUM];
-short execterm=1;
+short execterm=2;
 char execname[EXECNUM][80];
 short presparty=1;
 

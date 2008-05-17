@@ -24,7 +24,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
  
-orgHandler::orgHandler()
+orgHandler::orgHandler() : nextID(0)
 {
 }
 
@@ -51,37 +51,21 @@ organization &orgHandler::getOrg(int ID)
 void orgHandler::addOrg(organization org)
 {
    list<organization>::iterator iter; // Iterator to step through my organization list
-   list<organization>::iterator iter2; // Iterator to step through my organization list the second time
-   int nextID = 0; // Used to find the first available ID to give this organization
 
-   // First assign an unused ID to the organization
+   // Assign an unused ID to the organization
+   org.ID = nextID++;
+   // Add it to the list
+   gOrgs.push_back(org);
 
+   // Now update all organizations' records
    // Step through my list of organizations
    for(iter=gOrgs.begin(); iter!=gOrgs.end(); iter++)
    {
-      // If this organization is using the lowest potentially available ID,
-      // then I can't use that ID for the new org; try the next one
-      if(iter->ID == nextID)nextID++;
-      else break; // Otherwise, stop; we've found an ID and spot to insert the org
-   }
-   
-   org.ID = nextID;        // Use the available ID
-   gOrgs.insert(iter,org); // Insert where we found an open spot in the ID scale
-
-
-   // (Note the above algorithm requires that the org list be sorted by ID, and
-   //  it respects this by maintaining sort order when inserting new organizations)
-
-   // Now update all organizations' records
-
-   // Step through my list of organizations
-   for(iter2=gOrgs.begin(); iter2!=gOrgs.end(); iter2++)
-   {
       // If this organization is the new one, skip it
-      if(iter2->ID == org.ID) continue;
+      if(iter->ID == org.ID) continue;
       // Else notify this organization and the new one of eachother's existance
-      iter2->addOrgRecord(org);
-      iter->addOrgRecord(*iter2);
+      iter->addOrgRecord(gOrgs.back());
+      gOrgs.back().addOrgRecord(*iter);
    }
 }
 

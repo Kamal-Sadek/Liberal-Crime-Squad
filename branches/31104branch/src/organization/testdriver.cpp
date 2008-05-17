@@ -44,8 +44,8 @@ void testdriver()
 	
 	move(0,0);
 	addstr("Test Driver Completed");
-	//refresh();
-	//getch();
+	refresh();
+	getch();
 
 	//gOrgHandler.addOrg();
 }

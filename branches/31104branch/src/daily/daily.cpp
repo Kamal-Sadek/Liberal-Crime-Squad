@@ -128,6 +128,7 @@ void advanceday(char &clearformess,char canseethings)
                   getch();
                }
                squad[sq]->squad[p]->activity.type=ACTIVITY_VISIT;
+               squad[sq]->squad[p]->activity.arg=squad[sq]->activity.arg;
             }
          }
       }
@@ -855,6 +856,7 @@ void advanceday(char &clearformess,char canseethings)
          addstr(".");
 
          pool[p]->clinic=0;
+         pool[p]->activity.type=ACTIVITY_NONE;
 
          int hs=-1;
          for(int l=0;l<location.size();l++)

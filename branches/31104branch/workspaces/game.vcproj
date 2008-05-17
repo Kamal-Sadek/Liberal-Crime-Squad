@@ -587,6 +587,14 @@
 				RelativePath="..\src\organization\orghandler.h"
 				>
 			</File>
+			<File
+				RelativePath="..\src\organization\testdriver.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\organization\testdriver.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\src\compat.cpp"

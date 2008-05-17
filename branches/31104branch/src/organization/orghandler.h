@@ -47,5 +47,6 @@ public:
 
 private:
    list<organization> gOrgs; // Internal organization list
+   int nextID;
 };
 #endif
