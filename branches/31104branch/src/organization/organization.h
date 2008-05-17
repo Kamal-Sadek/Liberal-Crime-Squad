@@ -27,10 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 #ifndef ORGANIZATION_H_INCLUDED
 #define ORGANIZATION_H_INCLUDED
 
-//Allignment macroes
-#define LIBERAL			 1
-#define MODERATE		 0
-#define CONSERVATIVE	-1
+#include <includes.h>
 
 class interOrgData
 {
@@ -58,7 +55,7 @@ public:
 
 	//this says if they care about stuff other then special interests
 	bool swayable;
-	char alignment;
+	enum Alignment alignment;
 
 	//These handle changing other organizations viewpoints
 	void swayOthers();
@@ -67,7 +64,7 @@ public:
 
 	short attackPower;
 	//Soldiers they will send to attack
-	int soldiers[5];
+	enum CreatureType soldiers[5];
 	int ID;
 };
 

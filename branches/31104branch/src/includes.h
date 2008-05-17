@@ -298,7 +298,16 @@ enum SiteTypes
    SITENUM
 };
 
-enum CreatureTypes
+enum Alignment
+{
+   ALIGN_ARCHCONSERVATIVE = -2,
+   ALIGN_CONSERVATIVE,
+   ALIGN_MODERATE,
+   ALIGN_LIBERAL,
+   ALIGN_ELITELIBERAL
+};
+
+enum CreatureType
 {
    CREATURE_SECURITYGUARD,
    CREATURE_SCIENTIST_LABTECH,
