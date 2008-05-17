@@ -1,8 +1,5 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
+This file is part of Liberal Crime Squad.                                           //
                                                                                     //
     Liberal Crime Squad is free software; you can redistribute it and/or modify     //
     it under the terms of the GNU General Public License as published by            //
@@ -28,10 +25,13 @@ This file is part of Liberal Crime Squad.                                       
 #define ORGANIZATION_H_INCLUDED
 
 #include <includes.h>
+#include <list>
+#include <stdexcept>
 
 class interOrgData
 {
 public:
+   interOrgData();
 	interOrgData(int ID, float swayLevel, float affiliation, int respectLevel, int allyLevel);
 
 	int ID;
@@ -49,9 +49,10 @@ public:
 class organization
 {
 public:
-	organization(int newID);
 	vector<interOrgData> orgs;
-	vector<int> specialInterests;
+	vector<enum Views> specialInterests;
+
+	organization(int newID);
 
 	//this says if they care about stuff other then special interests
 	bool swayable;
@@ -61,6 +62,11 @@ public:
 	void swayOthers();
 	void attackedHandler();
 	void calcAllyLevel(int ID);
+
+   // Deletes the record of an organization
+   void deleteOrgRecord(int ID);
+   // Adds record of an organization if it has common special interests
+   void addOrgRecord(const organization& org);
 
 	short attackPower;
 	//Soldiers they will send to attack

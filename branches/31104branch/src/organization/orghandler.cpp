@@ -1,8 +1,5 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
+This file is part of Liberal Crime Squad.                                           //
                                                                                     //
     Liberal Crime Squad is free software; you can redistribute it and/or modify     //
     it under the terms of the GNU General Public License as published by            //
@@ -31,103 +28,79 @@ orgHandler::orgHandler()
 {
 }
 
-organization *orgHandler::getOrg(int ID)
+// Return reference to the organization with the given ID
+organization &orgHandler::getOrg(int ID)
 {
-	//Loop through, find the org, return it
-	int i = 0;
-	while(gOrgs[i].ID != ID && i < gOrgs.size())
-	{
-		i++;
-	}
-	if(i == gOrgs.size())
-	{
-		return NULL;
-	}
-	return &gOrgs[i];
+   list<organization>::iterator iter; // Iterator to step through my organization list
+
+	// Step through my list of organizations
+   for(iter=gOrgs.begin(); iter!=gOrgs.end(); iter++)
+   {
+      // If this is the organization I'm looking for, return it
+      if(iter->ID = ID)return *iter;
+   }
+
+   // Organization of that ID not in my list? Throw exception
+   // This should never have to happen
+   char error[80];
+   sprintf(error,"orgHandler recieved invalid ID %d in getOrg; no such object.",ID);
+   throw invalid_argument(error);
 }
 
+// Add an organization
 void orgHandler::addOrg(organization org)
 {
-	//This is confusing.
-	int size = gOrgs.size();
-	int i;
-	int k;
-	int matchNum = 0;
-	//Loop through the orgs
-	for(i = 0; i < gOrgs.size(); i++)
-	{
-		//loop through the special interests of the org you are comparing to
-		for(int j = 0; j < gOrgs[i].specialInterests.size(); j++)
-		{
-			int opposedSpecSize = org.specialInterests.size();
-			//loop through the org you want to add, and compare to see if there are any matches
-			for(k = 0; k < opposedSpecSize; k++);
-			{
-				if(org.specialInterests.at(k) == gOrgs.at(i).specialInterests.at(j))
-				{
-					matchNum++;
-				}
-			}
-		}
-		//if there are matches...
-		if(matchNum > 0)
-		{
-			//Find if they are allied
-			char allied;
-			if(gOrgs[i].alignment == org.alignment)
-			{
-				allied = 1;
-			}
-			else
-			{
-				allied = -1;
-			}
-			//Init data
-			interOrgData data(-1, 1.0f, 0.0f, 0, matchNum * 20 * allied);
-			data.ID = org.ID;
-			gOrgs[i].orgs.push_back(data);
-			data.ID = gOrgs[i].ID;
-			org.orgs.push_back(data);
-			matchNum = 0;
-		}
-	}
-	gOrgs.push_back(org);
+   list<organization>::iterator iter; // Iterator to step through my organization list
+   int nextID = 0; // Used to find the first available ID to give this organization
+
+   // First assign an unused ID to the organization
+
+   // Step through my list of organizations
+   for(iter=gOrgs.begin(); iter!=gOrgs.end(); iter++)
+   {
+      // If this organization is using the lowest potentially available ID,
+      // then I can't use that ID for the new org; try the next one
+      if(iter->ID = nextID)nextID++;
+      else break; // Otherwise, stop; we've found an ID and spot to insert the org
+   }
+   
+   org.ID = nextID;        // Use the available ID
+   gOrgs.insert(iter,org); // Insert where we found an open spot in the ID scale
+
+   // (Note the above algorithm requires that the org list be sorted by ID, and
+   //  it respects this by maintaining sort order when inserting new organizations)
+
+   // Now update all organizations' records
+
+   // Step through my list of organizations
+   for(iter=gOrgs.begin(); iter!=gOrgs.end(); iter++)
+   {
+      // If this organization is the new one, skip it
+      if(iter->ID == org.ID) continue;
+      // Else notify this organization and the new one of eachother's existance
+      iter->addOrgRecord(org);
+      org.addOrgRecord(*iter);
+   }
 }
 
+// Delete an organization
 void orgHandler::deleteOrg(organization org)
 {
-	//Now to delete an org
-	vector<organization>::iterator iter1;
-	vector<interOrgData>::iterator iter2;
-	int i = 0;
-	//this is confusing.
+	list<organization>::iterator iter1; // Iterator to step through the organization list
+
+   // Step through all organizations
 	for(iter1 = gOrgs.begin(); iter1 != gOrgs.end(); iter1++)
 	{
-		//If this is the org to be deleted, remove it
-		if(gOrgs[i].ID == org.ID)
+      // If this is the org to be deleted, we'll remove it from the list
+		if(iter1->ID == org.ID)
 		{
+         // Remove it
 			gOrgs.erase(iter1);
-			//after removal, go back one, so we don't skip the next one.
+			// Then go back one, so we don't skip the next one.
 			iter1--;
-			i--;
 		}
-		else
-		{
-			int j = 0;
-			for(iter2 = gOrgs[i].orgs.begin(); iter2 != gOrgs[i].orgs.end(); iter2++)
-			{
-				if(gOrgs[i].orgs[j].ID == org.ID)
-				{
-					gOrgs[i].orgs.erase(iter2);
-					//DELETED
-					iter2--;
-					j--;
-				}
-				iter2++;
-				j++;
-			}
-		}
-		i++;
+      // Else delete this org's internal record of the org we're deleting
+		else iter1->deleteOrgRecord(org.ID);
 	}
 }
 
@@ -137,15 +110,14 @@ void orgHandler::swayAll()
 
 void orgHandler::swayOrg(int ID, int opinionOrgID, int power)
 {
-	organization *org;
-	org = getOrg(ID);
-	if(org->swayable)
+	organization &org = getOrg(ID);
+	if(org.swayable)
 	{
-		for(int i = 0; i < org->orgs.size(); i++)
+		for(int i = 0; i < org.orgs.size(); i++)
 		{
-			if(org->orgs[i].ID == opinionOrgID)
+			if(org.orgs[i].ID == opinionOrgID)
 			{
-				org->orgs[i].allyLevel += (int)(org->orgs[i].swayLevel * power);
+				org.orgs[i].allyLevel += (int)(org.orgs[i].swayLevel * power);
 				break;
 			}
 		}

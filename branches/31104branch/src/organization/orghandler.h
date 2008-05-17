@@ -1,8 +1,5 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
+This file is part of Liberal Crime Squad.                                           //
                                                                                     //
     Liberal Crime Squad is free software; you can redistribute it and/or modify     //
     it under the terms of the GNU General Public License as published by            //
@@ -33,11 +30,14 @@ public:
 	//This handles all organizations
 	orgHandler();
 
-	vector<organization> gOrgs;
+   // Return reference to the organization with the given ID
+	organization &getOrg(int ID);
 
-	organization *getOrg(int ID);
-
+   // Adds a new organization to the list, assigning a free ID
+   // and notifying all existing organizations of its appearance
 	void addOrg(organization org);
+   // Deletes an organization from the list, notifying all
+   // existing organizations of its deletion
 	void deleteOrg(organization org);
 	
 	//This makes all organizations sway each other.
@@ -45,7 +45,7 @@ public:
 
 	void swayOrg(int ID, int opinionOrgID, int power);
 
-
-	int newID;
+private:
+   list<organization> gOrgs; // Internal organization list
 };
 #endif
