@@ -80,7 +80,7 @@ interOrgData::interOrgData(int IDin, float swayLevelin, float affiliationin, int
 }
 
 // Deletes the record of an organization
-void organization::deleteOrgRecord(int ID)
+void organization::deleteOrgRecord(int deleteID)
 {
    vector<interOrgData>::iterator iter; // Iterator to step through interOrgData vector
 
@@ -88,7 +88,7 @@ void organization::deleteOrgRecord(int ID)
    for(iter=orgs.begin();iter!=orgs.end();iter++)
    {
       // Find the organization to delete
-      if(iter->ID==ID)
+      if(iter->ID==deleteID)
       {
          // Delete it and stop looking
          orgs.erase(iter);
@@ -110,7 +110,7 @@ void organization::addOrgRecord(const organization& org)
 	for(iter1=specialInterests.begin(); iter1!=specialInterests.end(); iter1++)
 	{
 		// Loop through their special interests
-      for(iter2=org.specialInterests.begin();iter2!=org.specialInterests.end();iter2++);
+      for(iter2=org.specialInterests.begin();iter2!=org.specialInterests.end();iter2++)
 		{
          // If we share this interest
 			if(*iter1 == *iter2)
@@ -136,7 +136,7 @@ void organization::addOrgRecord(const organization& org)
    interOrgData newdata; // Data record to add
    
    // Record their data
-   newdata.ID           = ID;
+   newdata.ID           = org.ID;
    // The more common issues we have, the closer we are,
    // or the more fierce our rivalry
    newdata.allyLevel    = 20 * matchNum * allied;

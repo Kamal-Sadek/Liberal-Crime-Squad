@@ -5,7 +5,6 @@
 
 void testdriver()
 {
-	gOrgHandler = orgHandler();
 	//The org Mom creates the organizations.
 	organization *orgMom;
 

@@ -67,7 +67,7 @@ public:
 	void calcAllyLevel(int ID);
 
    // Deletes the record of an organization
-   void deleteOrgRecord(int ID);
+   void deleteOrgRecord(int deleteID);
    // Adds record of an organization if it has common special interests
    void addOrgRecord(const organization& org);
 
