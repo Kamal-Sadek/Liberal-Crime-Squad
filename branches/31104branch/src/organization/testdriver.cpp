@@ -25,7 +25,8 @@ void testdriver()
 	string newName;
 	for(int j = 0; j < 10; j++)
 	{
-		newName = "Test" + (j+'0');
+		newName = "Test";
+		newName += (j+'0');
 		orgMom = new organization(newName);
 		if(LCSrandom(2))
 		{
@@ -39,6 +40,7 @@ void testdriver()
 		{
 			orgMom->specialInterests.push_back((enum Views)LCSrandom(VIEWNUM));
 		}
+		orgMom->attackPower = LCSrandom(20);
 		gOrgHandler.addOrg(*orgMom);
 	}
 	
