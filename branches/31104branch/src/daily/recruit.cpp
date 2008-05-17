@@ -42,10 +42,10 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
 
 char recruitst::eagerness()
 {
-   char eagerness_temp = eagerness1 + level + pool[getpoolcreature(recruiter_id)]->skill[SKILL_LEADERSHIP]; 
+   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->skill[SKILL_LEADERSHIP]; 
    if(talkreceptive(*recruit))
    {
-      eagerness1+=3;
+      eagerness_temp+=2;
    }
    if(recruit->attval(ATTRIBUTE_HEART)>recruit->attval(ATTRIBUTE_WISDOM))
    {
@@ -206,6 +206,31 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
 }
 
 
+static void getissueeventstring(char* str)
+{
+   switch(LCSrandom(VIEWNUM-2))
+   {
+   case VIEW_ABORTION:strcat(str,"a documentary on the women's rights struggle");break;
+   case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
+   case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
+	case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
+   case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the chernobyl dead zone");break;
+   case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
+   case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
+   case VIEW_PRISONS:strcat(str,"a government inquiry into prison conditions");break;
+   case VIEW_INTELLIGENCE:strcat(str,"a documentary on privacy rights");break;
+   case VIEW_FREESPEECH:strcat(str,"a collection of banned books");break;
+   case VIEW_GENETICS:strcat(str,"a video about genetic engineering accidents");break;
+   case VIEW_JUSTICES:strcat(str,"a Liberal policy paper inquiring into judicial decisions");break;
+   case VIEW_SWEATSHOPS:strcat(str,"a hand-recorded video of unregulated sweatshops");break;
+   case VIEW_POLLUTION:strcat(str,"a leaked government paper on environmental conditions");break;
+   case VIEW_CORPORATECULTURE:strcat(str,"a documentary on life under corporate culture");break;
+   case VIEW_CEOSALARY:strcat(str,"a Liberal think-tank survey of top CEO salaries");break;
+   case VIEW_AMRADIO:strcat(str,"a collection of Conservative radio host rants");break;
+   case VIEW_CABLENEWS:strcat(str,"a collection of leaked Conservative cable news memos");break;
+   }
+}
+
 
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(recruitst &r,int p,char &clearformess)
@@ -219,39 +244,42 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr("Meeting with ");
    addstr(r.recruit->name);
    addstr(", ");
-   char str[25];
+   char str[75];
    getrecruitcreature(str,r.recruit->type);
    addstr(str);
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds(0,1,"Money: ");
 
-   printcreatureinfo(r.recruit);
+   printcreatureinfo(r.recruit,r.level);
    makedelimiter(8,0);
 
    move(10,0);
    addstr(r.recruit->name);
-   switch(r.level)
+   switch(r.eagerness())
    {
    case 0:
-      if(r.eagerness()>6 && subordinatesleft(*pool[p]))addstr(" hopes this is about joining the LCS.");
-      else addstr(" is curious what this is all about.");
-      break;
    case 1:
-      if(r.eagerness()>7 && subordinatesleft(*pool[p]))addstr(" is taking this pretty seriously.");
-      else addstr(" has completed the community service.");
-      break;
    case 2:
-      if(r.eagerness()>8 && subordinatesleft(*pool[p]))addstr(" is determined and eager to join.");
-      else addstr(" did well with the assigned tasks.");
-      break;
    case 3:
-      if(r.eagerness()>9 && subordinatesleft(*pool[p]))addstr(" is ready to fight for the Liberal Cause.");
+      addstr(" has someplace better to be, really.");
+      break;
+   case 4:
+   case 5:
+      addstr(" is curious what this is all about.");
+      break;
+   case 6:
+   case 7:
+      addstr(" is determined to do something.");
+      break;
+   default:
+      if(r.eagerness()>=8)
+         addstr(" is ready to fight for the Liberal Cause.");
       else
       {
-         addstr(" has done everything ");
+         addstr(" is obviously humoring ");
          addstr(pool[p]->name);
-         addstr(" has asked.");
+         addch('.');
       }
       break;
    }
@@ -260,83 +288,27 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr(pool[p]->name);
    addstr(" approach the situation?");
 
-   switch(r.level)
-   {
-   case 0:
-      move(13,0);
-      addstr("A - Invite ");
-      addstr(r.recruit->name);
-      addstr(" to join the LCS immediately.");
-      move(14,0);
-      addstr("B - Ease them in: organize a week of community service tasks.");
-      break;
-   case 1:
-      move(13,0);
-      addstr("A - Invite ");
-      addstr(r.recruit->name);
-      addstr(" to join the LCS.");
-      move(14,0);
-      addstr("B - Encourage them to engage in more aggressive political activism.");
-      break;
-   case 2:
-      move(13,0);
-      addstr("A - Invite ");
-      addstr(r.recruit->name);
-      addstr(" to join the LCS.");
-      move(14,0);
-      addstr("B - Ask ");
-      addstr(r.recruit->name);
-      addstr(" to commit some minor crimes.");
-      break;
-   case 3:
-      move(13,0);
-      addstr("A - Welcome ");
-      addstr(r.recruit->name);
-      addstr(" to the LCS.");
-      move(14,0);
-      if(funds>=1000)set_color(COLOR_WHITE,COLOR_BLACK,0);
-      else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("B - Offer ");
-      addstr(r.recruit->name);
-      addstr(" $1000 to join the LCS.");
-      break;
-   }
+   move(13,0);
+   addstr("A - Just ask for a cash donation and that's it.");
+   move(14,0);
+   if(funds<5)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   addstr("B - Go to coffee for a short interview and political discussion. ($5)");
    move(15,0);
-   int y;
-   if(r.recruit->weapon.type==WEAPON_NONE && r.level>=2)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,0);      
-      addstr("C - Tell ");
-      addstr(r.recruit->name);
-      addstr("to get a weapon.");
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(16,0);
-      if(funds>=500)set_color(COLOR_WHITE,COLOR_BLACK,0);
-      else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("D - Tell ");
-      addstr(r.recruit->name);
-      addstr("to get a weapon. Give them $500.");
-      move(17,0);
-      if(funds>=1500)set_color(COLOR_WHITE,COLOR_BLACK,0);
-      else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("E - Tell ");
-      addstr(r.recruit->name);
-      addstr("to get a weapon. Give them $1500.");
-      move(18,0);
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      addstr("F - ");
-      addstr(r.recruit->name);
-      addstr(" is not LCS material. Just go home.");
-      y=20;
-   }
-   else
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      addstr("C - ");
-      addstr(r.recruit->name);
-      addstr(" is not LCS material. Just go home.");
-      y=17;
-   }
+   if(funds<30)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   addstr("C - Share ");
+   str[0]=0;
+   getissueeventstring(str);
+   addstr(str);
+   addstr(". ($30)");
+   move(16,0);
+   if(subordinatesleft(*pool[p]))set_color(COLOR_WHITE,COLOR_BLACK,0);
+   else set_color(COLOR_BLACK,COLOR_BLACK,1);
+   addstr("D - Invite ");
+   addstr(r.recruit->name);
+   addstr(" to join the LCS as a full member.");
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+   int y=18;
    
 
    do
@@ -346,7 +318,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       translategetch(c);
 
       char test=0;
-      if(c=='a')
+      if(c=='d' && subordinatesleft(*pool[p]))
       {
          move(y,0);
          addstr(pool[p]->name);
@@ -357,7 +329,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          refresh();
          getch();
 
-         if(r.eagerness()>6 && subordinatesleft(*pool[p]))
+         if(r.eagerness()>=8)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             move(y+2,0);
@@ -396,202 +368,199 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             return 1;
          }
       }
-      if(c=='b' || (c>='c' && c<='e' && r.level>1 && r.recruit->weapon.type==WEAPON_NONE
-                    && r.recruit->align<=0 && r.recruit->skill[SKILL_GANGSTERISM]==0))
+      if(c=='b' && funds>5)
       {
-         if(r.level<3 && c=='b' && r.eagerness()>=r.level*2)
-         {
-            move(y,0);
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            r.task = r.level+1;
-            r.timeleft = 7;
-            addstr(r.recruit->name);
-            addstr(" will come back in a week, when the job is done.");
-            refresh();
-            getch();
+         funds -= 5;
+         moneylost_dating += 5;
+         pool[p]->skill_ip[SKILL_PERSUASION]+=5;
+         
+         int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]+
+                                  pool[p]->skill[SKILL_BUSINESS]+
+                                  pool[p]->skill[SKILL_SCIENCE]+
+                                  pool[p]->skill[SKILL_RELIGION]+
+                                  pool[p]->skill[SKILL_LAW]+
+                                  pool[p]->attval(ATTRIBUTE_HEART)+
+                                  pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
 
-            return 0;
-         }
-         else if(r.level==3 && c=='b' && funds>=1000)
+         int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
+                                  r.recruit->skill[SKILL_SCIENCE]+
+                                  r.recruit->skill[SKILL_RELIGION]+
+                                  r.recruit->skill[SKILL_LAW]+
+                                  r.recruit->attval(ATTRIBUTE_WISDOM)+
+                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
+                                  LCSrandom(10);
+
+         int max_eagerness      = pool[p]->attval(ATTRIBUTE_HEART)-
+                                  r.recruit->attval(ATTRIBUTE_WISDOM);
+
+         if((lib_persuasiveness > recruit_reluctance) &&
+            (max_eagerness      > r.eagerness()     ))
          {
-            move(y,0);
+            set_color(COLOR_BLUE,COLOR_BLACK,1);
+            r.level++;
+            r.eagerness1++;
+            move(y++,0);
+            addstr(r.recruit->name);
+            addstr(" found ");
             addstr(pool[p]->name);
-            addstr(" shows ");
+            addstr("'s views to be insightful.");
+            move(y++,0);
+            addstr("They'll definately meet again tomorrow.");
+         }
+         else if((lib_persuasiveness+LCSrandom(10) > recruit_reluctance))
+         {
+            r.level++;
+            move(y++,0);
             addstr(r.recruit->name);
-            addstr(" $1000 and invites them to join.");
+            addstr(" enjoyed talking with ");
+            addstr(pool[p]->name);
+            addstr(".");
+            move(y++,0);
+            addstr("They'll meet again tomorrow.");
+         }
+         else
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(y++,0);
+            addstr(pool[p]->name);
+            addstr(" comes off as slightly insane.");
             refresh();
             getch();
-
-            if(r.eagerness()>5&&subordinatesleft(*pool[p]))
+            if(r.eagerness1<=0)
             {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-               move(y+2,0);
-               
-               addstr(r.recruit->name);
-               addstr(" accepts, and is eager to get started.");
-
-               r.recruit->align=1;
-
-               r.recruit->location=pool[p]->location;
-               r.recruit->base=pool[p]->base;
-               r.recruit->hireid=pool[p]->id;
-
-               pool[p]->skill_ip[SKILL_LEADERSHIP]+=5;
-
-               pool.push_back(r.recruit);
-               stat_recruits++;
-
-               funds-=1000;
-
+               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+               move(y++,0);
+               addstr("This whole thing was a mistake. There won't be another meeting.");
                refresh();
                getch();
-
                return 1;
+            }
+            move(y++,0);
+            addstr("Hopefully tomorrow's meeting is a bit better.");
+         }
+         refresh();
+         getch();
+         return 0;
+      }
+      if(c=='c' && funds>=30) // Showing them a prop takes your guy out of the picture
+      {          // Now it's just the quality of the prop against them
+         funds -= 30;
+         moneylost_dating += 30;
+         pool[p]->skill_ip[SKILL_PERSUASION]+=5;
+
+         int lib_persuasiveness = 20+LCSrandom(10);
+
+         int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
+                                  r.recruit->skill[SKILL_SCIENCE]+
+                                  r.recruit->skill[SKILL_RELIGION]+
+                                  r.recruit->skill[SKILL_LAW]+
+                                  r.recruit->attval(ATTRIBUTE_WISDOM)+
+                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
+                                  LCSrandom(10);
+
+         int max_eagerness      = 20-r.recruit->attval(ATTRIBUTE_WISDOM);
+
+         if((lib_persuasiveness > recruit_reluctance) &&
+            (max_eagerness      > r.eagerness()     ))
+         {
+            set_color(COLOR_BLUE,COLOR_BLACK,1);
+            r.level++;
+            r.eagerness1++;
+            move(y++,0);
+            addstr(r.recruit->name);
+            addstr(" was shocked by the meeting material.");
+            move(y++,0);
+            addstr("They'll definately have to meet again tomorrow.");
+         }
+         else if((lib_persuasiveness+LCSrandom(10) > recruit_reluctance))
+         {
+            r.level++;
+            move(y++,0);
+            addstr(r.recruit->name);
+            addstr(" found that pretty interesting.");
+            move(y++,0);
+            addstr("They'll meet again tomorrow.");
+         }
+         else
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(y++,0);
+            addstr(r.recruit->name);
+            addstr(" is a little insulted; that was pretty dumb.");
+            refresh();
+            getch();
+            if(r.eagerness1<=0)
+            {
+               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+               move(y++,0);
+               addstr("This isn't really going anywhere. There won't be another meeting.");
+               refresh();
+               getch();
+               return 1;
+            }
+            move(y++,0);
+            addstr("Hopefully tomorrow's meeting is a bit better.");
+         }
+         refresh();
+         getch();
+         return 0;
+      }
+      if(c=='a')
+      {
+         if(r.eagerness()>5)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            int donationamount=0;
+            move(y++,0);
+            addstr(r.recruit->name);
+            addstr(" would be happy to help.");
+            
+            if(r.recruit->money>150)
+            {
+               donationamount=500;
+            }
+            else if(r.recruit->money>50)
+            {
+               donationamount=100;
+            }
+            else if(r.recruit->money)
+            {
+               donationamount=50;
             }
             else
             {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-               move(y+2,0);
-               addstr(r.recruit->name);
-               addstr(" isn't swayed by the money.");
-               move(y+3,0);
-               addstr("Thanks, but no thanks."); 
-               refresh();
-               getch();
-
-               delete r.recruit;
-               return 1;
+               donationamount=10;
             }
-         }
-         else if(r.level<3)
-         {
-            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-            move(y+2,0);
-            addstr(r.recruit->name);
-            if(r.level!=0)addstr(" is just not hardcore enough for that. Thanks, but no thanks.");
-            else addstr(" thought this would take less committment. Good luck though.");
+
+            if(r.eagerness()>7)
+               donationamount=static_cast<int>((1.5+LCSrandom(6)/10.0)*donationamount);
+            if(r.recruit->attval(ATTRIBUTE_HEART)>8)
+               donationamount=static_cast<int>((1.5+LCSrandom(6)/10.0)*donationamount);
+            if(r.recruit->attval(ATTRIBUTE_WISDOM)>8)
+               donationamount=static_cast<int>((1.0-LCSrandom(6)/10.0)*donationamount);
+            if(r.recruit->align==-1)
+               donationamount=static_cast<int>((0.5-LCSrandom(4)/10.0)*donationamount);
             refresh();
             getch();
-
-            return 1;
-         }
-      }
-      if(c=='e' && r.level>=2 && funds>=1500 && r.recruit->weapon.type==WEAPON_NONE)
-      {
-         move(y,0);
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         if((r.recruit->skill[SKILL_RIFLE] || r.recruit->skill[SKILL_SMG]) &&
-            (r.recruit->skill[SKILL_GANGSTERISM] || law[LAW_GUNCONTROL]==-2))
-         {
-            addstr(r.recruit->name);
-            addstr(" takes the $1500 and sets off to acquire a wicked gun.");
-
-            r.task = TASK_BUYWEAPON;
-            r.timeleft = 1;
-
-            r.recruit->money+=1500;
-            funds-=1500;
-
-            refresh();
-            getch();
-
-            return 0;
-         }
-         if((r.recruit->skill[SKILL_RIFLE] && law[LAW_GUNCONTROL]<=-1) ||
-            ((r.recruit->skill[SKILL_SHOTGUN] || r.recruit->skill[SKILL_PISTOL]) &&
-               (law[LAW_GUNCONTROL]<=1 || r.recruit->skill[SKILL_GANGSTERISM])))
-         {
-            addstr(r.recruit->name);
-            addstr(" only accepts $500, and promises to return soon.");
-
-            r.task = TASK_BUYWEAPON;
-            r.timeleft = 1;
-
-            r.recruit->money+=500;
-            funds-=500;
-
-            refresh();
-            getch();
-
-            return 0;
+            move(y++,0);
+            addstr("Here's $");
+            if(donationamount<=0)donationamount=1;
+            itoa(donationamount,str,10);
+            addstr(str);
+            addstr(" for the cause.");
+            funds+=donationamount;
+            moneygained_donate+=donationamount;
          }
          else
          {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            move(y++,0);
+            addstr("Sorry, ");
             addstr(r.recruit->name);
-            addstr(" refuses the money, but agrees to get a weapon.");
-
-            r.task = TASK_BUYWEAPON;
-            r.timeleft = 1;
-
-            refresh();
-            getch();
-
-            return 0;
+            addstr(" just doesn't have that kind of money lying around.");
          }
-      }
-      if(c=='d' && r.level>=2 && funds>=500 && r.recruit->weapon.type==WEAPON_NONE)
-      {
-         move(y,0);
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         if((r.recruit->skill[SKILL_RIFLE] && law[LAW_GUNCONTROL]<=-1) ||
-            ((r.recruit->skill[SKILL_SHOTGUN] || r.recruit->skill[SKILL_PISTOL]) &&
-               (law[LAW_GUNCONTROL]<=1 || r.recruit->skill[SKILL_GANGSTERISM])))
-         {
-            addstr(r.recruit->name);
-            addstr(" takes the $500, and promises to return soon.");
-
-            r.task = TASK_BUYWEAPON;
-            r.timeleft = 1;
-
-            r.recruit->money+=500;
-            funds-=500;
-
-            refresh();
-            getch();
-
-            return 0;
-         }
-         else
-         {
-            addstr(r.recruit->name);
-            addstr(" refuses the money, but agrees to get a weapon.");
-
-            r.task = TASK_BUYWEAPON;
-            r.timeleft = 1;
-
-            refresh();
-            getch();
-
-            return 0;
-         }
-      }
-      if(c=='c' && r.level>=2 && r.recruit->weapon.type==WEAPON_NONE)
-      {
-         move(y,0);
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         addstr(r.recruit->name);
-         addstr(" agrees to get a weapon.");
-
-         r.task = TASK_BUYWEAPON;
-         r.timeleft = 1;
-
          refresh();
          getch();
-
-         return 0;
-      }
-      if(c=='f' || c=='c')
-      {
-         move(y,0);
-         addstr(pool[p]->name);
-         addstr(" sends ");
-         addstr(r.recruit->name);
-         addstr(" home.");
-
-         refresh();
-         getch();
-
-         delete r.recruit;
          return 1;
       }
    }while(1);

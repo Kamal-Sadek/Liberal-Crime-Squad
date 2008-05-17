@@ -49,12 +49,17 @@ void noticecheck(int exclude)
          noticer.push_back(e);
       }
    }
+   int topi=-1;
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
          activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
+      {
          sneak=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
+         topi=i;
+      }
    }
+   if(topi>=0)activesquad->squad[topi]->skill_ip[SKILL_SLEIGHTOFHAND]+=10;
 
    if(noticer.size()>0)
    {
@@ -173,11 +178,13 @@ char alienationcheck(char mistake)
 void disguisecheck(void)
 {
    int weapon=0;
+   bool forcecheck=false;
    int weaponar[6]={0};
 
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
+      if(activesquad->squad[i]->armor.type==ARMOR_NONE)forcecheck=true;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
       if(thisweapon>weapon)weapon=thisweapon;
       if(thisweapon==2)weaponar[i]=1;
@@ -190,7 +197,6 @@ void disguisecheck(void)
          if(activesquad->squad[i]==NULL)break;
          if(weaponar[i])criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
       }
-      return;
    }
 
    if(sitealarmtimer==-1 && weapon<2)
@@ -217,7 +223,7 @@ void disguisecheck(void)
       int stealth  = stealthskill();
       bool sneaking=false;
 
-      if(stealth>disguise || weapon==2)
+      if(stealth>disguise || weapon==2 || sitealarm)
       {
          disguise=stealth;
          sneaking=true;
@@ -321,7 +327,7 @@ int disguiseskill(void)
 
          if(!uniformed)
          {
-            skill>>=2;
+            skill=0;
             //NAKEDNESS MAJOR PENALTY
             if(activesquad->squad[p]->armor.type==ARMOR_NONE)skill=-100;
          }
@@ -369,17 +375,17 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
                          activesquad->squad[p]->skill[SKILL_DISGUISE]*3+
                          activesquad->squad[p]->skill_ip[SKILL_DISGUISE]/(100+10*activesquad->squad[p]->skill[SKILL_DISGUISE])*3);
 
-        if(hasdisguise(*activesquad->squad[p],sitetype))
-        {
-        	if (spread>10)
-        	{
-        		activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=10;  //getting crushed isn't a great way to learn
-        	}
-        	else if(spread>0)
-        	{
-           		activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=spread;
-       		}
-        }
+      if(hasdisguise(*activesquad->squad[p],sitetype))
+      {
+         if(spread>10)
+         {
+	         activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=10;  //getting crushed isn't a great way to learn
+         }
+         else if(spread>0)
+         {
+  		      activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=spread;
+	      }
+      }
 	}
 }
 
@@ -398,7 +404,7 @@ int stealthskill(void)
 
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
-         int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3;
+         int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3+1;
 
          //activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=5;
 

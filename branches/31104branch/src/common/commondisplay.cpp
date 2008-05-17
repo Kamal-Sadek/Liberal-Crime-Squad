@@ -460,7 +460,7 @@ void printlocation(long loc)
 
 
 /* character info at top of screen */
-void printcreatureinfo(creaturest *cr)
+void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 {
    char num[20],str[200];
 
@@ -490,26 +490,54 @@ void printcreatureinfo(creaturest *cr)
    }
 
    move(2,0);addstr("Hrt:    ");
-   itoa(cr->attval(ATTRIBUTE_HEART),num,10);
-   addstr(num);
+   if(knowledge>0)
+   {
+      itoa(cr->attval(ATTRIBUTE_HEART),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(3,0);addstr("Int:    ");
-   itoa(cr->attval(ATTRIBUTE_INTELLIGENCE),num,10);
-   addstr(num);
+   if(knowledge>0)
+   {
+      itoa(cr->attval(ATTRIBUTE_INTELLIGENCE),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(4,0);addstr("Wis:    ");
-   itoa(cr->attval(ATTRIBUTE_WISDOM),num,10);
-   addstr(num);
+   if(knowledge>0)
+   {
+      itoa(cr->attval(ATTRIBUTE_WISDOM),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(5,0);addstr("Hlth:   ");
-   itoa(cr->attval(ATTRIBUTE_HEALTH),num,10);
-   addstr(num);
+   if(knowledge>1)
+   {
+      itoa(cr->attval(ATTRIBUTE_HEALTH),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(2,11);addstr("Agi:    ");
-   itoa(cr->attval(ATTRIBUTE_AGILITY),num,10);
-   addstr(num);
+   if(knowledge>1)
+   {
+      itoa(cr->attval(ATTRIBUTE_AGILITY),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(3,11);addstr("Str:    ");
-   itoa(cr->attval(ATTRIBUTE_STRENGTH),num,10);
-   addstr(num);
+   if(knowledge>1)
+   {
+      itoa(cr->attval(ATTRIBUTE_STRENGTH),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(4,11);addstr("Char:   ");
-   itoa(cr->attval(ATTRIBUTE_CHARISMA),num,10);
-   addstr(num);
+   if(knowledge>0)
+   {
+      itoa(cr->attval(ATTRIBUTE_CHARISMA),num,10);
+      addstr(num);
+   }
+   else addstr("?");
    move(5,11);
    addstr("Trans: ");
    long v=-1;
@@ -606,9 +634,15 @@ void printcreatureinfo(creaturest *cr)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(3+5-snum,31);
-         getskill(str,maxs);
+         if(knowledge>5-snum)
+            getskill(str,maxs);
+         else
+            strcpy(str,"???????");
          strcat(str,": ");
-         itoa(cr->skill[maxs],num,10);
+         if(knowledge>7-snum)
+            itoa(cr->skill[maxs],num,10);
+         else
+            strcpy(num,"?");
          strcat(str,num);
          addstr(str);
 

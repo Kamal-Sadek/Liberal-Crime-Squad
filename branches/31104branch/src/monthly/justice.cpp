@@ -103,7 +103,7 @@ void trial(creaturest &g)
       }
    }
 
-   if(LCSrandom(10)<sjudge.size())
+   if(LCSrandom(4)<sjudge.size())
    {
       sleeperjudge=1;
       sleeperjname=pool[sjudge[LCSrandom(sjudge.size())]]->name;

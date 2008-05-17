@@ -1496,7 +1496,7 @@ void printparty(void);
 /* location info at top of screen */
 void printlocation(long loc);
 /* character info at top of screen */
-void printcreatureinfo(creaturest *cr);
+void printcreatureinfo(creaturest *cr,unsigned char knowledge=255);
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p);
 /* full screen character sheet */
