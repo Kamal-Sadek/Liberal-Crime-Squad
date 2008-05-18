@@ -352,6 +352,8 @@ int main(int argc, char* argv[])
 
    testdriver();
 
+   initOrgs();
+
    mode_title();
 
    //deinitialize curses
@@ -361,6 +363,10 @@ int main(int argc, char* argv[])
 }
 
 
+void initOrgs()
+{
+
+}
 
 //picks a random number from 0 to max-1
 long LCSrandom(unsigned long max)
