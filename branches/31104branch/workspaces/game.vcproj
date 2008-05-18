@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/wd4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src\politics;..\src\organization;..\src"
+				AdditionalIncludeDirectories="..\src\politics;..\src\organization;..\src;..\src\pdcurses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -74,6 +74,7 @@
 				OutputFile="Debug/crimesquad.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\src\pdcurses"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/crimesquad.pdb"
 				SubSystem="1"
@@ -487,15 +488,8 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\curses.h"
+				RelativePath="..\src\pdcurses\curses.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\cursesgraphics.h"
@@ -629,11 +623,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\game.rc"
+			>
+		</File>
+		<File
 			RelativePath="..\src\lcsio.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\pdcurses.lib"
+			RelativePath="..\src\pdcurses\pdcurses.lib"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
 			>
 		</File>
 	</Files>

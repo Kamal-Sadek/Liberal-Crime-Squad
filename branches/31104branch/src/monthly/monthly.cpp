@@ -342,7 +342,7 @@ void passmonth(char &clearformess,char canseethings)
 
             for(int i=0;i<LAWFLAGNUM;i++)
             {
-               heat=+(pool[p]->heat)/4.0f;
+               heat+=(pool[p]->heat)/4.0f;
             }
 
             copstrength=static_cast<int>(copstrength*heat);

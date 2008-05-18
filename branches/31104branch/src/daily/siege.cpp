@@ -376,6 +376,7 @@ void siegecheck(char canseethings)
       else if(location[l]->siege.timeuntilcorps>0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
       else if(location[l]->siege.timeuntilcorps==0&&!location[l]->siege.siege&&offended_corps&&numpres>0)
       {
+         location[l]->siege.timeuntilcorps=-1;
          // Corps raid!
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -427,6 +428,7 @@ void siegecheck(char canseethings)
       else if(location[l]->siege.timeuntilcia>0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
       else if(location[l]->siege.timeuntilcia==0&&!location[l]->siege.siege&&offended_cia&&numpres>0)
       {
+         location[l]->siege.timeuntilcia=-1;
          // CIA raids!
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
