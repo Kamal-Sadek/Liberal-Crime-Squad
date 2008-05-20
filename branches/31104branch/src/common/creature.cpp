@@ -99,7 +99,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(4)+3;cr.skill[SKILL_SCIENCE]=sk;randomskills-=sk;
          break;
       case CREATURE_JUDGE_CONSERVATIVE:
-         strcpy(cr.name,"Hangin' Judge");
+         cr.name="Hangin' Judge";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_REVOLVER_44;
@@ -119,7 +119,7 @@ void makecreature(creaturest &cr,short type)
          attcap[ATTRIBUTE_HEART]=1;
          break;
       case CREATURE_JUDGE_LIBERAL:
-         strcpy(cr.name,"Liberal Judge");
+         cr.name="Liberal Judge";
          if(!LCSrandom(2))cr.weapon.type=WEAPON_GAVEL;
          cr.armor.type=ARMOR_BLACKROBE;
          cr.money=LCSrandom(41)+20;
@@ -211,7 +211,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Nonunion Worker");
+         cr.name="Nonunion Worker";
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
          if(cr.align==1)
@@ -237,7 +237,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Landlord");
+         cr.name="Landlord";
          cr.money=LCSrandom(121)+120;
          cr.align=0;
          sk=LCSrandom(4)+3;cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
@@ -253,7 +253,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=0;
          }
-         strcpy(cr.name,"Lawyer");
+         cr.name="Lawyer";
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(51)+50;
          //cr.align=LCSrandom(3)-1;
@@ -268,7 +268,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=0;
          }
-         strcpy(cr.name,"Doctor");
+         cr.name="Doctor";
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(21)+20;
          //cr.align=LCSrandom(3)-1;
@@ -282,7 +282,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=0;
          }
-         strcpy(cr.name,"Nurse");
+         cr.name="Nurse";
          cr.armor.type=ARMOR_LABCOAT;
          //cr.align=LCSrandom(3)-1;
 
@@ -295,7 +295,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Union Worker");
+         cr.name="Union Worker";
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.align=1;
@@ -304,14 +304,14 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_STRENGTH]=5;
          break;
       case CREATURE_TANK:
-         strcpy(cr.name,"Tank");
+         cr.name="Tank";
          cr.animalgloss=ANIMALGLOSS_TANK;
          cr.armor.type=ARMOR_NONE;
          cr.specialattack=ATTACK_CANNON;
          cr.align=-1;
          break;
       case CREATURE_MERC:
-         strcpy(cr.name,"Mercenary");
+         cr.name="Mercenary";
          if(law[LAW_GUNCONTROL]==-2)
          {
             cr.weapon.type=WEAPON_AUTORIFLE_M16;
@@ -343,11 +343,11 @@ void makecreature(creaturest &cr,short type)
       case CREATURE_HICK:
          switch(LCSrandom(5))
          {
-            case 0:strcpy(cr.name,"Country Boy");break;
-            case 1:strcpy(cr.name,"Hick");break;
-            case 2:strcpy(cr.name,"Redneck");break;
-            case 3:strcpy(cr.name,"Rube");break;
-            case 4:strcpy(cr.name,"Yokel");break;
+            case 0:cr.name="Country Boy";break;
+            case 1:cr.name="Hick";break;
+            case 2:cr.name="Redneck";break;
+            case 3:cr.name="Rube";break;
+            case 4:cr.name="Yokel";break;
          }
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(2))
          {
@@ -365,7 +365,7 @@ void makecreature(creaturest &cr,short type)
          cr.align=-1;
          break;
       case CREATURE_SOLDIER:
-         strcpy(cr.name,"Soldier");
+         cr.name="Soldier";
          cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
@@ -613,7 +613,7 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_PRISONGUARD:
-         strcpy(cr.name,"Prison Guard");
+         cr.name="Prison Guard";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_SMG_MP5;
@@ -643,7 +643,7 @@ void makecreature(creaturest &cr,short type)
 			cr.att[ATTRIBUTE_HEALTH]=3;
          break;
       case CREATURE_EDUCATOR:
-         strcpy(cr.name,"Educator");
+         cr.name="Educator";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_SMG_MP5;
@@ -675,7 +675,7 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_AGENT:
-         strcpy(cr.name,"Agent");
+         cr.name="Agent";
          switch(LCSrandom(10))
          {
             case 0:
@@ -746,7 +746,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Radio Personality");
+         cr.name="Radio Personality";
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(51)+50;
          cr.align=-1;
@@ -763,7 +763,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"News Anchor");
+         cr.name="News Anchor";
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(51)+50;
 
@@ -775,39 +775,39 @@ void makecreature(creaturest &cr,short type)
       case CREATURE_GENETIC:
          switch(LCSrandom(10))
          {
-            case 0:strcpy(cr.name,"Genetic Monster");break;
+            case 0:cr.name="Genetic Monster";break;
             case 1:
             {
-               strcpy(cr.name,"Flaming Rabbit");
+               cr.name="Flaming Rabbit";
                cr.specialattack=ATTACK_FLAME;
                break;
             }
-            case 2:strcpy(cr.name,"Genetic Nightmare");break;
-            case 3:strcpy(cr.name,"Mad Cow");break;
+            case 2:cr.name="Genetic Nightmare";break;
+            case 3:cr.name="Mad Cow";break;
             case 4:
             {
-               strcpy(cr.name,"Giant Mosquito");
+               cr.name="Giant Mosquito";
                cr.specialattack=ATTACK_SUCK;
                break;
             }
-            case 5:strcpy(cr.name,"Six-legged Pig");break;
-            case 6:strcpy(cr.name,"Purple Gorilla");break;
-            case 7:strcpy(cr.name,"Warped Bear");break;
-            case 8:strcpy(cr.name,"Writhing Mass");break;
-            case 9:strcpy(cr.name,"Something Bad");break;
+            case 5:cr.name="Six-legged Pig";break;
+            case 6:cr.name="Purple Gorilla";break;
+            case 7:cr.name="Warped Bear";break;
+            case 8:cr.name="Writhing Mass";break;
+            case 9:cr.name="Something Bad";break;
          }
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
          cr.align=-1;
          break;
       case CREATURE_GUARDDOG:
-         strcpy(cr.name,"Guard Dog");
+         cr.name="Guard Dog";
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
          cr.align=-1;
          break;
       case CREATURE_PRISONER:
-         strcpy(cr.name,"Prisoner");
+         cr.name="Prisoner";
          if(!LCSrandom(2))cr.weapon.type=WEAPON_SHANK;
          cr.armor.type=ARMOR_PRISONER;
          cr.money=0;
@@ -818,7 +818,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(5)+1;cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
          break;
       case CREATURE_JUROR:
-         strcpy(cr.name,"Angry Juror");
+         cr.name="Angry Juror";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
             cr.weapon.type=WEAPON_REVOLVER_22;
@@ -831,7 +831,7 @@ void makecreature(creaturest &cr,short type)
          cr.align=-1;
          break;
       case CREATURE_WORKER_FACTORY_CHILD:
-         strcpy(cr.name,"Child Worker");
+         cr.name="Child Worker";
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=0;
@@ -847,7 +847,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Sewer Worker");
+         cr.name="Sewer Worker";
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -859,7 +859,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"College Student");
+         cr.name="College Student";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -877,7 +877,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Musician");
+         cr.name="Musician";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(11);
          sk=LCSrandom(4)+2;cr.skill[SKILL_MUSIC]=sk;randomskills-=sk;
@@ -891,7 +891,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Mathematician");
+         cr.name="Mathematician";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -908,7 +908,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Teacher");
+         cr.name="Teacher";
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(4)+3;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
@@ -921,13 +921,13 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Highschool Dropout");
+         cr.name="Highschool Dropout";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          break;
       case CREATURE_BUM:
-         strcpy(cr.name,"Transient");
+         cr.name="Transient";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
             cr.weapon.type=WEAPON_REVOLVER_22;
@@ -941,7 +941,7 @@ void makecreature(creaturest &cr,short type)
             cr.align=LCSrandom(2);
          break;
       case CREATURE_MUTANT:
-         strcpy(cr.name,"Mutant");
+         cr.name="Mutant";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
             cr.weapon.type=WEAPON_REVOLVER_22;
@@ -961,7 +961,7 @@ void makecreature(creaturest &cr,short type)
          redistatts=LCSrandom(55);
          break;
       case CREATURE_GANGMEMBER:
-         strcpy(cr.name,"Gang Member");
+         cr.name="Gang Member";
 
          if(!LCSrandom(20) || (law[LAW_GUNCONTROL]==-2 && !LCSrandom(5)))
          {
@@ -1012,7 +1012,7 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(3)+1;cr.skill[SKILL_GANGSTERISM]=sk;randomskills-=sk;
          break;
       case CREATURE_CRACKHEAD:
-         strcpy(cr.name,"Crack Head");
+         cr.name="Crack Head";
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
             cr.weapon.type=WEAPON_REVOLVER_22;
@@ -1031,7 +1031,7 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_HEALTH]>>=1;cr.att[ATTRIBUTE_HEALTH]++;
          break;
       case CREATURE_PRIEST:
-         strcpy(cr.name,"Priest");
+         cr.name="Priest";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1044,7 +1044,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Engineer");
+         cr.name="Engineer";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1059,7 +1059,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Fast Food Worker");
+         cr.name="Fast Food Worker";
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(3);cr.skill[SKILL_COOKING]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
@@ -1072,7 +1072,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Telemarketer");
+         cr.name="Telemarketer";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1086,7 +1086,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Office Worker");
+         cr.name="Office Worker";
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(3);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
@@ -1099,7 +1099,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Football Coach");
+         cr.name="Football Coach";
          cr.armor.type=ARMOR_CLOTHES;
          sk=LCSrandom(3)+1;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_LEADERSHIP]=sk;randomskills-=sk;
@@ -1122,7 +1122,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Prostitute");
+         cr.name="Prostitute";
          if(LCSrandom(2))cr.armor.type=ARMOR_CHEAPDRESS;
          else cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1139,7 +1139,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Mail Carrier");
+         cr.name="Mail Carrier";
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1151,7 +1151,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Garbage Collector");
+         cr.name="Garbage Collector";
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1164,7 +1164,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Plumber");
+         cr.name="Plumber";
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1176,7 +1176,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Chef");
+         cr.name="Chef";
          sk=LCSrandom(5)+3;cr.skill[SKILL_COOKING]=sk;randomskills-=sk;
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1189,7 +1189,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Construction Worker");
+         cr.name="Construction Worker";
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1206,14 +1206,14 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Amateur Magician");
+         cr.name="Amateur Magician";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          sk=LCSrandom(3)+2;cr.skill[SKILL_SLEIGHTOFHAND]=sk;randomskills-=sk;
          break;
       case CREATURE_HIPPIE:
-         strcpy(cr.name,"Hippie");
+         cr.name="Hippie";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          cr.align=1;
@@ -1290,7 +1290,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Socialite");
+         cr.name="Socialite";
          if(LCSrandom(2))cr.armor.type=ARMOR_EXPENSIVEDRESS;
          else cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(131)+100;
@@ -1307,7 +1307,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Biker");
+         cr.name="Biker";
          cr.armor.type=ARMOR_TRENCHCOAT;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1320,7 +1320,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Truck Driver");
+         cr.name="Truck Driver";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1333,7 +1333,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Taxi Driver");
+         cr.name="Taxi Driver";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1346,7 +1346,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         strcpy(cr.name,"Programmer");
+         cr.name="Programmer";
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1531,295 +1531,295 @@ void makecreature(creaturest &cr,short type)
 void namecreature(creaturest &cr)
 {
    name(cr.name);
-   strcpy(cr.propername,cr.name);
+   cr.propername=cr.name;
 }
 
 
 
 /* fills a string with a proper name */
-void name(char *str)
+void name(string& str)
 {
-   strcpy(str,"");
+   str="";
 
-   char first[80];
+   string first;
    firstname(first);
-   strcat(str,first);
+   str+=first;
 
-   strcat(str," ");
+   str+=" ";
 
-   char last[80];
+   string last;
    lastname(last);
-   strcat(str,last);
+   str+=last;
 }
 
 
 
 /* gets a random first name */
-void firstname(char *str)
+void firstname(string& str)
 {
-   strcpy(str,"");
+   str="";
 
    switch(LCSrandom(122))
    {
-      case 0:strcat(str,"Ryan");break;
-      case 1:strcat(str,"Sergio");break;
-      case 2:strcat(str,"Laura");break;
-      case 3:strcat(str,"Anne");break;
-      case 4:strcat(str,"Bill");break;
-      case 5:strcat(str,"James");break;
-      case 6:strcat(str,"Marty");break;
-      case 7:strcat(str,"Jessica");break;
-      case 8:strcat(str,"Lisa");break;
-      case 9:strcat(str,"Bonita");break;
-      case 10:strcat(str,"Angel");break;
-      case 11:strcat(str,"Pat");break;
-      case 12:strcat(str,"Toshiro");break;
-      case 13:strcat(str,"Yan-ping");break;
-      case 14:strcat(str,"Tetsuo");break;
-      case 15:strcat(str,"Akira");break;
-      case 16:strcat(str,"Jimmy");break;
-      case 17:strcat(str,"Carlos");break;
-      case 18:strcat(str,"William");break;
-      case 19:strcat(str,"Billy Bob");break;
-      case 20:strcat(str,"Carol");break;
-      case 21:strcat(str,"Jenny");break;
-      case 22:strcat(str,"Jennifer");break;
-      case 23:strcat(str,"Manuela");break;
-      case 24:strcat(str,"Douglas");break;
-      case 25:strcat(str,"Kristin");break;
-      case 26:strcat(str,"Steven");break;
-      case 27:strcat(str,"Bonnie");break;
-      case 28:strcat(str,"Howard");break;
-      case 29:strcat(str,"Donald");break;
-      case 30:strcat(str,"Barry");break;
-      case 31:strcat(str,"Thomas");break;
-      case 32:strcat(str,"Joann");break;
-      case 33:strcat(str,"Derek");break;
-      case 34:strcat(str,"Gary");break;
-      case 35:strcat(str,"Archie");break;
-      case 36:strcat(str,"Mayumi");break;
-      case 37:strcat(str,"Felicia");break;
-      case 38:strcat(str,"Sherry");break;
-      case 39:strcat(str,"Judy");break;
-      case 40:strcat(str,"Elinor");break;
-      case 41:strcat(str,"Ned");break;
-      case 42:strcat(str,"Randy");break;
-      case 43:strcat(str,"Taylor");break;
-      case 44:strcat(str,"Kim");break;
-      case 45:strcat(str,"Ruthanne");break;
-      case 46:strcat(str,"Roger");break;
-      case 47:strcat(str,"Raymond");break;
-      case 48:strcat(str,"Harvey");break;
-      case 49:strcat(str,"Robert");break;
-      case 50:strcat(str,"Michael");break;
-      case 51:strcat(str,"Aaron");break;
-      case 52:strcat(str,"George");break;
-      case 53:strcat(str,"Noel");break;
-      case 54:strcat(str,"Adrienne");break;
-      case 55:strcat(str,"Lex");break;
-      case 56:strcat(str,"Linda");break;
-      case 57:strcat(str,"Chuck");break;
-      case 58:strcat(str,"Charlie");break;
-      case 59:strcat(str,"Charles");break;
-      case 60:strcat(str,"Malcolm");break;
-      case 61:strcat(str,"Martin");break;
-      case 62:strcat(str,"Sean");break;
-      case 63:strcat(str,"Raven");break;
-      case 64:strcat(str,"Wolf");break;
-      case 65:strcat(str,"Miguel");break;
-      case 66:strcat(str,"Pablo");break;
-      case 67:strcat(str,"Paul");break;
-      case 68:strcat(str,"Jesus");break;
-      case 69:strcat(str,"Ali");break;
-      case 70:strcat(str,"Ingrid");break;
-      case 71:strcat(str,"Kweisi");break;
-      case 72:strcat(str,"Susanna");break;
-      case 73:strcat(str,"Sharon");break;
-      case 74:strcat(str,"Marion");break;
-      case 75:strcat(str,"Kathy");break;
-      case 76:strcat(str,"Bruce");break;
-      case 77:strcat(str,"Dick");break;
-      case 78:strcat(str,"Phillip");break;
-      case 79:strcat(str,"Kirk");break;
-      case 80:strcat(str,"Kurt");break;
-      case 81:strcat(str,"John");break;
-      case 82:strcat(str,"Alexander");break;
-      case 83:strcat(str,"David");break;
-      case 84:strcat(str,"Beau");break;
-      case 85:strcat(str,"Elsie");break;
-      case 86:strcat(str,"Satya");break;
-      case 87:strcat(str,"Mumtaz");break;
-      case 88:strcat(str,"Diwakar");break;
-      case 89:strcat(str,"Dale");break;
-      case 90:strcat(str,"Woody");break;
-      case 91:strcat(str,"Ariel");break;
-      case 92:strcat(str,"Hans");break;
-      case 93:strcat(str,"Barbara");break;
-      case 94:strcat(str,"Jun");break;
-      case 95:strcat(str,"Rosemary");break;
-      case 96:strcat(str,"Chin-Yuan");break;
-      case 97:strcat(str,"Aiko");break;
-      case 98:strcat(str,"Vithara");break;
-      case 99:strcat(str,"Deepak");break;
-		case 100:strcat(str,"Christopher");break;
-		case 101:strcat(str,"Matthew");break;
-		case 102:strcat(str,"Joseph");break;
-		case 103:strcat(str,"James");break;
-		case 104:strcat(str,"Daniel");break;
-		case 105:strcat(str,"Robert");break;
-		case 106:strcat(str,"John");break;
-      case 107:strcat(str,"Kennedy");break;
-		case 108:strcat(str,"Jonathan");break;
-		case 109:strcat(str,"Adam");break;
-		case 110:strcat(str,"Justin");break;
-		case 111:strcat(str,"Ashley");break;
-		case 112:strcat(str,"Alene");break;
-		case 113:strcat(str,"Janette");break;
-		case 114:strcat(str,"Stephanie");break;
-		case 115:strcat(str,"Kelly");break;
-		case 116:strcat(str,"Robin");break;
-		case 117:strcat(str,"Tiffany");break;
-		case 118:strcat(str,"Monica");break;
-		case 119:strcat(str,"Jaqueline");break;
-		case 120:strcat(str,"Latoya");break;
-		case 121:strcat(str,"Veronica");break;
-      default:strcat(str,"Default");break;
+      case 0:str+="Ryan";break;
+      case 1:str+="Sergio";break;
+      case 2:str+="Laura";break;
+      case 3:str+="Anne";break;
+      case 4:str+="Bill";break;
+      case 5:str+="James";break;
+      case 6:str+="Marty";break;
+      case 7:str+="Jessica";break;
+      case 8:str+="Lisa";break;
+      case 9:str+="Bonita";break;
+      case 10:str+="Angel";break;
+      case 11:str+="Pat";break;
+      case 12:str+="Toshiro";break;
+      case 13:str+="Yan-ping";break;
+      case 14:str+="Tetsuo";break;
+      case 15:str+="Akira";break;
+      case 16:str+="Jimmy";break;
+      case 17:str+="Carlos";break;
+      case 18:str+="William";break;
+      case 19:str+="Billy Bob";break;
+      case 20:str+="Carol";break;
+      case 21:str+="Jenny";break;
+      case 22:str+="Jennifer";break;
+      case 23:str+="Manuela";break;
+      case 24:str+="Douglas";break;
+      case 25:str+="Kristin";break;
+      case 26:str+="Steven";break;
+      case 27:str+="Bonnie";break;
+      case 28:str+="Howard";break;
+      case 29:str+="Donald";break;
+      case 30:str+="Barry";break;
+      case 31:str+="Thomas";break;
+      case 32:str+="Joann";break;
+      case 33:str+="Derek";break;
+      case 34:str+="Gary";break;
+      case 35:str+="Archie";break;
+      case 36:str+="Mayumi";break;
+      case 37:str+="Felicia";break;
+      case 38:str+="Sherry";break;
+      case 39:str+="Judy";break;
+      case 40:str+="Elinor";break;
+      case 41:str+="Ned";break;
+      case 42:str+="Randy";break;
+      case 43:str+="Taylor";break;
+      case 44:str+="Kim";break;
+      case 45:str+="Ruthanne";break;
+      case 46:str+="Roger";break;
+      case 47:str+="Raymond";break;
+      case 48:str+="Harvey";break;
+      case 49:str+="Robert";break;
+      case 50:str+="Michael";break;
+      case 51:str+="Aaron";break;
+      case 52:str+="George";break;
+      case 53:str+="Noel";break;
+      case 54:str+="Adrienne";break;
+      case 55:str+="Lex";break;
+      case 56:str+="Linda";break;
+      case 57:str+="Chuck";break;
+      case 58:str+="Charlie";break;
+      case 59:str+="Charles";break;
+      case 60:str+="Malcolm";break;
+      case 61:str+="Martin";break;
+      case 62:str+="Sean";break;
+      case 63:str+="Raven";break;
+      case 64:str+="Wolf";break;
+      case 65:str+="Miguel";break;
+      case 66:str+="Pablo";break;
+      case 67:str+="Paul";break;
+      case 68:str+="Jesus";break;
+      case 69:str+="Ali";break;
+      case 70:str+="Ingrid";break;
+      case 71:str+="Kweisi";break;
+      case 72:str+="Susanna";break;
+      case 73:str+="Sharon";break;
+      case 74:str+="Marion";break;
+      case 75:str+="Kathy";break;
+      case 76:str+="Bruce";break;
+      case 77:str+="Dick";break;
+      case 78:str+="Phillip";break;
+      case 79:str+="Kirk";break;
+      case 80:str+="Kurt";break;
+      case 81:str+="John";break;
+      case 82:str+="Alexander";break;
+      case 83:str+="David";break;
+      case 84:str+="Beau";break;
+      case 85:str+="Elsie";break;
+      case 86:str+="Satya";break;
+      case 87:str+="Mumtaz";break;
+      case 88:str+="Diwakar";break;
+      case 89:str+="Dale";break;
+      case 90:str+="Woody";break;
+      case 91:str+="Ariel";break;
+      case 92:str+="Hans";break;
+      case 93:str+="Barbara";break;
+      case 94:str+="Jun";break;
+      case 95:str+="Rosemary";break;
+      case 96:str+="Chin-Yuan";break;
+      case 97:str+="Aiko";break;
+      case 98:str+="Vithara";break;
+      case 99:str+="Deepak";break;
+		case 100:str+="Christopher";break;
+		case 101:str+="Matthew";break;
+		case 102:str+="Joseph";break;
+		case 103:str+="James";break;
+		case 104:str+="Daniel";break;
+		case 105:str+="Robert";break;
+		case 106:str+="John";break;
+      case 107:str+="Kennedy";break;
+		case 108:str+="Jonathan";break;
+		case 109:str+="Adam";break;
+		case 110:str+="Justin";break;
+		case 111:str+="Ashley";break;
+		case 112:str+="Alene";break;
+		case 113:str+="Janette";break;
+		case 114:str+="Stephanie";break;
+		case 115:str+="Kelly";break;
+		case 116:str+="Robin";break;
+		case 117:str+="Tiffany";break;
+		case 118:str+="Monica";break;
+		case 119:str+="Jaqueline";break;
+		case 120:str+="Latoya";break;
+		case 121:str+="Veronica";break;
+      default:str+="Default";break;
    }
 }
 
 
 
 /* gets a random last name */
-void lastname(char *str)
+void lastname(string& str)
 {
-   strcpy(str,"");
+   str="";
 
    switch(LCSrandom(123))
    {
-      case 0:strcat(str,"King");break;
-      case 1:strcat(str,"Lewis");break;
-      case 2:strcat(str,"Black");break;
-      case 3:strcat(str,"White");break;
-      case 4:strcat(str,"Ames");break;
-      case 5:strcat(str,"Warner");break;
-      case 6:strcat(str,"Simpson");break;
-      case 7:strcat(str,"Parker");break;
-      case 8:strcat(str,"Suave");break;
-      case 9:strcat(str,"Mifune");break;
-      case 10:strcat(str,"Gu");break;
-      case 11:strcat(str,"Bolger");break;
-      case 12:strcat(str,"Ross");break;
-      case 13:strcat(str,"Ramirez");break;
-      case 14:strcat(str,"Kurosawa");break;
-      case 15:strcat(str,"Johnson");break;
-      case 16:strcat(str,"Buchanan");break;
-      case 17:strcat(str,"Adamson");break;
-      case 18:strcat(str,"Hendrix");break;
-      case 19:strcat(str,"Rojo");break;
-      case 20:strcat(str,"Villa");break;
-      case 21:strcat(str,"Fields");break;
-      case 22:strcat(str,"Templeton");break;
-      case 23:strcat(str,"Ivanson");break;
-      case 24:strcat(str,"Blitzer");break;
-      case 25:strcat(str,"Muhammed");break;
-      case 26:strcat(str,"Stone");break;
-      case 27:strcat(str,"Cho");break;
-      case 28:strcat(str,"Childress");break;
-      case 29:strcat(str,"Africa");break;
-      case 30:strcat(str,"Balgos");break;
-      case 31:strcat(str,"Baird");break;
-      case 32:strcat(str,"Bailey");break;
-      case 33:strcat(str,"Diaz");break;
-      case 34:strcat(str,"Decker");break;
-      case 35:strcat(str,"Ericson");break;
-      case 36:strcat(str,"Loeb");break;
-      case 37:strcat(str,"Meffert");break;
-      case 38:strcat(str,"McLeod");break;
-      case 39:strcat(str,"Tucker");break;
-      case 40:strcat(str,"Takayoshi");break;
-      case 41:strcat(str,"Tanner");break;
-      case 42:strcat(str,"Lipman");break;
-      case 43:strcat(str,"Little");break;
-      case 44:strcat(str,"Logsdon");break;
-      case 45:strcat(str,"Krasow");break;
-      case 46:strcat(str,"Krieger");break;
-      case 47:strcat(str,"Dahmer");break;
-      case 48:strcat(str,"Gacy");break;
-      case 49:strcat(str,"Krishna");break;
-      case 50:strcat(str,"la Russa");break;
-      case 51:strcat(str,"Savedra");break;
-      case 52:strcat(str,"Scardino");break;
-      case 53:strcat(str,"Keitel");break;
-      case 54:strcat(str,"Wallace");break;
-      case 55:strcat(str,"Buckman");break;
-      case 56:strcat(str,"Fulsom");break;
-      case 57:strcat(str,"Smith");break;
-      case 58:strcat(str,"Venus");break;
-      case 59:strcat(str,"Straley");break;
-      case 60:strcat(str,"Purcell");break;
-      case 61:strcat(str,"al Fadil");break;
-      case 62:strcat(str,"Storm");break;
-      case 63:strcat(str,"Patterson");break;
-      case 64:strcat(str,"Pelton");break;
-      case 65:strcat(str,"Ng");break;
-      case 66:strcat(str,"Filler");break;
-      case 67:strcat(str,"Buttman");break;
-      case 68:strcat(str,"Fingleton");break;
-      case 69:strcat(str,"Fenoglio");break;
-      case 70:strcat(str,"de la Cruz");break;
-      case 71:strcat(str,"Delgado");break;
-      case 72:strcat(str,"Hatcher");break;
-      case 73:strcat(str,"Jameson");break;
-      case 74:strcat(str,"Franklin");break;
-      case 75:strcat(str,"Washington");break;
-      case 76:strcat(str,"Jefferson");break;
-      case 77:strcat(str,"Strossen");break;
-      case 78:strcat(str,"Hannemann");break;
-      case 79:strcat(str,"Hammond");break;
-      case 80:strcat(str,"Logan");break;
-      case 81:strcat(str,"Hutchison");break;
-      case 82:strcat(str,"Jimison");break;
-      case 83:strcat(str,"Sawyer");break;
-      case 84:strcat(str,"Santiago");break;
-      case 85:strcat(str,"Rudkin");break;
-      case 86:strcat(str,"Bump");break;
-      case 87:strcat(str,"Simon");break;
-      case 88:strcat(str,"Davis");break;
-      case 89:strcat(str,"Reagan");break;
-      case 90:strcat(str,"Bush");break;
-      case 91:strcat(str,"Bradshaw");break;
-      case 92:strcat(str,"Yamaguchi");break;
-      case 93:strcat(str,"Roy");break;
-      case 94:strcat(str,"Colt");break;
-      case 95:strcat(str,"Rothstein");break;
-      case 96:strcat(str,"Spears");break;
-      case 97:strcat(str,"Lopez");break;
-      case 98:strcat(str,"Aguilera");break;
-      case 99:strcat(str,"Carey");break;
-		case 100:strcat(str,"Griffith");break;
-		case 101:strcat(str,"Valdez");break;
-		case 102:strcat(str,"McGee");break;
-		case 103:strcat(str,"Copeland");break;
-		case 104:strcat(str,"Blackenship");break;
-		case 105:strcat(str,"Faulkner");break;
-		case 106:strcat(str,"Melendez");break;
-		case 107:strcat(str,"Dunlap");break;
-		case 108:strcat(str,"Guy");break;
-		case 109:strcat(str,"Duke");break;
-		case 110:strcat(str,"Villanueva");break;
-		case 111:strcat(str,"Boggs");break;
-		case 112:strcat(str,"Godwin");break;
-		case 113:strcat(str,"Brewster");break;
-		case 114:strcat(str,"Irvin");break;
-		case 115:strcat(str,"Galindo");break;
-		case 116:strcat(str,"Cordero");break;
-		case 117:strcat(str,"Eubanks");break;
-		case 118:strcat(str,"Youngblood");break;
-		case 119:strcat(str,"Seay");break;
-		case 120:strcat(str,"Hope");break;
-		case 121:strcat(str,"Winslow");break;
-		case 122:strcat(str,"Fox");break;
-      default:strcat(str,"Defaultson");break;
+      case 0:str+="King";break;
+      case 1:str+="Lewis";break;
+      case 2:str+="Black";break;
+      case 3:str+="White";break;
+      case 4:str+="Ames";break;
+      case 5:str+="Warner";break;
+      case 6:str+="Simpson";break;
+      case 7:str+="Parker";break;
+      case 8:str+="Suave";break;
+      case 9:str+="Mifune";break;
+      case 10:str+="Gu";break;
+      case 11:str+="Bolger";break;
+      case 12:str+="Ross";break;
+      case 13:str+="Ramirez";break;
+      case 14:str+="Kurosawa";break;
+      case 15:str+="Johnson";break;
+      case 16:str+="Buchanan";break;
+      case 17:str+="Adamson";break;
+      case 18:str+="Hendrix";break;
+      case 19:str+="Rojo";break;
+      case 20:str+="Villa";break;
+      case 21:str+="Fields";break;
+      case 22:str+="Templeton";break;
+      case 23:str+="Ivanson";break;
+      case 24:str+="Blitzer";break;
+      case 25:str+="Muhammed";break;
+      case 26:str+="Stone";break;
+      case 27:str+="Cho";break;
+      case 28:str+="Childress";break;
+      case 29:str+="Africa";break;
+      case 30:str+="Balgos";break;
+      case 31:str+="Baird";break;
+      case 32:str+="Bailey";break;
+      case 33:str+="Diaz";break;
+      case 34:str+="Decker";break;
+      case 35:str+="Ericson";break;
+      case 36:str+="Loeb";break;
+      case 37:str+="Meffert";break;
+      case 38:str+="McLeod";break;
+      case 39:str+="Tucker";break;
+      case 40:str+="Takayoshi";break;
+      case 41:str+="Tanner";break;
+      case 42:str+="Lipman";break;
+      case 43:str+="Little";break;
+      case 44:str+="Logsdon";break;
+      case 45:str+="Krasow";break;
+      case 46:str+="Krieger";break;
+      case 47:str+="Dahmer";break;
+      case 48:str+="Gacy";break;
+      case 49:str+="Krishna";break;
+      case 50:str+="la Russa";break;
+      case 51:str+="Savedra";break;
+      case 52:str+="Scardino";break;
+      case 53:str+="Keitel";break;
+      case 54:str+="Wallace";break;
+      case 55:str+="Buckman";break;
+      case 56:str+="Fulsom";break;
+      case 57:str+="Smith";break;
+      case 58:str+="Venus";break;
+      case 59:str+="Straley";break;
+      case 60:str+="Purcell";break;
+      case 61:str+="al Fadil";break;
+      case 62:str+="Storm";break;
+      case 63:str+="Patterson";break;
+      case 64:str+="Pelton";break;
+      case 65:str+="Ng";break;
+      case 66:str+="Filler";break;
+      case 67:str+="Buttman";break;
+      case 68:str+="Fingleton";break;
+      case 69:str+="Fenoglio";break;
+      case 70:str+="de la Cruz";break;
+      case 71:str+="Delgado";break;
+      case 72:str+="Hatcher";break;
+      case 73:str+="Jameson";break;
+      case 74:str+="Franklin";break;
+      case 75:str+="Washington";break;
+      case 76:str+="Jefferson";break;
+      case 77:str+="Strossen";break;
+      case 78:str+="Hannemann";break;
+      case 79:str+="Hammond";break;
+      case 80:str+="Logan";break;
+      case 81:str+="Hutchison";break;
+      case 82:str+="Jimison";break;
+      case 83:str+="Sawyer";break;
+      case 84:str+="Santiago";break;
+      case 85:str+="Rudkin";break;
+      case 86:str+="Bump";break;
+      case 87:str+="Simon";break;
+      case 88:str+="Davis";break;
+      case 89:str+="Reagan";break;
+      case 90:str+="Bush";break;
+      case 91:str+="Bradshaw";break;
+      case 92:str+="Yamaguchi";break;
+      case 93:str+="Roy";break;
+      case 94:str+="Colt";break;
+      case 95:str+="Rothstein";break;
+      case 96:str+="Spears";break;
+      case 97:str+="Lopez";break;
+      case 98:str+="Aguilera";break;
+      case 99:str+="Carey";break;
+		case 100:str+="Griffith";break;
+		case 101:str+="Valdez";break;
+		case 102:str+="McGee";break;
+		case 103:str+="Copeland";break;
+		case 104:str+="Blackenship";break;
+		case 105:str+="Faulkner";break;
+		case 106:str+="Melendez";break;
+		case 107:str+="Dunlap";break;
+		case 108:str+="Guy";break;
+		case 109:str+="Duke";break;
+		case 110:str+="Villanueva";break;
+		case 111:str+="Boggs";break;
+		case 112:str+="Godwin";break;
+		case 113:str+="Brewster";break;
+		case 114:str+="Irvin";break;
+		case 115:str+="Galindo";break;
+		case 116:str+="Cordero";break;
+		case 117:str+="Eubanks";break;
+		case 118:str+="Youngblood";break;
+		case 119:str+="Seay";break;
+		case 120:str+="Hope";break;
+		case 121:str+="Winslow";break;
+		case 122:str+="Fox";break;
+      default:str+="Defaultson";break;
    }
 }
 
@@ -2315,10 +2315,10 @@ void conservatise(creaturest &cr)
    switch(cr.type)
    {
       case CREATURE_WORKER_FACTORY_UNION:
-         strcpy(cr.name,"Ex-union Worker");
+         cr.name="Ex-union Worker";
          break;
       case CREATURE_JUDGE_LIBERAL:
-         strcpy(cr.name,"Jaded Liberal Judge");
+         cr.name="Jaded Liberal Judge";
          break;
    }
 }
@@ -2333,7 +2333,7 @@ void liberalize(creaturest &cr)
    switch(cr.type)
    {
       case CREATURE_WORKER_FACTORY_NONUNION:
-         strcpy(cr.name,"New Union Worker");
+         cr.name="New Union Worker";
          break;
    }
 }

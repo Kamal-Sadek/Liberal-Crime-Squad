@@ -275,7 +275,7 @@ void advancecreature(creaturest &cr)
       {
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(16,1);
-         strcpy(str,cr.name);
+         strcpy(str,cr.name.c_str());
          strcat(str," bleeds.");
          addstr(str);
 

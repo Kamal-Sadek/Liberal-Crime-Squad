@@ -1867,7 +1867,7 @@ char maskselect(creaturest *cr,short &mask)
 
    short page=0;
 
-   char str[200];
+   string str;
 
    do
    {
@@ -1975,7 +1975,7 @@ unsigned long fenceselect(void)
       printparty();
 
       int x=1,y=10;
-      char str[200],str2[200];
+      string str,str2;
 
       for(int l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
       {
@@ -1988,9 +1988,9 @@ unsigned long fenceselect(void)
             {
                char num[20];
                itoa(activesquad->loot[l]->weapon.ammo,num,10);
-               strcat(str2," (");
-               strcat(str2,num);
-               strcat(str2,")");
+               str2+=" (";
+               str2+=num;
+               str2+=")";
             }
          }
          if(activesquad->loot[l]->type==ITEM_ARMOR)
@@ -2008,22 +2008,21 @@ unsigned long fenceselect(void)
          if(activesquad->loot[l]->number>1)
          {
             char num[20];
-            strcat(str2," ");
+            str2+=' ';
             if(selected[l]>0)
             {
                itoa(selected[l],num,10);
-               strcat(str2,num);
-               strcat(str2,"/");
+               str2+=num;
+               str2+="/";
             }
-            else strcat(str2,"x");
+            else str2+="x";
             itoa(activesquad->loot[l]->number,num,10);
-            strcat(str2,num);
+            str2+=num;
          }
 
          str[0]=l-page*18+'A';
          str[1]='\x0';
-         strcat(str," - ");
-         strcat(str,str2);
+         str+=" - "+str2;
 
          move(y,x);
          addstr(str);

@@ -2,6 +2,9 @@
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
 #include "orghandler.h"
+//#include "globals.h"
+
+//extern struct globals Globals;
 
 //Puzz:  Here we go...
 extern orgHandler gOrgHandler;
@@ -16,14 +19,14 @@ extern short law[LAWNUM];
 
 extern short house[435];
 extern short senate[100];
-extern short court[9];
-extern char courtname[9][80];
+extern char court[9];
+extern string courtname[9];
 
 
 
 extern short exec[EXECNUM];
 extern short execterm;
-extern char execname[EXECNUM][80];
+extern string execname[EXECNUM];
 extern short presparty;
 
 extern unsigned long stat_recruits;
@@ -87,7 +90,7 @@ extern short offended_cablenews;
 extern int police_heat;
 extern unsigned long attorneyseed;
 extern long selectedsiege;
-extern char lcityname[80];
+extern string lcityname;
 extern char newscherrybusted;
 
 extern int month;
@@ -127,7 +130,7 @@ extern vector<itemst *> groundloot;
 extern long curcreatureid;
 extern chaseseqst chaseseq;
 
-extern char slogan[80];
+extern string slogan;
 
 extern vector<creaturest *> pool;
 

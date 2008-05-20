@@ -65,7 +65,7 @@ void review(void)
             move(y,51);
             if(squad[p]->squad[0]!=NULL)
             {
-               char str[80];
+               string str;
                getactivity(str,squad[p]->activity);
 
                if(squad[p]->activity.type==ACTIVITY_NONE)
@@ -81,7 +81,7 @@ void review(void)
                         haveact=1;
                      }
                   }
-                  if(haveact&&count>1)strcpy(str,"Acting Individually");
+                  if(haveact&&count>1)str="Acting Individually";
                }
 
                addstr(str);
@@ -368,7 +368,7 @@ void review_mode(short mode)
                if(usepers)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  char str[80];
+                  string str;
                   getactivity(str,temppool[p]->activity);
                   addstr(str);
                }
@@ -433,7 +433,7 @@ void review_mode(short mode)
             }
             case REVIEWMODE_SLEEPERS:
             {
-               char str[200];
+               string str;
                if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
                else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
                else set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -647,7 +647,7 @@ void assemblesquad(squadst *cursquad)
       }
       else
       {
-         move(0,73-strlen(cursquad->name));
+         move(0,73-cursquad->name.length());
          addstr("Squad: ");
          addstr(cursquad->name);
       }
@@ -702,7 +702,7 @@ void assemblesquad(squadst *cursquad)
             }
          }
 
-         char str[200];
+         string str;
          if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -880,7 +880,9 @@ void assemblesquad(squadst *cursquad)
          raw_output(FALSE);
          echo();
          curs_set(1);
-         mvgetstr(24,0,cursquad->name);
+         char str[30];
+         mvgetstr(24,0,str);
+         cursquad->name=str;
          curs_set(0);
          noecho();
          raw_output(TRUE);

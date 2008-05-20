@@ -73,6 +73,9 @@
 #include <includes.h>
 #include "orghandler.h"
 #include "testdriver.h"
+#include "saveload.h"
+
+//struct globals Globals;
 
 orgHandler gOrgHandler = orgHandler();
 
@@ -99,7 +102,7 @@ siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 chaseseqst chaseseq;
 
-char slogan[SLOGAN_LEN+1];
+string slogan;
 
 vector<creaturest *> pool;
 
@@ -127,7 +130,7 @@ short offended_cablenews=0;
 int police_heat=0;
 unsigned long attorneyseed;
 long selectedsiege=-1;
-char lcityname[80];
+string lcityname;
 char newscherrybusted=0;
 
 int month=1;
@@ -147,13 +150,13 @@ short law[LAWNUM];
 
 short house[435];
 short senate[100];
-short court[9];
-char courtname[9][80];
+char court[9];
+string courtname[9];
 
 
 short exec[EXECNUM];
 short execterm=2;
-char execname[EXECNUM][80];
+string execname[EXECNUM];
 short presparty=1;
 
 char amradio_closed=0;
@@ -281,7 +284,7 @@ int main(int argc, char* argv[])
 
    loadinitfile();
 
-   strcpy(slogan,"We need a slogan!");
+   slogan = "We need a slogan!";
 
    for(int v=0;v<VIEWNUM;v++)
    {

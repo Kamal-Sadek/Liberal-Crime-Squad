@@ -137,7 +137,12 @@ using namespace std;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include <alignment.h>
+#include "alignment.h"
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/list.hpp>
+#include <boost/serialization/set.hpp>
 
 
 
@@ -529,6 +534,11 @@ struct weaponst
       }
       return 0;
    }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & type & ammo;
+   }
 };
 
 // *JDS* This should be expanded to cover
@@ -653,6 +663,11 @@ struct armorst
    {
       quality='1';
       flag=0;
+   }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & type & subtype & quality & flag;
    }
 };
 
@@ -821,6 +836,11 @@ struct activityst
    long type;
    long arg;
    long arg2;
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & type & arg & arg2;
+   }
 };
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
@@ -837,8 +857,8 @@ struct activityst
 
 struct creaturest
 {
-   char name[CREATURE_NAMELEN];
-   char propername[CREATURE_NAMELEN];
+   string name;
+   string propername;
    long squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
    char exists;
    char align;
@@ -921,6 +941,25 @@ struct creaturest
    }
    void creatureinit(void);
    long attval(short a,char usejuice=1);
+
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & name & propername & squadid & exists & align & alive & type & animalgloss;
+      ar & specialattack & clinic & dating & hiding & trainingtime & trainingsubject;
+      ar & prisoner & sentence & confessions & deathpenalty & joindays & deathdays;
+      ar & id & hireid & forceinc & att & skill & skill_ip & weapon & armor & clip;
+      ar & money & juice & wound & blood & special & lawflag & heat & location & worklocation;
+      ar & cantbluff & base & flag & carid & is_driver & pref_carid & pref_is_driver;
+      ar & activity;
+
+      //write extra interrogation data if applicable
+      if(align==-1 && alive)
+      {
+         interrogation * i = reinterpret_cast<interrogation*>(activity.arg);
+         ar & i;
+      }
+   }
 };
 
 #define SITEBLOCK_EXIT BIT1
@@ -986,6 +1025,11 @@ struct sitechangest
    sitechangest() {}
    sitechangest(char x_, char y_, char z_, unsigned short flag_) :
       x(x_), y(y_), z(z_), flag(flag_) {}
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & x & y & z & flag;
+   }
 };
 
 enum ItemTypes
@@ -1011,6 +1055,11 @@ struct itemst
    itemst()
    {
       number=1;
+   }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & weapon & armor & money & cliptype & loottype & type & number;
    }
 };
 
@@ -1049,6 +1098,12 @@ struct siegest
       timeuntilcorps=-1;
       timeuntilcia=-1;
    }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & siege & siegetype & underattack & attacktime & kills & escalationstate & lights_off;
+      ar & cameras_off & timeuntillocated & timeuntilcorps & timeuntilcia;
+   }
 };
 
 #define COMPOUND_BASIC BIT1
@@ -1060,8 +1115,8 @@ struct siegest
 
 struct locationst
 {
-   char name[40];
-   char shortname[20];
+   string name;
+   string shortname;
    short type;
    long parent;
    vector<itemst *> loot;
@@ -1077,7 +1132,7 @@ struct locationst
    char compound_walls;
    long compound_stores;
    short front_business;
-   char front_name[40];
+   string front_name;
    char haveflag;
    char hidden;
 
@@ -1089,6 +1144,31 @@ struct locationst
       needcar=0;
       renting=-1;
       hidden=0;
+   }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & loot;
+      ar & changes;
+      ar & name;
+      ar & shortname;
+      ar & type;
+      ar & parent;
+      ar & renting;
+      ar & newrental;
+      ar & needcar;
+      ar & closed;
+      ar & hidden;
+      ar & interrogated;
+      ar & highsecurity;
+      ar & siege;
+      ar & heat;
+      ar & compound_walls;
+      ar & compound_stores;
+      ar & front_business;
+      ar & front_name;
+      ar & haveflag;
+      ar & mapseed;
    }
    void init(void);
 };
@@ -1131,6 +1211,11 @@ struct vehiclest
    long id;
 
    void init(int t);
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & type & color & location & myear & id;
+   }
 };
 
 
@@ -1160,7 +1245,7 @@ struct chaseseqst
 
 struct squadst
 {
-   char name[40];
+   string name;
    creaturest *squad[6];
    activityst activity;
    int id;
@@ -1169,7 +1254,7 @@ struct squadst
    squadst()
    {
       for(int p=0;p<6;p++)squad[p]=NULL;
-      strcpy(name,"");
+      name.clear();
       activity.type=ACTIVITY_NONE;
       id=-1;
    }
@@ -1182,8 +1267,12 @@ struct squadst
 
       loot.clear();
    }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & name & squad & activity & id & loot;
+   }
 };
-
 
 #define ENCMAX 18
 
@@ -1264,6 +1353,13 @@ struct datest
       for(unsigned int d=0;d<date.size();d++)delete date[d];
       date.clear();
    }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & mac_id;
+      ar & timeleft;
+      ar & date;
+   }
 };
 
 enum RecruitTasks
@@ -1287,6 +1383,11 @@ struct recruitst
    char task;
    recruitst();
    char eagerness();
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & recruiter_id & recruit & timeleft & level & eagerness1 & task;
+   }
 };
 
 enum Crimes
@@ -1349,6 +1450,12 @@ struct newsstoryst
    {
       cr=NULL;
    }
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & type & view & cr & crime & loc & priority & page & guardianpage & positive;
+      ar & siegetype;
+   }
 };
 
 #define SLOGAN_LEN 79
@@ -1377,6 +1484,11 @@ struct float_zero
    float_zero() : n(0.0f) {};
    operator float&() { return n; };
    float n;
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & n;
+   }
 };
 
 //Interrogation information for the interrogation system, to be
@@ -1413,6 +1525,12 @@ struct interrogation
 
    //Maps individual characters to the rapport built with them
    map<long,struct float_zero> rapport;
+
+   template<class Archive>
+   void serialize(Archive & ar, const unsigned int /* file_version */)
+   {
+      ar & nofood & nowater & nosleep & nolight & techniques & totalspiritcrush & druguse & rapport;
+   }
 };
 
 #define SCORENUM 5
@@ -1521,6 +1639,8 @@ void addnextpagestr();
 void addprevpagestr();
 /* prints a long blurb showing how to page forward and back */
 void addpagestr();
+/* adapter to support string objects with addstr */
+void addstr(const string& str);
 
 /*
  commonactions.cpp
@@ -1590,28 +1710,28 @@ void translategetch_cap(int &c);
 /*
  getnames.cpp
 */
-void getactivity(char *str,activityst &act);
-void getweapon(char *str,int type);
-void getweaponfull(char *str,int type,int subtype=0);
-void getarmor(char *str,int type,int subtype=-1);
-void getarmorfull(char *str,armorst &armor,char superfull);
-void getarmorfull(char *str,int type,int subtype=-1);
-void getmaskdesc(char *str,short mask);
-void getskill(char *str,int type);
-void getclip(char *str,int clip);
-void getloot(char *str,int loot);
-void getrecruitcreature(char *str,int type);
-void gettitle(char *str,creaturest &cr);
-void getview(char *str,short view);
-void getlaw(char *str,int l);
-void getcarfull(char *str,vehiclest &car,char halffull=0);
-void getcarfull(char *str,int type);
-void getcar(char *str,int type);
-void getcarcolor(char *str,int type);
+void getactivity(string& str,activityst &act);
+void getweapon(string& str,int type);
+void getweaponfull(string& str,int type,int subtype=0);
+void getarmor(string& str,int type,int subtype=-1);
+void getarmorfull(string& str,armorst &armor,char superfull);
+void getarmorfull(string& str,int type,int subtype=-1);
+void getmaskdesc(string& str,short mask);
+void getskill(string& str,int type);
+void getclip(string& str,int clip);
+void getloot(string& str,int loot);
+void getrecruitcreature(string& str,int type);
+void gettitle(string& str,creaturest &cr);
+void getview(string& str,short view);
+void getlaw(string& str,int l);
+void getcarfull(string& str,vehiclest &car,char halffull=0);
+void getcarfull(string& str,int type);
+void getcar(string& str,int type);
+void getcarcolor(string& str,int type);
 short naturalcarcolor(int type); /* support function for getcarcolor */
-void cityname(char *story); /* random city name */
+void cityname(string& story); /* random city name */
 /* Allow player to enter a name with an optional default name */
-void enter_name(char *name, int len, char *defname=NULL);
+void enter_name(string& name, int len, string& defname=string(""));
 
 /*
  translateid.cpp
@@ -1649,11 +1769,11 @@ void makecreature(creaturest &cr,short type);
 /* rolls up a proper name for a creature */
 void namecreature(creaturest &cr);
 /* fills a string with a proper name */
-void name(char *str);
+void name(string& str);
 /* gets a random first name */
-void firstname(char *str);
+void firstname(string& str);
 /* gets a random last name */
-void lastname(char *str);
+void lastname(string& str);
 /* ensures that the creature's work location is appropriate to its type */
 void verifyworklocation(creaturest &cr);
 /* turns a creature into a conservative */
@@ -1691,21 +1811,6 @@ void savehighscore(char endtype);
 void makecharacter(void);
 /* mostly depricated, but called once by makecharacter */
 void initliberal(creaturest &cr);
-
-/*
- saveload.cpp
-*/
-/* saves the game to save.dat */
-void save(void);
-/* saves the game to autosave.dat */
-void autosave(void);
-/* handles saving */
-void savegame(char *str);
-/* loads the game from save.dat */
-char load(void);
-/* deletes save.dat (used on endgame and for invalid save version) */
-void reset(void);
-
 
 /*******************************************************************************
 *
@@ -2092,15 +2197,15 @@ void setpriority(newsstoryst &ns);
 void displaystory(newsstoryst &ns, bool liberalguardian, int header);
 /* news - graphics */
 void loadgraphics(void);
-void displaycenterednewsfont(char *str,int y);
-void displaycenteredsmallnews(char *str,int y);
+void displaycenterednewsfont(const char* str,int y);
+void displaycenteredsmallnews(const char* str,int y);
 void displaynewspicture(int p,int y);
 /* news - constructs non-LCS related event stories */
-void constructeventstory(char *story,short view,char positive);
+void constructeventstory(string& story,short view,char positive);
 /* news - draws the specified block of text to the screen */
-void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
+void displaynewsstory(string& story,short *storyx_s,short *storyx_e,int y);
 /* news - make some filler junk */
-void generatefiller(char *story,int amount);
+void generatefiller(string& story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings);
 

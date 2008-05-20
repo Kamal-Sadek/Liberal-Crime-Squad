@@ -28,25 +28,126 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <externs.h>
-
+#include "saveload.h"
 
 /* saves the game to save.dat */
-void save(void)
+/*void save(void)
 {
    savegame("save.dat");
-}
-
-
-
-/* saves the game to autosave.dat */
-void autosave(void)
-{
-   savegame("autosave.dat");
-}
-
+}*/
 
 /* handles saving */
-void savegame(char *str)
+template<typename STREAMTYPE,typename ARCHIVETYPE>
+bool saveloadBoost(const char * filename)
+{
+   STREAMTYPE stream(filename);
+   if(!stream.is_open())return false;
+   ARCHIVETYPE archive(stream);
+
+   unsigned int lversion=version;
+   archive & lversion;
+   archive & seed;
+   archive & mode;
+   archive & day;
+   archive & month;
+   archive & year;
+   archive & execterm;
+   archive & presparty;
+   archive & amendnum;
+
+   archive & stat_recruits;
+   archive & stat_dead;
+   archive & stat_kills;
+   archive & stat_kidnappings;
+   archive & stat_funds;
+   archive & stat_spent;
+   archive & stat_buys;
+   archive & stat_burns;
+
+   archive & policestation_closed;
+   archive & amradio_closed;
+   archive & cablenews_closed;
+
+   archive & endgamestate;
+   archive & ccs_kills;
+
+   archive & curcarid;
+   archive & showcarprefs;
+   archive & curcreatureid;
+   archive & cursquadid;
+   archive & offended_cops;
+   archive & police_heat;
+   archive & offended_corps;
+   archive & offended_cia;
+   archive & offended_amradio;
+   archive & offended_cablenews;
+   archive & attorneyseed;
+   archive & selectedsiege;
+   archive & lcityname;
+   archive & newscherrybusted;
+   archive & moneygained_donate;
+   archive & moneygained_brownies;
+   archive & moneygained_goods;
+   archive & moneygained_ccfraud;
+   archive & moneygained_hustling;
+   archive & moneygained_extortion;
+   archive & moneygained_thievery;
+   archive & moneylost_goods;
+   archive & moneylost_trouble;
+   archive & moneylost_rent;
+   archive & moneylost_training;
+   archive & moneylost_manufacture;
+   archive & moneylost_legal;
+   archive & moneylost_food;
+   archive & moneylost_dating;
+   archive & moneylost_compound;
+   archive & moneylost_hostage;
+
+   archive & slogan;
+   archive & funds;
+   archive & party_status;
+
+   archive & attitude;
+   archive & law;
+   archive & house;
+   archive & senate;
+   archive & court;
+   archive & courtname;
+   archive & exec;
+   archive & execname;
+
+   //LOCATIONS
+   archive & location;
+
+   //VEHICLES
+   archive & vehicle;
+
+   //POOL
+   archive & pool;
+
+   //SQUADS
+   archive & squad;
+
+   archive & activesquad;
+
+   //DATES
+   archive & date;
+
+   //RECRUITS
+   archive & recruit;
+
+   //NEWS STORIES
+   archive & newsstory;
+
+   // Liberal Media
+   archive & public_interest;
+   archive & background_liberal_influence;
+
+   return true;
+}
+
+/* handles saving */
+/*void savegame(char *str)
 {
    char dummy_c;
    int dummy;
@@ -59,11 +160,8 @@ void savegame(char *str)
    {
       unsigned int lversion=version;
       numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
-
       numbytes=fwrite(&seed,sizeof(unsigned long),1,h);
-
       numbytes=fwrite(&mode,sizeof(int),1,h);
-
       numbytes=fwrite(&day,sizeof(int),1,h);
       numbytes=fwrite(&month,sizeof(int),1,h);
       numbytes=fwrite(&year,sizeof(int),1,h);
@@ -311,11 +409,11 @@ void savegame(char *str)
 
       LCSCloseFile(h);
    }
-}
+}*/
 
 
 /* loads the game from save.dat */
-char load(void)
+/*char load(void)
 {
    //LOAD FILE
    unsigned long loadversion;
@@ -633,11 +731,11 @@ char load(void)
    }
 
    return 0;
-}
+}*/
 
 
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(void)
+static void reset(void)
 {
     LCSDeleteFile("save.dat",LCSIO_PRE_HOME);
 }

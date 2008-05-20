@@ -88,7 +88,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          getch();
 
          name(d.date[e]->name);
-         strcpy(d.date[e]->propername,d.date[e]->name);
+         d.date[e]->propername=d.date[e]->name;
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->location=pool[p]->location;
@@ -105,7 +105,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(2,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("What name will you use for this ");
-         char str[80];
+         string str;
          getrecruitcreature(str,d.date[e]->type);
          addstr(str);
          addstr(" in its presence?");
@@ -537,7 +537,7 @@ char completedate(datest &d,int p,char &clearformess)
                 LCSrandom(3))
             {
                name(d.date[e]->name);
-               strcpy(d.date[e]->propername,d.date[e]->name);
+               d.date[e]->propername=d.date[e]->name;
 
                d.date[e]->location=pool[p]->location;
                d.date[e]->base=pool[p]->base;
@@ -561,7 +561,7 @@ char completedate(datest &d,int p,char &clearformess)
                move(2,0);
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                addstr("What name will you use for this ");
-               char str[80];
+               string str;
                getrecruitcreature(str,d.date[e]->type);
                addstr(str);
                addstr(" in its presence?");

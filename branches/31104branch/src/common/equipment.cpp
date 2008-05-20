@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 
 // Helper function for equip and moveloot.
 // Gets the full title of an item for display, without quantity.
-void get_equip_title(char *str2, itemst* item)
+void get_equip_title(string& str2, itemst* item)
 {
    switch (item->type)
    {
@@ -41,9 +41,9 @@ void get_equip_title(char *str2, itemst* item)
          {
             char num[20];
             itoa(item->weapon.ammo,num,10);
-            strcat(str2," (");
-            strcat(str2,num);
-            strcat(str2,")");
+            str2+=" (";
+            str2+=num;
+            str2+=")";
          }
          break;
 
@@ -60,22 +60,22 @@ void get_equip_title(char *str2, itemst* item)
          break;
 
       case ITEM_MONEY:
-         strcpy(str2,"$");
+         str2="$";
          {
             char num[20];
             itoa(item->money,num,10);
-            strcat(str2,num);
+            str2+=num;
          }
          break;
 
       default:
-         strcpy(str2, "(BUG #");
+         str2= "(BUG #";
          {
             char num[20];
             itoa(item->type,num,10);
-            strcat(str2,num);
+            str2+=num;
          }
-         strcat(str2, ", report me!)");
+         str2+= ", report me!)";
 
    }
 }
@@ -92,7 +92,7 @@ long prompt_amount(long min, long max)
 
    refresh();
 
-   char str[100];
+   char str[40];
 
    keypad(stdscr,FALSE);
    raw_output(FALSE);
@@ -152,7 +152,7 @@ void equip(vector<itemst *> &loot,int loc)
       }
 
       int x=1,y=10;
-      char str[200],str2[200];
+      string str,str2;
 
       for(int l=page*18;l<loot.size()&&l<page*18+18;l++)
       {
@@ -162,14 +162,14 @@ void equip(vector<itemst *> &loot,int loc)
          {
             char num[20];
             itoa(loot[l]->number,num,10);
-            strcat(str2," ");
-            strcat(str2,"x");
-            strcat(str2,num);
+            str2+=" ";
+            str2+="x";
+            str2+=num;
          }
          str[0]=l-page*18+'A';
          str[1]='\x0';
-         strcat(str," - ");
-         strcat(str,str2);
+         str+=" - ";
+         str+=str2;
 
          move(y,x);
          addstr(str);
@@ -463,7 +463,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       printparty();
 
       int x=1,y=10;
-      char str[200],str2[200];
+      string str,str2;
 
       for(int l=page*18;l<source.size()&&l<page*18+18;l++)
       {
@@ -475,22 +475,22 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
          if(source[l]->number>1)
          {
             char num[20];
-            strcat(str2," ");
+            str2+=" ";
             if(selected[l]>0)
             {
                itoa(selected[l],num,10);
-               strcat(str2,num);
-               strcat(str2,"/");
+               str2+=num;
+               str2+="/";
             }
-            else strcat(str2,"x");
+            else str2+="x";
             itoa(source[l]->number,num,10);
-            strcat(str2,num);
+            str2+=num;
          }
 
          str[0]=l-page*18+'A';
          str[1]='\x0';
-         strcat(str," - ");
-         strcat(str,str2);
+         str+=" - ";
+         str+=str2;
 
          move(y,x);
          addstr(str);

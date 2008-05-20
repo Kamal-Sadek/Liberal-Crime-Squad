@@ -64,7 +64,7 @@ void activate(void)
 
    short page=0;
 
-   char str[80];
+   string str;
    char num[20];
 
    do
@@ -793,7 +793,7 @@ void activatebulk(void)
 
    short page=0;
 
-   char str[80];
+   string str;
    char num[20];
 
    int selectedactivity=0;
@@ -1139,7 +1139,7 @@ void select_makeclothing(creaturest *cr)
 
    short page=0;
 
-   char str[200];
+   string str;
    char num[20];
 
    do
@@ -1416,7 +1416,7 @@ long select_troublefundinglevel(creaturest *cr)
 char select_view(creaturest *cr,long &v)
 {
    int page=0;
-   char str[80];
+   string str;
 
    do
    {

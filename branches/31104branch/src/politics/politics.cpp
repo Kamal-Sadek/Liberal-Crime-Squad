@@ -159,7 +159,8 @@ void elections(char clearformess,char canseethings)
          addstr("After a long primary campaign, the people have rallied around two leaders...");
       }
 
-      char candidate[2][80];
+      string candidate[2];
+      char candidatealign[2];
       int votes[2]={0,0};
 
       //Primaries
@@ -195,24 +196,24 @@ void elections(char clearformess,char canseethings)
       // determine conservative winner
       if(consvotes[0] > consvotes[1])
          if(consvotes[0] > consvotes[2])
-            candidate[1][0]=-2;
-         else candidate[1][0]=0;
+            candidatealign[1]=-2;
+         else candidatealign[1]=0;
       else if(consvotes[1] > consvotes[2])
-         candidate[1][0]=-1;
-      else candidate[1][0]=0;
+         candidatealign[1]=-1;
+      else candidatealign[1]=0;
 
       // determine liberal winner
       if(libvotes[0] > libvotes[1])
          if(libvotes[0] > libvotes[2])
-            candidate[0][0]=0;
-         else candidate[0][0]=2;
+            candidatealign[0]=0;
+         else candidatealign[0]=2;
       else if(libvotes[1] > libvotes[2])
-         candidate[0][0]=1;
-      else candidate[0][0]=2;
+         candidatealign[0]=1;
+      else candidatealign[0]=2;
 
       // name the candidates
-      name(candidate[0]+1);
-      name(candidate[1]+1);
+      name(candidate[0]);
+      name(candidate[1]);
 
       // Special Incumbency Rules: If the incumbent president or vice president
       // has approval of over 50% in their party, they win their primary
@@ -225,12 +226,12 @@ void elections(char clearformess,char canseethings)
       {
          if(approvepres>=50)
          {
-            candidate[presparty][0]=exec[EXEC_PRESIDENT];
+            candidatealign[presparty]=exec[EXEC_PRESIDENT];
          }
          
-         if(candidate[presparty][0]==exec[EXEC_PRESIDENT])
+         if(candidatealign[presparty]==exec[EXEC_PRESIDENT])
          {
-            strcpy(candidate[presparty]+1,execname[EXEC_PRESIDENT]);
+            candidate[presparty] = execname[EXEC_PRESIDENT];
          }
          else
          {
@@ -242,8 +243,8 @@ void elections(char clearformess,char canseethings)
       {
          if(approvepres>=50)
          {
-            candidate[presparty][0]=exec[EXEC_PRESIDENT];
-            strcpy(candidate[presparty]+1,execname[EXEC_PRESIDENT]);
+            candidatealign[presparty]=exec[EXEC_PRESIDENT];
+            candidate[presparty]=execname[EXEC_PRESIDENT];
          }
       }
 
@@ -253,17 +254,17 @@ void elections(char clearformess,char canseethings)
          for(c=0;c<2;c++)
          {
             // Pick color by political orientation
-            if(candidate[c][0]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(candidate[c][0]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(candidate[c][0]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(candidate[c][0]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+            if(candidatealign[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(candidatealign[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(candidatealign[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(candidatealign[c]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
             move(6-c*2,0);
             // Choose title -- president or vice president special titles, otherwise
             // pick based on historically likely titles (eg, governor most likely...)
             if(c==presparty&&execterm==1)addstr("President ");
-            else if(c==presparty&&!strcmp(candidate[c]+1,execname[EXEC_VP]))addstr("Vice President ");
+            else if(c==presparty&&!(candidate[c] == execname[EXEC_VP]))addstr("Vice President ");
             else
             {
                if(LCSrandom(2))
@@ -292,7 +293,7 @@ void elections(char clearformess,char canseethings)
                }
             }
             
-            addstr(candidate[c]+1);
+            addstr(candidate[c].c_str());
             switch(candidate[c][0])
             {
             case -2:addstr(", Arch Conservative");break;
@@ -433,15 +434,15 @@ void elections(char clearformess,char canseethings)
       {
          presparty=winner;
          execterm=1;
-         exec[EXEC_PRESIDENT]=candidate[winner][0];
-         strcpy(execname[EXEC_PRESIDENT],candidate[winner]+1);
+         exec[EXEC_PRESIDENT]=candidatealign[winner];
+         execname[EXEC_PRESIDENT]=candidate[winner];
 
          for(int e=0;e<EXECNUM;e++)
          {
             if(e==EXEC_PRESIDENT)continue;
-            if(candidate[winner][0]==-2)exec[e]=-2;
-            else if(candidate[winner][0]==2)exec[e]=2;
-            else exec[e]=candidate[winner][0]+LCSrandom(3)-1;
+            if(candidatealign[winner]==-2)exec[e]=-2;
+            else if(candidatealign[winner]==2)exec[e]=2;
+            else exec[e]=candidatealign[winner]+LCSrandom(3)-1;
             name(execname[e]);
          }
       }
@@ -1248,9 +1249,9 @@ void supremecourt(char clearformess,char canseethings)
       if(canseethings)
       {
          move(c*3+2,0);
-         char name1[80];
-         char name2[80];
-         if(!LCSrandom(5)) strcpy(name1,"United States");
+         string name1;
+         string name2;
+         if(!LCSrandom(5)) name1="United States";
          else lastname(name1);
 
          lastname(name2);
@@ -1260,17 +1261,17 @@ void supremecourt(char clearformess,char canseethings)
          {
             switch(LCSrandom(5))
             {
-            case 0:strcat(name2,", Inc.");
-            case 1:strcat(name2,", L.L.C.");
-            case 2:strcat(name2," Corp.");
-            case 3:strcat(name2," Co.");
-            case 4:strcat(name2,", Ltd.");
+            case 0:name2+=", Inc.";break;
+            case 1:name2+=", L.L.C.";break;
+            case 2:name2+=" Corp.";break;
+            case 3:name2+=" Co.";break;
+            case 4:name2+=", Ltd.";break;
             }
          }
 
-         addstr(name1);
+         addstr(name1.c_str());
          addstr(" vs. ");
-         addstr(name2);
+         addstr(name2.c_str());
 
          move(c*3+3,0);
          addstr("A Decision could ");
@@ -1438,7 +1439,7 @@ void supremecourt(char clearformess,char canseethings)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(2,0);
          addstr("Justice ");
-         addstr(courtname[j]);
+         addstr(courtname[j].c_str());
          addstr(", ");
          switch(court[j])
          {
@@ -1478,7 +1479,7 @@ void supremecourt(char clearformess,char canseethings)
          addstr("After much debate and televised testimony, a new justice,");
          move(5,0);
          addstr("the Honorable ");
-         addstr(courtname[j]);
+         addstr(courtname[j].c_str());
          addstr(", ");
          switch(court[j])
          {
@@ -1896,7 +1897,7 @@ void congress(char clearformess,char canseethings)
             if(sign==1)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               addstr(execname[EXEC_PRESIDENT]);
+               addstr(execname[EXEC_PRESIDENT].c_str());
             }
             else if(sign==-1)
             {

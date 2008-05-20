@@ -1047,14 +1047,14 @@ void partyrescue(void)
    }
 
    int stillpcount=0;
-   char stillpname[200];
+   string stillpname;
    for(pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->location==cursite&&
          !(pool[pl]->flag & CREATUREFLAG_SLEEPER))
       {
          stillpcount++;
-         if(stillpcount==1)strcpy(stillpname,pool[pl]->name);
+         if(stillpcount==1)stillpname=pool[pl]->name;
       }
    }
 

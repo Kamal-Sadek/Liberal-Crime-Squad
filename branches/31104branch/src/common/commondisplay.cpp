@@ -145,7 +145,7 @@ void locheader(void)
    if(activesquad!=NULL)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      char str[80];
+      string str;
       getactivity(str,activesquad->activity);
 
       if(activesquad->activity.type==ACTIVITY_NONE)
@@ -161,7 +161,7 @@ void locheader(void)
                haveact=1;
             }
          }
-         if(haveact&&count>1)strcpy(str,"Acting Individually");
+         if(haveact&&count>1)str="Acting Individually";
       }
 
       move(0,46);
@@ -200,7 +200,7 @@ void printparty(void)
    }
    else
    {
-      char str[200];
+      string str;
       char num[20];
 
       move(1,0);
@@ -304,7 +304,7 @@ void printparty(void)
                char d;
                if(showcarprefs==1)d=party[p]->pref_is_driver;
                else d=party[p]->is_driver;
-               if(d)strcat(str,"-D");
+               if(d)str+="-D";
             }
             else
             {
@@ -313,9 +313,9 @@ void printparty(void)
                    (party[p]->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
                if((party[p]->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
                    (party[p]->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-               if(party[p]->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str,"Wheelchair");
-               else if(legok>=1)strcpy(str,"On Foot");
-               else strcpy(str,"On \"Foot\"");
+               if(party[p]->flag & CREATUREFLAG_WHEELCHAIR)str="Wheelchair";
+               else if(legok>=1)str="On Foot";
+               else str="On \"Foot\"";
             }
             addstr(str);
          }
@@ -493,7 +493,8 @@ void printlocation(long loc)
 /* character info at top of screen */
 void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 {
-   char num[20],str[200];
+   char num[20];
+   string str;
 
    makedelimiter(1,0);
 
@@ -580,7 +581,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
       char d;
       if(showcarprefs==1)d=cr->pref_is_driver;
       else d=cr->is_driver;
-      if(d)strcat(str,"-D");
+      if(d)str+="-D";
    }
    else
    {
@@ -589,9 +590,9 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
           (cr->wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
       if((cr->wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
           (cr->wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-      if(cr->flag & CREATUREFLAG_WHEELCHAIR)strcpy(str,"Wheelchair");
-      else if(legok>=1)strcpy(str,"On Foot");
-      else strcpy(str,"On \"Foot\"");
+      if(cr->flag & CREATUREFLAG_WHEELCHAIR)str="Wheelchair";
+      else if(legok>=1)str="On Foot";
+      else str="On \"Foot\"";
    }
    addstr(str);
    move(6,0);
@@ -668,13 +669,13 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
          if(knowledge>5-snum)
             getskill(str,maxs);
          else
-            strcpy(str,"???????");
-         strcat(str,": ");
+            str="???????";
+         str+=": ";
          if(knowledge>7-snum)
             itoa(cr->skill[maxs],num,10);
          else
-            strcpy(num,"?");
-         strcat(str,num);
+            num[0]='?';
+         str+=num;
          addstr(str);
 
          if(snum==5&&printed)
@@ -819,10 +820,11 @@ void printliberalstats(creaturest &cr,char smll)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   char num[20],str[200];
+   char num[20];
+   string str;
 
    move(2,0);
-   if(strcmp(cr.propername,cr.name)!=0)
+   if(cr.propername!=cr.name)
    {
 	   addstr("Code name: ");
    }
@@ -837,7 +839,7 @@ void printliberalstats(creaturest &cr,char smll)
    gettitle(str,cr);
    addstr(str);
    
-   if(strcmp(cr.propername,cr.name)!=0)
+   if(cr.propername!=cr.name)
    {
 	   //The names do not match, print alias
 	   
@@ -937,12 +939,12 @@ void printliberalstats(creaturest &cr,char smll)
          if(!smll)move(5+14-snum,40);
          else move(5+7-snum,40);
          getskill(str,maxs);
-         strcat(str,": ");
+         str+=": ";
          addstr(str);
          if(!smll)move(5+14-snum,56);
          else move(5+7-snum,54);
          itoa(cr.skill[maxs],num,10);
-         strcpy(str,num);
+         str=num;
          addstr(str);
          if(cr.skill_ip[maxs]<100+(10*cr.skill[maxs]))
          {
@@ -1013,7 +1015,7 @@ void printliberalstats(creaturest &cr,char smll)
          char d;
          if(showcarprefs==1)d=cr.pref_is_driver;
          else d=cr.is_driver;
-         if(d)strcat(str,"-D");
+         if(d)str+="-D";
       }
       else
       {
@@ -1022,9 +1024,9 @@ void printliberalstats(creaturest &cr,char smll)
              (cr.wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
          if((cr.wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
              (cr.wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-         if(cr.flag & CREATUREFLAG_WHEELCHAIR)strcpy(str,"Wheelchair");
-         else if(legok>=1)strcpy(str,"On Foot");
-         else strcpy(str,"On \"Foot\"");
+         if(cr.flag & CREATUREFLAG_WHEELCHAIR)str="Wheelchair";
+         else if(legok>=1)str="On Foot";
+         else str="On \"Foot\"";
       }
       addstr(str);
 
@@ -1341,15 +1343,15 @@ void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
 {
 	char moneystr[50];
 	
-	char prefixbuffer[50];
+	string prefixbuffer;
 	
 	if(prefix==NULL)
 	{
-		strncpy(prefixbuffer,"",50);
+		prefixbuffer="";
 	}
 	else
 	{
-		strncpy(prefixbuffer,prefix,50);
+		prefixbuffer=prefix;
 	}
 	
 	sprintf(moneystr,"$%d",funds);
@@ -1374,7 +1376,7 @@ void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
 	
 	
 	//Move, set color, and write.
-	move(y,80-strlen(moneystr)-strlen(prefixbuffer)-offsetx);
+	move(y,80-strlen(moneystr)-prefixbuffer.length()-offsetx);
 	addstr(prefixbuffer);
 	set_color(COLOR_GREEN,COLOR_BLACK,1);
 	addstr(moneystr);
@@ -1415,4 +1417,10 @@ void addpagestr()
       addstr("; and : to view other Liberal pages.");
    else
       addstr("PGUP/PGDN to view other Liberal pages.");
+}
+
+/* adapter to support string objects with addstr */
+void addstr(const string& str)
+{
+   addstr(str.c_str());
 }

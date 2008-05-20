@@ -298,7 +298,7 @@ void savehighscore(char endtype)
             score[s2]=score[s2-1];
          }
 
-         strcpy(score[s].slogan,slogan);
+         strcpy(score[s].slogan,slogan.c_str());
          score[s].month=month;
          score[s].year=year;
          score[s].stat_recruits=stat_recruits;

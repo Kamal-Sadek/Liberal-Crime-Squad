@@ -294,7 +294,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
       addstr(" shows ");
       addstr(t.name);
       addstr(" the ");
-      char str[30];
+      string str;
       getweaponfull(str,a.weapon.type,2);
       addstr(str);
       move(17,1);
@@ -572,7 +572,7 @@ void kidnaptransfer(creaturest &cr)
    move(2,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    addstr("What name will you use for this ");
-   char str[80];
+   string str;
    getrecruitcreature(str,newcr->type);
    addstr(str);
    addstr(" in its presence?");

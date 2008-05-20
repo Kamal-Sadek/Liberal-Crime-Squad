@@ -394,7 +394,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 {
    actual=0;
 
-   char str[200],str2[200];
+   string str,str2;
 
    clearmessagearea();
 
@@ -435,8 +435,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       {
          int resist=0;
 
-         strcpy(str,a.name);
-         strcat(str," ");
+         str=a.name;
+         str+=" ";
 
          int attack=0;
          if(a.align==-1)
@@ -454,14 +454,14 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case CREATURE_JUDGE_LIBERAL:
                switch(LCSrandom(4))
                {
-                  case 0:strcat(str,"debates the death penalty with");break;
-                  case 1:strcat(str,"debates gay rights with");break;
-                  case 2:strcat(str,"debates free speech with");break;
-                  case 3:strcat(str,"debates the Second Amendment with");break;
+                  case 0:str+="debates the death penalty with";break;
+                  case 1:str+="debates gay rights with";break;
+                  case 2:str+="debates free speech with";break;
+                  case 3:str+="debates the Second Amendment with";break;
                }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
+               str+=" ";
+               str+=t.name;
+               str+="!";
                if(t.align==1)
                {
                   resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
@@ -479,15 +479,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case CREATURE_SCIENTIST_EMINENT:
                switch(LCSrandom(3))
                {
-                  case 0:strcat(str,"debates scientific ethics with");break;
-                  case 1:if(a.align==-1)strcat(str,"explains the benefits of research to");
-                         else strcat(str,"explains ethical research to");
+                  case 0:str+="debates scientific ethics with";break;
+                  case 1:if(a.align==-1)str+="explains the benefits of research to";
+                         else str+="explains ethical research to";
                      break;
-                  case 2:strcat(str,"discusses the scientific method with");break;
+                  case 2:str+="discusses the scientific method with";break;
                }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
+               str+=" ";
+               str+=t.name;
+               str+="!";
                if(t.align==1)
                {
                   resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
@@ -509,32 +509,32 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   switch(LCSrandom(10))
                   {
-                     case 0:strcat(str,"explains the derivatives market to");break;
-                     case 1:strcat(str,"justifies voodoo economics to");break;
-                     case 2:strcat(str,"extols the Reagan presidency to");break;
-                     case 3:strcat(str,"argues about tax cuts with");break;
-                     case 4:strcat(str,"explains Conservative philosophy to");break;
-                     case 5:strcat(str,"extends a dinner invitation to");break;
-                     case 6:strcat(str,"offers a VP position to");break;
-                     case 7:strcat(str,"shows a $1000 bill to");break;
-                     case 8:strcat(str,"debates fiscal policy with");break;
-                     case 9:strcat(str,"offers stock options to");break;
+                     case 0:str+="explains the derivatives market to";break;
+                     case 1:str+="justifies voodoo economics to";break;
+                     case 2:str+="extols the Reagan presidency to";break;
+                     case 3:str+="argues about tax cuts with";break;
+                     case 4:str+="explains Conservative philosophy to";break;
+                     case 5:str+="extends a dinner invitation to";break;
+                     case 6:str+="offers a VP position to";break;
+                     case 7:str+="shows a $1000 bill to";break;
+                     case 8:str+="debates fiscal policy with";break;
+                     case 9:str+="offers stock options to";break;
                   }
                }
                else
                {
                   switch(LCSrandom(5))
                   {
-                     case 0:strcat(str,"debates fiscal policy with");break;
-                     case 1:strcat(str,"derides voodoo economics to");break;
-                     case 2:strcat(str,"dismisses the Reagan presidency to");break;
-                     case 3:strcat(str,"argues about tax cuts with");break;
-                     case 4:strcat(str,"explains Liberal philosophy to");break;
+                     case 0:str+="debates fiscal policy with";break;
+                     case 1:str+="derides voodoo economics to";break;
+                     case 2:str+="dismisses the Reagan presidency to";break;
+                     case 3:str+="argues about tax cuts with";break;
+                     case 4:str+="explains Liberal philosophy to";break;
                   }
                }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
+               str+=" ";
+               str+=t.name;
+               str+="!";
                if(t.align==1)
                {
                   resist=t.attval(ATTRIBUTE_HEART,0)+
@@ -553,15 +553,15 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case CREATURE_NEWSANCHOR:
                switch(LCSrandom(5))
                {
-                  case 0:strcat(str,"winks at");break;
-                  case 1:strcat(str,"smiles at");break;
-                  case 2:strcat(str,"smirks at");break;
-                  case 3:strcat(str,"chats warmly with");break;
-                  case 4:strcat(str,"yells slogans at");break;
+                  case 0:str+="winks at";break;
+                  case 1:str+="smiles at";break;
+                  case 2:str+="smirks at";break;
+                  case 3:str+="chats warmly with";break;
+                  case 4:str+="yells slogans at";break;
                }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
+               str+=" ";
+               str+=t.name;
+               str+="!";
                if(t.align==1)
                {
                   resist=t.attval(ATTRIBUTE_CHARISMA,0)+
@@ -581,17 +581,17 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   switch(LCSrandom(5))
                   {
-                     case 0:strcat(str,"plays a song for");break;
-                     case 1:strcat(str,"sings to");break;
-                     case 2:strcat(str,"strums the guitar at");break;
-                     case 3:if(a.align==1)strcat(str,"plays protest songs at");
-                            else strcat(str,"plays country songs at");
+                     case 0:str+="plays a song for";break;
+                     case 1:str+="sings to";break;
+                     case 2:str+="strums the guitar at";break;
+                     case 3:if(a.align==1)str+="plays protest songs at";
+                            else str+="plays country songs at";
                             break;
-                     case 4:strcat(str,"rocks out at");break;
+                     case 4:str+="rocks out at";break;
                   }
-                  strcat(str," ");
-                  strcat(str,t.name);
-                  strcat(str,"!");
+                  str+=" ";
+                  str+=t.name;
+                  str+="!";
                   if(t.align==1)
                   {
                      resist=t.skill[SKILL_MUSIC]+
@@ -741,8 +741,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
          a.clip[ammotype(a.weapon.type)]--;
 
-         strcpy(str,a.name);
-         strcat(str," reloads.");
+         str=a.name;
+         str+=" reloads.";
 
          move(16,1);
          addstr(str);
@@ -759,28 +759,28 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       }
    }
 
-   strcpy(str,a.name);
-   strcat(str," ");
-   if(mistake)strcat(str,"MISTAKENLY ");
+   str=a.name;
+   str+=" ";
+   if(mistake)str+="MISTAKENLY ";
    switch(a.weapon.type)
    {
       case WEAPON_NONE:
       {
-         if(!a.animalgloss)strcat(str,"jabs at");
+         if(!a.animalgloss)str+="jabs at";
          else
          {
-            if(a.specialattack==ATTACK_CANNON)strcat(str,"blasts at");
-            else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
-            else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs at");
-            else strcat(str,"claws at");
+            if(a.specialattack==ATTACK_CANNON)str+="blasts at";
+            else if(a.specialattack==ATTACK_FLAME)str+="breathes fire at";
+            else if(a.specialattack==ATTACK_SUCK)str+="stabs at";
+            else str+="claws at";
          }
          break;
       }
       case WEAPON_SWORD:
       case WEAPON_KNIFE:
       case WEAPON_SHANK:
-         strcat(str,"slashes at");break;
-      case WEAPON_SYRINGE:strcat(str,"pokes at");break;
+         str+="slashes at";break;
+      case WEAPON_SYRINGE:str+="pokes at";break;
       case WEAPON_REVOLVER_22:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
@@ -792,8 +792,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_SHOTGUN_PUMP:
       {
-         if(a.weapon.ammo>0)strcat(str,"shoots at");
-         else strcat(str,"swings at");
+         if(a.weapon.ammo>0)str+="shoots at";
+         else str+="swings at";
          break;
       }
       case WEAPON_CHAIN:
@@ -808,36 +808,36 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_STAFF:
       case WEAPON_TORCH:
       case WEAPON_SPRAYCAN:
-         strcat(str,"swings at");break;
+         str+="swings at";break;
       case WEAPON_PITCHFORK:
-         strcat(str,"stabs at");break;
+         str+="stabs at";break;
       
    }
-   strcat(str," ");
-   strcat(str,t.name);
+   str+=" ";
+   str+=t.name;
    move(16,1);
    addstr(str);
 
-   strcpy(str,"");
+   str="";
 
    if(a.weapon.type!=WEAPON_NONE)
    {
-      strcat(str," with a ");
+      str+=" with a ";
       getweaponfull(str2,a.weapon.type,1);
-      strcat(str,str2);
-      //strcat(str," and ");
+      str+=str2;
+      //str+=" and ";
    }
    else
    {
-      //strcat(str,"and ");
+      //str+="and ";
    }
-   strcat(str,"!");
+   str+="!";
    addstr(str);
 
    refresh();
    getch();
 
-   strcpy(str,a.name);
+   str=a.name;
 
    //BASIC ROLL
    int aroll=LCSrandom(20)+1;
@@ -939,7 +939,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    //HIT!
    if(aroll+bonus>droll)
    {
-      strcat(str," hits the ");
+      str+=" hits the ";
       int w;
       
       do
@@ -953,36 +953,36 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       {
          switch(w)
          {
-            case BODYPART_HEAD:strcat(str,"turret");break;
-            case BODYPART_BODY:strcat(str,"front");break;
-            case BODYPART_ARM_RIGHT:strcat(str,"right side");break;
-            case BODYPART_ARM_LEFT:strcat(str,"left side");break;
-            case BODYPART_LEG_RIGHT:strcat(str,"right tread");break;
-            case BODYPART_LEG_LEFT:strcat(str,"left tread");break;
+            case BODYPART_HEAD:str+="turret";break;
+            case BODYPART_BODY:str+="front";break;
+            case BODYPART_ARM_RIGHT:str+="right side";break;
+            case BODYPART_ARM_LEFT:str+="left side";break;
+            case BODYPART_LEG_RIGHT:str+="right tread";break;
+            case BODYPART_LEG_LEFT:str+="left tread";break;
          }
       }
       else if(t.animalgloss==ANIMALGLOSS_ANIMAL)
       {
          switch(w)
          {
-            case BODYPART_HEAD:strcat(str,"head");break;
-            case BODYPART_BODY:strcat(str,"body");break;
-            case BODYPART_ARM_RIGHT:strcat(str,"right front leg");break;
-            case BODYPART_ARM_LEFT:strcat(str,"left front leg");break;
-            case BODYPART_LEG_RIGHT:strcat(str,"right rear leg");break;
-            case BODYPART_LEG_LEFT:strcat(str,"left rear leg");break;
+            case BODYPART_HEAD:str+="head";break;
+            case BODYPART_BODY:str+="body";break;
+            case BODYPART_ARM_RIGHT:str+="right front leg";break;
+            case BODYPART_ARM_LEFT:str+="left front leg";break;
+            case BODYPART_LEG_RIGHT:str+="right rear leg";break;
+            case BODYPART_LEG_LEFT:str+="left rear leg";break;
          }
       }
       else
       {
          switch(w)
          {
-            case BODYPART_HEAD:strcat(str,"head");break;
-            case BODYPART_BODY:strcat(str,"body");break;
-            case BODYPART_ARM_RIGHT:strcat(str,"right arm");break;
-            case BODYPART_ARM_LEFT:strcat(str,"left arm");break;
-            case BODYPART_LEG_RIGHT:strcat(str,"right leg");break;
-            case BODYPART_LEG_LEFT:strcat(str,"left leg");break;
+            case BODYPART_HEAD:str+="head";break;
+            case BODYPART_BODY:str+="body";break;
+            case BODYPART_ARM_RIGHT:str+="right arm";break;
+            case BODYPART_ARM_LEFT:str+="left arm";break;
+            case BODYPART_LEG_RIGHT:str+="right leg";break;
+            case BODYPART_LEG_LEFT:str+="left leg";break;
          }
       }
 
@@ -992,8 +992,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          switch(bursthits)
          {
          case 1: break;
-         case 2: strcat(str," twice"); break;
-         case 3: strcat(str," three times"); break;
+         case 2: str+=" twice"; break;
+         case 3: str+=" three times"; break;
          }
 
       }
@@ -1384,11 +1384,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                }
             }
 
-            if(target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
-            else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
-            else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
-            else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
-            else strcat(str,".");
+            if(target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)str+=" CUTTING IT OFF!";
+            else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)str+=" CUTTING IT IN HALF!";
+            else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)str+=" BLOWING IT APART!";
+            else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)str+=" BLOWING IT IN HALF!";
+            else str+=".";
             move(17,1);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
@@ -1414,9 +1414,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          }
          else
          {
-            if(target->wound[w] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
-            else if(target->wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
-            else strcat(str,".");
+            if(target->wound[w] & WOUND_CLEANOFF)str+=" CUTTING IT OFF!";
+            else if(target->wound[w] & WOUND_NASTYOFF)str+=" BLOWING IT OFF!";
+            else str+=".";
             
             move(17,1);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1827,7 +1827,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       }
       else
       {
-         strcat(str," to no effect.");
+         str+=" to no effect.";
          move(17,1);
          addstr(str);
 
@@ -1842,7 +1842,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
    else
    {
-      strcat(str," misses.");
+      str+=" misses.";
       move(17,1);
       addstr(str);
 
@@ -1962,7 +1962,7 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       move(16,1);
       addstr("The ");
       addstr(" ");
-      char str[200];
+      string str;
       getweaponfull(str,cr.weapon.type,1);
       addstr(str);
       move(17,1);
@@ -2009,7 +2009,7 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       move(16,1);
       addstr(cr.name);
       addstr("'s ");
-      char str[80];
+      string str;
       getarmorfull(str,cr.armor.type,cr.armor.subtype);
       addstr(str);
       addstr(" has been destroyed.");
@@ -2029,7 +2029,7 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       move(16,1);
       addstr(cr.name);
       addstr("'s ");
-      char str[80];
+      string str;
       getarmorfull(str,cr.armor.type,cr.armor.subtype);
       addstr(str);
       addstr(" has been destroyed.");
@@ -2558,16 +2558,16 @@ void adddeathmessage(creaturest &cr)
    set_color(COLOR_YELLOW,COLOR_BLACK,1);
 
    move(16,1);
-   char str[200];
+   string str;
 
    if((cr.wound[BODYPART_HEAD] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_HEAD] & WOUND_NASTYOFF))
    {
-      strcpy(str,cr.name);
+      str=cr.name;
       switch(LCSrandom(4))
       {
          case 0:
-            strcat(str," reaches once where there");
+            str+=" reaches once where there";
             addstr(str);
             move(17,1);
             if(mode!=GAMEMODE_CHASECAR)
@@ -2579,18 +2579,18 @@ void adddeathmessage(creaturest &cr)
          case 1:
             if(mode!=GAMEMODE_CHASECAR)
             {
-               strcat(str," stands headless for a");
+               str+=" stands headless for a";
             }
-            else strcat(str," sits headless for a");
+            else str+=" sits headless for a";
             addstr(str);
             move(17,1);
             addstr("moment then crumples over.");
             break;
          case 2:
-            strcat(str," squirts ");
+            str+=" squirts ";
             if(law[LAW_FREESPEECH]==-2)addstr("[red water]");
-            else strcat(str,"blood");
-            strcat(str," out of the ");
+            else str+="blood";
+            str+=" out of the ";
             addstr(str);
             move(17,1);
             if(mode!=GAMEMODE_CHASECAR)
@@ -2600,7 +2600,7 @@ void adddeathmessage(creaturest &cr)
             else addstr("neck and falls to the side.");
             break;
          case 3:
-            strcat(str," sucks a last breath through");
+            str+=" sucks a last breath through";
             addstr(str);
             move(17,1);
             addstr("the neck hole, then is quiet.");
@@ -2610,77 +2610,77 @@ void adddeathmessage(creaturest &cr)
    else if((cr.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_BODY] & WOUND_NASTYOFF))
    {
-      strcpy(str,cr.name);
+      str=cr.name;
       switch(LCSrandom(2))
       {
-         case 0:strcat(str," falls into pieces.");break;
-         case 1:strcat(str," breaks apart and is dead.");break;
+         case 0:str+=" falls into pieces.";break;
+         case 1:str+=" breaks apart and is dead.";break;
       }
       addstr(str);
    }
    else
    {
-      strcpy(str,cr.name);
+      str=cr.name;
       switch(LCSrandom(10))
       {
          case 0:
-            strcat(str," cries out one last time");
+            str+=" cries out one last time";
             addstr(str);
             move(17,1);
             addstr("then is quiet.");
             break;
          case 1:
-            strcat(str," gasps a last breath and");
+            str+=" gasps a last breath and";
             addstr(str);
             move(17,1);
             if(law[LAW_FREESPEECH]==-2)addstr("[makes a mess].");
             else addstr("soils the floor.");
             break;
          case 2:
-            strcat(str," murmur quietly, breathing softly.");
+            str+=" murmur quietly, breathing softly.";
             addstr(str);
             move(17,1);
             addstr("Then all is silent.");
             break;
          case 3:
-            strcat(str," shouts \"FATHER!  Why have you");
+            str+=" shouts \"FATHER!  Why have you";
             addstr(str);
             move(17,1);
             addstr("forsaken me?\" and dies in a heap.");
             break;
          case 4:
-            strcat(str," cries silently for mother,");
+            str+=" cries silently for mother,";
             addstr(str);
             move(17,1);
             addstr("breathing slowly, then not at all.");
             break;
          case 5:
-            strcat(str," breathes heavily, coughing up");
+            str+=" breathes heavily, coughing up";
             addstr(str);
             move(17,1);
             addstr("blood...  then is quiet.");
             break;
          case 6:
-            strcat(str," silently drifts away, and");
+            str+=" silently drifts away, and";
             addstr(str);
             move(17,1);
             addstr("is gone.");
             break;
          case 7:
-            strcat(str," sweats profusely, murmurs");
+            str+=" sweats profusely, murmurs";
             addstr(str);
             move(17,1);
             if(law[LAW_FREESPEECH]==-2)addstr("something [good] about Jesus, and dies.");
             else addstr("something about Jesus, and dies.");
             break;
          case 8:
-            strcat(str," whines loudly, voice crackling,");
+            str+=" whines loudly, voice crackling,";
             addstr(str);
             move(17,1);
             addstr("then curls into a ball, unmoving.");
             break;
          case 9:
-            strcat(str," shivers silently, whispering");
+            str+=" shivers silently, whispering";
             addstr(str);
             move(17,1);
             addstr("a prayer, then all is still.");

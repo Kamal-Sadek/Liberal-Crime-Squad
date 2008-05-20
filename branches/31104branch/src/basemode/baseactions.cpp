@@ -878,16 +878,16 @@ char liberalagenda(char won)
 /* base - liberal agenda - disband */
 char confirmdisband(void)
 {
-   char word[80];
+   string word;;
    int pos=0;
 
    switch(LCSrandom(5))
    {
-      case 0:strcpy(word,"Corporate Accountability");break;
-      case 1:strcpy(word,"Free Speech");break;
-      case 2:strcpy(word,"Gay Marriage");break;
-      case 3:strcpy(word,"Abortion Rights");break;
-      case 4:strcpy(word,"Separation Clause");break;
+      case 0:word="Corporate Accountability";break;
+      case 1:word="Free Speech";break;
+      case 2:word="Gay Marriage";break;
+      case 3:word="Abortion Rights";break;
+      case 4:word="Separation Clause";break;
    }
 
    do
@@ -910,7 +910,7 @@ char confirmdisband(void)
       move(6,0);
       addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 
-      for(int x=0;x<strlen(word);x++)
+      for(int x=0;x<word.length();x++)
       {
          move(8,x);
          if(x==pos)set_color(COLOR_GREEN,COLOR_BLACK,0);
@@ -926,7 +926,7 @@ char confirmdisband(void)
       {
          pos++;
          if(word[pos]==' ')pos++;
-         if(pos>=strlen(word))
+         if(pos>=word.length())
          {
             //SET UP THE DISBAND
             for(int p=0;p<pool.size();p++)
@@ -1121,8 +1121,8 @@ void investlocation(void)
       {
          if(!ppress&&funds>=10000)
          {
-            strcpy(location[loc]->name,"Liberal Guardian Headquarters");
-            strcpy(location[loc]->shortname,"Guardian");
+            location[loc]->name="Liberal Guardian Headquarters";
+            location[loc]->shortname="Guardian";
             funds-=10000;
             stat_spent+=10000;
             moneylost_compound+=10000;
@@ -1153,23 +1153,23 @@ void investlocation(void)
             moneylost_compound+=3000;
             location[loc]->front_business=LCSrandom(BUSINESSFRONTNUM);
             lastname(location[loc]->front_name);
-            strcat(location[loc]->front_name," ");
+            location[loc]->front_name+=" ";
             switch(location[loc]->front_business)
             {
                case BUSINESSFRONT_INSURANCE:
                   switch(LCSrandom(3))
                   {
-                     case 0:strcat(location[loc]->front_name,"Auto");break;
-                     case 1:strcat(location[loc]->front_name,"Life");break;
-                     case 2:strcat(location[loc]->front_name,"Health");break;
+                     case 0:location[loc]->front_name+="Auto";break;
+                     case 1:location[loc]->front_name+="Life";break;
+                     case 2:location[loc]->front_name+="Health";break;
                   }
-                  strcat(location[loc]->front_name," Insurance");
+                  location[loc]->front_name+=" Insurance";
                   break;
                case BUSINESSFRONT_TEMPAGENCY:
                   switch(LCSrandom(2))
                   {
-                     case 0:strcat(location[loc]->front_name,"Temp Agency");break;
-                     case 1:strcat(location[loc]->front_name,"Manpower, LLC");break;
+                     case 0:location[loc]->front_name+="Temp Agency";break;
+                     case 1:location[loc]->front_name+="Manpower, LLC";break;
                   }
                   break;
             }
@@ -1199,7 +1199,7 @@ void setvehicles(void)
       printparty();
 
       int x=1,y=10;
-      char str[200],str2[200];
+      string str,str2;
 
       for(l=page*18;l<vehicle.size()&&l<page*18+18;l++)
       {
@@ -1227,8 +1227,8 @@ void setvehicles(void)
          getcarfull(str2,*vehicle[l],1);
          str[0]=l-page*18+'A';
          str[1]='\x0';
-         strcat(str," - ");
-         strcat(str,str2);
+         str+=" - ";
+         str+=str2;
 
          move(y,x);
          addstr(str);
