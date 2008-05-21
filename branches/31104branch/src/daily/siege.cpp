@@ -912,7 +912,7 @@ void siegeturn(char clearformess)
             // ELITE REPORTER SNEAKS IN
             if(!LCSrandom(50)&&no_bad&&liberalcount[l]>0)
             {
-               string repname;
+               char repname[200];
                name(repname);
 
                set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1110,9 +1110,9 @@ void giveup(void)
 
       int kcount=0;
       int pcount=0;
-      string kname;
-      string pname;
-      string pcname;
+      char kname[100];
+      char pname[100];
+      char pcname[100];
       int icount=0;
       int p;
       for(p=pool.size()-1;p>=0;p--)
@@ -1125,7 +1125,7 @@ void giveup(void)
          if(pool[p]->flag & CREATUREFLAG_MISSING)
          {
             kcount++;
-            kname=pool[p]->propername;
+            strcpy(kname,pool[p]->propername);
             if(pool[p]->type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
             if(pool[p]->type==CREATURE_NEWSANCHOR)offended_cablenews=1;
             //clear interrogation data if deleted
@@ -1146,8 +1146,8 @@ void giveup(void)
          if(iscriminal(*pool[p])&&!(pool[p]->flag & CREATUREFLAG_MISSING))
          {
             pcount++;
-            pname=pool[p]->propername;
-            pcname=pool[p]->name;
+            strcpy(pname,pool[p]->propername);
+            strcpy(pcname,pool[p]->name);
          }
       }
 
@@ -1626,7 +1626,7 @@ void statebrokenlaws(int loc)
    short breakercount[LAWFLAGNUM] = {0};
    int typenum=0;
    int criminalcount=0;
-   string kname;
+   char kname[100];
    int kidnapped=0;
    int confessed=0;
 
@@ -1637,7 +1637,7 @@ void statebrokenlaws(int loc)
 
       if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)
       {
-         kname=pool[p]->propername;
+         strcpy(kname,pool[p]->propername);
          kidnapped++;
       }
 

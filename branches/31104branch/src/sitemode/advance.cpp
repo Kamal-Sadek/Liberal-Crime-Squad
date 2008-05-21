@@ -273,14 +273,14 @@ void advancecreature(creaturest &cr)
       }
       else
       {
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(16,1);
-         strcpy(str,cr.name.c_str());
-         strcat(str," bleeds.");
-         addstr(str);
+         //set_color(COLOR_RED,COLOR_BLACK,0);
+         //move(16,1);
+         //strcpy(str,cr.name);
+         //strcat(str," bleeds.");
+         //addstr(str);
 
-         refresh();
-         getch();
+         //refresh();
+         //getch();
       }
    }
 }

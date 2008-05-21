@@ -84,8 +84,8 @@ void trial(creaturest &g)
    char sleeperlawyer=0;
    char sleeperjudge=0;
    bool autoconvict=0;
-   string sleeperjname;
-   string sleepername;
+   char *sleeperjname=NULL;
+   char *sleepername=NULL;
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER))
@@ -460,7 +460,7 @@ void trial(creaturest &g)
    move(y+2,1);
    addstr("How will you conduct the defense?");
 
-   string attorneyname;
+   char attorneyname[200];
    unsigned long oldseed=seed;
    seed=attorneyseed;
    name(attorneyname);
@@ -505,7 +505,7 @@ void trial(creaturest &g)
          stat_spent+=100;
          defense=3;
          moneylost_legal+=100;
-         attorneyname=sleepername;
+         strcpy(attorneyname,sleepername);
          break;
       }
       else if(c=='d'&&funds>=5000)

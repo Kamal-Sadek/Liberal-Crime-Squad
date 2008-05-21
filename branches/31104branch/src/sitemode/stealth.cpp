@@ -199,7 +199,7 @@ void disguisecheck(void)
       }
    }
 
-   if(sitealarmtimer==-1 && weapon<1 && !forcecheck)
+   if(sitealarmtimer==-1 && weapon<2)
    {
       if(!disguisesite(location[cursite]->type)&&
          !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))return;
@@ -261,7 +261,7 @@ void disguisecheck(void)
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(16,1);
       addstr(encounter[n].name);
-      if(sitealarmtimer!=0 && weapon<1)
+      if(sitealarmtimer!=0 && !weapon)
       {
          addstr(" looks at the Squad suspiciously.");
 
@@ -442,111 +442,53 @@ void stealthpractice(int p, int diff)  //diff is the difficulty that the Conserv
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(creaturest &cr,short type)
 {
-   bool suspicious=0;  // Does the weapon look at all suspicious?
-   char illegal=0;     // Is the weapon illegal?
-   char incharacter=0; // Is the weapon in character for the clothing the LCS is wearing?
-   char concealed=0;   // Is the weapon concealed under clothing?
+   char suspicious=1;
+   char illegal=1;
 
    //CHECK SUSPICIOUSNESS
    switch(cr.weapon.type)
    {
-   case WEAPON_NONE:
+   case WEAPON_DAISHO:
+   case WEAPON_HAMMER:
+   case WEAPON_MAUL:
    case WEAPON_CROSS:
-   case WEAPON_SYRINGE:
-   case WEAPON_GAVEL:
-   case WEAPON_GUITAR:
-      suspicious=0;
+   case WEAPON_STAFF:
+   case WEAPON_SWORD:
+   case WEAPON_PITCHFORK:
+   case WEAPON_TORCH:
+   case WEAPON_SPRAYCAN:
       break;
-   default:
-      suspicious=1;
-      break;
-   }
-
-   //CHECK CONCEALMENT
-   switch(cr.weapon.type)
-   {
-   case WEAPON_SYRINGE:
-   case WEAPON_GAVEL:
-   case WEAPON_CROSS:
    case WEAPON_SHANK:
    case WEAPON_KNIFE:
+   case WEAPON_SYRINGE:
+   case WEAPON_CHAIN:
    case WEAPON_CROWBAR:
    case WEAPON_REVOLVER_22:
    case WEAPON_REVOLVER_44:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
-      if(cr.armor.type!=ARMOR_NONE)concealed=1;
+      if(cr.armor.type!=ARMOR_NONE)suspicious=0;
       break;
-   case WEAPON_CHAIN:
-   case WEAPON_HAMMER:
-   case WEAPON_SPRAYCAN:
    case WEAPON_NIGHTSTICK:
    case WEAPON_SHOTGUN_PUMP:
    case WEAPON_SMG_MP5:
    case WEAPON_CARBINE_M4:
-   case WEAPON_SWORD:
-   case WEAPON_DAISHO:
-      if(cr.armor.type==ARMOR_TRENCHCOAT)concealed=1;
-      break;
-   default:
-      concealed=0;
-      break;
-   }
-
-   //CHECK UNIFORM
-   incharacter=0;
-   switch(cr.weapon.type)
-   {
-   case WEAPON_SYRINGE:
-      if(cr.armor.type==ARMOR_LABCOAT)incharacter=1;
-      break;
-   case WEAPON_GAVEL:
-      if(cr.armor.type==ARMOR_BLACKROBE)incharacter=1;
-      break;
-   case WEAPON_REVOLVER_22:
-   case WEAPON_REVOLVER_44:
-   case WEAPON_SEMIPISTOL_9MM:
-   case WEAPON_SEMIPISTOL_45:
-   case WEAPON_NIGHTSTICK:
-      // Police or security (no military)
-      if(cr.armor.type==ARMOR_POLICEUNIFORM||
-         cr.armor.type==ARMOR_SECURITYUNIFORM||
-         (cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE))
-      {
-         incharacter=1;
-      }
-      break;
-   case WEAPON_SHOTGUN_PUMP:
-   case WEAPON_SMG_MP5:
-   case WEAPON_CARBINE_M4:
-      // Police, military, or, in extreme times, security
-      if(cr.armor.type==ARMOR_POLICEUNIFORM||
-         (cr.armor.type==ARMOR_SECURITYUNIFORM&&law[LAW_GUNCONTROL]==-2)||
-         (cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)||
-         cr.armor.type==ARMOR_MILITARY||
-         (cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY))
-      {
-         incharacter=1;
-      }
-      break;
+      if(cr.armor.type==ARMOR_TRENCHCOAT)suspicious=0;
+      if(cr.armor.type==ARMOR_POLICEUNIFORM&&hasdisguise(cr,type))suspicious=0;
+      if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE&&hasdisguise(cr,type))suspicious=0;
+      if(law[LAW_GUNCONTROL]==-2&&cr.armor.type==ARMOR_SECURITYUNIFORM&&hasdisguise(cr,type))suspicious=0;
    case WEAPON_AUTORIFLE_M16:
    case WEAPON_SEMIRIFLE_AR15:
-      // Police at extreme times
-      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2)
-      {
-         if(cr.armor.type==ARMOR_POLICEUNIFORM||
-            (cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE))
-         {
-            incharacter=1;
-         }
-      }
-      // Or military
-      else if(cr.armor.type==ARMOR_MILITARY||
-              (cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY))
-      {
-         incharacter=1;
-      }
+      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2&&
+         cr.armor.type==ARMOR_POLICEUNIFORM&&hasdisguise(cr,type))suspicious=0;
+      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2&&
+         cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE&&hasdisguise(cr,type))suspicious=0;
+      if(cr.armor.type==ARMOR_MILITARY&&hasdisguise(cr,type))suspicious=0;
+      if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY&&hasdisguise(cr,type))suspicious=0;
+   case WEAPON_AUTORIFLE_AK47:
       break;
+   default:
+      suspicious=0;
    }
 
    //CHECK LEGALITY
@@ -572,13 +514,8 @@ char weaponcheck(creaturest &cr,short type)
       illegal=0;
    }
 
-   if(suspicious)
-   {
-      if(incharacter)return 0;
-      else if(concealed)return -1;
-      else if(illegal)return 2;
-      else return 1;
-   }
+   if(suspicious&&illegal)return 2;
+   if(suspicious)return 1;
    return 0;
 }
 

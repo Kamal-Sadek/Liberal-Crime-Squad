@@ -206,28 +206,28 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
 }
 
 
-static void getissueeventstring(string& str)
+static void getissueeventstring(char* str)
 {
    switch(LCSrandom(VIEWNUM-2))
    {
-   case VIEW_ABORTION:str+="a documentary on the women's rights struggle";break;
-   case VIEW_GAY:str+="a documentary on the gay rights struggle";break;
-   case VIEW_DEATHPENALTY:str+="a research paper on abuses of the death penalty";break;
-	case VIEW_TAXES:str+="an economic paper on the flaws of trickle-down";break;
-   case VIEW_NUCLEARPOWER:str+="a video tour of the chernobyl dead zone";break;
-   case VIEW_ANIMALRESEARCH:str+="a documentary on animal research";break;
-   case VIEW_POLICEBEHAVIOR:str+="a hand-recorded video of police brutality";break;
-   case VIEW_PRISONS:str+="a government inquiry into prison conditions";break;
-   case VIEW_INTELLIGENCE:str+="a documentary on privacy rights";break;
-   case VIEW_FREESPEECH:str+="a collection of banned books";break;
-   case VIEW_GENETICS:str+="a video about genetic engineering accidents";break;
-   case VIEW_JUSTICES:str+="a Liberal policy paper inquiring into judicial decisions";break;
-   case VIEW_SWEATSHOPS:str+="a hand-recorded video of unregulated sweatshops";break;
-   case VIEW_POLLUTION:str+="a leaked government paper on environmental conditions";break;
-   case VIEW_CORPORATECULTURE:str+="a documentary on life under corporate culture";break;
-   case VIEW_CEOSALARY:str+="a Liberal think-tank survey of top CEO salaries";break;
-   case VIEW_AMRADIO:str+="a collection of Conservative radio host rants";break;
-   case VIEW_CABLENEWS:str+="a collection of leaked Conservative cable news memos";break;
+   case VIEW_ABORTION:strcat(str,"a documentary on the women's rights struggle");break;
+   case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
+   case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
+	case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
+   case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the chernobyl dead zone");break;
+   case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
+   case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
+   case VIEW_PRISONS:strcat(str,"a government inquiry into prison conditions");break;
+   case VIEW_INTELLIGENCE:strcat(str,"a documentary on privacy rights");break;
+   case VIEW_FREESPEECH:strcat(str,"a collection of banned books");break;
+   case VIEW_GENETICS:strcat(str,"a video about genetic engineering accidents");break;
+   case VIEW_JUSTICES:strcat(str,"a Liberal policy paper inquiring into judicial decisions");break;
+   case VIEW_SWEATSHOPS:strcat(str,"a hand-recorded video of unregulated sweatshops");break;
+   case VIEW_POLLUTION:strcat(str,"a leaked government paper on environmental conditions");break;
+   case VIEW_CORPORATECULTURE:strcat(str,"a documentary on life under corporate culture");break;
+   case VIEW_CEOSALARY:strcat(str,"a Liberal think-tank survey of top CEO salaries");break;
+   case VIEW_AMRADIO:strcat(str,"a collection of Conservative radio host rants");break;
+   case VIEW_CABLENEWS:strcat(str,"a collection of leaked Conservative cable news memos");break;
    }
 }
 
@@ -244,7 +244,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr("Meeting with ");
    addstr(r.recruit->name);
    addstr(", ");
-   string str;
+   char str[75];
    getrecruitcreature(str,r.recruit->type);
    addstr(str);
 
@@ -544,10 +544,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             getch();
             move(y++,0);
             addstr("Here's $");
-            char str2[10];
             if(donationamount<=0)donationamount=1;
-            itoa(donationamount,str2,10);
-            addstr(str2);
+            itoa(donationamount,str,10);
+            addstr(str);
             addstr(" for the cause.");
             funds+=donationamount;
             moneygained_donate+=donationamount;

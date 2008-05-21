@@ -28,7 +28,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <externs.h>
-#include "saveload.h"
 
 void mode_title(void)
 {
@@ -51,12 +50,13 @@ void mode_title(void)
    {
       char num[20];
 
-      int l=slogan.length();
+      int l=strlen(slogan);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,40-(l>>1));
-      addstr(slogan.c_str());
+      addstr(slogan);
 
       move(9,10);
+
       addstr("Liberals Indoctrinated: ");
       itoa(stat_recruits,num,10);
       addstr(num);

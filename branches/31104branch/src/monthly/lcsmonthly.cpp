@@ -152,14 +152,15 @@ int choosespecialedition(char &clearformess)
       addstr("Do you want to run a special edition?");
 
       int x=1,y=10;
-      string str,str2;
+      char str[200],str2[200];
 
       for(int l=page*18;l<loottype.size()&&l<page*18+18;l++)
       {
          getloot(str2,loottype[l]);
          str[0]=l-page*18+'A';
          str[1]='\x0';
-         str+=" - "+str2;
+         strcat(str," - ");
+         strcat(str,str2);
 
          move(y,x);
          addstr(str);

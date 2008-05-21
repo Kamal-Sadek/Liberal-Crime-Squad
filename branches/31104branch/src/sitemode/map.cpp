@@ -215,14 +215,11 @@ void initsite(locationst &loc)
             }
             break;
          }
-         case SITE_BUSINESS_CIGARBAR:
-            levelmap[MAPX>>1][1][0].special=SPECIAL_CLUB_BOUNCER;
-            // no break; above use the same layout as below, just plus door guard
          case SITE_BUSINESS_JUICEBAR:
+         case SITE_BUSINESS_CIGARBAR:
          case SITE_BUSINESS_VEGANCOOP:
          case SITE_BUSINESS_INTERNETCAFE:
          {
-            
             for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
             {
                for(int y=3;y<10;y++)

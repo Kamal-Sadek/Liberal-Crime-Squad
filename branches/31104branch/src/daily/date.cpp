@@ -88,7 +88,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          getch();
 
          name(d.date[e]->name);
-         d.date[e]->propername=d.date[e]->name;
+         strcpy(d.date[e]->propername,d.date[e]->name);
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->location=pool[p]->location;
@@ -105,7 +105,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(2,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("What name will you use for this ");
-         string str;
+         char str[80];
          getrecruitcreature(str,d.date[e]->type);
          addstr(str);
          addstr(" in its presence?");
@@ -437,12 +437,10 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(12,0);
       addstr("B - Try to get through the evening without spending a penny.");
-      if(!(pool[p]->clinic||(pool[p]->blood<100)))set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(13,0);
-      addstr("C - Spend a week on a cheap vacation (");
-      if(pool[p]->blood<100)addstr("must not be injured, ");
-      addstr("stands up any other dates).");
+      addstr("C - Spend a week on a cheap vacation (stands up any other dates).");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(14,0);
       addstr("D - Break it off.");
@@ -507,7 +505,7 @@ char completedate(datest &d,int p,char &clearformess)
             break;
          }
 
-         if(c=='c'&&!(pool[p]->clinic||pool[p]->blood<100))
+         if(c=='c'&&!pool[p]->clinic)
          {
             for(int e2=d.date.size()-1;e2>=0;e2--)
             {
@@ -539,7 +537,7 @@ char completedate(datest &d,int p,char &clearformess)
                 LCSrandom(3))
             {
                name(d.date[e]->name);
-               d.date[e]->propername=d.date[e]->name;
+               strcpy(d.date[e]->propername,d.date[e]->name);
 
                d.date[e]->location=pool[p]->location;
                d.date[e]->base=pool[p]->base;
@@ -563,7 +561,7 @@ char completedate(datest &d,int p,char &clearformess)
                move(2,0);
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                addstr("What name will you use for this ");
-               string str;
+               char str[80];
                getrecruitcreature(str,d.date[e]->type);
                addstr(str);
                addstr(" in its presence?");

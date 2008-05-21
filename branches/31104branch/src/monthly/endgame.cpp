@@ -28,7 +28,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <externs.h>
-#include "saveload.h"
 
 
 
@@ -205,10 +204,10 @@ void reaganify(char canseethings)
       //REAGANIFY
       if(canseethings)
       {
-         execname[EXEC_PRESIDENT]="Ronald Reagan";
-         execname[EXEC_VP]="Strom Thurmond";
-         execname[EXEC_STATE]="Jesse Helms";
-         execname[EXEC_ATTORNEY]="Jerry Falwell";
+         strcpy(execname[EXEC_PRESIDENT],"Ronald Reagan");
+         strcpy(execname[EXEC_VP],"Strom Thurmond");
+         strcpy(execname[EXEC_STATE],"Jesse Helms");
+         strcpy(execname[EXEC_ATTORNEY],"Jerry Falwell");
          for(int e=0;e<EXECNUM;e++)exec[e]=-2;
          liberalagenda(-1);
          savehighscore(END_REAGAN);

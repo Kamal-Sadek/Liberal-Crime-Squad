@@ -29,7 +29,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
-
 enum bouncer_reject_reason
 {
    REJECTED_WEAPONS,
@@ -172,7 +171,6 @@ void special_bouncer_assess_squad()
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
    makecreature(encounter[0],CREATURE_BOUNCER);
 }
-
 
 void special_lab_cosmetics_cagedanimals(void)
 {

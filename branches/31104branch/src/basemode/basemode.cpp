@@ -445,7 +445,7 @@ void mode_base(void)
             addstr("P - PATRIOTISM: fly a flag here ($20)");
          }
 
-         length=slogan.length();
+         length=strlen(slogan);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          if(haveflag)move(24,40-(length>>1));
          else move(20,40-(length>>1));

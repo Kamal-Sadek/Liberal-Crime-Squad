@@ -28,7 +28,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <externs.h>
-#include "saveload.h"
 
 
 /* common - test for possible game over */

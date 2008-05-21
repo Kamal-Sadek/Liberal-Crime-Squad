@@ -103,7 +103,7 @@ void makecharacter(void)
             
             move(18,0);
             addstr("My parents named me ");
-            addstr(newcr->propername.c_str());
+            addstr(newcr->propername);
             addstr(".");
             break;
          case 1:
@@ -351,7 +351,7 @@ void makecharacter(void)
             //SKILL_PERSUASION 1
             move(17,0);
             addstr("I live in ");
-            addstr(lcityname.c_str());addstr(", and it's about to experience real change.");
+            addstr(lcityname);addstr(", and it's about to experience real change.");
             break;
       }
 
@@ -696,29 +696,29 @@ void makecharacter(void)
    locationst *newl;
 
    newl=new locationst;
-      newl->name="Downtown";
-      newl->shortname="Downtown";
+      strcpy(newl->name,"Downtown");
+      strcpy(newl->shortname,"Downtown");
       newl->type=SITE_DOWNTOWN;
       newl->parent=-1;
    location.push_back(newl);
 
    newl=new locationst;
-      newl->name="The University District";
-      newl->shortname="U-District";
+      strcpy(newl->name,"The University District");
+      strcpy(newl->shortname,"U-District");
       newl->type=SITE_UDISTRICT;
       newl->parent=-1;
    location.push_back(newl);
 
    newl=new locationst;
-      newl->name="The Industrial District";
-      newl->shortname="I-District";
+      strcpy(newl->name,"The Industrial District");
+      strcpy(newl->shortname,"I-District");
       newl->type=SITE_INDUSTRIAL;
       newl->parent=-1;
    location.push_back(newl);
 
    newl=new locationst;
-      newl->name="On the Outskirts of the City";
-      newl->shortname="Outskirts";
+      strcpy(newl->name,"On the Outskirts of the City");
+      strcpy(newl->shortname,"Outskirts");
       newl->type=SITE_OUTOFTOWN;
       newl->parent=-1;
       newl->needcar=1;
@@ -1023,7 +1023,7 @@ void makecharacter(void)
       newsq->id=0;cursquadid++;
       newsq->squad[0]=newcr;
       newcr->squadid=0;
-      newsq->name="The Liberal Crime Squad";
+      strcpy(newsq->name,"The Liberal Crime Squad");
       for(int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_RESIDENTIAL_SHELTER)

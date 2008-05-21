@@ -198,7 +198,7 @@ void repairarmor(creaturest &cr,char &clearformess)
       addstr(cr.name);
       if(armor->flag & ARMORFLAG_DAMAGED)addstr(" repairs ");
       else addstr(" cleans ");
-      string str;
+      char str[80];
       getarmorfull(str,armor->type,armor->subtype);
       addstr(str);
 
@@ -379,7 +379,7 @@ void makearmor(creaturest &cr,char &clearformess)
             case '4':addstr("fourth-rate");break;
          }
          addstr(" ");
-         string str;
+         char str[80];
          getarmorfull(str,at);
          addstr(str);
          addstr(".");
@@ -1080,7 +1080,7 @@ void funds_and_trouble(char &clearformess)
          }
       }
 
-      string msg = "";
+      char msg[80] = {0};
 
       //MAJOR HACKING
       if(truehack.size())
@@ -1089,19 +1089,19 @@ void funds_and_trouble(char &clearformess)
          {
             switch(LCSrandom(16))
             {
-            case 0:msg="Your hackers have no idea how to do what you've asked them to do.";break;
-            case 1:msg="Your hackers can't even figure out where to start.";break;
-            case 2:msg="Your hackers need to get their feet wet on something less ambitious.";break;
-            case 3:msg="Your hackers are just playing video games.";break;
-            default:msg="";break;
+            case 0:strcpy(msg,"Your hackers have no idea how to do what you've asked them to do.");break;
+            case 1:strcpy(msg,"Your hackers can't even figure out where to start.");break;
+            case 2:strcpy(msg,"Your hackers need to get their feet wet on something less ambitious.");break;
+            case 3:strcpy(msg,"Your hackers are just playing video games.");break;
+            default:strcpy(msg,"");break;
             }
          }
          else
          {
             if(LCSrandom(150)<=hack_skill)
             {
-               if(truehack.size()>1)msg="Your Hackers have ";
-               else {msg=truehack[0]->name;msg+=" has ";}
+               if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
+               else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
 
                int trackdif=0;
                unsigned short crime=0;
@@ -1112,7 +1112,7 @@ void funds_and_trouble(char &clearformess)
                {
                   case 0:
                   {
-                     msg+="pilfered files from a Corporate server.";
+                     strcat(msg,"pilfered files from a Corporate server.");
 
                      itemst *it=new itemst;
                         it->type=ITEM_LOOT;
@@ -1125,7 +1125,7 @@ void funds_and_trouble(char &clearformess)
                      break;
                   }
                   case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
-                     msg+="caused a scare by breaking into a CIA network.";
+                     strcat(msg,"caused a scare by breaking into a CIA network.");
 
                      trackdif=30;
                      crime=LAWFLAG_INFORMATION;
@@ -1133,7 +1133,7 @@ void funds_and_trouble(char &clearformess)
                      change_public_opinion(VIEW_INTELLIGENCE,10,0,75);
                      break;
                   case 2:
-                     msg+="sabotaged a genetics research company's network.";
+                     strcat(msg,"sabotaged a genetics research company's network.");
 
                      trackdif=20;
                      crime=LAWFLAG_INFORMATION;
@@ -1141,7 +1141,7 @@ void funds_and_trouble(char &clearformess)
                      change_public_opinion(VIEW_GENETICS,2,0,75);
                      break;
                   case 3:
-                     msg+="intercepted and published biased internal media emails.";
+                     strcat(msg,"intercepted and published biased internal media emails.");
 
                      trackdif=20;
                      crime=LAWFLAG_INFORMATION;
@@ -1149,7 +1149,7 @@ void funds_and_trouble(char &clearformess)
                      change_public_opinion(VIEW_CABLENEWS,5,0,75);
                      break;
                   case 4:
-                     msg+="broke into military networks leaving LCS slogans.";
+                     strcat(msg,"broke into military networks leaving LCS slogans.");
 
                      trackdif=30;
                      crime=LAWFLAG_INFORMATION;
@@ -1199,19 +1199,19 @@ void funds_and_trouble(char &clearformess)
          {
             switch(LCSrandom(16))
             {
-            case 0:msg="Nobody on your credit card fraud team knows what to do.";break;
-            case 1:msg="Your credit card fraud team needs skilled hackers.";break;
-            case 2:msg="Your credit card fraud team needs a programmer.";break;
-            case 3:msg="Your credit card fraud team is just playing video games.";break;
-            default:msg="";break;
+            case 0:strcpy(msg,"Nobody on your credit card fraud team knows what to do.");break;
+            case 1:strcpy(msg,"Your credit card fraud team needs skilled hackers.");break;
+            case 2:strcpy(msg,"Your credit card fraud team needs a programmer.");break;
+            case 3:strcpy(msg,"Your credit card fraud team is just playing video games.");break;
+            default:strcpy(msg,"");break;
             }
          }
          else if(LCSrandom(15)<=cc_skill)
          {
-            if(cc.size()>1)msg="Your credit card fraud team has ";
-            else {msg=cc[0]->name;msg+=" has ";}
+            if(cc.size()>1)strcpy(msg,"Your credit card fraud team has ");
+            else {strcpy(msg,cc[0]->name);strcat(msg," has ");}
 
-            msg+="run some numbers, netting $";
+            strcat(msg,"run some numbers, netting $");
             char num[20];
             // *JDS* You get between $1 and $100, plus an extra $1-50 every
             // time you pass a check against your hacking skill, where chance of
@@ -1228,8 +1228,8 @@ void funds_and_trouble(char &clearformess)
             stat_funds+=fundgain;
             moneygained_ccfraud+=fundgain;
             itoa(fundgain,num,10);
-            msg+=num;
-            msg+=".";
+            strcat(msg,num);
+            strcat(msg,".");
 
             if(fundgain/100>LCSrandom(cc_skill+1))
             {
@@ -1265,17 +1265,17 @@ void funds_and_trouble(char &clearformess)
          {
             switch(LCSrandom(16))
             {
-            case 0:msg="Nobody on your denial of service racket team knows what to do.";break;
-            case 1:msg="Your denial of service racket team needs a skilled hacker.";break;
-            case 2:msg="Your denial of service racket team isn't scaring anyone.";break;
-            case 3:msg="Your denial of service racket team needs a programmer.";break;
-            default:msg="";break;
+            case 0:strcpy(msg,"Nobody on your denial of service racket team knows what to do.");break;
+            case 1:strcpy(msg,"Your denial of service racket team needs a skilled hacker.");break;
+            case 2:strcpy(msg,"Your denial of service racket team isn't scaring anyone.");break;
+            case 3:strcpy(msg,"Your denial of service racket team needs a programmer.");break;
+            default:strcpy(msg,"");break;
             }
          }
          else if(LCSrandom(100)<=ddos_skill)
          {
-            if(ddos.size()>1)msg="Your DoS team has ";
-            else {msg=ddos[0]->name;msg+=" has ";}
+            if(ddos.size()>1)strcpy(msg,"Your DoS team has ");
+            else {strcpy(msg,ddos[0]->name);strcat(msg," has ");}
 
             int trackdif=0;
             unsigned short crime=0;
@@ -1285,18 +1285,18 @@ void funds_and_trouble(char &clearformess)
             // the attack was launched
             bool hit=LCSrandom(100)>ddos_skill;
             
-            if(hit) msg+="hit a ";
-            else msg+="extorted a ";
+            if(hit) strcat(msg,"hit a ");
+            else strcat(msg,"extorted a ");
 
             switch(LCSrandom(5))
             {
-            case 0:msg+="large corporation";break;
-            case 1:msg+="betting company";break;
-            case 2:msg+="political website";break;
-            case 3:msg+="news agency";break;
-            case 4:msg+="government agency";break;
+            case 0:strcat(msg,"large corporation");break;
+            case 1:strcat(msg,"betting company");break;
+            case 2:strcat(msg,"political website");break;
+            case 3:strcat(msg,"news agency");break;
+            case 4:strcat(msg,"government agency");break;
             }
-            msg+=", netting $";
+            strcat(msg,", netting $");
             char num[20];
 
             long fundgain=200;
@@ -1308,8 +1308,8 @@ void funds_and_trouble(char &clearformess)
             stat_funds+=fundgain;
             moneygained_extortion+=fundgain;
             itoa(fundgain,num,10);
-            msg+=num;
-            msg+=".";
+            strcat(msg,num);
+            strcat(msg,".");
 
             if(hit)trackdif=fundgain/1000; // Easier to track if they fight
             else trackdif=!LCSrandom(3); // Harder to track if they give in
@@ -1348,11 +1348,11 @@ void funds_and_trouble(char &clearformess)
          {
             switch(LCSrandom(16))
             {
-            case 0:msg="Your website harassment team trolls some forums.";break;
-            case 1:msg="Your website harassment team sends spam emails.";break;
-            case 2:msg="Your website harassment team posts mean comments.";break;
-            case 3:msg="Your website harassment team bad-mouths a website.";break;
-            default:msg="";break;
+            case 0:strcpy(msg,"Your website harassment team trolls some forums.");break;
+            case 1:strcpy(msg,"Your website harassment team sends spam emails.");break;
+            case 2:strcpy(msg,"Your website harassment team posts mean comments.");break;
+            case 3:strcpy(msg,"Your website harassment team bad-mouths a website.");break;
+            default:strcpy(msg,"");break;
             }
          }
          else if(LCSrandom(10)<=web_skill)
@@ -1363,27 +1363,27 @@ void funds_and_trouble(char &clearformess)
             // Maybe do a switch on issue here to specify which website it was, but I don't feel like
             // doing that right now
 
-            if(web.size()>1)msg="Your website harassment team has ";
-            else {msg=web[0]->name;msg+=" has ";}
+            if(web.size()>1)strcpy(msg,"Your website harassment team has ");
+            else {strcpy(msg,web[0]->name);strcat(msg," has ");}
 
             switch(LCSrandom(5))
             {
-            case 0:msg+="defaced";crime=LAWFLAG_INFORMATION;break;
-            case 1:msg+="knocked out";crime=LAWFLAG_COMMERCE;break;
-            case 2:msg+="slandered";crime=LAWFLAG_SPEECH;break;
-            case 3:msg+="threatened";crime=LAWFLAG_SPEECH;break;
-            case 4:msg+="hacked";crime=LAWFLAG_INFORMATION;break;
+            case 0:strcat(msg,"defaced");crime=LAWFLAG_INFORMATION;break;
+            case 1:strcat(msg,"knocked out");crime=LAWFLAG_COMMERCE;break;
+            case 2:strcat(msg,"slandered");crime=LAWFLAG_SPEECH;break;
+            case 3:strcat(msg,"threatened");crime=LAWFLAG_SPEECH;break;
+            case 4:strcat(msg,"hacked");crime=LAWFLAG_INFORMATION;break;
             }
-            msg+=" a ";
+            strcat(msg," a ");
             switch(LCSrandom(5))
             {
-            case 0:msg+="corporate website";break;
-            case 1:msg+="Conservative forum";break;
-            case 2:msg+="Conservative blog";break;
-            case 3:msg+="news website";break;
-            case 4:msg+="government website";break;
+            case 0:strcat(msg,"corporate website");break;
+            case 1:strcat(msg,"Conservative forum");break;
+            case 2:strcat(msg,"Conservative blog");break;
+            case 3:strcat(msg,"news website");break;
+            case 4:strcat(msg,"government website");break;
             }
-            msg+=".";
+            strcat(msg,".");
             
             change_public_opinion(issue,1);
 
@@ -1435,7 +1435,7 @@ void funds_and_trouble(char &clearformess)
             power=0;
             if(!LCSrandom(3))
             {
-               string issuestr;
+               char issuestr[60];
                getview(issuestr,graffiti[s]->activity.arg);
                issue=graffiti[s]->activity.arg;
                power=LCSrandom((graffiti[s]->skill[SKILL_ART]+graffiti[s]->attval(ATTRIBUTE_HEART))/5+1)+1;
@@ -1471,7 +1471,7 @@ void funds_and_trouble(char &clearformess)
          else if(!LCSrandom(max(30-graffiti[s]->skill[SKILL_ART]*2,5)))
          {
             issue=randomissue();
-            string issuestr;
+            char issuestr[60];
             getview(issuestr,issue);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -2164,7 +2164,7 @@ char stealcar(creaturest &cr,char &clearformess)
    clearformess=1;
 
    short cartype;
-   string str;
+   char str[80];
 
    if(carselect(cr,cartype))
    {
@@ -2391,7 +2391,7 @@ char stealcar(creaturest &cr,char &clearformess)
                if(bashstrengthmod(cr.weapon.type)>0)
                {
                   addstr(" with a ");
-                  string str;
+                  char str[80];
                   getweaponfull(str,cr.weapon.type,2);
                   addstr(str);
                }
@@ -2411,7 +2411,7 @@ char stealcar(creaturest &cr,char &clearformess)
                if(bashstrengthmod(cr.weapon.type)>0)
                {
                   addstr(" with a ");
-                  string str;
+                  char str[80];
                   getweaponfull(str,cr.weapon.type,2);
                   addstr(str);
                }
@@ -2703,7 +2703,7 @@ char carselect(creaturest &cr,short &cartype)
 
    short page=0;
 
-   string str;
+   char str[200];
 
    do
    {

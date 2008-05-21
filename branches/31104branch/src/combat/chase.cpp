@@ -1296,7 +1296,7 @@ void dodgedrive(void)
 
 void crashfriendlycar(int v)
 {
-   string str;
+   char str[80];
    getcarfull(str,*chaseseq.friendcar[v]);
 
    int victimsum=0;
@@ -1405,7 +1405,7 @@ void crashfriendlycar(int v)
 
 void crashenemycar(int v)
 {
-   string str;
+   char str[80];
    getcarfull(str,*chaseseq.enemycar[v]);
 
    int victimsum=0;

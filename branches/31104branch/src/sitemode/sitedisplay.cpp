@@ -730,7 +730,7 @@ void printchaseencounter(void)
 
       int carsy[4]={20,20,20,20};
 
-      string str;
+      char str[80];
       for(int v=0;v<chaseseq.enemycar.size();v++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
