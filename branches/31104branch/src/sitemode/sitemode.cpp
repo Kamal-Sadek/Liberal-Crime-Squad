@@ -30,7 +30,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
-
 void mode_site(long loc)
 {
    sitetype=location[loc]->type;
@@ -1423,6 +1422,7 @@ void mode_site(void)
             switch(levelmap[locx][locy][locz].special)
             {
                case SPECIAL_APARTMENT_LANDLORD:
+               case SPECIAL_CLUB_BOUNCER:
                case SPECIAL_RESTAURANT_TABLE:
                case SPECIAL_CAFE_COMPUTER:
                case SPECIAL_PARK_BENCH:
@@ -1968,6 +1968,12 @@ void mode_site(void)
 
                         prepareencounter(sitetype,0);
                      }
+                     break;
+                  case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
+                     special_bouncer_greet_squad();
+                     break;
+                  case SPECIAL_CLUB_BOUNCER:
+                     special_bouncer_assess_squad();
                      break;
                   case SPECIAL_APARTMENT_LANDLORD:
                      if(sitealarm||sitealienate||

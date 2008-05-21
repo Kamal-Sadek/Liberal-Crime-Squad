@@ -129,7 +129,8 @@ char talk(creaturest &a,int t)
             for(int i=0;i>0;i--)
             {
                if(activesquad->squad[i]==NULL)break;
-               weapon+=weaponcheck(*activesquad->squad[i],cursite);
+               if(weaponcheck(*activesquad->squad[i],cursite)>0)
+                  weapon++;
             }
 
             char noticed=0,bluff=0;

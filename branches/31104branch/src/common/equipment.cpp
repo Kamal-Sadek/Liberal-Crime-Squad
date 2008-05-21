@@ -166,8 +166,8 @@ void equip(vector<itemst *> &loot,int loc)
             str2+="x";
             str2+=num;
          }
-         str[0]=l-page*18+'A';
-         str[1]='\x0';
+         str=l-page*18+'A';
+         //str+='\x0';
          str+=" - ";
          str+=str2;
 
@@ -487,8 +487,9 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
             str2+=num;
          }
 
-         str[0]=l-page*18+'A';
-         str[1]='\x0';
+         str.resize(2);
+         str=l-page*18+'A';
+         //str[1]='\x0';
          str+=" - ";
          str+=str2;
 

@@ -30,6 +30,149 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
+enum bouncer_reject_reason
+{
+   REJECTED_WEAPONS,
+   REJECTED_UNDERAGE,
+   REJECTED_BUSTEDCLOTHES,
+   REJECTED_DRESSCODE,
+   REJECTED_SMELLFUNNY,
+   REJECTED_GUESTLIST,
+   NOT_REJECTED
+};
+
+void special_bouncer_greet_squad()
+{
+   // add a bouncer if there isn't one in the first slot
+   if(!sitealarm)
+   {
+      if(encounter[0].exists && encounter[0].type!=CREATURE_BOUNCER)
+      {
+         makecreature(encounter[0],CREATURE_BOUNCER);
+      }
+   }
+}
+
+void special_bouncer_assess_squad()
+{
+   clearmessagearea();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(16,1);
+   addstr("The bouncer assesses your squad.");
+   levelmap[locx][locy][locz].special=SPECIAL_CLUB_BOUNCER_SECONDVISIT;
+   refresh();
+   getch();
+   char rejected=NOT_REJECTED;
+   // Size up the squad for entry
+   for(int s=0;s<6;s++)
+   {
+      if(activesquad->squad[s])
+      {
+         // Wrong clothes? Gone
+         if(!hasdisguise(*activesquad->squad[s],sitetype))
+            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+         // Busted, cheap, bloody clothes? Gone
+         if(activesquad->squad[s]->armor.quality!='1'||activesquad->squad[s]->armor.flag!=0)
+            if(rejected>REJECTED_BUSTEDCLOTHES)rejected=REJECTED_BUSTEDCLOTHES;
+         // Suspicious weapons? Gone
+         if(weaponcheck(*activesquad->squad[s],sitetype)>0)
+            if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
+         // Fail a tough disguise check? Gone
+         if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
+            if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
+         // Underage? Gone
+         if(kid(*activesquad->squad[s])||activesquad->squad[s]->type==CREATURE_TEENAGER)
+            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+         // High security in gentleman's club? Gone
+         if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
+            if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
+      }
+   }
+   move(18,1);
+   switch(rejected)
+   {
+   case REJECTED_DRESSCODE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Wearing that? No way.\"");break;
+      case 1:addstr("\"Get some new clothes.\"");break;
+      case 2:addstr("\"We have a dress code here.\"");break;
+      case 3:addstr("\"I can't let you in looking like that.\"");break;
+      case 4:addstr("\"Change your clothes and come back tomorrow.\"");break;
+      }
+      break;
+   case REJECTED_SMELLFUNNY:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"God, you smell.\"");break;
+      case 1:addstr("\"Not letting you in. Because I said so.\"");break;
+      case 2:addstr("\"There's just something off about you.\"");break;
+      case 3:addstr("\"Take a shower.\"");break;
+      case 4:addstr("\"You'd just harass the others, wouldn't you?\"");break;
+      }
+      break;
+   case REJECTED_BUSTEDCLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+      case 1:addstr("\"Absolutely not. Clean up a bit.\"");break;
+      case 2:addstr("\"This isn't a goth club, ripped and bloody clothes don't cut it here.\"");break;
+      case 3:addstr("\"Uh, maybe you should wash... replace... those clothes.\"");break;
+      case 4:addstr("\"Did you fish that out of a dumpster and wear it?\"");break;
+      }
+      break;
+   case REJECTED_WEAPONS:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"No weapons allowed.\"");break;
+      case 1:addstr("\"I can't let you in carrying that.\"");break;
+      case 2:addstr("\"I can't let you take that in.\"");break;
+      case 3:addstr("\"Come to me armed, and I'll tell you to take a hike.\"");break;
+      case 4:addstr("\"Real men fight with fists. And no, you can't come in.\"");break;
+      }
+      break;
+   case REJECTED_GUESTLIST:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Invitation only.\"");break;
+      case 1:addstr("\"Let me check the guest list. Sorry, you're not on it.\"");break;
+      case 2:addstr("\"Invitation only. Some ruffians shot the place up awhile back.\"");break;
+      case 3:addstr("\"If it were me, I'd let you in, but this club is exclusive.\"");break;
+      case 4:addstr("\"Not on the guest list. You might try some less exclusive clubs.\"");break;
+      }
+      break;
+   case NOT_REJECTED:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Welcome to the club.\"");break;
+      case 1:addstr("\"Okay, come on in. Don't make trouble.\"");break;
+      case 2:addstr("\"Alright, you can go in.\"");break;
+      case 3:addstr("\"Welcome. Have a nice day.\"");break;
+      case 4:addstr("\"Keep it civil and don't drink too much.\"");break;
+      }
+      break;
+   }
+   refresh();
+   getch();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   if(rejected<NOT_REJECTED)
+   {
+      levelmap[locx][locy+1][locz].flag |= SITEBLOCK_LOCKED;
+      levelmap[locx][locy+1][locz].flag |= SITEBLOCK_CLOCK;
+   }
+   else levelmap[locx][locy+1][locz].flag &= ~SITEBLOCK_DOOR;
+   encounter[0].cantbluff=1;
+
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   makecreature(encounter[0],CREATURE_BOUNCER);
+}
+
 
 void special_lab_cosmetics_cagedanimals(void)
 {

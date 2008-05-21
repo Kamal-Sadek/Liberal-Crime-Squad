@@ -62,6 +62,16 @@ void makecreature(creaturest &cr,short type)
 
    switch(type)
    {
+      case CREATURE_BOUNCER:
+         cr.armor.type=ARMOR_SECURITYUNIFORM;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         if(sitealarm||disguisesite(sitetype))cr.align=-1;
+         else cr.align=0;
+         for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
+         cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.att[ATTRIBUTE_AGILITY]=4;
+         cr.att[ATTRIBUTE_STRENGTH]=6;
+         break;
       case CREATURE_SECURITYGUARD:
          if(law[LAW_GUNCONTROL]==-2)
          {

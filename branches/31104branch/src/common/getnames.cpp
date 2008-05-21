@@ -711,6 +711,9 @@ void getrecruitcreature(string& str,int type)
 
    switch(type)
    {
+      case CREATURE_BOUNCER:if(sitetype==SITE_BUSINESS_CIGARBAR)str+="Club Security";
+                            else str+="Bouncer";
+                            break;
       case CREATURE_SECURITYGUARD:str+="Security Guard";break;
       case CREATURE_SCIENTIST_LABTECH:str+="Lab Tech";break;
       case CREATURE_SCIENTIST_EMINENT:str+="Eminent Scientist";break;

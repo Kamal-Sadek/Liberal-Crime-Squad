@@ -197,7 +197,7 @@ void enemyattack(void)
    {
       if(activesquad->squad[i]==NULL)break;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
-      if(thisweapon==-1||thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+      if(thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
    }
 
 #ifdef NOENEMYATTACK
@@ -214,6 +214,8 @@ void enemyattack(void)
       if(mode==GAMEMODE_CHASECAR&&
          !encounter[e].weapon.ranged())continue;
 
+      if(encounter[e].type==CREATURE_BOUNCER)
+         conservatise(encounter[e]);
       if(encounter[e].align==-1)
          encounter[e].cantbluff=2;
       if(encounter[e].align!=-1&&!(encounter[e].flag & CREATUREFLAG_CONVERTED))
@@ -1296,7 +1298,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==&t)break;
-               if(activesquad->squad[i]->attval(ATTRIBUTE_HEART)>8&&
+               if(activesquad->squad[i]&&
+                  activesquad->squad[i]->attval(ATTRIBUTE_HEART)>8&&
                   activesquad->squad[i]->attval(ATTRIBUTE_AGILITY)>4)
                {
                   target=activesquad->squad[i];

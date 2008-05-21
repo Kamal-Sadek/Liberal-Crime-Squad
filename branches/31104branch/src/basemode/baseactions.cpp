@@ -1225,8 +1225,8 @@ void setvehicles(void)
          }
 
          getcarfull(str2,*vehicle[l],1);
-         str[0]=l-page*18+'A';
-         str[1]='\x0';
+         str=l-page*18+'A';
+         //str+='\x0';
          str+=" - ";
          str+=str2;
 

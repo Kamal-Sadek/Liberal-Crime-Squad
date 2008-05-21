@@ -172,8 +172,8 @@ void prepareencounter(short type,char sec)
       }
       case SITE_BUSINESS_CIGARBAR:
       {
-         if(sec)creaturearray[CREATURE_SECURITYGUARD]+=1000;
-         else creaturearray[CREATURE_SECURITYGUARD]+=100;
+         if(sec)creaturearray[CREATURE_BOUNCER]+=100;
+         else creaturearray[CREATURE_BOUNCER]+=10;
          creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
          creaturearray[CREATURE_CORPORATE_MANAGER]+=30;
          creaturearray[CREATURE_CORPORATE_CEO]+=1;

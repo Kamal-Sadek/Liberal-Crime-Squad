@@ -437,10 +437,12 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(12,0);
       addstr("B - Try to get through the evening without spending a penny.");
-      if(!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(!(pool[p]->clinic||(pool[p]->blood<100)))set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(13,0);
-      addstr("C - Spend a week on a cheap vacation (stands up any other dates).");
+      addstr("C - Spend a week on a cheap vacation (");
+      if(pool[p]->blood<100)addstr("must not be injured, ");
+      addstr("stands up any other dates).");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(14,0);
       addstr("D - Break it off.");
@@ -505,7 +507,7 @@ char completedate(datest &d,int p,char &clearformess)
             break;
          }
 
-         if(c=='c'&&!pool[p]->clinic)
+         if(c=='c'&&!(pool[p]->clinic||pool[p]->blood<100))
          {
             for(int e2=d.date.size()-1;e2>=0;e2--)
             {

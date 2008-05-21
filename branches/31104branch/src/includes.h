@@ -307,6 +307,7 @@ enum SiteTypes
 
 enum CreatureType
 {
+   CREATURE_BOUNCER,
    CREATURE_SECURITYGUARD,
    CREATURE_SCIENTIST_LABTECH,
    CREATURE_SCIENTIST_EMINENT,
@@ -1001,6 +1002,8 @@ enum SpecialBlocks
    SPECIAL_PARK_BENCH,
    SPECIAL_STAIRS_UP,
    SPECIAL_STAIRS_DOWN,
+   SPECIAL_CLUB_BOUNCER,
+   SPECIAL_CLUB_BOUNCER_SECONDVISIT,
    SPECIALNUM
 };
 
@@ -1950,6 +1953,8 @@ void reloadparty(bool wasteful=false);
 /*
  mapspecials.cpp
 */
+void special_bouncer_greet_squad(void);
+void special_bouncer_assess_squad(void);
 void special_lab_cosmetics_cagedanimals(void);
 void special_readsign(int sign);
 void special_nuclear_onoff(void);

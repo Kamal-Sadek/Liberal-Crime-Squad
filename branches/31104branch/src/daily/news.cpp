@@ -2935,6 +2935,7 @@ void displaynewsstory(string& story,short *storyx_s,short *storyx_e,int y)
 
    int addstrcur;
    string addstring;
+   addstring.resize(1000);
 
    char content;
    int cury=y;
@@ -2964,9 +2965,11 @@ void displaynewsstory(string& story,short *storyx_s,short *storyx_e,int y)
             {
                content=1;
                i++;
-               addstrcur+=1;
-               addstring[addstrcur-1]=' ';
-               addstring[addstrcur]='\x0';
+               //addstrcur+=1;
+               //addstring[addstrcur-1]=' ';
+               //addstring[addstrcur]='\x0';
+               addstring+=' ';
+               addstring+='\x0';
                endparagraph=1;
                break;
             }
@@ -2976,21 +2979,25 @@ void displaynewsstory(string& story,short *storyx_s,short *storyx_e,int y)
             content=1;
 
             if(story[i]=='&')i++;
-            addstring[addstrcur]=story[i];
-            addstring[addstrcur+1]='\x0';
+            //addstring[addstrcur]=story[i];
+            //addstring[addstrcur+1]='\x0';
+            addstring+=story[i];
+            addstring+='\x0';
             totalwidth++;
             if(totalwidth>length)
             {
                while(story[i]!=' '){i--;addstrcur--;}
                while(story[i]==' ')i++;
-               addstring[addstrcur]='\x0';
+               //addstring[addstrcur]='\x0';
+               addstring+='\x0';
                break;
             }
             addstrcur++;
          }
       }
 
-      if(i==story.size())addstring[addstrcur]='\x0';
+      if(i==story.size())//addstring[addstrcur]='\x0';
+         addstring+='\x0';
 
       if(addstring.length()>0&&content)
       {
