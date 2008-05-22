@@ -4,6 +4,7 @@
 #include <includes.h>
 #include <string>
 #include <list>
+#include <vector>
 
 std::string getNextSet(FILE *cfile);
 

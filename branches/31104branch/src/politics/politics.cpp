@@ -1260,11 +1260,11 @@ void supremecourt(char clearformess,char canseethings)
          {
             switch(LCSrandom(5))
             {
-            case 0:strcat(name2,", Inc.");
-            case 1:strcat(name2,", L.L.C.");
-            case 2:strcat(name2," Corp.");
-            case 3:strcat(name2," Co.");
-            case 4:strcat(name2,", Ltd.");
+            case 0:strcat(name2,", Inc.");break;
+            case 1:strcat(name2,", L.L.C.");break;
+            case 2:strcat(name2," Corp.");break;
+            case 3:strcat(name2," Co.");break;
+            case 4:strcat(name2,", Ltd.");break;
             }
          }
 

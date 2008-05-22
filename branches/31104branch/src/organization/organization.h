@@ -28,7 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <list>
 #include <stdexcept>
 #include <string>
-#include "config.h"
+#include "configfile.h"
 
 class interOrgData : public configurable
 {

@@ -623,11 +623,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\config.cpp"
+			RelativePath="..\src\configfile.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\config.h"
+			RelativePath="..\src\configfile.h"
 			>
 		</File>
 		<File

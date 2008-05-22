@@ -1,6 +1,6 @@
 
 
-#include "config.h"
+#include "configfile.h"
 
 string getNextSet(FILE *cfile)
 {

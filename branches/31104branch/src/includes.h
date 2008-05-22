@@ -105,8 +105,7 @@ const unsigned long lowestloadscoreversion=30001;
       #elif defined(USE_NCURSES_W)
          #include <ncursesw/ncurses.h>
       #else
-         //#error "You must define either USE_NCURSES or USE_NCURSES_W."
-         #include <ncurses.h> // ****haaack****
+         #error "You must define either USE_NCURSES or USE_NCURSES_W."
       #endif
    #endif
 
