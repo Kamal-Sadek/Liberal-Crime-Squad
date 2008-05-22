@@ -23,22 +23,43 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
-
-
 organization::organization(int newID)
 {
 	ID = newID;
+	initConfig();
 }
 
 organization::organization(string newName)
 {
 	name = newName;
+	initConfig();
 }
 
 organization::organization(int newID, string newName)
 {
 	ID = newID;
 	name = newName;
+	initConfig();
+}
+
+void organization::initConfig()
+{
+	configContainer temp;
+	temp.name = "SWAYABLE";
+	temp.variable = (void*)&swayable;
+	temp.variableType = BOOLTYPE;
+	configInfo.push_back(temp);
+
+
+	//this says if they care about stuff other then special interests
+	/*bool swayable;
+	signed char alignment;
+
+	short attackPower;
+	//Soldiers they will send to attack
+	enum CreatureType soldiers[5];
+	int ID;
+	string name;*/
 }
 
 void organization::swayOthers()
@@ -68,7 +89,10 @@ void organization::attackedHandler()
 {
 }
 
-interOrgData::interOrgData() : ID(0), swayLevel(1.0f), affiliation(0.0f), respectLevel(0), allyLevel(0) { }
+interOrgData::interOrgData() : ID(0), swayLevel(1.0f), affiliation(0.0f), respectLevel(0), allyLevel(0) 
+{ 
+	initConfig();
+}
 
 interOrgData::interOrgData(int IDin, float swayLevelin, float affiliationin, int respectLevelin, int allyLevelin)
 {
@@ -77,6 +101,11 @@ interOrgData::interOrgData(int IDin, float swayLevelin, float affiliationin, int
 	affiliation = affiliationin;
 	respectLevel = respectLevelin;
 	allyLevel = allyLevelin;
+	initConfig();
+}
+
+void interOrgData::initConfig()
+{
 }
 
 // Deletes the record of an organization

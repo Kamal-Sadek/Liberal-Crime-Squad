@@ -5,24 +5,40 @@
 #include <string>
 #include <list>
 
-void getNextSet();
+string getNextSet(FILE *cfile);
 
+enum VarTypes
+{
+	INTTYPE,
+	FLOATTYPE,
+	STRINGTYPE,
+	BOOLTYPE,
+	CHARTYPE,
+	VARNUMTYPE
+};
 
 class configContainer
 {
+public:
+	void *variable;
+
+	enum VarTypes variableType;
+
 	string name;
-
-	bool isNumeric;
 };
 
-template <class T> class varPointer : public configContainer
+/*template <class T> class varPointer : public configContainer
 {
+public:
 	T *variable;
-};
+};*/
 
 class configurable
 {
-	
+public:
+	void initConfig();
+	bool setVariable(string name, string data);
+
 	vector<configContainer> configInfo;
 };
 

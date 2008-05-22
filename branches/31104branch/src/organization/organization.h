@@ -28,12 +28,14 @@ This file is part of Liberal Crime Squad.                                       
 #include <list>
 #include <stdexcept>
 #include <string>
+#include "config.h"
 
-class interOrgData
+class interOrgData : public configurable
 {
 public:
-   interOrgData();
+	interOrgData();
 	interOrgData(int ID, float swayLevel, float affiliation, int respectLevel, int allyLevel);
+	void initConfig();
 
 	int ID;
 	//These are percentages that you are willing to be swayed and are affiliated with this org
@@ -47,7 +49,7 @@ public:
 	int allyLevel;
 };
 
-class organization
+class organization : public configurable
 {
 public:
 	vector<interOrgData> orgs;
@@ -57,9 +59,7 @@ public:
 	organization(string newName);
 	organization(int newID, string newName);
 
-	//this says if they care about stuff other then special interests
-	bool swayable;
-	signed char alignment;
+	void initConfig();
 
 	//These handle changing other organizations viewpoints
 	void swayOthers();
@@ -70,6 +70,10 @@ public:
    void deleteOrgRecord(int deleteID);
    // Adds record of an organization if it has common special interests
    void addOrgRecord(const organization& org);
+
+   	//this says if they care about stuff other then special interests
+	bool swayable;
+	signed char alignment;
 
 	short attackPower;
 	//Soldiers they will send to attack
