@@ -214,6 +214,8 @@ void enemyattack(void)
       if(mode==GAMEMODE_CHASECAR&&
          !encounter[e].weapon.ranged())continue;
 
+      if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER)
+         conservatise(encounter[e]);
       if(encounter[e].align==-1)
          encounter[e].cantbluff=2;
       if(encounter[e].align!=-1&&!(encounter[e].flag & CREATUREFLAG_CONVERTED))
@@ -1004,6 +1006,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       int severtype=-1;
 
       char damagearmor=0;
+      char armorpiercing=0;
 
       switch(a.weapon.type) // *JDS* removed sever types from many weapons (all guns except shotgun, knives...)
       {
@@ -1057,6 +1060,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             strengthmod=1;
             //severtype=WOUND_CLEANOFF; *JDS* no dismemberment from knives and shanks
             damagearmor=1;
+            armorpiercing=1;
             break;
          case WEAPON_SYRINGE:
             damtype|=WOUND_CUT;
@@ -1071,6 +1075,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(140)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
+               armorpiercing=1;
             }
             else
             {
@@ -1087,6 +1092,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(275)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
+               armorpiercing=4;
             }
             else
             {
@@ -1103,6 +1109,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(180)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from semi-automatics
                damagearmor=1;
+               armorpiercing=3;
             }
             else
             {
@@ -1119,6 +1126,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(180)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from semi-automatics
                damagearmor=1;
+               armorpiercing=3;
             }
             else
             {
@@ -1136,6 +1144,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(250)+10;
 
                damagearmor=1;
+               armorpiercing=5;
             }
             else
             {
@@ -1159,6 +1168,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   bursthits--;
                }
                damagearmor=1;
+               armorpiercing=5;
             }
             else
             {
@@ -1181,6 +1191,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   bursthits--;
                }
                damagearmor=1;
+               armorpiercing=5;
             }
             else
             {
@@ -1203,6 +1214,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   bursthits--;
                }
                damagearmor=1;
+               armorpiercing=3;
             }
             else
             {
@@ -1244,6 +1256,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             strengthmod=1;
             severtype=WOUND_CLEANOFF;
             damagearmor=1;
+            armorpiercing=1;
             break;
          case WEAPON_HAMMER:
          case WEAPON_CROSS:
@@ -1266,7 +1279,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_SPRAYCAN:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(10)+5;
-            damagearmor=1;
+            strengthmod=1;
             break;
       }
 
@@ -1275,6 +1288,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       if(strengthmod)
       {
          mod+=a.attval(ATTRIBUTE_STRENGTH)-5;
+         if(armorpiercing)
+            armorpiercing+=a.attval(ATTRIBUTE_STRENGTH)>>3;
       }
 
       //SKILL BONUS FOR GOOD ROLL
@@ -1283,7 +1298,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       //DO THE HEALTH MOD ON THE WOUND
       mod-=t.attval(ATTRIBUTE_HEALTH)-5;
 
-      damagemod(t,damtype,damamount,mod);
+      damagemod(t,damtype,damamount,w,armorpiercing,mod);
 
       if(damamount>0)
       {
@@ -1346,6 +1361,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             }while(target->blood-damamount<=0);
          }
 
+
+         
          if(damagearmor)armordamage(target->armor,w);
 
          target->blood-=damamount;
@@ -1887,40 +1904,51 @@ void healthmodroll(int &aroll,creaturest &a)
 
 
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,int mod)
+void damagemod(creaturest &t,char &damtype,int &damamount,
+               char hitlocation,char armorpenetration,int mod)
 {
    int prot=0;
 
    switch(t.armor.type)
    {
-      case ARMOR_CLOTHES:prot=1;break;
-      case ARMOR_OVERALLS:prot=1;break;
-      case ARMOR_WIFEBEATER:prot=1;break;
-      case ARMOR_TRENCHCOAT:prot=2;break;
-      case ARMOR_WORKCLOTHES:prot=1;break;
-      case ARMOR_SECURITYUNIFORM:prot=1;break;
-      case ARMOR_POLICEUNIFORM:prot=1;break;
-      case ARMOR_CHEAPSUIT:prot=1;break;
-      case ARMOR_EXPENSIVESUIT:prot=1;break;
-      case ARMOR_BLACKSUIT:prot=1;break;
-      case ARMOR_CHEAPDRESS:prot=1;break;
-      case ARMOR_EXPENSIVEDRESS:prot=1;break;
-      case ARMOR_BLACKDRESS:prot=1;break;
-      case ARMOR_LABCOAT:prot=1;break;
-      case ARMOR_BLACKROBE:prot=1;break;
-      case ARMOR_CLOWNSUIT:prot=1;break;
-      case ARMOR_BONDAGEGEAR:prot=1;break;
+      case ARMOR_CLOTHES:prot=0;break;
+      case ARMOR_OVERALLS:prot=0;break;
+      case ARMOR_WIFEBEATER:prot=0;break;
+      case ARMOR_TRENCHCOAT:prot=0;break;
+      case ARMOR_WORKCLOTHES:prot=0;break;
+      case ARMOR_SECURITYUNIFORM:prot=0;break;
+      case ARMOR_POLICEUNIFORM:prot=0;break;
+      case ARMOR_CHEAPSUIT:prot=0;break;
+      case ARMOR_EXPENSIVESUIT:prot=0;break;
+      case ARMOR_BLACKSUIT:prot=0;break;
+      case ARMOR_CHEAPDRESS:prot=0;break;
+      case ARMOR_EXPENSIVEDRESS:prot=0;break;
+      case ARMOR_BLACKDRESS:prot=0;break;
+      case ARMOR_LABCOAT:prot=0;break;
+      case ARMOR_BLACKROBE:prot=0;break;
+      case ARMOR_CLOWNSUIT:prot=0;break;
+      case ARMOR_BONDAGEGEAR:prot=0;break;
       case ARMOR_MASK:prot=0;break;
-      case ARMOR_MILITARY:prot=1;break;
-      case ARMOR_PRISONGUARD:prot=1;break;
-      case ARMOR_PRISONER:prot=1;break;
+      case ARMOR_MILITARY:prot=0;break;
+      case ARMOR_PRISONGUARD:prot=0;break;
+      case ARMOR_PRISONER:prot=0;break;
       case ARMOR_TOGA:prot=0;break;
-      case ARMOR_MITHRIL:prot=2;break;
-      case ARMOR_BALLISTICVEST:prot=4;break;
-      case ARMOR_HEAVYBALLISTICVEST:prot=6;break;
+      case ARMOR_MITHRIL:prot=0;break;
+      case ARMOR_CIVILLIANARMOR:prot=4;break;
+      case ARMOR_POLICEARMOR:prot=5;break;
+      case ARMOR_ARMYARMOR:prot=6;break;
+      case ARMOR_HEAVYARMOR:prot=7;break;
    }
 
-   mod-=prot;
+   if(t.armor.quality>'1')
+      prot-=t.armor.quality-'1';
+   if(t.armor.flag & ARMORFLAG_DAMAGED)
+      prot/=2;
+
+   if(hitlocation!=BODYPART_BODY)prot=0;
+
+   prot-=armorpenetration;
+   if(prot>0)mod-=prot*3;
 
    if(mod<=-4)damamount>>=4;
    else if(mod<=-3)damamount>>=3;
@@ -2051,8 +2079,6 @@ void armordamage(armorst &armor,int bp)
    {
       case ARMOR_NONE:
          return;
-      case ARMOR_HEAVYBALLISTICVEST:
-      case ARMOR_BALLISTICVEST:
       case ARMOR_SECURITYUNIFORM:
       case ARMOR_POLICEUNIFORM:
       case ARMOR_BONDAGEGEAR:
@@ -2062,6 +2088,10 @@ void armordamage(armorst &armor,int bp)
       case ARMOR_MASK:
          if(bp==BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
          break;
+      case ARMOR_HEAVYARMOR:
+      case ARMOR_CIVILLIANARMOR:
+      case ARMOR_POLICEARMOR:
+      case ARMOR_ARMYARMOR:
       case ARMOR_TOGA:
       case ARMOR_MITHRIL:
       case ARMOR_WIFEBEATER:

@@ -217,7 +217,7 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 2
             move(11,0);addstr("D - I carried a knife with me and told people I hung out with gangs.");
             //SKILL_KNIFE 1
-            //SKILL_GANGSTERISM 1
+            //ATTRIBUTE_STRENGTH 1
 
             //1 VIOLENT
             move(13,0);addstr("E - I tried school politics, but it was just a popularity contest.");
@@ -246,8 +246,7 @@ void makecharacter(void)
 
             //1 LEGIT
             move(11,0);addstr("D - when I tried to start a gang.  My best friend ratted me out.");
-            //SKILL_HANDTOHAND 1
-            //SKILL_GANGSTERISM 1
+            //SKILL_HANDTOHAND 2
             //ATTRBITUE_STRENGTH 1
 
             //1 VIOLENT
@@ -500,7 +499,7 @@ void makecharacter(void)
             if(c=='d')
             {
                newcr->skill[SKILL_KNIFE]+=1;
-               newcr->skill[SKILL_GANGSTERISM]+=1;
+               newcr->att[ATTRIBUTE_STRENGTH]+=1;
             }
             if(c=='e')
             {
@@ -528,8 +527,7 @@ void makecharacter(void)
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=1;
-               newcr->skill[SKILL_GANGSTERISM]+=1;
+               newcr->skill[SKILL_HANDTOHAND]+=2;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
             }
             if(c=='e')

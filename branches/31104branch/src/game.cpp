@@ -71,8 +71,8 @@
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
 #include <includes.h>
-#include "orghandler.h"
-#include "testdriver.h"
+#include "organization/orghandler.h"
+#include "organization/testdriver.h"
 
 orgHandler gOrgHandler = orgHandler();
 

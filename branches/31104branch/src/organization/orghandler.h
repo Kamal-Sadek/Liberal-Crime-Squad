@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 */ 
 #ifndef ORGHANDLER_H_INCLUDED
 #define ORGHANDLER_H_INCLUDED
-#include "organization.h"
+#include "organization/organization.h"
 
 class orgHandler
 {

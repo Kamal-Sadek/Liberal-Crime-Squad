@@ -5,7 +5,7 @@
 #include <string>
 #include <list>
 
-string getNextSet(FILE *cfile);
+std::string getNextSet(FILE *cfile);
 
 enum VarTypes
 {
@@ -24,7 +24,7 @@ public:
 
 	enum VarTypes variableType;
 
-	string name;
+	std::string name;
 };
 
 /*template <class T> class varPointer : public configContainer
@@ -37,9 +37,9 @@ class configurable
 {
 public:
 	void initConfig();
-	bool setVariable(string name, string data);
+	bool setVariable(std::string name, std::string data);
 
-	vector<configContainer> configInfo;
+	std::vector<configContainer> configInfo;
 };
 
 

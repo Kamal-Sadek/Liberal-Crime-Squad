@@ -2030,8 +2030,7 @@ void funds_and_trouble(char &clearformess)
          skillarray[4]=SKILL_RIFLE;
          skillarray[5]=SKILL_SMG;
          skillarray[6]=SKILL_SHOTGUN;
-         skillarray[7]=SKILL_GANGSTERISM;
-         skillarray[8]=-1;
+         skillarray[7]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
          cost=50;

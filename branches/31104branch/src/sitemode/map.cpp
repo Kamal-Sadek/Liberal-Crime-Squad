@@ -215,8 +215,10 @@ void initsite(locationst &loc)
             }
             break;
          }
-         case SITE_BUSINESS_JUICEBAR:
          case SITE_BUSINESS_CIGARBAR:
+            levelmap[MAPX>>1][1][0].special=SPECIAL_CLUB_BOUNCER;
+            //break;
+         case SITE_BUSINESS_JUICEBAR:
          case SITE_BUSINESS_VEGANCOOP:
          case SITE_BUSINESS_INTERNETCAFE:
          {

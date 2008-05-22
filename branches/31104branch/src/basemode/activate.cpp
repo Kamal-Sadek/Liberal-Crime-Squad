@@ -1128,8 +1128,10 @@ void select_makeclothing(creaturest *cr)
          case ARMOR_NONE:
          case ARMOR_MITHRIL:
          case ARMOR_MASK:
-         case ARMOR_BALLISTICVEST:
-         case ARMOR_HEAVYBALLISTICVEST:
+         case ARMOR_CIVILLIANARMOR:
+         case ARMOR_POLICEARMOR:
+         case ARMOR_ARMYARMOR:
+         case ARMOR_HEAVYARMOR:
             break;
          default:
             armortype.push_back(a);

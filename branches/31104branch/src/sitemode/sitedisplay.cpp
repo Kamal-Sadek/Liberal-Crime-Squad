@@ -440,6 +440,8 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_RESTAURANT_TABLE:strcpy(str,"Table");break;
       case SPECIAL_CAFE_COMPUTER:strcpy(str,"Computer");break;
       case SPECIAL_PARK_BENCH:strcpy(str,"Bench");break;
+      case SPECIAL_CLUB_BOUNCER:strcpy(str,"");break;
+      case SPECIAL_CLUB_BOUNCER_SECONDVISIT:strcpy(str,"");break;
    }
    if(levelmap[locx][locy][locz].special!=-1)
    {

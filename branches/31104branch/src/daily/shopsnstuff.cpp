@@ -2222,8 +2222,10 @@ unsigned long fencevalue(itemst &it)
             case ARMOR_PRISONER:fenceamount=40;break;
             case ARMOR_TOGA:fenceamount=10;break;
             case ARMOR_MITHRIL:fenceamount=50;break;
-            case ARMOR_BALLISTICVEST:fenceamount=200;break;
-            case ARMOR_HEAVYBALLISTICVEST:fenceamount=400;break;
+            case ARMOR_CIVILLIANARMOR:fenceamount=75;break;
+            case ARMOR_POLICEARMOR:fenceamount=150;break;
+            case ARMOR_ARMYARMOR:fenceamount=250;break;
+            case ARMOR_HEAVYARMOR:fenceamount=400;break;
          }
          break;
       case ITEM_CLIP:

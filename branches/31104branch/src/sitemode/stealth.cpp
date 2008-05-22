@@ -104,6 +104,7 @@ char alienationcheck(char mistake)
 {
    if(location[cursite]->siege.siege)return 0;
 
+
    char alienate=0;
    char alienatebig=0;
 
@@ -199,7 +200,7 @@ void disguisecheck(void)
       }
    }
 
-   if(sitealarmtimer==-1 && weapon<2)
+   if(sitealarmtimer==-1 && weapon<1 && !forcecheck)
    {
       if(!disguisesite(location[cursite]->type)&&
          !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))return;
@@ -261,14 +262,26 @@ void disguisecheck(void)
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(16,1);
       addstr(encounter[n].name);
-      if(sitealarmtimer!=0 && !weapon)
+      if(sitealarmtimer!=0 && weapon<1)
       {
-         addstr(" looks at the Squad suspiciously.");
+         if((sitetype==SITE_RESIDENTIAL_TENEMENT||
+             sitetype==SITE_RESIDENTIAL_APARTMENT||
+             sitetype==SITE_RESIDENTIAL_APARTMENT_UPSCALE)&&
+             levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+         {
+            sitealarm=1;
 
-         int time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
-         if(time<1)time=1;
+            addstr(" shrieks in alarm at the squad's Liberal Tresspassing!");
+         }
+         else
+         {
+            addstr(" looks at the Squad suspiciously.");
 
-         if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+            int time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
+            if(time<1)time=1;
+
+            if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+         }
       }
       else
       {
@@ -442,53 +455,111 @@ void stealthpractice(int p, int diff)  //diff is the difficulty that the Conserv
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(creaturest &cr,short type)
 {
-   char suspicious=1;
-   char illegal=1;
+   bool suspicious=0;  // Does the weapon look at all suspicious?
+   char illegal=0;     // Is the weapon illegal?
+   char incharacter=0; // Is the weapon in character for the clothing the LCS is wearing?
+   char concealed=0;   // Is the weapon concealed under clothing?
 
    //CHECK SUSPICIOUSNESS
    switch(cr.weapon.type)
    {
-   case WEAPON_DAISHO:
-   case WEAPON_HAMMER:
-   case WEAPON_MAUL:
+   case WEAPON_NONE:
    case WEAPON_CROSS:
-   case WEAPON_STAFF:
-   case WEAPON_SWORD:
-   case WEAPON_PITCHFORK:
-   case WEAPON_TORCH:
-   case WEAPON_SPRAYCAN:
+   case WEAPON_SYRINGE:
+   case WEAPON_GAVEL:
+   case WEAPON_GUITAR:
+      suspicious=0;
       break;
+   default:
+      suspicious=1;
+      break;
+   }
+
+   //CHECK CONCEALMENT
+   switch(cr.weapon.type)
+   {
+   case WEAPON_SYRINGE:
+   case WEAPON_GAVEL:
+   case WEAPON_CROSS:
    case WEAPON_SHANK:
    case WEAPON_KNIFE:
-   case WEAPON_SYRINGE:
-   case WEAPON_CHAIN:
    case WEAPON_CROWBAR:
    case WEAPON_REVOLVER_22:
    case WEAPON_REVOLVER_44:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
-      if(cr.armor.type!=ARMOR_NONE)suspicious=0;
+      if(cr.armor.type!=ARMOR_NONE)concealed=1;
       break;
+   case WEAPON_CHAIN:
+   case WEAPON_HAMMER:
+   case WEAPON_SPRAYCAN:
    case WEAPON_NIGHTSTICK:
    case WEAPON_SHOTGUN_PUMP:
    case WEAPON_SMG_MP5:
    case WEAPON_CARBINE_M4:
-      if(cr.armor.type==ARMOR_TRENCHCOAT)suspicious=0;
-      if(cr.armor.type==ARMOR_POLICEUNIFORM&&hasdisguise(cr,type))suspicious=0;
-      if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE&&hasdisguise(cr,type))suspicious=0;
-      if(law[LAW_GUNCONTROL]==-2&&cr.armor.type==ARMOR_SECURITYUNIFORM&&hasdisguise(cr,type))suspicious=0;
-   case WEAPON_AUTORIFLE_M16:
-   case WEAPON_SEMIRIFLE_AR15:
-      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2&&
-         cr.armor.type==ARMOR_POLICEUNIFORM&&hasdisguise(cr,type))suspicious=0;
-      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2&&
-         cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE&&hasdisguise(cr,type))suspicious=0;
-      if(cr.armor.type==ARMOR_MILITARY&&hasdisguise(cr,type))suspicious=0;
-      if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY&&hasdisguise(cr,type))suspicious=0;
-   case WEAPON_AUTORIFLE_AK47:
+   case WEAPON_SWORD:
+   case WEAPON_DAISHO:
+      if(cr.armor.type==ARMOR_TRENCHCOAT)concealed=1;
       break;
    default:
-      suspicious=0;
+      concealed=0;
+      break;
+   }
+
+   //CHECK UNIFORM
+   incharacter=0;
+   switch(cr.weapon.type)
+   {
+   case WEAPON_SYRINGE:
+      if(cr.armor.type==ARMOR_LABCOAT)incharacter=1;
+      break;
+   case WEAPON_GAVEL:
+      if(cr.armor.type==ARMOR_BLACKROBE)incharacter=1;
+      break;
+   case WEAPON_REVOLVER_22:
+   case WEAPON_REVOLVER_44:
+   case WEAPON_SEMIPISTOL_9MM:
+   case WEAPON_SEMIPISTOL_45:
+   case WEAPON_NIGHTSTICK:
+      // Police or security (no military)
+      if(cr.armor.type==ARMOR_POLICEUNIFORM||
+         cr.armor.type==ARMOR_SECURITYUNIFORM||
+         cr.armor.type==ARMOR_POLICEARMOR)
+      {
+         incharacter=1;
+      }
+      break;
+   case WEAPON_SHOTGUN_PUMP:
+   case WEAPON_SMG_MP5:
+   case WEAPON_CARBINE_M4:
+      // Police, military, or, in extreme times, security
+      if(cr.armor.type==ARMOR_POLICEUNIFORM||
+         (cr.armor.type==ARMOR_SECURITYUNIFORM&&law[LAW_GUNCONTROL]==-2)||
+         (cr.armor.type==ARMOR_POLICEARMOR)||
+         cr.armor.type==ARMOR_MILITARY||
+         (cr.armor.type==ARMOR_ARMYARMOR))
+      {
+         incharacter=1;
+      }
+      break;
+   case WEAPON_AUTORIFLE_M16:
+   case WEAPON_SEMIRIFLE_AR15:
+      // Police at extreme times
+      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2)
+      {
+         if(cr.armor.type==ARMOR_POLICEUNIFORM||
+            (cr.armor.type==ARMOR_POLICEARMOR))
+         {
+            incharacter=1;
+         }
+      }
+      // Or military
+      else if(cr.armor.type==ARMOR_MILITARY||
+              (cr.armor.type==ARMOR_ARMYARMOR))
+      {
+         incharacter=1;
+      }
+      break;
    }
 
    //CHECK LEGALITY
@@ -498,24 +569,33 @@ char weaponcheck(creaturest &cr,short type)
       illegal=0;
    case WEAPON_REVOLVER_22:
       if(law[LAW_GUNCONTROL]==1)illegal=0;
+      else illegal=1;
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
    case WEAPON_REVOLVER_44:
       if(law[LAW_GUNCONTROL]==0)illegal=0;
+      else illegal=1;
    case WEAPON_SEMIRIFLE_AR15:
    case WEAPON_AUTORIFLE_M16:
       if(law[LAW_GUNCONTROL]==-1)illegal=0;
+      else illegal=1;
    case WEAPON_SMG_MP5:
    case WEAPON_CARBINE_M4:
    case WEAPON_AUTORIFLE_AK47:
       if(law[LAW_GUNCONTROL]==-2)illegal=0;
+      else illegal=1;
       break;
    default:
       illegal=0;
    }
 
-   if(suspicious&&illegal)return 2;
-   if(suspicious)return 1;
+   if(suspicious)
+   {
+      if(incharacter)return 1;
+      else if(concealed)return 0;
+      else if(illegal)return 2;
+      else return 1;
+   }
    return 0;
 }
 
@@ -538,7 +618,7 @@ char hasdisguise(creaturest &cr,short type)
          case SIEGE_CORPORATE:
          {
             if(cr.armor.type==ARMOR_MILITARY)uniformed=1;
-            if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY)uniformed=1;
+            if(cr.armor.type==ARMOR_ARMYARMOR)uniformed=1;
             break;
          }
          case SIEGE_HICKS:
@@ -551,10 +631,10 @@ char hasdisguise(creaturest &cr,short type)
          case SIEGE_POLICE:
          {
             if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
-            if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)uniformed=1;
+            if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
             if(cr.armor.type==ARMOR_MILITARY&&
                location[cursite]->siege.escalationstate>0)uniformed=1;
-            if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_MILITARY&&
+            if(cr.armor.type==ARMOR_ARMYARMOR&&
                location[cursite]->siege.escalationstate>0)uniformed=1;
             break;
          }
@@ -562,8 +642,11 @@ char hasdisguise(creaturest &cr,short type)
    }
    else
    {
+      if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYARMOR)uniformed=1;
+
       switch(type)
       {
+         
          case SITE_INDUSTRY_WAREHOUSE:
          case SITE_RESIDENTIAL_SHELTER:
             uniformed=1;
@@ -572,22 +655,23 @@ char hasdisguise(creaturest &cr,short type)
          case SITE_LABORATORY_GENETIC:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_LABCOAT)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_POLICESTATION:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
-               if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)uniformed=1;
+               if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_COURTHOUSE:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_BLACKROBE)uniformed=1;
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
@@ -596,14 +680,14 @@ char hasdisguise(creaturest &cr,short type)
                if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
                if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
-               if(cr.armor.type==ARMOR_BALLISTICVEST&&cr.armor.subtype==BVEST_POLICE)uniformed=1;
+               if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_PRISON:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(law[LAW_DEATHPENALTY]==-2&&
                    law[LAW_POLICEBEHAVIOR]==-2)
                {
@@ -612,18 +696,18 @@ char hasdisguise(creaturest &cr,short type)
                else if(cr.armor.type==ARMOR_PRISONGUARD)uniformed=1;
                if(cr.armor.type==ARMOR_PRISONER)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_BUSINESS_CIGARBAR:
+            uniformed=0;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
             if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
@@ -633,18 +717,22 @@ char hasdisguise(creaturest &cr,short type)
             if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
             break;
          case SITE_INDUSTRY_SWEATSHOP:
+            uniformed=0;
             if(cr.armor.type==ARMOR_NONE)uniformed=1;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             break;
          case SITE_INDUSTRY_POLLUTER:
+            uniformed=0;
             if(cr.armor.type==ARMOR_WORKCLOTHES)uniformed=1;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             break;
          case SITE_INDUSTRY_NUCLEAR:
+            uniformed=0;
             if(cr.armor.type==ARMOR_LABCOAT)uniformed=1;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             break;
          case SITE_CORPORATE_HEADQUARTERS:
+            uniformed=0;
             if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
             if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
@@ -652,34 +740,35 @@ char hasdisguise(creaturest &cr,short type)
             if(cr.armor.type==ARMOR_CHEAPDRESS)uniformed=1;
             break;
          case SITE_CORPORATE_HOUSE:
+            uniformed=0;
             if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             break;
          case SITE_MEDIA_AMRADIO:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
                if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_CHEAPDRESS)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_MEDIA_CABLENEWS:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
+               uniformed=0;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
                if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
             }
-            else if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
          case SITE_RESIDENTIAL_TENEMENT:
          case SITE_RESIDENTIAL_APARTMENT:
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)break;
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)uniformed=0;
+            break;
          default:
-            if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYBALLISTICVEST)uniformed=1;
             break;
       }
    }

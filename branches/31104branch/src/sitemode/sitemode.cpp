@@ -339,7 +339,8 @@ void mode_site(void)
          move(14,18);
          addstr("T - Talk");
 
-         if(levelmap[locx][locy][locz].special!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(levelmap[locx][locy][locz].special!=-1&&
+            levelmap[locx][locy][locz].special!=SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2)))
          {
             if((levelmap[locx+1][locy][locz].flag & SITEBLOCK_BLOCK)||
@@ -362,6 +363,7 @@ void mode_site(void)
                }
                if(i==6)set_color(COLOR_BLACK,COLOR_BLACK,1);
             }
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,45);
@@ -444,9 +446,14 @@ void mode_site(void)
          clearmessagearea();
       }
 
+      
+
       refresh();
 
-      int c=getch();
+      int c;
+      if(levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
+         c='s';
+      else c=getch();
       translategetch(c);
 
       if(partyalive==0&&c=='c')
@@ -1422,6 +1429,8 @@ void mode_site(void)
             long makespecial=-1;
             switch(levelmap[locx][locy][locz].special)
             {
+               case SPECIAL_CLUB_BOUNCER:
+               case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
                case SPECIAL_APARTMENT_LANDLORD:
                case SPECIAL_RESTAURANT_TABLE:
                case SPECIAL_CAFE_COMPUTER:
@@ -1968,6 +1977,12 @@ void mode_site(void)
 
                         prepareencounter(sitetype,0);
                      }
+                     break;
+                  case SPECIAL_CLUB_BOUNCER:
+                     special_bouncer_assess_squad();
+                     break;
+                  case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
+                     special_bouncer_greet_squad();
                      break;
                   case SPECIAL_APARTMENT_LANDLORD:
                      if(sitealarm||sitealienate||

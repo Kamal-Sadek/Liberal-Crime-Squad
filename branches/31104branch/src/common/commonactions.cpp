@@ -252,6 +252,7 @@ int maxskill(int skill,creaturest& cr)
    {
    case SKILL_HANDTOHAND:
    case SKILL_CLUB:
+   case SKILL_IMPROVISED:
       return cr.attval(ATTRIBUTE_STRENGTH);
    case SKILL_KNIFE:
    case SKILL_SWORD:
@@ -260,13 +261,11 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_SMG:
    case SKILL_SHOTGUN:
    case SKILL_DRIVING:
-   case SKILL_IMPROVISED:
    case SKILL_SLEIGHTOFHAND:
    case SKILL_STEALTH:
       return cr.attval(ATTRIBUTE_AGILITY);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
-   case SKILL_GANGSTERISM:
    case SKILL_TEACHING:
    case SKILL_SEDUCTION:
       return cr.attval(ATTRIBUTE_CHARISMA);
@@ -278,7 +277,6 @@ int maxskill(int skill,creaturest& cr)
       return cr.attval(ATTRIBUTE_WISDOM);
    case SKILL_SCIENCE:
    case SKILL_LAW:
-   case SKILL_SURVIVAL:
    case SKILL_MEDICAL:
    case SKILL_SECURITY:
    case SKILL_INTERROGATION:
@@ -308,12 +306,11 @@ int weaponskill(int weapon)
    switch(weapon)
    {
       case WEAPON_KNIFE:
+      case WEAPON_SHANK:
          wsk=SKILL_KNIFE;
          break;
-      case WEAPON_SHANK:
       case WEAPON_SYRINGE:
       case WEAPON_CROWBAR:
-      case WEAPON_HAMMER:
       case WEAPON_CHAIN:
       case WEAPON_GAVEL:
       case WEAPON_CROSS:
@@ -325,6 +322,7 @@ int weaponskill(int weapon)
       case WEAPON_NIGHTSTICK:
       case WEAPON_MAUL:
       case WEAPON_STAFF:
+      case WEAPON_HAMMER:
          wsk=SKILL_CLUB;
          break;
       case WEAPON_SWORD:

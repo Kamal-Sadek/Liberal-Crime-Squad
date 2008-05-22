@@ -316,12 +316,6 @@ char completevacation(datest &d,int p,char &clearformess)
       if(pool[p]->skill[SKILL_SCIENCE])
          aroll+=pool[p]->skill[SKILL_SCIENCE];
    }
-   if(d.date[e]->skill[SKILL_GANGSTERISM])
-   {
-      troll+=d.date[e]->skill[SKILL_GANGSTERISM];
-      if(pool[p]->skill[SKILL_GANGSTERISM])
-         aroll+=pool[p]->skill[SKILL_GANGSTERISM];
-   }
 
 
    int y=2;
@@ -437,10 +431,11 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(12,0);
       addstr("B - Try to get through the evening without spending a penny.");
-      if(!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(!pool[p]->clinic&&pool[p]->blood==100)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(13,0);
-      addstr("C - Spend a week on a cheap vacation (stands up any other dates).");
+      if(pool[p]->blood==100) addstr("C - Spend a week on a cheap vacation (stands up any other dates).");
+      else addstr("C - Spend a week on a cheap vacation (must be uninjured).");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(14,0);
       addstr("D - Break it off.");
@@ -490,12 +485,6 @@ char completedate(datest &d,int p,char &clearformess)
             if(pool[p]->skill[SKILL_SCIENCE])
                aroll+=pool[p]->skill[SKILL_SCIENCE];
          }
-         if(d.date[e]->skill[SKILL_GANGSTERISM])
-         {
-            troll+=d.date[e]->skill[SKILL_GANGSTERISM];
-            if(pool[p]->skill[SKILL_GANGSTERISM])
-               aroll+=pool[p]->skill[SKILL_GANGSTERISM];
-         }
 
          if(test)
          {
@@ -505,7 +494,7 @@ char completedate(datest &d,int p,char &clearformess)
             break;
          }
 
-         if(c=='c'&&!pool[p]->clinic)
+         if(c=='c'&&!pool[p]->clinic&&pool[p]->blood==100)
          {
             for(int e2=d.date.size()-1;e2>=0;e2--)
             {
@@ -531,6 +520,7 @@ char completedate(datest &d,int p,char &clearformess)
                 d.date[e]->type!=CREATURE_COP&&
                 d.date[e]->type!=CREATURE_SWAT&&
                 d.date[e]->type!=CREATURE_GANGUNIT&&
+                
                 d.date[e]->type!=CREATURE_DEATHSQUAD&&
                 d.date[e]->type!=CREATURE_SOLDIER&&
                 d.date[e]->type!=CREATURE_MERC)||

@@ -163,8 +163,6 @@ void tendhostage(creaturest *cr,char &clearformess)
                   religion=temppool[p]->skill[SKILL_RELIGION];
                if(temppool[p]->skill[SKILL_SCIENCE]>science)
                   science=temppool[p]->skill[SKILL_SCIENCE];
-               if(temppool[p]->skill[SKILL_GANGSTERISM]>gangsterism)
-                  gangsterism=temppool[p]->skill[SKILL_GANGSTERISM];
 
                if((temppool[p]->attval(ATTRIBUTE_CHARISMA)+
                   temppool[p]->attval(ATTRIBUTE_HEART)-
@@ -205,7 +203,6 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(cr->skill[SKILL_BUSINESS])maxattack+=business-cr->skill[SKILL_BUSINESS];
       if(cr->skill[SKILL_RELIGION])maxattack+=religion-cr->skill[SKILL_RELIGION];
       if(cr->skill[SKILL_SCIENCE])maxattack+=science-cr->skill[SKILL_SCIENCE];
-      if(cr->skill[SKILL_GANGSTERISM])maxattack+=gangsterism-cr->skill[SKILL_GANGSTERISM];
 
       long aroll=LCSrandom(maxattack)+LCSrandom(10);
       long troll=LCSrandom(cr->attval(ATTRIBUTE_WISDOM)*2-
@@ -717,13 +714,6 @@ void tendhostage(creaturest *cr,char &clearformess)
                else addstr(" takes solace in the personal appearance of God.");
                y++;
             }
-            else if(cr->skill[SKILL_GANGSTERISM]>spiritcrush && !techniques[7])
-            {
-               move(y,0);
-               addstr(cr->name);
-               addstr(" defiantly threatens retribution from their gang.");
-               y++;
-            }
             else if(LCSrandom(spiritcrush+1)+LCSrandom(healthcrush+1) >
                cr->att[ATTRIBUTE_WISDOM]+cr->att[ATTRIBUTE_HEART]+cr->att[ATTRIBUTE_HEALTH])
             {
@@ -1017,15 +1007,6 @@ void tendhostage(creaturest *cr,char &clearformess)
             }
 
             a->skill_ip[SKILL_SCIENCE]+=cr->skill[SKILL_SCIENCE]*4;
-            y++;
-         }
-         //Failure to intimidate hardened gangsters
-         else if(cr->skill[SKILL_GANGSTERISM]/4>gangsterism+spiritcrush && !techniques[7])
-         {
-            move(y,0);
-            addstr(cr->name);
-            addstr(" swears vengeance, giving the hand sign of a prominent street gang.");
-            a->skill_ip[SKILL_GANGSTERISM]+=cr->skill[SKILL_GANGSTERISM];
             y++;
          }
          //Attempt to convert when the target is brutally treated will

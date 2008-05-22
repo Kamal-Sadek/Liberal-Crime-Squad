@@ -105,7 +105,8 @@ const unsigned long lowestloadscoreversion=30001;
       #elif defined(USE_NCURSES_W)
          #include <ncursesw/ncurses.h>
       #else
-         #error "You must define either USE_NCURSES or USE_NCURSES_W."
+         //#error "You must define either USE_NCURSES or USE_NCURSES_W."
+         #include <ncurses.h> // ****haaack****
       #endif
    #endif
 
@@ -137,7 +138,7 @@ using namespace std;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include <alignment.h>
+#include <politics/alignment.h>
 
 
 
@@ -440,7 +441,6 @@ enum Skills
    SKILL_RELIGION,
    SKILL_SCIENCE,
    SKILL_BUSINESS,
-   SKILL_GANGSTERISM,
    SKILL_STEALTH,
    SKILL_SLEIGHTOFHAND,
    SKILL_TEACHING,
@@ -635,8 +635,10 @@ enum Armors
    ARMOR_MITHRIL,
    ARMOR_OVERALLS,
    ARMOR_WIFEBEATER,
-   ARMOR_BALLISTICVEST,
-   ARMOR_HEAVYBALLISTICVEST,
+   ARMOR_CIVILLIANARMOR,
+   ARMOR_POLICEARMOR,
+   ARMOR_ARMYARMOR,
+   ARMOR_HEAVYARMOR,
    ARMORNUM
 };
 
@@ -1848,6 +1850,8 @@ void reloadparty(bool wasteful=false);
 /*
  mapspecials.cpp
 */
+void special_bouncer_assess_squad(void);
+void special_bouncer_greet_squad(void);
 void special_lab_cosmetics_cagedanimals(void);
 void special_readsign(int sign);
 void special_nuclear_onoff(void);
@@ -1925,7 +1929,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll,creaturest &a);
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,int mod);
+void damagemod(creaturest &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int mod);
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(creaturest &cr,vector<itemst *> &loot);
 /* damages the selected armor if it covers the body part specified */

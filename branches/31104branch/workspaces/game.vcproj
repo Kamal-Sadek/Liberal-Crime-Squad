@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/wd4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src\politics;..\src\organization;..\src;..\src\pdcurses"
+				AdditionalIncludeDirectories="..\src\redblacktree;..\src\politics;..\src\organization;..\src;..\src\pdcurses"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -351,6 +351,18 @@
 			<File
 				RelativePath="..\src\common\getnames.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\src\creature\pool.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\common\translateid.cpp"

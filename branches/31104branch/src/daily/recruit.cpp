@@ -107,7 +107,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       //Select a weapon to arm the recruit with
       if(r.recruit->money>1500 &&
          r.recruit->skill[SKILL_RIFLE] &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_GANGSTERISM]))
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          switch(LCSrandom(3))
          {
@@ -120,7 +120,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(r.recruit->money>1200 &&
          r.recruit->skill[SKILL_SMG] &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_GANGSTERISM]))
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          r.recruit->weapon.type=WEAPON_SMG_MP5;
          r.recruit->weapon.ammo=15;
@@ -128,7 +128,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(r.recruit->money>400 &&
          r.recruit->skill[SKILL_SHOTGUN] &&
-         (law[LAW_GUNCONTROL]<2 || r.recruit->skill[SKILL_GANGSTERISM]))
+         (law[LAW_GUNCONTROL]<2 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
@@ -136,7 +136,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(r.recruit->money>350 &&
          r.recruit->skill[SKILL_RIFLE] &&
-         (law[LAW_GUNCONTROL]<=-1 || r.recruit->skill[SKILL_GANGSTERISM]))
+         (law[LAW_GUNCONTROL]<=-1 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
@@ -144,7 +144,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(r.recruit->money>300 &&
          r.recruit->skill[SKILL_PISTOL] &&
-         (law[LAW_GUNCONTROL]<1 || r.recruit->skill[SKILL_GANGSTERISM]))
+         (law[LAW_GUNCONTROL]<1 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          switch(LCSrandom(4))
          {

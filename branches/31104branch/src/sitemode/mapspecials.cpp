@@ -31,12 +31,15 @@ This file is part of Liberal Crime Squad.                                       
 
 enum bouncer_reject_reason
 {
+   REJECTED_NUDE,
    REJECTED_WEAPONS,
    REJECTED_UNDERAGE,
-   REJECTED_BUSTEDCLOTHES,
-   REJECTED_DRESSCODE,
-   REJECTED_SMELLFUNNY,
+   REJECTED_BLOODYCLOTHES,
+   REJECTED_DAMAGEDCLOTHES,
    REJECTED_GUESTLIST,
+   REJECTED_DRESSCODE,
+   REJECTED_SECONDRATECLOTHES,
+   REJECTED_SMELLFUNNY,
    NOT_REJECTED
 };
 
@@ -45,7 +48,7 @@ void special_bouncer_greet_squad()
    // add a bouncer if there isn't one in the first slot
    if(!sitealarm)
    {
-      if(encounter[0].exists && encounter[0].type!=CREATURE_BOUNCER)
+      if(!encounter[0].exists || encounter[0].type!=CREATURE_BOUNCER)
       {
          makecreature(encounter[0],CREATURE_BOUNCER);
       }
@@ -54,7 +57,9 @@ void special_bouncer_greet_squad()
 
 void special_bouncer_assess_squad()
 {
-   clearmessagearea();
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   makecreature(encounter[0],CREATURE_BOUNCER);
+   //clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
    addstr("The bouncer assesses your squad.");
@@ -68,11 +73,17 @@ void special_bouncer_assess_squad()
       if(activesquad->squad[s])
       {
          // Wrong clothes? Gone
+         if(activesquad->squad[s]->armor.type==ARMOR_NONE)
+            if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
          if(!hasdisguise(*activesquad->squad[s],sitetype))
             if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
          // Busted, cheap, bloody clothes? Gone
-         if(activesquad->squad[s]->armor.quality!='1'||activesquad->squad[s]->armor.flag!=0)
-            if(rejected>REJECTED_BUSTEDCLOTHES)rejected=REJECTED_BUSTEDCLOTHES;
+         if(activesquad->squad[s]->armor.flag & ARMORFLAG_BLOODY)
+            if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
+         if(activesquad->squad[s]->armor.flag & ARMORFLAG_DAMAGED)
+            if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
+         if(activesquad->squad[s]->armor.quality!='1')
+            if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
          // Suspicious weapons? Gone
          if(weaponcheck(*activesquad->squad[s],sitetype)>0)
             if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
@@ -87,18 +98,20 @@ void special_bouncer_assess_squad()
             if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
       }
    }
-   move(18,1);
+   move(17,1);
    switch(rejected)
    {
+   case REJECTED_NUDE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      addstr("\"No shirt, no shoes, no service.\"");break;
+      break;
    case REJECTED_DRESSCODE:
       set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(5))
+      switch(LCSrandom(3))
       {
-      case 0:addstr("\"Wearing that? No way.\"");break;
-      case 1:addstr("\"Get some new clothes.\"");break;
-      case 2:addstr("\"We have a dress code here.\"");break;
-      case 3:addstr("\"I can't let you in looking like that.\"");break;
-      case 4:addstr("\"Change your clothes and come back tomorrow.\"");break;
+      case 0:addstr("\"Check the dress code.\"");break;
+      case 1:addstr("\"We have a dress code here.\"");break;
+      case 2:addstr("\"I can't let you in looking like that.\"");break;
       }
       break;
    case REJECTED_SMELLFUNNY:
@@ -112,15 +125,31 @@ void special_bouncer_assess_squad()
       case 4:addstr("\"You'd just harass the others, wouldn't you?\"");break;
       }
       break;
-   case REJECTED_BUSTEDCLOTHES:
+   case REJECTED_BLOODYCLOTHES:
       set_color(COLOR_RED,COLOR_BLACK,1);
       switch(LCSrandom(5))
       {
       case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
       case 1:addstr("\"Absolutely not. Clean up a bit.\"");break;
-      case 2:addstr("\"This isn't a goth club, ripped and bloody clothes don't cut it here.\"");break;
+      case 2:addstr("\"This isn't a goth club, bloody clothes don't cut it here.\"");break;
       case 3:addstr("\"Uh, maybe you should wash... replace... those clothes.\"");break;
-      case 4:addstr("\"Did you fish that out of a dumpster and wear it?\"");break;
+      case 4:addstr("\"Did you spill something on your clothes?\"");break;
+      }
+      break;
+   case REJECTED_DAMAGEDCLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(2))
+      {
+      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+      case 1:addstr("\"This isn't a goth club, ripped clothes don't cut it here.\"");break;
+      }
+      break;
+   case REJECTED_SECONDRATECLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(2))
+      {
+      case 0:addstr("\"That looks like you sewed it yourself.\"");break;
+      case 1:addstr("\"If badly cut clothing is a hot new trend, I missed it.\"");break;
       }
       break;
    case REJECTED_WEAPONS:
@@ -136,25 +165,11 @@ void special_bouncer_assess_squad()
       break;
    case REJECTED_GUESTLIST:
       set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(5))
-      {
-      case 0:addstr("\"Invitation only.\"");break;
-      case 1:addstr("\"Let me check the guest list. Sorry, you're not on it.\"");break;
-      case 2:addstr("\"Invitation only. Some ruffians shot the place up awhile back.\"");break;
-      case 3:addstr("\"If it were me, I'd let you in, but this club is exclusive.\"");break;
-      case 4:addstr("\"Not on the guest list. You might try some less exclusive clubs.\"");break;
-      }
+      addstr("\"This club is by invitation only.\"");
       break;
    case NOT_REJECTED:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      switch(LCSrandom(5))
-      {
-      case 0:addstr("\"Welcome to the club.\"");break;
-      case 1:addstr("\"Okay, come on in. Don't make trouble.\"");break;
-      case 2:addstr("\"Alright, you can go in.\"");break;
-      case 3:addstr("\"Welcome. Have a nice day.\"");break;
-      case 4:addstr("\"Keep it civil and don't drink too much.\"");break;
-      }
+      addstr("\"Keep it civil and don't drink too much.\"");
       break;
    }
    refresh();
@@ -168,8 +183,7 @@ void special_bouncer_assess_squad()
    else levelmap[locx][locy+1][locz].flag &= ~SITEBLOCK_DOOR;
    encounter[0].cantbluff=1;
 
-   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
-   makecreature(encounter[0],CREATURE_BOUNCER);
+   
 }
 
 void special_lab_cosmetics_cagedanimals(void)

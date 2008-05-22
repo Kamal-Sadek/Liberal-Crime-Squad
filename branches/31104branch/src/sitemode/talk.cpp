@@ -390,7 +390,7 @@ char talk(creaturest &a,int t)
                   short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
                      a.attval(ATTRIBUTE_HEART)+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
                   char badthing=0;
-                  if(aroll-a.attval(ATTRIBUTE_HEART)<25-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
+                  if(aroll<20-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
                   short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+
                      tk->attval(ATTRIBUTE_WISDOM);
@@ -418,7 +418,6 @@ char talk(creaturest &a,int t)
                         case LAW_POLICEBEHAVIOR:
                            addstr("\"The cops suck!\"");
                            troll+=tk->skill[SKILL_LAW];
-                           troll-=tk->skill[SKILL_GANGSTERISM];
                            break;
                         case LAW_PRIVACY:
                            addstr("\"The government, like, knows things about you.\"");
@@ -461,9 +460,8 @@ char talk(creaturest &a,int t)
                            troll+=tk->skill[SKILL_BUSINESS];
 									break;
                         case LAW_GUNCONTROL:
-                           addstr("\"People get shot, yo.\"");
+                           addstr("\"People like, think they need lots of guns.\"");
                            troll+=tk->skill[SKILL_LAW];
-                           troll+=tk->skill[SKILL_GANGSTERISM];
                            break;
                      }
                   }
@@ -488,7 +486,6 @@ char talk(creaturest &a,int t)
                         case LAW_POLICEBEHAVIOR:
                            addstr("\"The police regularly torture minority suspects during interrogations.\"");
                            if(tk->skill[SKILL_LAW])troll+=tk->skill[SKILL_LAW]-a.skill[SKILL_LAW];
-                           if(tk->skill[SKILL_GANGSTERISM])troll-=tk->skill[SKILL_GANGSTERISM]+a.skill[SKILL_GANGSTERISM];
                            break;
                         case LAW_PRIVACY:
                            addstr("\"Files are being kept on innocent citizens whose only crime is to");
@@ -556,7 +553,6 @@ char talk(creaturest &a,int t)
                            move(y,1);y++;
                            addstr("a right to walk around with the power to murder at any moment.\"");
                            if(tk->skill[SKILL_LAW])troll+=tk->skill[SKILL_LAW]-a.skill[SKILL_LAW];
-                           if(tk->skill[SKILL_GANGSTERISM])troll+=tk->skill[SKILL_GANGSTERISM]-a.skill[SKILL_GANGSTERISM];
                            break;
                      }
                   }

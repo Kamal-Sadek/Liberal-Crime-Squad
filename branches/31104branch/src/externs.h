@@ -1,7 +1,7 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
-#include "orghandler.h"
+#include "organization/orghandler.h"
 
 //Puzz:  Here we go...
 extern orgHandler gOrgHandler;

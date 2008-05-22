@@ -398,17 +398,10 @@ void getarmor(char *str,int type,int subtype)
       case ARMOR_PRISONER:      strcpy(str,"Orange Jmpsuit");break;
       case ARMOR_TOGA:         strcpy(str,"Toga");break;
       case ARMOR_MITHRIL:         strcpy(str,"Mithril Mail");break;
-      case ARMOR_BALLISTICVEST:
-         {
-            switch(subtype)
-            {
-            case BVEST_POLICE:      strcpy(str,"Police BdyArmr");break;
-            case BVEST_MILITARY:    strcpy(str,"Army BodyArmor");break;
-            default:                strcpy(str,"Body Armor");break;
-            }
-            break;
-         }
-      case ARMOR_HEAVYBALLISTICVEST:   strcpy(str,"Hvy Body Armor");break;
+      case ARMOR_CIVILLIANARMOR:       strcpy(str,"Body Armor");break;
+      case ARMOR_POLICEARMOR:          strcpy(str,"PoliceBdyArmor");break;
+      case ARMOR_ARMYARMOR:            strcpy(str,"Army BodyArmor");break;
+      case ARMOR_HEAVYARMOR:           strcpy(str,"HeavyBodyArmor");break;
    }
 }
 
@@ -498,17 +491,10 @@ void getarmorfull(char *str,int type,int subtype)
       case ARMOR_PRISONER:      strcpy(str,"Orange Jumpsuit");break;
       case ARMOR_TOGA:         strcpy(str,"Toga");break;
       case ARMOR_MITHRIL:         strcpy(str,"Mithril Mail");break;
-      case ARMOR_BALLISTICVEST:
-         {
-            switch(subtype)
-            {
-            case BVEST_POLICE:      strcpy(str,"Police Body Armor");break;
-            case BVEST_MILITARY:    strcpy(str,"Army Body Armor");break;
-            default:                strcpy(str,"Body Armor");break;
-            }
-            break;
-         }
-      case ARMOR_HEAVYBALLISTICVEST:   strcpy(str,"Heavy Body Armor");break;
+      case ARMOR_POLICEARMOR:      strcpy(str,"Police Body Armor");break;
+      case ARMOR_ARMYARMOR:    strcpy(str,"Army Body Armor");break;
+      case ARMOR_CIVILLIANARMOR:                strcpy(str,"Body Armor");break;
+      case ARMOR_HEAVYARMOR:   strcpy(str,"Heavy Body Armor");break;
    }
 }
 
@@ -630,7 +616,7 @@ void getskill(char *str,int type)
       case SKILL_RELIGION:strcpy(str,"Religion");break;
       case SKILL_SCIENCE:strcpy(str,"Science");break;
       case SKILL_BUSINESS:strcpy(str,"Business");break;
-      case SKILL_GANGSTERISM:strcpy(str,"Gangsterism");break;
+      case SKILL_SURVIVAL:strcpy(str,"Survival");break;
       case SKILL_STEALTH:strcpy(str,"Stealth");break;
       case SKILL_SLEIGHTOFHAND:strcpy(str,"Sleight of Hand");break;
       case SKILL_TEACHING:strcpy(str,"Teaching");break;
@@ -711,6 +697,7 @@ void getrecruitcreature(char *str,int type)
 
    switch(type)
    {
+      case CREATURE_BOUNCER:strcat(str,"Club Security");break;
       case CREATURE_SECURITYGUARD:strcat(str,"Security Guard");break;
       case CREATURE_SCIENTIST_LABTECH:strcat(str,"Lab Tech");break;
       case CREATURE_SCIENTIST_EMINENT:strcat(str,"Eminent Scientist");break;
