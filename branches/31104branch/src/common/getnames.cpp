@@ -783,6 +783,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_NURSE:strcat(str,"Nurse");break;
       case CREATURE_CCS_VIGILANTE:strcat(str,"CCS Vigilante");break;
       case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"CCS Vigilante Boss");break;
+      case CREATURE_POLITICALACTIVIST:strcat(str,"Political Activist");break;
       default:
          strcat(str,"Liberal");
          break;
@@ -795,11 +796,43 @@ void gettitle(char *str,creaturest &cr)
 {
    if(cr.align==-1)
    {
-      strcpy(str,"Mindless Conservative");
+      if(cr.juice<=-50)
+      {
+         if(law[LAW_FREESPEECH]==-2)strcpy(str,"[Darn] Worthless");
+         else strcpy(str,"Damn Worthless");
+      }
+      else if(cr.juice<=-10)strcpy(str,"Conservative Dregs");
+      else if(cr.juice<0)strcpy(str,"Conservative Punk");
+      else if(cr.juice<10)strcpy(str,"Mindless Conservative");
+      else if(cr.juice<50)strcpy(str,"Wrong-Thinker");
+      else if(cr.juice<100)
+      {
+         if(law[LAW_FREESPEECH]==-2)strcpy(str,"Stubborn as [Heck]");
+         else strcpy(str,"Stubborn as Hell");
+      }
+      else if(cr.juice<200)
+      {
+         if(law[LAW_FREESPEECH]==-2)strcpy(str,"Heartless [Jerk]");
+         else strcpy(str,"Heartless Bastard");
+      }
+      else if(cr.juice<500)strcpy(str,"Insane Vigilante");
+      else strcpy(str,"Arch-Conservative");
    }
    else if(cr.align==0)
    {
-      strcpy(str,"Non-Liberal");
+      if(cr.juice<=-50)
+      {
+         if(law[LAW_FREESPEECH]==-2)strcpy(str,"[Darn] Worthless");
+         else strcpy(str,"Damn Worthless");
+      }
+      else if(cr.juice<=-10)strcpy(str,"Society's Dregs");
+      else if(cr.juice<0)strcpy(str,"Non-Liberal Punk");
+      else if(cr.juice<10)strcpy(str,"Non-Liberal");
+      else if(cr.juice<50)strcpy(str,"Hard Working");
+      else if(cr.juice<100)strcpy(str,"Respected");
+      else if(cr.juice<200)strcpy(str,"Upstanding Citizen");
+      else if(cr.juice<500)strcpy(str,"Great Person");
+      else strcpy(str,"Peacemaker");
    }
    else
    {

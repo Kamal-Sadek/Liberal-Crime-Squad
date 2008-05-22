@@ -359,7 +359,7 @@ void freehostage(creaturest &cr,char situation)
             {
                encounter[e]=*cr.prisoner;
                encounter[e].exists=1;
-               encounter[e].align=-1;
+               conservatise(encounter[e]);
                break;
             }
          }

@@ -65,9 +65,58 @@ void advanceday(char &clearformess,char canseethings)
       
    for(p=0;p<pool.size();p++)
    {
+      if(!pool[p]->alive)continue;
+      
+      if(pool[p]->age>70)
+      {
+         int decrement=0;
+         while(pool[p]->age - decrement>70)
+         {
+            if(LCSrandom(365*10)==0)
+            {
+               pool[p]->att[ATTRIBUTE_HEALTH]--;
+               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+               {
+                  pool[p]->alive=0;
+                  if(clearformess)erase();
+                  else
+                  {
+                     makedelimiter(8,0);
+                  }
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr(pool[p]->name);
+                  addstr(" has passed away at the age of ");
+                  char str[5];
+                  itoa(pool[p]->age,str,10);
+                  addstr(str);
+                  addstr(". The Liberal will be missed.");
+                  refresh();
+                  getch();
+                  break;
+               }
+            }
+            decrement+=10;
+         }
+         if(!pool[p]->alive)continue;
+      }
+      if(month==pool[p]->birthday_month&&
+         day==pool[p]->birthday_day)
+      {
+         pool[p]->age++;
+         switch(pool[p]->age)
+         {
+         case 11:
+            pool[p]->type=CREATURE_TEENAGER;
+            break;
+         case 16:
+            pool[p]->type=CREATURE_POLITICALACTIVIST;
+            break;
+         }
+      }
+
       if(disbanding)break;
 
-      if(!pool[p]->alive)continue;
       if(pool[p]->clinic)continue;
       if(pool[p]->dating)continue;
       if(pool[p]->hiding)continue;

@@ -393,8 +393,11 @@ unsigned long r_num(void)
 long creaturest::attval(short a,char usejuice)
 {
    long ret=att[a];
+   
+   if(a==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
+   if(a==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
 
-   if(a!=ATTRIBUTE_WISDOM&&usejuice)
+   if(usejuice)
    {
       if(juice<=-50)ret=1;
       else if(juice<=-10)ret-=2;
@@ -434,6 +437,12 @@ long creaturest::attval(short a,char usejuice)
             ret=1;
          }
          else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
+
+         if(age<11)ret>>=1;
+         else if(age<16)ret-=1;
+         else if(age>35)ret-=1;
+         else if(age>52)ret-=3;
+         else if(age>70)ret>>=1;
          break;
       case ATTRIBUTE_AGILITY:
          if(special[SPECIALWOUND_NECK]!=1||
@@ -444,6 +453,12 @@ long creaturest::attval(short a,char usejuice)
          else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
          else if(legok==0)ret>>=2;
          else if(legok==1)ret>>=1;
+
+         if(age<11)ret-=2;
+         else if(age<16)ret-=1;
+         else if(age>35)ret-=1;
+         else if(age>52)ret-=3;
+         else if(age>70)ret>>=1;
          break;
       case ATTRIBUTE_HEALTH:
          if(special[SPECIALWOUND_NECK]!=1||
@@ -452,9 +467,40 @@ long creaturest::attval(short a,char usejuice)
             ret=1;
          }
          else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
+
+         if(age<11)ret-=2;
+         else if(age<16)ret-=1;
+         else if(age>35)ret-=1;
+         else if(age>52)ret-=3;
+         else if(age>70)ret>>=1;
          break;
       case ATTRIBUTE_CHARISMA:
          ret-=disfigs;
+
+         if(age<11)ret+=2; // yayay kids
+         else if(age<16)ret-=2; // barf teenagers
+         else if(age>35)ret+=1;
+         else if(age>52)ret+=2;
+         else if(age>70)ret+=3;
+         break;
+      case ATTRIBUTE_INTELLIGENCE:
+         if(age<11)ret-=3;
+         else if(age<16)ret-=1;
+         else if(age>35)ret+=1;
+         else if(age>52)ret+=2;
+         else if(age>70)ret+=3;
+         break;
+      case ATTRIBUTE_WISDOM:
+         if(age<11)ret-=2;
+         else if(age<16)ret-=1;
+         else if(age>52)ret+=1;
+         else if(age>70)ret+=2;
+         break;
+      case ATTRIBUTE_HEART:
+         if(age<11)ret+=2;
+         else if(age<16)ret+=1;
+         else if(age>52)ret-=1;
+         else if(age>70)ret-=2;
          break;
    }
 
@@ -544,6 +590,21 @@ void creaturest::creatureinit(void)
    worklocation=0;
    juice=0;
    flag=0;
+   age=18+LCSrandom(40);
+   birthday_month=LCSrandom(12);
+   if(birthday_month==4 || birthday_month==6 ||
+      birthday_month==9 || birthday_month==11)
+   {
+      birthday_day=LCSrandom(30);
+   }
+   else if(birthday_month==2)
+   {
+      birthday_day=LCSrandom(28);
+   }
+   else
+   {
+      birthday_day=LCSrandom(31);
+   }
    carid=-1;
    is_driver=0;
    pref_carid=-1;

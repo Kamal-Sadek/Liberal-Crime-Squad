@@ -388,6 +388,7 @@ enum CreatureType
    CREATURE_NURSE,
    CREATURE_CCS_VIGILANTE,
    CREATURE_CCS_ARCHCONSERVATIVE,
+   CREATURE_POLITICALACTIVIST,
    CREATURENUM
 };
 
@@ -837,11 +838,16 @@ struct activityst
 
 #define CREATURE_NAMELEN 40
 
+#define MAXSUBORDINATES 30
+
 struct creaturest
 {
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
-   long squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+   int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+   int age;
+   int birthday_month;
+   int birthday_day;
    char exists;
    char align;
    char alive;
@@ -857,14 +863,14 @@ struct creaturest
    short sentence;
    char confessions;
    char deathpenalty;
-   long joindays;
-   long deathdays;
-   long id;
-   long hireid;
+   int joindays;
+   int deathdays;
+   int id;
+   int hireid;
 
    char forceinc;
 
-   long att[ATTNUM];
+   int att[ATTNUM];
    int skill[SKILLNUM];
    int skill_ip[SKILLNUM];
 
@@ -873,7 +879,7 @@ struct creaturest
    int clip[CLIPNUM];
 
    unsigned long money;
-   long juice;
+   int juice;
 
    char wound[BODYPARTNUM];
    short blood;
@@ -881,17 +887,17 @@ struct creaturest
 
    unsigned int lawflag[LAWFLAGNUM];
    int heat;
-   long location;
-   long worklocation;
+   int location;
+   int worklocation;
 
    char cantbluff;
 
-   long base;
+   int base;
    activityst activity;
 
-   long carid;
+   int carid;
    char is_driver;
-   long pref_carid;
+   int pref_carid;
    char pref_is_driver;
    unsigned short flag;
 

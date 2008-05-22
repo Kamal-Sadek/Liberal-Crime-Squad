@@ -74,6 +74,7 @@ void makecharacter(void)
             //ATTRIBUTE_CHARISMA 2
             //SKILL_PERSUASION 1
             //ATTRIBUTE_HEART 1
+            // Sep. 4, 1984
 
             //Violent Act
             move(7,0);addstr("B - was the 3rd anniversary of the assassination attempt on Ronald Reagan.");
@@ -81,11 +82,13 @@ void makecharacter(void)
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_AGILITY 1
             //ATTRIBUTE_HEALTH 1
+            // Mar. 3, 1984
 
             //Technology Landmark
             move(9,0);addstr("C - the Macintosh was introduced.");
             //ATTRIBUTE_INTELLIGENCE 3
             //SKILL_COMPUTERS 1
+            // Jan. 24, 1984
 
             //Cynial Chess Player
             move(11,0);addstr("D - the Polish priest Popieluszko was kidnapped by government agents.");
@@ -93,12 +96,14 @@ void makecharacter(void)
             //ATTRIBUTE_CHARISMA 1
             //ATTRIBUTE_HEART 1
             //ATTRIBUTE_STRENGTH 1
+            // Oct. 19, 1984
 
             //Inspirational Leader
             move(13,0);addstr("E - the Nobel Peace Prize went to Desmond Tutu for opposition to apartheid.");
             //SKILL_PERSUASION 1
             //ATTRIBUTE_CHARISMA 1
             //ATTRIBUTE_HEART 2
+            // Oct. 16, 1984
             
             
             move(18,0);
@@ -365,36 +370,58 @@ void makecharacter(void)
       switch(q)
       {
          case 0:
+            // Sep. 4, 1984
             if(c=='a')
             {
                newcr->att[ATTRIBUTE_CHARISMA]+=2;
                newcr->att[ATTRIBUTE_HEART]+=1;
                newcr->skill[SKILL_PERSUASION]+=1;
+               newcr->birthday_month = 9;
+               newcr->birthday_day = 4;
             }
+            // Mar. 3, 1984
             if(c=='b')
             {
                newcr->skill[SKILL_PISTOL]+=1;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
                newcr->att[ATTRIBUTE_AGILITY]+=1;
                newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->birthday_month = 3;
+               newcr->birthday_day = 3;
             }
+            // Jan. 24, 1984
             if(c=='c')
             {
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=3;
                newcr->skill[SKILL_COMPUTERS]+=1;
+               newcr->birthday_month = 1;
+               newcr->birthday_day = 24;
             }
+            // Oct. 19, 1984
             if(c=='d')
             {
                newcr->skill[SKILL_INTERROGATION]+=1;
                newcr->att[ATTRIBUTE_CHARISMA]+=1;
                newcr->att[ATTRIBUTE_HEART]+=1;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
+               newcr->birthday_month = 10;
+               newcr->birthday_day = 19;
             }
+            // Oct. 16, 1984
             if(c=='e')
             {
                newcr->skill[SKILL_PERSUASION]+=1;
                newcr->att[ATTRIBUTE_CHARISMA]+=1;
                newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->birthday_month = 10;
+               newcr->birthday_day = 16;
+            }
+            newcr->age = year - 1984;
+            // Don't count this year in founder's age if starting before birthday
+            if(month < newcr->birthday_month ||
+               (month==newcr->birthday_month && day<newcr->birthday_day))
+            {
+               newcr->age--;
             }
             break;
          case 1:
@@ -628,6 +655,7 @@ void makecharacter(void)
                newcr->skill[SKILL_DISGUISE]+=2;
                newcr->skill[SKILL_SECURITY]+=2;
                newcr->skill[SKILL_DRIVING]+=1;
+               newcr->type = CREATURE_THIEF;
             }
             if(c=='b')
             {
@@ -639,6 +667,7 @@ void makecharacter(void)
                newcr->att[ATTRIBUTE_AGILITY]+=2;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
                newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->type = CREATURE_GANGMEMBER;
             }
             if(c=='c')
             {
@@ -647,6 +676,7 @@ void makecharacter(void)
                newcr->skill[SKILL_SCIENCE]+=2;
                newcr->skill[SKILL_WRITING]+=1;
                newcr->skill[SKILL_TEACHING]+=2;
+               newcr->type = CREATURE_COLLEGESTUDENT;
             }
             if(c=='d')
             {
@@ -659,6 +689,7 @@ void makecharacter(void)
                newcr->skill[SKILL_WRITING]+=1;
                newcr->skill[SKILL_PERSUASION]+=1;
                newcr->skill[SKILL_SEDUCTION]+=1;
+               newcr->type = CREATURE_HSDROPOUT;
             }
             if(c=='e')
             {
@@ -667,6 +698,7 @@ void makecharacter(void)
                newcr->skill[SKILL_LAW]+=2;
                newcr->skill[SKILL_WRITING]+=2;
                newcr->skill[SKILL_PERSUASION]+=1;
+               newcr->type = CREATURE_POLITICALACTIVIST;
             }
             break;
       }
@@ -1067,7 +1099,7 @@ void initliberal(creaturest &cr)
    cr.prisoner=NULL;
 
    cr.align=1;
-   cr.type=CREATURE_BUM;
+   cr.type=CREATURE_POLITICALACTIVIST;
    cr.money=0;
 
    namecreature(cr);

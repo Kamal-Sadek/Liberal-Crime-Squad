@@ -1156,6 +1156,7 @@ char talkreceptive(creaturest &cr)
       case CREATURE_TEACHER:
       case CREATURE_HSDROPOUT:
       case CREATURE_BUM:
+      case CREATURE_POLITICALACTIVIST:
       case CREATURE_GANGMEMBER:
       case CREATURE_CRACKHEAD:
       case CREATURE_FASTFOODWORKER:

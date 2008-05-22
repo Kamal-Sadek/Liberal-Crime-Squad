@@ -289,24 +289,29 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr(" approach the situation?");
 
    move(13,0);
-   addstr("A - Just ask for a cash donation and that's it.");
-   move(14,0);
-   if(funds<5)set_color(COLOR_BLACK,COLOR_BLACK,1);
-   addstr("B - Go to coffee for a short interview and political discussion. ($5)");
-   move(15,0);
-   if(funds<30)set_color(COLOR_BLACK,COLOR_BLACK,1);
-   addstr("C - Share ");
-   str[0]=0;
-   getissueeventstring(str);
-   addstr(str);
-   addstr(". ($30)");
-   move(16,0);
-   if(subordinatesleft(*pool[p]))set_color(COLOR_WHITE,COLOR_BLACK,0);
-   else set_color(COLOR_BLACK,COLOR_BLACK,1);
-   addstr("D - Invite ");
-   addstr(r.recruit->name);
-   addstr(" to join the LCS as a full member.");
+   if(funds<50)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   addstr("A - Spend $50 on props and a book for them to keep afterward.");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(14,0);
+   addstr("B - Just casually chat with them and discuss politics.");
+   move(15,0);
+   addstr("C - Ask them to help the Liberal cause with a cash donation.");
+   move(16,0);
+   if(subordinatesleft(*pool[p]))
+   {
+      addstr("D - Offer to let ");
+      addstr(r.recruit->name);
+      addstr(" to join the LCS as a full member.");
+   }
+   else
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr("D - ");
+      addstr(pool[p]->name);
+      addstr(" needs more Juice or Leadership to recurit.");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+   }
+   
 
    int y=18;
    
@@ -322,9 +327,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       {
          move(y,0);
          addstr(pool[p]->name);
-         addstr(" invites ");
+         addstr(" offers to let ");
          addstr(r.recruit->name);
-         addstr(" to join the Liberal Crime Squad.");
+         addstr(" join the Liberal Crime Squad.");
 
          refresh();
          getch();
@@ -357,8 +362,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             move(y+2,0);
+            addstr("What, do you think ");
             addstr(r.recruit->name);
-            addstr(" is not that insane. ");
+            addstr(" is insane? ");
             addstr("Thanks, but no thanks.");
 
             refresh();
@@ -368,10 +374,13 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             return 1;
          }
       }
-      if(c=='b' && funds>5)
+      if(c=='b' || (c=='a' && funds>=50))
       {
-         funds -= 5;
-         moneylost_dating += 5;
+         if(c=='a')
+         {
+            funds -= 50;
+            moneylost_dating += 50;
+         }
          pool[p]->skill_ip[SKILL_PERSUASION]+=5;
          
          int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]+
@@ -390,6 +399,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                                   r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
                                   LCSrandom(10);
 
+         if(c=='a')lib_persuasiveness+=LCSrandom(20);
+
          int max_eagerness      = pool[p]->attval(ATTRIBUTE_HEART)-
                                   r.recruit->attval(ATTRIBUTE_WISDOM);
 
@@ -407,7 +418,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr("They'll definately meet again tomorrow.");
          }
-         else if((lib_persuasiveness+LCSrandom(10) > recruit_reluctance))
+         else if((lib_persuasiveness+LCSrandom(5) > recruit_reluctance))
          {
             r.level++;
             move(y++,0);
@@ -442,70 +453,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          getch();
          return 0;
       }
-      if(c=='c' && funds>=30) // Showing them a prop takes your guy out of the picture
-      {          // Now it's just the quality of the prop against them
-         funds -= 30;
-         moneylost_dating += 30;
-         pool[p]->skill_ip[SKILL_PERSUASION]+=5;
-
-         int lib_persuasiveness = 20+LCSrandom(10);
-
-         int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
-                                  r.recruit->skill[SKILL_SCIENCE]+
-                                  r.recruit->skill[SKILL_RELIGION]+
-                                  r.recruit->skill[SKILL_LAW]+
-                                  r.recruit->attval(ATTRIBUTE_WISDOM)+
-                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
-                                  LCSrandom(10);
-
-         int max_eagerness      = 20-r.recruit->attval(ATTRIBUTE_WISDOM);
-
-         if((lib_persuasiveness > recruit_reluctance) &&
-            (max_eagerness      > r.eagerness()     ))
-         {
-            set_color(COLOR_BLUE,COLOR_BLACK,1);
-            r.level++;
-            r.eagerness1++;
-            move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" was shocked by the meeting material.");
-            move(y++,0);
-            addstr("They'll definately have to meet again tomorrow.");
-         }
-         else if((lib_persuasiveness+LCSrandom(10) > recruit_reluctance))
-         {
-            r.level++;
-            move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" found that pretty interesting.");
-            move(y++,0);
-            addstr("They'll meet again tomorrow.");
-         }
-         else
-         {
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" is a little insulted; that was pretty dumb.");
-            refresh();
-            getch();
-            if(r.eagerness1<=0)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               move(y++,0);
-               addstr("This isn't really going anywhere. There won't be another meeting.");
-               refresh();
-               getch();
-               return 1;
-            }
-            move(y++,0);
-            addstr("Hopefully tomorrow's meeting is a bit better.");
-         }
-         refresh();
-         getch();
-         return 0;
-      }
-      if(c=='a')
+      if(c=='c')
       {
          if(r.eagerness()>5)
          {

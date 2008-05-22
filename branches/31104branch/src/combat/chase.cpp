@@ -1146,7 +1146,7 @@ void makechasers(long sitetype,long sitecrime)
       }
    }
 
-   for(n=0;n<pnum;n++)encounter[n].align=-1;
+   for(n=0;n<pnum;n++)conservatise(encounter[n]);
 
    //ASSIGN CARS TO CREATURES
    long carnum;

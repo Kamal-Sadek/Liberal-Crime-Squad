@@ -90,7 +90,7 @@ void prepareencounter(short type,char sec)
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
-               encounter[encslot].align=-1;
+               conservatise(encounter[encslot]);
                encslot++;
             }
             break;

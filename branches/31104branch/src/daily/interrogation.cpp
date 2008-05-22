@@ -1310,7 +1310,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       cr->flag|=CREATUREFLAG_BRAINWASHED;
       
       y+=2;
-      cr->align=1;
+      liberalize(*cr);
       cr->hireid=a->id;
       stat_recruits++;
 

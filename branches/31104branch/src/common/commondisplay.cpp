@@ -850,7 +850,10 @@ void printliberalstats(creaturest &cr,char smll)
    
    
 
-   move(5,20);addstr("Juice: ");
+   move(5,20);
+   if(cr.align==ALIGN_LIBERAL)addstr("Juice: ");
+   else if(cr.align==ALIGN_CONSERVATIVE)addstr("Notoriety: ");
+   else addstr("Fame: ");
    itoa(cr.juice,num,10);
    addstr(num);
    if(cr.juice<500)
@@ -1027,6 +1030,48 @@ void printliberalstats(creaturest &cr,char smll)
          else strcpy(str,"On \"Foot\"");
       }
       addstr(str);
+
+      if(!smll)
+      {
+         // Add birthdate
+         move(16,0);
+         addstr("Born ");
+         switch(cr.birthday_month)
+         {
+         case 1:addstr("January");break;
+         case 2:addstr("February");break;
+         case 3:addstr("March");break;
+         case 4:addstr("April");break;
+         case 5:addstr("May");break;
+         case 6:addstr("June");break;
+         case 7:addstr("July");break;
+         case 8:addstr("August");break;
+         case 9:addstr("September");break;
+         case 10:addstr("October");break;
+         case 11:addstr("November");break;
+         case 12:addstr("December");break;
+         }
+         addstr(" ");
+         char num[5];
+         itoa(cr.birthday_day,num,10);
+         addstr(num);
+         addstr(", ");
+         if(cr.birthday_month < month ||
+            (cr.birthday_month == month && cr.birthday_day <= day))
+         {
+            itoa(year-cr.age,num,10);
+         }
+         else
+         {
+            itoa(year-1-cr.age,num,10);
+         }
+         addstr(num);
+         // Add age
+         addstr(" (Age ");
+         itoa(cr.age,num,10);
+         addstr(num);
+         addstr(")");
+      }
 
       int woundsum=0;
       for(int w=0;w<BODYPARTNUM;w++)

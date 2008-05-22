@@ -653,7 +653,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                      {
                         encounter[e]=t;
                         encounter[e].exists=1;
-                        encounter[e].align=-1;
+                        conservatise(encounter[e]);
                         encounter[e].squadid=-1;
                         break;
                      }
@@ -700,7 +700,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   addstr(t.name);
                   addstr(" has turned Liberal!");
 
-                  t.align=1;
+                  liberalize(t);
                   t.flag|=CREATUREFLAG_CONVERTED;
                   t.cantbluff=0;
                }

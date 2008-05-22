@@ -251,11 +251,12 @@ int maxskill(int skill,creaturest& cr)
    switch(skill)
    {
    case SKILL_HANDTOHAND:
-   case SKILL_CLUB:
+   case SKILL_SWORD:
    case SKILL_IMPROVISED:
+      return (cr.attval(ATTRIBUTE_STRENGTH)+cr.attval(ATTRIBUTE_AGILITY))/2;
+   case SKILL_CLUB:
       return cr.attval(ATTRIBUTE_STRENGTH);
    case SKILL_KNIFE:
-   case SKILL_SWORD:
    case SKILL_PISTOL:
    case SKILL_RIFLE:
    case SKILL_SMG:
@@ -266,27 +267,31 @@ int maxskill(int skill,creaturest& cr)
       return cr.attval(ATTRIBUTE_AGILITY);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
-   case SKILL_TEACHING:
    case SKILL_SEDUCTION:
       return cr.attval(ATTRIBUTE_CHARISMA);
    case SKILL_ART:
    case SKILL_MUSIC:
-      return cr.attval(ATTRIBUTE_HEART);
+   case SKILL_COOKING:
+      return (2*cr.attval(ATTRIBUTE_HEART)+cr.attval(ATTRIBUTE_AGILITY))/3;
+   case SKILL_WRITING:
+      return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_HEART))/2;
    case SKILL_RELIGION:
+      return (2*cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_HEART))/3;
    case SKILL_BUSINESS:
-      return cr.attval(ATTRIBUTE_WISDOM);
-   case SKILL_SCIENCE:
-   case SKILL_LAW:
+      return (cr.attval(ATTRIBUTE_CHARISMA)+cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_INTELLIGENCE))/3;
    case SKILL_MEDICAL:
    case SKILL_SECURITY:
-   case SKILL_INTERROGATION:
-   case SKILL_COOKING:
-   case SKILL_COMPUTERS:
    case SKILL_GARMENTMAKING:
-   case SKILL_WRITING:
+      return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_AGILITY))/2;
+   case SKILL_INTERROGATION:
+   case SKILL_TEACHING:
+      return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_CHARISMA))/2;
+   case SKILL_SCIENCE:
+   case SKILL_LAW:
+   case SKILL_COMPUTERS:
    case SKILL_STREETSENSE:
-      return cr.attval(ATTRIBUTE_INTELLIGENCE);
    case SKILL_TACTICS:
+      return cr.attval(ATTRIBUTE_INTELLIGENCE);
    case SKILL_LEADERSHIP:
       if(cr.juice<10)return 0;
       if(cr.juice<50)return 1;
