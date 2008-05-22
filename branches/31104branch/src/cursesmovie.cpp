@@ -165,7 +165,7 @@ void filelistst::smartappend(filelistst &list2)
 
 	   for(int l=0;l<list.size();l++)
 	   {
-	      if(!_stricmp(list2.list[l2],list[l]))
+	      if(!strcmp(list2.list[l2],list[l]))
 		   {
 		      conf=0;
 		      break;
