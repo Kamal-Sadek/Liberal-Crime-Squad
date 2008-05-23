@@ -73,7 +73,7 @@ public:
 
    	//this says if they care about stuff other then special interests
 	bool swayable;
-	signed char alignment;
+	char alignment;
 
 	short attackPower;
 	//Soldiers they will send to attack

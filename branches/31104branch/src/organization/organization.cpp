@@ -44,13 +44,31 @@ organization::organization(int newID, string newName)
 
 void organization::initConfig()
 {
-	configContainer temp;
-	temp.name = "SWAYABLE";
-	temp.variable = (void*)&swayable;
-	temp.variableType = BOOLTYPE;
-	configInfo.push_back(temp);
+	//There has to be a better way to do this...
+	
 
+	/*
+	configContainer<bool> *cswayable = new configContainer<bool>;
+	cswayable->variable = &swayable;
+	cswayable->name = "SWAYABLE";
+	configInfo.push_back(cswayable);
 
+	configContainer<char> *calignment = new configContainer<char>;
+	calignment->variable = &alignment;
+	calignment->name = "ALIGNMENT";
+	configInfo.push_back(calignment);
+
+	configContainer<short> *cattackPower = new configContainer<short>;
+	cattackPower->variable = &attackPower;
+	cattackPower->name = "ATKPOWER";
+	configInfo.push_back(cattackPower);
+
+	configContainer<std::string> *cname = new configContainer<std::string>;
+	cname->variable = &name;
+	cname->name = "NAME";
+	configInfo.push_back(cname);
+	*/
+	
 	//this says if they care about stuff other then special interests
 	/*bool swayable;
 	signed char alignment;
