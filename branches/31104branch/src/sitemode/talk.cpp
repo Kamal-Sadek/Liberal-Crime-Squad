@@ -49,24 +49,389 @@ char talk(creaturest &a,int t)
       addstr(":");
 
       int c=0;
+      int hostages=0;
+      int weaponhostage=0;
+      bool cop=0;
 
+      for(int i=0;i<6;i++)
+      {
+         if(activesquad->squad[i]&&
+            activesquad->squad[i]->prisoner&&
+            activesquad->squad[i]->prisoner->alive)
+         {
+            hostages++;
+            if(activesquad->squad[i]->weapon.type!=WEAPON_NONE)weaponhostage++;
+         }
+      }
       if(encounter[t].type==CREATURE_COP||
          encounter[t].type==CREATURE_GANGUNIT||
          encounter[t].type==CREATURE_SWAT)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(11,1);
-         addstr("A - Bluff");
-         move(12,1);
-         addstr("B - Give up");
-         while(c!='a'&&c!='b')
-         {
-            c=getch();
-            translategetch(c);
-         }
+         cop=1;
       }
 
-      if(c!='b')
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(11,1);
+      addstr("A - THIS IS THE LIBERAL CRIME SQUAD!");
+      if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(12,1);
+      addstr("B - Threaten hostages");
+      if(encounter[t].cantbluff!=2)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(13,1);
+      addstr("C - Bluff");
+      if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(14,1);
+      addstr("D - Give up");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      refresh();
+      while(1)
+      {
+         c=getch();
+         translategetch(c);
+         if(c=='a')break;
+         if(c=='b' && hostages)break;
+         if(c=='c' && encounter[t].cantbluff!=2)break;
+         if(c=='d' && cop)break;
+      }
+
+      if(c=='a')
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr(a.name);
+         addstr(":");
+         move(17,1);
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if(slogan[0]!='"')addch('"');
+         addstr(slogan);
+         int last=strlen(slogan);
+         if(last && slogan[last-1]!='"' && slogan[last-1]!='!' && slogan[last-1]!='.' && slogan[last-1]!='?')
+         {
+            addch('!');
+         }
+         if(last && slogan[last-1]!='"')addstr("\"");
+         
+         refresh();
+         getch();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         
+
+         for(int e=0;e<ENCMAX;e++)
+         {
+            if(encounter[e].exists&&encounter[e].alive&&
+               encounter[e].align==-1)
+            {
+               if((a.juice*attitude[VIEW_LIBERALCRIMESQUAD]*a.blood/10000 >
+                   encounter[e].juice+encounter[e].attval(ATTRIBUTE_WISDOM)*5) && LCSrandom(2))
+               {
+                  if((encounter[e].type==CREATURE_COP||
+                      encounter[e].type==CREATURE_GANGUNIT||
+                      encounter[e].type==CREATURE_SWAT||
+                      encounter[e].type==CREATURE_DEATHSQUAD||
+                      encounter[e].type==CREATURE_SOLDIER||
+                      encounter[e].type==CREATURE_AGENT)&&LCSrandom(3))
+                  {
+                     continue;
+                  }
+                  clearmessagearea();
+                  move(16,1);
+                  addstr(encounter[e].name);
+                  switch(LCSrandom(5))
+                  {
+                  case 0:addstr(" chickens out!");break;
+                  case 1:addstr(" backs off!");break;
+                  case 2:addstr(" doesn't want to die!");break;
+                  case 3:addstr(" is out of there!");break;
+                  case 4:addstr(" has a family!");break;
+                  }
+                  delenc(e,0);
+                  addjuice(a,1); // Instant juice!
+                  refresh();
+                  getch();
+               }
+            }
+         }
+      }
+      else if(c=='b')
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr(a.name);
+         addstr(":");
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(17,1);
+         if(hostages>1)
+            addstr("\"Back off or we'll blow their brains out!\"");
+         else
+            addstr("\"Back off or the hostage dies!\"");
+
+         sitecrime+=5;
+         criminalizeparty(LAWFLAG_KIDNAPPING);
+
+         addjuice(a,-2); // DE-juice for this shit
+
+         
+         refresh();
+         getch();
+
+         bool noretreat=false;
+
+         if(weaponhostage)
+         {
+            int e;
+            for(e=0;e<ENCMAX;e++)
+            {
+               if(encounter[e].exists&&encounter[e].alive&&
+                  encounter[e].align==-1)
+               {
+                  if(encounter[e].type==CREATURE_DEATHSQUAD||
+                     encounter[e].type==CREATURE_SOLDIER||
+                     encounter[e].type==CREATURE_AGENT||
+                     encounter[e].type==CREATURE_MERC||
+                     encounter[e].type==CREATURE_COP||
+                     encounter[e].type==CREATURE_GANGUNIT||
+                     encounter[e].type==CREATURE_SWAT||
+                     !LCSrandom(5))
+                  {
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     clearmessagearea();
+                     move(16,1);
+                     addstr(encounter[e].name);
+                     addstr(":");
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                     move(17,1);
+
+                     if(hostages>1)
+                        addstr("\"Release your hostages, and nobody gets hurt.\"");
+                     else
+                        addstr("\"Let the hostage go, and nobody gets hurt.\"");
+
+                     refresh();
+                     getch();
+
+                     noretreat=true;
+                     break;
+                  }
+               }
+            }
+            if(noretreat==false)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               clearmessagearea();
+               move(16,1);
+               addstr("The ploy works! The Conservatives back off.");
+               for(int i=ENCMAX;i>=0;i--)
+               {
+                  if(encounter[i].exists&&
+                     encounter[i].alive&&
+                     encounter[i].align<=-1)
+                  {
+                     delenc(i,0);
+                  }
+               }
+               refresh();
+               getch();
+            }
+            else
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               clearcommandarea();
+               clearmessagearea();
+               clearmaparea();
+               move(9,1);
+               addstr("How should ");
+               addstr(a.name);
+               addstr(" respond?");
+               move(11,1);
+               if(hostages>1)
+                  addstr("A - Execute a hostage");
+               else
+                  addstr("A - Execute the hostage");
+               move(12,1);
+               if(hostages>1)
+                  addstr("B - Offer to trade the hostages for freedom");
+               else
+                  addstr("B - Offer to trade the hostage for freedom");
+               move(13,1);
+               addstr("C - No reply");
+
+               while(1)
+               {
+                  c=getch();
+                  translategetch(c);
+                  if(c=='a'||c=='b'||c=='b')break;
+               }
+               if(c=='a')
+               {
+                  creaturest* executer;
+                  if(a.prisoner)
+                  {
+                     executer=&a;
+                  }
+                  else for(int i=0;i<6;i++)
+                  {
+                     if(activesquad->squad[i]->prisoner!=NULL)
+                     {
+                        executer=activesquad->squad[i];
+                        break;
+                     }
+                  }
+                  
+                  move(16,1);
+                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  if(executer->weapon.ranged() && executer->weapon.ammo)
+                  {
+                     addstr("BLAM!");
+                     executer->weapon.ammo--;
+                  }
+                  else
+                  {
+                     addstr("CRUNCH!");
+                  }
+                  refresh();
+                  getch();
+                  move(17,1);
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  addstr(executer->name);
+                  addstr(" drops ");
+                  addstr(executer->prisoner->name);
+                  addstr("'s body.");
+
+                  addjuice(*executer,-5); // DE-juice for this shit
+                  sitecrime+=10;
+                  sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+                  criminalize(*executer,LAWFLAG_MURDER);
+
+                  if(executer->prisoner->type==CREATURE_CORPORATE_CEO||
+                     executer->type==CREATURE_RADIOPERSONALITY||
+                     executer->prisoner->type==CREATURE_NEWSANCHOR||
+                     executer->prisoner->type==CREATURE_SCIENTIST_EMINENT||
+                     executer->prisoner->type==CREATURE_JUDGE_CONSERVATIVE)sitecrime+=30;
+
+                  makeloot(*executer->prisoner,groundloot);
+
+                  refresh();
+                  getch();
+
+                  delete executer->prisoner;
+                  executer->prisoner=NULL;
+
+                  if(hostages>1)
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr(encounter[e].name);
+                     addstr(":");
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                     move(17,1);
+                     if(law[LAW_FREESPEECH]>ALIGN_ARCHCONSERVATIVE)
+                        addstr("\"Fuck! Okay, okay, you win!\"");
+                     else
+                        addstr("\"[No!] Okay, okay, you win!\"");
+
+                     for(int i=ENCMAX;i>=0;i--)
+                     {
+                        if(encounter[i].exists && encounter[i].align==-1 && encounter[i].alive)
+                        {
+                           delenc(i,0);
+                        }
+                     }
+
+                     refresh();
+                     getch();
+                  }
+               }
+               else if(c=='b')
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(16,1);
+                  addstr(a.name);
+                  addstr(":");
+                  set_color(COLOR_GREEN,COLOR_BLACK,1);
+                  move(17,1);
+                  if(hostages>1)
+                     addstr("\"Okay, back off and we'll let the hostages go.\"");
+                  else
+                     addstr("\"Okay, back off and the hostage goes free.\"");
+
+                  refresh();
+                  getch();
+
+                  if(encounter[e].type==CREATURE_DEATHSQUAD||
+                     encounter[e].type==CREATURE_AGENT||
+                     encounter[e].type==CREATURE_MERC||
+                     encounter[e].type==CREATURE_GANGUNIT||
+                     LCSrandom(2))
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr(encounter[e].name);
+                     addstr(":");
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                     move(17,1);
+                     addstr("\"You had your chance!\"");
+
+                     refresh();
+                     getch();
+                  }
+                  else
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr(encounter[e].name);
+                     addstr(":");
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                     move(17,1);
+                     addstr("\"Deal.\"");
+                     refresh();
+                     getch();
+                     for(int i=ENCMAX;i>=0;i--)
+                     {
+                        if(encounter[i].exists &&
+                           encounter[i].align==-1 &&
+                           encounter[i].alive)
+                        {
+                           delenc(i,0);
+                        }
+                     }
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     juiceparty(5); // Instant juice for successful hostage negotiation
+                     if(hostages>1)addstr("The squad releases all hostages in the trade.");
+                     else addstr("The squad releases the hostage in the trade.");
+                     for(int i=0;i<6;i++)
+                     {
+                        if(activesquad->squad[i] &&
+                           activesquad->squad[i]->prisoner &&
+                           activesquad->squad[i]->prisoner->align==-1)
+                        {
+                           delete activesquad->squad[i]->prisoner;
+                           activesquad->squad[i]->prisoner=NULL;
+                        }
+                     }
+                     refresh();
+                     getch();
+                  }
+               }
+            }
+         }
+         else
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            clearmessagearea();
+            move(16,1);
+            addstr(encounter[t].name);
+            addstr(" isn't interested in your pathetic threats.");
+            refresh();
+            getch();
+         }
+      }
+      else if(c=='c')
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);

@@ -482,7 +482,7 @@ long creaturest::attval(short a,char usejuice)
          else if(age<16)ret-=1;
          else if(age>35)ret-=1;
          else if(age>52)ret-=3;
-         else if(age>70)ret>>=1;
+         else if(age>70)ret-=6;
          break;
       case ATTRIBUTE_AGILITY:
          if(special[SPECIALWOUND_NECK]!=1||
@@ -498,7 +498,7 @@ long creaturest::attval(short a,char usejuice)
          else if(age<16)ret-=1;
          else if(age>35)ret-=1;
          else if(age>52)ret-=3;
-         else if(age>70)ret>>=1;
+         else if(age>70)ret-=6;
          break;
       case ATTRIBUTE_HEALTH:
          if(special[SPECIALWOUND_NECK]!=1||
@@ -512,13 +512,13 @@ long creaturest::attval(short a,char usejuice)
          else if(age<16)ret-=1;
          else if(age>35)ret-=1;
          else if(age>52)ret-=3;
-         else if(age>70)ret>>=1;
+         else if(age>70)ret-=6;
          break;
       case ATTRIBUTE_CHARISMA:
          ret-=disfigs;
 
          if(age<11)ret+=2; // yayay kids
-         else if(age<16)ret-=2; // barf teenagers
+         else if(age<16)ret-=1; // barf teenagers
          else if(age>35)ret+=1;
          else if(age>52)ret+=2;
          else if(age>70)ret+=3;
@@ -635,15 +635,15 @@ void creaturest::creatureinit(void)
    if(birthday_month==4 || birthday_month==6 ||
       birthday_month==9 || birthday_month==11)
    {
-      birthday_day=LCSrandom(30);
+      birthday_day=LCSrandom(30)+1;
    }
    else if(birthday_month==2)
    {
-      birthday_day=LCSrandom(28);
+      birthday_day=LCSrandom(28)+1;
    }
    else
    {
-      birthday_day=LCSrandom(31);
+      birthday_day=LCSrandom(31)+1;
    }
    carid=-1;
    is_driver=0;

@@ -91,26 +91,6 @@ void passmonth(char &clearformess,char canseethings)
          guardianpower+=10*nploc.size();
          printnews(loottype,nploc.size());
 
-         for(int p=0;p<pool.size();p++)
-         {
-            if(pool[p]->alive&&pool[p]->align==1&&
-               pool[p]->clinic==0&&pool[p]->dating==0&&
-               pool[p]->hiding==0)
-            {
-               if(pool[p]->location!=-1)
-               {
-                  if(location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON&&
-                     location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-                     location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION)
-                  {
-                     if(loottype==LOOT_INTHQDISK||
-                        loottype==LOOT_SECRETDOCUMENTS)addjuice(*pool[p],100);
-                     else addjuice(*pool[p],50);
-                  }
-               }
-            }
-         }
-
          if(loottype==LOOT_INTHQDISK||
             loottype==LOOT_SECRETDOCUMENTS)
          {

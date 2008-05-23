@@ -26,7 +26,7 @@
 	}
 }*/
 
-int configurable::getVariable(std::string name)
+bool configurable::setVariable(string name, string data)
 {
 	int i = 0;
 	int size = configInfo.size();
@@ -36,19 +36,36 @@ int configurable::getVariable(std::string name)
 	}
 	if(i >= size)
 	{
-		return -1;
+		return false;
 	}
 	else
 	{
-		return i;
+		/* commented out becasue it doesn't compile and I want to compile my own code! -jds
+      switch(configInfo[i]->variableType)
+		{
+			case INTTYPE:
+				*(int*)configInfo[i].variable = atoi(data.c_str());
+				break;
+			case FLOATTYPE:
+				*(float*)configInfo[i].variable = atof(data.c_str());
+				break;
+			case STRINGTYPE:
+				*(string*)configInfo[i].variable = data;
+				break;
+			case BOOLTYPE:
+				*(bool*)configInfo[i].variable = (bool)atoi(data.c_str());
+				break;
+			case CHARTYPE:
+				*(char*)configInfo[i].variable = (char)atoi(data.c_str());
+				break;
+			default:
+				break;
+		}*/
 	}
+	return false;
 }
 
-void configurable::configVar(string name, string data)
+void configurable::configVar(std::string name, std::string data)
 {
-	int var = getVariable(name);
-	if(var != -1)
-	{
-		configInfo[var]->setVariable(data);
-	}
+   return; // empty but I need this here to build without a link error! :( -jds
 }

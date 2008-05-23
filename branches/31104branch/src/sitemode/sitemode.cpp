@@ -221,7 +221,7 @@ void mode_site(void)
             if(encounter[e].type==CREATURE_WORKER_SERVANT||
                encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
                encounter[e].type==CREATURE_WORKER_SWEATSHOP)freeable++;
-            else if(!encounter[e].cantbluff&&!(encounter[e].align==1&&sitealarm&&enemy))talkers++;
+            else if((encounter[e].cantbluff!=1||sitealarm)&&!(encounter[e].align==1&&sitealarm&&enemy))talkers++;
             if(encounter[e].type==CREATURE_CORPORATE_CEO||
                encounter[e].type==CREATURE_RADIOPERSONALITY||
                encounter[e].type==CREATURE_NEWSANCHOR||
@@ -238,7 +238,7 @@ void mode_site(void)
          {
             if(encounter[e].exists)
             {
-               if(encounter[e].align==-1&&!encounter[e].cantbluff)talkers++;
+               if(encounter[e].align==-1)talkers++;
             }
          }
       }
@@ -648,7 +648,7 @@ void mode_site(void)
                   !(encounter[e].type==CREATURE_WORKER_SERVANT||
                      encounter[e].type==CREATURE_WORKER_SWEATSHOP))
                {
-                  if(!encounter[e].cantbluff)
+                  if(encounter[e].cantbluff!=1||sitealarm)
                   {
                      if(forcetk==-1)forcetk=e;
                      else forcetk=-2;
@@ -771,20 +771,8 @@ void mode_site(void)
                                     !(encounter[tk].type==CREATURE_WORKER_SERVANT||
                                     encounter[tk].type==CREATURE_WORKER_SWEATSHOP))
                                  {
-                                    if(encounter[tk].cantbluff==2)
-                                    {
-                                       clearcommandarea();
-                                       clearmessagearea();
-                                       clearmaparea();
-
-                                       set_color(COLOR_WHITE,COLOR_BLACK,1);
-                                       move(9,1);
-                                       addstr("You can't talk in the middle of a fight.");
-
-                                       refresh();
-                                       getch();
-                                    }
-                                    else if(encounter[tk].cantbluff==1)
+                                    if(encounter[tk].cantbluff==1 &&
+                                       !sitealarm)
                                     {
                                        clearcommandarea();
                                        clearmessagearea();

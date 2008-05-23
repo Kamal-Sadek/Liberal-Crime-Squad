@@ -158,7 +158,7 @@ void siegecheck(char canseethings)
                location[l]->heat=crimes;
 
             if(location[l]->siege.timeuntillocated==-1 &&
-               location[l]->heat > 100 &&
+               location[l]->heat > 40 &&
                !LCSrandom(30))
             {
                // Begin planning siege if high heat on location
