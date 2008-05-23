@@ -83,7 +83,6 @@ public:
 	virtual void initConfig() = 0;
 	template <class T> void initVariable(std::string name, T *variable);
 	int getVariable(std::string name);
-   bool setVariable(string name, string data);
 	void configVar(std::string name, std::string data);
 
 	std::vector<configContainerBase*> configInfo;
