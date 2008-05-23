@@ -350,9 +350,9 @@ int main(int argc, char* argv[])
 
    loaded=load();
 
-   testdriver();
+   //testdriver();
 
-   initOrgs();
+   configureLCS();
 
    mode_title();
 
@@ -363,9 +363,49 @@ int main(int argc, char* argv[])
 }
 
 
-void initOrgs()
+void configureLCS()
 {
+	FILE *configFile;
+	configFile = LCSOpenFile("configfile.txt", "r", 2);
+	char tag[100] = "NONE";
+	char data[100] = "";
+	char currEntity[100] = "";
+	char curLine[100] = "";
+	configurable *newEntity = NULL;
+	char *status;
+	
+	status = fgets(curLine, 100, configFile);
+	
+	while(status != NULL)
+	{
+		if(curLine[0] != '#')
+		{
+			sscanf(curLine, "%s %s", tag, data);
+			if(!strcmp(tag, "OBJECT"))
+			{
+				if(strcmp(currEntity, ""))
+				{
+					//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
+					gOrgHandler.addOrg(*(organization*)newEntity);
+				}
+				strcpy(currEntity, data);
+				if(!strcmp(currEntity, "ORGANIZATION"))
+				{
+					newEntity = new organization();
+					newEntity->initConfig();
+				}
+			}
+			else if(newEntity != NULL)
+			{
+				newEntity->configVar(tag, data);
+			}
+		}
+		status = fgets(curLine, 100, configFile);
+	}
 
+	//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
+	gOrgHandler.addOrg(*(organization*)newEntity);
+	
 }
 
 //picks a random number from 0 to max-1

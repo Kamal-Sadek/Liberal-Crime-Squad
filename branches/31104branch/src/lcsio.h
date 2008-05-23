@@ -57,7 +57,8 @@ This file is part of Liberal Crime Squad.
 enum LCSIO_FLAGS
 {
     LCSIO_PRE_ART = 1, /// Append the given file name to the art directory path.
-    LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
+    LCSIO_PRE_HOME = 2, /// Append the given file name to the home directory path.
+	//LCSIO_PRE_CONFIG = 3 /// Append the given file name to the config directory path.
 };
 
 

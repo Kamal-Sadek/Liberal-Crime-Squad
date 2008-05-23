@@ -6,7 +6,7 @@
 #include <list>
 #include <vector>
 
-std::string getNextSet(FILE *cfile);
+//std::string getNextSet(FILE *cfile);
 
 class configContainerBase
 {
@@ -20,64 +20,79 @@ public:
 template <class T> class configContainer : public configContainerBase
 {
 public:
-	configContainer(std::string inName, T *inVariable);
-	void setVariable(std::string data);
+	configContainer(std::string inName, T *inVariable)
+	{
+		name = inName;
+		variable = inVariable;
+	}
+	void setVariable(std::string data)
+	{
+		*variable = (T)atoi(data.c_str());
+	}
 	T *variable;
 };
 
-template <class T> configContainer<T>::configContainer(std::string inName, T *inVariable)
+template <> class configContainer<std::string> : public configContainerBase
 {
-	name = inName;
-	variable = inVariable;
-}
+public:
+	configContainer(std::string inName, std::string *inVariable)
+	{
+		name = inName;
+		variable = inVariable;
+	}
+	void setVariable(std::string data)
+	{
+		*variable = data;
+	}
+	std::string *variable;
+};
 
-template <> void configContainer<int>::setVariable(std::string data)
+template <> class configContainer<float> : public configContainerBase
 {
-	*variable = (int)atoi(data.c_str());
-}
+public:
+	configContainer(std::string inName, float *inVariable)
+	{
+		name = inName;
+		variable = inVariable;
+	}
+	void setVariable(std::string data)
+	{
+		*variable = *variable = (float)atof(data.c_str());
+	}
+	float *variable;
+};
 
-template <> void configContainer<short>::setVariable(std::string data)
+template <> class configContainer<std::vector<int>> : public configContainerBase
 {
-	*variable = (short)atoi(data.c_str());
-}
-
-template <> void configContainer<char>::setVariable(std::string data)
-{
-	*variable = (char)atoi(data.c_str());
-}
-
-template <> void configContainer<bool>::setVariable(std::string data)
-{
-	*variable = (bool)atoi(data.c_str());
-}
-
-template <> void configContainer<float>::setVariable(std::string data)
-{
-	*variable = (float)atof(data.c_str());
-}
-
-template <> void configContainer<std::string>::setVariable(std::string data)
-{
-	*variable = data;
-}
-
-template <> void configContainer<std::vector<int>>::setVariable(std::string data)
-{
-	variable->push_back(atoi(data.c_str()));
-}
-
-
-
+public:
+	configContainer(std::string inName, std::vector<int> *inVariable)
+	{
+		name = inName;
+		variable = inVariable;
+	}
+	void setVariable(std::string data)
+	{
+		variable->push_back(atoi(data.c_str()));
+	}
+	std::vector<int> *variable;
+};
 
 class configurable
 {
 public:
-	void initConfig();
+	virtual void initConfig() = 0;
+	template <class T> void initVariable(std::string name, T *variable);
 	int getVariable(std::string name);
 	void configVar(std::string name, std::string data);
 
 	std::vector<configContainerBase*> configInfo;
 };
+
+template <class T> void configurable::initVariable(std::string name, T *variable)
+{
+	configContainer<T> *container = new configContainer<T>(name, variable);
+	configInfo.push_back(container);
+}
 
 
 

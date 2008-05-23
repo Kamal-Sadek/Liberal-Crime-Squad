@@ -227,7 +227,7 @@ using namespace std;
 
 unsigned long r_num(void);
 long LCSrandom(unsigned long max);
-void initOrgs();
+void configureLCS();
 
 enum UnlockTypes
 {

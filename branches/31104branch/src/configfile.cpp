@@ -2,11 +2,15 @@
 
 #include "configfile.h"
 
-string getNextSet(FILE *cfile)
+/*string getNextSet(FILE *cfile)
 {
+	if(cfile == NULL)
+	{
+		return "\0";
+	}
 	char input = ' ';
 	string name;
-	while(input != '[' && input != EOF)
+	while(input !=  && input != EOF)
 	{
 		input = fgetc(cfile);
 	}
@@ -18,13 +22,9 @@ string getNextSet(FILE *cfile)
 	}
 	else
 	{
-		return NULL;
+		return "\0";
 	}
-}
-
-void configurable::initConfig()
-{
-}
+}*/
 
 int configurable::getVariable(std::string name)
 {

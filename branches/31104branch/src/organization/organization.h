@@ -55,6 +55,7 @@ public:
 	vector<interOrgData> orgs;
 	vector<enum Views> specialInterests;
 
+	organization();
 	organization(int newID);
 	organization(string newName);
 	organization(int newID, string newName);
