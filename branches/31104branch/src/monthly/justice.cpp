@@ -734,6 +734,8 @@ void trial(creaturest &g)
       refresh();
       getch();
 
+      bool keeplawflags=0;
+
       //HUNG JURY
       if(defensepower==jury)
       {
@@ -761,6 +763,7 @@ void trial(creaturest &g)
                }
             }
             g.location=ps;
+            keeplawflags=true;
          }
          //NO RE-TRY
          else
@@ -801,9 +804,12 @@ void trial(creaturest &g)
          penalize(g,0);
       }
       //CLEAN UP LAW FLAGS
-      for(int i=0;i<LAWFLAGNUM;i++)
+      if(!keeplawflags)
       {
-         g.lawflag[i]=0;
+         for(int i=0;i<LAWFLAGNUM;i++)
+         {
+            g.lawflag[i]=0;
+         }
       }
       g.heat=0;
       //Clean up confessions

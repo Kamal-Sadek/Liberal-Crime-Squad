@@ -811,6 +811,11 @@ void funds_and_trouble(char &clearformess)
    for(int p=0;p<pool.size();p++)
    {
       if(!pool[p]->alive)continue;
+      if(pool[p]->location==-1)
+      {
+         pool[p]->activity.type=ACTIVITY_NONE;
+         continue;
+      }
       switch(pool[p]->activity.type)
       {
          case ACTIVITY_TEACH_GENERALED:

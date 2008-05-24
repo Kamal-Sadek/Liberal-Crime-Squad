@@ -1179,7 +1179,8 @@ void majornewspaper(char &clearformess,char canseethings)
    {
       if(pool[i]->alive&&pool[i]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
-         if(location[pool[i]->location]->compound_walls==COMPOUND_PRINTINGPRESS)
+         if(pool[i]->location!=-1&&
+            location[pool[i]->location]->compound_walls==COMPOUND_PRINTINGPRESS)
          {
             pool[i]->skill_ip[SKILL_WRITING]+=LCSrandom(3); // Experience gain
             writers+=pool[i]->skill[SKILL_WRITING]; // Record the writer on this topic

@@ -74,14 +74,15 @@ char talk(creaturest &a,int t)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(11,1);
       addstr("A - THIS IS THE LIBERAL CRIME SQUAD!");
-      if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,1);
       addstr("B - Threaten hostages");
       if(encounter[t].cantbluff!=2)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(13,1);
       addstr("C - Bluff");
-      if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(cop)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(14,1);
       addstr("D - Give up");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
