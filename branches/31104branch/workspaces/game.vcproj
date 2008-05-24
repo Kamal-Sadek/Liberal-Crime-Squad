@@ -389,10 +389,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\daily\news.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\daily\recruit.cpp"
 				>
 			</File>
@@ -615,6 +611,38 @@
 			</File>
 			<File
 				RelativePath="..\src\politics\politics.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="news"
+			>
+			<File
+				RelativePath="..\src\news\ads.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\news\headline.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\news\layout.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\news\majorevent.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\daily\news.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\news\news.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\news\squadstory_text.cpp"
 				>
 			</File>
 		</Filter>

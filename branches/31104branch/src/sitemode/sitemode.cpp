@@ -448,6 +448,7 @@ void mode_site(void)
 
       
 
+
       refresh();
 
       int c;
@@ -1562,6 +1563,52 @@ void mode_site(void)
                int sx=0,sy=0,sz=0;
                for(u=0;u<unitx.size();u++)
                {
+                  // don't leave tile if player is here
+                  if(unitx[u]==locx&&
+                     unity[u]==locy&&
+                     unitz[u]==locz)
+                  {
+                     continue;
+                  }
+                  // move into player's tile if possible
+                  if((unitx[u]==locx-1||
+                      unitx[u]==locx+1)&&
+                      unity[u]==locy&&
+                      unitz[u]==locz)
+                  {
+                     levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
+
+                     //BLOW TRAPS
+                     if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
+                     {
+                        levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_TRAP;
+                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
+                     }
+                     else
+                     {
+                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT;
+                     }
+                     continue;
+                  }
+                  if(unitx[u]==locx&&
+                     (unity[u]==locy+1||
+                      unity[u]==locy-1)&&
+                     unitz[u]==locz)
+                  {
+                     levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
+
+                     //BLOW TRAPS
+                     if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
+                     {
+                        levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_TRAP;
+                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
+                     }
+                     else
+                     {
+                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT;
+                     }
+                     continue;
+                  }
                   sz=0;
                   switch(LCSrandom(4))
                   {

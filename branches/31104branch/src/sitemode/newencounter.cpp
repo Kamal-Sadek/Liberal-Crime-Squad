@@ -987,7 +987,7 @@ char addsiegeencounter(char type)
                switch(location[cursite]->siege.siegetype)
                {
                   case SIEGE_POLICE:
-                     if(location[cursite]->siege.escalationstate==0||LCSrandom(2))
+                     if(location[cursite]->siege.escalationstate==0)
                      {
                         makecreature(encounter[e],CREATURE_SWAT);
                      }
@@ -1002,6 +1002,34 @@ char addsiegeencounter(char type)
                   case SIEGE_CORPORATE:
                      makecreature(encounter[e],CREATURE_MERC);
                      break;
+               }
+            }
+            else
+            {
+               switch(sitetype)
+               {
+               case SITE_GOVERNMENT_INTELLIGENCEHQ:
+                  makecreature(encounter[e],CREATURE_AGENT);
+                  break;
+               case SITE_CORPORATE_HEADQUARTERS:
+               case SITE_CORPORATE_HOUSE:
+                  makecreature(encounter[e],CREATURE_MERC);
+                  break;
+               case SITE_MEDIA_AMRADIO:
+               case SITE_MEDIA_CABLENEWS:
+                  makecreature(encounter[e],CREATURE_HICK);
+                  break;
+               case SITE_GOVERNMENT_POLICESTATION:
+                  if(law[LAW_DEATHPENALTY]==-2&&
+                     law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
+                  else makecreature(encounter[e],CREATURE_SWAT);
+                  break;
+               default:
+                  if(law[LAW_DEATHPENALTY]==-2&&
+                     law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
+                  else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[e],CREATURE_GANGUNIT);
+                  else makecreature(encounter[e],CREATURE_COP);
+                  break;
                }
             }
 

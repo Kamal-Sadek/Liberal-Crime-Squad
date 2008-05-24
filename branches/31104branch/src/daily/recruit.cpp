@@ -342,7 +342,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(r.recruit->name);
             addstr(" accepts, and is eager to get started.");
 
-            r.recruit->align=1;
+            liberalize(*r.recruit);
 
             r.recruit->location=pool[p]->location;
             r.recruit->base=pool[p]->base;
@@ -431,23 +431,15 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          }
          else
          {
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(y++,0);
             addstr(pool[p]->name);
             addstr(" comes off as slightly insane.");
+            move(y++,0);
+            addstr("This whole thing was a mistake. There won't be another meeting.");
             refresh();
             getch();
-            if(r.eagerness1<=0)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               move(y++,0);
-               addstr("This whole thing was a mistake. There won't be another meeting.");
-               refresh();
-               getch();
-               return 1;
-            }
-            move(y++,0);
-            addstr("Hopefully tomorrow's meeting is a bit better.");
+            return 1;
          }
          refresh();
          getch();

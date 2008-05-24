@@ -59,7 +59,7 @@ void noticecheck(int exclude)
          topi=i;
       }
    }
-   if(topi>=0)activesquad->squad[topi]->skill_ip[SKILL_SLEIGHTOFHAND]+=10;
+   if(topi>=0&&noticer.size())activesquad->squad[topi]->skill_ip[SKILL_SLEIGHTOFHAND]+=10;
 
    if(noticer.size()>0)
    {
@@ -547,15 +547,13 @@ char weaponcheck(creaturest &cr,short type)
       // Police at extreme times
       if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2)
       {
-         if(cr.armor.type==ARMOR_POLICEUNIFORM||
-            (cr.armor.type==ARMOR_POLICEARMOR))
+         if(cr.armor.type==ARMOR_POLICEUNIFORM||cr.armor.type==ARMOR_POLICEARMOR)
          {
             incharacter=1;
          }
       }
       // Or military
-      else if(cr.armor.type==ARMOR_MILITARY||
-              (cr.armor.type==ARMOR_ARMYARMOR))
+      if(cr.armor.type==ARMOR_MILITARY||cr.armor.type==ARMOR_ARMYARMOR)
       {
          incharacter=1;
       }
@@ -589,9 +587,11 @@ char weaponcheck(creaturest &cr,short type)
       illegal=0;
    }
 
+   if(hasdisguise(cr,location[cursite]->type)==false)incharacter=0;
+
    if(suspicious)
    {
-      if(incharacter)return 1;
+      if(incharacter)return 0;
       else if(concealed)return 0;
       else if(illegal)return 2;
       else return 1;

@@ -120,7 +120,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
          d.date[e]->location=pool[p]->location;
          d.date[e]->base=pool[p]->base;
-         d.date[e]->align=1;
+         liberalize(*d.date[e]);
          d.date.erase(d.date.begin() + e);
 
          return DATERESULT_JOINED;

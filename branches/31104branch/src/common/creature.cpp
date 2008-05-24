@@ -132,6 +132,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_BLACKROBE;
          cr.money=LCSrandom(41)+20;
          cr.align=-1;
+         cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
          sk=LCSrandom(6)+5;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
@@ -166,6 +167,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(41)+20;
          cr.align=-1;
+         cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
          sk=LCSrandom(3)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
@@ -203,6 +205,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(121)+120;
          cr.align=-1;
+         cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
          sk=LCSrandom(6)+6;cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
@@ -366,6 +369,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CIVILLIANARMOR;
          cr.money=0;
          cr.align=-1;
+         cr.juice=LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -408,6 +412,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_ARMYARMOR;
          cr.money=0;
          cr.align=-1;
+         cr.juice=LCSrandom(100);
          cr.age=AGE_YOUNGADULT;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -443,6 +448,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_POLICEARMOR;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
+         cr.juice=10+LCSrandom(50);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
@@ -479,6 +485,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_POLICEARMOR;
          cr.align=-1;
+         cr.juice=40+LCSrandom(50);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -501,6 +508,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_ARMYARMOR;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
+         cr.juice=90+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -559,6 +567,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
+         cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(4)+3;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -590,6 +599,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_HEAVYARMOR;
          cr.money=LCSrandom(51)+150;
          cr.align=-1;
+         cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
 
          sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -607,11 +617,11 @@ void makecreature(creaturest &cr,short type)
             attcap[a]=25;
          }
          attcap[ATTRIBUTE_HEART]=1;
-         redistatts=40;
-         cr.att[ATTRIBUTE_STRENGTH]=8;
-			cr.att[ATTRIBUTE_AGILITY]=8;
-			cr.att[ATTRIBUTE_HEALTH]=8;
-         cr.att[ATTRIBUTE_WISDOM]=16;
+         redistatts=25;
+         cr.att[ATTRIBUTE_STRENGTH]=4;
+			cr.att[ATTRIBUTE_AGILITY]=4;
+			cr.att[ATTRIBUTE_HEALTH]=4;
+         cr.att[ATTRIBUTE_WISDOM]=10;
          break;
       case CREATURE_GANGUNIT:
          
@@ -635,6 +645,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_POLICEARMOR;
          cr.align=-1;
+         cr.juice=40+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
          sk=LCSrandom(3)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -766,6 +777,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_BLACKSUIT;
          cr.align=-1;
+         cr.juice=75+LCSrandom(150);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(8)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
@@ -791,6 +803,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(51)+50;
          cr.align=-1;
+         cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(8)+1;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
@@ -813,6 +826,7 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_CHARISMA]=10;
          cr.att[ATTRIBUTE_WISDOM]=8;
          cr.align=-1;
+         cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
          break;
       case CREATURE_GENETIC:
@@ -1323,6 +1337,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(131)+100;
          //cr.align=LCSrandom(3)-1;
+         cr.juice=LCSrandom(25);
          cr.age=AGE_MATURE;
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;

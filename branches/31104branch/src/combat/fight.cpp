@@ -921,7 +921,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             {
                a.weapon.ammo--;
                // Each shot in a burst is increasingly less likely to hit
-               if(aroll+bonus-i*7>droll)bursthits++;
+               if(aroll+bonus-i*4>droll)bursthits++;
             }
             if(bursthits==0)bursthits=1;
             break;

@@ -1366,7 +1366,8 @@ void dispersalcheck(char &clearformess)
             else if(nukeme[p]==DISPERSAL_BOSSSAFE&&inprison||nukeme[p]==DISPERSAL_BOSSINPRISON)
             {
                // If you're here because you're unreachable, mark as checked and unreachable
-               if(!inprison)
+               //    --- EDIT MAY 24, 2008: MAKE PRISON NOT BREAK REACHABILITY --- JDS
+               /*if(!inprison)
                {
                   // Roll to see if you go into hiding or not
                   if(!pool[p]->hiding&&
@@ -1378,7 +1379,7 @@ void dispersalcheck(char &clearformess)
                   }
                   else nukeme[p]=DISPERSAL_HIDING;//Go into hiding
                }
-               else nukeme[p]=DISPERSAL_SAFE; // Else you're in prison; you're guaranteed contactable
+               else*/ nukeme[p]=DISPERSAL_SAFE; // Else you're in prison; you're guaranteed contactable
                
                // Find all subordinates if you didn't lose contact completely
                if(nukeme[p]!=DISPERSAL_NOCONTACT)
@@ -1519,7 +1520,9 @@ bool promotesubordinates(creaturest &cr, char &clearformess)
       {
          subordinates++;
          //Brainwashed people inelligible for promotion to founder
-         if(bigboss==-1 && pool[p]->flag & CREATUREFLAG_KIDNAPPED)continue;
+         if(bigboss==-1 && pool[p]->flag & CREATUREFLAG_BRAINWASHED)continue;
+         //Loveslaves inelligible for promotion to anything
+         if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)continue;
 
          if(pool[p]->juice+pool[p]->skill[SKILL_LEADERSHIP]*50>maxjuice)
          {
@@ -1561,7 +1564,7 @@ bool promotesubordinates(creaturest &cr, char &clearformess)
    }
    
    //Chain of command totally destroyed if dead person's boss also dead
-   if(bigboss==-2 || (cr.hireid!=-1 && !pool[bigboss]->alive))return 0;
+   if(bigboss==-2 || (cr.hireid!=-1 && bigboss!=-1 && !pool[bigboss]->alive))return 0;
    
    //One subordinate -- just promote them
    if(subordinates==1)
@@ -1575,7 +1578,8 @@ bool promotesubordinates(creaturest &cr, char &clearformess)
 
       for(p=0;p<pool.size();p++)
       {
-         if(pool[p]->hireid==cr.id && p!=newboss)
+         //Loveslaves lose contact anyway
+         if(pool[p]->hireid==cr.id && p!=newboss && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
          {
             pool[p]->hireid=pool[newboss]->id;
          }

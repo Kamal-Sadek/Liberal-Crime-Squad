@@ -60,7 +60,8 @@ char talk(creaturest &a,int t)
             activesquad->squad[i]->prisoner->alive)
          {
             hostages++;
-            if(activesquad->squad[i]->weapon.type!=WEAPON_NONE)weaponhostage++;
+            if(activesquad->squad[i]->weapon.type!=WEAPON_NONE&&
+               activesquad->squad[i]->weapon.type!=WEAPON_GUITAR)weaponhostage++;
          }
       }
       if(encounter[t].type==CREATURE_COP||

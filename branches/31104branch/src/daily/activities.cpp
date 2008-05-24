@@ -2048,8 +2048,8 @@ void funds_and_trouble(char &clearformess)
       for(int p=0;p<pool.size();p++)
       {
          //If they're at the location
-         if(pool[p]->location==teachers[t]->location/* &&
-            pool[p]->activity.type==ACTIVITY_NONE*/)
+         if(pool[p]->location==teachers[t]->location &&
+            pool[p]->align==ALIGN_LIBERAL)
          {
             //Step through the array of skills to train
             for(int i=0;i<10;i++)
