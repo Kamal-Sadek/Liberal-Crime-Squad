@@ -1654,6 +1654,12 @@ char squadhasitem(squadst &sq,int type,int subtype);
 /*
  creature.cpp
 */
+/*Puzzlemaker TEMP ADDITION!
+This is going to decide the rarity of spawning the creature for the organizations
+THIS IS TEMPORARY
+IF THIS EXISTS IN JULY OF 2008 I HAVE FAILED THE LCS
+*/
+int getSpawnChance(enum CreatureType type);
 /* rolls up a creature's stats and equipment */
 void makecreature(creaturest &cr,short type);
 /* rolls up a proper name for a creature */

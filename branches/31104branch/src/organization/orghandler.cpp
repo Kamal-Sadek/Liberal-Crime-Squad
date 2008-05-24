@@ -96,7 +96,7 @@ void orgHandler::swayAll()
 
 void orgHandler::swayOrg(int ID, int opinionOrgID, int power)
 {
-	organization &org = getOrg(ID);
+	/*organization &org = getOrg(ID);
 	if(org.swayable)
 	{
 		for(int i = 0; i < org.orgs.size(); i++)
@@ -107,5 +107,5 @@ void orgHandler::swayOrg(int ID, int opinionOrgID, int power)
 				break;
 			}
 		}
-	}
+	}*/
 }

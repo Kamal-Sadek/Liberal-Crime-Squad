@@ -38,6 +38,53 @@ This file is part of Liberal Crime Squad.                                       
 #define AGE_MIDDLEAGED  35+LCSrandom(25) /* for the more experienced types */
 #define AGE_SENIOR      65+LCSrandom(30) /* ah, social security */
 
+
+//TEMPORARY FUNNNCCCTIIOOONNNN
+//TEMPOR-FREAKIN-RARY!
+int getSpawnChance(enum CreatureType type)
+{
+	switch(type)
+	{
+		case CREATURE_CCS_VIGILANTE:
+			return 90;
+		case CREATURE_CCS_ARCHCONSERVATIVE:
+			return 10;
+		case CREATURE_COP:
+			return 80;
+		case CREATURE_SWAT:
+			return 20;
+		case CREATURE_DEATHSQUAD:
+			if(law[LAW_POLICEBEHAVIOR] == -2)
+			{
+				return 50;
+			}
+			else
+			{
+				return 0;
+			}
+		case CREATURE_GANGUNIT:
+			if(law[LAW_POLICEBEHAVIOR] == -1)
+			{
+				return 70;
+			}
+			else
+			{
+				return 0;
+			}
+		case CREATURE_HICK:
+			return 100;
+		case CREATURE_RADIOPERSONALITY:
+			return 20;
+		case CREATURE_NEWSANCHOR:
+			return 20;
+		case CREATURE_TANK:
+			return 1;
+		case CREATURE_SOLDIER:
+			return 99;
+		case CREATURE_AGENT:
+			return 20;
+	}
+}
 /* rolls up a creature's stats and equipment */
 void makecreature(creaturest &cr,short type)
 {

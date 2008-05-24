@@ -23,37 +23,36 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+interOrgData::interOrgData() : respectLevel(0), allyLevel(0) 
+{ 
+}
+
+interOrgData::interOrgData(int IDin, int respectLevelin, int allyLevelin)
+{
+	ID = IDin;
+	respectLevel = respectLevelin;
+	allyLevel = allyLevelin;
+}
+
 organization::organization()
 {
-	initConfig();
 }
 
 
 organization::organization(int newID)
 {
 	ID = newID;
-	initConfig();
 }
 
 organization::organization(string newName)
 {
 	name = newName;
-	initConfig();
 }
 
 organization::organization(int newID, string newName)
 {
 	ID = newID;
 	name = newName;
-	initConfig();
-}
-
-void organization::initConfig()
-{
-	initVariable<bool>("SWAYABLE", &swayable);
-	initVariable<char>("ALIGNMENT", &alignment);
-	initVariable<short>("ATKPOWER", &attackPower);
-	initVariable<std::string>("NAME", &name);
 }
 
 void organization::swayOthers()
@@ -83,23 +82,26 @@ void organization::attackedHandler()
 {
 }
 
-interOrgData::interOrgData() : ID(0), swayLevel(1.0f), affiliation(0.0f), respectLevel(0), allyLevel(0) 
-{ 
-	initConfig();
-}
-
-interOrgData::interOrgData(int IDin, float swayLevelin, float affiliationin, int respectLevelin, int allyLevelin)
+int spawnUnit(std::vector<int> unitList)
 {
-	ID = IDin;
-	swayLevel = swayLevelin;
-	affiliation = affiliationin;
-	respectLevel = respectLevelin;
-	allyLevel = allyLevelin;
-	initConfig();
-}
-
-void interOrgData::initConfig()
-{
+	int total = 0;
+	std::vector<int> chance;
+	chance.reserve(unitList.size());
+	for(int i = 0; i < unitList.size(); i++)
+	{
+		chance.push_back(getSpawnChance((enum CreatureType)unitList.at(i)));
+		total += chance.at(i);
+	}
+	int rnd;
+	rnd = LCSrandom(total);
+	for(int i = 0; i < unitList.size(); i++)
+	{
+		if(chance.at(i) > rnd)
+		{
+			return chance.at(i);
+		}
+	}
+	return unitList.at(0);
 }
 
 // Deletes the record of an organization
@@ -124,8 +126,8 @@ void organization::deleteOrgRecord(int deleteID)
 void organization::addOrgRecord(const organization& org)
 {
    // Check for and count common special interests
-   vector<enum Views>::const_iterator iter1; // Iterator to step through my interests
-   vector<enum Views>::const_iterator iter2; // Iterator to step through their interests
+   vector<int>::const_iterator iter1; // Iterator to step through my interests
+   vector<int>::const_iterator iter2; // Iterator to step through their interests
 
    int matchNum = 0;  // Number of common special interests
 

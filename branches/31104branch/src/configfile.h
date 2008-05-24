@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include "manager/manager.h"
 
 //std::string getNextSet(FILE *cfile);
 
@@ -77,7 +78,7 @@ public:
 	std::vector<int> *variable;
 };
 
-class configurable
+class configurable : public managedObject
 {
 public:
 	virtual void initConfig() = 0;
@@ -86,6 +87,10 @@ public:
 	void configVar(std::string name, std::string data);
 
 	std::vector<configContainerBase*> configInfo;
+
+	//This is to create a new entity of this type.
+	//template <class T> T *initializeInstance();
+
 };
 
 template <class T> void configurable::initVariable(std::string name, T *variable)

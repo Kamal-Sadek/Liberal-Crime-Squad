@@ -21,50 +21,41 @@ This file is part of Liberal Crime Squad.                                       
 	This file was made by Brad (AKA Puzzlemaker)
 */
 
-#ifndef ORGANIZATION_H_INCLUDED
-#define ORGANIZATION_H_INCLUDED
+#ifndef organizationDef_H_INCLUDED
+#define organizationDef_H_INCLUDED
 
 #include <includes.h>
 #include <list>
 #include <stdexcept>
 #include <string>
-#include "configfile.h"
 #include "manager/manager.h"
+#include "configfile.h"
+#include "organization/organization.h"
 
-class interOrgData : public managedObject
+class configInterOrgData : public configurable
 {
 public:
-	interOrgData();
-	interOrgData(int ID, int respectLevel, int allyLevel);
+	void initConfig();
+
+	//int ID;
+	//These are percentages that you are willing to be swayed and are affiliated with this org
+	float affiliation;
+	float swayLevel;
 
 	//this is how much you respect them, and how much they are your ally
+	//difference between allyLevel and affiliation is, affiliation is more like partial ownership.
 	//allyLevel can go negative, respect level cannot.
 	int respectLevel;
 	int allyLevel;
 };
 
-class organization : public managedObject
+class organizationDef : public configurable
 {
 public:
-	vector<interOrgData> orgs;
-	vector<int> specialInterests;
+	std::vector<int> specialInterests;
 
-	organization();
-	organization(int newID);
-	organization(string newName);
-	organization(int newID, string newName);
-
-	//These handle changing other organizations viewpoints
-	void swayOthers();
-	void attackedHandler();
-	void calcAllyLevel(int ID);
-
-	int spawnUnit(std::vector<int> unitList);
-
-    // Deletes the record of an organization
-    void deleteOrgRecord(int deleteID);
-    // Adds record of an organization if it has common special interests
-    void addOrgRecord(const organization& org);
+	void initConfig();
+	void initializeInstance(organization &instance);
 
 	char alignment;
 

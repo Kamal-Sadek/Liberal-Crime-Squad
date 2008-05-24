@@ -73,8 +73,11 @@
 #include <includes.h>
 #include "organization/orghandler.h"
 #include "organization/testdriver.h"
+#include "organizationdef.h"
+#include "manager/manager.h"
 
 orgHandler gOrgHandler = orgHandler();
+configManager<organizationDef, organization> organizationDefManager = configManager<organizationDef, organization>();
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
@@ -367,6 +370,11 @@ void configureLCS()
 {
 	FILE *configFile;
 	configFile = LCSOpenFile("configfile.txt", "r", 2);
+	if(configFile == NULL)
+	{
+		throw invalid_argument("Configuration File Not Found!");
+		return;
+	}
 	char tag[100] = "NONE";
 	char data[100] = "";
 	char currEntity[100] = "";
@@ -378,7 +386,7 @@ void configureLCS()
 	
 	while(status != NULL)
 	{
-		if(curLine[0] != '#')
+		if(curLine[0] != '#' && curLine[0] != '\n')
 		{
 			sscanf(curLine, "%s %s", tag, data);
 			if(!strcmp(tag, "OBJECT"))
@@ -386,12 +394,12 @@ void configureLCS()
 				if(strcmp(currEntity, ""))
 				{
 					//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
-					gOrgHandler.addOrg(*(organization*)newEntity);
+					organizationDefManager.addObj(*((organizationDef*)newEntity));
 				}
 				strcpy(currEntity, data);
 				if(!strcmp(currEntity, "ORGANIZATION"))
 				{
-					newEntity = new organization();
+					newEntity = new organizationDef();
 					newEntity->initConfig();
 				}
 			}
@@ -404,8 +412,19 @@ void configureLCS()
 	}
 
 	//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
-	gOrgHandler.addOrg(*(organization*)newEntity);
+	organizationDefManager.addObj(*((organizationDef*)newEntity));
 	
+	//NEED TO MOVE THIS TO OTHER INITIALIZATION FUNCTIONS
+	int i;
+	int ID;
+	organization *tOrg;
+
+	for(i = 0; i < organizationDefManager.getSize(); i++)
+	{
+		ID = organizationDefManager.getIDByIndex(i);
+		tOrg = organizationDefManager.getInstance(ID);
+		gOrgHandler.addOrg(*tOrg);
+	}
 }
 
 //picks a random number from 0 to max-1
