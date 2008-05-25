@@ -36,6 +36,8 @@ void siegecheck(char canseethings)
 {
    if(disbanding)return;
 
+
+
    //FIRST, THE COPS
    int numpres;
    for(int l=0;l<location.size();l++)
@@ -338,7 +340,48 @@ void siegecheck(char canseethings)
                }
             }
          }
-      }
+      
+
+	//Puzz:  TEST RAIDING.
+	//-----------------------------------------
+		 //This is SO HACKY and bad AND BAD
+		 //that this should not even exist
+		 //But in the end the sieging would be handled by the organizations
+		 //deciding to do it, not here.  So I can't access their private
+		 //variables, so I am just going to loop through their freaking ID's.
+
+    for(int count = 0; count < 9; count++)
+	{
+		organization org = gOrgManager.getOrg(count);
+		if(org.type != "" && org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat > 300)
+		{
+		  if(!location[l]->siege.siege&&numpres>0)
+		  {
+
+			 erase();
+			 set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+			 move(8,1);
+			 char gaspstring[40];
+			 sprintf(gaspstring, "%s are raiding the ", org.name.c_str());
+			 addstr(gaspstring);
+			 addlocationname(location[l]);
+			 addstr("!");
+
+			 refresh();
+			 getch();
+
+			 location[l]->siege.siege=1;
+			 location[l]->siege.orgID = org.ID;
+			 location[l]->siege.siegetype=SIEGE_ORG;
+			 location[l]->siege.underattack=1;
+			 location[l]->siege.lights_off=0;
+			 location[l]->siege.cameras_off=0;
+			 org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
+		  }
+		}
+	}
+	  //--------------------------------------
 
       //OTHER OFFENDABLE ENTITIES
          //CORPS
@@ -511,6 +554,7 @@ void siegecheck(char canseethings)
          location[l]->siege.lights_off=0;
          location[l]->siege.cameras_off=0;
       }
+   }
    }
 }
 

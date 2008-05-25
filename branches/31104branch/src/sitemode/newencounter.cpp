@@ -29,8 +29,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
-
-
 /* generates a new random encounter */
 void prepareencounter(short type,char sec)
 {
@@ -1002,6 +1000,11 @@ char addsiegeencounter(char type)
                   case SIEGE_CORPORATE:
                      makecreature(encounter[e],CREATURE_MERC);
                      break;
+					//Puzz:  Adding in organization attacks
+				  case SIEGE_ORG:
+					  organization org = gOrgManager.getOrg(location[cursite]->siege.orgID);
+					  makecreature(encounter[e],(short)org.spawnUnit(org.soldiers));
+					  break;
                }
             }
             else

@@ -138,6 +138,7 @@ using namespace std;
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
 #include <politics/alignment.h>
+#include "manager/manager.h"
 
 
 
@@ -227,7 +228,7 @@ using namespace std;
 
 unsigned long r_num(void);
 long LCSrandom(unsigned long max);
-void configureLCS();
+template <class def, class instance>void configureLCS(char configFileString[30], defManager<def, instance> *manager);
 
 enum UnlockTypes
 {
@@ -1032,12 +1033,15 @@ enum SiegeTypes
    SIEGE_CIA,
    SIEGE_HICKS,
    SIEGE_CORPORATE,
+   SIEGE_ORG,
    SIEGENUM
 };
 
 struct siegest
 {
    char siege;
+   //Puzz:  Temporary siege thing for organizations
+   int orgID;
    short siegetype;
    char underattack;
    long attacktime;
@@ -1070,6 +1074,11 @@ struct siegest
 
 struct locationst
 {
+	//PUZZ:  Now linked to an ORGANIZATION
+	//This needs to be made a class and crap, srsly.
+
+	int orgID;
+
    char name[40];
    char shortname[20];
    short type;
@@ -1099,6 +1108,7 @@ struct locationst
       needcar=0;
       renting=-1;
       hidden=0;
+	  orgID = -1;
    }
    void init(void);
 };

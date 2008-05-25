@@ -20,8 +20,8 @@ void testdriver()
 		liberal.specialInterests.push_back((enum Views)i);
 		conservative.specialInterests.push_back((enum Views)i);
 	}
-	gOrgHandler.addOrg(liberal);
-	gOrgHandler.addOrg(conservative);
+	gOrgManager.addOrg(liberal);
+	gOrgManager.addOrg(conservative);
 	string newName;
 	for(int j = 0; j < 10; j++)
 	{
@@ -41,7 +41,7 @@ void testdriver()
 			orgMom->specialInterests.push_back((enum Views)LCSrandom(VIEWNUM));
 		}
 		orgMom->attackPower = LCSrandom(20);
-		gOrgHandler.addOrg(*orgMom);
+		gOrgManager.addOrg(*orgMom);
 	}
 	
 	move(0,0);
@@ -49,5 +49,5 @@ void testdriver()
 	refresh();
 	getch();
 
-	//gOrgHandler.addOrg();
+	//gOrgManager.addOrg();
 }

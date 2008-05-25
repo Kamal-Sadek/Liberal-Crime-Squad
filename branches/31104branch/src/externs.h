@@ -1,13 +1,13 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
-#include "organization/orghandler.h"
+#include "organization/orgmanager.h"
 #include "manager/manager.h"
 #include "organizationdef.h"
 
 //Puzz:  Here we go...
-extern orgHandler gOrgHandler;
-extern configManager<organizationDef, organization> organizationDefManager;
+extern orgManager gOrgManager;
+extern defManager<organizationDef, organization> organizationDefManager;
 
 extern CursesMoviest movie;
 extern unsigned char bigletters[27][5][7][4];

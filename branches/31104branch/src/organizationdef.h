@@ -21,8 +21,8 @@ This file is part of Liberal Crime Squad.                                       
 	This file was made by Brad (AKA Puzzlemaker)
 */
 
-#ifndef organizationDef_H_INCLUDED
-#define organizationDef_H_INCLUDED
+#ifndef ORGANIZATIONDEF_H_INCLUDED
+#define ORGANIZATIONDEF_H_INCLUDED
 
 #include <includes.h>
 #include <list>

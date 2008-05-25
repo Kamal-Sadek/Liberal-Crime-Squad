@@ -753,18 +753,25 @@ void makecharacter(void)
       newl->parent=-1;
       newl->needcar=1;
    location.push_back(newl);
+	
+	//Puzz:  Temporary measures to add organizations to these blokes
+   vector<int> locID;
 
+   locID = gOrgManager.getOrgsByType("POLICE");
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_POLICESTATION;
       newl->parent=0;
       initlocation(*newl);
+	  newl->orgID = locID[0];
       if(hasmaps)newl->interrogated=1;
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_COURTHOUSE;
       newl->parent=0;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
       if(hasmaps)newl->interrogated=1;
    location.push_back(newl);
 
@@ -772,35 +779,49 @@ void makecharacter(void)
       newl->type=SITE_GOVERNMENT_PRISON;
       newl->parent=3;
       newl->needcar=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
+
+   locID = gOrgManager.getOrgsByType("GOVERMENT");
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_NUCLEAR;
       newl->parent=3;
       newl->needcar=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_INTELLIGENCEHQ;
       newl->parent=3;
       newl->needcar=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
+
+   locID = gOrgManager.getOrgsByType("CORPORATION");
 
    newl=new locationst;
       newl->type=SITE_CORPORATE_HEADQUARTERS;
       newl->parent=3;
       newl->needcar=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_CORPORATE_HOUSE;
       newl->parent=3;
       newl->needcar=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    newl=new locationst;
@@ -852,17 +873,25 @@ void makecharacter(void)
       initlocation(*newl);
    location.push_back(newl);
 
+	locID = gOrgManager.getOrgsByType("CABLENEWS");
+
    newl=new locationst;
       newl->type=SITE_MEDIA_CABLENEWS;
       newl->parent=0;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
       if(hasmaps)newl->interrogated=1;
    location.push_back(newl);
+
+   locID = gOrgManager.getOrgsByType("AMRADIO");
 
    newl=new locationst;
       newl->type=SITE_MEDIA_AMRADIO;
       newl->parent=0;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
       if(hasmaps)newl->interrogated=1;
    location.push_back(newl);
 
@@ -1024,12 +1053,16 @@ void makecharacter(void)
       initlocation(*newl);
    location.push_back(newl);
 
+   locID = gOrgManager.getOrgsByType("CCS");
+
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
       newl->parent=2;
       newl->renting=-2;
       newl->hidden=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    newl=new locationst;
@@ -1037,7 +1070,9 @@ void makecharacter(void)
       newl->parent=0;
       newl->renting=-2;
       newl->hidden=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    newl=new locationst;
@@ -1046,7 +1081,9 @@ void makecharacter(void)
       newl->renting=-2;
       newl->needcar=1;
       newl->hidden=1;
+	  newl->orgID = locID[0];
       initlocation(*newl);
+	  newl->orgID = locID[0];
    location.push_back(newl);
 
    squadst *newsq=new squadst;

@@ -71,13 +71,13 @@
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
 #include <includes.h>
-#include "organization/orghandler.h"
+#include "organization/orgmanager.h"
 #include "organization/testdriver.h"
 #include "organizationdef.h"
 #include "manager/manager.h"
 
-orgHandler gOrgHandler = orgHandler();
-configManager<organizationDef, organization> organizationDefManager = configManager<organizationDef, organization>();
+orgManager gOrgManager = orgManager();
+defManager<organizationDef, organization> organizationDefManager = defManager<organizationDef, organization>("ORGANIZATION");
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
@@ -355,7 +355,21 @@ int main(int argc, char* argv[])
 
    //testdriver();
 
-   configureLCS();
+   configureLCS<organizationDef, organization>("configfile.txt", &organizationDefManager);
+
+   	//NEED TO MOVE THIS TO OTHER INITIALIZATION FUNCTIONS
+   //-----
+	int i;
+	int ID;
+	organization *tOrg;
+
+	for(i = 0; i < organizationDefManager.getSize(); i++)
+	{
+		ID = organizationDefManager.getIDByIndex(i);
+		tOrg = organizationDefManager.getInstance(ID);
+		gOrgManager.addOrg(*tOrg);
+	}
+	//-----
 
    mode_title();
 
@@ -366,10 +380,10 @@ int main(int argc, char* argv[])
 }
 
 
-void configureLCS()
+template <class def, class instance>void configureLCS(char configFileString[], defManager<def, instance> *manager)
 {
 	FILE *configFile;
-	configFile = LCSOpenFile("configfile.txt", "r", 2);
+	configFile = LCSOpenFile(configFileString, "r", 2);
 	if(configFile == NULL)
 	{
 		throw invalid_argument("Configuration File Not Found!");
@@ -379,7 +393,7 @@ void configureLCS()
 	char data[100] = "";
 	char currEntity[100] = "";
 	char curLine[100] = "";
-	configurable *newEntity = NULL;
+	def *newEntity = NULL;
 	char *status;
 	
 	status = fgets(curLine, 100, configFile);
@@ -393,13 +407,12 @@ void configureLCS()
 			{
 				if(strcmp(currEntity, ""))
 				{
-					//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
-					organizationDefManager.addObj(*((organizationDef*)newEntity));
+					manager->addObj(*newEntity);
 				}
 				strcpy(currEntity, data);
-				if(!strcmp(currEntity, "ORGANIZATION"))
+				if(!strcmp(currEntity, manager->type.c_str()))
 				{
-					newEntity = new organizationDef();
+					newEntity = new def();
 					newEntity->initConfig();
 				}
 			}
@@ -411,20 +424,7 @@ void configureLCS()
 		status = fgets(curLine, 100, configFile);
 	}
 
-	//FUNCTION OR SOMETHING TO ADD DATA TO MANAGERS GOES HERE!
-	organizationDefManager.addObj(*((organizationDef*)newEntity));
-	
-	//NEED TO MOVE THIS TO OTHER INITIALIZATION FUNCTIONS
-	int i;
-	int ID;
-	organization *tOrg;
-
-	for(i = 0; i < organizationDefManager.getSize(); i++)
-	{
-		ID = organizationDefManager.getIDByIndex(i);
-		tOrg = organizationDefManager.getInstance(ID);
-		gOrgHandler.addOrg(*tOrg);
-	}
+	manager->addObj(*newEntity);
 }
 
 //picks a random number from 0 to max-1

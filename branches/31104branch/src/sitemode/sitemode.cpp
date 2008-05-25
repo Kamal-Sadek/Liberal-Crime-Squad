@@ -2104,8 +2104,18 @@ void mode_site(void)
 
 
 /* site - determines spin on site news story, "too hot" timer */
+//PUZZ:  Making sites all organizationally!
+//WOO!
 void resolvesite(void)
 {
+	//Piss of the organization you just attacked.
+	if(location[cursite]->orgID != -1)
+	{
+	organization *org;
+	org = &gOrgManager.getOrg(location[cursite]->orgID);
+	org->getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat += sitecrime;
+	}
+
    if(sitealienate)sitestory->positive=0;
    if(sitealarm==1&&sitecrime>100&&location[cursite]->renting<=-1)
    {

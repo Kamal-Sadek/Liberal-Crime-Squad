@@ -41,6 +41,9 @@ public:
    // Return reference to the object with the given ID
 	T &getObj(int ID);
 
+	//Returns reference to any objects with the given type
+	std::vector<int> getIDByType(std::string type);
+
    // Adds a new object to the list, assigning a free ID
 	void addObj(T obj);
    // Deletes an object from the list
@@ -92,6 +95,24 @@ template <class T> T &manager<T>::getObj(int ID)
    throw invalid_argument(error);
 }
 
+// Return reference to the object with the given ID
+template <class T> std::vector<int> manager<T>::getIDByType(std::string type)
+{
+   vector<T>::iterator iter; // Iterator to step through my object list
+   vector<int> matchingObjects;
+
+	// Step through my list of objects
+   for(iter=objects.begin(); iter!=objects.end(); iter++)
+   {
+      // If this is the object I'm looking for, return it
+      if(iter->type == type)
+	  {
+		  matchingObjects.push_back((*iter).ID);
+	  }
+   }
+   return matchingObjects;
+}
+
 // Add an object
 template <class T> void manager<T>::addObj(T obj)
 {
@@ -127,12 +148,13 @@ template <class T> void manager<T>::deleteObj(T obj)
 //----------------------------------------------------------------------------------
 
 
-template <class T, class copyClass> class configManager : public manager<T>
+template <class T, class copyClass> class defManager : public manager<T>
 {
 public:
-	configManager()
+	defManager(std::string inType)
 	{
 		nextID = 0;
+		type = inType;
 	}
 
 	copyClass* getInstance(int baseID) 
@@ -147,6 +169,7 @@ public:
 		/* find the correct object */ 
 		getObj(ID).initializeInstance(instance); 
 	}
+	std::string type;
 };
 
 

@@ -39,8 +39,10 @@ public:
 
 	//this is how much you respect them, and how much they are your ally
 	//allyLevel can go negative, respect level cannot.
+	//heat is how much short-term hate there is.
 	int respectLevel;
 	int allyLevel;
+	int heat;
 };
 
 class organization : public managedObject
@@ -54,6 +56,8 @@ public:
 	organization(string newName);
 	organization(int newID, string newName);
 
+	interOrgData &getOrgByID(int ID);
+	
 	//These handle changing other organizations viewpoints
 	void swayOthers();
 	void attackedHandler();

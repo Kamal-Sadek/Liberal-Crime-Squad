@@ -55,9 +55,29 @@ organization::organization(int newID, string newName)
 	name = newName;
 }
 
+interOrgData &organization::getOrgByID(int ID)
+{
+	vector<interOrgData>::iterator iter; // Iterator to step through my object list
+
+	// Step through my list of objects
+   for(iter=orgs.begin(); iter!=orgs.end(); iter++)
+   {
+      // If this is the object I'm looking for, return it
+      if(iter->ID == ID)
+	  {
+		  return *iter;
+	  }
+   }
+
+      // Object of that ID not in my list? Throw exception
+   // This should never have to happen
+   char error[80];
+   sprintf(error,"manager recieved invalid ID %d in getObj; no such object.",ID);
+   throw invalid_argument(error);
+}
+
 void organization::swayOthers()
 {
-	orgHandler gOrgHandler;
 	vector<int> candidates;
 	for(int i = 0; i < orgs.size(); i++)
 	{
@@ -72,7 +92,7 @@ void organization::swayOthers()
 		{
 			for(int j = 0; j < candidates.size(); j++)
 			{
-				gOrgHandler.swayOrg(ID, orgs[candidates[j]].ID, orgs[candidates[j]].allyLevel);
+				gOrgManager.swayOrg(ID, orgs[candidates[j]].ID, orgs[candidates[j]].allyLevel);
 			}
 		}
 	}
@@ -82,7 +102,7 @@ void organization::attackedHandler()
 {
 }
 
-int spawnUnit(std::vector<int> unitList)
+int organization::spawnUnit(std::vector<int> unitList)
 {
 	int total = 0;
 	std::vector<int> chance;
@@ -98,7 +118,7 @@ int spawnUnit(std::vector<int> unitList)
 	{
 		if(chance.at(i) > rnd)
 		{
-			return chance.at(i);
+			return unitList.at(i);
 		}
 	}
 	return unitList.at(0);
@@ -165,6 +185,8 @@ void organization::addOrgRecord(const organization& org)
    // The more common issues we have, the closer we are,
    // or the more fierce our rivalry
    newdata.allyLevel    = 20 * matchNum * allied;
+
+   newdata.heat = 0;
 
    // Add this record to our list
    orgs.push_back(newdata);

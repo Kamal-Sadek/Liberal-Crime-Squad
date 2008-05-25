@@ -4,6 +4,8 @@
 
 void organizationDef::initConfig()
 {
+	initVariable<std::string>("TYPE", &type);
+	
 	initVariable<char>("ALIGNMENT", &alignment);
 	initVariable<std::string>("NAME", &name);
 
@@ -21,6 +23,7 @@ void organizationDef::initConfig()
 
 void organizationDef::initializeInstance(organization &instance)
 {
+	instance.type = type;
 	instance.alignment = alignment;
 	instance.attackPower = attackPower;
 	instance.name = name;
