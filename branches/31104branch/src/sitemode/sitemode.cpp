@@ -486,8 +486,8 @@ void mode_site(void)
             {
                if(pool[pl]==activesquad->squad[p])
                {
-                  pool[p]->alive=0;
-                  pool[p]->location=-1;
+                  pool[pl]->alive=0;
+                  pool[pl]->location=-1;
                   //delete pool[pl];
                   //pool.erase(pool.begin() + pl);
                   break;

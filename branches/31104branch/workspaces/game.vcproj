@@ -578,6 +578,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\organizationdef.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\organizationdef.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\organization\orghandler.cpp"
 				>
 			</File>
@@ -614,32 +622,6 @@
 				>
 			</File>
 		</Filter>
-<<<<<<< .mine
-		<Filter
-			Name="manager"
-			>
-			<File
-				RelativePath="..\src\manager\manager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\manager\manager.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="configuration"
-			>
-			<File
-				RelativePath="..\src\organizationdef.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organizationdef.h"
-				>
-			</File>
-		</Filter>
-=======
 		<Filter
 			Name="news"
 			>
@@ -672,7 +654,6 @@
 				>
 			</File>
 		</Filter>
->>>>>>> .r208
 		<File
 			RelativePath="..\src\compat.cpp"
 			>
