@@ -362,9 +362,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             move(y+2,0);
-            addstr("What, do you think ");
             addstr(r.recruit->name);
-            addstr(" is insane? ");
+            addstr(" isn't crazy! ");
             addstr("Thanks, but no thanks.");
 
             refresh();
@@ -383,19 +382,20 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          }
          pool[p]->skill_ip[SKILL_PERSUASION]+=5;
          
-         int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]+
+         int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]*2+
                                   pool[p]->skill[SKILL_BUSINESS]+
                                   pool[p]->skill[SKILL_SCIENCE]+
                                   pool[p]->skill[SKILL_RELIGION]+
                                   pool[p]->skill[SKILL_LAW]+
                                   pool[p]->attval(ATTRIBUTE_HEART)+
+                                  pool[p]->attval(ATTRIBUTE_CHARISMA)+
                                   pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
 
          int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
                                   r.recruit->skill[SKILL_SCIENCE]+
                                   r.recruit->skill[SKILL_RELIGION]+
                                   r.recruit->skill[SKILL_LAW]+
-                                  r.recruit->attval(ATTRIBUTE_WISDOM)+
+                                  r.recruit->attval(ATTRIBUTE_WISDOM)*3+
                                   r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
                                   LCSrandom(10);
 

@@ -1065,7 +1065,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   case 3:addstr(" reveals childhood pains.");break;
                   case 4:addstr(" thanks ");
                      addstr(a->name);
-                     addstr(" for being there.");break;
+                     addstr(" for being merciful.");break;
                   case 5:addstr(" cries in ");
                      addstr(a->name);
                      addstr("'s arms.");break;
