@@ -1,5 +1,10 @@
 
-#include "organizationdef.h"
+//#include <includes.h>
+#include <externs.h>
+#include <stdexcept>
+#include <string>
+
+#include "configfile.h"
 
 
 void organizationDef::initConfig()

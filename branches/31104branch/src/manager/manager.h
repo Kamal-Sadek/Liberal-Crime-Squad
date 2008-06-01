@@ -24,15 +24,17 @@ This file is part of Liberal Crime Squad.                                       
 #define MANAGER_H_INCLUDED
 
 //#include "configfile.h"
+#include <string>
+#include "serializer.h"
 
-class managedObject
+class managedObject : public serializer
 {
 public:
 	int ID;
 	std::string type;
 };
 
-template <class T> class manager
+template <class T> class manager : public serializer
 {
 public:
 	//This handles all entitys
@@ -64,8 +66,14 @@ public:
 		return objects.at(index);
 	}
 
+	void saveLoadHandler(std::fstream *stream, bool reading)
+	{
+		serializeVectorHandler<T>(stream, reading, objects);
+		serializeHandler(stream, reading, nextID);
+	}
+
 protected:
-    vector<T> objects; // Internal object list
+	std::vector<T> objects; // Internal object list
     int nextID;
 };
  

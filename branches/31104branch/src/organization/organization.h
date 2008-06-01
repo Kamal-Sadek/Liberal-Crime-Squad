@@ -24,37 +24,32 @@ This file is part of Liberal Crime Squad.                                       
 #ifndef ORGANIZATION_H_INCLUDED
 #define ORGANIZATION_H_INCLUDED
 
-#include <includes.h>
-#include <list>
-#include <stdexcept>
-#include <string>
-#include "configfile.h"
-#include "manager/manager.h"
+//#include "manager/manager.h"
 
 class interOrgData : public managedObject
 {
 public:
 	interOrgData();
-	interOrgData(int ID, int respectLevel, int allyLevel);
+	interOrgData(int ID, float respectLevel, float allyLevel);
+
+	void saveLoadHandler(std::fstream *stream, bool reading);
 
 	//this is how much you respect them, and how much they are your ally
 	//allyLevel can go negative, respect level cannot.
 	//heat is how much short-term hate there is.
-	int respectLevel;
-	int allyLevel;
+	float respectLevel;
+	float allyLevel;
 	int heat;
 };
 
 class organization : public managedObject
 {
 public:
-	vector<interOrgData> orgs;
-	vector<int> specialInterests;
 
 	organization();
 	organization(int newID);
-	organization(string newName);
-	organization(int newID, string newName);
+	organization(std::string newName);
+	organization(int newID, std::string newName);
 
 	interOrgData &getOrgByID(int ID);
 	
@@ -69,6 +64,9 @@ public:
     void deleteOrgRecord(int deleteID);
     // Adds record of an organization if it has common special interests
     void addOrgRecord(const organization& org);
+
+	//Saving and loading handler
+	void saveLoadHandler(std::fstream *stream, bool reading);
 
 	char alignment;
 
@@ -88,6 +86,9 @@ public:
 	std::vector<int> publicists;
 
 	std::string name;
+
+	std::vector<interOrgData> orgs;
+	std::vector<int> specialInterests;
 	
 };
 

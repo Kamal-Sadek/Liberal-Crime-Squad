@@ -1,5 +1,5 @@
 
-#include "includes.h"
+//#include "includes.h"
 #include "externs.h"
 
 void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int header)

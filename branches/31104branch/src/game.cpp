@@ -74,7 +74,6 @@
 #include "organization/orgmanager.h"
 #include "organization/testdriver.h"
 #include "organizationdef.h"
-#include "manager/manager.h"
 
 orgManager gOrgManager = orgManager();
 defManager<organizationDef, organization> organizationDefManager = defManager<organizationDef, organization>("ORGANIZATION");
@@ -402,7 +401,7 @@ template <class def, class instance>void configureLCS(char configFileString[], d
 	{
 		if(curLine[0] != '#' && curLine[0] != '\n')
 		{
-			sscanf(curLine, "%s %s", tag, data);
+			sscanf(curLine, "%s%s", tag, data);
 			if(!strcmp(tag, "OBJECT"))
 			{
 				if(strcmp(currEntity, ""))

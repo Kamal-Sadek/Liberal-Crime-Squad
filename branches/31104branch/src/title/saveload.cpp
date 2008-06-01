@@ -26,7 +26,7 @@ This file is part of Liberal Crime Squad.                                       
 	the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
+//#include <includes.h>
 #include <externs.h>
 
 
@@ -48,13 +48,25 @@ void autosave(void)
 /* handles saving */
 void savegame(char *str)
 {
+
+	 fstream filestr;
+
+	 filestr.open (str, fstream::in | fstream::out | fstream::binary | fstream::trunc);
+	//Puzz:  NEW SAVE SYSTEM!  YAAAY!
+	if(filestr.is_open())
+	{
+		gOrgManager.saveData(&filestr);
+	}
+	filestr.close();
+
    char dummy_c;
    int dummy;
    unsigned int numbytes;
    FILE *h;
    int l;
 
-   h=LCSOpenFile(str, "wb", LCSIO_PRE_HOME);
+   h=LCSOpenFile(str, "ab", LCSIO_PRE_HOME);
+
    if(h!=NULL)
    {
       unsigned int lversion=version;
@@ -317,6 +329,18 @@ void savegame(char *str)
 /* loads the game from save.dat */
 char load(void)
 {
+
+		 fstream filestr;
+
+	 filestr.open ("save.dat", fstream::in | fstream::out | fstream::binary);
+	//Puzz:  NEW SAVE SYSTEM!  YAAAY!
+	 if(filestr.is_open())
+	 {
+		gOrgManager.loadData(&filestr);
+	 }
+	 filestr.close();
+
+
    //LOAD FILE
    unsigned long loadversion;
       int l;

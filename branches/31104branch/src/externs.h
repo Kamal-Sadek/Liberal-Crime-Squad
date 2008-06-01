@@ -2,7 +2,6 @@
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
 #include "organization/orgmanager.h"
-#include "manager/manager.h"
 #include "organizationdef.h"
 
 //Puzz:  Here we go...

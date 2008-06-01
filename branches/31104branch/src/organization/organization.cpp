@@ -20,14 +20,19 @@ This file is part of Liberal Crime Squad.                                       
 	This file was made by Brad (AKA Puzzlemaker)
 */
 
-#include <includes.h>
+//#include <includes.h>
 #include <externs.h>
+#include <stdexcept>
+#include <string>
+#include "configfile.h"
+
+
 
 interOrgData::interOrgData() : respectLevel(0), allyLevel(0) 
 { 
 }
 
-interOrgData::interOrgData(int IDin, int respectLevelin, int allyLevelin)
+interOrgData::interOrgData(int IDin, float respectLevelin, float allyLevelin)
 {
 	ID = IDin;
 	respectLevel = respectLevelin;
@@ -184,10 +189,37 @@ void organization::addOrgRecord(const organization& org)
    newdata.ID           = org.ID;
    // The more common issues we have, the closer we are,
    // or the more fierce our rivalry
-   newdata.allyLevel    = 20 * matchNum * allied;
+   newdata.allyLevel    = float(20 * matchNum * allied);
 
    newdata.heat = 0;
 
    // Add this record to our list
    orgs.push_back(newdata);
+}
+
+void organization::saveLoadHandler(fstream *stream, bool reading)
+{
+	serializeHandler(stream, reading, alignment);
+
+	serializeHandler(stream, reading, attackPower);
+	serializeVectorHandler<int>(stream, reading, soldiers);
+
+	serializeHandler(stream, reading, lobbyPower);
+	serializeVectorHandler<int>(stream, reading, lobbyists);
+
+	serializeHandler(stream, reading, publicityPower);
+	serializeVectorHandler<int>(stream, reading, publicists);
+
+	serializeHandler(stream, reading, name);
+
+	serializeVectorHandler<interOrgData>(stream, reading, orgs);
+	serializeVectorHandler<int>(stream, reading, specialInterests);
+}
+
+void interOrgData::saveLoadHandler(fstream *stream, bool reading)
+{
+	serializeHandler(stream, reading, respectLevel);
+	serializeHandler(stream, reading, allyLevel);
+	serializeHandler(stream, reading, heat);
+	serializeHandler(stream, reading, ID);
 }

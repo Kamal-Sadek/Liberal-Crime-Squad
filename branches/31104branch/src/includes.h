@@ -138,7 +138,7 @@ using namespace std;
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
 #include <politics/alignment.h>
-#include "manager/manager.h"
+#include <manager/manager.h>
 
 
 

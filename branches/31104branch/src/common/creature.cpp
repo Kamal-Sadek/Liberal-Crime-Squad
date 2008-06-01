@@ -26,7 +26,7 @@ This file is part of Liberal Crime Squad.                                       
 	the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
+//#include <includes.h>
 #include <externs.h>
 
 /* Age macros for characters */
@@ -84,6 +84,7 @@ int getSpawnChance(enum CreatureType type)
 		case CREATURE_AGENT:
 			return 20;
 	}
+	return 100;
 }
 /* rolls up a creature's stats and equipment */
 void makecreature(creaturest &cr,short type)

@@ -27,7 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #define CONSOLE_SUPPORT
-#include <includes.h>
+//#include <includes.h>
 #include <externs.h>
 
 

@@ -24,13 +24,7 @@ This file is part of Liberal Crime Squad.                                       
 #ifndef ORGANIZATIONDEF_H_INCLUDED
 #define ORGANIZATIONDEF_H_INCLUDED
 
-#include <includes.h>
-#include <list>
-#include <stdexcept>
-#include <string>
-#include "manager/manager.h"
 #include "configfile.h"
-#include "organization/organization.h"
 
 class configInterOrgData : public configurable
 {
