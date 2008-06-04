@@ -356,19 +356,7 @@ int main(int argc, char* argv[])
 
    configureLCS<organizationDef, organization>("configfile.txt", &organizationDefManager);
 
-   	//NEED TO MOVE THIS TO OTHER INITIALIZATION FUNCTIONS
-   //-----
-	int i;
-	int ID;
-	organization *tOrg;
 
-	for(i = 0; i < organizationDefManager.getSize(); i++)
-	{
-		ID = organizationDefManager.getIDByIndex(i);
-		tOrg = organizationDefManager.getInstance(ID);
-		gOrgManager.addOrg(*tOrg);
-	}
-	//-----
 
    mode_title();
 

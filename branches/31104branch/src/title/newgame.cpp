@@ -722,6 +722,20 @@ void makecharacter(void)
 
    pool.push_back(newcr);
 
+   //MAKE ORGANIZATIONS!  WOOOO!
+
+   //-----
+	int ID;
+	organization *tOrg;
+
+	for(int i = 0; i < organizationDefManager.getSize(); i++)
+	{
+		ID = organizationDefManager.getIDByIndex(i);
+		tOrg = organizationDefManager.getInstance(ID);
+		gOrgManager.addOrg(*tOrg);
+	}
+	//-----
+
    //MAKE LOCATIONS
    locationst *newl;
 

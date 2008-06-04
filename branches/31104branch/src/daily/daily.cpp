@@ -43,6 +43,9 @@ void advanceday(char &clearformess,char canseethings)
    //*JDS* Save the game to save.dat each day. :)
    save();
 
+   //Puzz:  Time for organizations to do their thang.
+   gOrgManager.runOrgAI();
+
    //CLEAR CAR STATES
    vector<long> caridused;
    for(p=0;p<pool.size();p++)pool[p]->carid=-1;

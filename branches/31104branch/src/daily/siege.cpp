@@ -350,7 +350,9 @@ void siegecheck(char canseethings)
 		 //deciding to do it, not here.  So I can't access their private
 		 //variables, so I am just going to loop through their freaking ID's.
 
-    for(int count = 0; count < 9; count++)
+		 //REMOVED THE TEMPORARY MEASURE TEMPORARILY.
+
+    /*for(int count = 0; count < 9; count++)
 	{
 		organization org = gOrgManager.getOrg(count);
 		if(org.type != "" && org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat > 300)
@@ -380,7 +382,7 @@ void siegecheck(char canseethings)
 			 org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
 		  }
 		}
-	}
+	}*/
 	  //--------------------------------------
 
       //OTHER OFFENDABLE ENTITIES

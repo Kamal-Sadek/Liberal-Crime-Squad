@@ -27,12 +27,12 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.12.1"
+#define PACKAGE_VERSION "3.12.3"
 #endif
 
-const unsigned long version=31201;
-const unsigned long lowestloadversion=31193;
-const unsigned long lowestloadscoreversion=30001;
+const unsigned long version=31203;
+const unsigned long lowestloadversion=31203;
+const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
    #include <windows.h>

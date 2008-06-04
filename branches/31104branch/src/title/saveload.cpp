@@ -69,7 +69,7 @@ void savegame(char *str)
 
    if(h!=NULL)
    {
-      unsigned int lversion=version;
+      unsigned long lversion=version;
       numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
 
       numbytes=fwrite(&seed,sizeof(unsigned long),1,h);
@@ -338,6 +338,7 @@ char load(void)
 	 {
 		gOrgManager.loadData(&filestr);
 	 }
+	 int offset = filestr.tellg();
 	 filestr.close();
 
 
@@ -351,9 +352,9 @@ char load(void)
    FILE *h;
 
    h=LCSOpenFile("save.dat", "rb", LCSIO_PRE_HOME);
-
    if(h!=NULL)
    {
+	  fseek(h, offset, SEEK_SET);
       fread(&loadversion,sizeof(unsigned long),1,h);
 
       //NUKE INVALID SAVE GAMES

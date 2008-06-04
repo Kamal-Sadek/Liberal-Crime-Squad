@@ -41,23 +41,27 @@ interOrgData::interOrgData(int IDin, float respectLevelin, float allyLevelin)
 
 organization::organization()
 {
+	currGoal = -1;
 }
 
 
 organization::organization(int newID)
 {
 	ID = newID;
+	currGoal = -1;
 }
 
 organization::organization(string newName)
 {
 	name = newName;
+	currGoal = -1;
 }
 
 organization::organization(int newID, string newName)
 {
 	ID = newID;
 	name = newName;
+	currGoal = -1;
 }
 
 interOrgData &organization::getOrgByID(int ID)
@@ -178,10 +182,17 @@ void organization::addOrgRecord(const organization& org)
    // Determine whether we are allies or enemies on our shared
    // interests by comparing alignments
    char allied;
+   //Also add goals while doing this
 	if(alignment == org.alignment)
+	{
 		allied = +1; // We are allies
+		generateGoal("LOBBY", org.ID);
+	}
 	else
+	{
 		allied = -1; // We are enemies
+		generateGoal("ATTACK", org.ID);
+	}
 
    interOrgData newdata; // Data record to add
    
@@ -189,12 +200,177 @@ void organization::addOrgRecord(const organization& org)
    newdata.ID           = org.ID;
    // The more common issues we have, the closer we are,
    // or the more fierce our rivalry
-   newdata.allyLevel    = float(20 * matchNum * allied);
+   //calculated by percentage of our matching issues and the percentage averaged then divided by 2, for a total of /4.
+   newdata.allyLevel    = float((((float)matchNum / (float)org.specialInterests.size()) + 
+								((float)matchNum / (float)specialInterests.size())) / 4 * allied);
 
    newdata.heat = 0;
 
    // Add this record to our list
    orgs.push_back(newdata);
+}
+
+void organization::orgAI()
+{
+
+	if(currGoal == -1)
+	{
+		int newGoal = -1;
+		int newGoalPriority = 0;
+		int size = goals.getSize();
+		for(int i = 0; i < size; i++)
+		{
+			//should this go here?  I don't think so, but whatever
+			if(goals.getObjByIndex(i).type == "PUBLICITY")
+			{
+				//This needs to be changed so organizations can be attacked with publicity
+				if(alignment == -1)
+				{
+					goals.getObjByIndex(i).priority = (int)attitude[goals.getObjByIndex(i).targetID];
+				}
+				else if(alignment == 1)
+				{
+					goals.getObjByIndex(i).priority = (int)(100 - attitude[goals.getObjByIndex(i).targetID]);
+				}
+			}
+			//again, I don't think this should go here, but whatever
+			if(goals.getObjByIndex(i).type == "ATTACK")
+			{
+				for(int j = 0; j < orgs.size(); j++)
+				{
+					if(goals.getObjByIndex(i).targetID == orgs[j].ID)
+					{
+						goals.getObjByIndex(i).priority = orgs[j].heat;
+						break;
+					}
+				}
+			}
+			if(goals.getObjByIndex(i).priority > newGoalPriority && goals.getObjByIndex(i).basePower != 0)
+			{
+				newGoal = goals.getObjByIndex(i).ID;
+				newGoalPriority = goals.getObjByIndex(i).priority;
+			}
+		}
+		if(newGoal != -1)
+		{
+			currGoal = newGoal;
+		}
+	}
+	else
+	{
+		for(int i = 0; i < orgs.size(); i++)
+		{
+			if(orgs[i].heat > 0)
+			{
+				orgs[i].heat--;
+			}
+		}
+		goals.getObj(currGoal).powerMult++;
+
+		//This needs to be fleshed out, a LOT.
+		if(goals.getObj(currGoal).powerMult >= 30)
+		{
+			if(!LCSrandom(20))
+			{
+				activateGoal();
+				currGoal = -1;
+			}
+		}
+	}
+}
+
+void organization::activateGoal()
+{
+	//Plan is to eventually have a more automated system where you can set different powers for each org
+	//like stealth, unity, etc.
+	//for now these combersome if statements will have to do.
+	if(goals.getObj(currGoal).type == "LOBBY")
+	{
+		//Not handling lobby right now.
+		//Lobbying another organization will transfer any heat you have
+		//to them, or lower heat, depending.
+	}
+	else if(goals.getObj(currGoal).type == "PUBLICITY")
+	{
+		public_interest[goals.getObj(currGoal).targetID] += alignment * (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
+		attitude[goals.getObj(currGoal).targetID] += alignment * (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
+	}
+	else if(goals.getObj(currGoal).type == "ATTACK")
+	{
+		int hPop = 0;
+		int hLoc = -1;
+		int numpres = 0;
+		//newGoal.basePower = attackPower;
+		for(int l=0;l<location.size();l++)
+		{
+			if(!location[l]->siege.siege)
+			{
+				numpres = 0;
+				for(int p=0;p<pool.size();p++)
+				{
+					if(!pool[p]->alive)continue; // Dead people don't count
+					if(pool[p]->location!=l)continue; // People not at this base don't count
+					if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
+					numpres++;
+				}
+				if(numpres > hPop)
+				{
+					hPop = numpres;
+					hLoc = l;
+				}
+			}
+		}
+		if(hLoc != -1)
+		{
+			erase();
+			set_color(COLOR_WHITE,COLOR_BLACK,1);
+			move(8,1);
+			char gaspstring[40];
+			sprintf(gaspstring, "The %s are raiding the ", name.c_str());
+			addstr(gaspstring);
+			addlocationname(location[hLoc]);
+			addstr("!");
+
+			refresh();
+			getch();
+
+			location[hLoc]->siege.siege=1;
+			location[hLoc]->siege.orgID = ID;
+			location[hLoc]->siege.siegetype=SIEGE_ORG;
+			location[hLoc]->siege.underattack=1;
+			location[hLoc]->siege.lights_off=0;
+			location[hLoc]->siege.cameras_off=0;
+			getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
+		}
+	}
+
+	goals.getObj(currGoal).priority = 0;
+	goals.getObj(currGoal).powerMult = 0;
+}
+
+void organization::generateGoal(std::string inType, int inTargetID)
+{
+	orgAIGoal newGoal;
+	newGoal.targetID = inTargetID;
+	newGoal.type = inType;
+
+	//This if statements needs to disapear...
+	if(inType == "LOBBY")
+	{
+		newGoal.basePower = lobbyPower;
+	}
+	else if(inType == "PUBLICITY")
+	{
+		newGoal.basePower = publicityPower;
+	}
+	else if(inType == "ATTACK")
+	{
+		newGoal.basePower = attackPower;
+	}
+	
+	newGoal.powerMult = 0;
+	newGoal.priority = 0;
+	goals.addObj(newGoal);
 }
 
 void organization::saveLoadHandler(fstream *stream, bool reading)
@@ -214,6 +390,11 @@ void organization::saveLoadHandler(fstream *stream, bool reading)
 
 	serializeVectorHandler<interOrgData>(stream, reading, orgs);
 	serializeVectorHandler<int>(stream, reading, specialInterests);
+	goals.saveLoadHandler(stream, reading);
+	serializeHandler(stream, reading, currGoal);
+
+	serializeHandler(stream, reading, type);
+	serializeHandler(stream, reading, ID);
 }
 
 void interOrgData::saveLoadHandler(fstream *stream, bool reading)
@@ -221,5 +402,15 @@ void interOrgData::saveLoadHandler(fstream *stream, bool reading)
 	serializeHandler(stream, reading, respectLevel);
 	serializeHandler(stream, reading, allyLevel);
 	serializeHandler(stream, reading, heat);
+	serializeHandler(stream, reading, ID);
+}
+
+void orgAIGoal::saveLoadHandler(fstream *stream, bool reading)
+{
+	serializeHandler(stream, reading, basePower);
+	serializeHandler(stream, reading, powerMult);
+	serializeHandler(stream, reading, targetID);
+	serializeHandler(stream, reading, priority);
+	serializeHandler(stream, reading, type);
 	serializeHandler(stream, reading, ID);
 }

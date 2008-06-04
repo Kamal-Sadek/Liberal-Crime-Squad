@@ -42,6 +42,20 @@ public:
 	int heat;
 };
 
+class orgAIGoal : public managedObject
+{
+public:
+	void saveLoadHandler(std::fstream *stream, bool reading);
+
+	//goals base power
+	int basePower;
+	//the multiplier
+	int powerMult;
+
+	int targetID;
+	int priority;
+};
+
 class organization : public managedObject
 {
 public:
@@ -64,6 +78,11 @@ public:
     void deleteOrgRecord(int deleteID);
     // Adds record of an organization if it has common special interests
     void addOrgRecord(const organization& org);
+
+	//runs ze org AI
+	void orgAI();
+	void activateGoal();
+	void generateGoal(std::string inType, int inTargetID);
 
 	//Saving and loading handler
 	void saveLoadHandler(std::fstream *stream, bool reading);
@@ -89,7 +108,8 @@ public:
 
 	std::vector<interOrgData> orgs;
 	std::vector<int> specialInterests;
-	
+	manager<orgAIGoal> goals;
+	int currGoal;
 };
 
 #endif

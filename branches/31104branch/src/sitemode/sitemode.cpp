@@ -2109,11 +2109,14 @@ void mode_site(void)
 void resolvesite(void)
 {
 	//Piss of the organization you just attacked.
+	//THIS SHOULD BE HANDLED SOMEWHERE ELSE, perhaps attackedHandler in the organization
+	//but for now, this is going here.
+
 	if(location[cursite]->orgID != -1)
 	{
-	organization *org;
-	org = &gOrgManager.getOrg(location[cursite]->orgID);
-	org->getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat += sitecrime;
+		organization *org;
+		org = &gOrgManager.getOrg(location[cursite]->orgID);
+		org->getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat += sitecrime;
 	}
 
    if(sitealienate)sitestory->positive=0;
