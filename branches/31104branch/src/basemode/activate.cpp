@@ -496,7 +496,7 @@ void activate(creaturest *cr)
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
-            addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun, Gangsterism");
+            addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun");
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;

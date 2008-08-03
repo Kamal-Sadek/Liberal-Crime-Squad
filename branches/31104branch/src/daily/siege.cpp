@@ -1228,8 +1228,21 @@ void giveup(void)
       }
       if(funds>0)
       {
-         move(8,1);
-         addstr("Fortunately, your funds remain intact.");
+         if(funds<=10000)
+         {
+            move(8,1);
+            addstr("Fortunately, your funds remain intact.");
+         }
+         else
+         {
+            move(8,1);
+            int confiscated = LCSrandom(LCSrandom(funds-10000)+1)+1000;
+            char str[50];
+            sprintf(str,"Law enforcement have confiscated $%d in LCS funds.",confiscated);
+            addstr(str);
+            funds -= confiscated;
+            moneylost_confiscated +=confiscated;
+         }
       }
       if(location[loc]->compound_walls&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
       {

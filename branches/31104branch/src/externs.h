@@ -113,6 +113,7 @@ extern long moneylost_food;
 extern long moneylost_dating;
 extern long moneylost_compound;
 extern long moneylost_hostage;
+extern long moneylost_confiscated;
 
 extern short party_status;
 

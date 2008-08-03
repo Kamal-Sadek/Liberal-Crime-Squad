@@ -618,7 +618,19 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          move(16,1);
          addstr(str);
 
-         if(attack>resist)
+         if(t.animalgloss)
+         {
+            switch(t.animalgloss)
+            {
+            case ANIMALGLOSS_TANK:
+            case ANIMALGLOSS_ANIMAL:
+            default:
+               move(17,1);
+               addstr(t.name);
+               addstr(" is immune to the attack!");
+            }
+         }
+         else if(attack>resist)
          {
             if(a.align==-1)
             {
@@ -1393,11 +1405,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
                }
-               if(target->squadid==-1)
+               if(target->squadid==-1 && target->animalgloss==0)
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                  if(a.squadid!=-1)criminalizeparty(LAWFLAG_MURDER);
+                  criminalize(a,LAWFLAG_MURDER);
                }
             }
 

@@ -354,6 +354,7 @@ void getarmor(char *str,int type,int subtype)
       case MASK_FORD:            strcpy(str,"Gld. Ford Mask");break;
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
       case MASK_GORE_TIPPER:      strcpy(str,"Tpr. Gore Mask");break;
+      case MASK_GUY_FAWKES:      strcpy(str,"G. Fawkes Mask");break;
       case MASK_HELMS:         strcpy(str,"Helms Mask");break;
       case MASK_JASON:         strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Lincoln Mask");break;
@@ -447,6 +448,7 @@ void getarmorfull(char *str,int type,int subtype)
       case MASK_FORD:            strcpy(str,"Gerald Ford Mask");break;
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
       case MASK_GORE_TIPPER:      strcpy(str,"Tipper Gore Mask");break;
+      case MASK_GUY_FAWKES:      strcpy(str,"Guy Fawkes Mask");break;
       case MASK_HELMS:         strcpy(str,"Jesse Helms Mask");break;
       case MASK_JASON:         strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Abraham Lincoln Msk");break;
@@ -519,6 +521,7 @@ void getmaskdesc(char *str,short mask)
       case MASK_GORE_AL:            strcpy(str,"U.S. Vice President");break;
       //LIMIT-------------------------------------:--------------------------------------:
       case MASK_GORE_TIPPER:         strcpy(str,"U.S. Second Lady");break;
+      case MASK_GUY_FAWKES:      strcpy(str,"Remember the 5th of November");break;
       case MASK_HELMS:            strcpy(str,"U.S. Senator");break;
       case MASK_JASON:            strcpy(str,"A Hockey Mask a la Friday the 13th");break;
       case MASK_LINCOLN:            strcpy(str,"U.S. President, Assassinated");break;

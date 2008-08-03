@@ -54,9 +54,7 @@ void mode_base(void)
 
    char forcewait,canseethings;
    long nonsighttime=0;
-   #ifdef SHOWWAIT
-      int oldforcemonth=month;
-   #endif
+   int oldforcemonth=month;
    
    int length=0;
 
@@ -97,8 +95,7 @@ void mode_base(void)
          cantseereason=4;
       }
 
-      #ifdef SHOWWAIT
-      if(forcewait&&oldforcemonth!=month)
+      if(disbanding&&oldforcemonth!=month)
       {
          oldforcemonth=month;
          erase();
@@ -106,65 +103,253 @@ void mode_base(void)
          char num[20];
          itoa(year,num,10);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
+         switch(month)
+         {
+            case 1:addstr("January ");break;
+            case 2:addstr("February ");break;
+            case 3:addstr("March ");break;
+            case 4:addstr("April ");break;
+            case 5:addstr("May ");break;
+            case 6:addstr("June ");break;
+            case 7:addstr("July ");break;
+            case 8:addstr("August ");break;
+            case 9:addstr("September ");break;
+            case 10:addstr("October ");break;
+            case 11:addstr("November ");break;
+            case 12:addstr("December ");break;
+         }
          addstr(num);
 
 
          int y=2;
 
-         for(int v=0;v<VIEWNUM;v++)
+         if(exec[EXEC_PRESIDENT]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(exec[EXEC_PRESIDENT]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(exec[EXEC_PRESIDENT]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(exec[EXEC_PRESIDENT]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(1,0);
+         addstr("President: ");
+         addstr(execname[EXEC_PRESIDENT]);addstr(", ");
+         switch(exec[EXEC_PRESIDENT])
          {
-            if(attitude[VIEW_LIBERALCRIMESQUAD]==0&&
-               v==VIEW_LIBERALCRIMESQUADPOS)continue;
+            case -2:addstr("Arch-Conservative");break;
+            case -1:addstr("Conservative");break;
+            case 0:addstr("moderate");break;
+            case 1:addstr("Liberal");break;
+            case 2:addstr("Elite Liberal");break;
+         }
+         if(execterm==1)addstr(", 1st Term");
+         else addstr(", 2nd Term");
+         if(exec[EXEC_VP]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(exec[EXEC_VP]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(exec[EXEC_VP]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(exec[EXEC_VP]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(2,0);
+         addstr("Vice President: ");addstr(execname[EXEC_VP]);addstr(", ");
+         switch(exec[EXEC_VP])
+         {
+            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+            case ALIGN_MODERATE:addstr("moderate");break;
+            case ALIGN_LIBERAL:addstr("Liberal");break;
+            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
+         }
+         if(exec[EXEC_STATE]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(exec[EXEC_STATE]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(exec[EXEC_STATE]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(exec[EXEC_STATE]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(3,0);
+         addstr("Secretary of State: ");addstr(execname[EXEC_STATE]);addstr(", ");
+         switch(exec[EXEC_STATE])
+         {
+            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+            case ALIGN_MODERATE:addstr("moderate");break;
+            case ALIGN_LIBERAL:addstr("Liberal");break;
+            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
+         }
+         if(exec[EXEC_ATTORNEY]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(exec[EXEC_ATTORNEY]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(exec[EXEC_ATTORNEY]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(exec[EXEC_ATTORNEY]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(4,0);
+         addstr("Attorney General: ");addstr(execname[EXEC_ATTORNEY]);addstr(", ");
+         switch(exec[EXEC_ATTORNEY])
+         {
+            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
+            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
+            case ALIGN_MODERATE:addstr("moderate");break;
+            case ALIGN_LIBERAL:addstr("Liberal");break;
+            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
+         }
 
-            if(attitude[v]==-1)set_color(COLOR_BLACK,COLOR_BLACK,1);
-            else if(attitude[v]<10)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(attitude[v]<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(attitude[v]<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(attitude[v]<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
-            else if(attitude[v]<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
+         int housemake[5]={0,0,0,0,0};
+         for(int h=0;h<435;h++)
+         {
+            housemake[house[h]+2]++;
+         }
+         int lsum=housemake[3]+housemake[4]
+            -housemake[0]-housemake[1];
+         if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(5,0);
+         addstr("House: ");
+         itoa(housemake[4],num,10);
+         addstr(num);addstr("Lib+, ");
+         itoa(housemake[3],num,10);
+         addstr(num);addstr("Lib, ");
+         itoa(housemake[2],num,10);
+         addstr(num);addstr("Mod, ");
+         itoa(housemake[1],num,10);
+         addstr(num);addstr("Cons, ");
+         itoa(housemake[0],num,10);
+         addstr(num);addstr("Cons+");
+
+         int senatemake[5]={0,0,0,0,0};
+         for(int s=0;s<100;s++)
+         {
+            senatemake[senate[s]+2]++;
+         }
+         lsum=senatemake[3]+senatemake[4]
+            -senatemake[0]-senatemake[1];
+         if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(6,0);
+         addstr("Senate: ");
+         itoa(senatemake[4],num,10);
+         addstr(num);addstr("Lib+, ");
+         itoa(senatemake[3],num,10);
+         addstr(num);addstr("Lib, ");
+         itoa(senatemake[2],num,10);
+         addstr(num);addstr("Mod, ");
+         itoa(senatemake[1],num,10);
+         addstr(num);addstr("Cons, ");
+         itoa(senatemake[0],num,10);
+         addstr(num);addstr("Cons+");
+
+         int elibjudge=0;
+         int econjudge=0;
+         for(int c=0;c<9;c++)
+         {
+            if(court[c]==2)elibjudge++;
+            if(court[c]==-2)econjudge++;
+         }
+
+         if(econjudge>=5)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(elibjudge>=5)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+         move(0,56);addch('S');
+         move(1,56);addch('U');
+         move(2,56);addch('P');
+         move(3,56);addch('R');
+         move(4,56);addch('E');
+         move(5,56);addch('M');
+         move(6,56);addch('E');
+
+         move(0,58);addch('C');
+         move(1,58);addch('O');
+         move(2,58);addch('U');
+         move(3,58);addch('R');
+         move(4,58);addch('T');
+
+         y=0;
+
+         for(int c=0;c<9;c++)
+         {
+            if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(court[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(court[c]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
-            move(y,0);
-            if(attitude[v]==-1)
-            {
-               addstr("Unknown how many ");
-            }
-            else
-            {
-               itoa(attitude[v],num,10);
-               addstr(num);
-               addstr("% ");
-            }
+            move(y,60);
+            addstr(courtname[c]);
 
-            switch(v)
-            {
-               case VIEW_ABORTION:addstr("supported abortion.");break;
-               case VIEW_GAY:addstr("were in favor of equal rights for homosexuals.");break;
-               case VIEW_DEATHPENALTY:addstr("opposed the death penalty.");break;
-			      case VIEW_TAXES:addstr("were against cutting taxes.");break;
-               case VIEW_NUCLEARPOWER:addstr("were terrified of nuclear power.");break;
-               case VIEW_ANIMALRESEARCH:addstr("deplored animal research.");break;
-               case VIEW_POLICEBEHAVIOR:addstr("were critical of the police.");break;
-               case VIEW_INTELLIGENCE:addstr("thought the intelligence community invades privacy.");break;
-               case VIEW_FREESPEECH:addstr("believed in unfettered free speech.");break;
-               case VIEW_GENETICS:addstr("abhorred genetically altered food products.");break;
-               case VIEW_JUSTICES:addstr("were for the appointment of Liberal justices.");break;
-               case VIEW_SWEATSHOPS:addstr("would boycott companies that used sweatshops.");break;
-               case VIEW_POLLUTION:addstr("thought industry should lower pollution.");break;
-               case VIEW_CORPORATECULTURE:addstr("were disgusted by corporate malfeasance.");break;
-               case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great.");break;
-               case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad.");break;
-               case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard.");break;
-               case VIEW_PRISONS:addstr("think the prison system needs reform.");break;
-               case VIEW_AMRADIO:addstr("do not like AM radio.");break;
-               case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs.");break;
-            }
             y++;
          }
 
+         for(int l=0;l<LAWNUM;l++)
+         {
+            if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_BLUE,COLOR_BLACK,1);
+            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+
+            move(10+l/2,l%2*40);
+
+            switch(l)
+            {
+               case LAW_TAX:
+                  addstr("Tax Structure");
+			         break;
+               case LAW_ABORTION:
+                  addstr("Abortion Rights");
+                  break;
+               case LAW_ANIMALRESEARCH:
+                  addstr("Animal Rights");
+                  break;
+               case LAW_POLICEBEHAVIOR:
+                  addstr("Police Regulation");
+                  break;
+               case LAW_PRIVACY:
+                  addstr("Privacy Rights");
+                  break;
+               case LAW_DEATHPENALTY:
+                  addstr("Death Penalty");
+                  break;
+               case LAW_NUCLEARPOWER:
+                  addstr("Nuclear Power");
+                  break;
+               case LAW_POLLUTION:
+                  addstr("Pollution");
+                  break;
+               case LAW_LABOR:
+                  addstr("Labor Laws");
+                  break;
+               case LAW_GAY:
+                  addstr("Gay Rights");
+                  break;
+               case LAW_CORPORATE:
+                  addstr("Corporate Regulation");
+                  break;
+               case LAW_FREESPEECH:
+                  addstr("Free Speech");
+                  break;
+               case LAW_FLAGBURNING:
+                  addstr("Flag Burning");
+                  break;
+               case LAW_GUNCONTROL:
+                  addstr("Gun Control");
+                  break;
+            }
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(21,33);
+         addstr("Public Mood");
+         move(22,1);
+         addstr("Conservative");
+         move(22,66);
+         addstr("Liberal");
+         move(23,0);
+         addstr("<------------------------------------------------------------------------------>");
+         move(23,77*publicmood(-1)/100+1);
+         addstr("|");
+
          refresh();
       }
-      #endif
 
       if(!forcewait)
       {

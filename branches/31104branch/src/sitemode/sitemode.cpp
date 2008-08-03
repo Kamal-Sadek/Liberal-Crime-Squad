@@ -951,29 +951,45 @@ void mode_site(void)
 
                      if(partysize<6)
                      {
-                        creaturest *newcr=new creaturest;
-                           *newcr=encounter[e];
-                        namecreature(*newcr);
-
-                        newcr->location=activesquad->squad[0]->location;
-                        newcr->base=activesquad->squad[0]->base;
-                        newcr->hireid=activesquad->squad[0]->id;
-
-                        pool.push_back(newcr);
-                        stat_recruits++;
-
-                        for(int p=0;p<6;p++)
+                        int i;
+                        // Check for people who can recruit followers
+                        for(i=0;i<6;i++)
                         {
-                           if(activesquad->squad[p]==NULL)
+                           if(activesquad->squad[i]!=NULL)
                            {
-                              activesquad->squad[p]=newcr;
-                              newcr->squadid=activesquad->id;
-                              break;
+                              if(subordinatesleft(*activesquad->squad[i]))
+                              {
+                                 break;
+                              }
                            }
                         }
+                        // If someone can, don't add this person as a newly recruited Liberal!
+                        if(i!=6)
+                        {
+                           creaturest *newcr=new creaturest;
+                              *newcr=encounter[e];
+                           namecreature(*newcr);
 
-                        actgot++;
-                        partysize++;
+                           newcr->location=activesquad->squad[i]->location;
+                           newcr->base=activesquad->squad[i]->base;
+                           newcr->hireid=activesquad->squad[i]->id;
+
+                           pool.push_back(newcr);
+                           stat_recruits++;
+
+                           for(int p=0;p<6;p++)
+                           {
+                              if(activesquad->squad[p]==NULL)
+                              {
+                                 activesquad->squad[p]=newcr;
+                                 newcr->squadid=activesquad->id;
+                                 break;
+                              }
+                           }
+
+                           actgot++;
+                           partysize++;
+                        }
                      }
                   }
                   if(flipstart)
@@ -1015,11 +1031,7 @@ void mode_site(void)
                   else if(followers-actgot>1)addstr("Some leave");
                   else if(actgot==0)addstr("The worker leaves");
                   else addstr("One worker leaves");
-                  addstr(" you, as there are many Liberals here.");
-
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(17,1);
-                  addstr("The last thing you need is more attention.");
+                  addstr(" you, feeling safer getting out alone.");
                }
 
                refresh();
@@ -1454,17 +1466,21 @@ void mode_site(void)
 
                      if(c=='y')
                      {
-                        char actual;
-
+                        char actual; // 1 if an actual attempt was made, 0 otherwise
+                        
+                        // If the unlock was successful
                         if(unlock(UNLOCK_DOOR,actual))
                         {
+                           // Unlock the door
                            levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
-                           sitecrime++;
+                           //sitecrime++; // (adding sitecrime gives juice; this is exploitable for unlocking doors)
                            sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
                            criminalizeparty(LAWFLAG_BREAKING);
                         }
-                        else levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
+                        // Else perma-lock it if an attempt was made
+                        else if(actual)levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
 
+                        // Check for people noticing you fiddling with the lock
                         if(actual)
                         {
                            alienationcheck(1);

@@ -238,21 +238,21 @@ void passmonth(char &clearformess,char canseethings)
 
       erase();
       move(12,10);
-      addstr("You disappeared safely, but you hadn't done enough.");
+      addstr("The Liberal Crime Squad is now just a memory.");
       refresh();
       getch();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       erase();
       move(12,12);
-      addstr("The Conservatives have made the world in their image.");
+      addstr("The last LCS members have all been hunted down.");
       refresh();
       getch();
 
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       erase();
       move(12,14);
-      addstr("They'll round the last of you up eventually.  All is lost.");
+      addstr("They will never see the utopia they dreamed of...");
       refresh();
       getch();
 

@@ -81,11 +81,10 @@ void trial(creaturest &g)
 
    //CHECK FOR SLEEPERS
    vector<int> sjudge;
-   char sleeperlawyer=0;
-   char sleeperjudge=0;
    bool autoconvict=0;
-   char *sleeperjname=NULL;
-   char *sleepername=NULL;
+   creaturest *sleeperjudge=NULL;
+   creaturest *sleeperlawyer=NULL;
+   int maxsleeperskill=0;
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER))
@@ -97,16 +96,18 @@ void trial(creaturest &g)
          }
          if(pool[p]->type==CREATURE_LAWYER&&!sleeperlawyer)
          {
-            sleeperlawyer=1;
-            sleepername=pool[p]->name;
+            if(sleeperlawyer->skill[SKILL_LAW]+sleeperlawyer->skill[SKILL_PERSUASION]>=maxsleeperskill)
+            {
+               sleeperlawyer=pool[p];
+               maxsleeperskill=pool[p]->skill[SKILL_LAW]+sleeperlawyer->skill[SKILL_PERSUASION];
+            }
          }
       }
    }
 
    if(LCSrandom(4)<sjudge.size())
    {
-      sleeperjudge=1;
-      sleeperjname=pool[sjudge[LCSrandom(sjudge.size())]]->name;
+      sleeperjudge=pool[sjudge[LCSrandom(sjudge.size())]];
    }
 
    //STATE CHARGES
@@ -115,7 +116,7 @@ void trial(creaturest &g)
    if(sleeperjudge)
    {
       addstr("Sleeper ");
-      addstr(sleeperjname);
+      addstr(sleeperjudge->name);
       addstr(" reads the charges, trying to hide a smile:");
    }
    else addstr("The judge reads the charges:");
@@ -473,20 +474,20 @@ void trial(creaturest &g)
    addstr("B - Defend self!");
    move(y,1);y++;
    addstr("C - Plead guilty.");
-   if(sleeperlawyer&&funds>=100)
+   if(funds<5000)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   move(y,1);y++;
+   addstr("D - Pay $5000 to hire ace Liberal attorney ");
+   addstr(attorneyname);
+   addstr(".");
+   if(sleeperlawyer)
    {
+      if(funds<100)set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(y,1);y++;
-      addstr("D - Pay a nominal $100 to use sleeper ");
-      addstr(sleepername);
+      addstr("E - Pay a nominal $100 to use sleeper ");
+      addstr(sleeperlawyer->name);
       addstr(" as your attorney.");
    }
-   else if(funds>=5000) // *JDS* hiring a good attorney is now more expensive
-   {
-      move(y,1);y++;
-      addstr("D - Use $5000 to hire ace Liberal attorney ");
-      addstr(attorneyname);
-      addstr(".");
-   }
+   if(funds<5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    short defense;
 
@@ -499,16 +500,7 @@ void trial(creaturest &g)
       if(c=='a'){defense=0;break;}
       if(c=='b'){defense=1;break;}
       if(c=='c'){defense=2;break;}
-      if(c=='d'&&sleeperlawyer&&funds>=100)
-      {
-         funds-=100;
-         stat_spent+=100;
-         defense=3;
-         moneylost_legal+=100;
-         strcpy(attorneyname,sleepername);
-         break;
-      }
-      else if(c=='d'&&funds>=5000)
+      if(c=='d'&&funds>=5000)
       {
          funds-=5000;
          stat_spent+=5000;
@@ -516,11 +508,21 @@ void trial(creaturest &g)
          moneylost_legal+=5000;
          break;
       }
+      if(c=='e'&&sleeperlawyer&&funds>=100)
+      {
+         funds-=100;
+         stat_spent+=100;
+         defense=4;
+         moneylost_legal+=100;
+         strcpy(attorneyname,sleeperlawyer->name);
+         break;
+      }
    }while(1);
 
    //TRIAL
    if(defense!=2)
    {
+      int prosecution=0;
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -540,7 +542,26 @@ void trial(creaturest &g)
       move(5,1);
       int jury=LCSrandom(61)-(60*publicmood(-1))/100; // Political leanings of the population determine your jury
       if(sleeperjudge)jury-=20;
-      if(jury<=-29)
+      if(defense==3) // Hired $5000 ace attorney
+      {
+         if(LCSrandom(10))
+         {
+            addstr(attorneyname);
+            addstr(" ensures the jury is stacked in ");
+            addstr(g.name);
+            addstr("'s favor!");
+            if(jury>0)jury=0;
+            jury-=30;
+         }
+         else
+         {
+            addstr(attorneyname);
+            addstr("'s CONSERVATIVE ARCH-NEMISIS will represent the prosecution!!!");
+            jury=0;
+            prosecution+=40; // DUN DUN DUN!!
+         }
+      }
+      else if(jury<=-29)
       {
          switch(LCSrandom(4))
          {
@@ -567,9 +588,8 @@ void trial(creaturest &g)
       getch();
 
       //PROSECUTION MESSAGE
-      int prosecution;
       // *JDS* The bigger your record, the stronger the evidence
-      prosecution=40+LCSrandom(61);
+      prosecution+=40+LCSrandom(61);
       prosecution+=scarefactor;
       prosecution+=20*g.confessions;
       if(sleeperjudge)prosecution>>=1;
@@ -606,7 +626,7 @@ void trial(creaturest &g)
       move(9,1);
 
       int defensepower=0;
-      if(defense==0||defense==3)
+      if(defense==0||defense==3||defense==4)
       {
          if(autoconvict)
          {
@@ -614,10 +634,17 @@ void trial(creaturest &g)
          }
          else
          {
-            if(defense==0)defensepower=LCSrandom(71); // *JDS* gave you a better shake with the court-appointed attorney
-            else
+            if(defense==0)
+               defensepower=LCSrandom(71);    // Court-appointed attorney
+            else if(defense==3)
+               defensepower=LCSrandom(71)+80; // Ace Liberal attorney
+            else if(defense==4)
             {
-               defensepower=LCSrandom(101)+50;
+               // Sleeper attorney
+               defensepower=LCSrandom(71)+sleeperlawyer->skill[SKILL_LAW]*4
+                                         +sleeperlawyer->skill[SKILL_PERSUASION]*4;
+               sleeperlawyer->skill_ip[SKILL_LAW]+=prosecution/4;
+               sleeperlawyer->skill_ip[SKILL_PERSUASION]+=prosecution/4;
             }
 
             if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
@@ -641,6 +668,7 @@ void trial(creaturest &g)
                   addstr("'s arguments made several of the jurors stand up");
                   move(10,1);
                   addstr("and shout \"NOT GUILTY!\" before deliberations even began.");
+                  if(defense==4)addjuice(*sleeperlawyer,10); // Bow please
                }
                else
                {
@@ -703,7 +731,11 @@ void trial(creaturest &g)
          else
          {
             addstr(g.name);
-            if(defensepower<=15)addstr("'s defense looks like Colin Ferguson's.");
+            if(defensepower<=15)
+            {
+               addstr("'s defense looks like Colin Ferguson's.");
+               addjuice(g,-10); // You should be ashamed
+            }
             else if(defensepower<=25)addstr("'s case really sucked.");
             else if(defensepower<=50)addstr(" did all right, but made some mistakes.");
             else if(defensepower<=75)addstr("'s arguments were pretty good.");
@@ -712,6 +744,7 @@ void trial(creaturest &g)
             else
             {
                addstr(" had the jurors crying for freedom.");
+               addjuice(g,10); // That shit is legend
             }
          }
       }
@@ -791,17 +824,41 @@ void trial(creaturest &g)
          move(5,1);
          addstr(g.name);
          addstr(" is free!");
+
+         
+         if(defense==4)
+         {
+            // Juice sleeper
+            addjuice(*sleeperlawyer,10,100);
+         }
+         if(defense==2)
+         {
+            // Juice for self-defense
+            addjuice(g,10,100);
+         }
          refresh();
          getch();
       }
       //LENIENCE
-      else if(!autoconvict && (defensepower/3>=jury/4 || sleeperjudge)) // *JDS* sleeper judge will always reduce the sentence
-      {
-         penalize(g,1);
-      }
       else
       {
-         penalize(g,0);
+         if(defense==4)
+         {
+            // De-Juice sleeper
+            addjuice(*sleeperlawyer,-10);
+         }
+         // Juice for getting convicted of something :)
+         addjuice(g,10,100);
+
+         // Check for lenience; sleeper judge will always be merciful
+         if(defensepower/3>=jury/4 || sleeperjudge)
+         {
+            penalize(g,1);
+         }
+         else
+         {
+            penalize(g,0);
+         }
       }
       //CLEAN UP LAW FLAGS
       if(!keeplawflags)

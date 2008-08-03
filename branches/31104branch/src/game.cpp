@@ -219,6 +219,7 @@ long moneylost_food=0;
 long moneylost_dating=0;
 long moneylost_compound=0;
 long moneylost_hostage=0;
+long moneylost_confiscated=0;
 
 short party_status=-1;
 

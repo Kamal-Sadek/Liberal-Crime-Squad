@@ -702,7 +702,7 @@ void fundreport(char &clearformess)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addstr("Groceries Subsidy . . . . . . . . . . . . . . . . . . . . .");
+         addstr("Groceries and Maintenance . . . . . . . . . . . . . . . . .");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
          move(y,60);
@@ -773,6 +773,25 @@ void fundreport(char &clearformess)
          totalmoney-=moneylost_hostage;
       }
 
+      //CONFISCATED
+      if(moneylost_confiscated>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Confiscated by Law Enforcement. . . . . . . . . . . . . . .");
+
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneylost_confiscated,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney-=moneylost_confiscated;
+      }
+
       //TOTAL
       y++;
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -813,6 +832,7 @@ void fundreport(char &clearformess)
       moneylost_dating=0;
       moneylost_compound=0;
       moneylost_hostage=0;
+      moneylost_confiscated=0;
    }
 }
 

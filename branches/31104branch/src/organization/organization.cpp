@@ -212,7 +212,8 @@ void organization::addOrgRecord(const organization& org)
 
 void organization::orgAI()
 {
-
+   // If this organization isn't doing anything right now, then spend this turn deciding
+   // what its next objective is
 	if(currGoal == -1)
 	{
 		int newGoal = -1;
@@ -221,6 +222,7 @@ void organization::orgAI()
 		for(int i = 0; i < size; i++)
 		{
 			//should this go here?  I don't think so, but whatever
+         // (For publicity goals, determine priority level of the goal)
 			if(goals.getObjByIndex(i).type == "PUBLICITY")
 			{
 				//This needs to be changed so organizations can be attacked with publicity
@@ -234,30 +236,36 @@ void organization::orgAI()
 				}
 			}
 			//again, I don't think this should go here, but whatever
+         // (For attack goals, determine priority level of the goal)
 			if(goals.getObjByIndex(i).type == "ATTACK")
 			{
 				for(int j = 0; j < orgs.size(); j++)
 				{
 					if(goals.getObjByIndex(i).targetID == orgs[j].ID)
 					{
+                  // Goal priority level is the amount of heat toward this organization
 						goals.getObjByIndex(i).priority = orgs[j].heat;
 						break;
 					}
 				}
 			}
+         // Use the goal with the highest priority so far as newGoal
 			if(goals.getObjByIndex(i).priority > newGoalPriority && goals.getObjByIndex(i).basePower != 0)
 			{
 				newGoal = goals.getObjByIndex(i).ID;
 				newGoalPriority = goals.getObjByIndex(i).priority;
 			}
 		}
+      // Use the last newGoal (highest priority goal of all of them) as the new goal
 		if(newGoal != -1)
 		{
 			currGoal = newGoal;
 		}
 	}
+   // If organization is in the middle of acting on a goal, it will continue working on this
 	else
 	{
+      // Reduce heat with all other organizations over time
 		for(int i = 0; i < orgs.size(); i++)
 		{
 			if(orgs[i].heat > 0)
@@ -265,15 +273,20 @@ void organization::orgAI()
 				orgs[i].heat--;
 			}
 		}
+      // Planning -- the longer the organization works on this goal,
+      // the more the power multiplier increases on it as the
+      // organization lays the groundwork for future actions
 		goals.getObj(currGoal).powerMult++;
 
-		//This needs to be fleshed out, a LOT.
+		// Once the power multiplier is high enough can act on the goal
+      //This needs to be fleshed out, a LOT.
 		if(goals.getObj(currGoal).powerMult >= 30)
 		{
+         // Chance of acting each day
 			if(!LCSrandom(20))
 			{
-				activateGoal();
-				currGoal = -1;
+				activateGoal(); // Act
+				currGoal = -1;  // Clear the goal so you can work on something else next turn
 			}
 		}
 	}
@@ -292,11 +305,31 @@ void organization::activateGoal()
 	}
 	else if(goals.getObj(currGoal).type == "PUBLICITY")
 	{
-		public_interest[goals.getObj(currGoal).targetID] += alignment * (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
-		attitude[goals.getObj(currGoal).targetID] += alignment * (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
+      // Organization conducts a publicity campaign to influence public opinion on a target issue
+      // Right now this is done silently, it should generate a news article
+
+      // Commented until a news article is added to communicate this behavior to the player
+
+      /*
+         // Increase public interest in the issue
+		   public_interest[goals.getObj(currGoal).targetID] += //alignment *
+            (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
+         // Change public opinion on the issue
+		   attitude[goals.getObj(currGoal).targetID] +=
+               alignment * (goals.getObj(currGoal).powerMult * goals.getObj(currGoal).basePower) / 3000;
+      */
 	}
 	else if(goals.getObj(currGoal).type == "ATTACK")
 	{
+      // At the moment this just launches an attack against the Liberal Crime Squad
+      
+      // It should check to see what organization is to be attacked and only run this code if the
+      // organization is the LCS, running alternate code (including probably a news article) for
+      // other enemy organizations
+
+      // Commented until organizations are more finished
+
+      /*
 		int hPop = 0;
 		int hLoc = -1;
 		int numpres = 0;
@@ -342,9 +375,14 @@ void organization::activateGoal()
 			location[hLoc]->siege.cameras_off=0;
 			getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
 		}
+      */
 	}
 
+   // Organization becomes satisfied that it took action on this,
+   // so priority drops to zero
 	goals.getObj(currGoal).priority = 0;
+   // New plans must be laid out for it to act on this issue again,
+   // so power multiplier drops to zero
 	goals.getObj(currGoal).powerMult = 0;
 }
 

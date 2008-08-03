@@ -322,13 +322,18 @@ int disguiseskill(void)
 {
    int lowest=10000;
    int highest=0;
+   int bonus = 15; // bonus for having few party members
 
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
+         bonus -= 5; // bonus decreases for each party member
+
+         // Dead people are a dead giveaway
          if(!activesquad->squad[p]->alive)return 0;
 
+         // As are hostages
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
          int skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
@@ -371,7 +376,7 @@ int disguiseskill(void)
       }
    }
 
-   return lowest+highest/4;
+   return lowest + highest/4 + bonus;
 }
 
 /* practices p's stealth skill */
@@ -408,25 +413,26 @@ int stealthskill(void)
 {
    int lowest=10000;
    int highest=0;
+   int bonus = 20; // party size bonus, higher for fewer party members
 
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
+         bonus -= 10; // less bonus for more people
+
          if(!activesquad->squad[p]->alive)return 0;
 
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
          int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3+1;
 
-         //activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=5;
-
          if(lowest>skill)lowest=skill;
          if(highest<skill)highest=skill;
       }
    }
 
-   return lowest;
+   return lowest + bonus;
 }
 
 /* practices p's stealth skill */

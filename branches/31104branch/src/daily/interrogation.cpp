@@ -133,7 +133,6 @@ void tendhostage(creaturest *cr,char &clearformess)
       int business=0;
       int religion=0;
       int science=0;
-      int gangsterism=0;
 
       //each day, spiritcrush is initialized to the average spiritcrush of
       //the entire stay with the LCS -- continued pressure just compounds

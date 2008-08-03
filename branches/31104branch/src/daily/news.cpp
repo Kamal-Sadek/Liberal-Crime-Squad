@@ -35,11 +35,15 @@ This file is part of Liberal Crime Squad.                                       
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns)
 {
+   // Priority is set differently based on the type of the news story
    switch(ns.type)
    {
+      // Major events always muscle to the front page by having a very high priority
       case NEWSSTORY_MAJOREVENT:
          ns.priority=30000;
          break;
+      // LCS-related news stories are more important if they involve lots of headline-grabbing
+      // crimes
       case NEWSSTORY_SQUAD_SITE:
       case NEWSSTORY_SQUAD_ESCAPED:
       case NEWSSTORY_SQUAD_FLEDATTACK:
@@ -52,12 +56,14 @@ void setpriority(newsstoryst &ns)
       {
          ns.priority=0;
 
-         long crime[CRIMENUM];
-         memset(crime,0,CRIMENUM*sizeof(long));
+         int crime[CRIMENUM];
+         memset(crime,0,CRIMENUM*sizeof(int));
+         // Record all the crimes in this story
          for(int c=0;c<ns.crime.size();c++)
          {
             crime[ns.crime[c]]++;
          }
+         // Cap publicity for more than ten repeats of an action of some type
          if(crime[CRIME_STOLEGROUND]>10)crime[CRIME_STOLEGROUND]=10;
          if(crime[CRIME_BROKEDOWNDOOR]>10)crime[CRIME_BROKEDOWNDOOR]=10;
          if(crime[CRIME_ATTACKED_MISTAKE]>10)crime[CRIME_ATTACKED_MISTAKE]=10;
@@ -67,24 +73,32 @@ void setpriority(newsstoryst &ns)
          if(crime[CRIME_FREE_RABBITS]>10)crime[CRIME_FREE_RABBITS]=10;
          if(crime[CRIME_FREE_BEASTS]>10)crime[CRIME_FREE_BEASTS]=10;
 
-         ns.priority+=crime[CRIME_STOLEGROUND];
-         ns.priority+=crime[CRIME_BROKEDOWNDOOR];
-         ns.priority+=crime[CRIME_ATTACKED_MISTAKE]*7;
-         ns.priority+=crime[CRIME_ATTACKED]*4;
-         ns.priority+=crime[CRIME_KILLEDSOMEBODY]*30;
-         ns.priority+=crime[CRIME_SHUTDOWNREACTOR]*100;
-         ns.priority+=crime[CRIME_POLICE_LOCKUP]*30;
-         ns.priority+=crime[CRIME_COURTHOUSE_LOCKUP]*30;
-         ns.priority+=crime[CRIME_PRISON_RELEASE]*50;
-         ns.priority+=crime[CRIME_JURYTAMPERING]*30;
-         ns.priority+=crime[CRIME_HACK_INTEL]*100;
-         ns.priority+=crime[CRIME_BREAK_SWEATSHOP]*2;
-         ns.priority+=crime[CRIME_BREAK_FACTORY]*2;
-         ns.priority+=crime[CRIME_HOUSE_PHOTOS]*100;
-         ns.priority+=crime[CRIME_CORP_FILES]*100;
-         ns.priority+=crime[CRIME_FREE_RABBITS]*2;
-         ns.priority+=crime[CRIME_FREE_BEASTS]*3;
+         // Increase news story priority based on the number of instances of
+         // various crimes, scaled by a factor dependant on the crime
 
+         // Unique site crimes
+         ns.priority+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
+         ns.priority+=crime[CRIME_HACK_INTEL       ] * 100;
+         ns.priority+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
+         ns.priority+=crime[CRIME_CORP_FILES       ] * 100;
+         ns.priority+=crime[CRIME_PRISON_RELEASE   ] *  50;
+         ns.priority+=crime[CRIME_JURYTAMPERING    ] *  30;
+         ns.priority+=crime[CRIME_POLICE_LOCKUP    ] *  30;
+         ns.priority+=crime[CRIME_COURTHOUSE_LOCKUP] *  30;
+
+         // Common site crimes
+         ns.priority+=crime[CRIME_KILLEDSOMEBODY   ] *  30;
+         ns.priority+=crime[CRIME_ATTACKED_MISTAKE ] *   7;
+         ns.priority+=crime[CRIME_ATTACKED         ] *   4;
+         ns.priority+=crime[CRIME_FREE_BEASTS      ] *   3;
+         ns.priority+=crime[CRIME_BREAK_SWEATSHOP  ] *   2;
+         ns.priority+=crime[CRIME_BREAK_FACTORY    ] *   2;
+         ns.priority+=crime[CRIME_FREE_RABBITS     ] *   2;
+         ns.priority+=crime[CRIME_STOLEGROUND      ];
+         ns.priority+=crime[CRIME_BROKEDOWNDOOR    ];
+
+         // Add additional priority based on the type of news story
+         // and how high profile the LCS is
          switch(ns.type)
          {
             case NEWSSTORY_SQUAD_ESCAPED:
@@ -110,10 +124,12 @@ void setpriority(newsstoryst &ns)
                break;
          }
 
+         // Cap news priority, in part so it can't displace major news stories
          if(ns.priority>20000)ns.priority=20000;
          break;
       }
       case NEWSSTORY_KIDNAPREPORT:
+         // Kidnappings are higher priority if they're an archconservative
          ns.priority=20;
          if(ns.cr->type==CREATURE_CORPORATE_CEO||
             ns.cr->type==CREATURE_RADIOPERSONALITY||
@@ -122,11 +138,14 @@ void setpriority(newsstoryst &ns)
             ns.cr->type==CREATURE_JUDGE_CONSERVATIVE)ns.priority=40;
          break;
       case NEWSSTORY_MASSACRE:
+         // More people massacred, higher priority (I think; not verified ns.crime[1] is people present)
          ns.priority=10 + ns.crime[1]*5;
          break;
       case NEWSSTORY_CCS_SITE:
       case NEWSSTORY_CCS_KILLED_SITE:
-      
+         // CCS actions loosely simulate LCS actions; here it adds some
+         // random site crimes to the story and increases the
+         // priority accordingly
          ns.crime.push_back(CRIME_BROKEDOWNDOOR);
          ns.priority=1;
          if(ns.positive==0)

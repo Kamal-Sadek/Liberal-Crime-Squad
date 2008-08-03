@@ -1859,7 +1859,7 @@ char maskselect(creaturest *cr,short &mask)
          case MASK_JACKSON_MICHAEL:
          case MASK_CRUTHERS:
          case MASK_KING_DON:
-            break;
+            break; /* comment this break to allow all masks, leave it in to hide some for surprises */
          default:
             masktype.push_back(a);
       }

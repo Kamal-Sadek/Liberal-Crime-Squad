@@ -143,7 +143,7 @@ void elections(char clearformess,char canseethings)
    //PRESIDENTIAL
    if(year%4==0)
    {
-      if(canseethings)
+      if(canseethings || disbanding)
       {
          erase();
 
@@ -248,7 +248,7 @@ void elections(char clearformess,char canseethings)
       }
 
       //Print candidates
-      if(canseethings)
+      if(canseethings || disbanding)
       {
          for(c=0;c<2;c++)
          {
@@ -303,14 +303,22 @@ void elections(char clearformess,char canseethings)
             }
          }
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(8,0);
-         addstr("Press any key to watch the election unfold.");
+         if(!disbanding)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(8,0);
+            addstr("Press any key to watch the election unfold.");
 
-         refresh();
-         getch();
+            refresh();
+            getch();
 
-         nodelay(stdscr,TRUE);
+            nodelay(stdscr,TRUE);
+         }
+         else
+         {
+            refresh();
+            pause_ms(200);
+         }
       }
 
       int winner=-1;
@@ -386,7 +394,7 @@ void elections(char clearformess,char canseethings)
             }
          }
 
-         if(canseethings && l%5==4)
+         if((canseethings||disbanding) && l%5==4)
          {
             for(int c=0;c<2;c++)
             {
@@ -402,15 +410,14 @@ void elections(char clearformess,char canseethings)
                addch('%');
                if(c==winner&&recount)addstr(" (After Recount)");
             }
-
+            
             refresh();
-
-            pause_ms(50);
-            getch();
+            if(!disbanding)pause_ms(50);
+            else pause_ms(20);
          }
       }
 
-      if(canseethings)nodelay(stdscr,FALSE);
+      if(canseethings||disbanding)nodelay(stdscr,FALSE);
 
       if(winner==presparty && execterm==1)oldwinner=1;
 
@@ -422,6 +429,11 @@ void elections(char clearformess,char canseethings)
 
          refresh();
          getch();
+      }
+      else if(disbanding)
+      {
+         refresh();
+         pause_ms(800);
       }
 
       //CONSTRUCT EXECUTIVE BRANCH
@@ -464,7 +476,7 @@ void elections(char clearformess,char canseethings)
          senmod=2;
       }
          
-      if(canseethings)
+      if(canseethings||disbanding)
       {
          erase();
 
@@ -482,7 +494,7 @@ void elections(char clearformess,char canseethings)
       {
          if(s%3!=senmod)continue;
 
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             move(y,x);
 
@@ -532,6 +544,11 @@ void elections(char clearformess,char canseethings)
 
          nodelay(stdscr,TRUE);
       }
+      else if(disbanding)
+      {
+         refresh();
+         pause_ms(200);
+      }
 
       int vote;
       int change[5] = {0,0,0,0,0};
@@ -562,29 +579,29 @@ void elections(char clearformess,char canseethings)
          {
          case -2:
             if(mood<60)break;
-            if(vote>=3)senate[s]=vote-3;
+            if(vote>=3)senate[s]=vote-2;
             break;
          case -1:
-            if(mood<50 && LCSrandom(5))break;
-            if(vote>=3 && LCSrandom(2))senate[s]=vote-2;
+            if(mood<40 && LCSrandom(4))break;
+            if(vote>=3 && LCSrandom(3))senate[s]=vote-2;
             break;
          case 0:
-            if(!LCSrandom(4))senate[s]=vote-2;
+            if(!LCSrandom(3))senate[s]=vote-2;
             break;
          case 1:
-            if(mood>50 && LCSrandom(5))break;
-            if(vote<=1 && LCSrandom(2))senate[s]=vote-2;
+            if(mood>60 && LCSrandom(4))break;
+            if(vote<=1 && LCSrandom(3))senate[s]=vote-2;
             break;
          case 2:
             if(mood>40)break;
-            if(vote<=1)senate[s]=vote-1;
+            if(vote<=1)senate[s]=vote-2;
             break;
          }
 
          change[senate[s]+2]++;
 
 
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             move(y,x);
 
@@ -622,7 +639,7 @@ void elections(char clearformess,char canseethings)
             y++;
          }
 
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -651,14 +668,15 @@ void elections(char clearformess,char canseethings)
             addstr(buffer);
             addstr("        ");
 
-            refresh();
-            pause_ms(50);
-
-            getch();
+            if(!disbanding)
+            {
+               refresh();
+               pause_ms(50);
+            }
          }
       }
 
-      if(canseethings)
+      if(canseethings||disbanding)
       {
          nodelay(stdscr,FALSE);
 
@@ -675,18 +693,27 @@ void elections(char clearformess,char canseethings)
          {
             addstr("The next two years promise to be more of the same.");
          }
-         move(22,0);
-         addstr("Press any key to continue the elections.    ");
 
-         refresh();
-         getch();
+         if(disbanding)
+         {
+            refresh();
+            pause_ms(800);
+         }
+         else
+         {
+            move(22,0);
+            addstr("Press any key to continue the elections.    ");
+
+            refresh();
+            getch();
+         }
       }
    }
 
    //HOUSE
    if(year%2==0)
    {
-      if(canseethings)
+      if(canseethings||disbanding)
       {
          erase();
 
@@ -702,7 +729,7 @@ void elections(char clearformess,char canseethings)
 
       for(h=0;h<435;h++)
       {
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             move(y,x);
 
@@ -751,6 +778,11 @@ void elections(char clearformess,char canseethings)
          getch();
 
          nodelay(stdscr,TRUE);
+      }
+      else if(disbanding)
+      {
+         refresh();
+         pause_ms(200);
       }
 
       int vote;
@@ -804,7 +836,7 @@ void elections(char clearformess,char canseethings)
 
          change[house[h]+2]++;
          
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             move(y,x);
 
@@ -842,7 +874,7 @@ void elections(char clearformess,char canseethings)
             y++;
          }
 
-         if(canseethings)
+         if(canseethings||disbanding)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -871,15 +903,18 @@ void elections(char clearformess,char canseethings)
             addstr(buffer);
             addstr("        ");
 
-            refresh();
+            if(!disbanding)
+            {
+               refresh();
 
-            pause_ms(10);
+               pause_ms(10);
 
-            getch();
+               getch();
+            }
          }
       }
 
-      if(canseethings)
+      if(canseethings||disbanding)
       {
          nodelay(stdscr,FALSE);
 
@@ -910,11 +945,19 @@ void elections(char clearformess,char canseethings)
          {
             addstr("The next two years promise to be more of the same.");
          }
-         move(22,0);
-         addstr("Press any key to continue the elections.    ");
+         if(!disbanding)
+         {
+            move(22,0);
+            addstr("Press any key to continue the elections.    ");
 
-         refresh();
-         getch();
+            refresh();
+            getch();
+         }
+         else
+         {
+            refresh();
+            pause_ms(800);
+         }
       }
    }
 
@@ -1011,6 +1054,8 @@ void elections(char clearformess,char canseethings)
          addstr("Proposition ");addstr(num);addstr(":");
          move(p*3+2,18);
          addstr("To ");
+         if(propdir[p]==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else set_color(COLOR_RED,COLOR_BLACK,1);
          switch(prop[p])
          {
             case LAW_ABORTION:
@@ -1070,8 +1115,7 @@ void elections(char clearformess,char canseethings)
                else addstr("Assert our Second Amendment Rights");
                break;
          }
-
-         refresh();
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
       }
    }
 
@@ -1274,6 +1318,8 @@ void supremecourt(char clearformess,char canseethings)
 
          move(c*3+3,0);
          addstr("A Decision could ");
+         if(scasedir[c]==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else set_color(COLOR_RED,COLOR_BLACK,1);
          switch(scase[c])
          {
             case LAW_ABORTION:
@@ -1333,6 +1379,7 @@ void supremecourt(char clearformess,char canseethings)
                else addstr("Protect our Second Amendment Rights");
                break;
          }
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          refresh();
       }
@@ -1643,6 +1690,8 @@ void congress(char clearformess,char canseethings)
 
          move(c*3+3,0);
          addstr("To ");
+         if(bill[c]==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else set_color(COLOR_RED,COLOR_BLACK,1);
          switch(bill[c])
          {
             case LAW_ABORTION:
@@ -1702,6 +1751,7 @@ void congress(char clearformess,char canseethings)
                else addstr("Protect our Second Amendment Rights");
                break;
          }
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          refresh();
       }

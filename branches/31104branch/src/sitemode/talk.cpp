@@ -1161,7 +1161,29 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(talkreceptive(*tk)||
+                  if(tk->animalgloss)
+                  {
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(12,1);addstr(tk->name);
+
+                     switch(tk->type)
+                     {
+                     case CREATURE_TANK:
+                        addstr(" rumbles disinterestedly.");
+                        break;
+                     case CREATURE_GUARDDOG:
+                        addstr(" barks.");
+                        break;
+                     default:
+                        addstr(" doesn't understand.");
+                     }
+                     
+                     refresh();
+                     getch();
+
+                     return 1;
+                  }
+                  else if(talkreceptive(*tk)||
                      a.skill[SKILL_PERSUASION]+a.attval(ATTRIBUTE_CHARISMA)>LCSrandom(20))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1282,7 +1304,31 @@ case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
                   short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
                   a.skill_ip[SKILL_SEDUCTION]+=LCSrandom(5)+2;
 
-                  if(aroll>troll)
+                  if(tk->animalgloss)
+                  {
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(12,1);addstr(tk->name);
+
+                     switch(tk->type)
+                     {
+                     case CREATURE_TANK:
+                        addstr(" shakes its turret a firm 'no'.");
+                        break;
+                     case CREATURE_GUARDDOG:
+                        addstr(" sniffs ");
+                        addstr(a.name);
+                        addstr(".");
+                        break;
+                     default:
+                        addstr(" doesn't quite pick up on the subtext.");
+                     }
+                     
+                     refresh();
+                     getch();
+
+                     return 1;
+                  }
+                  else if(aroll>troll)
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(y,1);y++;addstr(tk->name);addstr(" responds,");
