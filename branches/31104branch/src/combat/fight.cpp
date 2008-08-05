@@ -751,12 +751,16 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case CLIP_22:a.weapon.ammo+=6;break;
             case CLIP_44:a.weapon.ammo+=6;break;
             case CLIP_BUCKSHOT:a.weapon.ammo+=6;break;
+            case CLIP_MOLOTOV:a.weapon.ammo+=1;break;
          }
 
          a.clip[ammotype(a.weapon.type)]--;
 
          strcpy(str,a.name);
-         strcat(str," reloads.");
+         if(a.weapon.type!=WEAPON_MOLOTOV)
+            strcat(str," reloads.");
+         else
+            strcat(str," readies another molotov.");
 
          move(16,1);
          addstr(str);
@@ -810,6 +814,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          else strcat(str,"swings at");
          break;
       }
+      case WEAPON_MOLOTOV:
+         strcat(str,"hurls a molotv at");
+         break;
       case WEAPON_CHAIN:
       case WEAPON_NIGHTSTICK:
       case WEAPON_CROWBAR:
@@ -834,7 +841,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
    strcpy(str,"");
 
-   if(a.weapon.type!=WEAPON_NONE)
+   if(a.weapon.type!=WEAPON_NONE &&
+      a.weapon.type!=WEAPON_MOLOTOV)
    {
       strcat(str," with a ");
       getweaponfull(str2,a.weapon.type,1);
@@ -874,7 +882,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
-   if(rangedweapon(a.weapon) && a.weapon.ammo==0)wsk=SKILL_IMPROVISED;
+   if(rangedweapon(a.weapon) &&
+      a.weapon.type!=WEAPON_MOLOTOV &&
+      a.weapon.ammo==0)
+   {
+      wsk=SKILL_IMPROVISED;
+   }
    aroll+=LCSrandom(a.skill[wsk]+1);
    a.skill_ip[wsk]+=droll;
 
@@ -899,7 +912,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    
    int bonus=0;
    //Penalty for improvised weapons
-   if(wsk==SKILL_IMPROVISED)bonus=-4;
+   if(wsk==SKILL_IMPROVISED && a.weapon.type != WEAPON_MOLOTOV)bonus=-4;
    else
    {
       // Weapon accuracy bonuses and pentalties
@@ -914,10 +927,27 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
    int shotgun=0; // *JDS* Used for shotguns; enables "just missed" hits for reduced damage
+
+   int removeweapon=0; // Used by molotov to remove the weapon at the end of the turn if needed
+
    if(a.weapon.ammo>0)
    {
       switch(a.weapon.type)
       {
+         case WEAPON_MOLOTOV:
+            {
+               a.weapon.ammo--;
+               if(a.clip[CLIP_MOLOTOV]==0)
+                  removeweapon=1;
+
+               if(mode==GAMEMODE_SITE)
+               {
+                  sitechangest change(locx,locy,locz,SITEBLOCK_DEBRIS);
+                  location[cursite]->changes.push_back(change);
+                  levelmap[locx][locy][locz].flag|=SITEBLOCK_DEBRIS; // change to fire?
+               }
+            }
+            break;
          case WEAPON_SHOTGUN_PUMP:
             shotgun=1;
          case WEAPON_REVOLVER_22:
@@ -1010,6 +1040,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case 3: strcat(str," three times"); break;
          }
 
+      }
+
+      if(a.weapon.type==WEAPON_MOLOTOV)
+      {
+         strcat(str,", exploding");
       }
 
       char damtype=0;
@@ -1164,6 +1199,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=LCSrandom(30)+5;
                strengthmod=1;
             }
+            break;
+         case WEAPON_MOLOTOV:
+            damtype|=WOUND_BURNED;
+            damamount=LCSrandom(400)+400;
+            damagearmor=1;
+            armorpiercing=9;
             break;
          case WEAPON_AUTORIFLE_AK47:
          case WEAPON_AUTORIFLE_M16:
@@ -1369,7 +1410,10 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          {
             do
             {
-               damamount>>=1;
+               if(damtype & WOUND_BURNED)
+                  damamount-=10+LCSrandom(20); // burning more quickly reduce to near-death
+               else
+                  damamount>>=1;
             }while(target->blood-damamount<=0);
          }
 
@@ -1396,6 +1440,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             {
                target->blood=0;
                target->alive=0;
+
+               addjuice(a,5+t.juice/20); // Instant juice
+
                if(target->squadid!=-1)
                {
                   if(target->align==1)stat_dead++;
@@ -1409,7 +1456,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                  criminalize(a,LAWFLAG_MURDER);
+                  criminalizeparty(LAWFLAG_MURDER);
                }
             }
 
@@ -1417,7 +1464,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
             else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
             else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
-            else strcat(str,".");
+            else if(a.weapon.type!=WEAPON_MOLOTOV)strcat(str,".");
+            else strcat(str,"!");
             move(17,1);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
@@ -1510,7 +1558,6 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                            else addstr("'s face is removed!");
                            refresh();
                            getch();
-
                            target->special[SPECIALWOUND_RIGHTEYE]=0;
                            target->special[SPECIALWOUND_LEFTEYE]=0;
                            target->special[SPECIALWOUND_NOSE]=0;
@@ -1884,6 +1931,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       getch();
    }
 
+   if(removeweapon)
+      a.weapon.type=WEAPON_NONE;
    actual=1;
    return;
 }
@@ -1957,10 +2006,12 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    if(t.armor.flag & ARMORFLAG_DAMAGED)
       prot/=2;
 
-   if(hitlocation!=BODYPART_BODY)prot=0;
+   if(t.animalgloss==ANIMALGLOSS_TANK)prot=9;
+   else if(hitlocation==BODYPART_HEAD)prot/=2;
+   else if(hitlocation!=BODYPART_BODY)prot=0;
 
-   prot-=armorpenetration;
-   if(prot>0)mod-=prot*3;
+   int mod2=prot+LCSrandom(prot+1)-armorpenetration;
+   if(mod2<0)mod+=mod2;
 
    if(mod<=-4)damamount>>=4;
    else if(mod<=-3)damamount>>=3;
@@ -1978,8 +2029,6 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    else if(mod>=1)damamount=(int)((float)damamount * 1.2f);
 
    if(damamount<0)damamount=0;
-
-   if(t.animalgloss==ANIMALGLOSS_TANK)damamount=0;
 }
 
 
@@ -2028,10 +2077,21 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
          {
             for(int p=0;p<cr.clip[c];p++)
             {
-               itemst *newi=new itemst;
-                  newi->type=ITEM_CLIP;
-                  newi->cliptype=c;
-               loot.push_back(newi);
+               if(c==CLIP_MOLOTOV)
+               {
+                  itemst *newi=new itemst;
+                     newi->type=ITEM_WEAPON;
+                     newi->weapon.type=WEAPON_MOLOTOV;
+                     newi->weapon.ammo=1;
+                  loot.push_back(newi);
+               }
+               else
+               {
+                  itemst *newi=new itemst;
+                     newi->type=ITEM_CLIP;
+                     newi->cliptype=c;
+                  loot.push_back(newi);
+               }
             }
          }
 
@@ -2216,10 +2276,21 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
    {
       for(int p=0;p<cr.clip[c];p++)
       {
-         itemst *newi=new itemst;
-            newi->type=ITEM_CLIP;
-            newi->cliptype=c;
-         loot.push_back(newi);
+         if(c==CLIP_MOLOTOV)
+         {
+            itemst *newi=new itemst;
+               newi->type=ITEM_WEAPON;
+               newi->weapon.type=WEAPON_MOLOTOV;
+               newi->weapon.ammo=1;
+            loot.push_back(newi);
+         }
+         else
+         {
+            itemst *newi=new itemst;
+               newi->type=ITEM_CLIP;
+               newi->cliptype=c;
+            loot.push_back(newi);
+         }
       }
 
       cr.clip[c]=0;

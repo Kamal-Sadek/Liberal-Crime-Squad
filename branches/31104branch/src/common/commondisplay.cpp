@@ -363,7 +363,7 @@ void printlocation(long loc)
 
    if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
    {
-      if(numbereating(loc)>0&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
+      if(numbereating(loc)>0)
       {
          if(fooddaysleft(loc))
          {
@@ -393,9 +393,9 @@ void printlocation(long loc)
 
       if(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
       {
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(6,31);
-         addstr("LIBERAL GUARDIAN HQ");
+         set_color(COLOR_BLUE,COLOR_BLACK,1);
+         move(4,31);
+         addstr("PRINTING PRESS");
       }
 
       if(location[loc]->front_business!=-1)
@@ -452,7 +452,7 @@ void printlocation(long loc)
       int days=fooddaysleft(loc);
       char num[20];
 
-      if(eaters>0&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
+      if(eaters>0)
       {
          if(days>=1)
          {
@@ -471,21 +471,18 @@ void printlocation(long loc)
             addstr("Not Enough Food");
          }
       }
-      if(location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         itoa(location[loc]->compound_stores,num,10);
-         move(6,1);
-         addstr(num);
-         addstr(" Daily Ration");
-         if(location[loc]->compound_stores!=1)addstr("s");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      itoa(location[loc]->compound_stores,num,10);
+      move(6,1);
+      addstr(num);
+      addstr(" Daily Ration");
+      if(location[loc]->compound_stores!=1)addstr("s");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         itoa(eaters,num,10);
-         move(6,30);
-         addstr(num);
-         addstr(" Eating");
-      }
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      itoa(eaters,num,10);
+      move(6,30);
+      addstr(num);
+      addstr(" Eating");
    }
 }
 
@@ -730,7 +727,10 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
             if(sum==0)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               addstr("Liberal");
+               if(cr->animalgloss==ANIMALGLOSS_ANIMAL)
+                  addstr("Animal");
+               else
+                  addstr("Liberal");
             }
 
             if(cr->wound[w] & WOUND_SHOT){addstr("Sht");sum--;if(sum>0)addstr(",");}
@@ -1113,7 +1113,10 @@ void printliberalstats(creaturest &cr,char smll)
                if(sum==0)
                {
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
-                  addstr("Liberal");
+                  if(cr.animalgloss==ANIMALGLOSS_ANIMAL)
+                     addstr("Animal");
+                  else
+                     addstr("Liberal");
                }
 
                if(cr.wound[w] & WOUND_SHOT){addstr("Shot");sum--;if(sum>0)addstr(",");}
@@ -1370,7 +1373,10 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
       else
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         addstr("Liberal");
+         if(g.animalgloss==ANIMALGLOSS_ANIMAL)
+            addstr("Animal");
+         else
+            addstr("Liberal");
       }
    }
 }

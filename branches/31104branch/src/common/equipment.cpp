@@ -264,15 +264,25 @@ void equip(vector<itemst *> &loot,int loc)
 
                   if(loot[slot]->type==ITEM_WEAPON && armok)
                   {
-                     if(squaddie->weapon.type!=WEAPON_NONE)
+                     if(squaddie->weapon.type==WEAPON_MOLOTOV&&
+                        loot[slot]->weapon.type==WEAPON_MOLOTOV)
+                     {
+                        
+                        if(squaddie->weapon.ammo==0)
+                           squaddie->weapon.ammo=1;
+                        else
+                           squaddie->clip[CLIP_MOLOTOV]++;
+                     }
+                     else if(squaddie->weapon.type!=WEAPON_NONE)
                      {
                         itemst *newloot=new itemst;
                            newloot->type=ITEM_WEAPON;
                            newloot->weapon=squaddie->weapon;
                         loot.push_back(newloot);
-                     }
 
-                     squaddie->weapon=loot[slot]->weapon;
+                        squaddie->weapon=loot[slot]->weapon;
+                     }
+                     else squaddie->weapon=loot[slot]->weapon;
 
                      loot[slot]->number--;
                      if(loot[slot]->number==0)
@@ -288,10 +298,21 @@ void equip(vector<itemst *> &loot,int loc)
 
                         for(int p2=0;p2<squaddie->clip[cl];p2++)
                         {
-                           itemst *newi=new itemst;
-                              newi->type=ITEM_CLIP;
-                              newi->cliptype=cl;
-                           loot.push_back(newi);
+                           if(cl==CLIP_MOLOTOV)
+                           {
+                              itemst *newi=new itemst;
+                                 newi->type=ITEM_WEAPON;
+                                 newi->weapon.type=WEAPON_MOLOTOV;
+                                 newi->weapon.ammo=1;
+                              loot.push_back(newi);
+                           }
+                           else
+                           {
+                              itemst *newi=new itemst;
+                                 newi->type=ITEM_CLIP;
+                                 newi->cliptype=cl;
+                              loot.push_back(newi);
+                           }
                         }
 
                         squaddie->clip[cl]=0;
@@ -417,10 +438,21 @@ void equip(vector<itemst *> &loot,int loc)
                {
                   for(int p2=0;p2<activesquad->squad[p]->clip[c];p2++)
                   {
-                     itemst *newi=new itemst;
-                        newi->type=ITEM_CLIP;
-                        newi->cliptype=c;
-                     loot.push_back(newi);
+                     if(c==CLIP_MOLOTOV)
+                     {
+                        itemst *newi=new itemst;
+                           newi->type=ITEM_WEAPON;
+                           newi->weapon.type=WEAPON_MOLOTOV;
+                           newi->weapon.ammo=1;
+                        loot.push_back(newi);
+                     }
+                     else
+                     {
+                        itemst *newi=new itemst;
+                           newi->type=ITEM_CLIP;
+                           newi->cliptype=c;
+                        loot.push_back(newi);
+                     }
                   }
 
                   activesquad->squad[p]->clip[c]=0;
@@ -732,6 +764,8 @@ short ammotype(int type)
          return CLIP_ASSAULT;
       case WEAPON_SHOTGUN_PUMP:
          return CLIP_BUCKSHOT;
+      case WEAPON_MOLOTOV:
+         return CLIP_MOLOTOV;
    }
 
    return -1;
@@ -754,6 +788,7 @@ char rangedweapon(weaponst &w)
       case WEAPON_AUTORIFLE_M16:
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_SHOTGUN_PUMP:
+      case WEAPON_MOLOTOV:
          return 1;
    }
 

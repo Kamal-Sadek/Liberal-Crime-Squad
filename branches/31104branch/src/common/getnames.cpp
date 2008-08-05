@@ -183,6 +183,7 @@ void getweapon(char *str,int type)
          case WEAPON_TORCH:         strcpy(str,"Torch");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
       }
    }
    else
@@ -219,6 +220,7 @@ void getweapon(char *str,int type)
          case WEAPON_TORCH:         strcpy(str,"Flare");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
       }
    }
 }
@@ -268,6 +270,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_TORCH:         strcpy(str,"Torch");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_MOLOTOV:       strcpy(str,"Molotov Cocktail");break;
       }
    }
    else
@@ -308,6 +311,7 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_TORCH:         strcpy(str,"Burning Flare");break;
       case WEAPON_GUITAR:      strcpy(str,"Ancient Guitar");break;
       case WEAPON_SPRAYCAN:         strcpy(str,"Retro Spraycan");break;
+      case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
       }
    }
 }
@@ -355,6 +359,7 @@ void getarmor(char *str,int type,int subtype)
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
       case MASK_GORE_TIPPER:      strcpy(str,"Tpr. Gore Mask");break;
       case MASK_GUY_FAWKES:      strcpy(str,"G. Fawkes Mask");break;
+      case MASK_TED_STEVENS:      strcpy(str,"T Stevens Mask");break;
       case MASK_HELMS:         strcpy(str,"Helms Mask");break;
       case MASK_JASON:         strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Lincoln Mask");break;
@@ -449,6 +454,7 @@ void getarmorfull(char *str,int type,int subtype)
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
       case MASK_GORE_TIPPER:      strcpy(str,"Tipper Gore Mask");break;
       case MASK_GUY_FAWKES:      strcpy(str,"Guy Fawkes Mask");break;
+      case MASK_TED_STEVENS:      strcpy(str,"Ted Stevens Mask");break;
       case MASK_HELMS:         strcpy(str,"Jesse Helms Mask");break;
       case MASK_JASON:         strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Abraham Lincoln Msk");break;
@@ -522,6 +528,7 @@ void getmaskdesc(char *str,short mask)
       //LIMIT-------------------------------------:--------------------------------------:
       case MASK_GORE_TIPPER:         strcpy(str,"U.S. Second Lady");break;
       case MASK_GUY_FAWKES:      strcpy(str,"Remember the 5th of November");break;
+      case MASK_TED_STEVENS:      strcpy(str,"U.S. Senator");break;
       case MASK_HELMS:            strcpy(str,"U.S. Senator");break;
       case MASK_JASON:            strcpy(str,"A Hockey Mask a la Friday the 13th");break;
       case MASK_LINCOLN:            strcpy(str,"U.S. President, Assassinated");break;
@@ -648,6 +655,7 @@ void getclip(char *str,int clip)
          case CLIP_22:strcat(str,".22 Speedloader");break;
          case CLIP_44:strcat(str,".44 Speedloader");break;
          case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
+         case CLIP_MOLOTOV:strcat(str,"Molotov Cocktail");break;
       }
    }
    else
@@ -661,6 +669,7 @@ void getclip(char *str,int clip)
          case CLIP_22:strcat(str,".22 Slug Mag");break;
          case CLIP_44:strcat(str,".44 Heavy Slug Mag");break;
          case CLIP_BUCKSHOT:strcat(str,"Shotgun Plasma Pack");break;
+         case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
       }
    }
 }
@@ -784,6 +793,9 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_PRISONER:strcat(str,"Prisoner");break;
       case CREATURE_DOCTOR:strcat(str,"Doctor");break;
       case CREATURE_NURSE:strcat(str,"Nurse");break;
+      case CREATURE_GUARDDOG:strcat(str,"Canine Hero");break;
+      case CREATURE_GENETIC:strcat(str,"Genetic Monster");break;
+      case CREATURE_TANK:strcat(str,"Armored Tank");break;
       case CREATURE_CCS_VIGILANTE:strcat(str,"CCS Vigilante");break;
       case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"CCS Vigilante Boss");break;
       case CREATURE_POLITICALACTIVIST:strcat(str,"Political Activist");break;
@@ -924,7 +936,7 @@ void getcarfull(char *str,int type)
       case VEHICLE_POLICECAR:strcat(str,"Police Cruiser");break;
       case VEHICLE_TAXICAB:strcat(str,"Taxicab");break;
       case VEHICLE_SUV:strcat(str,"SUV");break;
-      case VEHICLE_AGENTCAR:strcat(str,"Car");break;
+      case VEHICLE_AGENTCAR:strcat(str,"Sportscar");break;
       case VEHICLE_JEEP:strcat(str,"Jeep");break;
    }
 }
@@ -933,7 +945,8 @@ void getcarfull(char *str,int type)
 void getcarfull(char *str,vehiclest &car,char halffull)
 {
    char str2[80],num[20];
-   strcpy(str,"");
+   if(car.heat)strcpy(str,"Stolen ");
+   else strcpy(str,"");
    if(car.color!=naturalcarcolor(car.type))
    {
       getcarcolor(str2,car.color);
@@ -966,7 +979,7 @@ void getcar(char *str,int type)
       case VEHICLE_POLICECAR:         strcat(str,"Cruiser");break;
       case VEHICLE_TAXICAB:         strcat(str,"Taxicab");break;
       case VEHICLE_SUV:            strcat(str,"SUV");break;
-      case VEHICLE_AGENTCAR:         strcat(str,"Car");break;
+      case VEHICLE_AGENTCAR:         strcat(str,"Sport");break;
       case VEHICLE_JEEP:            strcat(str,"Jeep");break;
    }
 }

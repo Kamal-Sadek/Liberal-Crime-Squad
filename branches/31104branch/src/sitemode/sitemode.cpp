@@ -220,7 +220,8 @@ void mode_site(void)
             if(encounter[e].align==-1)enemy++;
             if(encounter[e].type==CREATURE_WORKER_SERVANT||
                encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
-               encounter[e].type==CREATURE_WORKER_SWEATSHOP)freeable++;
+               encounter[e].type==CREATURE_WORKER_SWEATSHOP||
+               (strcmp(encounter[e].name,"Prisoner")==0&&encounter[e].align==1))freeable++;
             else if((encounter[e].cantbluff!=1||sitealarm)&&!(encounter[e].align==1&&sitealarm&&enemy))talkers++;
             if(encounter[e].type==CREATURE_CORPORATE_CEO||
                encounter[e].type==CREATURE_RADIOPERSONALITY||
@@ -943,8 +944,14 @@ void mode_site(void)
                   if(!encounter[e].exists)break;
                   if((encounter[e].type==CREATURE_WORKER_SERVANT||
                      encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
-                     encounter[e].type==CREATURE_WORKER_SWEATSHOP)&&!flipstart)
+                     encounter[e].type==CREATURE_WORKER_SWEATSHOP||
+                     (strcmp(encounter[e].name,"Prisoner")==0 && encounter[e].align==1))&&!flipstart)
                   {
+                     if(strcmp(encounter[e].name,"Prisoner")==0)
+                     {
+                        sitealarm=1; /* alarm for prisoner escape */
+                        criminalize(encounter[e],LAWFLAG_ESCAPED);
+                     }
                      followers++;
                      flipstart=1;
                      freed=1;
@@ -1014,8 +1021,8 @@ void mode_site(void)
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,1);
                addstr("You free ");
-               if(followers>1)addstr("some Oppressed workers");
-               else addstr("an Oppressed worker");
+               if(followers>1)addstr("some Oppressed Liberals");
+               else addstr("an Oppressed Liberal");
                addstr(" from the Conservatives.");
 
                if(actgot<followers)
@@ -1029,8 +1036,8 @@ void mode_site(void)
                   move(16,1);
                   if(actgot==0&&followers>1)addstr("They all leave");
                   else if(followers-actgot>1)addstr("Some leave");
-                  else if(actgot==0)addstr("The worker leaves");
-                  else addstr("One worker leaves");
+                  else if(actgot==0)addstr("The Liberal leaves");
+                  else addstr("One Liberal leaves");
                   addstr(" you, feeling safer getting out alone.");
                }
 

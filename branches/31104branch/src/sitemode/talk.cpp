@@ -926,7 +926,8 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->align==-1)))
+                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->align==-1)) &&
+                     tk->type!=CREATURE_PRISONER)
                   {
                      y++;
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1183,8 +1184,9 @@ char talk(creaturest &a,int t)
 
                      return 1;
                   }
-                  else if(talkreceptive(*tk)||
-                     a.skill[SKILL_PERSUASION]+a.attval(ATTRIBUTE_CHARISMA)>LCSrandom(20))
+                  else if(tk->type!=CREATURE_PRISONER &&
+                     (talkreceptive(*tk)||
+                     a.skill[SKILL_PERSUASION]+a.attval(ATTRIBUTE_CHARISMA)>LCSrandom(20)))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(12,1);addstr(tk->name);addstr(" responds,");

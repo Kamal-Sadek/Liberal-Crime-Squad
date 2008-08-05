@@ -569,6 +569,7 @@ void vehiclest::init(int t)
 {
    id=curcarid;curcarid++;
 
+   heat=0;
    location=-1;
    type=t;
    switch(t)
@@ -578,6 +579,9 @@ void vehiclest::init(int t)
          break;
       case VEHICLE_VAN:
          myear=1969+LCSrandom(6);
+         break;
+      case VEHICLE_AGENTCAR:
+         myear=year+1-LCSrandom(11);
          break;
       case VEHICLE_STATIONWAGON:
          myear=year+1-LCSrandom(41);

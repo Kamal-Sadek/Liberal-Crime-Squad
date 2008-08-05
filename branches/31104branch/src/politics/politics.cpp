@@ -1050,6 +1050,8 @@ void elections(char clearformess,char canseethings)
             case 4:propnum=11*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
             case 5:propnum=13*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
          }
+         
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
          itoa(propnum,num,10);
          addstr("Proposition ");addstr(num);addstr(":");
          move(p*3+2,18);
@@ -1174,8 +1176,8 @@ void elections(char clearformess,char canseethings)
             addstr(num);
             addstr("% Yes");
 
-            if(yesvotes<1/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(yesvotes>1/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(yesvotes<l/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes>l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(p*3+3,70);
             itoa((l+1-yesvotes)/10,num,10);
@@ -1680,6 +1682,7 @@ void congress(char clearformess,char canseethings)
 
       if(canseethings)
       {
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(c*3+2,0);
          addstr("Joint Resolution ");
          itoa(year,num,10);
@@ -1690,7 +1693,7 @@ void congress(char clearformess,char canseethings)
 
          move(c*3+3,0);
          addstr("To ");
-         if(bill[c]==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if(billdir[c]==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_RED,COLOR_BLACK,1);
          switch(bill[c])
          {

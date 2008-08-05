@@ -30,6 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* Age macros for characters */
+#define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
 #define AGE_CHILD       7+LCSrandom(4)   /* child laborer */
 #define AGE_TEENAGER    14+LCSrandom(4)  /* HS dropout, teenager, some fast food workers */
 #define AGE_YOUNGADULT  18+LCSrandom(18) /* young lads and ladies */
@@ -183,6 +184,7 @@ void makecreature(creaturest &cr,short type)
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(6)+5;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=19;
@@ -198,6 +200,7 @@ void makecreature(creaturest &cr,short type)
          cr.align=1;
          cr.age=AGE_MIDDLEAGED;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(6)+5;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=19;
@@ -218,6 +221,7 @@ void makecreature(creaturest &cr,short type)
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(3)+1;cr.skill[SKILL_WRITING]=sk;randomskills-=sk;
          sk=LCSrandom(6)+6;cr.skill[SKILL_SCIENCE]=sk;randomskills-=sk;
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=20;
@@ -256,6 +260,7 @@ void makecreature(creaturest &cr,short type)
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(6)+6;cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
 
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=8;
@@ -344,6 +349,7 @@ void makecreature(creaturest &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_GRADUATE;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(4)+4;cr.skill[SKILL_LAW]=sk;randomskills-=sk;
 			randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          break;
@@ -360,6 +366,7 @@ void makecreature(creaturest &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_GRADUATE;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(4)+4;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
          break;
       case CREATURE_NURSE:
@@ -374,6 +381,7 @@ void makecreature(creaturest &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_GRADUATE;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(4)+1;cr.skill[SKILL_MEDICAL]=sk;randomskills-=sk;
          break;
       case CREATURE_WORKER_FACTORY_UNION:
@@ -650,6 +658,7 @@ void makecreature(creaturest &cr,short type)
          cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
 
+         randomskills*=2; // Extra skills
          sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
          sk=LCSrandom(4)+6;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
          sk=LCSrandom(4)+6;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
@@ -904,14 +913,14 @@ void makecreature(creaturest &cr,short type)
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
          cr.align=-1;
-         cr.age=AGE_MATURE; // ERM
+         cr.age=AGE_DOGYEARS;
          break;
       case CREATURE_GUARDDOG:
          strcpy(cr.name,"Guard Dog");
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
          cr.align=-1;
-         cr.age=AGE_MATURE; // WOW! OLD DOG
+         cr.age=AGE_DOGYEARS;
          break;
       case CREATURE_PRISONER:
          strcpy(cr.name,"Prisoner");
@@ -921,9 +930,60 @@ void makecreature(creaturest &cr,short type)
          cr.juice=-5;
          if(cr.align==-1)
             cr.align=LCSrandom(2);
-         cr.age=AGE_MATURE;
 
-         sk=LCSrandom(5)+1;cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
+         // Prisoners should not be "prisoners" after recruiting them -- they should
+         // be some brand of criminal
+         if(!LCSrandom(10))
+         {
+            // Thief
+            sk=LCSrandom(5)+3;cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
+            sk=LCSrandom(5)+3;cr.skill[SKILL_DISGUISE]=sk;randomskills-=sk;
+            sk=LCSrandom(5)+3;cr.skill[SKILL_STEALTH]=sk;randomskills-=sk;
+            sk=LCSrandom(5)+3;cr.skill[SKILL_SLEIGHTOFHAND]=sk;randomskills-=sk;
+            cr.type=CREATURE_THIEF;
+            cr.age=AGE_MATURE;
+         }
+         else
+         {
+            switch(LCSrandom(5))
+            {
+            case 0:
+               // Gang member
+               sk=LCSrandom(2)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+               sk=LCSrandom(2)+1;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
+               sk=LCSrandom(2)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+               cr.type=CREATURE_GANGMEMBER;
+               cr.age=AGE_YOUNGADULT;
+               break;
+            case 1:
+               // Prostitute
+		         randomskills-=cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+               sk=LCSrandom(4)+2;cr.skill[SKILL_SEDUCTION]=sk;randomskills-=sk;
+               cr.type=CREATURE_PROSTITUTE;
+               cr.age=AGE_YOUNGADULT;
+               break;
+            case 2:
+               // Crack head
+               //NOTE: DO NOT REDISTRIBUTE ATTRIBUTES
+               cr.att[ATTRIBUTE_INTELLIGENCE]=1;
+               cr.att[ATTRIBUTE_HEALTH]>>=1;cr.att[ATTRIBUTE_HEALTH]++;
+               cr.type=CREATURE_CRACKHEAD;
+               cr.age=AGE_YOUNGADULT;
+               break;
+            case 3:
+               // Teenager
+               randomskills>>=1;
+               cr.age=AGE_TEENAGER;
+               cr.type=CREATURE_TEENAGER;
+               break;
+            case 4:
+               // HS Dropout
+               randomskills>>=1;
+               cr.age=AGE_TEENAGER;
+               cr.type=CREATURE_HSDROPOUT;
+               break;
+            }
+         }
          break;
       case CREATURE_JUROR:
          strcpy(cr.name,"Angry Juror");
@@ -976,6 +1036,7 @@ void makecreature(creaturest &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=18+LCSrandom(6); // no macro
 
+         randomskills*=2; // Extra skills
 			randomskills-=cr.skill[SKILL_COMPUTERS]=LCSrandom(2);
 			randomskills-=cr.skill[SKILL_WRITING]=LCSrandom(2)+1;
          sk=LCSrandom(3);cr.skill[SKILL_SCIENCE]=sk;randomskills-=sk;
@@ -1040,6 +1101,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
+         randomskills>>=1;
          cr.age=AGE_TEENAGER;
          break;
       case CREATURE_BUM:
@@ -1228,6 +1290,7 @@ void makecreature(creaturest &cr,short type)
          }
          strcpy(cr.name,"Football Coach");
          cr.armor.type=ARMOR_CLOTHES;
+         randomskills*=2; // Extra skills
          sk=LCSrandom(3)+1;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
          sk=LCSrandom(3)+1;cr.skill[SKILL_LEADERSHIP]=sk;randomskills-=sk;
          cr.money=LCSrandom(31)+20;
@@ -1512,6 +1575,7 @@ void makecreature(creaturest &cr,short type)
             cr.clip[CLIP_22]=3;
          }
          cr.age=AGE_SENIOR;
+         randomskills*=3; // Extra skills
          break;
       case CREATURE_PAINTER:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))

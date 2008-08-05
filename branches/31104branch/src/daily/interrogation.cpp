@@ -400,7 +400,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          for(int i=0;i<temppool.size();++i)
          {
-            if(LCSrandom(10)<temppool[i]->juice&&
+            if(LCSrandom(50)<temppool[i]->juice||
                LCSrandom(9)+1>=temppool[i]->attval(ATTRIBUTE_HEART,0))
             {
                a=temppool[i];
@@ -429,7 +429,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                case 4:addstr("telling it its parents wanted to abort it.");break;
             }
             refresh();getch();
-            if(LCSrandom(a->att[ATTRIBUTE_HEART]))
+            if(LCSrandom(a->att[ATTRIBUTE_HEART])>LCSrandom(3))
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;

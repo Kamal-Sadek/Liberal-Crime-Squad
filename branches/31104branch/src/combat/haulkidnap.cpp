@@ -100,10 +100,10 @@ void kidnapattempt(void)
       {
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&!encounter[e].animalgloss)
          {
-            if(encounter[e].weapon.type!=WEAPON_NONE&&
+            if((encounter[e].weapon.type!=WEAPON_NONE&&
                encounter[e].weapon.type!=WEAPON_SYRINGE&&
                encounter[e].weapon.type!=WEAPON_GAVEL&&
-               encounter[e].blood>20)continue;
+               encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
             target.push_back(e);
          }
       }

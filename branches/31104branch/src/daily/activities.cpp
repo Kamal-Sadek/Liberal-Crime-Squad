@@ -2648,11 +2648,18 @@ char stealcar(creaturest &cr,char &clearformess)
       if(v->type==VEHICLE_SUV||
          v->type==VEHICLE_POLICECAR)addjuice(cr,2,50);
 
+      v->heat = 14;
+      if(v->type==VEHICLE_SPORTSCAR)
+         v->heat += 5;
+      if(v->type==VEHICLE_POLICECAR)
+         v->heat += 16;
+
       chaseseq.clean();
       chaseseq.location=0;
       int chaselev=!LCSrandom(13-windowdamage);
       if(chaselev>0||(v->type==VEHICLE_POLICECAR&&LCSrandom(2)))
       {
+         v->heat += 10;
          chaselev=1;
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_CARTHEFT;

@@ -1108,27 +1108,24 @@ void reloadparty(bool wasteful)
             case CLIP_22:ammomax=6;break;
             case CLIP_44:ammomax=6;break;
             case CLIP_BUCKSHOT:ammomax=6;break;
+            case CLIP_MOLOTOV:ammomax=1;break;
          }
-		if(wasteful)
-		{
-         if(activesquad->squad[p]->weapon.ammo<ammomax&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
-         {
-            activesquad->squad[p]->weapon.ammo=ammomax;
-
-            activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
-
+		   if(wasteful)
+		   {
+            if(activesquad->squad[p]->weapon.ammo<ammomax&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
+            {
+               activesquad->squad[p]->weapon.ammo=ammomax;
+               activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
+            }
          }
-        }
-        else
-        {
-         if(activesquad->squad[p]->weapon.ammo==0&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
+         else
          {
-            activesquad->squad[p]->weapon.ammo=ammomax;
-
-            activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
-
-         }        
-        }
+            if(activesquad->squad[p]->weapon.ammo==0&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
+            {
+               activesquad->squad[p]->weapon.ammo=ammomax;
+               activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
+            }        
+         }
       }
    }
 }

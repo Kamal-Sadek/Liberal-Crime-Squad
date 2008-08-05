@@ -321,6 +321,7 @@ int weaponskill(int weapon)
       case WEAPON_CROSS:
       case WEAPON_TORCH:
       case WEAPON_PITCHFORK:
+      case WEAPON_MOLOTOV:
          wsk=SKILL_IMPROVISED;
          break;
       case WEAPON_BASEBALLBAT:
@@ -617,9 +618,9 @@ void change_public_opinion(int v,int power,char affect,char cap)
    else if(v==VIEW_LIBERALCRIMESQUADPOS)
    {
       //Only 80% of the country can be swayed at once in their views
-      //of the LCS.
+      //of the LCS negatively, 5% positively
       if(effpower<-80)effpower=-80;
-      if(effpower>80)effpower=80;
+      if(effpower>5)effpower=5;
    }
    
    //Scale the magnitude of the effect based on how much

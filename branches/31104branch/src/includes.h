@@ -27,11 +27,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.13.0"
+#define PACKAGE_VERSION "3.14.0"
 #endif
 
-const unsigned long version=31300;
-const unsigned long lowestloadversion=31300;
+const unsigned long version=31400;
+const unsigned long lowestloadversion=31400;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -505,6 +505,7 @@ enum Weapons
    WEAPON_TORCH,
    WEAPON_GUITAR,
    WEAPON_SPRAYCAN,
+   WEAPON_MOLOTOV,
    WEAPONNUM
 };
 
@@ -574,6 +575,7 @@ enum MaskTypes
    MASK_GORE_AL,
    MASK_GORE_TIPPER,
    MASK_GUY_FAWKES,
+   MASK_TED_STEVENS,
    MASK_HELMS,
    MASK_JASON,
    MASK_LINCOLN,
@@ -670,6 +672,7 @@ enum ClipType
    CLIP_22,
    CLIP_44,
    CLIP_BUCKSHOT,
+   CLIP_MOLOTOV,
    CLIPNUM
 };
 
@@ -1147,6 +1150,7 @@ struct vehiclest
 {
    short type;
    short color;
+   short heat;
    long location;
    int myear;
    long id;

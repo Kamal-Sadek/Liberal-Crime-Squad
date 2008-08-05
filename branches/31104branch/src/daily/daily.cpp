@@ -41,7 +41,7 @@ void advanceday(char &clearformess,char canseethings)
    //Save the game to autosave.dat each day.
    //autosave();
    //*JDS* Save the game to save.dat each day. :)
-   save();
+   if(!disbanding)save();
 
    //Puzz:  Time for organizations to do their thang.
    gOrgManager.runOrgAI();
@@ -68,7 +68,8 @@ void advanceday(char &clearformess,char canseethings)
       
    for(p=0;p<pool.size();p++)
    {
-      if(!pool[p]->alive)continue;
+      if(!pool[p]->alive||pool[p]->animalgloss)continue;
+      // animals, tanks don't have age effects at the moment
       
       if(pool[p]->age>70)
       {

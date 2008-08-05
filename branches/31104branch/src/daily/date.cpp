@@ -513,6 +513,42 @@ char completedate(datest &d,int p,char &clearformess)
          }
          if(c=='e'&&d.date[e]->align==-1&&!pool[p]->clinic)
          {
+            
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            int bonus=0;
+            move(17,0);
+            addstr(pool[p]->name);
+            char str[30];
+            getweaponfull(str,pool[p]->weapon.type,1);
+
+            if(pool[p]->weapon.ranged())
+            {
+               addstr(" comes back from the bathroom toting the ");
+               addstr(str);
+               move(18,4);
+               addstr("and threatens to blow the Conservative's brains out!");
+               bonus=5;
+            }
+            else if(pool[p]->weapon.type!=WEAPON_NONE)
+            {
+               addstr(" grabs the Conservative from behind, holding the ");
+               addstr(str);
+               move(18,4);
+               addstr("to the corporate slave's throat!");
+               bonus=2;
+            }
+            else
+            {
+               addstr(" seizes the Conservative swine from behind and warns it");
+               move(18,4);
+               if(law[LAW_FREESPEECH]!=-2)addstr("not to fuck around!");
+               else addstr("not to [resist]!");
+            }
+
+            refresh();
+            getch();
+
+
             // *JDS* Kidnap succeeds if the conservative isn't very dangerous,
             // but might fail (1 in 3 chance) if the conservative is
             // tough stuff.
@@ -520,12 +556,33 @@ char completedate(datest &d,int p,char &clearformess)
                 d.date[e]->type!=CREATURE_COP&&
                 d.date[e]->type!=CREATURE_SWAT&&
                 d.date[e]->type!=CREATURE_GANGUNIT&&
-                
                 d.date[e]->type!=CREATURE_DEATHSQUAD&&
                 d.date[e]->type!=CREATURE_SOLDIER&&
-                d.date[e]->type!=CREATURE_MERC)||
-                LCSrandom(3))
+                d.date[e]->type!=CREATURE_MERC&&
+                LCSrandom(15))||
+                LCSrandom(1+bonus))
             {
+               
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               move(20,6);
+               addstr(d.date[e]->name);
+               if(bonus)
+               {
+                  addstr(" doesn't resist.");
+               }
+               else
+               {
+                  addstr(" struggles and yells for help, but nobody comes.");
+               }
+
+               refresh();
+               getch();
+               move(22,8);
+               addstr(pool[p]->name);
+               addstr(" kidnaps the Conservative!");
+               refresh();
+               getch();
+
                name(d.date[e]->name);
                strcpy(d.date[e]->propername,d.date[e]->name);
 
@@ -569,14 +626,16 @@ char completedate(datest &d,int p,char &clearformess)
             }
             else
             {
-               int y=17;
+               int y=20;
                if(LCSrandom(2))
                {
-                  set_color(COLOR_YELLOW,COLOR_BLACK,1);
+                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
                   move(y,0);y++;
                   addstr(d.date[e]->name);
-                  addstr(" escapes on the way back to the safehouse!");
-                  move(y,0);y++;
+                  addstr(" manages to get away on the way back to the safehouse!");
+                  refresh();
+                  getch();
+                  move(++y,8);y++;
                   addstr(pool[p]->name);
                   addstr(" has failed to kidnap the Conservative.");
 
@@ -595,11 +654,13 @@ char completedate(datest &d,int p,char &clearformess)
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   move(y,0);y++;
                   addstr(d.date[e]->name);
-                  addstr(" turns the tables on ");
+                  addstr("'s fist is the last thing ");
                   addstr(pool[p]->name);
-                  addstr("!");
-                  move(y,0);y++;
-                  addstr("The Liberal has been arrested!");
+                  addstr(" remembers seeing!");
+                  refresh();
+                  getch();
+                  move(++y,8);y++;
+                  addstr("The Liberal wakes up in the police station...");
 
                   // Find the police station
                   long ps=-1;

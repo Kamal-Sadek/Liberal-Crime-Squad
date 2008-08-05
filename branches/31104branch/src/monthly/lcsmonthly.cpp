@@ -1080,7 +1080,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
       case CREATURE_HIPPIE: // too liberal to be a proper sleeper
       case CREATURE_WORKER_FACTORY_UNION: // same
       case CREATURE_JUDGE_LIBERAL: // more again
-      case CREATURE_POLITICALACTIVIST: // ??!?!? SAME
+      case CREATURE_POLITICALACTIVIST: // ??!?!? impressive getting an LCS Member sleeper, but no effect
       case CREATURE_MUTANT:
          return;
       /* Talk up LCS block -- includes everyone else */

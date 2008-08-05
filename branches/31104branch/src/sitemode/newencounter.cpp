@@ -784,7 +784,9 @@ void prepareencounter(short type,char sec)
       }
       case SITE_GOVERNMENT_PRISON:
       {
-         creaturearray[CREATURE_PRISONER]=8;
+         if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            creaturearray[CREATURE_PRISONER]=8; // prisoners only in restricted areas
+
          if(sec)
          {
             if(law[LAW_DEATHPENALTY]==-2&&

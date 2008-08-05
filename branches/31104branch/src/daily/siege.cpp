@@ -1244,7 +1244,7 @@ void giveup(void)
             moneylost_confiscated +=confiscated;
          }
       }
-      if(location[loc]->compound_walls&&location[loc]->compound_walls!=COMPOUND_PRINTINGPRESS)
+      if(location[loc]->compound_walls)
       {
          move(10,1);
          addstr("The compound is dismantled.");
