@@ -884,8 +884,25 @@ void special_graffiti(void)
    alienationcheck(0);
    noticecheck(-1);
    levelmap[locx][locy][locz].flag|=SITEBLOCK_GRAFFITI;
+   levelmap[locx][locy][locz].flag&=~(SITEBLOCK_GRAFFITI_CCS|SITEBLOCK_GRAFFITI_OTHER);
    if(!location[cursite]->highsecurity)
    {
+      // Erase any previous semi-permanent graffiti here
+      for(int i=0;i<location[cursite]->changes.size();i++)
+      {
+         if((location[cursite]->changes[i].x == locx) &&
+            (location[cursite]->changes[i].y == locy) &&
+            (location[cursite]->changes[i].z == locz) &&
+            ((location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI) ||
+             (location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_CCS) ||
+             (location[cursite]->changes[i].flag == SITEBLOCK_GRAFFITI_OTHER)))
+         {
+            location[cursite]->changes.erase(location[cursite]->changes.begin()+i);
+            break;
+         }
+      }
+
+      // Add new semi-permanent graffiti
       struct sitechangest change(locx,locy,locz,SITEBLOCK_GRAFFITI);
       location[cursite]->changes.push_back(change);
    }

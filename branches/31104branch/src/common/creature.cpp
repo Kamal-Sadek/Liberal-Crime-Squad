@@ -2554,7 +2554,7 @@ void conservatise(creaturest &cr)
 
 
 /* turns a creature into a liberal */
-void liberalize(creaturest &cr)
+void liberalize(creaturest &cr,bool rename)
 {
    if(cr.align==ALIGN_CONSERVATIVE && cr.juice>0)cr.juice=0;
 

@@ -1017,7 +1017,7 @@ void investlocation(void)
          if(funds>=5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,1);
-         addstr("P - Buy a Printing Press ($5000)");
+         addstr("P - Buy a Printing Press ($3000)");
       }
 
       if(location[loc]->front_business==-1)
@@ -1098,11 +1098,11 @@ void investlocation(void)
 
       if(c=='p')
       {
-         if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=5000)
+         if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)&&funds>=3000)
          {
-            funds-=5000;
-            stat_spent+=5000;
-            moneylost_compound+=5000;
+            funds-=3000;
+            stat_spent+=3000;
+            moneylost_compound+=3000;
             location[loc]->compound_walls|=COMPOUND_PRINTINGPRESS;
             location[loc]->front_business=-1;
             break;

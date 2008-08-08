@@ -270,7 +270,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_TORCH:         strcpy(str,"Torch");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
-         case WEAPON_MOLOTOV:       strcpy(str,"Molotov Cocktail");break;
+         case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
       }
    }
    else
@@ -655,7 +655,7 @@ void getclip(char *str,int clip)
          case CLIP_22:strcat(str,".22 Speedloader");break;
          case CLIP_44:strcat(str,".44 Speedloader");break;
          case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
-         case CLIP_MOLOTOV:strcat(str,"Molotov Cocktail");break;
+         case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
       }
    }
    else
@@ -894,6 +894,7 @@ void getview(char *str,short view)
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
+      case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;
    }
 }
 

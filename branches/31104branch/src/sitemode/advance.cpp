@@ -127,7 +127,7 @@ void creatureadvance(void)
       //Police Station -- SWAT teams are on site already and
       //only need to suit up to respond almost instantly
       if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
-         postalarmtimer<70 && sitealarm)postalarmtimer=75;
+         postalarmtimer<75 && sitealarm)postalarmtimer=75;
       //Courthouse -- Big police response, not far to come
       if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
          postalarmtimer<65 && sitealarm)postalarmtimer=65;
@@ -159,6 +159,110 @@ void creatureadvance(void)
             refresh();
             getch();
          }
+      }
+
+      for(int z=0;z<MAPZ;z++)
+      {
+         bool stairs=0; // Will check if higher levels are accessible
+
+         for(int y=0;y<MAPY;y++)
+         {
+            for(int x=0;x<MAPX;x++)
+            {
+               if(levelmap[x][y][z].flag & SITEBLOCK_EXIT)
+                  continue;
+
+               if(levelmap[x][y][z].special!=-1)
+               {
+                  if(levelmap[x][y][z].special & SPECIAL_STAIRS_UP)
+                     stairs=1;
+               }
+
+               // Extinguish ending fires
+               if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_END)
+               {
+                  if(!LCSrandom(15))
+                  {
+                     levelmap[x][y][z].flag &= ~SITEBLOCK_FIRE_END;
+                     levelmap[x][y][z].flag |= SITEBLOCK_DEBRIS;
+                  }
+               }
+
+               // Cool/spread peak fires
+               if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_PEAK)
+               {
+                  if(!LCSrandom(10))
+                  {
+                     levelmap[x][y][z].flag &= ~SITEBLOCK_FIRE_PEAK;
+                     levelmap[x][y][z].flag |= SITEBLOCK_FIRE_END;
+                  }
+                  else if(!LCSrandom(4)) // Spread fire
+                  {
+                     int dir=LCSrandom(4); // Random initial direction
+                     int tries=0; // Will try all four directions before giving up
+
+                     while(tries<4)
+                     {
+                        int xmod=0;
+                        int ymod=0;
+                        switch(dir++)
+                        {
+                        case 0:xmod=-1;break;
+                        case 1:xmod=1;break;
+                        case 2:ymod=-1;break;
+                        case 3:ymod=1;break;
+                        }
+                        // Check if the tile is a valid place to spread fire to
+                        if(x+xmod<MAPX&&x+xmod>=0&&y+ymod<MAPY&&y+ymod>=0&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_FIRE_START)&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_DEBRIS)&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_FIRE_PEAK)&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_FIRE_END)&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_EXIT))
+                        {
+                           // Spread it
+                           levelmap[x+xmod][y+ymod][z].flag |= SITEBLOCK_FIRE_START;
+                           break;
+                        }
+                        // Else try another direction
+                        tries++;
+                     }
+                     if(tries==5) // If all four directions unacceptable, spread upward
+                     {
+                        // Check if up is valid
+                        if(z<MAPZ&&
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_START)&&
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_DEBRIS)&&
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_PEAK)&&
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_END))
+                        {
+                           // Spread it
+                           levelmap[x][y][z+1].flag |= SITEBLOCK_FIRE_START;
+                        }
+                        // Else give up
+                     }
+                  }
+               }
+
+               // Aggrivate starting fires
+               if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_START)
+               {
+                  if(!LCSrandom(5))
+                  {
+                     sitechangest change(x,y,z,SITEBLOCK_DEBRIS);
+                     location[cursite]->changes.push_back(change);
+                     levelmap[x][y][z].flag&=~SITEBLOCK_BLOCK;
+                     levelmap[x][y][z].flag&=~SITEBLOCK_DOOR;
+                     levelmap[x][y][z].flag&=~SITEBLOCK_FIRE_START;
+                     levelmap[x][y][z].flag|=SITEBLOCK_FIRE_PEAK;
+                     sitecrime+=5;
+                  }
+               }
+            }
+         }
+
+         // If no stairs to the next level were found, don't continue to that level
+         if(!stairs)break;
       }
    }
 }
@@ -225,6 +329,67 @@ void advancecreature(creaturest &cr)
             getch();
          }
          else bleed++;
+      }
+   }
+
+   if(mode==GAMEMODE_SITE && LCSrandom(3) &&
+      ((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+       (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
+   {
+      clearmessagearea();
+
+      if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
+      {
+         cr.blood-=LCSrandom(40);
+      }
+      else
+      {
+         cr.blood-=LCSrandom(20);
+      }
+
+      char str[200];
+
+      if(cr.blood<=0)
+      {
+         cr.blood=0;
+         cr.alive=0;
+
+         if(cr.squadid!=-1)
+         {
+            if(cr.align==1)stat_dead++;
+         }
+         else if(cr.align==-1&&cr.animalgloss!=ANIMALGLOSS_ANIMAL)
+         {
+            stat_kills++;
+            if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
+         }
+         if(cr.squadid==-1)
+         {
+            sitecrime+=10;
+            sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
+            criminalizeparty(LAWFLAG_MURDER);
+            //<-- people dying in fire? probably your fault for starting it
+         }
+         adddeathmessage(cr);
+
+         refresh();
+         getch();
+
+         if(cr.prisoner!=NULL)
+         {
+            freehostage(cr,1);
+         }
+      }
+      else
+      {
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         move(16,1);
+         strcpy(str,cr.name);
+         strcat(str," is burned!");
+         addstr(str);
+
+         refresh();
+         getch();
       }
    }
 

@@ -74,7 +74,7 @@ char talk(creaturest &a,int t)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(11,1);
       addstr("A - THIS IS THE LIBERAL CRIME SQUAD!");
-      if(hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,1);
       addstr("B - Threaten hostages");
       if(encounter[t].cantbluff!=2)set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -388,7 +388,7 @@ char talk(creaturest &a,int t)
                      addstr(":");
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
-                     addstr("\"Deal.\"");
+                     addstr("\"Okay.\"");
                      refresh();
                      getch();
                      for(int i=ENCMAX;i>=0;i--)
@@ -493,10 +493,11 @@ char talk(creaturest &a,int t)
          {
             int disguise=disguiseskill();
             int weapon=0;
-            for(int i=0;i>0;i--)
+            for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
-               weapon+=weaponcheck(*activesquad->squad[i],cursite);
+               int weapontemp=weaponcheck(*activesquad->squad[i],cursite);
+               if(weapontemp>0)weapon+=weapontemp;
             }
 
             char noticed=0,bluff=0;

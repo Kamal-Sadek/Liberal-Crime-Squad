@@ -111,10 +111,10 @@ void advanceday(char &clearformess,char canseethings)
          switch(pool[p]->age)
          {
          case 11:
-            pool[p]->type=CREATURE_TEENAGER;
+            pool[p]->type=CREATURE_TEENAGER; // aww, all grown up
             break;
-         case 16:
-            pool[p]->type=CREATURE_POLITICALACTIVIST;
+         case 18:
+            pool[p]->type=CREATURE_POLITICALACTIVIST; // ok seriously this time
             break;
          }
       }
@@ -737,7 +737,7 @@ void advanceday(char &clearformess,char canseethings)
                // Difficulty 12 (Will die if not treated)
                if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>12)
                {
-                  pool[p]->wound[w]=(char)WOUND_CLEANOFF;
+                  pool[p]->wound[w]=WOUND_CLEANOFF;
                }
                // Else take bleed damage (4)
                else
@@ -1659,19 +1659,24 @@ void advancelocations(void)
                amradio_closed=0;
             if(location[l]->type==SITE_MEDIA_CABLENEWS)
                cablenews_closed=0;
+
+            //Clean up graffiti, patch up walls, restore fire damage
+            location[l]->changes.clear();
+
             switch(LCSrandom(2))
             {
                case 0:
+                  //If high security is supported
                   if(securityable(location[l]->type))
                   {
                      //Throw guards everywhere
                      location[l]->highsecurity=1;
-                     //Clean up graffiti, patch up walls
-                     location[l]->changes.clear();
                   }
+                  //Else remodel the location, invalidate maps
                   else initlocation(*location[l]);
                   break;
                case 1:
+                  //Remodel, invalidate maps
                   initlocation(*location[l]);
                   break;
             }

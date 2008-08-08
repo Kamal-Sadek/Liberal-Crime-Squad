@@ -27,11 +27,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.14.0"
+#define PACKAGE_VERSION "3.15.0"
 #endif
 
-const unsigned long version=31400;
-const unsigned long lowestloadversion=31400;
+const unsigned long version=31500;
+const unsigned long lowestloadversion=31500;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -207,22 +207,38 @@ using namespace std;
 #define NDEBUG
 #endif
 
-#define BIT1 1
-#define BIT2 2
-#define BIT3 4
-#define BIT4 8
-#define BIT5 16
-#define BIT6 32
-#define BIT7 64
-#define BIT8 128
-#define BIT9 256
-#define BIT10 512
-#define BIT11 1024
-#define BIT12 2048
-#define BIT13 4096
-#define BIT14 8192
-#define BIT15 16384
-#define BIT16 32768
+#define BIT1  (1<<0 )
+#define BIT2  (1<<1 )
+#define BIT3  (1<<2 )
+#define BIT4  (1<<3 )
+#define BIT5  (1<<4 )
+#define BIT6  (1<<5 )
+#define BIT7  (1<<6 )
+#define BIT8  (1<<7 )
+#define BIT9  (1<<8 )
+#define BIT10 (1<<9 )
+#define BIT11 (1<<10)
+#define BIT12 (1<<11)
+#define BIT13 (1<<12)
+#define BIT14 (1<<13)
+#define BIT15 (1<<14)
+#define BIT16 (1<<15)
+#define BIT17 (1<<16)
+#define BIT18 (1<<17)
+#define BIT19 (1<<18)
+#define BIT20 (1<<19)
+#define BIT21 (1<<20)
+#define BIT22 (1<<21)
+#define BIT23 (1<<22)
+#define BIT24 (1<<23)
+#define BIT25 (1<<24)
+#define BIT26 (1<<25)
+#define BIT27 (1<<26)
+#define BIT28 (1<<27)
+#define BIT29 (1<<28)
+#define BIT30 (1<<29)
+#define BIT31 (1<<30)
+#define BIT32 (1<<31)
 
 
 
@@ -744,6 +760,7 @@ enum Lawflags
    LAWFLAG_SPEECH,
    LAWFLAG_VANDALISM,
    LAWFLAG_ASSAULT,
+   LAWFLAG_ARMEDASSAULT,
    LAWFLAG_CARTHEFT,
    LAWFLAG_INFORMATION,
    LAWFLAG_COMMERCE,
@@ -756,6 +773,8 @@ enum Lawflags
    LAWFLAG_RACKETEERING,
    LAWFLAG_LOITERING,
    LAWFLAG_GUNCARRY,
+   LAWFLAG_GUNUSE,
+   LAWFLAG_ARSON,
    LAWFLAGNUM
 };
 
@@ -951,6 +970,11 @@ struct creaturest
 #define SITEBLOCK_OUTDOOR BIT13
 #define SITEBLOCK_DEBRIS BIT14
 #define SITEBLOCK_GRAFFITI BIT15
+#define SITEBLOCK_GRAFFITI_CCS BIT16
+#define SITEBLOCK_GRAFFITI_OTHER BIT17
+#define SITEBLOCK_FIRE_START BIT18
+#define SITEBLOCK_FIRE_PEAK BIT19
+#define SITEBLOCK_FIRE_END BIT20
 
 enum SpecialBlocks
 {
@@ -988,7 +1012,7 @@ enum SpecialBlocks
 struct siteblockst
 {
    short special;
-   unsigned short flag;
+   unsigned int flag;
    unsigned char siegeflag;
 };
 
@@ -997,9 +1021,9 @@ struct sitechangest
    char x;
    char y;
    char z;
-   unsigned short flag;
+   unsigned int flag;
    sitechangest() {}
-   sitechangest(char x_, char y_, char z_, unsigned short flag_) :
+   sitechangest(char x_, char y_, char z_, unsigned int flag_) :
       x(x_), y(y_), z(z_), flag(flag_) {}
 };
 
@@ -1242,15 +1266,16 @@ enum Views
    VIEW_POLLUTION,
    VIEW_CORPORATECULTURE,
    VIEW_CEOSALARY,
-   //*JDS* I'm using VIEWNUM-4 in a random generator that rolls a
+   //*JDS* I'm using VIEWNUM-5 in a random generator that rolls a
    //random issue, not including the media ones, and this will
    //break if these stop being the last 4 issues; do a search
-   //for VIEWNUM-4 to change it if it needs to be changed.
+   //for VIEWNUM-5 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
-   //THESE TWO MUST BE LAST FOR VIEWNUM-2 TO WORK IN PLACES
+   //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
    VIEW_LIBERALCRIMESQUADPOS,
+   VIEW_CONSERVATIVECRIMESQUAD,
    VIEWNUM
 };
 
@@ -1337,6 +1362,7 @@ enum Crimes
    CRIME_CORP_FILES,
    CRIME_FREE_RABBITS,
    CRIME_FREE_BEASTS,
+   CRIME_ARSON,
    CRIMENUM
 };
 
@@ -1673,6 +1699,9 @@ char squadhasitem(squadst &sq,int type,int subtype);
 This is going to decide the rarity of spawning the creature for the organizations
 THIS IS TEMPORARY
 IF THIS EXISTS IN JULY OF 2008 I HAVE FAILED THE LCS
+- You have failed me for the last time!
+- I shall plunge you into the abyss of attempting to SWERVE TO AVOID FRUIT STANDS!
+- [JonathanSFox, 8 Aug 2008]
 */
 int getSpawnChance(enum CreatureType type);
 /* rolls up a creature's stats and equipment */
@@ -1690,7 +1719,7 @@ void verifyworklocation(creaturest &cr);
 /* turns a creature into a conservative */
 void conservatise(creaturest &cr);
 /* turns a creature into a liberal */
-void liberalize(creaturest &cr);
+void liberalize(creaturest &cr,bool rename=true);
 
 /*******************************************************************************
 *

@@ -146,11 +146,11 @@ void displayads(newsstoryst& ns, bool liberalguardian, short* storyx_s, short* s
    }
    else
    {
-      if(ns.guardianpage>=1)adnumber++;
-      if(ns.guardianpage>=2)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=2)adnumber++;
       if(ns.guardianpage>=3)adnumber+=LCSrandom(2)+1;
       if(ns.guardianpage>=4)adnumber+=LCSrandom(2)+1;
       if(ns.guardianpage>=5)adnumber+=LCSrandom(2)+1;
+      if(ns.guardianpage>=6)adnumber+=LCSrandom(2)+1;
    }
    char addplace[2][3]={0,0,0,0,0,0};
    if(adnumber>6)adnumber=6;

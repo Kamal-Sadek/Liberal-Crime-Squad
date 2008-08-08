@@ -120,13 +120,22 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    //Manage graffiti
-   for(int l=0;l<location.size();l++)
+   for(int l=0;l<location.size();l++) // Check each location
    {
-      for(int c=location[l]->changes.size()-1;c>=0;c--)
+      for(int c=location[l]->changes.size()-1;c>=0;c--) // Each change to the map
       {
-         if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI)
+         if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI||
+            location[l]->changes[c].flag==SITEBLOCK_GRAFFITI_CCS||
+            location[l]->changes[c].flag==SITEBLOCK_GRAFFITI_OTHER) // Find changes that refer specifically to graffiti
          {
             int power;
+            int align;
+
+            if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI)
+               align=1;
+            if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI_CCS)
+               align=-1;
+
             //Purge graffiti from more secure sites (or from non-secure
             //sites about once every five years), but these will
             //influence people more for the current month
@@ -135,34 +144,43 @@ void passmonth(char &clearformess,char canseethings)
                location[l]->changes.erase(location[l]->changes.begin()+c);
                power=5;
             }
-            else if(location[l]->renting!=0) //Your permanent safehouses not counted
+            else
             {
-               power=1;
-               if(!LCSrandom(60))
-                  location[l]->changes.erase(location[l]->changes.begin()+c);
+               if(location[l]->renting==-2) // CCS Safehouse
+               {
+                  location[l]->changes[c].flag=SITEBLOCK_GRAFFITI_CCS; // Convert to CCS tags
+               }
+               else if(location[l]->renting==0) // LCS Permanent Safehouse
+               {
+                  location[l]->changes[c].flag=SITEBLOCK_GRAFFITI; // Convert to LCS tags
+               }
+               else
+               {
+                  power=1;
+                  if(!LCSrandom(10))
+                     location[l]->changes[c].flag=SITEBLOCK_GRAFFITI_OTHER; // Convert to other tags
+                  if(!LCSrandom(10)&&endgamestate<ENDGAME_CCS_DEFEATED&&endgamestate>0)
+                     location[l]->changes[c].flag=SITEBLOCK_GRAFFITI_CCS; // Convert to CCS tags
+                  if(!LCSrandom(30))
+                     location[l]->changes.erase(location[l]->changes.begin()+c); // Clean up
+               }
             }
-
-            background_liberal_influence[VIEW_LIBERALCRIMESQUAD]+=power;
+            if(align==1)
+            {
+               background_liberal_influence[VIEW_LIBERALCRIMESQUAD]+=power;
+               background_liberal_influence[VIEW_CONSERVATIVECRIMESQUAD]+=power;
+            }
+            else if(align==-1)
+            {
+               background_liberal_influence[VIEW_LIBERALCRIMESQUAD]-=power;
+               background_liberal_influence[VIEW_CONSERVATIVECRIMESQUAD]-=power;
+            }
          }
       }
    }
 
-   if(policestation_closed)
-   {
-      //People generally want to give police more power if they
-      //get closed down
-      change_public_opinion(VIEW_POLICEBEHAVIOR,-10);
-   }
-   if(amradio_closed)
-   {
-      //AM Radio less effective if brought offline
-      change_public_opinion(VIEW_AMRADIO,10);
-   }
-   if(cablenews_closed)
-   {
-      //Cable News less influential if brought offline
-      change_public_opinion(VIEW_CABLENEWS,10);
-   }
+   int mediabalance=0;
+   int issuebalance[VIEWNUM-5];
    
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
@@ -173,36 +191,87 @@ void passmonth(char &clearformess,char canseethings)
 
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
+      if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
       if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS)
       {
-         // Natural movement
-         if(LCSrandom(200)>conspower||LCSrandom(3))
+         issuebalance[v] = libpower[v] - conspower;
+         mediabalance += issuebalance[v];
+
+         // Heavy randomization -- balance of power just biases the roll
+         int roll = issuebalance[v] + LCSrandom(400)-200;
+
+         // If +/-50 to either side, that side wins the tug-of-war
+         if(roll < -50)
+         {
+            change_public_opinion(v,-1,0);
+         }
+         else if(roll > 50)
+         {
+            change_public_opinion(v,1,0);
+         }
+         else // Else random movement
          {
             change_public_opinion(v,LCSrandom(2)*2-1,0);
          }
-         // Or the CONSERVATIVE MEDIA forces public opinion down
-         else
-         {
-            change_public_opinion(v,-1,0);
+      }
 
-            // Crushing conservative media silences liberal influence!
-            libpower[v]=0;
-         }
-      }
-      // Sleepers and editorials act as the Liberal counterpart to the conservative media
-      if(LCSrandom(200)<libpower[v])
-      {
-         change_public_opinion(v,1,0);
-      }
       // AM Radio and Cable News popularity slowly shift to reflect public
       // opinion over time -- if left unchecked, their subtle influence
       // on society will become a self-perpetuating Conservative nightmare!
-      if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)
+      else /*if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)*/
       {
          if(publicmood(-1)<attitude[v])change_public_opinion(v,-1);
          else change_public_opinion(v,1);
       }
    }
+
+   /*******************************************************
+   *                                                      *
+   *     INTELLIGENCE REPORT - MOVE TO SEPARATE FILE      *
+   *        EYES ONLY - LCS PROPERTY - TOP SECRET         *
+   *******************************************************/
+   /*{
+      int y;
+      char str[20];
+      erase();
+      move(0,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("LCS MONTHLY INTELLIGENCE REPORT");
+
+      move(2,2);
+      addstr("POLITICAL INFLUENCE");
+      y=3;
+      for(int i=0;i<VIEWNUM-5;i++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,1);
+         getview(str,i);
+         addstr(str);
+         move(y,20);
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr("---------");
+
+         // Calculate location for pip (with a bit of randomness for imprecision!)
+         int pip=(issuebalance[i]+225)/50+LCSrandom(3)-1; 
+
+         // Select color and limit to ends of spectrum
+         if(pip<=0)     { pip=0; set_color(COLOR_RED,    COLOR_BLACK,1); }
+         else if(pip<4) {        set_color(COLOR_MAGENTA,COLOR_BLACK,1); }
+         else if(pip==4){        set_color(COLOR_YELLOW, COLOR_BLACK,1); }
+         else if(pip<8) {        set_color(COLOR_BLUE,   COLOR_BLACK,1); }
+         else           { pip=8; set_color(COLOR_GREEN,  COLOR_BLACK,1); }
+
+         move(y++,20+pip);
+         addch('O');
+      }
+      refresh();
+      getch();
+   }*/
+   /*******************************************************
+   *                                                      *
+   *              END INTELLIGENCE REPORT                 *
+   *                                                      *
+   *******************************************************/
 
    //ELECTIONS
    if(month==11){elections(clearformess,canseethings);clearformess=1;}

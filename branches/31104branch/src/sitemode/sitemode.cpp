@@ -340,6 +340,7 @@ void mode_site(void)
          move(14,18);
          addstr("T - Talk");
 
+         bool graffiti=0;
          if(levelmap[locx][locy][locz].special!=-1&&
             levelmap[locx][locy][locz].special!=SPECIAL_CLUB_BOUNCER_SECONDVISIT)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2)))
@@ -359,6 +360,7 @@ void mode_site(void)
                   else if(activesquad->squad[i]->weapon.type==WEAPON_SPRAYCAN)
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,0);
+                     graffiti=1;
                      break;
                   }
                }
@@ -368,7 +370,8 @@ void mode_site(void)
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,45);
-         addstr("U - Use");
+         if(graffiti)addstr("U - Graffiti");
+         else addstr("U - Use");
 
          if(enemy&&sitealarm)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -2143,28 +2146,54 @@ void resolvesite(void)
 	}
 
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&sitecrime>100&&location[cursite]->renting<=-1)
+   if(sitealarm==1&&sitecrime>100)
    {
-      location[cursite]->closed=30;
+      location[cursite]->closed=sitecrime/10;
+
+      // CCS Safehouse killed?
       if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
          location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
          location[cursite]->type==SITE_OUTDOOR_BUNKER)
       {
-         //location[cursite]->hidden=1;
-         location[cursite]->renting=0;
-         location[cursite]->closed=0;
+         //location[cursite]->hidden=1;  // Either re-hide the location...
+         location[cursite]->renting=0; // ...OR convert it to an LCS safehouse
+         location[cursite]->closed=0;  // one of the above two should be commented out
          ccs_kills++;
          if(ccs_kills<3)
             endgamestate--;
          else
             endgamestate=ENDGAME_CCS_DEFEATED;
       }
+   }
+   else if(sitealarm==1&&sitecrime>40&&location[cursite]->renting<=-1)
+   {
+      if(securityable(location[cursite]->type))
+         location[cursite]->highsecurity=1;
+      else
+         location[cursite]->closed=7;
+   }
+
+   if(location[cursite]->closed)
+   {
       if(location[cursite]->type==SITE_MEDIA_AMRADIO)
+      {
+         //AM Radio less effective if brought offline
+         change_public_opinion(VIEW_AMRADIO,10);
          amradio_closed=1;
+      }
       if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION)
+      {
+         //People generally want to give police more power if they
+         //get closed down
+         change_public_opinion(VIEW_POLICEBEHAVIOR,-10);
          policestation_closed=1;
+      }
       if(location[cursite]->type==SITE_MEDIA_CABLENEWS)
+      {
+         //Cable News less influential if brought offline
+         change_public_opinion(VIEW_CABLENEWS,10);
          cablenews_closed=1;
+      }
    }
 }
 

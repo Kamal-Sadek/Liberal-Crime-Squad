@@ -612,12 +612,14 @@ void siegeturn(char clearformess)
             if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
             else if(liberalcount[l])
             {
+               int moved=0;
                for(int p=0;p<pool.size();p++)
                {
                   if(!pool[p]->alive)continue; // Dead people don't move
-                  if(pool[p]->align!=1)continue; // Non-liberals don't move
+                  //if(pool[p]->align!=1)continue; // Non-liberals DO move
                   if(pool[p]->location==l)
                   {
+                     moved++;
                      pool[p]->base=hs;
                      pool[p]->location=hs;
                   }
@@ -650,7 +652,7 @@ void siegeturn(char clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(8,1);
-            addstr("The cops have raided the ");
+            addstr("Conservatives have raided the ");
             addlocationname(location[l]);
             addstr(", an unoccupied safehouse.");
 
@@ -1112,7 +1114,7 @@ void siegeturn(char clearformess)
                int viewhit;
                for(int v=0;v<5;v++)
                {
-                  viewhit=LCSrandom(VIEWNUM-2);
+                  viewhit=LCSrandom(VIEWNUM-3);
                   change_public_opinion(viewhit,(segmentpower-25)/2);
                }
             }
@@ -1822,6 +1824,14 @@ void statebrokenlaws(int loc)
       addstr(".");
    }
    //ASSAULT
+   else if(breakercount[LAWFLAG_ARMEDASSAULT])
+   {
+      move(4,1);
+      addstr("You are wanted for armed assault");
+      if(typenum>1)addstr(" and other crimes");
+      addstr(".");
+   }
+   //ASSAULT
    else if(breakercount[LAWFLAG_ASSAULT])
    {
       move(4,1);
@@ -1866,6 +1876,14 @@ void statebrokenlaws(int loc)
    {
       move(4,1);
       addstr("You are wanted for hiring an illegal alien");
+      if(typenum>1)addstr(" and other crimes");
+      addstr(".");
+   }
+   //GUN CARRY
+   else if(breakercount[LAWFLAG_GUNUSE])
+   {
+      move(4,1);
+      addstr("You are wanted for use of an illegal weapon");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

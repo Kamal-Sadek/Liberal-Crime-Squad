@@ -460,7 +460,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                }
 
-               if(liberalguardian)
+               if(liberalguardian&&!ccs)
                {
                   if(crime[CRIME_ATTACKED_MISTAKE])typesum--;
                   if(crime[CRIME_KILLEDSOMEBODY])typesum--;
@@ -484,6 +484,21 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   {
                      strcat(story,"  Further details are sketchy, but police sources suggest that the CCS ");
                         strcat(story,"engaged in ");
+                  }
+                  if(crime[CRIME_ARSON])
+                  {
+                     if(!liberalguardian||ccs)
+                     {
+                        strcat(story,"arson");
+                     }
+                     else
+                     {
+                        strcat(story,"set fire to Conservative property");
+                     }
+
+                     if(typesum>=3)strcat(story,", ");
+                     else if(typesum==2)strcat(story," and ");
+                     typesum--;
                   }
                   if(!liberalguardian||ccs)
                   {
@@ -1234,7 +1249,7 @@ void majornewspaper(char &clearformess,char canseethings)
          ns->type=NEWSSTORY_MAJOREVENT;
          do
          {
-            ns->view=LCSrandom(VIEWNUM-2);
+            ns->view=LCSrandom(VIEWNUM-3);
             ns->positive=LCSrandom(2);
 
             //NO ABORTION
@@ -1275,7 +1290,7 @@ void majornewspaper(char &clearformess,char canseethings)
    for(n=newsstory.size()-1;n>=0;n--)
    {
       if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&
-         newsstory[n]->crime.size()<10) // Low content ignored
+         newsstory[n]->crime.size()==0) // Low content ignored
       {
          delete newsstory[n];
          newsstory.erase(newsstory.begin() + n);
@@ -1558,7 +1573,6 @@ void majornewspaper(char &clearformess,char canseethings)
             int header = -1;
             if(writers&&newsstory[n]->type!=NEWSSTORY_MAJOREVENT)
             {
-               --writers;
                liberalguardian=1;
             }
             switch(newsstory[n]->type)
@@ -1705,19 +1719,31 @@ void majornewspaper(char &clearformess,char canseethings)
 
          power/=10;
          power++;
+
+         char colored=0;
          if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))
          {
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power);
-            if(newsstory[n]->positive)change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power);
-            else change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-power);
-         }
+            if(newsstory[n]->positive)
+            {
+               colored=1;
+            }
+            else power=-power;
 
-         char colored=0;
-         if(newsstory[n]->positive&&
-            !(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
-            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))colored=1;
-         else power=-power;
+            change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,power);
+         }
+         if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
+            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+         {
+            if(newsstory[n]->positive)
+            {
+               colored=-1;
+            }
+            else power=-power;
+            
+            change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,power);
+         }
 
          switch(location[newsstory[n]->loc]->type)
          {

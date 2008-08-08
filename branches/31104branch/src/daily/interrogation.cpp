@@ -1085,20 +1085,24 @@ void tendhostage(creaturest *cr,char &clearformess)
          else if(aroll*rapport_temp+spiritcrush>troll*2)
          {
             //Improve rapport with interrogator
-            rapport[a->id]+=0.4f;
+            rapport[a->id]+=0.6f;
 
-            if(LCSrandom(2))
+            //Reduce wisdom!
+            if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
             {
-               //Reduce wisdom!
-               if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))cr->att[ATTRIBUTE_WISDOM]--;
-               else if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))cr->att[ATTRIBUTE_HEART]++;
+               int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
+               if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+               cr->att[ATTRIBUTE_WISDOM]-=change;
             }
-            else
+            //Increase heart
+            if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))
             {
-               //Increase heart!
-               if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))cr->att[ATTRIBUTE_HEART]++;
-               else if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))cr->att[ATTRIBUTE_WISDOM]--;
+               int change = 
+                  LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
+               if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+               cr->att[ATTRIBUTE_HEART]+=change;
             }
+
             //Join LCS??
             //1) They were liberalized
             if(cr->attval(ATTRIBUTE_HEART)>cr->attval(ATTRIBUTE_WISDOM)+4)turned=1;
@@ -1309,7 +1313,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       cr->flag|=CREATUREFLAG_BRAINWASHED;
       
       y+=2;
-      liberalize(*cr);
+      liberalize(*cr,false);
       cr->hireid=a->id;
       stat_recruits++;
 

@@ -245,6 +245,7 @@ void printparty(void)
             else
                switch(weaponcheck(*party[p],sitetype))
                {
+               case -1:
                case 0:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
                case 1:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
                case 2:set_color(COLOR_RED,COLOR_BLACK,1);break;
@@ -596,6 +597,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
    else
       switch(weaponcheck(*cr,sitetype))
       {
+      case -1:
       case 0:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
       case 1:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
       case 2:set_color(COLOR_RED,COLOR_BLACK,1);break;

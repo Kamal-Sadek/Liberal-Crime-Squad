@@ -869,7 +869,7 @@ void pawnshop(int loc)
          if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,40);
-         addstr("B - Buy Bottle, Rag & Gasoline ($40)");
+         addstr("M - Buy Bottle, Rag & Gasoline ($40)");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(16,40);
@@ -1315,7 +1315,7 @@ void pawnshop(int loc)
                newi->weapon.type=WEAPON_GUITAR;
             activesquad->loot.push_back(newi);
          }
-         if(c=='b'&&funds>=40)
+         if(c=='m'&&funds>=40)
          {
             funds-=40;
             stat_spent+=40;

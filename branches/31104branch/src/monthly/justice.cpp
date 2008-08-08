@@ -94,9 +94,9 @@ void trial(creaturest &g)
          {
             sjudge.push_back(p);
          }
-         if(pool[p]->type==CREATURE_LAWYER&&!sleeperlawyer)
+         if(pool[p]->type==CREATURE_LAWYER/*&&!sleeperlawyer*/)
          {
-            if(sleeperlawyer->skill[SKILL_LAW]+sleeperlawyer->skill[SKILL_PERSUASION]>=maxsleeperskill)
+            if(pool[p]->skill[SKILL_LAW]+pool[p]->skill[SKILL_PERSUASION]>=maxsleeperskill)
             {
                sleeperlawyer=pool[p];
                maxsleeperskill=pool[p]->skill[SKILL_LAW]+sleeperlawyer->skill[SKILL_PERSUASION];
@@ -144,18 +144,6 @@ void trial(creaturest &g)
          }
          addstr("treason");
          breaker[LAWFLAG_TREASON]=0;
-      }
-      else if(breaker[LAWFLAG_MURDER])
-      {
-         if(g.lawflag[LAWFLAG_MURDER]>1)
-         {
-            char str[10];
-            itoa(g.lawflag[LAWFLAG_MURDER],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
-         addstr("murder");
-         breaker[LAWFLAG_MURDER]=0;
       }
       else if(breaker[LAWFLAG_TERRORISM])
       {
@@ -266,6 +254,42 @@ void trial(creaturest &g)
          addstr("racketeering");
          breaker[LAWFLAG_RACKETEERING]=0;
       }
+      else if(breaker[LAWFLAG_ARMEDASSAULT])
+      {
+         if(g.lawflag[LAWFLAG_ARMEDASSAULT]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_ARMEDASSAULT],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("felony assault");
+         breaker[LAWFLAG_ARMEDASSAULT]=0;
+      }
+      else if(breaker[LAWFLAG_MURDER])
+      {
+         if(g.lawflag[LAWFLAG_MURDER]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_MURDER],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("murder");
+         breaker[LAWFLAG_MURDER]=0;
+      }
+      else if(breaker[LAWFLAG_ARSON])
+      {
+         if(g.lawflag[LAWFLAG_ARSON]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_ARSON],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("arson");
+         breaker[LAWFLAG_ARSON]=0;
+      }
       else if(breaker[LAWFLAG_ASSAULT])
       {
          if(g.lawflag[LAWFLAG_ASSAULT]>1)
@@ -275,7 +299,7 @@ void trial(creaturest &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("assault");
+         addstr("misdemeanor assault");
          breaker[LAWFLAG_ASSAULT]=0;
       }
       else if(breaker[LAWFLAG_GUNCARRY])
@@ -289,6 +313,19 @@ void trial(creaturest &g)
          }
          addstr("carrying an illegal weapon");
          breaker[LAWFLAG_GUNCARRY]=0;
+         x=2;
+      }
+      else if(breaker[LAWFLAG_GUNUSE])
+      {
+         if(g.lawflag[LAWFLAG_GUNUSE]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_GUNUSE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("firing an illegal weapon");
+         breaker[LAWFLAG_GUNUSE]=0;
          x=2;
       }
       else if(breaker[LAWFLAG_CARTHEFT])
@@ -481,7 +518,7 @@ void trial(creaturest &g)
    addstr(".");
    if(sleeperlawyer)
    {
-      if(funds<100)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(funds>=100)set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(y,1);y++;
       addstr("E - Pay a nominal $100 to use sleeper ");
       addstr(sleeperlawyer->name);
@@ -952,7 +989,9 @@ void penalize(creaturest &g,char lenient)
       {
          g.sentence+=(36+LCSrandom(18))*g.lawflag[LAWFLAG_KIDNAPPING];
          g.sentence+=(1+LCSrandom(4))*g.lawflag[LAWFLAG_THEFT];
-         g.sentence+=(4+LCSrandom(12))*(!!g.lawflag[LAWFLAG_GUNCARRY]);
+         g.sentence+=(4+LCSrandom(12))*(!!g.lawflag[LAWFLAG_GUNUSE])+ // Extra for first incident only
+                     (2+LCSrandom(4)*g.lawflag[LAWFLAG_GUNUSE]);      // Generally
+         g.sentence+=(1+LCSrandom(4))*(!!g.lawflag[LAWFLAG_GUNCARRY]);
          g.sentence+=(6+LCSrandom(7))*g.lawflag[LAWFLAG_CARTHEFT];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_INFORMATION];
          g.sentence+=(1+LCSrandom(13))*g.lawflag[LAWFLAG_COMMERCE];
@@ -977,6 +1016,8 @@ void penalize(creaturest &g,char lenient)
          
          g.sentence+=(4+LCSrandom(3))*g.lawflag[LAWFLAG_SPEECH];
          g.sentence+=1*g.lawflag[LAWFLAG_VANDALISM];
+         g.sentence+=(12+LCSrandom(12))*g.lawflag[LAWFLAG_ARSON];
+         g.sentence+=(12+LCSrandom(1))*g.lawflag[LAWFLAG_ARMEDASSAULT];
          g.sentence+=(3+LCSrandom(1))*g.lawflag[LAWFLAG_ASSAULT];
       }
       if(law[LAW_FLAGBURNING]==-2)
@@ -994,7 +1035,7 @@ void penalize(creaturest &g,char lenient)
       else
       {
          if(!(g.sentence<0))g.sentence-=-1*g.lawflag[LAWFLAG_MURDER];
-         else if(g.lawflag[LAWFLAG_BURNFLAG])g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
+         else g.sentence=-1*g.lawflag[LAWFLAG_MURDER];
       }
       if(g.sentence<0)g.sentence-=1*g.lawflag[LAWFLAG_ESCAPED];
       else if(g.lawflag[LAWFLAG_ESCAPED]) g.sentence=-1*g.lawflag[LAWFLAG_ESCAPED];

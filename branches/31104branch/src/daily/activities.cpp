@@ -708,6 +708,7 @@ void survey(creaturest *cr)
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
+            case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
@@ -1362,7 +1363,7 @@ void funds_and_trouble(char &clearformess)
          }
          else if(LCSrandom(10)<=web_skill)
          {
-            int issue=LCSrandom(VIEWNUM-4); 
+            int issue=LCSrandom(VIEWNUM-5); 
             int crime;
 
             // Maybe do a switch on issue here to specify which website it was, but I don't feel like
@@ -1435,7 +1436,55 @@ void funds_and_trouble(char &clearformess)
             makedelimiter(8,0);
          }
 
-         if(graffiti[s]->activity.arg)
+         if(!LCSrandom((graffiti[s]->skill[SKILL_STREETSENSE]*3+
+                        graffiti[s]->attval(ATTRIBUTE_INTELLIGENCE))*3))
+         {
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            if(LCSrandom(graffiti[s]->skill[SKILL_STREETSENSE]*3+
+                         graffiti[s]->attval(ATTRIBUTE_AGILITY)*3))
+            {
+               addstr(graffiti[s]->name);
+               addstr(" was spotted by the police");
+               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
+               graffiti[s]->skill_ip[SKILL_STREETSENSE]+=20;
+
+               if(graffiti[s]->activity.arg!=-1)
+               {
+                  addstr(" and forced to abandon the mural.");
+                  graffiti[s]->activity.arg=-1;
+               }
+               else addstr(" while spraying an LCS tag.");
+
+               refresh();
+               getch();
+            }
+            else
+            {
+               addstr(graffiti[s]->name);
+               addstr(" has been arrested while spraying graffiti.");
+
+               refresh();
+               getch();
+
+               caught=1;
+
+               removesquadinfo(*graffiti[s]);
+               graffiti[s]->carid=-1;
+               graffiti[s]->location=ps;
+               graffiti[s]->weapon.type=WEAPON_NONE;
+               graffiti[s]->weapon.ammo=0;
+               graffiti[s]->activity.type=ACTIVITY_NONE;
+               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
+            }
+         }
+         else if(graffiti[s]->activity.arg!=-1)
          {
             power=0;
             if(!LCSrandom(3))
@@ -1454,7 +1503,7 @@ void funds_and_trouble(char &clearformess)
                addstr(issuestr);
                addstr(".");
                
-               graffiti[s]->activity.arg=0;
+               graffiti[s]->activity.arg=-1;
                addjuice(*graffiti[s],power,power*20);
                change_public_opinion(issue,power);
                graffiti[s]->skill_ip[SKILL_ART]+=max(10-graffiti[s]->skill[SKILL_ART]/2,1);
@@ -1489,57 +1538,6 @@ void funds_and_trouble(char &clearformess)
             graffiti[s]->skill_ip[SKILL_ART]+=max(10-graffiti[s]->skill[SKILL_ART]/2,1);
             refresh();
             getch();
-         }
-         
-
-
-         if(!LCSrandom((graffiti[s]->skill[SKILL_STREETSENSE]*3+
-                        graffiti[s]->attval(ATTRIBUTE_INTELLIGENCE))*3))
-         {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            if(LCSrandom(graffiti[s]->skill[SKILL_STREETSENSE]*3+
-                         graffiti[s]->attval(ATTRIBUTE_AGILITY)*3))
-            {
-               addstr(graffiti[s]->name);
-               addstr(" was spotted by the police");
-               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
-               graffiti[s]->skill_ip[SKILL_STREETSENSE]+=20;
-
-               if(graffiti[s]->activity.arg)
-               {
-                  addstr(" and forced to abandon the mural.");
-                  graffiti[s]->activity.arg=0;
-               }
-               else addstr(" while spraying an LCS tag.");
-
-               refresh();
-               getch();
-            }
-            else
-            {
-               addstr(graffiti[s]->name);
-               addstr(" has been arrested while spraying graffiti.");
-
-               refresh();
-               getch();
-
-               caught=1;
-
-               removesquadinfo(*graffiti[s]);
-               graffiti[s]->carid=-1;
-               graffiti[s]->location=ps;
-               graffiti[s]->weapon.type=WEAPON_NONE;
-               graffiti[s]->weapon.ammo=0;
-               graffiti[s]->activity.type=ACTIVITY_NONE;
-               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
-            }
          }
 
          graffiti[s]->skill_ip[SKILL_ART]+=max(4-graffiti[s]->skill[SKILL_ART],0);
@@ -2138,9 +2136,9 @@ void funds_and_trouble(char &clearformess)
             makedelimiter(8,0);
          }
 
-         if(bury.size()>0)addstr("Some Liberals have");
+         if(bury.size()>1)addstr("Some Liberals have");
          else {addstr(bury[0]->name);addstr(" has");}
-         addstr(" been while disposing of bodies.");
+         addstr(" been arrested while disposing of bodies.");
 
          refresh();
          getch();

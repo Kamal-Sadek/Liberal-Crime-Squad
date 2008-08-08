@@ -208,7 +208,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
 
 static void getissueeventstring(char* str)
 {
-   switch(LCSrandom(VIEWNUM-2))
+   switch(LCSrandom(VIEWNUM-3))
    {
    case VIEW_ABORTION:strcat(str,"a documentary on the women's rights struggle");break;
    case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
@@ -342,7 +342,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(r.recruit->name);
             addstr(" accepts, and is eager to get started.");
 
-            liberalize(*r.recruit);
+            liberalize(*r.recruit,false);
 
             r.recruit->location=pool[p]->location;
             r.recruit->base=pool[p]->base;

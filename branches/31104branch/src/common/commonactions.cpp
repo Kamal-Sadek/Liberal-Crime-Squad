@@ -488,7 +488,18 @@ void cleangonesquads(void)
       hasmembers=0;
       for(int p=0;p<6;p++)
       {
-         if(squad[sq]->squad[p]!=NULL)hasmembers=1;
+         if(squad[sq]->squad[p]!=NULL)
+         {
+            // Let's do a bit of housekeeping here
+            // And see if we can't gracefully eliminate that
+            // pesky dead liberal in my squad bug
+            if(squad[sq]->squad[p]->alive==false)
+            {
+               removesquadinfo(*squad[sq]->squad[p]);
+               p=-1; // restart this for loop
+            }
+            else hasmembers=1;
+         }
       }
       if(!hasmembers)
       {
@@ -557,6 +568,13 @@ void basesquad(squadst *st,long loc)
 /* common - shifts public opinion on an issue */
 void change_public_opinion(int v,int power,char affect,char cap)
 {
+   // First note this in the liberal influence -- mostly for the
+   // sake of the nice visual intelligence report entry
+   if(v<VIEWNUM-5)
+   {
+      background_liberal_influence[v]+=power*10;
+   }
+
    if(v==VIEW_LIBERALCRIMESQUAD)affect=0;
    if(v==VIEW_LIBERALCRIMESQUADPOS)affect=0;
 
@@ -570,9 +588,9 @@ void change_public_opinion(int v,int power,char affect,char cap)
 
    // Affect is whether the LCS is publically known to be behind
    // the circumstances creating the public opinion change
-   if(affect)
+   if(affect==1)
    {
-      // Aff is the % of people who know about the LCS
+      // Aff is the % of people who know/care about the LCS
       int aff=attitude[VIEW_LIBERALCRIMESQUAD];
       // Rawpower is the amount of the action proportional
       // to the people who, not having heard of the LCS,
@@ -607,19 +625,24 @@ void change_public_opinion(int v,int power,char affect,char cap)
       // of it).
       effpower=rawpower+affectedpower;
    }
+   else if(affect==-1)
+   {
+      // Simplifed algorithm for affect by CCS respect
+      effpower=power*(100-attitude[VIEW_CONSERVATIVECRIMESQUAD])/100;
+   }
 
    if(v==VIEW_LIBERALCRIMESQUAD)
    {
       //Only half the country will ever hear about the LCS at one time,
-      //and nobody will ever forget about it
-      if(effpower<0)effpower=0;
+      //and people will only grudgingly lose fear of it
+      if(effpower<-5)effpower=5;
       if(effpower>50)effpower=50;
    }
    else if(v==VIEW_LIBERALCRIMESQUADPOS)
    {
-      //Only 80% of the country can be swayed at once in their views
+      //Only 50% of the country can be swayed at once in their views
       //of the LCS negatively, 5% positively
-      if(effpower<-80)effpower=-80;
+      if(effpower<-50)effpower=-50;
       if(effpower>5)effpower=5;
    }
    
@@ -671,6 +694,7 @@ int lawflagheat(int lawflag)
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
    case LAWFLAG_ASSAULT:return 0;
+   case LAWFLAG_ARMEDASSAULT:return 1;
    case LAWFLAG_CARTHEFT:return 0;
    case LAWFLAG_INFORMATION:return 2;
    case LAWFLAG_COMMERCE:return 2;
@@ -683,6 +707,8 @@ int lawflagheat(int lawflag)
    case LAWFLAG_RACKETEERING:return 5;
    case LAWFLAG_LOITERING:return 0;
    case LAWFLAG_GUNCARRY:return 0;
+   case LAWFLAG_GUNUSE:return 1;
+   case LAWFLAG_ARSON:return 3;
    default:return 0;
    }
 }
@@ -759,13 +785,13 @@ int randomissue(bool core_only)
    int interest_array[VIEWNUM];
    int i;
    int total_interest=0;
-   for(i=0;i<VIEWNUM-(core_only*4);i++)
+   for(i=0;i<VIEWNUM-(core_only*5);i++)
    {
       interest_array[i]=public_interest[i]+total_interest+25;
       total_interest+=public_interest[i]+25;
    }
    int roll = LCSrandom(total_interest);
-   for(i=0;i<VIEWNUM-(core_only*4);i++)
+   for(i=0;i<VIEWNUM-(core_only*5);i++)
    {
       if(roll<interest_array[i])
          return i;

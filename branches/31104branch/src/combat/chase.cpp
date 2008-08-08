@@ -725,9 +725,8 @@ void evasivedrive(void)
                   encounter[e2]=encounter[e2+1];
                }
                encounter[ENCMAX-1].exists=0;
-               //e--; this causes an infinite loop...
-               //     I'm not sure whether I introduced a bug
-               //     by removing it or not
+               encounter[ENCMAX-1].carid=-1;
+               e--;
             }
          }
          for(int v=0;v<chaseseq.enemycar.size();v++)
@@ -1257,7 +1256,7 @@ void dodgedrive(void)
 
       if(driver!=-1)
       {
-         if(LCSrandom(11)>activesquad->squad[driver]->skill[SKILL_DRIVING])
+         if(LCSrandom(11)>driveskill(*activesquad->squad[driver],vehicle[id_getcar(activesquad->squad[driver]->carid)]))
          {
             crashfriendlycar(v);
             sitestory->crime.push_back(CRIME_CARCHASE);

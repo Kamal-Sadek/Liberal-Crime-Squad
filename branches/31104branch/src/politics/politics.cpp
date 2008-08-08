@@ -1142,7 +1142,16 @@ void elections(char clearformess,char canseethings)
       mood=publicmood(prop[p]);
       for(int l=0;l<1000;l++)
       {
-         if(LCSrandom(100)<mood)yesvotes++;
+         if(LCSrandom(100)<mood)
+         {
+            if(propdir[p]==1)
+               yesvotes++;
+         }
+         else
+         {
+            if(propdir[p]==-1)
+               yesvotes++;
+         }
          /*vote=0;
          if(LCSrandom(100)<mood)vote++;
          if(LCSrandom(100)<mood)vote++;
@@ -2109,7 +2118,7 @@ int publicmood(int l)
             sum+=attitude[v];
          }
 
-         sum/=(VIEWNUM-2);
+         sum/=(VIEWNUM-3);
 
          return sum;
       }

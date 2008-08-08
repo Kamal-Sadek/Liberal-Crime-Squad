@@ -115,7 +115,14 @@ char alienationcheck(char mistake)
    vector<int> noticer;
    for(int e=0;e<ENCMAX;e++)
    {
-      if(encounter[e].type==CREATURE_PRISONER)continue;
+      // Prisoners should never be alienated by your crimes, as
+      // they're happy to have you attacking their place of holding
+      //if(encounter[e].type==CREATURE_PRISONER)continue;
+
+      // ...but Prisoners are now spawned with a variety of creature
+      // types, so we'll go by name instead
+      if(!strcmp(encounter[e].name,"Prisoner"))continue;
+
       if(encounter[e].exists&&encounter[e].alive&&
          (encounter[e].align==0||(encounter[e].align==1&&mistake)))
       {
@@ -196,7 +203,12 @@ void disguisecheck(void)
       for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
-         if(weaponar[i])criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+         // If carrying an illegal weapon and never been charged with that
+         // crime, apply it here. If they are wanted for carrying an illegal
+         // weapon already, it shouldn't stack on extras here or you'll accrue
+         // dozens of extra charges for only one site incident
+         if(weaponar[i]&&!activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY])
+            criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
       }
    }
 
@@ -597,8 +609,13 @@ char weaponcheck(creaturest &cr,short type)
 
    if(suspicious)
    {
-      if(incharacter)return 0;
-      else if(concealed)return 0;
+      if(incharacter||concealed)
+      {
+         if(illegal)
+            return -1; // OK, but busted if you shoot it
+         else
+            return 0;  // OK
+      }
       else if(illegal)return 2;
       else return 1;
    }

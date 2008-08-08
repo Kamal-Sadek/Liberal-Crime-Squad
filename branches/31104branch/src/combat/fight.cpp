@@ -79,6 +79,7 @@ void youattack(void)
       }
 
       char actual;
+      short beforeblood=encounter[target].blood;
       attack(*activesquad->squad[p],encounter[target],mistake,actual);
 
       if(actual)
@@ -88,29 +89,18 @@ void youattack(void)
          if(mistake)
          {
             sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-            sitecrime+=10;
+            sitecrime+=7;
          }
-         else if(!wasalarm)
+         sitestory->crime.push_back(CRIME_ATTACKED);
+         // Charge with assault if (a) first strike, or (b) hit enemy
+         if(!wasalarm||beforeblood>encounter[target].blood)
          {
-            sitestory->crime.push_back(CRIME_ATTACKED);
-            sitecrime+=3;
-            // Don't charge with assault for nonviolent attacks, instead
-            // charge with disturbing the peace
-            if(!(activesquad->squad[p]->type==CREATURE_SCIENTIST_EMINENT||
-                 activesquad->squad[p]->type==CREATURE_JUDGE_LIBERAL||
-                 activesquad->squad[p]->type==CREATURE_JUDGE_CONSERVATIVE||
-                 activesquad->squad[p]->type==CREATURE_CORPORATE_CEO||
-                 activesquad->squad[p]->type==CREATURE_RADIOPERSONALITY||
-                 activesquad->squad[p]->type==CREATURE_NEWSANCHOR||
-                 activesquad->squad[p]->weapon.type==WEAPON_GUITAR))
-            {
+            if(activesquad->squad[p]->weapon.type==WEAPON_NONE)
                criminalize(*activesquad->squad[p],LAWFLAG_ASSAULT);
-            }
             else
-            {
-               criminalize(*activesquad->squad[p],LAWFLAG_DISTURBANCE);
-            }
+               criminalize(*activesquad->squad[p],LAWFLAG_ARMEDASSAULT);
          }
+         sitecrime+=3;
       }
 
       if(!encounter[target].alive)delenc(target,1);
@@ -171,15 +161,14 @@ void youattack(void)
                   if(mistake)
                   {
                      sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-                     criminalize(*pool[p],LAWFLAG_ASSAULT);
                      sitecrime+=10;
                   }
-                  else if(!wasalarm)
-                  {
-                     sitestory->crime.push_back(CRIME_ATTACKED);
-                     criminalize(*pool[p],LAWFLAG_ASSAULT);
-                     sitecrime+=3;
-                  }
+
+                  
+                  if(activesquad->squad[p]->weapon.type==WEAPON_NONE)
+                     criminalize(*activesquad->squad[p],LAWFLAG_ASSAULT);
+                  else
+                     criminalize(*activesquad->squad[p],LAWFLAG_ARMEDASSAULT);
                }
 
                if(!encounter[target].alive)delenc(target,1);
@@ -197,7 +186,7 @@ void enemyattack(void)
    {
       if(activesquad->squad[i]==NULL)break;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
-      if(thisweapon==-1||thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+      if(thisweapon==-1||thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNUSE);
    }
 
 #ifdef NOENEMYATTACK
@@ -218,62 +207,87 @@ void enemyattack(void)
          conservatise(encounter[e]);
       if(encounter[e].align==-1)
          encounter[e].cantbluff=2;
-      if(encounter[e].align!=-1&&!(encounter[e].flag & CREATUREFLAG_CONVERTED))
+
+      if(mode!=GAMEMODE_CHASECAR)
       {
-         if(!incapacitated(encounter[e],0,printed))
+         // Encountered creature will flee if:
+         // (a) Non-Conservative, and not recently converted via music or some other mechanism
+         // (b) Conservative, no juice, unarmed, non-tank/animal, and fails a morale check based in part on injury level
+         // (c) Conservative, and lost more than 55% blood
+         // (d) There's a fire, and they fail a random check
+         // Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
+         char fire=0;
+         if(mode==GAMEMODE_SITE)
          {
-            if(printed)
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
+               levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)
             {
+               fire=1;
+            }
+            else if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
+            {
+               fire=2;
+            }
+         }
+         if(((encounter[e].align!=-1||(encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE
+            &&encounter[e].blood<70+LCSrandom(61)))
+            &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45||(fire*LCSrandom(5)>=3))
+         {
+            if(!incapacitated(encounter[e],0,printed)&&encounter[e].animalgloss==ANIMALGLOSS_NONE)
+            {
+               if(printed)
+               {
+                  printparty();
+                  if(mode==GAMEMODE_CHASECAR||
+                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+                  else printencounter();
+
+                  refresh();
+                  getch();
+               }
+
+               clearmessagearea();
+
+               move(16,1);
+               addstr(encounter[e].name);
+               if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
+                  (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
+                  (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
+                  (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
+                  (encounter[e].blood<45))
+               {
+                  switch(LCSrandom(3))
+                  {
+                     case 0:addstr(" crawls off moaning...");break;
+                     case 1:addstr(" crawls off wimpering...");break;
+                     case 2:addstr(" crawls off trailing blood...");break;
+                  }
+               }
+               else
+               {
+                  switch(LCSrandom(5))
+                  {
+                     case 0:addstr(" makes a break for it!");break;
+                     case 1:addstr(" escapes crying!");break;
+                     case 2:addstr(" runs away!");break;
+                     case 3:addstr(" gets out of there!");break;
+                     case 4:addstr(" runs hollering!");break;
+                  }
+               }
+
+               delenc(e,0);
+               e--;
+
                printparty();
                if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
                else printencounter();
 
                refresh();
                getch();
             }
-
-            clearmessagearea();
-
-            move(16,1);
-            addstr(encounter[e].name);
-            if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-               (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
-               (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-               (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
-               (encounter[e].blood<20))
-            {
-               switch(LCSrandom(3))
-               {
-                  case 0:addstr(" crawls off moaning...");break;
-                  case 1:addstr(" crawls off wimpering...");break;
-                  case 2:addstr(" crawls off trailing blood...");break;
-               }
-            }
-            else
-            {
-               switch(LCSrandom(5))
-               {
-                  case 0:addstr(" makes a break for it!");break;
-                  case 1:addstr(" escapes crying!");break;
-                  case 2:addstr(" runs away!");break;
-                  case 3:addstr(" gets out of there!");break;
-                  case 4:addstr(" runs hollering!");break;
-               }
-            }
-
-            delenc(e,0);
-            e--;
-
-            printparty();
-            if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
-            else printencounter();
-
-            refresh();
-            getch();
+            continue;
          }
-         continue;
       }
 
       vector<int> goodtarg;
@@ -944,7 +958,18 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   sitechangest change(locx,locy,locz,SITEBLOCK_DEBRIS);
                   location[cursite]->changes.push_back(change);
-                  levelmap[locx][locy][locz].flag|=SITEBLOCK_DEBRIS; // change to fire?
+
+                  // Fire!
+                  if(!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS))
+                  {
+                     levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
+                     sitecrime+=3;
+                     criminalizeparty(LAWFLAG_ARSON);
+                     sitestory->crime.push_back(CRIME_ARSON);
+                  }
                }
             }
             break;
@@ -1410,8 +1435,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          {
             do
             {
-               if(damtype & WOUND_BURNED)
-                  damamount-=10+LCSrandom(20); // burning more quickly reduce to near-death
+               if(a.weapon.type==WEAPON_MOLOTOV && !LCSrandom(3))
+                  break;
                else
                   damamount>>=1;
             }while(target->blood-damamount<=0);
@@ -1568,7 +1593,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                         if(target->special[SPECIALWOUND_TEETH]>0)
                         {
                            int teethminus=LCSrandom(TOOTHNUM)+1;
-                           if(teethminus>target->special[SPECIALWOUND_TEETH])teethminus=target->special[SPECIALWOUND_TEETH];
+                           if(teethminus>target->special[SPECIALWOUND_TEETH])
+                              teethminus=target->special[SPECIALWOUND_TEETH];
                            char num[20];
                            itoa(teethminus,num,10);
 

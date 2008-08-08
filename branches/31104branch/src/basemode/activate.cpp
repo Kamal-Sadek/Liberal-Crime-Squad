@@ -532,7 +532,7 @@ void activate(creaturest *cr)
             case '1':cr->activity.type=ACTIVITY_COMMUNITYSERVICE;break;
             case '2':cr->activity.type=ACTIVITY_TROUBLE;break;
             case '3':cr->activity.type=ACTIVITY_GRAFFITI;
-                     cr->activity.arg=0;break;
+                     cr->activity.arg=-1;break;
             case '4':cr->activity.type=ACTIVITY_POLLS;break;
             case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
             case '6':cr->activity.type=ACTIVITY_HACKING;break;
@@ -564,6 +564,7 @@ void activate(creaturest *cr)
                   else if(cr->skill[SKILL_ART]>1)
                   {
                      cr->activity.type=ACTIVITY_GRAFFITI;
+                     cr->activity.arg=-1;
                      choice='3';
                   }
                   else
@@ -894,7 +895,10 @@ void activatebulk(void)
                      if(temppool[p]->skill[SKILL_COMPUTERS]>1)
                         temppool[p]->activity.type=ACTIVITY_DOS_ATTACKS;
                      else if(temppool[p]->skill[SKILL_ART]>1)
+                     {
                         temppool[p]->activity.type=ACTIVITY_GRAFFITI;
+                        temppool[p]->activity.arg=-1;
+                     }
                      else temppool[p]->activity.type=ACTIVITY_TROUBLE;
                   }
                   break;
@@ -1434,7 +1438,7 @@ char select_view(creaturest *cr,long &v)
       addstr("----TOPIC-----------------------------------INTEREST---------------------------");
 
       int y=3,x=0;
-      for(int p=page*18;p<VIEWNUM-2&&p<page*18+18;p++)
+      for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,x);
@@ -1486,12 +1490,12 @@ char select_view(creaturest *cr,long &v)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*16<VIEWNUM-2)page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*16<VIEWNUM-3)page++;
 
       if(c>='a'&&c<='a'+18)
       {
          int p=page*18+(int)(c-'a');
-         if(p<VIEWNUM-2)
+         if(p<VIEWNUM-3)
          {
             v=p;
             return 1;

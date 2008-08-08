@@ -122,7 +122,9 @@ void initsite(locationst &loc)
       loc.type==SITE_RESIDENTIAL_APARTMENT||
       loc.type==SITE_RESIDENTIAL_TENEMENT)
    {
+      // Add landlord notice sign at entrance
       levelmap[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
+
       short height;
       int floors=LCSrandom(6)+1;
       int swap;
@@ -130,33 +132,48 @@ void initsite(locationst &loc)
       {
          for(int y=3;y<MAPY-3;y++)
          {
+            // Clear center hallway
             levelmap[MAPX>>1][y][z].flag=0;
+
+            // Every four tiles
             if(y%4==0)
             {
+               // Pick a door location for the left
                height=y+LCSrandom(3)-1;
+               // Create the left door
                levelmap[(MAPX>>1)-1][height][z].flag&=~SITEBLOCK_BLOCK;
                levelmap[(MAPX>>1)-1][height][z].flag|=SITEBLOCK_DOOR;
+               // Construct apartment on the left
                generateroom((MAPX>>1)-8,y-1,7,3,z);
 
+               // Pick a door location for the right
                height=y+LCSrandom(3)-1;
+               // Create the right door
                levelmap[(MAPX>>1)+1][height][z].flag&=~SITEBLOCK_BLOCK;
                levelmap[(MAPX>>1)+1][height][z].flag|=SITEBLOCK_DOOR;
+               // Construct apartment on the right
                generateroom((MAPX>>1)+2,y-1,7,3,z);
+
+               // Special landlord location, first apartment set on the first floor
                if(y==4&&z==0)
                {
+                  // Unsecure right apartment
                   levelmap[(MAPX>>1)+2][height][z].flag=0;
+                  // Add landlord
                   levelmap[(MAPX>>1)+2][height][z].special=SPECIAL_APARTMENT_LANDLORD;
                }
             }
          }
-         swap=(z%2)*2-1;
+         swap=(z%2)*2-1; // Set orientation of stairs (which direction is on which side)
          if(z>0)
          {
+            // If not bottom floor, add down stairs
             levelmap[(MAPX>>1)+1*swap][MAPY-4][z].flag=0;
             levelmap[(MAPX>>1)+1*swap][MAPY-4][z].special=SPECIAL_STAIRS_DOWN;
          }
          if(z<floors-1)
          {
+            // If not top floor, add up stairs
             levelmap[(MAPX>>1)-1*swap][MAPY-4][z].flag=0;
             levelmap[(MAPX>>1)-1*swap][MAPY-4][z].special=SPECIAL_STAIRS_UP;
          }
@@ -173,7 +190,7 @@ void initsite(locationst &loc)
                for(int y=0;y<15;y++)
                {
                   //Park exits
-                  if(x==(MAPX>>1)-7||x==(MAPX>>1)+7||y==0||y==14)
+                  if(x<=(MAPX>>1)-7||x>=(MAPX>>1)+7||y==0||y>=14)
                   {
                      levelmap[x][y][0].flag=SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR;
                   }
@@ -350,7 +367,7 @@ void initsite(locationst &loc)
             for(int z=0;z<MAPZ;z++)
             {
                //Un-restrict blocks if they have neighboring
-               //restricted blocks
+               //unrestricted blocks
                if(!(levelmap[x][y][z].flag & SITEBLOCK_DOOR)&&
                   !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
                   (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
@@ -503,6 +520,7 @@ void initsite(locationst &loc)
       count--;
    }while(( levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
             levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+            !(levelmap[freex][freey][freez].flag & SITEBLOCK_RESTRICTED) ||
             levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
             levelmap[freex][freey][freez].special!=-1   )&&count>0);
 
@@ -562,6 +580,16 @@ void initsite(locationst &loc)
    /*******************************************************
    * Add semi-permanent changes inflicted by LCS and others
    *******************************************************/
+   
+   // Some sites need a minimum amount of graffiti
+   int graffitiquota=0; 
+   if(loc.type==SITE_OUTDOOR_PUBLICPARK)
+      graffitiquota=5;
+   if(loc.type==SITE_BUSINESS_CRACKHOUSE)
+      graffitiquota=30;
+   if(loc.type==SITE_RESIDENTIAL_TENEMENT)
+      graffitiquota=10;
+
    for(int i=0;i<loc.changes.size();i++)
    {
       int x=loc.changes[i].x;
@@ -569,14 +597,49 @@ void initsite(locationst &loc)
       int z=loc.changes[i].z;
       switch(loc.changes[i].flag)
       {
-      default:
+      case SITEBLOCK_GRAFFITI_OTHER: // Other tags
+      case SITEBLOCK_GRAFFITI_CCS: // CCS tags
       case SITEBLOCK_GRAFFITI: // LCS tags
+         graffitiquota--;
          levelmap[x][y][z].flag|=loc.changes[i].flag;
          break;
-      case SITEBLOCK_DEBRIS: // Smashed walls
+      case SITEBLOCK_DEBRIS: // Smashed walls, ash
          levelmap[x][y][z].flag&=~SITEBLOCK_BLOCK;
+         levelmap[x][y][z].flag&=~SITEBLOCK_DOOR;
          levelmap[x][y][z].flag|=loc.changes[i].flag;
          break;
+      default:
+         levelmap[x][y][z].flag|=loc.changes[i].flag;
+         break;
+      }
+   }
+
+   // If there isn't enough graffiti for this site type, add some
+   while(graffitiquota>0)
+   {
+      int x=LCSrandom(MAPX-2)+1;
+      int y=LCSrandom(MAPY-2)+1;
+      int z=0;
+      if(loc.type==SITE_RESIDENTIAL_TENEMENT)
+         z=LCSrandom(6);
+
+      if(!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
+         !(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED)&&
+         !(levelmap[x][y][z].flag & SITEBLOCK_EXIT)&&
+         !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI)&&
+         !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER)&&
+         !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS))
+      {
+         if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK ||
+            levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK ||
+            levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK ||
+            levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK)
+         {
+            sitechangest change(x,y,z,SITEBLOCK_GRAFFITI_OTHER);
+            loc.changes.push_back(change);
+            levelmap[x][y][z].flag |= SITEBLOCK_GRAFFITI_OTHER;
+            graffitiquota--;
+         }
       }
    }
 }
