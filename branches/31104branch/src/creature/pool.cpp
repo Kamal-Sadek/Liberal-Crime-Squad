@@ -141,7 +141,13 @@ void dispersalcheck(char &clearformess)
                   {
                      nukeme[p]=DISPERSAL_NOCONTACT;//Vanish forever
                   }
-                  else nukeme[p]=DISPERSAL_HIDING;//Go into hiding
+                  else 
+                  {
+                     if(pool[p]->flag & CREATUREFLAG_SLEEPER)
+                        nukeme[p]=DISPERSAL_SAFE;//Sleepers stay low
+                     else
+                        nukeme[p]=DISPERSAL_HIDING;//Others go into hiding
+                  }
                }
                else nukeme[p]=DISPERSAL_SAFE; // Else you're in prison; you're guaranteed contactable
                

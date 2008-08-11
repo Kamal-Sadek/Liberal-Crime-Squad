@@ -165,10 +165,10 @@ void youattack(void)
                   }
 
                   
-                  if(activesquad->squad[p]->weapon.type==WEAPON_NONE)
-                     criminalize(*activesquad->squad[p],LAWFLAG_ASSAULT);
+                  if(pool[p]->weapon.type==WEAPON_NONE)
+                     criminalize(*pool[p],LAWFLAG_ASSAULT);
                   else
-                     criminalize(*activesquad->squad[p],LAWFLAG_ARMEDASSAULT);
+                     criminalize(*pool[p],LAWFLAG_ARMEDASSAULT);
                }
 
                if(!encounter[target].alive)delenc(target,1);
@@ -2036,8 +2036,10 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    else if(hitlocation==BODYPART_HEAD)prot/=2;
    else if(hitlocation!=BODYPART_BODY)prot=0;
 
+   if(prot<0)prot=0; // Possible from second-rate clothes
+
    int mod2=prot+LCSrandom(prot+1)-armorpenetration;
-   if(mod2<0)mod+=mod2;
+   if(mod2>0)mod-=mod2;
 
    if(mod<=-4)damamount>>=4;
    else if(mod<=-3)damamount>>=3;

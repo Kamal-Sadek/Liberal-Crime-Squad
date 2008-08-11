@@ -2163,14 +2163,40 @@ void resolvesite(void)
             endgamestate--;
          else
             endgamestate=ENDGAME_CCS_DEFEATED;
+
+         // Move any CCS Sleepers at this location back to the homeless shelter
+
+         for(int p=0;p<pool.size();p++)
+         {
+            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
+               pool[p]->location == cursite)
+            {
+               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+               erase();
+               move(8,1);
+               addstr("Sleeper ");
+               addstr(pool[p]->name);
+               addstr(" has been outed by your brazen attack!");
+
+               move(10,1);
+               addstr("The former CCS Member is now at your command as a normal squad member.");
+               refresh();
+               getch();
+            }
+         }
       }
    }
    else if(sitealarm==1&&sitecrime>40&&location[cursite]->renting<=-1)
    {
-      if(securityable(location[cursite]->type))
-         location[cursite]->highsecurity=1;
-      else
-         location[cursite]->closed=7;
+      if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
+         !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&
+         !(location[cursite]->type==SITE_OUTDOOR_BUNKER))
+      {
+         if(securityable(location[cursite]->type))
+            location[cursite]->highsecurity=1;
+         else
+            location[cursite]->closed=7;
+      }
    }
 
    if(location[cursite]->closed)

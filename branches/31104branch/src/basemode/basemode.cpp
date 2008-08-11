@@ -568,7 +568,18 @@ void mode_base(void)
          if(sieged)
          {
             if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            else
+            {
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+               for(int p=0;p<pool.size();p++)
+               {
+                  if(pool[p]->location==selectedsiege)
+                  {
+                     set_color(COLOR_WHITE,COLOR_BLACK,0);
+                     break;
+                  }
+               }
+            }
             move(10,1);
             addstr("F - Escape/Engage");
 
@@ -667,11 +678,11 @@ void mode_base(void)
          cleangonesquads();
       }
 
-      if(c=='f'&&partysize>0)
+      if(c=='f')
       {
          //NOTE THAT THERE ARE TWO MORE OF THESE
             //IDENTICAL LINES BELOW
-         if(!sieged)
+         if(!sieged&&partysize>0)
          {
             stopevil();
          }

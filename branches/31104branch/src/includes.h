@@ -27,10 +27,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.15.0"
+#define PACKAGE_VERSION "3.15.1"
 #endif
 
-const unsigned long version=31500;
+const unsigned long version=31501;
 const unsigned long lowestloadversion=31500;
 const unsigned long lowestloadscoreversion=31203;
 
@@ -905,7 +905,7 @@ struct creaturest
    unsigned long money;
    int juice;
 
-   char wound[BODYPARTNUM];
+   unsigned char wound[BODYPARTNUM];
    short blood;
    char special[SPECIALWOUNDNUM];
 

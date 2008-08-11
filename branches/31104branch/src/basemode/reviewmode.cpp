@@ -905,7 +905,7 @@ void assemblesquad(squadst *cursquad)
          }
       }
 
-      if(!hasmembers)
+      if(!hasmembers && mode==GAMEMODE_BASE)
       {
          if(squadloc[sq]!=-1)
          {

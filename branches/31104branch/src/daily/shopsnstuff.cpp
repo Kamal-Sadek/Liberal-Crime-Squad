@@ -416,6 +416,12 @@ void armsdealer(int loc)
                itemst *newi=new itemst;
                   newi->type=ITEM_WEAPON;
                   newi->weapon=swap;
+                  if(swap.type==WEAPON_MOLOTOV &&
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
+                  {
+                     newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
+                  }
                activesquad->loot.push_back(newi);
             }
 
@@ -1183,6 +1189,13 @@ void pawnshop(int loc)
                itemst *newi=new itemst;
                   newi->type=ITEM_WEAPON;
                   newi->weapon=swap;
+                  
+                  if(swap.type==WEAPON_MOLOTOV &&
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
+                  {
+                     newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
+                  }
                activesquad->loot.push_back(newi);
             }
 
@@ -1510,6 +1523,13 @@ void deptstore(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_WEAPON;
                newi->weapon=swap;
+               
+               if(swap.type==WEAPON_MOLOTOV &&
+                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
+               {
+                  newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
+                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
+               }
             activesquad->loot.push_back(newi);
          }
 
@@ -1897,6 +1917,13 @@ void halloweenstore(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_WEAPON;
                newi->weapon=swap;
+               
+               if(swap.type==WEAPON_MOLOTOV &&
+                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
+               {
+                  newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
+                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
+               }
             activesquad->loot.push_back(newi);
          }
 

@@ -643,7 +643,7 @@ void siegeturn(char clearformess)
             }
          }
       }
-      else if(location[l]->siege.siege && !location[l]->siege.underattack)
+      else if(location[l]->siege.siege)
       {
          //resolve sieges with no people
          if(liberalcount[l]==0)
@@ -716,164 +716,69 @@ void siegeturn(char clearformess)
             }
          }
 
-         //EAT
-         int eat=numbereating(l);
-         if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
-         else location[l]->compound_stores=0;
-
-         //ATTACK!
-         char attack=0;
-         if(!LCSrandom(150))attack=1;
-
-         if(attack)
+         if(!location[l]->siege.underattack)
          {
-            if(clearformess)
+            //EAT
+            int eat=numbereating(l);
+            if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
+            else location[l]->compound_stores=0;
+
+            //ATTACK!
+            char attack=0;
+            if(!LCSrandom(150))attack=1;
+
+            if(attack)
             {
-               erase();
+               if(clearformess)
+               {
+                  erase();
+               }
+               else
+               {
+                  makedelimiter(8,0);
+               }
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr("The cops are coming!");
+
+               refresh();
+               getch();
+
+               location[l]->siege.underattack=1;
             }
             else
             {
-               makedelimiter(8,0);
-            }
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr("The cops are coming!");
+               char no_bad=1;
 
-            refresh();
-            getch();
-
-            location[l]->siege.underattack=1;
-         }
-         else
-         {
-            char no_bad=1;
-
-            //CUT LIGHTS
-            if(!location[l]->siege.lights_off &&
-               !(location[l]->compound_walls & COMPOUND_GENERATOR) && !LCSrandom(5))
-            {
-               no_bad=0;
-
-               if(clearformess)
+               //CUT LIGHTS
+               if(!location[l]->siege.lights_off &&
+                  !(location[l]->compound_walls & COMPOUND_GENERATOR) && !LCSrandom(5))
                {
-                  erase();
-               }
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr("The police have cut the lights.");
+                  no_bad=0;
 
-               refresh();
-               getch();
-
-               location[l]->siege.lights_off=1;
-            }
-
-            //SNIPER
-            if(location[l]->siege.escalationstate>=3 && !LCSrandom(20))
-            {
-               no_bad=0;
-
-               vector<int> pol;
-               for(int p=0;p<pool.size();p++)
-               {
-                  if(pool[p]->alive&&pool[p]->location==l)
+                  if(clearformess)
                   {
-                     pol.push_back(p);
-                  }
-               }
-
-               if(pol.size()>0)
-               {
-                  if(clearformess)erase();
-                  else makedelimiter(8,0);
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(8,1);
-                  int targ=pol[LCSrandom(pol.size())];
-                  if(LCSrandom(50)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
-                  {
-                     addstr("A National Guard sniper takes out ");
-                     addstr(pool[targ]->name);
-                     addstr("!");
-
-                     if(pool[targ]->align==1)
-                     {
-                        stat_dead++;
-                        liberalcount[l]--;
-                     }
-
-                     removesquadinfo(*pool[targ]);
-
-                     pool[targ]->alive=0;
-                     //delete pool[targ];
-                     //pool.erase(pool.begin() + targ);
+                     erase();
                   }
                   else
                   {
-                     addstr("A National Guard sniper nearly hits ");
-                     addstr(pool[targ]->name);
-                     addstr("!");
+                     makedelimiter(8,0);
                   }
-                  refresh();
-                  getch();
-               }
-            }
-         
-            if(location[l]->siege.escalationstate>=3 && !LCSrandom(5))
-            {
-               no_bad=0;
-
-               //AIR STRIKE!
-               char hit=!LCSrandom(3);
-               if(!(location[l]->compound_walls & COMPOUND_GENERATOR))hit=0;
-
-               if(clearformess)
-               {
-                  erase();
-               }
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr("You hear planes streak over head!");
-               refresh();
-               getch();
-               if(clearformess)
-               {
-                  erase();
-               }
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               move(8,1);
-               addstr("Explosions rock the compound!");
-               refresh();
-               getch();
-
-               if(hit)
-               {
-                  if(clearformess)erase();
-                  else makedelimiter(8,0);
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr("The generator has been destroyed!");
+                  addstr("The police have cut the lights.");
+
                   refresh();
                   getch();
-                  if(clearformess)erase();
-                  else makedelimiter(8,0);
-                  move(8,1);
-                  addstr("The lights fade and all is dark. ");
-                  refresh();
-                  getch();
+
+                  location[l]->siege.lights_off=1;
                }
 
-               if(!LCSrandom(2))
+               //SNIPER
+               if(location[l]->siege.escalationstate>=3 && !LCSrandom(20))
                {
+                  no_bad=0;
+
                   vector<int> pol;
                   for(int p=0;p<pool.size();p++)
                   {
@@ -890,10 +795,11 @@ void siegeturn(char clearformess)
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      int targ=pol[LCSrandom(pol.size())];
-                     if(LCSrandom(100)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
+                     if(LCSrandom(50)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
                      {
+                        addstr("A National Guard sniper takes out ");
                         addstr(pool[targ]->name);
-                        addstr(" was killed in the bombing!");
+                        addstr("!");
 
                         if(pool[targ]->align==1)
                         {
@@ -909,213 +815,310 @@ void siegeturn(char clearformess)
                      }
                      else
                      {
+                        addstr("A National Guard sniper nearly hits ");
                         addstr(pool[targ]->name);
-                        addstr(" narrowly avoided death!");
+                        addstr("!");
                      }
                      refresh();
                      getch();
                   }
                }
-               else
+            
+               if(location[l]->siege.escalationstate>=3 && !LCSrandom(5))
                {
-                  if(clearformess)erase();
-                  else makedelimiter(8,0);
+                  no_bad=0;
+
+                  //AIR STRIKE!
+                  char hit=!LCSrandom(3);
+                  if(!(location[l]->compound_walls & COMPOUND_GENERATOR))hit=0;
+
+                  if(clearformess)
+                  {
+                     erase();
+                  }
+                  else
+                  {
+                     makedelimiter(8,0);
+                  }
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr("Fortunately, no one is hurt.");
+                  addstr("You hear planes streak over head!");
                   refresh();
                   getch();
-               }
-
-               if(hit)
-               {
-                  location[l]->compound_walls&=~COMPOUND_GENERATOR;
-                  location[l]->siege.lights_off=1;
-               }
-            }
-            if((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
-               location[l]->siege.escalationstate>=3 && !LCSrandom(5))
-            {
-               no_bad=0;
-
-               //ENGINEERS
-               if(clearformess)
-               {
-                  erase();
-               }
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr("Engineers have removed your tank traps.");
-               refresh();
-               getch();
-
-               location[l]->compound_walls&=~COMPOUND_TANKTRAPS;
-            }
-
-            //NEED GOOD THINGS TO BALANCE THE BAD
-
-            // ELITE REPORTER SNEAKS IN
-            if(!LCSrandom(50)&&no_bad&&liberalcount[l]>0)
-            {
-               char repname[200];
-               name(repname);
-
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-               erase();
-               move(1,1);
-               addstr("Elitist ");
-               addstr(repname);
-               addstr(" from the ");
-               switch(LCSrandom(5))
-               {
-                  case 0:addstr("news program");break;
-                  case 1:addstr("news magazine");break;
-                  case 2:addstr("website");break;
-                  case 3:addstr("scandal rag");break;
-                  case 4:addstr("newspaper");break;
-               }
-               addstr(" ");
-               switch(LCSrandom(11))
-               {
-                  case 0:addstr("Daily");break;
-                  case 1:addstr("Nightly");break;
-                  case 2:addstr("Current");break;
-                  case 3:addstr("Pressing");break;
-                  case 4:addstr("Socialist");break;
-                  case 5:addstr("American");break;
-                  case 6:addstr("National");break;
-                  case 7:addstr("Union");break;
-                  case 8:addstr("Foreign");break;
-                  case 9:addstr("Associated");break;
-                  case 10:addstr("International");break;
-               }
-               addstr(" ");
-               switch(LCSrandom(11))
-               {
-                  case 0:addstr("Reporter");break;
-                  case 1:addstr("Issue");break;
-                  case 2:addstr("Take");break;
-                  case 3:addstr("Constitution");break;
-                  case 4:addstr("Times");break;
-                  case 5:addstr("Post");break;
-                  case 6:addstr("News");break;
-                  case 7:addstr("Affair");break;
-                  case 8:addstr("Statesman");break;
-                  case 9:addstr("Star");break;
-                  case 10:addstr("Inquirer");break;
-               }
-               move(2,1);
-               addstr("got into the compound somehow!");
-               refresh();
-               getch();
-
-               int best=-1,bestvalue=0,sum;
-               for(int p=0;p<pool.size();p++)
-               {
-                  if(!pool[p]->alive)continue;
-                  if(pool[p]->align!=1)continue;
-                  if(pool[p]->location!=l)continue;
-
-                  sum=0;
-                  sum+=pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
-                  sum+=pool[p]->attval(ATTRIBUTE_HEART);
-                  sum+=pool[p]->attval(ATTRIBUTE_CHARISMA)*2;
-                  sum+=pool[p]->skill[SKILL_PERSUASION]*3;
-                  sum+=pool[p]->skill[SKILL_LEADERSHIP]*5;
-
-                  if(sum>bestvalue||best==-1)
+                  if(clearformess)
                   {
-                     best=p;
-                     bestvalue=sum;
+                     erase();
+                  }
+                  else
+                  {
+                     makedelimiter(8,0);
+                  }
+                  move(8,1);
+                  addstr("Explosions rock the compound!");
+                  refresh();
+                  getch();
+
+                  if(hit)
+                  {
+                     if(clearformess)erase();
+                     else makedelimiter(8,0);
+                     move(8,1);
+                     addstr("The generator has been destroyed!");
+                     refresh();
+                     getch();
+                     if(clearformess)erase();
+                     else makedelimiter(8,0);
+                     move(8,1);
+                     addstr("The lights fade and all is dark. ");
+                     refresh();
+                     getch();
+                  }
+
+                  if(!LCSrandom(2))
+                  {
+                     vector<int> pol;
+                     for(int p=0;p<pool.size();p++)
+                     {
+                        if(pool[p]->alive&&pool[p]->location==l)
+                        {
+                           pol.push_back(p);
+                        }
+                     }
+
+                     if(pol.size()>0)
+                     {
+                        if(clearformess)erase();
+                        else makedelimiter(8,0);
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(8,1);
+                        int targ=pol[LCSrandom(pol.size())];
+                        if(LCSrandom(100)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
+                        {
+                           addstr(pool[targ]->name);
+                           addstr(" was killed in the bombing!");
+
+                           if(pool[targ]->align==1)
+                           {
+                              stat_dead++;
+                              liberalcount[l]--;
+                           }
+
+                           removesquadinfo(*pool[targ]);
+
+                           pool[targ]->alive=0;
+                           //delete pool[targ];
+                           //pool.erase(pool.begin() + targ);
+                        }
+                        else
+                        {
+                           addstr(pool[targ]->name);
+                           addstr(" narrowly avoided death!");
+                        }
+                        refresh();
+                        getch();
+                     }
+                  }
+                  else
+                  {
+                     if(clearformess)erase();
+                     else makedelimiter(8,0);
+                     move(8,1);
+                     addstr("Fortunately, no one is hurt.");
+                     refresh();
+                     getch();
+                  }
+
+                  if(hit)
+                  {
+                     location[l]->compound_walls&=~COMPOUND_GENERATOR;
+                     location[l]->siege.lights_off=1;
                   }
                }
-
-               move(4,1);
-               addstr(pool[best]->name);
-               addstr(" decides to give an interview.");
-               refresh();
-               getch();
-
-               move(6,1);
-               addstr("The interview is wide-ranging, covering a variety of topics.");
-               refresh();
-               getch();
-
-               int segmentpower=LCSrandom(bestvalue*2+1);
-
-               move(8,1);
-               if(segmentpower<10)
+               if((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
+                  location[l]->siege.escalationstate>=3 && !LCSrandom(5))
                {
-                  addstr(repname);
-                  addstr(" cancelled the interview halfway through");
-                  move(9,1);
-                  addstr("and later used the material for a Broadway play called");
-                  move(10,1);
-                  switch(LCSrandom(11))
+                  no_bad=0;
+
+                  //ENGINEERS
+                  if(clearformess)
                   {
-                     case 0:addstr("Flaming");break;
-                     case 1:addstr("Retarded");break;
-                     case 2:addstr("Insane");break;
-                     case 3:addstr("Crazy");break;
-                     case 4:addstr("Loopy");break;
-                     case 5:addstr("Idiot");break;
-                     case 6:addstr("Empty-Headed");break;
-                     case 7:addstr("Nutty");break;
-                     case 8:addstr("Half-Baked");break;
-                     case 9:addstr("Pot-Smoking");break;
-                     case 10:addstr("Stoner");break;
+                     erase();
+                  }
+                  else
+                  {
+                     makedelimiter(8,0);
+                  }
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr("Engineers have removed your tank traps.");
+                  refresh();
+                  getch();
+
+                  location[l]->compound_walls&=~COMPOUND_TANKTRAPS;
+               }
+
+               //NEED GOOD THINGS TO BALANCE THE BAD
+
+               // ELITE REPORTER SNEAKS IN
+               if(!LCSrandom(50)&&no_bad&&liberalcount[l]>0)
+               {
+                  char repname[200];
+                  name(repname);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+                  erase();
+                  move(1,1);
+                  addstr("Elitist ");
+                  addstr(repname);
+                  addstr(" from the ");
+                  switch(LCSrandom(5))
+                  {
+                     case 0:addstr("news program");break;
+                     case 1:addstr("news magazine");break;
+                     case 2:addstr("website");break;
+                     case 3:addstr("scandal rag");break;
+                     case 4:addstr("newspaper");break;
                   }
                   addstr(" ");
-                  switch(LCSrandom(10))
+                  switch(LCSrandom(11))
                   {
-                     case 0:addstr("Liberal");break;
-                     case 1:addstr("Socialist");break;
-                     case 2:addstr("Anarchist");break;
-                     case 3:addstr("Communist");break;
-                     case 4:addstr("Marxist");break;
-                     case 5:addstr("Green");break;
-                     case 6:addstr("Elite");break;
-                     case 7:addstr("Guerilla");break;
-                     case 8:addstr("Commando");break;
-                     case 9:addstr("Soldier");break;
+                     case 0:addstr("Daily");break;
+                     case 1:addstr("Nightly");break;
+                     case 2:addstr("Current");break;
+                     case 3:addstr("Pressing");break;
+                     case 4:addstr("Socialist");break;
+                     case 5:addstr("American");break;
+                     case 6:addstr("National");break;
+                     case 7:addstr("Union");break;
+                     case 8:addstr("Foreign");break;
+                     case 9:addstr("Associated");break;
+                     case 10:addstr("International");break;
                   }
-                  addstr(".");
-               }
-               else if(segmentpower<15)
-               {
-                  addstr("But the interview is so boring that ");
-                  addstr(repname);
-                  addstr(" falls asleep.");
-               }
-               else if(segmentpower<20)addstr("But the interview sucked.");
-               else if(segmentpower<25)addstr("It was nothing special, though.");
-               else if(segmentpower<32)addstr("It went pretty well.");
-               else if(segmentpower<40)addstr("The discussion was exciting and dynamic.");
-               else if(segmentpower<50)addstr("It was almost perfect.");
-               else
-               {
-                  addstr(repname);
-                  addstr(" later went on to win a Pulitzer for it.");
-                  move(9,1);
-                  addstr("Virtually everyone in America was moved by ");
-                  addstr(pool[best]->name);
-                  addstr("'s words.");
-               }
-               refresh();
-               getch();
+                  addstr(" ");
+                  switch(LCSrandom(11))
+                  {
+                     case 0:addstr("Reporter");break;
+                     case 1:addstr("Issue");break;
+                     case 2:addstr("Take");break;
+                     case 3:addstr("Constitution");break;
+                     case 4:addstr("Times");break;
+                     case 5:addstr("Post");break;
+                     case 6:addstr("News");break;
+                     case 7:addstr("Affair");break;
+                     case 8:addstr("Statesman");break;
+                     case 9:addstr("Star");break;
+                     case 10:addstr("Inquirer");break;
+                  }
+                  move(2,1);
+                  addstr("got into the compound somehow!");
+                  refresh();
+                  getch();
 
-               //CHECK PUBLIC OPINION
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,20);
-               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-25)/2,segmentpower+50);
-               int viewhit;
-               for(int v=0;v<5;v++)
-               {
-                  viewhit=LCSrandom(VIEWNUM-3);
-                  change_public_opinion(viewhit,(segmentpower-25)/2);
+                  int best=-1,bestvalue=0,sum;
+                  for(int p=0;p<pool.size();p++)
+                  {
+                     if(!pool[p]->alive)continue;
+                     if(pool[p]->align!=1)continue;
+                     if(pool[p]->location!=l)continue;
+
+                     sum=0;
+                     sum+=pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
+                     sum+=pool[p]->attval(ATTRIBUTE_HEART);
+                     sum+=pool[p]->attval(ATTRIBUTE_CHARISMA)*2;
+                     sum+=pool[p]->skill[SKILL_PERSUASION]*3;
+                     sum+=pool[p]->skill[SKILL_LEADERSHIP]*5;
+
+                     if(sum>bestvalue||best==-1)
+                     {
+                        best=p;
+                        bestvalue=sum;
+                     }
+                  }
+
+                  move(4,1);
+                  addstr(pool[best]->name);
+                  addstr(" decides to give an interview.");
+                  refresh();
+                  getch();
+
+                  move(6,1);
+                  addstr("The interview is wide-ranging, covering a variety of topics.");
+                  refresh();
+                  getch();
+
+                  int segmentpower=LCSrandom(bestvalue*2+1);
+
+                  move(8,1);
+                  if(segmentpower<10)
+                  {
+                     addstr(repname);
+                     addstr(" cancelled the interview halfway through");
+                     move(9,1);
+                     addstr("and later used the material for a Broadway play called");
+                     move(10,1);
+                     switch(LCSrandom(11))
+                     {
+                        case 0:addstr("Flaming");break;
+                        case 1:addstr("Retarded");break;
+                        case 2:addstr("Insane");break;
+                        case 3:addstr("Crazy");break;
+                        case 4:addstr("Loopy");break;
+                        case 5:addstr("Idiot");break;
+                        case 6:addstr("Empty-Headed");break;
+                        case 7:addstr("Nutty");break;
+                        case 8:addstr("Half-Baked");break;
+                        case 9:addstr("Pot-Smoking");break;
+                        case 10:addstr("Stoner");break;
+                     }
+                     addstr(" ");
+                     switch(LCSrandom(10))
+                     {
+                        case 0:addstr("Liberal");break;
+                        case 1:addstr("Socialist");break;
+                        case 2:addstr("Anarchist");break;
+                        case 3:addstr("Communist");break;
+                        case 4:addstr("Marxist");break;
+                        case 5:addstr("Green");break;
+                        case 6:addstr("Elite");break;
+                        case 7:addstr("Guerilla");break;
+                        case 8:addstr("Commando");break;
+                        case 9:addstr("Soldier");break;
+                     }
+                     addstr(".");
+                  }
+                  else if(segmentpower<15)
+                  {
+                     addstr("But the interview is so boring that ");
+                     addstr(repname);
+                     addstr(" falls asleep.");
+                  }
+                  else if(segmentpower<20)addstr("But the interview sucked.");
+                  else if(segmentpower<25)addstr("It was nothing special, though.");
+                  else if(segmentpower<32)addstr("It went pretty well.");
+                  else if(segmentpower<40)addstr("The discussion was exciting and dynamic.");
+                  else if(segmentpower<50)addstr("It was almost perfect.");
+                  else
+                  {
+                     addstr(repname);
+                     addstr(" later went on to win a Pulitzer for it.");
+                     move(9,1);
+                     addstr("Virtually everyone in America was moved by ");
+                     addstr(pool[best]->name);
+                     addstr("'s words.");
+                  }
+                  refresh();
+                  getch();
+
+                  //CHECK PUBLIC OPINION
+                  change_public_opinion(VIEW_LIBERALCRIMESQUAD,20);
+                  change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-25)/2,segmentpower+50);
+                  int viewhit;
+                  for(int v=0;v<5;v++)
+                  {
+                     viewhit=LCSrandom(VIEWNUM-3);
+                     change_public_opinion(viewhit,(segmentpower-25)/2);
+                  }
                }
             }
          }
@@ -1411,6 +1414,8 @@ int numbereating(int loc)
       //You're a prisoner getting starved? Not eating!
       if(pool[p]->align==-1 &&
          reinterpret_cast<interrogation*>(pool[p]->activity.arg)->nofood)continue;
+      //You're a sleeper agent? Sleepers don't eat! Feh! (Rather, they eat on Conservatives' expense, not yours.)
+      if(pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
       //None of the above? You're eating!
       eaters++;
    }
@@ -1495,15 +1500,42 @@ void escape_engage(void)
       {
          if(squad[sq]->squad[0]->location==loc)
          {
-            for(int p=0;p<6;p++)
+            if(activesquad)
             {
-               if(squad[sq]->squad[p]==NULL)continue;
-               squad[sq]->squad[p]->squadid=-1;
+               for(int p=0;p<6;p++)
+               {
+                  if(squad[sq]->squad[p]==NULL)continue;
+                  squad[sq]->squad[p]->squadid=-1;
+               }
+               delete squad[sq];
+               squad.erase(squad.begin() + sq);
             }
-            delete squad[sq];
-            squad.erase(squad.begin() + sq);
+            else
+            {
+               activesquad = squad[sq];
+            }
          }
       }
+   }
+
+   // No squads at the location? Form a new one.
+   if(activesquad==NULL)
+   {
+      squad.push_back(new squadst);
+      strcpy(squad.back()->name,location[selectedsiege]->shortname);
+      strcat(squad.back()->name," Defense");
+      int i=0;
+      for(int p=0;p<pool.size();p++)
+      {
+         if(pool[p]->location == selectedsiege)
+         {
+            squad.back()->squad[i]=pool[p];
+            pool[p]->squadid=squad.back()->id;
+            i++;
+            if(i>=6)break;
+         }
+      }
+      activesquad = squad.back();
    }
 
    //MAKE SURE PARTY IS ORGANIZED
