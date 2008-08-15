@@ -13,12 +13,26 @@
 /*
    DEBUG DEFINES
 */
+// Enemies don't attack
 //#define NOENEMYATTACK
+
+// Laws start archconservative
 //#define SHITLAWS
+
+// Gives you bloody armor
 //#define GIVEBLOODYARMOR
+
+// Start with lots of money
 //#define HIGHFUNDS
+
+// Interrogation always enlightens
 //#define AUTOENLIGHTEN
+
+// Show polls when you can't see things
 //#define SHOWWAIT
+
+// Show die rolls, 100% accurate poll numbers
+#define SHOWMECHANICS
 
 
 
@@ -406,6 +420,8 @@ enum CreatureType
    CREATURE_CCS_VIGILANTE,
    CREATURE_CCS_ARCHCONSERVATIVE,
    CREATURE_POLITICALACTIVIST,
+   CREATURE_CCS_MOLOTOV,
+   CREATURE_CCS_SNIPER,
    CREATURENUM
 };
 
@@ -1061,6 +1077,7 @@ enum SiegeTypes
    SIEGE_CIA,
    SIEGE_HICKS,
    SIEGE_CORPORATE,
+   SIEGE_CCS,
    SIEGE_ORG,
    SIEGENUM
 };
@@ -1080,6 +1097,7 @@ struct siegest
    short timeuntillocated;
    short timeuntilcorps;
    short timeuntilcia;
+   short timeuntilccs;
 
    siegest()
    {
@@ -1110,25 +1128,25 @@ struct locationst
    char name[40];
    char shortname[20];
    short type;
-   long parent;
+   int parent;
    vector<itemst *> loot;
    vector<sitechangest> changes;
-   long renting;
+   int renting;
    char newrental;
    char needcar;
    short closed;
    char interrogated;
-   char highsecurity;
+   int highsecurity;
    siegest siege;
    int heat;
    char compound_walls;
-   long compound_stores;
+   int compound_stores;
    short front_business;
    char front_name[40];
    char haveflag;
    char hidden;
 
-   unsigned long mapseed;
+   unsigned int mapseed;
 
    locationst()
    {
@@ -1483,6 +1501,7 @@ enum EndTypes
    END_HIDING,
    END_DISBANDLOSS,
    END_DISPERSED,
+   END_CCS,
    ENDNUM
 };
 enum ReportTypes
@@ -1984,7 +2003,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll,creaturest &a);
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int mod);
+void damagemod(creaturest &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int &mod);
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(creaturest &cr,vector<itemst *> &loot);
 /* damages the selected armor if it covers the body part specified */

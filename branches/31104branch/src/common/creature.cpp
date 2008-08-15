@@ -121,6 +121,15 @@ void makecreature(creaturest &cr,short type)
    {
       case CREATURE_BOUNCER:
          cr.weapon.type=WEAPON_NONE;
+         if(mode==GAMEMODE_SITE && location[cursite]->highsecurity)
+         {
+            strcpy(cr.name,"Enforcer");
+            cr.weapon.type=WEAPON_REVOLVER_44;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_44]=3;
+            
+            sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         }
          cr.armor.type=ARMOR_SECURITYUNIFORM;
          sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
          if(disguisesite(sitetype))cr.align=-1;
@@ -580,11 +589,76 @@ void makecreature(creaturest &cr,short type)
 			cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=6;
          break;
+      case CREATURE_CCS_MOLOTOV:
+      {
+         cr.armor.type=ARMOR_TRENCHCOAT;
+         cr.weapon.type=WEAPON_MOLOTOV;
+         cr.weapon.ammo=1;
+         cr.clip[CLIP_MOLOTOV]=4;
+
+         cr.money=LCSrandom(21)+20;
+         cr.align=-1;
+         cr.juice=90+LCSrandom(120);
+         cr.age=AGE_MATURE;
+
+         sk=LCSrandom(4)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+2;cr.skill[SKILL_IMPROVISED]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_RELIGION]=sk;randomskills-=sk;
+
+			for(a=0;a<ATTNUM;a++)
+         {
+            cr.att[a]=1;
+            attcap[a]=20;
+         }
+         attcap[ATTRIBUTE_HEART]=4;
+         redistatts=9;
+         cr.att[ATTRIBUTE_STRENGTH]=6;
+			cr.att[ATTRIBUTE_AGILITY]=6;
+			cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.att[ATTRIBUTE_WISDOM]=8;
+         break;
+      }
+      case CREATURE_CCS_SNIPER:
+      {
+         cr.armor.type=ARMOR_TRENCHCOAT;
+         cr.weapon.type=WEAPON_SEMIRIFLE_AR15;
+         cr.clip[CLIP_ASSAULT]=6;
+         cr.weapon.ammo=30;
+
+         cr.money=LCSrandom(21)+20;
+         cr.align=-1;
+         cr.juice=90+LCSrandom(120);
+         cr.age=AGE_MATURE;
+
+         sk=LCSrandom(4)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_BUSINESS]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_RELIGION]=sk;randomskills-=sk;
+
+			for(a=0;a<ATTNUM;a++)
+         {
+            cr.att[a]=1;
+            attcap[a]=20;
+         }
+         attcap[ATTRIBUTE_HEART]=4;
+         redistatts=9;
+         cr.att[ATTRIBUTE_STRENGTH]=6;
+			cr.att[ATTRIBUTE_AGILITY]=6;
+			cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.att[ATTRIBUTE_WISDOM]=8;
+         break;
+      }
       case CREATURE_CCS_VIGILANTE:
       {
-         cr.armor.type=ARMOR_MILITARY;
+         cr.armor.type=ARMOR_CLOTHES;
          switch(LCSrandom(5)+endgamestate)
          {
+         case 0:
          case 1:
             break;
          case 2:
@@ -620,6 +694,43 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=30;
             cr.armor.type=ARMOR_ARMYARMOR;
             break;
+         }
+         if(mode==GAMEMODE_SITE && sitealarm>0)
+         {
+            if(cr.armor.type==ARMOR_CIVILLIANARMOR)
+            {
+               strcpy(cr.name,"Mercenary");
+            }
+            else if(cr.armor.type==ARMOR_ARMYARMOR)
+            {
+               strcpy(cr.name,"Soldier");
+            }
+            else if(cr.weapon.type==WEAPON_SHOTGUN_PUMP||LCSrandom(2))
+            {
+               switch(LCSrandom(5))
+               {
+                  case 0:strcpy(cr.name,"Country Boy");break;
+                  case 1:strcpy(cr.name,"Hick");break;
+                  case 2:strcpy(cr.name,"Redneck");break;
+                  case 3:strcpy(cr.name,"Rube");break;
+                  case 4:strcpy(cr.name,"Yokel");break;
+               }
+            }
+            else
+            {
+               switch(LCSrandom(9))
+               {
+               case 0: strcpy(cr.name,"Biker");break;
+               case 1: strcpy(cr.name,"Transient");break;
+               case 2: strcpy(cr.name,"Crackhead");break;
+               case 3: strcpy(cr.name,"Fast Food Worker");break;
+               case 4: strcpy(cr.name,"Telemarketer");break;
+               case 5: strcpy(cr.name,"Office Worker");break;
+               case 6: strcpy(cr.name,"Mailman");break;
+               case 7: strcpy(cr.name,"Musician");break;
+               case 8: strcpy(cr.name,"Hairstylist");break;
+               }
+            }
          }
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
@@ -1514,7 +1625,7 @@ void makecreature(creaturest &cr,short type)
          strcpy(cr.name,"Biker");
          cr.armor.type=ARMOR_TRENCHCOAT;
          cr.money=LCSrandom(31)+20;
-         //cr.align=LCSrandom(3)-1;
+         cr.align=-1;
          cr.age=AGE_MATURE;
          sk=LCSrandom(3)+3;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
          break;
@@ -2218,6 +2329,9 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
          break;
+      case CREATURE_CCS_ARCHCONSERVATIVE:
+      case CREATURE_CCS_MOLOTOV:
+      case CREATURE_CCS_SNIPER:
       case CREATURE_CCS_VIGILANTE:
          if(ccs_kills==2)okaysite[SITE_OUTDOOR_BUNKER]=1;
          if(ccs_kills==1)okaysite[SITE_RESIDENTIAL_BOMBSHELTER]=1;

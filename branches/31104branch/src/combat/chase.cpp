@@ -1080,7 +1080,11 @@ void makechasers(long sitetype,long sitecrime)
    long pnum;
 
    chaseseq.canpullover=0;
-   if(endgamestate<ENDGAME_CCS_DEFEATED&&LCSrandom(10)<endgamestate)
+   // 50% of CCS harassing your teams once they reach the
+   // "attacks" stage
+   if(endgamestate<ENDGAME_CCS_DEFEATED&&
+      endgamestate>=ENDGAME_CCS_ATTACKS&&
+      LCSrandom(2))
    {
       cartype=VEHICLE_SUV;
       pnum=LCSrandom(sitecrime/5 + 1)+1;

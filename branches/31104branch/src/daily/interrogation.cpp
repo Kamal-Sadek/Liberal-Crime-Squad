@@ -831,7 +831,25 @@ void tendhostage(creaturest *cr,char &clearformess)
             getch();
 
             move(y++,0);
-            if((rapport[a->id]>1 && !LCSrandom(3)) || !LCSrandom(10))
+            if(cr->skill[SKILL_INTERROGATION]*3>spiritcrush)
+            {
+               switch(LCSrandom(4))
+               {
+               case 0:addstr(cr->name);
+                     addstr(" takes the drug-induced hallucinations with stoicism.");
+                     break;
+               case 1:addstr(cr->name);
+                     addstr(" mutters its initials over and over again.");
+                     break;
+               case 2:addstr(cr->name);
+                     addstr(" babbles continuous numerical sequences.");
+                     break;
+               case 3:addstr(cr->name);
+                     addstr(" manages to remain grounded through the hallucinations.");
+                     break;
+               }
+            }
+            else if((rapport[a->id]>1 && !LCSrandom(3)) || !LCSrandom(10))
             {
                rapport_temp=5;
                switch(LCSrandom(4))
@@ -925,8 +943,30 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
+         if(cr->skill[SKILL_INTERROGATION]*3>spiritcrush)
+         {
+            move(y,0);
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(cr->name);
+                  addstr(" plays mind games with ");
+                  addstr(a->name);
+                  addstr(".");
+                  break;
+            case 1:addstr(cr->name);
+                  addstr(" knows how this works, and won't budge.");
+                  break;
+            case 2:addstr(cr->name);
+                  addstr(" asks if Liberal mothers would approve of this.");
+                  break;
+            case 3:addstr(cr->name);
+                  addstr(" seems resistant to this form of interrogation.");
+                  break;
+            }
+            y++;
+         }
          //Failure to break religious convictions
-         if(cr->skill[SKILL_RELIGION]>religion+spiritcrush && !techniques[7])
+         else if(cr->skill[SKILL_RELIGION]>religion+spiritcrush && !techniques[7])
          {
             move(y,0);
             switch(LCSrandom(4))

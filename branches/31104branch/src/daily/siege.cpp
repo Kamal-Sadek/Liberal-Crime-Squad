@@ -442,6 +442,142 @@ void siegecheck(char canseethings)
       }
       else if(location[l]->siege.timeuntilcorps==0)location[l]->siege.timeuntilcorps=-1; // Silently call off foiled corp raids
 
+         //CONSERVATIVE CRIME SQUAD
+      if(endgamestate>ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
+      {
+         if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
+         {
+            location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
+            // CCS sleepers may give a warning before corp raids
+            int ccssleepercount=0;
+            for(int pl=0;pl<pool.size();pl++)
+            {
+               if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
+                  (pool[pl]->type==CREATURE_CCS_VIGILANTE || pool[pl]->type==CREATURE_CCS_ARCHCONSERVATIVE ||
+                   pool[pl]->type==CREATURE_CCS_MOLOTOV || pool[pl]->type==CREATURE_CCS_SNIPER))
+               {
+                  ccssleepercount++;
+               }
+            }
+            if(LCSrandom(ccssleepercount+1)>1)
+            {
+               erase();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr("You have recieved a sleeper warning that the CCS");
+               move(9,1);
+               addstr(" is gearing up to attack ");
+               addstr(location[l]->name);
+               addstr(".");
+               refresh();
+               getch();
+            }
+         }
+         else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // Corp raid countdown!
+         else if(location[l]->siege.timeuntilccs==0&&!location[l]->siege.siege&&numpres>0)
+         {
+            location[l]->siege.timeuntilccs=-1;
+            // Corps raid!
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("A screeching truck pulls up to ");
+            addlocationname(location[l]);
+            addstr("!");
+
+            refresh();
+            getch();
+
+            if(!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
+               !LCSrandom(5))
+            {
+               // CCS Carbombs safehouse!!
+               erase();
+               set_color(COLOR_RED,COLOR_BLACK,1);
+
+               move(8,1);
+               addstr("THE TRUCK BARRELS INTO THE BUILDING AND EXPLODES MASSIVELY!");
+
+               refresh();
+               getch();
+
+               erase();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               move(0,1);
+               addstr("CCS CAR BOMBING CASUALTY REPORT");
+
+               move(2,1);
+               addstr("KILLED: ");
+               int killed_y = 2;
+               int killed_x = 9;
+
+               move(12,1);
+               addstr("INJURED: ");
+               int injured_y = 12;
+               int injured_x = 10;
+
+               bool killed=0, injured=0;
+
+               for(int i=0;i<pool.size();i++)
+               {
+                  if(pool[i]->location==l)
+                  {
+                     if(LCSrandom(2))
+                     {
+                        int namelength=strlen(pool[i]->name);
+                        pool[i]->blood-=LCSrandom(101-pool[i]->juice/10)+10;
+                        if(pool[i]->blood<0)
+                        {
+                           if(killed_x+namelength>79)
+                           {
+                              killed_y++;
+                              killed_x=1;
+                           }
+                           move(killed_y,killed_x);
+                        }
+                        else
+                        {
+                           if(injured_x+namelength>79)
+                           {
+                              injured_y++;
+                              injured_x=1;
+                           }
+                           move(injured_y,injured_x);
+                        }
+                        set_alignment_color(pool[i]->align,true);
+                        addstr(pool[i]->name);
+                     }
+                  }
+               }
+
+               refresh();
+               getch();
+            }
+            else
+            {
+               // CCS Raids safehouse
+               erase();
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+
+               move(8,1);
+               addstr("The CCS is attacking the safehouse!");
+
+               refresh();
+               getch();
+
+               location[l]->siege.siege=1;
+               location[l]->siege.siegetype=SIEGE_CCS;
+               location[l]->siege.underattack=1;
+               location[l]->siege.lights_off=0;
+               location[l]->siege.cameras_off=0;
+            }
+         }
+         else if(location[l]->siege.timeuntilccs==0)location[l]->siege.timeuntilccs=-1; // Silently call off foiled ccs raids
+      }
+
+
          //CIA
       if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(600)&&numpres>0)
       {
@@ -1242,7 +1378,7 @@ void giveup(void)
          {
             move(8,1);
             int confiscated = LCSrandom(LCSrandom(funds-10000)+1)+1000;
-            char str[50];
+            char str[100];
             sprintf(str,"Law enforcement have confiscated $%d in LCS funds.",confiscated);
             addstr(str);
             funds -= confiscated;

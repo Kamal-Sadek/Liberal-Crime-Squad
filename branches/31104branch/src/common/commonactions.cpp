@@ -57,6 +57,7 @@ char endcheck(short cause)
                case SIEGE_CIA:savehighscore(END_CIA);break;
                case SIEGE_HICKS:savehighscore(END_HICKS);break;
                case SIEGE_CORPORATE:savehighscore(END_CORP);break;
+               case SIEGE_CCS:savehighscore(END_CCS);break;
             }
          } 
          else savehighscore(END_DEAD);
@@ -298,7 +299,8 @@ int maxskill(int skill,creaturest& cr)
       if(cr.juice<100)return 2;
       if(cr.juice<200)return 3;
       if(cr.juice<500)return 4;
-      return 5;
+      if(cr.juice<1000)return 5;
+      return 6;
    default:
       return -1;
    }
@@ -322,6 +324,7 @@ int weaponskill(int weapon)
       case WEAPON_TORCH:
       case WEAPON_PITCHFORK:
       case WEAPON_MOLOTOV:
+      case WEAPON_SPRAYCAN:
          wsk=SKILL_IMPROVISED;
          break;
       case WEAPON_BASEBALLBAT:
@@ -355,9 +358,6 @@ int weaponskill(int weapon)
          break;
       case WEAPON_GUITAR:
          wsk=SKILL_MUSIC;
-         break;
-      case WEAPON_SPRAYCAN:
-         wsk=SKILL_ART;
          break;
    }
    return wsk;

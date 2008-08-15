@@ -518,7 +518,7 @@ void trial(creaturest &g)
    addstr(".");
    if(sleeperlawyer)
    {
-      if(funds>=100)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(funds>=100)set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(y,1);y++;
       addstr("E - Pay a nominal $100 to use sleeper ");
       addstr(sleeperlawyer->name);
@@ -621,6 +621,20 @@ void trial(creaturest &g)
             case 3:addstr("The jury is frighteningly Conservative.");break;
          }
       }
+
+      // Debug jury bias
+      #ifdef SHOWMECHANICS
+      {
+         char str[20];
+         itoa(jury,str,10);
+         addstr(" (");
+         if(str[0]!='-')addch('+');
+
+         addstr(str);
+         addstr(" to convict)");
+      }
+      #endif
+
       refresh();
       getch();
 
@@ -652,6 +666,20 @@ void trial(creaturest &g)
             addstr("'s chances are beyond bleak.");
          }
       }
+
+      // Debug prosecution power
+      #ifdef SHOWMECHANICS
+      {
+         char str[20];
+         itoa(prosecution/2,str,10);
+         addstr(" (+");
+         addstr(str);
+         addstr(" to +");
+         itoa(prosecution,str,10);
+         addstr(str);
+         addstr(" to convict)");
+      }
+      #endif
 
       refresh();
       getch();
@@ -785,6 +813,20 @@ void trial(creaturest &g)
             }
          }
       }
+
+      // Debug defense power
+      #ifdef SHOWMECHANICS
+      {
+         char str[20];
+         itoa(defensepower,str,10);
+         addstr(" (");
+         addstr(str);
+         addstr(", need ");
+         itoa(jury+1,str,10);
+         addstr(str);
+         addstr(" to acquit)");
+      }
+      #endif
 
       refresh();
       getch();

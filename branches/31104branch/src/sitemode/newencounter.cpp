@@ -114,7 +114,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_SCULPTOR]+=1;
          creaturearray[CREATURE_THIEF]+=3;
          creaturearray[CREATURE_ACTOR]+=1;
-         if(endgamestate<ENDGAME_CCS_DEFEATED)
+         if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
             creaturearray[CREATURE_CCS_VIGILANTE]+=5;
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -201,7 +201,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_THIEF]+=1;
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
-         if(endgamestate<ENDGAME_CCS_DEFEATED)
+         if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
             creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
@@ -231,7 +231,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
          creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
          creaturearray[CREATURE_AGENT]+=1;
-         if(endgamestate<ENDGAME_CCS_DEFEATED)
+         if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
             creaturearray[CREATURE_CCS_VIGILANTE]+=endgamestate*4;
          creaturearray[CREATURE_RADIOPERSONALITY]+=1;
          creaturearray[CREATURE_NEWSANCHOR]+=1;
@@ -1001,6 +1001,24 @@ char addsiegeencounter(char type)
                      break;
                   case SIEGE_CORPORATE:
                      makecreature(encounter[e],CREATURE_MERC);
+                     break;
+                  case SIEGE_CCS:
+                     if(!LCSrandom(12))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_ARCHCONSERVATIVE);
+                     }
+                     else if(!LCSrandom(11))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_MOLOTOV);
+                     }
+                     else if(!LCSrandom(10))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_SNIPER);
+                     }
+                     else
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_VIGILANTE);
+                     }
                      break;
 					//Puzz:  Adding in organization attacks
 				  case SIEGE_ORG:

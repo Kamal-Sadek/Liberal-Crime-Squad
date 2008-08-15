@@ -1158,8 +1158,7 @@ void mode_site(void)
                         break;
                      case SITE_GOVERNMENT_COURTHOUSE:
                         item=new itemst;item->type=ITEM_LOOT;
-                           if(!LCSrandom(30))item->loottype=LOOT_POLICERECORDS;
-                           else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                           if(!LCSrandom(2))item->loottype=LOOT_TV;
                            else item->loottype=LOOT_COMPUTER;
                         activesquad->loot.push_back(item);
                         break;
@@ -2146,7 +2145,7 @@ void resolvesite(void)
 	}
 
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&sitecrime>100)
+   if(sitealarm==1&&sitecrime>200)
    {
       location[cursite]->closed=sitecrime/10;
 
@@ -2176,7 +2175,7 @@ void resolvesite(void)
                move(8,1);
                addstr("Sleeper ");
                addstr(pool[p]->name);
-               addstr(" has been outed by your brazen attack!");
+               addstr(" has been outed by your bold attack!");
 
                move(10,1);
                addstr("The former CCS Member is now at your command as a normal squad member.");
@@ -2186,14 +2185,14 @@ void resolvesite(void)
          }
       }
    }
-   else if(sitealarm==1&&sitecrime>40&&location[cursite]->renting<=-1)
+   else if(sitealarm==1&&location[cursite]->renting<=-1)
    {
       if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
          !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&
          !(location[cursite]->type==SITE_OUTDOOR_BUNKER))
       {
          if(securityable(location[cursite]->type))
-            location[cursite]->highsecurity=1;
+            location[cursite]->highsecurity=sitecrime;
          else
             location[cursite]->closed=7;
       }

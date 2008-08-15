@@ -602,7 +602,7 @@ void getskill(char *str,int type)
 
    switch(type)
    {
-      case SKILL_HANDTOHAND:strcpy(str,"Hand-to-Hand");break;
+      case SKILL_HANDTOHAND:strcpy(str,"Martial Arts");break;
       case SKILL_KNIFE:strcpy(str,"Knife");break;
       case SKILL_SWORD:strcpy(str,"Sword");break;
       case SKILL_IMPROVISED:strcpy(str,"Improv Weapons");break;
@@ -796,8 +796,10 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_GUARDDOG:strcat(str,"Canine Hero");break;
       case CREATURE_GENETIC:strcat(str,"Genetic Monster");break;
       case CREATURE_TANK:strcat(str,"Armored Tank");break;
-      case CREATURE_CCS_VIGILANTE:strcat(str,"CCS Vigilante");break;
-      case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"CCS Vigilante Boss");break;
+      case CREATURE_CCS_MOLOTOV:strcat(str,"Arsonist");break;
+      case CREATURE_CCS_SNIPER:strcat(str,"Sniper");break;
+      case CREATURE_CCS_VIGILANTE:strcat(str,"Vigilante");break;
+      case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"C.C.S. Boss");break;
       case CREATURE_POLITICALACTIVIST:strcat(str,"Political Activist");break;
       default:
          strcat(str,"Liberal");
@@ -831,7 +833,8 @@ void gettitle(char *str,creaturest &cr)
          else strcpy(str,"Heartless Bastard");
       }
       else if(cr.juice<500)strcpy(str,"Insane Vigilante");
-      else strcpy(str,"Arch-Conservative");
+      else if(cr.juice<1000)strcpy(str,"Arch-Conservative");
+      else strcpy(str,"Evil Incarnate");
    }
    else if(cr.align==0)
    {
@@ -847,7 +850,8 @@ void gettitle(char *str,creaturest &cr)
       else if(cr.juice<100)strcpy(str,"Respected");
       else if(cr.juice<200)strcpy(str,"Upstanding Citizen");
       else if(cr.juice<500)strcpy(str,"Great Person");
-      else strcpy(str,"Peacemaker");
+      else if(cr.juice<1000) strcpy(str,"Peacemaker");
+      else strcpy(str,"Peace Prize Winner");
    }
    else
    {
@@ -863,7 +867,8 @@ void gettitle(char *str,creaturest &cr)
       else if(cr.juice<100)strcpy(str,"Socialist Threat");
       else if(cr.juice<200)strcpy(str,"Revolutionary");
       else if(cr.juice<500)strcpy(str,"Urban Commando");
-      else strcpy(str,"Elite Liberal");
+      else if(cr.juice<1000)strcpy(str,"Elite Liberal");
+      else strcpy(str,"Left-Wing Legend");
    }
 }
 

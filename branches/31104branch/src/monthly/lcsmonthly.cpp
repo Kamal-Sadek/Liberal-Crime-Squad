@@ -937,10 +937,18 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
    {
       /* Cultural leaders block - small influence on everything */
       case CREATURE_RADIOPERSONALITY:
-         libpower[VIEW_AMRADIO]+=power;
+         change_public_opinion(VIEW_AMRADIO,1);
+         for(int i=0;i<VIEWNUM;i++)
+         {
+            libpower[i]+=power/2;
+         }
          break;
       case CREATURE_NEWSANCHOR:
-         libpower[VIEW_CABLENEWS]+=power;
+         change_public_opinion(VIEW_CABLENEWS,1);
+         for(int i=0;i<VIEWNUM;i++)
+         {
+            libpower[i]+=power/2;
+         }
          break;
       case CREATURE_PAINTER:
       case CREATURE_SCULPTOR:
@@ -953,7 +961,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
       case CREATURE_PRIEST:
          for(int i=0;i<VIEWNUM;i++)
          {
-            libpower[i]+=power/4;
+            libpower[i]+=power/2;
          }
          break;
       /* Legal block - influences an array of social issues */

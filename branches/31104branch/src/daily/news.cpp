@@ -666,7 +666,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          if(ns.page==1)
          {
             y=21;
-            if(!liberalguardian)
+            if(ns.crime[0]==SIEGE_CCS)
+            {
+               displaycenterednewsfont("CCS MASSACRE",5);
+            }
+            else if(!liberalguardian)
             {
                displaycenterednewsfont("MYSTERIOUS",5);
                displaycenterednewsfont("MASSACRE",13);
@@ -752,6 +756,18 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   strcat(story,"known to work with several corporations we've had confrotations ");
                   strcat(story,"with in the past.  If the police can't figure this one out, they're ");
                   strcat(story,"just covering it up");
+               }
+               break;
+            case SIEGE_CCS:
+               if(!liberalguardian)
+               {
+                  strcat(story,"Look, it was a Conservative Crime Squad hit, that's all we know, ");
+                  strcat(story,"no names, no faces, not even where it happened really");
+               }
+               else
+               {
+                  strcat(story,"This is the doing of the Conservative Crime Squad butchers.  ");
+                  strcat(story,"They have to be stopped before they kill again");
                }
                break;
          }
@@ -1228,9 +1244,12 @@ void majornewspaper(char &clearformess,char canseethings)
    if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate)
    {
       newsstoryst *ns=new newsstoryst;
+
+      // 10% chance of CCS squad wipe
       if(LCSrandom(10))ns->type=NEWSSTORY_CCS_SITE;
       else ns->type=NEWSSTORY_CCS_KILLED_SITE;
 
+      // 20% chance of rampage
       ns->positive=LCSrandom(5);
       if(ns->positive)ns->positive=1;
 
@@ -1647,19 +1666,29 @@ void majornewspaper(char &clearformess,char canseethings)
       }
    }
 
-   //Letters to the editor
+   
    for(int p=0;p<pool.size();p++)
    {
+      //Letters to the editor
       //Yes, crappy letters to the editor may backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
       {
          background_liberal_influence[randomissue()]+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
          pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
       }
+
+      //Guardian Essays
+      //Basically letters to the editor, but thrice as potent
+      // Should change this to have a further multiplier based on # of printing presses
+      if(pool[p]->activity.type==ACTIVITY_WRITE_GUARDIAN)
+      {
+         background_liberal_influence[randomissue()]+=3*(pool[p]->skill[SKILL_WRITING]-LCSrandom(3));
+         pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
+      }
    }
 
-   //Essay writing
-   for(int w=0;w<VIEWNUM;w++)
+   //Essay writing (old code)
+   /*for(int w=0;w<VIEWNUM;w++)
    {
       if(!public_interest[w])
       {
@@ -1674,7 +1703,7 @@ void majornewspaper(char &clearformess,char canseethings)
             background_liberal_influence[w]++;
          }
       }
-   }
+   }*/
 
    //CHANGE FOR SQUAD ACTS PUBLIC OPINION BASED ON PAGE NUMBERS
       //AND OVERALL POWER OF THE STORY

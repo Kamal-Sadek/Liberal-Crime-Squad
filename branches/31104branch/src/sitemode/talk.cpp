@@ -449,6 +449,9 @@ char talk(creaturest &a,int t)
                case SIEGE_CIA:
                   addstr("pretends to be a Secret Agent.");
                   break;
+               case SIEGE_CCS:
+                  addstr("talks about killing them Lib'rel scum!");
+                  break;
                case SIEGE_HICKS:
                   switch(LCSrandom(2))
                   {

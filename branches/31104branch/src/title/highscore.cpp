@@ -106,6 +106,9 @@ void viewhighscores(void)
             case END_DISPERSED:
                addstr("The Liberal Crime Squad was scattered in ");
                break;
+            case END_CCS:
+               addstr("The Liberal Crime Squad was out-Crime Squadded in ");
+               break;
          }
          switch(score[s].month)
          {

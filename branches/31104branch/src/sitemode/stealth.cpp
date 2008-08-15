@@ -651,6 +651,13 @@ char hasdisguise(creaturest &cr,short type)
             if(cr.armor.type==ARMOR_WIFEBEATER)uniformed=1;
             break;
          }
+         case SIEGE_CCS:
+         {
+            // CCS has trained in anticipation of this tactic
+            // There is no fooling them
+            uniformed=0;
+            break;
+         }
          case SIEGE_POLICE:
          {
             if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;

@@ -48,8 +48,22 @@ void youattack(void)
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
 
-      if(mode==GAMEMODE_CHASECAR&&
-         !activesquad->squad[p]->weapon.ranged())continue;
+      int thisweapon = weaponcheck(*activesquad->squad[p],activesquad->squad[p]->weapon.type);
+
+      if((thisweapon==-1||thisweapon==2) &&           // Illegal weapon
+          activesquad->squad[p]->weapon.ranged() &&   // Ranged
+          activesquad->squad[p]->weapon.ammo!=0)      // Not out of ammo
+      {
+         criminalize(*activesquad->squad[i],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
+      }
+
+      if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
+         (!activesquad->squad[p]->weapon.ranged()||            // And either using a melee weapon
+          (activesquad->squad[p]->weapon.ammo==0&&             // Or, out of ammo and...
+          activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]==0))) // ...no clips left
+      {
+         continue;                                             // Then skip this person, they can't fight
+      }
 
       vector<int> goodtarg;
       vector<int> badtarg;
@@ -182,11 +196,13 @@ void youattack(void)
 
 void enemyattack(void)
 {
+   bool armed=false;
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
-      if(thisweapon==-1||thisweapon==2)criminalize(*activesquad->squad[i],LAWFLAG_GUNUSE);
+      if(activesquad->squad[i]->weapon.type!=WEAPON_NONE)
+         armed=true;
    }
 
 #ifdef NOENEMYATTACK
@@ -212,7 +228,7 @@ void enemyattack(void)
       {
          // Encountered creature will flee if:
          // (a) Non-Conservative, and not recently converted via music or some other mechanism
-         // (b) Conservative, no juice, unarmed, non-tank/animal, and fails a morale check based in part on injury level
+         // (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
          // (c) Conservative, and lost more than 55% blood
          // (d) There's a fire, and they fail a random check
          // Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
@@ -229,8 +245,9 @@ void enemyattack(void)
                fire=2;
             }
          }
-         if(((encounter[e].align!=-1||(encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE
-            &&encounter[e].blood<70+LCSrandom(61)))
+
+         if(((encounter[e].align!=-1||
+            (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<70+LCSrandom(61)))
             &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45||(fire*LCSrandom(5)>=3))
          {
             if(!incapacitated(encounter[e],0,printed)&&encounter[e].animalgloss==ANIMALGLOSS_NONE)
@@ -798,7 +815,23 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    {
       case WEAPON_NONE:
       {
-         if(!a.animalgloss)strcat(str,"jabs at");
+         if(!a.animalgloss)
+         {
+            if(!LCSrandom(a.skill[SKILL_HANDTOHAND]+1))
+               strcat(str,"jabs at");
+            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]))
+               strcat(str,"swings at");
+            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-1))
+               strcat(str,"grabs at");
+            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-2))
+               strcat(str,"kicks at");
+            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-3))
+               strcat(str,"strikes at");
+            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-4))
+               strcat(str,"jump kicks at");
+            else
+               strcat(str,"gracefully strikes at");
+         }
          else
          {
             if(a.specialattack==ATTACK_CANNON)strcat(str,"blasts at");
@@ -926,23 +959,30 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    
    int bonus=0;
    //Penalty for improvised weapons
-   if(wsk==SKILL_IMPROVISED && a.weapon.type != WEAPON_MOLOTOV)bonus=-4;
+   if(wsk==SKILL_IMPROVISED /*&& a.weapon.type != WEAPON_MOLOTOV*/)bonus=-4;
    else
    {
       // Weapon accuracy bonuses and pentalties
       if(a.weapon.type==WEAPON_SHOTGUN_PUMP)bonus=2;
       if(a.weapon.type==WEAPON_SMG_MP5)bonus=4;
-      if(a.weapon.type==WEAPON_CARBINE_M4)bonus=1;
-      if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
-      if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
+      if(a.weapon.type==WEAPON_CARBINE_M4)bonus=2;
+      //if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
+      //if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
    }
    
 
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
-   int shotgun=0; // *JDS* Used for shotguns; enables "just missed" hits for reduced damage
 
    int removeweapon=0; // Used by molotov to remove the weapon at the end of the turn if needed
+
+   if(a.weapon.type==WEAPON_NONE)
+   {
+      // Martial arts multi-strikes
+      bursthits=1+LCSrandom(a.skill[SKILL_HANDTOHAND]/3+1);
+      if(bursthits>5)bursthits=5;
+      if(a.animalgloss)bursthits=1; // Whoops, must be human to use martial arts fanciness
+   }
 
    if(a.weapon.ammo>0)
    {
@@ -974,7 +1014,6 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             }
             break;
          case WEAPON_SHOTGUN_PUMP:
-            shotgun=1;
          case WEAPON_REVOLVER_22:
          case WEAPON_REVOLVER_44:
          case WEAPON_SEMIPISTOL_9MM:
@@ -990,7 +1029,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                // Each shot in a burst is increasingly less likely to hit
                if(aroll+bonus-i*4>droll)bursthits++;
             }
-            if(bursthits==0)bursthits=1;
+            //if(bursthits==0)bursthits=1; // Not needed with the way MP5 bursts are calculated now
             break;
          case WEAPON_CARBINE_M4:
          case WEAPON_AUTORIFLE_M16: 
@@ -1055,14 +1094,19 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          }
       }
 
-      // *JDS* show hits with assault rifle
-      if(bursthits)
+      // show multiple hits
+      if(bursthits>1)
       {
+         if(a.weapon.type==WEAPON_NONE)
+            strcat(str,", striking");
+
          switch(bursthits)
          {
          case 1: break;
          case 2: strcat(str," twice"); break;
          case 3: strcat(str," three times"); break;
+         case 4: strcat(str," four times"); break;
+         case 5: strcat(str," five times"); break;
          }
 
       }
@@ -1083,7 +1127,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       switch(a.weapon.type) // *JDS* removed sever types from many weapons (all guns except shotgun, knives...)
       {
          case WEAPON_NONE:
-            damamount=LCSrandom(5)+1;
+            while(bursthits)
+            {
+               damamount=LCSrandom(5+a.skill[SKILL_HANDTOHAND])+1+a.skill[SKILL_HANDTOHAND];
+               bursthits--;
+            }
             if(!a.animalgloss)damtype|=WOUND_BRUISED;
             else
             {
@@ -1377,6 +1425,19 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       mod-=t.attval(ATTRIBUTE_HEALTH)-5;
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
+
+      // Temporary debug output for the damage roll
+      #ifdef SHOWMECHANICS
+      {
+         char str[200];
+         clearmessagearea();
+         move(16,1);
+         sprintf(str,"(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)",aroll,droll,mod,damamount,armorpiercing);
+         addstr(str);
+         refresh();
+         getch();
+      }
+      #endif
 
       if(damamount>0)
       {
@@ -1992,9 +2053,11 @@ void healthmodroll(int &aroll,creaturest &a)
 
 /* adjusts attack damage based on armor, other factors */
 void damagemod(creaturest &t,char &damtype,int &damamount,
-               char hitlocation,char armorpenetration,int mod)
+               char hitlocation,char armorpenetration,int &mod)
 {
    int prot=0;
+   int prot2=0;
+   int prot3=0;
 
    switch(t.armor.type)
    {
@@ -2021,40 +2084,36 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
       case ARMOR_PRISONER:prot=0;break;
       case ARMOR_TOGA:prot=0;break;
       case ARMOR_MITHRIL:prot=0;break;
-      case ARMOR_CIVILLIANARMOR:prot=4;break;
-      case ARMOR_POLICEARMOR:prot=5;break;
-      case ARMOR_ARMYARMOR:prot=6;break;
-      case ARMOR_HEAVYARMOR:prot=7;break;
+      case ARMOR_CIVILLIANARMOR:prot=5;break;
+      case ARMOR_POLICEARMOR:prot=7;break;
+      case ARMOR_ARMYARMOR:prot=8;prot2=6;break;
+      case ARMOR_HEAVYARMOR:prot=10;prot2=8;prot3=4;break;
    }
+
+   
+   if(t.animalgloss==ANIMALGLOSS_TANK)prot=10;
+   else if(hitlocation==BODYPART_HEAD)prot=prot2;
+   else if(hitlocation!=BODYPART_BODY)prot=prot3;
 
    if(t.armor.quality>'1')
       prot-=t.armor.quality-'1';
    if(t.armor.flag & ARMORFLAG_DAMAGED)
       prot/=2;
 
-   if(t.animalgloss==ANIMALGLOSS_TANK)prot=9;
-   else if(hitlocation==BODYPART_HEAD)prot/=2;
-   else if(hitlocation!=BODYPART_BODY)prot=0;
-
    if(prot<0)prot=0; // Possible from second-rate clothes
 
    int mod2=prot+LCSrandom(prot+1)-armorpenetration;
-   if(mod2>0)mod-=mod2;
+   if(mod2>0)mod-=mod2*2;
 
-   if(mod<=-4)damamount>>=4;
+   
+   if(mod<=-8)damamount>>=6;
+   else if(mod<=-6)damamount>>=5;
+   else if(mod<=-4)damamount>>=4;
    else if(mod<=-3)damamount>>=3;
    else if(mod<=-2)damamount>>=2;
    else if(mod<=-1)damamount>>=1;
-   else if(mod>=10)damamount=(int)((float)damamount * 10.0f);
-   else if(mod>=9)damamount=(int)((float)damamount * 8.0f);
-   else if(mod>=8)damamount=(int)((float)damamount * 6.0f);
-   else if(mod>=7)damamount=(int)((float)damamount * 4.0f);
-   else if(mod>=6)damamount=(int)((float)damamount * 2.0f);
-   else if(mod>=5)damamount=(int)((float)damamount * 1.75f);
-   else if(mod>=4)damamount=(int)((float)damamount * 1.5f);
-   else if(mod>=3)damamount=(int)((float)damamount * 1.4f);
-   else if(mod>=2)damamount=(int)((float)damamount * 1.3f);
-   else if(mod>=1)damamount=(int)((float)damamount * 1.2f);
+   else if(mod>=0)damamount=(int)((float)damamount * (1.0f + 0.2f*mod));
+
 
    if(damamount<0)damamount=0;
 }
@@ -2290,7 +2349,7 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
       cr.armor.flag=0;
    }
 
-   if(cr.money>0)
+   if(cr.money>0 && mode == GAMEMODE_SITE)
    {
       itemst *newi=new itemst;
          newi->type=ITEM_MONEY;

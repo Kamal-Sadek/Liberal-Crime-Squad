@@ -454,8 +454,9 @@ long creaturest::attval(short a,char usejuice)
          if(juice<50)ret++;
          else if(juice<100)ret+=2;
          else if(juice<200)ret+=4;
-         else if(juice<500)ret+=8;
-         else ret+=15;
+         else if(juice<500)ret+=6;
+         else if(juice<1000)ret+=8;
+         else ret+=10;
       }
       if(ret<1)ret=1;
    }

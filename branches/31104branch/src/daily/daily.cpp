@@ -1670,7 +1670,7 @@ void advancelocations(void)
                   if(securityable(location[l]->type))
                   {
                      //Throw guards everywhere
-                     location[l]->highsecurity=1;
+                     location[l]->highsecurity=60;
                   }
                   //Else remodel the location, invalidate maps
                   else initlocation(*location[l]);
@@ -1682,12 +1682,9 @@ void advancelocations(void)
             }
          }
       }
-      else if(location[l]->highsecurity)
+      else if(location[l]->highsecurity>0)
       {
-         if(!LCSrandom(60))
-         {
-            location[l]->highsecurity=0;
-         }
+         location[l]->highsecurity--;
       }
    }
 }

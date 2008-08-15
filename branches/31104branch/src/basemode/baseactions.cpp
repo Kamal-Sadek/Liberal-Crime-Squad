@@ -934,7 +934,13 @@ char confirmdisband(void)
                if(pool[p]->alive&&
                   !(pool[p]->flag & CREATUREFLAG_SLEEPER))
                {
-                  pool[p]->activity.type=ACTIVITY_NONE;
+                  // If uncommented, this code will make it so that writers
+                  // continue to write while disbanded
+                  /*if(pool[p]->activity.type!=ACTIVITY_WRITE_LETTERS&&
+                     pool[p]->activity.type!=ACTIVITY_WRITE_GUARDIAN)*/
+                  {
+                     pool[p]->activity.type=ACTIVITY_NONE;
+                  }
                   pool[p]->clinic=0;
                   for(int i=0;i<LAWFLAGNUM;i++)
                   {

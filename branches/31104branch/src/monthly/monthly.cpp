@@ -50,8 +50,7 @@ void passmonth(char &clearformess,char canseethings)
    switch(endgamestate)
    {
    case ENDGAME_NONE:
-      if(newscherrybusted&&
-         !LCSrandom(5))
+      if(newscherrybusted && publicmood(-1)>65 && !LCSrandom(5))
          endgamestate=ENDGAME_CCS_APPEARANCE;
       break;
    case ENDGAME_CCS_APPEARANCE:
@@ -64,8 +63,8 @@ void passmonth(char &clearformess,char canseethings)
       break;
    case ENDGAME_CCS_SIEGES:
    case ENDGAME_CCS_DEFEATED:
-      if(publicmood(-1)>85&&presparty==1)
-         endgamestate=ENDGAME_MARTIALLAW;
+      //if(publicmood(-1)>85&&presparty==1)
+      //   endgamestate=ENDGAME_MARTIALLAW;
       break;
    }
 

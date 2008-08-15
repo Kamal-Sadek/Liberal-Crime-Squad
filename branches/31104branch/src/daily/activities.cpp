@@ -423,7 +423,7 @@ void survey(creaturest *cr)
       }
 
       //MAKE SURVEY ACCURATE IF DEBUGGING
-      #ifdef NDEBUG
+      #ifndef SHOWMECHANICS
          survey[v]+=LCSrandom(noise*2+1)-noise;
 
          if(!LCSrandom(20))
@@ -447,7 +447,7 @@ void survey(creaturest *cr)
       if(survey[v]<0)survey[v]=0;
       if(survey[v]>100)survey[v]=100;
 
-      #ifdef NDEBUG
+      #ifndef SHOWMECHANICS
          if(LCSrandom(public_interest[v]+50)<misschance)survey[v]=-1;
       #endif
 
@@ -569,7 +569,15 @@ void survey(creaturest *cr)
                break;
             }
             if(attitude[VIEW_LIBERALCRIMESQUADPOS]>50)addstr("the Liberal Crime Squad.");
-            else addstr("the left-wing terrorist threat.");
+            else addstr("the LCS terrorists.");
+            break;
+         case VIEW_CONSERVATIVECRIMESQUAD:
+            if(attitude[VIEW_CONSERVATIVECRIMESQUAD]<50)
+            {
+               addstr("the Conservative Crime Squad.");
+               break;
+            }
+            else addstr("the CCS terrorists.");
             break;
          case VIEW_PRISONS:
             if(attitude[VIEW_PRISONS]>50)addstr("horrific prison conditions.");

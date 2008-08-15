@@ -569,12 +569,54 @@ void elections(char clearformess,char canseethings)
 
          change[senate[s]+2]--;
 
-         if(senate[s]>1 && vote<4)vote++;
-
-         if(senate[s]<-1 && vote>0)vote--;
-
+         /* These slow the speed that the Senate changes
+          * Since the Senate has long terms, these turn out
+          * to make it change almost slower than the Supreme
+          * Court.
+          * That's bad, so they're commented out
+          */
+         //if(senate[s]>1 && vote<4)vote++;
+         //if(senate[s]<-1 && vote>0)vote--;
          //if(vote==2)vote+=LCSrandom(3)-1;
 
+         // Uncommented code below is taken and converted from the House
+         // election code to experiment with using that system instead
+         // of the perpetually busted Senate system
+
+         if(senate[s]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
+         if(senate[s]>1 && vote<4)vote++;
+
+         if(senate[s]<0 && vote>-1 && LCSrandom(100-mood+11)>10)vote--;
+         if(senate[s]<-1 && vote>0)vote--;
+
+         switch(senate[s])
+         {
+         case -2:
+            if(mood<60)break;
+            if(vote>=3)senate[s]=vote-1;
+            break;
+         case -1:
+            if(vote==0 && LCSrandom(100-mood+1)>60)senate[s]=-2;
+            if(mood<50 && LCSrandom(7))break;
+            if(vote>=3 && LCSrandom(3))senate[s]=vote-1;
+            break;
+         case 0:
+            if(!LCSrandom(3))senate[s]=vote-2;
+            break;
+         case 1:
+            if(vote==4 && LCSrandom(mood+1)>60)senate[s]=2;
+            if(mood>50 && LCSrandom(7))break;
+            if(vote<=1 && LCSrandom(3))senate[s]=vote-1;
+            break;
+         case 2:
+            if(mood>40)break;
+            if(vote<=1)senate[s]=vote-1;
+            break;
+         }
+
+         // House code ends here
+
+         /*
          switch(senate[s])
          {
          case -2:
@@ -582,21 +624,21 @@ void elections(char clearformess,char canseethings)
             if(vote>=3)senate[s]=vote-2;
             break;
          case -1:
-            if(mood<40 && LCSrandom(4))break;
-            if(vote>=3 && LCSrandom(3))senate[s]=vote-2;
+            if(mood<40 && LCSrandom(2))break;
+            if(vote>=3 && LCSrandom(5))senate[s]=vote-2;
             break;
          case 0:
             if(!LCSrandom(3))senate[s]=vote-2;
             break;
          case 1:
-            if(mood>60 && LCSrandom(4))break;
-            if(vote<=1 && LCSrandom(3))senate[s]=vote-2;
+            if(mood>60 && LCSrandom(2))break;
+            if(vote<=1 && LCSrandom(5))senate[s]=vote-2;
             break;
          case 2:
             if(mood>40)break;
             if(vote<=1)senate[s]=vote-2;
             break;
-         }
+         }*/
 
          change[senate[s]+2]++;
 
@@ -813,20 +855,20 @@ void elections(char clearformess,char canseethings)
          {
          case -2:
             if(mood<60)break;
-            if(vote>=3)house[h]=vote-3;
+            if(vote>=3)house[h]=vote-1;
             break;
          case -1:
-            if(vote==0 && LCSrandom(100-mood+1)>80)house[h]=-2;
-            if(mood<50 && LCSrandom(10))break;
-            if(vote>=3 && LCSrandom(2))house[h]=vote-3;
+            if(vote==0 && LCSrandom(100-mood+1)>60)house[h]=-2;
+            if(mood<50 && LCSrandom(7))break;
+            if(vote>=3 && LCSrandom(3))house[h]=vote-1;
             break;
          case 0:
             if(!LCSrandom(3))house[h]=vote-2;
             break;
          case 1:
-            if(vote==4 && LCSrandom(mood+1)>80)house[h]=2;
-            if(mood>50 && LCSrandom(10))break;
-            if(vote<=1 && LCSrandom(2))house[h]=vote-1;
+            if(vote==4 && LCSrandom(mood+1)>60)house[h]=2;
+            if(mood>50 && LCSrandom(7))break;
+            if(vote<=1 && LCSrandom(3))house[h]=vote-1;
             break;
          case 2:
             if(mood>40)break;

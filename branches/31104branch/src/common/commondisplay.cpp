@@ -352,6 +352,8 @@ void printlocation(long loc)
                addstr("The masses are storming this location!");break;
             case SIEGE_CORPORATE:
                addstr("The Corporations are raiding this location!");break;
+            case SIEGE_CCS:
+               addstr("The CCS is raiding this location!");break;
          }
       }
    }
@@ -858,7 +860,7 @@ void printliberalstats(creaturest &cr,char smll)
    else addstr("Fame: ");
    itoa(cr.juice,num,10);
    addstr(num);
-   if(cr.juice<500)
+   if(cr.juice<1000)
    {
       move(6,20);addstr("Next:  ");
       if(cr.juice<0)addstr("0");
@@ -866,7 +868,8 @@ void printliberalstats(creaturest &cr,char smll)
       else if(cr.juice<50)addstr("50");
       else if(cr.juice<100)addstr("100");
       else if(cr.juice<200)addstr("200");
-      else addstr("500");
+      else if(cr.juice<500)addstr("500");
+      else addstr("1000");
    }
    move(8,20);
    itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
