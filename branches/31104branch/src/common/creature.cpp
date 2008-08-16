@@ -297,7 +297,7 @@ void makecreature(creaturest &cr,short type)
          cr.age=AGE_MATURE;
          cr.juice=-20;
          cr.flag|=CREATUREFLAG_ILLEGALALIEN;
-         sk=LCSrandom(6)+5;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
+         sk=LCSrandom(6)+1;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
          break;
       case CREATURE_WORKER_FACTORY_NONUNION:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -1754,7 +1754,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.ammo=6;
             cr.clip[CLIP_22]=3;
          }
-         sk=LCSrandom(6)+5;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+8;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
          sk=LCSrandom(3)+2;cr.skill[SKILL_ART]=sk;randomskills-=sk;
          cr.age=AGE_MATURE;
          break;

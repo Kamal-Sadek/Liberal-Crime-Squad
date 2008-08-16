@@ -604,7 +604,8 @@ void advanceday(char &clearformess,char canseethings)
             break;
          case ACTIVITY_MAKE_ARMOR:
             makearmor(*pool[p],clearformess);
-            pool[p]->activity.type=ACTIVITY_NONE;
+            // Uncomment this to have people stop making armor after the first day
+            //pool[p]->activity.type=ACTIVITY_NONE;
             break;
          case ACTIVITY_WHEELCHAIR:
             getwheelchair(*pool[p],clearformess);

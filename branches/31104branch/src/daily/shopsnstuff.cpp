@@ -2204,7 +2204,7 @@ unsigned long fenceselect(void)
                char bad=0;
                if(activesquad->loot[slot]->type==ITEM_ARMOR)
                {
-                  if(activesquad->loot[slot]->armor.quality!='1')bad=1;
+                  //if(activesquad->loot[slot]->armor.quality!='1')bad=1;
                   if(activesquad->loot[slot]->armor.flag!=0)bad=1;
                }
 
@@ -2214,7 +2214,7 @@ unsigned long fenceselect(void)
 
                   move(8,15);
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  addstr(" You can't sell damaged or second-rate goods.");
+                  addstr(" You can't sell damaged goods.");
 
                   refresh();
                   getch();
@@ -2354,6 +2354,8 @@ unsigned long fencevalue(itemst &it)
             case ARMOR_ARMYARMOR:fenceamount=250;break;
             case ARMOR_HEAVYARMOR:fenceamount=400;break;
          }
+         // Sell second-rate clothing for second-rate prices
+         fenceamount>>=it.armor.quality-'1';
          break;
       case ITEM_CLIP:
          switch(it.cliptype)

@@ -214,24 +214,24 @@ void repairarmor(creaturest &cr,char &clearformess)
          }
       }
 
-      armor->flag&=~ARMORFLAG_BLOODY;
-      armor->flag&=~ARMORFLAG_DAMAGED;
-
       if(armor->flag & ARMORFLAG_DAMAGED)
       {
          long dif=(armor_makedifficulty(armor->type,&cr)>>1);
          cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
 
-         if((LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif)&&armor->quality!='4')
+         if((LCSrandom(1+dif))&&armor->quality!='4')
          {
             addstr(" but it is not quite the same");
             armor->quality++;
-            if(LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif && armor->quality!='4')armor->quality++;
-            if(LCSrandom(3+cr.skill[SKILL_GARMENTMAKING])<dif && armor->quality!='4')armor->quality++;
+            if(LCSrandom(1+dif) && armor->quality!='4')armor->quality++;
+            if(LCSrandom(1+dif) && armor->quality!='4')armor->quality++;
          }
       }
       
       addstr(".");
+      
+      armor->flag&=~ARMORFLAG_BLOODY;
+      armor->flag&=~ARMORFLAG_DAMAGED;
 
       refresh();
       getch();
@@ -348,13 +348,13 @@ void makearmor(creaturest &cr,char &clearformess)
             it->armor.flag=0;
          location[cr.location]->loot.push_back(it);
 
-         if(LCSrandom(10)<dif||LCSrandom(10)<dif)
+         if(4<dif||LCSrandom(10)<dif)
          {
             it->armor.quality='2';
-            if(LCSrandom(10)<dif||LCSrandom(10)<dif)
+            if(6<dif||LCSrandom(10)<dif)
             {
                it->armor.quality='3';
-               if(LCSrandom(10)<dif||LCSrandom(10)<dif)
+               if(8<dif||LCSrandom(10)<dif)
                {
                   it->armor.quality='4';
                }
@@ -2355,7 +2355,7 @@ char stealcar(creaturest &cr,char &clearformess)
             translategetch(c);
             if(c=='a')break;
             if(c=='b'){method=1;break;}
-            if(c=='x'){delete v;return 1;}
+            if(c=='x'){delete v;return 0;} /* try again tomorrow */
          }while(1);
 
          char entered=0;
@@ -2470,7 +2470,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
             if(footchase(cr)){
                mode=GAMEMODE_BASE;
-               delete v;return 1;}
+               delete v;return 0;} // Switched to return 0; this will cause you to try again tomorrow
             else {
                mode=GAMEMODE_BASE;
                delete v;return 0;}

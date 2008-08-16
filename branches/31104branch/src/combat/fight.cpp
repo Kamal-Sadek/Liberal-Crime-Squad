@@ -54,7 +54,7 @@ void youattack(void)
           activesquad->squad[p]->weapon.ranged() &&   // Ranged
           activesquad->squad[p]->weapon.ammo!=0)      // Not out of ammo
       {
-         criminalize(*activesquad->squad[i],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
+         criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
       }
 
       if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
@@ -1414,8 +1414,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       if(strengthmod)
       {
          mod+=a.attval(ATTRIBUTE_STRENGTH)-5;
-         if(armorpiercing)
-            armorpiercing+=a.attval(ATTRIBUTE_STRENGTH)>>3;
+         /*if(armorpiercing)
+            armorpiercing+=a.attval(ATTRIBUTE_STRENGTH)>>3;*/
       }
 
       //SKILL BONUS FOR GOOD ROLL
@@ -1423,6 +1423,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
       //DO THE HEALTH MOD ON THE WOUND
       mod-=t.attval(ATTRIBUTE_HEALTH)-5;
+
+      if(mod<0)mod=0; // Don't health mod into negative, only counter criticals
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
 

@@ -282,7 +282,8 @@ void printparty(void)
             if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else if(hasdisguise(*party[p],sitetype))
             {
-               if(party[p]->armor.quality!='1'||
+               // Armor quality flagging clothes yellow is disabled
+               if(//party[p]->armor.quality!='1'||
                   party[p]->armor.flag!=0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
                else set_color(COLOR_GREEN,COLOR_BLACK,1);
             }
@@ -623,7 +624,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
    if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
    else if(hasdisguise(*cr,sitetype))
    {
-      if(cr->armor.quality!='1'||
+      if(//cr->armor.quality!='1'||
          cr->armor.flag>0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
       else set_color(COLOR_GREEN,COLOR_BLACK,1);
    }
