@@ -1364,7 +1364,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr(" reveals details about the ");
          addstr(location[cr->worklocation]->name);
          addstr(".");
-         move(y++,0);
+         move(++y,0);
          if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
          {
             addstr("Unfortunately, none of it is useful to the LCS.");
