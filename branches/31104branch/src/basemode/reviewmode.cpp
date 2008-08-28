@@ -367,7 +367,8 @@ void review_mode(short mode)
                }
                if(usepers)
                {
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  // Let's add some color here...
+                  set_activity_color(temppool[p]->activity.type);
                   char str[80];
                   getactivity(str,temppool[p]->activity);
                   addstr(str);

@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+   This file was created by Chris Johnson (grundee@users.sourceforge.net)
+   by copying code from game.cpp.
+   To see descriptions of files and functions, see the list at 
+   the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -113,7 +113,8 @@ void activate(void)
          addstr(location[temppool[p]->location]->shortname);
 
          move(y,57);
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         // Let's add some color here...
+         set_activity_color(temppool[p]->activity.type);
          getactivity(str,temppool[p]->activity);
          addstr(str);
 
@@ -631,13 +632,13 @@ void activate(creaturest *cr)
             }
             break;
          case 'd':
-         	switch(choice)
-         	{
-         	case '1':break;
-         	case '2':cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
-         	default:cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
-         	}
-         	break;
+            switch(choice)
+            {
+            case '1':break;
+            case '2':cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
+            default:cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
+            }
+            break;
          case 'e':
             switch(choice)
             {
@@ -959,9 +960,9 @@ void select_tendhostage(creaturest *cr)
    if(temppool.size()==0)return;
    if(temppool.size()==1)
    {
-	cr->activity.type=ACTIVITY_HOSTAGETENDING;
-	cr->activity.arg=temppool[0]->id;
-	return;
+   cr->activity.type=ACTIVITY_HOSTAGETENDING;
+   cr->activity.arg=temppool[0]->id;
+   return;
    }
    
 

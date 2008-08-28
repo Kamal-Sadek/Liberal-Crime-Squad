@@ -32,7 +32,7 @@
 //#define SHOWWAIT
 
 // Show die rolls, 100% accurate poll numbers
-#define SHOWMECHANICS
+//#define SHOWMECHANICS
 
 
 
@@ -800,8 +800,7 @@ enum Lawflags
  * police attention to the wanted person, and to the
  * LCS as a whole. This is a global array, available
  * at runtime and indexed to the lawflag enum, so that
- * code can dynamically look up these hea
- t values as
+ * code can dynamically look up these heat values as
  * needed at runtime.
  */
 
@@ -1565,6 +1564,8 @@ void end_game(int err=0);
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
 void set_alignment_color(signed char alignment, bool extended_range=false);
+// Sets the text color per activity type
+void set_activity_color(long activity_type);
 /* location and squad header */
 void locheader(void);
 /* party info at top of screen */

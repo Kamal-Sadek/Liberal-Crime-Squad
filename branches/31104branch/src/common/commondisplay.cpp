@@ -60,6 +60,93 @@ void set_alignment_color(signed char alignment, bool extended_range)
    }
 }
 
+
+// Sets the text color per activity type
+void set_activity_color(long activity_type)
+{
+   switch(activity_type)
+   {
+      // Liberal agenda
+      case ACTIVITY_COMMUNITYSERVICE:
+      case ACTIVITY_TROUBLE:
+      case ACTIVITY_GRAFFITI:
+      case ACTIVITY_POLLS:
+      case ACTIVITY_DOS_ATTACKS:
+      case ACTIVITY_HACKING:
+      case ACTIVITY_WRITE_LETTERS:
+      case ACTIVITY_WRITE_GUARDIAN:
+         set_color(COLOR_BLUE,COLOR_BLACK,1);
+         break;
+
+      // Legal fundraising
+      case ACTIVITY_DONATIONS:
+      case ACTIVITY_SELL_TSHIRTS:
+      case ACTIVITY_SELL_ART:
+      case ACTIVITY_SELL_MUSIC:
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         break;
+
+      // Illegal fundraising
+      case ACTIVITY_SELL_DRUGS:
+      case ACTIVITY_PROSTITUTION:
+      case ACTIVITY_CCFRAUD:
+      case ACTIVITY_DOS_RACKET:
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         break;
+
+      // Clothing/garment stuff
+      case ACTIVITY_REPAIR_ARMOR:
+      case ACTIVITY_MAKE_ARMOR:
+         set_color(COLOR_BLUE,COLOR_BLACK,0);
+         break;
+
+      // Teaching
+      case ACTIVITY_TEACH_GENERALED:
+      case ACTIVITY_TEACH_POLITICS:
+      case ACTIVITY_TEACH_SURVIVAL:
+      case ACTIVITY_TEACH_FIGHTING:
+      case ACTIVITY_TEACH_COVERT:
+         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         break;
+
+      // Healing
+      case ACTIVITY_HEAL:
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         break;
+
+      // Vehicles
+      case ACTIVITY_WHEELCHAIR:
+      case ACTIVITY_STEALCARS:
+         set_color(COLOR_YELLOW,COLOR_BLACK,0);
+         break;
+
+      // Interrogating
+      case ACTIVITY_HOSTAGETENDING:
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         break;
+
+      // Going elsewhere to get healed
+      case ACTIVITY_CLINIC:
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         break;
+
+      // Cleaning up the dead
+      case ACTIVITY_BURY:
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         break;
+
+      // Going elsewhere
+      case ACTIVITY_VISIT:
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         break;
+
+      // Not doing anything
+      case ACTIVITY_NONE:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         break;
+   }
+}
+
 /* location and squad header */
 void locheader(void)
 {
