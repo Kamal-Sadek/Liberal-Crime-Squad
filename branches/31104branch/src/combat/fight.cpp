@@ -2139,10 +2139,10 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr("The ");
-      addstr(" ");
       char str[200];
       getweaponfull(str,cr.weapon.type,1);
       addstr(str);
+      addstr(" slips from");
       move(17,1);
       addstr(cr.name);
       addstr("'s grasp.");
