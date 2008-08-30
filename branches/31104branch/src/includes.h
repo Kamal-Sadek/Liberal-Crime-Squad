@@ -32,7 +32,7 @@
 //#define SHOWWAIT
 
 // Show die rolls, 100% accurate poll numbers
-//#define SHOWMECHANICS
+#define SHOWMECHANICS
 
 
 
@@ -307,6 +307,7 @@ enum SiteTypes
    SITE_GOVERNMENT_COURTHOUSE,
    SITE_GOVERNMENT_PRISON,
    SITE_GOVERNMENT_INTELLIGENCEHQ,
+   SITE_GOVERNMENT_FIRESTATION,
    SITE_INDUSTRY_SWEATSHOP,
    SITE_INDUSTRY_POLLUTER,
    SITE_INDUSTRY_NUCLEAR,
@@ -351,6 +352,7 @@ enum CreatureType
    CREATURE_COP,
    CREATURE_SWAT,
    CREATURE_DEATHSQUAD,
+   CREATURE_FIREFIGHTER,
    CREATURE_EDUCATOR,
    CREATURE_GANGUNIT,
    CREATURE_JUDGE_LIBERAL,
@@ -454,6 +456,7 @@ enum Skills
    SKILL_KNIFE,
    SKILL_SWORD,
    SKILL_CLUB,
+   SKILL_AXE,
    SKILL_IMPROVISED,
    SKILL_PISTOL,
    SKILL_RIFLE,
@@ -483,6 +486,7 @@ enum Skills
    SKILL_LEADERSHIP,
    SKILL_MEDICAL,
    SKILL_TACTICS,
+   SKILL_FLAMETHROWER,
    SKILLNUM
 };
 
@@ -538,6 +542,8 @@ enum Weapons
    WEAPON_GUITAR,
    WEAPON_SPRAYCAN,
    WEAPON_MOLOTOV,
+   WEAPON_AXE,
+   WEAPON_FLAMETHROWER,
    WEAPONNUM
 };
 
@@ -560,6 +566,7 @@ struct weaponst
          case WEAPON_CARBINE_M4:
          case WEAPON_SMG_MP5:
          case WEAPON_SHOTGUN_PUMP:
+         case WEAPON_FLAMETHROWER:
             return 1;
       }
       return 0;
@@ -675,6 +682,7 @@ enum Armors
    ARMOR_POLICEARMOR,
    ARMOR_ARMYARMOR,
    ARMOR_HEAVYARMOR,
+   ARMOR_BUNKERGEAR,
    ARMORNUM
 };
 
@@ -705,6 +713,7 @@ enum ClipType
    CLIP_44,
    CLIP_BUCKSHOT,
    CLIP_MOLOTOV,
+   CLIP_GASOLINE,
    CLIPNUM
 };
 
@@ -800,7 +809,8 @@ enum Lawflags
  * police attention to the wanted person, and to the
  * LCS as a whole. This is a global array, available
  * at runtime and indexed to the lawflag enum, so that
- * code can dynamically look up these heat values as
+ * code can dynamically look up these hea
+ t values as
  * needed at runtime.
  */
 
@@ -1564,7 +1574,7 @@ void end_game(int err=0);
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
 void set_alignment_color(signed char alignment, bool extended_range=false);
-// Sets the text color per activity type
+/* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */
 void locheader(void);

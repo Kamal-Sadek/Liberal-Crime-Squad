@@ -766,6 +766,8 @@ short ammotype(int type)
          return CLIP_BUCKSHOT;
       case WEAPON_MOLOTOV:
          return CLIP_MOLOTOV;
+      case WEAPON_FLAMETHROWER:
+         return CLIP_GASOLINE;
    }
 
    return -1;
@@ -789,6 +791,7 @@ char rangedweapon(weaponst &w)
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_SHOTGUN_PUMP:
       case WEAPON_MOLOTOV:
+      case WEAPON_FLAMETHROWER:
          return 1;
    }
 

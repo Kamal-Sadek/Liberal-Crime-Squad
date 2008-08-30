@@ -188,6 +188,7 @@ short sitealienate;
 short sitealarm;
 short sitealarmtimer;
 short postalarmtimer;
+short siteonfire;
 long sitecrime;
 long cursite;
 

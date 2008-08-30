@@ -230,7 +230,7 @@ void enemyattack(void)
          // (a) Non-Conservative, and not recently converted via music or some other mechanism
          // (b) Conservative, no juice, unarmed, non-tank/animal, enemy is armed, and fails a morale check based in part on injury level
          // (c) Conservative, and lost more than 55% blood
-         // (d) There's a fire, and they fail a random check
+         // (d) There's a fire, they are not firefighters, and they fail a random check
          // Encountered creatures will never flee if they are tanks, animals, or so hurt they can't move
          char fire=0;
          if(mode==GAMEMODE_SITE)
@@ -248,7 +248,8 @@ void enemyattack(void)
 
          if(((encounter[e].align!=-1||
             (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<70+LCSrandom(61)))
-            &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45||(fire*LCSrandom(5)>=3))
+            &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
+            ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
          {
             if(!incapacitated(encounter[e],0,printed)&&encounter[e].animalgloss==ANIMALGLOSS_NONE)
             {
@@ -783,6 +784,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case CLIP_44:a.weapon.ammo+=6;break;
             case CLIP_BUCKSHOT:a.weapon.ammo+=6;break;
             case CLIP_MOLOTOV:a.weapon.ammo+=1;break;
+            case CLIP_GASOLINE:a.weapon.ammo+=2;break;
          }
 
          a.clip[ammotype(a.weapon.type)]--;
@@ -845,6 +847,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_KNIFE:
       case WEAPON_SHANK:
          strcat(str,"slashes at");break;
+      case WEAPON_AXE:
+         strcat(str,"chops at");break;
       case WEAPON_SYRINGE:strcat(str,"pokes at");break;
       case WEAPON_REVOLVER_22:
       case WEAPON_REVOLVER_44:
@@ -879,6 +883,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          strcat(str,"swings at");break;
       case WEAPON_PITCHFORK:
          strcat(str,"stabs at");break;
+      case WEAPON_FLAMETHROWER:
+         if(a.weapon.ammo>0)strcat(str,"streams fire at");
+         else strcat(str,"swings at");break;
       
    }
    strcat(str," ");
@@ -1010,6 +1017,22 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                      criminalizeparty(LAWFLAG_ARSON);
                      sitestory->crime.push_back(CRIME_ARSON);
                   }
+               }
+            }
+            break;
+         case WEAPON_FLAMETHROWER:
+            a.weapon.ammo--;
+            if(mode==GAMEMODE_SITE)
+            {
+               if((!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
+                   !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+                   !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
+                   !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS)) &&!LCSrandom(3))
+               {
+                  levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
+                  sitecrime+=3;
+                  criminalizeparty(LAWFLAG_ARSON);
+                  sitestory->crime.push_back(CRIME_ARSON);
                }
             }
             break;
@@ -1275,9 +1298,23 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
          case WEAPON_MOLOTOV:
             damtype|=WOUND_BURNED;
-            damamount=LCSrandom(400)+400;
+            damamount=LCSrandom(100)+25;
             damagearmor=1;
-            armorpiercing=9;
+            armorpiercing=7;
+            break;
+         case WEAPON_FLAMETHROWER:
+            if(a.weapon.ammo>0)
+            {
+               damtype|=WOUND_BURNED;
+               damamount=LCSrandom(200)+300;
+               damagearmor=1;
+               armorpiercing=9;
+            } else
+            {
+               damtype|=WOUND_BRUISED;
+               damamount=LCSrandom(30)+5;
+               strengthmod=1;
+            }
             break;
          case WEAPON_AUTORIFLE_AK47:
          case WEAPON_AUTORIFLE_M16:
@@ -1376,6 +1413,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
          case WEAPON_DAISHO:
          case WEAPON_SWORD:
+         case WEAPON_AXE:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
             damamount=LCSrandom(100)+10;
@@ -2086,6 +2124,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
       case ARMOR_PRISONER:prot=0;break;
       case ARMOR_TOGA:prot=0;break;
       case ARMOR_MITHRIL:prot=0;break;
+      case ARMOR_BUNKERGEAR:prot=2;prot2=2;prot3=2;break;
       case ARMOR_CIVILLIANARMOR:prot=5;break;
       case ARMOR_POLICEARMOR:prot=7;break;
       case ARMOR_ARMYARMOR:prot=8;prot2=6;break;
@@ -2116,6 +2155,15 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    else if(mod<=-1)damamount>>=1;
    else if(mod>=0)damamount=(int)((float)damamount * (1.0f + 0.2f*mod));
 
+   // Firefighter's bunker gear reduces fire damage by 3/4
+   if((damtype & WOUND_BURNED)&&(t.armor.type==ARMOR_BUNKERGEAR))
+   {
+      // Damaged gear isn't as effective as undamaged gear
+      if(t.armor.flag & ARMORFLAG_DAMAGED)
+         damamount>>=1;
+      else
+         damamount>>=2;
+   }
 
    if(damamount<0)damamount=0;
 }
@@ -2244,6 +2292,7 @@ void armordamage(armorst &armor,int bp)
       case ARMOR_POLICEUNIFORM:
       case ARMOR_BONDAGEGEAR:
       case ARMOR_MILITARY:
+      case ARMOR_BUNKERGEAR:
          armor.flag|=ARMORFLAG_DAMAGED;
          break;
       case ARMOR_MASK:

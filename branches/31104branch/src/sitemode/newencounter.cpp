@@ -66,6 +66,7 @@ void prepareencounter(short type,char sec)
             else creaturearray[CREATURE_COP]=1000;
             break;
       }
+      if(siteonfire && law[LAW_FREESPEECH]!=-2)creaturearray[CREATURE_FIREFIGHTER]=1000;
    }
 
    switch(type)
@@ -160,6 +161,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -201,6 +203,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_THIEF]+=1;
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=1;
          if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
             creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
@@ -292,6 +295,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]+=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]+=1;
          creaturearray[CREATURE_ATHLETE]+=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -443,6 +447,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_CLERK]+=1;
          creaturearray[CREATURE_THIEF]+=1;
          creaturearray[CREATURE_ACTOR]+=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -508,6 +513,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -688,6 +694,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
+         //creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -774,6 +781,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_ACTOR]=1;
          creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
          creaturearray[CREATURE_ATHLETE]=1;
+         //creaturearray[CREATURE_FIREFIGHTER]+=1;
 
          for(int n=0;n<LCSrandom(6)+1;n++)
          {
@@ -782,6 +790,32 @@ void prepareencounter(short type,char sec)
          }
          break;
       }
+
+      case SITE_GOVERNMENT_FIRESTATION:
+      {
+         creaturearray[CREATURE_WORKER_JANITOR]=5;
+         creaturearray[CREATURE_WORKER_SECRETARY]=2;
+         if(sec)
+         {
+            if(law[LAW_DEATHPENALTY]==-2&&
+                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=50;
+            else if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=50;
+            else creaturearray[CREATURE_COP]+=50;
+         }
+         creaturearray[CREATURE_NURSE]=2;
+         creaturearray[CREATURE_PRIEST]=5;
+         creaturearray[CREATURE_JOURNALIST]=1;
+         creaturearray[CREATURE_PHOTOGRAPHER]=1;
+         creaturearray[CREATURE_FIREFIGHTER]+=100;
+
+         for(int n=0;n<LCSrandom(6)+1;n++)
+         {
+            makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+            encslot++;
+         }
+         break;
+      }
+
       case SITE_GOVERNMENT_PRISON:
       {
          if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)

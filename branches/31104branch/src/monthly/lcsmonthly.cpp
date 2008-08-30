@@ -1077,6 +1077,12 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
          }
          libpower[VIEW_INTELLIGENCE]+=power;
          break;
+      case CREATURE_FIREFIGHTER:
+         if(law[LAW_FREESPEECH]==-2)
+         {
+            libpower[VIEW_FREESPEECH]+=power;
+         }
+         break;
       /* No influence at all block - for people were liberal anyway, or have no way of doing any good */
       case CREATURE_WORKER_FACTORY_CHILD:
       case CREATURE_GENETIC:

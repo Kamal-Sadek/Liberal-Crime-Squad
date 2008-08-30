@@ -589,6 +589,49 @@ void makecreature(creaturest &cr,short type)
 			cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=6;
          break;
+      case CREATURE_FIREFIGHTER:
+         if(law[LAW_FREESPEECH]==-2)
+         {
+            cr.weapon.type=WEAPON_FLAMETHROWER;
+            cr.weapon.ammo=2;
+            cr.clip[CLIP_GASOLINE]=3;
+            sk=LCSrandom(3)+2;cr.skill[SKILL_FLAMETHROWER]=sk;randomskills-=sk;
+            strcpy(cr.name,"Fireman");
+         } else
+         {
+            cr.weapon.type=WEAPON_AXE;
+            sk=LCSrandom(3)+2;cr.skill[SKILL_AXE]=sk;randomskills-=sk;
+            strcpy(cr.name,"Firefighter");
+         }
+         
+         if(sitealarm)
+         {
+            // Respond to emergencies in bunker gear
+            cr.armor.type=ARMOR_BUNKERGEAR;
+         }
+         else
+         {
+            // Other situations have various clothes
+            switch(LCSrandom(3))
+            {
+            case 0:
+               cr.armor.type=ARMOR_OVERALLS;
+               break;
+            case 1:
+               cr.armor.type=ARMOR_WORKCLOTHES;
+               break;
+            case 2:
+               cr.armor.type=ARMOR_BUNKERGEAR;
+            }
+         }
+
+         cr.align=-1;
+         cr.age=AGE_MATURE;
+         for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=25;
+         cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_STRENGTH]=3;
+         break;
       case CREATURE_CCS_MOLOTOV:
       {
          cr.armor.type=ARMOR_TRENCHCOAT;
@@ -1850,7 +1893,13 @@ void makecreature(creaturest &cr,short type)
    //RANDOM STARTING SKILLS
    while(randomskills>0)
    {
-      cr.skill[LCSrandom(SKILLNUM)]++;
+      int randomskill = LCSrandom(SKILLNUM);
+      // 95% chance of not allowing some skills...
+      if(LCSrandom(20))
+      {
+         if(randomskill == SKILL_FLAMETHROWER)continue;
+      }
+      cr.skill[randomskill]++;
       randomskills--;
    }
 
@@ -1893,7 +1942,7 @@ void firstname(char *str)
 {
    strcpy(str,"");
 
-   switch(LCSrandom(122))
+   switch(LCSrandom(123))
    {
       case 0:strcat(str,"Ryan");break;
       case 1:strcat(str,"Sergio");break;
@@ -2017,6 +2066,7 @@ void firstname(char *str)
 		case 119:strcat(str,"Jaqueline");break;
 		case 120:strcat(str,"Latoya");break;
 		case 121:strcat(str,"Veronica");break;
+      case 122:strcat(str,"Guy");break;
       default:strcat(str,"Default");break;
    }
 }
@@ -2028,7 +2078,7 @@ void lastname(char *str)
 {
    strcpy(str,"");
 
-   switch(LCSrandom(123))
+   switch(LCSrandom(124))
    {
       case 0:strcat(str,"King");break;
       case 1:strcat(str,"Lewis");break;
@@ -2153,6 +2203,7 @@ void lastname(char *str)
 		case 120:strcat(str,"Hope");break;
 		case 121:strcat(str,"Winslow");break;
 		case 122:strcat(str,"Fox");break;
+      case 123:strcat(str,"Montag");break;
       default:strcat(str,"Defaultson");break;
    }
 }
@@ -2187,6 +2238,7 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
          okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         //okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
          break;
       case CREATURE_SCIENTIST_LABTECH:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
@@ -2235,6 +2287,7 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_BUSINESS_INTERNETCAFE]=1;
          okaysite[SITE_BUSINESS_DEPTSTORE]=1;
          okaysite[SITE_BUSINESS_HALLOWEEN]=1;
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
          break;
       case CREATURE_WORKER_SWEATSHOP:
          okaysite[SITE_INDUSTRY_SWEATSHOP]=1;
@@ -2259,6 +2312,7 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_CORPORATE_HOUSE]=1;
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
          break;
       case CREATURE_WORKER_FACTORY_UNION:
          okaysite[SITE_INDUSTRY_POLLUTER]=1;
@@ -2280,6 +2334,9 @@ void verifyworklocation(creaturest &cr)
          break;
       case CREATURE_DEATHSQUAD:
          okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         break;
+      case CREATURE_FIREFIGHTER:
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
          break;
       case CREATURE_GANGUNIT:
          okaysite[SITE_GOVERNMENT_POLICESTATION]=1;

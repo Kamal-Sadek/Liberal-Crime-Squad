@@ -61,6 +61,7 @@ long gun_price(enum Weapon type)
       case WEAPON_DAISHO:
       case WEAPON_HAMMER:
       case WEAPON_MAUL:
+      case WEAPON_AXE:
          price=100;
          break;
       case WEAPON_REVOLVER_22:
@@ -80,6 +81,7 @@ long gun_price(enum Weapon type)
          price=800;
          break;
       case WEAPON_SMG_MP5:
+      case WEAPON_FLAMETHROWER:
          price=1100;
          break;
       case WEAPON_AUTORIFLE_AK47:

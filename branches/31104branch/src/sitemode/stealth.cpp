@@ -576,6 +576,14 @@ char weaponcheck(creaturest &cr,short type)
          incharacter=1;
       }
       break;
+   case WEAPON_AXE:
+      if(cr.armor.type==ARMOR_BUNKERGEAR) incharacter=1;
+      break;
+   case WEAPON_FLAMETHROWER:
+      if(cr.armor.type==ARMOR_BUNKERGEAR&&law[LAW_FREESPEECH]==-2)
+      {
+         incharacter=1;
+      }
    }
 
    //CHECK LEGALITY
@@ -600,6 +608,9 @@ char weaponcheck(creaturest &cr,short type)
    case WEAPON_AUTORIFLE_AK47:
       if(law[LAW_GUNCONTROL]==-2)illegal=0;
       else illegal=1;
+      break;
+   case WEAPON_FLAMETHROWER:
+      illegal=1;
       break;
    default:
       illegal=0;
@@ -734,6 +745,20 @@ char hasdisguise(creaturest &cr,short type)
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+            }
+            break;
+         case SITE_GOVERNMENT_FIRESTATION:
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            {
+               uniformed=0;
+               if(cr.armor.type==ARMOR_BUNKERGEAR)uniformed=1;
+               if(cr.armor.type==ARMOR_WORKCLOTHES)uniformed=1;
+               if(cr.armor.type==ARMOR_OVERALLS)uniformed=1;
+               if(location[cursite]->highsecurity)
+               {
+                  if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
+                  if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
+               }
             }
             break;
          case SITE_BUSINESS_CIGARBAR:

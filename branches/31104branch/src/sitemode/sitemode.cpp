@@ -38,6 +38,7 @@ void mode_site(long loc)
    sitealarm=0;
    sitealarmtimer=-1;
    postalarmtimer=0;
+   siteonfire=0;
    sitealienate=0;
    sitecrime=0;
    initsite(*location[loc]);
@@ -1174,6 +1175,12 @@ void mode_site(void)
                            else if(!LCSrandom(2))item->loottype=LOOT_TV;
                            else if(LCSrandom(49))item->loottype=LOOT_COMPUTER;
                            else item->loottype=LOOT_SECRETDOCUMENTS;
+                        activesquad->loot.push_back(item);
+                        break;
+                     case SITE_GOVERNMENT_FIRESTATION:
+                        item=new itemst;item->type=ITEM_LOOT;
+                           if(LCSrandom(2))item->loottype=LOOT_TV;
+                           else item->loottype=LOOT_COMPUTER;
                         activesquad->loot.push_back(item);
                         break;
                      case SITE_INDUSTRY_SWEATSHOP:

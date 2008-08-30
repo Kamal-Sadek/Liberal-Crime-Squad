@@ -790,6 +790,15 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
+      newl->type=SITE_GOVERNMENT_FIRESTATION;
+      newl->parent=0;
+     newl->orgID = locID[0];
+      initlocation(*newl);
+     newl->orgID = locID[0];
+      if(hasmaps)newl->interrogated=1;
+   location.push_back(newl);
+
+   newl=new locationst;
       newl->type=SITE_GOVERNMENT_PRISON;
       newl->parent=3;
       newl->needcar=1;

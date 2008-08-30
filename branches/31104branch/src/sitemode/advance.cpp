@@ -191,6 +191,7 @@ void creatureadvance(void)
                // Cool/spread peak fires
                if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_PEAK)
                {
+                  siteonfire=1;
                   if(!LCSrandom(10))
                   {
                      levelmap[x][y][z].flag &= ~SITEBLOCK_FIRE_PEAK;
@@ -205,7 +206,7 @@ void creatureadvance(void)
                      {
                         int xmod=0;
                         int ymod=0;
-                        switch(dir++)
+                        switch(dir)
                         {
                         case 0:xmod=-1;break;
                         case 1:xmod=1;break;
@@ -226,6 +227,7 @@ void creatureadvance(void)
                         }
                         // Else try another direction
                         tries++;
+                        dir++;dir%=4;
                      }
                      if(tries==5) // If all four directions unacceptable, spread upward
                      {
@@ -336,16 +338,37 @@ void advancecreature(creaturest &cr)
       ((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
        (levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END)))
    {
+      int burndamage=0;
       clearmessagearea();
 
       if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
       {
-         cr.blood-=LCSrandom(40);
+         burndamage=LCSrandom(40);
       }
       else
       {
-         cr.blood-=LCSrandom(20);
+         burndamage=LCSrandom(20);
       }
+
+      // Firefighter's bunker gear reduces burn damage
+      if(cr.armor.type==ARMOR_BUNKERGEAR)
+      {
+         // Base effect is 3/4 damage reduction, the denominator
+         // increases with low quality or damaged gear
+         int denom=4;
+
+         // Damaged gear
+         if(cr.armor.flag & ARMORFLAG_DAMAGED)
+            denom+=2;
+         // Shoddy quality gear
+         denom+=cr.armor.quality - '1';
+
+         // Apply damage reduction
+         burndamage = static_cast<int>(burndamage * (3.0/denom));
+      }
+
+
+      cr.blood-=burndamage;
 
       char str[200];
 

@@ -252,12 +252,20 @@ int maxskill(int skill,creaturest& cr)
    switch(skill)
    {
    case SKILL_HANDTOHAND:
-   case SKILL_SWORD:
    case SKILL_IMPROVISED:
       return (cr.attval(ATTRIBUTE_STRENGTH)+cr.attval(ATTRIBUTE_AGILITY))/2;
+   case SKILL_FLAMETHROWER:
+      // Flamethrower fully limited by agility, but also so heavy that it
+      // requires strength too
+      if(cr.attval(ATTRIBUTE_STRENGTH) < cr.attval(ATTRIBUTE_AGILITY))
+         return cr.attval(ATTRIBUTE_STRENGTH);
+      else
+         return cr.attval(ATTRIBUTE_AGILITY);
    case SKILL_CLUB:
+   case SKILL_AXE:
       return cr.attval(ATTRIBUTE_STRENGTH);
    case SKILL_KNIFE:
+   case SKILL_SWORD:
    case SKILL_PISTOL:
    case SKILL_RIFLE:
    case SKILL_SMG:
@@ -334,6 +342,9 @@ int weaponskill(int weapon)
       case WEAPON_HAMMER:
          wsk=SKILL_CLUB;
          break;
+      case WEAPON_AXE:
+         wsk=SKILL_AXE;
+         break;
       case WEAPON_SWORD:
       case WEAPON_DAISHO:
          wsk=SKILL_SWORD;
@@ -355,6 +366,9 @@ int weaponskill(int weapon)
       case WEAPON_CARBINE_M4:
       case WEAPON_SEMIRIFLE_AR15:
          wsk=SKILL_RIFLE;
+         break;
+      case WEAPON_FLAMETHROWER:
+         wsk=SKILL_FLAMETHROWER;
          break;
       case WEAPON_GUITAR:
          wsk=SKILL_MUSIC;

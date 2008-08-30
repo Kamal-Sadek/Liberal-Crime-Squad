@@ -563,7 +563,10 @@ char talk(creaturest &a,int t)
                   else
                   {
                      addstr(encounter[n].name);
-                     addstr(" is not fooled by that crap.");
+                     if(law[LAW_FREESPEECH]==ALIGN_ARCHCONSERVATIVE)
+                     {
+                        addstr(" is not fooled by that [act].");
+                     } else addstr(" is not fooled by that crap.");
                   }
 
                   refresh();

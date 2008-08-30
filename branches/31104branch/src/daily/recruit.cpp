@@ -167,6 +167,10 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
          if(LCSrandom(5)) r.recruit->weapon.type=WEAPON_SWORD;
          else r.recruit->weapon.type=WEAPON_DAISHO;
       }
+      else if(r.recruit->skill[SKILL_AXE])
+      {
+         r.recruit->weapon.type=WEAPON_AXE;
+      }
       else if(r.recruit->skill[SKILL_PISTOL])
       {
          r.recruit->weapon.type=WEAPON_REVOLVER_22;

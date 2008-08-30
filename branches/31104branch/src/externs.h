@@ -55,6 +55,7 @@ extern short sitealienate;
 extern short sitealarm;
 extern short sitealarmtimer;
 extern short postalarmtimer;
+extern short siteonfire;
 extern long sitecrime;
 extern long cursite;
 

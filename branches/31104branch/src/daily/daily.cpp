@@ -1412,7 +1412,7 @@ void dispersalcheck(char &clearformess)
                      // safe. Their own subordinates will then be considered
                      // in the next loop iteration.
                      nukeme[p2]=DISPERSAL_BOSSSAFE;
-                     // If they're hiding indefinately and their boss isn't
+                     // If they're hiding indefinitely and their boss isn't
                      // hiding at all, then have them discreetly return in a
                      // couple of weeks
                      if(pool[p2]->hiding==-1&&!pool[p]->hiding)
@@ -1487,7 +1487,7 @@ void dispersalcheck(char &clearformess)
                pool[p]->location=-1;
                pool[p]->base=hs;
                pool[p]->activity.type=ACTIVITY_NONE;
-               pool[p]->hiding=-1; // Hide indefinately
+               pool[p]->hiding=-1; // Hide indefinitely
             }
          }
       }
@@ -1706,6 +1706,7 @@ char securityable(int type)
       case SITE_GOVERNMENT_COURTHOUSE:
       case SITE_GOVERNMENT_PRISON:
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
+      case SITE_GOVERNMENT_FIRESTATION:
       case SITE_INDUSTRY_SWEATSHOP:
       case SITE_INDUSTRY_POLLUTER:
       case SITE_CORPORATE_HEADQUARTERS:
@@ -1755,6 +1756,18 @@ void initlocation(locationst &loc)
          {
             strcpy(loc.name,"Court House");
             strcpy(loc.shortname,"Court House");
+         }
+         break;
+      case SITE_GOVERNMENT_FIRESTATION:
+         if(law[LAW_FREESPEECH]==-2)
+         {
+            strcpy(loc.name,"Fireman HQ");
+            strcpy(loc.shortname,"Fireman HQ");
+         }
+         else
+         {
+            strcpy(loc.name,"Fire Station");
+            strcpy(loc.shortname,"Fire Station");
          }
          break;
       case SITE_GOVERNMENT_PRISON:

@@ -284,23 +284,25 @@ long bashstrengthmod(int t)
       case WEAPON_SWORD:
       case WEAPON_DAISHO:
       case WEAPON_MAUL:
+      case WEAPON_AXE:
+      case WEAPON_HAMMER:
          return 5;
-      case WEAPON_CROWBAR:
+      case WEAPON_CROWBAR: // (crowbar won't look up this table, auto-bashes)
       case WEAPON_SHOTGUN_PUMP:
       case WEAPON_STAFF:
       case WEAPON_NIGHTSTICK:
-      case WEAPON_SMG_MP5:
       case WEAPON_SEMIRIFLE_AR15:
       case WEAPON_CARBINE_M4:
       case WEAPON_AUTORIFLE_M16:
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_PITCHFORK:
+      case WEAPON_FLAMETHROWER:
          return 3;
+      case WEAPON_SMG_MP5:
       case WEAPON_REVOLVER_22:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
-      case WEAPON_HAMMER:
       case WEAPON_CROSS:
          return 1;
       default:
@@ -1109,6 +1111,7 @@ void reloadparty(bool wasteful)
             case CLIP_44:ammomax=6;break;
             case CLIP_BUCKSHOT:ammomax=6;break;
             case CLIP_MOLOTOV:ammomax=1;break;
+            case CLIP_GASOLINE:ammomax=2;break;
          }
 		   if(wasteful)
 		   {

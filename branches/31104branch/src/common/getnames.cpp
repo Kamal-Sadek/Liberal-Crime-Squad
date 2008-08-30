@@ -184,6 +184,8 @@ void getweapon(char *str,int type)
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
+         case WEAPON_AXE:           strcpy(str,"Axe");break;
+         case WEAPON_FLAMETHROWER:  strcpy(str,"M2A1-7");break;
       }
    }
    else
@@ -221,6 +223,8 @@ void getweapon(char *str,int type)
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
+         case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
+         case WEAPON_FLAMETHROWER:  strcpy(str,"Plasmagun");break;
       }
    }
 }
@@ -271,6 +275,8 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
          case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
+         case WEAPON_AXE:           strcpy(str,"Axe");break;
+         case WEAPON_FLAMETHROWER:  strcpy(str,"M2 Flamethrower");break;
       }
    }
    else
@@ -312,6 +318,8 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_GUITAR:      strcpy(str,"Ancient Guitar");break;
       case WEAPON_SPRAYCAN:         strcpy(str,"Retro Spraycan");break;
       case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
+      case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
+      case WEAPON_FLAMETHROWER:  strcpy(str,"Plasma Gun");break;
       }
    }
 }
@@ -408,6 +416,7 @@ void getarmor(char *str,int type,int subtype)
       case ARMOR_POLICEARMOR:          strcpy(str,"PoliceBdyArmor");break;
       case ARMOR_ARMYARMOR:            strcpy(str,"Army BodyArmor");break;
       case ARMOR_HEAVYARMOR:           strcpy(str,"HeavyBodyArmor");break;
+      case ARMOR_BUNKERGEAR:           strcpy(str,"Bunker Gear");break;
    }
 }
 
@@ -503,6 +512,7 @@ void getarmorfull(char *str,int type,int subtype)
       case ARMOR_ARMYARMOR:    strcpy(str,"Army Body Armor");break;
       case ARMOR_CIVILLIANARMOR:                strcpy(str,"Body Armor");break;
       case ARMOR_HEAVYARMOR:   strcpy(str,"Heavy Body Armor");break;
+      case ARMOR_BUNKERGEAR:           strcpy(str,"Bunker Gear");break;
    }
 }
 
@@ -607,8 +617,10 @@ void getskill(char *str,int type)
       case SKILL_SWORD:strcpy(str,"Sword");break;
       case SKILL_IMPROVISED:strcpy(str,"Improv Weapons");break;
       case SKILL_CLUB:strcpy(str,"Club");break;
+      case SKILL_AXE:strcpy(str,"Axe");break;
       case SKILL_PISTOL:strcpy(str,"Pistol");break;
       case SKILL_RIFLE:strcpy(str,"Rifle");break;
+      case SKILL_FLAMETHROWER:strcpy(str,"Flamethrower");break;
       case SKILL_SHOTGUN:strcpy(str,"Shotgun");break;
       case SKILL_SMG:strcpy(str,"Submachine Gun");break;
       case SKILL_PERSUASION:strcpy(str,"Persuasion");break;
@@ -656,6 +668,7 @@ void getclip(char *str,int clip)
          case CLIP_44:strcat(str,".44 Speedloader");break;
          case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
+         case CLIP_GASOLINE:strcat(str,"Gas Tank");break;
       }
    }
    else
@@ -670,6 +683,7 @@ void getclip(char *str,int clip)
          case CLIP_44:strcat(str,".44 Heavy Slug Mag");break;
          case CLIP_BUCKSHOT:strcat(str,"Shotgun Plasma Pack");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
+         case CLIP_GASOLINE:strcat(str,"Hydrogen Fuel");break;
       }
    }
 }
@@ -731,6 +745,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_SWAT:strcat(str,"SWAT Officer");break;
       case CREATURE_DEATHSQUAD:strcat(str,"Death Squad Officer");break;
       case CREATURE_GANGUNIT:strcat(str,"Police Gang Unit");break;
+      case CREATURE_FIREFIGHTER:strcat(str,"Fire Fighter");break;
       case CREATURE_PRISONGUARD:strcat(str,"Prison Guard");break;
       case CREATURE_EDUCATOR:strcat(str,"Educator");break;
       case CREATURE_MERC:strcat(str,"Mercenary");break;

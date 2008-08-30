@@ -1133,7 +1133,6 @@ void select_makeclothing(creaturest *cr)
          case ARMOR_NONE:
          case ARMOR_MITHRIL:
          case ARMOR_MASK:
-         case ARMOR_CIVILLIANARMOR:
          case ARMOR_POLICEARMOR:
          case ARMOR_ARMYARMOR:
          case ARMOR_HEAVYARMOR:
@@ -1293,11 +1292,15 @@ long armor_makedifficulty(int type,creaturest *cr)
          basedif=5;
          break;
       case ARMOR_CHEAPSUIT:
+      case ARMOR_CIVILLIANARMOR:
          basedif=6;
          break;
       case ARMOR_BLACKSUIT:
       case ARMOR_BLACKDRESS:
          basedif=7;
+         break;
+      case ARMOR_BUNKERGEAR:
+         basedif=8;
          break;
       case ARMOR_EXPENSIVESUIT:
       case ARMOR_EXPENSIVEDRESS:
@@ -1358,6 +1361,9 @@ long armor_makeprice(int type)
       case ARMOR_EXPENSIVESUIT:
       case ARMOR_EXPENSIVEDRESS:
          price=300;
+      case ARMOR_BUNKERGEAR:
+      case ARMOR_CIVILLIANARMOR:
+         price=500;
          break;
    }
 
