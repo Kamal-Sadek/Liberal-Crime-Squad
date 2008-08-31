@@ -97,13 +97,31 @@ void mode_site(long loc)
          }
       }
 
+      //Cops have tanks; firemen have fire.
+      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
+      {
+         short firesstarted=0;
+         short firex=LCSrandom(MAPX);
+         short firey=LCSrandom(MAPY);
+         do
+         {
+            firex=LCSrandom(MAPX);
+            firey=LCSrandom(MAPY);
+            firesstarted++;
+            levelmap[firex][firey][0].flag |= SITEBLOCK_FIRE_START;
+
+         } while(!(levelmap[firex][firey][0].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT)) &&
+            firesstarted<4);
+      }
+
       do
       {
          locx=LCSrandom(MAPX);
          locy=maxy-LCSrandom(3);
          if(locy<3)locy=3;
          locz=0;
-      }while(levelmap[locx][locy][locz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR));
+      }while(levelmap[locx][locy][locz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|
+         SITEBLOCK_FIRE_START|SITEBLOCK_FIRE_PEAK|SITEBLOCK_FIRE_END));
 
       //PLACE LOOT
       int lootnum=location[loc]->loot.size();

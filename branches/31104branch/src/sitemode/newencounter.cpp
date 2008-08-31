@@ -1054,6 +1054,9 @@ char addsiegeencounter(char type)
                         makecreature(encounter[e],CREATURE_CCS_VIGILANTE);
                      }
                      break;
+                  case SIEGE_FIREMEN:
+                     makecreature(encounter[e],CREATURE_FIREFIGHTER);
+                     break;
 					//Puzz:  Adding in organization attacks
 				  case SIEGE_ORG:
 					  organization org = gOrgManager.getOrg(location[cursite]->siege.orgID);

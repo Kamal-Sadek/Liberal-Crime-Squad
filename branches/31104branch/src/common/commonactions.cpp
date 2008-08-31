@@ -58,6 +58,7 @@ char endcheck(short cause)
                case SIEGE_HICKS:savehighscore(END_HICKS);break;
                case SIEGE_CORPORATE:savehighscore(END_CORP);break;
                case SIEGE_CCS:savehighscore(END_CCS);break;
+               case SIEGE_FIREMEN:savehighscore(END_FIREMEN);break;
             }
          } 
          else savehighscore(END_DEAD);

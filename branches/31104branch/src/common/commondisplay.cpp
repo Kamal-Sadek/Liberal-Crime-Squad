@@ -442,6 +442,8 @@ void printlocation(long loc)
                addstr("The Corporations are raiding this location!");break;
             case SIEGE_CCS:
                addstr("The CCS is raiding this location!");break;
+            case SIEGE_FIREMEN:
+               addstr("Firemen are raiding this location!");break;
          }
       }
    }

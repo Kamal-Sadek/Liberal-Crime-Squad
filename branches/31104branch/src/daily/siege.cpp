@@ -443,12 +443,12 @@ void siegecheck(char canseethings)
       else if(location[l]->siege.timeuntilcorps==0)location[l]->siege.timeuntilcorps=-1; // Silently call off foiled corp raids
 
          //CONSERVATIVE CRIME SQUAD
-      if(endgamestate>ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
+      if(endgamestate>=ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
       {
          if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
          {
-            location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
-            // CCS sleepers may give a warning before corp raids
+            location[l]->siege.timeuntilccs=LCSrandom(3)+1;
+            // CCS sleepers may give a warning before raids
             int ccssleepercount=0;
             for(int pl=0;pl<pool.size();pl++)
             {
@@ -473,11 +473,11 @@ void siegecheck(char canseethings)
                getch();
             }
          }
-         else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // Corp raid countdown!
+         else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
          else if(location[l]->siege.timeuntilccs==0&&!location[l]->siege.siege&&numpres>0)
          {
             location[l]->siege.timeuntilccs=-1;
-            // Corps raid!
+            // CCS raid!
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -692,6 +692,67 @@ void siegecheck(char canseethings)
          location[l]->siege.lights_off=0;
          location[l]->siege.cameras_off=0;
       }
+      //Firemen
+      if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
+         offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
+      {
+         location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
+
+         // Sleeper Firemen can warn you of an impending raid
+         int firemensleepercount=0;
+         for(int pl=0;pl<pool.size();pl++)
+         {
+            if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
+               pool[pl]->type==CREATURE_FIREFIGHTER)
+            {
+               firemensleepercount++;
+            }
+         }
+         if(LCSrandom(firemensleepercount+1)>1||!LCSrandom(10))
+         {
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            if(firemensleepercount)
+            {
+               addstr("A sleeper Fireman has informed you that");
+            } else
+            {
+               addstr("Word in the underground is that");
+            }
+            move(9,1);
+            addstr("the Firemen are planning to burn ");
+            addstr(location[l]->name);
+            addstr(".");
+            refresh();
+            getch();
+         }
+
+      } else if(location[l]->siege.timeuntilfiremen>0)location[l]->siege.timeuntilfiremen--;
+      else if(location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege)
+      {
+         location[l]->siege.timeuntilfiremen=-1;
+         // Firemen raid!
+         erase();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+         move(8,1);
+         addstr("Screaming fire engines pull up to the ");
+         addlocationname(location[l]);
+         addstr("!");
+
+         move(9,1);
+         addstr("Armored firemen swarm out, pilot lights burning.");
+
+         refresh();
+         getch();
+
+         location[l]->siege.siege=1;
+         location[l]->siege.siegetype=SIEGE_FIREMEN;
+         location[l]->siege.underattack=1;
+         location[l]->siege.lights_off=0;
+         location[l]->siege.cameras_off=0;
+      } else if(location[l]->siege.timeuntilfiremen==0) location[l]->siege.timeuntilfiremen=-1; // Silently call off foiled firemen raids
    }
    }
 }
@@ -1261,6 +1322,7 @@ void siegeturn(char clearformess)
       }
    }
    delete[] liberalcount;
+   delete[] gourmet;
 }
 
 
@@ -1488,8 +1550,16 @@ void giveup(void)
       addstr("Everyone in the ");
       addlocationname(location[loc]);
       addstr(" is slain.");
+      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
+      {
+         location[loc]->compound_walls&=~COMPOUND_PRINTINGPRESS;
+         offended_firemen=0;  //Firemen do not hold grudges.
+         move(2,1);
+         addstr("The printing press is destroyed.");
+      }
       refresh();
       getch();
+
 
       newsstoryst *ns=new newsstoryst;
          ns->type=NEWSSTORY_MASSACRE;

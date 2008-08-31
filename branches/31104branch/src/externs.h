@@ -87,6 +87,7 @@ extern short offended_corps;
 extern short offended_cia;
 extern short offended_amradio;
 extern short offended_cablenews;
+extern short offended_firemen;
 extern int police_heat;
 extern unsigned long attorneyseed;
 extern long selectedsiege;

@@ -109,6 +109,9 @@ void viewhighscores(void)
             case END_CCS:
                addstr("The Liberal Crime Squad was out-Crime Squadded in ");
                break;
+            case END_FIREMEN:
+               addstr("The Liberal Crime Squad was burned in ");
+               break;
          }
          switch(score[s].month)
          {

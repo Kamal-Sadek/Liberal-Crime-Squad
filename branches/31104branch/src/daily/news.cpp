@@ -770,6 +770,23 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   strcat(story,"They have to be stopped before they kill again");
                }
                break;
+            case SIEGE_FIREMEN:
+               if(!liberalguardian)
+               {
+                  if(ns.crime[1]>1)strcat(story,"The recovered bodies were ");
+                  else strcat(story,"The recovered body was ");
+                  strcat(story,"burned unrecognizable.  ");
+                  strcat(story,"Scorch marks throughout the site indicate that this was no accident; ");
+                  strcat(story,"we are working closely with the Fire Department to track down the arsonist.  ");
+                  strcat(story,"Fortunately, firemen were able to respond before the fire could spread to other buildings");
+               }
+               else
+               {
+                  if(ns.crime[1]>1)strcat(story,"The murdered were reporters ");
+                  else strcat(story,"The murdered was a reporter ");
+                  strcat(story,"working for this very paper. ");
+                  strcat(story,"This is clearly the work of conservative butchers enforcing the prohibition on a free press");
+               }
          }
          strcat(story,".\"  ");
          strcat(story,"&r");

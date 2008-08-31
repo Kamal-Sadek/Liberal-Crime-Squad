@@ -679,6 +679,11 @@ char hasdisguise(creaturest &cr,short type)
                location[cursite]->siege.escalationstate>0)uniformed=1;
             break;
          }
+         case SIEGE_FIREMEN:
+         {
+            if(cr.armor.type==ARMOR_BUNKERGEAR)uniformed=1;
+            break;
+         }
       }
    }
    else

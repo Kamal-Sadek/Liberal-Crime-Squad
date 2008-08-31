@@ -1087,6 +1087,7 @@ enum SiegeTypes
    SIEGE_HICKS,
    SIEGE_CORPORATE,
    SIEGE_CCS,
+   SIEGE_FIREMEN,
    SIEGE_ORG,
    SIEGENUM
 };
@@ -1107,6 +1108,7 @@ struct siegest
    short timeuntilcorps;
    short timeuntilcia;
    short timeuntilccs;
+   short timeuntilfiremen;
 
    siegest()
    {
@@ -1117,6 +1119,7 @@ struct siegest
       timeuntillocated=-1;
       timeuntilcorps=-1;
       timeuntilcia=-1;
+      timeuntilfiremen=-1;
    }
 };
 
@@ -1511,6 +1514,7 @@ enum EndTypes
    END_DISBANDLOSS,
    END_DISPERSED,
    END_CCS,
+   END_FIREMEN,
    ENDNUM
 };
 enum ReportTypes

@@ -470,6 +470,20 @@ char talk(creaturest &a,int t)
                case SIEGE_CORPORATE:
                   addstr("pretends to be a mercenary.");
                   break;
+               case SIEGE_FIREMEN:
+                  addstr("lights a match and throws it on the ground.");
+                  if((!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS)) && !LCSrandom(10))
+                  {
+                     levelmap[locx][locy][locz].flag |= SITEBLOCK_FIRE_START;
+                     move(17,1);
+                     addstr("The carpet smoulders, then bursts into flame.");
+                     move(18,1);
+                     addstr("Perhaps that was a bad idea...");
+                  }
+                  break;
             }
          }
          else

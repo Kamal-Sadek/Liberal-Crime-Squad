@@ -126,6 +126,7 @@ short offended_corps=0;
 short offended_cia=0;
 short offended_amradio=0;
 short offended_cablenews=0;
+short offended_firemen=0;
 int police_heat=0;
 unsigned long attorneyseed;
 long selectedsiege=-1;

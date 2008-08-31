@@ -257,6 +257,7 @@ int choosespecialedition(char &clearformess)
 /* monthly - guardian - prints liberal guardian special editions */
 void printnews(short l,short newspaper)
 {
+   if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    switch(l)
