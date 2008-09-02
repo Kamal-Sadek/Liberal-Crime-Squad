@@ -849,7 +849,7 @@ void activatebulk(void)
          addstr(temppool[p]->name);
 
          move(y,25);
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         set_activity_color(temppool[p]->activity.type);
          getactivity(str,temppool[p]->activity);
          addstr(str);
          /*if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
