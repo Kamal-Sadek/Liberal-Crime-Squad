@@ -110,7 +110,7 @@ void advanceday(char &clearformess,char canseethings)
          pool[p]->age++;
          switch(pool[p]->age)
          {
-         case 11:
+         case 13:
             pool[p]->type=CREATURE_TEENAGER; // aww, all grown up
             break;
          case 18:

@@ -97,7 +97,7 @@ void set_activity_color(long activity_type)
       // Clothing/garment stuff
       case ACTIVITY_REPAIR_ARMOR:
       case ACTIVITY_MAKE_ARMOR:
-         set_color(COLOR_BLUE,COLOR_BLACK,0);
+         set_color(COLOR_MAGENTA,COLOR_BLACK,0);
          break;
 
       // Teaching

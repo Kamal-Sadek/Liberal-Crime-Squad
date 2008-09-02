@@ -2483,10 +2483,14 @@ char stealcar(creaturest &cr,char &clearformess)
 
       //START CAR
       char keys_in_car=0;
+      char ignition_progress=0;
+      char key_search_total=0;
+      int nervous_counter=0;
       if(!LCSrandom(5))keys_in_car=1;
 
       do
       {
+         nervous_counter++;
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(0,0);
@@ -2548,8 +2552,22 @@ char stealcar(creaturest &cr,char &clearformess)
          //HOTWIRE CAR
          if(method==0)
          {
-            int attack=cr.skill[SKILL_SECURITY];
-            if(!LCSrandom(20))attack++;
+            if(!LCSrandom(10))
+            {
+               ignition_progress++;
+               set_color(COLOR_BLUE,COLOR_BLACK,1);
+               move(y,0);y++;
+               addstr(cr.name);
+               switch(LCSrandom(5))
+               {
+                  case 0:addstr(" figures out some of the wiring in the console!");break;
+                  case 1:addstr(" makes some significant progress!");break;
+                  case 2:addstr(" remembers a key piece of information!");break;
+                  case 3:addstr(" remembers a wiring diagram that helps make sense of things!");break;
+                  case 4:addstr(" is closer to figuring out this ignition system!");break;
+               }
+            }
+            int attack=cr.skill[SKILL_SECURITY]+ignition_progress;
 
             if(LCSrandom(11)<attack)
             {
@@ -2567,7 +2585,14 @@ char stealcar(creaturest &cr,char &clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(cr.name);
-               addstr(" fiddles with ignition, but the car doesn't start.");
+               switch(LCSrandom(5))
+               {
+                  case 0:addstr(" fiddles with the ignition, but the car doesn't start.");break;
+                  case 1:addstr(" digs around in the steering column, but the car doesn't start.");break;
+                  case 2:addstr(" touches some wires together, but the car doesn't start.");break;
+                  case 3:addstr(" makes something in the engine click, but the car doesn't start.");break;
+                  case 4:addstr(" manages to turn on some dash lights, but the car doesn't start.");break;
+               }
                refresh();getch();
             }
          }
@@ -2598,24 +2623,40 @@ char stealcar(creaturest &cr,char &clearformess)
             }
             else
             {
+               key_search_total++;
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(cr.name);
                addstr(": <rummaging> ");
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               switch(LCSrandom(5))
+               if (key_search_total==5)
                {
-                  case 0:addstr("They've gotta be in here somewhere...");break;
-                  case 1:
-                     if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!");
-                     else addstr("Fuck!  Where are they?!");
-                     break;
-                  case 2:addstr("Come on, baby, come to me...");break;
-                  case 3:
-                     if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...");
-                     else addstr("Dammit...");
-                     break;
-                  case 4:addstr("I wish I could hotwire this thing...");break;
+                  addstr("Are they even in here?");
+               }
+               else if (key_search_total==10)
+               {
+                  addstr("I don't think they're in here...");
+               }
+               else if (key_search_total>=15)
+               {
+                  addstr("If they were here, I'd have found them by now.");
+               }
+               else
+               {
+                  switch(LCSrandom(5))
+                  {
+                     case 0:addstr("They've gotta be in here somewhere...");break;
+                     case 1:
+                        if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!");
+                        else addstr("Fuck!  Where are they?!");
+                        break;
+                     case 2:addstr("Come on, baby, come to me...");break;
+                     case 3:
+                        if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...");
+                        else addstr("Dammit...");
+                        break;
+                     case 4:addstr("I wish I could hotwire this thing...");break;
+                  }
                }
                refresh();getch();
             }
@@ -2646,6 +2687,23 @@ char stealcar(creaturest &cr,char &clearformess)
             else {
                mode=GAMEMODE_BASE;
                delete v;return 0;}
+         }
+
+         // Nervous message check
+         else if ((LCSrandom(7)+5)<nervous_counter)
+         {
+            nervous_counter=0;
+            move(++y,0);y++;
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr(cr.name);
+            switch(LCSrandom(3))
+            {
+               case 0:addstr(" can hear someone calling the cops.");break;
+               case 1:addstr(" is getting nervous being out here this long.");break;
+               case 2:addstr(" sees a police car driving around a few blocks away.");break;
+            }
+            refresh();
+            getch();
          }
 
          if(started)break;

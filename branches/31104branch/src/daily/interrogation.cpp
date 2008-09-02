@@ -1381,23 +1381,92 @@ void tendhostage(creaturest *cr,char &clearformess)
 
       if(cr->flag & CREATUREFLAG_MISSING && !(cr->flag & CREATUREFLAG_KIDNAPPED))
       {
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         move(y,0);y++;
+         refresh();
+         getch();
+
+         erase();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         y=1;
+         move(y,0);
          addstr(cr->name);
          addstr("'s disappearance has not yet been reported.");
-         move(y,0);y+=2;
-         addstr("You now have a sleeper infiltrating Conservative Society.");
-         move(y,0);y++;
-         addstr("Your sleeper agent will provide you with a complete map of its workplace");
-         move(y,0);y+=2;
-         addstr("and attempt to slowly influence public opinions from its position.");
+         y+=2;
+         move(y++,0);
+         addstr("This presents an opportunity:");
+         move(y++,0);
+         //      1234567891123456789212345678931234567894123456789512345678961234567897123456789x
+         addstr("This new Liberal can join the ranks of the ");
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         addstr("regular members");
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr(" of the LCS,");
+         move(y++,0);
+         addstr("or ");
+         addstr(cr->name);
+         addstr(" can become a ");
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         addstr("sleeper agent");
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr(" for the LCS.");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         y+=2;
+         move(y++,0);
+         addstr(" R - ");
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         addstr("Regular Member");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         y+=2;
+         addstr(" S - ");
+         set_color(COLOR_CYAN,COLOR_BLACK,0);
+         addstr("Sleeper Agent");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+                    
+         move(22,0);
+         addstr("Press a key to indicate where this Liberal will do the most good.");
+
+         refresh();
+
+
+         char sleeper=0;
+
+         do
+         {
+            int c=getch();
+            translategetch(c);
+            if(c=='r')break;
+            if(c=='s'){sleeper=1;break;}
+         }while(1);
+
+         move(22,0);
+         // Clear the "press a key..." line
+         addstr("                                                                  ");
+
+         // Regular member after all
+         if(sleeper==0)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            move(y,0);
+            addstr(cr->name);
+            addstr(" eagerly joins the ranks of the LCS.");
+         }
+         // Sleeper
+         else
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(y,0);y++;
+            addstr("You now have a sleeper infiltrating Conservative Society.");
+            move(y,0);y++;
+            addstr("Your sleeper agent will provide you with a complete map of its workplace");
+            move(y,0);y++;
+            addstr("and attempt to slowly influence public opinions from its position.");
+            cr->flag|=CREATUREFLAG_SLEEPER;
+            cr->location=cr->worklocation;
+            cr->base=cr->worklocation;
+         }
+
          cr->flag&=~CREATUREFLAG_MISSING;
-         cr->flag|=CREATUREFLAG_SLEEPER;
-         cr->location=cr->worklocation;
-         cr->base=cr->worklocation;
       }
-      refresh();
-      getch();
    }
 
    if(cr->align==1||!cr->alive)
