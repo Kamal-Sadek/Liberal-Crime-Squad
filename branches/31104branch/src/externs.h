@@ -105,6 +105,7 @@ extern long moneygained_ccfraud;
 extern long moneygained_hustling;
 extern long moneygained_extortion;
 extern long moneygained_thievery;
+extern long moneygained_embezzlement;
 extern long moneylost_goods;
 extern long moneylost_trouble;
 extern long moneylost_rent;

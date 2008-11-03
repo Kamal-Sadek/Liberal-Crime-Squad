@@ -1006,6 +1006,11 @@ void pawnshop(int loc)
                   fenceloot[LOOT_CEOPHOTOS]=0;
                   fenceloot[LOOT_INTHQDISK]=0;
                   fenceloot[LOOT_CORPFILES]=0;
+                  fenceloot[LOOT_JUDGEFILES]=0;
+                  fenceloot[LOOT_RESEARCHFILES]=0;
+                  fenceloot[LOOT_PRISONFILES]=0;
+                  fenceloot[LOOT_CABLENEWSFILES]=0;
+                  fenceloot[LOOT_AMRADIOFILES]=0;
                   fenceloot[LOOT_SECRETDOCUMENTS]=0;
                   fenceloot[LOOT_POLICERECORDS]=0;
                }
@@ -2392,6 +2397,11 @@ unsigned long fencevalue(itemst &it)
             case LOOT_INTHQDISK:fenceamount=1500;break;
             case LOOT_CORPFILES:fenceamount=1000;break;
             case LOOT_POLICERECORDS:fenceamount=750;break;
+            case LOOT_JUDGEFILES:fenceamount=1000;break;
+            case LOOT_RESEARCHFILES:fenceamount=750;break;
+            case LOOT_PRISONFILES:fenceamount=750;break;
+            case LOOT_CABLENEWSFILES:fenceamount=250;break;
+            case LOOT_AMRADIOFILES:fenceamount=250;break;
          }
          break;
    }

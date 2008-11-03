@@ -790,8 +790,10 @@ void funds_and_trouble(char &clearformess)
    int s;
    //FIND A POLICE STATION
    //and a clinic too
+   //and a homeless shelter three!
    long ps=-1;
    long clinic=-1;
+   long shelter=-1;
    for(long l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
@@ -801,6 +803,10 @@ void funds_and_trouble(char &clearformess)
       if(location[l]->type==SITE_HOSPITAL_CLINIC)
       {
          clinic=l;
+      }
+      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
+      {
+         shelter=l;
       }
    }
 
@@ -877,6 +883,13 @@ void funds_and_trouble(char &clearformess)
             hospitalize(clinic,*pool[p]);
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
+         case ACTIVITY_SLEEPER_JOINLCS:
+            if(!location[shelter]->siege.siege)
+            {
+               pool[p]->activity.type=ACTIVITY_NONE;
+               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+               pool[p]->location = shelter;
+            }
       }
    }
 
@@ -1155,13 +1168,19 @@ void funds_and_trouble(char &clearformess)
                      change_public_opinion(VIEW_GENETICS,2,0,75);
                      break;
                   case 3:
-                     strcat(msg,"intercepted and published biased internal media emails.");
+                  {
+                     strcat(msg,"intercepted internal media emails.");
+
+                     itemst *it=new itemst;
+                        it->type=ITEM_LOOT;
+                        it->loottype=LOOT_CABLENEWSFILES;
+                     location[hack[0]->location]->loot.push_back(it);
 
                      trackdif=20;
                      crime=LAWFLAG_INFORMATION;
                      juiceval=5;
-                     change_public_opinion(VIEW_CABLENEWS,5,0,75);
                      break;
+                  }
                   case 4:
                      strcat(msg,"broke into military networks leaving LCS slogans.");
 

@@ -298,6 +298,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\basemode\activate_sleepers.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\basemode\baseactions.cpp"
 				>
 			</File>
@@ -419,6 +423,10 @@
 			</File>
 			<File
 				RelativePath="..\src\monthly\monthly.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\monthly\sleeper_update.cpp"
 				>
 			</File>
 		</Filter>

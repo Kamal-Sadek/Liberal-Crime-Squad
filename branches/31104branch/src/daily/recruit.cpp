@@ -348,8 +348,52 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
             liberalize(*r.recruit,false);
 
-            r.recruit->location=pool[p]->location;
-            r.recruit->base=pool[p]->base;
+            erase();
+
+            move(6,0);
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("In what capacity will ");
+            addstr(r.recruit->name);
+            addstr(" best serve the Liberal cause?");
+            move(7,0);
+            addstr("1) Stay at ");
+            addstr(location[r.recruit->worklocation]->name);
+            addstr(" as a ");
+            set_color(COLOR_CYAN,COLOR_BLACK,0);
+            addstr("sleeper agent");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr(".");
+            move(8,0);
+            addstr("2) Come to ");
+            addstr(location[pool[p]->location]->name);
+            addstr(" as a ");
+            set_color(COLOR_GREEN,COLOR_BLACK,0);
+            addstr("regular member");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr(".");
+
+            
+            while(1)
+            {
+               char keystroke = getch();
+               if(keystroke == '1')
+               {
+                  r.recruit->flag |= CREATUREFLAG_SLEEPER;
+                  r.recruit->location = r.recruit->worklocation;
+                  r.recruit->base = r.recruit->worklocation;
+                  r.recruit->infiltration/=2;
+                  break;
+               }
+               else if(keystroke == '2')
+               {
+                  r.recruit->location=pool[p]->location;
+                  r.recruit->base=pool[p]->base;
+                  liberalize(*r.recruit,false);
+                  r.recruit->infiltration/=2;
+                  break;
+               }
+            }
+
             r.recruit->hireid=pool[p]->id;
 
             pool[p]->skill_ip[SKILL_LEADERSHIP]+=5;
@@ -403,10 +447,15 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                                   r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
                                   LCSrandom(10);
 
-         if(c=='a')lib_persuasiveness+=LCSrandom(20);
-
          int max_eagerness      = pool[p]->attval(ATTRIBUTE_HEART)-
                                   r.recruit->attval(ATTRIBUTE_WISDOM);
+
+         if(c=='a')
+         {
+            lib_persuasiveness+=LCSrandom(20);
+            max_eagerness     +=LCSrandom(20);
+         }
+
 
          if((lib_persuasiveness > recruit_reluctance) &&
             (max_eagerness      > r.eagerness()     ))

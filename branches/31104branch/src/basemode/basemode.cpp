@@ -502,14 +502,14 @@ void mode_base(void)
          {
             for(int p=0;p<7;p++)
             {
-               move(p+17,32);
+               move(p+10,32);
                if(p<3)
                {
                   set_color(COLOR_WHITE,COLOR_BLUE,1);
-                  move(p+17,32);
+                  move(p+10,32);
                   addstr("::::::");
                   set_color(COLOR_WHITE,COLOR_RED,1);
-                  move(p+17,38);
+                  move(p+10,38);
                   for(int i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
                }
                else
@@ -525,36 +525,64 @@ void mode_base(void)
             }
          }
 
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(18,10);
+         addstr("--- ACTIVISM ---");
+         move(18,51);
+         addstr("--- PLANNING ---");
+
          if(partysize>0&&!underattack)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,1);
+         move(19,40);
          addstr("E - Equipment");
+         if(vehicle.size()>0&&partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(19,59);
+         addstr("V - Vehicles");
          if(pool.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,1);
-         addstr("R - Review and reorganize Liberals");
-         if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(20,40);
+         addstr("R - Review Liberals and Form Squads");
+         /*if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,40);
-         addstr("O - Change the squad's Liberal order");
+         move(20,40);
+         addstr("O - Change the squad's Liberal order");*/
 
          if(squad.size()>1||(activesquad==NULL&&squad.size()>0))set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,40);
+         move(8,40);
          addstr("TAB - Next Squad");
 
          if(safenumber>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,62);
+         move(8,59);
          addstr("Z - Next Location");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(14,40);
+         move(21,40);
          addstr("L - The Status of the Liberal Agenda");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(13,1);
-         addstr("A - Activate the Uninvolved");
+         move(21,1);
+         addstr("A - Activate Liberals");
+
+         
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         for(int p=0;p < pool.size();p++)
+         {
+            if(pool[p]->alive==true&&
+               pool[p]->flag & CREATUREFLAG_SLEEPER&&
+               pool[p]->align==ALIGN_LIBERAL&&
+               pool[p]->hiding==false&&
+               pool[p]->clinic==false&&
+               pool[p]->dating==false)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               break;
+            }
+         }
+         move(21,25);
+         addstr("B - Sleepers");
 
          if(partysize>0)
          {
@@ -562,7 +590,7 @@ void mode_base(void)
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(14,1);
+         move(20,1);
          addstr("C - Cancel this Squad's Departure");
 
          if(sieged)
@@ -580,32 +608,32 @@ void mode_base(void)
                   }
                }
             }
-            move(10,1);
+            move(19,1);
             addstr("F - Escape/Engage");
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(10,23);
+            move(19,23);
             addstr("G - Give Up");
          }
          else
          {
             if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(10,1);
+            move(19,1);
             addstr("F - Go forth to stop EVIL");
          }
-         if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,40);
-         addstr("# - Check the status of a squad Liberal");
-         if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,40);
-         addstr("0 - Show the squad's Liberal status");
+         //if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+         //else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         //move(19,40);
+         //addstr("# - Check the status of a squad Liberal");
+         //if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         //else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         //move(18,40);
+         //addstr("0 - Show the squad's Liberal status");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(15,1);
+         move(23,40);
          addstr("X - Live to fight EVIL another day");
-         move(16,1);
+         move(23,1);
          if(cannotwait)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -613,20 +641,15 @@ void mode_base(void)
          }
          else
          {
-            move(16,1);
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             addstr("W - Wait a day");
             if(day==monthday())addstr(" (next month)");
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(16,40);
+         move(22,40);
          addstr("S - FREE SPEECH: the Liberal Slogan");
-         if(vehicle.size()>0&&partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,23);
-         addstr("V - Vehicles");
-         move(15,40);
+         move(22,1);
          if(haveflag)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -642,8 +665,8 @@ void mode_base(void)
 
          length=strlen(slogan);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         if(haveflag)move(24,40-(length>>1));
-         else move(20,40-(length>>1));
+         if(haveflag)move(17,40-(length>>1));
+         else move(13,40-(length>>1));
          addstr(slogan);
 
          refresh();
@@ -703,6 +726,11 @@ void mode_base(void)
       if(c=='a')
       {
          activate();
+      }
+
+      if(c=='b')
+      {
+         activate_sleepers();
       }
 
       if(c==9&&squad.size()>0)

@@ -129,7 +129,7 @@ void burnflag(void)
       {
          for(y=0;y<7;y++)
          {
-            move(y+17,x+32);
+            move(y+10,x+32);
             set_color(flag[x][y][1],flag[x][y][2],flag[x][y][3]);
             addch(flag[x][y][0]);
          }
@@ -188,16 +188,16 @@ void getslogan(void)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   move(23,0);
+   move(15,0);
    addstr("What is your new slogan?");
-   move(24,0);
+   move(16,0);
    addstr("                                                                                          ");
 
    keypad(stdscr,FALSE);
    raw_output(FALSE);
    echo();
    curs_set(1);
-   move(24,0);
+   move(16,0);
    enter_name(slogan,SLOGAN_LEN);
 
    curs_set(0);
@@ -450,7 +450,11 @@ void stopevil(void)
             if(location[l]->parent==loc&&location[l]->renting==-1)temploc.push_back(l);
          }
       }
-      else if(c==10)break;
+      else if(c==10)
+      {
+         activesquad->activity.type=ACTIVITY_NONE; // Clear squad activity
+         break;
+      }
 
    }while(1);
 }

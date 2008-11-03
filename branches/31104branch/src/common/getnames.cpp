@@ -132,7 +132,7 @@ void getactivity(char *str,activityst &act)
          strcat(str,"Tending to Injuries");
          break;
       case ACTIVITY_NONE:
-         strcat(str,"Hanging Out");
+         strcat(str,"Laying Low");
          break;
       case ACTIVITY_WRITE_LETTERS:
       case ACTIVITY_WRITE_GUARDIAN:
@@ -140,6 +140,30 @@ void getactivity(char *str,activityst &act)
          break;
       case ACTIVITY_CLINIC:
          strcat(str,"Going to Free CLINIC");
+      case ACTIVITY_SLEEPER_LIBERAL:
+         strcat(str,"Promoting Liberalism");
+         break;
+      case ACTIVITY_SLEEPER_CONSERVATIVE:
+         strcat(str,"Spouting Conservatism");
+         break;
+      case ACTIVITY_SLEEPER_SPY:
+         strcat(str,"Snooping Around");
+         break;
+      case ACTIVITY_SLEEPER_RECRUIT:
+         strcat(str,"Recruiting Sleepers");
+         break;
+      case ACTIVITY_SLEEPER_JOINLCS:
+         strcat(str,"Quitting Job");
+         break;
+      case ACTIVITY_SLEEPER_SCANDAL:
+         strcat(str,"Creating a Scandal");
+         break;
+      case ACTIVITY_SLEEPER_EMBEZZLE:
+         strcat(str,"Embezzling Funds");
+         break;
+      case ACTIVITY_SLEEPER_STEAL:
+         strcat(str,"Stealing Equipment");
+         break;
    }
 }
 
@@ -712,6 +736,11 @@ void getloot(char *str,int loot)
       case LOOT_CEOPHOTOS:strcat(str,"CEO Photos");break;
       case LOOT_INTHQDISK:strcat(str,"Intel. HQ Data Disk");break;
       case LOOT_CORPFILES:strcat(str,"Secret Corporate Files");break;
+      case LOOT_JUDGEFILES:strcat(str,"Judge Corrupt. Evidence");break;
+      case LOOT_RESEARCHFILES:strcat(str,"Research Papers");break;
+      case LOOT_PRISONFILES:strcat(str,"Prison Records");break;
+      case LOOT_CABLENEWSFILES:strcat(str,"Cable News Memos");break;
+      case LOOT_AMRADIOFILES:strcat(str,"AM Radio Plans");break;
    }
 }
 

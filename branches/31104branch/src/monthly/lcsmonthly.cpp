@@ -108,6 +108,11 @@ int choosespecialedition(char &clearformess)
          if(location[loc]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
             location[loc]->loot[l]->loottype!=LOOT_INTHQDISK&&
             location[loc]->loot[l]->loottype!=LOOT_CORPFILES&&
+            location[loc]->loot[l]->loottype!=LOOT_JUDGEFILES&&
+            location[loc]->loot[l]->loottype!=LOOT_RESEARCHFILES&&
+            location[loc]->loot[l]->loottype!=LOOT_PRISONFILES&&
+            location[loc]->loot[l]->loottype!=LOOT_CABLENEWSFILES&&
+            location[loc]->loot[l]->loottype!=LOOT_AMRADIOFILES&&
             location[loc]->loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
             location[loc]->loot[l]->loottype!=LOOT_POLICERECORDS)continue;
 
@@ -127,6 +132,11 @@ int choosespecialedition(char &clearformess)
          if(squad[sq]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
             squad[sq]->loot[l]->loottype!=LOOT_INTHQDISK&&
             squad[sq]->loot[l]->loottype!=LOOT_CORPFILES&&
+            squad[sq]->loot[l]->loottype!=LOOT_JUDGEFILES&&
+            squad[sq]->loot[l]->loottype!=LOOT_RESEARCHFILES&&
+            squad[sq]->loot[l]->loottype!=LOOT_PRISONFILES&&
+            squad[sq]->loot[l]->loottype!=LOOT_CABLENEWSFILES&&
+            squad[sq]->loot[l]->loottype!=LOOT_AMRADIOFILES&&
             squad[sq]->loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
             squad[sq]->loot[l]->loottype!=LOOT_POLICERECORDS)continue;
 
@@ -410,6 +420,119 @@ void printnews(short l,short newspaper)
          change_public_opinion(VIEW_POLICEBEHAVIOR,50);
          offended_cops=1;
          break;
+      case LOOT_JUDGEFILES:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story with evidence of a Conservative judge");
+         move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(2))
+         {
+            case 0:addstr("taking bribes to acquit murderers.");break;
+            case 1:addstr("promising Conservative rulings in exchange for appointments.");break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         //move(9,1);
+         //addstr("This is bound to get the police a little riled up.");
+
+         change_public_opinion(VIEW_JUSTICES,50);
+         //offended_cops=1;
+         break;
+      case LOOT_RESEARCHFILES:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring research papers");
+         move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(4))
+         {
+            case 0:addstr("documenting horrific animal rights abuses.");
+               change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
+            case 1:addstr("studying the effects of torture on cats.");
+               change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
+            case 2:addstr("covering up the accidental creation of a genetic monster.");
+               change_public_opinion(VIEW_GENETICS,50);break;
+            case 3:addstr("showing human test subjects dying under genetic research.");
+               change_public_opinion(VIEW_GENETICS,50);break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         //move(9,1);
+         //addstr("This is bound to get the police a little riled up.");
+
+         //offended_cops=1;
+         break;
+      case LOOT_PRISONFILES:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring prison documents");
+         move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(4))
+         {
+            case 0:addstr("documenting human rights abuses by prison guards.");break;
+            case 1:addstr("documenting a prison torture case.");break;
+            case 2:addstr("documenting widespread corruption among prison employees.");break;
+            case 3:
+               addstr("documenting gladiatory matches held between prisoners by guards.");
+               break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         move(9,1);
+         addstr("This is bound to get the police a little riled up.");
+
+         change_public_opinion(VIEW_PRISONS,50);
+         offended_cops=1;
+         break;
+      case LOOT_CABLENEWSFILES:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring cable news memos");
+         move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(4))
+         {
+            case 0:addstr("calling their news 'the vanguard of Conservative thought'.");break;
+            case 1:addstr("mandating negative coverage of Liberal politicians.");break;
+            case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
+            case 3:addstr("instructing a female anchor to 'dress sexier or get a new job'.");
+               break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         move(9,1);
+         addstr("This is bound to get the redneck masses a little riled up.");
+
+         change_public_opinion(VIEW_CABLENEWS,50);
+         offended_cablenews=1;
+         break;
+      case LOOT_AMRADIOFILES:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring AM radio plans");
+         move(7,1);
+         
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(4))
+         {
+            case 0:addstr("calling listeners 'sheep to be told what to think'.");break;
+            case 1:addstr("saying 'it's okay to lie, they don't need the truth'.");break;
+            case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         move(9,1);
+         addstr("This is bound to get the redneck masses a little riled up.");
+
+         change_public_opinion(VIEW_CABLENEWS,50);
+         offended_cablenews=1;
+         break;
    }
    refresh();
    getch();
@@ -425,6 +548,7 @@ void fundreport(char &clearformess)
    //MUST HAVE CATEGORIES FOR ALL FUND CHANGES
    if(moneygained_donate>0||
       moneygained_brownies>0||
+      moneygained_embezzlement>0||
       moneylost_trouble>0||
       moneylost_manufacture>0||
       moneylost_rent>0||
@@ -582,6 +706,25 @@ void fundreport(char &clearformess)
          y++;
 
          totalmoney+=moneygained_goods;
+      }
+
+      //EMBEZZLEMENT
+      if(moneygained_embezzlement>0)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addstr("Embezzlement. . . . . . . . . . . . . . . . . . . . . . . .");
+
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         move(y,60);
+         char num[20];
+         itoa(moneygained_embezzlement,num,10);
+         addstr("$");
+         addstr(num);
+
+         y++;
+
+         totalmoney+=moneygained_embezzlement;
       }
 
       //PURCHASE
@@ -823,6 +966,7 @@ void fundreport(char &clearformess)
       moneygained_hustling=0;
       moneygained_extortion=0;
       moneygained_thievery=0;
+      moneygained_embezzlement=0;
       moneylost_goods=0;
       moneylost_trouble=0;
       moneylost_manufacture=0;
@@ -839,268 +983,3 @@ void fundreport(char &clearformess)
 
 
 
-/* monthly - sleeper behavior */
-/**********************************************************************
-** *JDS*
-** ----- The sleeper system has been completely reworked.
-** - Sleepers no longer directly inflence the issues. They now affect
-** the broad "liberal power" stats across many issues, which are used
-** as a kind of monthly liberal roll akin to AM Radio and Cable News.
-** - Each sleeper can affect one or more issue, throwing their power
-** into the "abstracted debate" on that issue.
-** - After all of the sleepers have contributed to the liberal power
-** stats, a roll is made on each issue to see whether the liberals
-** make background progress on those issues. 
-** - Several sleepers have special abilities. Lawyers and Judges, as
-** always, can aid your people in the legal system. Police officers,
-** corporate managers, CEOs, and agents can all now leak secret
-** documents of the appropriate types, and they will make a check
-** each month. This will only happen if the homeless shelter is not
-** under siege, and "canseethings" is enabled (eg, you're not in prison
-** or disbanded or some other situation where your sleeper can't get
-** in touch with anyone in your squad).
-** - News Anchors and Radio Personalities remain the two most powerful
-** sleepers.
-**********************************************************************/
-void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower)
-{
-   int power=(cr.attval(ATTRIBUTE_CHARISMA)+
-               cr.attval(ATTRIBUTE_HEART)+cr.attval(ATTRIBUTE_INTELLIGENCE)+
-               cr.skill[SKILL_PERSUASION]);
-
-   // Profession specific skills
-   switch(cr.type)
-   {
-      case CREATURE_CRITIC_ART:
-         power+=cr.skill[SKILL_WRITING];
-      case CREATURE_PAINTER:
-      case CREATURE_SCULPTOR:
-         power+=cr.skill[SKILL_ART];
-         break;
-      case CREATURE_CRITIC_MUSIC:
-         power+=cr.skill[SKILL_WRITING];
-      case CREATURE_MUSICIAN:
-         power+=cr.skill[SKILL_MUSIC];
-         break;
-      case CREATURE_AUTHOR:
-      case CREATURE_JOURNALIST:
-         power+=cr.skill[SKILL_WRITING];
-         break;
-      case CREATURE_JUDGE_CONSERVATIVE:
-         power+=cr.skill[SKILL_WRITING];
-      case CREATURE_LAWYER:
-         power+=cr.skill[SKILL_LAW];
-         break;
-      case CREATURE_SCIENTIST_LABTECH:
-      case CREATURE_SCIENTIST_EMINENT:
-         power+=cr.skill[SKILL_SCIENCE];
-         break;
-      case CREATURE_CORPORATE_CEO:
-      case CREATURE_CORPORATE_MANAGER:
-         power+=cr.skill[SKILL_BUSINESS];
-         break;
-      case CREATURE_PRIEST:
-      case CREATURE_NUN:
-         power+=cr.skill[SKILL_RELIGION];
-         break;
-      case CREATURE_EDUCATOR:
-         power+=cr.skill[SKILL_INTERROGATION];
-         break;
-   }
-
-   // Adjust power for super sleepers
-   switch(cr.type)
-   {
-      case CREATURE_CORPORATE_CEO:
-      case CREATURE_DEATHSQUAD:
-      case CREATURE_EDUCATOR:
-         power*=4;
-         break;
-      case CREATURE_SCIENTIST_EMINENT:
-      case CREATURE_ACTOR:
-      case CREATURE_GANGUNIT:
-         power*=3;
-         break;
-      default:
-         power*=2;
-         break;
-   }
-
-   int homes=-1; // find homeless shelter
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         homes=l;
-      }
-   }
-   switch(cr.type)
-   {
-      /* Cultural leaders block - small influence on everything */
-      case CREATURE_RADIOPERSONALITY:
-         change_public_opinion(VIEW_AMRADIO,1);
-         for(int i=0;i<VIEWNUM;i++)
-         {
-            libpower[i]+=power/2;
-         }
-         break;
-      case CREATURE_NEWSANCHOR:
-         change_public_opinion(VIEW_CABLENEWS,1);
-         for(int i=0;i<VIEWNUM;i++)
-         {
-            libpower[i]+=power/2;
-         }
-         break;
-      case CREATURE_PAINTER:
-      case CREATURE_SCULPTOR:
-      case CREATURE_AUTHOR:
-      case CREATURE_JOURNALIST:
-      case CREATURE_MUSICIAN:
-      case CREATURE_CRITIC_ART:
-      case CREATURE_CRITIC_MUSIC:
-      case CREATURE_ACTOR:
-      case CREATURE_PRIEST:
-         for(int i=0;i<VIEWNUM;i++)
-         {
-            libpower[i]+=power/2;
-         }
-         break;
-      /* Legal block - influences an array of social issues */
-      case CREATURE_LAWYER:
-      case CREATURE_JUDGE_CONSERVATIVE:
-         libpower[VIEW_ABORTION]+=power;
-         libpower[VIEW_GAY]+=power;
-         libpower[VIEW_DEATHPENALTY]+=power;
-         libpower[VIEW_FREESPEECH]+=power;
-         libpower[VIEW_JUSTICES]+=power;
-         libpower[VIEW_INTELLIGENCE]+=power;
-         libpower[VIEW_ANIMALRESEARCH]+=power;
-         break;
-      /* Scientists block */
-      case CREATURE_SCIENTIST_LABTECH:
-      case CREATURE_SCIENTIST_EMINENT:
-         libpower[VIEW_NUCLEARPOWER]+=power;
-         libpower[VIEW_ANIMALRESEARCH]+=power;
-         libpower[VIEW_GENETICS]+=power;
-         break;
-      /* Corporate block */
-      case CREATURE_CORPORATE_CEO:
-         // CEO can leak corporate files to you
-         if(!LCSrandom(10)&&!location[homes]->siege.siege&&canseethings) 
-         {
-            itemst *it=new itemst;
-            it->type=ITEM_LOOT;
-            it->loottype=LOOT_CORPFILES;
-            location[homes]->loot.push_back(it);
-
-            erase();
-            move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has leaked secret corporate documents.");
-            move(7,1);
-            addstr("They are stashed at the homeless shelter.");
-         }
-         
-         libpower[VIEW_CEOSALARY]+=power;
-         libpower[VIEW_TAXES]+=power;
-         libpower[VIEW_CORPORATECULTURE]+=power;
-         break;
-      case CREATURE_CORPORATE_MANAGER:
-         // Corporate manager can leak corporate files to you
-         if(!LCSrandom(70)&&!location[homes]->siege.siege&&canseethings) 
-         {
-            itemst *it=new itemst;
-            it->type=ITEM_LOOT;
-            it->loottype=LOOT_CORPFILES;
-            location[homes]->loot.push_back(it);
-
-            erase();
-            move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has leaked secret corporate documents.");
-            move(7,1);
-            addstr("They are stashed at the homeless shelter.");
-         }
-         libpower[VIEW_CEOSALARY]+=power;
-         libpower[VIEW_TAXES]+=power;
-         libpower[VIEW_CORPORATECULTURE]+=power;
-         break;
-      /* Law enforcement block */
-      case CREATURE_DEATHSQUAD:
-         libpower[VIEW_DEATHPENALTY]+=power; // No break
-      case CREATURE_SWAT:
-      case CREATURE_COP:
-      case CREATURE_GANGUNIT:
-         // Cops can leak police files to you
-         if(!LCSrandom(70)&&!location[homes]->siege.siege&&canseethings)
-         {
-            itemst *it=new itemst;
-            it->type=ITEM_LOOT;
-            it->loottype=LOOT_POLICERECORDS;
-            location[homes]->loot.push_back(it);
-
-            erase();
-            move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has leaked secret police records.");
-            move(7,1);
-            addstr("They are stashed at the homeless shelter.");
-         }
-         libpower[VIEW_POLICEBEHAVIOR]+=power;
-         break;
-      /* Prison block */
-      case CREATURE_EDUCATOR:
-         libpower[VIEW_DEATHPENALTY]+=power; // no break intended
-      case CREATURE_PRISONGUARD:
-      case CREATURE_PRISONER:
-         libpower[VIEW_PRISONS]+=power;
-         break;
-      /* Intelligence block */
-      case CREATURE_AGENT:
-         // Agents can leak intelligence files to you
-         if(!LCSrandom(20)&&!location[homes]->siege.siege&&canseethings) 
-         {
-            itemst *it=new itemst;
-            it->type=ITEM_LOOT;
-            it->loottype=LOOT_SECRETDOCUMENTS;
-            location[homes]->loot.push_back(it);
-
-            erase();
-            move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has leaked secret intelligence files.");
-            move(7,1);
-            addstr("They are stashed at the homeless shelter.");
-         }
-         libpower[VIEW_INTELLIGENCE]+=power;
-         break;
-      case CREATURE_FIREFIGHTER:
-         if(law[LAW_FREESPEECH]==-2)
-         {
-            libpower[VIEW_FREESPEECH]+=power;
-         }
-         break;
-      /* No influence at all block - for people were liberal anyway, or have no way of doing any good */
-      case CREATURE_WORKER_FACTORY_CHILD:
-      case CREATURE_GENETIC:
-      case CREATURE_GUARDDOG:
-      case CREATURE_JUROR:
-      case CREATURE_BUM:
-      case CREATURE_CRACKHEAD:
-      case CREATURE_TANK:
-      case CREATURE_HIPPIE: // too liberal to be a proper sleeper
-      case CREATURE_WORKER_FACTORY_UNION: // same
-      case CREATURE_JUDGE_LIBERAL: // more again
-      case CREATURE_POLITICALACTIVIST: // ??!?!? impressive getting an LCS Member sleeper, but no effect
-      case CREATURE_MUTANT:
-         return;
-      /* Talk up LCS block -- includes everyone else */
-      default:
-         libpower[VIEW_LIBERALCRIMESQUAD]+=power;
-         libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
-   }
-}

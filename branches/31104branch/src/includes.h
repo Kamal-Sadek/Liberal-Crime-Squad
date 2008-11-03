@@ -41,11 +41,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.15.1"
+#define PACKAGE_VERSION "3.15.2"
 #endif
 
-const unsigned long version=31501;
-const unsigned long lowestloadversion=31500;
+const unsigned long version=31502;
+const unsigned long lowestloadversion=31502;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -726,6 +726,11 @@ enum LootType
    LOOT_CEOPHOTOS,
    LOOT_INTHQDISK,
    LOOT_CORPFILES,
+   LOOT_JUDGEFILES,
+   LOOT_RESEARCHFILES,
+   LOOT_PRISONFILES,
+   LOOT_CABLENEWSFILES,
+   LOOT_AMRADIOFILES,
    LOOT_POLICERECORDS,
    LOOT_VCR,
    LOOT_CELLPHONE,
@@ -864,6 +869,14 @@ enum Activity
    ACTIVITY_TEACH_COVERT,
    ACTIVITY_CLINIC,
    ACTIVITY_HEAL,
+   ACTIVITY_SLEEPER_LIBERAL,
+   ACTIVITY_SLEEPER_CONSERVATIVE,
+   ACTIVITY_SLEEPER_SPY,
+   ACTIVITY_SLEEPER_RECRUIT,
+   ACTIVITY_SLEEPER_SCANDAL,
+   ACTIVITY_SLEEPER_EMBEZZLE,
+   ACTIVITY_SLEEPER_STEAL,
+   ACTIVITY_SLEEPER_JOINLCS,
    ACTIVITYNUM
 };
 
@@ -897,10 +910,11 @@ struct creaturest
    int age;
    int birthday_month;
    int birthday_day;
-   char exists;
+   bool exists;
    char align;
-   char alive;
+   bool alive;
    short type;
+   float infiltration;
    char animalgloss;
    short specialattack;
    short clinic;
@@ -1834,6 +1848,13 @@ void investlocation(void);
 void setvehicles(void);
 
 /*
+ activate_sleepers.cpp
+*/
+/* base - activate the uninvolved */
+void activate_sleepers(void);
+void activate_sleeper(creaturest *cr);
+
+/*
  activate.cpp
 */
 /* base - activate the uninvolved */
@@ -2226,8 +2247,19 @@ int choosespecialedition(char &clearformess);
 void printnews(short l,short newspaper);
 /* monthly - LCS finances report */
 void fundreport(char &clearformess);
+
+/*
+ sleeper_update.cpp
+*/
 /* monthly - sleeper behavior */
 void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+/* assistant functions for specific sleeper tasks */
+void sleeper_recruit(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_scandal(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_embezzle(creaturest &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libpower);
 
 /*
  justice.cpp

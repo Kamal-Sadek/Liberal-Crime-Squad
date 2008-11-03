@@ -121,6 +121,7 @@ void savegame(char *str)
       numbytes=fwrite(&moneygained_hustling,sizeof(long),1,h);
       numbytes=fwrite(&moneygained_extortion,sizeof(long),1,h);
       numbytes=fwrite(&moneygained_thievery,sizeof(long),1,h);
+      numbytes=fwrite(&moneygained_embezzlement,sizeof(long),1,h);
       numbytes=fwrite(&moneylost_goods,sizeof(long),1,h);
       numbytes=fwrite(&moneylost_trouble,sizeof(long),1,h);
       numbytes=fwrite(&moneylost_rent,sizeof(long),1,h);
@@ -418,6 +419,7 @@ char load(void)
       fread(&moneygained_hustling,sizeof(long),1,h);
       fread(&moneygained_extortion,sizeof(long),1,h);
       fread(&moneygained_thievery,sizeof(long),1,h);
+      fread(&moneygained_embezzlement,sizeof(long),1,h);
       fread(&moneylost_goods,sizeof(long),1,h);
       fread(&moneylost_trouble,sizeof(long),1,h);
       fread(&moneylost_rent,sizeof(long),1,h);

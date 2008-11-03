@@ -1072,10 +1072,12 @@ static void printname(creaturest &cr)
       {
       case SITE_GOVERNMENT_POLICESTATION:
       case SITE_GOVERNMENT_COURTHOUSE:
-         bracketcolor=COLOR_YELLOW;
+         if(!(cr.flag & CREATUREFLAG_SLEEPER))
+            bracketcolor=COLOR_YELLOW;
          break;
       case SITE_GOVERNMENT_PRISON:
-         bracketcolor=COLOR_RED;
+         if(!(cr.flag & CREATUREFLAG_SLEEPER))
+            bracketcolor=COLOR_RED;
          break;
       default:
          if(cr.hiding)
@@ -1105,11 +1107,22 @@ static void printname(creaturest &cr)
       addstr("[");
    }
    
+   if(cr.flag & CREATUREFLAG_SLEEPER)
+   {
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      addstr("[");
+   }
+   
    // add name
    set_color(namecolor,COLOR_BLACK,brightness);
    addstr(cr.name);
 
    // add close bracket (if used)
+   if(cr.flag & CREATUREFLAG_SLEEPER)
+   {
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      addstr("]");
+   }
    if(bracketcolor!=-1)
    {
       set_color(bracketcolor,COLOR_BLACK,1);
@@ -1128,8 +1141,7 @@ void promoteliberals(void)
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&
-         pool[p]->align==1&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+         pool[p]->align==1)
       {
          temppool.push_back(pool[p]);
       }
@@ -1220,16 +1232,22 @@ void promoteliberals(void)
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       addstr("]");
       set_color(COLOR_RED,COLOR_BLACK,1);
-      addstr("   [");
+      addstr(" [");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("In Jail");
       set_color(COLOR_RED,COLOR_BLACK,1);
       addstr("]");
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("   [");
+      addstr(" [");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("In Hiding");
       set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr("]");
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      addstr(" [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Sleeper");
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
       addstr("]");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
@@ -1268,7 +1286,7 @@ void promoteliberals(void)
                   {
                      // Can't promote if new boss can't accept more subordinates
                      if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid&&
-                        (temppool[p]->flag&CREATUREFLAG_BRAINWASHED||subordinatesleft(*pool[p2])))
+                        (temppool[p]->flag&CREATUREFLAG_BRAINWASHED||subordinatesleft(*pool[p3])))
                      {
                         temppool[p]->hireid=pool[p2]->hireid;
                         sortbyhire(temppool,level);

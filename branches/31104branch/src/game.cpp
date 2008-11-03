@@ -211,6 +211,7 @@ long moneygained_ccfraud=0;
 long moneygained_hustling=0;
 long moneygained_extortion=0;
 long moneygained_thievery=0;
+long moneygained_embezzlement=0;
 long moneylost_goods=0;
 long moneylost_trouble=0;
 long moneylost_rent=0;

@@ -91,8 +91,6 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          strcpy(d.date[e]->propername,d.date[e]->name);
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
-         d.date[e]->location=pool[p]->location;
-         d.date[e]->base=pool[p]->base;
          d.date[e]->hireid=pool[p]->id;
 
          erase();
@@ -114,13 +112,54 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          
          move(4,0);
          enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
+
+         move(6,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("In what capacity will ");
+         addstr(d.date[e]->name);
+         addstr(" best serve the Liberal cause?");
+         move(7,0);
+         addstr("1) Stay at ");
+         addstr(location[d.date[e]->worklocation]->name);
+         addstr(" as a ");
+         set_color(COLOR_CYAN,COLOR_BLACK,0);
+         addstr("sleeper agent");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(".");
+         move(8,0);
+         addstr("2) Come to ");
+         addstr(location[pool[p]->location]->name);
+         addstr(" as a ");
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         addstr("regular member");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(".");
+
+         
+         while(1)
+         {
+            char keystroke = getch();
+            if(keystroke == '1')
+            {
+               d.date[e]->flag |= CREATUREFLAG_SLEEPER;
+               liberalize(*d.date[e],false);
+               d.date[e]->location = d.date[e]->worklocation;
+               d.date[e]->base = d.date[e]->worklocation;
+               d.date[e]->infiltration/=2;
+               break;
+            }
+            else if(keystroke == '2')
+            {
+               d.date[e]->location=pool[p]->location;
+               d.date[e]->base=pool[p]->base;
+               liberalize(*d.date[e],false);
+               d.date[e]->infiltration/=2;
+               break;
+            }
+         }
          
          pool.push_back(d.date[e]);
          stat_recruits++;
-
-         d.date[e]->location=pool[p]->location;
-         d.date[e]->base=pool[p]->base;
-         liberalize(*d.date[e],false);
          d.date.erase(d.date.begin() + e);
 
          return DATERESULT_JOINED;

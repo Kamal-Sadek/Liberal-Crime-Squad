@@ -1392,80 +1392,51 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr("'s disappearance has not yet been reported.");
          y+=2;
          move(y++,0);
-         addstr("This presents an opportunity:");
-         move(y++,0);
-         //      1234567891123456789212345678931234567894123456789512345678961234567897123456789x
-         addstr("This new Liberal can join the ranks of the ");
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         addstr("regular members");
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr(" of the LCS,");
-         move(y++,0);
-         addstr("or ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("In what capacity will ");
          addstr(cr->name);
-         addstr(" can become a ");
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         addstr("sleeper agent");
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr(" for the LCS.");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         y+=2;
+         addstr(" best serve the Liberal cause?");
          move(y++,0);
-         addstr(" R - ");
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         addstr("Regular Member");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         y+=2;
-         addstr(" S - ");
+         addstr("1) Stay at ");
+         addstr(location[cr->worklocation]->name);
+         addstr(" as a ");
          set_color(COLOR_CYAN,COLOR_BLACK,0);
-         addstr("Sleeper Agent");
+         addstr("sleeper agent");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-                    
-         move(22,0);
-         addstr("Press a key to indicate where this Liberal will do the most good.");
+         addstr(".");
+         move(y++,0);
+         addstr("2) Come to ");
+         addstr(location[a->location]->name);
+         addstr(" as a ");
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         addstr("regular member");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(".");
 
-         refresh();
-
-
-         char sleeper=0;
-
-         do
+         
+         while(1)
          {
-            int c=getch();
-            translategetch(c);
-            if(c=='r')break;
-            if(c=='s'){sleeper=1;break;}
-         }while(1);
-
-         move(22,0);
-         // Clear the "press a key..." line
-         addstr("                                                                  ");
-
-         // Regular member after all
-         if(sleeper==0)
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            move(y,0);
-            addstr(cr->name);
-            addstr(" eagerly joins the ranks of the LCS.");
-         }
-         // Sleeper
-         else
-         {
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            move(y,0);y++;
-            addstr("You now have a sleeper infiltrating Conservative Society.");
-            move(y,0);y++;
-            addstr("Your sleeper agent will provide you with a complete map of its workplace");
-            move(y,0);y++;
-            addstr("and attempt to slowly influence public opinions from its position.");
-            cr->flag|=CREATUREFLAG_SLEEPER;
-            cr->location=cr->worklocation;
-            cr->base=cr->worklocation;
+            char keystroke = getch();
+            if(keystroke == '1')
+            {
+               cr->flag |= CREATUREFLAG_SLEEPER;
+               liberalize(*cr,false);
+               cr->location = cr->worklocation;
+               cr->base = cr->worklocation;
+               break;
+            }
+            else if(keystroke == '2')
+            {
+               cr->location=a->location;
+               cr->base=a->base;
+               liberalize(*cr,false);
+               break;
+            }
          }
 
          cr->flag&=~CREATUREFLAG_MISSING;
+
+         return;
       }
    }
 

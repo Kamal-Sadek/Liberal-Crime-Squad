@@ -645,6 +645,11 @@ void consolidateloot(vector<itemst *> &loot)
                      loot[l]->loottype!=LOOT_CEOPHOTOS&&
                      loot[l]->loottype!=LOOT_INTHQDISK&&
                      loot[l]->loottype!=LOOT_CORPFILES&&
+                     loot[l]->loottype!=LOOT_JUDGEFILES&&
+                     loot[l]->loottype!=LOOT_RESEARCHFILES&&
+                     loot[l]->loottype!=LOOT_PRISONFILES&&
+                     loot[l]->loottype!=LOOT_CABLENEWSFILES&&
+                     loot[l]->loottype!=LOOT_AMRADIOFILES&&
                      loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
                      loot[l]->loottype!=LOOT_POLICERECORDS)conf=1;
                   break;
