@@ -1908,13 +1908,13 @@ void makecreature(creaturest &cr,short type)
    if(cr.align==1)
    {
       cr.att[ATTRIBUTE_HEART]+=4;
-      cr.infiltration = 0.15;
+      cr.infiltration = 0.15f;
    }
    else if(cr.align==0)
    {
       cr.att[ATTRIBUTE_HEART]+=2;
       cr.att[ATTRIBUTE_WISDOM]+=2;
-      cr.infiltration = 0.25;
+      cr.infiltration = 0.25f;
    }
    else
    {

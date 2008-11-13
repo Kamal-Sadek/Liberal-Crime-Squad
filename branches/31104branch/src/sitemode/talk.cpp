@@ -541,7 +541,8 @@ char talk(creaturest &a,int t)
             if(!noticed)
             {
                short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
-                  a.attval(ATTRIBUTE_WISDOM)*3+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
+                                         a.attval(ATTRIBUTE_WISDOM)*2+
+                                         a.skill[SKILL_PERSUASION]*2;
 
                int maxtroll=0,troll;
                for(int e=0;e<ENCMAX;e++)
@@ -775,12 +776,18 @@ char talk(creaturest &a,int t)
 
                if(lw!=-1)
                {
-                  short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
-                     a.attval(ATTRIBUTE_HEART)+LCSrandom(a.skill[SKILL_PERSUASION]*2+1);
+                  short aroll=
+                     LCSrandom(21)+
+                     a.attval(ATTRIBUTE_CHARISMA)+
+                     a.attval(ATTRIBUTE_HEART)+
+                     a.skill[SKILL_PERSUASION]*2;
                   char badthing=0;
-                  if(aroll<20-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
+                  if(aroll<30-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
+                  else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)badthing=2;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+
+                  short troll=
+                     LCSrandom(21)+
+                     tk->attval(ATTRIBUTE_CHARISMA)+
                      tk->attval(ATTRIBUTE_WISDOM);
                   a.skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
 
@@ -790,7 +797,7 @@ char talk(creaturest &a,int t)
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   int y=10;
                   move(y,1);y++;
-                  if(badthing)
+                  if(badthing==1)
                   {
                      switch(lw)
                      {
@@ -849,6 +856,70 @@ char talk(creaturest &a,int t)
 									break;
                         case LAW_GUNCONTROL:
                            addstr("\"People like, think they need lots of guns.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                     }
+                  }
+                  else if(badthing==2)
+                  {
+                     aroll/=2;
+                     switch(lw)
+                     {
+                        case LAW_ABORTION:
+                           addstr("\"Conservatives don't like abortion.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           troll+=tk->skill[SKILL_RELIGION];
+                           break;
+                        case LAW_ANIMALRESEARCH:
+                           addstr("\"Animals need to be better respected.\"");
+                           troll+=tk->skill[SKILL_SCIENCE];
+                           break;
+                        case LAW_POLICEBEHAVIOR:
+                           addstr("\"The police are still out there.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                        case LAW_PRIVACY:
+                           addstr("\"The government runs intelligence agencies.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                        case LAW_DEATHPENALTY:
+                           addstr("\"You can go to prison for life for serious crimes.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                        case LAW_NUCLEARPOWER:
+                           addstr("\"Nuclear power isn't banned in some countries.\"");
+                           troll+=tk->skill[SKILL_SCIENCE];
+                           break;
+                        case LAW_POLLUTION:
+                           addstr("\"We're still polluting a little bit.\"");
+                           troll+=tk->skill[SKILL_SCIENCE];
+                           break;
+                        case LAW_LABOR:
+                           addstr("\"Corporate bosses don't always give in to unions.\"");
+                           troll+=tk->skill[SKILL_BUSINESS];
+                           break;
+                        case LAW_GAY:
+                           addstr("\"Not everybody likes gay people.\"");
+                           troll+=tk->skill[SKILL_RELIGION];
+                           break;
+                        case LAW_CORPORATE:
+                           addstr("\"There are corporations.\"");
+                           troll+=tk->skill[SKILL_BUSINESS];
+                           break;
+                        case LAW_FREESPEECH:
+                           addstr("\"People get mad if you swear a lot in public.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                        case LAW_FLAGBURNING:
+                           addstr("\"The flag code says you shouldn't make it into clothing.\"");
+                           troll+=tk->skill[SKILL_LAW];
+                           break;
+                        case LAW_TAX:
+									addstr("\"There's still inequality in this country.\"");
+                           troll+=tk->skill[SKILL_BUSINESS];
+									break;
+                        case LAW_GUNCONTROL:
+                           addstr("\"We need to repeal the second amendment.\"");
                            troll+=tk->skill[SKILL_LAW];
                            break;
                      }
@@ -1051,7 +1122,7 @@ char talk(creaturest &a,int t)
                         }
                         else if(tk->align==-1)
                         {
-                           if(tk->type==CREATURE_COP || tk->type==CREATURE_GANGUNIT)
+                           if(tk->type==CREATURE_GANGUNIT)
                            {
                               addstr("\"Go away before I arrest you.\"");
                            }

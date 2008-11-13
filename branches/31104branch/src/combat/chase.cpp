@@ -767,7 +767,7 @@ void evasivedrive(void)
 
 void evasiverun(void)
 {
-   vector<long> yourspeed;
+   vector<int> yourspeed;
    yourspeed.resize(6);
    int yourworst=10000, yourbest=0;
    int wheelchair=0, notwheelchair=0;
@@ -776,25 +776,25 @@ void evasiverun(void)
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->alive)
       {
-         yourspeed[p]=activesquad->squad[p]->attval(ATTRIBUTE_AGILITY)+
-                      activesquad->squad[p]->attval(ATTRIBUTE_HEALTH);
-         if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)wheelchair++;
+         
+         if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
+         {
+            yourspeed[p]=0;
+
+            wheelchair++;
+         }
          else 
          {
+            yourspeed[p]=activesquad->squad[p]->attval(ATTRIBUTE_AGILITY)+
+                         activesquad->squad[p]->attval(ATTRIBUTE_HEALTH)+LCSrandom(10);
+
+            healthmodroll(yourspeed[p],*activesquad->squad[p]);
+
             notwheelchair++;
-            if(yourworst>yourspeed[p])yourworst=yourspeed[p];
-            if(yourbest<yourspeed[p])yourworst=yourspeed[p];
          }
+         if(yourworst>yourspeed[p])yourworst=yourspeed[p];
+         if(yourbest<yourspeed[p])yourbest=yourspeed[p];
       }
-   }
-   
-   if(wheelchair>notwheelchair)
-   {
-      yourworst=0;
-   }
-   else if(wheelchair!=0)
-   {
-      yourworst<<=1;
    }
 
    if(yourworst>5)
@@ -823,25 +823,20 @@ void evasiverun(void)
       refresh();
       getch();
    }
-   else
-   {
-      clearmessagearea();
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(16,1);
-      addstr("Your group can't move very fast!");
-      refresh();
-      getch();
-   }
 
    int theirbest=0;
+   int theirworst=10000;
    for(int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
 
       int chaser=encounter[e].attval(ATTRIBUTE_AGILITY)+
-                 encounter[e].attval(ATTRIBUTE_HEALTH) + LCSrandom(20);
+                 encounter[e].attval(ATTRIBUTE_HEALTH) + LCSrandom(10);
+
+      healthmodroll(chaser,encounter[e]);
 
       if(theirbest<chaser)theirbest=chaser;
+      if(theirworst>chaser)theirworst=chaser;
 
       if(chaser<yourworst)
       {
@@ -869,16 +864,21 @@ void evasiverun(void)
          getch();
       }
    }
+
+   
    //This last loop can be used to have fast people in
    //your squad escape one by one just as the enemy
    //falls behind one by one
-   /*for(int p=0;p<6;p++)
+   int othersleft=0;
+   for(int p=5;p>=0;p--)
    {
+      if(!encounter[0].exists)break;
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->alive)
       {
-         if(yourrolls[p]>theirbest)
+         if(yourspeed[p]>theirbest+5)
          {
+            if(p==0 && othersleft==0)break;
             clearmessagearea();
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             move(16,1);
@@ -886,13 +886,55 @@ void evasiverun(void)
             addstr(" breaks away!");
 
             removesquadinfo(*activesquad->squad[p]);
+            for(int i=p+1, j=p;i<5;i++, j++)
+            {
+               activesquad->squad[j]=activesquad->squad[i];
+            }
+            activesquad->squad[5]=NULL;
 
+            printparty();
+            refresh();
+            getch();
+         }
+         else if(yourspeed[p]<theirbest-10)
+         {
+            clearmessagearea();
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(16,1);
+            addstr(activesquad->squad[p]->name);
+            addstr(" is seized, thrown to the ground, and ");
+            switch(encounter[0].type)
+            {
+            case CREATURE_COP:addstr("handcuffed!");break;
+            case CREATURE_GANGUNIT:addstr("tazered repeatedly!");activesquad->squad[p]->blood-=10;break;
+            case CREATURE_DEATHSQUAD:addstr("shot in the head!");activesquad->squad[p]->blood=0;break;
+            default:addstr("beaten senseless!");activesquad->squad[p]->blood-=60;break;
+            }
+            if(activesquad->squad[p]->blood<=0)
+               activesquad->squad[p]->alive=0;
+
+            if(activesquad->squad[p]->alive==0)
+            {
+               move(17,1);
+               addstr("The Liberal is DEAD...");
+            }
+
+            capturecreature(*activesquad->squad[p]);
+            for(int i=p+1, j=p;i<6;i++, j++)
+            {
+               activesquad->squad[j]=activesquad->squad[i];
+            }
+            activesquad->squad[5]=NULL;
+            delenc(0,0);
+
+            printparty();
             printchaseencounter();
             refresh();
             getch();
          }
+         else othersleft++;
       }
-   }*/
+   }
 }
 
 

@@ -467,304 +467,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    {
       if(a.align==1||encnum<ENCMAX)
       {
-         int resist=0;
-
-         strcpy(str,a.name);
-         strcat(str," ");
-
-         int attack=0;
-         if(a.align==-1)
-         {
-            attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+t.attval(ATTRIBUTE_WISDOM,0);
-         }
-         else if(a.align==1)
-         {
-            attack=LCSrandom(a.attval(ATTRIBUTE_HEART))+t.attval(ATTRIBUTE_HEART,0);
-         }
-
-         switch(a.type)
-         {
-            case CREATURE_JUDGE_CONSERVATIVE:
-            case CREATURE_JUDGE_LIBERAL:
-               switch(LCSrandom(4))
-               {
-                  case 0:strcat(str,"debates the death penalty with");break;
-                  case 1:strcat(str,"debates gay rights with");break;
-                  case 2:strcat(str,"debates free speech with");break;
-                  case 3:strcat(str,"debates the Second Amendment with");break;
-               }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
-               if(t.align==1)
-               {
-                  resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                     t.attval(ATTRIBUTE_HEART,0)+t.skill[SKILL_LAW]-
-                     t.attval(ATTRIBUTE_WISDOM,0);
-               }
-               else
-               {
-                  resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                     t.attval(ATTRIBUTE_WISDOM,0)+t.skill[SKILL_LAW]-
-                     t.attval(ATTRIBUTE_HEART,0);
-               }
-               attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE)/2+1)+LCSrandom(a.skill[SKILL_LAW]+1);
-               break;
-            case CREATURE_SCIENTIST_EMINENT:
-               switch(LCSrandom(3))
-               {
-                  case 0:strcat(str,"debates scientific ethics with");break;
-                  case 1:if(a.align==-1)strcat(str,"explains the benefits of research to");
-                         else strcat(str,"explains ethical research to");
-                     break;
-                  case 2:strcat(str,"discusses the scientific method with");break;
-               }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
-               if(t.align==1)
-               {
-                  resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                     t.skill[SKILL_SCIENCE]+
-                     t.attval(ATTRIBUTE_HEART,0)-
-                     t.attval(ATTRIBUTE_WISDOM,0);
-               }
-               else
-               {
-                  resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-                     t.skill[SKILL_SCIENCE]+
-                     t.attval(ATTRIBUTE_WISDOM,0)-
-                     t.attval(ATTRIBUTE_HEART,0);
-               }
-               attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE))+LCSrandom(t.skill[SKILL_SCIENCE]+1);
-               break;
-            case CREATURE_CORPORATE_CEO:
-               if(a.align==-1)
-               {
-                  switch(LCSrandom(10))
-                  {
-                     case 0:strcat(str,"explains the derivatives market to");break;
-                     case 1:strcat(str,"justifies voodoo economics to");break;
-                     case 2:strcat(str,"extols the Reagan presidency to");break;
-                     case 3:strcat(str,"argues about tax cuts with");break;
-                     case 4:strcat(str,"explains Conservative philosophy to");break;
-                     case 5:strcat(str,"extends a dinner invitation to");break;
-                     case 6:strcat(str,"offers a VP position to");break;
-                     case 7:strcat(str,"shows a $1000 bill to");break;
-                     case 8:strcat(str,"debates fiscal policy with");break;
-                     case 9:strcat(str,"offers stock options to");break;
-                  }
-               }
-               else
-               {
-                  switch(LCSrandom(5))
-                  {
-                     case 0:strcat(str,"debates fiscal policy with");break;
-                     case 1:strcat(str,"derides voodoo economics to");break;
-                     case 2:strcat(str,"dismisses the Reagan presidency to");break;
-                     case 3:strcat(str,"argues about tax cuts with");break;
-                     case 4:strcat(str,"explains Liberal philosophy to");break;
-                  }
-               }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
-               if(t.align==1)
-               {
-                  resist=t.attval(ATTRIBUTE_HEART,0)+
-                     t.skill[SKILL_BUSINESS]-
-                     t.attval(ATTRIBUTE_WISDOM,0);
-               }
-               else
-               {
-                  resist=t.attval(ATTRIBUTE_WISDOM,0)+
-                     t.skill[SKILL_BUSINESS]-
-                     t.attval(ATTRIBUTE_HEART,0);
-               }
-               attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1)+LCSrandom(a.skill[SKILL_BUSINESS]+1);
-               break;
-            case CREATURE_RADIOPERSONALITY:
-            case CREATURE_NEWSANCHOR:
-               switch(LCSrandom(5))
-               {
-                  case 0:strcat(str,"winks at");break;
-                  case 1:strcat(str,"smiles at");break;
-                  case 2:strcat(str,"smirks at");break;
-                  case 3:strcat(str,"chats warmly with");break;
-                  case 4:strcat(str,"yells slogans at");break;
-               }
-               strcat(str," ");
-               strcat(str,t.name);
-               strcat(str,"!");
-               if(t.align==1)
-               {
-                  resist=t.attval(ATTRIBUTE_CHARISMA,0)+
-                     t.attval(ATTRIBUTE_HEART,0)-
-                     t.attval(ATTRIBUTE_WISDOM,0);
-               }
-               else
-               {
-                  resist=t.attval(ATTRIBUTE_CHARISMA,0)+
-                     t.attval(ATTRIBUTE_WISDOM,0)-
-                     t.attval(ATTRIBUTE_HEART,0);
-               }
-               attack+=LCSrandom(a.attval(ATTRIBUTE_CHARISMA));
-               break;
-            default:
-               if(a.weapon.type==WEAPON_GUITAR)
-               {
-                  switch(LCSrandom(5))
-                  {
-                     case 0:strcat(str,"plays a song for");break;
-                     case 1:strcat(str,"sings to");break;
-                     case 2:strcat(str,"strums the guitar at");break;
-                     case 3:if(a.align==1)strcat(str,"plays protest songs at");
-                            else strcat(str,"plays country songs at");
-                            break;
-                     case 4:strcat(str,"rocks out at");break;
-                  }
-                  strcat(str," ");
-                  strcat(str,t.name);
-                  strcat(str,"!");
-                  if(t.align==1)
-                  {
-                     resist=t.skill[SKILL_MUSIC]+
-                        t.attval(ATTRIBUTE_HEART,0)-
-                        t.attval(ATTRIBUTE_WISDOM,0);
-                  }
-                  else
-                  {
-                     resist=t.skill[SKILL_MUSIC]+
-                        t.attval(ATTRIBUTE_WISDOM,0)-
-                        t.attval(ATTRIBUTE_HEART,0);
-                  }
-                  attack=LCSrandom(a.skill[SKILL_MUSIC]*2+1);
-                  if(resist>0)
-                     a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist)+1;
-                  else
-                     a.skill_ip[SKILL_MUSIC]+=1;
-               }
-               break;
-         }
-
-         move(16,1);
-         addstr(str);
-
-         if(t.animalgloss)
-         {
-            switch(t.animalgloss)
-            {
-            case ANIMALGLOSS_TANK:
-            case ANIMALGLOSS_ANIMAL:
-            default:
-               move(17,1);
-               addstr(t.name);
-               addstr(" is immune to the attack!");
-            }
-         }
-         else if(attack>resist)
-         {
-            if(a.align==-1)
-            {
-               if(t.juice>=100)
-               {
-                  move(17,1);
-                  addstr(t.name);
-                  addstr(" loses juice!");
-                  addjuice(t,-50);
-               }
-               else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) || t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
-               {
-                  move(17,1);
-                  addstr(t.name);
-                  addstr(" becomes Wiser!");
-                  t.att[ATTRIBUTE_WISDOM]++;
-               }
-               else
-               {
-                  move(17,1);
-                  addstr(t.name);
-                  addstr(" is turned Conservative");
-                  if(t.prisoner!=NULL)
-                  {
-                     freehostage(t,0);
-                  }
-                  addstr("!");
-
-                  for(int e=0;e<ENCMAX;e++)
-                  {
-                     if(encounter[e].exists==0)
-                     {
-                        encounter[e]=t;
-                        encounter[e].exists=1;
-                        conservatise(encounter[e]);
-                        encounter[e].squadid=-1;
-                        break;
-                     }
-                  }
-
-                  char flipstart=0;
-                  for(int p=0;p<6;p++)
-                  {
-                     if(activesquad->squad[p]==&t)
-                     {
-                        for(int pl=pool.size()-1;pl>=0;pl--)
-                        {
-                           if(pool[pl]==activesquad->squad[p])
-                           {
-                              pool[pl]->alive=0;
-                              pool[pl]->location=-1;
-                              //delete pool[pl];
-                              //pool.erase(pool.begin() + pl);
-                              break;
-                           }
-                        }
-
-                        activesquad->squad[p]=NULL;
-                        flipstart=1;
-                     }
-                     if(flipstart&&p<5)activesquad->squad[p]=activesquad->squad[p+1];
-                  }
-                  if(flipstart)activesquad->squad[5]=NULL;
-               }
-            }
-            else
-            {
-               if(LCSrandom(15)>t.attval(ATTRIBUTE_HEART) ||
-                  t.attval(ATTRIBUTE_HEART) < t.attval(ATTRIBUTE_WISDOM))
-               {
-                  move(17,1);
-                  addstr(t.name);
-                  addstr("'s Heart swells!");
-                  t.att[ATTRIBUTE_HEART]++;
-               }
-               else
-               {
-                  move(17,1);
-                  addstr(t.name);
-                  addstr(" has turned Liberal!");
-
-                  liberalize(t);
-                  t.flag|=CREATUREFLAG_CONVERTED;
-                  t.cantbluff=0;
-               }
-            }
-         }
-         else
-         {
-            move(17,1);
-            addstr(t.name);
-            addstr(" remains strong.");
-         }
-
-         printparty();
-         if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
-         else printencounter();
-
-         refresh();
-         getch();
-
+         specialattack(a, t, actual);
          return;
       }
    }
@@ -921,6 +624,14 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int droll=LCSrandom(20)+1;
    if(t.prisoner!=NULL)droll-=LCSrandom(10);
 
+   //Agility rolls for melee attack
+   if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
+   {
+      aroll+=LCSrandom(a.attval(ATTRIBUTE_AGILITY));
+      droll+=LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+   }
+
+   //Injured people suck at attacking, are like fish in a barrel to attackers
    healthmodroll(aroll,a);
    healthmodroll(droll,t);
 
@@ -934,6 +645,17 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(aroll<0)aroll=0;
    if(droll<0)droll=0;
 
+   // Harder to hit people during a chase: 5 points for being on the
+   // move, 5-10 points for having to hit them in the car, depending
+   // on which side is shooting. Your side has the advantage, since
+   // you're leading the chase.
+   if(mode==GAMEMODE_CHASECAR)
+   {
+      if(a.align==-1)droll+=10;
+      else droll+=5;
+   }
+   if(mode==GAMEMODE_CHASEFOOT)droll+=5;
+
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
    if(rangedweapon(a.weapon) &&
@@ -942,27 +664,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    {
       wsk=SKILL_IMPROVISED;
    }
-   aroll+=LCSrandom(a.skill[wsk]+1);
+   aroll+=a.skill[wsk];
    a.skill_ip[wsk]+=droll;
-
-   // Harder to hit people during a chase: 5 points for being on the
-   // move, 5-15 points for having to hit them in the car, depending
-   // on which side is shooting. Your side has the advantage, since
-   // you're leading the chase.
-   if(mode==GAMEMODE_CHASECAR)
-   {
-      if(a.align==-1)droll+=15;
-      else droll+=5;
-   }
-   if(mode==GAMEMODE_CHASEFOOT)droll+=5;
-
-   //Agility bonuses used for melee attack
-   //if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
-   {
-      aroll+=LCSrandom(a.attval(ATTRIBUTE_AGILITY));
-      droll+=LCSrandom(t.attval(ATTRIBUTE_AGILITY));
-   }
-
    
    int bonus=0;
    //Penalty for improvised weapons
@@ -1459,10 +1162,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       //SKILL BONUS FOR GOOD ROLL
       mod+=aroll-droll-5;
 
-      //DO THE HEALTH MOD ON THE WOUND
-      mod-=t.attval(ATTRIBUTE_HEALTH)-5;
-
-      if(mod<0)mod=0; // Don't health mod into negative, only counter criticals
+      if(mod>0)
+      {
+         //DO THE HEALTH MOD ON THE WOUND
+         mod-=t.attval(ATTRIBUTE_HEALTH)-5;
+         if(mod<0)mod=0; // Don't health mod into negative, only counter criticals
+      }
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
 
@@ -2168,6 +1873,310 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    if(damamount<0)damamount=0;
 }
 
+
+void specialattack(creaturest &a, creaturest &t, char &actual)
+{
+   int resist=0;
+   char str[50];
+
+   strcpy(str,a.name);
+   strcat(str," ");
+
+   int attack=0;
+   if(a.align==-1)
+   {
+      attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+t.attval(ATTRIBUTE_WISDOM,0);
+   }
+   else if(a.align==1)
+   {
+      attack=LCSrandom(a.attval(ATTRIBUTE_HEART))+t.attval(ATTRIBUTE_HEART,0);
+   }
+
+   switch(a.type)
+   {
+      case CREATURE_JUDGE_CONSERVATIVE:
+      case CREATURE_JUDGE_LIBERAL:
+         switch(LCSrandom(4))
+         {
+            case 0:strcat(str,"debates the death penalty with");break;
+            case 1:strcat(str,"debates gay rights with");break;
+            case 2:strcat(str,"debates free speech with");break;
+            case 3:strcat(str,"debates the Second Amendment with");break;
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
+               t.attval(ATTRIBUTE_HEART,0)+t.skill[SKILL_LAW]-
+               t.attval(ATTRIBUTE_WISDOM,0);
+         }
+         else
+         {
+            resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
+               t.attval(ATTRIBUTE_WISDOM,0)+t.skill[SKILL_LAW]-
+               t.attval(ATTRIBUTE_HEART,0);
+         }
+         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE)/2+1)+LCSrandom(a.skill[SKILL_LAW]+1);
+         break;
+      case CREATURE_SCIENTIST_EMINENT:
+         switch(LCSrandom(3))
+         {
+            case 0:strcat(str,"debates scientific ethics with");break;
+            case 1:if(a.align==-1)strcat(str,"explains the benefits of research to");
+                   else strcat(str,"explains ethical research to");
+               break;
+            case 2:strcat(str,"discusses the scientific method with");break;
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
+               t.skill[SKILL_SCIENCE]+
+               t.attval(ATTRIBUTE_HEART,0)-
+               t.attval(ATTRIBUTE_WISDOM,0);
+         }
+         else
+         {
+            resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
+               t.skill[SKILL_SCIENCE]+
+               t.attval(ATTRIBUTE_WISDOM,0)-
+               t.attval(ATTRIBUTE_HEART,0);
+         }
+         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE))+LCSrandom(t.skill[SKILL_SCIENCE]+1);
+         break;
+      case CREATURE_CORPORATE_CEO:
+         if(a.align==-1)
+         {
+            switch(LCSrandom(10))
+            {
+               case 0:strcat(str,"explains the derivatives market to");break;
+               case 1:strcat(str,"justifies voodoo economics to");break;
+               case 2:strcat(str,"extols the Reagan presidency to");break;
+               case 3:strcat(str,"argues about tax cuts with");break;
+               case 4:strcat(str,"explains Conservative philosophy to");break;
+               case 5:strcat(str,"extends a dinner invitation to");break;
+               case 6:strcat(str,"offers a VP position to");break;
+               case 7:strcat(str,"shows a $1000 bill to");break;
+               case 8:strcat(str,"debates fiscal policy with");break;
+               case 9:strcat(str,"offers stock options to");break;
+            }
+         }
+         else
+         {
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"debates fiscal policy with");break;
+               case 1:strcat(str,"derides voodoo economics to");break;
+               case 2:strcat(str,"dismisses the Reagan presidency to");break;
+               case 3:strcat(str,"argues about tax cuts with");break;
+               case 4:strcat(str,"explains Liberal philosophy to");break;
+            }
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.attval(ATTRIBUTE_HEART,0)+
+               t.skill[SKILL_BUSINESS]-
+               t.attval(ATTRIBUTE_WISDOM,0);
+         }
+         else
+         {
+            resist=t.attval(ATTRIBUTE_WISDOM,0)+
+               t.skill[SKILL_BUSINESS]-
+               t.attval(ATTRIBUTE_HEART,0);
+         }
+         attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1)+LCSrandom(a.skill[SKILL_BUSINESS]+1);
+         break;
+      case CREATURE_RADIOPERSONALITY:
+      case CREATURE_NEWSANCHOR:
+         switch(LCSrandom(5))
+         {
+            case 0:strcat(str,"winks at");break;
+            case 1:strcat(str,"smiles at");break;
+            case 2:strcat(str,"smirks at");break;
+            case 3:strcat(str,"chats warmly with");break;
+            case 4:strcat(str,"yells slogans at");break;
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.attval(ATTRIBUTE_CHARISMA,0)+
+               t.attval(ATTRIBUTE_HEART,0)-
+               t.attval(ATTRIBUTE_WISDOM,0);
+         }
+         else
+         {
+            resist=t.attval(ATTRIBUTE_CHARISMA,0)+
+               t.attval(ATTRIBUTE_WISDOM,0)-
+               t.attval(ATTRIBUTE_HEART,0);
+         }
+         attack+=LCSrandom(a.attval(ATTRIBUTE_CHARISMA));
+         break;
+      default:
+         if(a.weapon.type==WEAPON_GUITAR)
+         {
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"plays a song for");break;
+               case 1:strcat(str,"sings to");break;
+               case 2:strcat(str,"strums the guitar at");break;
+               case 3:if(a.align==1)strcat(str,"plays protest songs at");
+                      else strcat(str,"plays country songs at");
+                      break;
+               case 4:strcat(str,"rocks out at");break;
+            }
+            strcat(str," ");
+            strcat(str,t.name);
+            strcat(str,"!");
+            if(t.align==1)
+            {
+               resist=t.skill[SKILL_MUSIC]+
+                  t.attval(ATTRIBUTE_HEART,0)-
+                  t.attval(ATTRIBUTE_WISDOM,0);
+            }
+            else
+            {
+               resist=t.skill[SKILL_MUSIC]+
+                  t.attval(ATTRIBUTE_WISDOM,0)-
+                  t.attval(ATTRIBUTE_HEART,0);
+            }
+            attack=LCSrandom(a.skill[SKILL_MUSIC]*2+1);
+            if(resist>0)
+               a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist)+1;
+            else
+               a.skill_ip[SKILL_MUSIC]+=1;
+         }
+         break;
+   }
+
+   move(16,1);
+   addstr(str);
+
+   if(t.animalgloss)
+   {
+      switch(t.animalgloss)
+      {
+      case ANIMALGLOSS_TANK:
+      case ANIMALGLOSS_ANIMAL:
+      default:
+         move(17,1);
+         addstr(t.name);
+         addstr(" is immune to the attack!");
+      }
+   }
+   else if(attack>resist)
+   {
+      if(a.align==-1)
+      {
+         if(t.juice>=100)
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" loses juice!");
+            addjuice(t,-50);
+         }
+         else if(LCSrandom(15)>t.attval(ATTRIBUTE_WISDOM) || t.attval(ATTRIBUTE_WISDOM) < t.attval(ATTRIBUTE_HEART))
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" becomes Wiser!");
+            t.att[ATTRIBUTE_WISDOM]++;
+         }
+         else
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" is turned Conservative");
+            if(t.prisoner!=NULL)
+            {
+               freehostage(t,0);
+            }
+            addstr("!");
+
+            for(int e=0;e<ENCMAX;e++)
+            {
+               if(encounter[e].exists==0)
+               {
+                  encounter[e]=t;
+                  encounter[e].exists=1;
+                  conservatise(encounter[e]);
+                  encounter[e].squadid=-1;
+                  break;
+               }
+            }
+
+            char flipstart=0;
+            for(int p=0;p<6;p++)
+            {
+               if(activesquad->squad[p]==&t)
+               {
+                  for(int pl=pool.size()-1;pl>=0;pl--)
+                  {
+                     if(pool[pl]==activesquad->squad[p])
+                     {
+                        pool[pl]->alive=0;
+                        pool[pl]->location=-1;
+                        //delete pool[pl];
+                        //pool.erase(pool.begin() + pl);
+                        break;
+                     }
+                  }
+
+                  activesquad->squad[p]=NULL;
+                  flipstart=1;
+               }
+               if(flipstart&&p<5)activesquad->squad[p]=activesquad->squad[p+1];
+            }
+            if(flipstart)activesquad->squad[5]=NULL;
+         }
+      }
+      else
+      {
+         if(LCSrandom(15)>t.attval(ATTRIBUTE_HEART) ||
+            t.attval(ATTRIBUTE_HEART) < t.attval(ATTRIBUTE_WISDOM))
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr("'s Heart swells!");
+            t.att[ATTRIBUTE_HEART]++;
+         }
+         else
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" has turned Liberal!");
+
+            liberalize(t);
+            t.flag|=CREATUREFLAG_CONVERTED;
+            t.cantbluff=0;
+         }
+      }
+   }
+   else
+   {
+      move(17,1);
+      addstr(t.name);
+      addstr(" remains strong.");
+   }
+
+   printparty();
+   if(mode==GAMEMODE_CHASECAR||
+            mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+   else printencounter();
+
+   refresh();
+   getch();
+
+   return;
+}
 
 
 /* destroys armor, masks, drops weapons based on severe damage */

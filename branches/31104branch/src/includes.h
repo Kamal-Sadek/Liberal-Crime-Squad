@@ -264,6 +264,8 @@ enum UnlockTypes
 {
    UNLOCK_DOOR,
    UNLOCK_CAGE,
+   UNLOCK_CAGE_HARD,
+   UNLOCK_CELL,
    UNLOCK_SAFE,
    UNLOCKNUM
 };
@@ -2036,6 +2038,7 @@ void youattack(void);
 void enemyattack(void);
 /* attack handling for an individual creature and its target */
 void attack(creaturest &a,creaturest &t,char mistake,char &actual);
+void specialattack(creaturest &a,creaturest &t,char &actual);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll,creaturest &a);
 /* adjusts attack damage based on armor, other factors */

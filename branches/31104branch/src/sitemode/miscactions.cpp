@@ -37,8 +37,13 @@ char unlock(short type,char &actual)
 
    switch(type)
    {
-      case UNLOCK_DOOR:difficulty=5;break;
-      case UNLOCK_CAGE:difficulty=10;break;
+      case UNLOCK_DOOR:
+         if(securityable(location[cursite]->type))difficulty=12;
+         else difficulty=7;
+         break;
+      case UNLOCK_CAGE:difficulty=3;break;
+      case UNLOCK_CAGE_HARD:difficulty=8;break;
+      case UNLOCK_CELL:difficulty=14;break;
       case UNLOCK_SAFE:difficulty=15;break;
    }
 
@@ -157,7 +162,24 @@ char bash(short type,char &actual)
 
    switch(type)
    {
-      case BASH_DOOR:difficulty=15;crowable=1;break;
+      case BASH_DOOR:
+         if(!securityable(location[cursite]->type))
+         {
+            difficulty=10; // Run down dump
+            crowable=1;
+         }
+         else if(location[cursite]->type!=SITE_GOVERNMENT_PRISON&&
+                 location[cursite]->type!=SITE_GOVERNMENT_INTELLIGENCEHQ)
+         {
+            difficulty=15; // Respectable place
+            crowable=1;
+         }
+         else
+         {
+            difficulty=20; // High security
+            crowable=0;
+         }
+         break;
    }
 
    if(crowable)
@@ -280,14 +302,15 @@ long bashstrengthmod(int t)
 {
    switch(t)
    {
+      case WEAPON_AXE:
+         return 4;
       case WEAPON_BASEBALLBAT:
       case WEAPON_SWORD:
       case WEAPON_DAISHO:
       case WEAPON_MAUL:
-      case WEAPON_AXE:
       case WEAPON_HAMMER:
-         return 5;
-      case WEAPON_CROWBAR: // (crowbar won't look up this table, auto-bashes)
+         return 3;
+      case WEAPON_CROWBAR: // (crowbar auto-bashes some things)
       case WEAPON_SHOTGUN_PUMP:
       case WEAPON_STAFF:
       case WEAPON_NIGHTSTICK:
@@ -297,7 +320,7 @@ long bashstrengthmod(int t)
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_PITCHFORK:
       case WEAPON_FLAMETHROWER:
-         return 3;
+         return 2;
       case WEAPON_SMG_MP5:
       case WEAPON_REVOLVER_22:
       case WEAPON_REVOLVER_44:

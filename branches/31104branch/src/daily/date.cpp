@@ -491,9 +491,8 @@ char completedate(datest &d,int p,char &clearformess)
          int c=getch();
          translategetch(c);
 
-         short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(pool[p]->skill[SKILL_SEDUCTION]*2+1);
-         short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
-         pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
+         short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skill[SKILL_SEDUCTION]*2;
+         short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
 
          char test=0;
          if(c=='a'&&funds>=100&&!pool[p]->clinic)
@@ -503,8 +502,13 @@ char completedate(datest &d,int p,char &clearformess)
             moneylost_dating+=100;
             aroll+=LCSrandom(10);
             test=1;
+            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(8)+3;
          }
-         if(c=='b')test=1;
+         if(c=='b')
+         {
+            test=1;
+            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(8)+3;
+         }
 
          if(d.date[e]->skill[SKILL_BUSINESS])
          {
@@ -542,6 +546,7 @@ char completedate(datest &d,int p,char &clearformess)
                d.date.erase(d.date.begin() + e2);
             }
             d.timeleft=7;
+            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(40)+15;
             return 0;
          }
          if(c=='d')
@@ -564,7 +569,7 @@ char completedate(datest &d,int p,char &clearformess)
             {
                addstr(" comes back from the bathroom toting the ");
                addstr(str);
-               move(18,4);
+               move(18,0);
                addstr("and threatens to blow the Conservative's brains out!");
                bonus=5;
             }
@@ -572,14 +577,14 @@ char completedate(datest &d,int p,char &clearformess)
             {
                addstr(" grabs the Conservative from behind, holding the ");
                addstr(str);
-               move(18,4);
+               move(18,0);
                addstr("to the corporate slave's throat!");
                bonus=2;
             }
             else
             {
                addstr(" seizes the Conservative swine from behind and warns it");
-               move(18,4);
+               move(18,0);
                if(law[LAW_FREESPEECH]!=-2)addstr("not to fuck around!");
                else addstr("not to [resist]!");
             }
@@ -603,7 +608,7 @@ char completedate(datest &d,int p,char &clearformess)
             {
                
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               move(20,6);
+               move(20,0);
                addstr(d.date[e]->name);
                if(bonus)
                {
@@ -674,7 +679,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" manages to get away on the way back to the safehouse!");
                   refresh();
                   getch();
-                  move(++y,8);y++;
+                  move(++y,0);y++;
                   addstr(pool[p]->name);
                   addstr(" has failed to kidnap the Conservative.");
 
@@ -698,7 +703,7 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(" remembers seeing!");
                   refresh();
                   getch();
-                  move(++y,8);y++;
+                  move(++y,0);y++;
                   addstr("The Liberal wakes up in the police station...");
 
                   // Find the police station

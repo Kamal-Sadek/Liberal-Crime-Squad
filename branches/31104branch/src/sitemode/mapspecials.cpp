@@ -351,7 +351,7 @@ void special_lab_genetic_cagedanimals(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr("You see horrible misshapen creatures in a locked cage.");
+      addstr("You see horrible misshapen creatures in a sealed cage.");
       move(17,1);
       addstr("Free them? (Yes or No)");
 
@@ -364,7 +364,7 @@ void special_lab_genetic_cagedanimals(void)
       {
          char actual;
 
-         if(unlock(UNLOCK_CAGE,actual))
+         if(unlock(UNLOCK_CAGE_HARD,actual))
          {
             int time=20+LCSrandom(10);
             if(time<1)time=1;
@@ -450,7 +450,7 @@ void special_policestation_lockup(void)
       {
          char actual;
 
-         if(unlock(UNLOCK_DOOR,actual))
+         if(unlock(UNLOCK_CELL,actual))
          {
             int numleft=LCSrandom(8)+2;
             for(int e=0;e<ENCMAX;e++)
@@ -515,7 +515,7 @@ void special_courthouse_lockup(void)
       {
          char actual;
 
-         if(unlock(UNLOCK_DOOR,actual))
+         if(unlock(UNLOCK_CELL,actual))
          {
             int numleft=LCSrandom(8)+2;
             for(int e=0;e<ENCMAX;e++)
@@ -643,9 +643,11 @@ void special_courthouse_jury(void)
          {
             int p=goodp[LCSrandom(goodp.size())];
 
-            short aroll=LCSrandom(21)+activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-               activesquad->squad[p]->attval(ATTRIBUTE_HEART)+LCSrandom(activesquad->squad[p]->skill[SKILL_PERSUASION]+1)+
-               LCSrandom(activesquad->squad[p]->skill[SKILL_LAW]+1)*2;
+            short aroll=LCSrandom(21)+
+               activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
+               activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
+               activesquad->squad[p]->skill[SKILL_PERSUASION]+
+               activesquad->squad[p]->skill[SKILL_LAW]*2;
             short troll=LCSrandom(21)+20;
             activesquad->squad[p]->skill_ip[SKILL_PERSUASION]+=troll;
             activesquad->squad[p]->skill_ip[SKILL_LAW]+=troll;

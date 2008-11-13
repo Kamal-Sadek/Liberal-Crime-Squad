@@ -1129,7 +1129,7 @@ void printliberalstats(creaturest &cr,char smll)
       if(!smll)
       {
          // Add birthdate
-         move(16,0);
+         move(15,0);
          addstr("Born ");
          switch(cr.birthday_month)
          {

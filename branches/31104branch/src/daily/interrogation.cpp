@@ -146,7 +146,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       int& nofood = reinterpret_cast<interrogation*>(cr->activity.arg)->nofood;
       int& nowater = reinterpret_cast<interrogation*>(cr->activity.arg)->nowater;
       int& nosleep = reinterpret_cast<interrogation*>(cr->activity.arg)->nosleep;
-      int& nolight = reinterpret_cast<interrogation*>(cr->activity.arg)->nolight;
+      //int& nolight = reinterpret_cast<interrogation*>(cr->activity.arg)->nolight;
       int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
       map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
@@ -164,14 +164,14 @@ void tendhostage(creaturest *cr,char &clearformess)
                   science=temppool[p]->skill[SKILL_SCIENCE];
 
                if((temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                  temppool[p]->attval(ATTRIBUTE_HEART)-
-                  temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                  temppool[p]->skill[SKILL_INTERROGATION]*2)>maxattack)
+                   temppool[p]->attval(ATTRIBUTE_HEART)-
+                   temppool[p]->attval(ATTRIBUTE_WISDOM)+
+                   temppool[p]->skill[SKILL_INTERROGATION]*2)>maxattack)
                {
                   maxattack=temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                     temppool[p]->attval(ATTRIBUTE_HEART)-
-                     temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                     temppool[p]->skill[SKILL_INTERROGATION]*2;
+                            temppool[p]->attval(ATTRIBUTE_HEART)-
+                            temppool[p]->attval(ATTRIBUTE_WISDOM)+
+                            temppool[p]->skill[SKILL_INTERROGATION]*2;
                }
             }
          }
@@ -186,9 +186,9 @@ void tendhostage(creaturest *cr,char &clearformess)
             if(temppool[p]->alive)
             {
                if((temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                     temppool[p]->attval(ATTRIBUTE_HEART)-
-                     temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                     temppool[p]->skill[SKILL_INTERROGATION]*2)==maxattack)
+                   temppool[p]->attval(ATTRIBUTE_HEART)-
+                   temppool[p]->attval(ATTRIBUTE_WISDOM)+
+                   temppool[p]->skill[SKILL_INTERROGATION]*2)==maxattack)
                {
                   goodp.push_back(p);
                }
@@ -199,14 +199,16 @@ void tendhostage(creaturest *cr,char &clearformess)
 
       maxattack+=temppool.size();
 
-      if(cr->skill[SKILL_BUSINESS])maxattack+=business-cr->skill[SKILL_BUSINESS];
-      if(cr->skill[SKILL_RELIGION])maxattack+=religion-cr->skill[SKILL_RELIGION];
-      if(cr->skill[SKILL_SCIENCE])maxattack+=science-cr->skill[SKILL_SCIENCE];
+      maxattack+=business-cr->skill[SKILL_BUSINESS];
+      maxattack+=religion-cr->skill[SKILL_RELIGION];
+      maxattack+=science-cr->skill[SKILL_SCIENCE];
 
-      long aroll=LCSrandom(maxattack)+LCSrandom(10);
-      long troll=LCSrandom(cr->attval(ATTRIBUTE_WISDOM)*2-
-         cr->attval(ATTRIBUTE_HEART)+
-         cr->skill[SKILL_INTERROGATION]*2)+LCSrandom(15);
+      long aroll=maxattack+
+                 LCSrandom(20)+1;
+      long troll=cr->attval(ATTRIBUTE_WISDOM)*2-
+                 cr->attval(ATTRIBUTE_HEART)+
+                 cr->skill[SKILL_INTERROGATION]*2+
+                 LCSrandom(20)+1;
 
       bool techniques[9];
       //recall interrogation plan
@@ -256,12 +258,12 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr("Given Water    ");
          if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[6]);
          move(y,0);y+=1;addstr("G - ");
-         if(techniques[6])addstr("Total Darkness");
-         else addstr("Lights On     ");
+         if(!techniques[6])addstr("No ");
+         addstr("Expensive Props ($100)   ");
          if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[7]);
          move(y,0);y+=2;addstr("H - ");
          if(!techniques[7])addstr("No ");
-         addstr("Psychedelic Drugs   ");
+         addstr("Psychedelic Drugs ($40)   ");
          if(techniques[8])set_color(COLOR_RED,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y+=2;addstr("K - Kill the Hostage");
@@ -515,29 +517,11 @@ void tendhostage(creaturest *cr,char &clearformess)
       addstr("The Automaton");
       if(techniques[1]) // Restraint
       {
-         if(techniques[6]) // No light
-         {
-            addstr(" is tied hands and feet to a metal chair in a dark closet.");
-            spiritcrush+=LCSrandom(3*(++nolight));
-         }
-         else
-         {
-            addstr(" is tied hands and feet to a metal chair");
-            y++;move(y,0);
-            addstr("in the middle of a back room.");
-            nolight=0;
-         }
-         y++;
-         nolight=0;
+         addstr(" is tied hands and feet to a metal chair");
+         y++;move(y,0);
+         addstr("in the middle of a back room.");
 
          spiritcrush+=LCSrandom(2);
-      }
-      else if(techniques[6]) // No light
-      {
-         addstr(" is locked in a dark room without any light.");
-         y++;
-
-         spiritcrush+=LCSrandom(3*(++nolight));
       }
       else
       {
@@ -545,7 +529,6 @@ void tendhostage(creaturest *cr,char &clearformess)
          y++;move(y,0);
          addstr("converted into a makeshift cell.");
          y++;
-         nolight=0;
       }
       refresh();
       getch();
@@ -618,7 +601,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          
          y++;
 
-         addstr("It is subjected to a psychedelic drug regimen.");
+         addstr("It is subjected to dangerous psychedelic drugs.");
 
          spiritcrush+=LCSrandom(5);
          healthcrush+=3;
@@ -690,13 +673,19 @@ void tendhostage(creaturest *cr,char &clearformess)
             addstr(cr->name);
             addstr("'s guards beat");
          }
-         addstr(" the Automaton, yelling its");
+         addstr(" the Automaton");
+         if(techniques[6])//props
+         {
+            addstr(" with a flagpole");
+         }
+         addstr(",");
          y++;
          move(y,0);
-         addstr("favorite corporation's name.");
+         addstr("yelling its favorite corporation's name.");
          y++;
 
          spiritcrush+=forceroll/2;
+         if(techniques[6])spiritcrush+=forceroll/2;
          healthcrush+=forceroll/2;
          cr->blood-=forceroll/2;
 
@@ -812,12 +801,25 @@ void tendhostage(creaturest *cr,char &clearformess)
          y+=1;
          move(y,0);
          addstr(a->name);
-         switch(LCSrandom(4))
+         if(techniques[6])//props
          {
-         case 0:addstr(" debates political issues with ");break;
-         case 1:addstr(" argues about the LCS with ");break;
-         case 2:addstr(" tries to expose the true Liberal side of ");break;
-         case 3:addstr(" attempts to recruit ");break;
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(" plays violent video games with ");break;
+            case 1:addstr(" discusses a Liberal documentary with ");break;
+            case 2:addstr(" burns flags in front of ");break;
+            case 3:addstr(" explores an elaborate political fantasy with ");break;
+            }
+         }
+         else
+         {
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(" debates political issues with ");break;
+            case 1:addstr(" argues about the LCS with ");break;
+            case 2:addstr(" tries to expose the true Liberal side of ");break;
+            case 3:addstr(" attempts to recruit ");break;
+            }
          }
          addstr(cr->name);
          addstr(".");
