@@ -1400,7 +1400,7 @@ case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
                   short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skill[SKILL_SEDUCTION]*2+1);
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
                   short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
-                  a.skill_ip[SKILL_SEDUCTION]+=LCSrandom(5)+2;
+                  if(!(tk->animalgloss))a.skill_ip[SKILL_SEDUCTION]+=LCSrandom(5)+2;
 
                   if(tk->animalgloss)
                   {

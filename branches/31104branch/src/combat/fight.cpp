@@ -1798,57 +1798,33 @@ void healthmodroll(int &aroll,creaturest &a)
 void damagemod(creaturest &t,char &damtype,int &damamount,
                char hitlocation,char armorpenetration,int &mod)
 {
-   int prot=0;
-   int prot2=0;
-   int prot3=0;
+   int armor=0;
+   int head_armor=0;
+   int limb_armor=0;
 
    switch(t.armor.type)
    {
-      case ARMOR_CLOTHES:prot=0;break;
-      case ARMOR_OVERALLS:prot=0;break;
-      case ARMOR_WIFEBEATER:prot=0;break;
-      case ARMOR_TRENCHCOAT:prot=0;break;
-      case ARMOR_WORKCLOTHES:prot=0;break;
-      case ARMOR_SECURITYUNIFORM:prot=0;break;
-      case ARMOR_POLICEUNIFORM:prot=0;break;
-      case ARMOR_CHEAPSUIT:prot=0;break;
-      case ARMOR_EXPENSIVESUIT:prot=0;break;
-      case ARMOR_BLACKSUIT:prot=0;break;
-      case ARMOR_CHEAPDRESS:prot=0;break;
-      case ARMOR_EXPENSIVEDRESS:prot=0;break;
-      case ARMOR_BLACKDRESS:prot=0;break;
-      case ARMOR_LABCOAT:prot=0;break;
-      case ARMOR_BLACKROBE:prot=0;break;
-      case ARMOR_CLOWNSUIT:prot=0;break;
-      case ARMOR_ELEPHANTSUIT:prot=0;break;
-      case ARMOR_DONKEYSUIT:prot=0;break;
-      case ARMOR_BONDAGEGEAR:prot=0;break;
-      case ARMOR_MASK:prot=0;break;
-      case ARMOR_MILITARY:prot=0;break;
-      case ARMOR_PRISONGUARD:prot=0;break;
-      case ARMOR_PRISONER:prot=0;break;
-      case ARMOR_TOGA:prot=0;break;
-      case ARMOR_MITHRIL:prot=0;break;
-      case ARMOR_BUNKERGEAR:prot=2;prot2=2;prot3=2;break;
-      case ARMOR_CIVILLIANARMOR:prot=5;break;
-      case ARMOR_POLICEARMOR:prot=7;break;
-      case ARMOR_ARMYARMOR:prot=8;prot2=6;break;
-      case ARMOR_HEAVYARMOR:prot=10;prot2=8;prot3=4;break;
+      default:armor=0;break;
+      case ARMOR_BUNKERGEAR:armor=2;head_armor=2;limb_armor=2;break;
+      case ARMOR_CIVILLIANARMOR:armor=5;break;
+      case ARMOR_POLICEARMOR:armor=7;break;
+      case ARMOR_ARMYARMOR:armor=8;head_armor=6;break;
+      case ARMOR_HEAVYARMOR:armor=10;head_armor=8;limb_armor=4;break;
    }
 
    
-   if(t.animalgloss==ANIMALGLOSS_TANK)prot=10;
-   else if(hitlocation==BODYPART_HEAD)prot=prot2;
-   else if(hitlocation!=BODYPART_BODY)prot=prot3;
+   if(t.animalgloss==ANIMALGLOSS_TANK)armor=10;
+   else if(hitlocation==BODYPART_HEAD)armor=head_armor;
+   else if(hitlocation!=BODYPART_BODY)armor=limb_armor;
 
    if(t.armor.quality>'1')
-      prot-=t.armor.quality-'1';
+      armor-=t.armor.quality-'1';
    if(t.armor.flag & ARMORFLAG_DAMAGED)
-      prot/=2;
+      armor/=2;
 
-   if(prot<0)prot=0; // Possible from second-rate clothes
+   if(armor<0)armor=0; // Possible from second-rate clothes
 
-   int mod2=prot+LCSrandom(prot+1)-armorpenetration;
+   int mod2=armor+LCSrandom(armor+1)-armorpenetration;
    if(mod2>0)mod-=mod2*2;
 
    
@@ -1865,9 +1841,9 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    {
       // Damaged gear isn't as effective as undamaged gear
       if(t.armor.flag & ARMORFLAG_DAMAGED)
-         damamount>>=1;
+         damamount>>=1; // Only half as much damage reduction
       else
-         damamount>>=2;
+         damamount>>=2; // Full damage reduction
    }
 
    if(damamount<0)damamount=0;
@@ -2184,9 +2160,9 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
 {
    int armok=2;
    if((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
-       (cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
+      (cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
    if((cr.wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
-       (cr.wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
+      (cr.wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
    if(cr.special[SPECIALWOUND_NECK]!=1)armok=0;
    if(cr.special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
 

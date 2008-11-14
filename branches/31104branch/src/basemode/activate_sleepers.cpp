@@ -202,15 +202,15 @@ void activate_sleeper(creaturest *cr)
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
       move(10,1);
-      addstr("A - Low Risk");
+      addstr("A - Communication and Advocacy");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='b');
       move(11,1);
-      addstr("B - Moderate Risk");
+      addstr("B - Espionage");
       
-      set_color(COLOR_WHITE,COLOR_BLACK,state=='c');
+      set_color(COLOR_BLACK,COLOR_BLACK,1); // Disabled
       move(12,1);
-      addstr("C - High Risk");
+      addstr("C - Sabotage and Direct Action");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='d');
       move(13,1);
@@ -225,71 +225,27 @@ void activate_sleeper(creaturest *cr)
       case 'a':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_NONE);
          move(10,40);
-         addstr("1 - Remain Inactive");
+         addstr("1 - Lay Low");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_LIBERAL);
          move(11,40);
-         addstr("2 - Support Liberalism");
+         addstr("2 - Liberal Outreach");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_CONSERVATIVE);
          move(12,40);
-         addstr("3 - Support Conservatism");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will lay low and avoid trouble.");
-            break;
-         case '2':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will openly support Liberal ideals.");
-            break;
-         case '3':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will spout Conservative screed.");
-            break;
-         }
-         break;
-      case 'b':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SPY);
-         move(10,40);
-         addstr("1 - Uncover Secrets");
+         addstr("3 - Conservative \"Outreach\"");
 
          if(subordinatesleft(*cr))
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_RECRUIT);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,40);
-         addstr("2 - Expand Sleeper Network");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will snoop around for secrets and enemy plans.");
-            break;
-         case '2':
-            if(subordinatesleft(*cr))
-            {
-               move(22,3);
-               addstr(cr->name);
-               addstr(" will try to recruit additional sleeper agents.");
-            }
-            break;
-         }
+         move(13,40);
+         addstr("4 - Expand Sleeper Network");
          break;
-      case 'c':
-         // Currently disabled
-         set_color(COLOR_BLACK,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SCANDAL);
+      case 'b':
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SPY);
          move(10,40);
-         addstr("1 - Fabricate Scandal");
+         addstr("1 - Uncover Secrets");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_EMBEZZLE);
          move(11,40);
@@ -298,26 +254,62 @@ void activate_sleeper(creaturest *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_STEAL);
          move(12,40);
          addstr("3 - Steal Equipment");
+         break;
+      case 'c':
+         // Currently disabled
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(10,40);
+         addstr("1 - Fabricate Scandal");
+         break;
+      }
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      switch(cr->activity.type)
+      {
+      case ACTIVITY_NONE:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will stay out of trouble.");
+         break;
+      case ACTIVITY_SLEEPER_LIBERAL:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will alter public opinion on the issues.");
+         break;
+      case ACTIVITY_SLEEPER_CONSERVATIVE:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will alter public opinion for the worse, in exchange");
+         move(23,3);
+         addstr("for increased credibility with the good old boy network.");
+         break;
+      case ACTIVITY_SLEEPER_RECRUIT:
+         if(subordinatesleft(*cr))
          {
-         case '1':
             move(22,3);
             addstr(cr->name);
-            addstr(" will get creative and do something outrageous.");
-            break;
-         case '2':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will embezzle money for the LCS.");
-            break;
-         case '3':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will steal equipment and send it to the Shelter.");
-            break;
+            addstr(" will try to recruit additional sleeper agents.");
          }
+         break;
+      case ACTIVITY_SLEEPER_SPY:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will snoop around for secrets and enemy plans.");
+         break;
+      case ACTIVITY_SLEEPER_EMBEZZLE:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will embezzle money for the LCS.");
+         break;
+      case ACTIVITY_SLEEPER_STEAL:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will steal equipment and send it to the Shelter.");
+         break;
+      case ACTIVITY_SLEEPER_SCANDAL:
+         //move(22,3);
+         //addstr(cr->name);
+         //addstr(" will get creative and do something outrageous.");
          break;
       }
 
@@ -340,6 +332,9 @@ void activate_sleeper(creaturest *cr)
             case '1':cr->activity.type=ACTIVITY_NONE;break;
             case '2':cr->activity.type=ACTIVITY_SLEEPER_LIBERAL;break;
             case '3':cr->activity.type=ACTIVITY_SLEEPER_CONSERVATIVE;break;
+            case '4':
+               if(subordinatesleft(*cr))
+                  cr->activity.type=ACTIVITY_SLEEPER_RECRUIT;break;
             }
             break;
          case 'b':
@@ -347,18 +342,14 @@ void activate_sleeper(creaturest *cr)
             {
             default:
             case '1':cr->activity.type=ACTIVITY_SLEEPER_SPY;break;
-            case '2':
-               if(subordinatesleft(*cr))
-                  cr->activity.type=ACTIVITY_SLEEPER_RECRUIT;break;
+            case '2':cr->activity.type=ACTIVITY_SLEEPER_EMBEZZLE;break;
+            case '3':cr->activity.type=ACTIVITY_SLEEPER_STEAL;break;
             }
             break;
          case 'c':
             switch(choice)
             {
             case '1':break;//cr->activity.type=ACTIVITY_SLEEPER_SCANDAL;break;
-            default:
-            case '2':cr->activity.type=ACTIVITY_SLEEPER_EMBEZZLE;break;
-            case '3':cr->activity.type=ACTIVITY_SLEEPER_STEAL;break;
             }
             break;
          }
