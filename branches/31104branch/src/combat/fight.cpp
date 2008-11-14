@@ -57,14 +57,6 @@ void youattack(void)
          criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
       }
 
-      if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
-         (!activesquad->squad[p]->weapon.ranged()||            // And either using a melee weapon
-          (activesquad->squad[p]->weapon.ammo==0&&             // Or, out of ammo and...
-          activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]==0))) // ...no clips left
-      {
-         continue;                                             // Then skip this person, they can't fight
-      }
-
       vector<int> goodtarg;
       vector<int> badtarg;
 
@@ -215,9 +207,6 @@ void enemyattack(void)
    {
       if(!encounter[e].exists)continue;
       if(!encounter[e].alive)continue;
-
-      if(mode==GAMEMODE_CHASECAR&&
-         !encounter[e].weapon.ranged())continue;
 
       if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER)
          conservatise(encounter[e]);
@@ -463,13 +452,22 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       a.type==CREATURE_CORPORATE_CEO||
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
-      a.weapon.type==WEAPON_GUITAR)&&!mistake)
+      a.weapon.type==WEAPON_GUITAR)&&!mistake&&
+      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE))
    {
       if(a.align==1||encnum<ENCMAX)
       {
          specialattack(a, t, actual);
          return;
       }
+   }
+
+   if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
+      (!a.weapon.ranged()||                                 // And either using a melee weapon
+       (a.weapon.ammo==0&&                                  // Or, out of ammo and...
+        a.clip[ammotype(a.weapon.type)]==0))) // ...no clips left
+   {
+      return;                                               // Then bail, they can't fight
    }
 
    //RELOAD
@@ -1822,6 +1820,8 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
       case ARMOR_LABCOAT:prot=0;break;
       case ARMOR_BLACKROBE:prot=0;break;
       case ARMOR_CLOWNSUIT:prot=0;break;
+      case ARMOR_ELEPHANTSUIT:prot=0;break;
+      case ARMOR_DONKEYSUIT:prot=0;break;
       case ARMOR_BONDAGEGEAR:prot=0;break;
       case ARMOR_MASK:prot=0;break;
       case ARMOR_MILITARY:prot=0;break;

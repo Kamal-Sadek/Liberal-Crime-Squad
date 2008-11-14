@@ -1258,7 +1258,7 @@ void majornewspaper(char &clearformess,char canseethings)
    }
 
    //Conservative Crime Squad Strikes!
-   if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate)
+   if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate && canseethings)
    {
       newsstoryst *ns=new newsstoryst;
 

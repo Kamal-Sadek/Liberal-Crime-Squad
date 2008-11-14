@@ -160,7 +160,7 @@ void activate_sleepers(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*9<temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
@@ -286,7 +286,8 @@ void activate_sleeper(creaturest *cr)
          }
          break;
       case 'c':
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SCANDAL);
+         // Currently disabled
+         set_color(COLOR_BLACK,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SCANDAL);
          move(10,40);
          addstr("1 - Fabricate Scandal");
 
@@ -354,7 +355,7 @@ void activate_sleeper(creaturest *cr)
          case 'c':
             switch(choice)
             {
-            case '1':cr->activity.type=ACTIVITY_SLEEPER_SCANDAL;break;
+            case '1':break;//cr->activity.type=ACTIVITY_SLEEPER_SCANDAL;break;
             default:
             case '2':cr->activity.type=ACTIVITY_SLEEPER_EMBEZZLE;break;
             case '3':cr->activity.type=ACTIVITY_SLEEPER_STEAL;break;

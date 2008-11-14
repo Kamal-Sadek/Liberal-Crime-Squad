@@ -32,7 +32,7 @@
 //#define SHOWWAIT
 
 // Show die rolls, 100% accurate poll numbers
-#define SHOWMECHANICS
+//#define SHOWMECHANICS
 
 
 
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.15.2"
+#define PACKAGE_VERSION "3.16.0"
 #endif
 
-const unsigned long version=31502;
-const unsigned long lowestloadversion=31502;
+const unsigned long version=31600;
+const unsigned long lowestloadversion=31600;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -393,6 +393,8 @@ enum CreatureType
    CREATURE_MERC,
    CREATURE_HICK,
    CREATURE_SOLDIER,
+   CREATURE_VETERAN,
+   CREATURE_HARDENED_VETERAN,
    CREATURE_PRISONGUARD,
    CREATURE_HIPPIE,
    CREATURE_CRITIC_ART,
@@ -413,6 +415,7 @@ enum CreatureType
    CREATURE_THIEF,
    CREATURE_ACTOR,
    CREATURE_YOGAINSTRUCTOR,
+   CREATURE_MARTIALARTIST,
    CREATURE_ATHLETE,
    CREATURE_BIKER,
    CREATURE_TRUCKER,
@@ -685,6 +688,8 @@ enum Armors
    ARMOR_ARMYARMOR,
    ARMOR_HEAVYARMOR,
    ARMOR_BUNKERGEAR,
+   ARMOR_ELEPHANTSUIT,
+   ARMOR_DONKEYSUIT,
    ARMORNUM
 };
 
@@ -1136,6 +1141,7 @@ struct siegest
       timeuntilcorps=-1;
       timeuntilcia=-1;
       timeuntilfiremen=-1;
+      timeuntilccs=-1;
    }
 };
 
@@ -1770,6 +1776,8 @@ void verifyworklocation(creaturest &cr);
 void conservatise(creaturest &cr);
 /* turns a creature into a liberal */
 void liberalize(creaturest &cr,bool rename=true);
+/* gives a cover name to CCS members */
+void nameCCSMember(creaturest &cr);
 
 /*******************************************************************************
 *

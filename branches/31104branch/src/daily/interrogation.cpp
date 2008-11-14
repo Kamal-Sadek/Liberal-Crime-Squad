@@ -380,6 +380,13 @@ void tendhostage(creaturest *cr,char &clearformess)
          if(c==10)break;
       }
 
+      if(techniques[6] && funds>=100)
+      { funds-=100; moneylost_hostage+=100; }
+      else { techniques[6] = 0; }
+      if(techniques[7] && funds>=40)
+      { funds-=40; moneylost_hostage+=40; }
+      else { techniques[6] = 0; }
+
       //remember interrogation choices
       for(int i=0; i<9; i++)
       {

@@ -173,8 +173,8 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
       case ACTIVITY_SLEEPER_LIBERAL:
       {
          power = static_cast<int>(power * cr.infiltration);
-         // Reduces infiltration level by 0-10% of the amount of trust acquired
-         cr.infiltration-=cr.infiltration*0.01*LCSrandom(11);
+         // Reduces infiltration level by 1% of the amount of trust acquired
+         cr.infiltration-=cr.infiltration*0.01;
          cr.juice+=5;
          if(cr.juice>50)cr.juice=50;
       }
@@ -314,6 +314,8 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
       return;
    }
    if(LCSrandom(static_cast<int>(10*cr.infiltration)+1)-LCSrandom(5) <= 0)return;
+
+   location[cr.base]->interrogated = 1;
 
    int homes;
    for(homes=0;homes<location.size();homes++)
@@ -589,143 +591,126 @@ void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libp
       }
    }
 
-   switch(cr.type)
+   int number_of_items = LCSrandom(10)+1;
+
+   while(number_of_items--)
    {
-   case CREATURE_DEATHSQUAD:
-   case CREATURE_SWAT:
-   case CREATURE_COP:
-   case CREATURE_GANGUNIT:
-      if(LCSrandom(2))
-      {
-         item=new itemst;item->type=ITEM_CLIP;
-            item->cliptype=CLIP_SMG;
-            item->number=3;
-         shelter->loot.push_back(item);
-         item=new itemst;item->type=ITEM_WEAPON;
-            item->weapon.type=WEAPON_SMG_MP5;
-            item->weapon.ammo=15;
-         shelter->loot.push_back(item);
-      }
-      else
-      {
-         item=new itemst;item->type=ITEM_ARMOR;
-            item->armor.type=ARMOR_POLICEARMOR;
-         shelter->loot.push_back(item);
-      }
-      break;
-   default:
       switch(location[cr.location]->type)
       {
-         case SITE_RESIDENTIAL_TENEMENT:
-            item=new itemst;item->type=ITEM_LOOT;
-               item->loottype=LOOT_TV;
-            shelter->loot.push_back(item);
-            break;
-         default:
-         case SITE_RESIDENTIAL_APARTMENT:
-         case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-               else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-               else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_LABORATORY_COSMETICS:
-         case SITE_INDUSTRY_NUCLEAR:
-         case SITE_LABORATORY_GENETIC:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(2))item->loottype=LOOT_LABEQUIPMENT;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else if(!LCSrandom(5))item->loottype=LOOT_SCANNER;
-               else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(5))item->loottype=LOOT_CHEMICAL;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_GOVERNMENT_POLICESTATION:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(40))item->loottype=LOOT_POLICERECORDS;
-               else if(!LCSrandom(3))item->loottype=LOOT_TV;
-               else if(!LCSrandom(2))item->loottype=LOOT_PRINTER;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_GOVERNMENT_COURTHOUSE:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_GOVERNMENT_PRISON:
-            item=new itemst;item->type=ITEM_WEAPON;
-            item->weapon.type=WEAPON_SHANK;
-            item->weapon.ammo=0;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_GOVERNMENT_INTELLIGENCEHQ:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else if(LCSrandom(49))item->loottype=LOOT_COMPUTER;
-               else item->loottype=LOOT_SECRETDOCUMENTS;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_GOVERNMENT_FIRESTATION:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_INDUSTRY_SWEATSHOP:
-            item=new itemst;item->type=ITEM_LOOT;
-               item->loottype=LOOT_FINECLOTH;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_INDUSTRY_POLLUTER:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(4))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(3))item->loottype=LOOT_TV;
-               else if(!LCSrandom(2))item->loottype=LOOT_CHEMICAL;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_CORPORATE_HEADQUARTERS:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(4))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(3))item->loottype=LOOT_TV;
-               else if(!LCSrandom(2))item->loottype=LOOT_CELLPHONE;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_CORPORATE_HOUSE:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-               else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-               else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_MEDIA_AMRADIO:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-               else if(!LCSrandom(4))item->loottype=LOOT_BROADCASTINGEQUIPMENT;
-               else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
-         case SITE_MEDIA_CABLENEWS:
-            item=new itemst;item->type=ITEM_LOOT;
-               if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-               else if(!LCSrandom(4))item->loottype=LOOT_TVCAMERA;
-               else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-               else if(!LCSrandom(2))item->loottype=LOOT_TV;
-               else item->loottype=LOOT_COMPUTER;
-            shelter->loot.push_back(item);
-            break;
+      default:
+         switch(location[cr.location]->type)
+         {
+            case SITE_RESIDENTIAL_TENEMENT:
+               item=new itemst;item->type=ITEM_LOOT;
+                  item->loottype=LOOT_TV;
+               shelter->loot.push_back(item);
+               break;
+            default:
+            case SITE_RESIDENTIAL_APARTMENT:
+            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
+                  else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
+                  else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_LABORATORY_COSMETICS:
+            case SITE_INDUSTRY_NUCLEAR:
+            case SITE_LABORATORY_GENETIC:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(2))item->loottype=LOOT_LABEQUIPMENT;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else if(!LCSrandom(5))item->loottype=LOOT_SCANNER;
+                  else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(5))item->loottype=LOOT_CHEMICAL;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_GOVERNMENT_POLICESTATION:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(40))item->loottype=LOOT_POLICERECORDS;
+                  else if(!LCSrandom(3))item->loottype=LOOT_TV;
+                  else if(!LCSrandom(2))item->loottype=LOOT_PRINTER;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_GOVERNMENT_COURTHOUSE:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_GOVERNMENT_PRISON:
+               item=new itemst;item->type=ITEM_WEAPON;
+               item->weapon.type=WEAPON_SHANK;
+               item->weapon.ammo=0;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_GOVERNMENT_INTELLIGENCEHQ:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else if(LCSrandom(49))item->loottype=LOOT_COMPUTER;
+                  else item->loottype=LOOT_SECRETDOCUMENTS;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_GOVERNMENT_FIRESTATION:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_INDUSTRY_SWEATSHOP:
+               item=new itemst;item->type=ITEM_LOOT;
+                  item->loottype=LOOT_FINECLOTH;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_INDUSTRY_POLLUTER:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(4))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(3))item->loottype=LOOT_TV;
+                  else if(!LCSrandom(2))item->loottype=LOOT_CHEMICAL;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_CORPORATE_HEADQUARTERS:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(4))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(3))item->loottype=LOOT_TV;
+                  else if(!LCSrandom(2))item->loottype=LOOT_CELLPHONE;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_CORPORATE_HOUSE:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
+                  else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
+                  else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_MEDIA_AMRADIO:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
+                  else if(!LCSrandom(4))item->loottype=LOOT_BROADCASTINGEQUIPMENT;
+                  else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+            case SITE_MEDIA_CABLENEWS:
+               item=new itemst;item->type=ITEM_LOOT;
+                  if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
+                  else if(!LCSrandom(4))item->loottype=LOOT_TVCAMERA;
+                  else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+                  else if(!LCSrandom(2))item->loottype=LOOT_TV;
+                  else item->loottype=LOOT_COMPUTER;
+               shelter->loot.push_back(item);
+               break;
+         }
       }
    }
    erase();

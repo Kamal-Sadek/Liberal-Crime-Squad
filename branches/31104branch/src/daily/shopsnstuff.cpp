@@ -1647,6 +1647,16 @@ void halloweenstore(int loc)
          move(13,40);
          addstr("O - Buy a Toga                ($90)");
 
+         if(funds>=1000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(14,40);
+         addstr("E - Buy an Elephant Suit    ($1000)");
+
+         if(funds>=1000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(14,40);
+         addstr("D - Buy a Donkey Suit       ($1000)");
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(15,30);
          addstr("Enter - Done");
@@ -1799,6 +1809,22 @@ void halloweenstore(int loc)
             funds-=350;
             stat_spent+=350;
             moneylost_goods+=350;
+         }
+
+         if(c=='e'&&funds>=1000)
+         {
+            armorbought=ARMOR_ELEPHANTSUIT;
+            funds-=1000;
+            stat_spent+=1000;
+            moneylost_goods+=1000;
+         }
+
+         if(c=='d'&&funds>=1000)
+         {
+            armorbought=ARMOR_DONKEYSUIT;
+            funds-=1000;
+            stat_spent+=1000;
+            moneylost_goods+=1000;
          }
 
          if(c=='m'&&funds>=15)

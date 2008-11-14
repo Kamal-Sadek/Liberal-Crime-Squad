@@ -854,7 +854,7 @@ void funds_and_trouble(char &clearformess)
             break;
          case ACTIVITY_COMMUNITYSERVICE:
             addjuice(*pool[p],1,0);
-            if(pool[p]->heat && !LCSrandom(20))pool[p]->heat--;
+            if(pool[p]->heat && !LCSrandom(10))pool[p]->heat--;
             change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,80);
             break;
          case ACTIVITY_SELL_TSHIRTS:
@@ -1872,7 +1872,8 @@ void funds_and_trouble(char &clearformess)
                   trouble[t]->activity.type=ACTIVITY_NONE;
                   criminalize(*trouble[t],crime);
                }
-               else if(trouble[t]->weapon.type==WEAPON_NONE)
+               else if(trouble[t]->weapon.type==WEAPON_NONE && 
+                       trouble[t]->skill[SKILL_HANDTOHAND]==0)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);

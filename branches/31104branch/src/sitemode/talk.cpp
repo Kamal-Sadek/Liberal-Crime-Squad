@@ -132,6 +132,8 @@ char talk(creaturest &a,int t)
                       encounter[e].type==CREATURE_SWAT||
                       encounter[e].type==CREATURE_DEATHSQUAD||
                       encounter[e].type==CREATURE_SOLDIER||
+                      encounter[e].type==CREATURE_HARDENED_VETERAN||
+                      encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                       encounter[e].type==CREATURE_AGENT)&&LCSrandom(3))
                   {
                      continue;
@@ -189,6 +191,8 @@ char talk(creaturest &a,int t)
                {
                   if(encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_SOLDIER||
+                     encounter[e].type==CREATURE_HARDENED_VETERAN||
+                     encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                      encounter[e].type==CREATURE_AGENT||
                      encounter[e].type==CREATURE_MERC||
                      encounter[e].type==CREATURE_COP||
@@ -998,7 +1002,7 @@ char talk(creaturest &a,int t)
                         case LAW_FLAGBURNING:
                            addstr("\"Burning a piece of cloth is actually stigmatized in this country.");
                            move(y,1);y++;
-                           addstr("You love freedom and still hate our government stands for.\"");
+                           addstr("You can love freedom and still hate our government stands for.\"");
                            if(tk->skill[SKILL_LAW])troll+=tk->skill[SKILL_LAW]-a.skill[SKILL_LAW];
                            break;
                         case LAW_TAX:

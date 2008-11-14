@@ -371,6 +371,8 @@ void getarmor(char *str,int type,int subtype)
       case ARMOR_LABCOAT:         strcpy(str,"Lab Coat");break;
       case ARMOR_BLACKROBE:      strcpy(str,"Black Robe");break;
       case ARMOR_CLOWNSUIT:      strcpy(str,"Clown Suit");break;
+      case ARMOR_ELEPHANTSUIT:      strcpy(str,"Elephant Suit");break;
+      case ARMOR_DONKEYSUIT:      strcpy(str,"Donkey Suit");break;
       case ARMOR_BONDAGEGEAR:      strcpy(str,"Bondage Gear");break;
       case ARMOR_MASK:
          switch(subtype)
@@ -467,6 +469,8 @@ void getarmorfull(char *str,int type,int subtype)
       case ARMOR_LABCOAT:         strcpy(str,"Lab Coat");break;
       case ARMOR_BLACKROBE:      strcpy(str,"Black Robe");break;
       case ARMOR_CLOWNSUIT:      strcpy(str,"Clown Suit");break;
+      case ARMOR_ELEPHANTSUIT:      strcpy(str,"Elephant Suit");break;
+      case ARMOR_DONKEYSUIT:      strcpy(str,"Donkey Suit");break;
       case ARMOR_BONDAGEGEAR:      strcpy(str,"Bondage Gear");break;
       case ARMOR_MASK:
          switch(subtype)
@@ -757,7 +761,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_SCIENTIST_LABTECH:strcat(str,"Lab Tech");break;
       case CREATURE_SCIENTIST_EMINENT:strcat(str,"Eminent Scientist");break;
       case CREATURE_CORPORATE_MANAGER:strcat(str,"Corporate Manager");break;
-      case CREATURE_CORPORATE_CEO:strcat(str,"CEO of a Corporation");break;
+      case CREATURE_CORPORATE_CEO:strcat(str,"Corporate CEO");break;
       case CREATURE_WORKER_SERVANT:
          if(law[LAW_LABOR]==-2&&
              law[LAW_CORPORATE]==-2)strcpy(str,"Slave");
@@ -772,7 +776,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_LANDLORD:strcat(str,"Landlord");break;
       case CREATURE_COP:strcat(str,"Police Officer");break;
       case CREATURE_SWAT:strcat(str,"SWAT Officer");break;
-      case CREATURE_DEATHSQUAD:strcat(str,"Death Squad Officer");break;
+      case CREATURE_DEATHSQUAD:strcat(str,"DethSquad Officer");break;
       case CREATURE_GANGUNIT:strcat(str,"Police Gang Unit");break;
       case CREATURE_FIREFIGHTER:strcat(str,"Fire Fighter");break;
       case CREATURE_PRISONGUARD:strcat(str,"Prison Guard");break;
@@ -780,6 +784,8 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_MERC:strcat(str,"Mercenary");break;
       case CREATURE_HICK:strcat(str,"Redneck");break;
       case CREATURE_SOLDIER:strcat(str,"Soldier");break;
+      case CREATURE_VETERAN:strcat(str,"Veteran");break;
+      case CREATURE_HARDENED_VETERAN:strcat(str,"Hardened Veteran");break;
       case CREATURE_JUDGE_LIBERAL:strcat(str,"Judge");break;
       case CREATURE_JUDGE_CONSERVATIVE:strcat(str,"Judge");break;
       case CREATURE_AGENT:strcat(str,"Agent");break;
@@ -832,6 +838,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_THIEF:strcat(str,"Professional Thief");break;
       case CREATURE_ACTOR:strcat(str,"Actor");break;
       case CREATURE_YOGAINSTRUCTOR:strcat(str,"Yoga Instructor");break;
+      case CREATURE_MARTIALARTIST:strcat(str,"Black Belt");break;
       case CREATURE_ATHLETE:strcat(str,"Athlete");break;
       case CREATURE_TEENAGER:strcat(str,"Teenager");break;
       case CREATURE_PRISONER:strcat(str,"Prisoner");break;
@@ -843,7 +850,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_CCS_MOLOTOV:strcat(str,"Arsonist");break;
       case CREATURE_CCS_SNIPER:strcat(str,"Sniper");break;
       case CREATURE_CCS_VIGILANTE:strcat(str,"Vigilante");break;
-      case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"C.C.S. Boss");break;
+      case CREATURE_CCS_ARCHCONSERVATIVE:strcat(str,"CCS Boss");break;
       case CREATURE_POLITICALACTIVIST:strcat(str,"Political Activist");break;
       default:
          strcat(str,"Liberal");
@@ -911,8 +918,8 @@ void gettitle(char *str,creaturest &cr)
       else if(cr.juice<100)strcpy(str,"Socialist Threat");
       else if(cr.juice<200)strcpy(str,"Revolutionary");
       else if(cr.juice<500)strcpy(str,"Urban Commando");
-      else if(cr.juice<1000)strcpy(str,"Elite Liberal");
-      else strcpy(str,"Left-Wing Legend");
+      else if(cr.juice<1000)strcpy(str,"Liberal Guardian");
+      else strcpy(str,"Elite Liberal");
    }
 }
 

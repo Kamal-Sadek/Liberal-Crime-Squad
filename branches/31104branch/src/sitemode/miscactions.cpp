@@ -38,13 +38,13 @@ char unlock(short type,char &actual)
    switch(type)
    {
       case UNLOCK_DOOR:
-         if(securityable(location[cursite]->type))difficulty=12;
-         else difficulty=7;
+         if(securityable(location[cursite]->type))difficulty=6;
+         else difficulty=4;
          break;
-      case UNLOCK_CAGE:difficulty=3;break;
-      case UNLOCK_CAGE_HARD:difficulty=8;break;
-      case UNLOCK_CELL:difficulty=14;break;
-      case UNLOCK_SAFE:difficulty=15;break;
+      case UNLOCK_CAGE:difficulty=2;break;
+      case UNLOCK_CAGE_HARD:difficulty=5;break;
+      case UNLOCK_CELL:difficulty=7;break;
+      case UNLOCK_SAFE:difficulty=10;break;
    }
 
    int maxattack=0;
@@ -83,10 +83,10 @@ char unlock(short type,char &actual)
    {
       int p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(11)+maxattack;
+      int aroll=LCSrandom(6)+maxattack;
       if(maxattack<=difficulty)
       {
-      	activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=1+difficulty-maxattack;
+      	activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=1+difficulty*2-maxattack;
       }
 
       if(aroll>difficulty)
@@ -109,11 +109,11 @@ char unlock(short type,char &actual)
 	         if (j==p) continue;
 	         if(activesquad->squad[j]!=NULL&&
 		         activesquad->squad[j]->alive&&
-		         activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty/2)
+		         activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty)
 	         {
 		         if(activesquad->squad[j]->alive)
 		         {
-			         activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty/2-activesquad->squad[j]->skill[SKILL_SECURITY];
+			         activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty-activesquad->squad[j]->skill[SKILL_SECURITY];
 		         }
 	         }
          }

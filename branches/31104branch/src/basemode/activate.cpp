@@ -655,6 +655,8 @@ void activate(creaturest *cr)
                case CREATURE_DEATHSQUAD:
                case CREATURE_GANGUNIT:
                case CREATURE_SOLDIER:
+               case CREATURE_VETERAN:
+               case CREATURE_HARDENED_VETERAN:
                case CREATURE_GANGMEMBER:
                   cr->activity.type=ACTIVITY_TEACH_FIGHTING;
                   choice='4';
@@ -1360,6 +1362,8 @@ long armor_makeprice(int type)
          break;
       case ARMOR_EXPENSIVESUIT:
       case ARMOR_EXPENSIVEDRESS:
+      case ARMOR_ELEPHANTSUIT:
+      case ARMOR_DONKEYSUIT:
          price=300;
       case ARMOR_BUNKERGEAR:
       case ARMOR_CIVILLIANARMOR:

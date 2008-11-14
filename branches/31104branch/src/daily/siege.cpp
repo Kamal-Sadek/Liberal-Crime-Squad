@@ -497,7 +497,7 @@ void siegecheck(char canseethings)
                set_color(COLOR_RED,COLOR_BLACK,1);
 
                move(8,1);
-               addstr("THE TRUCK BARRELS INTO THE BUILDING AND EXPLODES MASSIVELY!");
+               addstr("The truck barrels into the building and explodes massively!");
 
                refresh();
                getch();
@@ -536,6 +536,7 @@ void siegecheck(char canseethings)
                               killed_x=1;
                            }
                            move(killed_y,killed_x);
+                           pool[i]->alive=0;
                         }
                         else
                         {
@@ -546,7 +547,7 @@ void siegecheck(char canseethings)
                            }
                            move(injured_y,injured_x);
                         }
-                        set_alignment_color(pool[i]->align,true);
+                        set_alignment_color(pool[i]->align,false);
                         addstr(pool[i]->name);
                      }
                   }
@@ -852,6 +853,12 @@ void siegeturn(char clearformess)
             addstr("Conservatives have raided the ");
             addlocationname(location[l]);
             addstr(", an unoccupied safehouse.");
+
+            if(location[l]->siege.siegetype==SIEGE_CCS)
+            {
+               if(location[l]->type==SITE_INDUSTRY_WAREHOUSE)
+                  location[l]->renting=-2; // CCS Captures warehouse
+            }
 
             refresh();
             getch();
@@ -1544,6 +1551,12 @@ void giveup(void)
          //pool.erase(pool.begin() + p);
       }
 
+      if(location[loc]->siege.siegetype==SIEGE_CCS)
+      {
+         if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
+            location[loc]->renting=-2; // CCS Captures warehouse
+      }
+
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(1,1);
@@ -1694,6 +1707,12 @@ void escape_engage(void)
 
    refresh();
    getch();
+
+   if(location[loc]->siege.siegetype==SIEGE_CCS)
+   {
+      if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
+         location[loc]->renting=-2; // CCS Captures warehouse -- this will be reversed if you fight them off
+   }
 
    //CRIMINALIZE
    if(location[loc]->siege.siegetype==SIEGE_POLICE)criminalizepool(LAWFLAG_RESIST,-1,loc);

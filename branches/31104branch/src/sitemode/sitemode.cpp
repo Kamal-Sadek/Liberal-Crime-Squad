@@ -1932,6 +1932,12 @@ void mode_site(void)
                   if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_DEFENDED;
                   else sitestory->type=NEWSSTORY_SQUAD_BROKESIEGE;
 
+                  if(location[cursite]->siege.siegetype==SIEGE_CCS)
+                  {
+                     if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE)
+                        location[cursite]->renting=0; // CCS DOES NOT capture the warehouse -- reverse earlier assumption of your defeat!
+                  }
+
                   //DEAL WITH PRISONERS AND STOP BLEEDING
                   for(p=0;p<6;p++)
                   {
@@ -2209,12 +2215,41 @@ void resolvesite(void)
             }
          }
       }
+      // Capture a warehouse or crack den?
+      else if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
+              location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
+      {
+         location[cursite]->renting=0; // Capture safehouse for the glory of the LCS!
+         location[cursite]->closed=0;
+         location[cursite]->heat=100;
+
+         for(int p=0;p<pool.size();p++)
+         {
+            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
+               pool[p]->location == cursite)
+            {
+               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+               erase();
+               move(8,1);
+               addstr("Sleeper ");
+               addstr(pool[p]->name);
+               addstr(" has been outed by your bold attack!");
+
+               move(10,1);
+               addstr("The former LCS agent is now at your command as a normal squad member.");
+               refresh();
+               getch();
+            }
+         }
+      }
    }
    else if(sitealarm==1&&location[cursite]->renting<=-1)
    {
       if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
          !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&
-         !(location[cursite]->type==SITE_OUTDOOR_BUNKER))
+         !(location[cursite]->type==SITE_OUTDOOR_BUNKER)&&
+         !(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE)&&
+         !(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE))
       {
          if(securityable(location[cursite]->type))
             location[cursite]->highsecurity=sitecrime;

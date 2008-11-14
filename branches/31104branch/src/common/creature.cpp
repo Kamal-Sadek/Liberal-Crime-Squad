@@ -461,7 +461,7 @@ void makecreature(creaturest &cr,short type)
             case 3:strcpy(cr.name,"Rube");break;
             case 4:strcpy(cr.name,"Yokel");break;
          }
-         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(2))
+         if((law[LAW_GUNCONTROL]==-2 && !LCSrandom(2)) || !LCSrandom(10))
          {
             cr.weapon.type=WEAPON_SHOTGUN_PUMP;
             cr.weapon.ammo=6;
@@ -498,6 +498,46 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_STRENGTH]=5;
 			cr.att[ATTRIBUTE_AGILITY]=5;
 			cr.att[ATTRIBUTE_HEALTH]=5;
+         break;
+      case CREATURE_VETERAN:
+         strcpy(cr.name,"Veteran");
+         cr.money=LCSrandom(21)+20;
+         cr.align=LCSrandom(2)-1;
+         cr.infiltration=0.1*LCSrandom(4);
+         cr.juice=LCSrandom(100);
+         cr.age=AGE_MIDDLEAGED;
+
+         sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(2);cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
+         cr.att[ATTRIBUTE_STRENGTH]=5;
+			cr.att[ATTRIBUTE_AGILITY]=5;
+			cr.att[ATTRIBUTE_HEALTH]=5;
+         break;
+      case CREATURE_HARDENED_VETERAN:
+         strcpy(cr.name,"Hardened Veteran");
+         cr.weapon.type=WEAPON_AUTORIFLE_M16;
+         cr.clip[CLIP_ASSAULT]=6;
+         cr.weapon.ammo=30;
+         cr.armor.type=ARMOR_ARMYARMOR;
+         cr.money=0;
+         cr.align=-1;
+         cr.infiltration=0.1*LCSrandom(4);
+         cr.juice=LCSrandom(100);
+         cr.age=AGE_MIDDLEAGED;
+
+         sk=LCSrandom(4)+4;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
+         sk=LCSrandom(3);cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+2;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(2)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
+         cr.att[ATTRIBUTE_STRENGTH]=7;
+			cr.att[ATTRIBUTE_AGILITY]=7;
+			cr.att[ATTRIBUTE_HEALTH]=7;
          break;
       case CREATURE_COP:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
@@ -658,6 +698,11 @@ void makecreature(creaturest &cr,short type)
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
 
+         if(mode==GAMEMODE_SITE/* && sitealarm>0*/)
+         {
+            nameCCSMember(cr);
+         }
+
          sk=LCSrandom(4)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
          sk=LCSrandom(4)+2;cr.skill[SKILL_IMPROVISED]=sk;randomskills-=sk;
          sk=LCSrandom(4)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
@@ -690,6 +735,11 @@ void makecreature(creaturest &cr,short type)
          cr.infiltration=0.5 + 0.1*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
+
+         if(mode==GAMEMODE_SITE/* && sitealarm>0*/)
+         {
+            nameCCSMember(cr);
+         }
 
          sk=LCSrandom(4)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
          sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -753,42 +803,9 @@ void makecreature(creaturest &cr,short type)
             cr.armor.type=ARMOR_ARMYARMOR;
             break;
          }
-         if(mode==GAMEMODE_SITE && sitealarm>0)
+         if(mode==GAMEMODE_SITE/* && sitealarm>0*/)
          {
-            if(cr.armor.type==ARMOR_CIVILLIANARMOR)
-            {
-               strcpy(cr.name,"Mercenary");
-            }
-            else if(cr.armor.type==ARMOR_ARMYARMOR)
-            {
-               strcpy(cr.name,"Soldier");
-            }
-            else if(cr.weapon.type==WEAPON_SHOTGUN_PUMP||LCSrandom(2))
-            {
-               switch(LCSrandom(5))
-               {
-                  case 0:strcpy(cr.name,"Country Boy");break;
-                  case 1:strcpy(cr.name,"Hick");break;
-                  case 2:strcpy(cr.name,"Redneck");break;
-                  case 3:strcpy(cr.name,"Rube");break;
-                  case 4:strcpy(cr.name,"Yokel");break;
-               }
-            }
-            else
-            {
-               switch(LCSrandom(9))
-               {
-               case 0: strcpy(cr.name,"Biker");break;
-               case 1: strcpy(cr.name,"Transient");break;
-               case 2: strcpy(cr.name,"Crackhead");break;
-               case 3: strcpy(cr.name,"Fast Food Worker");break;
-               case 4: strcpy(cr.name,"Telemarketer");break;
-               case 5: strcpy(cr.name,"Office Worker");break;
-               case 6: strcpy(cr.name,"Mailman");break;
-               case 7: strcpy(cr.name,"Musician");break;
-               case 8: strcpy(cr.name,"Hairstylist");break;
-               }
-            }
+            nameCCSMember(cr);
          }
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
@@ -828,6 +845,11 @@ void makecreature(creaturest &cr,short type)
          cr.infiltration=0.9 + 0.01*LCSrandom(11);
          cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
+
+         if(mode==GAMEMODE_SITE/* && sitealarm>0*/)
+         {
+            nameCCSMember(cr);
+         }
 
          randomskills*=2; // Extra skills
          sk=LCSrandom(4)+6;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
@@ -1877,6 +1899,15 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_HEALTH]=10;
          cr.age=AGE_MATURE;
          break;
+      case CREATURE_MARTIALARTIST:
+         for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=13;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_TEACHING]=sk;randomskills-=sk;
+         sk=LCSrandom(4)+4;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         cr.att[ATTRIBUTE_AGILITY]=8;
+         cr.att[ATTRIBUTE_STRENGTH]=6;
+         cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.age=AGE_MATURE;
+         break;
       case CREATURE_ATHLETE:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
          {
@@ -2551,6 +2582,8 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
          break;
+      case CREATURE_VETERAN:
+      case CREATURE_HARDENED_VETERAN:
       case CREATURE_SOLDIER:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
@@ -2651,6 +2684,10 @@ void verifyworklocation(creaturest &cr)
       case CREATURE_YOGAINSTRUCTOR:
          okaysite[SITE_BUSINESS_VEGANCOOP]=1;
          break;
+      case CREATURE_MARTIALARTIST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
       case CREATURE_ATHLETE:
          okaysite[SITE_UDISTRICT]=1;
          break;
@@ -2755,5 +2792,48 @@ void liberalize(creaturest &cr,bool rename)
       case CREATURE_WORKER_FACTORY_NONUNION:
          strcpy(cr.name,"New Union Worker");
          break;
+   }
+}
+
+/* gives a CCS member a cover name */
+void nameCCSMember(creaturest &cr)
+{
+   if(cr.armor.type==ARMOR_CIVILLIANARMOR)
+   {
+      strcpy(cr.name,"Mercenary");
+   }
+   else if(cr.armor.type==ARMOR_ARMYARMOR)
+   {
+      strcpy(cr.name,"Soldier");
+   }
+   else if(cr.armor.type==ARMOR_HEAVYARMOR)
+   {
+      strcpy(cr.name,"Hardened Veteran");
+   }
+   else if(cr.weapon.type==WEAPON_SHOTGUN_PUMP||LCSrandom(2))
+   {
+      switch(LCSrandom(5))
+      {
+         case 0:strcpy(cr.name,"Country Boy");break;
+         case 1:strcpy(cr.name,"Hick");break;
+         case 2:strcpy(cr.name,"Redneck");break;
+         case 3:strcpy(cr.name,"Rube");break;
+         case 4:strcpy(cr.name,"Yokel");break;
+      }
+   }
+   else
+   {
+      switch(LCSrandom(9))
+      {
+      case 0: strcpy(cr.name,"Biker");break;
+      case 1: strcpy(cr.name,"Transient");break;
+      case 2: strcpy(cr.name,"Crackhead");break;
+      case 3: strcpy(cr.name,"Fast Food Worker");break;
+      case 4: strcpy(cr.name,"Telemarketer");break;
+      case 5: strcpy(cr.name,"Office Worker");break;
+      case 6: strcpy(cr.name,"Mailman");break;
+      case 7: strcpy(cr.name,"Musician");break;
+      case 8: strcpy(cr.name,"Hairstylist");break;
+      }
    }
 }

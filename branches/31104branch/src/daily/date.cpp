@@ -602,6 +602,12 @@ char completedate(datest &d,int p,char &clearformess)
                 d.date[e]->type!=CREATURE_GANGUNIT&&
                 d.date[e]->type!=CREATURE_DEATHSQUAD&&
                 d.date[e]->type!=CREATURE_SOLDIER&&
+                d.date[e]->type!=CREATURE_VETERAN&&
+                d.date[e]->type!=CREATURE_HARDENED_VETERAN&&
+                d.date[e]->type!=CREATURE_CCS_VIGILANTE&&
+                d.date[e]->type!=CREATURE_CCS_ARCHCONSERVATIVE&&
+                d.date[e]->type!=CREATURE_CCS_MOLOTOV&&
+                d.date[e]->type!=CREATURE_CCS_SNIPER&&
                 d.date[e]->type!=CREATURE_MERC&&
                 LCSrandom(15))||
                 LCSrandom(1+bonus))
