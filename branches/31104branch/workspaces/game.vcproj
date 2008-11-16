@@ -675,6 +675,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="items"
+			>
+			<File
+				RelativePath="..\src\items\armor.cpp"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\src\compat.cpp"
 			>

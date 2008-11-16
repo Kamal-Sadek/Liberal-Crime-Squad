@@ -304,7 +304,7 @@ void makecreature(creaturest &cr,short type)
          cr.age=AGE_MATURE;
          cr.juice=-20;
          cr.flag|=CREATUREFLAG_ILLEGALALIEN;
-         sk=LCSrandom(6)+1;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
+         sk=LCSrandom(5)+1;cr.skill[SKILL_GARMENTMAKING]=sk;randomskills-=sk;
          break;
       case CREATURE_WORKER_FACTORY_NONUNION:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(5))
@@ -490,32 +490,33 @@ void makecreature(creaturest &cr,short type)
          cr.age=AGE_YOUNGADULT;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(2);cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=14;
          cr.att[ATTRIBUTE_STRENGTH]=5;
 			cr.att[ATTRIBUTE_AGILITY]=5;
 			cr.att[ATTRIBUTE_HEALTH]=5;
+         cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_VETERAN:
-         strcpy(cr.name,"Veteran");
+         strcpy(cr.name,"Army Veteran");
          cr.money=LCSrandom(21)+20;
-         cr.align=LCSrandom(2)-1;
          cr.infiltration=0.1*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_MIDDLEAGED;
 
          sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(3);cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(2);cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=14;
          cr.att[ATTRIBUTE_STRENGTH]=5;
 			cr.att[ATTRIBUTE_AGILITY]=5;
 			cr.att[ATTRIBUTE_HEALTH]=5;
+         cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_HARDENED_VETERAN:
          strcpy(cr.name,"Hardened Veteran");
@@ -533,7 +534,8 @@ void makecreature(creaturest &cr,short type)
          sk=LCSrandom(3);cr.skill[SKILL_SECURITY]=sk;randomskills-=sk;
          sk=LCSrandom(3)+2;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
          sk=LCSrandom(3)+2;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+2;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+         sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
 			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=18;
          cr.att[ATTRIBUTE_STRENGTH]=7;
 			cr.att[ATTRIBUTE_AGILITY]=7;
@@ -598,7 +600,7 @@ void makecreature(creaturest &cr,short type)
             cr.clip[CLIP_ASSAULT]=3;
             cr.weapon.ammo=30;
          }
-         cr.armor.type=ARMOR_POLICEARMOR;
+         cr.armor.type=ARMOR_SWATARMOR;
          cr.align=-1;
          cr.infiltration=0.3 + 0.1*LCSrandom(4);
          cr.juice=40+LCSrandom(50);
@@ -2282,12 +2284,24 @@ void lastname(char *str)
 
 
 /* ensures that the creature's work location is appropriate to its type */
-void verifyworklocation(creaturest &cr)
+bool verifyworklocation(creaturest &cr, char test_location, char test_type)
 {
    char okaysite[SITENUM];
    memset(okaysite,0,SITENUM*sizeof(char));
 
-   switch(cr.type)
+   char type;
+
+   // If the caller sets test_type, they're just
+   // asking if the chosen creature type is appropriate
+   // to the location they provided, not actually setting
+   // the creature work location -- this is useful
+   // for things like stealth
+   if(test_type!=-1)
+      type=test_type;
+   else
+      type=cr.type;
+
+   switch(type)
    {
       case CREATURE_BOUNCER:
          okaysite[SITE_BUSINESS_CIGARBAR]=1;
@@ -2713,6 +2727,12 @@ void verifyworklocation(creaturest &cr)
          okaysite[SITE_RESIDENTIAL_SHELTER]=1;
    }
 
+   // Quick exit if only checking if a certain type works
+   if(test_type!=-1)
+   {
+      return okaysite[test_location];
+   }
+
    char swap=0;
    if(cr.worklocation==-1)swap=1;
    else
@@ -2756,6 +2776,7 @@ void verifyworklocation(creaturest &cr)
          cr.worklocation=goodlist[LCSrandom(goodlist.size())];
       }
    }
+   return false;
 }
 
 

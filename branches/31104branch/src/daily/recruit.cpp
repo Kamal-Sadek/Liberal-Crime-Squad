@@ -119,7 +119,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>1200 &&
-         r.recruit->skill[SKILL_SMG] &&
+         r.recruit->skill[SKILL_RIFLE] &&
          (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_STREETSENSE]))
       {
          r.recruit->weapon.type=WEAPON_SMG_MP5;

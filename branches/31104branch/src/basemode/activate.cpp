@@ -266,9 +266,16 @@ void activate(creaturest *cr)
          move(11,40);
          addstr("2 - Liberal Disobedience");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
-         move(12,40);
-         addstr("3 - Spray Graffiti");
+         if(cr->weapon.type==WEAPON_SPRAYCAN)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
+            move(12,40);
+            addstr("3 - Graffiti");
+         } else {
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(12,40);
+            addstr("3 - Graffiti (Need Spraypaint)");
+         }
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
          move(13,40);
@@ -293,56 +300,6 @@ void activate(creaturest *cr)
             move(17,40);
             addstr("8 - Write for The Liberal Guardian");
          }
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will help old ladies cross the street.");
-            break;
-         case '2':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will create public disturbances.");
-            break;
-         case '3':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will spray political graffiti.");
-            break;
-         case '4':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will search the internet for public opinion polls.");
-            break;
-         case '5':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will harass Conservative websites.");
-            break;
-         case '6':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will hack into private Conservative networks.");
-            break;
-         case '7':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will write letters to newspapers about current events.");
-            break;
-         case '8':
-            if(cr->location!=-1&&
-               location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
-            {
-               move(22,3);
-               addstr(cr->name);
-               addstr(" will write articles for the LCS's newspaper.");
-               break;
-            }
-            break;
-         }
          break;
       case 'b':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
@@ -351,40 +308,15 @@ void activate(creaturest *cr)
          
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
          move(11,40);
-         addstr("2 - Sell T-Shirts");
+         addstr("2 - Sell Tie-Dye T-Shirts");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_ART);
          move(12,40);
-         addstr("3 - Sell Liberal Art");
+         addstr("3 - Sell Portrait Sketches");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_MUSIC);
          move(13,40);
-         addstr("4 - Sell Liberal Music");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will walk around and ask for donations to the LCS.");
-            break;
-         case '2':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will tie-dye T-shirts and sell them on the street.");
-            break;
-         case '3':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will sketch and sell potraits on street corners.");
-            break;
-         case '4':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will work as a street musician.");
-            break;
-         }
+         addstr("4 - Play Street Music");
          break;
       case 'c':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
@@ -402,35 +334,6 @@ void activate(creaturest *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
          move(13,40);
          addstr("4 - Electronic Protection Racket");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will bake and sell special adult brownies that open");
-            move(23,1);
-            addstr("magical shimmering doorways to the adamantium pits.");
-            break;
-         case '2':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will trade sex for money.");
-            break;
-         case '3':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will commit credit card fraud online.");
-            break;
-         case '4':
-            move(22,3);
-            addstr(cr->name);
-            addstr(" will demand money in exchange for not bringing down");
-            move(23,1);
-            addstr("major websites.");
-            break;
-         }
          break;
       case 'd':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
@@ -465,17 +368,104 @@ void activate(creaturest *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
          move(16,40);
          addstr("5 - Covert Actions");
+      }
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(choice)
-         {
-         case '1':
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      switch(cr->activity.type)
+      {
+         case ACTIVITY_COMMUNITYSERVICE:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will help old ladies cross the street.");
+            break;
+         case ACTIVITY_TROUBLE:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will create public disturbances.");
+            break;
+         case ACTIVITY_GRAFFITI:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will spray political graffiti.");
+            break;
+         case ACTIVITY_POLLS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will search the internet for public opinion polls.");
+            break;
+         case ACTIVITY_DOS_ATTACKS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will harass Conservative websites.");
+            break;
+         case ACTIVITY_HACKING:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will hack into private Conservative networks.");
+            break;
+         case ACTIVITY_WRITE_LETTERS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will write letters to newspapers about current events.");
+            break;
+         case ACTIVITY_WRITE_GUARDIAN:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will write articles for the LCS's newspaper.");
+            break;
+         case ACTIVITY_DONATIONS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will walk around and ask for donations to the LCS.");
+            break;
+         case ACTIVITY_SELL_TSHIRTS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will tie-dye T-shirts and sell them on the street.");
+            break;
+         case ACTIVITY_SELL_ART:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will sketch people and sell portraits back to them.");
+            break;
+         case ACTIVITY_SELL_MUSIC:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will go out into the streets and drum on buckets,");
+            move(23,3);
+            addstr("or play guitar if one is equipped.");
+            break;
+         case ACTIVITY_SELL_DRUGS:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will bake and sell special adult brownies that open");
+            move(23,1);
+            addstr("magical shimmering doorways to the adamantium pits.");
+            break;
+         case ACTIVITY_PROSTITUTION:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will trade sex for money.");
+            break;
+         case ACTIVITY_CCFRAUD:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will commit credit card fraud online.");
+            break;
+         case ACTIVITY_DOS_RACKET:
+            move(22,3);
+            addstr(cr->name);
+            addstr(" will demand money in exchange for not bringing down");
+            move(23,1);
+            addstr("major websites.");
+            break;
+         case ACTIVITY_TEACH_GENERALED:
             move(22,1);
             addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion, Business");
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case '2':
+         case ACTIVITY_TEACH_POLITICS:
             //move(22,1);
             //addstr("  Attributes Trained: Intelligence, Charisma, Heart, Wisdom");
             move(22,1);
@@ -483,7 +473,7 @@ void activate(creaturest *cr)
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case '3':
+         case ACTIVITY_TEACH_SURVIVAL:
             //move(22,1);
             //addstr("  Attributes Trained: Intelligence, Health, Agility");
             move(22,1);
@@ -493,7 +483,7 @@ void activate(creaturest *cr)
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case '4':
+         case ACTIVITY_TEACH_FIGHTING:
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
@@ -501,7 +491,7 @@ void activate(creaturest *cr)
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         case '5':
+         case ACTIVITY_TEACH_COVERT:
             //move(22,1);
             //addstr("  Attributes Trained: Intelligence, Agility, Charisma");
             move(22,1);
@@ -511,8 +501,6 @@ void activate(creaturest *cr)
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
-         }
-         break;
       }
 
       refresh();
@@ -532,8 +520,11 @@ void activate(creaturest *cr)
             {
             case '1':cr->activity.type=ACTIVITY_COMMUNITYSERVICE;break;
             case '2':cr->activity.type=ACTIVITY_TROUBLE;break;
-            case '3':cr->activity.type=ACTIVITY_GRAFFITI;
-                     cr->activity.arg=-1;break;
+            case '3':if(cr->weapon.type==WEAPON_SPRAYCAN)
+                     {
+                        cr->activity.type=ACTIVITY_GRAFFITI;
+                        cr->activity.arg=-1;
+                     }break;
             case '4':cr->activity.type=ACTIVITY_POLLS;break;
             case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
             case '6':cr->activity.type=ACTIVITY_HACKING;break;
@@ -1135,6 +1126,7 @@ void select_makeclothing(creaturest *cr)
          case ARMOR_NONE:
          case ARMOR_MITHRIL:
          case ARMOR_MASK:
+         case ARMOR_SWATARMOR:
          case ARMOR_POLICEARMOR:
          case ARMOR_ARMYARMOR:
          case ARMOR_HEAVYARMOR:

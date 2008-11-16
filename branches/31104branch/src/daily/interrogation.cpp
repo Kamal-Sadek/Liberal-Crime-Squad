@@ -150,8 +150,11 @@ void tendhostage(creaturest *cr,char &clearformess)
       int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
       map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
+      int * attack = new int[temppool.size()];
+
       for(p=0;p<temppool.size();p++)
       {
+         attack[p] = 0;
          if(temppool[p]!=NULL)
          {
             if(temppool[p]->alive)
@@ -163,15 +166,15 @@ void tendhostage(creaturest *cr,char &clearformess)
                if(temppool[p]->skill[SKILL_SCIENCE]>science)
                   science=temppool[p]->skill[SKILL_SCIENCE];
 
-               if((temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                   temppool[p]->attval(ATTRIBUTE_HEART)-
-                   temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                   temppool[p]->skill[SKILL_INTERROGATION]*2)>maxattack)
-               {
-                  maxattack=temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                            temppool[p]->attval(ATTRIBUTE_HEART)-
+               attack[p] = (temppool[p]->attval(ATTRIBUTE_HEART)-
                             temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                            temppool[p]->skill[SKILL_INTERROGATION]*2;
+                            temppool[p]->skill[SKILL_INTERROGATION]*2);
+
+               attack[p] += temppool[p]->armor.interrogation_basepower();
+
+               if(attack[p]>maxattack)
+               {
+                  maxattack=attack[p];
                }
             }
          }
@@ -185,10 +188,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          {
             if(temppool[p]->alive)
             {
-               if((temppool[p]->attval(ATTRIBUTE_CHARISMA)+
-                   temppool[p]->attval(ATTRIBUTE_HEART)-
-                   temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                   temppool[p]->skill[SKILL_INTERROGATION]*2)==maxattack)
+               if(attack[p]==maxattack)
                {
                   goodp.push_back(p);
                }
@@ -256,14 +256,18 @@ void tendhostage(creaturest *cr,char &clearformess)
          move(y,0);y+=1;addstr("F - ");
          if(techniques[5])addstr("Not ");
          addstr("Given Water    ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[6]);
-         move(y,0);y+=1;addstr("G - ");
+         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[6]);
+         move(y,0);addstr("G - ");
          if(!techniques[6])addstr("No ");
-         addstr("Expensive Props ($100)   ");
+         addstr("Expensive Props     ");
+         move(y,27);y+=1;
+         addstr("($100)");
          if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[7]);
-         move(y,0);y+=2;addstr("H - ");
+         move(y,0);addstr("H - ");
          if(!techniques[7])addstr("No ");
-         addstr("Psychedelic Drugs ($40)   ");
+         addstr("Hallucinogenic Drugs    ");
+         move(y,28);y+=2;
+         addstr("($50)");
          if(techniques[8])set_color(COLOR_RED,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y+=2;addstr("K - Kill the Hostage");
@@ -333,6 +337,12 @@ void tendhostage(creaturest *cr,char &clearformess)
          itoa(a->attval(ATTRIBUTE_WISDOM),num2,10);
          addstr("Wisdom: ");
          addstr(num2);
+         move(++y,40);
+         itoa(a->attval(ATTRIBUTE_WISDOM),num2,10);
+         addstr("Outfit: ");
+         char str[40];
+         getarmorfull(str,a->armor.type);
+         addstr(str);
          move(y+=2,40);
          if(rapport[a->id]>3)
          {
@@ -383,9 +393,9 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(techniques[6] && funds>=100)
       { funds-=100; moneylost_hostage+=100; }
       else { techniques[6] = 0; }
-      if(techniques[7] && funds>=40)
-      { funds-=40; moneylost_hostage+=40; }
-      else { techniques[6] = 0; }
+      if(techniques[7] && funds>=50)
+      { funds-=50; moneylost_hostage+=50; }
+      else { techniques[7] = 0; }
 
       //remember interrogation choices
       for(int i=0; i<9; i++)
@@ -527,6 +537,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr(" is tied hands and feet to a metal chair");
          y++;move(y,0);
          addstr("in the middle of a back room.");
+         y++;
 
          spiritcrush+=LCSrandom(2);
       }
@@ -608,9 +619,9 @@ void tendhostage(creaturest *cr,char &clearformess)
          
          y++;
 
-         addstr("It is subjected to dangerous psychedelic drugs.");
+         addstr("It is subjected to dangerous hallucinogens.");
 
-         spiritcrush+=LCSrandom(5);
+         spiritcrush+=LCSrandom(5)+a->armor.interrogation_drugbonus();
          healthcrush+=3;
 
          //Possible permanent health damage
@@ -691,7 +702,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr("yelling its favorite corporation's name.");
          y++;
 
-         spiritcrush+=forceroll/2;
+         spiritcrush+=forceroll/2+a->armor.interrogation_assaultbonus();
          if(techniques[6])spiritcrush+=forceroll/2;
          healthcrush+=forceroll/2;
          cr->blood-=forceroll/2;
@@ -718,7 +729,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                {
                case 0:addstr(" screams helplessly for ");
                   if(techniques[7])addstr("John Lennon's mercy.");
-                  else if(cr->attval(ATTRIBUTE_WISDOM)>4)addstr("God's mercy.");
+                  else if(cr->skill[SKILL_RELIGION])addstr("God's mercy.");
                   else addstr("mommy.");
                   break;
                case 1:
@@ -763,7 +774,13 @@ void tendhostage(creaturest *cr,char &clearformess)
                addstr(cr->name);
                addstr(" seems to be getting the message.");
                y++;
-               if(cr->att[ATTRIBUTE_WISDOM]>1)
+               if(cr->juice>1)
+               {
+                  cr->juice-=forceroll;
+                  if(cr->juice<0)
+                     cr->juice=0;
+               }
+               else if(cr->att[ATTRIBUTE_WISDOM]>1)
                {
                   cr->att[ATTRIBUTE_WISDOM]-=forceroll/10+1;
                   if(cr->att[ATTRIBUTE_WISDOM]<1)cr->att[ATTRIBUTE_WISDOM]=1;
@@ -832,7 +849,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr(".");
          y++;
 
-         //Psychedelic drugs:
+         //Hallucinogenic drugs:
          //Re-interprets lead interrogator
          if(techniques[7])
          {
@@ -1136,20 +1153,28 @@ void tendhostage(creaturest *cr,char &clearformess)
             //Improve rapport with interrogator
             rapport[a->id]+=0.6f;
 
-            //Reduce wisdom!
-            if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
+            if(cr->juice>0)
             {
-               int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
-               if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
-               cr->att[ATTRIBUTE_WISDOM]-=change;
+               cr->juice-=aroll;
+               if(cr->juice<0)cr->juice=0;
             }
-            //Increase heart
-            if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))
+            else
             {
-               int change = 
-                  LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
-               if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
-               cr->att[ATTRIBUTE_HEART]+=change;
+               //Reduce wisdom!
+               if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
+               {
+                  int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
+                  if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+                  cr->att[ATTRIBUTE_WISDOM]-=change;
+               }
+               //Increase heart
+               if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))
+               {
+                  int change = 
+                     LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
+                  if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+                  cr->att[ATTRIBUTE_HEART]+=change;
+               }
             }
 
             //Join LCS??

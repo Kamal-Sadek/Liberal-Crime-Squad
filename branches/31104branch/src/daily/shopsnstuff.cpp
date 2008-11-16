@@ -2384,6 +2384,7 @@ unsigned long fencevalue(itemst &it)
             case ARMOR_MITHRIL:fenceamount=50;break;
             case ARMOR_CIVILLIANARMOR:fenceamount=75;break;
             case ARMOR_POLICEARMOR:fenceamount=150;break;
+            case ARMOR_SWATARMOR:fenceamount=200;break;
             case ARMOR_ARMYARMOR:fenceamount=250;break;
             case ARMOR_HEAVYARMOR:fenceamount=400;break;
          }

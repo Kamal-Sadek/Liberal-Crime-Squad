@@ -458,8 +458,27 @@ void trial(creaturest &g)
       }
       else if(breaker[LAWFLAG_DISTURBANCE])
       {
+         if(g.lawflag[LAWFLAG_DISTURBANCE]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_DISTURBANCE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
          addstr("disturbing the peace");
          breaker[LAWFLAG_DISTURBANCE]=0;
+      }
+      else if(breaker[LAWFLAG_PUBLICNUDITY])
+      {
+         if(g.lawflag[LAWFLAG_PUBLICNUDITY]>1)
+         {
+            char str[10];
+            itoa(g.lawflag[LAWFLAG_PUBLICNUDITY],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("public nudity");
+         breaker[LAWFLAG_PUBLICNUDITY]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
       {
@@ -1041,6 +1060,7 @@ void penalize(creaturest &g,char lenient)
          g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BURIAL];
          g.sentence+=(1+LCSrandom(6))*g.lawflag[LAWFLAG_PROSTITUTION];
          g.sentence+=1*g.lawflag[LAWFLAG_DISTURBANCE];
+         g.sentence+=1*g.lawflag[LAWFLAG_PUBLICNUDITY];
          //g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
          g.sentence+=1*g.lawflag[LAWFLAG_HIREILLEGAL];
          g.sentence+=(12+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];

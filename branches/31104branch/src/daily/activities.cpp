@@ -748,7 +748,27 @@ void survey(creaturest *cr)
 
 int checkforarrest(creaturest & liberal,const char* string,long ps,int clearformess)
 {
-   if(liberal.heat>liberal.skill[SKILL_STREETSENSE]*10)
+   bool arrest=false;
+   
+   if(!liberal.animalgloss && liberal.armor.type==ARMOR_NONE && LCSrandom(2))
+   {
+      criminalize(liberal,LAWFLAG_DISTURBANCE);
+
+      if(clearformess)erase();
+      else
+      {
+         makedelimiter(8,0);
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(8,1);
+      addstr(liberal.name);
+      addstr(" has been arrested for public nudity.");
+      arrest=true;
+      refresh();
+      getch();
+   }
+   else if(liberal.heat>liberal.skill[SKILL_STREETSENSE]*10)
    {
       if(!LCSrandom(50))
       {
@@ -764,21 +784,22 @@ int checkforarrest(creaturest & liberal,const char* string,long ps,int clearform
          addstr(" has been arrested while ");
          addstr(string);
          addstr(".");
-
+         arrest=true;
          refresh();
          getch();
-
-         removesquadinfo(liberal);
-         liberal.carid=-1;
-         liberal.location=ps;
-         liberal.weapon.type=WEAPON_NONE;
-         liberal.weapon.ammo=0;
-         liberal.activity.type=ACTIVITY_NONE;
-
-         return true;
       }
    }
-   return false;
+   
+   if(arrest)
+   {
+      removesquadinfo(liberal);
+      liberal.carid=-1;
+      liberal.location=ps;
+      liberal.weapon.type=WEAPON_NONE;
+      liberal.weapon.ammo=0;
+      liberal.activity.type=ACTIVITY_NONE;
+   }
+   return arrest;
 }
 
 
@@ -901,11 +922,12 @@ void funds_and_trouble(char &clearformess)
       if(!checkforarrest(*solicit[s],"soliciting donations",ps,clearformess))
       {
          money=LCSrandom(((solicit[s]->skill[SKILL_PERSUASION]+
-         solicit[s]->skill[SKILL_BUSINESS]+
-         solicit[s]->attval(ATTRIBUTE_CHARISMA)+
-         solicit[s]->attval(ATTRIBUTE_HEART))*
-         attitude[VIEW_LIBERALCRIMESQUADPOS]*
-         attitude[VIEW_LIBERALCRIMESQUAD])/10000+1);
+                           solicit[s]->skill[SKILL_BUSINESS]+
+                           solicit[s]->attval(ATTRIBUTE_CHARISMA)+
+                           solicit[s]->attval(ATTRIBUTE_HEART))*
+                           attitude[VIEW_LIBERALCRIMESQUADPOS]*
+                           (attitude[VIEW_LIBERALCRIMESQUAD]+5)*
+                           (solicit[s]->armor.professionalism()))/20000+1);
 
          funds+=money;
          stat_funds+=money;
@@ -921,13 +943,49 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*tshirts[s],"selling shirts",ps,clearformess))
       {
-         money=LCSrandom((tshirts[s]->skill[SKILL_GARMENTMAKING]*4*mood)/50+1);
+         int competitionpenalty=tshirts.size();
+         competitionpenalty-=tshirts[s]->skill[SKILL_PERSUASION];
+         if(competitionpenalty<0)competitionpenalty=0;
+         if(competitionpenalty>6)competitionpenalty=6;
+
+         int costofsupplies = 12;
+
+         if(funds < costofsupplies)
+         {
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(tshirts[s]->name);
+            addstr(" can't afford to buy blank shirts and dyes.");
+            tshirts[s]->activity.type=ACTIVITY_NONE;
+            refresh();
+            getch();
+            continue;
+         }
+
+         int productquality = tshirts[s]->skill[SKILL_GARMENTMAKING]*4+8;
+         int demand = mood + 10*(tshirts[s]->skill[SKILL_BUSINESS]-competitionpenalty);
+         if(demand<10)demand = 10;
+
+         money = LCSrandom((productquality*demand)/50+1) - costofsupplies;
+
          funds+=money;
-         stat_funds+=money;
-         moneygained_goods+=money;
+         if(money>0)
+         {
+            stat_funds+=money;
+         }
+         moneygained_goods+=money+costofsupplies;
+         moneylost_goods+=costofsupplies;
 
          if(tshirts[s]->skill[SKILL_GARMENTMAKING]<4)
             tshirts[s]->skill_ip[SKILL_GARMENTMAKING]+=LCSrandom(5)+2;
+         if(tshirts[s]->skill[SKILL_BUSINESS]<4)
+            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(5)+2;
       }
    }
 
@@ -936,13 +994,49 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*art[s],"sketching potraits",ps,clearformess))
       {
-         money=LCSrandom((art[s]->skill[SKILL_ART]*4*mood)/50+1);
-         funds+=money;
-         stat_funds+=money;
-         moneygained_goods+=money;
+         int competitionpenalty=art.size();
+         competitionpenalty-=art[s]->skill[SKILL_ART];
+         if(competitionpenalty<0)competitionpenalty=0;
+         if(competitionpenalty>6)competitionpenalty=6;
 
-         if(art[s]->skill[SKILL_ART]<5)
+         int costofsupplies = 8;
+
+         if(funds < costofsupplies)
+         {
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(art[s]->name);
+            addstr(" can't afford to buy art supplies.");
+            art[s]->activity.type=ACTIVITY_NONE;
+            refresh();
+            getch();
+            continue;
+         }
+
+         int productquality = art[s]->skill[SKILL_ART]*4+4;
+         int demand = mood + 10*(art[s]->skill[SKILL_BUSINESS]-competitionpenalty);
+         if(demand<10)demand = 10;
+
+         money = LCSrandom((productquality*demand)/50+1) - costofsupplies;
+
+         funds+=money;
+         if(money>0)
+         {
+            stat_funds+=money;
+         }
+         moneygained_goods+=money+costofsupplies;
+         moneylost_goods+=costofsupplies;
+
+         if(art[s]->skill[SKILL_ART]<4)
             art[s]->skill_ip[SKILL_ART]+=LCSrandom(5)+2;
+         if(art[s]->skill[SKILL_BUSINESS]<4)
+            art[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(5)+2;
       }
    }
 
@@ -951,12 +1045,21 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*music[s],"playing music",ps,clearformess))
       {
-         money=LCSrandom((music[s]->skill[SKILL_MUSIC]*4*mood)/50+1);
+         int competitionpenalty=music.size()/4;
+         if(competitionpenalty<0)competitionpenalty=0;
+
+         int productquality = music[s]->skill[SKILL_MUSIC];
+         if(music[s]->weapon.type==WEAPON_GUITAR)productquality *= 4;
+         int demand = mood - 10*competitionpenalty;
+         if(demand<10)demand = 10;
+
+         money = LCSrandom((productquality*demand)/50+2);
+
          funds+=money;
          stat_funds+=money;
          moneygained_goods+=money;
 
-         if(music[s]->skill[SKILL_MUSIC]<5)
+         if(music[s]->skill[SKILL_MUSIC]<4)
             music[s]->skill_ip[SKILL_MUSIC]+=LCSrandom(5)+2;
       }
    }
@@ -1453,6 +1556,24 @@ void funds_and_trouble(char &clearformess)
    {
       for(s=0;s<graffiti.size();++s)
       {
+         if(graffiti[s]->weapon.type!=WEAPON_SPRAYCAN)
+         {
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(music[s]->name);
+            addstr(" needs a spraycan equipped to do graffiti.");
+            music[s]->activity.type=ACTIVITY_NONE;
+            refresh();
+            getch();
+            continue;
+         }
+
          int issue=VIEW_LIBERALCRIMESQUAD;
          int power=1;
          int caught=0;
@@ -2059,10 +2180,10 @@ void funds_and_trouble(char &clearformess)
          skillarray[2]=SKILL_CLUB;
          skillarray[3]=SKILL_PISTOL;
          skillarray[4]=SKILL_RIFLE;
-         skillarray[5]=SKILL_SMG;
-         skillarray[6]=SKILL_SHOTGUN;
-         skillarray[7]=SKILL_FLAMETHROWER;
-         skillarray[8]=SKILL_AXE;
+         skillarray[5]=SKILL_SHOTGUN;
+         skillarray[6]=SKILL_FLAMETHROWER;
+         skillarray[7]=SKILL_AXE;
+         skillarray[8]=SKILL_SMG;
          skillarray[9]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:

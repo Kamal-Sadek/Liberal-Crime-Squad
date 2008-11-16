@@ -1267,13 +1267,32 @@ void mode_site(void)
 
             if(tookground)
             {
-               alienationcheck(1);
-               noticecheck(-1);
-               sitecrime++;
-               sitestory->crime.push_back(CRIME_STOLEGROUND);
-               if(enemy)
+               int maxsleightofhand=0;
+               int beststealer=0;
+               int i;
+               for(i=0;i<6;i++)
                {
-                  criminalizeparty(LAWFLAG_THEFT);
+                  if(!activesquad->squad[i])
+                  {
+                     break;
+                  }
+                  if(activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]>maxsleightofhand)
+                  {
+                     beststealer=i;
+                     maxsleightofhand=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND];
+                  }
+               }
+               activesquad->squad[i]->skill_ip[SKILL_SLEIGHTOFHAND]+=5;
+               if(!LCSrandom(maxsleightofhand+1))
+               {
+                  alienationcheck(1);
+                  noticecheck(-1);
+                  sitecrime++;
+                  sitestory->crime.push_back(CRIME_STOLEGROUND);
+                  if(enemy)
+                  {
+                     criminalize(*(activesquad->squad[beststealer]),LAWFLAG_THEFT);
+                  }
                }
             }
 

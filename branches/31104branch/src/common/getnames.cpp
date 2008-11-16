@@ -206,7 +206,7 @@ void getweapon(char *str,int type)
          case WEAPON_PITCHFORK:     strcpy(str,"Pitchfork");break;
          case WEAPON_TORCH:         strcpy(str,"Torch");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
-         case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_SPRAYCAN:      strcpy(str,"Spraypaint");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2A1-7");break;
@@ -218,7 +218,7 @@ void getweapon(char *str,int type)
       {
          //LIMIT ----------------------------------------:----: (-5 for guns)
          case WEAPON_NONE:         strcpy(str,"None");break;
-         case WEAPON_CROWBAR:      strcpy(str,"Crowbar");break;
+         case WEAPON_CROWBAR:      strcpy(str,"Prybar");break;
          case WEAPON_BASEBALLBAT:   strcpy(str,"Spaceball Bat");break;
          case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
          case WEAPON_SHANK:         strcpy(str,"Shank");break;
@@ -244,8 +244,8 @@ void getweapon(char *str,int type)
          case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
          case WEAPON_PITCHFORK:     strcpy(str,"Pitchfork");break;
          case WEAPON_TORCH:         strcpy(str,"Flare");break;
-         case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
-         case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_GUITAR:        strcpy(str,"Keytar");break;
+         case WEAPON_SPRAYCAN:      strcpy(str,"Holopaint");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"Plasmagun");break;
@@ -297,7 +297,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_PITCHFORK:     strcpy(str,"Pitchfork");break;
          case WEAPON_TORCH:         strcpy(str,"Torch");break;
          case WEAPON_GUITAR:        strcpy(str,"Guitar");break;
-         case WEAPON_SPRAYCAN:      strcpy(str,"Spraycan");break;
+         case WEAPON_SPRAYCAN:      strcpy(str,"Spraypaint");break;
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2 Flamethrower");break;
@@ -307,9 +307,10 @@ void getweaponfull(char *str,int type,int subtype)
    {
       switch(type)
       {
+      case WEAPON_NONE:          strcpy(str,"None");break;
       case WEAPON_BASEBALLBAT:   strcpy(str,"Spaceball Bat");break;
       case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
-      case WEAPON_SHANK:         strcpy(str,"Shank");break;
+      case WEAPON_SHANK:         strcpy(str,"Cyber Shank");break;
       case WEAPON_SYRINGE:      strcpy(str,"Medical Injector");break;
       case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug Pistol");break;
       case WEAPON_REVOLVER_44:   strcpy(str,".44 Heavy Slug Pistol");break;
@@ -330,17 +331,18 @@ void getweaponfull(char *str,int type,int subtype)
          case 2: strcpy(str,"Justice Blade");break;
          }
          break;
-      case WEAPON_HAMMER:         strcpy(str,"Dwarven Hammer");break;
-      case WEAPON_MAUL:         strcpy(str,"Maul of Anrin");break;
+      case WEAPON_HAMMER:        strcpy(str,"Dwarven Hammer");break;
+      case WEAPON_MAUL:          strcpy(str,"Maul of Anrin");break;
       case WEAPON_CROSS:         strcpy(str,"Silver Cross");break;
       case WEAPON_STAFF:         strcpy(str,"Wizard's Staff");break;
       case WEAPON_CHAIN:         strcpy(str,"Industrial Cyber-Arm");break;
-      case WEAPON_NIGHTSTICK:      strcpy(str,"Electro-Shock Stick");break;
-      case WEAPON_GAVEL:         strcpy(str,"Gavel");break;
-      case WEAPON_PITCHFORK:      strcpy(str,"Pitchfork");break;
+      case WEAPON_NIGHTSTICK:    strcpy(str,"Electro-Shock Stick");break;
+      case WEAPON_GAVEL:         strcpy(str,"Laser Gavel");break;
+      case WEAPON_PITCHFORK:     strcpy(str,"Space Pitchfork");break;
+      case WEAPON_CROWBAR:       strcpy(str,"Forcefield Prybar");break;
       case WEAPON_TORCH:         strcpy(str,"Burning Flare");break;
-      case WEAPON_GUITAR:      strcpy(str,"Ancient Guitar");break;
-      case WEAPON_SPRAYCAN:         strcpy(str,"Retro Spraycan");break;
+      case WEAPON_GUITAR:        strcpy(str,"Cyber-Keytar");break;
+      case WEAPON_SPRAYCAN:      strcpy(str,"Holo-Paint");break;
       case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
       case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
       case WEAPON_FLAMETHROWER:  strcpy(str,"Plasma Gun");break;
@@ -439,6 +441,7 @@ void getarmor(char *str,int type,int subtype)
       case ARMOR_TOGA:         strcpy(str,"Toga");break;
       case ARMOR_MITHRIL:         strcpy(str,"Mithril Mail");break;
       case ARMOR_CIVILLIANARMOR:       strcpy(str,"Body Armor");break;
+      case ARMOR_SWATARMOR:            strcpy(str,"SWAT Armor");break;
       case ARMOR_POLICEARMOR:          strcpy(str,"PoliceBdyArmor");break;
       case ARMOR_ARMYARMOR:            strcpy(str,"Army BodyArmor");break;
       case ARMOR_HEAVYARMOR:           strcpy(str,"HeavyBodyArmor");break;
@@ -536,6 +539,7 @@ void getarmorfull(char *str,int type,int subtype)
       case ARMOR_PRISONER:      strcpy(str,"Orange Jumpsuit");break;
       case ARMOR_TOGA:         strcpy(str,"Toga");break;
       case ARMOR_MITHRIL:         strcpy(str,"Mithril Mail");break;
+      case ARMOR_SWATARMOR:      strcpy(str,"Tactical SWAT Armor");break;
       case ARMOR_POLICEARMOR:      strcpy(str,"Police Body Armor");break;
       case ARMOR_ARMYARMOR:    strcpy(str,"Army Body Armor");break;
       case ARMOR_CIVILLIANARMOR:                strcpy(str,"Body Armor");break;

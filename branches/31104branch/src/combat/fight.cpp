@@ -54,7 +54,8 @@ void youattack(void)
           activesquad->squad[p]->weapon.ranged() &&   // Ranged
           activesquad->squad[p]->weapon.ammo!=0)      // Not out of ammo
       {
-         criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
+         // Illegal weapon crimes disabled
+         //criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
       }
 
       vector<int> goodtarg;
@@ -121,6 +122,11 @@ void youattack(void)
          if(pool[p]->align!=1)continue;
          if(pool[p]->squadid!=-1)continue;
          if(pool[p]->location!=cursite)continue;
+         // Juice check to engage in cover fire
+         // 10% chance for every 10 juice, starting at
+         // 10% chance for 0 juice -- caps out at 100%
+         // chance to fire at 90 juice
+         if(LCSrandom(10)-pool[p]->juice/10>0)continue;
 
          if(rangedweapon(pool[p]->weapon))
          {
@@ -874,13 +880,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
          case WEAPON_CROWBAR:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(80)+10;
+            damamount=LCSrandom(40)+10;
             strengthmod=1;
             break;
          case WEAPON_MAUL:
          case WEAPON_BASEBALLBAT:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(100)+10;
+            damamount=LCSrandom(50)+10;
             strengthmod=1;
             break;
          case WEAPON_PITCHFORK:
@@ -1808,6 +1814,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
       case ARMOR_BUNKERGEAR:armor=2;head_armor=2;limb_armor=2;break;
       case ARMOR_CIVILLIANARMOR:armor=5;break;
       case ARMOR_POLICEARMOR:armor=7;break;
+      case ARMOR_SWATARMOR:armor=7;head_armor=5;limb_armor=2;break;
       case ARMOR_ARMYARMOR:armor=8;head_armor=6;break;
       case ARMOR_HEAVYARMOR:armor=10;head_armor=8;limb_armor=4;break;
    }
@@ -1853,7 +1860,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
 void specialattack(creaturest &a, creaturest &t, char &actual)
 {
    int resist=0;
-   char str[50];
+   char str[200];
 
    strcpy(str,a.name);
    strcat(str," ");
@@ -2273,6 +2280,8 @@ void armordamage(armorst &armor,int bp)
    {
       case ARMOR_NONE:
          return;
+      case ARMOR_HEAVYARMOR:
+      case ARMOR_SWATARMOR:
       case ARMOR_SECURITYUNIFORM:
       case ARMOR_POLICEUNIFORM:
       case ARMOR_BONDAGEGEAR:
@@ -2280,13 +2289,13 @@ void armordamage(armorst &armor,int bp)
       case ARMOR_BUNKERGEAR:
          armor.flag|=ARMORFLAG_DAMAGED;
          break;
+      case ARMOR_ARMYARMOR:
+         if(bp==BODYPART_BODY||bp==BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
       case ARMOR_MASK:
          if(bp==BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
          break;
-      case ARMOR_HEAVYARMOR:
       case ARMOR_CIVILLIANARMOR:
       case ARMOR_POLICEARMOR:
-      case ARMOR_ARMYARMOR:
       case ARMOR_TOGA:
       case ARMOR_MITHRIL:
       case ARMOR_WIFEBEATER:

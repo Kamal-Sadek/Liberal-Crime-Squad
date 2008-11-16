@@ -724,6 +724,7 @@ int lawflagheat(int lawflag)
    case LAWFLAG_GUNCARRY:return 0;
    case LAWFLAG_GUNUSE:return 1;
    case LAWFLAG_ARSON:return 3;
+   case LAWFLAG_PUBLICNUDITY:return 0;
    default:return 0;
    }
 }

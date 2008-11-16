@@ -41,11 +41,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.16.0"
+#define PACKAGE_VERSION "3.16.1"
 #endif
 
-const unsigned long version=31600;
-const unsigned long lowestloadversion=31600;
+const unsigned long version=31601;
+const unsigned long lowestloadversion=31601;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -685,6 +685,7 @@ enum Armors
    ARMOR_WIFEBEATER,
    ARMOR_CIVILLIANARMOR,
    ARMOR_POLICEARMOR,
+   ARMOR_SWATARMOR,
    ARMOR_ARMYARMOR,
    ARMOR_HEAVYARMOR,
    ARMOR_BUNKERGEAR,
@@ -708,6 +709,12 @@ struct armorst
       quality='1';
       flag=0;
    }
+
+   int interrogation_basepower();
+   int interrogation_assaultbonus();
+   int interrogation_drugbonus();
+   int professionalism();
+   bool faceconcealed();
 };
 
 enum ClipType
@@ -812,6 +819,7 @@ enum Lawflags
    LAWFLAG_GUNCARRY,
    LAWFLAG_GUNUSE,
    LAWFLAG_ARSON,
+   LAWFLAG_PUBLICNUDITY,
    LAWFLAGNUM
 };
 
@@ -1771,7 +1779,7 @@ void firstname(char *str);
 /* gets a random last name */
 void lastname(char *str);
 /* ensures that the creature's work location is appropriate to its type */
-void verifyworklocation(creaturest &cr);
+bool verifyworklocation(creaturest &cr, char test_location=-1, char test_type=-1);
 /* turns a creature into a conservative */
 void conservatise(creaturest &cr);
 /* turns a creature into a liberal */

@@ -99,8 +99,10 @@ char unlock(short type,char &actual)
          switch(type)
          {
             case UNLOCK_DOOR:addstr("unlocks the door");break;
+            case UNLOCK_CAGE_HARD:
             case UNLOCK_CAGE:addstr("unlocks the cage");break;
             case UNLOCK_SAFE:addstr("cracks the safe");break;
+            case UNLOCK_CELL:addstr("unlocks the cell");break;
          }
          addstr("!");
          refresh();

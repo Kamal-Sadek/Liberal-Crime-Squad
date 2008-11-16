@@ -42,7 +42,8 @@ void noticecheck(int exclude)
    for(int e=0;e<ENCMAX;e++)
    {
       if(e==exclude)continue;
-      if(encounter[e].type==CREATURE_PRISONER)continue;
+      //if(encounter[e].type==CREATURE_PRISONER)continue;
+      if(strcmp(encounter[e].name,"Prisoner")==0)continue;
       if(encounter[e].exists&&encounter[e].alive&&
          encounter[e].align==-1)
       {
@@ -129,12 +130,6 @@ char alienationcheck(char mistake)
          noticer.push_back(e);
       }
    }
-   for(int i=0;i<6;++i)
-   {
-      if(activesquad->squad[i]&&
-         activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
-         sneak=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
-   }
 
    if(noticer.size()>0)
    {
@@ -146,13 +141,8 @@ char alienationcheck(char mistake)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
-         if(chance>LCSrandom(21)+sneak)
-         {
-            if(encounter[n].align==1)alienatebig=1;
-            else alienate=1;
-            break;
-         }
+         if(encounter[n].align==1)alienatebig=1;
+         else alienate=1;
       }while(noticer.size()>0);
 
       if(alienatebig)sitealienate=2;
@@ -208,7 +198,10 @@ void disguisecheck(void)
          // weapon already, it shouldn't stack on extras here or you'll accrue
          // dozens of extra charges for only one site incident
          if(weaponar[i]&&!activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY])
-            criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+         {
+            // Illegal weapon crimes disabled
+            //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+         }
       }
    }
 
@@ -308,7 +301,8 @@ void disguisecheck(void)
                if(activesquad->squad[i]==NULL)break;
                if(weaponar[i])
                {
-                  criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
+                  // Illegal weapon crimes disabled
+                  //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
                }
             }
          }
@@ -486,6 +480,9 @@ char weaponcheck(creaturest &cr,short type)
    case WEAPON_SYRINGE:
    case WEAPON_GAVEL:
    case WEAPON_GUITAR:
+   case WEAPON_SPRAYCAN:
+   case WEAPON_NIGHTSTICK:
+   case WEAPON_CHAIN:
       suspicious=0;
       break;
    default:
@@ -496,6 +493,8 @@ char weaponcheck(creaturest &cr,short type)
    //CHECK CONCEALMENT
    switch(cr.weapon.type)
    {
+   case WEAPON_SPRAYCAN:
+   case WEAPON_CHAIN:
    case WEAPON_SYRINGE:
    case WEAPON_GAVEL:
    case WEAPON_CROSS:
@@ -508,15 +507,8 @@ char weaponcheck(creaturest &cr,short type)
    case WEAPON_SEMIPISTOL_45:
       if(cr.armor.type!=ARMOR_NONE)concealed=1;
       break;
-   case WEAPON_CHAIN:
-   case WEAPON_HAMMER:
-   case WEAPON_SPRAYCAN:
-   case WEAPON_NIGHTSTICK:
    case WEAPON_SHOTGUN_PUMP:
    case WEAPON_SMG_MP5:
-   case WEAPON_CARBINE_M4:
-   case WEAPON_SWORD:
-   case WEAPON_DAISHO:
       if(cr.armor.type==ARMOR_TRENCHCOAT)concealed=1;
       break;
    default:
@@ -529,61 +521,66 @@ char weaponcheck(creaturest &cr,short type)
    switch(cr.weapon.type)
    {
    case WEAPON_SYRINGE:
-      if(cr.armor.type==ARMOR_LABCOAT)incharacter=1;
+      if(cr.armor.type==ARMOR_LABCOAT)incharacter=CREATURE_SCIENTIST_LABTECH;
       break;
    case WEAPON_GAVEL:
-      if(cr.armor.type==ARMOR_BLACKROBE)incharacter=1;
+      if(cr.armor.type==ARMOR_BLACKROBE)incharacter=CREATURE_JUDGE_LIBERAL;
       break;
    case WEAPON_REVOLVER_22:
    case WEAPON_REVOLVER_44:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
    case WEAPON_NIGHTSTICK:
-      // Police or security (no military)
+      if(cr.armor.type==ARMOR_SECURITYUNIFORM)
+      {
+         incharacter=CREATURE_SECURITYGUARD;
+      }
+      //break; // no break
+   case WEAPON_SHOTGUN_PUMP:
+      // Police
       if(cr.armor.type==ARMOR_POLICEUNIFORM||
-         cr.armor.type==ARMOR_SECURITYUNIFORM||
          cr.armor.type==ARMOR_POLICEARMOR)
       {
-         incharacter=1;
+         incharacter=CREATURE_COP;
       }
       break;
-   case WEAPON_SHOTGUN_PUMP:
    case WEAPON_SMG_MP5:
    case WEAPON_CARBINE_M4:
       // Police, military, or, in extreme times, security
-      if(cr.armor.type==ARMOR_POLICEUNIFORM||
-         (cr.armor.type==ARMOR_SECURITYUNIFORM&&law[LAW_GUNCONTROL]==-2)||
-         (cr.armor.type==ARMOR_POLICEARMOR)||
-         cr.armor.type==ARMOR_MILITARY||
-         (cr.armor.type==ARMOR_ARMYARMOR))
+      if(cr.armor.type==ARMOR_SWATARMOR)
       {
-         incharacter=1;
+         incharacter=CREATURE_SWAT;
+      }
+      if(cr.armor.type==ARMOR_SECURITYUNIFORM&&law[LAW_GUNCONTROL]==-2)
+      {
+         incharacter=CREATURE_SECURITYGUARD;
+      }
+      if(cr.armor.type==ARMOR_MILITARY||
+         cr.armor.type==ARMOR_ARMYARMOR)
+      {
+         incharacter=CREATURE_SOLDIER;
       }
       break;
    case WEAPON_AUTORIFLE_M16:
    case WEAPON_SEMIRIFLE_AR15:
-      // Police at extreme times
-      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2)
-      {
-         if(cr.armor.type==ARMOR_POLICEUNIFORM||cr.armor.type==ARMOR_POLICEARMOR)
-         {
-            incharacter=1;
-         }
-      }
-      // Or military
+      // Military
       if(cr.armor.type==ARMOR_MILITARY||cr.armor.type==ARMOR_ARMYARMOR)
       {
-         incharacter=1;
+         incharacter=CREATURE_SOLDIER;
       }
       break;
    case WEAPON_AXE:
-      if(cr.armor.type==ARMOR_BUNKERGEAR) incharacter=1;
+      if(cr.armor.type==ARMOR_BUNKERGEAR)
+      {
+         incharacter=CREATURE_FIREFIGHTER;
+      }
       break;
    case WEAPON_FLAMETHROWER:
       if(cr.armor.type==ARMOR_BUNKERGEAR&&law[LAW_FREESPEECH]==-2)
       {
-         incharacter=1;
+         incharacter=CREATURE_FIREFIGHTER;
       }
+      break;
    }
 
    //CHECK LEGALITY
@@ -616,19 +613,31 @@ char weaponcheck(creaturest &cr,short type)
       illegal=0;
    }
 
-   if(hasdisguise(cr,location[cursite]->type)==false)incharacter=0;
+   // If your disguise is inappropriate to the current location,
+   // then being in character isn't sufficient
+   if(hasdisguise(cr,location[cursite]->type)==false)
+   {
+      incharacter=-1;
+   }
+
+   // For now, you can only bluff your way out of toting weapons
+   // if you're in the middle of a siege where the place is getting
+   // stormed by people carrying such weapons
+   if(location[cursite]->siege.siege==false)
+   {
+      incharacter=-1;
+   }
 
    if(suspicious)
    {
       if(incharacter||concealed)
       {
-         if(illegal)
-            return -1; // OK, but busted if you shoot it
-         else
+         // if(illegal) return -1; else // OK, but busted if you shoot it
             return 0;  // OK
       }
-      else if(illegal)return 2;
-      else return 1;
+      else // if(illegal)
+         return 2;
+      //else return 1;
    }
    return 0;
 }
@@ -666,13 +675,14 @@ char hasdisguise(creaturest &cr,short type)
          {
             // CCS has trained in anticipation of this tactic
             // There is no fooling them
+            // (They pull this shit all the time in their own sieges)
             uniformed=0;
             break;
          }
          case SIEGE_POLICE:
          {
-            if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
-            if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
+            if(cr.armor.type==ARMOR_SWATARMOR&&
+               location[cursite]->siege.escalationstate==0)uniformed=1;
             if(cr.armor.type==ARMOR_MILITARY&&
                location[cursite]->siege.escalationstate>0)uniformed=1;
             if(cr.armor.type==ARMOR_ARMYARMOR&&

@@ -640,6 +640,9 @@ void elections(char clearformess,char canseethings)
             break;
          }*/
 
+         if(senate[s]>2)senate[s]=2;
+         if(senate[s]<-2)senate[s]=-2;
+
          change[senate[s]+2]++;
 
 
@@ -875,6 +878,9 @@ void elections(char clearformess,char canseethings)
             if(vote<=1)house[h]=vote-1;
             break;
          }
+
+         if(house[h]>2)house[h]=2;
+         if(house[h]<-2)house[h]=-2;
 
          change[house[h]+2]++;
          
