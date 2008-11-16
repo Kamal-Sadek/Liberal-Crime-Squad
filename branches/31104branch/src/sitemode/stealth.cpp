@@ -630,7 +630,7 @@ char weaponcheck(creaturest &cr,short type)
 
    if(suspicious)
    {
-      if(incharacter||concealed)
+      if(incharacter!=-1||concealed)
       {
          // if(illegal) return -1; else // OK, but busted if you shoot it
             return 0;  // OK
