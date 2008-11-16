@@ -1269,8 +1269,7 @@ void mode_site(void)
             {
                int maxsleightofhand=0;
                int beststealer=0;
-               int i;
-               for(i=0;i<6;i++)
+               for(int i=0;i<6;i++)
                {
                   if(!activesquad->squad[i])
                   {
@@ -1282,7 +1281,7 @@ void mode_site(void)
                      maxsleightofhand=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND];
                   }
                }
-               activesquad->squad[i]->skill_ip[SKILL_SLEIGHTOFHAND]+=5;
+               activesquad->squad[beststealer]->skill_ip[SKILL_SLEIGHTOFHAND]+=5;
                if(!LCSrandom(maxsleightofhand+1))
                {
                   alienationcheck(1);
