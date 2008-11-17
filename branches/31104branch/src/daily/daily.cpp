@@ -1584,7 +1584,7 @@ bool promotesubordinates(creaturest &cr, char &clearformess)
       for(p=0;p<pool.size();p++)
       {
          //Loveslaves lose contact anyway
-         if(pool[p]->hireid==cr.id && p!=newboss && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+         if(pool[p]->hireid==cr.id && p!=newboss && pool[p]->flag & ~CREATUREFLAG_LOVESLAVE)
          {
             pool[p]->hireid=pool[newboss]->id;
          }

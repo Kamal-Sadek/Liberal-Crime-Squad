@@ -47,6 +47,8 @@ int armorst::interrogation_basepower()
    case ARMOR_MILITARY:
    case ARMOR_PRISONGUARD:
       return 6;
+   case ARMOR_DEATHSQUADUNIFORM:
+      return 8;
    }
 }
 
@@ -69,6 +71,8 @@ int armorst::interrogation_assaultbonus()
    case ARMOR_MILITARY:
    case ARMOR_PRISONGUARD:
       return 4;
+   case ARMOR_DEATHSQUADUNIFORM:
+      return 6;
    }
 }
 
@@ -103,6 +107,7 @@ int armorst::professionalism()
    case ARMOR_HEAVYARMOR:
    case ARMOR_SWATARMOR:
    case ARMOR_BONDAGEGEAR:
+   case ARMOR_DEATHSQUADUNIFORM:
       return 1;
    default:
    case ARMOR_BUNKERGEAR:
@@ -138,6 +143,7 @@ bool armorst::faceconcealed()
    case ARMOR_MASK:
    case ARMOR_ELEPHANTSUIT:
    case ARMOR_DONKEYSUIT:
+   case ARMOR_DEATHSQUADUNIFORM:
       return true;
    default:
       return false;

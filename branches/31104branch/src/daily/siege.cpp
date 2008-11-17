@@ -342,419 +342,510 @@ void siegecheck(char canseethings)
          }
       
 
-	//Puzz:  TEST RAIDING.
-	//-----------------------------------------
-		 //This is SO HACKY and bad AND BAD
-		 //that this should not even exist
-		 //But in the end the sieging would be handled by the organizations
-		 //deciding to do it, not here.  So I can't access their private
-		 //variables, so I am just going to loop through their freaking ID's.
+	      //Puzz:  TEST RAIDING.
+	      //-----------------------------------------
+		       //This is SO HACKY and bad AND BAD
+		       //that this should not even exist
+		       //But in the end the sieging would be handled by the organizations
+		       //deciding to do it, not here.  So I can't access their private
+		       //variables, so I am just going to loop through their freaking ID's.
 
-		 //REMOVED THE TEMPORARY MEASURE TEMPORARILY.
+		       //REMOVED THE TEMPORARY MEASURE TEMPORARILY.
 
-    /*for(int count = 0; count < 9; count++)
-	{
-		organization org = gOrgManager.getOrg(count);
-		if(org.type != "" && org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat > 300)
-		{
-		  if(!location[l]->siege.siege&&numpres>0)
-		  {
+          /*for(int count = 0; count < 9; count++)
+	      {
+		      organization org = gOrgManager.getOrg(count);
+		      if(org.type != "" && org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat > 300)
+		      {
+		        if(!location[l]->siege.siege&&numpres>0)
+		        {
 
-			 erase();
-			 set_color(COLOR_WHITE,COLOR_BLACK,1);
+			       erase();
+			       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-			 move(8,1);
-			 char gaspstring[40];
-			 sprintf(gaspstring, "%s are raiding the ", org.name.c_str());
-			 addstr(gaspstring);
-			 addlocationname(location[l]);
-			 addstr("!");
+			       move(8,1);
+			       char gaspstring[40];
+			       sprintf(gaspstring, "%s are raiding the ", org.name.c_str());
+			       addstr(gaspstring);
+			       addlocationname(location[l]);
+			       addstr("!");
 
-			 refresh();
-			 getch();
+			       refresh();
+			       getch();
 
-			 location[l]->siege.siege=1;
-			 location[l]->siege.orgID = org.ID;
-			 location[l]->siege.siegetype=SIEGE_ORG;
-			 location[l]->siege.underattack=1;
-			 location[l]->siege.lights_off=0;
-			 location[l]->siege.cameras_off=0;
-			 org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
-		  }
-		}
-	}*/
-	  //--------------------------------------
+			       location[l]->siege.siege=1;
+			       location[l]->siege.orgID = org.ID;
+			       location[l]->siege.siegetype=SIEGE_ORG;
+			       location[l]->siege.underattack=1;
+			       location[l]->siege.lights_off=0;
+			       location[l]->siege.cameras_off=0;
+			       org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
+		        }
+		      }
+	      }*/
+	        //--------------------------------------
 
-      //OTHER OFFENDABLE ENTITIES
-         //CORPS
-      if(location[l]->heat&&location[l]->siege.timeuntilcorps==-1&&!location[l]->siege.siege&&offended_corps&&!LCSrandom(600)&&numpres>0)
-      {
-         location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
-         // *JDS* CEO sleepers may give a warning before corp raids
-         int ceosleepercount=0;
-         for(int pl=0;pl<pool.size();pl++)
+         //OTHER OFFENDABLE ENTITIES
+            //CORPS
+         if(location[l]->heat&&location[l]->siege.timeuntilcorps==-1&&!location[l]->siege.siege&&offended_corps&&!LCSrandom(600)&&numpres>0)
          {
-            if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-               pool[pl]->type==CREATURE_CORPORATE_CEO)
-            {
-               ceosleepercount++;
-            }
-         }
-         if(LCSrandom(ceosleepercount+1)||!LCSrandom(10))
-         {
-            erase();
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr("You have recieved ");
-            if(ceosleepercount)addstr("a sleeper CEO's warning");
-            else("an anonymous tip");
-            addstr(" that the Corporations");
-            move(9,1);
-            addstr("are hiring mercinaries to attack ");
-            if(ceosleepercount)addstr(location[l]->name);
-            else addstr("the LCS");
-            addstr(".");
-            refresh();
-            getch();
-         }
-      }
-      else if(location[l]->siege.timeuntilcorps>0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
-      else if(location[l]->siege.timeuntilcorps==0&&!location[l]->siege.siege&&offended_corps&&numpres>0)
-      {
-         location[l]->siege.timeuntilcorps=-1;
-         // Corps raid!
-         erase();
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(8,1);
-         addstr("Corporate mercinaries are raiding the ");
-         addlocationname(location[l]);
-         addstr("!");
-
-         refresh();
-         getch();
-
-         location[l]->siege.siege=1;
-         location[l]->siege.siegetype=SIEGE_CORPORATE;
-         location[l]->siege.underattack=1;
-         location[l]->siege.lights_off=0;
-         location[l]->siege.cameras_off=0;
-      }
-      else if(location[l]->siege.timeuntilcorps==0)location[l]->siege.timeuntilcorps=-1; // Silently call off foiled corp raids
-
-         //CONSERVATIVE CRIME SQUAD
-      if(endgamestate>=ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
-      {
-         if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
-         {
-            location[l]->siege.timeuntilccs=LCSrandom(3)+1;
-            // CCS sleepers may give a warning before raids
-            int ccssleepercount=0;
+            location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
+            // *JDS* CEO sleepers may give a warning before corp raids
+            int ceosleepercount=0;
             for(int pl=0;pl<pool.size();pl++)
             {
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-                  (pool[pl]->type==CREATURE_CCS_VIGILANTE || pool[pl]->type==CREATURE_CCS_ARCHCONSERVATIVE ||
-                   pool[pl]->type==CREATURE_CCS_MOLOTOV || pool[pl]->type==CREATURE_CCS_SNIPER))
+                  pool[pl]->type==CREATURE_CORPORATE_CEO)
                {
-                  ccssleepercount++;
+                  ceosleepercount++;
                }
             }
-            if(LCSrandom(ccssleepercount+1)>1)
+            if(LCSrandom(ceosleepercount+1)||!LCSrandom(10))
             {
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr("You have recieved a sleeper warning that the CCS");
+               addstr("You have recieved ");
+               if(ceosleepercount)addstr("a sleeper CEO's warning");
+               else("an anonymous tip");
+               addstr(" that the Corporations");
                move(9,1);
-               addstr(" is gearing up to attack ");
-               addstr(location[l]->name);
+               addstr("are hiring mercinaries to attack ");
+               if(ceosleepercount)addstr(location[l]->name);
+               else addstr("the LCS");
                addstr(".");
                refresh();
                getch();
             }
          }
-         else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
-         else if(location[l]->siege.timeuntilccs==0&&!location[l]->siege.siege&&numpres>0)
+         else if(location[l]->siege.timeuntilcorps>0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
+         else if(location[l]->siege.timeuntilcorps==0&&!location[l]->siege.siege&&offended_corps&&numpres>0)
          {
-            location[l]->siege.timeuntilccs=-1;
-            // CCS raid!
+            location[l]->siege.timeuntilcorps=-1;
+            // Corps raid!
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(8,1);
-            addstr("A screeching truck pulls up to ");
+            addstr("Corporate mercinaries are raiding the ");
             addlocationname(location[l]);
             addstr("!");
 
             refresh();
             getch();
 
-            if(!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
-               !LCSrandom(5))
+            location[l]->siege.siege=1;
+            location[l]->siege.siegetype=SIEGE_CORPORATE;
+            location[l]->siege.underattack=1;
+            location[l]->siege.lights_off=0;
+            location[l]->siege.cameras_off=0;
+         }
+         else if(location[l]->siege.timeuntilcorps==0)location[l]->siege.timeuntilcorps=-1; // Silently call off foiled corp raids
+
+            //CONSERVATIVE CRIME SQUAD
+         if(endgamestate>=ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
+         {
+            if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
             {
-               // CCS Carbombs safehouse!!
-               erase();
-               set_color(COLOR_RED,COLOR_BLACK,1);
-
-               move(8,1);
-               addstr("The truck barrels into the building and explodes massively!");
-
-               refresh();
-               getch();
-
+               location[l]->siege.timeuntilccs=LCSrandom(3)+1;
+               // CCS sleepers may give a warning before raids
+               int ccssleepercount=0;
+               for(int pl=0;pl<pool.size();pl++)
+               {
+                  if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
+                     (pool[pl]->type==CREATURE_CCS_VIGILANTE || pool[pl]->type==CREATURE_CCS_ARCHCONSERVATIVE ||
+                      pool[pl]->type==CREATURE_CCS_MOLOTOV || pool[pl]->type==CREATURE_CCS_SNIPER))
+                  {
+                     ccssleepercount++;
+                  }
+               }
+               if(LCSrandom(ccssleepercount+1)>1)
+               {
+                  erase();
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr("You have recieved a sleeper warning that the CCS");
+                  move(9,1);
+                  addstr(" is gearing up to attack ");
+                  addstr(location[l]->name);
+                  addstr(".");
+                  refresh();
+                  getch();
+               }
+            }
+            else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
+            else if(location[l]->siege.timeuntilccs==0&&!location[l]->siege.siege&&numpres>0)
+            {
+               location[l]->siege.timeuntilccs=-1;
+               // CCS raid!
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               move(0,1);
-               addstr("CCS CAR BOMBING CASUALTY REPORT");
-
-               move(2,1);
-               addstr("KILLED: ");
-               int killed_y = 2;
-               int killed_x = 9;
-
-               move(12,1);
-               addstr("INJURED: ");
-               int injured_y = 12;
-               int injured_x = 10;
-
-               bool killed=0, injured=0;
-
-               for(int i=0;i<pool.size();i++)
-               {
-                  if(pool[i]->location==l)
-                  {
-                     if(LCSrandom(2))
-                     {
-                        int namelength=strlen(pool[i]->name);
-                        pool[i]->blood-=LCSrandom(101-pool[i]->juice/10)+10;
-                        if(pool[i]->blood<0)
-                        {
-                           if(killed_x+namelength>79)
-                           {
-                              killed_y++;
-                              killed_x=1;
-                           }
-                           move(killed_y,killed_x);
-                           pool[i]->alive=0;
-                        }
-                        else
-                        {
-                           if(injured_x+namelength>79)
-                           {
-                              injured_y++;
-                              injured_x=1;
-                           }
-                           move(injured_y,injured_x);
-                        }
-                        set_alignment_color(pool[i]->align,false);
-                        addstr(pool[i]->name);
-                     }
-                  }
-               }
+               move(8,1);
+               addstr("A screeching truck pulls up to ");
+               addlocationname(location[l]);
+               addstr("!");
 
                refresh();
                getch();
+
+               if(!(location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
+                  !LCSrandom(5))
+               {
+                  // CCS Carbombs safehouse!!
+                  erase();
+                  set_color(COLOR_RED,COLOR_BLACK,1);
+
+                  move(8,1);
+                  addstr("The truck barrels into the building and explodes massively!");
+
+                  refresh();
+                  getch();
+
+                  erase();
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+                  move(0,1);
+                  addstr("CCS CAR BOMBING CASUALTY REPORT");
+
+                  move(2,1);
+                  addstr("KILLED: ");
+                  int killed_y = 2;
+                  int killed_x = 9;
+
+                  move(12,1);
+                  addstr("INJURED: ");
+                  int injured_y = 12;
+                  int injured_x = 10;
+
+                  bool killed=0, injured=0;
+
+                  for(int i=0;i<pool.size();i++)
+                  {
+                     if(pool[i]->location==l)
+                     {
+                        if(LCSrandom(2))
+                        {
+                           int namelength=strlen(pool[i]->name);
+                           pool[i]->blood-=LCSrandom(101-pool[i]->juice/10)+10;
+                           if(pool[i]->blood<0)
+                           {
+                              if(killed_x+namelength>79)
+                              {
+                                 killed_y++;
+                                 killed_x=1;
+                              }
+                              move(killed_y,killed_x);
+                              pool[i]->alive=0;
+                           }
+                           else
+                           {
+                              if(injured_x+namelength>79)
+                              {
+                                 injured_y++;
+                                 injured_x=1;
+                              }
+                              move(injured_y,injured_x);
+                           }
+                           set_alignment_color(pool[i]->align,false);
+                           addstr(pool[i]->name);
+                        }
+                     }
+                  }
+
+                  refresh();
+                  getch();
+               }
+               else
+               {
+                  // CCS Raids safehouse
+                  erase();
+                  set_color(COLOR_YELLOW,COLOR_BLACK,1);
+
+                  move(8,1);
+                  addstr("The CCS is attacking the safehouse!");
+
+                  refresh();
+                  getch();
+
+                  location[l]->siege.siege=1;
+                  location[l]->siege.siegetype=SIEGE_CCS;
+                  location[l]->siege.underattack=1;
+                  location[l]->siege.lights_off=0;
+                  location[l]->siege.cameras_off=0;
+               }
+            }
+            else if(location[l]->siege.timeuntilccs==0)location[l]->siege.timeuntilccs=-1; // Silently call off foiled ccs raids
+         }
+
+
+            //CIA
+         if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(600)&&numpres>0)
+         {
+            location[l]->siege.timeuntilcia=LCSrandom(3)+1;
+            // *JDS* agent sleepers may give a warning before cia raids
+            int agentsleepercount=0;
+            for(int pl=0;pl<pool.size();pl++)
+            {
+               if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
+                  pool[pl]->type==CREATURE_AGENT)
+               {
+                  agentsleepercount++;
+               }
+            }
+            if(LCSrandom(agentsleepercount+3)>=3) // Hard for agents to give warning
+            {
+               erase();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr("A sleeper agent has reported that the CIA is planning");
+               move(9,1);
+               addstr("to launch an attack on ");
+               addstr(location[l]->name);
+               addstr(".");
+               refresh();
+               getch();
+            }
+         }
+         else if(location[l]->siege.timeuntilcia>0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
+         else if(location[l]->siege.timeuntilcia==0&&!location[l]->siege.siege&&offended_cia&&numpres>0)
+         {
+            location[l]->siege.timeuntilcia=-1;
+            // CIA raids!
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("Unmarked black vans are surrounding the ");
+            addlocationname(location[l]);
+            addstr("!");
+
+            if(location[l]->compound_walls & COMPOUND_CAMERAS)
+            {
+               move(9,1);
+               addstr("Through some form of high technology, they've managed");
+               move(10,1);
+               addstr("to shut off the lights and the cameras!");
+            }
+            else if(location[l]->compound_walls & COMPOUND_GENERATOR)
+            {
+               move(9,1);
+               addstr("Through some form of high technology, they've managed");
+               move(10,1);
+               addstr("to shut off the lights!");
             }
             else
             {
-               // CCS Raids safehouse
+               move(9,1);
+               addstr("They've shut off the lights!");
+            }
+
+            refresh();
+            getch();
+
+            location[l]->siege.siege=1;
+            location[l]->siege.siegetype=SIEGE_CIA;
+            location[l]->siege.underattack=1;
+            location[l]->siege.lights_off=1;
+            location[l]->siege.cameras_off=1;
+         }
+         else if(location[l]->siege.timeuntilcia==0)location[l]->siege.timeuntilcia=-1; // Silently call off foiled cia raids
+            //HICKS
+         if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
+         {
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("Masses dissatisfied with your lack of respect for AM Radio");
+            move(9,1);
+            addstr("are storming the ");
+            addlocationname(location[l]);
+            addstr("!");
+
+            refresh();
+            getch();
+
+            location[l]->siege.siege=1;
+            location[l]->siege.siegetype=SIEGE_HICKS;
+            location[l]->siege.underattack=1;
+            location[l]->siege.lights_off=0;
+            location[l]->siege.cameras_off=0;
+         }
+         if(!location[l]->siege.siege&&offended_cablenews&&attitude[VIEW_CABLENEWS]<=35&&!LCSrandom(600)&&numpres>0)
+         {
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("Masses dissatisfied with your lack of respect for Cable News");
+            move(9,1);
+            addstr("are storming the ");
+            addlocationname(location[l]);
+            addstr("!");
+
+            refresh();
+            getch();
+
+            location[l]->siege.siege=1;
+            location[l]->siege.siegetype=SIEGE_HICKS;
+            location[l]->siege.underattack=1;
+            location[l]->siege.lights_off=0;
+            location[l]->siege.cameras_off=0;
+         }
+         //Firemen
+         if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
+            offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
+         {
+            location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
+
+            // Sleeper Firemen can warn you of an impending raid
+            int firemensleepercount=0;
+            for(int pl=0;pl<pool.size();pl++)
+            {
+               if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
+                  pool[pl]->type==CREATURE_FIREFIGHTER)
+               {
+                  firemensleepercount++;
+               }
+            }
+            if(LCSrandom(firemensleepercount+1)>0||!LCSrandom(10))
+            {
                erase();
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr("The CCS is attacking the safehouse!");
-
+               if(firemensleepercount)
+               {
+                  addstr("A sleeper Fireman has informed you that");
+               } else
+               {
+                  addstr("Word in the underground is that");
+               }
+               move(9,1);
+               addstr("the Firemen are planning to burn ");
+               addstr(location[l]->name);
+               addstr(".");
                refresh();
                getch();
-
-               location[l]->siege.siege=1;
-               location[l]->siege.siegetype=SIEGE_CCS;
-               location[l]->siege.underattack=1;
-               location[l]->siege.lights_off=0;
-               location[l]->siege.cameras_off=0;
             }
-         }
-         else if(location[l]->siege.timeuntilccs==0)location[l]->siege.timeuntilccs=-1; // Silently call off foiled ccs raids
-      }
 
-
-         //CIA
-      if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(600)&&numpres>0)
-      {
-         location[l]->siege.timeuntilcia=LCSrandom(3)+1;
-         // *JDS* agent sleepers may give a warning before cia raids
-         int agentsleepercount=0;
-         for(int pl=0;pl<pool.size();pl++)
+         } else if(location[l]->siege.timeuntilfiremen>0)location[l]->siege.timeuntilfiremen--;
+         else if(location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
          {
-            if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-               pool[pl]->type==CREATURE_AGENT)
-            {
-               agentsleepercount++;
-            }
-         }
-         if(LCSrandom(agentsleepercount+3)>=3) // Hard for agents to give warning
+            location[l]->siege.timeuntilfiremen=-1;
+            // Firemen raid!
+            erase();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+            move(8,1);
+            addstr("Screaming fire engines pull up to the ");
+            addlocationname(location[l]);
+            addstr("!");
+
+            move(9,1);
+            addstr("Armored firemen swarm out, pilot lights burning.");
+            
+            refresh();
+            getch();
+
+            erase();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(1,1);
+            addstr("You hear a screeching voice over the sound of fire engine sirens:");
+
+            move(3,1);
+            addstr("Surrender yourselves!");
+
+            move(4,1);
+            addstr("Unacceptable Speech has occurred at this location.");
+
+            move(6,1);
+            addstr("Come quietly and you will not be harmed.");
+
+            refresh();
+            getch();
+
+            location[l]->siege.siege=1;
+            location[l]->siege.siegetype=SIEGE_FIREMEN;
+            location[l]->siege.underattack=1;
+            location[l]->siege.lights_off=0;
+            location[l]->siege.cameras_off=0;
+         } 
+         else if(location[l]->siege.timeuntilfiremen==0)
          {
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
+
             move(8,1);
-            addstr("A sleeper agent has reported that the CIA is planning");
-            move(9,1);
-            addstr("to launch an attack on ");
-            addstr(location[l]->name);
-            addstr(".");
+            addstr("The Firemen have raided the ");
+            addlocationname(location[l]);
+            addstr(", an unoccupied safehouse.");
+
             refresh();
             getch();
-         }
-      }
-      else if(location[l]->siege.timeuntilcia>0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
-      else if(location[l]->siege.timeuntilcia==0&&!location[l]->siege.siege&&offended_cia&&numpres>0)
-      {
-         location[l]->siege.timeuntilcia=-1;
-         // CIA raids!
-         erase();
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-         move(8,1);
-         addstr("Unmarked black vans are surrounding the ");
-         addlocationname(location[l]);
-         addstr("!");
+            int y=9;
 
-         if(location[l]->compound_walls & COMPOUND_CAMERAS)
-         {
-            move(9,1);
-            addstr("Through some form of high technology, they've managed");
-            move(10,1);
-            addstr("to shut off the lights and the cameras!");
-         }
-         else if(location[l]->compound_walls & COMPOUND_GENERATOR)
-         {
-            move(9,1);
-            addstr("Through some form of high technology, they've managed");
-            move(10,1);
-            addstr("to shut off the lights!");
-         }
-         else
-         {
-            move(9,1);
-            addstr("They've shut off the lights!");
-         }
-
-         refresh();
-         getch();
-
-         location[l]->siege.siege=1;
-         location[l]->siege.siegetype=SIEGE_CIA;
-         location[l]->siege.underattack=1;
-         location[l]->siege.lights_off=1;
-         location[l]->siege.cameras_off=1;
-      }
-      else if(location[l]->siege.timeuntilcia==0)location[l]->siege.timeuntilcia=-1; // Silently call off foiled cia raids
-         //HICKS
-      if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
-      {
-         erase();
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(8,1);
-         addstr("Masses dissatisfied with your lack of respect for AM Radio");
-         move(9,1);
-         addstr("are storming the ");
-         addlocationname(location[l]);
-         addstr("!");
-
-         refresh();
-         getch();
-
-         location[l]->siege.siege=1;
-         location[l]->siege.siegetype=SIEGE_HICKS;
-         location[l]->siege.underattack=1;
-         location[l]->siege.lights_off=0;
-         location[l]->siege.cameras_off=0;
-      }
-      if(!location[l]->siege.siege&&offended_cablenews&&attitude[VIEW_CABLENEWS]<=35&&!LCSrandom(600)&&numpres>0)
-      {
-         erase();
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(8,1);
-         addstr("Masses dissatisfied with your lack of respect for Cable News");
-         move(9,1);
-         addstr("are storming the ");
-         addlocationname(location[l]);
-         addstr("!");
-
-         refresh();
-         getch();
-
-         location[l]->siege.siege=1;
-         location[l]->siege.siegetype=SIEGE_HICKS;
-         location[l]->siege.underattack=1;
-         location[l]->siege.lights_off=0;
-         location[l]->siege.cameras_off=0;
-      }
-      //Firemen
-      if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
-         offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
-      {
-         location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
-
-         // Sleeper Firemen can warn you of an impending raid
-         int firemensleepercount=0;
-         for(int pl=0;pl<pool.size();pl++)
-         {
-            if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-               pool[pl]->type==CREATURE_FIREFIGHTER)
+            for(int p=pool.size()-1;p>=0;p--)
             {
-               firemensleepercount++;
+               if(pool[p]->location!=l)continue;
+               if(!pool[p]->alive)
+               {
+                  move(y,1);y++;
+                  addstr(pool[p]->name);
+                  addstr("'s corpse has been recovered.");
+                  refresh();
+                  getch();
+
+                  delete pool[p];
+                  if(pool[p]->align==1)
+                  {
+                     int boss=getpoolcreature(pool[p]->hireid);
+                     if(boss!=-1&&pool[boss]->juice>50)
+                     {
+                        int juice=pool[boss]->juice-50;
+                        if(juice>10)juice=10;
+                        addjuice(*pool[boss],-juice);
+                     }
+                  }
+                  pool.erase(pool.begin() + p);
+                  continue;
+               }
+               if(pool[p]->align!=1)
+               {
+                  move(y,1);y++;
+                  addstr(pool[p]->name);
+                  addstr(" has been rescued.");
+                  refresh();
+                  getch();
+
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+                  continue;
+               }
+            }
+            for(int l2=0;l2<location[l]->loot.size();l2++)
+            {
+               delete location[l]->loot[l2];
+            }
+            location[l]->loot.clear();
+
+            if(location[l]->compound_walls & COMPOUND_PRINTINGPRESS)
+            {
+               move(10,1);
+               addstr("The printing press is dismantled and burned.");
+               location[l]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+            }
+
+            if(location[l]->front_business!=-1)
+            {
+               move(12,1);
+               addstr("Materials relating to the business front have been destroyed.");
+               location[l]->front_business=-1;
             }
          }
-         if(LCSrandom(firemensleepercount+1)>1||!LCSrandom(10))
-         {
-            erase();
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            if(firemensleepercount)
-            {
-               addstr("A sleeper Fireman has informed you that");
-            } else
-            {
-               addstr("Word in the underground is that");
-            }
-            move(9,1);
-            addstr("the Firemen are planning to burn ");
-            addstr(location[l]->name);
-            addstr(".");
-            refresh();
-            getch();
-         }
-
-      } else if(location[l]->siege.timeuntilfiremen>0)location[l]->siege.timeuntilfiremen--;
-      else if(location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege)
-      {
-         location[l]->siege.timeuntilfiremen=-1;
-         // Firemen raid!
-         erase();
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(8,1);
-         addstr("Screaming fire engines pull up to the ");
-         addlocationname(location[l]);
-         addstr("!");
-
-         move(9,1);
-         addstr("Armored firemen swarm out, pilot lights burning.");
-
-         refresh();
-         getch();
-
-         location[l]->siege.siege=1;
-         location[l]->siege.siegetype=SIEGE_FIREMEN;
-         location[l]->siege.underattack=1;
-         location[l]->siege.lights_off=0;
-         location[l]->siege.cameras_off=0;
-      } else if(location[l]->siege.timeuntilfiremen==0) location[l]->siege.timeuntilfiremen=-1; // Silently call off foiled firemen raids
-   }
+      }
    }
 }
 
@@ -1345,7 +1436,8 @@ void giveup(void)
    if(location[loc]->renting>1)location[loc]->renting=-1;
 
    //IF POLICE, END SIEGE
-   if(location[loc]->siege.siegetype==SIEGE_POLICE)
+   if(location[loc]->siege.siegetype==SIEGE_POLICE ||
+      location[loc]->siege.siegetype==SIEGE_FIREMEN)
    {
       int polsta=-1;
       for(int l=0;l<location.size();l++)
@@ -1362,7 +1454,11 @@ void giveup(void)
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(1,1);
-      addstr("The police confiscate everything, including Squad weapons.");
+      if(location[loc]->siege.siegetype==SIEGE_POLICE)
+         addstr("The police");
+      else
+         addstr("The firemen");
+      addstr(" confiscate everything, including Squad weapons.");
 
       int kcount=0;
       int pcount=0;
@@ -1392,6 +1488,15 @@ void giveup(void)
       //CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
       if(kcount>0)criminalizepool(LAWFLAG_KIDNAPPING,-1,loc);
       if(icount>0)criminalizepool(LAWFLAG_HIREILLEGAL,-1,loc);
+
+      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
+      {
+         if(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
+         {
+            // Criminalize pool for unacceptable speech
+            if(icount>0)criminalizepool(LAWFLAG_SPEECH,-1,loc);
+         }
+      }
 
       //LOOK FOR PRISONERS (MUST BE AFTER CRIMINALIZATION ABOVE)
       for(p=pool.size()-1;p>=0;p--)
@@ -1438,7 +1543,7 @@ void giveup(void)
       }
       if(funds>0)
       {
-         if(funds<=10000)
+         if(funds<=10000 || location[loc]->siege.siegetype==SIEGE_FIREMEN)
          {
             move(8,1);
             addstr("Fortunately, your funds remain intact.");
@@ -1454,11 +1559,26 @@ void giveup(void)
             moneylost_confiscated +=confiscated;
          }
       }
-      if(location[loc]->compound_walls)
+      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
       {
-         move(10,1);
-         addstr("The compound is dismantled.");
-         location[loc]->compound_walls=0;
+         if(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS)
+         {
+            // Criminalize pool for unacceptable speech
+            if(icount>0)criminalizepool(LAWFLAG_SPEECH,-1,loc);
+
+            move(10,1);
+            addstr("The printing press is dismantled and burned.");
+            location[loc]->compound_walls &= ~COMPOUND_PRINTINGPRESS;
+         }
+      }
+      else
+      {
+         if(location[loc]->compound_walls)
+         {
+            move(10,1);
+            addstr("The compound is dismantled.");
+            location[loc]->compound_walls=0;
+         }
       }
       if(location[loc]->front_business!=-1)
       {
@@ -1471,6 +1591,8 @@ void giveup(void)
       getch();
 
       location[loc]->siege.siege=0;
+      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
+         offended_firemen=0; // Firemen do not hold grudges
 
       char clearformess=1;
 
@@ -1563,13 +1685,6 @@ void giveup(void)
       addstr("Everyone in the ");
       addlocationname(location[loc]);
       addstr(" is slain.");
-      if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
-      {
-         location[loc]->compound_walls&=~COMPOUND_PRINTINGPRESS;
-         offended_firemen=0;  //Firemen do not hold grudges.
-         move(2,1);
-         addstr("The printing press is destroyed.");
-      }
       refresh();
       getch();
 

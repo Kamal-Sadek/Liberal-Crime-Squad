@@ -94,8 +94,8 @@ void setpriority(newsstoryst &ns)
          ns.priority+=crime[CRIME_BREAK_SWEATSHOP  ] *   2;
          ns.priority+=crime[CRIME_BREAK_FACTORY    ] *   2;
          ns.priority+=crime[CRIME_FREE_RABBITS     ] *   2;
-         ns.priority+=crime[CRIME_STOLEGROUND      ];
-         ns.priority+=crime[CRIME_BROKEDOWNDOOR    ];
+         //ns.priority+=crime[CRIME_STOLEGROUND      ];
+         //ns.priority+=crime[CRIME_BROKEDOWNDOOR    ];
 
          // Add additional priority based on the type of news story
          // and how high profile the LCS is
@@ -1352,6 +1352,7 @@ void majornewspaper(char &clearformess,char canseethings)
          }
       }
 
+      // Suppress news about sieges that aren't police actions
       if((newsstory[n]->type==NEWSSTORY_SQUAD_ESCAPED||
          newsstory[n]->type==NEWSSTORY_SQUAD_FLEDATTACK||
          newsstory[n]->type==NEWSSTORY_SQUAD_DEFENDED||
@@ -1563,6 +1564,15 @@ void majornewspaper(char &clearformess,char canseethings)
       for(n=0;n<newsstory.size();n++)
       {
          setpriority(*newsstory[n]);
+         // Suppress squad actions that aren't worth a story
+         if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
+            (newsstory[n]->priority==0 &&
+            newsstory[n]->claimed==false))
+         {
+            delete newsstory[n];
+            newsstory.erase(newsstory.begin() + n);
+            continue;
+         }
          newsstory[n]->page=-1;
       }
       char acted;

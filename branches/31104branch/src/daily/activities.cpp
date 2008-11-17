@@ -413,13 +413,16 @@ void survey(creaturest *cr)
    for(v=0;v<VIEWNUM;v++)
    {
       survey[v]=attitude[v];
-      if(maxview!=-1)
+      if(v!=VIEW_LIBERALCRIMESQUAD&&v!=VIEW_LIBERALCRIMESQUADPOS)
       {
-         if(public_interest[v]>public_interest[maxview])maxview=v;
-      }
-      else
-      {
-         if(public_interest[v]>0)maxview=v;
+         if(maxview!=-1)
+         {
+            if(public_interest[v]>public_interest[maxview])maxview=v;
+         }
+         else
+         {
+            if(public_interest[v]>0)maxview=v;
+         }
       }
 
       //MAKE SURVEY ACCURATE IF DEBUGGING
@@ -628,7 +631,7 @@ void survey(creaturest *cr)
       //Draw each line
       for(v=page*SURVEY_PAGE_SIZE;v<(page+1)*SURVEY_PAGE_SIZE;v++)
       {
-         if(v>=VIEWNUM)
+         if(v>=VIEWNUM || (v==VIEW_CONSERVATIVECRIMESQUAD && (endgamestate>=ENDGAME_CCS_DEFEATED||newscherrybusted<2)))
          {
             move(y++,0);
             addstr("                                                                                ");
@@ -984,8 +987,12 @@ void funds_and_trouble(char &clearformess)
 
          if(tshirts[s]->skill[SKILL_GARMENTMAKING]<4)
             tshirts[s]->skill_ip[SKILL_GARMENTMAKING]+=LCSrandom(5)+2;
+         else
+            tshirts[s]->skill_ip[SKILL_GARMENTMAKING]+=LCSrandom(3)+1;
          if(tshirts[s]->skill[SKILL_BUSINESS]<4)
-            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(5)+2;
+            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+         else
+            tshirts[s]->skill_ip[SKILL_BUSINESS]+=1;
       }
    }
 
@@ -1035,8 +1042,12 @@ void funds_and_trouble(char &clearformess)
 
          if(art[s]->skill[SKILL_ART]<4)
             art[s]->skill_ip[SKILL_ART]+=LCSrandom(5)+2;
-         if(art[s]->skill[SKILL_BUSINESS]<4)
-            art[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(5)+2;
+         else
+            art[s]->skill_ip[SKILL_ART]+=LCSrandom(3)+1;
+         if(tshirts[s]->skill[SKILL_BUSINESS]<4)
+            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+         else
+            tshirts[s]->skill_ip[SKILL_BUSINESS]+=1;
       }
    }
 
@@ -1061,6 +1072,8 @@ void funds_and_trouble(char &clearformess)
 
          if(music[s]->skill[SKILL_MUSIC]<4)
             music[s]->skill_ip[SKILL_MUSIC]+=LCSrandom(5)+2;
+         else
+            music[s]->skill_ip[SKILL_MUSIC]+=LCSrandom(3)+1;
       }
    }
 
@@ -1076,10 +1089,26 @@ void funds_and_trouble(char &clearformess)
       funds+=money;
       stat_funds+=money;
       moneygained_brownies+=money;
-      if(brownies[s]->skill[SKILL_PERSUASION]<5)
-         brownies[s]->skill_ip[SKILL_PERSUASION]+=LCSrandom(5)+2;
+      // Make the sale
+      if(brownies[s]->skill[SKILL_PERSUASION]<4)
+         brownies[s]->skill_ip[SKILL_PERSUASION]+=LCSrandom(3)+1;
+      else
+         brownies[s]->skill_ip[SKILL_PERSUASION]+=1;
+      // Know the streets
       if(brownies[s]->skill[SKILL_STREETSENSE]<5)
          brownies[s]->skill_ip[SKILL_STREETSENSE]+=LCSrandom(5)+2;
+      else
+         brownies[s]->skill_ip[SKILL_STREETSENSE]+=LCSrandom(3)+1;
+      // The ways of the businessman
+      if(brownies[s]->skill[SKILL_BUSINESS]<4)
+         brownies[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+      else
+         brownies[s]->skill_ip[SKILL_BUSINESS]+=1;
+      // Baking brownies
+      if(brownies[s]->skill[SKILL_COOKING]<2)
+         brownies[s]->skill_ip[SKILL_COOKING]+=LCSrandom(3)+1;
+      else
+         brownies[s]->skill_ip[SKILL_COOKING]+=1;
 
       //Check for police search
       dodgelawroll=LCSrandom(100);
@@ -1566,7 +1595,7 @@ void funds_and_trouble(char &clearformess)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(music[s]->name);
+            addstr(graffiti[s]->name);
             addstr(" needs a spraycan equipped to do graffiti.");
             music[s]->activity.type=ACTIVITY_NONE;
             refresh();
@@ -1732,7 +1761,10 @@ void funds_and_trouble(char &clearformess)
       addstr(num);
       addstr("!");
 
-      addjuice(*prostitutes[p],-!LCSrandom(3));
+      if(!LCSrandom(3))
+      {
+         addjuice(*prostitutes[p],-!LCSrandom(3));
+      }
       prostitutes[p]->skill_ip[SKILL_SEDUCTION]+=max(10-prostitutes[p]->skill[SKILL_SEDUCTION],0);
 
       refresh();

@@ -110,7 +110,7 @@ void passmonth(char &clearformess,char canseethings)
    int conspower=200-attitude[VIEW_AMRADIO]-attitude[VIEW_CABLENEWS];
    
    //HAVING SLEEPERS
-   for(int pl=0;pl<pool.size();pl++)
+   for(int pl=pool.size()-1;pl!=0;pl--)
    {
       if(pool[pl]->alive&&(pool[pl]->flag & CREATUREFLAG_SLEEPER))
       {
@@ -281,13 +281,6 @@ void passmonth(char &clearformess,char canseethings)
    //CONGRESS
    if(month==3){congress(clearformess,canseethings);clearformess=1;}
    if(month==9){congress(clearformess,canseethings);clearformess=1;}
-
-   //REAGANIFY?
-   if(publicmood(-1)<=8)
-   {
-      reaganify(canseethings);
-      clearformess=1;
-   }
 
    //DID YOU WIN?
    if(wincheck())
@@ -504,32 +497,83 @@ void passmonth(char &clearformess,char canseethings)
 
 
 
-/* rename prison according to the new laws (add more buildings to this) */
+/* rename various buildings according to the new laws */
 void updateworld_laws(short *law,short *oldlaw)
 {
-   //RENAME PRISONS
-   if(law[LAW_DEATHPENALTY]==-2&&
-      law[LAW_POLICEBEHAVIOR]==-2&&
-      (oldlaw[LAW_DEATHPENALTY]>-2||
-      oldlaw[LAW_POLICEBEHAVIOR]>-2))
+   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
+      law[LAW_DEATHPENALTY]!=oldlaw[LAW_DEATHPENALTY])
    {
       for(int l=0;l<location.size();l++)
       {
-         if(location[l]->type==SITE_GOVERNMENT_PRISON)
+         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
+         {
+            initlocation(*location[l]);
+         }
+         if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
          {
             initlocation(*location[l]);
          }
       }
    }
-   //RENAME CAMPS
-   else if(oldlaw[LAW_DEATHPENALTY]==-2&&
-      oldlaw[LAW_POLICEBEHAVIOR]==-2&&
-      (law[LAW_DEATHPENALTY]>-2||
-      law[LAW_POLICEBEHAVIOR]>-2))
+
+   if((law[LAW_POLICEBEHAVIOR]==-2||oldlaw[LAW_POLICEBEHAVIOR]==-2)&&
+      law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR])
    {
       for(int l=0;l<location.size();l++)
       {
-         if(location[l]->type==SITE_GOVERNMENT_PRISON)
+         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
+         {
+            initlocation(*location[l]);
+         }
+         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
+
+   if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
+      law[LAW_FREESPEECH]!=oldlaw[LAW_FREESPEECH])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
+
+   if((law[LAW_PRIVACY]==-2||oldlaw[LAW_PRIVACY]==-2)&&
+      law[LAW_PRIVACY]!=oldlaw[LAW_PRIVACY])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or min. of love?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
+
+   if((law[LAW_CORPORATE]==-2||oldlaw[LAW_CORPORATE]==-2)&&
+      law[LAW_CORPORATE]!=oldlaw[LAW_CORPORATE])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
+
+   if((law[LAW_TAX]==-2||oldlaw[LAW_TAX]==-2)&&
+      law[LAW_TAX]!=oldlaw[LAW_TAX])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
          {
             initlocation(*location[l]);
          }

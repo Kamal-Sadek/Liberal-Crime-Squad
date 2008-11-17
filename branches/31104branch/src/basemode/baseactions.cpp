@@ -672,7 +672,7 @@ char liberalagenda(char won)
          case LAW_FREESPEECH:
             if(won==-1)addstr("Unacceptable speech is a capital crime.");
             else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-               addstr("Speech is routinely suppressed.");
+               addstr("Armored squads are tasked with suppressing unacceptable speach.");
             else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
             else if(law[l]==0)addstr("Free speech is tolerated.");
             else if(law[l]==1)addstr("Free speech is encouraged.");
@@ -708,10 +708,10 @@ char liberalagenda(char won)
    }
    int lsum=housemake[3]+housemake[4]
       -housemake[0]-housemake[1];
-   if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
-   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-   else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-   else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
+   if(housemake[0]+housemake[1]/2>=290)set_color(COLOR_RED,COLOR_BLACK,1);
+   else if(lsum<-90)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+   else if(lsum<90)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   else if(housemake[4]+housemake[3]/2<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
    else set_color(COLOR_GREEN,COLOR_BLACK,1);
    char num[20];
    if(won!=-1)
@@ -737,10 +737,10 @@ char liberalagenda(char won)
    }
    lsum=senatemake[3]+senatemake[4]
       -senatemake[0]-senatemake[1];
-   if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
-   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+   if(senatemake[0]+senatemake[1]/2>=67)set_color(COLOR_RED,COLOR_BLACK,1);
+   else if(lsum<-33)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
    else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-   else if(senatemake[4]<51)set_color(COLOR_BLUE,COLOR_BLACK,1);
+   else if(senatemake[4]+senatemake[3]/2<66)set_color(COLOR_BLUE,COLOR_BLACK,1);
    else set_color(COLOR_GREEN,COLOR_BLACK,1);
    if(won!=-1)
    {
@@ -1024,7 +1024,7 @@ void investlocation(void)
 
       if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
-         if(funds>=5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(funds>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,1);
          addstr("P - Buy a Printing Press ($3000)");

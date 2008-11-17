@@ -41,10 +41,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.16.1"
+#define PACKAGE_VERSION "3.16.2"
 #endif
 
-const unsigned long version=31601;
+const unsigned long version=31602;
 const unsigned long lowestloadversion=31601;
 const unsigned long lowestloadscoreversion=31203;
 
@@ -691,6 +691,7 @@ enum Armors
    ARMOR_BUNKERGEAR,
    ARMOR_ELEPHANTSUIT,
    ARMOR_DONKEYSUIT,
+   ARMOR_DEATHSQUADUNIFORM,
    ARMORNUM
 };
 
@@ -1246,6 +1247,8 @@ struct vehiclest
 enum CarChaseObstacles
 {
    CARCHASE_OBSTACLE_FRUITSTAND,
+   CARCHASE_OBSTACLE_TRUCKPULLSOUT,
+   CARCHASE_OBSTACLE_CROSSTRAFFIC,
    CARCHASE_OBSTACLENUM
 };
 
@@ -1451,6 +1454,7 @@ struct newsstoryst
 {
    short type;
    short view;
+   bool claimed;
    creaturest *cr;
    vector<int> crime;
    long loc,priority,page,guardianpage;
@@ -1458,6 +1462,7 @@ struct newsstoryst
    short siegetype;
    newsstoryst()
    {
+      claimed=false;
       cr=NULL;
    }
 };

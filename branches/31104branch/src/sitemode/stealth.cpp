@@ -568,6 +568,10 @@ char weaponcheck(creaturest &cr,short type)
       {
          incharacter=CREATURE_SOLDIER;
       }
+      if(cr.armor.type==ARMOR_DEATHSQUADUNIFORM)
+      {
+         incharacter=CREATURE_DEATHSQUAD;
+      }
       break;
    case WEAPON_AXE:
       if(cr.armor.type==ARMOR_BUNKERGEAR)
@@ -720,6 +724,8 @@ char hasdisguise(creaturest &cr,short type)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                uniformed=0;
+               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+                  cr.armor.type==ARMOR_DEATHSQUADUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
             }
@@ -738,6 +744,8 @@ char hasdisguise(creaturest &cr,short type)
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
                if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+                  cr.armor.type==ARMOR_DEATHSQUADUNIFORM)uniformed=1;
             }
             break;
          case SITE_GOVERNMENT_PRISON:

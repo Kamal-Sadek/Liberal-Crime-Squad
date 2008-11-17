@@ -556,7 +556,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          strcat(str,"slashes at");break;
       case WEAPON_AXE:
          strcat(str,"chops at");break;
-      case WEAPON_SYRINGE:strcat(str,"pokes at");break;
+      case WEAPON_SYRINGE:
+         strcat(str,"pokes at");break;
       case WEAPON_REVOLVER_22:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
@@ -567,11 +568,9 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_AUTORIFLE_M16:
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_SHOTGUN_PUMP:
-      {
          if(a.weapon.ammo>0)strcat(str,"shoots at");
          else strcat(str,"swings at");
          break;
-      }
       case WEAPON_MOLOTOV:
          strcat(str,"hurls a molotv at");
          break;
@@ -650,13 +649,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(droll<0)droll=0;
 
    // Harder to hit people during a chase: 5 points for being on the
-   // move, 5-10 points for having to hit them in the car, depending
+   // move, 3-7 points for having to hit them in the car, depending
    // on which side is shooting. Your side has the advantage, since
    // you're leading the chase.
    if(mode==GAMEMODE_CHASECAR)
    {
-      if(a.align==-1)droll+=10;
-      else droll+=5;
+      if(a.align==-1)droll+=7;
+      else droll+=3;
    }
    if(mode==GAMEMODE_CHASEFOOT)droll+=5;
 
@@ -819,8 +818,27 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             case BODYPART_BODY:strcat(str,"body");break;
             case BODYPART_ARM_RIGHT:strcat(str,"right arm");break;
             case BODYPART_ARM_LEFT:strcat(str,"left arm");break;
-            case BODYPART_LEG_RIGHT:strcat(str,"right leg");break;
-            case BODYPART_LEG_LEFT:strcat(str,"left leg");break;
+            case BODYPART_LEG_RIGHT:
+               if(mode!=GAMEMODE_CHASECAR)
+               {
+                  strcat(str,"right leg");
+               }
+               else
+               {
+                  strcat(str,"car");
+                  aroll=-20;
+               }
+               break;
+            case BODYPART_LEG_LEFT:
+               if(mode!=GAMEMODE_CHASECAR)
+               {
+                  strcat(str,"left leg");
+               }
+               else
+               {
+                  strcat(str,"car");
+               }
+               break;
          }
       }
 
@@ -1187,6 +1205,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          getch();
       }
       #endif
+
+      if(mode==GAMEMODE_CHASECAR && (w & (BODYPART_LEG_LEFT|BODYPART_LEG_RIGHT)))
+      {
+         damamount=0; // no damage to shots to the car body
+      }
 
       if(damamount>0)
       {
@@ -2284,6 +2307,7 @@ void armordamage(armorst &armor,int bp)
       case ARMOR_SWATARMOR:
       case ARMOR_SECURITYUNIFORM:
       case ARMOR_POLICEUNIFORM:
+      case ARMOR_DEATHSQUADUNIFORM:
       case ARMOR_BONDAGEGEAR:
       case ARMOR_MILITARY:
       case ARMOR_BUNKERGEAR:

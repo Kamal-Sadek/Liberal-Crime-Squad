@@ -401,9 +401,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             pool.push_back(r.recruit);
             stat_recruits++;
 
-            refresh();
-            getch();
-
             return 1;
          }
          else

@@ -709,7 +709,7 @@ void mode_base(void)
          {
             stopevil();
          }
-         else
+         else if(sieged)
          {
             escape_engage();
             cleangonesquads();

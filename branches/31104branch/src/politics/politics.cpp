@@ -2078,9 +2078,13 @@ void congress(char clearformess,char canseethings)
       }
    }
 
-   if(housemake[4]>=290&&senatemake[4]>=67&&tossj)
+   if(housemake[4]+housemake[3]/2>=290&&senatemake[4]+senatemake[3]/2>=67&&tossj)
    {
       tossjustices(canseethings);
+   }
+   if(housemake[0]+housemake[1]/2>=290&&senatemake[0]+senatemake[1]/2>=67)
+   {
+      reaganify(canseethings);
    }
 }
 
@@ -2104,14 +2108,14 @@ char wincheck(void)
    {
       housemake[house[h]+2]++;
    }
-   if(housemake[4]<290)return 0;
+   if(housemake[4]+housemake[3]/2<290)return 0;
 
    int senatemake[5]={0,0,0,0,0};
    for(int s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
-   if(senatemake[4]<67)return 0;
+   if(senatemake[4]+senatemake[3]/2<67)return 0;
 
    int elibjudge=0;
    for(int c=0;c<9;c++)

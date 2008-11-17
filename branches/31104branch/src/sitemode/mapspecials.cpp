@@ -876,6 +876,8 @@ void special_graffiti(void)
    move(16,1);
    addstr("The squad sprays Liberal Graffiti!");
 
+   sitestory->claimed=true;
+
    refresh();
    getch();
 

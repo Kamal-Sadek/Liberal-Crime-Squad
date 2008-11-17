@@ -243,22 +243,6 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
       case CREATURE_SWAT:
       case CREATURE_COP:
       case CREATURE_GANGUNIT:
-         // Cops can leak police files to you
-         if(!LCSrandom(70)&&!location[homes]->siege.siege&&canseethings)
-         {
-            itemst *it=new itemst;
-            it->type=ITEM_LOOT;
-            it->loottype=LOOT_POLICERECORDS;
-            location[homes]->loot.push_back(it);
-
-            erase();
-            move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has leaked secret police records.");
-            move(7,1);
-            addstr("They are stashed at the homeless shelter.");
-         }
          libpower[VIEW_POLICEBEHAVIOR]+=power;
          break;
       /* Prison block */
@@ -323,6 +307,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
       if(location[homes]->type == SITE_RESIDENTIAL_SHELTER)break;
    }
 
+   bool pause=false;
    switch(cr.type)
    {
    case CREATURE_AGENT:
@@ -342,6 +327,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked secret intelligence files.");
          move(7,1);
          addstr("They are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_DEATHSQUAD:
@@ -364,6 +350,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked secret police records.");
          move(7,1);
          addstr("They are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_CORPORATE_MANAGER:
@@ -384,6 +371,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked secret corporate documents.");
          move(7,1);
          addstr("They are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_EDUCATOR:
@@ -403,6 +391,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked internal prison records.");
          move(7,1);
          addstr("They are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_NEWSANCHOR:
@@ -424,6 +413,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked proof of systemic Cable News bias.");
          move(7,1);
          addstr("The papers are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_RADIOPERSONALITY:
@@ -445,6 +435,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked proof of systemic AM Radio bias.");
          move(7,1);
          addstr("The papers are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_SCIENTIST_LABTECH:
@@ -464,6 +455,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked internal animal research reports.");
          move(7,1);
          addstr("They are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    case CREATURE_JUDGE_CONSERVATIVE:
@@ -482,11 +474,15 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has leaked proof of corruption in the judiciary.");
          move(7,1);
          addstr("The papers are stashed at the homeless shelter.");
+         pause=true;
       }
       break;
    }
-   refresh();
-   getch();
+   if(pause)
+   {
+      refresh();
+      getch();
+   }
    cr.juice+=10;
 }
 

@@ -2261,7 +2261,7 @@ void resolvesite(void)
          }
       }
    }
-   else if(sitealarm==1&&location[cursite]->renting<=-1)
+   else if(sitealarm==1&&sitecrime>10&&location[cursite]->renting<=-1)
    {
       if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
          !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&

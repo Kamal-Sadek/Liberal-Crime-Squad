@@ -282,20 +282,20 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_ART:
    case SKILL_MUSIC:
    case SKILL_COOKING:
-      return (2*cr.attval(ATTRIBUTE_HEART)+cr.attval(ATTRIBUTE_AGILITY))/3;
+      return cr.attval(ATTRIBUTE_HEART);
    case SKILL_WRITING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_HEART))/2;
    case SKILL_RELIGION:
-      return (2*cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_HEART))/3;
+      return (cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_HEART))/2;
    case SKILL_BUSINESS:
-      return (cr.attval(ATTRIBUTE_CHARISMA)+cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_INTELLIGENCE))/3;
-   case SKILL_MEDICAL:
+      return (cr.attval(ATTRIBUTE_WISDOM)+cr.attval(ATTRIBUTE_INTELLIGENCE))/2;
    case SKILL_SECURITY:
    case SKILL_GARMENTMAKING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_AGILITY))/2;
    case SKILL_INTERROGATION:
    case SKILL_TEACHING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_CHARISMA))/2;
+   case SKILL_MEDICAL:
    case SKILL_SCIENCE:
    case SKILL_LAW:
    case SKILL_COMPUTERS:
@@ -756,7 +756,7 @@ int subordinatesleft(const creaturest& cr)
    for(int p=0; p<pool.size(); p++)
    {
       // ignore seduced and brainwashed characters
-      if(pool[p]->hireid == cr.id && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
+      if(pool[p]->hireid == cr.id && pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
          recruitcap--;
    }
    if(recruitcap > 0) return recruitcap;

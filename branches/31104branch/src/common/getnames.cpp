@@ -140,6 +140,7 @@ void getactivity(char *str,activityst &act)
          break;
       case ACTIVITY_CLINIC:
          strcat(str,"Going to Free CLINIC");
+         break;
       case ACTIVITY_SLEEPER_LIBERAL:
          strcat(str,"Promoting Liberalism");
          break;
@@ -446,6 +447,7 @@ void getarmor(char *str,int type,int subtype)
       case ARMOR_ARMYARMOR:            strcpy(str,"Army BodyArmor");break;
       case ARMOR_HEAVYARMOR:           strcpy(str,"HeavyBodyArmor");break;
       case ARMOR_BUNKERGEAR:           strcpy(str,"Bunker Gear");break;
+      case ARMOR_DEATHSQUADUNIFORM:    strcpy(str,"DSquad Uniform");break;
    }
 }
 
@@ -545,6 +547,7 @@ void getarmorfull(char *str,int type,int subtype)
       case ARMOR_CIVILLIANARMOR:                strcpy(str,"Body Armor");break;
       case ARMOR_HEAVYARMOR:   strcpy(str,"Heavy Body Armor");break;
       case ARMOR_BUNKERGEAR:           strcpy(str,"Bunker Gear");break;
+      case ARMOR_DEATHSQUADUNIFORM:    strcpy(str,"Death Squad Uniform");break;
    }
 }
 

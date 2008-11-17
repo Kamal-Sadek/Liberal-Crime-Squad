@@ -2366,6 +2366,7 @@ unsigned long fencevalue(itemst &it)
             case ARMOR_WORKCLOTHES:fenceamount=20;break;
             case ARMOR_SECURITYUNIFORM:fenceamount=80;break;
             case ARMOR_POLICEUNIFORM:fenceamount=80;break;
+            case ARMOR_DEATHSQUADUNIFORM:fenceamount=80;break;
             case ARMOR_CHEAPSUIT:fenceamount=100;break;
             case ARMOR_EXPENSIVESUIT:fenceamount=600;break;
             case ARMOR_BLACKSUIT:fenceamount=120;break;

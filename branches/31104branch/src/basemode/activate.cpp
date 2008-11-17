@@ -331,9 +331,9 @@ void activate(creaturest *cr)
          move(12,40);
          addstr("3 - Steal Credit Card Numbers");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
+         /*set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
          move(13,40);
-         addstr("4 - Electronic Protection Racket");
+         addstr("4 - Electronic Protection Racket");*/
          break;
       case 'd':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
@@ -603,7 +603,7 @@ void activate(creaturest *cr)
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
             case '2':cr->activity.type=ACTIVITY_PROSTITUTION;break;
             case '3':cr->activity.type=ACTIVITY_CCFRAUD;break;
-            case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
+            //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             default:
                if(cr->skill[SKILL_COMPUTERS]>1)
                {
@@ -1131,6 +1131,10 @@ void select_makeclothing(creaturest *cr)
          case ARMOR_ARMYARMOR:
          case ARMOR_HEAVYARMOR:
             break;
+         case ARMOR_DEATHSQUADUNIFORM:
+            if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2)
+               armortype.push_back(a);
+            break;
          default:
             armortype.push_back(a);
             break;
@@ -1283,10 +1287,13 @@ long armor_makedifficulty(int type,creaturest *cr)
       case ARMOR_PRISONGUARD:
       case ARMOR_MILITARY:
       case ARMOR_POLICEUNIFORM:
+      case ARMOR_DEATHSQUADUNIFORM:
          basedif=5;
          break;
       case ARMOR_CHEAPSUIT:
       case ARMOR_CIVILLIANARMOR:
+      case ARMOR_DONKEYSUIT:
+      case ARMOR_ELEPHANTSUIT:
          basedif=6;
          break;
       case ARMOR_BLACKSUIT:
@@ -1343,6 +1350,7 @@ long armor_makeprice(int type)
       case ARMOR_PRISONGUARD:
       case ARMOR_MILITARY:
       case ARMOR_POLICEUNIFORM:
+      case ARMOR_DEATHSQUADUNIFORM:
          price=40;
          break;
       case ARMOR_CHEAPSUIT:
@@ -1357,6 +1365,7 @@ long armor_makeprice(int type)
       case ARMOR_ELEPHANTSUIT:
       case ARMOR_DONKEYSUIT:
          price=300;
+         break;
       case ARMOR_BUNKERGEAR:
       case ARMOR_CIVILLIANARMOR:
          price=500;

@@ -1208,7 +1208,7 @@ void promoteliberals(void)
                break;
             }
          }
-         if(p2==pool.size())addstr("<LCS Founder>");
+         if(p2==pool.size())addstr("<LCS Leader>");
 
          move(y,4+level[p]);
          printname(*temppool[p]);

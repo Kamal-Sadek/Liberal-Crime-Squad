@@ -623,7 +623,7 @@ void makecreature(creaturest &cr,short type)
          cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
-         cr.armor.type=ARMOR_ARMYARMOR;
+         cr.armor.type=ARMOR_DEATHSQUADUNIFORM;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
          cr.infiltration=0.5 + 0.1*LCSrandom(4);
@@ -651,6 +651,7 @@ void makecreature(creaturest &cr,short type)
             cr.clip[CLIP_GASOLINE]=3;
             sk=LCSrandom(3)+2;cr.skill[SKILL_FLAMETHROWER]=sk;randomskills-=sk;
             strcpy(cr.name,"Fireman");
+            cr.align=-1;
          } else
          {
             cr.weapon.type=WEAPON_AXE;
@@ -679,7 +680,6 @@ void makecreature(creaturest &cr,short type)
             }
          }
 
-         cr.align=-1;
          cr.infiltration=0.1*LCSrandom(4);
          cr.age=AGE_MATURE;
          for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=25;

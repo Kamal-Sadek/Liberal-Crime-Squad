@@ -501,13 +501,13 @@ void printnews(short l,short newspaper)
             case 0:addstr("calling their news 'the vanguard of Conservative thought'.");break;
             case 1:addstr("mandating negative coverage of Liberal politicians.");break;
             case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
-            case 3:addstr("instructing a female anchor to 'dress sexier or get a new job'.");
+            case 3:addstr("instructing a female anchor to 'get sexier or get a new job'.");
                break;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
          move(9,1);
-         addstr("This is bound to get the redneck masses a little riled up.");
+         addstr("This is bound to get the Conservative masses a little riled up.");
 
          change_public_opinion(VIEW_CABLENEWS,50);
          offended_cablenews=1;
@@ -528,7 +528,7 @@ void printnews(short l,short newspaper)
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
          move(9,1);
-         addstr("This is bound to get the redneck masses a little riled up.");
+         addstr("This is bound to get the Conservative masses a little riled up.");
 
          change_public_opinion(VIEW_CABLENEWS,50);
          offended_cablenews=1;

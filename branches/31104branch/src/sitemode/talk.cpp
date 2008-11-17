@@ -105,6 +105,8 @@ char talk(creaturest &a,int t)
          addstr(":");
          move(17,1);
          set_color(COLOR_GREEN,COLOR_BLACK,1);
+
+         // Formatting the slogan so that it always has quotes around it and punctuation
          if(slogan[0]!='"')addch('"');
          addstr(slogan);
          int last=strlen(slogan);
@@ -113,6 +115,8 @@ char talk(creaturest &a,int t)
             addch('!');
          }
          if(last && slogan[last-1]!='"')addstr("\"");
+
+         sitestory->claimed=true;
          
          refresh();
          getch();

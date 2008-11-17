@@ -66,16 +66,38 @@ void set_activity_color(long activity_type)
 {
    switch(activity_type)
    {
-      // Liberal agenda
-      case ACTIVITY_COMMUNITYSERVICE:
+      // Liberal actvism
+      case ACTIVITY_SLEEPER_LIBERAL:
       case ACTIVITY_TROUBLE:
       case ACTIVITY_GRAFFITI:
-      case ACTIVITY_POLLS:
       case ACTIVITY_DOS_ATTACKS:
       case ACTIVITY_HACKING:
       case ACTIVITY_WRITE_LETTERS:
       case ACTIVITY_WRITE_GUARDIAN:
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         break;
+
+      // Less exciting liberal activities
+      case ACTIVITY_SLEEPER_SPY:
+      case ACTIVITY_COMMUNITYSERVICE:
+      case ACTIVITY_POLLS:
          set_color(COLOR_BLUE,COLOR_BLACK,1);
+         break;
+
+      // Stealing things
+      case ACTIVITY_SLEEPER_STEAL:
+      case ACTIVITY_WHEELCHAIR:
+      case ACTIVITY_STEALCARS:
+         set_color(COLOR_CYAN,COLOR_BLACK,0);
+         break;
+      
+      // Illegal fundraising
+      case ACTIVITY_SLEEPER_EMBEZZLE:
+      case ACTIVITY_SELL_DRUGS:
+      case ACTIVITY_PROSTITUTION:
+      case ACTIVITY_CCFRAUD:
+      case ACTIVITY_DOS_RACKET:
+         set_color(COLOR_RED,COLOR_BLACK,1);
          break;
 
       // Legal fundraising
@@ -83,21 +105,13 @@ void set_activity_color(long activity_type)
       case ACTIVITY_SELL_TSHIRTS:
       case ACTIVITY_SELL_ART:
       case ACTIVITY_SELL_MUSIC:
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         break;
-
-      // Illegal fundraising
-      case ACTIVITY_SELL_DRUGS:
-      case ACTIVITY_PROSTITUTION:
-      case ACTIVITY_CCFRAUD:
-      case ACTIVITY_DOS_RACKET:
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
          break;
 
       // Clothing/garment stuff
       case ACTIVITY_REPAIR_ARMOR:
       case ACTIVITY_MAKE_ARMOR:
-         set_color(COLOR_MAGENTA,COLOR_BLACK,0);
+         set_color(COLOR_CYAN,COLOR_BLACK,0);
          break;
 
       // Teaching
@@ -109,40 +123,31 @@ void set_activity_color(long activity_type)
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          break;
 
-      // Healing
-      case ACTIVITY_HEAL:
-         set_color(COLOR_CYAN,COLOR_BLACK,1);
-         break;
-
-      // Vehicles
-      case ACTIVITY_WHEELCHAIR:
-      case ACTIVITY_STEALCARS:
-         set_color(COLOR_YELLOW,COLOR_BLACK,0);
-         break;
-
       // Interrogating
       case ACTIVITY_HOSTAGETENDING:
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
          break;
 
-      // Going elsewhere to get healed
+      // Dealing with your injuries
       case ACTIVITY_CLINIC:
          set_color(COLOR_RED,COLOR_BLACK,0);
          break;
 
-      // Cleaning up the dead
-      case ACTIVITY_BURY:
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         break;
-
-      // Going elsewhere
-      case ACTIVITY_VISIT:
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         break;
-
-      // Not doing anything
-      case ACTIVITY_NONE:
+      // Doing something Conservative
+      case ACTIVITY_SLEEPER_CONSERVATIVE:
          set_color(COLOR_RED,COLOR_BLACK,1);
+         break;
+
+      // Dealing with the dead
+      case ACTIVITY_BURY:
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         break;
+
+      // Nothing terribly important
+      case ACTIVITY_HEAL: // Identical to none in practice
+      case ACTIVITY_NONE:
+      case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          break;
    }
 }

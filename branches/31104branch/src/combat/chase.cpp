@@ -154,9 +154,29 @@ char chasesequence(void)
                   //LIMIT :------------------------------------:
                   addstr("You are speeding toward a fruit-stand!");
                   move(10,1);
-                  addstr("D - Avoid it!");
+                  addstr("D - Evasive driving!");
                   move(11,1);
-                  addstr("F - Drive on through!");
+                  addstr("F - Plow through it!");
+                  break;
+               case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
+                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+                  move(9,1);
+                  //LIMIT :------------------------------------:
+                  addstr("A truck pulls out in your path!");
+                  move(10,1);
+                  addstr("D - Speed around it!");
+                  move(11,1);
+                  addstr("F - Slow down!");
+                  break;
+               case CARCHASE_OBSTACLE_CROSSTRAFFIC:
+                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+                  move(9,1);
+                  //LIMIT :------------------------------------:
+                  addstr("There's a red light with crosstraffic ahead!");
+                  move(10,1);
+                  addstr("D - Run the light anyway!");
+                  move(11,1);
+                  addstr("F - Slow down and turn!");
                   break;
             }
          }
@@ -312,6 +332,8 @@ char chasesequence(void)
          {
             switch(obstacle)
             {
+               case CARCHASE_OBSTACLE_CROSSTRAFFIC:
+               case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
                case CARCHASE_OBSTACLE_FRUITSTAND:
                   if(c=='d')
                   {
@@ -884,17 +906,12 @@ void evasiverun(void)
             move(16,1);
             addstr(activesquad->squad[p]->name);
             addstr(" breaks away!");
-
-            removesquadinfo(*activesquad->squad[p]);
-            for(int i=p+1, j=p;i<5;i++, j++)
-            {
-               activesquad->squad[j]=activesquad->squad[i];
-            }
-            activesquad->squad[5]=NULL;
-
-            printparty();
             refresh();
             getch();
+
+            removesquadinfo(*activesquad->squad[p]);
+
+            printparty();
          }
          else if(yourspeed[p]<theirbest-10)
          {
@@ -913,19 +930,14 @@ void evasiverun(void)
             if(activesquad->squad[p]->blood<=0)
                activesquad->squad[p]->alive=0;
 
-            if(activesquad->squad[p]->alive==0)
-            {
-               move(17,1);
-               addstr("The Liberal is DEAD...");
-            }
-
             capturecreature(*activesquad->squad[p]);
             for(int i=p+1, j=p;i<6;i++, j++)
             {
                activesquad->squad[j]=activesquad->squad[i];
             }
             activesquad->squad[5]=NULL;
-            delenc(0,0);
+            // Death squads don't mess around, and don't fall behind when executing your people
+            if(encounter[0].type!=CREATURE_DEATHSQUAD)delenc(0,0);
 
             printparty();
             printchaseencounter();
@@ -1053,45 +1065,7 @@ void drivingupdate(short &obstacle)
             passenger.push_back(p);
          }
       }
-
-      if(passenger.size()>0&&driver==-1)
-      {
-         //MAKE BEST DRIVING PASSENGER INTO A DRIVER
-         vector<int> goodp;
-         int max=0;
-         for(p=0;p<passenger.size();p++)
-         {
-            if(driveskill(encounter[passenger[p]],chaseseq.enemycar[v])>max&&
-               encounter[passenger[p]].canwalk())
-            {
-               max=driveskill(encounter[passenger[p]],chaseseq.enemycar[v]);
-            }
-         }
-         for(p=0;p<passenger.size();p++)
-         {
-            if(driveskill(encounter[passenger[p]],chaseseq.enemycar[v])==max&&
-               encounter[passenger[p]].canwalk())
-            {
-               goodp.push_back(passenger[p]);
-            }
-         }
-
-         if(goodp.size()>0)
-         {
-            int p=goodp[LCSrandom(goodp.size())];
-            encounter[p].is_driver=1;
-            driver=p;
-
-            clearmessagearea();
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            move(16,1);
-            addstr(encounter[p].name);
-            addstr(" takes over the wheel.");
-            printchaseencounter();
-            refresh();
-            getch();
-         }
-      }
+      // Enemies don't take over the wheel when driver incapacitated
       if(driver==-1)
       {
          crashenemycar(v);
@@ -1242,6 +1216,58 @@ void obstacledrive(short obstacle,char choice)
 {
    switch(obstacle)
    {
+      case CARCHASE_OBSTACLE_CROSSTRAFFIC:
+         if(choice==0)
+         {
+            dodgedrive();
+         }
+         else if(choice==1)
+         {
+            clearmessagearea();
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(16,1);
+            addstr("You slow down, and turn the corner.");
+            refresh();
+            getch();
+
+            if(!LCSrandom(3))
+            {
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               move(17,1);
+               addstr("Here they come!");
+               refresh();
+               getch();
+               enemyattack();
+               youattack();
+            }
+         }
+         break;
+      case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
+         if(choice==0)
+         {
+            dodgedrive();
+         }
+         else if(choice==1)
+         {
+            clearmessagearea();
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(16,1);
+            addstr("You slow down, and carefully evade the truck.");
+            refresh();
+            getch();
+
+            if(!LCSrandom(3))
+            {
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               move(17,1);
+               addstr("Here they come!");
+               refresh();
+               getch();
+               enemyattack();
+               youattack();
+            }
+         }
+         break;
       case CARCHASE_OBSTACLE_FRUITSTAND:
          if(choice==0)
          {

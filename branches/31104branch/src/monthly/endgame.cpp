@@ -134,13 +134,7 @@ void reaganify(char canseethings)
 
       erase();
       move(12,6);
-      addstr("Two Thirds of the States have convened a Constitutional Convention!");
-      refresh();
-      getch();
-
-      erase();
-      move(12,15);
-      addstr("They have proposed an ARCH-CONSERVATIVE AMENDMENT!");
+      addstr("The Arch Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!");
       refresh();
       getch();
 
@@ -150,11 +144,11 @@ void reaganify(char canseethings)
       move(2,5);
       addstr("In recognition of the fact that society is degenerating under");
       move(3,0);
-      addstr("the pressure of the elite liberal threat, we the People hereby");
+      addstr("the pressure of the elite liberal threat, WE THE PEOPLE HEREBY");
       move(4,0);
-      addstr("repeal the Constitition.  The former United States are to be");
+      addstr("REPEAL THE CONSTITUTION.  The former United States are to be");
       move(5,0);
-      addstr("reorganized into the Confederated States of America, with new");
+      addstr("reorganized into the CONFEDERATED STATES OF AMERICA, with new");
       move(6,0);
       addstr("boundaries to be determined by leading theologians.");
       move(8,5);
