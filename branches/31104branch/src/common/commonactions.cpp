@@ -295,6 +295,8 @@ int maxskill(int skill,creaturest& cr)
    case SKILL_INTERROGATION:
    case SKILL_TEACHING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE)+cr.attval(ATTRIBUTE_CHARISMA))/2;
+   //case SKILL_SURVIVAL:
+   //   return cr.attval(ATTRIBUTE_HEALTH);
    case SKILL_MEDICAL:
    case SKILL_SCIENCE:
    case SKILL_LAW:
@@ -770,7 +772,7 @@ int loveslaves(const creaturest& cr)
    for(int p=0; p<pool.size(); p++)
    {
       // If subordinate and a love slave
-      if(pool[p]->hireid == cr.id && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+      if(pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
          loveslaves++;
    }
    return loveslaves;

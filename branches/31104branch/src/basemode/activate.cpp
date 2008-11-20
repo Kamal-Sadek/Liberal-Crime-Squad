@@ -477,7 +477,7 @@ void activate(creaturest *cr)
             //move(22,1);
             //addstr("  Attributes Trained: Intelligence, Health, Agility");
             move(22,1);
-            addstr("  Skills Trained: Driving, First Aid, Cooking, Survival, Street Sense,");
+            addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
             addstr("Garment Making, Hand to Hand, Improvised Weapons");
             move(24,1);

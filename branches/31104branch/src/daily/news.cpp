@@ -53,6 +53,11 @@ void setpriority(newsstoryst &ns)
       case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
       case NEWSSTORY_SQUAD_KILLED_SITE:
       case NEWSSTORY_CARTHEFT:
+      case NEWSSTORY_NUDITYARREST:
+      case NEWSSTORY_WANTEDARREST:
+      case NEWSSTORY_DRUGARREST:
+      case NEWSSTORY_GRAFFITIARREST:
+      case NEWSSTORY_BURIALARREST:
       {
          ns.priority=0;
 
@@ -213,6 +218,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
       case NEWSSTORY_CCS_SITE:
       case NEWSSTORY_CCS_KILLED_SITE:
       case NEWSSTORY_CARTHEFT:
+      case NEWSSTORY_NUDITYARREST:
+      case NEWSSTORY_WANTEDARREST:
+      case NEWSSTORY_DRUGARREST:
+      case NEWSSTORY_GRAFFITIARREST:
+      case NEWSSTORY_BURIALARREST:
       {
          int y=2;
          if((!liberalguardian&&ns.page==1)||(liberalguardian&&ns.guardianpage==1))
@@ -227,7 +237,47 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
          switch(ns.type)
          {
+            case NEWSSTORY_WANTEDARREST:
+            case NEWSSTORY_GRAFFITIARREST:
+            {
+               int crime[CRIMENUM];
+               std::memset(crime,0,sizeof(int)*CRIMENUM);
+               for(int c=0;c<ns.crime.size();c++)
+               {
+                  crime[ns.crime[c]]++;
+               }
+
+               if(crime[CRIME_KILLEDSOMEBODY]>1)
+               {
+                  if(crime[CRIME_KILLEDSOMEBODY]==2)
+                     strcat(story,"Two");
+                  else
+                     strcat(story,"Several");
+                  strcat(story," police officers were");
+               }
+               else strcat(story,"A police officer was");
+               strcat(story," killed in the line of duty yesterday, ");
+               strcat(story,"according to a spokesperson from the police department.");
+               strcat(story,"&r");
+               strcat(story,"  A suspect, identified only as a member of the ");
+               strcat(story,"radical political group Liberal Crime Squad, is believed to have killed ");
+               if(crime[CRIME_KILLEDSOMEBODY]>1)
+               {
+                  char num[20];
+                  itoa(crime[CRIME_KILLEDSOMEBODY],num,10);
+                  strcat(story,num);
+                  strcat(story," officers ");
+               }
+               else strcat(story,"the police officer ");
+               strcat(story," while they were attempting to perform an arrest.  ");
+               strcat(story,"The names of the officers have not been released pending notification of their families.");
+               strcat(story,"&r");
+               break;
+            }
+            case NEWSSTORY_NUDITYARREST:
             case NEWSSTORY_CARTHEFT:
+            case NEWSSTORY_DRUGARREST:
+            case NEWSSTORY_BURIALARREST:
             {
                int crime[CRIMENUM];
                std::memset(crime,0,sizeof(int)*CRIMENUM);
@@ -246,11 +296,27 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   char num[20];
                   itoa(crime[CRIME_KILLEDSOMEBODY],num,10);
                   strcat(story,num);
-                  strcat(story," police officers");
+                  strcat(story," police officers that were");
                }
-               else strcat(story,"a police officer");
-               strcat(story," that were attempting to perform an arrest.  A passerby had allegedly spotted the suspect committing a car theft.  ");
-               strcat(story,"The names of the officers have not been released pending notification of their families.");
+               else strcat(story,"a police officer that was");
+               strcat(story," attempting to perform an arrest.  ");
+               if(ns.type==NEWSSTORY_NUDITYARREST)
+                  strcat(story,"The incident apparently occurred as a response to a public nudity complaint.  ");
+               else if(ns.type==NEWSSTORY_DRUGARREST)
+                  strcat(story,"The suspect was alledgedly selling brownies.  ");
+               else if(ns.type==NEWSSTORY_BURIALARREST)
+               {
+                  strcat(story,"A passerby alledgedly called the police after seeing the suspect dragging what appeared ");
+                  strcat(story,"to be a corpse through an empty lot.  ");
+               }
+               else
+                  strcat(story,"A passerby had allegedly spotted the suspect committing a car theft.  ");
+
+               if(crime[CRIME_KILLEDSOMEBODY]>1)
+               {
+                  strcat(story,"The names of the officers have not been released pending notification of their families.");
+               }
+               else strcat(story,"The name of the officer has not been released pending notification of the officer's family."); 
                strcat(story,"&r");
                break;
             }
@@ -1333,7 +1399,8 @@ void majornewspaper(char &clearformess,char canseethings)
          continue;
       }
 
-      if(newsstory[n]->type==NEWSSTORY_CARTHEFT)
+      if(newsstory[n]->type & (NEWSSTORY_CARTHEFT|NEWSSTORY_NUDITYARREST|NEWSSTORY_WANTEDARREST|
+                               NEWSSTORY_DRUGARREST|NEWSSTORY_GRAFFITIARREST|NEWSSTORY_BURIALARREST))
       {
          char conf=0;
          for(int c=0;c<newsstory[n]->crime.size();c++)
@@ -1745,6 +1812,8 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEATTACK||
          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE||
          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SITE||
+         newsstory[n]->type==NEWSSTORY_WANTEDARREST||
+         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST||
          newsstory[n]->type==NEWSSTORY_CCS_SITE||
          newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
       {

@@ -45,6 +45,8 @@ This file is part of Liberal Crime Squad.                                       
 **********************************************************************/
 void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower)
 {
+   if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
+   
    switch(cr.activity.type)
    {
       case ACTIVITY_SLEEPER_CONSERVATIVE:
@@ -173,8 +175,8 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
       case ACTIVITY_SLEEPER_LIBERAL:
       {
          power = static_cast<int>(power * cr.infiltration);
-         // Reduces infiltration level by 1% of the amount of trust acquired
-         cr.infiltration-=cr.infiltration*0.01;
+         // Reduces infiltration level by 1% of the amount of distrust
+         cr.infiltration-=(1.0f-cr.infiltration)*0.01;
          cr.juice+=5;
          if(cr.juice>50)cr.juice=50;
       }

@@ -433,7 +433,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                                   pool[p]->skill[SKILL_RELIGION]+
                                   pool[p]->skill[SKILL_LAW]+
                                   pool[p]->attval(ATTRIBUTE_HEART)+
-                                  pool[p]->attval(ATTRIBUTE_CHARISMA)+
+                                  pool[p]->attval(ATTRIBUTE_CHARISMA)*2+
                                   pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
 
          int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
@@ -454,8 +454,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          }
 
 
-         if((lib_persuasiveness > recruit_reluctance) &&
-            (max_eagerness      > r.eagerness()     ))
+         if((lib_persuasiveness         > recruit_reluctance) &&
+            (max_eagerness+LCSrandom(5) > r.eagerness()     ))
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
             r.level++;
@@ -468,7 +468,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr("They'll definately meet again tomorrow.");
          }
-         else if((lib_persuasiveness+LCSrandom(5) > recruit_reluctance))
+         else if((lib_persuasiveness > recruit_reluctance))
          {
             r.level++;
             move(y++,0);

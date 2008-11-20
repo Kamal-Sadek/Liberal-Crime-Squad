@@ -91,7 +91,7 @@ char unlock(short type,char &actual)
 
       if(aroll>difficulty)
       {
-         clearmessagearea();
+         clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[p]->name);
@@ -127,7 +127,7 @@ char unlock(short type,char &actual)
       }
       else
       {
-         clearmessagearea();
+         clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[p]->name);
@@ -249,6 +249,12 @@ char bash(short type,char &actual)
          addstr("!");
          refresh();
          getch();
+         
+         if(sitealarmtimer<0 || sitealarmtimer>5)
+            sitealarmtimer=5;
+         else
+            sitealarmtimer=0;
+
          //Bashing doors in secure areas sets off alarms
          if((location[cursite]->type==SITE_GOVERNMENT_PRISON ||
              location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) &&
@@ -267,7 +273,7 @@ char bash(short type,char &actual)
       }
       else
       {
-         clearmessagearea();
+         clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[p]->name);
@@ -278,6 +284,13 @@ char bash(short type,char &actual)
          addstr("!");
          refresh();
          getch();
+
+         if(sitealarmtimer<0)
+            sitealarmtimer=25;
+         else if(sitealarmtimer>10)
+            sitealarmtimer-=10;
+         else
+            sitealarmtimer=0;
 
          actual=1;
          return 0;

@@ -59,51 +59,31 @@ void makecharacter(void)
       addstr("Insight into a Revolution:  My Traumatic Childhood");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-      //A - Sneaky Rogue
-      //B - Brutal Fighter
-      //C - Brilliant Scientist
-      //D - Cynical Planner
-      //E - Passionate Leader
+      //A - Thief
+      //B - Fighter
+      //C - Student
+      //D - Generalist/Sleepers
+      //E - Recruiter
 
       switch(q)
       {
          case 0:
             move(2,0);addstr("The day I was born in 1984...");
-            //Cloak and Dagger Op
-            move(5,0);addstr("A - the Sandanista Front won the elections in Nicaragua.");
-            //ATTRIBUTE_CHARISMA 2
-            //SKILL_PERSUASION 1
-            //ATTRIBUTE_HEART 1
-            // Sep. 4, 1984
-
-            //Violent Act
-            move(7,0);addstr("B - was the 3rd anniversary of the assassination attempt on Ronald Reagan.");
-            //SKILL_PISTOL 1
-            //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_AGILITY 1
-            //ATTRIBUTE_HEALTH 1
-            // Mar. 3, 1984
-
-            //Technology Landmark
-            move(9,0);addstr("C - the Macintosh was introduced.");
-            //ATTRIBUTE_INTELLIGENCE 3
-            //SKILL_COMPUTERS 1
-            // Jan. 24, 1984
-
-            //Cynial Chess Player
-            move(11,0);addstr("D - the Polish priest Popieluszko was kidnapped by government agents.");
-            //SKILL_INTERROGATION 1
-            //ATTRIBUTE_CHARISMA 1
-            //ATTRIBUTE_HEART 1
-            //ATTRIBUTE_STRENGTH 1
+            move(5,0);addstr("A - the Polish priest Popieluszko was kidnapped by government agents.");
+            //ATTRIBUTE_AGILITY 2
             // Oct. 19, 1984
-
-            //Inspirational Leader
-            move(13,0);addstr("E - the Nobel Peace Prize went to Desmond Tutu for opposition to apartheid.");
-            //SKILL_PERSUASION 1
-            //ATTRIBUTE_CHARISMA 1
+            move(7,0);addstr("B - was the 3rd anniversary of the assassination attempt on Ronald Reagan.");
+            //ATTRIBUTE_STRENGTH 2
+            // Mar. 3, 1984
+            move(9,0);addstr("C - the Macintosh was introduced.");
+            //ATTRIBUTE_INTELLIGENCE 2
+            // Jan. 24, 1984
+            move(11,0);addstr("D - the Nobel Peace Prize went to Desmond Tutu for opposition to apartheid.");
             //ATTRIBUTE_HEART 2
             // Oct. 16, 1984
+            move(13,0);addstr("E - the Sandanista Front won the elections in Nicaragua.");
+            //ATTRIBUTE_CHARISMA 2
+            // Sep. 4, 1984
             
             
             move(18,0);
@@ -115,25 +95,19 @@ void makecharacter(void)
             move(2,0);addstr("When I was bad...");
             move(5,0);addstr("A - my parents grounded me and hid my toys, but I knew where they put them.");
             //SKILL_SECURITY 1
-            //ATTRIBUTE_AGILITY 2
-
-            //1 THEIF
+            //ATTRIBUTE_AGILITY 1
             move(7,0);addstr("B - my father beat me.  I learned to take a punch earlier than most.");
             //SKILL_HANDTOHAND 1
-            //ATTRIBUTE_HEALTH 2
-
-            //1 VIOLENT
+            //ATTRIBUTE_HEALTH 1
             move(9,0);addstr("C - I was sent to my room, where I studied quietly by myself, alone.");
             //SKILL_WRITING 1
-            //ATTRIBUTE_INTELLIGENCE 2
-
-            //1 LEGIT
-            move(11,0);addstr("D - my father lectured me endlessly, trying to pound his ideas into my head.");
+            //ATTRIBUTE_INTELLIGENCE 1
+            move(11,0);addstr("D - my father lectured me endlessly, trying to make me think like him.");
             //SKILL_INTERROGATION 1
-            //ATTRIBUTE_HEART 2
+            //ATTRIBUTE_HEART 1
             move(13,0);addstr("E - my parents argued with each other about me, but I was never punished.");
             //SKILL_PERSUASION 1
-            //ATTRIBUTE_CHARISMA 2
+            //ATTRIBUTE_CHARISMA 1
 
             /*switch(c)
             {
@@ -158,159 +132,105 @@ void makecharacter(void)
             move(5,0);addstr("A - I was mischevious, and always up to something.");
             //SKILL_DISGUISE 1
             //ATTRIBUTE_AGILITY 1
-
-            //1 THIEF
-            move(7,0);addstr("B - I was unruly and often fought with the other children.");
-            //SKILL_HANDTOHAND 1
+            move(7,0);addstr("B - I had a lot of repressed anger.  I hurt animals.");
+            //SKILL_INTERROGATION 1
             //ATTRIBUTE_STRENGTH 1
-
-            //1 VIOLENT
+            //ATTRIBUTE_AGILITY 1
+            //ATTRIBUTE_HEART -1 <--- !
             move(9,0);addstr("C - I was at the head of the class, and I worked very hard.");
             //ATTRIBUTE_INTELLIGENCE 1
             //SKILL_WRITING 1
-
-            //1 LEGIT
-            move(11,0);addstr("D - I had a lot of repressed anger.  I hurt animals.");
-            //SKILL_INTERROGATION 1
-            //ATTRIBUTE_HEART -1 <- !
+            move(11,0);addstr("D - I was unruly and often fought with the other children.");
+            //SKILL_HANDTOHAND 1
             //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_AGILITY 1
-            
-            //1 VIOLENT
             move(13,0);addstr("E - I was the class clown.  I even had some friends.");
             //SKILL_PERSUASION 1
             //ATTRIBUTE_CHARISMA 1
-
-            //1 LEGIT
             break;
          case 3:
             move(2,0);addstr("When I turned 10...");
-            move(5,0);addstr("A - my parents divorced.  Acrimoniously.  I once tripped over the paperwork!");
-            //SKILL_LAW 1
-            //SKILL_WRITING 1
-            //ATTRIBUTE_INTELLIGENCE 1
+            move(5,0);addstr("A - my parents divorced.  Whenever I talked, they argued, so I stayed quiet.");
+            //SKILL_STEALTH 1
             move(7,0);addstr("B - my parents divorced.  Violently.");
             //SKILL_HANDTOHAND 1
-            //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_AGILITY 1
-
-            //1 VIOLENT
-            move(9,0);addstr("C - my parents divorced.  My studies suffered but I continued working.");
-            //ATTRIBUTE_INTELLIGENCE 2
-            //SKILL_COMPUTERS 1
-
-            //1 LEGIT
-            move(11,0);addstr("D - my parents divorced.  Mom cheated on dad with the divorce lawyer.");
-            //SKILL_SEDUCTION 2
+            move(9,0);addstr("C - my parents divorced.  Acrimoniously.  I once tripped over the paperwork!");
             //SKILL_LAW 1
-            move(13,0);addstr("E - my parents divorced.  I spent a lot of time out of the house with friends.");
-            //ATTRIBUTE_CHARISMA 2
+            move(11,0);addstr("D - my parents divorced.  Mom slept with the divorce lawyer.");
+            //SKILL_SEDUCTION 1
+            move(13,0);addstr("E - my parents divorced.  It still hurts to read my old diary.");
+            //SKILL_WRITING 1
             break;
          case 4:
-            move(2,0);addstr("When I hit junior high school...");
-            move(5,0);addstr("A - I broke into lockers and was into punk rock.");
-            //SKILL_SECURITY 1
-            //ATTRIBUTE_CHARISMA 1
-
-            //1 THEIF
-            move(7,0);addstr("B - I was obsessed with swords and started lifting weights.");
-            //SKILL_SWORD 1
-            //ATTRIBUTE_STRENGTH 1
-
-            //1 VIOLENT
-            move(9,0);addstr("C - I got into chess and go.  I was a total outcast.");
+            move(2,0);addstr("In junior high school...");
+            move(5,0);addstr("A - I was into chemistry.  I wanted to know what made the world tick.");
+            //SKILL_SCIENCE 2
             //ATTRIBUTE_INTELLIGENCE 2
-            move(11,0);addstr("D - I carried a knife with me and told people I hung out with gangs.");
-            //SKILL_KNIFE 1
-            //ATTRIBUTE_STRENGTH 1
-
-            //1 VIOLENT
-            move(13,0);addstr("E - I tried school politics, but it was just a popularity contest.");
-            //ATTRIBUTE_HEART 1
-            //SKILL_PERSUASION 1
-
-            //1 LEGIT
+            move(7,0);addstr("B - I played guitar in a grunge band.  We sucked, but so did life.");
+            //SKILL_MUSIC 2
+            //ATTRIBUTE_CHARISMA 2
+            move(9,0);addstr("C - I played violent video games at home.  I was a total outcast.");
+            //SKILL_COMPUTERS 2
+            //ATTRIBUTE_AGILITY 2
+            move(11,0);addstr("D - I drew things, a lot.  I was drawing a world better than this.");
+            //SKILL_ART 2
+            //ATTRIBUTE_HEART 2
+            move(13,0);addstr("E - I was obsessed with swords, and started lifting weights.");
+            //SKILL_SWORD 2
+            //ATTRIBUTE_STRENGTH 2
             break;
          case 5:
             move(2,0);addstr("Things were getting really bad...");
             move(5,0);addstr("A - when I stole my first car.  I got a few blocks before I totalled it.");
             //SKILL_DRIVING 1
             //SKILL_SECURITY 1
-            //ATTRIBUTE_INTELLIGENCE 1
-
-            //1 THEIF
             move(7,0);addstr("B - and I went to live with my dad.  He had been in Nam and he still drank.");
             //SKILL_SHOTGUN 1
             //SKILL_RIFLE 1
-            //ATTRIBUTE_AGILITY 1
-
-            //1 VIOLENT
             move(9,0);addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
-            //SKILL_DISGUISE 1
             //SKILL_GARMENTMAKING 2
-
-            //1 LEGIT
-            move(11,0);addstr("D - when I tried to start a gang.  My best friend ratted me out.");
-            //SKILL_HANDTOHAND 2
-            //ATTRBITUE_STRENGTH 1
-
-            //1 VIOLENT
-            move(13,0);addstr("E - and I buried myself in fantasy.  Star Trek, D&D, anything to get away.");
-            //ATTRIBUTE_INTELLIGENCE 1
-            //SKILL_SWORD 2
-
-            //1 LEGIT
+            move(11,0);addstr("D - when I was sent to religious counseling, just stressing me out more.");
+            //SKILL_RELIGION 1
+            //SKILL_INTERROGATION 1
+            move(13,0);addstr("E - and I tried being a teacher's assistant.  It just made me a target.");
+            //SKILL_TEACHING 2
             break;
          case 6:
             move(2,0);addstr("Well, I knew it had reached a crescendo when...");
             move(5,0);addstr("A - I stole a cop car when I was only 14.  I went to juvie for 6 months.");
             //SKILL_DRIVING 1
             //SKILL_SECURITY 1
-            //SKILL_INTELLIGENCE 1
-
-            //2 THEIF
+            //ATTRIBUTE_INTELLIGENCE 1
             move(7,0);addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off.");
             //SKILL_SHOTGUN 2
-            //SKILL_STREETSENSE 1
-
-            //2 VIOLENT
-            move(9,0);addstr("C - I tried sports for a quarter, desperate to fit in.");
+            //ATTRIBUTE_AGILITY 1
+            move(9,0);addstr("C - I tried wrestling for a quarter, desperate to fit in.");
             //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_AGILITY 2
-
-            //2 LEGIT
-            move(11,0);addstr("D - I physically attacked a teacher.  I couldn't take it anymore!");
             //SKILL_HANDTOHAND 2
-            //SKILL_IMPROVISED 1
-
-            //2 VIOLENT
-            move(13,0);addstr("E - my dad got me sent to a religious school for disturbed youth.");
-            //SKILL_RELIGION 3
-
-            //2 LEGIT
+            move(11,0);addstr("D - I got caught making out, and now I needed to be 'cured' of homosexuality.");
+            //SKILL_SEDUCTION 1
+            //SKILL_RELIGION 1
+            //ATTRIBUTE_HEART 1
+            move(13,0);addstr("E - I resorted to controlling people.  Had my own clique of outcasts.");
+            //SKILL_PERSUASION 2
+            //ATTRIBUTE_CHARISMA 1
             break;
          case 7:
             move(2,0);addstr("I was only 15 when I ran away, and...");
-            //switch(charclass)
-            //{
-            //case 0: //Thief
             move(5,0);addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");
             //SKILL_SECURITY 1
-            //SKILL_DISGUISE 1
+            //SKILL_STEALTH 1
             //ATTRIBUTE_AGILITY 1
             move(7,0);addstr("B - I hung out with thugs and beat the shit out of people.");
             //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_HEALTH 1
-            //SKILL_HANDTOHAND 1
-            move(9,0);addstr("C - I got my GED and found a minimum wage job.  Life had to be better than this.");
-            //ATTRIBUTE_INTELLIGENCE 1
+            //SKILL_HANDTOHAND 2
+            move(9,0);addstr("C - I got a horrible job working fast food, smiling as people fed the man.");
+            //ATTRIBUTE_CHARISMA 1
             //SKILL_BUSINESS 2
-            //}
             move(11,0);addstr("D - I let people pay me for sex.  I needed the money to survive.");
             //ATTRIBUTE_CHARISMA 1
             //SKILL_SEDUCTION 2
             move(13,0);addstr("E - I volunteered for a left-wing candidate. It wasn't *real*, though, you know?");
-            //ATTRIBUTE_HEART 1
+            //ATTRIBUTE_INTELLIGENCE 1
             //SKILL_LAW 1
             //SKILL_PERSUASION 1
             break;
@@ -319,40 +239,39 @@ void makecharacter(void)
             move(5,0);addstr("A - I stole a security uniform.");
             move(7,0);addstr("B - I bought myself an assault rifle.");
             move(9,0);addstr("C - I celebrated.  I'd saved a thousand bucks!");
-            move(11,0);addstr("D - I managed to acquire secret maps of several major buildings downtown.");
-            move(13,0);addstr("E - I went out to party and met a judge.  We've been fast friends ever since.");
+            move(11,0);addstr("D - I went out to party and met a judge.  We've been fast friends ever since.");
+            move(13,0);addstr("E - I managed to acquire secret maps of several major buildings downtown.");
             break;
          case 9:
             move(2,0);addstr("For the past few years, I've been...");
-            move(5,0);addstr("A - stealing from Corporations, but I want to do more.");
+            move(5,0);addstr("A - stealing from Corporations.  I know they're still keeping more secrets.");
             //ATTRIBUTE_INTELLIGENCE 2
-            //ATTRIBUTE_AGILITY 1
-            //ATTRIBUTE_CHARISMA 1
-            //SKILL_DISGUISE 2
-            //SKILL_SECURITY 2
-            //SKILL_DRIVING 1
-            move(7,0);addstr("B - a violent criminal.  Nothing can change that.");
-            //SKILL_SHOTGUN 1
-            //SKILL_RIFLE 1
-            //SKILL_PISTOL 1
-            //SKILL_KNIFE 1
-            //SKILL_CLUB 1
             //ATTRIBUTE_AGILITY 2
-            //ATTRIBUTE_STRENGTH 1
-            //ATTRIBUTE_HEALTH 1
-            move(9,0);addstr("C - going to college.  I just graduated, and the country needs me.");
+            //SKILL_DISGUISE 2
+            //SKILL_SECURITY 1
+            //SKILL_STEALTH 1
+            move(7,0);addstr("B - a violent criminal.  Nothing can change me, or stand in my way.");
+            //SKILL_RIFLE 2
+            //SKILL_PISTOL 2
+            //ATTRIBUTE_AGILITY 2
+            //ATTRIBUTE_HEALTH 2
+            move(9,0);addstr("C - taking college courses.  I can see how much the country needs help.");
             //SKILL_SCIENCE 2
-            //SKILL_TEACHING 2
+            //SKILL_TEACHING 1
             //SKILL_WRITING 1
+            //ATTRIBUTE_INTELLIGENCE 3
+            //ATTRIBUTE_HEART 1
+            move(11,0);addstr("D - talking to people, learning how they think.  I have to change minds.");
+            //SKILL_PERSUASION 2
+            //SKILL_SCIENCE 1
+            //SKILL_RELIGION 1
             //ATTRIBUTE_INTELLIGENCE 2
-            //ATTRIBUTE_HEART 2
-            move(11,0);addstr("D - planning major actions to break the machine, but now I need people.");
-            move(13,0);addstr("E - volunteering for prominent liberals, but I know there's a better way.");
             //ATTRIBUTE_CHARISMA 2
-            //ATTRIBUTE_HEART 2
-            //SKILL_LAW 2
+            move(13,0);addstr("E - writing my manifesto and refining my image.  I'm ready to lead.");
+            //ATTRIBUTE_CHARISMA 4
+            //SKILL_LAW 1
+            //SKILL_LEADERSHIP 1
             //SKILL_WRITING 2
-            //SKILL_PERSUASION 1
             move(17,0);
             addstr("I live in ");
             addstr(lcityname);addstr(", and it's about to experience real change.");
@@ -370,51 +289,40 @@ void makecharacter(void)
       switch(q)
       {
          case 0:
-            // Sep. 4, 1984
+            // Oct. 19, 1984
             if(c=='a')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->birthday_month = 9;
-               newcr->birthday_day = 4;
+               newcr->att[ATTRIBUTE_AGILITY]+=2;
+               newcr->birthday_month = 10;
+               newcr->birthday_day = 19;
             }
             // Mar. 3, 1984
             if(c=='b')
             {
-               newcr->skill[SKILL_PISTOL]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->att[ATTRIBUTE_STRENGTH]+=2;
                newcr->birthday_month = 3;
                newcr->birthday_day = 3;
             }
             // Jan. 24, 1984
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=3;
-               newcr->skill[SKILL_COMPUTERS]+=1;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
                newcr->birthday_month = 1;
                newcr->birthday_day = 24;
             }
-            // Oct. 19, 1984
+            // Oct. 16, 1984
             if(c=='d')
             {
-               newcr->skill[SKILL_INTERROGATION]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->birthday_month = 10;
-               newcr->birthday_day = 19;
-            }
-            // Oct. 16, 1984
-            if(c=='e')
-            {
-               newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
                newcr->att[ATTRIBUTE_HEART]+=2;
                newcr->birthday_month = 10;
                newcr->birthday_day = 16;
+            }
+            // Sep. 4, 1984
+            if(c=='e')
+            {
+               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->birthday_month = 9;
+               newcr->birthday_day = 4;
             }
             newcr->age = year - 1984;
             // Don't count this year in founder's age if starting before birthday
@@ -428,27 +336,27 @@ void makecharacter(void)
             if(c=='a')
             {
                newcr->skill[SKILL_SECURITY]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
+               newcr->att[ATTRIBUTE_AGILITY]+=1;
             }
             if(c=='b')
             {
                newcr->skill[SKILL_HANDTOHAND]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=2;
+               newcr->att[ATTRIBUTE_HEALTH]+=1;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
 					newcr->skill[SKILL_WRITING]+=1;
             }
             if(c=='d')
             {
                newcr->skill[SKILL_INTERROGATION]+=1;
-               newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->att[ATTRIBUTE_HEART]+=1;
             }
             if(c=='e')
             {
                newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->att[ATTRIBUTE_CHARISMA]+=1;
             }
             break;
          case 2:
@@ -459,7 +367,9 @@ void makecharacter(void)
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=1;
+               newcr->skill[SKILL_INTERROGATION]+=1;
+               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->att[ATTRIBUTE_HEART]-=1;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
             }
             if(c=='c')
@@ -470,9 +380,7 @@ void makecharacter(void)
             if(c=='d')
             {
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_HEART]-=1;
-               newcr->skill[SKILL_INTERROGATION]+=1;
+               newcr->skill[SKILL_HANDTOHAND]+=1;
             }
             if(c=='e')
             {
@@ -483,55 +391,50 @@ void makecharacter(void)
          case 3:
             if(c=='a')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->skill[SKILL_WRITING]+=1;
-               newcr->skill[SKILL_LAW]+=1;
+               newcr->skill[SKILL_STEALTH]+=1;
             }
             if(c=='b')
             {
                newcr->skill[SKILL_HANDTOHAND]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->skill[SKILL_COMPUTERS]+=1;
+               newcr->skill[SKILL_LAW]+=1;
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_SEDUCTION]+=2;
-               newcr->skill[SKILL_LAW]+=1;
+               newcr->skill[SKILL_SEDUCTION]+=1;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->att[SKILL_WRITING]+=2;
             }
             break;
          case 4:
             if(c=='a')
             {
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->skill[SKILL_SCIENCE]+=2;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_SWORD]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
+               newcr->skill[SKILL_MUSIC]+=2;
+               newcr->att[ATTRIBUTE_CHARISMA]+=2;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
+               newcr->skill[SKILL_COMPUTERS]+=2;
+               newcr->att[ATTRIBUTE_AGILITY]+=2;
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_KNIFE]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
+               newcr->skill[SKILL_ART]+=2;
+               newcr->att[ATTRIBUTE_HEART]+=2;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->skill[SKILL_PERSUASION]+=1;
+               newcr->att[ATTRIBUTE_STRENGTH]+=2;
+               newcr->skill[SKILL_SWORD]+=2;
             }
             break;
          case 5:
@@ -539,28 +442,24 @@ void makecharacter(void)
             {
                newcr->skill[SKILL_DRIVING]+=1;
                newcr->skill[SKILL_SECURITY]+=1;
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
             }
             if(c=='b')
             {
                newcr->skill[SKILL_SHOTGUN]+=1;
                newcr->skill[SKILL_RIFLE]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_DISGUISE]+=1;
                newcr->skill[SKILL_GARMENTMAKING]+=2;
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=2;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
+               newcr->skill[SKILL_RELIGION]+=1;
+               newcr->skill[SKILL_INTERROGATION]+=1;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->skill[SKILL_SWORD]+=2;
+               newcr->skill[SKILL_TEACHING]+=2;
             }
             break;
          case 6:
@@ -573,39 +472,40 @@ void makecharacter(void)
             if(c=='b')
             {
                newcr->skill[SKILL_SHOTGUN]+=2;
-               newcr->skill[SKILL_STREETSENSE]+=1;
+               newcr->att[ATTRIBUTE_AGILITY]+=1;
             }
             if(c=='c')
             {
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
+               newcr->skill[SKILL_HANDTOHAND]+=2;
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=2;
-               newcr->skill[SKILL_IMPROVISED]+=1;
+               newcr->skill[SKILL_SEDUCTION]+=1;
+               newcr->skill[SKILL_RELIGION]+=1;
+               newcr->att[ATTRIBUTE_HEART]+=1;
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_RELIGION]+=3;
+               newcr->skill[SKILL_PERSUASION]+=2;
+               newcr->att[ATTRIBUTE_CHARISMA]+=1;
             }
             break;
          case 7:
             if(c=='a')
             {
                newcr->skill[SKILL_SECURITY]+=1;
-               newcr->skill[SKILL_DISGUISE]+=1;
+               newcr->skill[SKILL_STEALTH]+=1;
                newcr->att[ATTRIBUTE_AGILITY]+=1;
             }
             if(c=='b')
             {
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=1;
-               newcr->skill[SKILL_HANDTOHAND]+=1;
+               newcr->skill[SKILL_HANDTOHAND]+=2;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
+               newcr->att[ATTRIBUTE_CHARISMA]+=1;
                newcr->skill[SKILL_BUSINESS]+=2;
             }
             if(c=='d')
@@ -615,7 +515,7 @@ void makecharacter(void)
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_HEART]+=1;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
                newcr->skill[SKILL_LAW]+=1;
                newcr->skill[SKILL_PERSUASION]+=1;
             }
@@ -639,65 +539,55 @@ void makecharacter(void)
             }
             if(c=='d')
             {
-               hasmaps=true;
+               makejudge=true;
             }
             if(c=='e')
             {
-               makejudge=true;
+               hasmaps=true;
             }
             break;
          case 9:
             if(c=='a')
             {
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->att[ATTRIBUTE_AGILITY]+=2;
                newcr->skill[SKILL_DISGUISE]+=2;
-               newcr->skill[SKILL_SECURITY]+=2;
-               newcr->skill[SKILL_DRIVING]+=1;
+               newcr->skill[SKILL_SECURITY]+=1;
+               newcr->skill[SKILL_STEALTH]+=1;
                newcr->type = CREATURE_THIEF;
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_SHOTGUN]+=1;
-               newcr->skill[SKILL_RIFLE]+=1;
-               newcr->skill[SKILL_PISTOL]+=1;
-               newcr->skill[SKILL_KNIFE]+=1;
-               newcr->skill[SKILL_CLUB]+=1;
+               newcr->skill[SKILL_RIFLE]+=2;
+               newcr->skill[SKILL_PISTOL]+=2;
                newcr->att[ATTRIBUTE_AGILITY]+=2;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->att[ATTRIBUTE_HEALTH]+=2;
                newcr->type = CREATURE_GANGMEMBER;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=3;
+               newcr->att[ATTRIBUTE_HEART]+=1;
                newcr->skill[SKILL_SCIENCE]+=2;
                newcr->skill[SKILL_WRITING]+=1;
-               newcr->skill[SKILL_TEACHING]+=2;
+               newcr->skill[SKILL_TEACHING]+=1;
                newcr->type = CREATURE_COLLEGESTUDENT;
             }
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->skill[SKILL_INTERROGATION]+=1;
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->skill[SKILL_WRITING]+=1;
-               newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->skill[SKILL_SEDUCTION]+=1;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
+               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->skill[SKILL_SCIENCE]+=1;
+               newcr->skill[SKILL_PERSUASION]+=2;
+               newcr->skill[SKILL_RELIGION]+=1;
                newcr->type = CREATURE_HSDROPOUT;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
-               newcr->att[ATTRIBUTE_HEART]+=2;
-               newcr->skill[SKILL_LAW]+=2;
+               newcr->att[ATTRIBUTE_CHARISMA]+=4;
+               newcr->skill[SKILL_LAW]+=1;
                newcr->skill[SKILL_WRITING]+=2;
-               newcr->skill[SKILL_PERSUASION]+=1;
+               newcr->skill[SKILL_LEADERSHIP]+=1;
                newcr->type = CREATURE_POLITICALACTIVIST;
             }
             break;

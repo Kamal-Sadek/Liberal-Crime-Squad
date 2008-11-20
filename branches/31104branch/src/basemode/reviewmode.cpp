@@ -1064,6 +1064,9 @@ static void printname(creaturest &cr)
    int bracketcolor=-1;
    int namecolor;
    int brightness;
+   
+   if(cr.hiding)
+      bracketcolor=COLOR_BLACK;
 
    // Determine bracket color, if any, based on location
    if(cr.location!=-1)
@@ -1080,8 +1083,6 @@ static void printname(creaturest &cr)
             bracketcolor=COLOR_RED;
          break;
       default:
-         if(cr.hiding)
-            bracketcolor=COLOR_BLACK;
          break;
       }
    }

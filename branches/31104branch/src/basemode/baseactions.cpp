@@ -903,20 +903,22 @@ char confirmdisband(void)
       addstr("Are you sure you want to disband?");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(2,0);
-      addstr("Disbanding ends the game.  The country will be simulated until a resolution");
-      move(3,0);
-      addstr("is reached.  Any sleepers in place will still be effective, but the rest of");
-      move(4,0);
-      addstr("your infrastructure will be dismantled.");
+      move(2,0);  addstr("Disbanding scatters the Liberal Crime Squad, sending all of its members");
+      move(3,0);  addstr("into hiding, free to pursue their own lives.  You will be able to observe");
+      move(4,0);  addstr("the political situation in brief, and wait until a resolution is reached.");
+
+      move(6,0);  addstr("If at any time you determine that the Liberal Crime Squad will be needed");
+      move(7,0);  addstr("again, you may return to the homeless shelter to restart the campaign.");
+
+      move(9,0);  addstr("Do not make this decision lightly.  If you do need to return to action,");
+      move(10,0); addstr("only the most devoted of your former members will return.");
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(6,0);
-      addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
+      move(13,0); addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 
       for(int x=0;x<strlen(word);x++)
       {
-         move(8,x);
+         move(15,x);
          if(x==pos)set_color(COLOR_GREEN,COLOR_BLACK,0);
          else if(x<pos)set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -933,28 +935,20 @@ char confirmdisband(void)
          if(pos>=strlen(word))
          {
             //SET UP THE DISBAND
-            for(int p=0;p<pool.size();p++)
+            for(int p=pool.size()-1;p>=0;p--)
             {
-               if(pool[p]->alive&&
-                  !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+               if(!pool[p]->alive)
                {
-                  // If uncommented, this code will make it so that writers
-                  // continue to write while disbanded
-                  /*if(pool[p]->activity.type!=ACTIVITY_WRITE_LETTERS&&
-                     pool[p]->activity.type!=ACTIVITY_WRITE_GUARDIAN)*/
-                  {
-                     pool[p]->activity.type=ACTIVITY_NONE;
-                  }
-                  pool[p]->clinic=0;
-                  for(int i=0;i<LAWFLAGNUM;i++)
-                  {
-                     pool[p]->lawflag[i]=0;
-                  }
-                  pool[p]->heat=0;
-                  pool[p]->dating=0;
-                  pool[p]->hiding=0;
+                  delete pool[p];
+                  pool.erase(pool.begin() + p);
+               }
+               if(!(pool[p]->flag & CREATUREFLAG_SLEEPER))
+               {
+                  removesquadinfo(*pool[p]);
+                  pool[p]->hiding=-1;
                }
             }
+            cleangonesquads();
 
             disbandtime=year;
 

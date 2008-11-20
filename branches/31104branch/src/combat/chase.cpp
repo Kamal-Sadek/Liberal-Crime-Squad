@@ -1571,6 +1571,7 @@ void chase_giveup(void)
    }
 
    clearmessagearea();
+   clearcommandarea();
    set_color(COLOR_MAGENTA,COLOR_BLACK,1);
    move(16,1);
    if(mode!=GAMEMODE_CHASECAR)addstr("You stop and are arrested.");

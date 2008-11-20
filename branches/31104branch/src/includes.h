@@ -41,10 +41,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.16.2"
+#define PACKAGE_VERSION "3.17.0"
 #endif
 
-const unsigned long version=31602;
+const unsigned long version=31700;
 const unsigned long lowestloadversion=31601;
 const unsigned long lowestloadscoreversion=31203;
 
@@ -485,13 +485,13 @@ enum Skills
    SKILL_STEALTH,
    SKILL_SLEIGHTOFHAND,
    SKILL_TEACHING,
-   SKILL_SURVIVAL,
    SKILL_STREETSENSE,
    SKILL_SEDUCTION,
    SKILL_LEADERSHIP,
    SKILL_MEDICAL,
    SKILL_TACTICS,
    SKILL_FLAMETHROWER,
+   //SKILL_SURVIVAL,
    SKILLNUM
 };
 
@@ -1447,6 +1447,11 @@ enum NewsStories
    NEWSSTORY_CARTHEFT,
    NEWSSTORY_MASSACRE,
    NEWSSTORY_KIDNAPREPORT,
+   NEWSSTORY_NUDITYARREST,
+   NEWSSTORY_WANTEDARREST,
+   NEWSSTORY_DRUGARREST,
+   NEWSSTORY_GRAFFITIARREST,
+   NEWSSTORY_BURIALARREST,
    NEWSSTORYNUM
 };
 
@@ -1957,7 +1962,7 @@ void printencounter(void);
 void printchaseencounter(void);
 /* blanks a part of the screen */
 void clearcommandarea(void);
-void clearmessagearea(void);
+void clearmessagearea(bool redrawmaparea=true);
 void clearmaparea(void);
 
 /*

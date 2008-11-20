@@ -143,7 +143,7 @@ void elections(char clearformess,char canseethings)
    //PRESIDENTIAL
    if(year%4==0)
    {
-      if(canseethings || disbanding)
+      if(canseethings)
       {
          erase();
 
@@ -248,7 +248,7 @@ void elections(char clearformess,char canseethings)
       }
 
       //Print candidates
-      if(canseethings || disbanding)
+      if(canseethings)
       {
          for(c=0;c<2;c++)
          {
@@ -394,7 +394,7 @@ void elections(char clearformess,char canseethings)
             }
          }
 
-         if((canseethings||disbanding) && l%5==4)
+         if((canseethings) && l%5==4)
          {
             for(int c=0;c<2;c++)
             {
@@ -417,7 +417,7 @@ void elections(char clearformess,char canseethings)
          }
       }
 
-      if(canseethings||disbanding)nodelay(stdscr,FALSE);
+      if(canseethings)nodelay(stdscr,FALSE);
 
       if(winner==presparty && execterm==1)oldwinner=1;
 
@@ -430,11 +430,11 @@ void elections(char clearformess,char canseethings)
          refresh();
          getch();
       }
-      else if(disbanding)
+      /*else if(disbanding)
       {
          refresh();
          pause_ms(800);
-      }
+      }*/
 
       //CONSTRUCT EXECUTIVE BRANCH
       if(oldwinner)
@@ -476,7 +476,7 @@ void elections(char clearformess,char canseethings)
          senmod=2;
       }
          
-      if(canseethings||disbanding)
+      if(canseethings)
       {
          erase();
 
@@ -494,7 +494,7 @@ void elections(char clearformess,char canseethings)
       {
          if(s%3!=senmod)continue;
 
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             move(y,x);
 
@@ -544,11 +544,11 @@ void elections(char clearformess,char canseethings)
 
          nodelay(stdscr,TRUE);
       }
-      else if(disbanding)
+      /*else if(disbanding)
       {
          refresh();
          pause_ms(200);
-      }
+      }*/
 
       int vote;
       int change[5] = {0,0,0,0,0};
@@ -646,7 +646,7 @@ void elections(char clearformess,char canseethings)
          change[senate[s]+2]++;
 
 
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             move(y,x);
 
@@ -684,7 +684,7 @@ void elections(char clearformess,char canseethings)
             y++;
          }
 
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -721,7 +721,7 @@ void elections(char clearformess,char canseethings)
          }
       }
 
-      if(canseethings||disbanding)
+      if(canseethings)
       {
          nodelay(stdscr,FALSE);
 
@@ -739,12 +739,12 @@ void elections(char clearformess,char canseethings)
             addstr("The next two years promise to be more of the same.");
          }
 
-         if(disbanding)
+         /*if(disbanding)
          {
             refresh();
             pause_ms(800);
          }
-         else
+         else*/
          {
             move(22,0);
             addstr("Press any key to continue the elections.    ");
@@ -758,7 +758,7 @@ void elections(char clearformess,char canseethings)
    //HOUSE
    if(year%2==0)
    {
-      if(canseethings||disbanding)
+      if(canseethings)
       {
          erase();
 
@@ -774,7 +774,7 @@ void elections(char clearformess,char canseethings)
 
       for(h=0;h<435;h++)
       {
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             move(y,x);
 
@@ -824,11 +824,11 @@ void elections(char clearformess,char canseethings)
 
          nodelay(stdscr,TRUE);
       }
-      else if(disbanding)
+      /*else if(disbanding)
       {
          refresh();
          pause_ms(200);
-      }
+      }*/
 
       int vote;
       int change[5] = {0,0,0,0,0};
@@ -884,7 +884,7 @@ void elections(char clearformess,char canseethings)
 
          change[house[h]+2]++;
          
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             move(y,x);
 
@@ -922,7 +922,7 @@ void elections(char clearformess,char canseethings)
             y++;
          }
 
-         if(canseethings||disbanding)
+         if(canseethings)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -962,7 +962,7 @@ void elections(char clearformess,char canseethings)
          }
       }
 
-      if(canseethings||disbanding)
+      if(canseethings)
       {
          nodelay(stdscr,FALSE);
 

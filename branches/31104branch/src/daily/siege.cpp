@@ -1090,7 +1090,7 @@ void siegeturn(char clearformess)
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      int targ=pol[LCSrandom(pol.size())];
-                     if(LCSrandom(50)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
+                     if(LCSrandom(50)>pool[targ]->juice/*+pool[targ]->skill[SKILL_SURVIVAL]*5*/)
                      {
                         addstr("A National Guard sniper takes out ");
                         addstr(pool[targ]->name);
@@ -1187,7 +1187,7 @@ void siegeturn(char clearformess)
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(8,1);
                         int targ=pol[LCSrandom(pol.size())];
-                        if(LCSrandom(100)>pool[targ]->juice+pool[targ]->skill[SKILL_SURVIVAL]*5)
+                        if(LCSrandom(100)>pool[targ]->juice/*+pool[targ]->skill[SKILL_SURVIVAL]*5*/)
                         {
                            addstr(pool[targ]->name);
                            addstr(" was killed in the bombing!");

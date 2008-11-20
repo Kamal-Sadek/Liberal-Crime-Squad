@@ -648,17 +648,6 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(aroll<0)aroll=0;
    if(droll<0)droll=0;
 
-   // Harder to hit people during a chase: 5 points for being on the
-   // move, 3-7 points for having to hit them in the car, depending
-   // on which side is shooting. Your side has the advantage, since
-   // you're leading the chase.
-   if(mode==GAMEMODE_CHASECAR)
-   {
-      if(a.align==-1)droll+=7;
-      else droll+=3;
-   }
-   if(mode==GAMEMODE_CHASEFOOT)droll+=5;
-
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
    if(rangedweapon(a.weapon) &&
@@ -1843,7 +1832,11 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    }
 
    
-   if(t.animalgloss==ANIMALGLOSS_TANK)armor=10;
+   if(t.animalgloss==ANIMALGLOSS_TANK)
+   {
+      if(damtype!=WOUND_BURNED)damamount=LCSrandom(armorpenetration+1);
+      else armor=10;
+   }
    else if(hitlocation==BODYPART_HEAD)armor=head_armor;
    else if(hitlocation!=BODYPART_BODY)armor=limb_armor;
 

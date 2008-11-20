@@ -269,18 +269,18 @@ void special_nuclear_onoff(void)
          clearmessagearea();
          levelmap[locx][locy][locz].special=-1;
 
-         char max=30;
+         char max=20;
          creaturest* maxs=0;
 
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL&&activesquad->squad[p]->alive)
             {
-               if(activesquad->squad[p]->skill[SKILL_SCIENCE]*6+
+               if(activesquad->squad[p]->skill[SKILL_SCIENCE]*4+
                   activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)>max)
                {
                   maxs=activesquad->squad[p];
-                  max=activesquad->squad[p]->skill[SKILL_SCIENCE]*6+
+                  max=activesquad->squad[p]->skill[SKILL_SCIENCE]*4+
                       activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE);
                }
             }

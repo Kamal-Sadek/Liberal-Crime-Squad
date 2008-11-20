@@ -193,10 +193,30 @@ void repairarmor(creaturest &cr,char &clearformess)
          makedelimiter(8,0);
       }
 
+      bool repairfailed=false;
+
+      if(armor->flag & ARMORFLAG_DAMAGED)
+      {
+         long dif=(armor_makedifficulty(armor->type,&cr)>>1);
+         cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
+
+         if((LCSrandom(1+dif)))
+         {
+            repairfailed=true;
+         }
+      }
+
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr(cr.name);
-      if(armor->flag & ARMORFLAG_DAMAGED)addstr(" repairs ");
+      if(armor->flag & ARMORFLAG_DAMAGED)
+      {
+         if(repairfailed)
+         {
+            addstr(" is working to repair ");
+         }
+         else addstr(" repairs ");
+      }
       else addstr(" cleans ");
       char str[80];
       getarmorfull(str,armor->type,armor->subtype);
@@ -214,24 +234,10 @@ void repairarmor(creaturest &cr,char &clearformess)
          }
       }
 
-      if(armor->flag & ARMORFLAG_DAMAGED)
-      {
-         long dif=(armor_makedifficulty(armor->type,&cr)>>1);
-         cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
-
-         if((LCSrandom(1+dif))&&armor->quality!='4')
-         {
-            addstr(" but it is not quite the same");
-            armor->quality++;
-            if(LCSrandom(1+dif) && armor->quality!='4')armor->quality++;
-            if(LCSrandom(1+dif) && armor->quality!='4')armor->quality++;
-         }
-      }
-      
       addstr(".");
       
       armor->flag&=~ARMORFLAG_BLOODY;
-      armor->flag&=~ARMORFLAG_DAMAGED;
+      if(!repairfailed)armor->flag&=~ARMORFLAG_DAMAGED;
 
       refresh();
       getch();
@@ -748,15 +754,11 @@ void survey(creaturest *cr)
    
 }
 
-
-int checkforarrest(creaturest & liberal,const char* string,long ps,int clearformess)
+// Police accost your liberal!
+void attemptarrest(creaturest & liberal,const char* string,int clearformess)
 {
-   bool arrest=false;
-   
-   if(!liberal.animalgloss && liberal.armor.type==ARMOR_NONE && LCSrandom(2))
+   if(string)
    {
-      criminalize(liberal,LAWFLAG_DISTURBANCE);
-
       if(clearformess)erase();
       else
       {
@@ -765,42 +767,56 @@ int checkforarrest(creaturest & liberal,const char* string,long ps,int clearform
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
+      addstr("Police are attempting to arrest ");
       addstr(liberal.name);
-      addstr(" has been arrested for public nudity.");
-      arrest=true;
+      addstr(" while ");
+      addstr(string);
+      addstr(".");
+
       refresh();
       getch();
+   }
+
+   // Chase sequence! Wee!
+   makechasers(-1,5);
+
+   chaseseq.clean();
+   chaseseq.location=0;
+   footchase(liberal);
+}
+
+// While galavanting in public, your liberals may be ambushed by police
+int checkforarrest(creaturest & liberal,const char* string,int clearformess)
+{
+   bool arrest=false;
+   
+   if(!liberal.animalgloss && liberal.armor.type==ARMOR_NONE && LCSrandom(2))
+   {
+      criminalize(liberal,LAWFLAG_DISTURBANCE);
+      
+      newsstoryst *ns=new newsstoryst;
+         ns->type=NEWSSTORY_NUDITYARREST;
+      newsstory.push_back(ns);
+      sitestory=ns;
+
+      arrest=true;
    }
    else if(liberal.heat>liberal.skill[SKILL_STREETSENSE]*10)
    {
       if(!LCSrandom(50))
       {
-         if(clearformess)erase();
-         else
-         {
-            makedelimiter(8,0);
-         }
+         newsstoryst *ns=new newsstoryst;
+            ns->type=NEWSSTORY_WANTEDARREST;
+         newsstory.push_back(ns);
+         sitestory=ns;
 
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(8,1);
-         addstr(liberal.name);
-         addstr(" has been arrested while ");
-         addstr(string);
-         addstr(".");
          arrest=true;
-         refresh();
-         getch();
       }
    }
-   
+
    if(arrest)
    {
-      removesquadinfo(liberal);
-      liberal.carid=-1;
-      liberal.location=ps;
-      liberal.weapon.type=WEAPON_NONE;
-      liberal.weapon.ammo=0;
-      liberal.activity.type=ACTIVITY_NONE;
+      attemptarrest(liberal,string,clearformess);
    }
    return arrest;
 }
@@ -922,7 +938,7 @@ void funds_and_trouble(char &clearformess)
    //SOLICITORS
    for(s=0;s<solicit.size();s++)
    {
-      if(!checkforarrest(*solicit[s],"soliciting donations",ps,clearformess))
+      if(!checkforarrest(*solicit[s],"soliciting donations",clearformess))
       {
          money=LCSrandom(((solicit[s]->skill[SKILL_PERSUASION]+
                            solicit[s]->skill[SKILL_BUSINESS]+
@@ -944,7 +960,7 @@ void funds_and_trouble(char &clearformess)
    int mood=publicmood(-1);
    for(s=0;s<tshirts.size();s++)
    {
-      if(!checkforarrest(*tshirts[s],"selling shirts",ps,clearformess))
+      if(!checkforarrest(*tshirts[s],"selling shirts",clearformess))
       {
          int competitionpenalty=tshirts.size();
          competitionpenalty-=tshirts[s]->skill[SKILL_PERSUASION];
@@ -999,7 +1015,7 @@ void funds_and_trouble(char &clearformess)
    //ART
    for(s=0;s<art.size();s++)
    {
-      if(!checkforarrest(*art[s],"sketching potraits",ps,clearformess))
+      if(!checkforarrest(*art[s],"sketching potraits",clearformess))
       {
          int competitionpenalty=art.size();
          competitionpenalty-=art[s]->skill[SKILL_ART];
@@ -1044,17 +1060,17 @@ void funds_and_trouble(char &clearformess)
             art[s]->skill_ip[SKILL_ART]+=LCSrandom(5)+2;
          else
             art[s]->skill_ip[SKILL_ART]+=LCSrandom(3)+1;
-         if(tshirts[s]->skill[SKILL_BUSINESS]<4)
-            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+         if(art[s]->skill[SKILL_BUSINESS]<4)
+            art[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
          else
-            tshirts[s]->skill_ip[SKILL_BUSINESS]+=1;
+            art[s]->skill_ip[SKILL_BUSINESS]+=1;
       }
    }
 
    //MUSIC
    for(s=0;s<music.size();s++)
    {
-      if(!checkforarrest(*music[s],"playing music",ps,clearformess))
+      if(!checkforarrest(*music[s],"playing music",clearformess))
       {
          int competitionpenalty=music.size()/4;
          if(competitionpenalty<0)competitionpenalty=0;
@@ -1119,35 +1135,13 @@ void funds_and_trouble(char &clearformess)
 
       if(dodgelawroll==0) // Busted! Sort of
       {
+         newsstoryst *ns=new newsstoryst;
+            ns->type=NEWSSTORY_DRUGARREST;
+         newsstory.push_back(ns);
+         sitestory=ns;
+
          criminalize(*brownies[s],LAWFLAG_BROWNIES);
-
-         // Check if an immediate arrest is made, or they're
-         // just quietly watched
-         if(brownies[s]->heat > 5 || LCSrandom(2))
-         {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(brownies[s]->name);
-            addstr(" has been arrested while selling brownies.");
-
-            brownies[s]->lawflag[LAWFLAG_BROWNIES]=1;
-
-            refresh();
-            getch();
-
-            removesquadinfo(*brownies[s]);
-            brownies[s]->carid=-1;
-            brownies[s]->location=ps;
-            brownies[s]->weapon.type=WEAPON_NONE;
-            brownies[s]->weapon.ammo=0;
-            brownies[s]->activity.type=ACTIVITY_NONE;
-         }         
+         attemptarrest(*brownies[s],"selling brownies",clearformess);
       }
    }
 
@@ -1639,26 +1633,20 @@ void funds_and_trouble(char &clearformess)
                }
                else addstr(" while spraying an LCS tag.");
 
+               newsstoryst *ns=new newsstoryst;
+                  ns->type=NEWSSTORY_GRAFFITIARREST;
+                  ns->positive=0;
+               newsstory.push_back(ns);
+               sitestory=ns;
+
+               attemptarrest(*graffiti[s],NULL,clearformess);
+
                refresh();
                getch();
             }
             else
             {
-               addstr(graffiti[s]->name);
-               addstr(" has been arrested while spraying graffiti.");
-
-               refresh();
-               getch();
-
                caught=1;
-
-               removesquadinfo(*graffiti[s]);
-               graffiti[s]->carid=-1;
-               graffiti[s]->location=ps;
-               graffiti[s]->weapon.type=WEAPON_NONE;
-               graffiti[s]->weapon.ammo=0;
-               graffiti[s]->activity.type=ACTIVITY_NONE;
-               criminalize(*graffiti[s],LAWFLAG_VANDALISM);
             }
          }
          else if(graffiti[s]->activity.arg!=-1)
@@ -2197,13 +2185,13 @@ void funds_and_trouble(char &clearformess)
          cost=50;
          skillarray[0]=SKILL_DRIVING;
          skillarray[1]=SKILL_MEDICAL;
-         skillarray[2]=SKILL_SURVIVAL;
-         skillarray[3]=SKILL_STREETSENSE;
-         skillarray[4]=SKILL_GARMENTMAKING;
-         skillarray[5]=SKILL_HANDTOHAND;
-         skillarray[6]=SKILL_IMPROVISED;
-         skillarray[7]=SKILL_COOKING;
-         skillarray[8]=-1;
+         skillarray[2]=SKILL_STREETSENSE;
+         skillarray[3]=SKILL_GARMENTMAKING;
+         skillarray[4]=SKILL_HANDTOHAND;
+         skillarray[5]=SKILL_IMPROVISED;
+         skillarray[6]=SKILL_COOKING;
+         //skillarray[7]=SKILL_SURVIVAL;
+         skillarray[7]=-1;
          break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=50;
@@ -2293,49 +2281,23 @@ void funds_and_trouble(char &clearformess)
          delete pool[p];
          pool.erase(pool.begin() + p);
 
-         if(!caught)
-         {
-            long dodgelawroll=0,ndodgelawroll;
-
-            for(int b=0;b<bury.size();b++)
-            {
-               ndodgelawroll=LCSrandom(bury[b]->skill[SKILL_PERSUASION]+
-                  bury[b]->skill[SKILL_DISGUISE]+
-                  bury[b]->skill[SKILL_STREETSENSE]+
-                  bury[b]->attval(ATTRIBUTE_CHARISMA)+
-                  bury[b]->attval(ATTRIBUTE_AGILITY)+
-                  bury[b]->attval(ATTRIBUTE_INTELLIGENCE)+1);
-               if(ndodgelawroll>dodgelawroll)dodgelawroll=ndodgelawroll;
-            }
-            if(dodgelawroll==0)caught=1;
-         }
-      }
-
-      if(caught)
-      {
-         if(clearformess)erase();
-         else
-         {
-            makedelimiter(8,0);
-         }
-
-         if(bury.size()>1)addstr("Some Liberals have");
-         else {addstr(bury[0]->name);addstr(" has");}
-         addstr(" been arrested while disposing of bodies.");
-
-         refresh();
-         getch();
-
          for(int b=0;b<bury.size();b++)
          {
-            removesquadinfo(*bury[b]);
-            bury[b]->carid=-1;
-            bury[b]->location=ps;
-            bury[b]->weapon.type=WEAPON_NONE;
-            bury[b]->weapon.ammo=0;
-            bury[b]->activity.type=ACTIVITY_NONE;
-            criminalize(*bury[b],LAWFLAG_BURIAL);
+            if(!LCSrandom(bury[b]->skill[SKILL_PERSUASION]+
+                          bury[b]->skill[SKILL_DISGUISE]+
+                          bury[b]->skill[SKILL_STREETSENSE]+
+                          bury[b]->attval(ATTRIBUTE_CHARISMA)+
+                          bury[b]->attval(ATTRIBUTE_AGILITY)+
+                          bury[b]->attval(ATTRIBUTE_INTELLIGENCE)+1))
+            {
+               newsstoryst *ns=new newsstoryst;
+                  ns->type=NEWSSTORY_BURIALARREST;
+               newsstory.push_back(ns);
+               sitestory=ns;
 
+               criminalize(*bury[b],LAWFLAG_BURIAL);
+               attemptarrest(*bury[b],"disposing of bodies",clearformess);
+            }
          }
       }
    }

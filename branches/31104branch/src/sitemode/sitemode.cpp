@@ -333,30 +333,30 @@ void mode_site(void)
             set_color(COLOR_WHITE,COLOR_BLACK,0);
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(9,18);
+         move(9,17);
          addstr("G - Get Loot");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(9,35);
+         move(9,32);
          addstr("M - Map");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(10,35);
+         move(10,32);
          addstr("S - Wait");
 
          if(!enemy||!sitealarm)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(10,45);
+         move(10,42);
          addstr("L - Reload");
 
          if(enemy)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,45);
+         move(13,42);
          addstr("K - Kidnap");
 
          if(talkers)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(14,18);
+         move(14,17);
          addstr("T - Talk");
 
          bool graffiti=0;
@@ -388,17 +388,17 @@ void mode_site(void)
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(11,45);
+         move(11,42);
          if(graffiti)addstr("U - Graffiti");
          else addstr("U - Use");
 
          if(enemy&&sitealarm)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(12,45);
+         move(12,42);
          addstr("V - Evade");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(9,45);
+         move(9,42);
          addstr("E - Equip");
 
          if(enemy)set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -410,14 +410,14 @@ void mode_site(void)
          {
             if(freeable&&(!enemy||!sitealarm))set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(14,35);
+            move(14,32);
             addstr("R - Release oppressed");
          }
          else
          {
             if(libnum>6)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(14,35);
+            move(14,32);
             addstr("R - Reorganize");
          }
       }
@@ -554,11 +554,10 @@ void mode_site(void)
 
          if(c=='v'&&enemy&&sitealarm)
          {
+            clearmessagearea();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
-            addstr("Which way?  (W,A,D, and X to move, ENTER to abort)      ");
-            move(17,1);
-            addstr("                                                        ");
+            addstr("Which way?  (W,A,D, and X to move, ENTER to abort)");
 
             refresh();
 
@@ -1503,7 +1502,7 @@ void mode_site(void)
 
                   do
                   {
-                     clearmessagearea();
+                     clearmessagearea(false);
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
@@ -1527,7 +1526,7 @@ void mode_site(void)
                            levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
                            //sitecrime++; // (adding sitecrime gives juice; this is exploitable for unlocking doors)
                            sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
-                           criminalizeparty(LAWFLAG_BREAKING);
+                           //criminalizeparty(LAWFLAG_BREAKING);
                         }
                         // Else perma-lock it if an attempt was made
                         else if(actual)levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
@@ -1549,7 +1548,7 @@ void mode_site(void)
                {
                   do
                   {
-                     clearmessagearea();
+                     clearmessagearea(false);
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);

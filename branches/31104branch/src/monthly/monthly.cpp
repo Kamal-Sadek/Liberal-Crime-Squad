@@ -391,8 +391,8 @@ void passmonth(char &clearformess,char canseethings)
 
             //Confession check
             if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
-                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5  +
-                                      pool[p]->skill[SKILL_SURVIVAL]*5  &&  pool[p]->hireid!=-1)
+                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5
+                                      /*+ pool[p]->skill[SKILL_SURVIVAL]*5*/  &&  pool[p]->hireid!=-1)
             {
                int nullify=0;
                int p2=getpoolcreature(pool[p]->hireid);

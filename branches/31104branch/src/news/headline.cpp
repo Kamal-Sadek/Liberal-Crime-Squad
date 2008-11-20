@@ -6,7 +6,12 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
 {
    switch(ns.type)
    {
+      case NEWSSTORY_NUDITYARREST:
       case NEWSSTORY_CARTHEFT:
+      case NEWSSTORY_WANTEDARREST:
+      case NEWSSTORY_DRUGARREST:
+      case NEWSSTORY_GRAFFITIARREST:
+      case NEWSSTORY_BURIALARREST:
          displaycenterednewsfont("POLICE KILLED",5);
          y=13;
          break;

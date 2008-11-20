@@ -86,7 +86,7 @@ void mode_base(void)
             else
             {
                if(pool[p]->dating==1&&cantseereason>1)cantseereason=1;
-               else if(pool[p]->hiding==1&&cantseereason>2)cantseereason=2;
+               else if(pool[p]->hiding!=0&&cantseereason>2)cantseereason=2;
             }
          }
       }
@@ -97,6 +97,23 @@ void mode_base(void)
 
       if(disbanding&&oldforcemonth!=month)
       {
+         for(int p=pool.size()-1;p>=0;p--)
+         {
+            int targetjuice=0;
+            for(int i=0;i<(year-disbandtime)+1;i++)
+            {
+               targetjuice+=LCSrandom(100);
+            }
+            if(targetjuice>1000)
+            {
+               targetjuice=1000;
+            }
+            if(pool[p]->juice<targetjuice)
+            {
+               if(pool[p]->hireid!=-1 && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+                  pool[p]->alive=-1; // Kill for the purposes of disbanding all contacts below
+            }
+         }
          oldforcemonth=month;
          erase();
          move(0,0);
@@ -141,51 +158,6 @@ void mode_base(void)
          }
          if(execterm==1)addstr(", 1st Term");
          else addstr(", 2nd Term");
-         if(exec[EXEC_VP]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(2,0);
-         addstr("Vice President: ");addstr(execname[EXEC_VP]);addstr(", ");
-         switch(exec[EXEC_VP])
-         {
-            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
-            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
-            case ALIGN_MODERATE:addstr("moderate");break;
-            case ALIGN_LIBERAL:addstr("Liberal");break;
-            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
-         }
-         if(exec[EXEC_STATE]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(3,0);
-         addstr("Secretary of State: ");addstr(execname[EXEC_STATE]);addstr(", ");
-         switch(exec[EXEC_STATE])
-         {
-            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
-            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
-            case ALIGN_MODERATE:addstr("moderate");break;
-            case ALIGN_LIBERAL:addstr("Liberal");break;
-            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
-         }
-         if(exec[EXEC_ATTORNEY]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(4,0);
-         addstr("Attorney General: ");addstr(execname[EXEC_ATTORNEY]);addstr(", ");
-         switch(exec[EXEC_ATTORNEY])
-         {
-            case ALIGN_ARCHCONSERVATIVE:addstr("Arch-Conservative");break;
-            case ALIGN_CONSERVATIVE:addstr("Conservative");break;
-            case ALIGN_MODERATE:addstr("moderate");break;
-            case ALIGN_LIBERAL:addstr("Liberal");break;
-            case ALIGN_ELITELIBERAL:addstr("Elite Liberal");break;
-         }
 
          int housemake[5]={0,0,0,0,0};
          for(int h=0;h<435;h++)
@@ -199,7 +171,7 @@ void mode_base(void)
          else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(5,0);
+         move(2,0);
          addstr("House: ");
          itoa(housemake[4],num,10);
          addstr(num);addstr("Lib+, ");
@@ -224,7 +196,7 @@ void mode_base(void)
          else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(6,0);
+         move(3,0);
          addstr("Senate: ");
          itoa(senatemake[4],num,10);
          addstr(num);addstr("Lib+, ");
@@ -237,48 +209,32 @@ void mode_base(void)
          itoa(senatemake[0],num,10);
          addstr(num);addstr("Cons+");
 
-         int elibjudge=0;
-         int econjudge=0;
-         for(int c=0;c<9;c++)
+         int courtmake[5]={0,0,0,0,0};
+         for(int s=0;s<9;s++)
          {
-            if(court[c]==2)elibjudge++;
-            if(court[c]==-2)econjudge++;
+            courtmake[court[s]+2]++;
          }
-
-         if(econjudge>=5)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(elibjudge>=5)set_color(COLOR_GREEN,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(0,56);addch('S');
-         move(1,56);addch('U');
-         move(2,56);addch('P');
-         move(3,56);addch('R');
-         move(4,56);addch('E');
-         move(5,56);addch('M');
-         move(6,56);addch('E');
-
-         move(0,58);addch('C');
-         move(1,58);addch('O');
-         move(2,58);addch('U');
-         move(3,58);addch('R');
-         move(4,58);addch('T');
+         lsum=courtmake[3]+courtmake[4]
+             -courtmake[0]-courtmake[1];
+         if(courtmake[0]>=5)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(courtmake[0]+courtmake[1]>=5)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(courtmake[3]+courtmake[4]<5)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(courtmake[4]<5)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(4,0);
+         addstr("Supreme Court: ");
+         itoa(courtmake[4],num,10);
+         addstr(num);addstr("Lib+, ");
+         itoa(courtmake[3],num,10);
+         addstr(num);addstr("Lib, ");
+         itoa(courtmake[2],num,10);
+         addstr(num);addstr("Mod, ");
+         itoa(courtmake[1],num,10);
+         addstr(num);addstr("Cons, ");
+         itoa(courtmake[0],num,10);
+         addstr(num);addstr("Cons+");
 
          y=0;
-
-         for(int c=0;c<9;c++)
-         {
-            if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(court[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(court[c]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
-            move(y,60);
-            addstr(courtname[c]);
-
-            y++;
-         }
-
          for(int l=0;l<LAWNUM;l++)
          {
             if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
@@ -287,7 +243,7 @@ void mode_base(void)
             else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_BLUE,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
-            move(10+l/2,l%2*40);
+            move(6+l/3,l%3*30);
 
             switch(l)
             {
@@ -337,18 +293,26 @@ void mode_base(void)
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(21,33);
+         move(19,33);
          addstr("Public Mood");
-         move(22,1);
+         move(21,1);
          addstr("Conservative");
-         move(22,66);
+         move(21,66);
          addstr("Liberal");
-         move(23,0);
+         move(22,0);
          addstr("<------------------------------------------------------------------------------>");
-         move(23,77*publicmood(-1)/100+1);
+         move(22,77*publicmood(-1)/100+1);
          addstr("|");
 
+         move(23,0);
+         addstr("R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
+
          refresh();
+         char c=getch();
+         if(c=='r')
+         {
+            disbanding=0;
+         }
       }
 
       if(!forcewait)

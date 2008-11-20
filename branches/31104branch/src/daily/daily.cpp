@@ -674,6 +674,11 @@ void advanceday(char &clearformess,char canseethings)
    }
    for(p=0;p<pool.size();p++)
    {
+      
+      if(disbanding)break;
+
+      if(!pool[p]->alive)continue;
+      if(pool[p]->hiding)continue;
       // People will help heal even if they aren't specifically assigned to do so
       // Having a specific healing activity helps bookkeeping for the player, though
       // Only the highest medical skill is considered
@@ -822,7 +827,7 @@ void advanceday(char &clearformess,char canseethings)
                   {
                      // May take permanent health damage depending on
                      // quality of care
-                     if(LCSrandom(20)>healing[pool[p]->location]+pool[p]->skill[SKILL_SURVIVAL])
+                     if(LCSrandom(20)>healing[pool[p]->location]/*+pool[p]->skill[SKILL_SURVIVAL]*/)
                      {
                         pool[p]->att[ATTRIBUTE_HEALTH]--;
                         if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -1195,21 +1200,28 @@ void advanceday(char &clearformess,char canseethings)
          pool[p]->hiding--;
          if(pool[p]->hiding==0)
          {
-            pool[p]->location=pool[p]->base;
-
-            if(clearformess)erase();
+            if(location[pool[p]->base]->siege.siege)
+            {
+               pool[p]->hiding=1;
+            }
             else
             {
-               makedelimiter(8,0);
+               pool[p]->location=pool[p]->base;
+
+               if(clearformess)erase();
+               else
+               {
+                  makedelimiter(8,0);
+               }
+
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr(pool[p]->name);
+               addstr(" regains contact with the LCS.");
+
+               refresh();
+               getch();
             }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(pool[p]->name);
-            addstr(" slinks back to the homeless shelter.");
-
-            refresh();
-            getch();
          }
       }
 
@@ -1316,12 +1328,23 @@ void dispersalcheck(char &clearformess)
             // If member has no boss (founder level), mark
             // them nukeme = 0, using them as a starting point
             // at the top of the chain.
-            if(pool[p]->hireid==-1)nukeme[p]=DISPERSAL_BOSSSAFE;
+            if(pool[p]->hireid==-1)
+            {
+               if(!disbanding)
+               {
+                  nukeme[p]=DISPERSAL_BOSSSAFE;
+                  if(pool[p]->hiding==-1)
+                  {
+                     pool[p]->hiding=LCSrandom(10)+5;
+                  }
+               }
+               else nukeme[p]=DISPERSAL_BOSSINHIDING;
+            }
             // If they're dead, mark them nukeme = -1, so they
             // don't ever have their subordinates checked
             // and aren't lost themselves (they're a corpse,
             // corpses don't lose contact)
-            if(!pool[p]->alive)
+            if(!pool[p]->alive && !disbanding)
             {
                nukeme[p]=DISPERSAL_SAFE;
                //Attempt to promote their subordinates
@@ -1348,6 +1371,7 @@ void dispersalcheck(char &clearformess)
          // so we can verify that their subordinates can reach them.
          for(p=pool.size()-1;p>=0;p--)
          {
+            if(!pool[p]->alive)continue;
             if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                inprison=1;
             else inprison=0;
@@ -1377,7 +1401,7 @@ void dispersalcheck(char &clearformess)
                   // Roll to see if you go into hiding or not
                   if(!pool[p]->hiding&&
                      pool[p]->attval(ATTRIBUTE_HEART)*5+
-                     pool[p]->skill[SKILL_SURVIVAL]*10+
+                     //pool[p]->skill[SKILL_SURVIVAL]*10+
                      pool[p]->juice<LCSrandom(200))
                   {
                      nukeme[p]=DISPERSAL_NOCONTACT;//Vanish forever
@@ -1445,25 +1469,28 @@ void dispersalcheck(char &clearformess)
                makedelimiter(8,0);
             }
 
-            if(!pool[p]->hiding&&nukeme[p]==3)
+            if(!disbanding)
             {
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(pool[p]->name);
-               addstr(" has lost touch with the Liberal Crime Squad.");
-               move(9,1);
-               addstr("The Liberal has gone into hiding...");
-               refresh();
-               getch();
-            }
-            else if(nukeme[p]==1)
-            {
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(pool[p]->name);
-               addstr(" has lost touch with the Liberal Crime Squad.");
-               refresh();
-               getch();
+               if(!pool[p]->hiding&&nukeme[p]==3)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr(pool[p]->name);
+                  addstr(" has lost touch with the Liberal Crime Squad.");
+                  move(9,1);
+                  addstr("The Liberal has gone into hiding...");
+                  refresh();
+                  getch();
+               }
+               else if(nukeme[p]==1)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr(pool[p]->name);
+                  addstr(" has lost touch with the Liberal Crime Squad.");
+                  refresh();
+                  getch();
+               }
             }
 
 

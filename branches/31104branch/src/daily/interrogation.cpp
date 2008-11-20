@@ -539,7 +539,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          addstr("in the middle of a back room.");
          y++;
 
-         spiritcrush+=LCSrandom(2);
+         spiritcrush+=LCSrandom(5);
       }
       else
       {
@@ -710,7 +710,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH)+cr->skill[SKILL_SURVIVAL])
+         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH)/*+cr->skill[SKILL_SURVIVAL]*/)
          {
             if(cr->skill[SKILL_RELIGION]>spiritcrush)
             {
@@ -822,6 +822,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       {
          float rapport_temp = rapport[a->id];
          rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skill[SKILL_INTERROGATION]-5)/10.0f;
+         if(techniques[1])rapport_temp -= 1;
          y+=1;
          move(y,0);
          addstr(a->name);

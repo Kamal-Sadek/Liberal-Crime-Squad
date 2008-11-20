@@ -30,580 +30,69 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
+// Imperfect but quick and dirty line of sight check
+// Only works if the target point is at most two spaces
+// away in any direction
+bool LineOfSight(int x, int y, int z)
+{
+   if(levelmap[x][y][z].flag & SITEBLOCK_KNOWN)
+      return true;
 
-/* prints the 'map graphics' on the bottom right */
+   int x1,x2;
+   int y1,y2;
+
+   if(abs(x-locx)==1)
+   {
+      x1=locx;
+      x2=x;
+   }
+   else x1=x2=(x+locx)/2;
+
+   if(abs(y-locy)==1)
+   {
+      y1=locy;
+      y2=y;
+   }
+   else y1=y2=(y+locy)/2;
+
+   // Check for obstructions
+   if(levelmap[x1][y2][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
+   {
+      if(levelmap[x2][y1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
+      {
+         return 0; // Blocked on some axis
+      }
+   }
+   return 1;
+}
+
+// Prints the map graphics in the bottom right of the screen
 void printsitemap(int x,int y,int z)
 {
-   int partysize=0;
-   int partyalive=0;
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)partysize++;
-      else continue;
+   int xscreen, xsite;
+   int yscreen, ysite;
 
-      if(activesquad->squad[p]->alive==1)partyalive++;
-   }
-   int encsize=0;
-   int freeable=0;
-   int enemy=0;
-   int majorenemy=0;
-   int talkers=0;
-   for(int e=0;e<ENCMAX;e++)
-   {
-      if(encounter[e].exists)
-      {
-         encsize++;
-         if(encounter[e].align==-1)enemy++;
-         if(encounter[e].type==CREATURE_WORKER_SERVANT||
-            encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
-            encounter[e].type==CREATURE_WORKER_SWEATSHOP)freeable++;
-         else if(encounter[e].align==0||encounter[e].align==1)talkers++;
-         if(encounter[e].type==CREATURE_CORPORATE_CEO||
-            encounter[e].type==CREATURE_RADIOPERSONALITY||
-            encounter[e].type==CREATURE_NEWSANCHOR||
-            encounter[e].type==CREATURE_SCIENTIST_EMINENT||
-            encounter[e].type==CREATURE_JUDGE_CONSERVATIVE)majorenemy++;
-      }
-   }
-
+   // Build the frame
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   for(int sx=57;sx<80;sx++)
+   for(xscreen=53;xscreen<80;xscreen++)
    {
-      for(int sy=9;sy<25;sy++)
-      {
-         move(sy,sx);
-         if(sy==24)addch('-');
-         else if(sx==57||sx==79)addch('|');
-         else addch(' ');
-      }
+      move(24,xscreen);
+      addch('-');
+   }
+   for(yscreen=9;yscreen<24;yscreen++)
+   {
+      move(yscreen,79);
+      addch('|');
+      move(yscreen,53);
+      addch('|');
    }
 
-   int px,py;
-
-   //YOUR BLOCK
-   px=65;py=14;
-   printblock(x,y,z,px,py);
-
-   //UP BLOCK
-   px=65;py=9;
-   if(y>0)
+   // Display the map
+   for(xsite=x-2,xscreen=79-5*5;xsite<x+3;xscreen+=5,xsite++)
    {
-      if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK)
+      for(ysite=y-2,yscreen=24-3*5;ysite<y+3;yscreen+=3,ysite++)
       {
-         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(py+4,px);addch(CH_FULL_BLOCK);
-         move(py+4,px+1);addch(CH_FULL_BLOCK);
-         move(py+4,px+2);addch(CH_FULL_BLOCK);
-         move(py+4,px+3);addch(CH_FULL_BLOCK);
-         move(py+4,px+4);addch(CH_FULL_BLOCK);
-         move(py+4,px+5);addch(CH_FULL_BLOCK);
-         move(py+4,px+6);addch(CH_FULL_BLOCK);
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI &&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_GREEN,COLOR_WHITE,0);
-            move(py+4,px+2);addch('L');
-            move(py+4,px+3);addch('C');
-            move(py+4,px+4);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS &&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_RED,COLOR_WHITE,0);
-            move(py+4,px+2);addch('C');
-            move(py+4,px+3);addch('C');
-            move(py+4,px+4);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER &&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_BLACK,COLOR_WHITE,0);
-            move(py+4,px+2);addch('G');
-            move(py+4,px+3);addch('N');
-            move(py+4,px+4);addch('G');
-         }
-         
-      }
-      else
-      {
-         printblock(x,y-1,z,px,py);
-      }
-   }
-
-   //DOWN BLOCK
-   px=65;py=19;
-   if(y<MAPY-1)
-   {
-      if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(py,px);addch(CH_FULL_BLOCK);
-         move(py,px+1);addch(CH_FULL_BLOCK);
-         move(py,px+2);addch(CH_FULL_BLOCK);
-         move(py,px+3);addch(CH_FULL_BLOCK);
-         move(py,px+4);addch(CH_FULL_BLOCK);
-         move(py,px+5);addch(CH_FULL_BLOCK);
-         move(py,px+6);addch(CH_FULL_BLOCK);
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_GREEN,COLOR_WHITE,0);
-            move(py,px+2);addch('L');
-            move(py,px+3);addch('C');
-            move(py,px+4);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_RED,COLOR_WHITE,0);
-            move(py,px+2);addch('C');
-            move(py,px+3);addch('C');
-            move(py,px+4);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_BLACK,COLOR_WHITE,0);
-            move(py,px+2);addch('G');
-            move(py,px+3);addch('N');
-            move(py,px+4);addch('G');
-         }
-      }
-      else
-      {
-         printblock(x,y+1,z,px,py);
-      }
-   }
-
-   //WEST BLOCK
-   px=58;py=14;
-   if(x>0)
-   {
-      if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(py,px+6);addch(CH_FULL_BLOCK);
-         move(py+1,px+6);addch(CH_FULL_BLOCK);
-         move(py+2,px+6);addch(CH_FULL_BLOCK);
-         move(py+3,px+6);addch(CH_FULL_BLOCK);
-         move(py+4,px+6);addch(CH_FULL_BLOCK);
-
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_GREEN,COLOR_WHITE,0);
-            move(py+1,px+6);addch('L');
-            move(py+2,px+6);addch('C');
-            move(py+3,px+6);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_RED,COLOR_WHITE,0);
-            move(py+1,px+6);addch('C');
-            move(py+2,px+6);addch('C');
-            move(py+3,px+6);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_BLACK,COLOR_WHITE,0);
-            move(py+1,px+6);addch('G');
-            move(py+2,px+6);addch('N');
-            move(py+3,px+6);addch('G');
-         }
-      }
-      else
-      {
-         printblock(x-1,y,z,px,py);
-      }
-   }
-
-   //EAST BLOCK
-   px=72;py=14;
-   if(x<MAPX-1)
-   {
-      if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(py,px);addch(CH_FULL_BLOCK);
-         move(py+1,px);addch(CH_FULL_BLOCK);
-         move(py+2,px);addch(CH_FULL_BLOCK);
-         move(py+3,px);addch(CH_FULL_BLOCK);
-         move(py+4,px);addch(CH_FULL_BLOCK);
-
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_GREEN,COLOR_WHITE,0);
-            move(py+1,px);addch('L');
-            move(py+2,px);addch('C');
-            move(py+3,px);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_RED,COLOR_WHITE,0);
-            move(py+1,px);addch('C');
-            move(py+2,px);addch('C');
-            move(py+3,px);addch('S');
-         }
-         if(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2))
-         {
-            set_color(COLOR_BLACK,COLOR_WHITE,0);
-            move(py+1,px);addch('G');
-            move(py+2,px);addch('N');
-            move(py+3,px);addch('G');
-         }
-      }
-      else
-      {
-         printblock(x+1,y,z,px,py);
-      }
-   }
-
-   //NE BLOCK
-   px=72;py=9;
-   if(x<MAPX-1&&y>0)
-   {
-      if(levelmap[x+1][y-1][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(!(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px);addch(CH_FULL_BLOCK);
-            move(py+1,px);addch(CH_FULL_BLOCK);
-            move(py+2,px);addch(CH_FULL_BLOCK);
-            move(py+3,px);addch(CH_FULL_BLOCK);
-            move(py+4,px);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+1,px);addch('L');
-               move(py+2,px);addch('C');
-               move(py+3,px);addch('S');
-            }
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+1,px);addch('C');
-               move(py+2,px);addch('C');
-               move(py+3,px);addch('S');
-            }
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+1,px);addch('G');
-               move(py+2,px);addch('N');
-               move(py+3,px);addch('G');
-            }
-         }
-         if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py+4,px);addch(CH_FULL_BLOCK);
-            move(py+4,px+1);addch(CH_FULL_BLOCK);
-            move(py+4,px+2);addch(CH_FULL_BLOCK);
-            move(py+4,px+3);addch(CH_FULL_BLOCK);
-            move(py+4,px+4);addch(CH_FULL_BLOCK);
-            move(py+4,px+5);addch(CH_FULL_BLOCK);
-            move(py+4,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+4,px+2);addch('L');
-               move(py+4,px+3);addch('C');
-               move(py+4,px+4);addch('S');
-            }
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+4,px+2);addch('C');
-               move(py+4,px+3);addch('C');
-               move(py+4,px+4);addch('S');
-            }
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+4,px+2);addch('G');
-               move(py+4,px+3);addch('N');
-               move(py+4,px+4);addch('G');
-            }
-         }
-      }
-      else
-      {
-         printblock(x+1,y-1,z,px,py);
-      }
-   }
-
-   //SE BLOCK
-   px=72;py=19;
-   if(x<MAPX-1&&y<MAPY-1)
-   {
-      if(levelmap[x+1][y+1][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(!(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px);addch(CH_FULL_BLOCK);
-            move(py+1,px);addch(CH_FULL_BLOCK);
-            move(py+2,px);addch(CH_FULL_BLOCK);
-            move(py+3,px);addch(CH_FULL_BLOCK);
-            move(py+4,px);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+1,px);addch('L');
-               move(py+2,px);addch('C');
-               move(py+3,px);addch('S');
-            }
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+1,px);addch('C');
-               move(py+2,px);addch('C');
-               move(py+3,px);addch('S');
-            }
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+1,px);addch('G');
-               move(py+2,px);addch('N');
-               move(py+3,px);addch('G');
-            }
-         }
-         if(!(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px);addch(CH_FULL_BLOCK);
-            move(py,px+1);addch(CH_FULL_BLOCK);
-            move(py,px+2);addch(CH_FULL_BLOCK);
-            move(py,px+3);addch(CH_FULL_BLOCK);
-            move(py,px+4);addch(CH_FULL_BLOCK);
-            move(py,px+5);addch(CH_FULL_BLOCK);
-            move(py,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py,px+2);addch('L');
-               move(py,px+3);addch('C');
-               move(py,px+4);addch('S');
-            }
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py,px+2);addch('C');
-               move(py,px+3);addch('C');
-               move(py,px+4);addch('S');
-            }
-            if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py,px+2);addch('G');
-               move(py,px+3);addch('N');
-               move(py,px+4);addch('G');
-            }
-         }
-      }
-      else
-      {
-         printblock(x+1,y+1,z,px,py);
-      }
-   }
-
-   //NW BLOCK
-   px=58;py=9;
-   if(x>0&&y>0)
-   {
-      if(levelmap[x-1][y-1][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(!(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px+6);addch(CH_FULL_BLOCK);
-            move(py+1,px+6);addch(CH_FULL_BLOCK);
-            move(py+2,px+6);addch(CH_FULL_BLOCK);
-            move(py+3,px+6);addch(CH_FULL_BLOCK);
-            move(py+4,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+1,px+6);addch('L');
-               move(py+2,px+6);addch('C');
-               move(py+3,px+6);addch('S');
-            }
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+1,px+6);addch('C');
-               move(py+2,px+6);addch('C');
-               move(py+3,px+6);addch('S');
-            }
-            if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+1,px+6);addch('G');
-               move(py+2,px+6);addch('N');
-               move(py+3,px+6);addch('G');
-            }
-         }
-         if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py+4,px);addch(CH_FULL_BLOCK);
-            move(py+4,px+1);addch(CH_FULL_BLOCK);
-            move(py+4,px+2);addch(CH_FULL_BLOCK);
-            move(py+4,px+3);addch(CH_FULL_BLOCK);
-            move(py+4,px+4);addch(CH_FULL_BLOCK);
-            move(py+4,px+5);addch(CH_FULL_BLOCK);
-            move(py+4,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+4,px+2);addch('L');
-               move(py+4,px+3);addch('C');
-               move(py+4,px+4);addch('S');
-            }
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+4,px+2);addch('C');
-               move(py+4,px+3);addch('C');
-               move(py+4,px+4);addch('S');
-            }
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+4,px+2);addch('G');
-               move(py+4,px+3);addch('N');
-               move(py+4,px+4);addch('G');
-            }
-         }
-      }
-      else
-      {
-         printblock(x-1,y-1,z,px,py);
-      }
-   }
-
-   //SW BLOCK
-   px=58;py=19;
-   if(x>0&&y<MAPY-1)
-   {
-      if(levelmap[x-1][y+1][z].flag & SITEBLOCK_BLOCK)
-      {
-         if(!(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px+6);addch(CH_FULL_BLOCK);
-            move(py+1,px+6);addch(CH_FULL_BLOCK);
-            move(py+2,px+6);addch(CH_FULL_BLOCK);
-            move(py+3,px+6);addch(CH_FULL_BLOCK);
-            move(py+4,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py+1,px+6);addch('L');
-               move(py+2,px+6);addch('C');
-               move(py+3,px+6);addch('S');
-            }
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py+1,px+6);addch('C');
-               move(py+2,px+6);addch('C');
-               move(py+3,px+6);addch('S');
-            }
-            if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py+1,px+6);addch('G');
-               move(py+2,px+6);addch('N');
-               move(py+3,px+6);addch('G');
-            }
-         }
-         if(!(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))
-         {
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2)set_color(COLOR_RED,COLOR_BLACK,0);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(py,px);addch(CH_FULL_BLOCK);
-            move(py,px+1);addch(CH_FULL_BLOCK);
-            move(py,px+2);addch(CH_FULL_BLOCK);
-            move(py,px+3);addch(CH_FULL_BLOCK);
-            move(py,px+4);addch(CH_FULL_BLOCK);
-            move(py,px+5);addch(CH_FULL_BLOCK);
-            move(py,px+6);addch(CH_FULL_BLOCK);
-
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_GREEN,COLOR_WHITE,0);
-               move(py,px+2);addch('L');
-               move(py,px+3);addch('C');
-               move(py,px+4);addch('S');
-            }
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_CCS&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_RED,COLOR_WHITE,0);
-               move(py,px+2);addch('C');
-               move(py,px+3);addch('C');
-               move(py,px+4);addch('S');
-            }
-            if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER&&
-            !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2))
-            {
-               set_color(COLOR_BLACK,COLOR_WHITE,0);
-               move(py,px+2);addch('G');
-               move(py,px+3);addch('N');
-               move(py,px+4);addch('G');
-            }
-         }
-      }
-      else
-      {
-         printblock(x-1,y+1,z,px,py);
+         printblock(xsite,ysite,z,xscreen,yscreen);
       }
    }
 
@@ -638,59 +127,253 @@ void printsitemap(int x,int y,int z)
    if(levelmap[locx][locy][locz].special!=-1)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(24,68-(strlen(str)>>1));
+      move(24,67-(strlen(str)>>1));
       addstr(str);
    }
 
    //PRINT PARTY
-   int backcolor=COLOR_BLACK;
-   char blink=0;
-   //if(levelmap[locx][locy][locz].flag & SITEBLOCK_GRASSY)
-      //backcolor=COLOR_GREEN;
-   //else if(levelmap[locx][locy][locz].flag & SITEBLOCK_OUTDOOR)
-      //blink=1;
-
-   if(partyalive>0)set_color(COLOR_GREEN,backcolor,1,blink);
-   else set_color(COLOR_BLACK,backcolor,1,blink);
-   move(16,66);
+   int partyalive=0;
+   for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]==NULL)continue;
+      if(activesquad->squad[p]->alive==1)partyalive++;
+   }
+   if(partyalive>0)set_color(COLOR_GREEN,COLOR_BLACK,1);
+   else set_color(COLOR_BLACK,COLOR_BLACK,1);
+   move(16,64);
    addstr("SQUAD");
 
+   int encsize=0;
+   for(int e=0;e<ENCMAX;e++)
+   {
+      if(encounter[e].exists)
+      {
+         encsize++;
+      }
+   }
    //PRINT ANY OPPOSING FORCE INFO
    if(encsize>0)
    {
-      set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(17,65);
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      move(17,64);
       if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
       {
-         addstr("ENC+ARM");
+         addstr("ARMOR");
       }
       else if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT)
       {
-         addstr("ENC+ENM");
+         addstr("ENEMY");
       }
       else if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
       {
-         addstr("ENC+enm");
+         addstr("enmey");
       }
-      else addstr("ENCNTER");
+      else addstr("ENCTR");
 
       printencounter();
    }
 
    if(groundloot.size()>0)
    {
-      set_color(COLOR_MAGENTA,backcolor,1,blink);
-      move(18,66);
+      set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+      move(15,64);
       addstr("LOOT!");
 
       printencounter();
    }
 }
 
+#define WALL_UP    0
+#define WALL_DOWN  1
+#define WALL_LEFT  2
+#define WALL_RIGHT 3
 
-
-void printblock(int x,int y,int z,int px,int py)
+void printwall(int x, int y, int z, int px, int py)
 {
+   bool visible[4]     = {false,false,false,false};
+   bool bloody[4]      = {false,false,false,false};
+   char graffiti[4][4] = {"   ","   ","   ","   "};
+   char graffiticolor[4] = {COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK};
+
+   char type = 0; // Are we drawing a wall or a door?
+   if(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)     { type = SITEBLOCK_BLOCK; }
+   else if(levelmap[x][y][z].flag & SITEBLOCK_DOOR) { type = levelmap[x][y][z].flag; } // Retain locked/jammed data
+
+   // Now follows a series of checks to determine the faces of the wall that should be
+   // displayed. Note the order of these checks is important:
+   //
+   // 1) You will see the wall if it's the upward face and you're above it (directional visibility)...
+   // 2) ...unless your line of sight is blocked (LOS)...
+   // 3) ...but line of sight and directional visibility is not important if you have already seen that
+   //          tile (memory)...
+   // 4) ...and regardless of any of the above, if there's a physical obstruction that would prevent you
+   //          from seeing it even if you were near it, like a wall, it should not be shown (blockages).
+   //
+   // The order of the remainder of the checks is not crucial.
+
+   // 1) Check for directional visibility
+   if(y<locy && y>0)         { visible[WALL_DOWN] = true; }
+   else if(y>locy && y<MAPY) { visible[WALL_UP] = true;   }
+
+   if(x<locx && x>0)         { visible[WALL_RIGHT] = true; }
+   else if(x>locx && x<MAPX) { visible[WALL_LEFT] = true;  }
+
+   // 2) Check LOS
+   if(!LineOfSight(x-1,y,z)) { visible[WALL_LEFT] = false; }
+   if(!LineOfSight(x+1,y,z)) { visible[WALL_RIGHT] = false; }
+   if(!LineOfSight(x,y-1,z)) { visible[WALL_UP] = false; }
+   if(!LineOfSight(x,y+1,z)) { visible[WALL_DOWN] = false; }
+
+   // 3) Check for memory
+   if(levelmap[x-1][y][z].flag & (SITEBLOCK_KNOWN)) { visible[WALL_LEFT] = true; }
+   if(levelmap[x+1][y][z].flag & (SITEBLOCK_KNOWN)) { visible[WALL_RIGHT] = true; }
+   if(levelmap[x][y-1][z].flag & (SITEBLOCK_KNOWN)) { visible[WALL_UP] = true; }
+   if(levelmap[x][y+1][z].flag & (SITEBLOCK_KNOWN)) { visible[WALL_DOWN] = true; }
+
+   // 4) Check for blockages
+   if(levelmap[x-1][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) { visible[WALL_LEFT] = false; }
+   if(levelmap[x+1][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) { visible[WALL_RIGHT] = false; }
+   if(levelmap[x][y-1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) { visible[WALL_UP] = false; }
+   if(levelmap[x][y+1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) { visible[WALL_DOWN] = false; }
+
+   // Below not used for doors
+   if(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)
+   {
+      // Check for bloody walls
+      if(levelmap[x-1][y][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_LEFT] = true; }
+      if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_RIGHT] = true; }
+      if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_UP] = true; }
+      if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_DOWN] = true; }
+
+      // Check for other graffiti
+      if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_LEFT],"GNG"); graffiticolor[WALL_LEFT] = COLOR_BLACK; }
+      if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_RIGHT],"GNG"); graffiticolor[WALL_RIGHT] = COLOR_BLACK; }
+      if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_UP],"GNG"); graffiticolor[WALL_UP] = COLOR_BLACK; }
+      if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_DOWN],"GNG"); graffiticolor[WALL_DOWN] = COLOR_BLACK; }
+
+      // Check for CCS graffiti
+      if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_CCS) { strcpy(graffiti[WALL_LEFT],"CCS"); graffiticolor[WALL_LEFT] = COLOR_RED; }
+      if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_CCS) { strcpy(graffiti[WALL_RIGHT],"CCS"); graffiticolor[WALL_RIGHT] = COLOR_RED; }
+      if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_CCS) { strcpy(graffiti[WALL_UP],"CCS"); graffiticolor[WALL_UP] = COLOR_RED; }
+      if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI_CCS) { strcpy(graffiti[WALL_DOWN],"CCS"); graffiticolor[WALL_DOWN] = COLOR_RED; }
+
+      // Check for LCS graffiti
+      if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_LEFT],"LCS"); graffiticolor[WALL_LEFT] = COLOR_GREEN; }
+      if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_RIGHT],"LCS"); graffiticolor[WALL_RIGHT] = COLOR_GREEN; }
+      if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_UP],"LCS"); graffiticolor[WALL_UP] = COLOR_GREEN; }
+      if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_DOWN],"LCS"); graffiticolor[WALL_DOWN] = COLOR_GREEN; }
+   }
+   
+   for(int dir=0;dir<4;dir++)
+   {
+      x=px;
+      y=py;
+
+      // Draw the wall/door
+      if(visible[dir])
+      {
+         if(type == SITEBLOCK_BLOCK)
+         {
+            // Position cursor at the start of where the graffiti tag would go
+            if(dir==WALL_UP) { x++; }
+            if(dir==WALL_DOWN) { y+=2; x++; }
+            if(dir==WALL_RIGHT) { x+=4; }
+            if(dir==WALL_LEFT) { }
+
+            // Blood overrides graffiti overrides gray base wall color
+            if(bloody[dir])
+               set_color(COLOR_RED,COLOR_RED,0);
+            else if(graffiti[dir][0]!=' ')
+               set_color(graffiticolor[dir],COLOR_WHITE,0);
+            else
+               set_color(COLOR_WHITE,COLOR_WHITE,0);
+            
+            // Draw the chunk of wall where the graffiti would/will go
+            for(int gchar=0;gchar<3;gchar++)
+            {
+               move(y,x);
+               addch(graffiti[dir][gchar]);
+
+               if(dir==WALL_RIGHT||dir==WALL_LEFT)
+                  y++;
+               else
+                  x++;
+            }
+
+            // For the long faces (top and bottom) of the wall, there is
+            // additional space to either side of the 'tag' (or lack of tag)
+            // that needs to be filled in with wall color
+
+            // Note that I'm ignoring bloodiness for these points; this is
+            // somewhat intentional
+            if(dir == WALL_UP || dir == WALL_DOWN)
+            {
+               set_color(COLOR_WHITE,COLOR_WHITE,0);
+               if(!visible[WALL_LEFT])
+               {
+                  move(y,px);
+                  addch(' ');
+               }
+               if(!visible[WALL_RIGHT])
+               {
+                  move(y,px+4);
+                  addch(' ');
+               }
+            }
+         }
+         else if(type & SITEBLOCK_DOOR)
+         {
+            // Doors are, thankfully, much simpler, as they do not
+            // support blood or graffiti
+
+            // Position cursor at the start of face
+            if(dir==WALL_DOWN)  { y+=2; }
+            if(dir==WALL_RIGHT) { x+=4; }
+
+            // Pick color
+            if(type & SITEBLOCK_CLOCK && type & SITEBLOCK_LOCKED)
+               set_color(COLOR_RED,COLOR_BLACK,0);
+            else if(type & SITEBLOCK_KLOCK && type & SITEBLOCK_LOCKED)
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+            else
+               set_color(COLOR_YELLOW,COLOR_BLACK,0);
+            
+            // Draw face
+            if(dir==WALL_RIGHT||dir==WALL_LEFT)
+            {
+               for(int i=0;i<3;i++)
+               { move(y,x); addch('|'); y++; }
+            }
+            else
+            {
+               for(int i=0;i<5;i++)
+               { move(y,x); addch('-'); x++; }
+            }
+         }
+      }
+   }
+}
+
+void printblock(int x,int y,int z,int px, int py)
+{
+   if(!LineOfSight(x,y,locz))
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,0);
+      for(x=px;x<px+5;x++)
+      {
+         for(y=py;y<py+3;y++)
+         {
+            move(y,x);
+            addch(' ');
+         }
+      }
+      return;
+   }
+   if(levelmap[x][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
+   {
+      printwall(x,y,z,px,py);
+      return;
+   }
    int backcolor=COLOR_BLACK;
    char blink=0;
    char ch=' ';
@@ -715,9 +398,9 @@ void printblock(int x,int y,int z,int px,int py)
       ch=' ';
    }
 
-   for(int px2=px;px2<px+7;px2++)
+   for(int px2=px;px2<px+5;px2++)
    {
-      for(int py2=py;py2<py+5;py2++)
+      for(int py2=py;py2<py+3;py2++)
       {
          move(py2,px2);
          addch(ch);
@@ -737,22 +420,10 @@ void printblock(int x,int y,int z,int px,int py)
       addch('.');
       move(py+1,px+4);
       addch('|');
-      move(py+1,px+6);
-      addch('-');
       move(py+2,px+1);
       addch('.');
       move(py+2,px+4);
       addch('\\');
-      move(py+2,px+6);
-      addch('.');
-      move(py+3,px+1);
-      addch('*');
-      move(py+3,px+5);
-      addch('=');
-      move(py+4,px+0);
-      addch('/');
-      move(py+4,px+3);
-      addch('.');
    }
 
    if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_START)
@@ -764,12 +435,6 @@ void printblock(int x,int y,int z,int px,int py)
       move(py+1,px+3);
       addch('.');
       move(py+2,px+1);
-      addch('.');
-      set_color(COLOR_RED,backcolor,1,blink);
-      move(py+2,px+6);
-      addch('.');
-      set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(py+4,px+3);
       addch('.');
    }
 
@@ -789,28 +454,11 @@ void printblock(int x,int y,int z,int px,int py)
       addch(':');
       move(py+1,px+4);
       addch('%');
-      set_color(COLOR_RED,backcolor,1,blink);
-      move(py+1,px+6);
-      addch('*');
       set_color(COLOR_YELLOW,backcolor,1,blink);
       move(py+2,px+1);
       addch(':');
       move(py+2,px+4);
       addch('*');
-      set_color(COLOR_RED,backcolor,1,blink);
-      move(py+2,px+6);
-      addch('*');
-      move(py+3,px+1);
-      addch('%');
-      set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(py+3,px+5);
-      addch('$');
-      set_color(COLOR_RED,backcolor,1,blink);
-      move(py+4,px+0);
-      addch('*');
-      set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(py+4,px+3);
-      addch(':');
    }
 
    if(levelmap[x][y][z].flag & SITEBLOCK_FIRE_END)
@@ -829,44 +477,22 @@ void printblock(int x,int y,int z,int px,int py)
       addch('.');
       move(py+1,px+4);
       addch('|');
-      set_color(COLOR_RED,backcolor,1,blink);
-      move(py+1,px+6);
-      addch('=');
       set_color(COLOR_WHITE,backcolor,1,blink);
       move(py+2,px+1);
       addch('.');
       set_color(COLOR_YELLOW,backcolor,1,blink);
       move(py+2,px+4);
       addch('#');
-      set_color(COLOR_WHITE,backcolor,1,blink);
-      move(py+2,px+6);
-      addch('.');
-      move(py+3,px+1);
-      addch('*');
-      set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(py+3,px+5);
-      addch('*');
-      set_color(COLOR_WHITE,backcolor,1,blink);
-      move(py+4,px+0);
-      addch('/');
-      move(py+4,px+3);
-      addch('.');
    }
 
    if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY2)
    {
       set_color(COLOR_RED,backcolor,0,blink);
-      move(py+3,px+2);
-      addch('\\');
       move(py+1,px+1);
       addch('%');
-      move(py+4,px+5);
-      addch('&');
       move(py+2,px+1);
       addch('.');
       move(py+1,px+2);
-      addch('.');
-      move(py+4,px+4);
       addch('.');
    }
    else if(levelmap[x][y][z].flag & SITEBLOCK_BLOODY)
@@ -876,15 +502,13 @@ void printblock(int x,int y,int z,int px,int py)
       addch('.');
       move(py+1,px+2);
       addch('.');
-      move(py+4,px+4);
-      addch('.');
    }
 
    if(levelmap[x][y][z].flag & SITEBLOCK_EXIT)
    {
       set_color(COLOR_WHITE,backcolor,0,blink);
       move(py+1,px+1);
-      addstr("EXIT");
+      addstr("EXT");
    }
    else if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
    {
@@ -892,40 +516,52 @@ void printblock(int x,int y,int z,int px,int py)
          (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
          set_color(COLOR_RED,backcolor,0,blink);
+         move(py,px);
+         addstr("=====");
          move(py+1,px);
-         addstr("L. DOOR");
+         addstr("=====");
+         move(py+2,px);
+         addstr("=====");
       }
       else if((levelmap[x][y][z].flag & SITEBLOCK_KLOCK) &&
          (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
-         set_color(COLOR_YELLOW,backcolor,0,blink);
+         set_color(COLOR_BLACK,backcolor,1,blink);
+         move(py,px);
+         addstr("=====");
          move(py+1,px);
-         addstr("L. DOOR");
+         addstr("=====");
+         move(py+2,px);
+         addstr("=====");
       }
       else
       {
          set_color(COLOR_YELLOW,backcolor,0,blink);
-         move(py+1,px+1);
-         addstr("DOOR");
+         move(py,px);
+         addstr("=====");
+         move(py+1,px);
+         addstr("=====");
+         move(py+2,px);
+         addstr("=====");
       }
    }
    else if(levelmap[x][y][z].flag & SITEBLOCK_LOOT)
    {
       set_color(COLOR_MAGENTA,backcolor,1,blink);
-      move(py+1,px+1);
-      addstr("GOODS");
+      move(py,px+1);
+      addstr("~$~");
    }
 
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_TRAP)
    {
       set_color(COLOR_YELLOW,backcolor,1,blink);
-      move(py,px+1);
+      move(py+1,px);
       addstr("TRAP!");
    }
    else if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
    {
       set_color(COLOR_RED,backcolor,0,blink);
-      move(py,px+1);
+      move(py+2,px+1);
       addstr("enemy");
    }
    else if(levelmap[x][y][z].special!=-1)
@@ -935,45 +571,44 @@ void printblock(int x,int y,int z,int px,int py)
 
       switch(levelmap[x][y][z].special)
       {
-         case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:addstr("ANIMALS");break;
-         case SPECIAL_NUCLEAR_ONOFF:addstr("ON/OFF!");break;
-         case SPECIAL_LAB_GENETIC_CAGEDANIMALS:addstr("ANIMALS");break;
-         case SPECIAL_POLICESTATION_LOCKUP:addstr("LOCK-UP");break;
-         case SPECIAL_COURTHOUSE_LOCKUP:addstr("LOCK-UP");break;
-         case SPECIAL_COURTHOUSE_JURYROOM:move(py,px+1);addstr("JURY!");break;
-         case SPECIAL_PRISON_CONTROL:addstr("CONTROL");break;
-         case SPECIAL_INTEL_SUPERCOMPUTER:addstr("COMPUTR");break;
-         case SPECIAL_SWEATSHOP_EQUIPMENT:addstr("MACHINE");break;
-         case SPECIAL_POLLUTER_EQUIPMENT:addstr("MACHINE");break;
-         case SPECIAL_HOUSE_PHOTOS:move(py,px+1);addstr("SAFE!");break;
-         case SPECIAL_CORPORATE_FILES:move(py,px+1);addstr("SAFE!");break;
-         case SPECIAL_RADIO_BROADCASTSTUDIO:addstr("STUDIO!");break;
-         case SPECIAL_NEWS_BROADCASTSTUDIO:addstr("STUDIO!");break;
-         case SPECIAL_APARTMENT_LANDLORD:addstr("LANDLRD");break;
-         case SPECIAL_APARTMENT_SIGN:move(py,px+1);addstr("SIGN!");break;
-         case SPECIAL_STAIRS_UP:addstr("STAIRS");addch(CH_UPWARDS_ARROW);break;
-         case SPECIAL_STAIRS_DOWN:addstr("STAIRS");
+         case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:addstr("CAGES");break;
+         case SPECIAL_NUCLEAR_ONOFF:addstr("POWER");break;
+         case SPECIAL_LAB_GENETIC_CAGEDANIMALS:addstr("CAGES");break;
+         case SPECIAL_POLICESTATION_LOCKUP:addstr("CELLS");break;
+         case SPECIAL_COURTHOUSE_LOCKUP:addstr("CELLS");break;
+         case SPECIAL_COURTHOUSE_JURYROOM:addstr("JURY!");break;
+         case SPECIAL_PRISON_CONTROL:addstr("CTROL");break;
+         case SPECIAL_INTEL_SUPERCOMPUTER:addstr("INTEL");break;
+         case SPECIAL_SWEATSHOP_EQUIPMENT:addstr("EQUIP");break;
+         case SPECIAL_POLLUTER_EQUIPMENT:addstr("EQUIP");break;
+         case SPECIAL_HOUSE_PHOTOS:addstr("SAFE!");break;
+         case SPECIAL_CORPORATE_FILES:addstr("SAFE!");break;
+         case SPECIAL_RADIO_BROADCASTSTUDIO:move(py,px+1);addstr("MIC");break;
+         case SPECIAL_NEWS_BROADCASTSTUDIO:addstr("STAGE");break;
+         case SPECIAL_APARTMENT_LANDLORD:addstr("OWNER");break;
+         case SPECIAL_APARTMENT_SIGN:addstr("SIGN!");break;
+         case SPECIAL_STAIRS_UP:move(py,px+1);addstr("UP");
+                                addch(CH_UPWARDS_ARROW);break;
+         case SPECIAL_STAIRS_DOWN:move(py,px+1);addstr("DN");
                                   addch(CH_DOWNWARDS_ARROW);break;
-         case SPECIAL_RESTAURANT_TABLE:move(py,px+1);addstr("TABLE");break;
-         case SPECIAL_CAFE_COMPUTER:addstr("COMPUTR");break;
-         case SPECIAL_PARK_BENCH:move(py,px+1);addstr("BENCH");break;
+         case SPECIAL_RESTAURANT_TABLE:;addstr("TABLE");break;
+         case SPECIAL_CAFE_COMPUTER:move(py,px+1);addstr("CPU");break;
+         case SPECIAL_PARK_BENCH:addstr("BENCH");break;
       }
    }
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
    {
       set_color(COLOR_RED,backcolor,1,blink);
-      move(py+3,px+1);
+      move(py+2,px);
       addstr("ARMOR");
    }
    else if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT)
    {
       set_color(COLOR_RED,backcolor,1,blink);
-      move(py+3,px+1);
+      move(py+2,px);
       addstr("ENEMY");
    }
 }
-
-
 
 /* prints the names of creatures you see */
 void printencounter(void)
@@ -982,7 +617,7 @@ void printencounter(void)
    for(int i=19;i<=24;i++)
    {
       move(i,1);
-      addstr("                                                        ");
+      addstr("                                                    ");
    }
 
    int px=1,py=19;
@@ -1017,7 +652,7 @@ void printchaseencounter(void)
       for(int i=19;i<=24;i++)
       {
          move(i,1);
-         addstr("                                                     ");
+         addstr("                                                  ");
       }
 
       int carsy[4]={20,20,20,20};
@@ -1060,20 +695,37 @@ void clearcommandarea(void)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int y=9;y<16;y++)
    {
-      move(y,1);
-      addstr("                                                        ");
+      for(int x=0;x<53;x++)
+      {
+         move(y,x);
+         addch(' ');
+      }
    }
 }
 
 
+void refreshmaparea(void)
+{
+   if(mode==GAMEMODE_SITE)
+   {
+      printsitemap(locx,locy,locz);
+   }
+   else
+   {
+      clearmaparea();
+   }
+}
 
-void clearmessagearea(void)
+
+void clearmessagearea(bool redrawmaparea)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   addstr("                                                        ");
+   addstr("                                                    ");
    move(17,1);
-   addstr("                                                        ");
+   addstr("                                                    ");
+
+   if(redrawmaparea)refreshmaparea();
 }
 
 
@@ -1083,7 +735,7 @@ void clearmaparea(void)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int y=9;y<24;y++)
    {
-      move(y,57);
-      addstr("                       ");
+      move(y,53);
+      addstr("                          ");
    }
 }

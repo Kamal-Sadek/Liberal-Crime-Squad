@@ -311,7 +311,7 @@ void advancecreature(creaturest &cr)
    {
       if(cr.wound[w] & WOUND_BLEEDING)
       {
-         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)+cr.skill[SKILL_SURVIVAL])
+         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)/*+cr.skill[SKILL_SURVIVAL]*5*/)
          {
             cr.wound[w]^=WOUND_BLEEDING;
          }

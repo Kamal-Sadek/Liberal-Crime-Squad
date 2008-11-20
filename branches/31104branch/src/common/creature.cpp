@@ -1332,7 +1332,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          cr.align=1;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_SURVIVAL]=sk;randomskills-=sk;
+         //sk=LCSrandom(3)+1;cr.skill[SKILL_SURVIVAL]=sk;randomskills-=sk;
          for(a=0;a<ATTNUM;a++)
          {
             cr.att[a]=1;
