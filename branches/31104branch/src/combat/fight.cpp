@@ -37,7 +37,7 @@ void youattack(void)
 
    for(int e=0;e<ENCMAX;e++)
    {
-      if(encounter[e].align==-1)
+      if(encounter[e].enemy())
          encounter[e].cantbluff=2;
    }
 
@@ -65,7 +65,7 @@ void youattack(void)
       {
          if(encounter[e].alive&&encounter[e].exists)
          {
-            if(encounter[e].align==-1)goodtarg.push_back(e);
+            if(encounter[e].enemy())goodtarg.push_back(e);
             else badtarg.push_back(e);
          }
       }
@@ -88,6 +88,7 @@ void youattack(void)
       char actual;
       short beforeblood=encounter[target].blood;
       attack(*activesquad->squad[p],encounter[target],mistake,actual);
+      if(encounter[target].align==1)mistake=1;
 
       if(actual)
       {
@@ -146,7 +147,7 @@ void youattack(void)
                {
                   if(encounter[e].alive&&encounter[e].exists)
                   {
-                     if(encounter[e].align==-1)goodtarg.push_back(e);
+                     if(encounter[e].enemy())goodtarg.push_back(e);
                      else badtarg.push_back(e);
                   }
                }
@@ -216,7 +217,7 @@ void enemyattack(void)
 
       if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER)
          conservatise(encounter[e]);
-      if(encounter[e].align==-1)
+      if(encounter[e].enemy())
          encounter[e].cantbluff=2;
 
       if(mode!=GAMEMODE_CHASECAR)
@@ -241,7 +242,7 @@ void enemyattack(void)
             }
          }
 
-         if(((encounter[e].align!=-1||
+         if(((!encounter[e].enemy()||
             (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<70+LCSrandom(61)))
             &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
             ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
@@ -306,7 +307,7 @@ void enemyattack(void)
       vector<int> goodtarg;
       vector<int> badtarg;
 
-      if(encounter[e].align==-1)
+      if(encounter[e].enemy())
       {
          for(int p=0;p<6;p++)
          {
@@ -332,7 +333,7 @@ void enemyattack(void)
       {
          if(!encounter[e2].exists)continue;
          if(!encounter[e2].alive)continue;
-         if(encounter[e2].align==-1)continue;
+         if(encounter[e2].enemy())continue;
 
          badtarg.push_back(e2);
       }
@@ -356,7 +357,7 @@ void enemyattack(void)
       char actual;
       if(canmistake)
       {
-         if(encounter[e].align==-1)
+         if(encounter[e].enemy())
          {
             if(activesquad->squad[target]->prisoner!=NULL && !LCSrandom(2))
             {
@@ -409,7 +410,7 @@ void enemyattack(void)
          }
       }
 
-      if(encounter[e].align==-1)
+      if(encounter[e].enemy())
          attack(encounter[e],*activesquad->squad[target],0,actual);
       else
          attack(encounter[e],encounter[target],0,actual);
@@ -452,7 +453,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int encnum=0;
    for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
-   if((a.type==CREATURE_SCIENTIST_EMINENT||
+   if(((a.type==CREATURE_COP&&a.align==ALIGN_LIBERAL&&a.enemy())||
+      a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
       a.type==CREATURE_CORPORATE_CEO||
@@ -657,7 +659,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       wsk=SKILL_IMPROVISED;
    }
    aroll+=a.skill[wsk];
-   a.skill_ip[wsk]+=droll;
+   a.train(wsk,droll);
    
    int bonus=0;
    //Penalty for improvised weapons
@@ -887,25 +889,25 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
          case WEAPON_CROWBAR:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(40)+10;
+            damamount=LCSrandom(21)+5;
             strengthmod=1;
             break;
          case WEAPON_MAUL:
          case WEAPON_BASEBALLBAT:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(50)+10;
+            damamount=LCSrandom(41)+5;
             strengthmod=1;
             break;
          case WEAPON_PITCHFORK:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(50)+5;
+            damamount=LCSrandom(51)+5;
             strengthmod=1;
             damagearmor=1;
             break;
          case WEAPON_TORCH:
             damtype|=WOUND_BURNED;
-            damamount=LCSrandom(10)+1;
+            damamount=LCSrandom(11)+5;
             strengthmod=1;
             damagearmor=1;
             break;
@@ -913,7 +915,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_KNIFE:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(10)+1;
+            damamount=LCSrandom(16)+5;
             strengthmod=1;
             //severtype=WOUND_CLEANOFF; *JDS* no dismemberment from knives and shanks
             damagearmor=1;
@@ -921,7 +923,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             break;
          case WEAPON_SYRINGE:
             damtype|=WOUND_CUT;
-            damamount=LCSrandom(5)+1;
+            damamount=LCSrandom(6)+5;
             strengthmod=1;
             break;
          case WEAPON_REVOLVER_22:
@@ -929,7 +931,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(140)+10;
+               damamount=LCSrandom(141)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
                armorpiercing=1;
@@ -937,7 +939,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(20)+5;
+               damamount=LCSrandom(6)+5;
                strengthmod=1;
             }
             break;
@@ -946,7 +948,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(275)+10;
+               damamount=LCSrandom(276)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
                armorpiercing=4;
@@ -954,33 +956,17 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(20)+5;
+               damamount=LCSrandom(6)+5;
                strengthmod=1;
             }
             break;
          case WEAPON_SEMIPISTOL_9MM:
-            if(a.weapon.ammo>0)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(180)+10;
-               //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from semi-automatics
-               damagearmor=1;
-               armorpiercing=3;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(20)+5;
-               strengthmod=1;
-            }
-            break;
          case WEAPON_SEMIPISTOL_45:
             if(a.weapon.ammo>0)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(180)+10;
+               damamount=LCSrandom(181)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from semi-automatics
                damagearmor=1;
                armorpiercing=3;
@@ -988,7 +974,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(20)+5;
+               damamount=LCSrandom(6)+5;
                strengthmod=1;
             }
             break;
@@ -998,7 +984,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
 
-               damamount=LCSrandom(250)+10;
+               damamount=LCSrandom(251)+10;
 
                damagearmor=1;
                armorpiercing=5;
@@ -1006,13 +992,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(30)+5;
+               damamount=LCSrandom(21)+5;
                strengthmod=1;
             }
             break;
          case WEAPON_MOLOTOV:
             damtype|=WOUND_BURNED;
-            damamount=LCSrandom(100)+25;
+            damamount=LCSrandom(101)+25;
             damagearmor=1;
             armorpiercing=7;
             break;
@@ -1020,13 +1006,13 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             if(a.weapon.ammo>0)
             {
                damtype|=WOUND_BURNED;
-               damamount=LCSrandom(200)+300;
+               damamount=LCSrandom(201)+50;
                damagearmor=1;
                armorpiercing=9;
             } else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(30)+5;
+               damamount=LCSrandom(21)+5;
                strengthmod=1;
             }
             break;
@@ -1041,7 +1027,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=0;
                while(bursthits)
                {
-                  damamount+=LCSrandom(250)+10;
+                  damamount+=LCSrandom(251)+10;
                   bursthits--;
                }
                damagearmor=1;
@@ -1050,7 +1036,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(30)+5;
+               damamount=LCSrandom(21)+5;
                strengthmod=1;
             }
             break;
@@ -1064,7 +1050,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=0;
                while(bursthits)
                {
-                  damamount+=LCSrandom(220)+10;
+                  damamount+=LCSrandom(221)+10;
                   bursthits--;
                }
                damagearmor=1;
@@ -1087,7 +1073,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damamount=0;
                while(bursthits)
                {
-                  damamount+=LCSrandom(180)+10;
+                  damamount+=LCSrandom(181)+10;
                   bursthits--;
                }
                damagearmor=1;
@@ -1096,7 +1082,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(30)+5;
+               damamount=LCSrandom(21)+5;
                strengthmod=1;
             }
             break;
@@ -1107,12 +1093,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BLEEDING;
                if(!LCSrandom(3))
                {
-                  damamount=LCSrandom(300)+10;
+                  damamount=LCSrandom(301)+10;
                   severtype=WOUND_NASTYOFF; // *JDS* dismemberment OK with shotgun
                }
                else
                {
-                  damamount=LCSrandom(200)+10;
+                  damamount=LCSrandom(201)+10;
                }
                
                
@@ -1121,7 +1107,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             else
             {
                damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(30)+5;
+               damamount=LCSrandom(21)+5;
                strengthmod=1;
             }
             break;
@@ -1130,7 +1116,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_AXE:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(100)+10;
+            damamount=LCSrandom(101)+10;
             strengthmod=1;
             severtype=WOUND_CLEANOFF;
             damagearmor=1;
@@ -1140,23 +1126,19 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_CROSS:
          case WEAPON_STAFF:
          case WEAPON_CHAIN:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(30)+5;
-            strengthmod=1;
-            break;
          case WEAPON_NIGHTSTICK:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(30)+5;
+            damamount=LCSrandom(21)+5;
             strengthmod=1;
             break;
          case WEAPON_GAVEL:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(20)+5;
+            damamount=LCSrandom(6)+5;
             strengthmod=1;
             break;
          case WEAPON_SPRAYCAN:
             damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(10)+5;
+            damamount=LCSrandom(11)+5;
             strengthmod=1;
             break;
       }
@@ -1210,6 +1192,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             //Oh Noes!!!! Find a liberal to jump in front of the bullet!!!
             for(int i=0;i<6;i++)
             {
+               if(activesquad->squad[i]==NULL)break;
                if(activesquad->squad[i]==&t)break;
                if(activesquad->squad[i]->attval(ATTRIBUTE_HEART)>8&&
                   activesquad->squad[i]->attval(ATTRIBUTE_AGILITY)>4)
@@ -1294,7 +1277,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   if(target->align==1)stat_dead++;
                }
-               else if(target->align==-1&&t.animalgloss!=ANIMALGLOSS_ANIMAL)
+               else if(target->enemy()&&t.animalgloss!=ANIMALGLOSS_ANIMAL)
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
@@ -1878,6 +1861,9 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
    int resist=0;
    char str[200];
 
+   clearmessagearea();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+
    strcpy(str,a.name);
    strcat(str," ");
 
@@ -1893,6 +1879,30 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
 
    switch(a.type)
    {
+      case CREATURE_COP:
+         switch(LCSrandom(7))
+         {
+            case 0:strcat(str,"reasons with ");
+                   strcat(str,t.name);break;
+            case 1:strcat(str,"promises a fair trial to ");
+                   strcat(str,t.name);break;
+            case 2:strcat(str,"offers a kind ear to ");
+                   strcat(str,t.name);break;
+            case 3:strcat(str,"urges cooperation from ");
+                   strcat(str,t.name);break;
+            case 4:strcat(str,"offers a hug to ");
+                   strcat(str,t.name);break;
+            case 5:strcat(str,"suggests counseling to ");
+                   strcat(str,t.name);break;
+            case 6:strcat(str,"gives a teddy bear to ");
+                   strcat(str,t.name);break;
+         }
+         strcat(str,"!");
+
+         resist=t.attval(ATTRIBUTE_HEART)*2-t.attval(ATTRIBUTE_WISDOM);
+
+         attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1);
+         break;
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
          switch(LCSrandom(4))
@@ -2049,9 +2059,9 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
             }
             attack=LCSrandom(a.skill[SKILL_MUSIC]*2+1);
             if(resist>0)
-               a.skill_ip[SKILL_MUSIC]+=LCSrandom(resist)+1;
+               a.train(SKILL_MUSIC,LCSrandom(resist)+1);
             else
-               a.skill_ip[SKILL_MUSIC]+=1;
+               a.train(SKILL_MUSIC,1);
          }
          break;
    }
@@ -2073,7 +2083,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
    }
    else if(attack>resist)
    {
-      if(a.align==-1)
+      if(a.enemy())
       {
          if(t.juice>=100)
          {
@@ -2091,14 +2101,28 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
          }
          else
          {
-            move(17,1);
-            addstr(t.name);
-            addstr(" is turned Conservative");
-            if(t.prisoner!=NULL)
+            if(a.align==-1)
             {
-               freehostage(t,0);
+               move(17,1);
+               addstr(t.name);
+               addstr(" is turned Conservative");
+               if(t.prisoner!=NULL)
+               {
+                  freehostage(t,0);
+               }
+               addstr("!");
             }
-            addstr("!");
+            else
+            {
+               move(17,1);
+               addstr(t.name);
+               addstr(" doesn't want to fight anymore");
+               if(t.prisoner!=NULL)
+               {
+                  freehostage(t,0);
+               }
+               addstr("!");
+            }
 
             for(int e=0;e<ENCMAX;e++)
             {
@@ -2106,7 +2130,8 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
                {
                   encounter[e]=t;
                   encounter[e].exists=1;
-                  conservatise(encounter[e]);
+                  if(a.align==-1)conservatise(encounter[e]);
+                  encounter[e].cantbluff=2;
                   encounter[e].squadid=-1;
                   break;
                }

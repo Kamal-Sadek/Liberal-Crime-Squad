@@ -40,6 +40,59 @@ This file is part of Liberal Crime Squad.                                       
 #define AGE_SENIOR      65+LCSrandom(30) /* ah, social security */
 
 
+void creaturest::train(int trainedskill, int experience)
+{
+   // Skill gain scaled by ability in the area
+   skill_ip[trainedskill]+=min(1,static_cast<int>(experience * maxskill(trainedskill,*this,false) / 6.0));
+   // Don't rush it
+   if(skill_ip[trainedskill]>=(100+10*skill[trainedskill])*1.5)
+   {
+      skill_ip[trainedskill]=static_cast<int>((100+10*skill[trainedskill])*1.5);
+   }
+}
+
+void creaturest::skill_up()
+{
+   for(int s=0;s<SKILLNUM;s++)
+   {
+      while(skill_ip[s]>=100+10*skill[s]&&
+            skill[s]<maxskill(s,*this))
+      {
+         skill_ip[s]-=100+10*skill[s];
+         skill[s]++;
+      }
+   }
+}
+
+int creaturest::get_skill_ip(int getskill)
+{
+   return skill_ip[getskill];
+}
+
+bool creaturest::enemy()
+{
+   if(align==-1)
+   {
+      return true;
+   }
+   else
+   {
+      if(type==CREATURE_COP)
+      {
+         for(int i=0;i<pool.size();i++)
+         {
+            if(pool[i]==this)
+            {
+               return false;
+            }
+         }
+         return true;
+      }
+   }
+   return false;
+}
+
+
 //TEMPORARY FUNNNCCCTIIOOONNNN
 //TEMPOR-FREAKIN-RARY!
 int getSpawnChance(enum CreatureType type)
@@ -542,44 +595,66 @@ void makecreature(creaturest &cr,short type)
 			cr.att[ATTRIBUTE_HEALTH]=7;
          break;
       case CREATURE_COP:
-         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         if(law[LAW_POLICEBEHAVIOR]==2 && cr.align==ALIGN_LIBERAL) // Peace Officer
          {
-            cr.weapon.type=WEAPON_SMG_MP5;
-            cr.weapon.ammo=15;
-            cr.clip[CLIP_SMG]=3;
-         }
-         else if(!LCSrandom(3))
-         {
-            cr.weapon.type=WEAPON_SEMIPISTOL_9MM;
-            cr.clip[CLIP_9]=3;
-            cr.weapon.ammo=15;
-         }
-         else if(!LCSrandom(2))
-         {
-            cr.weapon.type=WEAPON_SHOTGUN_PUMP;
-            cr.clip[CLIP_BUCKSHOT]=3;
-            cr.weapon.ammo=6;
-         }
-         else cr.weapon.type=WEAPON_NIGHTSTICK;
-         cr.armor.type=ARMOR_POLICEARMOR;
-         cr.money=LCSrandom(21)+20;
-         cr.align=-1;
-         cr.infiltration=0.3 + 0.1*LCSrandom(4);
-         cr.juice=10+LCSrandom(50);
-         cr.age=AGE_MATURE;
+            cr.weapon.type=WEAPON_NONE;
+            cr.armor.type=ARMOR_POLICEARMOR;
+            cr.money=LCSrandom(21)+20;
+            cr.juice=10+LCSrandom(50);
+            cr.age=AGE_MATURE;
 
-         sk=LCSrandom(4)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_CLUB]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+            sk=LCSrandom(4)+1;cr.skill[SKILL_PERSUASION]=sk;randomskills-=sk;
+            sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+            sk=LCSrandom(2)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+            sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
 
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=20;
-         cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
-         cr.att[ATTRIBUTE_WISDOM]=4;
+			   for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=20;
+            cr.att[ATTRIBUTE_STRENGTH]=3;
+			   cr.att[ATTRIBUTE_AGILITY]=3;
+			   cr.att[ATTRIBUTE_HEALTH]=3;
+            cr.att[ATTRIBUTE_HEART]=4;
+         }
+         else
+         {
+            if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+            {
+               cr.weapon.type=WEAPON_SMG_MP5;
+               cr.weapon.ammo=15;
+               cr.clip[CLIP_SMG]=3;
+            }
+            else if(!LCSrandom(3))
+            {
+               cr.weapon.type=WEAPON_SEMIPISTOL_9MM;
+               cr.clip[CLIP_9]=3;
+               cr.weapon.ammo=15;
+            }
+            else if(!LCSrandom(2))
+            {
+               cr.weapon.type=WEAPON_SHOTGUN_PUMP;
+               cr.clip[CLIP_BUCKSHOT]=3;
+               cr.weapon.ammo=6;
+            }
+            else cr.weapon.type=WEAPON_NIGHTSTICK;
+            cr.armor.type=ARMOR_POLICEARMOR;
+            cr.money=LCSrandom(21)+20;
+            cr.align=-1;
+            cr.infiltration=0.3 + 0.1*LCSrandom(4);
+            cr.juice=10+LCSrandom(50);
+            cr.age=AGE_MATURE;
+
+            sk=LCSrandom(4)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
+            sk=LCSrandom(3)+1;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
+            sk=LCSrandom(2)+1;cr.skill[SKILL_CLUB]=sk;randomskills-=sk;
+            sk=LCSrandom(2)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
+            sk=LCSrandom(2)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
+            sk=LCSrandom(3)+1;cr.skill[SKILL_INTERROGATION]=sk;randomskills-=sk;
+
+			   for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=20;
+            cr.att[ATTRIBUTE_STRENGTH]=3;
+			   cr.att[ATTRIBUTE_AGILITY]=3;
+			   cr.att[ATTRIBUTE_HEALTH]=3;
+            cr.att[ATTRIBUTE_WISDOM]=4;
+         }
          break;
       case CREATURE_SWAT:
          if(LCSrandom(3))

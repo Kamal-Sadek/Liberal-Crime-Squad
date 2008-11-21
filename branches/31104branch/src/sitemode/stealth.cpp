@@ -45,7 +45,7 @@ void noticecheck(int exclude)
       //if(encounter[e].type==CREATURE_PRISONER)continue;
       if(strcmp(encounter[e].name,"Prisoner")==0)continue;
       if(encounter[e].exists&&encounter[e].alive&&
-         encounter[e].align==-1)
+         encounter[e].enemy())
       {
          noticer.push_back(e);
       }
@@ -60,7 +60,7 @@ void noticecheck(int exclude)
          topi=i;
       }
    }
-   if(topi>=0&&noticer.size())activesquad->squad[topi]->skill_ip[SKILL_SLEIGHTOFHAND]+=10;
+   if(topi>=0&&noticer.size())activesquad->squad[topi]->train(SKILL_SLEIGHTOFHAND,10);
 
    if(noticer.size()>0)
    {
@@ -89,9 +89,13 @@ void noticecheck(int exclude)
       addstr(encounter[n].name);
       addstr(" observes your Liberal activity");
       move(17,1);
-      addstr("and lets forth a piercing Conservative alarm cry!");
-
+      if(encounter[n].align==ALIGN_CONSERVATIVE)
+         addstr("and lets forth a piercing Conservative alarm cry!");
+      else
+         addstr("and shouts for help!");
+      
       sitealarm=1;
+
 
       refresh();
       getch();
@@ -217,7 +221,7 @@ void disguisecheck(void)
    {
       if(encounter[e].type==CREATURE_PRISONER)continue;
       if(encounter[e].exists&&encounter[e].alive&&
-         encounter[e].align==-1)
+         encounter[e].enemy())
       {
          noticer.push_back(e);
       }
@@ -294,7 +298,10 @@ void disguisecheck(void)
          {
             addstr(" sees the Squad's Liberal Weapons");
             move(17,1);
-            addstr("and lets forth a piercing Conservative alarm cry!");
+            if(encounter[n].align==ALIGN_CONSERVATIVE)
+               addstr("and lets forth a piercing Conservative alarm cry!");
+            else
+               addstr("and shouts for help!");
 
             for(int i=0;i<6;i++)
             {
@@ -310,7 +317,10 @@ void disguisecheck(void)
          {
             addstr(" looks at the Squad with Intolerance");
             move(17,1);
-            addstr("and lets forth a piercing Conservative alarm cry!");
+            if(encounter[n].align==ALIGN_CONSERVATIVE)
+               addstr("and lets forth a piercing Conservative alarm cry!");
+            else
+               addstr("and shouts for help!");
          }
 
          sitealarm=1;
@@ -357,7 +367,7 @@ int disguiseskill(void)
          }
          else
          {
-            //activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=5;
+            //activesquad->squad[p]->train(SKILL_DISGUISE,5);
          }
 
          if(activesquad->squad[p]->armor.quality!='1')
@@ -396,18 +406,17 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
 		
 		//spread is how overwhelmed your disguise ability is by the Conservative
 		int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
-                         activesquad->squad[p]->skill[SKILL_DISGUISE]*3+
-                         activesquad->squad[p]->skill_ip[SKILL_DISGUISE]/(100+10*activesquad->squad[p]->skill[SKILL_DISGUISE])*3);
+                         activesquad->squad[p]->skill[SKILL_DISGUISE]*3);
 
       if(hasdisguise(*activesquad->squad[p],sitetype))
       {
          if(spread>10)
          {
-	         activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=10;  //getting crushed isn't a great way to learn
+	         activesquad->squad[p]->train(SKILL_DISGUISE,10);  //getting crushed isn't a great way to learn
          }
          else if(spread>0)
          {
-  		      activesquad->squad[p]->skill_ip[SKILL_DISGUISE]+=spread;
+  		      activesquad->squad[p]->train(SKILL_DISGUISE,spread);
 	      }
       }
 	}
@@ -451,15 +460,15 @@ void stealthpractice(int p, int diff)  //diff is the difficulty that the Conserv
 	    if(activesquad->squad[p]->prisoner!=NULL)return;
 	    
 		//spread is how overwhelmed your stealth ability is by the Conservative
-		int spread = diff-(activesquad->squad[p]->skill[SKILL_STEALTH]*3+activesquad->squad[p]->skill_ip[SKILL_STEALTH]/(100+10*activesquad->squad[p]->skill[SKILL_STEALTH])*3);
+		int spread = diff-(activesquad->squad[p]->skill[SKILL_STEALTH]*3);
 			
 		if(spread>10)
 		{
-			activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=10;    //getting crushed isn't a great way to learn
+			activesquad->squad[p]->train(SKILL_STEALTH,10);    //getting crushed isn't a great way to learn
 		}
 		else if (spread>0)
 		{
-			activesquad->squad[p]->skill_ip[SKILL_STEALTH]+=spread;
+			activesquad->squad[p]->train(SKILL_STEALTH,spread);
 		}
 	}
 }

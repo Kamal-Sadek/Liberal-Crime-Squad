@@ -727,8 +727,8 @@ void trial(creaturest &g)
                // Sleeper attorney
                defensepower=LCSrandom(71)+sleeperlawyer->skill[SKILL_LAW]*4
                                          +sleeperlawyer->skill[SKILL_PERSUASION]*4;
-               sleeperlawyer->skill_ip[SKILL_LAW]+=prosecution/4;
-               sleeperlawyer->skill_ip[SKILL_PERSUASION]+=prosecution/4;
+               sleeperlawyer->train(SKILL_LAW,prosecution/4);
+               sleeperlawyer->train(SKILL_PERSUASION,prosecution/4);
             }
 
             if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
@@ -795,8 +795,8 @@ void trial(creaturest &g)
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
          defensepower+=LCSrandom(min(defenseskill*2,max(200,prosecution+100)));
-         g.skill_ip[SKILL_PERSUASION]+=max(50-g.skill[SKILL_PERSUASION]*2,0);
-         g.skill_ip[SKILL_LAW]+=max(50-g.skill[SKILL_LAW]*2,0);
+         g.train(SKILL_PERSUASION,max(50-g.skill[SKILL_PERSUASION]*2,0));
+         g.train(SKILL_LAW,max(50-g.skill[SKILL_LAW]*2,0));
 
          if(autoconvict)
          {

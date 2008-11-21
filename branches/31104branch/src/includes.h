@@ -19,6 +19,9 @@
 // Laws start archconservative
 //#define SHITLAWS
 
+// Laws start elite liberal
+#define PERFECTLAWS
+
 // Gives you bloody armor
 //#define GIVEBLOODYARMOR
 
@@ -920,6 +923,9 @@ struct activityst
 
 struct creaturest
 {
+private:
+   int skill_ip[SKILLNUM]; // Use public training interface!! >:0
+public:
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
    int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
@@ -951,7 +957,12 @@ struct creaturest
 
    int att[ATTNUM];
    int skill[SKILLNUM];
-   int skill_ip[SKILLNUM];
+
+   void train(int trainedskill, int experience);
+   void skill_up();
+   int get_skill_ip(int getskill);
+
+   bool enemy();
 
    weaponst weapon;
    armorst armor;
@@ -1663,7 +1674,7 @@ int clinictime(creaturest &g);
 /* common - purges squad of loot and vehicles if it has no members */
 int testsquadclear(squadst &thissquad, int obase);
 /* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill, creaturest& cr);
+int maxskill(int skill, creaturest& cr, bool use_juice=true);
 /* common - returns the associated skill for the given weapon type */
 int weaponskill(int weapon);
 /* common - applies a crime to everyone in the active party */

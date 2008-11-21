@@ -198,7 +198,7 @@ void repairarmor(creaturest &cr,char &clearformess)
       if(armor->flag & ARMORFLAG_DAMAGED)
       {
          long dif=(armor_makedifficulty(armor->type,&cr)>>1);
-         cr.skill_ip[SKILL_GARMENTMAKING]+=dif+1;
+         cr.train(SKILL_GARMENTMAKING,dif+1);
 
          if((LCSrandom(1+dif)))
          {
@@ -345,7 +345,7 @@ void makearmor(creaturest &cr,char &clearformess)
             moneylost_manufacture+=cost;
          }
 
-         cr.skill_ip[SKILL_GARMENTMAKING]+=dif*2+1;
+         cr.train(SKILL_GARMENTMAKING,dif*2+1);
 
          itemst *it=new itemst;
             it->type=ITEM_ARMOR;
@@ -952,7 +952,7 @@ void funds_and_trouble(char &clearformess)
          stat_funds+=money;
          moneygained_donate+=money;
          if(solicit[s]->skill[SKILL_PERSUASION]<3)
-            solicit[s]->skill_ip[SKILL_PERSUASION]+=LCSrandom(5)+2;
+            solicit[s]->train(SKILL_PERSUASION,LCSrandom(5)+2);
       }
    }
 
@@ -1002,13 +1002,13 @@ void funds_and_trouble(char &clearformess)
          moneylost_goods+=costofsupplies;
 
          if(tshirts[s]->skill[SKILL_GARMENTMAKING]<4)
-            tshirts[s]->skill_ip[SKILL_GARMENTMAKING]+=LCSrandom(5)+2;
+            tshirts[s]->train(SKILL_GARMENTMAKING,LCSrandom(5)+2);
          else
-            tshirts[s]->skill_ip[SKILL_GARMENTMAKING]+=LCSrandom(3)+1;
+            tshirts[s]->train(SKILL_GARMENTMAKING,LCSrandom(3)+1);
          if(tshirts[s]->skill[SKILL_BUSINESS]<4)
-            tshirts[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+            tshirts[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
          else
-            tshirts[s]->skill_ip[SKILL_BUSINESS]+=1;
+            tshirts[s]->train(SKILL_BUSINESS,1);
       }
    }
 
@@ -1057,13 +1057,13 @@ void funds_and_trouble(char &clearformess)
          moneylost_goods+=costofsupplies;
 
          if(art[s]->skill[SKILL_ART]<4)
-            art[s]->skill_ip[SKILL_ART]+=LCSrandom(5)+2;
+            art[s]->train(SKILL_ART,LCSrandom(5)+2);
          else
-            art[s]->skill_ip[SKILL_ART]+=LCSrandom(3)+1;
+            art[s]->train(SKILL_ART,LCSrandom(3)+1);
          if(art[s]->skill[SKILL_BUSINESS]<4)
-            art[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+            art[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
          else
-            art[s]->skill_ip[SKILL_BUSINESS]+=1;
+            art[s]->train(SKILL_BUSINESS,1);
       }
    }
 
@@ -1087,9 +1087,9 @@ void funds_and_trouble(char &clearformess)
          moneygained_goods+=money;
 
          if(music[s]->skill[SKILL_MUSIC]<4)
-            music[s]->skill_ip[SKILL_MUSIC]+=LCSrandom(5)+2;
+            music[s]->train(SKILL_MUSIC,LCSrandom(5)+2);
          else
-            music[s]->skill_ip[SKILL_MUSIC]+=LCSrandom(3)+1;
+            music[s]->train(SKILL_MUSIC,LCSrandom(3)+1);
       }
    }
 
@@ -1107,24 +1107,24 @@ void funds_and_trouble(char &clearformess)
       moneygained_brownies+=money;
       // Make the sale
       if(brownies[s]->skill[SKILL_PERSUASION]<4)
-         brownies[s]->skill_ip[SKILL_PERSUASION]+=LCSrandom(3)+1;
+         brownies[s]->train(SKILL_PERSUASION,LCSrandom(3)+1);
       else
-         brownies[s]->skill_ip[SKILL_PERSUASION]+=1;
+         brownies[s]->train(SKILL_PERSUASION,1);
       // Know the streets
       if(brownies[s]->skill[SKILL_STREETSENSE]<5)
-         brownies[s]->skill_ip[SKILL_STREETSENSE]+=LCSrandom(5)+2;
+         brownies[s]->train(SKILL_STREETSENSE,LCSrandom(5)+2);
       else
-         brownies[s]->skill_ip[SKILL_STREETSENSE]+=LCSrandom(3)+1;
+         brownies[s]->train(SKILL_STREETSENSE,LCSrandom(3)+1);
       // The ways of the businessman
       if(brownies[s]->skill[SKILL_BUSINESS]<4)
-         brownies[s]->skill_ip[SKILL_BUSINESS]+=LCSrandom(3)+1;
+         brownies[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
       else
-         brownies[s]->skill_ip[SKILL_BUSINESS]+=1;
+         brownies[s]->train(SKILL_BUSINESS,1);
       // Baking brownies
       if(brownies[s]->skill[SKILL_COOKING]<2)
-         brownies[s]->skill_ip[SKILL_COOKING]+=LCSrandom(3)+1;
+         brownies[s]->train(SKILL_COOKING,LCSrandom(3)+1);
       else
-         brownies[s]->skill_ip[SKILL_COOKING]+=1;
+         brownies[s]->train(SKILL_COOKING,1);
 
       //Check for police search
       dodgelawroll=LCSrandom(100);
@@ -1208,27 +1208,27 @@ void funds_and_trouble(char &clearformess)
          {
          case ACTIVITY_CCFRAUD:
             if(cc_succeeded&&hack[h]->skill[SKILL_COMPUTERS]<7)
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(5);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(5));
             else
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(2);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(2));
             break;
          case ACTIVITY_DOS_ATTACKS:
             if(web_succeeded&&hack[h]->skill[SKILL_COMPUTERS]<7)
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(5);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(5));
             else
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(2);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(2));
             break;
          case ACTIVITY_DOS_RACKET:
             if(ddos_succeeded&&hack[h]->skill[SKILL_COMPUTERS]<14)
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(8);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(8));
             else
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(2);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(2));
             break;
          case ACTIVITY_HACKING:
             if(hack_succeeded&&hack[h]->skill[SKILL_COMPUTERS]<18)
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(10);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(10));
             else
-               hack[h]->skill_ip[SKILL_COMPUTERS]+=LCSrandom(2);
+               hack[h]->train(SKILL_COMPUTERS,LCSrandom(2));
             break;
          }
       }
@@ -1624,7 +1624,7 @@ void funds_and_trouble(char &clearformess)
                addstr(graffiti[s]->name);
                addstr(" was spotted by the police");
                criminalize(*graffiti[s],LAWFLAG_VANDALISM);
-               graffiti[s]->skill_ip[SKILL_STREETSENSE]+=20;
+               graffiti[s]->train(SKILL_STREETSENSE,20);
 
                if(graffiti[s]->activity.arg!=-1)
                {
@@ -1671,7 +1671,7 @@ void funds_and_trouble(char &clearformess)
                graffiti[s]->activity.arg=-1;
                addjuice(*graffiti[s],power,power*20);
                change_public_opinion(issue,power);
-               graffiti[s]->skill_ip[SKILL_ART]+=max(10-graffiti[s]->skill[SKILL_ART]/2,1);
+               graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skill[SKILL_ART]/2,1));
                refresh();
                getch();
             }
@@ -1682,7 +1682,7 @@ void funds_and_trouble(char &clearformess)
                move(8,1);
                addstr(graffiti[s]->name);
                addstr(" works through the night on a large mural.");
-               graffiti[s]->skill_ip[SKILL_ART]+=max(10-graffiti[s]->skill[SKILL_ART]/2,1);
+               graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skill[SKILL_ART]/2,1));
                refresh();
                getch();
             }
@@ -1700,12 +1700,12 @@ void funds_and_trouble(char &clearformess)
             addstr(".");
             graffiti[s]->activity.arg=issue;
             power=0;
-            graffiti[s]->skill_ip[SKILL_ART]+=max(10-graffiti[s]->skill[SKILL_ART]/2,1);
+            graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skill[SKILL_ART]/2,1));
             refresh();
             getch();
          }
 
-         graffiti[s]->skill_ip[SKILL_ART]+=max(4-graffiti[s]->skill[SKILL_ART],0);
+         graffiti[s]->train(SKILL_ART,max(4-graffiti[s]->skill[SKILL_ART],0));
          if(issue=VIEW_LIBERALCRIMESQUAD)
          {
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,LCSrandom(2),0,65);
@@ -1753,7 +1753,7 @@ void funds_and_trouble(char &clearformess)
       {
          addjuice(*prostitutes[p],-!LCSrandom(3));
       }
-      prostitutes[p]->skill_ip[SKILL_SEDUCTION]+=max(10-prostitutes[p]->skill[SKILL_SEDUCTION],0);
+      prostitutes[p]->train(SKILL_SEDUCTION,max(10-prostitutes[p]->skill[SKILL_SEDUCTION],0));
 
       refresh();
       getch();
@@ -1788,7 +1788,7 @@ void funds_and_trouble(char &clearformess)
          prostitutes[p]->activity.type=ACTIVITY_NONE;
          criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
       }
-      else prostitutes[p]->skill_ip[SKILL_STREETSENSE]+=max(5-prostitutes[p]->skill[SKILL_STREETSENSE],0);
+      else prostitutes[p]->train(SKILL_STREETSENSE,max(5-prostitutes[p]->skill[SKILL_STREETSENSE],0));
 
       /*{ //HUSTLING CODE NOT CURRENTLY USED
          if(clearformess)erase();
@@ -2241,7 +2241,7 @@ void funds_and_trouble(char &clearformess)
                   int teach=teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]]+
                                                     teachers[t]->skill[SKILL_TEACHING];
                   if(teach>10)teach=10;
-                  pool[p]->skill_ip[skillarray[i]]+=teach;
+                  pool[p]->train(skillarray[i],teach);
 
                   if(students<10)
                   {
@@ -2261,7 +2261,7 @@ void funds_and_trouble(char &clearformess)
          }
       }
 
-      teachers[t]->skill_ip[SKILL_TEACHING]+=students;
+      teachers[t]->train(SKILL_TEACHING,students);
    }
 
    //BURY THE DEAD
@@ -2505,7 +2505,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
             if(LCSrandom(6)<attack)
             {
-               cr.skill_ip[SKILL_SECURITY]+=max(5-cr.skill[SKILL_SECURITY],0);
+               cr.train(SKILL_SECURITY,max(5-cr.skill[SKILL_SECURITY],0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
                addstr(cr.name);
@@ -2706,7 +2706,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
             if(LCSrandom(11)<attack)
             {
-               cr.skill_ip[SKILL_SECURITY]+=max(7-cr.skill[SKILL_SECURITY],0);
+               cr.train(SKILL_SECURITY,max(7-cr.skill[SKILL_SECURITY],0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(cr.name);

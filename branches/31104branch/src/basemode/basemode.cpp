@@ -111,7 +111,7 @@ void mode_base(void)
             if(pool[p]->juice<targetjuice)
             {
                if(pool[p]->hireid!=-1 && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-                  pool[p]->alive=-1; // Kill for the purposes of disbanding all contacts below
+                  pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
             }
          }
          oldforcemonth=month;

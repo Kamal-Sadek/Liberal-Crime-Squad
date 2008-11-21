@@ -396,7 +396,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
             r.recruit->hireid=pool[p]->id;
 
-            pool[p]->skill_ip[SKILL_LEADERSHIP]+=5;
+            pool[p]->train(SKILL_LEADERSHIP,5);
 
             pool.push_back(r.recruit);
             stat_recruits++;
@@ -425,7 +425,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             funds -= 50;
             moneylost_dating += 50;
          }
-         pool[p]->skill_ip[SKILL_PERSUASION]+=5;
+         pool[p]->train(SKILL_PERSUASION,5);
          
          int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]*2+
                                   pool[p]->skill[SKILL_BUSINESS]+

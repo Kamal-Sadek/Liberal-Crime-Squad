@@ -1016,7 +1016,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
             
-            a->skill_ip[SKILL_RELIGION]+=cr->skill[SKILL_RELIGION]*4;
+            a->train(SKILL_RELIGION,cr->skill[SKILL_RELIGION]*4);
             y++;
          }
          //Failure to persuade entrenched capitalists
@@ -1043,7 +1043,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
             
-            a->skill_ip[SKILL_BUSINESS]+=cr->skill[SKILL_BUSINESS]*4;
+            a->train(SKILL_BUSINESS,cr->skill[SKILL_BUSINESS]*4);
             y++;
          }
          //Failure to persuade scientific minds
@@ -1072,7 +1072,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
 
-            a->skill_ip[SKILL_SCIENCE]+=cr->skill[SKILL_SCIENCE]*4;
+            a->train(SKILL_SCIENCE,cr->skill[SKILL_SCIENCE]*4);
             y++;
          }
          //Attempt to convert when the target is brutally treated will
@@ -1266,10 +1266,10 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(cr->att[ATTRIBUTE_HEART]<1)cr->att[ATTRIBUTE_HEART]=1;
 
       //Lead interrogator gets bonus experience
-      if(!techniques[8])a->skill_ip[SKILL_INTERROGATION]+=spiritcrush;
+      if(!techniques[8])a->train(SKILL_INTERROGATION,spiritcrush);
       //Others also get experience
       for(int i=0;i<temppool.size();i++)
-         temppool[i]->skill_ip[SKILL_INTERROGATION]+=(spiritcrush>>1)+1;
+         temppool[i]->train(SKILL_INTERROGATION,(spiritcrush>>1)+1);
 
       reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush+=spiritcrush;
 

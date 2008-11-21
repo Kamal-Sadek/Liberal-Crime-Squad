@@ -649,8 +649,8 @@ void special_courthouse_jury(void)
                activesquad->squad[p]->skill[SKILL_PERSUASION]+
                activesquad->squad[p]->skill[SKILL_LAW]*2;
             short troll=LCSrandom(21)+20;
-            activesquad->squad[p]->skill_ip[SKILL_PERSUASION]+=troll;
-            activesquad->squad[p]->skill_ip[SKILL_LAW]+=troll;
+            activesquad->squad[p]->train(SKILL_PERSUASION,troll);
+            activesquad->squad[p]->train(SKILL_LAW,troll);
 
             if(aroll>troll)succeed=1;
 

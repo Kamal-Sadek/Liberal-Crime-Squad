@@ -1315,7 +1315,7 @@ void majornewspaper(char &clearformess,char canseethings)
          if(pool[i]->location!=-1&&
             location[pool[i]->location]->compound_walls & COMPOUND_PRINTINGPRESS)
          {
-            pool[i]->skill_ip[SKILL_WRITING]+=LCSrandom(3); // Experience gain
+            pool[i]->train(SKILL_WRITING,LCSrandom(3)); // Experience gain
             writers+=pool[i]->skill[SKILL_WRITING]; // Record the writer on this topic
             criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
@@ -1399,8 +1399,12 @@ void majornewspaper(char &clearformess,char canseethings)
          continue;
       }
 
-      if(newsstory[n]->type & (NEWSSTORY_CARTHEFT|NEWSSTORY_NUDITYARREST|NEWSSTORY_WANTEDARREST|
-                               NEWSSTORY_DRUGARREST|NEWSSTORY_GRAFFITIARREST|NEWSSTORY_BURIALARREST))
+      if(newsstory[n]->type==NEWSSTORY_CARTHEFT ||
+         newsstory[n]->type==NEWSSTORY_NUDITYARREST||
+         newsstory[n]->type==NEWSSTORY_WANTEDARREST||
+         newsstory[n]->type==NEWSSTORY_DRUGARREST||
+         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST||
+         newsstory[n]->type==NEWSSTORY_BURIALARREST)
       {
          char conf=0;
          for(int c=0;c<newsstory[n]->crime.size();c++)
@@ -1768,7 +1772,7 @@ void majornewspaper(char &clearformess,char canseethings)
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
       {
          background_liberal_influence[randomissue()]+=pool[p]->skill[SKILL_WRITING]-LCSrandom(3);
-         pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
+         pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
       }
 
       //Guardian Essays
@@ -1777,7 +1781,7 @@ void majornewspaper(char &clearformess,char canseethings)
       if(pool[p]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
          background_liberal_influence[randomissue()]+=3*(pool[p]->skill[SKILL_WRITING]-LCSrandom(3));
-         pool[p]->skill_ip[SKILL_WRITING]+=LCSrandom(5)+1;
+         pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
       }
    }
 

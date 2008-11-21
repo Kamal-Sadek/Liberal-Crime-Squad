@@ -189,11 +189,11 @@ void getweapon(char *str,int type)
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Mag.");break;
          case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semi.");break;
          case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semi.");break;
-         case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR15");break;
+         case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR-15");break;
          case WEAPON_SMG_MP5:       strcpy(str,"MP5");break;
          case WEAPON_CARBINE_M4:    strcpy(str,"M4");break;
          case WEAPON_AUTORIFLE_M16:   strcpy(str,"M16");break;
-         case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK47");break;
+         case WEAPON_AUTORIFLE_AK47:   strcpy(str,"AK-47");break;
          case WEAPON_SHOTGUN_PUMP:      strcpy(str,"Shotgun");break;
          case WEAPON_SWORD:         strcpy(str,"Sword");break;
          case WEAPON_DAISHO:         strcpy(str,"Daisho");break;

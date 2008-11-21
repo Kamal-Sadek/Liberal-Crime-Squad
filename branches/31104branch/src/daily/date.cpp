@@ -225,15 +225,15 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
          if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
          {
-            pool[p]->skill_ip[SKILL_RELIGION]+=10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]);
+            pool[p]->train(SKILL_RELIGION,10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]));
          }
          if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
          {
-            pool[p]->skill_ip[SKILL_SCIENCE]+=10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]);
+            pool[p]->train(SKILL_SCIENCE,10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]));
          }
          if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
          {
-            pool[p]->skill_ip[SKILL_BUSINESS]+=10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]);
+            pool[p]->train(SKILL_BUSINESS,10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]));
          }
 
          refresh();
@@ -335,7 +335,7 @@ char completevacation(datest &d,int p,char &clearformess)
 
    short aroll=LCSrandom(51+pool[p]->attval(ATTRIBUTE_CHARISMA)*4+LCSrandom(pool[p]->skill[SKILL_SEDUCTION]*4))+10;
    short troll=LCSrandom(21+d.date[e]->attval(ATTRIBUTE_CHARISMA)*2+d.date[e]->attval(ATTRIBUTE_WISDOM)*4);
-   pool[p]->skill_ip[SKILL_PERSUASION]+=LCSrandom(14)+7;
+   pool[p]->train(SKILL_PERSUASION,LCSrandom(14)+7);
 
    if(d.date[e]->skill[SKILL_BUSINESS])
    {
@@ -502,12 +502,12 @@ char completedate(datest &d,int p,char &clearformess)
             moneylost_dating+=100;
             aroll+=LCSrandom(10);
             test=1;
-            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(8)+3;
+            pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
          }
          if(c=='b')
          {
             test=1;
-            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(8)+3;
+            pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
          }
 
          if(d.date[e]->skill[SKILL_BUSINESS])
@@ -546,7 +546,7 @@ char completedate(datest &d,int p,char &clearformess)
                d.date.erase(d.date.begin() + e2);
             }
             d.timeleft=7;
-            pool[p]->skill_ip[SKILL_SEDUCTION]+=LCSrandom(40)+15;
+            pool[p]->train(SKILL_SEDUCTION,LCSrandom(40)+15);
             return 0;
          }
          if(c=='d')
@@ -627,7 +627,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                refresh();
                getch();
-               move(22,8);
+               move(22,0);
                addstr(pool[p]->name);
                addstr(" kidnaps the Conservative!");
                refresh();

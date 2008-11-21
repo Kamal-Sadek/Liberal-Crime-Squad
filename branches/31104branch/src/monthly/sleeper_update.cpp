@@ -784,6 +784,7 @@ void sleeper_recruit(creaturest &cr,char &clearformess,char canseethings,int *li
                refresh();
                getch();
                if(!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
+               stat_recruits++;
                break;
             }
          }

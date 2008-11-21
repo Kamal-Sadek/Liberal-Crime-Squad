@@ -366,7 +366,7 @@ char chasesequence(void)
          for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].carid!=-1&&
-               encounter[e].align==-1&&
+               encounter[e].enemy()&&
                encounter[e].alive&&
                encounter[e].exists)baddiecount++;
          }
@@ -610,7 +610,7 @@ char footchase(void)
          int baddiecount=0;
          for(int e=0;e<ENCMAX;e++)
          {
-            if(encounter[e].align==-1&&
+            if(encounter[e].enemy()&&
                encounter[e].alive&&
                encounter[e].exists)baddiecount++;
          }
@@ -655,7 +655,7 @@ void evasivedrive(void)
       {
          long v=id_getcar(activesquad->squad[p]->carid);
          yourrolls.push_back(driveskill(*activesquad->squad[p],vehicle[v])+LCSrandom(10));
-         activesquad->squad[p]->skill_ip[SKILL_DRIVING]+=LCSrandom(20);
+         activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));
          if(yourworst>yourrolls.back())yourworst=yourrolls.back();
       }
    }
@@ -667,7 +667,7 @@ void evasivedrive(void)
    for(e=0;e<ENCMAX;e++)
    {
       if(encounter[e].carid!=-1&&
-         encounter[e].align==-1&&
+         encounter[e].enemy()&&
          encounter[e].alive&&
          encounter[e].exists&&
          encounter[e].is_driver)

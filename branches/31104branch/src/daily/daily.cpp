@@ -418,7 +418,7 @@ void advanceday(char &clearformess,char canseethings)
             for(int i=0;i<6;i++)
             {
                if(squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
-                  squad[sq]->squad[i]->skill_ip[SKILL_DRIVING]+=5;
+                  squad[sq]->squad[i]->train(SKILL_DRIVING,5);
             }
          }
 
@@ -636,7 +636,7 @@ void advanceday(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            pool[p]->skill_ip[SKILL_COMPUTERS]+=max(3-pool[p]->skill[SKILL_COMPUTERS],0);
+            pool[p]->train(SKILL_COMPUTERS,max(3-pool[p]->skill[SKILL_COMPUTERS],0));
 
             survey(pool[p]);
             //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
@@ -679,6 +679,7 @@ void advanceday(char &clearformess,char canseethings)
 
       if(!pool[p]->alive)continue;
       if(pool[p]->hiding)continue;
+      if(pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
       // People will help heal even if they aren't specifically assigned to do so
       // Having a specific healing activity helps bookkeeping for the player, though
       // Only the highest medical skill is considered
@@ -954,7 +955,7 @@ void advanceday(char &clearformess,char canseethings)
          if(healing2[pool[p]->location]==0)
             pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
-         pool[p]->skill_ip[SKILL_MEDICAL]+=max(0,healing2[pool[p]->location]/5-pool[p]->skill[SKILL_MEDICAL]*2);
+         pool[p]->train(SKILL_MEDICAL,max(0,healing2[pool[p]->location]/5-pool[p]->skill[SKILL_MEDICAL]*2));
       }
    }
    delete[] healing;
@@ -1251,15 +1252,7 @@ void advanceday(char &clearformess,char canseethings)
       }
 
       // Gain skill levels for anything where you have enough experience
-      for(int s=0;s<SKILLNUM;s++)
-      {
-         while(pool[p]->skill_ip[s]>=100+10*pool[p]->skill[s]&&
-               pool[p]->skill[s]<maxskill(s,*pool[p]))
-         {
-            pool[p]->skill_ip[s]-=100+10*pool[p]->skill[s];
-            pool[p]->skill[s]++;
-         }
-      }
+      pool[p]->skill_up();
    }
    
    //DO REPORTING BY MAJOR NEWSPAPERS

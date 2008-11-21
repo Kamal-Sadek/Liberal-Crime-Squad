@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 char talk(creaturest &a,int t)
 {
    //BLUFFING
-   if((sitealarm||location[cursite]->siege.siege)&&encounter[t].align==-1)
+   if((sitealarm||location[cursite]->siege.siege)&&encounter[t].enemy())
    {
       clearcommandarea();
       clearmessagearea();
@@ -126,7 +126,7 @@ char talk(creaturest &a,int t)
          for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
-               encounter[e].align==-1)
+               encounter[e].enemy())
             {
                if((a.juice*attitude[VIEW_LIBERALCRIMESQUAD]*a.blood/10000 >
                    encounter[e].juice+encounter[e].attval(ATTRIBUTE_WISDOM)*5) && LCSrandom(2))
@@ -191,7 +191,7 @@ char talk(creaturest &a,int t)
             for(e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists&&encounter[e].alive&&
-                  encounter[e].align==-1)
+                  encounter[e].enemy())
                {
                   if(encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_SOLDIER||
@@ -209,13 +209,21 @@ char talk(creaturest &a,int t)
                      move(16,1);
                      addstr(encounter[e].name);
                      addstr(":");
-                     set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
 
-                     if(hostages>1)
-                        addstr("\"Release your hostages, and nobody gets hurt.\"");
+                     if(encounter[e].align==ALIGN_LIBERAL)
+                     {
+                        set_color(COLOR_GREEN,COLOR_BLACK,1);
+                        addstr("\"Let them go! Think about what you're doing!\"");
+                     }
                      else
-                        addstr("\"Let the hostage go, and nobody gets hurt.\"");
+                     {
+                        set_color(COLOR_RED,COLOR_BLACK,1);
+                        if(hostages>1)
+                           addstr("\"Release your hostages, and nobody gets hurt.\"");
+                        else
+                           addstr("\"Let the hostage go, and nobody gets hurt.\"");
+                     }
 
                      refresh();
                      getch();
@@ -343,7 +351,7 @@ char talk(creaturest &a,int t)
 
                      for(int i=ENCMAX;i>=0;i--)
                      {
-                        if(encounter[i].exists && encounter[i].align==-1 && encounter[i].alive)
+                        if(encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
                         {
                            delenc(i,0);
                         }
@@ -369,10 +377,10 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(encounter[e].type==CREATURE_DEATHSQUAD||
+                  if((encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_AGENT||
                      encounter[e].type==CREATURE_MERC||
-                     encounter[e].type==CREATURE_GANGUNIT||
+                     encounter[e].type==CREATURE_GANGUNIT)&&
                      LCSrandom(2))
                   {
                      clearmessagearea();
@@ -402,7 +410,7 @@ char talk(creaturest &a,int t)
                      for(int i=ENCMAX;i>=0;i--)
                      {
                         if(encounter[i].exists &&
-                           encounter[i].align==-1 &&
+                           encounter[i].enemy() &&
                            encounter[i].alive)
                         {
                            delenc(i,0);
@@ -418,7 +426,7 @@ char talk(creaturest &a,int t)
                      {
                         if(activesquad->squad[i] &&
                            activesquad->squad[i]->prisoner &&
-                           activesquad->squad[i]->prisoner->align==-1)
+                           activesquad->squad[i]->prisoner->enemy())
                         {
                            delete activesquad->squad[i]->prisoner;
                            activesquad->squad[i]->prisoner=NULL;
@@ -508,7 +516,7 @@ char talk(creaturest &a,int t)
          for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
-               encounter[e].align==-1)
+               encounter[e].enemy())
             {
                noticer.push_back(e);
             }
@@ -556,7 +564,7 @@ char talk(creaturest &a,int t)
                for(int e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
-                     encounter[e].align==-1)
+                     encounter[e].enemy())
                   {
                      troll=encounter[e].attval(ATTRIBUTE_WISDOM)*3+
                         encounter[e].attval(ATTRIBUTE_INTELLIGENCE);
@@ -569,7 +577,7 @@ char talk(creaturest &a,int t)
                }
 
                maxtroll+=LCSrandom(21);
-               a.skill_ip[SKILL_PERSUASION]+=(maxtroll>>2)+1;
+               a.train(SKILL_PERSUASION,(maxtroll>>2)+1);
 
                if(maxtroll>aroll)
                {
@@ -619,7 +627,10 @@ char talk(creaturest &a,int t)
                   addstr(encounter[n].name);
                   addstr(" looks at the Squad with Intolerance");
                   move(17,1);
-                  addstr("and lets forth a piercing Conservative alarm cry!");
+                  if(a.align==ALIGN_CONSERVATIVE)
+                     addstr("and lets forth a piercing Conservative alarm cry!");
+                  else
+                     addstr("and shouts for help!");
 
                   sitealarm=1;
                }
@@ -640,7 +651,7 @@ char talk(creaturest &a,int t)
                for(int e=ENCMAX-1;e>=0;e--)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
-                     encounter[e].align==-1)
+                     encounter[e].enemy())
                   {
                      delenc(e,0);
                   }
@@ -797,7 +808,7 @@ char talk(creaturest &a,int t)
                      LCSrandom(21)+
                      tk->attval(ATTRIBUTE_CHARISMA)+
                      tk->attval(ATTRIBUTE_WISDOM);
-                  a.skill_ip[SKILL_PERSUASION]+=LCSrandom(2)+1;
+                  a.train(SKILL_PERSUASION,LCSrandom(2)+1);
 
                   clearcommandarea();clearmessagearea();clearmaparea();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1026,7 +1037,7 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->align==-1)) &&
+                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->enemy())) &&
                      tk->type!=CREATURE_PRISONER)
                   {
                      y++;
@@ -1404,7 +1415,7 @@ case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
                   short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skill[SKILL_SEDUCTION]*2+1);
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
                   short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
-                  if(!(tk->animalgloss))a.skill_ip[SKILL_SEDUCTION]+=LCSrandom(5)+2;
+                  if(!(tk->animalgloss))a.train(SKILL_SEDUCTION,LCSrandom(5)+2);
 
                   if(tk->animalgloss)
                   {
@@ -1655,7 +1666,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
 /* are they interested in talking about the issues? */
 char talkreceptive(creaturest &cr)
 {
-   if(cr.align==-1)return 0;
+   if(cr.enemy())return 0;
 
    switch(cr.type)
    {

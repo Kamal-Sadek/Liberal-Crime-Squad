@@ -86,7 +86,7 @@ char unlock(short type,char &actual)
       int aroll=LCSrandom(6)+maxattack;
       if(maxattack<=difficulty)
       {
-      	activesquad->squad[p]->skill_ip[SKILL_SECURITY]+=1+difficulty*2-maxattack;
+      	activesquad->squad[p]->train(SKILL_SECURITY,1+difficulty*2-maxattack);
       }
 
       if(aroll>difficulty)
@@ -115,7 +115,7 @@ char unlock(short type,char &actual)
 	         {
 		         if(activesquad->squad[j]->alive)
 		         {
-			         activesquad->squad[j]->skill_ip[SKILL_SECURITY]+=difficulty-activesquad->squad[j]->skill[SKILL_SECURITY];
+			         activesquad->squad[j]->train(SKILL_SECURITY,difficulty-activesquad->squad[j]->skill[SKILL_SECURITY]);
 		         }
 	         }
          }
@@ -420,7 +420,7 @@ char hack(short type,char &actual)
       int p=goodp[LCSrandom(goodp.size())];
 
       int aroll=LCSrandom(11)+maxattack;
-      activesquad->squad[p]->skill_ip[SKILL_COMPUTERS]+=difficulty;
+      activesquad->squad[p]->train(SKILL_COMPUTERS,difficulty);
 
       if(aroll>difficulty)
       {
@@ -562,7 +562,7 @@ char radio_broadcast(void)
          segmentpower+=activesquad->squad[p]->skill[SKILL_SCIENCE];
          segmentpower+=activesquad->squad[p]->skill[SKILL_BUSINESS];
          segmentpower+=activesquad->squad[p]->skill[SKILL_PERSUASION];
-         activesquad->squad[p]->skill_ip[SKILL_PERSUASION]+=50;
+         activesquad->squad[p]->train(SKILL_PERSUASION,50);
          partysize++;
       }
    }
@@ -804,7 +804,7 @@ char news_broadcast(void)
          segmentpower+=activesquad->squad[p]->skill[SKILL_SCIENCE];
          segmentpower+=activesquad->squad[p]->skill[SKILL_BUSINESS];
          segmentpower+=activesquad->squad[p]->skill[SKILL_PERSUASION];
-         activesquad->squad[p]->skill_ip[SKILL_PERSUASION]+=50;
+         activesquad->squad[p]->train(SKILL_PERSUASION,50);
          partysize++;
       }
    }

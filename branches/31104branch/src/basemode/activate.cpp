@@ -95,7 +95,7 @@ void activate(void)
          for(int sk=0;sk<SKILLNUM;sk++)
          {
             skill+=(unsigned long)temppool[p]->skill[sk];
-            if(temppool[p]->skill_ip[sk]>=100+(10*temppool[p]->skill[sk])&&
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
                temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
 
@@ -990,7 +990,7 @@ void select_tendhostage(creaturest *cr)
          for(int sk=0;sk<SKILLNUM;sk++)
          {
             skill+=(unsigned long)temppool[p]->skill[sk];
-            if(temppool[p]->skill_ip[sk]>=100+(10*temppool[p]->skill[sk])&&
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
                temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
 

@@ -627,7 +627,10 @@ void printencounter(void)
       {
          if(!encounter[e].alive)set_color(COLOR_BLACK,COLOR_BLACK,1);
          else if(encounter[e].align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else if(encounter[e].align==1)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else if(encounter[e].align==1)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+         }
          else set_color(COLOR_RED,COLOR_BLACK,1);
          move(py,px);
          addstr(encounter[e].name);

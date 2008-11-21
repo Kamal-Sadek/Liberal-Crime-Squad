@@ -38,8 +38,8 @@ void makecharacter(void)
 
    newcr->att[ATTRIBUTE_HEART]=8;
    newcr->att[ATTRIBUTE_WISDOM]=1;
-   newcr->att[ATTRIBUTE_INTELLIGENCE]=1;
-   newcr->att[ATTRIBUTE_AGILITY]=4;
+   newcr->att[ATTRIBUTE_INTELLIGENCE]=3;
+   newcr->att[ATTRIBUTE_AGILITY]=5;
    newcr->att[ATTRIBUTE_STRENGTH]=4;
    newcr->att[ATTRIBUTE_HEALTH]=6;
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
@@ -169,14 +169,16 @@ void makecharacter(void)
             //SKILL_MUSIC 2
             //ATTRIBUTE_CHARISMA 2
             move(9,0);addstr("C - I played violent video games at home.  I was a total outcast.");
-            //SKILL_COMPUTERS 2
+            //SKILL_COMPUTERS 1
+            //SKILL_PISTOL 1
             //ATTRIBUTE_AGILITY 2
-            move(11,0);addstr("D - I drew things, a lot.  I was drawing a world better than this.");
+            move(11,0);addstr("D - I was obsessed with blades, and started lifting weights.");
+            //SKILL_KNIFE 1
+            //SKILL_SWORD 1
+            //ATTRIBUTE_STRENGTH 2
+            move(13,0);addstr("E - I drew things, a lot.  I was drawing a world better than this.");
             //SKILL_ART 2
             //ATTRIBUTE_HEART 2
-            move(13,0);addstr("E - I was obsessed with swords, and started lifting weights.");
-            //SKILL_SWORD 2
-            //ATTRIBUTE_STRENGTH 2
             break;
          case 5:
             move(2,0);addstr("Things were getting really bad...");
@@ -187,7 +189,8 @@ void makecharacter(void)
             //SKILL_SHOTGUN 1
             //SKILL_RIFLE 1
             move(9,0);addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
-            //SKILL_GARMENTMAKING 2
+            //SKILL_GARMENTMAKING 1
+            //SKILL_DISGUISE 1
             move(11,0);addstr("D - when I was sent to religious counseling, just stressing me out more.");
             //SKILL_RELIGION 1
             //SKILL_INTERROGATION 1
@@ -256,19 +259,20 @@ void makecharacter(void)
             //ATTRIBUTE_AGILITY 2
             //ATTRIBUTE_HEALTH 2
             move(9,0);addstr("C - taking college courses.  I can see how much the country needs help.");
-            //SKILL_SCIENCE 2
-            //SKILL_TEACHING 1
+            //SKILL_SCIENCE 1
+            //SKILL_TEACHING 2
+            //SKILL_COMPUTERS 2
             //SKILL_WRITING 1
             //ATTRIBUTE_INTELLIGENCE 3
-            //ATTRIBUTE_HEART 1
-            move(11,0);addstr("D - talking to people, learning how they think.  I have to change minds.");
-            //SKILL_PERSUASION 2
-            //SKILL_SCIENCE 1
-            //SKILL_RELIGION 1
-            //ATTRIBUTE_INTELLIGENCE 2
-            //ATTRIBUTE_CHARISMA 2
+            move(11,0);addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
+            //SKILL_MEDICAL 2
+            //SKILL_STREETSENSE 2
+            //ATTRIBUTE_INTELLIGENCE 1
+            //ATTRIBUTE_AGILITY 1
+            //ATTRIBUTE_HEALTH 2
             move(13,0);addstr("E - writing my manifesto and refining my image.  I'm ready to lead.");
-            //ATTRIBUTE_CHARISMA 4
+            //ATTRIBUTE_CHARISMA 2
+            //ATTRIBUTE_INTELLIGENCE 2
             //SKILL_LAW 1
             //SKILL_LEADERSHIP 1
             //SKILL_WRITING 2
@@ -423,18 +427,20 @@ void makecharacter(void)
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_COMPUTERS]+=2;
+               newcr->skill[SKILL_COMPUTERS]+=1;
+               newcr->skill[SKILL_PISTOL]+=1;
                newcr->att[ATTRIBUTE_AGILITY]+=2;
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_ART]+=2;
-               newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->att[ATTRIBUTE_STRENGTH]+=2;
+               newcr->skill[SKILL_SWORD]+=1;
+               newcr->skill[SKILL_KNIFE]+=1;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=2;
-               newcr->skill[SKILL_SWORD]+=2;
+               newcr->skill[SKILL_ART]+=2;
+               newcr->att[ATTRIBUTE_HEART]+=2;
             }
             break;
          case 5:
@@ -450,7 +456,8 @@ void makecharacter(void)
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_GARMENTMAKING]+=2;
+               newcr->skill[SKILL_GARMENTMAKING]+=1;
+               newcr->skill[SKILL_DISGUISE]+=1;
             }
             if(c=='d')
             {
@@ -567,24 +574,26 @@ void makecharacter(void)
             if(c=='c')
             {
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=3;
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->skill[SKILL_SCIENCE]+=2;
+               newcr->skill[SKILL_SCIENCE]+=1;
                newcr->skill[SKILL_WRITING]+=1;
-               newcr->skill[SKILL_TEACHING]+=1;
+               newcr->skill[SKILL_COMPUTERS]+=2;
+               newcr->skill[SKILL_TEACHING]+=2;
                newcr->type = CREATURE_COLLEGESTUDENT;
             }
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
-               newcr->skill[SKILL_SCIENCE]+=1;
-               newcr->skill[SKILL_PERSUASION]+=2;
-               newcr->skill[SKILL_RELIGION]+=1;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
+               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->att[ATTRIBUTE_HEALTH]+=2;
+               newcr->skill[SKILL_MEDICAL]+=1;
+               newcr->skill[SKILL_STREETSENSE]+=2;
+               newcr->skill[SKILL_GARMENTMAKING]+=1;
                newcr->type = CREATURE_HSDROPOUT;
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=4;
+               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
                newcr->skill[SKILL_LAW]+=1;
                newcr->skill[SKILL_WRITING]+=2;
                newcr->skill[SKILL_LEADERSHIP]+=1;

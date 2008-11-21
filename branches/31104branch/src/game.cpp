@@ -317,6 +317,10 @@ int main(int argc, char* argv[])
    for(int l=0;l<LAWNUM;l++)law[l]=-2;
 #endif
 
+#ifdef PERFECTLAWS
+   for(int l=0;l<LAWNUM;l++)law[l]=2;
+#endif
+
    for(int s=0;s<100;s++)
    {
       if(s<20)senate[s]=-2;

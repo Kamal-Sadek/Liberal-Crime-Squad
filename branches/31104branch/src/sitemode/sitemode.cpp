@@ -236,7 +236,7 @@ void mode_site(void)
          if(encounter[e].exists)
          {
             encsize++;
-            if(encounter[e].align==-1)enemy++;
+            if(encounter[e].enemy())enemy++;
             if(encounter[e].type==CREATURE_WORKER_SERVANT||
                encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
                encounter[e].type==CREATURE_WORKER_SWEATSHOP||
@@ -258,7 +258,7 @@ void mode_site(void)
          {
             if(encounter[e].exists)
             {
-               if(encounter[e].align==-1)talkers++;
+               if(encounter[e].enemy())talkers++;
             }
          }
       }
@@ -809,7 +809,7 @@ void mode_site(void)
                                        refresh();
                                        getch();
                                     }
-                                    else if(encounter[tk].align!=-1&&sitealarm&&enemy)
+                                    else if(!encounter[tk].enemy()&&sitealarm&&enemy)
                                     {
                                        clearcommandarea();
                                        clearmessagearea();
@@ -817,7 +817,7 @@ void mode_site(void)
 
                                        set_color(COLOR_WHITE,COLOR_BLACK,1);
                                        move(9,1);
-                                       addstr("You have to deal with the conservatives first.");
+                                       addstr("You have to deal with the enemies first.");
 
                                        refresh();
                                        getch();
@@ -847,7 +847,7 @@ void mode_site(void)
 
          if(c=='l'&&(!enemy||!sitealarm))
          {
-            reloadparty();
+            reloadparty(true);
             printparty();
             refresh();
             creatureadvance();
@@ -1280,7 +1280,7 @@ void mode_site(void)
                      maxsleightofhand=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND];
                   }
                }
-               activesquad->squad[beststealer]->skill_ip[SKILL_SLEIGHTOFHAND]+=5;
+               activesquad->squad[beststealer]->train(SKILL_SLEIGHTOFHAND,5);
                if(!LCSrandom(maxsleightofhand+1))
                {
                   alienationcheck(1);

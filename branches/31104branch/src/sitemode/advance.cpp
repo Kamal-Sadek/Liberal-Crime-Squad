@@ -325,7 +325,7 @@ void advancecreature(creaturest &cr)
             move(17,1);
             addstr(cr.name);
             addstr("'s wounds.");
-            topmedical->skill_ip[SKILL_MEDICAL]+=max(50-topmedicalskill*2,0);
+            topmedical->train(SKILL_MEDICAL,max(50-topmedicalskill*2,0));
             cr.wound[w]^=WOUND_BLEEDING;
             refresh();
             getch();

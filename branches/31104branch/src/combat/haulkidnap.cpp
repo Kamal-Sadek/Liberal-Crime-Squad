@@ -101,7 +101,6 @@ void kidnapattempt(void)
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&!encounter[e].animalgloss)
          {
             if((encounter[e].weapon.type!=WEAPON_NONE&&
-               encounter[e].weapon.type!=WEAPON_SYRINGE&&
                encounter[e].weapon.type!=WEAPON_GAVEL&&
                encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
             target.push_back(e);
@@ -236,7 +235,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
       int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
 
       aroll+=LCSrandom(a.skill[SKILL_HANDTOHAND]+1);
-      a.skill_ip[SKILL_HANDTOHAND]+=droll;
+      a.train(SKILL_HANDTOHAND,droll);
 
       clearmessagearea();
 
