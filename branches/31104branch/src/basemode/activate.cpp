@@ -308,7 +308,7 @@ void activate(creaturest *cr)
          
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
          move(11,40);
-         addstr("2 - Sell Tie-Dye T-Shirts");
+         addstr("2 - Sell Tie-Dyed T-Shirts");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_ART);
          move(12,40);
@@ -688,7 +688,7 @@ void activate(creaturest *cr)
          }
       }
 
-      if(c=='h'&&cr->skill[SKILL_MEDICAL]!=0)
+      if(c=='h'&&cr->skillval(SKILL_MEDICAL)!=0)
       {
          cr->activity.type=ACTIVITY_HEAL;
          break;
@@ -886,9 +886,9 @@ void activatebulk(void)
                      temppool[p]->activity.type=ACTIVITY_TROUBLE;
                   else
                   {
-                     if(temppool[p]->skill[SKILL_COMPUTERS]>1)
+                     if(temppool[p]->skillval(SKILL_COMPUTERS)>1)
                         temppool[p]->activity.type=ACTIVITY_DOS_ATTACKS;
-                     else if(temppool[p]->skill[SKILL_ART]>1)
+                     else if(temppool[p]->skillval(SKILL_ART)>1)
                      {
                         temppool[p]->activity.type=ACTIVITY_GRAFFITI;
                         temppool[p]->activity.arg=-1;
@@ -897,18 +897,18 @@ void activatebulk(void)
                   }
                   break;
                case 1: //Fundraising
-                  if(temppool[p]->skill[SKILL_ART]>1)
+                  if(temppool[p]->skillval(SKILL_ART)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_ART;
-                  else if(temppool[p]->skill[SKILL_GARMENTMAKING]>1)
+                  else if(temppool[p]->skillval(SKILL_GARMENTMAKING)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_TSHIRTS;
-                  else if(temppool[p]->skill[SKILL_MUSIC]>1)
+                  else if(temppool[p]->skillval(SKILL_MUSIC)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_MUSIC;
                   else temppool[p]->activity.type=ACTIVITY_DONATIONS;
                   break;
                case 2: //Illegal Fundraising
-                  if(temppool[p]->skill[SKILL_COMPUTERS]>1)
+                  if(temppool[p]->skillval(SKILL_COMPUTERS)>1)
                      temppool[p]->activity.type=ACTIVITY_CCFRAUD;
-                  else if(temppool[p]->skill[SKILL_SEDUCTION]>1)
+                  else if(temppool[p]->skillval(SKILL_SEDUCTION)>1)
                      temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
                   else
                      temppool[p]->activity.type=ACTIVITY_SELL_DRUGS;
@@ -1312,7 +1312,7 @@ long armor_makedifficulty(int type,creaturest *cr)
          break;
    }
 
-   basedif-=cr->skill[SKILL_GARMENTMAKING]-3;
+   basedif-=cr->skillval(SKILL_GARMENTMAKING)-3;
    if(basedif<0)basedif=0;
 
    return basedif;

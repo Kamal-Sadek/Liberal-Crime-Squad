@@ -98,7 +98,8 @@ void kidnapattempt(void)
 
       for(int e=0;e<ENCMAX;e++)
       {
-         if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&!encounter[e].animalgloss)
+         if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
+            (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
          {
             if((encounter[e].weapon.type!=WEAPON_NONE&&
                encounter[e].weapon.type!=WEAPON_GAVEL&&
@@ -234,7 +235,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
       int aroll=LCSrandom(15)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
       int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
 
-      aroll+=LCSrandom(a.skill[SKILL_HANDTOHAND]+1);
+      aroll+=LCSrandom(a.skillval(SKILL_HANDTOHAND)+1);
       a.train(SKILL_HANDTOHAND,droll);
 
       clearmessagearea();

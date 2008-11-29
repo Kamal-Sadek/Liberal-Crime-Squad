@@ -713,16 +713,16 @@ void mode_site(void)
                            move(y,50);
                            itoa(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                                 activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-                                activesquad->squad[p]->skill[SKILL_PERSUASION]*2,num,10);
+                                activesquad->squad[p]->skillval(SKILL_PERSUASION)*2,num,10);
                            addstr(num);
                            move(y,60);
                            itoa(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)*2+
-                                activesquad->squad[p]->skill[SKILL_SEDUCTION]*2,num,10);
+                                activesquad->squad[p]->skillval(SKILL_SEDUCTION)*2,num,10);
                            addstr(num);
                            move(y,70);
                            itoa(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                                 activesquad->squad[p]->attval(ATTRIBUTE_WISDOM)*2+
-                                activesquad->squad[p]->skill[SKILL_PERSUASION]*2,num,10);
+                                activesquad->squad[p]->skillval(SKILL_PERSUASION)*2,num,10);
                            addstr(num);
                            y++;
                         }
@@ -1274,10 +1274,10 @@ void mode_site(void)
                   {
                      break;
                   }
-                  if(activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]>maxsleightofhand)
+                  if(activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)>maxsleightofhand)
                   {
                      beststealer=i;
-                     maxsleightofhand=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND];
+                     maxsleightofhand=activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND);
                   }
                }
                activesquad->squad[beststealer]->train(SKILL_SLEIGHTOFHAND,5);
@@ -2096,7 +2096,7 @@ void mode_site(void)
                      if(sitealarm||sitealienate||
                         location[cursite]->siege.siege)
                      {
-                        clearmessagearea();
+                        clearmessagearea(false);
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(16,1);
                         addstr("The landlord is out of the office.");
@@ -2106,7 +2106,7 @@ void mode_site(void)
                      }
                      else
                      {
-                        clearmessagearea();
+                        clearmessagearea(false);
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(16,1);
                         addstr("The landlord is in.");

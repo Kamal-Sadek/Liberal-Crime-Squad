@@ -96,10 +96,10 @@ void trial(creaturest &g)
          }
          if(pool[p]->type==CREATURE_LAWYER/*&&!sleeperlawyer*/)
          {
-            if(pool[p]->skill[SKILL_LAW]+pool[p]->skill[SKILL_PERSUASION]>=maxsleeperskill)
+            if(pool[p]->skillval(SKILL_LAW)+pool[p]->skillval(SKILL_PERSUASION)>=maxsleeperskill)
             {
                sleeperlawyer=pool[p];
-               maxsleeperskill=pool[p]->skill[SKILL_LAW]+sleeperlawyer->skill[SKILL_PERSUASION];
+               maxsleeperskill=pool[p]->skillval(SKILL_LAW)+sleeperlawyer->skillval(SKILL_PERSUASION);
             }
          }
       }
@@ -725,8 +725,8 @@ void trial(creaturest &g)
             else if(defense==4)
             {
                // Sleeper attorney
-               defensepower=LCSrandom(71)+sleeperlawyer->skill[SKILL_LAW]*4
-                                         +sleeperlawyer->skill[SKILL_PERSUASION]*4;
+               defensepower=LCSrandom(71)+sleeperlawyer->skillval(SKILL_LAW)*4
+                                         +sleeperlawyer->skillval(SKILL_PERSUASION)*4;
                sleeperlawyer->train(SKILL_LAW,prosecution/4);
                sleeperlawyer->train(SKILL_PERSUASION,prosecution/4);
             }
@@ -790,13 +790,13 @@ void trial(creaturest &g)
          // A character build spefically to be strong in this area *will* still start out
          // slightly stronger than the public defender (and will be notably better once they
          // hit activist level).
-         int defenseskill=3*g.skill[SKILL_PERSUASION]+6*g.skill[SKILL_LAW];
+         int defenseskill=3*g.skillval(SKILL_PERSUASION)+6*g.skillval(SKILL_LAW);
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
          defensepower+=LCSrandom(min(defenseskill*2,max(200,prosecution+100)));
-         g.train(SKILL_PERSUASION,max(50-g.skill[SKILL_PERSUASION]*2,0));
-         g.train(SKILL_LAW,max(50-g.skill[SKILL_LAW]*2,0));
+         g.train(SKILL_PERSUASION,max(50-g.skillval(SKILL_PERSUASION)*2,0));
+         g.train(SKILL_LAW,max(50-g.skillval(SKILL_LAW)*2,0));
 
          if(autoconvict)
          {
@@ -1043,6 +1043,12 @@ void penalize(creaturest &g,char lenient)
       if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
    }
 
+   for(int l=0;l<LAWFLAGNUM;l++)
+   {
+      if(g.lawflag[l]>10)
+         g.lawflag[l]=10;
+   }
+
    //CALC TIME
    if(!g.deathpenalty)
    {
@@ -1182,9 +1188,7 @@ void penalize(creaturest &g,char lenient)
          char num[20];
          itoa(g.sentence/12,num,10);
          addstr(num);
-         addstr(" year");
-         if(g.sentence/12>1)addstr("s");
-         addstr(" in prison.");
+         addstr(" years in prison.");
       }
       else
       {
@@ -1200,8 +1204,8 @@ void penalize(creaturest &g,char lenient)
       int boss=getpoolcreature(g.hireid);
       if(boss!=-1&&pool[boss]->juice>50)
       {
-         int juice=pool[boss]->juice-50;
-         if(juice>5)juice=5;
+         int juice=g.juice/10;
+         if(juice<5)juice=5;
          addjuice(*pool[boss],-juice);
       }
 

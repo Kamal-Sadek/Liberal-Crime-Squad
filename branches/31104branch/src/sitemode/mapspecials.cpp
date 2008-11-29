@@ -91,8 +91,8 @@ void special_bouncer_assess_squad()
          if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
             if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
          // Underage? Gone
-         if(kid(*activesquad->squad[s])||activesquad->squad[s]->type==CREATURE_TEENAGER)
-            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+         if(activesquad->squad[s]->age<18)
+            if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
          // High security in gentleman's club? Gone
          if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
             if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
@@ -103,7 +103,21 @@ void special_bouncer_assess_squad()
    {
    case REJECTED_NUDE:
       set_color(COLOR_RED,COLOR_BLACK,1);
-      addstr("\"No shirt, no shoes, no service.\"");break;
+      switch(LCSrandom(3))
+      {
+      case 0:addstr("\"No shirt, no pants, no service.\"");break;
+      case 1:addstr("\"Put some clothes on! That's disgusting.\"");break;
+      case 2:addstr("\"No! No, you can't come in naked! God!!\"");break;
+      }
+      break;
+   case REJECTED_UNDERAGE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(3))
+      {
+      case 0:addstr("\"Hahaha, come back in a few years.\"");break;
+      case 1:addstr("\"Find some kiddy club.\"");break;
+      case 2:addstr("\"You don't look 18 to me.\"");break;
+      }
       break;
    case REJECTED_DRESSCODE:
       set_color(COLOR_RED,COLOR_BLACK,1);
@@ -169,7 +183,13 @@ void special_bouncer_assess_squad()
       break;
    case NOT_REJECTED:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      addstr("\"Keep it civil and don't drink too much.\"");
+      
+      switch(LCSrandom(3))
+      {
+      case 0:addstr("\"Keep it civil and don't drink too much.\"");break;
+      case 1:addstr("\"Let me get the door for you.\"");break;
+      case 2:addstr("\"Ehh, alright, go on in.\"");break;
+      }
       break;
    }
    refresh();
@@ -276,11 +296,11 @@ void special_nuclear_onoff(void)
          {
             if(activesquad->squad[p]!=NULL&&activesquad->squad[p]->alive)
             {
-               if(activesquad->squad[p]->skill[SKILL_SCIENCE]*4+
+               if(activesquad->squad[p]->skillval(SKILL_SCIENCE)*4+
                   activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)>max)
                {
                   maxs=activesquad->squad[p];
-                  max=activesquad->squad[p]->skill[SKILL_SCIENCE]*4+
+                  max=activesquad->squad[p]->skillval(SKILL_SCIENCE)*4+
                       activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE);
                }
             }
@@ -608,13 +628,13 @@ void special_courthouse_jury(void)
                {
                   if((activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                      activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-                     activesquad->squad[p]->skill[SKILL_PERSUASION]+
-                     activesquad->squad[p]->skill[SKILL_LAW]*2)>maxattack)
+                     activesquad->squad[p]->skillval(SKILL_PERSUASION)+
+                     activesquad->squad[p]->skillval(SKILL_LAW)*2)>maxattack)
                   {
                      maxattack=activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                         activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-                        activesquad->squad[p]->skill[SKILL_PERSUASION]+
-                        activesquad->squad[p]->skill[SKILL_LAW]*2;
+                        activesquad->squad[p]->skillval(SKILL_PERSUASION)+
+                        activesquad->squad[p]->skillval(SKILL_LAW)*2;
                   }
                }
             }
@@ -630,8 +650,8 @@ void special_courthouse_jury(void)
                {
                   if((activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                      activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-                     activesquad->squad[p]->skill[SKILL_PERSUASION]+
-                     activesquad->squad[p]->skill[SKILL_LAW]*2)==maxattack)
+                     activesquad->squad[p]->skillval(SKILL_PERSUASION)+
+                     activesquad->squad[p]->skillval(SKILL_LAW)*2)==maxattack)
                   {
                      goodp.push_back(p);
                   }
@@ -646,8 +666,8 @@ void special_courthouse_jury(void)
             short aroll=LCSrandom(21)+
                activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
                activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-               activesquad->squad[p]->skill[SKILL_PERSUASION]+
-               activesquad->squad[p]->skill[SKILL_LAW]*2;
+               activesquad->squad[p]->skillval(SKILL_PERSUASION)+
+               activesquad->squad[p]->skillval(SKILL_LAW)*2;
             short troll=LCSrandom(21)+20;
             activesquad->squad[p]->train(SKILL_PERSUASION,troll);
             activesquad->squad[p]->train(SKILL_LAW,troll);

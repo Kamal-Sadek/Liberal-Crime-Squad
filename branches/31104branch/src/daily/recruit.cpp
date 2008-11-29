@@ -42,7 +42,7 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
 
 char recruitst::eagerness()
 {
-   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->skill[SKILL_LEADERSHIP]; 
+   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->skillval(SKILL_LEADERSHIP); 
    if(talkreceptive(*recruit))
    {
       eagerness_temp+=2;
@@ -106,8 +106,8 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
 
       //Select a weapon to arm the recruit with
       if(r.recruit->money>1500 &&
-         r.recruit->skill[SKILL_RIFLE] &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_STREETSENSE]))
+         r.recruit->skillval(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->skillval(SKILL_STREETSENSE)))
       {
          switch(LCSrandom(3))
          {
@@ -119,32 +119,32 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>1200 &&
-         r.recruit->skill[SKILL_RIFLE] &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skill[SKILL_STREETSENSE]))
+         r.recruit->skillval(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->skillval(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SMG_MP5;
          r.recruit->weapon.ammo=15;
          r.recruit->clip[CLIP_SMG]=4;
       }
       else if(r.recruit->money>400 &&
-         r.recruit->skill[SKILL_SHOTGUN] &&
-         (law[LAW_GUNCONTROL]<2 || r.recruit->skill[SKILL_STREETSENSE]))
+         r.recruit->skillval(SKILL_SHOTGUN) &&
+         (law[LAW_GUNCONTROL]<2 || r.recruit->skillval(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>350 &&
-         r.recruit->skill[SKILL_RIFLE] &&
-         (law[LAW_GUNCONTROL]<=-1 || r.recruit->skill[SKILL_STREETSENSE]))
+         r.recruit->skillval(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]<=-1 || r.recruit->skillval(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>300 &&
-         r.recruit->skill[SKILL_PISTOL] &&
-         (law[LAW_GUNCONTROL]<1 || r.recruit->skill[SKILL_STREETSENSE]))
+         r.recruit->skillval(SKILL_PISTOL) &&
+         (law[LAW_GUNCONTROL]<1 || r.recruit->skillval(SKILL_STREETSENSE)))
       {
          switch(LCSrandom(4))
          {
@@ -162,22 +162,22 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
                 break;
          }
       }
-      else if(r.recruit->skill[SKILL_SWORD])
+      else if(r.recruit->skillval(SKILL_SWORD))
       {
          if(LCSrandom(5)) r.recruit->weapon.type=WEAPON_SWORD;
          else r.recruit->weapon.type=WEAPON_DAISHO;
       }
-      else if(r.recruit->skill[SKILL_AXE])
+      else if(r.recruit->skillval(SKILL_AXE))
       {
          r.recruit->weapon.type=WEAPON_AXE;
       }
-      else if(r.recruit->skill[SKILL_PISTOL])
+      else if(r.recruit->skillval(SKILL_PISTOL))
       {
          r.recruit->weapon.type=WEAPON_REVOLVER_22;
          r.recruit->weapon.ammo=6;
          r.recruit->clip[CLIP_22]=4;
       }
-      else if(r.recruit->skill[SKILL_CLUB] && !r.recruit->skill[SKILL_KNIFE])
+      else if(r.recruit->skillval(SKILL_CLUB) && !r.recruit->skillval(SKILL_KNIFE))
       {
          if(LCSrandom(2))r.recruit->weapon.type=WEAPON_BASEBALLBAT;
          else r.recruit->weapon.type=WEAPON_CROWBAR;
@@ -427,19 +427,19 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          }
          pool[p]->train(SKILL_PERSUASION,5);
          
-         int lib_persuasiveness = pool[p]->skill[SKILL_PERSUASION]*2+
-                                  pool[p]->skill[SKILL_BUSINESS]+
-                                  pool[p]->skill[SKILL_SCIENCE]+
-                                  pool[p]->skill[SKILL_RELIGION]+
-                                  pool[p]->skill[SKILL_LAW]+
+         int lib_persuasiveness = pool[p]->skillval(SKILL_PERSUASION)*2+
+                                  pool[p]->skillval(SKILL_BUSINESS)+
+                                  pool[p]->skillval(SKILL_SCIENCE)+
+                                  pool[p]->skillval(SKILL_RELIGION)+
+                                  pool[p]->skillval(SKILL_LAW)+
                                   pool[p]->attval(ATTRIBUTE_HEART)+
                                   pool[p]->attval(ATTRIBUTE_CHARISMA)*2+
                                   pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
 
-         int recruit_reluctance = r.recruit->skill[SKILL_BUSINESS]+
-                                  r.recruit->skill[SKILL_SCIENCE]+
-                                  r.recruit->skill[SKILL_RELIGION]+
-                                  r.recruit->skill[SKILL_LAW]+
+         int recruit_reluctance = r.recruit->skillval(SKILL_BUSINESS)+
+                                  r.recruit->skillval(SKILL_SCIENCE)+
+                                  r.recruit->skillval(SKILL_RELIGION)+
+                                  r.recruit->skillval(SKILL_LAW)+
                                   r.recruit->attval(ATTRIBUTE_WISDOM)*3+
                                   r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
                                   LCSrandom(10);

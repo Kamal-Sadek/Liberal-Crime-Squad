@@ -20,7 +20,7 @@
 //#define SHITLAWS
 
 // Laws start elite liberal
-#define PERFECTLAWS
+//#define PERFECTLAWS
 
 // Gives you bloody armor
 //#define GIVEBLOODYARMOR
@@ -29,7 +29,7 @@
 //#define HIGHFUNDS
 
 // Interrogation always enlightens
-//#define AUTOENLIGHTEN
+#define AUTOENLIGHTEN
 
 // Show polls when you can't see things
 //#define SHOWWAIT
@@ -964,6 +964,8 @@ public:
 
    bool enemy();
 
+   int stunned;
+
    weaponst weapon;
    armorst armor;
    int clip[CLIPNUM];
@@ -1018,7 +1020,8 @@ public:
       return 1;
    }
    void creatureinit(void);
-   long attval(short a,char usejuice=1);
+   int attval(short a,char usejuice=1);
+   int skillval(int skill_to_lookup) { return skill[skill_to_lookup]; }
 };
 
 #define SITEBLOCK_EXIT BIT1
@@ -1585,6 +1588,9 @@ enum Execs
    EXECNUM
 };
 
+#define RENTING_CCS -2
+#define RENTING_NOCONTROL -1
+#define RENTING_PERMANENT 0
 
 enum TalkModes
 {
@@ -1642,7 +1648,7 @@ void printcreatureinfo(creaturest *cr,unsigned char knowledge=255);
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p);
 /* full screen character sheet */
-void printliberalstats(creaturest &cr,char smll);
+void printliberalstats(creaturest &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y,int x);
 /* print location name (is aware of business fronts) */

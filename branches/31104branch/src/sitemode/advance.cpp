@@ -298,12 +298,13 @@ void advancecreature(creaturest &cr)
    {
       if(activesquad->squad[i]&&
          activesquad->squad[i]->alive&&
+         activesquad->squad[i]->stunned==0&&
          activesquad->squad[i]->blood>40&&
          activesquad->squad[i]->id!=cr.id&&
-         activesquad->squad[i]->skill[SKILL_MEDICAL]>topmedicalskill)
+         activesquad->squad[i]->skillval(SKILL_MEDICAL)>topmedicalskill)
       {
          topmedical=activesquad->squad[i];
-         topmedicalskill=activesquad->squad[i]->skill[SKILL_MEDICAL];
+         topmedicalskill=activesquad->squad[i]->skillval(SKILL_MEDICAL);
       }
    }
 
@@ -311,7 +312,7 @@ void advancecreature(creaturest &cr)
    {
       if(cr.wound[w] & WOUND_BLEEDING)
       {
-         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)/*+cr.skill[SKILL_SURVIVAL]*5*/)
+         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)/*+cr.skillval(SKILL_SURVIVAL)*5*/)
          {
             cr.wound[w]^=WOUND_BLEEDING;
          }
@@ -381,7 +382,7 @@ void advancecreature(creaturest &cr)
          {
             if(cr.align==1)stat_dead++;
          }
-         else if(cr.align==-1&&cr.animalgloss!=ANIMALGLOSS_ANIMAL)
+         else if(cr.align==-1&&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
          {
             stat_kills++;
             if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
@@ -437,7 +438,7 @@ void advancecreature(creaturest &cr)
          {
             if(cr.align==1)stat_dead++;
          }
-         else if(cr.align==-1&&cr.animalgloss!=ANIMALGLOSS_ANIMAL)
+         else if(cr.align==-1&&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
          {
             stat_kills++;
             if(location[cursite]->siege.siege)location[cursite]->siege.kills++;

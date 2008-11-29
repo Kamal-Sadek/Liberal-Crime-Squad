@@ -223,17 +223,17 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr("'s wisdom!!!");
          pool[p]->att[ATTRIBUTE_WISDOM]++;
 
-         if(d.date[e]->skill[SKILL_RELIGION]>pool[p]->skill[SKILL_RELIGION])
+         if(d.date[e]->skillval(SKILL_RELIGION)>pool[p]->skillval(SKILL_RELIGION))
          {
-            pool[p]->train(SKILL_RELIGION,10*(d.date[e]->skill[SKILL_RELIGION]-pool[p]->skill[SKILL_RELIGION]));
+            pool[p]->train(SKILL_RELIGION,10*(d.date[e]->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION)));
          }
-         if(d.date[e]->skill[SKILL_SCIENCE]>pool[p]->skill[SKILL_SCIENCE])
+         if(d.date[e]->skillval(SKILL_SCIENCE)>pool[p]->skillval(SKILL_SCIENCE))
          {
-            pool[p]->train(SKILL_SCIENCE,10*(d.date[e]->skill[SKILL_SCIENCE]-pool[p]->skill[SKILL_SCIENCE]));
+            pool[p]->train(SKILL_SCIENCE,10*(d.date[e]->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE)));
          }
-         if(d.date[e]->skill[SKILL_BUSINESS]>pool[p]->skill[SKILL_BUSINESS])
+         if(d.date[e]->skillval(SKILL_BUSINESS)>pool[p]->skillval(SKILL_BUSINESS))
          {
-            pool[p]->train(SKILL_BUSINESS,10*(d.date[e]->skill[SKILL_BUSINESS]-pool[p]->skill[SKILL_BUSINESS]));
+            pool[p]->train(SKILL_BUSINESS,10*(d.date[e]->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS)));
          }
 
          refresh();
@@ -333,27 +333,27 @@ char completevacation(datest &d,int p,char &clearformess)
    addstr(pool[p]->name);
    addstr(" is back from vacation.");
 
-   short aroll=LCSrandom(51+pool[p]->attval(ATTRIBUTE_CHARISMA)*4+LCSrandom(pool[p]->skill[SKILL_SEDUCTION]*4))+10;
+   short aroll=LCSrandom(51+pool[p]->attval(ATTRIBUTE_CHARISMA)*4+LCSrandom(pool[p]->skillval(SKILL_SEDUCTION)*4))+10;
    short troll=LCSrandom(21+d.date[e]->attval(ATTRIBUTE_CHARISMA)*2+d.date[e]->attval(ATTRIBUTE_WISDOM)*4);
    pool[p]->train(SKILL_PERSUASION,LCSrandom(14)+7);
 
-   if(d.date[e]->skill[SKILL_BUSINESS])
+   if(d.date[e]->skillval(SKILL_BUSINESS))
    {
-      troll+=d.date[e]->skill[SKILL_BUSINESS];
-      if(pool[p]->skill[SKILL_BUSINESS])
-         aroll+=pool[p]->skill[SKILL_BUSINESS];
+      troll+=d.date[e]->skillval(SKILL_BUSINESS);
+      if(pool[p]->skillval(SKILL_BUSINESS))
+         aroll+=pool[p]->skillval(SKILL_BUSINESS);
    }
-   if(d.date[e]->skill[SKILL_RELIGION])
+   if(d.date[e]->skillval(SKILL_RELIGION))
    {
-      troll+=d.date[e]->skill[SKILL_RELIGION];
-      if(pool[p]->skill[SKILL_RELIGION])
-         aroll+=pool[p]->skill[SKILL_RELIGION];
+      troll+=d.date[e]->skillval(SKILL_RELIGION);
+      if(pool[p]->skillval(SKILL_RELIGION))
+         aroll+=pool[p]->skillval(SKILL_RELIGION);
    }
-   if(d.date[e]->skill[SKILL_SCIENCE])
+   if(d.date[e]->skillval(SKILL_SCIENCE))
    {
-      troll+=d.date[e]->skill[SKILL_SCIENCE];
-      if(pool[p]->skill[SKILL_SCIENCE])
-         aroll+=pool[p]->skill[SKILL_SCIENCE];
+      troll+=d.date[e]->skillval(SKILL_SCIENCE);
+      if(pool[p]->skillval(SKILL_SCIENCE))
+         aroll+=pool[p]->skillval(SKILL_SCIENCE);
    }
 
 
@@ -491,7 +491,7 @@ char completedate(datest &d,int p,char &clearformess)
          int c=getch();
          translategetch(c);
 
-         short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skill[SKILL_SEDUCTION]*2;
+         short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skillval(SKILL_SEDUCTION)*2;
          short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
 
          char test=0;
@@ -510,23 +510,23 @@ char completedate(datest &d,int p,char &clearformess)
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
          }
 
-         if(d.date[e]->skill[SKILL_BUSINESS])
+         if(d.date[e]->skillval(SKILL_BUSINESS))
          {
-            troll+=d.date[e]->skill[SKILL_BUSINESS];
-            if(pool[p]->skill[SKILL_BUSINESS])
-               aroll+=pool[p]->skill[SKILL_BUSINESS];
+            troll+=d.date[e]->skillval(SKILL_BUSINESS);
+            if(pool[p]->skillval(SKILL_BUSINESS))
+               aroll+=pool[p]->skillval(SKILL_BUSINESS);
          }
-         if(d.date[e]->skill[SKILL_RELIGION])
+         if(d.date[e]->skillval(SKILL_RELIGION))
          {
-            troll+=d.date[e]->skill[SKILL_RELIGION];
-            if(pool[p]->skill[SKILL_RELIGION])
-               aroll+=pool[p]->skill[SKILL_RELIGION];
+            troll+=d.date[e]->skillval(SKILL_RELIGION);
+            if(pool[p]->skillval(SKILL_RELIGION))
+               aroll+=pool[p]->skillval(SKILL_RELIGION);
          }
-         if(d.date[e]->skill[SKILL_SCIENCE])
+         if(d.date[e]->skillval(SKILL_SCIENCE))
          {
-            troll+=d.date[e]->skill[SKILL_SCIENCE];
-            if(pool[p]->skill[SKILL_SCIENCE])
-               aroll+=pool[p]->skill[SKILL_SCIENCE];
+            troll+=d.date[e]->skillval(SKILL_SCIENCE);
+            if(pool[p]->skillval(SKILL_SCIENCE))
+               aroll+=pool[p]->skillval(SKILL_SCIENCE);
          }
 
          if(test)

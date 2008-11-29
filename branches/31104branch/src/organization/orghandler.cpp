@@ -21,8 +21,10 @@ This file is part of Liberal Crime Squad.                                       
 	This file was made by Brad (AKA Puzzlemaker)
 */
 
-#include <includes.h>
-#include <externs.h>
+#include <list>
+#include "includes.h"
+#include "externs.h"
+#include "orghandler.h"
  
 orgHandler::orgHandler() : nextID(0)
 {

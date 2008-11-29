@@ -970,7 +970,7 @@ long driveskill(creaturest &cr,vehiclest *v)
          vbonus=3;
          break;
    }
-   int driveskill=cr.skill[SKILL_DRIVING]*(3+vbonus);
+   int driveskill=cr.skillval(SKILL_DRIVING)*(3+vbonus);
    healthmodroll(driveskill,cr);
    driveskill*=static_cast<int>(cr.blood/50.0);
    return driveskill;
@@ -1097,10 +1097,11 @@ void makechasers(long sitetype,long sitecrime)
 
    chaseseq.canpullover=0;
    // 50% of CCS harassing your teams once they reach the
-   // "attacks" stage
+   // "attacks" stage (but not for activities, which are
+   // law enforcement response specific)
    if(endgamestate<ENDGAME_CCS_DEFEATED&&
       endgamestate>=ENDGAME_CCS_ATTACKS&&
-      LCSrandom(2))
+      LCSrandom(2)&&sitetype!=-1)
    {
       cartype=VEHICLE_SUV;
       pnum=LCSrandom(sitecrime/5 + 1)+1;

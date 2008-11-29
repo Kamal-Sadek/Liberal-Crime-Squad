@@ -444,9 +444,9 @@ unsigned long r_num(void)
    return seed;
 }
 
-long creaturest::attval(short a,char usejuice)
+int creaturest::attval(short a,char usejuice)
 {
-   long ret=att[a];
+   int ret=att[a];
    
    if(a==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
    if(a==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
@@ -454,18 +454,19 @@ long creaturest::attval(short a,char usejuice)
    if(usejuice)
    {
       if(juice<=-50)ret=1;
-      else if(juice<=-10)ret-=2;
-      else if(juice<0)ret--;
+      else if(juice<=-10)ret=static_cast<int>(ret*0.6);
+      else if(juice<0)ret=static_cast<int>(ret*0.8);
       else if(juice>=10)
       {
-         if(juice<50)ret++;
-         else if(juice<100)ret+=2;
-         else if(juice<200)ret+=4;
-         else if(juice<500)ret+=6;
-         else if(juice<1000)ret+=8;
-         else ret+=10;
+         if(juice<50)ret=static_cast<int>(ret+=1);
+         else if(juice<100)ret=static_cast<int>(ret*1.1+2);
+         else if(juice<200)ret=static_cast<int>(ret*1.2+3);
+         else if(juice<500)ret=static_cast<int>(ret*1.3+4);
+         else if(juice<1000)ret=static_cast<int>(ret*1.4+5);
+         else ret=static_cast<int>(ret*1.5+6);
       }
       if(ret<1)ret=1;
+      if(ret>20)ret=20;
    }
 
    long disfigs=0;
@@ -525,9 +526,6 @@ long creaturest::attval(short a,char usejuice)
 
          if(age<11)ret-=2;
          else if(age<16)ret-=1;
-         else if(age>35)ret-=1;
-         else if(age>52)ret-=3;
-         else if(age>70)ret-=6;
          break;
       case ATTRIBUTE_CHARISMA:
          ret-=disfigs;
@@ -650,7 +648,7 @@ void creaturest::creatureinit(void)
    juice=0;
    flag=0;
    age=18+LCSrandom(40);
-   birthday_month=LCSrandom(12);
+   birthday_month=LCSrandom(12)+1;
    if(birthday_month==4 || birthday_month==6 ||
       birthday_month==9 || birthday_month==11)
    {
@@ -691,6 +689,7 @@ void creaturest::creatureinit(void)
    prisoner=NULL;
    alive=1;
    blood=100;
+   stunned=0;
    for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
    weapon.type=WEAPON_NONE;
    weapon.ammo=0;

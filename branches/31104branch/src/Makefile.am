@@ -14,7 +14,13 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp cursesgraphic
  daily/interrogation.cpp daily/recruit.cpp organization/organization.cpp\
  organization/orghandler.cpp organization/testdriver.cpp politics/law.cpp\
  politics/alignment.h politics/law.h configfile.cpp configfile.h organization/orghandler.h\
- organization/organization.h organization/testdriver.h
+ organization/organization.h organization/testdriver.h\
+ manager/manager.h manager/manager.cpp organizationdef.cpp organizationdef.h\
+ news/ads.cpp news/headline.cpp news/layout.cpp news/majorevent.cpp\
+ news/squadstory_text.cpp organization/orgmanager.h organization/orgmanager.cpp\
+ news/news.h location.cpp location.h locationdef.cpp locationdef.h\
+ basemode/activate_sleepers.cpp monthly/sleeper_update.cpp items/armor.cpp\
+ serializer.cpp serializer.h creature/creaturetypes.cpp
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src

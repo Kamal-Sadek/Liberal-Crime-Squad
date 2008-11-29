@@ -512,7 +512,7 @@ void review_mode(short mode)
                   addstr("Profile of a Liberal");
                }
 
-               printliberalstats(*temppool[p],0);
+               printliberalstats(*temppool[p]);
 
                move(23,0);
                if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
@@ -520,9 +520,9 @@ void review_mode(short mode)
                if(temppool.size()>1)
                {
                   addstr("    ");
-                  addprevpagestr();
+                  addstr("LEFT - Previous");
                   addstr("    ");
-                  addnextpagestr();
+                  addstr("RIGHT - Next");
                }
                move(24,0);
                addstr("Press any other key to continue the Struggle");
@@ -531,10 +531,10 @@ void review_mode(short mode)
                int c=getch();
                translategetch(c);
 
-               if(temppool.size()>0&&((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)||(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)))
+               if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
                {
                   int sx=1;
-                  if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT))sx=-1;
+                  if((c==KEY_LEFT))sx=-1;
                   p=(p+(int)temppool.size()+sx)%((int)temppool.size());
                   continue;
                }
@@ -1225,7 +1225,7 @@ void promoteliberals(void)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("/");
       set_color(COLOR_YELLOW,COLOR_BLACK,0);
-      addstr("Brainwashed");
+      addstr("Enlightened");
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       addstr("   [");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1254,7 +1254,7 @@ void promoteliberals(void)
       move(22,0);
       addstr("Press a Letter to Promote a Liberal. You can not Promote Liberals in Hiding.");
       move(23,0);
-      addstr("Brainwashed liberals follow anyone. Seduced liberals follow only their lover.");
+      addstr("Enlightened liberals follow anyone. Seduced liberals follow only their lover.");
       if(temppool.size()>PAGELENGTH)
       {
          move(24,0);

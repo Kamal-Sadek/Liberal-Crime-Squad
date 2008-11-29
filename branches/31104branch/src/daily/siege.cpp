@@ -871,8 +871,8 @@ void siegeturn(char clearformess)
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
       //Get the best cooking skill for each location
-      if(gourmet[pool[p]->location]<pool[p]->skill[SKILL_COOKING])
-         gourmet[pool[p]->location]=pool[p]->skill[SKILL_COOKING];
+      if(gourmet[pool[p]->location]<pool[p]->skillval(SKILL_COOKING))
+         gourmet[pool[p]->location]=pool[p]->skillval(SKILL_COOKING);
    }
    for(l=0;l<location.size();l++)
    {
@@ -1090,7 +1090,7 @@ void siegeturn(char clearformess)
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      int targ=pol[LCSrandom(pol.size())];
-                     if(LCSrandom(50)>pool[targ]->juice/*+pool[targ]->skill[SKILL_SURVIVAL]*5*/)
+                     if(LCSrandom(50)>pool[targ]->juice/*+pool[targ]->skillval(SKILL_SURVIVAL)*5*/)
                      {
                         addstr("A National Guard sniper takes out ");
                         addstr(pool[targ]->name);
@@ -1187,7 +1187,7 @@ void siegeturn(char clearformess)
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(8,1);
                         int targ=pol[LCSrandom(pol.size())];
-                        if(LCSrandom(100)>pool[targ]->juice/*+pool[targ]->skill[SKILL_SURVIVAL]*5*/)
+                        if(LCSrandom(100)>pool[targ]->juice/*+pool[targ]->skillval(SKILL_SURVIVAL)*5*/)
                         {
                            addstr(pool[targ]->name);
                            addstr(" was killed in the bombing!");
@@ -1321,8 +1321,8 @@ void siegeturn(char clearformess)
                      sum+=pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
                      sum+=pool[p]->attval(ATTRIBUTE_HEART);
                      sum+=pool[p]->attval(ATTRIBUTE_CHARISMA)*2;
-                     sum+=pool[p]->skill[SKILL_PERSUASION]*3;
-                     sum+=pool[p]->skill[SKILL_LEADERSHIP]*5;
+                     sum+=pool[p]->skillval(SKILL_PERSUASION)*3;
+                     sum+=pool[p]->skillval(SKILL_LEADERSHIP)*5;
 
                      if(sum>bestvalue||best==-1)
                      {

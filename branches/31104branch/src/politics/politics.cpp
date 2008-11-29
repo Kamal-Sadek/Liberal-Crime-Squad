@@ -536,7 +536,7 @@ void elections(char clearformess,char canseethings)
       if(canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(20,0);
+         move(23,0);
          addstr("Press any key to watch the elections unfold.");
 
          refresh();
@@ -816,7 +816,7 @@ void elections(char clearformess,char canseethings)
       if(canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(20,0);
+         move(23,0);
          addstr("Press any key to watch the elections unfold.");
 
          refresh();
@@ -1024,7 +1024,7 @@ void elections(char clearformess,char canseethings)
 
    vector<int> prop;
    vector<int> propdir;
-   int pnum=LCSrandom(5)+2;
+   int pnum=LCSrandom(4)+4;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
@@ -1172,7 +1172,7 @@ void elections(char clearformess,char canseethings)
    if(canseethings)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,0);
+      move(23,0);
       addstr("Press any key to watch the elections unfold.");
 
       refresh();
@@ -1269,7 +1269,7 @@ void elections(char clearformess,char canseethings)
       nodelay(stdscr,FALSE);
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,0);
+      move(23,0);
       addstr("Press any key to reflect on what has happened.");
 
       refresh();
@@ -1447,7 +1447,7 @@ void supremecourt(char clearformess,char canseethings)
    if(canseethings)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,0);
+      move(23,0);
       addstr("Press any key to watch the decisions unfold.");
 
       refresh();
@@ -1517,7 +1517,7 @@ void supremecourt(char clearformess,char canseethings)
       nodelay(stdscr,FALSE);
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,0);
+      move(23,0);
       addstr("Press any key to reflect on what has happened.");
 
       refresh();
@@ -1647,7 +1647,7 @@ void congress(char clearformess,char canseethings)
    vector<int> bill;
    vector<int> billdir;
    vector<int> killbill;
-   int cnum=LCSrandom(5)+2;
+   int cnum=LCSrandom(3)+4;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
@@ -1820,7 +1820,7 @@ void congress(char clearformess,char canseethings)
    if(canseethings)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,0);
+      move(23,0);
       addstr("Press any key to watch the votes unfold.");
 
       refresh();
@@ -1967,7 +1967,7 @@ void congress(char clearformess,char canseethings)
       if(canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(20,0);
+         move(23,0);
          addstr("Press any key to watch the President.                   ");
 
          refresh();
@@ -2032,7 +2032,7 @@ void congress(char clearformess,char canseethings)
          nodelay(stdscr,FALSE);
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(20,0);
+         move(23,0);
          addstr("Press any key to reflect on what has happened.    ");
 
          refresh();
@@ -2044,9 +2044,9 @@ void congress(char clearformess,char canseethings)
       if(canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(20,0);
+         move(23,0);
          addstr("None of the items made it to the President's desk.");
-         move(21,0);
+         move(24,0);
          addstr("Press any key to reflect on what has happened.    ");
 
          refresh();

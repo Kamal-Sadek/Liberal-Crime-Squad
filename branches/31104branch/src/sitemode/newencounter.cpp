@@ -445,7 +445,12 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ACTOR]+=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
 
-            for(int n=0;n<LCSrandom(6)+1;n++)
+            int encnum=1;
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               encnum=4;
+            }
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -513,7 +518,12 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ATHLETE]=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
 
-            for(int n=0;n<LCSrandom(6)+1;n++)
+            int encnum=1;
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               encnum=4;
+            }
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -522,8 +532,11 @@ void prepareencounter(short type,char sec)
          }
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
          {
-            if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
-            else creaturearray[CREATURE_SECURITYGUARD]+=10;
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               if(sec)creaturearray[CREATURE_SECURITYGUARD]+=100;
+               else creaturearray[CREATURE_SECURITYGUARD]+=10;
+            }
             creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]+=5;
             creaturearray[CREATURE_WORKER_JANITOR]=5;
@@ -554,7 +567,12 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ACTOR]=1;
             creaturearray[CREATURE_ATHLETE]=1;
 
-            for(int n=0;n<LCSrandom(6)+1;n++)
+            int encnum=1;
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               encnum=4;
+            }
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;

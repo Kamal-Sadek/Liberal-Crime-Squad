@@ -58,29 +58,49 @@ void youattack(void)
          //criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
       }
 
-      vector<int> goodtarg;
-      vector<int> badtarg;
+      vector<int> dangerous_enemies;
+      vector<int> enemies;
+      vector<int> non_enemies;
 
       for(int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].alive&&encounter[e].exists)
          {
-            if(encounter[e].enemy())goodtarg.push_back(e);
-            else badtarg.push_back(e);
+            if(encounter[e].enemy())
+            {
+               if(encounter[e].weapon.type!=WEAPON_NONE &&
+                  encounter[e].blood>=40)
+               {
+                  dangerous_enemies.push_back(e);
+               }
+               else
+               {
+                  enemies.push_back(e);
+               }
+            }
+            else non_enemies.push_back(e);
          }
       }
 
-      if(goodtarg.size()==0)return;
+      if(dangerous_enemies.size()+enemies.size()==0)return;
 
-      int target=goodtarg[LCSrandom(goodtarg.size())];
+      int target;
+      // Roll 1dX-1, where X is the number of "dangerous enemies", plus one if there are "other enemies"
+      target=LCSrandom(dangerous_enemies.size()+!!enemies.size());
+      // If the result is less than the number of "dangerous enemies", the result indicates which of these to shoot at
+      if(target!=dangerous_enemies.size())
+         target=dangerous_enemies[target];
+      // Else, roll again on the list of "other enemies" to pick one of them to shoot at
+      else
+         target=enemies[LCSrandom(enemies.size())];
 
       char mistake=0;
-      // *JDS* less likely to accidentally hit bystanders,
+      // Less likely to accidentally hit bystanders,
       // and never hit the wrong person if not using a ranged
       // weapon
-      if(badtarg.size()>0 && !LCSrandom(20) && activesquad->squad[p]->weapon.ranged()) 
+      if(non_enemies.size()>0 && !LCSrandom(20) && activesquad->squad[p]->weapon.ranged()) 
       {
-         target=badtarg[LCSrandom(badtarg.size())];
+         target=non_enemies[LCSrandom(non_enemies.size())];
          mistake=1;
          addjuice(*activesquad->squad[p],-5);
       }
@@ -427,6 +447,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    char str[200],str2[200];
 
    clearmessagearea();
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    //INCAPACITATED
    char incaprint;
@@ -453,7 +474,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int encnum=0;
    for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
-   if(((a.type==CREATURE_COP&&a.align==ALIGN_LIBERAL&&a.enemy())||
+   if(((a.type==CREATURE_COP&&a.align==ALIGN_MODERATE&&a.enemy())||
       a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
@@ -528,17 +549,17 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       {
          if(!a.animalgloss)
          {
-            if(!LCSrandom(a.skill[SKILL_HANDTOHAND]+1))
+            if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)+1))
                strcat(str,"jabs at");
-            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]))
+            else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)))
                strcat(str,"swings at");
-            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-1))
+            else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-1))
                strcat(str,"grabs at");
-            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-2))
+            else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-2))
                strcat(str,"kicks at");
-            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-3))
+            else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-3))
                strcat(str,"strikes at");
-            else if(!LCSrandom(a.skill[SKILL_HANDTOHAND]-4))
+            else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-4))
                strcat(str,"jump kicks at");
             else
                strcat(str,"gracefully strikes at");
@@ -658,8 +679,40 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    {
       wsk=SKILL_IMPROVISED;
    }
-   aroll+=a.skill[wsk];
+   aroll+=a.skillval(wsk);
    a.train(wsk,droll);
+
+   bool defender_is_LCS=false;
+   int maxtactics=0;
+   for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]==&t)
+      {
+         defender_is_LCS=true;
+      }
+   }
+   if(defender_is_LCS)
+   {
+      for(int p=0;p<6;p++)
+      {
+         if(activesquad->squad[p]&&activesquad->squad[p]->alive)
+         {
+            maxtactics=max(activesquad->squad[p]->skill[SKILL_TACTICS],maxtactics);
+         }
+      }
+   }
+   else if(t.enemy())
+   {
+      for(int e=0;e<ENCMAX;e++)
+      {
+         if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+         {
+            maxtactics=max(encounter[e].skill[SKILL_TACTICS],maxtactics);
+         }
+      }
+   }
+   droll+=maxtactics/2+t.skill[SKILL_TACTICS];
+   t.train(SKILL_TACTICS,5);
    
    int bonus=0;
    //Penalty for improvised weapons
@@ -683,7 +736,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    if(a.weapon.type==WEAPON_NONE)
    {
       // Martial arts multi-strikes
-      bursthits=1+LCSrandom(a.skill[SKILL_HANDTOHAND]/3+1);
+      bursthits=1+LCSrandom(a.skillval(SKILL_HANDTOHAND)/3+1);
       if(bursthits>5)bursthits=5;
       if(a.animalgloss)bursthits=1; // Whoops, must be human to use martial arts fanciness
    }
@@ -868,7 +921,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_NONE:
             while(bursthits)
             {
-               damamount=LCSrandom(5+a.skill[SKILL_HANDTOHAND])+1+a.skill[SKILL_HANDTOHAND];
+               damamount=LCSrandom(5+a.skillval(SKILL_HANDTOHAND))+1+a.skillval(SKILL_HANDTOHAND);
                bursthits--;
             }
             if(!a.animalgloss)damtype|=WOUND_BRUISED;
@@ -885,11 +938,6 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                else damtype|=WOUND_TORN;
                severtype=WOUND_NASTYOFF;
             }
-            strengthmod=1;
-            break;
-         case WEAPON_CROWBAR:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(21)+5;
             strengthmod=1;
             break;
          case WEAPON_MAUL:
@@ -1126,6 +1174,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          case WEAPON_CROSS:
          case WEAPON_STAFF:
          case WEAPON_CHAIN:
+         case WEAPON_CROWBAR:
          case WEAPON_NIGHTSTICK:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(21)+5;
@@ -1159,7 +1208,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       {
          //DO THE HEALTH MOD ON THE WOUND
          mod-=t.attval(ATTRIBUTE_HEALTH)-5;
-         if(mod<0)mod=0; // Don't health mod into negative, only counter criticals
+         //If commented out, health works like body armor
+         //if(mod<0)mod=0; 
       }
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
@@ -1277,12 +1327,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                {
                   if(target->align==1)stat_dead++;
                }
-               else if(target->enemy()&&t.animalgloss!=ANIMALGLOSS_ANIMAL)
+               else if(target->enemy()&&(t.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
                }
-               if(target->squadid==-1 && target->animalgloss==0)
+               if(target->squadid==-1 && (target->animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -1868,7 +1918,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
    strcat(str," ");
 
    int attack=0;
-   if(a.align==-1)
+   if(a.align!=1)
    {
       attack=LCSrandom(a.attval(ATTRIBUTE_WISDOM))+t.attval(ATTRIBUTE_WISDOM,0);
    }
@@ -1899,9 +1949,9 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
          }
          strcat(str,"!");
 
-         resist=t.attval(ATTRIBUTE_HEART)*2-t.attval(ATTRIBUTE_WISDOM);
+         resist=t.attval(ATTRIBUTE_HEART)-t.attval(ATTRIBUTE_WISDOM);
 
-         attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1);
+         attack+=LCSrandom(a.skillval(SKILL_PERSUASION)+1);
          break;
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
@@ -1918,16 +1968,16 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
          if(t.align==1)
          {
             resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-               t.attval(ATTRIBUTE_HEART,0)+t.skill[SKILL_LAW]-
+               t.attval(ATTRIBUTE_HEART,0)+t.skillval(SKILL_LAW)-
                t.attval(ATTRIBUTE_WISDOM,0);
          }
          else
          {
             resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-               t.attval(ATTRIBUTE_WISDOM,0)+t.skill[SKILL_LAW]-
+               t.attval(ATTRIBUTE_WISDOM,0)+t.skillval(SKILL_LAW)-
                t.attval(ATTRIBUTE_HEART,0);
          }
-         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE)/2+1)+LCSrandom(a.skill[SKILL_LAW]+1);
+         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE)/2+1)+LCSrandom(a.skillval(SKILL_LAW)+1);
          break;
       case CREATURE_SCIENTIST_EMINENT:
          switch(LCSrandom(3))
@@ -1944,18 +1994,18 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
          if(t.align==1)
          {
             resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-               t.skill[SKILL_SCIENCE]+
+               t.skillval(SKILL_SCIENCE)+
                t.attval(ATTRIBUTE_HEART,0)-
                t.attval(ATTRIBUTE_WISDOM,0);
          }
          else
          {
             resist=t.attval(ATTRIBUTE_INTELLIGENCE,0)+
-               t.skill[SKILL_SCIENCE]+
+               t.skillval(SKILL_SCIENCE)+
                t.attval(ATTRIBUTE_WISDOM,0)-
                t.attval(ATTRIBUTE_HEART,0);
          }
-         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE))+LCSrandom(t.skill[SKILL_SCIENCE]+1);
+         attack+=LCSrandom(a.attval(ATTRIBUTE_INTELLIGENCE))+LCSrandom(t.skillval(SKILL_SCIENCE)+1);
          break;
       case CREATURE_CORPORATE_CEO:
          if(a.align==-1)
@@ -1991,16 +2041,16 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
          if(t.align==1)
          {
             resist=t.attval(ATTRIBUTE_HEART,0)+
-               t.skill[SKILL_BUSINESS]-
+               t.skillval(SKILL_BUSINESS)-
                t.attval(ATTRIBUTE_WISDOM,0);
          }
          else
          {
             resist=t.attval(ATTRIBUTE_WISDOM,0)+
-               t.skill[SKILL_BUSINESS]-
+               t.skillval(SKILL_BUSINESS)-
                t.attval(ATTRIBUTE_HEART,0);
          }
-         attack+=LCSrandom(a.skill[SKILL_PERSUASION]+1)+LCSrandom(a.skill[SKILL_BUSINESS]+1);
+         attack+=LCSrandom(a.skillval(SKILL_PERSUASION)+1)+LCSrandom(a.skillval(SKILL_BUSINESS)+1);
          break;
       case CREATURE_RADIOPERSONALITY:
       case CREATURE_NEWSANCHOR:
@@ -2047,17 +2097,17 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
             strcat(str,"!");
             if(t.align==1)
             {
-               resist=t.skill[SKILL_MUSIC]+
+               resist=t.skillval(SKILL_MUSIC)+
                   t.attval(ATTRIBUTE_HEART,0)-
                   t.attval(ATTRIBUTE_WISDOM,0);
             }
             else
             {
-               resist=t.skill[SKILL_MUSIC]+
+               resist=t.skillval(SKILL_MUSIC)+
                   t.attval(ATTRIBUTE_WISDOM,0)-
                   t.attval(ATTRIBUTE_HEART,0);
             }
-            attack=LCSrandom(a.skill[SKILL_MUSIC]*2+1);
+            attack=LCSrandom(a.skillval(SKILL_MUSIC)*2+1);
             if(resist>0)
                a.train(SKILL_MUSIC,LCSrandom(resist)+1);
             else
@@ -2069,7 +2119,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
    move(16,1);
    addstr(str);
 
-   if(t.animalgloss)
+   if(t.animalgloss==ANIMALGLOSS_TANK||(t.animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2))
    {
       switch(t.animalgloss)
       {
@@ -2083,6 +2133,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
    }
    else if(attack>resist)
    {
+      t.stunned+=(attack-resist)/4;
       if(a.enemy())
       {
          if(t.juice>=100)
@@ -2106,6 +2157,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
                move(17,1);
                addstr(t.name);
                addstr(" is turned Conservative");
+               t.stunned=0;
                if(t.prisoner!=NULL)
                {
                   freehostage(t,0);
@@ -2117,6 +2169,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
                move(17,1);
                addstr(t.name);
                addstr(" doesn't want to fight anymore");
+               t.stunned=0;
                if(t.prisoner!=NULL)
                {
                   freehostage(t,0);
@@ -2177,6 +2230,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
             move(17,1);
             addstr(t.name);
             addstr(" has turned Liberal!");
+            t.stunned=0;
 
             liberalize(t);
             t.flag|=CREATUREFLAG_CONVERTED;
@@ -2530,8 +2584,6 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
 {
    printed=0;
 
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-
    if(a.animalgloss==ANIMALGLOSS_TANK)
    {
       if(a.blood<=20||(a.blood<=50&&(LCSrandom(2)||a.forceinc)))
@@ -2540,6 +2592,8 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
          if(noncombat)
          {
             clearmessagearea();
+            
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(16,1);
             addstr("The ");
@@ -2570,6 +2624,7 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
          if(noncombat)
          {
             clearmessagearea();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(16,1);
             addstr("The ");
@@ -2600,6 +2655,7 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
       if(noncombat)
       {
          clearmessagearea();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(16,1);
          addstr(a.name);
@@ -2799,6 +2855,57 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
 
       return 1;
    }
+   else if(a.stunned)
+   {
+      if(noncombat)
+      {
+         a.stunned--;
+         clearmessagearea();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+         move(16,1);
+         addstr(a.name);
+         switch(LCSrandom(11))
+         {
+            case 0:
+               addstr(" seems hesitant.");
+               break;
+            case 1:
+               addstr(" is caught in self-doubt.");
+               break;
+            case 2:
+               addstr(" looks around uneasily.");
+               break;
+            case 3:
+               addstr(" begins to weep.");
+               break;
+            case 4:
+               addstr(" asks \"Is this right?\"");
+               break;
+            case 5:
+               addstr(" asks for guidance.");
+               break;
+            case 6:
+               addstr(" is caught in indecision.");
+               break;
+            case 7:
+               addstr(" feels numb.");
+               break;
+            case 8:
+               addstr(" prays softly.");
+               break;
+            case 9:
+               addstr(" searches for the truth.");
+               break;
+            case 10:
+               addstr(" tears up.");
+               break;
+         }
+
+         printed=1;
+      }
+      return 1;
+   }
 
    if(a.special[SPECIALWOUND_NECK]==2||
       a.special[SPECIALWOUND_UPPERSPINE]==2)
@@ -2806,6 +2913,7 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
       if(!noncombat)
       {
          clearmessagearea();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(16,1);
          addstr(a.name);

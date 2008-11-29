@@ -15,15 +15,15 @@ void organizationDef::initConfig()
 	initVariable<std::string>("NAME", &name);
 
 	initVariable<short>("ATTACKPOWER", &attackPower);
-	initVariable<std::vector<int>>("SOLDIERS", &soldiers);
+	initVariable<std::vector<int> >("SOLDIERS", &soldiers);
 
 	initVariable<short>("LOBBYPOWER", &lobbyPower);
-	initVariable<std::vector<int>>("LOBBYISTS", &lobbyists);
+	initVariable<std::vector<int> >("LOBBYISTS", &lobbyists);
 
 	initVariable<short>("PUBLICITYPOWER", &publicityPower);
-	initVariable<std::vector<int>>("PUBLICISTS", &publicists);
+	initVariable<std::vector<int> >("PUBLICISTS", &publicists);
 
-	initVariable<std::vector<int>>("INTERESTS", &specialInterests);
+	initVariable<std::vector<int> >("INTERESTS", &specialInterests);
 }
 
 void organizationDef::initializeInstance(organization &instance)

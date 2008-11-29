@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* supporting function -- gives "standard" prices on guns */
-long gun_price(enum Weapon type)
+long gun_price(enum Weapons type)
 {
    double price=0;
 
@@ -107,20 +107,18 @@ long gun_price(enum Weapon type)
       case WEAPON_AUTORIFLE_M16:
       case WEAPON_AUTORIFLE_AK47:
          if(law[LAW_GUNCONTROL]!=-2)
-            price*=1.5;
+            price*=2.0;
       case WEAPON_SEMIRIFLE_AR15:
-         if(law[LAW_GUNCONTROL]>-1)
-            price*=1.5;
       case WEAPON_REVOLVER_44:
          if(law[LAW_GUNCONTROL]>-1)
-            price*=1.5;
+            price*=2.0;
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
          if(law[LAW_GUNCONTROL]>0)
-            price*=1.5;
+            price*=2.0;
       case WEAPON_REVOLVER_22:
          if(law[LAW_GUNCONTROL]>1)
-            price*=1.5;
+            price*=2.0;
    }
 
    return static_cast<int>(price);
@@ -199,7 +197,7 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
 {
    gun=-1;
 
-   vector<enum Weapon> guntype;
+   vector<enum Weapons> guntype;
    for(int a=0;a<WEAPONNUM;a++)
    {
       switch(a)
@@ -220,7 +218,7 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
          case WEAPON_REVOLVER_22:
             if(legal && law[LAW_GUNCONTROL]>1)break;
          case WEAPON_SHOTGUN_PUMP:
-            guntype.push_back(static_cast<enum Weapon>(a));
+            guntype.push_back(static_cast<enum Weapons>(a));
          default:
             break;
       }
@@ -631,7 +629,7 @@ void pawnshop(int loc)
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,40);
-         addstr("R - Pawn all Armor");
+         addstr("R - Pawn all Clothes");
 
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -641,7 +639,7 @@ void pawnshop(int loc)
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,40);
-         addstr("A - Pawn all extra Armor");
+         addstr("A - Pawn all extra Clothes");
 
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -895,6 +893,7 @@ void pawnshop(int loc)
          move(10,40);
          addstr("C - Buy Liberal clips");
 
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(11,1);
          addstr("T - Buy Liberal tools");
 
@@ -1302,16 +1301,14 @@ void pawnshop(int loc)
       }
       else if(in_tools==1)
       {
+         int toolbought=-1;
          if(c=='c'&&funds>=20)
          {
             funds-=20;
             stat_spent+=20;
             moneylost_goods+=20;
 
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon.type=WEAPON_CROWBAR;
-            activesquad->loot.push_back(newi);
+            toolbought=WEAPON_CROWBAR;
          }
          if(c=='s'&&funds>=20)
          {
@@ -1319,10 +1316,7 @@ void pawnshop(int loc)
             stat_spent+=20;
             moneylost_goods+=20;
 
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon.type=WEAPON_SPRAYCAN;
-            activesquad->loot.push_back(newi);
+            toolbought=WEAPON_SPRAYCAN;
          }
          if(c=='g'&&funds>=200)
          {
@@ -1330,10 +1324,7 @@ void pawnshop(int loc)
             stat_spent+=200;
             moneylost_goods+=200;
 
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon.type=WEAPON_GUITAR;
-            activesquad->loot.push_back(newi);
+            toolbought=WEAPON_GUITAR;
          }
          if(c=='m'&&funds>=40)
          {
@@ -1341,11 +1332,45 @@ void pawnshop(int loc)
             stat_spent+=40;
             moneylost_goods+=40;
 
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon.type=WEAPON_MOLOTOV;
-               newi->weapon.ammo=1;
-            activesquad->loot.push_back(newi);
+            toolbought=WEAPON_MOLOTOV;
+         }
+
+         if(toolbought!=-1)
+         {
+            weaponst swap=activesquad->squad[buyer]->weapon;
+            activesquad->squad[buyer]->weapon.type=toolbought;
+            activesquad->squad[buyer]->weapon.ammo=0;
+
+            if(swap.type!=WEAPON_NONE)
+            {
+               itemst *newi=new itemst;
+                  newi->type=ITEM_WEAPON;
+                  newi->weapon=swap;
+                  
+                  if(swap.type==WEAPON_MOLOTOV &&
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
+                  {
+                     newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
+                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
+                  }
+               activesquad->loot.push_back(newi);
+            }
+
+            //DROP ALL CLIPS THAT DON'T WORK
+            for(int cl=0;cl<CLIPNUM;cl++)
+            {
+               if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
+
+               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
+               {
+                  itemst *newi=new itemst;
+                     newi->type=ITEM_CLIP;
+                     newi->cliptype=cl;
+                  activesquad->loot.push_back(newi);
+               }
+
+               activesquad->squad[buyer]->clip[cl]=0;
+            }
          }
          if(c==10)in_tools=0;
       }

@@ -25,6 +25,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include "configfile.h"
 #include <string>
+#include <stdexcept>
 #include "serializer.h"
 
 class managedObject : public serializer
@@ -84,7 +85,7 @@ template <class T> manager<T>::manager() : nextID(0)
 // Return reference to the object with the given ID
 template <class T> T &manager<T>::getObj(int ID)
 {
-   vector<T>::iterator iter; // Iterator to step through my object list
+   typename vector<T>::iterator iter; // Iterator to step through my object list
 
 	// Step through my list of objects
    for(iter=objects.begin(); iter!=objects.end(); iter++)
@@ -100,13 +101,13 @@ template <class T> T &manager<T>::getObj(int ID)
    // This should never have to happen
    char error[80];
    sprintf(error,"manager recieved invalid ID %d in getObj; no such object.",ID);
-   throw invalid_argument(error);
+   throw std::invalid_argument(error);
 }
 
 // Return reference to the object with the given ID
 template <class T> std::vector<int> manager<T>::getIDByType(std::string type)
 {
-   vector<T>::iterator iter; // Iterator to step through my object list
+   typename vector<T>::iterator iter; // Iterator to step through my object list
    vector<int> matchingObjects;
 
 	// Step through my list of objects
@@ -133,7 +134,7 @@ template <class T> void manager<T>::addObj(T obj)
 // Delete an object
 template <class T> void manager<T>::deleteObj(T obj)
 {
-	vector<object>::iterator iter; // Iterator to step through the object list
+	typename vector<T>::iterator iter; // Iterator to step through the object list
 
    // Step through all objects
 	for(iter = objects.begin(); iter != objects.end(); iter++)
@@ -142,12 +143,12 @@ template <class T> void manager<T>::deleteObj(T obj)
 		if(iter->ID == obj.ID)
 		{
          // Remove it
-			objects.erase(iter1);
+			objects.erase(iter);
 			// Then go back one, so we don't skip the next one.
 			iter--;
 		}
       // Else delete this org's internal record of the org we're deleting
-		else iter1->deleteOrgRecord(obj.ID);
+		else iter->deleteOrgRecord(obj.ID);
 	}
 }
 
@@ -161,7 +162,7 @@ template <class T, class copyClass> class defManager : public manager<T>
 public:
 	defManager(std::string inType)
 	{
-		nextID = 0;
+		this->nextID = 0;
 		type = inType;
 	}
 
@@ -175,7 +176,7 @@ public:
 	void initialize(copyClass &instance, int ID) 
 	{ 
 		/* find the correct object */ 
-		getObj(ID).initializeInstance(instance); 
+		this->getObj(ID).initializeInstance(instance); 
 	}
 	std::string type;
 };

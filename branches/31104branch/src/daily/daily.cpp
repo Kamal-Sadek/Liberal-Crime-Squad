@@ -66,20 +66,22 @@ void advanceday(char &clearformess,char canseethings)
       homes=0;
    }
       
+   // Aging
    for(p=0;p<pool.size();p++)
    {
       if(!pool[p]->alive||pool[p]->animalgloss)continue;
       // animals, tanks don't have age effects at the moment
       
-      if(pool[p]->age>70)
+      if(pool[p]->age>60)
       {
          int decrement=0;
-         while(pool[p]->age - decrement>70)
+         while(pool[p]->age - decrement>60)
          {
             if(LCSrandom(365*10)==0)
             {
                pool[p]->att[ATTRIBUTE_HEALTH]--;
-               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
+               if(pool[p]->att[ATTRIBUTE_HEALTH]<=0 &&
+                  pool[p]->attval(ATTRIBUTE_HEALTH)<=1)
                {
                   pool[p]->alive=0;
                   if(clearformess)erase();
@@ -128,14 +130,13 @@ void advanceday(char &clearformess,char canseethings)
       if(pool[p]->location==-1)continue;
 
       if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-                  location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-                  location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+         location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
+         location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
       {
-
          // Prevent moving people to a sieged location,
          // but don't evacuate people already under siege. - wisq
          if(pool[p]->location != pool[p]->base &&
-               location[pool[p]->base]->siege.siege)
+            location[pool[p]->base]->siege.siege)
          {
             pool[p]->base=homes;
          }
@@ -647,7 +648,8 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
          case ACTIVITY_NONE:
-         	if(pool[p]->align == 1)
+         	if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                                      location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
             {
                if(pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
          	   {
@@ -686,9 +688,9 @@ void advanceday(char &clearformess,char canseethings)
       if(pool[p]->activity.type==ACTIVITY_HEAL||pool[p]->activity.type==ACTIVITY_NONE)
       {
          if(pool[p]->location>-1&&
-            healing[pool[p]->location]<pool[p]->skill[SKILL_MEDICAL])
+            healing[pool[p]->location]<pool[p]->skillval(SKILL_MEDICAL))
          {
-            healing[pool[p]->location]=pool[p]->skill[SKILL_MEDICAL];
+            healing[pool[p]->location]=pool[p]->skillval(SKILL_MEDICAL);
             pool[p]->activity.type=ACTIVITY_HEAL;
          }
       }
@@ -828,7 +830,7 @@ void advanceday(char &clearformess,char canseethings)
                   {
                      // May take permanent health damage depending on
                      // quality of care
-                     if(LCSrandom(20)>healing[pool[p]->location]/*+pool[p]->skill[SKILL_SURVIVAL]*/)
+                     if(LCSrandom(20)>healing[pool[p]->location]/*+pool[p]->skillval(SKILL_SURVIVAL)*/)
                      {
                         pool[p]->att[ATTRIBUTE_HEALTH]--;
                         if(pool[p]->att[ATTRIBUTE_HEALTH]<=0)
@@ -955,7 +957,7 @@ void advanceday(char &clearformess,char canseethings)
          if(healing2[pool[p]->location]==0)
             pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
-         pool[p]->train(SKILL_MEDICAL,max(0,healing2[pool[p]->location]/5-pool[p]->skill[SKILL_MEDICAL]*2));
+         pool[p]->train(SKILL_MEDICAL,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_MEDICAL)*2));
       }
    }
    delete[] healing;
@@ -1043,7 +1045,7 @@ void advanceday(char &clearformess,char canseethings)
             recruit[r]->timeleft--;
             //chance of being arrested
             if(recruit[r]->task==TASK_CRIMES &&
-               !LCSrandom(8*(recruit[r]->recruit->skill[SKILL_SECURITY]+recruit[r]->recruit->skill[SKILL_DISGUISE]+
+               !LCSrandom(8*(recruit[r]->recruit->skillval(SKILL_SECURITY)+recruit[r]->recruit->skillval(SKILL_DISGUISE)+
                              weaponskill(recruit[r]->recruit->weapon.type)+recruit[r]->recruit->skill[SKILL_STREETSENSE]+
                              recruit[r]->recruit->attval(ATTRIBUTE_AGILITY))))
             {
@@ -1271,6 +1273,7 @@ void advanceday(char &clearformess,char canseethings)
    showcarprefs=1;
 }
 
+#define DISPERSAL_ABANDONLCS   5
 #define DISPERSAL_BOSSINHIDING 4
 #define DISPERSAL_HIDING       3
 #define DISPERSAL_BOSSINPRISON 2
@@ -1385,39 +1388,38 @@ void dispersalcheck(char &clearformess)
 
             // If in prison or unreachable due to a member of the command structure
             // above being in prison
-            else if(nukeme[p]==DISPERSAL_BOSSSAFE&&inprison||nukeme[p]==DISPERSAL_BOSSINPRISON)
+            else if((nukeme[p]==DISPERSAL_BOSSSAFE&&inprison)||nukeme[p]==DISPERSAL_BOSSINPRISON)
             {
-               // If you're here because you're unreachable, mark as checked and unreachable
-               //    --- EDIT MAY 24, 2008: MAKE PRISON NOT BREAK REACHABILITY --- JDS
-               /*if(!inprison)
+               int dispersalval=DISPERSAL_SAFE;
+               if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
                {
-                  // Roll to see if you go into hiding or not
-                  if(!pool[p]->hiding&&
-                     pool[p]->attval(ATTRIBUTE_HEART)*5+
-                     //pool[p]->skill[SKILL_SURVIVAL]*10+
-                     pool[p]->juice<LCSrandom(200))
+                  if((nukeme[p]==DISPERSAL_BOSSINPRISON && !inprison) ||
+                     (nukeme[p]==DISPERSAL_BOSSSAFE     &&  inprison))
                   {
-                     nukeme[p]=DISPERSAL_NOCONTACT;//Vanish forever
-                  }
-                  else nukeme[p]=DISPERSAL_HIDING;//Go into hiding
-               }
-               else*/ nukeme[p]=DISPERSAL_SAFE; // Else you're in prison; you're guaranteed contactable
-               
-               // Find all subordinates if you didn't lose contact completely
-               if(nukeme[p]!=DISPERSAL_NOCONTACT)
-               {
-                  for(int p2=pool.size()-1;p2>=0;p2--)
-                  {
-                     if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
+                     pool[p]->juice--; // Love slaves bleed juice when not in prison with their lover
+                     if(pool[p]->juice < -50)
                      {
-                        nukeme[p2]=DISPERSAL_BOSSINHIDING; // Mark them as unreachable
-                        changed=1; // Need another iteration
+                        dispersalval=DISPERSAL_ABANDONLCS;
                      }
+                  }
+               }
+               nukeme[p]=dispersalval; // Guaranteed contactable in prison
+               
+               // Find all subordinates
+               for(int p2=pool.size()-1;p2>=0;p2--)
+               {
+                  if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
+                  {
+                     if(inprison)
+                        nukeme[p2]=DISPERSAL_BOSSINPRISON;
+                     else
+                        nukeme[p2]=DISPERSAL_BOSSSAFE;
+                     changed=1; // Need another iteration
                   }
                }
             }
             // Otherwise, if they're reachable
-            else if(nukeme[p]==0&&!inprison)
+            else if(nukeme[p]==DISPERSAL_BOSSSAFE&&!inprison)
             {
                // Start looking through the pool again.
                for(int p2=pool.size()-1;p2>=0;p2--)
@@ -1451,7 +1453,7 @@ void dispersalcheck(char &clearformess)
       // the LCS.
       for(p=pool.size()-1;p>=0;p--)
       {
-         if(nukeme[p]==1||nukeme[p]==3)
+         if(nukeme[p]==DISPERSAL_NOCONTACT||nukeme[p]==DISPERSAL_HIDING||nukeme[p]==DISPERSAL_ABANDONLCS)
          {
             if(clearformess)
             {
@@ -1464,18 +1466,30 @@ void dispersalcheck(char &clearformess)
 
             if(!disbanding)
             {
-               if(!pool[p]->hiding&&nukeme[p]==3)
+               if(!pool[p]->hiding&&nukeme[p]==DISPERSAL_HIDING)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr(pool[p]->name);
                   addstr(" has lost touch with the Liberal Crime Squad.");
+                  refresh();
+                  getch();
+                  set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(9,1);
                   addstr("The Liberal has gone into hiding...");
                   refresh();
                   getch();
                }
-               else if(nukeme[p]==1)
+               else if(nukeme[p]==DISPERSAL_ABANDONLCS)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(8,1);
+                  addstr(pool[p]->name);
+                  addstr(" has abandoned the LCS.");
+                  refresh();
+                  getch();
+               }
+               else if(nukeme[p]==DISPERSAL_NOCONTACT)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -1488,7 +1502,7 @@ void dispersalcheck(char &clearformess)
 
 
             removesquadinfo(*pool[p]);
-            if(nukeme[p]==1)
+            if(nukeme[p]==DISPERSAL_NOCONTACT||nukeme[p]==DISPERSAL_ABANDONLCS)
             {
                delete pool[p];
                pool.erase(pool.begin() + p);
@@ -1549,9 +1563,9 @@ bool promotesubordinates(creaturest &cr, char &clearformess)
          //Loveslaves inelligible for promotion to anything
          if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)continue;
 
-         if(pool[p]->juice+pool[p]->skill[SKILL_LEADERSHIP]*50>maxjuice)
+         if(pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50>maxjuice)
          {
-            maxjuice=pool[p]->juice+pool[p]->skill[SKILL_LEADERSHIP]*50;
+            maxjuice=pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50;
             newboss=p;
          }
       }

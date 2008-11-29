@@ -159,16 +159,16 @@ void tendhostage(creaturest *cr,char &clearformess)
          {
             if(temppool[p]->alive)
             {
-               if(temppool[p]->skill[SKILL_BUSINESS]>business)
-                  business=temppool[p]->skill[SKILL_BUSINESS];
-               if(temppool[p]->skill[SKILL_RELIGION]>religion)
-                  religion=temppool[p]->skill[SKILL_RELIGION];
-               if(temppool[p]->skill[SKILL_SCIENCE]>science)
-                  science=temppool[p]->skill[SKILL_SCIENCE];
+               if(temppool[p]->skillval(SKILL_BUSINESS)>business)
+                  business=temppool[p]->skillval(SKILL_BUSINESS);
+               if(temppool[p]->skillval(SKILL_RELIGION)>religion)
+                  religion=temppool[p]->skillval(SKILL_RELIGION);
+               if(temppool[p]->skillval(SKILL_SCIENCE)>science)
+                  science=temppool[p]->skillval(SKILL_SCIENCE);
 
                attack[p] = (temppool[p]->attval(ATTRIBUTE_HEART)-
                             temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                            temppool[p]->skill[SKILL_INTERROGATION]*2);
+                            temppool[p]->skillval(SKILL_INTERROGATION)*2);
 
                attack[p] += temppool[p]->armor.interrogation_basepower();
 
@@ -199,15 +199,15 @@ void tendhostage(creaturest *cr,char &clearformess)
 
       maxattack+=temppool.size();
 
-      maxattack+=business-cr->skill[SKILL_BUSINESS];
-      maxattack+=religion-cr->skill[SKILL_RELIGION];
-      maxattack+=science-cr->skill[SKILL_SCIENCE];
+      maxattack+=business-cr->skillval(SKILL_BUSINESS);
+      maxattack+=religion-cr->skillval(SKILL_RELIGION);
+      maxattack+=science-cr->skillval(SKILL_SCIENCE);
 
       long aroll=maxattack+
                  LCSrandom(20)+1;
       long troll=cr->attval(ATTRIBUTE_WISDOM)*2-
                  cr->attval(ATTRIBUTE_HEART)+
-                 cr->skill[SKILL_INTERROGATION]*2+
+                 cr->skillval(SKILL_INTERROGATION)*2+
                  LCSrandom(20)+1;
 
       bool techniques[9];
@@ -325,7 +325,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          printhealthstat(*a,y,48,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(++y,40);
-         itoa(a->skill[SKILL_INTERROGATION],num2,10);
+         itoa(a->skillval(SKILL_INTERROGATION),num2,10);
          addstr("Interrogation Skill: ");
          addstr(num2);
          move(++y,40);
@@ -663,10 +663,10 @@ void tendhostage(creaturest *cr,char &clearformess)
          forceroll=LCSrandom(forceroll)+1;
          
          //Torture captive if lead interrogator has low heart and high skill
-         if(a->skill[SKILL_INTERROGATION]>=4&&a->att[ATTRIBUTE_HEART]<4)
+         if(a->skillval(SKILL_INTERROGATION)>=4&&a->att[ATTRIBUTE_HEART]<4)
          {
             //Torture much more devastating than normal beating
-            forceroll*=a->skill[SKILL_INTERROGATION]/4+1;
+            forceroll*=a->skillval(SKILL_INTERROGATION)/4+1;
             //Extremely bad for rapport with lead interrogator
             rapport[a->id]-=2;
 
@@ -710,9 +710,9 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH)/*+cr->skill[SKILL_SURVIVAL]*/)
+         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH)/*+cr->skillval(SKILL_SURVIVAL)*/)
          {
-            if(cr->skill[SKILL_RELIGION]>spiritcrush)
+            if(cr->skillval(SKILL_RELIGION)>spiritcrush)
             {
                move(y,0);
                addstr(cr->name);
@@ -729,7 +729,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                {
                case 0:addstr(" screams helplessly for ");
                   if(techniques[7])addstr("John Lennon's mercy.");
-                  else if(cr->skill[SKILL_RELIGION])addstr("God's mercy.");
+                  else if(cr->skillval(SKILL_RELIGION))addstr("God's mercy.");
                   else addstr("mommy.");
                   break;
                case 1:
@@ -821,7 +821,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(techniques[0]&&cr->alive)
       {
          float rapport_temp = rapport[a->id];
-         rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skill[SKILL_INTERROGATION]-5)/10.0f;
+         rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skillval(SKILL_INTERROGATION)-5)/10.0f;
          if(techniques[1])rapport_temp -= 1;
          y+=1;
          move(y,0);
@@ -858,7 +858,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             getch();
 
             move(y++,0);
-            if(cr->skill[SKILL_INTERROGATION]*3>spiritcrush)
+            if(cr->skillval(SKILL_INTERROGATION)*3>spiritcrush)
             {
                switch(LCSrandom(4))
                {
@@ -970,7 +970,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(cr->skill[SKILL_INTERROGATION]*3>spiritcrush)
+         if(cr->skillval(SKILL_INTERROGATION)*3>spiritcrush)
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -993,7 +993,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             y++;
          }
          //Failure to break religious convictions
-         else if(cr->skill[SKILL_RELIGION]>religion+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_RELIGION)>religion+spiritcrush && !techniques[7])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1016,11 +1016,11 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
             
-            a->train(SKILL_RELIGION,cr->skill[SKILL_RELIGION]*4);
+            a->train(SKILL_RELIGION,cr->skillval(SKILL_RELIGION)*4);
             y++;
          }
          //Failure to persuade entrenched capitalists
-         else if(cr->skill[SKILL_BUSINESS]>business+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_BUSINESS)>business+spiritcrush && !techniques[7])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1043,11 +1043,11 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
             
-            a->train(SKILL_BUSINESS,cr->skill[SKILL_BUSINESS]*4);
+            a->train(SKILL_BUSINESS,cr->skillval(SKILL_BUSINESS)*4);
             y++;
          }
          //Failure to persuade scientific minds
-         else if(cr->skill[SKILL_SCIENCE]>science+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_SCIENCE)>science+spiritcrush && !techniques[7])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1072,7 +1072,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
             }
 
-            a->train(SKILL_SCIENCE,cr->skill[SKILL_SCIENCE]*4);
+            a->train(SKILL_SCIENCE,cr->skillval(SKILL_SCIENCE)*4);
             y++;
          }
          //Attempt to convert when the target is brutally treated will
@@ -1097,7 +1097,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             case 6:addstr(" just hates the LCS even more.");break;
             }
             if(a->attval(ATTRIBUTE_HEART)+
-               a->skill[SKILL_INTERROGATION]+
+               a->skillval(SKILL_INTERROGATION)+
                a->attval(ATTRIBUTE_CHARISMA)>16+LCSrandom(10))
             {
                getch();
@@ -1165,7 +1165,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
                {
                   int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
-                  if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+                  if(change > a->skillval(SKILL_INTERROGATION)/2 + 1)change = a->skillval(SKILL_INTERROGATION)/2 + 1;
                   cr->att[ATTRIBUTE_WISDOM]-=change;
                }
                //Increase heart
@@ -1173,7 +1173,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                {
                   int change = 
                      LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
-                  if(change > a->skill[SKILL_INTERROGATION]/2 + 1)change = a->skill[SKILL_INTERROGATION]/2 + 1;
+                  if(change > a->skillval(SKILL_INTERROGATION)/2 + 1)change = a->skillval(SKILL_INTERROGATION)/2 + 1;
                   cr->att[ATTRIBUTE_HEART]+=change;
                }
             }
@@ -1386,6 +1386,15 @@ void tendhostage(creaturest *cr,char &clearformess)
          cr->flag&=~CREATUREFLAG_KIDNAPPED;
       }
       cr->flag|=CREATUREFLAG_BRAINWASHED;
+
+      for(int p=0;p<pool.size();p++)
+      {
+         if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING &&
+            pool[p]->activity.arg==cr->id)
+         {
+            pool[p]->activity.type=ACTIVITY_NONE;
+         }
+      }
       
       y+=2;
       liberalize(*cr,false);

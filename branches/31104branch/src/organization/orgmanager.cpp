@@ -23,7 +23,8 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
-
+#include <list>
+#include "orgmanager.h"
  
 orgManager::orgManager()
 {

@@ -56,9 +56,9 @@ bool LineOfSight(int x, int y, int z)
    else y1=y2=(y+locy)/2;
 
    // Check for obstructions
-   if(levelmap[x1][y2][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
+   if(levelmap[x1][y2][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))
    {
-      if(levelmap[x2][y1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
+      if(levelmap[x2][y1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))
       {
          return 0; // Blocked on some axis
       }
@@ -369,6 +369,7 @@ void printblock(int x,int y,int z,int px, int py)
       }
       return;
    }
+   levelmap[x][y][z].flag |= SITEBLOCK_KNOWN;
    if(levelmap[x][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
    {
       printwall(x,y,z,px,py);
@@ -585,7 +586,7 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_CORPORATE_FILES:addstr("SAFE!");break;
          case SPECIAL_RADIO_BROADCASTSTUDIO:move(py,px+1);addstr("MIC");break;
          case SPECIAL_NEWS_BROADCASTSTUDIO:addstr("STAGE");break;
-         case SPECIAL_APARTMENT_LANDLORD:addstr("OWNER");break;
+         case SPECIAL_APARTMENT_LANDLORD:addstr("RENT?");break;
          case SPECIAL_APARTMENT_SIGN:addstr("SIGN!");break;
          case SPECIAL_STAIRS_UP:move(py,px+1);addstr("UP");
                                 addch(CH_UPWARDS_ARROW);break;

@@ -55,9 +55,9 @@ char unlock(short type,char &actual)
       {
          if(activesquad->squad[p]->alive)
          {
-            if(activesquad->squad[p]->skill[SKILL_SECURITY]>maxattack)
+            if(activesquad->squad[p]->skillval(SKILL_SECURITY)>maxattack)
             {
-               maxattack=activesquad->squad[p]->skill[SKILL_SECURITY];
+               maxattack=activesquad->squad[p]->skillval(SKILL_SECURITY);
             }
          }
       }
@@ -71,7 +71,7 @@ char unlock(short type,char &actual)
       {
          if(activesquad->squad[p]->alive)
          {
-            if(activesquad->squad[p]->skill[SKILL_SECURITY]==maxattack)
+            if(activesquad->squad[p]->skillval(SKILL_SECURITY)==maxattack)
             {
                goodp.push_back(p);
             }
@@ -232,7 +232,7 @@ char bash(short type,char &actual)
 
       if(aroll>difficulty||crowable)
       {
-         clearmessagearea();
+         clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[p]->name);
@@ -371,9 +371,9 @@ char hack(short type,char &actual)
          if(activesquad->squad[p]->alive)
          {
             if((activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-               activesquad->squad[p]->skill[SKILL_COMPUTERS])>maxattack)
+               activesquad->squad[p]->skillval(SKILL_COMPUTERS))>maxattack)
             {
-               if(activesquad->squad[p]->skill[SKILL_COMPUTERS]>0)
+               if(activesquad->squad[p]->skillval(SKILL_COMPUTERS)>0)
                {
                   if(!activesquad->squad[p]->special[SPECIALWOUND_RIGHTEYE]&&
                      !activesquad->squad[p]->special[SPECIALWOUND_LEFTEYE])
@@ -383,7 +383,7 @@ char hack(short type,char &actual)
                   else
                   {
                      maxattack=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-                        activesquad->squad[p]->skill[SKILL_COMPUTERS];
+                        activesquad->squad[p]->skillval(SKILL_COMPUTERS);
                   }
                }
             }
@@ -400,9 +400,9 @@ char hack(short type,char &actual)
          if(activesquad->squad[p]->alive)
          {
             if((activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-               activesquad->squad[p]->skill[SKILL_COMPUTERS])==maxattack)
+               activesquad->squad[p]->skillval(SKILL_COMPUTERS))==maxattack)
             {
-               if(activesquad->squad[p]->skill[SKILL_COMPUTERS]>0)
+               if(activesquad->squad[p]->skillval(SKILL_COMPUTERS)>0)
                {
                   if(activesquad->squad[p]->special[SPECIALWOUND_RIGHTEYE]||
                      activesquad->squad[p]->special[SPECIALWOUND_LEFTEYE])
@@ -557,11 +557,11 @@ char radio_broadcast(void)
          segmentpower+=LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE));
          segmentpower+=activesquad->squad[p]->attval(ATTRIBUTE_HEART);
          segmentpower+=LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA));
-         segmentpower+=activesquad->squad[p]->skill[SKILL_MUSIC];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_RELIGION];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_SCIENCE];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_BUSINESS];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_PERSUASION];
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_MUSIC);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_RELIGION);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_SCIENCE);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_BUSINESS);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_PERSUASION);
          activesquad->squad[p]->train(SKILL_PERSUASION,50);
          partysize++;
       }
@@ -638,7 +638,7 @@ char radio_broadcast(void)
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_INTELLIGENCE));
                usegmentpower+=activesquad->squad[p]->prisoner->attval(ATTRIBUTE_HEART);
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_CHARISMA));
-               usegmentpower+=activesquad->squad[p]->prisoner->skill[SKILL_PERSUASION];
+               usegmentpower+=activesquad->squad[p]->prisoner->skillval(SKILL_PERSUASION);
 
                if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2,1,80);
                else change_public_opinion(viewhit,usegmentpower/2);
@@ -799,11 +799,11 @@ char news_broadcast(void)
          segmentpower+=LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE));
          segmentpower+=activesquad->squad[p]->attval(ATTRIBUTE_HEART);
          segmentpower+=LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA));
-         segmentpower+=activesquad->squad[p]->skill[SKILL_MUSIC];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_RELIGION];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_SCIENCE];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_BUSINESS];
-         segmentpower+=activesquad->squad[p]->skill[SKILL_PERSUASION];
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_MUSIC);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_RELIGION);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_SCIENCE);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_BUSINESS);
+         segmentpower+=activesquad->squad[p]->skillval(SKILL_PERSUASION);
          activesquad->squad[p]->train(SKILL_PERSUASION,50);
          partysize++;
       }
@@ -880,7 +880,7 @@ char news_broadcast(void)
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_INTELLIGENCE));
                usegmentpower+=activesquad->squad[p]->prisoner->attval(ATTRIBUTE_HEART);
                usegmentpower+=LCSrandom(activesquad->squad[p]->prisoner->attval(ATTRIBUTE_CHARISMA));
-               usegmentpower+=activesquad->squad[p]->prisoner->skill[SKILL_PERSUASION];
+               usegmentpower+=activesquad->squad[p]->prisoner->skillval(SKILL_PERSUASION);
 
                if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(usegmentpower-10)/2);
                else change_public_opinion(viewhit,usegmentpower/2,1);

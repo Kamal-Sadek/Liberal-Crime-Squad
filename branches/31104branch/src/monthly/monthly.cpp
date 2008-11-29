@@ -391,8 +391,8 @@ void passmonth(char &clearformess,char canseethings)
 
             //Confession check
             if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
-                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skill[SKILL_INTERROGATION]*5
-                                      /*+ pool[p]->skill[SKILL_SURVIVAL]*5*/  &&  pool[p]->hireid!=-1)
+                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skillval(SKILL_INTERROGATION)*5
+                                      /*+ pool[p]->skillval(SKILL_SURVIVAL)*5*/  &&  pool[p]->hireid!=-1)
             {
                int nullify=0;
                int p2=getpoolcreature(pool[p]->hireid);
@@ -400,7 +400,7 @@ void passmonth(char &clearformess,char canseethings)
                if(pool[p2]->alive && (pool[p2]->location==-1 || location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON))
                {
                   //Leadership check to nullify subordinate's confession
-                  if(LCSrandom(pool[p2]->skill[SKILL_LEADERSHIP]+1))nullify=1;
+                  if(LCSrandom(pool[p2]->skillval(SKILL_LEADERSHIP)+1))nullify=1;
                   else
                   {
                      //Charge the boss with racketeering!

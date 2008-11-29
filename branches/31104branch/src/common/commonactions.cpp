@@ -38,7 +38,7 @@ char endcheck(short cause)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+         !(pool[p]->flag & CREATUREFLAG_SLEEPER && pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
       {
          dead=0;
          break;
@@ -444,7 +444,11 @@ void juiceparty(long juice)
 /* common - gives juice to a given creature */
 void addjuice(creaturest &cr,long juice,long cap)
 {
-   if(cr.juice>=cap)return;
+   if(cr.juice>=cap)
+   {
+      juice/=10;
+      if(juice==0)return;
+   }
 
    if(cr.juice+juice>cap)juice=cap-cr.juice;
    

@@ -54,9 +54,9 @@ void noticecheck(int exclude)
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
-         activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH]>sneak)
+         activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)+activesquad->squad[i]->skillval(SKILL_STEALTH)>sneak)
       {
-         sneak=activesquad->squad[i]->skill[SKILL_SLEIGHTOFHAND]+activesquad->squad[i]->skill[SKILL_STEALTH];
+         sneak=activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)+activesquad->squad[i]->skillval(SKILL_STEALTH);
          topi=i;
       }
    }
@@ -354,7 +354,7 @@ int disguiseskill(void)
 
          int skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
                    activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-                   activesquad->squad[p]->skill[SKILL_DISGUISE]*3;
+                   activesquad->squad[p]->skillval(SKILL_DISGUISE)*3;
 
          //ALSO NEED APPROPRIATE UNIFORM
          char uniformed=hasdisguise(*activesquad->squad[p],sitetype);
@@ -406,7 +406,7 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
 		
 		//spread is how overwhelmed your disguise ability is by the Conservative
 		int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
-                         activesquad->squad[p]->skill[SKILL_DISGUISE]*3);
+                         activesquad->squad[p]->skillval(SKILL_DISGUISE)*3);
 
       if(hasdisguise(*activesquad->squad[p],sitetype))
       {
@@ -440,7 +440,7 @@ int stealthskill(void)
 
          if(activesquad->squad[p]->prisoner!=NULL)return 0;
 
-         int skill=activesquad->squad[p]->skill[SKILL_STEALTH]*3+1;
+         int skill=activesquad->squad[p]->skillval(SKILL_STEALTH)*3+1;
 
          if(lowest>skill)lowest=skill;
          if(highest<skill)highest=skill;
@@ -460,7 +460,7 @@ void stealthpractice(int p, int diff)  //diff is the difficulty that the Conserv
 	    if(activesquad->squad[p]->prisoner!=NULL)return;
 	    
 		//spread is how overwhelmed your stealth ability is by the Conservative
-		int spread = diff-(activesquad->squad[p]->skill[SKILL_STEALTH]*3);
+		int spread = diff-(activesquad->squad[p]->skillval(SKILL_STEALTH)*3);
 			
 		if(spread>10)
 		{

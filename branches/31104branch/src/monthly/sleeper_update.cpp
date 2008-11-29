@@ -90,45 +90,45 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
    int power=(cr.attval(ATTRIBUTE_CHARISMA)+
                cr.attval(ATTRIBUTE_HEART)+
                cr.attval(ATTRIBUTE_INTELLIGENCE)+
-               cr.skill[SKILL_PERSUASION]);
+               cr.skillval(SKILL_PERSUASION));
 
    // Profession specific skills
    switch(cr.type)
    {
       case CREATURE_CRITIC_ART:
-         power+=cr.skill[SKILL_WRITING];
+         power+=cr.skillval(SKILL_WRITING);
       case CREATURE_PAINTER:
       case CREATURE_SCULPTOR:
-         power+=cr.skill[SKILL_ART];
+         power+=cr.skillval(SKILL_ART);
          break;
       case CREATURE_CRITIC_MUSIC:
-         power+=cr.skill[SKILL_WRITING];
+         power+=cr.skillval(SKILL_WRITING);
       case CREATURE_MUSICIAN:
-         power+=cr.skill[SKILL_MUSIC];
+         power+=cr.skillval(SKILL_MUSIC);
          break;
       case CREATURE_AUTHOR:
       case CREATURE_JOURNALIST:
-         power+=cr.skill[SKILL_WRITING];
+         power+=cr.skillval(SKILL_WRITING);
          break;
       case CREATURE_JUDGE_CONSERVATIVE:
-         power+=cr.skill[SKILL_WRITING];
+         power+=cr.skillval(SKILL_WRITING);
       case CREATURE_LAWYER:
-         power+=cr.skill[SKILL_LAW];
+         power+=cr.skillval(SKILL_LAW);
          break;
       case CREATURE_SCIENTIST_LABTECH:
       case CREATURE_SCIENTIST_EMINENT:
-         power+=cr.skill[SKILL_SCIENCE];
+         power+=cr.skillval(SKILL_SCIENCE);
          break;
       case CREATURE_CORPORATE_CEO:
       case CREATURE_CORPORATE_MANAGER:
-         power+=cr.skill[SKILL_BUSINESS];
+         power+=cr.skillval(SKILL_BUSINESS);
          break;
       case CREATURE_PRIEST:
       case CREATURE_NUN:
-         power+=cr.skill[SKILL_RELIGION];
+         power+=cr.skillval(SKILL_RELIGION);
          break;
       case CREATURE_EDUCATOR:
-         power+=cr.skill[SKILL_INTERROGATION];
+         power+=cr.skillval(SKILL_INTERROGATION);
          break;
    }
 

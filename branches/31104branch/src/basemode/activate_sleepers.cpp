@@ -235,12 +235,20 @@ void activate_sleeper(creaturest *cr)
          move(12,40);
          addstr("3 - Conservative \"Outreach\"");
 
-         if(subordinatesleft(*cr))
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_RECRUIT);
-         else
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,40);
-         addstr("4 - Expand Sleeper Network");
+         if(subordinatesleft(*cr))
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_RECRUIT);
+            addstr("4 - Expand Sleeper Network");
+         }
+         else
+         {
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(cr->flag & CREATUREFLAG_BRAINWASHED)
+               addstr("4 - [Enlightened Can't Recruit]");
+            else
+               addstr("4 - [Need More Juice to Recruit]");
+         }
          break;
       case 'b':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_SPY);
@@ -269,7 +277,7 @@ void activate_sleeper(creaturest *cr)
       case ACTIVITY_NONE:
          move(22,3);
          addstr(cr->name);
-         addstr(" will stay out of trouble.");
+         addstr(" will stay out of trouble, slowly earning trust.");
          break;
       case ACTIVITY_SLEEPER_LIBERAL:
          move(22,3);

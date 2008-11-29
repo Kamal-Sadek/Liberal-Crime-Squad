@@ -59,7 +59,7 @@ public:
 	float *variable;
 };
 
-template <> class configContainer<std::vector<int>> : public configContainerBase
+template <> class configContainer<std::vector<int> > : public configContainerBase
 {
 public:
 	configContainer(std::string inName, std::vector<int> *inVariable)

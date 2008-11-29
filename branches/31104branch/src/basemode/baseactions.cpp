@@ -591,11 +591,11 @@ char liberalagenda(char won)
          case LAW_ANIMALRESEARCH:
             if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
             else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-               addstr("Animal research is completely unregulated.");
+               addstr("Animals are things of inferior existance.");
             else if(law[l]==-1)addstr("Animal research is lightly regulated.");
             else if(law[l]==0)addstr("Animal research is moderately regulated.");
             else if(law[l]==1)addstr("Animal research is stiffly regulated.");
-            else addstr("Animal research is illegal in all cases.");
+            else addstr("Animals are people too.");
             break;
          case LAW_POLICEBEHAVIOR:
             if(won==-1)addstr("Policing is administered by corporations and has a draft.");
