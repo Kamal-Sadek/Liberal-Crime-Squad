@@ -279,7 +279,7 @@ char bash(short type,char &actual)
          addstr(activesquad->squad[p]->name);
          switch(type)
          {
-            case BASH_DOOR:addstr(" slams the door");break;
+            case BASH_DOOR:addstr(" bashes the door");break;
          }
          addstr("!");
          refresh();

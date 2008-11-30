@@ -440,7 +440,7 @@ void enemyattack(void)
 
 
 /* attack handling for an individual creature and its target */
-void attack(creaturest &a,creaturest &t,char mistake,char &actual)
+void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_melee)
 {
    actual=0;
 
@@ -474,7 +474,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    int encnum=0;
    for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
-   if(((a.type==CREATURE_COP&&a.align==ALIGN_MODERATE&&a.enemy())||
+   if(!force_melee &&
+      (((a.type==CREATURE_COP&&a.align==ALIGN_MODERATE&&a.enemy())||
       a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
@@ -482,7 +483,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
       a.weapon.type==WEAPON_GUITAR)&&!mistake&&
-      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE))
+      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE)))
    {
       if(a.align==1||encnum<ENCMAX)
       {
@@ -492,15 +493,19 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
 
    if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
-      (!a.weapon.ranged()||                                 // And either using a melee weapon
+      (!a.weapon.ranged()||force_melee||                    // And either using a melee weapon
        (a.weapon.ammo==0&&                                  // Or, out of ammo and...
-        a.clip[ammotype(a.weapon.type)]==0))) // ...no clips left
+        a.clip[ammotype(a.weapon.type)]==0)))               // ...no clips left
    {
       return;                                               // Then bail, they can't fight
    }
 
+   // Grenade type weapons can't be used in melee!
+   if(weaponskill(a.weapon.type)==SKILL_THROWING && force_melee)
+      return;
+
    //RELOAD
-   if(ammotype(a.weapon.type)!=-1&&a.weapon.ammo==0)
+   if(ammotype(a.weapon.type)!=-1&&a.weapon.ammo==0&&!force_melee)
    {
       if(a.clip[ammotype(a.weapon.type)]>0)
       {
@@ -540,6 +545,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       }
    }
 
+   bool melee=true;
+
    strcpy(str,a.name);
    strcat(str," ");
    if(mistake)strcat(str,"MISTAKENLY ");
@@ -550,23 +557,27 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
          if(!a.animalgloss)
          {
             if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)+1))
-               strcat(str,"jabs at");
+               strcat(str,"punches");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)))
                strcat(str,"swings at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-1))
-               strcat(str,"grabs at");
+               strcat(str,"grabs");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-2))
-               strcat(str,"kicks at");
+               strcat(str,"kicks");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-3))
-               strcat(str,"strikes at");
+               strcat(str,"strikes");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-4))
-               strcat(str,"jump kicks at");
+               strcat(str,"jump kicks");
             else
                strcat(str,"gracefully strikes at");
          }
          else
          {
-            if(a.specialattack==ATTACK_CANNON)strcat(str,"blasts at");
+            if(a.specialattack==ATTACK_CANNON)
+            {
+               strcat(str,"blasts at");
+               melee=false;
+            }
             else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
             else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs at");
             else strcat(str,"claws at");
@@ -591,11 +602,16 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_AUTORIFLE_M16:
       case WEAPON_AUTORIFLE_AK47:
       case WEAPON_SHOTGUN_PUMP:
-         if(a.weapon.ammo>0)strcat(str,"shoots at");
-         else strcat(str,"swings at");
+         if(a.weapon.ammo>0&&!force_melee)
+         {
+            strcat(str,"shoots at");
+            melee=false;
+         }
+         else strcat(str,"clubs at");
          break;
       case WEAPON_MOLOTOV:
          strcat(str,"hurls a molotv at");
+         melee=false;
          break;
       case WEAPON_CHAIN:
       case WEAPON_NIGHTSTICK:
@@ -613,8 +629,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       case WEAPON_PITCHFORK:
          strcat(str,"stabs at");break;
       case WEAPON_FLAMETHROWER:
-         if(a.weapon.ammo>0)strcat(str,"streams fire at");
-         else strcat(str,"swings at");break;
+         if(a.weapon.ammo>0&&!force_melee)
+         {
+            strcat(str,"streams fire at");
+            melee=false;
+         }
+         else strcat(str,"clubs at");break;
       
    }
    strcat(str," ");
@@ -644,14 +664,16 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
 
    strcpy(str,a.name);
 
+   int bonus=0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
+
    //BASIC ROLL
    int aroll=LCSrandom(20)+1;
    if(a.prisoner!=NULL)aroll-=LCSrandom(10);
    int droll=LCSrandom(20)+1;
-   if(t.prisoner!=NULL)droll-=LCSrandom(10);
+   if(t.prisoner!=NULL)bonus-=LCSrandom(10);
 
    //Agility rolls for melee attack
-   if(!rangedweapon(a.weapon) || a.weapon.ammo==0)
+   if(!rangedweapon(a.weapon) || a.weapon.ammo==0 || force_melee)
    {
       aroll+=LCSrandom(a.attval(ATTRIBUTE_AGILITY));
       droll+=LCSrandom(t.attval(ATTRIBUTE_AGILITY));
@@ -674,49 +696,58 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
    if(rangedweapon(a.weapon) &&
-      a.weapon.type!=WEAPON_MOLOTOV &&
-      a.weapon.ammo==0)
+      (a.weapon.type!=WEAPON_MOLOTOV &&
+       a.weapon.ammo==0) || force_melee)
    {
       wsk=SKILL_CLUB; // Club people with out-of-ammo guns
    }
    aroll+=a.skillval(wsk);
    a.train(wsk,droll);
 
-   bool defender_is_LCS=false;
-   int maxtactics=0;
-   for(int p=0;p<6;p++)
+   if(!melee)
    {
-      if(activesquad->squad[p]==&t)
-      {
-         defender_is_LCS=true;
-      }
-   }
-   if(defender_is_LCS)
-   {
+      bool defender_is_LCS=false;
+      int maxtactics=0;
       for(int p=0;p<6;p++)
       {
-         if(activesquad->squad[p]&&activesquad->squad[p]->alive)
+         if(activesquad->squad[p]==&t)
          {
-            maxtactics=max(activesquad->squad[p]->skill[SKILL_TACTICS],maxtactics);
+            defender_is_LCS=true;
          }
       }
-   }
-   else if(t.enemy())
-   {
-      for(int e=0;e<ENCMAX;e++)
+      if(defender_is_LCS)
       {
-         if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+         for(int p=0;p<6;p++)
          {
-            maxtactics=max(encounter[e].skill[SKILL_TACTICS],maxtactics);
+            if(activesquad->squad[p]&&activesquad->squad[p]->alive)
+            {
+               maxtactics=max(activesquad->squad[p]->skill[SKILL_TACTICS],maxtactics);
+            }
          }
       }
+      else if(t.enemy())
+      {
+         for(int e=0;e<ENCMAX;e++)
+         {
+            if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+            {
+               maxtactics=max(encounter[e].skill[SKILL_TACTICS],maxtactics);
+            }
+         }
+      }
+      droll+=maxtactics/2+t.skill[SKILL_TACTICS];
+      t.train(SKILL_TACTICS,5);
    }
-   droll+=maxtactics/2+t.skill[SKILL_TACTICS];
-   t.train(SKILL_TACTICS,5);
+   else
+   {
+      if(!t.weapon.ranged())
+         droll+=t.skillval(weaponskill(t.weapon.type))/2;
+      else if(weaponskill(t.weapon.type)!=SKILL_THROWING)
+         droll+=t.skillval(SKILL_CLUB)/2;
+   }
    
-   int bonus=0;
    //Penalty for improvised weapons
-   if(wsk==SKILL_IMPROVISED)bonus=-4;
+   if(wsk==SKILL_IMPROVISED)aroll=-4;
    else
    {
       // Weapon accuracy bonuses and pentalties
@@ -741,7 +772,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       if(a.animalgloss)bursthits=1; // Whoops, must be human to use martial arts fanciness
    }
 
-   if(a.weapon.ammo>0)
+   if(a.weapon.ammo>0 && !force_melee)
    {
       switch(a.weapon.type)
       {
@@ -919,6 +950,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       switch(a.weapon.type) // *JDS* removed sever types from many weapons (all guns except shotgun, knives...)
       {
          case WEAPON_NONE:
+             
             while(bursthits)
             {
                damamount=LCSrandom(5+a.skillval(SKILL_HANDTOHAND))+1+a.skillval(SKILL_HANDTOHAND);
@@ -945,34 +977,39 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(41)+5;
             strengthmod=1;
+             
             break;
          case WEAPON_PITCHFORK:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(51)+5;
+            damamount=LCSrandom(41)+10;
             strengthmod=1;
             damagearmor=1;
+             
             break;
          case WEAPON_TORCH:
             damtype|=WOUND_BURNED;
             damamount=LCSrandom(11)+5;
             strengthmod=1;
             damagearmor=1;
+             
             break;
          case WEAPON_SHANK:
          case WEAPON_KNIFE:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(16)+5;
+            damamount=LCSrandom(21)+10;
             strengthmod=1;
             //severtype=WOUND_CLEANOFF; *JDS* no dismemberment from knives and shanks
             damagearmor=1;
             armorpiercing=1;
+             
             break;
          case WEAPON_SYRINGE:
             damtype|=WOUND_CUT;
             damamount=LCSrandom(6)+5;
             strengthmod=1;
+             
             break;
          case WEAPON_REVOLVER_22:
             if(a.weapon.ammo>0)
@@ -989,10 +1026,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(6)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_REVOLVER_44:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1006,11 +1044,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(6)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_SEMIPISTOL_9MM:
          case WEAPON_SEMIPISTOL_45:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1024,10 +1063,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(6)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_SEMIRIFLE_AR15:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1042,6 +1082,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(21)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_MOLOTOV:
@@ -1051,7 +1092,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             armorpiercing=7;
             break;
          case WEAPON_FLAMETHROWER:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_BURNED;
                damamount=LCSrandom(201)+50;
@@ -1062,11 +1103,12 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(21)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_AUTORIFLE_AK47:
          case WEAPON_AUTORIFLE_M16:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1086,10 +1128,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(21)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_CARBINE_M4:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1109,10 +1152,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(25)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_SMG_MP5:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1132,10 +1176,11 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(21)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_SHOTGUN_PUMP:
-            if(a.weapon.ammo>0)
+            if(a.weapon.ammo>0 && !force_melee)
             {
                damtype|=WOUND_SHOT;
                damtype|=WOUND_BLEEDING;
@@ -1157,6 +1202,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
                damtype|=WOUND_BRUISED;
                damamount=LCSrandom(21)+5;
                strengthmod=1;
+                
             }
             break;
          case WEAPON_DAISHO:
@@ -1169,16 +1215,16 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             severtype=WOUND_CLEANOFF;
             damagearmor=1;
             armorpiercing=1;
+             
             break;
          case WEAPON_HAMMER:
-         case WEAPON_CROSS:
          case WEAPON_STAFF:
-         case WEAPON_CHAIN:
          case WEAPON_CROWBAR:
          case WEAPON_NIGHTSTICK:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(21)+5;
             strengthmod=1;
+             
             break;
          case WEAPON_GAVEL:
             damtype|=WOUND_BRUISED;
@@ -1186,6 +1232,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
             strengthmod=1;
             break;
          case WEAPON_SPRAYCAN:
+         case WEAPON_CHAIN:
+         case WEAPON_CROSS:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(11)+5;
             strengthmod=1;
@@ -1799,17 +1847,33 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    }
    else
    {
-      strcat(str," misses.");
-      move(17,1);
-      addstr(str);
+      if(melee && aroll<droll-10 && t.blood>70 && t.animalgloss==ANIMALGLOSS_NONE && weaponskill(t.weapon.type)!=SKILL_THROWING)
+      {
 
-      printparty();
-      if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
-      else printencounter();
+         strcpy(str,t.name);
+         strcat(str," knocks the blow aside and counters!");
+         move(17,1);
+         addstr(str);
 
-      refresh();
-      getch();
+         refresh();
+         getch();
+
+         char actual_dummy;
+         attack(t,a,0,actual_dummy,true);
+      }
+      else
+      {
+         strcat(str," misses.");
+         move(17,1);
+         addstr(str);
+         printparty();
+         if(mode==GAMEMODE_CHASECAR||
+                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+         else printencounter();
+
+         refresh();
+         getch();
+      }
    }
 
    if(removeweapon)
@@ -1883,6 +1947,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
    int mod2=armor+LCSrandom(armor+1)-armorpenetration;
    if(mod2>0)mod-=mod2*2;
 
+   if(mod>10)mod=10; // Cap damage multiplier (every 5 points adds 1x damage)
    
    if(mod<=-8)damamount>>=6;
    else if(mod<=-6)damamount>>=5;

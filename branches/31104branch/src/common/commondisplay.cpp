@@ -962,6 +962,15 @@ void printliberalskills(creaturest &cr)
    // Add all skills
    for(int s=0;s<SKILLNUM;s++)
    {
+      if(s%3==0 && s<9)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(4,27*(s/3));
+         addstr("SKILL");
+         move(4,15+27*(s/3));
+         addstr("NOW   MAX");
+      }
+
       // Maxed skills are green
       if(maxskill(s,cr)!=0 && cr.skill[s]>=maxskill(s,cr))set_color(COLOR_CYAN,COLOR_BLACK,1);
       // About to level up skills are white
@@ -971,14 +980,6 @@ void printliberalskills(creaturest &cr)
       else if(cr.skill[s]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
       // >=1 skills are light gray
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-      if(s%3==0 && s<9)
-      {
-         move(4,27*(s/3));
-         addstr("SKILL");
-         move(4,15+27*(s/3));
-         addstr("NOW   MAX");
-      }
 
       move(5+s/3,27*(s%3));
       getskill(str,s);
@@ -1005,6 +1006,8 @@ void printliberalskills(creaturest &cr)
          addstr("99+");
       }
 
+      if(maxskill(s,cr)==0 || cr.skill[s]<maxskill(s,cr))
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(5+s/3,20+27*(s%3));
       sprintf(str,"%2d.00",maxskill(s,cr));
       addstr(str);
@@ -1192,6 +1195,8 @@ void printliberalstats(creaturest &cr)
             addstr("99+");
          }
 
+         if(maxskill(maxs,cr)==0 || cr.skill[maxs]<maxskill(maxs,cr))
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(6+skills_shown,48);
          sprintf(str,"%2d.00",maxskill(maxs,cr));
          addstr(str);

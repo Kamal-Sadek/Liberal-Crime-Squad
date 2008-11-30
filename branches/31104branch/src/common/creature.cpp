@@ -32,9 +32,14 @@ This file is part of Liberal Crime Squad.                                       
 
 void creaturest::train(int trainedskill, int experience)
 {
-   if(animalgloss==ANIMALGLOSS_ANIMAL)return; // poor animals don't get experience
+   // Do we allow animals to gain skills? Right now, yes
+   //if(animalgloss==ANIMALGLOSS_ANIMAL)return;
+
    // Don't give experience if already maxed out
    if(maxskill(trainedskill,*this)==skill[trainedskill])
+      return;
+   // Don't give experience if requested to give none
+   if(experience==0)
       return;
    // Skill gain scaled by ability in the area
    skill_ip[trainedskill]+=max(1,static_cast<int>(experience * maxskill(trainedskill,*this,false) / 6.0));

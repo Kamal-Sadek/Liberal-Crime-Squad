@@ -481,7 +481,7 @@ void activate(creaturest *cr)
             move(22,1);
             addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
-            addstr("Garment Making, Martial Arts, Improvised Melee");
+            addstr("Tailoring, Martial Arts, Improvised Melee");
             move(24,1);
             addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
             break;

@@ -958,7 +958,8 @@ void advanceday(char &clearformess,char canseethings)
          if(healing2[pool[p]->location]==0)
             pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
-         pool[p]->train(SKILL_FIRSTAID,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_FIRSTAID)*2));
+         else
+            pool[p]->train(SKILL_FIRSTAID,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_FIRSTAID)*2));
       }
    }
    delete[] healing;
