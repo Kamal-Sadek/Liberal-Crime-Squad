@@ -401,8 +401,8 @@ char chasesequence(void)
 char footchase(void)
 {
    //NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
-      //IT CAN DELETE CREATURES, BUT SHOULD NOT DELETE SQUADS
-         //AS SQUADS MAY BE FICTITIOUS AND WILL BE DELETED LATER ANYWAY
+      //IT SHOULD NOT DELETE SQUADS OR CREATURES
+         //SQUADS MAY BE FICTITIOUS AND BOTH WILL BE DELETED LATER ANYWAY
       int p;
    reloadparty();
 
@@ -1409,7 +1409,9 @@ void crashfriendlycar(int v)
          {
             if(pool[pl]==activesquad->squad[p])
             {
-               delete pool[pl];
+               pool[pl]->alive=false;
+               //delete pool[pl];
+               //pool.erase(pool.begin() + pl);
                int boss=getpoolcreature(pool[pl]->hireid);
                if(boss!=-1&&pool[boss]->juice>50)
                {
@@ -1417,7 +1419,6 @@ void crashfriendlycar(int v)
                   if(juice>10)juice=10;
                   addjuice(*pool[boss],-juice);
                }
-               pool.erase(pool.begin() + pl);
                break;
             }
          }
