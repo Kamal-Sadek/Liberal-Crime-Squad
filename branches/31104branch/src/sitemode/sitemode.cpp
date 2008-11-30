@@ -1274,13 +1274,13 @@ void mode_site(void)
                   {
                      break;
                   }
-                  if(activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)>maxsleightofhand)
+                  if(activesquad->squad[i]->skillval(SKILL_THEFT)>maxsleightofhand)
                   {
                      beststealer=i;
-                     maxsleightofhand=activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND);
+                     maxsleightofhand=activesquad->squad[i]->skillval(SKILL_THEFT);
                   }
                }
-               activesquad->squad[beststealer]->train(SKILL_SLEIGHTOFHAND,5);
+               activesquad->squad[beststealer]->train(SKILL_THEFT,5);
                if(!LCSrandom(maxsleightofhand+1))
                {
                   alienationcheck(1);
@@ -1303,8 +1303,11 @@ void mode_site(void)
             cbase=activesquad->squad[0]->base;
          }
 
-         if(locx!=olocx||locy!=olocy||locz!=olocz||c=='s'||
-            (cbase==cursite&&!location[cursite]->siege.siege))
+         // Removed code that forces a turn to pass if you're
+         // looking around your own home base, regardless of
+         // what you do... not sure why that was even there
+         // in the first place
+         if(locx!=olocx||locy!=olocy||locz!=olocz||c=='s')
          {
             //NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
                //REFRESHES THE SCREEN

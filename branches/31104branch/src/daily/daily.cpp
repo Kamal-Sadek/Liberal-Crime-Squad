@@ -688,9 +688,9 @@ void advanceday(char &clearformess,char canseethings)
       if(pool[p]->activity.type==ACTIVITY_HEAL||pool[p]->activity.type==ACTIVITY_NONE)
       {
          if(pool[p]->location>-1&&
-            healing[pool[p]->location]<pool[p]->skillval(SKILL_MEDICAL))
+            healing[pool[p]->location]<pool[p]->skillval(SKILL_FIRSTAID))
          {
-            healing[pool[p]->location]=pool[p]->skillval(SKILL_MEDICAL);
+            healing[pool[p]->location]=pool[p]->skillval(SKILL_FIRSTAID);
             pool[p]->activity.type=ACTIVITY_HEAL;
          }
       }
@@ -898,8 +898,9 @@ void advanceday(char &clearformess,char canseethings)
       // Release healed people
 
       if(!clinictime(*pool[p])&&(pool[p]->location>0)&&
-                               (location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
-                                location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
+         !(pool[p]->flag & CREATUREFLAG_SLEEPER)&&
+         (location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
+          location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))
       {
          if(clearformess)
          {
@@ -957,7 +958,7 @@ void advanceday(char &clearformess,char canseethings)
          if(healing2[pool[p]->location]==0)
             pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
-         pool[p]->train(SKILL_MEDICAL,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_MEDICAL)*2));
+         pool[p]->train(SKILL_FIRSTAID,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_FIRSTAID)*2));
       }
    }
    delete[] healing;

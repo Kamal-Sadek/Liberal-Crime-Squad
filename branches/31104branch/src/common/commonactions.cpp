@@ -272,8 +272,9 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
    case SKILL_SMG:
    case SKILL_SHOTGUN:
    case SKILL_DRIVING:
-   case SKILL_SLEIGHTOFHAND:
+   case SKILL_THEFT:
    case SKILL_STEALTH:
+   case SKILL_THROWING:
       return cr.attval(ATTRIBUTE_AGILITY,use_juice);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
@@ -290,14 +291,14 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
    case SKILL_BUSINESS:
       return (cr.attval(ATTRIBUTE_WISDOM,use_juice)+cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice))/2;
    case SKILL_SECURITY:
-   case SKILL_GARMENTMAKING:
+   case SKILL_TAILORING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_AGILITY,use_juice))/2;
-   case SKILL_INTERROGATION:
+   case SKILL_PSYCHOLOGY:
    case SKILL_TEACHING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_CHARISMA,use_juice))/2;
    //case SKILL_SURVIVAL:
    //   return cr.attval(ATTRIBUTE_HEALTH,use_juice);
-   case SKILL_MEDICAL:
+   case SKILL_FIRSTAID:
    case SKILL_SCIENCE:
    case SKILL_LAW:
    case SKILL_COMPUTERS:
@@ -308,10 +309,10 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
       if(cr.juice<10)return 0;
       if(cr.juice<50)return 1;
       if(cr.juice<100)return 2;
-      if(cr.juice<200)return 3;
-      if(cr.juice<500)return 4;
-      if(cr.juice<1000)return 5;
-      return 6;
+      if(cr.juice<200)return 4;
+      if(cr.juice<500)return 7;
+      if(cr.juice<1000)return 10;
+      return 14;
    default:
       return -1;
    }
@@ -334,9 +335,11 @@ int weaponskill(int weapon)
       case WEAPON_CROSS:
       case WEAPON_TORCH:
       case WEAPON_PITCHFORK:
-      case WEAPON_MOLOTOV:
       case WEAPON_SPRAYCAN:
          wsk=SKILL_IMPROVISED;
+         break;
+      case WEAPON_MOLOTOV:
+         wsk=SKILL_THROWING;
          break;
       case WEAPON_BASEBALLBAT:
       case WEAPON_NIGHTSTICK:
@@ -462,11 +465,7 @@ void addjuice(creaturest &cr,long juice,long cap)
       {
          if(pool[i]->id==cr.hireid)
          {
-            //If your maximum leadership skill is greater than
-            //current skill. In other words, you need to be able
-            //to gain a level before you'll be given the experience
-            if(maxskill(SKILL_LEADERSHIP,*pool[i])>pool[i]->skill[SKILL_LEADERSHIP])
-               pool[i]->train(SKILL_LEADERSHIP,juice>>1);
+            pool[i]->train(SKILL_LEADERSHIP,juice>>1);
             break;
          }
       }
@@ -748,7 +747,7 @@ int maxsubordinates(const creaturest& cr)
    else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
    //Cap based on leadership
-   recruitcap += cr.skill[SKILL_LEADERSHIP] * 2; 
+   recruitcap += cr.skill[SKILL_LEADERSHIP]; 
    //Cap for founder
    if(cr.hireid == -1 && cr.align == 1) recruitcap += 6;
    return recruitcap;

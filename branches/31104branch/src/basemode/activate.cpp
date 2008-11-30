@@ -208,7 +208,7 @@ void activate(creaturest *cr)
       move(14,1);
       addstr("E - Teaching Other Liberals");
       
-      if(cr->skill[SKILL_MEDICAL]!=0)
+      if(cr->skill[SKILL_FIRSTAID]!=0)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
       }
@@ -240,7 +240,7 @@ void activate(creaturest *cr)
       if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(17,1);
-      addstr("I - Interrogate a Conservative hostage");
+      addstr("I - Tend to a Conservative hostage");
       
       if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_BURY&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -461,9 +461,11 @@ void activate(creaturest *cr)
             break;
          case ACTIVITY_TEACH_GENERALED:
             move(22,1);
-            addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion, Business");
+            addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion,");
+            move(23,1);
+            addstr("Business, Psychology");
             move(24,1);
-            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $200/day to conduct. All liberals able will attend.");
             break;
          case ACTIVITY_TEACH_POLITICS:
             //move(22,1);
@@ -471,7 +473,7 @@ void activate(creaturest *cr)
             move(22,1);
             addstr("  Skills Trained: Law, Persuasion, Leadership");
             move(24,1);
-            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $200/day to conduct. All liberals able will attend.");
             break;
          case ACTIVITY_TEACH_SURVIVAL:
             //move(22,1);
@@ -479,15 +481,15 @@ void activate(creaturest *cr)
             move(22,1);
             addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
-            addstr("Garment Making, Hand to Hand, Improvised Weapons");
+            addstr("Garment Making, Martial Arts, Improvised Melee");
             move(24,1);
-            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
             break;
          case ACTIVITY_TEACH_FIGHTING:
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
-            addstr("  Skills Trained: Knife, Sword, Club, Pistol, Rifle, SMG, Shotgun");
+            addstr("  Skills Trained: All Weapon Skills except Improvised Melee");
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
@@ -497,9 +499,9 @@ void activate(creaturest *cr)
             move(22,1);
             addstr("  Skills Trained: Persuasion, Security, Disguise, Stealth, Seduction,");
             move(23,1);
-            addstr("Interrogation");
+            addstr("Psychology");
             move(24,1);
-            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
             break;
       }
 
@@ -580,7 +582,7 @@ void activate(creaturest *cr)
                   cr->activity.type=ACTIVITY_SELL_ART;
                   choice='3';
                }
-               else if(cr->skill[SKILL_GARMENTMAKING]>1)
+               else if(cr->skill[SKILL_TAILORING]>1)
                {
                   cr->activity.type=ACTIVITY_SELL_TSHIRTS;
                   choice='2';
@@ -688,7 +690,7 @@ void activate(creaturest *cr)
          }
       }
 
-      if(c=='h'&&cr->skillval(SKILL_MEDICAL)!=0)
+      if(c=='h'&&cr->skillval(SKILL_FIRSTAID)!=0)
       {
          cr->activity.type=ACTIVITY_HEAL;
          break;
@@ -899,7 +901,7 @@ void activatebulk(void)
                case 1: //Fundraising
                   if(temppool[p]->skillval(SKILL_ART)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_ART;
-                  else if(temppool[p]->skillval(SKILL_GARMENTMAKING)>1)
+                  else if(temppool[p]->skillval(SKILL_TAILORING)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_TSHIRTS;
                   else if(temppool[p]->skillval(SKILL_MUSIC)>1)
                      temppool[p]->activity.type=ACTIVITY_SELL_MUSIC;
@@ -1312,7 +1314,7 @@ long armor_makedifficulty(int type,creaturest *cr)
          break;
    }
 
-   basedif-=cr->skillval(SKILL_GARMENTMAKING)-3;
+   basedif-=cr->skillval(SKILL_TAILORING)-3;
    if(basedif<0)basedif=0;
 
    return basedif;

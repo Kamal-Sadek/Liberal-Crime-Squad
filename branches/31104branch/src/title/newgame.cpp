@@ -106,7 +106,7 @@ void makecharacter(void)
             //SKILL_PERSUASION 1
             //ATTRIBUTE_HEART 1
             move(13,0);addstr("E - my father lectured me endlessly, trying to make me think like him.");
-            //SKILL_INTERROGATION 1
+            //SKILL_PSYCHOLOGY 1
             //ATTRIBUTE_CHARISMA 1
 
             /*switch(c)
@@ -133,7 +133,7 @@ void makecharacter(void)
             //SKILL_DISGUISE 1
             //ATTRIBUTE_AGILITY 1
             move(7,0);addstr("B - I had a lot of repressed anger.  I hurt animals.");
-            //SKILL_INTERROGATION 1
+            //SKILL_PSYCHOLOGY 1
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_AGILITY 1
             //ATTRIBUTE_HEART -1 <--- !
@@ -187,10 +187,10 @@ void makecharacter(void)
             //SKILL_SHOTGUN 1
             //SKILL_RIFLE 1
             move(9,0);addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
-            //SKILL_GARMENTMAKING 2
+            //SKILL_TAILORING 2
             move(11,0);addstr("D - when I was sent to religious counseling, just stressing me out more.");
             //SKILL_RELIGION 1
-            //SKILL_INTERROGATION 1
+            //SKILL_PSYCHOLOGY 1
             move(13,0);addstr("E - and I tried being a teacher's assistant.  It just made me a target.");
             //SKILL_TEACHING 2
             break;
@@ -260,7 +260,7 @@ void makecharacter(void)
             //SKILL_COMPUTERS 2
             //ATTRIBUTE_INTELLIGENCE 4
             move(11,0);addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
-            //SKILL_MEDICAL 2
+            //SKILL_FIRSTAID 2
             //SKILL_STREETSENSE 2
             //ATTRIBUTE_INTELLIGENCE 1
             //ATTRIBUTE_AGILITY 1
@@ -354,7 +354,7 @@ void makecharacter(void)
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_INTERROGATION]+=1;
+               newcr->skill[SKILL_PSYCHOLOGY]+=1;
                newcr->att[ATTRIBUTE_CHARISMA]+=1;
             }
             break;
@@ -366,7 +366,7 @@ void makecharacter(void)
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_INTERROGATION]+=1;
+               newcr->skill[SKILL_PSYCHOLOGY]+=1;
                newcr->att[ATTRIBUTE_AGILITY]+=1;
                newcr->att[ATTRIBUTE_HEART]-=1;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
@@ -449,12 +449,12 @@ void makecharacter(void)
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_GARMENTMAKING]+=2;
+               newcr->skill[SKILL_TAILORING]+=2;
             }
             if(c=='d')
             {
                newcr->skill[SKILL_RELIGION]+=1;
-               newcr->skill[SKILL_INTERROGATION]+=1;
+               newcr->skill[SKILL_PSYCHOLOGY]+=1;
             }
             if(c=='e')
             {
@@ -575,7 +575,7 @@ void makecharacter(void)
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
                newcr->att[ATTRIBUTE_AGILITY]+=1;
                newcr->att[ATTRIBUTE_HEALTH]+=2;
-               newcr->skill[SKILL_MEDICAL]+=2;
+               newcr->skill[SKILL_FIRSTAID]+=2;
                newcr->skill[SKILL_STREETSENSE]+=2;
                newcr->type = CREATURE_HSDROPOUT;
             }

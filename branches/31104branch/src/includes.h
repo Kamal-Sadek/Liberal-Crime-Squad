@@ -466,17 +466,18 @@ enum Skills
    SKILL_CLUB,
    SKILL_AXE,
    SKILL_IMPROVISED,
+   SKILL_THROWING,
    SKILL_PISTOL,
    SKILL_RIFLE,
    SKILL_SMG,
    SKILL_SHOTGUN,
    SKILL_PERSUASION,
-   SKILL_INTERROGATION,
+   SKILL_PSYCHOLOGY,
    SKILL_LAW,
    SKILL_SECURITY,
    SKILL_DISGUISE,
    SKILL_COMPUTERS,
-   SKILL_GARMENTMAKING,
+   SKILL_TAILORING,
    SKILL_DRIVING,
    SKILL_WRITING,
    SKILL_COOKING,
@@ -486,12 +487,12 @@ enum Skills
    SKILL_SCIENCE,
    SKILL_BUSINESS,
    SKILL_STEALTH,
-   SKILL_SLEIGHTOFHAND,
+   SKILL_THEFT,
    SKILL_TEACHING,
    SKILL_STREETSENSE,
    SKILL_SEDUCTION,
    SKILL_LEADERSHIP,
-   SKILL_MEDICAL,
+   SKILL_FIRSTAID,
    SKILL_TACTICS,
    SKILL_FLAMETHROWER,
    //SKILL_SURVIVAL,
@@ -1647,6 +1648,8 @@ void printlocation(long loc);
 void printcreatureinfo(creaturest *cr,unsigned char knowledge=255);
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p);
+/* full screen character sheet, just skills */
+void printliberalskills(creaturest &cr);
 /* full screen character sheet */
 void printliberalstats(creaturest &cr);
 /* draws a horizontal line across the screen */

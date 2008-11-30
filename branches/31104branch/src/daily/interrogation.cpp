@@ -142,7 +142,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       int spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
       int healthcrush=0;
 
-      //get short references to the interrogatee's status
+      //get short references to the hostage's status
       int& nofood = reinterpret_cast<interrogation*>(cr->activity.arg)->nofood;
       int& nowater = reinterpret_cast<interrogation*>(cr->activity.arg)->nowater;
       int& nosleep = reinterpret_cast<interrogation*>(cr->activity.arg)->nosleep;
@@ -168,7 +168,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
                attack[p] = (temppool[p]->attval(ATTRIBUTE_HEART)-
                             temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                            temppool[p]->skillval(SKILL_INTERROGATION)*2);
+                            temppool[p]->skillval(SKILL_PSYCHOLOGY)*2);
 
                attack[p] += temppool[p]->armor.interrogation_basepower();
 
@@ -207,7 +207,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                  LCSrandom(20)+1;
       long troll=cr->attval(ATTRIBUTE_WISDOM)*2-
                  cr->attval(ATTRIBUTE_HEART)+
-                 cr->skillval(SKILL_INTERROGATION)*2+
+                 cr->skillval(SKILL_PSYCHOLOGY)*2+
                  LCSrandom(20)+1;
 
       bool techniques[9];
@@ -325,8 +325,8 @@ void tendhostage(creaturest *cr,char &clearformess)
          printhealthstat(*a,y,48,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(++y,40);
-         itoa(a->skillval(SKILL_INTERROGATION),num2,10);
-         addstr("Interrogation Skill: ");
+         itoa(a->skillval(SKILL_PSYCHOLOGY),num2,10);
+         addstr("Psychology Skill: ");
          addstr(num2);
          move(++y,40);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -663,10 +663,10 @@ void tendhostage(creaturest *cr,char &clearformess)
          forceroll=LCSrandom(forceroll)+1;
          
          //Torture captive if lead interrogator has low heart and high skill
-         if(a->skillval(SKILL_INTERROGATION)>=4&&a->att[ATTRIBUTE_HEART]<4)
+         if(a->skillval(SKILL_PSYCHOLOGY)>=4&&a->att[ATTRIBUTE_HEART]<4)
          {
             //Torture much more devastating than normal beating
-            forceroll*=a->skillval(SKILL_INTERROGATION)/4+1;
+            forceroll*=a->skillval(SKILL_PSYCHOLOGY)/4+1;
             //Extremely bad for rapport with lead interrogator
             rapport[a->id]-=2;
 
@@ -821,7 +821,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(techniques[0]&&cr->alive)
       {
          float rapport_temp = rapport[a->id];
-         rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skillval(SKILL_INTERROGATION)-5)/10.0f;
+         rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skillval(SKILL_PSYCHOLOGY)-5)/10.0f;
          if(techniques[1])rapport_temp -= 1;
          y+=1;
          move(y,0);
@@ -858,7 +858,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             getch();
 
             move(y++,0);
-            if(cr->skillval(SKILL_INTERROGATION)*3>spiritcrush)
+            if(cr->skillval(SKILL_PSYCHOLOGY)*3>spiritcrush)
             {
                switch(LCSrandom(4))
                {
@@ -970,7 +970,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(cr->skillval(SKILL_INTERROGATION)*3>spiritcrush)
+         if(cr->skillval(SKILL_PSYCHOLOGY)*3>spiritcrush)
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1097,7 +1097,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             case 6:addstr(" just hates the LCS even more.");break;
             }
             if(a->attval(ATTRIBUTE_HEART)+
-               a->skillval(SKILL_INTERROGATION)+
+               a->skillval(SKILL_PSYCHOLOGY)+
                a->attval(ATTRIBUTE_CHARISMA)>16+LCSrandom(10))
             {
                getch();
@@ -1165,7 +1165,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
                {
                   int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
-                  if(change > a->skillval(SKILL_INTERROGATION)/2 + 1)change = a->skillval(SKILL_INTERROGATION)/2 + 1;
+                  if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
                   cr->att[ATTRIBUTE_WISDOM]-=change;
                }
                //Increase heart
@@ -1173,7 +1173,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                {
                   int change = 
                      LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
-                  if(change > a->skillval(SKILL_INTERROGATION)/2 + 1)change = a->skillval(SKILL_INTERROGATION)/2 + 1;
+                  if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
                   cr->att[ATTRIBUTE_HEART]+=change;
                }
             }
@@ -1266,10 +1266,10 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(cr->att[ATTRIBUTE_HEART]<1)cr->att[ATTRIBUTE_HEART]=1;
 
       //Lead interrogator gets bonus experience
-      if(!techniques[8])a->train(SKILL_INTERROGATION,spiritcrush);
+      if(!techniques[8])a->train(SKILL_PSYCHOLOGY,spiritcrush);
       //Others also get experience
       for(int i=0;i<temppool.size();i++)
-         temppool[i]->train(SKILL_INTERROGATION,(spiritcrush>>1)+1);
+         temppool[i]->train(SKILL_PSYCHOLOGY,(spiritcrush>>1)+1);
 
       reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush+=spiritcrush;
 

@@ -850,6 +850,9 @@ void fullstatus(int p)
 {
    if(activesquad==NULL)return;
 
+   const int pagenum=2;
+   unsigned page=0;
+
    do
    {
       erase();
@@ -858,19 +861,20 @@ void fullstatus(int p)
       move(0,0);
       addstr("Profile of a Liberal");
 
-      printliberalstats(*activesquad->squad[p]);
+      if(page==0)
+         printliberalstats(*activesquad->squad[p]);
+      else if(page==1)
+         printliberalskills(*activesquad->squad[p]);
 
       move(23,0);
       addstr("Press N to change this Liberal's Code Name");
       if(activesquad->squad[1]!=NULL)
       {
-         addstr("    ");
-         addstr("LEFT - Previous");
-         addstr("    ");
-         addstr("RIGHT - Next");
+         addstr("    LEFT/RIGHT - Other Liberals");
       }
       move(24,0);
       addstr("Press any other key to continue the Struggle");
+      addstr("    UP/DOWN  - More Info");
 
       refresh();
       int c=getch();
@@ -884,6 +888,20 @@ void fullstatus(int p)
          {
             p=(p+6+sx)%6;
          }while(activesquad->squad[p]==NULL);
+         continue;
+      }
+
+      if(c==KEY_DOWN)
+      {
+         page++;
+         page%=pagenum;
+         continue;
+      }
+
+      if(c==KEY_UP)
+      {
+         page--;
+         page%=pagenum;
          continue;
       }
 
@@ -906,11 +924,93 @@ void fullstatus(int p)
          noecho();
          raw_output(TRUE);
          keypad(stdscr,TRUE);
+         continue;
       }
-      else break;
+      break;
    }while(1);
 }
 
+
+/* Full screen character sheet, skills only edition */
+void printliberalskills(creaturest &cr)
+{
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   char str[200];
+   char num[5];
+
+   // Add name
+   move(2,0);
+   if(strcmp(cr.propername,cr.name)!=0)
+   {
+	   addstr("Code name: ");
+   }
+   else
+   {
+      addstr("Name: ");
+   }
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   addstr(cr.name);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr(", ");
+   gettitle(str,cr);
+   addstr(str);
+   addstr(" (");
+   getrecruitcreature(str,cr.type);
+   addstr(str);
+   addstr(")");
+
+   // Add all skills
+   for(int s=0;s<SKILLNUM;s++)
+   {
+      // Maxed skills are green
+      if(maxskill(s,cr)!=0 && cr.skill[s]==maxskill(s,cr))set_color(COLOR_GREEN,COLOR_BLACK,1);
+      // About to level up skills are white
+      else if(cr.get_skill_ip(s)>=100+(10*cr.skill[s])&&
+         cr.skill[s]<maxskill(s,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+      // <1 skills are dark gray
+      else if(cr.skill[s]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      // >=1 skills are light gray
+      else set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+      if(s%3==0 && s<9)
+      {
+         move(4,27*(s/3));
+         addstr("SKILL");
+         move(4,15+27*(s/3));
+         addstr("NOW   MAX");
+      }
+
+      move(5+s/3,27*(s%3));
+      getskill(str,s);
+      strcat(str,": ");
+      addstr(str);
+      move(5+s/3,14+27*(s%3));
+      sprintf(num,"%2d.",cr.skill[s]);
+      addstr(num);
+      if(cr.get_skill_ip(s)<100+(10*cr.skill[s]))
+      {
+         if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))!=0)
+         {
+         	itoa((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s])),num,10);
+         	if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))<10)
+         	{
+	           addstr("0");
+	         }
+	         addstr(num);
+	      }
+	      else addstr("00");
+	   }
+	   else
+      {
+         addstr("99+");
+      }
+
+      move(5+s/3,20+27*(s%3));
+      sprintf(str,"%2d.00",maxskill(s,cr));
+      addstr(str);
+   }
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+}
 
 
 /* full screen character sheet */
@@ -988,15 +1088,13 @@ void printliberalstats(creaturest &cr)
    addstr(")");
 
    // Add juice
-   move(11,16);
-   if(cr.align==ALIGN_LIBERAL)addstr("Juice: ");
-   else if(cr.align==ALIGN_CONSERVATIVE)addstr("Notoriety: ");
-   else addstr("Fame: ");
+   move(10,16);
+   addstr("Juice: ");
    itoa(cr.juice,num,10);
    addstr(num);
    if(cr.juice<1000)
    {
-      move(12,16);addstr("Next:  ");
+      move(11,16);addstr("Next:  ");
       if(cr.juice<0)addstr("0");
       else if(cr.juice<10)addstr("10");
       else if(cr.juice<50)addstr("50");
@@ -1006,25 +1104,25 @@ void printliberalstats(creaturest &cr)
       else addstr("1000");
    }
    // Add attributes
-   move(6,0);addstr("Heart: ");
+   move(5,0);addstr("Heart: ");
    itoa(cr.attval(ATTRIBUTE_HEART),num,10);
    addstr(num);
-   move(7,0);addstr("Intelligence: ");
+   move(6,0);addstr("Intelligence: ");
    itoa(cr.attval(ATTRIBUTE_INTELLIGENCE),num,10);
    addstr(num);
-   move(8,0);addstr("Wisdom: ");
+   move(7,0);addstr("Wisdom: ");
    itoa(cr.attval(ATTRIBUTE_WISDOM),num,10);
    addstr(num);
-   move(9,0);addstr("Health: ");
+   move(8,0);addstr("Health: ");
    itoa(cr.attval(ATTRIBUTE_HEALTH),num,10);
    addstr(num);
-   move(10,0);addstr("Agility: ");
+   move(9,0);addstr("Agility: ");
    itoa(cr.attval(ATTRIBUTE_AGILITY),num,10);
    addstr(num);
-   move(11,0);addstr("Strength: ");
+   move(10,0);addstr("Strength: ");
    itoa(cr.attval(ATTRIBUTE_STRENGTH),num,10);
    addstr(num);
-   move(12,0);addstr("Charisma: ");
+   move(11,0);addstr("Charisma: ");
    itoa(cr.attval(ATTRIBUTE_CHARISMA),num,10);
    addstr(num);
 
@@ -1035,8 +1133,10 @@ void printliberalstats(creaturest &cr)
    int skills_max=17;
    char printed=1;
 
-   move(4,34);
-   addstr("Best Skills");
+   move(5,28);
+   addstr("SKILL");
+   move(5,43);
+   addstr("NOW   MAX");
    for(int skills_shown=0;skills_shown<skills_max&&printed;skills_shown++)
    {
       printed=0;
@@ -1057,44 +1157,51 @@ void printliberalstats(creaturest &cr)
          used[maxs]=1;
          printed=1;
 
-         if(cr.get_skill_ip(maxs)>=100+(10*cr.skill[maxs])&&
+         // Maxed skills are green
+         if(maxskill(maxs,cr)!=0 && cr.skill[maxs]==maxskill(maxs,cr))set_color(COLOR_GREEN,COLOR_BLACK,1);
+         // About to level up skills are white
+         else if(cr.get_skill_ip(maxs)>=100+(10*cr.skill[maxs])&&
             cr.skill[maxs]<maxskill(maxs,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+         // <1 skills are dark gray
          else if(cr.skill[maxs]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+         // >=1 skills are light gray
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         move(5+skills_shown,30);
+         move(6+skills_shown,28);
          getskill(str,maxs);
          strcat(str,": ");
          addstr(str);
-         move(5+skills_shown,46);
-         itoa(cr.skill[maxs],num,10);
-         strcpy(str,num);
-         addstr(str);
+         move(6+skills_shown,42);
+         sprintf(num,"%2d.",cr.skill[maxs]);
+         addstr(num);
          if(cr.get_skill_ip(maxs)<100+(10*cr.skill[maxs]))
          {
-	         addstr(".");
-	         if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))!=0)
-	         {
-	         	itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs])),num,10);
-	         	if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))<10)
-	         	{
-		           addstr("0");
-		         }
-		         addstr(num);
-		      }
-		      else addstr("00");
-		   }
-		   else
+            if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))!=0)
+            {
+         	   itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs])),num,10);
+         	   if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))<10)
+         	   {
+	              addstr("0");
+	            }
+	            addstr(num);
+	         }
+	         else addstr("00");
+	      }
+	      else
          {
-            addstr(".99+");
+            addstr("99+");
          }
+
+         move(6+skills_shown,48);
+         sprintf(str,"%2d.00",maxskill(maxs,cr));
+         addstr(str);
       }
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    // Add weapon
-   move(14,0);
+   move(13,0);
    addstr("Weapon: ");
    getweaponfull(str,cr.weapon.type,0);
    addstr(str);
@@ -1113,13 +1220,13 @@ void printliberalstats(creaturest &cr)
    }
 
    // Add clothing
-   move(15,0);
+   move(14,0);
    addstr("Clothes: ");
    getarmorfull(str,cr.armor,1);
    addstr(str);
 
    // Add vehicle
-   move(16,0);
+   move(15,0);
    addstr("Transport: ");
    long v=-1;
    if(showcarprefs==1)v=id_getcar(cr.pref_carid);
@@ -1148,24 +1255,24 @@ void printliberalstats(creaturest &cr)
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(18,0);
+      move(17,0);
       itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
       addstr(num);
       addstr(" Recruits");
-      move(19,0);
+      move(18,0);
       itoa(maxsubordinates(cr),num,10);
       addstr(num);
       addstr(" Max");
    }
    else
    {
-      move(18,0);
+      move(17,0);
       addstr("Enlightened");
-      move(19,0);
+      move(18,0);
       addstr("Can't Recruit");
    }
    // Add seduction stats
-   move(20,0); 
+   move(19,0); 
    int lovers = loveslaves(cr);
    if(lovers)
    {
@@ -1180,7 +1287,7 @@ void printliberalstats(creaturest &cr)
       if(cr.wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-      move(5+w,57);
+      move(5+w,55);
       switch(w)
       {
          case BODYPART_HEAD:addstr("Head:");break;
@@ -1191,7 +1298,7 @@ void printliberalstats(creaturest &cr)
          case BODYPART_LEG_LEFT:addstr("Left Leg:");break;
       }
 
-      move(5+w,68);
+      move(5+w,66);
       if(cr.wound[w] & WOUND_NASTYOFF)addstr("Ripped off");
       else if(cr.wound[w] & WOUND_CLEANOFF)addstr("Severed");
       else
@@ -1226,91 +1333,92 @@ void printliberalstats(creaturest &cr)
    set_color(COLOR_RED,COLOR_BLACK,0);
 
    int y=12;
+   int x=55;
    if(cr.special[SPECIALWOUND_HEART]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Heart Punctured");
    }
    if(cr.special[SPECIALWOUND_RIGHTLUNG]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("R. Lung Collapsed");
    }
    if(cr.special[SPECIALWOUND_LEFTLUNG]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("L. Lung Collapsed");
    }
    if(cr.special[SPECIALWOUND_NECK]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Broken Neck");
    }
    if(cr.special[SPECIALWOUND_UPPERSPINE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Broken Up Spine");
    }
    if(cr.special[SPECIALWOUND_LOWERSPINE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Broken Lw Spine");
    }
    if(cr.special[SPECIALWOUND_RIGHTEYE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("No Right Eye");
    }
    if(cr.special[SPECIALWOUND_LEFTEYE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("No Left Eye");
    }
    if(cr.special[SPECIALWOUND_NOSE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("No Nose");
    }
    if(cr.special[SPECIALWOUND_TONGUE]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("No Tongue");
    }
    if(cr.special[SPECIALWOUND_TEETH]!=TOOTHNUM)
    {
-      move(y++,58);
+      move(y++,x);
       if(cr.special[SPECIALWOUND_TEETH]==0)addstr("No Teeth");
       else if(cr.special[SPECIALWOUND_TEETH]==TOOTHNUM-1)addstr("Missing a Tooth");
       else if(cr.special[SPECIALWOUND_TEETH]<TOOTHNUM)addstr("Missing Teeth");
    }
    if(cr.special[SPECIALWOUND_LIVER]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Liver Damaged");
    }
    if(cr.special[SPECIALWOUND_RIGHTKIDNEY]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("R. Kidney Damaged");
    }
    if(cr.special[SPECIALWOUND_LEFTKIDNEY]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("L. Kidney Damaged");
    }
    if(cr.special[SPECIALWOUND_STOMACH]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Stomach Injured");
    }
    if(cr.special[SPECIALWOUND_SPLEEN]!=1)
    {
-      move(y++,58);
+      move(y++,x);
       addstr("Busted Spleen");
    }
    if(cr.special[SPECIALWOUND_RIBS]!=RIBNUM)
    {
-      move(y++,58);
+      move(y++,x);
       if(cr.special[SPECIALWOUND_RIBS]==0)addstr("All Ribs Broken");
       else if(cr.special[SPECIALWOUND_RIBS]==RIBNUM-1)addstr("Broken Rib");
       else if(cr.special[SPECIALWOUND_RIBS]<RIBNUM)addstr("Broken Ribs");

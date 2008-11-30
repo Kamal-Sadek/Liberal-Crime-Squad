@@ -391,7 +391,7 @@ void passmonth(char &clearformess,char canseethings)
 
             //Confession check
             if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
-                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skillval(SKILL_INTERROGATION)*5
+                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skillval(SKILL_PSYCHOLOGY)*5
                                       /*+ pool[p]->skillval(SKILL_SURVIVAL)*5*/  &&  pool[p]->hireid!=-1)
             {
                int nullify=0;

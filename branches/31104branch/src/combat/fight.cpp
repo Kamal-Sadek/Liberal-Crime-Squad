@@ -677,7 +677,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
       a.weapon.type!=WEAPON_MOLOTOV &&
       a.weapon.ammo==0)
    {
-      wsk=SKILL_IMPROVISED;
+      wsk=SKILL_CLUB; // Club people with out-of-ammo guns
    }
    aroll+=a.skillval(wsk);
    a.train(wsk,droll);
@@ -716,7 +716,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual)
    
    int bonus=0;
    //Penalty for improvised weapons
-   if(wsk==SKILL_IMPROVISED /*&& a.weapon.type != WEAPON_MOLOTOV*/)bonus=-4;
+   if(wsk==SKILL_IMPROVISED)bonus=-4;
    else
    {
       // Weapon accuracy bonuses and pentalties

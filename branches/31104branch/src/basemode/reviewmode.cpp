@@ -496,6 +496,8 @@ void review_mode(short mode)
          int p=page*19+(int)(c-'a');
          if(p<temppool.size())
          {
+            unsigned page=0;
+            const int pagenum=2;
             do
             {
                erase();
@@ -512,20 +514,23 @@ void review_mode(short mode)
                   addstr("Profile of a Liberal");
                }
 
-               printliberalstats(*temppool[p]);
+               if(page==0)
+                  printliberalstats(*temppool[p]);
+               else if(page==1)
+                  printliberalskills(*temppool[p]);
 
                move(23,0);
+      
+
                if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
                else addstr("Press N to change this Liberal's Code Name");
                if(temppool.size()>1)
                {
-                  addstr("    ");
-                  addstr("LEFT - Previous");
-                  addstr("    ");
-                  addstr("RIGHT - Next");
+                  addstr("    LEFT/RIGHT - View Others");
                }
                move(24,0);
                addstr("Press any other key to continue the Struggle");
+               addstr("    UP/DOWN  - More Info");
 
                refresh();
                int c=getch();
@@ -536,6 +541,20 @@ void review_mode(short mode)
                   int sx=1;
                   if((c==KEY_LEFT))sx=-1;
                   p=(p+(int)temppool.size()+sx)%((int)temppool.size());
+                  continue;
+               }
+
+               if(c==KEY_DOWN)
+               {
+                  page++;
+                  page%=pagenum;
+                  continue;
+               }
+
+               if(c==KEY_UP)
+               {
+                  page--;
+                  page%=pagenum;
                   continue;
                }
 

@@ -650,21 +650,22 @@ void getskill(char *str,int type)
       case SKILL_HANDTOHAND:strcpy(str,"Martial Arts");break;
       case SKILL_KNIFE:strcpy(str,"Knife");break;
       case SKILL_SWORD:strcpy(str,"Sword");break;
-      case SKILL_IMPROVISED:strcpy(str,"Improv Weapons");break;
+      case SKILL_IMPROVISED:strcpy(str,"Improv Melee");break;
+      case SKILL_THROWING:strcpy(str,"Throwing");break;
       case SKILL_CLUB:strcpy(str,"Club");break;
       case SKILL_AXE:strcpy(str,"Axe");break;
       case SKILL_PISTOL:strcpy(str,"Pistol");break;
       case SKILL_RIFLE:strcpy(str,"Rifle");break;
       case SKILL_FLAMETHROWER:strcpy(str,"Flamethrower");break;
       case SKILL_SHOTGUN:strcpy(str,"Shotgun");break;
-      case SKILL_SMG:strcpy(str,"Submachine Gun");break;
+      case SKILL_SMG:strcpy(str,"SMG");break;
       case SKILL_PERSUASION:strcpy(str,"Persuasion");break;
-      case SKILL_INTERROGATION:strcpy(str,"Interrogation");break;
+      case SKILL_PSYCHOLOGY:strcpy(str,"Psychology");break;
       case SKILL_SECURITY:strcpy(str,"Security");break;
       case SKILL_DISGUISE:strcpy(str,"Disguise");break;
       case SKILL_COMPUTERS:strcpy(str,"Computers");break;
       case SKILL_LAW:strcpy(str,"Law");break;
-      case SKILL_GARMENTMAKING:strcpy(str,"Garment Making");break;
+      case SKILL_TAILORING:strcpy(str,"Tailoring");break;
       case SKILL_DRIVING:strcpy(str,"Driving");break;
       case SKILL_WRITING:strcpy(str,"Writing");break;
       case SKILL_COOKING:strcpy(str,"Cooking");break;
@@ -675,12 +676,12 @@ void getskill(char *str,int type)
       case SKILL_BUSINESS:strcpy(str,"Business");break;
       //case SKILL_SURVIVAL:strcpy(str,"Survival");break;
       case SKILL_STEALTH:strcpy(str,"Stealth");break;
-      case SKILL_SLEIGHTOFHAND:strcpy(str,"Sleight of Hand");break;
+      case SKILL_THEFT:strcpy(str,"Theft");break;
       case SKILL_TEACHING:strcpy(str,"Teaching");break;
       case SKILL_STREETSENSE:strcpy(str,"Street Sense");break;
       case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
       case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
-      case SKILL_MEDICAL:strcpy(str,"First Aid");break;
+      case SKILL_FIRSTAID:strcpy(str,"First Aid");break;
       case SKILL_TACTICS:strcpy(str,"Tactics");break;
    }
 }

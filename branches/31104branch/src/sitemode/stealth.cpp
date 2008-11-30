@@ -54,13 +54,13 @@ void noticecheck(int exclude)
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
-         activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)+activesquad->squad[i]->skillval(SKILL_STEALTH)>sneak)
+         activesquad->squad[i]->skillval(SKILL_THEFT)+activesquad->squad[i]->skillval(SKILL_STEALTH)>sneak)
       {
-         sneak=activesquad->squad[i]->skillval(SKILL_SLEIGHTOFHAND)+activesquad->squad[i]->skillval(SKILL_STEALTH);
+         sneak=activesquad->squad[i]->skillval(SKILL_THEFT)+activesquad->squad[i]->skillval(SKILL_STEALTH);
          topi=i;
       }
    }
-   if(topi>=0&&noticer.size())activesquad->squad[topi]->train(SKILL_SLEIGHTOFHAND,10);
+   if(topi>=0&&noticer.size())activesquad->squad[topi]->train(SKILL_THEFT,10);
 
    if(noticer.size()>0)
    {

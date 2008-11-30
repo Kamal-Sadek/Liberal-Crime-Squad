@@ -198,7 +198,7 @@ void repairarmor(creaturest &cr,char &clearformess)
       if(armor->flag & ARMORFLAG_DAMAGED)
       {
          long dif=(armor_makedifficulty(armor->type,&cr)>>1);
-         cr.train(SKILL_GARMENTMAKING,dif+1);
+         cr.train(SKILL_TAILORING,dif+1);
 
          if((LCSrandom(1+dif)))
          {
@@ -345,7 +345,7 @@ void makearmor(creaturest &cr,char &clearformess)
             moneylost_manufacture+=cost;
          }
 
-         cr.train(SKILL_GARMENTMAKING,dif*2+1);
+         cr.train(SKILL_TAILORING,dif*2+1);
 
          itemst *it=new itemst;
             it->type=ITEM_ARMOR;
@@ -987,7 +987,7 @@ void funds_and_trouble(char &clearformess)
             continue;
          }
 
-         int productquality = tshirts[s]->skillval(SKILL_GARMENTMAKING)*4+8;
+         int productquality = tshirts[s]->skillval(SKILL_TAILORING)*4+8;
          int demand = mood + 10*(tshirts[s]->skillval(SKILL_BUSINESS)-competitionpenalty);
          if(demand<10)demand = 10;
 
@@ -1001,10 +1001,10 @@ void funds_and_trouble(char &clearformess)
          moneygained_goods+=money+costofsupplies;
          moneylost_goods+=costofsupplies;
 
-         if(tshirts[s]->skillval(SKILL_GARMENTMAKING)<4)
-            tshirts[s]->train(SKILL_GARMENTMAKING,LCSrandom(5)+2);
+         if(tshirts[s]->skillval(SKILL_TAILORING)<4)
+            tshirts[s]->train(SKILL_TAILORING,LCSrandom(5)+2);
          else
-            tshirts[s]->train(SKILL_GARMENTMAKING,LCSrandom(3)+1);
+            tshirts[s]->train(SKILL_TAILORING,LCSrandom(3)+1);
          if(tshirts[s]->skillval(SKILL_BUSINESS)<4)
             tshirts[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
          else
@@ -2157,14 +2157,14 @@ void funds_and_trouble(char &clearformess)
    //Teaching
    for(int t=0;t<teachers.size();t++)
    {
-      int skillarray[10];
+      int skillarray[11];
       int cost, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
       switch(teachers[t]->activity.type)
       {
       case ACTIVITY_TEACH_GENERALED:
-         cost=50;
+         cost=20;
          skillarray[0]=SKILL_COMPUTERS;
          skillarray[1]=SKILL_WRITING;
          skillarray[2]=SKILL_MUSIC;
@@ -2172,21 +2172,22 @@ void funds_and_trouble(char &clearformess)
          skillarray[4]=SKILL_RELIGION;
          skillarray[5]=SKILL_BUSINESS;
          skillarray[6]=SKILL_SCIENCE;
-         skillarray[7]=-1;
+         skillarray[7]=SKILL_PSYCHOLOGY;
+         skillarray[8]=-1;
          break;
       case ACTIVITY_TEACH_POLITICS:
-         cost=50;
+         cost=20;
          skillarray[0]=SKILL_LAW;
          skillarray[1]=SKILL_PERSUASION;
          skillarray[2]=SKILL_LEADERSHIP;
          skillarray[3]=-1;
          break;
       case ACTIVITY_TEACH_SURVIVAL:
-         cost=50;
+         cost=30;
          skillarray[0]=SKILL_DRIVING;
-         skillarray[1]=SKILL_MEDICAL;
+         skillarray[1]=SKILL_FIRSTAID;
          skillarray[2]=SKILL_STREETSENSE;
-         skillarray[3]=SKILL_GARMENTMAKING;
+         skillarray[3]=SKILL_TAILORING;
          skillarray[4]=SKILL_HANDTOHAND;
          skillarray[5]=SKILL_IMPROVISED;
          skillarray[6]=SKILL_COOKING;
@@ -2204,16 +2205,17 @@ void funds_and_trouble(char &clearformess)
          skillarray[6]=SKILL_FLAMETHROWER;
          skillarray[7]=SKILL_AXE;
          skillarray[8]=SKILL_SMG;
-         skillarray[9]=-1;
+         skillarray[9]=SKILL_THROWING;
+         skillarray[10]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
-         cost=50;
+         cost=40;
          skillarray[0]=SKILL_PERSUASION;
          skillarray[1]=SKILL_SECURITY;
          skillarray[2]=SKILL_DISGUISE;
          skillarray[3]=SKILL_STEALTH;
          skillarray[4]=SKILL_SEDUCTION;
-         skillarray[5]=SKILL_INTERROGATION;
+         skillarray[5]=SKILL_PSYCHOLOGY;
          skillarray[6]=-1;
          break;
       }
@@ -2226,7 +2228,7 @@ void funds_and_trouble(char &clearformess)
             pool[p]->align==ALIGN_LIBERAL)
          {
             //Step through the array of skills to train
-            for(int i=0;i<10;i++)
+            for(int i=0;i<11;i++)
             {
                //If no more skills to train, stop
                if(skillarray[i]==-1)break;
@@ -2238,9 +2240,14 @@ void funds_and_trouble(char &clearformess)
                   funds>cost&&
                   pool[p]->skill[skillarray[i]]<maxskill(skillarray[i],*pool[p]))
                {
-                  int teach=teachers[t]->skill[skillarray[i]]-pool[p]->skill[skillarray[i]]+
-                                                    teachers[t]->skill[SKILL_TEACHING];
+                  // Teach based on teacher's skill in the topic plus skill in teaching, minus
+                  // student's skill in the topic
+                  int teach=teachers[t]->skill[skillarray[i]]+
+                            teachers[t]->skill[SKILL_TEACHING]-
+                            pool[p]->skill[skillarray[i]];
+                  // Cap at 10 points per day
                   if(teach>10)teach=10;
+
                   pool[p]->train(skillarray[i],teach);
 
                   if(students<10)

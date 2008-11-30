@@ -33,6 +33,9 @@ This file is part of Liberal Crime Squad.                                       
 void creaturest::train(int trainedskill, int experience)
 {
    if(animalgloss==ANIMALGLOSS_ANIMAL)return; // poor animals don't get experience
+   // Don't give experience if already maxed out
+   if(maxskill(trainedskill,*this)==skill[trainedskill])
+      return;
    // Skill gain scaled by ability in the area
    skill_ip[trainedskill]+=max(1,static_cast<int>(experience * maxskill(trainedskill,*this,false) / 6.0));
    // Don't rush it
@@ -52,6 +55,8 @@ void creaturest::skill_up()
          skill_ip[s]-=100+10*skill[s];
          skill[s]++;
       }
+      if(skill[s]==maxskill(s,*this))
+         skill_ip[s]=0;
    }
 }
 

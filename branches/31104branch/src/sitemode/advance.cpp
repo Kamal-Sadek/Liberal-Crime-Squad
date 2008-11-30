@@ -301,10 +301,10 @@ void advancecreature(creaturest &cr)
          activesquad->squad[i]->stunned==0&&
          activesquad->squad[i]->blood>40&&
          activesquad->squad[i]->id!=cr.id&&
-         activesquad->squad[i]->skillval(SKILL_MEDICAL)>topmedicalskill)
+         activesquad->squad[i]->skillval(SKILL_FIRSTAID)>topmedicalskill)
       {
          topmedical=activesquad->squad[i];
-         topmedicalskill=activesquad->squad[i]->skillval(SKILL_MEDICAL);
+         topmedicalskill=activesquad->squad[i]->skillval(SKILL_FIRSTAID);
       }
    }
 
@@ -326,7 +326,7 @@ void advancecreature(creaturest &cr)
             move(17,1);
             addstr(cr.name);
             addstr("'s wounds.");
-            topmedical->train(SKILL_MEDICAL,max(50-topmedicalskill*2,0));
+            topmedical->train(SKILL_FIRSTAID,max(50-topmedicalskill*2,0));
             cr.wound[w]^=WOUND_BLEEDING;
             refresh();
             getch();

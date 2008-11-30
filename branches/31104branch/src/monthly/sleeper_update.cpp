@@ -128,7 +128,7 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
          power+=cr.skillval(SKILL_RELIGION);
          break;
       case CREATURE_EDUCATOR:
-         power+=cr.skillval(SKILL_INTERROGATION);
+         power+=cr.skillval(SKILL_PSYCHOLOGY);
          break;
    }
 
