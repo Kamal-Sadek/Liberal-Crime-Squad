@@ -285,6 +285,7 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
    case SKILL_COOKING:
       return cr.attval(ATTRIBUTE_HEART,use_juice);
    case SKILL_WRITING:
+   case SKILL_PSYCHOLOGY:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_HEART,use_juice))/2;
    case SKILL_RELIGION:
       return (cr.attval(ATTRIBUTE_WISDOM,use_juice)+cr.attval(ATTRIBUTE_HEART,use_juice))/2;
@@ -293,7 +294,6 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
    case SKILL_SECURITY:
    case SKILL_TAILORING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_AGILITY,use_juice))/2;
-   case SKILL_PSYCHOLOGY:
    case SKILL_TEACHING:
       return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_CHARISMA,use_juice))/2;
    //case SKILL_SURVIVAL:
@@ -447,13 +447,11 @@ void juiceparty(long juice)
 /* common - gives juice to a given creature */
 void addjuice(creaturest &cr,long juice,long cap)
 {
-   if(cr.juice>=cap)
+   if(juice>0 && cr.juice>=cap)
    {
       juice/=10;
       if(juice==0)return;
    }
-
-   if(cr.juice+juice>cap)juice=cap-cr.juice;
    
    cr.juice+=juice;
    

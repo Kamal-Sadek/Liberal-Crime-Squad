@@ -29,7 +29,7 @@
 //#define HIGHFUNDS
 
 // Interrogation always enlightens
-#define AUTOENLIGHTEN
+//#define AUTOENLIGHTEN
 
 // Show polls when you can't see things
 //#define SHOWWAIT
@@ -44,11 +44,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.17.0"
+#define PACKAGE_VERSION "3.18.0"
 #endif
 
-const unsigned long version=31700;
-const unsigned long lowestloadversion=31601;
+const unsigned long version=31800;
+const unsigned long lowestloadversion=31800;
 const unsigned long lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -1983,7 +1983,7 @@ void printchaseencounter(void);
 /* blanks a part of the screen */
 void clearcommandarea(void);
 void clearmessagearea(bool redrawmaparea=true);
-void clearmaparea(void);
+void clearmaparea(bool lower=true,bool upper=true);
 
 /*
  miscactions.cpp

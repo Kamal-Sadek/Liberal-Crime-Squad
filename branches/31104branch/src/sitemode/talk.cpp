@@ -73,7 +73,7 @@ char talk(creaturest &a,int t)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(11,1);
-      addstr("A - THIS IS THE LIBERAL CRIME SQUAD!");
+      addstr("A - Shout the Liberal Slogan!");
       if(!hostages)set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,1);
       addstr("B - Threaten hostages");
@@ -169,10 +169,14 @@ char talk(creaturest &a,int t)
          addstr(":");
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(17,1);
-         if(hostages>1)
-            addstr("\"Back off or we'll blow their brains out!\"");
-         else
-            addstr("\"Back off or the hostage dies!\"");
+         switch(LCSrandom(5))
+         {
+         case 0:addstr("\"Back off or the hostage dies!\"");break;
+         case 1:addstr("\"Don't push the LCS!\"");sitestory->claimed=true;break;
+         case 2:addstr("\"Hostage says you better leave!\"");break;
+         case 3:addstr("\"I'll do it! I'll kill this one!\"");break;
+         case 4:addstr("\"You gonna tell the family you pushed me?!\"");break;
+         }
 
          sitecrime+=5;
          criminalizeparty(LAWFLAG_KIDNAPPING);
@@ -191,9 +195,9 @@ char talk(creaturest &a,int t)
             for(e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists&&encounter[e].alive&&
-                  encounter[e].enemy())
+                  encounter[e].enemy()&&encounter[e].blood>70)
                {
-                  if(encounter[e].type==CREATURE_DEATHSQUAD||
+                  if((encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_SOLDIER||
                      encounter[e].type==CREATURE_HARDENED_VETERAN||
                      encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
@@ -201,8 +205,8 @@ char talk(creaturest &a,int t)
                      encounter[e].type==CREATURE_MERC||
                      encounter[e].type==CREATURE_COP||
                      encounter[e].type==CREATURE_GANGUNIT||
-                     encounter[e].type==CREATURE_SWAT||
-                     !LCSrandom(5))
+                     encounter[e].type==CREATURE_SWAT)&&
+                     LCSrandom(5))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      clearmessagearea();
@@ -211,18 +215,34 @@ char talk(creaturest &a,int t)
                      addstr(":");
                      move(17,1);
 
-                     if(encounter[e].align==ALIGN_LIBERAL)
+                     if(encounter[e].align!=ALIGN_CONSERVATIVE)
                      {
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
-                        addstr("\"Let them go! Think about what you're doing!\"");
+                        switch(LCSrandom(5))
+                        {
+                        case 0:addstr("\"Let them go. Think about what you're doing.\"");break;
+                        case 1:addstr("\"Calm down, and let's talk about this.\"");break;
+                        case 2:addstr("\"Wait! We can work this out.\"");break;
+                        case 3:addstr("\"This isn't right, think about it.\"");break;
+                        case 4:addstr("\"Slow down. We can work this out.\"");break;
+                        }
                      }
                      else
                      {
                         set_color(COLOR_RED,COLOR_BLACK,1);
-                        if(hostages>1)
-                           addstr("\"Release your hostages, and nobody gets hurt.\"");
-                        else
-                           addstr("\"Let the hostage go, and nobody gets hurt.\"");
+                        switch(LCSrandom(5))
+                        {
+                        case 0:
+                           if(hostages>1)
+                              addstr("\"Release your hostages, and nobody gets hurt.\"");
+                           else
+                              addstr("\"Let the hostage go, and nobody gets hurt.\"");
+                           break;
+                        case 1:addstr("\"You got about five seconds to back down.\"");break;
+                        case 2:addstr("\"You want to do this the hard way?\"");break;
+                        case 3:addstr("\"Big mistake.\"");break;
+                        case 4:addstr("\"Three... two...\"");break;
+                        }
                      }
 
                      refresh();
@@ -335,7 +355,7 @@ char talk(creaturest &a,int t)
                   delete executer->prisoner;
                   executer->prisoner=NULL;
 
-                  if(hostages>1)
+                  if(hostages>1&&LCSrandom(2))
                   {
                      clearmessagearea();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -345,9 +365,17 @@ char talk(creaturest &a,int t)
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
                      if(law[LAW_FREESPEECH]>ALIGN_ARCHCONSERVATIVE)
-                        addstr("\"Fuck! Okay, okay, you win!\"");
+                        addstr("\"Fuck! \"");
                      else
-                        addstr("\"[No!] Okay, okay, you win!\"");
+                        addstr("\"[No!] \"");
+                     switch(LCSrandom(5))
+                     {
+                     case 0:addstr("Okay, okay, you win!\"");break;
+                     case 1:addstr("Don't shoot!\"");break;
+                     case 2:addstr("Do you even care?!\"");break;
+                     case 3:addstr("Heartless!\"");break;
+                     case 4:addstr("It's not worth it!\"");break;
+                     }
 
                      for(int i=ENCMAX;i>=0;i--)
                      {
@@ -369,19 +397,28 @@ char talk(creaturest &a,int t)
                   addstr(":");
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(17,1);
-                  if(hostages>1)
-                     addstr("\"Okay, back off and we'll let the hostages go.\"");
-                  else
-                     addstr("\"Okay, back off and the hostage goes free.\"");
+                  switch(LCSrandom(5))
+                  {
+                  case 0:
+                     if(hostages>1)
+                        addstr("\"Back off and we'll let the hostages go.\"");
+                     else
+                        addstr("\"Back off and the hostage goes free.\"");
+                     break;
+                  case 1:addstr("\"Freedom for freedom, understand?\"");break;
+                  case 2:addstr("\"Let me go in peace, okay?\"");break;
+                  case 3:addstr("\"Let's make a trade, then.\"");break;
+                  case 4:addstr("\"I just want out of here, yeah?\"");break;
+                  }
 
                   refresh();
                   getch();
 
-                  if((encounter[e].type==CREATURE_DEATHSQUAD||
+                  if(((encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_AGENT||
                      encounter[e].type==CREATURE_MERC||
-                     encounter[e].type==CREATURE_GANGUNIT)&&
-                     LCSrandom(2))
+                     encounter[e].type==CREATURE_GANGUNIT)||
+                     LCSrandom(2))&&encounter[e].align==ALIGN_CONSERVATIVE)
                   {
                      clearmessagearea();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -390,7 +427,14 @@ char talk(creaturest &a,int t)
                      addstr(":");
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
-                     addstr("\"You had your chance!\"");
+                     switch(LCSrandom(5))
+                     {
+                     case 0:addstr("\"No negotiation!\"");break;
+                     case 1:addstr("\"You're not getting away!\"");break;
+                     case 2:addstr("\"So you want it the hard way!\"");break;
+                     case 3:addstr("\"Cowardly Liberal!\"");break;
+                     case 4:addstr("\"You're not hardcore!\"");break;
+                     }
 
                      refresh();
                      getch();
@@ -404,7 +448,12 @@ char talk(creaturest &a,int t)
                      addstr(":");
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
-                     addstr("\"Okay.\"");
+                     switch(LCSrandom(3))
+                     {
+                     case 0:addstr("\"Right. Let's do it.\"");break;
+                     case 1:addstr("\"No further conditions.\"");break;
+                     case 2:addstr("\"Let them go, and we're done.\"");break;
+                     }
                      refresh();
                      getch();
                      for(int i=ENCMAX;i>=0;i--)
@@ -557,9 +606,8 @@ char talk(creaturest &a,int t)
             //NOW MUST BLUFF
             if(!noticed)
             {
-               short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)+
-                                         a.attval(ATTRIBUTE_WISDOM)*2+
-                                         a.skillval(SKILL_PERSUASION)*2;
+               short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+
+                                         a.skillval(SKILL_DISGUISE)*2;
 
                int maxtroll=0,troll;
                for(int e=0;e<ENCMAX;e++)
@@ -568,7 +616,7 @@ char talk(creaturest &a,int t)
                      encounter[e].enemy())
                   {
                      troll=encounter[e].attval(ATTRIBUTE_WISDOM)*3+
-                        encounter[e].attval(ATTRIBUTE_INTELLIGENCE);
+                           encounter[e].attval(ATTRIBUTE_INTELLIGENCE);
                      if(troll>maxtroll)
                      {
                         n=e;
@@ -578,7 +626,7 @@ char talk(creaturest &a,int t)
                }
 
                maxtroll+=LCSrandom(21);
-               a.train(SKILL_PERSUASION,(maxtroll>>2)+1);
+               a.train(SKILL_DISGUISE,(maxtroll>>2)+1);
 
                if(maxtroll>aroll)
                {

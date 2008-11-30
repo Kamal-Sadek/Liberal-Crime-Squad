@@ -705,6 +705,11 @@ void clearcommandarea(void)
          addch(' ');
       }
    }
+
+   if(mode!=GAMEMODE_SITE)
+   {
+      clearmaparea(false,true);
+   }
 }
 
 
@@ -716,7 +721,7 @@ void refreshmaparea(void)
    }
    else
    {
-      clearmaparea();
+      clearmaparea(true,false);
    }
 }
 
@@ -734,11 +739,13 @@ void clearmessagearea(bool redrawmaparea)
 
 
 
-void clearmaparea(void)
+void clearmaparea(bool lower,bool upper)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int y=9;y<24;y++)
    {
+      if(!upper&&y<15)continue;
+      if(!lower&&y>=15)continue;
       move(y,53);
       addstr("                          ");
    }

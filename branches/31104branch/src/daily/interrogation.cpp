@@ -18,8 +18,21 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-//#include <includes.h>
+#include <includes.h>
 #include <externs.h>
+
+enum InterrogationTechnqiues
+{
+   TECHNIQUE_TALK,
+   TECHNIQUE_RESTRAIN,
+   TECHNIQUE_BEAT,
+   TECHNIQUE_NOSLEEP,
+   TECHNIQUE_GIVEFOOD,
+   TECHNIQUE_GIVEWATER,
+   TECHNIQUE_PROPS,
+   TECHNIQUE_DRUGS,
+   TECHNIQUE_KILL
+};
 
 /* hostage tending */
 void tendhostage(creaturest *cr,char &clearformess)
@@ -51,7 +64,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
    //possible hostage escape attempt if unattended or unrestrained
    if(temppool.size()==0||
-      !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[1])
+      !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[TECHNIQUE_RESTRAIN])
    {
       //CHECK FOR HOSTAGE ESCAPE
       if(LCSrandom(200)+10*temppool.size()<
@@ -207,7 +220,6 @@ void tendhostage(creaturest *cr,char &clearformess)
                  LCSrandom(20)+1;
       long troll=cr->attval(ATTRIBUTE_WISDOM)*2-
                  cr->attval(ATTRIBUTE_HEART)+
-                 cr->skillval(SKILL_PSYCHOLOGY)*2+
                  LCSrandom(20)+1;
 
       bool techniques[9];
@@ -221,7 +233,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       {
          y=2;
          char num2[20];
-         if(techniques[8])
+         if(techniques[TECHNIQUE_KILL])
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(y,0);y+=2;addstr("The Execution of an Automoton         ");
@@ -231,44 +243,44 @@ void tendhostage(creaturest *cr,char &clearformess)
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             move(y,0);y+=2;addstr("Selecting a Liberal Interrogation Plan");
          }
-         if(techniques[8])set_color(COLOR_BLACK,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,techniques[0]);
+         if(techniques[TECHNIQUE_KILL])set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_TALK]);
          move(y,0);y+=1;addstr("A - ");
-         if(!techniques[0]) addstr("No Verbal Contact     ");
+         if(!techniques[TECHNIQUE_TALK]) addstr("No Verbal Contact     ");
          else addstr("Attempt to Convert");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[1]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_RESTRAIN]);
          move(y,0);y+=1;addstr("B - ");
-         if(!techniques[1]) addstr("No ");
+         if(!techniques[TECHNIQUE_RESTRAIN]) addstr("No ");
          addstr("Physical Restraints   ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[2]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_BEAT]);
          move(y,0);y+=1;addstr("C - ");
-         if(!techniques[2]) addstr("Not ");
+         if(!techniques[TECHNIQUE_BEAT]) addstr("Not ");
          addstr("Violently Beaten    ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[3]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_NOSLEEP]);
          move(y,0);y+=1;addstr("D - ");
-         if(!techniques[3])addstr("No ");
+         if(!techniques[TECHNIQUE_NOSLEEP])addstr("No ");
          addstr("Sleep Deprivation   ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[4]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[TECHNIQUE_GIVEFOOD]);
          move(y,0);y+=1;addstr("E - ");
-         if(techniques[4])addstr("Not ");
+         if(techniques[TECHNIQUE_GIVEFOOD])addstr("Not ");
          addstr("Given Food    ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[5]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[TECHNIQUE_GIVEWATER]);
          move(y,0);y+=1;addstr("F - ");
-         if(techniques[5])addstr("Not ");
+         if(techniques[TECHNIQUE_GIVEWATER])addstr("Not ");
          addstr("Given Water    ");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[6]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_PROPS]);
          move(y,0);addstr("G - ");
-         if(!techniques[6])addstr("No ");
+         if(!techniques[TECHNIQUE_PROPS])addstr("No ");
          addstr("Expensive Props     ");
          move(y,27);y+=1;
          addstr("($100)");
-         if(!techniques[8])set_color(COLOR_WHITE,COLOR_BLACK,techniques[7]);
+         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_DRUGS]);
          move(y,0);addstr("H - ");
-         if(!techniques[7])addstr("No ");
+         if(!techniques[TECHNIQUE_DRUGS])addstr("No ");
          addstr("Hallucinogenic Drugs    ");
          move(y,28);y+=2;
          addstr("($50)");
-         if(techniques[8])set_color(COLOR_RED,COLOR_BLACK,1);
+         if(techniques[TECHNIQUE_KILL])set_color(COLOR_RED,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y+=2;addstr("K - Kill the Hostage");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -386,16 +398,16 @@ void tendhostage(creaturest *cr,char &clearformess)
          int c=getch();
          translategetch(c);
          if(c>='a'&&c<='h')techniques[c-'a']=!techniques[c-'a'];
-         if(c=='k')techniques[8]=!techniques[8];
+         if(c=='k')techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
          if(c==10)break;
       }
 
-      if(techniques[6] && funds>=100)
+      if(techniques[TECHNIQUE_PROPS] && funds>=100)
       { funds-=100; moneylost_hostage+=100; }
-      else { techniques[6] = 0; }
-      if(techniques[7] && funds>=50)
+      else { techniques[TECHNIQUE_PROPS] = 0; }
+      if(techniques[TECHNIQUE_DRUGS] && funds>=50)
       { funds-=50; moneylost_hostage+=50; }
-      else { techniques[7] = 0; }
+      else { techniques[TECHNIQUE_DRUGS] = 0; }
 
       //remember interrogation choices
       for(int i=0; i<9; i++)
@@ -403,7 +415,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i]=techniques[i];
       }
 
-      if(techniques[8]) // Kill the Hostage
+      if(techniques[TECHNIQUE_KILL]) // Kill the Hostage
       {
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -484,10 +496,10 @@ void tendhostage(creaturest *cr,char &clearformess)
 
             //Interrogation will continue as planned, with
             //these restrictions:
-            techniques[0]=0; //don't talk to them today
-            techniques[2]=0; //don't beat them today
-            techniques[3]=0; //don't keep them from sleeping
-            techniques[7]=0; //don't administer drugs
+            techniques[TECHNIQUE_TALK]=0; //don't talk to them today
+            techniques[TECHNIQUE_BEAT]=0; //don't beat them today
+            techniques[TECHNIQUE_NOSLEEP]=0; //don't keep them from sleeping
+            techniques[TECHNIQUE_DRUGS]=0; //don't administer drugs
 
             //Food, water, light, and restraint settings
             //will be applied as normal
@@ -532,7 +544,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
       move(y,0);
       addstr("The Automaton");
-      if(techniques[1]) // Restraint
+      if(techniques[TECHNIQUE_RESTRAIN]) // Restraint
       {
          addstr(" is tied hands and feet to a metal chair");
          y++;move(y,0);
@@ -552,9 +564,9 @@ void tendhostage(creaturest *cr,char &clearformess)
       getch();
 
       move(y,0);
-      if(techniques[4]) // no food
+      if(techniques[TECHNIQUE_GIVEFOOD]) // no food
       {
-         if(techniques[5]) // no food AND no water
+         if(techniques[TECHNIQUE_GIVEWATER]) // no food AND no water
          {
             addstr("It is left to hunger and thirst like a lost animal.");
             spiritcrush+=LCSrandom(2*(nowater+1)+1);
@@ -574,7 +586,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
       }
-      else if(techniques[5])
+      else if(techniques[TECHNIQUE_GIVEWATER])
       {
          addstr("The only water it recieves comes in the scraps of food provided to sustain it.");
          spiritcrush+=LCSrandom(2*(nowater+1));
@@ -596,10 +608,18 @@ void tendhostage(creaturest *cr,char &clearformess)
          nowater=0;
       }
 
-      if(techniques[3]&&!turned&&cr->alive) // No sleep
+      if(techniques[TECHNIQUE_NOSLEEP]&&!turned&&cr->alive) // No sleep
       {
          move(y,0);
-         addstr("A trance of Liberal tracts and endless protest music substitutes for sleep.");
+         addstr("It is forced to ");
+         switch(LCSrandom(2+techniques[TECHNIQUE_PROPS]*2))
+         {
+         case 0:addstr("listen to protest music");break;
+         case 1:addstr("listen to public radio");break;
+         case 2:addstr("watch network news tapes");break;
+         case 3:addstr("watch revealing documentaries");break;
+         }
+         addstr(" in lieu of sleep.");
          y++;
 
          spiritcrush+=LCSrandom(3*(++nosleep));
@@ -613,7 +633,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          nosleep=0;
       }
       
-      if(techniques[7]) // Psychedelic drugs
+      if(techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
       {
          move(y,0);
          
@@ -645,7 +665,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       }
       if(cr->att[ATTRIBUTE_HEALTH]<=0)cr->alive=0;
 
-      if(techniques[2]&&!turned&&cr->alive) // Beating
+      if(techniques[TECHNIQUE_BEAT]&&!turned&&cr->alive) // Beating
       {
          y+=1;
          move(y,0);
@@ -662,48 +682,120 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          forceroll=LCSrandom(forceroll)+1;
          
-         //Torture captive if lead interrogator has low heart and high skill
-         if(a->skillval(SKILL_PSYCHOLOGY)>=4&&a->att[ATTRIBUTE_HEART]<4)
+         //Torture captive if lead interrogator has low heart
+         //and you funded using extra supplies
+         //
+         //Yeah, you kinda don't want this to happen
+         if(a->attval(ATTRIBUTE_HEART)==1&&techniques[TECHNIQUE_PROPS])
          {
-            //Torture much more devastating than normal beating
-            forceroll*=a->skillval(SKILL_PSYCHOLOGY)/4+1;
+            //Torture more devastating than normal beating
+            forceroll*=2;
             //Extremely bad for rapport with lead interrogator
-            rapport[a->id]-=2;
+            rapport[a->id]-=3;
 
             addstr(a->name);
-            addstr(" sadistically tortures");
+            switch(LCSrandom(5))
+            {
+            case 0:addstr(" recreates scenes from Abu Ghraib");break;
+            case 1:addstr(" whips the Automoton with a steel cable");break;
+            case 2:addstr(" holds the Automoton's head under water");break;
+            case 3:addstr(" peels back the Automoton's fingernails");break;
+            case 4:addstr(" beats the Automoton with a metal bat");break;
+            }
+            addstr(",");
+            y++;
+            move(y,0);
+            addstr("screaming \"");
+            int i=0;
+            while(i<2)
+            {
+               switch(LCSrandom(10))
+               {
+               case 0:addstr("I hate you");break;
+               case 1:addstr("Does it hurt?");break;
+               case 2:addstr("Nobody loves you");break;
+               case 3:addstr("God hates you");break;
+               case 4:addstr("Don't fuck with me");break;
+               case 5:addstr("This is Liberalism");break;
+               case 6:addstr("Convert, bitch");break;
+               case 7:addstr("I'm going to kill you");break;
+               case 8:addstr("Do you love me?");break;
+               case 9:addstr("I am your God");break;
+               }
+               if(++i<2)
+                  addstr("! ");
+            }
+            addstr("!\" in its face.");
             if(a->attval(ATTRIBUTE_HEART)>1)a->att[ATTRIBUTE_HEART]--;
-         }
-         else if(temppool.size()==1)
-         {
-            addstr(temppool[0]->name);
-            addstr(" beats");
-         }
-         else if(temppool.size()==2)
-         {
-            addstr(temppool[0]->name);
-            addstr(" and ");
-            addstr(temppool[1]->name);
-            addstr(" beat");
+            if(cr->attval(ATTRIBUTE_HEART)>1)cr->att[ATTRIBUTE_HEART]--;
          }
          else
          {
-            addstr(cr->name);
-            addstr("'s guards beat");
+            if(temppool.size()==1)
+            {
+               addstr(temppool[0]->name);
+               addstr(" beats");
+            }
+            else if(temppool.size()==2)
+            {
+               addstr(temppool[0]->name);
+               addstr(" and ");
+               addstr(temppool[1]->name);
+               addstr(" beat");
+            }
+            else
+            {
+               addstr(cr->name);
+               addstr("'s guards beat");
+            }
+            addstr(" the Automaton");
+            if(techniques[TECHNIQUE_PROPS])//props
+            {
+               switch(LCSrandom(5))
+               {
+               case 0:addstr(" with a flagpole");break;
+               case 1:addstr(" with a flag");break;
+               case 2:addstr(" with a bible");break;
+               case 3:addstr(" with a dildo");break;
+               case 4:addstr(" with a book");break;
+               }
+            }
+            addstr(",");
+            y++;
+            move(y,0);
+            addstr("screaming \"");
+            int i=0;
+            while(i<3)
+            {
+               switch(LCSrandom(17))
+               {
+               case 0:addstr("McDonalds");break;
+               case 1:addstr("Microsoft");break;
+               case 2:addstr("Bill Gates");break;
+               case 3:addstr("Wal-Mart");break;
+               case 4:addstr("George Bush");break;
+               case 5:addstr("ExxonMobil");break;
+               case 6:addstr("Trickle-down economics");break;
+               case 7:addstr("Family values");break;
+               case 8:addstr("Conservatism");break;
+               case 9:addstr("War on Drugs");break;
+               case 10:addstr("War on Terror");break;
+               case 11:addstr("Ronald Reagan");break;
+               case 12:addstr("Rush Limbaugh");break;
+               case 13:addstr("Tax cuts");break;
+               case 14:addstr("Military spending");break;
+               case 15:addstr("Ann Coulter");break;
+               case 16:addstr("Deregulation");break;
+               }
+               if(++i<3)
+                  addstr("! ");
+            }
+            addstr("!\" in its face.");
          }
-         addstr(" the Automaton");
-         if(techniques[6])//props
-         {
-            addstr(" with a flagpole");
-         }
-         addstr(",");
-         y++;
-         move(y,0);
-         addstr("yelling its favorite corporation's name.");
          y++;
 
          spiritcrush+=forceroll/2+a->armor.interrogation_assaultbonus();
-         if(techniques[6])spiritcrush+=forceroll/2;
+         if(techniques[TECHNIQUE_PROPS])spiritcrush+=forceroll/2;
          healthcrush+=forceroll/2;
          cr->blood-=forceroll/2;
 
@@ -716,30 +808,44 @@ void tendhostage(creaturest *cr,char &clearformess)
             {
                move(y,0);
                addstr(cr->name);
-               if(!techniques[7]) addstr(" prays...");
-               else addstr(" takes solace in the personal appearance of God.");
+               if(!techniques[TECHNIQUE_DRUGS])
+               {
+                  switch(LCSrandom(2))
+                  {
+                  case 0:addstr(" prays...");break;
+                  case 1:addstr(" cries out for God.");break;
+                  }
+               }
+               else
+               {
+                  switch(LCSrandom(2))
+                  {
+                  case 0:addstr(" takes solace in the personal appearance of God.");break;
+                  case 1:addstr(" appears to be having a religious experience.");break;
+                  }
+               }
                y++;
             }
-            else if(LCSrandom(spiritcrush+1)+LCSrandom(healthcrush+1) >
-               cr->att[ATTRIBUTE_WISDOM]+cr->att[ATTRIBUTE_HEART]+cr->att[ATTRIBUTE_HEALTH])
+            else if(spiritcrush+healthcrush >
+               cr->att[ATTRIBUTE_WISDOM]*3+cr->att[ATTRIBUTE_HEART]*3+cr->att[ATTRIBUTE_HEALTH]*3)
             {
                move(y++,0);
                addstr(cr->name);
                switch(LCSrandom(4))
                {
                case 0:addstr(" screams helplessly for ");
-                  if(techniques[7])addstr("John Lennon's mercy.");
+                  if(techniques[TECHNIQUE_DRUGS])addstr("John Lennon's mercy.");
                   else if(cr->skillval(SKILL_RELIGION))addstr("God's mercy.");
                   else addstr("mommy.");
                   break;
                case 1:
-                  if(techniques[1])addstr(" goes limp in the restraints.");
+                  if(techniques[TECHNIQUE_RESTRAIN])addstr(" goes limp in the restraints.");
                   else addstr(" curls up in the corner and doesn't move.");break;
                case 2:
-                  if(techniques[7] && !LCSrandom(5))addstr(" barks helplessly.");
+                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(5))addstr(" barks helplessly.");
                   else addstr(" cries helplessly.");break;
                case 3:
-                  if(techniques[7] && !LCSrandom(3))addstr(" wonders about apples.");
+                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(3))addstr(" wonders about apples.");
                   else addstr(" wonders about death.");
                   break;
                }
@@ -818,29 +924,31 @@ void tendhostage(creaturest *cr,char &clearformess)
       }
 
       // Verbal Interrogation
-      if(techniques[0]&&cr->alive)
+      if(techniques[TECHNIQUE_TALK]&&cr->alive)
       {
          float rapport_temp = rapport[a->id];
          rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skillval(SKILL_PSYCHOLOGY)-5)/10.0f;
-         if(techniques[1])rapport_temp -= 1;
+         if(techniques[TECHNIQUE_RESTRAIN])rapport_temp -= 1;
          y+=1;
          move(y,0);
          addstr(a->name);
-         if(techniques[6])//props
+         if(techniques[TECHNIQUE_PROPS])//props
          {
-            switch(LCSrandom(4))
+            switch(LCSrandom(6))
             {
             case 0:addstr(" plays violent video games with ");break;
-            case 1:addstr(" discusses a Liberal documentary with ");break;
+            case 1:addstr(" reads Origin of the Species to ");break;
             case 2:addstr(" burns flags in front of ");break;
             case 3:addstr(" explores an elaborate political fantasy with ");break;
+            case 4:addstr(" watches controversial avant-garde films with ");break;
+            case 5:addstr(" watches the anime film Bible Black with ");break;
             }
          }
          else
          {
             switch(LCSrandom(4))
             {
-            case 0:addstr(" debates political issues with ");break;
+            case 0:addstr(" talks about the issues with ");break;
             case 1:addstr(" argues about the LCS with ");break;
             case 2:addstr(" tries to expose the true Liberal side of ");break;
             case 3:addstr(" attempts to recruit ");break;
@@ -852,7 +960,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          //Hallucinogenic drugs:
          //Re-interprets lead interrogator
-         if(techniques[7])
+         if(techniques[TECHNIQUE_DRUGS])
          {
             refresh();
             getch();
@@ -896,7 +1004,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                case 2:
                   addstr(cr->name);
                   addstr(" stammers and ");
-                  techniques[1] ? addstr("talks about hugging ") : addstr("hugs ");
+                  techniques[TECHNIQUE_RESTRAIN] ? addstr("talks about hugging ") : addstr("hugs ");
                   addstr(a->name);
                   addstr(".");
                   break;
@@ -921,7 +1029,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   break;
                case 1:
                   addstr(cr->name);
-                  if(!techniques[1])addstr(" curls into a ball and");
+                  if(!techniques[TECHNIQUE_RESTRAIN])addstr(" curls into a ball and");
                   addstr(" squeals in fear.");
                   break;
                case 2:
@@ -970,7 +1078,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(cr->skillval(SKILL_PSYCHOLOGY)*3>spiritcrush)
+         if(troll<aroll&&troll+cr->skillval(SKILL_PSYCHOLOGY)*2>aroll)
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -993,7 +1101,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             y++;
          }
          //Failure to break religious convictions
-         else if(cr->skillval(SKILL_RELIGION)>religion+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_RELIGION)>religion+spiritcrush && !techniques[TECHNIQUE_DRUGS])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1004,7 +1112,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   addstr("'s religious conviction.");
                   break;
             case 1:addstr(cr->name);
-                  addstr(" will never be broken so long as God's strength holds.");
+                  addstr(" will never be broken so long as God grants it strength.");
                   break;
             case 2:addstr(a->name);
                   addstr("'s efforts to question ");
@@ -1020,7 +1128,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             y++;
          }
          //Failure to persuade entrenched capitalists
-         else if(cr->skillval(SKILL_BUSINESS)>business+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_BUSINESS)>business+spiritcrush && !techniques[TECHNIQUE_DRUGS])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1047,7 +1155,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             y++;
          }
          //Failure to persuade scientific minds
-         else if(cr->skillval(SKILL_SCIENCE)>science+spiritcrush && !techniques[7])
+         else if(cr->skillval(SKILL_SCIENCE)>science+spiritcrush && !techniques[TECHNIQUE_DRUGS])
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1061,9 +1169,9 @@ void tendhostage(creaturest *cr,char &clearformess)
                   addstr(" explains why nuclear energy is safe.");
                   break;
             case 2:addstr(cr->name);
-                  addstr(" invites ");
+                  addstr(" makes Albert Einstein faces at ");
                   addstr(a->name);
-                  addstr(" to play chess.");
+                  addstr(".");
                   break;
             case 3:addstr(cr->name);
                   addstr(" pities ");
@@ -1218,7 +1326,9 @@ void tendhostage(creaturest *cr,char &clearformess)
             }
          }
          //Target is not sold on the LCS arguments and holds firm
-         else if(aroll+spiritcrush>(troll>>2)||a->attval(ATTRIBUTE_WISDOM)>=cr->attval(ATTRIBUTE_WISDOM))
+         //This is the worst possible outcome if you use props
+         else if(aroll+spiritcrush>(troll>>2)||a->attval(ATTRIBUTE_WISDOM)>=cr->attval(ATTRIBUTE_WISDOM)||
+                  techniques[TECHNIQUE_PROPS])
          {
             //Not completely unproductive; builds rapport
             rapport[a->id]+=0.2f;
@@ -1266,7 +1376,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       if(cr->att[ATTRIBUTE_HEART]<1)cr->att[ATTRIBUTE_HEART]=1;
 
       //Lead interrogator gets bonus experience
-      if(!techniques[8])a->train(SKILL_PSYCHOLOGY,spiritcrush);
+      if(!techniques[TECHNIQUE_KILL])a->train(SKILL_PSYCHOLOGY,spiritcrush);
       //Others also get experience
       for(int i=0;i<temppool.size();i++)
          temppool[i]->train(SKILL_PSYCHOLOGY,(spiritcrush>>1)+1);
@@ -1282,12 +1392,12 @@ void tendhostage(creaturest *cr,char &clearformess)
          move(++y,0);
          
          //can't commit suicide if restrained
-         if(LCSrandom(6)||techniques[1])
+         if(LCSrandom(6)||techniques[TECHNIQUE_RESTRAIN])
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             addstr(cr->name);
             //can't cut self if restrained
-            switch(LCSrandom(5-techniques[1]))
+            switch(LCSrandom(5-techniques[TECHNIQUE_RESTRAIN]))
             {
             case 0:addstr(" mutters about death.");break;
             case 1:addstr(" broods darkly.");break;

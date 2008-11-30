@@ -1474,14 +1474,14 @@ void giveup(void)
 
          if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN)icount++;
 
-         if(pool[p]->flag & CREATUREFLAG_MISSING)
+         if(pool[p]->flag & CREATUREFLAG_MISSING && pool[p]->align==-1)
          {
             kcount++;
             strcpy(kname,pool[p]->propername);
             if(pool[p]->type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
             if(pool[p]->type==CREATURE_NEWSANCHOR)offended_cablenews=1;
             //clear interrogation data if deleted
-            if(pool[p]->align==-1) delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
+            delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
          }
       }
 
@@ -1504,7 +1504,7 @@ void giveup(void)
          if(pool[p]->location!=loc)continue;
          if(!pool[p]->alive)continue;
 
-         if(iscriminal(*pool[p])&&!(pool[p]->flag & CREATUREFLAG_MISSING))
+         if(iscriminal(*pool[p])&&!(pool[p]->flag & CREATUREFLAG_MISSING && pool[p]->align==-1))
          {
             pcount++;
             strcpy(pname,pool[p]->propername);
@@ -1527,9 +1527,12 @@ void giveup(void)
       {
          move(5,1);
          addstr(pname);
-         addstr(", aka ");
-         addstr(pcname);
-         addstr(",");
+         if(stricmp(pname,pcname))
+         {
+            addstr(", aka ");
+            addstr(pcname);
+            addstr(",");
+         }
          move(6,1);
          addstr("is taken to the police station.");
       }

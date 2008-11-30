@@ -2217,7 +2217,14 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
       }
       else
       {
-         if(LCSrandom(15)>t.attval(ATTRIBUTE_HEART) ||
+         if(t.juice>=100)
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" seems less badass!");
+            addjuice(t,-50);
+         }
+         else if(LCSrandom(15)>t.attval(ATTRIBUTE_HEART) ||
             t.attval(ATTRIBUTE_HEART) < t.attval(ATTRIBUTE_WISDOM))
          {
             move(17,1);

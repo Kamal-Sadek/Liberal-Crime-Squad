@@ -963,7 +963,7 @@ void printliberalskills(creaturest &cr)
    for(int s=0;s<SKILLNUM;s++)
    {
       // Maxed skills are green
-      if(maxskill(s,cr)!=0 && cr.skill[s]==maxskill(s,cr))set_color(COLOR_GREEN,COLOR_BLACK,1);
+      if(maxskill(s,cr)!=0 && cr.skill[s]>=maxskill(s,cr))set_color(COLOR_CYAN,COLOR_BLACK,1);
       // About to level up skills are white
       else if(cr.get_skill_ip(s)>=100+(10*cr.skill[s])&&
          cr.skill[s]<maxskill(s,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1158,7 +1158,7 @@ void printliberalstats(creaturest &cr)
          printed=1;
 
          // Maxed skills are green
-         if(maxskill(maxs,cr)!=0 && cr.skill[maxs]==maxskill(maxs,cr))set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if(maxskill(maxs,cr)!=0 && cr.skill[maxs]>=maxskill(maxs,cr))set_color(COLOR_CYAN,COLOR_BLACK,1);
          // About to level up skills are white
          else if(cr.get_skill_ip(maxs)>=100+(10*cr.skill[maxs])&&
             cr.skill[maxs]<maxskill(maxs,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);

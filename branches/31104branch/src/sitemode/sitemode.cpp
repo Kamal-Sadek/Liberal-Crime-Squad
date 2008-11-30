@@ -720,9 +720,8 @@ void mode_site(void)
                                 activesquad->squad[p]->skillval(SKILL_SEDUCTION)*2,num,10);
                            addstr(num);
                            move(y,70);
-                           itoa(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-                                activesquad->squad[p]->attval(ATTRIBUTE_WISDOM)*2+
-                                activesquad->squad[p]->skillval(SKILL_PERSUASION)*2,num,10);
+                           itoa(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)*2+
+                                activesquad->squad[p]->attval(SKILL_DISGUISE)*2,num,10);
                            addstr(num);
                            y++;
                         }

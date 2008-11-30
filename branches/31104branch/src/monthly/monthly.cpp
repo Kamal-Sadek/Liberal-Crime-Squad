@@ -346,7 +346,32 @@ void passmonth(char &clearformess,char canseethings)
             makedelimiter(8,0);
          }
 
-         if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN)
+         if(pool[p]->flag & CREATUREFLAG_MISSING)
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            move(8,1);
+            addstr(pool[p]->name);
+            addstr(" has been rehabilitated from LCS brainwashing.");
+
+            refresh();
+            getch();
+
+            removesquadinfo(*pool[p]);
+            if(pool[p]->align==1)
+            {
+               int boss=getpoolcreature(pool[p]->hireid);
+               if(boss!=-1&&pool[boss]->juice>50)
+               {
+                  int juice=pool[boss]->juice-50;
+                  if(juice>10)juice=10;
+                  addjuice(*pool[boss],-juice);
+               }
+            }
+            delete pool[p];
+            pool.erase(pool.begin() + p);
+            continue;
+         }
+         else if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);

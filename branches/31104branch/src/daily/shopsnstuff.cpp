@@ -624,32 +624,22 @@ void pawnshop(int loc)
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,1);
-         addstr("P - Pawn all Weapons");
+         addstr("W - Pawn all Weapons");
 
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,40);
-         addstr("R - Pawn all Clothes");
+         addstr("A - Pawn all Ammunition");
 
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,1);
-         addstr("W - Pawn all extra Weapons");
+         addstr("C - Pawn all Clothes");
 
          if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,40);
-         addstr("A - Pawn all extra Clothes");
-
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,1);
-         addstr("C - Pawn all extra Clips");
-
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,40);
-         addstr("L - Pawn Loot");
+         addstr("L - Pawn all Loot");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(16,40);
@@ -936,7 +926,7 @@ void pawnshop(int loc)
 
          if(c=='e')equip(activesquad->loot,-1);
 
-         if((c=='p'||c=='r'||c=='w'||c=='a'||c=='l'||c=='f')&&
+         if((c=='w'||c=='c'||c=='l'||c=='a'||c=='f')&&
             activesquad->loot.size()>0)
          {
             unsigned long fenceamount=0;
@@ -969,35 +959,11 @@ void pawnshop(int loc)
                   }
                }
 
-               if(c=='l'||c=='a'||c=='r'||c=='c')memset(fenceweapon,0,WEAPONNUM*sizeof(int));
-               else if(c=='w')
-               {
-                  for(int w=0;w<WEAPONNUM;w++)
-                  {
-                     if(fenceweapon[w]>6)fenceweapon[w]-=6;
-                     else fenceweapon[w]=0;
-                  }
-               }
+               if(c!='w')memset(fenceweapon,0,WEAPONNUM*sizeof(int));
 
-               if(c=='l'||c=='p'||c=='w'||c=='c')memset(fencearmor,0,ARMORNUM*sizeof(int));
-               else if(c=='a')
-               {
-                  for(int a=0;a<ARMORNUM;a++)
-                  {
-                     if(fencearmor[a]>6)fencearmor[a]-=6;
-                     else fencearmor[a]=0;
-                  }
-               }
+               if(c!='c')memset(fencearmor,0,ARMORNUM*sizeof(int));
 
-               if(c!='c')memset(fenceclip,0,CLIPNUM*sizeof(int));
-               else
-               {
-                  for(int c=0;c<CLIPNUM;c++)
-                  {
-                     if(fenceclip[c]>54)fenceclip[c]-=54;
-                     else fenceclip[c]=0;
-                  }
-               }
+               if(c!='a')memset(fenceclip,0,CLIPNUM*sizeof(int));
 
                if(c!='l')memset(fenceloot,0,LOOTNUM*sizeof(int));
                else
