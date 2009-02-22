@@ -1057,7 +1057,7 @@ void elections(char clearformess,char canseethings)
       else if(law[l]==1)pvote=75;
       else pvote=100;
 
-      lawpriority[l]=abs(pvote-pmood)+LCSrandom(10)+public_interest[l];
+      lawpriority[l]=abs((int)pvote-(int)pmood)+LCSrandom(10)+public_interest[l];
    }
 
    vector<int> canlaw;
@@ -2131,7 +2131,7 @@ char wincheck(void)
 
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
-unsigned int publicmood(unsigned int l)
+unsigned int publicmood(int l)
 {
    switch(l)
    {

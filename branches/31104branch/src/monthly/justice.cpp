@@ -794,9 +794,9 @@ void trial(creaturest &g)
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
          defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
-         defensepower+=LCSrandom(min(defenseskill*2,max(200,prosecution+100)));
-         g.train(SKILL_PERSUASION,max(50-g.skillval(SKILL_PERSUASION)*2,0));
-         g.train(SKILL_LAW,max(50-g.skillval(SKILL_LAW)*2,0));
+         defensepower+=LCSrandom(min(defenseskill*2,MAX(200,prosecution+100)));
+         g.train(SKILL_PERSUASION,MAX(50-g.skillval(SKILL_PERSUASION)*2,0));
+         g.train(SKILL_LAW,MAX(50-g.skillval(SKILL_LAW)*2,0));
 
          if(autoconvict)
          {

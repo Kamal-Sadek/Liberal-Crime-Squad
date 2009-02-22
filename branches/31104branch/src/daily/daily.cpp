@@ -634,7 +634,7 @@ void advanceday(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            pool[p]->train(SKILL_COMPUTERS,max(3-pool[p]->skill[SKILL_COMPUTERS],0));
+            pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->skill[SKILL_COMPUTERS],0));
 
             survey(pool[p]);
             //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
@@ -956,7 +956,7 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->activity.type=ACTIVITY_NONE;
          //Give experience based on work done and current skill
          else
-            pool[p]->train(SKILL_FIRSTAID,max(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_FIRSTAID)*2));
+            pool[p]->train(SKILL_FIRSTAID,MAX(0,healing2[pool[p]->location]/5-pool[p]->skillval(SKILL_FIRSTAID)*2));
       }
    }
    delete[] healing;

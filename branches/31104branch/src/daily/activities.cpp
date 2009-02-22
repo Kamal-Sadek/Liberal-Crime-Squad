@@ -1669,7 +1669,7 @@ void funds_and_trouble(char &clearformess)
                graffiti[s]->activity.arg=-1;
                addjuice(*graffiti[s],power,power*20);
                change_public_opinion(issue,power);
-               graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skillval(SKILL_ART)/2,1));
+               graffiti[s]->train(SKILL_ART,MAX(10-graffiti[s]->skillval(SKILL_ART)/2,1));
                refresh();
                getch();
             }
@@ -1680,12 +1680,12 @@ void funds_and_trouble(char &clearformess)
                move(8,1);
                addstr(graffiti[s]->name);
                addstr(" works through the night on a large mural.");
-               graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skillval(SKILL_ART)/2,1));
+               graffiti[s]->train(SKILL_ART,MAX(10-graffiti[s]->skillval(SKILL_ART)/2,1));
                refresh();
                getch();
             }
          }
-         else if(!LCSrandom(max(30-graffiti[s]->skillval(SKILL_ART)*2,5)))
+         else if(!LCSrandom(MAX(30-graffiti[s]->skillval(SKILL_ART)*2,5)))
          {
             issue=randomissue();
             char issuestr[60];
@@ -1698,12 +1698,12 @@ void funds_and_trouble(char &clearformess)
             addstr(".");
             graffiti[s]->activity.arg=issue;
             power=0;
-            graffiti[s]->train(SKILL_ART,max(10-graffiti[s]->skillval(SKILL_ART)/2,1));
+            graffiti[s]->train(SKILL_ART,MAX(10-graffiti[s]->skillval(SKILL_ART)/2,1));
             refresh();
             getch();
          }
 
-         graffiti[s]->train(SKILL_ART,max(4-graffiti[s]->skillval(SKILL_ART),0));
+         graffiti[s]->train(SKILL_ART,MAX(4-graffiti[s]->skillval(SKILL_ART),0));
          if(issue==VIEW_LIBERALCRIMESQUAD)
          {
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,LCSrandom(2),0,65);
@@ -1751,7 +1751,7 @@ void funds_and_trouble(char &clearformess)
       {
          addjuice(*prostitutes[p],-!LCSrandom(3));
       }
-      prostitutes[p]->train(SKILL_SEDUCTION,max(10-prostitutes[p]->skillval(SKILL_SEDUCTION),0));
+      prostitutes[p]->train(SKILL_SEDUCTION,MAX(10-prostitutes[p]->skillval(SKILL_SEDUCTION),0));
 
       refresh();
       getch();
@@ -1786,7 +1786,7 @@ void funds_and_trouble(char &clearformess)
          prostitutes[p]->activity.type=ACTIVITY_NONE;
          criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
       }
-      else prostitutes[p]->train(SKILL_STREETSENSE,max(5-prostitutes[p]->skill[SKILL_STREETSENSE],0));
+      else prostitutes[p]->train(SKILL_STREETSENSE,MAX(5-prostitutes[p]->skill[SKILL_STREETSENSE],0));
 
       /*{ //HUSTLING CODE NOT CURRENTLY USED
          if(clearformess)erase();
@@ -2505,7 +2505,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
             if(LCSrandom(6)<attack)
             {
-               cr.train(SKILL_SECURITY,max(5-cr.skillval(SKILL_SECURITY),0));
+               cr.train(SKILL_SECURITY,MAX(5-cr.skillval(SKILL_SECURITY),0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
                addstr(cr.name);
@@ -2706,7 +2706,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
             if(LCSrandom(11)<attack)
             {
-               cr.train(SKILL_SECURITY,max(7-cr.skillval(SKILL_SECURITY),0));
+               cr.train(SKILL_SECURITY,MAX(7-cr.skillval(SKILL_SECURITY),0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(cr.name);

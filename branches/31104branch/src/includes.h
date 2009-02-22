@@ -2330,7 +2330,7 @@ void congress(char clearformess,char canseethings);
 /* politics - checks if the game is won */
 char wincheck(void);
 /* politics - checks the prevailing attitude on a specific law, or overall */
-unsigned int publicmood(unsigned int l);
+unsigned int publicmood(int l);
 
 /*
  endgame.cpp
