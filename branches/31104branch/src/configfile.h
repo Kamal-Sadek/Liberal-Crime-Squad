@@ -49,7 +49,7 @@
 //   [x] resolve off by 1 errors if they occur
 // [x] clean deprecated map generation code
 // [x] BENCHMARK: TERRAIN AND SPECIALS CONFIGURABLE AND ACTIVE IN GAME
-// [ ] SVN commit of all new files and changes
+// [x] SVN commit of all new files and changes
 // [ ] change loot data storage to static item storage on map tiles
 // [ ] propogate changes to dropped loot in combat and all other
 //     areas where stuff exists on the floor in the game world

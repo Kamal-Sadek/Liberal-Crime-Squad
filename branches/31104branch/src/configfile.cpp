@@ -53,7 +53,7 @@ int readLine(std::fstream& file, std::string& command, std::string& value)
    // Search for a non-comment, non-empty line
    do
    {
-      getline(file,line);
+      getline(file,line,char(0x0A)); // end at line feed
       if(file.eof()) return 0;
    } while(line[0] == '#' || line[0] == 0);
 
@@ -74,7 +74,7 @@ int readLine(std::fstream& file, std::string& command, std::string& value)
       source++;
 
    // Value
-   while(source<line.length() && (line[source]!=' ' && line[source]!='\t'))
+   while(source<line.length() && (line[source]!=' ' && line[source]!='\t' && line[source]!=0x0D)) //do not read CR
       value.push_back(line[source++]);
 
    return 1;
