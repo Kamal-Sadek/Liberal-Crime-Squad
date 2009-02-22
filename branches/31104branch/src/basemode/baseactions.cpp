@@ -38,7 +38,7 @@ void burnflag(void)
    int x;
    int y;
 
-   for(int p=0;p<7;p++)
+   for(unsigned int p=0;p<7;p++)
    {
       if(p<3)
       {
@@ -130,7 +130,7 @@ void burnflag(void)
          for(y=0;y<7;y++)
          {
             move(y+10,x+32);
-            set_color(flag[x][y][1],flag[x][y][2],flag[x][y][3]);
+            set_color(short(flag[x][y][1]),short(flag[x][y][2]),char(flag[x][y][3]));
             addch(flag[x][y][0]);
          }
       }
@@ -214,7 +214,7 @@ void orderparty(void)
    if(activesquad==NULL)return;
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)partysize++;
    }
@@ -257,8 +257,8 @@ void orderparty(void)
 /* base - go forth to stop evil */
 void stopevil(void)
 {
- int l = 0;
- int p = 0;
+   unsigned int l = 0;
+   unsigned int p = 0;
 
    if(activesquad==NULL)return;
 
@@ -275,8 +275,8 @@ void stopevil(void)
       }
    }
 
-   int page=0;
-   long loc=-1;
+   unsigned int page=0;
+   int loc=-1;
 
    vector<long> temploc;
    for(l=0;l<location.size();l++)
@@ -285,7 +285,7 @@ void stopevil(void)
    }
    for(l=0;l<location.size();l++)
    {
-      locationst* loc2 = location[l];
+      //locationst* loc2 = location[l]; //what was this for?
       if(location[l]->parent==loc&&location[l]->renting==-2&&!location[l]->hidden)temploc.push_back(l);
    }
    for(l=0;l<location.size();l++)
@@ -388,7 +388,7 @@ void stopevil(void)
 
       if(c>='a'&&c<='k')
       {
-         int sq=page*11+(int)(c-'a');
+         unsigned int sq=page*11+(int)(c-'a');
          if(sq<temploc.size()&&sq>=0)
          {
             int oldloc=loc;
@@ -554,7 +554,7 @@ char liberalagenda(char won)
    }
 
    int y=22-LAWNUM;
-   for(int l=0;l<LAWNUM;l++)
+   for(unsigned int l=0;l<LAWNUM;l++)
    {
       if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
       else
@@ -702,7 +702,7 @@ char liberalagenda(char won)
    }
 
    int housemake[5]={0,0,0,0,0};
-   for(int h=0;h<435;h++)
+   for(unsigned int h=0;h<435;h++)
    {
       housemake[house[h]+2]++;
    }
@@ -731,7 +731,7 @@ char liberalagenda(char won)
    }
 
    int senatemake[5]={0,0,0,0,0};
-   for(int s=0;s<100;s++)
+   for(unsigned int s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
@@ -765,7 +765,7 @@ char liberalagenda(char won)
    }
 
    int elibjudge=0;
-   for(int c=0;c<9;c++)
+   for(unsigned int c=0;c<9;c++)
    {
       if(court[c]==2)elibjudge++;
    }
@@ -792,7 +792,7 @@ char liberalagenda(char won)
    {
       y=0;
 
-      for(int c=0;c<9;c++)
+      for(unsigned int c=0;c<9;c++)
       {
          if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
@@ -883,7 +883,7 @@ char liberalagenda(char won)
 char confirmdisband(void)
 {
    char word[80];
-   int pos=0;
+   unsigned int pos=0;
 
    switch(LCSrandom(5))
    {
@@ -916,7 +916,7 @@ char confirmdisband(void)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(13,0); addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 
-      for(int x=0;x<strlen(word);x++)
+      for(unsigned int x=0;x<strlen(word);x++)
       {
          move(15,x);
          if(x==pos)set_color(COLOR_GREEN,COLOR_BLACK,0);
@@ -932,7 +932,7 @@ char confirmdisband(void)
       {
          pos++;
          if(word[pos]==' ')pos++;
-         if(pos>=strlen(word))
+         if(int(pos)>=strlen(word))
          {
             //SET UP THE DISBAND
             for(int p=pool.size()-1;p>=0;p--)
@@ -1163,10 +1163,10 @@ void investlocation(void)
 /* base - assign a vehicle to this squad */
 void setvehicles(void)
 {
-   int p, l;
+   unsigned int p, l;
    if(activesquad==NULL)return;
 
-   int page=0;
+   unsigned int page=0;
 
    do
    {
@@ -1255,7 +1255,7 @@ void setvehicles(void)
 
       if(c>='A'&&c<='R')
       {
-         int slot=c-'A'+page*18;
+         unsigned int slot=c-'A'+page*18;
 
          if(slot>=0&&slot<vehicle.size())
          {
@@ -1285,7 +1285,7 @@ void setvehicles(void)
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         unsigned int slot=c-'a'+page*18;
 
          if(slot>=0&&slot<vehicle.size())
          {

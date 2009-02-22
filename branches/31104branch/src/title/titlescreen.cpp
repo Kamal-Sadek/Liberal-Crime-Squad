@@ -149,7 +149,7 @@ void loadinitfile(void)
          if(str[0]!='#')
          {
             wordnum=0;pos=0;begin=1;
-            for(int l=0;l<strlen(str);l++)
+            for(unsigned int l=0;l<strlen(str);l++)
             {
                if(str[l]==' '||str[l]=='\t')
                {

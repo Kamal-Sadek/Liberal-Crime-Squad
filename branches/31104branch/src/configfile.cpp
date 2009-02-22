@@ -1,58 +1,93 @@
 
-
-#include <includes.h>
-#include <string>
-#include <list>
-#include <vector>
 #include "configfile.h"
+#include "sitemode/sitemap.h"
+#include "externs.h"
 
-/*string getNextSet(FILE *cfile)
+// Reads in an entire configuration file
+// Returns 0 for read successful, returns -1 if failed read
+int readConfigFile(char* filename)
 {
-	if(cfile == NULL)
-	{
-		return "\0";
-	}
-	char input = ' ';
-	string name;
-	while(input !=  && input != EOF)
-	{
-		input = fgetc(cfile);
-	}
-	if(input == '[')
-	{
-		//Okay, we got the next config thing.
-		fscanf(cfile, "%s:", name);
-		return name;
-	}
-	else
-	{
-		return "\0";
-	}
-}*/
+   std::fstream file;
+   std::string command, value;
+   configurable* object = 0;
 
-int configurable::getVariable(std::string name)
-{
-	int i = 0;
-	int size = configInfo.size();
-	while(i < size && configInfo[i]->name != name)
-	{
-		i++;
-	}
-	if(i >= size)
-	{
-		return -1;
-	}
-	else
-	{
-		return i;
-	}
+   file.open(filename, ios::in);
+   if(!file.is_open()) return -1; // Unable to open; failed read
+   // loop through lines
+   while(readLine(file, command, value))
+   {
+      
+      // if COMMAND is OBJECT
+      if(command == "OBJECT")
+      {
+         // call a object creator factory, passing VALUE
+         // (record pointer to that object)
+         object = createObject(value);
+      }
+      else
+      {
+         // if I have an object
+         if(object)
+         {
+            // pass COMMAND and VALUE to the object
+            object->configure(command, value);
+         }
+         else
+         {
+            file.close();
+            return -1; // Unknown command and no object to give it to; failed read
+         }
+      }
+   }
+   file.close();
+   return 0;
 }
 
-void configurable::configVar(string name, string data)
+
+// readLine reads a line from the file, parses it
+int readLine(std::fstream& file, std::string& command, std::string& value)
 {
-	int var = getVariable(name);
-	if(var != -1)
-	{
-		configInfo[var]->setVariable(data);
-	}
+   std::string line;
+   unsigned int source=0;
+
+   // Search for a non-comment, non-empty line
+   do
+   {
+      getline(file,line);
+      if(file.eof()) return 0;
+   } while(line[0] == '#' || line[0] == 0);
+
+   // Parse the line
+   command.clear();
+   value.clear();
+
+   // Leading whitespace
+   while(source<line.length() && (line[source]==' ' || line[source]=='\t'))
+      source++;
+
+   // Command
+   while(source<line.length() && (line[source]!=' ' && line[source]!='\t'))
+      command.push_back(line[source++]);
+
+   // Delimiting whitespace
+   while(source<line.length() && (line[source]==' ' || line[source]=='\t'))
+      source++;
+
+   // Value
+   while(source<line.length() && (line[source]!=' ' && line[source]!='\t'))
+      value.push_back(line[source++]);
+
+   return 1;
+}
+
+// Constructs the new object, returns a pointer to it
+configurable* createObject(const std::string& objectType)
+{
+   configurable* object=0;
+   if(objectType == "SITEMAP")
+   {
+      object = new configSiteMap;
+      sitemaps.push_back(static_cast<configSiteMap*>(object));
+   }
+   return object;
 }

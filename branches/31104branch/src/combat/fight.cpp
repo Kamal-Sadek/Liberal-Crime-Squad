@@ -35,7 +35,7 @@ void youattack(void)
 {
    short wasalarm=sitealarm;
 
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].enemy())
          encounter[e].cantbluff=2;
@@ -43,7 +43,7 @@ void youattack(void)
 
    sitealarm=1;
 
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
@@ -62,7 +62,7 @@ void youattack(void)
       vector<int> enemies;
       vector<int> non_enemies;
 
-      for(int e=0;e<ENCMAX;e++)
+      for(unsigned int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].alive&&encounter[e].exists)
          {
@@ -137,7 +137,7 @@ void youattack(void)
    //COVER FIRE
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(unsigned int p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->align!=1)continue;
@@ -163,7 +163,7 @@ void youattack(void)
                vector<int> goodtarg;
                vector<int> badtarg;
 
-               for(int e=0;e<ENCMAX;e++)
+               for(unsigned int e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].alive&&encounter[e].exists)
                   {
@@ -216,10 +216,9 @@ void youattack(void)
 void enemyattack(void)
 {
    bool armed=false;
-   for(int i=0;i<6;i++)
+   for(unsigned int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
       if(activesquad->squad[i]->weapon.type!=WEAPON_NONE)
          armed=true;
    }
@@ -263,7 +262,7 @@ void enemyattack(void)
          }
 
          if(((!encounter[e].enemy()||
-            (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<70+LCSrandom(61)))
+            (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<signed(70+LCSrandom(61))))
             &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
             ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
          {
@@ -329,7 +328,7 @@ void enemyattack(void)
 
       if(encounter[e].enemy())
       {
-         for(int p=0;p<6;p++)
+         for(unsigned int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
             {
@@ -472,7 +471,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
 
    //SPECIAL ATTACK!
    int encnum=0;
-   for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
+   for(unsigned int e=0;e<ENCMAX;e++)if(encounter[e].exists)encnum++;
 
    if(!force_melee &&
       (((a.type==CREATURE_COP&&a.align==ALIGN_MODERATE&&a.enemy())||
@@ -707,8 +706,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
    if(!melee)
    {
       bool defender_is_LCS=false;
-      int maxtactics=0;
-      for(int p=0;p<6;p++)
+      unsigned int maxtactics=0;
+      for(unsigned int p=0;p<6;p++)
       {
          if(activesquad->squad[p]==&t)
          {
@@ -717,7 +716,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
       }
       if(defender_is_LCS)
       {
-         for(int p=0;p<6;p++)
+         for(unsigned int p=0;p<6;p++)
          {
             if(activesquad->squad[p]&&activesquad->squad[p]->alive)
             {
@@ -727,7 +726,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
       }
       else if(t.enemy())
       {
-         for(int e=0;e<ENCMAX;e++)
+         for(unsigned int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
             {
@@ -1288,7 +1287,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
             (w==BODYPART_HEAD||w==BODYPART_BODY)) //to a critical bodypart...
          {
             //Oh Noes!!!! Find a liberal to jump in front of the bullet!!!
-            for(int i=0;i<6;i++)
+            for(unsigned int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
                if(activesquad->squad[i]==&t)break;
@@ -2242,7 +2241,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
                addstr("!");
             }
 
-            for(int e=0;e<ENCMAX;e++)
+            for(unsigned int e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists==0)
                {
@@ -2256,7 +2255,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
             }
 
             char flipstart=0;
-            for(int p=0;p<6;p++)
+            for(unsigned int p=0;p<6;p++)
             {
                if(activesquad->squad[p]==&t)
                {
@@ -2367,7 +2366,7 @@ void severloot(creaturest &cr,vector<itemst *> &loot)
       cr.weapon.type=WEAPON_NONE;
       cr.weapon.ammo=0;
 
-      for(int c=0;c<CLIPNUM;c++)
+      for(unsigned int c=0;c<CLIPNUM;c++)
       {
          if(mode==GAMEMODE_SITE)
          {
@@ -2493,7 +2492,7 @@ void bloodblast(armorst &armor)
    levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY2;
 
    //HIT EVERYTHING
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->armor.type!=ARMOR_NONE)
@@ -2502,7 +2501,7 @@ void bloodblast(armorst &armor)
       }
    }
 
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
       if(encounter[e].armor.type!=ARMOR_NONE)
@@ -2572,7 +2571,7 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
       cr.money=0;
    }
 
-   for(int c=0;c<CLIPNUM;c++)
+   for(unsigned int c=0;c<CLIPNUM;c++)
    {
       for(int p=0;p<cr.clip[c];p++)
       {
@@ -2629,7 +2628,7 @@ void capturecreature(creaturest &t)
       {
          // Clear criminal record?
          t.heat=0;
-         for(int i=0;i<LAWFLAGNUM;i++)
+         for(unsigned int i=0;i<LAWFLAGNUM;i++)
          {
             t.lawflag[i]=0;
          }
@@ -2637,7 +2636,7 @@ void capturecreature(creaturest &t)
    }
    else
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
          {
@@ -3175,7 +3174,7 @@ void autopromote(int loc)
    }
 
    int libnum=0;
-   for(int pl=0;pl<pool.size();pl++)
+   for(unsigned int pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->location!=loc)continue;
       if(pool[pl]->alive&&pool[pl]->align==1)libnum++;
@@ -3193,7 +3192,7 @@ void autopromote(int loc)
 
       if(conf)
       {
-         for(int pl=0;pl<pool.size();pl++)
+         for(unsigned int pl=0;pl<pool.size();pl++)
          {
             if(pool[pl]->location!=loc)continue;
             if(pool[pl]->alive&&pool[pl]->squadid==-1&&

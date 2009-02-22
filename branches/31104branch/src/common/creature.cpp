@@ -52,7 +52,7 @@ void creaturest::train(int trainedskill, int experience)
 
 void creaturest::skill_up()
 {
-   for(int s=0;s<SKILLNUM;s++)
+   for(unsigned int s=0;s<SKILLNUM;s++)
    {
       while(skill_ip[s]>=100+10*skill[s]&&
             skill[s]<maxskill(s,*this))
@@ -65,9 +65,9 @@ void creaturest::skill_up()
    }
 }
 
-int creaturest::get_skill_ip(int getskill)
+unsigned creaturest::get_skill_ip(unsigned skill)
 {
-   return skill_ip[getskill];
+   return skill_ip[skill];
 }
 
 bool creaturest::enemy()
@@ -80,7 +80,7 @@ bool creaturest::enemy()
    {
       if(type==CREATURE_COP)
       {
-         for(int i=0;i<pool.size();i++)
+         for(unsigned int i=0;i<pool.size();i++)
          {
             if(pool[i]==this)
             {
@@ -446,10 +446,10 @@ void lastname(char *str)
 /* ensures that the creature's work location is appropriate to its type */
 bool verifyworklocation(creaturest &cr, char test_location, char test_type)
 {
-   char okaysite[SITENUM];
-   memset(okaysite,0,SITENUM*sizeof(char));
+   bool okaysite[SITENUM];
+   memset(okaysite,0,SITENUM*sizeof(bool));
 
-   char type;
+   short type;
 
    // If the caller sets test_type, they're just
    // asking if the chosen creature type is appropriate
@@ -911,7 +911,7 @@ bool verifyworklocation(creaturest &cr, char test_location, char test_type)
       //FIND ONE OF THESE
       vector<int> goodlist;
 
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==cr.worklocation)
          {
@@ -968,11 +968,14 @@ void liberalize(creaturest &cr,bool rename)
 
    cr.align=ALIGN_LIBERAL;
 
-   switch(cr.type)
+   if(rename)
    {
-      case CREATURE_WORKER_FACTORY_NONUNION:
-         strcpy(cr.name,"New Union Worker");
-         break;
+      switch(cr.type)
+      {
+         case CREATURE_WORKER_FACTORY_NONUNION:
+            strcpy(cr.name,"New Union Worker");
+            break;
+      }
    }
 }
 

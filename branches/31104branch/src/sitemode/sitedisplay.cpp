@@ -133,7 +133,7 @@ void printsitemap(int x,int y,int z)
 
    //PRINT PARTY
    int partyalive=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->alive==1)partyalive++;
@@ -144,7 +144,7 @@ void printsitemap(int x,int y,int z)
    addstr("SQUAD");
 
    int encsize=0;
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists)
       {
@@ -264,7 +264,7 @@ void printwall(int x, int y, int z, int px, int py)
       if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_DOWN],"LCS"); graffiticolor[WALL_DOWN] = COLOR_GREEN; }
    }
    
-   for(int dir=0;dir<4;dir++)
+   for(unsigned int dir=0;dir<4;dir++)
    {
       x=px;
       y=py;
@@ -289,7 +289,7 @@ void printwall(int x, int y, int z, int px, int py)
                set_color(COLOR_WHITE,COLOR_WHITE,0);
             
             // Draw the chunk of wall where the graffiti would/will go
-            for(int gchar=0;gchar<3;gchar++)
+            for(unsigned int gchar=0;gchar<3;gchar++)
             {
                move(y,x);
                addch(graffiti[dir][gchar]);
@@ -341,12 +341,12 @@ void printwall(int x, int y, int z, int px, int py)
             // Draw face
             if(dir==WALL_RIGHT||dir==WALL_LEFT)
             {
-               for(int i=0;i<3;i++)
+               for(unsigned int i=0;i<3;i++)
                { move(y,x); addch('|'); y++; }
             }
             else
             {
-               for(int i=0;i<5;i++)
+               for(unsigned int i=0;i<5;i++)
                { move(y,x); addch('-'); x++; }
             }
          }
@@ -622,7 +622,7 @@ void printencounter(void)
    }
 
    int px=1,py=19;
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists)
       {
@@ -662,7 +662,7 @@ void printchaseencounter(void)
       int carsy[4]={20,20,20,20};
 
       char str[80];
-      for(int v=0;v<chaseseq.enemycar.size();v++)
+      for(unsigned int v=0;v<chaseseq.enemycar.size();v++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(19,v*20+1);
@@ -670,11 +670,11 @@ void printchaseencounter(void)
          addstr(str);
       }
 
-      for(int e=0;e<ENCMAX;e++)
+      for(unsigned int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists)
          {
-            for(int v=0;v<chaseseq.enemycar.size();v++)
+            for(unsigned int v=0;v<chaseseq.enemycar.size();v++)
             {
                if(chaseseq.enemycar[v]->id==encounter[e].carid)
                {
@@ -699,7 +699,7 @@ void clearcommandarea(void)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int y=9;y<16;y++)
    {
-      for(int x=0;x<53;x++)
+      for(unsigned int x=0;x<53;x++)
       {
          move(y,x);
          addch(' ');

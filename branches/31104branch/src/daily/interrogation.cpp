@@ -38,9 +38,8 @@ enum InterrogationTechnqiues
 void tendhostage(creaturest *cr,char &clearformess)
 {
    vector<creaturest *> temppool;
-   int p;
+   unsigned int p;
 
-   long hfunds=0;
    creaturest *a=NULL;
 
    //Find all tenders who are set to this hostage
@@ -67,13 +66,13 @@ void tendhostage(creaturest *cr,char &clearformess)
       !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[TECHNIQUE_RESTRAIN])
    {
       //CHECK FOR HOSTAGE ESCAPE
-      if(LCSrandom(200)+10*temppool.size()<
+      if((int)(LCSrandom(200)+10*temppool.size())<
          cr->attval(ATTRIBUTE_INTELLIGENCE)+
          cr->attval(ATTRIBUTE_AGILITY)+
          cr->attval(ATTRIBUTE_STRENGTH)&&
          cr->joindays>=2)
       {
-         for(int p=0;p<pool.size();p++)
+         for(unsigned int p=0;p<pool.size();p++)
          {
             if(pool[p]==cr)
             {
@@ -92,7 +91,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                getch();
                
                //clear activities for tenders
-               for(int i=0;i<pool.size();i++)
+               for(unsigned int i=0;i<pool.size();i++)
                {
                   if(!pool[i]->alive)continue;
                   if(pool[i]->activity.type==ACTIVITY_HOSTAGETENDING)
@@ -140,30 +139,30 @@ void tendhostage(creaturest *cr,char &clearformess)
    int y=3;
 
    {
-      int p;
-      int maxattack=0;
+      unsigned int p;
+      unsigned int maxattack=0;
 
-      int business=0;
-      int religion=0;
-      int science=0;
+      unsigned business=0;
+      unsigned religion=0;
+      unsigned science=0;
 
       //each day, spiritcrush is initialized to the average spiritcrush of
       //the entire stay with the LCS -- continued pressure just compounds
       //the trauma, while letting up takes a while to get them calmed down
       //and really brutal treatment early on will never be completely
       //forgotten
-      int spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
-      int healthcrush=0;
+      unsigned int spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
+      unsigned int healthcrush=0;
 
       //get short references to the hostage's status
-      int& nofood = reinterpret_cast<interrogation*>(cr->activity.arg)->nofood;
-      int& nowater = reinterpret_cast<interrogation*>(cr->activity.arg)->nowater;
-      int& nosleep = reinterpret_cast<interrogation*>(cr->activity.arg)->nosleep;
-      //int& nolight = reinterpret_cast<interrogation*>(cr->activity.arg)->nolight;
-      int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
+      unsigned int& nofood = reinterpret_cast<interrogation*>(cr->activity.arg)->nofood;
+      unsigned int& nowater = reinterpret_cast<interrogation*>(cr->activity.arg)->nowater;
+      unsigned int& nosleep = reinterpret_cast<interrogation*>(cr->activity.arg)->nosleep;
+      //unsigned int& nolight = reinterpret_cast<interrogation*>(cr->activity.arg)->nolight;
+      unsigned int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
       map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
-      int * attack = new int[temppool.size()];
+      unsigned int * attack = new unsigned int[temppool.size()];
 
       for(p=0;p<temppool.size();p++)
       {
@@ -184,6 +183,9 @@ void tendhostage(creaturest *cr,char &clearformess)
                             temppool[p]->skillval(SKILL_PSYCHOLOGY)*2);
 
                attack[p] += temppool[p]->armor.interrogation_basepower();
+
+               if(attack[p] < 0)
+                  attack[p] = 0;
 
                if(attack[p]>maxattack)
                {
@@ -216,15 +218,15 @@ void tendhostage(creaturest *cr,char &clearformess)
       maxattack+=religion-cr->skillval(SKILL_RELIGION);
       maxattack+=science-cr->skillval(SKILL_SCIENCE);
 
-      long aroll=maxattack+
-                 LCSrandom(20)+1;
-      long troll=cr->attval(ATTRIBUTE_WISDOM)*2-
-                 cr->attval(ATTRIBUTE_HEART)+
-                 LCSrandom(20)+1;
+      unsigned int aroll=maxattack+
+                         LCSrandom(20)+1;
+      unsigned int troll=cr->attval(ATTRIBUTE_WISDOM)*2-
+                         cr->attval(ATTRIBUTE_HEART)+
+                         LCSrandom(20)+1;
 
       bool techniques[9];
       //recall interrogation plan
-      for(int i=0; i<9; i++)
+      for(unsigned int i=0; i<9; i++)
       {
          techniques[i]=reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i];
       }
@@ -410,7 +412,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       else { techniques[TECHNIQUE_DRUGS] = 0; }
 
       //remember interrogation choices
-      for(int i=0; i<9; i++)
+      for(unsigned int i=0; i<9; i++)
       {
          reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i]=techniques[i];
       }
@@ -429,9 +431,9 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          a=NULL;
 
-         for(int i=0;i<temppool.size();++i)
+         for(unsigned int i=0;i<temppool.size();++i)
          {
-            if(LCSrandom(50)<temppool[i]->juice||
+            if((int)LCSrandom(50)<temppool[i]->juice||
                LCSrandom(9)+1>=temppool[i]->attval(ATTRIBUTE_HEART,0))
             {
                a=temppool[i];
@@ -516,7 +518,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
          if(cr->alive==0)
          {
-            for(int p=0;p<pool.size();p++)
+            for(unsigned int p=0;p<pool.size();p++)
             {
                if(!pool[p]->alive)continue;
                if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
@@ -527,6 +529,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                   }
                }
             }
+            delete[] attack;
             return;
          }
       }
@@ -670,9 +673,9 @@ void tendhostage(creaturest *cr,char &clearformess)
          y+=1;
          move(y,0);
 
-         int forceroll=0;
+         unsigned int forceroll=0;
 
-         for(int i=0;i<temppool.size();i++)
+         for(unsigned int i=0;i<temppool.size();i++)
          {
             //add interrogator's strength to beating strength
             forceroll+=temppool[i]->attval(ATTRIBUTE_STRENGTH);
@@ -802,7 +805,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          refresh();
          getch();
 
-         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH)/*+cr->skillval(SKILL_SURVIVAL)*/)
+         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH))
          {
             if(cr->skillval(SKILL_RELIGION)>spiritcrush)
             {
@@ -826,7 +829,7 @@ void tendhostage(creaturest *cr,char &clearformess)
                }
                y++;
             }
-            else if(spiritcrush+healthcrush >
+            else if(signed(spiritcrush+healthcrush) >
                cr->att[ATTRIBUTE_WISDOM]*3+cr->att[ATTRIBUTE_HEART]*3+cr->att[ATTRIBUTE_HEALTH]*3)
             {
                move(y++,0);
@@ -1048,7 +1051,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             }
             else
             {
-               rapport_temp+=0.5*(LCSrandom(3)-1);
+               rapport_temp+=0.5f*(LCSrandom(3)-1);
                switch(LCSrandom(4))
                {
                case 0:
@@ -1189,7 +1192,7 @@ void tendhostage(creaturest *cr,char &clearformess)
          //to this, also targets who have been held a long time are
          //also likely to do this, or if you're interrogating with someone
          //who has frequently abused this target in the past
-         else if(LCSrandom(spiritcrush*2+1)+LCSrandom(healthcrush*2+1) >
+         else if((int)(LCSrandom(spiritcrush*2+1)+LCSrandom(healthcrush*2+1)) >
             cr->attval(ATTRIBUTE_WISDOM)+cr->attval(ATTRIBUTE_HEART)+cr->attval(ATTRIBUTE_HEALTH))
          {
             move(y,0);
@@ -1272,15 +1275,14 @@ void tendhostage(creaturest *cr,char &clearformess)
                //Reduce wisdom!
                if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
                {
-                  int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
+                  unsigned int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
                   if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
                   cr->att[ATTRIBUTE_WISDOM]-=change;
                }
                //Increase heart
                if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))
                {
-                  int change = 
-                     LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
+                  unsigned int change = LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
                   if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
                   cr->att[ATTRIBUTE_HEART]+=change;
                }
@@ -1378,7 +1380,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       //Lead interrogator gets bonus experience
       if(!techniques[TECHNIQUE_KILL])a->train(SKILL_PSYCHOLOGY,spiritcrush);
       //Others also get experience
-      for(int i=0;i<temppool.size();i++)
+      for(unsigned int i=0;i<temppool.size();i++)
          temppool[i]->train(SKILL_PSYCHOLOGY,(spiritcrush>>1)+1);
 
       reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush+=spiritcrush;
@@ -1472,6 +1474,7 @@ void tendhostage(creaturest *cr,char &clearformess)
             }
          }
       }
+      delete[] attack;
    }
    #ifdef AUTOENLIGHTEN
       turned=1;
@@ -1497,7 +1500,7 @@ void tendhostage(creaturest *cr,char &clearformess)
       }
       cr->flag|=CREATUREFLAG_BRAINWASHED;
 
-      for(int p=0;p<pool.size();p++)
+      for(unsigned int p=0;p<pool.size();p++)
       {
          if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING &&
             pool[p]->activity.arg==cr->id)
@@ -1596,7 +1599,7 @@ void tendhostage(creaturest *cr,char &clearformess)
 
    if(cr->align==1||!cr->alive)
    {
-      for(int p=0;p<pool.size();p++)
+      for(unsigned int p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)

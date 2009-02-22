@@ -131,8 +131,7 @@ void hospital(int loc)
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   int partydead=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -198,7 +197,7 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
    gun=-1;
 
    vector<enum Weapons> guntype;
-   for(int a=0;a<WEAPONNUM;a++)
+   for(unsigned int a=0;a<WEAPONNUM;a++)
    {
       switch(a)
       {
@@ -224,7 +223,7 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
       }
    }
 
-   short page=0;
+   unsigned page=0;
 
    char str[200];
 
@@ -242,9 +241,9 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
       addstr("----PRODUCT NAME-----------------------PRICE------------------------------------");
 
       int y=2;
-      for(int p=page*19;p<guntype.size()&&p<page*19+19;p++)
+      for(unsigned p=page*19;p<guntype.size()&&p<page*19+19;p++)
       {
-         int price = gun_price(guntype[p]);
+         unsigned int price = gun_price(guntype[p]);
          if(funds<price)set_color(COLOR_BLACK,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -282,10 +281,10 @@ char gunselect(creaturest *cr,short &gun,bool legal=1)
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
+         unsigned p=page*19+(int)(c-'a');
          if(p<guntype.size())
          {
-            int price = gun_price(guntype[p]);
+            unsigned price = gun_price(guntype[p]);
             if(price < funds)
             {
                gun=guntype[p];
@@ -308,12 +307,11 @@ void armsdealer(int loc)
 {
    short buyer=0;
    short in_gunshop=0;
-   int l;
 
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -426,7 +424,7 @@ void armsdealer(int loc)
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
+            for(unsigned int cl=0;cl<CLIPNUM;cl++)
             {
                if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
@@ -591,7 +589,7 @@ void pawnshop(int loc)
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -1172,7 +1170,7 @@ void pawnshop(int loc)
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
+            for(unsigned int cl=0;cl<CLIPNUM;cl++)
             {
                if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
@@ -1323,7 +1321,7 @@ void pawnshop(int loc)
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
+            for(unsigned int cl=0;cl<CLIPNUM;cl++)
             {
                if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
@@ -1376,7 +1374,7 @@ void deptstore(int loc)
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -1532,7 +1530,7 @@ void deptstore(int loc)
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
+         for(unsigned int cl=0;cl<CLIPNUM;cl++)
          {
             if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
@@ -1574,7 +1572,7 @@ void halloweenstore(int loc)
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -1952,7 +1950,7 @@ void halloweenstore(int loc)
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
+         for(unsigned int cl=0;cl<CLIPNUM;cl++)
          {
             if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
 
@@ -1991,7 +1989,7 @@ char maskselect(creaturest *cr,short &mask)
    mask=-1;
 
    vector<int> masktype;
-   for(int a=0;a<MASKNUM;a++)
+   for(unsigned int a=0;a<MASKNUM;a++)
    {
       switch(a)
       {
@@ -2016,7 +2014,7 @@ char maskselect(creaturest *cr,short &mask)
       }
    }
 
-   short page=0;
+   unsigned page=0;
 
    char str[200];
 
@@ -2033,8 +2031,8 @@ char maskselect(creaturest *cr,short &mask)
       move(1,0);
       addstr("----PRODUCT NAME-----------------------DESCRIPTION------------------------------");
 
-      int y=2;
-      for(int p=page*19;p<masktype.size()&&p<page*19+19;p++)
+      unsigned int y=2;
+      for(unsigned int p=page*19;p<masktype.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -2072,7 +2070,7 @@ char maskselect(creaturest *cr,short &mask)
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
+         unsigned p=page*19+(int)(c-'a');
          if(p<masktype.size())
          {
             mask=masktype[p];
@@ -2100,11 +2098,11 @@ unsigned long fenceselect(void)
 
    consolidateloot(activesquad->loot);
 
-   int page=0;
+   unsigned page=0;
 
-   vector<char> selected;
+   vector<int> selected;
    selected.resize(activesquad->loot.size());
-   for(int s=0;s<selected.size();s++)selected[s]=0;
+   for(unsigned int s=0;s<selected.size();s++)selected[s]=0;
 
    do
    {
@@ -2128,7 +2126,7 @@ unsigned long fenceselect(void)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
+      for(unsigned int l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -2214,7 +2212,7 @@ unsigned long fenceselect(void)
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         unsigned int slot=c-'a'+page*18;
 
          if(slot>=0&&slot<activesquad->loot.size())
          {
@@ -2438,7 +2436,7 @@ void choose_buyer(short &buyer)
    party_status=-1;
 
    int partysize=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)partysize++;
    }

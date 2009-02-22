@@ -57,7 +57,7 @@ void adjustblogpower(int &power)
       case 19:addstr("an insane");break;
       case 8:addstr("a shameful");break;
       }
-      power = -LCSrandom(2);
+      power = -signed(LCSrandom(2));
    }
    else if(power<35)
    {
@@ -158,7 +158,7 @@ void repairarmor(creaturest &cr,char &clearformess)
    else if(cr.squadid!=-1)
    {
       int sq=getsquad(cr.squadid);
-      for(int l=0;l<squad[sq]->loot.size();l++)
+      for(unsigned int l=0;l<squad[sq]->loot.size();l++)
       {
          if(squad[sq]->loot[l]->type==ITEM_ARMOR&&
             squad[sq]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
@@ -172,7 +172,7 @@ void repairarmor(creaturest &cr,char &clearformess)
    }
    if(armor==NULL&&cr.location!=-1)
    {
-      for(int l=0;l<location[cr.location]->loot.size();l++)
+      for(unsigned int l=0;l<location[cr.location]->loot.size();l++)
       {
          if(location[cr.location]->loot[l]->type==ITEM_ARMOR&&
             location[cr.location]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
@@ -249,11 +249,11 @@ void repairarmor(creaturest &cr,char &clearformess)
 /* armor manufacture */
 void makearmor(creaturest &cr,char &clearformess)
 {
-   long at=cr.activity.arg;
+   int at=cr.activity.arg;
 
-   long cost=armor_makeprice(at);
-   long hcost=(armor_makeprice(at)>>1)+1;
-   long dif=armor_makedifficulty(at,&cr);
+   unsigned int cost=armor_makeprice(at);
+   unsigned int hcost=(armor_makeprice(at)>>1)+1;
+   unsigned int dif=armor_makedifficulty(at,&cr);
 
    if(funds<hcost)
    {
@@ -279,7 +279,7 @@ void makearmor(creaturest &cr,char &clearformess)
       if(cr.squadid!=-1)
       {
          int sq=getsquad(cr.squadid);
-         for(int l=0;l<squad[sq]->loot.size();l++)
+         for(unsigned int l=0;l<squad[sq]->loot.size();l++)
          {
             if(squad[sq]->loot[l]->type==ITEM_LOOT&&
                squad[sq]->loot[l]->loottype==LOOT_FINECLOTH)
@@ -297,7 +297,7 @@ void makearmor(creaturest &cr,char &clearformess)
       }
       if(!foundcloth)
       {
-         for(int l=0;l<location[cr.location]->loot.size();l++)
+         for(unsigned int l=0;l<location[cr.location]->loot.size();l++)
          {
             if(location[cr.location]->loot[l]->type==ITEM_LOOT&&
                location[cr.location]->loot[l]->loottype==LOOT_FINECLOTH)
@@ -457,7 +457,7 @@ void survey(creaturest *cr)
       if(survey[v]>100)survey[v]=100;
 
       #ifndef SHOWMECHANICS
-         if(LCSrandom(public_interest[v]+50)<misschance)survey[v]=-1;
+         if(LCSrandom(public_interest[v]+50)<unsigned(misschance))survey[v]=-1;
       #endif
 
       if(v==VIEW_LIBERALCRIMESQUAD&&attitude[v]==0)survey[v]=-1;
@@ -827,14 +827,14 @@ int checkforarrest(creaturest & liberal,const char* string,int clearformess)
 // *JDSRETURN*
 void funds_and_trouble(char &clearformess)
 {
-   int s;
+   unsigned s;
    //FIND A POLICE STATION
    //and a clinic too
    //and a homeless shelter three!
-   long ps=-1;
-   long clinic=-1;
-   long shelter=-1;
-   for(long l=0;l<location.size();l++)
+   int ps=-1;
+   int clinic=-1;
+   int shelter=-1;
+   for(unsigned int l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
       {
@@ -863,7 +863,7 @@ void funds_and_trouble(char &clearformess)
    vector<creaturest *> prostitutes;
    vector<creaturest *> teachers;
 
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       if(!pool[p]->alive)continue;
       if(pool[p]->location==-1)
@@ -967,7 +967,7 @@ void funds_and_trouble(char &clearformess)
          if(competitionpenalty<0)competitionpenalty=0;
          if(competitionpenalty>6)competitionpenalty=6;
 
-         int costofsupplies = 12;
+         const unsigned int costofsupplies = 12;
 
          if(funds < costofsupplies)
          {
@@ -1022,7 +1022,7 @@ void funds_and_trouble(char &clearformess)
          if(competitionpenalty<0)competitionpenalty=0;
          if(competitionpenalty>6)competitionpenalty=6;
 
-         int costofsupplies = 8;
+         const int costofsupplies = 8;
 
          if(funds < costofsupplies)
          {
@@ -1094,14 +1094,13 @@ void funds_and_trouble(char &clearformess)
    }
 
    //BROWNIES
-   long dodgelawroll;
+   unsigned int dodgelawroll;
    for(s=0;s<brownies.size();s++)
    {
       money=LCSrandom(brownies[s]->skillval(SKILL_PERSUASION)*2+
-                      brownies[s]->attval(ATTRIBUTE_CHARISMA)*2+
-                      brownies[s]->attval(ATTRIBUTE_INTELLIGENCE)*2+
+                      brownies[s]->skillval(SKILL_COOKING)*2+
                       brownies[s]->skillval(SKILL_STREETSENSE)*2+
-                      brownies[s]->skillval(SKILL_BUSINESS)*2+1);
+                      brownies[s]->attval(ATTRIBUTE_CHARISMA)*2+1);
       funds+=money;
       stat_funds+=money;
       moneygained_brownies+=money;
@@ -1115,12 +1114,12 @@ void funds_and_trouble(char &clearformess)
          brownies[s]->train(SKILL_STREETSENSE,LCSrandom(5)+2);
       else
          brownies[s]->train(SKILL_STREETSENSE,LCSrandom(3)+1);
-      // The ways of the businessman
-      if(brownies[s]->skillval(SKILL_BUSINESS)<4)
+      // Buy low, sell high
+      if(brownies[s]->skillval(SKILL_BUSINESS)<2)
          brownies[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
       else
          brownies[s]->train(SKILL_BUSINESS,1);
-      // Baking brownies
+      // Baking brownies :)
       if(brownies[s]->skillval(SKILL_COOKING)<2)
          brownies[s]->train(SKILL_COOKING,LCSrandom(3)+1);
       else
@@ -1148,16 +1147,16 @@ void funds_and_trouble(char &clearformess)
    //HACKING
    if(hack.size()>0)
    {
-      int h;
+      unsigned h;
       vector<creaturest *> cc;
       vector<creaturest *> web;
       vector<creaturest *> ddos;
       vector<creaturest *> truehack;
 
-      int cc_skill=0,cc_succeeded=0;
-      int web_skill=0,web_succeeded=0;
-      int ddos_skill=0,ddos_succeeded=0;
-      int hack_skill=0,hack_succeeded=0;
+      unsigned cc_skill=0,cc_succeeded=0;
+      unsigned web_skill=0,web_succeeded=0;
+      unsigned ddos_skill=0,ddos_succeeded=0;
+      unsigned hack_skill=0,hack_succeeded=0;
 
       //First, do accounting to figure out who's doing what
       for(h=0;h<hack.size();h++)
@@ -1256,10 +1255,10 @@ void funds_and_trouble(char &clearformess)
                if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
                else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
 
-               int trackdif=0;
+               unsigned int trackdif=0;
                unsigned short crime=0;
 
-               long juiceval=0;
+               unsigned int juiceval=0;
 
                switch(LCSrandom(5))
                {
@@ -1319,13 +1318,13 @@ void funds_and_trouble(char &clearformess)
 
                if(trackdif>LCSrandom(hack_skill+1)+LCSrandom(10))
                {
-                  for(int h=0;h<truehack.size();h++)
+                  for(unsigned int h=0;h<truehack.size();h++)
                   {
                      criminalize(*hack[h],crime);
                   }
                }
 
-               for(int h=0;h<truehack.size();h++)
+               for(unsigned int h=0;h<truehack.size();h++)
                {
                   addjuice(*truehack[h],juiceval,50);
                }               
@@ -1378,8 +1377,8 @@ void funds_and_trouble(char &clearformess)
             // a check fails, no more money is gained. This check will be made
             // up to 20 times, at which point the loop breaks. The skill check
             // here doesn't take into account funding.
-            long fundgain=LCSrandom(101);
-            for(int i=0;i<20 && LCSrandom(cc_skill/4);i++)
+            unsigned fundgain=LCSrandom(101);
+            for(unsigned int i=0;i<20 && LCSrandom(cc_skill/4);i++)
             {
                fundgain+=LCSrandom(51);
             }
@@ -1392,7 +1391,7 @@ void funds_and_trouble(char &clearformess)
 
             if(fundgain/100>LCSrandom(cc_skill+1))
             {
-               for(int h=0;h<cc.size();h++)
+               for(unsigned int h=0;h<cc.size();h++)
                {
                   criminalize(*cc[h],LAWFLAG_CCFRAUD);
                }
@@ -1436,8 +1435,7 @@ void funds_and_trouble(char &clearformess)
             if(ddos.size()>1)strcpy(msg,"Your DoS team has ");
             else {strcpy(msg,ddos[0]->name);strcat(msg," has ");}
 
-            int trackdif=0;
-            unsigned short crime=0;
+            unsigned trackdif=0;
 
             // hit means they had to take the site down;
             // no hit means the target surrendered before
@@ -1459,7 +1457,7 @@ void funds_and_trouble(char &clearformess)
             char num[20];
 
             long fundgain=200;
-            for(int i=0;i<19 && LCSrandom(ddos_skill/(2+i));i++)
+            for(unsigned int i=0;i<19 && LCSrandom(ddos_skill/(2+i));i++)
             {
                fundgain+=200;
             }
@@ -1475,7 +1473,7 @@ void funds_and_trouble(char &clearformess)
 
             if(trackdif>LCSrandom(ddos_skill+1))
             {
-               for(int h=0;h<ddos.size();h++)
+               for(unsigned int h=0;h<ddos.size();h++)
                {
                   criminalize(*ddos[h],LAWFLAG_RACKETEERING);
                }
@@ -1548,7 +1546,7 @@ void funds_and_trouble(char &clearformess)
 
             if(!LCSrandom(web_skill+1))
             {
-               for(int h=0;h<web.size();h++)
+               for(unsigned int h=0;h<web.size();h++)
                {
                   criminalize(*web[h],crime);
                }
@@ -1706,7 +1704,7 @@ void funds_and_trouble(char &clearformess)
          }
 
          graffiti[s]->train(SKILL_ART,max(4-graffiti[s]->skillval(SKILL_ART),0));
-         if(issue=VIEW_LIBERALCRIMESQUAD)
+         if(issue==VIEW_LIBERALCRIMESQUAD)
          {
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,LCSrandom(2),0,65);
             change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,!LCSrandom(8),0,65);
@@ -1823,8 +1821,6 @@ void funds_and_trouble(char &clearformess)
    //TROUBLE
    if(trouble.size()>0)
    {
-      char num[20];
-
       long juiceval=0;
       char done=0;
       unsigned short crime=0;
@@ -1840,8 +1836,8 @@ void funds_and_trouble(char &clearformess)
       if(trouble.size()>1)addstr("Your Activists have ");
       else {addstr(trouble[0]->name);addstr(" has ");}
 
-      long power=0;
-      for(int t=0;t<trouble.size();t++)
+      unsigned power=0;
+      for(unsigned int t=0;t<trouble.size();t++)
       {
          power+=trouble[t]->skillval(SKILL_PERSUASION)+
                   trouble[t]->attval(ATTRIBUTE_CHARISMA)+
@@ -1851,7 +1847,7 @@ void funds_and_trouble(char &clearformess)
                   trouble[t]->attval(ATTRIBUTE_INTELLIGENCE);
       }
 
-      long mod=1;
+      int mod=1;
       if(LCSrandom(100)<power)mod++;
       if(LCSrandom(100)<power)mod++;
       if(LCSrandom(1000)<power)mod++;
@@ -1981,7 +1977,7 @@ void funds_and_trouble(char &clearformess)
 
       if(crime!=0)
       {
-         for(int t=0;t<trouble.size();t++)
+         for(unsigned int t=0;t<trouble.size();t++)
          {
             if(!LCSrandom(10) &&                                         // Police called?
                !LCSrandom(trouble[t]->attval(ATTRIBUTE_AGILITY)+
@@ -2040,7 +2036,7 @@ void funds_and_trouble(char &clearformess)
                   refresh();
                   getch();
 
-                  if(trouble[t]->juice>=100||LCSrandom(100)<trouble[t]->juice)
+                  if(trouble[t]->juice>=100||signed(LCSrandom(100))<trouble[t]->juice)
                   {
                      addjuice(*trouble[t],-5);
                      if(trouble[t]->blood>50)trouble[t]->blood=50;
@@ -2148,17 +2144,17 @@ void funds_and_trouble(char &clearformess)
          }
       }
 
-      for(int h=0;h<trouble.size();h++)
+      for(unsigned int h=0;h<trouble.size();h++)
       {
          addjuice(*trouble[h],juiceval,20);
       }
    }
 
    //Teaching
-   for(int t=0;t<teachers.size();t++)
+   for(unsigned int t=0;t<teachers.size();t++)
    {
-      int skillarray[11];
-      int cost, students=0;
+      unsigned int skillarray[11];
+      unsigned int cost, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
       switch(teachers[t]->activity.type)
@@ -2221,14 +2217,14 @@ void funds_and_trouble(char &clearformess)
       }
 
       //Walk through and train people
-      for(int p=0;p<pool.size();p++)
+      for(unsigned int p=0;p<pool.size();p++)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
             pool[p]->align==ALIGN_LIBERAL)
          {
             //Step through the array of skills to train
-            for(int i=0;i<11;i++)
+            for(unsigned int i=0;i<11;i++)
             {
                //If no more skills to train, stop
                if(skillarray[i]==-1)break;
@@ -2274,9 +2270,6 @@ void funds_and_trouble(char &clearformess)
    //BURY THE DEAD
    if(bury.size()>0)
    {
-      char haveburied=0;
-      char caught=0;
-
       for(int p=pool.size()-1;p>=0;p--)
       {
          if(pool[p]->alive)continue;
@@ -2288,7 +2281,7 @@ void funds_and_trouble(char &clearformess)
          delete pool[p];
          pool.erase(pool.begin() + p);
 
-         for(int b=0;b<bury.size();b++)
+         for(unsigned int b=0;b<bury.size();b++)
          {
             if(!LCSrandom(bury[b]->skillval(SKILL_PERSUASION)+
                           bury[b]->skillval(SKILL_DISGUISE)+
@@ -2322,7 +2315,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
    if(carselect(cr,cartype))
    {
-      long diff=difficulty_carfind(cartype);
+      unsigned diff=difficulty_carfind(cartype);
 
       vehiclest *v=new vehiclest;
 
@@ -2507,7 +2500,7 @@ char stealcar(creaturest &cr,char &clearformess)
          //PICK LOCK
          if(method==0)
          {
-            int attack=cr.skillval(SKILL_SECURITY);
+            unsigned attack=cr.skillval(SKILL_SECURITY);
             //if(!LCSrandom(20))attack++;
 
             if(LCSrandom(6)<attack)
@@ -2533,8 +2526,8 @@ char stealcar(creaturest &cr,char &clearformess)
          //BREAK WINDOW
          if(method==1)
          {
-            int attack=cr.attval(ATTRIBUTE_STRENGTH)+
-               bashstrengthmod(cr.weapon.type);
+            unsigned int attack=cr.attval(ATTRIBUTE_STRENGTH)+
+                                bashstrengthmod(cr.weapon.type);
 
             if(LCSrandom(11)<attack+windowdamage)
             {
@@ -2627,7 +2620,7 @@ char stealcar(creaturest &cr,char &clearformess)
       char keys_in_car=0;
       char ignition_progress=0;
       char key_search_total=0;
-      int nervous_counter=0;
+      unsigned nervous_counter=0;
       if(!LCSrandom(5))keys_in_car=1;
 
       do
@@ -2709,7 +2702,7 @@ char stealcar(creaturest &cr,char &clearformess)
                   case 4:addstr(" is closer to figuring out this ignition system!");break;
                }
             }
-            int attack=cr.skillval(SKILL_SECURITY)+ignition_progress;
+            unsigned int attack=cr.skillval(SKILL_SECURITY)+ignition_progress;
 
             if(LCSrandom(11)<attack)
             {
@@ -2741,7 +2734,7 @@ char stealcar(creaturest &cr,char &clearformess)
          //KEYS
          if(method==1)
          {
-            int attack=cr.attval(ATTRIBUTE_INTELLIGENCE);
+            unsigned int attack=cr.attval(ATTRIBUTE_INTELLIGENCE);
 
             if(LCSrandom(11)<attack&&keys_in_car)
             {
@@ -2890,7 +2883,7 @@ char stealcar(creaturest &cr,char &clearformess)
 
 
 
-long difficulty_carfind(int type)
+unsigned difficulty_carfind(unsigned type)
 {
    switch(type)
    {
@@ -2915,12 +2908,12 @@ char carselect(creaturest &cr,short &cartype)
    cartype=-1;
 
    vector<int> cart;
-   for(int a=0;a<VEHICLENUM;a++)
+   for(unsigned int a=0;a<VEHICLENUM;a++)
    {
       if(difficulty_carfind(a)<10)cart.push_back(a);
    }
 
-   short page=0;
+   unsigned page=0;
 
    char str[200];
 
@@ -2938,7 +2931,7 @@ char carselect(creaturest &cr,short &cartype)
       addstr("----TYPE-----------------------------------------DIFFICULTY TO FIND UNATTENDED--");
 
       int y=2,difficulty;
-      for(int p=page*19;p<cart.size()&&p<page*19+19;p++)
+      for(unsigned p=page*19;p<cart.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -3017,7 +3010,7 @@ char carselect(creaturest &cr,short &cartype)
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
+         unsigned int p=page*19+(int)(c-'a');
          if(p<cart.size())
          {
             cartype=cart[p];
@@ -3033,9 +3026,9 @@ char carselect(creaturest &cr,short &cartype)
 
 
 
-long sensealarmchance(int ct)
+unsigned sensealarmchance(unsigned cartype)
 {
-   switch(ct)
+   switch(cartype)
    {
       case VEHICLE_SPORTSCAR:
          return 15;
@@ -3053,9 +3046,9 @@ long sensealarmchance(int ct)
 }
 
 
-long touchalarmchance(int ct)
+unsigned touchalarmchance(unsigned cartype)
 {
-   switch(ct)
+   switch(cartype)
    {
       case VEHICLE_SPORTSCAR:
          return 95;

@@ -230,7 +230,7 @@ void viewhighscores(void)
 /* loads the high scores file */
 void loadhighscores(void)
 {
-   for(int s=0;s<SCORENUM;s++)score[s].valid=0;
+   for(unsigned int s=0;s<SCORENUM;s++)score[s].valid=0;
 
    //LOAD FILE
    unsigned long loadversion;
@@ -282,7 +282,7 @@ void savehighscore(char endtype)
    //PLACE THIS HIGH SCORE BY DATE IF NECESSARY
    yourscore=-1;
 
-   for(int s=0;s<SCORENUM;s++)
+   for(unsigned int s=0;s<SCORENUM;s++)
    {
       if((endtype==END_WON&&score[s].endtype==END_WON&&
          year==score[s].year&&month==score[s].month&&
@@ -299,7 +299,7 @@ void savehighscore(char endtype)
 
          score[s].valid==0)
       {
-         for(int s2=SCORENUM-1;s2>=s+1;s2--)
+         for(unsigned int s2=SCORENUM-1;s2>=s+1;s2--)
          {
             score[s2]=score[s2-1];
          }

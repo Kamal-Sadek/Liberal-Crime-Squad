@@ -31,10 +31,10 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* common - test for possible game over */
-char endcheck(short cause)
+char endcheck(char cause)
 {
    char dead=1;
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
@@ -78,7 +78,7 @@ char endcheck(short cause)
 //GETS RID OF CAR PREFERENCES FROM pool LIBERALS, BY CAR ID NUMBER
 void removecarprefs_pool(long carid)
 {
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       if(pool[p]->pref_carid==carid)
       {
@@ -91,7 +91,7 @@ void removecarprefs_pool(long carid)
 // *JDS* Checks if the character is a criminal
 bool iscriminal(creaturest &cr)
 {
-   for(int i=0;i<LAWFLAGNUM;i++)
+   for(unsigned int i=0;i<LAWFLAGNUM;i++)
       if(cr.lawflag[i])
          return 1;
    return 0;
@@ -142,14 +142,14 @@ void hospitalize(int loc, creaturest &patient)
 
       if(patientsquad)
       {
-         for(int p=0;p<6;p++)
+         for(unsigned int p=0;p<6;p++)
          {
             if(patientsquad->squad[p]==&patient)
                patientsquad->squad[p]=NULL;
          }
 
          // Reorganize patient's squad
-         for(int i=0;i<5;i++)
+         for(unsigned int i=0;i<5;i++)
          {
             for(int p2=1;p2<6;p2++)
             {
@@ -172,7 +172,7 @@ int clinictime(creaturest &g)
 {
    int time=0;
 
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(unsigned int w=0;w<BODYPARTNUM;w++)
    {
       if(((g.wound[w] & WOUND_NASTYOFF))&&
           (g.blood < 100))
@@ -212,14 +212,14 @@ int testsquadclear(squadst &thissquad, int obase)
 {
    //SPLIT IF SQUAD IS GONE
    char hasmembers=0;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(thissquad.squad[p]!=NULL)hasmembers=1;
    }
    if(!hasmembers)
    {
       //LOSE ALL CARS
-      for(int p=0;p<6;p++)
+      for(unsigned int p=0;p<6;p++)
       {
          if(thissquad.squad[p]==NULL)continue;
          if(thissquad.squad[p]->carid!=-1)
@@ -235,7 +235,7 @@ int testsquadclear(squadst &thissquad, int obase)
       }
 
       //RETURN ALL LOOT ITEMS TO BASE
-      for(int l=0;l<thissquad.loot.size();l++)
+      for(unsigned int l=0;l<thissquad.loot.size();l++)
       {
          location[obase]->loot.push_back(thissquad.loot[l]);
       }
@@ -248,7 +248,7 @@ int testsquadclear(squadst &thissquad, int obase)
 
 
 /* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill,creaturest& cr,bool use_juice)
+unsigned maxskill(unsigned skill,creaturest& cr,bool use_juice)
 {
    switch(skill)
    {
@@ -319,7 +319,7 @@ int maxskill(int skill,creaturest& cr,bool use_juice)
 }
 
 /* common - returns the associated skill for the given weapon type */
-int weaponskill(int weapon)
+unsigned weaponskill(unsigned weapon)
 {
    int wsk=SKILL_HANDTOHAND;
    switch(weapon)
@@ -389,7 +389,7 @@ int weaponskill(int weapon)
 void criminalizeparty(short crime)
 {
    if(activesquad==NULL)return;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -405,7 +405,7 @@ void criminalizeparty(short crime)
 /* common - applies a crime to everyone in a location, or the entire LCS */
 void criminalizepool(short crime,long exclude,short loc)
 {
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       if(p==exclude)continue;
       if(loc!=-1&&pool[p]->location!=loc)continue;
@@ -429,7 +429,7 @@ void juiceparty(long juice)
 {
    if(activesquad!=NULL)
    {
-      for(int p=0;p<6;p++)
+      for(unsigned int p=0;p<6;p++)
       {
          if(activesquad->squad[p]!=NULL)
          {
@@ -459,7 +459,7 @@ void addjuice(creaturest &cr,long juice,long cap)
    //half of that in leadership skill
    if(cr.juice>20 && juice>=2 && cr.hireid!=-1)
    {
-      for(int i=0;i<pool.size();i++)
+      for(unsigned int i=0;i<pool.size();i++)
       {
          if(pool[i]->id==cr.hireid)
          {
@@ -483,7 +483,7 @@ void removesquadinfo(creaturest &cr)
       if(sq!=-1)
       {
          char flipstart=0;
-         for(int pt=0;pt<6;pt++)
+         for(unsigned int pt=0;pt<6;pt++)
          {
             if(squad[sq]->squad[pt]==&cr)flipstart=1;
             if(flipstart&&pt<5)squad[sq]->squad[pt]=squad[sq]->squad[pt+1];
@@ -504,7 +504,7 @@ void cleangonesquads(void)
    {
       //NUKE SQUAD IF IT IS GONE
       hasmembers=0;
-      for(int p=0;p<6;p++)
+      for(unsigned int p=0;p<6;p++)
       {
          if(squad[sq]->squad[p]!=NULL)
          {
@@ -549,7 +549,7 @@ void cleangonesquads(void)
 /* common - moves all squad members and their cars to a new location */
 void locatesquad(squadst *st,long loc)
 {
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(st->squad[p]!=NULL)
       {
@@ -572,7 +572,7 @@ void locatesquad(squadst *st,long loc)
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st,long loc)
 {
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(st->squad[p]!=NULL)
       {
@@ -756,7 +756,7 @@ int maxsubordinates(const creaturest& cr)
 int subordinatesleft(const creaturest& cr)
 {
    int recruitcap = maxsubordinates(cr);
-   for(int p=0; p<pool.size(); p++)
+   for(unsigned int p=0; p<pool.size(); p++)
    {
       // ignore seduced and brainwashed characters
       if(pool[p]->hireid == cr.id && pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
@@ -770,7 +770,7 @@ int subordinatesleft(const creaturest& cr)
 int loveslaves(const creaturest& cr)
 {
    int loveslaves=0;
-   for(int p=0; p<pool.size(); p++)
+   for(unsigned int p=0; p<pool.size(); p++)
    {
       // If subordinate and a love slave
       if(pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)

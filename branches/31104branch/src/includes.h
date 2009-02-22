@@ -154,8 +154,7 @@ using namespace std;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include <politics/alignment.h>
-#include <manager/manager.h>
+#include "politics/alignment.h"
 
 
 
@@ -260,8 +259,7 @@ using namespace std;
 
 
 unsigned long r_num(void);
-long LCSrandom(unsigned long max);
-template <class def, class instance>void configureLCS(char configFileString[30], defManager<def, instance> *manager);
+unsigned int LCSrandom(unsigned int max);
 
 enum UnlockTypes
 {
@@ -903,9 +901,9 @@ enum Activity
 struct activityst
 {
    activityst() : type(0), arg(0), arg2(0) { }
-   long type;
-   long arg;
-   long arg2;
+   int type;
+   int arg;
+   int arg2;
 };
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
@@ -925,14 +923,14 @@ struct activityst
 struct creaturest
 {
 private:
-   int skill_ip[SKILLNUM]; // Use public training interface!! >:0
+   unsigned int skill_ip[SKILLNUM]; // Use public training interface!! >:0
 public:
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
-   int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
-   int age;
-   int birthday_month;
-   int birthday_day;
+   unsigned squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+   unsigned age;
+   unsigned birthday_month;
+   unsigned birthday_day;
    bool exists;
    char align;
    bool alive;
@@ -949,19 +947,19 @@ public:
    short sentence;
    char confessions;
    char deathpenalty;
-   int joindays;
-   int deathdays;
+   unsigned int joindays;
+   unsigned int deathdays;
    int id;
    int hireid;
 
    char forceinc;
 
-   int att[ATTNUM];
-   int skill[SKILLNUM];
+   int att[ATTNUM]; // allow negatives in raw data, but check through attval()
+   unsigned int skill[SKILLNUM]; // should never decrease, so never be negative
 
    void train(int trainedskill, int experience);
    void skill_up();
-   int get_skill_ip(int getskill);
+   unsigned get_skill_ip(unsigned skill);
 
    bool enemy();
 
@@ -979,7 +977,7 @@ public:
    char special[SPECIALWOUNDNUM];
 
    unsigned int lawflag[LAWFLAGNUM];
-   int heat;
+   unsigned int heat;
    int location;
    int worklocation;
 
@@ -1021,8 +1019,8 @@ public:
       return 1;
    }
    void creatureinit(void);
-   int attval(short a,char usejuice=1);
-   int skillval(int skill_to_lookup) { return skill[skill_to_lookup]; }
+   unsigned int attval(short a,char usejuice=1);
+   unsigned int skillval(unsigned int skill_to_lookup) { return skill[skill_to_lookup]; }
 };
 
 #define SITEBLOCK_EXIT BIT1
@@ -1144,7 +1142,7 @@ struct siegest
    int orgID;
    short siegetype;
    char underattack;
-   long attacktime;
+   unsigned int attacktime;
    short kills;
    short escalationstate;
    char lights_off;
@@ -1178,11 +1176,6 @@ struct siegest
 
 struct locationst
 {
-	//PUZZ:  Now linked to an ORGANIZATION
-	//This needs to be made a class and crap, srsly.
-
-	int orgID;
-
    char name[40];
    char shortname[20];
    short type;
@@ -1196,9 +1189,9 @@ struct locationst
    char interrogated;
    int highsecurity;
    siegest siege;
-   int heat;
+   unsigned int heat;
    char compound_walls;
-   int compound_stores;
+   unsigned int compound_stores;
    short front_business;
    char front_name[40];
    char haveflag;
@@ -1212,7 +1205,6 @@ struct locationst
       needcar=0;
       renting=-1;
       hidden=0;
-	  orgID = -1;
    }
    void init(void);
 };
@@ -1295,7 +1287,7 @@ struct squadst
 
    squadst()
    {
-      for(int p=0;p<6;p++)squad[p]=NULL;
+      for(unsigned int p=0;p<6;p++)squad[p]=NULL;
       strcpy(name,"");
       activity.type=ACTIVITY_NONE;
       id=-1;
@@ -1495,8 +1487,8 @@ struct highscorest
    char endtype;
 
    char slogan[SLOGAN_LEN+1];
-   int month;
-   int year;
+   unsigned int month;
+   unsigned int year;
    unsigned long stat_recruits;
    unsigned long stat_kidnappings;
    unsigned long stat_dead;
@@ -1536,16 +1528,16 @@ struct interrogation
       techniques[8]=0;
    };
 
-   int nofood;  //days without food
-   int nowater; //days without water
-   int nosleep; //days without sleep
-   int nolight; //days without light
+   unsigned int nofood;  //days without food
+   unsigned int nowater; //days without water
+   unsigned int nosleep; //days without sleep
+   unsigned int nolight; //days without light
 
    bool techniques[9]; //yesterday's interrogation plan
 
    int totalspiritcrush; //total amount of spirit crush applied over time
 
-   int druguse; //total days of drug use
+   unsigned int druguse; //total days of drug use
 
    //Maps individual characters to the rapport built with them
    map<long,struct float_zero> rapport;
@@ -1671,7 +1663,7 @@ void addpagestr();
  commonactions.cpp
 */
 /* common - test for possible game over */
-char endcheck(short cause=-1);
+char endcheck(char cause=-1);
 /* common - detatches all liberals from a specified car */
 void removecarprefs_pool(long carid);
 /* common - tests if the person is a wanted criminal */
@@ -1683,9 +1675,9 @@ int clinictime(creaturest &g);
 /* common - purges squad of loot and vehicles if it has no members */
 int testsquadclear(squadst &thissquad, int obase);
 /* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill, creaturest& cr, bool use_juice=true);
+unsigned int maxskill(unsigned int skill, creaturest& cr, bool use_juice=true);
 /* common - returns the associated skill for the given weapon type */
-int weaponskill(int weapon);
+unsigned int weaponskill(unsigned int weapon);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */
@@ -1764,7 +1756,7 @@ void enter_name(char *name, int len, char *defname=NULL);
 /* transforms a squad id number into the index of that squad in the global vector */
 long getsquad(long id);
 /* transforms a car id number into the index of that car in the global vector */
-long id_getcar(long id);
+int id_getcar(unsigned id);
 /* transforms a creature id number into the index of that person in the pool */
 int getpoolcreature(long id);
 
@@ -1914,12 +1906,12 @@ void select_tendhostage(creaturest *cr);
 long select_hostagefundinglevel(creaturest *cr,creaturest *hs);
 /* base - activate - make clothing */
 void select_makeclothing(creaturest *cr);
-long armor_makedifficulty(int type,creaturest *cr);
-long armor_makeprice(int type);
+unsigned int armor_makedifficulty(int type,creaturest *cr);
+unsigned int armor_makeprice(int type);
 /* base - activate - trouble */
 long select_troublefundinglevel(creaturest *cr);
 /* base - activate - select a topic to write about */
-char select_view(creaturest *cr,long &v);
+char select_view(creaturest *cr,int &v);
 
 /*
  reviewmode.cpp
@@ -1945,7 +1937,7 @@ void sortbyhire(vector<creaturest *> &temppool,vector<int> &level);
 /*
  sitemode.cpp
 */
-void mode_site(long loc);
+void mode_site(short loc);
 void mode_site(void);
 /* site - determines spin on site news story, "too hot" timer */
 void resolvesite(void);
@@ -2115,7 +2107,7 @@ char chasesequence(void);
 char footchase(void);
 void evasivedrive(void);
 void evasiverun(void);
-long driveskill(creaturest &cr,vehiclest *v);
+unsigned driveskill(creaturest &cr,vehiclest *v);
 void drivingupdate(short &obstacle);
 void makechasers(long sitetype,long sitecrime);
 void obstacledrive(short obstacle,char choice);
@@ -2163,7 +2155,7 @@ char securityable(int type);
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(locationst &loc);
 /* daily - returns the number of days in the current month */
-int monthday(void);
+unsigned monthday(void);
 
 /*
  activities.cpp
@@ -2182,10 +2174,10 @@ void survey(creaturest *cr);
 void funds_and_trouble(char &clearformess);
 /* steal a car */
 char stealcar(creaturest &cr,char &clearformess);
-long difficulty_carfind(int type);
+unsigned difficulty_carfind(unsigned type);
 char carselect(creaturest &cr,short &cartype);
-long sensealarmchance(int ct);
-long touchalarmchance(int ct);
+unsigned sensealarmchance(unsigned cartype);
+unsigned touchalarmchance(unsigned cartype);
 /* get a wheelchair */
 void getwheelchair(creaturest &cr,char &clearformess);
 
@@ -2338,7 +2330,7 @@ void congress(char clearformess,char canseethings);
 /* politics - checks if the game is won */
 char wincheck(void);
 /* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l);
+unsigned int publicmood(unsigned int l);
 
 /*
  endgame.cpp

@@ -127,6 +127,7 @@ bool LCSInitArtDir()
         return false;
 
     strncpy(artdir,artprefix,MAX_PATH_SIZE);
+    return true;
 }
 
 

@@ -64,7 +64,7 @@ void setpriority(newsstoryst &ns)
          int crime[CRIMENUM];
          memset(crime,0,CRIMENUM*sizeof(int));
          // Record all the crimes in this story
-         for(int c=0;c<ns.crime.size();c++)
+         for(unsigned int c=0;c<ns.crime.size();c++)
          {
             crime[ns.crime[c]]++;
          }
@@ -242,7 +242,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             {
                int crime[CRIMENUM];
                std::memset(crime,0,sizeof(int)*CRIMENUM);
-               for(int c=0;c<ns.crime.size();c++)
+               for(unsigned int c=0;c<ns.crime.size();c++)
                {
                   crime[ns.crime[c]]++;
                }
@@ -281,7 +281,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             {
                int crime[CRIMENUM];
                std::memset(crime,0,sizeof(int)*CRIMENUM);
-               for(int c=0;c<ns.crime.size();c++)
+               for(unsigned int c=0;c<ns.crime.size();c++)
                {
                   crime[ns.crime[c]]++;
                }
@@ -386,7 +386,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                int crime[CRIMENUM];
                memset(crime,0,sizeof(int)*CRIMENUM);
                int typesum=0;
-               for(int c=0;c<ns.crime.size();c++)
+               for(unsigned int c=0;c<ns.crime.size();c++)
                {
                   crime[ns.crime[c]]++;
 
@@ -971,11 +971,11 @@ void loadgraphics(void)
       numbytes=fread(&picnum,sizeof(unsigned long),1,h);
       numbytes=fread(&dimx,sizeof(unsigned long),1,h);
       numbytes=fread(&dimy,sizeof(unsigned long),1,h);
-      for(int p=0;p<picnum;p++)
+      for(unsigned int p=0;p<picnum;p++)
       {
-         for(int x=0;x<dimx;x++)
+         for(unsigned int x=0;x<dimx;x++)
          {
-            for(int y=0;y<dimy;y++)
+            for(unsigned int y=0;y<dimy;y++)
             {
                numbytes=fread(&bigletters[p][x][y][0],sizeof(unsigned char),4,h);
             }
@@ -991,11 +991,11 @@ void loadgraphics(void)
       numbytes=fread(&picnum,sizeof(unsigned long),1,h);
       numbytes=fread(&dimx,sizeof(unsigned long),1,h);
       numbytes=fread(&dimy,sizeof(unsigned long),1,h);
-      for(int p=0;p<picnum;p++)
+      for(unsigned int p=0;p<picnum;p++)
       {
-         for(int x=0;x<dimx;x++)
+         for(unsigned int x=0;x<dimx;x++)
          {
-            for(int y=0;y<dimy;y++)
+            for(unsigned int y=0;y<dimy;y++)
             {
                numbytes=fread(&newstops[p][x][y][0],sizeof(unsigned char),4,h);
             }
@@ -1012,11 +1012,11 @@ void loadgraphics(void)
       numbytes=fread(&picnum,sizeof(unsigned long),1,h);
       numbytes=fread(&dimx,sizeof(unsigned long),1,h);
       numbytes=fread(&dimy,sizeof(unsigned long),1,h);
-      for(int p=0;p<picnum;p++)
+      for(unsigned int p=0;p<picnum;p++)
       {
-         for(int x=0;x<dimx;x++)
+         for(unsigned int x=0;x<dimx;x++)
          {
-            for(int y=0;y<dimy;y++)
+            for(unsigned int y=0;y<dimy;y++)
             {
                numbytes=fread(&newspic[p][x][y][0],sizeof(unsigned char),4,h);
             }
@@ -1031,7 +1031,7 @@ void loadgraphics(void)
 void displaycenterednewsfont(char *str,int y)
 {
    int width=-1;
-   int s;
+   unsigned int s;
    for(s=0;s<strlen(str);s++)
    {
       if(str[s]>='A'&&str[s]<='Z')width+=6;
@@ -1083,9 +1083,9 @@ void displaycenterednewsfont(char *str,int y)
       else
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         for(int x2=0;x2<3;x2++)
+         for(unsigned int x2=0;x2<3;x2++)
          {
-            for(int y2=0;y2<7;y2++)
+            for(unsigned int y2=0;y2<7;y2++)
             {
                move(y+y2,x+x2);
                addch(CH_FULL_BLOCK);
@@ -1110,9 +1110,9 @@ void displaycenteredsmallnews(char *str,int y)
 
 void displaynewspicture(int p,int y)
 {
-   for(int x2=0;x2<78;x2++)
+   for(unsigned int x2=0;x2<78;x2++)
    {
-      for(int y2=0;y2<15;y2++)
+      for(unsigned int y2=0;y2<15;y2++)
       {
          if(y+y2>24)break;
          move(y+y2,1+x2);
@@ -1136,15 +1136,15 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
    vector<char *> text;
    vector<char> centered;
 
-   int totalwidth;
-   int curpos=0;
+   unsigned int totalwidth;
+   unsigned int curpos=0;
 
    int addstrcur;
    char addstring[500];
 
    char content;
    int cury=y;
-   int length;
+   unsigned int length;
    char endparagraph=0;
    char iscentered=0;
    unsigned int i=0;
@@ -1203,7 +1203,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
          int words=0;
          char silent=1;
          vector<int> spacex;
-         for(int s2=0;s2<strlen(addstring);s2++)
+         for(unsigned int s2=0;s2<strlen(addstring);s2++)
          {
             if(addstring[s2]==' ')
             {
@@ -1228,7 +1228,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
          {
             int csp=spacex[LCSrandom(spacex.size())];
 
-            for(int x=0;x<spacex.size();x++)
+            for(unsigned int x=0;x<spacex.size();x++)
             {
                if(spacex[x]>csp)spacex[x]++;
             }
@@ -1256,7 +1256,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
    }
 
    set_color(COLOR_BLACK,COLOR_WHITE,0);
-   for(int t=0;t<text.size();t++)
+   for(unsigned int t=0;t<text.size();t++)
    {
       if(y+t>=25)break;
       if(centered[t])
@@ -1285,7 +1285,7 @@ void generatefiller(char *story,int amount)
    while(amount>0)
    {
       par++;
-      for(int i=0;i<LCSrandom(10)+3;i++)strcat(story,"~");
+      for(unsigned int i=0;i<LCSrandom(10)+3;i++)strcat(story,"~");
       if(amount>1)strcat(story," ");
       if(par>=50&&!LCSrandom(5)&&amount>20)
       {
@@ -1303,8 +1303,7 @@ void generatefiller(char *story,int amount)
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings)
 {
-   int n = 0;
-   int i;
+   unsigned int i, n=0;
 
    int writers=0;
 
@@ -1407,7 +1406,7 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_BURIALARREST)
       {
          char conf=0;
-         for(int c=0;c<newsstory[n]->crime.size();c++)
+         for(unsigned int c=0;c<newsstory[n]->crime.size();c++)
          {
             if(newsstory[n]->crime[c]==CRIME_KILLEDSOMEBODY)
             {
@@ -1765,7 +1764,7 @@ void majornewspaper(char &clearformess,char canseethings)
    }
 
    
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       //Letters to the editor
       //Yes, crappy letters to the editor may backfire
@@ -1786,7 +1785,7 @@ void majornewspaper(char &clearformess,char canseethings)
    }
 
    //Essay writing (old code)
-   /*for(int w=0;w<VIEWNUM;w++)
+   /*for(unsigned int /1=0;w<VIEWNUM;w++)
    {
       if(!public_interest[w])
       {

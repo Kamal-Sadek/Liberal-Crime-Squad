@@ -243,7 +243,7 @@ void locheader(void)
       if(activesquad->activity.type==ACTIVITY_NONE)
       {
          int count=0;char haveact=0;
-         for(int p=0;p<6;p++)
+         for(unsigned int p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL)continue;
             count++;
@@ -267,7 +267,7 @@ void printparty(void)
    creaturest *party[6]={NULL,NULL,NULL,NULL,NULL,NULL};
    if(activesquad!=NULL)
    {
-      for(int p=0;p<6;p++)party[p]=activesquad->squad[p];
+      for(unsigned int p=0;p<6;p++)party[p]=activesquad->squad[p];
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -298,7 +298,7 @@ void printparty(void)
       move(1,0);
       addstr("#-CODE NAME------------SKILL---WEAPON---------ARMOR----------HEALTH---TRANSPORT-");
 
-      for(int p=0;p<6;p++)
+      for(unsigned int p=0;p<6;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(p+2,0);
@@ -316,7 +316,7 @@ void printparty(void)
 
             unsigned long skill=0;
             char bright=0;
-            for(int sk=0;sk<SKILLNUM;sk++)
+            for(unsigned int sk=0;sk<SKILLNUM;sk++)
             {
                skill+=(unsigned long)party[p]->skill[sk];
                if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->skill[sk])&&
@@ -742,7 +742,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 
       unsigned long max=0;
       long maxs=-1;
-      for(int s=0;s<SKILLNUM;s++)
+      for(unsigned int s=0;s<SKILLNUM;s++)
       {
          if(cr->skill[s]>max && !used[s])
          {
@@ -785,7 +785,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
    }
 
    int woundsum=0;
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(unsigned int w=0;w<BODYPARTNUM;w++)
    {
       if(cr->wound[w]!=0)woundsum++;
    }
@@ -794,7 +794,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 
    if(woundsum>0)
    {
-      for(int w=0;w<BODYPARTNUM;w++)
+      for(unsigned int w=0;w<BODYPARTNUM;w++)
       {
          if(cr->wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -960,7 +960,7 @@ void printliberalskills(creaturest &cr)
    addstr(")");
 
    // Add all skills
-   for(int s=0;s<SKILLNUM;s++)
+   for(unsigned int s=0;s<SKILLNUM;s++)
    {
       if(s%3==0 && s<9)
       {
@@ -1133,20 +1133,20 @@ void printliberalstats(creaturest &cr)
    char used[SKILLNUM];
    memset(used,0,sizeof(char)*SKILLNUM);
 
-   int skills_max=17;
+   unsigned int skills_max=17;
    char printed=1;
 
    move(5,28);
    addstr("SKILL");
    move(5,43);
    addstr("NOW   MAX");
-   for(int skills_shown=0;skills_shown<skills_max&&printed;skills_shown++)
+   for(unsigned int skills_shown=0;skills_shown<skills_max&&printed;skills_shown++)
    {
       printed=0;
 
       unsigned long max=0;
       long maxs=-1;
-      for(int s=0;s<SKILLNUM;s++)
+      for(unsigned int s=0;s<SKILLNUM;s++)
       {
          if((cr.skill[s]*10000+cr.get_skill_ip(s))>max && !used[s])
          {
@@ -1287,7 +1287,7 @@ void printliberalstats(creaturest &cr)
    }
 
    // Add wound status
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(unsigned int w=0;w<BODYPARTNUM;w++)
    {
       if(cr.wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1461,7 +1461,7 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
 {
    short woundsum=0;
    char bleeding=0;
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(unsigned int w=0;w<BODYPARTNUM;w++)
    {
       if(g.wound[w]!=0)woundsum++;
       if(g.wound[w] & WOUND_BLEEDING)bleeding=1;
@@ -1667,7 +1667,7 @@ void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
 	//Save color and brightness information for later.
 	short colorpair;
 	short front, back;
-	short dim;
+	char dim;
 	
 	attr_t attrs;
 	attr_get(&attrs,&colorpair,NULL);

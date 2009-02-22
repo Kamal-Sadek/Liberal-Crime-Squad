@@ -32,8 +32,8 @@ This file is part of Liberal Crime Squad.                                       
 /* unlock attempt */
 char unlock(short type,char &actual)
 {
-   int p;
-   int difficulty=0;
+   unsigned int p;
+   unsigned int difficulty=0;
 
    switch(type)
    {
@@ -47,7 +47,7 @@ char unlock(short type,char &actual)
       case UNLOCK_SAFE:difficulty=10;break;
    }
 
-   int maxattack=0;
+   unsigned int maxattack=0;
 
    for(p=0;p<6;p++)
    {
@@ -81,9 +81,9 @@ char unlock(short type,char &actual)
 
    if(goodp.size()>0)
    {
-      int p=goodp[LCSrandom(goodp.size())];
+      unsigned int p=goodp[LCSrandom(goodp.size())];
 
-      int aroll=LCSrandom(6)+maxattack;
+      unsigned int aroll=LCSrandom(6)+maxattack;
       if(maxattack<=difficulty)
       {
       	activesquad->squad[p]->train(SKILL_SECURITY,1+difficulty*2-maxattack);
@@ -106,7 +106,7 @@ char unlock(short type,char &actual)
          }
          addstr("!");
          refresh();
-         for(int j=0;j<6;j++) //If people witness a successful unlock, they learn a little bit.
+         for(unsigned int j=0;j<6;j++) //If people witness a successful unlock, they learn a little bit.
          {
 	         if (j==p) continue;
 	         if(activesquad->squad[j]!=NULL&&
@@ -189,7 +189,7 @@ char bash(short type,char &actual)
       if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))crowable=0;
    }
 
-   int maxattack=0;
+   unsigned int maxattack=0;
 
    for(p=0;p<6;p++)
    {
@@ -361,7 +361,7 @@ char hack(short type,char &actual)
       case HACK_SUPERCOMPUTER:difficulty=20;break;
    }
 
-   int maxattack=0;
+   unsigned int maxattack=0;
    char blind=0;
 
    for(p=0;p<6;p++)
@@ -487,7 +487,7 @@ char radio_broadcast(void)
    sitealarm=1;
 
    int enemy=0;
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
@@ -695,7 +695,7 @@ char radio_broadcast(void)
       getch();
 
       int numleft=LCSrandom(8)+2;
-      for(int e=0;e<ENCMAX;e++)
+      for(unsigned int e=0;e<ENCMAX;e++)
       {
          if(!encounter[e].exists)
          {
@@ -731,7 +731,7 @@ char news_broadcast(void)
    int p;
 
    int enemy=0;
-   for(int e=0;e<ENCMAX;e++)
+   for(unsigned int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
@@ -937,7 +937,7 @@ char news_broadcast(void)
       getch();
 
       int numleft=LCSrandom(8)+2;
-      for(int e=0;e<ENCMAX;e++)
+      for(unsigned int e=0;e<ENCMAX;e++)
       {
          if(!encounter[e].exists)
          {
@@ -970,7 +970,7 @@ char news_broadcast(void)
 void partyrescue(void)
 {
    int freeslots=0;
-   int p, pl;
+   unsigned int p, pl;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)freeslots++;
@@ -994,7 +994,7 @@ void partyrescue(void)
       {
          if(LCSrandom(2)&&freeslots)
          {
-            for(int p=0;p<6;p++)
+            for(unsigned int p=0;p<6;p++)
             {
                if(activesquad->squad[p]==NULL)
                {
@@ -1032,7 +1032,7 @@ void partyrescue(void)
       {
          if(hostslots)
          {
-            for(int p=0;p<6;p++)
+            for(unsigned int p=0;p<6;p++)
             {
                if(activesquad->squad[p]!=NULL)
                {
@@ -1131,7 +1131,7 @@ void partyrescue(void)
 /* everybody reload! */
 void reloadparty(bool wasteful)
 {
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;

@@ -27,10 +27,10 @@ This file is part of Liberal Crime Squad.                                       
 recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
 {
    //Has heard of the LCS
-   if(LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUAD])
+   if((int)LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUAD])
    {
       //Likes the LCS
-      if(LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUADPOS])
+      if((int)LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUADPOS])
       {
          eagerness1=1;
       }
@@ -70,8 +70,6 @@ char recruitst::eagerness()
 /* daily - recruit - recruit completes task */
 char completerecruittask(recruitst &r,int p,char &clearformess)
 {
-   int e=0;
-
    if(clearformess)erase();
    else
    {
@@ -239,7 +237,6 @@ static void getissueeventstring(char* str)
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 {
-   int e;
    clearformess=1;
 
    erase();
@@ -326,7 +323,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       int c=getch();
       translategetch(c);
 
-      char test=0;
       if(c=='d' && subordinatesleft(*pool[p]))
       {
          move(y,0);
@@ -455,7 +451,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
 
          if((lib_persuasiveness         > recruit_reluctance) &&
-            (max_eagerness+LCSrandom(5) > r.eagerness()     ))
+            (max_eagerness+(int)LCSrandom(5) > r.eagerness()     ))
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
             r.level++;

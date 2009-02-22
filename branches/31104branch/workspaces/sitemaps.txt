@@ -1,42 +1,92 @@
-
-#TODO: ADD PARK, SAFEHOUSE MAPS
-
+#
+# (Scroll down past the lines starting with # for the map scripts.)
+#
+# TODO:
+# - Add safehouse maps
+# - Document all existing tiles and specials
+#
+#
+#
+# Start a line with the # symbol to indicate a comment
+# Do not initiate comments elsewhere in the line
+#
+# All lines without comments must be either totally empty or have the pattern:
+# (whitespace) COMMAND (whitespace) VALUE
+# I reccomend using tabs to separate the command and value for clarity and organization
+# Leading tabs to indicate hierarchy aren't required, but help for readability
+#
+#
+#
 #OBJECT	SITEMAP	-- tells the game you're making a site map
 #	NAME	GENERIC_EXAMPLE -- labels the map, needed to add it to a level
-#	USE	GENERIC_FRONTDOOR -- build a map of this type first, then draw this map OVER it (useful for inheriting common motifs)
-#	TILE	SECURE -- name of the tile you'd like to draw with
-#		XSTART	-10 -- leftmost extreme of the rectangle to draw
+#	USE	GENERIC_FRONTDOOR -- build a map of this type first, then draw the
+#					specified changes over it (useful for inheriting common motifs, in this
+#					case it pre-builds a front door with exits around the spawn point)
+#	TILE	RESTRICTED  -- name of the tile you'd like to draw with, in this case creates a high security area
+#		XSTART	-10 -- leftmost extreme of the rectangle to draw (here, ten tiles left of start)
 #		XEND	10  -- rightmost extreme of the rectangle to draw
-#		YSTART	1   -- topmost extreme of the rectangle to draw
+#		YSTART	1   -- topmost extreme of the rectangle to draw 
 #		YEND	21  -- bottommost extreme of the rectangle to draw
-#		ZSTART	0   -- lowest level to draw this on
-#		ZEND	0   -- highest level to draw this on
+#		ZSTART	0   -- lowest floor to draw this on (0 is ground floor, 1 is one story up, etc)
+#		ZEND	0   -- highest floor to draw this on
 #		NOTE	ADD -- this tile should be COMBINED with existing tiles there (useful for securing areas, doors, etc)
-#	SCRIPT	ROOM -- name of a script to call on the specified area; scripts must be programmed into the code but can do arbitrarily complicated things
+#	SCRIPT	ROOM -- the command SCRIPT specifies a C++ method to call on the specified area; scripts must be programmed
+#					into the code but can do arbitrarily complicated things, and are used for complex
+#					tasks that are impossible to do using the config files.
 #		XSTART	-5
 #		XEND	5
 #		YSTART	3
-#		YEND	8
-#		ZSTART	0
-#		ZEND	0
+#		YEND	8 (omitting a coordinate sets it to 0, as is here for the z coordinates)
 #	SPECIAL	TABLE -- name of the special feature you'd like to draw
 #		XSTART	-10
 #		XEND	10
 #		YSTART	1
 #		YEND	21
-#		ZSTART	0
-#		ZEND	0
+#		Z	0 -- naming a coordinate without START or END assigns the value to both of them, as here with Z
 #		FREQ	5 -- draw this special about once every (5) tiles in this area
-#	UNIQUE	NUCLEAR_BUTTON -- name of the special to add uniquely to a single random open secure tile, if one is available
-#	LOOT	POLICE_RECORDS -- name of a type of stealable loot you want on this map
-#		WEIGHT	10 -- weighting on how frequently this loot will be rolled on this map (all loot freq's added, rolls randomly inside that range)
-
-# MAX/MIN X: -39/+39
+#	UNIQUE	NUCLEAR_ONOFF -- name of the special to add uniquely to a single random open secure tile, if one is available
+#	LOOT	POLICERECORDS -- name of a type of stealable loot you want on this map
+#		WEIGHT	10 -- weighting on how frequently a loot on the ground will be of this type, relative to any other
+#				loots specified (all loot freq's added, then it rolls randomly inside that range...
+#				so police records with freq 10 and chemicals with freq 20 gives a 2/3 chance that a
+#				given loot will be a chemical, and a 1/3 chance that it'll be police records)
+#
+#
+#
+# MAX/MIN X: -34/+34
 # MAX/MIN Y:  00/+22
 # MAX/MIN Z:  00/+09
 # Going beyond these limits may crash the game
-
+#
 # Player starts at X = 0, Y = 1, Z = 0 when visiting a site
+# Starting position varies when under siege
+#
+#
+#
+# USING STAIRS:
+#
+# - You can manually place stairs through SPECIAL STAIRS_UP and SPECIAL STAIRS_DOWN. You'll need to use both;
+# the game doesn't automatically place down stairs over up stairs and vice versa, and it's entirely possible to
+# get trapped on a level after climbing stairs that you can't get back down.
+#
+# - SCRIPT STAIRS will avoid this problem. Specify a volume that covers multiple z-levels and either stretches
+# along the X or Y axis for at least two tiles, and the script will automatically create stairs up and down on
+# each level. This is what is used to create the apartment stairwells in the game.
+#
+# - There isn't currently a good way to make roguelike-style stairs that are randomly placed in the
+# level. Specifying a range with SPECIAL won't have the desired effect, since SPECIAL just randomly spams stuff
+# down like tables in a restaurant.
+#
+#
+#
+# SCRIPTS:
+#
+# ROOM          - Random room generator, will generate either a room, or a maze of rooms, depending on the size of the area.
+# HALLWAY_YAXIS - Carves out a single tile wide hallway vertically down the map, then plots rooms on either side of the hallway.
+# STAIRS        - Creates a nice stairwell with alternating up and down stairs.
+#
+#
+# NOTE: Loot is currently not using this system.
 
 
 OBJECT	SITEMAP
@@ -79,7 +129,7 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	GENERIC_SECURE
 	USE	GENERIC_UNSECURE
-	TILE	SECURE
+	TILE	RESTRICTED
 		XSTART	-12
 		XEND	12
 		YSTART	3
@@ -114,7 +164,7 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	BUSINESS_INTERNETCAFE
 	USE	BUSINESS_CAFE
-	SPECIAL	COMPUTER
+	SPECIAL	CAFE_COMPUTER
 		XSTART	-4
 		XEND	4
 		YSTART	3
@@ -124,13 +174,13 @@ OBJECT	SITEMAP
 		FREQ	10
 
 OBJECT	SITEMAP
-	NAME	BUSINESS_GENTLEMANSCLUB
+	NAME	BUSINESS_RESTRICTEDCAFE
 	USE	BUSINESS_CAFE
-	SPECIAL	BOUNCER	
+	SPECIAL	CLUB_BOUNCER	
 		X	0
 		Y	1
 		Z	0
-	TILE	SECURE
+	TILE	RESTRICTED
 		XSTART	-4
 		XEND	4
 		YSTART	3
@@ -141,7 +191,7 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	INDUSTRY_SWEATSHOP
 	USE	GENERIC_SECURE
-	SPECIAL	EQUIPMENT_SWEATSHOP
+	SPECIAL	SWEATSHOP_EQUIPMENT
 		XSTART	-12
 		XEND	12
 		YSTART	3
@@ -155,7 +205,7 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	INDUSTRY_POLLUTER
 	USE	GENERIC_SECURE	
-	SPECIAL	EQUIPMENT_POLLUTER
+	SPECIAL	POLLUTER_EQUIPMENT
 		XSTART	-12
 		XEND	12
 		YSTART	3
@@ -169,27 +219,27 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	INDUSTRY_NUCLEAR
 	USE	GENERIC_SECURE
-	UNIQUE	NUCLEAR_BUTTON
+	UNIQUE	NUCLEAR_ONOFF
 
 OBJECT	SITEMAP
 	NAME	GOVERNMENT_INTELLIGENCEHQ
 	USE	GENERIC_SECURE
-	UNIQUE	CIA_SUPERCOMPUTER
+	UNIQUE	INTEL_SUPERCOMPUTER
 
 OBJECT	SITEMAP
 	NAME	CORPORATE_HEADQUARTERS
 	USE	GENERIC_SECURE
-	UNIQUE	CORPORATE_SAFE
+	UNIQUE	CORPORATE_FILES
 
 OBJECT	SITEMAP
 	NAME	CORPORATE_HOUSE
 	USE	GENERIC_SECURE
-	UNIQUE	CEO_SAFE
+	UNIQUE	HOUSE_PHOTOS
 
 OBJECT	SITEMAP
 	NAME	LABORATORY_GENETICS
 	USE	GENERIC_SECURE
-	SPECIAL	CAGE_BEASTS
+	SPECIAL	LAB_GENETIC_CAGEDANIMALS
 		XSTART	-12
 		XEND	12
 		YSTART	3
@@ -201,7 +251,7 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	LABORATORY_COSMETICS
 	USE	GENERIC_SECURE
-	SPECIAL	CAGE_RABBITS
+	SPECIAL	LAB_COSMETICS_CAGEDANIMALS
 		XSTART	-12
 		XEND	12
 		YSTART	3
@@ -226,8 +276,8 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	GOVERNMENT_COURTHOUSE
 	USE	GENERIC_LOBBY
-	UNIQUE	LOCKUP_COURTHOUSE
-	UNIQUE	JURY
+	UNIQUE	COURTHOUSE_LOCKUP
+	UNIQUE	COURTHOUSE_JURYROOM
 
 OBJECT	SITEMAP
 	NAME	GOVERNMENT_PRISON
@@ -237,14 +287,14 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	MEDIA_AMRADIO
 	USE	GENERIC_SECURE
-	UNIQUE	STUDIO_RADIO
+	UNIQUE	RADIO_BROADCASTSTUDIO
 
 OBJECT	SITEMAP
 	NAME	MEDIA_CABLENEWS
 	USE	GENERIC_SECURE
-	UNIQUE	STUDIO_TV
+	UNIQUE	NEWS_BROADCASTSTUDIO
 
-# X on the hallway script used by the apartment
+# XEND on the hallway script used by the apartment
 # block determines the width of the connected
 # rooms to either side of the hallway
 OBJECT	SITEMAP
@@ -252,7 +302,8 @@ OBJECT	SITEMAP
 	USE	GENERIC_FRONTDOOR
 	TILE	OPEN
 	SCRIPT	HALLWAY_YAXIS
-		X	7
+		XSTART	0
+		XEND	7
 		YSTART	3
 		YEND	18
 		ZSTART	0
@@ -275,11 +326,19 @@ OBJECT	SITEMAP
 	TILE	RESTRICTED
 		XSTART	1
 		XEND	9
-		YSTART	3
+		YSTART	6
 		YEND	18
 		ZSTART	0
 		ZEND	6
 		NOTE	ADD
+	SPECIAL	APARTMENT_LANDLORD
+		X	2
+		Y	5
+		Z	0
+	SPECIAL	APARTMENT_SIGN
+		X	0
+		Y	2
+		Z	0
 		
 
 OBJECT	SITEMAP
@@ -291,7 +350,7 @@ OBJECT	SITEMAP
 		YEND	6
 		ZSTART	0
 		ZEND	0
-	TILE	OPEN
+	TILE	OUTDOOR
 		XSTART	-2
 		XEND	2
 		YSTART	1
@@ -300,8 +359,90 @@ OBJECT	SITEMAP
 		ZEND	0
 
 OBJECT	SITEMAP
+	NAME	OUTDOOR_PUBLICPARK
+	TILE	EXIT
+		XSTART	-5
+		XEND	5
+		YSTART	0
+		YEND	10
+	TILE	OUTDOOR
+		XSTART	-4
+		XEND	4
+		YSTART	1
+		YEND	9
+	TILE	GRASSY
+		XSTART	-3
+		XEND	-1
+		YSTART	2
+		YEND	4
+		NOTE	ADD
+	TILE	GRASSY
+		XSTART	1
+		XEND	3
+		YSTART	2
+		YEND	4
+		NOTE	ADD
+	TILE	GRASSY
+		XSTART	1
+		XEND	3
+		YSTART	6
+		YEND	8
+		NOTE	ADD
+	TILE	GRASSY
+		XSTART	-3
+		XEND	-1
+		YSTART	6
+		YEND	8
+		NOTE	ADD
+	TILE	BLOCK
+		XSTART	-4
+		XEND	-1
+		Y	1
+	TILE	BLOCK
+		XSTART	1
+		XEND	4
+		Y	1
+	TILE	BLOCK
+		XSTART	-4
+		XEND	-1
+		Y	9
+	TILE	BLOCK
+		XSTART	1
+		XEND	4
+		Y	9
+	TILE	BLOCK
+		X	-4
+		YSTART	2
+		YEND	4
+	TILE	BLOCK
+		X	4
+		YSTART	2
+		YEND	4
+	TILE	BLOCK
+		X	-4
+		YSTART	6
+		YEND	8
+	TILE	BLOCK
+		X	4
+		YSTART	6
+		YEND	8
+	TILE	BLOCK
+		X	1
+		Y	6
+	TILE	BLOCK
+		X	1
+		Y	4
+	TILE	BLOCK
+		X	-1
+		Y	6
+	TILE	BLOCK
+		X	-1
+		Y	4
+
+OBJECT	SITEMAP
 	NAME	OUTDOOR_LATTESTAND
-	SPECIAL	TABLE
+	USE	OUTDOOR_OPEN
+	SPECIAL	RESTAURANT_TABLE
 		XSTART	-2
 		XEND	2
 		YSTART	1

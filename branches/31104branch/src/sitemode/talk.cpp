@@ -53,7 +53,7 @@ char talk(creaturest &a,int t)
       int weaponhostage=0;
       bool cop=0;
 
-      for(int i=0;i<6;i++)
+      for(unsigned int i=0;i<6;i++)
       {
          if(activesquad->squad[i]&&
             activesquad->squad[i]->prisoner&&
@@ -123,13 +123,13 @@ char talk(creaturest &a,int t)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          
 
-         for(int e=0;e<ENCMAX;e++)
+         for(unsigned int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
                encounter[e].enemy())
             {
                if((a.juice*attitude[VIEW_LIBERALCRIMESQUAD]*a.blood/10000 >
-                   encounter[e].juice+encounter[e].attval(ATTRIBUTE_WISDOM)*5) && LCSrandom(2))
+                   encounter[e].juice+(int)encounter[e].attval(ATTRIBUTE_WISDOM)*5) && LCSrandom(2))
                {
                   if((encounter[e].type==CREATURE_COP||
                       encounter[e].type==CREATURE_GANGUNIT||
@@ -302,12 +302,12 @@ char talk(creaturest &a,int t)
                }
                if(c=='a')
                {
-                  creaturest* executer;
+                  creaturest* executer=0;
                   if(a.prisoner)
                   {
                      executer=&a;
                   }
-                  else for(int i=0;i<6;i++)
+                  else for(unsigned int i=0;i<6;i++)
                   {
                      if(activesquad->squad[i]->prisoner!=NULL)
                      {
@@ -471,7 +471,7 @@ char talk(creaturest &a,int t)
                      juiceparty(5); // Instant juice for successful hostage negotiation
                      if(hostages>1)addstr("The squad releases all hostages in the trade.");
                      else addstr("The squad releases the hostage in the trade.");
-                     for(int i=0;i<6;i++)
+                     for(unsigned int i=0;i<6;i++)
                      {
                         if(activesquad->squad[i] &&
                            activesquad->squad[i]->prisoner &&
@@ -563,7 +563,7 @@ char talk(creaturest &a,int t)
          getch();
 
          vector<int> noticer;
-         for(int e=0;e<ENCMAX;e++)
+         for(unsigned int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
                encounter[e].enemy())
@@ -576,7 +576,7 @@ char talk(creaturest &a,int t)
          {
             int disguise=disguiseskill();
             int weapon=0;
-            for(int i=0;i<6;i++)
+            for(unsigned int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
                int weapontemp=weaponcheck(*activesquad->squad[i],cursite);
@@ -606,11 +606,11 @@ char talk(creaturest &a,int t)
             //NOW MUST BLUFF
             if(!noticed)
             {
-               short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+
-                                         a.skillval(SKILL_DISGUISE)*2;
+               unsigned int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+
+                                                a.skillval(SKILL_DISGUISE)*2;
 
-               int maxtroll=0,troll;
-               for(int e=0;e<ENCMAX;e++)
+               unsigned int maxtroll=0,troll;
+               for(unsigned int e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
                      encounter[e].enemy())
@@ -714,7 +714,7 @@ char talk(creaturest &a,int t)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("The police arrest the Squad.");
          getch();
-         for(int i=0;i<6;++i)
+         for(unsigned int i=0;i<6;++i)
          {
             if(activesquad->squad[i])capturecreature(*activesquad->squad[i]);
             activesquad->squad[i]=NULL;
@@ -844,19 +844,17 @@ char talk(creaturest &a,int t)
 
                if(lw!=-1)
                {
-                  short aroll=
-                     LCSrandom(21)+
-                     a.attval(ATTRIBUTE_CHARISMA)+
-                     a.attval(ATTRIBUTE_HEART)+
-                     a.skillval(SKILL_PERSUASION)*2;
+                  unsigned int aroll = LCSrandom(21)+
+                                       a.attval(ATTRIBUTE_CHARISMA)+
+                                       a.attval(ATTRIBUTE_HEART)+
+                                       a.skillval(SKILL_PERSUASION)*2;
                   char badthing=0;
                   if(aroll<30-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
                   else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)badthing=2;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  short troll=
-                     LCSrandom(21)+
-                     tk->attval(ATTRIBUTE_CHARISMA)+
-                     tk->attval(ATTRIBUTE_WISDOM);
+                  unsigned int troll = LCSrandom(21)+
+                                       tk->attval(ATTRIBUTE_CHARISMA)+
+                                       tk->attval(ATTRIBUTE_WISDOM);
                   a.train(SKILL_PERSUASION,LCSrandom(2)+1);
 
                   clearcommandarea();clearmessagearea();clearmaparea();
@@ -1347,7 +1345,7 @@ char talk(creaturest &a,int t)
                   }
                   else if(tk->type!=CREATURE_PRISONER &&
                      (talkreceptive(*tk)||
-                     a.skillval(SKILL_PERSUASION)+a.attval(ATTRIBUTE_CHARISMA)>LCSrandom(20)))
+                     a.skillval(SKILL_PERSUASION)+a.attval(ATTRIBUTE_CHARISMA)>(int)LCSrandom(20)))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(12,1);addstr(tk->name);addstr(" responds,");
@@ -1397,74 +1395,72 @@ char talk(creaturest &a,int t)
                   else
                   {
                      line=LCSrandom(44);
-                  switch(line)
-                  {
-//LIMIT             :-----------------------------------------------------------------------------:
-case 0:addstr("\"Hey baby, you're kinda ugly.  I like that.\"");break;
-case 1:addstr("\"I lost my phone number.  Could I have yours?\"");break;
-case 2:addstr("\"Hey, you wanna go rub one off?\"");break;
-case 3:addstr("\"Hot damn.  You're built like a brick shithouse, honey.\"");break;
-case 4:
-       addstr("\"I know I've seen you on the back of a milk carton,");
-       move(11,1);y++;
-       addstr("cuz you've been missing from my life.\"");
-       break;
-case 5:addstr("\"I'm big where it counts.\"");break;
-case 6:addstr("\"Daaaaaamn girl, I want to wrap your legs around my face and");
-       move(11,1);y++;
-       addstr("wear you like a feed bag!\"");
-       break;
-case 7:addstr("\"Let's play squirrel.  I'll bust a nut in your hole.\"");break;
-case 8:addstr("\"You know, if I were you, I'd have sex with me.\"");break;
-case 9:addstr("\"You don't sweat much for a fat chick.\"");break;
-case 10:addstr("\"Fuck me if I'm wrong but you want to kiss me, right?\"");break;
-case 11:addstr("\"Your parents must be retarded, because you are special.\"");break;
-case 12:addstr("\"Let's play trains...  you can sit on my face and I will chew chew chew.\"");break;
-case 13:addstr("\"Is it hot in here or is it just you?\"");break;
-case 14:addstr("\"I may not be Fred Flintstone, but I can make your bed rock!\"");break;
-case 15:addstr("\"What do you say we go behind a rock and get a little boulder?\"");break;
-case 16:addstr("\"Do you have stars on your panties?  Your ass is outta this world!\"");break;
-case 17:addstr("\"Those pants would look great on the floor of my bedroom.\"");break;
-case 18:addstr("\"If I said you had a nice body, would you hold it against me?\"");break;
-case 19:addstr("\"Are you tired?  You've been running around in my thoughts all day.\"");break;
-case 20:addstr("\"If I could change the alphabet baby, I would put the U and I together!\"");break;
-case 21:addstr("\"Your lips look sweet.  Can I taste them?\"");break;
-case 22:addstr("\"Nice shoes.  Wanna fuck?\"");break;
-case 23:addstr("\"Your sexuality makes me nervous and this frustrates me.\"");break;
-case 24:addstr("\"Are you Jamaican?  Cuz Jamaican me horny.\"");break;
-case 25:addstr("\"Hey pop tart, fancy coming in my toaster of love?\"");break;
-case 26:addstr("\"Wanna play army?  You lie down and I'll blow you away.\"");break;
-case 27:addstr("\"Can I lick your forehead?\"");break;
-case 28:addstr("\"I have a genital rash.  Will you rub this ointment on me?\"");break;
-case 29:addstr("\"What's your sign?\"");break;
-case 30:addstr("\"Do you work for the post office?");
-      move(11,1);y++;
-      addstr("Because I could have sworn you were checking out my package.\"");
-      break;
-case 31:addstr("\"I'm not the most attractive person in here,");
-      move(11,1);y++;
-      addstr("but I'm the only one talking to you.\"");
-      break;
-case 32:addstr("\"Hi.  I suffer from amnesia.  Do I come here often?\"");break;
-case 33:addstr("\"I'm new in town.  Could you give me directions to your apartment?\"");break;
-case 34:addstr("\"Stand still so I can pick you up!\"");break;
-case 35:addstr("\"Your daddy must have been a baker, cuz you've got a nice set of buns.\"");break;
-case 36:addstr("\"If you were a laser, you'd be set on 'stunning'.\"");break;
-case 37:addstr("\"Is that a keg in your pants?  Cuz I'd love to tap that ass.\"");break;
-case 38:addstr("\"If I could be anything, I'd love to be your bathwater.\"");break;
-case 39:addstr("\"Stop, drop and roll, baby.  You are on fire.\"");break;
-case 40:addstr("\"Do you want to see something swell?\"");break;
-case 41:addstr("\"Excuse me.  Do you want to fuck or should I apologize?\"");break;
-case 42:addstr("\"Say, did we go to different schools together?\"");break;
-case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
-                  }
+                     switch(line)
+                     {
+                     case 0:addstr("\"Hey baby, you're kinda ugly.  I like that.\"");break;
+                     case 1:addstr("\"I lost my phone number.  Could I have yours?\"");break;
+                     case 2:addstr("\"Hey, you wanna go rub one off?\"");break;
+                     case 3:addstr("\"Hot damn.  You're built like a brick shithouse, honey.\"");break;
+                     case 4:addstr("\"I know I've seen you on the back of a milk carton,");
+                            move(11,1);y++;
+                            addstr("cuz you've been missing from my life.\"");
+                            break;
+                     case 5:addstr("\"I'm big where it counts.\"");break;
+                     case 6:addstr("\"Daaaaaamn girl, I want to wrap your legs around my face and");
+                            move(11,1);y++;
+                            addstr("wear you like a feed bag!\"");
+                            break;
+                     case 7:addstr("\"Let's play squirrel.  I'll bust a nut in your hole.\"");break;
+                     case 8:addstr("\"You know, if I were you, I'd have sex with me.\"");break;
+                     case 9:addstr("\"You don't sweat much for a fat chick.\"");break;
+                     case 10:addstr("\"Fuck me if I'm wrong but you want to kiss me, right?\"");break;
+                     case 11:addstr("\"Your parents must be retarded, because you are special.\"");break;
+                     case 12:addstr("\"Let's play trains...  you can sit on my face and I will chew chew chew.\"");break;
+                     case 13:addstr("\"Is it hot in here or is it just you?\"");break;
+                     case 14:addstr("\"I may not be Fred Flintstone, but I can make your bed rock!\"");break;
+                     case 15:addstr("\"What do you say we go behind a rock and get a little boulder?\"");break;
+                     case 16:addstr("\"Do you have stars on your panties?  Your ass is outta this world!\"");break;
+                     case 17:addstr("\"Those pants would look great on the floor of my bedroom.\"");break;
+                     case 18:addstr("\"If I said you had a nice body, would you hold it against me?\"");break;
+                     case 19:addstr("\"Are you tired?  You've been running around in my thoughts all day.\"");break;
+                     case 20:addstr("\"If I could change the alphabet baby, I would put the U and I together!\"");break;
+                     case 21:addstr("\"Your lips look sweet.  Can I taste them?\"");break;
+                     case 22:addstr("\"Nice shoes.  Wanna fuck?\"");break;
+                     case 23:addstr("\"Your sexuality makes me nervous and this frustrates me.\"");break;
+                     case 24:addstr("\"Are you Jamaican?  Cuz Jamaican me horny.\"");break;
+                     case 25:addstr("\"Hey pop tart, fancy coming in my toaster of love?\"");break;
+                     case 26:addstr("\"Wanna play army?  You lie down and I'll blow you away.\"");break;
+                     case 27:addstr("\"Can I lick your forehead?\"");break;
+                     case 28:addstr("\"I have a genital rash.  Will you rub this ointment on me?\"");break;
+                     case 29:addstr("\"What's your sign?\"");break;
+                     case 30:addstr("\"Do you work for the post office?");
+                           move(11,1);y++;
+                           addstr("Because I could have sworn you were checking out my package.\"");
+                           break;
+                     case 31:addstr("\"I'm not the most attractive person in here,");
+                           move(11,1);y++;
+                           addstr("but I'm the only one talking to you.\"");
+                           break;
+                     case 32:addstr("\"Hi.  I suffer from amnesia.  Do I come here often?\"");break;
+                     case 33:addstr("\"I'm new in town.  Could you give me directions to your apartment?\"");break;
+                     case 34:addstr("\"Stand still so I can pick you up!\"");break;
+                     case 35:addstr("\"Your daddy must have been a baker, cuz you've got a nice set of buns.\"");break;
+                     case 36:addstr("\"If you were a laser, you'd be set on 'stunning'.\"");break;
+                     case 37:addstr("\"Is that a keg in your pants?  Cuz I'd love to tap that ass.\"");break;
+                     case 38:addstr("\"If I could be anything, I'd love to be your bathwater.\"");break;
+                     case 39:addstr("\"Stop, drop and roll, baby.  You are on fire.\"");break;
+                     case 40:addstr("\"Do you want to see something swell?\"");break;
+                     case 41:addstr("\"Excuse me.  Do you want to fuck or should I apologize?\"");break;
+                     case 42:addstr("\"Say, did we go to different schools together?\"");break;
+                     case 43:addstr("\"You smell...  Let's go take a shower.\"");break;
+                     }
                   }
                   refresh();
                   getch();
 
-                  short aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skillval(SKILL_SEDUCTION)*2+1);
+                  unsigned int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skillval(SKILL_SEDUCTION)*2+1);
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  short troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
+                  unsigned int troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
                   if(!(tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
                      tk->animalgloss==ANIMALGLOSS_TANK)
                   {
@@ -1588,7 +1584,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
 
                      int olddate=0;
                      datest *newd=NULL;
-                     for(int d=0;d<date.size();d++)
+                     for(unsigned int d=0;d<date.size();d++)
                      {
                         if(date[d]->mac_id==a.id)
                         {
@@ -1659,7 +1655,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                         return 1;
                      }
 
-                     long rent=200;
+                     unsigned long rent=200;
                      switch(location[cursite]->type)
                      {
                         case SITE_RESIDENTIAL_APARTMENT:rent=650;break;

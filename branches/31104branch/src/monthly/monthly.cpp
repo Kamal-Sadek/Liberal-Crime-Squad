@@ -36,7 +36,7 @@ void passmonth(char &clearformess,char canseethings)
 {
    short oldlaw[LAWNUM];
    memmove(oldlaw,law,sizeof(short)*LAWNUM);
-   int l, v, p;
+   unsigned int l, v, p;
 
    //TIME ADVANCE
    day=1;
@@ -93,7 +93,7 @@ void passmonth(char &clearformess,char canseethings)
          if(loottype==LOOT_INTHQDISK||
             loottype==LOOT_SECRETDOCUMENTS)
          {
-            for(int l=0;l<nploc.size();l++)
+            for(unsigned int l=0;l<nploc.size();l++)
             {
                criminalizepool(LAWFLAG_TREASON,-1,nploc[l]);
             }
@@ -102,7 +102,6 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    int libpower[VIEWNUM]={0};
-   int computernum=0;
 
    //STORIES STALE EVEN IF NOT PRINTED
    for(v=0;v<VIEWNUM;v++)public_interest[v]/=2;
@@ -119,7 +118,7 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    //Manage graffiti
-   for(int l=0;l<location.size();l++) // Check each location
+   for(unsigned int l=0;l<location.size();l++) // Check each location
    {
       for(int c=location[l]->changes.size()-1;c>=0;c--) // Each change to the map
       {
@@ -219,7 +218,7 @@ void passmonth(char &clearformess,char canseethings)
       // on society will become a self-perpetuating Conservative nightmare!
       else /*if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)*/
       {
-         if(publicmood(-1)<attitude[v])change_public_opinion(v,-1);
+         if((int)publicmood(-1)<attitude[v])change_public_opinion(v,-1);
          else change_public_opinion(v,1);
       }
    }
@@ -240,7 +239,7 @@ void passmonth(char &clearformess,char canseethings)
       move(2,2);
       addstr("POLITICAL INFLUENCE");
       y=3;
-      for(int i=0;i<VIEWNUM-5;i++)
+      for(unsigned int i=0;i<VIEWNUM-5;i++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,1);
@@ -406,7 +405,7 @@ void passmonth(char &clearformess,char canseethings)
             if(law[LAW_POLICEBEHAVIOR]==1)copstrength=75;
             if(law[LAW_POLICEBEHAVIOR]==2)copstrength=50;
 
-            for(int i=0;i<LAWFLAGNUM;i++)
+            for(unsigned int i=0;i<LAWFLAGNUM;i++)
             {
                heat+=(pool[p]->heat)/4.0f;
             }
@@ -472,7 +471,7 @@ void passmonth(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            for(int l=0;l<location.size();l++)
+            for(unsigned int l=0;l<location.size();l++)
             {
                if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE)
                {
@@ -528,7 +527,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
       law[LAW_DEATHPENALTY]!=oldlaw[LAW_DEATHPENALTY])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
          {
@@ -544,7 +543,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_POLICEBEHAVIOR]==-2||oldlaw[LAW_POLICEBEHAVIOR]==-2)&&
       law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
          {
@@ -560,7 +559,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
       law[LAW_FREESPEECH]!=oldlaw[LAW_FREESPEECH])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
          {
@@ -572,7 +571,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_PRIVACY]==-2||oldlaw[LAW_PRIVACY]==-2)&&
       law[LAW_PRIVACY]!=oldlaw[LAW_PRIVACY])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or min. of love?
          {
@@ -584,7 +583,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_CORPORATE]==-2||oldlaw[LAW_CORPORATE]==-2)&&
       law[LAW_CORPORATE]!=oldlaw[LAW_CORPORATE])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
          {
@@ -596,7 +595,7 @@ void updateworld_laws(short *law,short *oldlaw)
    if((law[LAW_TAX]==-2||oldlaw[LAW_TAX]==-2)&&
       law[LAW_TAX]!=oldlaw[LAW_TAX])
    {
-      for(int l=0;l<location.size();l++)
+      for(unsigned int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
          {

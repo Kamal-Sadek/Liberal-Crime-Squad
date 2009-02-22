@@ -38,7 +38,7 @@ void trial(creaturest &g)
    // homeless shelter instead.
    if(location[g.base]->renting==-1)
    {
-      for(int i=0;i<location.size();++i)
+      for(unsigned int i=0;i<location.size();++i)
       {
          if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
          {
@@ -69,7 +69,7 @@ void trial(creaturest &g)
       // nasty person with a wide variety of major charges against you, then scarefactor
       // can get up there
 
-   for(int i=0;i<LAWFLAGNUM;i++)
+   for(unsigned int i=0;i<LAWFLAGNUM;i++)
    {
       if(g.lawflag[i])
       {
@@ -84,8 +84,8 @@ void trial(creaturest &g)
    bool autoconvict=0;
    creaturest *sleeperjudge=NULL;
    creaturest *sleeperlawyer=NULL;
-   int maxsleeperskill=0;
-   for(int p=0;p<pool.size();p++)
+   unsigned int maxsleeperskill=0;
+   for(unsigned int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER))
       {
@@ -885,8 +885,8 @@ void trial(creaturest &g)
             refresh();
             getch();
 
-            long ps=-1;
-            for(long l=0;l<location.size();l++)
+            int ps=-1;
+            for(unsigned int l=0;l<location.size();l++)
             {
                if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE)
                {
@@ -961,7 +961,7 @@ void trial(creaturest &g)
       //CLEAN UP LAW FLAGS
       if(!keeplawflags)
       {
-         for(int i=0;i<LAWFLAGNUM;i++)
+         for(unsigned int i=0;i<LAWFLAGNUM;i++)
          {
             g.lawflag[i]=0;
          }
@@ -993,7 +993,7 @@ void trial(creaturest &g)
 
       penalize(g,LCSrandom(2));
       //CLEAN UP LAW FLAGS
-      for(int i=0;i<LAWFLAGNUM;i++)
+      for(unsigned int i=0;i<LAWFLAGNUM;i++)
       {
          g.lawflag[i]=0;
       }
@@ -1043,7 +1043,7 @@ void penalize(creaturest &g,char lenient)
       if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
    }
 
-   for(int l=0;l<LAWFLAGNUM;l++)
+   for(unsigned int l=0;l<LAWFLAGNUM;l++)
    {
       if(g.lawflag[l]>10)
          g.lawflag[l]=10;
@@ -1219,8 +1219,8 @@ void penalize(creaturest &g,char lenient)
 /* monthly - move a liberal to jail */
 void imprison(creaturest &g)
 {
-   long ps=-1;
-   for(long l=0;l<location.size();l++)
+   int ps=-1;
+   for(unsigned int l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_GOVERNMENT_PRISON)
       {
@@ -1352,7 +1352,7 @@ char prison(creaturest &g)
             // homeless shelter instead.
             if(location[g.base]->renting==-1)
             {
-               for(int i=0;i<location.size();++i)
+               for(unsigned int i=0;i<location.size();++i)
                {
                   if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
                   {

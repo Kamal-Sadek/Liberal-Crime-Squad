@@ -1,17 +1,14 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
 #include "includes.h"
-#include "organization/orgmanager.h"
-#include "organizationdef.h"
-
-//Puzz:  Here we go...
-extern orgManager gOrgManager;
-extern defManager<organizationDef, organization> organizationDefManager;
+#include "sitemode/sitemap.h"
 
 extern CursesMoviest movie;
 extern unsigned char bigletters[27][5][7][4];
 extern unsigned char newstops[6][80][5][4];
 extern unsigned char newspic[20][78][18][4];
+
+extern vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 extern unsigned long seed;
 extern short law[LAWNUM];
@@ -23,7 +20,7 @@ extern char courtname[9][80];
 
 
 
-extern short exec[EXECNUM];
+extern signed char exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][80];
 extern short presparty;
@@ -56,13 +53,13 @@ extern short sitealarm;
 extern short sitealarmtimer;
 extern short postalarmtimer;
 extern short siteonfire;
-extern long sitecrime;
-extern long cursite;
+extern int sitecrime;
+extern short cursite;
 
 extern short interface_pgup;
 extern short interface_pgdn;
 
-extern int day;
+extern unsigned int day;
 
 extern short attitude[VIEWNUM];
 
@@ -73,7 +70,7 @@ extern char policestation_closed;
 extern char amradio_closed;
 extern char cablenews_closed;
 
-extern char endgamestate;
+extern unsigned char endgamestate;
 extern char ccs_kills;
 
 extern unsigned long funds;
@@ -90,13 +87,13 @@ extern short offended_cablenews;
 extern short offended_firemen;
 extern int police_heat;
 extern unsigned long attorneyseed;
-extern long selectedsiege;
+extern int selectedsiege;
 extern char lcityname[80];
 extern char newscherrybusted;
 
-extern int month;
-extern int year;
-extern int amendnum;
+extern unsigned int month;
+extern unsigned int year;
+extern unsigned int amendnum;
 
 extern long moneygained_donate;
 extern long moneygained_brownies;

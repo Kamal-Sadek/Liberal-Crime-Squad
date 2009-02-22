@@ -49,7 +49,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       refresh();
       getch();
 
-      if(LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2)>d.date[e]->att[ATTRIBUTE_WISDOM])
+      if(signed(LCSrandom(d.date[e]->att[ATTRIBUTE_HEART]+(aroll-troll)/2))>d.date[e]->att[ATTRIBUTE_WISDOM])
       {
          if(loveslavesleft(*pool[p]) == 0)
          {
@@ -265,7 +265,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          {
             // Find the police station
             long ps=-1;
-            for(long l=0;l<location.size();l++)
+            for(unsigned int l=0;l<location.size();l++)
             {
                if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                {
@@ -373,7 +373,7 @@ char completevacation(datest &d,int p,char &clearformess)
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d,int p,char &clearformess)
 {
-   int e;
+   unsigned int e;
    clearformess=1;
 
    erase();
@@ -391,8 +391,8 @@ char completedate(datest &d,int p,char &clearformess)
    {
       addstr(d.date[e]->name);
 
-      if(e<=(int)d.date.size()-3)addstr(", ");
-      else if(e==(int)d.date.size()-2)addstr(" and ");
+      if(e<=d.date.size()-3)addstr(", ");
+      else if(e==d.date.size()-2)addstr(" and ");
       else
       {
          if(pool[p]->clinic>0)
@@ -713,8 +713,8 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr("The Liberal wakes up in the police station...");
 
                   // Find the police station
-                  long ps=-1;
-                  for(long l=0;l<location.size();l++)
+                  int ps=-1;
+                  for(unsigned int l=0;l<location.size();l++)
                   {
                      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                      {

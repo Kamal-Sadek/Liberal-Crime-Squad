@@ -130,7 +130,7 @@ void equip(vector<itemst *> &loot,int loc)
    consolidateloot(loot);
    if(loc!=-1)consolidateloot(location[loc]->loot);
 
-   int page=0;
+   unsigned int page=0;
    const char *errmsg = NULL;
 
    do
@@ -154,7 +154,7 @@ void equip(vector<itemst *> &loot,int loc)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<loot.size()&&l<page*18+18;l++)
+      for(unsigned int l=page*18;l<loot.size()&&l<page*18+18;l++)
       {
          get_equip_title(str2, loot[l]);
 
@@ -229,16 +229,21 @@ void equip(vector<itemst *> &loot,int loc)
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         unsigned int slot=c-'a'+page*18;
 
-         if (slot < 0 || slot >= loot.size()) {
+         if(slot < 0 || slot >= loot.size())
+         {
             // Out of range.
-         } else if (loot[slot]->type != ITEM_WEAPON
+         }
+         else if (loot[slot]->type != ITEM_WEAPON
                  && loot[slot]->type != ITEM_ARMOR
-                 && loot[slot]->type != ITEM_CLIP) {
+                 && loot[slot]->type != ITEM_CLIP)
+         {
             errmsg = "You can't equip that.";
             continue;
-         } else {
+         }
+         else
+         {
             move(8,20);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr("Choose a Liberal squad member to receive it.");
@@ -292,7 +297,7 @@ void equip(vector<itemst *> &loot,int loc)
                      }
 
                      //DROP ALL CLIPS THAT DON'T WORK
-                     for(int cl=0;cl<CLIPNUM;cl++)
+                     for(unsigned int cl=0;cl<CLIPNUM;cl++)
                      {
                         if(cl==ammotype(squaddie->weapon.type))continue;
 
@@ -434,7 +439,7 @@ void equip(vector<itemst *> &loot,int loc)
                activesquad->squad[p]->weapon.ammo=0;
 
                //DROP ALL CLIPS
-               for(int c=0;c<CLIPNUM;c++)
+               for(unsigned int c=0;c<CLIPNUM;c++)
                {
                   for(int p2=0;p2<activesquad->squad[p]->clip[c];p2++)
                   {
@@ -476,13 +481,11 @@ void equip(vector<itemst *> &loot,int loc)
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 {
-   unsigned long ret=0;
-
-   int page=0;
+   unsigned page=0;
 
    vector<unsigned int> selected;
    selected.resize(source.size());
-   for(int s=0;s<selected.size();s++)selected[s]=0;
+   for(unsigned int s=0;s<selected.size();s++)selected[s]=0;
 
    do
    {
@@ -497,7 +500,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<source.size()&&l<page*18+18;l++)
+      for(unsigned int l=page*18;l<source.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -562,7 +565,7 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         unsigned int slot=c-'a'+page*18;
 
          if(slot>=0&&slot<source.size())
          {
@@ -615,7 +618,8 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<itemst *> &loot)
 {
-   int l,l2;
+   int l;
+   unsigned l2;
 
    //PUT THINGS TOGETHER
    for(l=loot.size()-1;l>=1;l--)
@@ -808,7 +812,7 @@ char rangedweapon(weaponst &w)
 /* check if the squad has a certain weapon */
 char squadhasitem(squadst &sq,int type,int subtype)
 {
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(sq.squad[p]!=NULL)
       {
@@ -821,7 +825,7 @@ char squadhasitem(squadst &sq,int type,int subtype)
       }
    }
 
-   for(int l=0;l<sq.loot.size();l++)
+   for(unsigned int l=0;l<sq.loot.size();l++)
    {
       if(sq.loot[l]->type!=type)continue;
       switch(type)

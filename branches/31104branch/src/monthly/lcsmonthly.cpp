@@ -90,18 +90,18 @@ void guardianupdate(char size, char power)
 /* monthly - lets the player choose a special edition for the guardian */
 int choosespecialedition(char &clearformess)
 {
-   int page=0;
+   unsigned int page=0;
 
    char havetype[LOOTNUM];
-   for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
+   for(unsigned int l=0;l<LOOTNUM;l++)havetype[l]=0;
    vector<int> loottype;
 
    //FIND ALL LOOT TYPES
-   for(int loc=0;loc<location.size();loc++)
+   for(unsigned int loc=0;loc<location.size();loc++)
    {
       if(location[loc]->renting==-1)continue;
 
-      for(int l=0;l<location[loc]->loot.size();l++)
+      for(unsigned int l=0;l<location[loc]->loot.size();l++)
       {
          if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -123,9 +123,9 @@ int choosespecialedition(char &clearformess)
          }
       }
    }
-   for(int sq=0;sq<squad.size();sq++)
+   for(unsigned int sq=0;sq<squad.size();sq++)
    {
-      for(int l=0;l<squad[sq]->loot.size();l++)
+      for(unsigned int l=0;l<squad[sq]->loot.size();l++)
       {
          if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -164,7 +164,7 @@ int choosespecialedition(char &clearformess)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<loottype.size()&&l<page*18+18;l++)
+      for(unsigned int l=page*18;l<loottype.size()&&l<page*18+18;l++)
       {
          getloot(str2,loottype[l]);
          str[0]=l-page*18+'A';
@@ -206,16 +206,16 @@ int choosespecialedition(char &clearformess)
 
       if(c>='a'&&c<='r')
       {
-         int slot=c-'a'+page*18;
+         unsigned int slot=c-'a'+page*18;
 
          if(slot>=0&&slot<loottype.size())
          {
             //DELETE THE ITEM
-            for(int loc=0;loc<location.size();loc++)
+            for(unsigned int loc=0;loc<location.size();loc++)
             {
                if(location[loc]->renting==-1)continue;
 
-               for(int l=0;l<location[loc]->loot.size();l++)
+               for(unsigned int l=0;l<location[loc]->loot.size();l++)
                {
                   if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
 
@@ -227,9 +227,9 @@ int choosespecialedition(char &clearformess)
                   }
                }
             }
-            for(int sq=0;sq<squad.size();sq++)
+            for(unsigned int sq=0;sq<squad.size();sq++)
             {
-               for(int l=0;l<squad[sq]->loot.size();l++)
+               for(unsigned int l=0;l<squad[sq]->loot.size();l++)
                {
                   if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
 

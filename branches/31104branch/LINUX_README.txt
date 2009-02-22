@@ -2,6 +2,42 @@
                       Liberal Crime Squad Linux Notes
 ================================================================================
 2004-08-17 - Kevin Sadler (sadler@geodude.eclipse.co.uk)
+2009-02-22 - Jonathan Stickles (floppysocks@hevanet.com)
+
+Important Update as of Version 3.18
+===================================
+
+This file hasn't been updated in a long time, so I'll try to give a few
+key notes that will update the information contained below.
+
+BUILDING THE GAME
+If you have this file, it's probably because you checked out the source
+code from SVN. The new build commands are:
+
+  bootstrap
+  ./configure
+  make
+
+GRAPHICS AND TERMINAL SIZE
+The graphics for the Linux version of LCS are unaltered since 3.09. I have
+endeavored to ensure that future updates of LCS use strictly portable ASCII
+so that futher problems are not created for the port. The note below about
+terminal size remains important.
+
+FLAG BURNING
+The flag burning bug was fixed, and you can now safely burn flags in Linux.
+
+AUTOSAVING
+The game still autosaves, but instead of autosaving to autosave.dat, it
+autosaves directly to save.dat.
+
+ADDITIONAL REQUIRED FILES
+There are several new files that you must keep accessible to the LCS
+executable. These are found in the /workspaces directory that you probably
+checked out from SVN alongside this file. The list is below:
+
+  sitemaps.txt
+
 
 Linux Notes for Version 3.09
 ============================

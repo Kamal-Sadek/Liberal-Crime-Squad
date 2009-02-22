@@ -469,10 +469,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\sitemode\map.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\sitemode\mapspecials.cpp"
 				>
 			</File>
@@ -486,6 +482,14 @@
 			</File>
 			<File
 				RelativePath="..\src\sitemode\sitedisplay.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sitemode\sitemap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sitemode\sitemap.h"
 				>
 			</File>
 			<File
@@ -607,42 +611,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="orgs"
-			>
-			<File
-				RelativePath="..\src\organization\organization.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organization\organization.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organizationdef.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organizationdef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organization\orgmanager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organization\orgmanager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organization\testdriver.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\organization\testdriver.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="politics"
 			>
 			<File
@@ -697,14 +665,6 @@
 		<Filter
 			Name="definitions"
 			>
-			<File
-				RelativePath="..\src\manager\manager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\manager\manager.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="items"
@@ -748,14 +708,6 @@
 		</File>
 		<File
 			RelativePath=".\resource.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\serializer.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\serializer.h"
 			>
 		</File>
 	</Files>

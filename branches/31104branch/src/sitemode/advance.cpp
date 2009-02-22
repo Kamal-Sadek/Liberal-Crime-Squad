@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 void creatureadvance(void)
 {
    int e;
-   for(int p=0;p<6;p++)
+   for(unsigned int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
@@ -81,7 +81,7 @@ void creatureadvance(void)
 
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(unsigned int p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->squadid!=-1)continue;
@@ -161,13 +161,13 @@ void creatureadvance(void)
          }
       }
 
-      for(int z=0;z<MAPZ;z++)
+      for(unsigned int z=0;z<MAPZ;z++)
       {
          bool stairs=0; // Will check if higher levels are accessible
 
-         for(int y=0;y<MAPY;y++)
+         for(unsigned int y=0;y<MAPY;y++)
          {
-            for(int x=0;x<MAPX;x++)
+            for(unsigned int x=0;x<MAPX;x++)
             {
                if(levelmap[x][y][z].flag & SITEBLOCK_EXIT)
                   continue;
@@ -291,10 +291,10 @@ void advancecreature(creaturest &cr)
       }
    }
 
-   int bleed=0;
-   int topmedicalskill=0;
+   unsigned int bleed=0;
+   unsigned int topmedicalskill=0;
    creaturest* topmedical=NULL;
-   for(int i=0;i<6;++i)
+   for(unsigned int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
          activesquad->squad[i]->alive&&
@@ -308,7 +308,7 @@ void advancecreature(creaturest &cr)
       }
    }
 
-   for(int w=0;w<BODYPARTNUM;w++)
+   for(unsigned int w=0;w<BODYPARTNUM;w++)
    {
       if(cr.wound[w] & WOUND_BLEEDING)
       {
@@ -426,8 +426,6 @@ void advancecreature(creaturest &cr)
       levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
       if(cr.armor.type!=ARMOR_NONE)cr.armor.flag|=ARMORFLAG_BLOODY;
-
-      char str[200];
 
       if(cr.blood<=0)
       {

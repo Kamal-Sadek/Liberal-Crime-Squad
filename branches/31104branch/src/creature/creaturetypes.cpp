@@ -46,7 +46,7 @@ void makecreature(creaturest &cr,short type)
    cr.armor.type=ARMOR_CLOTHES;
    cr.money=LCSrandom(21)+20;
    {
-      int mood=publicmood(-1);
+      unsigned int mood=publicmood(-1);
       conservatise(cr);
       if(LCSrandom(100)<mood)cr.align++;
       if(LCSrandom(100)<mood)cr.align++;
@@ -61,8 +61,6 @@ void makecreature(creaturest &cr,short type)
       attcap[a]=10;
       cr.att[a]=1;
    }
-
-   int sk;
 
    switch(type)
    {
@@ -79,7 +77,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_SECURITYUNIFORM;
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
-         if(disguisesite(sitetype)) { cr.align=-1; cr.infiltration=0.1*LCSrandom(4); }
+         if(disguisesite(sitetype)) { cr.align=-1; cr.infiltration=0.1f*LCSrandom(4); }
          else cr.align=0;
          cr.age=AGE_MATURE;
          cr.att[ATTRIBUTE_HEALTH]=3;
@@ -108,7 +106,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_SECURITYUNIFORM;
          cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(3);
+         cr.infiltration=0.1f*LCSrandom(3);
          cr.age=AGE_MATURE;
          cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_AGILITY]=3;
@@ -120,7 +118,7 @@ void makecreature(creaturest &cr,short type)
             cr.weapon.type=WEAPON_SYRINGE;
          cr.armor.type=ARMOR_LABCOAT;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
          
          cr.att[ATTRIBUTE_INTELLIGENCE]=5;
@@ -139,7 +137,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_BLACKROBE;
          cr.money=LCSrandom(41)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
@@ -170,7 +168,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(41)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
@@ -185,7 +183,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.money=LCSrandom(41)+40;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(6);
+         cr.infiltration=0.1f*LCSrandom(6);
          cr.age=AGE_MATURE;
 
          cr.skill[SKILL_BUSINESS]=LCSrandom(4)+3;
@@ -205,7 +203,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(121)+120;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
@@ -344,7 +342,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_CIVILLIANARMOR;
          cr.money=0;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
@@ -388,7 +386,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_ARMYARMOR;
          cr.money=0;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_YOUNGADULT;
 
@@ -406,7 +404,7 @@ void makecreature(creaturest &cr,short type)
       case CREATURE_VETERAN:
          strcpy(cr.name,"Army Veteran");
          cr.money=LCSrandom(21)+20;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_MIDDLEAGED;
 
@@ -428,7 +426,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_ARMYARMOR;
          cr.money=0;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_MIDDLEAGED;
 
@@ -489,7 +487,7 @@ void makecreature(creaturest &cr,short type)
             cr.armor.type=ARMOR_POLICEARMOR;
             cr.money=LCSrandom(21)+20;
             cr.align=-1;
-            cr.infiltration=0.3 + 0.1*LCSrandom(4);
+            cr.infiltration=0.3f + 0.1f*LCSrandom(4);
             cr.juice=10+LCSrandom(50);
             cr.age=AGE_MATURE;
 
@@ -528,7 +526,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_SWATARMOR;
          cr.align=-1;
-         cr.infiltration=0.3 + 0.1*LCSrandom(4);
+         cr.infiltration=0.3f + 0.1f*LCSrandom(4);
          cr.juice=40+LCSrandom(50);
          cr.age=AGE_MATURE;
 
@@ -552,7 +550,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_DEATHSQUADUNIFORM;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
@@ -606,7 +604,7 @@ void makecreature(creaturest &cr,short type)
             }
          }
 
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
          
          cr.att[ATTRIBUTE_HEALTH]=3;
@@ -622,7 +620,7 @@ void makecreature(creaturest &cr,short type)
 
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
 
@@ -659,7 +657,7 @@ void makecreature(creaturest &cr,short type)
 
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
 
@@ -735,7 +733,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
 
@@ -767,7 +765,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_HEAVYARMOR;
          cr.money=LCSrandom(51)+150;
          cr.align=-1;
-         cr.infiltration=0.9 + 0.01*LCSrandom(11);
+         cr.infiltration=0.9f + 0.01f*LCSrandom(11);
          cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
 
@@ -818,7 +816,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_POLICEARMOR;
          cr.align=-1;
-         cr.infiltration=0.3 + 0.1*LCSrandom(4);
+         cr.infiltration=0.3f + 0.1f*LCSrandom(4);
          cr.juice=40+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
@@ -853,7 +851,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_PRISONGUARD;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
 
          cr.skill[SKILL_PISTOL]=LCSrandom(2)+1;
@@ -885,7 +883,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(21)+20;
          cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
+         cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
 
          cr.skill[SKILL_RIFLE]=LCSrandom(3)+1;
@@ -953,7 +951,7 @@ void makecreature(creaturest &cr,short type)
          }
          cr.armor.type=ARMOR_BLACKSUIT;
          cr.align=-1;
-         cr.infiltration=0.5*LCSrandom(4);
+         cr.infiltration=0.5f*LCSrandom(4);
          cr.juice=75+LCSrandom(150);
          cr.age=AGE_MATURE;
 
@@ -975,7 +973,7 @@ void makecreature(creaturest &cr,short type)
          cr.armor.type=ARMOR_EXPENSIVESUIT;
          cr.money=LCSrandom(51)+50;
          cr.align=-1;
-         cr.infiltration=0.6 + 0.1*LCSrandom(4);
+         cr.infiltration=0.6f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
 
@@ -994,7 +992,7 @@ void makecreature(creaturest &cr,short type)
          cr.att[ATTRIBUTE_CHARISMA]=10;
          cr.att[ATTRIBUTE_WISDOM]=8;
          cr.align=-1;
-         cr.infiltration=0.6 + 0.1*LCSrandom(4);
+         cr.infiltration=0.6f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
          break;
@@ -1629,7 +1627,7 @@ void makecreature(creaturest &cr,short type)
 
    int attnum=40;
    if(cr.type==CREATURE_MUTANT)attnum=LCSrandom(60)+7;
-   for(int a=0;a<ATTNUM;a++)
+   for(unsigned int a=0;a<ATTNUM;a++)
    {
       attnum-=min(5,cr.att[a]);
    }
@@ -1657,7 +1655,7 @@ void makecreature(creaturest &cr,short type)
    }
    else
    {
-      cr.infiltration += 0.35 * (1-cr.infiltration);
+      cr.infiltration += 0.35f * (1-cr.infiltration);
    }
    if(cr.infiltration < 0) cr.infiltration = 0;
    if(cr.infiltration > 1) cr.infiltration = 1;
@@ -1673,7 +1671,7 @@ void makecreature(creaturest &cr,short type)
       randomskills-=20-cr.age;
    }
 
-   for(int s=0;s<SKILLNUM;s++)
+   for(unsigned int s=0;s<SKILLNUM;s++)
    {
       randomskills-=cr.skill[s];
    }

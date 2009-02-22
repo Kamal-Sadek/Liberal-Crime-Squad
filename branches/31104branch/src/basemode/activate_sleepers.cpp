@@ -24,7 +24,7 @@ void activate_sleepers(void)
 {
    vector<creaturest *> temppool;
    // Comb the pool of Liberals for sleeper agents
-   for(int p=0;p<pool.size();p++)
+   for(unsigned int p=0;p<pool.size();p++)
    {
       // Select only sleepers that can work
       if(pool[p]->alive==true&&
@@ -40,10 +40,9 @@ void activate_sleepers(void)
 
    if(temppool.size()==0)return;
 
-   short page=0;
+   unsigned page=0;
 
    char str[80];
-   char num[20];
 
    do
    {
@@ -66,7 +65,7 @@ void activate_sleepers(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*9;p<temppool.size()&&p<page*9+9;p++)
+      for(unsigned int p=page*9;p<temppool.size()&&p<page*9+9;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -164,7 +163,7 @@ void activate_sleepers(void)
 
       if(c>='a'&&c<='s')
       {
-         int p=page*9+(int)(c-'a');
+         unsigned int p=page*9+(int)(c-'a');
          if(p<temppool.size())
          {
             activate_sleeper(temppool[p]);
@@ -181,8 +180,6 @@ void activate_sleeper(creaturest *cr)
    int state=0;
    int choice=0;
    char havedead=0;
-
-   char num[20];
 
    do
    {

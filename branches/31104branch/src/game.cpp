@@ -71,19 +71,15 @@
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
 #include <includes.h>
-#include "organization/orgmanager.h"
-#include "organization/testdriver.h"
-#include "organizationdef.h"
-
-orgManager gOrgManager = orgManager();
-defManager<organizationDef, organization> organizationDefManager = defManager<organizationDef, organization>("ORGANIZATION");
+#include "configfile.h"
+#include "sitemode/sitemap.h"
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
 
-
+vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 unsigned long seed;
 
@@ -129,19 +125,17 @@ short offended_cablenews=0;
 short offended_firemen=0;
 int police_heat=0;
 unsigned long attorneyseed;
-long selectedsiege=-1;
+int selectedsiege=-1;
 char lcityname[80];
 char newscherrybusted=0;
 
-int month=1;
-int year=2007;
-int amendnum=28;
+unsigned int month=1;
+unsigned int year=2007;
+unsigned int amendnum=28;
 
 
 short attitude[VIEWNUM];
 
-// Topicwork1 is editorials that are waiting to be written
-// Topicwork2 is editorials that have been written
 short public_interest[VIEWNUM];
 short background_liberal_influence[VIEWNUM];
 
@@ -154,7 +148,7 @@ short court[9];
 char courtname[9][80];
 
 
-short exec[EXECNUM];
+signed char exec[EXECNUM];
 short execterm=2;
 char execname[EXECNUM][80];
 short presparty=1;
@@ -182,7 +176,9 @@ unsigned long ustat_spent=0;
 unsigned long ustat_buys=0;
 unsigned long ustat_burns=0;
 
-int locx,locy,locz;
+int locx;
+int locy;
+int locz;
 
 short sitetype;
 short sitealienate;
@@ -190,13 +186,13 @@ short sitealarm;
 short sitealarmtimer;
 short postalarmtimer;
 short siteonfire;
-long sitecrime;
-long cursite;
+int sitecrime;
+short cursite;
 
 short interface_pgup='[';
 short interface_pgdn=']';
 
-int day=1;
+int unsigned day=1;
 
 #ifdef HIGHFUNDS
 unsigned long funds=100000;
@@ -226,24 +222,18 @@ long moneylost_confiscated=0;
 
 short party_status=-1;
 
-char endgamestate=ENDGAME_NONE;
+unsigned char endgamestate=ENDGAME_NONE;
 char ccs_kills=0;
 
 vector<datest *> date;
 vector<recruitst *> recruit;
 
-
-
 vector<newsstoryst *> newsstory;
 newsstoryst *sitestory=NULL;
-
 
 #define SCORENUM 5
 highscorest score[SCORENUM];
 int yourscore=-1;
-
-
-
 
 int main(int argc, char* argv[])
 {
@@ -261,9 +251,9 @@ int main(int argc, char* argv[])
    seed=getSeed();
    
    //initialize the array of color pairs
-   for(int i=0;i<8;i++)
+   for(unsigned int i=0;i<8;i++)
    {
-      for(int j=0;j<8;j++)
+      for(unsigned int j=0;j<8;j++)
       {
          if(i==0&&j==0)
          {
@@ -287,9 +277,11 @@ int main(int argc, char* argv[])
 
    loadinitfile();
 
+   readConfigFile("sitemaps.txt"); // load site map data
+
    strcpy(slogan,"We need a slogan!");
 
-   for(int v=0;v<VIEWNUM;v++)
+   for(unsigned int v=0;v<VIEWNUM;v++)
    {
       attitude[v]=45;
       public_interest[v]=0;
@@ -314,14 +306,14 @@ int main(int argc, char* argv[])
    law[LAW_GUNCONTROL]=-1;
 
 #ifdef SHITLAWS
-   for(int l=0;l<LAWNUM;l++)law[l]=-2;
+   for(unsigned int l=0;l<LAWNUM;l++)law[l]=-2;
 #endif
 
 #ifdef PERFECTLAWS
-   for(int l=0;l<LAWNUM;l++)law[l]=2;
+   for(unsigned int l=0;l<LAWNUM;l++)law[l]=2;
 #endif
 
-   for(int s=0;s<100;s++)
+   for(unsigned int s=0;s<100;s++)
    {
       if(s<20)senate[s]=-2;
       else if(s<45)senate[s]=-1;
@@ -330,7 +322,7 @@ int main(int argc, char* argv[])
       else senate[s]=2;
    }
 
-   for(int h=0;h<435;h++)
+   for(unsigned int h=0;h<435;h++)
    {
       if(h<30)house[h]=-2;
       else if(h<200)house[h]=-1;
@@ -339,7 +331,7 @@ int main(int argc, char* argv[])
       else house[h]=2;
    }
 
-   for(int c=0;c<9;c++)
+   for(unsigned int c=0;c<9;c++)
    {
       if(c<2)court[c]=-2;
       else if(c<5)court[c]=-1;
@@ -349,7 +341,7 @@ int main(int argc, char* argv[])
       name(courtname[c]);
    }
 
-   for(int e=0;e<EXECNUM;e++)
+   for(unsigned int e=0;e<EXECNUM;e++)
    {
       exec[e]=-1;
       name(execname[e]);
@@ -360,12 +352,6 @@ int main(int argc, char* argv[])
 
    loaded=load();
 
-   //testdriver();
-
-   configureLCS<organizationDef, organization>("configfile.txt", &organizationDefManager);
-
-
-
    mode_title();
 
    //deinitialize curses
@@ -374,56 +360,8 @@ int main(int argc, char* argv[])
    return 0;
 }
 
-
-template <class def, class instance>void configureLCS(char configFileString[], defManager<def, instance> *manager)
-{
-	FILE *configFile;
-	configFile = LCSOpenFile(configFileString, "r", 2);
-	if(configFile == NULL)
-	{
-		throw invalid_argument("Configuration File Not Found!");
-		return;
-	}
-	char tag[100] = "NONE";
-	char data[100] = "";
-	char currEntity[100] = "";
-	char curLine[100] = "";
-	def *newEntity = NULL;
-	char *status;
-	
-	status = fgets(curLine, 100, configFile);
-	
-	while(status != NULL)
-	{
-		if(curLine[0] != '#' && curLine[0] != '\n')
-		{
-			sscanf(curLine, "%s%s", tag, data);
-			if(!strcmp(tag, "OBJECT"))
-			{
-				if(strcmp(currEntity, ""))
-				{
-					manager->addObj(*newEntity);
-				}
-				strcpy(currEntity, data);
-				if(!strcmp(currEntity, manager->type.c_str()))
-				{
-					newEntity = new def();
-					newEntity->initConfig();
-				}
-			}
-			else if(newEntity != NULL)
-			{
-				newEntity->configVar(tag, data);
-			}
-		}
-		status = fgets(curLine, 100, configFile);
-	}
-
-	manager->addObj(*newEntity);
-}
-
 //picks a random number from 0 to max-1
-long LCSrandom(unsigned long max)
+unsigned int LCSrandom(unsigned int max)
 {
    r_num();
 
@@ -434,7 +372,7 @@ long LCSrandom(unsigned long max)
 
    rand_y = max*((long double)seed/rand_i);
 
-   return((long)rand_y);
+   return((int)rand_y);
 }
 
 //sets seed to a random number from 0 to 2 billion
@@ -444,7 +382,7 @@ unsigned long r_num(void)
    return seed;
 }
 
-int creaturest::attval(short a,char usejuice)
+unsigned int creaturest::attval(short a,char usejuice)
 {
    int ret=att[a];
    
@@ -675,7 +613,7 @@ void creaturest::creatureinit(void)
    location=0;
    base=0;
    activity.type=ACTIVITY_NONE;
-   for(int i=0;i<LAWFLAGNUM;i++)
+   for(unsigned int i=0;i<LAWFLAGNUM;i++)
       lawflag[i]=0;
    heat=0;
    confessions=0;
@@ -690,13 +628,13 @@ void creaturest::creatureinit(void)
    alive=1;
    blood=100;
    stunned=0;
-   for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
+   for(unsigned int w=0;w<BODYPARTNUM;w++)wound[w]=0;
    weapon.type=WEAPON_NONE;
    weapon.ammo=0;
    armor.type=ARMOR_CLOTHES;
    armor.quality='1';
    armor.flag=0;
-   for(int a=0;a<ATTNUM;a++)
+   for(unsigned int a=0;a<ATTNUM;a++)
    {
       att[a]=1;
    }
@@ -710,12 +648,12 @@ void creaturest::creatureinit(void)
          attnum--;
       }
    }
-   for(int s=0;s<SKILLNUM;s++)
+   for(unsigned int s=0;s<SKILLNUM;s++)
    {
       skill[s]=0;
       skill_ip[s]=0;
    }
-   for(int c=0;c<CLIPNUM;c++)clip[c]=0;
+   for(unsigned int c=0;c<CLIPNUM;c++)clip[c]=0;
    special[SPECIALWOUND_TEETH]=TOOTHNUM;
    special[SPECIALWOUND_RIGHTEYE]=1;
    special[SPECIALWOUND_LEFTEYE]=1;
@@ -755,7 +693,7 @@ void locationst::init(void)
 
 void chaseseqst::clean(void)
 {
-   for(int v=0;v<enemycar.size();v++)
+   for(unsigned int v=0;v<enemycar.size();v++)
    {
       delete enemycar[v];
    }
@@ -772,8 +710,7 @@ void end_game(int err)
 	{
 		delete (*it);
 	}
-	int i=0;
-	for(i=0;i<squad.size();++i)
+	for(unsigned int i=0;i<squad.size();++i)
 	{
 		delete squad[i];
 	}
