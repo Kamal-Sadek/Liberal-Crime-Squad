@@ -151,7 +151,7 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
    }
 
    int homes=-1; // find homeless shelter
-   for(unsigned int l=0;l<location.size();l++)
+   for(int l=0;l<location.size();l++)
    {
       if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
       {
@@ -188,14 +188,14 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
       /* Cultural leaders block - small influence on everything */
       case CREATURE_RADIOPERSONALITY:
          change_public_opinion(VIEW_AMRADIO,1);
-         for(unsigned int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM;i++)
          {
             libpower[i]+=power/2;
          }
          break;
       case CREATURE_NEWSANCHOR:
          change_public_opinion(VIEW_CABLENEWS,1);
-         for(unsigned int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM;i++)
          {
             libpower[i]+=power/2;
          }
@@ -209,7 +209,7 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
       case CREATURE_PRIEST:
-         for(unsigned int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM;i++)
          {
             libpower[i]+=power/2;
          }
@@ -303,7 +303,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
 
    location[cr.base]->interrogated = 1;
 
-   unsigned int homes;
+   int homes;
    for(homes=0;homes<location.size();homes++)
    {
       if(location[homes]->type == SITE_RESIDENTIAL_SHELTER)break;
@@ -509,7 +509,7 @@ void sleeper_embezzle(creaturest &cr,char &clearformess,char canseethings,int *l
       
       refresh();
       getch();
-      for(unsigned int p=0;p<pool.size();p++)
+      for(int p=0;p<pool.size();p++)
       {
          if(pool[p]->id == cr.id)
          {
@@ -565,7 +565,7 @@ void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libp
       addstr("The LCS has no choice but to cut the sleeper loose.");
       refresh();
       getch();
-      for(unsigned int p=0;p<pool.size();p++)
+      for(int p=0;p<pool.size();p++)
       {
          if(pool[p]->id == cr.id)
          {
@@ -580,7 +580,7 @@ void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libp
    itemst *item;
    locationst *shelter=0;
 
-   for(unsigned int l=0;l<location.size();l++)
+   for(int l=0;l<location.size();l++)
    {
       if(location[l]->type == SITE_RESIDENTIAL_SHELTER)
       {
@@ -748,7 +748,7 @@ void sleeper_recruit(creaturest &cr,char &clearformess,char canseethings,int *li
       if(subordinatesleft(cr))
       {
          prepareencounter(location[cr.worklocation]->type,0);
-         for(unsigned int e=0;e<18;e++)
+         for(int e=0;e<18;e++)
          {
             if(encounter[e].exists == false)
                break;

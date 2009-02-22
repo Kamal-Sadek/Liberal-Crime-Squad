@@ -52,7 +52,7 @@ void creaturest::train(int trainedskill, int experience)
 
 void creaturest::skill_up()
 {
-   for(unsigned int s=0;s<SKILLNUM;s++)
+   for(int s=0;s<SKILLNUM;s++)
    {
       while(skill_ip[s]>=100+10*skill[s]&&
             skill[s]<maxskill(s,*this))
@@ -65,7 +65,7 @@ void creaturest::skill_up()
    }
 }
 
-unsigned creaturest::get_skill_ip(unsigned skill)
+int creaturest::get_skill_ip(int skill)
 {
    return skill_ip[skill];
 }
@@ -80,7 +80,7 @@ bool creaturest::enemy()
    {
       if(type==CREATURE_COP)
       {
-         for(unsigned int i=0;i<pool.size();i++)
+         for(int i=0;i<pool.size();i++)
          {
             if(pool[i]==this)
             {
@@ -911,7 +911,7 @@ bool verifyworklocation(creaturest &cr, char test_location, char test_type)
       //FIND ONE OF THESE
       vector<int> goodlist;
 
-      for(unsigned int l=0;l<location.size();l++)
+      for(int l=0;l<location.size();l++)
       {
          if(location[l]->type==cr.worklocation)
          {

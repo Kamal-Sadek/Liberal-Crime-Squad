@@ -40,7 +40,7 @@ void kidnapattempt(void)
 
    int available=0;
    char availslot[6]={0,0,0,0,0,0};
-   for(unsigned int p=0;p<6;p++)
+   for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -96,7 +96,7 @@ void kidnapattempt(void)
    {
       vector<int> target;
 
-      for(unsigned int e=0;e<ENCMAX;e++)
+      for(int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
             (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
@@ -110,7 +110,7 @@ void kidnapattempt(void)
 
       if(target.size()>0)
       {
-         unsigned t=target[0];
+         int t=target[0];
 
          if(target.size()>1)
          {
@@ -125,7 +125,7 @@ void kidnapattempt(void)
                addstr("Kidnap whom?");
 
                int x=1,y=11;
-               for(unsigned t2=0;t2<target.size();t2++)
+               for(int t2=0;t2<target.size();t2++)
                {
                   move(y,x);
                   addch(t2+'A');
@@ -170,7 +170,7 @@ void kidnapattempt(void)
             if(amateur)
             {
                char present=0;
-               for(unsigned int e=0;e<ENCMAX;e++)
+               for(int e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive){present=1;break;}
                }
@@ -353,7 +353,7 @@ void freehostage(creaturest &cr,char situation)
 
       if(cr.prisoner->squadid==-1)
       {
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists==0)
             {
@@ -373,7 +373,7 @@ void freehostage(creaturest &cr,char situation)
       {
          //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
          //(That may not be the case any longer -jds)
-         for(unsigned int pl=0;pl<pool.size();pl++)
+         for(int pl=0;pl<pool.size();pl++)
          {
             if(pool[pl]==cr.prisoner)
             {
@@ -465,7 +465,7 @@ void squadgrab_immobile(char dead)
 
                   //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
                   //(that may not be the case any longer -jds)
-                  for(unsigned int pl=0;pl<pool.size();pl++)
+                  for(int pl=0;pl<pool.size();pl++)
                   {
                      if(pool[pl]==activesquad->squad[p])
                      {
@@ -519,7 +519,7 @@ void squadgrab_immobile(char dead)
 
             //SHUFFLE SQUAD
             char flipstart=0;
-            for(unsigned int pt=0;pt<6;pt++)
+            for(int pt=0;pt<6;pt++)
             {
                if(pt==p-1)continue;
                if(pt==p){flipstart=1;}

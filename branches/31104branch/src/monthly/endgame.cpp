@@ -102,7 +102,7 @@ void tossjustices(char canseethings)
    if(ratify(2,-1,-1,1,canseethings))
    {
       //BLAST JUSTICES
-      for(unsigned int j=0;j<9;j++)
+      for(int j=0;j<9;j++)
       {
          if(court[j]!=2)
          {
@@ -202,7 +202,7 @@ void reaganify(char canseethings)
          strcpy(execname[EXEC_VP],"Strom Thurmond");
          strcpy(execname[EXEC_STATE],"Jesse Helms");
          strcpy(execname[EXEC_ATTORNEY],"Jerry Falwell");
-         for(unsigned int e=0;e<EXECNUM;e++)exec[e]=-2;
+         for(int e=0;e<EXECNUM;e++)exec[e]=-2;
          liberalagenda(-1);
          savehighscore(END_REAGAN);
       }
@@ -385,7 +385,7 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
       int vote;
       int s=-1;
 
-      for(unsigned int l=0;l<435;l++)
+      for(int l=0;l<435;l++)
       {
          vote=house[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
@@ -481,7 +481,7 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-         for(unsigned int s=0;s<50;s++)
+         for(int s=0;s<50;s++)
          {
             if(s<17)move(5+s,0);
             else if(s<34)move(5+s-17,27);
@@ -552,7 +552,7 @@ char ratify(int level,int view,int lawview,char congress,char canseethings)
 
       int vote;
       int smood;
-      for(unsigned int s=0;s<50;s++)
+      for(int s=0;s<50;s++)
       {
          smood=mood;
 

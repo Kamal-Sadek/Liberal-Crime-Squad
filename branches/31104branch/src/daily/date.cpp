@@ -265,7 +265,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          {
             // Find the police station
             long ps=-1;
-            for(unsigned int l=0;l<location.size();l++)
+            for(int l=0;l<location.size();l++)
             {
                if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                {
@@ -373,7 +373,7 @@ char completevacation(datest &d,int p,char &clearformess)
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d,int p,char &clearformess)
 {
-   unsigned int e;
+   int e;
    clearformess=1;
 
    erase();
@@ -714,7 +714,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   // Find the police station
                   int ps=-1;
-                  for(unsigned int l=0;l<location.size();l++)
+                  for(int l=0;l<location.size();l++)
                   {
                      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
                      {

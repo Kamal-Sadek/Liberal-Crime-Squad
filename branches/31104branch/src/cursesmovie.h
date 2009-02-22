@@ -27,7 +27,7 @@ struct filelistst
 
    ~filelistst()
    {
-      for(unsigned int l=0;l<list.size();l++)
+      for(int l=0;l<list.size();l++)
       {
          delete list[l];
       }
@@ -35,7 +35,7 @@ struct filelistst
    }
    void clean(void)
    {
-      for(unsigned int l=0;l<list.size();l++)
+      for(int l=0;l<list.size();l++)
       {
          delete list[l];
       }

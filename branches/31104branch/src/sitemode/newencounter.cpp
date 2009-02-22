@@ -34,7 +34,7 @@ void prepareencounter(short type,char sec)
 {
    int encslot=0;
 
-   for(unsigned int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
 
    int creaturearray[CREATURENUM];
    memset(creaturearray,0,CREATURENUM*sizeof(int));
@@ -77,7 +77,7 @@ void prepareencounter(short type,char sec)
       creaturearray[CREATURE_CRACKHEAD]+=5;
       creaturearray[CREATURE_PRIEST]+=5;
       creaturearray[CREATURE_RADIOPERSONALITY]+=1;
-      for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+      for(int n=0;n<LCSrandom(6)+1;n++)
       {
          makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
          conservatise(encounter[encslot]);
@@ -109,7 +109,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ACTOR]+=1;
             if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
                creaturearray[CREATURE_CCS_VIGILANTE]+=5;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -155,7 +155,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MARTIALARTIST]+=1;
             creaturearray[CREATURE_ATHLETE]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -199,7 +199,7 @@ void prepareencounter(short type,char sec)
             if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
                creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -291,7 +291,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ATHLETE]+=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -324,7 +324,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_PHOTOGRAPHER]+=1;
             creaturearray[CREATURE_YOGAINSTRUCTOR]+=2;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -355,7 +355,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_CAMERAMAN]+=1;
             creaturearray[CREATURE_CLERK]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -388,7 +388,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_THIEF]+=5;
             creaturearray[CREATURE_ACTOR]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -450,7 +450,7 @@ void prepareencounter(short type,char sec)
             {
                encnum=4;
             }
-            for(unsigned int n=0;n<LCSrandom(encnum)+1;n++)
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -523,7 +523,7 @@ void prepareencounter(short type,char sec)
             {
                encnum=4;
             }
-            for(unsigned int n=0;n<LCSrandom(encnum)+1;n++)
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -572,7 +572,7 @@ void prepareencounter(short type,char sec)
             {
                encnum=4;
             }
-            for(unsigned int n=0;n<LCSrandom(encnum)+1;n++)
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -590,7 +590,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_WORKER_SECRETARY]=10;
             creaturearray[CREATURE_OFFICEWORKER]=10;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -608,7 +608,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_WORKER_SECRETARY]=10;
             creaturearray[CREATURE_OFFICEWORKER]=10;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -626,7 +626,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_WORKER_JANITOR]=10;
             creaturearray[CREATURE_WORKER_SECRETARY]=10;
             creaturearray[CREATURE_OFFICEWORKER]=10;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -714,7 +714,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ATHLETE]=1;
             //creaturearray[CREATURE_FIREFIGHTER]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -803,7 +803,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ATHLETE]=1;
             //creaturearray[CREATURE_FIREFIGHTER]+=1;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -828,7 +828,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_PHOTOGRAPHER]=1;
             creaturearray[CREATURE_FIREFIGHTER]+=100;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -853,7 +853,7 @@ void prepareencounter(short type,char sec)
                    law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=2;
                else creaturearray[CREATURE_PRISONGUARD]+=2;
             }
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -871,7 +871,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MATHEMATICIAN]+=5;
             creaturearray[CREATURE_PROGRAMMER]+=5;
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -884,7 +884,7 @@ void prepareencounter(short type,char sec)
             else creaturearray[CREATURE_SECURITYGUARD]+=200;
             creaturearray[CREATURE_CORPORATE_MANAGER]+=5;
             creaturearray[CREATURE_WORKER_SWEATSHOP]+=800;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -920,7 +920,7 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_WORKER_FACTORY_UNION]=110;
             }
             else creaturearray[CREATURE_WORKER_FACTORY_UNION]=160;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -940,7 +940,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_PRIEST]=1;
             creaturearray[CREATURE_OFFICEWORKER]=80;
             creaturearray[CREATURE_PROSTITUTE]=1;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -960,7 +960,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_LAWYER]=5;
             creaturearray[CREATURE_PRIEST]=1;
             creaturearray[CREATURE_PROSTITUTE]=1;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -977,7 +977,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_RADIOPERSONALITY]=2;
             creaturearray[CREATURE_ENGINEER]=20;
             creaturearray[CREATURE_OFFICEWORKER]=40;
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -1001,7 +1001,7 @@ void prepareencounter(short type,char sec)
          creaturearray[CREATURE_NEWSANCHOR]=20000;
       #endif
 
-            for(unsigned int n=0;n<LCSrandom(6)+1;n++)
+            for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
                encslot++;
@@ -1019,7 +1019,7 @@ char addsiegeencounter(char type)
 {
    int num;
    int freeslots=0;
-   for(unsigned int e=0;e<ENCMAX;e++)
+   for(int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)freeslots++;
    }
@@ -1033,7 +1033,7 @@ char addsiegeencounter(char type)
 
          num=LCSrandom(3)+4;
 
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists)continue;
 
@@ -1125,7 +1125,7 @@ char addsiegeencounter(char type)
 
          num=1;
 
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists)continue;
 
@@ -1147,7 +1147,7 @@ char addsiegeencounter(char type)
 int getrandomcreaturetype(int cr[CREATURENUM])
 {
    int sum=0;
-   for(unsigned int c=0;c<CREATURENUM;c++)sum+=cr[c];
+   for(int c=0;c<CREATURENUM;c++)sum+=cr[c];
 
    if(sum>0)
    {

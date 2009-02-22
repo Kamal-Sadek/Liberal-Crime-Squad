@@ -39,7 +39,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
       ey=24;
    }
 
-   unsigned int ch='?';
+   int ch='?';
    switch(LCSrandom(6))
    {
       case 0:ch=CH_LIGHT_SHADE;break;

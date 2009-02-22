@@ -81,7 +81,7 @@ unsigned char newspic[20][78][18][4];
 
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
-unsigned long seed;
+unsigned int seed;
 
 long curcreatureid=0;
 vector<itemst *> groundloot;
@@ -124,14 +124,14 @@ short offended_amradio=0;
 short offended_cablenews=0;
 short offended_firemen=0;
 int police_heat=0;
-unsigned long attorneyseed;
+int attorneyseed;
 int selectedsiege=-1;
 char lcityname[80];
 char newscherrybusted=0;
 
-unsigned int month=1;
-unsigned int year=2007;
-unsigned int amendnum=28;
+int month=1;
+int year=2007;
+int amendnum=28;
 
 
 short attitude[VIEWNUM];
@@ -158,23 +158,23 @@ char cablenews_closed=0;
 char policestation_closed=0;
 
 
-unsigned long stat_recruits=0;
-unsigned long stat_kidnappings=0;
-unsigned long stat_dead=0;
-unsigned long stat_kills=0;
-unsigned long stat_funds=0;
-unsigned long stat_spent=0;
-unsigned long stat_buys=0;
-unsigned long stat_burns=0;
+int stat_recruits=0;
+int stat_kidnappings=0;
+int stat_dead=0;
+int stat_kills=0;
+int stat_funds=0;
+int stat_spent=0;
+int stat_buys=0;
+int stat_burns=0;
 
-unsigned long ustat_recruits=0;
-unsigned long ustat_kidnappings=0;
-unsigned long ustat_dead=0;
-unsigned long ustat_kills=0;
-unsigned long ustat_funds=0;
-unsigned long ustat_spent=0;
-unsigned long ustat_buys=0;
-unsigned long ustat_burns=0;
+int ustat_recruits=0;
+int ustat_kidnappings=0;
+int ustat_dead=0;
+int ustat_kills=0;
+int ustat_funds=0;
+int ustat_spent=0;
+int ustat_buys=0;
+int ustat_burns=0;
 
 int locx;
 int locy;
@@ -192,12 +192,12 @@ short cursite;
 short interface_pgup='[';
 short interface_pgdn=']';
 
-int unsigned day=1;
+int day=1;
 
 #ifdef HIGHFUNDS
-unsigned long funds=100000;
+int funds=100000;
 #else
-unsigned long funds=7;
+int funds=7;
 #endif
 
 long moneygained_donate=0;
@@ -222,7 +222,7 @@ long moneylost_confiscated=0;
 
 short party_status=-1;
 
-unsigned char endgamestate=ENDGAME_NONE;
+char endgamestate=ENDGAME_NONE;
 char ccs_kills=0;
 
 vector<datest *> date;
@@ -251,9 +251,9 @@ int main(int argc, char* argv[])
    seed=getSeed();
    
    //initialize the array of color pairs
-   for(unsigned int i=0;i<8;i++)
+   for(int i=0;i<8;i++)
    {
-      for(unsigned int j=0;j<8;j++)
+      for(int j=0;j<8;j++)
       {
          if(i==0&&j==0)
          {
@@ -281,7 +281,7 @@ int main(int argc, char* argv[])
 
    strcpy(slogan,"We need a slogan!");
 
-   for(unsigned int v=0;v<VIEWNUM;v++)
+   for(int v=0;v<VIEWNUM;v++)
    {
       attitude[v]=45;
       public_interest[v]=0;
@@ -306,14 +306,14 @@ int main(int argc, char* argv[])
    law[LAW_GUNCONTROL]=-1;
 
 #ifdef SHITLAWS
-   for(unsigned int l=0;l<LAWNUM;l++)law[l]=-2;
+   for(int l=0;l<LAWNUM;l++)law[l]=-2;
 #endif
 
 #ifdef PERFECTLAWS
-   for(unsigned int l=0;l<LAWNUM;l++)law[l]=2;
+   for(int l=0;l<LAWNUM;l++)law[l]=2;
 #endif
 
-   for(unsigned int s=0;s<100;s++)
+   for(int s=0;s<100;s++)
    {
       if(s<20)senate[s]=-2;
       else if(s<45)senate[s]=-1;
@@ -322,7 +322,7 @@ int main(int argc, char* argv[])
       else senate[s]=2;
    }
 
-   for(unsigned int h=0;h<435;h++)
+   for(int h=0;h<435;h++)
    {
       if(h<30)house[h]=-2;
       else if(h<200)house[h]=-1;
@@ -331,7 +331,7 @@ int main(int argc, char* argv[])
       else house[h]=2;
    }
 
-   for(unsigned int c=0;c<9;c++)
+   for(int c=0;c<9;c++)
    {
       if(c<2)court[c]=-2;
       else if(c<5)court[c]=-1;
@@ -341,7 +341,7 @@ int main(int argc, char* argv[])
       name(courtname[c]);
    }
 
-   for(unsigned int e=0;e<EXECNUM;e++)
+   for(int e=0;e<EXECNUM;e++)
    {
       exec[e]=-1;
       name(execname[e]);
@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 }
 
 //picks a random number from 0 to max-1
-unsigned int LCSrandom(unsigned int max)
+int LCSrandom(int max)
 {
    r_num();
 
@@ -376,13 +376,13 @@ unsigned int LCSrandom(unsigned int max)
 }
 
 //sets seed to a random number from 0 to 2 billion
-unsigned long r_num(void)
+int r_num(void)
 {
    seed=(seed*907725L+99979777UL)%2147483648UL;
    return seed;
 }
 
-unsigned int creaturest::attval(short a,char usejuice)
+int creaturest::attval(short a,char usejuice)
 {
    int ret=att[a];
    
@@ -613,7 +613,7 @@ void creaturest::creatureinit(void)
    location=0;
    base=0;
    activity.type=ACTIVITY_NONE;
-   for(unsigned int i=0;i<LAWFLAGNUM;i++)
+   for(int i=0;i<LAWFLAGNUM;i++)
       lawflag[i]=0;
    heat=0;
    confessions=0;
@@ -628,13 +628,13 @@ void creaturest::creatureinit(void)
    alive=1;
    blood=100;
    stunned=0;
-   for(unsigned int w=0;w<BODYPARTNUM;w++)wound[w]=0;
+   for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
    weapon.type=WEAPON_NONE;
    weapon.ammo=0;
    armor.type=ARMOR_CLOTHES;
    armor.quality='1';
    armor.flag=0;
-   for(unsigned int a=0;a<ATTNUM;a++)
+   for(int a=0;a<ATTNUM;a++)
    {
       att[a]=1;
    }
@@ -648,12 +648,12 @@ void creaturest::creatureinit(void)
          attnum--;
       }
    }
-   for(unsigned int s=0;s<SKILLNUM;s++)
+   for(int s=0;s<SKILLNUM;s++)
    {
       skill[s]=0;
       skill_ip[s]=0;
    }
-   for(unsigned int c=0;c<CLIPNUM;c++)clip[c]=0;
+   for(int c=0;c<CLIPNUM;c++)clip[c]=0;
    special[SPECIALWOUND_TEETH]=TOOTHNUM;
    special[SPECIALWOUND_RIGHTEYE]=1;
    special[SPECIALWOUND_LEFTEYE]=1;
@@ -693,7 +693,7 @@ void locationst::init(void)
 
 void chaseseqst::clean(void)
 {
-   for(unsigned int v=0;v<enemycar.size();v++)
+   for(int v=0;v<enemycar.size();v++)
    {
       delete enemycar[v];
    }
@@ -710,7 +710,7 @@ void end_game(int err)
 	{
 		delete (*it);
 	}
-	for(unsigned int i=0;i<squad.size();++i)
+	for(int i=0;i<squad.size();++i)
 	{
 		delete squad[i];
 	}

@@ -10,7 +10,7 @@ extern unsigned char newspic[20][78][18][4];
 
 extern vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
-extern unsigned long seed;
+extern unsigned int seed;
 extern short law[LAWNUM];
 
 extern short house[435];
@@ -25,23 +25,23 @@ extern short execterm;
 extern char execname[EXECNUM][80];
 extern short presparty;
 
-extern unsigned long stat_recruits;
-extern unsigned long stat_kidnappings;
-extern unsigned long stat_dead;
-extern unsigned long stat_kills;
-extern unsigned long stat_funds;
-extern unsigned long stat_spent;
-extern unsigned long stat_buys;
-extern unsigned long stat_burns;
+extern int stat_recruits;
+extern int stat_kidnappings;
+extern int stat_dead;
+extern int stat_kills;
+extern int stat_funds;
+extern int stat_spent;
+extern int stat_buys;
+extern int stat_burns;
 
-extern unsigned long ustat_recruits;
-extern unsigned long ustat_kidnappings;
-extern unsigned long ustat_dead;
-extern unsigned long ustat_kills;
-extern unsigned long ustat_funds;
-extern unsigned long ustat_spent;
-extern unsigned long ustat_buys;
-extern unsigned long ustat_burns;
+extern int ustat_recruits;
+extern int ustat_kidnappings;
+extern int ustat_dead;
+extern int ustat_kills;
+extern int ustat_funds;
+extern int ustat_spent;
+extern int ustat_buys;
+extern int ustat_burns;
 
 extern int locx;
 extern int locy;
@@ -59,7 +59,7 @@ extern short cursite;
 extern short interface_pgup;
 extern short interface_pgdn;
 
-extern unsigned int day;
+extern int day;
 
 extern short attitude[VIEWNUM];
 
@@ -70,10 +70,10 @@ extern char policestation_closed;
 extern char amradio_closed;
 extern char cablenews_closed;
 
-extern unsigned char endgamestate;
+extern char endgamestate;
 extern char ccs_kills;
 
-extern unsigned long funds;
+extern int funds;
 
 extern char loaded;
 
@@ -86,14 +86,14 @@ extern short offended_amradio;
 extern short offended_cablenews;
 extern short offended_firemen;
 extern int police_heat;
-extern unsigned long attorneyseed;
+extern int attorneyseed;
 extern int selectedsiege;
 extern char lcityname[80];
 extern char newscherrybusted;
 
-extern unsigned int month;
-extern unsigned int year;
-extern unsigned int amendnum;
+extern int month;
+extern int year;
+extern int amendnum;
 
 extern long moneygained_donate;
 extern long moneygained_brownies;

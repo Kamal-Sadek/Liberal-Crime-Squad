@@ -243,7 +243,7 @@ void locheader(void)
       if(activesquad->activity.type==ACTIVITY_NONE)
       {
          int count=0;char haveact=0;
-         for(unsigned int p=0;p<6;p++)
+         for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL)continue;
             count++;
@@ -267,7 +267,7 @@ void printparty(void)
    creaturest *party[6]={NULL,NULL,NULL,NULL,NULL,NULL};
    if(activesquad!=NULL)
    {
-      for(unsigned int p=0;p<6;p++)party[p]=activesquad->squad[p];
+      for(int p=0;p<6;p++)party[p]=activesquad->squad[p];
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -298,7 +298,7 @@ void printparty(void)
       move(1,0);
       addstr("#-CODE NAME------------SKILL---WEAPON---------ARMOR----------HEALTH---TRANSPORT-");
 
-      for(unsigned int p=0;p<6;p++)
+      for(int p=0;p<6;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(p+2,0);
@@ -314,11 +314,11 @@ void printparty(void)
             addstr(party[p]->name);
             if(party[p]->prisoner!=NULL)addstr("+H");
 
-            unsigned long skill=0;
+            int skill=0;
             char bright=0;
-            for(unsigned int sk=0;sk<SKILLNUM;sk++)
+            for(int sk=0;sk<SKILLNUM;sk++)
             {
-               skill+=(unsigned long)party[p]->skill[sk];
+               skill+=(int)party[p]->skill[sk];
                if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->skill[sk])&&
                   party[p]->skill[sk]<maxskill(sk,*party[p]))bright=1;
             }
@@ -740,9 +740,9 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
    {
       printed=0;
 
-      unsigned long max=0;
+      int max=0;
       long maxs=-1;
-      for(unsigned int s=0;s<SKILLNUM;s++)
+      for(int s=0;s<SKILLNUM;s++)
       {
          if(cr->skill[s]>max && !used[s])
          {
@@ -785,7 +785,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
    }
 
    int woundsum=0;
-   for(unsigned int w=0;w<BODYPARTNUM;w++)
+   for(int w=0;w<BODYPARTNUM;w++)
    {
       if(cr->wound[w]!=0)woundsum++;
    }
@@ -794,7 +794,7 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 
    if(woundsum>0)
    {
-      for(unsigned int w=0;w<BODYPARTNUM;w++)
+      for(int w=0;w<BODYPARTNUM;w++)
       {
          if(cr->wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -851,7 +851,7 @@ void fullstatus(int p)
    if(activesquad==NULL)return;
 
    const int pagenum=2;
-   unsigned page=0;
+   int page=0;
 
    do
    {
@@ -960,7 +960,7 @@ void printliberalskills(creaturest &cr)
    addstr(")");
 
    // Add all skills
-   for(unsigned int s=0;s<SKILLNUM;s++)
+   for(int s=0;s<SKILLNUM;s++)
    {
       if(s%3==0 && s<9)
       {
@@ -1133,20 +1133,20 @@ void printliberalstats(creaturest &cr)
    char used[SKILLNUM];
    memset(used,0,sizeof(char)*SKILLNUM);
 
-   unsigned int skills_max=17;
+   int skills_max=17;
    char printed=1;
 
    move(5,28);
    addstr("SKILL");
    move(5,43);
    addstr("NOW   MAX");
-   for(unsigned int skills_shown=0;skills_shown<skills_max&&printed;skills_shown++)
+   for(int skills_shown=0;skills_shown<skills_max&&printed;skills_shown++)
    {
       printed=0;
 
-      unsigned long max=0;
+      int max=0;
       long maxs=-1;
-      for(unsigned int s=0;s<SKILLNUM;s++)
+      for(int s=0;s<SKILLNUM;s++)
       {
          if((cr.skill[s]*10000+cr.get_skill_ip(s))>max && !used[s])
          {
@@ -1287,7 +1287,7 @@ void printliberalstats(creaturest &cr)
    }
 
    // Add wound status
-   for(unsigned int w=0;w<BODYPARTNUM;w++)
+   for(int w=0;w<BODYPARTNUM;w++)
    {
       if(cr.wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1461,7 +1461,7 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
 {
    short woundsum=0;
    char bleeding=0;
-   for(unsigned int w=0;w<BODYPARTNUM;w++)
+   for(int w=0;w<BODYPARTNUM;w++)
    {
       if(g.wound[w]!=0)woundsum++;
       if(g.wound[w] & WOUND_BLEEDING)bleeding=1;
@@ -1642,7 +1642,7 @@ void printhealthstat(creaturest &g,int y,int x,char smll)
   Please note that offsetx is the offset from the right of the screen, y is 
   the offset from the top as always.
 */
-void printfunds(unsigned int y, unsigned int offsetx, char* prefix)
+void printfunds(int y, int offsetx, char* prefix)
 {
 	char moneystr[50];
 	

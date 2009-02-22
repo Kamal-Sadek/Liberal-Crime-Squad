@@ -53,7 +53,7 @@ char talk(creaturest &a,int t)
       int weaponhostage=0;
       bool cop=0;
 
-      for(unsigned int i=0;i<6;i++)
+      for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i]&&
             activesquad->squad[i]->prisoner&&
@@ -123,7 +123,7 @@ char talk(creaturest &a,int t)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          
 
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
                encounter[e].enemy())
@@ -307,7 +307,7 @@ char talk(creaturest &a,int t)
                   {
                      executer=&a;
                   }
-                  else for(unsigned int i=0;i<6;i++)
+                  else for(int i=0;i<6;i++)
                   {
                      if(activesquad->squad[i]->prisoner!=NULL)
                      {
@@ -471,7 +471,7 @@ char talk(creaturest &a,int t)
                      juiceparty(5); // Instant juice for successful hostage negotiation
                      if(hostages>1)addstr("The squad releases all hostages in the trade.");
                      else addstr("The squad releases the hostage in the trade.");
-                     for(unsigned int i=0;i<6;i++)
+                     for(int i=0;i<6;i++)
                      {
                         if(activesquad->squad[i] &&
                            activesquad->squad[i]->prisoner &&
@@ -563,7 +563,7 @@ char talk(creaturest &a,int t)
          getch();
 
          vector<int> noticer;
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists&&encounter[e].alive&&
                encounter[e].enemy())
@@ -576,7 +576,7 @@ char talk(creaturest &a,int t)
          {
             int disguise=disguiseskill();
             int weapon=0;
-            for(unsigned int i=0;i<6;i++)
+            for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
                int weapontemp=weaponcheck(*activesquad->squad[i],cursite);
@@ -606,11 +606,11 @@ char talk(creaturest &a,int t)
             //NOW MUST BLUFF
             if(!noticed)
             {
-               unsigned int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+
+               int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+
                                                 a.skillval(SKILL_DISGUISE)*2;
 
-               unsigned int maxtroll=0,troll;
-               for(unsigned int e=0;e<ENCMAX;e++)
+               int maxtroll=0,troll;
+               for(int e=0;e<ENCMAX;e++)
                {
                   if(encounter[e].exists&&encounter[e].alive&&
                      encounter[e].enemy())
@@ -714,7 +714,7 @@ char talk(creaturest &a,int t)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("The police arrest the Squad.");
          getch();
-         for(unsigned int i=0;i<6;++i)
+         for(int i=0;i<6;++i)
          {
             if(activesquad->squad[i])capturecreature(*activesquad->squad[i]);
             activesquad->squad[i]=NULL;
@@ -844,7 +844,7 @@ char talk(creaturest &a,int t)
 
                if(lw!=-1)
                {
-                  unsigned int aroll = LCSrandom(21)+
+                  int aroll = LCSrandom(21)+
                                        a.attval(ATTRIBUTE_CHARISMA)+
                                        a.attval(ATTRIBUTE_HEART)+
                                        a.skillval(SKILL_PERSUASION)*2;
@@ -852,7 +852,7 @@ char talk(creaturest &a,int t)
                   if(aroll<30-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
                   else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)badthing=2;
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  unsigned int troll = LCSrandom(21)+
+                  int troll = LCSrandom(21)+
                                        tk->attval(ATTRIBUTE_CHARISMA)+
                                        tk->attval(ATTRIBUTE_WISDOM);
                   a.train(SKILL_PERSUASION,LCSrandom(2)+1);
@@ -1458,9 +1458,9 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  unsigned int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skillval(SKILL_SEDUCTION)*2+1);
+                  int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skillval(SKILL_SEDUCTION)*2+1);
                   if(a.armor.type==ARMOR_NONE)aroll-=30;
-                  unsigned int troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
+                  int troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
                   if(!(tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
                      tk->animalgloss==ANIMALGLOSS_TANK)
                   {
@@ -1584,7 +1584,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
 
                      int olddate=0;
                      datest *newd=NULL;
-                     for(unsigned int d=0;d<date.size();d++)
+                     for(int d=0;d<date.size();d++)
                      {
                         if(date[d]->mac_id==a.id)
                         {
@@ -1655,7 +1655,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                         return 1;
                      }
 
-                     unsigned long rent=200;
+                     int rent=200;
                      switch(location[cursite]->type)
                      {
                         case SITE_RESIDENTIAL_APARTMENT:rent=650;break;

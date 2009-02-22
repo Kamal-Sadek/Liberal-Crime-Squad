@@ -43,7 +43,7 @@ void makecharacter(void)
    newcr->att[ATTRIBUTE_STRENGTH]=4;
    newcr->att[ATTRIBUTE_HEALTH]=6;
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
-   for(unsigned int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
+   for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
 
    name(newcr->propername);
    
@@ -51,7 +51,7 @@ void makecharacter(void)
    bool hasmaps=0;
    bool makejudge=0;
 
-   for(unsigned int q=0;q<10;q++)
+   for(int q=0;q<10;q++)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -949,7 +949,7 @@ void makecharacter(void)
       newsq->squad[0]=newcr;
       newcr->squadid=0;
       strcpy(newsq->name,"The Liberal Crime Squad");
-      for(unsigned int l=0;l<location.size();l++)
+      for(int l=0;l<location.size();l++)
       {
          if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
          {

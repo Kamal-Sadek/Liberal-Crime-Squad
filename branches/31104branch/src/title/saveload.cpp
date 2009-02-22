@@ -50,18 +50,18 @@ void savegame(char *str)
 {
    char dummy_c;
    int dummy;
-   unsigned int numbytes;
+   int numbytes;
    FILE *h;
-   unsigned int l;
+   int l;
 
    h=LCSOpenFile(str, "ab", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
-      unsigned long lversion=version;
-      numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
+      int lversion=version;
+      numbytes=fwrite(&lversion,sizeof(int),1,h);
 
-      numbytes=fwrite(&seed,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&seed,sizeof(int),1,h);
 
       numbytes=fwrite(&mode,sizeof(int),1,h);
 
@@ -72,14 +72,14 @@ void savegame(char *str)
       numbytes=fwrite(&presparty,sizeof(short),1,h);
       numbytes=fwrite(&amendnum,sizeof(int),1,h);
 
-      numbytes=fwrite(&stat_recruits,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_dead,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_kills,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_kidnappings,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_funds,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_spent,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_buys,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&stat_burns,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&stat_recruits,sizeof(int),1,h);
+      numbytes=fwrite(&stat_dead,sizeof(int),1,h);
+      numbytes=fwrite(&stat_kills,sizeof(int),1,h);
+      numbytes=fwrite(&stat_kidnappings,sizeof(int),1,h);
+      numbytes=fwrite(&stat_funds,sizeof(int),1,h);
+      numbytes=fwrite(&stat_spent,sizeof(int),1,h);
+      numbytes=fwrite(&stat_buys,sizeof(int),1,h);
+      numbytes=fwrite(&stat_burns,sizeof(int),1,h);
 
       numbytes=fwrite(&policestation_closed,sizeof(char),1,h);
       numbytes=fwrite(&amradio_closed,sizeof(char),1,h);
@@ -99,7 +99,7 @@ void savegame(char *str)
       numbytes=fwrite(&offended_amradio,sizeof(short),1,h);
       numbytes=fwrite(&offended_cablenews,sizeof(short),1,h);
       numbytes=fwrite(&offended_firemen,sizeof(short),1,h);
-      numbytes=fwrite(&attorneyseed,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&attorneyseed,sizeof(int),1,h);
       numbytes=fwrite(&selectedsiege,sizeof(long),1,h);
       numbytes=fwrite(lcityname,sizeof(char),80,h);
       numbytes=fwrite(&newscherrybusted,sizeof(char),1,h);
@@ -124,7 +124,7 @@ void savegame(char *str)
       numbytes=fwrite(&moneylost_confiscated,sizeof(long),1,h);
 
       numbytes=fwrite(slogan,sizeof(char),80,h);
-      numbytes=fwrite(&funds,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&funds,sizeof(int),1,h);
       numbytes=fwrite(&party_status,sizeof(short),1,h);
 
       numbytes=fwrite(attitude,sizeof(short),VIEWNUM,h);
@@ -143,13 +143,13 @@ void savegame(char *str)
       {
          dummy=location[l]->loot.size();
          numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(unsigned int l2=0;l2<location[l]->loot.size();l2++)
+         for(int l2=0;l2<location[l]->loot.size();l2++)
          {
             numbytes=fwrite(location[l]->loot[l2],sizeof(itemst),1,h);
          }
          dummy=location[l]->changes.size();
          numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(unsigned int l2=0;l2<location[l]->changes.size();l2++)
+         for(int l2=0;l2<location[l]->changes.size();l2++)
          {
             numbytes=fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
          }
@@ -172,7 +172,7 @@ void savegame(char *str)
          numbytes=fwrite(&location[l]->front_business,sizeof(short),1,h);
          numbytes=fwrite(location[l]->front_name,sizeof(char),40,h);
          numbytes=fwrite(&location[l]->haveflag,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->mapseed,sizeof(unsigned long),1,h);
+         numbytes=fwrite(&location[l]->mapseed,sizeof(int),1,h);
       }
 
       //VEHICLES
@@ -186,7 +186,7 @@ void savegame(char *str)
       //POOL
       dummy=pool.size();
       numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(unsigned int pl=0;pl<pool.size();pl++)
+      for(int pl=0;pl<pool.size();pl++)
       {
          numbytes=fwrite(pool[pl],sizeof(creaturest),1,h);
          //write extra interrogation data if applicable
@@ -201,8 +201,8 @@ void savegame(char *str)
             numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
 
             //deep write rapport map
-            unsigned int size = reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.size();
-            numbytes=fwrite(&size,sizeof(unsigned int),1,h);
+            int size = reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.size();
+            numbytes=fwrite(&size,sizeof(int),1,h);
             
             map<long,float_zero>::iterator i;
             for(i=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.begin();
@@ -217,13 +217,13 @@ void savegame(char *str)
       //SQUADS
       dummy=squad.size();
       numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(unsigned int sq=0;sq<squad.size();sq++)
+      for(int sq=0;sq<squad.size();sq++)
       {
          numbytes=fwrite(squad[sq]->name,sizeof(char),40,h);
          numbytes=fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
          numbytes=fwrite(&squad[sq]->id,sizeof(int),1,h);
 
-         for(unsigned int pos=0;pos<6;pos++)
+         for(int pos=0;pos<6;pos++)
          {
             if(squad[sq]->squad[pos]==NULL)dummy_c=0;
             else dummy_c=1;
@@ -237,7 +237,7 @@ void savegame(char *str)
 
          dummy=squad[sq]->loot.size();
          numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(unsigned int l2=0;l2<squad[sq]->loot.size();l2++)
+         for(int l2=0;l2<squad[sq]->loot.size();l2++)
          {
             numbytes=fwrite(squad[sq]->loot[l2],sizeof(itemst),1,h);
          }
@@ -254,13 +254,13 @@ void savegame(char *str)
       //DATES
       dummy=date.size();
       numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(unsigned int dt=0;dt<date.size();dt++)
+      for(int dt=0;dt<date.size();dt++)
       {
          numbytes=fwrite(&date[dt]->mac_id,sizeof(long),1,h);
          numbytes=fwrite(&date[dt]->timeleft,sizeof(short),1,h);
          dummy=date[dt]->date.size();
          numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(unsigned int dt2=0;dt2<date[dt]->date.size();dt2++)
+         for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
             numbytes=fwrite(date[dt]->date[dt2],sizeof(creaturest),1,h);
          }
@@ -269,7 +269,7 @@ void savegame(char *str)
       //RECRUITS
       dummy=recruit.size();
       numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(unsigned int rt=0;rt<recruit.size();rt++)
+      for(int rt=0;rt<recruit.size();rt++)
       {
          numbytes=fwrite(&recruit[rt]->recruiter_id,sizeof(long),1,h);
          numbytes=fwrite(&recruit[rt]->timeleft,sizeof(short),1,h);
@@ -282,7 +282,7 @@ void savegame(char *str)
       //NEWS STORIES
       dummy=newsstory.size();
       numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(unsigned int ns=0;ns<newsstory.size();ns++)
+      for(int ns=0;ns<newsstory.size();ns++)
       {
          numbytes=fwrite(&newsstory[ns]->type,sizeof(short),1,h);
          numbytes=fwrite(&newsstory[ns]->view,sizeof(short),1,h);
@@ -303,7 +303,7 @@ void savegame(char *str)
 
          dummy=newsstory[ns]->crime.size();
          numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(unsigned int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
+         for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
          {
             numbytes=fwrite(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }
@@ -322,8 +322,8 @@ void savegame(char *str)
 char load(void)
 {
    //LOAD FILE
-   unsigned long loadversion;
-   unsigned int l;
+   int loadversion;
+   int l;
    char dummy_c;
    int dummy;
    long dummy_l;
@@ -332,7 +332,7 @@ char load(void)
    h=LCSOpenFile("save.dat", "rb", LCSIO_PRE_HOME);
    if(h!=NULL)
    {
-      fread(&loadversion,sizeof(unsigned long),1,h);
+      fread(&loadversion,sizeof(int),1,h);
 
       //NUKE INVALID SAVE GAMES
       if(loadversion<lowestloadversion)
@@ -355,14 +355,14 @@ char load(void)
       fread(&presparty,sizeof(short),1,h);
       fread(&amendnum,sizeof(int),1,h);
 
-      fread(&stat_recruits,sizeof(unsigned long),1,h);
-      fread(&stat_dead,sizeof(unsigned long),1,h);
-      fread(&stat_kills,sizeof(unsigned long),1,h);
-      fread(&stat_kidnappings,sizeof(unsigned long),1,h);
-      fread(&stat_funds,sizeof(unsigned long),1,h);
-      fread(&stat_spent,sizeof(unsigned long),1,h);
-      fread(&stat_buys,sizeof(unsigned long),1,h);
-      fread(&stat_burns,sizeof(unsigned long),1,h);
+      fread(&stat_recruits,sizeof(int),1,h);
+      fread(&stat_dead,sizeof(int),1,h);
+      fread(&stat_kills,sizeof(int),1,h);
+      fread(&stat_kidnappings,sizeof(int),1,h);
+      fread(&stat_funds,sizeof(int),1,h);
+      fread(&stat_spent,sizeof(int),1,h);
+      fread(&stat_buys,sizeof(int),1,h);
+      fread(&stat_burns,sizeof(int),1,h);
 
       fread(&policestation_closed,sizeof(char),1,h);
       fread(&amradio_closed,sizeof(char),1,h);
@@ -382,7 +382,7 @@ char load(void)
       fread(&offended_amradio,sizeof(short),1,h);
       fread(&offended_cablenews,sizeof(short),1,h);
       fread(&offended_firemen,sizeof(short),1,h);
-      fread(&attorneyseed,sizeof(unsigned long),1,h);
+      fread(&attorneyseed,sizeof(int),1,h);
       fread(&selectedsiege,sizeof(long),1,h);
       fread(lcityname,sizeof(char),80,h);
       fread(&newscherrybusted,sizeof(char),1,h);
@@ -406,7 +406,7 @@ char load(void)
       fread(&moneylost_hostage,sizeof(long),1,h);
       fread(&moneylost_confiscated,sizeof(long),1,h);
       fread(slogan,sizeof(char),80,h);
-      fread(&funds,sizeof(unsigned long),1,h);
+      fread(&funds,sizeof(int),1,h);
       fread(&party_status,sizeof(short),1,h);
 
       fread(attitude,sizeof(short)*VIEWNUM,1,h);
@@ -427,14 +427,14 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->loot.resize(dummy);
-         for(unsigned int l2=0;l2<location[l]->loot.size();l2++)
+         for(int l2=0;l2<location[l]->loot.size();l2++)
          {
             location[l]->loot[l2]=new itemst;
             fread(location[l]->loot[l2],sizeof(itemst),1,h);
          }
          fread(&dummy,sizeof(int),1,h);
          location[l]->changes.resize(dummy);
-         for(unsigned int l2=0;l2<location[l]->changes.size();l2++)
+         for(int l2=0;l2<location[l]->changes.size();l2++)
          {
             fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
          }
@@ -457,7 +457,7 @@ char load(void)
          fread(&location[l]->front_business,sizeof(short),1,h);
          fread(location[l]->front_name,sizeof(char),40,h);
          fread(&location[l]->haveflag,sizeof(char),1,h);
-         fread(&location[l]->mapseed,sizeof(unsigned long),1,h);
+         fread(&location[l]->mapseed,sizeof(int),1,h);
       }
 
       //VEHICLES
@@ -472,7 +472,7 @@ char load(void)
       //POOL
       fread(&dummy,sizeof(int),1,h);
       pool.resize(dummy);
-      for(unsigned int pl=0;pl<pool.size();pl++)
+      for(int pl=0;pl<pool.size();pl++)
       {
          pool[pl]=new creaturest;
          fread(pool[pl],sizeof(creaturest),1,h);
@@ -506,7 +506,7 @@ char load(void)
       //SQUADS
       fread(&dummy,sizeof(int),1,h);
       squad.resize(dummy);
-      for(unsigned int sq=0;sq<squad.size();sq++)
+      for(int sq=0;sq<squad.size();sq++)
       {
          squad[sq]=new squadst;
 
@@ -514,7 +514,7 @@ char load(void)
          fread(&squad[sq]->activity,sizeof(activityst),1,h);
          fread(&squad[sq]->id,sizeof(int),1,h);
 
-         for(unsigned int pos=0;pos<6;pos++)
+         for(int pos=0;pos<6;pos++)
          {
             fread(&dummy_c,sizeof(char),1,h);
 
@@ -523,7 +523,7 @@ char load(void)
             if(dummy_c)
             {
                fread(&dummy_l,sizeof(long),1,h);
-               for(unsigned int pl=0;pl<pool.size();pl++)
+               for(int pl=0;pl<pool.size();pl++)
                {
                   if(pool[pl]->id==dummy_l)
                   {
@@ -535,7 +535,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          squad[sq]->loot.resize(dummy);
-         for(unsigned int l2=0;l2<squad[sq]->loot.size();l2++)
+         for(int l2=0;l2<squad[sq]->loot.size();l2++)
          {
             squad[sq]->loot[l2]=new itemst;
             fread(squad[sq]->loot[l2],sizeof(itemst),1,h);
@@ -547,7 +547,7 @@ char load(void)
       if(dummy_c)
       {
          fread(&dummy_l,sizeof(long),1,h);
-         for(unsigned int sq=0;sq<squad.size();sq++)
+         for(int sq=0;sq<squad.size();sq++)
          {
             if(squad[sq]->id==dummy_l)
             {
@@ -560,7 +560,7 @@ char load(void)
       //DATES
       fread(&dummy,sizeof(int),1,h);
       date.resize(dummy);
-      for(unsigned int dt=0;dt<date.size();dt++)
+      for(int dt=0;dt<date.size();dt++)
       {
          date[dt]=new datest;
 
@@ -569,7 +569,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          date[dt]->date.resize(dummy);
-         for(unsigned int dt2=0;dt2<date[dt]->date.size();dt2++)
+         for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
             date[dt]->date[dt2]=new creaturest;
             fread(date[dt]->date[dt2],sizeof(creaturest),1,h);
@@ -579,7 +579,7 @@ char load(void)
       //RECRUITS
       fread(&dummy,sizeof(int),1,h);
       recruit.resize(dummy);
-      for(unsigned int rt=0;rt<recruit.size();rt++)
+      for(int rt=0;rt<recruit.size();rt++)
       {
          recruit[rt]=new recruitst;
          fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
@@ -594,7 +594,7 @@ char load(void)
       //NEWS STORIES
       fread(&dummy,sizeof(int),1,h);
       newsstory.resize(dummy);
-      for(unsigned int ns=0;ns<newsstory.size();ns++)
+      for(int ns=0;ns<newsstory.size();ns++)
       {
          newsstory[ns]=new newsstoryst;
 
@@ -611,7 +611,7 @@ char load(void)
          if(dummy_c)
          {
             fwrite(&dummy_l,sizeof(long),1,h);
-            for(unsigned int pl=0;pl<pool.size();pl++)
+            for(int pl=0;pl<pool.size();pl++)
             {
                if(pool[pl]->id==dummy_l)
                {
@@ -623,7 +623,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          newsstory[ns]->crime.resize(dummy);
-         for(unsigned int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
+         for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
          {
             fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }

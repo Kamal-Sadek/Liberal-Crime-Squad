@@ -34,7 +34,7 @@ void activate(void)
 {
    vector<creaturest *> temppool;
    int sq;
-   for(unsigned int p=0;p<pool.size();p++)
+   for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
@@ -62,7 +62,7 @@ void activate(void)
 
    if(temppool.size()==0)return;
 
-   unsigned page=0;
+   int page=0;
 
    char str[80];
    char num[20];
@@ -83,7 +83,7 @@ void activate(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(unsigned int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -91,10 +91,10 @@ void activate(void)
          addstr(temppool[p]->name);
 
          char bright=0;
-         unsigned long skill=0;
-         for(unsigned int sk=0;sk<SKILLNUM;sk++)
+         int skill=0;
+         for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=(unsigned long)temppool[p]->skill[sk];
+            skill+=temppool[p]->skill[sk];
             if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
                temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
@@ -141,7 +141,7 @@ void activate(void)
 
       if(c>='a'&&c<='s')
       {
-         unsigned int p=page*19+(int)(c-'a');
+         int p=page*19+(int)(c-'a');
          if(p<temppool.size())
          {
             activate(temppool[p]);
@@ -164,7 +164,7 @@ void activate(creaturest *cr)
    int state=0;
    int choice=0;
    char havedead=0;
-   for(unsigned int p=0;p<pool.size();p++)
+   for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location)hostagecount++;
       if(!pool[p]->alive)havedead=1;
@@ -758,7 +758,7 @@ void activatebulk(void)
 {
    vector<creaturest *> temppool;
    int sq;
-   for(unsigned int p=0;p<pool.size();p++)
+   for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
@@ -786,7 +786,7 @@ void activatebulk(void)
 
    if(temppool.size()==0)return;
 
-   unsigned page=0;
+   int page=0;
 
    char str[80];
 
@@ -833,7 +833,7 @@ void activatebulk(void)
       addstr("6 - Community Service");
 
       int y=2;
-      for(unsigned int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -873,7 +873,7 @@ void activatebulk(void)
 
       if(c>='a'&&c<='s')
       {
-         unsigned int p=page*19+(int)(c-'a');
+         int p=page*19+(int)(c-'a');
          if(p<temppool.size())
          {
             switch(selectedactivity)
@@ -939,7 +939,7 @@ void select_tendhostage(creaturest *cr)
 {
    vector<creaturest *> temppool;
 
-   for(unsigned int p=0;p<pool.size();p++)
+   for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->align!=1&&
          pool[p]->alive&&
@@ -958,7 +958,7 @@ void select_tendhostage(creaturest *cr)
    }
    
 
-   unsigned page=0;
+   int page=0;
 
    char num[20];
 
@@ -977,7 +977,7 @@ void select_tendhostage(creaturest *cr)
       addstr("DAYS IN CAPTIVITY");
 
       int y=2;
-      for(unsigned int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -985,10 +985,10 @@ void select_tendhostage(creaturest *cr)
          addstr(temppool[p]->name);
 
          char bright=0;
-         unsigned long skill=0;
-         for(unsigned int sk=0;sk<SKILLNUM;sk++)
+         int skill=0;
+         for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=(unsigned long)temppool[p]->skill[sk];
+            skill+=temppool[p]->skill[sk];
             if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
                temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
          }
@@ -1036,7 +1036,7 @@ void select_tendhostage(creaturest *cr)
 
       if(c>='a'&&c<='s')
       {
-         unsigned int p=page*19+(int)(c-'a');
+         int p=page*19+(int)(c-'a');
          if(p<temppool.size())
          {
             cr->activity.type=ACTIVITY_HOSTAGETENDING;
@@ -1118,7 +1118,7 @@ long select_hostagefundinglevel(creaturest *cr,creaturest *hs)
 void select_makeclothing(creaturest *cr)
 {
    vector<int> armortype;
-   for(unsigned int a=0;a<ARMORNUM;a++)
+   for(int a=0;a<ARMORNUM;a++)
    {
       switch(a)
       {
@@ -1140,7 +1140,7 @@ void select_makeclothing(creaturest *cr)
       }
    }
 
-   unsigned page=0;
+   int page=0;
 
    char str[200];
    char num[20];
@@ -1159,7 +1159,7 @@ void select_makeclothing(creaturest *cr)
       addstr("----NAME-----------------------------DIFFICULTY-------------COST----------------");
 
       int y=2,difficulty;
-      for(unsigned int p=page*19;p<armortype.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<armortype.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1243,7 +1243,7 @@ void select_makeclothing(creaturest *cr)
 
       if(c>='a'&&c<='s')
       {
-         unsigned int p=page*19+(int)(c-'a');
+         int p=page*19+(int)(c-'a');
          if(p<armortype.size())
          {
             cr->activity.type=ACTIVITY_MAKE_ARMOR;
@@ -1258,7 +1258,7 @@ void select_makeclothing(creaturest *cr)
 
 
 
-unsigned int armor_makedifficulty(int type,creaturest *cr)
+int armor_makedifficulty(int type,creaturest *cr)
 {
    long basedif;
 
@@ -1319,7 +1319,7 @@ unsigned int armor_makedifficulty(int type,creaturest *cr)
 
 
 
-unsigned int armor_makeprice(int type)
+int armor_makeprice(int type)
 {
    long price=0;
 
@@ -1432,7 +1432,7 @@ long select_troublefundinglevel(creaturest *cr)
 /* base - activate - select a topic to write about */
 char select_view(creaturest *cr,int &v)
 {
-   unsigned int page=0;
+   int page=0;
    char str[80];
 
    do
@@ -1449,7 +1449,7 @@ char select_view(creaturest *cr,int &v)
       addstr("----TOPIC-----------------------------------INTEREST---------------------------");
 
       int y=3,x=0;
-      for(unsigned int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++)
+      for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,x);

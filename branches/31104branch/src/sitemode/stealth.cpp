@@ -37,9 +37,9 @@ void noticecheck(int exclude)
    if(sitealarm)return;
 
    char noticed=0;
-   unsigned char sneak=0;
+   char sneak=0;
    vector<int> noticer;
-   for(unsigned int e=0;e<ENCMAX;e++)
+   for(int e=0;e<ENCMAX;e++)
    {
       if(e==exclude)continue;
       //if(encounter[e].type==CREATURE_PRISONER)continue;
@@ -51,7 +51,7 @@ void noticecheck(int exclude)
       }
    }
    int topi=-1;
-   for(unsigned int i=0;i<6;++i)
+   for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
          activesquad->squad[i]->skillval(SKILL_THEFT)+activesquad->squad[i]->skillval(SKILL_STEALTH)>sneak)
@@ -118,7 +118,7 @@ char alienationcheck(char mistake)
    int oldsitealienate=sitealienate;
 
    vector<int> noticer;
-   for(unsigned int e=0;e<ENCMAX;e++)
+   for(int e=0;e<ENCMAX;e++)
    {
       // Prisoners should never be alienated by your crimes, as
       // they're happy to have you attacking their place of holding
@@ -183,7 +183,7 @@ void disguisecheck(void)
    bool forcecheck=false;
    int weaponar[6]={0};
 
-   for(unsigned int i=0;i<6;i++)
+   for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
       if(activesquad->squad[i]->armor.type==ARMOR_NONE)forcecheck=true;
@@ -194,7 +194,7 @@ void disguisecheck(void)
 
    if(sitealarm)
    {
-      for(unsigned int i=0;i<6;i++)
+      for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i]==NULL)break;
          // If carrying an illegal weapon and never been charged with that
@@ -217,7 +217,7 @@ void disguisecheck(void)
 
    char noticed=0;
    vector<int> noticer;
-   for(unsigned int e=0;e<ENCMAX;e++)
+   for(int e=0;e<ENCMAX;e++)
    {
       if(encounter[e].type==CREATURE_PRISONER)continue;
       if(encounter[e].exists&&encounter[e].alive&&
@@ -249,7 +249,7 @@ void disguisecheck(void)
 
          int spotchance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
                         encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
-         for(unsigned int i=0;i<6;i++)
+         for(int i=0;i<6;i++)
          {
             if(!sneaking)disguisepractice(i, spotchance);
             else stealthpractice(i, spotchance);
@@ -303,7 +303,7 @@ void disguisecheck(void)
             else
                addstr("and shouts for help!");
 
-            for(unsigned int i=0;i<6;i++)
+            for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
                if(weaponar[i])
@@ -340,7 +340,7 @@ int disguiseskill(void)
    int highest=0;
    int bonus = 15; // bonus for having few party members
 
-   for(unsigned int p=0;p<6;p++)
+   for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -430,7 +430,7 @@ int stealthskill(void)
    int highest=0;
    int bonus = 20; // party size bonus, higher for fewer party members
 
-   for(unsigned int p=0;p<6;p++)
+   for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {

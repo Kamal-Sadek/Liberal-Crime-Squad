@@ -4,9 +4,9 @@
 
 void preparepage(newsstoryst& ns, bool liberalguardian)
 {
-   for(unsigned int x=0;x<80;x++)
+   for(int x=0;x<80;x++)
    {
-      for(unsigned int y=0;y<25;y++)
+      for(int y=0;y<25;y++)
       {
          move(y,x);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -18,9 +18,9 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
    {
       //TOP
       int pap=LCSrandom(5);
-      for(unsigned int x=0;x<80;x++)
+      for(int x=0;x<80;x++)
       {
-         for(unsigned int y=0;y<5;y++)
+         for(int y=0;y<5;y++)
          {
             move(y,x);
             if(liberalguardian)

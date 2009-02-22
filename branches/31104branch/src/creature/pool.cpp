@@ -8,7 +8,7 @@ private:
    std::map<int,creaturest*> map;
    void dispersal_ok(creaturest* cr)
    {
-      for(unsigned int i=0; i<
+      for(int i=0; i<
       cr.subordinates
    }
 public:
@@ -240,7 +240,7 @@ void dispersalcheck(char &clearformess)
             else
             {
                int hs=0;
-               for(unsigned int l=0;l<location.size();l++)
+               for(int l=0;l<location.size();l++)
                {
                   if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
                   {

@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 /* transforms a squad id number into the index of that squad in the global vector */
 long getsquad(long id)
 {
-   for(unsigned int sq=0;sq<squad.size();sq++)
+   for(int sq=0;sq<squad.size();sq++)
    {
       if(squad[sq]->id==id)return sq;
    }
@@ -41,9 +41,9 @@ long getsquad(long id)
 }
 
 /* transforms a car id number into the index of that car in the global vector */
-int id_getcar(unsigned id)
+int id_getcar(int id)
 {
-   for(unsigned v=0;v<vehicle.size();v++)
+   for(int v=0;v<vehicle.size();v++)
    {
       if(vehicle[v]->id==id)return v;
    }
@@ -53,7 +53,7 @@ int id_getcar(unsigned id)
 /* transforms a creature id number into the index of that person in the pool */
 int getpoolcreature(long id)
 {
-   for(unsigned int pl=0;pl<pool.size();pl++)
+   for(int pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->id==id)return pl;
    }

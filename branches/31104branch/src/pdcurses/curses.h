@@ -95,7 +95,7 @@ typedef unsigned char bool;       /* PDCurses Boolean type       */
 
 #ifdef CHTYPE_LONG
 # if _LP64
-typedef unsigned int chtype;
+typedef int chtype;
 # else
 typedef unsigned long chtype;       /* 16-bit attr + 16-bit char       */
 # endif

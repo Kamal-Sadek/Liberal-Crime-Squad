@@ -93,7 +93,7 @@ int getswingvoter()
    // liberal end of the spectrum, high conservative bias only rolls on
    // the conservative end of the spectrum
    int vote=-2;
-   for(unsigned int i=0;i<4;i++)
+   for(int i=0;i<4;i++)
    {
       if(25+(int)LCSrandom(50)-bias<attitude[randomissue(true)])vote++;
    }
@@ -105,7 +105,7 @@ int getswingvoter()
 int getsimplevoter(int leaning)
 {
    int vote=leaning-1;
-   for(unsigned int i=0;i<2;i++)
+   for(int i=0;i<2;i++)
    {
       if((int)LCSrandom(100)<attitude[randomissue(true)])vote++;
    }
@@ -138,7 +138,7 @@ void elections(char clearformess,char canseethings)
       getch();
    }
 
-   unsigned int mood=publicmood(-1);
+   int mood=publicmood(-1);
 
    //PRESIDENTIAL
    if(year%4==0)
@@ -160,7 +160,7 @@ void elections(char clearformess,char canseethings)
       }
 
       char candidate[2][80];
-      unsigned int votes[2]={0,0};
+      int votes[2]={0,0};
 
       //Primaries
       int approvepres=0; // presidential approval within own party
@@ -169,7 +169,7 @@ void elections(char clearformess,char canseethings)
       int consvotes[3];  // conservative party's candidates votes recieved
 
       // run primaries for 100 voters
-      for(unsigned int i=0;i<100;i++)
+      for(int i=0;i<100;i++)
       {
          int voters[2]={0,0};
          // liberal party voter decides
@@ -326,7 +326,7 @@ void elections(char clearformess,char canseethings)
       char oldwinner=0;
       int vote;
 
-      for(unsigned int l=0;l<1000;l++) // 1000 Voters!
+      for(int l=0;l<1000;l++) // 1000 Voters!
       {
          vote=-2;
          if(l%2==0&&LCSrandom(5))      // Partyline Liberals (~40%)
@@ -366,7 +366,7 @@ void elections(char clearformess,char canseethings)
 
          if(l==999)
          {
-            unsigned int maxvote=0;
+            int maxvote=0;
 
             for(c=0;c<2;c++)
             {
@@ -396,7 +396,7 @@ void elections(char clearformess,char canseethings)
 
          if((canseethings) && l%5==4)
          {
-            for(unsigned int c=0;c<2;c++)
+            for(int c=0;c<2;c++)
             {
                if(votes[c]<votes[!c] || (winner>=0&&c!=winner))set_color(COLOR_BLACK,COLOR_BLACK,1);
                else if(votes[c]>votes[!c] || c==winner)set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -448,7 +448,7 @@ void elections(char clearformess,char canseethings)
          exec[EXEC_PRESIDENT]=candidate[winner][0];
          strcpy(execname[EXEC_PRESIDENT],candidate[winner]+1);
 
-         for(unsigned int e=0;e<EXECNUM;e++)
+         for(int e=0;e<EXECNUM;e++)
          {
             if(e==EXEC_PRESIDENT)continue;
             if(candidate[winner][0]==-2)exec[e]=-2;
@@ -1028,12 +1028,12 @@ void elections(char clearformess,char canseethings)
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
-   unsigned int lawpriority[LAWNUM];
+   int lawpriority[LAWNUM];
    memset(lawpriority,0,LAWNUM*sizeof(int));
    char lawdir[LAWNUM];
    memset(lawdir,0,LAWNUM*sizeof(char));
    //DETERMINE PROPS
-   unsigned int pmood;
+   int pmood;
    int pvote;
    for(l=0;l<LAWNUM;l++)
    {
@@ -1066,7 +1066,7 @@ void elections(char clearformess,char canseethings)
    propdir.resize(pnum);
    for(p=0;p<pnum;p++)
    {
-      unsigned int maxprior=0;
+      int maxprior=0;
       for(l=0;l<LAWNUM;l++)
       {
          if(lawpriority[l]>maxprior&&!lawtaken[l])maxprior=lawpriority[l];
@@ -1185,10 +1185,10 @@ void elections(char clearformess,char canseethings)
    for(p=0;p<pnum;p++)
    {
       char yeswin=0;
-      unsigned int yesvotes=0;
+      int yesvotes=0;
       char recount=0;
       mood=publicmood(prop[p]);
-      for(unsigned int l=0;l<1000;l++)
+      for(int l=0;l<1000;l++)
       {
          if(LCSrandom(100)<mood)
          {
@@ -1470,7 +1470,7 @@ void supremecourt(char clearformess,char canseethings)
       else if(scase[c]==LAW_GUNCONTROL)bias=-1;
       else bias=0;
 
-      for(unsigned int l=0;l<9;l++)
+      for(int l=0;l<9;l++)
       {
          vote=court[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1+bias;
@@ -1567,7 +1567,7 @@ void supremecourt(char clearformess,char canseethings)
       name(courtname[j]);
       float president=exec[EXEC_PRESIDENT];
       float sen=0;
-      for(unsigned int s=0;s<100;s++)sen+=senate[s];
+      for(int s=0;s<100;s++)sen+=senate[s];
       sen/=100.0f;
 
       float consensus=(president+sen)*.5f;
@@ -1651,7 +1651,7 @@ void congress(char clearformess,char canseethings)
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
-   unsigned int lawpriority[LAWNUM];
+   int lawpriority[LAWNUM];
    memset(lawpriority,0,LAWNUM*sizeof(int));
    char lawdir[LAWNUM];
    memset(lawdir,0,LAWNUM*sizeof(char));
@@ -1666,7 +1666,7 @@ void congress(char clearformess,char canseethings)
 
       if(!LCSrandom(3))
       {
-         for(unsigned int cl=0;cl<435;cl++)
+         for(int cl=0;cl<435;cl++)
          {
             if(law[l]<house[cl])pup=1;
             else if(law[l]>house[cl])pdown=1;
@@ -1675,7 +1675,7 @@ void congress(char clearformess,char canseethings)
       }
       else if(LCSrandom(2))
       {
-         for(unsigned int sl=0;sl<100;sl++)
+         for(int sl=0;sl<100;sl++)
          {
             if(law[l]<senate[sl])pup++;
             else if(law[l]>senate[sl])pdown++;
@@ -1684,13 +1684,13 @@ void congress(char clearformess,char canseethings)
       }
       else
       {
-         for(unsigned int cl=0;cl<435;cl++)
+         for(int cl=0;cl<435;cl++)
          {
             if(law[l]<house[cl])pup++;
             else if(law[l]>house[cl])pdown++;
             pprior+=abs(house[cl]-law[l]);
          }
-         for(unsigned int sl=0;sl<100;sl++)
+         for(int sl=0;sl<100;sl++)
          {
             if(law[l]<senate[sl])pup+=4;
             else if(law[l]>senate[sl])pdown+=4;
@@ -1717,7 +1717,7 @@ void congress(char clearformess,char canseethings)
    {
       killbill[c]=0;
 
-      unsigned int maxprior=0;
+      int maxprior=0;
       for(l=0;l<LAWNUM;l++)
       {
          if(lawpriority[l]>maxprior&&!lawtaken[l])maxprior=lawpriority[l];
@@ -1845,7 +1845,7 @@ void congress(char clearformess,char canseethings)
       int vote;
       int s=-1;
 
-      for(unsigned int l=0;l<435;l++)
+      for(int l=0;l<435;l++)
       {
          vote=house[l];
          if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
@@ -1982,7 +1982,7 @@ void congress(char clearformess,char canseethings)
          pause_ms(500);
       }
 
-      for(unsigned int c=0;c<bill.size();c++)
+      for(int c=0;c<bill.size();c++)
       {
          char sign=0;
          if(killbill[c]==1)sign=-1;
@@ -2056,20 +2056,20 @@ void congress(char clearformess,char canseethings)
 
    //CONGRESS CONSTITUTION CHANGES
    int housemake[5]={0,0,0,0,0};
-   for(unsigned int h=0;h<435;h++)
+   for(int h=0;h<435;h++)
    {
       housemake[house[h]+2]++;
    }
 
    int senatemake[5]={0,0,0,0,0};
-   for(unsigned int s=0;s<100;s++)
+   for(int s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
 
    //TOSS JUSTICES?
    char tossj=0;
-   for(unsigned int j=0;j<9;j++)
+   for(int j=0;j<9;j++)
    {
       if(court[j]<=1)
       {
@@ -2093,32 +2093,32 @@ void congress(char clearformess,char canseethings)
 /* politics - checks if the game is won */
 char wincheck(void)
 {
-   for(unsigned int e=0;e<EXECNUM;e++)
+   for(int e=0;e<EXECNUM;e++)
    {
       if(exec[e]!=2)return 0;
    }
 
-   for(unsigned int l=0;l<LAWNUM;l++)
+   for(int l=0;l<LAWNUM;l++)
    {
       if(law[l]!=2)return 0;
    }
 
    int housemake[5]={0,0,0,0,0};
-   for(unsigned int h=0;h<435;h++)
+   for(int h=0;h<435;h++)
    {
       housemake[house[h]+2]++;
    }
    if(housemake[4]+housemake[3]/2<290)return 0;
 
    int senatemake[5]={0,0,0,0,0};
-   for(unsigned int s=0;s<100;s++)
+   for(int s=0;s<100;s++)
    {
       senatemake[senate[s]+2]++;
    }
    if(senatemake[4]+senatemake[3]/2<67)return 0;
 
    int elibjudge=0;
-   for(unsigned int c=0;c<9;c++)
+   for(int c=0;c<9;c++)
    {
       if(court[c]==2)elibjudge++;
    }
@@ -2131,7 +2131,7 @@ char wincheck(void)
 
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
-unsigned int publicmood(int l)
+int publicmood(int l)
 {
    switch(l)
    {
@@ -2162,7 +2162,7 @@ unsigned int publicmood(int l)
       {
          int sum=0;
 
-         for(unsigned int v=0;v<VIEWNUM;v++)
+         for(int v=0;v<VIEWNUM;v++)
          {
             if(v==VIEW_LIBERALCRIMESQUAD)continue;
             if(v==VIEW_LIBERALCRIMESQUADPOS)continue;

@@ -230,19 +230,19 @@ void viewhighscores(void)
 /* loads the high scores file */
 void loadhighscores(void)
 {
-   for(unsigned int s=0;s<SCORENUM;s++)score[s].valid=0;
+   for(int s=0;s<SCORENUM;s++)score[s].valid=0;
 
    //LOAD FILE
-   unsigned long loadversion;
+   int loadversion;
 
-   unsigned int numbytes;
+   int numbytes;
    FILE *h;
 
    h=LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
-      numbytes=fread(&loadversion,sizeof(unsigned long),1,h);
+      numbytes=fread(&loadversion,sizeof(int),1,h);
 
       if(loadversion<lowestloadscoreversion)
       {
@@ -250,14 +250,14 @@ void loadhighscores(void)
          return;
       }
 
-      numbytes=fread(&ustat_recruits,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_dead,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_kills,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_kidnappings,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_funds,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_spent,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_buys,sizeof(unsigned long),1,h);
-      numbytes=fread(&ustat_burns,sizeof(unsigned long),1,h);
+      numbytes=fread(&ustat_recruits,sizeof(int),1,h);
+      numbytes=fread(&ustat_dead,sizeof(int),1,h);
+      numbytes=fread(&ustat_kills,sizeof(int),1,h);
+      numbytes=fread(&ustat_kidnappings,sizeof(int),1,h);
+      numbytes=fread(&ustat_funds,sizeof(int),1,h);
+      numbytes=fread(&ustat_spent,sizeof(int),1,h);
+      numbytes=fread(&ustat_buys,sizeof(int),1,h);
+      numbytes=fread(&ustat_burns,sizeof(int),1,h);
       numbytes=fread(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);
@@ -282,7 +282,7 @@ void savehighscore(char endtype)
    //PLACE THIS HIGH SCORE BY DATE IF NECESSARY
    yourscore=-1;
 
-   for(unsigned int s=0;s<SCORENUM;s++)
+   for(int s=0;s<SCORENUM;s++)
    {
       if((endtype==END_WON&&score[s].endtype==END_WON&&
          year==score[s].year&&month==score[s].month&&
@@ -299,7 +299,7 @@ void savehighscore(char endtype)
 
          score[s].valid==0)
       {
-         for(unsigned int s2=SCORENUM-1;s2>=s+1;s2--)
+         for(int s2=SCORENUM-1;s2>=s+1;s2--)
          {
             score[s2]=score[s2-1];
          }
@@ -324,22 +324,22 @@ void savehighscore(char endtype)
    }
 
 
-   unsigned int numbytes;
+   int numbytes;
    FILE *h;
    h=LCSOpenFile("score.dat","wb",LCSIO_PRE_HOME);
    if(h!=NULL)
    {
-      unsigned int lversion=version;
-      numbytes=fwrite(&lversion,sizeof(unsigned long),1,h);
+      int lversion=version;
+      numbytes=fwrite(&lversion,sizeof(int),1,h);
 
-      numbytes=fwrite(&ustat_recruits,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_dead,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_kills,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_kidnappings,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_funds,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_spent,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_buys,sizeof(unsigned long),1,h);
-      numbytes=fwrite(&ustat_burns,sizeof(unsigned long),1,h);
+      numbytes=fwrite(&ustat_recruits,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_dead,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_kills,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_kidnappings,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_funds,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_spent,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_buys,sizeof(int),1,h);
+      numbytes=fwrite(&ustat_burns,sizeof(int),1,h);
       numbytes=fwrite(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);

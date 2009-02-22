@@ -47,14 +47,14 @@ int readConfigFile(char* filename)
 // readLine reads a line from the file, parses it
 int readLine(std::fstream& file, std::string& command, std::string& value)
 {
-   std::string line;
-   unsigned int source=0;
+   char line[600];
+   int source=0;
 
    // Search for a non-comment, non-empty line
    do
    {
-      getline(file,line,char(0x0A)); // end at line feed
       if(file.eof()) return 0;
+      file.getline(line,598);
    } while(line[0] == '#' || line[0] == 0);
 
    // Parse the line
@@ -62,19 +62,19 @@ int readLine(std::fstream& file, std::string& command, std::string& value)
    value.clear();
 
    // Leading whitespace
-   while(source<line.length() && (line[source]==' ' || line[source]=='\t'))
+   while(source<600 && (line[source]==' ' || line[source]=='\t') && line[source]!=0)
       source++;
 
    // Command
-   while(source<line.length() && (line[source]!=' ' && line[source]!='\t'))
+   while(source<600 && (line[source]!=' ' && line[source]!='\t') && line[source]!=0)
       command.push_back(line[source++]);
 
    // Delimiting whitespace
-   while(source<line.length() && (line[source]==' ' || line[source]=='\t'))
+   while(source<600 && (line[source]==' ' || line[source]=='\t') && line[source]!=0)
       source++;
 
    // Value
-   while(source<line.length() && (line[source]!=' ' && line[source]!='\t' && line[source]!=0x0D)) //do not read CR
+   while(source<600 && (line[source]!=' ' && line[source]!='\t') && line[source]!=0)
       value.push_back(line[source++]);
 
    return 1;

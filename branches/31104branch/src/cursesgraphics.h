@@ -1350,8 +1350,8 @@
 #ifdef CONSOLE_SUPPORT
 struct unicodechar
 {
-	unsigned int unicode_char;
-	unsigned int hack_char;
+	int unicode_char;
+	int hack_char;
 };
 
 // First letter of the Japanese alphabet (Hiragana).
@@ -1665,8 +1665,8 @@ struct unicodechar unicode_hacks[] = {
 
 struct graphicschar
 {
-	unsigned int native_code;
-	unsigned int cp437_code;
+	int native_code;
+	int cp437_code;
 };
 
 #ifdef CURSES_GRAPHICS

@@ -46,7 +46,7 @@ void makecreature(creaturest &cr,short type)
    cr.armor.type=ARMOR_CLOTHES;
    cr.money=LCSrandom(21)+20;
    {
-      unsigned int mood=publicmood(-1);
+      int mood=publicmood(-1);
       conservatise(cr);
       if(LCSrandom(100)<mood)cr.align++;
       if(LCSrandom(100)<mood)cr.align++;
@@ -1627,7 +1627,7 @@ void makecreature(creaturest &cr,short type)
 
    int attnum=40;
    if(cr.type==CREATURE_MUTANT)attnum=LCSrandom(60)+7;
-   for(unsigned int a=0;a<ATTNUM;a++)
+   for(int a=0;a<ATTNUM;a++)
    {
       attnum-=min(5,cr.att[a]);
    }
@@ -1671,7 +1671,7 @@ void makecreature(creaturest &cr,short type)
       randomskills-=20-cr.age;
    }
 
-   for(unsigned int s=0;s<SKILLNUM;s++)
+   for(int s=0;s<SKILLNUM;s++)
    {
       randomskills-=cr.skill[s];
    }

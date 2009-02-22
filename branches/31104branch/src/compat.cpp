@@ -199,7 +199,7 @@ void initalarm()
 #endif 
 
 #ifdef WIN32
-  unsigned long ptime=GetTickCount();
+  int ptime=GetTickCount();
 #endif
 
 void alarmset(int t)

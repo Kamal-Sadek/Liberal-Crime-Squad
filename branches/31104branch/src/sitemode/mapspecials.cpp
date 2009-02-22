@@ -57,7 +57,7 @@ void special_bouncer_greet_squad()
 
 void special_bouncer_assess_squad()
 {
-   for(unsigned int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
    makecreature(encounter[0],CREATURE_BOUNCER);
    //clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -68,7 +68,7 @@ void special_bouncer_assess_squad()
    getch();
    char rejected=NOT_REJECTED;
    // Size up the squad for entry
-   for(unsigned int s=0;s<6;s++)
+   for(int s=0;s<6;s++)
    {
       if(activesquad->squad[s])
       {
@@ -289,10 +289,10 @@ void special_nuclear_onoff(void)
          clearmessagearea();
          levelmap[locx][locy][locz].special=-1;
 
-         unsigned char max=20;
+         char max=20;
          creaturest* maxs=0;
 
-         for(unsigned int p=0;p<6;p++)
+         for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL&&activesquad->squad[p]->alive)
             {
@@ -403,7 +403,7 @@ void special_lab_genetic_cagedanimals(void)
                addstr("Uh, maybe that idea was Conservative in retrospect...");
 
                int numleft=LCSrandom(6)+1;
-               for(unsigned int e=0;e<ENCMAX;e++)
+               for(int e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)
                   {
@@ -473,7 +473,7 @@ void special_policestation_lockup(void)
          if(unlock(UNLOCK_CELL,actual))
          {
             int numleft=LCSrandom(8)+2;
-            for(unsigned int e=0;e<ENCMAX;e++)
+            for(int e=0;e<ENCMAX;e++)
             {
                if(!encounter[e].exists)
                {
@@ -538,7 +538,7 @@ void special_courthouse_lockup(void)
          if(unlock(UNLOCK_CELL,actual))
          {
             int numleft=LCSrandom(8)+2;
-            for(unsigned int e=0;e<ENCMAX;e++)
+            for(int e=0;e<ENCMAX;e++)
             {
                if(!encounter[e].exists)
                {
@@ -618,7 +618,7 @@ void special_courthouse_jury(void)
 
          char succeed=0;
 
-         unsigned int maxattack=0;
+         int maxattack=0;
 
          for(p=0;p<6;p++)
          {
@@ -722,7 +722,7 @@ void special_courthouse_jury(void)
                getch();
 
                int numleft=12;
-               for(unsigned int e=0;e<ENCMAX;e++)
+               for(int e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)
                   {
@@ -775,7 +775,7 @@ void special_prison_control(void)
       if(c=='y')
       {
          int numleft=LCSrandom(8)+2;
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(!encounter[e].exists)
             {
@@ -912,7 +912,7 @@ void special_graffiti(void)
    if(!location[cursite]->highsecurity)
    {
       // Erase any previous semi-permanent graffiti here
-      for(unsigned int i=0;i<location[cursite]->changes.size();i++)
+      for(int i=0;i<location[cursite]->changes.size();i++)
       {
          if((location[cursite]->changes[i].x == locx) &&
             (location[cursite]->changes[i].y == locy) &&

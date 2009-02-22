@@ -39,9 +39,9 @@ void initsite(locationst &loc)
    //PREP
    if(activesquad==NULL)return;
 
-   for(unsigned int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
 
-   for(unsigned int p=0;p<6;p++)
+   for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
@@ -49,7 +49,7 @@ void initsite(locationst &loc)
       }
    }
 
-   for(unsigned int l=0;l<groundloot.size();l++)
+   for(int l=0;l<groundloot.size();l++)
    {
       delete groundloot[l];
    }
@@ -57,14 +57,14 @@ void initsite(locationst &loc)
 
 
    //MAKE MAP
-   unsigned long oldseed=seed;
+   int oldseed=seed;
    seed=loc.mapseed;
 
    for(x=0;x<MAPX;x++)
    {
-      for(unsigned int y=0;y<MAPY;y++)
+      for(int y=0;y<MAPY;y++)
       {
-         for(unsigned int z=0;z<MAPZ;z++)
+         for(int z=0;z<MAPZ;z++)
          {
             levelmap[x][y][z].flag=SITEBLOCK_BLOCK;
             levelmap[x][y][z].special=-1;
@@ -154,9 +154,9 @@ void initsite(locationst &loc)
    char opennum;
    for(x=0;x<MAPX;x++)
    {
-      for(unsigned int y=0;y<MAPY;y++)
+      for(int y=0;y<MAPY;y++)
       {
-         for(unsigned int z=0;z<MAPZ;z++)
+         for(int z=0;z<MAPZ;z++)
          {
             if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
             {
@@ -207,9 +207,9 @@ void initsite(locationst &loc)
    //DELETE NON-DOORS
    for(x=0;x<MAPX;x++)
    {
-      for(unsigned int y=0;y<MAPY;y++)
+      for(int y=0;y<MAPY;y++)
       {
-         for(unsigned int z=0;z<MAPZ;z++)
+         for(int z=0;z<MAPZ;z++)
          {
             if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
             {
@@ -237,11 +237,11 @@ void initsite(locationst &loc)
    {
       acted=0;
 
-      for(unsigned int x=2;x<MAPX-2;x++)
+      for(int x=2;x<MAPX-2;x++)
       {
-         for(unsigned int y=2;y<MAPY-2;y++)
+         for(int y=2;y<MAPY-2;y++)
          {
-            for(unsigned int z=0;z<MAPZ;z++)
+            for(int z=0;z<MAPZ;z++)
             {
                //Un-restrict blocks if they have neighboring
                //unrestricted blocks
@@ -305,9 +305,9 @@ void initsite(locationst &loc)
    seed=oldseed;
    for(x=2;x<MAPX-2;x++)
    {
-      for(unsigned int y=2;y<MAPY-2;y++)
+      for(int y=2;y<MAPY-2;y++)
       {
-         for(unsigned int z=0;z<MAPZ;z++)
+         for(int z=0;z<MAPZ;z++)
          {
             if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
                !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
@@ -347,7 +347,7 @@ void initsite(locationst &loc)
    if(loc.type==SITE_RESIDENTIAL_TENEMENT)
       graffitiquota=10;
 
-   for(unsigned int i=0;i<loc.changes.size();i++)
+   for(int i=0;i<loc.changes.size();i++)
    {
       int x=loc.changes[i].x;
       int y=loc.changes[i].y;
@@ -513,7 +513,7 @@ void knowmap(int locx,int locy,int locz)
 // Builds a site based on the name provided
 void build_site(std::string name)
 {
-   for(unsigned int i=0;i<sitemaps.size();i++)
+   for(int i=0;i<sitemaps.size();i++)
    {
       if(*sitemaps[i] == name)
       {
@@ -528,7 +528,7 @@ void build_site(std::string name)
 
 configSiteMap::~configSiteMap()
 {
-   for(unsigned int i=0;i<commands.size();i++)
+   for(int i=0;i<commands.size();i++)
    {
       delete commands[i];
    }
@@ -581,7 +581,7 @@ void configSiteMap::build()
    {
       build_site(parent);
    }
-   for(unsigned int step=0;step<commands.size();step++)
+   for(int step=0;step<commands.size();step++)
    {
       commands[step]->build();
    }

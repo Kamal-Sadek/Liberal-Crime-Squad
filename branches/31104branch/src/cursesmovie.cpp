@@ -104,14 +104,14 @@ void filelistst::open_diskload(FILE* h)
 {
 	int dummy;
 	short dummy2;
-	unsigned int numbytes;
+	int numbytes;
 
 	clean();
 
     numbytes=fread(&dummy,sizeof(int),1,h);
 	list.resize(dummy);
 
-	for(unsigned int l=0;l<list.size();l++)
+	for(int l=0;l<list.size();l++)
 	{
 	    numbytes=fread(&dummy2,sizeof(short),1,h);
 
@@ -129,12 +129,12 @@ void filelistst::open_disksave(FILE *h)
 {
 	int dummy;
 	short dummy2;
-	unsigned int numbytes;
+	int numbytes;
 
 	dummy=list.size();
 	numbytes=fwrite(&dummy,sizeof(int),1,h);
 
-	for(unsigned int l=0;l<list.size();l++)
+	for(int l=0;l<list.size();l++)
 	{
 	if(list[l]!=NULL)
     {
@@ -157,13 +157,13 @@ void filelistst::smartappend(filelistst &list2)
 {
 	char conf;
 
-	for(unsigned int l2=0;l2<list2.list.size();l2++)
+	for(int l2=0;l2<list2.list.size();l2++)
 	{
 	   if(list2.list[l2]==NULL)continue;
 
 	   conf=1;
 
-	   for(unsigned int l=0;l<list.size();l++)
+	   for(int l=0;l<list.size();l++)
 	   {
 	      if(!strcmp(list2.list[l2],list[l]))
 		   {
@@ -183,7 +183,7 @@ void filelistst::smartappend(filelistst &list2)
 
 void CursesMoviest::savemovie(char *filename,int flags=0)
 {
-	unsigned int numbytes;
+	int numbytes;
 	FILE *h;
 	h=LCSOpenFile(filename, "wb", flags);
 
@@ -191,10 +191,10 @@ void CursesMoviest::savemovie(char *filename,int flags=0)
 
 	if(h!=NULL)
 	{
-        numbytes=fwrite(&picnum,sizeof(unsigned long),1,h);
-		numbytes=fwrite(&dimx,sizeof(unsigned long),1,h);
-		numbytes=fwrite(&dimy,sizeof(unsigned long),1,h);
-		numbytes=fwrite(picture,sizeof(unsigned char),80*25*4*picnum,h);
+        numbytes=fwrite(&picnum,sizeof(int),1,h);
+		numbytes=fwrite(&dimx,sizeof(int),1,h);
+		numbytes=fwrite(&dimy,sizeof(int),1,h);
+		numbytes=fwrite(picture,sizeof(char),80*25*4*picnum,h);
 		dummy=frame.size();
 		numbytes=fwrite(&dummy,sizeof(long),1,h);
 		for(int f=0;f<dummy;f++)
@@ -227,10 +227,10 @@ void CursesMoviest::loadmovie(char *filename)
 
 	if(h!=NULL)
 	{
-		fread(&picnum,sizeof(unsigned long),1,h);
-		fread(&dimx,sizeof(unsigned long),1,h);
-		fread(&dimy,sizeof(unsigned long),1,h);
-		fread(picture,sizeof(unsigned char)*80*25*4*picnum,1,h);
+		fread(&picnum,sizeof(int),1,h);
+		fread(&dimx,sizeof(int),1,h);
+		fread(&dimy,sizeof(int),1,h);
+		fread(picture,sizeof(char)*80*25*4*picnum,1,h);
 
 		fread(&dummy,sizeof(long),1,h);
 		frame.resize(dummy);
@@ -243,7 +243,7 @@ void CursesMoviest::loadmovie(char *filename)
 			fread(&frame[f]->sound,sizeof(short),1,h);
 			fread(&frame[f]->song,sizeof(short),1,h);
 			fread(&frame[f]->effect,sizeof(short),1,h);
-			fread(&frame[f]->flag,sizeof(unsigned short),1,h);
+			fread(&frame[f]->flag,sizeof(int short),1,h);
 		}
 
 		songlist.open_diskload(h);
@@ -255,7 +255,7 @@ void CursesMoviest::loadmovie(char *filename)
 
 void CursesMoviest::clean(void)
 {
-	for(unsigned int f=0;f<frame.size();f++)
+	for(int f=0;f<frame.size();f++)
 	{
 		delete frame[f];
 	}
@@ -264,13 +264,13 @@ void CursesMoviest::clean(void)
 
 void CursesMoviest::convertindices_song(filelistst &master)
 {
-   unsigned int s2;
+   int s2;
 	if(songlist.list.size()==0)return;
 
 	vector<int> convert;
 	convert.resize(songlist.list.size());
 
-	for(unsigned int s=0;s<songlist.list.size();s++)
+	for(int s=0;s<songlist.list.size();s++)
 	{
 		for(s2=0;s2<master.list.size();s2++)
 		{
@@ -283,7 +283,7 @@ void CursesMoviest::convertindices_song(filelistst &master)
 		if(s2==master.list.size())convert[s]=-1;
 	}
 
-	for(unsigned int f=0;f<frame.size();f++)
+	for(int f=0;f<frame.size();f++)
 	{
 		if(frame[f]->song!=-1)frame[f]->song=convert[frame[f]->song];
 	}
@@ -291,13 +291,13 @@ void CursesMoviest::convertindices_song(filelistst &master)
 
 void CursesMoviest::convertindices_sound(filelistst &master)
 {
-   unsigned int s2;
+   int s2;
 	if(soundlist.list.size()==0)return;
 
 	vector<int> convert;
 	convert.resize(soundlist.list.size());
 
-	for(unsigned int s=0;s<soundlist.list.size();s++)
+	for(int s=0;s<soundlist.list.size();s++)
 	{
 		for(s2=0;s2<master.list.size();s2++)
 		{
@@ -310,7 +310,7 @@ void CursesMoviest::convertindices_sound(filelistst &master)
 		if(s2==master.list.size())convert[s]=-1;
 	}
 
-	for(unsigned int f=0;f<frame.size();f++)
+	for(int f=0;f<frame.size();f++)
 	{
 		if(frame[f]->sound!=-1)frame[f]->sound=convert[frame[f]->sound];
 	}
@@ -328,14 +328,14 @@ void CursesMoviest::playmovie(int x,int y)
 
 	do
 		{
-		//unsigned long time=GetTickCount();
+		//int time=GetTickCount();
 		alarmset(10);
 
 		cont=0;
 		pted=0;
 
 		//ASSUMES FRAME ORDERED BY STOP TIMER
-		for(unsigned int f=0;f<frame.size();f++)
+		for(int f=0;f<frame.size();f++)
 			{
 			if(frame[f]->stop>=finalframe)finalframe=frame[f]->stop;
 			if(frame[f]->start<=timer&&frame[f]->stop>=timer)
@@ -353,9 +353,9 @@ void CursesMoviest::playmovie(int x,int y)
 				//DRAW FRAME
 				if(frame[f]->frame!=-1)
 					{
-					for(unsigned int fx=0;fx<movie.dimx&&fx+x<80;fx++)
+					for(int fx=0;fx<movie.dimx&&fx+x<80;fx++)
 						{
-						for(unsigned int fy=0;fy<movie.dimy&&fy+y<25;fy++)
+						for(int fy=0;fy<movie.dimy&&fy+y<25;fy++)
 							{
 							if((movie.picture[frame[f]->frame][fx][fy][0]==' '||
 								movie.picture[frame[f]->frame][fx][fy][0]==0)&&

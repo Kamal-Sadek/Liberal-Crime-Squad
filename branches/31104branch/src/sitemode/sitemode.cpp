@@ -52,17 +52,17 @@ void mode_site(short loc)
       locz=0;
 
       //check for sleeper infiltration
-      for(unsigned int p=0;p<pool.size();p++)
+      for(int p=0;p<pool.size();p++)
       {
          //sleeper infiltration :D
          if(pool[p]->base==loc || location[loc]->interrogated)
          {
             //make entire site known
-            for(unsigned int x=0;x<MAPX;x++)
+            for(int x=0;x<MAPX;x++)
             {
-               for(unsigned int y=0;y<MAPY;y++)
+               for(int y=0;y<MAPY;y++)
                {
-                  for(unsigned int z=0;z<MAPZ;z++)
+                  for(int z=0;z<MAPZ;z++)
                   {
                      levelmap[x][y][z].flag|=SITEBLOCK_KNOWN;
                   }
@@ -81,13 +81,13 @@ void mode_site(short loc)
       location[loc]->siege.kills=0;
 
       //PLACE YOU
-      unsigned int maxy=0;
+      int maxy=0;
 
-      for(unsigned int x=0;x<MAPX;x++)
+      for(int x=0;x<MAPX;x++)
       {
-         for(unsigned int y=0;y<MAPY;y++)
+         for(int y=0;y<MAPY;y++)
          {
-            for(unsigned int z=0;z<MAPZ;z++)
+            for(int z=0;z<MAPZ;z++)
             {
                if(!location[loc]->siege.lights_off)levelmap[x][y][z].flag|=SITEBLOCK_KNOWN;
                levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
@@ -201,7 +201,7 @@ void mode_site(short loc)
 
 void mode_site(void)
 {
-   unsigned int p, u;
+   int p, u;
    int x;
    if(activesquad==NULL)return;
 
@@ -232,7 +232,7 @@ void mode_site(void)
       int enemy=0;
       int majorenemy=0;
       int talkers=0;
-      for(unsigned int e=0;e<ENCMAX;e++)
+      for(int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists)
          {
@@ -255,7 +255,7 @@ void mode_site(void)
       if(talkers&&sitealarm&&enemy)
       {
          talkers=0;
-         for(unsigned int e=0;e<ENCMAX;e++)
+         for(int e=0;e<ENCMAX;e++)
          {
             if(encounter[e].exists)
             {
@@ -438,7 +438,7 @@ void mode_site(void)
       {
          char havehostage=0;
          //Check your whole squad
-         for(unsigned int p=0;p<6;p++)
+         for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
             {
@@ -486,7 +486,7 @@ void mode_site(void)
          //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
          if(!location[cursite]->siege.siege)
          {
-            for(unsigned int p=0;p<6;p++)
+            for(int p=0;p<6;p++)
             {
                if(activesquad->squad[p]==NULL)continue;
                if(activesquad->squad[p]->carid!=-1)
@@ -502,7 +502,7 @@ void mode_site(void)
             }
          }
 
-         for(unsigned int p=0;p<6;p++)
+         for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL)continue;
 
@@ -633,7 +633,7 @@ void mode_site(void)
                      (levelmap[locx][locy-1][locz].flag & SITEBLOCK_BLOCK)))
             {
                int spray=0;
-               for(unsigned int i=0;i<6;i++)
+               for(int i=0;i<6;i++)
                {
                   if(!activesquad->squad[i])break;
                   if(activesquad->squad[i]->weapon.type==WEAPON_SPRAYCAN)
@@ -654,7 +654,7 @@ void mode_site(void)
             int forcesp=-1;
             int forcetk=-1;
 
-            for(unsigned int p=0;p<6;p++)
+            for(int p=0;p<6;p++)
             {
                if(activesquad->squad[p]!=NULL)
                {
@@ -666,7 +666,7 @@ void mode_site(void)
                }
             }
 
-            for(unsigned int e=0;e<ENCMAX;e++)
+            for(int e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists&&encounter[e].alive&&
                   !(encounter[e].type==CREATURE_WORKER_SERVANT||
@@ -701,7 +701,7 @@ void mode_site(void)
 
                   char num[20];
                   int y=11;
-                  for(unsigned int p=0;p<6;p++)
+                  for(int p=0;p<6;p++)
                   {
                      if(activesquad->squad[p]!=NULL)
                      {
@@ -762,7 +762,7 @@ void mode_site(void)
                         addstr("To whom?");
 
                         int x=1,y=11;
-                        for(unsigned int t=0;t<ENCMAX;t++)
+                        for(int t=0;t<ENCMAX;t++)
                         {
                            if(encounter[t].exists)
                            {
@@ -859,9 +859,9 @@ void mode_site(void)
 
          if(c=='m')
          {
-            for(unsigned int x=0;x<MAPX;x++)
+            for(int x=0;x<MAPX;x++)
             {
-               for(unsigned int y=0;y<MAPY;y++)
+               for(int y=0;y<MAPY;y++)
                {
                   if(levelmap[x][y][locz].flag & SITEBLOCK_KNOWN)
                   {
@@ -960,7 +960,7 @@ void mode_site(void)
             {
                flipstart=0;
                freed=0;
-               for(unsigned int e=0;e<ENCMAX;e++)
+               for(int e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)break;
                   if((encounter[e].type==CREATURE_WORKER_SERVANT||
@@ -1005,7 +1005,7 @@ void mode_site(void)
                            pool.push_back(newcr);
                            stat_recruits++;
 
-                           for(unsigned int p=0;p<6;p++)
+                           for(int p=0;p<6;p++)
                            {
                               if(activesquad->squad[p]==NULL)
                               {
@@ -1099,11 +1099,11 @@ void mode_site(void)
                   //GRAB SOME OF THE BASE LOOT
                   int lcount=1; //1 FROM THE ONE DELETED ABOVE
 
-                  for(unsigned int x=0;x<MAPX;x++)
+                  for(int x=0;x<MAPX;x++)
                   {
-                     for(unsigned int y=0;y<MAPY;y++)
+                     for(int y=0;y<MAPY;y++)
                      {
-                        for(unsigned int z=0;z<MAPZ;z++)
+                        for(int z=0;z<MAPZ;z++)
                         {
                            if(levelmap[x][y][z].flag&SITEBLOCK_LOOT)
                            {
@@ -1254,7 +1254,7 @@ void mode_site(void)
             }
 
             //MAKE GROUND LOOT INTO MISSION LOOT
-            for(unsigned int l=0;l<groundloot.size();l++)
+            for(int l=0;l<groundloot.size();l++)
             {
                activesquad->loot.push_back(groundloot[l]);
             }
@@ -1266,9 +1266,9 @@ void mode_site(void)
 
             if(tookground)
             {
-               unsigned int maxsleightofhand=0;
-               unsigned int beststealer=0;
-               for(unsigned int i=0;i<6;i++)
+               int maxsleightofhand=0;
+               int beststealer=0;
+               for(int i=0;i<6;i++)
                {
                   if(!activesquad->squad[i])
                   {
@@ -1418,7 +1418,7 @@ void mode_site(void)
                   for(p=0;p<pool.size();p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
-                     for(unsigned int w=0;w<BODYPARTNUM;w++)
+                     for(int w=0;w<BODYPARTNUM;w++)
                      {
                         pool[p]->wound[w]&=~WOUND_BLEEDING;
                      }
@@ -1475,7 +1475,7 @@ void mode_site(void)
                newenc=1;
             }
 
-            for(unsigned int e=0;e<ENCMAX;e++)
+            for(int e=0;e<ENCMAX;e++)
             {
                if(encounter[e].exists)newenc=0;
             }
@@ -1605,7 +1605,7 @@ void mode_site(void)
             {
                if(locx!=olocx||locy!=olocy||locz!=olocz)
                {
-                  for(unsigned int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+                  for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
                }
 
                //MOVE SIEGE UNITS AROUND
@@ -1616,9 +1616,9 @@ void mode_site(void)
 
                for(x=0;x<MAPX;x++)
                {
-                  for(unsigned int y=0;y<MAPY;y++)
+                  for(int y=0;y<MAPY;y++)
                   {
-                     for(unsigned int z=0;z<MAPZ;z++)
+                     for(int z=0;z<MAPZ;z++)
                      {
                         if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT)
                         {
@@ -1741,9 +1741,9 @@ void mode_site(void)
                   //MOVE HEAVY UNITS
                for(x=0;x<MAPX;x++)
                {
-                  for(unsigned int y=0;y<MAPY;y++)
+                  for(int y=0;y<MAPY;y++)
                   {
-                     for(unsigned int z=0;z<MAPZ;z++)
+                     for(int z=0;z<MAPZ;z++)
                      {
                         if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
                         {
@@ -1984,7 +1984,7 @@ void mode_site(void)
                   for(p=0;p<pool.size();p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
-                     for(unsigned int w=0;w<BODYPARTNUM;w++)
+                     for(int w=0;w<BODYPARTNUM;w++)
                      {
                         pool[p]->wound[w]&=~WOUND_BLEEDING;
                      }
@@ -2117,7 +2117,7 @@ void mode_site(void)
                         refresh();
                         getch();
 
-                        for(unsigned int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+                        for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
                         makecreature(encounter[0],CREATURE_LANDLORD);
                      }
                      break;
@@ -2138,7 +2138,7 @@ void mode_site(void)
                if((locx!=olocx||locy!=olocy||locz!=olocz)&&!newenc)
                {
                   //PUT BACK SPECIALS
-                  for(unsigned int e=0;e<ENCMAX;e++)
+                  for(int e=0;e<ENCMAX;e++)
                   {
                      if(encounter[e].exists)
                      {
@@ -2156,7 +2156,7 @@ void mode_site(void)
             if(locx!=olocx||locy!=olocy||locz!=olocz)
             {
                //NUKE GROUND LOOT
-               for(unsigned int l=0;l<groundloot.size();l++)
+               for(int l=0;l<groundloot.size();l++)
                {
                   delete groundloot[l];
                }
@@ -2203,7 +2203,7 @@ void resolvesite(void)
 
          // Move any CCS Sleepers at this location back to the homeless shelter
 
-         for(unsigned int p=0;p<pool.size();p++)
+         for(int p=0;p<pool.size();p++)
          {
             if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
                pool[p]->location == cursite)
@@ -2230,7 +2230,7 @@ void resolvesite(void)
          location[cursite]->closed=0;
          location[cursite]->heat=100;
 
-         for(unsigned int p=0;p<pool.size();p++)
+         for(int p=0;p<pool.size();p++)
          {
             if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
                pool[p]->location == cursite)

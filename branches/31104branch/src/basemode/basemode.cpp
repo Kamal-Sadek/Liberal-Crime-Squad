@@ -43,7 +43,7 @@ void mode_base(void)
    
    int length=0;
 
-   unsigned l = 0;
+   int l = 0;
 
    do
    {
@@ -52,7 +52,7 @@ void mode_base(void)
       cantseereason=3;
       if(!disbanding)
       {
-         for(unsigned int p=0;p<pool.size();p++)
+         for(int p=0;p<pool.size();p++)
          {
             if(pool[p]->alive&&
                pool[p]->align==1&&
@@ -85,7 +85,7 @@ void mode_base(void)
          for(int p=pool.size()-1;p>=0;p--)
          {
             int targetjuice=0;
-            for(unsigned int i=0;i<(year-disbandtime)+1;i++)
+            for(int i=0;i<(year-disbandtime)+1;i++)
             {
                targetjuice+=LCSrandom(100);
             }
@@ -145,7 +145,7 @@ void mode_base(void)
          else addstr(", 2nd Term");
 
          int housemake[5]={0,0,0,0,0};
-         for(unsigned int h=0;h<435;h++)
+         for(int h=0;h<435;h++)
          {
             housemake[house[h]+2]++;
          }
@@ -170,7 +170,7 @@ void mode_base(void)
          addstr(num);addstr("Cons+");
 
          int senatemake[5]={0,0,0,0,0};
-         for(unsigned int s=0;s<100;s++)
+         for(int s=0;s<100;s++)
          {
             senatemake[senate[s]+2]++;
          }
@@ -195,7 +195,7 @@ void mode_base(void)
          addstr(num);addstr("Cons+");
 
          int courtmake[5]={0,0,0,0,0};
-         for(unsigned int s=0;s<9;s++)
+         for(int s=0;s<9;s++)
          {
             courtmake[court[s]+2]++;
          }
@@ -220,7 +220,7 @@ void mode_base(void)
          addstr(num);addstr("Cons+");
 
          y=0;
-         for(unsigned int l=0;l<LAWNUM;l++)
+         for(int l=0;l<LAWNUM;l++)
          {
             if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
             else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
@@ -333,7 +333,7 @@ void mode_base(void)
       int partydead=0;
       if(activesquad!=NULL)
       {
-         for(unsigned int p=0;p<6;p++)
+         for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)partysize++;
             else
@@ -352,7 +352,7 @@ void mode_base(void)
          }
       }
 
-      unsigned safenumber=0;
+      int safenumber=0;
       for(l=0;l<location.size();l++)
       {
          if(location[l]->renting>=0)safenumber++;
@@ -375,11 +375,11 @@ void mode_base(void)
       
       // Count people at each location
       int* location2 = new int[location.size()];
-      for(unsigned int i=0;i<location.size();i++)
+      for(int i=0;i<location.size();i++)
       {
          location2[i]=0;
       }
-      for(unsigned int p=0;p<pool.size();p++)
+      for(int p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue; // Dead people don't count
          if(pool[p]->align!=1)continue; // Non-liberals don't count
@@ -449,7 +449,7 @@ void mode_base(void)
 
          if(haveflag)
          {
-            for(unsigned int p=0;p<7;p++)
+            for(int p=0;p<7;p++)
             {
                move(p+10,32);
                if(p<3)
@@ -459,13 +459,13 @@ void mode_base(void)
                   addstr("::::::");
                   set_color(COLOR_WHITE,COLOR_RED,1);
                   move(p+10,38);
-                  for(unsigned int i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
+                  for(int i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
                }
                else
                {
                   if(p<6)set_color(COLOR_WHITE,COLOR_RED,1);
                   else set_color(COLOR_RED,COLOR_BLACK,0);
-                  for(unsigned int i=0;i<16;i++)
+                  for(int i=0;i<16;i++)
                   {
                      if(p==6)addch(CH_UPPER_HALF_BLOCK);
                      else addch(CH_LOWER_HALF_BLOCK);
@@ -517,7 +517,7 @@ void mode_base(void)
 
          
          set_color(COLOR_BLACK,COLOR_BLACK,1);
-         for(unsigned int p=0;p < pool.size();p++)
+         for(int p=0;p < pool.size();p++)
          {
             if(pool[p]->alive==true&&
                pool[p]->flag & CREATUREFLAG_SLEEPER&&
@@ -548,7 +548,7 @@ void mode_base(void)
             else
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
-               for(unsigned int p=0;p<pool.size();p++)
+               for(int p=0;p<pool.size();p++)
                {
                   if(pool[p]->location==selectedsiege)
                   {
@@ -687,7 +687,7 @@ void mode_base(void)
          if(activesquad==NULL)activesquad=squad[0];
          else
          {
-            for(unsigned int sq=0;sq<squad.size();sq++)
+            for(int sq=0;sq<squad.size();sq++)
             {
                if(squad[sq]==activesquad)
                {
@@ -702,11 +702,11 @@ void mode_base(void)
       if(c=='z'&&safenumber>0)
       {
          activesquad=NULL;
-         unsigned sl;
+         int sl;
          if(selectedsiege==-1)sl=0;
          else sl=selectedsiege+1;
 
-         for(unsigned l=sl;l<location.size();l++)
+         for(int l=sl;l<location.size();l++)
          {
             if(location[l]->renting>=0)
             {
