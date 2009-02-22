@@ -47,8 +47,8 @@
 #define PACKAGE_VERSION "3.18.0"
 #endif
 
-const int version=31800;
-const int lowestloadversion=31800;
+const int version=31801;
+const int lowestloadversion=31801;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32

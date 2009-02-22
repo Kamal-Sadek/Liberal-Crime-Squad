@@ -73,6 +73,7 @@
 #include <includes.h>
 #include "configfile.h"
 #include "sitemode/sitemap.h"
+#include <iostream>
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
@@ -272,12 +273,28 @@ int main(int argc, char* argv[])
    keypad(stdscr,TRUE);
    
    raw_output(TRUE);
+   
+   addstr("Loading Graphics\n");
+   refresh();
+   getch();
 
    loadgraphics();
+   
+   addstr("Loading Init File Options\n");
+   refresh();
+   getch();
 
    loadinitfile();
+   
+   addstr("Loading sitemaps.txt\n");
+   refresh();
+   getch();
 
    readConfigFile("sitemaps.txt"); // load site map data
+   
+   addstr("Setting initial game data\n");
+   refresh();
+   getch();
 
    strcpy(slogan,"We need a slogan!");
 
@@ -349,8 +366,12 @@ int main(int argc, char* argv[])
 
    attorneyseed=getSeed();
    cityname(lcityname);
+   
+   std::cout << "Attempting to load saved game" << endl;
 
    loaded=load();
+   
+   std::cout << "Setup complete: Beginning LCS!" << endl;
 
    mode_title();
 
