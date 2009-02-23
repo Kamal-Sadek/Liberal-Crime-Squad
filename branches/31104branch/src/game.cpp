@@ -274,25 +274,26 @@ int main(int argc, char* argv[])
    
    raw_output(TRUE);
    
-   addstr("Loading Graphics\n");
+   addstr("Loading Graphics... ");
    refresh();
    getch();
 
    loadgraphics();
    
-   addstr("Loading Init File Options\n");
+   addstr("Loading Init File Options... ");
    refresh();
    getch();
 
    loadinitfile();
    
-   addstr("Loading sitemaps.txt\n");
+   addstr("Loading sitemaps.txt... ");
    refresh();
    getch();
 
    readConfigFile("sitemaps.txt"); // load site map data
    
-   addstr("Setting initial game data\n");
+   move(1,0);
+   addstr("Setting initial game data... ");
    refresh();
    getch();
 
@@ -367,11 +368,19 @@ int main(int argc, char* argv[])
    attorneyseed=getSeed();
    cityname(lcityname);
    
-   std::cout << "Attempting to load saved game" << endl;
+   addstr("Attempting to load saved game... ");
+
+   refresh();
+   getch();
 
    loaded=load();
    
-   std::cout << "Setup complete: Beginning LCS!" << endl;
+   addstr("Setup complete!");
+
+   refresh();
+   getch();
+
+   clear();
 
    mode_title();
 
