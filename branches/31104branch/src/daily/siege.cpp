@@ -28,7 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
-
+#include <cstring>
 
 
 /* siege - updates upcoming sieges */

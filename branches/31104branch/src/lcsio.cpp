@@ -24,6 +24,8 @@ This file is part of Liberal Crime Squad.
 #include <string>
 #include <queue>
 #include "lcsio.h"
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -28,7 +28,7 @@ private:
 class configSiteMap : public configurable
 {
 public:
-   configSiteMap::~configSiteMap();
+   ~configSiteMap();
    void configure(const std::string& command, const std::string& value);
    void build();
    bool operator==(const std::string& rhs) { return name == rhs; }

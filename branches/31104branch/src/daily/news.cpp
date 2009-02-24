@@ -26,8 +26,9 @@ This file is part of Liberal Crime Squad.                                       
 	the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
+#include <includes.h>
 #include <externs.h>
+#include <cstring>
 #include "news/news.h"
 
 

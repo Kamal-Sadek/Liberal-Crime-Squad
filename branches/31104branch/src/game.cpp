@@ -745,6 +745,6 @@ void end_game(int err)
 		delete squad[i];
 	}
 	endwin();
-	exit(err);
+//	exit(err);
 }
 

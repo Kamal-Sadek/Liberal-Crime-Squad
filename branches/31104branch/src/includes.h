@@ -41,6 +41,8 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+#include <math.h>
+#include <stdlib.h>
 #endif
 
 #ifndef PACKAGE_VERSION
