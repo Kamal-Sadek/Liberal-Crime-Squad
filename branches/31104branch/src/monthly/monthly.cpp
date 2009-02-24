@@ -109,7 +109,7 @@ void passmonth(char &clearformess,char canseethings)
    int conspower=200-attitude[VIEW_AMRADIO]-attitude[VIEW_CABLENEWS];
    
    //HAVING SLEEPERS
-   for(int pl=pool.size()-1;pl!=0;pl--)
+   for(int pl=pool.size()-1;pl>0;pl--)
    {
       if(pool[pl]->alive&&(pool[pl]->flag & CREATUREFLAG_SLEEPER))
       {
