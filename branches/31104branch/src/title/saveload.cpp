@@ -54,7 +54,7 @@ void savegame(char *str)
    FILE *h;
    int l;
 
-   h=LCSOpenFile(str, "ab", LCSIO_PRE_HOME);
+   h=LCSOpenFile(str, "wb", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
