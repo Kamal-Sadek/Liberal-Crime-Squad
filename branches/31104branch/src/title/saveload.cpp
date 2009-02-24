@@ -344,7 +344,7 @@ char load(void)
          return 0;
       }
 
-      fread(&seed,sizeof(unsigned long),1,h);
+      fread(&seed,sizeof(unsigned int),1,h);
 
       fread(&mode,sizeof(int),1,h);
 
