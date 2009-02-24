@@ -10,6 +10,7 @@ extern unsigned char newspic[20][78][18][4];
 
 extern vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
+extern int oldMapMode;
 extern unsigned int seed;
 extern short law[LAWNUM];
 
@@ -17,7 +18,6 @@ extern short house[435];
 extern short senate[100];
 extern short court[9];
 extern char courtname[9][80];
-
 
 
 extern signed char exec[EXECNUM];

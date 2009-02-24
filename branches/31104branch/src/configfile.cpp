@@ -10,6 +10,9 @@ int readConfigFile(char* filename)
    std::fstream file;
    std::string command, value;
    configurable* object = 0;
+   addstr("Attempting to open filename: ");
+   addstr(filename);
+   addstr(" ");
 
    file.open(filename, ios::in);
    if(!file.is_open()) return -1; // Unable to open; failed read

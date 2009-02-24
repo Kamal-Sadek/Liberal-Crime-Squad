@@ -72,81 +72,193 @@ void initsite(locationst &loc)
          }
       }
    }
-
-   switch(loc.type)
+   if (oldMapMode==0) // Check to see if sitemaps got loaded. SAV
    {
-   case SITE_RESIDENTIAL_TENEMENT:
-   case SITE_RESIDENTIAL_APARTMENT: 
-   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-      build_site("RESIDENTIAL_APARTMENT"); break;
-   case SITE_INDUSTRY_WAREHOUSE:
-   case SITE_RESIDENTIAL_SHELTER:
-   case SITE_BUSINESS_CRACKHOUSE:
-   case SITE_BUSINESS_BARANDGRILL:
-   case SITE_RESIDENTIAL_BOMBSHELTER:
-   case SITE_OUTDOOR_BUNKER:
-      build_site("GENERIC_UNSECURE");
-      break;
-   case SITE_LABORATORY_COSMETICS:
-      build_site("LABORATORY_COSMETICS");
-      break;
-   case SITE_LABORATORY_GENETIC:
-      build_site("LABORATORY_GENETICS");
-      break;
-   case SITE_GOVERNMENT_POLICESTATION:
-      build_site("GOVERNMENT_POLICESTATION");
-      break;
-   case SITE_GOVERNMENT_COURTHOUSE:
-      build_site("GOVERNMENT_COURTHOUSE");
-      break;
-   case SITE_GOVERNMENT_PRISON:
-      build_site("GOVERNMENT_PRISON");
-      break;
-   case SITE_GOVERNMENT_INTELLIGENCEHQ:
-      build_site("GOVERNMENT_INTELLIGENCEHQ");
-      break;
-   case SITE_GOVERNMENT_FIRESTATION:
-      build_site("GENERIC_LOBBY");
-      break;
-   case SITE_INDUSTRY_SWEATSHOP:
-      build_site("INDUSTRY_SWEATSHOP");
-      break;
-   case SITE_INDUSTRY_POLLUTER:
-      build_site("INDUSTRY_POLLUTER");
-      break;
-   case SITE_INDUSTRY_NUCLEAR:
-      build_site("INDUSTRY_NUCLEAR");
-      break;
-   case SITE_CORPORATE_HEADQUARTERS:
-      build_site("CORPORATE_HEADQUARTERS");
-      break;
-   case SITE_CORPORATE_HOUSE:
-      build_site("CORPORATE_HOUSE");
-      break;
-   case SITE_MEDIA_AMRADIO:
-      build_site("MEDIA_AMRADIO");
-      break;
-   case SITE_MEDIA_CABLENEWS:
-      build_site("MEDIA_CABLENEWS");
-      break;
-   case SITE_BUSINESS_JUICEBAR:
-      build_site("BUSINESS_CAFE");
-      break;
-   case SITE_BUSINESS_INTERNETCAFE:
-      build_site("BUSINESS_INTERNETCAFE");
-      break;
-   case SITE_BUSINESS_CIGARBAR:
-      build_site("BUSINESS_RESTRICTEDCAFE");
-      break;
-   case SITE_BUSINESS_LATTESTAND:
-      build_site("OUTDOOR_LATTESTAND");
-      break;
-   case SITE_BUSINESS_VEGANCOOP:
-      build_site("GENERIC_ONEROOM");
-      break;
-   case SITE_OUTDOOR_PUBLICPARK:
-      build_site("OUTDOOR_PUBLICPARK");
-      break;
+     switch(loc.type)
+     {
+     case SITE_RESIDENTIAL_TENEMENT:
+     case SITE_RESIDENTIAL_APARTMENT: 
+     case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+        build_site("RESIDENTIAL_APARTMENT"); break;
+     case SITE_INDUSTRY_WAREHOUSE:
+     case SITE_RESIDENTIAL_SHELTER:
+     case SITE_BUSINESS_CRACKHOUSE:
+     case SITE_BUSINESS_BARANDGRILL:
+     case SITE_RESIDENTIAL_BOMBSHELTER:
+     case SITE_OUTDOOR_BUNKER:
+        build_site("GENERIC_UNSECURE");
+        break;
+     case SITE_LABORATORY_COSMETICS:
+        build_site("LABORATORY_COSMETICS");
+        break;
+     case SITE_LABORATORY_GENETIC:
+        build_site("LABORATORY_GENETICS");
+        break;
+     case SITE_GOVERNMENT_POLICESTATION:
+        build_site("GOVERNMENT_POLICESTATION");
+        break;
+     case SITE_GOVERNMENT_COURTHOUSE:
+        build_site("GOVERNMENT_COURTHOUSE");
+        break;
+     case SITE_GOVERNMENT_PRISON:
+        build_site("GOVERNMENT_PRISON");
+        break;
+     case SITE_GOVERNMENT_INTELLIGENCEHQ:
+        build_site("GOVERNMENT_INTELLIGENCEHQ");
+        break;
+     case SITE_GOVERNMENT_FIRESTATION:
+        build_site("GENERIC_LOBBY");
+        break;
+     case SITE_INDUSTRY_SWEATSHOP:
+        build_site("INDUSTRY_SWEATSHOP");
+        break;
+     case SITE_INDUSTRY_POLLUTER:
+        build_site("INDUSTRY_POLLUTER");
+        break;
+     case SITE_INDUSTRY_NUCLEAR:
+        build_site("INDUSTRY_NUCLEAR");
+        break;
+     case SITE_CORPORATE_HEADQUARTERS:
+        build_site("CORPORATE_HEADQUARTERS");
+        break;
+     case SITE_CORPORATE_HOUSE:
+        build_site("CORPORATE_HOUSE");
+        break;
+     case SITE_MEDIA_AMRADIO:
+        build_site("MEDIA_AMRADIO");
+        break;
+     case SITE_MEDIA_CABLENEWS:
+        build_site("MEDIA_CABLENEWS");
+        break;
+     case SITE_BUSINESS_JUICEBAR:
+        build_site("BUSINESS_CAFE");
+        break;
+     case SITE_BUSINESS_INTERNETCAFE:
+        build_site("BUSINESS_INTERNETCAFE");
+        break;
+     case SITE_BUSINESS_CIGARBAR:
+        build_site("BUSINESS_RESTRICTEDCAFE");
+        break;
+     case SITE_BUSINESS_LATTESTAND:
+        build_site("OUTDOOR_LATTESTAND");
+        break;
+     case SITE_BUSINESS_VEGANCOOP:
+        build_site("GENERIC_ONEROOM");
+        break;
+     case SITE_OUTDOOR_PUBLICPARK:
+        build_site("OUTDOOR_PUBLICPARK");
+        break;
+     }
+   } else {
+//No sitemaps? No problem! Revert to old build code. SAV
+     levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
+     levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
+     levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
+     levelmap[(MAPX>>1)-1][0][0].flag=SITEBLOCK_EXIT;
+     levelmap[(MAPX>>1)-1][1][0].flag=SITEBLOCK_EXIT;
+
+     levelmap[MAPX>>1][1][0].flag=0;
+
+     levelmap[MAPX>>1][2][0].flag=SITEBLOCK_DOOR;
+
+     if(loc.type==SITE_RESIDENTIAL_APARTMENT_UPSCALE||
+        loc.type==SITE_RESIDENTIAL_APARTMENT||
+        loc.type==SITE_RESIDENTIAL_TENEMENT)
+     {
+        levelmap[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
+        short height;
+        int floors=LCSrandom(6)+1;
+        int swap;
+        for(int z=0;z<floors;z++)
+        {
+           for(int y=3;y<MAPY-3;y++)
+           {
+              levelmap[MAPX>>1][y][z].flag=0;
+              if(y%4==0)
+              {
+                 height=y+LCSrandom(3)-1;
+                 levelmap[(MAPX>>1)-1][height][z].flag=SITEBLOCK_DOOR;
+                 generateroom((MAPX>>1)-8,y-1,7,3,z);
+
+                 height=y+LCSrandom(3)-1;
+                 levelmap[(MAPX>>1)+1][height][z].flag=SITEBLOCK_DOOR;
+                 generateroom((MAPX>>1)+2,y-1,7,3,z);
+                 if(y==4&&z==0)
+                 {
+                    levelmap[(MAPX>>1)+2][height][z].flag=0;
+                    levelmap[(MAPX>>1)+2][height][z].special=SPECIAL_APARTMENT_LANDLORD;
+                 }
+              }
+           }
+           swap=(z%2)*2-1;
+           if(z>0)
+           {
+              levelmap[(MAPX>>1)+1*swap][MAPY-4][z].flag=0;
+              levelmap[(MAPX>>1)+1*swap][MAPY-4][z].special=SPECIAL_STAIRS_DOWN;
+           }
+           if(z<floors-1)
+           {
+              levelmap[(MAPX>>1)-1*swap][MAPY-4][z].flag=0;
+              levelmap[(MAPX>>1)-1*swap][MAPY-4][z].special=SPECIAL_STAIRS_UP;
+           }
+        }
+     }
+     else
+     {
+        switch(loc.type)
+        {
+           case SITE_BUSINESS_LATTESTAND:
+           {
+              for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
+              {
+                 for(int y=0;y<7;y++)
+                 {
+                    if (x==(MAPX>>1)-4||x==(MAPX>>1)+4||y==0||y==6) 
+                      levelmap[x][y][0].flag=SITEBLOCK_EXIT;
+                    else levelmap[x][y][0].flag=0;
+                    levelmap[x][y][0].special=-1;
+                    levelmap[x][y][0].siegeflag=0;
+                 }
+              }
+              break;
+           }
+           case SITE_BUSINESS_JUICEBAR:
+           case SITE_BUSINESS_CIGARBAR:
+           case SITE_BUSINESS_VEGANCOOP:
+           case SITE_BUSINESS_INTERNETCAFE:
+           {
+              for(int x=(MAPX>>1)-4;x<=(MAPX>>1)+4;x++)
+              {
+                 for(int y=3;y<10;y++)
+                 {
+                    levelmap[x][y][0].flag=0;
+                    levelmap[x][y][0].special=-1;
+                    levelmap[x][y][0].siegeflag=0;
+                 }
+              }
+              break;
+           }
+           case SITE_BUSINESS_CRACKHOUSE:
+           {
+              int dx=LCSrandom(5)*2+19;
+              int dy=LCSrandom(3)*2+7;
+              int rx=(MAPX>>1)-(dx>>1);
+              int ry=3;
+              generateroom(rx,ry,dx,dy,0);
+              break;
+           }
+           default:
+           {
+              int dx=LCSrandom(5)*2+35;
+              int dy=LCSrandom(3)*2+15;
+              int rx=(MAPX>>1)-(dx>>1);
+              int ry=3;
+              generateroom(rx,ry,dx,dy,0);
+              break;
+           }
+        }
+     }
+   // End of old build code. SAV
    }
 
    //CLEAR AWAY BLOCKED DOORWAYS

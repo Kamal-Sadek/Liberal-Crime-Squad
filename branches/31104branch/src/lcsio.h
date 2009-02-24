@@ -109,7 +109,7 @@ void LCSCloseFile(FILE* handle);
     \param handle FILE* handle that you get from LCSOpenFile.
     \return False on error, true if no error.
 */
-inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
+/*inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
 {
     fwrite(buffer,size,count,handle);
     if(ferror(handle))
@@ -117,7 +117,7 @@ inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
 
     else
         return true;
-}
+} Deprecated function - SAV */
 
 
 /**
@@ -133,7 +133,7 @@ inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
     \param handle FILE* handle that you get from LCSOpenFile.
      \return False on error, true if no error.
 */
-inline bool LCSRead(void* buffer, size_t size, size_t count, FILE* handle)
+/*inline bool LCSRead(void* buffer, size_t size, size_t count, FILE* handle)
 {
     fread(buffer,size,count,handle);
     if(ferror(handle))
@@ -141,7 +141,7 @@ inline bool LCSRead(void* buffer, size_t size, size_t count, FILE* handle)
 
     else
         return true;
-}
+}Deprecated function - SAV */
 
 /**
     \brief Deletes a file.

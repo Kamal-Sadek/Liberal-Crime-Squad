@@ -93,6 +93,7 @@ vector<vehiclest *> vehicle;
 long curcarid=0;
 char showcarprefs=1;
 
+int oldMapMode=0; // -1 if we're using the old map generation functions.
 
 siteblockst levelmap[MAPX][MAPY][MAPZ];
 
@@ -290,7 +291,12 @@ int main(int argc, char* argv[])
    refresh();
    getch();
 
-   readConfigFile("sitemaps.txt"); // load site map data
+   oldMapMode=readConfigFile("sitemaps.txt"); // load site map data
+   if (oldMapMode==-1)
+   {
+   	addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
+   	refresh();
+   }
    
    move(1,0);
    addstr("Setting initial game data... ");
