@@ -133,7 +133,7 @@ void savegame(char *str)
       numbytes=fwrite(senate,sizeof(short),100,h);
       numbytes=fwrite(court,sizeof(short),9,h);
       numbytes=fwrite(courtname,sizeof(char)*80,9,h);
-      numbytes=fwrite(exec,sizeof(short),EXECNUM,h);
+      numbytes=fwrite(exec,sizeof(char),EXECNUM,h);
       numbytes=fwrite(execname,sizeof(char)*80,EXECNUM,h);
 
       //LOCATIONS
@@ -415,7 +415,7 @@ char load(void)
       fread(senate,sizeof(short),100,h);
       fread(court,sizeof(short),9,h);
       fread(courtname,sizeof(char)*80,9,h);
-      fread(exec,sizeof(short)*EXECNUM,1,h);
+      fread(exec,sizeof(char)*EXECNUM,1,h);
       fread(execname,sizeof(char)*80,EXECNUM,h);
 
       //LOCATIONS
