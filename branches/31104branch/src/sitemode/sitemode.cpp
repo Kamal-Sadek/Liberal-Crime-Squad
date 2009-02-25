@@ -766,16 +766,27 @@ void mode_site(void)
                         {
                            if(encounter[t].exists)
                            {
-                              move(y,x);
-                              addch(t+'A');
-                              addstr(" - ");
-                              addstr(encounter[t].name);
-
-                              y++;
-                              if(y==17)
+                              if (encounter[t].cantbluff!=1)
                               {
-                                 y=11;
-                                 x+=30;
+                                 move(y,x);
+                                 addch(t+'A');
+                                 addstr(" - ");
+                                 addstr(encounter[t].name);
+
+                                 y++;
+                                 if(y==17)
+                                 {
+                                    y=11;
+                                    x+=30;
+                                 }
+                              } else
+                              {
+                                 y++;
+                                 if(y==17)
+                                 {
+                                    y=11;
+                                    x+=30;
+                                 }
                               }
                            }
                         }
@@ -991,7 +1002,7 @@ void mode_site(void)
                               }
                            }
                         }
-                        // If someone can, don't add this person as a newly recruited Liberal!
+                        // If someone can, add this person as a newly recruited Liberal!
                         if(i!=6)
                         {
                            creaturest *newcr=new creaturest;

@@ -545,8 +545,31 @@ void trial(creaturest &g)
    }
    if(funds<5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   short defense;
+   //SAV - added in display of skills and relevant attributes to help
+   // decide when to defend self.
+   char temp[20];
+   y++;
+   move(y,5);
+   addstr("Heart: ");
+   addstr(itoa(g.attval(ATTRIBUTE_HEART),temp,10));
+   move(y,25);
+   addstr("Persuasion: ");
+   addstr(itoa(g.skillval(SKILL_PERSUASION),temp,10));
+   y++;
+   move(y,5);
+   addstr("Charisma: ");
+   addstr(itoa(g.attval(ATTRIBUTE_CHARISMA),temp,10));
+   move(y,25);
+   addstr("Law: ");
+   addstr(itoa(g.skillval(SKILL_LAW),temp,10));
+   y++;
+   move(y,5);
+   addstr("Intelligence: ");
+   addstr(itoa(g.attval(ATTRIBUTE_INTELLIGENCE),temp,10));
+   y++;
+   // End SAV's adds   
 
+   short defense;
    int c;
    do
    {

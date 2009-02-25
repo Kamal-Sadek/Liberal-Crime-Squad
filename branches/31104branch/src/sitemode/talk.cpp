@@ -30,7 +30,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
-
 /* bluff, date, issues */
 char talk(creaturest &a,int t)
 {
@@ -917,9 +916,9 @@ char talk(creaturest &a,int t)
                            troll+=tk->skillval(SKILL_LAW);
                            break;
                         case LAW_TAX:
-									addstr("\"Rich people, like, have money, man.\"");
+                           addstr("\"Rich people, like, have money, man.\"");
                            troll+=tk->skillval(SKILL_BUSINESS);
-									break;
+                           break;
                         case LAW_GUNCONTROL:
                            addstr("\"People like, think they need lots of guns.\"");
                            troll+=tk->skillval(SKILL_LAW);
@@ -981,9 +980,9 @@ char talk(creaturest &a,int t)
                            troll+=tk->skillval(SKILL_LAW);
                            break;
                         case LAW_TAX:
-									addstr("\"There's still inequality in this country.\"");
+                           addstr("\"There's still inequality in this country.\"");
                            troll+=tk->skillval(SKILL_BUSINESS);
-									break;
+                           break;
                         case LAW_GUNCONTROL:
                            addstr("\"We need to repeal the second amendment.\"");
                            troll+=tk->skillval(SKILL_LAW);
@@ -1064,15 +1063,15 @@ char talk(creaturest &a,int t)
                         case LAW_FLAGBURNING:
                            addstr("\"Burning a piece of cloth is actually stigmatized in this country.");
                            move(y,1);y++;
-                           addstr("You can love freedom and still hate our government stands for.\"");
+                           addstr("You can love freedom and still hate what our government stands for.\"");
                            if(tk->skillval(SKILL_LAW))troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            break;
                         case LAW_TAX:
-									addstr("\"The tax code has been designed to perpetuate an unjust class");
-									move(y,1);y++;
-									addstr("structure that is keeping you oppressed.\"");
+                           addstr("\"The tax code has been designed to perpetuate an unjust class");
+                           move(y,1);y++;
+                           addstr("structure that is keeping you oppressed.\"");
                            if(tk->skillval(SKILL_BUSINESS))troll+=tk->skillval(SKILL_BUSINESS)-a.skillval(SKILL_BUSINESS);
-									break;
+                           break;
                         case LAW_GUNCONTROL:
                            addstr("\"We live in such a backwards country right now that people think it's");
                            move(y,1);y++;
@@ -1097,7 +1096,23 @@ char talk(creaturest &a,int t)
                      {
                         addstr("\"Aaaahhh...\"");
                      }
-                     else addstr("\"That *is* disturbing!   What can I do?\"");
+                     else
+                     {
+                       switch(rand()%10)
+                         {
+                           case 0: addstr("\"Dear me! Is there anything we can do?\""); break;
+                           case 1: addstr("\"That *is* disturbing!   What can I do?\""); break;
+                           case 2: addstr("\"Gosh!   Is there anything I can do?\""); break;
+                           case 3: addstr("\"That's frightening!   What can we do?\""); break;
+                           case 4: addstr("\"Oh, really?\" \"Yeah, really!\""); break;
+                           case 5: addstr("\"Oh my Science!   We've got to do something!\""); break;
+                           case 6: addstr("\"Dude... that's like... totally bumming me.\""); break;
+                           case 7: addstr("\"Gadzooks! Something must be done!\"");break;
+                           case 8: addstr("\"You got anything to smoke on you?\" *cough*");break;
+                           case 9: addstr("\"Lawks, I don't think we can allow that.\"");break;
+                         }
+                     }
+                     
                      refresh();
                      getch();
 
@@ -1617,7 +1632,14 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                      move(y,1);y++;addstr(tk->name);addstr(" responds,");
                      set_color(COLOR_BLUE,COLOR_BLACK,1);
                      move(y,1);y++;
-                     addstr("\"Jesus...\"");
+                     switch (rand()%5)
+                     {
+                        case 0: addstr("\"Jesus...\""); break;
+                        case 1: addstr("\"Touch me and I scream.\""); break;
+                        case 2: addstr("\"I'm.. uh.. waiting for someone.\""); break;
+                        case 3: addstr("\"Hey, look, a ufo!\" *bolts*"); break;
+                        case 4: addstr("\"You're not my type. I like sane.\""); break;                        
+                     }
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      addstr(" <turns away>");
                      refresh();
