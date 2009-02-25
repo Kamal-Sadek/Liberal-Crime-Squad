@@ -1235,10 +1235,12 @@ void setvehicles(void)
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(19,1);
+      move(18,1);
       addstr("Press a letter to specify passengers for that Liberal vehicle");
-      move(20,1);
+      move(29,1);
       addstr("Capitalize the letter to designate a driver.");
+      move(20,1);
+      addstr("Press a number to remove that squad member from a vehicle.");
       move(21,1);
       addstr("Note:  Vehicles in yellow have already been selected by another squad");
       move(22,1);
@@ -1308,6 +1310,25 @@ void setvehicles(void)
             }
          }
       }
+
+      //SAV - adding way to remove people from vehicles.
+      
+      if(c>='1'&&c<='6')
+      {
+      // 1. Is there someone there?
+        if(activesquad->squad[c-'1']!=NULL)
+        {
+      // 2. Are they in a vehicle? Someday we'll want to enforce car capacity
+          int vin=activesquad->squad[c-'1']->pref_carid;
+          if ( vin > 0)
+          {
+            activesquad->squad[c-'1']->pref_carid=0;
+            activesquad->squad[c-'1']->pref_is_driver=0;
+          }
+        }
+      }
+      
+      //SAV - End add
 
       if(c=='x')return;
 
