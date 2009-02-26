@@ -342,6 +342,180 @@ void initsite(locationst &loc)
       }
    }
 
+   if (oldMapMode!=0) // SAV - Did I mention we have some more things to do?
+   {
+     //ADD RESTRICTIONS
+     bool restricted=0;
+     switch(loc.type)
+     {
+      case SITE_LABORATORY_COSMETICS:
+      case SITE_LABORATORY_GENETIC:
+      case SITE_GOVERNMENT_POLICESTATION:
+      case SITE_GOVERNMENT_COURTHOUSE:
+      case SITE_GOVERNMENT_PRISON:
+      case SITE_GOVERNMENT_INTELLIGENCEHQ:
+      case SITE_MEDIA_AMRADIO:
+      case SITE_MEDIA_CABLENEWS:
+         restricted=1;
+         for(x=2;x<MAPX-2;x++)
+         {
+            for(int y=2;y<MAPY-2;y++)
+            {
+               for(int z=0;z<MAPZ;z++)
+               {
+                  levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
+               }
+            }
+         }
+         break;
+     }
+
+     //ADD ACCESSORIES
+     seed=oldseed;
+     
+     for(x=2;x<MAPX-2;x++)
+     {
+        for(int y=2;y<MAPY-2;y++)
+        {
+           for(int z=0;z<MAPZ;z++)
+           {
+              if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+                 !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+                 !LCSrandom(10))
+              {
+                 switch(loc.type)
+                 {
+                    case SITE_RESIDENTIAL_SHELTER:
+                    case SITE_BUSINESS_CRACKHOUSE:
+                    case SITE_BUSINESS_JUICEBAR:
+                    case SITE_BUSINESS_CIGARBAR:
+                    case SITE_BUSINESS_LATTESTAND:
+                    case SITE_BUSINESS_VEGANCOOP:
+                    case SITE_BUSINESS_INTERNETCAFE:
+                    case SITE_INDUSTRY_WAREHOUSE:
+                       break;
+                    default:
+                       levelmap[x][y][z].flag|=SITEBLOCK_LOOT;
+                       break;
+                 }
+              }
+
+              if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+                 !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+                 !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+                 (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
+                 loc.type==SITE_LABORATORY_COSMETICS&&!LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_LAB_COSMETICS_CAGEDANIMALS;
+              }
+              if(!(levelmap[x][y][0].flag & SITEBLOCK_DOOR)&&
+                 !(levelmap[x][y][0].flag & SITEBLOCK_BLOCK)&&
+                 !(levelmap[x][y][0].flag & SITEBLOCK_LOOT)&&
+                 (levelmap[x][y][0].flag & SITEBLOCK_RESTRICTED)&&
+                 loc.type==SITE_LABORATORY_GENETIC&&!LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_LAB_GENETIC_CAGEDANIMALS;
+              }
+              if(levelmap[x][y][0].flag==0&&
+                 loc.type==SITE_INDUSTRY_SWEATSHOP&&!LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_SWEATSHOP_EQUIPMENT;
+              }
+              if(levelmap[x][y][0].flag==0&&
+                 loc.type==SITE_INDUSTRY_POLLUTER&&!LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_POLLUTER_EQUIPMENT;
+              }
+              if(levelmap[x][y][0].flag==0&&
+                 (loc.type==SITE_BUSINESS_JUICEBAR||
+                 loc.type==SITE_BUSINESS_CIGARBAR||
+                 loc.type==SITE_BUSINESS_LATTESTAND||
+                 loc.type==SITE_BUSINESS_INTERNETCAFE)&&
+                 !LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_RESTAURANT_TABLE;
+              }
+              if(levelmap[x][y][z].flag==0&&loc.type==SITE_BUSINESS_INTERNETCAFE&&
+                 !LCSrandom(10))
+              {
+                 levelmap[x][y][z].special=SPECIAL_CAFE_COMPUTER;
+              }
+           }
+        }
+     }
+
+     int freex,freey,freez=0;
+
+     //ADD FIRST SPECIAL
+     int count=100000;
+
+     do
+     {
+        freex=LCSrandom(MAPX-4)+2;
+        freey=LCSrandom(MAPY-4)+2;
+        if(freex>=(MAPX>>1)-2&&
+           freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
+        count--;
+     }while(( levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+              levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+              levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+              levelmap[freex][freey][freez].special!=-1   )&&count>0);
+
+     switch(loc.type)
+     {
+        case SITE_INDUSTRY_NUCLEAR:
+           levelmap[freex][freey][freez].special=SPECIAL_NUCLEAR_ONOFF;
+           break;
+        case SITE_GOVERNMENT_POLICESTATION:
+           levelmap[freex][freey][freez].special=SPECIAL_POLICESTATION_LOCKUP;
+           break;
+        case SITE_GOVERNMENT_COURTHOUSE:
+           levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_LOCKUP;
+           break;
+        case SITE_GOVERNMENT_PRISON:
+           levelmap[freex][freey][freez].special=SPECIAL_PRISON_CONTROL;
+           break;
+        case SITE_GOVERNMENT_INTELLIGENCEHQ:
+           levelmap[freex][freey][freez].special=SPECIAL_INTEL_SUPERCOMPUTER;
+           break;
+        case SITE_CORPORATE_HEADQUARTERS:
+           levelmap[freex][freey][freez].special=SPECIAL_CORPORATE_FILES;
+           break;
+        case SITE_CORPORATE_HOUSE:
+           levelmap[freex][freey][freez].special=SPECIAL_HOUSE_PHOTOS;
+           break;
+        case SITE_MEDIA_AMRADIO:
+           levelmap[freex][freey][freez].special=SPECIAL_RADIO_BROADCASTSTUDIO;
+           break;
+        case SITE_MEDIA_CABLENEWS:
+           levelmap[freex][freey][freez].special=SPECIAL_NEWS_BROADCASTSTUDIO;
+           break;
+     }
+
+     count=100000;
+
+     //ADD SECOND SPECIAL
+     do
+     {
+        freex=LCSrandom(MAPX-4)+2;
+        freey=LCSrandom(MAPY-4)+2;
+        if(freex>=(MAPX>>1)-2&&
+           freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
+        count--;
+     }while(( levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+              levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+              levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+              levelmap[freex][freey][freez].special!=-1   )&&count>0);
+
+     switch(loc.type)
+     {
+        case SITE_GOVERNMENT_COURTHOUSE:
+           levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_JURYROOM;
+           break;
+     }
+   }
+   // SAV - End more old map stuff.
+
    //Clear out restrictions
    char acted;
 
