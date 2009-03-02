@@ -567,6 +567,10 @@ char radio_broadcast(void)
       }
    }
 
+   // LCS colors enhance the broadcast significantly
+   if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+      segmentpower = (segmentpower * 3) / 2;
+
    int segmentbonus=segmentpower/4;
    if(partysize>1)segmentpower/=partysize;
    segmentpower+=segmentbonus;
@@ -575,13 +579,13 @@ char radio_broadcast(void)
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   if(segmentpower<5)addstr("The Squad sounds wholly insane.");
-   else if(segmentpower<10)addstr("The show really sucks.");
-   else if(segmentpower<15)addstr("It is a very boring hour.");
-   else if(segmentpower<20)addstr("It is mediocre radio.");
-   else if(segmentpower<30)addstr("The show was all right.");
-   else if(segmentpower<40)addstr("The Squad put on a good show.");
-   else if(segmentpower<50)addstr("It was thought-provoking, even humorous.");
+   if(segmentpower<15)addstr("The Squad sounds wholly insane.");
+   else if(segmentpower<25)addstr("The show really sucks.");
+   else if(segmentpower<35)addstr("It is a very boring hour.");
+   else if(segmentpower<45)addstr("It is mediocre radio.");
+   else if(segmentpower<60)addstr("The show was all right.");
+   else if(segmentpower<75)addstr("The Squad put on a good show.");
+   else if(segmentpower<90)addstr("It was thought-provoking, even humorous.");
    else addstr("It was the best hour of AM radio EVER.");
 
    refresh();
@@ -589,8 +593,8 @@ char radio_broadcast(void)
 
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-10)/2);
-   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-10)/2,1,80);
+   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-50)/2);
+   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-50)/2,1,80);
    else change_public_opinion(viewhit,segmentpower/2);
 
    //PRISONER PARTS
@@ -809,6 +813,10 @@ char news_broadcast(void)
       }
    }
 
+   // LCS colors enhance the broadcast significantly
+   if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+      segmentpower = (segmentpower * 3) / 2;
+
    int segmentbonus=segmentpower/4;
    if(partysize>1)segmentpower/=partysize;
    segmentpower+=segmentbonus;
@@ -817,13 +825,13 @@ char news_broadcast(void)
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   if(segmentpower<5)addstr("The Squad looks completely insane.");
-   else if(segmentpower<10)addstr("The show really sucks.");
-   else if(segmentpower<15)addstr("It is a very boring hour.");
-   else if(segmentpower<20)addstr("It is mediocre TV.");
-   else if(segmentpower<30)addstr("The show was all right.");
-   else if(segmentpower<40)addstr("The Squad put on a good show.");
-   else if(segmentpower<50)addstr("It was thought-provoking, even humorous.");
+   if(segmentpower<15)addstr("The Squad looks completely insane.");
+   else if(segmentpower<25)addstr("The show really sucks.");
+   else if(segmentpower<35)addstr("It is a very boring hour.");
+   else if(segmentpower<45)addstr("It is mediocre TV.");
+   else if(segmentpower<60)addstr("The show was all right.");
+   else if(segmentpower<75)addstr("The Squad put on a good show.");
+   else if(segmentpower<90)addstr("It was thought-provoking, even humorous.");
    else addstr("It was the best hour of Cable TV EVER.");
 
    refresh();
@@ -832,7 +840,7 @@ char news_broadcast(void)
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
    change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,(segmentpower-50)/10);
-   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-50)/10,1,80);
+   if(viewhit!=VIEW_LIBERALCRIMESQUAD)change_public_opinion(viewhit,(segmentpower-50)/5,1,80);
    else change_public_opinion(viewhit,segmentpower/10);
 
    //PRISONER PARTS

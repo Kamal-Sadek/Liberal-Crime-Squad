@@ -662,6 +662,10 @@ char hasdisguise(creaturest &cr,short type)
 {
    char uniformed=0;
 
+   // Never uniformed in battle colors
+   if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+      return 0;
+
    if(location[cursite]->siege.siege)
    {
       switch(location[cursite]->siege.siegetype)

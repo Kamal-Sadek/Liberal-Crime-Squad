@@ -275,33 +275,34 @@ int main(int argc, char* argv[])
    
    raw_output(TRUE);
    
-   addstr("Loading Graphics... ");
-   refresh();
-   getch();
+   //addstr("Loading Graphics... ");
+   //refresh();
+   //getch();
 
    loadgraphics();
    
-   addstr("Loading Init File Options... ");
-   refresh();
-   getch();
+   //addstr("Loading Init File Options... ");
+   //refresh();
+   //getch();
 
    loadinitfile();
    
-   addstr("Loading sitemaps.txt... ");
-   refresh();
-   getch();
+   //addstr("Loading sitemaps.txt... ");
+   //refresh();
+   //getch();
 
    oldMapMode=readConfigFile("sitemaps.txt"); // load site map data
    if (oldMapMode==-1)
    {
    	addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
    	refresh();
+      getch();
    }
    
-   move(1,0);
-   addstr("Setting initial game data... ");
-   refresh();
-   getch();
+   //move(1,0);
+   //addstr("Setting initial game data... ");
+   //refresh();
+   //getch();
 
    strcpy(slogan,"We need a slogan!");
 
@@ -374,17 +375,15 @@ int main(int argc, char* argv[])
    attorneyseed=getSeed();
    cityname(lcityname);
    
-   addstr("Attempting to load saved game... ");
-
-   refresh();
-   getch();
+   //addstr("Attempting to load saved game... ");
+   //refresh();
+   //getch();
 
    loaded=load();
    
-   addstr("Setup complete!");
-
-   refresh();
-   getch();
+   //addstr("Setup complete!");
+   //refresh();
+   //getch();
 
    clear();
 

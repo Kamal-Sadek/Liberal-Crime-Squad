@@ -47,6 +47,11 @@ void mode_site(short loc)
 
    if(!location[loc]->siege.siege)
    {
+      //Low profile site action?
+      if(activesquad->stance == SQUADSTANCE_ANONYMOUS)
+         sitestory->claimed = 0;
+
+      //Start at entrance to map
       locx=MAPX>>1;
       locy=1;
       locz=0;
@@ -772,6 +777,7 @@ void mode_site(void)
                                  addch(t+'A');
                                  addstr(" - ");
                                  addstr(encounter[t].name);
+                                 add_age(encounter[t]);
 
                                  y++;
                                  if(y==17)

@@ -695,8 +695,8 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
    //SKILL EFFECTS
    int wsk=weaponskill(a.weapon.type);
    if(rangedweapon(a.weapon) &&
-      (a.weapon.type!=WEAPON_MOLOTOV &&
-       a.weapon.ammo==0) || force_melee)
+      ((a.weapon.type!=WEAPON_MOLOTOV &&
+        a.weapon.ammo==0) || force_melee))
    {
       wsk=SKILL_CLUB; // Club people with out-of-ammo guns
    }
@@ -2159,11 +2159,16 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
             strcat(str," ");
             strcat(str,t.name);
             strcat(str,"!");
+
+            attack=LCSrandom(a.skillval(SKILL_MUSIC)*2+1);
             if(t.align==1)
             {
                resist=t.skillval(SKILL_MUSIC)+
                   t.attval(ATTRIBUTE_HEART,0)-
                   t.attval(ATTRIBUTE_WISDOM,0);
+               // LCS in full battle colors has bonus to music attack
+               if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+                  attack=(attack*3)/2;
             }
             else
             {
@@ -2171,7 +2176,6 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
                   t.attval(ATTRIBUTE_WISDOM,0)-
                   t.attval(ATTRIBUTE_HEART,0);
             }
-            attack=LCSrandom(a.skillval(SKILL_MUSIC)*2+1);
             if(resist>0)
                a.train(SKILL_MUSIC,LCSrandom(resist)+1);
             else

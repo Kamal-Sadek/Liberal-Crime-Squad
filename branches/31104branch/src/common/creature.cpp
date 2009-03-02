@@ -94,53 +94,51 @@ bool creaturest::enemy()
 }
 
 
-//Temporary function used in the organization code
-int getSpawnChance(enum CreatureType type)
+// Add an age estimate to a person's name
+void add_age(creaturest& person)
 {
-	switch(type)
-	{
-		case CREATURE_CCS_VIGILANTE:
-			return 90;
-		case CREATURE_CCS_ARCHCONSERVATIVE:
-			return 10;
-		case CREATURE_COP:
-			return 80;
-		case CREATURE_SWAT:
-			return 20;
-		case CREATURE_DEATHSQUAD:
-			if(law[LAW_POLICEBEHAVIOR] == -2)
-			{
-				return 50;
-			}
-			else
-			{
-				return 0;
-			}
-		case CREATURE_GANGUNIT:
-			if(law[LAW_POLICEBEHAVIOR] == -1)
-			{
-				return 70;
-			}
-			else
-			{
-				return 0;
-			}
-		case CREATURE_HICK:
-			return 100;
-		case CREATURE_RADIOPERSONALITY:
-			return 20;
-		case CREATURE_NEWSANCHOR:
-			return 20;
-		case CREATURE_TANK:
-			return 1;
-		case CREATURE_SOLDIER:
-			return 99;
-		case CREATURE_AGENT:
-			return 20;
-	}
-	return 100;
-}
+   // Who knows how old the purple gorilla/tank/flaming bunny/dog is?
+   if(person.animalgloss!=ANIMALGLOSS_NONE)
+   {
+      addstr(" (?)");
+      return;
+   }
 
+   // For humans, estimate their age
+   addstr(" (");
+   // Almost precise estimates of child and teen ages
+   if(person.age<20)
+   {
+      char num[5];
+      // Inaccuracy in estimating age should be the same every
+      // time a character is queried. I'm using the day of the
+      // month the character was born on to determine this.
+      itoa(person.age+person.birthday_day%3-1,num,10);
+      addstr(num);
+      addstr("?");
+   }
+   // More rough estimates of everyone else
+   else
+   {
+      if(person.age<30)
+         addstr("20s");
+      else if(person.age<40)
+         addstr("30s");
+      else if(person.age<50)
+         addstr("40s");
+      else if(person.age<60)
+         addstr("50s");
+      else if(person.age<70)
+         addstr("60s");
+      else if(person.age<80)
+         addstr("70s");
+      else if(person.age<90)
+         addstr("80s");
+      else
+         addstr("Very Old");
+   }
+   addstr(")");
+}
 
 
 /* rolls up a proper name for a creature */

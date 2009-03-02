@@ -130,6 +130,9 @@ void setpriority(newsstoryst &ns)
                break;
          }
 
+         // Double profile if the squad moved out in full battle colors
+         if(ns.claimed==2)ns.priority*=2;
+
          // Cap news priority, in part so it can't displace major news stories
          if(ns.priority>20000)ns.priority=20000;
          break;
@@ -1638,8 +1641,8 @@ void majornewspaper(char &clearformess,char canseethings)
          setpriority(*newsstory[n]);
          // Suppress squad actions that aren't worth a story
          if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
-            (newsstory[n]->priority==0 &&
-            newsstory[n]->claimed==false))
+            (newsstory[n]->priority<30 &&
+            newsstory[n]->claimed==0))
          {
             delete newsstory[n];
             newsstory.erase(newsstory.begin() + n);

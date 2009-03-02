@@ -844,7 +844,6 @@ void printcreatureinfo(creaturest *cr, unsigned char knowledge)
 }
 
 
-
 /* full character sheet (with surrounding interface) */
 void fullstatus(int p)
 {
@@ -901,6 +900,7 @@ void fullstatus(int p)
       if(c==KEY_UP)
       {
          page--;
+         if(page<0)page=pagenum-1;
          page%=pagenum;
          continue;
       }

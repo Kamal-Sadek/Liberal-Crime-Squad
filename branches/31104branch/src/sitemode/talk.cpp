@@ -115,31 +115,44 @@ char talk(creaturest &a,int t)
          }
          if(last && slogan[last-1]!='"')addstr("\"");
 
-         sitestory->claimed=true;
+         if(!sitestory->claimed)
+            sitestory->claimed=1;
          
          refresh();
          getch();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          
+         int intimidation_factor = a.juice*attitude[VIEW_LIBERALCRIMESQUAD]*a.blood/10000;
 
+         // Battle colors on site actions causes shouts to be x1.5 effective
+         if(activesquad->stance == SQUADSTANCE_BATTLECOLORS && 
+            !location[cursite]->siege.siege)
+         {
+            intimidation_factor = (intimidation_factor * 3) / 2;
+         }
+         
          for(int e=0;e<ENCMAX;e++)
          {
-            if(encounter[e].exists&&encounter[e].alive&&
-               encounter[e].enemy())
+            if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
             {
-               if((a.juice*attitude[VIEW_LIBERALCRIMESQUAD]*a.blood/10000 >
-                   encounter[e].juice+(int)encounter[e].attval(ATTRIBUTE_WISDOM)*5) && LCSrandom(2))
+               int defender_morale = encounter[e].juice+(int)encounter[e].attval(ATTRIBUTE_WISDOM)*5;
+
+               if((intimidation_factor > defender_morale) && LCSrandom(2))
                {
-                  if((encounter[e].type==CREATURE_COP||
-                      encounter[e].type==CREATURE_GANGUNIT||
-                      encounter[e].type==CREATURE_SWAT||
-                      encounter[e].type==CREATURE_DEATHSQUAD||
-                      encounter[e].type==CREATURE_SOLDIER||
-                      encounter[e].type==CREATURE_HARDENED_VETERAN||
-                      encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
-                      encounter[e].type==CREATURE_AGENT)&&LCSrandom(3))
+                  if(encounter[e].type==CREATURE_COP||
+                     encounter[e].type==CREATURE_GANGUNIT||
+                     encounter[e].type==CREATURE_SWAT||
+                     encounter[e].type==CREATURE_DEATHSQUAD||
+                     encounter[e].type==CREATURE_SOLDIER||
+                     encounter[e].type==CREATURE_HARDENED_VETERAN||
+                     encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
+                     encounter[e].type==CREATURE_AGENT)
                   {
-                     continue;
+                     if((activesquad->stance == SQUADSTANCE_BATTLECOLORS && 
+                         !location[cursite]->siege.siege) || LCSrandom(3))
+                     {
+                        continue;
+                     }
                   }
                   clearmessagearea();
                   move(16,1);
@@ -171,7 +184,8 @@ char talk(creaturest &a,int t)
          switch(LCSrandom(5))
          {
          case 0:addstr("\"Back off or the hostage dies!\"");break;
-         case 1:addstr("\"Don't push the LCS!\"");sitestory->claimed=true;break;
+         case 1:addstr("\"Don't push the LCS!\"");
+            if(!sitestory->claimed)sitestory->claimed=1;break;
          case 2:addstr("\"Hostage says you better leave!\"");break;
          case 3:addstr("\"I'll do it! I'll kill this one!\"");break;
          case 4:addstr("\"You gonna tell the family you pushed me?!\"");break;
@@ -742,6 +756,7 @@ char talk(creaturest &a,int t)
          addstr(a.name);
          addstr(" talks to ");
          addstr(tk->name);
+         add_age(*tk);
          addstr(":");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1634,14 +1649,32 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                      move(y,1);y++;
                      switch (rand()%5)
                      {
-                        case 0: addstr("\"Jesus...\""); break;
-                        case 1: addstr("\"Touch me and I scream.\""); break;
-                        case 2: addstr("\"I'm.. uh.. waiting for someone.\""); break;
-                        case 3: addstr("\"Hey, look, a ufo!\" *bolts*"); break;
-                        case 4: addstr("\"You're not my type. I like sane.\""); break;                        
+                        case 0: addstr("\"Jesus...\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 1: addstr("\"Touch me and you'll regret it.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <crosses arms>");break;
+                        case 2: addstr("\"I'm.. uh.. waiting for someone.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 3: addstr("\"Hey, look, a ufo!\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <ducks away>");break;
+                        case 4: addstr("\"You're not my type. I like sane.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 5: addstr("\"Hahahahaha!\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <shakes head>");break;
+                        case 6: addstr("\"You're disgusting.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 7: addstr("\"Are you serious?\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
                      }
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     addstr(" <turns away>");
+                     
                      refresh();
                      getch();
 

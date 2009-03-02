@@ -896,7 +896,8 @@ void special_graffiti(void)
    move(16,1);
    addstr("The squad sprays Liberal Graffiti!");
 
-   sitestory->claimed=true;
+   if(!sitestory->claimed)
+      sitestory->claimed=1;
 
    refresh();
    getch();
@@ -1173,7 +1174,11 @@ void special_radio_broadcaststudio(void)
 
       if(c=='y')
       {
-         if(radio_broadcast())levelmap[locx][locy][locz].special=-1;
+         if(radio_broadcast())
+         {
+            sitestory->claimed=2;
+            levelmap[locx][locy][locz].special=-1;
+         }
 
          return;
       }
@@ -1210,7 +1215,11 @@ void special_news_broadcaststudio(void)
 
       if(c=='y')
       {
-         if(news_broadcast())levelmap[locx][locy][locz].special=-1;
+         if(news_broadcast())
+         {
+            sitestory->claimed=2;
+            levelmap[locx][locy][locz].special=-1;
+         }
 
          return;
       }

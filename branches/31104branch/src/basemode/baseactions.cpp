@@ -310,6 +310,37 @@ void stopevil(void)
          addlocationname(location[loc]);
       }
 
+      move(12,50);
+      addstr("Z - Toggle Squad Stance");
+      switch(activesquad->stance)
+      {
+      case SQUADSTANCE_ANONYMOUS:
+         move(13,50);
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr("ANONYMOUS ACTION");
+         move(14,50);
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr("(Low Profile)");
+         break;
+      case SQUADSTANCE_STANDARD:
+         move(13,50);
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         addstr("CLAIMED ACTION");
+         move(14,50);
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr("(Medium Profile)");
+         break;
+      case SQUADSTANCE_BATTLECOLORS:
+         move(13,50);
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         addstr("GREEN ARMBANDS");
+         move(14,50);
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr("(No Stealth, High Profile)");
+         break;
+      }
+
+
       int y=10;
       for(p=page*11;p<temploc.size()&&p<page*11+11;p++)
       {
@@ -435,6 +466,13 @@ void stopevil(void)
                }
             }
          }
+      }
+
+      if(c=='z')
+      {
+         activesquad->stance++;
+         if(activesquad->stance>=SQUADSTANCE_MAX)
+            activesquad->stance=0;
       }
 
       if(c==10&&loc!=-1)

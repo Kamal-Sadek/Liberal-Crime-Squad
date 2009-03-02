@@ -1279,6 +1279,14 @@ struct chaseseqst
    void clean(void);
 };
 
+enum SquadStances
+{
+   SQUADSTANCE_ANONYMOUS,
+   SQUADSTANCE_STANDARD,
+   SQUADSTANCE_BATTLECOLORS,
+   SQUADSTANCE_MAX
+};
+
 struct squadst
 {
    char name[40];
@@ -1287,12 +1295,15 @@ struct squadst
    int id;
    vector<itemst *> loot;
 
+   char stance; // Squad's site action stance: high profile, low profile, etc.
+
    squadst()
    {
       for(int p=0;p<6;p++)squad[p]=NULL;
       strcpy(name,"");
       activity.type=ACTIVITY_NONE;
       id=-1;
+      stance=SQUADSTANCE_STANDARD;
    }
    ~squadst()
    {
@@ -1468,7 +1479,7 @@ struct newsstoryst
 {
    short type;
    short view;
-   bool claimed;
+   char claimed;
    creaturest *cr;
    vector<int> crime;
    long loc,priority,page,guardianpage;
@@ -1476,7 +1487,7 @@ struct newsstoryst
    short siegetype;
    newsstoryst()
    {
-      claimed=false;
+      claimed=1;
       cr=NULL;
    }
 };
@@ -1783,15 +1794,8 @@ char squadhasitem(squadst &sq,int type,int subtype);
 /*
  creature.cpp
 */
-/*Puzzlemaker TEMP ADDITION!
-This is going to decide the rarity of spawning the creature for the organizations
-THIS IS TEMPORARY
-IF THIS EXISTS IN JULY OF 2008 I HAVE FAILED THE LCS
-- You have failed me for the last time!
-- I shall plunge you into the abyss of attempting to SWERVE TO AVOID FRUIT STANDS!
-- [JonathanSFox, 8 Aug 2008]
-*/
-int getSpawnChance(enum CreatureType type);
+// Add an age estimate to a person's name
+void add_age(creaturest& person);
 /* rolls up a creature's stats and equipment */
 void makecreature(creaturest &cr,short type);
 /* rolls up a proper name for a creature */

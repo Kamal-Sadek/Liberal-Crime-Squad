@@ -701,9 +701,9 @@ void tendhostage(creaturest *cr,char &clearformess)
             {
             case 0:addstr(" recreates scenes from Abu Ghraib");break;
             case 1:addstr(" whips the Automoton with a steel cable");break;
-            case 2:addstr(" holds the Automoton's head under water");break;
+            case 2:addstr(" holds the hostage's head under water");break;
             case 3:addstr(" peels back the Automoton's fingernails");break;
-            case 4:addstr(" beats the Automoton with a metal bat");break;
+            case 4:addstr(" beats the hostage with a metal bat");break;
             }
             addstr(",");
             y++;
