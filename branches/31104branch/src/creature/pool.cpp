@@ -5,20 +5,20 @@
 class pool
 {
 private:
-   std::map<int,creaturest*> map;
-   void dispersal_ok(creaturest* cr)
+   std::map<int,Creature*> map;
+   void dispersal_ok(Creature* cr)
    {
       for(int i=0; i<
       cr.subordinates
    }
 public:
-   creaturest* getFounder(void)
+   Creature* getFounder(void)
    {
       pool::iterator i = map.begin();
       while((*i).second->hireid!=-1)i++;
       return (*i).second;
    }
-   creaturest* operator[](int i)
+   Creature* operator[](int i)
    {
       return map[i];
    }

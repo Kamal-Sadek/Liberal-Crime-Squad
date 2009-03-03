@@ -90,7 +90,7 @@ void removecarprefs_pool(long carid)
 
 /* common - tests if the person is a wanted criminal */
 // *JDS* Checks if the character is a criminal
-bool iscriminal(creaturest &cr)
+bool iscriminal(Creature &cr)
 {
    for(int i=0;i<LAWFLAGNUM;i++)
       if(cr.lawflag[i])
@@ -105,7 +105,7 @@ bool iscriminal(creaturest &cr)
 *JDS* Hospitalize -- sends current person to the
 specified clinic or hospital.
 ***************************************************/
-void hospitalize(int loc, creaturest &patient)
+void hospitalize(int loc, Creature &patient)
 {
    // He's dead, Jim
    if(!patient.alive)return;
@@ -169,7 +169,7 @@ void hospitalize(int loc, creaturest &patient)
 
 
 /* common - determines how long a creature's injuries will take to heal */
-int clinictime(creaturest &g)
+int clinictime(Creature &g)
 {
    int time=0;
 
@@ -249,7 +249,7 @@ int testsquadclear(squadst &thissquad, int obase)
 
 
 /* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill,creaturest& cr,bool use_juice)
+int maxskill(int skill,Creature& cr,bool use_juice)
 {
    switch(skill)
    {
@@ -417,7 +417,7 @@ void criminalizepool(short crime,long exclude,short loc)
 }
 
 /* common - applies a crime to a person */
-void criminalize(creaturest &cr,short crime)
+void criminalize(Creature &cr,short crime)
 {
    cr.lawflag[crime]++;
    cr.heat+=lawflagheat(crime);
@@ -446,7 +446,7 @@ void juiceparty(long juice)
 
 
 /* common - gives juice to a given creature */
-void addjuice(creaturest &cr,long juice,long cap)
+void addjuice(Creature &cr,long juice,long cap)
 {
    if(juice>0 && cr.juice>=cap)
    {
@@ -476,7 +476,7 @@ void addjuice(creaturest &cr,long juice,long cap)
 
 
 /* common - removes the liberal from all squads */
-void removesquadinfo(creaturest &cr)
+void removesquadinfo(Creature &cr)
 {
    if(cr.squadid!=-1)
    {
@@ -734,7 +734,7 @@ int lawflagheat(int lawflag)
 }
 
 // Determines the number of subordinates a creature may command
-int maxsubordinates(const creaturest& cr)
+int maxsubordinates(const Creature& cr)
 {
    //brainwashed recruits can't recruit normally
    if(cr.flag & CREATUREFLAG_BRAINWASHED)return 0;
@@ -754,7 +754,7 @@ int maxsubordinates(const creaturest& cr)
 
 // Determines the number of subordinates a creature may recruit,
 // based on their max and the number they already command
-int subordinatesleft(const creaturest& cr)
+int subordinatesleft(const Creature& cr)
 {
    int recruitcap = maxsubordinates(cr);
    for(int p=0; p<pool.size(); p++)
@@ -768,7 +768,7 @@ int subordinatesleft(const creaturest& cr)
 }
 
 // Determines the number of love slaves a creature has
-int loveslaves(const creaturest& cr)
+int loveslaves(const Creature& cr)
 {
    int loveslaves=0;
    for(int p=0; p<pool.size(); p++)
@@ -782,7 +782,7 @@ int loveslaves(const creaturest& cr)
 
 // Determines the number of love slaves a creature may recruit,
 // based on max minus number they already command
-int loveslavesleft(const creaturest& cr)
+int loveslavesleft(const Creature& cr)
 {
    // Get maximum lovers
    int loveslavecap = cr.skill[SKILL_SEDUCTION]/2+1;

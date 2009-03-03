@@ -290,7 +290,7 @@ void special_nuclear_onoff(void)
          levelmap[locx][locy][locz].special=-1;
 
          char max=20;
-         creaturest* maxs=0;
+         Creature* maxs=0;
 
          for(int p=0;p<6;p++)
          {

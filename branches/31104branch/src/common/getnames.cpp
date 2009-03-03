@@ -868,7 +868,7 @@ void getrecruitcreature(char *str,int type)
 
 
 
-void gettitle(char *str,creaturest &cr)
+void gettitle(char *str,Creature &cr)
 {
    if(cr.align==-1)
    {

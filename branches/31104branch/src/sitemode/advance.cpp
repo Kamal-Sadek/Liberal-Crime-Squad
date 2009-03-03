@@ -272,7 +272,7 @@ void creatureadvance(void)
 
 
 /* handles end of round stuff for one creature */
-void advancecreature(creaturest &cr)
+void advancecreature(Creature &cr)
 {
    if(!cr.alive)return;
 
@@ -293,7 +293,7 @@ void advancecreature(creaturest &cr)
 
    int bleed=0;
    int topmedicalskill=0;
-   creaturest* topmedical=NULL;
+   Creature* topmedical=NULL;
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&

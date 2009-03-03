@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 /* base - activate the uninvolved */
 void activate(void)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    int sq;
    for(int p=0;p<pool.size();p++)
    {
@@ -158,7 +158,7 @@ void activate(void)
 }
 
 
-void activate(creaturest *cr)
+void activate(Creature *cr)
 {
    int hostagecount=0;
    int state=0;
@@ -756,7 +756,7 @@ void activate(creaturest *cr)
 
 void activatebulk(void)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    int sq;
    for(int p=0;p<pool.size();p++)
    {
@@ -935,9 +935,9 @@ void activatebulk(void)
 
 
 /* base - activate - hostages */
-void select_tendhostage(creaturest *cr)
+void select_tendhostage(Creature *cr)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
 
    for(int p=0;p<pool.size();p++)
    {
@@ -1050,7 +1050,7 @@ void select_tendhostage(creaturest *cr)
 }
 
 
-long select_hostagefundinglevel(creaturest *cr,creaturest *hs)
+long select_hostagefundinglevel(Creature *cr,Creature *hs)
 {
    long flevel=-1;
 
@@ -1115,7 +1115,7 @@ long select_hostagefundinglevel(creaturest *cr,creaturest *hs)
 
 
 /* base - activate - make clothing */
-void select_makeclothing(creaturest *cr)
+void select_makeclothing(Creature *cr)
 {
    vector<int> armortype;
    for(int a=0;a<ARMORNUM;a++)
@@ -1258,7 +1258,7 @@ void select_makeclothing(creaturest *cr)
 
 
 
-int armor_makedifficulty(int type,creaturest *cr)
+int armor_makedifficulty(int type,Creature *cr)
 {
    long basedif;
 
@@ -1377,7 +1377,7 @@ int armor_makeprice(int type)
 
 
 /* base - activate - trouble */
-long select_troublefundinglevel(creaturest *cr)
+long select_troublefundinglevel(Creature *cr)
 {
    long flevel=-1;
 
@@ -1430,7 +1430,7 @@ long select_troublefundinglevel(creaturest *cr)
 
 
 /* base - activate - select a topic to write about */
-char select_view(creaturest *cr,int &v)
+char select_view(Creature *cr,int &v)
 {
    int page=0;
    char str[80];

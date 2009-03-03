@@ -1257,7 +1257,7 @@ void siegeturn(char clearformess)
                if(!LCSrandom(50)&&no_bad&&liberalcount[l]>0)
                {
                   char repname[200];
-                  name(repname);
+                  generate_name(repname);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
 

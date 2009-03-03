@@ -951,7 +951,7 @@ void evasiverun(void)
 
 
 
-int driveskill(creaturest &cr,vehiclest *v)
+int driveskill(Creature &cr,vehiclest *v)
 {
    int vbonus=0;
    switch(v->type)
@@ -1595,10 +1595,10 @@ void chase_giveup(void)
 
 
 /* the next two functions force a chase sequence with a specific liberal */
-char footchase(creaturest &cr)
+char footchase(Creature &cr)
 {
    long oldsqid=cr.squadid;
-   creaturest *crp=&cr;
+   Creature *crp=&cr;
    squadst *sq=new squadst;
       sq->squad[0]=&cr;
       sq->squad[0]->squadid=cursquadid;cursquadid++;
@@ -1641,7 +1641,7 @@ char footchase(creaturest &cr)
 
 
 
-char chasesequence(creaturest &cr,vehiclest &v)
+char chasesequence(Creature &cr,vehiclest &v)
 {
    long oldsqid=cr.squadid;
    squadst *sq=new squadst;

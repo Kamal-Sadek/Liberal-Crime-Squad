@@ -439,7 +439,7 @@ void enemyattack(void)
 
 
 /* attack handling for an individual creature and its target */
-void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_melee)
+void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 {
    actual=0;
 
@@ -1281,7 +1281,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
 
       if(damamount>0)
       {
-         creaturest *target=0;
+         Creature *target=0;
          if(t.squadid!=-1&&t.hireid==-1&& //if the founder is hit...
             (damamount>t.blood||damamount>=10)&& //and lethal or potentially crippling damage is done...
             (w==BODYPART_HEAD||w==BODYPART_BODY)) //to a critical bodypart...
@@ -1884,7 +1884,7 @@ void attack(creaturest &a,creaturest &t,char mistake,char &actual,bool force_mel
 
 
 /* modifies a combat roll based on the creature's critical injuries */
-void healthmodroll(int &aroll,creaturest &a)
+void healthmodroll(int &aroll,Creature &a)
 {
    if(a.special[SPECIALWOUND_RIGHTEYE]!=1)aroll-=LCSrandom(2);
    if(a.special[SPECIALWOUND_LEFTEYE]!=1)aroll-=LCSrandom(2);
@@ -1909,7 +1909,7 @@ void healthmodroll(int &aroll,creaturest &a)
 
 
 /* adjusts attack damage based on armor, other factors */
-void damagemod(creaturest &t,char &damtype,int &damamount,
+void damagemod(Creature &t,char &damtype,int &damamount,
                char hitlocation,char armorpenetration,int &mod)
 {
    int armor=0;
@@ -1970,7 +1970,7 @@ void damagemod(creaturest &t,char &damtype,int &damamount,
 }
 
 
-void specialattack(creaturest &a, creaturest &t, char &actual)
+void specialattack(Creature &a, Creature &t, char &actual)
 {
    int resist=0;
    char str[200];
@@ -2333,7 +2333,7 @@ void specialattack(creaturest &a, creaturest &t, char &actual)
 
 
 /* destroys armor, masks, drops weapons based on severe damage */
-void severloot(creaturest &cr,vector<itemst *> &loot)
+void severloot(Creature &cr,vector<itemst *> &loot)
 {
    int armok=2;
    if((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
@@ -2540,7 +2540,7 @@ void delenc(short e,char loot)
 
 
 /* generates the loot dropped by a creature when it dies */
-void makeloot(creaturest &cr,vector<itemst *> &loot)
+void makeloot(Creature &cr,vector<itemst *> &loot)
 {
    if(cr.weapon.type!=WEAPON_NONE)
    {
@@ -2603,7 +2603,7 @@ void makeloot(creaturest &cr,vector<itemst *> &loot)
 
 
 /* abandoned liberal is captured by conservatives */
-void capturecreature(creaturest &t)
+void capturecreature(Creature &t)
 {
    t.activity.type=0;
 
@@ -2655,7 +2655,7 @@ void capturecreature(creaturest &t)
 
 
 /* checks if the creature can fight and prints flavor text if they can't */
-char incapacitated(creaturest &a,char noncombat,char &printed)
+char incapacitated(Creature &a,char noncombat,char &printed)
 {
    printed=0;
 
@@ -3023,7 +3023,7 @@ char incapacitated(creaturest &a,char noncombat,char &printed)
 
 
 /* describes a character's death */
-void adddeathmessage(creaturest &cr)
+void adddeathmessage(Creature &cr)
 {
    set_color(COLOR_YELLOW,COLOR_BLACK,1);
 

@@ -188,7 +188,7 @@ void savegame(char *str)
       numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(int pl=0;pl<pool.size();pl++)
       {
-         numbytes=fwrite(pool[pl],sizeof(creaturest),1,h);
+         numbytes=fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
@@ -262,7 +262,7 @@ void savegame(char *str)
          numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
-            numbytes=fwrite(date[dt]->date[dt2],sizeof(creaturest),1,h);
+            numbytes=fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
@@ -276,7 +276,7 @@ void savegame(char *str)
          numbytes=fwrite(&recruit[rt]->level,sizeof(char),1,h);
          numbytes=fwrite(&recruit[rt]->eagerness1,sizeof(char),1,h);
          numbytes=fwrite(&recruit[rt]->task,sizeof(char),1,h);
-         numbytes=fwrite(recruit[rt]->recruit,sizeof(creaturest),1,h);
+         numbytes=fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES
@@ -474,8 +474,8 @@ char load(void)
       pool.resize(dummy);
       for(int pl=0;pl<pool.size();pl++)
       {
-         pool[pl]=new creaturest;
-         fread(pool[pl],sizeof(creaturest),1,h);
+         pool[pl]=new Creature;
+         fread(pool[pl],sizeof(Creature),1,h);
          //read extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
@@ -571,8 +571,8 @@ char load(void)
          date[dt]->date.resize(dummy);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
-            date[dt]->date[dt2]=new creaturest;
-            fread(date[dt]->date[dt2],sizeof(creaturest),1,h);
+            date[dt]->date[dt2]=new Creature;
+            fread(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
@@ -587,8 +587,8 @@ char load(void)
          fread(&recruit[rt]->level,sizeof(char),1,h);
          fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
          fread(&recruit[rt]->task,sizeof(char),1,h);
-         recruit[rt]->recruit = new creaturest;
-         fread(recruit[rt]->recruit,sizeof(creaturest),1,h);
+         recruit[rt]->recruit = new Creature;
+         fread(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES

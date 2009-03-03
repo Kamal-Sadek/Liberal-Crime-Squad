@@ -144,7 +144,7 @@ void adjustblogpower(int &power)
 
 
 /* armor repair */
-void repairarmor(creaturest &cr,char &clearformess)
+void repairarmor(Creature &cr,char &clearformess)
 {
    armorst *armor=NULL;
    itemst *pile=NULL;
@@ -247,7 +247,7 @@ void repairarmor(creaturest &cr,char &clearformess)
 
 
 /* armor manufacture */
-void makearmor(creaturest &cr,char &clearformess)
+void makearmor(Creature &cr,char &clearformess)
 {
    int at=cr.activity.arg;
 
@@ -399,7 +399,7 @@ void makearmor(creaturest &cr,char &clearformess)
 
 
 /* search for polls */
-void survey(creaturest *cr)
+void survey(Creature *cr)
 {
    static const char SURVEY_PAGE_SIZE=14;
 
@@ -755,7 +755,7 @@ void survey(creaturest *cr)
 }
 
 // Police accost your liberal!
-void attemptarrest(creaturest & liberal,const char* string,int clearformess)
+void attemptarrest(Creature & liberal,const char* string,int clearformess)
 {
    if(string)
    {
@@ -786,7 +786,7 @@ void attemptarrest(creaturest & liberal,const char* string,int clearformess)
 }
 
 // While galavanting in public, your liberals may be ambushed by police
-int checkforarrest(creaturest & liberal,const char* string,int clearformess)
+int checkforarrest(Creature & liberal,const char* string,int clearformess)
 {
    bool arrest=false;
    
@@ -851,17 +851,17 @@ void funds_and_trouble(char &clearformess)
    }
 
    //ACTIVITIES FOR INDIVIDUALS
-   vector<creaturest *> trouble;
-   vector<creaturest *> hack;
-   vector<creaturest *> bury;
-   vector<creaturest *> solicit;
-   vector<creaturest *> tshirts;
-   vector<creaturest *> art;
-   vector<creaturest *> music;
-   vector<creaturest *> graffiti;
-   vector<creaturest *> brownies;
-   vector<creaturest *> prostitutes;
-   vector<creaturest *> teachers;
+   vector<Creature *> trouble;
+   vector<Creature *> hack;
+   vector<Creature *> bury;
+   vector<Creature *> solicit;
+   vector<Creature *> tshirts;
+   vector<Creature *> art;
+   vector<Creature *> music;
+   vector<Creature *> graffiti;
+   vector<Creature *> brownies;
+   vector<Creature *> prostitutes;
+   vector<Creature *> teachers;
 
    for(int p=0;p<pool.size();p++)
    {
@@ -1148,10 +1148,10 @@ void funds_and_trouble(char &clearformess)
    if(hack.size()>0)
    {
       int h;
-      vector<creaturest *> cc;
-      vector<creaturest *> web;
-      vector<creaturest *> ddos;
-      vector<creaturest *> truehack;
+      vector<Creature *> cc;
+      vector<Creature *> web;
+      vector<Creature *> ddos;
+      vector<Creature *> truehack;
 
       int cc_skill=0,cc_succeeded=0;
       int web_skill=0,web_succeeded=0;
@@ -2306,7 +2306,7 @@ void funds_and_trouble(char &clearformess)
 
 
 /* steal a car */
-char stealcar(creaturest &cr,char &clearformess)
+char stealcar(Creature &cr,char &clearformess)
 {
    clearformess=1;
 
@@ -2903,7 +2903,7 @@ int difficulty_carfind(int type)
 
 
 
-char carselect(creaturest &cr,short &cartype)
+char carselect(Creature &cr,short &cartype)
 {
    cartype=-1;
 
@@ -3068,7 +3068,7 @@ int touchalarmchance(int cartype)
 
 
 /* get a wheelchair */
-void getwheelchair(creaturest &cr,char &clearformess)
+void getwheelchair(Creature &cr,char &clearformess)
 {
    if(clearformess)
    {

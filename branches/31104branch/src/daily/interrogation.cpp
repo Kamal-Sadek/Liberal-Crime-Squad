@@ -35,12 +35,12 @@ enum InterrogationTechnqiues
 };
 
 /* hostage tending */
-void tendhostage(creaturest *cr,char &clearformess)
+void tendhostage(Creature *cr,char &clearformess)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    int p;
 
-   creaturest *a=NULL;
+   Creature *a=NULL;
 
    //Find all tenders who are set to this hostage
    for(p=0;p<pool.size();p++)

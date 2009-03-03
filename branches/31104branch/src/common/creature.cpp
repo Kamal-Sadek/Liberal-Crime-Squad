@@ -30,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
-void creaturest::train(int trainedskill, int experience)
+void Creature::train(int trainedskill, int experience)
 {
    // Do we allow animals to gain skills? Right now, yes
    //if(animalgloss==ANIMALGLOSS_ANIMAL)return;
@@ -50,7 +50,7 @@ void creaturest::train(int trainedskill, int experience)
    }
 }
 
-void creaturest::skill_up()
+void Creature::skill_up()
 {
    for(int s=0;s<SKILLNUM;s++)
    {
@@ -65,12 +65,12 @@ void creaturest::skill_up()
    }
 }
 
-int creaturest::get_skill_ip(int skill)
+int Creature::get_skill_ip(int skill)
 {
    return skill_ip[skill];
 }
 
-bool creaturest::enemy()
+bool Creature::enemy()
 {
    if(align==-1)
    {
@@ -95,7 +95,7 @@ bool creaturest::enemy()
 
 
 // Add an age estimate to a person's name
-void add_age(creaturest& person)
+void add_age(Creature& person)
 {
    // Who knows how old the purple gorilla/tank/flaming bunny/dog is?
    if(person.animalgloss!=ANIMALGLOSS_NONE)
@@ -104,8 +104,9 @@ void add_age(creaturest& person)
       return;
    }
 
-   // For humans, estimate their age
+   // For humans, estimate their age and gender
    addstr(" (");
+
    // Almost precise estimates of child and teen ages
    if(person.age<20)
    {
@@ -137,26 +138,39 @@ void add_age(creaturest& person)
       else
          addstr("Very Old");
    }
+
+   // Assess their gender Liberally
+   if(person.gender_liberal == GENDER_MALE)
+      addstr(", Male");
+   else if(person.gender_liberal == GENDER_FEMALE)
+      addstr(", Female");
+   else
+      addstr(", Unknown");
+
+   // Note if there's some conflict with Conservative society's perceptions
+   if(person.gender_liberal != person.gender_conservative)
+      addstr("?");
+
    addstr(")");
 }
 
 
 /* rolls up a proper name for a creature */
-void namecreature(creaturest &cr)
+void Creature::namecreature()
 {
-   name(cr.name);
-   strcpy(cr.propername,cr.name);
+   generate_name(name, gender_liberal);
+   strcpy(propername,name);
 }
 
 
 
 /* fills a string with a proper name */
-void name(char *str)
+void generate_name(char *str, char gender)
 {
    strcpy(str,"");
 
    char first[80];
-   firstname(first);
+   firstname(first, gender);
    strcat(str,first);
 
    strcat(str," ");
@@ -169,136 +183,193 @@ void name(char *str)
 
 
 /* gets a random first name */
-void firstname(char *str)
+void firstname(char *str, char gender)
 {
    strcpy(str,"");
 
-   switch(LCSrandom(123))
+   int roll, nametable;
+
+   // If we don't care if the name is male or female, pick one randomly
+   // This ensures gender balance in the names chosen
+   if(gender == GENDER_NEUTRAL)
+      gender = LCSrandom(2) + 1;
+
+   // Assign a name from the available names for each gender
+   if(gender == GENDER_MALE)
    {
+      // Roll on the number of gender-specific names,
+      // plus the number of gender-neutral names
+      roll = LCSrandom(73 + 10);
+      // Decide whether to use a gender-specific name
+      // or a gender-neutral name
+      if(roll >= 10) { roll -= 10; nametable = GENDER_MALE; }
+      else nametable = GENDER_NEUTRAL;
+   }
+   else if(gender == GENDER_FEMALE)
+   {
+      // (Same here, just use the number of female names instead)
+      roll = LCSrandom(46 + 10);
+      if(roll >= 10) { roll -= 10; nametable = GENDER_FEMALE; }
+      else nametable = GENDER_NEUTRAL;
+   }
+
+   if(nametable == GENDER_MALE)
+   {
+      switch(roll)
+      {
+         // Male name table
       case 0:strcat(str,"Ryan");break;
       case 1:strcat(str,"Sergio");break;
-      case 2:strcat(str,"Laura");break;
-      case 3:strcat(str,"Anne");break;
-      case 4:strcat(str,"Bill");break;
-      case 5:strcat(str,"James");break;
-      case 6:strcat(str,"Marty");break;
-      case 7:strcat(str,"Jessica");break;
-      case 8:strcat(str,"Lisa");break;
-      case 9:strcat(str,"Bonita");break;
-      case 10:strcat(str,"Angel");break;
-      case 11:strcat(str,"Pat");break;
-      case 12:strcat(str,"Toshiro");break;
-      case 13:strcat(str,"Yan-ping");break;
-      case 14:strcat(str,"Tetsuo");break;
-      case 15:strcat(str,"Akira");break;
-      case 16:strcat(str,"Jimmy");break;
-      case 17:strcat(str,"Carlos");break;
-      case 18:strcat(str,"William");break;
-      case 19:strcat(str,"Billy Bob");break;
-      case 20:strcat(str,"Carol");break;
-      case 21:strcat(str,"Jenny");break;
-      case 22:strcat(str,"Jennifer");break;
-      case 23:strcat(str,"Manuela");break;
-      case 24:strcat(str,"Douglas");break;
-      case 25:strcat(str,"Kristin");break;
-      case 26:strcat(str,"Steven");break;
-      case 27:strcat(str,"Bonnie");break;
-      case 28:strcat(str,"Howard");break;
-      case 29:strcat(str,"Donald");break;
-      case 30:strcat(str,"Barry");break;
-      case 31:strcat(str,"Thomas");break;
-      case 32:strcat(str,"Joann");break;
-      case 33:strcat(str,"Derek");break;
-      case 34:strcat(str,"Gary");break;
-      case 35:strcat(str,"Archie");break;
-      case 36:strcat(str,"Mayumi");break;
-      case 37:strcat(str,"Felicia");break;
-      case 38:strcat(str,"Sherry");break;
-      case 39:strcat(str,"Judy");break;
-      case 40:strcat(str,"Elinor");break;
-      case 41:strcat(str,"Ned");break;
-      case 42:strcat(str,"Randy");break;
-      case 43:strcat(str,"Taylor");break;
-      case 44:strcat(str,"Kim");break;
-      case 45:strcat(str,"Ruthanne");break;
-      case 46:strcat(str,"Roger");break;
-      case 47:strcat(str,"Raymond");break;
-      case 48:strcat(str,"Harvey");break;
-      case 49:strcat(str,"Robert");break;
-      case 50:strcat(str,"Michael");break;
-      case 51:strcat(str,"Aaron");break;
-      case 52:strcat(str,"George");break;
-      case 53:strcat(str,"Noel");break;
-      case 54:strcat(str,"Adrienne");break;
-      case 55:strcat(str,"Lex");break;
-      case 56:strcat(str,"Linda");break;
-      case 57:strcat(str,"Chuck");break;
-      case 58:strcat(str,"Charlie");break;
-      case 59:strcat(str,"Charles");break;
-      case 60:strcat(str,"Malcolm");break;
-      case 61:strcat(str,"Martin");break;
-      case 62:strcat(str,"Sean");break;
-      case 63:strcat(str,"Raven");break;
-      case 64:strcat(str,"Wolf");break;
-      case 65:strcat(str,"Miguel");break;
-      case 66:strcat(str,"Pablo");break;
-      case 67:strcat(str,"Paul");break;
-      case 68:strcat(str,"Jesus");break;
-      case 69:strcat(str,"Ali");break;
-      case 70:strcat(str,"Ingrid");break;
-      case 71:strcat(str,"Kweisi");break;
-      case 72:strcat(str,"Susanna");break;
-      case 73:strcat(str,"Sharon");break;
-      case 74:strcat(str,"Marion");break;
-      case 75:strcat(str,"Kathy");break;
-      case 76:strcat(str,"Bruce");break;
-      case 77:strcat(str,"Dick");break;
-      case 78:strcat(str,"Phillip");break;
-      case 79:strcat(str,"Kirk");break;
-      case 80:strcat(str,"Kurt");break;
-      case 81:strcat(str,"John");break;
-      case 82:strcat(str,"Alexander");break;
-      case 83:strcat(str,"David");break;
-      case 84:strcat(str,"Beau");break;
-      case 85:strcat(str,"Elsie");break;
-      case 86:strcat(str,"Satya");break;
-      case 87:strcat(str,"Mumtaz");break;
-      case 88:strcat(str,"Diwakar");break;
-      case 89:strcat(str,"Dale");break;
-      case 90:strcat(str,"Woody");break;
-      case 91:strcat(str,"Ariel");break;
-      case 92:strcat(str,"Hans");break;
-      case 93:strcat(str,"Barbara");break;
-      case 94:strcat(str,"Jun");break;
-      case 95:strcat(str,"Rosemary");break;
-      case 96:strcat(str,"Chin-Yuan");break;
-      case 97:strcat(str,"Aiko");break;
-      case 98:strcat(str,"Vithara");break;
-      case 99:strcat(str,"Deepak");break;
-		case 100:strcat(str,"Christopher");break;
-		case 101:strcat(str,"Matthew");break;
-		case 102:strcat(str,"Joseph");break;
-		case 103:strcat(str,"James");break;
-		case 104:strcat(str,"Daniel");break;
-		case 105:strcat(str,"Robert");break;
-		case 106:strcat(str,"John");break;
-      case 107:strcat(str,"Kennedy");break;
-		case 108:strcat(str,"Jonathan");break;
-		case 109:strcat(str,"Adam");break;
-		case 110:strcat(str,"Justin");break;
-		case 111:strcat(str,"Ashley");break;
-		case 112:strcat(str,"Alene");break;
-		case 113:strcat(str,"Janette");break;
-		case 114:strcat(str,"Stephanie");break;
-		case 115:strcat(str,"Kelly");break;
-		case 116:strcat(str,"Robin");break;
-		case 117:strcat(str,"Tiffany");break;
-		case 118:strcat(str,"Monica");break;
-		case 119:strcat(str,"Jaqueline");break;
-		case 120:strcat(str,"Latoya");break;
-		case 121:strcat(str,"Veronica");break;
-      case 122:strcat(str,"Guy");break;
+      case 2:strcat(str,"Bill");break;
+      case 3:strcat(str,"James");break;
+      case 4:strcat(str,"Marty");break;
+      case 5:strcat(str,"Pat");break;
+      case 6:strcat(str,"Toshiro");break;
+      case 7:strcat(str,"Tetsuo");break;
+      case 8:strcat(str,"Jimmy");break;
+      case 9:strcat(str,"Carlos");break;
+      case 10:strcat(str,"William");break;
+      case 11:strcat(str,"Billy Bob");break;
+      case 12:strcat(str,"Douglas");break;
+      case 13:strcat(str,"Steven");break;
+      case 14:strcat(str,"Howard");break;
+      case 15:strcat(str,"Donald");break;
+      case 16:strcat(str,"Barry");break;
+      case 17:strcat(str,"Thomas");break;
+      case 18:strcat(str,"Derek");break;
+      case 19:strcat(str,"Gary");break;
+      case 20:strcat(str,"Archie");break;
+      case 21:strcat(str,"Ned");break;
+      case 22:strcat(str,"Randy");break;
+      case 23:strcat(str,"Roger");break;
+      case 24:strcat(str,"Raymond");break;
+      case 25:strcat(str,"Harvey");break;
+      case 26:strcat(str,"Robert");break;
+      case 27:strcat(str,"Michael");break;
+      case 28:strcat(str,"Aaron");break;
+      case 29:strcat(str,"George");break;
+      case 30:strcat(str,"Lex");break;
+      case 31:strcat(str,"Chuck");break;
+      case 32:strcat(str,"Charlie");break;
+      case 33:strcat(str,"Charles");break;
+      case 34:strcat(str,"Malcolm");break;
+      case 35:strcat(str,"Martin");break;
+      case 36:strcat(str,"Sean");break;
+      case 37:strcat(str,"Wolf");break;
+      case 38:strcat(str,"Miguel");break;
+      case 39:strcat(str,"Pablo");break;
+      case 40:strcat(str,"Paul");break;
+      case 41:strcat(str,"Jesus");break;
+      case 42:strcat(str,"Ali");break;
+      case 43:strcat(str,"Kweisi");break;
+      case 44:strcat(str,"Bruce");break;
+      case 45:strcat(str,"Dick");break;
+      case 46:strcat(str,"Phillip");break;
+      case 47:strcat(str,"Kirk");break;
+      case 48:strcat(str,"Kurt");break;
+      case 49:strcat(str,"John");break;
+      case 50:strcat(str,"Alexander");break;
+      case 51:strcat(str,"David");break;
+      case 52:strcat(str,"Beau");break;
+      case 53:strcat(str,"Mumtaz");break;
+      case 54:strcat(str,"Diwakar");break;
+      case 55:strcat(str,"Dale");break;
+      case 56:strcat(str,"Woody");break;
+      case 57:strcat(str,"Hans");break;
+      case 58:strcat(str,"Jinyuan");break;
+      case 59:strcat(str,"Deepak");break;
+		case 60:strcat(str,"Christopher");break;
+		case 61:strcat(str,"Matthew");break;
+		case 62:strcat(str,"Joseph");break;
+		case 63:strcat(str,"James");break;
+		case 64:strcat(str,"Daniel");break;
+		case 65:strcat(str,"Robert");break;
+		case 66:strcat(str,"John");break;
+      case 67:strcat(str,"Kennedy");break;
+		case 68:strcat(str,"Jonathan");break;
+		case 69:strcat(str,"Adam");break;
+		case 70:strcat(str,"Justin");break;
+      case 71:strcat(str,"Guy");break;
+      case 72:strcat(str,"Bob");break;
+
+      default:strcat(str,"Defaulto");break;
+      }
+   }
+
+   else if(nametable == GENDER_FEMALE)
+   {
+      switch(roll)
+      {
+         // Female name table
+		case 0:strcat(str,"Veronica");break;
+      case 1:strcat(str,"Laura");break;
+      case 2:strcat(str,"Anne");break;
+      case 3:strcat(str,"Jessica");break;
+      case 4:strcat(str,"Lisa");break;
+      case 5:strcat(str,"Bonita");break;
+      case 6:strcat(str,"Carol");break;
+      case 7:strcat(str,"Jenny");break;
+      case 8:strcat(str,"Jennifer");break;
+      case 9:strcat(str,"Manuela");break;
+      case 10:strcat(str,"Kristin");break;
+      case 11:strcat(str,"Bonnie");break;
+      case 12:strcat(str,"Joann");break;
+      case 13:strcat(str,"Mayumi");break;
+      case 14:strcat(str,"Felicia");break;
+      case 15:strcat(str,"Sherry");break;
+      case 16:strcat(str,"Judy");break;
+      case 17:strcat(str,"Elinor");break;
+      case 18:strcat(str,"Ruthanne");break;
+      case 19:strcat(str,"Adrienne");break;
+      case 20:strcat(str,"Linda");break;
+      case 21:strcat(str,"Ingrid");break;
+      case 22:strcat(str,"Susanna");break;
+      case 23:strcat(str,"Sharon");break;
+      case 24:strcat(str,"Marion");break;
+      case 25:strcat(str,"Kathy");break;
+      case 26:strcat(str,"Elsie");break;
+      case 27:strcat(str,"Satya");break;
+      case 28:strcat(str,"Barbara");break;
+      case 29:strcat(str,"Rosemary");break;
+      case 30:strcat(str,"Aiko");break;
+      case 31:strcat(str,"Vithara");break;
+		case 32:strcat(str,"Alene");break;
+		case 33:strcat(str,"Janette");break;
+		case 34:strcat(str,"Stephanie");break;
+		case 35:strcat(str,"Kelly");break;
+		case 36:strcat(str,"Robin");break;
+		case 37:strcat(str,"Tiffany");break;
+		case 38:strcat(str,"Monica");break;
+		case 39:strcat(str,"Jaqueline");break;
+		case 40:strcat(str,"Latoya");break;
+		case 41:strcat(str,"Gwendolyn");break;
+		case 42:strcat(str,"Harmony");break;
+		case 43:strcat(str,"Willow");break;
+		case 44:strcat(str,"Clarity");break;
+		case 45:strcat(str,"October");break;
+
+      default:strcat(str,"Defaulta");break;
+      }
+   }
+
+   else if(nametable == GENDER_NEUTRAL)
+   {
+      switch(roll)
+      {
+         // Gender-neutral name table
+		case 0:strcat(str,"Ashley");break;
+      case 1:strcat(str,"Angel");break;
+      case 2:strcat(str,"Yanping");break;
+      case 3:strcat(str,"Akira");break;
+      case 4:strcat(str,"Taylor");break;
+      case 5:strcat(str,"Kim");break;
+      case 6:strcat(str,"Noel");break;
+      case 7:strcat(str,"Raven");break;
+      case 8:strcat(str,"Ariel");break;
+      case 9:strcat(str,"Jun");break;
+
       default:strcat(str,"Default");break;
+      }
    }
 }
 
@@ -311,6 +382,7 @@ void lastname(char *str)
 
    switch(LCSrandom(124))
    {
+      // Last name table
       case 0:strcat(str,"King");break;
       case 1:strcat(str,"Lewis");break;
       case 2:strcat(str,"Black");break;
@@ -435,6 +507,7 @@ void lastname(char *str)
 		case 121:strcat(str,"Winslow");break;
 		case 122:strcat(str,"Fox");break;
       case 123:strcat(str,"Montag");break;
+
       default:strcat(str,"Defaultson");break;
    }
 }
@@ -442,7 +515,7 @@ void lastname(char *str)
 
 
 /* ensures that the creature's work location is appropriate to its type */
-bool verifyworklocation(creaturest &cr, char test_location, char test_type)
+bool verifyworklocation(Creature &cr, char test_location, char test_type)
 {
    bool okaysite[SITENUM];
    memset(okaysite,0,SITENUM*sizeof(bool));
@@ -940,7 +1013,7 @@ bool verifyworklocation(creaturest &cr, char test_location, char test_type)
 
 
 /* turns a creature into a conservative */
-void conservatise(creaturest &cr)
+void conservatise(Creature &cr)
 {
    if(cr.align==ALIGN_LIBERAL && cr.juice>0)cr.juice=0;
    
@@ -960,7 +1033,7 @@ void conservatise(creaturest &cr)
 
 
 /* turns a creature into a liberal */
-void liberalize(creaturest &cr,bool rename)
+void liberalize(Creature &cr,bool rename)
 {
    if(cr.align==ALIGN_CONSERVATIVE && cr.juice>0)cr.juice=0;
 
@@ -978,7 +1051,7 @@ void liberalize(creaturest &cr,bool rename)
 }
 
 /* gives a CCS member a cover name */
-void nameCCSMember(creaturest &cr)
+void nameCCSMember(Creature &cr)
 {
    if(cr.armor.type==ARMOR_CIVILLIANARMOR)
    {
@@ -1018,4 +1091,52 @@ void nameCCSMember(creaturest &cr)
       case 8: strcpy(cr.name,"Hairstylist");break;
       }
    }
+}
+
+/* are they interested in talking about the issues? */
+bool Creature::talkreceptive()
+{
+   if(enemy())return false;
+
+   switch(type)
+   {
+      case CREATURE_WORKER_SERVANT:
+      case CREATURE_WORKER_JANITOR:
+      case CREATURE_WORKER_SWEATSHOP:
+      case CREATURE_WORKER_FACTORY_CHILD:
+      case CREATURE_TEENAGER:
+      case CREATURE_SEWERWORKER:
+      case CREATURE_COLLEGESTUDENT:
+      case CREATURE_MUSICIAN:
+      case CREATURE_MATHEMATICIAN:
+      case CREATURE_TEACHER:
+      case CREATURE_HSDROPOUT:
+      case CREATURE_BUM:
+      case CREATURE_POLITICALACTIVIST:
+      case CREATURE_GANGMEMBER:
+      case CREATURE_CRACKHEAD:
+      case CREATURE_FASTFOODWORKER:
+      case CREATURE_TELEMARKETER:
+      case CREATURE_PROSTITUTE:
+      case CREATURE_GARBAGEMAN:
+      case CREATURE_PLUMBER:
+      case CREATURE_AMATEURMAGICIAN:
+      case CREATURE_HIPPIE:
+      case CREATURE_RETIREE:
+      case CREATURE_HAIRSTYLIST:
+      case CREATURE_CLERK:
+      case CREATURE_MUTANT:
+         return true;
+   }
+
+   return false;
+}
+
+
+
+/* is the character too young to be dating? */
+bool Creature::kid()
+{
+   if(age<16) return true;
+   else return false;
 }

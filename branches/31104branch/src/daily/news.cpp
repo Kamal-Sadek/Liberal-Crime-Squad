@@ -1501,7 +1501,7 @@ void majornewspaper(char &clearformess,char canseethings)
                      }
                      strcat(str," with ");
                      char bname[80];
-                     name(bname);
+                     generate_name(bname);
                      strcat(str,bname);
 
                      erase();
@@ -1515,7 +1515,7 @@ void majornewspaper(char &clearformess,char canseethings)
                      addstr("Washington D.C.");
 
                      move(16,41);
-                     name(bname);
+                     generate_name(bname);
                      addstr(bname);
                      move(17,41);
                      switch(LCSrandom(3))

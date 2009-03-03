@@ -225,7 +225,7 @@ void kidnapattempt(void)
 
 
 /* roll on the kidnap attempt and show the results */
-char kidnap(creaturest &a,creaturest &t,char &amateur)
+char kidnap(Creature &a,Creature &t,char &amateur)
 {
    if(a.weapon.type==WEAPON_NONE)
    {
@@ -250,7 +250,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
          addstr(t.name);
          addstr("!");
 
-         a.prisoner=new creaturest;
+         a.prisoner=new Creature;
          *a.prisoner=t;
 
          refresh();
@@ -303,7 +303,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
       if(law[LAW_FREESPEECH]==-2)addstr("\"[Please], be cool.\"");
       else addstr("\"Bitch, be cool.\"");
 
-      a.prisoner=new creaturest;
+      a.prisoner=new Creature;
       *a.prisoner=t;
 
       refresh();
@@ -316,7 +316,7 @@ char kidnap(creaturest &a,creaturest &t,char &amateur)
 
 
 /* hostage freed due to host unable to haul */
-void freehostage(creaturest &cr,char situation)
+void freehostage(Creature &cr,char situation)
 {
    if(cr.prisoner==NULL)return;
 
@@ -538,11 +538,11 @@ void squadgrab_immobile(char dead)
 
 
 /* names the new hostage and stashes them in your base */
-void kidnaptransfer(creaturest &cr)
+void kidnaptransfer(Creature &cr)
 {
-   creaturest *newcr=new creaturest;
+   Creature *newcr=new Creature;
       *newcr=cr;
-   namecreature(*newcr);
+   newcr->namecreature();
 
    newcr->location=activesquad->squad[0]->location;
    newcr->base=activesquad->squad[0]->base;

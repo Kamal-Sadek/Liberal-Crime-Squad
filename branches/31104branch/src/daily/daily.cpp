@@ -1535,7 +1535,7 @@ void dispersalcheck(char &clearformess)
 
 
 /* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(creaturest &cr, char &clearformess)
+bool promotesubordinates(Creature &cr, char &clearformess)
 {
    int p;
 

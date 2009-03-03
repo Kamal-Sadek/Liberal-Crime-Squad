@@ -1011,9 +1011,9 @@ void mode_site(void)
                         // If someone can, add this person as a newly recruited Liberal!
                         if(i!=6)
                         {
-                           creaturest *newcr=new creaturest;
+                           Creature *newcr=new Creature;
                               *newcr=encounter[e];
-                           namecreature(*newcr);
+                           newcr->namecreature();
 
                            newcr->location=activesquad->squad[i]->location;
                            newcr->base=activesquad->squad[i]->base;

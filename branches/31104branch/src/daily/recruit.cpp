@@ -43,7 +43,7 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
 char recruitst::eagerness()
 {
    char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->skillval(SKILL_LEADERSHIP); 
-   if(talkreceptive(*recruit))
+   if(recruit->talkreceptive())
    {
       eagerness_temp+=2;
    }

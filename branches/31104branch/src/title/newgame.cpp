@@ -33,7 +33,7 @@ This file is part of Liberal Crime Squad.                                       
 /* creates your founder */
 void makecharacter(void)
 {
-   creaturest *newcr=new creaturest;
+   Creature *newcr=new Creature;
    initliberal(*newcr);
 
    newcr->att[ATTRIBUTE_HEART]=8;
@@ -45,7 +45,7 @@ void makecharacter(void)
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
    for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
 
-   name(newcr->propername);
+   generate_name(newcr->propername,newcr->gender_conservative);
    
    int c;
    bool hasmaps=0;
@@ -86,10 +86,25 @@ void makecharacter(void)
             // Sep. 4, 1984
             
             
-            move(18,0);
-            addstr("My parents named me ");
-            addstr(newcr->propername);
+            move(17,0);
+            addstr("The doctor said I was a ");
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            if(newcr->gender_conservative == GENDER_MALE)
+               addstr("boy");
+            else if(newcr->gender_conservative == GENDER_FEMALE)
+               addstr("girl");
+            else
+               addstr("hermaphrodite"); // this is a bug if it happens, but hey, whatever :P
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
             addstr(".");
+
+            move(19,0);
+            addstr("My parents named me ");
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            addstr(newcr->propername);
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr(".");
+
             break;
          case 1:
             move(2,0);addstr("When I was bad...");
@@ -974,9 +989,9 @@ void makecharacter(void)
 
    if(makejudge)
    {
-      creaturest* judge=new creaturest;
+      Creature* judge=new Creature;
       makecreature(*judge,CREATURE_JUDGE_LIBERAL);
-      namecreature(*judge);
+      judge->namecreature();
       judge->flag|=CREATUREFLAG_SLEEPER;
       judge->hireid=newcr->id;
       pool.push_back(judge);
@@ -987,7 +1002,7 @@ void makecharacter(void)
 
 
 /* mostly depricated, but called once by makecharacter */
-void initliberal(creaturest &cr)
+void initliberal(Creature &cr)
 {
    cr.creatureinit();
 
@@ -997,7 +1012,7 @@ void initliberal(creaturest &cr)
    cr.type=CREATURE_POLITICALACTIVIST;
    cr.money=0;
 
-   namecreature(cr);
+   cr.namecreature();
 
    //STARTING SKILLS
    int startsknum=cr.attval(ATTRIBUTE_WISDOM);

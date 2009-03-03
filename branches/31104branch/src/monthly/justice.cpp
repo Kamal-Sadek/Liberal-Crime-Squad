@@ -30,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* monthly - hold trial on a liberal */
-void trial(creaturest &g)
+void trial(Creature &g)
 {
    g.sentence=0;
    g.deathpenalty=0;
@@ -82,8 +82,8 @@ void trial(creaturest &g)
    //CHECK FOR SLEEPERS
    vector<int> sjudge;
    bool autoconvict=0;
-   creaturest *sleeperjudge=NULL;
-   creaturest *sleeperlawyer=NULL;
+   Creature *sleeperjudge=NULL;
+   Creature *sleeperlawyer=NULL;
    int maxsleeperskill=0;
    for(int p=0;p<pool.size();p++)
    {
@@ -520,7 +520,7 @@ void trial(creaturest &g)
    char attorneyname[200];
    int oldseed=seed;
    seed=attorneyseed;
-   name(attorneyname);
+   generate_name(attorneyname);
    seed=oldseed;
 
    y+=4;
@@ -1040,7 +1040,7 @@ void trial(creaturest &g)
 
 
 /* monthly - sentence a liberal */
-void penalize(creaturest &g,char lenient)
+void penalize(Creature &g,char lenient)
 {
    set_color(COLOR_RED,COLOR_BLACK,1);
    move(3,1);
@@ -1240,7 +1240,7 @@ void penalize(creaturest &g,char lenient)
 
 
 /* monthly - move a liberal to jail */
-void imprison(creaturest &g)
+void imprison(Creature &g)
 {
    int ps=-1;
    for(int l=0;l<location.size();l++)
@@ -1257,7 +1257,7 @@ void imprison(creaturest &g)
 
 /* monthly - advances a liberal's prison time or executes them */
 //RETURNS IF SCREEN WAS ERASED
-char prison(creaturest &g)
+char prison(Creature &g)
 {
    char showed=0;
 

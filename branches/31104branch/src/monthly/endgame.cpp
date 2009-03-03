@@ -106,7 +106,7 @@ void tossjustices(char canseethings)
       {
          if(court[j]!=2)
          {
-            name(courtname[j]);
+            generate_name(courtname[j]);
             court[j]=2;
          }
       }

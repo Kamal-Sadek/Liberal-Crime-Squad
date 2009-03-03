@@ -186,7 +186,7 @@ void review(void)
 
 void review_mode(short mode)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    for(int p=0;p<pool.size();p++)
    {
       switch(mode)
@@ -523,7 +523,10 @@ void review_mode(short mode)
       
 
                if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
-               else addstr("Press N to change this Liberal's Code Name");
+               else
+               {
+                  addstr("N - Change Code Name      G - Fix Gender Label");
+               }
                if(temppool.size()>1)
                {
                   addstr("    LEFT/RIGHT - View Others");
@@ -579,6 +582,12 @@ void review_mode(short mode)
                   raw_output(TRUE);
                   keypad(stdscr,TRUE);
                }
+               else if(c=='g' && temppool[p]->align==1)
+               {
+                  temppool[p]->gender_liberal++;
+                  if(temppool[p]->gender_liberal > 2)
+                     temppool[p]->gender_liberal = 0;
+               }
                else break;
             }while(1);
          }
@@ -609,7 +618,7 @@ void assemblesquad(squadst *cursquad)
       newsquad=1;
    }
 
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    for(p=0;p<pool.size();p++)
    {
       if(pool[p]->alive==1&&
@@ -950,7 +959,7 @@ void squadlessbaseassign(void)
 {
    int p = 0;
    int l = 0;
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    for(p=0;p<pool.size();p++)
    {
       if(pool[p]->alive&&
@@ -1076,7 +1085,7 @@ void squadlessbaseassign(void)
 }
 
 // prints a formatted name, used by promoteliberals
-static void printname(creaturest &cr)
+static void printname(Creature &cr)
 {
    int bracketcolor=-1;
    int namecolor;
@@ -1154,7 +1163,7 @@ static void printname(creaturest &cr)
 void promoteliberals(void)
 {
    const static int PAGELENGTH=19;
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    vector<int> level;
    for(int p=0;p<pool.size();p++)
    {
@@ -1321,9 +1330,9 @@ void promoteliberals(void)
 
 
 
-void sortbyhire(vector<creaturest *> &temppool,vector<int> &level)
+void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
 {
-   vector<creaturest *> newpool;
+   vector<Creature *> newpool;
    level.clear();
 
    for(int i=temppool.size()-1;i>=0;i--)

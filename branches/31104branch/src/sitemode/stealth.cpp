@@ -474,7 +474,7 @@ void stealthpractice(int p, int diff)  //diff is the difficulty that the Conserv
 }
 
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(creaturest &cr,short type)
+char weaponcheck(Creature &cr,short type)
 {
    bool suspicious=0;  // Does the weapon look at all suspicious?
    char illegal=0;     // Is the weapon illegal?
@@ -658,7 +658,7 @@ char weaponcheck(creaturest &cr,short type)
 
 
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(creaturest &cr,short type)
+char hasdisguise(Creature &cr,short type)
 {
    char uniformed=0;
 

@@ -101,7 +101,7 @@ chaseseqst chaseseq;
 
 char slogan[SLOGAN_LEN+1];
 
-vector<creaturest *> pool;
+vector<Creature *> pool;
 
 vector<squadst *> squad;
 squadst *activesquad=NULL;
@@ -112,7 +112,7 @@ int disbandtime=0;
 char cantseereason;
 
 
-creaturest encounter[ENCMAX];
+Creature encounter[ENCMAX];
 
 
 char loaded=0;
@@ -363,13 +363,13 @@ int main(int argc, char* argv[])
       else if(c<7)court[c]=0;
       else if(c<8)court[c]=1;
       else court[c]=2;
-      name(courtname[c]);
+      generate_name(courtname[c]);
    }
 
    for(int e=0;e<EXECNUM;e++)
    {
       exec[e]=-1;
-      name(execname[e]);
+      generate_name(execname[e]);
    }
 
    attorneyseed=getSeed();
@@ -417,7 +417,7 @@ int r_num(void)
    return seed;
 }
 
-int creaturest::attval(short a,char usejuice)
+int Creature::attval(short a,char usejuice)
 {
    int ret=att[a];
    
@@ -614,13 +614,14 @@ void vehiclest::init(int t)
    }
 }
 
-void creaturest::creatureinit(void)
+void Creature::creatureinit(void)
 {
    hireid=-1;
    worklocation=0;
    juice=0;
    flag=0;
    age=18+LCSrandom(40);
+   gender_liberal = gender_conservative = LCSrandom(2) + 1;
    birthday_month=LCSrandom(12)+1;
    if(birthday_month==4 || birthday_month==6 ||
       birthday_month==9 || birthday_month==11)

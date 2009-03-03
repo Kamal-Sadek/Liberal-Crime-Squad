@@ -211,8 +211,8 @@ void elections(char clearformess,char canseethings)
       else candidate[0][0]=2;
 
       // name the candidates
-      name(candidate[0]+1);
-      name(candidate[1]+1);
+      generate_name(candidate[0]+1);
+      generate_name(candidate[1]+1);
 
       // Special Incumbency Rules: If the incumbent president or vice president
       // has approval of over 50% in their party, they win their primary
@@ -454,7 +454,7 @@ void elections(char clearformess,char canseethings)
             if(candidate[winner][0]==-2)exec[e]=-2;
             else if(candidate[winner][0]==2)exec[e]=2;
             else exec[e]=candidate[winner][0]+LCSrandom(3)-1;
-            name(execname[e]);
+            generate_name(execname[e]);
          }
       }
    }
@@ -1564,7 +1564,7 @@ void supremecourt(char clearformess,char canseethings)
          getch();
       }
 
-      name(courtname[j]);
+      generate_name(courtname[j]);
       float president=exec[EXEC_PRESIDENT];
       float sen=0;
       for(int s=0;s<100;s++)sen+=senate[s];

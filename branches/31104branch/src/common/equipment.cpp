@@ -255,7 +255,7 @@ void equip(vector<itemst *> &loot,int loc)
 
             if(c>='1'&&c<='6')
             {
-               creaturest *squaddie = activesquad->squad[c - '1'];
+               Creature *squaddie = activesquad->squad[c - '1'];
 
                if(squaddie!=NULL)
                {

@@ -192,7 +192,7 @@ void hospital(int loc)
 }
 
 /* select a gun for arms dealership */
-char gunselect(creaturest *cr,short &gun,bool legal=1)
+char gunselect(Creature *cr,short &gun,bool legal=1)
 {
    gun=-1;
 
@@ -1984,7 +1984,7 @@ void halloweenstore(int loc)
 
 
 /* oubliette - buy a mask */
-char maskselect(creaturest *cr,short &mask)
+char maskselect(Creature *cr,short &mask)
 {
    mask=-1;
 

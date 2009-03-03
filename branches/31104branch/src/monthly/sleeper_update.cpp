@@ -43,7 +43,7 @@ This file is part of Liberal Crime Squad.                                       
 ** - News Anchors and Radio Personalities remain the two most powerful
 ** sleepers.
 **********************************************************************/
-void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
    
@@ -85,7 +85,7 @@ void sleepereffect(creaturest &cr,char &clearformess,char canseethings,int *libp
 **     PUBLIC OPINION
 **
 **********************************/
-void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    int power=(cr.attval(ATTRIBUTE_CHARISMA)+
                cr.attval(ATTRIBUTE_HEART)+
@@ -291,7 +291,7 @@ void sleeper_influence(creaturest &cr,char &clearformess,char canseethings,int *
 **   SLEEPERS SNOOPING AROUND
 **
 **********************************/
-void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    cr.infiltration-=(1-cr.infiltration)*0.1f*LCSrandom(3);
    if(cr.infiltration < 0)
@@ -493,7 +493,7 @@ void sleeper_spy(creaturest &cr,char &clearformess,char canseethings,int *libpow
 **   SLEEPERS EMBEZZLING FUNDS
 **
 **********************************/
-void sleeper_embezzle(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    cr.infiltration-=0.05f*LCSrandom(3);
    if(cr.infiltration < 0 ||
@@ -551,7 +551,7 @@ void sleeper_embezzle(creaturest &cr,char &clearformess,char canseethings,int *l
 **   SLEEPERS STEALING THINGS
 **
 **********************************/
-void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    cr.infiltration-=(1-cr.infiltration)*0.2f*LCSrandom(3);
    if(cr.infiltration < 0 || !LCSrandom(static_cast<int>(cr.infiltration*20+1)))
@@ -723,7 +723,7 @@ void sleeper_steal(creaturest &cr,char &clearformess,char canseethings,int *libp
 **   SLEEPERS CREATING SCANDALS
 **
 **********************************/
-void sleeper_scandal(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    // Add content here!
    return;
@@ -735,7 +735,7 @@ void sleeper_scandal(creaturest &cr,char &clearformess,char canseethings,int *li
 **   SLEEPERS RECRUITING
 **
 **********************************/
-void sleeper_recruit(creaturest &cr,char &clearformess,char canseethings,int *libpower)
+void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    cr.infiltration-=(cr.infiltration)*0.05f*LCSrandom(3);
    if(cr.infiltration < 0)
@@ -754,9 +754,9 @@ void sleeper_recruit(creaturest &cr,char &clearformess,char canseethings,int *li
                break;
             if(encounter[e].worklocation == cr.worklocation)
             {
-               creaturest* recruit = new creaturest(encounter[e]);
+               Creature* recruit = new Creature(encounter[e]);
                liberalize(*recruit,0);
-               namecreature(*recruit);
+               recruit->namecreature();
                recruit->hireid = cr.id;
                if(recruit->infiltration > cr.infiltration/2)
                {

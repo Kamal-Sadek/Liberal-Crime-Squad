@@ -264,7 +264,7 @@ void locheader(void)
 /* party info at top of screen */
 void printparty(void)
 {
-   creaturest *party[6]={NULL,NULL,NULL,NULL,NULL,NULL};
+   Creature *party[6]={NULL,NULL,NULL,NULL,NULL,NULL};
    if(activesquad!=NULL)
    {
       for(int p=0;p<6;p++)party[p]=activesquad->squad[p];
@@ -586,7 +586,7 @@ void printlocation(long loc)
 
 
 /* character info at top of screen */
-void printcreatureinfo(creaturest *cr, unsigned char knowledge)
+void printcreatureinfo(Creature *cr, unsigned char knowledge)
 {
    char num[20],str[200];
 
@@ -866,7 +866,7 @@ void fullstatus(int p)
          printliberalskills(*activesquad->squad[p]);
 
       move(23,0);
-      addstr("Press N to change this Liberal's Code Name");
+      addstr("N - Change Code Name      G - Fix Gender Label");
       if(activesquad->squad[1]!=NULL)
       {
          addstr("    LEFT/RIGHT - Other Liberals");
@@ -926,13 +926,20 @@ void fullstatus(int p)
          keypad(stdscr,TRUE);
          continue;
       }
+      else if(c=='g')
+      {
+         activesquad->squad[p]->gender_liberal++;
+         if(activesquad->squad[p]->gender_liberal > 2)
+            activesquad->squad[p]->gender_liberal = 0;
+         continue;
+      }
       break;
    }while(1);
 }
 
 
 /* Full screen character sheet, skills only edition */
-void printliberalskills(creaturest &cr)
+void printliberalskills(Creature &cr)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    char str[200];
@@ -1017,7 +1024,7 @@ void printliberalskills(creaturest &cr)
 
 
 /* full screen character sheet */
-void printliberalstats(creaturest &cr)
+void printliberalstats(Creature &cr)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -1025,17 +1032,17 @@ void printliberalstats(creaturest &cr)
 
    // Add name
    move(2,0);
-   if(strcmp(cr.propername,cr.name)!=0)
-   {
-	   addstr("Code name: ");
-   }
-   else
-   {
-      addstr("Name: ");
-   }
+   addstr("Name: ");
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    addstr(cr.name);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
+   if(strcmp(cr.propername,cr.name)!=0)
+   {
+	   //The names do not match, print real name as well
+	   addstr(" (");
+	   addstr(cr.propername);
+      addstr(")");
+   }
    addstr(", ");
    gettitle(str,cr);
    addstr(str);
@@ -1045,13 +1052,7 @@ void printliberalstats(creaturest &cr)
    addstr(")");
 	move(3,0);
    
-   if(strcmp(cr.propername,cr.name)!=0)
-   {
-	   //The names do not match, print real name as well
-	   addstr("Real name: ");
-	   addstr(cr.propername);
-      move(4,0);
-   }
+   
 
    // Add birthdate
    addstr("Born ");
@@ -1088,6 +1089,17 @@ void printliberalstats(creaturest &cr)
    addstr(" (Age ");
    itoa(cr.age,num,10);
    addstr(num);
+   addstr(", ");
+   // Add Liberal gender
+   if(cr.gender_liberal == GENDER_FEMALE)
+      addstr("Female");
+   else if(cr.gender_liberal == GENDER_MALE)
+      addstr("Male");
+   else
+      addstr("Androgyne");
+   // Note if there's some conflict with Conservative society's perceptions
+   if(cr.gender_liberal != cr.gender_conservative)
+      addstr("*");
    addstr(")");
 
    // Add juice
@@ -1457,7 +1469,7 @@ void addlocationname(locationst *loc)
 }
 
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
-void printhealthstat(creaturest &g,int y,int x,char smll)
+void printhealthstat(Creature &g,int y,int x,char smll)
 {
    short woundsum=0;
    char bleeding=0;

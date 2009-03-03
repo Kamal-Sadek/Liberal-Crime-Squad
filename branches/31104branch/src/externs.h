@@ -132,7 +132,7 @@ extern chaseseqst chaseseq;
 
 extern char slogan[80];
 
-extern vector<creaturest *> pool;
+extern vector<Creature *> pool;
 
 extern vector<squadst *> squad;
 extern squadst *activesquad;
@@ -147,7 +147,7 @@ extern long curcarid;
 extern char showcarprefs;
 
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];
-extern creaturest encounter[ENCMAX];
+extern Creature encounter[ENCMAX];
 extern highscorest score[SCORENUM];
 extern int yourscore;
 

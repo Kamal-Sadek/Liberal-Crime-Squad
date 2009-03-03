@@ -244,7 +244,7 @@ void orderparty(void)
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
-         creaturest *swap=activesquad->squad[spot];
+         Creature *swap=activesquad->squad[spot];
          activesquad->squad[spot]=activesquad->squad[c-'1'];
          activesquad->squad[c-'1']=swap;
          spot++;

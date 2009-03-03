@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* bluff, date, issues */
-char talk(creaturest &a,int t)
+char talk(Creature &a,int t)
 {
    //BLUFFING
    if((sitealarm||location[cursite]->siege.siege)&&encounter[t].enemy())
@@ -315,7 +315,7 @@ char talk(creaturest &a,int t)
                }
                if(c=='a')
                {
-                  creaturest* executer=0;
+                  Creature* executer=0;
                   if(a.prisoner)
                   {
                      executer=&a;
@@ -740,7 +740,7 @@ char talk(creaturest &a,int t)
    //TALKING
    short talkmode=TALKMODE_START;
 
-   creaturest *tk=&encounter[t];
+   Creature *tk=&encounter[t];
 
    do
    {
@@ -774,7 +774,7 @@ char talk(creaturest &a,int t)
                if(a.armor.type==ARMOR_NONE)addstr(" while naked");
                addstr(".");
                move(12,1);
-               if(!kid(*tk)&&!kid(a))set_color(COLOR_WHITE,COLOR_BLACK,0);
+               if(!(tk->kid())&&!a.kid())set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr("B - Drop a pickup line");
                if(a.armor.type==ARMOR_NONE)addstr(" while naked");
@@ -1098,7 +1098,7 @@ char talk(creaturest &a,int t)
                   refresh();
                   getch();
 
-                  if(aroll>troll*(1+!talkreceptive(*tk)+2*(tk->enemy())) &&
+                  if(aroll>troll*(1+!(tk->talkreceptive())+2*(tk->enemy())) &&
                      tk->type!=CREATURE_PRISONER)
                   {
                      y++;
@@ -1139,9 +1139,9 @@ char talk(creaturest &a,int t)
                      refresh();
                      getch();
 
-                     creaturest *newcr=new creaturest;
+                     Creature *newcr=new Creature;
                         *newcr=*tk;
-                     namecreature(*newcr);
+                     newcr->namecreature();
 
                      recruitst *newrst=new recruitst;
                      newrst->recruit=newcr;
@@ -1374,7 +1374,7 @@ char talk(creaturest &a,int t)
                      return 1;
                   }
                   else if(tk->type!=CREATURE_PRISONER &&
-                     (talkreceptive(*tk)||
+                     (tk->talkreceptive()||
                      a.skillval(SKILL_PERSUASION)+a.attval(ATTRIBUTE_CHARISMA)>(int)LCSrandom(20)))
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1403,7 +1403,7 @@ char talk(creaturest &a,int t)
                      return 1;
                   }
                }
-               if(c=='b'&&!kid(*tk)&&!kid(a))
+               if(c=='b'&&!(tk->kid())&&!a.kid())
                {
                   int y=12;
                   clearcommandarea();clearmessagearea();clearmaparea();
@@ -1631,7 +1631,7 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
                         date.push_back(newd);
                      }
 
-                     creaturest *newcr=new creaturest;
+                     Creature *newcr=new Creature;
                      *newcr=*tk;
 
                      newcr->location=a.location;
@@ -1767,57 +1767,3 @@ case 43:addstr("\"Don't you like it dirty?\"");break;
    }while(1);
 }
 
-
-
-/* are they interested in talking about the issues? */
-char talkreceptive(creaturest &cr)
-{
-   if(cr.enemy())return 0;
-
-   switch(cr.type)
-   {
-      case CREATURE_WORKER_SERVANT:
-      case CREATURE_WORKER_JANITOR:
-      case CREATURE_WORKER_SWEATSHOP:
-      case CREATURE_WORKER_FACTORY_CHILD:
-      case CREATURE_TEENAGER:
-      case CREATURE_SEWERWORKER:
-      case CREATURE_COLLEGESTUDENT:
-      case CREATURE_MUSICIAN:
-      case CREATURE_MATHEMATICIAN:
-      case CREATURE_TEACHER:
-      case CREATURE_HSDROPOUT:
-      case CREATURE_BUM:
-      case CREATURE_POLITICALACTIVIST:
-      case CREATURE_GANGMEMBER:
-      case CREATURE_CRACKHEAD:
-      case CREATURE_FASTFOODWORKER:
-      case CREATURE_TELEMARKETER:
-      case CREATURE_PROSTITUTE:
-      case CREATURE_GARBAGEMAN:
-      case CREATURE_PLUMBER:
-      case CREATURE_AMATEURMAGICIAN:
-      case CREATURE_HIPPIE:
-      case CREATURE_RETIREE:
-      case CREATURE_HAIRSTYLIST:
-      case CREATURE_CLERK:
-      case CREATURE_MUTANT:
-         return 1;
-   }
-
-   return 0;
-}
-
-
-
-/* is the character too young to be dating? */
-char kid(creaturest &cr)
-{
-   switch(cr.type)
-   {
-      case CREATURE_WORKER_FACTORY_CHILD:
-         return 1;
-   }
-
-   return 0;
-}

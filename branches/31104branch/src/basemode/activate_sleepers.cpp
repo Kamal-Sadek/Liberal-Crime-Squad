@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /* base - activate sleepers */
 void activate_sleepers(void)
 {
-   vector<creaturest *> temppool;
+   vector<Creature *> temppool;
    // Comb the pool of Liberals for sleeper agents
    for(int p=0;p<pool.size();p++)
    {
@@ -175,7 +175,7 @@ void activate_sleepers(void)
 }
 
 
-void activate_sleeper(creaturest *cr)
+void activate_sleeper(Creature *cr)
 {
    int state=0;
    int choice=0;

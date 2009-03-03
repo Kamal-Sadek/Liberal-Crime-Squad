@@ -33,7 +33,7 @@
 
 
 /* rolls up a creature's stats and equipment */
-void makecreature(creaturest &cr,short type)
+void makecreature(Creature &cr,short type)
 {
    int a = 0;
    cr.creatureinit();
