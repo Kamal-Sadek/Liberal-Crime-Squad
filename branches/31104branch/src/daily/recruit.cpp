@@ -393,6 +393,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             r.recruit->hireid=pool[p]->id;
 
             pool[p]->train(SKILL_LEADERSHIP,5);
+            pool[p]->train(SKILL_PERSUASION,5);
 
             pool.push_back(r.recruit);
             stat_recruits++;
@@ -421,7 +422,11 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             funds -= 50;
             moneylost_dating += 50;
          }
-         pool[p]->train(SKILL_PERSUASION,5);
+         //SAV - You can get your skill up to a 3 by chatting. Past that,
+         // you must successfully recruit people. Training is slower the
+         // better you are.
+         pool[p]->train(SKILL_PERSUASION,
+            max(3-pool[p]->skillval(SKILL_PERSUASION),0));
          
          int lib_persuasiveness = pool[p]->skillval(SKILL_PERSUASION)*2+
                                   pool[p]->skillval(SKILL_BUSINESS)+

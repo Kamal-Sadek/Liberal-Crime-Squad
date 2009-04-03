@@ -479,7 +479,7 @@ void activate(Creature *cr)
             move(22,1);
             addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
-            addstr("Tailoring, Martial Arts, Improvised Melee");
+            addstr("Tailoring, Martial Arts, Improvised Melee, Theft");
             move(24,1);
             addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
             break;
@@ -487,7 +487,7 @@ void activate(Creature *cr)
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
-            addstr("  Skills Trained: All Weapon Skills except Improvised Melee");
+            addstr("  Skills Trained: All Weapon Skills except Improvised Melee, Tactics");
             move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;

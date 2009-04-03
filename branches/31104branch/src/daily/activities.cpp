@@ -2187,8 +2187,8 @@ void funds_and_trouble(char &clearformess)
          skillarray[4]=SKILL_HANDTOHAND;
          skillarray[5]=SKILL_IMPROVISED;
          skillarray[6]=SKILL_COOKING;
-         //skillarray[7]=SKILL_SURVIVAL;
-         skillarray[7]=-1;
+         skillarray[7]=SKILL_THEFT;
+         skillarray[8]=-1;
          break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=50;
@@ -2202,7 +2202,8 @@ void funds_and_trouble(char &clearformess)
          skillarray[7]=SKILL_AXE;
          skillarray[8]=SKILL_SMG;
          skillarray[9]=SKILL_THROWING;
-         skillarray[10]=-1;
+         skillarray[10]=SKILL_TACTICS;
+         skillarray[11]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
          cost=40;
