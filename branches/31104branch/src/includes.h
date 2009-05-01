@@ -43,6 +43,7 @@
 #include <config.h>
 #include <math.h>
 #include <stdlib.h>
+#include <langinfo.h>
 #endif
 
 #ifndef PACKAGE_VERSION
