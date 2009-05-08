@@ -143,13 +143,14 @@ void makecharacter(void)
       if(c=='d')
       {
          choices = !choices;
-         strcpy(newcr->propername,first[gender]);
-         strcat(newcr->propername," ");
-         strcat(newcr->propername,last);
          continue;
       }
       break;
    }
+   
+   strcpy(newcr->propername,first[gender]);
+   strcat(newcr->propername," ");
+   strcat(newcr->propername,last);
    
    int c;
    bool hasmaps=0;

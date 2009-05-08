@@ -1239,10 +1239,10 @@ void configSiteUnique::build()
       if(levelmap[x][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
          continue;
       // don't drop the special on another special
-      if(levelmap[x][y][z].special)
+      if(levelmap[x][y][z].special!=-1)
          continue;
       // try to plot in restricted areas, but not absolutely required
-      if(!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED && count<30))
+      if(!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED) && count<30)
          continue;
 
       break;

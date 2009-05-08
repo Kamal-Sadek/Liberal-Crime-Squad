@@ -107,6 +107,9 @@ void setpriority(newsstoryst &ns)
 
          // Set story's political and violence levels for determining whether
          // a story becomes positive or negative
+         if(ns.claimed)ns.politics_level=20;
+         else ns.politics_level=0;
+         
          ns.politics_level+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
          ns.politics_level+=crime[CRIME_HACK_INTEL       ] * 100;
          ns.politics_level+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
@@ -120,7 +123,7 @@ void setpriority(newsstoryst &ns)
          ns.politics_level+=crime[CRIME_FREE_RABBITS     ] *  10;
          ns.politics_level+=crime[CRIME_TAGGING          ] *   3;
 
-         if(ns.claimed)ns.politics_level+=20;
+         ns.violence_level=0;
 
          ns.violence_level+=crime[CRIME_KILLEDSOMEBODY   ] *  20;
          ns.violence_level+=crime[CRIME_ATTACKED_MISTAKE ] *  12;
@@ -129,19 +132,19 @@ void setpriority(newsstoryst &ns)
          short violence_threshhold;
          if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<5)violence_threshhold=1;
          else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<25)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<45)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<65)violence_threshhold=6;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<85)violence_threshhold=8;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<105)violence_threshhold=10;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<125)violence_threshhold=13;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<145)violence_threshhold=17;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<165)violence_threshhold=20;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<185)violence_threshhold=30;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<45)violence_threshhold=3;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<65)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<85)violence_threshhold=5;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<105)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<125)violence_threshhold=7;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<145)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<165)violence_threshhold=9;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<185)violence_threshhold=10;
          else violence_threshhold=50;
 
          if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
-            ns.positive = 1;
-         else ns.positive = 0;
+            ns.positive = 0;
+         else ns.positive = 1;
 
          // Add additional priority based on the type of news story
          // and how high profile the LCS is

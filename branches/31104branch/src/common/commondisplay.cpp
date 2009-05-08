@@ -225,7 +225,7 @@ void locheader(void)
       move(3,6);
       addstr("To form a new squad:");
       move(4,6);
-      addstr("1) R - Review and reorganize Liberals");
+      addstr("1) R - Review Assets and Form Squads");
       move(5,6);
       addstr("2) Press Z to Assemble a New Squad");
       set_color(COLOR_WHITE,COLOR_BLACK,0);

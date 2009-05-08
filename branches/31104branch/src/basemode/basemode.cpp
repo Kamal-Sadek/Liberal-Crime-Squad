@@ -514,15 +514,15 @@ void mode_base(void)
          if(partysize>0&&!underattack)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(19,40);
-         addstr("E - Equipment");
+         addstr("E - Equip Squad");
          if(vehicle.size()>0&&partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(19,59);
+         move(19,60);
          addstr("V - Vehicles");
          if(pool.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(20,40);
-         addstr("R - Review Liberals and Form Squads");
+         addstr("R - Review Assets and Form Squads");
          /*if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(20,40);
@@ -535,7 +535,7 @@ void mode_base(void)
 
          if(safenumber>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,59);
+         move(8,60);
          addstr("Z - Next Location");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);

@@ -1609,6 +1609,46 @@ void funds_and_trouble(char &clearformess)
                addstr(" bought spraypaint for graffiti.");
                refresh();
                getch();
+
+               // drop your gun
+               if(graffiti[s]->weapon.type!=WEAPON_NONE)
+               {
+                  itemst *i=new itemst;
+                     i->type=ITEM_WEAPON;
+                     i->weapon=graffiti[s]->weapon;
+                  location[graffiti[s]->base]->loot.push_back(i);
+
+                  graffiti[s]->weapon.type=WEAPON_NONE;
+                  graffiti[s]->weapon.ammo=0;
+
+                  //DROP ALL CLIPS
+                  for(int c=0;c<CLIPNUM;c++)
+                  {
+                     for(int p2=0;p2<graffiti[s]->clip[c];p2++)
+                     {
+                        if(c==CLIP_MOLOTOV)
+                        {
+                           itemst *newi=new itemst;
+                              newi->type=ITEM_WEAPON;
+                              newi->weapon.type=WEAPON_MOLOTOV;
+                              newi->weapon.ammo=1;
+                           location[graffiti[s]->base]->loot.push_back(newi);
+                        }
+                        else
+                        {
+                           itemst *newi=new itemst;
+                              newi->type=ITEM_CLIP;
+                              newi->cliptype=c;
+                           location[graffiti[s]->base]->loot.push_back(newi);
+                        }
+                     }
+
+                     graffiti[s]->clip[c]=0;
+                  }
+
+                  consolidateloot(location[graffiti[s]->base]->loot);
+               }
+               graffiti[s]->weapon.type=WEAPON_SPRAYCAN;
             }
             else
             {

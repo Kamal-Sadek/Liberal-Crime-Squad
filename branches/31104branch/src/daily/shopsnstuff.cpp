@@ -441,7 +441,7 @@ void armsdealer(int loc)
                      newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
                      activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
                   }
-               activesquad->loot.push_back(newi);
+               location[activesquad->squad[0]->base]->loot.push_back(newi);
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
@@ -454,7 +454,7 @@ void armsdealer(int loc)
                   itemst *newi=new itemst;
                      newi->type=ITEM_CLIP;
                      newi->cliptype=cl;
-                  activesquad->loot.push_back(newi);
+                  location[activesquad->squad[0]->base]->loot.push_back(newi);
                }
 
                activesquad->squad[buyer]->clip[cl]=0;
@@ -568,7 +568,7 @@ void armsdealer(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_CLIP;
                newi->cliptype=clipbought;
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
 
          if(c==10)in_gunshop=0;
@@ -635,27 +635,27 @@ void pawnshop(int loc)
          move(10,1);
          addstr("E - Look over Equipment");
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(10,40);
          addstr("F - Pawn Selectively");
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,1);
          addstr("W - Pawn all Weapons");
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(11,40);
          addstr("A - Pawn all Ammunition");
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,1);
          addstr("C - Pawn all Clothes");
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,40);
          addstr("L - Pawn all Loot");
@@ -912,7 +912,7 @@ void pawnshop(int loc)
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         if(activesquad->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[activesquad->squad[0]->base]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,1);
          addstr("S - Sell something");
@@ -946,7 +946,7 @@ void pawnshop(int loc)
          if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
 
          if((c=='w'||c=='c'||c=='l'||c=='a'||c=='f')&&
-            activesquad->loot.size()>0)
+            location[activesquad->squad[0]->base]->loot.size()>0)
          {
             int fenceamount=0;
 
@@ -963,18 +963,18 @@ void pawnshop(int loc)
                memset(fenceclip,0,CLIPNUM*sizeof(int));
                memset(fenceloot,0,LOOTNUM*sizeof(int));
 
-               for(l=activesquad->loot.size()-1;l>=0;l--)
+               for(l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
                {
-                  switch(activesquad->loot[l]->type)
+                  switch(location[activesquad->squad[0]->base]->loot[l]->type)
                   {
-                     case ITEM_WEAPON:fenceweapon[activesquad->loot[l]->weapon.type]+=activesquad->loot[l]->number;break;
+                     case ITEM_WEAPON:fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
                      case ITEM_ARMOR:
-                        if(activesquad->loot[l]->armor.quality!='1')break;
-                        if(activesquad->loot[l]->armor.flag!=0)break;
-                        fencearmor[activesquad->loot[l]->armor.type]+=activesquad->loot[l]->number;
+                        if(location[activesquad->squad[0]->base]->loot[l]->armor.quality!='1')break;
+                        if(location[activesquad->squad[0]->base]->loot[l]->armor.flag!=0)break;
+                        fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]+=location[activesquad->squad[0]->base]->loot[l]->number;
                         break;
-                     case ITEM_CLIP:fenceclip[activesquad->loot[l]->cliptype]+=activesquad->loot[l]->number;break;
-                     case ITEM_LOOT:fenceloot[activesquad->loot[l]->loottype]+=activesquad->loot[l]->number;break;
+                     case ITEM_CLIP:fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
+                     case ITEM_LOOT:fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
                   }
                }
 
@@ -999,73 +999,73 @@ void pawnshop(int loc)
                   fenceloot[LOOT_POLICERECORDS]=0;
                }
 
-               for(l=activesquad->loot.size()-1;l>=0;l--)
+               for(l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
                {
-                  switch(activesquad->loot[l]->type)
+                  switch(location[activesquad->squad[0]->base]->loot[l]->type)
                   {
                      case ITEM_WEAPON:
-                        if(fenceweapon[activesquad->loot[l]->weapon.type]>0)
+                        if(fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]>0)
                         {
-                           long numbersold=fenceweapon[activesquad->loot[l]->weapon.type];
-                           if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
-                           fenceweapon[activesquad->loot[l]->weapon.type]-=numbersold;
-                           activesquad->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*activesquad->loot[l])*numbersold;
+                           long numbersold=fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type];
+                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
+                           fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]-=numbersold;
+                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
+                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
 
-                           if(activesquad->loot[l]->number==0)
+                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
                            {
-                              delete activesquad->loot[l];
-                              activesquad->loot.erase(activesquad->loot.begin() + l);
+                              delete location[activesquad->squad[0]->base]->loot[l];
+                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                            }
                         }
                         break;
                      case ITEM_ARMOR:
-                        if(activesquad->loot[l]->armor.quality!='1')break;
-                        if(activesquad->loot[l]->armor.flag!=0)break;
-                        if(fencearmor[activesquad->loot[l]->armor.type]>0)
+                        if(location[activesquad->squad[0]->base]->loot[l]->armor.quality!='1')break;
+                        if(location[activesquad->squad[0]->base]->loot[l]->armor.flag!=0)break;
+                        if(fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]>0)
                         {
-                           long numbersold=fencearmor[activesquad->loot[l]->armor.type];
-                           if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
-                           fencearmor[activesquad->loot[l]->armor.type]-=numbersold;
-                           activesquad->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*activesquad->loot[l])*numbersold;
+                           long numbersold=fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type];
+                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
+                           fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]-=numbersold;
+                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
+                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
 
-                           if(activesquad->loot[l]->number==0)
+                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
                            {
-                              delete activesquad->loot[l];
-                              activesquad->loot.erase(activesquad->loot.begin() + l);
+                              delete location[activesquad->squad[0]->base]->loot[l];
+                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                            }
                         }
                         break;
                      case ITEM_CLIP:
-                        if(fenceclip[activesquad->loot[l]->cliptype]>0)
+                        if(fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]>0)
                         {
-                           long numbersold=fenceclip[activesquad->loot[l]->cliptype];
-                           if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
-                           fenceclip[activesquad->loot[l]->cliptype]-=numbersold;
-                           activesquad->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*activesquad->loot[l])*numbersold;
+                           long numbersold=fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype];
+                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
+                           fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]-=numbersold;
+                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
+                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
 
-                           if(activesquad->loot[l]->number==0)
+                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
                            {
-                              delete activesquad->loot[l];
-                              activesquad->loot.erase(activesquad->loot.begin() + l);
+                              delete location[activesquad->squad[0]->base]->loot[l];
+                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                            }
                         }
                         break;
                      case ITEM_LOOT:
-                        if(fenceloot[activesquad->loot[l]->loottype]>0)
+                        if(fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]>0)
                         {
-                           long numbersold=fenceloot[activesquad->loot[l]->loottype];
-                           if(numbersold>activesquad->loot[l]->number)numbersold=activesquad->loot[l]->number;
-                           fenceloot[activesquad->loot[l]->loottype]-=numbersold;
-                           activesquad->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*activesquad->loot[l])*numbersold;
+                           long numbersold=fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype];
+                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
+                           fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]-=numbersold;
+                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
+                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
 
-                           if(activesquad->loot[l]->number==0)
+                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
                            {
-                              delete activesquad->loot[l];
-                              activesquad->loot.erase(activesquad->loot.begin() + l);
+                              delete location[activesquad->squad[0]->base]->loot[l];
+                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                            }
                         }
                         break;
@@ -1187,7 +1187,7 @@ void pawnshop(int loc)
                      newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
                      activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
                   }
-               activesquad->loot.push_back(newi);
+               location[activesquad->squad[0]->base]->loot.push_back(newi);
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
@@ -1200,7 +1200,7 @@ void pawnshop(int loc)
                   itemst *newi=new itemst;
                      newi->type=ITEM_CLIP;
                      newi->cliptype=cl;
-                  activesquad->loot.push_back(newi);
+                  location[activesquad->squad[0]->base]->loot.push_back(newi);
                }
 
                activesquad->squad[buyer]->clip[cl]=0;
@@ -1279,7 +1279,7 @@ void pawnshop(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_CLIP;
                newi->cliptype=clipbought;
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
 
          if(c==10)in_gunshop=0;
@@ -1338,7 +1338,7 @@ void pawnshop(int loc)
                      newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
                      activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
                   }
-               activesquad->loot.push_back(newi);
+               location[activesquad->squad[0]->base]->loot.push_back(newi);
             }
 
             //DROP ALL CLIPS THAT DON'T WORK
@@ -1351,7 +1351,7 @@ void pawnshop(int loc)
                   itemst *newi=new itemst;
                      newi->type=ITEM_CLIP;
                      newi->cliptype=cl;
-                  activesquad->loot.push_back(newi);
+                  location[activesquad->squad[0]->base]->loot.push_back(newi);
                }
 
                activesquad->squad[buyer]->clip[cl]=0;
@@ -1849,7 +1849,7 @@ void deptstore(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_ARMOR;
                newi->armor=swap;
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
       }
       if(weaponbought!=-1)
@@ -1870,7 +1870,7 @@ void deptstore(int loc)
                   newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
                   activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
                }
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
@@ -1883,7 +1883,7 @@ void deptstore(int loc)
                itemst *newi=new itemst;
                   newi->type=ITEM_CLIP;
                   newi->cliptype=cl;
-               activesquad->loot.push_back(newi);
+               location[activesquad->squad[0]->base]->loot.push_back(newi);
             }
 
             activesquad->squad[buyer]->clip[cl]=0;
@@ -2269,7 +2269,7 @@ void halloweenstore(int loc)
             itemst *newi=new itemst;
                newi->type=ITEM_ARMOR;
                newi->armor=swap;
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
       }
       if(weaponbought!=-1)
@@ -2290,7 +2290,7 @@ void halloweenstore(int loc)
                   newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
                   activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
                }
-            activesquad->loot.push_back(newi);
+            location[activesquad->squad[0]->base]->loot.push_back(newi);
          }
 
          //DROP ALL CLIPS THAT DON'T WORK
@@ -2303,7 +2303,7 @@ void halloweenstore(int loc)
                itemst *newi=new itemst;
                   newi->type=ITEM_CLIP;
                   newi->cliptype=cl;
-               activesquad->loot.push_back(newi);
+               location[activesquad->squad[0]->base]->loot.push_back(newi);
             }
 
             activesquad->squad[buyer]->clip[cl]=0;
@@ -2440,12 +2440,12 @@ int fenceselect(void)
 {
    int ret=0;
 
-   consolidateloot(activesquad->loot);
+   consolidateloot(location[activesquad->squad[0]->base]->loot);
 
    int page=0;
 
    vector<int> selected;
-   selected.resize(activesquad->loot.size());
+   selected.resize(location[activesquad->squad[0]->base]->loot.size());
    for(int s=0;s<selected.size();s++)selected[s]=0;
 
    do
@@ -2470,35 +2470,35 @@ int fenceselect(void)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<activesquad->loot.size()&&l<page*18+18;l++)
+      for(int l=page*18;l<location[activesquad->squad[0]->base]->loot.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         if(activesquad->loot[l]->type==ITEM_WEAPON)
+         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_WEAPON)
          {
-            getweaponfull(str2,activesquad->loot[l]->weapon.type);
-            if(activesquad->loot[l]->weapon.ammo>0)
+            getweaponfull(str2,location[activesquad->squad[0]->base]->loot[l]->weapon.type);
+            if(location[activesquad->squad[0]->base]->loot[l]->weapon.ammo>0)
             {
                char num[20];
-               itoa(activesquad->loot[l]->weapon.ammo,num,10);
+               itoa(location[activesquad->squad[0]->base]->loot[l]->weapon.ammo,num,10);
                strcat(str2," (");
                strcat(str2,num);
                strcat(str2,")");
             }
          }
-         if(activesquad->loot[l]->type==ITEM_ARMOR)
+         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_ARMOR)
          {
-            getarmorfull(str2,activesquad->loot[l]->armor,0);
+            getarmorfull(str2,location[activesquad->squad[0]->base]->loot[l]->armor,0);
          }
-         if(activesquad->loot[l]->type==ITEM_CLIP)
+         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_CLIP)
          {
-            getclip(str2,activesquad->loot[l]->cliptype);
+            getclip(str2,location[activesquad->squad[0]->base]->loot[l]->cliptype);
          }
-         if(activesquad->loot[l]->type==ITEM_LOOT)
+         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_LOOT)
          {
-            getloot(str2,activesquad->loot[l]->loottype);
+            getloot(str2,location[activesquad->squad[0]->base]->loot[l]->loottype);
          }
-         if(activesquad->loot[l]->number>1)
+         if(location[activesquad->squad[0]->base]->loot[l]->number>1)
          {
             char num[20];
             strcat(str2," ");
@@ -2509,7 +2509,7 @@ int fenceselect(void)
                strcat(str2,"/");
             }
             else strcat(str2,"x");
-            itoa(activesquad->loot[l]->number,num,10);
+            itoa(location[activesquad->squad[0]->base]->loot[l]->number,num,10);
             strcat(str2,num);
          }
 
@@ -2537,7 +2537,7 @@ int fenceselect(void)
          addprevpagestr();
       }
       //PAGE DOWN
-      if((page+1)*18<activesquad->loot.size())
+      if((page+1)*18<location[activesquad->squad[0]->base]->loot.size())
       {
          move(17,53);
          addnextpagestr();
@@ -2558,20 +2558,20 @@ int fenceselect(void)
       {
          int slot=c-'a'+page*18;
 
-         if(slot>=0&&slot<activesquad->loot.size())
+         if(slot>=0&&slot<location[activesquad->squad[0]->base]->loot.size())
          {
             if(selected[slot])
             {
-               ret-=fencevalue(*activesquad->loot[slot])*selected[slot];
+               ret-=fencevalue(*location[activesquad->squad[0]->base]->loot[slot])*selected[slot];
                selected[slot]=0;
             }
             else
             {
                char bad=0;
-               if(activesquad->loot[slot]->type==ITEM_ARMOR)
+               if(location[activesquad->squad[0]->base]->loot[slot]->type==ITEM_ARMOR)
                {
-                  //if(activesquad->loot[slot]->armor.quality!='1')bad=1;
-                  if(activesquad->loot[slot]->armor.flag!=0)bad=1;
+                  //if(location[activesquad->squad[0]->base]->loot[slot]->armor.quality!='1')bad=1;
+                  if(location[activesquad->squad[0]->base]->loot[slot]->armor.flag!=0)bad=1;
                }
 
                if(bad)
@@ -2587,7 +2587,7 @@ int fenceselect(void)
                }
                else
                {
-                  if(activesquad->loot[slot]->number>1)
+                  if(location[activesquad->squad[0]->base]->loot[slot]->number>1)
                   {
                      selected[slot]=1;
 
@@ -2613,10 +2613,10 @@ int fenceselect(void)
 
                      selected[slot]=atoi(str);
                      if(selected[slot]<0)selected[slot]=0;
-                     else if(selected[slot]>activesquad->loot[slot]->number)selected[slot]=activesquad->loot[slot]->number;
+                     else if(selected[slot]>location[activesquad->squad[0]->base]->loot[slot]->number)selected[slot]=location[activesquad->squad[0]->base]->loot[slot]->number;
                   }
                   else selected[slot]=1;
-                  ret+=fencevalue(*activesquad->loot[slot])*selected[slot];
+                  ret+=fencevalue(*location[activesquad->squad[0]->base]->loot[slot])*selected[slot];
                }
             }
          }
@@ -2627,19 +2627,19 @@ int fenceselect(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<activesquad->loot.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<location[activesquad->squad[0]->base]->loot.size())page++;
 
    }while(1);
 
-   for(int l=activesquad->loot.size()-1;l>=0;l--)
+   for(int l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
    {
       if(selected[l]>0)
       {
-         activesquad->loot[l]->number-=selected[l];
-         if(activesquad->loot[l]->number<=0)
+         location[activesquad->squad[0]->base]->loot[l]->number-=selected[l];
+         if(location[activesquad->squad[0]->base]->loot[l]->number<=0)
          {
-            delete activesquad->loot[l];
-            activesquad->loot.erase(activesquad->loot.begin() + l);
+            delete location[activesquad->squad[0]->base]->loot[l];
+            location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
          }
       }
    }
