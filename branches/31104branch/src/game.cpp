@@ -132,8 +132,10 @@ char lcityname[80];
 char newscherrybusted=0;
 
 int month=1;
-int year=2007;
+int year=2009;
 int amendnum=28;
+
+bool termlimits=false;
 
 
 short attitude[VIEWNUM];
@@ -151,7 +153,7 @@ char courtname[9][80];
 
 
 signed char exec[EXECNUM];
-short execterm=2;
+short execterm=1;
 char execname[EXECNUM][80];
 short presparty=1;
 
@@ -308,16 +310,24 @@ int main(int argc, char* argv[])
 
    for(int v=0;v<VIEWNUM;v++)
    {
-      attitude[v]=45;
+      attitude[v]=30+LCSrandom(25);
       public_interest[v]=0;
       background_liberal_influence[v]=0;
    }
    attitude[VIEW_LIBERALCRIMESQUAD]=0;
-   attitude[VIEW_LIBERALCRIMESQUADPOS]=20;
+   attitude[VIEW_LIBERALCRIMESQUADPOS]=5;
+   attitude[VIEW_POLITICALVIOLENCE]=5;
+
+#ifdef REVOLUTIONNOW
+   for(int v=0;v<VIEWNUM;v++)
+   {
+      attitude[v]=100;
+   }
+#endif
 
    law[LAW_ABORTION]=1;
    law[LAW_ANIMALRESEARCH]=-1;
-   law[LAW_POLICEBEHAVIOR]=0;
+   law[LAW_POLICEBEHAVIOR]=-1;
    law[LAW_PRIVACY]=-1;
    law[LAW_DEATHPENALTY]=-1;
    law[LAW_NUCLEARPOWER]=-1;
@@ -329,6 +339,14 @@ int main(int argc, char* argv[])
    law[LAW_FLAGBURNING]=1;
    law[LAW_TAX]=0;
    law[LAW_GUNCONTROL]=-1;
+   law[LAW_WOMEN]=1;
+   law[LAW_CIVILRIGHTS]=1;
+   law[LAW_DRUGS]=-1;
+   law[LAW_IMMIGRATION]=0;
+   law[LAW_RELIGION]=-1;
+   law[LAW_ELECTIONS]=0;
+   law[LAW_MILITARY]=-1;
+   law[LAW_TORTURE]=-1;
 
 #ifdef SHITLAWS
    for(int l=0;l<LAWNUM;l++)law[l]=-2;
@@ -340,27 +358,27 @@ int main(int argc, char* argv[])
 
    for(int s=0;s<100;s++)
    {
-      if(s<20)senate[s]=-2;
-      else if(s<45)senate[s]=-1;
-      else if(s<70)senate[s]=0;
-      else if(s<90)senate[s]=1;
+      if(s<25)senate[s]=-2;
+      else if(s<60)senate[s]=-1;
+      else if(s<80)senate[s]=0;
+      else if(s<95)senate[s]=1;
       else senate[s]=2;
    }
 
    for(int h=0;h<435;h++)
    {
-      if(h<30)house[h]=-2;
-      else if(h<200)house[h]=-1;
-      else if(h<300)house[h]=0;
+      if(h<50)house[h]=-2;
+      else if(h<250)house[h]=-1;
+      else if(h<350)house[h]=0;
       else if(h<400)house[h]=1;
       else house[h]=2;
    }
 
    for(int c=0;c<9;c++)
    {
-      if(c<2)court[c]=-2;
+      if(c<3)court[c]=-2;
       else if(c<5)court[c]=-1;
-      else if(c<7)court[c]=0;
+      else if(c<5)court[c]=0;
       else if(c<8)court[c]=1;
       else court[c]=2;
       generate_name(courtname[c]);
@@ -368,8 +386,8 @@ int main(int argc, char* argv[])
 
    for(int e=0;e<EXECNUM;e++)
    {
-      exec[e]=-1;
-      generate_name(execname[e]);
+      exec[e]=-2;
+      generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
    }
 
    attorneyseed=getSeed();

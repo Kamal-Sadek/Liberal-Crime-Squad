@@ -911,6 +911,27 @@ void evasiverun(void)
 
             removesquadinfo(*activesquad->squad[p]);
 
+            //Unload hauled hostage or body when they get back to the safehouse
+            if(activesquad->squad[p]->prisoner!=NULL)
+            {
+               //If this is an LCS member or corpse being hauled (marked as in the squad)
+               if(activesquad->squad[p]->prisoner->squadid!=-1)
+               {
+                  //Take them out of the squad
+                  activesquad->squad[p]->prisoner->squadid=-1;
+                  //Set base and current location to squad's safehouse
+                  activesquad->squad[p]->prisoner->location=activesquad->squad[p]->base;
+                  activesquad->squad[p]->prisoner->base=activesquad->squad[p]->base;
+               }
+               else //A kidnapped conservative
+               {
+                  //Convert them into a prisoner
+                  kidnaptransfer(*activesquad->squad[p]->prisoner);
+                  delete activesquad->squad[p]->prisoner;
+               }
+               activesquad->squad[p]->prisoner=NULL;
+            }
+
             printparty();
          }
          else if(yourspeed[p]<theirbest-10)

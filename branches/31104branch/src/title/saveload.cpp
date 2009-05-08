@@ -72,6 +72,8 @@ void savegame(char *str)
       numbytes=fwrite(&presparty,sizeof(short),1,h);
       numbytes=fwrite(&amendnum,sizeof(int),1,h);
 
+      numbytes=fwrite(&termlimits,sizeof(bool),1,h);
+
       numbytes=fwrite(&stat_recruits,sizeof(int),1,h);
       numbytes=fwrite(&stat_dead,sizeof(int),1,h);
       numbytes=fwrite(&stat_kills,sizeof(int),1,h);
@@ -355,6 +357,8 @@ char load(void)
       fread(&presparty,sizeof(short),1,h);
       fread(&amendnum,sizeof(int),1,h);
 
+      fread(&termlimits,sizeof(bool),1,h);
+
       fread(&stat_recruits,sizeof(int),1,h);
       fread(&stat_dead,sizeof(int),1,h);
       fread(&stat_kills,sizeof(int),1,h);
@@ -479,7 +483,7 @@ char load(void)
          //read extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            pool[pl]->activity.arg = reinterpret_cast<int>(new interrogation);
+            pool[pl]->activity.arg = reinterpret_cast<long>(new interrogation);
             fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nofood,sizeof(int),1,h);
             fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nowater,sizeof(int),1,h);
             fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->nosleep,sizeof(int),1,h);

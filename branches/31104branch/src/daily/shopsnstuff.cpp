@@ -64,7 +64,7 @@ long gun_price(enum Weapons type)
       case WEAPON_AXE:
          price=100;
          break;
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
          price=200;
          break;
       case WEAPON_SEMIPISTOL_9MM:
@@ -116,7 +116,7 @@ long gun_price(enum Weapons type)
       case WEAPON_SEMIPISTOL_45:
          if(law[LAW_GUNCONTROL]>0)
             price*=2.0;
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
          if(law[LAW_GUNCONTROL]>1)
             price*=2.0;
    }
@@ -203,21 +203,42 @@ char gunselect(Creature *cr,short &gun,bool legal=1)
       {
          /* list here any guns to be sold at gunshop */
          case WEAPON_SMG_MP5:
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_CARBINE_M4:
+            if(!legal)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_AUTORIFLE_M16:
+            if(!legal)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_AUTORIFLE_AK47:
             if(legal && law[LAW_GUNCONTROL]!=-2)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_SEMIRIFLE_AR15:
             if(legal && law[LAW_GUNCONTROL]>-1)break;
+            if(!legal)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_REVOLVER_44:
             if(legal && law[LAW_GUNCONTROL]>-1)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_SEMIPISTOL_9MM:
          case WEAPON_SEMIPISTOL_45:
             if(legal && law[LAW_GUNCONTROL]>0)break;
-         case WEAPON_REVOLVER_22:
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
+         case WEAPON_REVOLVER_38:
             if(legal && law[LAW_GUNCONTROL]>1)break;
+            if(!legal)break;
+            guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          case WEAPON_SHOTGUN_PUMP:
             guntype.push_back(static_cast<enum Weapons>(a));
+            break;
          default:
             break;
       }
@@ -341,7 +362,7 @@ void armsdealer(int loc)
             if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,40);
-            addstr("T - Buy a .22 Speedloader     ($25)");
+            addstr("T - Buy a .38 Speedloader     ($25)");
             if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
@@ -372,7 +393,7 @@ void armsdealer(int loc)
             if(funds>=25)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,40);
-            addstr("T - Buy a .22 Slug Magazine   ($25)");
+            addstr("T - Buy a .38 Slug Magazine   ($25)");
             if(funds>=40)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
@@ -483,7 +504,7 @@ void armsdealer(int loc)
 
          if(funds>=25&&c=='t')
          {
-            clipbought=CLIP_22;
+            clipbought=CLIP_38;
             funds-=25;
             stat_spent+=25;
             moneylost_goods+=25;
@@ -557,7 +578,7 @@ void armsdealer(int loc)
          if(c==10)break;
          if(c=='c')in_gunshop=2;
          if(c=='g')in_gunshop=1;
-         if(c=='e')equip(activesquad->loot,-1);
+         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
       }
 
       if(c=='b')choose_buyer(buyer);
@@ -656,7 +677,7 @@ void pawnshop(int loc)
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,40);
             if(law[LAW_GUNCONTROL]<2)
-            addstr("T - Buy a .22 Speedloader     ($15)");
+            addstr("T - Buy a .38 Speedloader     ($15)");
             if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
@@ -694,7 +715,7 @@ void pawnshop(int loc)
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,40);
             if(law[LAW_GUNCONTROL]<2)
-            addstr("T - Buy a .22 Slug Magazine   ($15)");
+            addstr("T - Buy a .38 Slug Magazine   ($15)");
             if(funds>=30)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
@@ -740,7 +761,7 @@ void pawnshop(int loc)
                if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                move(10,40);
-               addstr("T - Buy a .22 Revolver        ($150)");
+               addstr("T - Buy a .38 Revolver        ($150)");
             }
             if(law[LAW_GUNCONTROL]<1)
             {
@@ -795,7 +816,7 @@ void pawnshop(int loc)
                if(funds>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                move(10,40);
-               addstr("T - Buy a .22 Slug Pistol     ($150)");
+               addstr("T - Buy a .38 Slug Pistol     ($150)");
             }
             if(law[LAW_GUNCONTROL]<1)
             {
@@ -922,7 +943,7 @@ void pawnshop(int loc)
       {
          if(c==10)in_fence=0;
 
-         if(c=='e')equip(activesquad->loot,-1);
+         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
 
          if((c=='w'||c=='c'||c=='l'||c=='a'||c=='f')&&
             activesquad->loot.size()>0)
@@ -1078,7 +1099,7 @@ void pawnshop(int loc)
 
          if(funds>=150&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
-            gunbought=WEAPON_REVOLVER_22;
+            gunbought=WEAPON_REVOLVER_38;
             funds-=150;
             stat_spent+=150;
             moneylost_goods+=150;
@@ -1194,7 +1215,7 @@ void pawnshop(int loc)
 
          if(funds>=15&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
-            clipbought=CLIP_22;
+            clipbought=CLIP_38;
             funds-=15;
             stat_spent+=15;
             moneylost_goods+=15;
@@ -1343,10 +1364,334 @@ void pawnshop(int loc)
          if(c==10)break;
          if(c=='c' && law[LAW_GUNCONTROL]<2)in_gunshop=2;
          if(c=='g' && law[LAW_GUNCONTROL]<2)in_gunshop=1;
-         if(c=='e')equip(activesquad->loot,-1);
+         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
          if(c=='s')in_fence=1;
          if(c=='t')in_tools=1;
       }
+
+      if(c=='b')choose_buyer(buyer);
+
+      if(c=='0')party_status=-1;
+
+      if(c>='1'&&c<='6'&&activesquad!=NULL)
+      {
+         if(activesquad->squad[c-'1']!=NULL)
+         {
+            if(party_status==c-'1')fullstatus(party_status);
+            else party_status=c-'1';
+         }
+      }
+
+   }while(1);
+}
+
+
+
+/* active squad visits the car dealership */
+void dealership(int loc)
+{
+   short buyer=0;
+   int l;
+   char str[80];
+
+   locatesquad(activesquad,loc);
+
+   int partysize=0;
+   for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]!=NULL)
+      {
+         partysize++;
+      }
+   }
+
+   do
+   {
+      erase();
+
+      locheader();
+      printparty();
+
+      vehiclest* car_to_sell=0;
+      int price=0;
+
+      for(int v=(int)vehicle.size()-1;v>=0;v--)
+      {
+         if(vehicle[v]->id==activesquad->squad[buyer]->carid)
+         {
+            car_to_sell = vehicle[v];
+         }
+      }
+
+      if(!car_to_sell)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(10,1);
+      addstr("G - Get a Liberal car");
+
+      move(11,1);
+      if(car_to_sell)
+      {
+         switch(car_to_sell->type)
+         {
+         case VEHICLE_VAN:
+            price=8000;
+            break;
+         case VEHICLE_STATIONWAGON:
+            price=6000;
+            break;
+         case VEHICLE_SPORTSCAR:
+            price=8000;
+            break;
+         case VEHICLE_BUG:
+            price=4000;
+            break;
+         case VEHICLE_PICKUP:
+            price=4000;
+            break;
+         case VEHICLE_POLICECAR:
+            price=4000;
+            break;
+         case VEHICLE_TAXICAB:
+            price=4000;
+            break;
+         case VEHICLE_SUV:
+            price=8000;
+            break;
+         case VEHICLE_AGENTCAR:
+            price=8000;
+            break;
+         case VEHICLE_JEEP:
+            price=6000;
+            break;
+         }
+         if(car_to_sell->heat)
+            price/=10;
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("S - Sell the ");
+         getcarfull(str,*car_to_sell);
+         addstr(str);
+         addstr(" ($");
+         itoa(price,str,10);
+         addstr(str);
+         addstr(")");
+      }
+      else
+      {
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr("S - Sell a car");
+      }
+
+      /*if(car_to_sell && car_to_sell->heat>1 && funds>=500)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(12,1);
+      addstr("P - Repaint car, replace plates and tags ($500)");*/
+
+      if(partysize>=2)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(16,1);
+      addstr("B - Choose a buyer");
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(16,40);
+      addstr("Enter - Leave");
+
+      if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(15,1);
+      addstr("0 - Show the squad's Liberal status");
+      if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(15,40);
+      addstr("# - Check the status of a squad Liberal");
+
+      int c=getch();
+      translategetch(c);
+
+      
+      // Leave
+      if(c==10)break;
+
+      //Sell the car
+      if(c=='s' && car_to_sell)
+      {
+         funds+=price;
+         moneygained_goods+=price;
+         removecarprefs_pool(car_to_sell->id);
+         delete car_to_sell;
+         for(int v=(int)vehicle.size()-1;v>=0;v--)
+         {
+            if(vehicle[v]==car_to_sell)
+            {
+               vehicle.erase(vehicle.begin() + v);
+               break;
+            }
+         }
+      }
+
+      // Get a car
+      if(c=='g' && !car_to_sell)
+      {
+         do
+         {
+            erase();
+
+            locheader();
+            printparty();
+
+            if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(10,1);
+            addstr("A - Bug ($10000)");
+            move(10,40);
+            addstr("B - Pickup Truck ($10000)");
+            
+            if(funds>=20000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(11,1);
+            addstr("C - Sports Car ($20000)");
+            move(11,40);
+            addstr("D - SUV ($20000)");
+            
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(16,1);
+            addstr("Enter - We don't need a Conservative car");
+
+            if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(15,1);
+            addstr("0 - Show the squad's Liberal status");
+            if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(15,40);
+            addstr("# - Check the status of a squad Liberal");
+
+            int c=getch();
+            translategetch(c);
+            
+            // Back out
+            if(c==10)break;
+
+            //Picked a car
+            if(c>='a' && c<='d')
+            {
+               if(funds<20000 || (funds<40000 && c>='c'))continue;
+               int cartype=-1;
+               int carcolor=-1;
+               switch(c)
+               {
+               case 'a':cartype=VEHICLE_BUG;break;
+               case 'b':cartype=VEHICLE_PICKUP;break;
+               case 'c':cartype=VEHICLE_SPORTSCAR;break;
+               case 'd':cartype=VEHICLE_SUV;break;
+               default:continue;
+               }
+
+               do
+               {
+                  erase();
+
+                  locheader();
+                  printparty();
+
+                  if(funds>=40000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  move(10,1);
+                  addstr("A - Red");
+                  move(10,40);
+                  addstr("B - White");
+                  move(11,1);
+                  addstr("C - Blue");
+                  move(11,40);
+                  addstr("D - Beige");
+                  
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  move(16,1);
+                  addstr("Enter - These colors are Conservative");
+
+                  if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  else set_color(COLOR_BLACK,COLOR_BLACK,1);
+                  move(15,1);
+                  addstr("0 - Show the squad's Liberal status");
+                  if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  else set_color(COLOR_BLACK,COLOR_BLACK,1);
+                  move(15,40);
+                  addstr("# - Check the status of a squad Liberal");
+
+                  int c=getch();
+                  translategetch(c);
+                  
+                  // Back out
+                  if(c==10)break;
+
+                  //Picked a color
+                  if(c=='a')
+                  {
+                     carcolor=VEHICLECOLOR_RED;
+                     break;
+                  }
+                  if(c=='b')
+                  {
+                     carcolor=VEHICLECOLOR_WHITE;
+                     break;
+                  }
+                  if(c=='c')
+                  {
+                     carcolor=VEHICLECOLOR_BLUE;
+                     break;
+                  }
+                  if(c=='d')
+                  {
+                     carcolor=VEHICLECOLOR_BEIGE;
+                     break;
+                  }
+
+                  if(c=='0')party_status=-1;
+
+                  if(c>='1'&&c<='6'&&activesquad!=NULL)
+                  {
+                     if(activesquad->squad[c-'1']!=NULL)
+                     {
+                        if(party_status==c-'1')fullstatus(party_status);
+                        else party_status=c-'1';
+                     }
+                  }
+               }while(1);
+
+               if(carcolor!=-1)
+               {
+                  vehiclest *v=new vehiclest;
+                  v->init(cartype);
+                  v->color = carcolor;
+                  v->myear = year;
+                  v->heat  = 0;
+                  activesquad->squad[buyer]->carid = v->id;
+                  vehicle.push_back(v);
+                  break;
+               }
+            }
+
+            if(c=='0')party_status=-1;
+
+            if(c>='1'&&c<='6'&&activesquad!=NULL)
+            {
+               if(activesquad->squad[c-'1']!=NULL)
+               {
+                  if(party_status==c-'1')fullstatus(party_status);
+                  else party_status=c-'1';
+               }
+            }
+
+         }while(1);
+      }
+
+      // Reduce heat
+      /*if(c=='p' && car_to_sell && car_to_sell->heat>1 && funds>=500)
+      {
+         funds-=500;
+         moneylost_goods+=500;
+         car_to_sell->heat=1;
+      }*/
 
       if(c=='b')choose_buyer(buyer);
 
@@ -1546,7 +1891,7 @@ void deptstore(int loc)
          }
       }
 
-      if(c=='e')equip(activesquad->loot,-1);
+      if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
       if(c=='b')choose_buyer(buyer);
       if(c=='0')party_status=-1;
       if(c>='1'&&c<='6'&&activesquad!=NULL)
@@ -1966,7 +2311,7 @@ void halloweenstore(int loc)
          }
       }
 
-      if(c=='e')equip(activesquad->loot,-1);
+      if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
       if(c=='b')choose_buyer(buyer);
       if(c=='0')party_status=-1;
       if(c>='1'&&c<='6'&&activesquad!=NULL)
@@ -2320,7 +2665,7 @@ int fencevalue(itemst &it)
             case WEAPON_KNIFE:fenceamount=10;break;
             case WEAPON_SHANK:fenceamount=5;break;
             case WEAPON_SYRINGE:fenceamount=10;break;
-            case WEAPON_REVOLVER_22:fenceamount=50;break;
+            case WEAPON_REVOLVER_38:fenceamount=50;break;
             case WEAPON_REVOLVER_44:fenceamount=100;break;
             case WEAPON_SEMIPISTOL_9MM:fenceamount=100;break;
             case WEAPON_SEMIPISTOL_45:fenceamount=100;break;
@@ -2384,7 +2729,7 @@ int fencevalue(itemst &it)
       case ITEM_CLIP:
          switch(it.cliptype)
          {
-            case CLIP_22:fenceamount=2;break;
+            case CLIP_38:fenceamount=2;break;
             case CLIP_44:fenceamount=3;break;
             case CLIP_45:fenceamount=4;break;
             case CLIP_9:fenceamount=4;break;

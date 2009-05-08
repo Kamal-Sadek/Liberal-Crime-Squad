@@ -151,7 +151,9 @@ void tendhostage(Creature *cr,char &clearformess)
       //the trauma, while letting up takes a while to get them calmed down
       //and really brutal treatment early on will never be completely
       //forgotten
-      int spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
+      int spiritcrush;
+      if(cr->joindays)spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
+      else spiritcrush=0;
       int healthcrush=0;
 
       //get short references to the hostage's status
@@ -238,7 +240,7 @@ void tendhostage(Creature *cr,char &clearformess)
          if(techniques[TECHNIQUE_KILL])
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            move(y,0);y+=2;addstr("The Execution of an Automoton         ");
+            move(y,0);y+=2;addstr("The Execution of an Automaton         ");
          }
          else
          {
@@ -700,9 +702,9 @@ void tendhostage(Creature *cr,char &clearformess)
             switch(LCSrandom(5))
             {
             case 0:addstr(" recreates scenes from Abu Ghraib");break;
-            case 1:addstr(" whips the Automoton with a steel cable");break;
+            case 1:addstr(" whips the Automaton with a steel cable");break;
             case 2:addstr(" holds the hostage's head under water");break;
-            case 3:addstr(" peels back the Automoton's fingernails");break;
+            case 3:addstr(" peels back the Automaton's fingernails");break;
             case 4:addstr(" beats the hostage with a metal bat");break;
             }
             addstr(",");
@@ -1579,6 +1581,7 @@ void tendhostage(Creature *cr,char &clearformess)
                cr->flag |= CREATUREFLAG_SLEEPER;
                liberalize(*cr,false);
                cr->location = cr->worklocation;
+               location[cr->worklocation]->interrogated=1;
                cr->base = cr->worklocation;
                break;
             }

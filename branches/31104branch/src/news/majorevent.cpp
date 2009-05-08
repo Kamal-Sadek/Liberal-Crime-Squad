@@ -13,7 +13,7 @@ void constructeventstory(char *story,short view,char positive)
    {
       switch(view)
       {
-         case VIEW_ABORTION:
+         case VIEW_WOMEN:
          {
             char str[200],str2[200];
             char gen[50];
@@ -1102,7 +1102,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
    {
       switch(ns.view)
       {
-         case VIEW_ABORTION:
+         case VIEW_WOMEN:
             displaycenterednewsfont("CLINIC MURDER",5);
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);

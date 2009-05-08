@@ -232,6 +232,30 @@ void mode_base(void)
 
             switch(l)
             {
+               case LAW_WOMEN:
+                  addstr("Women's Rights");
+			         break;
+               case LAW_CIVILRIGHTS:
+                  addstr("Civil Rights");
+			         break;
+               case LAW_DRUGS:
+                  addstr("Drug Law");
+			         break;
+               case LAW_IMMIGRATION:
+                  addstr("Immigration");
+			         break;
+               case LAW_RELIGION:
+                  addstr("Religion");
+			         break;
+               case LAW_ELECTIONS:
+                  addstr("Election Reform");
+			         break;
+               case LAW_MILITARY:
+                  addstr("Military Spending");
+			         break;
+               case LAW_TORTURE:
+                  addstr("Human Rights");
+			         break;
                case LAW_TAX:
                   addstr("Tax Structure");
 			         break;
@@ -404,7 +428,10 @@ void mode_base(void)
          if(fooddaysleft(l)==0)
          {
             // Allow siege if no liberals present
-            if(location2[l])cannotwait=1;
+
+            // Allow waiting if there's no food...
+            //   we'll handle this by decrementing starving Liberals' health
+            //if(location2[l])cannotwait=1;
             break;
          }
       }
@@ -444,6 +471,10 @@ void mode_base(void)
             {
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
                addstr("Under Siege");
+               int stock=1;
+               if(selectedsiege!=-1)stock=location[selectedsiege]->compound_stores;
+               else if(activesquad!=NULL)stock=location[activesquad->squad[0]->location]->compound_stores;
+               if(!stock)addstr(" (No Food)");
             }
          }
 
@@ -719,11 +750,12 @@ void mode_base(void)
 
       if(c=='e'&&partysize>0&&!underattack)
       {
-         if(location[activesquad->squad[0]->location]->renting>=0)
+         equip(location[activesquad->squad[0]->location]->loot,-1);
+         /*if(location[activesquad->squad[0]->location]->renting>=0)
          {
             equip(activesquad->loot,activesquad->squad[0]->location);
          }
-         else equip(activesquad->loot,-1);
+         else equip(activesquad->loot,-1);*/
       }
 
       if(c=='r'&&pool.size()>0)review();

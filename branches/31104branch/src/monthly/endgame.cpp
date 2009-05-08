@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 
-/* endgame - attempts to pass a constitutional amendment to win the game */
+/* endgame - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
 {
    int j;
@@ -86,7 +86,9 @@ void tossjustices(char canseethings)
       move(y+4,0);
       addstr("choosing to be replaced by Proper Justices, also of");
       move(y+5,0);
-      addstr("the President's choosing.");
+      addstr("the President's choosing with the advice and consent of");
+      move(y+6,0);
+      addstr("the Senate.");
 
       move(24,0);
       addstr("Press 'C' to watch the ratification process unfold.");
@@ -123,7 +125,84 @@ void tossjustices(char canseethings)
    }
 }
 
+/* endgame - attempts to pass a constitutional amendment to help win the game */
+void amendment_termlimits(char canseethings)
+{
+   if(termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
+   int j;
+   if(canseethings)
+   {
+      erase();
 
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+      move(12,6);
+      addstr("A National Convention has proposed an ELITE LIBERAL AMENDMENT!");
+
+      refresh();
+      getch();
+   }
+
+   //STATE THE AMENDMENT
+   if(canseethings)
+   {
+      int tossnum=0;
+      for(j=0;j<9;j++)
+      {
+         if(court[j]<=1)tossnum++;
+      }
+
+      amendmentheading();
+
+      move(2,5);
+      addstr("In light of the Conservative nature of entrenched politicians,");
+      move(3,0);
+      addstr("and the corrupting influence of incumbency on the democratic process,");
+      move(4,0);
+      addstr("all members of the House of Representatives and Senate shall henceforth");
+      move(5,0);
+      addstr("be limited to one term in office.  This shall be immediately enforced");
+      move(6,0);
+      addstr("by holding elections to replace all members of Congress upon the");
+      move(7,0);
+      addstr("ratification of this amendment.");
+
+      move(24,0);
+      addstr("Press 'C' to watch the ratification process unfold.");
+      do
+      {
+         refresh();
+         int c=getch();
+         translategetch(c);
+         if(c=='c')break;
+      }while(1);
+   }
+
+   if(ratify(2,-1,-1,0,canseethings))
+   {
+      termlimits = true;
+      if(canseethings)
+      {
+         move(24,0);
+         addstr("Press any key to hold new elections!                           ");
+         refresh();
+         getch();
+      }
+      elections_senate(0,canseethings);
+      elections_senate(1,canseethings);
+      elections_senate(2,canseethings);
+      elections_house(canseethings);
+
+      amendnum++;
+   }
+   else if(canseethings)
+   {
+      move(24,0);
+      addstr("Press any key to reflect on what has happened.");
+      refresh();
+      getch();
+   }
+}
 
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings)
@@ -185,7 +264,7 @@ void reaganify(char canseethings)
       }while(1);
    }
 
-   if(ratify(-2,-1,-1,0,canseethings))
+   if(ratify(-2,-1,-1,1,canseethings))
    {
       if(canseethings)
       {
@@ -194,6 +273,8 @@ void reaganify(char canseethings)
          refresh();
          getch();
       }
+
+      amendnum = 1; // Constitution repealed...
 
       //REAGANIFY
       if(canseethings)
@@ -334,7 +415,7 @@ void reaganify(char canseethings)
 
 
 /* endgame - checks if a constitutional amendment is ratified */
-char ratify(int level,int view,int lawview,char congress,char canseethings)
+char ratify(int level,int lawview,int view,char congress,char canseethings)
 {
    if(canseethings)
    {

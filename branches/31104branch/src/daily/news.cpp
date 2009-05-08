@@ -78,6 +78,7 @@ void setpriority(newsstoryst &ns)
          if(crime[CRIME_BREAK_FACTORY]>10)crime[CRIME_BREAK_FACTORY]=10;
          if(crime[CRIME_FREE_RABBITS]>10)crime[CRIME_FREE_RABBITS]=10;
          if(crime[CRIME_FREE_BEASTS]>10)crime[CRIME_FREE_BEASTS]=10;
+         if(crime[CRIME_TAGGING]>10)crime[CRIME_TAGGING]=10;
 
          // Increase news story priority based on the number of instances of
          // various crimes, scaled by a factor dependant on the crime
@@ -94,14 +95,53 @@ void setpriority(newsstoryst &ns)
 
          // Common site crimes
          ns.priority+=crime[CRIME_KILLEDSOMEBODY   ] *  30;
+         ns.priority+=crime[CRIME_FREE_BEASTS      ] *  12;
+         ns.priority+=crime[CRIME_BREAK_SWEATSHOP  ] *   8;
+         ns.priority+=crime[CRIME_BREAK_FACTORY    ] *   8;
+         ns.priority+=crime[CRIME_FREE_RABBITS     ] *   8;
          ns.priority+=crime[CRIME_ATTACKED_MISTAKE ] *   7;
          ns.priority+=crime[CRIME_ATTACKED         ] *   4;
-         ns.priority+=crime[CRIME_FREE_BEASTS      ] *   3;
-         ns.priority+=crime[CRIME_BREAK_SWEATSHOP  ] *   2;
-         ns.priority+=crime[CRIME_BREAK_FACTORY    ] *   2;
-         ns.priority+=crime[CRIME_FREE_RABBITS     ] *   2;
+         ns.priority+=crime[CRIME_TAGGING          ] *   2;
          //ns.priority+=crime[CRIME_STOLEGROUND      ];
          //ns.priority+=crime[CRIME_BROKEDOWNDOOR    ];
+
+         // Set story's political and violence levels for determining whether
+         // a story becomes positive or negative
+         ns.politics_level+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
+         ns.politics_level+=crime[CRIME_HACK_INTEL       ] * 100;
+         ns.politics_level+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
+         ns.politics_level+=crime[CRIME_CORP_FILES       ] * 100;
+         ns.politics_level+=crime[CRIME_PRISON_RELEASE   ] *  50;
+         ns.politics_level+=crime[CRIME_POLICE_LOCKUP    ] *  30;
+         ns.politics_level+=crime[CRIME_COURTHOUSE_LOCKUP] *  30;
+         ns.politics_level+=crime[CRIME_FREE_BEASTS      ] *  10;
+         ns.politics_level+=crime[CRIME_BREAK_SWEATSHOP  ] *  10;
+         ns.politics_level+=crime[CRIME_BREAK_FACTORY    ] *  10;
+         ns.politics_level+=crime[CRIME_FREE_RABBITS     ] *  10;
+         ns.politics_level+=crime[CRIME_TAGGING          ] *   3;
+
+         if(ns.claimed)ns.politics_level+=20;
+
+         ns.violence_level+=crime[CRIME_KILLEDSOMEBODY   ] *  20;
+         ns.violence_level+=crime[CRIME_ATTACKED_MISTAKE ] *  12;
+         ns.violence_level+=crime[CRIME_ATTACKED         ] *   4;
+
+         short violence_threshhold;
+         if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<5)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<25)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<45)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<65)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<85)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<105)violence_threshhold=10;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<125)violence_threshhold=13;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<145)violence_threshhold=17;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<165)violence_threshhold=20;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+attitude[VIEW_LIBERALCRIMESQUADPOS]<185)violence_threshhold=30;
+         else violence_threshhold=50;
+
+         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
+            ns.positive = 1;
+         else ns.positive = 0;
 
          // Add additional priority based on the type of news story
          // and how high profile the LCS is
@@ -157,17 +197,21 @@ void setpriority(newsstoryst &ns)
          // priority accordingly
          ns.crime.push_back(CRIME_BROKEDOWNDOOR);
          ns.priority=1;
+         ns.politics_level+=20;
          if(ns.positive==0)
          {
             ns.crime.push_back(CRIME_ATTACKED_MISTAKE);
             ns.priority+=7;
+            ns.violence_level+=12;
          }
          ns.crime.push_back(CRIME_ATTACKED);
          ns.priority+=4*(LCSrandom(10)+1);
+         ns.violence_level+=LCSrandom(10) *  4;
          if(LCSrandom(endgamestate+1))
          {
             ns.crime.push_back(CRIME_KILLEDSOMEBODY);
             ns.priority+=LCSrandom(10)*30;
+            ns.violence_level+=LCSrandom(10) * 20;
          }
          if(LCSrandom(endgamestate+1))
          {
@@ -178,11 +222,33 @@ void setpriority(newsstoryst &ns)
          {
             ns.crime.push_back(CRIME_BREAK_FACTORY);
             ns.priority+=LCSrandom(10)*2;
+            ns.politics_level+=LCSrandom(10) *  10;
          }
          if(LCSrandom(2))
          {
             ns.crime.push_back(CRIME_CARCHASE);
          }
+
+         // Set story's political and violence levels for determining whether
+         // a story becomes positive or negative
+
+         short violence_threshhold;
+         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<5)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<25)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<45)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<65)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<85)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<105)violence_threshhold=10;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<125)violence_threshhold=13;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<145)violence_threshhold=17;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<165)violence_threshhold=20;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<185)violence_threshhold=30;
+         else violence_threshhold=50;
+
+         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
+            ns.positive = 1;
+         else ns.positive = 0;
+
          break;
       case NEWSSTORY_CCS_DEFENDED:
       case NEWSSTORY_CCS_KILLED_SIEGEATTACK:
@@ -407,6 +473,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[c]==CRIME_CARCHASE)continue;
                   if(ns.crime[c]==CRIME_CARCRASH)continue;
                   if(ns.crime[c]==CRIME_FOOTCHASE)continue;
+                  if(ns.crime[c]==CRIME_TAGGING)continue;
                   if(crime[ns.crime[c]]==1)typesum++;
                }
 
@@ -414,7 +481,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to sources that were at the scene, ");
+                     strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad caused the power out that struck the state ");
                      strcat(story,"yesterday by tampering with equipment on the site.");
                      strcat(story,"&r");
@@ -430,7 +497,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to sources that were at the scene, ");
+                     strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad allegedly freed or attempted to free prisoners from the police lockup.");
                      strcat(story,"&r");
                   }
@@ -445,7 +512,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to sources that were at the scene, ");
+                     strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad allegedly freed or attempted to free prisoners from the court house lockup.");
                      strcat(story,"&r");
                   }
@@ -460,7 +527,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to sources that were at the scene, ");
+                     strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad allegedly freed prisoners while in the facility.");
                      strcat(story,"&r");
                   }
@@ -475,7 +542,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to police sources that were at the scene, ");
+                     strcat(story,"  According to police sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad allegedly violated the sacred ");
                      strcat(story,"trust and attempted to influence a jury.");
                      strcat(story,"&r");
@@ -491,7 +558,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to police sources that were at the scene, ");
+                     strcat(story,"  According to police sources that were at the scene, ");
                      strcat(story,"intelligence officials seemed very nervous about something.");
                      strcat(story,"&r");
                   }
@@ -505,7 +572,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to police sources that were at the scene, ");
+                     strcat(story,"  According to police sources that were at the scene, ");
                      strcat(story,"the owner of the house seemed very frantic about some missing property.");
                      strcat(story,"&r");
                   }
@@ -519,7 +586,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  Accorded to police sources that were at the scene, ");
+                     strcat(story,"  According to police sources that were at the scene, ");
                      strcat(story,"executives on the scene seemed very nervous about something.");
                      strcat(story,"&r");
                   }
@@ -536,150 +603,167 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(crime[CRIME_KILLEDSOMEBODY])typesum--;
                }
 
-               if(typesum>0)
+               if(typesum>0 || crime[CRIME_TAGGING])
                {
-                  if(!ccs)
+                  if(crime[CRIME_TAGGING])
                   {
-                     if(!liberalguardian)
+                     if(ccs)
                      {
-                        strcat(story,"  Further details are sketchy, but police sources suggest that the LCS ");
-                        strcat(story,"engaged in ");
+                        strcat(story,"  The CCS spraypainted its initials on the walls.");
                      }
                      else
                      {
-                        strcat(story,"  The Liberal Crime Squad ");
+                        strcat(story,"  The LCS spraypainted its initials on the walls.");
                      }
                   }
-                  else
-                  {
-                     strcat(story,"  Further details are sketchy, but police sources suggest that the CCS ");
-                        strcat(story,"engaged in ");
-                  }
-                  if(crime[CRIME_ARSON])
-                  {
-                     if(!liberalguardian||ccs)
-                     {
-                        strcat(story,"arson");
-                     }
-                     else
-                     {
-                        strcat(story,"set fire to Conservative property");
-                     }
 
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
-                  }
-                  if(!liberalguardian||ccs)
+                  if(typesum>0)
                   {
-                     if(crime[CRIME_KILLEDSOMEBODY])
+                     if(!ccs)
                      {
-                        strcat(story,"murder");
+                        if(!liberalguardian)
+                        {
+                           strcat(story,"  Further details are sketchy, but police sources suggest that the LCS ");
+                           strcat(story,"engaged in ");
+                        }
+                        else
+                        {
+                           strcat(story,"  The Liberal Crime Squad ");
+                        }
+                     }
+                     else
+                     {
+                        strcat(story,"  Further details are sketchy, but police sources suggest that the CCS ");
+                           strcat(story,"engaged in ");
+                     }
+                     if(crime[CRIME_ARSON])
+                     {
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"arson");
+                        }
+                        else
+                        {
+                           strcat(story,"set fire to Conservative property");
+                        }
+
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
                         typesum--;
                      }
-                     if(crime[CRIME_ATTACKED_MISTAKE])
+                     if(!liberalguardian||ccs)
                      {
-                        strcat(story,"violence");
+                        if(crime[CRIME_KILLEDSOMEBODY])
+                        {
+                           strcat(story,"murder");
+                           if(typesum>=3)strcat(story,", ");
+                           else if(typesum==2)strcat(story," and ");
+                           typesum--;
+                        }
+                        if(crime[CRIME_ATTACKED_MISTAKE])
+                        {
+                           strcat(story,"violence");
+                           if(typesum>=3)strcat(story,", ");
+                           else if(typesum==2)strcat(story," and ");
+                           typesum--;
+                        }
+                        if(crime[CRIME_ATTACKED])
+                        {
+                           if(crime[CRIME_ATTACKED_MISTAKE])strcat(story,"more violence");
+                           else strcat(story,"violence");
+                           if(typesum>=3)strcat(story,", ");
+                           else if(typesum==2)strcat(story," and ");
+                           typesum--;
+                        }
+                     }
+                     else
+                     {
+                        if(crime[CRIME_ATTACKED])
+                        {
+                           strcat(story,"engaged in combat with Conservative forces");
+                           if(typesum>=3)strcat(story,", ");
+                           else if(typesum==2)strcat(story," and ");
+                           typesum--;
+                        }
+                     }
+                     if(crime[CRIME_STOLEGROUND])
+                     {
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"theft");
+                        }
+                        else
+                        {
+                           strcat(story,"gained control of enemy equipment");
+                        }
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
                         typesum--;
                      }
-                     if(crime[CRIME_ATTACKED])
+                     if(crime[CRIME_FREE_RABBITS]||crime[CRIME_FREE_BEASTS])
                      {
-                        if(crime[CRIME_ATTACKED_MISTAKE])strcat(story,"more violence");
-                        else strcat(story,"violence");
+                        if(!liberalguardian)
+                        {
+                           strcat(story,"tampering with lab animals");
+                        }
+                        else
+                        {
+                           strcat(story,"liberated abused lab animals");
+                        }
+
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
                         typesum--;
                      }
-                  }
-                  else
-                  {
-                     if(crime[CRIME_ATTACKED])
+                     if(crime[CRIME_BREAK_SWEATSHOP]||crime[CRIME_BREAK_FACTORY])
                      {
-                        strcat(story,"engaged in combat with Conservative forces");
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"destruction of private property");
+                        }
+                        else
+                        {
+                           strcat(story,"damaged enemy infrastructure");
+                        }
+
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
                         typesum--;
                      }
-                  }
-                  if(crime[CRIME_STOLEGROUND])
-                  {
-                     if(!liberalguardian||ccs)
+                     if(crime[CRIME_BROKEDOWNDOOR])
                      {
-                        strcat(story,"theft");
-                     }
-                     else
-                     {
-                        strcat(story,"gained control of enemy equipment");
-                     }
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
-                  }
-                  if(crime[CRIME_FREE_RABBITS]||crime[CRIME_FREE_BEASTS])
-                  {
-                     if(!liberalguardian)
-                     {
-                        strcat(story,"tampering with lab animals");
-                     }
-                     else
-                     {
-                        strcat(story,"liberated abused lab animals");
-                     }
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"breaking and entering");
+                        }
+                        else
+                        {
+                           strcat(story,"forced entry into a secure area");
+                        }
 
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
-                  }
-                  if(crime[CRIME_BREAK_SWEATSHOP]||crime[CRIME_BREAK_FACTORY])
-                  {
-                     if(!liberalguardian||ccs)
-                     {
-                        strcat(story,"destruction of private property");
+                        if(typesum>=3)strcat(story,", ");
+                        else if(typesum==2)strcat(story," and ");
+                        typesum--;
                      }
-                     else
+                     if(crime[CRIME_UNLOCKEDDOOR])
                      {
-                        strcat(story,"damaged enemy infrastructure");
-                     }
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"unlawful entry");
+                        }
+                        else
+                        {
+                           strcat(story,"evaded Conservative security measures");
+                        }
 
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
+                        if(typesum>=3)strcat(story,", ");
+                        else if(typesum==2)strcat(story," and ");
+                        typesum--;
+                     }
+                     strcat(story,".");
                   }
-                  if(crime[CRIME_BROKEDOWNDOOR])
-                  {
-                     if(!liberalguardian||ccs)
-                     {
-                        strcat(story,"breaking and entering");
-                     }
-                     else
-                     {
-                        strcat(story,"forced entry into a secure area");
-                     }
 
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
-                  }
-                  if(crime[CRIME_UNLOCKEDDOOR])
-                  {
-                     if(!liberalguardian||ccs)
-                     {
-                        strcat(story,"unlawful entry");
-                     }
-                     else
-                     {
-                        strcat(story,"evaded Conservative security measures");
-                     }
-
-                     if(typesum>=3)strcat(story,", ");
-                     else if(typesum==2)strcat(story," and ");
-                     typesum--;
-                  }
-                  strcat(story,".&r");
+                  strcat(story,"&r");
                }
 
                if(crime[CRIME_CARCHASE])
@@ -911,7 +995,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          strcat(story," - The disappearance of ");
          strcat(story,ns.cr->propername);
          strcat(story," is now considered a kidnapping, ");
-         strcat(story,"accorded to a police spokesperson.");
+         strcat(story,"according to a police spokesperson.");
          strcat(story,"&r");
 
          char dstr[200],dstr2[200];
@@ -1358,12 +1442,18 @@ void majornewspaper(char &clearformess,char canseethings)
             ns->view=LCSrandom(VIEWNUM-3);
             ns->positive=LCSrandom(2);
 
+            // Skip issues that we have no news stories for
+            if(ns->view==VIEW_IMMIGRATION)continue;
+            if(ns->view==VIEW_DRUGS)continue;
+            if(ns->view==VIEW_MILITARY)continue;
+            if(ns->view==VIEW_CIVILRIGHTS)continue;
+
             //NO ABORTION
-            if(ns->view==VIEW_ABORTION&&ns->positive&&law[LAW_ABORTION]==-2)continue;
+            if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
             //NO PARTIAL BIRTH ABORTION
-            if(ns->view==VIEW_ABORTION&&!ns->positive&&law[LAW_ABORTION]<2)continue;
+            if(ns->view==VIEW_WOMEN&&!ns->positive&&law[LAW_ABORTION]<2)continue;
             //NO DEATH PENALTY
-            if(ns->view==VIEW_DEATHPENALTY&&law[LAW_ABORTION]==2)continue;
+            if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue;
             //NO NUCLEAR POWER
             if(ns->view==VIEW_NUCLEARPOWER&&ns->positive&&law[LAW_NUCLEARPOWER]==2)continue;
             //NO ANIMAL RESEARCH
@@ -1598,7 +1688,7 @@ void majornewspaper(char &clearformess,char canseethings)
 
                      del=1;
                      break;
-                  case VIEW_ABORTION:
+                  case VIEW_WOMEN:
                      erase();
 
                      movie.loadmovie("art\\abort.cmv");
@@ -1636,7 +1726,7 @@ void majornewspaper(char &clearformess,char canseethings)
    //ASSIGN PAGE NUMBERS TO STORIES BASED ON THEIR PRIORITY
    if(newsstory.size())
    {
-      for(n=0;n<newsstory.size();n++)
+      for(n=newsstory.size()-1;n>=0;n--)
       {
          setpriority(*newsstory[n]);
          // Suppress squad actions that aren't worth a story
@@ -1789,24 +1879,6 @@ void majornewspaper(char &clearformess,char canseethings)
       }
    }
 
-   //Essay writing (old code)
-   /*for(int /1=0;w<VIEWNUM;w++)
-   {
-      if(!public_interest[w])
-      {
-         continue;
-      }
-      else
-      {
-         if(writers)
-         {
-            public_interest[w]--;
-            writers--;
-            background_liberal_influence[w]++;
-         }
-      }
-   }*/
-
    //CHANGE FOR SQUAD ACTS PUBLIC OPINION BASED ON PAGE NUMBERS
       //AND OVERALL POWER OF THE STORY
    int power;
@@ -1853,6 +1925,29 @@ void majornewspaper(char &clearformess,char canseethings)
          power/=10;
          power++;
 
+         short violence_threshhold;
+
+         if(attitude[VIEW_POLITICALVIOLENCE]<5)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<15)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<25)violence_threshhold=3;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<35)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<45)violence_threshhold=5;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<55)violence_threshhold=7;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<65)violence_threshhold=9;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<75)violence_threshhold=11;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<85)violence_threshhold=15;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<95)violence_threshhold=20;
+         else violence_threshhold=50;
+
+         if(newsstory[n]->violence_level / (newsstory[n]->politics_level+1) > violence_threshhold)
+         {
+            change_public_opinion(VIEW_POLITICALVIOLENCE,power);
+         }
+         else
+         {
+            change_public_opinion(VIEW_POLITICALVIOLENCE,-power);
+         }
+
          char colored=0;
          if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))
@@ -1882,39 +1977,47 @@ void majornewspaper(char &clearformess,char canseethings)
          {
             case SITE_LABORATORY_COSMETICS:
                change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
                break;
             case SITE_LABORATORY_GENETIC:
+               change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
                change_public_opinion(VIEW_GENETICS,power,colored,power*10);
                break;
             case SITE_GOVERNMENT_POLICESTATION:
                change_public_opinion(VIEW_POLICEBEHAVIOR,power,colored,power*10);
+               change_public_opinion(VIEW_DRUGS,power,colored,power*10);
                break;
             case SITE_GOVERNMENT_COURTHOUSE:
                change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
                change_public_opinion(VIEW_JUSTICES,power,colored,power*10);
                change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
-               change_public_opinion(VIEW_ABORTION,power,colored,power*10);
                change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
                break;
             case SITE_GOVERNMENT_PRISON:
                change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
                change_public_opinion(VIEW_PRISONS,power,colored,power*10);
+               change_public_opinion(VIEW_DRUGS,power,colored,power*10);
                break;
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
                change_public_opinion(VIEW_INTELLIGENCE,power,colored,power*10);
                break;
             case SITE_INDUSTRY_SWEATSHOP:
                change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
+               change_public_opinion(VIEW_IMMIGRATION,power,colored,power*10);
                break;
             case SITE_INDUSTRY_POLLUTER:
+               change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
                change_public_opinion(VIEW_POLLUTION,power,colored,power*10);
                break;
             case SITE_INDUSTRY_NUCLEAR:
                change_public_opinion(VIEW_NUCLEARPOWER,power,colored,power*10);
                break;
             case SITE_CORPORATE_HEADQUARTERS:
-					change_public_opinion(VIEW_TAXES,power,colored,power);
+					change_public_opinion(VIEW_TAXES,power,colored,power*10);
                change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
                break;
             case SITE_CORPORATE_HOUSE:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);
@@ -1922,9 +2025,17 @@ void majornewspaper(char &clearformess,char canseethings)
                break;
             case SITE_MEDIA_AMRADIO:
                change_public_opinion(VIEW_AMRADIO,power,colored,power*10);
+               change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
+               change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
                break;
             case SITE_MEDIA_CABLENEWS:
                change_public_opinion(VIEW_CABLENEWS,power,colored,power*10);
+               change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
+               change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);
@@ -1933,6 +2044,7 @@ void majornewspaper(char &clearformess,char canseethings)
             case SITE_BUSINESS_CIGARBAR:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);
 					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
                break;
          }
       }

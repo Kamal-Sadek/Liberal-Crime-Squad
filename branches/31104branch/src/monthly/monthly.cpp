@@ -50,8 +50,11 @@ void passmonth(char &clearformess,char canseethings)
    switch(endgamestate)
    {
    case ENDGAME_NONE:
-      if(newscherrybusted && publicmood(-1)>65 && !LCSrandom(5))
+      if((attitude[VIEW_POLITICALVIOLENCE]>60||publicmood(-1)>60))
+      {
          endgamestate=ENDGAME_CCS_APPEARANCE;
+         attitude[VIEW_CONSERVATIVECRIMESQUAD]=100-attitude[VIEW_POLITICALVIOLENCE];
+      }
       break;
    case ENDGAME_CCS_APPEARANCE:
       if(!LCSrandom(12))
@@ -178,7 +181,7 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    int mediabalance=0;
-   int issuebalance[VIEWNUM-5];
+   int issuebalance[VIEWNUM-6];
    
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
@@ -189,6 +192,11 @@ void passmonth(char &clearformess,char canseethings)
 
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
+      if(v==VIEW_POLITICALVIOLENCE)
+      {
+         change_public_opinion(VIEW_POLITICALVIOLENCE,-3,0);
+         continue;
+      }
       if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
       if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS)
       {
@@ -239,7 +247,7 @@ void passmonth(char &clearformess,char canseethings)
       move(2,2);
       addstr("POLITICAL INFLUENCE");
       y=3;
-      for(int i=0;i<VIEWNUM-5;i++)
+      for(int i=0;i<VIEWNUM-6;i++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,1);
@@ -256,7 +264,7 @@ void passmonth(char &clearformess,char canseethings)
          if(pip<=0)     { pip=0; set_color(COLOR_RED,    COLOR_BLACK,1); }
          else if(pip<4) {        set_color(COLOR_MAGENTA,COLOR_BLACK,1); }
          else if(pip==4){        set_color(COLOR_YELLOW, COLOR_BLACK,1); }
-         else if(pip<8) {        set_color(COLOR_BLUE,   COLOR_BLACK,1); }
+         else if(pip<8) {        set_color(COLOR_CYAN,   COLOR_BLACK,1); }
          else           { pip=8; set_color(COLOR_GREEN,  COLOR_BLACK,1); }
 
          move(y++,20+pip);
@@ -534,6 +542,17 @@ void updateworld_laws(short *law,short *oldlaw)
             initlocation(*location[l]);
          }
          if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
+
+   if(law[LAW_GUNCONTROL]==2&&oldlaw[LAW_GUNCONTROL]<2)
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
          {
             initlocation(*location[l]);
          }

@@ -419,7 +419,7 @@ void survey(Creature *cr)
    for(v=0;v<VIEWNUM;v++)
    {
       survey[v]=attitude[v];
-      if(v!=VIEW_LIBERALCRIMESQUAD&&v!=VIEW_LIBERALCRIMESQUADPOS)
+      if(v!=VIEW_LIBERALCRIMESQUAD&&v!=VIEW_LIBERALCRIMESQUADPOS&&v!=VIEW_POLITICALVIOLENCE)
       {
          if(maxview!=-1)
          {
@@ -492,7 +492,7 @@ void survey(Creature *cr)
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       break;
    case 1:
-      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      set_color(COLOR_CYAN,COLOR_BLACK,1);
       break;
    case 2:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -510,10 +510,6 @@ void survey(Creature *cr)
       addstr("The people are most concerned about ");
       switch(maxview)
       {
-         case VIEW_ABORTION:
-            if(attitude[VIEW_ABORTION]>50)addstr("protecting abortion rights.");
-            else addstr("protecting the unborn child.");
-            break;
          case VIEW_GAY:
             if(attitude[VIEW_GAY]>50)addstr("protecting gay rights.");
             else addstr("protecting the traditional family.");
@@ -708,7 +704,6 @@ void survey(Creature *cr)
 
          switch(v)
          {
-            case VIEW_ABORTION:addstr("supported abortion");break;
             case VIEW_GAY:addstr("were in favor of equal rights for homosexuals");break;
             case VIEW_DEATHPENALTY:addstr("opposed the death penalty");break;
 			   case VIEW_TAXES:addstr("were against cutting taxes");break;
@@ -723,12 +718,18 @@ void survey(Creature *cr)
             case VIEW_POLLUTION:addstr("thought industry should lower pollution");break;
             case VIEW_CORPORATECULTURE:addstr("were disgusted by corporate malfeasance");break;
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
+            case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
+            case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
+            case VIEW_DRUGS:addstr("believed in legalizing marijuana");break;
+            case VIEW_IMMIGRATION:addstr("wanted amnesty for illegal immigrants");break;
+            case VIEW_MILITARY:addstr("opposed increasing military spending");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
+            case VIEW_POLITICALVIOLENCE:addstr("thought political violence was justified");break;
          }
          y++;
       }
@@ -1366,11 +1367,11 @@ void funds_and_trouble(char &clearformess)
          }
          else if(LCSrandom(15)<=cc_skill)
          {
-            if(cc.size()>1)strcpy(msg,"Your credit card fraud team has ");
+            /*if(cc.size()>1)strcpy(msg,"Your credit card fraud team has ");
             else {strcpy(msg,cc[0]->name);strcat(msg," has ");}
 
             strcat(msg,"run some numbers, netting $");
-            char num[20];
+            char num[20];*/
             // *JDS* You get between $1 and $100, plus an extra $1-50 every
             // time you pass a check against your hacking skill, where chance of
             // failure is one over the adjusted hackers' skill divided by four. Once
@@ -1385,9 +1386,9 @@ void funds_and_trouble(char &clearformess)
             funds+=fundgain;
             stat_funds+=fundgain;
             moneygained_ccfraud+=fundgain;
-            itoa(fundgain,num,10);
+            /*itoa(fundgain,num,10);
             strcat(msg,num);
-            strcat(msg,".");
+            strcat(msg,".");*/
 
             if(fundgain/100>LCSrandom(cc_skill+1))
             {
@@ -1514,7 +1515,7 @@ void funds_and_trouble(char &clearformess)
          }
          else if(LCSrandom(10)<=web_skill)
          {
-            int issue=LCSrandom(VIEWNUM-5); 
+            int issue=LCSrandom(VIEWNUM-6); 
             int crime;
 
             // Maybe do a switch on issue here to specify which website it was, but I don't feel like
@@ -1579,20 +1580,33 @@ void funds_and_trouble(char &clearformess)
       {
          if(graffiti[s]->weapon.type!=WEAPON_SPRAYCAN)
          {
+            
             if(clearformess)erase();
             else
             {
                makedelimiter(8,0);
             }
-
+            
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(graffiti[s]->name);
-            addstr(" needs a spraycan equipped to do graffiti.");
-            music[s]->activity.type=ACTIVITY_NONE;
-            refresh();
-            getch();
-            continue;
+            
+            if(funds>=20)
+            {
+               moneylost_goods+=20;
+               funds-=20;
+               addstr(" bought spraypaint for graffiti.");
+               refresh();
+               getch();
+            }
+            else
+            {
+               addstr(" needs a spraycan equipped to do graffiti.");
+               graffiti[s]->activity.type=ACTIVITY_NONE;
+               refresh();
+               getch();
+               continue;
+            }
          }
 
          int issue=VIEW_LIBERALCRIMESQUAD;
@@ -1891,8 +1905,8 @@ void funds_and_trouble(char &clearformess)
                   addstr("posted horrifying dead abortion doctor pictures downtown!");
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
-                  public_interest[VIEW_ABORTION]+=mod;
-                  background_liberal_influence[VIEW_ABORTION]+=mod;
+                  public_interest[VIEW_WOMEN]+=mod;
+                  background_liberal_influence[VIEW_WOMEN]+=mod;
                   juiceval=1;
                   done=1;
                }
@@ -2185,11 +2199,8 @@ void funds_and_trouble(char &clearformess)
          skillarray[2]=SKILL_STREETSENSE;
          skillarray[3]=SKILL_TAILORING;
          skillarray[4]=SKILL_HANDTOHAND;
-         skillarray[5]=SKILL_IMPROVISED;
-         skillarray[6]=SKILL_COOKING;
-         skillarray[7]=SKILL_THEFT;
-         skillarray[8]=-1;
-         break;
+         skillarray[5]=SKILL_COOKING;
+         skillarray[6]=SKILL_THEFT;         skillarray[7]=-1;         break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=50;
          skillarray[0]=SKILL_KNIFE;
@@ -2691,7 +2702,7 @@ char stealcar(Creature &cr,char &clearformess)
             if(!LCSrandom(10))
             {
                ignition_progress++;
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
+               set_color(COLOR_CYAN,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(cr.name);
                switch(LCSrandom(5))

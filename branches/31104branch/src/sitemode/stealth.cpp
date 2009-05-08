@@ -510,7 +510,7 @@ char weaponcheck(Creature &cr,short type)
    case WEAPON_SHANK:
    case WEAPON_KNIFE:
    case WEAPON_CROWBAR:
-   case WEAPON_REVOLVER_22:
+   case WEAPON_REVOLVER_38:
    case WEAPON_REVOLVER_44:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
@@ -535,7 +535,7 @@ char weaponcheck(Creature &cr,short type)
    case WEAPON_GAVEL:
       if(cr.armor.type==ARMOR_BLACKROBE)incharacter=CREATURE_JUDGE_LIBERAL;
       break;
-   case WEAPON_REVOLVER_22:
+   case WEAPON_REVOLVER_38:
    case WEAPON_REVOLVER_44:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
@@ -601,7 +601,7 @@ char weaponcheck(Creature &cr,short type)
    {
    case WEAPON_SHOTGUN_PUMP:
       illegal=0;
-   case WEAPON_REVOLVER_22:
+   case WEAPON_REVOLVER_38:
       if(law[LAW_GUNCONTROL]==1)illegal=0;
       else illegal=1;
    case WEAPON_SEMIPISTOL_9MM:

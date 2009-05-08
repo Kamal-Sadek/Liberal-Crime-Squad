@@ -171,9 +171,9 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       }
       else if(r.recruit->skillval(SKILL_PISTOL))
       {
-         r.recruit->weapon.type=WEAPON_REVOLVER_22;
+         r.recruit->weapon.type=WEAPON_REVOLVER_38;
          r.recruit->weapon.ammo=6;
-         r.recruit->clip[CLIP_22]=4;
+         r.recruit->clip[CLIP_38]=4;
       }
       else if(r.recruit->skillval(SKILL_CLUB) && !r.recruit->skillval(SKILL_KNIFE))
       {
@@ -212,7 +212,11 @@ static void getissueeventstring(char* str)
 {
    switch(LCSrandom(VIEWNUM-3))
    {
-   case VIEW_ABORTION:strcat(str,"a documentary on the women's rights struggle");break;
+   case VIEW_DRUGS:strcat(str,"a collection of studies on the health effects of marijuana");break;
+   case VIEW_MILITARY:strcat(str,"a book on the history of military atrocities");break;
+   case VIEW_IMMIGRATION:strcat(str,"a reality TV episode on the lives of immigrants");break;
+   case VIEW_CIVILRIGHTS:strcat(str,"a documentary on the civil rights struggle");break;
+   case VIEW_WOMEN:strcat(str,"a documentary on the women's rights struggle");break;
    case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
    case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
 	case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
@@ -230,6 +234,7 @@ static void getissueeventstring(char* str)
    case VIEW_CEOSALARY:strcat(str,"a Liberal think-tank survey of top CEO salaries");break;
    case VIEW_AMRADIO:strcat(str,"a collection of Conservative radio host rants");break;
    case VIEW_CABLENEWS:strcat(str,"a collection of leaked Conservative cable news memos");break;
+   case VIEW_POLITICALVIOLENCE:strcat(str,"a documentary about progress made by direct action");break;
    }
 }
 
@@ -376,6 +381,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                {
                   r.recruit->flag |= CREATUREFLAG_SLEEPER;
                   r.recruit->location = r.recruit->worklocation;
+                  location[r.recruit->worklocation]->interrogated=1;
                   r.recruit->base = r.recruit->worklocation;
                   r.recruit->infiltration/=2;
                   break;
@@ -458,7 +464,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          if((lib_persuasiveness         > recruit_reluctance) &&
             (max_eagerness+(int)LCSrandom(5) > r.eagerness()     ))
          {
-            set_color(COLOR_BLUE,COLOR_BLACK,1);
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
             r.level++;
             r.eagerness1++;
             move(y++,0);

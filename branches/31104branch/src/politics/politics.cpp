@@ -211,7 +211,12 @@ void elections(char clearformess,char canseethings)
       else candidate[0][0]=2;
 
       // name the candidates
-      generate_name(candidate[0]+1);
+      if(candidate[0][0]==-2)
+         generate_name(candidate[0]+1,GENDER_WHITEMALEPATRIARCH);
+      else if(candidate[0][0]==-1)
+         generate_name(candidate[0]+1,GENDER_MALE);
+      else
+         generate_name(candidate[0]+1);
       generate_name(candidate[1]+1);
 
       // Special Incumbency Rules: If the incumbent president or vice president
@@ -256,7 +261,7 @@ void elections(char clearformess,char canseethings)
             if(candidate[c][0]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
             else if(candidate[c][0]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             else if(candidate[c][0]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(candidate[c][0]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
+            else if(candidate[c][0]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
             move(6-c*2,0);
@@ -454,7 +459,13 @@ void elections(char clearformess,char canseethings)
             if(candidate[winner][0]==-2)exec[e]=-2;
             else if(candidate[winner][0]==2)exec[e]=2;
             else exec[e]=candidate[winner][0]+LCSrandom(3)-1;
-            generate_name(execname[e]);
+
+            if(exec[e]==-2)
+               generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
+            else if(exec[e]==-1)
+               generate_name(execname[e],GENDER_MALE);
+            else
+               generate_name(execname[e]);
          }
       }
    }
@@ -476,537 +487,13 @@ void elections(char clearformess,char canseethings)
          senmod=2;
       }
          
-      if(canseethings)
-      {
-         erase();
-
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(0,0);
-         addstr("Senate Elections ");
-         itoa(year,num,10);
-         addstr(num);
-      }
-
-      int x=0,y=2, s=0;
-
-      for(s=0;s<100;s++)
-      {
-         if(s%3!=senmod)continue;
-
-         if(canseethings)
-         {
-            move(y,x);
-
-            if(senate[s]==-2)
-            {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("Arch-Conservative");
-            }
-            else if(senate[s]==-1)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               addstr("Conservative");
-            }
-            else if(senate[s]==0)
-            {
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               addstr("moderate");
-            }
-            else if(senate[s]==1)
-            {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
-               addstr("Liberal");
-            }
-            else
-            {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-               addstr("Elite Liberal");
-            }
-         }
-
-         x+=20;
-         if(x>70)
-         {
-            x=0;
-            y++;
-         }
-      }
-
-      if(canseethings)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(23,0);
-         addstr("Press any key to watch the elections unfold.");
-
-         refresh();
-         getch();
-
-         nodelay(stdscr,TRUE);
-      }
-      /*else if(disbanding)
-      {
-         refresh();
-         pause_ms(200);
-      }*/
-
-      int vote;
-      int change[5] = {0,0,0,0,0};
-
-      x=0;
-      y=2;
-
-      for(s=0;s<100;s++)
-      {
-         if(s%3!=senmod)continue;
-
-         vote=0;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-
-
-         change[senate[s]+2]--;
-
-         /* These slow the speed that the Senate changes
-          * Since the Senate has long terms, these turn out
-          * to make it change almost slower than the Supreme
-          * Court.
-          * That's bad, so they're commented out
-          */
-         //if(senate[s]>1 && vote<4)vote++;
-         //if(senate[s]<-1 && vote>0)vote--;
-         //if(vote==2)vote+=LCSrandom(3)-1;
-
-         // Uncommented code below is taken and converted from the House
-         // election code to experiment with using that system instead
-         // of the perpetually busted Senate system
-
-         if(senate[s]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
-         if(senate[s]>1 && vote<4)vote++;
-
-         if(senate[s]<0 && vote>-1 && LCSrandom(100-mood+11)>10)vote--;
-         if(senate[s]<-1 && vote>0)vote--;
-
-         switch(senate[s])
-         {
-         case -2:
-            if(mood<60)break;
-            if(vote>=3)senate[s]=vote-1;
-            break;
-         case -1:
-            if(vote==0 && LCSrandom(100-mood+1)>60)senate[s]=-2;
-            if(mood<50 && LCSrandom(7))break;
-            if(vote>=3 && LCSrandom(3))senate[s]=vote-1;
-            break;
-         case 0:
-            if(!LCSrandom(3))senate[s]=vote-2;
-            break;
-         case 1:
-            if(vote==4 && LCSrandom(mood+1)>60)senate[s]=2;
-            if(mood>50 && LCSrandom(7))break;
-            if(vote<=1 && LCSrandom(3))senate[s]=vote-1;
-            break;
-         case 2:
-            if(mood>40)break;
-            if(vote<=1)senate[s]=vote-1;
-            break;
-         }
-
-         // House code ends here
-
-         /*
-         switch(senate[s])
-         {
-         case -2:
-            if(mood<60)break;
-            if(vote>=3)senate[s]=vote-2;
-            break;
-         case -1:
-            if(mood<40 && LCSrandom(2))break;
-            if(vote>=3 && LCSrandom(5))senate[s]=vote-2;
-            break;
-         case 0:
-            if(!LCSrandom(3))senate[s]=vote-2;
-            break;
-         case 1:
-            if(mood>60 && LCSrandom(2))break;
-            if(vote<=1 && LCSrandom(5))senate[s]=vote-2;
-            break;
-         case 2:
-            if(mood>40)break;
-            if(vote<=1)senate[s]=vote-2;
-            break;
-         }*/
-
-         if(senate[s]>2)senate[s]=2;
-         if(senate[s]<-2)senate[s]=-2;
-
-         change[senate[s]+2]++;
-
-
-         if(canseethings)
-         {
-            move(y,x);
-
-            if(senate[s]==-2)
-            {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("Arch-Conservative    ");
-            }
-            else if(senate[s]==-1)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               addstr("Conservative         ");
-            }
-            else if(senate[s]==0)
-            {
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               addstr("moderate             ");
-            }
-            else if(senate[s]==1)
-            {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
-               addstr("Liberal              ");
-            }
-            else
-            {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-               addstr("Elite Liberal        ");
-            }
-         }
-
-         x+=20;
-         if(x>70)
-         {
-            x=0;
-            y++;
-         }
-
-         if(canseethings)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-            char buffer[10];
-            move(20,0);
-            addstr("Net change: ");
-            addstr("C+: ");
-            if(change[0]>0)addstr("+");
-            itoa(change[0],buffer,10);
-            addstr(buffer);
-            addstr("   C: ");
-            if(change[1]>0)addstr("+");
-            itoa(change[1],buffer,10);
-            addstr(buffer);
-            addstr("   m: ");
-            if(change[2]>0)addstr("+");
-            itoa(change[2],buffer,10);
-            addstr(buffer);
-            addstr("   L: ");
-            if(change[3]>0)addstr("+");
-            itoa(change[3],buffer,10);
-            addstr(buffer);
-            addstr("   L+: ");
-            if(change[4]>0)addstr("+");
-            itoa(change[4],buffer,10);
-            addstr(buffer);
-            addstr("        ");
-
-            if(!disbanding)
-            {
-               refresh();
-               pause_ms(50);
-            }
-         }
-      }
-
-      if(canseethings)
-      {
-         nodelay(stdscr,FALSE);
-
-         move(21,0);
-         if(change[0]+change[1]>change[3]+change[4])
-         {
-            addstr("The Conservative Party claims victory!");
-         }
-         else if(change[0]+change[1]<change[3]+change[4])
-         {
-            addstr("The Liberal Party claims victory!");
-         }
-         else
-         {
-            addstr("The next two years promise to be more of the same.");
-         }
-
-         /*if(disbanding)
-         {
-            refresh();
-            pause_ms(800);
-         }
-         else*/
-         {
-            move(22,0);
-            addstr("Press any key to continue the elections.    ");
-
-            refresh();
-            getch();
-         }
-      }
+      elections_senate(senmod, canseethings);
    }
 
    //HOUSE
    if(year%2==0)
    {
-      if(canseethings)
-      {
-         erase();
-
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-         move(0,0);
-         addstr("House Elections ");
-         itoa(year,num,10);
-         addstr(num);
-      }
-
-      int x=0,y=2, h=0;
-
-      for(h=0;h<435;h++)
-      {
-         if(canseethings)
-         {
-            move(y,x);
-
-            if(house[h]==-2)
-            {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("C+");
-            }
-            else if(house[h]==-1)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               addstr("C ");
-            }
-            else if(house[h]==0)
-            {
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               addstr("m ");
-            }
-            else if(house[h]==1)
-            {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
-               addstr("L ");
-            }
-            else
-            {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-               addstr("L+");
-            }
-         }
-
-         x+=3;
-         if(x>78)
-         {
-            x=0;
-            y++;
-         }
-      }
-
-      if(canseethings)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(23,0);
-         addstr("Press any key to watch the elections unfold.");
-
-         refresh();
-         getch();
-
-         nodelay(stdscr,TRUE);
-      }
-      /*else if(disbanding)
-      {
-         refresh();
-         pause_ms(200);
-      }*/
-
-      int vote;
-      int change[5] = {0,0,0,0,0};
-
-      x=0;
-      y=2;
-
-      for(h=0;h<435;h++)
-      {
-         vote=0;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-         if(mood>LCSrandom(100))vote++;
-
-         change[house[h]+2]--;
-
-         if(house[h]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
-         if(house[h]>1 && vote<4)vote++;
-
-         if(house[h]<0 && vote>-1 && LCSrandom(100-mood+11)>10)vote--;
-         if(house[h]<-1 && vote>0)vote--;
-
-         //if(vote==2)vote+=LCSrandom(3)-1;
-
-         switch(house[h])
-         {
-         case -2:
-            if(mood<60)break;
-            if(vote>=3)house[h]=vote-1;
-            break;
-         case -1:
-            if(vote==0 && LCSrandom(100-mood+1)>60)house[h]=-2;
-            if(mood<50 && LCSrandom(7))break;
-            if(vote>=3 && LCSrandom(3))house[h]=vote-1;
-            break;
-         case 0:
-            if(!LCSrandom(3))house[h]=vote-2;
-            break;
-         case 1:
-            if(vote==4 && LCSrandom(mood+1)>60)house[h]=2;
-            if(mood>50 && LCSrandom(7))break;
-            if(vote<=1 && LCSrandom(3))house[h]=vote-1;
-            break;
-         case 2:
-            if(mood>40)break;
-            if(vote<=1)house[h]=vote-1;
-            break;
-         }
-
-         if(house[h]>2)house[h]=2;
-         if(house[h]<-2)house[h]=-2;
-
-         change[house[h]+2]++;
-         
-         if(canseethings)
-         {
-            move(y,x);
-
-            if(house[h]==-2)
-            {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("C+");
-            }
-            else if(house[h]==-1)
-            {
-               set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               addstr("C ");
-            }
-            else if(house[h]==0)
-            {
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               addstr("m ");
-            }
-            else if(house[h]==1)
-            {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
-               addstr("L ");
-            }
-            else
-            {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-               addstr("L+");
-            }
-         }
-
-         x+=3;
-         if(x>78)
-         {
-            x=0;
-            y++;
-         }
-
-         if(canseethings)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-            char buffer[10];
-            move(20,0);
-            addstr("Net change: ");
-            addstr("C+: ");
-            if(change[0]>0)addstr("+");
-            itoa(change[0],buffer,10);
-            addstr(buffer);
-            addstr("   C: ");
-            if(change[1]>0)addstr("+");
-            itoa(change[1],buffer,10);
-            addstr(buffer);
-            addstr("   m: ");
-            if(change[2]>0)addstr("+");
-            itoa(change[2],buffer,10);
-            addstr(buffer);
-            addstr("   L: ");
-            if(change[3]>0)addstr("+");
-            itoa(change[3],buffer,10);
-            addstr(buffer);
-            addstr("   L+: ");
-            if(change[4]>0)addstr("+");
-            itoa(change[4],buffer,10);
-            addstr(buffer);
-            addstr("        ");
-
-            if(!disbanding)
-            {
-               refresh();
-
-               pause_ms(10);
-
-               getch();
-            }
-         }
-      }
-
-      if(canseethings)
-      {
-         nodelay(stdscr,FALSE);
-
-         move(21,0);
-         if(change[0]+change[1]>change[3]+change[4])
-         {
-            if(change[1]<0 && mood<25)
-            {
-               addstr("The $$ U.S.A. Flag Eagle $$ Conservative Party claims victory!");
-            }
-            else
-            {
-               addstr("The Conservative Party claims victory!");
-            }
-         }
-         else if(change[0]+change[1]<change[3]+change[4])
-         {
-            if(change[3]<0 && mood>75)
-            {
-               addstr("The Progressive Elite Social Liberal Party claims victory!");
-            }
-            else
-            {
-               addstr("The Liberal Party claims victory!");
-            }
-         }
-         else
-         {
-            addstr("The next two years promise to be more of the same.");
-         }
-         if(!disbanding)
-         {
-            move(22,0);
-            addstr("Press any key to continue the elections.    ");
-
-            refresh();
-            getch();
-         }
-         else
-         {
-            refresh();
-            pause_ms(800);
-         }
-      }
+      elections_house(canseethings);
    }
 
    //PROPOSITIONS
@@ -1165,6 +652,38 @@ void elections(char clearformess,char canseethings)
                if(propdir[p]==1)addstr("Prevent Gun Violence");
                else addstr("Assert our Second Amendment Rights");
                break;
+            case LAW_WOMEN:
+               if(propdir[p]==1)addstr("Expand Women's Rights");
+               else addstr("Protect Traditional Gender Roles");
+               break;
+            case LAW_CIVILRIGHTS:
+               if(propdir[p]==1)addstr("Expand Civil Rights");
+               else addstr("Fight Reverse Discrimination");
+               break;
+            case LAW_DRUGS:
+               if(propdir[p]==1)addstr("Limit Oppressive Drug Laws");
+               else addstr("Strengthen the War On Drugs");
+               break;
+            case LAW_IMMIGRATION:
+               if(propdir[p]==1)addstr("Protect Immigrant Rights");
+               else addstr("Protect our Borders");
+               break;
+            case LAW_RELIGION:
+               if(propdir[p]==1)addstr("Uphold the Separation of Church and State");
+               else addstr("Confirm our Religious Values");
+               break;
+            case LAW_ELECTIONS:
+               if(propdir[p]==1)addstr("Fight Political Corruption");
+               else addstr("Limit Regulation of Political Speech");
+               break;
+            case LAW_MILITARY:
+               if(propdir[p]==1)addstr("Limit Military Spending");
+               else addstr("Strengthen our National Defense");
+               break;
+            case LAW_TORTURE:
+               if(propdir[p]==1)addstr("Protect Human Rights");
+               else addstr("Permit Strong Tactics in Interrogations");
+               break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       }
@@ -1277,6 +796,500 @@ void elections(char clearformess,char canseethings)
    }
 }
 
+void elections_senate(int senmod,char canseethings)
+{
+   char num[10];
+   int mood = publicmood(-1);
+   if(canseethings)
+   {
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+      move(0,0);
+      addstr("Senate Elections ");
+      itoa(year,num,10);
+      addstr(num);
+   }
+
+   int x=0,y=2, s=0;
+
+   for(s=0;s<100;s++)
+   {
+      if(senmod!=-1 && s%3!=senmod)continue;
+
+      if(canseethings)
+      {
+         move(y,x);
+
+         if(senate[s]==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Arch-Conservative");
+         }
+         else if(senate[s]==-1)
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("Conservative");
+         }
+         else if(senate[s]==0)
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("moderate");
+         }
+         else if(senate[s]==1)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("Liberal");
+         }
+         else
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("Elite Liberal");
+         }
+      }
+
+      x+=20;
+      if(x>70)
+      {
+         x=0;
+         y++;
+      }
+   }
+
+   if(canseethings)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(23,0);
+      addstr("Press any key to watch the elections unfold.");
+
+      refresh();
+      getch();
+
+      nodelay(stdscr,TRUE);
+   }
+
+   int vote;
+   int change[5] = {0,0,0,0,0};
+
+   x=0;
+   y=2;
+
+   for(s=0;s<100;s++)
+   {
+      if(senmod!=-1 && s%3!=senmod)continue;
+
+      vote=0;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+
+      if(termlimits)
+      {
+         change[senate[s]+2]--;
+         change[vote]++;
+         senate[s]=vote-2;
+      }
+      else
+      {
+         change[senate[s]+2]--;
+
+         if(senate[s]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
+         if(senate[s]>1 && vote<4)vote++;
+
+         if(senate[s]<0 && vote>-1 && LCSrandom(100-mood+11)>10)vote--;
+         if(senate[s]<-1 && vote>0)vote--;
+
+         switch(senate[s])
+         {
+         case -2:
+            if(mood<60)break;
+            if(vote>=3)senate[s]=vote-1;
+            break;
+         case -1:
+            if(vote==0 && LCSrandom(100-mood+1)>60)senate[s]=-2;
+            if(mood<50 && LCSrandom(7))break;
+            if(vote>=3 && LCSrandom(3))senate[s]=vote-1;
+            break;
+         case 0:
+            if(!LCSrandom(3))senate[s]=vote-2;
+            break;
+         case 1:
+            if(vote==4 && LCSrandom(mood+1)>60)senate[s]=2;
+            if(mood>50 && LCSrandom(7))break;
+            if(vote<=1 && LCSrandom(3))senate[s]=vote-1;
+            break;
+         case 2:
+            if(mood>40)break;
+            if(vote<=1)senate[s]=vote-1;
+            break;
+         }
+
+         if(senate[s]>2)senate[s]=2;
+         if(senate[s]<-2)senate[s]=-2;
+
+         change[senate[s]+2]++;
+      }
+
+
+      if(canseethings)
+      {
+         move(y,x);
+
+         if(senate[s]==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Arch-Conservative    ");
+         }
+         else if(senate[s]==-1)
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("Conservative         ");
+         }
+         else if(senate[s]==0)
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("moderate             ");
+         }
+         else if(senate[s]==1)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("Liberal              ");
+         }
+         else
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("Elite Liberal        ");
+         }
+      }
+
+      x+=20;
+      if(x>70)
+      {
+         x=0;
+         y++;
+      }
+
+      if(canseethings)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+         char buffer[10];
+         move(20,0);
+         addstr("Net change: ");
+         addstr("C+: ");
+         if(change[0]>0)addstr("+");
+         itoa(change[0],buffer,10);
+         addstr(buffer);
+         addstr("   C: ");
+         if(change[1]>0)addstr("+");
+         itoa(change[1],buffer,10);
+         addstr(buffer);
+         addstr("   m: ");
+         if(change[2]>0)addstr("+");
+         itoa(change[2],buffer,10);
+         addstr(buffer);
+         addstr("   L: ");
+         if(change[3]>0)addstr("+");
+         itoa(change[3],buffer,10);
+         addstr(buffer);
+         addstr("   L+: ");
+         if(change[4]>0)addstr("+");
+         itoa(change[4],buffer,10);
+         addstr(buffer);
+         addstr("        ");
+
+         if(!disbanding)
+         {
+            refresh();
+            pause_ms(50);
+         }
+      }
+   }
+
+   if(canseethings)
+   {
+      nodelay(stdscr,FALSE);
+
+      move(21,0);
+      if(change[0]+change[1]>change[3]+change[4])
+      {
+         addstr("The Conservative Party claims victory!");
+      }
+      else if(change[0]+change[1]<change[3]+change[4])
+      {
+         addstr("The Liberal Party claims victory!");
+      }
+      else
+      {
+         addstr("The next two years promise to be more of the same.");
+      }
+
+      move(22,0);
+      addstr("Press any key to continue the elections.    ");
+
+      refresh();
+      getch();
+   }
+}
+
+void elections_house(char canseethings)
+{
+   char num[10];
+   int mood = publicmood(-1);
+   if(canseethings)
+   {
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+      move(0,0);
+      addstr("House Elections ");
+      itoa(year,num,10);
+      addstr(num);
+   }
+
+   int x=0,y=2, h=0;
+
+   for(h=0;h<435;h++)
+   {
+      if(canseethings)
+      {
+         move(y,x);
+
+         if(house[h]==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("C+");
+         }
+         else if(house[h]==-1)
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("C ");
+         }
+         else if(house[h]==0)
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("m ");
+         }
+         else if(house[h]==1)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("L ");
+         }
+         else
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("L+");
+         }
+      }
+
+      x+=3;
+      if(x>78)
+      {
+         x=0;
+         y++;
+      }
+   }
+
+   if(canseethings)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(23,0);
+      addstr("Press any key to watch the elections unfold.");
+
+      refresh();
+      getch();
+
+      nodelay(stdscr,TRUE);
+   }
+
+   int vote;
+   int change[5] = {0,0,0,0,0};
+
+   x=0;
+   y=2;
+
+   for(h=0;h<435;h++)
+   {
+      vote=0;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+      if(mood>LCSrandom(100))vote++;
+
+      if(termlimits)
+      {
+         change[house[h]+2]--;
+         change[vote]++;
+         house[h]=vote-2;
+      }
+      else
+      {
+         change[house[h]+2]--;
+
+         if(house[h]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
+         if(house[h]>1 && vote<4)vote++;
+
+         if(house[h]<0 && vote>-1 && LCSrandom(100-mood+11)>10)vote--;
+         if(house[h]<-1 && vote>0)vote--;
+
+         switch(house[h])
+         {
+         case -2:
+            if(mood<60)break;
+            if(vote>=3)house[h]=vote-1;
+            break;
+         case -1:
+            if(vote==0 && LCSrandom(100-mood+1)>60)house[h]=-2;
+            if(mood<50 && LCSrandom(7))break;
+            if(vote>=3 && LCSrandom(3))house[h]=vote-1;
+            break;
+         case 0:
+            if(!LCSrandom(3))house[h]=vote-2;
+            break;
+         case 1:
+            if(vote==4 && LCSrandom(mood+1)>60)house[h]=2;
+            if(mood>50 && LCSrandom(7))break;
+            if(vote<=1 && LCSrandom(3))house[h]=vote-1;
+            break;
+         case 2:
+            if(mood>40)break;
+            if(vote<=1)house[h]=vote-1;
+            break;
+         }
+
+         if(house[h]>2)house[h]=2;
+         if(house[h]<-2)house[h]=-2;
+
+         change[house[h]+2]++;
+      }
+      
+      if(canseethings)
+      {
+         move(y,x);
+
+         if(house[h]==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("C+");
+         }
+         else if(house[h]==-1)
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("C ");
+         }
+         else if(house[h]==0)
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("m ");
+         }
+         else if(house[h]==1)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("L ");
+         }
+         else
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("L+");
+         }
+      }
+
+      x+=3;
+      if(x>78)
+      {
+         x=0;
+         y++;
+      }
+
+      if(canseethings)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+         char buffer[10];
+         move(20,0);
+         addstr("Net change: ");
+         addstr("C+: ");
+         if(change[0]>0)addstr("+");
+         itoa(change[0],buffer,10);
+         addstr(buffer);
+         addstr("   C: ");
+         if(change[1]>0)addstr("+");
+         itoa(change[1],buffer,10);
+         addstr(buffer);
+         addstr("   m: ");
+         if(change[2]>0)addstr("+");
+         itoa(change[2],buffer,10);
+         addstr(buffer);
+         addstr("   L: ");
+         if(change[3]>0)addstr("+");
+         itoa(change[3],buffer,10);
+         addstr(buffer);
+         addstr("   L+: ");
+         if(change[4]>0)addstr("+");
+         itoa(change[4],buffer,10);
+         addstr(buffer);
+         addstr("        ");
+
+         if(!disbanding)
+         {
+            refresh();
+
+            pause_ms(10);
+
+            getch();
+         }
+      }
+   }
+
+   if(canseethings)
+   {
+      nodelay(stdscr,FALSE);
+
+      move(21,0);
+      if(change[0]+change[1]>change[3]+change[4])
+      {
+         if(change[1]<0 && mood<25)
+         {
+            addstr("The $$ U.S.A. Flag Eagle $$ Conservative Party claims victory!");
+         }
+         else
+         {
+            addstr("The Conservative Party claims victory!");
+         }
+      }
+      else if(change[0]+change[1]<change[3]+change[4])
+      {
+         if(change[3]<0 && mood>75)
+         {
+            addstr("The Progressive Elite Social Liberal Party claims victory!");
+         }
+         else
+         {
+            addstr("The Liberal Party claims victory!");
+         }
+      }
+      else
+      {
+         addstr("The next two years promise to be more of the same.");
+      }
+      if(!disbanding)
+      {
+         move(22,0);
+         addstr("Press any key to continue the elections.    ");
+
+         refresh();
+         getch();
+      }
+      else
+      {
+         refresh();
+         pause_ms(800);
+      }
+   }
+}
 
 
 /* politics - causes the supreme court to hand down decisions */
@@ -1313,6 +1326,8 @@ void supremecourt(char clearformess,char canseethings)
       addstr("Supreme Court Watch ");
       itoa(year,num,10);
       addstr(num);
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
 
    vector<int> scase;
@@ -1436,6 +1451,38 @@ void supremecourt(char clearformess,char canseethings)
             case LAW_GUNCONTROL:
                if(scasedir[c]==1)addstr("Prevent Gun Violence");
                else addstr("Protect our Second Amendment Rights");
+               break;
+            case LAW_WOMEN:
+               if(scasedir[c]==1)addstr("Expand Women's Rights");
+               else addstr("Protect Traditional Gender Roles");
+               break;
+            case LAW_CIVILRIGHTS:
+               if(scasedir[c]==1)addstr("Expand Civil Rights");
+               else addstr("Fight Reverse Discrimination");
+               break;
+            case LAW_DRUGS:
+               if(scasedir[c]==1)addstr("Limit Oppressive Drug Laws");
+               else addstr("Strengthen the War On Drugs");
+               break;
+            case LAW_IMMIGRATION:
+               if(scasedir[c]==1)addstr("Protect Immigrant Rights");
+               else addstr("Protect our Borders");
+               break;
+            case LAW_RELIGION:
+               if(scasedir[c]==1)addstr("Uphold the Separation of Church and State");
+               else addstr("Confirm our Religious Values");
+               break;
+            case LAW_ELECTIONS:
+               if(scasedir[c]==1)addstr("Fight Political Corruption");
+               else addstr("Limit Regulation of Political Speech");
+               break;
+            case LAW_MILITARY:
+               if(scasedir[c]==1)addstr("Limit Military Spending");
+               else addstr("Strengthen our National Defense");
+               break;
+            case LAW_TORTURE:
+               if(scasedir[c]==1)addstr("Protect Human Rights");
+               else addstr("Permit Strong Tactics in Interrogations");
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1810,6 +1857,38 @@ void congress(char clearformess,char canseethings)
                if(billdir[c]==1)addstr("Prevent Gun Violence");
                else addstr("Protect our Second Amendment Rights");
                break;
+            case LAW_WOMEN:
+               if(billdir[c]==1)addstr("Expand Women's Rights");
+               else addstr("Protect Traditional Gender Roles");
+               break;
+            case LAW_CIVILRIGHTS:
+               if(billdir[c]==1)addstr("Expand Civil Rights");
+               else addstr("Fight Reverse Discrimination");
+               break;
+            case LAW_DRUGS:
+               if(billdir[c]==1)addstr("Limit Oppressive Drug Laws");
+               else addstr("Strengthen the War On Drugs");
+               break;
+            case LAW_IMMIGRATION:
+               if(billdir[c]==1)addstr("Protect Immigrant Rights");
+               else addstr("Protect our Borders");
+               break;
+            case LAW_RELIGION:
+               if(billdir[c]==1)addstr("Uphold the Separation of Church and State");
+               else addstr("Confirm our Religious Values");
+               break;
+            case LAW_ELECTIONS:
+               if(billdir[c]==1)addstr("Fight Political Corruption");
+               else addstr("Limit Regulation of Political Speech");
+               break;
+            case LAW_MILITARY:
+               if(billdir[c]==1)addstr("Limit Military Spending");
+               else addstr("Strengthen our National Defense");
+               break;
+            case LAW_TORTURE:
+               if(billdir[c]==1)addstr("Protect Human Rights");
+               else addstr("Permit Strong Tactics in Interrogations");
+               break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -1835,6 +1914,7 @@ void congress(char clearformess,char canseethings)
       nodelay(stdscr,TRUE);
    }
 
+
    for(c=0;c<cnum;c++)
    {
       char yeswin_h=0;
@@ -1856,6 +1936,7 @@ void congress(char clearformess,char canseethings)
          if(l==434)
          {
             if(yesvotes_h>=218)yeswin_h=1;
+            if(yesvotes_h>=290)killbill[c]=-2;
          }
 
          if(canseethings)
@@ -1891,6 +1972,7 @@ void congress(char clearformess,char canseethings)
          if(l==434)
          {
             if(yesvotes_s>=51)yeswin_s=1;
+            if(yesvotes_s<67 && killbill[c]==-2)killbill[c]=0;
             if(yesvotes_s==50)
             {
                //TIE BREAKER
@@ -2015,8 +2097,17 @@ void congress(char clearformess,char canseethings)
             }
             else if(!sign)
             {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("*** VETO ***");
+               if(killbill[c]==-2)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  addstr("*** VETO FAILED ***");
+                  sign=1;
+               }
+               else
+               {
+                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  addstr("*** VETO ***");
+               }
             }
 
             refresh();
@@ -2067,7 +2158,7 @@ void congress(char clearformess,char canseethings)
       senatemake[senate[s]+2]++;
    }
 
-   //TOSS JUSTICES?
+   // Throw out non-L+ Justices?
    char tossj=0;
    for(int j=0;j<9;j++)
    {
@@ -2077,12 +2168,17 @@ void congress(char clearformess,char canseethings)
          break;
       }
    }
-
    if(housemake[4]+housemake[3]/2>=290&&senatemake[4]+senatemake[3]/2>=67&&tossj)
    {
       tossjustices(canseethings);
    }
-   if(housemake[0]+housemake[1]/2>=290&&senatemake[0]+senatemake[1]/2>=67)
+   // Purge Congress, implement term limits, and hold new elections?
+   if(housemake[4]<290&&senatemake[4]<67&&publicmood(-1)>95)
+   {
+      amendment_termlimits(canseethings);
+   }
+   // REPEAL THE CONSTITUTION AND LOSE THE GAME?
+   if(housemake[0]>=290&&senatemake[0]>=67)
    {
       reaganify(canseethings);
    }
@@ -2095,12 +2191,12 @@ char wincheck(void)
 {
    for(int e=0;e<EXECNUM;e++)
    {
-      if(exec[e]!=2)return 0;
+      if(exec[e]<2)return 0;
    }
 
    for(int l=0;l<LAWNUM;l++)
    {
-      if(law[l]!=2)return 0;
+      if(law[l]<2)return 0;
    }
 
    int housemake[5]={0,0,0,0,0};
@@ -2120,7 +2216,7 @@ char wincheck(void)
    int elibjudge=0;
    for(int c=0;c<9;c++)
    {
-      if(court[c]==2)elibjudge++;
+      if(court[c]>=2)elibjudge++;
    }
 
    if(elibjudge<5)return 0;
@@ -2135,7 +2231,7 @@ int publicmood(int l)
 {
    switch(l)
    {
-      case LAW_ABORTION:return attitude[VIEW_ABORTION];
+      case LAW_ABORTION:return attitude[VIEW_WOMEN];
       case LAW_ANIMALRESEARCH:return attitude[VIEW_ANIMALRESEARCH];
       case LAW_POLICEBEHAVIOR:return attitude[VIEW_POLICEBEHAVIOR];
       case LAW_PRIVACY:return attitude[VIEW_INTELLIGENCE];
@@ -2145,10 +2241,17 @@ int publicmood(int l)
       case LAW_LABOR:return attitude[VIEW_SWEATSHOPS];
       case LAW_GAY:return attitude[VIEW_GAY];
       case LAW_CORPORATE:return (attitude[VIEW_CORPORATECULTURE]+
-                        attitude[VIEW_CEOSALARY])/2;
+                                 attitude[VIEW_CEOSALARY])/2;
       case LAW_FREESPEECH:return attitude[VIEW_FREESPEECH];
 		case LAW_TAX:return attitude[VIEW_TAXES];
       case LAW_FLAGBURNING:return attitude[VIEW_FREESPEECH];
+      case LAW_WOMEN:return attitude[VIEW_WOMEN];break;
+      case LAW_CIVILRIGHTS:return attitude[VIEW_CIVILRIGHTS];break;
+      case LAW_DRUGS:return attitude[VIEW_DRUGS];break;
+      case LAW_IMMIGRATION:return attitude[VIEW_CIVILRIGHTS];break;
+      case LAW_MILITARY:return attitude[VIEW_MILITARY];break;
+      case LAW_TORTURE:return (attitude[VIEW_INTELLIGENCE] +
+                               attitude[VIEW_MILITARY])/2;break;
       case LAW_GUNCONTROL:
             if(!disbanding)
                return (attitude[VIEW_POLICEBEHAVIOR]+
@@ -2158,6 +2261,9 @@ int publicmood(int l)
                return (attitude[VIEW_POLICEBEHAVIOR]+
                      attitude[VIEW_PRISONS]+
                      attitude[VIEW_DEATHPENALTY])/3;
+
+      case LAW_ELECTIONS:
+      case LAW_RELIGION:
       default: //eg. -1
       {
          int sum=0;

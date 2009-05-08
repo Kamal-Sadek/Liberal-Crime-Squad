@@ -145,6 +145,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
                liberalize(*d.date[e],false);
                d.date[e]->location = d.date[e]->worklocation;
                d.date[e]->base = d.date[e]->worklocation;
+               location[d.date[e]->worklocation]->interrogated=1;
                d.date[e]->infiltration/=2;
                break;
             }

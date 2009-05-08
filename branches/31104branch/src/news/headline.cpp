@@ -82,20 +82,19 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
                         displaycenterednewsfont("NO NUKE POWER",5);
                         break;
                      case VIEW_POLICEBEHAVIOR:
-                        displaycenterednewsfont("LCS COPS WAR",5);
+                        displaycenterednewsfont("LCS VS COPS",5);
                         break;
                      case VIEW_PRISONS:
                         displaycenterednewsfont("PRISON WAR",5);
                         break;
                      case VIEW_INTELLIGENCE:
-                        displaycenterednewsfont("LCS CIA WAR",5);
+                        displaycenterednewsfont("LCS VS CIA",5);
                         break;
                      case VIEW_ANIMALRESEARCH:
                      case VIEW_GENETICS:
                         displaycenterednewsfont("EVIL RESEARCH",5);
                         break;
                      case VIEW_FREESPEECH:
-                     case VIEW_ABORTION:
                      case VIEW_GAY:
                      case VIEW_JUSTICES:
                         displaycenterednewsfont("NO JUSTICE",5);

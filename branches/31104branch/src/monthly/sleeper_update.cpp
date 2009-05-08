@@ -69,8 +69,6 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          sleeper_scandal(cr,clearformess,canseethings,libpower);
          break;
       case ACTIVITY_NONE:
-         // 0-10% of remaining trust gained
-         cr.infiltration += (1-cr.infiltration)*0.01f*LCSrandom(11);
          break;
       case ACTIVITY_SLEEPER_JOINLCS:
       default:
@@ -164,21 +162,24 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
    {
       case ACTIVITY_SLEEPER_CONSERVATIVE:
       {
-         power = static_cast<int>(-power * (1-cr.infiltration));
-         // Improves infiltration level by 0-20% of the amount of trust not yet
-         // acquired
-         cr.infiltration+=(1-cr.infiltration)*0.01f*LCSrandom(21);
-         cr.juice -= 5;
-         if(cr.juice<0)cr.juice=0;
+         power = static_cast<int>(-power * (1-cr.infiltration))/4;
+         // Improves juice, as confidence improves
+         if(cr.juice<50)
+         {
+            cr.juice += 5;
+            if(cr.juice>50)cr.juice=50;
+         }
       }
       break;
       case ACTIVITY_SLEEPER_LIBERAL:
       {
          power = static_cast<int>(power * cr.infiltration);
-         // Reduces infiltration level by 1% of the amount of distrust
-         cr.infiltration-=(1.0f-cr.infiltration)*0.01f;
-         cr.juice+=5;
-         if(cr.juice>50)cr.juice=50;
+         // Reduces juice, as confidence reduces
+         if(cr.juice>0)
+         {
+            cr.juice -= 5;
+            if(cr.juice<0)cr.juice=0;
+         }
       }
       break;
    }
@@ -188,14 +189,14 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       /* Cultural leaders block - small influence on everything */
       case CREATURE_RADIOPERSONALITY:
          change_public_opinion(VIEW_AMRADIO,1);
-         for(int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
          }
          break;
       case CREATURE_NEWSANCHOR:
          change_public_opinion(VIEW_CABLENEWS,1);
-         for(int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
          }
@@ -209,7 +210,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
       case CREATURE_PRIEST:
-         for(int i=0;i<VIEWNUM;i++)
+         for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
          }
@@ -217,7 +218,8 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       /* Legal block - influences an array of social issues */
       case CREATURE_LAWYER:
       case CREATURE_JUDGE_CONSERVATIVE:
-         libpower[VIEW_ABORTION]+=power;
+         libpower[VIEW_WOMEN]+=power;
+         libpower[VIEW_CIVILRIGHTS]+=power;
          libpower[VIEW_GAY]+=power;
          libpower[VIEW_DEATHPENALTY]+=power;
          libpower[VIEW_FREESPEECH]+=power;
@@ -246,6 +248,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_COP:
       case CREATURE_GANGUNIT:
          libpower[VIEW_POLICEBEHAVIOR]+=power;
+         libpower[VIEW_DRUGS]+=power;
          break;
       /* Prison block */
       case CREATURE_EDUCATOR:
@@ -253,22 +256,27 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_PRISONGUARD:
       case CREATURE_PRISONER:
          libpower[VIEW_PRISONS]+=power;
+         libpower[VIEW_DRUGS]+=power;
          break;
       /* Intelligence block */
       case CREATURE_AGENT:
          libpower[VIEW_INTELLIGENCE]+=power;
          break;
-      case CREATURE_FIREFIGHTER:
-         if(law[LAW_FREESPEECH]==-2)
-         {
-            libpower[VIEW_FREESPEECH]+=power;
-         }
+      /* Military block */
+      case CREATURE_SOLDIER:
+      case CREATURE_VETERAN:
+      case CREATURE_MERC:
+         libpower[VIEW_MILITARY]+=power;
+         break;
+      /* Sweatshop workers */
+      case CREATURE_WORKER_SWEATSHOP:
+         libpower[VIEW_IMMIGRATION]+=power;
+         libpower[VIEW_SWEATSHOPS]+=power;
          break;
       /* No influence at all block - for people were liberal anyway, or have no way of doing any good */
       case CREATURE_WORKER_FACTORY_CHILD:
       case CREATURE_GENETIC:
       case CREATURE_GUARDDOG:
-      case CREATURE_JUROR:
       case CREATURE_BUM:
       case CREATURE_CRACKHEAD:
       case CREATURE_TANK:
@@ -279,6 +287,12 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_MUTANT:
          return;
       /* Talk up LCS block -- includes everyone else */
+      case CREATURE_FIREFIGHTER:
+         if(law[LAW_FREESPEECH]==-2)
+         {
+            libpower[VIEW_FREESPEECH]+=power;
+            break;
+         }
       default:
          libpower[VIEW_LIBERALCRIMESQUAD]+=power;
          libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
@@ -293,13 +307,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 **********************************/
 void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
-   cr.infiltration-=(1-cr.infiltration)*0.1f*LCSrandom(3);
-   if(cr.infiltration < 0)
-   {
-      cr.infiltration = 0;
-      return;
-   }
-   if(LCSrandom(static_cast<int>(10*cr.infiltration)+1)-LCSrandom(5) <= 0)return;
+   if(LCSrandom(static_cast<int>(10*cr.infiltration)+1) <= 0)return;
 
    location[cr.base]->interrogated = 1;
 
@@ -316,7 +324,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       // Agents can leak intelligence files to you
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(law[LAW_PRIVACY] + 3) * 5) break;
+         if(LCSrandom(law[LAW_PRIVACY] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_SECRETDOCUMENTS;
@@ -339,7 +347,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       // Cops can leak police files to you
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3) * 5) break;
+         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_POLICERECORDS;
@@ -360,7 +368,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       // Can leak corporate files to you
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(law[LAW_CORPORATE] + 3) * 5) break;
+         if(LCSrandom(law[LAW_CORPORATE] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_CORPFILES;
@@ -380,7 +388,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
    case CREATURE_PRISONGUARD:
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3) * 5) break;
+         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_PRISONFILES;
@@ -402,7 +410,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
-         if(LCSrandom(-law[LAW_FREESPEECH] + 3) * 5) break;
+         if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_CABLENEWSFILES;
@@ -424,7 +432,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
-         if(LCSrandom(-law[LAW_FREESPEECH] + 3) * 5) break;
+         if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_AMRADIOFILES;
@@ -444,7 +452,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
    case CREATURE_SCIENTIST_EMINENT:
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(law[LAW_ANIMALRESEARCH] + 3) * 5) break;
+         if(LCSrandom(law[LAW_ANIMALRESEARCH] + 3)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_RESEARCHFILES;
@@ -463,7 +471,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
    case CREATURE_JUDGE_CONSERVATIVE:
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(20)) break;
+         if(LCSrandom(5)) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_JUDGEFILES;
@@ -485,7 +493,6 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       refresh();
       getch();
    }
-   cr.juice+=10;
 }
 
 /*********************************
@@ -495,7 +502,6 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 **********************************/
 void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
-   cr.infiltration-=0.05f*LCSrandom(3);
    if(cr.infiltration < 0 ||
       !LCSrandom(static_cast<int>(cr.infiltration*40)+1))
    {
@@ -543,7 +549,6 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
          moneygained_embezzlement+=static_cast<int>(100*cr.infiltration);
          return;
    }
-   cr.juice+=10;
 }
 
 /*********************************
@@ -553,7 +558,6 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
 **********************************/
 void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
-   cr.infiltration-=(1-cr.infiltration)*0.2f*LCSrandom(3);
    if(cr.infiltration < 0 || !LCSrandom(static_cast<int>(cr.infiltration*20+1)))
    {
       erase();
@@ -624,11 +628,29 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_POLICESTATION:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(40))item->loottype=LOOT_POLICERECORDS;
-            else if(!LCSrandom(3))item->loottype=LOOT_TV;
-            else if(!LCSrandom(2))item->loottype=LOOT_PRINTER;
+         item=new itemst;
+         if(!LCSrandom(3))
+         {
+            item->type=ITEM_WEAPON;
+            if(!LCSrandom(4))item->loottype=WEAPON_SMG_MP5;
+            else if(!LCSrandom(3))item->loottype=WEAPON_SEMIPISTOL_45;
+            else if(!LCSrandom(2))item->loottype=WEAPON_SHOTGUN_PUMP;
+            else item->loottype=WEAPON_SEMIRIFLE_AR15;
+         }
+         else if(!LCSrandom(2))
+         {
+            item->type=ITEM_ARMOR;
+            if(!LCSrandom(3))item->loottype=ARMOR_POLICEUNIFORM;
+            else if(!LCSrandom(2))item->loottype=ARMOR_SWATARMOR;
+            else item->loottype=ARMOR_POLICEARMOR;
+         }
+         else
+         {
+            item=new itemst;item->type=ITEM_LOOT;
+            if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
+            else if(!LCSrandom(2))item->loottype=LOOT_TV;
             else item->loottype=LOOT_COMPUTER;
+         }
          shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_COURTHOUSE:
@@ -644,11 +666,26 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         item=new itemst;item->type=ITEM_LOOT;
+         if(!LCSrandom(3))
+         {
+            item->type=ITEM_WEAPON;
+            if(!LCSrandom(4))item->loottype=WEAPON_SMG_MP5;
+            else if(!LCSrandom(3))item->loottype=WEAPON_AUTORIFLE_M16;
+            else if(!LCSrandom(2))item->loottype=WEAPON_SHOTGUN_PUMP;
+            else item->loottype=WEAPON_CARBINE_M4;
+         }
+         else if(!LCSrandom(2))
+         {
+            item->type=ITEM_ARMOR;
+            item->loottype=ARMOR_BLACKSUIT;
+         }
+         else
+         {
+            item=new itemst;item->type=ITEM_LOOT;
             if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
             else if(!LCSrandom(2))item->loottype=LOOT_TV;
-            else if(LCSrandom(49))item->loottype=LOOT_COMPUTER;
-            else item->loottype=LOOT_SECRETDOCUMENTS;
+            else item->loottype=LOOT_COMPUTER;
+         }
          shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_FIRESTATION:
@@ -712,7 +749,6 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    addstr("Sleeper ");
    addstr(cr.name);
    addstr(" has dropped a package off at the homeless shelter.");
-   cr.juice+=10;
    refresh();
    getch();
 }
@@ -737,54 +773,48 @@ void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int *libp
 **********************************/
 void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
-   cr.infiltration-=(cr.infiltration)*0.05f*LCSrandom(3);
-   if(cr.infiltration < 0)
+   if(subordinatesleft(cr))
    {
-      cr.infiltration = 0;
-      return;
-   }
-   if(!LCSrandom(static_cast<int>((1-cr.infiltration)*5)+1))
-   {
-      if(subordinatesleft(cr))
+      prepareencounter(location[cr.worklocation]->type,0);
+      for(int e=0;e<18;e++)
       {
-         prepareencounter(location[cr.worklocation]->type,0);
-         for(int e=0;e<18;e++)
+         if(encounter[e].exists == false)
+            break;
+         if(encounter[e].worklocation == cr.worklocation || !LCSrandom(5))
          {
-            if(encounter[e].exists == false)
-               break;
-            if(encounter[e].worklocation == cr.worklocation)
-            {
-               Creature* recruit = new Creature(encounter[e]);
-               liberalize(*recruit,0);
-               recruit->namecreature();
-               recruit->hireid = cr.id;
-               if(recruit->infiltration > cr.infiltration/2)
-               {
-                  recruit->infiltration = cr.infiltration/2;
-               }
-               recruit->flag |= CREATUREFLAG_SLEEPER;
-               pool.push_back(recruit);
+            if(encounter[e].align!=1&&LCSrandom(5))continue;
 
-               erase();
-               move(6,1);
-               addstr("Sleeper ");
-               addstr(cr.name);
-               addstr(" has recruited a new ");
-               char str[50];
-               getrecruitcreature(str,recruit->type);
-               addstr(str);
-               addstr(".");
-               move(8,1);
-               addstr(recruit->name);
-               addstr(" looks forward serving the Liberal cause!");
-               refresh();
-               getch();
-               if(!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
-               stat_recruits++;
-               break;
+            Creature* recruit = new Creature(encounter[e]);
+            liberalize(*recruit,0);
+            recruit->namecreature();
+            recruit->hireid = cr.id;
+            if(recruit->infiltration > cr.infiltration)
+            {
+               recruit->infiltration = cr.infiltration;
             }
+            recruit->flag |= CREATUREFLAG_SLEEPER;
+            location[recruit->worklocation]->interrogated=1;
+            pool.push_back(recruit);
+
+            erase();
+            move(6,1);
+            addstr("Sleeper ");
+            addstr(cr.name);
+            addstr(" has recruited a new ");
+            char str[50];
+            getrecruitcreature(str,recruit->type);
+            addstr(str);
+            addstr(".");
+            move(8,1);
+            addstr(recruit->name);
+            addstr(" looks forward serving the Liberal cause!");
+            refresh();
+            getch();
+            if(!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
+            stat_recruits++;
+            break;
          }
       }
-      return;
    }
+   return;
 }

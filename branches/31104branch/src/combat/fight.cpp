@@ -112,12 +112,17 @@ void youattack(void)
 
       if(actual)
       {
-         alienationcheck(mistake);
-
          if(mistake)
          {
+            alienationcheck(mistake);
             sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
-            sitecrime+=7;
+            sitecrime+=10;
+            addjuice(*(activesquad->squad[p]),-1);
+         }
+         else
+         {
+            sitecrime+=3;
+            addjuice(*(activesquad->squad[p]),2);
          }
          sitestory->crime.push_back(CRIME_ATTACKED);
          // Charge with assault if (a) first strike, or (b) hit enemy
@@ -128,7 +133,6 @@ void youattack(void)
             else
                criminalize(*activesquad->squad[p],LAWFLAG_ARMEDASSAULT);
          }
-         sitecrime+=3;
       }
 
       if(!encounter[target].alive)delenc(target,1);
@@ -189,12 +193,12 @@ void youattack(void)
 
                if(actual)
                {
-                  alienationcheck(mistake);
-
                   if(mistake)
                   {
+                     alienationcheck(mistake);
                      sitestory->crime.push_back(CRIME_ATTACKED_MISTAKE);
                      sitecrime+=10;
+                     addjuice(*(pool[p]),-10);
                   }
 
                   
@@ -482,7 +486,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
       a.weapon.type==WEAPON_GUITAR)&&!mistake&&
-      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE)))
+      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE||a.align!=1)))
    {
       if(a.align==1||encnum<ENCMAX)
       {
@@ -514,7 +518,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             case CLIP_45:a.weapon.ammo+=15;break;
             case CLIP_ASSAULT:a.weapon.ammo+=30;break;
             case CLIP_SMG:a.weapon.ammo+=15;break;
-            case CLIP_22:a.weapon.ammo+=6;break;
+            case CLIP_38:a.weapon.ammo+=6;break;
             case CLIP_44:a.weapon.ammo+=6;break;
             case CLIP_BUCKSHOT:a.weapon.ammo+=6;break;
             case CLIP_MOLOTOV:a.weapon.ammo+=1;break;
@@ -591,7 +595,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcat(str,"chops at");break;
       case WEAPON_SYRINGE:
          strcat(str,"pokes at");break;
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
@@ -609,7 +613,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          else strcat(str,"clubs at");
          break;
       case WEAPON_MOLOTOV:
-         strcat(str,"hurls a molotv at");
+         strcat(str,"hurls a molotov at");
          melee=false;
          break;
       case WEAPON_CHAIN:
@@ -734,7 +738,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             }
          }
       }
-      droll+=maxtactics/2+t.skill[SKILL_TACTICS];
+      droll+=LCSrandom(maxtactics/2+t.skill[SKILL_TACTICS]+1);
       t.train(SKILL_TACTICS,5);
    }
    else
@@ -745,18 +749,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          droll+=t.skillval(SKILL_CLUB)/2;
    }
    
-   //Penalty for improvised weapons
-   if(wsk==SKILL_IMPROVISED)aroll=-4;
-   else
-   {
-      // Weapon accuracy bonuses and pentalties
-      if(a.weapon.type==WEAPON_SHOTGUN_PUMP)bonus=2;
-      if(a.weapon.type==WEAPON_SMG_MP5)bonus=4;
-      if(a.weapon.type==WEAPON_CARBINE_M4)bonus=2;
-      //if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
-      //if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
-   }
-   
+   // Weapon accuracy bonuses and pentalties
+   if(a.weapon.type==WEAPON_SHOTGUN_PUMP)bonus=2;
+   if(a.weapon.type==WEAPON_SMG_MP5)bonus=4;
+   if(a.weapon.type==WEAPON_CARBINE_M4)bonus=2;
+   //if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
+   //if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
 
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
@@ -794,6 +792,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   {
                      levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
                      sitecrime+=3;
+                     addjuice(a,3);
                      criminalizeparty(LAWFLAG_ARSON);
                      sitestory->crime.push_back(CRIME_ARSON);
                   }
@@ -811,13 +810,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                {
                   levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
                   sitecrime+=3;
+                  addjuice(a,3);
                   criminalizeparty(LAWFLAG_ARSON);
                   sitestory->crime.push_back(CRIME_ARSON);
                }
             }
             break;
          case WEAPON_SHOTGUN_PUMP:
-         case WEAPON_REVOLVER_22:
+         case WEAPON_REVOLVER_38:
          case WEAPON_REVOLVER_44:
          case WEAPON_SEMIPISTOL_9MM:
          case WEAPON_SEMIPISTOL_45:
@@ -981,7 +981,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case WEAPON_PITCHFORK:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(41)+10;
+            damamount=LCSrandom(61)+10;
             strengthmod=1;
             damagearmor=1;
              
@@ -994,12 +994,19 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
              
             break;
          case WEAPON_SHANK:
+            damtype|=WOUND_CUT;
+            damtype|=WOUND_BLEEDING;
+            damamount=LCSrandom(31)+10;
+            strengthmod=1;
+            damagearmor=1;
+            armorpiercing=1;
+             
+            break;
          case WEAPON_KNIFE:
             damtype|=WOUND_CUT;
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(21)+10;
+            damamount=LCSrandom(61)+10;
             strengthmod=1;
-            //severtype=WOUND_CLEANOFF; *JDS* no dismemberment from knives and shanks
             damagearmor=1;
             armorpiercing=1;
              
@@ -1010,7 +1017,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             strengthmod=1;
              
             break;
-         case WEAPON_REVOLVER_22:
+         case WEAPON_REVOLVER_38:
             if(a.weapon.ammo>0)
             {
                damtype|=WOUND_SHOT;
@@ -1368,7 +1375,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                target->blood=0;
                target->alive=0;
 
-               addjuice(a,5+t.juice/20); // Instant juice
+               if(t.align==-a.align)
+                  addjuice(a,5+t.juice/20); // Instant juice
+               else
+                  addjuice(a,-(5+t.juice/20));
 
                if(target->squadid!=-1)
                {

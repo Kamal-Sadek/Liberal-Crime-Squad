@@ -185,7 +185,7 @@ void getweapon(char *str,int type)
          case WEAPON_KNIFE:         strcpy(str,"Knife");break;
          case WEAPON_SHANK:         strcpy(str,"Shank");break;
          case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
-         case WEAPON_REVOLVER_22:   strcpy(str,".22 Rev.");break;
+         case WEAPON_REVOLVER_38:   strcpy(str,".38 Rev.");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Mag.");break;
          case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semi.");break;
          case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semi.");break;
@@ -224,7 +224,7 @@ void getweapon(char *str,int type)
          case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
          case WEAPON_SHANK:         strcpy(str,"Shank");break;
          case WEAPON_SYRINGE:       strcpy(str,"Injector");break;
-         case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug");break;
+         case WEAPON_REVOLVER_38:   strcpy(str,".38 Slug");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Slug");break;
          case WEAPON_SEMIPISTOL_9MM:strcpy(str,"9mm Las.");break;
          case WEAPON_SEMIPISTOL_45: strcpy(str,".45 Las.");break;
@@ -269,7 +269,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_KNIFE:         strcpy(str,"Knife");break;
          case WEAPON_SHANK:         strcpy(str,"Shank");break;
          case WEAPON_SYRINGE:       strcpy(str,"Syringe");break;
-         case WEAPON_REVOLVER_22:   strcpy(str,".22 Revolver");break;
+         case WEAPON_REVOLVER_38:   strcpy(str,".38 Revolver");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Magnum");break;
          case WEAPON_SEMIPISTOL_9MM:strcpy(str,"9mm Semiauto");break;
          case WEAPON_SEMIPISTOL_45: strcpy(str,".45 Semiauto");break;
@@ -313,7 +313,7 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_KNIFE:         strcpy(str,"Vibro-Knife");break;
       case WEAPON_SHANK:         strcpy(str,"Cyber Shank");break;
       case WEAPON_SYRINGE:      strcpy(str,"Medical Injector");break;
-      case WEAPON_REVOLVER_22:   strcpy(str,".22 Slug Pistol");break;
+      case WEAPON_REVOLVER_38:   strcpy(str,".38 Slug Pistol");break;
       case WEAPON_REVOLVER_44:   strcpy(str,".44 Heavy Slug Pistol");break;
       case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Laser Pistol");break;
       case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Laser Pistol");break;
@@ -650,7 +650,6 @@ void getskill(char *str,int type)
       case SKILL_HANDTOHAND:strcpy(str,"Martial Arts");break;
       case SKILL_KNIFE:strcpy(str,"Knife");break;
       case SKILL_SWORD:strcpy(str,"Sword");break;
-      case SKILL_IMPROVISED:strcpy(str,"Improv Melee");break;
       case SKILL_THROWING:strcpy(str,"Throwing");break;
       case SKILL_CLUB:strcpy(str,"Club");break;
       case SKILL_AXE:strcpy(str,"Axe");break;
@@ -682,7 +681,7 @@ void getskill(char *str,int type)
       case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
       case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
       case SKILL_FIRSTAID:strcpy(str,"First Aid");break;
-      case SKILL_TACTICS:strcpy(str,"Tactics");break;
+      case SKILL_TACTICS:strcpy(str,"Dodge");break;
    }
 }
 
@@ -700,7 +699,7 @@ void getclip(char *str,int clip)
          case CLIP_45:strcat(str,".45 Pistol Mag");break;
          case CLIP_ASSAULT:strcat(str,"Aslt/Rifle Mag");break;
          case CLIP_SMG:strcat(str,"9mm SMG Mag");break;
-         case CLIP_22:strcat(str,".22 Speedloader");break;
+         case CLIP_38:strcat(str,".38 Speedloader");break;
          case CLIP_44:strcat(str,".44 Speedloader");break;
          case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
@@ -715,7 +714,7 @@ void getclip(char *str,int clip)
          case CLIP_45:strcat(str,".45 Powerpack");break;
          case CLIP_ASSAULT:strcat(str,"Rifle Powerpack");break;
          case CLIP_SMG:strcat(str,"SMG Powerpack");break;
-         case CLIP_22:strcat(str,".22 Slug Mag");break;
+         case CLIP_38:strcat(str,".38 Slug Mag");break;
          case CLIP_44:strcat(str,".44 Heavy Slug Mag");break;
          case CLIP_BUCKSHOT:strcat(str,"Shotgun Plasma Pack");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
@@ -938,7 +937,6 @@ void getview(char *str,short view)
 
    switch(view)
    {
-      case VIEW_ABORTION:strcat(str,"Abortion");break;
       case VIEW_GAY:strcat(str,"Homosexual Rights");break;
       case VIEW_DEATHPENALTY:strcat(str,"Death Penalty");break;
 		case VIEW_TAXES:strcat(str,"Taxes");break;
@@ -956,6 +954,7 @@ void getview(char *str,short view)
       case VIEW_CEOSALARY:strcat(str,"CEO Compensation");break;
       case VIEW_AMRADIO:strcat(str,"AM Radio");break;
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
+      case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;
@@ -982,6 +981,14 @@ void getlaw(char *str,int l)
 		case LAW_TAX:strcpy(str,"Tax Law");break;
       case LAW_FLAGBURNING:strcpy(str,"Flag Burning");break;
       case LAW_GUNCONTROL:strcpy(str,"Gun Control");break;
+      case LAW_WOMEN:addstr("Women's Rights");break;
+      case LAW_CIVILRIGHTS:addstr("Civil Rights");break;
+      case LAW_DRUGS:addstr("Drug Law");break;
+      case LAW_IMMIGRATION:addstr("Immigration");break;
+      case LAW_RELIGION:addstr("Religion");break;
+      case LAW_ELECTIONS:addstr("Election Reform");break;
+      case LAW_MILITARY:addstr("Military Spending");break;
+      case LAW_TORTURE:addstr("Human Rights");break;
    }
 }
 
@@ -1085,7 +1092,7 @@ void cityname(char *story)
       case 0:strcpy(story,"San Francisco, CA");break;
       case 1:strcpy(story,"Boston, MA");break;
       case 2:strcpy(story,"Los Angeles, CA");break;
-      case 3:strcpy(story,"Detroit, MC");break;
+      case 3:strcpy(story,"Detroit, MI");break;
       case 4:strcpy(story,"Cleveland, OH");break;
       case 5:strcpy(story,"Cincinnati, OH");break;
       case 6:strcpy(story,"New York, NY");break;

@@ -96,7 +96,7 @@ void siegecheck(char canseethings)
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
             //Heat doesn't matter for sieges until it gets high
-            int pheat=pool[p]->heat-50;
+            int pheat=pool[p]->heat-5;
 
             //Contribute to the investigation based on person's heat
             if(pheat>0)crimes+=pheat;
@@ -156,13 +156,18 @@ void siegecheck(char canseethings)
             if(heatprotection<0)heatprotection=0;
 
             crimes>>=heatprotection;
-            if(location[l]->heat<crimes)
-               location[l]->heat=crimes;
+
+            location[l]->heat+=LCSrandom(crimes);
 
             if(location[l]->siege.timeuntillocated==-1 &&
                location[l]->heat > 40 &&
                !LCSrandom(30))
             {
+               if(LCSrandom(crimes) > 25)location[l]->siege.escalationstate++;
+               if(LCSrandom(crimes) > 50)location[l]->siege.escalationstate++;
+               if(LCSrandom(crimes) > 75)location[l]->siege.escalationstate++;
+               if(location[l]->siege.escalationstate>3)
+                  location[l]->siege.escalationstate=3;
                // Begin planning siege if high heat on location
                int siegetime = 5*(1 + 1 * heatprotection - kidnapped);
                if(siegetime<5)siegetime=5;
@@ -226,10 +231,10 @@ void siegecheck(char canseethings)
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               if(location[l]->compound_walls & COMPOUND_BASIC)
+               if(location[l]->siege.escalationstate>0)
                {
                   move(8,1);
-                  addstr("The cops have surrounded the ");
+                  addstr("The police have surrounded the ");
                   addlocationname(location[l]);
                   addstr(".");
                   location[l]->siege.underattack=0;
@@ -237,7 +242,7 @@ void siegecheck(char canseethings)
                else
                {
                   move(8,1);
-                  addstr("The cops are raiding the ");
+                  addstr("A police SWAT team is raiding the ");
                   addlocationname(location[l]);
                   addstr("!");
                   location[l]->siege.underattack=1;
@@ -257,7 +262,7 @@ void siegecheck(char canseethings)
                if(location[l]->siege.escalationstate>=3)
                {
                   move(9,1);
-                  addstr("You hear tanks and helicopters outside.");
+                  addstr("You hear jet bombers streak overhead.");
                }
 
                refresh();
@@ -323,6 +328,7 @@ void siegecheck(char canseethings)
                      continue;
                   }
                }
+                  
                for(int l2=0;l2<location[l]->loot.size();l2++)
                {
                   delete location[l]->loot[l2];
@@ -340,50 +346,6 @@ void siegecheck(char canseethings)
                }
             }
          }
-      
-
-	      //Puzz:  TEST RAIDING.
-	      //-----------------------------------------
-		       //This is SO HACKY and bad AND BAD
-		       //that this should not even exist
-		       //But in the end the sieging would be handled by the organizations
-		       //deciding to do it, not here.  So I can't access their private
-		       //variables, so I am just going to loop through their freaking ID's.
-
-		       //REMOVED THE TEMPORARY MEASURE TEMPORARILY.
-
-          /*for(int count = 0; count < 9; count++)
-	      {
-		      organization org = gOrgManager.getOrg(count);
-		      if(org.type != "" && org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat > 300)
-		      {
-		        if(!location[l]->siege.siege&&numpres>0)
-		        {
-
-			       erase();
-			       set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-			       move(8,1);
-			       char gaspstring[40];
-			       sprintf(gaspstring, "%s are raiding the ", org.name.c_str());
-			       addstr(gaspstring);
-			       addlocationname(location[l]);
-			       addstr("!");
-
-			       refresh();
-			       getch();
-
-			       location[l]->siege.siege=1;
-			       location[l]->siege.orgID = org.ID;
-			       location[l]->siege.siegetype=SIEGE_ORG;
-			       location[l]->siege.underattack=1;
-			       location[l]->siege.lights_off=0;
-			       location[l]->siege.cameras_off=0;
-			       org.getOrgByID(gOrgManager.getOrgsByType("LCS").at(0)).heat = 0;
-		        }
-		      }
-	      }*/
-	        //--------------------------------------
 
          //OTHER OFFENDABLE ENTITIES
             //CORPS
@@ -410,7 +372,7 @@ void siegecheck(char canseethings)
                else("an anonymous tip");
                addstr(" that the Corporations");
                move(9,1);
-               addstr("are hiring mercinaries to attack ");
+               addstr("are hiring mercenaries to attack ");
                if(ceosleepercount)addstr(location[l]->name);
                else addstr("the LCS");
                addstr(".");
@@ -427,7 +389,7 @@ void siegecheck(char canseethings)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(8,1);
-            addstr("Corporate mercinaries are raiding the ");
+            addstr("Corporate mercenaries are raiding the ");
             addlocationname(location[l]);
             addstr("!");
 
@@ -1013,13 +975,36 @@ void siegeturn(char clearformess)
          if(!location[l]->siege.underattack)
          {
             //EAT
+            bool starving=false;
             int eaters=numbereating(l);
+            if(location[l]->compound_stores==0)
+            {
+               starving=true;
+            }
             if(location[l]->compound_stores>=eaters)location[l]->compound_stores-=eaters;
             else location[l]->compound_stores=0;
 
             //ATTACK!
             char attack=0;
-            if(!LCSrandom(150))attack=1;
+            int kidnapped=0;
+            int criminalcount=0;
+
+            for(int p=0;p<pool.size();p++)
+            {
+               if(!pool[p]->alive)continue;
+               if(pool[p]->location!=l)continue;
+
+               if(starving)pool[p]->blood-=LCSrandom(5)+1;
+
+               if(pool[p]->flag & CREATUREFLAG_KIDNAPPED)
+               {
+                  kidnapped++;
+               }
+
+               if(iscriminal(*pool[p]))criminalcount++;
+            }
+
+            if(!LCSrandom(1+criminalcount+kidnapped*5))attack=1;
 
             if(attack)
             {
@@ -1069,7 +1054,7 @@ void siegeturn(char clearformess)
                }
 
                //SNIPER
-               if(location[l]->siege.escalationstate>=3 && !LCSrandom(20))
+               if(!(location[l]->compound_walls & COMPOUND_BASIC) && !LCSrandom(5))
                {
                   no_bad=0;
 
@@ -1091,7 +1076,7 @@ void siegeturn(char clearformess)
                      int targ=pol[LCSrandom(pol.size())];
                      if((int)LCSrandom(50)>pool[targ]->juice)
                      {
-                        addstr("A National Guard sniper takes out ");
+                        addstr("A sniper takes out ");
                         addstr(pool[targ]->name);
                         addstr("!");
 
@@ -1109,7 +1094,7 @@ void siegeturn(char clearformess)
                      }
                      else
                      {
-                        addstr("A National Guard sniper nearly hits ");
+                        addstr("A sniper nearly hits ");
                         addstr(pool[targ]->name);
                         addstr("!");
                      }
@@ -1118,7 +1103,7 @@ void siegeturn(char clearformess)
                   }
                }
             
-               if(location[l]->siege.escalationstate>=3 && !LCSrandom(5))
+               if(location[l]->siege.escalationstate>=3 && !LCSrandom(3))
                {
                   no_bad=0;
 
@@ -1229,7 +1214,7 @@ void siegeturn(char clearformess)
                   }
                }
                if((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
-                  location[l]->siege.escalationstate>=3 && !LCSrandom(5))
+                  location[l]->siege.escalationstate>=3 && !LCSrandom(50))
                {
                   no_bad=0;
 
@@ -2096,7 +2081,10 @@ void statebrokenlaws(int loc)
    else addstr("You hear a blaring voice on a loudspeaker:");
 
    move(3,1);
-   addstr("Surrender yourselves!");
+   if(location[loc]->siege.escalationstate>=2 && publicmood(-1) < 20)
+      addstr("In the name of God, your campaign of terror ends here!");
+   else
+      addstr("Surrender yourselves!");
 
    //KIDNAP VICTIM
    if(kidnapped)
@@ -2115,19 +2103,19 @@ void statebrokenlaws(int loc)
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
-   //MURDERER
-   else if(breakercount[LAWFLAG_MURDER])
-   {
-      move(4,1);
-      addstr("You are wanted for murder");
-      if(typenum>1)addstr(" and other crimes");
-      addstr(".");
-   }
    //TERRORISM
    else if(breakercount[LAWFLAG_TERRORISM])
    {
       move(4,1);
       addstr("You are wanted for terrorism");
+      if(typenum>1)addstr(" and other crimes");
+      addstr(".");
+   }
+   //MURDERER
+   else if(breakercount[LAWFLAG_MURDER])
+   {
+      move(4,1);
+      addstr("You are wanted for murder");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

@@ -194,22 +194,29 @@ void firstname(char *str, char gender)
    if(gender == GENDER_NEUTRAL)
       gender = LCSrandom(2) + 1;
 
+   // For white male Arch-Conservative politicians
+   if(gender == GENDER_WHITEMALEPATRIARCH)
+   {
+      roll = LCSrandom(50);
+      nametable = GENDER_WHITEMALEPATRIARCH;
+   }
+
    // Assign a name from the available names for each gender
    if(gender == GENDER_MALE)
    {
       // Roll on the number of gender-specific names,
       // plus the number of gender-neutral names
-      roll = LCSrandom(73 + 10);
+      roll = LCSrandom(176 + 12);
       // Decide whether to use a gender-specific name
       // or a gender-neutral name
-      if(roll >= 10) { roll -= 10; nametable = GENDER_MALE; }
+      if(roll >= 12) { roll -= 12; nametable = GENDER_MALE; }
       else nametable = GENDER_NEUTRAL;
    }
    else if(gender == GENDER_FEMALE)
    {
       // (Same here, just use the number of female names instead)
-      roll = LCSrandom(46 + 10);
-      if(roll >= 10) { roll -= 10; nametable = GENDER_FEMALE; }
+      roll = LCSrandom(127 + 12);
+      if(roll >= 12) { roll -= 12; nametable = GENDER_FEMALE; }
       else nametable = GENDER_NEUTRAL;
    }
 
@@ -278,19 +285,122 @@ void firstname(char *str, char gender)
       case 57:strcat(str,"Hans");break;
       case 58:strcat(str,"Jinyuan");break;
       case 59:strcat(str,"Deepak");break;
-		case 60:strcat(str,"Christopher");break;
-		case 61:strcat(str,"Matthew");break;
-		case 62:strcat(str,"Joseph");break;
-		case 63:strcat(str,"James");break;
-		case 64:strcat(str,"Daniel");break;
-		case 65:strcat(str,"Robert");break;
-		case 66:strcat(str,"John");break;
+      case 60:strcat(str,"Christopher");break;
+      case 61:strcat(str,"Matthew");break;
+      case 62:strcat(str,"Joseph");break;
+      case 63:strcat(str,"James");break;
+      case 64:strcat(str,"Daniel");break;
+      case 65:strcat(str,"Robert");break;
+      case 66:strcat(str,"Barack");break;
       case 67:strcat(str,"Kennedy");break;
-		case 68:strcat(str,"Jonathan");break;
-		case 69:strcat(str,"Adam");break;
-		case 70:strcat(str,"Justin");break;
+      case 68:strcat(str,"Jonathan");break;
+      case 69:strcat(str,"Adam");break;
+      case 70:strcat(str,"Justin");break;
       case 71:strcat(str,"Guy");break;
       case 72:strcat(str,"Bob");break;
+      case 73:strcat(str,"Albert");break;
+      case 74:strcat(str,"Alec");break;
+      case 75:strcat(str,"Alfred");break;
+      case 76:strcat(str,"Andrew");break;
+      case 77:strcat(str,"Arnold");break;
+      case 78:strcat(str,"Arthur");break;
+      case 79:strcat(str,"Benjamin");break;
+      case 80:strcat(str,"Bernard");break;
+      case 81:strcat(str,"Boris");break;
+      case 82:strcat(str,"Carl");break;
+      case 83:strcat(str,"Christian");break;
+      case 84:strcat(str,"Claude");break;
+      case 85:strcat(str,"Damon");break;
+      case 86:strcat(str,"Dominic");break;
+      case 87:strcat(str,"Edwin");break;
+      case 88:strcat(str,"Eric");break;
+      case 89:strcat(str,"Francesco");break;
+      case 90:strcat(str,"Francis");break;
+      case 91:strcat(str,"Frederick");break;
+      case 92:strcat(str,"Gabriel");break;
+      case 93:strcat(str,"Graham");break;
+      case 94:strcat(str,"Hank");break;
+      case 95:strcat(str,"Harold");break;
+      case 96:strcat(str,"Harry");break;
+      case 97:strcat(str,"Henry");break;
+      case 98:strcat(str,"Herbert");break;
+      case 99:strcat(str,"Ian");break;
+      case 100:strcat(str,"Ivan");break;
+      case 101:strcat(str,"Jack");break;
+      case 102:strcat(str,"Jacob");break;
+      case 103:strcat(str,"Jean");break;
+      case 104:strcat(str,"Jeremy");break;
+      case 105:strcat(str,"Lance");break;
+      case 106:strcat(str,"Lawrence");break;
+      case 107:strcat(str,"Leonard");break;
+      case 108:strcat(str,"Louis");break;
+      case 109:strcat(str,"Lucas");break;
+      case 110:strcat(str,"Luke");break;
+      case 111:strcat(str,"Manuel");break;
+      case 112:strcat(str,"Marcus");break;
+      case 113:strcat(str,"Mario");break;
+      case 114:strcat(str,"Maurice");break;
+      case 115:strcat(str,"Max");break;
+      case 116:strcat(str,"Nicholas");break;
+      case 117:strcat(str,"Oliver");break;
+      case 118:strcat(str,"Pedro");break;
+      case 119:strcat(str,"Peter");break;
+      case 120:strcat(str,"Ralph");break;
+      case 121:strcat(str,"Raphael");break;
+      case 122:strcat(str,"Ricardo");break;
+      case 123:strcat(str,"Richard");break;
+      case 124:strcat(str,"Samuel");break;
+      case 125:strcat(str,"Sebastian");break;
+      case 126:strcat(str,"Seth");break;
+      case 127:strcat(str,"Simon");break;
+      case 128:strcat(str,"Theodore");break;
+      case 129:strcat(str,"Timothy");break;
+      case 130:strcat(str,"Toby");break;
+      case 131:strcat(str,"Zachary");break;
+      case 132:strcat(str,"Alan");break;
+      case 133:strcat(str,"Avi");break;
+      case 134:strcat(str,"Brad");break;
+      case 135:strcat(str,"Brian");break;
+      case 136:strcat(str,"Calvin");break;
+      case 137:strcat(str,"Chester");break;
+      case 138:strcat(str,"Colin");break;
+      case 139:strcat(str,"Craig");break;
+      case 140:strcat(str,"Dwight");break;
+      case 141:strcat(str,"Edward");break;
+      case 142:strcat(str,"Eliah");break;
+      case 143:strcat(str,"Enrique");break;
+      case 144:strcat(str,"Fabio");break;
+      case 145:strcat(str,"Felix");break;
+      case 146:strcat(str,"Gregory");break;
+      case 147:strcat(str,"Hugh");break;
+      case 148:strcat(str,"Jeffrey");break;
+      case 149:strcat(str,"Keith");break;
+      case 150:strcat(str,"Kenneth");break;
+      case 151:strcat(str,"Mustafa");break;
+      case 152:strcat(str,"Ronald");break;
+      case 153:strcat(str,"Scott");break;
+      case 154:strcat(str,"Stuart");break;
+      case 155:strcat(str,"Thor");break;
+      case 156:strcat(str,"Tony");break;
+      case 157:strcat(str,"Travis");break;
+      case 158:strcat(str,"Tyrone");break;
+      case 159:strcat(str,"Victor");break;
+      case 160:strcat(str,"Vincent");break;
+      case 161:strcat(str,"Walter");break;
+      case 162:strcat(str,"Winston");break;
+      case 163:strcat(str,"Zeke");break;
+      case 164:strcat(str,"Jose");break;
+      case 165:strcat(str,"Juan");break;
+      case 166:strcat(str,"Diego");break;
+      case 167:strcat(str,"Xavier");break;
+      case 168:strcat(str,"Antonio");break;
+      case 169:strcat(str,"Alejandro");break;
+      case 170:strcat(str,"Jorge");break;
+      case 171:strcat(str,"Eduardo");break;
+      case 172:strcat(str,"Cesar");break;
+      case 173:strcat(str,"Javier");break;
+      case 174:strcat(str,"Fernando");break;
+      case 175:strcat(str,"Rafael");break;
 
       default:strcat(str,"Defaulto");break;
       }
@@ -333,20 +443,101 @@ void firstname(char *str, char gender)
       case 29:strcat(str,"Rosemary");break;
       case 30:strcat(str,"Aiko");break;
       case 31:strcat(str,"Vithara");break;
-		case 32:strcat(str,"Alene");break;
-		case 33:strcat(str,"Janette");break;
-		case 34:strcat(str,"Stephanie");break;
-		case 35:strcat(str,"Kelly");break;
-		case 36:strcat(str,"Robin");break;
-		case 37:strcat(str,"Tiffany");break;
-		case 38:strcat(str,"Monica");break;
-		case 39:strcat(str,"Jaqueline");break;
-		case 40:strcat(str,"Latoya");break;
-		case 41:strcat(str,"Gwendolyn");break;
-		case 42:strcat(str,"Harmony");break;
-		case 43:strcat(str,"Willow");break;
-		case 44:strcat(str,"Clarity");break;
-		case 45:strcat(str,"October");break;
+      case 32:strcat(str,"Alene");break;
+      case 33:strcat(str,"Janette");break;
+      case 34:strcat(str,"Stephanie");break;
+      case 35:strcat(str,"Esmerelda");break;
+      case 36:strcat(str,"Mercedes");break;
+      case 37:strcat(str,"Tiffany");break;
+      case 38:strcat(str,"Monica");break;
+      case 39:strcat(str,"Jaqueline");break;
+      case 40:strcat(str,"Latoya");break;
+      case 41:strcat(str,"Gwendolyn");break;
+      case 42:strcat(str,"Harmony");break;
+      case 43:strcat(str,"Willow");break;
+      case 44:strcat(str,"Clarity");break;
+      case 45:strcat(str,"October");break;
+      case 46:strcat(str,"Alexandra");break;
+      case 47:strcat(str,"Alice");break;
+      case 48:strcat(str,"Andrea");break;
+      case 49:strcat(str,"Amy");break;
+      case 50:strcat(str,"Betty");break;
+      case 51:strcat(str,"Celine");break;
+      case 52:strcat(str,"Charlotte");break;
+      case 53:strcat(str,"Christine");break;
+      case 54:strcat(str,"Clara");break;
+      case 55:strcat(str,"Claudia");break;
+      case 56:strcat(str,"Colleen");break;
+      case 57:strcat(str,"Consuela");break;
+      case 58:strcat(str,"Danielle");break;
+      case 59:strcat(str,"Denise");break;
+      case 60:strcat(str,"Diane");break;
+      case 61:strcat(str,"Elaine");break;
+      case 62:strcat(str,"Emily");break;
+      case 63:strcat(str,"Emma");break;
+      case 64:strcat(str,"Eve");break;
+      case 65:strcat(str,"Erica");break;
+      case 66:strcat(str,"Fatima");break;
+      case 67:strcat(str,"Gabrielle");break;
+      case 68:strcat(str,"Helen");break;
+      case 69:strcat(str,"Helga");break;
+      case 70:strcat(str,"Isabelle");break;
+      case 71:strcat(str,"Irene");break;
+      case 72:strcat(str,"Jasmin");break;
+      case 73:strcat(str,"Julie");break;
+      case 74:strcat(str,"Leah");break;
+      case 75:strcat(str,"Leila");break;
+      case 76:strcat(str,"Lina");break;
+      case 77:strcat(str,"Louise");break;
+      case 78:strcat(str,"Lucia");break;
+      case 79:strcat(str,"Karen");break;
+      case 80:strcat(str,"Margaret");break;
+      case 81:strcat(str,"Maria");break;
+      case 82:strcat(str,"Marlene");break;
+      case 83:strcat(str,"Martina");break;
+      case 84:strcat(str,"Mary");break;
+      case 85:strcat(str,"Michelle");break;
+      case 86:strcat(str,"Miranda");break;
+      case 87:strcat(str,"Nadia");break;
+      case 88:strcat(str,"Natalie");break;
+      case 89:strcat(str,"Nellie");break;
+      case 90:strcat(str,"Nina");break;
+      case 91:strcat(str,"Olivia");break;
+      case 92:strcat(str,"Patricia");break;
+      case 93:strcat(str,"Paula");break;
+      case 94:strcat(str,"Rania");break;
+      case 95:strcat(str,"Raphaela");break;
+      case 96:strcat(str,"Roberta");break;
+      case 97:strcat(str,"Roxanne");break;
+      case 98:strcat(str,"Sabrina");break;
+      case 99:strcat(str,"Samantha");break;
+      case 100:strcat(str,"Sandra");break;
+      case 101:strcat(str,"Sarah");break;
+      case 102:strcat(str,"Selma");break;
+      case 103:strcat(str,"Silvia");break;
+      case 104:strcat(str,"Sonia");break;
+      case 105:strcat(str,"Sophia");break;
+      case 106:strcat(str,"Tamara");break;
+      case 107:strcat(str,"Theresa");break;
+      case 108:strcat(str,"Tina");break;
+      case 109:strcat(str,"Vanessa");break;
+      case 110:strcat(str,"Verena");break;
+      case 111:strcat(str,"Victoria");break;
+      case 112:strcat(str,"Xenia");break;
+      case 113:strcat(str,"Cybill");break;
+      case 114:strcat(str,"Josephine");break;
+      case 115:strcat(str,"Lindsay");break;
+      case 116:strcat(str,"Melanie");break;
+      case 117:strcat(str,"Shirley");break;
+      case 118:strcat(str,"Valerie");break;
+      case 119:strcat(str,"Adriana");break;
+      case 120:strcat(str,"Daniela");break;
+      case 121:strcat(str,"Valeria");break;
+      case 122:strcat(str,"Mariana");break;
+      case 123:strcat(str,"Juliana");break;
+      case 124:strcat(str,"Liliana");break;
+      case 125:strcat(str,"Adrianna");break;
+      case 126:strcat(str,"Camilia");break;
 
       default:strcat(str,"Defaulta");break;
       }
@@ -367,8 +558,67 @@ void firstname(char *str, char gender)
       case 7:strcat(str,"Raven");break;
       case 8:strcat(str,"Ariel");break;
       case 9:strcat(str,"Jun");break;
+      case 10:strcat(str,"Robin");break;
+      case 11:strcat(str,"Kelly");break;
 
       default:strcat(str,"Default");break;
+      }
+   }
+
+   else if(nametable == GENDER_WHITEMALEPATRIARCH)
+   {
+      switch(roll)
+      {
+      case 0:strcat(str,"Roger");break;
+      case 1:strcat(str,"James");break;
+      case 2:strcat(str,"John");break;
+      case 3:strcat(str,"Bob");break;
+      case 4:strcat(str,"Mike");break;
+      case 5:strcat(str,"Bill");break;
+      case 6:strcat(str,"Dave");break;
+      case 7:strcat(str,"Rick");break;
+      case 8:strcat(str,"Colin");break;
+      case 9:strcat(str,"Joe");break;
+      case 10:strcat(str,"Tom");break;
+      case 11:strcat(str,"Chris");break;
+      case 12:strcat(str,"Dan");break;
+      case 13:strcat(str,"Paul");break;
+      case 14:strcat(str,"Mark");break;
+      case 15:strcat(str,"Donald");break;
+      case 16:strcat(str,"Jim");break;
+      case 17:strcat(str,"Ken");break;
+      case 18:strcat(str,"Steve");break;
+      case 19:strcat(str,"Edward");break;
+      case 20:strcat(str,"Brian");break;
+      case 21:strcat(str,"Ron");break;
+      case 22:strcat(str,"Tony");break;
+      case 23:strcat(str,"Kevin");break;
+      case 24:strcat(str,"Jason");break;
+      case 25:strcat(str,"Matt");break;
+      case 26:strcat(str,"Gary");break;
+      case 27:strcat(str,"Tim");break;
+      case 28:strcat(str,"Alan");break;
+      case 29:strcat(str,"Larry");break;
+      case 30:strcat(str,"Jeff");break;
+      case 31:strcat(str,"Frank");break;
+      case 32:strcat(str,"Scott");break;
+      case 33:strcat(str,"Eric");break;
+      case 34:strcat(str,"Steve");break;
+      case 35:strcat(str,"Andy");break;
+      case 36:strcat(str,"Ray");break;
+      case 37:strcat(str,"Greg");break;
+      case 38:strcat(str,"Josh");break;
+      case 39:strcat(str,"Jerry");break;
+      case 40:strcat(str,"Dennis");break;
+      case 41:strcat(str,"Walter");break;
+      case 42:strcat(str,"Jesse");break;
+      case 43:strcat(str,"Peter");break;
+      case 44:strcat(str,"Harry");break;
+      case 45:strcat(str,"Doug");break;
+      case 46:strcat(str,"Henry");break;
+      case 47:strcat(str,"Carl");break;
+      case 48:strcat(str,"Arthur");break;
+      case 49:strcat(str,"Ryan");break;
       }
    }
 }
@@ -380,7 +630,7 @@ void lastname(char *str)
 {
    strcpy(str,"");
 
-   switch(LCSrandom(124))
+   switch(LCSrandom(258))
    {
       // Last name table
       case 0:strcat(str,"King");break;
@@ -483,30 +733,164 @@ void lastname(char *str)
       case 97:strcat(str,"Lopez");break;
       case 98:strcat(str,"Aguilera");break;
       case 99:strcat(str,"Carey");break;
-		case 100:strcat(str,"Griffith");break;
-		case 101:strcat(str,"Valdez");break;
-		case 102:strcat(str,"McGee");break;
-		case 103:strcat(str,"Copeland");break;
-		case 104:strcat(str,"Blackenship");break;
-		case 105:strcat(str,"Faulkner");break;
-		case 106:strcat(str,"Melendez");break;
-		case 107:strcat(str,"Dunlap");break;
-		case 108:strcat(str,"Guy");break;
-		case 109:strcat(str,"Duke");break;
-		case 110:strcat(str,"Villanueva");break;
-		case 111:strcat(str,"Boggs");break;
-		case 112:strcat(str,"Godwin");break;
-		case 113:strcat(str,"Brewster");break;
-		case 114:strcat(str,"Irvin");break;
-		case 115:strcat(str,"Galindo");break;
-		case 116:strcat(str,"Cordero");break;
-		case 117:strcat(str,"Eubanks");break;
-		case 118:strcat(str,"Youngblood");break;
-		case 119:strcat(str,"Seay");break;
-		case 120:strcat(str,"Hope");break;
-		case 121:strcat(str,"Winslow");break;
-		case 122:strcat(str,"Fox");break;
+      case 100:strcat(str,"Griffith");break;
+      case 101:strcat(str,"Valdez");break;
+      case 102:strcat(str,"McGee");break;
+      case 103:strcat(str,"Copeland");break;
+      case 104:strcat(str,"Blackenship");break;
+      case 105:strcat(str,"Faulkner");break;
+      case 106:strcat(str,"Melendez");break;
+      case 107:strcat(str,"Dunlap");break;
+      case 108:strcat(str,"Guy");break;
+      case 109:strcat(str,"Duke");break;
+      case 110:strcat(str,"Villanueva");break;
+      case 111:strcat(str,"Boggs");break;
+      case 112:strcat(str,"Godwin");break;
+      case 113:strcat(str,"Brewster");break;
+      case 114:strcat(str,"Irvin");break;
+      case 115:strcat(str,"Galindo");break;
+      case 116:strcat(str,"Cordero");break;
+      case 117:strcat(str,"Eubanks");break;
+      case 118:strcat(str,"Youngblood");break;
+      case 119:strcat(str,"Seay");break;
+      case 120:strcat(str,"Hope");break;
+      case 121:strcat(str,"Winslow");break;
+      case 122:strcat(str,"Fox");break;
       case 123:strcat(str,"Montag");break;
+      case 124:strcat(str,"Abbott");break;
+      case 125:strcat(str,"Adkins");break;
+      case 126:strcat(str,"Alcott");break;
+      case 127:strcat(str,"Armstead");break;
+      case 128:strcat(str,"Ashmore");break;
+      case 129:strcat(str,"Baker");break;
+      case 130:strcat(str,"Baranyi");break;
+      case 131:strcat(str,"Barwick");break;
+      case 132:strcat(str,"Bates");break;
+      case 133:strcat(str,"Bezos");break;
+      case 134:strcat(str,"Birkin");break;
+      case 135:strcat(str,"Bogart");break;
+      case 136:strcat(str,"Bosanquet");break;
+      case 137:strcat(str,"Brandis");break;
+      case 138:strcat(str,"Bremer");break;
+      case 139:strcat(str,"Brightman");break;
+      case 140:strcat(str,"Buckley");break;
+      case 141:strcat(str,"Bunten");break;
+      case 142:strcat(str,"Burton");break;
+      case 143:strcat(str,"Carpenter");break;
+      case 144:strcat(str,"Cavill");break;
+      case 145:strcat(str,"Chaffee");break;
+      case 146:strcat(str,"Chandler");break;
+      case 147:strcat(str,"Channing");break;
+      case 148:strcat(str,"Cheney");break;
+      case 149:strcat(str,"Clay");break;
+      case 150:strcat(str,"Cohen");break;
+      case 151:strcat(str,"Collins");break;
+      case 152:strcat(str,"Cook");break;
+      case 153:strcat(str,"Cooper");break;
+      case 154:strcat(str,"Cosgrove");break;
+      case 155:strcat(str,"Cottrell");break;
+      case 156:strcat(str,"Croft");break;
+      case 157:strcat(str,"Cromwell");break;
+      case 158:strcat(str,"Cross");break;
+      case 159:strcat(str,"Crowe");break;
+      case 160:strcat(str,"Danes");break;
+      case 161:strcat(str,"Darby");break;
+      case 162:strcat(str,"Dench");break;
+      case 163:strcat(str,"Dent");break;
+      case 164:strcat(str,"Duffield");break;
+      case 165:strcat(str,"Dunham");break;
+      case 166:strcat(str,"Evans");break;
+      case 167:strcat(str,"Fairbanks");break;
+      case 168:strcat(str,"Fisher");break;
+      case 169:strcat(str,"Fletcher");break;
+      case 170:strcat(str,"Ford");break;
+      case 171:strcat(str,"Garcia");break;
+      case 172:strcat(str,"Getty");break;
+      case 173:strcat(str,"Gleaves");break;
+      case 174:strcat(str,"Grant");break;
+      case 175:strcat(str,"Greenberg");break;
+      case 176:strcat(str,"Grover");break;
+      case 177:strcat(str,"Hall");break;
+      case 178:strcat(str,"Hawking");break;
+      case 179:strcat(str,"Headley");break;
+      case 180:strcat(str,"Henderson");break;
+      case 181:strcat(str,"Hendren");break;
+      case 182:strcat(str,"Helton");break;
+      case 183:strcat(str,"Hepburn");break;
+      case 184:strcat(str,"Hewson");break;
+      case 185:strcat(str,"Hilton");break;
+      case 186:strcat(str,"Hoffmann");break;
+      case 187:strcat(str,"Hopkins");break;
+      case 188:strcat(str,"Hopper");break;
+      case 189:strcat(str,"Hudson");break;
+      case 190:strcat(str,"Hughes");break;
+      case 191:strcat(str,"Ibarra");break;
+      case 192:strcat(str,"Jones");break;
+      case 193:strcat(str,"Jordan");break;
+      case 194:strcat(str,"Keaton");break;
+      case 195:strcat(str,"Kershaw");break;
+      case 196:strcat(str,"Koprowski");break;
+      case 197:strcat(str,"Langley");break;
+      case 198:strcat(str,"Lee");break;
+      case 199:strcat(str,"Leyden");break;
+      case 200:strcat(str,"Lincoln");break;
+      case 201:strcat(str,"Lombard");break;
+      case 202:strcat(str,"London");break;
+      case 203:strcat(str,"Lynch");break;
+      case 204:strcat(str,"March");break;
+      case 205:strcat(str,"Milburn");break;
+      case 206:strcat(str,"Miller");break;
+      case 207:strcat(str,"Morton");break;
+      case 208:strcat(str,"Mosley");break;
+      case 209:strcat(str,"Murphy");break;
+      case 210:strcat(str,"Myers");break;
+      case 211:strcat(str,"Nelson");break;
+      case 212:strcat(str,"Nettles");break;
+      case 213:strcat(str,"Newman");break;
+      case 214:strcat(str,"Oakley");break;
+      case 215:strcat(str,"Paoletti");break;
+      case 216:strcat(str,"Pendleton");break;
+      case 217:strcat(str,"Pickett");break;
+      case 218:strcat(str,"Pomper");break;
+      case 219:strcat(str,"Porcaro");break;
+      case 220:strcat(str,"Porter");break;
+      case 221:strcat(str,"Presley");break;
+      case 222:strcat(str,"Probst");break;
+      case 223:strcat(str,"Reed");break;
+      case 224:strcat(str,"Reynolds");break;
+      case 225:strcat(str,"Rodham");break;
+      case 226:strcat(str,"Rushworth");break;
+      case 227:strcat(str,"Russell");break;
+      case 228:strcat(str,"Scurfield");break;
+      case 229:strcat(str,"Sharpe");break;
+      case 230:strcat(str,"Shelton");break;
+      case 231:strcat(str,"Shepard");break;
+      case 232:strcat(str,"Shurin");break;
+      case 233:strcat(str,"Siegel");break;
+      case 234:strcat(str,"da Silva");break;
+      case 235:strcat(str,"Spasov");break;
+      case 236:strcat(str,"Spencer");break;
+      case 237:strcat(str,"Stelling");break;
+      case 238:strcat(str,"Stockton");break;
+      case 239:strcat(str,"Swain");break;
+      case 240:strcat(str,"Thatcher");break;
+      case 241:strcat(str,"Thomson");break;
+      case 242:strcat(str,"Thurlow");break;
+      case 243:strcat(str,"Tillson");break;
+      case 244:strcat(str,"Truman");break;
+      case 245:strcat(str,"Turner");break;
+      case 246:strcat(str,"Upton");break;
+      case 247:strcat(str,"Walker");break;
+      case 248:strcat(str,"Weathers");break;
+      case 249:strcat(str,"Weller");break;
+      case 250:strcat(str,"Weston");break;
+      case 251:strcat(str,"Willett");break;
+      case 252:strcat(str,"Willman");break;
+      case 253:strcat(str,"Wilson");break;
+      case 254:strcat(str,"Wood");break;
+      case 255:strcat(str,"Wright");break;
+      case 256:strcat(str,"Obama");break;
+      case 257:strcat(str,"McCain");break;
 
       default:strcat(str,"Defaultson");break;
    }
@@ -517,8 +901,8 @@ void lastname(char *str)
 /* ensures that the creature's work location is appropriate to its type */
 bool verifyworklocation(Creature &cr, char test_location, char test_type)
 {
-   bool okaysite[SITENUM];
-   memset(okaysite,0,SITENUM*sizeof(bool));
+   int okaysite[SITENUM];
+   memset(okaysite,0,SITENUM*sizeof(int));
 
    short type;
 
@@ -559,10 +943,12 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       case CREATURE_SCIENTIST_LABTECH:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
          okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
          break;
       case CREATURE_SCIENTIST_EMINENT:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
          okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
          break;
       case CREATURE_CORPORATE_MANAGER:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
@@ -689,6 +1075,8 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
       case CREATURE_JUROR:
          okaysite[SITE_RESIDENTIAL_APARTMENT]=1;
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
          break;
       case CREATURE_LAWYER:
          okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
@@ -754,6 +1142,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       case CREATURE_ENGINEER:
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
          break;
       case CREATURE_FASTFOODWORKER:
          okaysite[SITE_DOWNTOWN]=1;
@@ -826,6 +1215,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       case CREATURE_HICK:
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_OUTOFTOWN]=1;
          break;
       case CREATURE_VETERAN:
       case CREATURE_HARDENED_VETERAN:
@@ -845,11 +1235,13 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
          break;
       case CREATURE_CRITIC_MUSIC:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
          break;
       case CREATURE_SOCIALITE:
          okaysite[SITE_DOWNTOWN]=1;
@@ -974,10 +1366,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
    if(swap)
    {
       //PICK A TYPE OF WORK LOCATION
-      do
-      {
-         cr.worklocation=LCSrandom(SITENUM);
-      }while(!okaysite[cr.worklocation]);
+      cr.worklocation=choose_one(okaysite,SITENUM,0);
 
       //FIND ONE OF THESE
       vector<int> goodlist;

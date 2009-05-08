@@ -615,6 +615,141 @@ void moveloot(vector<itemst *> &dest,vector<itemst *> &source)
 
 
 
+/* equipment - assign new bases to the equipment */
+void equipmentbaseassign(void)
+{
+   int p = 0;
+   int l = 0;
+   vector<itemst *> temploot;
+   map<itemst *,locationst *> temploot2;
+   for(l=0;l<location.size();l++)
+   {
+      for(int l2=0;l2<location[l]->loot.size();l2++)
+      {
+         temploot.push_back(location[l]->loot[l2]);
+         temploot2[location[l]->loot[l2]]=location[l];
+      }
+   }
+
+   vector<int> temploc;
+   for(l=0;l<location.size();l++)
+   {
+      if(location[l]->renting>=0&&!location[l]->siege.siege)temploc.push_back(l);
+   }
+   if(temploc.size()==0)return;
+
+   int page_loot=0;
+   int page_loc=0;
+
+   int selectedbase=0;
+
+   do
+   {
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+      
+      move(0,0);
+      addstr("Moving Equipment");
+      move(1,0);
+      addstr("----ITEM-----------------CURRENT LOCATION---------------------------------------");
+      move(1,51);
+      addstr("NEW LOCATION");
+
+      int y=2;
+      char str[80];
+      for(p=page_loot*19;p<temploot.size()&&p<page_loot*19+19;p++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addch(y+'A'-2);addstr(" - ");
+         get_equip_title(str,temploot[p]);
+         addstr(str);
+
+         move(y,25);
+         addstr(temploot2[temploot[p]]->shortname);
+
+         y++;
+      }
+
+      y=2;
+      for(p=page_loc*9;p<temploc.size()&&p<page_loc*9+9;p++)
+      {
+         if(p==selectedbase)set_color(COLOR_WHITE,COLOR_BLACK,1);
+         else set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,51);
+         addch(y+'1'-2);addstr(" - ");
+         addstr(location[temploc[p]]->shortname);
+
+         y++;
+      }
+
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr("Press a Letter to assign a base.  Press a Number to select a base.");
+      move(23,0);
+      addstr("Moving equipment takes no time.");
+      if(temploot.size()>19)
+      {
+         move(23,40);
+         addpagestr();
+      }
+      if(temploc.size()>9)
+      {
+         move(24,0);
+         addstr(",. to view other base pages.");
+      }
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_loot>0)page_loot--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_loot+1)*19<temploot.size())page_loot++;
+
+      //PAGE UP
+      if(c==','&&page_loc>0)page_loc--;
+      //PAGE DOWN
+      if(c=='.'&&(page_loc+1)*9<temploc.size())page_loc++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page_loot*19+(int)(c-'a');
+         if(p<temploot.size())
+         {
+            // Search through the old base's stuff for this item
+            for(int l2=0;l2<temploot2[temploot[p]]->loot.size();l2++)
+            {
+               // Remove it from that inventory and move it to the new one
+               if(temploot2[temploot[p]]->loot[l2]==temploot[p])
+               {
+                  temploot2[temploot[p]]->loot.erase(temploot2[temploot[p]]->loot.begin()+l2);
+                  location[temploc[selectedbase]]->loot.push_back(temploot[p]);
+                  temploot2[temploot[p]]=location[temploc[selectedbase]];
+               }
+            }
+         }
+      }
+      if(c>='1'&&c<='9')
+      {
+         int p=page_loc*9+(int)(c-'1');
+         if(p<temploc.size())
+         {
+            selectedbase=p;
+         }
+      }
+
+      if(c==10)break;
+   }while(1);
+}
+
+
+
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<itemst *> &loot)
 {
@@ -756,8 +891,8 @@ short ammotype(int type)
 {
    switch(type)
    {
-      case WEAPON_REVOLVER_22:
-         return CLIP_22;
+      case WEAPON_REVOLVER_38:
+         return CLIP_38;
       case WEAPON_REVOLVER_44:
          return CLIP_44;
       case WEAPON_SMG_MP5:
@@ -789,7 +924,7 @@ char rangedweapon(weaponst &w)
 {
    switch(w.type)
    {
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:

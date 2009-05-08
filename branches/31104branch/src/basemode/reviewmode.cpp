@@ -46,7 +46,7 @@ void review(void)
       addstr("----SQUAD NAME-----------------LOCATION------------ACTIVITY----------------------");
 
       int y=2;
-      for(int p=page*19;p<squad.size()+REVIEWMODENUM&&p<page*19+19;p++)
+      for(int p=page*19;p<squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++)
       {
          if(p<squad.size())
          {
@@ -106,7 +106,7 @@ void review(void)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(y,0);
             addch('3');addstr(" - ");
-            addstr("CLINIC");
+            addstr("Hospital");
          }
          else if(p==squad.size()+3)
          {
@@ -135,6 +135,13 @@ void review(void)
             move(y,0);
             addch('7');addstr(" - ");
             addstr("Away");
+         }
+         else if(p==squad.size()+7)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(y,0);
+            addch('8');addstr(" - ");
+            addstr("Review and Move Equipment");
          }
 
          y++;
@@ -169,6 +176,7 @@ void review(void)
          }
       }
       if(c>='1'&&c<='7')review_mode((int)(c-'1'));
+      if(c=='8')equipmentbaseassign();
       if(c=='z')
       {
          assemblesquad(NULL);

@@ -254,8 +254,6 @@ int maxskill(int skill,Creature& cr,bool use_juice)
    switch(skill)
    {
    case SKILL_HANDTOHAND:
-   case SKILL_IMPROVISED:
-      return (cr.attval(ATTRIBUTE_STRENGTH,use_juice)+cr.attval(ATTRIBUTE_AGILITY,use_juice))/2;
    case SKILL_FLAMETHROWER:
       // Flamethrower fully limited by agility, but also so heavy that it
       // requires strength too
@@ -327,21 +325,18 @@ int weaponskill(int weapon)
    {
       case WEAPON_KNIFE:
       case WEAPON_SHANK:
+      case WEAPON_SYRINGE:
          wsk=SKILL_KNIFE;
          break;
-      case WEAPON_SYRINGE:
+      case WEAPON_MOLOTOV:
+         wsk=SKILL_THROWING;
+         break;
+      case WEAPON_SPRAYCAN:
       case WEAPON_CROWBAR:
       case WEAPON_CHAIN:
       case WEAPON_GAVEL:
       case WEAPON_CROSS:
       case WEAPON_TORCH:
-      case WEAPON_PITCHFORK:
-      case WEAPON_SPRAYCAN:
-         wsk=SKILL_IMPROVISED;
-         break;
-      case WEAPON_MOLOTOV:
-         wsk=SKILL_THROWING;
-         break;
       case WEAPON_BASEBALLBAT:
       case WEAPON_NIGHTSTICK:
       case WEAPON_MAUL:
@@ -352,11 +347,12 @@ int weaponskill(int weapon)
       case WEAPON_AXE:
          wsk=SKILL_AXE;
          break;
+      case WEAPON_PITCHFORK:
       case WEAPON_SWORD:
       case WEAPON_DAISHO:
          wsk=SKILL_SWORD;
          break;
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
@@ -527,7 +523,7 @@ void cleangonesquads(void)
          delete squad[sq];
          squad.erase(squad.begin() + sq);
       }
-      //OTHERWISE YOU CAN TAKE ITS MONEY
+      //OTHERWISE YOU CAN TAKE ITS MONEY (and other gear)
       else
       {
          for(int l=squad[sq]->loot.size()-1;l>=0;l--)
@@ -538,6 +534,12 @@ void cleangonesquads(void)
                stat_funds+=squad[sq]->loot[l]->money;
                moneygained_thievery+=squad[sq]->loot[l]->money;
                delete squad[sq]->loot[l];
+               squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
+            }
+            else
+            {
+               // Empty squad inventory into base inventory
+               location[squad[sq]->squad[0]->base]->loot.push_back(squad[sq]->loot[l]);
                squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
             }
          }
@@ -569,6 +571,26 @@ void locatesquad(squadst *st,long loc)
 }
 
 
+// Picks a random option, based on the weights provided
+int choose_one(const int * weight_list, int number_of_options, int default_value)
+{
+   int weight_total=0;
+   int option;
+   for (option=0;option<number_of_options;option++)
+   {
+      weight_total+=weight_list[option];
+   }
+   if(weight_total<1) return default_value; // No acceptable results; use default
+   
+   int choose=LCSrandom(weight_total);
+   for (option=0;option<number_of_options;option++)
+   {
+      choose -= weight_list[option];
+      if(choose<0)break;
+   }
+   return option;
+}
+
 
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st,long loc)
@@ -589,7 +611,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
 {
    // First note this in the liberal influence -- mostly for the
    // sake of the nice visual intelligence report entry
-   if(v<VIEWNUM-5)
+   if(v<VIEWNUM-6)
    {
       background_liberal_influence[v]+=power*10;
    }

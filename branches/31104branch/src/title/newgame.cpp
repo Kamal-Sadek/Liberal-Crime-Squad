@@ -45,7 +45,111 @@ void makecharacter(void)
 	newcr->att[ATTRIBUTE_CHARISMA]=4;
    for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
 
-   generate_name(newcr->propername,newcr->gender_conservative);
+   char first[2][80];
+   char last[80];
+   bool gender=(newcr->gender_conservative==GENDER_FEMALE);
+   firstname(first[0], GENDER_MALE);
+   firstname(first[1], GENDER_FEMALE);
+   lastname(last);
+
+   bool choices=true;
+
+   while(1)
+   {
+      clear();
+   
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(4,6);
+      addstr("The Founder of the Liberal Crime Squad");
+
+      move(6,2);
+      addstr("FIRST NAME: ");
+      addstr(first[gender]);
+      move(6,30);
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" (Press A to have your parents reconsider)");
+
+      move(8,2);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("LAST NAME: ");
+      addstr(last);
+      move(8,30);
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" (Press B to be born to a different family)");
+      
+      move(10,2);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("SEX: ");
+      if(newcr->gender_conservative == GENDER_MALE)
+      {
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         addstr("Male");
+      }
+      else
+      {
+         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         addstr("Female");
+      }
+      move(10,30);
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" (Press C to be born as the other sex)");
+
+      move(12,2);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("HISTORY: ");
+      if(choices)
+      {
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         addstr("Let Me Choose");
+      }
+      else
+      {
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         addstr("Let Fate Decide");
+      }
+      move(12,30);
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" (Press D to toggle childhood)");
+
+      move(15,4);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Press any other key when ready to begin...");
+
+      int c=getch();
+      translategetch(c);
+
+      if(c=='a')
+      {
+         firstname(first[gender],newcr->gender_conservative);
+         continue;
+      }
+      if(c=='b')
+      {
+         lastname(last);
+         continue;
+      }
+      if(c=='c')
+      {
+         if(newcr->gender_conservative == GENDER_FEMALE)
+            newcr->gender_conservative = GENDER_MALE;
+         else
+            newcr->gender_conservative = GENDER_FEMALE;
+
+         newcr->gender_liberal = newcr->gender_conservative;
+
+         gender=newcr->gender_conservative-1;
+         continue;
+      }
+      if(c=='d')
+      {
+         choices = !choices;
+         strcpy(newcr->propername,first[gender]);
+         strcat(newcr->propername," ");
+         strcat(newcr->propername,last);
+         continue;
+      }
+      break;
+   }
    
    int c;
    bool hasmaps=0;
@@ -65,23 +169,36 @@ void makecharacter(void)
       //D - Generalist/Sleepers
       //E - Recruiter
 
+      char selection = LCSrandom(5);
+
       switch(q)
       {
          case 0:
             move(2,0);addstr("The day I was born in 1984...");
-            move(5,0);addstr("A - the Polish priest Popieluszko was kidnapped by government agents.");
+            
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - the Polish priest Popieluszko was kidnapped by government agents.");
             //ATTRIBUTE_AGILITY 2
             // Oct. 19, 1984
-            move(7,0);addstr("B - was the 3rd anniversary of the assassination attempt on Ronald Reagan.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - was the 3rd anniversary of the assassination attempt on Ronald Reagan.");
             //ATTRIBUTE_STRENGTH 2
             // Mar. 3, 1984
-            move(9,0);addstr("C - the Macintosh was introduced.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - the Macintosh was introduced.");
             //ATTRIBUTE_INTELLIGENCE 2
             // Jan. 24, 1984
-            move(11,0);addstr("D - the Nobel Peace Prize went to Desmond Tutu for opposition to apartheid.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - the Nobel Peace Prize went to Desmond Tutu for opposition to apartheid.");
             //ATTRIBUTE_HEART 2
             // Oct. 16, 1984
-            move(13,0);addstr("E - the Sandanista Front won the elections in Nicaragua.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - the Sandanista Front won the elections in Nicaragua.");
             //ATTRIBUTE_CHARISMA 2
             // Sep. 4, 1984
             
@@ -94,7 +211,7 @@ void makecharacter(void)
             else if(newcr->gender_conservative == GENDER_FEMALE)
                addstr("girl");
             else
-               addstr("hermaphrodite"); // this is a bug if it happens, but hey, whatever :P
+               addstr("intersex baby"); // this is a bug if it happens, but hey, whatever :P
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             addstr(".");
 
@@ -108,19 +225,29 @@ void makecharacter(void)
             break;
          case 1:
             move(2,0);addstr("When I was bad...");
-            move(5,0);addstr("A - my parents grounded me and hid my toys, but I knew where they put them.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - my parents grounded me and hid my toys, but I knew where they put them.");
             //SKILL_SECURITY 1
             //ATTRIBUTE_AGILITY 1
-            move(7,0);addstr("B - my father beat me.  I learned to take a punch earlier than most.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - my father beat me.  I learned to take a punch earlier than most.");
             //SKILL_HANDTOHAND 1
             //ATTRIBUTE_HEALTH 1
-            move(9,0);addstr("C - I was sent to my room, where I studied quietly by myself, alone.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I was sent to my room, where I studied quietly by myself, alone.");
             //SKILL_WRITING 1
             //ATTRIBUTE_INTELLIGENCE 1
-            move(11,0);addstr("D - my parents argued with each other about me, but I was never punished.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - my parents argued with each other about me, but I was never punished.");
             //SKILL_PERSUASION 1
             //ATTRIBUTE_HEART 1
-            move(13,0);addstr("E - my father lectured me endlessly, trying to make me think like him.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - my father lectured me endlessly, trying to make me think like him.");
             //SKILL_PSYCHOLOGY 1
             //ATTRIBUTE_CHARISMA 1
 
@@ -144,143 +271,223 @@ void makecharacter(void)
             break;
          case 2:
             move(2,0);addstr("In elementary school...");
-            move(5,0);addstr("A - I was mischevious, and always up to something.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - I was mischevious, and always up to something.");
             //SKILL_DISGUISE 1
             //ATTRIBUTE_AGILITY 1
-            move(7,0);addstr("B - I had a lot of repressed anger.  I hurt animals.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - I had a lot of repressed anger.  I hurt animals.");
             //SKILL_PSYCHOLOGY 1
             //ATTRIBUTE_STRENGTH 1
             //ATTRIBUTE_AGILITY 1
             //ATTRIBUTE_HEART -1 <--- !
-            move(9,0);addstr("C - I was at the head of the class, and I worked very hard.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I was at the head of the class, and I worked very hard.");
             //ATTRIBUTE_INTELLIGENCE 1
             //SKILL_WRITING 1
-            move(11,0);addstr("D - I was unruly and often fought with the other children.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - I was unruly and often fought with the other children.");
             //SKILL_HANDTOHAND 1
             //ATTRIBUTE_STRENGTH 1
-            move(13,0);addstr("E - I was the class clown.  I even had some friends.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - I was the class clown.  I even had some friends.");
             //SKILL_PERSUASION 1
             //ATTRIBUTE_CHARISMA 1
             break;
          case 3:
             move(2,0);addstr("When I turned 10...");
-            move(5,0);addstr("A - my parents divorced.  Whenever I talked, they argued, so I stayed quiet.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - my parents divorced.  Whenever I talked, they argued, so I stayed quiet.");
             //SKILL_STEALTH 1
-            move(7,0);addstr("B - my parents divorced.  Violently.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - my parents divorced.  Violently.");
             //SKILL_HANDTOHAND 1
-            move(9,0);addstr("C - my parents divorced.  Acrimoniously.  I once tripped over the paperwork!");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - my parents divorced.  Acrimoniously.  I once tripped over the paperwork!");
             //SKILL_LAW 1
-            move(11,0);addstr("D - my parents divorced.  Mom slept with the divorce lawyer.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - my parents divorced.  Mom slept with the divorce lawyer.");
             //SKILL_SEDUCTION 1
-            move(13,0);addstr("E - my parents divorced.  It still hurts to read my old diary.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - my parents divorced.  It still hurts to read my old diary.");
             //SKILL_WRITING 1
             break;
          case 4:
             move(2,0);addstr("In junior high school...");
-            move(5,0);addstr("A - I was into chemistry.  I wanted to know what made the world tick.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - I was into chemistry.  I wanted to know what made the world tick.");
             //SKILL_SCIENCE 2
             //ATTRIBUTE_INTELLIGENCE 2
-            move(7,0);addstr("B - I played guitar in a grunge band.  We sucked, but so did life.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - I played guitar in a grunge band.  We sucked, but so did life.");
             //SKILL_MUSIC 2
             //ATTRIBUTE_CHARISMA 2
-            move(9,0);addstr("C - I drew things, a lot.  I was drawing a world better than this.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I drew things, a lot.  I was drawing a world better than this.");
             //SKILL_ART 2
             //ATTRIBUTE_HEART 2
-            move(11,0);addstr("D - I played violent video games at home.  I was a total outcast.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - I played violent video games at home.  I was a total outcast.");
             //SKILL_COMPUTERS 2
             //ATTRIBUTE_AGILITY 2
-            move(13,0);addstr("E - I was obsessed with swords, and started lifting weights.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - I was obsessed with swords, and started lifting weights.");
             //SKILL_SWORD 2
             //ATTRIBUTE_STRENGTH 2
             break;
          case 5:
             move(2,0);addstr("Things were getting really bad...");
-            move(5,0);addstr("A - when I stole my first car.  I got a few blocks before I totalled it.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - when I stole my first car.  I got a few blocks before I totalled it.");
             //SKILL_DRIVING 1
             //SKILL_SECURITY 1
-            move(7,0);addstr("B - and I went to live with my dad.  He had been in Nam and he still drank.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - and I went to live with my dad.  He had been in Nam and he still drank.");
             //SKILL_SHOTGUN 1
             //SKILL_RIFLE 1
-            move(9,0);addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
             //SKILL_TAILORING 2
-            move(11,0);addstr("D - when I was sent to religious counseling, just stressing me out more.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - when I was sent to religious counseling, just stressing me out more.");
             //SKILL_RELIGION 1
             //SKILL_PSYCHOLOGY 1
-            move(13,0);addstr("E - and I tried being a teacher's assistant.  It just made me a target.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - and I tried being a teacher's assistant.  It just made me a target.");
             //SKILL_TEACHING 2
             break;
          case 6:
             move(2,0);addstr("Well, I knew it had reached a crescendo when...");
-            move(5,0);addstr("A - I stole a cop car when I was only 14.  I went to juvie for 6 months.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - I stole a cop car when I was only 14.  I went to juvie for 6 months.");
             //SKILL_DRIVING 1
             //SKILL_SECURITY 1
             //ATTRIBUTE_INTELLIGENCE 1
-            move(7,0);addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off.");
             //SKILL_SHOTGUN 2
             //ATTRIBUTE_AGILITY 1
-            move(9,0);addstr("C - I tried wrestling for a quarter, desperate to fit in.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I tried wrestling for a quarter, desperate to fit in.");
             //ATTRIBUTE_STRENGTH 1
             //SKILL_HANDTOHAND 2
-            move(11,0);addstr("D - I got caught making out, and now I needed to be 'cured' of homosexuality.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - I got caught making out, and now I needed to be 'cured' of homosexuality.");
             //SKILL_SEDUCTION 1
             //SKILL_RELIGION 1
             //ATTRIBUTE_HEART 1
-            move(13,0);addstr("E - I resorted to controlling people.  Had my own clique of outcasts.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - I resorted to controlling people.  Had my own clique of outcasts.");
             //SKILL_PERSUASION 2
             //ATTRIBUTE_CHARISMA 1
             break;
          case 7:
             move(2,0);addstr("I was only 15 when I ran away, and...");
-            move(5,0);addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");
             //SKILL_SECURITY 1
             //SKILL_STEALTH 1
             //ATTRIBUTE_AGILITY 1
-            move(7,0);addstr("B - I hung out with thugs and beat the shit out of people.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - I hung out with thugs and beat the shit out of people.");
             //ATTRIBUTE_STRENGTH 1
             //SKILL_HANDTOHAND 2
-            move(9,0);addstr("C - I got a horrible job working fast food, smiling as people fed the man.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I got a horrible job working fast food, smiling as people fed the man.");
             //ATTRIBUTE_CHARISMA 1
             //SKILL_BUSINESS 2
-            move(11,0);addstr("D - I let people pay me for sex.  I needed the money to survive.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - I let people pay me for sex.  I needed the money to survive.");
             //ATTRIBUTE_CHARISMA 1
             //SKILL_SEDUCTION 2
-            move(13,0);addstr("E - I volunteered for a left-wing candidate. It wasn't *real*, though, you know?");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - I volunteered for a left-wing candidate. It wasn't *real*, though, you know?");
             //ATTRIBUTE_INTELLIGENCE 1
             //SKILL_LAW 1
             //SKILL_PERSUASION 1
             break;
          case 8:
             move(2,0);addstr("Life went on.  On my 18th birthday...");
-            move(5,0);addstr("A - I stole a security uniform.");
-            move(7,0);addstr("B - I bought myself an assault rifle.");
-            move(9,0);addstr("C - I celebrated.  I'd saved a thousand bucks!");
-            move(11,0);addstr("D - I went out to party and met a judge.  We've been fast friends ever since.");
-            move(13,0);addstr("E - I managed to acquire secret maps of several major buildings downtown.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - I stole a security uniform.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - I bought myself an assault rifle.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - I celebrated.  I'd saved a thousand bucks!");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - I went out to party and met a judge.  We've been fast friends ever since.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - I managed to acquire secret maps of several major buildings downtown.");
             break;
          case 9:
             move(2,0);addstr("For the past few years, I've been...");
-            move(5,0);addstr("A - stealing from Corporations.  I know they're still keeping more secrets.");
+            move(5,0);
+            if(choices || selection == 0)
+               addstr("A - stealing from Corporations.  I know they're still keeping more secrets.");
             //ATTRIBUTE_INTELLIGENCE 2
             //ATTRIBUTE_AGILITY 2
             //SKILL_DISGUISE 2
             //SKILL_SECURITY 1
             //SKILL_STEALTH 1
-            move(7,0);addstr("B - a violent criminal.  Nothing can change me, or stand in my way.");
+            move(7,0);
+            if(choices || selection == 1)
+               addstr("B - a violent criminal.  Nothing can change me, or stand in my way.");
             //SKILL_RIFLE 2
             //SKILL_PISTOL 2
             //ATTRIBUTE_AGILITY 2
             //ATTRIBUTE_HEALTH 2
-            move(9,0);addstr("C - taking college courses.  I can see how much the country needs help.");
+            move(9,0);
+            if(choices || selection == 2)
+               addstr("C - taking college courses.  I can see how much the country needs help.");
             //SKILL_SCIENCE 2
             //SKILL_COMPUTERS 2
             //ATTRIBUTE_INTELLIGENCE 4
-            move(11,0);addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
+            move(11,0);
+            if(choices || selection == 3)
+               addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
             //SKILL_FIRSTAID 2
             //SKILL_STREETSENSE 2
             //ATTRIBUTE_INTELLIGENCE 1
             //ATTRIBUTE_AGILITY 1
             //ATTRIBUTE_HEALTH 2
-            move(13,0);addstr("E - writing my manifesto and refining my image.  I'm ready to lead.");
+            move(13,0);
+            if(choices || selection == 4)
+               addstr("E - writing my manifesto and refining my image.  I'm ready to lead.");
             //ATTRIBUTE_CHARISMA 2
             //ATTRIBUTE_INTELLIGENCE 2
             //SKILL_LAW 1
@@ -298,6 +505,7 @@ void makecharacter(void)
       {
          c=getch();
          translategetch(c);
+         if(!choices)c='a'+selection;
       }while(c<'a'||c>'e');
 
       switch(q)
@@ -609,6 +817,52 @@ void makecharacter(void)
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(2,2);
+   addstr("A NEW CONSERVATIVE ERA");
+
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(4,2);
+   addstr("The Year is 2009.");
+   move(6,2);
+   addstr("Conservative President ");
+   char president[80];
+   generate_name(president,GENDER_WHITEMALEPATRIARCH);
+   addstr(president);
+   addstr(" ends his second term with approval");
+   move(7,2);
+   addstr("ratings in the high 70s, and is succeeded by hardcore Arch-Conservative");
+   move(8,2);
+   addstr(execname[EXEC_PRESIDENT]);
+   addstr(".");
+
+   move(10,2);
+   addstr("With Conservatives sweeping into power in the House of Representatives");
+   move(11,2);
+   addstr("and Senate, and a Conservative majority in the Supreme Court of the");
+   move(12,2);
+   addstr("United States, commentators are hailing it as the beginning of a new");
+   move(13,2);
+   addstr("Conservative era.");
+
+   move(15,2);
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   addstr("President ");
+   addstr(execname[EXEC_PRESIDENT]);
+   addstr(" has asked the new Congress to move quickly");
+   move(16,2);
+   addstr("to rubber stamp his radical Arch-Conservative agenda. ");
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("The left seems");
+   move(17,2);
+   addstr("powerless to stop this imminent trampling of Liberal Sanity and Justice.");
+
+   move(19,2);
+   addstr("In this dark time, the Liberal Crime Squad is born...");
+   refresh();
+   getch();
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
    addstr("What is your name to the People?");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -632,6 +886,13 @@ void makecharacter(void)
       strcpy(newl->name,"Downtown");
       strcpy(newl->shortname,"Downtown");
       newl->type=SITE_DOWNTOWN;
+      newl->parent=-1;
+   location.push_back(newl);
+
+   newl=new locationst;
+      strcpy(newl->name,"The Commercial Center");
+      strcpy(newl->shortname,"C-District");
+      newl->type=SITE_COMMERCIAL;
       newl->parent=-1;
    location.push_back(newl);
 
@@ -680,49 +941,67 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_PRISON;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_NUCLEAR;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_INTELLIGENCEHQ;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_CORPORATE_HEADQUARTERS;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_CORPORATE_HOUSE;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
+      newl->type=SITE_BUSINESS_PAWNSHOP;
+      newl->parent=1;
+      initlocation(*newl);
+   location.push_back(newl);
+   
+   newl=new locationst;
+      newl->type=SITE_BUSINESS_HALLOWEEN;
+      newl->parent=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
+      newl->type=SITE_BUSINESS_CARDEALERSHIP;
+      newl->parent=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
       newl->type=SITE_RESIDENTIAL_SHELTER;
-      newl->parent=2;
+      newl->parent=3;
       newl->renting=0;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_WAREHOUSE;
-      newl->parent=2;
+      newl->parent=3;
       newl->renting=0;
       newl->hidden=0;
       initlocation(*newl);
@@ -730,15 +1009,7 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_WAREHOUSE;
-      newl->parent=2;
-      newl->renting=0;
-      newl->hidden=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_WAREHOUSE;
-      newl->parent=2;
+      newl->parent=3;
       newl->renting=0;
       newl->hidden=0;
       initlocation(*newl);
@@ -746,19 +1017,13 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_POLLUTER;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_POLLUTER;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_POLLUTER;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
@@ -790,115 +1055,97 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_APARTMENT;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_APARTMENT;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_TENEMENT;
       newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_TENEMENT;
-      newl->parent=2;
+      newl->parent=3;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
+      newl->type=SITE_RESIDENTIAL_TENEMENT;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_HOSPITAL_UNIVERSITY;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_HOSPITAL_CLINIC;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_LABORATORY_GENETIC;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_LABORATORY_COSMETICS;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_PAWNSHOP;
       newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_DEPTSTORE;
-      newl->parent=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_HALLOWEEN;
       newl->parent=1;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_SWEATSHOP;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_SWEATSHOP;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_CRACKHOUSE;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_CRACKHOUSE;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_CRACKHOUSE;
-      newl->parent=2;
+      newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_VEGANCOOP;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_JUICEBAR;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_BUSINESS_INTERNETCAFE;
-      newl->parent=1;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
@@ -916,27 +1163,21 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
-      newl->type=SITE_BUSINESS_LATTESTAND;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
       newl->type=SITE_OUTDOOR_PUBLICPARK;
-      newl->parent=0;
+      newl->parent=2;
       initlocation(*newl);
    location.push_back(newl);
 
-   newl=new locationst;
+   /*newl=new locationst;
       newl->type=SITE_BUSINESS_ARMSDEALER;
-      newl->parent=3;
+      newl->parent=4;
       newl->needcar=1;
       initlocation(*newl);
-   location.push_back(newl);
+   location.push_back(newl);*/
 
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
-      newl->parent=2;
+      newl->parent=3;
       newl->renting=-2;
       newl->hidden=1;
       initlocation(*newl);
@@ -952,7 +1193,7 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_OUTDOOR_BUNKER;
-      newl->parent=3;
+      newl->parent=4;
       newl->renting=-2;
       newl->needcar=1;
       newl->hidden=1;
@@ -993,6 +1234,7 @@ void makecharacter(void)
       makecreature(*judge,CREATURE_JUDGE_LIBERAL);
       judge->namecreature();
       judge->flag|=CREATUREFLAG_SLEEPER;
+      location[judge->worklocation]->interrogated=1;
       judge->hireid=newcr->id;
       pool.push_back(judge);
       judge->location=judge->base;

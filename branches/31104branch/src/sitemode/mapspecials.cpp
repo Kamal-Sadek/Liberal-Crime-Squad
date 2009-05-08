@@ -34,8 +34,11 @@ enum bouncer_reject_reason
    REJECTED_NUDE,
    REJECTED_WEAPONS,
    REJECTED_UNDERAGE,
+   REJECTED_FEMALEISH,
+   REJECTED_FEMALE,
    REJECTED_BLOODYCLOTHES,
    REJECTED_DAMAGEDCLOTHES,
+   REJECTED_CROSSDRESSING,
    REJECTED_GUESTLIST,
    REJECTED_DRESSCODE,
    REJECTED_SECONDRATECLOTHES,
@@ -57,143 +60,209 @@ void special_bouncer_greet_squad()
 
 void special_bouncer_assess_squad()
 {
+   bool autoadmit=0;
+   char sleepername[80];
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int p=0;p<pool.size();p++)
+   {
+      if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER && !LCSrandom(3))
+      {
+         autoadmit=1;
+         strcpy(sleepername,pool[p]->name);
+         strcpy(encounter[0].name,sleepername);
+         break;
+      }
+   }
    makecreature(encounter[0],CREATURE_BOUNCER);
+   if(autoadmit==1)encounter[0].align=1;
    //clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
-   addstr("The bouncer assesses your squad.");
-   levelmap[locx][locy][locz].special=SPECIAL_CLUB_BOUNCER_SECONDVISIT;
+   if(autoadmit)
+   {
+      addstr("Sleeper ");
+      addstr(sleepername);
+      addstr(" smirks and lets the squad in.");
+      
+      levelmap[locx][locy][locz].special=-1;
+   }
+   else
+   {
+      addstr("The bouncer assesses your squad.");
+      levelmap[locx][locy][locz].special=SPECIAL_CLUB_BOUNCER_SECONDVISIT;
+   }
+   printencounter();
    refresh();
    getch();
    char rejected=NOT_REJECTED;
+   
    // Size up the squad for entry
-   for(int s=0;s<6;s++)
+   if(!autoadmit)
    {
-      if(activesquad->squad[s])
+      for(int s=0;s<6;s++)
       {
-         // Wrong clothes? Gone
-         if(activesquad->squad[s]->armor.type==ARMOR_NONE)
-            if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
-         if(!hasdisguise(*activesquad->squad[s],sitetype))
-            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
-         // Busted, cheap, bloody clothes? Gone
-         if(activesquad->squad[s]->armor.flag & ARMORFLAG_BLOODY)
-            if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
-         if(activesquad->squad[s]->armor.flag & ARMORFLAG_DAMAGED)
-            if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
-         if(activesquad->squad[s]->armor.quality!='1')
-            if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
-         // Suspicious weapons? Gone
-         if(weaponcheck(*activesquad->squad[s],sitetype)>0)
-            if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
-         // Fail a tough disguise check? Gone
-         if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
-            if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
-         // Underage? Gone
-         if(activesquad->squad[s]->age<18)
-            if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
-         // High security in gentleman's club? Gone
-         if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
-            if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
+         if(activesquad->squad[s])
+         {
+            // Wrong clothes? Gone
+            if(activesquad->squad[s]->armor.type==ARMOR_NONE)
+               if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
+            if(!hasdisguise(*activesquad->squad[s],sitetype))
+               if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+            // Busted, cheap, bloody clothes? Gone
+            if(activesquad->squad[s]->armor.flag & ARMORFLAG_BLOODY)
+               if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
+            if(activesquad->squad[s]->armor.flag & ARMORFLAG_DAMAGED)
+               if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
+            if(activesquad->squad[s]->armor.quality!='1')
+               if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
+            // Suspicious weapons? Gone
+            if(weaponcheck(*activesquad->squad[s],sitetype)>0)
+               if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
+            // Fail a tough disguise check? Gone
+            if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
+               if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
+            // Underage? Gone
+            if(activesquad->squad[s]->age<18)
+               if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
+            // Not a gentleman by their definition?
+            if(sitetype==SITE_BUSINESS_CIGARBAR &&
+               (activesquad->squad[s]->gender_conservative!=GENDER_MALE ||
+                activesquad->squad[s]->gender_liberal == GENDER_FEMALE))
+            {
+               // Are you passing as a man? Are you skilled enough to pull it off?
+               if(activesquad->squad[s]->gender_liberal != GENDER_NEUTRAL ||
+                  activesquad->squad[s]->gender_liberal != GENDER_MALE)
+               {
+                  // Not a man by your own definition either
+                  if(rejected>REJECTED_FEMALE)rejected=REJECTED_FEMALE;
+               }
+               else if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
+               {
+                  // Not skilled enough to pull it off
+                  if(rejected>REJECTED_FEMALEISH)rejected=REJECTED_FEMALEISH;
+               }
+            }
+            // High security in gentleman's club? Gone
+            if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
+               if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
+         }
       }
+      move(17,1);
+      switch(rejected)
+      {
+      case REJECTED_NUDE:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"No shirt, no underpants, no service.\"");break;
+         case 1:addstr("\"Put some clothes on! That's disgusting.\"");break;
+         case 2:addstr("\"No! No, you can't come in naked! God!!\"");break;
+         }
+         break;
+      case REJECTED_UNDERAGE:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"Hahaha, come back in a few years.\"");break;
+         case 1:addstr("\"Find some kiddy club.\"");break;
+         case 2:addstr("\"You don't look 18 to me.\"");break;
+         }
+         break;
+      case REJECTED_FEMALE:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"Move along ma'am, this club's for men.\"");break;
+         case 1:addstr("\"This 'ain't no sewing circle, ma'am.\"");break;
+         case 2:addstr("\"Sorry ma'am, this place is only for the men.\"");break;
+         }
+         break;
+      case REJECTED_FEMALEISH:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"You /really/ don't look like a man to me...\"");break;
+         case 1:addstr("\"Y'know... the \'other\' guys won't like you much.\"");break;
+         case 2:addstr("\"Uhh... can't let you in, ma'am. Sir. Whatever.\"");break;
+         }
+         break;
+      case REJECTED_DRESSCODE:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"Check the dress code.\"");break;
+         case 1:addstr("\"We have a dress code here.\"");break;
+         case 2:addstr("\"I can't let you in looking like that.\"");break;
+         }
+         break;
+      case REJECTED_SMELLFUNNY:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(5))
+         {
+         case 0:addstr("\"God, you smell.\"");break;
+         case 1:addstr("\"Not letting you in. Because I said so.\"");break;
+         case 2:addstr("\"There's just something off about you.\"");break;
+         case 3:addstr("\"Take a shower.\"");break;
+         case 4:addstr("\"You'd just harass the others, wouldn't you?\"");break;
+         }
+         break;
+      case REJECTED_BLOODYCLOTHES:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(5))
+         {
+         case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+         case 1:addstr("\"Absolutely not. Clean up a bit.\"");break;
+         case 2:addstr("\"This isn't a goth club, bloody clothes don't cut it here.\"");break;
+         case 3:addstr("\"Uh, maybe you should wash... replace... those clothes.\"");break;
+         case 4:addstr("\"Did you spill something on your clothes?\"");break;
+         }
+         break;
+      case REJECTED_DAMAGEDCLOTHES:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(2))
+         {
+         case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+         case 1:addstr("\"This isn't a goth club, ripped clothes don't cut it here.\"");break;
+         }
+         break;
+      case REJECTED_SECONDRATECLOTHES:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(2))
+         {
+         case 0:addstr("\"That looks like you sewed it yourself.\"");break;
+         case 1:addstr("\"If badly cut clothing is a hot new trend, I missed it.\"");break;
+         }
+         break;
+      case REJECTED_WEAPONS:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(5))
+         {
+         case 0:addstr("\"No weapons allowed.\"");break;
+         case 1:addstr("\"I can't let you in carrying that.\"");break;
+         case 2:addstr("\"I can't let you take that in.\"");break;
+         case 3:addstr("\"Come to me armed, and I'll tell you to take a hike.\"");break;
+         case 4:addstr("\"Real men fight with fists. And no, you can't come in.\"");break;
+         }
+         break;
+      case REJECTED_GUESTLIST:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         addstr("\"This club is by invitation only.\"");
+         break;
+      case NOT_REJECTED:
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         
+         switch(LCSrandom(3))
+         {
+         case 0:addstr("\"Keep it civil and don't drink too much.\"");break;
+         case 1:addstr("\"Let me get the door for you.\"");break;
+         case 2:addstr("\"Ehh, alright, go on in.\"");break;
+         }
+         break;
+      }
+      refresh();
+      getch();
    }
-   move(17,1);
-   switch(rejected)
-   {
-   case REJECTED_NUDE:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(3))
-      {
-      case 0:addstr("\"No shirt, no pants, no service.\"");break;
-      case 1:addstr("\"Put some clothes on! That's disgusting.\"");break;
-      case 2:addstr("\"No! No, you can't come in naked! God!!\"");break;
-      }
-      break;
-   case REJECTED_UNDERAGE:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(3))
-      {
-      case 0:addstr("\"Hahaha, come back in a few years.\"");break;
-      case 1:addstr("\"Find some kiddy club.\"");break;
-      case 2:addstr("\"You don't look 18 to me.\"");break;
-      }
-      break;
-   case REJECTED_DRESSCODE:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(3))
-      {
-      case 0:addstr("\"Check the dress code.\"");break;
-      case 1:addstr("\"We have a dress code here.\"");break;
-      case 2:addstr("\"I can't let you in looking like that.\"");break;
-      }
-      break;
-   case REJECTED_SMELLFUNNY:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(5))
-      {
-      case 0:addstr("\"God, you smell.\"");break;
-      case 1:addstr("\"Not letting you in. Because I said so.\"");break;
-      case 2:addstr("\"There's just something off about you.\"");break;
-      case 3:addstr("\"Take a shower.\"");break;
-      case 4:addstr("\"You'd just harass the others, wouldn't you?\"");break;
-      }
-      break;
-   case REJECTED_BLOODYCLOTHES:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(5))
-      {
-      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
-      case 1:addstr("\"Absolutely not. Clean up a bit.\"");break;
-      case 2:addstr("\"This isn't a goth club, bloody clothes don't cut it here.\"");break;
-      case 3:addstr("\"Uh, maybe you should wash... replace... those clothes.\"");break;
-      case 4:addstr("\"Did you spill something on your clothes?\"");break;
-      }
-      break;
-   case REJECTED_DAMAGEDCLOTHES:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(2))
-      {
-      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
-      case 1:addstr("\"This isn't a goth club, ripped clothes don't cut it here.\"");break;
-      }
-      break;
-   case REJECTED_SECONDRATECLOTHES:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(2))
-      {
-      case 0:addstr("\"That looks like you sewed it yourself.\"");break;
-      case 1:addstr("\"If badly cut clothing is a hot new trend, I missed it.\"");break;
-      }
-      break;
-   case REJECTED_WEAPONS:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      switch(LCSrandom(5))
-      {
-      case 0:addstr("\"No weapons allowed.\"");break;
-      case 1:addstr("\"I can't let you in carrying that.\"");break;
-      case 2:addstr("\"I can't let you take that in.\"");break;
-      case 3:addstr("\"Come to me armed, and I'll tell you to take a hike.\"");break;
-      case 4:addstr("\"Real men fight with fists. And no, you can't come in.\"");break;
-      }
-      break;
-   case REJECTED_GUESTLIST:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      addstr("\"This club is by invitation only.\"");
-      break;
-   case NOT_REJECTED:
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      
-      switch(LCSrandom(3))
-      {
-      case 0:addstr("\"Keep it civil and don't drink too much.\"");break;
-      case 1:addstr("\"Let me get the door for you.\"");break;
-      case 2:addstr("\"Ehh, alright, go on in.\"");break;
-      }
-      break;
-   }
-   refresh();
-   getch();
+   else encounter[0].exists=0;
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    if(rejected<NOT_REJECTED)
    {
@@ -234,6 +303,7 @@ void special_lab_cosmetics_cagedanimals(void)
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
             sitecrime++;
+            juiceparty(3);
             sitestory->crime.push_back(CRIME_FREE_RABBITS);
             criminalizeparty(LAWFLAG_VANDALISM);
          }
@@ -289,7 +359,7 @@ void special_nuclear_onoff(void)
          clearmessagearea();
          levelmap[locx][locy][locz].special=-1;
 
-         char max=20;
+         char max=15;
          Creature* maxs=0;
 
          for(int p=0;p<6;p++)
@@ -347,6 +417,8 @@ void special_nuclear_onoff(void)
 
             refresh();
             getch();
+
+            juiceparty(5);
          }
          sitealarm=1;
          alienationcheck(1);
@@ -391,6 +463,7 @@ void special_lab_genetic_cagedanimals(void)
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
             sitecrime++;
+            juiceparty(4);
             sitestory->crime.push_back(CRIME_FREE_BEASTS);
             criminalizeparty(LAWFLAG_VANDALISM);
 
@@ -483,6 +556,9 @@ void special_policestation_lockup(void)
                if(numleft==0)break;
             }
 
+            juiceparty(10);
+            sitecrime+=20;
+
             int time=20+LCSrandom(10);
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
@@ -500,7 +576,7 @@ void special_policestation_lockup(void)
             alienationcheck(1);
             noticecheck(-1);
             levelmap[locx][locy][locz].special=-1;
-            sitecrime+=3;
+            sitecrime+=2;
             sitestory->crime.push_back(CRIME_POLICE_LOCKUP);
             criminalizeparty(LAWFLAG_HELPESCAPE);
          }
@@ -547,6 +623,9 @@ void special_courthouse_lockup(void)
                }
                if(numleft==0)break;
             }
+
+            juiceparty(10);
+            sitecrime+=20;
 
             int time=20+LCSrandom(10);
             if(time<1)time=1;
@@ -799,7 +878,8 @@ void special_prison_control(void)
          alienationcheck(1);
          noticecheck(-1);
          levelmap[locx][locy][locz].special=-1;
-         sitecrime+=3;
+         sitecrime+=30;
+         juiceparty(10);
          sitestory->crime.push_back(CRIME_PRISON_RELEASE);
          criminalizeparty(LAWFLAG_HELPESCAPE);
 
@@ -855,6 +935,8 @@ void special_intel_supercomputer(void)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
             addstr("The Squad obtains sensitive information.");
+            
+            juiceparty(10);
 
             itemst *it=new itemst;
                it->type=ITEM_LOOT;
@@ -932,8 +1014,14 @@ void special_graffiti(void)
       location[cursite]->changes.push_back(change);
    }
    sitecrime++;
+   for(int i=0;i<6;i++)
+   {
+      if(activesquad->squad[i])
+         addjuice(*(activesquad->squad[i]),1,20);
+   }
 
    criminalizeparty(LAWFLAG_VANDALISM);
+   sitestory->crime.push_back(CRIME_TAGGING);
 
    return;
 }
@@ -966,6 +1054,7 @@ void special_sweatshop_equipment(void)
          noticecheck(-1);
          levelmap[locx][locy][locz].special=-1;
          sitecrime++;
+         juiceparty(2);
          sitestory->crime.push_back(CRIME_BREAK_SWEATSHOP);
 
          criminalizeparty(LAWFLAG_VANDALISM);
@@ -1008,6 +1097,7 @@ void special_polluter_equipment(void)
          noticecheck(-1);
          levelmap[locx][locy][locz].special=-1;
          sitecrime+=2;
+         juiceparty(2);
          sitestory->crime.push_back(CRIME_BREAK_FACTORY);
 
          criminalizeparty(LAWFLAG_VANDALISM);
@@ -1054,6 +1144,9 @@ void special_house_photos(void)
                it->type=ITEM_LOOT;
                it->loottype=LOOT_CEOPHOTOS;
             activesquad->loot.push_back(it);
+
+            juiceparty(10);
+            sitecrime+=20;
 
             int time=20+LCSrandom(10);
             if(time<1)time=1;
@@ -1116,6 +1209,9 @@ void special_corporate_files(void)
                it->type=ITEM_LOOT;
                it->loottype=LOOT_CORPFILES;
             activesquad->loot.push_back(it);
+            
+            juiceparty(10);
+            sitecrime+=20;
 
             int time=20+LCSrandom(10);
             if(time<1)time=1;

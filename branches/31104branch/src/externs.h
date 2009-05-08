@@ -95,6 +95,8 @@ extern int month;
 extern int year;
 extern int amendnum;
 
+extern bool termlimits;
+
 extern long moneygained_donate;
 extern long moneygained_brownies;
 extern long moneygained_goods;

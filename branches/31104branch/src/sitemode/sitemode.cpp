@@ -1449,13 +1449,6 @@ void mode_site(void)
                   }
                   else
                   {
-                     //Juice party for successful raid
-                     if(!sitealienate)
-                     {
-                        long addjuice=sitecrime;
-                        if(addjuice>20)addjuice=20;
-                        juiceparty(addjuice);
-                     }
                      resolvesite();
                   }
                }
@@ -1544,7 +1537,6 @@ void mode_site(void)
                         {
                            // Unlock the door
                            levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
-                           //sitecrime++; // (adding sitecrime gives juice; this is exploitable for unlocking doors)
                            sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
                            //criminalizeparty(LAWFLAG_BREAKING);
                         }
@@ -2200,9 +2192,29 @@ void mode_site(void)
 void resolvesite(void)
 {
    if(sitealienate)sitestory->positive=0;
-   if(sitealarm==1&&sitecrime>200)
+   if(sitealarm==1&&sitecrime>100)
    {
       location[cursite]->closed=sitecrime/10;
+      
+      // Out sleepers
+      for(int p=0;p<pool.size();p++)
+      {
+         if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
+            pool[p]->location == cursite)
+         {
+            pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+            erase();
+            move(8,1);
+            addstr("Sleeper ");
+            addstr(pool[p]->name);
+            addstr(" has been outed by your bold attack!");
+
+            move(10,1);
+            addstr("The Liberal is now at your command as a normal squad member.");
+            refresh();
+            getch();
+         }
+      }
 
       // CCS Safehouse killed?
       if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
@@ -2212,6 +2224,7 @@ void resolvesite(void)
          //location[cursite]->hidden=1;  // Either re-hide the location...
          location[cursite]->renting=0; // ...OR convert it to an LCS safehouse
          location[cursite]->closed=0;  // one of the above two should be commented out
+         location[cursite]->heat=100;
          ccs_kills++;
          if(ccs_kills<3)
             endgamestate--;
@@ -2220,24 +2233,7 @@ void resolvesite(void)
 
          // Move any CCS Sleepers at this location back to the homeless shelter
 
-         for(int p=0;p<pool.size();p++)
-         {
-            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
-               pool[p]->location == cursite)
-            {
-               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-               erase();
-               move(8,1);
-               addstr("Sleeper ");
-               addstr(pool[p]->name);
-               addstr(" has been outed by your bold attack!");
-
-               move(10,1);
-               addstr("The former CCS Member is now at your command as a normal squad member.");
-               refresh();
-               getch();
-            }
-         }
+         
       }
       // Capture a warehouse or crack den?
       else if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
@@ -2246,25 +2242,6 @@ void resolvesite(void)
          location[cursite]->renting=0; // Capture safehouse for the glory of the LCS!
          location[cursite]->closed=0;
          location[cursite]->heat=100;
-
-         for(int p=0;p<pool.size();p++)
-         {
-            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
-               pool[p]->location == cursite)
-            {
-               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-               erase();
-               move(8,1);
-               addstr("Sleeper ");
-               addstr(pool[p]->name);
-               addstr(" has been outed by your bold attack!");
-
-               move(10,1);
-               addstr("The former LCS agent is now at your command as a normal squad member.");
-               refresh();
-               getch();
-            }
-         }
       }
    }
    else if(sitealarm==1&&sitecrime>10&&location[cursite]->renting<=-1)

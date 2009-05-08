@@ -337,7 +337,7 @@ long bashstrengthmod(int t)
       case WEAPON_FLAMETHROWER:
          return 2;
       case WEAPON_SMG_MP5:
-      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
@@ -519,7 +519,11 @@ char radio_broadcast(void)
    int viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
-      case VIEW_ABORTION:addstr("discusses abortion.");break;
+      case VIEW_WOMEN:addstr("discusses abortion.");break;
+      case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
+      case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
+      case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
+      case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
       case VIEW_GAY:addstr("discusses homosexual rights.");break;
       case VIEW_DEATHPENALTY:addstr("examines the death penalty.");break;
       case VIEW_NUCLEARPOWER:addstr("runs down nuclear power.");break;
@@ -617,7 +621,11 @@ char radio_broadcast(void)
                move(17,1);
                switch(viewhit)
                {
-                  case VIEW_ABORTION:addstr("discuss abortion.");break;
+                  case VIEW_WOMEN:addstr("discusses abortion.");break;
+                  case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
+                  case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
+                  case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
+                  case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
                   case VIEW_GAY:addstr("discuss homosexual rights.");break;
                   case VIEW_DEATHPENALTY:addstr("examine the death penalty.");break;
                   case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
@@ -767,7 +775,11 @@ char news_broadcast(void)
    int viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
-      case VIEW_ABORTION:addstr("discusses abortion.");break;
+      case VIEW_WOMEN:addstr("discusses abortion.");break;
+      case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
+      case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
+      case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
+      case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
       case VIEW_GAY:addstr("discusses homosexual rights.");break;
       case VIEW_DEATHPENALTY:addstr("examines the death penalty.");break;
       case VIEW_NUCLEARPOWER:addstr("runs down nuclear power.");break;
@@ -863,7 +875,11 @@ char news_broadcast(void)
                move(17,1);
                switch(viewhit)
                {
-                  case VIEW_ABORTION:addstr("discuss abortion.");break;
+                  case VIEW_WOMEN:addstr("discusses abortion.");break;
+                  case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
+                  case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
+                  case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
+                  case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
                   case VIEW_GAY:addstr("discuss homosexual rights.");break;
                   case VIEW_DEATHPENALTY:addstr("examine the death penalty.");break;
                   case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
@@ -1153,7 +1169,7 @@ void reloadparty(bool wasteful)
             case CLIP_45:ammomax=15;break;
             case CLIP_ASSAULT:ammomax=30;break;
             case CLIP_SMG:ammomax=15;break;
-            case CLIP_22:ammomax=6;break;
+            case CLIP_38:ammomax=6;break;
             case CLIP_44:ammomax=6;break;
             case CLIP_BUCKSHOT:ammomax=6;break;
             case CLIP_MOLOTOV:ammomax=1;break;

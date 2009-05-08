@@ -22,6 +22,9 @@
 // Laws start elite liberal
 //#define PERFECTLAWS
 
+// Public opinion starts at 100% Liberal
+//#define REVOLUTIONNOW
+
 // Gives you bloody armor
 //#define GIVEBLOODYARMOR
 
@@ -47,11 +50,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.18.0"
+#define PACKAGE_VERSION "3.19.0"
 #endif
 
-const int version=31801;
-const int lowestloadversion=31801;
+const int version=31900;
+const int lowestloadversion=31900;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -297,6 +300,7 @@ enum SpecialAttacks
 enum SiteTypes
 {
    SITE_DOWNTOWN,
+   SITE_COMMERCIAL,
    SITE_UDISTRICT,
    SITE_OUTOFTOWN,
    SITE_INDUSTRIAL,
@@ -333,6 +337,7 @@ enum SiteTypes
    SITE_BUSINESS_HALLOWEEN,
    SITE_BUSINESS_BARANDGRILL,
    SITE_BUSINESS_ARMSDEALER,
+   SITE_BUSINESS_CARDEALERSHIP,
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
    SITENUM
@@ -466,7 +471,6 @@ enum Skills
    SKILL_SWORD,
    SKILL_CLUB,
    SKILL_AXE,
-   SKILL_IMPROVISED,
    SKILL_THROWING,
    SKILL_PISTOL,
    SKILL_RIFLE,
@@ -528,7 +532,7 @@ enum Weapons
    WEAPON_KNIFE,
    WEAPON_SHANK,
    WEAPON_SYRINGE,
-   WEAPON_REVOLVER_22,
+   WEAPON_REVOLVER_38,
    WEAPON_REVOLVER_44,
    WEAPON_SEMIPISTOL_9MM,
    WEAPON_SEMIPISTOL_45,
@@ -566,7 +570,7 @@ struct weaponst
    {
       switch(type)
       {
-         case WEAPON_REVOLVER_22:
+         case WEAPON_REVOLVER_38:
          case WEAPON_REVOLVER_44:
          case WEAPON_SEMIPISTOL_9MM:
          case WEAPON_SEMIPISTOL_45:
@@ -729,7 +733,7 @@ enum ClipType
    CLIP_45,
    CLIP_ASSAULT,
    CLIP_SMG,
-   CLIP_22,
+   CLIP_38,
    CLIP_44,
    CLIP_BUCKSHOT,
    CLIP_MOLOTOV,
@@ -905,8 +909,8 @@ struct activityst
 {
    activityst() : type(0), arg(0), arg2(0) { }
    int type;
-   int arg;
-   int arg2;
+   long arg;
+   long arg2;
 };
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
@@ -926,6 +930,7 @@ struct activityst
 #define GENDER_NEUTRAL 0
 #define GENDER_MALE    1
 #define GENDER_FEMALE  2
+#define GENDER_WHITEMALEPATRIARCH 3
 
 class Creature
 {
@@ -1347,7 +1352,6 @@ enum GameModes
 
 enum Views
 {
-   VIEW_ABORTION,
    VIEW_GAY,
    VIEW_DEATHPENALTY,
 	VIEW_TAXES,
@@ -1363,12 +1367,18 @@ enum Views
    VIEW_POLLUTION,
    VIEW_CORPORATECULTURE,
    VIEW_CEOSALARY,
-   //*JDS* I'm using VIEWNUM-5 in a random generator that rolls a
-   //random issue, not including the media ones, and this will
+   VIEW_WOMEN,
+   VIEW_CIVILRIGHTS,
+   VIEW_DRUGS,
+   VIEW_IMMIGRATION,
+   VIEW_MILITARY,
+   //*JDS* I'm using VIEWNUM-6 in a random generator that rolls a
+   //random issue, not including the media/politicalviolence ones, and this will
    //break if these stop being the last 4 issues; do a search
-   //for VIEWNUM-5 to change it if it needs to be changed.
+   //for VIEWNUM-6 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
+   VIEW_POLITICALVIOLENCE,
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
    VIEW_LIBERALCRIMESQUADPOS,
@@ -1394,6 +1404,14 @@ enum Laws
    LAW_FLAGBURNING,
    LAW_GUNCONTROL,
    LAW_TAX,
+   LAW_WOMEN,
+   LAW_CIVILRIGHTS,
+   LAW_DRUGS,
+   LAW_IMMIGRATION,
+   LAW_RELIGION,
+   LAW_ELECTIONS,
+   LAW_MILITARY,
+   LAW_TORTURE,
    LAWNUM
 };
 
@@ -1460,6 +1478,7 @@ enum Crimes
    CRIME_FREE_RABBITS,
    CRIME_FREE_BEASTS,
    CRIME_ARSON,
+   CRIME_TAGGING,
    CRIMENUM
 };
 
@@ -1486,6 +1505,10 @@ enum NewsStories
    NEWSSTORY_DRUGARREST,
    NEWSSTORY_GRAFFITIARREST,
    NEWSSTORY_BURIALARREST,
+   NEWSSTORY_RAID_CORPSESFOUND,
+   NEWSSTORY_RAID_GUNSFOUND,
+   NEWSSTORY_HOSTAGE_RESCUED,
+   NEWSSTORY_HOSTAGE_ESCAPES,
    NEWSSTORYNUM
 };
 
@@ -1494,6 +1517,8 @@ struct newsstoryst
    short type;
    short view;
    char claimed;
+   short politics_level;
+   short violence_level;
    Creature *cr;
    vector<int> crime;
    long loc,priority,page,guardianpage;
@@ -1502,6 +1527,8 @@ struct newsstoryst
    newsstoryst()
    {
       claimed=1;
+      politics_level=0;
+      violence_level=0;
       cr=NULL;
    }
 };
@@ -1739,6 +1766,8 @@ int loveslaves(const Creature& cr);
 int loveslavesleft(const Creature& cr);
 /* common - random issue by public interest */
 int randomissue(bool core_only=0);
+// Picks a random option, based on the weights provided
+int choose_one(const int * weight_list, int number_of_options, int default_value);
 
 /*
  consolesupport.cpp
@@ -1794,6 +1823,8 @@ int getpoolcreature(long id);
 void equip(vector<itemst *> &loot,int loc);
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<itemst *> &dest,vector<itemst *> &source);
+/* equipment - assign new bases to the equipment */
+void equipmentbaseassign(void);
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<itemst *> &loot);
 /* compares two items, used in sorting gear */
@@ -2202,6 +2233,8 @@ void getwheelchair(Creature &cr,char &clearformess);
 void hospital(int loc);
 /* active squad visits the pawn shop */
 void pawnshop(int loc);
+/* active squad visits the car dealership */
+void dealership(int loc);
 /* active squad visits the arms dealer */
 void armsdealer(int loc);
 /* active squad visits the department store */
@@ -2337,10 +2370,14 @@ int presidentapproval();
 int getswingvoter();
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings);
+void elections_senate(int senmod,char canseethings);
+void elections_house(char canseethings);
 /* politics - causes the supreme court to hand down decisions */
 void supremecourt(char clearformess,char canseethings);
 /* politics - causes congress to act on legislation */
 void congress(char clearformess,char canseethings);
+// letter of amenesty to the LCS from the President (you win)
+void amnesty(void);
 /* politics - checks if the game is won */
 char wincheck(void);
 /* politics - checks the prevailing attitude on a specific law, or overall */
@@ -2349,8 +2386,10 @@ int publicmood(int l);
 /*
  endgame.cpp
 */
-/* endgame - attempts to pass a constitutional amendment to win the game */
+/* endgame - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings);
+/* endgame - attempts to pass a constitutional amendment to help win the game */
+void amendment_termlimits(char canseethings);
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */

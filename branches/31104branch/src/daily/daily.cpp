@@ -426,6 +426,7 @@ void advanceday(char &clearformess,char canseethings)
             case SITE_BUSINESS_DEPTSTORE:
             case SITE_BUSINESS_HALLOWEEN:
             case SITE_BUSINESS_PAWNSHOP:
+            case SITE_BUSINESS_CARDEALERSHIP:
             case SITE_BUSINESS_ARMSDEALER:
                if(clearformess)erase();
                else
@@ -454,6 +455,9 @@ void advanceday(char &clearformess,char canseethings)
                      break;
                   case SITE_BUSINESS_PAWNSHOP:
                      pawnshop(squad[sq]->activity.arg);
+                     break;
+                  case SITE_BUSINESS_CARDEALERSHIP:
+                     dealership(squad[sq]->activity.arg);
                      break;
                   case SITE_BUSINESS_ARMSDEALER:
                      armsdealer(squad[sq]->activity.arg);
@@ -689,6 +693,22 @@ void advanceday(char &clearformess,char canseethings)
          {
             healing[pool[p]->location]=pool[p]->skillval(SKILL_FIRSTAID);
             pool[p]->activity.type=ACTIVITY_HEAL;
+         }
+      }
+   }
+
+   // Don't let starving locations heal
+   for(p=0;p<location.size();++p)
+   {
+      // Clinic is equal to a skill 6 liberal
+      if(location[p]->type!=SITE_HOSPITAL_CLINIC && location[p]->type!=SITE_HOSPITAL_UNIVERSITY)
+      {
+         if(!fooddaysleft(p))
+         {
+            if(location[p]->siege.siege)
+            {
+               healing[p]=0;
+            }
          }
       }
    }
@@ -1857,6 +1877,24 @@ void initlocation(locationst &loc)
          strcpy(loc.name,"Corporate HQ");
          strcpy(loc.shortname,"Corp. HQ");
          break;
+      case SITE_BUSINESS_PAWNSHOP:
+         if(law[LAW_GUNCONTROL]==-2)
+         {
+            char str[80];
+            lastname(str);
+            strcpy(loc.name,str);
+            strcat(loc.name,"'s Pawnshop");
+            strcpy(loc.shortname,"Pawnshop");
+         }
+         else
+         {
+            char str[80];
+            lastname(str);
+            strcpy(loc.name,str);
+            strcat(loc.name," Pawn & Gun");
+            strcpy(loc.shortname,"Pawnshop");
+         }
+         break;
       case SITE_CORPORATE_HOUSE:
          if(law[LAW_CORPORATE]==-2&&
 				law[LAW_TAX]==-2)
@@ -1965,13 +2003,13 @@ void initlocation(locationst &loc)
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
       case SITE_RESIDENTIAL_APARTMENT:
       case SITE_RESIDENTIAL_TENEMENT:
-	 do {
-	    lastname(str);
-	    strcpy(loc.name,str);
-	    strcat(loc.name," Apartments");
-	    strcpy(loc.shortname,str);
-	    strcat(loc.shortname," Apts");
-	 } while (duplicatelocation(loc));
+	       do {
+	          lastname(str);
+	          strcpy(loc.name,str);
+	          strcat(loc.name," Apartments");
+	          strcpy(loc.shortname,str);
+	          strcat(loc.shortname," Apts");
+	       } while (duplicatelocation(loc));
          break;
       case SITE_HOSPITAL_UNIVERSITY:
          strcpy(loc.name,"The University Hospital");
@@ -1993,11 +2031,14 @@ void initlocation(locationst &loc)
          strcat(loc.name," Cosmetics");
          strcpy(loc.shortname,"Cosmetics Lab");
          break;
-      case SITE_BUSINESS_PAWNSHOP:
-         lastname(str);
+      case SITE_BUSINESS_CARDEALERSHIP:
+         firstname(str,GENDER_WHITEMALEPATRIARCH);
          strcpy(loc.name,str);
-         strcat(loc.name," Cash & Loans");
-         strcpy(loc.shortname,"Pawnshop");
+         strcat(loc.name," ");
+         lastname(str);
+         strcat(loc.name,str);
+         strcat(loc.name,"'s Used Car Dealership");
+         strcpy(loc.shortname,"Dealership");
          break;
       case SITE_BUSINESS_DEPTSTORE:
          lastname(str);

@@ -62,6 +62,7 @@ void creatureadvance(void)
                getch();
 
                sitecrime+=10;
+               addjuice(*(activesquad->squad[p]),-5);
                sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
                //criminalizeparty(LAWFLAG_MURDER);
                //<-- might not die from squad's attacks

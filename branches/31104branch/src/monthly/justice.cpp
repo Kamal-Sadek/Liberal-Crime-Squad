@@ -1093,12 +1093,13 @@ void penalize(Creature &g,char lenient)
          //g.sentence+=1*g.lawflag[LAWFLAG_LOITERING];
          g.sentence+=1*g.lawflag[LAWFLAG_HIREILLEGAL];
          g.sentence+=(12+LCSrandom(100))*g.lawflag[LAWFLAG_RACKETEERING];
-         if(LCSrandom(3))g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BROWNIES];
-         else
-         {
-            if(LCSrandom(3))g.sentence+=(3+LCSrandom(120))*g.lawflag[LAWFLAG_BROWNIES];
-            else g.sentence+=(3+LCSrandom(360))*g.lawflag[LAWFLAG_BROWNIES];
-         }
+
+         // How illegal is marijuana?
+         if(law[LAW_DRUGS]==-2)g.sentence+=(3+LCSrandom(360))*g.lawflag[LAWFLAG_BROWNIES]; //insanely illegal
+         else if(law[LAW_DRUGS]==-1)g.sentence+=(3+LCSrandom(120))*g.lawflag[LAWFLAG_BROWNIES]; //very illegal
+         else if(law[LAW_DRUGS]==0)g.sentence+=(3+LCSrandom(12))*g.lawflag[LAWFLAG_BROWNIES]; //moderately illegal
+         // else not illegal
+
          g.sentence+=1*g.lawflag[LAWFLAG_BREAKING];
          g.sentence+=(60+LCSrandom(181))*g.lawflag[LAWFLAG_TERRORISM];
          g.sentence+=(30+LCSrandom(61))*g.lawflag[LAWFLAG_JURY];

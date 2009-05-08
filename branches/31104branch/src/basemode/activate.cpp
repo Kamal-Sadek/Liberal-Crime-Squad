@@ -264,16 +264,9 @@ void activate(Creature *cr)
          move(11,40);
          addstr("2 - Liberal Disobedience");
 
-         if(cr->weapon.type==WEAPON_SPRAYCAN)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
-            move(12,40);
-            addstr("3 - Graffiti");
-         } else {
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(12,40);
-            addstr("3 - Graffiti (Need Spraypaint)");
-         }
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
+         move(12,40);
+         addstr("3 - Graffiti");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
          move(13,40);
@@ -479,16 +472,14 @@ void activate(Creature *cr)
             move(22,1);
             addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
-            addstr("Tailoring, Martial Arts, Improvised Melee, Theft");
-            move(24,1);
+            addstr("Tailoring, Martial Arts, Theft");            move(24,1);
             addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
             break;
          case ACTIVITY_TEACH_FIGHTING:
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
-            addstr("  Skills Trained: All Weapon Skills except Improvised Melee, Tactics");
-            move(24,1);
+            addstr("  Skills Trained: All Weapon Skills");            move(24,1);
             addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
             break;
          case ACTIVITY_TEACH_COVERT:
@@ -520,11 +511,9 @@ void activate(Creature *cr)
             {
             case '1':cr->activity.type=ACTIVITY_COMMUNITYSERVICE;break;
             case '2':cr->activity.type=ACTIVITY_TROUBLE;break;
-            case '3':if(cr->weapon.type==WEAPON_SPRAYCAN)
-                     {
-                        cr->activity.type=ACTIVITY_GRAFFITI;
-                        cr->activity.arg=-1;
-                     }break;
+            case '3':cr->activity.type=ACTIVITY_GRAFFITI;
+                     cr->activity.arg=-1;
+                     break;
             case '4':cr->activity.type=ACTIVITY_POLLS;break;
             case '5':cr->activity.type=ACTIVITY_DOS_ATTACKS;break;
             case '6':cr->activity.type=ACTIVITY_HACKING;break;

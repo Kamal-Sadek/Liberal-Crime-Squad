@@ -99,7 +99,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             case 3:
                strcpy(ad,"&cQuality Pre-Owned&r");
                strcat(ad,"&cVehicles&r");
-               strcat(ad,"&c1999 Lexus GS 300&r");
+               strcat(ad,"&c2005 Lexus GS 300&r");
                strcat(ad,"&cSedan 4D&r");
                strcat(ad,"&cOnly $21,988&r");
                break;

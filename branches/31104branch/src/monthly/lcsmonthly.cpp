@@ -333,7 +333,7 @@ void printnews(short l,short newspaper)
                break;
             case 2:
                addstr("containing a memo: \"Terminate the pregnancy, I terminate you.\"");
-               change_public_opinion(VIEW_ABORTION,50);
+               change_public_opinion(VIEW_WOMEN,50);
                break;
             case 3:
                addstr("cheerfully describing foreign corporate sweatshops.");
@@ -379,7 +379,7 @@ void printnews(short l,short newspaper)
                break;
             case 5:
                addstr("documenting the infiltration of a pro-choice group.");
-               change_public_opinion(VIEW_ABORTION,50);
+               change_public_opinion(VIEW_WOMEN,50);
                break;
          }
          move(8,1);
@@ -530,7 +530,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the Conservative masses a little riled up.");
 
-         change_public_opinion(VIEW_CABLENEWS,50);
+         change_public_opinion(VIEW_AMRADIO,50);
          offended_cablenews=1;
          break;
    }

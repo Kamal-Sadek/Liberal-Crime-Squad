@@ -1096,10 +1096,10 @@ void printliberalstats(Creature &cr)
    else if(cr.gender_liberal == GENDER_MALE)
       addstr("Male");
    else
-      addstr("Androgyne");
+      addstr("Androgynous");
    // Note if there's some conflict with Conservative society's perceptions
-   if(cr.gender_liberal != cr.gender_conservative)
-      addstr("*");
+   //if(cr.gender_liberal != cr.gender_conservative)
+   //   addstr("*");
    addstr(")");
 
    // Add juice

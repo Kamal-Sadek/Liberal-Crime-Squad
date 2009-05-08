@@ -389,6 +389,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\basemode\liberalagenda.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\creature\pool.cpp"
 				>
 				<FileConfiguration
