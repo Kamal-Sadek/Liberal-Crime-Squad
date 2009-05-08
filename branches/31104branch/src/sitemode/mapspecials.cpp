@@ -127,7 +127,8 @@ void special_bouncer_assess_squad()
             // Not a gentleman by their definition?
             if(sitetype==SITE_BUSINESS_CIGARBAR &&
                (activesquad->squad[s]->gender_conservative!=GENDER_MALE ||
-                activesquad->squad[s]->gender_liberal == GENDER_FEMALE))
+                activesquad->squad[s]->gender_liberal == GENDER_FEMALE) &&
+                law[LAW_WOMEN]<1)
             {
                // Are you passing as a man? Are you skilled enough to pull it off?
                if(activesquad->squad[s]->gender_liberal != GENDER_NEUTRAL ||
@@ -136,7 +137,7 @@ void special_bouncer_assess_squad()
                   // Not a man by your own definition either
                   if(rejected>REJECTED_FEMALE)rejected=REJECTED_FEMALE;
                }
-               else if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40)
+               else if(disguisesite(sitetype) && disguiseskill()+LCSrandom(20)<40 && law[LAW_GAY]!=2)
                {
                   // Not skilled enough to pull it off
                   if(rejected>REJECTED_FEMALEISH)rejected=REJECTED_FEMALEISH;

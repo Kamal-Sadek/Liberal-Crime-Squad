@@ -1102,6 +1102,17 @@ void funds_and_trouble(char &clearformess)
                       brownies[s]->skillval(SKILL_COOKING)*2+
                       brownies[s]->skillval(SKILL_STREETSENSE)*2+
                       brownies[s]->attval(ATTRIBUTE_CHARISMA)*2+1);
+      
+      // more money when more illegal
+      if(law[LAW_DRUGS]==-2)
+         money*=3;
+      if(law[LAW_DRUGS]==-1)
+         money*=2;
+      if(law[LAW_DRUGS]==1)
+         money/=2;
+      if(law[LAW_DRUGS]==2)
+         money/=6;
+      
       funds+=money;
       stat_funds+=money;
       moneygained_brownies+=money;
@@ -1133,7 +1144,7 @@ void funds_and_trouble(char &clearformess)
       if(dodgelawroll==0)
          dodgelawroll=LCSrandom(brownies[s]->skillval(SKILL_STREETSENSE)+1);
 
-      if(dodgelawroll==0) // Busted! Sort of
+      if(dodgelawroll==0 && law[LAW_DRUGS]<=0) // Busted! Sort of
       {
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_DRUGARREST;

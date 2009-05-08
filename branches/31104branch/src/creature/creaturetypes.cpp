@@ -69,13 +69,11 @@ void makecreature(Creature &cr,short type)
          if(mode==GAMEMODE_SITE && location[cursite]->highsecurity)
          {
             strcpy(cr.name,"Enforcer");
-            cr.weapon.type=WEAPON_REVOLVER_44;
-            cr.weapon.ammo=6;
-            cr.clip[CLIP_44]=3;
+            cr.weapon.type=WEAPON_NIGHTSTICK;
             
-            cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
+            cr.skill[SKILL_CLUB]=LCSrandom(3)+3;
          }
-         cr.armor.type=ARMOR_SECURITYUNIFORM;
+         cr.armor.type=ARMOR_CHEAPSUIT;
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
          if(disguisesite(sitetype)) { cr.align=-1; cr.infiltration=0.1f*LCSrandom(4); }
          else cr.align=0;
@@ -107,6 +105,10 @@ void makecreature(Creature &cr,short type)
             cr.weapon.type=WEAPON_REVOLVER_38;
             cr.weapon.ammo=6;
             cr.clip[CLIP_38]=3;
+         }
+         else
+         {
+            cr.weapon.type=WEAPON_NIGHTSTICK;
          }
          cr.armor.type=ARMOR_SECURITYUNIFORM;
          cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
@@ -914,49 +916,39 @@ void makecreature(Creature &cr,short type)
          break;
       case CREATURE_AGENT:
          strcpy(cr.name,"Agent");
-         switch(LCSrandom(10))
+         switch(LCSrandom(7))
          {
             case 0:
-               cr.weapon.type=WEAPON_REVOLVER_38;
-               cr.clip[CLIP_38]=3;
-               cr.weapon.ammo=6;
-               break;
-            case 1:
                cr.weapon.type=WEAPON_REVOLVER_44;
                cr.clip[CLIP_44]=3;
                cr.weapon.ammo=6;
                break;
-            case 2:
+            case 1:
                cr.weapon.type=WEAPON_SEMIPISTOL_9MM;
                cr.clip[CLIP_9]=3;
                cr.weapon.ammo=15;
                break;
-            case 3:
-               cr.weapon.type=WEAPON_SEMIPISTOL_45;
-               cr.clip[CLIP_45]=3;
-               cr.weapon.ammo=15;
-               break;
-            case 4:
+            case 2:
                cr.weapon.type=WEAPON_AUTORIFLE_M16;
                cr.clip[CLIP_ASSAULT]=3;
                cr.weapon.ammo=30;
                break;
-            case 5:
+            case 3:
                cr.weapon.type=WEAPON_AUTORIFLE_AK47;
                cr.clip[CLIP_ASSAULT]=3;
                cr.weapon.ammo=30;
                break;
-            case 6:
+            case 4:
                cr.weapon.type=WEAPON_SHOTGUN_PUMP;
                cr.clip[CLIP_BUCKSHOT]=3;
                cr.weapon.ammo=6;
                break;
-            case 7:
+            case 5:
                cr.weapon.type=WEAPON_CARBINE_M4;
                cr.clip[CLIP_ASSAULT]=3;
                cr.weapon.ammo=30;
                break;
-            case 8:
+            case 6:
                cr.weapon.type=WEAPON_SMG_MP5;
                cr.clip[CLIP_SMG]=3;
                cr.weapon.ammo=15;
@@ -965,19 +957,22 @@ void makecreature(Creature &cr,short type)
          cr.armor.type=ARMOR_BLACKSUIT;
          cr.align=-1;
          cr.infiltration=0.5f*LCSrandom(4);
-         cr.juice=75+LCSrandom(150);
+         cr.juice=200+LCSrandom(150);
          cr.age=AGE_MATURE;
 
-         cr.skill[SKILL_PISTOL]=LCSrandom(8)+1;
-         cr.skill[SKILL_RIFLE]=LCSrandom(8)+1;
-         cr.skill[SKILL_SHOTGUN]=LCSrandom(8)+1;
-         cr.skill[SKILL_HANDTOHAND]=LCSrandom(8)+1;
-         cr.skill[SKILL_DRIVING]=LCSrandom(8)+1;
-         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(8)+1;
+         cr.skill[SKILL_PISTOL]=LCSrandom(8)+2;
+         cr.skill[SKILL_RIFLE]=LCSrandom(8)+2;
+         cr.skill[SKILL_SHOTGUN]=LCSrandom(8)+2;
+         cr.skill[SKILL_HANDTOHAND]=LCSrandom(8)+2;
+         cr.skill[SKILL_CLUB]=LCSrandom(8)+2;
+         cr.skill[SKILL_DRIVING]=LCSrandom(6)+4;
+         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(6)+4;
+         cr.skill[SKILL_TACTICS]=LCSrandom(4)+4;
          
          cr.att[ATTRIBUTE_STRENGTH]=5;
-         cr.att[ATTRIBUTE_AGILITY]=5;
+         cr.att[ATTRIBUTE_AGILITY]=7;
          cr.att[ATTRIBUTE_HEALTH]=5;
+         cr.att[ATTRIBUTE_INTELLIGENCE]=4;
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_RADIOPERSONALITY:
@@ -1640,7 +1635,7 @@ void makecreature(Creature &cr,short type)
    if(cr.type==CREATURE_MUTANT)attnum=LCSrandom(60)+7;
    for(int a=0;a<ATTNUM;a++)
    {
-      attnum-=min(5,cr.att[a]);
+      attnum-=min(4,cr.att[a]);
    }
    while(attnum>0)
    {
@@ -1675,17 +1670,17 @@ void makecreature(Creature &cr,short type)
 
    if(cr.age>20)
    {
-      randomskills=static_cast<int>(randomskills*((cr.age-20.0)/20.0));
+      randomskills+=static_cast<int>(randomskills*((cr.age-20.0)/20.0));
    }
    else
    {
       randomskills-=20-cr.age;
    }
 
-   for(int s=0;s<SKILLNUM;s++)
+   /*for(int s=0;s<SKILLNUM;s++)
    {
       randomskills-=cr.skill[s];
-   }
+   }*/
 
    //RANDOM STARTING SKILLS
    while(randomskills>0)

@@ -494,6 +494,8 @@ char completedate(datest &d,int p,char &clearformess)
 
          short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skillval(SKILL_SEDUCTION)*2;
          short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
+         if(d.date[e]->align==ALIGN_CONSERVATIVE)
+            troll+=troll*(d.date[e]->juice/100);
 
          char test=0;
          if(c=='a'&&funds>=100&&!pool[p]->clinic)

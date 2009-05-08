@@ -93,6 +93,8 @@ void siegecheck(char canseethings)
             
             // Cleanse record on things that aren't illegal right now
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
+            if(law[LAW_DRUGS]>0)pool[p]->lawflag[LAWFLAG_BROWNIES]=0;
+            if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
             //Heat doesn't matter for sieges until it gets high

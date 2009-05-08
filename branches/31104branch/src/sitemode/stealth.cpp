@@ -254,6 +254,9 @@ void disguisecheck(void)
             if(!sneaking)disguisepractice(i, spotchance);
             else stealthpractice(i, spotchance);
          }
+
+         if(encounter[n].type==CREATURE_GUARDDOG)spotchance*=3; // Sniff sniff Grrrrowl
+
          if(sitealarmtimer ?
             spotchance > (int)LCSrandom(21)+disguise :
             spotchance+sitecrime > (int)LCSrandom(21)+disguise)
@@ -284,7 +287,10 @@ void disguisecheck(void)
          }
          else
          {
-            addstr(" looks at the Squad suspiciously.");
+            if(encounter[n].type==CREATURE_GUARDDOG)
+               addstr(" growls at the squad suspiciously.");
+            else
+               addstr(" looks at the Squad suspiciously.");
 
             int time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
             if(time<1)time=1;
@@ -294,7 +300,7 @@ void disguisecheck(void)
       }
       else
       {
-         if(weapon)
+         if(weapon&&encounter[n].type!=CREATURE_GUARDDOG)
          {
             addstr(" sees the Squad's Liberal Weapons");
             move(17,1);
@@ -318,7 +324,13 @@ void disguisecheck(void)
             addstr(" looks at the Squad with Intolerance");
             move(17,1);
             if(encounter[n].align==ALIGN_CONSERVATIVE)
-               addstr("and lets forth a piercing Conservative alarm cry!");
+            {
+               if(encounter[n].type==CREATURE_GUARDDOG)
+                  addstr("and launches into angry Conservative barking!");
+               else
+                  addstr("and lets forth a piercing Conservative alarm cry!");
+               
+            }
             else
                addstr("and shouts for help!");
          }
@@ -367,6 +379,7 @@ int disguiseskill(void)
          }
          else
          {
+            if(uniformed==2)skill>>=1;
             //activesquad->squad[p]->train(SKILL_DISGUISE,5);
          }
 
@@ -663,8 +676,8 @@ char hasdisguise(Creature &cr,short type)
    char uniformed=0;
 
    // Never uniformed in battle colors
-   if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
-      return 0;
+   //if(activesquad->stance==SQUADSTANCE_BATTLECOLORS)
+   //   return 0;
 
    if(location[cursite]->siege.siege)
    {
@@ -683,7 +696,7 @@ char hasdisguise(Creature &cr,short type)
          }
          case SIEGE_HICKS:
          {
-            if(cr.armor.type==ARMOR_CLOTHES)uniformed=1;
+            if(cr.armor.type==ARMOR_CLOTHES)uniformed=2;
             if(cr.armor.type==ARMOR_OVERALLS)uniformed=1;
             if(cr.armor.type==ARMOR_WIFEBEATER)uniformed=1;
             break;
@@ -730,7 +743,14 @@ char hasdisguise(Creature &cr,short type)
             {
                uniformed=0;
                if(cr.armor.type==ARMOR_LABCOAT)uniformed=1;
-               if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+               if(location[cursite]->highsecurity)
+               {
+                  if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+               }
+               else
+               {
+                  if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=2;
+               }
             }
             break;
          case SITE_GOVERNMENT_POLICESTATION:
@@ -756,7 +776,6 @@ char hasdisguise(Creature &cr,short type)
                if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEUNIFORM)uniformed=1;
                if(cr.armor.type==ARMOR_POLICEARMOR)uniformed=1;
-               if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
                if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
                   cr.armor.type==ARMOR_DEATHSQUADUNIFORM)uniformed=1;
             }
@@ -780,7 +799,6 @@ char hasdisguise(Creature &cr,short type)
                uniformed=0;
                if(cr.armor.type==ARMOR_BLACKSUIT)uniformed=1;
                if(cr.armor.type==ARMOR_BLACKDRESS)uniformed=1;
-               if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             }
             break;
          case SITE_GOVERNMENT_FIRESTATION:
@@ -799,7 +817,6 @@ char hasdisguise(Creature &cr,short type)
             break;
          case SITE_BUSINESS_CIGARBAR:
             uniformed=0;
-            if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
             if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
             if(cr.armor.type==ARMOR_CHEAPSUIT)uniformed=1;
             if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
@@ -815,7 +832,10 @@ char hasdisguise(Creature &cr,short type)
          case SITE_INDUSTRY_POLLUTER:
             uniformed=0;
             if(cr.armor.type==ARMOR_WORKCLOTHES)uniformed=1;
-            if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+            if(location[cursite]->highsecurity)
+            {
+               if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+            }
             break;
          case SITE_INDUSTRY_NUCLEAR:
             uniformed=0;
@@ -832,7 +852,13 @@ char hasdisguise(Creature &cr,short type)
             break;
          case SITE_CORPORATE_HOUSE:
             uniformed=0;
-            if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+            if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
+            if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
+            if(location[cursite]->highsecurity)
+            {
+               if(cr.armor.type==ARMOR_MILITARY)uniformed=1;
+               if(cr.armor.type==ARMOR_ARMYARMOR)uniformed=1;
+            }
             break;
          case SITE_MEDIA_AMRADIO:
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
@@ -861,6 +887,20 @@ char hasdisguise(Creature &cr,short type)
             break;
          default:
             break;
+      }
+   }
+
+   if(!uniformed)
+   {
+      if(cr.armor.type==ARMOR_POLICEUNIFORM||
+         cr.armor.type==ARMOR_POLICEARMOR)
+      {
+         uniformed=2;
+      }
+      if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+            cr.armor.type==ARMOR_DEATHSQUADUNIFORM)
+      {
+         uniformed=2;
       }
    }
 

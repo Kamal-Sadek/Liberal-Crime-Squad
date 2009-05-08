@@ -372,14 +372,15 @@ void printparty(void)
             }
 
             if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else if(hasdisguise(*party[p],sitetype))
+            else
             {
-               // Armor quality flagging clothes yellow is disabled
-               if(//party[p]->armor.quality!='1'||
-                  party[p]->armor.flag!=0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
+               switch(hasdisguise(*party[p],sitetype))
+               {
+               case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
+               case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
+               default:set_color(COLOR_RED,COLOR_BLACK,1);break;
+               }
             }
-            else set_color(COLOR_RED,COLOR_BLACK,1);
             move(p+2,46);
             getarmor(str,party[p]->armor.type,party[p]->armor.subtype);
             addstr(str);
@@ -716,13 +717,15 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    }
 
    if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
-   else if(hasdisguise(*cr,sitetype))
+   else
    {
-      if(//cr->armor.quality!='1'||
-         cr->armor.flag>0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-      else set_color(COLOR_GREEN,COLOR_BLACK,1);
+      switch(hasdisguise(*cr,sitetype))
+      {
+      case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
+      case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
+      default:set_color(COLOR_RED,COLOR_BLACK,1);break;
+      }
    }
-   else set_color(COLOR_RED,COLOR_BLACK,1);
    move(7,0);
    addstr("Clothes: ");
    getarmorfull(str,cr->armor,0);

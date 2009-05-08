@@ -378,12 +378,16 @@ void passmonth(char &clearformess,char canseethings)
             pool.erase(pool.begin() + p);
             continue;
          }
-         else if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN)
+         else if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN && law[LAW_IMMIGRATION]!=2)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);
             addstr(pool[p]->name);
-            addstr(" has been shipped out to the INS to face deportation.");
+            addstr(" has been shipped out to the INS to face ");
+            if(law[LAW_IMMIGRATION]==-2 && law[LAW_DEATHPENALTY]==-2)
+               addstr("execution.");
+            else
+               addstr("deportation.");
 
             refresh();
             getch();

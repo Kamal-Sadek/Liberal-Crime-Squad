@@ -1543,16 +1543,16 @@ void dealership(int loc)
             if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,1);
-            addstr("A - Bug ($10000)");
+            addstr("A - Bug ($5000)");
             move(10,40);
-            addstr("B - Pickup Truck ($10000)");
+            addstr("B - Pickup Truck ($5000)");
             
             if(funds>=20000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
-            addstr("C - Sports Car ($20000)");
+            addstr("C - Sports Car ($10000)");
             move(11,40);
-            addstr("D - SUV ($20000)");
+            addstr("D - SUV ($10000)");
             
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(16,1);
@@ -1576,7 +1576,7 @@ void dealership(int loc)
             //Picked a car
             if(c>='a' && c<='d')
             {
-               if(funds<20000 || (funds<40000 && c>='c'))continue;
+               if(funds<5000 || (funds<10000 && c>='c'))continue;
                int cartype=-1;
                int carcolor=-1;
                switch(c)
@@ -1595,7 +1595,6 @@ void dealership(int loc)
                   locheader();
                   printparty();
 
-                  if(funds>=40000)set_color(COLOR_WHITE,COLOR_BLACK,0);
                   move(10,1);
                   addstr("A - Red");
                   move(10,40);
