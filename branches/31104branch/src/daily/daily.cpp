@@ -1310,26 +1310,26 @@ void dispersalcheck(char &clearformess)
       // *JDS* I'm documenting this algorithm carefully because it
       // took me awhile to figure out what exactly was going on here.
       //
-      // nukeme tracks whether each person has a secure chain of command.
+      // dispersal_status tracks whether each person has a secure chain of command.
       // 
-      // if nukeme == 1, no confirmation of contact has been made
-      // if nukeme == 0, confirmation that THEY are safe is given,
+      // if dispersal_status == NOCONTACT, no confirmation of contact has been made
+      // if dispersal_status == BOSSSAFE, confirmation that THEY are safe is given,
       //    but it is still needed to check whether their subordinates
       //    can reach them.
-      // if nukeme == -1, confirmation has been made that this squad
+      // if dispersal_status == SAFE, confirmation has been made that this squad
       //    member is safe, and their immediate subordinates have also
       //    checked.
       //
-      // The way the algorithm works, everyone starts at nukeme = 1.
+      // The way the algorithm works, everyone starts at dispersal_status = NOCONTACT.
       // Then we start at the top of the chain of command and walk
-      // down it slowly, marking people 0 and then -1 as we sweep
+      // down it slowly, marking people BOSSSAFE and then SAFE as we sweep
       // down the chain. If someone is dead or in an unreachable state,
       // they block progression down the chain to their subordinates,
       // preventing everyone who requires contact with that person
       // from being marked safe. After everyone reachable has been
       // reached and marked safe, all remaining squad members are nuked.
-      vector<int> nukeme;
-      nukeme.resize(pool.size());
+      vector<int> dispersal_status;
+      dispersal_status.resize(pool.size());
 
       bool promotion;
       do
@@ -1337,31 +1337,31 @@ void dispersalcheck(char &clearformess)
          promotion=0;
          for(p=0;p<pool.size();p++)
          {
-            // Default: members are marked nukeme = 1
+            // Default: members are marked dispersal_status = NOCONTACT
             //(no contact verified)
-            nukeme[p]=DISPERSAL_NOCONTACT;
+            dispersal_status[p]=DISPERSAL_NOCONTACT;
             // If member has no boss (founder level), mark
-            // them nukeme = 0, using them as a starting point
+            // them dispersal_status = BOSSSAFE, using them as a starting point
             // at the top of the chain.
             if(pool[p]->hireid==-1)
             {
                if(!disbanding)
                {
-                  nukeme[p]=DISPERSAL_BOSSSAFE;
+                  dispersal_status[p]=DISPERSAL_BOSSSAFE;
                   if(pool[p]->hiding==-1)
                   {
                      pool[p]->hiding=LCSrandom(10)+5;
                   }
                }
-               else nukeme[p]=DISPERSAL_BOSSINHIDING;
+               else dispersal_status[p]=DISPERSAL_BOSSINHIDING;
             }
-            // If they're dead, mark them nukeme = -1, so they
+            // If they're dead, mark them dispersal_status = SAFE, so they
             // don't ever have their subordinates checked
             // and aren't lost themselves (they're a corpse,
             // corpses don't lose contact)
             if(!pool[p]->alive && !disbanding)
             {
-               nukeme[p]=DISPERSAL_SAFE;
+               dispersal_status[p]=DISPERSAL_SAFE;
                //Attempt to promote their subordinates
                if(promotesubordinates(*pool[p], clearformess))promotion=1;
 
@@ -1382,7 +1382,7 @@ void dispersalcheck(char &clearformess)
 
          char inprison;
 
-         // Go through the entire pool to locate people at nukeme = 0,
+         // Go through the entire pool to locate people at dispersal_status = BOSSSAFE,
          // so we can verify that their subordinates can reach them.
          for(p=pool.size()-1;p>=0;p--)
          {
@@ -1392,14 +1392,14 @@ void dispersalcheck(char &clearformess)
             else inprison=0;
 
             // If your boss is in hiding
-            if(nukeme[p]==DISPERSAL_BOSSINHIDING)
+            if(dispersal_status[p]==DISPERSAL_BOSSINHIDING)
             {
-               nukeme[p]=DISPERSAL_HIDING;
+               dispersal_status[p]=DISPERSAL_HIDING;
                for(int p2=pool.size()-1;p2>=0;p2--)
                {
                   if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
                   {
-                     nukeme[p2]=DISPERSAL_BOSSINHIDING; // Mark them as unreachable
+                     dispersal_status[p2]=DISPERSAL_BOSSINHIDING; // Mark them as unreachable
                      changed=1; // Need another iteration
                   }
                }
@@ -1407,13 +1407,13 @@ void dispersalcheck(char &clearformess)
 
             // If in prison or unreachable due to a member of the command structure
             // above being in prison
-            else if((nukeme[p]==DISPERSAL_BOSSSAFE&&inprison)||nukeme[p]==DISPERSAL_BOSSINPRISON)
+            else if((dispersal_status[p]==DISPERSAL_BOSSSAFE&&inprison)||dispersal_status[p]==DISPERSAL_BOSSINPRISON)
             {
                int dispersalval=DISPERSAL_SAFE;
                if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
                {
-                  if((nukeme[p]==DISPERSAL_BOSSINPRISON && !inprison) ||
-                     (nukeme[p]==DISPERSAL_BOSSSAFE     &&  inprison))
+                  if((dispersal_status[p]==DISPERSAL_BOSSINPRISON && !inprison) ||
+                     (dispersal_status[p]==DISPERSAL_BOSSSAFE     &&  inprison))
                   {
                      pool[p]->juice--; // Love slaves bleed juice when not in prison with their lover
                      if(pool[p]->juice < -50)
@@ -1422,7 +1422,7 @@ void dispersalcheck(char &clearformess)
                      }
                   }
                }
-               nukeme[p]=dispersalval; // Guaranteed contactable in prison
+               dispersal_status[p]=dispersalval; // Guaranteed contactable in prison
                
                // Find all subordinates
                for(int p2=pool.size()-1;p2>=0;p2--)
@@ -1430,15 +1430,15 @@ void dispersalcheck(char &clearformess)
                   if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
                   {
                      if(inprison)
-                        nukeme[p2]=DISPERSAL_BOSSINPRISON;
+                        dispersal_status[p2]=DISPERSAL_BOSSINPRISON;
                      else
-                        nukeme[p2]=DISPERSAL_BOSSSAFE;
+                        dispersal_status[p2]=DISPERSAL_BOSSSAFE;
                      changed=1; // Need another iteration
                   }
                }
             }
             // Otherwise, if they're reachable
-            else if(nukeme[p]==DISPERSAL_BOSSSAFE&&!inprison)
+            else if(dispersal_status[p]==DISPERSAL_BOSSSAFE&&!inprison)
             {
                // Start looking through the pool again.
                for(int p2=pool.size()-1;p2>=0;p2--)
@@ -1449,7 +1449,7 @@ void dispersalcheck(char &clearformess)
                      // Protect them from being dispersed -- their boss is
                      // safe. Their own subordinates will then be considered
                      // in the next loop iteration.
-                     nukeme[p2]=DISPERSAL_BOSSSAFE;
+                     dispersal_status[p2]=DISPERSAL_BOSSSAFE;
                      // If they're hiding indefinitely and their boss isn't
                      // hiding at all, then have them discreetly return in a
                      // couple of weeks
@@ -1462,7 +1462,7 @@ void dispersalcheck(char &clearformess)
                }
                // Now that we've dealt with this person's subordinates, mark
                // them so that we don't look at them again in this loop.
-               nukeme[p]=DISPERSAL_SAFE;
+               dispersal_status[p]=DISPERSAL_SAFE;
             }
          }
       }while(changed); // If another iteration is needed, continue the loop.
@@ -1472,7 +1472,7 @@ void dispersalcheck(char &clearformess)
       // the LCS.
       for(p=pool.size()-1;p>=0;p--)
       {
-         if(nukeme[p]==DISPERSAL_NOCONTACT||nukeme[p]==DISPERSAL_HIDING||nukeme[p]==DISPERSAL_ABANDONLCS)
+         if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_HIDING||dispersal_status[p]==DISPERSAL_ABANDONLCS)
          {
             if(clearformess)
             {
@@ -1485,7 +1485,7 @@ void dispersalcheck(char &clearformess)
 
             if(!disbanding)
             {
-               if(!pool[p]->hiding&&nukeme[p]==DISPERSAL_HIDING)
+               if(!pool[p]->hiding&&dispersal_status[p]==DISPERSAL_HIDING)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -1499,7 +1499,7 @@ void dispersalcheck(char &clearformess)
                   refresh();
                   getch();
                }
-               else if(nukeme[p]==DISPERSAL_ABANDONLCS)
+               else if(dispersal_status[p]==DISPERSAL_ABANDONLCS)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -1508,7 +1508,7 @@ void dispersalcheck(char &clearformess)
                   refresh();
                   getch();
                }
-               else if(nukeme[p]==DISPERSAL_NOCONTACT)
+               else if(dispersal_status[p]==DISPERSAL_NOCONTACT)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -1521,7 +1521,7 @@ void dispersalcheck(char &clearformess)
 
 
             removesquadinfo(*pool[p]);
-            if(nukeme[p]==DISPERSAL_NOCONTACT||nukeme[p]==DISPERSAL_ABANDONLCS)
+            if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_ABANDONLCS)
             {
                delete pool[p];
                pool.erase(pool.begin() + p);
@@ -1579,8 +1579,13 @@ bool promotesubordinates(Creature &cr, char &clearformess)
          subordinates++;
          //Brainwashed people inelligible for promotion to founder
          if(bigboss==-1 && pool[p]->flag & CREATUREFLAG_BRAINWASHED)continue;
-         //Loveslaves inelligible for promotion to anything
-         if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)continue;
+         //Loveslaves inelligible for promotion to anything unless juice is high
+         //in which case they get over it and continue to serve as a normal member
+         if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+         {
+            if(pool[p]->juice<100)continue;
+            else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
+         }
 
          if(pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50>maxjuice)
          {
@@ -1624,22 +1629,19 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    //Chain of command totally destroyed if dead person's boss also dead
    if(bigboss==-2 || (cr.hireid!=-1 && bigboss!=-1 && !pool[bigboss]->alive))return 0;
    
-   //One subordinate -- just promote them
-   if(subordinates==1)
+   //Promote the new boss
+   pool[newboss]->hireid=cr.hireid;
+   
+   //Order secondary subordinates to follow the new boss
+   if(subordinates>1)
    {
-      pool[newboss]->hireid=cr.hireid;
-   }
-   //Else need to replace dead person with the best subordinate
-   else
-   {
-      pool[newboss]->hireid=cr.hireid;
-
       for(p=0;p<pool.size();p++)
       {
-         //Loveslaves lose contact anyway
-         if(pool[p]->hireid==cr.id && p!=newboss && pool[p]->flag & ~CREATUREFLAG_LOVESLAVE)
+         if(pool[p]->hireid==cr.id && // recruited by old boss that died
+            p!=newboss &&             // not the new boss
+            pool[p]->flag & CREATUREFLAG_LOVESLAVE) // is not a love slave
          {
-            pool[p]->hireid=pool[newboss]->id;
+            pool[p]->hireid=pool[newboss]->id; // promote
          }
       }
    }

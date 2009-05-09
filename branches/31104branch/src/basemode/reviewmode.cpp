@@ -558,14 +558,14 @@ void review_mode(short mode)
                if(c==KEY_DOWN)
                {
                   page++;
-                  page%=pagenum;
+                  if(page>1)page=0;
                   continue;
                }
 
                if(c==KEY_UP)
                {
                   page--;
-                  page%=pagenum;
+                  if(page<0)page=1;
                   continue;
                }
 

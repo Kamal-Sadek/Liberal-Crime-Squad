@@ -200,8 +200,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(4)+3;
 
          
-			cr.att[ATTRIBUTE_INTELLIGENCE]=2;
-			cr.att[ATTRIBUTE_CHARISMA]=5;
+         cr.att[ATTRIBUTE_INTELLIGENCE]=4;
+         cr.att[ATTRIBUTE_CHARISMA]=5;
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_CORPORATE_CEO:
@@ -225,8 +225,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(6)+6;
 
          
-			cr.att[ATTRIBUTE_INTELLIGENCE]=6;
-			cr.att[ATTRIBUTE_CHARISMA]=7;
+         cr.att[ATTRIBUTE_INTELLIGENCE]=7;
+         cr.att[ATTRIBUTE_CHARISMA]=7;
          cr.att[ATTRIBUTE_WISDOM]=12;
          break;
       case CREATURE_WORKER_SERVANT:
@@ -263,6 +263,7 @@ void makecreature(Creature &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
          cr.skill[SKILL_WRITING]=LCSrandom(2)+1;
+         cr.att[ATTRIBUTE_INTELLIGENCE]=2;
          break;
       case CREATURE_LANDLORD:
          GIVE_WEAPON_CIVILIAN;
@@ -271,6 +272,8 @@ void makecreature(Creature &cr,short type)
          cr.align=0;
          cr.age=AGE_MATURE;
          cr.skill[SKILL_BUSINESS]=LCSrandom(4)+3;
+         cr.att[ATTRIBUTE_INTELLIGENCE]=4;
+         cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_TEENAGER:
          //cr.align=LCSrandom(3)-1;
@@ -290,7 +293,10 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_GRADUATE;
 
          cr.skill[SKILL_LAW]=LCSrandom(4)+4;
-			cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+         cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+
+         cr.att[ATTRIBUTE_INTELLIGENCE]=6;
+         cr.att[ATTRIBUTE_CHARISMA]=4;
          break;
       case CREATURE_DOCTOR:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
@@ -306,6 +312,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_GRADUATE;
 
          cr.skill[SKILL_FIRSTAID]=LCSrandom(4)+4;
+         
+         cr.att[ATTRIBUTE_INTELLIGENCE]=6;
          break;
       case CREATURE_NURSE:
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
@@ -410,10 +418,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=5;
-			cr.att[ATTRIBUTE_AGILITY]=5;
-			cr.att[ATTRIBUTE_HEALTH]=5;
+         cr.att[ATTRIBUTE_AGILITY]=5;
+         cr.att[ATTRIBUTE_HEALTH]=5;
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_VETERAN:

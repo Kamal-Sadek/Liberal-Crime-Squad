@@ -153,8 +153,9 @@ void makecharacter(void)
    strcat(newcr->propername,last);
    
    int c;
-   bool hasmaps=0;
-   bool makejudge=0;
+   bool hasmaps=false;
+   bool makelawyer=false;
+   bool gaylawyer=false;
 
    for(int q=0;q<10;q++)
    {
@@ -450,7 +451,7 @@ void makecharacter(void)
                addstr("C - I celebrated.  I'd saved a thousand bucks!");
             move(11,0);
             if(choices || selection == 3)
-               addstr("D - I went out to party and met a judge.  We've been fast friends ever since.");
+               addstr("D - I went to a party and met a cool law student.  We've been dating since.");
             move(13,0);
             if(choices || selection == 4)
                addstr("E - I managed to acquire secret maps of several major buildings downtown.");
@@ -707,6 +708,7 @@ void makecharacter(void)
                newcr->skill[SKILL_SEDUCTION]+=1;
                newcr->skill[SKILL_RELIGION]+=1;
                newcr->att[ATTRIBUTE_HEART]+=1;
+               gaylawyer=true;
             }
             if(c=='e')
             {
@@ -762,7 +764,7 @@ void makecharacter(void)
             }
             if(c=='d')
             {
-               makejudge=true;
+               makelawyer=true;
             }
             if(c=='e')
             {
@@ -1229,16 +1231,42 @@ void makecharacter(void)
    squad.push_back(newsq);
    activesquad=newsq;
 
-   if(makejudge)
+   if(makelawyer)
    {
-      Creature* judge=new Creature;
-      makecreature(*judge,CREATURE_JUDGE_LIBERAL);
-      judge->namecreature();
-      judge->flag|=CREATUREFLAG_SLEEPER;
-      location[judge->worklocation]->interrogated=1;
-      judge->hireid=newcr->id;
-      pool.push_back(judge);
-      judge->location=judge->base;
+      Creature* lawyer=new Creature;
+      makecreature(*lawyer,CREATURE_LAWYER);
+      // Make sure lawyer is of the appropriate gender for dating the main character;
+      // opposite sex by default, same sex if the option was chosen that mentions
+      // homosexuality
+      if(gaylawyer)
+      {
+         lawyer->gender_conservative=lawyer->gender_liberal=newcr->gender_conservative;
+      }
+      else
+      {
+         if(newcr->gender_conservative==GENDER_MALE)
+            lawyer->gender_conservative=GENDER_FEMALE;
+
+         if(newcr->gender_conservative==GENDER_FEMALE)
+            lawyer->gender_conservative=GENDER_MALE;
+      }
+
+      // Ensure the lawyer has good heart/wisdom stats
+      if(lawyer->att[ATTRIBUTE_HEART]<newcr->att[ATTRIBUTE_HEART]-2)
+         lawyer->att[ATTRIBUTE_HEART]=newcr->att[ATTRIBUTE_HEART]-2;
+      
+      lawyer->att[ATTRIBUTE_WISDOM]=1;
+      
+      lawyer->namecreature();
+      lawyer->flag|=CREATUREFLAG_SLEEPER;
+      lawyer->flag|=CREATUREFLAG_LOVESLAVE;
+      lawyer->align=ALIGN_LIBERAL;
+      lawyer->age=28;
+
+      location[lawyer->worklocation]->interrogated=1;
+      lawyer->hireid=newcr->id;
+      pool.push_back(lawyer);
+      lawyer->location=lawyer->base;
    }
 }
 

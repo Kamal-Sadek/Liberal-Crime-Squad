@@ -1088,7 +1088,7 @@ void configSiteScript::generatehallway_y(int rx, int ry, int dx, int dy, int z)
 void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, int dz)
 {
    for(int z=rz; z<=rz+dz; z++)
-   {      
+   {
       // If not bottom floor, add down stairs
       if(z>rz)
       {

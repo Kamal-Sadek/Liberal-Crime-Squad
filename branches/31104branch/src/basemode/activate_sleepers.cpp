@@ -226,11 +226,11 @@ void activate_sleeper(Creature *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_LIBERAL);
          move(11,40);
-         addstr("2 - Liberal Outreach");
+         addstr("2 - Advocate Liberalism");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_CONSERVATIVE);
          move(12,40);
-         addstr("3 - Conservative \"Outreach\"");
+         addstr("3 - Build Conservative Credibility");
 
          move(13,40);
          if(subordinatesleft(*cr))
@@ -279,12 +279,12 @@ void activate_sleeper(Creature *cr)
       case ACTIVITY_SLEEPER_LIBERAL:
          move(22,3);
          addstr(cr->name);
-         addstr(" will alter public opinion on the issues.");
+         addstr(" will build support for Liberal causes.");
          break;
       case ACTIVITY_SLEEPER_CONSERVATIVE:
          move(22,3);
          addstr(cr->name);
-         addstr(" will alter public opinion for the worse, in exchange");
+         addstr(" will publically condemn Liberals and the LCS, in exchange");
          move(23,3);
          addstr("for increased credibility with the good old boy network.");
          break;

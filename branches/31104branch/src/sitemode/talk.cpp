@@ -1172,33 +1172,33 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            break;
                         case LAW_WOMEN:
-                           addstr("\"Sexism is still pervasive, in subtle ways, and women make much less\"");
+                           addstr("\"Sexism is still pervasive, in subtle ways, and women make much less");
                            move(y,1);y++;
                            addstr("than they deserve for their labor.\"");
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            break;
                         case LAW_CIVILRIGHTS:
-                           addstr("\"You might think we have all these civil rights laws on the books, but\"");
+                           addstr("\"You might think we have all these civil rights laws on the books, but");
                            move(y,1);y++;
                            addstr("we aren't enforcing them consistantly.  We still have a long way to go.\"");
                            troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
                            break;
                         case LAW_DRUGS:
-                           addstr("\"The government's drug policy is a mess.  We need to stop filling\"");
+                           addstr("\"The government's drug policy is a mess.  We need to stop filling");
                            move(y,1);y++;
                            addstr("prisons with drug users, and focus on helping only those that need it.\"");
                            troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
                            troll+=tk->skillval(SKILL_FIRSTAID)-a.skillval(SKILL_FIRSTAID);
                            break;
                         case LAW_IMMIGRATION:
-                           addstr("\"Millions of people are doing jobs most folks don't even want, and\"");
+                           addstr("\"Millions of people are doing jobs most folks don't even want, and");
                            move(y,1);y++;
                            addstr("saving their families from poverty, but we just try to kick them out.\"");
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            troll+=tk->skillval(SKILL_BUSINESS)-a.skillval(SKILL_BUSINESS);
                            break;
                         case LAW_RELIGION:
-                           addstr("\"Instead of just tolerating the faith of others like we should be,\"");
+                           addstr("\"Instead of just tolerating the faith of others like we should be,");
                            move(y,1);y++;
                            addstr("we're letting religion dominate even our secular political debate.\"");
                            troll+=tk->skillval(SKILL_RELIGION) * 2 - a.skillval(SKILL_RELIGION) * 2;
@@ -1210,13 +1210,13 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            break;
                         case LAW_MILITARY:
-                           addstr("\"Take a breath and think about the world we live in, that we're spending\"");
+                           addstr("\"Take a breath and think about the world we live in, that we're spending");
                            move(y,1);y++;
                            addstr("hundreds of billions on new ways to kill people.  This has to stop!\"");
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
                            break;
                         case LAW_TORTURE:
-                           addstr("\"In the name of the war on terror, we've sacrificed our soul by letting\"");
+                           addstr("\"In the name of the war on terror, we've sacrificed our soul by letting");
                            move(y,1);y++;
                            addstr("the government torture and abuse human beings on our behalf.\"");
                            troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);

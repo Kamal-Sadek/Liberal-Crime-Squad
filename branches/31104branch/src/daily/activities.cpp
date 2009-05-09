@@ -2218,7 +2218,7 @@ void funds_and_trouble(char &clearformess)
    //Teaching
    for(int t=0;t<teachers.size();t++)
    {
-      int skillarray[11];
+      int skillarray[12];
       int cost, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
@@ -2251,7 +2251,9 @@ void funds_and_trouble(char &clearformess)
          skillarray[3]=SKILL_TAILORING;
          skillarray[4]=SKILL_HANDTOHAND;
          skillarray[5]=SKILL_COOKING;
-         skillarray[6]=SKILL_THEFT;         skillarray[7]=-1;         break;
+         skillarray[6]=SKILL_THEFT;
+         skillarray[7]=-1;
+         break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=50;
          skillarray[0]=SKILL_KNIFE;
@@ -2264,8 +2266,7 @@ void funds_and_trouble(char &clearformess)
          skillarray[7]=SKILL_AXE;
          skillarray[8]=SKILL_SMG;
          skillarray[9]=SKILL_THROWING;
-         skillarray[10]=SKILL_TACTICS;
-         skillarray[11]=-1;
+         skillarray[10]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
          cost=40;
@@ -2835,15 +2836,26 @@ char stealcar(Creature &cr,char &clearformess)
                {
                   addstr("I don't think they're in here...");
                }
-               else if (key_search_total>=15)
+               else if (key_search_total==15)
                {
                   addstr("If they were here, I'd have found them by now.");
+               }
+               else if (key_search_total>15)
+               {
+                  switch(LCSrandom(5))
+                  {
+                  case 0:addstr("This isn't working!");break;
+                  case 1:addstr("Why me?");break;
+                  case 2:addstr("What do I do now?");break;
+                  case 3:addstr("Oh no...");break;
+                  case 4:addstr("I'm going to get arrested, aren't I?");break;
+                  }
                }
                else
                {
                   switch(LCSrandom(5))
                   {
-                     case 0:addstr("They've gotta be in here somewhere...");break;
+                     case 0:addstr("Please be in here somewhere...");break;
                      case 1:
                         if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!");
                         else addstr("Fuck!  Where are they?!");

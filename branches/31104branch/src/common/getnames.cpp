@@ -939,7 +939,7 @@ void getview(char *str,short view)
    {
       case VIEW_GAY:strcat(str,"Homosexual Rights");break;
       case VIEW_DEATHPENALTY:strcat(str,"Death Penalty");break;
-		case VIEW_TAXES:strcat(str,"Taxes");break;
+      case VIEW_TAXES:strcat(str,"Taxes");break;
       case VIEW_NUCLEARPOWER:strcat(str,"Nuclear Power");break;
       case VIEW_ANIMALRESEARCH:strcat(str,"Animal Cruelty");break;
       case VIEW_POLICEBEHAVIOR:strcat(str,"The Police");break;
@@ -954,6 +954,10 @@ void getview(char *str,short view)
       case VIEW_CEOSALARY:strcat(str,"CEO Compensation");break;
       case VIEW_AMRADIO:strcat(str,"AM Radio");break;
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
+      case VIEW_WOMEN:strcat(str,"Gender Equality");break;
+      case VIEW_CIVILRIGHTS:strcat(str,"Racial Equality");break;
+      case VIEW_DRUGS:strcat(str,"Drugs");break;
+      case VIEW_MILITARY:strcat(str,"The Military");break;
       case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;

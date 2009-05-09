@@ -654,7 +654,7 @@ void elections(char clearformess,char canseethings)
                break;
             case LAW_WOMEN:
                if(propdir[p]==1)addstr("Expand Women's Rights");
-               else addstr("Protect Traditional Gender Roles");
+               else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
                if(propdir[p]==1)addstr("Expand Civil Rights");
@@ -1454,7 +1454,7 @@ void supremecourt(char clearformess,char canseethings)
                break;
             case LAW_WOMEN:
                if(scasedir[c]==1)addstr("Expand Women's Rights");
-               else addstr("Protect Traditional Gender Roles");
+               else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
                if(scasedir[c]==1)addstr("Expand Civil Rights");
@@ -1859,7 +1859,7 @@ void congress(char clearformess,char canseethings)
                break;
             case LAW_WOMEN:
                if(billdir[c]==1)addstr("Expand Women's Rights");
-               else addstr("Protect Traditional Gender Roles");
+               else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
                if(billdir[c]==1)addstr("Expand Civil Rights");

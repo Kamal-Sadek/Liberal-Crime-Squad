@@ -1247,7 +1247,7 @@ void printliberalstats(Creature &cr)
 
    // Add vehicle
    move(15,0);
-   addstr("Transport: ");
+   addstr("Car: ");
    long v=-1;
    if(showcarprefs==1)v=id_getcar(cr.pref_carid);
    else v=id_getcar(cr.carid);
@@ -1275,30 +1275,31 @@ void printliberalstats(Creature &cr)
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(17,0);
+      move(18,0);
       itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
       addstr(num);
-      addstr(" Recruits");
-      move(18,0);
+      addstr(" Recruits / ");
       itoa(maxsubordinates(cr),num,10);
       addstr(num);
       addstr(" Max");
    }
    else
    {
-      move(17,0);
-      addstr("Enlightened");
       move(18,0);
+      addstr("Enlightened ");
       addstr("Can't Recruit");
    }
    // Add seduction stats
    move(19,0); 
    int lovers = loveslaves(cr);
+   if(cr.flag & CREATUREFLAG_LOVESLAVE)
+      lovers++;
    if(lovers)
    {
       itoa(lovers,num,10);
       addstr(num);
-      addstr(" Seduced Liberals");
+      addstr(" Lover");
+      if(lovers>1)addstr("s");
    }
 
    // Add wound status

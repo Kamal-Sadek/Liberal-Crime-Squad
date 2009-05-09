@@ -1930,17 +1930,16 @@ void majornewspaper(char &clearformess,char canseethings)
 
          short violence_threshhold;
 
-         if(attitude[VIEW_POLITICALVIOLENCE]<5)violence_threshhold=1;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<15)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<25)violence_threshhold=3;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<35)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<45)violence_threshhold=5;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<55)violence_threshhold=7;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<65)violence_threshhold=9;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<75)violence_threshhold=11;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<85)violence_threshhold=15;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<95)violence_threshhold=20;
-         else violence_threshhold=50;
+         if(attitude[VIEW_POLITICALVIOLENCE]<15)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<25)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<35)violence_threshhold=3;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<45)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<55)violence_threshhold=5;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<65)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<75)violence_threshhold=7;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<85)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]<95)violence_threshhold=9;
+         else violence_threshhold=10;
 
          if(newsstory[n]->violence_level / (newsstory[n]->politics_level+1) > violence_threshhold)
          {
