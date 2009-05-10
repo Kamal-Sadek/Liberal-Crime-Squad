@@ -1682,7 +1682,7 @@ void makecreature(Creature &cr,short type)
    }
    else
    {
-      randomskills-=20-cr.age;
+      randomskills-=(20-cr.age)/2;
    }
 
    /*for(int s=0;s<SKILLNUM;s++)

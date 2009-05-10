@@ -1224,7 +1224,7 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_RELIGION) * 2 - a.skillval(SKILL_RELIGION) * 2;
                            break;
                         case LAW_ELECTIONS:
-                           addstr("\"Political favors are bought and sold for campaign contributions,\"");
+                           addstr("\"Political favors are bought and sold for campaign contributions,");
                            move(y,1);y++;
                            addstr("and the voting system enforces two party dominance.\"");
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);

@@ -773,9 +773,22 @@ void mode_site(void)
                            {
                               if (encounter[t].cantbluff!=1)
                               {
+                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(y,x);
                                  addch(t+'A');
                                  addstr(" - ");
+                                 switch(encounter[t].align)
+                                 {
+                                 case ALIGN_CONSERVATIVE:
+                                    set_color(COLOR_RED,COLOR_BLACK,1);
+                                    break;
+                                 case ALIGN_LIBERAL:
+                                    set_color(COLOR_GREEN,COLOR_BLACK,1);
+                                    break;
+                                 case ALIGN_MODERATE:
+                                    set_color(COLOR_WHITE,COLOR_BLACK,1);
+                                    break;
+                                 }
                                  addstr(encounter[t].name);
                                  add_age(encounter[t]);
 

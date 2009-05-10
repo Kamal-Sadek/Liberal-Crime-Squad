@@ -1298,7 +1298,7 @@ void printliberalstats(Creature &cr)
    {
       itoa(lovers,num,10);
       addstr(num);
-      addstr(" Lover");
+      addstr(" Romantic Interest");
       if(lovers>1)addstr("s");
    }
 

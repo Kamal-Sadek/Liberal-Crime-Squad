@@ -952,9 +952,7 @@ void funds_and_trouble(char &clearformess)
          funds+=money;
          stat_funds+=money;
          moneygained_donate+=money;
-         if(solicit[s]->skillval(SKILL_PERSUASION)<3)
-            solicit[s]->train(SKILL_PERSUASION,LCSrandom(5)+2);
-         solicit[s]->train(SKILL_PERSUASION,max(3-solicit[s]->skill[SKILL_PERSUASION],1));
+         solicit[s]->train(SKILL_PERSUASION,max(7-solicit[s]->skill[SKILL_PERSUASION],2));
          solicit[s]->train(SKILL_BUSINESS,max(3-solicit[s]->skill[SKILL_BUSINESS],1));
       }
    }

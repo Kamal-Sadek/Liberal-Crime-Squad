@@ -274,6 +274,7 @@ int maxskill(int skill,Creature& cr,bool use_juice)
    case SKILL_THEFT:
    case SKILL_STEALTH:
    case SKILL_THROWING:
+   case SKILL_TACTICS:
       return cr.attval(ATTRIBUTE_AGILITY,use_juice);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
@@ -302,7 +303,6 @@ int maxskill(int skill,Creature& cr,bool use_juice)
    case SKILL_LAW:
    case SKILL_COMPUTERS:
    case SKILL_STREETSENSE:
-   case SKILL_TACTICS:
       return cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice);
    case SKILL_LEADERSHIP:
       if(cr.juice<10)return 0;

@@ -937,8 +937,8 @@ void getview(char *str,short view)
 
    switch(view)
    {
-      case VIEW_GAY:strcat(str,"Homosexual Rights");break;
-      case VIEW_DEATHPENALTY:strcat(str,"Death Penalty");break;
+      case VIEW_GAY:strcat(str,"LGBT Rights");break;
+      case VIEW_DEATHPENALTY:strcat(str,"The Death Penalty");break;
       case VIEW_TAXES:strcat(str,"Taxes");break;
       case VIEW_NUCLEARPOWER:strcat(str,"Nuclear Power");break;
       case VIEW_ANIMALRESEARCH:strcat(str,"Animal Cruelty");break;
@@ -963,6 +963,43 @@ void getview(char *str,short view)
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;
+   }
+}
+
+
+
+void getviewsmall(char *str,short view)
+{
+   strcpy(str,"");
+
+   switch(view)
+   {
+      case VIEW_GAY:strcat(str,"LGBT rights");break;
+      case VIEW_DEATHPENALTY:strcat(str,"the death penalty");break;
+      case VIEW_TAXES:strcat(str,"taxes");break;
+      case VIEW_NUCLEARPOWER:strcat(str,"nuclear power");break;
+      case VIEW_ANIMALRESEARCH:strcat(str,"animal cruelty");break;
+      case VIEW_POLICEBEHAVIOR:strcat(str,"the cops");break;
+      case VIEW_PRISONS:strcat(str,"prison conditions");break;
+      case VIEW_INTELLIGENCE:strcat(str,"privacy");break;
+      case VIEW_FREESPEECH:strcat(str,"free speech");break;
+      case VIEW_GENETICS:strcat(str,"genetic research");break;
+      case VIEW_JUSTICES:strcat(str,"judges");break;
+      case VIEW_SWEATSHOPS:strcat(str,"labor rights");break;
+      case VIEW_POLLUTION:strcat(str,"pollution");break;
+      case VIEW_CORPORATECULTURE:strcat(str,"corporations");break;
+      case VIEW_CEOSALARY:strcat(str,"CEO compensation");break;
+      case VIEW_WOMEN:strcat(str,"gender equality");break;
+      case VIEW_CIVILRIGHTS:strcat(str,"racial equality");break;
+      case VIEW_DRUGS:strcat(str,"drugs");break;
+      case VIEW_IMMIGRATION:strcat(str,"immigration");break;
+      case VIEW_MILITARY:strcat(str,"the military");break;
+      case VIEW_AMRADIO:strcat(str,"AM radio");break;
+      case VIEW_CABLENEWS:strcat(str,"cable news");break;
+      case VIEW_POLITICALVIOLENCE:strcat(str,"the need for action");break;
+      case VIEW_LIBERALCRIMESQUAD:strcat(str,"the LCS");break;
+      case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"the LCS");break;
+      case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"the CCS");break;
    }
 }
 

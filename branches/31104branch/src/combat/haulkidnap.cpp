@@ -227,7 +227,9 @@ void kidnapattempt(void)
 /* roll on the kidnap attempt and show the results */
 char kidnap(Creature &a,Creature &t,char &amateur)
 {
-   if(a.weapon.type==WEAPON_NONE)
+   if(a.weapon.type==WEAPON_NONE||
+      a.weapon.type==WEAPON_SPRAYCAN||
+      a.weapon.type==WEAPON_GUITAR)
    {
       amateur=1;
 

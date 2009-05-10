@@ -674,7 +674,7 @@ void elections(char clearformess,char canseethings)
                break;
             case LAW_ELECTIONS:
                if(propdir[p]==1)addstr("Fight Political Corruption");
-               else addstr("Limit Regulation of Political Speech");
+               else addstr("Limit Campaign Finance Reforms");
                break;
             case LAW_MILITARY:
                if(propdir[p]==1)addstr("Limit Military Spending");

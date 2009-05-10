@@ -951,10 +951,17 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          else
          {
+            char str[75];
             switch(LCSrandom(4))
             {
-            case 0:addstr(" talks about the issues with ");break;
-            case 1:addstr(" argues about the LCS with ");break;
+            case 0:addstr(" talks about ");
+                   getviewsmall(str,LCSrandom(VIEWNUM-3));
+                   addstr(str);
+                   addstr(" with ");break;
+            case 1:addstr(" argues about ");
+                   getviewsmall(str,LCSrandom(VIEWNUM-3));
+                   addstr(str);
+                   addstr(" with ");break;
             case 2:addstr(" tries to expose the true Liberal side of ");break;
             case 3:addstr(" attempts to recruit ");break;
             }

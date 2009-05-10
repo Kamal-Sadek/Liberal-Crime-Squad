@@ -198,7 +198,7 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
       r.level++;
       break;
    default:
-      addstr("finished chilling out. THIS IS A BUG, btw.");
+      addstr("finished REPORTING THIS BUG TO THE PROGRAMMERS.");
       break;
    }
 
@@ -349,6 +349,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
             liberalize(*r.recruit,false);
 
+            refresh();
+            getch();
+
             erase();
 
             move(6,0);
@@ -469,6 +472,34 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             lib_persuasiveness+=LCSrandom(20);
             max_eagerness     +=LCSrandom(20);
+
+            move(y++,0);
+            addstr(pool[p]->name);
+            addstr(" shares ");
+            strcpy(str,"");
+            getissueeventstring(str);
+            addstr(str);
+            addstr(".");
+            
+            refresh();
+            getch();
+         }
+         else
+         {
+            move(y++,0);
+            addstr(pool[p]->name);
+            addstr(" explains ");
+            if(pool[p]->gender_liberal==GENDER_MALE||
+               (pool[p]->gender_liberal==GENDER_NEUTRAL&&pool[p]->gender_conservative==GENDER_MALE))
+               addstr("his ");
+            else
+               addstr("her ");
+            addstr("views on ");
+            getviewsmall(str,LCSrandom(VIEWNUM-3));
+            addstr(str);
+            addstr(".");
+            refresh();
+            getch();
          }
 
 
@@ -515,7 +546,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       }
       if(c=='c')
       {
-         if(r.eagerness()>5)
+         if(r.eagerness()>5 && r.recruit->money)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             int donationamount=0;
@@ -523,27 +554,12 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(r.recruit->name);
             addstr(" would be happy to help.");
             
-            if(r.recruit->money>150)
-            {
-               donationamount=500;
-            }
-            else if(r.recruit->money>50)
-            {
-               donationamount=100;
-            }
-            else if(r.recruit->money)
-            {
-               donationamount=50;
-            }
-            else
-            {
-               donationamount=10;
-            }
+            donationamount=r.recruit->money;
 
             if(r.eagerness()>7)
-               donationamount=static_cast<int>((1.5+LCSrandom(6)/10.0)*donationamount);
+               donationamount=static_cast<int>((1.0+LCSrandom(6)/10.0)*donationamount);
             if(r.recruit->attval(ATTRIBUTE_HEART)>8)
-               donationamount=static_cast<int>((1.5+LCSrandom(6)/10.0)*donationamount);
+               donationamount=static_cast<int>((1.0+LCSrandom(6)/10.0)*donationamount);
             if(r.recruit->attval(ATTRIBUTE_WISDOM)>8)
                donationamount=static_cast<int>((1.0-LCSrandom(6)/10.0)*donationamount);
             if(r.recruit->align==-1)

@@ -1507,6 +1507,7 @@ void majornewspaper(char &clearformess,char canseethings)
             if(ns->view==VIEW_DRUGS)continue;
             if(ns->view==VIEW_MILITARY)continue;
             if(ns->view==VIEW_CIVILRIGHTS)continue;
+            if(ns->view==VIEW_POLITICALVIOLENCE)continue;
 
             //NO ABORTION
             if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
@@ -1791,8 +1792,9 @@ void majornewspaper(char &clearformess,char canseethings)
          setpriority(*newsstory[n]);
          // Suppress squad actions that aren't worth a story
          if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
-            (newsstory[n]->priority<30 &&
-            newsstory[n]->claimed==0))
+            ((newsstory[n]->priority<50 &&
+            newsstory[n]->claimed==0)||
+            newsstory[n]->priority<30))
          {
             delete newsstory[n];
             newsstory.erase(newsstory.begin() + n);

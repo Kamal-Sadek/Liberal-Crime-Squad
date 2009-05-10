@@ -1796,6 +1796,7 @@ void getloot(char *str,int loot);
 void getrecruitcreature(char *str,int type);
 void gettitle(char *str,Creature &cr);
 void getview(char *str,short view);
+void getviewsmall(char *str,short view);
 void getlaw(char *str,int l);
 void getcarfull(char *str,vehiclest &car,char halffull=0);
 void getcarfull(char *str,int type);
