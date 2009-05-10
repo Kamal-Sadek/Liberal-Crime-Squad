@@ -1111,12 +1111,12 @@ void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, in
          {
             // Purge all tiles other than restriction, add stairs
             levelmap[rx+dx][ry+dy][z].flag&=SITEBLOCK_RESTRICTED;
-            levelmap[rx+dx][ry+dy][z].special=SPECIAL_STAIRS_DOWN;
+            levelmap[rx+dx][ry+dy][z].special=SPECIAL_STAIRS_UP;
          }
          else
          {
             levelmap[rx][ry][z].flag&=SITEBLOCK_RESTRICTED;
-            levelmap[rx][ry][z].special=SPECIAL_STAIRS_DOWN;
+            levelmap[rx][ry][z].special=SPECIAL_STAIRS_UP;
          }
       }
    }
