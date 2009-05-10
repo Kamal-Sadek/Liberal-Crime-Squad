@@ -72,9 +72,9 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          // Improves infiltration
          if(cr.infiltration<0.4)
          {
-            cr.infiltration+=0.02;
+            cr.infiltration+=0.02f;
             if(cr.infiltration>0.4)
-               cr.infiltration=0.4;
+               cr.infiltration=0.4f;
          }
          break;
       case ACTIVITY_SLEEPER_JOINLCS:
@@ -173,9 +173,9 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          // Improves infiltration
          if(cr.infiltration<0.6)
          {
-            cr.infiltration+=0.05;
+            cr.infiltration+=0.05f;
             if(cr.infiltration>0.6)
-               cr.infiltration=0.6;
+               cr.infiltration=0.6f;
          }
       }
       break;
@@ -814,6 +814,7 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libp
             }
             recruit->flag |= CREATUREFLAG_SLEEPER;
             location[recruit->worklocation]->interrogated=1;
+            location[recruit->worklocation]->hidden=0;
             pool.push_back(recruit);
 
             erase();

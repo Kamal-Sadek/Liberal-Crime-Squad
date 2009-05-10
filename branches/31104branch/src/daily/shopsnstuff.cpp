@@ -1540,14 +1540,14 @@ void dealership(int loc)
             locheader();
             printparty();
 
-            if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(funds>=5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(10,1);
             addstr("A - Bug ($5000)");
             move(10,40);
             addstr("B - Pickup Truck ($5000)");
             
-            if(funds>=20000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(funds>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(11,1);
             addstr("C - Sports Car ($10000)");
@@ -1666,6 +1666,20 @@ void dealership(int loc)
                   v->heat  = 0;
                   activesquad->squad[buyer]->carid = v->id;
                   vehicle.push_back(v);
+
+                  switch(cartype)
+                  {
+                  case VEHICLE_BUG:
+                  case VEHICLE_PICKUP:
+                     funds-=5000;
+                     moneylost_goods+=5000;
+                     break;
+                  case VEHICLE_SPORTSCAR:
+                  case VEHICLE_SUV:
+                     funds-=10000;
+                     moneylost_goods+=10000;
+                  default:continue;
+                  }
                   break;
                }
             }

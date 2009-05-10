@@ -1018,7 +1018,7 @@ void special_graffiti(void)
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i])
-         addjuice(*(activesquad->squad[i]),1,20);
+         addjuice(*(activesquad->squad[i]),1,50);
    }
 
    criminalizeparty(LAWFLAG_VANDALISM);

@@ -243,19 +243,38 @@ char talk(Creature &a,int t)
                      else
                      {
                         set_color(COLOR_RED,COLOR_BLACK,1);
-                        switch(LCSrandom(5))
+                        if(((encounter[e].type==CREATURE_DEATHSQUAD||
+                           encounter[e].type==CREATURE_AGENT||
+                           encounter[e].type==CREATURE_MERC||
+                           encounter[e].type==CREATURE_GANGUNIT))
+                           &&encounter[e].align==ALIGN_CONSERVATIVE)
                         {
-                        case 0:
-                           if(hostages>1)
-                              addstr("\"Release your hostages, and nobody gets hurt.\"");
-                           else
-                              addstr("\"Let the hostage go, and nobody gets hurt.\"");
-                           break;
-                        case 1:addstr("\"You got about five seconds to back down.\"");break;
-                        case 2:addstr("\"You want to do this the hard way?\"");break;
-                        case 3:addstr("\"Big mistake.\"");break;
-                        case 4:addstr("\"Three... two...\"");break;
+                           switch(LCSrandom(5))
+                           {
+                           case 0:addstr("\"Hahahaha...\"");break;
+                           case 1:addstr("\"You think you can scare me?\"");break;
+                           case 2:addstr("\"You're not getting out of here alive.\"");break;
+                           case 3:addstr("\"What's wrong?  Need your diaper changed?\"");break;
+                           case 4:addstr("\"Three... two...\"");break;
+                           }
                         }
+                        else
+                        {
+                           switch(LCSrandom(5))
+                           {
+                           case 0:
+                              if(hostages>1)
+                                 addstr("\"Release your hostages, and nobody gets hurt.\"");
+                              else
+                                 addstr("\"Let the hostage go, and nobody gets hurt.\"");
+                              break;
+                           case 1:addstr("\"You got about five seconds to back down.\"");break;
+                           case 2:addstr("\"You want to do this the hard way?\"");break;
+                           case 3:addstr("\"Big mistake.\"");break;
+                           case 4:addstr("\"Release them, and I'll let you go.\"");break;
+                           }
+                        }
+
                      }
 
                      refresh();
@@ -430,7 +449,7 @@ char talk(Creature &a,int t)
                   if(((encounter[e].type==CREATURE_DEATHSQUAD||
                      encounter[e].type==CREATURE_AGENT||
                      encounter[e].type==CREATURE_MERC||
-                     encounter[e].type==CREATURE_GANGUNIT)||
+                     encounter[e].type==CREATURE_GANGUNIT)&&
                      LCSrandom(2))&&encounter[e].align==ALIGN_CONSERVATIVE)
                   {
                      clearmessagearea();
@@ -442,11 +461,11 @@ char talk(Creature &a,int t)
                      move(17,1);
                      switch(LCSrandom(5))
                      {
-                     case 0:addstr("\"No negotiation!\"");break;
-                     case 1:addstr("\"You're not getting away!\"");break;
-                     case 2:addstr("\"So you want it the hard way!\"");break;
-                     case 3:addstr("\"Cowardly Liberal!\"");break;
-                     case 4:addstr("\"You're not hardcore!\"");break;
+                     case 0:addstr("\"Do I look like a loving person?\"");break;
+                     case 1:addstr("\"You don't take a hint, do you?\"");break;
+                     case 2:addstr("\"I'm doing the world a favor.\"");break;
+                     case 3:addstr("\"That's so pathetic...\"");break;
+                     case 4:addstr("\"It's a deal.\"");break;
                      }
 
                      refresh();
@@ -461,11 +480,12 @@ char talk(Creature &a,int t)
                      addstr(":");
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
-                     switch(LCSrandom(3))
+                     switch(LCSrandom(4))
                      {
                      case 0:addstr("\"Right. Let's do it.\"");break;
                      case 1:addstr("\"No further conditions.\"");break;
                      case 2:addstr("\"Let them go, and we're done.\"");break;
+                     case 3:addstr("\"No tricks, okay?\"");break;
                      }
                      refresh();
                      getch();
@@ -528,8 +548,8 @@ char talk(Creature &a,int t)
                   addstr("pretends to be a Secret Agent.");
                   break;
                case SIEGE_CCS:
-                  addstr("talks about killing them Lib'rel scum!");
-                  break;
+                  //addstr("talks about killing them Lib'rel scum!");
+                  //break;
                case SIEGE_HICKS:
                   switch(LCSrandom(2))
                   {

@@ -1582,6 +1582,7 @@ void tendhostage(Creature *cr,char &clearformess)
                liberalize(*cr,false);
                cr->location = cr->worklocation;
                location[cr->worklocation]->interrogated=1;
+               location[cr->worklocation]->hidden=0;
                cr->base = cr->worklocation;
                break;
             }

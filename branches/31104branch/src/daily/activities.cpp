@@ -954,6 +954,8 @@ void funds_and_trouble(char &clearformess)
          moneygained_donate+=money;
          if(solicit[s]->skillval(SKILL_PERSUASION)<3)
             solicit[s]->train(SKILL_PERSUASION,LCSrandom(5)+2);
+         solicit[s]->train(SKILL_PERSUASION,max(3-solicit[s]->skill[SKILL_PERSUASION],1));
+         solicit[s]->train(SKILL_BUSINESS,max(3-solicit[s]->skill[SKILL_BUSINESS],1));
       }
    }
 
@@ -1002,14 +1004,8 @@ void funds_and_trouble(char &clearformess)
          moneygained_goods+=money+costofsupplies;
          moneylost_goods+=costofsupplies;
 
-         if(tshirts[s]->skillval(SKILL_TAILORING)<4)
-            tshirts[s]->train(SKILL_TAILORING,LCSrandom(5)+2);
-         else
-            tshirts[s]->train(SKILL_TAILORING,LCSrandom(3)+1);
-         if(tshirts[s]->skillval(SKILL_BUSINESS)<4)
-            tshirts[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
-         else
-            tshirts[s]->train(SKILL_BUSINESS,1);
+         tshirts[s]->train(SKILL_TAILORING,max(6-tshirts[s]->skill[SKILL_TAILORING],4));
+         tshirts[s]->train(SKILL_BUSINESS,max(4-tshirts[s]->skill[SKILL_BUSINESS],2));
       }
    }
 
@@ -1057,14 +1053,8 @@ void funds_and_trouble(char &clearformess)
          moneygained_goods+=money+costofsupplies;
          moneylost_goods+=costofsupplies;
 
-         if(art[s]->skillval(SKILL_ART)<4)
-            art[s]->train(SKILL_ART,LCSrandom(5)+2);
-         else
-            art[s]->train(SKILL_ART,LCSrandom(3)+1);
-         if(art[s]->skillval(SKILL_BUSINESS)<4)
-            art[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
-         else
-            art[s]->train(SKILL_BUSINESS,1);
+         art[s]->train(SKILL_ART,max(6-art[s]->skill[SKILL_ART],4));
+         art[s]->train(SKILL_BUSINESS,max(4-art[s]->skill[SKILL_BUSINESS],2));
       }
    }
 
@@ -1087,10 +1077,7 @@ void funds_and_trouble(char &clearformess)
          stat_funds+=money;
          moneygained_goods+=money;
 
-         if(music[s]->skillval(SKILL_MUSIC)<4)
-            music[s]->train(SKILL_MUSIC,LCSrandom(5)+2);
-         else
-            music[s]->train(SKILL_MUSIC,LCSrandom(3)+1);
+         music[s]->train(SKILL_MUSIC,max(6-music[s]->skill[SKILL_MUSIC],4));
       }
    }
 
@@ -1117,25 +1104,13 @@ void funds_and_trouble(char &clearformess)
       stat_funds+=money;
       moneygained_brownies+=money;
       // Make the sale
-      if(brownies[s]->skillval(SKILL_PERSUASION)<4)
-         brownies[s]->train(SKILL_PERSUASION,LCSrandom(3)+1);
-      else
-         brownies[s]->train(SKILL_PERSUASION,1);
+      brownies[s]->train(SKILL_PERSUASION,max(4-brownies[s]->skill[SKILL_PERSUASION],1));
       // Know the streets
-      if(brownies[s]->skillval(SKILL_STREETSENSE)<5)
-         brownies[s]->train(SKILL_STREETSENSE,LCSrandom(5)+2);
-      else
-         brownies[s]->train(SKILL_STREETSENSE,LCSrandom(3)+1);
+      brownies[s]->train(SKILL_STREETSENSE,max(5-brownies[s]->skill[SKILL_STREETSENSE],3));
       // Buy low, sell high
-      if(brownies[s]->skillval(SKILL_BUSINESS)<2)
-         brownies[s]->train(SKILL_BUSINESS,LCSrandom(3)+1);
-      else
-         brownies[s]->train(SKILL_BUSINESS,1);
+      brownies[s]->train(SKILL_BUSINESS,max(3-brownies[s]->skill[SKILL_BUSINESS],1));
       // Baking brownies :)
-      if(brownies[s]->skillval(SKILL_COOKING)<2)
-         brownies[s]->train(SKILL_COOKING,LCSrandom(3)+1);
-      else
-         brownies[s]->train(SKILL_COOKING,1);
+      brownies[s]->train(SKILL_COOKING,max(3-brownies[s]->skill[SKILL_COOKING],1));
 
       //Check for police search
       dodgelawroll=LCSrandom(100);
@@ -1601,6 +1576,8 @@ void funds_and_trouble(char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(graffiti[s]->name);
+
+            //TODO: CHECK BASE INVENTORY FOR A SPRAYCAN BEFORE BUYING ONE
             
             if(funds>=20)
             {

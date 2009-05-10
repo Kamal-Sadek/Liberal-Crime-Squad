@@ -146,6 +146,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
                d.date[e]->location = d.date[e]->worklocation;
                d.date[e]->base = d.date[e]->worklocation;
                location[d.date[e]->worklocation]->interrogated=1;
+               location[d.date[e]->worklocation]->hidden=0;
                d.date[e]->infiltration/=2;
                break;
             }
@@ -506,11 +507,23 @@ char completedate(datest &d,int p,char &clearformess)
             aroll+=LCSrandom(10);
             test=1;
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
+            pool[p]->train(SKILL_SCIENCE,
+               max(d.date[e]->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE),0));
+            pool[p]->train(SKILL_RELIGION,
+               max(d.date[e]->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION),0));
+            pool[p]->train(SKILL_BUSINESS,
+               max(d.date[e]->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
          }
          if(c=='b')
          {
             test=1;
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
+            pool[p]->train(SKILL_SCIENCE,
+               max(d.date[e]->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE),0));
+            pool[p]->train(SKILL_RELIGION,
+               max(d.date[e]->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION),0));
+            pool[p]->train(SKILL_BUSINESS,
+               max(d.date[e]->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
          }
 
          if(d.date[e]->skillval(SKILL_BUSINESS))
@@ -550,6 +563,12 @@ char completedate(datest &d,int p,char &clearformess)
             }
             d.timeleft=7;
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(40)+15);
+            pool[p]->train(SKILL_SCIENCE,
+               max((d.date[e]->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE))*4,0));
+            pool[p]->train(SKILL_RELIGION,
+               max((d.date[e]->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION))*4,0));
+            pool[p]->train(SKILL_BUSINESS,
+               max((d.date[e]->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS))*4,0));
             return 0;
          }
          if(c=='d')

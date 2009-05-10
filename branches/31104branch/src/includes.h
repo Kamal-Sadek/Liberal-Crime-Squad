@@ -29,7 +29,7 @@
 //#define GIVEBLOODYARMOR
 
 // Start with lots of money
-//#define HIGHFUNDS
+#define HIGHFUNDS
 
 // Interrogation always enlightens
 //#define AUTOENLIGHTEN

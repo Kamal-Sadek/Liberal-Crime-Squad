@@ -638,7 +638,7 @@ void advanceday(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->skill[SKILL_COMPUTERS],0));
+            pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->skill[SKILL_COMPUTERS],1));
 
             survey(pool[p]);
             //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-

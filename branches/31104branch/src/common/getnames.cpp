@@ -952,12 +952,13 @@ void getview(char *str,short view)
       case VIEW_POLLUTION:strcat(str,"Pollution");break;
       case VIEW_CORPORATECULTURE:strcat(str,"Corporate Culture");break;
       case VIEW_CEOSALARY:strcat(str,"CEO Compensation");break;
-      case VIEW_AMRADIO:strcat(str,"AM Radio");break;
-      case VIEW_CABLENEWS:strcat(str,"Cable News");break;
       case VIEW_WOMEN:strcat(str,"Gender Equality");break;
       case VIEW_CIVILRIGHTS:strcat(str,"Racial Equality");break;
       case VIEW_DRUGS:strcat(str,"Drugs");break;
+      case VIEW_IMMIGRATION:strcat(str,"Immigration");break;
       case VIEW_MILITARY:strcat(str,"The Military");break;
+      case VIEW_AMRADIO:strcat(str,"AM Radio");break;
+      case VIEW_CABLENEWS:strcat(str,"Cable News");break;
       case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;

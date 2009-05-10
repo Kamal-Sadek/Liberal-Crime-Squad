@@ -382,6 +382,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                   r.recruit->flag |= CREATUREFLAG_SLEEPER;
                   r.recruit->location = r.recruit->worklocation;
                   location[r.recruit->worklocation]->interrogated=1;
+                  location[r.recruit->worklocation]->hidden=0;
                   r.recruit->base = r.recruit->worklocation;
                   r.recruit->infiltration/=2;
                   break;
@@ -431,8 +432,18 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          //SAV - You can get your skill up to a 3 by chatting. Past that,
          // you must successfully recruit people. Training is slower the
          // better you are.
+         //JDS - Increased max skill to get to 5 under this system, gave
+         // minimum of 1 exp for the action.
          pool[p]->train(SKILL_PERSUASION,
-            max(3-pool[p]->skillval(SKILL_PERSUASION),0));
+            max(5-pool[p]->skillval(SKILL_PERSUASION),1));
+         pool[p]->train(SKILL_SCIENCE,
+            max(r.recruit->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE),0));
+         pool[p]->train(SKILL_RELIGION,
+            max(r.recruit->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION),0));
+         pool[p]->train(SKILL_LAW,
+            max(r.recruit->skillval(SKILL_LAW)-pool[p]->skillval(SKILL_LAW),0));
+         pool[p]->train(SKILL_BUSINESS,
+            max(r.recruit->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
          
          int lib_persuasiveness = pool[p]->skillval(SKILL_PERSUASION)*2+
                                   pool[p]->skillval(SKILL_BUSINESS)+
