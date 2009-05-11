@@ -274,7 +274,7 @@ int maxskill(int skill,Creature& cr,bool use_juice)
    case SKILL_THEFT:
    case SKILL_STEALTH:
    case SKILL_THROWING:
-   case SKILL_TACTICS:
+   case SKILL_DODGE:
       return cr.attval(ATTRIBUTE_AGILITY,use_juice);
    case SKILL_PERSUASION:
    case SKILL_DISGUISE:
@@ -622,7 +622,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
    if(v==VIEW_LIBERALCRIMESQUADPOS)
    {
       int mood = publicmood(-1);
-      if(cap>mood)cap=mood;
+      if(cap>mood+40)cap=mood+40;
    }
 
    int effpower=power;

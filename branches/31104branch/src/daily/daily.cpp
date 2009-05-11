@@ -1587,7 +1587,8 @@ bool promotesubordinates(Creature &cr, char &clearformess)
             else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
          }
 
-         if(pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50>maxjuice)
+         if(pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50>maxjuice&&
+            (location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON||pool[p]->sentence>=0))
          {
             maxjuice=pool[p]->juice+pool[p]->skillval(SKILL_LEADERSHIP)*50;
             newboss=p;

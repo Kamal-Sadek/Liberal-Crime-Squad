@@ -975,7 +975,7 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_CLUB]=LCSrandom(8)+2;
          cr.skill[SKILL_DRIVING]=LCSrandom(6)+4;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(6)+4;
-         cr.skill[SKILL_TACTICS]=LCSrandom(4)+4;
+         cr.skill[SKILL_DODGE]=LCSrandom(4)+4;
          
          cr.att[ATTRIBUTE_STRENGTH]=5;
          cr.att[ATTRIBUTE_AGILITY]=7;

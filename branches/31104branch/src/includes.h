@@ -50,10 +50,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.19.3"
+#define PACKAGE_VERSION "3.19.4"
 #endif
 
-const int version=31903;
+const int version=31904;
 const int lowestloadversion=31900;
 const int lowestloadscoreversion=31203;
 
@@ -498,7 +498,7 @@ enum Skills
    SKILL_SEDUCTION,
    SKILL_LEADERSHIP,
    SKILL_FIRSTAID,
-   SKILL_TACTICS,
+   SKILL_DODGE,
    SKILL_FLAMETHROWER,
    //SKILL_SURVIVAL,
    SKILLNUM

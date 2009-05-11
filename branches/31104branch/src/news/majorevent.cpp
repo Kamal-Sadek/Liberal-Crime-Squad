@@ -1118,6 +1118,42 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
             /*
+         case VIEW_MILITARY:
+            displaycenterednewsfont("CASUALTIES MOUNT",5);
+            displaycenteredsmallnews("Is the latest military invasion yet another quagmire?",12);
+            strcpy(story,"");
+            generatefiller(story,200);
+            displaynewsstory(story,storyx_s,storyx_e,13);
+            break;
+         case VIEW_POLITICALVIOLENCE:
+            displaycenterednewsfont("RADICAL BOOK",5);
+            char str[80];
+            strcpy(str,"");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Desperate");break;
+               case 1:strcat(str,"Aggressive");break;
+               case 2:strcat(str,"Strong");break;
+               case 3:strcat(str,"Direct");break;
+               case 4:strcat(str,"Real");break;
+            }
+            strcat(str," ");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Action");break;
+               case 1:strcat(str,"Strikes");break;
+               case 2:strcat(str,"Strategy");break;
+               case 3:strcat(str,"Cause");break;
+               case 4:strcat(str,"Violence");break;
+            }
+            strcat(str,": New best seller documents the success of radical groups.");
+            displaycenteredsmallnews(str,12);
+            strcpy(story,"");
+            generatefiller(story,200);
+            displaynewsstory(story,storyx_s,storyx_e,13);
+            break;
+            */
+            /*
          case VIEW_GUNS:
             displaycenterednewsfont("SCHOOL SHOOTING",5);
             constructeventstory(story,ns.view,ns.positive);
@@ -1264,6 +1300,24 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
+            /*
+         case VIEW_MILITARY:
+            displaycenterednewsfont("BIG VICTORY",5);
+            displaycenteredsmallnews("Our boys defend freedom once again, defeating an evil dictator.",13);
+            strcpy(story,"");
+            generatefiller(story,200);
+            displaynewsstory(story,storyx_s,storyx_e,15);
+            break;
+         case VIEW_POLITICALVIOLENCE:
+            displaycenterednewsfont("HUGE BOMBING",5);
+            itoa(500+LCSrandom(2000),story,10);
+            strcat(story, " killed in domestic terrorist attack.");
+            displaycenteredsmallnews(story,13);
+            strcpy(story,"");
+            generatefiller(story,200);
+            displaynewsstory(story,storyx_s,storyx_e,15);
+            break;
+            */
             /*
          case VIEW_GUNS:
             displaycenterednewsfont("KILLER STOPPED",5);

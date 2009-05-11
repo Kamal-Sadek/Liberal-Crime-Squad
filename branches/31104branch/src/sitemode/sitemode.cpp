@@ -1670,6 +1670,12 @@ void mode_site(void)
                   {
                      levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
 
+                     //Get torched
+                     if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
+                     {
+                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
+                     }
+
                      //BLOW TRAPS
                      if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
                      {
@@ -2224,6 +2230,9 @@ void resolvesite(void)
 
             move(10,1);
             addstr("The Liberal is now at your command as a normal squad member.");
+
+            pool[p]->base=activesquad->squad[0]->base;
+            pool[p]->location=pool[p]->base;
             refresh();
             getch();
          }

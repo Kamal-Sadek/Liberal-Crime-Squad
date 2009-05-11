@@ -107,8 +107,9 @@ void youattack(void)
 
       char actual;
       short beforeblood=encounter[target].blood;
-      attack(*activesquad->squad[p],encounter[target],mistake,actual);
       if(encounter[target].align==1)mistake=1;
+      attack(*activesquad->squad[p],encounter[target],mistake,actual);
+      
 
       if(actual)
       {
@@ -238,7 +239,7 @@ void enemyattack(void)
       if(!encounter[e].exists)continue;
       if(!encounter[e].alive)continue;
 
-      if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER)
+      if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER&&encounter[e].align!=ALIGN_LIBERAL)
          conservatise(encounter[e]);
       if(encounter[e].enemy())
          encounter[e].cantbluff=2;
@@ -560,17 +561,17 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          if(!a.animalgloss)
          {
             if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)+1))
-               strcat(str,"punches");
+               strcat(str,"punches at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)))
                strcat(str,"swings at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-1))
-               strcat(str,"grabs");
+               strcat(str,"grapples with");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-2))
-               strcat(str,"kicks");
+               strcat(str,"kicks at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-3))
-               strcat(str,"strikes");
+               strcat(str,"strikes at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-4))
-               strcat(str,"jump kicks");
+               strcat(str,"jump kicks at");
             else
                strcat(str,"gracefully strikes at");
          }
@@ -582,7 +583,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                melee=false;
             }
             else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
-            else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs at");
+            else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs");
             else strcat(str,"claws at");
          }
          break;
@@ -610,7 +611,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             strcat(str,"shoots at");
             melee=false;
          }
-         else strcat(str,"clubs at");
+         else strcat(str,"swings at");
          break;
       case WEAPON_MOLOTOV:
          strcat(str,"hurls a molotov at");
@@ -628,16 +629,17 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       case WEAPON_STAFF:
       case WEAPON_TORCH:
       case WEAPON_SPRAYCAN:
+      case WEAPON_GUITAR:
          strcat(str,"swings at");break;
       case WEAPON_PITCHFORK:
-         strcat(str,"stabs at");break;
+         strcat(str,"stabs");break;
       case WEAPON_FLAMETHROWER:
          if(a.weapon.ammo>0&&!force_melee)
          {
             strcat(str,"streams fire at");
             melee=false;
          }
-         else strcat(str,"clubs at");break;
+         else strcat(str,"swings at");break;
       
    }
    strcat(str," ");
@@ -724,7 +726,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if(activesquad->squad[p]&&activesquad->squad[p]->alive)
             {
-               maxtactics=max(activesquad->squad[p]->skill[SKILL_TACTICS],maxtactics);
+               maxtactics=max(activesquad->squad[p]->skill[SKILL_DODGE],maxtactics);
             }
          }
       }
@@ -734,12 +736,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
             {
-               maxtactics=max(encounter[e].skill[SKILL_TACTICS],maxtactics);
+               maxtactics=max(encounter[e].skill[SKILL_DODGE],maxtactics);
             }
          }
       }
-      droll+=LCSrandom(maxtactics/2+t.skill[SKILL_TACTICS]+1);
-      t.train(SKILL_TACTICS,5);
+      droll+=LCSrandom(maxtactics/2+t.skill[SKILL_DODGE]+1);
+      t.train(SKILL_DODGE,5);
    }
    else
    {

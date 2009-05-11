@@ -231,6 +231,16 @@ void passmonth(char &clearformess,char canseethings)
       }
    }
 
+   // Seduction monthly experience stipends for those liberals
+   // who have been getting it on with their love slaves/masters
+   // in the background
+   for(int p=0;p<pool.size();p++)
+   {
+      pool[p]->train(SKILL_SEDUCTION,loveslaves(*pool[p])*5);
+      if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+         pool[p]->train(SKILL_SEDUCTION,5);
+   }
+
    /*******************************************************
    *                                                      *
    *     INTELLIGENCE REPORT - MOVE TO SEPARATE FILE      *
@@ -245,7 +255,7 @@ void passmonth(char &clearformess,char canseethings)
       addstr("LCS MONTHLY INTELLIGENCE REPORT");
 
       move(2,2);
-      addstr("POLITICAL INFLUENCE");
+      addstr("ESTIMATED POLITICAL INFLUENCE");
       y=3;
       for(int i=0;i<VIEWNUM-6;i++)
       {

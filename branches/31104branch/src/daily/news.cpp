@@ -107,7 +107,7 @@ void setpriority(newsstoryst &ns)
 
          // Set story's political and violence levels for determining whether
          // a story becomes positive or negative
-         if(ns.claimed)ns.politics_level=20;
+         if(ns.claimed)ns.politics_level=5;
          else ns.politics_level=0;
          
          ns.politics_level+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
@@ -533,7 +533,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[c]==CRIME_CARCHASE)continue;
                   if(ns.crime[c]==CRIME_CARCRASH)continue;
                   if(ns.crime[c]==CRIME_FOOTCHASE)continue;
-                  if(ns.crime[c]==CRIME_TAGGING)continue;
+                  //if(ns.crime[c]==CRIME_TAGGING)continue;
                   if(crime[ns.crime[c]]==1)typesum++;
                }
 
@@ -663,20 +663,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(crime[CRIME_KILLEDSOMEBODY])typesum--;
                }
 
-               if(typesum>0 || crime[CRIME_TAGGING])
+               if(typesum>0)
                {
-                  if(crime[CRIME_TAGGING])
-                  {
-                     if(ccs)
-                     {
-                        strcat(story,"  The CCS spraypainted its initials on the walls.");
-                     }
-                     else
-                     {
-                        strcat(story,"  The LCS spraypainted its initials on the walls.");
-                     }
-                  }
-
                   if(typesum>0)
                   {
                      if(!ccs)
@@ -784,6 +772,21 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         else
                         {
                            strcat(story,"damaged enemy infrastructure");
+                        }
+
+                        if(typesum>=3)strcat(story,", ");
+                        else if(typesum==2)strcat(story," and ");
+                        typesum--;
+                     }
+                     if(crime[CRIME_TAGGING])
+                     {
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"vandalism");
+                        }
+                        else
+                        {
+                           strcat(story,"marked the site for Liberation");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -1505,9 +1508,9 @@ void majornewspaper(char &clearformess,char canseethings)
             // Skip issues that we have no news stories for
             if(ns->view==VIEW_IMMIGRATION)continue;
             if(ns->view==VIEW_DRUGS)continue;
-            if(ns->view==VIEW_MILITARY)continue;
+            //if(ns->view==VIEW_MILITARY)continue;
             if(ns->view==VIEW_CIVILRIGHTS)continue;
-            if(ns->view==VIEW_POLITICALVIOLENCE)continue;
+            //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
 
             //NO ABORTION
             if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
@@ -1794,7 +1797,7 @@ void majornewspaper(char &clearformess,char canseethings)
          if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
             ((newsstory[n]->priority<50 &&
             newsstory[n]->claimed==0)||
-            newsstory[n]->priority<30))
+            newsstory[n]->priority<4))
          {
             delete newsstory[n];
             newsstory.erase(newsstory.begin() + n);

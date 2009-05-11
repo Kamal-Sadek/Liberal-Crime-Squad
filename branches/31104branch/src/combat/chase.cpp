@@ -918,7 +918,7 @@ void evasiverun(void)
                if(activesquad->squad[p]->prisoner->squadid!=-1)
                {
                   //Take them out of the squad
-                  activesquad->squad[p]->prisoner->squadid=-1;
+                  removesquadinfo(*activesquad->squad[p]->prisoner);
                   //Set base and current location to squad's safehouse
                   activesquad->squad[p]->prisoner->location=activesquad->squad[p]->base;
                   activesquad->squad[p]->prisoner->base=activesquad->squad[p]->base;
@@ -1412,17 +1412,9 @@ void crashfriendlycar(int v)
             {
                if(activesquad->squad[p]->prisoner->alive&&
                   activesquad->squad[p]->prisoner->align==1)stat_dead++;
-               for(int pl=pool.size()-1;pl>=0;pl--)
-               {
-                  if(pool[pl]==activesquad->squad[p]->prisoner)
-                  {
-                     pool[pl]->alive=0;
-                     pool[pl]->location=-1;
-                     //delete pool[pl];
-                     //pool.erase(pool.begin() + pl);
-                     break;
-                  }
-               }
+
+               activesquad->squad[p]->prisoner->alive=0;
+               activesquad->squad[p]->prisoner->location=-1;
             }
             else delete activesquad->squad[p]->prisoner;
             activesquad->squad[p]->prisoner=NULL;

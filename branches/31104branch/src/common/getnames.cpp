@@ -681,7 +681,7 @@ void getskill(char *str,int type)
       case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
       case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
       case SKILL_FIRSTAID:strcpy(str,"First Aid");break;
-      case SKILL_TACTICS:strcpy(str,"Dodge");break;
+      case SKILL_DODGE:strcpy(str,"Dodge");break;
    }
 }
 
