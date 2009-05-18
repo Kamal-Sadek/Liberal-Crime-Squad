@@ -52,11 +52,32 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
+			if(VIEW_STALIN<=50)
+			{
+			strcat("anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
+            strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
+            strcat(story,str2);
+			}
+			else
+			{
             strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
             strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
             strcat(story,str2);
+			}
+			if(LAW_WOMEN=-2)
+			{
+				strcat(story," later admitted to being a rogue FBI vigliante, hunting down ");
+				strcat(story," abortion doctors instead of just arresting them.&r");
+			}
+			if(VIEW_STALIN<=50)
+			{
+            strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
+            strcat(story,"had been completed.&r");	
+			else
+			{
             strcat(story," surrendered without a struggle, reportedly saying that God's work ");
             strcat(story,"had been completed.&r");
+			}
             strcat(story,"  ");
             strcat(story,dstr2);
             strcat(story," is survived by ");
