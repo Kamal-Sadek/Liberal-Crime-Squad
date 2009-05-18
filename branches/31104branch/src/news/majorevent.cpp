@@ -632,7 +632,23 @@ void constructeventstory(char *story,short view,char positive)
          case VIEW_ANIMALRESEARCH:
          {
             cityname(story);
-            strcat(story," - Researchers here report that they have discovered an amazing new wonder drug.  ");
+            strcat(story," - Researchers ")
+			if(LAW_ANIMALRESEARCH=2)
+			{
+				strcat("from ")
+					switch(LCSrandom(5))
+				{
+					case 0:strcat(story,"Russia");break;
+					case 1:strcat(story,"North Korea");break;
+					case 2:strcat(story,"Taiwan");break;
+					case 3:stract(story,"Iran");break;
+					case 4:stract(story,"China");break;
+				}
+				stract(" report that they have discovered an amazing new wonder drug. ");
+			else
+			{
+				strcat("here report that they have discovered an amazing new wonder drug.  ");
+			}
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {
@@ -800,6 +816,7 @@ void constructeventstory(char *story,short view,char positive)
          {
             cityname(story);
             strcat(story," - The genetic foods industry staged a major event here yesterday ");
+			}
             strcat(story,"to showcase its upcoming products.  Over thirty companies set up ");
             strcat(story,"booths and gave talks to wide-eyed onlookers.");
             strcat(story,"&r");
