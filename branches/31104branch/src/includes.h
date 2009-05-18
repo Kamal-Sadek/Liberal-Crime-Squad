@@ -340,6 +340,7 @@ enum SiteTypes
    SITE_BUSINESS_CARDEALERSHIP,
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
+   SITE_BUSINESS_STALIN,
    SITENUM
 };
 
@@ -438,6 +439,9 @@ enum CreatureType
    CREATURE_POLITICALACTIVIST,
    CREATURE_CCS_MOLOTOV,
    CREATURE_CCS_SNIPER,
+   CREATURE_CHEKA,
+   CREATURE_REDGUARD,
+   CREATURE_COMISSAR,
    CREATURENUM
 };
 
@@ -449,6 +453,7 @@ enum endgame
    ENDGAME_CCS_SIEGES,
    ENDGAME_CCS_DEFEATED,
    ENDGAME_MARTIALLAW,
+   ENDGAME_STALIN_DEFEATED,
    ENDGAMENUM
 };
 
@@ -1152,6 +1157,7 @@ enum SiegeTypes
    SIEGE_CORPORATE,
    SIEGE_CCS,
    SIEGE_FIREMEN,
+   SIEGE_STALIN,
    SIEGE_ORG,
    SIEGENUM
 };
@@ -1363,6 +1369,7 @@ enum Views
    VIEW_FREESPEECH,
    VIEW_GENETICS,
    VIEW_JUSTICES,
+   VIEW_GUNCONTROL,
    VIEW_SWEATSHOPS,
    VIEW_POLLUTION,
    VIEW_CORPORATECULTURE,
@@ -1378,6 +1385,7 @@ enum Views
    //for VIEWNUM-6 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
+   VIEW_STALIN,
    VIEW_POLITICALVIOLENCE,
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
@@ -1497,6 +1505,12 @@ enum NewsStories
    NEWSSTORY_CCS_DEFENDED,
    NEWSSTORY_CCS_KILLED_SIEGEATTACK,
    NEWSSTORY_CCS_KILLED_SITE,
+   NEWSSTORY_STALIN_SITE,
+   NEWSSTORY_STALIN_DEFENDED,
+   NEWSSTORY_STALIN_KILLED_SIEGEATTACK,
+   NEWSSTORY_STALIN_KILLED_SITE,
+   NEWSSTORY_STALIN_CON_SITE,
+   NEWSSTORY_CON_KILLED_SITE,
    NEWSSTORY_CARTHEFT,
    NEWSSTORY_MASSACRE,
    NEWSSTORY_KIDNAPREPORT,
@@ -1560,14 +1574,12 @@ struct float_zero
    operator float&() { return n; };
    float n;
 };
-
 //Interrogation information for the interrogation system, to be
 //dynamically created on capture and deleted when interrogation ends,
 //referenced using a pointer typecast into one of the arguments
 //of the target's current action.
 struct interrogation
 {
-   //default constructor
    interrogation() : nofood(0), nowater(0), nosleep(0), nolight(0),
       totalspiritcrush(0), druguse(0)
    {
@@ -1607,6 +1619,8 @@ enum EndTypes
    END_POLICE,
    END_CORP,
    END_REAGAN,
+   END_STALIN,
+   END_STALINIFY,
    END_DEAD,
    END_PRISON,
    END_EXECUTED,
@@ -2393,6 +2407,7 @@ void tossjustices(char canseethings);
 void amendment_termlimits(char canseethings);
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings);
+void stalinify(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */

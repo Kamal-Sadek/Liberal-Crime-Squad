@@ -148,6 +148,9 @@ void initsite(locationst &loc)
      case SITE_OUTDOOR_PUBLICPARK:
         build_site("OUTDOOR_PUBLICPARK");
         break;
+	 case SITE_BUSINESS_STALIN:
+		 build_site("GENERIC_ONEROOM");
+		 break;
      }
    } else {
 //No sitemaps? No problem! Revert to old build code. SAV

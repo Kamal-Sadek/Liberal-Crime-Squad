@@ -2181,6 +2181,10 @@ void initlocation(locationst &loc)
       case SITE_BUSINESS_ARMSDEALER:
          strcpy(loc.name,"Black Market");
          strcpy(loc.shortname,"Black Market");
+	  case SITE_BUSINESS_STALIN:
+         strcpy(loc.name,"The Union Gazette");
+         strcpy(loc.shortname,"Union Gazette");
+         break;
    }
 }
 

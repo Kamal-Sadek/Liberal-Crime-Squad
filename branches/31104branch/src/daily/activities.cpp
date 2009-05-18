@@ -584,6 +584,13 @@ void survey(Creature *cr)
             }
             else addstr("the CCS terrorists.");
             break;
+			case VIEW_STALIN
+				if(attitude[VIEW_STALIN]<50)
+				{
+					addstr("the Stalinist Comrade Squad");
+					break;
+				}
+				else addstr("the Stalinists' terrorism network.");
          case VIEW_PRISONS:
             if(attitude[VIEW_PRISONS]>50)addstr("horrific prison conditions.");
             else addstr("lax prison conditions.");
@@ -720,12 +727,33 @@ void survey(Creature *cr)
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
             case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
             case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
-            case VIEW_DRUGS:addstr("believed in legalizing marijuana");break;
+            case VIEW_DRUGS:
+				{
+					if law[LAW_DRUGS]>=1
+					{
+						addstr("supported keeping marijuana legal");break;
+					}
+					else
+					{
+						addstr("believed in legalizing marijuana");break;
+					}
+				}
             case VIEW_IMMIGRATION:addstr("wanted amnesty for illegal immigrants");break;
+				{
+					if law[LAW_IMMIGRATION]>=1
+					{
+						addstr("condemned unnecessary immigration regulations")
+					}
+					else
+					{
+						addstr("wanted amnesty for illegal immigrants");break;
+					}
+				}
             case VIEW_MILITARY:addstr("opposed increasing military spending");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
+			case VIEW_STALIN:addstr("are against communism and the Stalinist Comrade Squad");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;

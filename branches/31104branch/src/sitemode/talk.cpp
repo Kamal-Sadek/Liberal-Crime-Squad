@@ -1416,6 +1416,11 @@ char talk(Creature &a,int t)
                            {
                               addstr("\"If I was your boss, I'd fire you.\"");
                            }
+						   else if(tk->type==CREATURE_CHEKA)
+                           else if(tk->type==CREATURE_COMMISSAR)
+                           else if(tk->type==CREATURE_REDGUARD)
+                           {
+                              addstr("\"I'm sorry, but I'm already in an freedom-fighting organization.\"");
                            else switch(LCSrandom(10))
                            {
                            case 0:addstr("\"Don't they put people like you in zoos?\"");break;

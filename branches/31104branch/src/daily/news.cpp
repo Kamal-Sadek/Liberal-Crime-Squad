@@ -314,6 +314,121 @@ void setpriority(newsstoryst &ns)
       case NEWSSTORY_CCS_KILLED_SIEGEATTACK:
          ns.priority=40+attitude[VIEW_LIBERALCRIMESQUAD]/3;
          break;
+		 
+      case NEWSSTORY_STALIN_SITE:
+      case NEWSSTORY_STALIN_KILLED_SITE:
+         // Stalinists' actions loosely simulate LCS actions; here it adds some
+         // random site crimes to the story and increases the
+         // priority accordingly
+         ns.crime.push_back(CRIME_BROKEDOWNDOOR);
+         ns.priority=1;
+         if(ns.positive==0)
+         {
+            ns.crime.push_back(CRIME_ATTACKED_MISTAKE);
+            ns.priority+=7;
+         }
+         ns.crime.push_back(CRIME_ATTACKED);
+         ns.priority+=4*(LCSrandom(10)+1);
+         if(LCSrandom(5))
+         {
+            ns.crime.push_back(CRIME_KILLEDSOMEBODY);
+            ns.priority+=LCSrandom(10)*30;
+         }
+         if(LCSrandom(6))
+         {
+            ns.crime.push_back(CRIME_STOLEGROUND);
+            ns.priority+=LCSrandom(10);
+         }
+         if(!LCSrandom(7))
+         {
+            ns.crime.push_back(CRIME_BREAK_FACTORY);
+            ns.priority+=LCSrandom(10)*2;
+         }
+         if(LCSrandom(2))
+         {
+            ns.crime.push_back(CRIME_CARCHASE);
+         }
+		          // Set story's political and violence levels for determining whether
+         // a story becomes positive or negative
+
+         short violence_threshhold;
+         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<5)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<25)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<45)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<65)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<85)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<105)violence_threshhold=10;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<125)violence_threshhold=13;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<145)violence_threshhold=17;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<165)violence_threshhold=20;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<185)violence_threshhold=30;
+         else violence_threshhold=50;
+
+         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
+            ns.positive = 1;
+         else ns.positive = 0;
+
+         break;
+      case NEWSSTORY_STALIN_DEFENDED:
+      case NEWSSTORY_STALIN_KILLED_SIEGEATTACK:
+         ns.priority=40+attitude[VIEW_LIBERALCRIMESQUAD]/3;
+         break;
+      case NEWSSTORY_STALIN_CON_SITE:
+      case NEWSSTORY_STALIN_CON_KILLED_SITE:
+         // Stalinists' actions loosely simulate LCS actions; here it adds some
+         // random site crimes to the story and increases the
+         // priority accordingly
+         ns.crime.push_back(CRIME_BROKEDOWNDOOR);
+         ns.priority=1;
+         if(ns.positive==0)
+         {
+            ns.crime.push_back(CRIME_ATTACKED_MISTAKE);
+            ns.priority+=7;
+         }
+         ns.crime.push_back(CRIME_ATTACKED);
+         ns.priority+=4*(LCSrandom(10)+1);
+         if(LCSrandom(5))
+         {
+            ns.crime.push_back(CRIME_KILLEDSOMEBODY);
+            ns.priority+=LCSrandom(10)*30;
+         }
+         if(LCSrandom(6))
+         {
+            ns.crime.push_back(CRIME_STOLEGROUND);
+            ns.priority+=LCSrandom(10);
+         }
+         if(!LCSrandom(7))
+         {
+            ns.crime.push_back(CRIME_BREAK_FACTORY);
+            ns.priority+=LCSrandom(10)*2;
+         }
+         if(LCSrandom(2))
+         {
+            ns.crime.push_back(CRIME_CARCHASE);
+         }
+         break;
+		 
+		          // Set story's political and violence levels for determining whether
+         // a story becomes positive or negative
+
+         short violence_threshhold;
+         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<5)violence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<25)violence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<45)violence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<65)violence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<85)violence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<105)violence_threshhold=10;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<125)violence_threshhold=13;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<145)violence_threshhold=17;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<165)violence_threshhold=20;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<185)violence_threshhold=30;
+         else violence_threshhold=50;
+
+         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
+            ns.positive = 1;
+         else ns.positive = 0;
+
+         break;
    }
 }
 
@@ -987,6 +1102,20 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   strcat(story,"They have to be stopped before they kill again");
                }
                break;
+			   case SIEGE_STALIN:
+               if(!liberalguardian)
+               {
+                  strcat(story,"Listen, all we know is that they are working for the ");
+                  strcat(story,"Stalinist Comrade Squad. No names, no faces, ");
+                  strcat(story,"not even when it happened really.");
+               }
+               else
+               {
+                  strcat(story,"This was a crime committed by the Stalinist Comrade Squad ");
+                  strcat(story,"who desire to establish a Conservative Police State. ");
+                  strcat(story,"They must be stopped.");
+               }
+			   break;
             case SIEGE_FIREMEN:
                if(!liberalguardian)
                {
@@ -1495,6 +1624,54 @@ void majornewspaper(char &clearformess,char canseethings)
       newsstory.push_back(ns);
    }
 
+   //Stalinist Comrade Squad Strikes!
+   if(stalinendgamestate<ENDGAME_STALIN_DEFEATED && LCSrandom(30) && canseethings)
+   {
+      newsstoryst *ns=new newsstoryst;
+
+      // 10% chance of Stalin squad wipe
+      if(LCSrandom(10))ns->type=NEWSSTORY_STALIN_SITE;
+      else ns->type=NEWSSTORY_STALIN_KILLED_SITE;
+
+      // 20% chance of Stalin rampage
+      ns->positive=LCSrandom(5);
+      if(ns->positive)ns->positive=1;
+
+      do
+      {
+         ns->loc=LCSrandom(LCSrandom(5))
+         {
+            case 0:SITE_INDUSTRY_SWEATSHOP
+            case 1:SITE_CORPORATE_HOUSE
+            case 2:SITE_INDUSTRY_POLLUTER
+            case 3:SITE_RESIDENTIAL_APARTMENT_UPSCALE
+            case 4:SITE_CORPORATE_HEADQUARTERS;
+         };
+      }
+//The "Social Revolutionary Wing" of the Stalinist Comrade Squad Strikes Against Reactionary Liberalism!
+   if(endgamestate<ENDGAME_STALIN_DEFEATED && LCSrandom(30) && canseethings)
+   {
+      newsstoryst *ns=new newsstoryst;
+
+      // 10% chance of CCS squad wipe
+      if(LCSrandom(10))ns->type=NEWSSTORY_STALIN_CON_SITE;
+      else ns->type=NEWSSTORY_STALIN_CON_KILLED_SITE;
+
+      // 20% chance of rampage
+      ns->positive=LCSrandom(5);
+      if(ns->positive)ns->positive=1;
+
+      do
+      {
+         ns->loc=LCSrandom(LCSrandom(5))
+         {  
+            case 0:SITE_INDUSTRY_NUCLEAR
+            case 1:SITE_GOVERNMENT_COURTHOUSE
+            case 2:SITE_GOVERNMENT_POLICESTATION
+            case 3:SITE_GOVERNMENT_PRISON
+            case 4:SITE_GOVERNMENT_INTELLIGENCEHQ;
+         };
+      }
    //SET UP MAJOR EVENTS
    if(!LCSrandom(60))
    {
@@ -1960,12 +2137,18 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_WANTEDARREST||
          newsstory[n]->type==NEWSSTORY_GRAFFITIARREST||
          newsstory[n]->type==NEWSSTORY_CCS_SITE||
-         newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+         newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE
+         newsstory[n]->type==NEWSSTORY_STALIN_SITE||
+         newsstory[n]->type==NEWSSTORY_STALIN_KILLED_SITE||
+         newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE||
+         newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE)
       {
          power=newsstory[n]->priority;
 
          if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
-            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE
+            newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE||
+            newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE)
          {
             newsstory[n]->positive=!newsstory[n]->positive;
          }
@@ -2014,7 +2197,11 @@ void majornewspaper(char &clearformess,char canseethings)
 
          char colored=0;
          if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
-            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))
+            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+            !(newsstory[n]->type==NEWSSTORY_STALIN_SITE)&&
+            !(newsstory[n]->type==NEWSSTORY_STALIN_KILLED_SITE)&&
+            !(newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE)&&
+            !(newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE))
          {
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+power);
             if(newsstory[n]->positive)
@@ -2036,8 +2223,25 @@ void majornewspaper(char &clearformess,char canseethings)
             
             change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,power);
          }
-
-         switch(location[newsstory[n]->loc]->type)
+         if(newsstory[n]->type==NEWSSTORY_STALIN_SITE||
+            newsstory[n]->type==NEWSSTORY_STALIN_KILLED_SITE)
+         {
+            if(newsstory[n]->positive)
+            {
+               colored=1;
+            }
+            else power=-power;
+            change_public_opinion(VIEW_STALIN,-power);
+         if(newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE||
+            newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE)
+         {
+            if(newsstory[n]->positive)
+            {
+               colored=-1;
+            }
+            else power=-power;
+            change_public_opinion(VIEW_STALIN,power);
+		switch(location[newsstory[n]->loc]->type)
          {
             case SITE_LABORATORY_COSMETICS:
                change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
@@ -2103,7 +2307,8 @@ void majornewspaper(char &clearformess,char canseethings)
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);
-					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10)
+					change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
                break;
             case SITE_BUSINESS_CIGARBAR:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);

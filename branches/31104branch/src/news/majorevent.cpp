@@ -188,7 +188,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-        /* case VIEW_GUNS:
+		 /*
+         case VIEW_GUNCONTROL:
          {
             cityname(story);
             strcat(" - ");
@@ -595,7 +596,15 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".");
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
-            strcat(story,"seeking the death penalty in this case.");
+            strcat(story,"seeking ")
+				if(LAW[DEATH_PENALTY]=2)
+				{
+					strcat("life imprisonment in this case.");
+				}
+					else
+				{
+					strcat("the death penalty in this case.");
+				}
             strcat(story,"&r");
             break;
          }
@@ -632,7 +641,16 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".  ");
             strcat(story,"&r");
             strcat(story,"   Along with bonobos, chimpanzees are our closest cousins");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,", at least according to the now-discredited theory of evolution");
+            if(law[LAW_FREESPEECH]==-2)
+			{
+				if(attitude[VIEW_STALIN]<50)
+				{
+					strcat(story,", at least according to the now-discredited and reactionary theory of Mendelian genetics");
+				}
+				else
+				{strcat(story,", at least according to the now-discredited theory of evolution");
+				}
+			}
             strcat(story,".  ");
             strcat(story,"Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ");
             strcat(story,"a spokesperson for the research team stated that, \"It really isn't so bad as all that.  Chimpanzees are very resilient creatures.  ");
@@ -1153,13 +1171,13 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
             */
-            /*
-         case VIEW_GUNS:
+			/*
+         case VIEW_GUNCONTROL:
             displaycenterednewsfont("SCHOOL SHOOTING",5);
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
-            */
+			*/
          case VIEW_TAXES:
          {
             displaycenterednewsfont("REAGAN FLAWED",5);
@@ -1284,6 +1302,34 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
+      case VIEW_STALIN:
+      displaycenterednewsfont("STALIN'S CRIMES",5);
+           strcpy(str,"");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Genocide in ");break;
+               case 1:strcat(str,"Warfare in");break;
+               case 2:strcat(str,"Famine in");break;
+               case 3:strcat(str,"Death in");break;
+               case 4:strcat(str,"Terror in");break;
+            }
+            strcat(str," ");
+            switch(LCSrandom(6))
+            {
+               case 0:strcat(str,"Ukraine");break;
+               case 1:strcat(str,"Sibera");break;
+               case 2:strcat(str,"Poland");break;
+               case 3:strcat(str,"Moscow");break;
+               case 4:strcat(str,"Czechslovkia");break;
+               case 5:strcat(str,"the Baltic States");break;
+               case 6:strcat(str,"Eastern Europe");break;
+               case 7:strcat(str,"Russia");break;
+            }            
+            strcat(str,": A new book proves once and for all that Stalin and the USSR has committed vast atrocities in the region.");
+            displaycenteredsmallnews(str,12);
+            displaynewspicture(PICTURE_BOOK,13);
+            break;
+         }
       }
    }
    else
@@ -1318,13 +1364,13 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,15);
             break;
             */
-            /*
-         case VIEW_GUNS:
+			/*
+         case VIEW_GUNCONTROL:
             displaycenterednewsfont("KILLER STOPPED",5);
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
-            */
+			*/
          case VIEW_TAXES:
          {
             displaycenterednewsfont("REAGAN THE MAN",5);
@@ -1348,6 +1394,32 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
                case 4:strcat(str,"Faith");break;
             }
             strcat(str,": A new book lauding Reagan and the greatest generation.");
+            displaycenteredsmallnews(str,12);
+            displaynewspicture(PICTURE_BOOK,13);
+            break;
+         }
+            case VIEW_STALIN:
+            displaycenterednewsfont("STALIN FRAMED",5);
+            strcpy(str,"");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Fall of the");break;
+               case 1:strcat(str,"Legacy of the");break;
+               case 2:strcat(str,"Sacrifices of The");break;
+               case 3:strcat(str,"Lies Against The");break;
+               case 4:strcat(str,"Truth Behind The");break;
+            }
+            strcat(str," ");
+            switch(LCSrandom(6))
+            {
+               case 0:strcat(str,"Dear Leader");break;
+               case 1:strcat(str,"Couragous Fighter");break;
+               case 2:strcat(str,"Economic Miracle-Worker");break;
+               case 3:strcat(str,"Great Communicator");break;
+               case 4:strcat(str,"Socialist Democrat");break;
+               case 5:strcat(str,"Revolutionary Secretary");break;
+            }            
+            strcat(str,": A new book details new evidence suggesting Stalin and the USSR was framed by the vast right-wing machine.");
             displaycenteredsmallnews(str,12);
             displaynewspicture(PICTURE_BOOK,13);
             break;

@@ -1134,6 +1134,18 @@ void makechasers(long sitetype,long sitecrime)
          encslot++;
       }
    }
+   else if(stalinendgamestate<ENDGAME_STALIN_DEFEATED && offended_stalin &&
+      LCSrandom(4)&&sitetype!=-1)
+   {
+      cartype=VEHICLE_SUV;
+      pnum=LCSrandom(sitecrime/5 + 1)+1;
+      if(pnum>12)pnum=12;
+      for(n=0;n<pnum;n++)
+      {
+         makecreature(encounter[encslot],CREATURE_REDGUARD);
+         encslot++;
+      }
+   }
    else
    {
       switch(sitetype)
