@@ -1,4 +1,4 @@
-
+#include "includes.h"
 
 void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* storyx_e);
 

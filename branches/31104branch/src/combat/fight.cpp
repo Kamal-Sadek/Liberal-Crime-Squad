@@ -561,17 +561,17 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          if(!a.animalgloss)
          {
             if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)+1))
-               strcat(str,"punches at");
+               strcat(str,"punches ");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)))
                strcat(str,"swings at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-1))
                strcat(str,"grapples with");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-2))
-               strcat(str,"kicks at");
+               strcat(str,"kicks ");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-3))
                strcat(str,"strikes at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-4))
-               strcat(str,"jump kicks at");
+               strcat(str,"jump kicks ");
             else
                strcat(str,"gracefully strikes at");
          }
@@ -973,12 +973,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             }
             strengthmod=1;
             break;
+         case WEAPON_HAMMER:
          case WEAPON_MAUL:
          case WEAPON_BASEBALLBAT:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(41)+5;
             strengthmod=1;
-             
             break;
          case WEAPON_PITCHFORK:
             damtype|=WOUND_CUT;
@@ -986,7 +986,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             damamount=LCSrandom(61)+10;
             strengthmod=1;
             damagearmor=1;
-             
             break;
          case WEAPON_TORCH:
             damtype|=WOUND_BURNED;
@@ -1002,7 +1001,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             strengthmod=1;
             damagearmor=1;
             armorpiercing=1;
-             
             break;
          case WEAPON_KNIFE:
             damtype|=WOUND_CUT;
@@ -1010,8 +1008,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             damamount=LCSrandom(61)+10;
             strengthmod=1;
             damagearmor=1;
-            armorpiercing=1;
-             
+            armorpiercing=2;
             break;
          case WEAPON_SYRINGE:
             damtype|=WOUND_CUT;
@@ -1027,7 +1024,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                damamount=LCSrandom(141)+10;
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
-               armorpiercing=1;
+               armorpiercing=2;
             }
             else
             {
@@ -1222,12 +1219,16 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             strengthmod=1;
             severtype=WOUND_CLEANOFF;
             damagearmor=1;
-            armorpiercing=1;
-             
+            armorpiercing=2;
             break;
-         case WEAPON_HAMMER:
-         case WEAPON_STAFF:
          case WEAPON_CROWBAR:
+            damtype|=WOUND_BRUISED;
+            damtype|=WOUND_BLEEDING;
+            damamount=LCSrandom(21)+10;
+            strengthmod=1;
+         case WEAPON_GUITAR:
+         case WEAPON_CHAIN:
+         case WEAPON_STAFF:
          case WEAPON_NIGHTSTICK:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(21)+5;
@@ -1240,7 +1241,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             strengthmod=1;
             break;
          case WEAPON_SPRAYCAN:
-         case WEAPON_CHAIN:
          case WEAPON_CROSS:
             damtype|=WOUND_BRUISED;
             damamount=LCSrandom(11)+5;

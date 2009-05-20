@@ -154,6 +154,7 @@ void initsite(locationst &loc)
      }
    } else {
 //No sitemaps? No problem! Revert to old build code. SAV
+      // LEGACY SITEMAP CODE
      levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
@@ -1074,7 +1075,7 @@ void configSiteScript::generatehallway_y(int rx, int ry, int dx, int dy, int z)
          levelmap[rx-1][door_y][z].flag&=~SITEBLOCK_BLOCK;
          levelmap[rx-1][door_y][z].flag|=SITEBLOCK_DOOR;
          // Construct apartment on the left
-         generateroom(rx-dx-2,y-1,dx,3,z);
+         generateroom(rx-dx-1,y-1,dx,3,z);
 
          // Pick a door location for the right
          door_y=y+LCSrandom(3)-1;

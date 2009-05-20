@@ -566,6 +566,30 @@ void survey(Creature *cr)
             if(attitude[VIEW_CEOSALARY]>50)addstr("severe income inequality.");
             else addstr("resisting communist wage limits.");
             break;
+         case VIEW_POLITICALVIOLENCE:
+            if(attitude[VIEW_POLITICALVIOLENCE]>50)addstr("taking strong action.");
+            else addstr("political terrorism.");
+            break;
+         case VIEW_IMMIGRATION:
+            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
+            else addstr("illegal immigration.");
+            break;
+         case VIEW_DRUGS:
+            if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");
+            else addstr("drug abuse.");
+            break;
+         case VIEW_WOMEN:
+            if(attitude[VIEW_WOMEN]>50)addstr("women's equality.");
+            else addstr("women.");
+            break;
+         case VIEW_CIVILRIGHTS:
+            if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");
+            else addstr("troublemaking minorities.");
+            break;
+         case VIEW_MILITARY:
+            if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
+            else addstr("strengthening the military.");
+            break;
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
             if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
@@ -3096,7 +3120,11 @@ char carselect(Creature &cr,short &cartype)
          }
       }
 
-      if(c==10)break;
+      // Too easy to accidentally back out
+      // Not a big problem if this page isn't skippable
+      // (There's no immediate risk in picking a car)
+      // - JDS
+      //if(c==10)break;
    }while(1);
 
    return 0;

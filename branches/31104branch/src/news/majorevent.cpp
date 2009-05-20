@@ -341,6 +341,60 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
+         case VIEW_POLITICALVIOLENCE:
+         {
+            cityname(story);
+            strcat(story," - The dismissal of ");
+            char gender;
+            if(LCSrandom(2))
+            {
+               gender=GENDER_MALE;
+               strcat(story,"his");
+            }
+            else
+            {
+               gender=GENDER_FEMALE;
+               strcat(story,"her");
+            }
+            strcat(story," final appeal ended the tragic tale of ");
+            char dstr[200],nstr[200];
+            firstname(nstr,gender);
+            strcat(story,nstr);
+            strcat(story," ");
+            lastname(dstr);
+            strcat(story,dstr);
+            strcat(story," today. ");
+            strcat(story,dstr);
+            strcat(story,", ");
+            itoa(30+LCSrandom(40),nstr,10);
+            strcat(story,nstr);
+            strcat(story,", is the central figure of what many consider to be the greatest political "
+                         "scandal in years. A successful owner of a French language-themed bookshop "
+                         "until two years ago, ");
+            strcat(story,dstr);
+            strcat(story,"'s downfall began when local police unlawfully confiscated much of ");
+            if(gender==GENDER_MALE)
+               strcat(story,"his");
+            else
+               strcat(story,"her");
+            strcat(story," stock for 'unamerican content'. Attempts to take the matter to the legal arena "
+                         "failed after the judge - who happened to be a brother-in-law of one of the "
+                         "accused officers - threw out the case and the state supreme court declined to "
+                         "get involved despite widespread media publication of the case.");
+            strcat(story,"&r "); // comment this line to create a wall of text
+            strcat(story,"  Four months ago, a disillusioned and bankrupt ");
+            strcat(story,dstr);
+            strcat(story," was caught in the act of vandalizing the courthouse windows with a baseball bat. ");
+            if(gender==GENDER_MALE)
+               strcat(story,"He");
+            else
+               strcat(story,"She");
+            strcat(story," was subsequently convicted of breaking the peace, vandalism, attempted murder "
+                         "and terrorism and sentenced to life in prison. The presiding judge was a childhood "
+                         "friend of (continued: Nightmare, A6)");
+            strcat(story,"&r");
+            break;
+         }
          case VIEW_FREESPEECH:
          {
             cityname(story);
@@ -770,6 +824,36 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
+         case VIEW_POLITICALVIOLENCE:
+         {
+            cityname(story);
+            strcat(story," - Nine people were killed today as special forces brought the three-day "
+                         "hostage crisis at the ");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(story,"City Hall");break;
+               case 1:strcat(story,"Trinity Disco");break;
+               case 2:strcat(story,"Henderson Cafeteria");break;
+               case 3:strcat(story,"Unemployment Office");break;
+               case 4:strcat(story,"Milburn Orphanage");break;
+            }
+            strcat(story,", instigated by members of the ");
+            switch(LCSrandom(4))
+            {
+               case 0:strcat(story,"Stalinist Comrade Squad");break;
+               case 1:strcat(story,"Radical Feminist Brigades");break;
+               case 2:strcat(story,"2nd Amendment Society");break;
+               case 3:strcat(story,"Anarcho-Fascist Collective");break;
+            }
+            strcat(story,", to a bloody end. Prior to the raid, the group had taken over 80 people captive and demanded, "
+                         "among other things: safe passage to North Korea, 10 billion dollars in cash, "
+                         "2 fully-fueled airliners and the dissolution of the United States of America. "
+                         "According to police sources, the raid became necessary after the kidnappers "
+                         "revealed they had been executing twenty people at the end of each day of "
+                         "non-compliance with their demands.");
+            strcat(story,"&r");
+            break;
+         }
          case VIEW_INTELLIGENCE:
          {
             strcat(story,"Washington D.C. - The CIA announced yesterday that it has averted a terror attack that ");
@@ -1181,34 +1265,13 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             generatefiller(story,200);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
+            */
          case VIEW_POLITICALVIOLENCE:
-            displaycenterednewsfont("RADICAL BOOK",5);
-            char str[80];
-            strcpy(str,"");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(str,"Desperate");break;
-               case 1:strcat(str,"Aggressive");break;
-               case 2:strcat(str,"Strong");break;
-               case 3:strcat(str,"Direct");break;
-               case 4:strcat(str,"Real");break;
-            }
-            strcat(str," ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(str,"Action");break;
-               case 1:strcat(str,"Strikes");break;
-               case 2:strcat(str,"Strategy");break;
-               case 3:strcat(str,"Cause");break;
-               case 4:strcat(str,"Violence");break;
-            }
-            strcat(str,": New best seller documents the success of radical groups.");
-            displaycenteredsmallnews(str,12);
-            strcpy(story,"");
+            displaycenterednewsfont("NIGHTMARE",5);
+            constructeventstory(story,ns.view,ns.positive);
             generatefiller(story,200);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
-            */
 			/*
          case VIEW_GUNCONTROL:
             displaycenterednewsfont("SCHOOL SHOOTING",5);
@@ -1392,16 +1455,13 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             generatefiller(story,200);
             displaynewsstory(story,storyx_s,storyx_e,15);
             break;
-         case VIEW_POLITICALVIOLENCE:
-            displaycenterednewsfont("HUGE BOMBING",5);
-            itoa(500+LCSrandom(2000),story,10);
-            strcat(story, " killed in domestic terrorist attack.");
-            displaycenteredsmallnews(story,13);
-            strcpy(story,"");
-            generatefiller(story,200);
-            displaynewsstory(story,storyx_s,storyx_e,15);
-            break;
             */
+         case VIEW_POLITICALVIOLENCE:
+            displaycenterednewsfont("END IN TEARS",5);
+            constructeventstory(story,ns.view,ns.positive);
+            generatefiller(story,200);
+            displaynewsstory(story,storyx_s,storyx_e,13);
+            break;
 			/*
          case VIEW_GUNCONTROL:
             displaycenterednewsfont("KILLER STOPPED",5);

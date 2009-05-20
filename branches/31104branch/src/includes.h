@@ -1899,6 +1899,8 @@ void savehighscore(char endtype);
 /*
  newgame.cpp
 */
+/* new game options screen */
+void setup_newgame(void);
 /* creates your founder */
 void makecharacter(void);
 /* mostly depricated, but called once by makecharacter */

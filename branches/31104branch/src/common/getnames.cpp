@@ -458,7 +458,46 @@ void getarmorfull(char *str,int type,int subtype)
    {
       //LIMIT --------------------------------------------------:
       case ARMOR_NONE:         strcpy(str,"Naked");break;
-      case ARMOR_CLOTHES:         strcpy(str,"Clothes");break;
+      case ARMOR_CLOTHES:      strcpy(str,"Clothes");
+         /*switch(subtype)
+         {
+            // Hippie
+         case CLOTHES_TIEDYE:       strcpy(str,"Tie-Dye Shirt");break;
+
+            // Liberal Rags
+         case CLOTHES_PUNKBLAZER:   strcpy(str,"Punk Blazer");break;
+         case CLOTHES_KUTTE:        strcpy(str,"Kutte Vest");break;
+         case CLOTHES_GOTHDRESS:    strcpy(str,"Gothic Dress");break;
+         case CLOTHES_GOTHSHIRT:    strcpy(str,"Gothic Shirt");break;
+         case CLOTHES_KILT:         strcpy(str,"Kilt");break;
+
+            // Mainstream
+         case CLOTHES_BLOUSE:       strcpy(str,"Blouse");break;
+         case CLOTHES_DRESSSHIRT:   strcpy(str,"Dress Shirt");break;
+         case CLOTHES_JERSEY:       strcpy(str,"Jersey");break;
+         case CLOTHES_SWEATER:      strcpy(str,"Sweater");break;
+         case CLOTHES_POLOSHIRT:    strcpy(str,"Polo Shirt");break;
+         case CLOTHES_TURTLENECK:   strcpy(str,"Turtleneck");break;
+         case CLOTHES_HOODIE:       strcpy(str,"Hoodie");break;
+         case CLOTHES_LEATHERJACKET:strcpy(str,"Leather Jacket");break;
+         case CLOTHES_VINTAGEJACKET:strcpy(str,"Vintage Jacket");break;
+
+            // Conservative Gear
+         case CLOTHES_CAMOSHIRT:    strcpy(str,"Camo Shirt");break;
+         case CLOTHES_BIKERJACKET:  strcpy(str,"Biker Jacket");break;
+         case CLOTHES_FURCOAT:      strcpy(str,"Fur-Lined Coat");break;
+         //LIMIT ---------------------------------------------:
+
+            // Weird stuff
+         case CLOTHES_MAOSUIT:      strcpy(str,"Zhongshan Suit");break;
+         case CLOTHES_DASHIKI:      strcpy(str,"Dashiki");break;
+         case CLOTHES_KIMONO:       strcpy(str,"Kimono");break;
+         case CLOTHES_STRAIGHTJACKET:strcpy(str,"Straightjacket");break;
+         case CLOTHES_ZOOTSUIT:     strcpy(str,"Zoot Suit");break;
+         //LIMIT ---------------------------------------------:
+         default:                   strcpy(str,"Clothes");
+         }*/
+         break;
       case ARMOR_OVERALLS:      strcpy(str,"Overalls");break;
       case ARMOR_WIFEBEATER:      strcpy(str,"Wife Beater");break;
       case ARMOR_TRENCHCOAT:      strcpy(str,"Trenchcoat");break;

@@ -593,14 +593,23 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         do
-         {
-            refresh();
-            int c=getch();
-            translategetch(c);
+         refresh();
+         int c=getch();
+         translategetch(c);
 
-            if(c=='l')break;
-         }while(1);
+         if(c==KEY_RIGHT || c==KEY_DOWN)
+         {
+            page++;
+            continue;
+         }
+
+         if(c==KEY_LEFT || c==KEY_UP)
+         {
+            page--;
+            continue;
+         }
+
+         if(c=='l')break;
       }
       else if(won==-1)
       {
@@ -610,14 +619,24 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         do
-         {
-            refresh();
-            int c=getch();
-            translategetch(c);
+         refresh();
+         int c=getch();
+         translategetch(c);
 
-            if(c=='l')break;
-         }while(1);
+
+         if(c==KEY_RIGHT || c==KEY_DOWN)
+         {
+            page++;
+            continue;
+         }
+
+         if(c==KEY_LEFT || c==KEY_UP)
+         {
+            page--;
+            continue;
+         }
+
+         if(c=='l')break;
       }
 	  else if(won==-2)
 	  {
