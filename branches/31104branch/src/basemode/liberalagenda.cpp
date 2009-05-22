@@ -58,13 +58,20 @@ char liberalagenda(char won)
          else if(exec[EXEC_PRESIDENT]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(5,0);
-         if(won!=-1)
+         if(won!=-1&&won!=-2)
          {
             addstr("President ");
             if(execterm==1)addstr("(1st Term):");
             else addstr("(2nd Term):");
          }
-         else addstr("King: ");
+         else if(won=-1)
+		 {
+			 addstr("King: ");
+		 }
+		 else if(won=-2)
+		 {
+			 addstr("President For Life ");
+		 }
          move(5,25);
          addstr(execname[EXEC_PRESIDENT]);
 
@@ -84,7 +91,14 @@ char liberalagenda(char won)
          else if(exec[EXEC_STATE]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(7,0);
-         addstr("Secretary of State: ");
+		 if (won!=2
+		 {
+			 addstr("Secretary of State: ");
+		 }
+		 else
+		 {
+			 addstr("General Secretary: ");
+		 }
          move(7,25);
          addstr(execname[EXEC_STATE]);
 
@@ -111,7 +125,7 @@ char liberalagenda(char won)
          else if(housemake[4]+housemake[3]/2<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          char num[20];
-         if(won!=-1)
+         if(won!=-1&&won!=2)
          {
             move(10,0);
             addstr("House: ");
@@ -139,7 +153,7 @@ char liberalagenda(char won)
          else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else if(senatemake[4]+senatemake[3]/2<66)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         if(won!=-1)
+         if(won!=-1&&won!=-2)
          {
             move(11,0);
             addstr("Senate: ");
@@ -154,13 +168,18 @@ char liberalagenda(char won)
             itoa(senatemake[0],num,10);
             addstr(num);addstr("Cons+");
          }
-         else
+         else if(won=-1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(10,0);
             addstr("The Congress consists of CEOs and televangelists.");
          }
-
+		 else if(won=-2)
+		 {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            move(10,0);
+            addstr("The People's Congress is composed of Stalinist Party lackeys.");
+		 }
          int elibjudge=0;
          for(int c=0;c<9;c++)
          {
@@ -168,6 +187,7 @@ char liberalagenda(char won)
          }
 
          if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
+		 else if(won=-2)set_color(COLOR_RED_COLOR_BLACK,1);
          else if(won==1||elibjudge>=5)set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -185,7 +205,7 @@ char liberalagenda(char won)
          move(7,58);addch('R');
          move(8,58);addch('T');
 
-         if(won!=-1)
+         if(won!=-1&&won!=-2)
          {
             y=4;
 
@@ -203,7 +223,7 @@ char liberalagenda(char won)
                y++;
             }
          }
-         else
+         else if(won=-1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(5,60);
@@ -213,7 +233,16 @@ char liberalagenda(char won)
             move(7,60);
             addstr("Ethics Officers");
          }
-
+		 else if(won=-2)
+		 {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            move(5,60);
+            addstr("   Controlled by");
+            move(6,60);
+            addstr(" the People's");
+            move(7,60);
+            addstr("Congress");
+		 }
          for(int l=0;l<LAWNUM;l++)
          {
             move(14+l/3,l%3*26);
@@ -314,6 +343,7 @@ char liberalagenda(char won)
          for(int l=startinglaw;l<startinglaw+18 && l<LAWNUM;l++)
          {
             if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
+			else if(won==-2)set_color(COLOR_RED_COLOR_BLACK,1);
             else
             {
                if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
@@ -329,6 +359,7 @@ char liberalagenda(char won)
             {
                case LAW_WOMEN:
                   if(won==-1)addstr("Women have been stripped of the right to vote.");
+				  else if(won=-2)addstr("Women are usually drafted into the armed forces to fight in place of men.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Women are regularly treated as second-class citizens.");
 				      else if(law[l]==-1)addstr("Non-discrimination laws do not apply to gender.");
@@ -338,6 +369,7 @@ char liberalagenda(char won)
 				      break;
                case LAW_CIVILRIGHTS:
                   if(won==-1)addstr("Segregation has been reintroduced.");
+				  else if(won==-2)adddstr("Entire ethnic groups are branded 'enemies of the state'.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Racial discrimination is prohibited in name only.");
 				      else if(law[l]==-1)addstr("Civil rights laws are inconsistently enforced.");
@@ -347,7 +379,8 @@ char liberalagenda(char won)
                   break;
                case LAW_DRUGS:
                   if(won==-1)addstr("Talking about recreational drugs is punishable by death.");
-				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+				  else if(won=-2)addstr("Vodka is the only legal recreational drug in the USA.");
+				  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Violent criminals are released to make room for drug offenders.");
 				      else if(law[l]==-1)addstr("Prisons are filled with the targets of a war on drugs.");
 				      else if(law[l]==0)addstr("Recreational drugs are prohibited unless medically prescribed.");
@@ -356,6 +389,7 @@ char liberalagenda(char won)
                   break;
                case LAW_IMMIGRATION:
                   if(won==-1)addstr("Border guards shoot suspected foreigners on sight.");
+				  else if(won==-2)addstr("All Americans must carry around an internal passport, or be shot on sight.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Immigration is illegal, and noncitizens are shipped to Mexico at gunpoint.");
 				      else if(law[l]==-1)addstr("The military has been deployed to the borders to slow immigration.");
@@ -365,6 +399,7 @@ char liberalagenda(char won)
                   break;
                case LAW_RELIGION:
                   if(won==-1)addstr("The world derisively refers to the country as \"Jesusland\".");
+				  else if(won==-2)addstr("Religion is illegal.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Encouraging religious faith is a major goal of public policy.");
 				      else if(law[l]==-1)addstr("Public schools include organized prayer and study of creation beliefs.");
@@ -374,6 +409,7 @@ char liberalagenda(char won)
                   break;
                case LAW_ELECTIONS:
                   if(won==-1)addstr("Only independently wealthy candidates have a chance of defeating incumbents.");
+				  else if(won=-2)addstr("Only Stalinist Party members may run in elections.);
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Virtually no ethics restrictions exist on political officeholders.");
 				      else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
@@ -383,6 +419,7 @@ char liberalagenda(char won)
 				      break;
                case LAW_MILITARY:
                   if(won==-1)addstr("The massive military is a tool of political oppression.");
+				  else if(won==-2)addstr("The military promote Stalinism throughout the world by using force.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Ballooning military boondoggles are utterly out of control.");
 				      else if(law[l]==-1)addstr("Massive investment is put into the military.");
@@ -392,6 +429,7 @@ char liberalagenda(char won)
 				      break;
                case LAW_TORTURE:
                   if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");
+				  else if(won==-2)addstr("The Cheka constanly invents new methods of torture.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
 				      else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
@@ -401,6 +439,7 @@ char liberalagenda(char won)
 				      break;
                case LAW_TAX:
 				      if(won==-1)addstr("There are no taxes, yet most people have no money.");
+					  else if(won==-2)addstr("Having any money whatsoever is considered a criminal offense.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("The tax code is a nightmare designed to maintain class structure.");
 				      else if(law[l]==-1)addstr("A flat tax is in effect.");
@@ -410,6 +449,7 @@ char liberalagenda(char won)
 				      break;
                case LAW_ABORTION:
                   if(won==-1)addstr("Use of contraception and abortion are capital offenses.");
+				  else if(won==-2)addstr("Use of contraception and abortion are capital offenses.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Abortion is a felony equal to murder.");
                   else if(law[l]==-1)addstr("Abortion is prohibited except in extreme circumstances.");
@@ -419,6 +459,7 @@ char liberalagenda(char won)
                   break;
                case LAW_ANIMALRESEARCH:
                   if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
+				  else if(won==-2)addstr("All forms of human experimentation on 'class enemies' are encouraged.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Animals are things of inferior existance.");
                   else if(law[l]==-1)addstr("Animal research is lightly regulated.");
@@ -428,6 +469,7 @@ char liberalagenda(char won)
                   break;
                case LAW_POLICEBEHAVIOR:
                   if(won==-1)addstr("Policing is administered by corporations and has a draft.");
+				  else if(won==-2)addstr("The police is administered by the Stalinist Party and has a draft.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Law enforcement is given free reign.");
                   else if(law[l]==-1)addstr("Law enforcement is lightly regulated.");
@@ -437,6 +479,7 @@ char liberalagenda(char won)
                   break;
                case LAW_PRIVACY:
                   if(won==-1)addstr("Files on each citizen are easily accessible to corporations.");
+				  else if(won==-2)addstr("Files on each citizen are easily accessible to the Stalinist Party.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Any corporation requesting private information is granted access.");
                   else if(law[l]==-1)addstr("Privacy laws are weak.");
@@ -446,6 +489,7 @@ char liberalagenda(char won)
                   break;
                case LAW_DEATHPENALTY:
                   if(won==-1)addstr("Poor criminals receive mandatory death sentences.");
+				  else if(won==-2)addstr("Class enemies receive mandatory death sentences.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("People can be put to death for minor offenses.");
                   else if(law[l]==-1)addstr("The death penalty is actively enforced in many states.");
@@ -455,6 +499,7 @@ char liberalagenda(char won)
                   break;
                case LAW_NUCLEARPOWER:
                   if(won==-1)addstr("Nuclear power plants are ubiquitous.");
+				  else if(won==-2)addstr("Nuclear power plants are ubiquitous.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Nuclear power is proliferating with no controls.");
                   else if(law[l]==-1)addstr("Nuclear power is a preferred energy source.");
@@ -464,6 +509,7 @@ char liberalagenda(char won)
                   break;
                case LAW_POLLUTION:
                   if(won==-1)addstr("Deformed children are the norm in industrial zones.");
+				  else if(won==-2)addstr("Industry is subject to zero-tolerance pollution regulations.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Industry may pollute as much as they like.");
                   else if(law[l]==-1)addstr("Industry voluntarily regulates pollution.");
@@ -473,6 +519,7 @@ char liberalagenda(char won)
                   break;
                case LAW_LABOR:
                   if(won==-1)addstr("People are bred in pens to be farmed out to corporations like beasts.");
+				  else if(won==-2)addstr("The state has nationalized all industries.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("There is no weekend and children are forced to work.");
                   else if(law[l]==-1)addstr("Working conditions are miserable and the minimum wage is low.");
@@ -482,6 +529,7 @@ char liberalagenda(char won)
                   break;
                case LAW_GAY:
                   if(won==-1)addstr("Homosexuals are executed regularly.");
+				  else if(won==-2)addstr("Homosexuals are executed regularly.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Homosexuals are routinely persecuted with no recourse.");
                   else if(law[l]==-1)addstr("Homosexuals are not tolerated.");
@@ -491,6 +539,7 @@ char liberalagenda(char won)
                   break;
                case LAW_CORPORATE:
                   if(won==-1)addstr("Corporations under the King run the country in a feudal system.");
+				  else if(won==-2)addstr("Belonging to a corporation is a criminal offense.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Corporations essentially run the country in a feudal system.");
                   else if(law[l]==-1)addstr("Corporate culture is corrupt and there is a great disparity in wages.");
@@ -500,6 +549,7 @@ char liberalagenda(char won)
                   break;
                case LAW_FREESPEECH:
                   if(won==-1)addstr("Unacceptable speech is a capital crime.");
+				  if(won==-2)addstr("Unacceptable speech is a capital crime.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Armored squads are tasked with suppressing unacceptable speach.");
                   else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
@@ -509,6 +559,7 @@ char liberalagenda(char won)
                   break;
                case LAW_FLAGBURNING:
                   if(won==-1)addstr("Images or words describing flag burning are punished by death.");
+				  else if(won==-2)addstr("Flags of the old American regime is burnt primarly as as fuel.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Burning the flag is a crime on par with murder.");
                   else if(law[l]==-1)addstr("Burning the flag is a felony.");
@@ -518,6 +569,7 @@ char liberalagenda(char won)
                   break;
                case LAW_GUNCONTROL:
                   if(won==-1)addstr("Gangs of young children carrying AK-47s roam the streets.");
+				  else if(won==-2)addstr("Anyone owning a gun is executed.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Machine guns can be bought and sold freely.");
                   else if(law[l]==-1)addstr("Military weapons are banned, but similar-looking guns are available.");
@@ -541,23 +593,14 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
-
-         if(c==KEY_RIGHT || c==KEY_DOWN)
+         do
          {
-            page++;
-            continue;
-         }
+            refresh();
+            int c=getch();
+            translategetch(c);
 
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='l')break;
+            if(c=='l')break;
+         }while(1);
       }
       else if(won==-1)
       {
@@ -567,25 +610,33 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
-
-
-         if(c==KEY_RIGHT || c==KEY_DOWN)
+         do
          {
-            page++;
-            continue;
-         }
+            refresh();
+            int c=getch();
+            translategetch(c);
 
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='l')break;
+            if(c=='l')break;
+         }while(1);
       }
+	  else if(won==-2)
+	  {
+
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         move(23,0);
+         addstr("The country has been Stalinified.");
+         move(24,0);
+         addstr("Press 'L' to view the high score list.");
+
+         do
+         {
+            refresh();
+            int c=getch();
+            translategetch(c);
+
+            if(c=='l')break;
+         }while(1);
+	  }
       else
       {
          move(23,0);

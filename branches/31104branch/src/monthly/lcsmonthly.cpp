@@ -278,7 +278,7 @@ void printnews(short l,short newspaper)
          move(7,1);
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(10))
+         switch(LCSrandom(12))
          {
             case 0:
                addstr("engaging in lewd behavior with animals.");
@@ -304,6 +304,24 @@ void printnews(short l,short newspaper)
                change_public_opinion(VIEW_SWEATSHOPS,10);
                break;
             case 9:addstr("playing with feces and urine.");break;
+				            case 10:addstr("waving a USSR flag at a Stalinist Comrade Squad rally.");
+change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_WOMEN,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
+            case 11:addstr("being kidnapped and brainwashed by the Stalinist Comrade Squad.");
+change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_WOMEN,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -343,6 +361,16 @@ void printnews(short l,short newspaper)
 					addstr("describing an intricate tax scheme.");
 					change_public_opinion(VIEW_TAXES,50);
 					break;
+					
+					addstr("about a temporary peace treaty with the Stalinist Comrade Squad to counter the Elite Liberal threat.");
+change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_WOMEN,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -361,7 +389,7 @@ void printnews(short l,short newspaper)
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(6))
+         switch(LCSrandom(7))
          {
             case 0:addstr("documenting the overthrow of a government.");break;
             case 1:
@@ -381,7 +409,17 @@ void printnews(short l,short newspaper)
                addstr("documenting the infiltration of a pro-choice group.");
                change_public_opinion(VIEW_WOMEN,50);
                break;
-         }
+			case 6:
+				addstr("revealing a plan to posion the water supply with fluoride on behalf of the Stalinist Comrade Squad.");break;
+change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_WOMEN,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
+		 }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
          move(9,1);
@@ -397,7 +435,7 @@ void printnews(short l,short newspaper)
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(6))
+         switch(LCSrandom(7))
          {
             case 0:addstr("documenting human rights abuses by the force.");break;
             case 1:addstr("documenting a police torture case.");break;
@@ -411,6 +449,17 @@ void printnews(short l,short newspaper)
                addstr("documenting gladiatory matches held between prisoners by guards.");
                change_public_opinion(VIEW_PRISONS,50);
                break;
+			case 6:
+				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad for \"re-eductation\".");
+					change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_JUSTICES,1);
+change_public_opinion(VIEW_ABORTION,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -472,13 +521,24 @@ void printnews(short l,short newspaper)
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(4))
+         switch(LCSrandom(5))
          {
             case 0:addstr("documenting human rights abuses by prison guards.");break;
             case 1:addstr("documenting a prison torture case.");break;
             case 2:addstr("documenting widespread corruption among prison employees.");break;
             case 3:
                addstr("documenting gladiatory matches held between prisoners by guards.");
+			case 4:
+				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad by rogue guards.");break;
+				change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_POLICEBEHAVIOR,1);
+change_public_opinion(VIEW_JUSTICES,1);
+change_public_opinion(VIEW_ABORTION,1);
+change_public_opinion(VIEW_NUCLEARPOWER,1);
+change_public_opinion(VIEW_INTELLIGENCE,1);
+change_public_opinion(VIEW_FREESPEECH,1);
+change_public_opinion(VIEW_STALIN,5);
+					offended_stalin=1;
                break;
          }
          move(8,1);
@@ -486,7 +546,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the police a little riled up.");
 
-         change_public_opinion(VIEW_PRISONS,50);
+		 change_public_opinion(VIEW_PRISONS,50);
          offended_cops=1;
          break;
       case LOOT_CABLENEWSFILES:

@@ -566,30 +566,6 @@ void survey(Creature *cr)
             if(attitude[VIEW_CEOSALARY]>50)addstr("severe income inequality.");
             else addstr("resisting communist wage limits.");
             break;
-         case VIEW_POLITICALVIOLENCE:
-            if(attitude[VIEW_POLITICALVIOLENCE]>50)addstr("taking strong action.");
-            else addstr("political terrorism.");
-            break;
-         case VIEW_IMMIGRATION:
-            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
-            else addstr("illegal immigration.");
-            break;
-         case VIEW_DRUGS:
-            if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");
-            else addstr("drug abuse.");
-            break;
-         case VIEW_WOMEN:
-            if(attitude[VIEW_WOMEN]>50)addstr("women's equality.");
-            else addstr("women.");
-            break;
-         case VIEW_CIVILRIGHTS:
-            if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");
-            else addstr("troublemaking minorities.");
-            break;
-         case VIEW_MILITARY:
-            if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
-            else addstr("strengthening the military.");
-            break;
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
             if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
@@ -608,6 +584,13 @@ void survey(Creature *cr)
             }
             else addstr("the CCS terrorists.");
             break;
+			case VIEW_STALIN
+				if(attitude[VIEW_STALIN]<50)
+				{
+					addstr("the Stalinist Comrade Squad");
+					break;
+				}
+				else addstr("the Stalinists' terrorism network.");
          case VIEW_PRISONS:
             if(attitude[VIEW_PRISONS]>50)addstr("horrific prison conditions.");
             else addstr("lax prison conditions.");
@@ -744,12 +727,33 @@ void survey(Creature *cr)
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
             case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
             case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
-            case VIEW_DRUGS:addstr("believed in legalizing marijuana");break;
+            case VIEW_DRUGS:
+				{
+					if law[LAW_DRUGS]>=1
+					{
+						addstr("supported keeping marijuana legal");break;
+					}
+					else
+					{
+						addstr("believed in legalizing marijuana");break;
+					}
+				}
             case VIEW_IMMIGRATION:addstr("wanted amnesty for illegal immigrants");break;
+				{
+					if law[LAW_IMMIGRATION]>=1
+					{
+						addstr("condemned unnecessary immigration regulations")
+					}
+					else
+					{
+						addstr("wanted amnesty for illegal immigrants");break;
+					}
+				}
             case VIEW_MILITARY:addstr("opposed increasing military spending");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
+			case VIEW_STALIN:addstr("are against communism and the Stalinist Comrade Squad");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
@@ -3092,11 +3096,7 @@ char carselect(Creature &cr,short &cartype)
          }
       }
 
-      // Too easy to accidentally back out
-      // Not a big problem if this page isn't skippable
-      // (There's no immediate risk in picking a car)
-      // - JDS
-      //if(c==10)break;
+      if(c==10)break;
    }while(1);
 
    return 0;

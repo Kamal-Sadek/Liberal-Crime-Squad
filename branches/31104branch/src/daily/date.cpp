@@ -87,7 +87,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          refresh();
          getch();
 
-         d.date[e]->namecreature();
+         generate_name(d.date[e]->name);
+         strcpy(d.date[e]->propername,d.date[e]->name);
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->hireid=pool[p]->id;
@@ -654,7 +655,8 @@ char completedate(datest &d,int p,char &clearformess)
                refresh();
                getch();
 
-               d.date[e]->namecreature();
+               generate_name(d.date[e]->name);
+               strcpy(d.date[e]->propername,d.date[e]->name);
 
                d.date[e]->location=pool[p]->location;
                d.date[e]->base=pool[p]->base;

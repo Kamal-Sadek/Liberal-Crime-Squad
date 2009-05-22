@@ -543,11 +543,8 @@ void advanceday(char &clearformess,char canseethings)
                   move(8,1);
                   addstr("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
 
-                  do
-                  {
-                     c=getch();
-                     translategetch(c);
-                  }while(c!='s'&&c!='b'&&c!='t');
+                  c=getch();
+                  translategetch(c);
                }
 
                if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
@@ -1390,12 +1387,8 @@ void dispersalcheck(char &clearformess)
          for(p=pool.size()-1;p>=0;p--)
          {
             if(!pool[p]->alive)continue;
-            if(pool[p]->location!=-1&&
-               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&
-               !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-            {
+            if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                inprison=1;
-            }
             else inprison=0;
 
             // If your boss is in hiding
@@ -2188,6 +2181,10 @@ void initlocation(locationst &loc)
       case SITE_BUSINESS_ARMSDEALER:
          strcpy(loc.name,"Black Market");
          strcpy(loc.shortname,"Black Market");
+	  case SITE_BUSINESS_STALIN:
+         strcpy(loc.name,"The Union Gazette");
+         strcpy(loc.shortname,"Union Gazette");
+         break;
    }
 }
 

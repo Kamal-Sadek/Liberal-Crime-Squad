@@ -52,7 +52,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
-<<<<<<< .mine
 			if(VIEW_STALIN<=50)
 			{
 			strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
@@ -61,12 +60,9 @@ void constructeventstory(char *story,short view,char positive)
 			}
 			else
 			{
-=======
->>>>>>> .r282
             strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
             strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
             strcat(story,str2);
-<<<<<<< .mine
 			}
 			if(law[LAW_WOMEN]=-2)
 			{

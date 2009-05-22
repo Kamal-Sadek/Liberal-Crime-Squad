@@ -1521,19 +1521,11 @@ bool Creature::talkreceptive()
    return false;
 }
 
-#define ABS(x) ((x)<0)?(-x):(x)
 
-/* are the characters close enough in age to date? */
-bool Creature::can_date(Creature &a)
+
+/* is the character too young to be dating? */
+bool Creature::kid()
 {
-   if(age<11) return false;
-   if(a.age<11) return false;
-   if(age<16 || a.age<16)
-   {
-      if(ABS(age-a.age)<5)
-         return true;
-      else
-         return false;
-   }
-   else return true;
+   if(age<16) return true;
+   else return false;
 }

@@ -198,7 +198,7 @@ void passmonth(char &clearformess,char canseethings)
          continue;
       }
       if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
-      if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS)
+      if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS&&v!=VIEW_STALIN)
       {
          issuebalance[v] = libpower[v] - conspower;
          mediabalance += issuebalance[v];
@@ -224,11 +224,58 @@ void passmonth(char &clearformess,char canseethings)
       // AM Radio and Cable News popularity slowly shift to reflect public
       // opinion over time -- if left unchecked, their subtle influence
       // on society will become a self-perpetuating Conservative nightmare!
-      else /*if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)*/
+      else if(v==VIEW_AMRADIO||v==VIEW_CABLENEWS)
       {
          if((int)publicmood(-1)<attitude[v])change_public_opinion(v,-1);
          else change_public_opinion(v,1);
       }
+	  else if (v==VIEW_STALIN)
+	  {
+		  if(VIEW_STALIN)=<30
+		  {
+			  change_public_opinion(VIEW_WOMEN,-2);
+			  change_public_opinion(VIEW_POLICEBEHAVIOR,-2);
+			  change_public_opinion(VIEW_DRUGS,-2);
+			  change_public_opinion(VIEW_GAY,-2);
+			  change_public_opinion(VIEW_DEATHPENALTY,-2);
+			  change_public_opinion(VIEW_FREESPEECH,-2);
+			  change_public_opinion(VIEW_STALIN,-4);
+			  change_public_opinion(VIEW_NUCLEARPOWER,-2);
+			  change_public_opinion(VIEW_CIVILRIGHTS,-2);
+			  change_public_opinion(VIEW_INTELLIGENCE,-2);
+			  change_public_opinion(VIEW_SWEATSHOPS,2);
+			  change_public_opinion(VIEW_CEOSALARY,2);
+			  change_public_opinion(VIEW_CORPORATECULTURE,2);
+			  change_public_opinion(VIEW_TAXES,2);
+			  change_public_opinion(VIEW_POLLUTION,2);
+			  change_public_opinion(VIEW_GUNCONTROL,2);
+			  change_public_opinion(VIEW_POLITICALVIOLENCE,2);
+		  }
+		  if(VIEW_STALIN)=<50
+		  {		  
+			  change_public_opinion(VIEW_WOMEN,-1);
+			  change_public_opinion(VIEW_POLICEBEHAVIOR,-1);
+			  change_public_opinion(VIEW_DRUGS,-1);
+			  change_public_opinion(VIEW_GAY,-1);
+			  change_public_opinion(VIEW_DEATHPENALTY,-1);
+			  change_public_opinion(VIEW_FREESPEECH,-1);
+			  change_public_opinion(VIEW_STALIN,-2);
+			  change_public_opinion(VIEW_NUCLEARPOWER,-1);
+			  change_public_opinion(VIEW_CIVILRIGHTS,-1);
+			  change_public_opinion(VIEW_INTELLIGENCE,-1);
+			  change_public_opinion(VIEW_SWEATSHOPS,1);
+			  change_public_opinion(VIEW_CEOSALARY,1);
+			  change_public_opinion(VIEW_TAXES,1);
+			  change_public_opinion(VIEW_POLLUTION,1);
+			  change_public_opinion(VIEW_GUNCONTROL,1);
+			  change_public_opinion(VIEW_POLITICALVIOLENCE,1);
+		  }
+		  else
+		  {
+			  change_public_opinion(VIEW_STALIN,-1);
+		  }
+
+	  }
    }
 
    // Seduction monthly experience stipends for those liberals

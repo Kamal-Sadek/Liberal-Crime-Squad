@@ -27,7 +27,6 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 //#include <includes.h>
-#include "news/news.h"
 #include <externs.h>
 
 void mode_title(void)
@@ -112,7 +111,6 @@ void mode_title(void)
 
    int c=getch();
    translategetch(c);
-
    if(c==27)
    {
       end_game();
@@ -120,11 +118,7 @@ void mode_title(void)
 
    viewhighscores();
 
-   if(!loaded)
-   {
-      setup_newgame();
-      makecharacter();
-   }
+   if(!loaded)makecharacter();
    mode=GAMEMODE_BASE;
    mode_base();
 

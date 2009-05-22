@@ -212,6 +212,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
       case CREATURE_PRIEST:
+	  case CREATURE_COMMISSAR:
          for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
@@ -239,12 +240,14 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       /* Corporate block */
       case CREATURE_CORPORATE_CEO:
       case CREATURE_CORPORATE_MANAGER:
+	  case CREATURE_REDGUARD:
          libpower[VIEW_CEOSALARY]+=power;
          libpower[VIEW_TAXES]+=power;
          libpower[VIEW_CORPORATECULTURE]+=power;
          break;
       /* Law enforcement block */
       case CREATURE_DEATHSQUAD:
+	  case CREATURE_CHEKA:
          libpower[VIEW_DEATHPENALTY]+=power; // No break
       case CREATURE_SWAT:
       case CREATURE_COP:
@@ -765,7 +768,6 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       }
    }
    erase();
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(6,1);
    addstr("Sleeper ");
    addstr(cr.name);
