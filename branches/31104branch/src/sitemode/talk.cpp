@@ -794,7 +794,7 @@ char talk(Creature &a,int t)
                if(a.armor.type==ARMOR_NONE)addstr(" while naked");
                addstr(".");
                move(12,1);
-               if(!(tk->kid())&&!a.kid())set_color(COLOR_WHITE,COLOR_BLACK,0);
+               if(tk->can_date(a))set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr("B - Drop a pickup line");
                if(a.armor.type==ARMOR_NONE)addstr(" while naked");
@@ -1416,11 +1416,6 @@ char talk(Creature &a,int t)
                            {
                               addstr("\"If I was your boss, I'd fire you.\"");
                            }
-						   else if(tk->type==CREATURE_CHEKA)
-                           else if(tk->type==CREATURE_COMMISSAR)
-                           else if(tk->type==CREATURE_REDGUARD)
-                           {
-                              addstr("\"I'm sorry, but I'm already in an freedom-fighting organization.\"");
                            else switch(LCSrandom(10))
                            {
                            case 0:addstr("\"Don't they put people like you in zoos?\"");break;
@@ -1590,7 +1585,7 @@ char talk(Creature &a,int t)
                      return 1;
                   }
                }
-               if(c=='b'&&!(tk->kid())&&!a.kid())
+               if(c=='b'&&tk->can_date(a))
                {
                   int y=12;
                   clearcommandarea();clearmessagearea();clearmaparea();

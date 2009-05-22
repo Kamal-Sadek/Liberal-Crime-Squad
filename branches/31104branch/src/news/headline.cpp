@@ -46,31 +46,6 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
             displaycenterednewsfont("CCS RAMPAGE",5);
          y=13;
          break;
-		       case NEWSSTORY_STALIN_SITE:
-      case NEWSSTORY_STALIN_KILLED_SITE:
-         if(!liberalguardian)
-         {
-            displaycenterednewsfont("STALINISTS ATTACK",5);
-         }
-         else
-         {
-            displaycenterednewsfont("STALINISTS STRIKE",5);
-         y=13;
-         }
-         break;
-      case NEWSSTORY_STALIN_CON_SITE:
-      case NEWSSTORY_STALIN_CON_KILLED_SITE:
-         if(!liberalguardian)
-         {
-            displaycenterednewsfont("STALINISTS ATTACK",5);
-         y=13;
-         }
-         else
-         {
-            displaycenterednewsfont("RED TERROR",5);
-         y=13;
-         }
-         break;
       default:
          if(ns.positive)
          {

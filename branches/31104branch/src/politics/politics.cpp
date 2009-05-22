@@ -2182,10 +2182,6 @@ void congress(char clearformess,char canseethings)
    {
       reaganify(canseethings);
    }
-      if(VIEW_WOMEN<=30&&VIEW_POLICEBEHAVIOR<=30&&VIEW_DRUGS<=30&&VIEW_DEATHPENALTY<=30&&VIEW_FREESPEECH<=30&&VIEW_GAY<=30&&VIEW_NUCLEARPOWER<=30&&VIEW_CIVILRIGHTS<=30&&VIEW_INTELLIGENCE<=30&&VIEW_SWEATSHOPS>=70&&(VIEW_CEOSALARY+VIEW_CORPORATECULTURE)/2>=60&&VIEW_TAXES>=70&&VIEW_POLLUTION>=70&&VIEW_GUNCONTROL>=70&&VIEW_STALIN<=50)
-   {
-      stalinify(canseethings);
-   }
 }
 
 
@@ -2237,7 +2233,7 @@ int publicmood(int l)
    {
       case LAW_ABORTION:return attitude[VIEW_WOMEN];
       case LAW_ANIMALRESEARCH:return attitude[VIEW_ANIMALRESEARCH];
-      case LAW_POLICEBEHAVIOR:return (attitude[VIEW_POLICEBEHAVIOR]+attitude[VIEW_PRISON])/2;
+      case LAW_POLICEBEHAVIOR:return attitude[VIEW_POLICEBEHAVIOR];
       case LAW_PRIVACY:return attitude[VIEW_INTELLIGENCE];
       case LAW_DEATHPENALTY:return attitude[VIEW_DEATHPENALTY];
       case LAW_NUCLEARPOWER:return attitude[VIEW_NUCLEARPOWER];
@@ -2252,15 +2248,19 @@ int publicmood(int l)
       case LAW_WOMEN:return attitude[VIEW_WOMEN];break;
       case LAW_CIVILRIGHTS:return attitude[VIEW_CIVILRIGHTS];break;
       case LAW_DRUGS:return attitude[VIEW_DRUGS];break;
-      case LAW_IMMIGRATION:return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;break;
+      case LAW_IMMIGRATION:return attitude[VIEW_CIVILRIGHTS];break;
       case LAW_MILITARY:return attitude[VIEW_MILITARY];break;
       case LAW_TORTURE:return (attitude[VIEW_INTELLIGENCE] +
                                attitude[VIEW_MILITARY])/2;break;
       case LAW_GUNCONTROL:
             if(!disbanding)
-               return attitude[VIEW_GUNCONTROL];
+               return (attitude[VIEW_POLICEBEHAVIOR]+
+                     attitude[VIEW_PRISONS]+
+                     attitude[VIEW_DEATHPENALTY])/3;
             else
-               return (attitude[VIEW_GUNCONTROL];
+               return (attitude[VIEW_POLICEBEHAVIOR]+
+                     attitude[VIEW_PRISONS]+
+                     attitude[VIEW_DEATHPENALTY])/3;
 
       case LAW_ELECTIONS:
       case LAW_RELIGION:
@@ -2272,8 +2272,7 @@ int publicmood(int l)
          {
             if(v==VIEW_LIBERALCRIMESQUAD)continue;
             if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
-			if(v==VIEW_STALIN)continue;
-			if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
+
             sum+=attitude[v];
          }
 
