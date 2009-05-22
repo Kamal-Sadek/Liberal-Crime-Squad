@@ -52,9 +52,36 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
+<<<<<<< .mine
+			if(VIEW_STALIN<=50)
+			{
+			strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
+            strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
+            strcat(story,str2);
+			}
+			else
+			{
+=======
+>>>>>>> .r282
             strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
             strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
             strcat(story,str2);
+<<<<<<< .mine
+			}
+			if(law[LAW_WOMEN]=-2)
+			{
+				strcat(story," later admitted to being a rogue FBI vigliante, hunting down ");
+				strcat(story," abortion doctors instead of just arresting them.&r");
+			}
+			if(VIEW_STALIN<=50)
+			{
+            strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
+            strcat(story,"had been completed.&r");	
+			}
+			else
+			{
+=======
+>>>>>>> .r282
             strcat(story," surrendered without a struggle, reportedly saying that God's work ");
             strcat(story,"had been completed.&r");
             strcat(story,"  ");
@@ -91,7 +118,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            if(law[LAW_GAY]<=-1)strcat(story,", a known homosexual, was ");
+            if(law[LAW_GAY]<=-1)
+			{
+				strcat(story,", a known homosexual, was ");
+			}
             else strcat(story,", a homosexual, was ");
             switch(LCSrandom(3))
             {
@@ -649,14 +679,47 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".");
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
+<<<<<<< .mine
+            strcat(story,"seeking ");
+				if(law[LAW_DEATHPENALTY]=2)
+				{
+					strcat(story,"life imprisonment in this case.");
+				}
+					else
+				{
+					strcat(story,"the death penalty in this case.");
+				}
+=======
             strcat(story,"seeking the death penalty in this case.");
+>>>>>>> .r282
             strcat(story,"&r");
             break;
          }
          case VIEW_ANIMALRESEARCH:
          {
             cityname(story);
+<<<<<<< .mine
+            strcat(story," - Researchers ");
+			if(law[LAW_ANIMALRESEARCH]=2)
+			{
+				strcat(story,"from ");
+					switch(LCSrandom(5))
+				{
+					case 0:strcat(story,"Russia");break;
+					case 1:strcat(story,"North Korea");break;
+					case 2:strcat(story,"Taiwan");break;
+					case 3:strcat(story,"Iran");break;
+					case 4:strcat(story,"China");break;
+				}
+				strcat(story," report that they have discovered an amazing new wonder drug. ");
+			}
+			else
+			{
+				strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
+			}
+=======
             strcat(story," - Researchers here report that they have discovered an amazing new wonder drug.  ");
+>>>>>>> .r282
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {
@@ -1346,9 +1409,43 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenterednewsfont("AM IMPLOSION",5);
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
+<<<<<<< .mine
+            break;
+      case VIEW_STALIN:
+		   displaycenterednewsfont("STALIN'S CRIMES",5);
+	       char str[80];
+           strcpy(str,"");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Genocide in ");break;
+               case 1:strcat(str,"Warfare in");break;
+               case 2:strcat(str,"Famine in");break;
+               case 3:strcat(str,"Death in");break;
+               case 4:strcat(str,"Terror in");break;
+            }
+            strcat(str," ");
+            switch(LCSrandom(6))
+            {
+               case 0:strcat(str,"Ukraine");break;
+               case 1:strcat(str,"Sibera");break;
+               case 2:strcat(str,"Poland");break;
+               case 3:strcat(str,"Moscow");break;
+               case 4:strcat(str,"Czechslovkia");break;
+               case 5:strcat(str,"the Baltic States");break;
+               case 6:strcat(str,"Eastern Europe");break;
+               case 7:strcat(str,"Russia");break;
+            }            
+            strcat(str,": A new book proves once and for all that Stalin and the USSR has committed vast atrocities in the region.");
+            displaycenteredsmallnews(str,12);
+            displaynewspicture(PICTURE_BOOK,13);
+            break;
+		}
+	}
+=======
             break;
       }
    }
+>>>>>>> .r282
    else
    {
       switch(ns.view)
@@ -1411,6 +1508,37 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenteredsmallnews(str,12);
             displaynewspicture(PICTURE_BOOK,13);
             break;
+<<<<<<< .mine
+         }
+            case VIEW_STALIN:
+				{
+			displaycenterednewsfont("STALIN FRAMED",5);
+			char str[80];
+            strcpy(str,"");
+            switch(LCSrandom(5))
+            {
+               case 0:strcat(str,"Fall of the");break;
+               case 1:strcat(str,"Legacy of the");break;
+               case 2:strcat(str,"Sacrifices of The");break;
+               case 3:strcat(str,"Lies Against The");break;
+               case 4:strcat(str,"Truth Behind The");break;
+            }
+            strcat(str," ");
+            switch(LCSrandom(6))
+            {
+               case 0:strcat(str,"Dear Leader");break;
+               case 1:strcat(str,"Couragous Fighter");break;
+               case 2:strcat(str,"Economic Miracle-Worker");break;
+               case 3:strcat(str,"Great Communicator");break;
+               case 4:strcat(str,"Socialist Democrat");break;
+               case 5:strcat(str,"Revolutionary Secretary");break;
+            }            
+            strcat(str,": A new book details new evidence suggesting Stalin and the USSR was framed by the vast right-wing machine.");
+            displaycenteredsmallnews(str,12);
+            displaynewspicture(PICTURE_BOOK,13);
+            break;
+=======
+>>>>>>> .r282
          }
          case VIEW_NUCLEARPOWER:
             displaycenterednewsfont("OIL CRUNCH",5);
