@@ -350,25 +350,6 @@ void setpriority(newsstoryst &ns)
          }
 		          // Set story's political and violence levels for determining whether
          // a story becomes positive or negative
-
-         short violence_threshhold;
-         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<5)violence_threshhold=1;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<25)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<45)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<65)violence_threshhold=6;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<85)violence_threshhold=8;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<105)violence_threshhold=10;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<125)violence_threshhold=13;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<145)violence_threshhold=17;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<165)violence_threshhold=20;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<185)violence_threshhold=30;
-         else violence_threshhold=50;
-
-         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
-            ns.positive = 1;
-         else ns.positive = 0;
-
-         break;
       case NEWSSTORY_STALIN_DEFENDED:
       case NEWSSTORY_STALIN_KILLED_SIEGEATTACK:
          ns.priority=40+attitude[VIEW_LIBERALCRIMESQUAD]/3;
@@ -407,24 +388,21 @@ void setpriority(newsstoryst &ns)
             ns.crime.push_back(CRIME_CARCHASE);
          }
          break;
-		 
-		          // Set story's political and violence levels for determining whether
-         // a story becomes positive or negative
 
-         short violence_threshhold;
-         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<5)violence_threshhold=1;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<25)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<45)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<65)violence_threshhold=6;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<85)violence_threshhold=8;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<105)violence_threshhold=10;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<125)violence_threshhold=13;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<145)violence_threshhold=17;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<165)violence_threshhold=20;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<185)violence_threshhold=30;
-         else violence_threshhold=50;
+         short stalinviolence_threshhold;
+         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<5)stalinviolence_threshhold=1;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<25)stalinviolence_threshhold=2;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<45)stalinviolence_threshhold=4;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<65)stalinviolence_threshhold=6;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<85)stalinviolence_threshhold=8;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<105)stalinviolence_threshhold=10;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<125)stalinviolence_threshhold=13;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<145)stalinviolence_threshhold=17;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<165)stalinviolence_threshhold=20;
+         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_STALIN]<185)stalinviolence_threshhold=30;
+         else stalinviolence_threshhold=50;
 
-         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
+         if(ns.violence_level / (ns.politics_level+1) > stalinviolence_threshhold)
             ns.positive = 1;
          else ns.positive = 0;
 
@@ -1637,16 +1615,15 @@ void majornewspaper(char &clearformess,char canseethings)
       ns->positive=LCSrandom(5);
       if(ns->positive)ns->positive=1;
 
-      do
-      {
-         ns->loc=LCSrandom(LCSrandom(5))
-         {
-            case 0:SITE_INDUSTRY_SWEATSHOP
-            case 1:SITE_CORPORATE_HOUSE
-            case 2:SITE_INDUSTRY_POLLUTER
-            case 3:SITE_RESIDENTIAL_APARTMENT_UPSCALE
-            case 4:SITE_CORPORATE_HEADQUARTERS;
-         };
+switch(LCSrandom(5))
+{
+	case 0:ns->loc=SITE_INDUSTRY_SWEATSHOP;
+	case 1:ns->loc=SITE_CORPORATE_HOUSE;
+	case 2:ns->loc=SITE_INDUSTRY_POLLUTER;
+	case 3:ns->loc=SITE_RESIDENTIAL_APARTMENT_UPSCALE;
+	case 4:ns->loc=SITE_CORPORATE_HEADQUARTERS;
+}
+		newsstory.push_back(ns);
       }
 //The "Social Revolutionary Wing" of the Stalinist Comrade Squad Strikes Against Reactionary Liberalism!
    if(endgamestate<ENDGAME_STALIN_DEFEATED && LCSrandom(30) && canseethings)
@@ -1661,16 +1638,15 @@ void majornewspaper(char &clearformess,char canseethings)
       ns->positive=LCSrandom(5);
       if(ns->positive)ns->positive=1;
 
-      do
-      {
-         ns->loc=LCSrandom(LCSrandom(5))
-         {  
-            case 0:SITE_INDUSTRY_NUCLEAR
-            case 1:SITE_GOVERNMENT_COURTHOUSE
-            case 2:SITE_GOVERNMENT_POLICESTATION
-            case 3:SITE_GOVERNMENT_PRISON
-            case 4:SITE_GOVERNMENT_INTELLIGENCEHQ;
-         };
+switch(LCSrandom(5))
+{
+            case 0:ns->loc=SITE_INDUSTRY_NUCLEAR;
+            case 1:ns->loc=SITE_GOVERNMENT_COURTHOUSE;
+            case 2:ns->loc=SITE_GOVERNMENT_POLICESTATION;
+            case 3:ns->loc=SITE_GOVERNMENT_PRISON;
+            case 4:ns->loc=SITE_GOVERNMENT_INTELLIGENCEHQ;
+         }
+		newsstory.push_back(ns);
       }
    //SET UP MAJOR EVENTS
    if(!LCSrandom(60))
@@ -2137,16 +2113,16 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_WANTEDARREST||
          newsstory[n]->type==NEWSSTORY_GRAFFITIARREST||
          newsstory[n]->type==NEWSSTORY_CCS_SITE||
-         newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE
+         newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE||
          newsstory[n]->type==NEWSSTORY_STALIN_SITE||
          newsstory[n]->type==NEWSSTORY_STALIN_KILLED_SITE||
          newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE||
          newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE)
-      {
+	  {
          power=newsstory[n]->priority;
-
+	  }
          if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
-            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE
+            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE||
             newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE||
             newsstory[n]->type==NEWSSTORY_STALIN_CON_KILLED_SITE)
          {
@@ -2197,7 +2173,7 @@ void majornewspaper(char &clearformess,char canseethings)
 
          char colored=0;
          if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
-            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+            !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_STALIN_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_STALIN_KILLED_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_STALIN_CON_SITE)&&
@@ -2307,7 +2283,7 @@ void majornewspaper(char &clearformess,char canseethings)
                break;
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
 					change_public_opinion(VIEW_TAXES,power,colored,power*10);
-					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10)
+					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
 					change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
                break;
             case SITE_BUSINESS_CIGARBAR:
@@ -2318,7 +2294,7 @@ void majornewspaper(char &clearformess,char canseethings)
          }
       }
    }
-
+ }
    //DELETE STORIES
    for(n=0;n<newsstory.size();n++)delete newsstory[n];
    newsstory.clear();

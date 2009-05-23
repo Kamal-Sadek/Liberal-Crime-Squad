@@ -76,8 +76,6 @@ void constructeventstory(char *story,short view,char positive)
 			}
 			else
 			{
-=======
->>>>>>> .r282
             strcat(story," surrendered without a struggle, reportedly saying that God's work ");
             strcat(story,"had been completed.&r");
             strcat(story,"  ");

@@ -453,9 +453,15 @@ enum endgame
    ENDGAME_CCS_SIEGES,
    ENDGAME_CCS_DEFEATED,
    ENDGAME_MARTIALLAW,
-   ENDGAME_STALIN_DEFEATED,
    ENDGAMENUM
 };
+
+enum stalinendgamestate
+{
+	ENDGAME_STALIN_ACTIVE,
+	ENDGAME_STALIN_DEFEATED,
+};
+#define ENDGAME_STALIN_DEFEATED BIT1
 
 enum Attributes
 {
@@ -1179,6 +1185,7 @@ struct siegest
    short timeuntilcia;
    short timeuntilccs;
    short timeuntilfiremen;
+   short timeuntilstalin;
 
    siegest()
    {
@@ -1191,6 +1198,7 @@ struct siegest
       timeuntilcia=-1;
       timeuntilfiremen=-1;
       timeuntilccs=-1;
+	  timeuntilstalin=-1;
    }
 };
 
@@ -1510,7 +1518,7 @@ enum NewsStories
    NEWSSTORY_STALIN_KILLED_SIEGEATTACK,
    NEWSSTORY_STALIN_KILLED_SITE,
    NEWSSTORY_STALIN_CON_SITE,
-   NEWSSTORY_CON_KILLED_SITE,
+   NEWSSTORY_STALIN_CON_KILLED_SITE,
    NEWSSTORY_CARTHEFT,
    NEWSSTORY_MASSACRE,
    NEWSSTORY_KIDNAPREPORT,
