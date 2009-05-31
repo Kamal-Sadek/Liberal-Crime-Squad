@@ -716,7 +716,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".");
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
-<<<<<<< .mine
             strcat(story,"seeking ");
 				if(law[LAW_DEATHPENALTY]=2)
 				{
@@ -726,16 +725,12 @@ void constructeventstory(char *story,short view,char positive)
 				{
 					strcat(story,"the death penalty in this case.");
 				}
-=======
-            strcat(story,"seeking the death penalty in this case.");
->>>>>>> .r282
             strcat(story,"&r");
             break;
          }
          case VIEW_ANIMALRESEARCH:
          {
             cityname(story);
-<<<<<<< .mine
             strcat(story," - Researchers ");
 			if(law[LAW_ANIMALRESEARCH]=2)
 			{
@@ -754,9 +749,6 @@ void constructeventstory(char *story,short view,char positive)
 			{
 				strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
 			}
-=======
-            strcat(story," - Researchers here report that they have discovered an amazing new wonder drug.  ");
->>>>>>> .r282
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {
@@ -1508,7 +1500,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenterednewsfont("AM IMPLOSION",5);
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
-<<<<<<< .mine
             break;
       case VIEW_STALIN:
 		   displaycenterednewsfont("STALIN'S CRIMES",5);
@@ -1540,11 +1531,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             break;
 		}
 	}
-=======
-            break;
-      }
-   }
->>>>>>> .r282
    else
    {
       switch(ns.view)
@@ -1607,7 +1593,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenteredsmallnews(str,12);
             displaynewspicture(PICTURE_BOOK,13);
             break;
-<<<<<<< .mine
          }
             case VIEW_STALIN:
 				{
@@ -1636,8 +1621,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenteredsmallnews(str,12);
             displaynewspicture(PICTURE_BOOK,13);
             break;
-=======
->>>>>>> .r282
          }
          case VIEW_NUCLEARPOWER:
             displaycenterednewsfont("OIL CRUNCH",5);
