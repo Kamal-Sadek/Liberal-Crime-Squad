@@ -774,8 +774,15 @@ void getrecruitcreature(char *str,int type)
              law[LAW_CORPORATE]==-2)strcpy(str,"Slave");
          else strcat(str,"Servant");
          break;
-      case CREATURE_WORKER_JANITOR:strcat(str,"Janitor");break;
-      case CREATURE_WORKER_SWEATSHOP:strcat(str,"Sweatshop Worker");break;
+      case CREATURE_WORKER_JANITOR:
+             if(law[LAW_LABOR]==2)strcpy(str,"Custodian");
+         else strcat(str,"Janitor");
+         break;
+      case CREATURE_WORKER_SWEATSHOP:
+         if(law[LAW_IMMIGRATION]==2&&
+             law[LAW_LABOR]==2)strcpy(str,"Migrant Worker");
+         else strcat(str,"Sweatshop Worker");
+         break;
       case CREATURE_WORKER_FACTORY_NONUNION:strcat(str,"Factory Worker");break;
       case CREATURE_WORKER_FACTORY_CHILD:strcat(str,"Child Worker");break;
       case CREATURE_WORKER_SECRETARY:strcat(str,"Secretary");break;
@@ -1129,7 +1136,7 @@ short naturalcarcolor(int type)
 
 void cityname(char *story)
 {
-   switch(LCSrandom(20))
+   switch(LCSrandom(42))
    {
       case 0:strcpy(story,"San Francisco, CA");break;
       case 1:strcpy(story,"Boston, MA");break;
@@ -1151,6 +1158,28 @@ void cityname(char *story)
       case 17:strcpy(story,"Seattle, WA");break;
       case 18:strcpy(story,"Salt Lake City, UT");break;
       case 19:strcpy(story,"Philadelphia, PA");break;
+      case 20:strcpy(story,"San Antonio, TX");break;
+      case 21:strcpy(story,"Columbus, OH");break;
+      case 22:strcpy(story,"Atlanta, GA");break;
+      case 23:strcpy(story,"Buffalo, NY");break;
+      case 24:strcpy(story,"Orlando, FL");break;
+      case 25:strcpy(story,"Syracuse, NY");break;
+      case 26:strcpy(story,"Baltimore, MD");break;
+      case 27:strcpy(story,"Washington D.C.");break;
+      case 28:strcpy(story,"Memphis, TN");break;
+      case 29:strcpy(story,"Brooklyn, NY");break;
+      case 30:strcpy(story,"New Orleans, LA");break;
+      case 31:strcpy(story,"Albany, NY");break;
+      case 32:strcpy(story,"Jackson, MS");break;
+      case 33:strcpy(story,"Waco, TX");break;
+      case 34:strcpy(story,"Oklahoma, OK");break;
+      case 35:strcpy(story,"Austin, TX");break;
+      case 36:strcpy(story,"Nashville, TN");break;
+      case 37:strcpy(story,"Philadelphia, PA");break;
+      case 38:strcpy(story,"Tampa, FL");break;
+      case 39:strcpy(story,"San Diego, CA");break;
+      case 40:strcpy(story,"El Paso, TX");break;
+      case 41:strcpy(story,"Baton Rouge, LA");break;
    }
 }
 

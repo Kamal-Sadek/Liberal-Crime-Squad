@@ -311,7 +311,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("carrying an illegal weapon");
+         addstr("possession of an illegal weapon");
          breaker[LAWFLAG_GUNCARRY]=0;
          x=2;
       }
@@ -477,7 +477,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("public nudity");
+         addstr("public nudity"); // XXX Maybe `Indecent exposure'?
          breaker[LAWFLAG_PUBLICNUDITY]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
@@ -635,7 +635,7 @@ void trial(Creature &g)
          else
          {
             addstr(attorneyname);
-            addstr("'s CONSERVATIVE ARCH-NEMISIS will represent the prosecution!!!");
+            addstr("'s CONSERVATIVE ARCH-NEMISIS will represent the prosecution!!!"); // Red text?
             jury=0;
             prosecution+=40; // DUN DUN DUN!!
          }
@@ -647,7 +647,7 @@ void trial(Creature &g)
             case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.");break;
             case 1:addstr("The jury is Flaming Liberal.");break;
             case 2:addstr("Four of the jurors are closet Socialists.");break;
-            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break;
+            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break; // Green text?
          }
       }
       else if(jury<=-15)addstr("The jury is fairly Liberal.");

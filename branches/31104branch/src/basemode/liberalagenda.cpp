@@ -413,7 +413,7 @@ char liberalagenda(char won)
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Virtually no ethics restrictions exist on political officeholders.");
 				      else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
-				      else if(law[l]==0)addstr("Moderate campagin finance reform is implemented.");
+				      else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
 				      else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
 				      else addstr("Election expenses are publically funded, and voting is by ranked list.");
 				      break;
@@ -695,18 +695,35 @@ char liberalagenda(char won)
 
 
 /* base - liberal agenda - disband */
-char confirmdisband(void)
-{
-   char word[80];
-   int pos=0;
+char confirmdisband(void) // XXX The (current) issue that the masses are most
+{			  // XXX	concerned should be more likely to be
+   char word[80];	  // XXX	the phrase. (Issue, not the CCS, etc.)
+   int pos=0;		  // XXX			-- LK
 
-   switch(LCSrandom(5))
-   {
-      case 0:strcpy(word,"Corporate Accountability");break;
-      case 1:strcpy(word,"Free Speech");break;
-      case 2:strcpy(word,"Gay Marriage");break;
-      case 3:strcpy(word,"Abortion Rights");break;
-      case 4:strcpy(word,"Separation Clause");break;
+   switch(LCSrandom(22)) // or more... (preferably 44)
+   {	// Liberal Phrase				     XXX Conservative Equivalent XXX
+      case 0:strcpy(word,"Corporate Accountability");break;	// Corporate Trust
+      case 1:strcpy(word,"Free Speech");break;			// Protect The Children
+      case 2:strcpy(word,"Gay Marriage");break;			// Queer Fear
+      case 3:strcpy(word,"Abortion Rights");break;		// Sacred Life
+      case 4:strcpy(word,"Separation Clause");break;		// Under God
+      case 5:strcpy(word,"Racial Equality");break;		// Racial Profiling
+      case 6:strcpy(word,"Gun Control");break;			// Second Ammendment
+      case 7:strcpy(word,"Campaign Finance Reform");break;	// Lobbyists
+      case 8:strcpy(word,"Animal Rights");break;		// Animal Testing FIXME
+      case 9:strcpy(word,"Worker's Rights");break;		// Small Business FIXME
+      case 10:strcpy(word,"Police Responsibility");break;	// Police Brutality
+      case 11:strcpy(word,"Global Warming");break;		// Environmental Wasteland
+      case 12:strcpy(word,"Immigration Reform");break;		// Border Control FIXME
+      case 13:strcpy(word,"Human Rights");break;		// Enemy Combatant FIXME
+      case 14:strcpy(word,"Woman's Suffrage");break;		// Traditional Gender Roles
+      case 15:strcpy(word,"Right To Privacy");break;		// Wiretapping
+      case 16:strcpy(word,"Medical Marijuana");break;		// Drug Trafficking
+      case 17:strcpy(word,"Flag Burning");break;		// Stars And Stripes
+      case 18:strcpy(word,"Life Imprisonment");break;		// Lethal Injection
+      case 19:strcpy(word,"Peacetime Military");break;		// Preemptive Strike
+      case 20:strcpy(word,"Radiation Poisoning");break;		// Nuclear Power
+      case 21:strcpy(word,"Tax Bracket");break;			// Poverty
    }
 
    do

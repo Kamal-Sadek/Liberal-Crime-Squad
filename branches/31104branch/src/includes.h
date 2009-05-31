@@ -1790,6 +1790,8 @@ int loveslavesleft(const Creature& cr);
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value);
+/* pick a random state */
+void makestate(char *str);
 
 /*
  consolesupport.cpp
@@ -2331,6 +2333,25 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
 void generatefiller(char *story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings);
+
+/*******************************************************************************
+*
+*			      News Related Things
+*			      Folder: "news"
+*
+*******************************************************************************/
+
+/*
+ sex.cpp
+*/
+/* pick a descriptor acronym */
+void sexdesc(char *str)
+/* what kind of person? */
+void sexwho(char *str)
+/* seeking acronym */
+void sexseek(char *str)
+/* what type of sex? */
+void sextype(char *str)
 
 /*******************************************************************************
 *

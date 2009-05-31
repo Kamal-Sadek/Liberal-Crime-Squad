@@ -779,9 +779,9 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             else if(s<34)move(5+s-17,27);
             else move(5+s-34,54);
 
-            switch(s)
-            {
-               case 0:addstr("Alabama");break;
+            switch(s) //XXX: I really think that states past voting records
+            {         //XXX:    *eyes Massachusetts* should influence this...
+               case 0:addstr("Alabama");break;//                -- LK
                case 1:addstr("Alaska");break;
                case 2:addstr("Arkansas");break;
                case 3:addstr("Arizona");break;

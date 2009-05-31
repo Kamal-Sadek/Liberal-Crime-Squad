@@ -132,7 +132,12 @@ char lcityname[80];
 char newscherrybusted=0;
 
 int month=1;
+
+#ifdef THEFUTURE
+int year=2100;
+#else
 int year=2009;
+#endif
 int amendnum=28;
 
 bool termlimits=false;

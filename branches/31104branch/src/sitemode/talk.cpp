@@ -157,13 +157,14 @@ char talk(Creature &a,int t)
                   clearmessagearea();
                   move(16,1);
                   addstr(encounter[e].name);
-                  switch(LCSrandom(5))
+                  switch(LCSrandom(6))
                   {
                   case 0:addstr(" chickens out!");break;
                   case 1:addstr(" backs off!");break;
                   case 2:addstr(" doesn't want to die!");break;
                   case 3:addstr(" is out of there!");break;
                   case 4:addstr(" has a family!");break;
+                  case 5:addstr(" is too young to die!");break;
                   }
                   delenc(e,0);
                   addjuice(a,1); // Instant juice!
@@ -181,7 +182,7 @@ char talk(Creature &a,int t)
          addstr(":");
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(17,1);
-         switch(LCSrandom(5))
+         switch(LCSrandom(6))
          {
          case 0:addstr("\"Back off or the hostage dies!\"");break;
          case 1:addstr("\"Don't push the LCS!\"");
@@ -189,6 +190,11 @@ char talk(Creature &a,int t)
          case 2:addstr("\"Hostage says you better leave!\"");break;
          case 3:addstr("\"I'll do it! I'll kill this one!\"");break;
          case 4:addstr("\"You gonna tell the family you pushed me?!\"");break;
+         case 5:
+                if(law[LAW_FREESPEECH]==-2)addstr("\"Don't [mess] with me!\"");
+                else if(law[LAW_FREESPEECH]==2)addstr("\"Don't fuck with me!\"");
+                else addstr("\"Don't f*ck with me!\"");
+                break;
          }
 
          sitecrime+=5;
@@ -1863,7 +1869,7 @@ char talk(Creature &a,int t)
                         case 3: addstr("\"Hey, look, a ufo!\"");
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            addstr(" <ducks away>");break;
-                        case 4: addstr("\"You're not my type. I like sane.\"");
+                        case 4: addstr("\"You're not my type. I like the sane.\"");
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            addstr(" <turns away>");break;
                         case 5: addstr("\"Hahahahaha!\"");

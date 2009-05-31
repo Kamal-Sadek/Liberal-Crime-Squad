@@ -31,6 +31,20 @@ This file is part of Liberal Crime Squad.                                       
 #include <cstring>
 
 
+/* TODO
+make it less likely to be raided based on:
+	- the number of sleepers.
+	- how effective said sleepers are.
+	- what action each sleeper is doing (promoting liberalism decreases chance while promoting conservatism increases chance)
+	- what the sleeper does for a living (police officers are more influential than janitors, for instance)
+
+make it more likely to be raided:
+	- when a liberal hacks or steals credit cards.
+	- dead bodies in the base. XXX DONE
+	- 
+*/
+
+
 /* siege - updates upcoming sieges */
 void siegecheck(char canseethings)
 {
@@ -100,9 +114,20 @@ void siegecheck(char canseethings)
             //Heat doesn't matter for sieges until it gets high
             int pheat=pool[p]->heat-5;
 
+
+	 }
+
+            if(law[LAW_FLAGBURNING]==-2&&haveflag) {heatprotection+=2;} // More protection if the flag is sacred
+            else if(law[LAW_FLAGBURNING]!=-2&&haveflag) {heatprotection+=1;} // Some if the flag isn't
+            else if(law[LAW_FLAGBURNING]==2&&!haveflag) {heatprotection-=1;} // Lose some if it is and you have no flag
+            else {heatprotection+=0;} // None if it isn't and you have no flag
+
+		for(int p=0;p<pool.size();p++)
+		{
+			if(!pool[p]->alive) {heatprotection-=1;}
             //Contribute to the investigation based on person's heat
             if(pheat>0)crimes+=pheat;
-         }
+                }
 
          // Let the place slowly cool off if there are no criminals there
          if(!crimes&&location[l]->heat)
@@ -153,7 +178,7 @@ void siegecheck(char canseethings)
             //Protection varies with how many people in the safehouse
             if(numpres>20)heatprotection-=1;
             if(numpres<10)heatprotection+=1;
-            if(numpres<4)heatprotection+=1;
+            if(numpres<4)heatprotection+=2;
 
             if(heatprotection<0)heatprotection=0;
 

@@ -294,22 +294,30 @@ void enemyattack(void)
                   (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
                   (encounter[e].blood<45))
                {
-                  switch(LCSrandom(3))
+                  switch(LCSrandom(9))
                   {
                      case 0:addstr(" crawls off moaning...");break;
                      case 1:addstr(" crawls off wimpering...");break;
                      case 2:addstr(" crawls off trailing blood...");break;
+                     case 3:addstr(" crawls off screaming...");break;
+                     case 4:addstr(" crawls off crying...");break;
+                     case 5:addstr(" crawls off sobbing...");break;
+                     case 6:addstr(" crawls off whispering...");break;
+                     case 7:addstr(" crawls off praying...");break;
+                     case 8:addstr(" crawls off cursing...");break;
                   }
                }
                else
                {
-                  switch(LCSrandom(5))
+                  switch(LCSrandom(7))
                   {
                      case 0:addstr(" makes a break for it!");break;
                      case 1:addstr(" escapes crying!");break;
                      case 2:addstr(" runs away!");break;
                      case 3:addstr(" gets out of there!");break;
                      case 4:addstr(" runs hollering!");break;
+                     case 5:addstr(" bolts out of there!");break;
+                     case 6:addstr(" runs away screaming!");break;
                   }
                }
 
@@ -874,7 +882,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             case BODYPART_LEG_LEFT:strcat(str,"left tread");break;
          }
       }
-      else if(t.animalgloss==ANIMALGLOSS_ANIMAL)
+      else if(t.animalgloss==ANIMALGLOSS_ANIMAL) // XXX What about Six-legged Pigs?
       {
          switch(w)
          {
@@ -3095,8 +3103,8 @@ void adddeathmessage(Creature &cr)
       strcpy(str,cr.name);
       switch(LCSrandom(2))
       {
-         case 0:strcat(str," falls into pieces.");break;
-         case 1:strcat(str," breaks apart and is dead.");break;
+         case 0:strcat(str," breaks into pieces.");break;
+         case 1:strcat(str," falls apart and is dead.");break;
       }
       addstr(str);
    }

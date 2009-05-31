@@ -27,6 +27,7 @@ enum InterrogationTechnqiues
    TECHNIQUE_RESTRAIN,
    TECHNIQUE_BEAT,
    TECHNIQUE_NOSLEEP,
+   //TECHNIQUE_NOLIGHTS, XXX
    TECHNIQUE_GIVEFOOD,
    TECHNIQUE_GIVEWATER,
    TECHNIQUE_PROPS,
@@ -367,10 +368,18 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr("to ");
             addstr(a->name);
             addstr(" as its only friend.");
-         }
-         else if(rapport[a->id]>1)
+         } //XXX: What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist)
+         else if(rapport[a->id]>1) //                   -- LK
          {
             addstr("The Conservative likes ");
+            addstr(a->name);
+            addstr(".");
+         }
+         else if(rapport[a->id]>0)
+         {
+            addstr("The Conservative is indifferent");
+            move(++y,40);
+            addstr("toward ");
             addstr(a->name);
             addstr(".");
          }
@@ -472,11 +481,12 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" feels sick to the stomach afterward and ");
                a->att[ATTRIBUTE_HEART]--;
                move(y,0);y++;
-               switch(LCSrandom(3))
+               switch(LCSrandom(4))
                {
                   case 0:addstr("throws up in a trash can.");break;
                   case 1:addstr("gets drunk, eventually falling asleep.");break;
                   case 2:addstr("curls up in a ball, crying softly.");break;
+                  case 3:addstr("shoots up and collapses in a heap on the floor.");break;
                }
             }
             else if(!LCSrandom(3))
@@ -505,8 +515,8 @@ void tendhostage(Creature *cr,char &clearformess)
             techniques[TECHNIQUE_NOSLEEP]=0; //don't keep them from sleeping
             techniques[TECHNIQUE_DRUGS]=0; //don't administer drugs
 
-            //Food, water, light, and restraint settings
-            //will be applied as normal
+            //Food, water, light, and restraint settings will be applied as
+            //normal, of course, at the moment, light is not implemented
          }
          refresh();
          getch();
@@ -699,13 +709,15 @@ void tendhostage(Creature *cr,char &clearformess)
             rapport[a->id]-=3;
 
             addstr(a->name);
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
-            case 0:addstr(" recreates scenes from Abu Ghraib");break;
+            case 0:addstr(" recreates scenes from Abu Ghraib");break;//lol, sodomy
             case 1:addstr(" whips the Automaton with a steel cable");break;
             case 2:addstr(" holds the hostage's head under water");break;
-            case 3:addstr(" peels back the Automaton's fingernails");break;
+            case 3:addstr(" peels back the Automaton's fingernails");break;//XXX: but shouldn't this only happen once?
             case 4:addstr(" beats the hostage with a metal bat");break;
+            case 5:addstr(" beats the hostage with a belt");break;
+//            case 6:addstr(" ");break;
             }
             addstr(",");
             y++;
@@ -720,9 +732,18 @@ void tendhostage(Creature *cr,char &clearformess)
                case 1:addstr("Does it hurt?");break;
                case 2:addstr("Nobody loves you");break;
                case 3:addstr("God hates you");break;
-               case 4:addstr("Don't fuck with me");break;
-               case 5:addstr("This is Liberalism");break;
-               case 6:addstr("Convert, bitch");break;
+               case 4:
+                      if(law[LAW_FREESPEECH]==-2)addstr("Don't [mess] with me");
+                      else addstr("Don't fuck with me");break;
+               case 5:
+#ifdef SPARTA
+                      addstr("This is SPARTAAAAA");break;//Couldn't help myself...
+#else
+                      addstr("This is Liberalism");break;
+#endif
+               case 6:
+                      if(law[LAW_FREESPEECH]==-2)addstr("Convert, [you]");
+                      else addstr("Convert, bitch");break;
                case 7:addstr("I'm going to kill you");break;
                case 8:addstr("Do you love me?");break;
                case 9:addstr("I am your God");break;
@@ -760,25 +781,35 @@ void tendhostage(Creature *cr,char &clearformess)
                {
                case 0:addstr(" with a flagpole");break;
                case 1:addstr(" with a flag");break;
-               case 2:addstr(" with a bible");break;
-               case 3:addstr(" with a dildo");break;
+               case 2:addstr(" with a bible");break;//XXX: Effect on religion/science? XXX: Maybe if(law[LAW_RELIGION]==-2) it's *the* bible?
+               case 3:
+                      if(law[LAW_FREESPEECH]==-2)addstr(" with a [pink rod]");// Pervert!
+                      else addstr(" with a dildo");break;
                case 4:addstr(" with a book");break;
                }
             }
             addstr(",");
             y++;
             move(y,0);
-            addstr("screaming \"");
+            switch(LCSrandom(4))
+            {
+            case 0:addstr("scream");break;
+            case 1:addstr("yell");break;
+            case 2:addstr("shout");break;
+            case 3:addstr("holler");break;
+//            case 4:addstr("");break;
+            }
+            addstr("ing \"");
             int i=0;
             while(i<3)
             {
-               switch(LCSrandom(17))
+               switch(LCSrandom(23))
                {
                case 0:addstr("McDonalds");break;
                case 1:addstr("Microsoft");break;
                case 2:addstr("Bill Gates");break;
                case 3:addstr("Wal-Mart");break;
-               case 4:addstr("George Bush");break;
+               case 4:addstr("George Bush");break;//XXX: Dubya?
                case 5:addstr("ExxonMobil");break;
                case 6:addstr("Trickle-down economics");break;
                case 7:addstr("Family values");break;
@@ -791,12 +822,18 @@ void tendhostage(Creature *cr,char &clearformess)
                case 14:addstr("Military spending");break;
                case 15:addstr("Ann Coulter");break;
                case 16:addstr("Deregulation");break;
+               case 17:addstr("Gang Violence");break;
+               case 18:addstr("Police Brutality");break;
+               case 19:addstr("Corporate Corruption");break;
+               case 20:addstr("Wiretapping");break;
+               case 22:addstr("Reaganomics");break;
+
                }
                if(++i<3)
                   addstr("! ");
             }
             addstr("!\" in its face.");
-         }
+         }            }
          y++;
 
          spiritcrush+=forceroll/2+a->armor.interrogation_assaultbonus();
@@ -939,14 +976,17 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr(a->name);
          if(techniques[TECHNIQUE_PROPS])//props
          {
-            switch(LCSrandom(6))
+            switch(LCSrandom(9))
             {
             case 0:addstr(" plays violent video games with ");break;
             case 1:addstr(" reads Origin of the Species to ");break;
             case 2:addstr(" burns flags in front of ");break;
             case 3:addstr(" explores an elaborate political fantasy with ");break;
             case 4:addstr(" watches controversial avant-garde films with ");break;
-            case 5:addstr(" watches the anime film Bible Black with ");break;
+            case 5:addstr(" watches the anime film Bible Black with ");break;//XXX: Wasn't this basically a porno?
+            case 6:addstr(" watches a documentary about Emmett Till with ");break;
+            case 7:addstr(" watches Michael Moore films with ");break;
+            case 8:addstr(" listens to Liberal radio shows with ");break;
             }
          }
          else
@@ -1053,6 +1093,9 @@ void tendhostage(Creature *cr,char &clearformess)
                case 3:
                   addstr(cr->name);
                   addstr(" gasps and demands that ");
+                  //addstr("Hitler tell them where ");
+                  //addstr(a->name);
+                  //addstr(" went.");
                   addstr(a->name);
                   addstr(" stop looking like Hitler.");
                   break;
@@ -1414,7 +1457,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 1:addstr(" broods darkly.");break;
             case 2:addstr(" has lost hope of rescue.");break;
             case 3:addstr(" is making peace with God.");break;
-            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=25;break;
+            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=25;break;//XXX: should be cr->blood-=LCSrandom(15)+10 or something... I mean, blood loss isn't the same *every* time.
             }
          }
          else
@@ -1486,7 +1529,7 @@ void tendhostage(Creature *cr,char &clearformess)
       delete[] attack;
    }
    #ifdef AUTOENLIGHTEN
-      turned=1;
+      turned=1;// Lucky!
    #endif
 
    if(turned&&cr->alive)

@@ -560,6 +560,7 @@ void firstname(char *str, char gender)
       case 9:strcat(str,"Jun");break;
       case 10:strcat(str,"Robin");break;
       case 11:strcat(str,"Kelly");break;
+      case 12:strcat(str,"Sam");break;
 
       default:strcat(str,"Default");break;
       }

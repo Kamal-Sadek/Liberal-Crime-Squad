@@ -483,7 +483,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                strcat(story,"according to a spokesperson from the police department.");
                strcat(story,"&r");
                strcat(story,"  A suspect, identified only as a member of the ");
-               strcat(story,"radical political group Liberal Crime Squad, is believed to have killed ");
+               strcat(story,"radical political group known as the Liberal Crime Squad, is believed to have killed ");
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
                   char num[20];
@@ -526,7 +526,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                if(ns.type==NEWSSTORY_NUDITYARREST)
                   strcat(story,"The incident apparently occurred as a response to a public nudity complaint.  ");
                else if(ns.type==NEWSSTORY_DRUGARREST)
-                  strcat(story,"The suspect was alledgedly selling brownies.  ");
+                  strcat(story,"The suspect was alledgedly selling \"brownies\".  ");
                else if(ns.type==NEWSSTORY_BURIALARREST)
                {
                   strcat(story,"A passerby alledgedly called the police after seeing the suspect dragging what appeared ");
@@ -1033,7 +1033,9 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[1]>1)strcat(story,"The bodies had no faces or ");
                   else strcat(story,"The body had no face or ");
                   strcat(story,"fingerprints.  Like, it was all smooth.  ");
-                  strcat(story,"D*mnd*st thing I've ever seen");
+                  if(law[LAW_FREESPEECH]==-2)strcat(story,"[Craziest] thing I've ever seen");
+		  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damndest thing I've ever seen");
+		  else strcat(story,"D*mnd*st thing I've ever seen");
                }
                else
                {

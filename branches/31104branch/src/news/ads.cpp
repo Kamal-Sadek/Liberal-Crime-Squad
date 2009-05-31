@@ -79,8 +79,8 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
       char ad[500];
       if(!liberalguardian)
       {
-         switch(LCSrandom(5))
-         {
+         switch(LCSrandom(6))
+         {		// location[]->name?
             case 0:
                strcpy(ad,"&cNo Fee&r");
                strcat(ad,"&cConsignment Program&r&r");
@@ -109,11 +109,46 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                strcat(ad,"&cand Fitness&r&r");
                strcat(ad,"&c7 Days a Week&r");
                break;
+/*	    case 5: // Could write something to gen this. <http://en.wikipedia.org/wiki/Personal_advertisement> -- LK
+	       strcpy(ad,"&cM4W&r");
+	       strcat(ad,"&cSWM w/ BWC ISO HJ IRL&r&r");
+	       strcat(ad,"&cInto BJ, GB, and FWB&r");
+	       break;*/
+	    case 5:
+	       strcat(ad,"&c");
+	       switch(LCSrandom(4))
+	       {
+		  case 0:strcpy(ad,"Searching For Love");
+		  case 1:strcpy(ad,"Seeking Love");
+		  case 2:strcpy(ad,"Are You Lonely?");
+		  case 3:strcpy(ad,"Looking For Love");
+		  break;
+	       }
+
+	       strcat(ad,"&r&r");
+	       strcat(ad,"&c");
+	       sexdesc(sdesc);
+	       strcat(ad,sdesc);
+	       strcat(ad," ");
+	       sexwho(swho);
+	       strcat(ad,swho);
+	       strcat(ad," ");
+	       sexseek(sseek);
+	       strcat(ad,sseek);
+	       strcat(ad,"&r");
+	       strcat(ad,"&c");
+	       sextype(stype);
+	       strcat(ad,stype);
+	       strcat(ad," w/ ");
+	       sexwho(shwo);
+	       strcat(ad,shwo);
+	       strcat(ad,"&r");
+	       break;
          }
       }
       else
       {
-         switch(2) // Liberal Guardian Ads
+         switch(4) // Liberal Guardian Ads
          {
          case 0:
             strcpy(ad,"&cWant Organic?&r&r");
@@ -125,6 +160,43 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             strcat(ad,"&c26 Years Experience&r&r");
             strcat(ad,"&cCall Today&r");
             break;
+	 case 2:
+	    strcpy(ad,"&cAbortion Clinic&r&r"); // I have no clue what &c or &r does, so bear with me... -- LK
+	    strcat(ad,"&cWalk-in, No&r");
+	    strcat(ad,"&cQuestions Asked&r");
+	    strcat(ad,"&cOpen 24/7&r");
+	    break;
+	 case 3:
+	       strcat(ad,"&c");
+	       switch(LCSrandom(4))
+	       {
+		  case 0:strcpy(ad,"Searching For Love");
+		  case 1:strcpy(ad,"Seeking Love");
+		  case 2:strcpy(ad,"Are You Lonely?");
+		  case 3:strcpy(ad,"Looking For Love");
+		  break;
+	       }
+
+	       strcat(ad,"&r&r");
+	       strcat(ad,"&c");
+	       sexdesc(sdesc);
+	       strcat(ad,sdesc);
+	       strcat(ad," ");
+	       sexwho(swho);
+	       strcat(ad,swho);
+	       strcat(ad," ");
+	       sexseek(sseek);
+	       strcat(ad,sseek);
+	       strcat(ad,"&r");
+	       strcat(ad,"&c");
+	       sextype(stype);
+	       strcat(ad,stype);
+	       strcat(ad," w/ ");
+	       sexwho(shwo);
+	       strcat(ad,shwo);
+	       strcat(ad,"&r");
+	       break;
+         }
          }
       }
 

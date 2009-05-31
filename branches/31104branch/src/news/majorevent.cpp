@@ -19,7 +19,9 @@ void constructeventstory(char *story,short view,char positive)
             char gen[50];
             cityname(story);
             strcat(story," - ");
-            strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
+	    if(law[LAW_ABORTION]==-2)strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
+	    else if(law[LAW_ABORTION]==-1)strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
+            else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
             lastname(str);strcat(story,str);
             strcat(story," CLINIC yesterday.  ");
@@ -112,7 +114,11 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            if(law[LAW_GAY]<=-1)
+            if(law[LAW_GAY]==-2)
+                        {
+                                strcat(story,", a known sexual deviant, was ");
+                        }
+            else if(law[LAW_GAY]==-1)
 			{
 				strcat(story,", a known homosexual, was ");
 			}
@@ -132,17 +138,24 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"murderers swerving wildly, ");
             switch(LCSrandom(3))
             {
-               case 0:strcat(story,"throwing beer bottles");break;
-               case 1:strcat(story,"urinating out the window");break;
+               case 0:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"throwing [juice boxes]");
+		      else strcat(story,"throwing beer bottles");break;
+               case 1:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[peeing] out the window");
+		      else if(law[LAW_FREESPEECH]==2)strcat(story,"pissing out the window");
+		      else strcat(story,"urinating out the window");break;
                case 2:strcat(story,"taking swipes");break;
             }
             strcat(story," at the pursuing police cruisers.  ");
             strcat(story,"The chase ended when ");
-            switch(LCSrandom(3))
+            switch(LCSrandom(5))
             {
                case 0:strcat(story,"the suspects ran out of gas, ");break;
                case 1:strcat(story,"the suspects collided with a manure truck, ");break;
                case 2:strcat(story,"the suspects veered into a ditch, ");break;
+	       case 3:strcat(story,"the suspects were surrounded by alert citizens, ");break;
+	       case 4:strcat(story,"the suspects were caught in traffic, ");break;
             }
             strcat(story,"at which point they were taken into custody.  Nobody was seriously injured during the incident.");
             strcat(story,"&r");
@@ -156,8 +169,8 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_DEATHPENALTY:
          {
-            strcat(story,"Texas - ");
-            strcat(story,"An innocent citizen has been put to death in the electric chair.  ");
+	    makestate(state);strcat(story,state);
+            strcat(story," - An innocent citizen has been put to death in the electric chair.  ");
             char dstr[200],dstr2[200],dstr3[200];
             firstname(dstr);firstname(dstr2);lastname(dstr3);
             strcat(story,dstr);
@@ -165,7 +178,19 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr2);
             strcat(story," ");
             strcat(story,dstr3);
-            strcat(story," was pronounced dead at 7:06PM yesterday at the ");
+            strcat(story," was pronounced dead at ");
+            int hofd=LCSrandom(12)+1;
+            strcat(story,hofd);
+            strcat(story,":");
+            int mofd=LCSrandom(60);
+            strcat(story,mofd);
+            char tofday=LCSrandom(2);
+            switch(tofday)
+            {
+               case 0:strcpy(gen,"AM");break;
+               case 1:strcpy(gen,"PM");break;
+            }
+            strcat(story," yesterday at the ");
             char jstr[200];
             lastname(jstr);
             strcat(story,jstr);
@@ -301,7 +326,9 @@ void constructeventstory(char *story,short view,char positive)
                case 4:strcat(story,"Cell");break;
                case 5:strcat(story,"Shank");break;
                case 6:strcat(story,"Lockdown");break;
-               case 7:strcat(story,"Buttlord");break;
+               case 7:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[Bum]lord");
+		      else strcat(story,"Buttlord");break;
             }
             strcat(story,"_.&r");
             strcat(story,"   Take this excerpt, \"");
@@ -311,7 +338,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"I was trapped with them now.  There were three, looking me over ");
             strcat(story,"with dark glares of bare lust, as football players might stare at a stupified, drunken, helpless teenager.  ");
             strcat(story,"My shank's under the mattress.  Better to be a man and fight or a punk and let them take it?  ");
-            strcat(story,"Maybe lose an eye the one way, maybe catch AIDS the other.  A helluva choice, ");
+	    if(law[LAW_GAY]==-2)strcat(story,"Maybe lose an eye the one way, maybe catch GRIDS the other.  A helluva choice, "); // Gay Related Immunodeficiency Syndrome
+            else strcat(story,"Maybe lose an eye the one way, maybe catch AIDS the other.  A helluva choice, ");
             strcat(story,"and I would only have a few seconds before they made it for me");
             strcat(story,".\"");
             strcat(story,"&r");
@@ -430,13 +458,19 @@ void constructeventstory(char *story,short view,char positive)
                case 4:strcat(story,"Something");break;
             }
             strcat(story,"_, is the third in an immensely popular series by ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(11))
             {
                case 0:strcat(story,"British");break;
                case 1:strcat(story,"Indian");break;
                case 2:strcat(story,"Chinese");break;
                case 3:strcat(story,"Rwandan");break;
                case 4:strcat(story,"Palestinian");break;
+	       case 5:strcat(story,"Egyptian");break;
+	       case 6:strcat(story,"French");break;
+	       case 7:strcat(story,"German");break;
+               case 8:strcat(story,"Iraqi");break;
+               case 9:strcat(story,"Bolivian");break;
+               case 10:strcat(story,"Columbian");break;
             }
             strcat(story," author ");
             char c[2];
@@ -499,7 +533,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            strcat(story," has resigned in disgrace after being caught with a prostitute.");
+	    if(law[LAW_FREESPEECH]==-2)strcat(story," has resigned in disgrace after being caught with a [civil servant.]");
+            else strcat(story," has resigned in disgrace after being caught with a prostitute.");
             strcat(story,"&r");
             strcat(story,"  ");
             strcat(story,dstr2);
@@ -521,8 +556,13 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(3))
             {
                case 0:strcat(story,"\"the most perverse and spine-tingling debauchery imaginable, at least with only two people.\"");break;
-               case 1:strcat(story,"the judge relieving himself on the prostitute.");break;
-               case 2:strcat(story,"the prostitute hollering like a cowboy astride the judge.");break;
+               case 1:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"the judge [going to the bathroom near] the [civil servant.]");
+		      else if(law[LAW_FREESPEECH]==2)strcat(story,"the judge pissing on the prostitute.");
+		      else strcat(story,"the judge relieving himself on the prostitute.");break; // Himself? Maybe themselves would work better? -- LK
+               case 2:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"the [civil servant] hollering like a cowboy [at a respectable distance from] the judge.");
+		      else strcat(story,"the prostitute hollering like a cowboy astride the judge.");break;
             }
             strcat(story,"  ");
             strcat(story,pstr2);
@@ -603,7 +643,10 @@ void constructeventstory(char *story,short view,char positive)
                      case 0:strcat(story,"his");break;
                      case 1:strcat(story,"her");break;
                   }
-                  strcat(story," g*dd*mn mind");
+
+                  if(law[LAW_FREESPEECH]==2 && law[LAW_RELIGION]!=-2)strcat(story," goddamn mind");
+		  else if(law[LAW_FREESPEECH]==-2 || law[LAW_RELIGION]==-2)strcat(story," [gosh darn] mind");
+                  else strcat(story," g*dd*mn mind");
                   break;
                case 1:strcat(story,"maybe gone a little off the deep end");break;
                case 2:strcat(story,"probably been listening to Art Bell in the next studio a little too long");break;
@@ -615,10 +658,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," issued an apology later in the program, but ");
             strcat(story,"the damage might already be done.  ");
             strcat(story,"According to a poll completed yesterday, ");
-            strcat(story,"fully half of the host's most loyal supporters ");
-            strcat(story,"have decided to leave the program for saner ");
-            strcat(story,"pastures.  Of these, many said that they would be switching over ");
-            strcat(story,"to the FM band.");
+             strcat(story,"fully half of the host's most loyal supporters ");			// XXX How many of them switch
+            strcat(story,"have decided to leave the program for saner ");			// XXX should depend on
+            strcat(story,"pastures.  Of these, many said that they would be switching over ");	// XXX [LAW_FREESPEECH]
+            strcat(story,"to the FM band.");							// 		-- LK
             strcat(story,"&r");
             break;
          }
@@ -717,7 +760,9 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {
-               case 0:strcat(story,"Anal");break;
+               case 0:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"Bum-Bum");
+                      else strcat(story,"Anal");break;
                case 1:strcat(story,"Colo");break;
                case 2:strcat(story,"Lacta");break;
                case 3:strcat(story,"Pur");break;
@@ -735,7 +780,9 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(5))
             {
                case 0:strcat(story,"boosts intelligence in chimpanzees");break;
-               case 1:strcat(story,"corrects erectile dysfunction in chimpanzees");break;
+               case 1:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[helps chimpanzees reproduce]");
+		      else strcat(story,"corrects erectile dysfunction in chimpanzees");break;
                case 2:strcat(story,"allows chimpanzees to move blocks with their minds");break;
                case 3:strcat(story,"allows chimpanzees to fly short distances");break;
                case 4:strcat(story,"increases the attention span of young chimpanzees");break;
@@ -778,7 +825,8 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story," captor.");
             strcat(story,"&r");
-            strcat(story,"   Two weeks ago, convicted rapist ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [sex fiend] ");
+	    else strcat(story,"   Two weeks ago, convicted rapist ");
             char dstr[200],dstr2[200];
             firstname(dstr);lastname(dstr2);
             strcat(story,dstr);
@@ -806,16 +854,26 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," reportedly screamed into the receiver \"");
             switch(LCSrandom(3))
             {
-               case 0:strcat(story,"Ah, f*ck this sh*t.  This punk b*tch is f*ckin' dead!");break;
-               case 1:strcat(story,"F*ck a m*th*f*ck*n' bull.  I'm killin' this pig sh*t.");break;
-               case 2:strcat(story,"Why the f*ck am I talkin' to you?  I'd rather kill this pig.");break;
+               case 0:
+                      if(law[LAW_FREESPEECH]==2)strcat(story,"Ah, fuck this shit.  This punk bitch is fuckin' dead!");
+		      else if(law[LAW_FREESPEECH]==-2)strcat(story,"Ah, [no way.]  This [police officer will be harmed!]");
+                      else strcat(story,"Ah, f*ck this sh*t.  This punk b*tch is f*ckin' dead!");break;
+               case 1:
+                      if(law[LAW_FREESPEECH]==2)strcat(story,"Fuck a muthafuckin' bull.  I'm killin' this pig shit.");
+		      else if(law[LAW_FREESPEECH]==-2)strcat(story,"[Too late.]  [I am going to harm this police officer.]");
+                      else strcat(story,"F*ck a m*th*f*ck*n' bull.  I'm killin' this pig sh*t.");break;
+               case 2:
+                      if(law[LAW_FREESPEECH]==2)strcat(story,"Why the fuck am I talkin' to you?  I'd rather kill this pig.");
+		      else if(law[LAW_FREESPEECH]==-2)strcat(story,"Why am I talkin' to you?  I'd rather [harm this police officer.]");
+                      else strcat(story,"Why the f*ck am I talkin' to you?  I'd rather kill this pig.");break;
             }
             strcat(story,"\"");
             strcat(story,"  The tower was breached in an attempt to reach ");
             strcat(story,"the hostage, but ");
             strcat(story,dstr2);
             strcat(story," had already ");
-            switch(LCSrandom(3))
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"killed the guard");
+	    else switch(LCSrandom(3))
             {
                case 0:strcat(story,"slit the guard's throat with a shank");break;
                case 1:strcat(story,"strangled the guard to death with a knotted bed sheet");break;
@@ -871,13 +929,21 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," planned to ");
             switch(LCSrandom(9))
             {
-               case 0:strcat(story,"fly planes into skyscrapers");break;
+               case 0:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[land] planes [on apartment buildings]");
+		      else strcat(story,"fly planes into skyscrapers");break;
                case 1:strcat(story,"detonate a fertilizer bomb at a federal building");break;
                case 2:strcat(story,"ram a motorboat loaded with explosives into a warship");break;
-               case 3:strcat(story,"detonate explosives on a school bus");break;
+               case 3:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[harm children]");
+		      else strcat(story,"detonate explosives on a school bus");break;
                case 4:strcat(story,"blow out a section of a major bridge");break;
-               case 5:strcat(story,"kidnap the president");break;
-               case 6:strcat(story,"assassinate the president");break;
+               case 5:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[take] the president [on vacation]");
+		      else strcat(story,"kidnap the president");break;
+               case 6:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[hurt] the president");
+		      else strcat(story,"assassinate the president");break;
                case 7:strcat(story,"destroy the Capitol Building");break;
                case 8:strcat(story,"detonate a nuclear bomb in New York");break;
             }
@@ -966,13 +1032,20 @@ void constructeventstory(char *story,short view,char positive)
                case 3:strcat(story,"gal having a ruptured intestine");break;
             }
             strcat(story," is just a load of ");
-            switch(LCSrandom(4))
+            if(law[LAW_FREESPEECH]==-2)switch(LCSrandom(5))
             {
                case 0:strcat(story,"hooey");break;
                case 1:strcat(story,"poppycock");break;
                case 2:strcat(story,"horse radish");break;
                case 3:strcat(story,"skunk weed");break;
+	       case 4:strcat(story,"garbage");break;
             }
+	    else switch(LCSrandom(3))
+	    {
+	       case 0:strcat(story,"horseshit");break;
+               case 1:strcat(story,"bullshit");break;
+               case 2:strcat(story,"shit");break;
+	    }
             strcat(story,".  Would we stake the reputation of our company on unsafe products?  ");
             strcat(story,"No.  That's just ridiculous.  I mean, sure companies have put unsafe products out, ");
             strcat(story,"but the GM industry operates at a higher ethical standard.  That goes without saying.");
@@ -1010,7 +1083,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"ten-year-old eye witness testimony");break;
                case 1:strcat(story,gen);strcat(story," general feeling about police corruption");break;
-               case 2:strcat(story,gen);strcat(story," belief that the crimes were a right-wing conspiracy");break;
+               case 2:strcat(story,gen);strcat(story," belief that the crimes were a vast right-wing conspiracy");break; // lol, Clinton
                case 3:
                   strcat(story,gen);
                   strcat(story," belief that ");
@@ -1051,31 +1124,34 @@ void constructeventstory(char *story,short view,char positive)
          case VIEW_POLLUTION:
             cityname(story);
             strcat(story," - Pollution might not be so bad after all.  The ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"American");break;
                case 1:strcat(story,"United");break;
                case 2:strcat(story,"Patriot");break;
                case 3:strcat(story,"Family");break;
                case 4:strcat(story,"Children's");break;
+               case 5:strcat(story,"National");break;
             }
             strcat(story," ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"Heritage");break;
                case 1:strcat(story,"Enterprise");break;
                case 2:strcat(story,"Freedom");break;
                case 3:strcat(story,"Liberty");break;
                case 4:strcat(story,"Charity");break;
+	       case 5:strcat(story,"Equality");break;
             }
             strcat(story," ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"Partnership");break;
                case 1:strcat(story,"Institute");break;
                case 2:strcat(story,"Consortium");break;
                case 3:strcat(story,"Forum");break;
                case 4:strcat(story,"Center");break;
+	       case 5:strcat(story,"Association");break;
             }
             strcat(story," recently released a wide-ranging report detailing recent trends ");
             strcat(story,"and the latest science on the issue.  ");
@@ -1203,17 +1279,45 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," reportedly ");
             switch(LCSrandom(5))
             {
-               case 0:strcat(story,"had intercourse");break;
-               case 1:strcat(story,"encouraged listeners to call in and relieve themselves");break;
-               case 2:strcat(story,"screamed \"f*ck the police those g*odd*mn m*th*f*ck*rs.  I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"");break;
-               case 3:strcat(story,"breastfed from a lactating woman");break;
-               case 4:strcat(story,"masturbated");break;
+               case 0:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[had consensual intercourse in the missionary position]");
+		      else if(law[LAW_FREESPEECH]==2)strcat(story,"fucked");
+		      else strcat(story,"had intercourse");break;
+               case 1:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"encouraged listeners to call in and [urinate]");
+		      else if(law[LAW_FREESPEECH]==2)strcat(story,"encouraged listeners to call in and take a piss");
+		      else strcat(story,"encouraged listeners to call in and relieve themselves");break;
+               case 2:
+                      if(law[LAW_FREESPEECH]==2)strcat(story,"screamed \"fuck the police those goddamn motherfuckers.  I got a fucking ticket this morning and I'm fucking pissed as shit.\"");
+                      else if(law[LAW_FREESPEECH]==-2 && law[LAW_RELIGION]==-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry that I might stop going to church!]\"");
+		      else if(law[LAW_FREESPEECH]==-2 && law[LAW_RELIGION]!=-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"");
+                      else strcat(story,"screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs.  I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"");break;
+               case 3:
+		      if(law[LAW_FREESPEECH]==-2 && law[LAW_WOMEN]==-2)strcat(story,"[fed] from [an indecent] woman");
+		      else if(law[LAW_FREESPEECH]!=-2 && law[LAW_WOMEN]==-2)strcat(story,"breastfed from an exposed woman");
+		      else if(law[LAW_FREESPEECH]==-2 && law[LAW_WOMEN]!=-2)strcat(story,"[fed] from a [woman]");
+		      else strcat(story,"breastfed from a lactating woman");break;
+               case 4:
+		      if(law[LAW_FREESPEECH]==-2)strcat(story,"[had fun]");
+		      else strcat(story,"masturbated");break;
             }
             strcat(story," on the air.  Although ");
             strcat(story,dstr2);
             strcat(story," later apologized, ");
-            strcat(story,"the FCC received thousands of complaints ");
-            strcat(story,"from irate listeners.  A spokesperson for the FCC ");
+            strcat(story,"the FCC received ");
+	    if(law[LAW_FREESPEECH]==-2)strcat(story,"thousands of");
+	    else if(law[LAW_FREESPEECH]==-1)strcat(story,"several hundred");
+	    else if(law[LAW_FREESPEECH]==0)strcat(story,"hundreds of");
+	    else if(law[LAW_FREESPEECH]==1)strcat(story,"dozens of");
+	    else strcat(story,"some");
+	    strcat(story," complaints ");
+            strcat(story,"from irate listeners ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"across the nation. ");
+            else if(law[LAW_FREESPEECH]==-1)strcat(story,"from all over the state. ");
+            else if(law[LAW_FREESPEECH]==0)strcat(story,"within the county. ");
+            else if(law[LAW_FREESPEECH]==1)strcat(story,"in neighboring towns. ");
+            else strcat(story,"within the town. ");
+	    strcat(" A spokesperson for the FCC ");
             strcat(story,"stated that the incident is under investigation.");
             strcat(story,"&r");
          }
@@ -1365,7 +1469,8 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(10))
             {
                case 0:
-                  strcat(str,"regularly visits prostitutes.");
+		  if(law[LAW_FREESPEECH]==-2)strcat(str,"regularly visits [civil servants.]");
+                  else strcat(str,"regularly visits prostitutes.");
                   break;
                case 1:
                   strcat(str,"seeks the aid of psychics.");
@@ -1374,7 +1479,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
                   strcat(str,"donated millions to the KKK.");
                   break;
                case 3:
-                  strcat(str,"evaded paying taxes.");
+                  strcat(str,"hasn't paid taxes in over 20 years.");
                   break;
                case 4:
                   strcat(str,"took out a contract on his wife.");
@@ -1545,7 +1650,8 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
          case VIEW_POLICEBEHAVIOR:
-            displaycenterednewsfont("BASTARDS",5);
+            if(law[LAW_FREESPEECH]==-2)displaycenterednewsfont("[JERKS]",5);
+	    else displaycenterednewsfont("BASTARDS",5);
             displaynewspicture(PICTURE_TERRORISTS,13);
             break;
          case VIEW_PRISONS:
