@@ -283,7 +283,7 @@ void disguisecheck(void)
          {
             sitealarm=1;
 
-            addstr(" shrieks in alarm at the squad's Liberal Tresspassing!");
+            addstr(" shrieks in alarm at the squad's Liberal Trespassing!");
          }
          else
          {

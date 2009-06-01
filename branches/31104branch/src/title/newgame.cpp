@@ -242,7 +242,7 @@ void makecharacter(void)
             move(2,0);addstr("When I was bad...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - my parents grounded me and hid my toys, but I knew where they put them."); // Toybox
+               addstr("A - my parents grounded me and hid my toys, but I knew where they put them."); // Toy box
             //SKILL_SECURITY 1
             //ATTRIBUTE_AGILITY 1
             move(7,0);
@@ -288,7 +288,7 @@ void makecharacter(void)
             move(2,0);addstr("In elementary school...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - I was mischevious, and always up to something.");
+               addstr("A - I was mischievous, and always up to something.");
             //SKILL_DISGUISE 1
             //ATTRIBUTE_AGILITY 1
             move(7,0);
@@ -369,7 +369,7 @@ void makecharacter(void)
             move(2,0);addstr("Things were getting really bad...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - when I stole my first car.  I got a few blocks before I totalled it.");
+               addstr("A - when I stole my first car.  I got a few blocks before I totaled it.");
             //SKILL_DRIVING 1
             //SKILL_SECURITY 1
             move(7,0);
@@ -402,7 +402,7 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 1
             move(7,0);
             if(choices || selection == 1)
-               addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off.");
+               addstr("B - my step mom shot her ex-husband, my dad, with a shotgun.  She got off.");
             //SKILL_SHOTGUN 2
             //ATTRIBUTE_AGILITY 1
             move(9,0);

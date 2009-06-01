@@ -583,7 +583,7 @@ char talk(Creature &a,int t)
                   {
                      levelmap[locx][locy][locz].flag |= SITEBLOCK_FIRE_START;
                      move(17,1);
-                     addstr("The carpet smoulders, then bursts into flame.");
+                     addstr("The carpet smolders, then bursts into flame.");
                      move(18,1);
                      addstr("Perhaps that was a bad idea...");
                   }
@@ -1206,7 +1206,7 @@ char talk(Creature &a,int t)
                         case LAW_CIVILRIGHTS:
                            addstr("\"You might think we have all these civil rights laws on the books, but");
                            move(y,1);y++;
-                           addstr("we aren't enforcing them consistantly.  We still have a long way to go.\"");
+                           addstr("we aren't enforcing them consistently.  We still have a long way to go.\"");
                            troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
                            break;
                         case LAW_DRUGS:
@@ -1866,7 +1866,7 @@ char talk(Creature &a,int t)
                         case 2: addstr("\"I'm.. uh.. waiting for someone.\"");
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            addstr(" <turns away>");break;
-                        case 3: addstr("\"Hey, look, a ufo!\"");
+                        case 3: addstr("\"Hey, look, a UFO!\"");
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            addstr(" <ducks away>");break;
                         case 4: addstr("\"You're not my type. I like the sane.\"");

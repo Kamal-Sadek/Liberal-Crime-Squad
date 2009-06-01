@@ -24,7 +24,7 @@ This file is part of Liberal Crime Squad.                                       
 /**********************************************************************
 ** *JDS*
 ** ----- The sleeper system has been completely reworked.
-** - Sleepers no longer directly inflence the issues. They now affect
+** - Sleepers no longer directly influence the issues. They now affect
 ** the broad "liberal power" stats across many issues, which are used
 ** as a kind of monthly liberal roll akin to AM Radio and Cable News.
 ** - Each sleeper can affect one or more issue, throwing their power

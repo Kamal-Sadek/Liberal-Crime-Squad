@@ -635,7 +635,7 @@ void trial(Creature &g)
          else
          {
             addstr(attorneyname);
-            addstr("'s CONSERVATIVE ARCH-NEMISIS will represent the prosecution!!!"); // Red text?
+            addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!"); // Red text?
             jury=0;
             prosecution+=40; // DUN DUN DUN!!
          }
@@ -810,7 +810,7 @@ void trial(Creature &g)
          // than the public defender, and about on par with the prosecutor so long as it isn't
          // a high-profile case.
 
-         // A character build spefically to be strong in this area *will* still start out
+         // A character build specifically to be strong in this area *will* still start out
          // slightly stronger than the public defender (and will be notably better once they
          // hit activist level).
          int defenseskill=3*g.skillval(SKILL_PERSUASION)+6*g.skillval(SKILL_LAW);
@@ -1308,7 +1308,7 @@ char prison(Creature &g)
                   case 2:addstr("disemboweling");break;
                   case 3:addstr("one thousand cuts");break;
                   case 4:addstr("feeding the lions");break;
-                  case 5:addstr("repeated gladiatory death matches");break;
+                  case 5:addstr("repeated gladiatorial death matches");break;
                   case 6:addstr("burning");break;
                   case 7:addstr("crucifixion");break;
                   case 8:addstr("head-squishing");break;
@@ -1317,7 +1317,7 @@ char prison(Creature &g)
                   case 11:addstr("covering with peanut butter and letting rats eat");break;
                   case 12:addstr("burying up to the neck in a fire ant nest");break;
                   case 13:addstr("running truck over the head");break;
-                  case 14:addstr("drowning in a sewage digestor vat");break;
+                  case 14:addstr("drowning in a sewage digester vat");break;
                   case 15:addstr("chipper-shredder");break;
                   case 16:addstr("use in lab research");break;
                   case 17:addstr("blood draining");break;

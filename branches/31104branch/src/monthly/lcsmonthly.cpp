@@ -410,7 +410,7 @@ change_public_opinion(VIEW_STALIN,5);
                change_public_opinion(VIEW_WOMEN,50);
                break;
 			case 6:
-				addstr("revealing a plan to posion the water supply with fluoride on behalf of the Stalinist Comrade Squad.");break;
+				addstr("revealing a plan to poison the water supply with fluoride on behalf of the Stalinist Comrade Squad.");break;
 change_public_opinion(VIEW_GAY,1);
 change_public_opinion(VIEW_POLICEBEHAVIOR,1);
 change_public_opinion(VIEW_WOMEN,1);
@@ -446,11 +446,11 @@ change_public_opinion(VIEW_STALIN,5);
             case 3:addstr("documenting a forced confession.");break;
             case 4:addstr("documenting widespread corruption in the force.");break;
             case 5:
-               addstr("documenting gladiatory matches held between prisoners by guards.");
+               addstr("documenting gladiatorial matches held between prisoners by guards.");
                change_public_opinion(VIEW_PRISONS,50);
                break;
 			case 6:
-				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad for \"re-eductation\".");
+				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad for \"re-education\".");
 					change_public_opinion(VIEW_GAY,1);
 change_public_opinion(VIEW_POLICEBEHAVIOR,1);
 change_public_opinion(VIEW_JUSTICES,1);
@@ -527,7 +527,7 @@ change_public_opinion(VIEW_STALIN,5);
             case 1:addstr("documenting a prison torture case.");break;
             case 2:addstr("documenting widespread corruption among prison employees.");break;
             case 3:
-               addstr("documenting gladiatory matches held between prisoners by guards.");
+               addstr("documenting gladiatorial matches held between prisoners by guards.");
 			case 4:
 				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad by rogue guards.");break;
 				change_public_opinion(VIEW_GAY,1);
