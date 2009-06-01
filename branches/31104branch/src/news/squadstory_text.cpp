@@ -194,7 +194,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
 		 {
          if(ns.positive)
          {
-            strcat(story,"Militants affilated with the Stalinist Comrade Squad ");
+            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
             strcat(story,"engaged in political activism yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
             strcat(story,"&r");
@@ -217,7 +217,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
    {
          if(ns.positive)
          {
-            strcat(story,"Militants affilated with the Stalinist Comrade Squad ");
+            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
             strcat(story,"engaged in political activism yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
             strcat(story,"&r");
@@ -240,7 +240,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
    {
          if(ns.positive)
 		 {
-            strcat(story,"Militants affilated with the Stalinist Comrade Squad ");
+            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
             strcat(story,"were either arrested or killed while engaging in political activism, according ");
             strcat(story,"to a spokesperson from the police department.");
             strcat(story,"&r");
@@ -263,7 +263,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
    {
          if(ns.positive)
          {
-            strcat(story,"Militants affilated with the Stalinist Comrade Squad ");
+            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
             strcat(story,"were either arrested or killed while engaging in political activism, according ");
             strcat(story,"to a spokesperson from the police department.");
             strcat(story,"&r");

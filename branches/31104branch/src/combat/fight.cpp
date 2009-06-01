@@ -297,7 +297,7 @@ void enemyattack(void)
                   switch(LCSrandom(9))
                   {
                      case 0:addstr(" crawls off moaning...");break;
-                     case 1:addstr(" crawls off wimpering...");break;
+                     case 1:addstr(" crawls off whimpering...");break;
                      case 2:addstr(" crawls off trailing blood...");break;
                      case 3:addstr(" crawls off screaming...");break;
                      case 4:addstr(" crawls off crying...");break;
@@ -2859,7 +2859,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
                addstr(" starts shaking uncontrollably.");
                break;
             case 28:
-               addstr(" looks strangly calm.");
+               addstr(" looks strangely calm.");
                break;
             case 29:
                addstr(" nods off for a moment.");

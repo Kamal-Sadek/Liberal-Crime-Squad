@@ -284,7 +284,7 @@ void activate_sleeper(Creature *cr)
       case ACTIVITY_SLEEPER_CONSERVATIVE:
          move(22,3);
          addstr(cr->name);
-         addstr(" will publically condemn Liberals and the LCS, in exchange");
+         addstr(" will publicly condemn Liberals and the LCS, in exchange");
          move(23,3);
          addstr("for increased credibility with the good old boy network.");
          break;

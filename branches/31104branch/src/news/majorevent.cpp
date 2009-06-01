@@ -68,7 +68,7 @@ void constructeventstory(char *story,short view,char positive)
 			}
 			if(law[LAW_WOMEN]=-2)
 			{
-				strcat(story," later admitted to being a rogue FBI vigliante, hunting down ");
+				strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
 				strcat(story," abortion doctors instead of just arresting them.&r");
 			}
 			if(VIEW_STALIN<=50)
@@ -336,7 +336,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"The steel bars grated forward in their rails, ");
             strcat(story,"coming to a halt with a deafening clang that said it all -- ");
             strcat(story,"I was trapped with them now.  There were three, looking me over ");
-            strcat(story,"with dark glares of bare lust, as football players might stare at a stupified, drunken, helpless teenager.  ");
+            strcat(story,"with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager.  ");
             strcat(story,"My shank's under the mattress.  Better to be a man and fight or a punk and let them take it?  ");
 	    if(law[LAW_GAY]==-2)strcat(story,"Maybe lose an eye the one way, maybe catch GRIDS the other.  A helluva choice, "); // Gay Related Immunodeficiency Syndrome
             else strcat(story,"Maybe lose an eye the one way, maybe catch AIDS the other.  A helluva choice, ");
@@ -407,7 +407,7 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story,"his");
             else
                strcat(story,"her");
-            strcat(story," stock for 'unamerican content'. Attempts to take the matter to the legal arena "
+            strcat(story," stock for 'Un-American content'. Attempts to take the matter to the legal arena "
                          "failed after the judge - who happened to be a brother-in-law of one of the "
                          "accused officers - threw out the case and the state supreme court declined to "
                          "get involved despite widespread media publication of the case.");
@@ -505,7 +505,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," as key evidence of the dark nature of the book.");
             strcat(story,"&r");
             strcat(story,"   When the decision to ban the book was announced yesterday, ");
-            strcat(story,"many area children spontoneously broke into tears.  One child was ");
+            strcat(story,"many area children spontaneously broke into tears.  One child was ");
             strcat(story,"heard saying, \"");
             switch(LCSrandom(2))
             {
@@ -917,7 +917,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"white supremacists");break;
                case 1:strcat(story,"Islamic fundamentalists");break;
-               case 2:strcat(story,"outcast goths from a suburban highschool");break;
+               case 2:strcat(story,"outcast goths from a suburban high school");break;
             }
             strcat(story," planned to ");
             switch(LCSrandom(9))
@@ -1021,7 +1021,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"guy going on a killing spree");break;
                case 1:strcat(story,"gal turning blue and exploding");break;
-               case 2:strcat(story,"guy speaking in tongues and worshipping Satan");break;
+               case 2:strcat(story,"guy speaking in tongues and worshiping Satan");break;
                case 3:strcat(story,"gal having a ruptured intestine");break;
             }
             strcat(story," is just a load of ");
@@ -1151,7 +1151,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"Among the most startling of the think tank's findings is that ");
             switch(LCSrandom(5))
             {
-               case 0:strcat(story,"a modest intake of radiactive waste");break;
+               case 0:strcat(story,"a modest intake of radioactive waste");break;
                case 1:strcat(story,"a healthy dose of radiation");break;
                case 2:strcat(story,"a bath in raw sewage");break;
                case 3:strcat(story,"watching animals die in oil slicks");break;
@@ -1188,7 +1188,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"Why is there contention on the pollution question?  It's because ");
             strcat(story,"there's work left to be done.  We should study much more ");
             strcat(story,"before we urge any action.  Society really just ");
-            strcat(story,"needs to take a breather on this one.  We don't see why there's such a rush to judgement here.  ");
+            strcat(story,"needs to take a breather on this one.  We don't see why there's such a rush to judgment here.  ");
             strcat(story,"&r");
             break;
          case VIEW_CORPORATECULTURE:
@@ -1518,10 +1518,10 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(6))
             {
                case 0:strcat(str,"Ukraine");break;
-               case 1:strcat(str,"Sibera");break;
+               case 1:strcat(str,"Siberia");break;
                case 2:strcat(str,"Poland");break;
                case 3:strcat(str,"Moscow");break;
-               case 4:strcat(str,"Czechslovkia");break;
+               case 4:strcat(str,"Czechoslovakia");break;
                case 5:strcat(str,"the Baltic States");break;
                case 6:strcat(str,"Eastern Europe");break;
                case 7:strcat(str,"Russia");break;
@@ -1612,7 +1612,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(6))
             {
                case 0:strcat(str,"Dear Leader");break;
-               case 1:strcat(str,"Couragous Fighter");break;
+               case 1:strcat(str,"Courageous Fighter");break;
                case 2:strcat(str,"Economic Miracle-Worker");break;
                case 3:strcat(str,"Great Communicator");break;
                case 4:strcat(str,"Socialist Democrat");break;

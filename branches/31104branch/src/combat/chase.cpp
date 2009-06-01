@@ -172,7 +172,7 @@ char chasesequence(void)
                   set_color(COLOR_MAGENTA,COLOR_BLACK,1);
                   move(9,1);
                   //LIMIT :------------------------------------:
-                  addstr("There's a red light with crosstraffic ahead!");
+                  addstr("There's a red light with cross traffic ahead!");
                   move(10,1);
                   addstr("D - Run the light anyway!");
                   move(11,1);
@@ -944,7 +944,7 @@ void evasiverun(void)
             switch(encounter[0].type)
             {
             case CREATURE_COP:addstr("handcuffed!");break;
-            case CREATURE_GANGUNIT:addstr("tazered repeatedly!");activesquad->squad[p]->blood-=10;break;
+            case CREATURE_GANGUNIT:addstr("tazed repeatedly!");activesquad->squad[p]->blood-=10;break;
             case CREATURE_DEATHSQUAD:addstr("shot in the head!");activesquad->squad[p]->blood=0;break;
             default:addstr("beaten senseless!");activesquad->squad[p]->blood-=60;break;
             }

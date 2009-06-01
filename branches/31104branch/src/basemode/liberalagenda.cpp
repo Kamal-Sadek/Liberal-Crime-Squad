@@ -394,7 +394,7 @@ char liberalagenda(char won)
                      addstr("Immigration is illegal, and noncitizens are shipped to Mexico at gunpoint.");
 				      else if(law[l]==-1)addstr("The military has been deployed to the borders to slow immigration.");
 				      else if(law[l]==0)addstr("Great expense is taken to slow immigration, without success.");
-				      else if(law[l]==1)addstr("The government works to accomodate potential immigrants.");
+				      else if(law[l]==1)addstr("The government works to accommodate potential immigrants.");
 				      else addstr("Immigration is unregulated.");
                   break;
                case LAW_RELIGION:
@@ -415,7 +415,7 @@ char liberalagenda(char won)
 				      else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
 				      else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
 				      else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
-				      else addstr("Election expenses are publically funded, and voting is by ranked list.");
+				      else addstr("Election expenses are publicly funded, and voting is by ranked list.");
 				      break;
                case LAW_MILITARY:
                   if(won==-1)addstr("The massive military is a tool of political oppression.");
@@ -433,7 +433,7 @@ char liberalagenda(char won)
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
 				      else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
-				      else if(law[l]==0)addstr("Government human rights abuses still occassionally crop up.");
+				      else if(law[l]==0)addstr("Government human rights abuses still occasionally crop up.");
 				      else if(law[l]==1)addstr("The government has a strong reputation on human rights issues.");
 				      else addstr("The country is respected as an international leader on human rights.");
 				      break;
@@ -461,7 +461,7 @@ char liberalagenda(char won)
                   if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
 				  else if(won==-2)addstr("All forms of human experimentation on 'class enemies' are encouraged.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Animals are things of inferior existance.");
+                     addstr("Animals are things of inferior existence.");
                   else if(law[l]==-1)addstr("Animal research is lightly regulated.");
                   else if(law[l]==0)addstr("Animal research is moderately regulated.");
                   else if(law[l]==1)addstr("Animal research is stiffly regulated.");
@@ -551,7 +551,7 @@ char liberalagenda(char won)
                   if(won==-1)addstr("Unacceptable speech is a capital crime.");
 				  if(won==-2)addstr("Unacceptable speech is a capital crime.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Armored squads are tasked with suppressing unacceptable speach.");
+                     addstr("Armored squads are tasked with suppressing unacceptable speech.");
                   else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
                   else if(law[l]==0)addstr("Free speech is tolerated.");
                   else if(law[l]==1)addstr("Free speech is encouraged.");
@@ -559,7 +559,7 @@ char liberalagenda(char won)
                   break;
                case LAW_FLAGBURNING:
                   if(won==-1)addstr("Images or words describing flag burning are punished by death.");
-				  else if(won==-2)addstr("Flags of the old American regime is burnt primarly as as fuel.");
+				  else if(won==-2)addstr("Flags of the old American regime is burnt primarily as as fuel.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Burning the flag is a crime on par with murder.");
                   else if(law[l]==-1)addstr("Burning the flag is a felony.");
@@ -708,7 +708,7 @@ char confirmdisband(void) // XXX The (current) issue that the masses are most
       case 3:strcpy(word,"Abortion Rights");break;		// Sacred Life
       case 4:strcpy(word,"Separation Clause");break;		// Under God
       case 5:strcpy(word,"Racial Equality");break;		// Racial Profiling
-      case 6:strcpy(word,"Gun Control");break;			// Second Ammendment
+      case 6:strcpy(word,"Gun Control");break;			// Second Amendment
       case 7:strcpy(word,"Campaign Finance Reform");break;	// Lobbyists
       case 8:strcpy(word,"Animal Rights");break;		// Animal Testing FIXME
       case 9:strcpy(word,"Worker's Rights");break;		// Small Business FIXME
