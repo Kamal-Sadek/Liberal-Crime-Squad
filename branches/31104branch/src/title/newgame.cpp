@@ -402,7 +402,7 @@ void makecharacter(void)
             //ATTRIBUTE_INTELLIGENCE 1
             move(7,0);
             if(choices || selection == 1)
-               addstr("B - my step mom shot her ex-husband, my dad, with a shotgun.  She got off.");
+               addstr("B - my step mom shot her ex-husband, my dad, with a shotgun.  She got off.");//XXX: Sounds... Sexual...
             //SKILL_SHOTGUN 2
             //ATTRIBUTE_AGILITY 1
             move(9,0);
@@ -426,7 +426,7 @@ void makecharacter(void)
             move(2,0);addstr("I was only 15 when I ran away, and...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");
+               addstr("A - I started robbing houses:  rich people only.  I was fed up with their crap.");//XXX: No theft?
             //SKILL_SECURITY 1
             //SKILL_STEALTH 1
             //ATTRIBUTE_AGILITY 1
@@ -437,7 +437,7 @@ void makecharacter(void)
             //SKILL_HANDTOHAND 2
             move(9,0);
             if(choices || selection == 2)
-               addstr("C - I got a horrible job working fast food, smiling as people fed the man.");
+               addstr("C - I got a horrible job working fast food, smiling as people fed the man.");//XXX: No cooking?
             //ATTRIBUTE_CHARISMA 1
             //SKILL_BUSINESS 2
             move(11,0);
@@ -456,7 +456,7 @@ void makecharacter(void)
             move(2,0);addstr("Life went on.  On my 18th birthday...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - I stole a security uniform.");
+               addstr("A - I stole a security uniform.");//XXX: No theft?
             move(7,0);
             if(choices || selection == 1)
                addstr("B - I bought myself an assault rifle.");
@@ -465,7 +465,7 @@ void makecharacter(void)
                addstr("C - I celebrated.  I'd saved a thousand bucks!");
             move(11,0);
             if(choices || selection == 3)
-               addstr("D - I went to a party and met a cool law student.  We've been dating since.");
+               addstr("D - I went to a party and met a cool law student.  We've been dating since.");//XXX: No Seduction?
             move(13,0);
             if(choices || selection == 4)
                addstr("E - I managed to acquire secret maps of several major buildings downtown.");
@@ -474,7 +474,7 @@ void makecharacter(void)
             move(2,0);addstr("For the past few years, I've been...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - stealing from Corporations.  I know they're still keeping more secrets.");
+               addstr("A - stealing from Corporations.  I know they're still keeping more secrets.");//XXX: No theft?
             //ATTRIBUTE_INTELLIGENCE 2
             //ATTRIBUTE_AGILITY 2
             //SKILL_DISGUISE 2
