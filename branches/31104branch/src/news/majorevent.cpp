@@ -21,6 +21,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," - ");
 	    if(law[LAW_ABORTION]==-2)strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
 	    else if(law[LAW_ABORTION]==-1)strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
+	    else if(law[LAW_ABORTION]<=1)strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
             else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
             lastname(str);strcat(story,str);
@@ -54,7 +55,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
-			if(VIEW_STALIN<=50)
+			if(VIEW_STALIN<=50)//XXX: Should this really trigger every time this is true? Maybe if(VIEW_STALIN+LCSrandom(25)<=66) or something...
 			{
 			strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
             strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
