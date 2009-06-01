@@ -38,7 +38,7 @@ void constructeventstory(char *story,short view,char positive)
                case 0:strcpy(gen,"his");break;
                case 1:strcpy(gen,"her");break;
             }
-            strcat(story," was walking to ");strcat(story,gen);
+            strcat(story," was walking to ");strcat(story,gen);//TODO: Add more variety, not just in the parking lot.
             strcat(story," car when, according to police reports, ");
             strcat(story,"shots were fired from a nearby vehicle.  ");
             strcat(story,dstr2);
@@ -163,7 +163,12 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Authorities have stated that they will vigorously ");
             strcat(story,"prosecute this case as a hate crime, due to the ");
             strcat(story,"aggravated nature of the offense");
-            if(law[LAW_GAY]==-2)strcat(story,", even though being gay is deviant, as we all know.");
+            if(law[LAW_GAY]==-2 && law[LAW_FREESPEECH]!=-2)strcat(story,", despite the fact that ");
+                                                           strcat(story,dstr);
+                                                           strcat(story," ");
+                                                           strcat(story,dstr2);
+                                                           strcat(story," is a known faggot");
+            else if(law[LAW_GAY]==-2)strcat(story,", even though being gay is deviant, as we all know.");
             else strcat(story,".");
             strcat(story,"&r");
             break;
@@ -441,13 +446,14 @@ void constructeventstory(char *story,short view,char positive)
             lastname(dstr);
             strcat(story,dstr);
             strcat(story,"_and_the_");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"Mysterious");break;
                case 1:strcat(story,"Magical");break;
                case 2:strcat(story,"Golden");break;
                case 3:strcat(story,"Invisible");break;
                case 4:strcat(story,"Wondrous");break;
+               case 5:strcat(story,"Amazing");break;
             }
             strcat(story,"_");
             switch(LCSrandom(5))
