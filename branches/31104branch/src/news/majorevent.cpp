@@ -614,11 +614,12 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"'s monologue for the evening began the way that fans ");
             strcat(story,"had come to expect, with attacks on the \"liberal media establishment\" and ");
             strcat(story,"the \"elite liberal agenda\".  But when the radio icon said, \"");
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
                case 0:strcat(story,"and the Grays are going to take over the planet in the End Times");break;
                case 1:strcat(story,"a liberal chupacabra will suck the blood from us like a goat, a goat!, a goat!");break;
                case 2:strcat(story,"I feel translucent rods passing through my body...  it's like making love to the future");break;
+               case 3:strcat(story,"and the greatest living example of a reverse racist is the current president!");break; // lol, Limbaugh
             }
             strcat(story,"\", a former fan of the show, ");
             char nstr[200],nstr2[200];

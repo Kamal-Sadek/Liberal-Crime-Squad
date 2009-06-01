@@ -1,4 +1,27 @@
-#!/bin/bash
+#!/bin/sh
 #
-# Just a simple script for finding Subversion conflicts. *NOT* for fixing them.
-grep -r \>\>\> *
+# A simple script that finds Subversion(1) conflicts using grep(1).
+#       This script does *NOT* fix them.
+#		FIXME: Poorly implemented, grep(1)s the directories 3 times.
+fcount=`grep -rlI --color=auto --exclude-dir=".svn" \>\>\>\> * | sed -n $=` # grep(1), sed(1)
+ccount=`grep -rI --color=auto --exclude-dir=".svn" \>\>\>\> * | sed -n $=` # grep(1), sed(1)
+
+if [ "$fcount" = "" ]; then
+	fcount='any';
+	fnum='file';
+	elif [ "$fcount" = "1" ]; then
+		fnum='file';
+	else fnum='files';
+fi
+
+if [ "$ccount" = "" ]; then
+	ccount='No';
+	cnum='matches';
+	elif [ "$ccount" = "1" ]; then
+		cnum='match';
+	else cnum='matches';
+fi
+
+grep -rnI --color=auto --exclude-dir=".svn" \>\>\>\> * # grep(1)
+echo "$ccount $cnum in $fcount $fnum." # Recursive, grep(1) every file in every
+                                       #         directory for 4 '>'s in a row.

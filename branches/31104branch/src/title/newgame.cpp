@@ -175,6 +175,12 @@ void makecharacter(void)
 
       switch(q)
       {
+
+/*
+	- The anniversary of Hitler's suicide. - SKILL_PISTOL 1 (lol)
+	- Indira Gandhi Killed
+*/
+
          case 0:
             move(2,0);addstr("The day I was born in 1984...");
             
@@ -225,11 +231,18 @@ void makecharacter(void)
             addstr(".");
 
             break;
+
+		// My first memory was...
+			// my father burning my back with a cigarette
+		// When he was really into the sauce...
+			// 
+		// XXX: Needs an option to have the founder have been in the Army -- LK
+
          case 1:
             move(2,0);addstr("When I was bad...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - my parents grounded me and hid my toys, but I knew where they put them.");
+               addstr("A - my parents grounded me and hid my toys, but I knew where they put them."); // Toybox
             //SKILL_SECURITY 1
             //ATTRIBUTE_AGILITY 1
             move(7,0);
@@ -364,6 +377,7 @@ void makecharacter(void)
                addstr("B - and I went to live with my dad.  He had been in Nam and he still drank.");
             //SKILL_SHOTGUN 1
             //SKILL_RIFLE 1
+            //SKILL_PSYCHOLOGY 1
             move(9,0);
             if(choices || selection == 2)
                addstr("C - and I went completely goth.  I had no friends and made costumes by myself.");
@@ -428,7 +442,7 @@ void makecharacter(void)
             //SKILL_BUSINESS 2
             move(11,0);
             if(choices || selection == 3)
-               addstr("D - I let people pay me for sex.  I needed the money to survive.");
+               addstr("D - I let people pay me for sex.  I needed the money to survive.");//XXX: What? No heart loss?
             //ATTRIBUTE_CHARISMA 1
             //SKILL_SEDUCTION 2
             move(13,0);
@@ -671,6 +685,7 @@ void makecharacter(void)
             {
                newcr->skill[SKILL_SHOTGUN]+=1;
                newcr->skill[SKILL_RIFLE]+=1;
+               newcr->skill[SKILL_PSYCHOLOGY]+=1;
             }
             if(c=='c')
             {
