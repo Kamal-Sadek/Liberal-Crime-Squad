@@ -162,11 +162,13 @@ void special_bouncer_assess_squad()
          break;
       case REJECTED_UNDERAGE:
          set_color(COLOR_RED,COLOR_BLACK,1);
-         switch(LCSrandom(3))
+         switch(LCSrandom(5))
          {
          case 0:addstr("\"Hahaha, come back in a few years.\"");break;
          case 1:addstr("\"Find some kiddy club.\"");break;
          case 2:addstr("\"You don't look 18 to me.\"");break;
+         case 3:addstr("\"Go back to your treehouse.\"");break;
+         case 4:addstr("\"Where's your mother?\"");break
          }
          break;
       case REJECTED_FEMALE:
@@ -198,13 +200,17 @@ void special_bouncer_assess_squad()
          break;
       case REJECTED_SMELLFUNNY:
          set_color(COLOR_RED,COLOR_BLACK,1);
-         switch(LCSrandom(5))
+         switch(LCSrandom(6))
          {
          case 0:addstr("\"God, you smell.\"");break;
          case 1:addstr("\"Not letting you in. Because I said so.\"");break;
          case 2:addstr("\"There's just something off about you.\"");break;
          case 3:addstr("\"Take a shower.\"");break;
          case 4:addstr("\"You'd just harass the others, wouldn't you?\"");break;
+         case 5:
+                if(law[LAW_FREESPEECH]==-2)addstr("\"Get the [heck] out of here.\"");
+                else if(law[LAW_FREESPEECH]==2)addstr("\"Get the fuck out of here.\"");
+                else addstr("\"Get the hell out of here.\"");break;
          }
          break;
       case REJECTED_BLOODYCLOTHES:
@@ -764,7 +770,7 @@ void special_courthouse_jury(void)
                addstr(" works the room like Twelve Angry Men, and the jury");
                move(17,1);
                addstr("concludes that the ");
-               switch(LCSrandom(10))
+               switch(LCSrandom(16))
                {
                   case 0:addstr("murder");break;
                   case 1:addstr("assault");break;
@@ -776,6 +782,12 @@ void special_courthouse_jury(void)
                   case 7:addstr("libel");break;
                   case 8:addstr("slander");break;
                   case 9:addstr("sodomy");break;
+                  case 10:addstr("obstruction of justice");break;
+                  case 11:addstr("breaking and entering");break;
+                  case 12:addstr("public indecency");break;
+                  case 13:addstr("arson");break;
+                  case 14:addstr("resisting arrest");break;
+                  case 15:addstr("tax evasion");break;
                }
                addstr(" wasn't really wrong here.");
 
