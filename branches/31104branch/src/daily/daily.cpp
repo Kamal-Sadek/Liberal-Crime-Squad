@@ -1806,7 +1806,7 @@ void initlocation(locationst &loc)
       case SITE_GOVERNMENT_COURTHOUSE:
          if(law[LAW_DEATHPENALTY]==-2)
          {
-            strcpy(loc.name,"Halls of Ultimate Judgement");
+            strcpy(loc.name,"Halls of Ultimate Judgment");
             strcpy(loc.shortname,"Judge Hall");
          }
          else

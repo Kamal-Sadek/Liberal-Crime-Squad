@@ -220,7 +220,7 @@ void siegecheck(char canseethings)
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr("You have recieved advance warning from your sleepers regarding");
+               addstr("You have received advance warning from your sleepers regarding");
                move(9,1);
                addstr("in imminent police raid on ");
                addlocationname(location[l]);
@@ -394,7 +394,7 @@ void siegecheck(char canseethings)
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr("You have recieved ");
+               addstr("You have received ");
                if(ceosleepercount)addstr("a sleeper CEO's warning");
                else("an anonymous tip");
                addstr(" that the Corporations");
@@ -453,7 +453,7 @@ void siegecheck(char canseethings)
                   erase();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr("You have recieved a sleeper warning that the CCS");
+                  addstr("You have received a sleeper warning that the CCS");
                   move(9,1);
                   addstr(" is gearing up to attack ");
                   addstr(location[l]->name);
@@ -1469,7 +1469,7 @@ void siegeturn(char clearformess)
                         case 4:addstr("Marxist");break;
                         case 5:addstr("Green");break;
                         case 6:addstr("Elite");break;
-                        case 7:addstr("Guerilla");break;
+                        case 7:addstr("Guerrilla");break;
                         case 8:addstr("Commando");break;
                         case 9:addstr("Soldier");break;
                      }
@@ -1854,7 +1854,7 @@ int numbereating(int loc)
 
 
 /* siege - prepares for entering site mode to fight the siege */
-void escape_engage(void)
+void escape_engage(void) // FIXME: Wait... LCC?
 {
    //GIVE INFO SCREEN
    erase();
@@ -2127,7 +2127,7 @@ void conquertext(void)
       move(3,16);
       addstr("The Conservative automatons have been driven back.");
       move(4,11);
-      addstr("Unfortunately, you will never truely be safe from");
+      addstr("Unfortunately, you will never truly be safe from");
       move(5,11);
       addstr("this filth until the Liberal Agenda is realized.");
    }
@@ -2368,7 +2368,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_COMMERCE])
    {
       move(4,1);
-      addstr("You are wanted for intefering with interstate commerce");
+      addstr("You are wanted for interfering with interstate commerce");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

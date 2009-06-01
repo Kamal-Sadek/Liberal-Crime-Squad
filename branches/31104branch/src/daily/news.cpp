@@ -526,10 +526,10 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                if(ns.type==NEWSSTORY_NUDITYARREST)
                   strcat(story,"The incident apparently occurred as a response to a public nudity complaint.  ");
                else if(ns.type==NEWSSTORY_DRUGARREST)
-                  strcat(story,"The suspect was alledgedly selling \"brownies\".  ");
+                  strcat(story,"The suspect was allegedly selling \"brownies\".  ");
                else if(ns.type==NEWSSTORY_BURIALARREST)
                {
-                  strcat(story,"A passerby alledgedly called the police after seeing the suspect dragging what appeared ");
+                  strcat(story,"A passerby allegedly called the police after seeing the suspect dragging what appeared ");
                   strcat(story,"to be a corpse through an empty lot.  ");
                }
                else
@@ -1034,7 +1034,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   else strcat(story,"The body had no face or ");
                   strcat(story,"fingerprints.  Like, it was all smooth.  ");
                   if(law[LAW_FREESPEECH]==-2)strcat(story,"[Craziest] thing I've ever seen");
-		  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damndest thing I've ever seen");
+		  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damnedest thing I've ever seen");
 		  else strcat(story,"D*mnd*st thing I've ever seen");
                }
                else
@@ -1042,7 +1042,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   strcat(story,"We have strong evidence that this was an extra-judicial slaughter ");
                   strcat(story,"carried out by the Central Intelligence Agency in retaliation for our ");
                   strcat(story,"previous actions to uncover human rights abuses and corruption in the ");
-                  strcat(story,"intelligene community");
+                  strcat(story,"intelligence community");
                }
                break;
             case SIEGE_POLICE:
@@ -1065,7 +1065,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                else
                {
                   strcat(story,"This massacre has the signature mark of a group of mercenaries ");
-                  strcat(story,"known to work with several corporations we've had confrotations ");
+                  strcat(story,"known to work with several corporations we've had confrontations ");
                   strcat(story,"with in the past.  If the police can't figure this one out, they're ");
                   strcat(story,"just covering it up");
                }

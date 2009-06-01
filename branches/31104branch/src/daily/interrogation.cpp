@@ -590,7 +590,7 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          else
          {
-            addstr("It is forced to beg for food and water, and never recieves any food.");
+            addstr("It is forced to beg for food and water, and never receives any food.");
             if(nowater>3)cr->att[ATTRIBUTE_HEALTH]++;
             nowater=0;
          }
@@ -735,12 +735,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 4:
                       if(law[LAW_FREESPEECH]==-2)addstr("Don't [mess] with me");
                       else addstr("Don't fuck with me");break;
-               case 5:
-#ifdef SPARTA
-                      addstr("This is SPARTAAAAA");break;//Couldn't help myself...
-#else
-                      addstr("This is Liberalism");break;
-#endif
+               case 5:addstr("This is Liberalism");break;
                case 6:
                       if(law[LAW_FREESPEECH]==-2)addstr("Convert, [you]");
                       else addstr("Convert, bitch");break;
@@ -1088,7 +1083,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(cr->name);
                   addstr(" watches ");
                   addstr(a->name);
-                  addstr(" shift from one monsterous form to another.");
+                  addstr(" shift from one monstrous form to another.");
                   break;
                case 3:
                   addstr(cr->name);

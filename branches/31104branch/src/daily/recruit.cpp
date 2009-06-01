@@ -220,7 +220,7 @@ static void getissueeventstring(char* str)
    case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
    case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
 	case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
-   case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the chernobyl dead zone");break;
+   case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the Chernobyl dead zone");break;
    case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
    case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
    case VIEW_PRISONS:strcat(str,"a government inquiry into prison conditions");break;
@@ -314,7 +314,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr("D - ");
       addstr(pool[p]->name);
-      addstr(" needs more Juice or Leadership to recurit.");
+      addstr(" needs more Juice or Leadership to recruit.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
    
@@ -515,7 +515,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(pool[p]->name);
             addstr("'s views to be insightful.");
             move(y++,0);
-            addstr("They'll definately meet again tomorrow.");
+            addstr("They'll definitely meet again tomorrow.");
          }
          else if((lib_persuasiveness > recruit_reluctance))
          {

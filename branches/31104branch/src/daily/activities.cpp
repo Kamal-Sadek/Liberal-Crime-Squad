@@ -1038,7 +1038,7 @@ void funds_and_trouble(char &clearformess)
    //ART
    for(s=0;s<art.size();s++)
    {
-      if(!checkforarrest(*art[s],"sketching potraits",clearformess))
+      if(!checkforarrest(*art[s],"sketching portraits",clearformess))
       {
          int competitionpenalty=art.size();
          competitionpenalty-=art[s]->skillval(SKILL_ART);
