@@ -44,6 +44,7 @@ void adjustblogpower(int &power)
       case 5:addstr("a Conservative");break;
       case 6:addstr("a heinous");break;
       case 7:addstr("an embarrasing");break;
+      case 8:addstr("a shameful");break;
       case 9:addstr("a counter-productive");break;
       case 10:addstr("a sad");break;
       case 11:addstr("a vapid");break;
@@ -55,7 +56,6 @@ void adjustblogpower(int &power)
       case 17:addstr("a half-baked");break;
       case 18:addstr("a laughable");break;
       case 19:addstr("an insane");break;
-      case 8:addstr("a shameful");break;
       }
       power = -signed(LCSrandom(2));
    }
@@ -518,7 +518,7 @@ void survey(Creature *cr)
             if(attitude[VIEW_DEATHPENALTY]>50)addstr("the unjust death penalty.");
             else addstr("protecting the death penalty.");
             break;
-			case VIEW_TAXES:
+	 case VIEW_TAXES:
             if(attitude[VIEW_TAXES]>50)addstr("the oppressive tax structure.");
             else addstr("the excessive tax burden.");
             break;
@@ -566,31 +566,19 @@ void survey(Creature *cr)
             if(attitude[VIEW_CEOSALARY]>50)addstr("severe income inequality.");
             else addstr("resisting communist wage limits.");
             break;
-         case VIEW_LIBERALCRIMESQUAD:
+         case VIEW_LIBERALCRIMESQUAD: // wat
          case VIEW_LIBERALCRIMESQUADPOS:
-            if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
-            {
-               addstr("activist political groups.");
-               break;
-            }
             if(attitude[VIEW_LIBERALCRIMESQUADPOS]>50)addstr("the Liberal Crime Squad.");
             else addstr("the LCS terrorists.");
             break;
          case VIEW_CONSERVATIVECRIMESQUAD:
-            if(attitude[VIEW_CONSERVATIVECRIMESQUAD]<50)
-            {
-               addstr("the Conservative Crime Squad.");
-               break;
-            }
+            if(attitude[VIEW_CONSERVATIVECRIMESQUAD]<50)addstr("the Conservative Crime Squad.");
             else addstr("the CCS terrorists.");
             break;
-			case VIEW_STALIN
-				if(attitude[VIEW_STALIN]<50)
-				{
-					addstr("the Stalinist Comrade Squad");
-					break;
-				}
-				else addstr("the Stalinists' terrorism network.");
+	 case VIEW_STALIN:
+	    if(attitude[VIEW_STALIN]<50)addstr("the Stalinist Comrade Squad");
+	    else addstr("the Stalinist terrorism network.");
+	    break;
          case VIEW_PRISONS:
             if(attitude[VIEW_PRISONS]>50)addstr("horrific prison conditions.");
             else addstr("lax prison conditions.");
@@ -728,27 +716,13 @@ void survey(Creature *cr)
             case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
             case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
             case VIEW_DRUGS:
-				{
-					if law[LAW_DRUGS]>=1
-					{
-						addstr("supported keeping marijuana legal");break;
-					}
-					else
-					{
-						addstr("believed in legalizing marijuana");break;
-					}
-				}
-            case VIEW_IMMIGRATION:addstr("wanted amnesty for illegal immigrants");break;
-				{
-					if law[LAW_IMMIGRATION]>=1
-					{
-						addstr("condemned unnecessary immigration regulations")
-					}
-					else
-					{
-						addstr("wanted amnesty for illegal immigrants");break;
-					}
-				}
+					if(law[LAW_DRUGS]>=1)addstr("supported keeping marijuana legal");
+					else addstr("believed in legalizing marijuana");
+					break;
+            case VIEW_IMMIGRATION:
+					if(law[LAW_IMMIGRATION]>=1)addstr("condemned unnecessary immigration regulations");
+					else addstr("wanted amnesty for illegal immigrants");
+					break;
             case VIEW_MILITARY:addstr("opposed increasing military spending");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;

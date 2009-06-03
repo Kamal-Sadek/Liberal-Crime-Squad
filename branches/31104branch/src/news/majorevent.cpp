@@ -70,7 +70,7 @@ void constructeventstory(char *story,short view,char positive)
 			if(law[LAW_WOMEN]=-2)
 			{
 				strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
-				strcat(story," abortion doctors instead of just arresting them.&r");
+				strcat(story," abortion doctors as opposed to arresting them.&r");
 			}
 			if(VIEW_STALIN<=50)
 			{

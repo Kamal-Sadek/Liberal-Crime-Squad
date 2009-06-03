@@ -70,7 +70,7 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-#include <includes.h>
+#include "includes.h"
 #include "configfile.h"
 #include "sitemode/sitemap.h"
 #include <iostream>
