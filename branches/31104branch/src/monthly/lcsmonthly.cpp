@@ -305,7 +305,7 @@ void printnews(short l,short newspaper)
                break;
             case 9:addstr("playing with feces and urine.");break;
 				            case 10:addstr("waving a USSR flag at a Stalinist Comrade Squad rally.");
-change_public_opinion(VIEW_GAY,1);
+change_public_opinion(VIEW_GAY,1);//XXX: Why all these issues? It isn't this way for the CCS!
 change_public_opinion(VIEW_POLICEBEHAVIOR,1);
 change_public_opinion(VIEW_WOMEN,1);
 change_public_opinion(VIEW_NUCLEARPOWER,1);
@@ -454,7 +454,7 @@ change_public_opinion(VIEW_STALIN,5);
 					change_public_opinion(VIEW_GAY,1);
 change_public_opinion(VIEW_POLICEBEHAVIOR,1);
 change_public_opinion(VIEW_JUSTICES,1);
-change_public_opinion(VIEW_ABORTION,1);
+change_public_opinion(VIEW_WOMEN,1);
 change_public_opinion(VIEW_NUCLEARPOWER,1);
 change_public_opinion(VIEW_INTELLIGENCE,1);
 change_public_opinion(VIEW_FREESPEECH,1);
@@ -533,7 +533,7 @@ change_public_opinion(VIEW_STALIN,5);
 				change_public_opinion(VIEW_GAY,1);
 change_public_opinion(VIEW_POLICEBEHAVIOR,1);
 change_public_opinion(VIEW_JUSTICES,1);
-change_public_opinion(VIEW_ABORTION,1);
+change_public_opinion(VIEW_WOMEN,1);
 change_public_opinion(VIEW_NUCLEARPOWER,1);
 change_public_opinion(VIEW_INTELLIGENCE,1);
 change_public_opinion(VIEW_FREESPEECH,1);
