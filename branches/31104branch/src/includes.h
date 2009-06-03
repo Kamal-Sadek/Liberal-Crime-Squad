@@ -2345,13 +2345,13 @@ void majornewspaper(char &clearformess,char canseethings);
  sex.cpp
 */
 /* pick a descriptor acronym */
-void sexdesc(char *str)
+void sexdesc(char *str);
 /* what kind of person? */
-void sexwho(char *str)
+void sexwho(char *str);
 /* seeking acronym */
-void sexseek(char *str)
+void sexseek(char *str);
 /* what type of sex? */
-void sextype(char *str)
+void sextype(char *str);
 
 /*******************************************************************************
 *
