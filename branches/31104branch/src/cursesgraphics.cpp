@@ -66,7 +66,7 @@
 */
 
 #define CURSES_GRAPHICS
-#include <includes.h>
+#include "includes.h"
 
 #ifdef CH_USE_CP437
 int translateGraphicsChar(int c)

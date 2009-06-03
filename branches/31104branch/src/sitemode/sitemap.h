@@ -2,7 +2,7 @@
 #define SITEMAP_H_INCLUDED
 
 
-#include "configfile.h"
+#include "../configfile.h"
 
 #define SITEMAP_ADDTYPE_OR     1
 #define SITEMAP_ADDTYPE_ANDNOT 2
