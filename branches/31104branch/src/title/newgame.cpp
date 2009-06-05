@@ -30,6 +30,103 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
+/* select new game options */
+void setup_newgame(void)
+{
+   bool classicmode   = false;
+   bool strongccs     = false;
+   bool nightmarelaws = false;
+   bool nostalinists  = true;
+   while(1)
+   {
+      clear();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(4,6);
+      addstr("New Game of Liberal Crime Squad: Difficulty and Gameplay Options");
+      move(6,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(classicmode)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" A - Classic Mode: No Conservative Crime Squad.");
+      move(8,0);
+      if(!classicmode)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(strongccs)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" B - We Didn't Start The Fire: The CCS started it. You have to finish it.");
+      move(10,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(nightmarelaws)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" C - Nightmare Mode: Liberalism is collapsing. Is it too late to fight back?");
+      move(12,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(!nostalinists)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" D - Stalinist Mod: Fight Communism and Conservatism at the same time.");
+      move(15,4);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Press any other key when ready to begin...");
+      int c=getch();
+      translategetch(c);
+      if(c=='a')
+      {
+         classicmode=!classicmode;
+         continue;
+      }
+      if(c=='b')
+      {
+         strongccs=!strongccs;
+         continue;
+      }
+      if(c=='c')
+      {
+         nightmarelaws=!nightmarelaws;
+         continue;
+      }
+      if(c=='d')
+      {
+         nostalinists=!nostalinists;
+         continue;
+      }
+      break;
+   }
+   if(nightmarelaws)
+   {
+      for(int l=0;l<LAWNUM;l++)
+      {
+         law[l]=ALIGN_ARCHCONSERVATIVE;
+      }
+      for(int a=0;a<VIEWNUM-3;a++)
+      {
+         attitude[a]=LCSrandom(20);
+      }
+   }
+   if(classicmode)
+   {
+      endgamestate=ENDGAME_CCS_DEFEATED;
+   }
+   else if(strongccs)
+   {
+      endgamestate=ENDGAME_CCS_ATTACKS;
+      attitude[VIEW_POLITICALVIOLENCE]=90;
+   }
+   if(nostalinists)
+   {
+      stalinendgamestate=ENDGAME_STALIN_DEFEATED;
+   }
+}
+
 /* creates your founder */
 void makecharacter(void)
 {
@@ -1260,10 +1357,10 @@ void makecharacter(void)
       else
       {
          if(newcr->gender_conservative==GENDER_MALE)
-            lawyer->gender_conservative=GENDER_FEMALE;
+            lawyer->gender_liberal=lawyer->gender_conservative=GENDER_FEMALE;
 
          if(newcr->gender_conservative==GENDER_FEMALE)
-            lawyer->gender_conservative=GENDER_MALE;
+            lawyer->gender_liberal=lawyer->gender_conservative=GENDER_MALE;
       }
 
       // Ensure the lawyer has good heart/wisdom stats

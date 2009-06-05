@@ -543,9 +543,9 @@ void advanceday(char &clearformess,char canseethings)
                   move(8,1);
                   addstr("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
 
-                  c=getch();
-                  translategetch(c);
-               }
+                  do
+                  {
+                     c=getch();                     translategetch(c);                  }while(c!='s'&&c!='b'&&c!='t');               }
 
                if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
                if(c=='t'||c=='b')
@@ -1387,9 +1387,9 @@ void dispersalcheck(char &clearformess)
          for(p=pool.size()-1;p>=0;p--)
          {
             if(!pool[p]->alive)continue;
-            if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON)
-               inprison=1;
-            else inprison=0;
+            if(pool[p]->location!=-1&&
+               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&               !(pool[p]->flag & CREATUREFLAG_SLEEPER))            {               inprison=1;
+            }            else inprison=0;
 
             // If your boss is in hiding
             if(dispersal_status[p]==DISPERSAL_BOSSINHIDING)

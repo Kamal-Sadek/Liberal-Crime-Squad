@@ -477,7 +477,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("public nudity"); // XXX Maybe `Indecent exposure'?
+         addstr("indecent exposure"); // XXX Maybe `Indecent exposure'? // Done. -JonathanSFox
          breaker[LAWFLAG_PUBLICNUDITY]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
@@ -634,20 +634,22 @@ void trial(Creature &g)
          }
          else
          {
+            set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(attorneyname);
-            addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!"); // Red text?
+            addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!"); // Red text? // Done. -Fox
             jury=0;
             prosecution+=40; // DUN DUN DUN!!
          }
       }
       else if(jury<=-29)
       {
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
          switch(LCSrandom(4))
          {
             case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.");break;
             case 1:addstr("The jury is Flaming Liberal.");break;
             case 2:addstr("Four of the jurors are closet Socialists.");break;
-            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break; // Green text?
+            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break; // Green text? // Done. -Fox
          }
       }
       else if(jury<=-15)addstr("The jury is fairly Liberal.");
@@ -655,6 +657,7 @@ void trial(Creature &g)
       else if(jury<29)addstr("The jury is a bit Conservative.");
       else
       {
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
          switch(LCSrandom(4))
          {
             case 0:addstr("Such a collection of Conservative jurors has never before been assembled.");break;

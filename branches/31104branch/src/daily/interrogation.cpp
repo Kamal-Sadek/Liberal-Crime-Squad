@@ -369,17 +369,10 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(a->name);
             addstr(" as its only friend.");
          } //XXX: What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist)
+           // These are greater than and less than comparisons, so they are testing ranges -Fox
          else if(rapport[a->id]>1) //                   -- LK
          {
             addstr("The Conservative likes ");
-            addstr(a->name);
-            addstr(".");
-         }
-         else if(rapport[a->id]>0)
-         {
-            addstr("The Conservative is indifferent");
-            move(++y,40);
-            addstr("toward ");
             addstr(a->name);
             addstr(".");
          }
@@ -517,6 +510,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
             //Food, water, light, and restraint settings will be applied as
             //normal, of course, at the moment, light is not implemented
+            // (It was cut awhile back! -Fox)
          }
          refresh();
          getch();
@@ -732,13 +726,9 @@ void tendhostage(Creature *cr,char &clearformess)
                case 1:addstr("Does it hurt?");break;
                case 2:addstr("Nobody loves you");break;
                case 3:addstr("God hates you");break;
-               case 4:
-                      if(law[LAW_FREESPEECH]==-2)addstr("Don't [mess] with me");
-                      else addstr("Don't fuck with me");break;
+               case 4:addstr("Don't fuck with me");break; // Don't censor profanity in interrogations, even if C+ free speech
                case 5:addstr("This is Liberalism");break;
-               case 6:
-                      if(law[LAW_FREESPEECH]==-2)addstr("Convert, [you]");
-                      else addstr("Convert, bitch");break;
+               case 6:addstr("Convert, bitch");break;
                case 7:addstr("I'm going to kill you");break;
                case 8:addstr("Do you love me?");break;
                case 9:addstr("I am your God");break;
@@ -777,9 +767,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 0:addstr(" with a flagpole");break;
                case 1:addstr(" with a flag");break;
                case 2:addstr(" with a bible");break;//XXX: Effect on religion/science? XXX: Maybe if(law[LAW_RELIGION]==-2) it's *the* bible?
-               case 3:
-                      if(law[LAW_FREESPEECH]==-2)addstr(" with a [pink rod]");// Pervert!
-                      else addstr(" with a dildo");break;
+               case 3:addstr(" with a dildo");break;
                case 4:addstr(" with a book");break;
                }
             }
@@ -797,13 +785,13 @@ void tendhostage(Creature *cr,char &clearformess)
             int i=0;
             while(i<3)
             {
-               switch(LCSrandom(23))
+               switch(LCSrandom(20))
                {
                case 0:addstr("McDonalds");break;
                case 1:addstr("Microsoft");break;
                case 2:addstr("Bill Gates");break;
                case 3:addstr("Wal-Mart");break;
-               case 4:addstr("George W. Bush");break;//XXX: Dubya? //Disambiguated. -JonathanSFox
+               case 4:addstr("George W. Bush");break;//XXX: Dubya? //Disambiguated. -Fox
                case 5:addstr("ExxonMobil");break;
                case 6:addstr("Trickle-down economics");break;
                case 7:addstr("Family values");break;
@@ -815,12 +803,10 @@ void tendhostage(Creature *cr,char &clearformess)
                case 13:addstr("Tax cuts");break;
                case 14:addstr("Military spending");break;
                case 15:addstr("Ann Coulter");break;
-               case 16:addstr("Deregulation");break;
-               case 17:addstr("Gang Violence");break;
-               case 18:addstr("Police Brutality");break;
-               case 19:addstr("Corporate Corruption");break;
-               case 20:addstr("Wiretapping");break;
-               case 22:addstr("Reaganomics");break;
+               case 16:addstr("Deregulation");break; //Cut a few that weren't names Conservatives use (or things they might like) -Fox
+               case 17:addstr("Police");break;
+               case 18:addstr("Corporations");break;
+               case 19:addstr("Wiretapping");break;
 
                }
                if(++i<3)
@@ -977,7 +963,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 2:addstr(" burns flags in front of ");break;
             case 3:addstr(" explores an elaborate political fantasy with ");break;
             case 4:addstr(" watches controversial avant-garde films with ");break;
-            case 5:addstr(" watches the anime film Bible Black with ");break;//XXX: Wasn't this basically a porno?
+            case 5:addstr(" watches the anime film Bible Black with ");break;//XXX: Wasn't this basically a porno? //Yes. -Fox
             case 6:addstr(" watches a documentary about Emmett Till with ");break;
             case 7:addstr(" watches Michael Moore films with ");break;
             case 8:addstr(" listens to Liberal radio shows with ");break;
@@ -1451,7 +1437,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 1:addstr(" broods darkly.");break;
             case 2:addstr(" has lost hope of rescue.");break;
             case 3:addstr(" is making peace with God.");break;
-            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=25;break;//XXX: should be cr->blood-=LCSrandom(15)+10 or something... I mean, blood loss isn't the same *every* time.
+            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=LCSrandom(15)+10;break;//XXX: should be cr->blood-=LCSrandom(15)+10 or something... I mean, blood loss isn't the same *every* time.
             }
          }
          else

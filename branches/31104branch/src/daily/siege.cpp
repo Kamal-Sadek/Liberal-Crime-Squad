@@ -1848,7 +1848,7 @@ int numbereating(int loc)
 
 
 /* siege - prepares for entering site mode to fight the siege */
-void escape_engage(void) // FIXME: Wait... LCC?
+void escape_engage(void) // FIXME: Wait... LCC? //Liberal Command Center. Probably a pre-3.0 term. Fixed. -Fox
 {
    //GIVE INFO SCREEN
    erase();
@@ -1860,15 +1860,15 @@ void escape_engage(void) // FIXME: Wait... LCC?
    move(3,16);
    addstr("You are about to engage Conservative forces in battle.");
    move(4,11);
-   addstr("You will find yourself in the Command Center, and it will be");
+   addstr("You will find yourself in the Liberal safehouse, and it will");
    move(5,11);
-   addstr("swarming with Conservative units.  The Liberal Crime Squad");
+   addstr("be swarming with Conservative units.  The Liberal Crime");
    move(6,11);
-   addstr("will be located far from the entrance to the LCC.  It is");
+   addstr("Squad will be located far from the entrance to the safehouse.");
    move(7,11);
-   addstr("your task to bring your squad out to safety, or fight off");
+   addstr("It is your task to bring your squad out to safety, or fight");
    move(8,11);
-   addstr("the Conservatives within the perimeter.  Either way you");
+   addstr("off the Conservatives within the perimeter.  Either way you");
    move(9,11);
    addstr("choose, any equipment from the LCC which isn't held by a");
    move(10,11);

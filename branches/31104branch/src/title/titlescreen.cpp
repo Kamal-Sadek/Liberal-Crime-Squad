@@ -26,8 +26,9 @@ This file is part of Liberal Crime Squad.                                       
 	the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
-#include <externs.h>
+//#include "includes.h"
+#include "news/news.h"
+#include "externs.h"
 
 void mode_title(void)
 {
@@ -118,7 +119,11 @@ void mode_title(void)
 
    viewhighscores();
 
-   if(!loaded)makecharacter();
+   if(!loaded)
+   {
+      setup_newgame();
+      makecharacter();
+   }
    mode=GAMEMODE_BASE;
    mode_base();
 

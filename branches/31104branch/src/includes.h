@@ -1049,8 +1049,8 @@ public:
 
    /* are they interested in talking about the issues? */
    bool talkreceptive();
-   /* is the character too young to be dating? */
-   bool kid();
+   /* are the characters close enough in age to date? */
+   bool can_date(Creature &a);
    /* rolls up a proper name for a creature */
    void namecreature();
 };
@@ -1393,7 +1393,7 @@ enum Views
    //for VIEWNUM-6 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
-   VIEW_STALIN,
+   VIEW_STALIN, // Breaking VIEWNUM-6; I need to fix this -Fox
    VIEW_POLITICALVIOLENCE,
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
@@ -1909,7 +1909,7 @@ void savehighscore(char endtype);
 /*
  newgame.cpp
 */
-/* creates your founder */
+/* new game options screen */void setup_newgame(void);/* creates your founder */
 void makecharacter(void);
 /* mostly depricated, but called once by makecharacter */
 void initliberal(Creature &cr);

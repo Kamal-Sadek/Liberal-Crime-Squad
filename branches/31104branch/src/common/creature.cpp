@@ -206,17 +206,17 @@ void firstname(char *str, char gender)
    {
       // Roll on the number of gender-specific names,
       // plus the number of gender-neutral names
-      roll = LCSrandom(176 + 12);
+      roll = LCSrandom(176 + 13);
       // Decide whether to use a gender-specific name
       // or a gender-neutral name
-      if(roll >= 12) { roll -= 12; nametable = GENDER_MALE; }
+      if(roll >= 13) { roll -= 13; nametable = GENDER_MALE; }
       else nametable = GENDER_NEUTRAL;
    }
    else if(gender == GENDER_FEMALE)
    {
       // (Same here, just use the number of female names instead)
-      roll = LCSrandom(127 + 12);
-      if(roll >= 12) { roll -= 12; nametable = GENDER_FEMALE; }
+      roll = LCSrandom(127 + 13);
+      if(roll >= 13) { roll -= 13; nametable = GENDER_FEMALE; }
       else nametable = GENDER_NEUTRAL;
    }
 
@@ -1522,11 +1522,19 @@ bool Creature::talkreceptive()
    return false;
 }
 
+#define ABS(x) ((x)<0)?(-x):(x)
 
-
-/* is the character too young to be dating? */
-bool Creature::kid()
+/* are the characters close enough in age to date? */
+bool Creature::can_date(Creature &a)
 {
-   if(age<16) return true;
-   else return false;
+   if(age<11) return false;
+   if(a.age<11) return false;
+   if(age<16 || a.age<16)
+   {
+      if(ABS(age-a.age)<5)
+         return true;
+      else
+         return false;
+   }
+   else return true;
 }

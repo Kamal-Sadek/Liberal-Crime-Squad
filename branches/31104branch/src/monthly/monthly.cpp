@@ -194,7 +194,7 @@ void passmonth(char &clearformess,char canseethings)
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
       if(v==VIEW_POLITICALVIOLENCE)
       {
-         change_public_opinion(VIEW_POLITICALVIOLENCE,-3,0);
+         change_public_opinion(VIEW_POLITICALVIOLENCE,-1,0);
          continue;
       }
       if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;

@@ -64,11 +64,11 @@ char liberalagenda(char won)
             if(execterm==1)addstr("(1st Term):");
             else addstr("(2nd Term):");
          }
-         else if(won=-1)
+         else if(won==-1)
 		 {
 			 addstr("King: ");
 		 }
-		 else if(won=-2)
+		 else if(won==-2)
 		 {
 			 addstr("President For Life ");
 		 }
@@ -168,13 +168,13 @@ char liberalagenda(char won)
             itoa(senatemake[0],num,10);
             addstr(num);addstr("Cons+");
          }
-         else if(won=-1)
+         else if(won==-1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(10,0);
             addstr("The Congress consists of CEOs and televangelists.");
          }
-		 else if(won=-2)
+		 else if(won==-2)
 		 {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(10,0);
@@ -223,7 +223,7 @@ char liberalagenda(char won)
                y++;
             }
          }
-         else if(won=-1)
+         else if(won==-1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(5,60);
@@ -233,7 +233,7 @@ char liberalagenda(char won)
             move(7,60);
             addstr("Ethics Officers");
          }
-		 else if(won=-2)
+		 else if(won==-2)
 		 {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(5,60);

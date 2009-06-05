@@ -768,7 +768,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       }
    }
    erase();
-   move(6,1);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);   move(6,1);
    addstr("Sleeper ");
    addstr(cr.name);
    addstr(" has dropped a package off at the homeless shelter.");

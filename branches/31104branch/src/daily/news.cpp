@@ -526,7 +526,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                if(ns.type==NEWSSTORY_NUDITYARREST)
                   strcat(story,"The incident apparently occurred as a response to a public nudity complaint.  ");
                else if(ns.type==NEWSSTORY_DRUGARREST)
-                  strcat(story,"The suspect was allegedly selling \"brownies\".  ");
+                  strcat(story,"The suspect was allegedly selling \"pot brownies\".  ");
                else if(ns.type==NEWSSTORY_BURIALARREST)
                {
                   strcat(story,"A passerby allegedly called the police after seeing the suspect dragging what appeared ");
@@ -1605,7 +1605,7 @@ void majornewspaper(char &clearformess,char canseethings)
    }
 
    //Stalinist Comrade Squad Strikes!
-   if(stalinendgamestate<ENDGAME_STALIN_DEFEATED && LCSrandom(30) && canseethings)
+   if(stalinendgamestate<ENDGAME_STALIN_DEFEATED && !LCSrandom(30) && canseethings)
    {
       newsstoryst *ns=new newsstoryst;
 
@@ -1628,7 +1628,7 @@ switch(LCSrandom(5))
 		newsstory.push_back(ns);
       }
 //The "Social Revolutionary Wing" of the Stalinist Comrade Squad Strikes Against Reactionary Liberalism!
-   if(endgamestate<ENDGAME_STALIN_DEFEATED && LCSrandom(30) && canseethings)
+   if(stalinendgamestate<ENDGAME_STALIN_DEFEATED && !LCSrandom(30) && canseethings)
    {
       newsstoryst *ns=new newsstoryst;
 
@@ -1654,46 +1654,46 @@ switch(LCSrandom(5))
    if(!LCSrandom(60))
    {
       newsstoryst *ns=new newsstoryst;
-         ns->type=NEWSSTORY_MAJOREVENT;
-         do
-         {
-            ns->view=LCSrandom(VIEWNUM-3);
-            ns->positive=LCSrandom(2);
+      ns->type=NEWSSTORY_MAJOREVENT;
+      do
+      {
+         ns->view=LCSrandom(VIEWNUM-3);
+         ns->positive=LCSrandom(2);
 
-            // Skip issues that we have no news stories for
-            if(ns->view==VIEW_IMMIGRATION)continue;
-            if(ns->view==VIEW_DRUGS)continue;
-            //if(ns->view==VIEW_MILITARY)continue;
-            if(ns->view==VIEW_CIVILRIGHTS)continue;
-            //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
+         // Skip issues that we have no news stories for
+         if(ns->view==VIEW_IMMIGRATION)continue;
+         if(ns->view==VIEW_DRUGS)continue;
+         if(ns->view==VIEW_MILITARY)continue;
+         if(ns->view==VIEW_CIVILRIGHTS)continue;
+         //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
 
-            //NO ABORTION
-            if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
-            //NO PARTIAL BIRTH ABORTION
-            if(ns->view==VIEW_WOMEN&&!ns->positive&&law[LAW_ABORTION]<2)continue;
-            //NO DEATH PENALTY
-            if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue;
-            //NO NUCLEAR POWER
-            if(ns->view==VIEW_NUCLEARPOWER&&ns->positive&&law[LAW_NUCLEARPOWER]==2)continue;
-            //NO ANIMAL RESEARCH
-            if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue;
-            //NO BAD COPS
-            if(ns->view==VIEW_POLICEBEHAVIOR&&ns->positive&&law[LAW_POLICEBEHAVIOR]==2)continue;
-            //NO PRIVACY VIOLATIONS
-            if(ns->view==VIEW_INTELLIGENCE&&ns->positive&&law[LAW_PRIVACY]==2)continue;
-            //NO SWEATSHOPS
-            if(ns->view==VIEW_SWEATSHOPS&&ns->positive&&law[LAW_LABOR]==2)continue;
-            //NO POLLUTION
-            if(ns->view==VIEW_POLLUTION&&ns->positive&&law[LAW_POLLUTION]>=1)continue;
-            //NO ENRONS
-            if(ns->view==VIEW_CORPORATECULTURE&&ns->positive&&law[LAW_CORPORATE]==2)continue;
-            //NO CEOS
-            if(ns->view==VIEW_CEOSALARY&&ns->positive&&law[LAW_CORPORATE]==2)continue;
-            //NO FREEDOM OF SPEECH
-            if(ns->view==VIEW_AMRADIO&&!ns->positive&&law[LAW_FREESPEECH]==-2)continue;
+         //NO ABORTION
+         if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
+         //NO PARTIAL BIRTH ABORTION
+         if(ns->view==VIEW_WOMEN&&!ns->positive&&law[LAW_ABORTION]<2)continue;
+         //NO DEATH PENALTY
+         if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue;
+         //NO NUCLEAR POWER
+         if(ns->view==VIEW_NUCLEARPOWER&&ns->positive&&law[LAW_NUCLEARPOWER]==2)continue;
+         //NO ANIMAL RESEARCH
+         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue;
+         //NO BAD COPS
+         if(ns->view==VIEW_POLICEBEHAVIOR&&ns->positive&&law[LAW_POLICEBEHAVIOR]==2)continue;
+         //NO PRIVACY VIOLATIONS
+         if(ns->view==VIEW_INTELLIGENCE&&ns->positive&&law[LAW_PRIVACY]==2)continue;
+         //NO SWEATSHOPS
+         if(ns->view==VIEW_SWEATSHOPS&&ns->positive&&law[LAW_LABOR]==2)continue;
+         //NO POLLUTION
+         if(ns->view==VIEW_POLLUTION&&ns->positive&&law[LAW_POLLUTION]>=1)continue;
+         //NO ENRONS
+         if(ns->view==VIEW_CORPORATECULTURE&&ns->positive&&law[LAW_CORPORATE]==2)continue;
+         //NO CEOS
+         if(ns->view==VIEW_CEOSALARY&&ns->positive&&law[LAW_CORPORATE]==2)continue;
+         //NO FREEDOM OF SPEECH
+         if(ns->view==VIEW_AMRADIO&&!ns->positive&&law[LAW_FREESPEECH]==-2)continue;
 
-            break;
-         }while(1);
+         break;
+      }while(1);
       newsstory.push_back(ns);
 
       if(ns->positive)change_public_opinion(ns->view,20,0);

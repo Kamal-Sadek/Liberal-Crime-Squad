@@ -304,23 +304,17 @@ void printnews(short l,short newspaper)
                change_public_opinion(VIEW_SWEATSHOPS,10);
                break;
             case 9:addstr("playing with feces and urine.");break;
-				            case 10:addstr("waving a USSR flag at a Stalinist Comrade Squad rally.");
-change_public_opinion(VIEW_GAY,1);//XXX: Why all these issues? It isn't this way for the CCS!
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
+            case 10:
+               if(stalinendgamestate!=ENDGAME_STALIN_DEFEATED)addstr("waving a USSR flag at a Stalinist Comrade Squad rally.");
+               else addstr("defecating on the American flag.");
+
+change_public_opinion(VIEW_STALIN,50);
 					offended_stalin=1;
-            case 11:addstr("being kidnapped and brainwashed by the Stalinist Comrade Squad.");
-change_public_opinion(VIEW_GAY,1);
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
+            case 11:
+               if(stalinendgamestate!=ENDGAME_STALIN_DEFEATED)addstr("being kidnapped and brainwashed by the Stalinist Comrade Squad.");
+               else addstr("beating up homeless people.");
+
+change_public_opinion(VIEW_STALIN,50);
 					offended_stalin=1;
          }
          move(8,1);
@@ -410,14 +404,8 @@ change_public_opinion(VIEW_STALIN,5);
                change_public_opinion(VIEW_WOMEN,50);
                break;
 			case 6:
-				addstr("revealing a plan to poison the water supply with fluoride on behalf of the Stalinist Comrade Squad.");break;
-change_public_opinion(VIEW_GAY,1);
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
+				addstr("revealing a plan to poison the water supply with fluoride on behalf of communists.");break;
+change_public_opinion(VIEW_STALIN,50);
 					offended_stalin=1;
 		 }
          move(8,1);
@@ -435,7 +423,7 @@ change_public_opinion(VIEW_STALIN,5);
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(7))
+         switch(LCSrandom(6))
          {
             case 0:addstr("documenting human rights abuses by the force.");break;
             case 1:addstr("documenting a police torture case.");break;
@@ -451,14 +439,7 @@ change_public_opinion(VIEW_STALIN,5);
                break;
 			case 6:
 				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad for \"re-education\".");
-					change_public_opinion(VIEW_GAY,1);
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_JUSTICES,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
+change_public_opinion(VIEW_STALIN,50);
 					offended_stalin=1;
          }
          move(8,1);
@@ -521,7 +502,7 @@ change_public_opinion(VIEW_STALIN,5);
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(5))
+         switch(LCSrandom(4))
          {
             case 0:addstr("documenting human rights abuses by prison guards.");break;
             case 1:addstr("documenting a prison torture case.");break;

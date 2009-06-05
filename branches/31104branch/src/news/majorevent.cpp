@@ -19,9 +19,9 @@ void constructeventstory(char *story,short view,char positive)
             char gen[50];
             cityname(story);
             strcat(story," - ");
-	    if(law[LAW_ABORTION]==-2)strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
-	    else if(law[LAW_ABORTION]==-1)strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
-	    else if(law[LAW_ABORTION]<=1)strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
+            if(law[LAW_ABORTION]==-2)strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
+            else if(law[LAW_ABORTION]==-1)strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
+            else if(law[LAW_ABORTION]==0)strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
             else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
             lastname(str);strcat(story,str);
@@ -56,7 +56,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
 			   if(VIEW_STALIN+LCSrandom(25)<=66)//XXX: Should this really trigger every time this is true? Maybe if(VIEW_STALIN+LCSrandom(25)<=66) or something...
-                                              // Done. -JonathanSFox
+                                              // Done. -Fox
 			   {
 			   strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
                strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
@@ -1477,7 +1477,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(10))
             {
                case 0:
-		  if(law[LAW_FREESPEECH]==-2)strcat(str,"regularly visits [civil servants.]");
+		  if(law[LAW_FREESPEECH]==-2)strcat(str,"regularly visits [working women].");
                   else strcat(str,"regularly visits prostitutes.");
                   break;
                case 1:
@@ -1519,7 +1519,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             break;
       case VIEW_STALIN:
 		   displaycenterednewsfont("STALIN'S CRIMES",5);
-	       char str[80];
+	       char str[150];
            strcpy(str,"");
             switch(LCSrandom(5))
             {
@@ -1613,7 +1613,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             case VIEW_STALIN:
 				{
 			displaycenterednewsfont("STALIN FRAMED",5);
-			char str[80];
+			char str[150];
             strcpy(str,"");
             switch(LCSrandom(5))
             {

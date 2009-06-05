@@ -375,7 +375,7 @@ char load(void)
       fread(&cablenews_closed,sizeof(char),1,h);
 
       fread(&endgamestate,sizeof(char),1,h);
-      fread(&stalinendgamestate,sizeof(short),1,h);
+      fread(&stalinendgamestate,sizeof(char),1,h);
       fread(&ccs_kills,sizeof(char),1,h);
 
       fread(&curcarid,sizeof(long),1,h);

@@ -30,7 +30,6 @@ int armorst::interrogation_basepower()
    case ARMOR_HEAVYARMOR:
    case ARMOR_SECURITYUNIFORM:
       return 2;
-   case ARMOR_MASK:
    case ARMOR_CHEAPSUIT:
    case ARMOR_CHEAPDRESS:
    case ARMOR_BLACKSUIT:
@@ -49,6 +48,62 @@ int armorst::interrogation_basepower()
       return 6;
    case ARMOR_DEATHSQUADUNIFORM:
       return 8;
+   case ARMOR_MASK:
+      switch(subtype)
+      {
+      case MASK_ASHCROFT:
+      case MASK_BARR:
+      case MASK_BLAIR:
+      case MASK_BUSH_BARBARA:
+      case MASK_BUSH_GEORGE:
+      case MASK_BUSH_GEORGE2:
+      case MASK_CARTER:
+      case MASK_CHENEY:
+      case MASK_CLINTON_BILL:
+      case MASK_CLINTON_HILLARY:
+      case MASK_FALWELL:
+      case MASK_FORD:
+      case MASK_GORE_AL:
+      case MASK_GORE_TIPPER:
+      case MASK_TED_STEVENS:
+      case MASK_HELMS:
+      case MASK_LINCOLN:
+      case MASK_KENNEDY_JOHN:
+      case MASK_KENNEDY_ROBERT:
+      case MASK_KISSINGER:
+      case MASK_NIXON:
+      case MASK_POWELL:
+      case MASK_REAGAN_NANCY:
+      case MASK_REAGAN_RONALD:
+      case MASK_RICE:
+      case MASK_ROBERTSON:
+      case MASK_RUMSFELD:
+      case MASK_STARR:
+      case MASK_THURMOND:
+      case MASK_WASHINGTON:
+      case MASK_WAXMAN:
+      case MASK_COLEMAN_GARY:
+      case MASK_MADONNA:
+      case MASK_SPEARS:
+      case MASK_EMINEM:
+      case MASK_AGUILERA:
+      case MASK_WAHLBERG:
+      case MASK_IGGYPOP:
+      case MASK_CASH:
+      case MASK_LORDS:
+      case MASK_JACKSON_MICHAEL:
+      case MASK_SHIELDS:
+      case MASK_CRUTHERS:
+      case MASK_KING_DON:
+      default:
+         return 4;
+      case MASK_GUY_FAWKES:
+      case MASK_JASON:
+      case MASK_SATAN:
+      case MASK_JESUS:
+      case MASK_BINLADEN:
+         return 6;
+      }
    }
 }
 
