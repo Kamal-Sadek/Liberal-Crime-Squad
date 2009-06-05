@@ -109,41 +109,39 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                strcat(ad,"&cand Fitness&r&r");
                strcat(ad,"&c7 Days a Week&r");
                break;
-/*	    case 5: // Could write something to gen this. <http://en.wikipedia.org/wiki/Personal_advertisement> -- LK
-	       strcpy(ad,"&cM4W&r");
-	       strcat(ad,"&cSWM w/ BWC ISO HJ IRL&r&r");
-	       strcat(ad,"&cInto BJ, GB, and FWB&r");
-	       break;*/
-	    case 5:
-	       strcat(ad,"&c");
-	       switch(LCSrandom(4))
-	       {
-		  case 0:strcpy(ad,"Searching For Love");
-		  case 1:strcpy(ad,"Seeking Love");
-		  case 2:strcpy(ad,"Are You Lonely?");
-		  case 3:strcpy(ad,"Looking For Love");
-		  break;
-	       }
+            case 5:
+            {
+               strcat(ad,"&c");
+               switch(LCSrandom(4))
+               {
+                  case 0:strcpy(ad,"Searching For Love");
+                  case 1:strcpy(ad,"Seeking Love");
+                  case 2:strcpy(ad,"Are You Lonely?");
+                  case 3:strcpy(ad,"Looking For Love");
+                  break;
+               }
+               char str[10];
 
-	       strcat(ad,"&r&r");
-	       strcat(ad,"&c");
-	       sexdesc(sdesc);
-	       strcat(ad,sdesc);
-	       strcat(ad," ");
-	       sexwho(swho);
-	       strcat(ad,swho);
-	       strcat(ad," ");
-	       sexseek(sseek);
-	       strcat(ad,sseek);
-	       strcat(ad,"&r");
-	       strcat(ad,"&c");
-	       sextype(stype);
-	       strcat(ad,stype);
-	       strcat(ad," w/ ");
-	       sexwho(shwo);
-	       strcat(ad,shwo);
-	       strcat(ad,"&r");
-	       break;
+               strcat(ad,"&r&r");
+               strcat(ad,"&c");
+               sexdesc(str);
+               strcat(ad,str);
+               strcat(ad," ");
+               sexwho(str);
+               strcat(ad,str);
+               strcat(ad," ");
+               sexseek(str);
+               strcat(ad,str);
+               strcat(ad,"&r");
+               strcat(ad,"&c");
+               sextype(str);
+               strcat(ad,str);
+               strcat(ad," w/ ");
+               sexwho(str);
+               strcat(ad,str);
+               strcat(ad,"&r");
+               break;
+            }
          }
       }
       else
@@ -160,43 +158,45 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             strcat(ad,"&c26 Years Experience&r&r");
             strcat(ad,"&cCall Today&r");
             break;
-	 case 2:
-	    strcpy(ad,"&cAbortion Clinic&r&r"); // I have no clue what &c or &r does, so bear with me... -- LK
-	    strcat(ad,"&cWalk-in, No&r");
-	    strcat(ad,"&cQuestions Asked&r");
-	    strcat(ad,"&cOpen 24/7&r");
-	    break;
-	 case 3:
-	       strcat(ad,"&c");
-	       switch(LCSrandom(4))
-	       {
-		  case 0:strcpy(ad,"Searching For Love");
-		  case 1:strcpy(ad,"Seeking Love");
-		  case 2:strcpy(ad,"Are You Lonely?");
-		  case 3:strcpy(ad,"Looking For Love");
-		  break;
-	       }
+         case 2:
+            strcpy(ad,"&cAbortion Clinic&r&r"); // I have no clue what &c or &r does, so bear with me... -- LK
+            strcat(ad,"&cWalk-in, No&r");
+            strcat(ad,"&cQuestions Asked&r");
+            strcat(ad,"&cOpen 24/7&r");
+            break;
+         case 3:
+            {
+               strcat(ad,"&c");
+               switch(LCSrandom(4))
+               {
+                  case 0:strcpy(ad,"Searching For Love");
+                  case 1:strcpy(ad,"Seeking Love");
+                  case 2:strcpy(ad,"Are You Lonely?");
+                  case 3:strcpy(ad,"Looking For Love");
+                  break;
+               }
+               char str[10];
 
-	       strcat(ad,"&r&r");
-	       strcat(ad,"&c");
-	       sexdesc(sdesc);
-	       strcat(ad,sdesc);
-	       strcat(ad," ");
-	       sexwho(swho);
-	       strcat(ad,swho);
-	       strcat(ad," ");
-	       sexseek(sseek);
-	       strcat(ad,sseek);
-	       strcat(ad,"&r");
-	       strcat(ad,"&c");
-	       sextype(stype);
-	       strcat(ad,stype);
-	       strcat(ad," w/ ");
-	       sexwho(shwo);
-	       strcat(ad,shwo);
-	       strcat(ad,"&r");
-	       break;
-         }
+               strcat(ad,"&r&r");
+               strcat(ad,"&c");
+               sexdesc(str);
+               strcat(ad,str);
+               strcat(ad," ");
+               sexwho(str);
+               strcat(ad,str);
+               strcat(ad," ");
+               sexseek(str);
+               strcat(ad,str);
+               strcat(ad,"&r");
+               strcat(ad,"&c");
+               sextype(str);
+               strcat(ad,str);
+               strcat(ad," w/ ");
+               sexwho(str);
+               strcat(ad,str);
+               strcat(ad,"&r");
+               break;
+            }
          }
       }
 

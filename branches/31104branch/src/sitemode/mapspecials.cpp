@@ -168,7 +168,7 @@ void special_bouncer_assess_squad()
          case 1:addstr("\"Find some kiddy club.\"");break;
          case 2:addstr("\"You don't look 18 to me.\"");break;
          case 3:addstr("\"Go back to your treehouse.\"");break;
-         case 4:addstr("\"Where's your mother?\"");break
+         case 4:addstr("\"Where's your mother?\"");break;
          }
          break;
       case REJECTED_FEMALE:

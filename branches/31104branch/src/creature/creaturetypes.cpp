@@ -1012,33 +1012,41 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_GENETIC:
+         if(location[cursite]->type==SITE_CORPORATE_HOUSE)
+            strcpy(cr.name,"Pet ");
+         else
+            strcpy(cr.name,"");
+
          switch(LCSrandom(10))
          {
-            case 0:strcpy(cr.name,"Genetic Monster");break;
+            case 0:strcat(cr.name,"Genetic Monster");break;
             case 1:
             {
-               strcpy(cr.name,"Flaming Rabbit");
+               strcat(cr.name,"Flaming Rabbit");
                cr.specialattack=ATTACK_FLAME;
                break;
             }
-            case 2:strcpy(cr.name,"Genetic Nightmare");break;
-            case 3:strcpy(cr.name,"Mad Cow");break;
+            case 2:strcat(cr.name,"Genetic Nightmare");break;
+            case 3:strcat(cr.name,"Mad Cow");break;
             case 4:
             {
-               strcpy(cr.name,"Giant Mosquito");
+               strcat(cr.name,"Giant Mosquito");
                cr.specialattack=ATTACK_SUCK;
                break;
             }
-            case 5:strcpy(cr.name,"Six-legged Pig");break;
-            case 6:strcpy(cr.name,"Purple Gorilla");break;
-            case 7:strcpy(cr.name,"Warped Bear");break;
-            case 8:strcpy(cr.name,"Writhing Mass");break;
-            case 9:strcpy(cr.name,"Something Bad");break;
+            case 5:strcat(cr.name,"Six-legged Pig");break;
+            case 6:strcat(cr.name,"Purple Gorilla");break;
+            case 7:strcat(cr.name,"Warped Bear");break;
+            case 8:strcat(cr.name,"Writhing Mass");break;
+            case 9:strcat(cr.name,"Something Bad");break;
          }
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
          cr.align=-1;
-         attcap[ATTRIBUTE_CHARISMA]=2;
+         if(location[cursite]->type==SITE_CORPORATE_HOUSE)
+            attcap[ATTRIBUTE_CHARISMA]=10;
+         else
+            attcap[ATTRIBUTE_CHARISMA]=2;
          attcap[ATTRIBUTE_INTELLIGENCE]=1;
          attcap[ATTRIBUTE_HEART]=6;
          attcap[ATTRIBUTE_WISDOM]=6;
@@ -1650,14 +1658,13 @@ void makecreature(Creature &cr,short type)
          cr.juice=90+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
-         sk=LCSrandom(4)+2;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_SHOTGUN]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(2)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-         sk=LCSrandom(4)+2;cr.skill[SKILL_PSYCHOLOGY]=sk;randomskills-=sk;
+         cr.skill[SKILL_RIFLE]=LCSrandom(4)+2;
+         cr.skill[SKILL_PISTOL]=LCSrandom(2)+1;
+         cr.skill[SKILL_SHOTGUN]=LCSrandom(2)+1;
+         cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
+         cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
+         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+2;
 
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=17;
          cr.att[ATTRIBUTE_STRENGTH]=3;
 			cr.att[ATTRIBUTE_AGILITY]=3;
 			cr.att[ATTRIBUTE_HEALTH]=3;
@@ -1676,12 +1683,12 @@ void makecreature(Creature &cr,short type)
          cr.juice=LCSrandom(100);
          cr.age=AGE_YOUNGADULT;
 
-         sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_PSYCHOLOGY]=sk;randomskills-=sk;
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=14;
+         cr.skill[SKILL_RIFLE]=LCSrandom(4)+1;
+         cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
+         cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
+         cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
+         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
+
          cr.att[ATTRIBUTE_STRENGTH]=5;
 			cr.att[ATTRIBUTE_AGILITY]=5;
 			cr.att[ATTRIBUTE_HEALTH]=5;
@@ -1695,12 +1702,12 @@ void makecreature(Creature &cr,short type)
          cr.juice=LCSrandom(100);
          cr.age=AGE_MIDDLEAGED;
 
-         sk=LCSrandom(4)+1;cr.skill[SKILL_RIFLE]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_HANDTOHAND]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_PISTOL]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_DRIVING]=sk;randomskills-=sk;
-         sk=LCSrandom(3)+1;cr.skill[SKILL_PSYCHOLOGY]=sk;randomskills-=sk;
-			for(a=0;a<ATTNUM;a++)cr.att[a]=1;redistatts=14;
+         cr.skill[SKILL_RIFLE]=LCSrandom(4)+1;
+         cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
+         cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
+         cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
+         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
+
          cr.att[ATTRIBUTE_STRENGTH]=5;
 			cr.att[ATTRIBUTE_AGILITY]=5;
 			cr.att[ATTRIBUTE_HEALTH]=5;

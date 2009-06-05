@@ -792,7 +792,6 @@ void tendhostage(Creature *cr,char &clearformess)
             case 1:addstr("yell");break;
             case 2:addstr("shout");break;
             case 3:addstr("holler");break;
-//            case 4:addstr("");break;
             }
             addstr("ing \"");
             int i=0;
@@ -804,7 +803,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 1:addstr("Microsoft");break;
                case 2:addstr("Bill Gates");break;
                case 3:addstr("Wal-Mart");break;
-               case 4:addstr("George Bush");break;//XXX: Dubya?
+               case 4:addstr("George W. Bush");break;//XXX: Dubya? //Disambiguated. -JonathanSFox
                case 5:addstr("ExxonMobil");break;
                case 6:addstr("Trickle-down economics");break;
                case 7:addstr("Family values");break;
@@ -828,7 +827,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr("! ");
             }
             addstr("!\" in its face.");
-         }            }
+         }
          y++;
 
          spiritcrush+=forceroll/2+a->armor.interrogation_assaultbonus();

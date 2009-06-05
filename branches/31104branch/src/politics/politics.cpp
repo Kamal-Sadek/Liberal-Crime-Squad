@@ -2235,32 +2235,46 @@ int publicmood(int l)
 {
    switch(l)
    {
-      case LAW_ABORTION:return attitude[VIEW_WOMEN];
-      case LAW_ANIMALRESEARCH:return attitude[VIEW_ANIMALRESEARCH];
-      case LAW_POLICEBEHAVIOR:return (attitude[VIEW_POLICEBEHAVIOR]+attitude[VIEW_PRISON])/2;
-      case LAW_PRIVACY:return attitude[VIEW_INTELLIGENCE];
-      case LAW_DEATHPENALTY:return attitude[VIEW_DEATHPENALTY];
-      case LAW_NUCLEARPOWER:return attitude[VIEW_NUCLEARPOWER];
-      case LAW_POLLUTION:return attitude[VIEW_POLLUTION];
-      case LAW_LABOR:return attitude[VIEW_SWEATSHOPS];
-      case LAW_GAY:return attitude[VIEW_GAY];
-      case LAW_CORPORATE:return (attitude[VIEW_CORPORATECULTURE]+
-                                 attitude[VIEW_CEOSALARY])/2;
-      case LAW_FREESPEECH:return attitude[VIEW_FREESPEECH];
-		case LAW_TAX:return attitude[VIEW_TAXES];
-      case LAW_FLAGBURNING:return attitude[VIEW_FREESPEECH];
-      case LAW_WOMEN:return attitude[VIEW_WOMEN];break;
-      case LAW_CIVILRIGHTS:return attitude[VIEW_CIVILRIGHTS];break;
-      case LAW_DRUGS:return attitude[VIEW_DRUGS];break;
-      case LAW_IMMIGRATION:return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;break;
-      case LAW_MILITARY:return attitude[VIEW_MILITARY];break;
-      case LAW_TORTURE:return (attitude[VIEW_INTELLIGENCE] +
-                               attitude[VIEW_MILITARY])/2;break;
+      case LAW_ABORTION:
+         return attitude[VIEW_WOMEN];
+      case LAW_ANIMALRESEARCH:
+         return attitude[VIEW_ANIMALRESEARCH];
+      case LAW_POLICEBEHAVIOR:
+         return (attitude[VIEW_POLICEBEHAVIOR]+attitude[VIEW_PRISONS])/2;
+      case LAW_PRIVACY:
+         return attitude[VIEW_INTELLIGENCE];
+      case LAW_DEATHPENALTY:
+         return attitude[VIEW_DEATHPENALTY];
+      case LAW_NUCLEARPOWER:
+         return attitude[VIEW_NUCLEARPOWER];
+      case LAW_POLLUTION:
+         return attitude[VIEW_POLLUTION];
+      case LAW_LABOR:
+         return attitude[VIEW_SWEATSHOPS];
+      case LAW_GAY:
+         return attitude[VIEW_GAY];
+      case LAW_CORPORATE:
+         return (attitude[VIEW_CORPORATECULTURE]+attitude[VIEW_CEOSALARY])/2;
+      case LAW_FREESPEECH:
+         return attitude[VIEW_FREESPEECH];
+		case LAW_TAX:
+         return attitude[VIEW_TAXES];
+      case LAW_FLAGBURNING:
+         return attitude[VIEW_FREESPEECH];
+      case LAW_WOMEN:
+         return attitude[VIEW_WOMEN];
+      case LAW_CIVILRIGHTS:
+         return attitude[VIEW_CIVILRIGHTS];
+      case LAW_DRUGS:
+         return attitude[VIEW_DRUGS];
+      case LAW_IMMIGRATION:
+         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;
+      case LAW_MILITARY:
+         return attitude[VIEW_MILITARY];
+      case LAW_TORTURE:
+         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
       case LAW_GUNCONTROL:
-            if(!disbanding)
-               return attitude[VIEW_GUNCONTROL];
-            else
-               return (attitude[VIEW_GUNCONTROL];
+         return attitude[VIEW_GUNCONTROL];
 
       case LAW_ELECTIONS:
       case LAW_RELIGION:

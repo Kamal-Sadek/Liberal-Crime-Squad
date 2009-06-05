@@ -1422,23 +1422,25 @@ char talk(Creature &a,int t)
                            {
                               addstr("\"If I was your boss, I'd fire you.\"");
                            }
-						   else if(tk->type==CREATURE_CHEKA)
-                           else if(tk->type==CREATURE_COMMISSAR)
-                           else if(tk->type==CREATURE_REDGUARD)
+                           else if(tk->type==CREATURE_CHEKA||tk->type==CREATURE_COMMISSAR||tk->type==CREATURE_REDGUARD)
                            {
                               addstr("\"I'm sorry, but I'm already in an freedom-fighting organization.\"");
-                           else switch(LCSrandom(10))
+                           }
+                           else
                            {
-                           case 0:addstr("\"Don't they put people like you in zoos?\"");break;
-                           case 1:addstr("\"Save your breath. You'll need it to blow up your date.\"");break;
-                           case 2:addstr("\"Please, stop breathing on me!\"");break;
-                           case 3:addstr("\"The exit is that way. Go.\"");break;
-                           case 4:addstr("\"People like you are the reason I'm on medication.\"");break;
-                           case 5:addstr("\"Everyone is entitled to be stupid, but you abuse the privilege.\"");break;
-                           case 6:addstr("\"Earth is full. Go home.\"");break;
-                           case 7:addstr("\"Don't you have a parole meeting to get to?\"");break;
-                           case 8:addstr("\"Wow. Why am I talking to you again?\"");break;
-                           case 9:addstr("\"Were you dropped as a child?\"");break;
+                              switch(LCSrandom(10))
+                              {
+                              case 0:addstr("\"Don't they put people like you in zoos?\"");break;
+                              case 1:addstr("\"Save your breath. You'll need it to blow up your date.\"");break;
+                              case 2:addstr("\"Please, stop breathing on me!\"");break;
+                              case 3:addstr("\"The exit is that way. Go.\"");break;
+                              case 4:addstr("\"People like you are the reason I'm on medication.\"");break;
+                              case 5:addstr("\"Everyone is entitled to be stupid, but you abuse the privilege.\"");break;
+                              case 6:addstr("\"Earth is full. Go home.\"");break;
+                              case 7:addstr("\"Don't you have a parole meeting to get to?\"");break;
+                              case 8:addstr("\"Wow. Why am I talking to you again?\"");break;
+                              case 9:addstr("\"Were you dropped as a child?\"");break;
+                              }
                            }
                         }
                         else addstr("\"Whatever.\"");

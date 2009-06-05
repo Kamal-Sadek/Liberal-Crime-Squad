@@ -34,7 +34,7 @@ switch(LCSrandom(35))
                case 7:strcat(str,"BMW");break; // lol big mexican woman
                case 8:strcat(str,"CD");break;
                case 9:strcat(str,"DWF");break;
-               case 1:strcat(str,"DWM");break;
+               case 10:strcat(str,"DWM");break;
                case 11:strcat(str,"FTM");break;
                case 12:strcat(str,"GAM");break;
                case 13:strcat(str,"GBM");break;

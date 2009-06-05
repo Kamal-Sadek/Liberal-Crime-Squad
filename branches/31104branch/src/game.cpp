@@ -125,6 +125,7 @@ short offended_cia=0;
 short offended_amradio=0;
 short offended_cablenews=0;
 short offended_firemen=0;
+short offended_stalin=0;
 int police_heat=0;
 int attorneyseed;
 int selectedsiege=-1;
@@ -232,6 +233,7 @@ long moneylost_confiscated=0;
 short party_status=-1;
 
 char endgamestate=ENDGAME_NONE;
+char stalinendgamestate=ENDGAME_STALIN_DEFEATED;
 char ccs_kills=0;
 
 vector<datest *> date;

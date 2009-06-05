@@ -43,8 +43,8 @@ void prepareencounter(short type,char sec)
    {
       switch(sitetype)
       {
-	  case SITE_BUSINESS_STALIN:
-         creaturearray[CREATURE_CHEKA]=1000
+	      case SITE_BUSINESS_STALIN:
+            creaturearray[CREATURE_CHEKA]=1000;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             creaturearray[CREATURE_AGENT]=1000;

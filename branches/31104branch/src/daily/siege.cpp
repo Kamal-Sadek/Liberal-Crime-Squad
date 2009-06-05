@@ -96,9 +96,14 @@ void siegecheck(char canseethings)
          //CHECK FOR CRIMINALS AT THIS BASE
          int crimes=0;
          int kidnapped=0;
+         int heatprotection=0;
          for(int p=0;p<pool.size();p++)
          {
-            if(!pool[p]->alive)continue; // Dead people don't count
+            if(!pool[p]->alive)
+            {
+               heatprotection-=1; // Rotting corpses ruin your heat protection
+               continue;
+            }
             if(pool[p]->location!=l)continue; // People not at this base don't count
             if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
                pool[p]->align!=1)kidnapped++; // Kidnapped persons increase heat
@@ -113,21 +118,7 @@ void siegecheck(char canseethings)
 
             //Heat doesn't matter for sieges until it gets high
             int pheat=pool[p]->heat-5;
-
-
-	 }
-
-            if(law[LAW_FLAGBURNING]==-2&&haveflag) {heatprotection+=2;} // More protection if the flag is sacred
-            else if(law[LAW_FLAGBURNING]!=-2&&haveflag) {heatprotection+=1;} // Some if the flag isn't
-            else if(law[LAW_FLAGBURNING]==2&&!haveflag) {heatprotection-=1;} // Lose some if it is and you have no flag
-            else {heatprotection+=0;} // None if it isn't and you have no flag
-
-		for(int p=0;p<pool.size();p++)
-		{
-			if(!pool[p]->alive) {heatprotection-=1;}
-            //Contribute to the investigation based on person's heat
-            if(pheat>0)crimes+=pheat;
-                }
+         }
 
          // Let the place slowly cool off if there are no criminals there
          if(!crimes&&location[l]->heat)
@@ -140,8 +131,6 @@ void siegecheck(char canseethings)
          }
          else if(crimes||kidnapped)
          {
-            int heatprotection=0;
-
             // Determine how effective your current safehouse
             // is at keeping the police confused
             switch(location[l]->type)
@@ -168,6 +157,11 @@ void siegecheck(char canseethings)
                heatprotection+=3; // Upper class housing -- high protection
                break;
             }
+
+            if(law[LAW_FLAGBURNING]==-2&&location[l]->haveflag) {heatprotection+=2;} // More protection if the flag is sacred
+            else if(law[LAW_FLAGBURNING]!=-2&&location[l]->haveflag) {heatprotection+=1;} // Some if the flag isn't
+            else if(law[LAW_FLAGBURNING]==2&&!(location[l]->haveflag)) {heatprotection-=1;} // Lose some if it is and you have no flag
+            else {heatprotection+=0;} // None if it isn't and you have no flag
 
             //Having hostages reduces protection
             if(kidnapped)
@@ -640,7 +634,7 @@ void siegecheck(char canseethings)
 		 
          //Stalinists
          if(location[l]->siege.timeuntilstalin==-1 && !location[l]->siege.siege &&
-            offended_stalin && numpres>0 && stalinendgamestate=!ENDGAME_STALIN_DEFEATED)
+            offended_stalin && numpres>0 && stalinendgamestate!=ENDGAME_STALIN_DEFEATED)
          {
             location[l]->siege.timeuntilstalin=LCSrandom(3)+1;
 
@@ -675,7 +669,7 @@ void siegecheck(char canseethings)
             }
 
          } else if(location[l]->siege.timeuntilstalin>0)location[l]->siege.timeuntilstalin--;
-         else if(location[l]->siege.timeuntilstalin==0 && !location[l]->siege.siege&&numpres>0 && stalinendgamestate=!ENDGAME_STALIN_DEFEATED)
+         else if(location[l]->siege.timeuntilstalin==0 && !location[l]->siege.siege&&numpres>0 && stalinendgamestate!=ENDGAME_STALIN_DEFEATED)
          {
             location[l]->siege.timeuntilstalin=-1;
             // Stalin raid!

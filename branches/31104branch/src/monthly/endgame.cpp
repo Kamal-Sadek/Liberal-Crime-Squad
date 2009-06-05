@@ -414,8 +414,7 @@ void reaganify(char canseethings)
 
 
 
-void stalinify char(canseethings)
-
+void stalinify(char canseethings)
 {
    if(canseethings)
    {
@@ -499,116 +498,116 @@ void stalinify char(canseethings)
          strcpy(execname[EXEC_STATE],"Joseph Stalin");
          strcpy(execname[EXEC_ATTORNEY],"Joseph Stalin");
          for(int e=0;e<EXECNUM;e++)exec[e]=-2;
-		 liberalagenda(-2);
+		   liberalagenda(-2);
          savehighscore(END_STALINIFY);
       }
       else
       {
          switch(cantseereason)
          {
-            case 1:
-               //DATING AND REAGANIFIED
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
+         case 1:
+            //DATING AND REAGANIFIED
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               erase();
-               move(12,10);
-               addstr("You went on vacation when the country was on the verge of collapse.");
-               refresh();
-               getch();
+            erase();
+            move(12,10);
+            addstr("You went on vacation when the country was on the verge of collapse.");
+            refresh();
+            getch();
 
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-               erase();
-               move(12,12);
-               addstr("The Stalinists have made the world in their image.");
-               refresh();
-               getch();
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            erase();
+            move(12,12);
+            addstr("The Stalinists have made the world in their image.");
+            refresh();
+            getch();
 
-               set_color(COLOR_BLACK,COLOR_BLACK,1);
-               erase();
-               move(12,14);
-               addstr("They'll round up the last of you eventually.  All is lost.");
-               refresh();
-               getch();
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            erase();
+            move(12,14);
+            addstr("They'll round up the last of you eventually.  All is lost.");
+            refresh();
+            getch();
 
-               savehighscore(END_DATING);
-               break;
-            case 2:
-               //HIDING AND REAGANIFIED
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
+            savehighscore(END_DATING);
+            break;
+         case 2:
+            //HIDING AND REAGANIFIED
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               erase();
-               move(12,10);
-               addstr("You went into hiding when the country was on the verge of collapse.");
-               refresh();
-               getch();
+            erase();
+            move(12,10);
+            addstr("You went into hiding when the country was on the verge of collapse.");
+            refresh();
+            getch();
 
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-               erase();
-               move(12,12);
-               addstr("The Stalinists have made the world in their image.");
-               refresh();
-               getch();
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            erase();
+            move(12,12);
+            addstr("The Stalinists have made the world in their image.");
+            refresh();
+            getch();
 
-               set_color(COLOR_BLACK,COLOR_BLACK,1);
-               erase();
-               move(12,14);
-               addstr("They'll round the last of you up eventually.  All is lost.");
-               refresh();
-               getch();
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            erase();
+            move(12,14);
+            addstr("They'll round the last of you up eventually.  All is lost.");
+            refresh();
+            getch();
 
-               savehighscore(END_HIDING);
-               break;
-            case 3:
-               //IF YOU ARE ALL IN PRISON, JUST PASS AWAY QUIETLY
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
+            savehighscore(END_HIDING);
+            break;
+         case 3:
+            //IF YOU ARE ALL IN PRISON, JUST PASS AWAY QUIETLY
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               erase();
-               move(12,10);
-               addstr("While you were on the inside, the country degenerated...");
-               refresh();
-               getch();
+            erase();
+            move(12,10);
+            addstr("While you were on the inside, the country degenerated...");
+            refresh();
+            getch();
 
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-               erase();
-               move(12,12);
-               addstr("Your kind are never released these days.");
-               refresh();
-               getch();
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            erase();
+            move(12,12);
+            addstr("Your kind are never released these days.");
+            refresh();
+            getch();
 
-               set_color(COLOR_BLACK,COLOR_BLACK,1);
-               erase();
-               move(12,14);
-               addstr("Ain't no sunshine...");
-               refresh();
-               getch();
-               savehighscore(END_PRISON);
-               break;
-            case 4:
-               //DISBANDED AND REAGANIFIED
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            erase();
+            move(12,14);
+            addstr("Ain't no sunshine...");
+            refresh();
+            getch();
+            savehighscore(END_PRISON);
+            break;
+         case 4:
+            //DISBANDED AND REAGANIFIED
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               erase();
-               move(12,10);
-               addstr("You disappeared safely, but you hadn't done enough.");
-               refresh();
-               getch();
+            erase();
+            move(12,10);
+            addstr("You disappeared safely, but you hadn't done enough.");
+            refresh();
+            getch();
 
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-               erase();
-               move(12,12);
-               addstr("The Stalinists have made the world in their image.");
-               refresh();
-               getch();
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            erase();
+            move(12,12);
+            addstr("The Stalinists have made the world in their image.");
+            refresh();
+            getch();
 
-               set_color(COLOR_BLACK,COLOR_BLACK,1);
-               erase();
-               move(12,14);
-               addstr("They'll round the last of you up eventually.  All is lost.");
-               refresh();
-               getch();
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            erase();
+            move(12,14);
+            addstr("They'll round the last of you up eventually.  All is lost.");
+            refresh();
+            getch();
 
-               savehighscore(END_DISBANDLOSS);
-               break;
+            savehighscore(END_DISBANDLOSS);
+            break;
          }
       }
       reset();
@@ -625,6 +624,8 @@ void stalinify char(canseethings)
          getch();
       }
    }
+}
+
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int lawview,int view,char congress,char canseethings)
 {

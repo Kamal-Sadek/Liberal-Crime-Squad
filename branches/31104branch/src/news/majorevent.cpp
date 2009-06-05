@@ -55,56 +55,58 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
-			if(VIEW_STALIN<=50)//XXX: Should this really trigger every time this is true? Maybe if(VIEW_STALIN+LCSrandom(25)<=66) or something...
-			{
-			strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
-            strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
-            strcat(story,str2);
-			}
-			else
-			{
-            strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
-            strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
-            strcat(story,str2);
-			}
-			if(law[LAW_WOMEN]=-2)
-			{
-				strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
-				strcat(story," abortion doctors as opposed to arresting them.&r");
-			}
-			if(VIEW_STALIN<=50)
-			{
-            strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
-            strcat(story,"had been completed.&r");	
-			}
-			else
-			{
-            strcat(story," surrendered without a struggle, reportedly saying that God's work ");
-            strcat(story,"had been completed.&r");
-            strcat(story,"  ");
-            strcat(story,dstr2);
-            strcat(story," is survived by ");
-            strcat(story,gen);
-            strcat(story," ");
-            char spouse=LCSrandom(2);
-            if(law[LAW_GAY]<=1)
-            {
-               spouse=1-gn;
+			   if(VIEW_STALIN+LCSrandom(25)<=66)//XXX: Should this really trigger every time this is true? Maybe if(VIEW_STALIN+LCSrandom(25)<=66) or something...
+                                              // Done. -JonathanSFox
+			   {
+			   strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
+               strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
+               strcat(story,str2);
+			   }
+			   else
+			   {
+               strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
+               strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
+               strcat(story,str2);
+			   }
+			   if(law[LAW_WOMEN]=-2)
+			   {
+				   strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
+				   strcat(story," abortion doctors as opposed to arresting them.&r");
+			   }
+			   if(VIEW_STALIN<=50)
+			   {
+               strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
+               strcat(story,"had been completed.&r");	
+			   }
+			   else
+			   {
+               strcat(story," surrendered without a struggle, reportedly saying that God's work ");
+               strcat(story,"had been completed.&r");
+               strcat(story,"  ");
+               strcat(story,dstr2);
+               strcat(story," is survived by ");
+               strcat(story,gen);
+               strcat(story," ");
+               char spouse=LCSrandom(2);
+               if(law[LAW_GAY]<=1)
+               {
+                  spouse=1-gn;
+               }
+               switch(spouse)
+               {
+                  case 0:strcat(story,"husband");break;
+                  case 1:strcat(story,"wife");break;
+               }
+               strcat(story," and ");
+               switch(LCSrandom(3))
+               {
+                  case 0:strcat(story,"two");break;
+                  case 1:strcat(story,"three");break;
+                  case 2:strcat(story,"five");break;
+               }
+               strcat(story," children.&r");
+               break;
             }
-            switch(spouse)
-            {
-               case 0:strcat(story,"husband");break;
-               case 1:strcat(story,"wife");break;
-            }
-            strcat(story," and ");
-            switch(LCSrandom(3))
-            {
-               case 0:strcat(story,"two");break;
-               case 1:strcat(story,"three");break;
-               case 2:strcat(story,"five");break;
-            }
-            strcat(story," children.&r");
-            break;
          }
          case VIEW_GAY:
          {
@@ -116,13 +118,13 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," ");
             strcat(story,dstr2);
             if(law[LAW_GAY]==-2)
-                        {
-                                strcat(story,", a known sexual deviant, was ");
-                        }
+            {
+               strcat(story,", a known sexual deviant, was ");
+            }
             else if(law[LAW_GAY]==-1)
-			{
-				strcat(story,", a known homosexual, was ");
-			}
+			   {
+				   strcat(story,", a known homosexual, was ");
+			   }
             else strcat(story,", a homosexual, was ");
             switch(LCSrandom(3))
             {
@@ -163,11 +165,14 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Authorities have stated that they will vigorously ");
             strcat(story,"prosecute this case as a hate crime, due to the ");
             strcat(story,"aggravated nature of the offense");
-            if(law[LAW_GAY]==-2 && law[LAW_FREESPEECH]!=-2)strcat(story,", despite the fact that ");
-                                                           strcat(story,dstr);
-                                                           strcat(story," ");
-                                                           strcat(story,dstr2);
-                                                           strcat(story," is a known faggot");
+            if(law[LAW_GAY]==-2 && law[LAW_FREESPEECH]!=-2)
+            {
+               strcat(story,", despite the fact that ");
+               strcat(story,dstr);
+               strcat(story," ");
+               strcat(story,dstr2);
+               strcat(story," is a known faggot");
+            }
             else if(law[LAW_GAY]==-2)strcat(story,", even though being gay is deviant, as we all know.");
             else strcat(story,".");
             strcat(story,"&r");
@@ -175,7 +180,8 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_DEATHPENALTY:
          {
-	    makestate(state);strcat(story,state);
+            char state[50];
+	         makestate(state);strcat(story,state);
             strcat(story," - An innocent citizen has been put to death in the electric chair.  ");
             char dstr[200],dstr2[200],dstr3[200];
             firstname(dstr);firstname(dstr2);lastname(dstr3);
@@ -186,15 +192,18 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr3);
             strcat(story," was pronounced dead at ");
             int hofd=LCSrandom(12)+1;
-            strcat(story,hofd);
+            char num[10];
+            itoa(hofd,num,10);
+            strcat(story,num);
             strcat(story,":");
             int mofd=LCSrandom(60);
-            strcat(story,mofd);
-            char tofday=LCSrandom(2);
+            itoa(mofd,num,10);
+            strcat(story,num);
+            bool tofday=LCSrandom(2);
             switch(tofday)
             {
-               case 0:strcpy(gen,"AM");break;
-               case 1:strcpy(gen,"PM");break;
+               case 0:strcpy(story,"AM");break;
+               case 1:strcpy(story,"PM");break;
             }
             strcat(story," yesterday at the ");
             char jstr[200];
@@ -205,10 +214,9 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  ");
             strcat(story,dstr3);
             strcat(story," was convicted in ");
-            char num[20];
             itoa(year-LCSrandom(11)-10,num,10);
             strcat(story,num);
-            strcat(story," of thirteen serial murders.  ");
+            strcat(story," of 13 serial murders.  ");
             strcat(story,"Since then, numerous pieces of exculpatory evidence ");
             strcat(story,"have been produced, including ");
             switch(LCSrandom(3))
@@ -1317,7 +1325,7 @@ void constructeventstory(char *story,short view,char positive)
             else if(law[LAW_FREESPEECH]==0)strcat(story,"within the county. ");
             else if(law[LAW_FREESPEECH]==1)strcat(story,"in neighboring towns. ");
             else strcat(story,"within the town. ");
-	    strcat(" A spokesperson for the FCC ");
+	    strcat(story," A spokesperson for the FCC ");
             strcat(story,"stated that the incident is under investigation.");
             strcat(story,"&r");
          }

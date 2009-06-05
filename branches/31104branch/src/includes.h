@@ -441,7 +441,7 @@ enum CreatureType
    CREATURE_CCS_SNIPER,
    CREATURE_CHEKA,
    CREATURE_REDGUARD,
-   CREATURE_COMISSAR,
+   CREATURE_COMMISSAR,
    CREATURENUM
 };
 
@@ -456,12 +456,12 @@ enum endgame
    ENDGAMENUM
 };
 
-enum stalinendgamestate
+enum stalinendgame
 {
 	ENDGAME_STALIN_ACTIVE,
 	ENDGAME_STALIN_DEFEATED,
+   ENDGAME_STALIN_NUM
 };
-#define ENDGAME_STALIN_DEFEATED BIT1
 
 enum Attributes
 {

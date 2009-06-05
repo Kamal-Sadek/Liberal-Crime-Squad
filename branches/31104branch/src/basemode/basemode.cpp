@@ -632,7 +632,12 @@ void mode_base(void)
          move(22,1);
          if(haveflag)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            
+            if(sieged)
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+
             addstr("P - PROTEST: burn the flag");
          }
          else
