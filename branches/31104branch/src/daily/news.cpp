@@ -529,8 +529,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   strcat(story,"The suspect was allegedly selling \"pot brownies\".  ");
                else if(ns.type==NEWSSTORY_BURIALARREST)
                {
-                  strcat(story,"A passerby allegedly called the police after seeing the suspect dragging what appeared ");
-                  strcat(story,"to be a corpse through an empty lot.  ");
+                  strcat(story,"A passerby allegedly called the authorities after seeing the suspect dragging what ");
+                  strcat(story,"appeared to be a corpse through an empty lot.  ");
                }
                else
                   strcat(story,"A passerby had allegedly spotted the suspect committing a car theft.  ");
@@ -686,7 +686,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   else
                   {
-                     strcat(story,"  The Liberal Crime Squad attempted to rescue innocent people from the Conservative conditions ");
+                     strcat(story,"  The Liberal Crime Squad attempted to rescue innocent people from the abusive Conservative conditions ");
                      strcat(story,"at the prison.");
                      strcat(story,"&r");
                   }
@@ -703,7 +703,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   else
                   {
                      strcat(story,"  The Liberal Crime Squad has apologized over reports that the operation ");
-                     strcat(story,"interfered with jury deliberations.");
+                     strcat(story,"may have interfered with jury deliberations.");
                      strcat(story,"&r");
                   }
                }
@@ -717,7 +717,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   else
                   {
-                     strcat(story,"  Liberal Crime Squad hackers worked to penetrate CIA computers.");
+                     strcat(story,"  Liberal Crime Squad hackers worked to liberate information from CIA computers.");//XXX: Can't find a better word for `hacker'.
                      strcat(story,"&r");
                   }
                }
@@ -835,7 +835,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         }
                         else
                         {
-                           strcat(story,"gained control of enemy equipment");
+                           strcat(story,"liberated enemy resources");
                         }
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
@@ -849,7 +849,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         }
                         else
                         {
-                           strcat(story,"liberated abused lab animals");
+                           strcat(story,"liberated abused animals");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -894,7 +894,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         }
                         else
                         {
-                           strcat(story,"forced entry into a secure area");
+                           strcat(story,"infiltration of a conservative hot spot");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -931,7 +931,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   else
                   {
-                     strcat(story,"  Conservative operatives engaged in a dangerous ");
+                     strcat(story,"  Conservative operatives engaged in a reckless ");
                      strcat(story,"pursuit of the LCS.  ");
                   }
 
@@ -945,7 +945,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      }
                      else strcat(story,"One vehicle crashed.  ");
                      if(!liberalguardian||ccs)
-                        strcat(story,"Details about injuries were not released.  ");
+                        strcat(story,"Details about injuries were not released.  ");//XXX: Why not turn them into martyrs?
                   }
 
                   if(crime[CRIME_FOOTCHASE])
@@ -953,7 +953,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      if(!liberalguardian||ccs)
                         strcat(story,"There was also a foot chase when the suspect or suspects bailed out after the high-speed pursuit.  ");
                      else
-                        strcat(story,"The Liberal Crime Squad ended the dangerous high-speed chase to protect the public, and attempted to escape on foot.  ");
+                        strcat(story,"The Liberal Crime Squad ended the dangerous high-speed chase in order to protect the public, and attempted to escape on foot.  ");
                   }
                   strcat(story,"&r");
                }
@@ -999,7 +999,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             char num[20];
             itoa(ns.crime[1],num,10);
             strcat(story,num);
-            strcat(story," bodies were ");
+            strcat(story," bodies were "); //Gruesome pile, large pile.
          }
          else if(ns.crime[1]>1)strcat(story," Two bodies were ");
          else strcat(story," A body was ");
@@ -1017,12 +1017,12 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          else
          {
             strcat(story,"  The police have opened an investigation into the massacre, but seem ");
-            strcat(story,"unwilling to pursue the case with all of their effort.");
+            strcat(story,"unwilling to pursue the case with any serious effort.");
             strcat(story,"&r");
             strcat(story,"  The Liberal Crime Squad has claimed that the ");
-            if(ns.crime[1]>1)strcat(story,"victims were ");
-            else strcat(story,"victim was ");
-            strcat(story,"a member of the LCS targeted simply due to their affiliation.  ");
+            if(ns.crime[1]>1)strcat(story,"victims were members ");
+            else strcat(story,"victim was a member ");
+            strcat(story,"of the LCS targeted simply due to their political beliefs.  ");
             strcat(story,"According to an LCS spokesperson, \"");
          }
          switch(ns.crime[0])
@@ -1049,7 +1049,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case SIEGE_HICKS:
                if(!liberalguardian)
                {
-                  strcat(story,"Burned...  stabbed with, maybe, pitchforks.  There may have been bite marks.  Nothing recognizable left");
+                  strcat(story,"Burned...  stabbed with, maybe, pitchforks.  There may have ");
+                  strcat(story,"been bite marks.  Nothing recognizable left.  Complete carnage.");
                }
                else
                {
@@ -1066,7 +1067,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   strcat(story,"This massacre has the signature mark of a group of mercenaries ");
                   strcat(story,"known to work with several corporations we've had confrontations ");
-                  strcat(story,"with in the past.  If the police can't figure this one out, they're ");
+                  strcat(story,"with in the past.  *When* the police can't figure this one out, they're ");
                   strcat(story,"just covering it up");
                }
                break;
@@ -1093,7 +1094,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   strcat(story,"This was a crime committed by the Stalinist Comrade Squad ");
                   strcat(story,"who desire to establish a Conservative Police State. ");
-                  strcat(story,"They must be stopped.");
+                  strcat(story,"They must be stopped before they strike again.");
                }
 			   break;
             case SIEGE_FIREMEN:
@@ -1157,7 +1158,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      displaycenterednewsfont("COP",5);
                      displaycenterednewsfont("KIDNAPPED",13);break;
                   default:
-                     displaycenterednewsfont("PERSON",5);
+                     displaycenterednewsfont("SOMEONE",5);
                      displaycenterednewsfont("KIDNAPPED",13);break;
                }
             }
@@ -1632,7 +1633,7 @@ switch(LCSrandom(5))
    {
       newsstoryst *ns=new newsstoryst;
 
-      // 10% chance of CCS squad wipe
+      // 10% chance of CCS squad wipe XXX: CCS?
       if(LCSrandom(10))ns->type=NEWSSTORY_STALIN_CON_SITE;
       else ns->type=NEWSSTORY_STALIN_CON_KILLED_SITE;
 

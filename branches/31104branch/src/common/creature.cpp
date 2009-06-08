@@ -221,10 +221,11 @@ void firstname(char *str, char gender)
    }
 
    if(nametable == GENDER_MALE)
+//{{{ Male
    {
       switch(roll)
       {
-         // Male name table
+         //{{{ Male name table
       case 0:strcat(str,"Ryan");break;
       case 1:strcat(str,"Sergio");break;
       case 2:strcat(str,"Bill");break;
@@ -401,16 +402,19 @@ void firstname(char *str, char gender)
       case 173:strcat(str,"Javier");break;
       case 174:strcat(str,"Fernando");break;
       case 175:strcat(str,"Rafael");break;
+//}}}
+
 
       default:strcat(str,"Defaulto");break;
       }
    }
-
+//}}}
    else if(nametable == GENDER_FEMALE)
+//{{{ Female
    {
       switch(roll)
       {
-         // Female name table
+         // {{{Female name table
 		case 0:strcat(str,"Veronica");break;
       case 1:strcat(str,"Laura");break;
       case 2:strcat(str,"Anne");break;
@@ -538,16 +542,17 @@ void firstname(char *str, char gender)
       case 124:strcat(str,"Liliana");break;
       case 125:strcat(str,"Adrianna");break;
       case 126:strcat(str,"Camilia");break;
-
+//}}}
       default:strcat(str,"Defaulta");break;
       }
    }
-
+//}}}
+//{{{ Neutral
    else if(nametable == GENDER_NEUTRAL)
    {
       switch(roll)
       {
-         // Gender-neutral name table
+         //{{{ Gender-neutral name table
 		case 0:strcat(str,"Ashley");break;
       case 1:strcat(str,"Angel");break;
       case 2:strcat(str,"Yanping");break;
@@ -561,15 +566,18 @@ void firstname(char *str, char gender)
       case 10:strcat(str,"Robin");break;
       case 11:strcat(str,"Kelly");break;
       case 12:strcat(str,"Sam");break;
+//}}}
 
       default:strcat(str,"Default");break;
       }
    }
-
+//}}}
    else if(nametable == GENDER_WHITEMALEPATRIARCH)
+//{{{ White Male Patriarchs
    {
       switch(roll)
       {
+      //{{{ White Male Patriarch
       case 0:strcat(str,"Roger");break;
       case 1:strcat(str,"James");break;
       case 2:strcat(str,"John");break;
@@ -619,21 +627,22 @@ void firstname(char *str, char gender)
       case 46:strcat(str,"Henry");break;
       case 47:strcat(str,"Carl");break;
       case 48:strcat(str,"Arthur");break;
-      case 49:strcat(str,"Ryan");break;
+      case 49:strcat(str,"Ryan");break;//}}}
       }
    }
 }
 
 
-
+//}}}
 /* gets a random last name */
 void lastname(char *str)
+//{{{ Last Name
 {
    strcpy(str,"");
 
    switch(LCSrandom(258))
    {
-      // Last name table
+      //{{{ Last name table
       case 0:strcat(str,"King");break;
       case 1:strcat(str,"Lewis");break;
       case 2:strcat(str,"Black");break;
@@ -892,10 +901,12 @@ void lastname(char *str)
       case 255:strcat(str,"Wright");break;
       case 256:strcat(str,"Obama");break;
       case 257:strcat(str,"McCain");break;
+//}}}
 
       default:strcat(str,"Defaultson");break;
    }
 }
+//}}}
 
 
 

@@ -1277,7 +1277,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       {
          //DO THE HEALTH MOD ON THE WOUND
          mod-=t.attval(ATTRIBUTE_HEALTH)-5;
-         //If commented out, health works like body armor
+         //If commented out, health works like body armor XXX: Which line?
          //if(mod<0)mod=0; 
       }
 
