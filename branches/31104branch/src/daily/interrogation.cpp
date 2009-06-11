@@ -368,9 +368,9 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr("to ");
             addstr(a->name);
             addstr(" as its only friend.");
-         } //XXX: What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist)
+         } //XXX: What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
            // These are greater than and less than comparisons, so they are testing ranges -Fox
-         else if(rapport[a->id]>1) //                   -- LK
+         else if(rapport[a->id]>1)
          {
             addstr("The Conservative likes ");
             addstr(a->name);

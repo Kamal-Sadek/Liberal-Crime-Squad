@@ -76,7 +76,7 @@ void constructeventstory(char *story,short view,char positive)
 			   if(VIEW_STALIN<=50)
 			   {
                strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
-               strcat(story,"had been completed.&r");	
+               strcat(story,"had been completed.&r");
 			   }
 			   else
 			   {

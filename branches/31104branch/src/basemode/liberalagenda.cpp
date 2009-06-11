@@ -549,7 +549,7 @@ char liberalagenda(char won)
                   break;
                case LAW_FREESPEECH:
                   if(won==-1)addstr("Unacceptable speech is a capital crime.");
-				      if(won==-2)addstr("Unacceptable speech is a capital crime.");
+				      else if(won==-2)addstr("Unacceptable speech is a capital crime.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Armored squads are tasked with suppressing unacceptable speech.");
                   else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
@@ -569,7 +569,7 @@ char liberalagenda(char won)
                   break;
                case LAW_GUNCONTROL:
                   if(won==-1)addstr("Gangs of young children carrying AK-47s roam the streets.");
-				      else if(won==-2)addstr("Anyone owning a gun is executed.");
+				      else if(won==-2)addstr("Anyone owning a gun is executed by firing squad.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Machine guns can be bought and sold freely.");
                   else if(law[l]==-1)addstr("Military weapons are banned, but similar-looking guns are available.");
@@ -701,29 +701,32 @@ char confirmdisband(void) // XXX The (current) issue that the masses are most
    int pos=0;		  // XXX			-- LK
 
    switch(LCSrandom(22)) // or more... (preferably 44)
-   {	// Liberal Phrase				     XXX Conservative Equivalent XXX
-      case 0:strcpy(word,"Corporate Accountability");break;	// Corporate Trust
-      case 1:strcpy(word,"Free Speech");break;			// Protect The Children
-      case 2:strcpy(word,"Gay Marriage");break;			// Queer Fear
-      case 3:strcpy(word,"Abortion Rights");break;		// Sacred Life
-      case 4:strcpy(word,"Separation Clause");break;		// Under God
-      case 5:strcpy(word,"Racial Equality");break;		// Racial Profiling
-      case 6:strcpy(word,"Gun Control");break;			// Second Amendment
-      case 7:strcpy(word,"Campaign Finance Reform");break;	// Lobbyists
-      case 8:strcpy(word,"Animal Rights");break;		// Animal Testing FIXME
-      case 9:strcpy(word,"Worker's Rights");break;		// Small Business FIXME
-      case 10:strcpy(word,"Police Responsibility");break;	// Police Brutality
-      case 11:strcpy(word,"Global Warming");break;		// Environmental Wasteland
-      case 12:strcpy(word,"Immigration Reform");break;		// Border Control FIXME
-      case 13:strcpy(word,"Human Rights");break;		// Enemy Combatant FIXME
-      case 14:strcpy(word,"Woman's Suffrage");break;		// Traditional Gender Roles
-      case 15:strcpy(word,"Right To Privacy");break;		// Wiretapping
-      case 16:strcpy(word,"Medical Marijuana");break;		// Drug Trafficking
-      case 17:strcpy(word,"Flag Burning");break;		// Stars And Stripes
-      case 18:strcpy(word,"Life Imprisonment");break;		// Lethal Injection
-      case 19:strcpy(word,"Peacetime Military");break;		// Preemptive Strike
-      case 20:strcpy(word,"Radiation Poisoning");break;		// Nuclear Power
-      case 21:strcpy(word,"Tax Bracket");break;			// Poverty
+   {    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Liberal Phrase                                       // Conservative Equivalent      // Stalinist Equivalent  //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      case 0:strcpy(word,"Corporate Accountability");break;     // Corporate Trust              //                       //
+      case 1:strcpy(word,"Free Speech");break;                  // Protect The Children         // Thoughtcrime          //
+      case 2:strcpy(word,"Gay Marriage");break;                 // Queer Fear                   //                       //
+      case 3:strcpy(word,"Abortion Rights");break;              // Sacred Life                  //                       //
+      case 4:strcpy(word,"Separation Clause");break;            // Under God                    //                       //
+      case 5:strcpy(word,"Racial Equality");break;              // Racial Profiling             //                       //
+      case 6:strcpy(word,"Gun Control");break;                  // Second Amendment             // Firing Squad          //
+      case 7:strcpy(word,"Campaign Finance Reform");break;      // Lobbyists                    //                       //
+      case 8:strcpy(word,"Animal Rights");break;                // Animal Testing FIXME         //                       //
+      case 9:strcpy(word,"Worker's Rights");break;              // Small Business FIXME         //                       //
+      case 10:strcpy(word,"Police Responsibility");break;       // Police Brutality             //                       //
+      case 11:strcpy(word,"Global Warming");break;              // Environmental Wasteland      //                       //
+      case 12:strcpy(word,"Immigration Reform");break;          // Border Control FIXME         //                       //
+      case 13:strcpy(word,"Human Rights");break;                // Enemy Combatant FIXME        //                       //
+      case 14:strcpy(word,"Woman's Suffrage");break;            // Traditional Gender Roles     //                       //
+      case 15:strcpy(word,"Right To Privacy");break;            // Wiretapping                  // Big Brother           //
+      case 16:strcpy(word,"Medical Marijuana");break;           // Drug Trafficking             //                       //
+      case 17:strcpy(word,"Flag Burning");break;                // Stars And Stripes            //                       //
+      case 18:strcpy(word,"Life Imprisonment");break;           // Lethal Injection             //                       //
+      case 19:strcpy(word,"Conflict Resolution");break;         // Preemptive Strike            //                       //
+      case 20:strcpy(word,"Radiation Poisoning");break;         // Nuclear Power                //                       //
+      case 21:strcpy(word,"Tax Bracket");break;                 // Poverty                      // Proletariat           //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    }
 
    do

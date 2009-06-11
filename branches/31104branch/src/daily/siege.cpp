@@ -2234,7 +2234,8 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_BURNFLAG])
    {
       move(4,1);
-      addstr("You are wanted for flag burning");
+      if(law[LAW_FLAGBURNING]==-2)addstr("You are wanted for flag murder");
+      else addstr("You are wanted for flag burning");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
@@ -2306,7 +2307,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_CARTHEFT])
    {
       move(4,1);
-      addstr("You are wanted for car theft");
+      addstr("You are wanted for car theft");//XXX: If adding grand theft auto, modify this too.
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
@@ -2338,7 +2339,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_HIREILLEGAL])
    {
       move(4,1);
-      addstr("You are wanted for hiring an illegal alien");
+      addstr("You are wanted for hiring an illegal alien");//XXX: Maybe `undocumented worker` if LAW_IMMIGRATION is 0, or maybe 1...
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }

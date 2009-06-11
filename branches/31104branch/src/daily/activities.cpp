@@ -567,13 +567,46 @@ void survey(Creature *cr)
             else addstr("resisting communist wage limits.");
             break;
          case VIEW_POLITICALVIOLENCE:
-            if(attitude[VIEW_POLITICALVIOLENCE]>50)addstr("taking strong action.");            else addstr("political terrorism.");            break;         case VIEW_IMMIGRATION:            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");            else addstr("illegal immigration.");            break;         case VIEW_DRUGS:            if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");            else addstr("drug abuse.");            break;         case VIEW_WOMEN:            if(attitude[VIEW_WOMEN]>50)addstr("women's equality.");            else addstr("women.");            break;         case VIEW_CIVILRIGHTS:            if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");            else addstr("troublemaking minorities.");            break;         case VIEW_MILITARY:            if(attitude[VIEW_MILITARY]>50)addstr("the large military.");            else addstr("strengthening the military.");            break;         case VIEW_LIBERALCRIMESQUAD:         case VIEW_LIBERALCRIMESQUADPOS:
-            if(attitude[VIEW_LIBERALCRIMESQUAD]<50)            {               addstr("activist political groups.");               break;            }            if(attitude[VIEW_LIBERALCRIMESQUADPOS]>50)addstr("the Liberal Crime Squad.");
+            if(attitude[VIEW_POLITICALVIOLENCE]>50)addstr("taking strong action.");
+            else addstr("political terrorism.");
+            break;
+         case VIEW_IMMIGRATION:
+            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
+            else addstr("illegal immigration.");
+            break;
+         case VIEW_DRUGS:
+            if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");
+            else addstr("drug abuse.");
+            break;
+         case VIEW_WOMEN:
+            if(attitude[VIEW_WOMEN]>50)addstr("women's equality.");
+            else addstr("women.");
+            break;
+         case VIEW_CIVILRIGHTS:
+            if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");
+            else addstr("troublemaking minorities.");
+            break;
+         case VIEW_MILITARY:
+            if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
+            else addstr("strengthening the military.");
+            break;
+         case VIEW_LIBERALCRIMESQUAD:
+         case VIEW_LIBERALCRIMESQUADPOS:
+            if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
+            {
+               addstr("activist political groups.");
+               break;
+            }
+            if(attitude[VIEW_LIBERALCRIMESQUADPOS]>50)addstr("the Liberal Crime Squad.");
             else addstr("the LCS terrorists.");
             break;
          case VIEW_CONSERVATIVECRIMESQUAD:
             if(attitude[VIEW_CONSERVATIVECRIMESQUAD]<50)
-            {               addstr("the Conservative Crime Squad.");               break;            }            else addstr("the CCS terrorists.");
+            {
+               addstr("the Conservative Crime Squad.");
+               break;
+            }
+            else addstr("the CCS terrorists.");
             break;
 	 case VIEW_STALIN:
 	    if(attitude[VIEW_STALIN]<50)addstr("the Stalinist Comrade Squad");
@@ -1930,7 +1963,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_ABORTION]<2)
                {
-                  addstr("posted horrifying dead abortion doctor pictures downtown!");
+                  addstr("posted horrifying dead abortion doctor pictures downtown!");//XXX Change me
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_WOMEN]+=mod;

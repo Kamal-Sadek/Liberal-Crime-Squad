@@ -60,7 +60,7 @@ switch(LCSrandom(35))
                case 33:strcat(str,"TS");break;
                case 34:strcat(str,"TV");break;
 
-	default:strcat(str,"BAR");break;
+        default:strcat(str,"BAR");break;
    }
 }
 
@@ -73,7 +73,7 @@ switch(LCSrandom(2))
             { // ISO
                case 0:strcat(str,"ISO");break;
                case 1:strcat(str,"LF");break;
-	       default:strcat(str,"BAZ");break;
+               default:strcat(str,"BAZ");break;
             }
 }
 
@@ -98,6 +98,6 @@ switch(LCSrandom(14))
                case 11:strcat(str,"TT");break;
                case 12:strcat(str,"SWS");break;
                case 13:strcat(str,"W/S");break;
-	       default:strcat(str,"LOL");break;
+               default:strcat(str,"LOL");break;
             }
 }

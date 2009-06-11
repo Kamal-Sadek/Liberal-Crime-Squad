@@ -132,7 +132,13 @@ void trial(Creature &g)
 
       x++;
       if(x>=2){x=0;y++;move(y,1);}
-
+      //////////////////////////////////////////////////////////////////////////
+      //                                Treason                               //
+      //////////////////////////////////////////////////////////////////////////
+      // Technically, treason is exposing state secrets, or somesuch.         //
+      // Illegal Immigrants cannot commit treason, because treason can only   //
+      // be committed by `those owing allegiance to the United States`.       //
+      //////////////////////////////////////////////////////////////////////////
       if(breaker[LAWFLAG_TREASON])
       {
          if(g.lawflag[LAWFLAG_TREASON]>1)
@@ -266,7 +272,7 @@ void trial(Creature &g)
          addstr("felony assault");
          breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
-      else if(breaker[LAWFLAG_MURDER])
+      else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge?
       {
          if(g.lawflag[LAWFLAG_MURDER]>1)
          {
@@ -337,9 +343,9 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("car theft");
-         breaker[LAWFLAG_CARTHEFT]=0;
-      }
+         addstr("car theft");//XXX: If chase lasts more than 20 `turns` then
+         breaker[LAWFLAG_CARTHEFT]=0;//XXX: this should be `Grand Theft Auto`
+      }                              //                 -- LK
       else if(breaker[LAWFLAG_CCFRAUD])
       {
          if(g.lawflag[LAWFLAG_CCFRAUD]>1)
@@ -477,7 +483,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("indecent exposure"); // XXX Maybe `Indecent exposure'? // Done. -JonathanSFox
+         addstr("indecent exposure")
          breaker[LAWFLAG_PUBLICNUDITY]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])
@@ -636,7 +642,7 @@ void trial(Creature &g)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(attorneyname);
-            addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!"); // Red text? // Done. -Fox
+            addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!");
             jury=0;
             prosecution+=40; // DUN DUN DUN!!
          }
@@ -648,8 +654,8 @@ void trial(Creature &g)
          {
             case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.");break;
             case 1:addstr("The jury is Flaming Liberal.");break;
-            case 2:addstr("Four of the jurors are closet Socialists.");break;
-            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break; // Green text? // Done. -Fox
+            case 2:addstr("Four of the jurors are closet Socialists.");break;//XXX: A Few?
+            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break;
          }
       }
       else if(jury<=-15)addstr("The jury is fairly Liberal.");
@@ -816,6 +822,8 @@ void trial(Creature &g)
          // A character build specifically to be strong in this area *will* still start out
          // slightly stronger than the public defender (and will be notably better once they
          // hit activist level).
+
+         // <3 Documentation. -- LK
          int defenseskill=3*g.skillval(SKILL_PERSUASION)+6*g.skillval(SKILL_LAW);
          defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
          defensepower+=g.attval(ATTRIBUTE_HEART);
@@ -853,7 +861,7 @@ void trial(Creature &g)
             else if(defensepower<=150)addstr(" made a very powerful case.");
             else
             {
-               addstr(" had the jurors crying for freedom.");
+               addstr(" had the jury, judge, and prosecution crying for freedom.");
                addjuice(g,10); // That shit is legend
             }
          }

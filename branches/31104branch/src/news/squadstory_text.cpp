@@ -190,8 +190,8 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
          }
       }
    }
-		 else if (ns.type==NEWSSTORY_STALIN_SITE)
-		 {
+                 else if (ns.type==NEWSSTORY_STALIN_SITE)
+                 {
          if(ns.positive)
          {
             strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
@@ -200,19 +200,19 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
             strcat(story,"&r");
          }
          else if(liberalguardian)
-		 {
+                 {
             strcat(story,"Elements of the Stalinist Comrade Squad protested against ");
             strcat(story,"Conservative tyranny by engaging in political ");
             strcat(story," activism.");
             strcat(story,"&r");
-		 }
+                 }
          else
          {
             strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
             strcat(story,"went on a rampage yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
-		 }
-		 }
+                 }
+                 }
    else if(ns.type==NEWSSTORY_STALIN_CON_SITE)
    {
          if(ns.positive)
@@ -223,42 +223,42 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
             strcat(story,"&r");
          }
          if(liberalguardian)
-		 {
+                 {
             strcat(story,"The Stalinist Comrade Squad attempted to promote its ideology of ");
             strcat(story,"Conservative hatred and tyranny yesterday ");
             strcat(story," in its quest to take over the United States.");
             strcat(story,"&r");
-			}
+                        }
          else
          {
             strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
             strcat(story,"went on a rampage yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
-			}
-		 }
+                        }
+                 }
    else if(ns.type==NEWSSTORY_STALIN_KILLED_SITE)
    {
          if(ns.positive)
-		 {
+                 {
             strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
             strcat(story,"were either arrested or killed while engaging in political activism, according ");
             strcat(story,"to a spokesperson from the police department.");
             strcat(story,"&r");
          }
          if(liberalguardian)
-		 {
+                 {
             strcat(story,"Elements of the Stalinist Comrade Squad protested against ");
             strcat(story,"Conservative tyranny and were promptly arrested or ");
             strcat(story," killed by the Conservative police.");
             strcat(story,"&r");
-			}
+                        }
          else
          {
             strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
             strcat(story,"went on a rampage yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
-			}
-		 }
+                        }
+                 }
    else if(ns.type==NEWSSTORY_STALIN_CON_KILLED_SITE)
    {
          if(ns.positive)
@@ -269,18 +269,18 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
             strcat(story,"&r");
          }
          if(liberalguardian)
-		 {
+                 {
             strcat(story,"The Stalinist Comrade Squad attempted to promote its ideology of ");
             strcat(story,"Conservative hatred and tyranny yesterday ");
             strcat(story,"and got what they deserved.");
             strcat(story,"&r");
-		 }
+                 }
          else
          {
             strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
             strcat(story,"went on a rampage yesterday, according ");
             strcat(story,"to a spokesperson from the police department.");
-			}
+                        }
    }
    else
    {
