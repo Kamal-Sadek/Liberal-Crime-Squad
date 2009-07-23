@@ -1,7 +1,4 @@
 (Note this document is a parody of the original Oubliette 2.5 Manual from 1983)
-(This document does not include information for new features added after
-the Open Source community took over development, this will be updated in
-the future).
 
 Liberal Crime Squad
 A Liberal Adventure
@@ -11,7 +8,12 @@ To some a dream come true, to others an offensive piece of crap.
 Author: Tarn Adams of Bay 12 Games
 v3.9 Copyright (c) 2002-4, Tarn Adams
 
-v3.11 Maintained by the Open Source Community
+v3.10-3.13 revisions by Jonathan Stickles, Chris Johnson, and other fans of Liberal Crime Squad in the Open Source Community. We hope you enjoy our changes.
+
+Visit the Curses forum at the Bay 12 Games website to discuss and contribute to LCS:
+http://www.bay12games.com/cgi-local/ultimatebb.cgi?ubb=forum&f=3
+
+See also our underutilized sourceforge page:
 https://sourceforge.net/projects/lcsgame/
 
 DISCLAIMER
@@ -20,8 +22,6 @@ Tarn Adams and Bay 12 Games make no representations or warranties with respect t
 the contents hereof and disclaim any implied warranties of merchantability or fitness
 for any purpose.  Tarn Adams and Bay 12 Games reserve the right to make changes at
 any time without prior notification.  
-
-See the file COPYING for license information.
 
 www.bay12games.com
 
@@ -42,8 +42,27 @@ Site Options  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
 The Legend of the Liberal Crime Squad
 ----------------------------------------------------------------
 
-The Oubliette Manual gave the history of the French word and some other things.
-I guess I could talk about the SLA here or something.
+(This section is adapted from the Wikipedia article on the Symbionese Liberation Army, and serves as background for the 'inspiration' for LCS. If it's too serious for you, just skip it -- we don't take the game seriously, either, so no worries.)
+
+On Febuary 4, 1974, the Symbionese Liberation Army, an American self-styled urban gurrilla warfare group kidnapped 19-year-old media heiress Patricia Hearst as she and her 26-year-old boyfriend, Steven Weed, sat relaxing in their Berkeley, California home.
+
+Their goal was to negotiate the release of two of their members, Joseph Remiro and Russell Little, who were just convicted and given life sentences for assassinating a popular school superintendant over his support for what they considered to be a "facist" plan to introduce identification cards. This proved impossible to negotiate, and the F.B.I. searched unsuccessfully for the S.L.A. as they took refuge in "safehouses" and the kidnapping captured regional, then world attention.
+
+What was so spectacular about this kidnapping was not so much the prominence of the victim, but her response. The S.L.A. released taped recordings of Hearst reading their demands, and with each tape they released, she voiced increasing support for her captors. Eventually, she firmly renounced her former life and family, and declared that when the S.L.A. offered her the choice of going free or joining them, she chose to join them. She would even take a new name: Tania.
+
+On April 15, 1974, S.L.A. members burst into a branch of The Hibernia Bank at 1450 Noriega Street in San Francisco. Security camera footage of pictured Patricia Hearst, Tania, holding a rifle and yelling commands. Two civilians were shot, and the S.L.A. made off with over $10,000.
+
+Unable to recruit any would-be revolutionaries in the Bay Area, the S.L.A. moved to Los Angeles in hopes of finding more supporters, but the move was sloppy, and the group resorted to commandeering housing and supplies from the people of Los Angeles, thus alienating the people they relied upon for secrecy and protection. Imprisoned S.L.A. member Russell Little declared that they had lost sight of their goals, and were entering a confrontation with the police rather than engaging in a dialogue with the people.
+
+On 16 May 1974, S.L.A. codenames Teko and Yolanda entered Mel's Sporting Goods Store in Inglewood, California, to shop for supplies for their safehouse. While Yolanda made the purchases, Teko on a whim tried to shoplift, and was caught by a security guard. Following a brief confrontation, codename Tania, on lookout from across the street, opened fire on the store's sign, forcing everyone inside to take cover, and allowing the other members to escape.
+
+Police tracked them to their safehouse, and they were forced to abandon it and commandeer a new one from unwilling occupants in the dead of the night, storming a home with massive amounts of guns and ammunition in tow. The next day, a woman called the police to tell them that people with guns were staying at her daughter's house. That afternoon, more than 400 L.A.P.D. officers, along with the F.B.I., California Highway Patrol, and Los Angeles Fire Department surrounded the neighborhood. After a two-hour gun battle between S.W.A.T. teams outside and the S.L.A. inside, the house caught fire and all six S.L.A. members inside were killed. Tania, Teko, and Yolanda were in hiding elsewhere, and were not among the dead.
+
+The manhunt for Patricia Hearst and the remainder of the S.L.A. continued, and after over a year of continued movement and additional S.L.A. actions, she was captured. She claimed to have been drugged and brainwashed, and identified the remainder of the S.L.A. members. She was convicted for her part in the bank raid, and the S.L.A. dissolved.
+
+The revolution failed.
+
+But that was then...
 
 ----------------------------------------------------------------
 Loading Liberal Crime Squad
@@ -53,60 +72,35 @@ Loading Liberal Crime Squad
 
 2. Insert the Liberal Crime Squad disk into Drive A (!!!!!!!!)
 
-3. The disk drive will activate and you will be prompted to enter the date and time,
-pressing the carriage return after each.  Wow, that's some old school shit.
+3. The disk drive will activate and you will be prompted to enter the date and time, pressing the carriage return after each.  Wow, that's some old school shit.
 
 4. At the A> prompt, type LCS and press the carriage return.
 
-5. The game starts with a listing of the current game statistics, unless
-it is your first time.  Press the carriage return to begin Liberal Crime Squad.
+5. The game starts with a listing of the current game statistics, unless it is your first time.  Press the carriage return to begin Liberal Crime Squad.
 
 ----------------------------------------------------------------
 Introduction to Liberal Crime Squad
 ----------------------------------------------------------------
 
-Welcome to Liberal Crime Squad!  The Conservatives have taken
-the Executive, Legislative, and Judicial branches of government.
-Over time, the Liberal laws of this nation will erode and turn
-the country into a BACKWOODS YET CORPORATE NIGHTMARE.  To prevent this
-from happening, the Liberal Crime Squad was established.
-The mood of the country is shifting, and we need to turn things around.
-Go out on the streets and indoctrinate Conservative automatons.
-That is, let them see their True Liberal Nature.
-Then arm them and send them forth to Stop Evil.  Eventually the public
-will fall behind us, and we will put more Elite Liberals in government.
+Welcome to Liberal Crime Squad!  The Conservatives have taken the Executive, Legislative, and Judicial branches of government. Over time, the Liberal laws of this nation will erode and turn the country into a BACKWOODS YET CORPORATE NIGHTMARE.  To prevent this from happening, the Liberal Crime Squad was established. The mood of the country is shifting, and we need to turn things around. Go out on the streets and indoctrinate Conservative automatons. That is, let them see their True Liberal Nature. Then arm them and send them forth to Stop Evil.  Eventually the public will fall behind us, and we will put more Elite Liberals in government.
 
-Read below for the technical details.  A working knowledge of the
-game is essentially to FURTHER YOUR LIBERAL AGENDA.
+Read below for the technical details.  A working knowledge of the game is essential to FURTHER YOUR LIBERAL AGENDA.
 
 ----------------------------------------------------------------
 Character Creation
 ----------------------------------------------------------------
 
-After the title screen, you will create the founder of the Liberal
-Crime Squad by answering a series of questions.  Just be honest,
-or cynically answer according to what best suits your style of play.
-The initial Liberal that you control will have skills and equipment
-related to your responses.
+After the title screen, you will create the founder of the Liberal Crime Squad by answering a series of questions.  Just be honest, or cynically answer according to what best suits your style of play. The initial Liberal that you control will have skills and equipment related to your responses. If you really want to cheat, with this or anything else, you can pull up your web browser and search for the LCS wiki for detailed information about how these choices affect your starting character.
 
 ----------------------------------------------------------------
 Liberal Information
 ----------------------------------------------------------------
 
-Once you've named the founder, you'll notice a short synopsis of
-the Squad members' equipment at the top of the screen.  The first
-skill number is the sum of the Liberal's skills, and the second
-number is the Liberal's skill with the current weapon.
+Once you've named the founder, you'll notice a short synopsis of the Squad members' equipment at the top of the screen.  The first skill number is the sum of the Liberal's skills, and the second number is the Liberal's skill with the current weapon.
 
-***NOTE***: If a gun is loaded, the number in parentheses after it is the
-number of rounds left.  If it is empty, the number in parentheses
-is darker, and it counts the number of clips remaining.
+***NOTE***: If a gun is loaded, the number in parentheses after it is the number of rounds left.  If it is empty, the number in parentheses is darker, and it counts the number of clips remaining.
 
-Press a number to view that Squad member.  For instance, if you
-press '1', you'll see that statistics of the first member.
-Press '0' to view the Squad synopsis again.  If you press the
-same number twice you'll see a full display of that
-Squad member's statistics.
+Press a number to view that Squad member.  For instance, if you press '1', you'll see that statistics of the first member. Press '0' to view the Squad synopsis again.  If you press the same number twice you'll see a full display of that Squad member's statistics.
 
 Back on the smaller statistics screen, you had a display like:
 
@@ -119,13 +113,9 @@ Weapon: .22 Revolver (5/3)    Knife: 1
 Armor: Trenchcoat             Club: 1
 ----------------------------------------------------------
 
-This shows your attributes, skills and equipment.
-If you are wounded, you will also see your wounds.  Dead Liberals
-cannot be "resurrected", as that is a Conservative notion.
+This shows your attributes, skills and equipment. If you are wounded, you will also see your wounds.  Dead Liberals cannot be "resurrected", as that is a Conservative notion.
 
-If you have a gun, the first number is the number of rounds
-in the gun, and the second is the number of clips.  A squad
-member may carry up to nine clips for a single weapon.
+If you have a gun, the first number is the number of rounds in the gun, and the second is the number of clips.  A squad member may carry up to nine clips for a single weapon.
 
 We now go over the statistics one by one:
 
@@ -133,58 +123,78 @@ Attributes:
 
 Heart:  This is how much feeling you bring to back up your Liberalism.
 	MAIN USES:  Converting people to Liberalism.
+	SKILLS: Music, art.
 
 Intelligence:  This is how smart you are.
-	MAIN USES:  Pick locks, hack computers, disguise, writing and winning arguments.
+	MAIN USES:  Pick locks, hack computers, science, law, first aid, writing and winning arguments.
+	SKILLS: Science, law, survival, first aid, security, interrogation, cooking, computers, garment making, writing, street sense.
 
 Wisdom:  This is how much you've been polluted by Conservative thinking.
 	MAIN USES:  Determines how easy it is to be converted to conservatism.
+	SKILLS: Religion, business.
 
 Health:  This is how robust your character is.
-	MAIN USES:  Resist Battle Damage.  
+	MAIN USES:  Resist Battle Damage.
+	SKILLS: None.
 
 Agility:  This is how quick your character is.
 	MAIN USES:  Influences attack and kidnapping success, as well as driving.
+	SKILLS: Knife, sword, pistol, rifle, SMG, shotgun, driving, improvised weapons, sleight of hand, stealth.
 
 Strength:  This is how muscular your character is.
 	MAIN USES:  Influences melee damage and door bashing.
+	SKILLS: Hand to hand, club.
 
 Charisma:  This is how you look and come across to others.
-	MAIN USES:  Converting people to Liberalism, winning arguments,
-		and disguise.
+	MAIN USES:  Converting people to Liberalism, winning arguments, and disguise.
+	SKILLS: Persuasion, disguise, gangsterism, teaching, seduction.
 
-Unlike other computer games that say specious statements like
-"all of the attributes are equally important", you'll find a balance
-that is right for your Liberal Agenda.  All of the attributes are used
-throughout the game, even Charisma.
+Each attribute is associated with a number of skills, and determines the maximum amount of skill that you may develop in that area. Obviously, it is advantageous to have high attributes if you wish to have high skills.
+
+Unlike other computer games that say specious statements like "all of the attributes are equally important", you'll find a balance that is right for your Liberal Agenda.  All of the attributes are used throughout the game, even Charisma.
 
 Skills:
-Persuasion:  This skill tells you how well you can influence others.
-Law:  This skill tells you how well you know the law and how it is used.
-Disguise:  This skill lets you move unnoticed by Conservative filth.  It is
-	important to dress for the part.
-Computers:  This skill tells you how well you know your way around computers.
-Hand to Hand:  This is your skill in unarmed combat.
-Knife:  This skill tells you how well you can handle a knife.
-Club:  This governs your fighting ability with bats and chains,
-	as well as other blunt melee weapons.
-Spear:  This governs your fighting ability with spears.
-Sword:  This governs your fighting ability with swords.
-Axe:  This governs your fighting ability with axes.
-Pistol:  This tells you how well you can shoot a pistol.
-Rifle:  This skill is used to fire shotguns.
-Assault Rifle:  This skill governs your accuracy with military-style assault rifles.
-Security:  This skills tells you how well you can pick locks and hotwire cars.
-Driving:  This skills lets you drive.
-Writing:  This skill judges how well you can write.
-Garment Making:  This skill lets you make better clothing.
+
+Weapon Skills:
+Hand to Hand:	Unarmed
+Knife:		Knife, Shank
+Sword:		Sword, Daisho
+Club:		Club, Maul, Crowbar, Staff
+Improvised:	Syringe, Gavel, Empty Guns
+Pistol:		All Pistols
+Rifle:		AR-15, AK-47, M16, M4
+SMG:		MP5
+Shotgun:	Pump Shotgun
+
+Other Skills:
+Persuasion:	The ability to convince others that you are right.
+Interrogation:	The ability to manipulate Conservatives when they are tied up.
+Writing:	The ability to communicate effectively in writing.
+Leadership:	The ability to recieve more followers and greater loyalty from other Liberals.
+Teaching:	The ability to pass skills on to other Liberals.
+Art:		The ability to create powerful visual art.
+Music:		The ability to create powerful music.
+Garment Making:	The ability to make better clothing.
+Cooking:	The ability to make good food and feed Liberals more cheaply.
+First Aid:	The ability to effectively tend to Conservative injuries.
+Survival:	Instinct and ability to survive and cope even in dire situations.
+Street Sense:	Instinct and ability to avoid trouble in urban areas.
+Seduction:	The ability to seduce and keep lovers.
+Sleight of Hand:The ability to take and handle objects without being noticed.
+Stealth:	The ability to move unnoticed while obviously Liberal.
+Disguise:	The ability to blend in and act like Conservative filth. Dress the part.
+Security:	The ability to pick locks and hotwire cars.
+Computers:	The ability to use and exploit computer systems effectively.
+Driving:	The ability to handle a car in dangerous situations.
+Law:		Knowledge of courtroom procedure and criminal law.
+Religion:	Knowledge of religious doctrine and advanced theology.
+Business:	Knowledge of business practices and economic theory.
+Science:	Knowledge of scientific disciplines and technical matters.
+Gangsterism:	Knowledge of street gangs and their practices.
+Tactics:	Knowledge of military squad-based tactics.
 
 Juice:
-In the full status screen, you can see how much "juice" a Liberal has.
-Juice is Liberal Street Credibility and having higher juice influences
-your attributes, since that Liberal is inflamed by the powers of
-Liberal Justice.  Juice can be made negative by performing non-liberal
-actions or just generally messing up.
+In the full status screen, you can see how much "juice" a Liberal has. Juice is Liberal Street Credibility and having higher juice influences your attributes, since that Liberal is inflamed by the powers of Liberal Justice. Most Liberals are unable to get anyone to follow them without gaining a significant amount of juice first. Juice can be made negative by performing non-liberal actions or just generally messing up.
 
 ----------------------------------------------------------------
 Equipment
