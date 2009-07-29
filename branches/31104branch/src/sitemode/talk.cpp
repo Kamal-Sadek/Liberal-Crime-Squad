@@ -1040,7 +1040,7 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_LAW);
                            break;
                         case LAW_NUCLEARPOWER:
-                           addstr("\"Nuclear power isn't banned in some countries.\"");
+                           addstr("\"Some people support legalizing nuclear power.\"");
                            troll+=tk->skillval(SKILL_SCIENCE);
                            break;
                         case LAW_POLLUTION:
@@ -1094,7 +1094,7 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_BUSINESS);
                            break;
                         case LAW_RELIGION:
-                           addstr("\"In some parts of the world, religion dominates politics.\"");
+                           addstr("\"People in this country still believe in God.\"");
                            troll+=tk->skillval(SKILL_RELIGION) * 2;
                            break;
                         case LAW_ELECTIONS:
@@ -1102,7 +1102,7 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_LAW);
                            break;
                         case LAW_MILITARY:
-                           addstr("\"We have to keep fighting for peace.\"");
+                           addstr("\"We still have a military.\"");
                            troll+=tk->skillval(SKILL_LAW);
                            break;
 						case LAW_WELFARE:
@@ -1111,7 +1111,7 @@ char talk(Creature &a,int t)
 						   troll+=tk->skillval(SKILL_RELIGION);
                            break;							
                         case LAW_TORTURE:
-                           addstr("\"Some places in the world, people still torture.\"");
+                           addstr("\"Some conservatives supports torture.\"");
                            troll+=tk->skillval(SKILL_RELIGION);
                            troll+=tk->skillval(SKILL_LAW);
                            break;
