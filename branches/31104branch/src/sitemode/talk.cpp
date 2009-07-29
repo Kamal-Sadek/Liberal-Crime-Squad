@@ -1024,7 +1024,7 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_RELIGION);
                            break;
                         case LAW_ANIMALRESEARCH:
-                           addstr("\"Animals need to be better respected.\"");
+                           addstr("\"Animals are denied the right to vote.\"");
                            troll+=tk->skillval(SKILL_SCIENCE);
                            break;
                         case LAW_POLICEBEHAVIOR:
