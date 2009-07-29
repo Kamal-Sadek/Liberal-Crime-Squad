@@ -216,6 +216,8 @@ void setpriority(newsstoryst &ns)
          case SITE_BUSINESS_CARDEALERSHIP:
          case SITE_OUTDOOR_PUBLICPARK:
          case SITE_OUTDOOR_BUNKER:
+		 case SITE_INDUSTRY_FOODBANK:
+		 case SITE_BUSINESS_STALIN:
          default:
             break;
 
@@ -632,6 +634,24 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(crime[CRIME_SHUTDOWNREACTOR])
                {
+				   if(law[LAW_NUCLEARPOWER]=2)
+				   {
+					   if(!liberalguardian)
+                  {
+                     strcat(story,"  According to sources that were at the scene, ");
+                     strcat(story,"the Liberal Crime Squad contaminated the state's water supply");
+                     strcat(story,"yesterday by tampering with equipment on the site.");
+                     strcat(story,"&r");
+                  }
+                  else
+                  {
+                     strcat(story,"  The Liberal Crime Squad tampered with the state's water supply yesterday, ");
+                     strcat(story,"demonstrating the extreme dangers of Nuclear Waste. ");
+                     strcat(story,"&r");
+                  }
+				  }
+				   else
+				   {
                   if(!liberalguardian)
                   {
                      strcat(story,"  According to sources that were at the scene, ");
@@ -2294,6 +2314,10 @@ switch(LCSrandom(5))
 					change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
                change_public_opinion(VIEW_WOMEN,power,colored,power*10);
                break;
+			case SITE_INDUSTRY_FOODBANK:
+				change_public_opinion(VIEW_WELFARE,power,colored,power*10);
+				change_public_opinion(VIEW_RELIGION,power,colored,power*10);
+			   break;
          }
       }
    }

@@ -189,20 +189,60 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
    switch(cr.type)
    {
       /* Cultural leaders block - small influence on everything */
+	  /*Radio Personalities and News Anchors subvert Conservative news stations and convince people to watch
+	  Liberal news stations. But once people watch Liberal news, nobody will want to listen to the
+	  Radio Personalities and News Anchors anymore! They lose their ability to change Culture!*/
       case CREATURE_RADIOPERSONALITY:
+		 if(attitude([VIEW_AMRADIO])=<50)
+		 {
          change_public_opinion(VIEW_AMRADIO,1);
          for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
          }
-         break;
+		 }
+		 else
+		 {
+		libpower[VIEW_LIBERALCRIMESQUAD]+=power;
+         libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
+		 }
+		 break;
       case CREATURE_NEWSANCHOR:
+		  if(attitude([VIEW_CABLENEWS])=<50)
+		  {
          change_public_opinion(VIEW_CABLENEWS,1);
          for(int i=0;i<VIEWNUM-3;i++)
          {
             libpower[i]+=power/2;
          }
+		  }
+		  else
+		  {
+			 libpower[VIEW_LIBERALCRIMESQUAD]+=power;
+			 libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
+		  }
          break;
+		 /* Priests gain their cultural power through their ability to "creatively interpert" religion to promote
+		 Liberal ideas, such as the seperation of church and state. But if the government strictly 
+		 enforce the seperation of church and state (L+), prohibiting faith-based views from affecting public policy,
+		 then Priests would be unable to use their Religious preachings to change the Culture of society!*/
+      case CREATURE_PRIEST:
+		  if(law[LAW_RELIGION]<=1)
+		  {
+			  change_public_opinion(VIEW_RELIGION,1);
+			  for(int i=0;i<VIEWNUM-3;i++)
+         {
+            libpower[i]+=power/2;
+         }
+		  }
+		  else
+		  {
+			 libpower[VIEW_LIBERALCRIMESQUAD]+=power;
+			 libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
+		  }
+         break;
+		 /* All these other Cultural Sleepers are inherently good at affecting culture, in fact, they get to produce
+		 Culture! Nothing can be done to strip them of their power. */
       case CREATURE_PAINTER:
       case CREATURE_SCULPTOR:
       case CREATURE_AUTHOR:
@@ -211,7 +251,6 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_CRITIC_ART:
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
-      case CREATURE_PRIEST:
 	  case CREATURE_COMMISSAR:
          for(int i=0;i<VIEWNUM-3;i++)
          {
@@ -229,6 +268,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          libpower[VIEW_JUSTICES]+=power;
          libpower[VIEW_INTELLIGENCE]+=power;
          libpower[VIEW_ANIMALRESEARCH]+=power;
+		 libpower[VIEW_WELFARE}+=power;
          break;
       /* Scientists block */
       case CREATURE_SCIENTIST_LABTECH:

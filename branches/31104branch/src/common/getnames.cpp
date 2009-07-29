@@ -967,6 +967,8 @@ void getview(char *str,short view)
       case VIEW_AMRADIO:strcat(str,"AM Radio");break;
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
       case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
+	  case VIEW_WELFARE:strcat("Welfare");break;
+	  case VIEW_RELIGION:strcat("Seperation of Church and State");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;
@@ -1004,6 +1006,8 @@ void getviewsmall(char *str,short view)
       case VIEW_AMRADIO:strcat(str,"AM radio");break;
       case VIEW_CABLENEWS:strcat(str,"cable news");break;
       case VIEW_POLITICALVIOLENCE:strcat(str,"the need for action");break;
+	  case VIEW_WELFARE:strcat(str,"welfare");break;
+	  case VIEW_RELIGION:strcat(str,"religion");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"the LCS");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"the LCS");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"the CCS");break;
@@ -1037,6 +1041,7 @@ void getlaw(char *str,int l)
       case LAW_RELIGION:addstr("Religion");break;
       case LAW_ELECTIONS:addstr("Election Reform");break;
       case LAW_MILITARY:addstr("Military Spending");break;
+	  case LAW_WELFARE:addstr("Welfare");break;
       case LAW_TORTURE:addstr("Human Rights");break;
    }
 }

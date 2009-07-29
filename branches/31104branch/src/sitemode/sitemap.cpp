@@ -86,6 +86,7 @@ void initsite(locationst &loc)
      case SITE_BUSINESS_BARANDGRILL:
      case SITE_RESIDENTIAL_BOMBSHELTER:
      case SITE_OUTDOOR_BUNKER:
+	 case SITE_INDUSTRY_FOODBANK:
         build_site("GENERIC_UNSECURE");
         break;
      case SITE_LABORATORY_COSMETICS:

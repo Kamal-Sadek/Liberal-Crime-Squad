@@ -36,11 +36,13 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_CORPORATE_HEADQUARTERS:
          strcat(story,"Welfare Assistance Agency.  ");break;
       case SITE_CORPORATE_HOUSE:
-         strcat(story,"Food Bank.  ");break;
+         strcat(story,"Richard Dawkins Food Bank.  ");break;
       case SITE_MEDIA_AMRADIO:
          strcat(story,"Public Radio Station.  ");break;
       case SITE_MEDIA_CABLENEWS:
          strcat(story,"Network News Station.  ");break;
+	  case SITE_INDUSTRY_FOODBANK:
+         strcat(story,"Atheist Alliance HQ.  ");break;
       default:
          strcat(story,location[ns.loc]->name);
          strcat(story,".  ");break;
@@ -80,6 +82,8 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_MEDIA_AMRADIO:
       case SITE_MEDIA_CABLENEWS:
          strcat(story,", known for its Extreme Conservative Bias.  ");break;
+	  case SITE_INDUSTRY_FOODBANK:
+		  strcat(story,", known for denying aid to poor people to coerce them into accepting Conservative Religious Teachings.  ");break;
       default:
          strcat(story,".  ");break;
       }

@@ -680,6 +680,10 @@ void elections(char clearformess,char canseethings)
                if(propdir[p]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
+			case LAW_WELFARE:
+				if(propdir[p]==1)addstr("Insure the Welfare of the Needy");
+				else addstr("Reform the Welfare System");
+				break;
             case LAW_TORTURE:
                if(propdir[p]==1)addstr("Protect Human Rights");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -1480,6 +1484,10 @@ void supremecourt(char clearformess,char canseethings)
                if(scasedir[c]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
+			case LAW_WELFARE:
+				if(scasedir[p]==1)addstr("Insure the Welfare of the Needy");
+				else addstr("Reform the Welfare System");
+				break;
             case LAW_TORTURE:
                if(scasedir[c]==1)addstr("Protect Human Rights");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -1885,6 +1893,10 @@ void congress(char clearformess,char canseethings)
                if(billdir[c]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
+		   	case LAW_WELFARE:
+				if(billdir[p]==1)addstr("Insure the Welfare of the Needy");
+				else addstr("Reform the Welfare System");
+				break;
             case LAW_TORTURE:
                if(billdir[c]==1)addstr("Protect Human Rights");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -2271,13 +2283,15 @@ int publicmood(int l)
          return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;
       case LAW_MILITARY:
          return attitude[VIEW_MILITARY];
+	  case LAW_WELFARE:
+		  return attitude[VIEW_WELFARE];
       case LAW_TORTURE:
          return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
-
+	  case LAW_RELIGION:
+		  return attitude[VIEW_RELIGION];
       case LAW_ELECTIONS:
-      case LAW_RELIGION:
       default: //eg. -1
       {
          int sum=0;

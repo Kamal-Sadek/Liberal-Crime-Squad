@@ -1007,6 +1007,10 @@ char talk(Creature &a,int t)
                            troll+=tk->skillval(SKILL_RELIGION);
                            troll+=tk->skillval(SKILL_LAW);
                            break;
+						case LAW_WELFARE:
+							addstr("\"Poor people don't like being poor!\"");
+							troll+=tk->skillval(SKILL_RELIGION);
+                           troll+=tk->skillval(SKILL_LAW);
                      }
                   }
                   else if(badthing==2)
@@ -1101,6 +1105,11 @@ char talk(Creature &a,int t)
                            addstr("\"We have to keep fighting for peace.\"");
                            troll+=tk->skillval(SKILL_LAW);
                            break;
+						case LAW_WELFARE:
+							addstr("\"In some countries, poor people must 'work' to receive a 'paycheck'. That's just not right, man.\"");
+                           troll+=tk->skillval(SKILL_LAW);
+						   troll+=tk->skillval(SKILL_RELIGION);
+                           break;							
                         case LAW_TORTURE:
                            addstr("\"Some places in the world, people still torture.\"");
                            troll+=tk->skillval(SKILL_RELIGION);
@@ -1240,6 +1249,13 @@ char talk(Creature &a,int t)
                            move(y,1);y++;
                            addstr("hundreds of billions on new ways to kill people.  This has to stop!\"");
                            troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
+                           break;
+						case LAW_WELFARE:
+                           addstr("\"There is no reliable safety net for the poorest and the neediest of Americans, and");
+                           move(y,1);y++;
+                           addstr("without government assistance, innocent people will starve to death on our streets.\"");
+                           troll+=tk->skillval(SKILL_LAW)-a.skillval(SKILL_LAW);
+						   troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
                            break;
                         case LAW_TORTURE:
                            addstr("\"In the name of the war on terror, we've sacrificed our soul by letting");
@@ -1388,7 +1404,14 @@ char talk(Creature &a,int t)
                               addstr("\"Drugs are a terrible influence on society.\"");
                               break;
                            case LAW_IMMIGRATION:
+							   if(law[LAW_IMMIGRATION]>0)
+							   {
+								   addstr("\"Migrant workers undermines our economy and culture.\"");
+							   }
+							   else
+							   {
                               addstr("\"Illegal immigrants are undermining our economy and culture.\"");
+							   }
                               break;
                            case LAW_RELIGION:
                               addstr("\"Religious faith is the foundation of morality.\"");
@@ -1402,6 +1425,9 @@ char talk(Creature &a,int t)
                            case LAW_TORTURE:
                               addstr("\"The terrorists would do worse to us.\"");
                               break;
+						   case LAW_WELFARE:
+							   addstr("\"Private charities can safely handle the issue of poverty.\"");
+							  break;
                            }
                         }
                         else if(tk->align==-1 || badthing)

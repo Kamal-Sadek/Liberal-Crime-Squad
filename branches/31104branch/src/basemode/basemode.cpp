@@ -253,6 +253,9 @@ void mode_base(void)
                case LAW_MILITARY:
                   addstr("Military Spending");
 			         break;
+			   case LAW_WELFARE:
+				   addstr("Welfare Spending");
+				   break;
                case LAW_TORTURE:
                   addstr("Human Rights");
 			         break;

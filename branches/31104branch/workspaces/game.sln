@@ -1,5 +1,10 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{059D6162-CD51-11D0-AE1F-00A0C90FFFC3}") = "cursestest", "cursestest\cursestest.dsp", "{050FF415-FE27-4E9D-9946-EF263E9DFEFE}"
+EndProject
+Project("{059D6162-CD51-11D0-AE1F-00A0C90FFFC3}") = "dumpcaps", "dumpcaps\dumpcaps.dsp", "{6DE764ED-E882-4F3A-845D-0B343BFA4660}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game.vcproj", "{CA438C67-7A74-4797-BC09-8C866F965240}"
 EndProject
 Global

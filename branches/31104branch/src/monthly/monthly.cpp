@@ -182,6 +182,9 @@ void passmonth(char &clearformess,char canseethings)
 
    int mediabalance=0;
    int issuebalance[VIEWNUM-6];
+   int stimulus=0;
+   int cost=0;
+   int tax=0;
    
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
@@ -198,7 +201,7 @@ void passmonth(char &clearformess,char canseethings)
          continue;
       }
       if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
-      if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS&&v!=VIEW_STALIN)
+      if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS&&v!=VIEW_STALIN&&v!=VIEW_DEBT&&v!=VIEW_ECONOMY)
       {
          issuebalance[v] = libpower[v] - conspower;
          mediabalance += issuebalance[v];
@@ -274,6 +277,191 @@ void passmonth(char &clearformess,char canseethings)
          {
             change_public_opinion(VIEW_STALIN,-1);
          }
+	   }
+	   else if (v==VIEW_ECONOMY)
+	   {
+		   //Low Taxes and High Welfare postively affect the economy. Welfare is more effective than taxes (liberal bias
+		   //after all)), but you'll need both to have a good economy. Corporate Regulations are a little random.
+		   //At C+, when times are good, they are good, but when times are bad, heads start to roll. At L+, Corporate greed is
+		   //reined in, but growth is sluggish as a result. Pollution regulations impose a cost on businesses, and always 
+		   //negatively affect the economy. I was considering having immigration also postively effect the economy
+		   //(cheap labor supply), but then the American people would kinda be seen as stupid for supporting 
+		   //a policy that would actually continue an economic recession.
+		   switch(l)
+		   {
+		   case LAW_TAX:
+		       if(law[l]==ALIGN_ARCHCONSERVATIVE)stimulus+=10;
+               else if(law[l]==ALIGN_CONSERVATIVE)stimulus+=8;
+               else if(law[l]==ALIGN_MODERATE)stimulus+=6;
+               else if(law[l]==ALIGN_LIBERAL)stimulus+=3;
+               else if(law[l]==ALIGN_ELITELIBERAL)stimulus+=0;
+			   break;
+		   case LAW_WELFARE:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)stimulus+=0;
+               else if(law[l]==ALIGN_CONSERVATIVE)stimulus+=3;
+               else if(law[l]==ALIGN_MODERATE)stimulus+=6;
+               else if(law[l]==ALIGN_LIBERAL)stimulus+=9;
+               else if(law[l]==ALIGN_ELITELIBERAL)stimulus+=11;
+			   break;
+		   case LAW_CORPORATE:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)stimulus+=(LCSrandom(15)-LCSrandom(8));
+               else if(law[l]==ALIGN_CONSERVATIVE)stimulus+=(LCSrandom(10)-LCSrandom(5));
+               else if(law[l]==ALIGN_MODERATE)stimulus+=(LCSrandom(5)-LCSrandom(3));
+               else if(law[l]==ALIGN_LIBERAL)stimulus+=(3-LCSrandom(5));
+               else if(law[l]==ALIGN_ELITELIBERAL)stimulus+=(1-LCSrandom(6));
+			   break;
+		   case LAW_POLLUTION:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)stimulus+=0;
+               else if(law[l]==ALIGN_CONSERVATIVE)stimulus+=-2;
+               else if(law[l]==ALIGN_MODERATE)stimulus+=-5;
+               else if(law[l]==ALIGN_LIBERAL)stimulus+=-8;
+               else if(law[l]==ALIGN_ELITELIBERAL)stimulus+=-12;
+			   break;
+		   }
+
+         int roll = cost + LCSrandom(400)-200;
+         // Heavy randomization -- stimulus just biases the roll
+         // If +/-50 to either side, that side wins the tug-of-war
+         if(roll < -50)
+         {
+            change_public_opinion(VIEW_DEBT,-LCSrandom(5),0);
+         }
+         else if(roll > 50)
+         {
+            change_public_opinion(VIEW_DEBT,LCSrandom(5),0);
+         }
+         else // Else random movement
+         {
+            change_public_opinion(VIEW_ECONOMY,LCSrandom(2)*2-1,0);
+         }
+	  //Economy affects a whole slew of issues. For the most part, the economy is "self-correcting",
+	  //altough it is rather sluggish, and needs a little 'assistance'. In a poor economy, people want to pay lower taxes,
+	  //kick out migrant workers who might be stealing American jobs, end job-stifling pollution regulations,
+	  //hand out money to poor people, purge corporations of greedy CEOes, and support political terrorism.
+	  //Every action (except for kicking out migrant workers, and committing terrorism) will make the economy
+	  //better off in the long term. In a good economy, people are willing to consider pollution regulations
+	  //and allow immigrants to return, but they also will support C+ corporate goverence, cut back on
+	  //welfare payments (after all...it's a good economy!), and no longer support terrorism.
+	  //Sorry for the long comment. I have to explain everything I'm doing here.---SC
+		   if(VIEW_ECONOMY>=70)
+		   {
+			   change_public_opinion(VIEW_TAXES,-2);
+			   change_public_opinion(VIEW_POLLUTION,-2);
+			   change_public_opinion(VIEW_CORPORATECULTURE,2);
+			   change_public_opinion(VIEW_CEOSALARY,2);
+			   change_public_opinion(VIEW_POLITICALVIOLENCE,2);
+			   change_public_opinion(VIEW_IMMIGRATION,-1);
+			   change_public_opinion(VIEW_WELFARE,1);
+		   }
+		   if(VIEW_ECONOMY>=50)
+		   {
+			   change_public_opinion(VIEW_TAXES,-1);
+			   change_public_opinion(VIEW_POLLUTION,-1);
+			   change_public_opinion(VIEW_CORPORATECULTURE,1);
+			   change_public_opinion(VIEW_CEOSALARY,1);
+			   change_public_opinion(VIEW_POLITICALVIOLENCE,1);
+		   }		   	
+		   if(VIEW_ECONOMY>=30)
+		   {
+			   change_public_opinion(VIEW_POLLUTION,1);
+			   change_public_opinion(VIEW_CORPORATECULTURE,-1);
+			   change_public_opinion(VIEW_CEOSALARY,-1);
+			   change_public_opinion(VIEW_POLITICALVIOLENCE,-1);
+		   }
+		   if(VIEW_ECONOMY<30)
+		   {
+			   change_public_opinion(VIEW_POLLUTION,2);
+			   change_public_opinion(VIEW_CORPORATECULTURE,-2);
+			   change_public_opinion(VIEW_CEOSALARY,-2);
+			   change_public_opinion(VIEW_POLITICALVIOLENCE,-2);
+			   change_public_opinion(VIEW_WELFARE,-1);
+			   change_public_opinion(VIEW_IMMIGRATION,1);
+		   }
+	   }
+	   else if (v==VIEW_DEBT)
+	   {
+		   		   switch(l)
+		   {
+			   //The amount of tax revenue depends on the health of the national economy.
+		   case LAW_TAX:
+		       if(law[l]==ALIGN_ARCHCONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY]))*0.10));
+               else if(law[l]==ALIGN_CONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY])*0.25));
+               else if(law[l]==ALIGN_MODERATE)tax+=((100-attitude[VIEW_ECONOMY])*0.35));
+               else if(law[l]==ALIGN_LIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.5));
+               else if(law[l]==ALIGN_ELITELIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.75));
+			   break;
+		   case LAW_WELFARE:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)cost+=0;
+               else if(law[l]==ALIGN_CONSERVATIVE)cost+=15;
+               else if(law[l]==ALIGN_MODERATE)cost+=30;
+               else if(law[l]==ALIGN_LIBERAL)cost+=45;
+               else if(law[l]==ALIGN_ELITELIBERAL)cost+=60;
+			   break;
+			   //Pollution regulations are actually pretty cheap, for the government at least.
+			   //That being said, I'm only looking at EPA and Superfund costs, which compose
+			   //only a small part of the national budget. However, it might be "unbalancing",
+			   //since Military Upkeep is more expensive that Pollution.---SC
+		   case LAW_POLLUTION:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)cost+=0;
+               else if(law[l]==ALIGN_CONSERVATIVE)cost+=0;
+               else if(law[l]==ALIGN_MODERATE)cost+=1;
+               else if(law[l]==ALIGN_LIBERAL)cost+=3;
+               else if(law[l]==ALIGN_ELITELIBERAL)cost+=6;
+			   break;
+		   case LAW_MILITARY:
+			   if(law[l]==ALIGN_ARCHCONSERVATIVE)cost+=30;
+               else if(law[l]==ALIGN_CONSERVATIVE)cost+=20;
+               else if(law[l]==ALIGN_MODERATE)cost+=10;
+               else if(law[l]==ALIGN_LIBERAL)cost+=5;
+               else if(law[l]==ALIGN_ELITELIBERAL)cost+=0;
+			   break;
+		   }
+	    int deficit = tax - cost;
+		int roll = deficit + LCSrandom(400)-200;
+         // Heavy randomization -- stimulus just biases the roll
+         // If +/-50 to either side, that side wins the tug-of-war
+         if(roll < -50)
+         {
+            change_public_opinion(VIEW_DEBT,-LCSrandom(5),0);
+         }
+         else if(roll > 50)
+         {
+            change_public_opinion(VIEW_DEBT,LCSrandom(5),0);
+         }
+         else // Else random movement
+         {
+            change_public_opinion(VIEW_DEBT,LCSrandom(2)*2-1,0);
+         }
+	//The National Debt also affect a whole slew of issues as well. If the National Debt is high,
+	   //people will raise taxes and cut welfare payments. If the national debt is too high, people
+	   //will begin considering ending Pollution regulations and cutting back on the US Military.
+	   //When there is a surplus, there will be demand to give that money back to Americans, either
+	   //via Welfare payments or Tax Cuts. If the National Debt is low enough, pork barrel projects win,
+	   //and there will be a push to throw all that excess money to enviromentalists and militarists.---SC
+		   if(VIEW_DEBT>=70)
+		   {
+			   change_public_opinion(VIEW_TAXES,2);
+			   change_public_opinion(VIEW_WELFARE,-2);
+			   change_public_opinion(VIEW_POLLUTION,-1);
+			   change_public_opinion(VIEW_MILITARY,1);
+		   }
+		   if(VIEW_DEBT>=50)
+		   {
+			   change_public_opinion(VIEW_TAXES,1);
+			   change_public_opinion(VIEW_WELFARE,-1);
+		   }
+		   if(VIEW_DEBT>=30)
+		   {
+			   change_public_opinion(VIEW_TAXES,-1);
+			   change_public_opinion(VIEW_WELFARE,1);
+		   }
+		   else
+		   {
+			   change_public_opinion(VIEW_TAXES,-2);
+			   change_public_opinion(VIEW_WELFARE,2);
+			   change_public_opinion(VIEW_POLLUTION,1);
+			   change_public_opinion(VIEW_MILITARY,-1);
+		   }
 	   }
    }
 
@@ -587,8 +775,6 @@ void passmonth(char &clearformess,char canseethings)
    
 }
 
-
-
 /* rename various buildings according to the new laws */
 void updateworld_laws(short *law,short *oldlaw)
 {
@@ -682,8 +868,29 @@ void updateworld_laws(short *law,short *oldlaw)
          }
       }
    }
+      if((law[LAW_DRUGS]==2||oldlaw[LAW_DRUGS]==2)&&
+      law[LAW_DRUGS]!=oldlaw[LAW_DRUGS])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_BUSINESS_CRACKHOUSE) // Crack House, or Recreational Drugs Center?
+         {
+            initlocation(*location[l]);
+         }
+      }
+	  }
+	  if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
+      law[LAW_NUCLEARPOWER]!=oldlaw[LAW_NUCLEARPOWER])
+   {
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
+         {
+            initlocation(*location[l]);
+         }
+      }
+   }
 }
-
 
 
 

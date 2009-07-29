@@ -393,6 +393,43 @@ void prepareencounter(short type,char sec)
             }
             break;
          }
+		 case SITE_INDUSTRY_FOODBANK:
+         {
+			creaturearray[CREATURE_SECURITYGUARD]+=5;
+            creaturearray[CREATURE_WORKER_JANITOR]+=5;
+			creaturearray[CREATURE_HICK]+=20;
+            creaturearray[CREATURE_TEENAGER]+=20;
+            creaturearray[CREATURE_MUSICIAN]+=3;
+            creaturearray[CREATURE_MATHEMATICIAN]+=1;
+            creaturearray[CREATURE_BUM]+=200;
+			if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
+            creaturearray[CREATURE_CCS_VIGILANTE]+=5;
+            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION]==-2&&
+               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
+            creaturearray[CREATURE_GANGMEMBER]+=20;
+            creaturearray[CREATURE_CRACKHEAD]+=50;
+			creaturearray[CREATURE_PRIEST]=+5;
+            creaturearray[CREATURE_PROSTITUTE]+=20;
+            creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
+            creaturearray[CREATURE_HIPPIE]+=1;
+            creaturearray[CREATURE_NURSE]+=5;
+            creaturearray[CREATURE_BIKER]+=1;
+            creaturearray[CREATURE_PAINTER]+=1;
+            creaturearray[CREATURE_SCULPTOR]+=1;
+            creaturearray[CREATURE_DANCER]+=1;
+            creaturearray[CREATURE_PHOTOGRAPHER]+=1;
+            creaturearray[CREATURE_THIEF]+=5;
+            creaturearray[CREATURE_ACTOR]+=1;
+
+            for(int n=0;n<LCSrandom(6)+1;n++)
+            {
+               makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+               encslot++;
+            }
+            break;
+         }
          default:
          case SITE_RESIDENTIAL_SHELTER:
          {
@@ -1141,6 +1178,8 @@ char addsiegeencounter(char type)
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;
+			   case SITE_BUSINESS_CRACKHOUSE:
+				   makecreature(encounter[e],CREATURE_GANGMEMBER);
                default:
                   if(law[LAW_DEATHPENALTY]==-2&&
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);

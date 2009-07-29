@@ -516,7 +516,17 @@ void survey(Creature *cr)
             break;
          case VIEW_DEATHPENALTY:
             if(attitude[VIEW_DEATHPENALTY]>50)addstr("the unjust death penalty.");
-            else addstr("protecting the death penalty.");
+			else
+			{
+				if(law[LAW_DEATHPENALTY]=2)
+				{
+					addstr("restoring the death penalty.");
+				}
+				else
+				{
+				addstr("protecting the death penalty.");
+				}
+			}
             break;
 	 case VIEW_TAXES:
             if(attitude[VIEW_TAXES]>50)addstr("the oppressive tax structure.");
@@ -524,7 +534,17 @@ void survey(Creature *cr)
             break;
          case VIEW_NUCLEARPOWER:
             if(attitude[VIEW_NUCLEARPOWER]>50)addstr("the dangers of nuclear power.");
-            else addstr("threats to nuclear power.");
+			else
+			{
+				if(law[LAW_NUCLEARPOWER]=2)
+				{
+					addstr("legalizing nuclear power.");
+				}
+				else
+				{
+				addstr("threats to nuclear power.");
+				}
+			}
             break;
          case VIEW_ANIMALRESEARCH:
             if(attitude[VIEW_ANIMALRESEARCH]>50)addstr("brutal animal research practices.");
@@ -571,8 +591,18 @@ void survey(Creature *cr)
             else addstr("political terrorism.");
             break;
          case VIEW_IMMIGRATION:
-            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
-            else addstr("illegal immigration.");
+            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights."); 
+			else
+			{
+				if(law[LAW_IMMIGRATION]>=1)
+				{
+					addstr("uncontrolled immigration.");
+				}
+				else
+				{
+					addstr("illegal immigration.");
+				}
+			}
             break;
          case VIEW_DRUGS:
             if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");
@@ -590,6 +620,12 @@ void survey(Creature *cr)
             if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
             else addstr("strengthening the military.");
             break;
+		 case VIEW_WELFARE:
+			 if(attitude[VIEW_WELFARE]>50)addstr("alievating poverty.");
+			 else addstr("welfare reform.");
+		 case VIEW_RELIGION:
+			 if(attitude[VIEW_RELIGION]>50)addstr("seperation of Church and State.")"
+			 else addstr("protecting religious values.");
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
             if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
@@ -757,6 +793,10 @@ void survey(Creature *cr)
 					else addstr("wanted amnesty for illegal immigrants");
 					break;
             case VIEW_MILITARY:addstr("opposed increasing military spending");break;
+			case VIEW_WELFARE:addstr("opposed decreasing welfare spending");break;
+			case VIEW_RELIGION:addstr("believed that the government should not support religion");break;
+			case VIEW_ECONOMY:addstr("sees the economy as fundmentally flawed");break;
+			case VIEW_DEBT:addstr("is concerned about the rising national debt");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;

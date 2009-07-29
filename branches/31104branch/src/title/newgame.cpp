@@ -110,6 +110,8 @@ void setup_newgame(void)
       for(int a=0;a<VIEWNUM-3;a++)
       {
          attitude[a]=LCSrandom(20);
+		 //Arch-Conservative Dystopia should not like Joesph Stalin.
+		 attitude[VIEW_STALIN]=90;
       }
    }
    if(classicmode)

@@ -341,6 +341,7 @@ enum SiteTypes
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
    SITE_BUSINESS_STALIN,
+   SITE_INDUSTRY_FOODBANK,
    SITENUM
 };
 
@@ -1387,13 +1388,19 @@ enum Views
    VIEW_DRUGS,
    VIEW_IMMIGRATION,
    VIEW_MILITARY,
+   VIEW_STALIN,
+   //VIEW_STALIN is here in an attept to save VIEWNUM-6 from being broken...I think. 
+   //VIEW_STALIN works rather differently from VIEW_AMRADIO and VIEW_CABLENEWS, so this might work...-SC
+   VIEW_ECONOMY,
+   VIEW_DEBT,
+   VIEW_WELFARE,
+   VIEW_RELIGION,
    //*JDS* I'm using VIEWNUM-6 in a random generator that rolls a
    //random issue, not including the media/politicalviolence ones, and this will
    //break if these stop being the last 4 issues; do a search
    //for VIEWNUM-6 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
-   VIEW_STALIN, // Breaking VIEWNUM-6; I need to fix this -Fox
    VIEW_POLITICALVIOLENCE,
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
@@ -1428,6 +1435,7 @@ enum Laws
    LAW_ELECTIONS,
    LAW_MILITARY,
    LAW_TORTURE,
+   LAW_WELFARE,
    LAWNUM
 };
 

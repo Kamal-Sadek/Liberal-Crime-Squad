@@ -351,11 +351,20 @@ void special_nuclear_onoff(void)
       clearmessagearea();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
+	  if(law[LAW_NUCLEARPOWER]=2)
+	  {
+	  move(16,1);
+      addstr("You see the nuclear waste center control room.");
+      move(17,1);
+      addstr("Attempt to release nuclear waste? (Yes or No)");
+	  }
+	  else
+	  {
       move(16,1);
       addstr("You see the nuclear power plant control room.");
       move(17,1);
       addstr("Attempt to shut down the reactor? (Yes or No)");
-
+	  }
       refresh();
 
       int c=getch();
@@ -401,18 +410,31 @@ void special_nuclear_onoff(void)
             addstr(".");
             refresh();
             getch();
-
-            move(17,1);
-            addstr("The lights dim...  power must be out state-wide.");
-
+	  if(law[LAW_NUCLEARPOWER]=2)
+	  {
+	  move(17,1);
+      addstr("The nuclear waste gets released into the state's water supply!");
             change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
-
             refresh();
             getch();
 
             juiceparty(20); // Instant juice!
             
             sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
+
+	  }
+	  else
+	  {
+            move(17,1);
+            addstr("The lights dim...  power must be out state-wide.");
+            change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
+            refresh();
+            getch();
+
+            juiceparty(20); // Instant juice!
+            
+            sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
+	  }
          }
          else
          {

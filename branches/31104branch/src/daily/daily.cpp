@@ -1860,8 +1860,16 @@ void initlocation(locationst &loc)
          }
          break;
       case SITE_INDUSTRY_NUCLEAR:
+		  if(law[LAW_NUCLEARPOWER]==2)
+		  {
+			strcpy(loc.name,"Nuclear Waste Center");
+            strcpy(loc.shortname,"NWaste Center");
+		  }
+		  else
+		  {
          strcpy(loc.name,"Nuclear Power Plant");
          strcpy(loc.shortname,"NPower Plant");
+		  }
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          if(law[LAW_PRIVACY]==-2&&
@@ -2043,6 +2051,13 @@ void initlocation(locationst &loc)
          strcat(loc.name,"'s Used Car Dealership");
          strcpy(loc.shortname,"Dealership");
          break;
+	  case SITE_INDUSTRY_FOODBANK:
+		  strcat(loc.name,"Saint ")
+		  firstname(str,GENDER_FEMALE);
+		  strcpy(loc.name,str);
+		  strcat(loc.name,"'s Food Bank");
+		  strcpy(loc.shortname,"Food Bank");
+		  break;
       case SITE_BUSINESS_DEPTSTORE:
          lastname(str);
          strcpy(loc.name,str);
@@ -2061,10 +2076,20 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Sweatshop");
          break;
       case SITE_BUSINESS_CRACKHOUSE:
+		  if(law[LAW_DRUGS]=2)
+		  {
+		lastname(str);
+         strcpy(loc.name,str);
+         strcat(loc.name," St. Recreational Drugs Center");
+         strcpy(loc.shortname,"Crack House");
+		  }
+		  else
+		  {
          lastname(str);
          strcpy(loc.name,str);
          strcat(loc.name," St. Crack House");
          strcpy(loc.shortname,"Crack House");
+		  }
          break;
       case SITE_BUSINESS_JUICEBAR:
          strcpy(loc.name,"");
