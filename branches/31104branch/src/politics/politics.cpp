@@ -2241,6 +2241,25 @@ char wincheck(void)
 }
 
 
+/*
+	FIXME:
+		At the present time, VIEW_CIVILRIGHTS has far too much sway.
+		However, before this was the case, as an example, LAW_ABORTION
+		and LAW_WOMEN, had the same "return attitude[]" attribute, and
+		both returned VIEW_WOMEN. What I think is needed, is some sort
+		of indicators for things such as:
+			1) Desire for change, which could be based on the
+				approval rate of the president.
+			2) Liberal, Conservative, and Stalinist percentage of
+				the country, i.e. how much support each party
+				has.
+			3) VIEW_HUMANRIGHTS, which should be based off of the
+				two previous things, (i.e. A higher liberal
+				percentage, and a higher desire for change would
+				make VIEW_HUMANRIGHTS get closer to 100.)
+
+	-- LiteralKa
+*/
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this...

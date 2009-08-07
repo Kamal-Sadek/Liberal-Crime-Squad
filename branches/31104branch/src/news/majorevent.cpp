@@ -55,8 +55,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
-			   if(VIEW_STALIN+LCSrandom(25)<=66)//XXX: Should this really trigger every time this is true? Maybe if(VIEW_STALIN+LCSrandom(25)<=66) or something...
-                                              // Done. -Fox
+			   if(VIEW_STALIN+LCSrandom(25)<=66)
 			   {
 			   strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
                strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
@@ -352,7 +351,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"I was trapped with them now.  There were three, looking me over ");
             strcat(story,"with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager.  ");
             strcat(story,"My shank's under the mattress.  Better to be a man and fight or a punk and let them take it?  ");
-	    if(law[LAW_GAY]==-2)strcat(story,"Maybe lose an eye the one way, maybe catch GRIDS the other.  A helluva choice, "); // Gay Related Immunodeficiency Syndrome
+	    if(law[LAW_GAY]==-2)strcat(story,"Maybe lose an eye the one way, maybe catch GRIDS the other.  A helluva choice, "); // Gay Related Immunodeficiency Syndrome, obsoleted/politically incorrect name for "AIDS".
             else strcat(story,"Maybe lose an eye the one way, maybe catch AIDS the other.  A helluva choice, ");
             strcat(story,"and I would only have a few seconds before they made it for me");
             strcat(story,".\"");
@@ -1050,7 +1049,7 @@ void constructeventstory(char *story,short view,char positive)
             }
 	    else switch(LCSrandom(3))
 	    {
-	       case 0:strcat(story,"horseshit");break;
+	       case 0:strcat(story,"horseshit");break; // Mccain
                case 1:strcat(story,"bullshit");break;
                case 2:strcat(story,"shit");break;
 	    }
@@ -1091,7 +1090,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"ten-year-old eye witness testimony");break;
                case 1:strcat(story,gen);strcat(story," general feeling about police corruption");break;
-               case 2:strcat(story,gen);strcat(story," belief that the crimes were a vast right-wing conspiracy");break; // lol, Clinton
+               case 2:strcat(story,gen);strcat(story," belief that the crimes were a vast right-wing conspiracy");break; // Clinton
                case 3:
                   strcat(story,gen);
                   strcat(story," belief that ");
@@ -1394,7 +1393,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             */
          case VIEW_TAXES:
          {
-            displaycenterednewsfont("REAGAN FLAWED",5);
+            displaycenterednewsfont("REAGAN FLAWED",5);//XXX: "Reagan was wrong" or something?
             char str[80];
             strcpy(str,"");
             switch(LCSrandom(5))
