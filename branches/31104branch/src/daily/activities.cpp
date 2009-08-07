@@ -770,7 +770,7 @@ void survey(Creature *cr)
          {
             case VIEW_GAY:addstr("were in favor of equal rights for homosexuals");break;
             case VIEW_DEATHPENALTY:addstr("opposed the death penalty");break;
-			   case VIEW_TAXES:addstr("were against cutting taxes");break;
+            case VIEW_TAXES:addstr("were against cutting taxes");break;
             case VIEW_NUCLEARPOWER:addstr("were terrified of nuclear power");break;
             case VIEW_ANIMALRESEARCH:addstr("deplored animal research");break;
             case VIEW_POLICEBEHAVIOR:addstr("were critical of the police");break;
@@ -800,7 +800,7 @@ void survey(Creature *cr)
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
-			case VIEW_STALIN:addstr("were against communism and the Stalinist Comrade Squad");break;
+            case VIEW_STALIN:addstr("were against communism and the Stalinist Comrade Squad");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
@@ -2003,7 +2003,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_ABORTION]<2)
                {
-                  addstr("posted horrifying dead abortion doctor pictures downtown!");//XXX Change me
+                  addstr("posted horrifying dead abortion doctor pictures downtown!");
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_WOMEN]+=mod;

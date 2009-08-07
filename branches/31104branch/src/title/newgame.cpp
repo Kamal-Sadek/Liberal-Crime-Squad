@@ -141,7 +141,7 @@ void makecharacter(void)
    newcr->att[ATTRIBUTE_AGILITY]=5;
    newcr->att[ATTRIBUTE_STRENGTH]=4;
    newcr->att[ATTRIBUTE_HEALTH]=6;
-	newcr->att[ATTRIBUTE_CHARISMA]=4;
+   newcr->att[ATTRIBUTE_CHARISMA]=4;
    for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
 
    char first[2][80];
@@ -683,7 +683,7 @@ void makecharacter(void)
             if(c=='c')
             {
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-					newcr->skill[SKILL_WRITING]+=1;
+               newcr->skill[SKILL_WRITING]+=1;
             }
             if(c=='d')
             {
@@ -1034,7 +1034,7 @@ void makecharacter(void)
       newl->parent=-1;
       newl->needcar=1;
    location.push_back(newl);
-	
+
    newl=new locationst;
       newl->type=SITE_GOVERNMENT_POLICESTATION;
       newl->parent=0;
@@ -1408,4 +1408,3 @@ void initliberal(Creature &cr)
       startsknum--;
    }
 }
-

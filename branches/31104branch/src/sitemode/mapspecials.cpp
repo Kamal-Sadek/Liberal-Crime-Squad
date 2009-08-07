@@ -173,11 +173,12 @@ void special_bouncer_assess_squad()
          break;
       case REJECTED_FEMALE:
          set_color(COLOR_RED,COLOR_BLACK,1);
-         switch(LCSrandom(3))
+         switch(LCSrandom(4))
          {
          case 0:addstr("\"Move along ma'am, this club's for men.\"");break;
          case 1:addstr("\"This 'ain't no sewing circle, ma'am.\"");break;
          case 2:addstr("\"Sorry ma'am, this place is only for the men.\"");break;
+         case 3:addstr("\"Where's your husband?\"");break;
          }
          break;
       case REJECTED_FEMALEISH:
@@ -222,6 +223,7 @@ void special_bouncer_assess_squad()
          case 2:addstr("\"This isn't a goth club, bloody clothes don't cut it here.\"");break;
          case 3:addstr("\"Uh, maybe you should wash... replace... those clothes.\"");break;
          case 4:addstr("\"Did you spill something on your clothes?\"");break;
+         case 5:addstr("\"Come back when you get the red wine out of your clothes.\"");break;
          }
          break;
       case REJECTED_DAMAGEDCLOTHES:
@@ -258,11 +260,12 @@ void special_bouncer_assess_squad()
       case NOT_REJECTED:
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          
-         switch(LCSrandom(3))
+         switch(LCSrandom(4))
          {
          case 0:addstr("\"Keep it civil and don't drink too much.\"");break;
          case 1:addstr("\"Let me get the door for you.\"");break;
          case 2:addstr("\"Ehh, alright, go on in.\"");break;
+         case 3:addstr("\"Come on in.\"");break;
          }
          break;
       }
@@ -791,7 +794,7 @@ void special_courthouse_jury(void)
                addstr(activesquad->squad[p]->name);
                addstr(" works the room like Twelve Angry Men, and the jury");
                move(17,1);
-               addstr("concludes that the ");
+               addstr("concludes that the ");//XXX: This is very awkward grammar.
                switch(LCSrandom(16))
                {
                   case 0:addstr("murder");break;

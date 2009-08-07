@@ -591,7 +591,7 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_STAIRS_UP:move(py,px+1);addstr("UP");
                                 addch(CH_UPWARDS_ARROW);break;
          case SPECIAL_STAIRS_DOWN:move(py,px+1);addstr("DN");
-                                  addch(CH_DOWNWARDS_ARROW);break;
+                                addch(CH_DOWNWARDS_ARROW);break;
          case SPECIAL_RESTAURANT_TABLE:addstr("TABLE");break;
          case SPECIAL_CAFE_COMPUTER:move(py,px+1);addstr("CPU");break;
          case SPECIAL_PARK_BENCH:addstr("BENCH");break;

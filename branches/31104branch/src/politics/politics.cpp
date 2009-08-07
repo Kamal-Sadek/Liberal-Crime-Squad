@@ -2243,12 +2243,12 @@ char wincheck(void)
 
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l)
+int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this...
 {
    switch(l)
    {
       case LAW_ABORTION:
-         return attitude[VIEW_WOMEN];
+         return attitude[VIEW_WOMEN];//XXX: No VIEW_ABORTION! Do not forget this!
       case LAW_ANIMALRESEARCH:
          return attitude[VIEW_ANIMALRESEARCH];
       case LAW_POLICEBEHAVIOR:
@@ -2258,23 +2258,23 @@ int publicmood(int l)
       case LAW_DEATHPENALTY:
          return attitude[VIEW_DEATHPENALTY];
       case LAW_NUCLEARPOWER:
-         return attitude[VIEW_NUCLEARPOWER];
+         return (attitude[VIEW_NUCLEARPOWER]+attitude[VIEW_POLLUTION])/2;
       case LAW_POLLUTION:
          return attitude[VIEW_POLLUTION];
       case LAW_LABOR:
          return attitude[VIEW_SWEATSHOPS];
       case LAW_GAY:
-         return attitude[VIEW_GAY];
+         return (attitude[VIEW_GAY]+attitude[VIEW_CIVILRIGHTS])/2;
       case LAW_CORPORATE:
          return (attitude[VIEW_CORPORATECULTURE]+attitude[VIEW_CEOSALARY])/2;
       case LAW_FREESPEECH:
          return attitude[VIEW_FREESPEECH];
-		case LAW_TAX:
+      case LAW_TAX:
          return attitude[VIEW_TAXES];
       case LAW_FLAGBURNING:
-         return attitude[VIEW_FREESPEECH];
+         return (attitude[VIEW_FREESPEECH]+attitude[VIEW_POLITICALVIOLENCE])/2;
       case LAW_WOMEN:
-         return attitude[VIEW_WOMEN];
+         return (attitude[VIEW_WOMEN]+attitude[VIEW_CIVILRIGHTS])/2;
       case LAW_CIVILRIGHTS:
          return attitude[VIEW_CIVILRIGHTS];
       case LAW_DRUGS:
@@ -2286,7 +2286,7 @@ int publicmood(int l)
 	  case LAW_WELFARE:
 		  return attitude[VIEW_WELFARE];
       case LAW_TORTURE:
-         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
+         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY]+attitude[VIEW_CIVILRIGHTS])/3;
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
 	  case LAW_RELIGION:

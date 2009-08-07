@@ -88,8 +88,9 @@ void viewhighscores(void)
             case END_REAGAN:
                addstr("The country was Reaganified in ");
                break;
-			case END_STALINIFY:
-				addstr("The country was Stalinified in ");
+            case END_STALINIFY:
+               addstr("The country was Stalinified in ");
+               break;
             case END_PRISON:
                addstr("The Liberal Crime Squad died in prison in ");
                break;
@@ -111,8 +112,9 @@ void viewhighscores(void)
             case END_CCS:
                addstr("The Liberal Crime Squad was out-Crime Squadded in ");
                break;
-			case END_STALIN:
-				addstr("The Liberal Crime Squad was overrun by the Communist Hordes in ");
+            case END_STALIN:
+               addstr("The Liberal Crime Squad was overrun by the Communist Hordes in ");
+               break;
             case END_FIREMEN:
                addstr("The Liberal Crime Squad was burned in ");
                break;

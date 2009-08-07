@@ -43,7 +43,7 @@ void prepareencounter(short type,char sec)
    {
       switch(sitetype)
       {
-	      case SITE_BUSINESS_STALIN:
+         case SITE_BUSINESS_STALIN:
             creaturearray[CREATURE_CHEKA]=1000;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
@@ -91,9 +91,8 @@ void prepareencounter(short type,char sec)
    {
       switch(type)
       {
-	  case SITE_BUSINESS_STALIN:
-		  {
-			  
+          case SITE_BUSINESS_STALIN:
+          {
             creaturearray[CREATURE_THIEF]+=5;
             creaturearray[CREATURE_TEENAGER]+=5;
             creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
@@ -118,7 +117,7 @@ void prepareencounter(short type,char sec)
                encslot++;
             }
             break;
-		  }
+         }
          case SITE_BUSINESS_CRACKHOUSE:
          {
             creaturearray[CREATURE_TEENAGER]+=100;
@@ -1142,7 +1141,7 @@ char addsiegeencounter(char type)
                   case SIEGE_FIREMEN:
                      makecreature(encounter[e],CREATURE_FIREFIGHTER);
                      break;
-				  case SIEGE_STALIN:
+                  case SIEGE_STALIN:
                      if(!LCSrandom(12))
                      {
                         makecreature(encounter[e],CREATURE_CHEKA);

@@ -38,4 +38,3 @@ echo "$ccount $cnum in $fcount $fnum." #########################################
                                        ##  in every directory for a conflict  ##
                                        ##  indicator                          ##
                                        #########################################
-#>>>>>>>
