@@ -2289,9 +2289,9 @@ FIXME, PART1:
 
 @Servant:
 	As it stands, (revision 316) the only alarming thing is that this may
-		influence public moods that are affected by LAW_HUMANRIGHTS.
-		This is only midly alarming because the mood itself is effected,
-		and not the view.
+		influence LAW_*s that are affected by LAW_HUMANRIGHTS. This is
+		only midly alarming because the LAW_* itself is effected, and
+		not the attitude[VIEW_*].
 	-- LiteralKa
 */
 
