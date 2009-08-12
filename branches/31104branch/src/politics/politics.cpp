@@ -2315,12 +2315,12 @@ int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this..
          return attitude[VIEW_WOMEN];
       case LAW_CIVILRIGHTS:
          return attitude([VIEW_CIVILRIGHTS];
-	  case LAW_HUMANRIGHTS:
+      case LAW_HUMANRIGHTS:
          return (attitude[VIEW_SWEATSHOPS]+attitude[VIEW_FREESPEECH]+attitude[VIEW_CIVILRIGHTS]+attitude[VIEW_WOMEN]+attitude[VIEW_MILITARY]+attitude[VIEW_INTELLIGENCE]+attitude[VIEW_GAY]+attitude[VIEW_IMMIGRATION])/8;
       case LAW_DRUGS:
          return attitude[VIEW_DRUGS];
       case LAW_IMMIGRATION:
-         return attitude[VIEW_IMMIGRATION];
+         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_HUMANRIGHTS])/2;//XXX: VIEW_DRUGS?
       case LAW_MILITARY:
          return attitude[VIEW_MILITARY];
 	  case LAW_WELFARE:
