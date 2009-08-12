@@ -616,6 +616,10 @@ void survey(Creature *cr)
             if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");
             else addstr("troublemaking minorities.");
             break;
+		 case VIEW_GUNCONTROL:
+            if(attitude[VIEW_GUNCONTROL]>50)addstr("gun violence.");
+            else addstr("protecting the Second Amendment.");
+            break;
          case VIEW_MILITARY:
             if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
             else addstr("strengthening the military.");
@@ -784,6 +788,7 @@ void survey(Creature *cr)
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
             case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
             case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
+			case VIEW_GUNCONTROL:addstr("are concerned about gun violence");break;
             case VIEW_DRUGS:
 					if(law[LAW_DRUGS]>=1)addstr("supported keeping marijuana legal");
 					else addstr("believed in legalizing marijuana");

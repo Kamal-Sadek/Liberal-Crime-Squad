@@ -980,6 +980,10 @@ char talk(Creature &a,int t)
                            addstr("\"Conservatives are all racist and stuff.\"");
                            troll+=tk->skillval(SKILL_RELIGION);
                            break;
+						case LAW_HUMANRIGHTS:
+                           addstr("\"Conservatives likes dictatorships!");
+                           troll+=tk->skillval(SKILL_RELIGION);
+                           break;
                         case LAW_DRUGS:
                            addstr("\"Drugs, man, the government won't let you do drugs.\"");
                            troll+=tk->skillval(SKILL_RELIGION);
@@ -1081,6 +1085,10 @@ char talk(Creature &a,int t)
                            break;
                         case LAW_CIVILRIGHTS:
                            addstr("\"I knew some people that were pretty racist.\"");
+                           troll+=tk->skillval(SKILL_RELIGION);
+                           break;
+						case LAW_HUMANRIGHTS:
+                           addstr("\"Some countries don't like us standing up for human rights.");
                            troll+=tk->skillval(SKILL_RELIGION);
                            break;
                         case LAW_DRUGS:
@@ -1216,6 +1224,12 @@ char talk(Creature &a,int t)
                            addstr("\"You might think we have all these civil rights laws on the books, but");
                            move(y,1);y++;
                            addstr("we aren't enforcing them consistently.  We still have a long way to go.\"");
+                           troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
+                           break;
+						case LAW_HUMANRIGHTS:
+                           addstr("\"Our government supports dictators who deny human beings the same human rights");
+                           move(y,1);y++;
+                           addstr("that we at least nominally have. We must stop supporting Conservative regimes!\"");
                            troll+=tk->skillval(SKILL_RELIGION)-a.skillval(SKILL_RELIGION);
                            break;
                         case LAW_DRUGS:
@@ -1399,6 +1413,9 @@ char talk(Creature &a,int t)
                               break;
                            case LAW_CIVILRIGHTS:
                               addstr("\"Reverse discrimination is still discrimination.\"");
+                              break;
+						   case LAW_HUMANRIGHTS:
+                              addstr("\"Sometimes, you have to work with terrible people in order to protect American Interests.\"");
                               break;
                            case LAW_DRUGS:
                               addstr("\"Drugs are a terrible influence on society.\"");

@@ -377,6 +377,16 @@ char liberalagenda(char won)
 				      else if(law[l]==1)addstr("Affirmative action is in place to counteract discrimination.");
 				      else addstr("Racial equality is guaranteed and vigorously enforced.");
                   break;
+			   case LAW_HUMANRIGHTS:
+                  if(won==-1)addstr("The CSA is the founding member of the Alliance of Conservative Dictatorships.");
+				      else if(won==-2)addstr("The USA is the founding member of the Alliance of Socialist Dictatorships.");
+				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                     addstr("The United States actively assist human right violators in order to further American Interests.");
+				      else if(law[l]==-1)addstr("The government inconsistently promote human rights.");
+				      else if(law[l]==0)addstr("The government's human rights record is fairly weak.");
+				      else if(law[l]==1)addstr("The government has a strong reputation on human rights issues.");
+				      else addstr("The country is respected as an international leader on human rights.");
+                  break;
                case LAW_DRUGS:
                   if(won==-1)addstr("Talking about recreational drugs is punishable by death.");
 				      else if(won==-2)addstr("Vodka is the only legal recreational drug in the USA.");
@@ -443,9 +453,9 @@ char liberalagenda(char won)
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
 				      else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
-				      else if(law[l]==0)addstr("Government human rights abuses still occasionally crop up.");
-				      else if(law[l]==1)addstr("The government has a strong reputation on human rights issues.");
-				      else addstr("The country is respected as an international leader on human rights.");
+				      else if(law[l]==0)addstr("Torture allegations still occasionally crop up.");
+				      else if(law[l]==1)addstr("The government strongly enforces a ban on torture.");
+				      else addstr("The country is respected as an international leader on Moral Interrogation Practices.");
 				      break;
                case LAW_TAX:
 				      if(won==-1)addstr("There are no taxes, yet most people have no money.");

@@ -660,6 +660,10 @@ void elections(char clearformess,char canseethings)
                if(propdir[p]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
+			case LAW_HUMANRIGHTS:
+               if(propdir[p]==1)addstr("Promote Human Rights Throughout The World");
+               else addstr("Defend American Interests");
+               break;
             case LAW_DRUGS:
                if(propdir[p]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -1464,6 +1468,10 @@ void supremecourt(char clearformess,char canseethings)
                if(scasedir[c]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
+			case LAW_HUMANRIGHTS:
+               if(scasedir[c]==1)addstr("Promote Human Rights Throughout The World");
+               else addstr("Defend American Interests");
+               break;
             case LAW_DRUGS:
                if(scasedir[c]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -1873,6 +1881,10 @@ void congress(char clearformess,char canseethings)
                if(billdir[c]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
+			case LAW_HUMANRIGHTS:
+               if(billdir[c]==1)addstr("Promote Human Rights Throughout The World");
+               else addstr("Defend American Interests");
+               break;
             case LAW_DRUGS:
                if(billdir[c]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -1898,7 +1910,7 @@ void congress(char clearformess,char canseethings)
 				else addstr("Reform the Welfare System");
 				break;
             case LAW_TORTURE:
-               if(billdir[c]==1)addstr("Protect Human Rights");
+               if(billdir[c]==1)addstr("Abolish Torture");
                else addstr("Permit Strong Tactics in Interrogations");
                break;
          }
@@ -2260,6 +2272,13 @@ char wincheck(void)
 
 	-- LiteralKa
 */
+/*
+FIXME, PART1:
+LAW_HUMANRIGHTS is added as a sort of an indictator, but it relies on all the other Human Rights issue,
+rather than affecting the issues to be more "pro-Human Rights". Essentially, if you support Gay Rights but
+not Abortion Rights, you will not be considered as someone who supports 'human rights'.
+---Servant Corps
+*/
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this...
@@ -2283,7 +2302,7 @@ int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this..
       case LAW_LABOR:
          return attitude[VIEW_SWEATSHOPS];
       case LAW_GAY:
-         return (attitude[VIEW_GAY]+attitude[VIEW_CIVILRIGHTS])/2;
+         return attitude[VIEW_GAY];
       case LAW_CORPORATE:
          return (attitude[VIEW_CORPORATECULTURE]+attitude[VIEW_CEOSALARY])/2;
       case LAW_FREESPEECH:
@@ -2293,19 +2312,21 @@ int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this..
       case LAW_FLAGBURNING:
          return (attitude[VIEW_FREESPEECH]+attitude[VIEW_POLITICALVIOLENCE])/2;
       case LAW_WOMEN:
-         return (attitude[VIEW_WOMEN]+attitude[VIEW_CIVILRIGHTS])/2;
+         return attitude[VIEW_WOMEN];
       case LAW_CIVILRIGHTS:
-         return attitude[VIEW_CIVILRIGHTS];
+         return attitude([VIEW_CIVILRIGHTS];
+	  case LAW_HUMANRIGHTS:
+         return (attitude[VIEW_SWEATSHOPS]+attitude[VIEW_FREESPEECH]+attitude[VIEW_CIVILRIGHTS]+attitude[VIEW_WOMEN]+attitude[VIEW_MILITARY]+attitude[VIEW_INTELLIGENCE]+attitude[VIEW_GAY]+attitude[VIEW_IMMIGRATION])/8;
       case LAW_DRUGS:
          return attitude[VIEW_DRUGS];
       case LAW_IMMIGRATION:
-         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;
+         return attitude[VIEW_IMMIGRATION];
       case LAW_MILITARY:
          return attitude[VIEW_MILITARY];
 	  case LAW_WELFARE:
 		  return attitude[VIEW_WELFARE];
       case LAW_TORTURE:
-         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY]+attitude[VIEW_CIVILRIGHTS])/3;
+         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
 	  case LAW_RELIGION:
