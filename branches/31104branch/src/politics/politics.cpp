@@ -2254,7 +2254,7 @@ char wincheck(void)
 
 
 /*
-	FIXME:
+	FIXED:
 		At the present time, VIEW_CIVILRIGHTS has far too much sway.
 		However, before this was the case, as an example, LAW_ABORTION
 		and LAW_WOMEN, had the same "return attitude[]" attribute, and
@@ -2271,17 +2271,32 @@ char wincheck(void)
 				make VIEW_HUMANRIGHTS get closer to 100.)
 
 	-- LiteralKa
+
+	ADDENDUM (20090812): Keeping this for historical purposes, and to
+		possibly improve future changes to this issue.
 */
 /*
 FIXME, PART1:
-LAW_HUMANRIGHTS is added as a sort of an indictator, but it relies on all the other Human Rights issue,
-rather than affecting the issues to be more "pro-Human Rights". Essentially, if you support Gay Rights but
-not Abortion Rights, you will not be considered as someone who supports 'human rights'.
----Servant Corps
+	LAW_HUMANRIGHTS is added as a sort of an indictator, but it relies on
+		all the other Human Rights issue, rather than affecting the
+		issues to be more "pro-Human Rights". Essentially, if you
+		support Gay Rights but not Abortion Rights, you will not be
+		considered as someone who supports 'human rights'.
+
+	---Servant Corps
+
+/////                                                                      /////
+
+@Servant:
+	As it stands, (revision 316) the only alarming thing is that this may
+		influence public moods that are affected by LAW_HUMANRIGHTS.
+		This is only midly alarming because the mood itself is effected,
+		and not the view.
+	-- LiteralKa
 */
 
 /* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this...
+int publicmood(int l)
 {
    switch(l)
    {
@@ -2322,15 +2337,14 @@ int publicmood(int l)//XXX: VIEW_CIVILRIGHTS has quite a bit of weight in this..
       case LAW_IMMIGRATION:
          return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_HUMANRIGHTS])/2;//XXX: VIEW_DRUGS?
       case LAW_MILITARY:
-         return attitude[VIEW_MILITARY];
-	  case LAW_WELFARE:
-		  return attitude[VIEW_WELFARE];
+         return attitude[VIEW_MILITARY];      case LAW_WELFARE:
+         return attitude[VIEW_WELFARE];
       case LAW_TORTURE:
          return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
-	  case LAW_RELIGION:
-		  return attitude[VIEW_RELIGION];
+      case LAW_RELIGION:
+         return attitude[VIEW_RELIGION];
       case LAW_ELECTIONS:
       default: //eg. -1
       {
