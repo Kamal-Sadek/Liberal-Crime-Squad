@@ -307,9 +307,13 @@ void makecharacter(void)
             if(choices || selection == 4)
                addstr("E - the Sandanista Front won the elections in Nicaragua.");
             //ATTRIBUTE_CHARISMA 2
-            // Sep. 4, 1984
-            
-            
+            // Sept. 4, 1984
+			//move(14,0);
+			//if(choices || selection == 5)
+               //addstr("F - the United Nations condemned Iraq's use of chemical weapons.");      
+            //ATTRIBUTE_HEALTH 2
+			//March 30, 1984
+
             move(17,0);
             addstr("The doctor said I was a ");
             set_color(COLOR_WHITE,COLOR_BLACK,1);

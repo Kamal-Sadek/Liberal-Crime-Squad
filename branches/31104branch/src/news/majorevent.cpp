@@ -797,7 +797,14 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".  ");
             strcat(story,"&r");
             strcat(story,"   Along with bonobos, chimpanzees are our closest cousins");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,", at least according to the now-discredited theory of evolution");
+            if(law[LAW_RELIGION]==-2)
+			{
+				strcat(story,", at least according to the now-discredited theory of evolution");
+			}
+			else if (VIEW_STALIN+LCSrandom(25)<=66)
+			{
+				strcat(story,", at least according to the reactionary theory of Mendelian Genetics");
+			}
             strcat(story,".  ");
             strcat(story,"Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ");
             strcat(story,"a spokesperson for the research team stated that, \"It really isn't so bad as all that.  Chimpanzees are very resilient creatures.  ");
@@ -832,7 +839,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story," captor.");
             strcat(story,"&r");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [sex fiend] ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [reproduction fiend] ");
 	    else strcat(story,"   Two weeks ago, convicted rapist ");
             char dstr[200],dstr2[200];
             firstname(dstr);lastname(dstr2);

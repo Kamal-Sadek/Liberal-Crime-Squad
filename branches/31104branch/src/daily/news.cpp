@@ -1645,6 +1645,7 @@ switch(LCSrandom(5))
 	case 2:ns->loc=SITE_INDUSTRY_POLLUTER;
 	case 3:ns->loc=SITE_RESIDENTIAL_APARTMENT_UPSCALE;
 	case 4:ns->loc=SITE_CORPORATE_HEADQUARTERS;
+	case 5:ns->loc=SITE_BUSINESS_FOODBANK;
 }
 		newsstory.push_back(ns);
       }

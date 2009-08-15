@@ -250,7 +250,8 @@ void passmonth(char &clearformess,char canseethings)
             change_public_opinion(VIEW_CEOSALARY,2);
             change_public_opinion(VIEW_CORPORATECULTURE,2);
             change_public_opinion(VIEW_TAXES,2);
-            change_public_opinion(VIEW_POLLUTION,2);
+			change_public_opinion(VIEW_RELIGION,2);
+            change_public_opinion(VIEW_POLLUTION,-2);
             change_public_opinion(VIEW_GUNCONTROL,2);
             change_public_opinion(VIEW_POLITICALVIOLENCE,2);
          }
@@ -269,7 +270,8 @@ void passmonth(char &clearformess,char canseethings)
             change_public_opinion(VIEW_SWEATSHOPS,1);
             change_public_opinion(VIEW_CEOSALARY,1);
             change_public_opinion(VIEW_TAXES,1);
-            change_public_opinion(VIEW_POLLUTION,1);
+            change_public_opinion(VIEW_POLLUTION,-1);
+			change_public_opinion(VIEW_RELIGION,1);
             change_public_opinion(VIEW_GUNCONTROL,1);
             change_public_opinion(VIEW_POLITICALVIOLENCE,1);
          }
