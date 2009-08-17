@@ -962,7 +962,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
              
             while(bursthits)
             {
-               damamount=LCSrandom(5+a.skillval(SKILL_HANDTOHAND))+1+a.skillval(SKILL_HANDTOHAND);
+               damamount+=LCSrandom(5+a.skillval(SKILL_HANDTOHAND))+1+a.skillval(SKILL_HANDTOHAND);
                bursthits--;
             }
             if(!a.animalgloss)damtype|=WOUND_BRUISED;

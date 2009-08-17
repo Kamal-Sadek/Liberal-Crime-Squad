@@ -193,7 +193,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 	  Liberal news stations. But once people watch Liberal news, nobody will want to listen to the
 	  Radio Personalities and News Anchors anymore! They lose their ability to change Culture!*/
       case CREATURE_RADIOPERSONALITY:
-		 if(attitude([VIEW_AMRADIO])=<50)
+		 if(attitude[VIEW_AMRADIO]<=50)
 		 {
          change_public_opinion(VIEW_AMRADIO,1);
          for(int i=0;i<VIEWNUM-3;i++)
@@ -208,7 +208,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 		 }
 		 break;
       case CREATURE_NEWSANCHOR:
-		  if(attitude([VIEW_CABLENEWS])=<50)
+		  if(attitude[VIEW_CABLENEWS]<=50)
 		  {
          change_public_opinion(VIEW_CABLENEWS,1);
          for(int i=0;i<VIEWNUM-3;i++)
@@ -268,7 +268,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          libpower[VIEW_JUSTICES]+=power;
          libpower[VIEW_INTELLIGENCE]+=power;
          libpower[VIEW_ANIMALRESEARCH]+=power;
-		 libpower[VIEW_WELFARE}+=power;
+		 libpower[VIEW_WELFARE]+=power;
          break;
       /* Scientists block */
       case CREATURE_SCIENTIST_LABTECH:

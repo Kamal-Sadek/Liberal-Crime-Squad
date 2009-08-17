@@ -2052,7 +2052,7 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Dealership");
          break;
 	  case SITE_INDUSTRY_FOODBANK:
-		  strcat(loc.name,"Saint ")
+		  strcat(loc.name,"Saint ");
 		  firstname(str,GENDER_FEMALE);
 		  strcpy(loc.name,str);
 		  strcat(loc.name,"'s Food Bank");

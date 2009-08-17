@@ -1493,7 +1493,7 @@ void supremecourt(char clearformess,char canseethings)
                else addstr("Strengthen our National Defense");
                break;
 			case LAW_WELFARE:
-				if(scasedir[p]==1)addstr("Insure the Welfare of the Needy");
+				if(scasedir[c]==1)addstr("Insure the Welfare of the Needy");
 				else addstr("Reform the Welfare System");
 				break;
             case LAW_TORTURE:
@@ -1906,7 +1906,7 @@ void congress(char clearformess,char canseethings)
                else addstr("Strengthen our National Defense");
                break;
 		   	case LAW_WELFARE:
-				if(billdir[p]==1)addstr("Insure the Welfare of the Needy");
+				if(billdir[c]==1)addstr("Insure the Welfare of the Needy");
 				else addstr("Reform the Welfare System");
 				break;
             case LAW_TORTURE:
@@ -2329,13 +2329,13 @@ int publicmood(int l)
       case LAW_WOMEN:
          return attitude[VIEW_WOMEN];
       case LAW_CIVILRIGHTS:
-         return attitude([VIEW_CIVILRIGHTS];
+         return attitude[VIEW_CIVILRIGHTS];
       case LAW_HUMANRIGHTS:
          return (attitude[VIEW_SWEATSHOPS]+attitude[VIEW_FREESPEECH]+attitude[VIEW_CIVILRIGHTS]+attitude[VIEW_WOMEN]+attitude[VIEW_MILITARY]+attitude[VIEW_INTELLIGENCE]+attitude[VIEW_GAY]+attitude[VIEW_IMMIGRATION])/8;
       case LAW_DRUGS:
          return attitude[VIEW_DRUGS];
       case LAW_IMMIGRATION:
-         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_HUMANRIGHTS])/2;//XXX: VIEW_DRUGS?
+         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;//XXX: VIEW_DRUGS?
       case LAW_MILITARY:
          return attitude[VIEW_MILITARY];      case LAW_WELFARE:
          return attitude[VIEW_WELFARE];

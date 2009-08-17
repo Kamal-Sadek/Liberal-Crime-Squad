@@ -483,7 +483,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("indecent exposure")
+         addstr("indecent exposure");
          breaker[LAWFLAG_PUBLICNUDITY]=0;
       }
       else if(breaker[LAWFLAG_LOITERING])

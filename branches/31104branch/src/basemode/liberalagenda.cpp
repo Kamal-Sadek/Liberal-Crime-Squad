@@ -441,11 +441,11 @@ char liberalagenda(char won)
 				   if(won==-1)addstr("Corporate workhouses help the degenerate poor pull themselves up by their bootstraps.");
 				   else if(won==-2)addstr("People who receive welfare must work for the Stalinist Party.");
 				   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-					   addstr("Welfare is provided purely by private charities.")
+					   addstr("Welfare is provided purely by private charities.");
 				   else if(law[l]==-1)addstr("A minimal welfare system provides temporary benefits and rigorously searches for fraud.");
 				   else if(law[l]==0)addstr("The welfare system provides benefits in some cases.");
 				   else if(law[l]==1)addstr("There is a effective societal safety net for those who can't work.");
-				   else addstr("The welfare system shows that there is such a thing as a free lunch.)";
+				   else addstr("The welfare system shows that there is such a thing as a free lunch.");
 				   break;
                case LAW_TORTURE:
                   if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");

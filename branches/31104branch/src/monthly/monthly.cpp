@@ -183,8 +183,8 @@ void passmonth(char &clearformess,char canseethings)
    int mediabalance=0;
    int issuebalance[VIEWNUM-6];
    int stimulus=0;
-   int cost=0;
-   int tax=0;
+   double cost=0;
+   double tax=0;
    
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
@@ -386,11 +386,11 @@ void passmonth(char &clearformess,char canseethings)
 		   {
 			   //The amount of tax revenue depends on the health of the national economy.
 		   case LAW_TAX:
-		       if(law[l]==ALIGN_ARCHCONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY]))*0.10));
-               else if(law[l]==ALIGN_CONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY])*0.25));
-               else if(law[l]==ALIGN_MODERATE)tax+=((100-attitude[VIEW_ECONOMY])*0.35));
-               else if(law[l]==ALIGN_LIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.5));
-               else if(law[l]==ALIGN_ELITELIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.75));
+		       if(law[l]==ALIGN_ARCHCONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY])*0.10);
+               else if(law[l]==ALIGN_CONSERVATIVE)tax+=((100-attitude[VIEW_ECONOMY])*0.25);
+               else if(law[l]==ALIGN_MODERATE)tax+=((100-attitude[VIEW_ECONOMY])*0.35);
+               else if(law[l]==ALIGN_LIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.5);
+               else if(law[l]==ALIGN_ELITELIBERAL)tax+=((100-attitude[VIEW_ECONOMY])*0.75);
 			   break;
 		   case LAW_WELFARE:
 			   if(law[l]==ALIGN_ARCHCONSERVATIVE)cost+=0;
@@ -418,7 +418,7 @@ void passmonth(char &clearformess,char canseethings)
                else if(law[l]==ALIGN_ELITELIBERAL)cost+=0;
 			   break;
 		   }
-	    int deficit = tax - cost;
+	    int deficit = (int)(tax - cost);
 		int roll = deficit + LCSrandom(400)-200;
          // Heavy randomization -- stimulus just biases the roll
          // If +/-50 to either side, that side wins the tug-of-war

@@ -637,7 +637,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 				   if(law[LAW_NUCLEARPOWER]=2)
 				   {
 					   if(!liberalguardian)
-                  {
+						{
                      strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad contaminated the state's water supply");
                      strcat(story,"yesterday by tampering with equipment on the site.");
@@ -665,6 +665,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      strcat(story,"demonstrating the extreme vulnerability and danger of Nuclear Power Plants. ");
                      strcat(story,"&r");
                   }
+				   }
                }
                if(crime[CRIME_POLICE_LOCKUP])
                {
@@ -1645,7 +1646,7 @@ switch(LCSrandom(5))
 	case 2:ns->loc=SITE_INDUSTRY_POLLUTER;
 	case 3:ns->loc=SITE_RESIDENTIAL_APARTMENT_UPSCALE;
 	case 4:ns->loc=SITE_CORPORATE_HEADQUARTERS;
-	case 5:ns->loc=SITE_BUSINESS_FOODBANK;
+	case 5:ns->loc=SITE_INDUSTRY_FOODBANK;
 }
 		newsstory.push_back(ns);
       }

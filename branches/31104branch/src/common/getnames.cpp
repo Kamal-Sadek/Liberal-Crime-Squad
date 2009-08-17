@@ -967,8 +967,8 @@ void getview(char *str,short view)
       case VIEW_AMRADIO:strcat(str,"AM Radio");break;
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
       case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
-	  case VIEW_WELFARE:strcat("Welfare");break;
-	  case VIEW_RELIGION:strcat("Seperation of Church and State");break;
+	  case VIEW_WELFARE:strcat(str,"Welfare");break;
+	  case VIEW_RELIGION:strcat(str,"Seperation of Church and State");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;

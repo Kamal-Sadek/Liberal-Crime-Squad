@@ -628,7 +628,7 @@ void survey(Creature *cr)
 			 if(attitude[VIEW_WELFARE]>50)addstr("alievating poverty.");
 			 else addstr("welfare reform.");
 		 case VIEW_RELIGION:
-			 if(attitude[VIEW_RELIGION]>50)addstr("seperation of Church and State.")"
+			 if(attitude[VIEW_RELIGION]>50)addstr("seperation of Church and State.");
 			 else addstr("protecting religious values.");
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
