@@ -1,0 +1,218 @@
+ChangeLog for Version 3.11.4:
+
+2007-12-14   Chris Johnson   <grundee@users.sourceforge.net>
+* ALL FILES: Changed all ints/longs to int32s. Changed all shorts to int16s.
+
+2007-12-14   Chris Johnson   <grundee@users.sourceforge.net>
+* configure.ac: Added sizeof checks for data types.
+* compat.h: Added typedefs for integer sizes using new sizeof macros.
+* cursesmovie.h, cursesgraphics.h, lcsio.h: Included compat.h.
+
+2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp, monthly.cpp: Added more places where Wisdom is used.
+* date.cpp: Bug causing liberals who are caught trying to kidnap their dates
+to be not properly charged with kidnapping has been fixed.
+
+2007-07-12   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpp: Fixed multiple crashes related to car theft chases.
+* creature.cpp: Secretaries now get a little bit of writing skill.
+* activities.cpp: Car locks are harder to jimmy and it is harder to hotwire
+cars. Chance of getting caught pulling away now considers whether you broke
+the window and whether you are trying to steal a police car.
+* daily.cpp: You are now charged with car theft if you give up to police when
+stealing a car.
+* justice.cpp: Resisting arrest, disturbing the peace, and loitering no longer
+report how many charges you are faced with.
+* talk.cpp: You may now voluntarily surrender to the police on site.
+
+2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
+* activate.cpp: Added funds to more screens.
+
+2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
+* commondisplay.h: Added real name to the profile of a liberal/conservative
+page.
+
+2007-07-10   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h, commondisplay.cpp: Added function called printfunds(3) which 
+prints funds at the specified location, prefixes some text, and then returns
+everything (such as color and cursor location) back to the way it was before.
+* activate.cpp, reviewmode.cpp, baseactions.cpp, commondisplay.cpp, date.cpp:
+Changes all money displaying to use new function.
+* newgame.cpp: Added ability to use real name by default for character 
+creation.
+
+ChangeLog for Version 3.11.3:
+
+2007-07-08   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* includes.h, configure.ac: Updated to version 3.11.3 for release.
+
+2007-07-08   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* daily.cpp: Fixed a bug causing vacation dates to never end.
+
+2007-06-30   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* lcsio.cpp, lcsio.h: Windows version of the new I/O uses _mkdir and includes
+direct.h for VC++ support.
+* fight.cpp: Liberals that are captured now lose their hostages.
+* daily.cpp: Liberals that lose contact and go into hiding now stop their
+current actions.
+* daily.cpp: Dates can now only be gone on if the Liberal is either in the
+hospital or at a safehouse.
+* news.cpp: The news no longer specifies whether you were killed when the LCS
+squad is wiped out on site, in order to support cases where you were really just
+arrested.
+* siege.cpp: Hostages which are rescued can no longer continue to be tended.
+* justice.cpp: During trials and on release from prison, Liberals are now
+transferred to the homeless shelter as their new base if their current base is
+no longer a safehouse.
+
+2007-06-30   Chris Johnson   <grundee@users.sourceforge.net>
+* lcsio.h, lcsio.cpp: Completely rewrote the LCS I/O system. Use LCSOpenFile
+and LCSCloseFile now, see documentation in lcsio.h for help.
+* cursesmovie.h, cursesmovie.cpp, news.cpp, highscore.cpp, saveload.cpp:
+Changed saving and loading to use C I/O with file handle returned by the new
+IO functions. This system should be portable, further testing on Linux will
+be necessary.
+
+2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp: You will now only be charged with assault for attacking people who
+aren't already hostile to you.
+
+2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* justice.cpp: Fixed a bug which would give you a warning 1 in 4 times if you
+didn't commit murder instead of your proper sentence.
+
+ChangeLog for Version 3.11.2:
+
+2007-06-17   Jonathan Stickles & Chris Johnson
+* baseactions.cpp: Fixed Linux flag burning bug.
+
+2007-06-17   Chris Johnson   <grundee@users.sourceforge.net>
+* lcsio.cpp: Changed mode for read only to actually be read only.
+Changed order of art search paths.
+
+2007-06-18   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* fight.cpp: Fixed a sneaky bug in which having high health doesn't protect you
+from damage, it protects your opponent from recieving damage from you. Fighter
+archetype characters and people with high health stats are now much more
+powerful, because they were actually being weakened by their own health rather
+than strengthened by it.
+
+2007-06-18   Chris Johnson   <grundee@users.sourceforge.net>
+* src/Makefile.am, f[l]ight.cpp: Renamed flight.cpp to fight.cpp, which it was
+supposed to be called. Modified Makefile.am to reflect this change.
+* Makefile.am, workspaces/game.cbp: Added workspace for Code::Blocks.
+
+2007-06-19   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* news.cpp, newstops.cpc: Added art for the Liberal Guardian to be
+turned into a major newspaper later.
+
+2007-06-19   Chris Johnson   <grundee@users.sourceforge.net>
+* configure.ac, includes.h: Changed version to "3.11.1svn2"
+as Jonathan's changes with the art may break compatability with older
+versions.
+
+2007-06-19   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpp: Fixed a crash bug relating to squad members not being
+removed from their squad if killed in a car chase away from their
+squad.
+
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* getnames.cpp (enter_name): Added a function to allow a player to enter 
+a name. Supports a default value and length.
+* includes.h: Added a function prototype for enter_name.
+* includes.h: Added a #define called CREATURE_NAMELEN and set it to
+the maximum name length. Used this value in declaration of creaturest.
+* date.cpp (completedate, completevacation): Used enter_name for name entry.
+* haulkidnap.cpp (kidnaptransfer): Used enter_name for name entry.
+
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h: Added SLOGAN_LEN which is set to the length of the slogan.
+Changed the declarations of slogan to SLOGAN_LEN+1, and the declaration of 
+name and propername in creaturest to CREATURE_NAMELEN+1. The last character
+is for a NULL that will not be overwritten by mvgetnstr().
+* basemode/reviewmode.cpp: Changed mvgetstr to mvgetnstr to prevent overflows
+of the creature's name.
+* basemode/baseactions.cpp: Changed mvgetstr to mvgetnstr to prevent overflows
+of the slogan.
+
+2007-06-20   Chris Johnson   <grundee@users.sourceforge.net>
+* reviewmode.cpp (review_mode): Terminated string to prevent overflow.
+* baseactions.cpp (getslogan): Terminated string to prevent overflow.
+* newgame.cpp (makecharacter): Changed mvgetstr to mvgetnstr and terminated
+string to prevent overflow.
+* commondisplay.cpp (fullstatus): Changed mvgetstr to mvgetnstr and terminated
+string to prevent overflow.
+* getnames.cpp (enter_name): Terminated string to prevent overflow.
+* includes.h: Took away the +1's as they are no longer needed.
+
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* reviewmode.cpp, baseactions.cpp, newgame.cpp, commondisplay.cpp: 
+mvgetnstr does not work with my PDcurses, and I am assuming that other people
+will have trouble as well. I changed everything from my previous change to use
+enter_name for string entry.
+* includes.h: Changed SLOGAN_LEN to 79. I think that the code that centers 
+the slogan on the screen can not handle a slogan that is 80 chars long, as 
+that is the size of the screen. No crashes for the slogan now.
+
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* game.cpp, includes.h: Created function called end_game which will clean up
+memory and close the game to prevent memory leaks.
+* lcsio.cpp: Fixed lcs_home memory leak by freeing and reallocating it each 
+time it is needed.
+* titlescreen.cpp, commonactions.cpp, endgame.cpp, monthly.cpp: Modified
+some of the exit code to use new end_game function.
+
+2007-06-21   Chris Johnson   <grundee@users.sourceforge.net>
+* game.cpp, includes.h: Redefined all slogan vars to have length SLOGAN_LEN+1.
+The save/load system does not like 79 byte slogans. The other code
+that sets slogan still uses SLOGAN_LEN, so only 79 bytes will be shown.
+
+2007-06-22   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* extern.h, game.cpp, includes.h, activate.cpp, baseactions.cpp, basemode.cpp,
+commondisplay.cpp, activities.cpp, siege.cpp, monthly.cpp, saveload.cpp:
+Continuation of the ongoing massive overhaul of the Liberal Guardian design.
+This may be the final design for the system for now.
+* commonactions.cpp, activities.cpp, lcsmonthly.cpp, miscactions.cpp:
+change_public_opinion no longer has a default cap of 10 points of public opinion
+shift per call. Formerly this cap was changable through an optional fourth
+parameter. Now the fourth parameter is the maximum to increase public opinion
+to, and defaults to 100. Calls throughout the code changed appropriately.
+* news.cpp: Changed the way the public opinion changes from news stories and
+site actions is calculated.
+* commonactions.cpp, siege.cpp: Changed the way law enforcement "heat" is
+calculated.
+* justice.cpp: Changed the way the strength of legal prosecution is calculated.
+* monthly.cpp: Changed the way public opinion drifts are calculated.
+* news.cpp: Unlawful entry no longer generates a news story.
+* game.cpp, includes.h: Moved debug defines from game.cpp to includes.h.
+* includes.h: Advanced version to 3.11.1svn3. Old saves are now obsolete.
+
+2007-06-22   Chris Johnson   <grundee@users.sourceforge.net>
+* includes.h: Changed version of lowest save to 3.11.2.
+
+2007-06-22   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* chase.cpp: The cops now play mercifully nice. You can always pull over or give
+up in a police chace, even if you start shooting earlier in the fight. You still
+can't surrender to death squads or non-police enemies.
+* chase.cpp: Changed the driveskill calculation. Driving skill is now more
+important. The speed of your car is also more important. Having an injured
+driver is now very bad. Shooting the enemy driver is now very good.
+* justice.cpp: Tweaked the way scarefactor works in court again.
+
+2007-06-23   Chris Johnson   <grundee@users.sourceforge.net>
+* lcsio.cpp: Added ../art to the art search path. Forced Windows to search
+../art as well.
+
+2007-06-23   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
+* justice.cpp: You can now be charged with multiple counts of the same crime.
+
+2007-06-23   Chris Johnson & Jonathan Stickles
+* chase.cpp: Fixed bug #1741974, Hostages not freed if arrested during
+car chase.
+* haulkidnap.cpp: Added new situation to freehostage to not print anything.
+
+
+RELEASE VERSION 3.11.1:
+Fixed crash when squad is disbanded.
+Split up game.cpp into smaller files.
+Support for GNU Autotools
