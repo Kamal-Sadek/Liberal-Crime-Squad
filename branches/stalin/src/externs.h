@@ -72,6 +72,7 @@ extern char cablenews_closed;
 
 extern char endgamestate;
 extern char ccs_kills;
+extern int ccs_siege_kills;
 
 extern int funds;
 

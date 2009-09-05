@@ -857,6 +857,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_TEENAGER:strcat(str,"Teenager");break;
       case CREATURE_PRISONER:strcat(str,"Prisoner");break;
       case CREATURE_DOCTOR:strcat(str,"Doctor");break;
+      case CREATURE_PSYCHOLOGIST:strcat(str,"Psychologist");break;
       case CREATURE_NURSE:strcat(str,"Nurse");break;
       case CREATURE_GUARDDOG:strcat(str,"Canine Hero");break;
       case CREATURE_GENETIC:strcat(str,"Genetic Monster");break;
@@ -992,6 +993,7 @@ void getviewsmall(char *str,short view)
       case VIEW_FREESPEECH:strcat(str,"free speech");break;
       case VIEW_GENETICS:strcat(str,"genetic research");break;
       case VIEW_JUSTICES:strcat(str,"judges");break;
+      case VIEW_GUNCONTROL:strcat(str,"gun control");break;
       case VIEW_SWEATSHOPS:strcat(str,"labor rights");break;
       case VIEW_POLLUTION:strcat(str,"pollution");break;
       case VIEW_CORPORATECULTURE:strcat(str,"corporations");break;

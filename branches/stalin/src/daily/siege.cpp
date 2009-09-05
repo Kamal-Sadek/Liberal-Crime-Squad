@@ -109,6 +109,7 @@ void siegecheck(char canseethings)
             if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
                pool[p]->align!=1)kidnapped++; // Kidnapped persons increase heat
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
+            numpres++;
             
             // Cleanse record on things that aren't illegal right now
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
@@ -2016,6 +2017,52 @@ void conquertext(void)
    }
 
    move(7,19);
+   addstr("Press C to Continue Liberally.");
+
+   do
+   {
+      refresh();
+      int c=getch();
+      translategetch(c);
+
+      if(c=='c')break;
+   }while(1);
+}
+
+
+
+/* siege - flavor text when you crush a CCS safe house */
+void conquertextccs(void)
+{
+   //GIVE INFO SCREEN
+   erase();
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   move(1,26);
+   addstr("* * * * *   VICTORY   * * * * *");
+
+   if(ccs_kills<3)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(3,16);
+      addstr("Gunfire still ringing in their ears, the squad revels in");
+      move(4,11);
+      addstr("their victory.  The CCS is bound to have another safe house, but");
+      move(5,11);
+      addstr("for now, their power has been severely weakened.  This will make");
+      move(6,11);
+      addstr("a fine base for future Liberal operations.");
+   }
+   else
+   {
+      move(3,16);
+      addstr("Gunfire still ringing in their ears, the squad revels in");
+      move(4,11);
+      addstr("their final victory.");
+      move(6,16);
+      addstr("The CCS has been completely destroyed.");
+   }
+
+   move(8,19);
    addstr("Press C to Continue Liberally.");
 
    do

@@ -87,7 +87,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          refresh();
          getch();
 
-         generate_name(d.date[e]->name);
+         d.date[e]->namecreature();
          strcpy(d.date[e]->propername,d.date[e]->name);
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;

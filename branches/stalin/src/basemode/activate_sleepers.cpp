@@ -236,7 +236,7 @@ void activate_sleeper(Creature *cr)
          move(12,40);
          addstr("3 - Build Conservative Credibility");*/
 
-         move(13,40);
+         move(12,40);
          if(subordinatesleft(*cr))
          {
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SLEEPER_RECRUIT);

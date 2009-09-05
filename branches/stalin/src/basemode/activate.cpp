@@ -456,7 +456,7 @@ void activate(Creature *cr)
             move(23,1);
             addstr("Business, Psychology");
             move(24,1);
-            addstr("  Classes cost up to $200/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $200/day to conduct. All Liberals able will attend.");
             break;
          case ACTIVITY_TEACH_POLITICS:
             //move(22,1);
@@ -464,7 +464,7 @@ void activate(Creature *cr)
             move(22,1);
             addstr("  Skills Trained: Law, Persuasion, Leadership");
             move(24,1);
-            addstr("  Classes cost up to $200/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $200/day to conduct. All Liberals able will attend.");
             break;
          case ACTIVITY_TEACH_SURVIVAL:
             //move(22,1);
@@ -473,14 +473,14 @@ void activate(Creature *cr)
             addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
             move(23,1);
             addstr("Tailoring, Martial Arts, Theft");            move(24,1);
-            addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $300/day to conduct. All Liberals able will attend.");
             break;
          case ACTIVITY_TEACH_FIGHTING:
             //move(22,1);
             //addstr("  Attributes Trained: Health, Agility, Strength");
             move(22,1);
             addstr("  Skills Trained: All Weapon Skills");            move(24,1);
-            addstr("  Classes cost up to $500/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $500/day to conduct. All Liberals able will attend.");
             break;
          case ACTIVITY_TEACH_COVERT:
             //move(22,1);
@@ -490,7 +490,7 @@ void activate(Creature *cr)
             move(23,1);
             addstr("Psychology");
             move(24,1);
-            addstr("  Classes cost up to $300/day to conduct. All liberals able will attend.");
+            addstr("  Classes cost up to $300/day to conduct. All Liberals able will attend.");
             break;
       }
 

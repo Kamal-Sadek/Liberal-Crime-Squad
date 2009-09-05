@@ -79,13 +79,20 @@ void initsite(locationst &loc)
      case SITE_RESIDENTIAL_TENEMENT:
      case SITE_RESIDENTIAL_APARTMENT: 
      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-        build_site("RESIDENTIAL_APARTMENT"); break;
+        build_site("RESIDENTIAL_APARTMENT");
+        break;
      case SITE_INDUSTRY_WAREHOUSE:
      case SITE_RESIDENTIAL_SHELTER:
      case SITE_BUSINESS_CRACKHOUSE:
+        build_site("GENERIC_UNSECURE");
+        break;
      case SITE_BUSINESS_BARANDGRILL:
+        build_site("BUSINESS_RESTRICTEDCAFE");
+        break;
      case SITE_RESIDENTIAL_BOMBSHELTER:
      case SITE_OUTDOOR_BUNKER:
+        build_site("GENERIC_LOBBY");
+        break;
      case SITE_LABORATORY_COSMETICS:
         build_site("LABORATORY_COSMETICS");
         break;
@@ -665,7 +672,7 @@ void initsite(locationst &loc)
          z=LCSrandom(6);
 
       if(!(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
-         !(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED)&&
+         (!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED) || loc.type==SITE_BUSINESS_CRACKHOUSE)&&
          !(levelmap[x][y][z].flag & SITEBLOCK_EXIT)&&
          !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI)&&
          !(levelmap[x][y][z].flag & SITEBLOCK_GRAFFITI_OTHER)&&
@@ -1224,27 +1231,44 @@ void configSiteUnique::build()
 {
    int x, y, z;
    int count=0;
-
-   while(1)
+   struct coordinates
    {
-      if(count>100)return; // control for very long runs
-      count++;
-      x = xstart + LCSrandom(xend-xstart+1);
-      y = ystart + LCSrandom(yend-ystart+1);
-      z = zstart + LCSrandom(zend-zstart+1);
+      coordinates(int x1,int y1,int z1) : x(x1), y(y1), z(z1) {};
+      int x, y, z;
+   };
+   vector<coordinates> secure, unsecure;
 
-      // don't drop the special in a wall or door
-      if(levelmap[x][y][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR))
-         continue;
-      // don't drop the special on another special
-      if(levelmap[x][y][z].special!=-1)
-         continue;
-      // try to plot in restricted areas, but not absolutely required
-      if(!(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED) && count<30)
-         continue;
-
-      break;
+   for(x=xstart;x<=xend;x++)
+   {
+      for(y=ystart;y<=yend;y++)
+      {
+         for(z=zstart;z<=zend;z++)
+         {
+            if(!(levelmap[x][y][z].flag & (SITEBLOCK_DOOR|SITEBLOCK_BLOCK|SITEBLOCK_EXIT)))
+            {
+               if(levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED)
+                  secure.push_back(coordinates(x,y,z));
+               else
+                  unsecure.push_back(coordinates(x,y,z));
+            }
+         }
+      }
    }
+   if(secure.size())
+   {
+      int choice=LCSrandom(secure.size());
+      x = secure[choice].x;
+      y = secure[choice].y;
+      z = secure[choice].z;
+   }
+   else if(unsecure.size())
+   {
+      int choice=LCSrandom(unsecure.size());
+      x = unsecure[choice].x;
+      y = unsecure[choice].y;
+      z = unsecure[choice].z;
+   }
+   else return;
 
    levelmap[x][y][z].special=unique;
 }

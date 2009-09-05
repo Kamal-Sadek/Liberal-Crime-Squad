@@ -31,6 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 
 enum bouncer_reject_reason
 {
+   REJECTED_CCS,
    REJECTED_NUDE,
    REJECTED_WEAPONS,
    REJECTED_UNDERAGE,
@@ -49,11 +50,17 @@ enum bouncer_reject_reason
 void special_bouncer_greet_squad()
 {
    // add a bouncer if there isn't one in the first slot
-   if(!sitealarm)
+   if(!sitealarm && location[cursite]->renting!=RENTING_PERMANENT)
    {
-      if(!encounter[0].exists || encounter[0].type!=CREATURE_BOUNCER)
+      if(location[cursite]->renting==RENTING_CCS)
+      {
+         makecreature(encounter[0],CREATURE_CCS_VIGILANTE);
+         makecreature(encounter[1],CREATURE_CCS_VIGILANTE);
+      }
+      else if(!encounter[0].exists || encounter[0].type!=CREATURE_BOUNCER)
       {
          makecreature(encounter[0],CREATURE_BOUNCER);
+         makecreature(encounter[1],CREATURE_BOUNCER);
       }
    }
 }
@@ -63,6 +70,9 @@ void special_bouncer_assess_squad()
    bool autoadmit=0;
    char sleepername[80];
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   
+   special_bouncer_greet_squad();
+
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER && !LCSrandom(3))
@@ -70,11 +80,10 @@ void special_bouncer_assess_squad()
          autoadmit=1;
          strcpy(sleepername,pool[p]->name);
          strcpy(encounter[0].name,sleepername);
+         encounter[0].align=1;
          break;
       }
    }
-   makecreature(encounter[0],CREATURE_BOUNCER);
-   if(autoadmit==1)encounter[0].align=1;
    //clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(16,1);
@@ -88,7 +97,10 @@ void special_bouncer_assess_squad()
    }
    else
    {
-      addstr("The bouncer assesses your squad.");
+      if(location[cursite]->renting==RENTING_CCS)
+         addstr("The Conservative scum block the door.");
+      else
+         addstr("The bouncer assesses your squad.");
       levelmap[locx][locy][locz].special=SPECIAL_CLUB_BOUNCER_SECONDVISIT;
    }
    printencounter();
@@ -146,11 +158,30 @@ void special_bouncer_assess_squad()
             // High security in gentleman's club? Gone
             if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
                if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
+            if(location[cursite]->renting==RENTING_CCS)
+               rejected=REJECTED_CCS;
          }
       }
       move(17,1);
       switch(rejected)
       {
+      case REJECTED_CCS:
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         switch(LCSrandom(11))
+         {
+         case 0:addstr("\"Can I see... heh heh... some ID?\"");break;
+         case 1:addstr("\"Woah... you think you're coming in here?\"");break;
+         case 2:addstr("\"Check out this fool. Heh.\"");break;
+         case 3:addstr("\"Want some trouble, dumpster breath?\"");break;
+         case 4:addstr("\"You're gonna stir up the hornet's nest, fool.\"");break;
+         case 5:addstr("\"Come on, take a swing at me. Just try it.\"");break;
+         case 6:addstr("\"You really don't want to fuck with me.\"");break;
+         case 7:addstr("\"Hey girly, have you written your will?\"");break;
+         case 8:addstr("\"Oh, you're trouble. I *like* trouble.\"");break;
+         case 9:addstr("\"I'll bury you in those planters over there.\"");break;
+         case 10:addstr("\"Looking to check on the color of your blood?\"");break;
+         }
+         break;
       case REJECTED_NUDE:
          set_color(COLOR_RED,COLOR_BLACK,1);
          switch(LCSrandom(3))

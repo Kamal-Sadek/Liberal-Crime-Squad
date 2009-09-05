@@ -1399,6 +1399,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
+                  if(location[cursite]->renting==RENTING_CCS)ccs_siege_kills++;
                }
                if(target->squadid==-1 && (target->animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
                {

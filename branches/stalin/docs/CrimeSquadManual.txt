@@ -8,7 +8,7 @@ To some a dream come true, to others an offensive piece of crap.
 Author: Tarn Adams of Bay 12 Games
 v3.9 Copyright (c) 2002-4, Tarn Adams
 
-v3.10-3.13 revisions by Jonathan Stickles, Chris Johnson, and other fans of Liberal Crime Squad in the Open Source Community. We hope you enjoy our changes.
+v3.10-4.00 revisions by Jonathan Stickles, Chris Johnson, and other fans of Liberal Crime Squad in the Open Source Community. We hope you enjoy our changes.
 
 Visit the Curses forum at the Bay 12 Games website to discuss and contribute to LCS:
 http://www.bay12games.com/cgi-local/ultimatebb.cgi?ubb=forum&f=3

@@ -50,10 +50,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.00.0"
+#define PACKAGE_VERSION "4.00.2"
 #endif
 
-const int version=40000;
+const int version=40002;
 const int lowestloadversion=40000;
 const int lowestloadscoreversion=31203;
 
@@ -438,6 +438,7 @@ enum CreatureType
    CREATURE_POLITICALACTIVIST,
    CREATURE_CCS_MOLOTOV,
    CREATURE_CCS_SNIPER,
+   CREATURE_PSYCHOLOGIST,
    CREATURENUM
 };
 
@@ -584,6 +585,11 @@ struct weaponst
             return 1;
       }
       return 0;
+   }
+
+   weaponst()
+   {
+      ammo=0;
    }
 };
 
@@ -2290,6 +2296,8 @@ void escape_engage(void);
 void escapesiege(char won);
 /* siege - flavor text when you fought off the raid */
 void conquertext(void);
+/* siege - flavor text when you crush a CCS safe house */
+void conquertextccs(void);
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc);
 void statebrokenlaws(Creature & cr);

@@ -47,6 +47,8 @@ void mode_site(short loc)
 
    if(!location[loc]->siege.siege)
    {
+      ccs_siege_kills=0;
+
       //Low profile site action?
       if(activesquad->stance == SQUADSTANCE_ANONYMOUS)
          sitestory->claimed = 0;
@@ -1623,6 +1625,77 @@ void mode_site(void)
                if(encsize>0)newenc=0;
             }
 
+            //BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
+            if(ccs_siege_kills>=25&&location[cursite]->renting==RENTING_CCS)
+            {
+               //DEAL WITH PRISONERS AND STOP BLEEDING
+               for(p=0;p<6;p++)
+               {
+                  if(activesquad->squad[p]==NULL)continue;
+                  if(activesquad->squad[p]->prisoner!=NULL)
+                  {
+                     if(activesquad->squad[p]->prisoner->squadid!=-1)
+                     {
+                        //RESTORE POOL MEMBER
+                        activesquad->squad[p]->prisoner->squadid=-1;
+                        //MUST LOCATE THE MEMBER
+                        activesquad->squad[p]->prisoner->location=activesquad->squad[p]->base;
+                        activesquad->squad[p]->prisoner->base=activesquad->squad[p]->base;
+                     }
+                     else
+                     {
+                        //CONVERT KIDNAP VICTIM
+                        kidnaptransfer(*activesquad->squad[p]->prisoner);
+                        delete activesquad->squad[p]->prisoner;
+                     }
+                     activesquad->squad[p]->prisoner=NULL;
+                  }
+               }
+               for(p=0;p<pool.size();p++)
+               {
+                  pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
+                  for(int w=0;w<BODYPARTNUM;w++)
+                  {
+                     pool[p]->wound[w]&=~WOUND_BLEEDING;
+                  }
+               }
+
+               //INFORM
+               clearmessagearea();
+
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               move(16,1);
+               addstr("The CCS has been broken!");
+
+               refresh();
+               getch();
+               
+               // CCS Safehouse killed?
+               if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
+                  location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
+                  location[cursite]->type==SITE_OUTDOOR_BUNKER)
+               {
+                  //location[cursite]->hidden=1;  // Either re-hide the location...
+                  location[cursite]->renting=0; // ...OR convert it to an LCS safehouse
+                  location[cursite]->closed=0;  // one of the above two should be commented out
+                  location[cursite]->heat=100;
+                  ccs_kills++;
+                  if(ccs_kills<3)
+                     endgamestate--;
+                  else
+                     endgamestate=ENDGAME_CCS_DEFEATED;
+
+                  // Move any CCS Sleepers at this location back to the homeless shelter
+               }
+
+               conquertextccs();
+
+               //RESET MODE
+               mode=GAMEMODE_BASE;
+               showcarprefs=0;
+               return;
+            }
+
             if(location[cursite]->siege.siege||postalarmtimer>=100) // *JDS* police response added
             {
                if(locx!=olocx||locy!=olocy||locz!=olocz)
@@ -2238,27 +2311,8 @@ void resolvesite(void)
          }
       }
 
-      // CCS Safehouse killed?
-      if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
-         location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
-         location[cursite]->type==SITE_OUTDOOR_BUNKER)
-      {
-         //location[cursite]->hidden=1;  // Either re-hide the location...
-         location[cursite]->renting=0; // ...OR convert it to an LCS safehouse
-         location[cursite]->closed=0;  // one of the above two should be commented out
-         location[cursite]->heat=100;
-         ccs_kills++;
-         if(ccs_kills<3)
-            endgamestate--;
-         else
-            endgamestate=ENDGAME_CCS_DEFEATED;
-
-         // Move any CCS Sleepers at this location back to the homeless shelter
-
-         
-      }
       // Capture a warehouse or crack den?
-      else if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
+      if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
               location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
       {
          location[cursite]->renting=0; // Capture safehouse for the glory of the LCS!

@@ -155,7 +155,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_STRENGTH]=2;
          break;
       case CREATURE_SCIENTIST_LABTECH:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          if(cr.weapon.type == WEAPON_NONE && !LCSrandom(2))
             cr.weapon.type=WEAPON_SYRINGE;
          cr.armor.type=ARMOR_LABCOAT;
@@ -168,7 +169,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_SCIENCE]=LCSrandom(4)+3;
          break;
       case CREATURE_JUDGE_CONSERVATIVE:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Hangin' Judge");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Hangin' Judge");
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_REVOLVER_44;
@@ -329,7 +331,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_CHARISMA]=4;
          break;
       case CREATURE_DOCTOR:
-         GIVE_GENDER_MALE;         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         GIVE_GENDER_MALE;
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_REVOLVER_38;
             cr.weapon.ammo=6;
@@ -345,8 +348,29 @@ void makecreature(Creature &cr,short type)
          
          cr.att[ATTRIBUTE_INTELLIGENCE]=6;
          break;
+      case CREATURE_PSYCHOLOGIST:
+         GIVE_GENDER_MALE;
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         {
+            cr.weapon.type=WEAPON_REVOLVER_38;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_38]=0;
+         }
+         strcpy(cr.name,"Psychologist");
+         if(cr.gender_liberal==GENDER_MALE||LCSrandom(2))cr.armor.type=ARMOR_CHEAPSUIT;
+         else cr.armor.type=ARMOR_CHEAPDRESS;
+         cr.money=LCSrandom(21)+20;
+         //cr.align=LCSrandom(3)-1;
+         cr.age=AGE_GRADUATE;
+
+         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+4;
+         
+         cr.att[ATTRIBUTE_INTELLIGENCE]=6;
+         cr.att[ATTRIBUTE_HEART]=6;
+         break;
       case CREATURE_NURSE:
-         GIVE_GENDER_FEMALE;         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         GIVE_GENDER_FEMALE;
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_REVOLVER_38;
             cr.weapon.ammo=6;
@@ -360,7 +384,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_FIRSTAID]=LCSrandom(4)+1;
          break;
       case CREATURE_WORKER_FACTORY_UNION:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Union Worker");
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
@@ -378,7 +403,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_TEENAGER; // wut?
          break;
       case CREATURE_MERC:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Mercenary");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Mercenary");
          if(law[LAW_GUNCONTROL]==-2)
          {
             cr.weapon.type=WEAPON_AUTORIFLE_M16;
@@ -431,7 +457,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_SOLDIER:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Soldier");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Soldier");
          cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
@@ -454,7 +481,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_VETERAN:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Army Veteran");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Army Veteran");
          cr.money=LCSrandom(21)+20;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
@@ -471,7 +499,8 @@ void makecreature(Creature &cr,short type)
 			cr.att[ATTRIBUTE_HEALTH]=5;
          break;
       case CREATURE_HARDENED_VETERAN:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Hardened Veteran");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Hardened Veteran");
          cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
@@ -496,7 +525,8 @@ void makecreature(Creature &cr,short type)
       case CREATURE_COP:
          if(law[LAW_POLICEBEHAVIOR]==2 && cr.align==ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
          {
-            GIVE_GENDER_MALE;            cr.align=ALIGN_MODERATE;
+            GIVE_GENDER_MALE;
+            cr.align=ALIGN_MODERATE;
             strcpy(cr.name,"Police Negotiator");
             cr.weapon.type=WEAPON_NONE;
             cr.armor.type=ARMOR_POLICEARMOR;
@@ -516,7 +546,8 @@ void makecreature(Creature &cr,short type)
          }
          else
          {
-            GIVE_GENDER_MALE;            if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+            GIVE_GENDER_MALE;
+            if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
             {
                cr.weapon.type=WEAPON_SMG_MP5;
                cr.weapon.ammo=15;
@@ -556,7 +587,8 @@ void makecreature(Creature &cr,short type)
          }
          break;
       case CREATURE_SWAT:
-         GIVE_GENDER_MALE;         if(LCSrandom(3))
+         GIVE_GENDER_MALE;
+         if(LCSrandom(3))
          {
             cr.weapon.type=WEAPON_SMG_MP5;
             cr.clip[CLIP_SMG]=3;
@@ -593,7 +625,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_DEATHSQUAD:
-         GIVE_GENDER_MALE;         cr.weapon.type=WEAPON_AUTORIFLE_M16;
+         GIVE_GENDER_MALE;
+         cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
          cr.armor.type=ARMOR_DEATHSQUADUNIFORM;
@@ -616,7 +649,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=6;
          break;
       case CREATURE_FIREFIGHTER:
-         GIVE_GENDER_MALE;         if(law[LAW_FREESPEECH]==-2)
+         GIVE_GENDER_MALE;
+         if(law[LAW_FREESPEECH]==-2)
          {
             cr.weapon.type=WEAPON_FLAMETHROWER;
             cr.weapon.ammo=2;
@@ -661,7 +695,8 @@ void makecreature(Creature &cr,short type)
          break;
       case CREATURE_CCS_MOLOTOV:
       {
-         GIVE_GENDER_MALE;         cr.armor.type=ARMOR_TRENCHCOAT;
+         GIVE_GENDER_MALE;
+         cr.armor.type=ARMOR_TRENCHCOAT;
          cr.weapon.type=WEAPON_MOLOTOV;
          cr.weapon.ammo=1;
          cr.clip[CLIP_MOLOTOV]=4;
@@ -698,7 +733,8 @@ void makecreature(Creature &cr,short type)
       }
       case CREATURE_CCS_SNIPER:
       {
-         GIVE_GENDER_MALE;         cr.armor.type=ARMOR_TRENCHCOAT;
+         GIVE_GENDER_MALE;
+         cr.armor.type=ARMOR_TRENCHCOAT;
          cr.weapon.type=WEAPON_SEMIRIFLE_AR15;
          cr.clip[CLIP_ASSAULT]=6;
          cr.weapon.ammo=30;
@@ -735,7 +771,8 @@ void makecreature(Creature &cr,short type)
       }
       case CREATURE_CCS_VIGILANTE:
       {
-         GIVE_GENDER_MALE;         cr.armor.type=ARMOR_CLOTHES;
+         GIVE_GENDER_MALE;
+         cr.armor.type=ARMOR_CLOTHES;
          switch(LCSrandom(5)+endgamestate)
          {
          case 0:
@@ -945,7 +982,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_AGENT:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Agent");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Agent");
          switch(LCSrandom(7))
          {
             case 0:
@@ -1255,7 +1293,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_GANGMEMBER:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Gang Member");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Gang Member");
 
          if(!LCSrandom(20) || (law[LAW_GUNCONTROL]==-2 && !LCSrandom(5)))
          {
@@ -1331,7 +1370,8 @@ void makecreature(Creature &cr,short type)
          attnum-=10;
          break;
       case CREATURE_PRIEST:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Priest");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Priest");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1717,15 +1757,15 @@ void makecreature(Creature &cr,short type)
 
    if(cr.align==1)
    {
-      cr.infiltration = 0.15f+LCSrandom(10)-5;
+      cr.infiltration = 0.15f+(LCSrandom(10)-5)*0.01f;
    }
    else if(cr.align==0)
    {
-      cr.infiltration = 0.25f+LCSrandom(10)-5;
+      cr.infiltration = 0.25f+(LCSrandom(10)-5)*0.01f;
    }
    else
    {
-      cr.infiltration += 0.35f * (1-cr.infiltration)+LCSrandom(10)-5;
+      cr.infiltration += 0.35f * (1-cr.infiltration)+(LCSrandom(10)-5)*0.01f;
    }
    if(cr.infiltration < 0) cr.infiltration = 0;
    if(cr.infiltration > 1) cr.infiltration = 1;
@@ -1750,7 +1790,7 @@ void makecreature(Creature &cr,short type)
    while(randomskills>0)
    {
       int randomskill = LCSrandom(SKILLNUM);
-      // 95% chance of not allowing some skills...
+      // 95% chance of not allowing some skills for anybody...
       if(LCSrandom(20))
       {
          if(randomskill == SKILL_FLAMETHROWER)continue;
@@ -1761,7 +1801,16 @@ void makecreature(Creature &cr,short type)
          if(randomskill == SKILL_CLUB)continue;
          if(randomskill == SKILL_PSYCHOLOGY)continue;
       }
-      // 90% chance of not allowing some skills, other than      //   for conservatives      if(LCSrandom(10) && cr.align!=ALIGN_CONSERVATIVE)      {         if(randomskill == SKILL_SHOTGUN)continue;         if(randomskill == SKILL_PISTOL)continue;      }      if(maxskill(randomskill,cr)>cr.skill[randomskill])
+
+      // 90% chance of not allowing some skills, other than      
+      //   for conservatives      
+      if(LCSrandom(10) && cr.align!=ALIGN_CONSERVATIVE)      
+      {         
+         if(randomskill == SKILL_SHOTGUN)continue;         
+         if(randomskill == SKILL_PISTOL)continue;      
+      }
+
+      if(maxskill(randomskill,cr)>cr.skill[randomskill])
       {
          cr.skill[randomskill]++;
          randomskills--;
@@ -1771,7 +1820,8 @@ void makecreature(Creature &cr,short type)
       {
          if(randomskills&&LCSrandom(2) &&
             maxskill(randomskill,cr)>cr.skill[randomskill] &&
-            cr.skill[randomskill] < 4)         {
+            cr.skill[randomskill] < 4)
+         {
             cr.skill[randomskill]++;
             randomskills--;
          }

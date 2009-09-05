@@ -178,6 +178,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_NEWSANCHOR]+=1;
             creaturearray[CREATURE_LAWYER]+=15;
             creaturearray[CREATURE_DOCTOR]+=10;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=1;
             creaturearray[CREATURE_MUSICIAN]+=1;
             creaturearray[CREATURE_ENGINEER]+=10;
             creaturearray[CREATURE_FOOTBALLCOACH]+=1;
@@ -232,6 +233,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_NEWSANCHOR]+=1;
             creaturearray[CREATURE_LAWYER]+=5;
             creaturearray[CREATURE_DOCTOR]+=5;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=1;
             creaturearray[CREATURE_NURSE]+=5;
             creaturearray[CREATURE_SEWERWORKER]+=1;
             creaturearray[CREATURE_COLLEGESTUDENT]+=30;
@@ -485,6 +487,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_FOOTBALLCOACH]=1;
             creaturearray[CREATURE_MAILMAN]=1;
             creaturearray[CREATURE_DOCTOR]=1;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=1;
             creaturearray[CREATURE_NURSE]=1;
             creaturearray[CREATURE_GARBAGEMAN]=1;
             creaturearray[CREATURE_PLUMBER]=1;
@@ -548,6 +551,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_NEWSANCHOR]=1;
             creaturearray[CREATURE_LAWYER]=5;
             creaturearray[CREATURE_DOCTOR]=5;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=1;
             creaturearray[CREATURE_NURSE]=1;
             creaturearray[CREATURE_COLLEGESTUDENT]=1;
             creaturearray[CREATURE_MUSICIAN]=1;
@@ -654,6 +658,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_NEWSANCHOR]=1;
             creaturearray[CREATURE_LAWYER]=1;
             creaturearray[CREATURE_DOCTOR]=1;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=1;
             creaturearray[CREATURE_NURSE]=1;
             creaturearray[CREATURE_SEWERWORKER]=1;
             creaturearray[CREATURE_COLLEGESTUDENT]=1;
@@ -743,6 +748,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_RADIOPERSONALITY]=1;
             creaturearray[CREATURE_NEWSANCHOR]=1;
             creaturearray[CREATURE_LAWYER]=200;
+            creaturearray[CREATURE_PSYCHOLOGIST]+=20;
             creaturearray[CREATURE_SEWERWORKER]=1;
             creaturearray[CREATURE_COLLEGESTUDENT]=1;
             creaturearray[CREATURE_MUSICIAN]=1;

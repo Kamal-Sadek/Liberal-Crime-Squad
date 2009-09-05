@@ -1532,7 +1532,7 @@ void majornewspaper(char &clearformess,char canseethings)
          if(ns->view==VIEW_DRUGS)continue;
          if(ns->view==VIEW_MILITARY)continue;
          if(ns->view==VIEW_CIVILRIGHTS)continue;
-         //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
+         if(ns->view==VIEW_POLITICALVIOLENCE)continue;
 
          //NO ABORTION
          if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;

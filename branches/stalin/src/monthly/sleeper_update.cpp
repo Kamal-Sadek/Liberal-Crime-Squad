@@ -241,6 +241,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_SCULPTOR:
       case CREATURE_AUTHOR:
       case CREATURE_JOURNALIST:
+      case CREATURE_PSYCHOLOGIST:
       case CREATURE_MUSICIAN:
       case CREATURE_CRITIC_ART:
       case CREATURE_CRITIC_MUSIC:
@@ -665,28 +666,6 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       cr.juice += 3;
       if(cr.juice>100)cr.juice=100;
    }
-   if(cr.infiltration < 0 || !LCSrandom(static_cast<int>(cr.infiltration*20+1)))
-   {
-      erase();
-      move(6,1);
-      addstr("Sleeper ");
-      addstr(cr.name);
-      addstr(" has been caught stealing things for the LCS.");
-      move(8,1);
-      addstr("The LCS has no choice but to cut the sleeper loose.");
-      refresh();
-      getch();
-      for(int p=0;p<pool.size();p++)
-      {
-         if(pool[p]->id == cr.id)
-         {
-            delete pool[p];
-            pool.erase(pool.begin() + p);
-            break;
-         }
-      }
-      return;
-   }
    
    itemst *item;
    locationst *shelter=0;
@@ -711,17 +690,6 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             item->loottype=LOOT_TV;
          shelter->loot.push_back(item);
          break;
-      default:
-      case SITE_RESIDENTIAL_APARTMENT:
-      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-            else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
-            else if(!LCSrandom(2))item->loottype=LOOT_TV;
-            else item->loottype=LOOT_COMPUTER;
-         shelter->loot.push_back(item);
-         break;
       case SITE_LABORATORY_COSMETICS:
       case SITE_INDUSTRY_NUCLEAR:
       case SITE_LABORATORY_GENETIC:
@@ -739,17 +707,17 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          if(!LCSrandom(3))
          {
             item->type=ITEM_WEAPON;
-            if(!LCSrandom(4))item->loottype=WEAPON_SMG_MP5;
-            else if(!LCSrandom(3))item->loottype=WEAPON_SEMIPISTOL_45;
-            else if(!LCSrandom(2))item->loottype=WEAPON_SHOTGUN_PUMP;
-            else item->loottype=WEAPON_SEMIRIFLE_AR15;
+            if(!LCSrandom(4))item->weapon.type=WEAPON_SMG_MP5;
+            else if(!LCSrandom(3))item->weapon.type=WEAPON_SEMIPISTOL_45;
+            else if(!LCSrandom(2))item->weapon.type=WEAPON_SHOTGUN_PUMP;
+            else item->weapon.type=WEAPON_SEMIRIFLE_AR15;
          }
          else if(!LCSrandom(2))
          {
             item->type=ITEM_ARMOR;
-            if(!LCSrandom(3))item->loottype=ARMOR_POLICEUNIFORM;
-            else if(!LCSrandom(2))item->loottype=ARMOR_SWATARMOR;
-            else item->loottype=ARMOR_POLICEARMOR;
+            if(!LCSrandom(3))item->armor.type=ARMOR_POLICEUNIFORM;
+            else if(!LCSrandom(2))item->armor.type=ARMOR_SWATARMOR;
+            else item->armor.type=ARMOR_POLICEARMOR;
          }
          else
          {
@@ -776,15 +744,15 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          if(!LCSrandom(3))
          {
             item->type=ITEM_WEAPON;
-            if(!LCSrandom(4))item->loottype=WEAPON_SMG_MP5;
-            else if(!LCSrandom(3))item->loottype=WEAPON_AUTORIFLE_M16;
-            else if(!LCSrandom(2))item->loottype=WEAPON_SHOTGUN_PUMP;
-            else item->loottype=WEAPON_CARBINE_M4;
+            if(!LCSrandom(4))item->weapon.type=WEAPON_SMG_MP5;
+            else if(!LCSrandom(3))item->weapon.type=WEAPON_AUTORIFLE_M16;
+            else if(!LCSrandom(2))item->weapon.type=WEAPON_SHOTGUN_PUMP;
+            else item->weapon.type=WEAPON_CARBINE_M4;
          }
          else if(!LCSrandom(2))
          {
             item->type=ITEM_ARMOR;
-            item->loottype=ARMOR_BLACKSUIT;
+            item->armor.type=ARMOR_BLACKSUIT;
          }
          else
          {
@@ -844,6 +812,17 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          item=new itemst;item->type=ITEM_LOOT;
             if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
             else if(!LCSrandom(4))item->loottype=LOOT_TVCAMERA;
+            else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
+            else if(!LCSrandom(2))item->loottype=LOOT_TV;
+            else item->loottype=LOOT_COMPUTER;
+         shelter->loot.push_back(item);
+         break;
+      case SITE_RESIDENTIAL_APARTMENT:
+      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+      default:
+         item=new itemst;item->type=ITEM_LOOT;
+            if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
+            else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
             else if(!LCSrandom(3))item->loottype=LOOT_PRINTER;
             else if(!LCSrandom(2))item->loottype=LOOT_TV;
             else item->loottype=LOOT_COMPUTER;
