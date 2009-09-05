@@ -41,8 +41,6 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
          strcat(story,"Public Radio Station.  ");break;
       case SITE_MEDIA_CABLENEWS:
          strcat(story,"Network News Station.  ");break;
-	  case SITE_INDUSTRY_FOODBANK:
-         strcat(story,"Atheist Alliance HQ.  ");break;
       default:
          strcat(story,location[ns.loc]->name);
          strcat(story,".  ");break;
@@ -82,8 +80,6 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_MEDIA_AMRADIO:
       case SITE_MEDIA_CABLENEWS:
          strcat(story,", known for its Extreme Conservative Bias.  ");break;
-	  case SITE_INDUSTRY_FOODBANK:
-		  strcat(story,", known for denying aid to poor people to coerce them into accepting Conservative Religious Teachings.  ");break;
       default:
          strcat(story,".  ");break;
       }
@@ -194,98 +190,6 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
          }
       }
    }
-                 else if (ns.type==NEWSSTORY_STALIN_SITE)
-                 {
-         if(ns.positive)
-         {
-            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
-            strcat(story,"engaged in political activism yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-            strcat(story,"&r");
-         }
-         else if(liberalguardian)
-                 {
-            strcat(story,"Elements of the Stalinist Comrade Squad protested against ");
-            strcat(story,"Conservative tyranny by engaging in political ");
-            strcat(story," activism.");
-            strcat(story,"&r");
-                 }
-         else
-         {
-            strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
-            strcat(story,"went on a rampage yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-                 }
-                 }
-   else if(ns.type==NEWSSTORY_STALIN_CON_SITE)
-   {
-         if(ns.positive)
-         {
-            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
-            strcat(story,"engaged in political activism yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-            strcat(story,"&r");
-         }
-         if(liberalguardian)
-                 {
-            strcat(story,"The Stalinist Comrade Squad attempted to promote its ideology of ");
-            strcat(story,"Conservative hatred and tyranny yesterday ");
-            strcat(story," in its quest to take over the United States.");
-            strcat(story,"&r");
-                        }
-         else
-         {
-            strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
-            strcat(story,"went on a rampage yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-                        }
-                 }
-   else if(ns.type==NEWSSTORY_STALIN_KILLED_SITE)
-   {
-         if(ns.positive)
-                 {
-            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
-            strcat(story,"were either arrested or killed while engaging in political activism, according ");
-            strcat(story,"to a spokesperson from the police department.");
-            strcat(story,"&r");
-         }
-         if(liberalguardian)
-                 {
-            strcat(story,"Elements of the Stalinist Comrade Squad protested against ");
-            strcat(story,"Conservative tyranny and were promptly arrested or ");
-            strcat(story," killed by the Conservative police.");
-            strcat(story,"&r");
-                        }
-         else
-         {
-            strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
-            strcat(story,"went on a rampage yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-                        }
-                 }
-   else if(ns.type==NEWSSTORY_STALIN_CON_KILLED_SITE)
-   {
-         if(ns.positive)
-         {
-            strcat(story,"Militants affiliated with the Stalinist Comrade Squad ");
-            strcat(story,"were either arrested or killed while engaging in political activism, according ");
-            strcat(story,"to a spokesperson from the police department.");
-            strcat(story,"&r");
-         }
-         if(liberalguardian)
-                 {
-            strcat(story,"The Stalinist Comrade Squad attempted to promote its ideology of ");
-            strcat(story,"Conservative hatred and tyranny yesterday ");
-            strcat(story,"and got what they deserved.");
-            strcat(story,"&r");
-                 }
-         else
-         {
-            strcat(story,"A group of thugs working for the Stalinist Comrade Squad ");
-            strcat(story,"went on a rampage yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.");
-                        }
-   }
    else
    {
       if(!newscherrybusted&&!liberalguardian)
@@ -335,17 +239,6 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
    {
       if(ns.positive&&!liberalguardian)strcat(story,"Everyone in the CCS group was arrested or killed.  ");
       else strcat(story,"Fortunately, the CCS thugs were stopped by brave citizens.  ");
-   }
-   if(ns.type==NEWSSTORY_STALIN_KILLED_SITE)
-   {
-      if(liberalguardian)strcat(story,"Unfortunately, the Stalinists was defeated by the forces of evil.  ");
-      else if(ns.positive)strcat(story,"Everyone in the group was arrested or killed.  ");
-      else strcat(story,"Fortunately, the Stalinists were stopped by brave citizens.  ");
-   }
-   if(ns.type==NEWSSTORY_STALIN_CON_KILLED_SITE)
-   {
-      if(ns.positive&&!liberalguardian)strcat(story,"Everyone in the group was arrested or killed.  ");
-      else strcat(story,"Fortunately, the Stalinists were stopped by brave citizens.  ");
    }
    strcat(story,"&r");
 }

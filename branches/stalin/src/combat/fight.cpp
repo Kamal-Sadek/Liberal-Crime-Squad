@@ -569,17 +569,17 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          if(!a.animalgloss)
          {
             if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)+1))
-               strcat(str,"punches ");
+               strcat(str,"punches");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)))
                strcat(str,"swings at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-1))
                strcat(str,"grapples with");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-2))
-               strcat(str,"kicks ");
+               strcat(str,"kicks");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-3))
                strcat(str,"strikes at");
             else if(!LCSrandom(a.skillval(SKILL_HANDTOHAND)-4))
-               strcat(str,"jump kicks ");
+               strcat(str,"jump kicks");
             else
                strcat(str,"gracefully strikes at");
          }
@@ -717,41 +717,39 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    aroll+=a.skillval(wsk);
    a.train(wsk,droll);
 
-   if(!melee)
+   bool defender_is_LCS=false;
+   int maxtactics=0;
+   for(int p=0;p<6;p++)
    {
-      bool defender_is_LCS=false;
-      int maxtactics=0;
+      if(activesquad->squad[p]==&t)
+      {
+         defender_is_LCS=true;
+      }
+   }
+   if(defender_is_LCS)
+   {
       for(int p=0;p<6;p++)
       {
-         if(activesquad->squad[p]==&t)
+         if(activesquad->squad[p]&&activesquad->squad[p]->alive)
          {
-            defender_is_LCS=true;
+            maxtactics=max(activesquad->squad[p]->skill[SKILL_DODGE],maxtactics);
          }
       }
-      if(defender_is_LCS)
-      {
-         for(int p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]&&activesquad->squad[p]->alive)
-            {
-               maxtactics=max(activesquad->squad[p]->skill[SKILL_DODGE],maxtactics);
-            }
-         }
-      }
-      else if(t.enemy())
-      {
-         for(int e=0;e<ENCMAX;e++)
-         {
-            if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
-            {
-               maxtactics=max(encounter[e].skill[SKILL_DODGE],maxtactics);
-            }
-         }
-      }
-      droll+=LCSrandom(maxtactics/2+t.skill[SKILL_DODGE]+1);
-      t.train(SKILL_DODGE,5);
    }
-   else
+   else if(t.enemy())
+   {
+      for(int e=0;e<ENCMAX;e++)
+      {
+         if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
+         {
+            maxtactics=max(encounter[e].skill[SKILL_DODGE],maxtactics);
+         }
+      }
+   }
+   droll+=LCSrandom(maxtactics/2+t.skill[SKILL_DODGE]+1);
+   t.train(SKILL_DODGE,5);
+
+   if(melee)
    {
       if(!t.weapon.ranged())
          droll+=t.skillval(weaponskill(t.weapon.type))/2;
@@ -1273,13 +1271,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       //SKILL BONUS FOR GOOD ROLL
       mod+=aroll-droll-5;
 
-      if(mod>0)
-      {
-         //DO THE HEALTH MOD ON THE WOUND
-         mod-=t.attval(ATTRIBUTE_HEALTH)-5;
-         //If commented out, health works like body armor XXX: Which line?
-         //if(mod<0)mod=0; 
-      }
+      //DO THE HEALTH MOD ON THE WOUND
+      mod-=t.attval(ATTRIBUTE_HEALTH)-5;
+      //If the line below is commented out, health works like body armor
+      //else, health will only avoid critical hits, not stop low-damage attacks
+      //if(mod<0)mod=0;
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
 

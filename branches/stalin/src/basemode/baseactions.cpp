@@ -310,7 +310,7 @@ void stopevil(void)
          addlocationname(location[loc]);
       }
 
-      move(12,50);
+      /*move(12,50);
       addstr("Z - Toggle Squad Stance");
       switch(activesquad->stance)
       {
@@ -338,7 +338,7 @@ void stopevil(void)
          set_color(COLOR_BLACK,COLOR_BLACK,1);
          addstr("(No Stealth, High Profile)");
          break;
-      }
+      }*/
 
 
       int y=10;
@@ -355,11 +355,55 @@ void stopevil(void)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(" (Current Location)");
+
+            char num[10];
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,50);
+            addstr("Heat: ");
+            if(location[temploc[p]]->heat>100)
+               set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(location[temploc[p]]->heat>0)
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            itoa(location[temploc[p]]->heat,num,10);
+            addstr(num);
+            addstr("%");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,61);
+            addstr("Secrecy: ");
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            location[temploc[p]]->update_heat_protection();
+            itoa(static_cast<int>(location[temploc[p]]->heat_protection*100),num,10);
+            addstr(num);
+            addstr("%");
          }
          else if(location[temploc[p]]->renting>=0)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr(" (Safe House)");
+
+            char num[10];
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,50);
+            addstr("Heat: ");
+            if(location[temploc[p]]->heat>100)
+               set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(location[temploc[p]]->heat>0)
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            itoa(location[temploc[p]]->heat,num,10);
+            addstr(num);
+            addstr("%");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,61);
+            addstr("Secrecy: ");
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            location[temploc[p]]->update_heat_protection();
+            itoa(static_cast<int>(location[temploc[p]]->heat_protection*100),num,10);
+            addstr(num);
+            addstr("%");
          }
          if(location[temploc[p]]->renting==-2)
          {
@@ -469,12 +513,12 @@ void stopevil(void)
          }
       }
 
-      if(c=='z')
+      /*if(c=='z')
       {
          activesquad->stance++;
          if(activesquad->stance>SQUADSTANCE_STANDARD)
             activesquad->stance=0;
-      }
+      }*/
 
       if(c==10&&loc!=-1)
       {

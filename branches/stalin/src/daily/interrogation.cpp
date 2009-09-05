@@ -766,7 +766,6 @@ void tendhostage(Creature *cr,char &clearformess)
                {
                case 0:addstr(" with a flagpole");break;
                case 1:addstr(" with a flag");break;
-               case 2:addstr(" with a bible");break;//XXX: Effect on religion/science? XXX: Maybe if(law[LAW_RELIGION]==-2) it's *the* bible?
                case 3:addstr(" with a dildo");break;
                case 4:addstr(" with a book");break;
                }

@@ -244,18 +244,12 @@ void mode_base(void)
                case LAW_IMMIGRATION:
                   addstr("Immigration");
 			         break;
-               case LAW_RELIGION:
-                  addstr("Religion");
-			         break;
                case LAW_ELECTIONS:
                   addstr("Election Reform");
 			         break;
                case LAW_MILITARY:
                   addstr("Military Spending");
 			         break;
-			   case LAW_WELFARE:
-				   addstr("Welfare Spending");
-				   break;
                case LAW_TORTURE:
                   addstr("Human Rights");
 			         break;

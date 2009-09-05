@@ -80,7 +80,6 @@ void trial(Creature &g)
    }
 
    //CHECK FOR SLEEPERS
-   vector<int> sjudge;
    bool autoconvict=0;
    Creature *sleeperjudge=NULL;
    Creature *sleeperlawyer=NULL;
@@ -92,9 +91,12 @@ void trial(Creature &g)
          if(pool[p]->type==CREATURE_JUDGE_CONSERVATIVE||
             pool[p]->type==CREATURE_JUDGE_LIBERAL)
          {
-            sjudge.push_back(p);
+            if(pool[p]->infiltration*100>=LCSrandom(100))
+               sleeperjudge=pool[p];
          }
-         if(pool[p]->type==CREATURE_LAWYER/*&&!sleeperlawyer*/)
+         if(pool[p]->type==CREATURE_LAWYER&&
+            (pool[p]->infiltration*100>=LCSrandom(100)||
+            (pool[p]->flag&=CREATUREFLAG_LOVESLAVE&&pool[p]->hireid==g.id)))
          {
             if(pool[p]->skillval(SKILL_LAW)+pool[p]->skillval(SKILL_PERSUASION)>=maxsleeperskill)
             {
@@ -103,11 +105,6 @@ void trial(Creature &g)
             }
          }
       }
-   }
-
-   if(LCSrandom(4)<sjudge.size())
-   {
-      sleeperjudge=pool[sjudge[LCSrandom(sjudge.size())]];
    }
 
    //STATE CHARGES
@@ -139,6 +136,10 @@ void trial(Creature &g)
       // Illegal Immigrants cannot commit treason, because treason can only   //
       // be committed by `those owing allegiance to the United States`.       //
       //////////////////////////////////////////////////////////////////////////
+
+      // The above is already respected by LCS; treason occurs from exposing
+      // intelligence secrets, and illegal immigrants are not taken to trial.
+      //    - Jonathan S. Fox
       if(breaker[LAWFLAG_TREASON])
       {
          if(g.lawflag[LAWFLAG_TREASON]>1)
@@ -343,7 +344,7 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("car theft");//XXX: If chase lasts more than 20 `turns` then
+         addstr("motor theft");//XXX: If chase lasts more than 20 `turns` then
          breaker[LAWFLAG_CARTHEFT]=0;//XXX: this should be `Grand Theft Auto`
       }                              //                 -- LK
       else if(breaker[LAWFLAG_CCFRAUD])
@@ -543,11 +544,11 @@ void trial(Creature &g)
    addstr(".");
    if(sleeperlawyer)
    {
-      if(funds>=100)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(y,1);y++;
-      addstr("E - Pay a nominal $100 to use sleeper ");
+      addstr("E - Accept sleeper ");
       addstr(sleeperlawyer->name);
-      addstr(" as your attorney.");
+      addstr("'s offer to assist pro bono.");
    }
    if(funds<5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -593,12 +594,9 @@ void trial(Creature &g)
          moneylost_legal+=5000;
          break;
       }
-      if(c=='e'&&sleeperlawyer&&funds>=100)
+      if(c=='e'&&sleeperlawyer)
       {
-         funds-=100;
-         stat_spent+=100;
          defense=4;
-         moneylost_legal+=100;
          strcpy(attorneyname,sleeperlawyer->name);
          break;
       }

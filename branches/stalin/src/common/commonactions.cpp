@@ -59,7 +59,6 @@ char endcheck(char cause)
                case SIEGE_HICKS:savehighscore(END_HICKS);break;
                case SIEGE_CORPORATE:savehighscore(END_CORP);break;
                case SIEGE_CCS:savehighscore(END_CCS);break;
-			   case SIEGE_STALIN:savehighscore(END_STALIN);break;
                case SIEGE_FIREMEN:savehighscore(END_FIREMEN);break;
             }
          } 
@@ -445,6 +444,8 @@ void juiceparty(long juice)
 /* common - gives juice to a given creature */
 void addjuice(Creature &cr,long juice,long cap)
 {
+   juice *= 2; // Less grinding mode, engaged!
+
    if(juice>0 && cr.juice>=cap)
    {
       juice/=10;

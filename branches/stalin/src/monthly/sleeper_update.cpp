@@ -49,7 +49,6 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
    
    switch(cr.activity.type)
    {
-      case ACTIVITY_SLEEPER_CONSERVATIVE:
       case ACTIVITY_SLEEPER_LIBERAL:
          sleeper_influence(cr,clearformess,canseethings,libpower);
          break;
@@ -69,14 +68,6 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          sleeper_scandal(cr,clearformess,canseethings,libpower);
          break;
       case ACTIVITY_NONE:
-         // Improves infiltration
-         if(cr.infiltration<0.4)
-         {
-            cr.infiltration+=0.02f;
-            if(cr.infiltration>0.4)
-               cr.infiltration=0.4f;
-         }
-         break;
       case ACTIVITY_SLEEPER_JOINLCS:
       default:
          break;
@@ -92,6 +83,37 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
 **********************************/
 void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
+   
+   if(LCSrandom(100) > 100*cr.infiltration)
+   {
+      if(!LCSrandom(static_cast<int>(cr.infiltration*20)+1))cr.juice-=1;
+      if(cr.juice<-2)
+      {
+         erase();
+         move(6,1);
+         addstr("Sleeper ");
+         addstr(cr.name);
+         addstr(" is tired of indirect methods.");
+
+         move(8,1);
+         addstr("The Liberal is waiting at the shelter.");
+
+         refresh();
+         getch();
+
+         int hs;
+         for(hs=0;location[hs]->type!=SITE_RESIDENTIAL_SHELTER;hs++);
+
+         removesquadinfo(cr);
+         cr.location=hs;
+         cr.weapon.type=WEAPON_NONE;
+         cr.weapon.ammo=0;
+         cr.activity.type=ACTIVITY_NONE;
+         cr.flag&=~CREATUREFLAG_SLEEPER;
+      }
+      return;
+   }
+
    int power=(cr.attval(ATTRIBUTE_CHARISMA)+
                cr.attval(ATTRIBUTE_HEART)+
                cr.attval(ATTRIBUTE_INTELLIGENCE)+
@@ -164,27 +186,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       }
    }
 
-   // Advocating Conservative views should have negative effects on popular opinion
-   switch(cr.activity.type)
-   {
-      case ACTIVITY_SLEEPER_CONSERVATIVE:
-      {
-         power = static_cast<int>(-power * (1-cr.infiltration))/4;
-         // Improves infiltration
-         if(cr.infiltration<0.6)
-         {
-            cr.infiltration+=0.05f;
-            if(cr.infiltration>0.6)
-               cr.infiltration=0.6f;
-         }
-      }
-      break;
-      case ACTIVITY_SLEEPER_LIBERAL:
-      {
-         power = static_cast<int>(power * cr.infiltration);
-      }
-      break;
-   }
+   power=static_cast<int>(power*cr.infiltration);
 
    switch(cr.type)
    {
@@ -227,20 +229,12 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 		 enforce the seperation of church and state (L+), prohibiting faith-based views from affecting public policy,
 		 then Priests would be unable to use their Religious preachings to change the Culture of society!*/
       case CREATURE_PRIEST:
-		  if(law[LAW_RELIGION]<=1)
-		  {
-			  change_public_opinion(VIEW_RELIGION,1);
-			  for(int i=0;i<VIEWNUM-3;i++)
-         {
-            libpower[i]+=power/2;
-         }
-		  }
-		  else
+		  /*if(law[LAW_RELIGION]<=1)
 		  {
 			 libpower[VIEW_LIBERALCRIMESQUAD]+=power;
 			 libpower[VIEW_LIBERALCRIMESQUADPOS]+=power;
 		  }
-         break;
+         break;*/
 		 /* All these other Cultural Sleepers are inherently good at affecting culture, in fact, they get to produce
 		 Culture! Nothing can be done to strip them of their power. */
       case CREATURE_PAINTER:
@@ -251,11 +245,6 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_CRITIC_ART:
       case CREATURE_CRITIC_MUSIC:
       case CREATURE_ACTOR:
-	  case CREATURE_COMMISSAR:
-         for(int i=0;i<VIEWNUM-3;i++)
-         {
-            libpower[i]+=power/2;
-         }
          break;
       /* Legal block - influences an array of social issues */
       case CREATURE_LAWYER:
@@ -268,7 +257,6 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          libpower[VIEW_JUSTICES]+=power;
          libpower[VIEW_INTELLIGENCE]+=power;
          libpower[VIEW_ANIMALRESEARCH]+=power;
-		 libpower[VIEW_WELFARE]+=power;
          break;
       /* Scientists block */
       case CREATURE_SCIENTIST_LABTECH:
@@ -280,15 +268,9 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       /* Corporate block */
       case CREATURE_CORPORATE_CEO:
       case CREATURE_CORPORATE_MANAGER:
-	  case CREATURE_REDGUARD:
-         libpower[VIEW_CEOSALARY]+=power;
-         libpower[VIEW_TAXES]+=power;
-         libpower[VIEW_CORPORATECULTURE]+=power;
          break;
       /* Law enforcement block */
       case CREATURE_DEATHSQUAD:
-	  case CREATURE_CHEKA:
-         libpower[VIEW_DEATHPENALTY]+=power; // No break
       case CREATURE_SWAT:
       case CREATURE_COP:
       case CREATURE_GANGUNIT:
@@ -352,13 +334,42 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 **********************************/
 void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
+   if(LCSrandom(100) > 100*cr.infiltration)
+   {
+      cr.juice-=1;
+      if(cr.juice<-2)
+      {
+         erase();
+         move(6,1);
+         addstr("Sleeper ");
+         addstr(cr.name);
+         addstr(" has been caught snooping around.");
+
+         move(8,1);
+         addstr("The Liberal is now homeless and jobless...");
+
+         refresh();
+         getch();
+
+         int hs;
+         for(hs=0;location[hs]->type!=SITE_RESIDENTIAL_SHELTER;hs++);
+
+         removesquadinfo(cr);
+         cr.location=hs;
+         cr.weapon.type=WEAPON_NONE;
+         cr.weapon.ammo=0;
+         cr.activity.type=ACTIVITY_NONE;
+         cr.flag&=~CREATUREFLAG_SLEEPER;
+      }
+      return;
+   }
+   
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
-      cr.juice += 2;
+      cr.juice += 3;
       if(cr.juice>100)cr.juice=100;
    }
-   if(LCSrandom(static_cast<int>(10*cr.infiltration)+1) <= 0)return;
 
    location[cr.base]->interrogated = 1;
 
@@ -553,36 +564,41 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 **********************************/
 void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
+   if(LCSrandom(100) > 100*cr.infiltration)
+   {
+      cr.juice-=1;
+      if(cr.juice<-2)
+      {
+         erase();
+         move(6,1);
+         addstr("Sleeper ");
+         addstr(cr.name);
+         addstr(" has been arrested while embezzling funds.");
+
+         refresh();
+         getch();
+
+         int ps;
+         for(ps=0;location[ps]->type!=SITE_GOVERNMENT_POLICESTATION;ps++);
+
+         cr.lawflag[LAWFLAG_COMMERCE]++;
+         removesquadinfo(cr);
+         cr.location=ps;
+         cr.weapon.type=WEAPON_NONE;
+         cr.weapon.ammo=0;
+         cr.activity.type=ACTIVITY_NONE;
+         cr.flag&=~CREATUREFLAG_SLEEPER;
+      }
+      return;
+   }
+
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
       cr.juice += 3;
       if(cr.juice>100)cr.juice=100;
    }
-   if(cr.infiltration < 0 ||
-      !LCSrandom(static_cast<int>(cr.infiltration*40)+1))
-   {
-      erase();
-      move(6,1);
-      addstr("Sleeper ");
-      addstr(cr.name);
-      addstr(" has been caught embezzling funds for the LCS.");
-      move(8,1);
-      addstr("The LCS has no choice but to cut the sleeper loose.");
-      
-      refresh();
-      getch();
-      for(int p=0;p<pool.size();p++)
-      {
-         if(pool[p]->id == cr.id)
-         {
-            delete pool[p];
-            pool.erase(pool.begin() + p);
-            break;
-         }
-      }
-      return;
-   }
+
    switch(cr.type)
    {
       case CREATURE_SCIENTIST_EMINENT:
@@ -615,6 +631,34 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
 **********************************/
 void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
+   if(LCSrandom(100) > 100*cr.infiltration)
+   {
+      cr.juice-=1;
+      if(cr.juice<-2)
+      {
+         erase();
+         move(6,1);
+         addstr("Sleeper ");
+         addstr(cr.name);
+         addstr(" has been arrested while stealing things.");
+
+         refresh();
+         getch();
+
+         int ps;
+         for(ps=0;location[ps]->type!=SITE_GOVERNMENT_POLICESTATION;ps++);
+
+         cr.lawflag[LAWFLAG_THEFT]++;
+         removesquadinfo(cr);
+         cr.location=ps;
+         cr.weapon.type=WEAPON_NONE;
+         cr.weapon.ammo=0;
+         cr.activity.type=ACTIVITY_NONE;
+         cr.flag&=~CREATUREFLAG_SLEEPER;
+      }
+      return;
+   }
+
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {

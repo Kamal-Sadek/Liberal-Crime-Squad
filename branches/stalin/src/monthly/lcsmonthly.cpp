@@ -278,7 +278,7 @@ void printnews(short l,short newspaper)
          move(7,1);
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(12))
+         switch(LCSrandom(10))
          {
             case 0:
                addstr("engaging in lewd behavior with animals.");
@@ -304,18 +304,6 @@ void printnews(short l,short newspaper)
                change_public_opinion(VIEW_SWEATSHOPS,10);
                break;
             case 9:addstr("playing with feces and urine.");break;
-            case 10:
-               if(stalinendgamestate!=ENDGAME_STALIN_DEFEATED)addstr("waving a USSR flag at a Stalinist Comrade Squad rally.");
-               else addstr("defecating on the American flag.");
-
-change_public_opinion(VIEW_STALIN,50);
-					offended_stalin=1;
-            case 11:
-               if(stalinendgamestate!=ENDGAME_STALIN_DEFEATED)addstr("being kidnapped and brainwashed by the Stalinist Comrade Squad.");
-               else addstr("beating up homeless people.");
-
-change_public_opinion(VIEW_STALIN,50);
-					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -355,16 +343,6 @@ change_public_opinion(VIEW_STALIN,50);
 					addstr("describing an intricate tax scheme.");
 					change_public_opinion(VIEW_TAXES,50);
 					break;
-					
-					addstr("about a temporary peace treaty with the Stalinist Comrade Squad to counter the Elite Liberal threat.");
-change_public_opinion(VIEW_GAY,1);
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
-					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -383,7 +361,7 @@ change_public_opinion(VIEW_STALIN,5);
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(7))
+         switch(LCSrandom(6))
          {
             case 0:addstr("documenting the overthrow of a government.");break;
             case 1:
@@ -403,10 +381,6 @@ change_public_opinion(VIEW_STALIN,5);
                addstr("documenting the infiltration of a pro-choice group.");
                change_public_opinion(VIEW_WOMEN,50);
                break;
-			case 6:
-				addstr("revealing a plan to poison the water supply with fluoride on behalf of communists.");break;
-change_public_opinion(VIEW_STALIN,50);
-					offended_stalin=1;
 		 }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -437,10 +411,6 @@ change_public_opinion(VIEW_STALIN,50);
                addstr("documenting gladiatorial matches held between prisoners by guards.");
                change_public_opinion(VIEW_PRISONS,50);
                break;
-			case 6:
-				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad for \"re-education\".");
-change_public_opinion(VIEW_STALIN,50);
-					offended_stalin=1;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -509,18 +479,6 @@ change_public_opinion(VIEW_STALIN,50);
             case 2:addstr("documenting widespread corruption among prison employees.");break;
             case 3:
                addstr("documenting gladiatorial matches held between prisoners by guards.");
-			case 4:
-				addstr("documenting the sale of prisoners to the Stalinist Comrade Squad by rogue guards.");break;
-				change_public_opinion(VIEW_GAY,1);
-change_public_opinion(VIEW_POLICEBEHAVIOR,1);
-change_public_opinion(VIEW_JUSTICES,1);
-change_public_opinion(VIEW_WOMEN,1);
-change_public_opinion(VIEW_NUCLEARPOWER,1);
-change_public_opinion(VIEW_INTELLIGENCE,1);
-change_public_opinion(VIEW_FREESPEECH,1);
-change_public_opinion(VIEW_STALIN,5);
-					offended_stalin=1;
-               break;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");

@@ -660,10 +660,6 @@ void elections(char clearformess,char canseethings)
                if(propdir[p]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
-			case LAW_HUMANRIGHTS:
-               if(propdir[p]==1)addstr("Promote Human Rights Throughout The World");
-               else addstr("Defend American Interests");
-               break;
             case LAW_DRUGS:
                if(propdir[p]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -671,10 +667,6 @@ void elections(char clearformess,char canseethings)
             case LAW_IMMIGRATION:
                if(propdir[p]==1)addstr("Protect Immigrant Rights");
                else addstr("Protect our Borders");
-               break;
-            case LAW_RELIGION:
-               if(propdir[p]==1)addstr("Uphold the Separation of Church and State");
-               else addstr("Confirm our Religious Values");
                break;
             case LAW_ELECTIONS:
                if(propdir[p]==1)addstr("Fight Political Corruption");
@@ -684,10 +676,6 @@ void elections(char clearformess,char canseethings)
                if(propdir[p]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
-			case LAW_WELFARE:
-				if(propdir[p]==1)addstr("Insure the Welfare of the Needy");
-				else addstr("Reform the Welfare System");
-				break;
             case LAW_TORTURE:
                if(propdir[p]==1)addstr("Protect Human Rights");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -1468,10 +1456,6 @@ void supremecourt(char clearformess,char canseethings)
                if(scasedir[c]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
-			case LAW_HUMANRIGHTS:
-               if(scasedir[c]==1)addstr("Promote Human Rights Throughout The World");
-               else addstr("Defend American Interests");
-               break;
             case LAW_DRUGS:
                if(scasedir[c]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -1479,10 +1463,6 @@ void supremecourt(char clearformess,char canseethings)
             case LAW_IMMIGRATION:
                if(scasedir[c]==1)addstr("Protect Immigrant Rights");
                else addstr("Protect our Borders");
-               break;
-            case LAW_RELIGION:
-               if(scasedir[c]==1)addstr("Uphold the Separation of Church and State");
-               else addstr("Confirm our Religious Values");
                break;
             case LAW_ELECTIONS:
                if(scasedir[c]==1)addstr("Fight Political Corruption");
@@ -1492,10 +1472,6 @@ void supremecourt(char clearformess,char canseethings)
                if(scasedir[c]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
-			case LAW_WELFARE:
-				if(scasedir[c]==1)addstr("Insure the Welfare of the Needy");
-				else addstr("Reform the Welfare System");
-				break;
             case LAW_TORTURE:
                if(scasedir[c]==1)addstr("Protect Human Rights");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -1881,10 +1857,6 @@ void congress(char clearformess,char canseethings)
                if(billdir[c]==1)addstr("Expand Civil Rights");
                else addstr("Fight Reverse Discrimination");
                break;
-			case LAW_HUMANRIGHTS:
-               if(billdir[c]==1)addstr("Promote Human Rights Throughout The World");
-               else addstr("Defend American Interests");
-               break;
             case LAW_DRUGS:
                if(billdir[c]==1)addstr("Limit Oppressive Drug Laws");
                else addstr("Strengthen the War On Drugs");
@@ -1892,10 +1864,6 @@ void congress(char clearformess,char canseethings)
             case LAW_IMMIGRATION:
                if(billdir[c]==1)addstr("Protect Immigrant Rights");
                else addstr("Protect our Borders");
-               break;
-            case LAW_RELIGION:
-               if(billdir[c]==1)addstr("Uphold the Separation of Church and State");
-               else addstr("Confirm our Religious Values");
                break;
             case LAW_ELECTIONS:
                if(billdir[c]==1)addstr("Fight Political Corruption");
@@ -1905,10 +1873,6 @@ void congress(char clearformess,char canseethings)
                if(billdir[c]==1)addstr("Limit Military Spending");
                else addstr("Strengthen our National Defense");
                break;
-		   	case LAW_WELFARE:
-				if(billdir[c]==1)addstr("Insure the Welfare of the Needy");
-				else addstr("Reform the Welfare System");
-				break;
             case LAW_TORTURE:
                if(billdir[c]==1)addstr("Abolish Torture");
                else addstr("Permit Strong Tactics in Interrogations");
@@ -2124,7 +2088,7 @@ void congress(char clearformess,char canseethings)
                if(killbill[c]==-2)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  addstr("*** VETO FAILED ***");
+                  addstr("FORCED BY CONGRESS");
                   sign=1;
                }
                else
@@ -2205,10 +2169,6 @@ void congress(char clearformess,char canseethings)
    if(housemake[0]>=290&&senatemake[0]>=67)
    {
       reaganify(canseethings);
-   }
-      if(VIEW_WOMEN<=30&&VIEW_POLICEBEHAVIOR<=30&&VIEW_DRUGS<=30&&VIEW_DEATHPENALTY<=30&&VIEW_FREESPEECH<=30&&VIEW_GAY<=30&&VIEW_NUCLEARPOWER<=30&&VIEW_CIVILRIGHTS<=30&&VIEW_INTELLIGENCE<=30&&VIEW_SWEATSHOPS>=70&&(VIEW_CEOSALARY+VIEW_CORPORATECULTURE)/2>=60&&VIEW_TAXES>=70&&VIEW_RELIGION>=70&&VIEW_POLLUTION<=30&&VIEW_GUNCONTROL>=70&&VIEW_STALIN<=50)
-   {
-      stalinify(canseethings);
    }
 }
 
@@ -2330,21 +2290,16 @@ int publicmood(int l)
          return attitude[VIEW_WOMEN];
       case LAW_CIVILRIGHTS:
          return attitude[VIEW_CIVILRIGHTS];
-      case LAW_HUMANRIGHTS:
-         return (attitude[VIEW_SWEATSHOPS]+attitude[VIEW_FREESPEECH]+attitude[VIEW_CIVILRIGHTS]+attitude[VIEW_WOMEN]+attitude[VIEW_MILITARY]+attitude[VIEW_INTELLIGENCE]+attitude[VIEW_GAY]+attitude[VIEW_IMMIGRATION])/8;
       case LAW_DRUGS:
          return attitude[VIEW_DRUGS];
       case LAW_IMMIGRATION:
          return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;//XXX: VIEW_DRUGS?
       case LAW_MILITARY:
-         return attitude[VIEW_MILITARY];      case LAW_WELFARE:
-         return attitude[VIEW_WELFARE];
+         return attitude[VIEW_MILITARY];
       case LAW_TORTURE:
          return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
-      case LAW_RELIGION:
-         return attitude[VIEW_RELIGION];
       case LAW_ELECTIONS:
       default: //eg. -1
       {
@@ -2354,8 +2309,7 @@ int publicmood(int l)
          {
             if(v==VIEW_LIBERALCRIMESQUAD)continue;
             if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
-			if(v==VIEW_STALIN)continue;
-			if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
+			   if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
             sum+=attitude[v];
          }
 

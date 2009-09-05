@@ -86,9 +86,30 @@ void makecreature(Creature &cr,short type)
          if(mode==GAMEMODE_SITE && location[cursite]->highsecurity)
          {
             strcpy(cr.name,"Enforcer");
-            cr.weapon.type=WEAPON_NIGHTSTICK;
-            
             cr.skill[SKILL_CLUB]=LCSrandom(3)+3;
+         }
+
+         if(law[LAW_GUNCONTROL]==-2)
+         {
+            cr.weapon.type=WEAPON_SMG_MP5;
+            cr.weapon.ammo=15;
+            cr.clip[CLIP_SMG]=3;
+         }
+         else if(law[LAW_GUNCONTROL]==-1)
+         {
+            cr.weapon.type=WEAPON_REVOLVER_44;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_44]=3;
+         }
+         else if(law[LAW_GUNCONTROL]==0)
+         {
+            cr.weapon.type=WEAPON_REVOLVER_38;
+            cr.weapon.ammo=6;
+            cr.clip[CLIP_38]=3;
+         }
+         else
+         {
+            cr.weapon.type=WEAPON_NIGHTSTICK;
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
@@ -101,7 +122,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_STRENGTH]=4;
          break;
       case CREATURE_SECURITYGUARD:
-         GIVE_GENDER_MALE;         if(law[LAW_GUNCONTROL]==-2)
+         GIVE_GENDER_MALE;         
+         if(law[LAW_GUNCONTROL]==-2)
          {
             cr.weapon.type=WEAPON_SMG_MP5;
             cr.weapon.ammo=15;
@@ -1282,6 +1304,16 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_PISTOL]=LCSrandom(2)+1;
          cr.skill[SKILL_SHOTGUN]=LCSrandom(2)+1;
          cr.skill[SKILL_RIFLE]=LCSrandom(2)+1;
+
+         if(!LCSrandom(2))
+         {
+            switch(LCSrandom(3))
+            {
+            case 0:cr.lawflag[LAWFLAG_BROWNIES]++;
+            case 1:cr.lawflag[LAWFLAG_ASSAULT]++;
+            case 2:cr.lawflag[LAWFLAG_MURDER]++;
+            }
+         }
          break;
       case CREATURE_CRACKHEAD:
          strcpy(cr.name,"Crack Head");
@@ -1379,6 +1411,11 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_YOUNGADULT;
 			cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          cr.skill[SKILL_SEDUCTION]=LCSrandom(4)+2;
+
+         if(!LCSrandom(3))
+         {
+            cr.lawflag[LAWFLAG_PROSTITUTION]++;
+         }
          break;
       case CREATURE_MAILMAN:
          GIVE_WEAPON_CIVILIAN;
@@ -1446,6 +1483,11 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_MUSIC]=LCSrandom(2);
          cr.skill[SKILL_ART]=LCSrandom(2);
          cr.skill[SKILL_TAILORING]=LCSrandom(2);
+
+         if(!LCSrandom(10))
+         {
+            cr.lawflag[LAWFLAG_BROWNIES]++;
+         }
          break;
       case CREATURE_AUTHOR:
          GIVE_WEAPON_CIVILIAN;
@@ -1608,6 +1650,15 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_STEALTH]=LCSrandom(5)+3;
          cr.skill[SKILL_THEFT]=LCSrandom(5)+3;
          cr.age=AGE_MATURE;
+
+         if(!LCSrandom(10))
+         {
+            switch(LCSrandom(2))
+            {
+            case 0:cr.lawflag[LAWFLAG_BREAKING]++;
+            case 1:cr.lawflag[LAWFLAG_THEFT]++;
+            }
+         }
          break;
       case CREATURE_ACTOR:
          GIVE_WEAPON_CIVILIAN;
@@ -1643,74 +1694,6 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_HEALTH]=8;
          cr.age=AGE_YOUNGADULT;
          break;
-      case CREATURE_CHEKA:
-		  
-         strcpy(cr.name,"NKVD Agent");
-         cr.weapon.type=WEAPON_AUTORIFLE_M16;
-         cr.clip[CLIP_ASSAULT]=6;
-         cr.weapon.ammo=30;
-         cr.armor.type=ARMOR_DEATHSQUADUNIFORM;
-         cr.money=LCSrandom(21)+20;
-         cr.align=-1;
-         cr.infiltration=0.5 + 0.1*LCSrandom(4);
-         cr.juice=90+LCSrandom(50);
-         cr.age=AGE_YOUNGADULT;
-
-         cr.skill[SKILL_RIFLE]=LCSrandom(4)+2;
-         cr.skill[SKILL_PISTOL]=LCSrandom(2)+1;
-         cr.skill[SKILL_SHOTGUN]=LCSrandom(2)+1;
-         cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
-         cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
-         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+2;
-
-         cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
-         cr.att[ATTRIBUTE_WISDOM]=6;
-         break;
-		 
-      case CREATURE_REDGUARD:
-         strcpy(cr.name,"Red Army Guard");
-         cr.weapon.type=WEAPON_AUTORIFLE_M16;
-         cr.clip[CLIP_ASSAULT]=6;
-         cr.weapon.ammo=30;
-         cr.armor.type=ARMOR_ARMYARMOR;
-         cr.money=0;
-         cr.align=-1;
-         cr.infiltration=0.1*LCSrandom(4);
-         cr.juice=LCSrandom(100);
-         cr.age=AGE_YOUNGADULT;
-
-         cr.skill[SKILL_RIFLE]=LCSrandom(4)+1;
-         cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
-         cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
-         cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
-         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-
-         cr.att[ATTRIBUTE_STRENGTH]=5;
-			cr.att[ATTRIBUTE_AGILITY]=5;
-			cr.att[ATTRIBUTE_HEALTH]=5;
-         cr.att[ATTRIBUTE_WISDOM]=5;
-         break;
-
-      case CREATURE_COMMISSAR:
-         strcpy(cr.name,"Red Army Commissar");
-         cr.money=LCSrandom(21)+20;
-         cr.infiltration=0.1*LCSrandom(4);
-         cr.juice=LCSrandom(100);
-         cr.age=AGE_MIDDLEAGED;
-
-         cr.skill[SKILL_RIFLE]=LCSrandom(4)+1;
-         cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
-         cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
-         cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
-         cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-
-         cr.att[ATTRIBUTE_STRENGTH]=5;
-			cr.att[ATTRIBUTE_AGILITY]=5;
-			cr.att[ATTRIBUTE_HEALTH]=5;
-         cr.att[ATTRIBUTE_WISDOM]=5;
-         break;
    }
 
    if(cr.type==CREATURE_MUTANT)attnum=LCSrandom(60)+7;
@@ -1734,15 +1717,15 @@ void makecreature(Creature &cr,short type)
 
    if(cr.align==1)
    {
-      cr.infiltration = 0.15f;
+      cr.infiltration = 0.15f+LCSrandom(10)-5;
    }
    else if(cr.align==0)
    {
-      cr.infiltration = 0.25f;
+      cr.infiltration = 0.25f+LCSrandom(10)-5;
    }
    else
    {
-      cr.infiltration += 0.35f * (1-cr.infiltration);
+      cr.infiltration += 0.35f * (1-cr.infiltration)+LCSrandom(10)-5;
    }
    if(cr.infiltration < 0) cr.infiltration = 0;
    if(cr.infiltration > 1) cr.infiltration = 1;

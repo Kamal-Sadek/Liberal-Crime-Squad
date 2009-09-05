@@ -99,16 +99,16 @@ void siegecheck(char canseethings)
          int heatprotection=0;
          for(int p=0;p<pool.size();p++)
          {
-            if(!pool[p]->alive)
+            
+            if(pool[p]->location!=l)continue; // People not at this base don't count
+            if(!pool[p]->alive) // Corpses attract attention
             {
-               heatprotection-=1; // Rotting corpses ruin your heat protection
+               crimes=10;
                continue;
             }
-            if(pool[p]->location!=l)continue; // People not at this base don't count
             if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
                pool[p]->align!=1)kidnapped++; // Kidnapped persons increase heat
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
-            numpres++;
             
             // Cleanse record on things that aren't illegal right now
             if(law[LAW_FLAGBURNING]>0)pool[p]->lawflag[LAWFLAG_BURNFLAG]=0;
@@ -117,7 +117,7 @@ void siegecheck(char canseethings)
             if(law[LAW_FREESPEECH]>-2)pool[p]->lawflag[LAWFLAG_SPEECH]=0;
 
             //Heat doesn't matter for sieges until it gets high
-            int pheat=pool[p]->heat-5;
+            crimes=pool[p]->heat-5;
          }
 
          // Let the place slowly cool off if there are no criminals there
@@ -129,39 +129,12 @@ void siegecheck(char canseethings)
                location[l]->heat-=5-police_heat;
             if(location[l]->heat<0)location[l]->heat=0;
          }
-         else if(crimes||kidnapped)
+         else if(crimes*3>location[l]->heat+location[l]->heat_protection*100||kidnapped)
          {
             // Determine how effective your current safehouse
             // is at keeping the police confused
-            switch(location[l]->type)
-            {
-            case SITE_INDUSTRY_WAREHOUSE:
-               if(location[l]->front_business!=-1)
-                  heatprotection+=3; // Business front -- high protection
-               else
-                  heatprotection+=0; // Abandoned warehouse -- no protection
-               break;
-            case SITE_RESIDENTIAL_SHELTER:
-               heatprotection+=0; // Homeless shelter -- no protection
-               break;
-            case SITE_RESIDENTIAL_TENEMENT:
-               heatprotection+=1; // Lower class housing -- low protection
-               break;
-            case SITE_RESIDENTIAL_APARTMENT:
-               heatprotection+=2; // Middle class housing -- medium protection
-               break;
-            case SITE_RESIDENTIAL_BOMBSHELTER:
-            case SITE_OUTDOOR_BUNKER:
-            case SITE_BUSINESS_BARANDGRILL:
-            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-               heatprotection+=3; // Upper class housing -- high protection
-               break;
-            }
-
-            if(law[LAW_FLAGBURNING]==-2&&location[l]->haveflag) {heatprotection+=2;} // More protection if the flag is sacred
-            else if(law[LAW_FLAGBURNING]!=-2&&location[l]->haveflag) {heatprotection+=1;} // Some if the flag isn't
-            else if(law[LAW_FLAGBURNING]==2&&!(location[l]->haveflag)) {heatprotection-=1;} // Lose some if it is and you have no flag
-            else {heatprotection+=0;} // None if it isn't and you have no flag
+            location[l]->update_heat_protection();
+            heatprotection=static_cast<int>(location[l]->heat_protection * 20);
 
             //Having hostages reduces protection
             if(kidnapped)
@@ -169,19 +142,15 @@ void siegecheck(char canseethings)
                heatprotection-=kidnapped;
                crimes+=kidnapped*5;
             }
-            //Protection varies with how many people in the safehouse
-            if(numpres>20)heatprotection-=1;
-            if(numpres<10)heatprotection+=1;
-            if(numpres<4)heatprotection+=2;
 
             if(heatprotection<0)heatprotection=0;
 
-            crimes>>=heatprotection;
+            crimes-=crimes*heatprotection/20;
 
-            location[l]->heat+=LCSrandom(crimes);
+            location[l]->heat+=LCSrandom(LCSrandom(crimes)+1);
 
             if(location[l]->siege.timeuntillocated==-1 &&
-               location[l]->heat > 40 &&
+               location[l]->heat > 100 &&
                !LCSrandom(30))
             {
                if(LCSrandom(crimes) > 25)location[l]->siege.escalationstate++;
@@ -206,7 +175,7 @@ void siegecheck(char canseethings)
                   pool[pl]->location!=-1&& // <- this must be executed before the line below it
                   location[pool[pl]->location]->type==SITE_GOVERNMENT_POLICESTATION)
                {
-                  if(LCSrandom(2)) { policesleeperwarning=1; break; }
+                  if(pool[pl]->infiltration*100>LCSrandom(50)) { policesleeperwarning=1; break; }
                }
             }
             if(policesleeperwarning)
@@ -380,10 +349,11 @@ void siegecheck(char canseethings)
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
                   pool[pl]->type==CREATURE_CORPORATE_CEO)
                {
-                  ceosleepercount++;
+                  if(pool[pl]->infiltration*100>LCSrandom(50)) { ceosleepercount=1; break; }
+                  
                }
             }
-            if(LCSrandom(ceosleepercount+1)||!LCSrandom(10))
+            if(ceosleepercount||!LCSrandom(5))
             {
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -439,10 +409,10 @@ void siegecheck(char canseethings)
                      (pool[pl]->type==CREATURE_CCS_VIGILANTE || pool[pl]->type==CREATURE_CCS_ARCHCONSERVATIVE ||
                       pool[pl]->type==CREATURE_CCS_MOLOTOV || pool[pl]->type==CREATURE_CCS_SNIPER))
                   {
-                     ccssleepercount++;
+                     if(pool[pl]->infiltration*100>LCSrandom(50)) { ccssleepercount=1; break; }
                   }
                }
-               if(LCSrandom(ccssleepercount+1)>1)
+               if(ccssleepercount>1)
                {
                   erase();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -571,10 +541,10 @@ void siegecheck(char canseethings)
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
                   pool[pl]->type==CREATURE_AGENT)
                {
-                  agentsleepercount++;
+                  if(pool[pl]->infiltration*100>LCSrandom(100)) { agentsleepercount=1; break; }
                }
             }
-            if(LCSrandom(agentsleepercount+3)>=3) // Hard for agents to give warning
+            if(agentsleepercount)
             {
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -631,88 +601,7 @@ void siegecheck(char canseethings)
             location[l]->siege.cameras_off=1;
          }
          else if(location[l]->siege.timeuntilcia==0)location[l]->siege.timeuntilcia=-1; // Silently call off foiled cia raids
-		 
-         //Stalinists
-         if(location[l]->siege.timeuntilstalin==-1 && !location[l]->siege.siege &&
-            offended_stalin && numpres>0 && stalinendgamestate!=ENDGAME_STALIN_DEFEATED)
-         {
-            location[l]->siege.timeuntilstalin=LCSrandom(3)+1;
-
-            // Sleeper Stalinists can warn you of an impending raid
-            int stalinsleepercount=0;
-            for(int pl=0;pl<pool.size();pl++)
-            {
-               if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-                  pool[pl]->type==CREATURE_COMMISSAR)
-               {
-                  stalinsleepercount++;
-               }
-            }
-            if(LCSrandom(stalinsleepercount+1)>0||!LCSrandom(10))
-            {
-               erase();
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               if(stalinsleepercount)
-               {
-                  addstr("A sleeper Commissar has informed you that");
-               } else
-               {
-                  addstr("the Stalinist Comrade Squad is planning to");
-               }
-               move(9,1);
-               addstr("raid the ");
-               addstr(location[l]->name);
-               addstr(".");
-               refresh();
-               getch();
-            }
-
-         } else if(location[l]->siege.timeuntilstalin>0)location[l]->siege.timeuntilstalin--;
-         else if(location[l]->siege.timeuntilstalin==0 && !location[l]->siege.siege&&numpres>0 && stalinendgamestate!=ENDGAME_STALIN_DEFEATED)
-         {
-            location[l]->siege.timeuntilstalin=-1;
-            // Stalin raid!
-            erase();
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-            move(8,1);
-            addstr("Screaming black cars pull up to the ");
-            addlocationname(location[l]);
-            addstr("!");
-
-            move(9,1);
-            addstr("Members of the Stalinist Comrade Squad swarmed out.");
-            
-            refresh();
-            getch();
-
-            erase();
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(1,1);
-            addstr("You hear a screeching voice over the sound of black cars:");
-
-            move(3,1);
-            addstr("We have tolerated your 'squad' for some time, but when");
-
-            move(4,1);
-            addstr("you released NVKD STATE SECRETS, we are forced to act.");
-
-            move(6,1);
-            addstr("Surrender, and your death will be quick and painless.");
-
-            refresh();
-            getch();
-
-            location[l]->siege.siege=1;
-            location[l]->siege.siegetype=SIEGE_STALIN;
-            location[l]->siege.underattack=1;
-            location[l]->siege.lights_off=0;
-            location[l]->siege.cameras_off=0;
-         } 
-         
-         else if(location[l]->siege.timeuntilstalin==0)location[l]->siege.timeuntilstalin=-1; // Silently call off foiled Stalinst raids
+		   
             //HICKS
          if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
          {
@@ -2307,7 +2196,7 @@ void statebrokenlaws(int loc)
    else if(breakercount[LAWFLAG_CARTHEFT])
    {
       move(4,1);
-      addstr("You are wanted for car theft");//XXX: If adding grand theft auto, modify this too.
+      addstr("You are wanted for motor theft");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
@@ -2419,3 +2308,174 @@ void statebrokenlaws(int loc)
    refresh();
    getch();
 }
+
+
+void statebrokenlaws(Creature & cr)
+{
+   int kidnapped=0;
+   bool criminal=false;
+   bool breakercount[LAWFLAGNUM];
+
+   if(cr.flag & CREATUREFLAG_KIDNAPPED)
+      kidnapped++;
+
+   for(int i=0;i<LAWFLAGNUM;i++)
+      if(cr.lawflag[i])
+      {
+         breakercount[i]=true;
+         criminal=true;
+      }
+      else
+      {
+         breakercount[i]=false;
+      }
+
+   if(!(criminal||kidnapped))
+      return;
+
+   set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   addstr("WANTED FOR ");
+
+   //KIDNAP VICTIM
+   if(kidnapped)
+   {
+      addstr("REHABILITATION");
+   }
+   //TREASON
+   else if(breakercount[LAWFLAG_TREASON])
+   {
+      addstr("TREASON");
+   }
+   //TERRORISM
+   else if(breakercount[LAWFLAG_TERRORISM])
+   {
+      addstr("TERRORISM");
+   }
+   //MURDERER
+   else if(breakercount[LAWFLAG_MURDER])
+   {
+      addstr("MURDER");
+   }
+   //KIDNAPPER
+   else if(breakercount[LAWFLAG_KIDNAPPING])
+   {
+      addstr("KIDNAPPING");
+   }
+   //BURN FLAG
+   else if(breakercount[LAWFLAG_BURNFLAG])
+   {
+      if(law[LAW_FLAGBURNING]==-2)addstr("FLAG MURDER");
+      else addstr("FLAG BURNING");
+   }
+   //SPEECH
+   else if(breakercount[LAWFLAG_SPEECH])
+   {
+      addstr("HARMFUL SPEECH");
+   }
+   //BROWNIES
+   else if(breakercount[LAWFLAG_BROWNIES])
+   {
+      addstr("DRUG DEALING");
+   }
+   //ESCAPED
+   else if(breakercount[LAWFLAG_ESCAPED])
+   {
+      addstr("ESCAPING PRISON");
+   }
+   //HELP ESCAPED
+   else if(breakercount[LAWFLAG_HELPESCAPE])
+   {
+      addstr("RELEASING PRISONERS");
+   }
+   //JURY
+   else if(breakercount[LAWFLAG_JURY])
+   {
+      addstr("JURY TAMPERING");
+   }
+   //RACKETEERING
+   else if(breakercount[LAWFLAG_RACKETEERING])
+   {
+      addstr("RACKETEERING");
+   }
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ARMEDASSAULT])
+   {
+      addstr("ARMED ASSAULT");
+   }
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ASSAULT])
+   {
+      addstr("ASSAULT");
+   }
+   //CAR THEFT
+   else if(breakercount[LAWFLAG_CARTHEFT])
+   {
+      addstr("GRAND THEFT AUTO");
+   }
+   //CC FRAUD
+   else if(breakercount[LAWFLAG_CCFRAUD])
+   {
+      addstr("CREDIT CARD FRAUD");
+   }
+   //THIEF
+   else if(breakercount[LAWFLAG_THEFT])
+   {
+      addstr("THEFT");
+   }
+   //PROSTITUTION
+   else if(breakercount[LAWFLAG_PROSTITUTION])
+   {
+      addstr("PROSTITUTION");
+   }
+   //HIRE ILLEGAL
+   else if(breakercount[LAWFLAG_HIREILLEGAL])
+   {
+      addstr("HIRING ILLEGAL ALIENS");
+   }
+   //GUN CARRY
+   else if(breakercount[LAWFLAG_GUNUSE])
+   {
+      addstr("FIRING ILLEGAL WEAPONS");
+   }
+   //GUN CARRY
+   else if(breakercount[LAWFLAG_GUNCARRY])
+   {
+      addstr("USING ILLEGAL WEAPONS");
+   }
+   //COMMERCE
+   else if(breakercount[LAWFLAG_COMMERCE])
+   {
+      addstr("ELECTRONIC SABOTAGE");
+   }
+   //INFORMATION
+   else if(breakercount[LAWFLAG_INFORMATION])
+   {
+      addstr("HACKING");
+   }
+   //UNLAWFUL BURIAL
+   else if(breakercount[LAWFLAG_BURIAL])
+   {
+      addstr("UNLAWFUL BURIAL");
+   }
+   //BREAKING
+   else if(breakercount[LAWFLAG_BREAKING])
+   {
+      addstr("BREAKING AND ENTERING");
+   }
+   //VANDALISM
+   else if(breakercount[LAWFLAG_VANDALISM])
+   {
+      addstr("VANDALISM");
+   }
+   //RESIST
+   else if(breakercount[LAWFLAG_RESIST])
+   {
+      addstr("RESISTING ARREST");
+   }
+   //DISTURBANCE
+   else if(breakercount[LAWFLAG_DISTURBANCE])
+   {
+      addstr("DISTURBING THE PEACE");
+   }
+}
+

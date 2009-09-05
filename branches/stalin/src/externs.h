@@ -71,7 +71,6 @@ extern char amradio_closed;
 extern char cablenews_closed;
 
 extern char endgamestate;
-extern char stalinendgamestate;
 extern char ccs_kills;
 
 extern int funds;
@@ -86,7 +85,6 @@ extern short offended_cia;
 extern short offended_amradio;
 extern short offended_cablenews;
 extern short offended_firemen;
-extern short offended_stalin;
 extern int police_heat;
 extern int attorneyseed;
 extern int selectedsiege;

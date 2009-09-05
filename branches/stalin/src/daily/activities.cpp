@@ -624,12 +624,6 @@ void survey(Creature *cr)
             if(attitude[VIEW_MILITARY]>50)addstr("the large military.");
             else addstr("strengthening the military.");
             break;
-		 case VIEW_WELFARE:
-			 if(attitude[VIEW_WELFARE]>50)addstr("alievating poverty.");
-			 else addstr("welfare reform.");
-		 case VIEW_RELIGION:
-			 if(attitude[VIEW_RELIGION]>50)addstr("seperation of Church and State.");
-			 else addstr("protecting religious values.");
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
             if(attitude[VIEW_LIBERALCRIMESQUAD]<50)
@@ -648,10 +642,6 @@ void survey(Creature *cr)
             }
             else addstr("the CCS terrorists.");
             break;
-	 case VIEW_STALIN:
-	    if(attitude[VIEW_STALIN]<50)addstr("the Stalinist Comrade Squad");
-	    else addstr("the Stalinist terrorism network.");
-	    break;
          case VIEW_PRISONS:
             if(attitude[VIEW_PRISONS]>50)addstr("horrific prison conditions.");
             else addstr("lax prison conditions.");
@@ -788,7 +778,7 @@ void survey(Creature *cr)
             case VIEW_CEOSALARY:addstr("believed that CEO salaries are too great");break;
             case VIEW_WOMEN:addstr("favored doing more for gender equality");break;
             case VIEW_CIVILRIGHTS:addstr("felt more work was needed for racial equality");break;
-			case VIEW_GUNCONTROL:addstr("are concerned about gun violence");break;
+            case VIEW_GUNCONTROL:addstr("are concerned about gun violence");break;
             case VIEW_DRUGS:
 					if(law[LAW_DRUGS]>=1)addstr("supported keeping marijuana legal");
 					else addstr("believed in legalizing marijuana");
@@ -798,14 +788,9 @@ void survey(Creature *cr)
 					else addstr("wanted amnesty for illegal immigrants");
 					break;
             case VIEW_MILITARY:addstr("opposed increasing military spending");break;
-			case VIEW_WELFARE:addstr("opposed decreasing welfare spending");break;
-			case VIEW_RELIGION:addstr("believed that the government should not support religion");break;
-			case VIEW_ECONOMY:addstr("sees the economy as fundmentally flawed");break;
-			case VIEW_DEBT:addstr("is concerned about the rising national debt");break;
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
-            case VIEW_STALIN:addstr("were against communism and the Stalinist Comrade Squad");break;
             case VIEW_PRISONS:addstr("think the prison system needs reform");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
@@ -1170,13 +1155,13 @@ void funds_and_trouble(char &clearformess)
       
       // more money when more illegal
       if(law[LAW_DRUGS]==-2)
-         money*=3;
+         money*=4;
       if(law[LAW_DRUGS]==-1)
          money*=2;
       if(law[LAW_DRUGS]==1)
-         money/=2;
+         money/=4;
       if(law[LAW_DRUGS]==2)
-         money/=6;
+         money/=8;
       
       funds+=money;
       stat_funds+=money;
@@ -1191,7 +1176,7 @@ void funds_and_trouble(char &clearformess)
       brownies[s]->train(SKILL_COOKING,max(3-brownies[s]->skill[SKILL_COOKING],1));
 
       //Check for police search
-      dodgelawroll=LCSrandom(100);
+      dodgelawroll=LCSrandom(1+30*law[LAW_DRUGS]+3);
 
       //Saved by street sense?
       if(dodgelawroll==0)

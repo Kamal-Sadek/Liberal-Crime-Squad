@@ -1926,7 +1926,7 @@ void initlocation(locationst &loc)
       case SITE_INDUSTRY_WAREHOUSE:
       {
          do {
-            strcpy(loc.name,"Abandoned ");
+            strcpy(loc.name,"Old ");
             char str[50];
             lastname(str);
             strcat(loc.name,str);
@@ -2051,13 +2051,6 @@ void initlocation(locationst &loc)
          strcat(loc.name,"'s Used Car Dealership");
          strcpy(loc.shortname,"Dealership");
          break;
-	  case SITE_INDUSTRY_FOODBANK:
-		  strcat(loc.name,"Saint ");
-		  firstname(str,GENDER_FEMALE);
-		  strcpy(loc.name,str);
-		  strcat(loc.name,"'s Food Bank");
-		  strcpy(loc.shortname,"Food Bank");
-		  break;
       case SITE_BUSINESS_DEPTSTORE:
          lastname(str);
          strcpy(loc.name,str);
@@ -2076,9 +2069,9 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Sweatshop");
          break;
       case SITE_BUSINESS_CRACKHOUSE:
-		  if(law[LAW_DRUGS]=2)
+		  if(law[LAW_DRUGS]==2)
 		  {
-		lastname(str);
+   		lastname(str);
          strcpy(loc.name,str);
          strcat(loc.name," St. Recreational Drugs Center");
          strcpy(loc.shortname,"Crack House");
@@ -2206,10 +2199,6 @@ void initlocation(locationst &loc)
       case SITE_BUSINESS_ARMSDEALER:
          strcpy(loc.name,"Black Market");
          strcpy(loc.shortname,"Black Market");
-	  case SITE_BUSINESS_STALIN:
-         strcpy(loc.name,"The Union Gazette");
-         strcpy(loc.shortname,"Union Gazette");
-         break;
    }
 }
 

@@ -50,11 +50,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "3.19.4"
+#define PACKAGE_VERSION "4.00.0"
 #endif
 
-const int version=31904;
-const int lowestloadversion=31900;
+const int version=40000;
+const int lowestloadversion=40000;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -340,8 +340,6 @@ enum SiteTypes
    SITE_BUSINESS_CARDEALERSHIP,
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
-   SITE_BUSINESS_STALIN,
-   SITE_INDUSTRY_FOODBANK,
    SITENUM
 };
 
@@ -440,9 +438,6 @@ enum CreatureType
    CREATURE_POLITICALACTIVIST,
    CREATURE_CCS_MOLOTOV,
    CREATURE_CCS_SNIPER,
-   CREATURE_CHEKA,
-   CREATURE_REDGUARD,
-   CREATURE_COMMISSAR,
    CREATURENUM
 };
 
@@ -455,13 +450,6 @@ enum endgame
    ENDGAME_CCS_DEFEATED,
    ENDGAME_MARTIALLAW,
    ENDGAMENUM
-};
-
-enum stalinendgame
-{
-	ENDGAME_STALIN_ACTIVE,
-	ENDGAME_STALIN_DEFEATED,
-   ENDGAME_STALIN_NUM
 };
 
 enum Attributes
@@ -1164,7 +1152,6 @@ enum SiegeTypes
    SIEGE_CORPORATE,
    SIEGE_CCS,
    SIEGE_FIREMEN,
-   SIEGE_STALIN,
    SIEGE_ORG,
    SIEGENUM
 };
@@ -1186,7 +1173,6 @@ struct siegest
    short timeuntilcia;
    short timeuntilccs;
    short timeuntilfiremen;
-   short timeuntilstalin;
 
    siegest()
    {
@@ -1199,7 +1185,6 @@ struct siegest
       timeuntilcia=-1;
       timeuntilfiremen=-1;
       timeuntilccs=-1;
-	  timeuntilstalin=-1;
    }
 };
 
@@ -1226,6 +1211,7 @@ struct locationst
    int highsecurity;
    siegest siege;
    int heat;
+   double heat_protection;
    char compound_walls;
    int compound_stores;
    short front_business;
@@ -1243,6 +1229,7 @@ struct locationst
       hidden=0;
    }
    void init(void);
+   void update_heat_protection(void);
 };
 
 
@@ -1388,13 +1375,6 @@ enum Views
    VIEW_DRUGS,
    VIEW_IMMIGRATION,
    VIEW_MILITARY,
-   VIEW_STALIN,
-   //VIEW_STALIN is here in an attept to save VIEWNUM-6 from being broken...I think. 
-   //VIEW_STALIN works rather differently from VIEW_AMRADIO and VIEW_CABLENEWS, so this might work...-SC
-   VIEW_ECONOMY,
-   VIEW_DEBT,
-   VIEW_WELFARE,
-   VIEW_RELIGION,
    //*JDS* I'm using VIEWNUM-6 in a random generator that rolls a
    //random issue, not including the media/politicalviolence ones, and this will
    //break if these stop being the last 4 issues; do a search
@@ -1429,14 +1409,11 @@ enum Laws
    LAW_TAX,
    LAW_WOMEN,
    LAW_CIVILRIGHTS,
-   LAW_HUMANRIGHTS,
    LAW_DRUGS,
    LAW_IMMIGRATION,
-   LAW_RELIGION,
    LAW_ELECTIONS,
    LAW_MILITARY,
    LAW_TORTURE,
-   LAW_WELFARE,
    LAWNUM
 };
 
@@ -1522,12 +1499,6 @@ enum NewsStories
    NEWSSTORY_CCS_DEFENDED,
    NEWSSTORY_CCS_KILLED_SIEGEATTACK,
    NEWSSTORY_CCS_KILLED_SITE,
-   NEWSSTORY_STALIN_SITE,
-   NEWSSTORY_STALIN_DEFENDED,
-   NEWSSTORY_STALIN_KILLED_SIEGEATTACK,
-   NEWSSTORY_STALIN_KILLED_SITE,
-   NEWSSTORY_STALIN_CON_SITE,
-   NEWSSTORY_STALIN_CON_KILLED_SITE,
    NEWSSTORY_CARTHEFT,
    NEWSSTORY_MASSACRE,
    NEWSSTORY_KIDNAPREPORT,
@@ -1636,8 +1607,6 @@ enum EndTypes
    END_POLICE,
    END_CORP,
    END_REAGAN,
-   END_STALIN,
-   END_STALINIFY,
    END_DEAD,
    END_PRISON,
    END_EXECUTED,
@@ -1918,7 +1887,9 @@ void savehighscore(char endtype);
 /*
  newgame.cpp
 */
-/* new game options screen */void setup_newgame(void);/* creates your founder */
+/* new game options screen */
+void setup_newgame(void);
+/* creates your founder */
 void makecharacter(void);
 /* mostly depricated, but called once by makecharacter */
 void initliberal(Creature &cr);
@@ -2321,6 +2292,7 @@ void escapesiege(char won);
 void conquertext(void);
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc);
+void statebrokenlaws(Creature & cr);
 
 /*
  news.cpp
@@ -2445,7 +2417,6 @@ void tossjustices(char canseethings);
 void amendment_termlimits(char canseethings);
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings);
-void stalinify(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */

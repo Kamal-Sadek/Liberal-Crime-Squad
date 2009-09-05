@@ -55,13 +55,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
             strcat(story," remained at the scene after the shooting, screaming ");
-			   if(VIEW_STALIN+LCSrandom(25)<=66)
-			   {
-			   strcat(story, "anti-Malthusian quotes from Karl Marx at the stunned onlookers. Someone ");
-               strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
-               strcat(story,str2);
-			   }
-			   else
 			   {
                strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
                strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
@@ -72,12 +65,6 @@ void constructeventstory(char *story,short view,char positive)
 				   strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
 				   strcat(story," abortion doctors as opposed to arresting them.&r");
 			   }
-			   if(VIEW_STALIN<=50)
-			   {
-               strcat(story," surrendered without a struggle, reportedly saying that Karl Marx's work ");
-               strcat(story,"had been completed.&r");
-			   }
-			   else
 			   {
                strcat(story," surrendered without a struggle, reportedly saying that God's work ");
                strcat(story,"had been completed.&r");
@@ -659,8 +646,8 @@ void constructeventstory(char *story,short view,char positive)
                      case 1:strcat(story,"her");break;
                   }
 
-                  if(law[LAW_FREESPEECH]==2 && law[LAW_RELIGION]!=-2)strcat(story," goddamn mind");
-		  else if(law[LAW_FREESPEECH]==-2 || law[LAW_RELIGION]==-2)strcat(story," [gosh darn] mind");
+                  if(law[LAW_FREESPEECH]==2)strcat(story," goddamn mind");
+		            else if(law[LAW_FREESPEECH]==-2)strcat(story," [gosh darn] mind");
                   else strcat(story," g*dd*mn mind");
                   break;
                case 1:strcat(story,"maybe gone a little off the deep end");break;
@@ -797,14 +784,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".  ");
             strcat(story,"&r");
             strcat(story,"   Along with bonobos, chimpanzees are our closest cousins");
-            if(law[LAW_RELIGION]==-2)
-			{
-				strcat(story,", at least according to the now-discredited theory of evolution");
-			}
-			else if (VIEW_STALIN+LCSrandom(25)<=66)
-			{
-				strcat(story,", at least according to the reactionary theory of Mendelian Genetics");
-			}
             strcat(story,".  ");
             strcat(story,"Fielding questions about the ethics of their experiments from reporters during a press conference yesterday, ");
             strcat(story,"a spokesperson for the research team stated that, \"It really isn't so bad as all that.  Chimpanzees are very resilient creatures.  ");
@@ -1303,8 +1282,7 @@ void constructeventstory(char *story,short view,char positive)
 		      else strcat(story,"encouraged listeners to call in and relieve themselves");break;
                case 2:
                       if(law[LAW_FREESPEECH]==2)strcat(story,"screamed \"fuck the police those goddamn motherfuckers.  I got a fucking ticket this morning and I'm fucking pissed as shit.\"");
-                      else if(law[LAW_FREESPEECH]==-2 && law[LAW_RELIGION]==-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry that I might stop going to church!]\"");
-		      else if(law[LAW_FREESPEECH]==-2 && law[LAW_RELIGION]!=-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"");
+		                else if(law[LAW_FREESPEECH]==-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"");
                       else strcat(story,"screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs.  I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"");break;
                case 3:
 		      if(law[LAW_FREESPEECH]==-2 && law[LAW_WOMEN]==-2)strcat(story,"[fed] from [an indecent] woman");
@@ -1523,34 +1501,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             constructeventstory(story,ns.view,ns.positive);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
-      case VIEW_STALIN:
-		   displaycenterednewsfont("STALIN'S CRIMES",5);
-	       char str[150];
-           strcpy(str,"");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(str,"Genocide in ");break;
-               case 1:strcat(str,"Warfare in");break;
-               case 2:strcat(str,"Famine in");break;
-               case 3:strcat(str,"Death in");break;
-               case 4:strcat(str,"Terror in");break;
-            }
-            strcat(str," ");
-            switch(LCSrandom(6))
-            {
-               case 0:strcat(str,"Ukraine");break;
-               case 1:strcat(str,"Siberia");break;
-               case 2:strcat(str,"Poland");break;
-               case 3:strcat(str,"Moscow");break;
-               case 4:strcat(str,"Czechoslovakia");break;
-               case 5:strcat(str,"the Baltic States");break;
-               case 6:strcat(str,"Eastern Europe");break;
-               case 7:strcat(str,"Russia");break;
-            }            
-            strcat(str,": A new book proves once and for all that Stalin and the USSR has committed vast atrocities in the region.");
-            displaycenteredsmallnews(str,12);
-            displaynewspicture(PICTURE_BOOK,13);
-            break;
 		}
 	}
    else
@@ -1612,34 +1562,6 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
                case 4:strcat(str,"Faith");break;
             }
             strcat(str,": A new book lauding Reagan and the greatest generation.");
-            displaycenteredsmallnews(str,12);
-            displaynewspicture(PICTURE_BOOK,13);
-            break;
-         }
-            case VIEW_STALIN:
-				{
-			displaycenterednewsfont("STALIN FRAMED",5);
-			char str[150];
-            strcpy(str,"");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(str,"Fall of the");break;
-               case 1:strcat(str,"Legacy of the");break;
-               case 2:strcat(str,"Sacrifices of The");break;
-               case 3:strcat(str,"Lies Against The");break;
-               case 4:strcat(str,"Truth Behind The");break;
-            }
-            strcat(str," ");
-            switch(LCSrandom(6))
-            {
-               case 0:strcat(str,"Dear Leader");break;
-               case 1:strcat(str,"Courageous Fighter");break;
-               case 2:strcat(str,"Economic Miracle-Worker");break;
-               case 3:strcat(str,"Great Communicator");break;
-               case 4:strcat(str,"Socialist Democrat");break;
-               case 5:strcat(str,"Revolutionary Secretary");break;
-            }            
-            strcat(str,": A new book details new evidence suggesting Stalin and the USSR was framed by the vast right-wing machine.");
             displaycenteredsmallnews(str,12);
             displaynewspicture(PICTURE_BOOK,13);
             break;

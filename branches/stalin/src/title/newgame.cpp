@@ -36,13 +36,12 @@ void setup_newgame(void)
    bool classicmode   = false;
    bool strongccs     = false;
    bool nightmarelaws = false;
-   bool nostalinists  = true;
    while(1)
    {
       clear();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
-      addstr("New Game of Liberal Crime Squad: Difficulty and Gameplay Options");
+      addstr("New Game of Liberal Crime Squad: Advanced Gameplay Options");
       move(6,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(classicmode)
@@ -59,24 +58,17 @@ void setup_newgame(void)
          addstr("[X]");
       else
          addstr("[ ]");
-      addstr(" B - We Didn't Start The Fire: The CCS started it. You have to finish it.");
+      addstr(" B - We Didn't Start The Fire: The CCS starts active and extremely strong.");
       move(10,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(nightmarelaws)
          addstr("[X]");
       else
          addstr("[ ]");
-      addstr(" C - Nightmare Mode: Liberalism is collapsing. Is it too late to fight back?");
-      move(12,0);
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      if(!nostalinists)
-         addstr("[X]");
-      else
-         addstr("[ ]");
-      addstr(" D - Stalinist Mod: Fight Communism and Conservatism at the same time.");
+      addstr(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
       move(15,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      addstr("Press any other key when ready to begin...");
+      addstr("Press any other key to continue...");
       int c=getch();
       translategetch(c);
       if(c=='a')
@@ -94,11 +86,6 @@ void setup_newgame(void)
          nightmarelaws=!nightmarelaws;
          continue;
       }
-      if(c=='d')
-      {
-         nostalinists=!nostalinists;
-         continue;
-      }
       break;
    }
    if(nightmarelaws)
@@ -110,8 +97,6 @@ void setup_newgame(void)
       for(int a=0;a<VIEWNUM-3;a++)
       {
          attitude[a]=LCSrandom(20);
-		 //Arch-Conservative Dystopia should not like Joesph Stalin.
-		 attitude[VIEW_STALIN]=90;
       }
    }
    if(classicmode)
@@ -122,10 +107,6 @@ void setup_newgame(void)
    {
       endgamestate=ENDGAME_CCS_ATTACKS;
       attitude[VIEW_POLITICALVIOLENCE]=90;
-   }
-   if(nostalinists)
-   {
-      stalinendgamestate=ENDGAME_STALIN_DEFEATED;
    }
 }
 

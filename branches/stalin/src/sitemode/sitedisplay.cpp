@@ -245,7 +245,7 @@ void printwall(int x, int y, int z, int px, int py)
       if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_UP] = true; }
       if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_DOWN] = true; }
 
-      // Check for other graffiti TODO: Stalinist graffiti
+      // Check for other graffiti
       if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_LEFT],"GNG"); graffiticolor[WALL_LEFT] = COLOR_BLACK; }
       if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_RIGHT],"GNG"); graffiticolor[WALL_RIGHT] = COLOR_BLACK; }
       if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_UP],"GNG"); graffiticolor[WALL_UP] = COLOR_BLACK; }

@@ -86,9 +86,6 @@ void initsite(locationst &loc)
      case SITE_BUSINESS_BARANDGRILL:
      case SITE_RESIDENTIAL_BOMBSHELTER:
      case SITE_OUTDOOR_BUNKER:
-	 case SITE_INDUSTRY_FOODBANK:
-        build_site("GENERIC_UNSECURE");
-        break;
      case SITE_LABORATORY_COSMETICS:
         build_site("LABORATORY_COSMETICS");
         break;
@@ -149,9 +146,6 @@ void initsite(locationst &loc)
      case SITE_OUTDOOR_PUBLICPARK:
         build_site("OUTDOOR_PUBLICPARK");
         break;
-	 case SITE_BUSINESS_STALIN:
-		 build_site("GENERIC_ONEROOM");
-		 break;
      }
    } else {
 //No sitemaps? No problem! Revert to old build code. SAV

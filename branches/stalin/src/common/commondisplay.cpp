@@ -1105,6 +1105,10 @@ void printliberalstats(Creature &cr)
    //   addstr("*");
    addstr(")");
 
+   move(3,40);
+   statebrokenlaws(cr);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+
    // Add juice
    move(10,16);
    addstr("Juice: ");
