@@ -1333,7 +1333,7 @@ void makecharacter(void)
    if(makelawyer)
    {
       Creature* lawyer=new Creature;
-      makecreature(*lawyer,CREATURE_COP);
+      makecreature(*lawyer,CREATURE_LAWYER);
       // Make sure lawyer is of the appropriate gender for dating the main character;
       // opposite sex by default, same sex if the option was chosen that mentions
       // homosexuality
@@ -1360,7 +1360,7 @@ void makecharacter(void)
       lawyer->flag|=CREATUREFLAG_SLEEPER;
       lawyer->flag|=CREATUREFLAG_LOVESLAVE;
       lawyer->align=ALIGN_LIBERAL;
-      lawyer->infiltration=1.0f;
+      lawyer->infiltration=0.3f;
       lawyer->age=28;
 
       location[lawyer->worklocation]->interrogated=1;
