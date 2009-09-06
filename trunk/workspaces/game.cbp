@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="game" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug_Win32">
+				<Option output="..\crimesquad.exe" prefix_auto="1" extension_auto="1" />
+				<Option working_dir=".." />
+				<Option object_output="Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D__MINGW32__" />
+					<Add directory="..\src" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="..\src" />
+				</ResourceCompiler>
+				<Linker>
+					<Add library="pdcurses" />
+				</Linker>
+			</Target>
+			<Target title="Release_Win32">
+				<Option output="..\crimesquad.exe" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D__MINGW32__" />
+					<Add directory="..\src" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="..\src" />
+				</ResourceCompiler>
+			</Target>
+			<Target title="Debug_Linux">
+				<Option output="Debug\crimesquad.exe" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DLinux" />
+					<Add option="-DUNIX" />
+					<Add option="-DHAVE_LIBNCURSES" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add directory="..\src" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="..\src" />
+				</ResourceCompiler>
+				<Linker>
+					<Add library="ncurses" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="..\src\basemode\activate.cpp" />
+		<Unit filename="..\src\basemode\baseactions.cpp" />
+		<Unit filename="..\src\basemode\basemode.cpp" />
+		<Unit filename="..\src\basemode\reviewmode.cpp" />
+		<Unit filename="..\src\combat\chase.cpp" />
+		<Unit filename="..\src\combat\fight.cpp" />
+		<Unit filename="..\src\combat\haulkidnap.cpp" />
+		<Unit filename="..\src\common\commonactions.cpp" />
+		<Unit filename="..\src\common\commondisplay.cpp" />
+		<Unit filename="..\src\common\consolesupport.cpp" />
+		<Unit filename="..\src\common\creature.cpp" />
+		<Unit filename="..\src\common\equipment.cpp" />
+		<Unit filename="..\src\common\getnames.cpp" />
+		<Unit filename="..\src\common\translateid.cpp" />
+		<Unit filename="..\src\compat.cpp" />
+		<Unit filename="..\src\compat.h" />
+		<Unit filename="..\src\cursesgraphics.cpp" />
+		<Unit filename="..\src\cursesgraphics.h" />
+		<Unit filename="..\src\cursesmovie.cpp" />
+		<Unit filename="..\src\cursesmovie.h" />
+		<Unit filename="..\src\daily\activities.cpp" />
+		<Unit filename="..\src\daily\daily.cpp" />
+		<Unit filename="..\src\daily\date.cpp" />
+		<Unit filename="..\src\daily\news.cpp" />
+		<Unit filename="..\src\daily\shopsnstuff.cpp" />
+		<Unit filename="..\src\daily\siege.cpp" />
+		<Unit filename="..\src\externs.h" />
+		<Unit filename="..\src\game.cpp" />
+		<Unit filename="..\src\includes.h" />
+		<Unit filename="..\src\lcsio.cpp" />
+		<Unit filename="..\src\lcsio.h" />
+		<Unit filename="..\src\monthly\endgame.cpp" />
+		<Unit filename="..\src\monthly\justice.cpp" />
+		<Unit filename="..\src\monthly\lcsmonthly.cpp" />
+		<Unit filename="..\src\monthly\monthly.cpp" />
+		<Unit filename="..\src\monthly\politics.cpp" />
+		<Unit filename="..\src\sitemode\advance.cpp" />
+		<Unit filename="..\src\sitemode\map.cpp" />
+		<Unit filename="..\src\sitemode\mapspecials.cpp" />
+		<Unit filename="..\src\sitemode\miscactions.cpp" />
+		<Unit filename="..\src\sitemode\newencounter.cpp" />
+		<Unit filename="..\src\sitemode\sitedisplay.cpp" />
+		<Unit filename="..\src\sitemode\sitemode.cpp" />
+		<Unit filename="..\src\sitemode\stealth.cpp" />
+		<Unit filename="..\src\sitemode\talk.cpp" />
+		<Unit filename="..\src\title\highscore.cpp" />
+		<Unit filename="..\src\title\newgame.cpp" />
+		<Unit filename="..\src\title\saveload.cpp" />
+		<Unit filename="..\src\title\titlescreen.cpp" />
+		<Unit filename="..\src\vector.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
