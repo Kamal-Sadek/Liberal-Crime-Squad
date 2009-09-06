@@ -3080,7 +3080,7 @@ void adddeathmessage(Creature &cr)
             break;
          case 2:
             strcat(str," squirts ");
-            if(law[LAW_FREESPEECH]==-2)addstr("[red water]");
+            if(law[LAW_FREESPEECH]==-2)strcat(str,"[red water]");
             else strcat(str,"blood");
             strcat(str," out of the ");
             addstr(str);
