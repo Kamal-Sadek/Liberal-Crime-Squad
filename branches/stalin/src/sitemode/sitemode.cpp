@@ -1626,7 +1626,7 @@ void mode_site(void)
             }
 
             //BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
-            if(ccs_siege_kills>=25&&location[cursite]->renting==RENTING_CCS)
+            if(ccs_siege_kills>=25&&!location[cursite]->siege.siege&&location[cursite]->renting==RENTING_CCS)
             {
                //DEAL WITH PRISONERS AND STOP BLEEDING
                for(p=0;p<6;p++)
