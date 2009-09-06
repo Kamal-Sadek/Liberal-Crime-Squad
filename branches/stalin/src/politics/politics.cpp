@@ -2285,9 +2285,9 @@ int publicmood(int l)
       case LAW_TAX:
          return attitude[VIEW_TAXES];
       case LAW_FLAGBURNING:
-         return (attitude[VIEW_FREESPEECH]+attitude[VIEW_POLITICALVIOLENCE])/2;
-      case LAW_WOMEN:
-         return attitude[VIEW_WOMEN];
+         return attitude[VIEW_FREESPEECH];   // <-- I'm keeping this pure free speech instead of free speech
+      case LAW_WOMEN:                        // plus political violence. Ideologically, there's no association
+         return attitude[VIEW_WOMEN];        // between flag burning and violence. -Fox
       case LAW_CIVILRIGHTS:
          return attitude[VIEW_CIVILRIGHTS];
       case LAW_DRUGS:

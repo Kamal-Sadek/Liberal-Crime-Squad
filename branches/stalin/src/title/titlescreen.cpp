@@ -90,19 +90,19 @@ void mode_title(void)
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"v3.9 Copyright (C) 2002-4, Tarn Adams");
-   move(10,39-((strlen(str)-1)>>1));
+   move(13,39-((strlen(str)-1)>>1));
    addstr(str);
    strcpy(str,"A Bay 12 Games Production");
-   move(11,39-((strlen(str)-1)>>1));
+   move(14,39-((strlen(str)-1)>>1));
    addstr(str);
    strcpy(str,"www.bay12games.com");
-   move(12,39-((strlen(str)-1)>>1));
-   addstr(str);
-   strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
    move(15,39-((strlen(str)-1)>>1));
    addstr(str);
+   strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
+   move(17,39-((strlen(str)-1)>>1));
+   addstr(str);
    strcpy(str,"sourceforge.net/projects/lcsgame");
-   move(16,39-((strlen(str)-1)>>1));
+   move(18,39-((strlen(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press ESC now to quit.  Quitting later causes your progress to be saved.");
    move(20,39-((strlen(str)-1)>>1));

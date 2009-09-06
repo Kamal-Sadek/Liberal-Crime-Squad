@@ -96,7 +96,7 @@ void trial(Creature &g)
          }
          if(pool[p]->type==CREATURE_LAWYER&&
             (pool[p]->infiltration*100>=LCSrandom(100)||
-            (pool[p]->flag&=CREATUREFLAG_LOVESLAVE&&pool[p]->hireid==g.id)))
+            (pool[p]->flag & CREATUREFLAG_LOVESLAVE&&pool[p]->hireid==g.id)))
          {
             if(pool[p]->skillval(SKILL_LAW)+pool[p]->skillval(SKILL_PERSUASION)>=maxsleeperskill)
             {
@@ -975,7 +975,7 @@ void trial(Creature &g)
          if(defense==4)
          {
             // De-Juice sleeper
-            addjuice(*sleeperlawyer,-10);
+            addjuice(*sleeperlawyer,-5);
          }
          // Juice for getting convicted of something :)
          addjuice(g,10,100);
