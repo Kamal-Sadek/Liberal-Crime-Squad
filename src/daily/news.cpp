@@ -177,60 +177,63 @@ void setpriority(newsstoryst &ns)
          if(ns.claimed==2)ns.priority*=2;
 
          // Modify notability by location
-         switch(location[ns.loc]->type)
+         if(ns.loc!=-1)
          {
-            // Nobody cares
-         case SITE_RESIDENTIAL_TENEMENT:
-         case SITE_BUSINESS_CRACKHOUSE:
-            ns.priority/=8;
-            break;
+            switch(location[ns.loc]->type)
+            {
+               // Nobody cares
+            case SITE_RESIDENTIAL_TENEMENT:
+            case SITE_BUSINESS_CRACKHOUSE:
+               ns.priority/=8;
+               break;
 
-            // Normal priority
-         case SITE_RESIDENTIAL_SHELTER:
-         case SITE_INDUSTRY_WAREHOUSE:
-         case SITE_RESIDENTIAL_BOMBSHELTER:
-         case SITE_DOWNTOWN:
-         case SITE_COMMERCIAL:
-         case SITE_UDISTRICT:
-         case SITE_OUTOFTOWN:
-         case SITE_INDUSTRIAL:
-         case SITE_RESIDENTIAL_APARTMENT:
-         case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-         case SITE_LABORATORY_COSMETICS:
-         case SITE_LABORATORY_GENETIC:
-         case SITE_HOSPITAL_CLINIC:
-         case SITE_HOSPITAL_UNIVERSITY:
-         case SITE_INDUSTRY_SWEATSHOP:
-         case SITE_INDUSTRY_POLLUTER:
-         case SITE_INDUSTRY_NUCLEAR:
-         case SITE_BUSINESS_PAWNSHOP:
-         case SITE_BUSINESS_JUICEBAR:
-         case SITE_BUSINESS_CIGARBAR:
-         case SITE_BUSINESS_LATTESTAND:
-         case SITE_BUSINESS_VEGANCOOP:
-         case SITE_BUSINESS_INTERNETCAFE:
-         case SITE_BUSINESS_DEPTSTORE:
-         case SITE_BUSINESS_HALLOWEEN:
-         case SITE_BUSINESS_BARANDGRILL:
-         case SITE_BUSINESS_ARMSDEALER:
-         case SITE_BUSINESS_CARDEALERSHIP:
-         case SITE_OUTDOOR_PUBLICPARK:
-         case SITE_OUTDOOR_BUNKER:
-         default:
-            break;
+               // Normal priority
+            case SITE_RESIDENTIAL_SHELTER:
+            case SITE_INDUSTRY_WAREHOUSE:
+            case SITE_RESIDENTIAL_BOMBSHELTER:
+            case SITE_DOWNTOWN:
+            case SITE_COMMERCIAL:
+            case SITE_UDISTRICT:
+            case SITE_OUTOFTOWN:
+            case SITE_INDUSTRIAL:
+            case SITE_RESIDENTIAL_APARTMENT:
+            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+            case SITE_LABORATORY_COSMETICS:
+            case SITE_LABORATORY_GENETIC:
+            case SITE_HOSPITAL_CLINIC:
+            case SITE_HOSPITAL_UNIVERSITY:
+            case SITE_INDUSTRY_SWEATSHOP:
+            case SITE_INDUSTRY_POLLUTER:
+            case SITE_INDUSTRY_NUCLEAR:
+            case SITE_BUSINESS_PAWNSHOP:
+            case SITE_BUSINESS_JUICEBAR:
+            case SITE_BUSINESS_CIGARBAR:
+            case SITE_BUSINESS_LATTESTAND:
+            case SITE_BUSINESS_VEGANCOOP:
+            case SITE_BUSINESS_INTERNETCAFE:
+            case SITE_BUSINESS_DEPTSTORE:
+            case SITE_BUSINESS_HALLOWEEN:
+            case SITE_BUSINESS_BARANDGRILL:
+            case SITE_BUSINESS_ARMSDEALER:
+            case SITE_BUSINESS_CARDEALERSHIP:
+            case SITE_OUTDOOR_PUBLICPARK:
+            case SITE_OUTDOOR_BUNKER:
+            default:
+               break;
 
-            // WOAH OMG
-         case SITE_GOVERNMENT_POLICESTATION:
-         case SITE_GOVERNMENT_COURTHOUSE:
-         case SITE_GOVERNMENT_PRISON:
-         case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         case SITE_GOVERNMENT_FIRESTATION:
-         case SITE_CORPORATE_HEADQUARTERS:
-         case SITE_CORPORATE_HOUSE:
-         case SITE_MEDIA_AMRADIO:
-         case SITE_MEDIA_CABLENEWS:
-            ns.priority*=2;
-            break;
+               // WOAH OMG
+            case SITE_GOVERNMENT_POLICESTATION:
+            case SITE_GOVERNMENT_COURTHOUSE:
+            case SITE_GOVERNMENT_PRISON:
+            case SITE_GOVERNMENT_INTELLIGENCEHQ:
+            case SITE_GOVERNMENT_FIRESTATION:
+            case SITE_CORPORATE_HEADQUARTERS:
+            case SITE_CORPORATE_HOUSE:
+            case SITE_MEDIA_AMRADIO:
+            case SITE_MEDIA_CABLENEWS:
+               ns.priority*=2;
+               break;
+            }
          }
 
          // Cap news priority, in part so it can't displace major news stories
