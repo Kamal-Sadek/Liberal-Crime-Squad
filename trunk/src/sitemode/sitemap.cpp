@@ -1227,15 +1227,16 @@ void configSiteUnique::configure(const std::string& command, const std::string& 
    // no commands
 }
 
+struct coordinates
+{
+   coordinates(int x1,int y1,int z1) : x(x1), y(y1), z(z1) {};
+   int x, y, z;
+};
+
 void configSiteUnique::build()
 {
    int x, y, z;
    int count=0;
-   struct coordinates
-   {
-      coordinates(int x1,int y1,int z1) : x(x1), y(y1), z(z1) {};
-      int x, y, z;
-   };
    vector<coordinates> secure, unsecure;
 
    for(x=xstart;x<=xend;x++)

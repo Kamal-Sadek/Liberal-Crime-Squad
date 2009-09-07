@@ -666,7 +666,8 @@ void mode_base(void)
 
       if(c=='i'&&selectedsiege!=-1)
       {
-         if(location[selectedsiege]->type==SITE_INDUSTRY_WAREHOUSE&&
+         if((location[selectedsiege]->type==SITE_INDUSTRY_WAREHOUSE||
+            location[selectedsiege]->type==SITE_BUSINESS_CRACKHOUSE)&&
             !location[selectedsiege]->siege.siege)
          {
             investlocation();

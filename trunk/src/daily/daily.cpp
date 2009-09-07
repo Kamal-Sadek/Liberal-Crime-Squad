@@ -118,7 +118,7 @@ void advanceday(char &clearformess,char canseethings)
          }
       }
 
-      if(disbanding)break;
+      if(disbanding)continue;
 
       if(pool[p]->clinic)continue;
       if(pool[p]->dating)continue;
