@@ -862,6 +862,7 @@ int checkforarrest(Creature & liberal,const char* string,int clearformess)
       
       newsstoryst *ns=new newsstoryst;
          ns->type=NEWSSTORY_NUDITYARREST;
+         ns->loc=-1;
       newsstory.push_back(ns);
       sitestory=ns;
 
@@ -873,6 +874,7 @@ int checkforarrest(Creature & liberal,const char* string,int clearformess)
       {
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_WANTEDARREST;
+            ns->loc=-1;
          newsstory.push_back(ns);
          sitestory=ns;
 
@@ -1186,6 +1188,7 @@ void funds_and_trouble(char &clearformess)
       {
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_DRUGARREST;
+            ns->loc=-1;
          newsstory.push_back(ns);
          sitestory=ns;
 
@@ -1738,6 +1741,7 @@ void funds_and_trouble(char &clearformess)
 
                newsstoryst *ns=new newsstoryst;
                   ns->type=NEWSSTORY_GRAFFITIARREST;
+                  ns->loc=-1;
                   ns->positive=0;
                newsstory.push_back(ns);
                sitestory=ns;
@@ -2396,6 +2400,7 @@ void funds_and_trouble(char &clearformess)
             {
                newsstoryst *ns=new newsstoryst;
                   ns->type=NEWSSTORY_BURIALARREST;
+                  ns->loc=-1;
                newsstory.push_back(ns);
                sitestory=ns;
 
