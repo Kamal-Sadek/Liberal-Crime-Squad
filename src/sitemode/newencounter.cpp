@@ -1102,13 +1102,14 @@ char addsiegeencounter(char type)
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;
-			   case SITE_BUSINESS_CRACKHOUSE:
-				   makecreature(encounter[e],CREATURE_GANGMEMBER);
+			      case SITE_BUSINESS_CRACKHOUSE:
+				      makecreature(encounter[e],CREATURE_GANGMEMBER);
+                  encounter[e].align=ALIGN_CONSERVATIVE;
+                  break;
                default:
                   if(law[LAW_DEATHPENALTY]==-2&&
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
-                  else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[e],CREATURE_GANGUNIT);
-                  else makecreature(encounter[e],CREATURE_COP);
+                  else makecreature(encounter[e],CREATURE_SWAT);
                   break;
                }
             }
@@ -1117,6 +1118,8 @@ char addsiegeencounter(char type)
             {
                encounter[e].blood=LCSrandom(50)+1;
             }
+
+            encounter[e].exists=true;
 
             num--;
             if(num==0)break;

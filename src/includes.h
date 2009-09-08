@@ -50,10 +50,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.00.4"
+#define PACKAGE_VERSION "4.00.5"
 #endif
 
-const int version=40004;
+const int version=40005;
 const int lowestloadversion=40000;
 const int lowestloadscoreversion=31203;
 

@@ -304,8 +304,33 @@ void mode_site(void)
          itoa(locz+1,num,10);
          addstr(num);
 
-         if(postalarmtimer>100)addstr(": MASSIVE CONSERVATIVE RESPONSE");
-         else if(postalarmtimer>80)addstr(": MASSIVE RESPONSE IMMINENT");
+         if(postalarmtimer>100)
+         {
+            switch(location[cursite]->type)
+            {
+            case SITE_GOVERNMENT_INTELLIGENCEHQ:
+               addstr(": AGENTS ON SITE");
+               break;
+            case SITE_CORPORATE_HEADQUARTERS:
+            case SITE_CORPORATE_HOUSE:
+               addstr(": MERCENARIES ON SITE");
+               break;
+            case SITE_MEDIA_AMRADIO:
+            case SITE_MEDIA_CABLENEWS:
+               addstr(": ANGRY MOB ON SITE");
+               break;
+		      case SITE_BUSINESS_CRACKHOUSE:
+               addstr(": LOCAL SET ON SITE");
+               break;
+            case SITE_GOVERNMENT_POLICESTATION:
+            default:
+               if(law[LAW_DEATHPENALTY]==-2&&
+                  law[LAW_POLICEBEHAVIOR]==-2)addstr(": DEATH SQUADS ON SITE");
+               else addstr(": SWAT TEAMS ON SITE");
+               break;
+            }
+         }
+         else if(postalarmtimer>80)addstr(": EVACUATING AREA");
          else if(sitealienate==1)addstr(": ALIENATED MASSES");
          else if(sitealienate==2)addstr(": ALIENATED EVERYONE");
          else if(sitealarm)addstr(": CONSERVATIVES ALARMED");
@@ -1495,7 +1520,7 @@ void mode_site(void)
             //SEE IF THERE IS AN ENCOUNTER
             char newenc=0;
 
-            if(!location[cursite]->siege.siege&&!LCSrandom(10))
+            if(!location[cursite]->siege.siege&&postalarmtimer<100&&!LCSrandom(10))
             {
                newenc=1;
             }
@@ -1736,10 +1761,11 @@ void mode_site(void)
                      continue;
                   }
                   // move into player's tile if possible
-                  if((unitx[u]==locx-1||
-                      unitx[u]==locx+1)&&
-                      unity[u]==locy&&
-                      unitz[u]==locz)
+                  if((((unitx[u]==locx-1||unitx[u]==locx+1)&&
+                        unity[u]==locy)||
+                      ((unity[u]==locy-1||unity[u]==locy+1)&&
+                        unitx[u]==locx))
+                        &&unitz[u]==locz)
                   {
                      levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
 
@@ -1748,25 +1774,6 @@ void mode_site(void)
                      {
                         levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
                      }
-
-                     //BLOW TRAPS
-                     if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
-                     {
-                        levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_TRAP;
-                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
-                     }
-                     else
-                     {
-                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT;
-                     }
-                     continue;
-                  }
-                  if(unitx[u]==locx&&
-                     (unity[u]==locy+1||
-                      unity[u]==locy-1)&&
-                     unitz[u]==locz)
-                  {
-                     levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
 
                      //BLOW TRAPS
                      if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
@@ -2234,7 +2241,7 @@ void mode_site(void)
                hostcheck=1;
             }
 
-            if(!location[cursite]->siege.siege)
+            if(!location[cursite]->siege.siege&&postalarmtimer<100)
             {
                if((locx!=olocx||locy!=olocy||locz!=olocz)&&!newenc)
                {

@@ -860,13 +860,23 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    {
       strcat(str," hits the ");
       int w;
+      bool canhit=false;
+
+      for(w=0;w<BODYPARTNUM;w++)
+      {
+         if(!(t.wound[w]&WOUND_CLEANOFF) && !(t.wound[w]&WOUND_NASTYOFF))
+         {
+            canhit=true;
+            break;
+         }
+      }
       
       do
       {
          //Body gets two entries
          w=LCSrandom(BODYPARTNUM+1);
          if(w>BODYPART_BODY)w--;
-      }while((t.wound[w]&WOUND_CLEANOFF) || (t.wound[w]&WOUND_NASTYOFF));
+      }while((t.wound[w]&WOUND_CLEANOFF) || (t.wound[w]&WOUND_NASTYOFF) || canhit==false);
 
       if(t.animalgloss==ANIMALGLOSS_TANK)
       {

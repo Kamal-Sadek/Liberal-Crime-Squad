@@ -1746,10 +1746,10 @@ void funds_and_trouble(char &clearformess)
                newsstory.push_back(ns);
                sitestory=ns;
 
-               attemptarrest(*graffiti[s],NULL,clearformess);
-
                refresh();
                getch();
+
+               attemptarrest(*graffiti[s],NULL,clearformess);
             }
             else
             {
