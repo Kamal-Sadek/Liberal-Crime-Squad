@@ -1105,7 +1105,7 @@ void printliberalstats(Creature &cr)
    //   addstr("*");
    addstr(")");
 
-   move(3,40);
+   move(3,46);
    statebrokenlaws(cr);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 

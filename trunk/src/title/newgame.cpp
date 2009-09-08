@@ -590,9 +590,13 @@ void makecharacter(void)
                addstr("C - taking college courses.  I can see how much the country needs help.");
             //SKILL_SCIENCE 2
             //SKILL_COMPUTERS 2
+            //SKILL_WRITING 2
+            //SKILL_TEACHING 2
+            //SKILL_BUSINESS 1
+            //SKILL_LAW 1
             //ATTRIBUTE_INTELLIGENCE 4
             // +University apartment
-            // +$650 (one month rent)
+            // +$500 (one month rent)
             move(11,0);
             if(choices || selection == 3)
                addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
@@ -918,9 +922,13 @@ void makecharacter(void)
                newcr->att[ATTRIBUTE_INTELLIGENCE]+=4;
                newcr->skill[SKILL_SCIENCE]+=2;
                newcr->skill[SKILL_COMPUTERS]+=2;
+               newcr->skill[SKILL_WRITING]+=2;
+               newcr->skill[SKILL_TEACHING]+=2;
+               newcr->skill[SKILL_BUSINESS]+=1;
+               newcr->skill[SKILL_LAW]+=1;
                newcr->type = CREATURE_COLLEGESTUDENT;
                base = SITE_RESIDENTIAL_APARTMENT;
-               funds += 650;
+               funds += 500;
             }
             if(c=='d')
             {
@@ -937,6 +945,7 @@ void makecharacter(void)
                newcr->att[ATTRIBUTE_AGILITY]+=1;
                newcr->att[ATTRIBUTE_STRENGTH]+=1;
                newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->att[ATTRIBUTE_CHARISMA]+=1;
             }
             if(c=='e')
             {
@@ -1353,7 +1362,7 @@ void makecharacter(void)
             switch(base)
             {
             case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting=1200;break;
-            case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=650;break;
+            case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=500;break;
             case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=200;break;
             case SITE_BUSINESS_CRACKHOUSE:
                location[l]->renting=0;
@@ -1410,7 +1419,7 @@ void makecharacter(void)
             break;
          }
       }
-      newcr->juice=0;
+      //newcr->juice=0;
    squad.push_back(newsq);
    activesquad=newsq;
 
