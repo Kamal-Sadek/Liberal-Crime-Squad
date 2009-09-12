@@ -233,7 +233,7 @@ void savegame(char *str)
 
             if(squad[sq]->squad[pos]!=NULL)
             {
-               numbytes=fwrite(&squad[sq]->squad[pos]->id,sizeof(long),1,h);
+               numbytes=fwrite(&squad[sq]->squad[pos]->id,sizeof(int),1,h);
             }
          }
 
@@ -250,7 +250,7 @@ void savegame(char *str)
       numbytes=fwrite(&dummy_c,sizeof(char),1,h);
       if(activesquad!=NULL)
       {
-         numbytes=fwrite(&activesquad->id,sizeof(long),1,h);
+         numbytes=fwrite(&activesquad->id,sizeof(int),1,h);
       }
 
       //DATES
@@ -526,10 +526,11 @@ char load(void)
             squad[sq]->squad[pos]=NULL;
             if(dummy_c)
             {
-               fread(&dummy_l,sizeof(long),1,h);
+               int dummy_i;
+               fread(&dummy_i,sizeof(int),1,h);
                for(int pl=0;pl<pool.size();pl++)
                {
-                  if(pool[pl]->id==dummy_l)
+                  if(pool[pl]->id==dummy_i)
                   {
                      squad[sq]->squad[pos]=pool[pl];
                   }
@@ -550,10 +551,11 @@ char load(void)
       fread(&dummy_c,sizeof(char),1,h);
       if(dummy_c)
       {
-         fread(&dummy_l,sizeof(long),1,h);
+	 int dummy_l;
+         fread(&dummy_i,sizeof(int),1,h);
          for(int sq=0;sq<squad.size();sq++)
          {
-            if(squad[sq]->id==dummy_l)
+            if(squad[sq]->id==dummy_i)
             {
                activesquad=squad[sq];
                break;
