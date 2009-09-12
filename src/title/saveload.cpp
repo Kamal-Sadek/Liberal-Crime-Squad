@@ -551,7 +551,7 @@ char load(void)
       fread(&dummy_c,sizeof(char),1,h);
       if(dummy_c)
       {
-	 int dummy_l;
+	 int dummy_i;
          fread(&dummy_i,sizeof(int),1,h);
          for(int sq=0;sq<squad.size();sq++)
          {
