@@ -165,6 +165,9 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_SLEEPER_STEAL:
          strcat(str,"Stealing Equipment");
          break;
+      default:
+	 strcat(str,"Reporting Bugs to the Dev Team");
+	 break;
    }
 }
 
@@ -211,6 +214,7 @@ void getweapon(char *str,int type)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2A1-7");break;
+	 default:		    strcpy(str,"Error");break;
       }
    }
    else
@@ -250,6 +254,7 @@ void getweapon(char *str,int type)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"Plasmagun");break;
+	 default:		    strcpy(str,"Error");break;
       }
    }
 }
@@ -302,6 +307,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2 Flamethrower");break;
+	 default:		    strcpy(str,"Error");break;
       }
    }
    else
@@ -347,6 +353,7 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
       case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
       case WEAPON_FLAMETHROWER:  strcpy(str,"Plasma Gun");break;
+      default:		         strcpy(str,"Error");break;
       }
    }
 }
@@ -752,6 +759,7 @@ void getloot(char *str,int loot)
       case LOOT_PRISONFILES:strcat(str,"Prison Records");break;
       case LOOT_CABLENEWSFILES:strcat(str,"Cable News Memos");break;
       case LOOT_AMRADIOFILES:strcat(str,"AM Radio Plans");break;
+      default: strcpy(str,"Programming Errors");break;
    }
 }
 
@@ -1029,7 +1037,7 @@ void getlaw(char *str,int l)
       case LAW_GAY:strcpy(str,"Homosexual Rights");break;
       case LAW_CORPORATE:strcpy(str,"Corporate Ethics");break;
       case LAW_FREESPEECH:strcpy(str,"Freedom of Speech");break;
-		case LAW_TAX:strcpy(str,"Tax Law");break;
+      case LAW_TAX:strcpy(str,"Tax Law");break;
       case LAW_FLAGBURNING:strcpy(str,"Flag Burning");break;
       case LAW_GUNCONTROL:strcpy(str,"Gun Control");break;
       case LAW_WOMEN:addstr("Women's Rights");break;
@@ -1120,6 +1128,7 @@ void getcarcolor(char *str,int type)
       case VEHICLECOLOR_POLICE:strcat(str,"Police-Marked");break;
       case VEHICLECOLOR_TAXI:strcat(str,"Taxi-Striped");break;
       case VEHICLECOLOR_BLACK:strcat(str,"Black");break;
+      default:strcat(str,"Translucent");break;
    }
 }
 
@@ -1181,6 +1190,7 @@ void cityname(char *story)
       case 39:strcpy(story,"San Diego, CA");break;
       case 40:strcpy(story,"El Paso, TX");break;
       case 41:strcpy(story,"Baton Rouge, LA");break;
+      default:strcpy(story,"ERROR, AR");break;
    }
 }
 

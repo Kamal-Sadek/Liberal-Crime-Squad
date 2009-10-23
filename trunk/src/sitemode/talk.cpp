@@ -1619,7 +1619,7 @@ char talk(Creature &a,int t)
                      case 5:addstr("\"I'm big where it counts.\"");break;
                      case 6:addstr("\"Daaaaaamn girl, I want to wrap your legs around my face and");
                             move(11,1);y++;
-                            addstr("wear you like a feed bag!\"");
+                            addstr("wear you like a feed bag!\""); // Bill Hicks
                             break;
                      case 7:addstr("\"Let's play squirrel.  I'll bust a nut in your hole.\"");break;
                      case 8:addstr("\"You know, if I were you, I'd have sex with me.\"");break;

@@ -705,7 +705,7 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(a->name);
             switch(LCSrandom(6))
             {
-            case 0:addstr(" recreates scenes from Abu Ghraib");break;//lol, sodomy
+            case 0:addstr(" recreates scenes from Abu Ghraib");break;
             case 1:addstr(" whips the Automaton with a steel cable");break;
             case 2:addstr(" holds the hostage's head under water");break;
             case 3:addstr(" peels back the Automaton's fingernails");break;//XXX: but shouldn't this only happen once?
@@ -726,7 +726,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 1:addstr("Does it hurt?");break;
                case 2:addstr("Nobody loves you");break;
                case 3:addstr("God hates you");break;
-               case 4:addstr("Don't fuck with me");break; // Don't censor profanity in interrogations, even if C+ free speech
+               case 4:addstr("Don't fuck with me");break;//NOTE: Don't censor profanity in interrogations, even if C+ free speech
                case 5:addstr("This is Liberalism");break;
                case 6:addstr("Convert, bitch");break;
                case 7:addstr("I'm going to kill you");break;
