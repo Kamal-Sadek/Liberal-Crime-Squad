@@ -383,6 +383,7 @@ char completedate(datest &d,int p,char &clearformess)
    move(0,0);
    addstr(pool[p]->name);
    addstr(" has ");
+//if(!pool[p]->alive) { die } or something
    if(d.date.size()==1)
    {
       if(pool[p]->clinic)addstr("a \"hot\" date with ");
