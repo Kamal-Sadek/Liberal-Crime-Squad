@@ -2331,7 +2331,7 @@ void majornewspaper(char &clearformess,char canseethings);
 *******************************************************************************/
 
 /*
- sex.cpp
+ newsfuncs.cpp
 */
 /* pick a descriptor acronym */
 void sexdesc(char *str);
@@ -2341,6 +2341,10 @@ void sexwho(char *str);
 void sexseek(char *str);
 /* what type of sex? */
 void sextype(char *str);
+/* generate a vanity plate for the squad. */
+//void vanity(char *str);
+/* generate a non-vanity plate for the squad. */
+void plate(char *str);
 
 /*******************************************************************************
 *

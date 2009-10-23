@@ -152,7 +152,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
          }
          else
          {
-            strcat(story,"The Conservative Crime Squad has gone on a rampage.  ");
+            strcat(story,"The Conservative Crime Squad has gone on another rampage.  ");
             strcat(story,"&r");
          }
       }
@@ -163,14 +163,14 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
       {
          if(ns.positive&&!liberalguardian)
          {
-            strcat(story,"A group of M16-wielding vigilantes calling itself the Conservative Crime Squad ");
+            strcat(story,"A group of M16-wielding vigilantes calling themselves the Conservative Crime Squad ");
             strcat(story,"burst briefly onto the scene of political activism yesterday, according ");
             strcat(story,"to a spokesperson from the police department.  ");
             strcat(story,"&r");
          }
          else
          {
-            strcat(story,"A group of worthless M16-toting hicks calling itself the Conservative Crime Squad ");
+            strcat(story,"A group of worthless M16-toting hicks calling themselves the Conservative Crime Squad ");
             strcat(story,"went on a suicidal rampage yesterday, according ");
             strcat(story,"to a spokesperson from the police department.  ");
             strcat(story,"&r");
@@ -185,7 +185,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
          }
          else
          {
-            strcat(story,"The Conservative Crime Squad has gone on a rampage, and they got what they deserved.  ");
+            strcat(story,"The Conservative Crime Squad has gone on another rampage, and they got what they deserved.  ");
             strcat(story,"&r");
          }
       }
@@ -221,7 +221,7 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
             if(!liberalguardian)
                strcat(story,"The Liberal Crime Squad has gone on a rampage, and they got what they deserved.  ");
             else
-               strcat(story,"A Liberal Crime Squad operation went horribly wrong, and came to a tragic end.  ");
+               strcat(story,"A Liberal Crime Squad operation went horribly wrong, and came to a tragic end.  ");//XXX: Rewrite me -- LK
             strcat(story,"&r");
          }
       }

@@ -219,7 +219,7 @@ static void getissueeventstring(char* str)
    case VIEW_WOMEN:strcat(str,"a documentary on the women's rights struggle");break;
    case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
    case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
-	case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
+   case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
    case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the Chernobyl dead zone");break;
    case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
    case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;

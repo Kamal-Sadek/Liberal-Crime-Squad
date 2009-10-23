@@ -41,7 +41,7 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
       case NEWSSTORY_CCS_SITE:
       case NEWSSTORY_CCS_KILLED_SITE:
          if(ns.positive)
-            displaycenterednewsfont("CCS STRIKES",5);
+            displaycenterednewsfont("CCS STRIKES",5);//AGAIN?
          else
             displaycenterednewsfont("CCS RAMPAGE",5);
          y=13;

@@ -2,7 +2,7 @@
 //#include "includes.h"
 #include "externs.h"
 
-
+//FIXME: These ads can occur more than once on the same newspaper.
 void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,short* storyx_e,int& it2)
 {
    int x,y;
@@ -87,9 +87,12 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                strcat(ad,"&cCall for Details&r");
                break;
             case 1:
+               int chairprice = LCSrandom(201)+400;
                strcpy(ad,"&cFine Leather Chairs&r&r");
                strcat(ad,"&cSpecial Purchase&r");
-               strcat(ad,"&cNow $599&r");
+               strcat(ad,"&cNow $");
+               strcat(ad,chairprice);
+               strcat(ad,"&r");
                break;
             case 2:
                strcpy(ad,"&cParis Flea Market&r&r");
@@ -97,11 +100,21 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                strcat(ad,"&c50% Off&r");
                break;
             case 3:
+               int caryear = year-LCSrandom(15);
+               int carprice = LCSrandom(16)+15;
+               int carprice2 = LCSrandom(1000);
                strcpy(ad,"&cQuality Pre-Owned&r");
                strcat(ad,"&cVehicles&r");
-               strcat(ad,"&c2005 Lexus GS 300&r");
+               strcat(ad,"&c");
+               strcat(ad,caryear);
+               strcat(ad," ");
+//               strcat(ad,cartype);
+//TODO: leading zeros, etc.
+               strcat(ad,"Lexus GS 300&r");
                strcat(ad,"&cSedan 4D&r");
-               strcat(ad,"&cOnly $21,988&r");
+               strcat(ad,"&cOnly $");
+               strcat(ad,carprice);
+               strcat(ad,"&r");
                break;
             case 4:
                strcpy(ad,"&cSpa&r");
@@ -112,12 +125,13 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             case 5:
             {
                strcat(ad,"&c");
-               switch(LCSrandom(4))
+               switch(LCSrandom(5))
                {
                   case 0:strcpy(ad,"Searching For Love");
                   case 1:strcpy(ad,"Seeking Love");
                   case 2:strcpy(ad,"Are You Lonely?");
                   case 3:strcpy(ad,"Looking For Love");
+		  case 4:strcpy(ad,"Soulmate Wanted");
                   break;
                }
                char str[10];
@@ -154,8 +168,11 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             strcat(ad,"&cCo-Op&r");
             break;
          case 1:
+            int numyears = LCSrandom(11)+20;
             strcpy(ad,"&cLiberal Defense Lawyer&r");
-            strcat(ad,"&c26 Years Experience&r&r");
+            strcpy(ad,"&c");
+            strcpy(ad,numyears);
+            strcat(ad," Years Experience&r&r");
             strcat(ad,"&cCall Today&r");
             break;
          case 2://XXX: Should this only be if abortion is legal?

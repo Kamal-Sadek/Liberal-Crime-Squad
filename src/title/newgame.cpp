@@ -329,6 +329,7 @@ void makecharacter(void)
 		// When he was really into the sauce...
 			// 
 		// XXX: Needs an option to have the founder have been in the Army -- LK
+		// XXX: Something I forgot.
 
          case 1:
             move(2,0);addstr("When I was bad...");
