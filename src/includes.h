@@ -40,6 +40,23 @@
 // Show die rolls, 100% accurate poll numbers
 //#define SHOWMECHANICS
 
+// Make the year 2100
+//#define THEFUTURE
+
+// Make the founder blind
+//#define BLIND
+
+// Make the founder unable to walk
+//#define NOWALK
+
+// Make the founder have no face
+//#define NOFACE
+
+// Make the founder have a severely injured spine
+//#define SPINE
+
+// Make the founder have severe internal damage
+//#define INTERNAL
 
 
 #ifdef HAVE_CONFIG_H
