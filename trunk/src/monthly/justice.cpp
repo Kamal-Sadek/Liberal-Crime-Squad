@@ -273,8 +273,8 @@ void trial(Creature &g)
          addstr("felony assault");
          breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
-      else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge?
-      {
+      else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
+      {					//		Manslaughter is murder without forethought or malice, IIRC. -- LK
          if(g.lawflag[LAWFLAG_MURDER]>1)
          {
             char str[10];
@@ -666,7 +666,7 @@ void trial(Creature &g)
          {
             case 0:addstr("Such a collection of Conservative jurors has never before been assembled.");break;
             case 1:addstr("One of the accepted jurors is a Conservative activist.");break;
-            case 2:addstr("Three of the jurors are members of the KKK.");break;
+            case 2:addstr("Three of the jurors are members of the KKK.");break;//XXX: A Few?
             case 3:addstr("The jury is frighteningly Conservative.");break;
          }
       }

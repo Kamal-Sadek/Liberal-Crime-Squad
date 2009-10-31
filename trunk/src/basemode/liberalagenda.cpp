@@ -225,7 +225,7 @@ char liberalagenda(char won)
          }
          for(int l=0;l<LAWNUM;l++)
          {
-            move(14+l/3,l%3*26);
+            move(14+l/3,l%3*26);//FIXME: L+ Should be on the LEFT, not the right, and vice versa. -- LK
 
             set_color(COLOR_BLACK,COLOR_BLACK,1);
 
@@ -290,7 +290,7 @@ char liberalagenda(char won)
                   break;
             }
 
-            move(14+l/3,l%3*26 + 3 + law[l]);
+            move(14+l/3,l%3*26 + 3 + law[l]);//FIXME: Pretty sure this needs to be changed as well. -- LK
 
             addch('O');
          }
@@ -339,7 +339,8 @@ char liberalagenda(char won)
                case LAW_WOMEN:
                   if(won==-1)addstr("Women have been stripped of the right to vote.");
 				      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Women are regularly treated as second-class citizens.");
+//                     addstr("Women are regularly treated as second-class citizens.");
+                     addstr("Women are second-class citizens.");
 				      else if(law[l]==-1)addstr("Non-discrimination laws do not apply to gender.");
 				      else if(law[l]==0)addstr("Women are nominally equal under law.");
 				      else if(law[l]==1)addstr("Women have substantial recourse against discrimination.");
@@ -421,27 +422,27 @@ char liberalagenda(char won)
                   if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Animals are things of inferior existence.");
-                  else if(law[l]==-1)addstr("Animal research is lightly regulated.");
-                  else if(law[l]==0)addstr("Animal research is moderately regulated.");
-                  else if(law[l]==1)addstr("Animal research is stiffly regulated.");
-                  else addstr("Animals are people too.");
+                  else if(law[l]==-1)addstr("Animal research is lightly regulated.");// TODO: BORING! -- LK
+                  else if(law[l]==0)addstr("Animal research is moderately regulated.");// TODO: BORING! -- LK
+                  else if(law[l]==1)addstr("Animal research is stiffly regulated.");// TODO: BORING! -- LK
+                  else addstr("Animals are people, too.");
                   break;
                case LAW_POLICEBEHAVIOR:
                   if(won==-1)addstr("Policing is administered by corporations and has a draft.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Law enforcement is given free reign.");
-                  else if(law[l]==-1)addstr("Law enforcement is lightly regulated.");
-                  else if(law[l]==0)addstr("Law enforcement is moderately regulated.");
-                  else if(law[l]==1)addstr("Law enforcement is strictly controlled.");
+                  else if(law[l]==-1)addstr("Law enforcement is lightly regulated.");// TODO: BORING! -- LK
+                  else if(law[l]==0)addstr("Law enforcement is moderately regulated.");// TODO: BORING! -- LK
+                  else if(law[l]==1)addstr("Law enforcement is strictly controlled.");// TODO: BORING! -- LK
                   else addstr("All law enforcement positions are subject to election and recall.");
                   break;
                case LAW_PRIVACY:
                   if(won==-1)addstr("Files on each citizen are easily accessible to corporations.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Any corporation requesting private information is granted access.");
-                  else if(law[l]==-1)addstr("Privacy laws are weak.");
-                  else if(law[l]==0)addstr("Privacy laws are moderate.");
-                  else if(law[l]==1)addstr("Privacy laws are strong.");
+                  else if(law[l]==-1)addstr("Privacy laws are weak.");// TODO: BORING! -- LK
+                  else if(law[l]==0)addstr("Privacy laws are moderate.");// TODO: BORING! -- LK
+                  else if(law[l]==1)addstr("Privacy laws are strong.");// TODO: BORING! -- LK
                   else addstr("Individual privacy is sacred.");
                   break;
                case LAW_DEATHPENALTY:
@@ -523,7 +524,7 @@ char liberalagenda(char won)
                   else if(law[l]==-1)addstr("Military weapons are banned, but similar-looking guns are available.");
                   else if(law[l]==0)addstr("A comprehensive ban on military-style weapons is in effect.");
                   else if(law[l]==1)addstr("Most guns cannot be sold to anyone outside of law enforcement.");
-                  else addstr("It is illegal to buy, sell, or carry a gun in public.");
+                  else addstr("It is illegal to buy, sell, or carry a gun in public.");//XXX: Should guns be legal in private, too? -- LK
                   break;
             }
 
@@ -620,8 +621,9 @@ char liberalagenda(char won)
 
 /* base - liberal agenda - disband */
 char confirmdisband(void) // XXX The (current) issue that the masses are most
-{			  // XXX	concerned should be more likely to be
-   char word[80];	  // XXX	the phrase. (Issue, not the CCS, etc.)
+{			  // XXX	concerned should be (slightly) more
+                          // XXX        likely to be the phrase.
+                          // XXX        (Issue, not the CCS, etc.)
    int pos=0;		  // XXX			-- LK
 
    switch(LCSrandom(22)) // or more... (preferably 44)
@@ -633,22 +635,22 @@ char confirmdisband(void) // XXX The (current) issue that the masses are most
       case 2:strcpy(word,"Gay Marriage");break;                 // Sancitity of Marriage        //                       //
       case 3:strcpy(word,"Abortion Rights");break;              // Right to Life                //                       //
       case 4:strcpy(word,"Separation Clause");break;            // Under God                    //                       //
-      case 5:strcpy(word,"Racial Equality");break;              // Racial Tolerance             //                       //
+      case 5:strcpy(word,"Racial Equality");break;              // Emmett Till                  //                       //
       case 6:strcpy(word,"Gun Control");break;                  // Second Amendment             // Firing Squad          //
       case 7:strcpy(word,"Campaign Finance Reform");break;      // Freedom to Campaign          //                       //
-      case 8:strcpy(word,"Animal Rights");break;                // Animal Testing FIXME         //                       //
-      case 9:strcpy(word,"Worker's Rights");break;              // Right to Work                //                       //
-      case 10:strcpy(word,"Police Responsibility");break;       // Safe Streets                 //                       //
+      case 8:strcpy(word,"Animal Rights");break;                // Animal Abuse                 //                       //
+      case 9:strcpy(word,"Worker's Rights");break;              // Right to Work                // Gulag                 //
+      case 10:strcpy(word,"Police Responsibility");break;       // Rodney King                  // Red Guard FIXME       // /* XXX: "Civilian" Police (Note to self) -- LK */
       case 11:strcpy(word,"Global Warming");break;              // Self-Regulation              //                       //
-      case 12:strcpy(word,"Immigration Reform");break;          // Border Control FIXME         //                       //
-      case 13:strcpy(word,"Human Rights");break;                // National Security            //                       //
+      case 12:strcpy(word,"Immigration Reform");break;          // Border Control FIXME         // Berlin Wall           // /* XXX: "Nicer" Term (Note to self) -- LK */
+      case 13:strcpy(word,"Human Rights");break;                // National Security            // Reeducation FIXME     // /* XXX: 2+2 = 5? (Note to self) -- LK */
       case 14:strcpy(word,"Woman's Suffrage");break;            // Traditional Gender Roles     //                       //
       case 15:strcpy(word,"Right To Privacy");break;            // Wiretapping                  // Big Brother           //
-      case 16:strcpy(word,"Medical Marijuana");break;           // Drug Prevention              //                       //
-      case 17:strcpy(word,"Flag Burning");break;                // Patriotism                   //                       //
-      case 18:strcpy(word,"Life Imprisonment");break;           // Zero Tolerance               //                       //
-      case 19:strcpy(word,"Conflict Resolution");break;         // Preemptive Strike            //                       //
-      case 20:strcpy(word,"Radiation Poisoning");break;         // Nuclear Power                //                       //
+      case 16:strcpy(word,"Medical Marijuana");break;           // War on Drugs                 // Soma                  //
+      case 17:strcpy(word,"Flag Burning");break;                // Patriotism                   // DAILYSPEECHORW/E FIXME// /* XXX: Towards the beginning of 1984, at Winston's job. (Note to self) -- LK */
+      case 18:strcpy(word,"Life Imprisonment");break;           // Zero Tolerance               // Mass Grave            //
+      case 19:strcpy(word,"Conflict Resolution");break;         // Preemptive Strike            // Cuban Missile Crisis  //
+      case 20:strcpy(word,"Radiation Poisoning");break;         // Nuclear Power                // Arms Race             //
       case 21:strcpy(word,"Tax Bracket");break;                 // Flat Tax                     // Proletariat           //
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    }
