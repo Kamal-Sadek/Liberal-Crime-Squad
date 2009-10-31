@@ -67,7 +67,7 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
                strcat(story,str2);
 			   }
-			   if(law[LAW_WOMEN]=-2)
+			   if(law[LAW_WOMEN]==-2)
 			   {
 				   strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
 				   strcat(story," abortion doctors as opposed to arresting them.&r");
@@ -732,7 +732,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
             strcat(story,"seeking ");
-				if(law[LAW_DEATHPENALTY]=2)
+				if(law[LAW_DEATHPENALTY]==2)
 				{
 					strcat(story,"life imprisonment in this case.");
 				}
@@ -747,7 +747,7 @@ void constructeventstory(char *story,short view,char positive)
          {
             cityname(story);
             strcat(story," - Researchers ");
-			if(law[LAW_ANIMALRESEARCH]=2)
+			if(law[LAW_ANIMALRESEARCH]==2)
 			{
 				strcat(story,"from ");
 					switch(LCSrandom(5))

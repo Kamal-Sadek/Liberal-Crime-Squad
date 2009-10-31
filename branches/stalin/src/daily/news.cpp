@@ -634,7 +634,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(crime[CRIME_SHUTDOWNREACTOR])
                {
-				   if(law[LAW_NUCLEARPOWER]=2)
+				   if(law[LAW_NUCLEARPOWER]==2)
 				   {
 					   if(!liberalguardian)
 						{

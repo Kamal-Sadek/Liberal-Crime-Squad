@@ -354,7 +354,7 @@ void special_nuclear_onoff(void)
       clearmessagearea();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-	  if(law[LAW_NUCLEARPOWER]=2)
+	  if(law[LAW_NUCLEARPOWER]==2)
 	  {
 	  move(16,1);
       addstr("You see the nuclear waste center control room.");
@@ -413,7 +413,7 @@ void special_nuclear_onoff(void)
             addstr(".");
             refresh();
             getch();
-	  if(law[LAW_NUCLEARPOWER]=2)
+	  if(law[LAW_NUCLEARPOWER]==2)
 	  {
 	  move(17,1);
       addstr("The nuclear waste gets released into the state's water supply!");

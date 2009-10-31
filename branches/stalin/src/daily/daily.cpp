@@ -2076,7 +2076,7 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Sweatshop");
          break;
       case SITE_BUSINESS_CRACKHOUSE:
-		  if(law[LAW_DRUGS]=2)
+		  if(law[LAW_DRUGS]==2)
 		  {
 		lastname(str);
          strcpy(loc.name,str);

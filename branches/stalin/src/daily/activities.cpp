@@ -518,7 +518,7 @@ void survey(Creature *cr)
             if(attitude[VIEW_DEATHPENALTY]>50)addstr("the unjust death penalty.");
 			else
 			{
-				if(law[LAW_DEATHPENALTY]=2)
+				if(law[LAW_DEATHPENALTY]==2)
 				{
 					addstr("restoring the death penalty.");
 				}
@@ -536,7 +536,7 @@ void survey(Creature *cr)
             if(attitude[VIEW_NUCLEARPOWER]>50)addstr("the dangers of nuclear power.");
 			else
 			{
-				if(law[LAW_NUCLEARPOWER]=2)
+				if(law[LAW_NUCLEARPOWER]==2)
 				{
 					addstr("legalizing nuclear power.");
 				}
