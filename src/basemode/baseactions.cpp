@@ -280,7 +280,18 @@ void stopevil(void)
 
    vector<long> temploc;
    for(l=0;l<location.size();l++)
-      if(location[l]->parent==loc&&!location[l]->hidden)temploc.push_back(l);
+   {
+      if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
+   }
+   for(l=0;l<location.size();l++)
+   {
+      //locationst* loc2 = location[l]; //what was this for?
+      if(location[l]->parent==loc&&location[l]->renting==RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
+   }
+   for(l=0;l<location.size();l++)
+   {
+      if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
+   }
 
    do
    {
@@ -461,7 +472,17 @@ void stopevil(void)
             temploc.clear();
 
             for(l=0;l<location.size();l++)
-               if(location[l]->parent==loc&&!location[l]->hidden)temploc.push_back(l);
+            {
+               if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
+            }
+            for(l=0;l<location.size();l++)
+            {
+               if(location[l]->parent==loc&&location[l]->renting==RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
+            }
+            for(l=0;l<location.size();l++)
+            {
+               if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
+            }
 
             if(temploc.size()==0)
             {
@@ -476,7 +497,17 @@ void stopevil(void)
                {
                   loc=oldloc;
                   for(l=0;l<location.size();l++)
-                     if(location[l]->parent==loc&&!location[l]->hidden)temploc.push_back(l);
+                  {
+                     if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
+                  }
+                  for(l=0;l<location.size();l++)
+                  {
+                     if(location[l]->parent==loc&&location[l]->renting==RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
+                  }
+                  for(l=0;l<location.size();l++)
+                  {
+                     if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
+                  }
                }
             }
          }
