@@ -652,7 +652,7 @@ void assemblesquad(squadst *cursquad)
       squadloc[sl]=squad[sl]->squad[0]->location;
       if(squadloc[sl]!=-1)
       {
-         if(location[squadloc[sl]]->renting==-1)
+         if(location[squadloc[sl]]->renting==RENTING_NOCONTROL)
          {
             squadloc[sl]=-1;
          }

@@ -36,7 +36,7 @@ void trial(Creature &g)
    g.deathpenalty=0;
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
-   if(location[g.base]->renting==-1)
+   if(location[g.base]->renting<0)
    {
       for(int i=0;i<location.size();++i)
       {
@@ -1384,7 +1384,7 @@ char prison(Creature &g)
             g.armor.flag=0;
             // If their old base is no longer under LCS control, wander back to the
             // homeless shelter instead.
-            if(location[g.base]->renting==-1)
+            if(location[g.base]->renting<0)
             {
                for(int i=0;i<location.size();++i)
                {
