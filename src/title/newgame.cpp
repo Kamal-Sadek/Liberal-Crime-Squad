@@ -81,8 +81,7 @@ void setup_newgame(void)
          strongccs=!strongccs;
          continue;
       }
-      if(c=='c')   if(a.special[SPECIALWOUND_RIGHTEYE]!=1&&
-      a.special[SPECIALWOUND_LEFTEYE]!=1)aroll-=LCSrandom(20);
+      if(c=='c')
       {
          nightmarelaws=!nightmarelaws;
          continue;
@@ -1006,7 +1005,9 @@ void makecharacter(void)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(4,2);
    addstr("The Year is ");
-   addstr(year);
+   char year_s [80];
+   itoa (year, year_s, 10);
+   addstr(year_s);
    addstr(".");
    move(6,2);
    addstr("Conservative President ");
