@@ -17,7 +17,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp cursesgraphic
  news/squadstory_text.cpp sitemode/sitemap.h sitemode/sitemap.cpp\
  news/news.h location.cpp location.h locationdef.cpp locationdef.h\
  basemode/activate_sleepers.cpp monthly/sleeper_update.cpp items/armor.cpp\
- creature/creaturetypes.cpp basemode/liberalagenda.cpp news/sex.cpp
+ creature/creaturetypes.cpp basemode/liberalagenda.cpp news/newsfuncs.cpp
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src
