@@ -86,7 +86,7 @@ void dispersalcheck(char &clearformess)
                //Attempt to promote their subordinates
                if(promotesubordinates(*pool[p], clearformess))promotion=1;
 
-               if(pool[p]->location==-1 || location[pool[p]->location]->renting == -1)
+               if(pool[p]->location==-1 || location[pool[p]->location]->renting == RENTING_NOCONTROL)
                {
                   delete pool[p];
                   pool.erase(pool.begin() + p);

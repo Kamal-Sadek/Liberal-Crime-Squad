@@ -147,11 +147,11 @@ void passmonth(char &clearformess,char canseethings)
             }
             else
             {
-               if(location[l]->renting==-2) // CCS Safehouse
+               if(location[l]->renting==RENTING_CCS)
                {
                   location[l]->changes[c].flag=SITEBLOCK_GRAFFITI_CCS; // Convert to CCS tags
                }
-               else if(location[l]->renting==0) // LCS Permanent Safehouse
+               else if(location[l]->renting==RENTING_PERMANENT)
                {
                   location[l]->changes[c].flag=SITEBLOCK_GRAFFITI; // Convert to LCS tags
                }

@@ -1182,14 +1182,14 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_SHELTER;
       newl->parent=3;
-      newl->renting=0;
+      newl->renting=RENTING_PERMANENT;
       initlocation(*newl);
    location.push_back(newl);
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_WAREHOUSE;
       newl->parent=3;
-      newl->renting=0;
+      newl->renting=RENTING_PERMANENT;
       newl->hidden=0;
       initlocation(*newl);
    location.push_back(newl);
@@ -1197,7 +1197,7 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_INDUSTRY_WAREHOUSE;
       newl->parent=3;
-      newl->renting=0;
+      newl->renting=RENTING_PERMANENT;
       newl->hidden=0;
       initlocation(*newl);
    location.push_back(newl);
@@ -1365,7 +1365,7 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
       newl->parent=3;
-      newl->renting=-2;
+      newl->renting=RENTING_CCS;
       newl->hidden=1;
       initlocation(*newl);
    location.push_back(newl);
@@ -1373,7 +1373,7 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_BUSINESS_BARANDGRILL;
       newl->parent=0;
-      newl->renting=-2;
+      newl->renting=RENTING_CCS;
       newl->hidden=1;
       initlocation(*newl);
    location.push_back(newl);
@@ -1381,7 +1381,7 @@ void makecharacter(void)
    newl=new locationst;
       newl->type=SITE_OUTDOOR_BUNKER;
       newl->parent=4;
-      newl->renting=-2;
+      newl->renting=RENTING_CCS;
       newl->needcar=1;
       newl->hidden=1;
       initlocation(*newl);
@@ -1404,7 +1404,7 @@ void makecharacter(void)
             case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=500;break;
             case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=200;break;
             case SITE_BUSINESS_CRACKHOUSE:
-               location[l]->renting=0;
+               location[l]->renting=RENTING_PERMANENT;
                location[l]->compound_stores+=50;
                break;
             }

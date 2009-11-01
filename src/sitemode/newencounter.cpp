@@ -69,7 +69,7 @@ void prepareencounter(short type,char sec)
       if(siteonfire && law[LAW_FREESPEECH]!=-2)creaturearray[CREATURE_FIREFIGHTER]=1000;
    }
 
-   if(location[cursite]->renting==-2)
+   if(location[cursite]->renting==RENTING_CCS)
    {
       creaturearray[CREATURE_CCS_VIGILANTE]+=50;
       creaturearray[CREATURE_CCS_ARCHCONSERVATIVE]+=endgamestate;
