@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 #include <includes.h>
@@ -849,7 +849,7 @@ void makestate(char *str)
 
    switch(LCSrandom(50))
    {
-	       case 0:addstr("Alabama");break;
+               case 0:addstr("Alabama");break;
                case 1:addstr("Alaska");break;
                case 2:addstr("Arkansas");break;
                case 3:addstr("Arizona");break;

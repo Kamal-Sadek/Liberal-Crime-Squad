@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -350,7 +350,7 @@ void freehostage(Creature &cr,char situation)
       }
       else if(situation==2)
       {
-	      //Don't print anything.
+              //Don't print anything.
       }
 
       if(cr.prisoner->squadid==-1)
@@ -581,7 +581,6 @@ void kidnaptransfer(Creature &cr)
 
    move(3,0);
    addstr("If you do not enter anything, their real name will be used.");
-	 
    move(4,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
 

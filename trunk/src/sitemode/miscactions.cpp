@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -86,7 +86,7 @@ char unlock(short type,char &actual)
       int aroll=LCSrandom(6)+maxattack;
       if(maxattack<=difficulty)
       {
-      	activesquad->squad[p]->train(SKILL_SECURITY,1+difficulty*2-maxattack);
+              activesquad->squad[p]->train(SKILL_SECURITY,1+difficulty*2-maxattack);
       }
 
       if(aroll>difficulty)
@@ -108,16 +108,16 @@ char unlock(short type,char &actual)
          refresh();
          for(int j=0;j<6;j++) //If people witness a successful unlock, they learn a little bit.
          {
-	         if (j==p) continue;
-	         if(activesquad->squad[j]!=NULL&&
-		         activesquad->squad[j]->alive&&
-		         activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty)
-	         {
-		         if(activesquad->squad[j]->alive)
-		         {
-			         activesquad->squad[j]->train(SKILL_SECURITY,difficulty-activesquad->squad[j]->skill[SKILL_SECURITY]);
-		         }
-	         }
+                 if (j==p) continue;
+                 if(activesquad->squad[j]!=NULL&&
+                         activesquad->squad[j]->alive&&
+                         activesquad->squad[j]->skill[SKILL_SECURITY]<difficulty)
+                 {
+                         if(activesquad->squad[j]->alive)
+                         {
+                                 activesquad->squad[j]->train(SKILL_SECURITY,difficulty-activesquad->squad[j]->skill[SKILL_SECURITY]);
+                         }
+                 }
          }
 
          getch();
@@ -466,10 +466,10 @@ char hack(short type,char &actual)
       addstr("You can't find anyone to do the job.");
       if(blind)
       {
-		// Screen readers FTW. Honestly, it should just be a handicap
-		//	instead of an impossibility, just make the chances
-		//	much, much less.
-		//			-- LK
+                // Screen readers FTW. Honestly, it should just be a handicap
+                //        instead of an impossibility, just make the chances
+                //        much, much less.
+                //                        -- LK
          refresh();
          getch();
          move(17,1);
@@ -1179,8 +1179,8 @@ void reloadparty(bool wasteful)
             case CLIP_MOLOTOV:ammomax=1;break;
             case CLIP_GASOLINE:ammomax=2;break;
          }
-		   if(wasteful)
-		   {
+                   if(wasteful)
+                   {
             if(activesquad->squad[p]->weapon.ammo<ammomax&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
             {
                activesquad->squad[p]->weapon.ammo=ammomax;

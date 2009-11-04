@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -551,7 +551,7 @@ char load(void)
       fread(&dummy_c,sizeof(char),1,h);
       if(dummy_c)
       {
-	 int dummy_i;
+         int dummy_i;
          fread(&dummy_i,sizeof(int),1,h);
          for(int sq=0;sq<squad.size();sq++)
          {

@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at
+        the bottom of includes.h in the top src folder.
 */
 
 
@@ -299,8 +299,8 @@ void makecharacter(void)
       {
 
 /*
-	- The anniversary of Hitler's suicide. - SKILL_PISTOL 1 (lol)
-	- Indira Gandhi Killed
+        - The anniversary of Hitler's suicide. - SKILL_PISTOL 1 (lol)
+        - Indira Gandhi Killed
 */
 
          case 0:
@@ -331,11 +331,11 @@ void makecharacter(void)
                addstr("E - the Sandanista Front won the elections in Nicaragua.");
             //ATTRIBUTE_CHARISMA 2
             // Sept. 4, 1984
-			//move(14,0);
-			//if(choices || selection == 5)
+                        //move(14,0);
+                        //if(choices || selection == 5)
                //addstr("F - the United Nations condemned Iraq's use of chemical weapons.");      
             //ATTRIBUTE_HEALTH 2
-			//March 30, 1984
+                        //March 30, 1984
 
             move(17,0);
             addstr("The doctor said I was a ");
@@ -358,12 +358,12 @@ void makecharacter(void)
 
             break;
 
-		// My first memory was...
-			// my father burning my back with a cigarette
-		// When he was really into the sauce...
-			// 
-		// XXX: Needs an option to have the founder have been in the Army -- LK
-		// XXX: Something I forgot.
+                // My first memory was...
+                        // my father burning my back with a cigarette
+                // When he was really into the sauce...
+                        // 
+                // XXX: Needs an option to have the founder have been in the Army -- LK
+                // XXX: Something I forgot.
 
          case 1:
             move(2,0);addstr("When I was bad...");

@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at
+        the bottom of includes.h in the top src folder.
 */
 
 #include <includes.h>
@@ -542,10 +542,10 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(crime[CRIME_SHUTDOWNREACTOR])
                {
-				   if(law[LAW_NUCLEARPOWER]=2)
-				   {
-					   if(!liberalguardian)
-						{
+                                   if(law[LAW_NUCLEARPOWER]=2)
+                                   {
+                                           if(!liberalguardian)
+                                                {
                      strcat(story,"  According to sources that were at the scene, ");
                      strcat(story,"the Liberal Crime Squad contaminated the state's water supply");
                      strcat(story,"yesterday by tampering with equipment on the site.");
@@ -557,9 +557,9 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      strcat(story,"demonstrating the extreme dangers of Nuclear Waste. ");
                      strcat(story,"&r");
                   }
-				  }
-				   else
-				   {
+                                  }
+                                   else
+                                   {
                   if(!liberalguardian)
                   {
                      strcat(story,"  According to sources that were at the scene, ");
@@ -573,7 +573,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      strcat(story,"demonstrating the extreme vulnerability and danger of Nuclear Power Plants. ");
                      strcat(story,"&r");
                   }
-				   }
+                                   }
                }
                if(crime[CRIME_POLICE_LOCKUP])
                {
@@ -963,8 +963,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   else strcat(story,"The body had no face or ");
                   strcat(story,"fingerprints.  Like, it was all smooth.  ");
                   if(law[LAW_FREESPEECH]==-2)strcat(story,"[Craziest] thing I've ever seen");
-		  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damnedest thing I've ever seen");
-		  else strcat(story,"D*mnd*st thing I've ever seen");
+                  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damnedest thing I've ever seen");
+                  else strcat(story,"D*mnd*st thing I've ever seen");
                }
                else
                {
@@ -1910,7 +1910,7 @@ void majornewspaper(char &clearformess,char canseethings)
                         header=VIEW_NUCLEARPOWER;
                         break;
                      case SITE_CORPORATE_HEADQUARTERS:
-					         header=VIEW_CORPORATECULTURE;
+                                                 header=VIEW_CORPORATECULTURE;
                         break;
                      case SITE_CORPORATE_HOUSE:
                         header=VIEW_CEOSALARY;
@@ -2066,7 +2066,7 @@ void majornewspaper(char &clearformess,char canseethings)
             colored=-1;
          }
          else power=-power;
-	      switch(location[newsstory[n]->loc]->type)
+              switch(location[newsstory[n]->loc]->type)
          {
          case SITE_LABORATORY_COSMETICS:
             change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
@@ -2108,13 +2108,13 @@ void majornewspaper(char &clearformess,char canseethings)
             change_public_opinion(VIEW_NUCLEARPOWER,power,colored,power*10);
             break;
          case SITE_CORPORATE_HEADQUARTERS:
-			   change_public_opinion(VIEW_TAXES,power,colored,power*10);
+                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
             change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
             change_public_opinion(VIEW_WOMEN,power,colored,power*10);
             break;
          case SITE_CORPORATE_HOUSE:
-			   change_public_opinion(VIEW_TAXES,power,colored,power*10);
-			   change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
+                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
             break;
          case SITE_MEDIA_AMRADIO:
             change_public_opinion(VIEW_AMRADIO,power,colored,power*10);
@@ -2131,13 +2131,13 @@ void majornewspaper(char &clearformess,char canseethings)
             change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
             break;
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-			   change_public_opinion(VIEW_TAXES,power,colored,power*10);
-			   change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
-			   change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
+                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
+                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+                           change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
             break;
          case SITE_BUSINESS_CIGARBAR:
-			   change_public_opinion(VIEW_TAXES,power,colored,power*10);
-			   change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
+                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
             change_public_opinion(VIEW_WOMEN,power,colored,power*10);
             break;
          }

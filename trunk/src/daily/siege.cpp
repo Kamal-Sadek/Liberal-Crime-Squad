@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -33,14 +33,14 @@ This file is part of Liberal Crime Squad.                                       
 
 /* TODO
 make it less likely to be raided based on:
-	- the number of sleepers.
-	- how effective said sleepers are.
-	- what action each sleeper is doing (promoting liberalism decreases chance while promoting conservatism increases chance)
-	- what the sleeper does for a living (police officers are more influential than janitors, for instance)
+        - the number of sleepers.
+        - how effective said sleepers are.
+        - what action each sleeper is doing (promoting liberalism decreases chance while promoting conservatism increases chance)
+        - what the sleeper does for a living (police officers are more influential than janitors, for instance)
 
 make it more likely to be raided:
-	- when a liberal hacks or steals credit cards.
-	- dead bodies in the base. [DONE]
+        - when a liberal hacks or steals credit cards.
+        - dead bodies in the base. [DONE]
 */
 
 
@@ -601,7 +601,7 @@ void siegecheck(char canseethings)
             location[l]->siege.cameras_off=1;
          }
          else if(location[l]->siege.timeuntilcia==0)location[l]->siege.timeuntilcia=-1; // Silently call off foiled cia raids
-		   
+                   
             //HICKS
          if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
          {
@@ -1333,12 +1333,12 @@ void siegeturn(char clearformess)
                      {
                         case 0:addstr("Flaming");break;
                         case 1:
-				if(law[LAW_FREESPEECH]==-2) {
-					addstr("Dumb");
-				} else {
-					addstr("Retarded");
-				}
-				break;
+                                if(law[LAW_FREESPEECH]==-2) {
+                                        addstr("Dumb");
+                                } else {
+                                        addstr("Retarded");
+                                }
+                                break;
                         case 2:addstr("Insane");break;
                         case 3:addstr("Crazy");break;
                         case 4:addstr("Loopy");break;
