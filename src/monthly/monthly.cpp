@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -231,7 +231,7 @@ void passmonth(char &clearformess,char canseethings)
       {
          if((int)publicmood(-1)<attitude[v])change_public_opinion(v,-1);
          else change_public_opinion(v,1);
-	   }
+      }
    }
 
    // Seduction monthly experience stipends for those liberals
@@ -648,9 +648,9 @@ void updateworld_laws(short *law,short *oldlaw)
             initlocation(*location[l]);
          }
       }
-	}
+   }
 
-	if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
+   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
        law[LAW_NUCLEARPOWER]!=oldlaw[LAW_NUCLEARPOWER])
    {
       for(int l=0;l<location.size();l++)

@@ -113,7 +113,11 @@ void makecreature(Creature &cr,short type)
          }
          cr.armor.type=ARMOR_CHEAPSUIT;
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(3)+1;
-         if(disguisesite(sitetype)) { cr.align=-1; cr.infiltration=0.1f*LCSrandom(4); }
+         if(disguisesite(sitetype))
+         {
+                 cr.align=-1;
+                 cr.infiltration=0.1f*LCSrandom(4);
+         }
          else cr.align=0;
          cr.age=AGE_MATURE;
 
@@ -122,7 +126,7 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_STRENGTH]=4;
          break;
       case CREATURE_SECURITYGUARD:
-         GIVE_GENDER_MALE;         
+         GIVE_GENDER_MALE;
          if(law[LAW_GUNCONTROL]==-2)
          {
             cr.weapon.type=WEAPON_SMG_MP5;
@@ -207,7 +211,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_HEART]=10;
          break;
       case CREATURE_SCIENTIST_EMINENT:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          if(cr.weapon.type==WEAPON_NONE && !LCSrandom(2))cr.weapon.type=WEAPON_SYRINGE;
          cr.armor.type=ARMOR_LABCOAT;
          cr.money=LCSrandom(41)+20;
@@ -238,7 +243,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_CORPORATE_CEO:
-         GIVE_GENDER_MALE;         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         GIVE_GENDER_MALE;
+         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_REVOLVER_44;
             cr.weapon.ammo=6;
@@ -280,7 +286,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_TAILORING]=LCSrandom(5)+1;
          break;
       case CREATURE_WORKER_FACTORY_NONUNION:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Nonunion Worker");
          cr.weapon.type=WEAPON_CHAIN;
          cr.armor.type=ARMOR_WORKCLOTHES;
@@ -298,7 +305,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_INTELLIGENCE]=2;
          break;
       case CREATURE_LANDLORD:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Landlord");
          cr.money=LCSrandom(121)+120;
          cr.align=0;
@@ -493,10 +501,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+1;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=5;
-			cr.att[ATTRIBUTE_AGILITY]=5;
-			cr.att[ATTRIBUTE_HEALTH]=5;
+         cr.att[ATTRIBUTE_AGILITY]=5;
+         cr.att[ATTRIBUTE_HEALTH]=5;
          break;
       case CREATURE_HARDENED_VETERAN:
          GIVE_GENDER_MALE;
@@ -517,10 +525,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_PISTOL]=LCSrandom(3)+2;
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+2;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=7;
-			cr.att[ATTRIBUTE_AGILITY]=7;
-			cr.att[ATTRIBUTE_HEALTH]=7;
+         cr.att[ATTRIBUTE_AGILITY]=7;
+         cr.att[ATTRIBUTE_HEALTH]=7;
          break;
       case CREATURE_COP:
          if(law[LAW_POLICEBEHAVIOR]==2 && cr.align==ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
@@ -538,10 +546,10 @@ void makecreature(Creature &cr,short type)
             cr.skill[SKILL_PISTOL]=LCSrandom(3)+1;
             cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
             cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-			   
+   
             cr.att[ATTRIBUTE_STRENGTH]=3;
-			   cr.att[ATTRIBUTE_AGILITY]=3;
-			   cr.att[ATTRIBUTE_HEALTH]=3;
+            cr.att[ATTRIBUTE_AGILITY]=3;
+            cr.att[ATTRIBUTE_HEALTH]=3;
             cr.att[ATTRIBUTE_HEART]=4;
          }
          else
@@ -579,10 +587,10 @@ void makecreature(Creature &cr,short type)
             cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
             cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
             cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(3)+1;
-			   
+   
             cr.att[ATTRIBUTE_STRENGTH]=3;
-			   cr.att[ATTRIBUTE_AGILITY]=3;
-			   cr.att[ATTRIBUTE_HEALTH]=3;
+            cr.att[ATTRIBUTE_AGILITY]=3;
+            cr.att[ATTRIBUTE_HEALTH]=3;
             cr.att[ATTRIBUTE_WISDOM]=4;
          }
          break;
@@ -620,8 +628,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+1;
 
          cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_DEATHSQUAD:
@@ -642,10 +650,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+2;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=6;
          break;
       case CREATURE_FIREFIGHTER:
@@ -719,15 +727,15 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(3);
          cr.skill[SKILL_RELIGION]=LCSrandom(3)+1;
 
-			for(a=0;a<ATTNUM;a++)
+         for(a=0;a<ATTNUM;a++)
          {
             cr.att[a]=1;
             attcap[a]=20;
          }
          attcap[ATTRIBUTE_HEART]=4;
          cr.att[ATTRIBUTE_STRENGTH]=6;
-			cr.att[ATTRIBUTE_AGILITY]=6;
-			cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.att[ATTRIBUTE_AGILITY]=6;
+         cr.att[ATTRIBUTE_HEALTH]=6;
          cr.att[ATTRIBUTE_WISDOM]=8;
          break;
       }
@@ -757,15 +765,15 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(3);
          cr.skill[SKILL_RELIGION]=LCSrandom(3)+1;
 
-			for(a=0;a<ATTNUM;a++)
+         for(a=0;a<ATTNUM;a++)
          {
             cr.att[a]=1;
             attcap[a]=20;
          }
          attcap[ATTRIBUTE_HEART]=4;
          cr.att[ATTRIBUTE_STRENGTH]=6;
-			cr.att[ATTRIBUTE_AGILITY]=6;
-			cr.att[ATTRIBUTE_HEALTH]=6;
+         cr.att[ATTRIBUTE_AGILITY]=6;
+         cr.att[ATTRIBUTE_HEALTH]=6;
          cr.att[ATTRIBUTE_WISDOM]=8;
          break;
       }
@@ -831,20 +839,21 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(3);
          cr.skill[SKILL_RELIGION]=LCSrandom(3)+1;
 
-			for(a=0;a<ATTNUM;a++)
+         for(a=0;a<ATTNUM;a++)
          {
             cr.att[a]=1;
             attcap[a]=20;
          }
          attcap[ATTRIBUTE_HEART]=4;
          cr.att[ATTRIBUTE_STRENGTH]=4;
-			cr.att[ATTRIBUTE_AGILITY]=4;
-			cr.att[ATTRIBUTE_HEALTH]=4;
+         cr.att[ATTRIBUTE_AGILITY]=4;
+         cr.att[ATTRIBUTE_HEALTH]=4;
          cr.att[ATTRIBUTE_WISDOM]=8;
          break;
       }
       case CREATURE_CCS_ARCHCONSERVATIVE:
-         GIVE_GENDER_MALE;         cr.weapon.type=WEAPON_AUTORIFLE_M16;
+         GIVE_GENDER_MALE;
+         cr.weapon.type=WEAPON_AUTORIFLE_M16;
          cr.clip[CLIP_ASSAULT]=9;
          cr.weapon.ammo=30;
          cr.armor.type=ARMOR_HEAVYARMOR;
@@ -868,15 +877,15 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_BUSINESS]=LCSrandom(6);
          cr.skill[SKILL_RELIGION]=LCSrandom(6)+2;
 
-			for(a=0;a<ATTNUM;a++)
+         for(a=0;a<ATTNUM;a++)
          {
             cr.att[a]=1;
             attcap[a]=25;
          }
          attcap[ATTRIBUTE_HEART]=1;
          cr.att[ATTRIBUTE_STRENGTH]=4;
-			cr.att[ATTRIBUTE_AGILITY]=4;
-			cr.att[ATTRIBUTE_HEALTH]=4;
+         cr.att[ATTRIBUTE_AGILITY]=4;
+         cr.att[ATTRIBUTE_HEALTH]=4;
          cr.att[ATTRIBUTE_WISDOM]=10;
          break;
       case CREATURE_GANGUNIT:
@@ -911,14 +920,15 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+2;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=5;
          break;
       case CREATURE_PRISONGUARD:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Prison Guard");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Prison Guard");
          if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
             cr.weapon.type=WEAPON_SMG_MP5;
@@ -943,10 +953,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_CLUB]=LCSrandom(3)+2;
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(2);
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_HEALTH]=3;
          break;
       case CREATURE_EDUCATOR:
          strcpy(cr.name,"Educator");
@@ -975,10 +985,10 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_HANDTOHAND]=LCSrandom(2)+1;
          cr.skill[SKILL_DRIVING]=LCSrandom(2);
          cr.skill[SKILL_PSYCHOLOGY]=LCSrandom(4)+3;
-			
+
          cr.att[ATTRIBUTE_STRENGTH]=3;
-			cr.att[ATTRIBUTE_AGILITY]=3;
-			cr.att[ATTRIBUTE_HEALTH]=3;
+         cr.att[ATTRIBUTE_AGILITY]=3;
+         cr.att[ATTRIBUTE_HEALTH]=3;
          cr.att[ATTRIBUTE_WISDOM]=4;
          break;
       case CREATURE_AGENT:
@@ -1077,7 +1087,7 @@ void makecreature(Creature &cr,short type)
          else
             strcpy(cr.name,"");
 
-         switch(LCSrandom(10))
+         switch(LCSrandom(11))
          {
             case 0:strcat(cr.name,"Genetic Monster");break;
             case 1:
@@ -1099,6 +1109,7 @@ void makecreature(Creature &cr,short type)
             case 7:strcat(cr.name,"Warped Bear");break;
             case 8:strcat(cr.name,"Writhing Mass");break;
             case 9:strcat(cr.name,"Something Bad");break;
+            case 10:strcat(cr.name,"Pink Elephant");break;
          }
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.armor.type=ARMOR_NONE;
@@ -1122,12 +1133,15 @@ void makecreature(Creature &cr,short type)
          attcap[ATTRIBUTE_INTELLIGENCE]=1;
          attcap[ATTRIBUTE_HEART]=6;
          attcap[ATTRIBUTE_WISDOM]=6;
-         cr.att[ATTRIBUTE_STRENGTH]=7;attcap[ATTRIBUTE_STRENGTH]=12;
-         cr.att[ATTRIBUTE_AGILITY]=9;attcap[ATTRIBUTE_AGILITY]=15;
+         cr.att[ATTRIBUTE_STRENGTH]=7;
+         attcap[ATTRIBUTE_STRENGTH]=12;
+         cr.att[ATTRIBUTE_AGILITY]=9;
+         attcap[ATTRIBUTE_AGILITY]=15;
          cr.age=AGE_DOGYEARS;
          break;
       case CREATURE_PRISONER:
-         GIVE_GENDER_MALE;         strcpy(cr.name,"Prisoner");
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Prisoner");
          if(!LCSrandom(2))cr.weapon.type=WEAPON_SHANK;
          cr.armor.type=ARMOR_PRISONER;
          cr.money=0;
@@ -1161,7 +1175,7 @@ void makecreature(Creature &cr,short type)
                break;
             case 1:
                // Prostitute
-		         cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+               cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
                cr.skill[SKILL_SEDUCTION]=LCSrandom(4)+2;
                cr.type=CREATURE_PROSTITUTE;
                cr.age=AGE_YOUNGADULT;
@@ -1207,7 +1221,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_HEART]=8;
          break;
       case CREATURE_SEWERWORKER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Sewer Worker");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1222,8 +1237,8 @@ void makecreature(Creature &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=18+LCSrandom(6); // no macro
 
-			cr.skill[SKILL_COMPUTERS]=LCSrandom(2);
-			cr.skill[SKILL_WRITING]=LCSrandom(2)+1;
+         cr.skill[SKILL_COMPUTERS]=LCSrandom(2);
+         cr.skill[SKILL_WRITING]=LCSrandom(2)+1;
          cr.skill[SKILL_SCIENCE]=LCSrandom(3);
          cr.skill[SKILL_ART]=LCSrandom(3);
          cr.skill[SKILL_MUSIC]=LCSrandom(3);
@@ -1252,7 +1267,8 @@ void makecreature(Creature &cr,short type)
          cr.att[ATTRIBUTE_INTELLIGENCE]=7;
          break;
       case CREATURE_TEACHER:
-         GIVE_GENDER_FEMALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_FEMALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Teacher");
          cr.armor.type=ARMOR_CLOTHES;
          cr.skill[SKILL_TEACHING]=LCSrandom(4)+3;
@@ -1379,7 +1395,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_RELIGION]=LCSrandom(5)+3;
          break;
       case CREATURE_ENGINEER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Engineer");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1409,7 +1426,7 @@ void makecreature(Creature &cr,short type)
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_YOUNGADULT;
 
-			cr.skill[SKILL_PERSUASION]=LCSrandom(3)+1;
+         cr.skill[SKILL_PERSUASION]=LCSrandom(3)+1;
          break;
       case CREATURE_OFFICEWORKER:
          GIVE_WEAPON_CIVILIAN;
@@ -1421,7 +1438,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_FOOTBALLCOACH:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Football Coach");
          cr.armor.type=ARMOR_CLOTHES;
          cr.skill[SKILL_TEACHING]=LCSrandom(3)+1;
@@ -1437,11 +1455,15 @@ void makecreature(Creature &cr,short type)
             cr.att[ATTRIBUTE_AGILITY]=5;
             cr.att[ATTRIBUTE_STRENGTH]=5;
          }
-			cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+         cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          break;
       case CREATURE_PROSTITUTE:
          GIVE_WEAPON_CIVILIAN;
-         if(LCSrandom(7))            cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE;         else if(!LCSrandom(3))            cr.gender_liberal=GENDER_FEMALE;         strcpy(cr.name,"Prostitute");
+         if(LCSrandom(7))
+            cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE;
+         else if(!LCSrandom(3))
+            cr.gender_liberal=GENDER_FEMALE;
+         strcpy(cr.name,"Prostitute");
          if(LCSrandom(2))cr.armor.type=ARMOR_CHEAPDRESS;
          else cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1449,7 +1471,7 @@ void makecreature(Creature &cr,short type)
          if(cr.align==-1)
             cr.align=LCSrandom(2);
          cr.age=AGE_YOUNGADULT;
-			cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
+         cr.skill[SKILL_PERSUASION]=LCSrandom(4)+2;
          cr.skill[SKILL_SEDUCTION]=LCSrandom(4)+2;
 
          if(!LCSrandom(3))
@@ -1466,7 +1488,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_GARBAGEMAN:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Garbage Collector");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1475,7 +1498,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_DRIVING]=LCSrandom(2)+1;
          break;
       case CREATURE_PLUMBER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Plumber");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1483,7 +1507,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_CHEF:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Chef");
          cr.skill[SKILL_COOKING]=LCSrandom(5)+3;
          cr.armor.type=ARMOR_WORKCLOTHES;
@@ -1492,7 +1517,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_CONSTRUCTIONWORKER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Construction Worker");
          cr.armor.type=ARMOR_WORKCLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1519,7 +1545,10 @@ void makecreature(Creature &cr,short type)
          cr.align=1;
          
          cr.att[ATTRIBUTE_HEART]=6;
-         attcap[ATTRIBUTE_HEART]=15;         attcap[ATTRIBUTE_WISDOM]=1;         attnum-=5;         cr.skill[SKILL_COOKING]=LCSrandom(2);
+         attcap[ATTRIBUTE_HEART]=15;
+         attcap[ATTRIBUTE_WISDOM]=1;
+         attnum-=5;
+         cr.skill[SKILL_COOKING]=LCSrandom(2);
          cr.skill[SKILL_MUSIC]=LCSrandom(2);
          cr.skill[SKILL_ART]=LCSrandom(2);
          cr.skill[SKILL_TAILORING]=LCSrandom(2);
@@ -1586,7 +1615,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_MUSIC]=LCSrandom(3);
          break;
       case CREATURE_BIKER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Biker");
          cr.armor.type=ARMOR_TRENCHCOAT;
          cr.money=LCSrandom(31)+20;
@@ -1595,7 +1625,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+3;
          break;
       case CREATURE_TRUCKER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Truck Driver");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1604,7 +1635,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+3;
          break;
       case CREATURE_TAXIDRIVER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Taxi Driver");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1613,7 +1645,8 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_DRIVING]=LCSrandom(3)+3;
          break;
       case CREATURE_PROGRAMMER:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Programmer");
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=LCSrandom(31)+20;
@@ -1626,7 +1659,8 @@ void makecreature(Creature &cr,short type)
          break;
       case CREATURE_NUN:
          cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE;
-         cr.skill[SKILL_RELIGION]=LCSrandom(3)+5;         cr.age=AGE_MATURE;
+         cr.skill[SKILL_RELIGION]=LCSrandom(3)+5;
+         cr.age=AGE_MATURE;
          break;
       case CREATURE_RETIREE:
          GIVE_WEAPON_CIVILIAN;
@@ -1661,12 +1695,14 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_HAIRSTYLIST:
-         GIVE_GENDER_FEMALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_FEMALE;
+         GIVE_WEAPON_CIVILIAN;
          cr.skill[SKILL_ART]=LCSrandom(2)+1;
          cr.age=AGE_MATURE;
          break;
       case CREATURE_FASHIONDESIGNER:
-         GIVE_GENDER_FEMALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_FEMALE;
+         GIVE_WEAPON_CIVILIAN;
          cr.skill[SKILL_TAILORING]=LCSrandom(3)+8;
          cr.skill[SKILL_ART]=LCSrandom(3)+2;
          cr.age=AGE_MATURE;
@@ -1707,7 +1743,7 @@ void makecreature(Creature &cr,short type)
          cr.skill[SKILL_DISGUISE]=LCSrandom(5)+3;
          
          cr.att[ATTRIBUTE_WISDOM]=9;
-			cr.att[ATTRIBUTE_CHARISMA]=5;
+         cr.att[ATTRIBUTE_CHARISMA]=5;
          cr.age=AGE_MATURE;
          break;
       case CREATURE_YOGAINSTRUCTOR:
@@ -1728,7 +1764,8 @@ void makecreature(Creature &cr,short type)
          cr.age=AGE_MATURE;
          break;
       case CREATURE_ATHLETE:
-         GIVE_GENDER_MALE;         GIVE_WEAPON_CIVILIAN;
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
          cr.att[ATTRIBUTE_AGILITY]=8;
          cr.att[ATTRIBUTE_STRENGTH]=8;
          cr.att[ATTRIBUTE_HEALTH]=8;
@@ -1806,8 +1843,8 @@ void makecreature(Creature &cr,short type)
       //   for conservatives      
       if(LCSrandom(10) && cr.align!=ALIGN_CONSERVATIVE)      
       {         
-         if(randomskill == SKILL_SHOTGUN)continue;         
-         if(randomskill == SKILL_PISTOL)continue;      
+         if(randomskill == SKILL_SHOTGUN)continue;
+         if(randomskill == SKILL_PISTOL)continue;
       }
 
       if(maxskill(randomskill,cr)>cr.skill[randomskill])

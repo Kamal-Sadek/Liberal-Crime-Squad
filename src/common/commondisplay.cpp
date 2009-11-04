@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -952,7 +952,7 @@ void printliberalskills(Creature &cr)
    move(2,0);
    if(strcmp(cr.propername,cr.name)!=0)
    {
-	   addstr("Code name: ");
+           addstr("Code name: ");
    }
    else
    {
@@ -1002,16 +1002,16 @@ void printliberalskills(Creature &cr)
       {
          if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))!=0)
          {
-         	itoa((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s])),num,10);
-         	if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))<10)
-         	{
-	           addstr("0");
-	         }
-	         addstr(num);
-	      }
-	      else addstr("00");
-	   }
-	   else
+                itoa((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s])),num,10);
+                if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))<10)
+                 {
+                   addstr("0");
+                 }
+                 addstr(num);
+              }
+              else addstr("00");
+           }
+           else
       {
          addstr("99+");
       }
@@ -1041,9 +1041,9 @@ void printliberalstats(Creature &cr)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    if(strcmp(cr.propername,cr.name)!=0)
    {
-	   //The names do not match, print real name as well
-	   addstr(" (");
-	   addstr(cr.propername);
+           //The names do not match, print real name as well
+           addstr(" (");
+           addstr(cr.propername);
       addstr(")");
    }
    addstr(", ");
@@ -1053,7 +1053,7 @@ void printliberalstats(Creature &cr)
    getrecruitcreature(str,cr.type);
    addstr(str);
    addstr(")");
-	move(3,0);
+   move(3,0);
    
    
 
@@ -1200,16 +1200,16 @@ void printliberalstats(Creature &cr)
          {
             if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))!=0)
             {
-         	   itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs])),num,10);
-         	   if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))<10)
-         	   {
-	              addstr("0");
-	            }
-	            addstr(num);
-	         }
-	         else addstr("00");
-	      }
-	      else
+                    itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs])),num,10);
+                    if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))<10)
+                    {
+                      addstr("0");
+                    }
+                    addstr(num);
+                 }
+                 else addstr("00");
+              }
+              else
          {
             addstr("99+");
          }
@@ -1664,49 +1664,47 @@ void printhealthstat(Creature &g,int y,int x,char smll)
 */
 void printfunds(int y, int offsetx, char* prefix)
 {
-	char moneystr[50];
-	
-	char prefixbuffer[50];
-	
-	if(prefix==NULL)
-	{
-		strncpy(prefixbuffer,"",50);
-	}
-	else
-	{
-		strncpy(prefixbuffer,prefix,50);
-	}
-	
-	sprintf(moneystr,"$%d",funds);
-	
-	
-	//Save screen coordinates for later.
-	int begy,begx;
-	getyx(stdscr,begy,begx);
-	
-	//Save color and brightness information for later.
-	short colorpair;
-	short front, back;
-	char dim;
-	
-	attr_t attrs;
-	attr_get(&attrs,&colorpair,NULL);
-	if((attrs & WA_DIM)==0)
-		dim=0;
-	else
-		dim=1;
-	pair_content(colorpair,&front,&back);
-	
-	
-	//Move, set color, and write.
-	move(y,80-strlen(moneystr)-strlen(prefixbuffer)-offsetx);
-	addstr(prefixbuffer);
-	set_color(COLOR_GREEN,COLOR_BLACK,1);
-	addstr(moneystr);
-	
-	//Recover old settings
-	move(begy,begx);
-	set_color(front,back,dim);
+        char moneystr[50];
+        char prefixbuffer[50];
+        
+        if(prefix==NULL)
+        {
+                strncpy(prefixbuffer,"",50);
+        }
+        else
+        {
+                strncpy(prefixbuffer,prefix,50);
+        }
+
+        sprintf(moneystr,"$%d",funds);
+
+        //Save screen coordinates for later.
+        int begy,begx;
+        getyx(stdscr,begy,begx);
+
+        //Save color and brightness information for later.
+        short colorpair;
+        short front, back;
+        char dim;
+        
+        attr_t attrs;
+        attr_get(&attrs,&colorpair,NULL);
+        if((attrs & WA_DIM)==0)
+                dim=0;
+        else
+                dim=1;
+        pair_content(colorpair,&front,&back);
+        
+        
+        //Move, set color, and write.
+        move(y,80-strlen(moneystr)-strlen(prefixbuffer)-offsetx);
+        addstr(prefixbuffer);
+        set_color(COLOR_GREEN,COLOR_BLACK,1);
+        addstr(moneystr);
+        
+        //Recover old settings
+        move(begy,begx);
+        set_color(front,back,dim);
 }
 
 /* prints a short blurb showing how to page forward */

@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -584,7 +584,7 @@ void firstname(char *str, char gender)
       switch(roll)
       {
          // {{{Female name table
-		case 0:strcat(str,"Abigail");break;
+      case 0:strcat(str,"Abigail");break;
       case 1:strcat(str,"Ada");break;
       case 2:strcat(str,"Adriana");break;
       case 3:strcat(str,"Adrianna");break;
@@ -941,7 +941,7 @@ void firstname(char *str, char gender)
       switch(roll)
       {
          //{{{ Gender-neutral name table
-		case 0:strcat(str,"Akira");break;
+      case 0:strcat(str,"Akira");break;
       case 1:strcat(str,"Alex");break;
       case 2:strcat(str,"Alexis");break;
       case 3:strcat(str,"Angel");break;
@@ -2431,9 +2431,9 @@ void liberalize(Creature &cr,bool rename)
          case CREATURE_WORKER_FACTORY_NONUNION:
             strcpy(cr.name,"New Union Worker");
             break;
-//	 case CREATURE_JUDGE_CONSERVATIVE:
-//	    strcpy(cr.name,"Enlightened Judge");
-//	    break;
+//       case CREATURE_JUDGE_CONSERVATIVE:
+//          strcpy(cr.name,"Enlightened Judge");
+//          break;
       }
    }
 }

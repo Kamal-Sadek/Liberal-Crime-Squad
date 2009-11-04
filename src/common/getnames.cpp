@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -166,8 +166,8 @@ void getactivity(char *str,activityst &act)
          strcat(str,"Stealing Equipment");
          break;
       default:
-	 strcat(str,"Reporting Bugs to the Dev Team");
-	 break;
+         strcat(str,"Reporting Bugs to the Dev Team");
+         break;
    }
 }
 
@@ -214,7 +214,7 @@ void getweapon(char *str,int type)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2A1-7");break;
-	 default:		    strcpy(str,"Error");break;
+         default:                   strcpy(str,"Error");break;
       }
    }
    else
@@ -254,7 +254,7 @@ void getweapon(char *str,int type)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov");break;
          case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"Plasmagun");break;
-	 default:		    strcpy(str,"Error");break;
+         default:                   strcpy(str,"Error");break;
       }
    }
 }
@@ -307,7 +307,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
          case WEAPON_AXE:           strcpy(str,"Axe");break;
          case WEAPON_FLAMETHROWER:  strcpy(str,"M2 Flamethrower");break;
-	 default:		    strcpy(str,"Error");break;
+         default:                   strcpy(str,"Error");break;
       }
    }
    else
@@ -353,7 +353,7 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_MOLOTOV:       strcpy(str,"Molotov Bomb");break;
       case WEAPON_AXE:           strcpy(str,"Laser Axe");break;
       case WEAPON_FLAMETHROWER:  strcpy(str,"Plasma Gun");break;
-      default:		         strcpy(str,"Error");break;
+      default:                   strcpy(str,"Error");break;
       }
    }
 }
@@ -1197,7 +1197,7 @@ void cityname(char *story)
 /* Allow the player to enter a name with an optional default */
 void enter_name(char *name, int len, char* defname)
 {
-	keypad(stdscr,FALSE);
+        keypad(stdscr,FALSE);
         raw_output(FALSE);
         echo();
         curs_set(1);
@@ -1206,12 +1206,10 @@ void enter_name(char *name, int len, char* defname)
         noecho();
         raw_output(TRUE);
         keypad(stdscr,TRUE);
-	
-	if((defname!=NULL) && (strncmp(name,"",len)==0))
-	{
-		strncpy(name,defname,len);
-	}
-	name[len-1]='\0';
+
+        if((defname!=NULL) && (strncmp(name,"",len)==0))
+        {
+                strncpy(name,defname,len);
+        }
+        name[len-1]='\0';
 }
-
-

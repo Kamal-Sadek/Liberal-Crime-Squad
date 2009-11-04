@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -649,15 +649,15 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
          case ACTIVITY_NONE:
-         	if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                 if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
                                       location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
             {
                if(pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
-         	   {
-         		   repairarmor(*pool[p],clearformess);
-         	   }
+                    {
+                            repairarmor(*pool[p],clearformess);
+                    }
             }
-         	break;
+                 break;
       }
    }
 
@@ -1860,16 +1860,16 @@ void initlocation(locationst &loc)
          }
          break;
       case SITE_INDUSTRY_NUCLEAR:
-		  if(law[LAW_NUCLEARPOWER]==2)
-		  {
-			strcpy(loc.name,"Nuclear Waste Center");
+                  if(law[LAW_NUCLEARPOWER]==2)
+                  {
+                        strcpy(loc.name,"Nuclear Waste Center");
             strcpy(loc.shortname,"NWaste Center");
-		  }
-		  else
-		  {
+                  }
+                  else
+                  {
          strcpy(loc.name,"Nuclear Power Plant");
          strcpy(loc.shortname,"NPower Plant");
-		  }
+                  }
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          if(law[LAW_PRIVACY]==-2&&
@@ -1908,7 +1908,7 @@ void initlocation(locationst &loc)
          break;
       case SITE_CORPORATE_HOUSE:
          if(law[LAW_CORPORATE]==-2&&
-				law[LAW_TAX]==-2)
+                                law[LAW_TAX]==-2)
          {
             strcpy(loc.name,"CEO Castle");
             strcpy(loc.shortname,"CEO Castle");
@@ -1931,51 +1931,51 @@ void initlocation(locationst &loc)
             lastname(str);
             strcat(loc.name,str);
             strcat(loc.name," ");
-	      
-	         switch(LCSrandom(10))
-	         {
-	            case 0:
-		      strcat(loc.name,"Meat Plant");
-		      strcpy(loc.shortname,"Meat Plant");
-		      break;
-	            case 1:
-		      strcat(loc.name,"Warehouse");
-		      strcpy(loc.shortname,"Warehouse");
-		      break;
-	            case 2:
-		      strcat(loc.name,"Paper Mill");
-		      strcpy(loc.shortname,"Paper Mill");
-		      break;
-	            case 3:
-		      strcat(loc.name,"Cement Factory");
-		      strcpy(loc.shortname,"Cement");
-		      break;
-	            case 4:
-		      strcat(loc.name,"Fertilizer Plant");
-		      strcpy(loc.shortname,"Fertilizer");
-		      break;
-	            case 5:
-		      strcat(loc.name,"Drill Factory");
-		      strcpy(loc.shortname,"Drill");
-		      break;
-	            case 6:
-		      strcat(loc.name,"Steel Plant");
-		      strcpy(loc.shortname,"Steel");
-		      break;
-	            case 7:
-		      strcat(loc.name,"Packing Plant");
-		      strcpy(loc.shortname,"Packing");
-		      break;
-	            case 8:
-		      strcat(loc.name,"Toy Factory");
-		      strcpy(loc.shortname,"Toy");
-		      break;
-	            case 9:
-		      strcat(loc.name,"Building Site");
-		      strcpy(loc.shortname,"Building");
-		      break;
-	         }
-	      } while (duplicatelocation(loc));
+              
+                 switch(LCSrandom(10))
+                 {
+                    case 0:
+                      strcat(loc.name,"Meat Plant");
+                      strcpy(loc.shortname,"Meat Plant");
+                      break;
+                    case 1:
+                      strcat(loc.name,"Warehouse");
+                      strcpy(loc.shortname,"Warehouse");
+                      break;
+                    case 2:
+                      strcat(loc.name,"Paper Mill");
+                      strcpy(loc.shortname,"Paper Mill");
+                      break;
+                    case 3:
+                      strcat(loc.name,"Cement Factory");
+                      strcpy(loc.shortname,"Cement");
+                      break;
+                    case 4:
+                      strcat(loc.name,"Fertilizer Plant");
+                      strcpy(loc.shortname,"Fertilizer");
+                      break;
+                    case 5:
+                      strcat(loc.name,"Drill Factory");
+                      strcpy(loc.shortname,"Drill");
+                      break;
+                    case 6:
+                      strcat(loc.name,"Steel Plant");
+                      strcpy(loc.shortname,"Steel");
+                      break;
+                    case 7:
+                      strcat(loc.name,"Packing Plant");
+                      strcpy(loc.shortname,"Packing");
+                      break;
+                    case 8:
+                      strcat(loc.name,"Toy Factory");
+                      strcpy(loc.shortname,"Toy");
+                      break;
+                    case 9:
+                      strcat(loc.name,"Building Site");
+                      strcpy(loc.shortname,"Building");
+                      break;
+                 }
+              } while (duplicatelocation(loc));
          break;
       }
       case SITE_INDUSTRY_POLLUTER:
@@ -2014,13 +2014,13 @@ void initlocation(locationst &loc)
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
       case SITE_RESIDENTIAL_APARTMENT:
       case SITE_RESIDENTIAL_TENEMENT:
-	       do {
-	          lastname(str);
-	          strcpy(loc.name,str);
-	          strcat(loc.name," Apartments");
-	          strcpy(loc.shortname,str);
-	          strcat(loc.shortname," Apts");
-	       } while (duplicatelocation(loc));
+               do {
+                  lastname(str);
+                  strcpy(loc.name,str);
+                  strcat(loc.name," Apartments");
+                  strcpy(loc.shortname,str);
+                  strcat(loc.shortname," Apts");
+               } while (duplicatelocation(loc));
          break;
       case SITE_HOSPITAL_UNIVERSITY:
          strcpy(loc.name,"The University Hospital");
@@ -2069,20 +2069,20 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Sweatshop");
          break;
       case SITE_BUSINESS_CRACKHOUSE:
-		  if(law[LAW_DRUGS]==2)
-		  {
-   		lastname(str);
+                  if(law[LAW_DRUGS]==2)
+                  {
+                lastname(str);
          strcpy(loc.name,str);
          strcat(loc.name," St. Recreational Drugs Center");
          strcpy(loc.shortname,"Crack House");
-		  }
-		  else
-		  {
+                  }
+                  else
+                  {
          lastname(str);
          strcpy(loc.name,str);
          strcat(loc.name," St. Crack House");
          strcpy(loc.shortname,"Crack House");
-		  }
+                  }
          break;
       case SITE_BUSINESS_JUICEBAR:
          strcpy(loc.name,"");

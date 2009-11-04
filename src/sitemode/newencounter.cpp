@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -1102,8 +1102,8 @@ char addsiegeencounter(char type)
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;
-			      case SITE_BUSINESS_CRACKHOUSE:
-				      makecreature(encounter[e],CREATURE_GANGMEMBER);
+                              case SITE_BUSINESS_CRACKHOUSE:
+                                      makecreature(encounter[e],CREATURE_GANGMEMBER);
                   encounter[e].align=ALIGN_CONSERVATIVE;
                   break;
                default:

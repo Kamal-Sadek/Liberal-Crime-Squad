@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -234,28 +234,28 @@ void mode_base(void)
             {
                case LAW_WOMEN:
                   addstr("Women's Rights");
-			         break;
+                  break;
                case LAW_CIVILRIGHTS:
                   addstr("Civil Rights");
-			         break;
+                  break;
                case LAW_DRUGS:
                   addstr("Drug Law");
-			         break;
+                  break;
                case LAW_IMMIGRATION:
                   addstr("Immigration");
-			         break;
+                  break;
                case LAW_ELECTIONS:
                   addstr("Election Reform");
-			         break;
+                  break;
                case LAW_MILITARY:
                   addstr("Military Spending");
-			         break;
+                  break;
                case LAW_TORTURE:
                   addstr("Human Rights");
-			         break;
+                  break;
                case LAW_TAX:
                   addstr("Tax Structure");
-			         break;
+                  break;
                case LAW_ABORTION:
                   addstr("Abortion Rights");
                   break;

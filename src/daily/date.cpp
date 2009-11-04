@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -215,7 +215,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       //WISDOM POSSIBLE INCREASE
       if(d.date[e]->align==-1&&aroll<troll/2)
       {
-			set_color(COLOR_RED,COLOR_BLACK,1);
+                        set_color(COLOR_RED,COLOR_BLACK,1);
          move(y,0);y++;
          
          addstr("Talking with ");

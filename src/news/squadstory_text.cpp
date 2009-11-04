@@ -170,9 +170,34 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
          }
          else
          {
-            strcat(story,"A group of worthless M16-toting hicks calling themselves the Conservative Crime Squad ");
-            strcat(story,"went on a suicidal rampage yesterday, according ");
-            strcat(story,"to a spokesperson from the police department.  ");
+            strcat(story,"A group of ");
+            switch(LCSrandom(3))
+            {
+            case 0:strcat(story,"pathetic, ");break
+            case 1:strcat(story,"worthless, ");break
+            case 2:strcat(story,"disheveled, ");break
+            }
+            switch(LCSrandom(3))
+            {
+            case 0:strcat(story,"violent, ");break
+            case 1:strcat(story,"bloodthirsty, ");break
+            case 2:strcat(story,"");break
+            }
+            strcat(story,"M16-toting ");break;
+            switch(LCSrandom(3))
+            {
+            case 0:strcat(story,"hicks ");break
+            case 1:strcat(story,"rednecks ");break
+            case 2:strcat(story,"losers ");break
+            }
+            strcat(story,"calling themselves the Conservative Crime Squad went on a ");
+            switch(LCSrandom(3))
+            {
+            case 0:strcat(story,"suicidal ");break;
+            case 1:strcat(story,"homicidal ");break;
+            case 2:strcat(story,"bloodthirsty ");break;
+            }
+            strcat(story,"rampage yesterday, according to a spokesperson from the police department.  ");
             strcat(story,"&r");
          }
       }

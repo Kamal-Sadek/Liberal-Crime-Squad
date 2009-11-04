@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -339,10 +339,10 @@ void printnews(short l,short newspaper)
                addstr("cheerfully describing foreign corporate sweatshops.");
                change_public_opinion(VIEW_SWEATSHOPS,50);
                break;
-				case 4:
-					addstr("describing an intricate tax scheme.");
-					change_public_opinion(VIEW_TAXES,50);
-					break;
+            case 4:
+               addstr("describing an intricate tax scheme.");
+               change_public_opinion(VIEW_TAXES,50);
+               break;
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
@@ -381,7 +381,7 @@ void printnews(short l,short newspaper)
                addstr("documenting the infiltration of a pro-choice group.");
                change_public_opinion(VIEW_WOMEN,50);
                break;
-		 }
+                 }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
          move(9,1);
@@ -485,7 +485,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the police a little riled up.");
 
-		 change_public_opinion(VIEW_PRISONS,50);
+                 change_public_opinion(VIEW_PRISONS,50);
          offended_cops=1;
          break;
       case LOOT_CABLENEWSFILES:

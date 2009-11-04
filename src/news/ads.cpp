@@ -80,7 +80,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
       if(!liberalguardian)
       {
          switch(LCSrandom(6))
-         {		// location[]->name?
+         {                // location[]->name?
             case 0:
                strcpy(ad,"&cNo Fee&r");
                strcat(ad,"&cConsignment Program&r&r");
@@ -141,7 +141,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                   case 1:strcpy(ad,"Seeking Love");
                   case 2:strcpy(ad,"Are You Lonely?");
                   case 3:strcpy(ad,"Looking For Love");
-		  case 4:strcpy(ad,"Soulmate Wanted");
+                  case 4:strcpy(ad,"Soulmate Wanted");
                   break;
                }
                char str[10];

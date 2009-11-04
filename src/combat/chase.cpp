@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -1570,7 +1570,7 @@ void chase_giveup(void)
       activesquad->squad[p]->activity.type=ACTIVITY_NONE;
       if(activesquad->squad[p]->prisoner!=NULL)
       {
-	      if(activesquad->squad[p]->prisoner->squadid==-1)
+         if(activesquad->squad[p]->prisoner->squadid==-1)
          {
             hostagefreed++;
          }
@@ -1594,12 +1594,12 @@ void chase_giveup(void)
    else addstr("You pull over and are arrested.");
    if(hostagefreed>0)
    {
-	   move(17,1);
-	   addstr("Your hostage");
-	   if(hostagefreed>1)
-		   addstr("s are free.");
-	   else
-		   addstr(" is free.");
+           move(17,1);
+           addstr("Your hostage");
+           if(hostagefreed>1)
+                   addstr("s are free.");
+           else
+                   addstr(" is free.");
    }
    refresh();
    getch();

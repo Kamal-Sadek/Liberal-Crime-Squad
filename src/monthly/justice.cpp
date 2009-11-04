@@ -20,10 +20,10 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 /*
-	This file was created by Chris Johnson (grundee@users.sourceforge.net)
-	by copying code from game.cpp.
-	To see descriptions of files and functions, see the list at 
-	the bottom of includes.h in the top src folder.
+        This file was created by Chris Johnson (grundee@users.sourceforge.net)
+        by copying code from game.cpp.
+        To see descriptions of files and functions, see the list at 
+        the bottom of includes.h in the top src folder.
 */
 
 //#include <includes.h>
@@ -274,7 +274,7 @@ void trial(Creature &g)
          breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
       else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
-      {					//		Manslaughter is murder without forethought or malice, IIRC. -- LK
+      {                                        //                Manslaughter is murder without forethought or malice, IIRC. -- LK
          if(g.lawflag[LAWFLAG_MURDER]>1)
          {
             char str[10];

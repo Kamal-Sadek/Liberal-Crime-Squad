@@ -105,35 +105,35 @@ switch(LCSrandom(14))
 /* generate a vanity plate for the squad. */
 /*void vanity(char *str)
 {
-	strcpy(str,"");
+        strcpy(str,"");
 
-	switch(LCSrandom(20))
-		{
-			case 0:strcat(str,"ABORTN");break;
-			case 1:strcat(str,"");break;
-			case 2:strcat(str,"");break;
-			case 3:strcat(str,"");break;
-			case 4:strcat(str,"");break;
-			case 5:strcat(str,"");break;
-			case 6:strcat(str,"");break;
-			case 7:strcat(str,"");break;
-			case 8:strcat(str,"");break;
-			case 9:strcat(str,"");break;
-			case 10:strcat(str,"");break;
-			case 11:strcat(str,"");break;
-			case 12:strcat(str,"");break;
-			case 13:strcat(str,"");break;
-			case 14:strcat(str,"");break;
-			case 15:strcat(str,"");break;
-			case 16:strcat(str,"");break;
-			case 17:strcat(str,"");break;
-			case 18:strcat(str,"");break;
-			case 19:strcat(str,"");break;
-		}
+        switch(LCSrandom(20))
+                {
+                        case 0:strcat(str,"ABORTN");break;
+                        case 1:strcat(str,"");break;
+                        case 2:strcat(str,"");break;
+                        case 3:strcat(str,"");break;
+                        case 4:strcat(str,"");break;
+                        case 5:strcat(str,"");break;
+                        case 6:strcat(str,"");break;
+                        case 7:strcat(str,"");break;
+                        case 8:strcat(str,"");break;
+                        case 9:strcat(str,"");break;
+                        case 10:strcat(str,"");break;
+                        case 11:strcat(str,"");break;
+                        case 12:strcat(str,"");break;
+                        case 13:strcat(str,"");break;
+                        case 14:strcat(str,"");break;
+                        case 15:strcat(str,"");break;
+                        case 16:strcat(str,"");break;
+                        case 17:strcat(str,"");break;
+                        case 18:strcat(str,"");break;
+                        case 19:strcat(str,"");break;
+                }
 }
 */
 /* generate a non-vanity plate for the squad. */
 void plate(char *str)
 {
-   strcpy(str,"");
+        strcpy(str,"")
 }
