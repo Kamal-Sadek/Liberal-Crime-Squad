@@ -646,7 +646,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   else
                   {
-                     strcat(story,"  Liberal Crime Squad hackers worked to liberate information from CIA computers.");//XXX: Can't find a better word for `hacker'.
+                     strcat(story,"  Liberal Crime Squad computer specialists worked to liberate information from CIA computers.");
                      strcat(story,"&r");
                   }
                }
@@ -1910,7 +1910,7 @@ void majornewspaper(char &clearformess,char canseethings)
                         header=VIEW_NUCLEARPOWER;
                         break;
                      case SITE_CORPORATE_HEADQUARTERS:
-                                                 header=VIEW_CORPORATECULTURE;
+                        header=VIEW_CORPORATECULTURE;
                         break;
                      case SITE_CORPORATE_HOUSE:
                         header=VIEW_CEOSALARY;
@@ -2108,13 +2108,13 @@ void majornewspaper(char &clearformess,char canseethings)
             change_public_opinion(VIEW_NUCLEARPOWER,power,colored,power*10);
             break;
          case SITE_CORPORATE_HEADQUARTERS:
-                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
+            change_public_opinion(VIEW_TAXES,power,colored,power*10);
             change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
             change_public_opinion(VIEW_WOMEN,power,colored,power*10);
             break;
          case SITE_CORPORATE_HOUSE:
-                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
-                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+            change_public_opinion(VIEW_TAXES,power,colored,power*10);
+            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
             break;
          case SITE_MEDIA_AMRADIO:
             change_public_opinion(VIEW_AMRADIO,power,colored,power*10);
@@ -2131,13 +2131,13 @@ void majornewspaper(char &clearformess,char canseethings)
             change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
             break;
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
-                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
-                           change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
+            change_public_opinion(VIEW_TAXES,power,colored,power*10);
+            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+            change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
             break;
          case SITE_BUSINESS_CIGARBAR:
-                           change_public_opinion(VIEW_TAXES,power,colored,power*10);
-                           change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+            change_public_opinion(VIEW_TAXES,power,colored,power*10);
+            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
             change_public_opinion(VIEW_WOMEN,power,colored,power*10);
             break;
          }

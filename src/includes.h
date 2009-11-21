@@ -1791,8 +1791,6 @@ int loveslavesleft(const Creature& cr);
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value);
-/* pick a random state */
-void makestate(char *str);
 
 /*
  consolesupport.cpp
@@ -1883,6 +1881,28 @@ void conservatise(Creature &cr);
 void liberalize(Creature &cr,bool rename=true);
 /* gives a cover name to CCS members */
 void nameCCSMember(Creature &cr);
+
+/*
+ misc.cpp
+*/
+/* pick a descriptor acronym */
+void sexdesc(char *str);
+/* what kind of person? */
+void sexwho(char *str);
+/* seeking acronym */
+void sexseek(char *str);
+/* what type of sex? */
+void sextype(char *str);
+/* generate a vanity plate for the squad. */
+//void vanity(char *str);
+/* return a letter, number, or one of either. */
+void chooseLetterOrNumber(int type);
+/* generate a non-vanity plate for the squad. */
+void plate(char *str);
+/* pick a random state */
+void makestate(char *str);
+/* endgame - converts an integer into a roman numeral for amendments */
+void romannumeral(int amendnum);
 
 /*******************************************************************************
 *
@@ -2342,29 +2362,6 @@ void majornewspaper(char &clearformess,char canseethings);
 
 /*******************************************************************************
 *
-*			      News Related Things
-*			      Folder: "news"
-*
-*******************************************************************************/
-
-/*
- newsfuncs.cpp
-*/
-/* pick a descriptor acronym */
-void sexdesc(char *str);
-/* what kind of person? */
-void sexwho(char *str);
-/* seeking acronym */
-void sexseek(char *str);
-/* what type of sex? */
-void sextype(char *str);
-/* generate a vanity plate for the squad. */
-//void vanity(char *str);
-/* generate a non-vanity plate for the squad. */
-void plate(char *str);
-
-/*******************************************************************************
-*
 *                             End of Month Events
 *                             Folder: "monthly"
 *
@@ -2450,8 +2447,6 @@ void reaganify(char canseethings);
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */
 void amendmentheading(void);
-/* endgame - converts an integer into a roman numeral for amendments */
-void romannumeral(int amendnum);
 
 
 #endif // INCLUDES_H_INCLUDED

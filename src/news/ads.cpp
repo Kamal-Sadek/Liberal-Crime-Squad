@@ -190,7 +190,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
 	     break;
 	   }
          case 2://XXX: Should this only be if abortion is legal?
-            strcpy(ad,"&cAbortion Clinic&r&r"); // I have no clue what &c or &r does, so bear with me... -- LK
+            strcpy(ad,"&cAbortion Clinic&r&r");
             strcat(ad,"&cWalk-in, No&r");
             strcat(ad,"&cQuestions Asked&r");
             strcat(ad,"&cOpen 24/7&r");
