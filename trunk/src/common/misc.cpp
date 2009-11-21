@@ -133,21 +133,6 @@ switch(LCSrandom(14))
 }
 */
 
-/* Create a string with random letters and digits
- */
-void make_rand_str(char *s, int len)
-{
-  int j;
-
-  for (j = 0; j < len; j++) {
-    if (!randint(3))
-      s[j] = '0' + randint(10);
-    else
-      s[j] = 'a' + randint(26);
-  }
-  s[len] = 0;
-}
-
 /* return a letter, number, or one of either. */
 void chooseLetterOrNumber(int type)
 {
