@@ -133,6 +133,21 @@ switch(LCSrandom(14))
 }
 */
 
+/* Create a string with random letters and digits
+ */
+void make_rand_str(char *s, int len)
+{
+  int j;
+
+  for (j = 0; j < len; j++) {
+    if (!randint(3))
+      s[j] = '0' + randint(10);
+    else
+      s[j] = 'a' + randint(26);
+  }
+  s[len] = 0;
+}
+
 /* return a letter, number, or one of either. */
 void chooseLetterOrNumber(int type)
 {
@@ -140,90 +155,18 @@ void chooseLetterOrNumber(int type)
 
     if(type == 1) // Choose a letter.
     {
-        switch(LCSrandom(26))
-        {
-            case 0:addstr("A");break;
-            case 1:addstr("B");break;
-            case 2:addstr("C");break;
-            case 3:addstr("D");break;
-            case 4:addstr("E");break;
-            case 5:addstr("F");break;
-            case 6:addstr("G");break;
-            case 7:addstr("H");break;
-            case 8:addstr("I");break;
-            case 9:addstr("J");break;
-            case 10:addstr("K");break;
-            case 11:addstr("L");break;
-            case 12:addstr("M");break;
-            case 13:addstr("N");break;
-            case 14:addstr("O");break;
-            case 15:addstr("P");break;
-            case 16:addstr("Q");break;
-            case 17:addstr("R");break;
-            case 18:addstr("S");break;
-            case 19:addstr("T");break;
-            case 20:addstr("U");break;
-            case 21:addstr("V");break;
-            case 22:addstr("W");break;
-            case 23:addstr("X");break;
-            case 24:addstr("Y");break;
-            case 25:addstr("Z");break;
-        }
-    } else if(type == 2)
+        char randChar = 'a' + LCSrandom(26);
+        addstr(randChar);
+    } else if(type == 2) // Choose a number.
     {
-        switch(LCSrandom(10))
-        {
-            case 0:addstr("0");break;
-            case 1:addstr("1");break;
-            case 2:addstr("2");break;
-            case 3:addstr("3");break;
-            case 4:addstr("4");break;
-            case 5:addstr("5");break;
-            case 6:addstr("6");break;
-            case 7:addstr("7");break;
-            case 8:addstr("8");break;
-            case 9:addstr("9");break;
-        }
-    } else if(type == 3)
+        addstr(LCSrandom(10));
+    } else if(type == 3) // Choose one of either.
     {
-        switch(LSrandom(36))
-        {
-            case 0:addstr("A");break;
-            case 1:addstr("B");break;
-            case 2:addstr("C");break;
-            case 3:addstr("D");break;
-            case 4:addstr("E");break;
-            case 5:addstr("F");break;
-            case 6:addstr("G");break;
-            case 7:addstr("H");break;
-            case 8:addstr("I");break;
-            case 9:addstr("J");break;
-            case 10:addstr("K");break;
-            case 11:addstr("L");break;
-            case 12:addstr("M");break;
-            case 13:addstr("N");break;
-            case 14:addstr("O");break;
-            case 15:addstr("P");break;
-            case 16:addstr("Q");break;
-            case 17:addstr("R");break;
-            case 18:addstr("S");break;
-            case 19:addstr("T");break;
-            case 20:addstr("U");break;
-            case 21:addstr("V");break;
-            case 22:addstr("W");break;
-            case 23:addstr("X");break;
-            case 24:addstr("Y");break;
-            case 25:addstr("Z");break;
-            case 26:addstr("0");break;
-            case 27:addstr("1");break;
-            case 28:addstr("2");break;
-            case 29:addstr("3");break;
-            case 30:addstr("4");break;
-            case 31:addstr("5");break;
-            case 32:addstr("6");break;
-            case 33:addstr("7");break;
-            case 34:addstr("8");break;
-            case 35:addstr("9");break;
+        if(LCSrandom(36) > 25) {
+            addstr(LCSrandom(10));
+        } else {
+            char randChar = 'a' + LCSrandom(26);
+            addstr(randChar);
         }
     } else {
         addstr("-ERR-");
@@ -231,9 +174,73 @@ void chooseLetterOrNumber(int type)
 }
 
 /* generate a non-vanity plate for the squad. */
-void plate(char *str)
+void plate(void)
 {
    strcpy(str,"");
+
+    switch(LCSrandom(6)) // Actual license plate formats.
+    {
+        case 0: // 123 ABC
+                // CT,WA
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(" ");
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(1));
+               break;
+        case 1: // 12A B34
+                // CT,MA
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(1));
+               addstr(" ");
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               break;
+        case 2: // 123 4567
+                // NH
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(" ");
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               break;
+        case 3: // ABC 1234
+                // PA, NY
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(1));
+               addstr(" ");
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               break;
+        case 4: // 12A34
+                // School Buses.
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(1));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               break;
+        case 5: // A 12345
+                // Trucks, etc.
+               addstr(chooseLetterOrNumber(1));
+               addstr(" ");
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               addstr(chooseLetterOrNumber(2));
+               break;
+    }
 }
 
 /* pick a random state */
