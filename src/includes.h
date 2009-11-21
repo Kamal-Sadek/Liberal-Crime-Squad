@@ -1898,7 +1898,7 @@ void sextype(char *str);
 /* return a letter, number, or one of either. */
 void chooseLetterOrNumber(int type);
 /* generate a non-vanity plate for the squad. */
-void plate(char *str);
+void plate(void);
 /* pick a random state */
 void makestate(char *str);
 /* endgame - converts an integer into a roman numeral for amendments */
