@@ -1,0 +1,10 @@
+When  writing news  stories,  &c centers the text,  and &r denotes  the end of a
+paragraph.  Please also try to avoid using tabs, and instead use mere spaces, as
+this  usually causes  nightmares  in  formatting  for others.  Instead  of using
+rand(void) or random(void), please use LCSrandom(int max) instead. Additionally,
+std::cout  is  not used,  instead,  addstr()  is.  Miscellaneous  functions  are
+traditionally  lumped into  commonactions.cpp. I personally  try to  avoid this,
+instead placing  functions related to the game internally,  as opposed to string
+manipulation, etc.  (i.e. maxskill(int skill, Creature& cr, bool use_juice=true)
+goes     in      commonactions.cpp,     and     makestate(cha r    *str)     and
+romannumeral(int amendnum) go in misc.cpp.)
