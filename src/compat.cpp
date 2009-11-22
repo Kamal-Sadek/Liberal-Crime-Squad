@@ -1,45 +1,35 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//																						//
-//Copyright (c) 2004 by Kevin Sadler											//
-//																						//
+//											//
+//Copyright (c) 2004 by Kevin Sadler							//
+//											//
 //////////////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.												//
-//																						//
-//    Liberal Crime Squad is free software; you can redistribute it and/or modify		//
-//    it under the terms of the GNU General Public License as published by				//
-//    the Free Software Foundation; either version 2 of the License, or					//
-//    (at your option) any later version.												//
-//																						//
-//    Liberal Crime Squad is distributed in the hope that it will be useful,			//
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of					//
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the						//
-//    GNU General Public License for more details.										//
-//																						//
-//    You should have received a copy of the GNU General Public License					//
-//    along with Liberal Crime Squad; if not, write to the Free Software				//
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
+//This file is part of Liberal Crime Squad.						//
+//											//
+//    Liberal Crime Squad is free software; you can redistribute it and/or modify	//
+//    it under the terms of the GNU General Public License as published by		//
+//    the Free Software Foundation; either version 2 of the License, or			//
+//    (at your option) any later version.						//
+//											//
+//    Liberal Crime Squad is distributed in the hope that it will be useful,		//
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of			//
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			//
+//    GNU General Public License for more details.					//
+//											//
+//    You should have received a copy of the GNU General Public License			//
+//    along with Liberal Crime Squad; if not, write to the Free Software		//
+//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA		//
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* \file		compat.cpp
+* compat.cpp
 *
-* \brief	Compatibility Functions to support ports to non-Windows Platforms
+* Compatibility Functions to support ports to non-Windows Platforms
 *
-* $Author: sadler $
-* $Date: 2004/07/01 20:09:11 $
-* \version	$Name: HEAD $ $Revision: 1.4 $
+* Liberal Crime Squad
 *
-* $Id: compat.cpp,v 1.4 2004/07/01 20:09:11 sadler Exp $
-*
-* <HR>
-* \b Liberal Crime Squad
-*
+* Abstract
 * 
-* <HR>
-*
-* \par Abstract
-* 
-* \par Portability Functions
+* Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
 *
@@ -52,13 +42,8 @@
 * 
 * compat.cpp is the place for non-trivial or more global functions,
 *
-* <HR>
+* History
 *
-* \par History
-*
-* \par
-* $Log: compat.cpp,v $
-* Revision 1.4  2004/07/01 20:09:11  sadler
 * Changes for portability...
 * 1) For Visual C++ 6.0 don't use namespace std.
 * 2) MINGW32 had a name clash between the UNIX-like time() function and
@@ -106,6 +91,33 @@
 
 #ifndef WIN32_PRE_DOTNET
 using namespace std;
+#endif
+
+#ifdef Linux
+ // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
+
+typedef long long __int64;
+
+typedef unsigned long ULONG;
+//#if defined(_WIN64) // TODO: detect 64 bit.
+// typedef unsigned __int64 ULONG_PTR;
+//#else
+ typedef unsigned long ULONG_PTR;
+//#endif
+//#if !defined(_M_IX86) // And whatever this is.
+// typedef unsigned __int64 ULONGLONG;
+//#else
+ typedef double ULONGLONG;
+//#endif
+
+typedef unsigned long DWORD;
+typedef ULONGLONG DWORDLONG;
+typedef ULONG_PTR DWORD_PTR;
+typedef unsigned int DWORD32;
+typedef unsigned __int64 DWORD64;
+
+typedef void *PVOID;
+typedef PVOID HANDLE;
 #endif
 
  #ifndef HAS_STRICMP
@@ -283,4 +295,3 @@ void pause_ms(int t)
    return buffer;
  }
  #endif
- 

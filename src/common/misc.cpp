@@ -110,7 +110,7 @@ switch(LCSrandom(14))
         switch(LCSrandom(20))
                 {
                         case 0:strcat(str,"ABORTN");break;
-                        case 1:strcat(str,"");break;
+                        case 1:strcat(str,"LCS-"LCSrandom(50)+1);break;
                         case 2:strcat(str,"");break;
                         case 3:strcat(str,"");break;
                         case 4:strcat(str,"");break;
