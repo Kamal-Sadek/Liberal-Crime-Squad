@@ -377,7 +377,9 @@ void activate(Creature *cr)
          case ACTIVITY_GRAFFITI:
             move(22,3);
             addstr(cr->name);
-            addstr(" will spray political graffiti.");
+            addstr(" will spray political graffiti. Art and Heart will enhance the");
+			move(23,3);
+			addstr("liberal effect.");
             break;
          case ACTIVITY_POLLS:
             move(22,3);
