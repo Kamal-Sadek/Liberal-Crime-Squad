@@ -93,33 +93,6 @@
 using namespace std;
 #endif
 
-#ifdef Linux
- // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
-
-typedef long long __int64;
-
-typedef unsigned long ULONG;
-//#if defined(_WIN64) // TODO: detect 64 bit.
-// typedef unsigned __int64 ULONG_PTR;
-//#else
- typedef unsigned long ULONG_PTR;
-//#endif
-//#if !defined(_M_IX86) // And whatever this is.
-// typedef unsigned __int64 ULONGLONG;
-//#else
- typedef double ULONGLONG;
-//#endif
-
-typedef unsigned long DWORD;
-typedef ULONGLONG DWORDLONG;
-typedef ULONG_PTR DWORD_PTR;
-typedef unsigned int DWORD32;
-typedef unsigned __int64 DWORD64;
-
-typedef void *PVOID;
-typedef PVOID HANDLE;
-#endif
-
  #ifndef HAS_STRICMP
  // Portable equivalent of Windows stricmp() function.
  // This is strcmp() on lowercase versions of the
