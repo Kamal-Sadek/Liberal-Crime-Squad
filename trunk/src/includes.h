@@ -137,8 +137,8 @@ const int lowestloadscoreversion=31203;
       */
       #include <xcurses.h> //This is the X11 Port of PDCurses
    //undo PDCurses macros that break vector class
-      #undef erase
-      #undef clear
+      #undef erase // XXX: Umm... Now erase() and clear() don't work in
+      #undef clear //       dumpcaps.cpp
    #else
       #if defined(USE_NCURSES)
          #include <ncurses.h>
@@ -631,7 +631,7 @@ struct weaponst
 enum BallisticVestTypes
 {
    BVEST_POLICE,
-   BVEST_MILITARY
+   BVEST_MILITARY // XXX: SWAT?
 };
 
 enum MaskTypes
@@ -862,8 +862,7 @@ enum Lawflags
  * police attention to the wanted person, and to the
  * LCS as a whole. This is a global array, available
  * at runtime and indexed to the lawflag enum, so that
- * code can dynamically look up these hea
- t values as
+ * code can dynamically look up these heat values as
  * needed at runtime.
  */
 

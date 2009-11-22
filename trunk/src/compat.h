@@ -1,45 +1,35 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-//																						//
-//Copyright (c) 2004 by Kevin Sadler								                    //
-//																						//
+//											//
+//Copyright (c) 2004 by Kevin Sadler							//
+//											//
 //////////////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.												//
-//																						//
-//    Liberal Crime Squad is free software; you can redistribute it and/or modify		//
-//    it under the terms of the GNU General Public License as published by				//
-//    the Free Software Foundation; either version 2 of the License, or					//
-//    (at your option) any later version.												//
-//																						//
-//    Liberal Crime Squad is distributed in the hope that it will be useful,			//
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of					//
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the						//
-//    GNU General Public License for more details.										//
-//																						//
-//    You should have received a copy of the GNU General Public License					//
-//    along with Liberal Crime Squad; if not, write to the Free Software				//
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
+//This file is part of Liberal Crime Squad.						//
+//											//
+//    Liberal Crime Squad is free software; you can redistribute it and/or modify	//
+//    it under the terms of the GNU General Public License as published by		//
+//    the Free Software Foundation; either version 2 of the License, or			//
+//    (at your option) any later version.						//
+//											//
+//    Liberal Crime Squad is distributed in the hope that it will be useful,		//
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of			//
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			//
+//    GNU General Public License for more details.					//
+//											//
+//    You should have received a copy of the GNU General Public License			//
+//    along with Liberal Crime Squad; if not, write to the Free Software		//
+//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA		//
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* \file		compat.h
+* compat.h
 *
-* \brief	Compatibility Functions to support ports to non-Windows Platforms
+* Compatibility Functions to support ports to non-Windows Platforms
 *
-* $Author: sadler $
-* $Date: 2004/06/30 22:46:33 $
-* \version	$Name: HEAD $ $Revision: 1.3 $
+* Liberal Crime Squad
 *
-* $Id: compat.h,v 1.3 2004/06/30 22:46:33 sadler Exp $
-*
-* <HR>
-* \b Liberal Crime Squad
-*
-*
-* <HR>
-*
-* \par Abstract
-*
-* \par Portability Functions
+* Abstract
+* 
+* Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
 *
@@ -49,16 +39,16 @@
 * (b) Write portable alternatives for use by Windows and ports.
 * (c) Do (a) and (b) and decide what Windows does (API or portable)
 *     based on the value of a MACRO GO_PORTABLE.
-*
+* 
 * compat.cpp is the place for non-trivial or more global functions,
 *
+* History
 *
-* <HR>
+* Changes for portability...
+* 1) For Visual C++ 6.0 don't use namespace std.
+* 2) MINGW32 had a name clash between the UNIX-like time() function and
+* the time variable used for WIN32. Changed time to ptime.
 *
-* \par History
-*
-* \par
-* $Log: compat.h,v $
 * Revision 1.3  2004/06/30 22:46:33  sadler
 * Moved itoa() from game into compat.cpp
 *
