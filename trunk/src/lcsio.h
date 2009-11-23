@@ -23,9 +23,11 @@ This file is part of Liberal Crime Squad.
 */
 
 /**
-    \file lcsio.cpp
-    \author Chris Johnson
-    \brief Input/Output for Liberal Crime Squad.
+    lcsio.cpp
+
+    Chris Johnson
+
+    Input/Output for Liberal Crime Squad.
 
     This file contains all of the declarations for the new Liberal Crime Squad I/O system.
     The entire system is being rewritten
@@ -50,7 +52,7 @@ This file is part of Liberal Crime Squad.
 #include <sys/types.h>
 #include <sys/stat.h>
 /**
-    \brief I/O Flags for the LCS I/O System.
+    I/O Flags for the LCS I/O System.
 
 
 */
@@ -63,7 +65,7 @@ enum LCSIO_FLAGS
 
 
 /**
-    \brief LCSIO File open.
+    LCSIO File open.
 
     This function will open the given file using
     a prefix specified in flags. Use the mode
@@ -76,19 +78,19 @@ enum LCSIO_FLAGS
     Never mix prefixes, behavior is undefined in that case and may
     cause files to be deleted or corrupted.
 
-    \param filename Name of the file to open.
-    \param mode Mode of stream. Same as mode for fopen().
-    \param flags File name prefix flags, see enum LCSIO_FLAGS
-    \return FILE* handle. NULL on error.
+    filename Name of the file to open.
+    mode Mode of stream. Same as mode for fopen().
+    flags File name prefix flags, see enum LCSIO_FLAGS
+    FILE* handle. NULL on error.
 
 */
 FILE* LCSOpenFile(char* filename,char* mode,int flags);
 
 /**
-    \brief LCSIO Close an open file.
+    LCSIO Close an open file.
 
     This function closes the given file handle.
-    \param handle File handle to close.
+    handle File handle to close.
 
 */
 void LCSCloseFile(FILE* handle);
@@ -97,17 +99,17 @@ void LCSCloseFile(FILE* handle);
 
 
 /**
-    \brief Write to file.
+    Write to file.
 
     This function simply passes through to the standard C I/O system,
     but returns false on error, and true on success.
     If you need something more, use the actual C I/O calls instead.
 
-    \param buffer Pointer to buffer to write.
-    \param size Size of data to write, normally 1 byte.
-    \param count Number of data items to write. This is the length of the data.
-    \param handle FILE* handle that you get from LCSOpenFile.
-    \return False on error, true if no error.
+    buffer Pointer to buffer to write.
+    size Size of data to write, normally 1 byte.
+    count Number of data items to write. This is the length of the data.
+    handle FILE* handle that you get from LCSOpenFile.
+    False on error, true if no error.
 */
 /*inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
 {
@@ -121,17 +123,17 @@ void LCSCloseFile(FILE* handle);
 
 
 /**
-    \brief Read from file to buffer.
+    Read from file to buffer.
 
     This function simply passes through to the standard C I/O system,
     but returns false on error and true on success.
     If you need something more, use the actual C I/O calls instead.
 
-    \param buffer Pointer to buffer to read in to.
-    \param size Size of data to read, normally 1 byte.
-    \param count Number of data items to read. This is the length of the data.
-    \param handle FILE* handle that you get from LCSOpenFile.
-     \return False on error, true if no error.
+    buffer Pointer to buffer to read in to.
+    size Size of data to read, normally 1 byte.
+    count Number of data items to read. This is the length of the data.
+    handle FILE* handle that you get from LCSOpenFile.
+     False on error, true if no error.
 */
 /*inline bool LCSRead(void* buffer, size_t size, size_t count, FILE* handle)
 {
@@ -144,14 +146,15 @@ void LCSCloseFile(FILE* handle);
 }Deprecated function - SAV */
 
 /**
-    \brief Deletes a file.
+    Deletes a file.
 
     This function unlinks the filename you spefify.
     You may use prefix flags to delete files in other directories.
 
-    \warning Do not try to delete files in the art directory.
-    \param filename Name of file to delete.
-    \param flags Prefix flags. See enum LCSIO_FLAGS.
+    Do not try to delete files in the art directory.
+
+    filename Name of file to delete.
+    flags Prefix flags. See enum LCSIO_FLAGS.
 */
 void LCSDeleteFile(char* filename,int flags);
 

@@ -74,7 +74,7 @@ typedef unsigned long ULONG;
 
 #if defined(i386) || defined(i486) || \
         defined(intel) || defined(x86) || defined(i86pc)
-#define LCS_M_IX86
+    #define LCS_M_IX86
 #endif
 
 #if !defined(LCS_M_IX86)
