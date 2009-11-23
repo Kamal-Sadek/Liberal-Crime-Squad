@@ -2849,7 +2849,7 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;
-               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  ");
+               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  "); // Holy car keys Batman!
                else addstr("Holy shit!  ");
                addstr(cr.name);
                addstr(" found the keys ");

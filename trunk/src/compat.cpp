@@ -44,6 +44,9 @@
 *
 * History
 *
+* LiteralKa's changes:
+* 1) Added Window's mostly nonsensical custom type definitions.
+*
 * Changes for portability...
 * 1) For Visual C++ 6.0 don't use namespace std.
 * 2) MINGW32 had a name clash between the UNIX-like time() function and

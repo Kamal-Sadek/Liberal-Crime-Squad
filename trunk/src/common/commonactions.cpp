@@ -736,7 +736,7 @@ int lawflagheat(int lawflag)
    case LAWFLAG_BURNFLAG:return 0;
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
-   case LAWFLAG_ASSAULT:return 0;
+   case LAWFLAG_ASSAULT:return 0; // XXX: This is on the same level as "harmful speech"?
    case LAWFLAG_ARMEDASSAULT:return 1;
    case LAWFLAG_CARTHEFT:return 0;
    case LAWFLAG_INFORMATION:return 2;
