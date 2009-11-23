@@ -72,11 +72,16 @@ typedef unsigned long ULONG;
     typedef unsigned long ULONG_PTR;
 #endif
 
-//#if !defined(_M_IX86) // And whatever this is.
-// typedef unsigned __int64 ULONGLONG;
-//#else
-typedef double ULONGLONG;
-//#endif
+#if defined(i386) || defined(i486) || \
+        defined(intel) || defined(x86) || defined(i86pc)
+#define LCS_M_IX86
+#endif
+
+#if !defined(LCS_M_IX86)
+    typedef unsigned __int64 ULONGLONG;
+#else
+    typedef double ULONGLONG;
+#endif
 
 typedef unsigned long DWORD;
 typedef ULONGLONG DWORDLONG;
