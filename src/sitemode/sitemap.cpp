@@ -156,6 +156,8 @@ void initsite(locationst &loc)
      }
    } else {
 //No sitemaps? No problem! Revert to old build code. SAV
+//FIXME: For Linux, it can't find sitemaps.txt, and makes it impossible to load
+//        a saved game. -- LK
      levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
