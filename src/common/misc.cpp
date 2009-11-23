@@ -134,24 +134,25 @@ switch(LCSrandom(14))
 */
 
 /* return a letter, number, or one of either. */
-void chooseLetterOrNumber(int type)
+void chooseLetterOrNumber(char *str, int type)
 {
     strcpy(str,"");
 
     if(type == 1) // Choose a letter.
     {
         char randChar = 'a' + LCSrandom(26);
-        addstr(randChar);
+        addstr((char *)randChar);
     } else if(type == 2) // Choose a number.
     {
-        addstr(LCSrandom(10));
-    } else if(type == 3) // Choose one of either.
-    {
+        char randNum = LCSrandom(10);
+        addstr((char *)randNum);
+    } else if(type == 3) {// Choose one of either.
         if(LCSrandom(36) > 25) {
-            addstr(LCSrandom(10));
+            char randNum = LCSrandom(10);
+            addstr((char *)randNum);
         } else {
-            char randChar = 'a' + LCSrandom(26);
-            addstr(randChar);
+        char randChar = 'a' + LCSrandom(26);
+        addstr((char *)randChar);
         }
     } else {
         addstr("-ERR-");
@@ -159,7 +160,7 @@ void chooseLetterOrNumber(int type)
 }
 
 /* generate a non-vanity plate for the squad. */
-void plate(void)
+void plate(char *str)
 {
    strcpy(str,"");
 
@@ -167,63 +168,63 @@ void plate(void)
     {
         case 0: // 123 ABC
                 // CT,WA
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(" ");
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(1));
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               strcat(str," ");
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 1);
                break;
         case 1: // 12A B34
                 // CT,MA
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(1));
-               addstr(" ");
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 1);
+               strcat(str," ");
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
                break;
         case 2: // 123 4567
                 // NH
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(" ");
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               strcat(str," ");
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
                break;
         case 3: // ABC 1234
                 // PA, NY
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(1));
-               addstr(" ");
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 1);
+               strcat(str," ");
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
                break;
         case 4: // 12A34
                 // School Buses.
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(1));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
                break;
         case 5: // A 12345
                 // Trucks, etc.
-               addstr(chooseLetterOrNumber(1));
-               addstr(" ");
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
-               addstr(chooseLetterOrNumber(2));
+               chooseLetterOrNumber(str, 1);
+               strcat(str," ");
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
                break;
     }
 }
