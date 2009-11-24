@@ -164,7 +164,7 @@ void plate(char *str)
 {
    strcpy(str,"");
 
-    switch(LCSrandom(6)) // Actual license plate formats.
+    switch(LCSrandom(7)) // Actual license plate formats.
     {
         case 0: // 123 ABC
                 // CT,WA
@@ -222,6 +222,16 @@ void plate(char *str)
                strcat(str," ");
                chooseLetterOrNumber(str, 2);
                chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 2);
+               break;
+        case 6: // 1AB 234
+                // CT
+               chooseLetterOrNumber(str, 2);
+               chooseLetterOrNumber(str, 1);
+               chooseLetterOrNumber(str, 1);
+               strcat(str," ");
                chooseLetterOrNumber(str, 2);
                chooseLetterOrNumber(str, 2);
                chooseLetterOrNumber(str, 2);
