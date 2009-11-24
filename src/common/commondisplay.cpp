@@ -1476,6 +1476,17 @@ void addlocationname(locationst *loc)
    }
 }
 
+/* print location's shortname (is aware of business fronts) */
+void addshortname (locationst *loc)
+{
+  if (loc->front_business!=-1) {
+    addstr (loc->front_shortname);
+  }
+  else {
+    addstr (loc->shortname);
+  }
+}
+
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll)
 {

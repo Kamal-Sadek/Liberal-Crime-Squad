@@ -710,29 +710,44 @@ void investlocation(void)
             funds-=3000;
             stat_spent+=3000;
             moneylost_compound+=3000;
-            location[loc]->front_business=LCSrandom(BUSINESSFRONTNUM);
-            lastname(location[loc]->front_name);
-            strcat(location[loc]->front_name," ");
-            switch(location[loc]->front_business)
-            {
-               case BUSINESSFRONT_INSURANCE:
-                  switch(LCSrandom(3))
-                  {
-                     case 0:strcat(location[loc]->front_name,"Auto");break;
-                     case 1:strcat(location[loc]->front_name,"Life");break;
-                     case 2:strcat(location[loc]->front_name,"Health");break;
-                  }
-                  strcat(location[loc]->front_name," Insurance");
-                  break;
-               case BUSINESSFRONT_TEMPAGENCY:
-                  switch(LCSrandom(2))
-                  {
-                     case 0:strcat(location[loc]->front_name,"Temp Agency");break;
-                     case 1:strcat(location[loc]->front_name,"Manpower, LLC");break;
-                  }
-                  break;
-            }
-         }
+	    do {
+	      location[loc]->front_business=LCSrandom(BUSINESSFRONTNUM);
+	      lastname(location[loc]->front_name);
+	      strcat(location[loc]->front_name," ");
+	      switch(location[loc]->front_business) {
+	      case BUSINESSFRONT_INSURANCE:
+		switch(LCSrandom(3)) {
+		case 0:
+		  strcat(location[loc]->front_name,"Auto");
+		  strcpy(location[loc]->front_shortname,"Auto");
+		  break;
+		case 1:
+		  strcat(location[loc]->front_name,"Life");
+		  strcpy(location[loc]->front_shortname,"Life");
+		  break;
+		case 2:
+		  strcat(location[loc]->front_name,"Health");
+		  strcpy(location[loc]->front_shortname,"Health");
+		  break;
+		}
+		strcat(location[loc]->front_name," Insurance");
+		strcat(location[loc]->front_shortname," Ins.");
+		break;
+	      case BUSINESSFRONT_TEMPAGENCY:
+		switch(LCSrandom(2)) {
+		case 0:
+		  strcat(location[loc]->front_name,"Temp Agency");
+		  strcpy(location[loc]->front_shortname,"Agency");
+		  break;
+		case 1:
+		  strcat(location[loc]->front_name,"Manpower, LLC");
+		  strcpy(location[loc]->front_shortname,"Manpower");
+		  break;
+		}
+		break;
+	      }
+	    } while (duplicatelocation(*location[loc]));
+	 } 
       }
    }while(1);
 }

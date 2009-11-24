@@ -136,7 +136,7 @@ void activate_sleepers(void)
 
          move(y,42);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(location[temppool[p]->worklocation]->shortname);
+         addshortname(location[temppool[p]->worklocation]);
 
          move(y,57);
          // Let's add some color here...

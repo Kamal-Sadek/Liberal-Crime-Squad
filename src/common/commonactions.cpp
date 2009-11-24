@@ -842,3 +842,22 @@ int randomissue(bool core_only)
    }
    return -1;
 }
+
+/* common - Checks if a site (typically safehouse) has a unique short name, and for business fronts, if the front has a unique shortname. */
+char duplicatelocation(locationst &loc) {
+   for(int l = 0; l < location.size(); l++)
+   {
+      if(location[l] == &loc)
+         continue;
+
+      if(!strcmp(location[l]->shortname, loc.shortname))
+         return 1;
+
+      if (location[l]->front_business != -1 &&
+	  loc.front_business != -1 &&
+	  !strcmp (location[l]->front_shortname, loc.front_shortname))
+	 return 1;
+   }
+   return 0;
+}
+
