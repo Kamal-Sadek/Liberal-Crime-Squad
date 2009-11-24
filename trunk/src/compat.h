@@ -94,8 +94,8 @@ typedef unsigned long ULONG;
 
 
 typedef unsigned long DWORD;
-typedef ULONGLONG DWORDLONG;
-typedef ULONG_PTR DWORD_PTR;
+typedef ULONGLONG DWORDLONG; // ULONGLONG and ULONG_PTR vary depending on
+typedef ULONG_PTR DWORD_PTR; //  architecture
 typedef unsigned int DWORD32;
 typedef unsigned long long DWORD64;
 
