@@ -70,8 +70,9 @@
 #define PACKAGE_VERSION "4.00.5"
 #endif
 
-const int version=40005;
-const int lowestloadversion=40000;
+// I bumped these to 40006 already since I broke save compatibility with the business front shortname handling --ari
+const int version=40006; 
+const int lowestloadversion=40006;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -1238,6 +1239,7 @@ struct locationst
    int compound_stores;
    short front_business;
    char front_name[40];
+   char front_shortname[20];
    char haveflag;
    char hidden;
 
@@ -1724,6 +1726,8 @@ void printliberalstats(Creature &cr);
 void makedelimiter(int y,int x);
 /* print location name (is aware of business fronts) */
 void addlocationname(locationst *loc);
+/* print location's shortname (is aware of business fronts) */
+void addshortname (locationst *loc);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
@@ -1790,6 +1794,9 @@ int loveslavesleft(const Creature& cr);
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value);
+/* common - Checks if a site (typically safehouse) has a unique short name, and for business fronts, if the front has a unique shortname. */
+char duplicatelocation(locationst &loc);
+
 
 /*
  consolesupport.cpp

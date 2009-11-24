@@ -1776,19 +1776,6 @@ char securityable(int type)
 }
 
 
-// Helper function for initlocation.
-// Checks if a site (typically safehouse) has a unique short name.
-char duplicatelocation(locationst &loc) {
-   for(int l = 0; l < location.size(); l++)
-   {
-      if(location[l] == &loc)
-         continue;
-
-      if(!strcmp(location[l]->shortname, loc.shortname))
-         return 1;
-   }
-   return 0;
-}
 
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(locationst &loc)

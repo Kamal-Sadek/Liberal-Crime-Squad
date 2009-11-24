@@ -125,7 +125,10 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_VISIT:
       {
          strcat(str,"Going to ");
-         strcat(str,location[act.arg]->shortname);
+	 if (location[act.arg]->front_business==-1)
+	    strcat(str,location[act.arg]->shortname);
+	 else
+	    strcat(str,location[act.arg]->front_shortname);
          break;
       }
       case ACTIVITY_HEAL:
