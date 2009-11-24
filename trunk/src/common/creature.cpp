@@ -35,7 +35,7 @@ void Creature::train(int trainedskill, int experience, int upto)
    //if(animalgloss==ANIMALGLOSS_ANIMAL)return;
 
    // Don't give experience if already maxed out
-   if(maxskill(trainedskill,*this)==skill[trainedskill] || upto==skill[trainedskill])
+   if(maxskill(trainedskill,*this)>=skill[trainedskill] || upto>=skill[trainedskill])
       return;
    // Don't give experience if requested to give none
    if(experience==0)
