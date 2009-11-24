@@ -995,6 +995,7 @@ public:
    int skill[SKILLNUM]; // should never decrease, so never be negative
 
    void train(int trainedskill, int experience);
+   void train(int trainedskill, int experience, int upto);
    void skill_up();
    int get_skill_ip(int skill);
 
