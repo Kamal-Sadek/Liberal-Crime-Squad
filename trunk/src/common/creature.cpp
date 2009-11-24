@@ -43,11 +43,8 @@ void Creature::train(int trainedskill, int experience)
       return;
    // Skill gain scaled by ability in the area
    skill_ip[trainedskill]+=max(1,static_cast<int>(experience * maxskill(trainedskill,*this,false) / 6.0));
-   // Don't rush it
-   if(skill_ip[trainedskill]>=(100+10*skill[trainedskill])*1.5)
-   {
-      skill_ip[trainedskill]=static_cast<int>((100+10*skill[trainedskill])*1.5);
-   }
+   // Don't rush it (limit development to exactly halfway through the next skill level) 
+   skill_ip[trainedskill] = min(skill_ip[trainedskill], 100 + 10*skill[trainedskill] + 50 + 5*(1+skill[trainedskill]));
 }
 
 void Creature::skill_up()
