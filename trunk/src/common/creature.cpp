@@ -29,22 +29,35 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
-
-void Creature::train(int trainedskill, int experience)
+void Creature::train(int trainedskill, int experience, int upto)
 {
    // Do we allow animals to gain skills? Right now, yes
    //if(animalgloss==ANIMALGLOSS_ANIMAL)return;
 
    // Don't give experience if already maxed out
-   if(maxskill(trainedskill,*this)==skill[trainedskill])
+   if(maxskill(trainedskill,*this)==skill[trainedskill] || upto==skill[trainedskill])
       return;
    // Don't give experience if requested to give none
    if(experience==0)
       return;
    // Skill gain scaled by ability in the area
    skill_ip[trainedskill]+=max(1,static_cast<int>(experience * maxskill(trainedskill,*this,false) / 6.0));
-   // Don't rush it (limit development to exactly halfway through the next skill level) 
-   skill_ip[trainedskill] = min(skill_ip[trainedskill], 100 + 10*skill[trainedskill] + 50 + 5*(1+skill[trainedskill]));
+
+   int abovenextlevel;
+   // only allow gaining experience on the new level if it doesn't put us over a level limit
+   if (skill[trainedskill] >= (upto - 1) || 
+       skill[trainedskill] >= (maxskill (trainedskill,*this) - 1))
+     abovenextlevel = 0;
+   else
+     abovenextlevel = 50 + 5*(1+skill[trainedskill]); // enough skill points to get halfway through the next skill level
+
+   skill_ip[trainedskill] = min(skill_ip[trainedskill], 100 + 10*skill[trainedskill] + abovenextlevel);
+
+}
+
+void Creature::train(int trainedskill, int experience)
+{
+   return this->train (trainedskill, experience, 20);
 }
 
 void Creature::skill_up()
