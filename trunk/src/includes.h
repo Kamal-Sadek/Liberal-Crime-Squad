@@ -1911,6 +1911,13 @@ void makestate(char *str);
 /* endgame - converts an integer into a roman numeral for amendments */
 void romannumeral(int amendnum);
 
+/*
+ help.cpp
+*/
+/* Generates help page on activities. Just supply Activity type as an int */
+void HelpActivities(int activity);
+
+
 /*******************************************************************************
 *
 *                             Title Screen and New Game
