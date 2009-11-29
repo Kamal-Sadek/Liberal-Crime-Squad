@@ -381,6 +381,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\help.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\basemode\liberalagenda.cpp"
 				>
 			</File>
