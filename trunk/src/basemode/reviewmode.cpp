@@ -675,6 +675,7 @@ void review_mode(short mode)
 							delete temppool[p];
 							temppool.erase(temppool.begin() + p);
 							pool.erase(pool.begin() + thisPersonIndex);
+							break;
 						}
 					}					
 					else if(c=='k' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
