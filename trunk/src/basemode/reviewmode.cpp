@@ -630,7 +630,7 @@ void review_mode(short mode)
 						addstr("s juice.          ");
 
 						move(23,0);
-						addstr("If the member has low heart they may goto the police.                      ");
+						addstr("If the member has low heart they may goto the police.                         ");
 
 						move(24,0);
 						addstr("  C - Confirm       Any other key to continue                                                ");
@@ -640,22 +640,35 @@ void review_mode(short mode)
 
 						if(c=='c')
 						{
+							// Release squad member
 							move(22,0);
 							addstr(temppool[p]->name);
-							addstr(" has been released.");
+							addstr(" has been released.                                                                      ");
+							move(23,0);
+						    addstr("                                                                                         ");
+							move(24,0);
+						    addstr("                                                                                         ");
+							getch();
+							// Chance of member going to police if boss has criminal record and
+							// if they have low heart
+							// TODO: Do law check against other members?
+							if(temppool[p]->attval(ATTRIBUTE_HEART) < LCSrandom(6)
+								&& iscriminal(*pool[boss]))
+							{								
+								if(LCSrandom(5)) // Chance of tip off
+								{
+									set_color(COLOR_CYAN,COLOR_BLACK,1);
+									move(22,0);
+									addstr("A liberal friend tips you off on ");
+									addstr(temppool[p]->name);
+									addstr("s where abouts.");
+									move(23,0);
+									addstr("Unfortunately due to their lack of heart they have gone to the police.");
+								}
 
-							// Chance of member going to police.
-							if(temppool[p]->attval(ATTRIBUTE_HEART) < LCSrandom(10))
-							{
-								// Gone to police increase heat.
-								addstr(" Unfortunately with thier lack of heart they");
-								move(23,0);
-								addstr("have gone to the police. ");
-								addstr(pool[boss]->name);
-								addstr("s heat rises.                                                      ");
-								move(24,0);
-								addstr("                                                                   ");
-								pool[boss]->heat += 5;
+								// TODO: Depending on the crime increase heat or make seige
+
+								location[pool[boss]->location]->siege.timeuntillocated=3;
 								getch();
 							}
 
@@ -693,11 +706,11 @@ void review_mode(short mode)
 
 						move(22,0);
 						set_color(COLOR_WHITE,COLOR_BLACK,0);
-						addstr("Confirm you want to kill off squad member (at a loss of ");
+						addstr("Confirm you want to kill off squad member at a loss of ");
 						addstr(pool[boss]->name);
-						addstr("s juice).         ");
+						addstr("s juice, there is");
 						move(23,0);
-						addstr("                                                                           ");
+						addstr("also a chance they will loose Heart or gain Wisdom.                              ");
 						move(24,0);
 						addstr("  C - Confirm       Any other key to continue                                                ");
 
@@ -707,18 +720,70 @@ void review_mode(short mode)
 						if(c=='c')
 						{
 							temppool[p]->alive = 0;
-							// Dejuice boss
+							stat_kills++;
+
+							move(22,0);
+							addstr(pool[boss]->name);
+							addstr(" executes ");
+							addstr(temppool[p]->name);
+							addstr(" by ");
+							switch(LCSrandom(3))
+							{
+							case 0:addstr("strangling to death.                             ");break;
+							case 1:addstr("beating to death.                                ");break;
+							case 2:addstr("cold execution.                                  ");break;
+							}
+							move(23,0);
+							addstr("                                                                            ");
+							move(24,0);
+							addstr("                                                                            ");
+
+							getch();
+							move(22,0);
+
 							if(boss!=-1)
 							{
+								// Dejuice boss
 								int juice=temppool[p]->juice/10;
 								if(juice<5)
 								{
 									juice=5;
 								}
 								addjuice(*pool[boss],-juice);
+
+								if(LCSrandom(pool[boss]->att[ATTRIBUTE_HEART])>LCSrandom(3))
+								{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr(pool[boss]->name);
+									addstr(" feels sick to the stomach afterward and ");
+									pool[boss]->att[ATTRIBUTE_HEART]--;
+									switch(LCSrandom(4))
+									{
+									case 0:addstr("throws up in a trash can.                                          ");break;
+									case 1:addstr("gets drunk, eventually falling asleep.                             ");break;
+									case 2:addstr("curls up in a ball, crying softly.                                 ");break;
+									case 3:addstr("shoots up and collapses in a heap on the floor.                    ");break;
+									}
+									move(23,0);
+									addstr(pool[boss]->name);
+									addstr(" looses heart.");
+									getch();
+								}
+								else if(!LCSrandom(3))
+								{
+									set_color(COLOR_CYAN,COLOR_BLACK,1);
+									addstr(pool[boss]->name);
+									addstr(" grows older.                                                            ");
+									pool[boss]->att[ATTRIBUTE_WISDOM]++;
+									move(23,0);
+									addstr(pool[boss]->name);
+									addstr(" gains Wisdom.                                                           ");
+									getch();
+								}
 							}
+
 							break;
-						}						
+						}		
 					}
 					else break;
 				}while(1);
