@@ -73,6 +73,7 @@ void savegame(char *str)
       numbytes=fwrite(&amendnum,sizeof(int),1,h);
 
       numbytes=fwrite(&termlimits,sizeof(bool),1,h);
+      numbytes=fwrite(&deagle,sizeof(bool),1,h);
 
       numbytes=fwrite(&stat_recruits,sizeof(int),1,h);
       numbytes=fwrite(&stat_dead,sizeof(int),1,h);
@@ -359,6 +360,7 @@ char load(void)
       fread(&amendnum,sizeof(int),1,h);
 
       fread(&termlimits,sizeof(bool),1,h);
+      fread(&deagle,sizeof(bool),1,h);
 
       fread(&stat_recruits,sizeof(int),1,h);
       fread(&stat_dead,sizeof(int),1,h);

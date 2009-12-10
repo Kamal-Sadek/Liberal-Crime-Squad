@@ -97,6 +97,7 @@ extern int year;
 extern int amendnum;
 
 extern bool termlimits;
+extern bool deagle;
 
 extern long moneygained_donate;
 extern long moneygained_brownies;

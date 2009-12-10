@@ -524,6 +524,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             case CLIP_SMG:a.weapon.ammo+=15;break;
             case CLIP_38:a.weapon.ammo+=6;break;
             case CLIP_44:a.weapon.ammo+=6;break;
+            case CLIP_50AE:a.weapon.ammo+=7;break;
             case CLIP_BUCKSHOT:a.weapon.ammo+=6;break;
             case CLIP_MOLOTOV:a.weapon.ammo+=1;break;
             case CLIP_GASOLINE:a.weapon.ammo+=2;break;
@@ -601,6 +602,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcat(str,"pokes at");break;
       case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
+      case WEAPON_DESERT_EAGLE:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
       case WEAPON_SEMIRIFLE_AR15:
@@ -822,6 +824,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case WEAPON_SHOTGUN_PUMP:
          case WEAPON_REVOLVER_38:
          case WEAPON_REVOLVER_44:
+         case WEAPON_DESERT_EAGLE:
          case WEAPON_SEMIPISTOL_9MM:
          case WEAPON_SEMIPISTOL_45:
          case WEAPON_SEMIRIFLE_AR15:
@@ -1057,6 +1060,24 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
                damagearmor=1;
                armorpiercing=4;
+            }
+            else
+            {
+               damtype|=WOUND_BRUISED;
+               damamount=LCSrandom(6)+5;
+               strengthmod=1;
+                
+            }
+            break;
+         case WEAPON_DESERT_EAGLE:
+            if(a.weapon.ammo>0 && !force_melee)
+            {
+               damtype|=WOUND_SHOT;
+               damtype|=WOUND_BLEEDING;
+               damamount=LCSrandom(301)+10;
+               severtype=WOUND_NASTYOFF; // We're just going to go ahead and continue
+               damagearmor=1;            // the mythology of the Deagle by letting it
+               armorpiercing=4;          // blow limbs off... --Fox
             }
             else
             {

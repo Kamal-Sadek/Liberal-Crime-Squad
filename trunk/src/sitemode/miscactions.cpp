@@ -339,6 +339,7 @@ long bashstrengthmod(int t)
       case WEAPON_SMG_MP5:
       case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
+      case WEAPON_DESERT_EAGLE:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
       case WEAPON_CROSS:
@@ -1175,6 +1176,7 @@ void reloadparty(bool wasteful)
             case CLIP_SMG:ammomax=15;break;
             case CLIP_38:ammomax=6;break;
             case CLIP_44:ammomax=6;break;
+            case CLIP_50AE:ammomax=7;break;
             case CLIP_BUCKSHOT:ammomax=6;break;
             case CLIP_MOLOTOV:ammomax=1;break;
             case CLIP_GASOLINE:ammomax=2;break;

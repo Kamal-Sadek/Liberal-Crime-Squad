@@ -1203,19 +1203,54 @@ void special_house_photos(void)
 
          if(unlock(UNLOCK_SAFE,actual))
          {
-            clearmessagearea();
+            bool empty=true;
+            itemst *it;
+            
+            if(deagle==false)
+            {
+               clearmessagearea();
+               
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(16,1);
+               addstr("The squad has found a Desert Eagle.");
 
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(16,1);
-            addstr("This guy sure had a lot of $100 bills.");
+               refresh();
+               getch();
 
-            refresh();
-            getch();
+               itemst *it=new itemst;
+                  it->type=ITEM_WEAPON;
+                  it->weapon.type=WEAPON_DESERT_EAGLE;
+                  it->weapon.ammo=7;
+               activesquad->loot.push_back(it);
 
-            itemst *it=new itemst;
-               it->type=ITEM_MONEY;
-               it->money=1000*(1+LCSrandom(10));
-            activesquad->loot.push_back(it);
+               it=new itemst;
+                  it->type=ITEM_CLIP;
+                  it->cliptype=CLIP_50AE;
+                  it->number=9;
+               activesquad->loot.push_back(it);
+
+               deagle=true;
+               empty=false;
+            }
+               
+            if(LCSrandom(2))
+            {
+               clearmessagearea();
+
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(16,1);
+               addstr("This guy sure had a lot of $100 bills.");
+
+               refresh();
+               getch();
+
+               it=new itemst;
+                  it->type=ITEM_MONEY;
+                  it->money=1000*(1+LCSrandom(10));
+               activesquad->loot.push_back(it);
+               
+               empty=false;
+            }
 
             if(LCSrandom(2))
             {
@@ -1233,15 +1268,10 @@ void special_house_photos(void)
                it=new itemst;
                   it->type=ITEM_LOOT;
                   it->loottype=LOOT_EXPENSIVEJEWELERY;
+                  it->number=3;
                activesquad->loot.push_back(it);
-               it=new itemst;
-                  it->type=ITEM_LOOT;
-                  it->loottype=LOOT_EXPENSIVEJEWELERY;
-               activesquad->loot.push_back(it);
-               it=new itemst;
-                  it->type=ITEM_LOOT;
-                  it->loottype=LOOT_EXPENSIVEJEWELERY;
-               activesquad->loot.push_back(it);
+               
+               empty=false;
             }
 
             if(!LCSrandom(3))
@@ -1259,6 +1289,8 @@ void special_house_photos(void)
                   it->type=ITEM_LOOT;
                   it->loottype=LOOT_CEOPHOTOS;
                activesquad->loot.push_back(it);
+               
+               empty=false;
             }
 
             if(!LCSrandom(3))
@@ -1271,6 +1303,8 @@ void special_house_photos(void)
 
                refresh();
                getch();
+               
+               empty=false;
             }
 
             if(!LCSrandom(3))
@@ -1290,6 +1324,8 @@ void special_house_photos(void)
                   it->type=ITEM_LOOT;
                   it->loottype=LOOT_CEOLOVELETTERS;
                activesquad->loot.push_back(it);
+               
+               empty=false;
             }
 
             if(!LCSrandom(3))
@@ -1307,14 +1343,32 @@ void special_house_photos(void)
                   it->type=ITEM_LOOT;
                   it->loottype=LOOT_CEOTAXPAPERS;
                activesquad->loot.push_back(it);
+               
+               empty=false;
             }
 
-            juiceparty(10);
-            sitecrime+=40;
+            if(empty)
+            {
+               clearmessagearea();
 
-            int time=20+LCSrandom(10);
-            if(time<1)time=1;
-            if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(16,1);
+               addstr("Wow, it's empty.  That sucks.");
+
+               refresh();
+               getch();
+            }
+            else
+            {
+               juiceparty(10);
+               sitecrime+=40;
+               sitestory->crime.push_back(CRIME_HOUSE_PHOTOS);
+               criminalizeparty(LAWFLAG_THEFT);
+
+               int time=20+LCSrandom(10);
+               if(time<1)time=1;
+               if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+            }
          }
 
          if(actual)
@@ -1322,10 +1376,6 @@ void special_house_photos(void)
             alienationcheck(1);
             noticecheck(-1);
             levelmap[locx][locy][locz].special=-1;
-            sitecrime+=3;
-            sitestory->crime.push_back(CRIME_HOUSE_PHOTOS);
-
-            criminalizeparty(LAWFLAG_THEFT);
          }
 
          return;

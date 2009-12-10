@@ -24,16 +24,16 @@ void HelpActivities(int activityType)
 	addstr("Liberal help on: ");
 
 
-	if(activityType == ACTIVITY_COMMUNITYSERVICE)
-	{
+   switch(activityType)
+   {
+   case ACTIVITY_COMMUNITYSERVICE:
 		addstr("===Community service===");
 		move(2,1);
 		addstr("Has a minor effect on public opinion, increases Juice and has the chance");
 		move(3,1);
 		addstr("of reducing the activists Heat.");
-	}
-	else if(activityType == ACTIVITY_TROUBLE)
-	{
+      break;
+   case ACTIVITY_TROUBLE:
 		addstr("===Liberal Disobedience===");
 		move(2,1);
 		addstr("Liberal Disobedience is an illegal activity and a form of Liberal Activism"); 
@@ -51,10 +51,8 @@ void HelpActivities(int activityType)
 		addstr("There is a chance that someone will phone to police. Agility, intelligence,");
 		move(10,1);
 		addstr("disguise and street sense will shake them off the scent.");
-
-	} 
-	else if(activityType == ACTIVITY_POLLS)
-	{
+      break;
+   case ACTIVITY_POLLS:
 		addstr("===Search Opinion Polls===");
 		move(2,1);
 		addstr("Search Opinion Polls is a legal activity that lets you see what people think");
@@ -63,9 +61,8 @@ void HelpActivities(int activityType)
 
 		move(5,1);
 		addstr("Skill in computers and intelligence will give better results.");
-	}
-	else if(activityType == ACTIVITY_DOS_ATTACKS)
-	{
+      break;
+   case ACTIVITY_DOS_ATTACKS:
 		addstr("===Harass Websites===");
 		move(2,1);
 		addstr("Harass Websites is an illegal activity and a form of Liberal Activism. It");
@@ -78,9 +75,8 @@ void HelpActivities(int activityType)
 
 		move(7,1);
 		addstr("Utilises only the Computers skill.");
-	}
-	else if(activityType == ACTIVITY_HACKING)
-	{
+      break;
+   case ACTIVITY_HACKING:
 		addstr("===Hacking===");
 		move(2,1);
 		addstr("Hacking is an activity, the most highly illegal form of Liberal Activism,");
@@ -101,9 +97,14 @@ void HelpActivities(int activityType)
 		addstr("increases. Additionally if successful it will increase juice.");
 
 		move(12,1);
-		addstr("Occasionally instead of effecting public opinion your hacker");
+		addstr("In addition to affecting public opinion, your hackers may find files");
 		move(13,1);
-		addstr("may find files that can be used with the Liberal Guardian.");
+		addstr("that can be used with the Liberal Guardian.");
+      break;
+   default:
+      addstr("===THE GREAT UNKNOWN===");
+		move(2,1);
+		addstr("There is no help on this topic yet. Sorry, the help system is very new!");
 	}
 
 	set_color(COLOR_WHITE,COLOR_BLACK,0);

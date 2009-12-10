@@ -193,6 +193,7 @@ void getweapon(char *str,int type)
          case WEAPON_SYRINGE:      strcpy(str,"Syringe");break;
          case WEAPON_REVOLVER_38:   strcpy(str,".38 Rev.");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Mag.");break;
+         case WEAPON_DESERT_EAGLE:   strcpy(str,"Deagle");break;
          case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Semi.");break;
          case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Semi.");break;
          case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"AR-15");break;
@@ -233,6 +234,7 @@ void getweapon(char *str,int type)
          case WEAPON_SYRINGE:       strcpy(str,"Injector");break;
          case WEAPON_REVOLVER_38:   strcpy(str,".38 Slug");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Slug");break;
+         case WEAPON_DESERT_EAGLE:  strcpy(str,"Deagle");break;
          case WEAPON_SEMIPISTOL_9MM:strcpy(str,"9mm Las.");break;
          case WEAPON_SEMIPISTOL_45: strcpy(str,".45 Las.");break;
          case WEAPON_SEMIRIFLE_AR15:strcpy(str,"X15 Semi");break;
@@ -279,6 +281,7 @@ void getweaponfull(char *str,int type,int subtype)
          case WEAPON_SYRINGE:       strcpy(str,"Syringe");break;
          case WEAPON_REVOLVER_38:   strcpy(str,".38 Revolver");break;
          case WEAPON_REVOLVER_44:   strcpy(str,".44 Magnum");break;
+         case WEAPON_DESERT_EAGLE:  strcpy(str,"Desert Eagle");break;
          case WEAPON_SEMIPISTOL_9MM:strcpy(str,"9mm Semiauto");break;
          case WEAPON_SEMIPISTOL_45: strcpy(str,".45 Semiauto");break;
          case WEAPON_SEMIRIFLE_AR15:strcpy(str,"AR15");break;
@@ -324,6 +327,7 @@ void getweaponfull(char *str,int type,int subtype)
       case WEAPON_SYRINGE:      strcpy(str,"Medical Injector");break;
       case WEAPON_REVOLVER_38:   strcpy(str,".38 Slug Pistol");break;
       case WEAPON_REVOLVER_44:   strcpy(str,".44 Heavy Slug Pistol");break;
+      case WEAPON_DESERT_EAGLE:   strcpy(str,"Desert Eagle");break;
       case WEAPON_SEMIPISTOL_9MM:   strcpy(str,"9mm Laser Pistol");break;
       case WEAPON_SEMIPISTOL_45:   strcpy(str,".45 Laser Pistol");break;
       case WEAPON_SEMIRIFLE_AR15:   strcpy(str,"X15 Personal Laser");break;
@@ -711,6 +715,7 @@ void getclip(char *str,int clip)
          case CLIP_SMG:strcat(str,"9mm SMG Mag");break;
          case CLIP_38:strcat(str,".38 Speedloader");break;
          case CLIP_44:strcat(str,".44 Speedloader");break;
+         case CLIP_50AE:strcat(str,".50AE Pistol Mag");break;
          case CLIP_BUCKSHOT:strcat(str,"6 Shotgun Shells");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
          case CLIP_GASOLINE:strcat(str,"Gas Tank");break;
@@ -726,6 +731,7 @@ void getclip(char *str,int clip)
          case CLIP_SMG:strcat(str,"SMG Powerpack");break;
          case CLIP_38:strcat(str,".38 Slug Mag");break;
          case CLIP_44:strcat(str,".44 Heavy Slug Mag");break;
+         case CLIP_50AE:strcat(str,".50AE Pistol Mag");break;
          case CLIP_BUCKSHOT:strcat(str,"Shotgun Plasma Pack");break;
          case CLIP_MOLOTOV:strcat(str,"Molotov Bomb");break;
          case CLIP_GASOLINE:strcat(str,"Hydrogen Fuel");break;

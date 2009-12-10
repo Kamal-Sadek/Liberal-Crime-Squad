@@ -897,6 +897,8 @@ short ammotype(int type)
          return CLIP_38;
       case WEAPON_REVOLVER_44:
          return CLIP_44;
+      case WEAPON_DESERT_EAGLE:
+         return CLIP_50AE;
       case WEAPON_SMG_MP5:
          return CLIP_SMG;
       case WEAPON_SEMIPISTOL_9MM:
@@ -928,6 +930,7 @@ char rangedweapon(weaponst &w)
    {
       case WEAPON_REVOLVER_38:
       case WEAPON_REVOLVER_44:
+      case WEAPON_DESERT_EAGLE:
       case WEAPON_SEMIPISTOL_9MM:
       case WEAPON_SEMIPISTOL_45:
       case WEAPON_SEMIRIFLE_AR15:
