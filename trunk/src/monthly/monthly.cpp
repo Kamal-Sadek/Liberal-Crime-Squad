@@ -79,8 +79,13 @@ void passmonth(char &clearformess,char canseethings)
    for(l=0;l<location.size();l++)
    {
       if((location[l]->compound_walls & COMPOUND_PRINTINGPRESS)&&
-         !location[l]->siege.siege)nploc.push_back(l);
+          !location[l]->siege.siege&&
+          location[l]->renting!=RENTING_CCS)nploc.push_back(l);
    }
+
+   // Check for game over 
+   endcheck(END_DEAD);
+   dispersalcheck(clearformess);
 
    int guardianpower=0;
    if(nploc.size()>0&&!disbanding)

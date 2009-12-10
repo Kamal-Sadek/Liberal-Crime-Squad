@@ -43,23 +43,35 @@ void tendhostage(Creature *cr,char &clearformess)
 
    Creature *a=NULL;
 
+   
+
    //Find all tenders who are set to this hostage
    for(p=0;p<pool.size();p++)
    {
       if(!pool[p]->alive)continue;
       if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
       {
+         
          if(pool[p]->activity.arg==cr->id)
          {
             //If they're in the same location as the hostage,
             //include them in the interrogation
             if(pool[p]->location==cr->location)
-               temppool.push_back(pool[p]);
+            {
+               if(pool[p]->location!=-1)
+                  temppool.push_back(pool[p]);
+            }
             //If they're someplace else, take them off the job
             else
                pool[p]->activity.type=ACTIVITY_NONE;
          }
       }
+   }
+
+   if(cr->location==-1)
+   {
+      delete cr;
+      return;
    }
 
    //possible hostage escape attempt if unattended or unrestrained

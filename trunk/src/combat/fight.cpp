@@ -406,11 +406,6 @@ void enemyattack(void)
                      addstr(activesquad->squad[target]->prisoner->name);
                      addstr("'s body.");
 
-                     sitecrime+=10;
-                     sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                     //criminalizeparty(LAWFLAG_MURDER);
-                     //<-- don't penalize for shots the enemy takes
-
                      if(activesquad->squad[target]->prisoner->type==CREATURE_CORPORATE_CEO||
                         activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
                         activesquad->squad[target]->prisoner->type==CREATURE_NEWSANCHOR||
@@ -1421,11 +1416,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
                   if(location[cursite]->renting==RENTING_CCS)ccs_siege_kills++;
                }
-               if(target->squadid==-1 && (target->animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
+               if(target->squadid==-1 &&
+                  (target->animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
-                  criminalizeparty(LAWFLAG_MURDER);
+                  if(a.squadid!=-1)
+                     criminalizeparty(LAWFLAG_MURDER);
                }
             }
 

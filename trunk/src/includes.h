@@ -1303,8 +1303,12 @@ struct vehiclest
    long location;
    int myear;
    long id;
-
    void init(int t);
+   void stop_riding_me();
+   ~vehiclest()
+   {
+      stop_riding_me();
+   }
 };
 
 
