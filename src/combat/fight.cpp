@@ -2659,7 +2659,8 @@ void capturecreature(Creature &t)
    freehostage(t,2); // situation 2 = no message; this may want to be changed to 0 or 1
    if(t.prisoner)
    {
-      if(t.prisoner->alive)
+      if(t.prisoner->squadid==-1)
+         delete t.prisoner;
       t.prisoner=NULL; // Stop hauling people
    }
    if(t.flag & CREATUREFLAG_JUSTESCAPED)
