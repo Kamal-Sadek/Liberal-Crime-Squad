@@ -579,6 +579,17 @@ int Creature::attval(short a,char usejuice)
    return ret;
 }
 
+void vehiclest::stop_riding_me()
+{
+   for(int p=0;p<pool.size();p++)
+   {
+      if(pool[p]->carid==id)
+      {
+         pool[p]->carid=-1;
+      }
+   }
+}
+
 void vehiclest::init(int t)
 {
    id=curcarid;curcarid++;

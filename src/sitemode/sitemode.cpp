@@ -2408,7 +2408,8 @@ void resolvesite(void)
    if(sitealienate)sitestory->positive=0;
    if(sitealarm==1&&sitecrime>100)
    {
-      location[cursite]->closed=sitecrime/10;
+      if(location[cursite]->renting==RENTING_NOCONTROL)
+         location[cursite]->closed=sitecrime/10;
       
       // Out sleepers
       for(int p=0;p<pool.size();p++)
@@ -2442,7 +2443,7 @@ void resolvesite(void)
          location[cursite]->heat=100;
       }
    }
-   else if(sitealarm==1&&sitecrime>10&&location[cursite]->renting<=-1)
+   else if(sitealarm==1&&sitecrime>10&&location[cursite]->renting==RENTING_NOCONTROL)
    {
       if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
          !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&
