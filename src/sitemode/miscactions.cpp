@@ -533,7 +533,7 @@ char radio_broadcast(void)
       case VIEW_NUCLEARPOWER:addstr("runs down nuclear power.");break;
       case VIEW_ANIMALRESEARCH:addstr("discusses the horrors of animal research.");break;
       case VIEW_POLICEBEHAVIOR:addstr("goes over cases of police brutality.");break;
-      case VIEW_PRISONS:addstr("discusses the prison system.");break;
+      case VIEW_TORTURE:addstr("discusses prisoner abuse and torture.");break;
       case VIEW_INTELLIGENCE:addstr("debates privacy law.");break;
       case VIEW_FREESPEECH:addstr("talks about free speech.");break;
       case VIEW_GENETICS:addstr("discusses the implications of genetic research.");break;
@@ -635,7 +635,7 @@ char radio_broadcast(void)
                   case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
                   case VIEW_ANIMALRESEARCH:addstr("discuss the horrors of animal research.");break;
                   case VIEW_POLICEBEHAVIOR:addstr("go over cases of police brutality.");break;
-                  case VIEW_PRISONS:addstr("discuss the prison system.");break;
+                  case VIEW_TORTURE:addstr("discuss prisoner abuse and torture.");break;
                   case VIEW_INTELLIGENCE:addstr("advocate privacy laws.");break;
                   case VIEW_FREESPEECH:addstr("talk about free speech.");break;
                   case VIEW_GENETICS:addstr("discuss the implications of genetic research.");break;
@@ -789,7 +789,7 @@ char news_broadcast(void)
       case VIEW_NUCLEARPOWER:addstr("runs down nuclear power.");break;
       case VIEW_ANIMALRESEARCH:addstr("discusses the horrors of animal research.");break;
       case VIEW_POLICEBEHAVIOR:addstr("goes over cases of police brutality.");break;
-      case VIEW_PRISONS:addstr("discusses the prison system.");break;
+      case VIEW_TORTURE:addstr("discusses prisoner abuse and torture.");break;
       case VIEW_INTELLIGENCE:addstr("debates privacy law.");break;
       case VIEW_FREESPEECH:addstr("talks about free speech.");break;
       case VIEW_GENETICS:addstr("discusses the implications of genetic research.");break;
@@ -889,7 +889,7 @@ char news_broadcast(void)
                   case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
                   case VIEW_ANIMALRESEARCH:addstr("discuss the horrors of animal research.");break;
                   case VIEW_POLICEBEHAVIOR:addstr("go over cases of police brutality.");break;
-                  case VIEW_PRISONS:addstr("discuss the prison system.");break;
+                  case VIEW_TORTURE:addstr("discuss prisoner abuse and torture.");break;
                   case VIEW_INTELLIGENCE:addstr("advocate privacy laws.");break;
                   case VIEW_FREESPEECH:addstr("talk about free speech.");break;
                   case VIEW_GENETICS:addstr("discuss the implications of genetic research.");break;

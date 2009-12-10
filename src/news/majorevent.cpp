@@ -295,7 +295,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          } */
-         case VIEW_PRISONS:
+         /* case VIEW_PRISONS:
          {
             cityname(story);
             strcat(story," - A former prisoner has written a book describing in horrifying ");
@@ -345,7 +345,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,".\"");
             strcat(story,"&r");
             break;
-         }
+         }*/
          case VIEW_INTELLIGENCE:
          {
             strcat(story,"Washington D.C. - The FBI might be keeping tabs on you.  ");
@@ -372,7 +372,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-         case VIEW_POLITICALVIOLENCE:
+         /*case VIEW_POLITICALVIOLENCE:
          {
             cityname(story);
             strcat(story," - The dismissal of ");
@@ -425,7 +425,7 @@ void constructeventstory(char *story,short view,char positive)
                          "friend of (continued: Nightmare, A6)");
             strcat(story,"&r");
             break;
-         }
+         }*/
          case VIEW_FREESPEECH:
          {
             cityname(story);
@@ -720,14 +720,14 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
             strcat(story,"seeking ");
-                                if(law[LAW_DEATHPENALTY]=2)
-                                {
-                                        strcat(story,"life imprisonment in this case.");
-                                }
-                                        else
-                                {
-                                        strcat(story,"the death penalty in this case.");
-                                }
+				if(law[LAW_DEATHPENALTY]==2)
+				{
+					strcat(story,"life imprisonment in this case.");
+				}
+					else
+				{
+					strcat(story,"the death penalty in this case.");
+				}
             strcat(story,"&r");
             break;
          }
@@ -735,23 +735,23 @@ void constructeventstory(char *story,short view,char positive)
          {
             cityname(story);
             strcat(story," - Researchers ");
-                        if(law[LAW_ANIMALRESEARCH]=2)
-                        {
-                                strcat(story,"from ");
-                                        switch(LCSrandom(5))
-                                {
-                                        case 0:strcat(story,"Russia");break;
-                                        case 1:strcat(story,"North Korea");break;
-                                        case 2:strcat(story,"Taiwan");break;
-                                        case 3:strcat(story,"Iran");break;
-                                        case 4:strcat(story,"China");break;
-                                }
-                                strcat(story," report that they have discovered an amazing new wonder drug. ");
-                        }
-                        else
-                        {
-                                strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
-                        }
+			if(law[LAW_ANIMALRESEARCH]==2)
+			{
+				strcat(story,"from ");
+					switch(LCSrandom(5))
+				{
+					case 0:strcat(story,"Russia");break;
+					case 1:strcat(story,"North Korea");break;
+					case 2:strcat(story,"Taiwan");break;
+					case 3:strcat(story,"Iran");break;
+					case 4:strcat(story,"China");break;
+				}
+				strcat(story," report that they have discovered an amazing new wonder drug. ");
+			}
+			else
+			{
+				strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
+			}
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {
@@ -803,7 +803,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-         case VIEW_PRISONS:
+         /*case VIEW_PRISONS:
          {
             cityname(story);
             strcat(story," - The hostage crisis at the ");
@@ -877,8 +877,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"\"resisting capture\", according to a prison spokesperson.");
             strcat(story,"&r");
             break;
-         }
-         case VIEW_POLITICALVIOLENCE:
+         }*/
+         /*case VIEW_POLITICALVIOLENCE:
          {
             cityname(story);
             strcat(story," - Nine people were killed today as special forces brought the three-day "
@@ -907,7 +907,7 @@ void constructeventstory(char *story,short view,char positive)
                          "non-compliance with their demands.");
             strcat(story,"&r");
             break;
-         }
+         }*/
          case VIEW_INTELLIGENCE:
          {
             strcat(story,"Washington D.C. - The CIA announced yesterday that it has averted a terror attack that ");
@@ -1364,12 +1364,14 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
             */
+            /*
          case VIEW_POLITICALVIOLENCE:
             displaycenterednewsfont("NIGHTMARE",5);
             constructeventstory(story,ns.view,ns.positive);
             generatefiller(story,200);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
+            */
             /*
          case VIEW_GUNS:
             displaycenterednewsfont("SCHOOL SHOOTING",5);
@@ -1414,11 +1416,11 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaycenteredsmallnews("A mutant animal has escaped from a lab and killed thirty people.",12);
             displaynewspicture(PICTURE_MUTANT_BEAST,13);
             break;
-         case VIEW_PRISONS:
-            displaycenterednewsfont("ON THE INSIDE",5);
-            constructeventstory(story,ns.view,ns.positive);
-            displaynewsstory(story,storyx_s,storyx_e,13);
-            break;
+         //case VIEW_PRISONS:
+         //   displaycenterednewsfont("ON THE INSIDE",5);
+         //   constructeventstory(story,ns.view,ns.positive);
+         //   displaynewsstory(story,storyx_s,storyx_e,13);
+         //   break;
          case VIEW_INTELLIGENCE:
             displaycenterednewsfont("THE FBI FILES",5);
             constructeventstory(story,ns.view,ns.positive);
@@ -1527,12 +1529,14 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,15);
             break;
             */
+            /*
          case VIEW_POLITICALVIOLENCE:
             displaycenterednewsfont("END IN TEARS",5);
             constructeventstory(story,ns.view,ns.positive);
             generatefiller(story,200);
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
+            */
             /*
          case VIEW_GUNS:
             displaycenterednewsfont("KILLER STOPPED",5);
@@ -1582,11 +1586,11 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             else displaycenterednewsfont("BASTARDS",5);
             displaynewspicture(PICTURE_TERRORISTS,13);
             break;
-         case VIEW_PRISONS:
-            displaycenterednewsfont("HOSTAGE SLAIN",5);
-            constructeventstory(story,ns.view,ns.positive);
-            displaynewsstory(story,storyx_s,storyx_e,13);
-            break;
+         //case VIEW_PRISONS:
+         //   displaycenterednewsfont("HOSTAGE SLAIN",5);
+         //   constructeventstory(story,ns.view,ns.positive);
+         //   displaynewsstory(story,storyx_s,storyx_e,13);
+         //   break;
          case VIEW_INTELLIGENCE:
             displaycenterednewsfont("DODGED BULLET",5);
             constructeventstory(story,ns.view,ns.positive);

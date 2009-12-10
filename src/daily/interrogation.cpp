@@ -1112,7 +1112,7 @@ void tendhostage(Creature *cr,char &clearformess)
          refresh();
          getch();
 
-         if(troll<aroll&&troll+cr->skillval(SKILL_PSYCHOLOGY)*2>aroll)
+         if(cr->skillval(SKILL_PSYCHOLOGY)+LCSrandom(cr->skillval(SKILL_PSYCHOLOGY)+1)>a->skillval(SKILL_PSYCHOLOGY)+spiritcrush)
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1294,8 +1294,6 @@ void tendhostage(Creature *cr,char &clearformess)
          else if(aroll*rapport_temp+spiritcrush>troll*2)
          {
             //Improve rapport with interrogator
-            rapport[a->id]+=0.6f;
-
             if(cr->juice>0)
             {
                cr->juice-=aroll;
@@ -1303,20 +1301,7 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             else
             {
-               //Reduce wisdom!
-               if(cr->attval(ATTRIBUTE_WISDOM)>a->attval(ATTRIBUTE_WISDOM))
-               {
-                  int change = LCSrandom(cr->attval(ATTRIBUTE_WISDOM)-a->attval(ATTRIBUTE_WISDOM)+1);
-                  if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
-                  cr->att[ATTRIBUTE_WISDOM]-=change;
-               }
-               //Increase heart
-               if(cr->attval(ATTRIBUTE_HEART)<a->attval(ATTRIBUTE_HEART))
-               {
-                  int change = LCSrandom(a->attval(ATTRIBUTE_HEART)-cr->attval(ATTRIBUTE_HEART)+1);
-                  if(change > a->skillval(SKILL_PSYCHOLOGY)/2 + 1)change = a->skillval(SKILL_PSYCHOLOGY)/2 + 1;
-                  cr->att[ATTRIBUTE_HEART]+=change;
-               }
+               rapport[a->id]+=1.5;
             }
 
             //Join LCS??

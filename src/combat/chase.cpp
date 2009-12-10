@@ -1532,7 +1532,6 @@ void crashenemycar(int v)
    getch();
 }
 
-
 void chase_giveup(void)
 {
    int p;

@@ -2069,10 +2069,24 @@ void conquertextccs(void)
       move(4,11);
       addstr("their final victory.");
       move(6,16);
-      addstr("The CCS has been completely destroyed.");
+      addstr("As your Liberals pick through the remains of the safehouse,");
+      move(7,11);
+      addstr("it is increasingly clear that this was their final safe house.");
+      move(9,16);
+      addstr("The CCS has been completely destroyed.  Now wasn't there a");
+      move(10,16);
+      addstr("revolution to attend to?");
+
+      move(12,5);
+      addstr("+100 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD");
+
+      for(int p=0;p<pool.size();p++)
+      {
+         addjuice(*pool[p],100);
+      }
    }
 
-   move(8,19);
+   move(15,19);
    addstr("Press C to Continue Liberally.");
 
    do
