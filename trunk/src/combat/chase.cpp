@@ -909,8 +909,6 @@ void evasiverun(void)
             refresh();
             getch();
 
-            removesquadinfo(*activesquad->squad[p]);
-
             //Unload hauled hostage or body when they get back to the safehouse
             if(activesquad->squad[p]->prisoner!=NULL)
             {
@@ -931,6 +929,8 @@ void evasiverun(void)
                }
                activesquad->squad[p]->prisoner=NULL;
             }
+
+            removesquadinfo(*activesquad->squad[p]);
 
             printparty();
          }
