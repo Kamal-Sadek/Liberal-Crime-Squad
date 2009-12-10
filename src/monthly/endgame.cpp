@@ -569,7 +569,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             switch(s) //XXX: I really think that states past voting records
             {         //XXX:    *eyes Massachusetts* should influence this...
                case 0:addstr("Alabama");break;//                -- LK
-               case 1:addstr("Alaska");break;
+               case 1:addstr("Alaska");break;   // It already does, actually. See below. -Fox
                case 2:addstr("Arkansas");break;
                case 3:addstr("Arizona");break;
                case 4:addstr("California");break;
@@ -635,17 +635,18 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
       {
          smood=mood;
 
+         // State biases.
          switch(s)
          {
-            case 0:smood-=10;break;
-            case 4:smood=100;break;
-            case 9:smood-=10;break;
-            case 11:smood-=10;break;
-            case 20:smood+=25;break;
-            case 23:smood-=10;break;
-            case 39:smood-=10;break;
-            case 42:smood-=10;break;
-            case 43:smood=0;break;
+            case 0:smood-=10;break;  // Alabama
+            case 4:smood=100;break;  // California (Always L+)
+            case 9:smood-=10;break;  // Georgia
+            case 11:smood-=10;break; // Idaho
+            case 20:smood+=25;break; // Massachusetts
+            case 23:smood-=10;break; // Mississippi
+            case 39:smood-=10;break; // South Carolina
+            case 42:smood-=10;break; // Texas
+            case 43:smood=0;break;   // Utah (Always C+)
          }
 
          vote=0;

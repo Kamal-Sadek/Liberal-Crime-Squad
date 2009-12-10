@@ -77,6 +77,7 @@ long gun_price(enum Weapons type)
       case WEAPON_REVOLVER_44:
          price=500;
          break;
+      case WEAPON_DESERT_EAGLE:
       case WEAPON_SEMIRIFLE_AR15:
          price=800;
          break;
@@ -110,6 +111,7 @@ long gun_price(enum Weapons type)
             price*=2.0;
       case WEAPON_SEMIRIFLE_AR15:
       case WEAPON_REVOLVER_44:
+      case WEAPON_DESERT_EAGLE:
          if(law[LAW_GUNCONTROL]>-1)
             price*=2.0;
       case WEAPON_SEMIPISTOL_9MM:
@@ -2682,6 +2684,7 @@ int fencevalue(itemst &it)
             case WEAPON_SYRINGE:fenceamount=10;break;
             case WEAPON_REVOLVER_38:fenceamount=50;break;
             case WEAPON_REVOLVER_44:fenceamount=100;break;
+            case WEAPON_DESERT_EAGLE:fenceamount=250;break;
             case WEAPON_SEMIPISTOL_9MM:fenceamount=100;break;
             case WEAPON_SEMIPISTOL_45:fenceamount=100;break;
             case WEAPON_SMG_MP5:fenceamount=450;break;

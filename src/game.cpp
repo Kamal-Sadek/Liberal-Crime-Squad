@@ -141,7 +141,7 @@ int year=2009;
 int amendnum=28;
 
 bool termlimits=false;
-
+bool deagle=false;
 
 short attitude[VIEWNUM];
 

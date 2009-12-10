@@ -527,6 +527,7 @@ char weaponcheck(Creature &cr,short type)
    case WEAPON_CROWBAR:
    case WEAPON_REVOLVER_38:
    case WEAPON_REVOLVER_44:
+   case WEAPON_DESERT_EAGLE:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
       if(cr.armor.type!=ARMOR_NONE)concealed=1;
@@ -552,6 +553,7 @@ char weaponcheck(Creature &cr,short type)
       break;
    case WEAPON_REVOLVER_38:
    case WEAPON_REVOLVER_44:
+   case WEAPON_DESERT_EAGLE:
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
    case WEAPON_NIGHTSTICK:
@@ -622,6 +624,7 @@ char weaponcheck(Creature &cr,short type)
    case WEAPON_SEMIPISTOL_9MM:
    case WEAPON_SEMIPISTOL_45:
    case WEAPON_REVOLVER_44:
+   case WEAPON_DESERT_EAGLE:
       if(law[LAW_GUNCONTROL]==0)illegal=0;
       else illegal=1;
    case WEAPON_SEMIRIFLE_AR15:
