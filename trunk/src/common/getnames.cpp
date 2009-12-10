@@ -741,27 +741,32 @@ void getloot(char *str,int loot)
    switch(loot)
    {
       case LOOT_LABEQUIPMENT:strcat(str,"Lab Equipment");break;
-      case LOOT_COMPUTER:strcat(str,"Computer");break;
-      case LOOT_TV:strcat(str,"TV");break;
+      case LOOT_COMPUTER:strcat(str,"Laptop");break;
+      case LOOT_WATCH:strcat(str,"Watch");break;
       case LOOT_SECRETDOCUMENTS:strcat(str,"Secret Documents");break;
       case LOOT_POLICERECORDS:strcat(str,"Police Records");break;
-      case LOOT_VCR:strcat(str,"VCR");break;
+      case LOOT_PDA:strcat(str,"PDA");break;
       case LOOT_CELLPHONE:strcat(str,"Cellphone");break;
-      case LOOT_TVCAMERA:strcat(str,"TV Camera");break;
-      case LOOT_BROADCASTINGEQUIPMENT:strcat(str,"Broadcasting Equip.");break;
+      case LOOT_CHEAPJEWELERY:strcat(str,"Cheap Jewelery");break;
+      case LOOT_MICROPHONE:strcat(str,"Microphone");break;
       case LOOT_SILVERWARE:strcat(str,"Silverware");break;
-      case LOOT_SCANNER:strcat(str,"Scanner");break;
-      case LOOT_PRINTER:strcat(str,"Printer");break;
+      case LOOT_EXPENSIVEJEWELERY:strcat(str,"Fine Jewelery");break;
+      case LOOT_TRINKET:strcat(str,"Kitschy Trinket");break;
       case LOOT_FINECLOTH:strcat(str,"Fine Cloth");break;
       case LOOT_CHEMICAL:strcat(str,"Weird Chemical");break;
       case LOOT_CEOPHOTOS:strcat(str,"CEO Photos");break;
+      case LOOT_CEOLOVELETTERS:strcat(str,"CEO Love Letters");break;
+      case LOOT_CEOTAXPAPERS:strcat(str,"CEO Tax Papers");break;
       case LOOT_INTHQDISK:strcat(str,"Intel. HQ Data Disk");break;
       case LOOT_CORPFILES:strcat(str,"Secret Corporate Files");break;
       case LOOT_JUDGEFILES:strcat(str,"Judge Corrupt. Evidence");break;
       case LOOT_RESEARCHFILES:strcat(str,"Research Papers");break;
       case LOOT_PRISONFILES:strcat(str,"Prison Records");break;
       case LOOT_CABLENEWSFILES:strcat(str,"Cable News Memos");break;
-      case LOOT_AMRADIOFILES:strcat(str,"AM Radio Plans");break;
+      case LOOT_AMRADIOFILES:strcat(str,"AM Radio Memos");break;
+      case LOOT_KIDART:strcat(str,"Macaroni Art");break;
+      case LOOT_FAMILYPHOTO:strcat(str,"Family Photos");break;
+      case LOOT_DIRTYSOCK:strcat(str,"Dirty Sock");break;
       default: strcpy(str,"Programming Errors");break;
    }
 }
@@ -962,11 +967,12 @@ void getview(char *str,short view)
       case VIEW_NUCLEARPOWER:strcat(str,"Nuclear Power");break;
       case VIEW_ANIMALRESEARCH:strcat(str,"Animal Cruelty");break;
       case VIEW_POLICEBEHAVIOR:strcat(str,"The Police");break;
-      case VIEW_PRISONS:strcat(str,"Prisons");break;
+      case VIEW_TORTURE:strcat(str,"Torture");break;
       case VIEW_INTELLIGENCE:strcat(str,"Privacy");break;
       case VIEW_FREESPEECH:strcat(str,"Free Speech");break;
       case VIEW_GENETICS:strcat(str,"Genetics");break;
       case VIEW_JUSTICES:strcat(str,"The Judiciary");break;
+      case VIEW_GUNCONTROL:strcat(str,"Gun Control");break;
       case VIEW_SWEATSHOPS:strcat(str,"Labor");break;
       case VIEW_POLLUTION:strcat(str,"Pollution");break;
       case VIEW_CORPORATECULTURE:strcat(str,"Corporate Culture");break;
@@ -978,7 +984,7 @@ void getview(char *str,short view)
       case VIEW_MILITARY:strcat(str,"The Military");break;
       case VIEW_AMRADIO:strcat(str,"AM Radio");break;
       case VIEW_CABLENEWS:strcat(str,"Cable News");break;
-      case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
+      //case VIEW_POLITICALVIOLENCE:strcat(str,"The Need For Action");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"Who We Are");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"Why We Rock");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"The CCS Criminals");break;
@@ -999,7 +1005,7 @@ void getviewsmall(char *str,short view)
       case VIEW_NUCLEARPOWER:strcat(str,"nuclear power");break;
       case VIEW_ANIMALRESEARCH:strcat(str,"animal cruelty");break;
       case VIEW_POLICEBEHAVIOR:strcat(str,"the cops");break;
-      case VIEW_PRISONS:strcat(str,"prison conditions");break;
+      case VIEW_TORTURE:strcat(str,"torture");break;
       case VIEW_INTELLIGENCE:strcat(str,"privacy");break;
       case VIEW_FREESPEECH:strcat(str,"free speech");break;
       case VIEW_GENETICS:strcat(str,"genetic research");break;
@@ -1016,7 +1022,7 @@ void getviewsmall(char *str,short view)
       case VIEW_MILITARY:strcat(str,"the military");break;
       case VIEW_AMRADIO:strcat(str,"AM radio");break;
       case VIEW_CABLENEWS:strcat(str,"cable news");break;
-      case VIEW_POLITICALVIOLENCE:strcat(str,"the need for action");break;
+      //case VIEW_POLITICALVIOLENCE:strcat(str,"the need for action");break;
       case VIEW_LIBERALCRIMESQUAD:strcat(str,"the LCS");break;
       case VIEW_LIBERALCRIMESQUADPOS:strcat(str,"the LCS");break;
       case VIEW_CONSERVATIVECRIMESQUAD:strcat(str,"the CCS");break;

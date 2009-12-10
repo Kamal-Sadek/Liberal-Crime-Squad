@@ -1781,9 +1781,9 @@ void makecreature(Creature &cr,short type)
    while(attnum>0)
    {
       int a=LCSrandom(ATTNUM);
-      if(a==ATTRIBUTE_WISDOM && cr.align==1 && LCSrandom(2))
+      if(a==ATTRIBUTE_WISDOM && cr.align==1 && LCSrandom(4))
          a=ATTRIBUTE_HEART;
-      if(a==ATTRIBUTE_HEART && cr.align==-1 && LCSrandom(2))
+      if(a==ATTRIBUTE_HEART && cr.align==-1 && LCSrandom(4))
          a=ATTRIBUTE_WISDOM;
       if(cr.att[a]<attcap[a])
       {

@@ -797,25 +797,25 @@ char talk(Creature &a,int t)
             case TALKMODE_START:
                move(11,1);
                addstr("A - Strike up a conversation about politics");
-               if(a.armor.type==ARMOR_NONE)addstr(" while naked");
+               if(a.armor.type==ARMOR_NONE  && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                move(12,1);
                if(tk->can_date(a))set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr("B - Drop a pickup line");
-               if(a.armor.type==ARMOR_NONE)addstr(" while naked");
+               if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(13,1);
                addstr("C - On second thought, don't say anything");
-               if(a.armor.type==ARMOR_NONE)addstr(" while naked");
+               if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                if(encounter[t].type==CREATURE_LANDLORD&&
                   location[cursite]->renting==-1)
                {
                   move(14,1);
                   addstr("D - Rent a room");
-                  if(a.armor.type==ARMOR_NONE)addstr(" while naked");
+                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                   addstr(".");
                }
                if((encounter[t].type==CREATURE_GANGMEMBER||encounter[t].type==CREATURE_MERC)&&
@@ -823,7 +823,7 @@ char talk(Creature &a,int t)
                {
                   move(14,1);
                   addstr("D - Buy weapons");
-                  if(a.armor.type==ARMOR_NONE)addstr(" while naked");
+                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                   addstr(".");
                }
                break;
@@ -899,7 +899,7 @@ char talk(Creature &a,int t)
                   char badthing=0;
                   if(aroll<30-a.attval(ATTRIBUTE_INTELLIGENCE))badthing=1;
                   else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)badthing=2;
-                  if(a.armor.type==ARMOR_NONE)aroll-=30;
+                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)aroll-=30;
                   int troll = LCSrandom(21)+
                                        tk->attval(ATTRIBUTE_CHARISMA)+
                                        tk->attval(ATTRIBUTE_WISDOM);
@@ -1670,7 +1670,7 @@ char talk(Creature &a,int t)
                   getch();
 
                   int aroll=LCSrandom(21)+a.attval(ATTRIBUTE_CHARISMA)*2+LCSrandom(a.skillval(SKILL_SEDUCTION)*2+1);
-                  if(a.armor.type==ARMOR_NONE)aroll-=30;
+                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)aroll-=30;
                   int troll=LCSrandom(21)+tk->attval(ATTRIBUTE_CHARISMA)+tk->attval(ATTRIBUTE_WISDOM);
                   if(!(tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
                      tk->animalgloss==ANIMALGLOSS_TANK)
@@ -1894,7 +1894,7 @@ char talk(Creature &a,int t)
                      refresh();
                      getch();
 
-                     if(a.armor.type==ARMOR_NONE)
+                     if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(12,1);addstr(tk->name);addstr(" responds,");
@@ -1971,7 +1971,7 @@ char talk(Creature &a,int t)
                      refresh();
                      getch();
 
-                     if(a.armor.type==ARMOR_NONE)
+                     if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(12,1);addstr(tk->name);addstr(" responds,");

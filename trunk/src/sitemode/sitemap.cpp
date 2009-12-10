@@ -1241,6 +1241,77 @@ void configSiteUnique::build()
    int count=0;
    vector<coordinates> secure, unsecure;
 
+   //Clear out restrictions
+   char acted;
+   do
+   {
+      acted=0;
+
+      for(int x=2;x<MAPX-2;x++)
+      {
+         for(int y=2;y<MAPY-2;y++)
+         {
+            for(int z=0;z<MAPZ;z++)
+            {
+               //Un-restrict blocks if they have neighboring
+               //unrestricted blocks
+               if(!(levelmap[x][y][z].flag & SITEBLOCK_DOOR)&&
+                  !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
+                  (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
+               {
+                  if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))||
+                     (!(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))||
+                     (!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))||
+                     (!(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK)))
+                  {
+                     levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
+                     acted=1;
+                     continue;
+                  }
+               }
+               //Un-restrict and unlock doors if they lead between two
+               //unrestricted sections. If they lead between one
+               //unrestricted section and a restricted section, lock
+               //them instead.
+               else if((levelmap[x][y][z].flag & SITEBLOCK_DOOR)&&
+                  !(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)&&
+                  (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
+               {
+                  //Unrestricted on two opposite sides?
+                  if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED))||
+                     (!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)&&
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED)))
+                  {
+                     //Unlock and unrestrict
+                     levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
+                     levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
+                     acted=1;
+                     continue;
+                  }
+                  //Unrestricted on at least one side and I'm not locked?
+                  else if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)||
+                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED))&&
+                     !(levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
+                  {
+                     //Lock doors leading to restricted areas
+                     levelmap[x][y][z].flag|=SITEBLOCK_LOCKED;
+                     acted=1;
+                     continue;
+                  }
+               }
+            }
+         }
+      }
+   }while(acted);
+
+   // Place unique
    for(x=xstart;x<=xend;x++)
    {
       for(y=ystart;y<=yend;y++)
@@ -1282,10 +1353,10 @@ configSiteLoot::configSiteLoot(const std::string& value)
 {
    if(value == "FINECLOTH")loot = LOOT_FINECLOTH;
    else if(value == "CHEMICAL")loot = LOOT_CHEMICAL;
-   else if(value == "PRINTER")loot = LOOT_PRINTER;
+   else if(value == "PDA")loot = LOOT_PDA;
    else if(value == "LABEQUIPMENT")loot = LOOT_LABEQUIPMENT;
-   else if(value == "COMPUTER")loot = LOOT_COMPUTER;
-   else if(value == "TV")loot = LOOT_TV;
+   else if(value == "LAPTOP")loot = LOOT_COMPUTER;
+   else if(value == "CHEAPJEWELERY")loot = LOOT_CHEAPJEWELERY;
    else if(value == "SECRETDOCUMENTS")loot = LOOT_SECRETDOCUMENTS;
    else if(value == "CEOPHOTOS")loot = LOOT_CEOPHOTOS;
    else if(value == "INTHQDISK")loot = LOOT_INTHQDISK;
@@ -1296,12 +1367,12 @@ configSiteLoot::configSiteLoot(const std::string& value)
    else if(value == "CABLENEWSFILES")loot = LOOT_CABLENEWSFILES;
    else if(value == "AMRADIOFILES")loot = LOOT_AMRADIOFILES;
    else if(value == "POLICERECORDS")loot = LOOT_POLICERECORDS;
-   else if(value == "VCR")loot = LOOT_VCR;
+   else if(value == "FINEJEWELERY")loot = LOOT_EXPENSIVEJEWELERY;
    else if(value == "CELLPHONE")loot = LOOT_CELLPHONE;
-   else if(value == "TVCAMERA")loot = LOOT_TVCAMERA;
-   else if(value == "BROADCASTINGEQUIPMENT")loot = LOOT_BROADCASTINGEQUIPMENT;
+   else if(value == "MICROPHONE")loot = LOOT_MICROPHONE;
+   else if(value == "WATCH")loot = LOOT_WATCH;
    else if(value == "SILVERWARE")loot = LOOT_SILVERWARE;
-   else if(value == "SCANNER")loot = LOOT_SCANNER;
+   else if(value == "TRINKET")loot = LOOT_TRINKET;
 }
 
 void configSiteLoot::configure(const std::string& command, const std::string& value)

@@ -782,6 +782,8 @@ void consolidateloot(vector<itemst *> &loot)
                case ITEM_LOOT:
                   if(loot[l]->loottype==loot[l2]->loottype&&
                      loot[l]->loottype!=LOOT_CEOPHOTOS&&
+                     loot[l]->loottype!=LOOT_CEOLOVELETTERS&&
+                     loot[l]->loottype!=LOOT_CEOTAXPAPERS&&
                      loot[l]->loottype!=LOOT_INTHQDISK&&
                      loot[l]->loottype!=LOOT_CORPFILES&&
                      loot[l]->loottype!=LOOT_JUDGEFILES&&

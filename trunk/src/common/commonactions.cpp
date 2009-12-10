@@ -613,7 +613,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
 {
    // First note this in the liberal influence -- mostly for the
    // sake of the nice visual intelligence report entry
-   if(v<VIEWNUM-6)
+   if(v<VIEWNUM-5)
    {
       background_liberal_influence[v]+=power*10;
    }
@@ -721,6 +721,12 @@ void change_public_opinion(int v,int power,char affect,char cap)
 /* returns the amount of heat associated with a given crime */
 int lawflagheat(int lawflag)
 {
+   // Note that for the purposes of this function, we're not looking at how severe the crime is,
+   // but how vigorously it is pursued by law enforcement. This determines how quickly they raid
+   // you for it, and how much of a penalty you get in court for it. Some crimes are inflated
+   // heat, others are deflated (such as the violent crimes).
+   //
+   // - Jonathan S. Fox
    switch(lawflag)
    {
    case LAWFLAG_KIDNAPPING:return 2;
@@ -732,26 +738,26 @@ int lawflagheat(int lawflag)
    case LAWFLAG_TREASON:return 10;
    case LAWFLAG_ESCAPED:return 5;
    case LAWFLAG_HELPESCAPE:return 5;
-   case LAWFLAG_RESIST:return 0;
+   case LAWFLAG_RESIST:return 1;
    case LAWFLAG_BURNFLAG:return 0;
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
-   case LAWFLAG_ASSAULT:return 0; // XXX: This is on the same level as "harmful speech"?
-   case LAWFLAG_ARMEDASSAULT:return 1;
+   case LAWFLAG_ASSAULT:return 0;      // XXX: This is on the same level as "harmful speech"?
+   case LAWFLAG_ARMEDASSAULT:return 1; //      Yes. -Fox
    case LAWFLAG_CARTHEFT:return 0;
-   case LAWFLAG_INFORMATION:return 2;
+   case LAWFLAG_INFORMATION:return 5;
    case LAWFLAG_COMMERCE:return 2;
-   case LAWFLAG_CCFRAUD:return 1;
-   case LAWFLAG_BROWNIES:return 1;
+   case LAWFLAG_CCFRAUD:return 2;
+   case LAWFLAG_BROWNIES:return 5;
    case LAWFLAG_BURIAL:return 0;
    case LAWFLAG_PROSTITUTION:return 0;
    case LAWFLAG_DISTURBANCE:return 0;
-   case LAWFLAG_HIREILLEGAL:return 0;
+   case LAWFLAG_HIREILLEGAL:return 1;
    case LAWFLAG_RACKETEERING:return 5;
    case LAWFLAG_LOITERING:return 0;
    case LAWFLAG_GUNCARRY:return 0;
    case LAWFLAG_GUNUSE:return 1;
-   case LAWFLAG_ARSON:return 3;
+   case LAWFLAG_ARSON:return 5;
    case LAWFLAG_PUBLICNUDITY:return 0;
    default:return 0;
    }

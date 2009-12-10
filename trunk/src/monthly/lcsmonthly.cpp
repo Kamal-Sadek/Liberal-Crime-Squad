@@ -106,6 +106,8 @@ int choosespecialedition(char &clearformess)
          if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
 
          if(location[loc]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
+            location[loc]->loot[l]->loottype!=LOOT_CEOLOVELETTERS&&
+            location[loc]->loot[l]->loottype!=LOOT_CEOTAXPAPERS&&
             location[loc]->loot[l]->loottype!=LOOT_INTHQDISK&&
             location[loc]->loot[l]->loottype!=LOOT_CORPFILES&&
             location[loc]->loot[l]->loottype!=LOOT_JUDGEFILES&&
@@ -130,6 +132,8 @@ int choosespecialedition(char &clearformess)
          if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
 
          if(squad[sq]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
+            squad[sq]->loot[l]->loottype!=LOOT_CEOLOVELETTERS&&
+            squad[sq]->loot[l]->loottype!=LOOT_CEOTAXPAPERS&&
             squad[sq]->loot[l]->loottype!=LOOT_INTHQDISK&&
             squad[sq]->loot[l]->loottype!=LOOT_CORPFILES&&
             squad[sq]->loot[l]->loottype!=LOOT_JUDGEFILES&&
@@ -314,6 +318,70 @@ void printnews(short l,short newspaper)
          change_public_opinion(VIEW_CORPORATECULTURE,50);
          offended_corps=1;
          break;
+      case LOOT_CEOLOVELETTERS:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring love letters from a major CEO");
+         move(7,1);
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(8))
+         {
+            case 0:
+               addstr("addressed to his pet dog.  Yikes.");
+               change_public_opinion(VIEW_ANIMALRESEARCH,15);
+               break;
+            case 1:
+               addstr("to the judge that acquit him in a corruption trial.");
+               change_public_opinion(VIEW_JUSTICES,15);
+               break;
+            case 2:
+               addstr("to an illicit gay lover.");
+               change_public_opinion(VIEW_GAY,15);
+               break;
+            case 3:addstr("to himself.  They're very steamy.");break;
+            case 4:
+               addstr("implying that he has enslaved his houseservants.");
+               change_public_opinion(VIEW_SWEATSHOPS,10);
+               break;
+            case 5:
+               addstr("to the FDA official overseeing the CEO's products.");
+               change_public_opinion(VIEW_GENETICS,10);
+               change_public_opinion(VIEW_POLLUTION,10);
+               break;
+            case 6:addstr("that seem to touch on every fetish known to man.");break;
+            case 7:addstr("promising someone company profits in exchange for sexual favors.");break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         move(9,1);
+         addstr("This is bound to get the Corporations a little riled up.");
+
+         change_public_opinion(VIEW_CEOSALARY,50);
+         change_public_opinion(VIEW_CORPORATECULTURE,50);
+         offended_corps=1;
+         break;
+      case LOOT_CEOTAXPAPERS:
+         move(6,1);
+         addstr("The Liberal Guardian runs a story featuring a major CEO's tax papers");
+         move(7,1);
+         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+         switch(LCSrandom(1))
+         {
+            default:
+               addstr("showing that he has engaged in consistent tax evasion.");
+               change_public_opinion(VIEW_TAXES,25);
+               break;
+         }
+         move(8,1);
+         addstr("The major networks and publications take it up and run it for weeks.");
+         move(9,1);
+         addstr("This is bound to get the Corporations a little riled up.");
+
+         change_public_opinion(VIEW_CEOSALARY,50);
+         change_public_opinion(VIEW_CORPORATECULTURE,50);
+         offended_corps=1;
+         break;
       case LOOT_CORPFILES:
          move(6,1);
          addstr("The Liberal Guardian runs a story featuring Corporate files");
@@ -399,17 +467,27 @@ void printnews(short l,short newspaper)
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
          switch(LCSrandom(6))
          {
-            case 0:addstr("documenting human rights abuses by the force.");break;
-            case 1:addstr("documenting a police torture case.");break;
+            case 0:
+               addstr("documenting human rights abuses by the force.");
+               change_public_opinion(VIEW_TORTURE,15);
+               break;
+            case 1:
+               addstr("documenting a police torture case.");
+               change_public_opinion(VIEW_TORTURE,50);
+               break;
             case 2:
                addstr("documenting a systematic invasion of privacy by the force.");
                change_public_opinion(VIEW_INTELLIGENCE,15);
                break;
-            case 3:addstr("documenting a forced confession.");break;
-            case 4:addstr("documenting widespread corruption in the force.");break;
+            case 3:
+               addstr("documenting a forced confession.");
+               break;
+            case 4:
+               addstr("documenting widespread corruption in the force.");
+               break;
             case 5:
                addstr("documenting gladiatorial matches held between prisoners by guards.");
-               change_public_opinion(VIEW_PRISONS,50);
+               change_public_opinion(VIEW_DEATHPENALTY,50);
                break;
          }
          move(8,1);
@@ -475,7 +553,10 @@ void printnews(short l,short newspaper)
          switch(LCSrandom(4))
          {
             case 0:addstr("documenting human rights abuses by prison guards.");break;
-            case 1:addstr("documenting a prison torture case.");break;
+            case 1:
+               addstr("documenting a prison torture case.");
+               change_public_opinion(VIEW_TORTURE,50);
+               break;
             case 2:addstr("documenting widespread corruption among prison employees.");break;
             case 3:
                addstr("documenting gladiatorial matches held between prisoners by guards.");
@@ -485,7 +566,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the police a little riled up.");
 
-                 change_public_opinion(VIEW_PRISONS,50);
+		   change_public_opinion(VIEW_DEATHPENALTY,50);
          offended_cops=1;
          break;
       case LOOT_CABLENEWSFILES:
@@ -518,7 +599,7 @@ void printnews(short l,short newspaper)
          
          change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(4))
+         switch(LCSrandom(3))
          {
             case 0:addstr("calling listeners 'sheep to be told what to think'.");break;
             case 1:addstr("saying 'it's okay to lie, they don't need the truth'.");break;

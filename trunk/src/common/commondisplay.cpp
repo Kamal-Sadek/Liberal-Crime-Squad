@@ -460,7 +460,8 @@ void printlocation(long loc)
       addstr("You are not under siege...  yet.");
    }
 
-   if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
+   if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE ||
+      location[loc]->type==SITE_BUSINESS_CRACKHOUSE)
    {
       if(numbereating(loc)>0)
       {

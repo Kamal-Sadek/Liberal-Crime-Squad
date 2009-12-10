@@ -625,12 +625,10 @@ void review_mode(short mode)
 
 						move(22,0);
 						set_color(COLOR_WHITE,COLOR_BLACK,0);
-						addstr("Confirm you want to release squad member at the loss of ");
-						addstr(pool[boss]->name);
-						addstr("s juice.          ");
+						addstr("Do you want to permanently release this squad member from the LCS?          ");
 
 						move(23,0);
-						addstr("If the member has low heart they may goto the police.                         ");
+						addstr("If the member has low heart they may go to the police.                         ");
 
 						move(24,0);
 						addstr("  C - Confirm       Any other key to continue                                                ");
@@ -652,24 +650,27 @@ void review_mode(short mode)
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
 							// TODO: Do law check against other members?
-							if(temppool[p]->attval(ATTRIBUTE_HEART) < LCSrandom(6)
+							if(temppool[p]->attval(ATTRIBUTE_HEART) < temppool[p]->attval(ATTRIBUTE_WISDOM)+ LCSrandom(5)
 								&& iscriminal(*pool[boss]))
-							{								
+                     {
 								if(LCSrandom(5)) // Chance of tip off
 								{
 									set_color(COLOR_CYAN,COLOR_BLACK,1);
 									move(22,0);
-									addstr("A liberal friend tips you off on ");
+									addstr("A Liberal friend tips you off on ");
 									addstr(temppool[p]->name);
-									addstr("s where abouts.");
+									addstr("'s whereabouts.");
 									move(23,0);
-									addstr("Unfortunately due to their lack of heart they have gone to the police.");
+									addstr("The Conservative traitor has ratted you out to the police.");
+                           getch();
 								}
+
+                        criminalize(*pool[boss],LAWFLAG_RACKETEERING);
+                        pool[boss]->confessions++;
 
 								// TODO: Depending on the crime increase heat or make seige
 
 								location[pool[boss]->location]->siege.timeuntillocated=3;
-								getch();
 							}
 
 							// Remove squad member
@@ -679,7 +680,7 @@ void review_mode(short mode)
 								if(boss!=-1&&pool[boss]->juice>50)
 								{
 									int juice=pool[boss]->juice-50;
-									if(juice>10)juice=10;
+									if(juice>5)juice=5;
 									addjuice(*pool[boss],-juice);
 								}
 							}
@@ -706,11 +707,11 @@ void review_mode(short mode)
 
 						move(22,0);
 						set_color(COLOR_WHITE,COLOR_BLACK,0);
-						addstr("Confirm you want to kill off squad member at a loss of ");
+						addstr("Confirm you want to have ");
 						addstr(pool[boss]->name);
-						addstr("s juice, there is");
+						addstr("kill this squad member?");
 						move(23,0);
-						addstr("also a chance they will loose Heart or gain Wisdom.                              ");
+						addstr("Killing your squad members is Not a Liberal Act.                              ");
 						move(24,0);
 						addstr("  C - Confirm       Any other key to continue                                                ");
 
@@ -766,18 +767,18 @@ void review_mode(short mode)
 									}
 									move(23,0);
 									addstr(pool[boss]->name);
-									addstr(" looses heart.");
+									addstr(" has lost heart.");
 									getch();
 								}
 								else if(!LCSrandom(3))
 								{
 									set_color(COLOR_CYAN,COLOR_BLACK,1);
 									addstr(pool[boss]->name);
-									addstr(" grows older.                                                            ");
+									addstr(" grows colder.                                                            ");
 									pool[boss]->att[ATTRIBUTE_WISDOM]++;
 									move(23,0);
 									addstr(pool[boss]->name);
-									addstr(" gains Wisdom.                                                           ");
+									addstr(" has gained wisdom.                                                           ");
 									getch();
 								}
 							}

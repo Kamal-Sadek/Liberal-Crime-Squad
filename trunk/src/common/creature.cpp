@@ -82,13 +82,13 @@ int Creature::get_skill_ip(int skill)
 
 bool Creature::enemy()
 {
-   if(align==-1)
+   if(align==ALIGN_CONSERVATIVE)
    {
       return true;
    }
    else
    {
-      if(type==CREATURE_COP)
+      if(type==CREATURE_COP && align==ALIGN_MODERATE)
       {
          for(int i=0;i<pool.size();i++)
          {
@@ -216,7 +216,7 @@ void firstname(char *str, char gender)
    {
       // Roll on the number of gender-specific names,
       // plus the number of gender-neutral names
-      roll = LCSrandom(346 + 34);
+      roll = LCSrandom(347 + 34);
       // Decide whether to use a gender-specific name
       // or a gender-neutral name
       if(roll >= 34) { roll -= 34; nametable = GENDER_MALE; }
@@ -354,6 +354,7 @@ void firstname(char *str, char gender)
          case 115:strcat(str,"Eugene");break;
          case 116:strcat(str,"Evan");break;
          case 117:strcat(str,"Fabio");break;
+         case 118:strcat(str,"Lyle");break;
          case 119:strcat(str,"Felix");break;
          case 120:strcat(str,"Fernando");break;
          case 121:strcat(str,"Floyd");break;
@@ -581,6 +582,7 @@ void firstname(char *str, char gender)
          case 343:strcat(str,"Xavier");break;
          case 344:strcat(str,"Zachary");break;
          case 345:strcat(str,"Zeke");break;
+         case 346:strcat(str,"Quentin");break;
 //}}}
 
 
@@ -1891,6 +1893,7 @@ void lastname(char *str)
       case 826:strcat(str,"Zucker");break;
       case 827:strcat(str,"Zumbach");break;
       case 828:strcat(str,"Starr");break;
+      case 829:strcat(str,"Falstaff");break;
 //}}}
 
       default:strcat(str,"Errorman");break;

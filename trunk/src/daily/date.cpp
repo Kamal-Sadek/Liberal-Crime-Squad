@@ -664,7 +664,7 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->flag|=CREATUREFLAG_MISSING;
 
                //Kidnapped wearing normal clothes and no weapon
-               d.date[e]->weapon.ammo = ARMOR_NONE;
+               d.date[e]->weapon.ammo = 0;
                d.date[e]->weapon.type = WEAPON_NONE;
                d.date[e]->armor.type = ARMOR_CLOTHES;
 

@@ -223,18 +223,19 @@ static void getissueeventstring(char* str)
    case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the Chernobyl dead zone");break;
    case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
    case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
-   case VIEW_PRISONS:strcat(str,"a government inquiry into prison conditions");break;
+   case VIEW_TORTURE:strcat(str,"a government inquiry into military interrogations");break;
    case VIEW_INTELLIGENCE:strcat(str,"a documentary on privacy rights");break;
    case VIEW_FREESPEECH:strcat(str,"a collection of banned books");break;
    case VIEW_GENETICS:strcat(str,"a video about genetic engineering accidents");break;
    case VIEW_JUSTICES:strcat(str,"a Liberal policy paper inquiring into judicial decisions");break;
+   case VIEW_GUNCONTROL:strcat(str,"a book profiling school shootings");break;
    case VIEW_SWEATSHOPS:strcat(str,"a hand-recorded video of unregulated sweatshops");break;
    case VIEW_POLLUTION:strcat(str,"a leaked government paper on environmental conditions");break;
    case VIEW_CORPORATECULTURE:strcat(str,"a documentary on life under corporate culture");break;
    case VIEW_CEOSALARY:strcat(str,"a Liberal think-tank survey of top CEO salaries");break;
    case VIEW_AMRADIO:strcat(str,"a collection of Conservative radio host rants");break;
    case VIEW_CABLENEWS:strcat(str,"a collection of leaked Conservative cable news memos");break;
-   case VIEW_POLITICALVIOLENCE:strcat(str,"a documentary about progress made by direct action");break;
+   //case VIEW_POLITICALVIOLENCE:strcat(str,"a documentary about progress made by direct action");break;
    }
 }
 
@@ -244,9 +245,27 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 {
    clearformess=1;
 
+   
+
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
+   if(pool[p]->meetings++>5 && LCSrandom(pool[p]->meetings-5))
+   {
+      addstr(pool[p]->name);
+      addstr(" accidentally missed the meeting with ");
+      addstr(r.recruit->name);
+      move(1,0);
+      addstr("due to multiple booking of recruitment sessions.");
+
+      move(3,0);
+      addstr("Get it together, ");
+      addstr(pool[p]->name);
+      addstr("!");
+      getch();
+
+      return 1;
+   }
    addstr("Meeting with ");
    addstr(r.recruit->name);
    addstr(", ");
@@ -300,24 +319,24 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(14,0);
    addstr("B - Just casually chat with them and discuss politics.");
+   
    move(15,0);
-   addstr("C - Ask them to help the Liberal cause with a cash donation.");
-   move(16,0);
    if(subordinatesleft(*pool[p]))
    {
-      addstr("D - Offer to let ");
+      addstr("C - Offer to let ");
       addstr(r.recruit->name);
       addstr(" to join the LCS as a full member.");
    }
    else
    {
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("D - ");
+      addstr("C - ");
       addstr(pool[p]->name);
       addstr(" needs more Juice or Leadership to recruit.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
-   
+   move(16,0);
+   addstr("D - Break off the meetings.");
 
    int y=18;
    
@@ -328,7 +347,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       int c=getch();
       translategetch(c);
 
-      if(c=='d' && subordinatesleft(*pool[p]))
+      if(c=='c' && subordinatesleft(*pool[p]))
       {
          move(y,0);
          addstr(pool[p]->name);
@@ -448,22 +467,21 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          pool[p]->train(SKILL_BUSINESS,
             max(r.recruit->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
          
-         int lib_persuasiveness = pool[p]->skillval(SKILL_PERSUASION)*2+
+         int lib_persuasiveness = LCSrandom(pool[p]->skillval(SKILL_PERSUASION)*2+
                                   pool[p]->skillval(SKILL_BUSINESS)+
                                   pool[p]->skillval(SKILL_SCIENCE)+
                                   pool[p]->skillval(SKILL_RELIGION)+
-                                  pool[p]->skillval(SKILL_LAW)+
-                                  pool[p]->attval(ATTRIBUTE_HEART)+
+                                  pool[p]->skillval(SKILL_LAW)+1)+
+                                  LCSrandom(pool[p]->attval(ATTRIBUTE_HEART)+
                                   pool[p]->attval(ATTRIBUTE_CHARISMA)*2+
-                                  pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
+                                  pool[p]->attval(ATTRIBUTE_INTELLIGENCE));
 
-         int recruit_reluctance = r.recruit->skillval(SKILL_BUSINESS)+
+         int recruit_reluctance = LCSrandom(r.recruit->skillval(SKILL_BUSINESS)+
                                   r.recruit->skillval(SKILL_SCIENCE)+
                                   r.recruit->skillval(SKILL_RELIGION)+
-                                  r.recruit->skillval(SKILL_LAW)+
-                                  r.recruit->attval(ATTRIBUTE_WISDOM)*3+
-                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE)+
-                                  LCSrandom(10);
+                                  r.recruit->skillval(SKILL_LAW))+
+                                  LCSrandom(r.recruit->attval(ATTRIBUTE_WISDOM)*3+
+                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE));
 
          int max_eagerness      = pool[p]->attval(ATTRIBUTE_HEART)-
                                   r.recruit->attval(ATTRIBUTE_WISDOM);
@@ -544,7 +562,13 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          getch();
          return 0;
       }
-      if(c=='c')
+      if(c=='d')
+      {
+         return 1;
+      }
+      // Donations below -- removed because it's a grindfest
+      // - Jonathan S. Fox
+      /*if(c=='c')
       {
          if(r.eagerness()>5 && r.recruit->money)
          {
@@ -586,6 +610,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          refresh();
          getch();
          return 1;
-      }
+      }*/
    }while(1);
 }

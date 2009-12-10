@@ -107,7 +107,7 @@ void setup_newgame(void)
    else if(strongccs)
    {
       endgamestate=ENDGAME_CCS_ATTACKS;
-      attitude[VIEW_POLITICALVIOLENCE]=90;
+      //attitude[VIEW_POLITICALVIOLENCE]=90;
    }
 }
 

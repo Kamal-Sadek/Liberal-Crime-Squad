@@ -186,7 +186,8 @@ void disguisecheck(void)
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      if(activesquad->squad[i]->armor.type==ARMOR_NONE)forcecheck=true;
+      if(activesquad->squad[i]->armor.type==ARMOR_NONE &&
+         activesquad->squad[i]->animalgloss!=ANIMALGLOSS_ANIMAL)forcecheck=true;
       int thisweapon=weaponcheck(*activesquad->squad[i],cursite);
       if(thisweapon>weapon)weapon=thisweapon;
       if(thisweapon==2)weaponar[i]=1;
@@ -375,7 +376,8 @@ int disguiseskill(void)
          {
             skill=0;
             //NAKEDNESS MAJOR PENALTY
-            if(activesquad->squad[p]->armor.type==ARMOR_NONE)skill=-100;
+            if(activesquad->squad[p]->armor.type==ARMOR_NONE &&
+               activesquad->squad[p]->animalgloss!=ANIMALGLOSS_ANIMAL)skill=-100;
          }
          else
          {
@@ -728,7 +730,8 @@ char hasdisguise(Creature &cr,short type)
    }
    else
    {
-      if(cr.armor.type!=ARMOR_NONE&&cr.armor.type!=ARMOR_HEAVYARMOR)uniformed=1;
+      if((cr.armor.type!=ARMOR_NONE||cr.animalgloss!=ANIMALGLOSS_ANIMAL)
+         &&cr.armor.type!=ARMOR_HEAVYARMOR)uniformed=1;
 
       switch(type)
       {

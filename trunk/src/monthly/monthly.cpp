@@ -50,10 +50,10 @@ void passmonth(char &clearformess,char canseethings)
    switch(endgamestate)
    {
    case ENDGAME_NONE:
-      if((attitude[VIEW_POLITICALVIOLENCE]>60||publicmood(-1)>60))
+      if((/*attitude[VIEW_POLITICALVIOLENCE]>60||*/publicmood(-1)>60))
       {
          endgamestate=ENDGAME_CCS_APPEARANCE;
-         attitude[VIEW_CONSERVATIVECRIMESQUAD]=100-attitude[VIEW_POLITICALVIOLENCE];
+         attitude[VIEW_CONSERVATIVECRIMESQUAD]=0;
       }
       break;
    case ENDGAME_CCS_APPEARANCE:
@@ -181,7 +181,7 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    int mediabalance=0;
-   int issuebalance[VIEWNUM-6];
+   int issuebalance[VIEWNUM-5];
    int stimulus=0;
    double cost=0;
    double tax=0;
@@ -195,11 +195,11 @@ void passmonth(char &clearformess,char canseethings)
 
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
-      if(v==VIEW_POLITICALVIOLENCE)
-      {
-         change_public_opinion(VIEW_POLITICALVIOLENCE,-1,0);
-         continue;
-      }
+      //if(v==VIEW_POLITICALVIOLENCE)
+      //{
+      //   change_public_opinion(VIEW_POLITICALVIOLENCE,-1,0);
+      //   continue;
+      //}
       if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
       if(v!=VIEW_AMRADIO&&v!=VIEW_CABLENEWS)
       {
@@ -260,7 +260,7 @@ void passmonth(char &clearformess,char canseethings)
       move(2,2);
       addstr("ESTIMATED POLITICAL INFLUENCE");
       y=3;
-      for(int i=0;i<VIEWNUM-6;i++)
+      for(int i=0;i<VIEWNUM-5;i++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,1);
@@ -271,7 +271,7 @@ void passmonth(char &clearformess,char canseethings)
          addstr("---------");
 
          // Calculate location for pip (with a bit of randomness for imprecision!)
-         int pip=(issuebalance[i]+225)/50+LCSrandom(3)-1; 
+         int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1; 
 
          // Select color and limit to ends of spectrum
          if(pip<=0)     { pip=0; set_color(COLOR_RED,    COLOR_BLACK,1); }

@@ -389,6 +389,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\common\misc.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\creature\pool.cpp"
 				>
 				<FileConfiguration
@@ -655,10 +659,6 @@
 			</File>
 			<File
 				RelativePath="..\src\news\news.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\news\sex.cpp"
 				>
 			</File>
 			<File

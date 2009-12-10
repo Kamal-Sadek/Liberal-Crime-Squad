@@ -1874,7 +1874,7 @@ void congress(char clearformess,char canseethings)
                else addstr("Strengthen our National Defense");
                break;
             case LAW_TORTURE:
-               if(billdir[c]==1)addstr("Abolish Torture");
+               if(billdir[c]==1)addstr("Ban Torture Techniques");
                else addstr("Permit Strong Tactics in Interrogations");
                break;
          }
@@ -2260,18 +2260,33 @@ int publicmood(int l)
 {
    switch(l)
    {
+      // All laws should be affected by exactly one issue if there is a direct
+      // correlation between that law and an issue. For example, police behavior
+      // as a law should depend only upon police behavior as an issue. This keeps
+      // the game logical to the player and ensures that the public opinion polls
+      // displayed in-game accurately predict how people will vote in specific
+      // issues. For a handful of laws, we might not have a directly correllating
+      // issue; for example, as of this writing, there is no issue asking people's
+      // opinions on torture. In this case, we can use the nearest issue, or we
+      // can mix two closely related ones. As a general principle, try to avoid
+      // getting too complicated here; this is under-the-hood stuff the player
+      // will never appreciate, so it should be kept as simple and transparent as
+      // possible so as to avoid creating unexpected results that will only confuse
+      // players, like people refusing to further regulate nuclear power because
+      // one of the other issues besides nuclear power is conservative, even when
+      // the nuclear power issue is 100% Liberal. - Jonathan S. Fox
       case LAW_ABORTION:
          return attitude[VIEW_WOMEN];//XXX: No VIEW_ABORTION! Do not forget this!
       case LAW_ANIMALRESEARCH:
          return attitude[VIEW_ANIMALRESEARCH];
       case LAW_POLICEBEHAVIOR:
-         return (attitude[VIEW_POLICEBEHAVIOR]+attitude[VIEW_PRISONS])/2;
+         return attitude[VIEW_POLICEBEHAVIOR];
       case LAW_PRIVACY:
          return attitude[VIEW_INTELLIGENCE];
       case LAW_DEATHPENALTY:
          return attitude[VIEW_DEATHPENALTY];
       case LAW_NUCLEARPOWER:
-         return (attitude[VIEW_NUCLEARPOWER]+attitude[VIEW_POLLUTION])/2;
+         return attitude[VIEW_NUCLEARPOWER];
       case LAW_POLLUTION:
          return attitude[VIEW_POLLUTION];
       case LAW_LABOR:
@@ -2279,7 +2294,10 @@ int publicmood(int l)
       case LAW_GAY:
          return attitude[VIEW_GAY];
       case LAW_CORPORATE:
-         return (attitude[VIEW_CORPORATECULTURE]+attitude[VIEW_CEOSALARY])/2;
+         // We'll be merging these two views here because there is no CEO salary law.
+         // The issue is there for flavor, and falls under the same umbrella of
+         // corporate regulation. - Jonathan S. Fox
+         return (attitude[VIEW_CORPORATECULTURE] + attitude[VIEW_CEOSALARY])/2;
       case LAW_FREESPEECH:
          return attitude[VIEW_FREESPEECH];
       case LAW_TAX:
@@ -2287,17 +2305,17 @@ int publicmood(int l)
       case LAW_FLAGBURNING:
          return attitude[VIEW_FREESPEECH];   // <-- I'm keeping this pure free speech instead of free speech
       case LAW_WOMEN:                        // plus political violence. Ideologically, there's no association
-         return attitude[VIEW_WOMEN];        // between flag burning and violence. -Fox
+         return attitude[VIEW_WOMEN];        // between flag burning and violence. - Jonathan S. Fox
       case LAW_CIVILRIGHTS:
          return attitude[VIEW_CIVILRIGHTS];
       case LAW_DRUGS:
          return attitude[VIEW_DRUGS];
       case LAW_IMMIGRATION:
-         return (attitude[VIEW_IMMIGRATION]+attitude[VIEW_CIVILRIGHTS])/2;//XXX: VIEW_DRUGS?
+         return attitude[VIEW_IMMIGRATION];//XXX: VIEW_DRUGS?
       case LAW_MILITARY:
          return attitude[VIEW_MILITARY];
       case LAW_TORTURE:
-         return (attitude[VIEW_INTELLIGENCE]+attitude[VIEW_MILITARY])/2;
+         return attitude[VIEW_TORTURE];
       case LAW_GUNCONTROL:
          return attitude[VIEW_GUNCONTROL];
       case LAW_ELECTIONS:

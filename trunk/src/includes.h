@@ -70,9 +70,8 @@
 #define PACKAGE_VERSION "4.00.5"
 #endif
 
-// I bumped these to 40006 already since I broke save compatibility with the business front shortname handling --ari
-const int version=40006; 
-const int lowestloadversion=40006;
+const int version=40008; 
+const int lowestloadversion=40008;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -769,7 +768,7 @@ enum LootType
 {
    LOOT_LABEQUIPMENT,
    LOOT_COMPUTER,
-   LOOT_TV,
+   LOOT_PDA,
    LOOT_SECRETDOCUMENTS,
    LOOT_CEOPHOTOS,
    LOOT_INTHQDISK,
@@ -780,15 +779,20 @@ enum LootType
    LOOT_CABLENEWSFILES,
    LOOT_AMRADIOFILES,
    LOOT_POLICERECORDS,
-   LOOT_VCR,
+   LOOT_CHEAPJEWELERY,
    LOOT_CELLPHONE,
-   LOOT_TVCAMERA,
-   LOOT_BROADCASTINGEQUIPMENT,
+   LOOT_EXPENSIVEJEWELERY,
+   LOOT_MICROPHONE,
    LOOT_SILVERWARE,
-   LOOT_SCANNER,
-   LOOT_PRINTER,
+   LOOT_TRINKET,
+   LOOT_WATCH,
    LOOT_FINECLOTH,
    LOOT_CHEMICAL,
+   LOOT_KIDART,
+   LOOT_FAMILYPHOTO,
+   LOOT_DIRTYSOCK,
+   LOOT_CEOTAXPAPERS,
+   LOOT_CEOLOVELETTERS,
    LOOTNUM
 };
 
@@ -988,6 +992,7 @@ public:
    int deathdays;
    int id;
    int hireid;
+   int meetings;
 
    char forceinc;
 
@@ -1385,7 +1390,7 @@ enum Views
    VIEW_NUCLEARPOWER,
    VIEW_ANIMALRESEARCH,
    VIEW_POLICEBEHAVIOR,
-   VIEW_PRISONS,//XXX: Please don't code with the nonexistant VIEW_PRISON
+   VIEW_TORTURE,
    VIEW_INTELLIGENCE,
    VIEW_FREESPEECH,
    VIEW_GENETICS,
@@ -1400,13 +1405,13 @@ enum Views
    VIEW_DRUGS,
    VIEW_IMMIGRATION,
    VIEW_MILITARY,
-   //*JDS* I'm using VIEWNUM-6 in a random generator that rolls a
+   //*JDS* I'm using VIEWNUM-5 in a random generator that rolls a
    //random issue, not including the media/politicalviolence ones, and this will
    //break if these stop being the last 4 issues; do a search
-   //for VIEWNUM-6 to change it if it needs to be changed.
+   //for VIEWNUM-5 to change it if it needs to be changed.
    VIEW_AMRADIO,
    VIEW_CABLENEWS,
-   VIEW_POLITICALVIOLENCE,
+   //VIEW_POLITICALVIOLENCE,
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
    VIEW_LIBERALCRIMESQUADPOS,
