@@ -1459,6 +1459,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
 /* news - make some filler junk */
 void generatefiller(char *story,int amount)
 {
+//TODO: Use text from filler.cpp
    char str[80];
    strcat(story,"&r");
    cityname(str);
