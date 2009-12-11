@@ -1,4 +1,4 @@
-#include <includes.h>
+#include <externs.h>
 
 /**
    ACTIVITY_VISIT, TODO
@@ -38,8 +38,8 @@
 
 // Help pages are drawn here.
 
-// NOTE: This will probably need updating if there are any fundamental code changes
-// that will change gameplay.
+// NOTE: This will probably need updating if there are any fundamental code
+// changes that will change gameplay.
 void help(const char* string)
 {
         erase();
@@ -59,17 +59,16 @@ void HelpActivities(int activityType)
         move(0,0);
         addstr("Liberal help on: ");
 
-
-        if(activityType == ACTIVITY_COMMUNITYSERVICE)
-        {
+switch(activityType)
+   {
+        case ACTIVITY_COMMUNITYSERVICE:
                 addstr("===Community Service===");
                 move(2,1);
                 addstr("Has a minor effect on public opinion, increases Juice and has the chance");
                 move(3,1);
                 addstr("of reducing the activists Heat.");
-        }
-        else if(activityType == ACTIVITY_TROUBLE)
-        {
+        break;
+        case ACTIVITY_TROUBLE:
                 addstr("===Liberal Disobedience===");
                 move(2,1);
                 addstr("Liberal Disobedience is an illegal activity and a form of Liberal Activism"); 
@@ -89,10 +88,8 @@ void HelpActivities(int activityType)
                 addstr("disguise and street sense will shake them off the scent. There is also a");
                 move(11,1);
                 addstr("chance that an angry mob will beat the crap out of you.");
-
-        } 
-        else if(activityType == ACTIVITY_POLLS)
-        {
+        break;
+        case ACTIVITY_POLLS:
                 addstr("===Search Opinion Polls===");
                 move(2,1);
                 addstr("Search Opinion Polls is a legal activity that lets you see what people think");
@@ -101,9 +98,8 @@ void HelpActivities(int activityType)
 
                 move(5,1);
                 addstr("Skill in computers and intelligence will give better results.");
-        }
-        else if(activityType == ACTIVITY_DOS_ATTACKS)
-        {
+        break;
+        case ACTIVITY_DOS_ATTACKS:
                 addstr("===Harassing Websites===");
                 move(2,1);
                 addstr("Harassing Websites is an illegal activity and a form of Liberal Activism.");
@@ -118,9 +114,8 @@ void HelpActivities(int activityType)
 
                 move(7,1);
                 addstr("Utilizes only the Computers skill.");
-        }
-        else if(activityType == ACTIVITY_HACKING)
-        {
+        break;
+        case ACTIVITY_HACKING:
                 addstr("===Hacking===");
                 move(2,1);
                 addstr("Hacking is a highly illegal form of Liberal Activism, which has a good");
@@ -144,9 +139,8 @@ void HelpActivities(int activityType)
                 addstr("may find files that can be published in a special edition of");
                 move(13,1);
                 addstr("the Liberal Guardian.");
-        }
-        else if(activityType == ACTIVITY_GRAFFITI)
-        {
+        break;
+        case ACTIVITY_GRAFFITI:
                 addstr("===Graffiti==");
                 move(2,1);
                 addstr("Spraying political graffiti is a misdemeanor, carrying with it");
@@ -164,7 +158,14 @@ void HelpActivities(int activityType)
                 addstr("A high art skill and heart will enhance the effect this has");
                 move(9,1);
                 addstr("on public opinion.");
-        }
+        break;
+        default:
+                addstr("===THE GREAT UNKNOWN===");
+		move(2,1);
+		addstr("There is no help on this topic yet, as the help system is quite new.");
+                move(3,1);
+                addstr("However, if you want to help us, you could write one, and send it to us!");
+        break;
 
 
         set_color(COLOR_WHITE,COLOR_BLACK,0);
