@@ -238,114 +238,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-        /* case VIEW_GUNS:
-         {
-            cityname(story);
-            strcat(" - ");
-            strcat(story,"A student has gone on a shooting rampage at a local high school.  ");
-            char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
-            strcat(story,dstr);
-            strcat(story," ");
-            strcat(story,dstr2);
-            strcat(story,", 15, used a variety of weapons to shoot more than a dozen classmates and two teachers at ");
-            char jstr[200];
-            lastname(jstr);
-            strcat(story,jstr);
-            strcat(story," High School, before committing suicide.&r");
-
-            strcat(story,"  ");
-            strcat(story,dstr);
-            strcat(story," was considered an outcast ");
-            char num[20];
-            itoa(year-LCSrandom(11)-10,num,10);
-            strcat(story,num);
-            strcat(story," of thirteen serial murders.  ");
-            strcat(story,"Since then, numerous pieces of exculpatory evidence ");
-            strcat(story,"have been produced, including ");
-            switch(LCSrandom(3))
-            {
-               case 0:strcat(story,"a confession from another convict.  ");break;
-               case 1:strcat(story,"a battery of negative DNA tests.  ");break;
-               case 2:
-                  strcat(story,"an admission from a former prosecutor that ");
-                  strcat(story,dstr3);
-                  strcat(story," was framed.  ");
-                  break;
-            }
-            strcat(story,"The state still went through with the execution, with a ");
-            strcat(story,"spokesperson for the governor saying, ");
-            strcat(story,"\"");
-            switch(LCSrandom(3))
-            {
-               case 0:strcat(story,"Let's not forget the convict is colored.  You know how their kind are");break;
-               case 1:
-                  strcat(story,"The convict is always referred to by three names.  ");
-                  strcat(story,"Assassin, serial killer, either way -- guilty.  ");
-                  strcat(story,"End of story");
-                  break;
-               case 2:strcat(story,"The family wants closure.  We don't have time for another trial");break;
-            }
-            strcat(story,".\"");
-            strcat(story,"&r");
-            strcat(story,"  Candlelight vigils were held throughout the country last night during the execution, ");
-            strcat(story,"and more events are expected this evening.  If there is a bright side to be found from this ");
-            strcat(story,"tragedy, it will be that our nation is now evaluating the ease with which people ");
-            strcat(story,"can be put to death in this country.");
-            strcat(story,"&r");
-            break;
-         } */
-         /* case VIEW_PRISONS:
-         {
-            cityname(story);
-            strcat(story," - A former prisoner has written a book describing in horrifying ");
-            strcat(story,"detail what goes on behind bars.  ");
-            strcat(story,"Although popular culture has used, or perhaps overused, the ");
-            strcat(story,"prison theme lately in its offerings for mass consumption, rarely ");
-            strcat(story,"have these works been as poignant as ");
-            char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
-            strcat(story,dstr);
-            strcat(story," ");
-            strcat(story,dstr2);
-            strcat(story,"'s new tour-de-force, _");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"Nightmare");break;
-               case 1:strcat(story,"Primal");break;
-               case 2:strcat(story,"Animal");break;
-               case 3:strcat(story,"American");break;
-               case 4:strcat(story,"Solitary");break;
-            }
-            strcat(story,"_");
-            switch(LCSrandom(7))
-            {
-               case 0:strcat(story,"Packer");break;
-               case 1:strcat(story,"Soap");break;
-               case 2:strcat(story,"Punk");break;
-               case 3:strcat(story,"Kid");break;
-               case 4:strcat(story,"Cell");break;
-               case 5:strcat(story,"Shank");break;
-               case 6:strcat(story,"Lockdown");break;
-               case 7:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[Bum]lord");
-                      else strcat(story,"Buttlord");break;
-            }
-            strcat(story,"_.&r");
-            strcat(story,"   Take this excerpt, \"");
-
-            strcat(story,"The steel bars grated forward in their rails, ");
-            strcat(story,"coming to a halt with a deafening clang that said it all -- ");
-            strcat(story,"I was trapped with them now.  There were three, looking me over ");
-            strcat(story,"with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager.  ");
-            strcat(story,"My shank's under the mattress.  Better to be a man and fight or a punk and let them take it?  ");
-            if(law[LAW_GAY]==-2)strcat(story,"Maybe lose an eye the one way, maybe catch GRIDS the other.  A helluva choice, "); // Gay Related Immunodeficiency Syndrome, obsoleted/politically incorrect name for "AIDS".
-            else strcat(story,"Maybe lose an eye the one way, maybe catch AIDS the other.  A helluva choice, ");
-            strcat(story,"and I would only have a few seconds before they made it for me");
-            strcat(story,".\"");
-            strcat(story,"&r");
-            break;
-         }*/
          case VIEW_INTELLIGENCE:
          {
             strcat(story,"Washington D.C. - The FBI might be keeping tabs on you.  ");
@@ -372,60 +264,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-         /*case VIEW_POLITICALVIOLENCE:
-         {
-            cityname(story);
-            strcat(story," - The dismissal of ");
-            char gender;
-            if(LCSrandom(2))
-            {
-               gender=GENDER_MALE;
-               strcat(story,"his");
-            }
-            else
-            {
-               gender=GENDER_FEMALE;
-               strcat(story,"her");
-            }
-            strcat(story," final appeal ended the tragic tale of ");
-            char dstr[200],nstr[200];
-            firstname(nstr,gender);
-            strcat(story,nstr);
-            strcat(story," ");
-            lastname(dstr);
-            strcat(story,dstr);
-            strcat(story," today. ");
-            strcat(story,dstr);
-            strcat(story,", ");
-            itoa(30+LCSrandom(40),nstr,10);
-            strcat(story,nstr);
-            strcat(story,", is the central figure of what many consider to be the greatest political "
-                         "scandal in years. A successful owner of a French language-themed bookshop "
-                         "until two years ago, ");
-            strcat(story,dstr);
-            strcat(story,"'s downfall began when local police unlawfully confiscated much of ");
-            if(gender==GENDER_MALE)
-               strcat(story,"his");
-            else
-               strcat(story,"her");
-            strcat(story," stock for 'Un-American content'. Attempts to take the matter to the legal arena "
-                         "failed after the judge - who happened to be a brother-in-law of one of the "
-                         "accused officers - threw out the case and the state supreme court declined to "
-                         "get involved despite widespread media publication of the case.");
-            strcat(story,"&r "); // comment this line to create a wall of text
-            strcat(story,"  Four months ago, a disillusioned and bankrupt ");
-            strcat(story,dstr);
-            strcat(story," was caught in the act of vandalizing the courthouse windows with a baseball bat. ");
-            if(gender==GENDER_MALE)
-               strcat(story,"He");
-            else
-               strcat(story,"She");
-            strcat(story," was subsequently convicted of breaking the peace, vandalism, attempted murder "
-                         "and terrorism and sentenced to life in prison. The presiding judge was a childhood "
-                         "friend of (continued: Nightmare, A6)");
-            strcat(story,"&r");
-            break;
-         }*/
          case VIEW_FREESPEECH:
          {
             cityname(story);
@@ -803,111 +641,6 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          }
-         /*case VIEW_PRISONS:
-         {
-            cityname(story);
-            strcat(story," - The hostage crisis at the ");
-            char jstr[200];
-            lastname(jstr);
-            strcat(story,jstr);
-            strcat(story," Correctional Facility ended tragically yesterday with the ");
-            strcat(story,"death of both the prison guard being held hostage and ");
-            switch(LCSrandom(2))
-            {
-               case 0:strcat(story,"his");break;
-               case 1:strcat(story,"her");break;
-            }
-            strcat(story," captor.");
-            strcat(story,"&r");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [reproduction fiend] ");
-            else strcat(story,"   Two weeks ago, convicted rapist ");
-            char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
-            strcat(story,dstr);
-            strcat(story," ");
-            strcat(story,dstr2);
-            strcat(story,", an inmate at ");
-            strcat(story,jstr);
-            strcat(story,", overpowered ");
-            char gstr[200],gstr2[200];
-            firstname(gstr);lastname(gstr2);
-            strcat(story,gstr);
-            strcat(story," ");
-            strcat(story,gstr2);
-            strcat(story," and barricaded ");
-            switch(LCSrandom(2))
-            {
-               case 0:strcat(story,"himself");break;
-               case 1:strcat(story,"herself");break;
-            }
-            strcat(story," with the guard in a prison tower.  ");
-            strcat(story,"Authorities locked down the prison and ");
-            strcat(story,"attempted to negotiate by phone for 13 days, ");
-            strcat(story,"but talks were cut short when ");
-            strcat(story,dstr2);
-            strcat(story," reportedly screamed into the receiver \"");
-            switch(LCSrandom(3))
-            {
-               case 0:
-                      if(law[LAW_FREESPEECH]==2)strcat(story,"Ah, fuck this shit.  This punk bitch is fuckin' dead!");
-                      else if(law[LAW_FREESPEECH]==-2)strcat(story,"Ah, [no way.]  This [police officer will be harmed!]");
-                      else strcat(story,"Ah, f*ck this sh*t.  This punk b*tch is f*ckin' dead!");break;
-               case 1:
-                      if(law[LAW_FREESPEECH]==2)strcat(story,"Fuck a muthafuckin' bull.  I'm killin' this pig shit.");
-                      else if(law[LAW_FREESPEECH]==-2)strcat(story,"[Too late.]  [I am going to harm this police officer.]");
-                      else strcat(story,"F*ck a m*th*f*ck*n' bull.  I'm killin' this pig sh*t.");break;
-               case 2:
-                      if(law[LAW_FREESPEECH]==2)strcat(story,"Why the fuck am I talkin' to you?  I'd rather kill this pig.");
-                      else if(law[LAW_FREESPEECH]==-2)strcat(story,"Why am I talkin' to you?  I'd rather [harm this police officer.]");
-                      else strcat(story,"Why the f*ck am I talkin' to you?  I'd rather kill this pig.");break;
-            }
-            strcat(story,"\"");
-            strcat(story,"  The tower was breached in an attempt to reach ");
-            strcat(story,"the hostage, but ");
-            strcat(story,dstr2);
-            strcat(story," had already ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"killed the guard");
-            else switch(LCSrandom(3))
-            {
-               case 0:strcat(story,"slit the guard's throat with a shank");break;
-               case 1:strcat(story,"strangled the guard to death with a knotted bed sheet");break;
-               case 2:strcat(story,"chewed out the guard's throat");break;
-            }
-            strcat(story,".  The prisoner was beaten to death while ");
-            strcat(story,"\"resisting capture\", according to a prison spokesperson.");
-            strcat(story,"&r");
-            break;
-         }*/
-         /*case VIEW_POLITICALVIOLENCE:
-         {
-            cityname(story);
-            strcat(story," - Nine people were killed today as special forces brought the three-day "
-                         "hostage crisis at the ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"City Hall");break;
-               case 1:strcat(story,"Trinity Disco");break;
-               case 2:strcat(story,"Henderson Cafeteria");break;
-               case 3:strcat(story,"Unemployment Office");break;
-               case 4:strcat(story,"Milburn Orphanage");break;
-            }
-            strcat(story,", instigated by members of the ");
-            switch(LCSrandom(4))
-            {
-               case 0:strcat(story,"Stalinist Comrade Squad");break;
-               case 1:strcat(story,"Radical Feminist Brigades");break;
-               case 2:strcat(story,"2nd Amendment Society");break;
-               case 3:strcat(story,"Anarcho-Fascist Collective");break;
-            }
-            strcat(story,", to a bloody end. Prior to the raid, the group had taken over 80 people captive and demanded, "
-                         "among other things: safe passage to North Korea, 10 billion dollars in cash, "
-                         "2 fully-fueled airliners and the dissolution of the United States of America. "
-                         "According to police sources, the raid became necessary after the kidnappers "
-                         "revealed they had been executing twenty people at the end of each day of "
-                         "non-compliance with their demands.");
-            strcat(story,"&r");
-            break;
-         }*/
          case VIEW_INTELLIGENCE:
          {
             strcat(story,"Washington D.C. - The CIA announced yesterday that it has averted a terror attack that ");
@@ -1464,7 +1197,8 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(10))
             {
                case 0:
-                  if(law[LAW_FREESPEECH]==-2)strcat(str,"regularly visits [working women].");
+                  if(law[LAW_FREESPEECH]==-2&&law[LAW_WOMEN]!=-2)strcat(str,"regularly visits [working women].");
+                  else if(law[LAW_FREESPEECH]==-2&&law[LAW_WOMEN]==-2)strcat(str,"regularly [donates to sperm banks].");
                   else strcat(str,"regularly visits prostitutes.");
                   break;
                case 1:
