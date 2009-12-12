@@ -145,12 +145,6 @@ void amendment_termlimits(char canseethings)
    //STATE THE AMENDMENT
    if(canseethings)
    {
-      int tossnum=0;
-      for(j=0;j<9;j++)
-      {
-         if(court[j]<=1)tossnum++;
-      }
-
       amendmentheading();
 
       move(2,5);

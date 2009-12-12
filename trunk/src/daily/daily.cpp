@@ -670,8 +670,8 @@ void advanceday(char &clearformess,char canseethings)
    {
       // Clinic is equal to a skill 6 liberal
       if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=6;
-      // Hospital is equal to a skill 8 liberal
-      else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY)healing[p]=8;
+      // Hospital is equal to a skill 12 liberal
+      else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY)healing[p]=12;
       else healing[p]=0;
       healing2[p]=0;
    }
@@ -700,7 +700,6 @@ void advanceday(char &clearformess,char canseethings)
    // Don't let starving locations heal
    for(p=0;p<location.size();++p)
    {
-      // Clinic is equal to a skill 6 liberal
       if(location[p]->type!=SITE_HOSPITAL_CLINIC && location[p]->type!=SITE_HOSPITAL_UNIVERSITY)
       {
          if(!fooddaysleft(p))

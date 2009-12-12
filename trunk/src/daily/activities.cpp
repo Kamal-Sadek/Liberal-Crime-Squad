@@ -1009,13 +1009,17 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*solicit[s],"soliciting donations",clearformess))
       {
-         money=LCSrandom(((solicit[s]->skillval(SKILL_PERSUASION)+
-                           solicit[s]->skillval(SKILL_BUSINESS)+
-                           solicit[s]->attval(ATTRIBUTE_CHARISMA)+
-                           solicit[s]->attval(ATTRIBUTE_HEART))*
-                           attitude[VIEW_LIBERALCRIMESQUADPOS]*
-                           (attitude[VIEW_LIBERALCRIMESQUAD]+5)*
-                           (solicit[s]->armor.professionalism()))/20000+1);
+         money=0;
+         for(int i=0;i<3;i++) // Rolling multiple times gives a nice bell curve
+         {
+            money+=LCSrandom(((solicit[s]->skillval(SKILL_PERSUASION)+
+                              solicit[s]->skillval(SKILL_BUSINESS)+
+                              solicit[s]->attval(ATTRIBUTE_CHARISMA)+
+                              solicit[s]->attval(ATTRIBUTE_HEART))*
+                              attitude[VIEW_LIBERALCRIMESQUADPOS]*
+                              (attitude[VIEW_LIBERALCRIMESQUAD]+5)*
+                              (solicit[s]->armor.professionalism()))/20000+5);
+         }
 
          funds+=money;
          stat_funds+=money;
@@ -1868,32 +1872,16 @@ void funds_and_trouble(char &clearformess)
       long fundgain=0;
       char caught=0;
 
-      if(clearformess)erase();
-      else
-      {
-         makedelimiter(8,0);
-      }
-
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(8,1);
-      addstr(prostitutes[p]->name);
-      addstr(" gives it up for $");
       if(prostitutes[p]->skillval(SKILL_SEDUCTION)>9)fundgain=LCSrandom(201)+200;
       else if(prostitutes[p]->skillval(SKILL_SEDUCTION))fundgain=LCSrandom(20*prostitutes[p]->skillval(SKILL_SEDUCTION)+1)+
                                                                         5*prostitutes[p]->skillval(SKILL_SEDUCTION);
       else fundgain=LCSrandom(21)+20;
-      itoa(fundgain,num,10);
-      addstr(num);
-      addstr("!");
 
       if(!LCSrandom(3))
       {
          addjuice(*prostitutes[p],-!LCSrandom(3));
       }
       prostitutes[p]->train(SKILL_SEDUCTION,MAX(10-prostitutes[p]->skillval(SKILL_SEDUCTION),0));
-
-      refresh();
-      getch();
 
 
       if(!LCSrandom(100) &&                                    // Police sting?

@@ -1576,50 +1576,8 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr(cr->name);
          addstr("'s disappearance has not yet been reported.");
          y+=2;
-         move(y++,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("In what capacity will ");
-         addstr(cr->name);
-         addstr(" best serve the Liberal cause?");
-         move(y++,0);
-         addstr("1) Stay at ");
-         addstr(location[cr->worklocation]->name);
-         addstr(" as a ");
-         set_color(COLOR_CYAN,COLOR_BLACK,0);
-         addstr("sleeper agent");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(".");
-         move(y++,0);
-         addstr("2) Come to ");
-         addstr(location[a->location]->name);
-         addstr(" as a ");
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         addstr("regular member");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(".");
 
-         
-         while(1)
-         {
-            char keystroke = getch();
-            if(keystroke == '1')
-            {
-               cr->flag |= CREATUREFLAG_SLEEPER;
-               liberalize(*cr,false);
-               cr->location = cr->worklocation;
-               location[cr->worklocation]->interrogated=1;
-               location[cr->worklocation]->hidden=0;
-               cr->base = cr->worklocation;
-               break;
-            }
-            else if(keystroke == '2')
-            {
-               cr->location=a->location;
-               cr->base=a->base;
-               liberalize(*cr,false);
-               break;
-            }
-         }
+         sleeperize_prompt(*cr,*a,y);
 
          cr->flag&=~CREATUREFLAG_MISSING;
 

@@ -2161,7 +2161,7 @@ void congress(char clearformess,char canseethings)
       tossjustices(canseethings);
    }
    // Purge Congress, implement term limits, and hold new elections?
-   if(housemake[4]<290&&senatemake[4]<67&&publicmood(-1)>95)
+   if((housemake[4]+housemake[3]/2<290||senatemake[4]+senatemake[3]/2<67)&&publicmood(-1)>80)
    {
       amendment_termlimits(canseethings);
    }

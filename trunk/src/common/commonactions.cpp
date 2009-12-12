@@ -868,3 +868,72 @@ char duplicatelocation(locationst &loc) {
    return 0;
 }
 
+// Prompt to turn new recruit into a sleeper
+void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
+{
+   char selection=0;
+       
+   while(1)
+   {
+      move(y,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("In what capacity will ");
+      addstr(converted.name);
+      addstr(" best serve the Liberal cause?");
+      move(y+2,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,selection==0);
+      if(selection==0)
+      {
+         addstr("-> ");
+      }
+      else
+      {
+         addstr("   ");
+      }
+      addstr("Come to ");
+      addstr(location[recruiter.location]->name);
+      addstr(" as a ");
+      set_color(COLOR_GREEN,COLOR_BLACK,selection==0);
+      addstr("regular member");
+      set_color(COLOR_WHITE,COLOR_BLACK,selection==0);
+      addstr(".");
+      move(y+3,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
+      if(selection==1)
+         addstr("-> ");
+      else
+         addstr("   ");
+      addstr("Stay at ");
+      addstr(location[converted.worklocation]->name);
+      addstr(" as a ");
+      set_color(COLOR_CYAN,COLOR_BLACK,selection==1);
+      addstr("sleeper agent");
+      set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
+      addstr(".");
+      
+   
+      int keystroke = getch();
+      translategetch(keystroke);
+      if(keystroke == 10 && selection==1)
+      {
+         converted.flag |= CREATUREFLAG_SLEEPER;
+         converted.location = converted.worklocation;
+         location[converted.worklocation]->interrogated=1;
+         location[converted.worklocation]->hidden=0;
+         converted.base = converted.worklocation;
+         break;
+      }
+      else if(keystroke == 10 && selection==0)
+      {
+         converted.location=recruiter.location;
+         converted.base=recruiter.base;
+         liberalize(converted,false);
+         break;
+      }
+      else if(keystroke == KEY_DOWN || keystroke == KEY_UP)
+      {
+         selection=!selection;
+      }
+   }
+}
+

@@ -830,7 +830,7 @@ void setvehicles(void)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(18,1);
       addstr("Press a letter to specify passengers for that Liberal vehicle");
-      move(29,1);
+      move(19,1);
       addstr("Capitalize the letter to designate a driver.");
       move(20,1);
       addstr("Press a number to remove that squad member from a vehicle.");
@@ -923,7 +923,7 @@ void setvehicles(void)
       
       //SAV - End add
 
-      if(c=='x')return;
+      if(c=='x'||c=='X')return;
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;

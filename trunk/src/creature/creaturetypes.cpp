@@ -1203,8 +1203,6 @@ void makecreature(Creature &cr,short type)
          break;
       case CREATURE_JUROR:
          strcpy(cr.name,"Angry Juror");
-         GIVE_WEAPON_CIVILIAN;
-         if(!LCSrandom(5))cr.weapon.type=WEAPON_KNIFE;
          cr.armor.type=ARMOR_CLOTHES;
          cr.money=0;
          cr.align=-1;

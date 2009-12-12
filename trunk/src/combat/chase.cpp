@@ -940,13 +940,13 @@ void evasiverun(void)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             move(16,1);
             addstr(activesquad->squad[p]->name);
-            addstr(" is seized, thrown to the ground, and ");
+            addstr(" is seized, ");
             switch(encounter[0].type)
             {
-            case CREATURE_COP:addstr("handcuffed!");break;
-            case CREATURE_GANGUNIT:addstr("tazed repeatedly!");activesquad->squad[p]->blood-=10;break;
-            case CREATURE_DEATHSQUAD:addstr("shot in the head!");activesquad->squad[p]->blood=0;break;
-            default:addstr("beaten senseless!");activesquad->squad[p]->blood-=60;break;
+            case CREATURE_COP:addstr("pushed to the ground, and handcuffed!");break;
+            case CREATURE_GANGUNIT:addstr("thrown to the ground, and tazed repeatedly!");activesquad->squad[p]->blood-=10;break;
+            case CREATURE_DEATHSQUAD:addstr("thrown to the ground, and shot in the head!");activesquad->squad[p]->blood=0;break;
+            default:addstr("thrown to the ground, and beaten senseless!");activesquad->squad[p]->blood-=60;break;
             }
             if(activesquad->squad[p]->blood<=0)
                activesquad->squad[p]->alive=0;

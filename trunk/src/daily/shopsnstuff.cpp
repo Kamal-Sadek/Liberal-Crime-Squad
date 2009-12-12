@@ -349,7 +349,7 @@ void armsdealer(int loc)
       locheader();
       printparty();
 
-      move(8,60);
+      move(8,45);
       addstr("Buyer: ");
       addstr(activesquad->squad[buyer]->name);
       
@@ -627,7 +627,7 @@ void pawnshop(int loc)
       locheader();
       printparty();
 
-      move(8,60);
+      move(8,45);
       addstr("Buyer: ");
       addstr(activesquad->squad[buyer]->name);
 
@@ -1754,7 +1754,7 @@ void deptstore(int loc)
       locheader();
       printparty();
 
-      move(8,60);
+      move(8,45);
       addstr("Buyer: ");
       addstr(activesquad->squad[buyer]->name);
 
@@ -1952,7 +1952,7 @@ void halloweenstore(int loc)
       locheader();
       printparty();
 
-      move(8,60);
+      move(8,45);
       addstr("Buyer: ");
       addstr(activesquad->squad[buyer]->name);
 
