@@ -21,7 +21,7 @@ using namespace std;
 #define CH_USE_ASCII_HACK
 #define CURSES_GRAPHICS
 
-#include "../cursesgraphics.h"
+#include "../src/cursesgraphics.h"
 
 
 unsigned long picnum,dimx,dimy;
@@ -163,8 +163,7 @@ void displaynewspicture(int p,int y)
 
 void loadgraphics(void)
 {
-
-int p, x, y;
+   int p, x, y;
 
    int numbytes;
    FILE *h;
@@ -230,8 +229,57 @@ int p, x, y;
 
 int main(/*int nargs, char *args[]*/)
 {
+   initscr();
+   noecho();
+   //initialize curses color
+   start_color();
+   //initialize the array of color pairs
+   for(int i=0;i<8;i++)
+   {
+      for(int j=0;j<8;j++)
+      {
+         if(i==0&&j==0)
+         {
+            init_pair(7*8,0,0);
+            continue;
+         }
+         if(i==7&&j==0)continue;
+         init_pair(i*8+j,i,j);
+      }
+   }
+   //turns off cursor
+   //curs_set(0);
+   //begin the game loop
+   keypad(stdscr,TRUE);
+   raw_output(TRUE);
 	loadgraphics();
-        displaynewspicture(3,13);
 
-   return 0;
+   char c=0;
+   char index=0;
+   while(1)
+   {
+      // Render
+      clear();
+      move(0,0);
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      addstr("Press ENTER to exit, or press [ or ] to browse pictures.");
+      move(1,0);
+      addstr("Currently displaying Liberal picture ");
+      addch('0'+index);
+      displaynewspicture(index,2);
+      refresh();
+      
+      // Read input
+      while(c!=10 && c!='[' && c!=']')
+         c=getch();
+      // Act on input
+      if(c==10)return 0;
+      else if(c==']')index++;
+      else if(c=='[')index--;
+      if(index==-1)
+         index=20;
+      if(index==21)
+         index=0;
+      c=0;
+   }
 }
