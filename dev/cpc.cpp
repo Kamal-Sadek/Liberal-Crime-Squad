@@ -1,3 +1,6 @@
+/**
+ * Running `g++ -lncurses -o cpc -DNCURSES cpc.cpp' works fine for me -- LK
+ */
 #include <vector>
 #include <map>
 #include <string.h>
@@ -23,6 +26,17 @@ using namespace std;
 
 #include "../src/cursesgraphics.h"
 
+ /* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
+   * This function is for compatibility and is currently a do nothing function.
+   */
+ #ifdef NCURSES
+ inline int raw_output(bool bf)
+ {
+    raw();
+ return OK;
+ }
+
+ #endif
 
 unsigned long picnum,dimx,dimy;
 unsigned char bigletters[27][5][7][4];
@@ -167,7 +181,7 @@ void loadgraphics(void)
 
    int numbytes;
    FILE *h;
-	
+
    h = fopen("newspic.cpc", "rb");
    if(h!=NULL)
    {
@@ -252,7 +266,7 @@ int main(/*int nargs, char *args[]*/)
    //begin the game loop
    keypad(stdscr,TRUE);
    raw_output(TRUE);
-	loadgraphics();
+   loadgraphics();
 
    char c=0;
    char index=0;
@@ -273,9 +287,9 @@ int main(/*int nargs, char *args[]*/)
       while(c!=10 && c!='[' && c!=']')
          c=getch();
       // Act on input
-      if(c==10)return 0;
+      if(c==10)/*exit(0);*/return 0;
       else if(c==']')index++;
-      else if(c=='[')index--;
+      else if(c=='[' && index!=0)index--;
       if(index==-1)
          index=20;
       if(index==21)
