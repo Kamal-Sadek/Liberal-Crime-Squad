@@ -196,7 +196,7 @@ void passmonth(char &clearformess,char canseethings)
    {
       // Liberal essays add their power to the effect of sleepers
       libpower[v]+=background_liberal_influence[v];
-      background_liberal_influence[v]=0;
+      background_liberal_influence[v]=static_cast<short>(background_liberal_influence[v]*0.66);
 
       if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
       if(v==VIEW_LIBERALCRIMESQUAD)continue;
@@ -263,7 +263,7 @@ void passmonth(char &clearformess,char canseethings)
       addstr("LCS MONTHLY INTELLIGENCE REPORT");
 
       move(2,2);
-      addstr("ESTIMATED POLITICAL INFLUENCE");
+      addstr("ESTIMATED POLITICAL TRENDS");
       y=3;
       for(int i=0;i<VIEWNUM-5;i++)
       {
@@ -273,7 +273,7 @@ void passmonth(char &clearformess,char canseethings)
          addstr(str);
          move(y,20);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr("---------");
+         addstr("<------->");
 
          // Calculate location for pip (with a bit of randomness for imprecision!)
          int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1; 

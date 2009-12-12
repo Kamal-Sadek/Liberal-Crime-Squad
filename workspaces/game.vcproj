@@ -381,7 +381,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\help.cpp"
+				RelativePath="..\src\common\help.cpp"
 				>
 			</File>
 			<File

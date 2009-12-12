@@ -67,10 +67,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.01.00"
+#define PACKAGE_VERSION "4.01.1"
 #endif
 
-const int version=40100; 
+const int version=40101; 
 const int lowestloadversion=40100;
 const int lowestloadscoreversion=31203;
 
@@ -1813,6 +1813,8 @@ int randomissue(bool core_only=0);
 int choose_one(const int * weight_list, int number_of_options, int default_value);
 /* common - Checks if a site (typically safehouse) has a unique short name, and for business fronts, if the front has a unique shortname. */
 char duplicatelocation(locationst &loc);
+// Prompt to convert a new recruit into a sleeper
+void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
 
 
 /*

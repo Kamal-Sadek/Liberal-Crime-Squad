@@ -55,23 +55,18 @@ void fight_subdued(void)
    }
    chaseseq.friendcar.clear();
    int hostagefreed=0;
+   int stolen=0;
+   // Police assess stolen goods in inventory
+   for(int l=0;l<activesquad->loot.size();l++)
+   {
+      if(activesquad->loot[l]->type==ITEM_LOOT)
+         stolen++;
+   }
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
-      activesquad->squad[p]->squadid=-1;
-      activesquad->squad[p]->carid=-1;
-      activesquad->squad[p]->location=ps;
-      activesquad->squad[p]->weapon.type=WEAPON_NONE;
-      activesquad->squad[p]->weapon.ammo=0;
-      activesquad->squad[p]->activity.type=ACTIVITY_NONE;
-      if(activesquad->squad[p]->prisoner!=NULL)
-      {
-         if(activesquad->squad[p]->prisoner->squadid==-1)
-         {
-            hostagefreed++;
-         }
-         freehostage(*activesquad->squad[p],2);
-      }
+      activesquad->squad[p]->lawflag[LAWFLAG_THEFT]+=stolen;
+      capturecreature(*(activesquad->squad[p]));
       activesquad->squad[p]=NULL;
    }
    for(p=0;p<pool.size();p++)
@@ -1483,7 +1478,54 @@ void mode_site(void)
             locz=olocz;
 
             //ENEMIES SHOULD GET FREE SHOTS NOW
-            if(enemy&&sitealarm)enemyattack();
+            if(enemy&&sitealarm)
+            {
+               int e;
+               // Try to sneak past
+               for(e=0;e<ENCMAX;e++)
+               {
+                  if(encounter[e].exists &&
+                     encounter[e].alive  &&
+                     encounter[e].cantbluff == 2)
+                  {
+                     // You can't sneak past this person; they already know you're there
+                     break;
+                  }
+               }
+
+               // If you can sneak past all enemies
+               if(e==ENCMAX)
+               {
+                  for(e=0;e<ENCMAX;e++)
+                  {
+                     int difficulty = (1 + 3 * (encounter[e].type==CREATURE_GUARDDOG)) *
+                                       (sitecrime + encounter[e].attval(ATTRIBUTE_WISDOM) * 3 +
+                                       encounter[e].attval(ATTRIBUTE_INTELLIGENCE));
+                     for(int i=0;i<6;i++)
+                     {
+                        stealthpractice(i, difficulty);
+                     }
+                     if(difficulty > LCSrandom(21) + stealthskill())
+                     {
+                        break;
+                     }
+                  }
+               }
+
+               // If snuck past everyone
+               if(e==ENCMAX)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  clearmessagearea();
+                  move(16,1);
+                  addstr("The squad isn't seen!");
+                  getch();
+               }
+               else
+               {
+                  enemyattack();
+               }
+            }
             else if(enemy)disguisecheck();
 
             creatureadvance();
@@ -2345,6 +2387,12 @@ void mode_site(void)
                      }
                      break;
                   default:
+                     if(location[cursite]->type==SITE_RESIDENTIAL_APARTMENT||
+                        location[cursite]->type==SITE_RESIDENTIAL_TENEMENT ||
+                        location[cursite]->type==SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+                     {
+                        if(LCSrandom(5))break; // Rarely encounter someone in apartments
+                     }
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
                      addstr("There is someone up ahead.      ");

@@ -806,11 +806,12 @@ void special_courthouse_jury(void)
             int p=goodp[LCSrandom(goodp.size())];
 
             short aroll=LCSrandom(21)+
-                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-                                  activesquad->squad[p]->attval(ATTRIBUTE_HEART)+
-                                  activesquad->squad[p]->skillval(SKILL_PERSUASION)+
-                                  activesquad->squad[p]->skillval(SKILL_LAW)*2);
-            short troll=LCSrandom(21)+10;
+                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+1)+
+                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_HEART)+1)+
+                        LCSrandom(activesquad->squad[p]->skillval(SKILL_PERSUASION)+1)+
+                        LCSrandom(activesquad->squad[p]->skillval(SKILL_LAW)+1)+
+                        LCSrandom(activesquad->squad[p]->skillval(SKILL_LAW)+1);
+            short troll=20;
             activesquad->squad[p]->train(SKILL_PERSUASION,troll);
             activesquad->squad[p]->train(SKILL_LAW,troll);
 
@@ -854,7 +855,7 @@ void special_courthouse_jury(void)
                noticecheck(-1);
 
                //INSTANT JUICE BONUS
-               juiceparty(10);
+               addjuice(*(activesquad->squad[p]),20);
             }
             else
             {

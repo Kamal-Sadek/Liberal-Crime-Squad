@@ -113,52 +113,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(4,0);
          enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
-         move(6,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("In what capacity will ");
-         addstr(d.date[e]->name);
-         addstr(" best serve the Liberal cause?");
-         move(7,0);
-         addstr("1) Stay at ");
-         addstr(location[d.date[e]->worklocation]->name);
-         addstr(" as a ");
-         set_color(COLOR_CYAN,COLOR_BLACK,0);
-         addstr("sleeper agent");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(".");
-         move(8,0);
-         addstr("2) Come to ");
-         addstr(location[pool[p]->location]->name);
-         addstr(" as a ");
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         addstr("regular member");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(".");
-
-         
-         while(1)
-         {
-            char keystroke = getch();
-            if(keystroke == '1')
-            {
-               d.date[e]->flag |= CREATUREFLAG_SLEEPER;
-               liberalize(*d.date[e],false);
-               d.date[e]->location = d.date[e]->worklocation;
-               d.date[e]->base = d.date[e]->worklocation;
-               location[d.date[e]->worklocation]->interrogated=1;
-               location[d.date[e]->worklocation]->hidden=0;
-               d.date[e]->infiltration/=2;
-               break;
-            }
-            else if(keystroke == '2')
-            {
-               d.date[e]->location=pool[p]->location;
-               d.date[e]->base=pool[p]->base;
-               liberalize(*d.date[e],false);
-               d.date[e]->infiltration/=2;
-               break;
-            }
-         }
+         sleeperize_prompt(*d.date[e],*pool[p],y+2);
          
          pool.push_back(d.date[e]);
          stat_recruits++;
@@ -335,9 +290,16 @@ char completevacation(datest &d,int p,char &clearformess)
    addstr(pool[p]->name);
    addstr(" is back from vacation.");
 
-   short aroll=LCSrandom(51+pool[p]->attval(ATTRIBUTE_CHARISMA)*4+LCSrandom(pool[p]->skillval(SKILL_SEDUCTION)*4))+10;
-   short troll=LCSrandom(21+d.date[e]->attval(ATTRIBUTE_CHARISMA)*2+d.date[e]->attval(ATTRIBUTE_WISDOM)*4);
-   pool[p]->train(SKILL_PERSUASION,LCSrandom(14)+7);
+   short aroll=LCSrandom(51)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skillval(SKILL_SEDUCTION)*2;
+   short troll=LCSrandom(21+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM));
+   pool[p]->train(SKILL_SEDUCTION,LCSrandom(21)+10);
+   
+   pool[p]->train(SKILL_SCIENCE,
+      max(d.date[e]->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE),0));
+   pool[p]->train(SKILL_RELIGION,
+      max(d.date[e]->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION),0));
+   pool[p]->train(SKILL_BUSINESS,
+      max(d.date[e]->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
 
    if(d.date[e]->skillval(SKILL_BUSINESS))
    {
@@ -495,7 +457,7 @@ char completedate(datest &d,int p,char &clearformess)
          translategetch(c);
 
          short aroll=LCSrandom(21)+pool[p]->attval(ATTRIBUTE_CHARISMA)+pool[p]->skillval(SKILL_SEDUCTION)*2;
-         short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_WISDOM)*2;
+         short troll=LCSrandom(21)+d.date[e]->attval(ATTRIBUTE_CHARISMA)+d.date[e]->attval(ATTRIBUTE_WISDOM);
          if(d.date[e]->align==ALIGN_CONSERVATIVE)
             troll+=troll*(d.date[e]->juice/100);
 

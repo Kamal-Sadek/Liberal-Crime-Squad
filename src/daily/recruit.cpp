@@ -361,7 +361,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          if(r.eagerness()>=8)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            move(y+2,0);
+            move(y+=2,0);
             
             addstr(r.recruit->name);
             addstr(" accepts, and is eager to get started.");
@@ -372,52 +372,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             getch();
 
             erase();
-
-            move(6,0);
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr("In what capacity will ");
-            addstr(r.recruit->name);
-            addstr(" best serve the Liberal cause?");
-            move(7,0);
-            addstr("1) Stay at ");
-            addstr(location[r.recruit->worklocation]->name);
-            addstr(" as a ");
-            set_color(COLOR_CYAN,COLOR_BLACK,0);
-            addstr("sleeper agent");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr(".");
-            move(8,0);
-            addstr("2) Come to ");
-            addstr(location[pool[p]->location]->name);
-            addstr(" as a ");
-            set_color(COLOR_GREEN,COLOR_BLACK,0);
-            addstr("regular member");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr(".");
-
-            
-            while(1)
-            {
-               char keystroke = getch();
-               if(keystroke == '1')
-               {
-                  r.recruit->flag |= CREATUREFLAG_SLEEPER;
-                  r.recruit->location = r.recruit->worklocation;
-                  location[r.recruit->worklocation]->interrogated=1;
-                  location[r.recruit->worklocation]->hidden=0;
-                  r.recruit->base = r.recruit->worklocation;
-                  r.recruit->infiltration/=2;
-                  break;
-               }
-               else if(keystroke == '2')
-               {
-                  r.recruit->location=pool[p]->location;
-                  r.recruit->base=pool[p]->base;
-                  liberalize(*r.recruit,false);
-                  r.recruit->infiltration/=2;
-                  break;
-               }
-            }
+            sleeperize_prompt(*r.recruit,*pool[p],6);
 
             r.recruit->hireid=pool[p]->id;
 

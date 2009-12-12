@@ -256,8 +256,15 @@ void disguisecheck(void)
             else stealthpractice(i, spotchance);
          }
 
-         if(encounter[n].type==CREATURE_GUARDDOG)spotchance*=3; // Sniff sniff Grrrrowl
-
+         if(encounter[n].type==CREATURE_GUARDDOG) // Sniff sniff Grrrrowl
+         {                                        // The guard dog should SCARE thieves
+            spotchance=30;    // Higher ability to spot you than most
+            if(!LCSrandom(4)) // Always a chance of detecting you, even with insane skills
+            {
+               noticed=1;
+               break;
+            }
+         }
          if(sitealarmtimer ?
             spotchance > (int)LCSrandom(21)+disguise :
             spotchance+sitecrime > (int)LCSrandom(21)+disguise)
@@ -265,7 +272,6 @@ void disguisecheck(void)
             noticed=1;
             break;
          }
-
       }while(noticer.size()>0);
 
       if(!noticed)return;
@@ -413,28 +419,28 @@ int disguiseskill(void)
 /* practices p's stealth skill */
 void disguisepractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
 {
-        if(activesquad->squad[p]!=NULL)
-        {
-            if(!activesquad->squad[p]->alive)return;
+   if(activesquad->squad[p]!=NULL)
+   {
+      if(!activesquad->squad[p]->alive)return;
 
-            if(activesquad->squad[p]->prisoner!=NULL)return;
+      if(activesquad->squad[p]->prisoner!=NULL)return;
                 
-                //spread is how overwhelmed your disguise ability is by the Conservative
-                int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
-                         activesquad->squad[p]->skillval(SKILL_DISGUISE)*3);
+      //spread is how overwhelmed your disguise ability is by the Conservative
+      int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
+      activesquad->squad[p]->skillval(SKILL_DISGUISE)*3);
 
       if(hasdisguise(*activesquad->squad[p],sitetype))
       {
          if(spread>10)
          {
-                 activesquad->squad[p]->train(SKILL_DISGUISE,10);  //getting crushed isn't a great way to learn
+            activesquad->squad[p]->train(SKILL_DISGUISE,10);  //getting crushed isn't a great way to learn
          }
          else if(spread>0)
          {
-                        activesquad->squad[p]->train(SKILL_DISGUISE,spread);
-              }
+            activesquad->squad[p]->train(SKILL_DISGUISE,spread);
+         }
       }
-        }
+   }
 }
 
 
@@ -468,24 +474,24 @@ int stealthskill(void)
 /* practices p's stealth skill */
 void stealthpractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
 {
-        if(activesquad->squad[p]!=NULL)
-        {
-            if(!activesquad->squad[p]->alive)return;
+   if(activesquad->squad[p]!=NULL)
+   {
+      if(!activesquad->squad[p]->alive)return;
 
-            if(activesquad->squad[p]->prisoner!=NULL)return;
-            
-                //spread is how overwhelmed your stealth ability is by the Conservative
-                int spread = diff-(activesquad->squad[p]->skillval(SKILL_STEALTH)*3);
-                        
-                if(spread>10)
-                {
-                        activesquad->squad[p]->train(SKILL_STEALTH,10);    //getting crushed isn't a great way to learn
-                }
-                else if (spread>0)
-                {
-                        activesquad->squad[p]->train(SKILL_STEALTH,spread);
-                }
-        }
+      if(activesquad->squad[p]->prisoner!=NULL)return;
+      
+      //spread is how overwhelmed your stealth ability is by the Conservative
+      int spread = diff-(activesquad->squad[p]->skillval(SKILL_STEALTH)*3);
+      
+      if(spread>10)
+      {
+         activesquad->squad[p]->train(SKILL_STEALTH,10);    //getting crushed isn't a great way to learn
+      }
+      else if (spread>0)
+      {
+         activesquad->squad[p]->train(SKILL_STEALTH,spread);
+      }
+   }
 }
 
 /* checks if a creature's weapon is suspicious or illegal */
@@ -733,7 +739,7 @@ char hasdisguise(Creature &cr,short type)
    }
    else
    {
-      if((cr.armor.type!=ARMOR_NONE||cr.animalgloss!=ANIMALGLOSS_ANIMAL)
+      if((cr.armor.type!=ARMOR_NONE||cr.animalgloss==ANIMALGLOSS_ANIMAL)
          &&cr.armor.type!=ARMOR_HEAVYARMOR)uniformed=1;
 
       switch(type)

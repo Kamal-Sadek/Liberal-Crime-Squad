@@ -42,134 +42,135 @@
 // changes that will change gameplay.
 void help(const char* string)
 {
-        erase();
+   erase();
 }
 
 // Generates help page on activities.
 // Just supply Activity type.
 void HelpActivities(int activityType)
 {
-        if(activityType == ACTIVITY_NONE)
-        {
-                return;
-        }
-
-        erase();
-        set_color(COLOR_WHITE,COLOR_BLACK,0);
-        move(0,0);
-        addstr("Liberal help on: ");
-
-switch(activityType)
+   if(activityType == ACTIVITY_NONE)
    {
-        case ACTIVITY_COMMUNITYSERVICE:
-                addstr("===Community Service===");
-                move(2,1);
-                addstr("Has a minor effect on public opinion, increases Juice and has the chance");
-                move(3,1);
-                addstr("of reducing the activists Heat.");
-        break;
-        case ACTIVITY_TROUBLE:
-                addstr("===Liberal Disobedience===");
-                move(2,1);
-                addstr("Liberal Disobedience is an illegal activity and a form of Liberal Activism"); 
-                move(3,1);
-                addstr("which has a positive effect on Public Opinion. It has very short prison");        
-                move(4,1);
-                addstr("sentences if you get convicted. It also increases juice.");        
+      return;
+   }
 
-                move(6,1);
-                addstr("Persuasion, Charisma, Agility, Heart, Strength, Intelligence will increase the");        
-                move(7,1);
-                addstr("effect you have on Public Opinion.");
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(0,0);
+   addstr("Liberal help on: ");
 
-                move(9,1);
-                addstr("There is a chance that someone will phone the police. Agility, intelligence,");
-                move(10,1);
-                addstr("disguise and street sense will shake them off the scent. There is also a");
-                move(11,1);
-                addstr("chance that an angry mob will beat the crap out of you.");
-        break;
-        case ACTIVITY_POLLS:
-                addstr("===Search Opinion Polls===");
-                move(2,1);
-                addstr("Search Opinion Polls is a legal activity that lets you see what people think");
-                move(3,1);
-                addstr("about various Issues that are part of Public Opinion.");
+   switch(activityType)
+   {
+   case ACTIVITY_COMMUNITYSERVICE:
+         addstr("===Community Service===");
+         move(2,1);
+         addstr("Has a minor effect on public opinion, increases Juice and has the chance");
+         move(3,1);
+         addstr("of reducing the activists Heat.");
+         break;
+   case ACTIVITY_TROUBLE:
+      addstr("===Liberal Disobedience===");
+      move(2,1);
+      addstr("Liberal Disobedience is an illegal activity and a form of Liberal Activism"); 
+      move(3,1);
+      addstr("which has a positive effect on Public Opinion. It has very short prison");        
+      move(4,1);
+      addstr("sentences if you get convicted. It also increases juice.");        
 
-                move(5,1);
-                addstr("Skill in computers and intelligence will give better results.");
-        break;
-        case ACTIVITY_DOS_ATTACKS:
-                addstr("===Harassing Websites===");
-                move(2,1);
-                addstr("Harassing Websites is an illegal activity and a form of Liberal Activism.");
-                move(3,1);
-                addstr("It is a weaker version of Hacking. Resulting in much shorter prison");
-                move(4,1);
-                addstr("sentences, and is much less likely to provoke a raid by the Police or");
-                move(5,1);
-                addstr("other law enforcement. Harassing websites only requires a");
-                move(6,1);
-                addstr("Computers skill of 1.");
+      move(6,1);
+      addstr("Persuasion, Charisma, Agility, Heart, Strength, Intelligence will increase the");        
+      move(7,1);
+      addstr("effect you have on Public Opinion.");
 
-                move(7,1);
-                addstr("Utilizes only the Computers skill.");
-        break;
-        case ACTIVITY_HACKING:
-                addstr("===Hacking===");
-                move(2,1);
-                addstr("Hacking is a highly illegal form of Liberal Activism, which has a good");
-                move(3,1);
-                addstr("effect on public opinion. With it, comes very long prison sentences.");
+      move(9,1);
+      addstr("There is a chance that someone will phone the police. Agility, intelligence,");
+      move(10,1);
+      addstr("disguise and street sense will shake them off the scent. There is also a");
+      move(11,1);
+      addstr("chance that an angry mob will beat the crap out of you.");
+      break;
+   case ACTIVITY_POLLS:
+      addstr("===Search Opinion Polls===");
+      move(2,1);
+      addstr("Search Opinion Polls is a legal activity that lets you see what people think");
+      move(3,1);
+      addstr("about various Issues that are part of Public Opinion.");
 
-                move(5,1);
-                addstr("Generally you need a lot of the Computer skill and Intelligence before"); 
-                move(6,1);
-                addstr("you can make a successful hacking attempt. If you are successful there");
-                move(7,1);
-                addstr("is a chance depending on the Computer skill and Intelligence of evading");
-                move(8,1);
-                addstr("being criminalized. If you are criminalized, heat on the activist");
-                move(9,1);
-                addstr("increases. Additionally if successful it will increase juice.");
+      move(5,1);
+      addstr("Skill in computers and intelligence will give better results.");
+      break;
+   case ACTIVITY_DOS_ATTACKS:
+      addstr("===Harassing Websites===");
+      move(2,1);
+      addstr("Harassing Websites is an illegal activity and a form of Liberal Activism.");
+      move(3,1);
+      addstr("It is a weaker version of Hacking. Resulting in much shorter prison");
+      move(4,1);
+      addstr("sentences, and is much less likely to provoke a raid by the Police or");
+      move(5,1);
+      addstr("other law enforcement. Harassing websites only requires a");
+      move(6,1);
+      addstr("Computers skill of 1.");
 
-                move(11,1);
-                addstr("Occasionally instead of effecting public opinion your hacker");
-                move(12,1);
-                addstr("may find files that can be published in a special edition of");
-                move(13,1);
-                addstr("the Liberal Guardian.");
-        break;
-        case ACTIVITY_GRAFFITI:
-                addstr("===Graffiti==");
-                move(2,1);
-                addstr("Spraying political graffiti is a misdemeanor, carrying with it");
-                move(3,1);
-                addstr("relatively short jail sentences. This has a positive effect on");
-                move(4,1);
-                addstr("public opinion.");
+      move(7,1);
+      addstr("Utilizes only the Computers skill.");
+      break;
+   case ACTIVITY_HACKING:
+      addstr("===Hacking===");
+      move(2,1);
+      addstr("Hacking is a highly illegal form of Liberal Activism, which has a good");
+      move(3,1);
+      addstr("effect on public opinion. With it, comes very long prison sentences.");
 
-                move(5,1);
-                addstr("If you do not have a can of spray paint, your character will spend");
-                move(6,1);
-                addstr("a day purchasing one.");
+      move(5,1);
+      addstr("Generally you need a lot of the Computer skill and Intelligence before"); 
+      move(6,1);
+      addstr("you can make a successful hacking attempt. If you are successful there");
+      move(7,1);
+      addstr("is a chance depending on the Computer skill and Intelligence of evading");
+      move(8,1);
+      addstr("being criminalized. If you are criminalized, heat on the activist");
+      move(9,1);
+      addstr("increases. Additionally if successful it will increase juice.");
 
-                move(8,1);
-                addstr("A high art skill and heart will enhance the effect this has");
-                move(9,1);
-                addstr("on public opinion.");
-        break;
-        default:
-                addstr("===THE GREAT UNKNOWN===");
-		move(2,1);
-		addstr("There is no help on this topic yet, as the help system is quite new.");
-                move(3,1);
-                addstr("However, if you want to help us, you could write one, and send it to us!");
-        break;
+      move(11,1);
+      addstr("Occasionally instead of effecting public opinion your hacker");
+      move(12,1);
+      addstr("may find files that can be published in a special edition of");
+      move(13,1);
+      addstr("the Liberal Guardian.");
+      break;
+   case ACTIVITY_GRAFFITI:
+      addstr("===Graffiti==");
+      move(2,1);
+      addstr("Spraying political graffiti is a misdemeanor, carrying with it");
+      move(3,1);
+      addstr("relatively short jail sentences. This has a positive effect on");
+      move(4,1);
+      addstr("public opinion.");
+
+      move(5,1);
+      addstr("If you do not have a can of spray paint, your character will spend");
+      move(6,1);
+      addstr("a day purchasing one.");
+
+      move(8,1);
+      addstr("A high art skill and heart will enhance the effect this has");
+      move(9,1);
+      addstr("on public opinion.");
+      break;
+   default:
+      addstr("===THE GREAT UNKNOWN===");
+      move(2,1);
+      addstr("There is no help on this topic yet, as the help system is quite new.");
+      move(3,1);
+      addstr("However, if you want to help us, you could write one, and send it to us!");
+      break;
+   }
 
 
-        set_color(COLOR_WHITE,COLOR_BLACK,0);
-        move(20,5);
-        addstr("Press any key - Return to previous screen");
-        getch();
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(20,5);
+   addstr("Press any key - Return to previous screen");
+   getch();
 }
