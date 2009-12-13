@@ -2284,6 +2284,12 @@ void specialattack(Creature &a, Creature &t, char &actual)
          addstr(" is immune to the attack!");
       }
    }
+   else if(a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED)
+   {
+      move(17,1);
+      addstr(t.name);
+      addstr(" is not subject to Conservative thinking!");
+   }
    else if(attack>resist)
    {
       t.stunned+=(attack-resist)/4;
@@ -2302,6 +2308,12 @@ void specialattack(Creature &a, Creature &t, char &actual)
             addstr(t.name);
             addstr(" becomes Wiser!");
             t.att[ATTRIBUTE_WISDOM]++;
+         }
+         else if(t.align==ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
+         {
+            move(17,1);
+            addstr(t.name);
+            addstr(" can't bear to leave!");
          }
          else
          {

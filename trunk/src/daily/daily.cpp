@@ -716,7 +716,7 @@ void advanceday(char &clearformess,char canseethings)
    for(p=0;p<pool.size();p++)
    {
       if(disbanding)break;
-
+      if(!(pool[p]->alive))continue;
       if(clinictime(*pool[p]))
       {
          int damage=0; // Amount health degrades
