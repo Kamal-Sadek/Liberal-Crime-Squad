@@ -624,402 +624,169 @@ void printnews(short l,short newspaper)
 void fundreport(char &clearformess)
 {
    if(disbanding)return;
+   
+   clearformess=1;
+   erase();
 
-   //MUST HAVE CATEGORIES FOR ALL FUND CHANGES
-   if(moneygained_donate>0||
-      moneygained_brownies>0||
-      moneygained_embezzlement>0||
-      moneylost_trouble>0||
-      moneylost_manufacture>0||
-      moneylost_rent>0||
-      moneylost_legal>0||
-      moneygained_goods>0||
-      moneygained_ccfraud>0||
-      moneygained_hustling>0||
-      moneygained_thievery>0||
-      moneylost_goods>0||
-      moneylost_food>0||
-      moneylost_training>0||
-      moneylost_compound>0||
-      moneylost_hostage>0)
+   int y=2;
+   int totalmoney=0;
+   bool showledger = false;
+   char entryname[80];
+   char num[20];
+
+   for(int i=0;i<INCOMETYPENUM;i++)
    {
-      clearformess=1;
-      erase();
+      if(ledger.income[i] != 0)
+      {
+         showledger = true;
+         move(y,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+         
+         set_color(COLOR_GREEN,COLOR_BLACK,0);
+         itoa(ledger.income[i],num,10);
+         addstr("$");
+         addstr(num);
 
+         switch(i)
+         {
+         case INCOME_DONATIONS:
+            strcpy(entryname,"Donations");
+            break;
+         case INCOME_BROWNIES:
+            strcpy(entryname,"Brownies");
+            break;
+         case INCOME_PAWN:
+            strcpy(entryname,"Pawning Goods");
+            break;
+         case INCOME_SKETCHES:
+            strcpy(entryname,"Drawing Sales");
+            break;
+         case INCOME_TSHIRTS:
+            strcpy(entryname,"T-Shirt Sales");
+            break;
+         case INCOME_BUSKING:
+            strcpy(entryname,"Street Music");
+            break;
+         case INCOME_CARS:
+            strcpy(entryname,"Car Sales");
+            break;
+         case INCOME_CCFRAUD:
+            strcpy(entryname,"Credit Card Fraud");
+            break;
+         case INCOME_PROSTITUTION:
+            strcpy(entryname,"Prostitution");
+            break;
+         case INCOME_HUSTLING:
+            strcpy(entryname,"Hustling");
+            break;
+         case INCOME_EXTORTION:
+            strcpy(entryname,"Extortion");
+            break;
+         case INCOME_THIEVERY:
+            strcpy(entryname,"Thievery");
+            break;
+         case INCOME_EMBEZZLEMENT:
+            strcpy(entryname,"Embezzlement");
+            break;
+         default:
+            strcpy(entryname,"Other Income");
+            break;
+         }
+         move(y,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(entryname);
+         y++;
+
+         totalmoney+=ledger.income[i];
+         ledger.income[i]=0;
+      }
+   }
+
+   for(int i=0;i<EXPENSETYPENUM;i++)
+   {
+      if(ledger.expense[i] != 0)
+      {
+         showledger = true;
+         move(y,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+         
+         set_color(COLOR_RED,COLOR_BLACK,0);
+         itoa(ledger.expense[i],num,10);
+         addstr("$");
+         addstr(num);
+
+         switch(i)
+         {
+         case EXPENSE_SHOPPING:
+            strcpy(entryname,"Purchasing Goods");
+            break;
+         case EXPENSE_TROUBLEMAKING:
+            strcpy(entryname,"Activism");
+            break;
+         case EXPENSE_RENT:
+            strcpy(entryname,"Rent");
+            break;
+         case EXPENSE_TRAINING:
+            strcpy(entryname,"Training");
+            break;
+         case EXPENSE_MANUFACTURE:
+            strcpy(entryname,"Manufacturing");
+            break;
+         case EXPENSE_LEGAL:
+            strcpy(entryname,"Legal Fees");
+            break;
+         case EXPENSE_FOOD:
+            strcpy(entryname,"Groceries");
+            break;
+         case EXPENSE_RECRUITMENT:
+            strcpy(entryname,"Recruitment");
+            break;
+         case EXPENSE_DATING:
+            strcpy(entryname,"Dating");
+            break;
+         case EXPENSE_COMPOUND:
+            strcpy(entryname,"Safehouse Investments");
+            break;
+         case EXPENSE_HOSTAGE:
+            strcpy(entryname,"Hostage Tending");
+            break;
+         case EXPENSE_CONFISCATED:
+            strcpy(entryname,"Confiscated");
+            break;
+         case EXPENSE_TSHIRTS:
+            strcpy(entryname,"T-Shirt Materials");
+            break;
+         case EXPENSE_SKETCHES:
+            strcpy(entryname,"Drawing Materials");
+            break;
+         case EXPENSE_CARS:
+            strcpy(entryname,"New Cars");
+            break;
+         default:
+            strcpy(entryname,"Other Expenses");
+            break;
+         }
+         move(y,0);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(entryname);
+         y++;
+
+         totalmoney-=ledger.expense[i];
+         ledger.expense[i]=0;
+      }
+   }
+
+   if(showledger == true)
+   {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       move(0,0);
       addstr("Liberal Crime Squad:   Monthly Action Report");
 
-      int y=2;
-
-      long totalmoney=0;
-
-      //DONATIONS
-      if(moneygained_donate>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Donations . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_donate,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_donate;
-      }
-
-      //BROWNIES
-      if(moneygained_brownies>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Brownies. . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_brownies,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_brownies;
-      }
-
-      //CCFRAUD
-      if(moneygained_ccfraud>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Credit Card Fraud . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_ccfraud,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_ccfraud;
-      }
-
-      //HUSTLING
-      if(moneygained_hustling>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Hustling. . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_hustling,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_hustling;
-      }
-
-      //HUSTLING
-      if(moneygained_extortion>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Extortion . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_extortion,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_extortion;
-      }
-
-      //THIEVERY
-      if(moneygained_thievery>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Thievery. . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_thievery,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_thievery;
-      }
-
-      //SALE
-      if(moneygained_goods>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Sale of Goods . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_goods,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_goods;
-      }
-
-      //EMBEZZLEMENT
-      if(moneygained_embezzlement>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Embezzlement. . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneygained_embezzlement,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney+=moneygained_embezzlement;
-      }
-
-      //PURCHASE
-      if(moneylost_goods>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Purchase of Goods . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_goods,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_goods;
-      }
-
-      //TROUBLE
-      if(moneylost_trouble>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Liberal Disobedience. . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_trouble,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_trouble;
-      }
-
-      //RENT
-      if(moneylost_rent>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Rent. . . . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_rent,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_rent;
-      }
-
-      //Training
-      if(moneylost_training>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Training. . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_training,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_training;
-      }
-
-      //MANUFACTURE
-      if(moneylost_manufacture>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Manufacture . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_manufacture,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_manufacture;
-      }
-
-      //LEGAL
-      if(moneylost_legal>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Legal Fees. . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_legal,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_legal;
-      }
-
-      //Food
-      if(moneylost_food>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Groceries and Maintenance . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_food,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_food;
-      }
-
-      //Dating
-      if(moneylost_dating>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Dating. . . . . . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_dating,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_dating;
-      }
-
-      //COMPOUND
-      if(moneylost_compound>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Infrastructure. . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_compound,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_compound;
-      }
-
-      //HOSTAGES
-      if(moneylost_hostage>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Hostage Tending . . . . . . . . . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_hostage,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_hostage;
-      }
-
-      //CONFISCATED
-      if(moneylost_confiscated>0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addstr("Confiscated by Law Enforcement. . . . . . . . . . . . . . .");
-
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         move(y,60);
-         char num[20];
-         itoa(moneylost_confiscated,num,10);
-         addstr("$");
-         addstr(num);
-
-         y++;
-
-         totalmoney-=moneylost_confiscated;
-      }
-
-      //TOTAL
-      y++;
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(y,0);
+      move(++y,0);
       addstr("Total:");
 
       if(totalmoney>0)set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -1038,26 +805,6 @@ void fundreport(char &clearformess)
 
       refresh();
       getch();
-
-      moneygained_donate=0;
-      moneygained_brownies=0;
-      moneygained_goods=0;
-      moneygained_ccfraud=0;
-      moneygained_hustling=0;
-      moneygained_extortion=0;
-      moneygained_thievery=0;
-      moneygained_embezzlement=0;
-      moneylost_goods=0;
-      moneylost_trouble=0;
-      moneylost_manufacture=0;
-      moneylost_rent=0;
-      moneylost_training=0;
-      moneylost_legal=0;
-      moneylost_food=0;
-      moneylost_dating=0;
-      moneylost_compound=0;
-      moneylost_hostage=0;
-      moneylost_confiscated=0;
    }
 }
 

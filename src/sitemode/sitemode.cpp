@@ -65,7 +65,7 @@ void fight_subdued(void)
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
-      activesquad->squad[p]->lawflag[LAWFLAG_THEFT]+=stolen;
+      activesquad->squad[p]->crimes_suspected[LAWFLAG_THEFT]+=stolen;
       capturecreature(*(activesquad->squad[p]));
       activesquad->squad[p]=NULL;
    }

@@ -1688,7 +1688,7 @@ void printfunds(int y, int offsetx, char* prefix)
                 strncpy(prefixbuffer,prefix,50);
         }
 
-        sprintf(moneystr,"$%d",funds);
+        sprintf(moneystr,"$%d",ledger.get_funds());
 
         //Save screen coordinates for later.
         int begy,begx;

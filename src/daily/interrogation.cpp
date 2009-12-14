@@ -420,11 +420,11 @@ void tendhostage(Creature *cr,char &clearformess)
          if(c==10)break;
       }
 
-      if(techniques[TECHNIQUE_PROPS] && funds>=100)
-      { funds-=100; moneylost_hostage+=100; }
+      if(techniques[TECHNIQUE_PROPS] && ledger.get_funds()>=100)
+      { ledger.subtract_funds(100,EXPENSE_HOSTAGE); }
       else { techniques[TECHNIQUE_PROPS] = 0; }
-      if(techniques[TECHNIQUE_DRUGS] && funds>=50)
-      { funds-=50; moneylost_hostage+=50; }
+      if(techniques[TECHNIQUE_DRUGS] && ledger.get_funds()>=50)
+      { ledger.subtract_funds(50,EXPENSE_HOSTAGE); }
       else { techniques[TECHNIQUE_DRUGS] = 0; }
 
       //remember interrogation choices

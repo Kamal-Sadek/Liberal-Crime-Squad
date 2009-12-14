@@ -992,11 +992,9 @@ void advanceday(char &clearformess,char canseethings)
          if(location[l]->renting>0&&
             !location[l]->newrental)
          {
-            if(signed(funds)>=location[l]->renting)
+            if(ledger.get_funds()>=location[l]->renting)
             {
-               funds-=location[l]->renting;
-               moneylost_rent+=location[l]->renting;
-               stat_spent+=location[l]->renting;
+               ledger.subtract_funds(location[l]->renting,EXPENSE_RENT);
             }
             //EVICTED!!!!!!!!!
             else

@@ -428,7 +428,7 @@ char completedate(datest &d,int p,char &clearformess)
       addstr(pool[p]->name);
       addstr(" approach the situation?");
 
-      if(funds>=100&&!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(ledger.get_funds()>=100&&!pool[p]->clinic)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(11,0);
       addstr("A - Spend a hundred bucks tonight to get the ball rolling.");
@@ -462,11 +462,9 @@ char completedate(datest &d,int p,char &clearformess)
             troll+=troll*(d.date[e]->juice/100);
 
          char test=0;
-         if(c=='a'&&funds>=100&&!pool[p]->clinic)
+         if(c=='a'&&ledger.get_funds()>=100&&!pool[p]->clinic)
          {
-            funds-=100;
-            stat_spent+=100;
-            moneylost_dating+=100;
+            ledger.subtract_funds(100,EXPENSE_DATING);
             aroll+=LCSrandom(10);
             test=1;
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(8)+3);
