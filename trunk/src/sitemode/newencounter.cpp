@@ -1107,7 +1107,26 @@ char addsiegeencounter(char type)
                   encounter[e].align=ALIGN_CONSERVATIVE;
                   break;
                default:
-                  if(law[LAW_DEATHPENALTY]==-2&&
+                  if(location[cursite]->renting==RENTING_CCS)
+                  {
+                     if(!LCSrandom(12))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_ARCHCONSERVATIVE);
+                     }
+                     else if(!LCSrandom(11))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_MOLOTOV);
+                     }
+                     else if(!LCSrandom(10))
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_SNIPER);
+                     }
+                     else
+                     {
+                        makecreature(encounter[e],CREATURE_CCS_VIGILANTE);
+                     }
+                  }
+                  else if(law[LAW_DEATHPENALTY]==-2&&
                      law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;

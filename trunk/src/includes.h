@@ -38,7 +38,7 @@
 //#define SHOWWAIT
 
 // Show die rolls, 100% accurate poll numbers
-#define SHOWMECHANICS
+//#define SHOWMECHANICS
 
 // Make the year 2100
 //#define THEFUTURE
