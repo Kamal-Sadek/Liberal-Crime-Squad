@@ -133,12 +133,6 @@ void makecreature(Creature &cr,short type)
             cr.weapon.ammo=15;
             cr.clip[CLIP_SMG]=3;
          }
-         else if(law[LAW_GUNCONTROL]==-1)
-         {
-            cr.weapon.type=WEAPON_REVOLVER_44;
-            cr.weapon.ammo=6;
-            cr.clip[CLIP_44]=3;
-         }
          else if(law[LAW_GUNCONTROL]!=2)
          {
             cr.weapon.type=WEAPON_REVOLVER_38;
