@@ -418,6 +418,26 @@ void criminalizepool(short crime,long exclude,short loc)
 /* common - applies a crime to a person */
 void criminalize(Creature &cr,short crime)
 {
+   if(mode==GAMEMODE_SITE)
+   {
+      if(location[cursite]->siege.siege)
+      {
+         // Do not criminalize the LCS for self-defense against
+         // extrajudicial raids
+         if(location[cursite]->siege.siegetype!=SIEGE_POLICE)
+            return;
+      }
+      else if(location[cursite]->renting==RENTING_CCS)
+      {
+         // Do not criminalize the LCS for crimes against the CCS
+         return;
+      }
+      else if(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
+      {
+         // Do not criminalize the LCS for crimes against the gangs
+         return;
+      }
+   }
    cr.crimes_suspected[crime]++;
    cr.heat+=lawflagheat(crime);
 }
