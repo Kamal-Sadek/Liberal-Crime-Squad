@@ -43,6 +43,7 @@ unsigned char bigletters[27][5][7][4];
 unsigned char newstops[5][80][5][4];
 unsigned char newspic[20][78][18][4];
 
+void translategetch(int &c);
 
 int translateGraphicsChar(int c)
 {
@@ -89,6 +90,43 @@ void set_color(short f,short b,char bright,char blink=0)
    {
       attrset(COLOR_PAIR(f*8+b));
    }
+}
+
+//IN CASE FUNKY ARROW KEYS ARE SENT IN, TRANSLATE THEM BACK
+void translategetch(int &c)
+{
+   //if(c==-63)c='7';
+   //if(c==-62)c='8';
+   //if(c==-61)c='9';
+   //if(c==-60)c='4';
+   //if(c==-59)c='5';
+   //if(c==-58)c='6';
+   //if(c==-57)c='1';
+   //if(c==-56)c='2';
+   //if(c==-55)c='3';
+
+   if(c==-6)c='0';
+   if(c==-50)c='.';
+   if(c==-53)c=10;
+   if(c==-47)c='+';
+   if(c==-48)c='-';
+   if(c==-49)c='*';
+   if(c==-54)c='/';
+
+   /*
+   if(c==2)c='2';
+   if(c==3)c='8';
+   if(c==4)c='4';
+   if(c==5)c='6';
+   */
+
+   //if(c>='A'&&c<='Z'){c-='A';c+='a';}
+
+   /* Support Cursor Keys...*/
+   //if(c==KEY_LEFT)c='a';
+   //if(c==KEY_RIGHT)c='d';
+   //if(c==KEY_UP)c='w';
+   //if(c==KEY_DOWN)c='x';
 }
 
 void displaycenterednewsfont(char *str,int y)
@@ -240,6 +278,61 @@ void loadgraphics(void)
    }
 }
 
+void set_tile(unsigned char &c)
+{
+   clear();
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   move(1,2);
+   addstr("Type a letter, number, or symbol to use that tile.");
+   move(2,2);
+   addstr("OR, browse the special symbols below and press enter to select one.");
+
+   for(unsigned char i=176;i<224;i++)
+   {
+      move(5+2*((i-176)/16),6+2*((i-176)%16));
+      addch(i);
+   }
+
+   static unsigned char i=176;
+   int input;
+   while(1)
+   {
+      move(5+2*((i-176)/16),6+2*((i-176)%16));
+      refresh();
+      input = getch();
+      translategetch(input);
+      if((input<='Z' && input>='A') || (input<='z' && input>='a') || (input<='9' && input>='0'))
+      {
+         c=input;
+         return;
+      }
+      else if(input == KEY_UP)
+      {
+         i-=16;
+         if(i<176)i+=48;
+      }
+      else if(input == KEY_DOWN)
+      {
+         i+=16;
+         if(i>223)i-=48;
+      }
+      else if(input == KEY_LEFT)
+      {
+         i--;
+         if(i==175)i=223;
+      }
+      else if(input == KEY_RIGHT)
+      {
+         i++;
+         if(i==224)i=176;
+      }
+      else if(input==10)
+      {
+         c=i;
+         return;
+      }
+   }
+}
 
 int main(/*int nargs, char *args[]*/)
 {
@@ -268,28 +361,56 @@ int main(/*int nargs, char *args[]*/)
    raw_output(TRUE);
    loadgraphics();
 
-   char c=0;
-   char index=0;
+   int c=0;
+   int index=0;
+   int x=0;
+   int y=0;
+   short frontcolor=COLOR_WHITE;
+   short backcolor=COLOR_BLACK;
+   char brightness=0;
+   unsigned char draw_character='x';
    while(1)
    {
       // Render
       clear();
       move(0,0);
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      addstr("Press ENTER to exit, or press [ or ] to browse pictures.");
+      addstr("Press X to exit, or press [ or ] to browse pictures.");
       move(1,0);
       addstr("Currently displaying Liberal picture ");
       addch('0'+index);
       displaynewspicture(index,2);
+      move(16,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Currently drawing with: ");
+      set_color(frontcolor,backcolor,brightness);
+      addch(draw_character);
+      move(17,0);
+      addstr("To draw, press ENTER. (Not yet implemented.)");
+      move(18,0);
+      addstr("To change tile, press T.");
+      move(19,0);
+      addstr("To change foreground color, press F. (Not yet implemented.)");
+      move(20,0);
+      addstr("To change background color, press B. (Not yet implemented.)");
+      move(2+y,1+x);
       refresh();
       
       // Read input
-      while(c!=10 && c!='[' && c!=']')
-         c=getch();
+      c=getch();
+      translategetch(c);
       // Act on input
-      if(c==10)/*exit(0);*/return 0;
-      else if(c==']')index++;
-      else if(c=='[' && index!=0)index--;
+      switch(c)
+      {
+      case 'x':return 0;
+      case ']':index++;break;
+      case '[':index--;break; // Allow dropping to index -1
+      case KEY_LEFT:if(x>0)x--;break;
+      case KEY_RIGHT:if(x<77)x++;break;
+      case KEY_UP:if(y>0)y--;break;
+      case KEY_DOWN:if(y<11)y++;break;
+      case 't':set_tile(draw_character);break;
+      }
       if(index==-1)
          index=20;
       if(index==21)
