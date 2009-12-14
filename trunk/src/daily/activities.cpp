@@ -255,7 +255,7 @@ void makearmor(Creature &cr,char &clearformess)
    int hcost=(armor_makeprice(at)>>1)+1;
    int dif=armor_makedifficulty(at,&cr);
 
-   if(funds<hcost)
+   if(ledger.get_funds()<hcost)
    {
       if(clearformess)erase();
       else
@@ -314,7 +314,7 @@ void makearmor(Creature &cr,char &clearformess)
          }
       }
 
-      if(!foundcloth&&funds<cost)
+      if(!foundcloth&&ledger.get_funds()<cost)
       {
          if(clearformess)erase();
          else
@@ -334,15 +334,11 @@ void makearmor(Creature &cr,char &clearformess)
       {
          if(foundcloth)
          {
-            funds-=hcost;
-            stat_spent+=hcost;
-            moneylost_manufacture+=hcost;
+            ledger.subtract_funds(hcost,EXPENSE_MANUFACTURE);
          }
          else
          {
-            funds-=cost;
-            stat_spent+=cost;
-            moneylost_manufacture+=cost;
+            ledger.subtract_funds(cost,EXPENSE_MANUFACTURE);
          }
 
          cr.train(SKILL_TAILORING,dif*2+1);
@@ -1016,14 +1012,14 @@ void funds_and_trouble(char &clearformess)
                               solicit[s]->skillval(SKILL_BUSINESS)+
                               solicit[s]->attval(ATTRIBUTE_CHARISMA)+
                               solicit[s]->attval(ATTRIBUTE_HEART))*
+                              public_interest[VIEW_LIBERALCRIMESQUAD]*
                               attitude[VIEW_LIBERALCRIMESQUADPOS]*
                               (attitude[VIEW_LIBERALCRIMESQUAD]+5)*
-                              (solicit[s]->armor.professionalism()))/20000+5);
+                              (solicit[s]->armor.professionalism()))/3000000+5);
          }
 
-         funds+=money;
-         stat_funds+=money;
-         moneygained_donate+=money;
+         
+         ledger.add_funds(money,INCOME_DONATIONS);
          solicit[s]->train(SKILL_PERSUASION,max(7-solicit[s]->skill[SKILL_PERSUASION],2));
          solicit[s]->train(SKILL_BUSINESS,max(3-solicit[s]->skill[SKILL_BUSINESS],1));
       }
@@ -1042,7 +1038,7 @@ void funds_and_trouble(char &clearformess)
 
          const int costofsupplies = 12;
 
-         if(funds < costofsupplies)
+         if(ledger.get_funds() < costofsupplies)
          {
             if(clearformess)erase();
             else
@@ -1066,13 +1062,8 @@ void funds_and_trouble(char &clearformess)
 
          money = LCSrandom((productquality*demand)/50+1) - costofsupplies;
 
-         funds+=money;
-         if(money>0)
-         {
-            stat_funds+=money;
-         }
-         moneygained_goods+=money+costofsupplies;
-         moneylost_goods+=costofsupplies;
+         ledger.add_funds(money+costofsupplies,INCOME_TSHIRTS);
+         ledger.subtract_funds(costofsupplies,EXPENSE_TSHIRTS);
 
          tshirts[s]->train(SKILL_TAILORING,max(6-tshirts[s]->skill[SKILL_TAILORING],4));
          tshirts[s]->train(SKILL_BUSINESS,max(4-tshirts[s]->skill[SKILL_BUSINESS],2));
@@ -1091,7 +1082,7 @@ void funds_and_trouble(char &clearformess)
 
          const int costofsupplies = 8;
 
-         if(funds < costofsupplies)
+         if(ledger.get_funds() < costofsupplies)
          {
             if(clearformess)erase();
             else
@@ -1115,13 +1106,8 @@ void funds_and_trouble(char &clearformess)
 
          money = LCSrandom((productquality*demand)/50+1) - costofsupplies;
 
-         funds+=money;
-         if(money>0)
-         {
-            stat_funds+=money;
-         }
-         moneygained_goods+=money+costofsupplies;
-         moneylost_goods+=costofsupplies;
+         ledger.add_funds(money+costofsupplies,INCOME_SKETCHES);
+         ledger.subtract_funds(costofsupplies,EXPENSE_SKETCHES);
 
          art[s]->train(SKILL_ART,max(6-art[s]->skill[SKILL_ART],4));
          art[s]->train(SKILL_BUSINESS,max(4-art[s]->skill[SKILL_BUSINESS],2));
@@ -1143,9 +1129,7 @@ void funds_and_trouble(char &clearformess)
 
          money = LCSrandom((productquality*demand)/50+2);
 
-         funds+=money;
-         stat_funds+=money;
-         moneygained_goods+=money;
+         ledger.add_funds(money,INCOME_BUSKING);
 
          music[s]->train(SKILL_MUSIC,max(6-music[s]->skill[SKILL_MUSIC],4));
       }
@@ -1170,9 +1154,7 @@ void funds_and_trouble(char &clearformess)
       if(law[LAW_DRUGS]==2)
          money/=8;
       
-      funds+=money;
-      stat_funds+=money;
-      moneygained_brownies+=money;
+      ledger.add_funds(money,INCOME_BROWNIES);
       // Make the sale
       brownies[s]->train(SKILL_PERSUASION,max(4-brownies[s]->skill[SKILL_PERSUASION],1));
       // Know the streets
@@ -1469,9 +1451,7 @@ void funds_and_trouble(char &clearformess)
             {
                fundgain+=LCSrandom(51);
             }
-            funds+=fundgain;
-            stat_funds+=fundgain;
-            moneygained_ccfraud+=fundgain;
+            ledger.add_funds(fundgain,INCOME_CCFRAUD);
             /*itoa(fundgain,num,10);
             strcat(msg,num);
             strcat(msg,".");*/
@@ -1548,9 +1528,7 @@ void funds_and_trouble(char &clearformess)
             {
                fundgain+=200;
             }
-            funds+=fundgain;
-            stat_funds+=fundgain;
-            moneygained_extortion+=fundgain;
+            ledger.add_funds(fundgain,INCOME_EXTORTION);
             itoa(fundgain,num,10);
             strcat(msg,num);
             strcat(msg,".");
@@ -1679,10 +1657,9 @@ void funds_and_trouble(char &clearformess)
 
             //TODO: CHECK BASE INVENTORY FOR A SPRAYCAN BEFORE BUYING ONE
             
-            if(funds>=20)
+            if(ledger.get_funds()>=20)
             {
-               moneylost_goods+=20;
-               funds-=20;
+               ledger.subtract_funds(20,EXPENSE_SHOPPING);
                addstr(" bought spraypaint for graffiti.");
                refresh();
                getch();
@@ -1939,9 +1916,7 @@ void funds_and_trouble(char &clearformess)
 
       if(!caught)
       {
-         funds+=fundgain;
-         stat_funds+=fundgain;
-         moneygained_hustling+=fundgain;
+         ledger.add_funds(fundgain,INCOME_HUSTLING);
       }
    }
 
@@ -2359,7 +2334,7 @@ void funds_and_trouble(char &clearformess)
                //teacher's ability at teaching
                if(pool[p]->skill[skillarray[i]]<teachers[t]->skill[skillarray[i]]-1&&
                   pool[p]->skill[skillarray[i]]<teachers[t]->skill[SKILL_TEACHING]+2&&
-                  funds>cost&&
+                  ledger.get_funds()>cost&&
                   pool[p]->skill[skillarray[i]]<maxskill(skillarray[i],*pool[p]))
                {
                   // Teach based on teacher's skill in the topic plus skill in teaching, minus
@@ -2375,16 +2350,9 @@ void funds_and_trouble(char &clearformess)
                   if(students<10)
                   {
                      students++;
-                     funds-=cost;
-                     moneylost_training+=cost;
+                     ledger.subtract_funds(cost,EXPENSE_TRAINING);
                      if(students==10)cost=0;
                   }
-                  //No crime for now
-                  /*if(pool[p]->heat>teachers[t]->heat)
-                  {
-                     if(teachers[t]->lawflag[LAWFLAG_RACKETEERING]==0)
-                        teachers[t]->lawflag[LAWFLAG_RACKETEERING]=1;
-                  }*/
                }
             }
          }

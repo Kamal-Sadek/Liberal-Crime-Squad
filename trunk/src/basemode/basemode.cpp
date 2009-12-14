@@ -640,7 +640,7 @@ void mode_base(void)
          }
          else
          {
-            if(funds>=20&&!sieged&&
+            if(ledger.get_funds()>=20&&!sieged&&
                (selectedsiege!=-1||activesquad!=NULL))set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             addstr("P - PATRIOTISM: fly a flag here ($20)");
@@ -813,15 +813,13 @@ void mode_base(void)
             }
          }
       }
-      else if(c=='p'&&funds>=20&&!sieged&&
+      else if(c=='p'&&ledger.get_funds()>=20&&!sieged&&
                (selectedsiege!=-1||activesquad!=NULL))
       {
-         funds-=20;
-         stat_spent+=20;
+         ledger.subtract_funds(20,EXPENSE_COMPOUND);
          if(selectedsiege!=-1)location[selectedsiege]->haveflag=1;
          if(activesquad!=NULL)location[activesquad->squad[0]->base]->haveflag=1;
          stat_buys++;
-         moneylost_compound+=20;
       }
 
       if(c=='s')getslogan();

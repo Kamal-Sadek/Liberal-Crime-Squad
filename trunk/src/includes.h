@@ -38,7 +38,7 @@
 //#define SHOWWAIT
 
 // Show die rolls, 100% accurate poll numbers
-//#define SHOWMECHANICS
+#define SHOWMECHANICS
 
 // Make the year 2100
 //#define THEFUTURE
@@ -67,11 +67,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.01.2"
+#define PACKAGE_VERSION "4.01.3"
 #endif
 
-const int version=40102; 
-const int lowestloadversion=40100;
+const int version=40103; 
+const int lowestloadversion=40103;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -943,6 +943,88 @@ struct activityst
    long arg2;
 };
 
+enum IncomeType
+{
+   INCOME_DONATIONS,
+   INCOME_BROWNIES,
+   INCOME_PAWN,
+   INCOME_BUSKING,
+   INCOME_CARS,
+   INCOME_CCFRAUD,
+   INCOME_PROSTITUTION,
+   INCOME_HUSTLING,
+   INCOME_EXTORTION,
+   INCOME_THIEVERY,
+   INCOME_EMBEZZLEMENT,
+   INCOME_TSHIRTS,
+   INCOME_SKETCHES,
+   INCOMETYPENUM
+};
+
+enum ExpenseType
+{
+   EXPENSE_TSHIRTS,
+   EXPENSE_SKETCHES,
+   EXPENSE_SHOPPING,
+   EXPENSE_TROUBLEMAKING,
+   EXPENSE_RENT,
+   EXPENSE_TRAINING,
+   EXPENSE_MANUFACTURE,
+   EXPENSE_LEGAL,
+   EXPENSE_FOOD,
+   EXPENSE_RECRUITMENT,
+   EXPENSE_DATING,
+   EXPENSE_COMPOUND,
+   EXPENSE_HOSTAGE,
+   EXPENSE_CONFISCATED,
+   EXPENSE_CARS,
+   EXPENSETYPENUM
+};
+
+class Ledger
+{
+private:
+   int funds;
+public:
+   int income[INCOMETYPENUM];
+   int expense[EXPENSETYPENUM];
+   int total_income;
+   int total_expense;
+
+   Ledger()
+   {
+      funds=7;
+      total_income=0;
+      total_expense=0;
+      for(int i=0;i<INCOMETYPENUM;i++)
+         income[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++)
+         expense[e]=0;
+   }
+
+   int get_funds()
+   {
+      return funds;
+   }
+   void force_funds(int amount)
+   {
+      funds = amount;
+   }
+   void add_funds(int amount, int incometype)
+   {
+      funds+=amount;
+      income[incometype]+=amount;
+      total_income+=amount;
+   }
+   void subtract_funds(int amount, int expensetype)
+   {
+      funds-=amount;
+      expense[expensetype]+=amount;
+      total_expense+=amount;
+   }
+
+};
+
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
 #define CREATUREFLAG_MISSING BIT3
@@ -1022,7 +1104,10 @@ public:
    short blood;
    char special[SPECIALWOUNDNUM];
 
-   int lawflag[LAWFLAGNUM];
+   //int crimes_committed[LAWFLAGNUM];
+   int crimes_suspected[LAWFLAGNUM];
+   //int crimes_convicted[LAWFLAGNUM];
+   
    int heat;
    int location;
    int worklocation;
@@ -1572,6 +1657,7 @@ struct newsstoryst
       claimed=1;
       politics_level=0;
       violence_level=0;
+      loc=-1;
       cr=NULL;
    }
 };

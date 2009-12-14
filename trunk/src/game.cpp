@@ -203,31 +203,7 @@ short interface_pgdn=']';
 
 int day=1;
 
-#ifdef HIGHFUNDS
-int funds=100000;
-#else
-int funds=7;
-#endif
-
-long moneygained_donate=0;
-long moneygained_brownies=0;
-long moneygained_goods=0;
-long moneygained_ccfraud=0;
-long moneygained_hustling=0;
-long moneygained_extortion=0;
-long moneygained_thievery=0;
-long moneygained_embezzlement=0;
-long moneylost_goods=0;
-long moneylost_trouble=0;
-long moneylost_rent=0;
-long moneylost_training=0;
-long moneylost_manufacture=0;
-long moneylost_legal=0;
-long moneylost_food=0;
-long moneylost_dating=0;
-long moneylost_compound=0;
-long moneylost_hostage=0;
-long moneylost_confiscated=0;
+class Ledger ledger;
 
 short party_status=-1;
 
@@ -696,7 +672,7 @@ void Creature::creatureinit(void)
    base=0;
    activity.type=ACTIVITY_NONE;
    for(int i=0;i<LAWFLAGNUM;i++)
-      lawflag[i]=0;
+      crimes_suspected[i]=0;
    heat=0;
    confessions=0;
    clinic=0;

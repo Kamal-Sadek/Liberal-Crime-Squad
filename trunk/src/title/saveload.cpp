@@ -106,28 +106,9 @@ void savegame(char *str)
       numbytes=fwrite(&selectedsiege,sizeof(long),1,h);
       numbytes=fwrite(lcityname,sizeof(char),80,h);
       numbytes=fwrite(&newscherrybusted,sizeof(char),1,h);
-      numbytes=fwrite(&moneygained_donate,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_brownies,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_goods,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_ccfraud,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_hustling,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_extortion,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_thievery,sizeof(long),1,h);
-      numbytes=fwrite(&moneygained_embezzlement,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_goods,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_trouble,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_rent,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_training,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_manufacture,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_legal,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_food,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_dating,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_compound,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_hostage,sizeof(long),1,h);
-      numbytes=fwrite(&moneylost_confiscated,sizeof(long),1,h);
 
       numbytes=fwrite(slogan,sizeof(char),80,h);
-      numbytes=fwrite(&funds,sizeof(int),1,h);
+      numbytes=fwrite(&ledger,sizeof(class Ledger),1,h);
       numbytes=fwrite(&party_status,sizeof(short),1,h);
 
       numbytes=fwrite(attitude,sizeof(short),VIEWNUM,h);
@@ -393,27 +374,9 @@ char load(void)
       fread(&selectedsiege,sizeof(long),1,h);
       fread(lcityname,sizeof(char),80,h);
       fread(&newscherrybusted,sizeof(char),1,h);
-      fread(&moneygained_donate,sizeof(long),1,h);
-      fread(&moneygained_brownies,sizeof(long),1,h);
-      fread(&moneygained_goods,sizeof(long),1,h);
-      fread(&moneygained_ccfraud,sizeof(long),1,h);
-      fread(&moneygained_hustling,sizeof(long),1,h);
-      fread(&moneygained_extortion,sizeof(long),1,h);
-      fread(&moneygained_thievery,sizeof(long),1,h);
-      fread(&moneygained_embezzlement,sizeof(long),1,h);
-      fread(&moneylost_goods,sizeof(long),1,h);
-      fread(&moneylost_trouble,sizeof(long),1,h);
-      fread(&moneylost_rent,sizeof(long),1,h);
-      fread(&moneylost_training,sizeof(long),1,h);
-      fread(&moneylost_manufacture,sizeof(long),1,h);
-      fread(&moneylost_legal,sizeof(long),1,h);
-      fread(&moneylost_food,sizeof(long),1,h);
-      fread(&moneylost_dating,sizeof(long),1,h);
-      fread(&moneylost_compound,sizeof(long),1,h);
-      fread(&moneylost_hostage,sizeof(long),1,h);
-      fread(&moneylost_confiscated,sizeof(long),1,h);
+
       fread(slogan,sizeof(char),80,h);
-      fread(&funds,sizeof(int),1,h);
+      fread(&ledger,sizeof(class Ledger),1,h);
       fread(&party_status,sizeof(short),1,h);
 
       fread(attitude,sizeof(short)*VIEWNUM,1,h);

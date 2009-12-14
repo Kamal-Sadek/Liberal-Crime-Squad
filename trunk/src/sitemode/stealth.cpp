@@ -202,7 +202,7 @@ void disguisecheck(void)
          // crime, apply it here. If they are wanted for carrying an illegal
          // weapon already, it shouldn't stack on extras here or you'll accrue
          // dozens of extra charges for only one site incident
-         if(weaponar[i]&&!activesquad->squad[i]->lawflag[LAWFLAG_GUNCARRY])
+         if(weaponar[i]&&!activesquad->squad[i]->crimes_suspected[LAWFLAG_GUNCARRY])
          {
             // Illegal weapon crimes disabled
             //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
