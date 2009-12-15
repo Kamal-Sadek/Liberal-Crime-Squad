@@ -362,7 +362,7 @@ int main(/*int nargs, char *args[]*/)
    loadgraphics();
 
    int c=0;
-   int index=0;
+   int index=0; // Progresses as "0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C [seg fault]"
    int x=0;
    int y=0;
    short frontcolor=COLOR_WHITE;
