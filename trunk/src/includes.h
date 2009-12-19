@@ -67,10 +67,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.01.3"
+#define PACKAGE_VERSION "4.01.4"
 #endif
 
-const int version=40103; 
+const int version=40104; 
 const int lowestloadversion=40103;
 const int lowestloadscoreversion=31203;
 
@@ -1211,7 +1211,8 @@ enum SpecialBlocks
    SPECIAL_STAIRS_DOWN,
    SPECIAL_CLUB_BOUNCER,
    SPECIAL_CLUB_BOUNCER_SECONDVISIT,
-   SPECIALNUM
+   SPECIALNUM,
+   SPECIAL_NONE = -1
 };
 
 #define SIEGEFLAG_UNIT BIT1

@@ -143,8 +143,7 @@ void special_bouncer_assess_squad()
                 law[LAW_WOMEN]<1)
             {
                // Are you passing as a man? Are you skilled enough to pull it off?
-               if(activesquad->squad[s]->gender_liberal != GENDER_NEUTRAL ||
-                  activesquad->squad[s]->gender_liberal != GENDER_MALE)
+               if(activesquad->squad[s]->gender_liberal == GENDER_FEMALE)
                {
                   // Not a man by your own definition either
                   if(rejected>REJECTED_FEMALE)rejected=REJECTED_FEMALE;
@@ -806,11 +805,10 @@ void special_courthouse_jury(void)
             int p=goodp[LCSrandom(goodp.size())];
 
             short aroll=LCSrandom(21)+
-                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+1)+
-                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_HEART)+1)+
-                        LCSrandom(activesquad->squad[p]->skillval(SKILL_PERSUASION)+1)+
-                        LCSrandom(activesquad->squad[p]->skillval(SKILL_LAW)+1)+
-                        LCSrandom(activesquad->squad[p]->skillval(SKILL_LAW)+1);
+                        LCSrandom(activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
+                                  activesquad->squad[p]->attval(ATTRIBUTE_HEART)+1)+
+                        LCSrandom(activesquad->squad[p]->skillval(SKILL_PERSUASION)+
+                                  activesquad->squad[p]->skillval(SKILL_LAW)*2+1);
             short troll=20;
             activesquad->squad[p]->train(SKILL_PERSUASION,troll);
             activesquad->squad[p]->train(SKILL_LAW,troll);
@@ -826,7 +824,7 @@ void special_courthouse_jury(void)
                addstr(activesquad->squad[p]->name);
                addstr(" works the room like Twelve Angry Men, and the jury");
                move(17,1);
-               addstr("concludes that the ");//XXX: This is very awkward grammar.
+               addstr("concludes that ");//XXX: This is very awkward grammar.
                switch(LCSrandom(16))
                {
                   case 0:addstr("murder");break;
@@ -855,7 +853,7 @@ void special_courthouse_jury(void)
                noticecheck(-1);
 
                //INSTANT JUICE BONUS
-               addjuice(*(activesquad->squad[p]),20);
+               addjuice(*(activesquad->squad[p]),10);
             }
             else
             {

@@ -577,7 +577,12 @@ void mode_site(void)
 
       int c;
       if(levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
-         c='s';
+      {
+         if(location[cursite]->renting==RENTING_PERMANENT)
+            levelmap[locx][locy][locz].special = SPECIAL_NONE;
+         else
+            c='s';
+      }
       else c=getch();
       translategetch(c);
 
@@ -1856,7 +1861,7 @@ void mode_site(void)
                refresh();
                getch();
                
-               location[cursite]->renting=0;
+               location[cursite]->renting=RENTING_PERMANENT;
                location[cursite]->closed=0;
                location[cursite]->heat=100;
                   
@@ -2221,8 +2226,15 @@ void mode_site(void)
 
                   if(location[cursite]->siege.siegetype==SIEGE_CCS)
                   {
-                     if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE)
-                        location[cursite]->renting=0; // CCS DOES NOT capture the warehouse -- reverse earlier assumption of your defeat!
+                     // CCS DOES NOT capture the warehouse -- reverse earlier assumption of your defeat!
+                     if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE || SITE_BUSINESS_CRACKHOUSE)
+                        location[cursite]->renting=RENTING_PERMANENT;
+                     else if(location[cursite]->type==SITE_RESIDENTIAL_TENEMENT)
+                        location[cursite]->renting=200;
+                     else if(location[cursite]->type==SITE_RESIDENTIAL_APARTMENT)
+                        location[cursite]->renting=650;
+                     else if(location[cursite]->type==SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+                        location[cursite]->renting=1500;
                   }
 
                   //DEAL WITH PRISONERS AND STOP BLEEDING
@@ -2461,38 +2473,46 @@ void resolvesite(void)
    if(sitealarm==1&&sitecrime>100)
    {
       if(location[cursite]->renting==RENTING_NOCONTROL)
-         location[cursite]->closed=sitecrime/10;
-      
-      // Out sleepers
-      for(int p=0;p<pool.size();p++)
       {
-         if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
-            pool[p]->location == cursite)
+         // Capture a warehouse or crack den?
+         if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
+            location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
          {
-            pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-            erase();
-            move(8,1);
-            addstr("Sleeper ");
-            addstr(pool[p]->name);
-            addstr(" has been outed by your bold attack!");
-
-            move(10,1);
-            addstr("The Liberal is now at your command as a normal squad member.");
-
-            pool[p]->base=activesquad->squad[0]->base;
-            pool[p]->location=pool[p]->base;
-            refresh();
-            getch();
+            location[cursite]->renting=RENTING_PERMANENT; // Capture safehouse for the glory of the LCS!
+            location[cursite]->closed=0;
+            location[cursite]->heat=100;
+         }
+         else
+         {
+            // Close down site
+            location[cursite]->closed=sitecrime/10;
          }
       }
 
-      // Capture a warehouse or crack den?
-      if(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE||
-              location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
+      // Out sleepers
+      if(location[cursite]->renting==RENTING_CCS)
       {
-         location[cursite]->renting=0; // Capture safehouse for the glory of the LCS!
-         location[cursite]->closed=0;
-         location[cursite]->heat=100;
+         for(int p=0;p<pool.size();p++)
+         {
+            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
+               pool[p]->location == cursite)
+            {
+               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+               erase();
+               move(8,1);
+               addstr("Sleeper ");
+               addstr(pool[p]->name);
+               addstr(" has been outed by your bold attack!");
+
+               move(10,1);
+               addstr("The Liberal is now at your command as a normal squad member.");
+
+               pool[p]->base=activesquad->squad[0]->base;
+               pool[p]->location=pool[p]->base;
+               refresh();
+               getch();
+            }
+         }
       }
    }
    else if(sitealarm==1&&sitecrime>10&&location[cursite]->renting==RENTING_NOCONTROL)
