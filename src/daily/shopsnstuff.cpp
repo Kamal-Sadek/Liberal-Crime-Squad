@@ -1456,7 +1456,7 @@ void dealership(int loc)
       //Sell the car
       if(c=='s' && car_to_sell)
       {
-         ledger.subtract_funds(price,EXPENSE_CARS);
+         ledger.add_funds(price,INCOME_CARS);
          removecarprefs_pool(car_to_sell->id);
          delete car_to_sell;
          for(int v=(int)vehicle.size()-1;v>=0;v--)

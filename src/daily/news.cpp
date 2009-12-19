@@ -173,6 +173,14 @@ void setpriority(newsstoryst &ns)
             case NEWSSTORY_SQUAD_KILLED_SITE:
                ns.priority+=10+attitude[VIEW_LIBERALCRIMESQUAD]/3;
                break;
+            default:
+               // Suppress actions at  CCS safehouses
+               if(ns.loc!=-1 &&
+                  location[ns.loc]->renting==RENTING_CCS)
+               {
+                  ns.priority = 0;
+               }
+               break;
          }
 
          // Double profile if the squad moved out in full battle colors
@@ -183,9 +191,16 @@ void setpriority(newsstoryst &ns)
          {
             switch(location[ns.loc]->type)
             {
+               // Not even reported
+            case SITE_BUSINESS_CRACKHOUSE:
+               if(ns.type == NEWSSTORY_SQUAD_KILLED_SITE ||
+                  ns.type == NEWSSTORY_SQUAD_SITE)
+               {
+                  ns.priority = 0;
+                  break;
+               }
                // Nobody cares
             case SITE_RESIDENTIAL_TENEMENT:
-            case SITE_BUSINESS_CRACKHOUSE:
                ns.priority/=8;
                break;
 
@@ -293,32 +308,6 @@ void setpriority(newsstoryst &ns)
          {
             ns.crime.push_back(CRIME_CARCHASE);
          }
-
-         // Set story's political and violence levels for determining whether
-         // a story becomes positive or negative
-
-         if(!LCSrandom(5))ns.positive = 1;
-         else ns.positive = 0;
-
-         /*
-         short violence_threshhold;
-         if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<5)violence_threshhold=1;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<25)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<45)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<65)violence_threshhold=6;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<85)violence_threshhold=8;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<105)violence_threshhold=10;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<125)violence_threshhold=13;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<145)violence_threshhold=17;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<165)violence_threshhold=20;
-         else if(attitude[VIEW_POLITICALVIOLENCE]+100-attitude[VIEW_CONSERVATIVECRIMESQUAD]<185)violence_threshhold=30;
-         else violence_threshhold=50;
-
-         if(ns.violence_level / (ns.politics_level+1) > violence_threshhold)
-            ns.positive = 1;
-         else ns.positive = 0;
-         */
-
          break;
       case NEWSSTORY_CCS_DEFENDED:
       case NEWSSTORY_CCS_KILLED_SIEGEATTACK:
@@ -1998,11 +1987,6 @@ void majornewspaper(char &clearformess,char canseethings)
          newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
       {
          power=newsstory[n]->priority;
-         if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
-            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
-         {
-            newsstory[n]->positive=!newsstory[n]->positive;
-         }
 
          //PAGE BONUS
          if(newsstory[n]->page==1)power*=5;
@@ -2024,30 +2008,6 @@ void majornewspaper(char &clearformess,char canseethings)
          power/=10;
          power++;
 
-         /*
-         short violence_threshhold;
-
-         if(attitude[VIEW_POLITICALVIOLENCE]<15)violence_threshhold=1;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<25)violence_threshhold=2;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<35)violence_threshhold=3;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<45)violence_threshhold=4;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<55)violence_threshhold=5;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<65)violence_threshhold=6;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<75)violence_threshhold=7;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<85)violence_threshhold=8;
-         else if(attitude[VIEW_POLITICALVIOLENCE]<95)violence_threshhold=9;
-         else violence_threshhold=10;
-
-         if(newsstory[n]->violence_level / (newsstory[n]->politics_level+1) > violence_threshhold)
-         {
-            change_public_opinion(VIEW_POLITICALVIOLENCE,power);
-         }
-         else
-         {
-            change_public_opinion(VIEW_POLITICALVIOLENCE,-power);
-         }
-         */
-
          char colored=0;
          if(!(newsstory[n]->type==NEWSSTORY_CCS_SITE)&&
             !(newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE))
@@ -2067,23 +2027,15 @@ void majornewspaper(char &clearformess,char canseethings)
             if(newsstory[n]->positive)
             {
                colored=-1;
+               power=-power;
             }
-            else power=-power;
             
-            change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,power);
+            change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,power,0);
          }
 
-         if(newsstory[n]->positive)
-         {
-            colored=-1;
-         }
-         else
-         {
-            power=-power;
-            change_public_opinion(VIEW_GUNCONTROL,abs(power),0,power*10);
-         }
+         change_public_opinion(VIEW_GUNCONTROL,abs(power)/10,0,abs(power)*10);
 
-              switch(location[newsstory[n]->loc]->type)
+         switch(location[newsstory[n]->loc]->type)
          {
          case SITE_LABORATORY_COSMETICS:
             change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
