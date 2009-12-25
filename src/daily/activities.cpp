@@ -1916,7 +1916,7 @@ void funds_and_trouble(char &clearformess)
 
       if(!caught)
       {
-         ledger.add_funds(fundgain,INCOME_HUSTLING);
+         ledger.add_funds(fundgain,INCOME_PROSTITUTION);
       }
    }
 
