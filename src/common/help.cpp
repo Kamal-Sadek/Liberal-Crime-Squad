@@ -233,7 +233,6 @@ void HelpActivities(int activityType)
 		move(21,0);
 		addstr(" appropriate location or from hackers.");
 		break;
-
 		// Legal fund raising
 	case ACTIVITY_DONATIONS:
 		move(2,0);
@@ -305,9 +304,61 @@ void HelpActivities(int activityType)
 		addstr(" Skills trained are music.");
 		break;
 
-		// TODO: Next... Illegal fund raising
-
-
+		// Illegal fund raising
+	case ACTIVITY_SELL_DRUGS:
+		move(2,0);
+		addstr("===Selling Brownies===");
+		move(4,0);
+		addstr(" Selling brownies on the street is an illegal way to make money. Money earned is ");
+		move(5,0);
+		addstr(" based upon the activists persuasion, cooking, street sense and charisma.");
+		move(7,0);
+		addstr(" It raises persuasion, street sense, business and cooking. Street sense is used ");
+		move(8,0);
+		addstr(" to avoid being caught. If caught and tried, it is a minor crime and a good  ");
+		move(9,0);
+		addstr(" chance to raise your law skill without much risk.");
+		move(11,0);
+		addstr(" Additionally depending on the current drug laws, the more illegal drugs are the ");
+		move(12,0);
+		addstr(" more money you will make.");
+		break;
+	case ACTIVITY_PROSTITUTION:
+		move(2,0);
+		addstr("===Prostitution===");
+		move(4,0);
+		addstr(" Prostitution is an activity which raises money illegally. The amount of money");
+		move(5,0);
+		addstr(" made is based on seduction. The Seduction skill is trained and it also");
+		move(6,0);
+		addstr(" decreases your Juice every time you do it. Prostitution is quite lucrative ");
+		move(7,0);
+		addstr(" with seduction that is over 10.");
+		move(9,0);
+		addstr(" Street sense will help you evade being criminalized and caught.");
+		break;
+	case ACTIVITY_CCFRAUD:
+		move(2,0);
+		addstr("===Credit Card Fraud===");
+		move(4,0);
+		addstr(" To steal credit card numbers you need to have someone who has a computer ");
+		move(5,0);
+		addstr(" skill greater than 1. The more computer skill your hacker has the more money  ");
+		move(6,0);
+		addstr(" you will make. This activity trains computer skill.");
+		break;
+	case ACTIVITY_REPAIR_ARMOR:
+		move(2,0);
+		addstr("===Repair Clothing===");
+		move(4,0);
+		addstr(" Repairing clothing will repair damaged amour and remove blood stains if there ");
+		move(5,0);
+		addstr(" are any. ");
+		move(7,0);
+		addstr(" The chance of repairing the clothing is dependant on the quality of ");
+		move(8,0);
+		addstr(" the clothing and the tailoring skill of the activist.");
+		break;
 	default:
 		addstr("===THE GREAT UNKNOWN===");
 		move(2,1);
@@ -316,7 +367,6 @@ void HelpActivities(int activityType)
 		addstr("However, if you want to help us, you could write one, and send it to us!");
 		break;
 	}
-
 
 	set_color(COLOR_WHITE,COLOR_BLACK,0);
 	move(23,0);
