@@ -709,7 +709,7 @@ void review_mode(short mode)
 						set_color(COLOR_WHITE,COLOR_BLACK,0);
 						addstr("Confirm you want to have ");
 						addstr(pool[boss]->name);
-						addstr("kill this squad member?");
+						addstr(" kill this squad member?");
 						move(23,0);
 						addstr("Killing your squad members is Not a Liberal Act.                              ");
 						move(24,0);
