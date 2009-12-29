@@ -521,10 +521,12 @@ void mode_base(void)
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(20,40);
          addstr("R - Review Assets and Form Squads");
-         /*if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+         if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(20,40);
-         addstr("O - Change the squad's Liberal order");*/
+         move(8,3);
+		 if(partysize>0)
+			addstr("O - Reorder squad");
 
          if(squad.size()>1||(activesquad==NULL&&squad.size()>0))set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -700,7 +702,10 @@ void mode_base(void)
          }
       }
 
-      if(c=='o'&&partysize>1)orderparty();
+      if(c=='o'&&partysize>1)
+	  {
+		  orderpartyV2();
+	  }
 
       if(c=='c'&&partysize>0)
       {
