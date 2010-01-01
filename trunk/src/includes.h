@@ -1826,6 +1826,8 @@ void fullstatus(int p);
 void printliberalskills(Creature &cr);
 /* full screen character sheet */
 void printliberalstats(Creature &cr);
+/* Full screen character sheet, crime sheet */
+void printliberalcrimes(Creature &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y,int x);
 /* print location name (is aware of business fronts) */
@@ -1941,7 +1943,7 @@ short naturalcarcolor(int type); /* support function for getcarcolor */
 void cityname(char *story); /* random city name */
 /* Allow player to enter a name with an optional default name */
 void enter_name(char *name, int len, char *defname=NULL);
-
+void getlawflag(char *str,int type);
 /*
  translateid.cpp
 */
