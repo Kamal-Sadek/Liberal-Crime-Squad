@@ -485,7 +485,7 @@ void review_mode(short mode)
 
 		set_color(COLOR_WHITE,COLOR_BLACK,0);
 		move(22,0);
-		addstr("Press a Letter to View Status.");
+		addstr("Press a Letter to View Status.        Z - Reorder liberals");
 		move(23,0);
 		addpagestr();
 
@@ -643,16 +643,16 @@ void review_mode(short mode)
 							addstr(temppool[p]->name);
 							addstr(" has been released.                                                                      ");
 							move(23,0);
-						    addstr("                                                                                         ");
+							addstr("                                                                                         ");
 							move(24,0);
-						    addstr("                                                                                         ");
+							addstr("                                                                                         ");
 							getch();
 							// Chance of member going to police if boss has criminal record and
 							// if they have low heart
 							// TODO: Do law check against other members?
 							if(temppool[p]->attval(ATTRIBUTE_HEART) < temppool[p]->attval(ATTRIBUTE_WISDOM)+ LCSrandom(5)
 								&& iscriminal(*pool[boss]))
-                     {
+							{
 								if(LCSrandom(5)) // Chance of tip off
 								{
 									set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -662,11 +662,11 @@ void review_mode(short mode)
 									addstr("'s whereabouts.");
 									move(23,0);
 									addstr("The Conservative traitor has ratted you out to the police.");
-                           getch();
+									getch();
 								}
 
-                        criminalize(*pool[boss],LAWFLAG_RACKETEERING);
-                        pool[boss]->confessions++;
+								criminalize(*pool[boss],LAWFLAG_RACKETEERING);
+								pool[boss]->confessions++;
 
 								// TODO: Depending on the crime increase heat or make seige
 
@@ -789,6 +789,99 @@ void review_mode(short mode)
 					else break;
 				}while(1);
 			}
+		}
+
+		// Reorder squad
+		if(c>='z')
+		{
+			if(temppool.size()<=1)break;
+
+			do
+			{
+				move(22,0);
+				addstr("                                                                               ");
+				move(23,0);
+				addstr("                                                                               ");
+
+				move(22,8);
+				set_color(COLOR_WHITE,COLOR_BLACK,1);
+				addstr("Choose squad member to replace ");
+				refresh();
+
+				int c=getch();
+				translategetch(c);
+
+				if(c==10)break;
+
+				if(!c>='a'&&!c<='s')
+				{
+					// Not within correct range
+					break;
+				}
+
+				// Get first member to swap
+				int oldPos = c;
+				Creature *swap1 = NULL;
+				if((int)(c-'a')>=0&&(int)(c-'a')<temppool.size())
+				{
+					swap1=temppool[(int)(c-'a')];
+				}
+				if(swap1 == NULL)
+				{
+					// Haven't found first member
+					break;
+				}
+
+				char num[20];
+				itoa((int)(c-'a'),num,10);
+				addstr(swap1->name);	  
+				addstr(" with");
+
+				c=getch();
+				translategetch(c);
+
+				// Get next member to swap to
+				if(c==10)break;
+
+				if(!c>='a'&&!c<='s')
+				{
+					// Not within correct range
+					break;
+				}
+
+				Creature *swap2 = NULL;
+				if((int)(c-'a')>=0&&(int)(c-'a')<temppool.size())
+				{
+					swap2 = temppool[(int)(c-'a')];	
+				}
+
+				if(swap2 == NULL)
+				{
+					// Haven't found a member
+					break;
+				}
+
+				// Swap members in main pool
+				for(int i = 0; i < pool.size(); i++)
+				{
+					if(pool[i]->id == swap1->id)
+					{
+						pool[i] = swap2;
+					}
+					else if(pool[i]->id == swap2->id)
+					{
+						pool[i] = swap1;
+					}
+				}
+				// Swap temppool for this 'immediate' drawing window
+				if((int)(c-'a')>=0&&(int)(c-'a')<=temppool.size())
+				{
+					temppool[(int)(oldPos-'a')]=temppool[(int)(c-'a')];
+					temppool[(int)(c-'a')]=swap1;
+				}
+				// Swap sucessful.
+				break;
+			}while(true);
 		}
 
 		if(c==10)break;
