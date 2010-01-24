@@ -566,7 +566,7 @@ void printnews(short l,short newspaper)
          move(9,1);
          addstr("This is bound to get the police a little riled up.");
 
-		   change_public_opinion(VIEW_DEATHPENALTY,50);
+         change_public_opinion(VIEW_DEATHPENALTY,50);
          offended_cops=1;
          break;
       case LOOT_CABLENEWSFILES:

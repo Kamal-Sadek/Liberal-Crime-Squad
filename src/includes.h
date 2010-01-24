@@ -123,10 +123,10 @@ const int lowestloadscoreversion=31203;
    #endif
 
    #ifdef HAVE_LIBXCURSES
-   	#define XCURSES
+      #define XCURSES
    #endif
    #ifdef HAVE_LIBNCURSES
-   	#define NCURSES
+      #define NCURSES
    #endif
    #ifdef XCURSES
       #define HAVE_PROTO 1
@@ -1788,8 +1788,8 @@ enum ReviewModes
 };
 
 /*
-	Declarations for every function grouped by folder and file.
-	Created by jonathansfox.
+   Declarations for every function grouped by folder and file.
+   Created by jonathansfox.
 */
 
 

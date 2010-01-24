@@ -426,7 +426,7 @@ char load(void)
          fread(&location[l]->compound_stores,sizeof(long),1,h);
          fread(&location[l]->front_business,sizeof(short),1,h);
          fread(location[l]->front_name,sizeof(char),40,h);
-	 fread(location[l]->front_shortname,sizeof(char),20,h);
+         fread(location[l]->front_shortname,sizeof(char),20,h);
          fread(&location[l]->haveflag,sizeof(char),1,h);
          fread(&location[l]->mapseed,sizeof(int),1,h);
       }
