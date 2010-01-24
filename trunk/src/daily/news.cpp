@@ -554,8 +554,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         strcat(story,"&r");
                      }
                   }
-				      else
-				      {
+                  else
+                  {
                      if(!liberalguardian)
                      {
                         strcat(story,"  According to sources that were at the scene, ");
@@ -569,7 +569,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         strcat(story,"demonstrating the extreme vulnerability and danger of Nuclear Power Plants. ");
                         strcat(story,"&r");
                      }
-				      }
+                  }
                }
                if(crime[CRIME_POLICE_LOCKUP])
                {

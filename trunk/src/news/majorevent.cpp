@@ -558,14 +558,14 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
             strcat(story,"seeking ");
-				if(law[LAW_DEATHPENALTY]==2)
-				{
-					strcat(story,"life imprisonment in this case.");
-				}
-					else
-				{
-					strcat(story,"the death penalty in this case.");
-				}
+            if(law[LAW_DEATHPENALTY]==2)
+            {
+               strcat(story,"life imprisonment in this case.");
+            }
+               else
+            {
+               strcat(story,"the death penalty in this case.");
+            }
             strcat(story,"&r");
             break;
          }
@@ -573,23 +573,23 @@ void constructeventstory(char *story,short view,char positive)
          {
             cityname(story);
             strcat(story," - Researchers ");
-			if(law[LAW_ANIMALRESEARCH]==2)
-			{
-				strcat(story,"from ");
-					switch(LCSrandom(5))
-				{
-					case 0:strcat(story,"Russia");break;
-					case 1:strcat(story,"North Korea");break;
-					case 2:strcat(story,"Taiwan");break;
-					case 3:strcat(story,"Iran");break;
-					case 4:strcat(story,"China");break;
-				}
-				strcat(story," report that they have discovered an amazing new wonder drug. ");
-			}
-			else
-			{
-				strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
-			}
+            if(law[LAW_ANIMALRESEARCH]==2)
+            {
+               strcat(story,"from ");
+               switch(LCSrandom(5))
+               {
+               case 0:strcat(story,"Russia");break;
+               case 1:strcat(story,"North Korea");break;
+               case 2:strcat(story,"Taiwan");break;
+               case 3:strcat(story,"Iran");break;
+               case 4:strcat(story,"China");break;
+               }
+               strcat(story," report that they have discovered an amazing new wonder drug. ");
+            }
+            else
+            {
+               strcat(story,"here report that they have discovered an amazing new wonder drug.  ");
+            }
             strcat(story,"Called ");
             switch(LCSrandom(5))
             {

@@ -878,9 +878,9 @@ char duplicatelocation(locationst &loc) {
          return 1;
 
       if (location[l]->front_business != -1 &&
-	  loc.front_business != -1 &&
-	  !strcmp (location[l]->front_shortname, loc.front_shortname))
-	 return 1;
+     loc.front_business != -1 &&
+     !strcmp (location[l]->front_shortname, loc.front_shortname))
+    return 1;
    }
    return 0;
 }

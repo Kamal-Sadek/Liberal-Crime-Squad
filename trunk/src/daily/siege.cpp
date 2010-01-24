@@ -1852,9 +1852,9 @@ void escape_engage(void) // FIXME: Wait... LCC? //Liberal Command Center. Probab
    {
       squad.push_back(new squadst);
       if (location[selectedsiege]->front_business==-1)
-	 strcpy(squad.back()->name,location[selectedsiege]->shortname);
+      strcpy(squad.back()->name,location[selectedsiege]->shortname);
       else
-	 strcpy(squad.back()->name,location[selectedsiege]->front_shortname);
+      strcpy(squad.back()->name,location[selectedsiege]->front_shortname);
 
       strcat(squad.back()->name," Defense");
       int i=0;

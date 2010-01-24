@@ -278,8 +278,8 @@ int main(int argc, char* argv[])
    oldMapMode=readConfigFile("sitemaps.txt"); // load site map data
    if (oldMapMode==-1)
    {
-   	addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
-   	refresh();
+      addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
+      refresh();
       getch();
    }
    
@@ -834,15 +834,15 @@ void chaseseqst::clean(void)
 /* Free memory and exit the game */
 void end_game(int err)
 {
-	for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
-	{
-		delete (*it);
-	}
-	for(int i=0;i<squad.size();++i)
-	{
-		delete squad[i];
-	}
-	endwin();
-	exit(err);
+   for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
+   {
+      delete (*it);
+   }
+   for(int i=0;i<squad.size();++i)
+   {
+      delete squad[i];
+   }
+   endwin();
+   exit(err);
 }
 
