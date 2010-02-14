@@ -467,16 +467,18 @@ void stopevil(void)
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(" (Enemy Safe House)");
          }
+
          if(location[temploc[p]]->closed)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(" (Closed Down)");
          }
-         if(location[temploc[p]]->highsecurity)
+         else if(location[temploc[p]]->highsecurity)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             addstr(" (High Security)");
          }
+
          if(location[temploc[p]]->needcar>0&&!havecar)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
