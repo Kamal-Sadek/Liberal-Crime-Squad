@@ -955,7 +955,6 @@ void pawnshop(int loc)
                   {
                      case ITEM_WEAPON:fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
                      case ITEM_ARMOR:
-                        if(location[activesquad->squad[0]->base]->loot[l]->armor.quality!='1')break;
                         if(location[activesquad->squad[0]->base]->loot[l]->armor.flag!=0)break;
                         fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]+=location[activesquad->squad[0]->base]->loot[l]->number;
                         break;
