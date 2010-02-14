@@ -392,7 +392,7 @@ void mode_site(void)
                {
                   addstr(": CCS VIGILANTES ON SITE");
                }
-               if(law[LAW_DEATHPENALTY]==-2&&
+               else if(law[LAW_DEATHPENALTY]==-2&&
                   law[LAW_POLICEBEHAVIOR]==-2)addstr(": DEATH SQUADS ON SITE");
                else addstr(": SWAT TEAMS ON SITE");
                break;

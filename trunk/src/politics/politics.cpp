@@ -1011,11 +1011,25 @@ void elections_senate(int senmod,char canseethings)
       move(21,0);
       if(change[0]+change[1]>change[3]+change[4])
       {
-         addstr("The Conservative Party claims victory!");
+         if(change[1]<0 && mood<25)
+         {
+            addstr("The $$ U.S.A. Flag Eagle $$ Conservative Party claims victory!");
+         }
+         else
+         {
+            addstr("The Conservative Party claims victory!");
+         }
       }
       else if(change[0]+change[1]<change[3]+change[4])
       {
-         addstr("The Liberal Party claims victory!");
+         if(change[3]<0 && mood>75)
+         {
+            addstr("The Progressive Elite Social Liberal Party claims victory!");
+         }
+         else
+         {
+            addstr("The Liberal Party claims victory!");
+         }
       }
       else
       {
