@@ -801,7 +801,7 @@ void locationst::update_heat_protection(void)
 
    if(law[LAW_FLAGBURNING]==-2&&location[l]->haveflag) {heatprotection+=6;} // More protection if the flag is sacred
    else if(law[LAW_FLAGBURNING]!=-2&&location[l]->haveflag) {heatprotection+=2;} // Some if the flag isn't
-   else if(law[LAW_FLAGBURNING]==2&&!(location[l]->haveflag)) {heatprotection-=2;} // Lose some if it is and you have no flag
+   else if(law[LAW_FLAGBURNING]==-2&&!(location[l]->haveflag)) {heatprotection-=2;} // Lose some if it is and you have no flag
    else {heatprotection+=0;} // None if it isn't and you have no flag
 
    //Protection varies with how many people in the safehouse
