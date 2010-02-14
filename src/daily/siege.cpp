@@ -360,7 +360,7 @@ void siegecheck(char canseethings)
                move(8,1);
                addstr("You have received ");
                if(ceosleepercount)addstr("a sleeper CEO's warning");
-               else("an anonymous tip");
+               else addstr("an anonymous tip");
                addstr(" that the Corporations");
                move(9,1);
                addstr("are hiring mercenaries to attack ");
@@ -1634,6 +1634,12 @@ void giveup(void)
          pool[p]->weapon.type=WEAPON_NONE;
          pool[p]->weapon.ammo=0;
          
+         // CLEAR CLIPS
+         for(int cl=0;cl<CLIPNUM;cl++)
+         {
+            pool[p]->clip[cl] = 0;
+         }
+
          if(iscriminal(*pool[p]))
          {
             removesquadinfo(*pool[p]);
