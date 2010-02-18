@@ -759,6 +759,7 @@ void mode_base(void)
 
       if(c=='e'&&partysize>0&&!underattack)
       {
+		 party_status=-1;
          equip(location[activesquad->squad[0]->location]->loot,-1);
          /*if(location[activesquad->squad[0]->location]->renting>=0)
          {
