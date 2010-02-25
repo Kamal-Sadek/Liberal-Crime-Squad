@@ -29,6 +29,23 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
+Creature::~Creature()
+{
+   if(prisoner!=NULL)
+   {
+      int p;
+      for(p=0;p<pool.size();p++)
+      {
+         if(prisoner==pool[p])
+            break;
+      }
+      if(p != pool.size())
+         delete prisoner;
+   }
+   // Clean up hostage situation
+   stop_hauling_me();
+}
+
 
 void Creature::stop_hauling_me()
 {
