@@ -2035,83 +2035,86 @@ void majornewspaper(char &clearformess,char canseethings)
 
          change_public_opinion(VIEW_GUNCONTROL,abs(power)/10,0,abs(power)*10);
 
-         switch(location[newsstory[n]->loc]->type)
+         if(newsstory[n]->loc != -1)
          {
-         case SITE_LABORATORY_COSMETICS:
-            change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            break;
-         case SITE_LABORATORY_GENETIC:
-            change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
-            change_public_opinion(VIEW_GENETICS,power,colored,power*10);
-            break;
-         case SITE_GOVERNMENT_POLICESTATION:
-            change_public_opinion(VIEW_POLICEBEHAVIOR,power,colored,power*10);
-            change_public_opinion(VIEW_DRUGS,power,colored,power*10);
-            break;
-         case SITE_GOVERNMENT_COURTHOUSE:
-            change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
-            change_public_opinion(VIEW_JUSTICES,power,colored,power*10);
-            change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
-            change_public_opinion(VIEW_GAY,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
-            break;
-         case SITE_GOVERNMENT_PRISON:
-            change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
-            change_public_opinion(VIEW_DRUGS,power,colored,power*10);
-            change_public_opinion(VIEW_TORTURE,power,colored,power*10);
-            break;
-         case SITE_GOVERNMENT_INTELLIGENCEHQ:
-            change_public_opinion(VIEW_INTELLIGENCE,power,colored,power*10);
-            change_public_opinion(VIEW_TORTURE,power,colored,power*10);
-            change_public_opinion(VIEW_MILITARY,power,colored,power*10); // Doesn't fit, but we need at least one place
-                                                                         // that can affect this issue! - Jonathan S. Fox
-            break;
-         case SITE_INDUSTRY_SWEATSHOP:
-            change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
-            change_public_opinion(VIEW_IMMIGRATION,power,colored,power*10);
-            break;
-         case SITE_INDUSTRY_POLLUTER:
-            change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
-            change_public_opinion(VIEW_POLLUTION,power,colored,power*10);
-            break;
-         case SITE_INDUSTRY_NUCLEAR:
-            change_public_opinion(VIEW_NUCLEARPOWER,power,colored,power*10);
-            break;
-         case SITE_CORPORATE_HEADQUARTERS:
-            change_public_opinion(VIEW_TAXES,power,colored,power*10);
-            change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            break;
-         case SITE_CORPORATE_HOUSE:
-            change_public_opinion(VIEW_TAXES,power,colored,power*10);
-            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
-            break;
-         case SITE_MEDIA_AMRADIO:
-            change_public_opinion(VIEW_AMRADIO,power,colored,power*10);
-            change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
-            change_public_opinion(VIEW_GAY,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
-            break;
-         case SITE_MEDIA_CABLENEWS:
-            change_public_opinion(VIEW_CABLENEWS,power,colored,power*10);
-            change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
-            change_public_opinion(VIEW_GAY,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
-            break;
-         case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-            change_public_opinion(VIEW_TAXES,power,colored,power*10);
-            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
-            change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
-            break;
-         case SITE_BUSINESS_CIGARBAR:
-            change_public_opinion(VIEW_TAXES,power,colored,power*10);
-            change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
-            change_public_opinion(VIEW_WOMEN,power,colored,power*10);
-            break;
+            switch(location[newsstory[n]->loc]->type)
+            {
+            case SITE_LABORATORY_COSMETICS:
+               change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               break;
+            case SITE_LABORATORY_GENETIC:
+               change_public_opinion(VIEW_ANIMALRESEARCH,power,colored,power*10);
+               change_public_opinion(VIEW_GENETICS,power,colored,power*10);
+               break;
+            case SITE_GOVERNMENT_POLICESTATION:
+               change_public_opinion(VIEW_POLICEBEHAVIOR,power,colored,power*10);
+               change_public_opinion(VIEW_DRUGS,power,colored,power*10);
+               break;
+            case SITE_GOVERNMENT_COURTHOUSE:
+               change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
+               change_public_opinion(VIEW_JUSTICES,power,colored,power*10);
+               change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
+               change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
+               break;
+            case SITE_GOVERNMENT_PRISON:
+               change_public_opinion(VIEW_DEATHPENALTY,power,colored,power*10);
+               change_public_opinion(VIEW_DRUGS,power,colored,power*10);
+               change_public_opinion(VIEW_TORTURE,power,colored,power*10);
+               break;
+            case SITE_GOVERNMENT_INTELLIGENCEHQ:
+               change_public_opinion(VIEW_INTELLIGENCE,power,colored,power*10);
+               change_public_opinion(VIEW_TORTURE,power,colored,power*10);
+               change_public_opinion(VIEW_MILITARY,power,colored,power*10); // Doesn't fit, but we need at least one place
+                                                                            // that can affect this issue! - Jonathan S. Fox
+               break;
+            case SITE_INDUSTRY_SWEATSHOP:
+               change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
+               change_public_opinion(VIEW_IMMIGRATION,power,colored,power*10);
+               break;
+            case SITE_INDUSTRY_POLLUTER:
+               change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);
+               change_public_opinion(VIEW_POLLUTION,power,colored,power*10);
+               break;
+            case SITE_INDUSTRY_NUCLEAR:
+               change_public_opinion(VIEW_NUCLEARPOWER,power,colored,power*10);
+               break;
+            case SITE_CORPORATE_HEADQUARTERS:
+               change_public_opinion(VIEW_TAXES,power,colored,power*10);
+               change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               break;
+            case SITE_CORPORATE_HOUSE:
+               change_public_opinion(VIEW_TAXES,power,colored,power*10);
+               change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+               break;
+            case SITE_MEDIA_AMRADIO:
+               change_public_opinion(VIEW_AMRADIO,power,colored,power*10);
+               change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
+               change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
+               break;
+            case SITE_MEDIA_CABLENEWS:
+               change_public_opinion(VIEW_CABLENEWS,power,colored,power*10);
+               change_public_opinion(VIEW_FREESPEECH,power,colored,power*10);
+               change_public_opinion(VIEW_GAY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               change_public_opinion(VIEW_CIVILRIGHTS,power,colored,power*10);
+               break;
+            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+               change_public_opinion(VIEW_TAXES,power,colored,power*10);
+               change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+               change_public_opinion(VIEW_GUNCONTROL,power,colored,power*10);
+               break;
+            case SITE_BUSINESS_CIGARBAR:
+               change_public_opinion(VIEW_TAXES,power,colored,power*10);
+               change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+               change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               break;
+            }
          }
       }
    }

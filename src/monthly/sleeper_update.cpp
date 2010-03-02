@@ -774,7 +774,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          }
          else
          {
-            item=new itemst;item->type=ITEM_LOOT;
+            item->type=ITEM_LOOT;
             if(!LCSrandom(5))item->loottype=LOOT_POLICERECORDS;
             else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
             else if(!LCSrandom(2))item->loottype=LOOT_PDA;
@@ -783,6 +783,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
+         item=new itemst;
          if(!LCSrandom(3))
          {
             item->type=ITEM_WEAPON;
@@ -798,7 +799,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          }
          else
          {
-            item=new itemst;item->type=ITEM_LOOT;
+            item->type=ITEM_LOOT;
             if(!LCSrandom(5))item->loottype=LOOT_SECRETDOCUMENTS;
             else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
             else if(!LCSrandom(2))item->loottype=LOOT_PDA;
