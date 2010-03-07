@@ -134,8 +134,7 @@ void dispersalcheck(char &clearformess)
                {
                   // Roll to see if you go into hiding or not
                   if(!pool[p]->hiding&&
-                     pool[p]->attval(ATTRIBUTE_HEART)*5+
-                     //pool[p]->skillval(SKILL_SURVIVAL)*10+
+                     pool[p]->get_attribute(ATTRIBUTE_HEART)*5+
                      pool[p]->juice<LCSrandom(200))
                   {
                      member_status[p]=DISPERSAL_NOCONTACT;//Vanish forever

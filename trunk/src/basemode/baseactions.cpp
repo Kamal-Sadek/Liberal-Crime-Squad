@@ -903,7 +903,7 @@ void setvehicles(void)
          {
             move(8,20);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Choose a Liberal squad member drive it.");
+            addstr("Choose a Liberal squad member to drive it.");
 
             refresh();
 

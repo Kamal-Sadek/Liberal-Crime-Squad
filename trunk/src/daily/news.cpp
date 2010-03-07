@@ -1489,7 +1489,7 @@ void majornewspaper(char &clearformess,char canseethings)
             location[pool[i]->location]->compound_walls & COMPOUND_PRINTINGPRESS)
          {
             pool[i]->train(SKILL_WRITING,LCSrandom(3)); // Experience gain
-            writers+=pool[i]->skillval(SKILL_WRITING); // Record the writer on this topic
+            writers+=pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
             criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
@@ -1954,16 +1954,23 @@ void majornewspaper(char &clearformess,char canseethings)
       //Yes, crappy letters to the editor may backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
       {
-         background_liberal_influence[randomissue()]+=pool[p]->skillval(SKILL_WRITING)-LCSrandom(3);
+         if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
+            background_liberal_influence[randomissue()]+=5;
+         else
+            background_liberal_influence[randomissue()]-=5;
+
          pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
       }
 
       //Guardian Essays
       //Basically letters to the editor, but thrice as potent
-      // Should change this to have a further multiplier based on # of printing presses
       if(pool[p]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
-         background_liberal_influence[randomissue()]+=3*(pool[p]->skillval(SKILL_WRITING)-LCSrandom(3));
+         if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
+            background_liberal_influence[randomissue()]+=15;
+         else
+            background_liberal_influence[randomissue()]-=15;
+
          pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
       }
    }

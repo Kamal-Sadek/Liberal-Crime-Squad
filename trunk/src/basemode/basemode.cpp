@@ -704,7 +704,7 @@ void mode_base(void)
 
       if(c=='o'&&partysize>1)
      {
-        orderpartyV2();
+        orderparty();
      }
 
       if(c=='c'&&partysize>0)

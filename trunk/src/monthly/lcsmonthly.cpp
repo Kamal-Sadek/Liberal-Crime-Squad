@@ -492,11 +492,8 @@ void printnews(short l,short newspaper)
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the police a little riled up.");
 
          change_public_opinion(VIEW_POLICEBEHAVIOR,50);
-         offended_cops=1;
          break;
       case LOOT_JUDGEFILES:
          move(6,1);
@@ -512,11 +509,8 @@ void printnews(short l,short newspaper)
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
-         //move(9,1);
-         //addstr("This is bound to get the police a little riled up.");
 
          change_public_opinion(VIEW_JUSTICES,50);
-         //offended_cops=1;
          break;
       case LOOT_RESEARCHFILES:
          move(6,1);
@@ -538,10 +532,6 @@ void printnews(short l,short newspaper)
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
-         //move(9,1);
-         //addstr("This is bound to get the police a little riled up.");
-
-         //offended_cops=1;
          break;
       case LOOT_PRISONFILES:
          move(6,1);
@@ -563,11 +553,8 @@ void printnews(short l,short newspaper)
          }
          move(8,1);
          addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the police a little riled up.");
 
          change_public_opinion(VIEW_DEATHPENALTY,50);
-         offended_cops=1;
          break;
       case LOOT_CABLENEWSFILES:
          move(6,1);

@@ -119,7 +119,6 @@ char loaded=0;
 
 int mode=GAMEMODE_TITLE;
 
-short offended_cops=0;
 short offended_corps=0;
 short offended_cia=0;
 short offended_amradio=0;
@@ -142,6 +141,8 @@ int amendnum=28;
 
 bool termlimits=false;
 bool deagle=false;
+
+UniqueCreatures uniqueCreatures;
 
 short attitude[VIEWNUM];
 
@@ -428,133 +429,6 @@ int r_num(void)
    return seed;
 }
 
-int Creature::attval(short a,char usejuice)
-{
-   int ret=att[a];
-   
-   if(a==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
-   if(a==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
-
-   if(usejuice)
-   {
-      if(juice<=-50)ret=1;
-      else if(juice<=-10)ret=static_cast<int>(ret*0.6);
-      else if(juice<0)ret=static_cast<int>(ret*0.8);
-      else if(juice>=10)
-      {
-         if(juice<50)ret=static_cast<int>(ret+=1);
-         else if(juice<100)ret=static_cast<int>(ret*1.1+2);
-         else if(juice<200)ret=static_cast<int>(ret*1.2+3);
-         else if(juice<500)ret=static_cast<int>(ret*1.3+4);
-         else if(juice<1000)ret=static_cast<int>(ret*1.4+5);
-         else ret=static_cast<int>(ret*1.5+6);
-      }
-      if(ret<1)ret=1;
-      if(ret>20)ret=20;
-   }
-
-   long disfigs=0;
-   if(special[SPECIALWOUND_TEETH]<TOOTHNUM)disfigs++;
-   if(special[SPECIALWOUND_TEETH]<TOOTHNUM/2)disfigs++;
-   if(special[SPECIALWOUND_TEETH]==0)disfigs++;
-   if(special[SPECIALWOUND_RIGHTEYE]==0)disfigs+=2;
-   if(special[SPECIALWOUND_LEFTEYE]==0)disfigs+=2;
-   if(special[SPECIALWOUND_TONGUE]==0)disfigs+=3;
-   if(special[SPECIALWOUND_NOSE]==0)disfigs+=3;
-
-   int legok=2;
-   if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-       (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-   if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-       (wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-
-   switch(a)
-   {
-      case ATTRIBUTE_STRENGTH:
-         if(special[SPECIALWOUND_NECK]!=1||
-            special[SPECIALWOUND_UPPERSPINE]!=1)
-         {
-            ret=1;
-         }
-         else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-
-         if(age<11)ret>>=1;
-         else if(age<16)ret-=1;
-         else if(age>35)ret-=1;
-         else if(age>52)ret-=3;
-         else if(age>70)ret-=6;
-         break;
-      case ATTRIBUTE_AGILITY:
-         if(special[SPECIALWOUND_NECK]!=1||
-            special[SPECIALWOUND_UPPERSPINE]!=1)
-         {
-            ret=1;
-         }
-         else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-         else if(legok==0)ret>>=2;
-         else if(legok==1)ret>>=1;
-
-         if(age<11)ret-=2;
-         else if(age<16)ret-=1;
-         else if(age>35)ret-=1;
-         else if(age>52)ret-=3;
-         else if(age>70)ret-=6;
-         break;
-      case ATTRIBUTE_HEALTH:
-         if(special[SPECIALWOUND_NECK]!=1||
-            special[SPECIALWOUND_UPPERSPINE]!=1)
-         {
-            ret=1;
-         }
-         else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-
-         if(age<11)ret-=2;
-         else if(age<16)ret-=1;
-         break;
-      case ATTRIBUTE_CHARISMA:
-         ret-=disfigs;
-
-         if(age<11)ret+=2; // yayay kids
-         else if(age<16)ret-=1; // barf teenagers
-         else if(age>35)ret+=1;
-         else if(age>52)ret+=2;
-         else if(age>70)ret+=3;
-         break;
-      case ATTRIBUTE_INTELLIGENCE:
-         if(age<11)ret-=3;
-         else if(age<16)ret-=1;
-         else if(age>35)ret+=1;
-         else if(age>52)ret+=2;
-         else if(age>70)ret+=3;
-         break;
-      case ATTRIBUTE_WISDOM:
-         if(age<11)ret-=2;
-         else if(age<16)ret-=1;
-         else if(age>52)ret+=1;
-         else if(age>70)ret+=2;
-         break;
-      case ATTRIBUTE_HEART:
-         if(age<11)ret+=2;
-         else if(age<16)ret+=1;
-         else if(age>52)ret-=1;
-         else if(age>70)ret-=2;
-         break;
-   }
-
-   if(a==ATTRIBUTE_STRENGTH||
-      a==ATTRIBUTE_AGILITY||
-      a==ATTRIBUTE_CHARISMA)
-   {
-      if(blood<=20)ret>>=1;
-      else if(blood<=50){ret*=3;ret>>=2;}
-      else if(blood<=75){ret*=7;ret>>=3;}
-   }
-
-   if(ret<1)ret=1;
-
-   return ret;
-}
-
 void vehiclest::stop_riding_me()
 {
    for(int p=0;p<pool.size();p++)
@@ -634,104 +508,6 @@ void vehiclest::init(int t)
          }
          break;
    }
-}
-
-void Creature::creatureinit(void)
-{
-   hireid=-1;
-   worklocation=0;
-   juice=0;
-   flag=0;
-   age=18+LCSrandom(40);
-   gender_liberal = gender_conservative = LCSrandom(2) + 1;
-   birthday_month=LCSrandom(12)+1;
-   if(birthday_month==4 || birthday_month==6 ||
-      birthday_month==9 || birthday_month==11)
-   {
-      birthday_day=LCSrandom(30)+1;
-   }
-   else if(birthday_month==2)
-   {
-      birthday_day=LCSrandom(28)+1;
-   }
-   else
-   {
-      birthday_day=LCSrandom(31)+1;
-   }
-   carid=-1;
-   is_driver=0;
-   pref_carid=-1;
-   pref_is_driver=0;
-   id=curcreatureid;
-      curcreatureid++;
-   joindays=0;
-   deathdays=0;
-   squadid=-1;
-   cantbluff=0;
-   location=0;
-   base=0;
-   activity.type=ACTIVITY_NONE;
-   for(int i=0;i<LAWFLAGNUM;i++)
-      crimes_suspected[i]=0;
-   heat=0;
-   confessions=0;
-   clinic=0;
-   dating=0;
-   hiding=0;
-   trainingtime=0;
-   trainingsubject=-1;
-   specialattack=-1;
-   animalgloss=0;
-   prisoner=NULL;
-   alive=1;
-   blood=100;
-   stunned=0;
-   for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
-   weapon.type=WEAPON_NONE;
-   weapon.ammo=0;
-   armor.type=ARMOR_CLOTHES;
-   armor.quality='1';
-   armor.flag=0;
-   for(int a=0;a<ATTNUM;a++)
-   {
-      att[a]=1;
-   }
-   int attnum=32;
-   while(attnum>0)
-   {
-      int a=LCSrandom(ATTNUM);
-      if(att[a]<10)
-      {
-         att[a]++;
-         attnum--;
-      }
-   }
-   for(int s=0;s<SKILLNUM;s++)
-   {
-      skill[s]=0;
-      skill_ip[s]=0;
-   }
-   for(int c=0;c<CLIPNUM;c++)clip[c]=0;
-   special[SPECIALWOUND_TEETH]=TOOTHNUM;
-   special[SPECIALWOUND_RIGHTEYE]=1;
-   special[SPECIALWOUND_LEFTEYE]=1;
-   special[SPECIALWOUND_NOSE]=1;
-   special[SPECIALWOUND_TONGUE]=1;
-   special[SPECIALWOUND_RIGHTLUNG]=1;
-   special[SPECIALWOUND_LEFTLUNG]=1;
-   special[SPECIALWOUND_HEART]=1;
-   special[SPECIALWOUND_LIVER]=1;
-   special[SPECIALWOUND_STOMACH]=1;
-   special[SPECIALWOUND_RIGHTKIDNEY]=1;
-   special[SPECIALWOUND_LEFTKIDNEY]=1;
-   special[SPECIALWOUND_SPLEEN]=1;
-   special[SPECIALWOUND_RIBS]=RIBNUM;
-   special[SPECIALWOUND_NECK]=1;
-   special[SPECIALWOUND_UPPERSPINE]=1;
-   special[SPECIALWOUND_LOWERSPINE]=1;
-   forceinc=0;
-   sentence=0;
-   deathpenalty=0;
 }
 
 void locationst::init(void)

@@ -444,9 +444,9 @@ void passmonth(char &clearformess,char canseethings)
             if(copstrength>200)copstrength=200;
 
             //Confession check
-            if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->attval(ATTRIBUTE_HEART)*5  -
-                                      pool[p]->attval(ATTRIBUTE_WISDOM)*5  +  pool[p]->skillval(SKILL_PSYCHOLOGY)*5
-                                      /*+ pool[p]->skillval(SKILL_SURVIVAL)*5*/  &&  pool[p]->hireid!=-1)
+            if(LCSrandom(copstrength)>pool[p]->juice  +  pool[p]->get_attribute(ATTRIBUTE_HEART,true)*5  -
+                                      pool[p]->get_attribute(ATTRIBUTE_WISDOM,true)*5  +  pool[p]->get_skill(SKILL_PSYCHOLOGY)*5
+                                      /*+ pool[p]->get_skill(SKILL_SURVIVAL)*5*/  &&  pool[p]->hireid!=-1)
             {
                int nullify=0;
                int p2=getpoolcreature(pool[p]->hireid);
@@ -454,7 +454,7 @@ void passmonth(char &clearformess,char canseethings)
                if(pool[p2]->alive && (pool[p2]->location==-1 || location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON))
                {
                   //Leadership check to nullify subordinate's confession
-                  if(LCSrandom(pool[p2]->skillval(SKILL_LEADERSHIP)+1))nullify=1;
+                  if(LCSrandom(pool[p2]->get_skill(SKILL_LEADERSHIP)+1))nullify=1;
                   else
                   {
                      //Charge the boss with racketeering!
@@ -530,7 +530,7 @@ void passmonth(char &clearformess,char canseethings)
       if(location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&!pool[p]->alive)
       {
          removesquadinfo(*pool[p]);
-         pool[p]->alive=0;
+         pool[p]->die();
          pool[p]->location=-1;
          //delete pool[p];
          //pool.erase(pool.begin() + p);
@@ -546,7 +546,153 @@ void passmonth(char &clearformess,char canseethings)
    //FUND REPORTS
    fundreport(clearformess);
 
-   
+   //HEAL CLINIC PEOPLE
+   for(p=0;p<pool.size();p++)
+   {
+      if(disbanding)break;
+      if(!(pool[p]->alive))continue;
+
+      if(pool[p]->clinic>0)
+      {
+         pool[p]->clinic--;
+
+         for(int w=0;w<BODYPARTNUM;w++)
+         {
+            if((pool[p]->wound[w] & WOUND_NASTYOFF)||
+               (pool[p]->wound[w] & WOUND_CLEANOFF))
+            {
+               pool[p]->wound[w]=(char)WOUND_CLEANOFF;
+            }
+            else pool[p]->wound[w]=0;
+         }
+
+         int healthdamage = 0;
+
+         if(pool[p]->special[SPECIALWOUND_RIGHTLUNG]!=1)
+         {
+            pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
+            if(LCSrandom(2))
+            {
+               healthdamage++;
+            }
+         }
+         if(pool[p]->special[SPECIALWOUND_LEFTLUNG]!=1)
+         {
+            pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
+            if(LCSrandom(2))
+            {
+               healthdamage++;
+            }
+         }
+         if(pool[p]->special[SPECIALWOUND_HEART]!=1)
+         {
+            pool[p]->special[SPECIALWOUND_HEART]=1;
+            if(LCSrandom(3))
+            {
+               healthdamage++;
+            }
+         }
+         pool[p]->special[SPECIALWOUND_LIVER]=1;
+         pool[p]->special[SPECIALWOUND_STOMACH]=1;
+         pool[p]->special[SPECIALWOUND_RIGHTKIDNEY]=1;
+         pool[p]->special[SPECIALWOUND_LEFTKIDNEY]=1;
+         pool[p]->special[SPECIALWOUND_SPLEEN]=1;
+         pool[p]->special[SPECIALWOUND_RIBS]=RIBNUM;
+
+         if(!pool[p]->special[SPECIALWOUND_NECK])
+         {
+            pool[p]->special[SPECIALWOUND_NECK]=2;
+         }
+         if(!pool[p]->special[SPECIALWOUND_UPPERSPINE])
+         {
+            pool[p]->special[SPECIALWOUND_UPPERSPINE]=2;
+         }
+         if(!pool[p]->special[SPECIALWOUND_LOWERSPINE])
+         {
+            pool[p]->special[SPECIALWOUND_LOWERSPINE]=2;
+         }
+
+         // Inflict permanent health damage
+         pool[p]->set_attribute(ATTRIBUTE_HEALTH,pool[p]->get_attribute(ATTRIBUTE_HEALTH,0)-healthdamage);
+         if(pool[p]->get_attribute(ATTRIBUTE_HEALTH,0)<=0)
+         {
+            pool[p]->set_attribute(ATTRIBUTE_HEALTH,1);
+         }
+
+         if(pool[p]->blood<=20&&pool[p]->clinic<=2)pool[p]->blood=50;
+         if(pool[p]->blood<=50&&pool[p]->clinic<=1)pool[p]->blood=75;
+
+         // If at clinic and in critical condition, transfer to university hospital
+         if(pool[p]->clinic > 2 &&
+            pool[p]->location > -1 &&
+            location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
+         {
+            int hospital;
+            for(hospital=0;hospital<location.size();++hospital)
+            {
+               if(location[hospital]->type==SITE_HOSPITAL_UNIVERSITY)break;
+            }
+            if(hospital!=location.size())
+            {
+               pool[p]->location=hospital;
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(8,1);
+               addstr(pool[p]->name);
+               addstr(" has been transferred to ");
+               addstr(location[hospital]->name);
+               addstr(".");
+               refresh();
+               getch();
+            }
+         }
+
+         // End treatment
+         if(pool[p]->clinic==0)
+         {
+            pool[p]->blood=100;
+            if(clearformess)
+            {
+               erase();
+            }
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(pool[p]->name);
+            addstr(" has left ");
+            addstr(location[pool[p]->location]->name);
+            addstr(".");
+
+            int hs=-1;
+            for(int l=0;l<location.size();l++)
+            {
+               if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
+               {
+                  hs=l;
+                  break;
+               }
+            }
+            if (hs==-1)
+            {
+               //TODO: Error unable to find location
+               hs=0;
+            }
+
+            if(location[pool[p]->base]->siege.siege)
+            {
+               pool[p]->base=hs;
+            }
+
+            pool[p]->location=pool[p]->base;
+
+            refresh();
+            getch();
+         }
+      }
+   }
 }
 
 /* rename various buildings according to the new laws */

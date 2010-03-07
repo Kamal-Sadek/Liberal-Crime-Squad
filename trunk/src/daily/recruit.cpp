@@ -42,16 +42,16 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
 
 char recruitst::eagerness()
 {
-   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->skillval(SKILL_LEADERSHIP); 
+   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->get_skill(SKILL_LEADERSHIP); 
    if(recruit->talkreceptive())
    {
       eagerness_temp+=2;
    }
-   if(recruit->attval(ATTRIBUTE_HEART)>recruit->attval(ATTRIBUTE_WISDOM))
+   if(recruit->get_attribute(ATTRIBUTE_HEART,true)>recruit->get_attribute(ATTRIBUTE_WISDOM,true))
    {
       eagerness_temp++;
    }
-   if(recruit->attval(ATTRIBUTE_HEART) > 9)
+   if(recruit->get_attribute(ATTRIBUTE_HEART,true) > 9)
    {
       eagerness_temp++;
    }
@@ -104,8 +104,8 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
 
       //Select a weapon to arm the recruit with
       if(r.recruit->money>1500 &&
-         r.recruit->skillval(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skillval(SKILL_STREETSENSE)))
+         r.recruit->get_skill(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->get_skill(SKILL_STREETSENSE)))
       {
          switch(LCSrandom(3))
          {
@@ -117,32 +117,32 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>1200 &&
-         r.recruit->skillval(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->skillval(SKILL_STREETSENSE)))
+         r.recruit->get_skill(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]==-2 || r.recruit->get_skill(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SMG_MP5;
          r.recruit->weapon.ammo=15;
          r.recruit->clip[CLIP_SMG]=4;
       }
       else if(r.recruit->money>400 &&
-         r.recruit->skillval(SKILL_SHOTGUN) &&
-         (law[LAW_GUNCONTROL]<2 || r.recruit->skillval(SKILL_STREETSENSE)))
+         r.recruit->get_skill(SKILL_SHOTGUN) &&
+         (law[LAW_GUNCONTROL]<2 || r.recruit->get_skill(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>350 &&
-         r.recruit->skillval(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]<=-1 || r.recruit->skillval(SKILL_STREETSENSE)))
+         r.recruit->get_skill(SKILL_RIFLE) &&
+         (law[LAW_GUNCONTROL]<=-1 || r.recruit->get_skill(SKILL_STREETSENSE)))
       {
          r.recruit->weapon.type=WEAPON_SEMIRIFLE_AR15;
          r.recruit->weapon.ammo=30;
          r.recruit->clip[CLIP_ASSAULT]=4;
       }
       else if(r.recruit->money>300 &&
-         r.recruit->skillval(SKILL_PISTOL) &&
-         (law[LAW_GUNCONTROL]<1 || r.recruit->skillval(SKILL_STREETSENSE)))
+         r.recruit->get_skill(SKILL_PISTOL) &&
+         (law[LAW_GUNCONTROL]<1 || r.recruit->get_skill(SKILL_STREETSENSE)))
       {
          switch(LCSrandom(4))
          {
@@ -160,22 +160,22 @@ char completerecruittask(recruitst &r,int p,char &clearformess)
                 break;
          }
       }
-      else if(r.recruit->skillval(SKILL_SWORD))
+      else if(r.recruit->get_skill(SKILL_SWORD))
       {
          if(LCSrandom(5)) r.recruit->weapon.type=WEAPON_SWORD;
          else r.recruit->weapon.type=WEAPON_DAISHO;
       }
-      else if(r.recruit->skillval(SKILL_AXE))
+      else if(r.recruit->get_skill(SKILL_AXE))
       {
          r.recruit->weapon.type=WEAPON_AXE;
       }
-      else if(r.recruit->skillval(SKILL_PISTOL))
+      else if(r.recruit->get_skill(SKILL_PISTOL))
       {
          r.recruit->weapon.type=WEAPON_REVOLVER_38;
          r.recruit->weapon.ammo=6;
          r.recruit->clip[CLIP_38]=4;
       }
-      else if(r.recruit->skillval(SKILL_CLUB) && !r.recruit->skillval(SKILL_KNIFE))
+      else if(r.recruit->get_skill(SKILL_CLUB) && !r.recruit->get_skill(SKILL_KNIFE))
       {
          if(LCSrandom(2))r.recruit->weapon.type=WEAPON_BASEBALLBAT;
          else r.recruit->weapon.type=WEAPON_CROWBAR;
@@ -408,42 +408,42 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          //SAV - You can get your skill up to a 3 by chatting. Past that,
          // you must successfully recruit people. Training is slower the
          // better you are.
-         //JDS - Increased max skill to get to 5 under this system, gave
-         // minimum of 1 exp for the action.
+         //JDS - Increased max skill to get to 12 under this system, gave
+         // minimum of 5 exp for the action.
          pool[p]->train(SKILL_PERSUASION,
-            max(5-pool[p]->skillval(SKILL_PERSUASION),1));
+            max(12-pool[p]->get_skill(SKILL_PERSUASION),5));
          pool[p]->train(SKILL_SCIENCE,
-            max(r.recruit->skillval(SKILL_SCIENCE)-pool[p]->skillval(SKILL_SCIENCE),0));
+            max(r.recruit->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
          pool[p]->train(SKILL_RELIGION,
-            max(r.recruit->skillval(SKILL_RELIGION)-pool[p]->skillval(SKILL_RELIGION),0));
+            max(r.recruit->get_skill(SKILL_RELIGION)-pool[p]->get_skill(SKILL_RELIGION),0));
          pool[p]->train(SKILL_LAW,
-            max(r.recruit->skillval(SKILL_LAW)-pool[p]->skillval(SKILL_LAW),0));
+            max(r.recruit->get_skill(SKILL_LAW)-pool[p]->get_skill(SKILL_LAW),0));
          pool[p]->train(SKILL_BUSINESS,
-            max(r.recruit->skillval(SKILL_BUSINESS)-pool[p]->skillval(SKILL_BUSINESS),0));
+            max(r.recruit->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS),0));
          
-         int lib_persuasiveness = LCSrandom(pool[p]->skillval(SKILL_PERSUASION)*2+
-                                  pool[p]->skillval(SKILL_BUSINESS)+
-                                  pool[p]->skillval(SKILL_SCIENCE)+
-                                  pool[p]->skillval(SKILL_RELIGION)+
-                                  pool[p]->skillval(SKILL_LAW)+1)+
-                                  LCSrandom(pool[p]->attval(ATTRIBUTE_HEART)+
-                                  pool[p]->attval(ATTRIBUTE_CHARISMA)*2+
-                                  pool[p]->attval(ATTRIBUTE_INTELLIGENCE));
+         int lib_persuasiveness = pool[p]->get_skill(SKILL_BUSINESS)+
+                                  pool[p]->get_skill(SKILL_SCIENCE)+
+                                  pool[p]->get_skill(SKILL_RELIGION)+
+                                  pool[p]->get_skill(SKILL_LAW)+
+                                  pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
 
-         int recruit_reluctance = LCSrandom(r.recruit->skillval(SKILL_BUSINESS)+
-                                  r.recruit->skillval(SKILL_SCIENCE)+
-                                  r.recruit->skillval(SKILL_RELIGION)+
-                                  r.recruit->skillval(SKILL_LAW))+
-                                  LCSrandom(r.recruit->attval(ATTRIBUTE_WISDOM)*3+
-                                  r.recruit->attval(ATTRIBUTE_INTELLIGENCE));
+         int recruit_reluctance = r.recruit->get_skill(SKILL_BUSINESS)+
+                                  r.recruit->get_skill(SKILL_SCIENCE)+
+                                  r.recruit->get_skill(SKILL_RELIGION)+
+                                  r.recruit->get_skill(SKILL_LAW)+
+                                  r.recruit->get_attribute(ATTRIBUTE_WISDOM,true)+
+                                  r.recruit->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
 
-         int max_eagerness      = pool[p]->attval(ATTRIBUTE_HEART)-
-                                  r.recruit->attval(ATTRIBUTE_WISDOM);
+         if(lib_persuasiveness > recruit_reluctance + 5)
+            recruit_reluctance = -5;
+         else
+            recruit_reluctance -= lib_persuasiveness;
+
+         int difficulty = DIFFICULTY_AVERAGE + recruit_reluctance;
 
          if(c=='a')
          {
-            lib_persuasiveness+=LCSrandom(20);
-            max_eagerness     +=LCSrandom(20);
+            difficulty -= 5;
 
             move(y++,0);
             addstr(pool[p]->name);
@@ -474,9 +474,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             getch();
          }
 
-
-         if((lib_persuasiveness         > recruit_reluctance) &&
-            (max_eagerness+(int)LCSrandom(5) > r.eagerness()     ))
+         if(pool[p]->skill_check(SKILL_PERSUASION,difficulty))
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             r.level++;
@@ -489,7 +487,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr("They'll definitely meet again tomorrow.");
          }
-         else if((lib_persuasiveness > recruit_reluctance))
+         else if(pool[p]->skill_check(SKILL_PERSUASION,difficulty)) // Second chance to not fail horribly
          {
             r.level++;
             move(y++,0);
@@ -504,10 +502,24 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(y++,0);
-            addstr(pool[p]->name);
-            addstr(" comes off as slightly insane.");
-            move(y++,0);
-            addstr("This whole thing was a mistake. There won't be another meeting.");
+            if(pool[p]->talkreceptive())
+            {
+               addstr(r.recruit->name);
+               addstr(" isn't convinced ");
+               addstr(pool[p]->name);
+               addstr(" really understands the problem.");
+               move(y++,0);
+               addstr("Maybe ");
+               addstr(pool[p]->name);
+               addstr(" needs more experience.");
+            }
+            else
+            {
+               addstr(pool[p]->name);
+               addstr(" comes off as slightly insane.");
+               move(y++,0);
+               addstr("This whole thing was a mistake. There won't be another meeting.");
+            }
             refresh();
             getch();
             return 1;
@@ -520,50 +532,5 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       {
          return 1;
       }
-      // Donations below -- removed because it's a grindfest
-      // - Jonathan S. Fox
-      /*if(c=='c')
-      {
-         if(r.eagerness()>5 && r.recruit->money)
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            int donationamount=0;
-            move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" would be happy to help.");
-            
-            donationamount=r.recruit->money;
-
-            if(r.eagerness()>7)
-               donationamount=static_cast<int>((1.0+LCSrandom(6)/10.0)*donationamount);
-            if(r.recruit->attval(ATTRIBUTE_HEART)>8)
-               donationamount=static_cast<int>((1.0+LCSrandom(6)/10.0)*donationamount);
-            if(r.recruit->attval(ATTRIBUTE_WISDOM)>8)
-               donationamount=static_cast<int>((1.0-LCSrandom(6)/10.0)*donationamount);
-            if(r.recruit->align==-1)
-               donationamount=static_cast<int>((0.5-LCSrandom(4)/10.0)*donationamount);
-            refresh();
-            getch();
-            move(y++,0);
-            addstr("Here's $");
-            if(donationamount<=0)donationamount=1;
-            itoa(donationamount,str,10);
-            addstr(str);
-            addstr(" for the cause.");
-            funds+=donationamount;
-            moneygained_donate+=donationamount;
-         }
-         else
-         {
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            move(y++,0);
-            addstr("Sorry, ");
-            addstr(r.recruit->name);
-            addstr(" just doesn't have that kind of money lying around.");
-         }
-         refresh();
-         getch();
-         return 1;
-      }*/
    }while(1);
 }

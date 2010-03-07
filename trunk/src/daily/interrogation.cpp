@@ -21,19 +21,133 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+// Macro dumps interrogation data to screen for debug
+#ifdef INTERROGATION_DEBUG
+   #define DEBUG_VARIABLE_DUMP(text,value) { char c[5]; move(20,0); itoa(value,c,10); addstr(text); addstr(c); addstr(" "); }
+#else
+   #define DEBUG_VARIABLE_DUMP(text,value)
+#endif
+
 enum InterrogationTechnqiues
 {
    TECHNIQUE_TALK,
    TECHNIQUE_RESTRAIN,
    TECHNIQUE_BEAT,
-   TECHNIQUE_NOSLEEP,
-   //TECHNIQUE_NOLIGHTS, XXX
-   TECHNIQUE_GIVEFOOD,
-   TECHNIQUE_GIVEWATER,
    TECHNIQUE_PROPS,
    TECHNIQUE_DRUGS,
    TECHNIQUE_KILL
 };
+
+// Clear sidebar
+void clear_interrogation_sidebar()
+{
+   for(int i=4;i<23;i++)
+   {
+      move(i,40);
+      addstr("                                  ");
+   }
+}
+
+// Shows the interrogation data at the right side of the screen
+void show_interrogation_sidebar( Creature * cr, Creature * a )
+{
+   clear_interrogation_sidebar();
+   int y=4;
+   char num2[10];
+   map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
+   move(y,40);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("Prisoner: ");
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   addstr(cr->name);
+   move(y+=2,40);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("Health: ");
+   printhealthstat(*cr,y,48,0);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(++y,40);
+   itoa(cr->get_attribute(ATTRIBUTE_HEART,true),num2,10);
+   addstr("Heart: ");
+   addstr(num2);
+   move(++y,40);
+   itoa(cr->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
+   addstr("Wisdom: ");
+   addstr(num2);
+   move(++y,40);
+   itoa(cr->get_attribute(ATTRIBUTE_HEALTH,true),num2,10);
+   addstr("Health: ");
+   addstr(num2);
+
+   move(y=13,40);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("Lead Interrogator: ");
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   addstr(a->name);
+   move(y+=2,40);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("Health: ");
+   printhealthstat(*a,y,48,0);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(++y,40);
+   itoa(a->get_skill(SKILL_PSYCHOLOGY),num2,10);
+   addstr("Psychology Skill: ");
+   addstr(num2);
+   move(++y,40);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   itoa(a->get_attribute(ATTRIBUTE_HEART,true),num2,10);
+   addstr("Heart: ");
+   addstr(num2);
+   move(++y,40);
+   itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
+   addstr("Wisdom: ");
+   addstr(num2);
+   move(++y,40);
+   itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
+   addstr("Outfit: ");
+   char str[40];
+   getarmorfull(str,a->armor.type);
+   addstr(str);
+   move(y+=2,40);
+   
+   // What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
+   // These are greater than and less than comparisons, so they are testing ranges -Fox
+   if(rapport[a->id]>3)
+   {
+      addstr("The Conservative clings helplessly ");
+      move(++y,40);
+      addstr("to ");
+      addstr(a->name);
+      addstr(" as its only friend.");
+   } 
+   else if(rapport[a->id]>1)
+   {
+      addstr("The Conservative likes ");
+      addstr(a->name);
+      addstr(".");
+   }
+   else if(rapport[a->id]>-1)
+   {
+      addstr("The Conservative is uncooperative");
+      move(++y,40);
+      addstr("toward ");
+      addstr(a->name);
+      addstr(".");
+   }
+   else if(rapport[a->id]>-4)
+   {
+      addstr("The Conservative hates ");
+      addstr(a->name);
+      addstr(".");
+   }
+   else
+   {
+      addstr("The Conservative would like to ");
+      move(++y,40);
+      addstr("murder ");
+      addstr(a->name);
+      addstr(".");
+   }
+}
 
 /* hostage tending */
 void tendhostage(Creature *cr,char &clearformess)
@@ -79,11 +193,11 @@ void tendhostage(Creature *cr,char &clearformess)
       !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[TECHNIQUE_RESTRAIN])
    {
       //CHECK FOR HOSTAGE ESCAPE
-      if((int)(LCSrandom(200)+10*temppool.size())<
-         cr->attval(ATTRIBUTE_INTELLIGENCE)+
-         cr->attval(ATTRIBUTE_AGILITY)+
-         cr->attval(ATTRIBUTE_STRENGTH)&&
-         cr->joindays>=2)
+      if(LCSrandom(200)+25*temppool.size()<
+         cr->get_attribute(ATTRIBUTE_INTELLIGENCE,true)+
+         cr->get_attribute(ATTRIBUTE_AGILITY,true)+
+         cr->get_attribute(ATTRIBUTE_STRENGTH,true)&&
+         cr->joindays>=5)
       {
          for(int p=0;p<pool.size();p++)
          {
@@ -153,58 +267,47 @@ void tendhostage(Creature *cr,char &clearformess)
 
    {
       int p;
-      int maxattack=0;
 
       int business=0;
       int religion=0;
       int science=0;
 
-      //each day, spiritcrush is initialized to the average spiritcrush of
-      //the entire stay with the LCS -- continued pressure just compounds
-      //the trauma, while letting up takes a while to get them calmed down
-      //and really brutal treatment early on will never be completely
-      //forgotten
-      int spiritcrush;
-      if(cr->joindays)spiritcrush=reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush/cr->joindays;
-      else spiritcrush=0;
-      int healthcrush=0;
-
-      //get short references to the hostage's status
-      int& nofood = reinterpret_cast<interrogation*>(cr->activity.arg)->nofood;
-      int& nowater = reinterpret_cast<interrogation*>(cr->activity.arg)->nowater;
-      int& nosleep = reinterpret_cast<interrogation*>(cr->activity.arg)->nosleep;
-      //int& nolight = reinterpret_cast<interrogation*>(cr->activity.arg)->nolight;
+      //each day, the attack roll is initialized to the number of days of the stay with
+      //the LCS -- they will eventually break, but also eventually become too traumatized
+      //to continue
+      int attack = 0;
       int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
+
       map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
-      int * attack = new int[temppool.size()];
+      int* _attack   = new int[temppool.size()];
 
       for(p=0;p<temppool.size();p++)
       {
-         attack[p] = 0;
+         _attack[p] = 0;
          if(temppool[p]!=NULL)
          {
             if(temppool[p]->alive)
             {
-               if(temppool[p]->skillval(SKILL_BUSINESS)>business)
-                  business=temppool[p]->skillval(SKILL_BUSINESS);
-               if(temppool[p]->skillval(SKILL_RELIGION)>religion)
-                  religion=temppool[p]->skillval(SKILL_RELIGION);
-               if(temppool[p]->skillval(SKILL_SCIENCE)>science)
-                  science=temppool[p]->skillval(SKILL_SCIENCE);
+               if(temppool[p]->get_skill(SKILL_BUSINESS)>business)
+                  business=temppool[p]->get_skill(SKILL_BUSINESS);
+               if(temppool[p]->get_skill(SKILL_RELIGION)>religion)
+                  religion=temppool[p]->get_skill(SKILL_RELIGION);
+               if(temppool[p]->get_skill(SKILL_SCIENCE)>science)
+                  science=temppool[p]->get_skill(SKILL_SCIENCE);
 
-               attack[p] = (temppool[p]->attval(ATTRIBUTE_HEART)-
-                            temppool[p]->attval(ATTRIBUTE_WISDOM)+
-                            temppool[p]->skillval(SKILL_PSYCHOLOGY)*2);
+               _attack[p] = (temppool[p]->get_attribute(ATTRIBUTE_HEART,true)-
+                            temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+
+                            temppool[p]->get_skill(SKILL_PSYCHOLOGY)*2);
 
-               attack[p] += temppool[p]->armor.interrogation_basepower();
+               _attack[p] += temppool[p]->armor.interrogation_basepower();
 
-               if(attack[p] < 0)
-                  attack[p] = 0;
+               if(_attack[p] < 0)
+                  _attack[p] = 0;
 
-               if(attack[p]>maxattack)
+               if(_attack[p]>attack)
                {
-                  maxattack=attack[p];
+                  attack=_attack[p];
                }
             }
          }
@@ -218,7 +321,7 @@ void tendhostage(Creature *cr,char &clearformess)
          {
             if(temppool[p]->alive)
             {
-               if(attack[p]==maxattack)
+               if(_attack[p]==attack)
                {
                   goodp.push_back(p);
                }
@@ -227,21 +330,20 @@ void tendhostage(Creature *cr,char &clearformess)
       }
       a=temppool[goodp[LCSrandom(goodp.size())]];
 
-      maxattack+=temppool.size();
+      attack+=temppool.size();
+      attack+=cr->joindays;
 
-      maxattack+=business-cr->skillval(SKILL_BUSINESS);
-      maxattack+=religion-cr->skillval(SKILL_RELIGION);
-      maxattack+=science-cr->skillval(SKILL_SCIENCE);
+      attack+=business-cr->get_skill(SKILL_BUSINESS);
+      attack+=religion-cr->get_skill(SKILL_RELIGION);
+      attack+=science-cr->get_skill(SKILL_SCIENCE);
+      attack+=a->skill_roll(SKILL_PSYCHOLOGY)-cr->skill_roll(SKILL_PSYCHOLOGY);
 
-      int aroll=maxattack+
-                         LCSrandom(20)+1;
-      int troll=cr->attval(ATTRIBUTE_WISDOM)*2-
-                         cr->attval(ATTRIBUTE_HEART)+
-                         LCSrandom(20)+1;
+      attack+=cr->attribute_roll(ATTRIBUTE_HEART);
+      attack-=cr->attribute_roll(ATTRIBUTE_WISDOM)*2;
 
-      bool techniques[9];
+      bool techniques[6];
       //recall interrogation plan
-      for(int i=0; i<9; i++)
+      for(int i=0; i<6; i++)
       {
          techniques[i]=reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i];
       }
@@ -273,26 +375,14 @@ void tendhostage(Creature *cr,char &clearformess)
          move(y,0);y+=1;addstr("C - ");
          if(!techniques[TECHNIQUE_BEAT]) addstr("Not ");
          addstr("Violently Beaten    ");
-         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_NOSLEEP]);
-         move(y,0);y+=1;addstr("D - ");
-         if(!techniques[TECHNIQUE_NOSLEEP])addstr("No ");
-         addstr("Sleep Deprivation   ");
-         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[TECHNIQUE_GIVEFOOD]);
-         move(y,0);y+=1;addstr("E - ");
-         if(techniques[TECHNIQUE_GIVEFOOD])addstr("Not ");
-         addstr("Given Food    ");
-         if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,!techniques[TECHNIQUE_GIVEWATER]);
-         move(y,0);y+=1;addstr("F - ");
-         if(techniques[TECHNIQUE_GIVEWATER])addstr("Not ");
-         addstr("Given Water    ");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_PROPS]);
-         move(y,0);addstr("G - ");
+         move(y,0);addstr("D - ");
          if(!techniques[TECHNIQUE_PROPS])addstr("No ");
          addstr("Expensive Props     ");
          move(y,27);y+=1;
-         addstr("($100)");
+         addstr("($250)");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_DRUGS]);
-         move(y,0);addstr("H - ");
+         move(y,0);addstr("E - ");
          if(!techniques[TECHNIQUE_DRUGS])addstr("No ");
          addstr("Hallucinogenic Drugs    ");
          move(y,28);y+=2;
@@ -303,125 +393,17 @@ void tendhostage(Creature *cr,char &clearformess)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y+=1;addstr("Press Enter to Confirm the Plan");
 
-         y=4;
-         move(y,40);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("Prisoner: ");
-         set_color(COLOR_RED,COLOR_BLACK,1);
-         addstr(cr->name);
-         move(y+=2,40);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("Health: ");
-         printhealthstat(*cr,y,48,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(++y,40);
-         itoa(cr->attval(ATTRIBUTE_HEART),num2,10);
-         addstr("Heart: ");
-         addstr(num2);
-         move(++y,40);
-         itoa(cr->attval(ATTRIBUTE_WISDOM),num2,10);
-         addstr("Wisdom: ");
-         addstr(num2);
-         move(++y,40);
-         itoa(cr->attval(ATTRIBUTE_HEALTH),num2,10);
-         addstr("Health: ");
-         addstr(num2);
-         if(nofood)
-         {
-            move(++y,40);
-            itoa(nofood,num2,10);
-            addstr("No Food: ");
-            addstr(num2);
-            addstr(" days");
-         }
-         if(nowater)
-         {
-            move(++y,40);
-            itoa(nowater,num2,10);
-            addstr("No Water: ");
-            addstr(num2);
-            addstr(" days");
-         }
-
-         move(y=13,40);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("Lead Interrogator: ");
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         addstr(a->name);
-         move(y+=2,40);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("Health: ");
-         printhealthstat(*a,y,48,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(++y,40);
-         itoa(a->skillval(SKILL_PSYCHOLOGY),num2,10);
-         addstr("Psychology Skill: ");
-         addstr(num2);
-         move(++y,40);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         itoa(a->attval(ATTRIBUTE_HEART),num2,10);
-         addstr("Heart: ");
-         addstr(num2);
-         move(++y,40);
-         itoa(a->attval(ATTRIBUTE_WISDOM),num2,10);
-         addstr("Wisdom: ");
-         addstr(num2);
-         move(++y,40);
-         itoa(a->attval(ATTRIBUTE_WISDOM),num2,10);
-         addstr("Outfit: ");
-         char str[40];
-         getarmorfull(str,a->armor.type);
-         addstr(str);
-         move(y+=2,40);
-         if(rapport[a->id]>3)
-         {
-            addstr("The Conservative clings helplessly ");
-            move(++y,40);
-            addstr("to ");
-            addstr(a->name);
-            addstr(" as its only friend.");
-         } // What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
-           // These are greater than and less than comparisons, so they are testing ranges -Fox
-         else if(rapport[a->id]>1)
-         {
-            addstr("The Conservative likes ");
-            addstr(a->name);
-            addstr(".");
-         }
-         else if(rapport[a->id]>-1)
-         {
-            addstr("The Conservative is uncooperative");
-            move(++y,40);
-            addstr("toward ");
-            addstr(a->name);
-            addstr(".");
-         }
-         else if(rapport[a->id]>-4)
-         {
-            addstr("The Conservative hates ");
-            addstr(a->name);
-            addstr(".");
-         }
-         else
-         {
-            addstr("The Conservative would like to ");
-            move(++y,40);
-            addstr("murder ");
-            addstr(a->name);
-            addstr(".");
-         }
-         
-
+         show_interrogation_sidebar(cr,a);
          
          int c=getch();
          translategetch(c);
-         if(c>='a'&&c<='h')techniques[c-'a']=!techniques[c-'a'];
+         if(c>='a'&&c<='e')techniques[c-'a']=!techniques[c-'a'];
          if(c=='k')techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
          if(c==10)break;
       }
 
-      if(techniques[TECHNIQUE_PROPS] && ledger.get_funds()>=100)
-      { ledger.subtract_funds(100,EXPENSE_HOSTAGE); }
+      if(techniques[TECHNIQUE_PROPS] && ledger.get_funds()>=250)
+      { ledger.subtract_funds(250,EXPENSE_HOSTAGE); }
       else { techniques[TECHNIQUE_PROPS] = 0; }
       if(techniques[TECHNIQUE_DRUGS] && ledger.get_funds()>=50)
       { ledger.subtract_funds(50,EXPENSE_HOSTAGE); }
@@ -450,7 +432,7 @@ void tendhostage(Creature *cr,char &clearformess)
          for(int i=0;i<temppool.size();++i)
          {
             if((int)LCSrandom(50)<temppool[i]->juice||
-               LCSrandom(9)+1>=temppool[i]->attval(ATTRIBUTE_HEART,0))
+               LCSrandom(9)+1>=temppool[i]->get_attribute(ATTRIBUTE_HEART,0))
             {
                a=temppool[i];
                break;
@@ -462,7 +444,7 @@ void tendhostage(Creature *cr,char &clearformess)
             //delete interrogation information
             delete reinterpret_cast<interrogation*>(cr->activity.arg);
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-            cr->alive=0;
+            cr->die();
             stat_kills++;
             move(y,0);y++;
             addstr(a->name);
@@ -477,14 +459,15 @@ void tendhostage(Creature *cr,char &clearformess)
                case 3:addstr("telling it that taxes have been increased.");break;
                case 4:addstr("telling it its parents wanted to abort it.");break;
             }
+            //show_interrogation_sidebar(cr,a);
             refresh();getch();
-            if(LCSrandom(a->att[ATTRIBUTE_HEART])>LCSrandom(3))
+            if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(a->name);
                addstr(" feels sick to the stomach afterward and ");
-               a->att[ATTRIBUTE_HEART]--;
+               a->adjust_attribute(ATTRIBUTE_HEART,-1);
                move(y,0);y++;
                switch(LCSrandom(4))
                {
@@ -500,7 +483,7 @@ void tendhostage(Creature *cr,char &clearformess)
                move(y,0);y++;
                addstr(a->name);
                addstr(" grows colder.");
-               a->att[ATTRIBUTE_WISDOM]++;
+               a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
             }
          }
          else
@@ -517,13 +500,11 @@ void tendhostage(Creature *cr,char &clearformess)
             //these restrictions:
             techniques[TECHNIQUE_TALK]=0; //don't talk to them today
             techniques[TECHNIQUE_BEAT]=0; //don't beat them today
-            techniques[TECHNIQUE_NOSLEEP]=0; //don't keep them from sleeping
             techniques[TECHNIQUE_DRUGS]=0; //don't administer drugs
 
-            //Food, water, light, and restraint settings will be applied as
-            //normal, of course, at the moment, light is not implemented
-            // (It was cut awhile back! -Fox)
+            //Food and restraint settings will be applied as normal
          }
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
 
@@ -547,7 +528,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   }
                }
             }
-            delete[] attack;
+            delete[] _attack;
             return;
          }
       }
@@ -572,7 +553,7 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr("in the middle of a back room.");
          y++;
 
-         spiritcrush+=LCSrandom(5);
+         attack+=5;
       }
       else
       {
@@ -581,78 +562,9 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr("converted into a makeshift cell.");
          y++;
       }
+      //show_interrogation_sidebar(cr,a);
       refresh();
       getch();
-
-      move(y,0);
-      if(techniques[TECHNIQUE_GIVEFOOD]) // no food
-      {
-         if(techniques[TECHNIQUE_GIVEWATER]) // no food AND no water
-         {
-            addstr("It is left to hunger and thirst like a lost animal.");
-            spiritcrush+=LCSrandom(2*(nowater+1)+1);
-            healthcrush+=LCSrandom(3*(nowater+1)+1)+1;
-            if(nowater++>2)cr->att[ATTRIBUTE_HEALTH]--;
-         }
-         else
-         {
-            addstr("It is forced to beg for food and water, and never receives any food.");
-            if(nowater>3)cr->att[ATTRIBUTE_HEALTH]++;
-            nowater=0;
-         }
-         y++;
-         spiritcrush+=LCSrandom(2*(nofood+1)+1);
-         healthcrush+=LCSrandom(2*(nofood+1)+1)+1;
-         if(nofood++>5)cr->att[ATTRIBUTE_HEALTH]--;
-         refresh();
-         getch();
-      }
-      else if(techniques[TECHNIQUE_GIVEWATER])
-      {
-         addstr("The only water it recieves comes in the scraps of food provided to sustain it.");
-         spiritcrush+=LCSrandom(2*(nowater+1));
-         healthcrush+=LCSrandom(3*(nowater+1))+1;
-         if(nowater++>2)cr->att[ATTRIBUTE_HEALTH]--;
-         if(nofood>6)cr->att[ATTRIBUTE_HEALTH]++;
-         nofood=0;
-
-         y++;
-         refresh();
-         getch();
-      }
-      else 
-      {
-         if(nowater>3)cr->att[ATTRIBUTE_HEALTH]++;
-         if(nofood>6)cr->att[ATTRIBUTE_HEALTH]++;
-         cr->blood+=nofood+nowater;
-         nofood=0;
-         nowater=0;
-      }
-
-      if(techniques[TECHNIQUE_NOSLEEP]&&!turned&&cr->alive) // No sleep
-      {
-         move(y,0);
-         addstr("It is forced to ");
-         switch(LCSrandom(2+techniques[TECHNIQUE_PROPS]*2))
-         {
-         case 0:addstr("listen to protest music");break;
-         case 1:addstr("listen to public radio");break;
-         case 2:addstr("watch network news tapes");break;
-         case 3:addstr("watch revealing documentaries");break;
-         }
-         addstr(" in lieu of sleep.");
-         y++;
-
-         spiritcrush+=LCSrandom(3*(++nosleep));
-         healthcrush+=2*nosleep;
-
-         refresh();
-         getch();
-      }
-      else
-      {
-         nosleep=0;
-      }
       
       if(techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
       {
@@ -662,13 +574,12 @@ void tendhostage(Creature *cr,char &clearformess)
 
          addstr("It is subjected to dangerous hallucinogens.");
 
-         spiritcrush+=LCSrandom(5)+a->armor.interrogation_drugbonus();
-         healthcrush+=3;
+         attack+=10+a->armor.interrogation_drugbonus();
 
          //Possible permanent health damage
-         if(LCSrandom(50)<++druguse)cr->att[ATTRIBUTE_HEALTH]--;
+         if(LCSrandom(50)<++druguse)cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
          
-         if(cr->att[ATTRIBUTE_HEALTH]==0)
+         if(cr->get_attribute(ATTRIBUTE_HEALTH,false)==0)
          {
             y++;
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -678,13 +589,14 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr("It is a lethal overdose in ");
             addstr(cr->name);
             addstr("'s weakened state.");
-            cr->alive=0;
+            cr->die();
          }
 
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
       }
-      if(cr->att[ATTRIBUTE_HEALTH]<=0)cr->alive=0;
+      if(cr->get_attribute(ATTRIBUTE_HEALTH,false)<=0)cr->die();
 
       if(techniques[TECHNIQUE_BEAT]&&!turned&&cr->alive) // Beating
       {
@@ -692,23 +604,23 @@ void tendhostage(Creature *cr,char &clearformess)
          move(y,0);
 
          int forceroll=0;
+         bool tortured=0;
 
          for(int i=0;i<temppool.size();i++)
          {
             //add interrogator's strength to beating strength
-            forceroll+=temppool[i]->attval(ATTRIBUTE_STRENGTH);
+            forceroll+=temppool[i]->attribute_roll(ATTRIBUTE_STRENGTH);
             //reduce rapport with each interrogator
             rapport[temppool[i]->id]-=0.4f;
          }
-
-         forceroll=LCSrandom(forceroll)+1;
          
          //Torture captive if lead interrogator has low heart
          //and you funded using extra supplies
          //
          //Yeah, you kinda don't want this to happen
-         if(a->attval(ATTRIBUTE_HEART)==1&&techniques[TECHNIQUE_PROPS])
+         if(!(a->attribute_check(ATTRIBUTE_HEART,DIFFICULTY_EASY))&&techniques[TECHNIQUE_PROPS])
          {
+            tortured = true;
             //Torture more devastating than normal beating
             forceroll*=2;
             //Extremely bad for rapport with lead interrogator
@@ -720,7 +632,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 0:addstr(" reenacts scenes from Abu Ghraib");break;
             case 1:addstr(" whips the Automaton with a steel cable");break;
             case 2:addstr(" holds the hostage's head under water");break;
-            case 3:addstr(" peels back the Automaton's fingernails");break;//XXX: but shouldn't this only happen once?
+            case 3:addstr(" pushes needles under the Automaton's fingernails");break;
             case 4:addstr(" beats the hostage with a metal bat");break;
             case 5:addstr(" beats the hostage with a belt");break;
 //            case 6:addstr(" ");break;
@@ -749,8 +661,8 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr("! ");
             }
             addstr("!\" in its face.");
-            if(a->attval(ATTRIBUTE_HEART)>1)a->att[ATTRIBUTE_HEART]--;
-            if(cr->attval(ATTRIBUTE_HEART)>1)cr->att[ATTRIBUTE_HEART]--;
+            if(cr->get_attribute(ATTRIBUTE_HEART,true)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
+            if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>1)cr->adjust_attribute(ATTRIBUTE_WISDOM,-1);
          }
          else
          {
@@ -827,17 +739,16 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          y++;
 
-         spiritcrush+=forceroll/2+a->armor.interrogation_assaultbonus();
-         if(techniques[TECHNIQUE_PROPS])spiritcrush+=forceroll/2;
-         healthcrush+=forceroll/2;
-         cr->blood-=forceroll/2;
+         if(techniques[TECHNIQUE_PROPS])forceroll*=2;
+         cr->blood-=forceroll;
 
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
 
-         if(forceroll>=cr->attval(ATTRIBUTE_HEALTH))
+         if(!(cr->attribute_check(ATTRIBUTE_HEALTH,forceroll)))
          {
-            if(cr->skillval(SKILL_RELIGION)>spiritcrush)
+            if(cr->skill_check(SKILL_RELIGION,forceroll))
             {
                move(y,0);
                addstr(cr->name);
@@ -859,8 +770,10 @@ void tendhostage(Creature *cr,char &clearformess)
                }
                y++;
             }
-            else if(signed(spiritcrush+healthcrush) >
-               cr->att[ATTRIBUTE_WISDOM]*3+cr->att[ATTRIBUTE_HEART]*3+cr->att[ATTRIBUTE_HEALTH]*3)
+            else if(forceroll >
+                     cr->get_attribute(ATTRIBUTE_WISDOM,true)*3+
+                     cr->get_attribute(ATTRIBUTE_HEART,true)*3+
+                     cr->get_attribute(ATTRIBUTE_HEALTH,true)*3)
             {
                move(y++,0);
                addstr(cr->name);
@@ -868,7 +781,7 @@ void tendhostage(Creature *cr,char &clearformess)
                {
                case 0:addstr(" screams helplessly for ");
                   if(techniques[TECHNIQUE_DRUGS])addstr("John Lennon's mercy.");
-                  else if(cr->skillval(SKILL_RELIGION))addstr("God's mercy.");
+                  else if(cr->get_skill(SKILL_RELIGION))addstr("God's mercy.");
                   else addstr("mommy.");
                   break;
                case 1:
@@ -882,9 +795,22 @@ void tendhostage(Creature *cr,char &clearformess)
                   else addstr(" wonders about death.");
                   break;
                }
-               if(cr->att[ATTRIBUTE_HEART]>1)cr->att[ATTRIBUTE_HEART]--;
+               if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
+               
+               if(LCSrandom(2) && cr->juice>0)
+               {
+                  cr->juice-=forceroll;
+                  if(cr->juice<0)cr->juice=0;
+               }
+               else if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
+               {
+                  cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10));
+                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
+               }
+               
                if(location[cr->worklocation]->interrogated==0 && !LCSrandom(5))
                {
+                  //show_interrogation_sidebar(cr,a);
                   refresh();
                   getch();
                   move(y++,0);
@@ -913,35 +839,37 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(cr->name);
                addstr(" seems to be getting the message.");
                y++;
-               if(cr->juice>1)
+               if(LCSrandom(2) && cr->juice>0)
                {
                   cr->juice-=forceroll;
-                  if(cr->juice<0)
-                     cr->juice=0;
+                  if(cr->juice<0)cr->juice=0;
                }
-               else if(cr->att[ATTRIBUTE_WISDOM]>1)
+               else if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
-                  cr->att[ATTRIBUTE_WISDOM]-=forceroll/10+1;
-                  if(cr->att[ATTRIBUTE_WISDOM]<1)cr->att[ATTRIBUTE_WISDOM]=1;
+                  cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10+1));
+                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
                }
             }
 
-            if(forceroll>=LCSrandom(cr->attval(ATTRIBUTE_HEALTH)*5+1))
+            if(!(cr->attribute_check(ATTRIBUTE_HEALTH,forceroll/3)))
             {
+               //show_interrogation_sidebar(cr,a);
                refresh();
                getch();
 
                move(y,0);
-               if(--cr->att[ATTRIBUTE_HEALTH]>0)
+               if(cr->get_attribute(ATTRIBUTE_HEALTH,false)>1)
                {
+                  cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
                   addstr(cr->name);
                   addstr(" is badly hurt.");
                }
                else
                {
+                  cr->set_attribute(ATTRIBUTE_HEALTH,0);
                   addstr(cr->name);
                   addstr("'s weakened body crumbles under the brutal assault.");
-                  cr->alive=0;
+                  cr->die();
                }
                y++;
             }
@@ -953,20 +881,54 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(" takes it well.");
             y++;
          }
+         //show_interrogation_sidebar(cr,a);
          getch();
+
+         if(tortured && cr->alive)
+         {
+            if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
+            {
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               move(y,0);y++;
+               addstr(a->name);
+               addstr(" feels sick to the stomach afterward and ");
+               a->adjust_attribute(ATTRIBUTE_HEART,-1);
+               move(y,0);y++;
+               switch(LCSrandom(4))
+               {
+                  case 0:addstr("throws up in a trash can.");break;
+                  case 1:addstr("gets drunk, eventually falling asleep.");break;
+                  case 2:addstr("curls up in a ball, crying softly.");break;
+                  case 3:addstr("shoots up and collapses in a heap on the floor.");break;
+               }
+            }
+            else if(!LCSrandom(3))
+            {
+               set_color(COLOR_CYAN,COLOR_BLACK,1);
+               move(y,0);y++;
+               addstr(a->name);
+               addstr(" grows colder.");
+               a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
+            }
+         }
       }
 
       // Verbal Interrogation
       if(techniques[TECHNIQUE_TALK]&&cr->alive)
       {
          float rapport_temp = rapport[a->id];
-         rapport_temp += static_cast<float>(a->attval(ATTRIBUTE_CHARISMA)+a->skillval(SKILL_PSYCHOLOGY)-5)/10.0f;
-         if(techniques[TECHNIQUE_RESTRAIN])rapport_temp -= 1;
+
+         rapport_temp += static_cast<float>(a->attribute_roll(ATTRIBUTE_CHARISMA)+a->skill_roll(SKILL_PSYCHOLOGY))/10.0f;
+
+         if(techniques[TECHNIQUE_RESTRAIN])attack -= 10;
+
          y+=1;
          move(y,0);
          addstr(a->name);
+
          if(techniques[TECHNIQUE_PROPS])//props
          {
+            attack += LCSrandom(10);
             switch(LCSrandom(9))
             {
             case 0:addstr(" plays violent video games with ");break;
@@ -974,7 +936,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 2:addstr(" burns flags in front of ");break;
             case 3:addstr(" explores an elaborate political fantasy with ");break;
             case 4:addstr(" watches controversial avant-garde films with ");break;
-            case 5:addstr(" watches the anime film Bible Black with ");break;// Wasn't this basically a porno? //Yes. -Fox
+            case 5:addstr(" plays the anime film Bible Black for ");break;// Wasn't this basically a porno? //Yes. -Fox
             case 6:addstr(" watches a documentary about Emmett Till with ");break;
             case 7:addstr(" watches Michael Moore films with ");break;
             case 8:addstr(" listens to Liberal radio shows with ");break;
@@ -1005,11 +967,12 @@ void tendhostage(Creature *cr,char &clearformess)
          //Re-interprets lead interrogator
          if(techniques[TECHNIQUE_DRUGS])
          {
+            //show_interrogation_sidebar(cr,a);
             refresh();
             getch();
 
             move(y++,0);
-            if(cr->skillval(SKILL_PSYCHOLOGY)*3>spiritcrush)
+            if(cr->skill_check(SKILL_PSYCHOLOGY,DIFFICULTY_CHALLENGING))
             {
                switch(LCSrandom(4))
                {
@@ -1029,7 +992,7 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             else if((rapport[a->id]>1 && !LCSrandom(3)) || !LCSrandom(10))
             {
-               rapport_temp=5;
+               rapport_temp=10;
                switch(LCSrandom(4))
                {
                case 0:
@@ -1042,7 +1005,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(cr->name);
                   addstr(" realizes with joy that ");
                   addstr(a->name);
-                  addstr(" is Ronald Reagan.");
+                  addstr(" is Ronald Reagan!");
                   break;
                case 2:
                   addstr(cr->name);
@@ -1061,7 +1024,7 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             else if((rapport[a->id]<-1 && LCSrandom(3)) || !LCSrandom(5))
             {
-               rapport_temp=-5;
+               attack=0;
                switch(LCSrandom(4))
                {
                case 0:
@@ -1083,18 +1046,14 @@ void tendhostage(Creature *cr,char &clearformess)
                   break;
                case 3:
                   addstr(cr->name);
-                  addstr(" gasps and demands that ");
-                  //addstr("Hitler tell them where ");
-                  //addstr(a->name);
-                  //addstr(" went.");
+                  addstr(" begs Hitler to tell them where ");
                   addstr(a->name);
-                  addstr(" stop looking like Hitler.");
+                  addstr(" went.");
                   break;
                }
             }
             else
             {
-               rapport_temp+=0.5f*(LCSrandom(3)-1);
                switch(LCSrandom(4))
                {
                case 0:
@@ -1105,7 +1064,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   break;
                case 1:
                   addstr(cr->name);
-                  addstr(" can't stop looking at the movie playing on the door.");
+                  addstr(" can't stop looking at the moving colors.");
                   break;
                case 2:
                   addstr(cr->name);
@@ -1121,10 +1080,11 @@ void tendhostage(Creature *cr,char &clearformess)
             }
          }
 
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
 
-         if(cr->skillval(SKILL_PSYCHOLOGY)+LCSrandom(cr->skillval(SKILL_PSYCHOLOGY)+1)>a->skillval(SKILL_PSYCHOLOGY)+spiritcrush)
+         if(cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
          {
             move(y,0);
             switch(LCSrandom(4))
@@ -1146,97 +1106,9 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             y++;
          }
-         //Failure to break religious convictions
-         else if(cr->skillval(SKILL_RELIGION)>religion+spiritcrush && !techniques[TECHNIQUE_DRUGS])
-         {
-            move(y,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(a->name);
-                  addstr(" is unable to shake ");
-                  addstr(cr->name);
-                  addstr("'s religious conviction.");
-                  break;
-            case 1:addstr(cr->name);
-                  addstr(" will never be broken so long as God grants it strength.");
-                  break;
-            case 2:addstr(a->name);
-                  addstr("'s efforts to question ");
-                  addstr(cr->name);
-                  addstr("'s faith seem futile.");
-                  break;
-            case 3:addstr(cr->name);
-                  addstr(" calmly explains the Conservative tenets of its faith.");
-                  break;
-            }
-            
-            a->train(SKILL_RELIGION,cr->skillval(SKILL_RELIGION)*4);
-            y++;
-         }
-         //Failure to persuade entrenched capitalists
-         else if(cr->skillval(SKILL_BUSINESS)>business+spiritcrush && !techniques[TECHNIQUE_DRUGS])
-         {
-            move(y,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(cr->name);
-                  addstr(" will never be moved by ");
-                  addstr(a->name);
-                  addstr("'s pathetic economic ideals.");
-                  break;
-            case 1:addstr(cr->name);
-                  addstr(" is pretty sure LCS actions hurt businesses.");
-                  break;
-            case 2:addstr(cr->name);
-                  addstr(" explains to ");
-                  addstr(a->name);
-                  addstr(" why communism failed.");
-                  break;
-            case 3:addstr(cr->name);
-                  addstr(" mumbles incoherently about Reaganomics.");
-                  break;
-            }
-            
-            a->train(SKILL_BUSINESS,cr->skillval(SKILL_BUSINESS)*4);
-            y++;
-         }
-         //Failure to persuade scientific minds
-         else if(cr->skillval(SKILL_SCIENCE)>science+spiritcrush && !techniques[TECHNIQUE_DRUGS])
-         {
-            move(y,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(cr->name);
-                  addstr(" wonders what mental disease has possessed ");
-                  addstr(a->name);
-                  addstr(".");
-                  break;
-            case 1:addstr(cr->name);
-                  addstr(" explains why nuclear energy is safe.");
-                  break;
-            case 2:addstr(cr->name);
-                  addstr(" makes Albert Einstein faces at ");
-                  addstr(a->name);
-                  addstr(".");
-                  break;
-            case 3:addstr(cr->name);
-                  addstr(" pities ");
-                  addstr(a->name);
-                  addstr("'s blind ignorance of science.");
-                  break;
-            }
-
-            a->train(SKILL_SCIENCE,cr->skillval(SKILL_SCIENCE)*4);
-            y++;
-         }
          //Attempt to convert when the target is brutally treated will
-         //just alienate them and make them cynical - targets with poor
-         //health and few convictions are more suceptible to succumbing
-         //to this, also targets who have been held a long time are
-         //also likely to do this, or if you're interrogating with someone
-         //who has frequently abused this target in the past
-         else if((int)(LCSrandom(spiritcrush*2+1)+LCSrandom(healthcrush*2+1)) >
-            cr->attval(ATTRIBUTE_WISDOM)+cr->attval(ATTRIBUTE_HEART)+cr->attval(ATTRIBUTE_HEALTH))
+         //just alienate them and make them cynical
+         else if(techniques[TECHNIQUE_BEAT] || rapport_temp < -2)
          {
             move(y,0);
             addstr(cr->name);
@@ -1250,10 +1122,9 @@ void tendhostage(Creature *cr,char &clearformess)
             case 5:addstr(" is too terrified to even speak to ");addstr(a->name);addstr(".");break;
             case 6:addstr(" just hates the LCS even more.");break;
             }
-            if(a->attval(ATTRIBUTE_HEART)+
-               a->skillval(SKILL_PSYCHOLOGY)+
-               a->attval(ATTRIBUTE_CHARISMA)>16+LCSrandom(10))
+            if(a->skill_check(SKILL_SEDUCTION,static_cast<int>((-rapport_temp) * 2)))
             {
+               //show_interrogation_sidebar(cr,a);
                getch();
                move(++y,0);
                addstr(a->name);
@@ -1270,6 +1141,7 @@ void tendhostage(Creature *cr,char &clearformess)
                rapport[a->id]+=0.7f;
                if(rapport[a->id]>3)
                {
+                  //show_interrogation_sidebar(cr,a);
                   getch();
                   move(++y,0);
                   addstr(cr->name);
@@ -1298,27 +1170,112 @@ void tendhostage(Creature *cr,char &clearformess)
                }
             }
             
-            if(cr->att[ATTRIBUTE_HEART]>1)cr->att[ATTRIBUTE_HEART]--;
+            if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
+            y++;
+         }
+         //Failure to break religious convictions
+         else if(cr->get_skill(SKILL_RELIGION)>a->get_skill(SKILL_RELIGION)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
+         {
+            move(y,0);
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(a->name);
+                  addstr(" is unable to shake ");
+                  addstr(cr->name);
+                  addstr("'s religious conviction.");
+                  break;
+            case 1:addstr(cr->name);
+                  addstr(" will never be broken so long as God grants it strength.");
+                  break;
+            case 2:addstr(a->name);
+                  addstr("'s efforts to question ");
+                  addstr(cr->name);
+                  addstr("'s faith seem futile.");
+                  break;
+            case 3:addstr(cr->name);
+                  addstr(" calmly explains the Conservative tenets of its faith.");
+                  break;
+            }
+            
+            a->train(SKILL_RELIGION,cr->get_skill(SKILL_RELIGION)*4);
+            y++;
+         }
+         //Failure to persuade entrenched capitalists
+         else if(cr->get_skill(SKILL_BUSINESS)>a->get_skill(SKILL_BUSINESS)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
+         {
+            move(y,0);
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(cr->name);
+                  addstr(" will never be moved by ");
+                  addstr(a->name);
+                  addstr("'s pathetic economic ideals.");
+                  break;
+            case 1:addstr(cr->name);
+                  addstr(" is pretty sure LCS actions hurt businesses.");
+                  break;
+            case 2:addstr(cr->name);
+                  addstr(" explains to ");
+                  addstr(a->name);
+                  addstr(" why communism failed.");
+                  break;
+            case 3:addstr(cr->name);
+                  addstr(" mumbles incoherently about Reaganomics.");
+                  break;
+            }
+            
+            a->train(SKILL_BUSINESS,cr->get_skill(SKILL_BUSINESS)*4);
+            y++;
+         }
+         //Failure to persuade scientific minds
+         else if(cr->get_skill(SKILL_SCIENCE)>a->get_skill(SKILL_SCIENCE)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
+         {
+            move(y,0);
+            switch(LCSrandom(4))
+            {
+            case 0:addstr(cr->name);
+                  addstr(" wonders what mental disease has possessed ");
+                  addstr(a->name);
+                  addstr(".");
+                  break;
+            case 1:addstr(cr->name);
+                  addstr(" explains why nuclear energy is safe.");
+                  break;
+            case 2:addstr(cr->name);
+                  addstr(" makes Albert Einstein faces at ");
+                  addstr(a->name);
+                  addstr(".");
+                  break;
+            case 3:addstr(cr->name);
+                  addstr(" pities ");
+                  addstr(a->name);
+                  addstr("'s blind ignorance of science.");
+                  break;
+            }
+
+            a->train(SKILL_SCIENCE,cr->get_skill(SKILL_SCIENCE)*4);
             y++;
          }
          //Target is swayed by Liberal Reason -- skilled interrogators, time held,
          //and rapport contribute to the likelihood of this
-         else if(aroll*rapport_temp+spiritcrush>troll*2)
+         else if(!(cr->attribute_check(ATTRIBUTE_WISDOM,attack/6)))
          {
-            //Improve rapport with interrogator
             if(cr->juice>0)
             {
-               cr->juice-=aroll;
+               cr->juice-=attack;
                if(cr->juice<0)cr->juice=0;
             }
-            else
+            
+            if(cr->get_attribute(ATTRIBUTE_HEART,false)<10)
             {
-               rapport[a->id]+=1.5;
+               cr->adjust_attribute(ATTRIBUTE_HEART,+1);
             }
+            //Improve rapport with interrogator
+            rapport[a->id]+=1.5;
 
             //Join LCS??
             //1) They were liberalized
-            if(cr->attval(ATTRIBUTE_HEART)>cr->attval(ATTRIBUTE_WISDOM)+4)turned=1;
+            if(cr->get_attribute(ATTRIBUTE_HEART,true)>cr->get_attribute(ATTRIBUTE_WISDOM,true)+4)turned=1;
             //2) They were befriended
             if(rapport[a->id]>4)turned=1;
 
@@ -1357,8 +1314,7 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          //Target is not sold on the LCS arguments and holds firm
          //This is the worst possible outcome if you use props
-         else if(aroll+spiritcrush>(troll>>2)||a->attval(ATTRIBUTE_WISDOM)>=cr->attval(ATTRIBUTE_WISDOM)||
-                  techniques[TECHNIQUE_PROPS])
+         else if(rapport_temp || techniques[TECHNIQUE_PROPS])
          {
             //Not completely unproductive; builds rapport
             rapport[a->id]+=0.2f;
@@ -1376,7 +1332,7 @@ void tendhostage(Creature *cr,char &clearformess)
             //liberal more
             rapport[a->id]+=0.5f;
 
-            a->att[ATTRIBUTE_WISDOM]++;
+            a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
 
             move(y,0);
             addstr(cr->name);
@@ -1385,6 +1341,7 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr("!");
             y++;
 
+            //show_interrogation_sidebar(cr,a);
             refresh();
             getch();
       
@@ -1394,30 +1351,21 @@ void tendhostage(Creature *cr,char &clearformess)
             y++;
          }
 
+         //show_interrogation_sidebar(cr,a);
          getch();
       }
 
-      //Health degraded when brutally treated
-      cr->blood-=2*healthcrush/cr->attval(ATTRIBUTE_HEALTH);
-      //Resolve (and desire to join) weakens when brutally treated
-      cr->att[ATTRIBUTE_WISDOM]-=spiritcrush>>(2+LCSrandom(3));
-      if(cr->att[ATTRIBUTE_WISDOM]<1)cr->att[ATTRIBUTE_WISDOM]=1;
-      cr->att[ATTRIBUTE_HEART]-=spiritcrush>>(3+LCSrandom(3));
-      if(cr->att[ATTRIBUTE_HEART]<1)cr->att[ATTRIBUTE_HEART]=1;
-
       //Lead interrogator gets bonus experience
-      if(!techniques[TECHNIQUE_KILL])a->train(SKILL_PSYCHOLOGY,spiritcrush);
+      if(!techniques[TECHNIQUE_KILL])a->train(SKILL_PSYCHOLOGY,attack/2+1);
       //Others also get experience
       for(int i=0;i<temppool.size();i++)
-         temppool[i]->train(SKILL_PSYCHOLOGY,(spiritcrush>>1)+1);
-
-      reinterpret_cast<interrogation*>(cr->activity.arg)->totalspiritcrush+=spiritcrush;
+         temppool[i]->train(SKILL_PSYCHOLOGY,(attack/4)+1);
 
 
 
       //Possibly suicidal when heart is down to 1 and prisoner has already been
       //captive for a week without rescue
-      if(cr->alive&&cr->att[ATTRIBUTE_HEART]==1&&LCSrandom(3)&&cr->joindays>6)
+      if(!turned&&cr->alive&&cr->get_attribute(ATTRIBUTE_HEART,false)==1&&LCSrandom(3)&&cr->joindays>6)
       {
          move(++y,0);
          
@@ -1433,7 +1381,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 1:addstr(" broods darkly.");break;
             case 2:addstr(" has lost hope of rescue.");break;
             case 3:addstr(" is making peace with God.");break;
-            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=LCSrandom(15)+10;break;// should be cr->blood-=LCSrandom(15)+10 or something... I mean, blood loss isn't the same *every* time.
+            case 4:addstr(" is bleeding from self-inflicted wounds.");cr->blood-=LCSrandom(15)+10;break;
             }
          }
          else
@@ -1441,9 +1389,10 @@ void tendhostage(Creature *cr,char &clearformess)
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(cr->name);
             addstr(" has committed suicide.");
-            cr->alive=0;
+            cr->die();
          }
          y++;
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
       }
@@ -1453,7 +1402,7 @@ void tendhostage(Creature *cr,char &clearformess)
       {
          //delete interrogation information
          delete reinterpret_cast<interrogation*>(cr->activity.arg);
-         cr->alive=0;
+         cr->die();
 
          stat_kills++;
          y++;
@@ -1473,17 +1422,18 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          y++;
+         //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
          if(a)
          {
-            if(LCSrandom(a->att[ATTRIBUTE_HEART]))
+            if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false)))
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;
                addstr(a->name);
                addstr(" feels sick to the stomach afterward and ");
-               a->att[ATTRIBUTE_HEART]--;
+               a->adjust_attribute(ATTRIBUTE_HEART,-1);
                move(y,0);y++;
                switch(LCSrandom(3))
                {
@@ -1498,11 +1448,11 @@ void tendhostage(Creature *cr,char &clearformess)
                move(y,0);y++;
                addstr(a->name);
                addstr(" grows colder.");
-               a->att[ATTRIBUTE_WISDOM]++;
+               a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
             }
          }
       }
-      delete[] attack;
+      delete[] _attack;
    }
    #ifdef AUTOENLIGHTEN
       turned=1;// Lucky!
@@ -1510,14 +1460,15 @@ void tendhostage(Creature *cr,char &clearformess)
 
    if(turned&&cr->alive)
    {
+      //clear_interrogation_sidebar();
       //delete interrogation information
       delete reinterpret_cast<interrogation*>(cr->activity.arg);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       y++;
       move(y,0);
       addstr("The Automaton has been Enlightened!   Your Liberal ranks are swelling!");
-      if(cr->attval(ATTRIBUTE_HEART)>7 &&
-         cr->attval(ATTRIBUTE_WISDOM)>2 &&
+      if(cr->get_attribute(ATTRIBUTE_HEART,true)>7 &&
+         cr->get_attribute(ATTRIBUTE_WISDOM,true)>2 &&
          !LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
       {
          move(++y,0);
