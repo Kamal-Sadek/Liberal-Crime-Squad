@@ -36,69 +36,46 @@ void noticecheck(int exclude)
 {
    if(sitealarm)return;
 
-   char noticed=0;
    char sneak=0;
-   vector<int> noticer;
-   for(int e=0;e<ENCMAX;e++)
-   {
-      if(e==exclude)continue;
-      //if(encounter[e].type==CREATURE_PRISONER)continue;
-      if(strcmp(encounter[e].name,"Prisoner")==0)continue;
-      if(encounter[e].exists&&encounter[e].alive&&
-         encounter[e].enemy())
-      {
-         noticer.push_back(e);
-      }
-   }
-   int topi=-1;
+   
+   int topi=0;
    for(int i=0;i<6;++i)
    {
       if(activesquad->squad[i]&&
-         activesquad->squad[i]->skillval(SKILL_THEFT)+activesquad->squad[i]->skillval(SKILL_STEALTH)>sneak)
+         activesquad->squad[i]->get_skill(SKILL_STEALTH)>sneak)
       {
-         sneak=activesquad->squad[i]->skillval(SKILL_THEFT)+activesquad->squad[i]->skillval(SKILL_STEALTH);
+         sneak=activesquad->squad[i]->get_skill(SKILL_STEALTH);
          topi=i;
       }
    }
-   if(topi>=0&&noticer.size())activesquad->squad[topi]->train(SKILL_THEFT,10);
 
-   if(noticer.size()>0)
+   for(int e=0;e<ENCMAX;e++)
    {
-      int n,an;
-
-      do
-      {
-         an=LCSrandom(noticer.size());
-         n=noticer[an];
-         noticer.erase(noticer.begin() + an);
-
-         int chance=encounter[n].attval(ATTRIBUTE_WISDOM)*3+encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
-         if(chance>(int)LCSrandom(21+sneak))
-         {
-            noticed=1;
-            break;
-         }
-      }while(noticer.size()>0);
-
-      if(!noticed)return;
-
-      clearmessagearea();
-
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      move(16,1);
-      addstr(encounter[n].name);
-      addstr(" observes your Liberal activity");
-      move(17,1);
-      if(encounter[n].align==ALIGN_CONSERVATIVE)
-         addstr("and lets forth a piercing Conservative alarm cry!");
+      if(e==exclude || encounter[e].exists==false)
+         continue;
+      else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,DIFFICULTY_EASY))
+         continue;
       else
-         addstr("and shouts for help!");
-      
-      sitealarm=1;
+      {
+         clearmessagearea();
+
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         move(16,1);
+         addstr(encounter[e].name);
+         addstr(" observes your Liberal activity");
+         move(17,1);
+         if(encounter[e].align==ALIGN_CONSERVATIVE)
+            addstr("and lets forth a piercing Conservative alarm cry!");
+         else
+            addstr("and shouts for help!");
+         
+         sitealarm=1;
 
 
-      refresh();
-      getch();
+         refresh();
+         getch();
+         break;
+      }
    }
 }
 
@@ -202,11 +179,11 @@ void disguisecheck(void)
          // crime, apply it here. If they are wanted for carrying an illegal
          // weapon already, it shouldn't stack on extras here or you'll accrue
          // dozens of extra charges for only one site incident
-         if(weaponar[i]&&!activesquad->squad[i]->crimes_suspected[LAWFLAG_GUNCARRY])
-         {
+         //if(weaponar[i]&&!activesquad->squad[i]->crimes_suspected[LAWFLAG_GUNCARRY])
+         //{
             // Illegal weapon crimes disabled
             //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
-         }
+         //}
       }
    }
 
@@ -230,16 +207,6 @@ void disguisecheck(void)
 
    if(noticer.size()>0)
    {
-      int disguise = disguiseskill();
-      int stealth  = stealthskill();
-      bool sneaking=false;
-
-      if(stealth>disguise || weapon==2 || sitealarm)
-      {
-         disguise=stealth;
-         sneaking=true;
-      }
-
       int n,an;
 
       do
@@ -248,30 +215,33 @@ void disguisecheck(void)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int spotchance=encounter[n].attval(ATTRIBUTE_WISDOM) * 3+
-                        encounter[n].attval(ATTRIBUTE_INTELLIGENCE);
+         int difficulty = DIFFICULTY_VERYEASY;
+
+         if(sitealarmtimer)
+            difficulty = DIFFICULTY_EASY;
+
+         if(encounter[n].get_attribute(ATTRIBUTE_WISDOM,true) > 12)
+            difficulty = DIFFICULTY_HARD;
+
+         if(encounter[n].type==CREATURE_GUARDDOG) // The guard dog should SCARE thieves
+            difficulty = DIFFICULTY_HEROIC;
+
          for(int i=0;i<6;i++)
          {
-            if(!sneaking)disguisepractice(i, spotchance);
-            else stealthpractice(i, spotchance);
-         }
-
-         if(encounter[n].type==CREATURE_GUARDDOG) // Sniff sniff Grrrrowl
-         {                                        // The guard dog should SCARE thieves
-            spotchance=30;    // Higher ability to spot you than most
-            if(!LCSrandom(4)) // Always a chance of detecting you, even with insane skills
+            if(activesquad->squad[i]==NULL)break;
+            if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH, difficulty+7)))
             {
-               noticed=1;
-               break;
+               if(weaponcheck(*activesquad->squad[i],cursite) == 2 ||
+                  !(activesquad->squad[i]->skill_check(SKILL_DISGUISE, difficulty)))
+               {
+                  disguisepractice(i, difficulty);
+                  noticed = true;
+                  break;
+               }
+               stealthpractice(i, difficulty-7);
             }
          }
-         if(sitealarmtimer ?
-            spotchance > (int)LCSrandom(21)+disguise :
-            spotchance+sitecrime > (int)LCSrandom(21)+disguise)
-         {
-            noticed=1;
-            break;
-         }
+         if(noticed)break;
       }while(noticer.size()>0);
 
       if(!noticed)return;
@@ -281,7 +251,7 @@ void disguisecheck(void)
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(16,1);
       addstr(encounter[n].name);
-      if(sitealarmtimer!=0 && weapon<1)
+      if(sitealarmtimer!=0 && weapon<1 && encounter[n].type!=CREATURE_GUARDDOG)
       {
          if((sitetype==SITE_RESIDENTIAL_TENEMENT||
              sitetype==SITE_RESIDENTIAL_APARTMENT||
@@ -290,16 +260,17 @@ void disguisecheck(void)
          {
             sitealarm=1;
 
-            addstr(" shrieks in alarm at the squad's Liberal Trespassing!");
+            addstr(" shouts in alarm at the squad's Liberal Trespassing!");
          }
          else
          {
-            if(encounter[n].type==CREATURE_GUARDDOG)
-               addstr(" growls at the squad suspiciously.");
-            else
-               addstr(" looks at the Squad suspiciously.");
+            addstr(" looks at the Squad suspiciously.");
 
-            int time=20+LCSrandom(10)-encounter[n].attval(ATTRIBUTE_INTELLIGENCE)-encounter[n].attval(ATTRIBUTE_CHARISMA);
+            int time;
+
+            time = 20 + LCSrandom(10) - encounter[n].get_attribute(ATTRIBUTE_INTELLIGENCE,true)
+                                      - encounter[n].get_attribute(ATTRIBUTE_WISDOM,true);
+            
             if(time<1)time=1;
 
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
@@ -319,11 +290,11 @@ void disguisecheck(void)
             for(int i=0;i<6;i++)
             {
                if(activesquad->squad[i]==NULL)break;
-               if(weaponar[i])
-               {
+               //if(weaponar[i])
+               //{
                   // Illegal weapon crimes disabled
                   //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
-               }
+               //}
             }
          }
          else
@@ -350,72 +321,6 @@ void disguisecheck(void)
    }
 }
 
-
-
-/* returns the difficulty of seeing through your squad's disguise */
-int disguiseskill(void)
-{
-   int lowest=10000;
-   int highest=0;
-   int bonus = 15; // bonus for having few party members
-
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)
-      {
-         bonus -= 5; // bonus decreases for each party member
-
-         // Dead people are a dead giveaway
-         if(!activesquad->squad[p]->alive)return 0;
-
-         // As are hostages
-         if(activesquad->squad[p]->prisoner!=NULL)return 0;
-
-         int skill=activesquad->squad[p]->attval(ATTRIBUTE_INTELLIGENCE)+
-                   activesquad->squad[p]->attval(ATTRIBUTE_CHARISMA)+
-                   activesquad->squad[p]->skillval(SKILL_DISGUISE)*3;
-
-         //ALSO NEED APPROPRIATE UNIFORM
-         char uniformed=hasdisguise(*activesquad->squad[p],sitetype);
-
-         if(!uniformed)
-         {
-            skill=0;
-            //NAKEDNESS MAJOR PENALTY
-            if(activesquad->squad[p]->armor.type==ARMOR_NONE &&
-               activesquad->squad[p]->animalgloss!=ANIMALGLOSS_ANIMAL)skill=-100;
-         }
-         else
-         {
-            if(uniformed==2)skill>>=1;
-            //activesquad->squad[p]->train(SKILL_DISGUISE,5);
-         }
-
-         if(activesquad->squad[p]->armor.quality!='1')
-         {
-            if(activesquad->squad[p]->armor.quality=='2')skill--;
-            else if(activesquad->squad[p]->armor.quality=='3')skill>>=1;
-            else if(activesquad->squad[p]->armor.quality=='4')skill>>=2;
-         }
-
-         if(activesquad->squad[p]->armor.flag & ARMORFLAG_BLOODY)
-         {
-            skill>>=1;
-         }
-
-         if(activesquad->squad[p]->armor.flag & ARMORFLAG_DAMAGED)
-         {
-            skill>>=1;
-         }
-
-         if(lowest>skill)lowest=skill;
-         if(highest<skill)highest=skill;
-      }
-   }
-
-   return lowest + highest/4 + bonus;
-}
-
 /* practices p's stealth skill */
 void disguisepractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
 {
@@ -426,14 +331,13 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
       if(activesquad->squad[p]->prisoner!=NULL)return;
                 
       //spread is how overwhelmed your disguise ability is by the Conservative
-      int spread = diff-(15+ // magic number replacing your stats -- high stats shouldn't be punished here, low shouldn't be rewarded
-      activesquad->squad[p]->skillval(SKILL_DISGUISE)*3);
+      int spread = diff-activesquad->squad[p]->get_skill(SKILL_DISGUISE);
 
-      if(hasdisguise(*activesquad->squad[p],sitetype))
+      if(hasdisguise(*activesquad->squad[p]))
       {
-         if(spread>10)
+         if(spread>5)
          {
-            activesquad->squad[p]->train(SKILL_DISGUISE,10);  //getting crushed isn't a great way to learn
+            activesquad->squad[p]->train(SKILL_DISGUISE,5);  // Cap skill gain
          }
          else if(spread>0)
          {
@@ -443,49 +347,19 @@ void disguisepractice(int p, int diff)  //diff is the difficulty that the Conser
    }
 }
 
-
-/* returns the difficulty of spotting the squad if it is sneaking */
-int stealthskill(void)
-{
-   int lowest=10000;
-   int highest=0;
-   int bonus = 20; // party size bonus, higher for fewer party members
-
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)
-      {
-         bonus -= 10; // less bonus for more people
-
-         if(!activesquad->squad[p]->alive)return 0;
-
-         if(activesquad->squad[p]->prisoner!=NULL)return 0;
-
-         int skill=activesquad->squad[p]->skillval(SKILL_STEALTH)*3+1;
-
-         if(lowest>skill)lowest=skill;
-         if(highest<skill)highest=skill;
-      }
-   }
-
-   return lowest + bonus;
-}
-
 /* practices p's stealth skill */
 void stealthpractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
 {
    if(activesquad->squad[p]!=NULL)
    {
       if(!activesquad->squad[p]->alive)return;
-
-      if(activesquad->squad[p]->prisoner!=NULL)return;
       
       //spread is how overwhelmed your stealth ability is by the Conservative
-      int spread = diff-(activesquad->squad[p]->skillval(SKILL_STEALTH)*3);
+      int spread = diff-activesquad->squad[p]->get_skill(SKILL_STEALTH);
       
-      if(spread>10)
+      if(spread>5)
       {
-         activesquad->squad[p]->train(SKILL_STEALTH,10);    //getting crushed isn't a great way to learn
+         activesquad->squad[p]->train(SKILL_STEALTH,5);    //cap skill gain
       }
       else if (spread>0)
       {
@@ -657,7 +531,7 @@ char weaponcheck(Creature &cr,short type)
 
    // If your disguise is inappropriate to the current location,
    // then being in character isn't sufficient
-   if(hasdisguise(cr,location[cursite]->type)==false)
+   if(hasdisguise(cr)==false)
    {
       incharacter=-1;
    }
@@ -687,8 +561,10 @@ char weaponcheck(Creature &cr,short type)
 
 
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(Creature &cr,short type)
+char hasdisguise(Creature &cr)
 {
+   short type = -1;
+   if(cursite>=0)type = location[cursite]->type;
    char uniformed=0;
 
    // Never uniformed in battle colors
@@ -871,6 +747,8 @@ char hasdisguise(Creature &cr,short type)
             uniformed=0;
             if(cr.armor.type==ARMOR_EXPENSIVESUIT)uniformed=1;
             if(cr.armor.type==ARMOR_EXPENSIVEDRESS)uniformed=1;
+            if(cr.armor.type==ARMOR_SECURITYUNIFORM)uniformed=1;
+            if(cr.armor.type==ARMOR_SERVANTUNIFORM)uniformed=1;
             if(location[cursite]->highsecurity)
             {
                if(cr.armor.type==ARMOR_MILITARY)uniformed=1;

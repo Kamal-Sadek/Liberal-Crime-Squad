@@ -99,6 +99,33 @@ void setup_newgame(void)
       {
          attitude[a]=LCSrandom(20);
       }
+      for(int s=0;s<100;s++)
+      {
+         if(s<45)senate[s]=-2;
+         else if(s<70)senate[s]=-1;
+         else if(s<80)senate[s]=0;
+         else if(s<97)senate[s]=1;
+         else senate[s]=2;
+      }
+
+      for(int h=0;h<435;h++)
+      {
+         if(h<190)house[h]=-2;
+         else if(h<350)house[h]=-1;
+         else if(h<400)house[h]=0;
+         else if(h<425)house[h]=1;
+         else house[h]=2;
+      }
+
+      for(int c=0;c<9;c++)
+      {
+         if(c<5)court[c]=-2;
+         else if(c<7)court[c]=-1;
+         else if(c<8)court[c]=0;
+         else if(c<8)court[c]=1;
+         else court[c]=2;
+         generate_name(courtname[c]);
+      }
    }
    if(classicmode)
    {
@@ -121,7 +148,7 @@ enum recruits
 void makecharacter(void)
 {
    Creature *newcr=new Creature;
-   initliberal(*newcr);
+   newcr->align=1;
 
 #ifdef BLIND
    newcr->special[SPECIALWOUND_RIGHTEYE]=1;
@@ -156,14 +183,14 @@ void makecharacter(void)
 #endif
 
 
-   newcr->att[ATTRIBUTE_HEART]=8;
-   newcr->att[ATTRIBUTE_WISDOM]=1;
-   newcr->att[ATTRIBUTE_INTELLIGENCE]=3;
-   newcr->att[ATTRIBUTE_AGILITY]=5;
-   newcr->att[ATTRIBUTE_STRENGTH]=4;
-   newcr->att[ATTRIBUTE_HEALTH]=6;
-   newcr->att[ATTRIBUTE_CHARISMA]=4;
-   for(int sk=0;sk<SKILLNUM;sk++)newcr->skill[sk]=0;
+   newcr->set_attribute(ATTRIBUTE_HEART,8);
+   newcr->set_attribute(ATTRIBUTE_WISDOM,1);
+   newcr->set_attribute(ATTRIBUTE_INTELLIGENCE,3);
+   newcr->set_attribute(ATTRIBUTE_AGILITY,5);
+   newcr->set_attribute(ATTRIBUTE_STRENGTH,4);
+   newcr->set_attribute(ATTRIBUTE_HEALTH,6);
+   newcr->set_attribute(ATTRIBUTE_CHARISMA,4);
+   for(int sk=0;sk<SKILLNUM;sk++)newcr->set_skill(sk,0);
 
    char first[2][80];
    char last[80];
@@ -674,35 +701,35 @@ void makecharacter(void)
             // Oct. 19, 1984
             if(c=='a')
             {
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+2);
                newcr->birthday_month = 10;
                newcr->birthday_day = 19;
             }
             // Mar. 3, 1984
             if(c=='b')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+2);
                newcr->birthday_month = 3;
                newcr->birthday_day = 3;
             }
             // Jan. 24, 1984
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
                newcr->birthday_month = 1;
                newcr->birthday_day = 24;
             }
             // Oct. 16, 1984
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_HEART,+2);
                newcr->birthday_month = 10;
                newcr->birthday_day = 16;
             }
             // Sep. 4, 1984
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+2);
                newcr->birthday_month = 9;
                newcr->birthday_day = 4;
             }
@@ -717,191 +744,191 @@ void makecharacter(void)
          case 1:
             if(c=='a')
             {
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=1;
+               newcr->set_skill(SKILL_HANDTOHAND,newcr->get_skill(SKILL_HANDTOHAND)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_HEALTH,+1);
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->skill[SKILL_WRITING]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(1));
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->att[ATTRIBUTE_HEART]+=1;
+               newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_HEART,+1);
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_PSYCHOLOGY]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->set_skill(SKILL_PSYCHOLOGY,newcr->get_skill(SKILL_PSYCHOLOGY)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
             }
             break;
          case 2:
             if(c=='a')
             {
-               newcr->skill[SKILL_DISGUISE]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->set_skill(SKILL_DISGUISE,newcr->get_skill(SKILL_DISGUISE)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_PSYCHOLOGY]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_HEART]-=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
+               newcr->set_skill(SKILL_PSYCHOLOGY,newcr->get_skill(SKILL_PSYCHOLOGY)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
+               newcr->adjust_attribute(ATTRIBUTE_HEART,-1);
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+1);
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->skill[SKILL_WRITING]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(1));
             }
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->skill[SKILL_HANDTOHAND]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+1);
+               newcr->set_skill(SKILL_HANDTOHAND,newcr->get_skill(SKILL_HANDTOHAND)+(1));
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_PERSUASION]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
             }
             break;
          case 3:
             if(c=='a')
             {
-               newcr->skill[SKILL_STEALTH]+=1;
+               newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(1));
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_HANDTOHAND]+=1;
+               newcr->set_skill(SKILL_HANDTOHAND,newcr->get_skill(SKILL_HANDTOHAND)+(1));
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_LAW]+=1;
+               newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_SEDUCTION]+=1;
+               newcr->set_skill(SKILL_SEDUCTION,newcr->get_skill(SKILL_SEDUCTION)+(1));
             }
             if(c=='e')
             {
-               newcr->att[SKILL_WRITING]+=1;
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+1);
             }
             break;
          case 4:
             if(c=='a')
             {
-               newcr->skill[SKILL_SCIENCE]+=2;
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
+               newcr->set_skill(SKILL_SCIENCE,newcr->get_skill(SKILL_SCIENCE)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_MUSIC]+=2;
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
+               newcr->set_skill(SKILL_MUSIC,newcr->get_skill(SKILL_MUSIC)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+2);
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_ART]+=2;
-               newcr->att[ATTRIBUTE_HEART]+=2;
+               newcr->set_skill(SKILL_ART,newcr->get_skill(SKILL_ART)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_HEART,+2);
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_COMPUTERS]+=2;
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
+               newcr->set_skill(SKILL_COMPUTERS,newcr->get_skill(SKILL_COMPUTERS)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+2);
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=2;
-               newcr->skill[SKILL_SWORD]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+2);
+               newcr->set_skill(SKILL_SWORD,newcr->get_skill(SKILL_SWORD)+(2));
             }
             break;
          case 5:
             if(c=='a')
             {
-               newcr->skill[SKILL_DRIVING]+=1;
-               newcr->skill[SKILL_SECURITY]+=1;
+               newcr->set_skill(SKILL_DRIVING,newcr->get_skill(SKILL_DRIVING)+(1));
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_SHOTGUN]+=1;
-               newcr->skill[SKILL_RIFLE]+=1;
-               newcr->skill[SKILL_PSYCHOLOGY]+=1;
+               newcr->set_skill(SKILL_SHOTGUN,newcr->get_skill(SKILL_SHOTGUN)+(1));
+               newcr->set_skill(SKILL_RIFLE,newcr->get_skill(SKILL_RIFLE)+(1));
+               newcr->set_skill(SKILL_PSYCHOLOGY,newcr->get_skill(SKILL_PSYCHOLOGY)+(1));
             }
             if(c=='c')
             {
-               newcr->skill[SKILL_TAILORING]+=2;
+               newcr->set_skill(SKILL_TAILORING,newcr->get_skill(SKILL_TAILORING)+(2));
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_RELIGION]+=1;
-               newcr->skill[SKILL_PSYCHOLOGY]+=1;
+               newcr->set_skill(SKILL_RELIGION,newcr->get_skill(SKILL_RELIGION)+(1));
+               newcr->set_skill(SKILL_PSYCHOLOGY,newcr->get_skill(SKILL_PSYCHOLOGY)+(1));
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_TEACHING]+=2;
+               newcr->set_skill(SKILL_TEACHING,newcr->get_skill(SKILL_TEACHING)+(2));
             }
             break;
          case 6:
             if(c=='a')
             {
-               newcr->skill[SKILL_DRIVING]+=1;
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
+               newcr->set_skill(SKILL_DRIVING,newcr->get_skill(SKILL_DRIVING)+(1));
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_SHOTGUN]+=2;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->set_skill(SKILL_SHOTGUN,newcr->get_skill(SKILL_SHOTGUN)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->skill[SKILL_HANDTOHAND]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+1);
+               newcr->set_skill(SKILL_HANDTOHAND,newcr->get_skill(SKILL_HANDTOHAND)+(2));
             }
             if(c=='d')
             {
-               newcr->skill[SKILL_SEDUCTION]+=1;
-               newcr->skill[SKILL_RELIGION]+=1;
-               newcr->att[ATTRIBUTE_HEART]+=1;
+               newcr->set_skill(SKILL_SEDUCTION,newcr->get_skill(SKILL_SEDUCTION)+(1));
+               newcr->set_skill(SKILL_RELIGION,newcr->get_skill(SKILL_RELIGION)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_HEART,+1);
                gaylawyer=true;
             }
             if(c=='e')
             {
-               newcr->skill[SKILL_PERSUASION]+=2;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
             }
             break;
          case 7:
             if(c=='a')
             {
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->skill[SKILL_STEALTH]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
+               newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(1));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
             }
             if(c=='b')
             {
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->skill[SKILL_HANDTOHAND]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+1);
+               newcr->set_skill(SKILL_HANDTOHAND,newcr->get_skill(SKILL_HANDTOHAND)+(2));
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
-               newcr->skill[SKILL_BUSINESS]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
+               newcr->set_skill(SKILL_BUSINESS,newcr->get_skill(SKILL_BUSINESS)+(2));
             }
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
-               newcr->skill[SKILL_SEDUCTION]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
+               newcr->set_skill(SKILL_SEDUCTION,newcr->get_skill(SKILL_SEDUCTION)+(2));
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->skill[SKILL_LAW]+=1;
-               newcr->skill[SKILL_PERSUASION]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
+               newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
+               newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(1));
             }
             break;
          case 8:
@@ -933,62 +960,62 @@ void makecharacter(void)
          case 9:
             if(c=='a')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
-               newcr->skill[SKILL_DISGUISE]+=2;
-               newcr->skill[SKILL_SECURITY]+=1;
-               newcr->skill[SKILL_STEALTH]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+2);
+               newcr->set_skill(SKILL_DISGUISE,newcr->get_skill(SKILL_DISGUISE)+(2));
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
+               newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(1));
                newcr->type = CREATURE_THIEF;
                base = SITE_RESIDENTIAL_APARTMENT_UPSCALE;
                ledger.force_funds(ledger.get_funds()+1200);
             }
             if(c=='b')
             {
-               newcr->skill[SKILL_RIFLE]+=2;
-               newcr->skill[SKILL_PISTOL]+=2;
-               newcr->att[ATTRIBUTE_AGILITY]+=2;
-               newcr->att[ATTRIBUTE_HEALTH]+=2;
+               newcr->set_skill(SKILL_RIFLE,newcr->get_skill(SKILL_RIFLE)+(2));
+               newcr->set_skill(SKILL_PISTOL,newcr->get_skill(SKILL_PISTOL)+(2));
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+2);
+               newcr->adjust_attribute(ATTRIBUTE_HEALTH,+2);
                newcr->type = CREATURE_GANGMEMBER;
                base = SITE_BUSINESS_CRACKHOUSE;
                recruits = RECRUITS_GANG;
             }
             if(c=='c')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=4;
-               newcr->skill[SKILL_SCIENCE]+=2;
-               newcr->skill[SKILL_COMPUTERS]+=2;
-               newcr->skill[SKILL_WRITING]+=2;
-               newcr->skill[SKILL_TEACHING]+=2;
-               newcr->skill[SKILL_BUSINESS]+=1;
-               newcr->skill[SKILL_LAW]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+4);
+               newcr->set_skill(SKILL_SCIENCE,newcr->get_skill(SKILL_SCIENCE)+(2));
+               newcr->set_skill(SKILL_COMPUTERS,newcr->get_skill(SKILL_COMPUTERS)+(2));
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(2));
+               newcr->set_skill(SKILL_TEACHING,newcr->get_skill(SKILL_TEACHING)+(2));
+               newcr->set_skill(SKILL_BUSINESS,newcr->get_skill(SKILL_BUSINESS)+(1));
+               newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
                newcr->type = CREATURE_COLLEGESTUDENT;
                base = SITE_RESIDENTIAL_APARTMENT;
                ledger.force_funds(ledger.get_funds()+500);
             }
             if(c=='d')
             {
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=2;
-               newcr->skill[SKILL_FIRSTAID]+=2;
-               newcr->skill[SKILL_STREETSENSE]+=2;
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
+               newcr->adjust_attribute(ATTRIBUTE_HEALTH,+2);
+               newcr->set_skill(SKILL_FIRSTAID,newcr->get_skill(SKILL_FIRSTAID)+(2));
+               newcr->set_skill(SKILL_STREETSENSE,newcr->get_skill(SKILL_STREETSENSE)+(2));
                newcr->type = CREATURE_HSDROPOUT;
                base = SITE_RESIDENTIAL_SHELTER;
 
-               newcr->att[ATTRIBUTE_HEART]+=1;
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=1;
-               newcr->att[ATTRIBUTE_AGILITY]+=1;
-               newcr->att[ATTRIBUTE_STRENGTH]+=1;
-               newcr->att[ATTRIBUTE_HEALTH]+=1;
-               newcr->att[ATTRIBUTE_CHARISMA]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_HEART,+1);
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+1);
+               newcr->adjust_attribute(ATTRIBUTE_AGILITY,+1);
+               newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+1);
+               newcr->adjust_attribute(ATTRIBUTE_HEALTH,+1);
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+1);
             }
             if(c=='e')
             {
-               newcr->att[ATTRIBUTE_CHARISMA]+=2;
-               newcr->att[ATTRIBUTE_INTELLIGENCE]+=2;
-               newcr->skill[SKILL_LAW]+=1;
-               newcr->skill[SKILL_WRITING]+=2;
-               newcr->skill[SKILL_LEADERSHIP]+=1;
+               newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+2);
+               newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
+               newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(2));
+               newcr->set_skill(SKILL_LEADERSHIP,newcr->get_skill(SKILL_LEADERSHIP)+(1));
                newcr->type = CREATURE_POLITICALACTIVIST;
                base = SITE_RESIDENTIAL_TENEMENT;
                ledger.force_funds(ledger.get_funds()+200);
@@ -1427,8 +1454,11 @@ void makecharacter(void)
                   }
 
                   recruit->align=ALIGN_LIBERAL;
-                  recruit->att[ATTRIBUTE_HEART]+=recruit->att[ATTRIBUTE_WISDOM]/2;
-                  recruit->att[ATTRIBUTE_WISDOM]-=recruit->att[ATTRIBUTE_WISDOM]/2;
+                  recruit->set_attribute(ATTRIBUTE_HEART,
+                           recruit->get_attribute(ATTRIBUTE_HEART,false)+
+                           recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
+                  recruit->set_attribute(ATTRIBUTE_WISDOM,
+                           recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
                   
                   recruit->namecreature();
                   strcpy(recruit->name,recruit->propername);
@@ -1483,10 +1513,10 @@ void makecharacter(void)
       }
 
       // Ensure the lawyer has good heart/wisdom stats
-      if(lawyer->att[ATTRIBUTE_HEART]<newcr->att[ATTRIBUTE_HEART]-2)
-         lawyer->att[ATTRIBUTE_HEART]=newcr->att[ATTRIBUTE_HEART]-2;
+      if(lawyer->get_attribute(ATTRIBUTE_HEART,false)<newcr->get_attribute(ATTRIBUTE_HEART,false)-2)
+         lawyer->adjust_attribute(ATTRIBUTE_HEART,-2);
       
-      lawyer->att[ATTRIBUTE_WISDOM]=1;
+      lawyer->set_attribute(ATTRIBUTE_WISDOM,1);
       
       lawyer->namecreature();
       lawyer->flag|=CREATUREFLAG_SLEEPER;
@@ -1499,30 +1529,7 @@ void makecharacter(void)
       lawyer->hireid=newcr->id;
       pool.push_back(lawyer);
       lawyer->location=lawyer->base=lawyer->worklocation;
-   }
-}
 
-
-
-/* mostly depricated, but called once by makecharacter */
-void initliberal(Creature &cr)
-{
-   cr.creatureinit();
-
-   cr.prisoner=NULL;
-
-   cr.align=1;
-   cr.type=CREATURE_POLITICALACTIVIST;
-   cr.money=0;
-
-   cr.namecreature();
-
-   //STARTING SKILLS
-   int startsknum=cr.attval(ATTRIBUTE_WISDOM);
-
-   while(startsknum>0)
-   {
-      cr.skill[LCSrandom(SKILLNUM)]++;
-      startsknum--;
+      uniqueCreatures.initialize();
    }
 }

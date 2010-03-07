@@ -227,17 +227,14 @@ void kidnapattempt(void)
 /* roll on the kidnap attempt and show the results */
 char kidnap(Creature &a,Creature &t,char &amateur)
 {
-   if(a.weapon.type==WEAPON_NONE||
-      a.weapon.type==WEAPON_SPRAYCAN||
-      a.weapon.type==WEAPON_GUITAR)
+   if(!a.weapon.can_take_hostages())
    {
       amateur=1;
 
       //BASIC ROLL
-      int aroll=LCSrandom(15)+1+LCSrandom(a.attval(ATTRIBUTE_AGILITY));
-      int droll=LCSrandom(20)+1+LCSrandom(t.attval(ATTRIBUTE_AGILITY));
+      int aroll=a.skill_roll(SKILL_HANDTOHAND);
+      int droll=t.attribute_check(ATTRIBUTE_AGILITY,true);
 
-      aroll+=LCSrandom(a.skillval(SKILL_HANDTOHAND)+1);
       a.train(SKILL_HANDTOHAND,droll);
 
       clearmessagearea();
@@ -380,7 +377,7 @@ void freehostage(Creature &cr,char situation)
             if(pool[pl]==cr.prisoner)
             {
                removesquadinfo(*pool[pl]);
-               pool[pl]->alive=0;
+               pool[pl]->die();
                pool[pl]->location=-1;
                //delete pool[pl];
                //pool.erase(pool.begin() + pl);
@@ -471,7 +468,7 @@ void squadgrab_immobile(char dead)
                   {
                      if(pool[pl]==activesquad->squad[p])
                      {
-                        pool[pl]->alive=0;
+                        pool[pl]->die();
                         pool[pl]->location=-1;
                         //delete pool[pl];
                         //pool.erase(pool.begin() + pl);

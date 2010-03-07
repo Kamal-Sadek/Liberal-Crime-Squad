@@ -86,48 +86,48 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
 **********************************/
 void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
-   int power=(cr.attval(ATTRIBUTE_CHARISMA)+
-              cr.attval(ATTRIBUTE_HEART)+
-              cr.attval(ATTRIBUTE_INTELLIGENCE)+
-              cr.skillval(SKILL_PERSUASION));
+   int power=(cr.get_attribute(ATTRIBUTE_CHARISMA,true)+
+              cr.get_attribute(ATTRIBUTE_HEART,true)+
+              cr.get_attribute(ATTRIBUTE_INTELLIGENCE,true)+
+              cr.get_skill(SKILL_PERSUASION));
 
    // Profession specific skills
    switch(cr.type)
    {
       case CREATURE_CRITIC_ART:
-         power+=cr.skillval(SKILL_WRITING);
+         power+=cr.get_skill(SKILL_WRITING);
       case CREATURE_PAINTER:
       case CREATURE_SCULPTOR:
-         power+=cr.skillval(SKILL_ART);
+         power+=cr.get_skill(SKILL_ART);
          break;
       case CREATURE_CRITIC_MUSIC:
-         power+=cr.skillval(SKILL_WRITING);
+         power+=cr.get_skill(SKILL_WRITING);
       case CREATURE_MUSICIAN:
-         power+=cr.skillval(SKILL_MUSIC);
+         power+=cr.get_skill(SKILL_MUSIC);
          break;
       case CREATURE_AUTHOR:
       case CREATURE_JOURNALIST:
-         power+=cr.skillval(SKILL_WRITING);
+         power+=cr.get_skill(SKILL_WRITING);
          break;
       case CREATURE_JUDGE_CONSERVATIVE:
-         power+=cr.skillval(SKILL_WRITING);
+         power+=cr.get_skill(SKILL_WRITING);
       case CREATURE_LAWYER:
-         power+=cr.skillval(SKILL_LAW);
+         power+=cr.get_skill(SKILL_LAW);
          break;
       case CREATURE_SCIENTIST_LABTECH:
       case CREATURE_SCIENTIST_EMINENT:
-         power+=cr.skillval(SKILL_SCIENCE);
+         power+=cr.get_skill(SKILL_SCIENCE);
          break;
       case CREATURE_CORPORATE_CEO:
       case CREATURE_CORPORATE_MANAGER:
-         power+=cr.skillval(SKILL_BUSINESS);
+         power+=cr.get_skill(SKILL_BUSINESS);
          break;
       case CREATURE_PRIEST:
       case CREATURE_NUN:
-         power+=cr.skillval(SKILL_RELIGION);
+         power+=cr.get_skill(SKILL_RELIGION);
          break;
       case CREATURE_EDUCATOR:
-         power+=cr.skillval(SKILL_PSYCHOLOGY);
+         power+=cr.get_skill(SKILL_PSYCHOLOGY);
          break;
    }
 
@@ -135,6 +135,8 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
    switch(cr.type)
    {
       case CREATURE_CORPORATE_CEO:
+         power*=20;
+         break;
       case CREATURE_DEATHSQUAD:
       case CREATURE_EDUCATOR:
          power*=4;
@@ -398,7 +400,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       // Can leak corporate files to you
       if(!location[homes]->siege.siege&&canseethings) 
       {
-         if(LCSrandom(law[LAW_CORPORATE] + 3)) break;
+         if(LCSrandom(law[LAW_CORPORATE] + 3) && cr.type!=CREATURE_CORPORATE_CEO) break;
          itemst *it=new itemst;
          it->type=ITEM_LOOT;
          it->loottype=LOOT_CORPFILES;
@@ -571,19 +573,16 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
    switch(cr.type)
    {
       case CREATURE_SCIENTIST_EMINENT:
-         income=static_cast<int>(3000*cr.infiltration);
+         income=static_cast<int>(5000*cr.infiltration);
          break;
       case CREATURE_CORPORATE_CEO:
-         income=static_cast<int>(10000*cr.infiltration);
+         income=static_cast<int>(50000*cr.infiltration);
          break;
       case CREATURE_CORPORATE_MANAGER:
-         income=static_cast<int>(2000*cr.infiltration);
-         break;
-      case CREATURE_AGENT:
-         income=static_cast<int>(1000*cr.infiltration);
+         income=static_cast<int>(5000*cr.infiltration);
          break;
       default:
-         income=static_cast<int>(100*cr.infiltration);
+         income=static_cast<int>(1000*cr.infiltration);
          break;
    }
    ledger.add_funds(income,INCOME_EMBEZZLEMENT);

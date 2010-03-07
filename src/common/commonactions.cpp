@@ -134,8 +134,8 @@ void hospitalize(int loc, Creature &patient)
       itoa(time,num,10);
       addstr(num);
       addstr(" ");
-      if(time>1)addstr("weeks");
-      else addstr("week");
+      if(time>1)addstr("months");
+      else addstr("month");
       addstr(".");
 
       refresh();
@@ -244,77 +244,6 @@ int testsquadclear(squadst &thissquad, int obase)
       return 1;
    }
    return 0;
-}
-
-
-
-/* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill,Creature& cr,bool use_juice)
-{
-   switch(skill)
-   {
-   case SKILL_HANDTOHAND:
-   case SKILL_FLAMETHROWER:
-      // Flamethrower fully limited by agility, but also so heavy that it
-      // requires strength too
-      if(cr.attval(ATTRIBUTE_STRENGTH,use_juice) < cr.attval(ATTRIBUTE_AGILITY,use_juice))
-         return cr.attval(ATTRIBUTE_STRENGTH,use_juice);
-      else
-         return cr.attval(ATTRIBUTE_AGILITY,use_juice);
-   case SKILL_CLUB:
-   case SKILL_AXE:
-      return cr.attval(ATTRIBUTE_STRENGTH,use_juice);
-   case SKILL_KNIFE:
-   case SKILL_SWORD:
-   case SKILL_PISTOL:
-   case SKILL_RIFLE:
-   case SKILL_SMG:
-   case SKILL_SHOTGUN:
-   case SKILL_DRIVING:
-   case SKILL_THEFT:
-   case SKILL_STEALTH:
-   case SKILL_THROWING:
-   case SKILL_DODGE:
-      return cr.attval(ATTRIBUTE_AGILITY,use_juice);
-   case SKILL_PERSUASION:
-   case SKILL_DISGUISE:
-   case SKILL_SEDUCTION:
-      return cr.attval(ATTRIBUTE_CHARISMA,use_juice);
-   case SKILL_ART:
-   case SKILL_MUSIC:
-   case SKILL_COOKING:
-      return cr.attval(ATTRIBUTE_HEART,use_juice);
-   case SKILL_WRITING:
-   case SKILL_PSYCHOLOGY:
-      return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_HEART,use_juice))/2;
-   case SKILL_RELIGION:
-      return (cr.attval(ATTRIBUTE_WISDOM,use_juice)+cr.attval(ATTRIBUTE_HEART,use_juice))/2;
-   case SKILL_BUSINESS:
-      return (cr.attval(ATTRIBUTE_WISDOM,use_juice)+cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice))/2;
-   case SKILL_SECURITY:
-   case SKILL_TAILORING:
-      return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_AGILITY,use_juice))/2;
-   case SKILL_TEACHING:
-      return (cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice)+cr.attval(ATTRIBUTE_CHARISMA,use_juice))/2;
-   //case SKILL_SURVIVAL:
-   //   return cr.attval(ATTRIBUTE_HEALTH,use_juice);
-   case SKILL_FIRSTAID:
-   case SKILL_SCIENCE:
-   case SKILL_LAW:
-   case SKILL_COMPUTERS:
-   case SKILL_STREETSENSE:
-      return cr.attval(ATTRIBUTE_INTELLIGENCE,use_juice);
-   case SKILL_LEADERSHIP:
-      if(cr.juice<10)return 0;
-      if(cr.juice<50)return 1;
-      if(cr.juice<100)return 2;
-      if(cr.juice<200)return 4;
-      if(cr.juice<500)return 7;
-      if(cr.juice<1000)return 10;
-      return 14;
-   default:
-      return -1;
-   }
 }
 
 /* common - returns the associated skill for the given weapon type */
@@ -757,11 +686,12 @@ int lawflagheat(int lawflag)
    case LAWFLAG_ESCAPED:return 5;
    case LAWFLAG_HELPESCAPE:return 5;
    case LAWFLAG_RESIST:return 1;
+   case LAWFLAG_EXTORTION:return 1;
    case LAWFLAG_BURNFLAG:return 0;
    case LAWFLAG_SPEECH:return 0;
    case LAWFLAG_VANDALISM:return 0;
    case LAWFLAG_ASSAULT:return 0;      // XXX: This is on the same level as "harmful speech"?
-   case LAWFLAG_ARMEDASSAULT:return 1; //      Yes. -Fox
+   case LAWFLAG_ARMEDASSAULT:return 0;    // Fox: Yes. You get too many assault charges to put heat on it.
    case LAWFLAG_CARTHEFT:return 0;
    case LAWFLAG_INFORMATION:return 5;
    case LAWFLAG_COMMERCE:return 2;
@@ -773,8 +703,8 @@ int lawflagheat(int lawflag)
    case LAWFLAG_HIREILLEGAL:return 1;
    case LAWFLAG_RACKETEERING:return 5;
    case LAWFLAG_LOITERING:return 0;
-   case LAWFLAG_GUNCARRY:return 0;
-   case LAWFLAG_GUNUSE:return 1;
+   //case LAWFLAG_GUNCARRY:return 0;
+   //case LAWFLAG_GUNUSE:return 1;
    case LAWFLAG_ARSON:return 5;
    case LAWFLAG_PUBLICNUDITY:return 0;
    default:return 0;
@@ -794,7 +724,7 @@ int maxsubordinates(const Creature& cr)
    else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
    //Cap based on leadership
-   recruitcap += cr.skill[SKILL_LEADERSHIP]; 
+   recruitcap += cr.get_skill(SKILL_LEADERSHIP); 
    //Cap for founder
    if(cr.hireid == -1 && cr.align == 1) recruitcap += 6;
    return recruitcap;
@@ -833,7 +763,7 @@ int loveslaves(const Creature& cr)
 int loveslavesleft(const Creature& cr)
 {
    // Get maximum lovers
-   int loveslavecap = cr.skill[SKILL_SEDUCTION]/2+1;
+   int loveslavecap = cr.get_skill(SKILL_SEDUCTION)/2+1;
 
    // -1 if they're a love slave (their boss is a lover)
    if(cr.flag & CREATUREFLAG_LOVESLAVE)loveslavecap--;

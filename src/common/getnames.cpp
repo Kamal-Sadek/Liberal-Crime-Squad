@@ -125,10 +125,10 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_VISIT:
       {
          strcat(str,"Going to ");
-    if (location[act.arg]->front_business==-1)
-       strcat(str,location[act.arg]->shortname);
-    else
-       strcat(str,location[act.arg]->front_shortname);
+         if (location[act.arg]->front_business==-1)
+            strcat(str,location[act.arg]->shortname);
+         else
+            strcat(str,location[act.arg]->front_shortname);
          break;
       }
       case ACTIVITY_HEAL:
@@ -371,80 +371,81 @@ void getarmor(char *str,int type,int subtype)
    switch(type)
    {
       //LIMIT ---------------------------------------------:
-      case ARMOR_NONE:         strcpy(str,"Naked");break;
-      case ARMOR_CLOTHES:         strcpy(str,"Clothes");break;
-      case ARMOR_OVERALLS:      strcpy(str,"Overalls");break;
-      case ARMOR_WIFEBEATER:      strcpy(str,"Wife Beater");break;
-      case ARMOR_TRENCHCOAT:      strcpy(str,"Trenchcoat");break;
-      case ARMOR_WORKCLOTHES:      strcpy(str,"Work Clothes");break;
-      case ARMOR_SECURITYUNIFORM:   strcpy(str,"Security Unif.");break;
-      case ARMOR_POLICEUNIFORM:   strcpy(str,"Police Uniform");break;
+      case ARMOR_NONE:           strcpy(str,"Naked");break;
+      case ARMOR_CLOTHES:        strcpy(str,"Clothes");break;
+      case ARMOR_OVERALLS:       strcpy(str,"Overalls");break;
+      case ARMOR_WIFEBEATER:     strcpy(str,"Wife Beater");break;
+      case ARMOR_TRENCHCOAT:     strcpy(str,"Trenchcoat");break;
+      case ARMOR_WORKCLOTHES:    strcpy(str,"Work Clothes");break;
+      case ARMOR_SECURITYUNIFORM:strcpy(str,"Security Unif.");break;
+      case ARMOR_SERVANTUNIFORM: strcpy(str,"Servant Unif.");break;
+      case ARMOR_POLICEUNIFORM:  strcpy(str,"Police Uniform");break;
       case ARMOR_CHEAPSUIT:      strcpy(str,"Cheap Suit");break;
-      case ARMOR_EXPENSIVESUIT:   strcpy(str,"Expensive Suit");break;
+      case ARMOR_EXPENSIVESUIT:  strcpy(str,"Expensive Suit");break;
       case ARMOR_BLACKSUIT:      strcpy(str,"Black Suit");break;
-      case ARMOR_CHEAPDRESS:      strcpy(str,"Cheap Dress");break;
-      case ARMOR_EXPENSIVEDRESS:   strcpy(str,"Expensve Dress");break;
-      case ARMOR_BLACKDRESS:      strcpy(str,"Black Dress");break;
-      case ARMOR_LABCOAT:         strcpy(str,"Lab Coat");break;
+      case ARMOR_CHEAPDRESS:     strcpy(str,"Cheap Dress");break;
+      case ARMOR_EXPENSIVEDRESS: strcpy(str,"Expensve Dress");break;
+      case ARMOR_BLACKDRESS:     strcpy(str,"Black Dress");break;
+      case ARMOR_LABCOAT:        strcpy(str,"Lab Coat");break;
       case ARMOR_BLACKROBE:      strcpy(str,"Black Robe");break;
       case ARMOR_CLOWNSUIT:      strcpy(str,"Clown Suit");break;
-      case ARMOR_ELEPHANTSUIT:      strcpy(str,"Elephant Suit");break;
-      case ARMOR_DONKEYSUIT:      strcpy(str,"Donkey Suit");break;
-      case ARMOR_BONDAGEGEAR:      strcpy(str,"Bondage Gear");break;
+      case ARMOR_ELEPHANTSUIT:   strcpy(str,"Elephant Suit");break;
+      case ARMOR_DONKEYSUIT:     strcpy(str,"Donkey Suit");break;
+      case ARMOR_BONDAGEGEAR:    strcpy(str,"Bondage Gear");break;
       case ARMOR_MASK:
          switch(subtype)
          {
-      case MASK_ASHCROFT:         strcpy(str,"Ashcroft Mask");break;
+      case MASK_ASHCROFT:        strcpy(str,"Ashcroft Mask");break;
       case MASK_BARR:            strcpy(str,"Bob Barr Mask");break;
-      case MASK_BLAIR:         strcpy(str,"Blair Mask");break;
-      case MASK_BUSH_BARBARA:      strcpy(str,"Brb. Bush Mask");break;
-      case MASK_BUSH_GEORGE:      strcpy(str,"G HW Bush Mask");break;
-      case MASK_BUSH_GEORGE2:      strcpy(str,"G W. Bush Mask");break;
+      case MASK_BLAIR:           strcpy(str,"Blair Mask");break;
+      case MASK_BUSH_BARBARA:    strcpy(str,"Brb. Bush Mask");break;
+      case MASK_BUSH_GEORGE:     strcpy(str,"G HW Bush Mask");break;
+      case MASK_BUSH_GEORGE2:    strcpy(str,"G W. Bush Mask");break;
       //LIMIT ---------------------------------------------:
-      case MASK_CARTER:         strcpy(str,"Carter Mask");break;
-      case MASK_CHENEY:         strcpy(str,"Cheney Mask");break;
-      case MASK_CLINTON_BILL:      strcpy(str,"B Clinton Mask");break;
-      case MASK_CLINTON_HILLARY:   strcpy(str,"H Clinton Mask");break;
+      case MASK_CARTER:          strcpy(str,"Carter Mask");break;
+      case MASK_CHENEY:          strcpy(str,"Cheney Mask");break;
+      case MASK_CLINTON_BILL:    strcpy(str,"B Clinton Mask");break;
+      case MASK_CLINTON_HILLARY: strcpy(str,"H Clinton Mask");break;
       case MASK_FALWELL:         strcpy(str,"Falwell Mask");break;
       case MASK_FORD:            strcpy(str,"Gld. Ford Mask");break;
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
-      case MASK_GORE_TIPPER:      strcpy(str,"Tpr. Gore Mask");break;
+      case MASK_GORE_TIPPER:     strcpy(str,"Tpr. Gore Mask");break;
       case MASK_GUY_FAWKES:      strcpy(str,"G. Fawkes Mask");break;
-      case MASK_TED_STEVENS:      strcpy(str,"T Stevens Mask");break;
-      case MASK_HELMS:         strcpy(str,"Helms Mask");break;
-      case MASK_JASON:         strcpy(str,"Jason Mask");break;
+      case MASK_TED_STEVENS:     strcpy(str,"T Stevens Mask");break;
+      case MASK_HELMS:           strcpy(str,"Helms Mask");break;
+      case MASK_JASON:           strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Lincoln Mask");break;
-      case MASK_KENNEDY_JOHN:      strcpy(str,"JFK Mask");break;
-      case MASK_KENNEDY_ROBERT:   strcpy(str,"RFK Mask");break;
-      case MASK_KISSINGER:      strcpy(str,"Kissinger Mask");break;
-      case MASK_NIXON:         strcpy(str,"Nixon Mask");break;
-      case MASK_POWELL:         strcpy(str,"Powell Mask");break;
-      case MASK_REAGAN_NANCY:      strcpy(str,"N. Reagan Mask");break;
+      case MASK_KENNEDY_JOHN:    strcpy(str,"JFK Mask");break;
+      case MASK_KENNEDY_ROBERT:  strcpy(str,"RFK Mask");break;
+      case MASK_KISSINGER:       strcpy(str,"Kissinger Mask");break;
+      case MASK_NIXON:           strcpy(str,"Nixon Mask");break;
+      case MASK_POWELL:          strcpy(str,"Powell Mask");break;
+      case MASK_REAGAN_NANCY:    strcpy(str,"N. Reagan Mask");break;
       case MASK_REAGAN_RONALD:   strcpy(str,"R. Reagan Mask");break;
       case MASK_RICE:            strcpy(str,"Cn. Rice Mask");break;
-      case MASK_ROBERTSON:      strcpy(str,"Robertson Mask");break;
-      case MASK_RUMSFELD:         strcpy(str,"Rumsfeld Mask");break;
-      case MASK_SATAN:         strcpy(str,"Satan Mask");break;
-      case MASK_STARR:         strcpy(str,"Ken Starr Mask");break;
-      case MASK_THURMOND:         strcpy(str,"Thurmond Mask");break;
+      case MASK_ROBERTSON:       strcpy(str,"Robertson Mask");break;
+      case MASK_RUMSFELD:        strcpy(str,"Rumsfeld Mask");break;
+      case MASK_SATAN:           strcpy(str,"Satan Mask");break;
+      case MASK_STARR:           strcpy(str,"Ken Starr Mask");break;
+      case MASK_THURMOND:        strcpy(str,"Thurmond Mask");break;
       case MASK_WASHINGTON:      strcpy(str,"Washngton Mask");break;
-      case MASK_WAXMAN:         strcpy(str,"Waxman Mask");break;
+      case MASK_WAXMAN:          strcpy(str,"Waxman Mask");break;
       //LIMIT ---------------------------------------------:
-      case MASK_JESUS:         strcpy(str,"Jesus Mask");break;
-      case MASK_COLEMAN_GARY:      strcpy(str,"G Coleman Mask");break;
+      case MASK_JESUS:           strcpy(str,"Jesus Mask");break;
+      case MASK_COLEMAN_GARY:    strcpy(str,"G Coleman Mask");break;
       case MASK_MADONNA:         strcpy(str,"Madonna Mask");break;
-      case MASK_SPEARS:         strcpy(str,"B Spears Mask");break;
-      case MASK_EMINEM:         strcpy(str,"Eminem Mask");break;
-      case MASK_AGUILERA:         strcpy(str,"C Aguilra Mask");break;
-      case MASK_WAHLBERG:         strcpy(str,"M Wahlbrg Mask");break;
+      case MASK_SPEARS:          strcpy(str,"B Spears Mask");break;
+      case MASK_EMINEM:          strcpy(str,"Eminem Mask");break;
+      case MASK_AGUILERA:        strcpy(str,"C Aguilra Mask");break;
+      case MASK_WAHLBERG:        strcpy(str,"M Wahlbrg Mask");break;
       case MASK_IGGYPOP:         strcpy(str,"Iggy Pop Mask");break;
       case MASK_CASH:            strcpy(str,"Jny. Cash Mask");break;
-      case MASK_BINLADEN:         strcpy(str,"bin Laden Mask");break;
-      case MASK_LORDS:         strcpy(str,"Tr. Lords Mask");break;
+      case MASK_BINLADEN:        strcpy(str,"bin Laden Mask");break;
+      case MASK_LORDS:           strcpy(str,"Tr. Lords Mask");break;
       case MASK_SHIELDS:         strcpy(str,"Br. Shlds Mask");break;
-      case MASK_JACKSON_MICHAEL:   strcpy(str,"M Jackson Mask");break;
-      case MASK_CRUTHERS:         strcpy(str,"Cruthers Mask");break;
-      case MASK_KING_DON:         strcpy(str,"Don King Mask");break;
+      case MASK_JACKSON_MICHAEL: strcpy(str,"M Jackson Mask");break;
+      case MASK_CRUTHERS:        strcpy(str,"Cruthers Mask");break;
+      case MASK_KING_DON:        strcpy(str,"Don King Mask");break;
       //LIMIT ---------------------------------------------:
       default:
                            strcpy(str,"Mask");
@@ -470,98 +471,139 @@ void getarmorfull(char *str,int type,int subtype)
 {
    switch(type)
    {
-      //LIMIT --------------------------------------------------:
       case ARMOR_NONE:         strcpy(str,"Naked");break;
       case ARMOR_CLOTHES:      strcpy(str,"Clothes");
-         /*switch(subtype)         {            // Hippie         case CLOTHES_TIEDYE:       strcpy(str,"Tie-Dye Shirt");break;            // Liberal Rags         case CLOTHES_PUNKBLAZER:   strcpy(str,"Punk Blazer");break;         case CLOTHES_KUTTE:        strcpy(str,"Kutte Vest");break;         case CLOTHES_GOTHDRESS:    strcpy(str,"Gothic Dress");break;         case CLOTHES_GOTHSHIRT:    strcpy(str,"Gothic Shirt");break;         case CLOTHES_KILT:         strcpy(str,"Kilt");break;            // Mainstream         case CLOTHES_BLOUSE:       strcpy(str,"Blouse");break;         case CLOTHES_DRESSSHIRT:   strcpy(str,"Dress Shirt");break;         case CLOTHES_JERSEY:       strcpy(str,"Jersey");break;         case CLOTHES_SWEATER:      strcpy(str,"Sweater");break;         case CLOTHES_POLOSHIRT:    strcpy(str,"Polo Shirt");break;         case CLOTHES_TURTLENECK:   strcpy(str,"Turtleneck");break;         case CLOTHES_HOODIE:       strcpy(str,"Hoodie");break;         case CLOTHES_LEATHERJACKET:strcpy(str,"Leather Jacket");break;         case CLOTHES_VINTAGEJACKET:strcpy(str,"Vintage Jacket");break;            // Conservative Gear         case CLOTHES_CAMOSHIRT:    strcpy(str,"Camo Shirt");break;         case CLOTHES_BIKERJACKET:  strcpy(str,"Biker Jacket");break;         case CLOTHES_FURCOAT:      strcpy(str,"Fur-Lined Coat");break;         //LIMIT ---------------------------------------------:            // Weird stuff         case CLOTHES_MAOSUIT:      strcpy(str,"Zhongshan Suit");break;         case CLOTHES_DASHIKI:      strcpy(str,"Dashiki");break;         case CLOTHES_KIMONO:       strcpy(str,"Kimono");break;         case CLOTHES_STRAIGHTJACKET:strcpy(str,"Straightjacket");break;         case CLOTHES_ZOOTSUIT:     strcpy(str,"Zoot Suit");break;         //LIMIT ---------------------------------------------:         default:                   strcpy(str,"Clothes");         }*/         break;      case ARMOR_OVERALLS:      strcpy(str,"Overalls");break;
-      case ARMOR_WIFEBEATER:      strcpy(str,"Wife Beater");break;
-      case ARMOR_TRENCHCOAT:      strcpy(str,"Trenchcoat");break;
-      case ARMOR_WORKCLOTHES:      strcpy(str,"Work Clothes");break;
-      case ARMOR_SECURITYUNIFORM:   strcpy(str,"Security Uniform");break;
-      case ARMOR_POLICEUNIFORM:   strcpy(str,"Police Uniform");break;
+      //LIMIT --------------------------------------------------:
+         /*switch(subtype)
+         {
+      // Hippie
+      case CLOTHES_TIEDYE:       strcpy(str,"Tie-Dye Shirt");break;
+
+      // Liberal Rags
+      case CLOTHES_PUNKBLAZER:   strcpy(str,"Punk Blazer");break;
+      case CLOTHES_KUTTE:        strcpy(str,"Kutte Vest");break;
+      case CLOTHES_GOTHDRESS:    strcpy(str,"Gothic Dress");break;
+      case CLOTHES_GOTHSHIRT:    strcpy(str,"Gothic Shirt");break;
+      case CLOTHES_KILT:         strcpy(str,"Kilt");break;
+
+      // Mainstream
+      case CLOTHES_BLOUSE:       strcpy(str,"Blouse");break;
+      case CLOTHES_DRESSSHIRT:   strcpy(str,"Dress Shirt");break;
+      case CLOTHES_JERSEY:       strcpy(str,"Jersey");break;
+      case CLOTHES_SWEATER:      strcpy(str,"Sweater");break;
+      case CLOTHES_POLOSHIRT:    strcpy(str,"Polo Shirt");break;
+      case CLOTHES_TURTLENECK:   strcpy(str,"Turtleneck");break;
+      case CLOTHES_HOODIE:       strcpy(str,"Hoodie");break;
+      case CLOTHES_LEATHERJACKET:strcpy(str,"Leather Jacket");break;
+      case CLOTHES_VINTAGEJACKET:strcpy(str,"Vintage Jacket");break;
+
+      // Conservative Gear
+      case CLOTHES_CAMOSHIRT:    strcpy(str,"Camo Shirt");break;
+      case CLOTHES_BIKERJACKET:  strcpy(str,"Biker Jacket");break;
+      case CLOTHES_FURCOAT:      strcpy(str,"Fur-Lined Coat");break;
+
+      // Weird stuff
+      case CLOTHES_MAOSUIT:      strcpy(str,"Zhongshan Suit");break;
+      case CLOTHES_DASHIKI:      strcpy(str,"Dashiki");break;
+      case CLOTHES_KIMONO:       strcpy(str,"Kimono");break;
+      case CLOTHES_STRAIGHTJACKET:strcpy(str,"Straightjacket");break;
+      case CLOTHES_ZOOTSUIT:     strcpy(str,"Zoot Suit");break;
+      default:                   strcpy(str,"Clothes");
+         }
+         */
+         break;
+      //LIMIT --------------------------------------------------:
+      case ARMOR_OVERALLS:       strcpy(str,"Overalls");break;
+      case ARMOR_WIFEBEATER:     strcpy(str,"Wife Beater");break;
+      case ARMOR_TRENCHCOAT:     strcpy(str,"Trenchcoat");break;
+      case ARMOR_WORKCLOTHES:    strcpy(str,"Work Clothes");break;
+      case ARMOR_SECURITYUNIFORM:strcpy(str,"Security Uniform");break;
+      case ARMOR_SERVANTUNIFORM: strcpy(str,"Servant Uniform");break;
+      case ARMOR_POLICEUNIFORM:  strcpy(str,"Police Uniform");break;
       case ARMOR_CHEAPSUIT:      strcpy(str,"Cheap Suit");break;
-      case ARMOR_EXPENSIVESUIT:   strcpy(str,"Expensive Suit");break;
+      case ARMOR_EXPENSIVESUIT:  strcpy(str,"Expensive Suit");break;
       case ARMOR_BLACKSUIT:      strcpy(str,"Black Suit");break;
-      case ARMOR_CHEAPDRESS:      strcpy(str,"Cheap Dress");break;
-      case ARMOR_EXPENSIVEDRESS:   strcpy(str,"Expensve Dress");break;
-      case ARMOR_BLACKDRESS:      strcpy(str,"Black Dress");break;
-      case ARMOR_LABCOAT:         strcpy(str,"Lab Coat");break;
+      case ARMOR_CHEAPDRESS:     strcpy(str,"Cheap Dress");break;
+      case ARMOR_EXPENSIVEDRESS: strcpy(str,"Expensve Dress");break;
+      case ARMOR_BLACKDRESS:     strcpy(str,"Black Dress");break;
+      case ARMOR_LABCOAT:        strcpy(str,"Lab Coat");break;
       case ARMOR_BLACKROBE:      strcpy(str,"Black Robe");break;
       case ARMOR_CLOWNSUIT:      strcpy(str,"Clown Suit");break;
-      case ARMOR_ELEPHANTSUIT:      strcpy(str,"Elephant Suit");break;
-      case ARMOR_DONKEYSUIT:      strcpy(str,"Donkey Suit");break;
-      case ARMOR_BONDAGEGEAR:      strcpy(str,"Bondage Gear");break;
+      case ARMOR_ELEPHANTSUIT:   strcpy(str,"Elephant Suit");break;
+      case ARMOR_DONKEYSUIT:     strcpy(str,"Donkey Suit");break;
+      case ARMOR_BONDAGEGEAR:    strcpy(str,"Bondage Gear");break;
       case ARMOR_MASK:
          switch(subtype)
          {
-      case MASK_ASHCROFT:         strcpy(str,"John Ashcroft Mask");break;
-      case MASK_BARR:            strcpy(str,"Bob Barr Mask");break;
-      case MASK_BLAIR:         strcpy(str,"Tony Blair Mask");break;
-      case MASK_BUSH_BARBARA:      strcpy(str,"Barbara Bush Mask");break;
-      case MASK_BUSH_GEORGE:      strcpy(str,"George HW Bush Mask");break;
-      case MASK_BUSH_GEORGE2:      strcpy(str,"George W. Bush Mask");break;
       //LIMIT --------------------------------------------------:
-      case MASK_CARTER:         strcpy(str,"Jimmy Carter Mask");break;
-      case MASK_CHENEY:         strcpy(str,"Dick Cheney Mask");break;
-      case MASK_CLINTON_BILL:      strcpy(str,"Bill Clinton Mask");break;
-      case MASK_CLINTON_HILLARY:   strcpy(str,"Hillary Clinton Msk");break;
+      case MASK_ASHCROFT:        strcpy(str,"John Ashcroft Mask");break;
+      case MASK_BARR:            strcpy(str,"Bob Barr Mask");break;
+      case MASK_BLAIR:           strcpy(str,"Tony Blair Mask");break;
+      case MASK_BUSH_BARBARA:    strcpy(str,"Barbara Bush Mask");break;
+      case MASK_BUSH_GEORGE:     strcpy(str,"George HW Bush Mask");break;
+      case MASK_BUSH_GEORGE2:    strcpy(str,"George W. Bush Mask");break;
+      case MASK_CARTER:          strcpy(str,"Jimmy Carter Mask");break;
+      case MASK_CHENEY:          strcpy(str,"Dick Cheney Mask");break;
+      case MASK_CLINTON_BILL:    strcpy(str,"Bill Clinton Mask");break;
+      case MASK_CLINTON_HILLARY: strcpy(str,"Hillary Clinton Msk");break;
       case MASK_FALWELL:         strcpy(str,"Jerry Falwell Mask");break;
       case MASK_FORD:            strcpy(str,"Gerald Ford Mask");break;
       case MASK_GORE_AL:         strcpy(str,"Al Gore Mask");break;
-      case MASK_GORE_TIPPER:      strcpy(str,"Tipper Gore Mask");break;
+      case MASK_GORE_TIPPER:     strcpy(str,"Tipper Gore Mask");break;
       case MASK_GUY_FAWKES:      strcpy(str,"Guy Fawkes Mask");break;
-      case MASK_TED_STEVENS:      strcpy(str,"Ted Stevens Mask");break;
-      case MASK_HELMS:         strcpy(str,"Jesse Helms Mask");break;
-      case MASK_JASON:         strcpy(str,"Jason Mask");break;
+      case MASK_TED_STEVENS:     strcpy(str,"Ted Stevens Mask");break;
+      case MASK_HELMS:           strcpy(str,"Jesse Helms Mask");break;
+      case MASK_JASON:           strcpy(str,"Jason Mask");break;
       case MASK_LINCOLN:         strcpy(str,"Abraham Lincoln Msk");break;
-      case MASK_KENNEDY_JOHN:      strcpy(str,"John F Kennedy Mask");break;
-      case MASK_KENNEDY_ROBERT:   strcpy(str,"Robert Kennedy Mask");break;
-      case MASK_KISSINGER:      strcpy(str,"Henry Kissinger Msk");break;
-      case MASK_NIXON:         strcpy(str,"Richard Nixon Mask");break;
-      case MASK_POWELL:         strcpy(str,"Colin Powell Mask");break;
-      case MASK_REAGAN_NANCY:      strcpy(str,"Nancy Reagan Mask");break;
+      case MASK_KENNEDY_JOHN:    strcpy(str,"John F Kennedy Mask");break;
+      case MASK_KENNEDY_ROBERT:  strcpy(str,"Robert Kennedy Mask");break;
+      case MASK_KISSINGER:       strcpy(str,"Henry Kissinger Msk");break;
+      case MASK_NIXON:           strcpy(str,"Richard Nixon Mask");break;
+      case MASK_POWELL:          strcpy(str,"Colin Powell Mask");break;
+      case MASK_REAGAN_NANCY:    strcpy(str,"Nancy Reagan Mask");break;
       case MASK_REAGAN_RONALD:   strcpy(str,"Ronald Reagan Mask");break;
       case MASK_RICE:            strcpy(str,"Condoleezza Rice Mk");break;
-      case MASK_ROBERTSON:      strcpy(str,"Pat Robertson Mask");break;
-      case MASK_RUMSFELD:         strcpy(str,"Donald Rumsfeld Msk");break;
-      case MASK_SATAN:         strcpy(str,"Satan Mask");break;
-      case MASK_STARR:         strcpy(str,"Ken Starr Mask");break;
-      case MASK_THURMOND:         strcpy(str,"Strom Thurmond Mask");break;
+      case MASK_ROBERTSON:       strcpy(str,"Pat Robertson Mask");break;
+      case MASK_RUMSFELD:        strcpy(str,"Donald Rumsfeld Msk");break;
+      case MASK_SATAN:           strcpy(str,"Satan Mask");break;
+      case MASK_STARR:           strcpy(str,"Ken Starr Mask");break;
+      case MASK_THURMOND:        strcpy(str,"Strom Thurmond Mask");break;
       case MASK_WASHINGTON:      strcpy(str,"George Washngtn Msk");break;
-      case MASK_WAXMAN:         strcpy(str,"Henry Waxman Mask");break;
-      //LIMIT --------------------------------------------------:
-      case MASK_JESUS:         strcpy(str,"Jesus Christ Mask");break;
-      case MASK_COLEMAN_GARY:      strcpy(str,"Gary Coleman Mask");break;
+      case MASK_WAXMAN:          strcpy(str,"Henry Waxman Mask");break;
+      case MASK_JESUS:           strcpy(str,"Jesus Christ Mask");break;
+      case MASK_COLEMAN_GARY:    strcpy(str,"Gary Coleman Mask");break;
       case MASK_MADONNA:         strcpy(str,"Madonna Mask");break;
-      case MASK_SPEARS:         strcpy(str,"Britney Spears Mask");break;
-      case MASK_EMINEM:         strcpy(str,"Eminem Mask");break;
-      case MASK_AGUILERA:         strcpy(str,"Chrstna Aguilera Mk");break;
-      case MASK_WAHLBERG:         strcpy(str,"Mark Wahlbrg Mask");break;
+      case MASK_SPEARS:          strcpy(str,"Britney Spears Mask");break;
+      case MASK_EMINEM:          strcpy(str,"Eminem Mask");break;
+      case MASK_AGUILERA:        strcpy(str,"Chrstna Aguilera Mk");break;
+      case MASK_WAHLBERG:        strcpy(str,"Mark Wahlbrg Mask");break;
       case MASK_IGGYPOP:         strcpy(str,"Iggy Pop Mask");break;
       case MASK_CASH:            strcpy(str,"Johnny Cash Mask");break;
-      case MASK_BINLADEN:         strcpy(str,"Osama bin Laden Msk");break;
-      case MASK_LORDS:         strcpy(str,"Traci Lords Mask");break;
+      case MASK_BINLADEN:        strcpy(str,"Osama bin Laden Msk");break;
+      case MASK_LORDS:           strcpy(str,"Traci Lords Mask");break;
       case MASK_SHIELDS:         strcpy(str,"Brooke Shields Mask");break;
-      case MASK_JACKSON_MICHAEL:   strcpy(str,"Michael Jackson Msk");break;
-      case MASK_CRUTHERS:         strcpy(str,"Scatman Cruthers Mk");break;
-      case MASK_KING_DON:         strcpy(str,"Don King Mask");break;
+      case MASK_JACKSON_MICHAEL: strcpy(str,"Michael Jackson Msk");break;
+      case MASK_CRUTHERS:        strcpy(str,"Scatman Cruthers Mk");break;
+      case MASK_KING_DON:        strcpy(str,"Don King Mask");break;
       //LIMIT --------------------------------------------------:
       default:
-                           strcpy(str,"Mask");
+                                 strcpy(str,"Mask");
          }
          break;
-      case ARMOR_MILITARY:      strcpy(str,"Army Uniform");break;
-      case ARMOR_PRISONGUARD:      strcpy(str,"Guard Uniform");break;
-      case ARMOR_PRISONER:      strcpy(str,"Orange Jumpsuit");break;
-      case ARMOR_TOGA:         strcpy(str,"Toga");break;
-      case ARMOR_MITHRIL:         strcpy(str,"Mithril Mail");break;
+      case ARMOR_MILITARY:       strcpy(str,"Army Uniform");break;
+      case ARMOR_PRISONGUARD:    strcpy(str,"Guard Uniform");break;
+      case ARMOR_PRISONER:       strcpy(str,"Orange Jumpsuit");break;
+      case ARMOR_TOGA:           strcpy(str,"Toga");break;
+      case ARMOR_MITHRIL:        strcpy(str,"Mithril Mail");break;
       case ARMOR_SWATARMOR:      strcpy(str,"Tactical SWAT Armor");break;
-      case ARMOR_POLICEARMOR:      strcpy(str,"Police Body Armor");break;
-      case ARMOR_ARMYARMOR:    strcpy(str,"Army Body Armor");break;
-      case ARMOR_CIVILLIANARMOR:                strcpy(str,"Body Armor");break;
-      case ARMOR_HEAVYARMOR:   strcpy(str,"Heavy Body Armor");break;
-      case ARMOR_BUNKERGEAR:           strcpy(str,"Bunker Gear");break;
-      case ARMOR_DEATHSQUADUNIFORM:    strcpy(str,"Death Squad Uniform");break;
+      case ARMOR_POLICEARMOR:    strcpy(str,"Police Body Armor");break;
+      case ARMOR_ARMYARMOR:      strcpy(str,"Army Body Armor");break;
+      case ARMOR_CIVILLIANARMOR: strcpy(str,"Body Armor");break;
+      case ARMOR_HEAVYARMOR:     strcpy(str,"Heavy Body Armor");break;
+      case ARMOR_BUNKERGEAR:     strcpy(str,"Bunker Gear");break;
+      case ARMOR_DEATHSQUADUNIFORM:
+                                 strcpy(str,"Death Squad Uniform");break;
+      //LIMIT --------------------------------------------------:
    }
 }
 
@@ -652,54 +694,6 @@ void getarmorfull(char *str,armorst &armor,char superfull)
       strcat(str,"]");
    }
 }
-
-
-
-void getskill(char *str,int type)
-{
-   strcpy(str,"");
-
-   switch(type)
-   {
-      case SKILL_HANDTOHAND:strcpy(str,"Martial Arts");break;
-      case SKILL_KNIFE:strcpy(str,"Knife");break;
-      case SKILL_SWORD:strcpy(str,"Sword");break;
-      case SKILL_THROWING:strcpy(str,"Throwing");break;
-      case SKILL_CLUB:strcpy(str,"Club");break;
-      case SKILL_AXE:strcpy(str,"Axe");break;
-      case SKILL_PISTOL:strcpy(str,"Pistol");break;
-      case SKILL_RIFLE:strcpy(str,"Rifle");break;
-      case SKILL_FLAMETHROWER:strcpy(str,"Flamethrower");break;
-      case SKILL_SHOTGUN:strcpy(str,"Shotgun");break;
-      case SKILL_SMG:strcpy(str,"SMG");break;
-      case SKILL_PERSUASION:strcpy(str,"Persuasion");break;
-      case SKILL_PSYCHOLOGY:strcpy(str,"Psychology");break;
-      case SKILL_SECURITY:strcpy(str,"Security");break;
-      case SKILL_DISGUISE:strcpy(str,"Disguise");break;
-      case SKILL_COMPUTERS:strcpy(str,"Computers");break;
-      case SKILL_LAW:strcpy(str,"Law");break;
-      case SKILL_TAILORING:strcpy(str,"Tailoring");break;
-      case SKILL_DRIVING:strcpy(str,"Driving");break;
-      case SKILL_WRITING:strcpy(str,"Writing");break;
-      case SKILL_COOKING:strcpy(str,"Cooking");break;
-      case SKILL_MUSIC:strcpy(str,"Music");break;
-      case SKILL_ART:strcpy(str,"Art");break;
-      case SKILL_RELIGION:strcpy(str,"Religion");break;
-      case SKILL_SCIENCE:strcpy(str,"Science");break;
-      case SKILL_BUSINESS:strcpy(str,"Business");break;
-      //case SKILL_SURVIVAL:strcpy(str,"Survival");break;
-      case SKILL_STEALTH:strcpy(str,"Stealth");break;
-      case SKILL_THEFT:strcpy(str,"Theft");break;
-      case SKILL_TEACHING:strcpy(str,"Teaching");break;
-      case SKILL_STREETSENSE:strcpy(str,"Street Sense");break;
-      case SKILL_SEDUCTION:strcpy(str,"Seduction");break;
-      case SKILL_LEADERSHIP:strcpy(str,"Leadership");break;
-      case SKILL_FIRSTAID:strcpy(str,"First Aid");break;
-      case SKILL_DODGE:strcpy(str,"Dodge");break;
-   }
-}
-
-
 
 void getclip(char *str,int clip)
 {
@@ -1261,10 +1255,11 @@ void getlawflag(char *str,int type)
    case LAWFLAG_HIREILLEGAL:strcat(str,"Hiring illegal aliens");break;
    case LAWFLAG_RACKETEERING:strcat(str,"Racketeering");break;
    case LAWFLAG_LOITERING:strcat(str,"Loitering");break;
-   case LAWFLAG_GUNCARRY:strcat(str,"Using illegal weapons");break;
-   case LAWFLAG_GUNUSE:strcat(str,"Firing illegal weapons");break;
+   //case LAWFLAG_GUNCARRY:strcat(str,"Using illegal weapons");break;
+   //case LAWFLAG_GUNUSE:strcat(str,"Firing illegal weapons");break;
    case LAWFLAG_ARSON:strcat(str,"Arson");break;
    case LAWFLAG_PUBLICNUDITY:strcat(str,"Public nudity");break;
+   case LAWFLAG_EXTORTION:strcat(str,"Extortion");break;
    default:strcpy(str,"ERROR, AR");break;
    }
 }

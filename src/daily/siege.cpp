@@ -84,11 +84,6 @@ void siegecheck(char canseethings)
                      hunt_speed--;
                   }
                }
-               if(offended_cops&&
-                  location[l]->siege.timeuntillocated>1&&!LCSrandom(2))
-               {
-                  location[l]->siege.timeuntillocated--;
-               }
             }
          }
 
@@ -102,11 +97,15 @@ void siegecheck(char canseethings)
             if(pool[p]->location!=l)continue; // People not at this base don't count
             if(!pool[p]->alive) // Corpses attract attention
             {
-               crimes=10;
+               crimes += 10;
                continue;
             }
             if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
-               pool[p]->align!=1)kidnapped++; // Kidnapped persons increase heat
+               pool[p]->align!=1)
+            {
+               crimes += 5*pool[p]->joindays; // Kidnapped persons increase heat
+               continue;
+            }
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
             
@@ -117,51 +116,42 @@ void siegecheck(char canseethings)
             if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
 
             //Heat doesn't matter for sieges until it gets high
-            crimes=pool[p]->heat-5;
+            crimes += max(0,pool[p]->heat-10);
          }
 
-         // Let the place slowly cool off if there are no criminals there
-         if(!crimes&&location[l]->heat)
+         // Let the place cool off if nobody is present
+         if(!crimes)
          {
-            if(location[l]->heat > 500)
-               location[l]->heat-=200-police_heat*40;
-            else
-               location[l]->heat-=5-police_heat;
-            if(location[l]->heat<0)location[l]->heat=0;
+            location[l]->heat=0;
          }
-         else if(crimes*3>location[l]->heat+location[l]->heat_protection*100||kidnapped)
+         else
          {
             // Determine how effective your current safehouse
             // is at keeping the police confused
             location[l]->update_heat_protection();
-            heatprotection=static_cast<int>(location[l]->heat_protection * 20);
 
-            //Having hostages reduces protection
+            // Having hostages increases heat
             if(kidnapped)
             {
-               heatprotection-=kidnapped;
-               crimes+=kidnapped*5;
+               crimes+=kidnapped*20;
             }
 
-            if(heatprotection<0)heatprotection=0;
+            // Update location heat
+            location[l]->heat = static_cast<int>(crimes * (1.0 - location[l]->heat_protection));
 
-            crimes-=crimes*heatprotection/20;
-
-            location[l]->heat+=LCSrandom(LCSrandom(crimes)+1);
-
-            if(location[l]->siege.timeuntillocated==-1 &&
-               location[l]->heat > 100 &&
-               !LCSrandom(30))
+            // Begin planning siege if high heat on location
+            if(LCSrandom(3000) < location[l]->heat)
             {
+               // Set force deployment (military, bombers, etc.)
                if(LCSrandom(crimes) > 25)location[l]->siege.escalationstate++;
-               if(LCSrandom(crimes) > 50)location[l]->siege.escalationstate++;
-               if(LCSrandom(crimes) > 75)location[l]->siege.escalationstate++;
+               if(LCSrandom(crimes) > 100)location[l]->siege.escalationstate++;
+               if(LCSrandom(crimes) > 500)location[l]->siege.escalationstate++;
+
                if(location[l]->siege.escalationstate>3)
                   location[l]->siege.escalationstate=3;
-               // Begin planning siege if high heat on location
-               int siegetime = 5*(1 + 1 * heatprotection - kidnapped);
-               if(siegetime<5)siegetime=5;
-               location[l]->siege.timeuntillocated += siegetime + LCSrandom(siegetime);
+
+               // Set time until siege is carried out
+               location[l]->siege.timeuntillocated += 5 + LCSrandom(20);
             }
          }
 
@@ -488,7 +478,7 @@ void siegecheck(char canseethings)
                                  killed_x=1;
                               }
                               move(killed_y,killed_x);
-                              pool[i]->alive=0;
+                              pool[i]->die();
                            }
                            else
                            {
@@ -829,8 +819,8 @@ void siegeturn(char clearformess)
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
       //Get the best cooking skill for each location
-      if(food_prep[pool[p]->location]<pool[p]->skillval(SKILL_COOKING))
-         food_prep[pool[p]->location]=pool[p]->skillval(SKILL_COOKING);
+      if(food_prep[pool[p]->location]<pool[p]->get_skill(SKILL_COOKING))
+         food_prep[pool[p]->location]=pool[p]->get_skill(SKILL_COOKING);
    }
    for(l=0;l<location.size();l++)
    {
@@ -843,7 +833,8 @@ void siegeturn(char clearformess)
 
    for(l=0;l<location.size();l++)
    {
-      if(!location[l]->siege.siege && location[l]->renting>=0 && location[l]->type!=SITE_RESIDENTIAL_SHELTER)
+      // FOOD -- currently free
+      /*if(!location[l]->siege.siege && location[l]->renting>=0 && location[l]->type!=SITE_RESIDENTIAL_SHELTER)
       {
          //locations not under siege eat
          int eat=numbereating(l);
@@ -889,7 +880,8 @@ void siegeturn(char clearformess)
             }
          }
       }
-      else if(location[l]->siege.siege)
+      else*/
+      if(location[l]->siege.siege)
       {
          //resolve sieges with no people
          if(liberalcount[l]==0)
@@ -1084,7 +1076,7 @@ void siegeturn(char clearformess)
 
                         removesquadinfo(*pool[targ]);
 
-                        pool[targ]->alive=0;
+                        pool[targ]->die();
                         //delete pool[targ];
                         //pool.erase(pool.begin() + targ);
                      }
@@ -1180,7 +1172,7 @@ void siegeturn(char clearformess)
 
                            removesquadinfo(*pool[targ]);
 
-                           pool[targ]->alive=0;
+                           pool[targ]->die();
                            //delete pool[targ];
                            //pool.erase(pool.begin() + targ);
                         }
@@ -1299,11 +1291,11 @@ void siegeturn(char clearformess)
                      if(pool[p]->location!=l)continue;
 
                      sum=0;
-                     sum+=pool[p]->attval(ATTRIBUTE_INTELLIGENCE);
-                     sum+=pool[p]->attval(ATTRIBUTE_HEART);
-                     sum+=pool[p]->attval(ATTRIBUTE_CHARISMA)*2;
-                     sum+=pool[p]->skillval(SKILL_PERSUASION)*3;
-                     sum+=pool[p]->skillval(SKILL_LEADERSHIP)*5;
+                     sum+=pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
+                     sum+=pool[p]->get_attribute(ATTRIBUTE_HEART,true);
+                     sum+=pool[p]->get_attribute(ATTRIBUTE_CHARISMA,true)*2;
+                     sum+=pool[p]->get_skill(SKILL_PERSUASION)*3;
+                     sum+=pool[p]->get_skill(SKILL_LEADERSHIP)*5;
 
                      if(sum>bestvalue||best==-1)
                      {
@@ -1662,7 +1654,7 @@ void giveup(void)
 
          killnumber++;
          removesquadinfo(*pool[p]);
-         pool[p]->alive=0;
+         pool[p]->die();
          pool[p]->location=-1;
          //delete pool[p];
          //pool.erase(pool.begin() + p);
@@ -1740,9 +1732,8 @@ int numbereating(int loc)
       if(pool[p]->location!=loc)continue;
       //Not alive? Not eating!
       if(!pool[p]->alive)continue;
-      //You're a prisoner getting starved? Not eating!
-      if(pool[p]->align==-1 &&
-         reinterpret_cast<interrogation*>(pool[p]->activity.arg)->nofood)continue;
+      //Don't count Conservatives as eaters. Just assume they get fed scraps or something.
+      if(pool[p]->align==-1)continue;
       //You're a sleeper agent? Sleepers don't eat! Feh! (Rather, they eat on Conservatives' expense, not yours.)
       if(pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
       //None of the above? You're eating!
@@ -2267,6 +2258,14 @@ void statebrokenlaws(int loc)
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
+   //EXTORTION
+   else if(breakercount[LAWFLAG_EXTORTION])
+   {
+      move(4,1);
+      addstr("You are wanted for extortion");
+      if(typenum>1)addstr(" and other crimes");
+      addstr(".");
+   }
    //ASSAULT
    else if(breakercount[LAWFLAG_ARMEDASSAULT])
    {
@@ -2324,7 +2323,7 @@ void statebrokenlaws(int loc)
       addstr(".");
    }
    //GUN CARRY
-   else if(breakercount[LAWFLAG_GUNUSE])
+   /*else if(breakercount[LAWFLAG_GUNUSE])
    {
       move(4,1);
       addstr("You are wanted for use of an illegal weapon");
@@ -2338,7 +2337,7 @@ void statebrokenlaws(int loc)
       addstr("You are wanted for carrying an illegal weapon");
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
-   }
+   }*/
    //COMMERCE
    else if(breakercount[LAWFLAG_COMMERCE])
    {
@@ -2524,7 +2523,7 @@ void statebrokenlaws(Creature & cr)
       addstr("HIRING ILLEGAL ALIENS");
    }
    //GUN CARRY
-   else if(breakercount[LAWFLAG_GUNUSE])
+   /*else if(breakercount[LAWFLAG_GUNUSE])
    {
       addstr("FIRING ILLEGAL WEAPONS");
    }
@@ -2532,7 +2531,7 @@ void statebrokenlaws(Creature & cr)
    else if(breakercount[LAWFLAG_GUNCARRY])
    {
       addstr("USING ILLEGAL WEAPONS");
-   }
+   }*/
    //COMMERCE
    else if(breakercount[LAWFLAG_COMMERCE])
    {
@@ -2567,6 +2566,11 @@ void statebrokenlaws(Creature & cr)
    else if(breakercount[LAWFLAG_DISTURBANCE])
    {
       addstr("DISTURBING THE PEACE");
+   }
+   //RESIST
+   else if(breakercount[LAWFLAG_EXTORTION])
+   {
+      addstr("EXTORTION");
    }
 }
 

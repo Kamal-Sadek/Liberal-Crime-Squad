@@ -146,7 +146,7 @@ void set_activity_color(long activity_type)
       // Nothing terribly important
    case ACTIVITY_HEAL: // Identical to none in practice
    case ACTIVITY_NONE:
-   case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
+   //case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       break;
    }
@@ -318,9 +318,9 @@ void printparty(void)
             char bright=0;
             for(int sk=0;sk<SKILLNUM;sk++)
             {
-               skill+=(int)party[p]->skill[sk];
-               if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->skill[sk])&&
-                  party[p]->skill[sk]<maxskill(sk,*party[p]))bright=1;
+               skill+=(int)party[p]->get_skill(sk);
+               if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->get_skill(sk))&&
+                  party[p]->get_skill(sk)<party[p]->skill_cap(sk,true))bright=1;
             }
 
             set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -329,7 +329,7 @@ void printparty(void)
             addstr(num);
             addstr("/");
             int wsk=weaponskill(party[p]->weapon.type);
-            itoa(party[p]->skill[wsk],num,10);
+            itoa(party[p]->get_skill(wsk),num,10);
             addstr(num);
 
             move(p+2,31);
@@ -374,7 +374,7 @@ void printparty(void)
             if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else
             {
-               switch(hasdisguise(*party[p],sitetype))
+               switch(hasdisguise(*party[p]))
                {
                case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
                case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
@@ -620,49 +620,49 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    move(2,0);addstr("Hrt:    ");
    if(knowledge>0)
    {
-      itoa(cr->attval(ATTRIBUTE_HEART),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_HEART,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(3,0);addstr("Int:    ");
    if(knowledge>0)
    {
-      itoa(cr->attval(ATTRIBUTE_INTELLIGENCE),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_INTELLIGENCE,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(4,0);addstr("Wis:    ");
    if(knowledge>0)
    {
-      itoa(cr->attval(ATTRIBUTE_WISDOM),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_WISDOM,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(5,0);addstr("Hlth:   ");
    if(knowledge>1)
    {
-      itoa(cr->attval(ATTRIBUTE_HEALTH),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_HEALTH,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(2,11);addstr("Agi:    ");
    if(knowledge>1)
    {
-      itoa(cr->attval(ATTRIBUTE_AGILITY),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_AGILITY,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(3,11);addstr("Str:    ");
    if(knowledge>1)
    {
-      itoa(cr->attval(ATTRIBUTE_STRENGTH),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_STRENGTH,true),num,10);
       addstr(num);
    }
    else addstr("?");
    move(4,11);addstr("Char:   ");
    if(knowledge>0)
    {
-      itoa(cr->attval(ATTRIBUTE_CHARISMA),num,10);
+      itoa(cr->get_attribute(ATTRIBUTE_CHARISMA,true),num,10);
       addstr(num);
    }
    else addstr("?");
@@ -720,7 +720,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
    else
    {
-      switch(hasdisguise(*cr,sitetype))
+      switch(hasdisguise(*cr))
       {
       case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
       case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
@@ -748,9 +748,9 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       long maxs=-1;
       for(int s=0;s<SKILLNUM;s++)
       {
-         if(cr->skill[s]>max && !used[s])
+         if(cr->get_skill(s)>max && !used[s])
          {
-            max=cr->skillval(s);
+            max=cr->get_skill(s);
             maxs=s;
          }
       }
@@ -760,18 +760,18 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
          used[maxs]=1;
          printed=1;
 
-         if(cr->get_skill_ip(maxs)>=100+(10*cr->skill[maxs])&&
-            cr->skill[maxs]<maxskill(maxs,*cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+         if(cr->get_skill_ip(maxs)>=100+(10*cr->get_skill(maxs))&&
+            cr->get_skill(maxs)<cr->skill_cap(maxs,true))set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(3+5-snum,31);
          if(knowledge>5-snum)
-            getskill(str,maxs);
+            strcpy(str,Skill::get_name(maxs).c_str());
          else
             strcpy(str,"???????");
          strcat(str,": ");
          if(knowledge>7-snum)
-            itoa(cr->skill[maxs],num,10);
+            itoa(cr->get_skill(maxs),num,10);
          else
             strcpy(num,"?");
          strcat(str,num);
@@ -985,28 +985,28 @@ void printliberalskills(Creature &cr)
       }
 
       // Maxed skills are green
-      if(maxskill(s,cr)!=0 && cr.skill[s]>=maxskill(s,cr))set_color(COLOR_CYAN,COLOR_BLACK,1);
+      if(cr.skill_cap(s,true)!=0 && cr.get_skill(s)>=cr.skill_cap(s,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
       // About to level up skills are white
-      else if(cr.get_skill_ip(s)>=100+(10*cr.skill[s])&&
-         cr.skill[s]<maxskill(s,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+      else if(cr.get_skill_ip(s)>=100+(10*cr.get_skill(s))&&
+         cr.get_skill(s)<cr.skill_cap(s,true))set_color(COLOR_WHITE,COLOR_BLACK,1);
       // <1 skills are dark gray
-      else if(cr.skill[s]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      else if(cr.get_skill(s)<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
       // >=1 skills are light gray
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
       move(5+s/3,27*(s%3));
-      getskill(str,s);
+      strcpy(str,Skill::get_name(s).c_str());
       strcat(str,": ");
       addstr(str);
       move(5+s/3,14+27*(s%3));
-      sprintf(num,"%2d.",cr.skill[s]);
+      sprintf(num,"%2d.",cr.get_skill(s));
       addstr(num);
-      if(cr.get_skill_ip(s)<100+(10*cr.skill[s]))
+      if(cr.get_skill_ip(s)<100+(10*cr.get_skill(s)))
       {
-         if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))!=0)
+         if ((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s)))!=0)
          {
-            itoa((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s])),num,10);
-            if ((cr.get_skill_ip(s)*100)/(100+(10*cr.skill[s]))<10)
+            itoa((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s))),num,10);
+            if ((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s)))<10)
             {
                addstr("0");
             }
@@ -1019,10 +1019,10 @@ void printliberalskills(Creature &cr)
          addstr("99+");
       }
 
-      if(maxskill(s,cr)==0 || cr.skill[s]<maxskill(s,cr))
+      if(cr.skill_cap(s,true)==0 || cr.get_skill(s)<cr.skill_cap(s,true))
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(5+s/3,20+27*(s%3));
-      sprintf(str,"%2d.00",maxskill(s,cr));
+      sprintf(str,"%2d.00",cr.skill_cap(s,true));
       addstr(str);
    }
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1130,25 +1130,25 @@ void printliberalstats(Creature &cr)
    }
    // Add attributes
    move(5,0);addstr("Heart: ");
-   itoa(cr.attval(ATTRIBUTE_HEART),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_HEART,true),num,10);
    addstr(num);
    move(6,0);addstr("Intelligence: ");
-   itoa(cr.attval(ATTRIBUTE_INTELLIGENCE),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_INTELLIGENCE,true),num,10);
    addstr(num);
    move(7,0);addstr("Wisdom: ");
-   itoa(cr.attval(ATTRIBUTE_WISDOM),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_WISDOM,true),num,10);
    addstr(num);
    move(8,0);addstr("Health: ");
-   itoa(cr.attval(ATTRIBUTE_HEALTH),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_HEALTH,true),num,10);
    addstr(num);
    move(9,0);addstr("Agility: ");
-   itoa(cr.attval(ATTRIBUTE_AGILITY),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_AGILITY,true),num,10);
    addstr(num);
    move(10,0);addstr("Strength: ");
-   itoa(cr.attval(ATTRIBUTE_STRENGTH),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_STRENGTH,true),num,10);
    addstr(num);
    move(11,0);addstr("Charisma: ");
-   itoa(cr.attval(ATTRIBUTE_CHARISMA),num,10);
+   itoa(cr.get_attribute(ATTRIBUTE_CHARISMA,true),num,10);
    addstr(num);
 
    // Add highest skills
@@ -1170,9 +1170,9 @@ void printliberalstats(Creature &cr)
       long maxs=-1;
       for(int s=0;s<SKILLNUM;s++)
       {
-         if((cr.skill[s]*10000+cr.get_skill_ip(s))>max && !used[s])
+         if((cr.get_skill(s)*10000+cr.get_skill_ip(s))>max && !used[s])
          {
-            max=(cr.skill[s]*10000+cr.get_skill_ip(s));
+            max=(cr.get_skill(s)*10000+cr.get_skill_ip(s));
             maxs=s;
          }
       }
@@ -1183,28 +1183,28 @@ void printliberalstats(Creature &cr)
          printed=1;
 
          // Maxed skills are green
-         if(maxskill(maxs,cr)!=0 && cr.skill[maxs]>=maxskill(maxs,cr))set_color(COLOR_CYAN,COLOR_BLACK,1);
+         if(cr.skill_cap(maxs,true)!=0 && cr.get_skill(maxs)>=cr.skill_cap(maxs,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
          // About to level up skills are white
-         else if(cr.get_skill_ip(maxs)>=100+(10*cr.skill[maxs])&&
-            cr.skill[maxs]<maxskill(maxs,cr))set_color(COLOR_WHITE,COLOR_BLACK,1);
+         else if(cr.get_skill_ip(maxs)>=100+(10*cr.get_skill(maxs))&&
+            cr.get_skill(maxs)<cr.skill_cap(maxs,true))set_color(COLOR_WHITE,COLOR_BLACK,1);
          // <1 skills are dark gray
-         else if(cr.skill[maxs]<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else if(cr.get_skill(maxs)<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
          // >=1 skills are light gray
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(6+skills_shown,28);
-         getskill(str,maxs);
+         strcpy(str,Skill::get_name(maxs).c_str());
          strcat(str,": ");
          addstr(str);
          move(6+skills_shown,42);
-         sprintf(num,"%2d.",cr.skill[maxs]);
+         sprintf(num,"%2d.",cr.get_skill(maxs));
          addstr(num);
-         if(cr.get_skill_ip(maxs)<100+(10*cr.skill[maxs]))
+         if(cr.get_skill_ip(maxs)<100+(10*cr.get_skill(maxs)))
          {
-            if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))!=0)
+            if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.get_skill(maxs)))!=0)
             {
-               itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs])),num,10);
-               if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.skill[maxs]))<10)
+               itoa((cr.get_skill_ip(maxs)*100)/(100+(10*cr.get_skill(maxs))),num,10);
+               if ((cr.get_skill_ip(maxs)*100)/(100+(10*cr.get_skill(maxs)))<10)
                {
                   addstr("0");
                }
@@ -1217,10 +1217,10 @@ void printliberalstats(Creature &cr)
             addstr("99+");
          }
 
-         if(maxskill(maxs,cr)==0 || cr.skill[maxs]<maxskill(maxs,cr))
+         if(cr.skill_cap(maxs,true)==0 || cr.get_skill(maxs)<cr.skill_cap(maxs,true))
             set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(6+skills_shown,48);
-         sprintf(str,"%2d.00",maxskill(maxs,cr));
+         sprintf(str,"%2d.00",cr.skill_cap(maxs,true));
          addstr(str);
       }
    }

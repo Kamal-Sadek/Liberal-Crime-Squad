@@ -329,9 +329,9 @@ void review_mode(short mode)
          int skill=0;
          for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=(int)temppool[p]->skill[sk];
-            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
-               temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
+            skill+=(int)temppool[p]->get_skill(sk);
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(sk))&&
+               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -652,10 +652,10 @@ void review_mode(short mode)
                      // Chance of member going to police if boss has criminal record and
                      // if they have low heart
                      // TODO: Do law check against other members?
-                     if(temppool[p]->attval(ATTRIBUTE_HEART) < temppool[p]->attval(ATTRIBUTE_WISDOM)+ LCSrandom(5)
+                     if(temppool[p]->get_attribute(ATTRIBUTE_HEART,true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+ LCSrandom(5)
                         && iscriminal(*pool[boss]))
                      {
-                        if(LCSrandom(5)) // Chance of tip off
+                        if(!LCSrandom(5)) // Chance of tip off
                         {
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
                            move(22,0);
@@ -672,7 +672,10 @@ void review_mode(short mode)
 
                         // TODO: Depending on the crime increase heat or make seige
 
-                        location[pool[boss]->location]->siege.timeuntillocated=3;
+                        if(location[pool[boss]->location]->heat > 20)
+                           location[pool[boss]->location]->siege.timeuntillocated=3;
+                        else
+                           location[pool[boss]->location]->heat += 20;
                      }
 
                      // Remove squad member
@@ -722,7 +725,7 @@ void review_mode(short mode)
 
                   if(c=='c')
                   {
-                     temppool[p]->alive = 0;
+                     temppool[p]->die();
                      stat_kills++;
 
                      move(22,0);
@@ -754,12 +757,12 @@ void review_mode(short mode)
                         }
                         addjuice(*pool[boss],-juice);
 
-                        if(LCSrandom(pool[boss]->att[ATTRIBUTE_HEART])>LCSrandom(3))
+                        if(LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
                         {
                            set_color(COLOR_GREEN,COLOR_BLACK,1);
                            addstr(pool[boss]->name);
                            addstr(" feels sick to the stomach afterward and ");
-                           pool[boss]->att[ATTRIBUTE_HEART]--;
+                           pool[boss]->adjust_attribute(ATTRIBUTE_HEART,-1);
                            switch(LCSrandom(4))
                            {
                            case 0:addstr("throws up in a trash can.                                          ");break;
@@ -777,7 +780,7 @@ void review_mode(short mode)
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
                            addstr(pool[boss]->name);
                            addstr(" grows colder.                                                            ");
-                           pool[boss]->att[ATTRIBUTE_WISDOM]++;
+                           pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
                            move(23,0);
                            addstr(pool[boss]->name);
                            addstr(" has gained wisdom.                                                           ");
@@ -815,7 +818,7 @@ void review_mode(short mode)
 
             if(c==10)break;
 
-            if(!c>='a'&&!c<='s')
+            if(c<'a'||c>'s')
             {
                // Not within correct range
                break;
@@ -845,7 +848,7 @@ void review_mode(short mode)
             // Get next member to swap to
             if(c==10)break;
 
-            if(!c>='a'&&!c<='s')
+            if(c<'a'||c>'s')
             {
                // Not within correct range
                break;
@@ -989,9 +992,9 @@ void assemblesquad(squadst *cursquad)
          int skill=0;
          for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=(int)temppool[p]->skill[sk];
-            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->skill[sk])&&
-               temppool[p]->skill[sk]<maxskill(sk,*temppool[p]))bright=1;
+            skill+=(int)temppool[p]->get_skill(sk);
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(sk))&&
+               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);

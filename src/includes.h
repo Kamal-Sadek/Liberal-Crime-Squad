@@ -40,6 +40,9 @@
 // Show die rolls, 100% accurate poll numbers
 //#define SHOWMECHANICS
 
+// Interrogation debug, since SHOWMECHANICS is too verbose
+//#define INTERROGATION_DEBUG
+
 // Make the year 2100
 //#define THEFUTURE
 
@@ -360,105 +363,6 @@ enum SiteTypes
    SITENUM
 };
 
-enum CreatureType
-{
-   CREATURE_BOUNCER,
-   CREATURE_SECURITYGUARD,
-   CREATURE_SCIENTIST_LABTECH,
-   CREATURE_SCIENTIST_EMINENT,
-   CREATURE_CORPORATE_MANAGER,
-   CREATURE_CORPORATE_CEO,
-   CREATURE_WORKER_SERVANT,
-   CREATURE_WORKER_JANITOR,
-   CREATURE_WORKER_SWEATSHOP,
-   CREATURE_WORKER_FACTORY_NONUNION,
-   CREATURE_WORKER_FACTORY_CHILD,
-   CREATURE_WORKER_SECRETARY,
-   CREATURE_WORKER_FACTORY_UNION,
-   CREATURE_LANDLORD,
-   CREATURE_TEENAGER,
-   CREATURE_COP,
-   CREATURE_SWAT,
-   CREATURE_DEATHSQUAD,
-   CREATURE_FIREFIGHTER,
-   CREATURE_EDUCATOR,
-   CREATURE_GANGUNIT,
-   CREATURE_JUDGE_LIBERAL,
-   CREATURE_JUDGE_CONSERVATIVE,
-   CREATURE_AGENT,
-   CREATURE_RADIOPERSONALITY,
-   CREATURE_NEWSANCHOR,
-   CREATURE_GENETIC,
-   CREATURE_GUARDDOG,
-   CREATURE_PRISONER,
-   CREATURE_JUROR,
-   CREATURE_LAWYER,
-   CREATURE_SEWERWORKER,
-   CREATURE_COLLEGESTUDENT,
-   CREATURE_MUSICIAN,
-   CREATURE_MATHEMATICIAN,
-   CREATURE_TEACHER,
-   CREATURE_HSDROPOUT,
-   CREATURE_BUM,
-   CREATURE_GANGMEMBER,
-   CREATURE_CRACKHEAD,
-   CREATURE_PRIEST,
-   CREATURE_ENGINEER,
-   CREATURE_FASTFOODWORKER,
-   CREATURE_TELEMARKETER,
-   CREATURE_OFFICEWORKER,
-   CREATURE_FOOTBALLCOACH,
-   CREATURE_PROSTITUTE,
-   CREATURE_MAILMAN,
-   CREATURE_GARBAGEMAN,
-   CREATURE_PLUMBER,
-   CREATURE_CHEF,
-   CREATURE_CONSTRUCTIONWORKER,
-   CREATURE_AMATEURMAGICIAN,
-   CREATURE_TANK,
-   CREATURE_MERC,
-   CREATURE_HICK,
-   CREATURE_SOLDIER,
-   CREATURE_VETERAN,
-   CREATURE_HARDENED_VETERAN,
-   CREATURE_PRISONGUARD,
-   CREATURE_HIPPIE,
-   CREATURE_CRITIC_ART,
-   CREATURE_CRITIC_MUSIC,
-   CREATURE_SOCIALITE,
-   CREATURE_PROGRAMMER,
-   CREATURE_RETIREE,
-   CREATURE_PAINTER,
-   CREATURE_SCULPTOR,
-   CREATURE_AUTHOR,
-   CREATURE_JOURNALIST,
-   CREATURE_DANCER,
-   CREATURE_PHOTOGRAPHER,
-   CREATURE_CAMERAMAN,
-   CREATURE_HAIRSTYLIST,
-   CREATURE_FASHIONDESIGNER,
-   CREATURE_CLERK,
-   CREATURE_THIEF,
-   CREATURE_ACTOR,
-   CREATURE_YOGAINSTRUCTOR,
-   CREATURE_MARTIALARTIST,
-   CREATURE_ATHLETE,
-   CREATURE_BIKER,
-   CREATURE_TRUCKER,
-   CREATURE_TAXIDRIVER,
-   CREATURE_NUN,
-   CREATURE_MUTANT,
-   CREATURE_DOCTOR,
-   CREATURE_NURSE,
-   CREATURE_CCS_VIGILANTE,
-   CREATURE_CCS_ARCHCONSERVATIVE,
-   CREATURE_POLITICALACTIVIST,
-   CREATURE_CCS_MOLOTOV,
-   CREATURE_CCS_SNIPER,
-   CREATURE_PSYCHOLOGIST,
-   CREATURENUM
-};
-
 enum endgame
 {
    ENDGAME_NONE,
@@ -469,78 +373,6 @@ enum endgame
    ENDGAME_MARTIALLAW,
    ENDGAMENUM
 };
-
-enum Attributes
-{
-   ATTRIBUTE_STRENGTH,
-   ATTRIBUTE_INTELLIGENCE,
-   ATTRIBUTE_WISDOM,
-   ATTRIBUTE_AGILITY,
-   ATTRIBUTE_HEALTH,
-   ATTRIBUTE_CHARISMA,
-   ATTRIBUTE_HEART,
-   ATTNUM
-};
-
-enum Skills
-{
-   SKILL_HANDTOHAND,
-   SKILL_KNIFE,
-   SKILL_SWORD,
-   SKILL_CLUB,
-   SKILL_AXE,
-   SKILL_THROWING,
-   SKILL_PISTOL,
-   SKILL_RIFLE,
-   SKILL_SMG,
-   SKILL_SHOTGUN,
-   SKILL_PERSUASION,
-   SKILL_PSYCHOLOGY,
-   SKILL_LAW,
-   SKILL_SECURITY,
-   SKILL_DISGUISE,
-   SKILL_COMPUTERS,
-   SKILL_TAILORING,
-   SKILL_DRIVING,
-   SKILL_WRITING,
-   SKILL_COOKING,
-   SKILL_MUSIC,
-   SKILL_ART,
-   SKILL_RELIGION,
-   SKILL_SCIENCE,
-   SKILL_BUSINESS,
-   SKILL_STEALTH,
-   SKILL_THEFT,
-   SKILL_TEACHING,
-   SKILL_STREETSENSE,
-   SKILL_SEDUCTION,
-   SKILL_LEADERSHIP,
-   SKILL_FIRSTAID,
-   SKILL_DODGE,
-   SKILL_FLAMETHROWER,
-   //SKILL_SURVIVAL,
-   SKILLNUM
-};
-
-enum Bodyparts
-{
-   BODYPART_HEAD,
-   BODYPART_BODY,
-   BODYPART_ARM_RIGHT,
-   BODYPART_ARM_LEFT,
-   BODYPART_LEG_RIGHT,
-   BODYPART_LEG_LEFT,
-   BODYPARTNUM
-};
-
-#define WOUND_SHOT BIT1
-#define WOUND_CUT BIT2
-#define WOUND_BRUISED BIT3
-#define WOUND_BURNED BIT4
-#define WOUND_BLEEDING BIT5
-#define WOUND_TORN BIT6
-#define WOUND_NASTYOFF BIT7
-#define WOUND_CLEANOFF BIT8
 
 enum Weapons
 {
@@ -585,25 +417,71 @@ struct weaponst
    short type;
    short ammo;
 
-   char ranged(void)
+   // Can you hit someone at range with it?
+   bool ranged(void)
    {
       switch(type)
       {
-         case WEAPON_REVOLVER_38:
-         case WEAPON_REVOLVER_44:
-         case WEAPON_DESERT_EAGLE:
-         case WEAPON_SEMIPISTOL_9MM:
-         case WEAPON_SEMIPISTOL_45:
-         case WEAPON_AUTORIFLE_M16:
-         case WEAPON_AUTORIFLE_AK47:
-         case WEAPON_SEMIRIFLE_AR15:
-         case WEAPON_CARBINE_M4:
-         case WEAPON_SMG_MP5:
-         case WEAPON_SHOTGUN_PUMP:
-         case WEAPON_FLAMETHROWER:
-            return 1;
+      case WEAPON_REVOLVER_38:
+      case WEAPON_REVOLVER_44:
+      case WEAPON_DESERT_EAGLE:
+      case WEAPON_SEMIPISTOL_9MM:
+      case WEAPON_SEMIPISTOL_45:
+      case WEAPON_AUTORIFLE_M16:
+      case WEAPON_AUTORIFLE_AK47:
+      case WEAPON_SEMIRIFLE_AR15:
+      case WEAPON_CARBINE_M4:
+      case WEAPON_SMG_MP5:
+      case WEAPON_SHOTGUN_PUMP:
+      case WEAPON_FLAMETHROWER:
+         return true;
+      default:
+         return false;
       }
-      return 0;
+   }
+   
+   // Can you threaten a hostage with it?
+   bool can_take_hostages(void)
+   {
+      switch(type)
+      {
+      case WEAPON_NONE:
+      case WEAPON_BASEBALLBAT:
+      case WEAPON_NIGHTSTICK:
+      case WEAPON_CROWBAR:
+      case WEAPON_MOLOTOV:
+      case WEAPON_HAMMER:
+      case WEAPON_STAFF:
+      case WEAPON_MAUL:
+      case WEAPON_PITCHFORK:
+      case WEAPON_TORCH:
+      case WEAPON_GAVEL:
+      case WEAPON_CROSS:
+      case WEAPON_GUITAR:
+      case WEAPON_SPRAYCAN:
+         return false;
+      default:
+         return true;
+      }
+   }
+
+   // Does it attract bullets and terrify landlords?
+   bool threatening(void)
+   {
+      switch(type)
+      {
+      case WEAPON_NONE:
+      case WEAPON_SYRINGE:
+      case WEAPON_GAVEL:
+      case WEAPON_CROSS:
+      case WEAPON_CHAIN:
+      case WEAPON_SHANK:
+      case WEAPON_GUITAR:
+      case WEAPON_SPRAYCAN:
+         return false;
+      default:
+         return true;
+      }
    }
 
    weaponst()
@@ -697,6 +575,7 @@ enum Armors
    ARMOR_CLOTHES,
    ARMOR_TRENCHCOAT,
    ARMOR_WORKCLOTHES,
+   ARMOR_SERVANTUNIFORM,
    ARMOR_SECURITYUNIFORM,
    ARMOR_POLICEUNIFORM,
    ARMOR_CHEAPSUIT,
@@ -799,31 +678,6 @@ enum LootType
    LOOTNUM
 };
 
-enum SpecialWounds
-{
-   SPECIALWOUND_TEETH,
-   SPECIALWOUND_RIGHTEYE,
-   SPECIALWOUND_LEFTEYE,
-   SPECIALWOUND_NOSE,
-   SPECIALWOUND_TONGUE,
-   SPECIALWOUND_RIGHTLUNG,
-   SPECIALWOUND_LEFTLUNG,
-   SPECIALWOUND_HEART,
-   SPECIALWOUND_LIVER,
-   SPECIALWOUND_STOMACH,
-   SPECIALWOUND_RIGHTKIDNEY,
-   SPECIALWOUND_LEFTKIDNEY,
-   SPECIALWOUND_SPLEEN,
-   SPECIALWOUND_RIBS,
-   SPECIALWOUND_NECK,
-   SPECIALWOUND_UPPERSPINE,
-   SPECIALWOUND_LOWERSPINE,
-   SPECIALWOUNDNUM
-};
-
-#define RIBNUM 10
-#define TOOTHNUM 32
-
 /* *JDS* I'm making laws an array instead of a bunch
  * of bits which are either on or off. Each charge can be
  * duplicated, for multiple counts, and intense focus
@@ -857,10 +711,11 @@ enum Lawflags
    LAWFLAG_HIREILLEGAL,
    LAWFLAG_RACKETEERING,
    LAWFLAG_LOITERING,
-   LAWFLAG_GUNCARRY,
-   LAWFLAG_GUNUSE,
    LAWFLAG_ARSON,
    LAWFLAG_PUBLICNUDITY,
+   LAWFLAG_EXTORTION,
+   //LAWFLAG_GUNCARRY,
+   //LAWFLAG_GUNUSE,
    LAWFLAGNUM
 };
 
@@ -1022,140 +877,9 @@ public:
       expense[expensetype]+=amount;
       total_expense+=amount;
    }
-
 };
 
-#define CREATUREFLAG_WHEELCHAIR BIT1
-#define CREATUREFLAG_JUSTESCAPED BIT2
-#define CREATUREFLAG_MISSING BIT3
-#define CREATUREFLAG_KIDNAPPED BIT4
-#define CREATUREFLAG_SLEEPER BIT5
-#define CREATUREFLAG_ILLEGALALIEN BIT6
-#define CREATUREFLAG_LOVESLAVE BIT7
-#define CREATUREFLAG_BRAINWASHED BIT8
-#define CREATUREFLAG_CONVERTED BIT9
-
-#define CREATURE_NAMELEN 40
-
-#define MAXSUBORDINATES 30
-
-#define GENDER_NEUTRAL 0
-#define GENDER_MALE    1
-#define GENDER_FEMALE  2
-#define GENDER_WHITEMALEPATRIARCH 3
-
-class Creature
-{
-private:
-   int skill_ip[SKILLNUM]; // Use public training interface!! >:0
-public:
-   char name[CREATURE_NAMELEN];
-   char propername[CREATURE_NAMELEN];
-   char gender_conservative;
-   char gender_liberal;
-   int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
-   int age;
-   int birthday_month;
-   int birthday_day;
-   bool exists;
-   char align;
-   bool alive;
-   short type;
-   float infiltration;
-   char animalgloss;
-   short specialattack;
-   short clinic;
-   short dating;
-   short hiding;
-   short trainingtime;
-   short trainingsubject;
-   Creature *prisoner;
-   short sentence;
-   char confessions;
-   char deathpenalty;
-   int joindays;
-   int deathdays;
-   int id;
-   int hireid;
-   int meetings;
-
-   char forceinc;
-
-   int att[ATTNUM]; // allow negatives in raw data, but check through attval()
-   int skill[SKILLNUM]; // should never decrease, so never be negative
-
-   void train(int trainedskill, int experience);
-   void train(int trainedskill, int experience, int upto);
-   void skill_up();
-   int get_skill_ip(int skill);
-
-   bool enemy();
-
-   int stunned;
-
-   weaponst weapon;
-   armorst armor;
-   int clip[CLIPNUM];
-
-   int money;
-   int juice;
-
-   unsigned char wound[BODYPARTNUM];
-   short blood;
-   char special[SPECIALWOUNDNUM];
-
-   //int crimes_committed[LAWFLAGNUM];
-   int crimes_suspected[LAWFLAGNUM];
-   //int crimes_convicted[LAWFLAGNUM];
-   
-   int heat;
-   int location;
-   int worklocation;
-
-   char cantbluff;
-
-   int base;
-   activityst activity;
-
-   int carid;
-   char is_driver;
-   int pref_carid;
-   char pref_is_driver;
-   short flag;
-
-   void stop_hauling_me();
-
-   Creature()
-   {
-      creatureinit();
-   }
-   ~Creature();
-   char canwalk(void)
-   {
-      if(!alive)return 0;
-      int legok=2;
-      if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-          (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-      if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-          (wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-      if(special[SPECIALWOUND_NECK]!=1||
-         special[SPECIALWOUND_UPPERSPINE]!=1||
-         special[SPECIALWOUND_LOWERSPINE]!=1)return 0;
-      if(legok==0)return 0;
-
-      return 1;
-   }
-   void creatureinit(void);
-   int attval(short a,char usejuice=1);
-   int skillval(int skill_to_lookup) { return skill[skill_to_lookup]; }
-
-   /* are they interested in talking about the issues? */
-   bool talkreceptive();
-   /* are the characters close enough in age to date? */
-   bool can_date(Creature &a);
-   /* rolls up a proper name for a creature */
-   void namecreature();
-};
+#include "creature/creature.h"
 
 #define SITEBLOCK_EXIT BIT1
 #define SITEBLOCK_BLOCK BIT2
@@ -1191,6 +915,7 @@ enum SpecialBlocks
    SPECIAL_POLLUTER_EQUIPMENT,
    SPECIAL_NUCLEAR_ONOFF,
    SPECIAL_HOUSE_PHOTOS,
+   SPECIAL_HOUSE_CEO,
    SPECIAL_CORPORATE_FILES,
    SPECIAL_RADIO_BROADCASTSTUDIO,
    SPECIAL_NEWS_BROADCASTSTUDIO,
@@ -1688,8 +1413,7 @@ struct float_zero
 //of the target's current action.
 struct interrogation
 {
-   interrogation() : nofood(0), nowater(0), nosleep(0), nolight(0),
-      totalspiritcrush(0), druguse(0)
+   interrogation() : druguse(0)
    {
       techniques[0]=1;
       techniques[1]=1;
@@ -1697,19 +1421,9 @@ struct interrogation
       techniques[3]=0;
       techniques[4]=0;
       techniques[5]=0;
-      techniques[6]=0;
-      techniques[7]=0;
-      techniques[8]=0;
    };
 
-   int nofood;  //days without food
-   int nowater; //days without water
-   int nosleep; //days without sleep
-   int nolight; //days without light
-
-   bool techniques[9]; //yesterday's interrogation plan
-
-   int totalspiritcrush; //total amount of spirit crush applied over time
+   bool techniques[6]; //yesterday's interrogation plan
 
    int druguse; //total days of drug use
 
@@ -1852,8 +1566,6 @@ void hospitalize(int loc, Creature &patient);
 int clinictime(Creature &g);
 /* common - purges squad of loot and vehicles if it has no members */
 int testsquadclear(squadst &thissquad, int obase);
-/* common - returns the creature's maximum level in the given skill */
-int maxskill(int skill, Creature& cr, bool use_juice=true);
 /* common - returns the associated skill for the given weapon type */
 int weaponskill(int weapon);
 /* common - applies a crime to everyone in the active party */
@@ -1919,7 +1631,6 @@ void getarmor(char *str,int type,int subtype=-1);
 void getarmorfull(char *str,armorst &armor,char superfull);
 void getarmorfull(char *str,int type,int subtype=-1);
 void getmaskdesc(char *str,short mask);
-void getskill(char *str,int type);
 void getclip(char *str,int clip);
 void getloot(char *str,int loot);
 void getrecruitcreature(char *str,int type);
@@ -2047,8 +1758,6 @@ void savehighscore(char endtype);
 void setup_newgame(void);
 /* creates your founder */
 void makecharacter(void);
-/* mostly depricated, but called once by makecharacter */
-void initliberal(Creature &cr);
 
 /*
  saveload.cpp
@@ -2196,7 +1905,7 @@ char unlock(short type,char &actual);
 /* bash attempt */
 char bash(short type,char &actual);
 /* returns the bash bonus provided by the specified weapon */
-long bashstrengthmod(int t);
+float bashstrengthmod(int t);
 /* computer hack attempt */
 char hack(short type,char &actual);
 /* run a radio broadcast */
@@ -2245,18 +1954,14 @@ void noticecheck(int exclude);
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
 void disguisecheck(void);
-/* returns the difficulty of seeing through your squad's disguise */
-int disguiseskill(void);
 /* practices squads disguise skill */
 void disguisepractice(int p,int diff);
-/* returns the difficulty of spotting the squad if it is sneaking */
-int stealthskill(void);
 /* practices squads stealth skill */
 void stealthpractice(int p,int diff);
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(Creature &cr,short type);
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(Creature &cr,short type);
+char hasdisguise(Creature &cr);
 /* returns true if the entire site is not open to public */
 char disguisesite(long type);
 
@@ -2315,10 +2020,10 @@ char footchase(void);
 void evasivedrive(void);
 void evasiverun(void);
 int driveskill(Creature &cr,vehiclest *v);
-void drivingupdate(short &obstacle);
+char drivingupdate(short &obstacle);
 void makechasers(long sitetype,long sitecrime);
-void obstacledrive(short obstacle,char choice);
-void dodgedrive(void);
+char obstacledrive(short obstacle,char choice);
+char dodgedrive(void);
 void crashfriendlycar(int v);
 void crashenemycar(int v);
 void chase_giveup(void);

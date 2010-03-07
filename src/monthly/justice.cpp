@@ -98,10 +98,10 @@ void trial(Creature &g)
             (pool[p]->infiltration*100>=LCSrandom(100)||
             (pool[p]->flag & CREATUREFLAG_LOVESLAVE&&pool[p]->hireid==g.id)))
          {
-            if(pool[p]->skillval(SKILL_LAW)+pool[p]->skillval(SKILL_PERSUASION)>=maxsleeperskill)
+            if(pool[p]->get_skill(SKILL_LAW)+pool[p]->get_skill(SKILL_PERSUASION)>=maxsleeperskill)
             {
                sleeperlawyer=pool[p];
-               maxsleeperskill=pool[p]->skillval(SKILL_LAW)+sleeperlawyer->skillval(SKILL_PERSUASION);
+               maxsleeperskill=pool[p]->get_skill(SKILL_LAW)+sleeperlawyer->get_skill(SKILL_PERSUASION);
             }
          }
       }
@@ -229,7 +229,7 @@ void trial(Creature &g)
          }
          addstr("escaping prison");
          breaker[LAWFLAG_ESCAPED]=0;
-         //autoconvict=1; // *Impossible* to beat this charge
+         //autoconvict=1; // *Impossible* to beat this charge if this line isn't commented out
       }
       else if(breaker[LAWFLAG_HELPESCAPE])
       {
@@ -274,8 +274,9 @@ void trial(Creature &g)
          breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
       else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
-      {                                        //                Manslaughter is murder without forethought or malice, IIRC. -- LK
-         if(g.crimes_suspected[LAWFLAG_MURDER]>1)
+      {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
+                                      // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
+         if(g.crimes_suspected[LAWFLAG_MURDER]>1) 
          {
             char str[10];
             itoa(g.crimes_suspected[LAWFLAG_MURDER],str,10);
@@ -284,6 +285,18 @@ void trial(Creature &g)
          }
          addstr("murder");
          breaker[LAWFLAG_MURDER]=0;
+      }
+      else if(breaker[LAWFLAG_EXTORTION])
+      {
+         if(g.crimes_suspected[LAWFLAG_EXTORTION]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_EXTORTION],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("extortion");
+         breaker[LAWFLAG_EXTORTION]=0;
       }
       else if(breaker[LAWFLAG_ARSON])
       {
@@ -309,7 +322,7 @@ void trial(Creature &g)
          addstr("misdemeanor assault");
          breaker[LAWFLAG_ASSAULT]=0;
       }
-      else if(breaker[LAWFLAG_GUNCARRY])
+      /*else if(breaker[LAWFLAG_GUNCARRY])
       {
          if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
          {
@@ -334,7 +347,7 @@ void trial(Creature &g)
          addstr("firing an illegal weapon");
          breaker[LAWFLAG_GUNUSE]=0;
          x=2;
-      }
+      }*/
       else if(breaker[LAWFLAG_CARTHEFT])
       {
          if(g.crimes_suspected[LAWFLAG_CARTHEFT]>1)
@@ -344,9 +357,10 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("motor theft");//XXX: If chase lasts more than 20 `turns` then
+         addstr("grand theft auto");//XXX: If chase lasts more than 20 `turns` then
          breaker[LAWFLAG_CARTHEFT]=0;//XXX: this should be `Grand Theft Auto`
       }                              //                 -- LK
+                                          // We'll just make it grand theft auto anyway :) -Fox
       else if(breaker[LAWFLAG_CCFRAUD])
       {
          if(g.crimes_suspected[LAWFLAG_CCFRAUD]>1)
@@ -558,21 +572,21 @@ void trial(Creature &g)
    y++;
    move(y,5);
    addstr("Heart: ");
-   addstr(itoa(g.attval(ATTRIBUTE_HEART),temp,10));
+   addstr(itoa(g.get_attribute(ATTRIBUTE_HEART,true),temp,10));
    move(y,25);
    addstr("Persuasion: ");
-   addstr(itoa(g.skillval(SKILL_PERSUASION),temp,10));
+   addstr(itoa(g.get_skill(SKILL_PERSUASION),temp,10));
    y++;
    move(y,5);
    addstr("Charisma: ");
-   addstr(itoa(g.attval(ATTRIBUTE_CHARISMA),temp,10));
+   addstr(itoa(g.get_attribute(ATTRIBUTE_CHARISMA,true),temp,10));
    move(y,25);
    addstr("Law: ");
-   addstr(itoa(g.skillval(SKILL_LAW),temp,10));
+   addstr(itoa(g.get_skill(SKILL_LAW),temp,10));
    y++;
    move(y,5);
    addstr("Intelligence: ");
-   addstr(itoa(g.attval(ATTRIBUTE_INTELLIGENCE),temp,10));
+   addstr(itoa(g.get_attribute(ATTRIBUTE_INTELLIGENCE,true),temp,10));
    y++;
    // End SAV's adds   
 
@@ -753,8 +767,8 @@ void trial(Creature &g)
             else if(defense==4)
             {
                // Sleeper attorney
-               defensepower=LCSrandom(71)+sleeperlawyer->skillval(SKILL_LAW)*2
-                                         +sleeperlawyer->skillval(SKILL_PERSUASION)*2;
+               defensepower=LCSrandom(71)+sleeperlawyer->get_skill(SKILL_LAW)*2
+                                         +sleeperlawyer->get_skill(SKILL_PERSUASION)*2;
                sleeperlawyer->train(SKILL_LAW,prosecution/4);
                sleeperlawyer->train(SKILL_PERSUASION,prosecution/4);
             }
@@ -820,13 +834,13 @@ void trial(Creature &g)
          // hit activist level).
 
          // <3 Documentation. -- LK
-         int defenseskill=3*g.skillval(SKILL_PERSUASION)+6*g.skillval(SKILL_LAW);
-         defensepower+=g.attval(ATTRIBUTE_INTELLIGENCE);
-         defensepower+=g.attval(ATTRIBUTE_HEART);
-         defensepower+=g.attval(ATTRIBUTE_CHARISMA)*2;
+         int defenseskill=3*g.get_skill(SKILL_PERSUASION)+6*g.get_skill(SKILL_LAW);
+         defensepower+=g.get_attribute(ATTRIBUTE_INTELLIGENCE,true);
+         defensepower+=g.get_attribute(ATTRIBUTE_HEART,true);
+         defensepower+=g.get_attribute(ATTRIBUTE_CHARISMA,true)*2;
          defensepower+=LCSrandom(min(defenseskill*2,MAX(200,prosecution+100)));
-         g.train(SKILL_PERSUASION,MAX(50-g.skillval(SKILL_PERSUASION)*2,0));
-         g.train(SKILL_LAW,MAX(50-g.skillval(SKILL_LAW)*2,0));
+         g.train(SKILL_PERSUASION,MAX(50-g.get_skill(SKILL_PERSUASION)*2,0));
+         g.train(SKILL_LAW,MAX(50-g.get_skill(SKILL_LAW)*2,0));
 
          if(autoconvict)
          {
@@ -1086,9 +1100,9 @@ void penalize(Creature &g,char lenient)
       {
          g.sentence+=(36+LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
          g.sentence+=(1+LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
-         g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
-                     (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
-         g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
+         //g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
+         //            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
+         //g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
          g.sentence+=(6+LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
          g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
          g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
@@ -1112,6 +1126,7 @@ void penalize(Creature &g,char lenient)
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
          g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
+         g.sentence+=(6+LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
          
          g.sentence+=(4+LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
          g.sentence+=1*g.crimes_suspected[LAWFLAG_VANDALISM];
@@ -1360,7 +1375,7 @@ char prison(Creature &g)
                addjuice(*pool[boss],-15);
             }
 
-            g.alive=0;
+            g.die();
             stat_dead++;
             showed=1;
          }

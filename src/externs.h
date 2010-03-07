@@ -80,7 +80,6 @@ extern char loaded;
 
 extern int mode;
 
-extern short offended_cops;
 extern short offended_corps;
 extern short offended_cia;
 extern short offended_amradio;
@@ -99,6 +98,7 @@ extern int amendnum;
 extern bool termlimits;
 extern bool deagle;
 
+extern UniqueCreatures uniqueCreatures;
 
 extern short party_status;
 

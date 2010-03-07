@@ -119,28 +119,31 @@ void creatureadvance(void)
 
    if(mode==GAMEMODE_SITE)
    {
-      if(sitealarm)postalarmtimer++;
+      if(sitealarm && sitecrime > 10)
+      {
+         postalarmtimer++;
 
-      //Attacking government agencies results in the rapid
-      //deployment of overwhelming force to the site -- especially
-      //if there are a lot of heavily armed people already on site
-      
-      //Police Station -- SWAT teams are on site already and
-      //only need to suit up to respond almost instantly
-      if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
-         postalarmtimer<75 && sitealarm)postalarmtimer=75;
-      //Courthouse -- Big police response, not far to come
-      if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
-         postalarmtimer<65 && sitealarm)postalarmtimer=65;
-      //Prison -- Big police response but has to get from downtown
-      if(location[cursite]->type==SITE_GOVERNMENT_PRISON &&
-         postalarmtimer<50 && sitealarm)postalarmtimer=50;
-      //Intelligence HQ -- Agents are deadly, but the site is not
-      //is not designed to be called to action that quickly
-      if(location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ &&
-         postalarmtimer<50 && sitealarm)postalarmtimer=50;
+         //Attacking government agencies results in the rapid
+         //deployment of overwhelming force to the site -- especially
+         //if there are a lot of heavily armed people already on site
+         
+         //Police Station -- SWAT teams are on site already and
+         //only need to suit up to respond almost instantly
+         if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
+            postalarmtimer<65 && sitealarm)postalarmtimer=65;
+         //Courthouse -- Big police response, not far to come
+         if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
+            postalarmtimer<50 && sitealarm)postalarmtimer=50;
+         //Prison -- Big police response but has to get from downtown
+         if(location[cursite]->type==SITE_GOVERNMENT_PRISON &&
+            postalarmtimer<30 && sitealarm)postalarmtimer=30;
+         //Intelligence HQ -- Agents are deadly, but the site is not
+         //is not designed to be called to action that quickly
+         if(location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ &&
+            postalarmtimer<50 && sitealarm)postalarmtimer=50;
+      }
 
-      if(sitealarmtimer>0&&!sitealarm)
+      if(sitealarmtimer>0 && !sitealarm && sitecrime > 5)
       {
          sitealarmtimer--;
          if(sitealarmtimer<=0)
@@ -302,10 +305,10 @@ void advancecreature(Creature &cr)
          activesquad->squad[i]->stunned==0&&
          activesquad->squad[i]->blood>40&&
          activesquad->squad[i]->id!=cr.id&&
-         activesquad->squad[i]->skillval(SKILL_FIRSTAID)>topmedicalskill)
+         activesquad->squad[i]->get_skill(SKILL_FIRSTAID)>topmedicalskill)
       {
          topmedical=activesquad->squad[i];
-         topmedicalskill=activesquad->squad[i]->skillval(SKILL_FIRSTAID);
+         topmedicalskill=activesquad->squad[i]->get_skill(SKILL_FIRSTAID);
       }
    }
 
@@ -313,11 +316,11 @@ void advancecreature(Creature &cr)
    {
       if(cr.wound[w] & WOUND_BLEEDING)
       {
-         if(LCSrandom(500)<cr.attval(ATTRIBUTE_HEALTH)/*+cr.skillval(SKILL_SURVIVAL)*5*/)
+         if(LCSrandom(500)<cr.get_attribute(ATTRIBUTE_HEALTH,true))
          {
             cr.wound[w]^=WOUND_BLEEDING;
          }
-         else if(cr.squadid!=-1&&topmedical&&LCSrandom(40)<topmedicalskill)
+         else if(cr.squadid!=-1&&topmedical&&topmedical->skill_check(SKILL_FIRSTAID,DIFFICULTY_FORMIDABLE))
          {
             clearmessagearea();
             set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -376,8 +379,7 @@ void advancecreature(Creature &cr)
 
       if(cr.blood<=0)
       {
-         cr.blood=0;
-         cr.alive=0;
+         cr.die();
 
          if(cr.squadid!=-1)
          {
@@ -431,8 +433,7 @@ void advancecreature(Creature &cr)
 
       if(cr.blood<=0)
       {
-         cr.blood=0;
-         cr.alive=0;
+         cr.die();
 
          if(cr.squadid!=-1)
          {
