@@ -691,7 +691,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    int droll = t.skill_roll(SKILL_DODGE) / 2;
    t.train(SKILL_DODGE,aroll*2);
-   a.train(wsk,droll*2);
+   a.train(wsk,droll*2+5);
 
    // Hostages interfere with attack
    if(t.prisoner!=NULL)bonus-=LCSrandom(10);
@@ -1359,7 +1359,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
       #endif
 
-      if(mode==GAMEMODE_CHASECAR && (w & (BODYPART_LEG_LEFT|BODYPART_LEG_RIGHT)))
+      if(mode==GAMEMODE_CHASECAR && (w == BODYPART_LEG_LEFT || w == BODYPART_LEG_RIGHT))
       {
          damamount=0; // no damage to shots to the car body
       }   

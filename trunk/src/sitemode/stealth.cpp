@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* checks if your liberal activity is noticed */
-void noticecheck(int exclude)
+void noticecheck(int exclude,int difficulty)
 {
    if(sitealarm)return;
 
@@ -53,7 +53,7 @@ void noticecheck(int exclude)
    {
       if(e==exclude || encounter[e].exists==false)
          continue;
-      else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,DIFFICULTY_EASY))
+      else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty))
          continue;
       else
       {
@@ -140,6 +140,15 @@ char alienationcheck(char mistake)
          addstr("                                                        ");
 
          sitealarm=1;
+
+         for(int i=0;i<ENCMAX;i++)
+         {
+            if(encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
+            {
+               if(encounter[i].align == ALIGN_MODERATE || alienatebig)
+                  conservatise(encounter[i]);
+            }
+         }
 
          if(mode==GAMEMODE_CHASECAR||
                      mode==GAMEMODE_CHASEFOOT)printchaseencounter();
@@ -229,16 +238,16 @@ void disguisecheck(void)
          for(int i=0;i<6;i++)
          {
             if(activesquad->squad[i]==NULL)break;
-            if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH, difficulty+7)))
+            if(weaponcheck(*activesquad->squad[i],cursite) == 2 ||
+               !(activesquad->squad[i]->skill_check(SKILL_DISGUISE, difficulty)))
             {
-               if(weaponcheck(*activesquad->squad[i],cursite) == 2 ||
-                  !(activesquad->squad[i]->skill_check(SKILL_DISGUISE, difficulty)))
+               disguisepractice(i, difficulty);
+               if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH, difficulty+7)))
                {
-                  disguisepractice(i, difficulty);
+                  stealthpractice(i, difficulty-7);
                   noticed = true;
                   break;
                }
-               stealthpractice(i, difficulty-7);
             }
          }
          if(noticed)break;

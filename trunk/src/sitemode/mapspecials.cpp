@@ -554,17 +554,15 @@ void special_lab_genetic_cagedanimals(void)
                getch();
 
                sitealarm=1;
-               alienationcheck(0);
+               alienationcheck(1);
             }
             else
             {
                alienationcheck(0);
-               noticecheck(-1);
             }
          }
          else if(actual)
          {
-            alienationcheck(0);
             noticecheck(-1);
          }
 
@@ -634,7 +632,7 @@ void special_policestation_lockup(void)
          if(actual)
          {
             alienationcheck(1);
-            noticecheck(-1);
+            noticecheck(-1,DIFFICULTY_HARD);
             levelmap[locx][locy][locz].special=-1;
             sitecrime+=2;
             sitestory->crime.push_back(CRIME_POLICE_LOCKUP);
@@ -702,7 +700,7 @@ void special_courthouse_lockup(void)
          if(actual)
          {
             alienationcheck(1);
-            noticecheck(-1);
+            noticecheck(-1,DIFFICULTY_HARD);
             levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_COURTHOUSE_LOCKUP);
@@ -998,7 +996,7 @@ void special_intel_supercomputer(void)
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
             alienationcheck(1);
-            noticecheck(-1);
+            noticecheck(-1,DIFFICULTY_HARD);
             levelmap[locx][locy][locz].special=-1;
             sitecrime+=3;
             sitestory->crime.push_back(CRIME_HACK_INTEL);
@@ -1033,7 +1031,7 @@ void special_graffiti(void)
    if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
    
    alienationcheck(0);
-   noticecheck(-1);
+   noticecheck(-1,DIFFICULTY_HARD);
    levelmap[locx][locy][locz].flag|=SITEBLOCK_GRAFFITI;
    levelmap[locx][locy][locz].flag&=~(SITEBLOCK_GRAFFITI_CCS|SITEBLOCK_GRAFFITI_OTHER);
    if(!location[cursite]->highsecurity)
@@ -1095,7 +1093,7 @@ void special_sweatshop_equipment(void)
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
          
          alienationcheck(0);
-         noticecheck(-1);
+         noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
          sitecrime++;
          juiceparty(2);
@@ -1138,7 +1136,7 @@ void special_polluter_equipment(void)
          change_public_opinion(VIEW_POLLUTION,2,1,70);
          
          alienationcheck(0);
-         noticecheck(-1);
+         noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
          sitecrime+=2;
          juiceparty(2);

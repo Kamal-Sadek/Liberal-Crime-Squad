@@ -740,7 +740,7 @@ void tendhostage(Creature *cr,char &clearformess)
          y++;
 
          if(techniques[TECHNIQUE_PROPS])forceroll*=2;
-         cr->blood-=forceroll;
+         cr->blood-=(5 + LCSrandom(5)) * (1+techniques[TECHNIQUE_PROPS]);
 
          //show_interrogation_sidebar(cr,a);
          refresh();
@@ -839,12 +839,14 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(cr->name);
                addstr(" seems to be getting the message.");
                y++;
-               if(LCSrandom(2) && cr->juice>0)
+
+               if(cr->juice>0)
                {
                   cr->juice-=forceroll;
                   if(cr->juice<0)cr->juice=0;
                }
-               else if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
+               
+               if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10+1));
                   if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
@@ -918,9 +920,8 @@ void tendhostage(Creature *cr,char &clearformess)
       {
          float rapport_temp = rapport[a->id];
 
-         rapport_temp += static_cast<float>(a->attribute_roll(ATTRIBUTE_CHARISMA)+a->skill_roll(SKILL_PSYCHOLOGY))/10.0f;
-
-         if(techniques[TECHNIQUE_RESTRAIN])attack -= 10;
+         if(!techniques[TECHNIQUE_RESTRAIN])attack += 5;
+         attack += rapport[a->id] * 3;
 
          y+=1;
          move(y,0);
@@ -928,7 +929,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
          if(techniques[TECHNIQUE_PROPS])//props
          {
-            attack += LCSrandom(10);
+            attack += 10;
             switch(LCSrandom(9))
             {
             case 0:addstr(" plays violent video games with ");break;

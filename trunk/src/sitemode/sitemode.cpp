@@ -373,28 +373,28 @@ void mode_site(void)
             switch(location[cursite]->type)
             {
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
-               addstr(": AGENTS ON SITE");
+               addstr(": AGENTS");
                break;
             case SITE_CORPORATE_HEADQUARTERS:
             case SITE_CORPORATE_HOUSE:
-               addstr(": MERCENARIES ON SITE");
+               addstr(": MERCENARIES");
                break;
             case SITE_MEDIA_AMRADIO:
             case SITE_MEDIA_CABLENEWS:
-               addstr(": ANGRY MOB ON SITE");
+               addstr(": ANGRY MOB");
                break;
             case SITE_BUSINESS_CRACKHOUSE:
-               addstr(": LOCAL SET ON SITE");
+               addstr(": GANG RESPONSE");
                break;
             case SITE_GOVERNMENT_POLICESTATION:
             default:
                if(location[cursite]->renting==RENTING_CCS)
                {
-                  addstr(": CCS VIGILANTES ON SITE");
+                  addstr(": CCS VIGILANTES");
                }
                else if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)addstr(": DEATH SQUADS ON SITE");
-               else addstr(": SWAT TEAMS ON SITE");
+                  law[LAW_POLICEBEHAVIOR]==-2)addstr(": DEATH SQUADS");
+               else addstr(": POLICE");
                break;
             }
          }
@@ -1807,8 +1807,8 @@ void mode_site(void)
 
                         if(actual)
                         {
-                           alienationcheck(0);
-                           noticecheck(-1);
+                           alienationcheck(1);
+                           noticecheck(-1,DIFFICULTY_HEROIC);
                         }
 
                         break;

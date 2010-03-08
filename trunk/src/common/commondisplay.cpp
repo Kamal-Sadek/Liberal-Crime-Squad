@@ -146,7 +146,7 @@ void set_activity_color(long activity_type)
       // Nothing terribly important
    case ACTIVITY_HEAL: // Identical to none in practice
    case ACTIVITY_NONE:
-   //case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
+   case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       break;
    }
