@@ -152,7 +152,7 @@ void advanceday(char &clearformess,char canseethings)
 
       //MAKE SURE MEMBERS DON'T ACT IF SQUAD DOES
 
-      /*if(squad[sq]->activity.type!=ACTIVITY_NONE)
+      if(squad[sq]->activity.type!=ACTIVITY_NONE)
       {
          for(int p=0;p<6;p++)
          {
@@ -184,7 +184,7 @@ void advanceday(char &clearformess,char canseethings)
                squad[sq]->squad[p]->activity.arg=squad[sq]->activity.arg;
             }
          }
-      }*/
+      }
 
       if(squad[sq]->activity.type==ACTIVITY_VISIT)
       {
@@ -1809,7 +1809,7 @@ void initlocation(locationst &loc)
          strcpy(loc.shortname,"Corp. HQ");
          break;
       case SITE_BUSINESS_PAWNSHOP:
-         if(law[LAW_GUNCONTROL]==-2)
+         if(law[LAW_GUNCONTROL]==ALIGN_ELITELIBERAL)
          {
             char str[80];
             lastname(str);

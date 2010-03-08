@@ -1515,7 +1515,7 @@ void crashfriendlycar(int v)
                refresh();
                getch();
             }
-            activesquad->squad[p]->prisoner->alive=false;
+            activesquad->squad[p]->prisoner->die();
             victimsum++;
             
             // Record death if living Liberal is hauled
@@ -1533,7 +1533,7 @@ void crashfriendlycar(int v)
          }
 
          // Handle squad member death
-         if(activesquad->squad[p]->blood < 0 && activesquad->squad[p]->alive)
+         if(activesquad->squad[p]->blood <= 0)
          {
             // Inform the player
             clearmessagearea();
@@ -1558,7 +1558,7 @@ void crashfriendlycar(int v)
             getch();
 
             // Mark as dead
-            activesquad->squad[p]->alive = false;
+            activesquad->squad[p]->die();
             victimsum++;
 
             // Account for deaths for high score

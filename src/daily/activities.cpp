@@ -2064,7 +2064,7 @@ void funds_and_trouble(char &clearformess)
       switch(teachers[t]->activity.type)
       {
       case ACTIVITY_TEACH_GENERALED:
-         cost=20;
+         cost=4;
          skillarray[0]=SKILL_COMPUTERS;
          skillarray[1]=SKILL_WRITING;
          skillarray[2]=SKILL_MUSIC;
@@ -2076,14 +2076,14 @@ void funds_and_trouble(char &clearformess)
          skillarray[8]=-1;
          break;
       case ACTIVITY_TEACH_POLITICS:
-         cost=20;
+         cost=4;
          skillarray[0]=SKILL_LAW;
          skillarray[1]=SKILL_PERSUASION;
          skillarray[2]=SKILL_LEADERSHIP;
          skillarray[3]=-1;
          break;
       case ACTIVITY_TEACH_SURVIVAL:
-         cost=30;
+         cost=6;
          skillarray[0]=SKILL_DRIVING;
          skillarray[1]=SKILL_FIRSTAID;
          skillarray[2]=SKILL_STREETSENSE;
@@ -2094,7 +2094,7 @@ void funds_and_trouble(char &clearformess)
          //skillarray[6]=SKILL_THEFT;
          break;
       case ACTIVITY_TEACH_FIGHTING:
-         cost=50;
+         cost=10;
          skillarray[0]=SKILL_KNIFE;
          skillarray[1]=SKILL_SWORD;
          skillarray[2]=SKILL_CLUB;
@@ -2108,7 +2108,7 @@ void funds_and_trouble(char &clearformess)
          skillarray[10]=-1;
          break;
       case ACTIVITY_TEACH_COVERT:
-         cost=40;
+         cost=8;
          skillarray[0]=SKILL_PERSUASION;
          skillarray[1]=SKILL_SECURITY;
          skillarray[2]=SKILL_DISGUISE;

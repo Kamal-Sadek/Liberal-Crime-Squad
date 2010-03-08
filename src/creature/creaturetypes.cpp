@@ -1874,3 +1874,509 @@ void makecreature(Creature &cr,short type)
    if(sitealienate>=1&&cr.align==0)conservatise(cr);
    if(sitealienate==2&&cr.align==1)conservatise(cr);
 }
+
+
+/* ensures that the creature's work location is appropriate to its type */
+bool verifyworklocation(Creature &cr, char test_location, char test_type)
+{
+   int okaysite[SITENUM];
+   memset(okaysite,0,SITENUM*sizeof(int));
+
+   short type;
+
+   // If the caller sets test_type, they're just
+   // asking if the chosen creature type is appropriate
+   // to the location they provided, not actually setting
+   // the creature work location -- this is useful
+   // for things like stealth
+   if(test_type!=-1)
+      type=test_type;
+   else
+      type=cr.type;
+
+   switch(type)
+   {
+      case CREATURE_BOUNCER:
+         okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         break;
+      case CREATURE_CORPORATE_CEO:
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         break;
+      case CREATURE_SECURITYGUARD:
+         okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE]=1;
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         okaysite[SITE_INDUSTRY_SWEATSHOP]=1;
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         //okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         break;
+      case CREATURE_SCIENTIST_LABTECH:
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         break;
+      case CREATURE_SCIENTIST_EMINENT:
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         break;
+      case CREATURE_CORPORATE_MANAGER:
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_INDUSTRY_SWEATSHOP]=1;
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         break;
+      case CREATURE_WORKER_SERVANT:
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         break;
+      case CREATURE_WORKER_JANITOR:
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE]=1;
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_HOSPITAL_CLINIC]=1;
+         okaysite[SITE_HOSPITAL_UNIVERSITY]=1;
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         okaysite[SITE_GOVERNMENT_PRISON]=1;
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_BUSINESS_PAWNSHOP]=1;
+         okaysite[SITE_BUSINESS_CRACKHOUSE]=1;
+         okaysite[SITE_BUSINESS_JUICEBAR]=1;
+         okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         okaysite[SITE_BUSINESS_LATTESTAND]=1;
+         okaysite[SITE_BUSINESS_VEGANCOOP]=1;
+         okaysite[SITE_BUSINESS_INTERNETCAFE]=1;
+         okaysite[SITE_BUSINESS_DEPTSTORE]=1;
+         okaysite[SITE_BUSINESS_HALLOWEEN]=1;
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         break;
+      case CREATURE_WORKER_SWEATSHOP:
+         okaysite[SITE_INDUSTRY_SWEATSHOP]=1;
+         break;
+      case CREATURE_WORKER_FACTORY_NONUNION:
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         break;
+      case CREATURE_WORKER_FACTORY_CHILD:
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         break;
+      case CREATURE_WORKER_SECRETARY:
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_HOSPITAL_CLINIC]=1;
+         okaysite[SITE_HOSPITAL_UNIVERSITY]=1;
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         break;
+      case CREATURE_WORKER_FACTORY_UNION:
+         okaysite[SITE_INDUSTRY_POLLUTER]=1;
+         break;
+      case CREATURE_LANDLORD:
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE]=1;
+         break;
+      case CREATURE_TEENAGER:
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT]=1;
+         okaysite[SITE_RESIDENTIAL_APARTMENT_UPSCALE]=1;
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         break;
+      case CREATURE_COP:
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         break;
+      case CREATURE_DEATHSQUAD:
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         break;
+      case CREATURE_FIREFIGHTER:
+         okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         break;
+      case CREATURE_GANGUNIT:
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         break;
+      case CREATURE_SWAT:
+         okaysite[SITE_GOVERNMENT_POLICESTATION]=1;
+         break;
+      case CREATURE_JUDGE_LIBERAL:
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         break;
+      case CREATURE_JUDGE_CONSERVATIVE:
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         break;
+      case CREATURE_AGENT:
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         break;
+      case CREATURE_RADIOPERSONALITY:
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         break;
+      case CREATURE_NEWSANCHOR:
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         break;
+      case CREATURE_GENETIC:
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         break;
+      case CREATURE_GUARDDOG:
+         okaysite[SITE_GOVERNMENT_PRISON]=1;
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         break;
+      case CREATURE_PRISONER:
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+         break;
+      case CREATURE_JUROR:
+         okaysite[SITE_RESIDENTIAL_APARTMENT]=1;
+         okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+         break;
+      case CREATURE_LAWYER:
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         break;
+      case CREATURE_DOCTOR:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_PSYCHOLOGIST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_NURSE:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_CCS_ARCHCONSERVATIVE:
+      case CREATURE_CCS_MOLOTOV:
+      case CREATURE_CCS_SNIPER:
+      case CREATURE_CCS_VIGILANTE:
+         if(ccs_kills==2)okaysite[SITE_OUTDOOR_BUNKER]=1;
+         if(ccs_kills==1)okaysite[SITE_RESIDENTIAL_BOMBSHELTER]=1;
+         if(ccs_kills==0)okaysite[SITE_BUSINESS_BARANDGRILL]=1;
+         break;
+      case CREATURE_SEWERWORKER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_COLLEGESTUDENT:
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_MUSICIAN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_MATHEMATICIAN:
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_TEACHER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_HSDROPOUT:
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_BUM:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+         break;
+      case CREATURE_GANGMEMBER:
+         okaysite[SITE_BUSINESS_CRACKHOUSE]=1;
+         break;
+      case CREATURE_CRACKHEAD:
+         okaysite[SITE_BUSINESS_CRACKHOUSE]=1;
+         break;
+      case CREATURE_PRIEST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_ENGINEER:
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         break;
+      case CREATURE_FASTFOODWORKER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_TELEMARKETER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_OFFICEWORKER:
+         okaysite[SITE_LABORATORY_COSMETICS]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_HOSPITAL_CLINIC]=1;
+         okaysite[SITE_HOSPITAL_UNIVERSITY]=1;
+         okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_BUSINESS_DEPTSTORE]=1;
+         break;
+      case CREATURE_FOOTBALLCOACH:
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_PROSTITUTE:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_MAILMAN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_GARBAGEMAN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_PLUMBER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_CHEF:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         break;
+      case CREATURE_CONSTRUCTIONWORKER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_AMATEURMAGICIAN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_TANK:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_MERC:
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         break;
+      case CREATURE_HICK:
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         okaysite[SITE_OUTOFTOWN]=1;
+         break;
+      case CREATURE_VETERAN:
+      case CREATURE_HARDENED_VETERAN:
+      case CREATURE_SOLDIER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_EDUCATOR:
+      case CREATURE_PRISONGUARD:
+         okaysite[SITE_GOVERNMENT_PRISON]=1;
+         break;
+      case CREATURE_HIPPIE:
+         okaysite[SITE_BUSINESS_VEGANCOOP]=1;
+         break;
+      case CREATURE_CRITIC_ART:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         break;
+      case CREATURE_CRITIC_MUSIC:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_MEDIA_AMRADIO]=1;
+         break;
+      case CREATURE_SOCIALITE:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_PROGRAMMER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
+         okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         break;
+      case CREATURE_RETIREE:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_PAINTER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_SCULPTOR:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_AUTHOR:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_JOURNALIST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_DANCER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_PHOTOGRAPHER:
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         break;
+      case CREATURE_CAMERAMAN:
+         okaysite[SITE_MEDIA_CABLENEWS]=1;
+         break;
+      case CREATURE_HAIRSTYLIST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_FASHIONDESIGNER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_CLERK:
+         okaysite[SITE_BUSINESS_JUICEBAR]=1;
+         okaysite[SITE_BUSINESS_LATTESTAND]=1;
+         okaysite[SITE_BUSINESS_INTERNETCAFE]=1;
+         okaysite[SITE_BUSINESS_DEPTSTORE]=1;
+         okaysite[SITE_BUSINESS_HALLOWEEN]=1;
+         break;
+      case CREATURE_THIEF:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_ACTOR:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_YOGAINSTRUCTOR:
+         okaysite[SITE_BUSINESS_VEGANCOOP]=1;
+         break;
+      case CREATURE_MARTIALARTIST:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+      case CREATURE_ATHLETE:
+         okaysite[SITE_UDISTRICT]=1;
+         break;
+      case CREATURE_BIKER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_TRUCKER:
+         okaysite[SITE_OUTOFTOWN]=1;
+         break;
+      case CREATURE_TAXIDRIVER:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_NUN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      default:
+         okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+   }
+
+   // Quick exit if only checking if a certain type works
+   if(test_type!=-1)
+   {
+      return okaysite[test_location];
+   }
+
+   char swap=0;
+   if(cr.worklocation==-1)swap=1;
+   else
+   {
+      if(!okaysite[location[cr.worklocation]->type])swap=1;
+   }
+
+   if(swap)
+   {
+      //PICK A TYPE OF WORK LOCATION
+      cr.worklocation=choose_one(okaysite,SITENUM,0);
+
+      //FIND ONE OF THESE
+      vector<int> goodlist;
+
+      for(int l=0;l<location.size();l++)
+      {
+         if(location[l]->type==cr.worklocation)
+         {
+            goodlist.push_back(l);
+         }
+      }
+// Sadler - This line sometimes causes a memory fault
+//               Only thing I can think of is if loop above didn'
+//               find any locations of type == to cr.worklocation
+//               My hunch is that some locations, such as the 1st four
+//               are special and cannot be used here..
+//      
+//   TODO There was a bug in the makecharacter() code where th
+//   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
+//   is still occuring, normally at the Latte Bar Downtown ;
+      if (goodlist.size()==0)
+      {
+         cr.worklocation=0;
+      }
+      else
+      {
+         cr.worklocation=goodlist[LCSrandom(goodlist.size())];
+      }
+   }
+   return false;
+}

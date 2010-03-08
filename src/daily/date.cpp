@@ -113,7 +113,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(4,0);
          enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
-         sleeperize_prompt(*d.date[e],*pool[p],y+2);
+         sleeperize_prompt(*d.date[e],*pool[p],8);
          
          pool.push_back(d.date[e]);
          stat_recruits++;

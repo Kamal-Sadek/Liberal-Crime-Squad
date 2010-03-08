@@ -1949,7 +1949,7 @@ char talk(Creature &a,int t);
  stealth.cpp
 */
 /* checks if your liberal activity is noticed */
-void noticecheck(int exclude);
+void noticecheck(int exclude,int difficulty=DIFFICULTY_EASY);
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
