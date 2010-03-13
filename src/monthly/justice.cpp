@@ -176,7 +176,7 @@ void trial(Creature &g)
          addstr("kidnapping");
          breaker[LAWFLAG_KIDNAPPING]=0;
       }
-      else if(breaker[LAWFLAG_BURNFLAG])
+      else if(breaker[LAWFLAG_BURNFLAG] && law[LAW_FLAGBURNING] <= 0)
       {
          if(g.crimes_suspected[LAWFLAG_BURNFLAG]>1)
          {
