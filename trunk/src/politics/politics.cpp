@@ -727,8 +727,8 @@ void elections(char clearformess,char canseethings)
 
          if(l==999)
          {
-            if(yesvotes>50)yeswin=1;
-            else if(yesvotes==50)
+            if(yesvotes>500)yeswin=1;
+            else if(yesvotes==500)
             {
                if(!LCSrandom(2))yeswin=1;
                recount=1;
