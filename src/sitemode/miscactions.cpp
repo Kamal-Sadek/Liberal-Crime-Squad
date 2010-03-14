@@ -464,29 +464,33 @@ char radio_broadcast(void)
    int viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
-   case VIEW_WOMEN:           addstr("discusses abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
-   case VIEW_CIVILRIGHTS:     addstr("debates affirmative action.");break;
-   case VIEW_DRUGS:           addstr("has a frank talk about drugs.");break;
-   case VIEW_IMMIGRATION:     addstr("examines the issue of immigration.");break;
-   case VIEW_MILITARY:        addstr("talks about militarism in modern culture.");break;
-   case VIEW_GAY:             addstr("discusses homosexual rights.");break;
-   case VIEW_DEATHPENALTY:    addstr("examines the death penalty.");break;
-   case VIEW_NUCLEARPOWER:    addstr("runs down nuclear power.");break;
-   case VIEW_ANIMALRESEARCH:  addstr("discusses the horrors of animal research.");break;
-   case VIEW_POLICEBEHAVIOR:  addstr("goes over cases of police brutality.");break;
-   case VIEW_TORTURE:         addstr("discusses prisoner abuse and torture.");break;
-   case VIEW_INTELLIGENCE:    addstr("debates privacy law.");break;
-   case VIEW_FREESPEECH:      addstr("talks about free speech.");break;
-   case VIEW_GENETICS:        addstr("discusses the implications of genetic research.");break;
-   case VIEW_JUSTICES:        addstr("talks about the record of a Conservative judge.");break;
-   case VIEW_SWEATSHOPS:      addstr("brings details about sweatshops to light.");break;
-   case VIEW_POLLUTION:       addstr("does a show on industrial pollution.");break;
-   case VIEW_CORPORATECULTURE:addstr("jokes about corporate culture.");break;
-   case VIEW_CEOSALARY:       addstr("gives examples of CEO excesses.");break;
-   case VIEW_AMRADIO:         addstr("discusses other AM radio shows.");break;
-   case VIEW_CABLENEWS:       addstr("talks about Cable News.");break;
-   case VIEW_LIBERALCRIMESQUAD:addstr("lets people know about the Liberal Crime Squad.");break;
-   case VIEW_LIBERALCRIMESQUADPOS:addstr("extols the virtues of the Liberal Crime Squad.");break;
+      case VIEW_GAY:                    addstr("discusses homosexual rights.");break;
+      case VIEW_DEATHPENALTY:           addstr("examines the death penalty.");break;
+      case VIEW_TAXES:                  addstr("discusses the tax code.");break;
+      case VIEW_NUCLEARPOWER:           addstr("runs down nuclear power.");break;
+      case VIEW_ANIMALRESEARCH:         addstr("discusses the horrors of animal research.");break;
+      case VIEW_POLICEBEHAVIOR:         addstr("goes over cases of police brutality.");break;
+      case VIEW_TORTURE:                addstr("discusses prisoner abuse and torture.");break;
+      case VIEW_INTELLIGENCE:           addstr("debates privacy law.");break;
+      case VIEW_FREESPEECH:             addstr("talks about free speech.");break;
+      case VIEW_GENETICS:               addstr("discusses the implications of genetic research.");break;
+      case VIEW_JUSTICES:               addstr("talks about the record of a Conservative judge.");break;
+      case VIEW_GUNCONTROL:             addstr("talks about gun control.");break;
+      case VIEW_SWEATSHOPS:             addstr("brings details about sweatshops to light.");break;
+      case VIEW_POLLUTION:              addstr("does a show on industrial pollution.");break;
+      case VIEW_CORPORATECULTURE:       addstr("jokes about corporate culture.");break;
+      case VIEW_CEOSALARY:              addstr("gives examples of CEO excesses.");break;
+      case VIEW_WOMEN:                  addstr("discusses abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+      case VIEW_CIVILRIGHTS:            addstr("debates affirmative action.");break;
+      case VIEW_DRUGS:                  addstr("has a frank talk about drugs.");break;
+      case VIEW_IMMIGRATION:            addstr("examines the issue of immigration.");break;
+      case VIEW_MILITARY:               addstr("talks about militarism in modern culture.");break;
+      case VIEW_AMRADIO:                addstr("discusses other AM radio shows.");break;
+      case VIEW_CABLENEWS:              addstr("talks about Cable News.");break;
+      case VIEW_LIBERALCRIMESQUAD:      addstr("lets people know about the Liberal Crime Squad.");break;
+      default:
+      case VIEW_LIBERALCRIMESQUADPOS:   addstr("extols the virtues of the Liberal Crime Squad.");break;
+      case VIEW_CONSERVATIVECRIMESQUAD: addstr("demonizes the Conservative Crime Squad.");break;
    }
 
    refresh();
@@ -566,29 +570,33 @@ char radio_broadcast(void)
                move(17,1);
                switch(viewhit)
                {
-               case VIEW_WOMEN:addstr("discuss abortion.");break;
-               case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
-               case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
-               case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
-               case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
-               case VIEW_GAY:addstr("discuss homosexual rights.");break;
-               case VIEW_DEATHPENALTY:addstr("examine the death penalty.");break;
-               case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
-               case VIEW_ANIMALRESEARCH:addstr("discuss the horrors of animal research.");break;
-               case VIEW_POLICEBEHAVIOR:addstr("go over cases of police brutality.");break;
-               case VIEW_TORTURE:addstr("discuss prisoner abuse and torture.");break;
-               case VIEW_INTELLIGENCE:addstr("advocate privacy laws.");break;
-               case VIEW_FREESPEECH:addstr("talk about free speech.");break;
-               case VIEW_GENETICS:addstr("discuss the implications of genetic research.");break;
-               case VIEW_JUSTICES:addstr("talk about the record of a Conservative judge.");break;
-               case VIEW_SWEATSHOPS:addstr("bring details about sweatshops to light.");break;
-               case VIEW_POLLUTION:addstr("do a segment on industrial pollution.");break;
-               case VIEW_CORPORATECULTURE:addstr("joke about corporate culture.");break;
-               case VIEW_CEOSALARY:addstr("give examples of CEO excesses.");break;
-               case VIEW_AMRADIO:addstr("make fun of its own AM radio show.");break;
-               case VIEW_CABLENEWS:addstr("talk about Cable News.");break;
-               case VIEW_LIBERALCRIMESQUAD:addstr("let people know about the Liberal Crime Squad.");break;
-               case VIEW_LIBERALCRIMESQUADPOS:addstr("extol the virtues of the Liberal Crime Squad.");break;
+                  case VIEW_GAY:                    addstr("discuss homosexual rights.");break;
+                  case VIEW_DEATHPENALTY:           addstr("examine the death penalty.");break;
+                  case VIEW_TAXES:                  addstr("discuss the tax code.");break;
+                  case VIEW_NUCLEARPOWER:           addstr("run down nuclear power.");break;
+                  case VIEW_ANIMALRESEARCH:         addstr("discuss the horrors of animal research.");break;
+                  case VIEW_POLICEBEHAVIOR:         addstr("go over cases of police brutality.");break;
+                  case VIEW_TORTURE:                addstr("discuss prisoner abuse and torture.");break;
+                  case VIEW_INTELLIGENCE:           addstr("debate privacy law.");break;
+                  case VIEW_FREESPEECH:             addstr("talk about free speech.");break;
+                  case VIEW_GENETICS:               addstr("discuss the implications of genetic research.");break;
+                  case VIEW_JUSTICES:               addstr("talk about the record of a Conservative judge.");break;
+                  case VIEW_GUNCONTROL:             addstr("talk about gun control.");break;
+                  case VIEW_SWEATSHOPS:             addstr("bring details about sweatshops to light.");break;
+                  case VIEW_POLLUTION:              addstr("do a show on industrial pollution.");break;
+                  case VIEW_CORPORATECULTURE:       addstr("joke about corporate culture.");break;
+                  case VIEW_CEOSALARY:              addstr("give examples of CEO excesses.");break;
+                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+                  case VIEW_CIVILRIGHTS:            addstr("debate affirmative action.");break;
+                  case VIEW_DRUGS:                  addstr("have a frank talk about drugs.");break;
+                  case VIEW_IMMIGRATION:            addstr("examine the issue of immigration.");break;
+                  case VIEW_MILITARY:               addstr("talk about militarism in modern culture.");break;
+                  case VIEW_AMRADIO:                addstr("discuss other AM radio shows.");break;
+                  case VIEW_CABLENEWS:              addstr("talk about Cable News.");break;
+                  case VIEW_LIBERALCRIMESQUAD:      addstr("let people know about the Liberal Crime Squad.");break;
+                  default:
+                  case VIEW_LIBERALCRIMESQUADPOS:   addstr("extol the virtues of the Liberal Crime Squad.");break;
+                  case VIEW_CONSERVATIVECRIMESQUAD: addstr("demonize the Conservative Crime Squad.");break;
                }
 
                usegmentpower=10; //FAME BONUS
@@ -720,30 +728,33 @@ char news_broadcast(void)
    int viewhit=LCSrandom(VIEWNUM);
    switch(viewhit)
    {
-      case VIEW_WOMEN:addstr("discusses abortion.");break;
-      case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
-      case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
-      case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
-      case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
-      case VIEW_GAY:addstr("discusses homosexual rights.");break;
-      case VIEW_DEATHPENALTY:addstr("examines the death penalty.");break;
-      case VIEW_NUCLEARPOWER:addstr("runs down nuclear power.");break;
-      case VIEW_ANIMALRESEARCH:addstr("discusses the horrors of animal research.");break;
-      case VIEW_POLICEBEHAVIOR:addstr("goes over cases of police brutality.");break;
-      case VIEW_TORTURE:addstr("discusses prisoner abuse and torture.");break;
-      case VIEW_INTELLIGENCE:addstr("debates privacy law.");break;
-      case VIEW_FREESPEECH:addstr("talks about free speech.");break;
-      case VIEW_GENETICS:addstr("discusses the implications of genetic research.");break;
-      case VIEW_JUSTICES:addstr("talks about the record of a Conservative judge.");break;
-      case VIEW_SWEATSHOPS:addstr("brings details about sweatshops to light.");break;
-      case VIEW_POLLUTION:addstr("does a show on industrial pollution.");break;
-      case VIEW_CORPORATECULTURE:addstr("jokes about corporate culture.");break;
-      case VIEW_CEOSALARY:addstr("gives examples of CEO excesses.");break;
-      case VIEW_AMRADIO:addstr("discusses AM radio shows.");break;
-      case VIEW_CABLENEWS:addstr("talks about Cable News.");break;
-      case VIEW_LIBERALCRIMESQUAD:addstr("lets people know about the Liberal Crime Squad.");break;
+      case VIEW_GAY:                    addstr("discusses homosexual rights.");break;
+      case VIEW_DEATHPENALTY:           addstr("examines the death penalty.");break;
+      case VIEW_TAXES:                  addstr("discusses the tax code.");break;
+      case VIEW_NUCLEARPOWER:           addstr("runs down nuclear power.");break;
+      case VIEW_ANIMALRESEARCH:         addstr("discusses the horrors of animal research.");break;
+      case VIEW_POLICEBEHAVIOR:         addstr("goes over cases of police brutality.");break;
+      case VIEW_TORTURE:                addstr("discusses prisoner abuse and torture.");break;
+      case VIEW_INTELLIGENCE:           addstr("debates privacy law.");break;
+      case VIEW_FREESPEECH:             addstr("talks about free speech.");break;
+      case VIEW_GENETICS:               addstr("discusses the implications of genetic research.");break;
+      case VIEW_JUSTICES:               addstr("talks about the record of a Conservative judge.");break;
+      case VIEW_GUNCONTROL:             addstr("talks about gun control.");break;
+      case VIEW_SWEATSHOPS:             addstr("brings details about sweatshops to light.");break;
+      case VIEW_POLLUTION:              addstr("does a show on industrial pollution.");break;
+      case VIEW_CORPORATECULTURE:       addstr("jokes about corporate culture.");break;
+      case VIEW_CEOSALARY:              addstr("gives examples of CEO excesses.");break;
+      case VIEW_WOMEN:                  addstr("discusses abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+      case VIEW_CIVILRIGHTS:            addstr("debates affirmative action.");break;
+      case VIEW_DRUGS:                  addstr("has a frank talk about drugs.");break;
+      case VIEW_IMMIGRATION:            addstr("examines the issue of immigration.");break;
+      case VIEW_MILITARY:               addstr("talks about militarism in modern culture.");break;
+      case VIEW_AMRADIO:                addstr("discusses other AM radio shows.");break;
+      case VIEW_CABLENEWS:              addstr("talks about Cable News.");break;
+      case VIEW_LIBERALCRIMESQUAD:      addstr("lets people know about the Liberal Crime Squad.");break;
       default:
-      case VIEW_LIBERALCRIMESQUADPOS:addstr("extols the virtues of the Liberal Crime Squad.");break;
+      case VIEW_LIBERALCRIMESQUADPOS:   addstr("extols the virtues of the Liberal Crime Squad.");break;
+      case VIEW_CONSERVATIVECRIMESQUAD: addstr("demonizes the Conservative Crime Squad.");break;
    }
 
    refresh();
@@ -821,29 +832,33 @@ char news_broadcast(void)
                move(17,1);
                switch(viewhit)
                {
-                  case VIEW_WOMEN:addstr("discuss abortion.");break;
-                  case VIEW_CIVILRIGHTS:addstr("debates affirmative action.");break;
-                  case VIEW_DRUGS:addstr("has a frank talk about drugs.");break;
-                  case VIEW_IMMIGRATION:addstr("examines the issue of immigration.");break;
-                  case VIEW_MILITARY:addstr("talks about militarism in modern culture.");break;
-                  case VIEW_GAY:addstr("discuss homosexual rights.");break;
-                  case VIEW_DEATHPENALTY:addstr("examine the death penalty.");break;
-                  case VIEW_NUCLEARPOWER:addstr("run down nuclear power.");break;
-                  case VIEW_ANIMALRESEARCH:addstr("discuss the horrors of animal research.");break;
-                  case VIEW_POLICEBEHAVIOR:addstr("go over cases of police brutality.");break;
-                  case VIEW_TORTURE:addstr("discuss prisoner abuse and torture.");break;
-                  case VIEW_INTELLIGENCE:addstr("advocate privacy laws.");break;
-                  case VIEW_FREESPEECH:addstr("talk about free speech.");break;
-                  case VIEW_GENETICS:addstr("discuss the implications of genetic research.");break;
-                  case VIEW_JUSTICES:addstr("talk about the record of a Conservative judge.");break;
-                  case VIEW_SWEATSHOPS:addstr("bring details about sweatshops to light.");break;
-                  case VIEW_POLLUTION:addstr("do a segment on industrial pollution.");break;
-                  case VIEW_CORPORATECULTURE:addstr("joke about corporate culture.");break;
-                  case VIEW_CEOSALARY:addstr("give examples of CEO excesses.");break;
-                  case VIEW_AMRADIO:addstr("talk about AM radio.");break;
-                  case VIEW_CABLENEWS:addstr("make fun of its own Cable News show.");break;
-                  case VIEW_LIBERALCRIMESQUAD:addstr("let people know about the Liberal Crime Squad.");break;
-                  case VIEW_LIBERALCRIMESQUADPOS:addstr("extol the virtues of the Liberal Crime Squad.");break;
+                  case VIEW_GAY:                    addstr("discuss homosexual rights.");break;
+                  case VIEW_DEATHPENALTY:           addstr("examine the death penalty.");break;
+                  case VIEW_TAXES:                  addstr("discuss the tax code.");break;
+                  case VIEW_NUCLEARPOWER:           addstr("run down nuclear power.");break;
+                  case VIEW_ANIMALRESEARCH:         addstr("discuss the horrors of animal research.");break;
+                  case VIEW_POLICEBEHAVIOR:         addstr("go over cases of police brutality.");break;
+                  case VIEW_TORTURE:                addstr("discuss prisoner abuse and torture.");break;
+                  case VIEW_INTELLIGENCE:           addstr("debate privacy law.");break;
+                  case VIEW_FREESPEECH:             addstr("talk about free speech.");break;
+                  case VIEW_GENETICS:               addstr("discuss the implications of genetic research.");break;
+                  case VIEW_JUSTICES:               addstr("talk about the record of a Conservative judge.");break;
+                  case VIEW_GUNCONTROL:             addstr("talk about gun control.");break;
+                  case VIEW_SWEATSHOPS:             addstr("bring details about sweatshops to light.");break;
+                  case VIEW_POLLUTION:              addstr("do a show on industrial pollution.");break;
+                  case VIEW_CORPORATECULTURE:       addstr("joke about corporate culture.");break;
+                  case VIEW_CEOSALARY:              addstr("give examples of CEO excesses.");break;
+                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+                  case VIEW_CIVILRIGHTS:            addstr("debate affirmative action.");break;
+                  case VIEW_DRUGS:                  addstr("have a frank talk about drugs.");break;
+                  case VIEW_IMMIGRATION:            addstr("examine the issue of immigration.");break;
+                  case VIEW_MILITARY:               addstr("talk about militarism in modern culture.");break;
+                  case VIEW_AMRADIO:                addstr("discuss other AM radio shows.");break;
+                  case VIEW_CABLENEWS:              addstr("talk about Cable News.");break;
+                  case VIEW_LIBERALCRIMESQUAD:      addstr("let people know about the Liberal Crime Squad.");break;
+                  default:
+                  case VIEW_LIBERALCRIMESQUADPOS:   addstr("extol the virtues of the Liberal Crime Squad.");break;
+                  case VIEW_CONSERVATIVECRIMESQUAD: addstr("demonize the Conservative Crime Squad.");break;
                }
 
                usegmentpower=10; //FAME BONUS
