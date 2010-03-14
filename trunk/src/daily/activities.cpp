@@ -2179,11 +2179,7 @@ void funds_and_trouble(char &clearformess)
          delete pool[p];
          pool.erase(pool.begin() + p);
 
-         int burials = bury.size(); // in case someone's killed while doing it
-         // if that happens, just assume they got killed at the burial site, so 
-         // their body doesn't need to be buried later
-
-         for(int b=0;b<burials;b++)
+         for(int b=0;b<bury.size();b++)
          {
             if(!(bury[b]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
             {
