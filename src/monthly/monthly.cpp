@@ -242,11 +242,11 @@ void passmonth(char &clearformess,char canseethings)
    // Seduction monthly experience stipends for those liberals
    // who have been getting it on with their love slaves/masters
    // in the background
-   for(int p=0;p<pool.size();p++)
+   for(int s=0;s<pool.size();s++)
    {
-      pool[p]->train(SKILL_SEDUCTION,loveslaves(*pool[p])*5);
-      if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
-         pool[p]->train(SKILL_SEDUCTION,5);
+      pool[s]->train(SKILL_SEDUCTION,loveslaves(*pool[s])*5);
+      if(pool[s]->flag & CREATUREFLAG_LOVESLAVE)
+         pool[s]->train(SKILL_SEDUCTION,5);
    }
 
    /*******************************************************
