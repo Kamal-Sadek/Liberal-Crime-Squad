@@ -375,23 +375,23 @@ char liberalagenda(char won)
                   break;
                case LAW_ELECTIONS:
                   if(won==-1)addstr("Only independently wealthy candidates have a chance of defeating incumbents.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Virtually no ethics restrictions exist on political officeholders.");
-                                      else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
-                                      else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
-                                      else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
-                                      else addstr("Election expenses are publicly funded, and voting is by ranked list.");
-                                      break;
+		  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+			  addstr("Virtually no ethics restrictions exist on political officeholders.");
+		  else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
+		  else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
+		  else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
+		  else addstr("Election expenses are publicly funded, and voting is by ranked list.");
+		  break;
                case LAW_MILITARY:
                   if(won==-1)addstr("The massive military is a tool of political oppression.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Ballooning military boondoggles are utterly out of control.");
-                                      else if(law[l]==-1)addstr("Massive investment is put into the military.");
-                                      else if(law[l]==0)addstr("Military spending is growing each year.");
-                                      else if(law[l]==1)addstr("Military strength is not a major priority.");
-                                      else addstr("The military has been weakened significantly.");
-                                      break;
-               case LAW_TORTURE:
+		  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+			  addstr("Ballooning military boondoggles are utterly out of control.");
+		  else if(law[l]==-1)addstr("Massive investment is put into the military.");
+		  else if(law[l]==0)addstr("Military spending is growing each year.");
+		  else if(law[l]==1)addstr("Military strength is not a major priority.");
+		  else addstr("The military has been weakened significantly.");
+		  break;
+	       case LAW_TORTURE:
                   if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");
                                       else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
@@ -421,28 +421,28 @@ char liberalagenda(char won)
                case LAW_ANIMALRESEARCH:
                   if(won==-1)addstr("All forms of human experimentation on the poor are encouraged.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-                     addstr("Animals are things of inferior existence.");
-                  else if(law[l]==-1)addstr("Animal research is lightly regulated.");// TODO: BORING! -- LK
-                  else if(law[l]==0)addstr("Animal research is moderately regulated.");// TODO: BORING! -- LK
-                  else if(law[l]==1)addstr("Animal research is stiffly regulated.");// TODO: BORING! -- LK
+                     addstr("Animals are property that can be experimented upon freely.");
+                  else if(law[l]==-1)addstr("Animal testing must be classified by purpose and suffering caused.");
+                  else if(law[l]==0)addstr("Animal research is regulated with a system of licenses and certificates.");
+                  else if(law[l]==1)addstr("Animal research is strictly regulated by purpose and suffering caused.");
                   else addstr("Animals are people, too.");
                   break;
                case LAW_POLICEBEHAVIOR:
                   if(won==-1)addstr("Policing is administered by corporations and has a draft.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Law enforcement is given free reign.");
-                  else if(law[l]==-1)addstr("Law enforcement is lightly regulated.");// TODO: BORING! -- LK
-                  else if(law[l]==0)addstr("Law enforcement is moderately regulated.");// TODO: BORING! -- LK
-                  else if(law[l]==1)addstr("Law enforcement is strictly controlled.");// TODO: BORING! -- LK
+                  else if(law[l]==-1)addstr("Even the worst police misconduct only earns slap-on-the-wrist punishments.");
+                  else if(law[l]==0)addstr("Law enforcement is regulated to prevent extreme misconduct.");
+                  else if(law[l]==1)addstr("Law enforcement has heavy oversight and freedom-of-information requirements.");
                   else addstr("All law enforcement positions are subject to election and recall.");
                   break;
                case LAW_PRIVACY:
                   if(won==-1)addstr("Files on each citizen are easily accessible to corporations.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Any corporation requesting private information is granted access.");
-                  else if(law[l]==-1)addstr("Privacy laws are weak.");// TODO: BORING! -- LK
-                  else if(law[l]==0)addstr("Privacy laws are moderate.");// TODO: BORING! -- LK
-                  else if(law[l]==1)addstr("Privacy laws are strong.");// TODO: BORING! -- LK
+                  else if(law[l]==-1)addstr("Privacy laws are full of loopholes.");
+                  else if(law[l]==0)addstr("Basic safeguards for medical and financial privacy are in place.");
+                  else if(law[l]==1)addstr("All areas of privacy are protected with strong safeguards.");
                   else addstr("Individual privacy is sacred.");
                   break;
                case LAW_DEATHPENALTY:
@@ -479,7 +479,7 @@ char liberalagenda(char won)
                   else if(law[l]==-1)addstr("Working conditions are miserable and the minimum wage is low.");
                   else if(law[l]==0)addstr("Workers still require some benefits.");
                   else if(law[l]==1)addstr("Workers are fairly compensated and have benefits.");
-                  else addstr("There are universal workers' rights and high wages.");
+                  else addstr("There are universal workers' rights and a high guaranteed minimum income.");
                   break;
                case LAW_GAY:
                   if(won==-1)addstr("Homosexuals are executed regularly.");
