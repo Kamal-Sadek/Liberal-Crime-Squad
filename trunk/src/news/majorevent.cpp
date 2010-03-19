@@ -60,7 +60,7 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
                strcat(story,str2);
                            }
-                           if(law[LAW_WOMEN]=-2)
+                           if(law[LAW_WOMEN]==-2)
                            {
                                    strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
                                    strcat(story," abortion doctors as opposed to arresting them.&r");
