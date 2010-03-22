@@ -1260,7 +1260,7 @@ void printliberalstats(Creature &cr)
    else v=id_getcar(cr.carid);
    if(v!=-1&&showcarprefs!=-1)
    {
-      getcarfull(str,*vehicle[v]);
+      getcar(str,vehicle[v]->type);
       char d;
       if(showcarprefs==1)d=cr.pref_is_driver;
       else d=cr.is_driver;
