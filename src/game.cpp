@@ -172,8 +172,6 @@ int stat_recruits=0;
 int stat_kidnappings=0;
 int stat_dead=0;
 int stat_kills=0;
-int stat_funds=0;
-int stat_spent=0;
 int stat_buys=0;
 int stat_burns=0;
 

@@ -79,8 +79,6 @@ void savegame(char *str)
       numbytes=fwrite(&stat_dead,sizeof(int),1,h);
       numbytes=fwrite(&stat_kills,sizeof(int),1,h);
       numbytes=fwrite(&stat_kidnappings,sizeof(int),1,h);
-      numbytes=fwrite(&stat_funds,sizeof(int),1,h);
-      numbytes=fwrite(&stat_spent,sizeof(int),1,h);
       numbytes=fwrite(&stat_buys,sizeof(int),1,h);
       numbytes=fwrite(&stat_burns,sizeof(int),1,h);
 
@@ -344,8 +342,6 @@ char load(void)
       fread(&stat_dead,sizeof(int),1,h);
       fread(&stat_kills,sizeof(int),1,h);
       fread(&stat_kidnappings,sizeof(int),1,h);
-      fread(&stat_funds,sizeof(int),1,h);
-      fread(&stat_spent,sizeof(int),1,h);
       fread(&stat_buys,sizeof(int),1,h);
       fread(&stat_burns,sizeof(int),1,h);
 

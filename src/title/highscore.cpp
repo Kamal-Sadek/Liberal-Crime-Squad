@@ -274,8 +274,8 @@ void savehighscore(char endtype)
    ustat_dead+=stat_dead;
    ustat_kills+=stat_kills;
    ustat_kidnappings+=stat_kidnappings;
-   ustat_funds+=stat_funds;
-   ustat_spent+=stat_spent;
+   ustat_funds+=ledger.total_income;
+   ustat_spent+=ledger.total_expense;
    ustat_buys+=stat_buys;
    ustat_burns+=stat_burns;
 
@@ -286,7 +286,7 @@ void savehighscore(char endtype)
    {
       if((endtype==END_WON&&score[s].endtype==END_WON&&
          year==score[s].year&&month==score[s].month&&
-         stat_spent+stat_funds>score[s].stat_spent+score[s].stat_funds)||
+         ledger.total_expense+ledger.total_expense>score[s].stat_spent+score[s].stat_funds)||
 
          (endtype==END_WON&&score[s].endtype==END_WON
          &&(year<score[s].year ||
@@ -295,7 +295,7 @@ void savehighscore(char endtype)
          (endtype==END_WON&&score[s].endtype!=END_WON)||
 
          (endtype!=END_WON&&score[s].endtype!=END_WON&&
-         stat_spent+stat_funds>score[s].stat_spent+score[s].stat_funds)||
+         ledger.total_expense+ledger.total_income>score[s].stat_spent+score[s].stat_funds)||
 
          score[s].valid==0)
       {
@@ -311,8 +311,8 @@ void savehighscore(char endtype)
          score[s].stat_dead=stat_dead;
          score[s].stat_kills=stat_kills;
          score[s].stat_kidnappings=stat_kidnappings;
-         score[s].stat_funds=stat_funds;
-         score[s].stat_spent=stat_spent;
+         score[s].stat_funds=ledger.total_income;
+         score[s].stat_spent=ledger.total_expense;
          score[s].stat_buys=stat_buys;
          score[s].stat_burns=stat_burns;
          score[s].valid=1;

@@ -74,12 +74,12 @@ void mode_title(void)
 
       move(9,47);
       addstr("Funds Taxed: ");
-      itoa(stat_funds,num,10);
+      itoa(ledger.total_income,num,10);
       addstr(num);
 
       move(10,47);
       addstr("Funds Spent: ");
-      itoa(stat_spent,num,10);
+      itoa(ledger.total_expense,num,10);
       addstr(num);
 
       move(11,47);
