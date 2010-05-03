@@ -38,8 +38,10 @@ char unlock(short type,char &actual)
    switch(type)
    {
       case UNLOCK_DOOR:
-         if(securityable(location[cursite]->type))
+         if(securityable(location[cursite]->type) == 1)
             difficulty=DIFFICULTY_CHALLENGING;
+         else if(securityable(location[cursite]->type) > 1)
+            difficulty=DIFFICULTY_CHALLENGING; //todo: make slightly harder than the above
          else
             difficulty=DIFFICULTY_AVERAGE;
          break;
@@ -85,13 +87,16 @@ char unlock(short type,char &actual)
    {
       int p=goodp[LCSrandom(goodp.size())];
 
-      if(maxattack<=difficulty)
-      {
-         activesquad->squad[p]->train(SKILL_SECURITY,1+difficulty*2-maxattack);
-      }
-
+	//lock pick succeeded.
       if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
       {
+         //skill goes up in proportion to the chance of you failing.
+         //this used to always happen even if you failed - but that made it very fast to train by failing at
+         //impossibly difficult locks.
+         if(maxattack<=difficulty)
+         {
+            activesquad->squad[p]->train(SKILL_SECURITY,1+(difficulty-maxattack)*2);
+         }
          clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
@@ -128,6 +133,15 @@ char unlock(short type,char &actual)
       }
       else
       {
+         //gain some experience for failing only if you could have succeeded.
+         for (int i = 0; i < 3; i++)
+         {
+            if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
+            {
+               activesquad->squad[p]->train(SKILL_SECURITY,1+(difficulty-maxattack));
+               break;
+            }
+         }
          clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);

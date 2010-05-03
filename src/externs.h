@@ -19,7 +19,6 @@ extern short senate[100];
 extern short court[9];
 extern char courtname[9][80];
 
-
 extern signed char exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][80];
@@ -78,7 +77,8 @@ extern class Ledger ledger;
 
 extern char loaded;
 
-extern int mode;
+extern short mode;
+extern short wincondition;
 
 extern short offended_corps;
 extern short offended_cia;

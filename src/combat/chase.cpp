@@ -650,7 +650,8 @@ char footchase(void)
 }
 
 
-
+//was 10
+#define DRIVING_RANDOMNESS 13
 void evasivedrive(void)
 {
    int e;
@@ -663,7 +664,7 @@ void evasivedrive(void)
          activesquad->squad[p]->is_driver)
       {
          long v=id_getcar(activesquad->squad[p]->carid);
-         yourrolls.push_back(driveskill(*activesquad->squad[p],vehicle[v])+LCSrandom(10));
+         yourrolls.push_back(driveskill(*activesquad->squad[p],vehicle[v])+LCSrandom(DRIVING_RANDOMNESS));
          activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));
          if(yourworst>yourrolls.back())yourworst=yourrolls.back();
       }
@@ -685,7 +686,7 @@ void evasivedrive(void)
          {
             if(chaseseq.enemycar[v]->id==encounter[e].carid)
             {
-               theirrolls.push_back(driveskill(encounter[e],chaseseq.enemycar[v])+LCSrandom(10));
+               theirrolls.push_back(driveskill(encounter[e],chaseseq.enemycar[v])+LCSrandom(DRIVING_RANDOMNESS));
                theirrolls_id.push_back(encounter[e].carid);
                theirrolls_drv.push_back(encounter[e].id);
             }

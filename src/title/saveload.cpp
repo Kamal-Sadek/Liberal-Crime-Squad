@@ -63,7 +63,8 @@ void savegame(char *str)
 
       numbytes=fwrite(&seed,sizeof(int),1,h);
 
-      numbytes=fwrite(&mode,sizeof(int),1,h);
+      numbytes=fwrite(&mode,sizeof(short),1,h);
+	  numbytes=fwrite(&wincondition,sizeof(short),1,h);
 
       numbytes=fwrite(&day,sizeof(int),1,h);
       numbytes=fwrite(&month,sizeof(int),1,h);
@@ -326,7 +327,8 @@ char load(void)
 
       fread(&seed,sizeof(unsigned int),1,h);
 
-      fread(&mode,sizeof(int),1,h);
+      fread(&mode,sizeof(short),1,h);
+	  fread(&wincondition,sizeof(short),1,h);
 
       fread(&day,sizeof(int),1,h);
       fread(&month,sizeof(int),1,h);

@@ -30,6 +30,8 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
+bool goodguyattack = false;
+
 /* attack handling for each side as a whole */
 void youattack(void)
 {
@@ -42,6 +44,8 @@ void youattack(void)
    }
 
    sitealarm=1;
+
+   goodguyattack = true;
 
    for(int p=0;p<6;p++)
    {
@@ -220,6 +224,8 @@ void youattack(void)
 
 void enemyattack(void)
 {
+   goodguyattack = false;
+
    bool armed=false;
    for(int i=0;i<6;i++)
    {
@@ -454,7 +460,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    char str[200],str2[200];
 
    clearmessagearea();
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   if (goodguyattack)
+   {
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+   }
+   else
+   {
+      set_color(COLOR_RED,COLOR_BLACK,1);
+   }
 
    //INCAPACITATED
    char incaprint;
@@ -673,6 +686,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    refresh();
    getch();
 
+   if (goodguyattack)
+   {
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+   }
+   else
+   {
+      set_color(COLOR_RED,COLOR_BLACK,1);
+   }
    strcpy(str,a.name);
 
    int bonus=0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
@@ -1385,13 +1406,16 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   target=activesquad->squad[i];
                   
                   clearmessagearea();
+			      if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+				  else set_color(COLOR_RED,COLOR_BLACK,1);
+
                   move(16,1);
                   addstr(target->name);
                   if(!t.alive)addstr(" misguidedly ");
                   else addstr(" heroically ");
                   addstr(" shields ");
                   addstr(t.name);
-                  if(!t.alive)addstr("'s corpse ");
+                  if(!t.alive)addstr("'s corpse");
                   addstr("!");
                   
                   addjuice(*target,10);//Instant juice!! Way to take the bullet!!
@@ -1490,7 +1514,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else if(a.weapon.type!=WEAPON_MOLOTOV)strcat(str,".");
             else strcat(str,"!");
             move(17,1);
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            //set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
 
             refresh();
@@ -1501,6 +1525,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                severloot(t,groundloot);
 
                clearmessagearea();
+			   if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+			   else set_color(COLOR_RED,COLOR_BLACK,1);
+
                adddeathmessage(*target);
 
                refresh();
@@ -1519,7 +1546,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else strcat(str,".");
             
             move(17,1);
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            //set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
 
             if(target->wound[w] & WOUND_NASTYOFF)bloodblast(target->armor);
@@ -1562,7 +1589,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                if(w==BODYPART_HEAD)
                {
                   clearmessagearea();
-                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+                  if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+				  else set_color(COLOR_RED,COLOR_BLACK,1);
 
                   switch(LCSrandom(7))
                   {
@@ -1717,7 +1745,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                if(w==BODYPART_BODY)
                {
                   clearmessagearea();
-                  set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+                  //set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+		          if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+				  else set_color(COLOR_RED,COLOR_BLACK,1);
+
 
                   switch(LCSrandom(11))
                   {
@@ -1922,7 +1953,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                severloot(*target,groundloot);
             }
 
-            set_color(COLOR_WHITE,COLOR_BLACK,1);            
+            //set_color(COLOR_WHITE,COLOR_BLACK,1);            
          }
       }
       else
@@ -1942,6 +1973,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    }
    else
    {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+
       if(melee && aroll<droll-10 && t.blood>70 && t.animalgloss==ANIMALGLOSS_NONE && weaponskill(t.weapon.type)!=SKILL_THROWING)
       {
 
@@ -1953,6 +1986,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          refresh();
          getch();
 
+		 goodguyattack = !goodguyattack;
          char actual_dummy;
          attack(t,a,0,actual_dummy,true);
       }
@@ -3182,7 +3216,7 @@ void adddeathmessage(Creature &cr)
    else
    {
       strcpy(str,cr.name);
-      switch(LCSrandom(10))
+      switch(LCSrandom(11))
       {
          case 0:
             strcat(str," cries out one last time");
@@ -3246,6 +3280,23 @@ void adddeathmessage(Creature &cr)
             move(17,1);
             addstr("a prayer, then all is still.");
             break;
+		 case 10:
+			strcat(str," speaks these final words:");
+			addstr(str);
+            move(17,1);
+			switch (cr.align)
+			{
+			case ALIGN_LIBERAL:
+			case ALIGN_ELITELIBERAL:
+				addstr(slogan);
+				break;
+			case ALIGN_MODERATE:
+				addstr("\"A plague on both your houses...\"");
+				break;
+			default:
+				addstr("\"Better dead than liberal...\"");
+				break;
+			}
       }
    }
 }

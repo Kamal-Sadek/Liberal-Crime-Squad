@@ -912,3 +912,16 @@ Creature& UniqueCreatures::CEO()
       makecreature(CEO_,CREATURE_CORPORATE_CEO);
    return CEO_;
 }
+
+const char *Creature::heshe()
+{
+	if(gender_liberal == GENDER_MALE)
+	{
+		return "he";
+	}
+	if(gender_liberal == GENDER_FEMALE)
+	{
+		return "she";
+	}
+	return "they";
+}
