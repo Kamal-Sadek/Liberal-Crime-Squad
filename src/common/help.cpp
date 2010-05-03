@@ -25,7 +25,7 @@ ACTIVITY_SLEEPER_EMBEZZLE, TODO
 ACTIVITY_SLEEPER_STEAL, TODO
 ACTIVITY_SLEEPER_JOINLCS, TODO
 */
-
+// {{{ Various voids
 // Help pages are drawn here.
 
 // NOTE: This will probably need updating if there are any fundamental code
@@ -42,6 +42,8 @@ void HelpActivities(int activityType)
    // I have actually created a screen editor to help me create the code
    // for the help. It can probably be used all over the place for formatting
    // large pieces of text.
+   //
+   // Could you possibly put this in ../../dev/ ? -- LK
 
    if(activityType == ACTIVITY_NONE)
    {
@@ -55,7 +57,9 @@ void HelpActivities(int activityType)
 
    switch(activityType)
    {
-      // Liberal activism
+// }}}
+// {{{ Liberal activism
+// {{{ ACTIVITY_COMMUNITYSERVICE
    case ACTIVITY_COMMUNITYSERVICE:
       move(2,0);
       addstr("===Community Service===");
@@ -64,6 +68,8 @@ void HelpActivities(int activityType)
       move(5,0);
       addstr(" of reducing the activists Heat.");
       break;
+// }}}
+// {{{ ACTIVITY_TROUBLE
    case ACTIVITY_TROUBLE:
       move(2,0);
       addstr("===Liberal Disobedience===");
@@ -84,6 +90,8 @@ void HelpActivities(int activityType)
       move(13,0);
       addstr(" chance that an angry mob will beat the crap out of you.");
       break;
+// }}}
+// {{{ ACTIVITY_GRAFFITI
    case ACTIVITY_GRAFFITI:
       move(2,0);
       addstr("===Graffiti==");
@@ -98,6 +106,8 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" A high art skill and heart will enhance the effect this has on public opinion.");
       break;
+// }}}
+// {{{ ACTIVITY_POLLS
    case ACTIVITY_POLLS:
       move(2,0);
       addstr("===Search Opinion Polls===");
@@ -112,6 +122,8 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" Skill in computers and intelligence will give better results.");
       break;
+// }}}
+// {{{ ACTIVITY_DOS_ATTACKS
    case ACTIVITY_DOS_ATTACKS:
       move(2,0);
       addstr("===Harassing Websites===");
@@ -126,6 +138,8 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" Utilizes only the Computers skill.");
       break;
+// }}}
+// {{{ ACTIVITY_HACKING
    case ACTIVITY_HACKING:
       move(2,0);
       addstr("===Hacking===");
@@ -154,7 +168,8 @@ void HelpActivities(int activityType)
       move(18,0);
       addstr(" that can be published in a special edition of the Liberal Guardian.");
       break;
-
+// }}}
+// {{{ ACTIVITY_WRITE_LETTERS
    case ACTIVITY_WRITE_LETTERS:
       move(2,0);
       addstr("===Write to Newspapers===");
@@ -191,6 +206,8 @@ void HelpActivities(int activityType)
       move(21,0);
       addstr(" safehouse.");
       break;
+// }}}
+// {{{ ACTIVITY_WRITE_GUARDIAN
    case ACTIVITY_WRITE_GUARDIAN:
       move(2,0);
       addstr("===Write for the Liberal Guardian ===");
@@ -229,7 +246,10 @@ void HelpActivities(int activityType)
       move(21,0);
       addstr(" appropriate location or from hackers.");
       break;
-      // Legal fund raising
+// }}}
+// }}}
+// {{{ Legal fund raising
+// {{{ ACTIVITY_DONATIONS
    case ACTIVITY_DONATIONS:
       move(2,0);
       addstr("===Soliciting Donations===");
@@ -242,6 +262,8 @@ void HelpActivities(int activityType)
       move(8,0);
       addstr(" This activity trains persuasion.");
       break;
+// }}}
+// {{{ ACTIVITY_SELL_TSHIRTS
    case ACTIVITY_SELL_TSHIRTS:
       move(2,0);
       addstr("===Sell Shirts===");
@@ -252,6 +274,8 @@ void HelpActivities(int activityType)
       move(7,0);
       addstr(" This activity trains tailoring and business.");
       break;
+// }}}
+// {{{ ACTIVITY_SELL_ART
    case ACTIVITY_SELL_ART:
       move(2,0);
       addstr("===Sell Portrait Sketches===");
@@ -259,6 +283,8 @@ void HelpActivities(int activityType)
       addstr(" The cost of art supplies is $1/day. Income depends on art skill. ");
       move(6,0);
       addstr(" This activity trains art. Income is lower if the country is very conservative.");
+// }}}
+// {{{ ACTIVITY_SELL_MUSIC
    case ACTIVITY_SELL_MUSIC:
       move(2,0);
       addstr("===Play Street Music===");
@@ -271,8 +297,10 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" This activity trains music.");
       break;
-
-      // Illegal fund raising
+// }}}
+// }}}
+// {{{ Illegal fund raising
+// {{{ ACTIVITY_SELL_DRUGS
    case ACTIVITY_SELL_DRUGS:
       move(2,0);
       addstr("===Selling Brownies===");
@@ -291,6 +319,8 @@ void HelpActivities(int activityType)
       move(12,0);
       addstr(" the consequences of being convicted will increase as well. ");
       break;
+// }}}
+// {{{ ACTIVITY_PROSTITUTION
    case ACTIVITY_PROSTITUTION:
       move(2,0);
       addstr("===Prostitution===");
@@ -305,6 +335,8 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" Street sense will help you evade being criminalized and caught.");
       break;
+// }}}
+// {{{ ACTIVITY_CCFRAUD
    case ACTIVITY_CCFRAUD:
       move(2,0);
       addstr("===Credit Card Fraud===");
@@ -315,6 +347,8 @@ void HelpActivities(int activityType)
       move(6,0);
       addstr(" you will make. This activity trains computer skill.");
       break;
+// }}}
+// {{{ ACTIVITY_REPAIR_ARMOR
    case ACTIVITY_REPAIR_ARMOR:
       move(2,0);
       addstr("===Repair Clothing===");
@@ -327,6 +361,9 @@ void HelpActivities(int activityType)
       move(8,0);
       addstr(" the clothing and the tailoring skill of the activist.");
       break;
+// }}}
+// }}}
+// {{{ default
    default:
       addstr("===THE GREAT UNKNOWN===");
       move(2,1);
@@ -334,6 +371,7 @@ void HelpActivities(int activityType)
       move(3,1);
       addstr("However, if you want to help us, you could write one, and send it to us!");
       break;
+// }}}
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);

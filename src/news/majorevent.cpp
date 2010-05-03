@@ -86,11 +86,12 @@ void constructeventstory(char *story,short view,char positive)
                case 1:strcat(story,"wife");break;
             }
             strcat(story," and ");
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
                case 0:strcat(story,"two");break;
                case 1:strcat(story,"three");break;
-               case 2:strcat(story,"five");break;
+               case 2:strcat(story,"four");break;
+               case 3:strcat(story,"five");break;
             }
             strcat(story," children.&r");
             break;
@@ -343,7 +344,32 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"a child that swore in class");break;
                case 1:strcat(story,"a child that said a magic spell at her parents");break;
-               case 2:strcat(story,"a child that pushed her older sister");break; // TODO: Add variety, (him/her) (older/younger/twin) (brother/sister)
+               case 2:strcat(story,"a child that ");
+                     switch(LCSrandom(5))
+                     {
+                        case 0:strcat(story,"pushed ");break;
+                        case 1:strcat(story,"hit ");break;
+                        case 2:strcat(story,"slapped ");break;
+                        case 3:strcat(story,"insulted ");break;
+                        case 4:strcat(story,"tripped ");break;
+                     }
+                     switch(LCSrandom(2))
+                     {
+                        case 0:strcat(story,"his ");break;
+                        case 1:strcat(story,"her ");break;
+                     }
+                     switch(LCSrandom(3))
+                     {
+                        case 0:strcat(story,"older ");break;
+                        case 1:strcat(story,"younger ");break;
+                        case 2:strcat(story,"twin ");break;
+                     }
+                     switch(LCSrandom(2))
+                     {
+                        case 0:strcat(story,"brother");break;
+                        case 1:strcat(story,"sister");break;
+                     }
+               break;
             }
             strcat(story," as key evidence of the dark nature of the book.");
             strcat(story,"&r");
@@ -462,7 +488,7 @@ void constructeventstory(char *story,short view,char positive)
                case 0:strcat(story,"and the Grays are going to take over the planet in the End Times");break;
                case 1:strcat(story,"a liberal chupacabra will suck the blood from us like a goat, a goat!, a goat!");break;
                case 2:strcat(story,"I feel translucent rods passing through my body...  it's like making love to the future");break;
-               case 3:strcat(story,"and the greatest living example of a reverse racist is the current president!");break; // lol, Limbaugh
+               case 3:strcat(story,"and the greatest living example of a reverse racist is the current president!");break; // Limbaugh
             }
             strcat(story,"\", a former fan of the show, ");
             char nstr[200],nstr2[200];
