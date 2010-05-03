@@ -1041,6 +1041,8 @@ void assemblesquad(squadst *cursquad)
       addstr("Press a Letter to add or remove a Liberal from the squad.");
       move(23,0);
       addpagestr();
+		move(23,40);
+      addstr("V - View a Liberal");
       move(24,0);
       if(squadsize>0)addstr("Enter - The squad is ready.");
       else addstr("Enter - I need no squad!");
@@ -1094,7 +1096,6 @@ void assemblesquad(squadst *cursquad)
                addstr("                  Have this Liberal procure a wheelchair.                     ");
                refresh();
                getch();
-
                conf=0;
             }
             if(conf)
@@ -1129,6 +1130,36 @@ void assemblesquad(squadst *cursquad)
             }
          }
       }
+		if(c=='v')
+		{
+			move(22,0);
+			set_color(COLOR_WHITE,COLOR_BLACK,1);
+			addstr("Press a Letter to view Liberal details.                          ");
+			move(23,0);
+			addstr("                                                                 ");
+			move(24,0);
+			addstr("                                                                 ");
+			int c2=getch();
+			translategetch(c2);
+			if(c2>='a'&&c2<='s')
+			{
+				int p=page*19+(int)(c2-'a');
+//Create a temporary squad from which to view this character - even if they already have a squad.
+				squadst *oldactivesquad = activesquad;
+			  int oldSquadID = temppool[p]->squadid;
+			  //create a temp squad containing just this liberal
+	  			activesquad=new squadst;
+				strcpy(activesquad->name, "Temporary Squad");
+				activesquad->id=cursquadid;
+				activesquad->squad[0]=temppool[p];
+				temppool[p]->squadid = activesquad->id;
+				fullstatus(0);
+				delete activesquad;
+				activesquad = NULL;
+				temppool[p]->squadid = oldSquadID;
+				activesquad = oldactivesquad;
+			}
+		}
       if(c==10)
       {
          //CHECK IF GOOD
@@ -1204,7 +1235,10 @@ void assemblesquad(squadst *cursquad)
          raw_output(FALSE);
          echo();
          curs_set(1);
-         mvgetstr(24,0,cursquad->name);
+         char tempstr[100];
+         mvgetstr(24,0,tempstr);
+         tempstr[39] = 0;
+         strcpy(cursquad->name, tempstr);
          curs_set(0);
          noecho();
          raw_output(TRUE);
