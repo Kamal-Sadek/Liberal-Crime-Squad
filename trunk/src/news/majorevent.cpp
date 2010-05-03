@@ -279,7 +279,7 @@ void constructeventstory(char *story,short view,char positive)
             lastname(dstr);
             strcat(story,dstr);
             strcat(story,"_and_the_");
-            switch(LCSrandom(6))
+            switch(LCSrandom(7))
             {
                case 0:strcat(story,"Mysterious");break;
                case 1:strcat(story,"Magical");break;
@@ -287,6 +287,7 @@ void constructeventstory(char *story,short view,char positive)
                case 3:strcat(story,"Invisible");break;
                case 4:strcat(story,"Wondrous");break;
                case 5:strcat(story,"Amazing");break;
+               case 6:strcat(story,"Secret");break;
             }
             strcat(story,"_");
             switch(LCSrandom(5))
@@ -311,6 +312,8 @@ void constructeventstory(char *story,short view,char positive)
                case 8:strcat(story,"Iraqi");break;
                case 9:strcat(story,"Bolivian");break;
                case 10:strcat(story,"Columbian");break;
+
+               default:strcat(story,"Elbonian");break; // Dilbert
             }
             strcat(story," author ");
             char c[2];
@@ -340,7 +343,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"a child that swore in class");break;
                case 1:strcat(story,"a child that said a magic spell at her parents");break;
-               case 2:strcat(story,"a child that pushed her older sister");break;
+               case 2:strcat(story,"a child that pushed her older sister");break; // TODO: Add variety, (him/her) (older/younger/twin) (brother/sister)
             }
             strcat(story," as key evidence of the dark nature of the book.");
             strcat(story,"&r");
