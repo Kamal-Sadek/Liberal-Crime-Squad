@@ -777,6 +777,19 @@ enum Activity
    ACTIVITY_TEACH_SURVIVAL,
    ACTIVITY_TEACH_FIGHTING,
    ACTIVITY_TEACH_COVERT,
+   ACTIVITY_STUDY_DEBATING,
+   ACTIVITY_STUDY_LEADERSHIP,
+   ACTIVITY_STUDY_TAILORING,
+   ACTIVITY_STUDY_MARTIAL_ARTS,
+   ACTIVITY_STUDY_DRIVING,
+   ACTIVITY_STUDY_PSYCHOLOGY,
+   ACTIVITY_STUDY_FIRST_AID,
+   ACTIVITY_STUDY_LAW,
+   ACTIVITY_STUDY_DISGUISE,
+   ACTIVITY_STUDY_SCIENCE,
+   ACTIVITY_STUDY_BUSINESS,
+   ACTIVITY_STUDY_COOKING,
+   ACTIVITY_STUDY_DODGEBALL,
    ACTIVITY_CLINIC,
    ACTIVITY_HEAL,
    ACTIVITY_SLEEPER_LIBERAL,
@@ -1194,7 +1207,11 @@ enum GameModes
    GAMEMODE_CHASEFOOT
 };
 
-
+enum WinConditions
+{
+	WINCONDITION_ELITE,
+	WINCONDITION_EASY
+};
 
 enum Views
 {
@@ -1660,6 +1677,8 @@ int getpoolcreature(long id);
 /*
  equipment.cpp
 */
+/* for displaying name of an item*/
+void get_equip_title(char *str2, itemst* item);
 /* review squad equipment */
 void equip(vector<itemst *> &loot,int loc);
 /* lets you pick stuff to stash/retrieve from one location to another */

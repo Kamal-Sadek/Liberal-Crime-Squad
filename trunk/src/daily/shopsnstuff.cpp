@@ -931,6 +931,30 @@ void pawnshop(int loc)
 
          if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
 
+         if(c=='w'||c=='a'||c=='c')
+		 {
+		   move(18,1);
+           set_color(COLOR_WHITE,COLOR_BLACK,1);
+		   switch (c)
+		   {
+		    case 'w':
+				addstr("Really sell all weapons? (Y)es to confirm.           ");
+				break;
+			case 'a':
+				addstr("Really sell all ammo? (Y)es to confirm.              ");
+				break;
+			case 'c':
+				addstr("Really sell all clothes? (Y)es to confirm.           ");
+				break;
+		   }
+		   int c2=getch();
+	       translategetch(c2);
+		   if (c2!='y')
+		   {
+			   c = 0;//no sale
+		   }
+		 }
+
          if((c=='w'||c=='c'||c=='l'||c=='a'||c=='f')&&
             location[activesquad->squad[0]->base]->loot.size()>0)
          {

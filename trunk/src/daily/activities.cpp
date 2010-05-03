@@ -910,6 +910,7 @@ void funds_and_trouble(char &clearformess)
    vector<Creature *> brownies;
    vector<Creature *> prostitutes;
    vector<Creature *> teachers;
+   vector<Creature *> students;
 
    for(int p=0;p<pool.size();p++)
    {
@@ -971,6 +972,21 @@ void funds_and_trouble(char &clearformess)
             hospitalize(clinic,*pool[p]);
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
+         case ACTIVITY_STUDY_DEBATING:
+         case ACTIVITY_STUDY_LEADERSHIP:
+         case ACTIVITY_STUDY_TAILORING:
+         case ACTIVITY_STUDY_MARTIAL_ARTS:
+         case ACTIVITY_STUDY_DRIVING:
+         case ACTIVITY_STUDY_PSYCHOLOGY:
+         case ACTIVITY_STUDY_FIRST_AID:
+         case ACTIVITY_STUDY_LAW:
+         case ACTIVITY_STUDY_DISGUISE:
+         case ACTIVITY_STUDY_SCIENCE:
+         case ACTIVITY_STUDY_BUSINESS:
+         case ACTIVITY_STUDY_COOKING:
+         case ACTIVITY_STUDY_DODGEBALL:
+            students.push_back(pool[p]);
+            break;
          case ACTIVITY_SLEEPER_JOINLCS:
             if(!location[shelter]->siege.siege)
             {
@@ -991,10 +1007,12 @@ void funds_and_trouble(char &clearformess)
       {
          money+=solicit[s]->skill_roll(SKILL_PERSUASION) *
                 solicit[s]->armor.professionalism()+1;
+         solicit[s]->income=money;
 
          solicit[s]->train(SKILL_PERSUASION,max(5-solicit[s]->get_skill(SKILL_PERSUASION),2));
       }
    }
+   int originalmoney = money;
    // Country's alignment dramatically affects effectiveness
    if(publicmood(-1) < 90)
       money /= 2;
@@ -1008,6 +1026,10 @@ void funds_and_trouble(char &clearformess)
    if(solicit.size() > 2)
       money = (money * (solicit.size()-((solicit.size()-1)/2))) / solicit.size();
    ledger.add_funds(money,INCOME_DONATIONS);
+   for(s=0;s<solicit.size();s++)
+   {
+      solicit[s]->income=solicit[s]->income*money/originalmoney;
+   }
 
    //TSHIRTS
    int mood=publicmood(-1);
@@ -1050,6 +1072,7 @@ void funds_and_trouble(char &clearformess)
          if(costofsupplies > money)
             costofsupplies = money;
 
+         tshirts[s]->income=money;
          ledger.add_funds(money,INCOME_TSHIRTS);
          ledger.subtract_funds(costofsupplies,EXPENSE_TSHIRTS);
 
@@ -1099,6 +1122,7 @@ void funds_and_trouble(char &clearformess)
          if(costofsupplies > money)
             costofsupplies = money;
 
+         art[s]->income=money;
          ledger.add_funds(money,INCOME_SKETCHES);
          ledger.subtract_funds(costofsupplies,EXPENSE_SKETCHES);
 
@@ -1121,6 +1145,7 @@ void funds_and_trouble(char &clearformess)
             money /= 2;
 
          ledger.add_funds(money,INCOME_BUSKING);
+         music[s]->income=money;
 
          if(music[s]->weapon.type==WEAPON_GUITAR)
             music[s]->train(SKILL_MUSIC,max(7-music[s]->get_skill(SKILL_MUSIC),4));
@@ -1148,6 +1173,7 @@ void funds_and_trouble(char &clearformess)
       if(law[LAW_DRUGS]==2)
          money/=8;
       
+      brownies[s]->income=money;
       ledger.add_funds(money,INCOME_BROWNIES);
       // Make the sale
       brownies[s]->train(SKILL_PERSUASION,max(4-brownies[s]->get_skill(SKILL_PERSUASION),1));
@@ -1372,6 +1398,10 @@ void funds_and_trouble(char &clearformess)
                fundgain+=LCSrandom(51);
             }
             ledger.add_funds(fundgain,INCOME_CCFRAUD);
+            for(int h=0;h<cc.size();h++)
+            {//doesn't really indicate relative contributions, unfortunately
+			      cc[h]->income = fundgain / cc.size();
+			   }
 
             if(fundgain/100>LCSrandom(hack_skill+1))
             {
@@ -1728,7 +1758,100 @@ void funds_and_trouble(char &clearformess)
       if(!caught)
       {
          ledger.add_funds(fundgain,INCOME_PROSTITUTION);
+         prostitutes[p]->income = fundgain;
       }
+   }
+
+   for(int s=students.size()-1;s>=0;s--)
+   {
+	   if (ledger.get_funds()<60)
+	   {
+		   break;
+	   }
+	   ledger.subtract_funds(60,EXPENSE_TRAINING);
+	   int skill[2] = {-1, -1};
+	   int effectiveness[2] = {20, 20};
+	   switch(students[s]->activity.type)
+	   {
+		  case ACTIVITY_STUDY_DEBATING:
+			  skill[0] = SKILL_PERSUASION;
+			  effectiveness[0] = 16;
+			  skill[1] = SKILL_SEDUCTION;
+			  effectiveness[1] = 4;
+			  break;
+		  case ACTIVITY_STUDY_LEADERSHIP:
+			  skill[0] = SKILL_LEADERSHIP;
+			  effectiveness[0] = 12; //leadership goes up slower...
+			  skill[1] = SKILL_SEDUCTION;
+			  effectiveness[1] = 4;
+			  break;
+		  case ACTIVITY_STUDY_TAILORING:
+			  skill[0] = SKILL_TAILORING;
+			  break;
+		  case ACTIVITY_STUDY_MARTIAL_ARTS:
+			  skill[0] = SKILL_HANDTOHAND;
+			  break;
+		  case ACTIVITY_STUDY_DRIVING:
+			  skill[0] = SKILL_DRIVING;
+			  break;
+		  case ACTIVITY_STUDY_PSYCHOLOGY:
+           skill[0] = SKILL_PSYCHOLOGY;
+			  break;
+		  case ACTIVITY_STUDY_FIRST_AID:
+           skill[0] = SKILL_FIRSTAID;
+			  break;
+		  case ACTIVITY_STUDY_LAW:
+	        skill[0] = SKILL_LAW;
+			  break;
+		  case ACTIVITY_STUDY_DISGUISE:
+           skill[0] = SKILL_DISGUISE;
+			  break;
+		  case ACTIVITY_STUDY_SCIENCE:
+           skill[0] = SKILL_SCIENCE;
+			  break;
+		  case ACTIVITY_STUDY_BUSINESS:
+           skill[0] = SKILL_BUSINESS;
+			  break;
+		  case ACTIVITY_STUDY_COOKING:
+           skill[0] = SKILL_COOKING;
+			  break;
+		  case ACTIVITY_STUDY_DODGEBALL:
+           skill[0] = SKILL_DODGE;
+			  skill[1] = SKILL_THROWING;
+			  effectiveness[0] = 12;
+			  effectiveness[1] = 12;
+			  break;
+	   }
+	   bool worthcontinuing = false;
+	   for (int i = 0; i < 2; i++)
+	   {
+		   if (skill[i] != -1)
+		   {
+			   //gradual decrease in effectiveness as your skill gets higher.
+            effectiveness[i]-=(students[s]->get_skill(skill[i]) * effectiveness[i])/15;
+			   if (effectiveness[i]<1)
+			   {
+               effectiveness[i]=1;
+			   }
+		      students[s]->train(skill[i],effectiveness[i]);
+            if(students[s]->get_skill(skill[i]) < students[s]->skill_cap(skill[i],true))
+			   {
+				   worthcontinuing=true;
+			   }
+		   }
+	   }
+	   if (!worthcontinuing)
+	   {
+		   students[s]->activity.type=ACTIVITY_NONE;
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(students[s]->name);
+         addstr(" has learned as much as ");
+         addstr(students[s]->heshe());
+         addstr(" can.");
+         refresh();
+         getch();
+	   }
    }
 
    //TROUBLE

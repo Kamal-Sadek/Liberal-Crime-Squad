@@ -136,6 +136,49 @@ void setup_newgame(void)
       endgamestate=ENDGAME_CCS_ATTACKS;
       //attitude[VIEW_POLITICALVIOLENCE]=90;
    }
+
+
+
+   clear();
+   while(1)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(4,6);
+      addstr("New Game of Liberal Crime Squad: Your Agenda");
+      move(7,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(wincondition==WINCONDITION_ELITE)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" A - No Compromise Classic - I will make all our laws Elite Liberal!");
+      move(10,0);
+      if(!classicmode)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      if(wincondition==WINCONDITION_EASY)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" B - Democrat Mode - Most laws must be Elite Liberal, some can be Liberal.");
+      move(15,4);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Press any other key to continue...");
+      int c=getch();
+      translategetch(c);
+      if(c=='a')
+      {
+         wincondition=WINCONDITION_ELITE;
+         continue;
+      }
+      if(c=='b')
+      {
+         wincondition=WINCONDITION_EASY;
+         continue;
+      }
+      break;
+   }
 }
 
 enum recruits

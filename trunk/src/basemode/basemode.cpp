@@ -522,20 +522,28 @@ void mode_base(void)
          move(20,40);
          addstr("R - Review Assets and Form Squads");
 
+
          if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,3);
-       if(partysize>0 && !sieged)
-         addstr("O - Reorder squad");
+         move(8,30);
+         if(partysize>0 && !sieged)
+            addstr("O - Reorder");
 
+         if (activesquad)
+         {
+            move(8,1);
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr(activesquad->name);
+            addstr("-"); //in case of overlap, at least make it clear where the name ends.
+         }
          if(squad.size()>1||(activesquad==NULL&&squad.size()>0))set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,40);
+         move(8,43);
          addstr("TAB - Next Squad");
 
          if(safenumber>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,60);
+         move(8,62);
          addstr("Z - Next Location");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);

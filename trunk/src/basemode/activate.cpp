@@ -157,6 +157,129 @@ void activate(void)
    }while(1);
 }
 
+int classlist = 0;
+void listclasses(Creature *cr)
+{
+     set_color(COLOR_WHITE,COLOR_BLACK,0);
+     move(10,40);
+     addstr("Classes cost $60 a day. Study what?");
+    if (classlist == 0)
+    {
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
+       move(12,40);
+       addstr("1 - Debating");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LEADERSHIP);
+       move(13,40);
+       addstr("2 - Leadership");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TAILORING);
+       move(14,40);
+       addstr("3 - Tailoring");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
+       move(15,40);
+       addstr("4 - Kung fu");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
+       move(16,40);
+       addstr("5 - Drivers ed.");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,0);
+       move(17,40);
+       addstr("6 - Other classes");
+    }
+    else if (classlist == 1)
+    {
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
+       move(12,40);
+       addstr("1 - Psychology");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
+       move(13,40);
+       addstr("2 - First aid");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
+       move(14,40);
+       addstr("3 - Law");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
+       move(15,40);
+       addstr("4 - Acting");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
+       move(16,40);
+       addstr("5 - Nuclear physics");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
+       move(17,40);
+       addstr("6 - Other classes");
+    }
+    else if (classlist == 2)
+    {
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
+       move(12,40);
+       addstr("1 - Business & finance");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_COOKING);
+       move(13,40);
+       addstr("2 - Cooking");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DODGEBALL);
+       move(14,40);
+       addstr("3 - Dodgeball");
+
+//possible additions: music, seduction technique, teacher training, guns (if gun control is conservative), writing
+
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
+       move(17,40);
+       addstr("6 - Other classes");
+    }
+}
+
+void updateclasschoice(Creature *cr, char choice)
+{
+   if (choice == '6')
+   {
+      classlist = (classlist + 1) % 3;
+      listclasses(cr);
+   }
+   else
+   {
+      if (classlist == 0)
+      {
+         switch(choice)
+         {
+            case '1':cr->activity.type=ACTIVITY_STUDY_DEBATING;break;
+            case '2':cr->activity.type=ACTIVITY_STUDY_LEADERSHIP;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_TAILORING;break;
+            case '4':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
+            case '5':cr->activity.type=ACTIVITY_STUDY_DRIVING;break;
+         }
+      }
+      else if (classlist == 1)
+      {
+         switch(choice)
+         {
+            case '1':cr->activity.type=ACTIVITY_STUDY_PSYCHOLOGY;break;
+            case '2':cr->activity.type=ACTIVITY_STUDY_FIRST_AID;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_LAW;break;
+            case '4':cr->activity.type=ACTIVITY_STUDY_DISGUISE;break;
+            case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
+         }
+      }
+      else if (classlist == 2)
+      {
+         switch(choice)
+         {
+            case '1':cr->activity.type=ACTIVITY_STUDY_BUSINESS;break;
+            case '2':cr->activity.type=ACTIVITY_STUDY_COOKING;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_DODGEBALL;break;
+         }
+      }
+      listclasses(cr);
+   }
+}
 
 void activate(Creature *cr)
 {
@@ -178,9 +301,21 @@ void activate(Creature *cr)
       printfunds(0,1,"Money: ");
 
       move(0,0);
-      addstr("Taking Action:   What will ");
-      addstr(cr->name);
-      addstr(" be doing today?");
+     if (cr->income)
+     {
+        addstr(cr->name);
+        addstr(" made $");
+        char num[20];
+        itoa(cr->income,num,10);
+        addstr(num);
+        addstr(" yesterday. What now?");
+     }
+     else
+     {
+        addstr("Taking Action: What will ");
+        addstr(cr->name);
+        addstr(" be doing today?");
+     }
 
       printcreatureinfo(cr);
 
@@ -202,10 +337,6 @@ void activate(Creature *cr)
       move(13,1);
       addstr("D - Make/Repair Clothing");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,state=='e');
-      move(14,1);
-      addstr("E - Teaching Other Liberals");
-
       if(cr->get_skill(SKILL_FIRSTAID)!=0)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
@@ -214,10 +345,10 @@ void activate(Creature *cr)
       {
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       }
-      move(15,1);
+      move(14,1);
       addstr("H - Heal Liberals");
 
-      move(16,1);
+      move(15,1);
       if(cr->canwalk())
       {
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS&&state==0);
@@ -230,20 +361,51 @@ void activate(Creature *cr)
          addstr("S - Procuring a Wheelchair");
       }
 
-      if(clinictime(*cr))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
-      else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(18,1);
-      addstr("M - Move to the Free CLINIC");
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='t');
+      move(16,1);
+      addstr("T - Teaching Other Liberals");
 
-      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
+     if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(17,1);
       addstr("I - Tend to a Conservative hostage");
+
+      if(clinictime(*cr))
+     {
+        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
+        move(18,1);
+        addstr("M - Move to the Free CLINIC");
+     }
+      else
+     {
+        set_color(COLOR_WHITE,COLOR_BLACK,state=='l');
+        move(18,1);
+        addstr("L - Learn in the University District");
+     }
+      
 
       if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_BURY&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(19,1);
       addstr("Z - Dispose of bodies");
+
+     siegest *siege=NULL;
+      if(selectedsiege!=-1)siege=&location[selectedsiege]->siege;
+      if(activesquad!=NULL)siege=&location[activesquad->squad[0]->location]->siege;
+      char sieged=0;
+      if(siege!=NULL)sieged=siege->siege;
+      char underattack=0;
+      if(siege!=NULL)
+      {
+         if(sieged)underattack=siege->underattack;
+      }
+
+     if (!sieged)
+     {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+        move(20,1);
+        addstr("E - Equip this Liberal");
+     }
 
       if(state == 'a' || state == 'b' || state == 'c' ||state == 'd' )
       {
@@ -257,7 +419,7 @@ void activate(Creature *cr)
       addstr("Enter - Confirm Selection");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,1);
+      move(21,1);
       addstr("X - Nothing for Now");
 
       switch(state)
@@ -345,7 +507,7 @@ void activate(Creature *cr)
          move(11,40);
          addstr("2 - Repair Clothing");
          break;
-      case 'e':
+      case 't':
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(10,40);
          addstr("Teach Liberals About What?");
@@ -369,6 +531,10 @@ void activate(Creature *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
          move(16,40);
          addstr("5 - Covert Actions");
+       break;
+     case 'l':
+       listclasses(cr);
+       break;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -377,9 +543,9 @@ void activate(Creature *cr)
       case ACTIVITY_COMMUNITYSERVICE:
          move(22,3);
          addstr(cr->name);
-         addstr(" will help the elderly, local library, anything that is");
-         move(23,3);
-         addstr("liberal.");
+         addstr(" will help the elderly, local library, anything");
+         move(23,1);
+         addstr("  that is liberal.");
          break;
       case ACTIVITY_TROUBLE:
          move(22,3);
@@ -389,32 +555,32 @@ void activate(Creature *cr)
       case ACTIVITY_GRAFFITI:
          move(22,3);
          addstr(cr->name);
-         addstr(" will spray political graffiti. Art and Heart will enhance the");
-         move(23,3);
-         addstr("liberal effect.");
+         addstr(" will spray political graffiti. Art and Heart will");
+         move(23,1);
+         addstr("  enhance the liberal effect.");
          break;
       case ACTIVITY_POLLS:
          move(22,3);
          addstr(cr->name);
-         addstr(" will search the internet for public opinion polls. Polls will");
-         move(23,3);
-         addstr("give an idea on how the liberal agenda is going. Computers and intelligence");
-         move(24,3);
-         addstr("will provide better results.");
+         addstr(" will search the internet for public opinion polls.");
+         move(23,1);
+         addstr("  Polls will give an idea on how the liberal agenda is going. Computers");
+         move(24,1);
+         addstr("  and intelligence will provide better results.");
          break;
       case ACTIVITY_DOS_ATTACKS:
          move(22,3);
          addstr(cr->name);
-         addstr(" will harass Conservative websites. Computer skill will give");
-         move(23,3);
-         addstr("greater effect.");
+         addstr(" will harass Conservative websites. Computer skill");
+         move(23,1);
+         addstr("  will give greater effect.");
          break;
       case ACTIVITY_HACKING:
          move(22,3);
          addstr(cr->name);
-         addstr(" will hack into private Conservative networks. Computer skill");
-         move(23,3);
-         addstr("and intelligence will give greater effect.");
+         addstr(" will hack into private Conservative networks.");
+         move(23,1);
+         addstr("  Computer skill and intelligence will give greater effect.");
          break;
       case ACTIVITY_WRITE_LETTERS:
          move(22,3);
@@ -430,16 +596,16 @@ void activate(Creature *cr)
          move(22,3);
          addstr(cr->name);
          addstr(" will walk around and ask for donations to the LCS.");
-         move(23,3);
-         addstr("Based on persuasion, public's view on the cause, and how well dressed the");
-         move(24,3);
-         addstr("activist is.");
+         move(23,1);
+         addstr("  Based on persuasion, public's view on the cause, and how well dressed the");
+         move(24,1);
+         addstr("  activist is.");
          break;
       case ACTIVITY_SELL_TSHIRTS:
          move(22,3);
          addstr(cr->name);
          if(cr->get_skill(SKILL_TAILORING)>4)
-            addstr(" will embroid shirts and sell them on the street.");
+            addstr(" will embroider shirts and sell them on the street.");
          else
             addstr(" will tie-dye T-shirts and sell them on the street.");
          break;
@@ -452,15 +618,15 @@ void activate(Creature *cr)
          move(22,3);
          addstr(cr->name);
          addstr(" will go out into the streets and drum on buckets,");
-         move(23,3);
-         addstr("or play guitar if one is equipped.");
+         move(23,1);
+         addstr("  or play guitar if one is equipped.");
          break;
       case ACTIVITY_SELL_DRUGS:
          move(22,3);
          addstr(cr->name);
          addstr(" will bake and sell special adult brownies that open");
          move(23,1);
-         addstr("magical shimmering doorways to the adamantium pits.");
+         addstr("  magical shimmering doorways to the adamantium pits.");
          break;
       case ACTIVITY_PROSTITUTION:
          move(22,3);
@@ -483,7 +649,7 @@ void activate(Creature *cr)
          move(22,1);
          addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion,");
          move(23,1);
-         addstr("Business, Psychology");
+         addstr("  Business, Psychology");
          move(24,1);
          addstr("  Classes cost up to $40/day to conduct. All Liberals able will attend.");
          break;
@@ -501,7 +667,7 @@ void activate(Creature *cr)
          move(22,1);
          addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
          move(23,1);
-         addstr("Tailoring, Martial Arts");
+         addstr("  Tailoring, Martial Arts");
          move(24,1);
          addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
          break;
@@ -519,9 +685,28 @@ void activate(Creature *cr)
          move(22,1);
          addstr("  Skills Trained: Persuasion, Security, Disguise, Stealth, Seduction,");
          move(23,1);
-         addstr("Psychology");
+         addstr("  Psychology");
          move(24,1);
          addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
+         break;
+      case ACTIVITY_STUDY_DEBATING:
+      case ACTIVITY_STUDY_LEADERSHIP:
+      case ACTIVITY_STUDY_TAILORING:
+      case ACTIVITY_STUDY_MARTIAL_ARTS:
+      case ACTIVITY_STUDY_DRIVING:
+      case ACTIVITY_STUDY_PSYCHOLOGY:
+      case ACTIVITY_STUDY_FIRST_AID:
+      case ACTIVITY_STUDY_LAW:
+      case ACTIVITY_STUDY_DISGUISE:
+      case ACTIVITY_STUDY_SCIENCE:
+      case ACTIVITY_STUDY_BUSINESS:
+      case ACTIVITY_STUDY_COOKING:
+      case ACTIVITY_STUDY_DODGEBALL:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will attend classes in the University District");
+         move(23,1);
+         addstr("  at a cost of $60 a day.");
          break;
       }
 
@@ -650,7 +835,10 @@ void activate(Creature *cr)
             default:cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
             }
             break;
-         case 'e':
+       case 'l':
+          updateclasschoice(cr, choice);
+          break;
+         case 't':
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_TEACH_GENERALED;break;
@@ -728,6 +916,23 @@ void activate(Creature *cr)
          select_tendhostage(cr);
          if(cr->activity.type==ACTIVITY_HOSTAGETENDING)break;
          else cr->activity=oact;
+      }
+      if (!sieged && c == 'e')
+      {
+         //create a temp squad containing just this liberal
+         int oldsquadid = cr->squadid;
+         squadst *oldactivesquad = activesquad;
+         activesquad=new squadst;
+         strcpy(activesquad->name, "Temporary Squad");
+         activesquad->id=cursquadid;
+         activesquad->squad[0]=cr;
+         cr->squadid = activesquad->id;
+         //go to equipment screen
+         equip(location[activesquad->squad[0]->location]->loot,-1);
+         //once you're done, restore original squad status.
+         delete activesquad;
+         activesquad = oldactivesquad;
+         cr->squadid = oldsquadid;
       }
       if(c=='s')
       {

@@ -538,7 +538,14 @@ char liberalagenda(char won)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(23,0);
-         addstr("The country has achieved Elite Liberal status.");
+		 if(wincondition==WINCONDITION_EASY)
+		 {
+			addstr("The country has achieved Liberal status!");
+		 }
+		 else
+		 {
+			 addstr("The country has achieved Elite Liberal status!");
+		 }
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
@@ -587,7 +594,7 @@ char liberalagenda(char won)
          //move(23,0);
          //addstr("Once these are Green, the country will have achieved Elite Liberal status.");
          move(24,0);
-         addstr("Press D to disband and wait.  Press any other key to consider the situation.");
+         addstr("Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
 
          refresh();
          int c=getch();

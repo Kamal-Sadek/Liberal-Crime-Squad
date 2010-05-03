@@ -442,6 +442,12 @@ void initsite(locationst &loc)
                     case SITE_BUSINESS_VEGANCOOP:
                     case SITE_BUSINESS_INTERNETCAFE:
                     case SITE_INDUSTRY_WAREHOUSE:
+//seem to be weird things happening with loot in CCS bases - would the CCS call the policeon you for stealing?
+//and shouldn't you be able to loot everything from there anyway once you've won?
+//removing the loot.
+					case SITE_BUSINESS_BARANDGRILL:
+					case SITE_OUTDOOR_BUNKER:
+					case SITE_RESIDENTIAL_BOMBSHELTER:
                        break;
                     default:
                        levelmap[x][y][z].flag|=SITEBLOCK_LOOT;

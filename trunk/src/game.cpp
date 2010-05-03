@@ -117,7 +117,7 @@ Creature encounter[ENCMAX];
 
 char loaded=0;
 
-int mode=GAMEMODE_TITLE;
+short mode=GAMEMODE_TITLE;
 
 short offended_corps=0;
 short offended_cia=0;
@@ -205,6 +205,8 @@ int day=1;
 class Ledger ledger;
 
 short party_status=-1;
+
+short wincondition=WINCONDITION_ELITE;
 
 char endgamestate=ENDGAME_NONE;
 char ccs_kills=0;

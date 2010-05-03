@@ -369,19 +369,80 @@ char completedate(datest &d,int p,char &clearformess)
    refresh();
    getch();
 
-   if(d.date.size()>1&&!LCSrandom(5))
+   char datestr[128];
+   if(d.date.size()>1&&
+	   !LCSrandom( (d.date.size() > 2) ? 4 : 6))
    {
-      move(2,0);
-      addstr("Unfortunately, they all know each other and had been discussing");
-      move(3,0);
-      addstr(pool[p]->name);
-      addstr(".  An ambush was set for the lying dog...");
-      refresh();
-      getch();
+	  switch (LCSrandom(3))
+	  {
+	  case 0:
+		  move(2,0);
+		  if (d.date.size()>2)
+		  {
+			 addstr("Unfortunately, they all know each other and had been discussing");
+		  }
+		  else
+		  {
+		     addstr("Unfortunately, they know each other and had been discussing");
+		  }
+		  move(3,0);
+		  addstr(pool[p]->name);
+		  addstr(".  An ambush was set for the lying dog...");
+		  refresh();
+		  getch();
+		  break;
+	  case 1:
+		  move(2,0);
+		  if (d.date.size()>2)
+		  {
+		     addstr("Unfortunately, they all turn up at the same time.");
+		  }
+		  else
+		  {
+		     addstr("Unfortunately, they turn up at the same time.");
+		  }
+		  move(3,0);
+		  addstr("Uh oh...");
+		  refresh();
+		  getch();
+		  break;
+	  default:
+		  move(2,0);
+		  addstr(pool[p]->name);
+		  if (d.date.size()>2)
+		  {
+			 sprintf(datestr, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size());
+			 addstr(datestr);
+		  }
+		  else
+		  {
+		     addstr(" mixes up the names of ");
+			 addstr(d.date[0]->name);
+			 addstr(" and ");
+			 addstr(d.date[1]->name);
+		  }
+		  move(3,0);
+		  addstr("Things go downhill fast.");
+		  refresh();
+		  getch();
+		  break;
+	  }
 
       move(5,0);
       addstr(pool[p]->name);
-      addstr(" has failed the Liberal Crime Squad.");
+      //addstr(" has failed the Liberal Crime Squad."); //in combination with the word 'ambush', this made it sound like getting beaten to death.
+	  switch (LCSrandom(3))
+	  {
+	  case 0:
+	     addstr(" is publically humiliated.");
+		 break;
+	  case 1:
+	     addstr(" runs away.");
+		 break;
+	  default:
+	     addstr(" escapes through the bathroom window.");
+		 break;
+	  }
       addjuice(*pool[p],-5);
       refresh();
       getch();
@@ -447,6 +508,18 @@ char completedate(datest &d,int p,char &clearformess)
          addstr("E - Just kidnap the Conservative bitch.");
       }
 
+  	  int thingsincommon = 0;
+	  for(int s=0;s<SKILLNUM;s++)
+      {
+         if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
+         {
+//Has a skill that is between double and half the same skill of the other person on the date.
+			 if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2 && d.date[e]->get_skill(s)*2>=pool[p]->get_skill(s))
+			 {
+				 thingsincommon++;
+			 }
+         }
+      }
       do
       {
          refresh();
@@ -459,6 +532,7 @@ char completedate(datest &d,int p,char &clearformess)
             troll+=troll*(d.date[e]->juice/100);
 
          char test=0;
+		   aroll += thingsincommon * 3;
          if(c=='a'&&ledger.get_funds()>=100&&!pool[p]->clinic)
          {
             ledger.subtract_funds(100,EXPENSE_DATING);
