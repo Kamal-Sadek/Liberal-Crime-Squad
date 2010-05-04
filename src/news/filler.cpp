@@ -4,7 +4,7 @@ void constructfillerstory(void)
 {
    strcpy(story,"");
 
-      switch(LCSrandom(7)
+      switch(LCSrandom(5)
       {
 
         case 0://VIEW_GUNS:
@@ -194,8 +194,10 @@ void constructfillerstory(void)
             }
             strcat(story," with the guard in a prison tower.  ");
             strcat(story,"Authorities locked down the prison and ");
-            strcat(story,"attempted to negotiate by phone for 13 days, "); // TODO: 5-22 days.
-            strcat(story,"but talks were cut short when ");
+            strcat(story,"attempted to negotiate by phone for ");
+            int numdays = LCSrandom(18)+5;
+            strcat(story,numdays);
+            strcat(story," days, but talks were cut short when ");
             strcat(story,dstr2);
             strcat(story," reportedly screamed into the receiver \"");
             switch(LCSrandom(3))
@@ -272,55 +274,7 @@ void constructfillerstory(void)
                          "According to police sources, the raid became necessary after the kidnappers "
                          "revealed they had been executing twenty people at the end of each day of "
                          "non-compliance with their demands."); // XXX: Wait... We can do this? (Multiple lines with one strcat()) -- LK
-            strcat(story,"&r");
-            break;
-         }
-         case 6://VIEW_DEATHPENALTY:
-         {
-            cityname(story);
-            strcat(story," - Perhaps parents can rest easier tonight.  ");
-            strcat(story,"The authorities have apprehended their primary suspect in the ");
-            strcat(story,"string of brutal child killings that has kept everyone in the area on edge, ");
-            strcat(story,"according to a spokesperson for the police department here.  ");
-            char dstr[200],dstr2[200],dstr3[200];
-            firstname(dstr);firstname(dstr2);lastname(dstr3);
-            strcat(story,dstr);
-            strcat(story," ");
-            strcat(story,dstr2);
-            strcat(story," ");
-            strcat(story,dstr3);
-            strcat(story," was detained yesterday afternoon, reportedly in possession of ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"pieces of another victim");break;
-               case 1:strcat(story,"bloody toys");break;
-               case 2:strcat(story,"a child's clothing stained with DNA evidence");break;
-               case 3:strcat(story,"seven junior high school yearbooks");break;
-               case 4:strcat(story,"two small backpacks");break;
-            }
-            strcat(story,".  Over twenty children in the past two years have gone missing, ");
-            strcat(story,"only to turn up later dead and ");// TODO: C+ freespeech = [with bad things done to them]
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"carved with satanic symbols");break;
-               case 1:strcat(story,"sexually mutilated");break;
-               case 2:strcat(story,"missing all of their teeth");break;
-               case 3:strcat(story,"missing all of their fingers");break;
-               case 4:strcat(story,"without eyes");break;
-            }
-            strcat(story,".  Sources say that the police got a break in the case when ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"a victim called 911 just prior to being slain while still on the phone");break;
-               case 1:strcat(story,"the suspect allegedly carved an address into one of the bodies");break;
-               case 2:strcat(story,"an eye witness allegedly spotted the suspect luring a victim into a car");break;
-               case 3:strcat(story,"a blood trail was found on a road that led them to the suspect's car trunk");break;
-               case 4:strcat(story,"they found a victim in a ditch, still clinging to life");break;
-            }
-            strcat(story,".");
-            strcat(story,"&r");
-            strcat(story,"   The district attorney's office has already repeatedly said it will be ");
-            strcat(story,"seeking the death penalty in this case.");
+                                                                //      Also, is there any reason why this isn't more common here and in majorevent.cpp?
             strcat(story,"&r");
             break;
          }
