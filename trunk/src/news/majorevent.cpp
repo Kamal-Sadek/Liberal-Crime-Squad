@@ -133,7 +133,7 @@ void constructeventstory(char *story,short view,char positive)
                       if(law[LAW_FREESPEECH]==-2)strcat(story,"throwing [juice boxes]");
                       else strcat(story,"throwing beer bottles");break;
                case 1:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[peeing] out the window");
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[relieving themselves] out the window");
                       else if(law[LAW_FREESPEECH]==2)strcat(story,"pissing out the window");
                       else strcat(story,"urinating out the window");break;
                case 2:strcat(story,"taking swipes");break;
@@ -488,7 +488,11 @@ void constructeventstory(char *story,short view,char positive)
                case 0:strcat(story,"and the Grays are going to take over the planet in the End Times");break;
                case 1:strcat(story,"a liberal chupacabra will suck the blood from us like a goat, a goat!, a goat!");break;
                case 2:strcat(story,"I feel translucent rods passing through my body...  it's like making love to the future");break;
-               case 3:strcat(story,"and the greatest living example of a reverse racist is the current president!");break; // Limbaugh
+               case 3:
+                      strcat(story,"and the greatest living example of a reverse racist is the ");
+                      if(exec[EXEC_PRESIDENT]==-2)strcat(story,"current president!"); // Limbaugh
+                      else strcat(story,"liberal media establishment!");
+               break;
             }
             strcat(story,"\", a former fan of the show, ");
             char nstr[200],nstr2[200];
@@ -528,10 +532,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," issued an apology later in the program, but ");
             strcat(story,"the damage might already be done.  ");
             strcat(story,"According to a poll completed yesterday, ");
-             strcat(story,"fully half of the host's most loyal supporters ");                        // XXX How many of them switch
-            strcat(story,"have decided to leave the program for saner ");                        // XXX should depend on
-            strcat(story,"pastures.  Of these, many said that they would be switching over ");        // XXX [LAW_FREESPEECH]
-            strcat(story,"to the FM band.");                                                        //                 -- LK
+             strcat(story,"fully half of the host's most loyal supporters ");                    // XXX How many of them switch should
+            strcat(story,"have decided to leave the program for saner ");                        //     depend on [LAW_FREESPEECH]
+            strcat(story,"pastures.  Of these, many said that they would be switching over ");
+            strcat(story,"to the FM band.");
             strcat(story,"&r");
             break;
          }
@@ -565,14 +569,19 @@ void constructeventstory(char *story,short view,char positive)
                case 4:strcat(story,"two small backpacks");break;
             }
             strcat(story,".  Over twenty children in the past two years have gone missing, ");
-            strcat(story,"only to turn up later dead and ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"carved with satanic symbols");break;
-               case 1:strcat(story,"sexually mutilated");break;
-               case 2:strcat(story,"missing all of their teeth");break;
-               case 3:strcat(story,"missing all of their fingers");break;
-               case 4:strcat(story,"without eyes");break;
+            strcat(story,"only to turn up later");
+            if(law[LAW_FREESPEECH]==-2) {
+               strcat(story," [in a better place]");
+            } else {
+               strcat(story," dead and ");
+               switch(LCSrandom(5))
+               {
+                  case 0:strcat(story,"carved with satanic symbols");break;
+                  case 1:strcat(story,"sexually mutilated");break;
+                  case 2:strcat(story,"missing all of their teeth");break;
+                  case 3:strcat(story,"missing all of their fingers");break;
+                  case 4:strcat(story,"without eyes");break;
+               }
             }
             strcat(story,".  Sources say that the police got a break in the case when ");
             switch(LCSrandom(5))
