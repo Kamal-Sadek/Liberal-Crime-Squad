@@ -636,7 +636,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             case 4:smood=100;break;  // California (Always L+)
             case 9:smood-=10;break;  // Georgia
             case 11:smood-=10;break; // Idaho
-            case 20:smood+=25;break; // Massachusetts
+            case 20:smood=100;break; // Massachusetts (Always L+, even though this is an unfair advantage, SEE: McGovern)
             case 23:smood-=10;break; // Mississippi
             case 39:smood-=10;break; // South Carolina
             case 42:smood-=10;break; // Texas

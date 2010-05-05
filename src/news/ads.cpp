@@ -189,7 +189,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
              strcat(ad,"&cCall Today&r");
              break;
            }
-         case 2://XXX: Should this only be if abortion is legal?
+         case 2:
             strcpy(ad,"&cAbortion Clinic&r&r");
             strcat(ad,"&cWalk-in, No&r");
             strcat(ad,"&cQuestions Asked&r");

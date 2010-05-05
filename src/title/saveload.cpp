@@ -36,7 +36,7 @@ void save(void)
    savegame("save.dat");
 }
 
-
+// TODO: It would be really cool to be able to "export" characters.
 
 /* saves the game to autosave.dat */
 void autosave(void)

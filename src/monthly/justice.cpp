@@ -140,6 +140,8 @@ void trial(Creature &g)
       // The above is already respected by LCS; treason occurs from exposing
       // intelligence secrets, and illegal immigrants are not taken to trial.
       //    - Jonathan S. Fox
+
+      // Oh, right. Forgot about that. Even if the law is L+?
       if(breaker[LAWFLAG_TREASON])
       {
          if(g.crimes_suspected[LAWFLAG_TREASON]>1)
@@ -276,6 +278,7 @@ void trial(Creature &g)
       else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
       {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
                                       // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
+                                      // Possibly people you accidentally kill when shooting at conservatives. -- LK
          if(g.crimes_suspected[LAWFLAG_MURDER]>1) 
          {
             char str[10];
@@ -357,8 +360,8 @@ void trial(Creature &g)
             addstr(str);
             addstr(" counts of ");
          }
-         addstr("grand theft auto");//XXX: If chase lasts more than 20 `turns` then
-         breaker[LAWFLAG_CARTHEFT]=0;//XXX: this should be `Grand Theft Auto`
+         addstr("grand theft auto");// If chase lasts more than 20 `turns` then
+         breaker[LAWFLAG_CARTHEFT]=0;// this should be `Grand Theft Auto`
       }                              //                 -- LK
                                           // We'll just make it grand theft auto anyway :) -Fox
       else if(breaker[LAWFLAG_CCFRAUD])
@@ -1026,6 +1029,7 @@ void trial(Creature &g)
       }
    }
    //GUILTY PLEA
+   // XXX: How about "nolo" (Nolo contendere) -- LK
    else
    {
       erase();
