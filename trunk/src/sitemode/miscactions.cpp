@@ -494,7 +494,8 @@ char radio_broadcast(void)
       case VIEW_POLLUTION:              addstr("does a show on industrial pollution.");break;
       case VIEW_CORPORATECULTURE:       addstr("jokes about corporate culture.");break;
       case VIEW_CEOSALARY:              addstr("gives examples of CEO excesses.");break;
-      case VIEW_WOMEN:                  addstr("discusses abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+      case VIEW_WOMEN:                  addstr("discusses abortion.");break;// "Performs an abortion live on the air."
+                                                                            // Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
       case VIEW_CIVILRIGHTS:            addstr("debates affirmative action.");break;
       case VIEW_DRUGS:                  addstr("has a frank talk about drugs.");break;
       case VIEW_IMMIGRATION:            addstr("examines the issue of immigration.");break;
@@ -600,7 +601,8 @@ char radio_broadcast(void)
                   case VIEW_POLLUTION:              addstr("do a show on industrial pollution.");break;
                   case VIEW_CORPORATECULTURE:       addstr("joke about corporate culture.");break;
                   case VIEW_CEOSALARY:              addstr("give examples of CEO excesses.");break;
-                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;// "Performs an abortion live on the air."
+                                                                                      // Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
                   case VIEW_CIVILRIGHTS:            addstr("debate affirmative action.");break;
                   case VIEW_DRUGS:                  addstr("have a frank talk about drugs.");break;
                   case VIEW_IMMIGRATION:            addstr("examine the issue of immigration.");break;
@@ -758,7 +760,8 @@ char news_broadcast(void)
       case VIEW_POLLUTION:              addstr("does a show on industrial pollution.");break;
       case VIEW_CORPORATECULTURE:       addstr("jokes about corporate culture.");break;
       case VIEW_CEOSALARY:              addstr("gives examples of CEO excesses.");break;
-      case VIEW_WOMEN:                  addstr("discusses abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+      case VIEW_WOMEN:                  addstr("discusses abortion.");break;// "Performs an abortion live on the air."
+                                                                            // Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
       case VIEW_CIVILRIGHTS:            addstr("debates affirmative action.");break;
       case VIEW_DRUGS:                  addstr("has a frank talk about drugs.");break;
       case VIEW_IMMIGRATION:            addstr("examines the issue of immigration.");break;
@@ -862,7 +865,8 @@ char news_broadcast(void)
                   case VIEW_POLLUTION:              addstr("do a show on industrial pollution.");break;
                   case VIEW_CORPORATECULTURE:       addstr("joke about corporate culture.");break;
                   case VIEW_CEOSALARY:              addstr("give examples of CEO excesses.");break;
-                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;//XXX: "performs an abortion live on the air." Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
+                  case VIEW_WOMEN:                  addstr("discuss abortion.");break;// "Performs an abortion live on the air."
+                                                                                      // Get [LAWFLAG_SPEECH], [LAWFLAG_MURDER], [LAWFLAG_DISTURBANCE] -- LK
                   case VIEW_CIVILRIGHTS:            addstr("debate affirmative action.");break;
                   case VIEW_DRUGS:                  addstr("have a frank talk about drugs.");break;
                   case VIEW_IMMIGRATION:            addstr("examine the issue of immigration.");break;

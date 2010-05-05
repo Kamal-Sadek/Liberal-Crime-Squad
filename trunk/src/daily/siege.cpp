@@ -38,6 +38,10 @@ make it less likely to be raided based on:
         - what action each sleeper is doing (promoting liberalism decreases chance while promoting conservatism increases chance)
         - what the sleeper does for a living (police officers are more influential than janitors, for instance)
 
+There are a few bugs regarding sieges, including:
+        - After coming back after disbanding, ALL sleepers end up in the homeless shelter, and will be killed/arrested during raids, however, they still
+           can only be controlled as sleepers, meaning, no moving them out of the homeless shelter.
+
 make it more likely to be raided:
         - when a liberal hacks or steals credit cards.
         - dead bodies in the base. [DONE]

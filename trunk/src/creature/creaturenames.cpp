@@ -950,10 +950,53 @@ void firstname(char *str, char gender)
       case 49:strcat(str,"Ryan");break;//}}}
       }
    }
-}
-
-
 //}}}
+/*   else if(nametable == GENDER_MALE_IMMIGRANT)
+// {{{ Illegal Immigrants
+   {
+      switch(roll)
+      {
+         case 0:strcat(str,"Alejandro");break;
+         case 1:strcat(str,"Antonio");break;
+         case 2:strcat(str,"Beltran");break;
+         case 3:strcat(str,"Carlos");break;
+         case 4:strcat(str,"Diego");break;
+         case 5:strcat(str,"Eduardo");break;
+         case 6:strcat(str,"Enrique");break;
+         case 7:strcat(str,"Fernando");break;
+         case 8:strcat(str,"Jacobo");break;
+         case 9:strcat(str,"Javier");break;
+         case 10:strcat(str,"Jorge");break;
+         case 11:strcat(str,"Juan");break;
+         case 12:strcat(str,"Luis");break;
+         case 13:strcat(str,"Matteo");break;
+         case 14:strcat(str,"Pablo");break;
+         case 15:strcat(str,"Pedro");break;
+         case 16:strcat(str,"Raul");break;
+         case 17:strcat(str,"Ricardo");break;
+      }
+   }
+// }}}
+   else if(nametable == GENDER_FEMALE_IMMIGRANT)
+// {{{ Illegal Immigrants, Female
+   {     
+      switch(roll)
+      {
+         case 0:strcat(str,"Daniela");break;
+         case 1:strcat(str,"Denielle");break;
+         case 2:strcat(str,"Esmerelda");break;
+         case 3:strcat(str,"Gabrielle");break;
+         case 4:strcat(str,"Isabel");break;
+         case 5:strcat(str,"Isabella");break;
+         case 6:strcat(str,"Isabelle");break;
+         case 7:strcat(str,"Maria");break;
+         case 8:strcat(str,"Natalia");break;
+         case 9:strcat(str,"Roberta");break;
+      }
+   }
+// }}}
+*/
+}
 /* gets a random last name */
 void lastname(char *str)
 //{{{ Last Name

@@ -881,48 +881,48 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   strcat(story,"&r");
                }
-			   if (!ccs)
-			   {
-				  if (!LCSrandom(8))
-				  {
-					  if(crime[CRIME_TAGGING])
-					  {
-						 strcat(story,"  The slogan, \"");
-						 strcat(story,slogan);
-						 strcat(story,"\" was found painted on the walls.");
-					  }
-					  else
-					  {
-						  switch (LCSrandom(3))
-						  {
-						  case 0:
-							 if (ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
-							 {
-							    strcat(story,"  One uttered the words, \"");
-   				                strcat(story,slogan);
-					            strcat(story,"\" before passing out.");
-							 }
-							 else
-							 {
-								strcat(story,"  As they left, they shouted, \"");
-   				                strcat(story,slogan);
-					            strcat(story,"\"");
-							 }
-							 break;
-						  case 1:
-							 strcat(story,"  One of them was rumored to have cried out, \"");
-					         strcat(story,slogan);
-					         strcat(story,"\"");
-							 break;
-						  case 2:
-							 strcat(story,"  Witnesses reported hearing the phrase, \"");
-					         strcat(story,slogan);
-					         strcat(story,"\"");
-							 break;
-						  }
-					  }
-				  }
-			   }
+               if (!ccs)
+               {
+                  if (!LCSrandom(8))
+                  {
+                      if(crime[CRIME_TAGGING])
+                      {
+                         strcat(story,"  The slogan, \"");
+                         strcat(story,slogan);
+                         strcat(story,"\" was found painted on the walls.");
+                      }
+                      else
+                      {
+                          switch (LCSrandom(3))
+                          {
+                          case 0:
+                             if (ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
+                             {
+                                strcat(story,"  One uttered the words, \"");
+                                   strcat(story,slogan);
+                                strcat(story,"\" before passing out.");
+                             }
+                             else
+                             {
+                                strcat(story,"  As they left, they shouted, \"");
+                                   strcat(story,slogan);
+                                strcat(story,"\"");
+                             }
+                             break;
+                          case 1:
+                             strcat(story,"  One of them was rumored to have cried out, \"");
+                             strcat(story,slogan);
+                             strcat(story,"\"");
+                             break;
+                          case 2:
+                             strcat(story,"  Witnesses reported hearing the phrase, \"");
+                             strcat(story,slogan);
+                             strcat(story,"\"");
+                             break;
+                          }
+                      }
+                  }
+               }
                break;
             }
          }

@@ -1611,7 +1611,7 @@ char talk(Creature &a,int t)
                      move(y,1);y++;addstr(tk->name);addstr(" responds,");
                      set_color(COLOR_BLUE,COLOR_BLACK,1);
                      move(y,1);y++;
-                     switch(LCSrandom(8))
+                     switch(LCSrandom(9))
                      {
                      case 0: addstr("\"Jesus...\"");
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1635,6 +1635,9 @@ char talk(Creature &a,int t)
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         addstr(" <turns away>");break;
                      case 7: addstr("\"Are you serious?\"");
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        addstr(" <turns away>");break;
+                     case 8: addstr("\"You're a pig.\"");
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         addstr(" <turns away>");break;
                      }
