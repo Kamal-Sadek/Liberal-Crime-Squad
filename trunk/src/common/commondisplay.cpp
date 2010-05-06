@@ -171,7 +171,7 @@ void locheader(void)
 {
    char num[20];
 
-   if(activesquad!=NULL)
+   if(activesquad!=NULL && activesquad->squad[0]->location!=-1)
    {
       if(location[activesquad->squad[0]->location]->siege.siege)
       {
@@ -192,7 +192,7 @@ void locheader(void)
    else set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(0,0);
 
-   if(activesquad!=NULL)
+   if(activesquad!=NULL && activesquad->squad[0]->location!=-1)
    {
       addlocationname(location[activesquad->squad[0]->location]);
       addstr(", ");
