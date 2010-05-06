@@ -901,14 +901,35 @@ void setvehicles(void)
 
          if(slot>=0&&slot<vehicle.size())
          {
-            move(8,20);
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Choose a Liberal squad member to drive it.");
+            bool choice = true;
+            if (activesquad->squad[0])
+            {
+               choice = false;
+               for (int c=1; c<6; c++)
+               {
+                  if (activesquad->squad[c]) //are these slots always filled in order?
+                  {
+                     choice=true;
+                     break;
+                  }
+               }
+            }
+            int c;
+            if (choice)
+            {
+               move(8,20);
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               addstr("Choose a Liberal squad member to drive it.");
 
-            refresh();
+               refresh();
 
-            int c=getch();
-            translategetch(c);
+               c=getch();
+               translategetch(c);
+            }
+            else
+            {
+               c='1';
+            }
 
             if(c>='1'&&c<='6')
             {
@@ -931,14 +952,35 @@ void setvehicles(void)
 
          if(slot>=0&&slot<vehicle.size())
          {
-            move(8,20);
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr("Choose a Liberal squad member be a passenger.");
+            bool choice = true;
+            if (activesquad->squad[0])
+            {
+               choice = false;
+               for (int c=1; c<6; c++)
+               {
+                  if (activesquad->squad[c]) //are these slots always filled in order?
+                  {
+                     choice=true;
+                     break;
+                  }
+               }
+            }
+            int c;
+            if (choice)
+            {
+               move(8,20);
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               addstr("Choose a Liberal squad member to be a passenger.");
 
-            refresh();
+               refresh();
 
-            int c=getch();
-            translategetch(c);
+               c=getch();
+               translategetch(c);
+            }
+            else
+            {
+               c='1';
+            }
 
             if(c>='1'&&c<='6')
             {

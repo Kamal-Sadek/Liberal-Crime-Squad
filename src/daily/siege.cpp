@@ -1936,6 +1936,9 @@ void escapesiege(char won)
       refresh();
       getch();
 
+      activesquad=NULL; //active squad cannot be disbanded in removesquadinfo, 
+                        //but we need to disband current squad as the people are going to be 'away'.
+
       //GET RID OF DEAD, etc.
       if(location[cursite]->renting>1)location[cursite]->renting=RENTING_NOCONTROL;
 

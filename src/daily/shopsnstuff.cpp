@@ -564,7 +564,7 @@ void armsdealer(int loc)
          if(c==10)break;
          if(c=='c')in_gunshop=2;
          if(c=='g')in_gunshop=1;
-         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
+         if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
       }
 
       if(c=='b')choose_buyer(buyer);
@@ -929,7 +929,7 @@ void pawnshop(int loc)
       {
          if(c==10)in_fence=0;
 
-         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
+         if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
 
          if(c=='w'||c=='a'||c=='c')
 		 {
@@ -1347,7 +1347,7 @@ void pawnshop(int loc)
          if(c==10)break;
          if(c=='c' && law[LAW_GUNCONTROL]<2)in_gunshop=2;
          if(c=='g' && law[LAW_GUNCONTROL]<2)in_gunshop=1;
-         if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
+         if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
          if(c=='s')in_fence=1;
          if(c=='t')in_tools=1;
       }
@@ -1872,7 +1872,7 @@ void deptstore(int loc)
          }
       }
 
-      if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
+      if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
       if(c=='b')choose_buyer(buyer);
       if(c=='0')party_status=-1;
       if(c>='1'&&c<='6'&&activesquad!=NULL)
@@ -2256,7 +2256,7 @@ void halloweenstore(int loc)
          }
       }
 
-      if(c=='e')equip(location[activesquad->squad[0]->location]->loot,-1);
+      if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
       if(c=='b')choose_buyer(buyer);
       if(c=='0')party_status=-1;
       if(c>='1'&&c<='6'&&activesquad!=NULL)
