@@ -202,18 +202,20 @@ void equip(vector<itemst *> &loot,int loc)
       addstr("Press a number to drop that Squad member's Conservative weapon");
       move(21,1);
       addstr("S - Liberally Strip a Squad member");
+      move(22,1);
+      addstr("Cursors - Increase or decrease ammo allocation");
 
       if(loc!=-1)
       {
          if(location[loc]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(22,1);
+         move(23,1);
          addstr("Y - Get things from ");
          addshortname(location[loc]);
 
          if(loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(22,40);
+         move(23,40);
          addstr("Z - Stash things at ");
          addshortname(location[loc]);
       }
@@ -226,181 +228,264 @@ void equip(vector<itemst *> &loot,int loc)
 
       int c=getch();
       translategetch(c);
+      bool increaseammo = (c==KEY_RIGHT || c==KEY_UP);
+      bool decreaseammo = (c==KEY_LEFT || c==KEY_DOWN);
 
-      if(c>='a'&&c<='r')
+      if((c>='a'&&c<='r')||increaseammo||decreaseammo)
       {
          int slot=c-'a'+page*18;
-
-         if(slot < 0 || slot >= loot.size())
+         if (increaseammo||decreaseammo)
          {
-            // Out of range.
-         }
-         else if (loot[slot]->type != ITEM_WEAPON
-                 && loot[slot]->type != ITEM_ARMOR
-                 && loot[slot]->type != ITEM_CLIP)
-         {
-            errmsg = "You can't equip that.";
-            continue;
+            slot=-999;
          }
          else
          {
-            bool choice = true;
-            if (activesquad->squad[0])
+            if(slot < 0 || slot >= loot.size())
             {
-               choice = false;
-               for (int c=1; c<6; c++)
+               // Out of range.
+               continue;
+            }
+            else if (loot[slot]->type != ITEM_WEAPON
+                    && loot[slot]->type != ITEM_ARMOR
+                    && loot[slot]->type != ITEM_CLIP)
+            {
+               errmsg = "You can't equip that.";
+               continue;
+            }
+         }
+         bool choice = true;
+         if (activesquad->squad[0])
+         {
+            choice = false;
+            for (int c=1; c<6; c++)
+            {
+               if (activesquad->squad[c]) //are these slots always filled in order?
                {
-                  if (activesquad->squad[c]) //are these slots always filled in order?
-                  {
-                     choice=true;
-                     break;
-                  }
+                  choice=true;
+                  break;
                }
             }
-            int c;
-            if (choice)
+         }
+         int c;
+         if (choice)
+         {
+            move(8,20);
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            if (increaseammo)
             {
-               move(8,20);
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               addstr("Choose a Liberal squad member to receive it.");
-
-               refresh();
-
-               c=getch();
-               translategetch(c);
+               addstr("Choose a Liberal squad member to receive a clip.");
+            }
+            else if (decreaseammo)
+            {
+               addstr("Choose a Liberal squad member to drop a clip.");
             }
             else
             {
-               c='1'; //only one member so no need to choose.
+               addstr("Choose a Liberal squad member to receive it.");
             }
 
-            if(c>='1'&&c<='6')
+            refresh();
+
+            c=getch();
+            translategetch(c);
+         }
+         else
+         {
+            c='1'; //only one member so no need to choose.
+         }
+
+         if(c>='1'&&c<='6')
+         {
+            Creature *squaddie = activesquad->squad[c - '1'];
+
+            if(squaddie!=NULL)
             {
-               Creature *squaddie = activesquad->squad[c - '1'];
-
-               if(squaddie!=NULL)
+               if (decreaseammo)
                {
-                  int armok=2;
-                  if((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
-                     (squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
-                  if((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
-                     (squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
-                  if(squaddie->special[SPECIALWOUND_NECK]!=1)armok=0;
-                  if(squaddie->special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
-
-                  if(loot[slot]->type==ITEM_WEAPON && armok)
+                  int cl = ammotype(squaddie->weapon.type);
+                  if (cl == -1)
                   {
-                     if(squaddie->weapon.type==WEAPON_MOLOTOV&&
-                        loot[slot]->weapon.type==WEAPON_MOLOTOV)
-                     {
-                        
-                        if(squaddie->weapon.ammo==0)
-                           squaddie->weapon.ammo=1;
-                        else
-                           squaddie->clip[CLIP_MOLOTOV]++;
-                     }
-                     else if(squaddie->weapon.type!=WEAPON_NONE)
-                     {
-                        itemst *newloot=new itemst;
-                           newloot->type=ITEM_WEAPON;
-                           newloot->weapon=squaddie->weapon;
-                        loot.push_back(newloot);
-
-                        squaddie->weapon=loot[slot]->weapon;
-                     }
-                     else squaddie->weapon=loot[slot]->weapon;
-
-                     loot[slot]->number--;
-                     if(loot[slot]->number==0)
-                     {
-                        delete loot[slot];
-                        loot.erase(loot.begin() + slot);
-                     }
-
-                     //DROP ALL CLIPS THAT DON'T WORK
-                     for(int cl=0;cl<CLIPNUM;cl++)
-                     {
-                        if(cl==ammotype(squaddie->weapon.type))continue;
-
-                        for(int p2=0;p2<squaddie->clip[cl];p2++)
-                        {
-                           if(cl==CLIP_MOLOTOV)
-                           {
-                              itemst *newi=new itemst;
-                                 newi->type=ITEM_WEAPON;
-                                 newi->weapon.type=WEAPON_MOLOTOV;
-                                 newi->weapon.ammo=1;
-                              loot.push_back(newi);
-                           }
-                           else
-                           {
-                              itemst *newi=new itemst;
-                                 newi->type=ITEM_CLIP;
-                                 newi->cliptype=cl;
-                              loot.push_back(newi);
-                           }
-                        }
-
-                        squaddie->clip[cl]=0;
-                     }
-
-                     if(page*18>=loot.size()&&page!=0)page--;
+                     errmsg = "No ammo to drop!";
+                     continue;
                   }
-                  else if(loot[slot]->type==ITEM_ARMOR)
+                  if (squaddie->clip[cl] == 0)
                   {
-                     if(squaddie->armor.type!=ARMOR_NONE)
-                     {
-                        itemst *newloot=new itemst;
-                           newloot->type=ITEM_ARMOR;
-                           newloot->armor=squaddie->armor;
-                        loot.push_back(newloot);
-                     }
-
-                     squaddie->armor=loot[slot]->armor;
-
-                     loot[slot]->number--;
-                     if(loot[slot]->number==0)
-                     {
-                        delete loot[slot];
-                        loot.erase(loot.begin() + slot);
-                     }
-
-                     if(page*18>=loot.size()&&page!=0)page--;
+                     errmsg = "No spare clips!";
+                     continue;
                   }
-                  else if(loot[slot]->type==ITEM_CLIP && armok)
+                  if(cl==CLIP_MOLOTOV)
                   {
-                     short ammo_type = ammotype(squaddie->weapon.type);
-                     int space = 9 - squaddie->clip[ammo_type];
-
-                     if (ammo_type != loot[slot]->cliptype) {
-                        errmsg = (ammo_type < 0 ?
-                              "Can't carry ammo without a gun." :
-                              "That ammo doesn't fit.");
-                        continue;
-                     } else if (space < 1) {
-                        errmsg = "Can't carry any more ammo.";
-                        continue;
-                     } else {
-                        int amount = 1;
-                        if (loot[slot]->number > 1)
-                           amount = prompt_amount(0,
-                                 MIN(loot[slot]->number, space));
-
-                        squaddie->clip[ammo_type] += amount;
-                        loot[slot]->number -= amount;
-
-                        if(loot[slot]->number==0)
-                        {
-                           delete loot[slot];
-                           loot.erase(loot.begin() + slot);
-                        }
-
-                        if(page*18>=loot.size()&&page!=0)page--;
-                     }
+                     itemst *newi=new itemst;
+                        newi->type=ITEM_WEAPON;
+                        newi->weapon.type=WEAPON_MOLOTOV;
+                        newi->weapon.ammo=1;
+                     loot.push_back(newi);
                   }
-
+                  else
+                  {
+                     itemst *newi=new itemst;
+                        newi->type=ITEM_CLIP;
+                        newi->cliptype=cl;
+                     loot.push_back(newi);
+                  }
+                  squaddie->clip[cl]--;
                   consolidateloot(loot);
+                  continue;
                }
+               if (increaseammo)
+               {
+                  int cl = ammotype(squaddie->weapon.type);
+                  if (cl == -1)
+                  {
+                     errmsg = "No ammo required!";
+                     continue;
+                  }
+                  slot = -1;
+                  for (int sl = 0; sl < loot.size(); sl++)
+                  {
+                     if ((loot[sl]->type==ITEM_CLIP && loot[sl]->cliptype == cl) ||
+                        (cl == CLIP_MOLOTOV && loot[sl]->type==ITEM_WEAPON && loot[sl]->weapon.type==WEAPON_MOLOTOV))
+                     {
+                        slot = sl;
+                        break;
+                     }
+                  }
+                  if (slot == -1)
+                  {
+                     errmsg = "No ammo available!";
+                     continue;
+                  }
+               }
+               int armok=2;
+               if((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
+                  (squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
+               if((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
+                  (squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
+               if(squaddie->special[SPECIALWOUND_NECK]!=1)armok=0;
+               if(squaddie->special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
+
+               if(loot[slot]->type==ITEM_WEAPON && armok)
+               {
+                  int testVal1 = squaddie->weapon.type;
+                  int testVal2 = loot[slot]->weapon.type;
+                  if(squaddie->weapon.type==WEAPON_MOLOTOV&&
+                     loot[slot]->weapon.type==WEAPON_MOLOTOV)
+                  {
+                     if(squaddie->weapon.ammo==0)
+                        squaddie->weapon.ammo=1;
+                     else
+                        squaddie->clip[CLIP_MOLOTOV]++;
+                  }
+                  else if(squaddie->weapon.type!=WEAPON_NONE)
+                  {
+                     itemst *newloot=new itemst;
+                        newloot->type=ITEM_WEAPON;
+                        newloot->weapon=squaddie->weapon;
+                     loot.push_back(newloot);
+
+                     squaddie->weapon=loot[slot]->weapon;
+                  }
+                  else squaddie->weapon=loot[slot]->weapon;
+
+                  loot[slot]->number--;
+                  if(loot[slot]->number==0)
+                  {
+                     delete loot[slot];
+                     loot.erase(loot.begin() + slot);
+                  }
+
+                  //DROP ALL CLIPS THAT DON'T WORK
+                  for(int cl=0;cl<CLIPNUM;cl++)
+                  {
+                     if(cl==ammotype(squaddie->weapon.type))continue;
+
+                     for(int p2=0;p2<squaddie->clip[cl];p2++)
+                     {
+                        if(cl==CLIP_MOLOTOV)
+                        {
+                           itemst *newi=new itemst;
+                              newi->type=ITEM_WEAPON;
+                              newi->weapon.type=WEAPON_MOLOTOV;
+                              newi->weapon.ammo=1;
+                           loot.push_back(newi);
+                        }
+                        else
+                        {
+                           itemst *newi=new itemst;
+                              newi->type=ITEM_CLIP;
+                              newi->cliptype=cl;
+                           loot.push_back(newi);
+                        }
+                     }
+
+                     squaddie->clip[cl]=0;
+                  }
+
+                  if(page*18>=loot.size()&&page!=0)page--;
+               }
+               else if(loot[slot]->type==ITEM_ARMOR)
+               {
+                  if(squaddie->armor.type!=ARMOR_NONE)
+                  {
+                     itemst *newloot=new itemst;
+                        newloot->type=ITEM_ARMOR;
+                        newloot->armor=squaddie->armor;
+                     loot.push_back(newloot);
+                  }
+
+                  squaddie->armor=loot[slot]->armor;
+
+                  loot[slot]->number--;
+                  if(loot[slot]->number==0)
+                  {
+                     delete loot[slot];
+                     loot.erase(loot.begin() + slot);
+                  }
+
+                  if(page*18>=loot.size()&&page!=0)page--;
+               }
+               else if(loot[slot]->type==ITEM_CLIP && armok)
+               {
+                  short ammo_type = ammotype(squaddie->weapon.type);
+                  int space = 9 - squaddie->clip[ammo_type];
+
+                  if (ammo_type != loot[slot]->cliptype) {
+                     errmsg = (ammo_type < 0 ?
+                           "Can't carry ammo without a gun." :
+                           "That ammo doesn't fit.");
+                     continue;
+                  } else if (space < 1) {
+                     errmsg = "Can't carry any more ammo.";
+                     continue;
+                  } else {
+                     int amount = 1;
+                     if (loot[slot]->number > 1)
+                     {
+                        if (increaseammo)
+                        {
+                           amount = 1;
+                        }
+                        else
+                        {
+                           amount = prompt_amount(0,
+                              MIN(loot[slot]->number, space));
+                        }
+                     }
+
+                     squaddie->clip[ammo_type] += amount;
+                     loot[slot]->number -= amount;
+
+                     if(loot[slot]->number==0)
+                     {
+                        delete loot[slot];
+                        loot.erase(loot.begin() + slot);
+                     }
+
+                     if(page*18>=loot.size()&&page!=0)page--;
+                  }
+               }
+
+               consolidateloot(loot);
             }
          }
       }
