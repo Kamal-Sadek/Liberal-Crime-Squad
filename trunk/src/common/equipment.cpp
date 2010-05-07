@@ -752,15 +752,20 @@ void equipmentbaseassign(void)
    {
       for(int l2=0;l2<location[l]->loot.size();l2++)
       {
-         temploot.push_back(location[l]->loot[l2]);
-         temploot2[location[l]->loot[l2]]=location[l];
+         if (!location[l]->siege.siege)
+         {
+            temploot.push_back(location[l]->loot[l2]);
+            temploot2[location[l]->loot[l2]]=location[l];
+         }
       }
    }
 
    vector<int> temploc;
    for(l=0;l<location.size();l++)
    {
-      if(location[l]->renting>=0&&!location[l]->siege.siege)temploc.push_back(l);
+      if(location[l]->renting>=0)
+         if (!location[l]->siege.siege)
+            temploc.push_back(l);
    }
    if(temploc.size()==0)return;
 

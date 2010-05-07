@@ -1936,6 +1936,16 @@ void escapesiege(char won)
       refresh();
       getch();
 
+//dump retrieved loot in homeless shelter - is there anywhere better to put it?
+      if (activesquad && homes != -1)
+      {
+         for(int l=0;l<activesquad->loot.size();l++)
+         {
+            location[homes]->loot.push_back(activesquad->loot[l]);
+         }
+         activesquad->loot.clear();
+      }
+
       activesquad=NULL; //active squad cannot be disbanded in removesquadinfo, 
                         //but we need to disband current squad as the people are going to be 'away'.
 
