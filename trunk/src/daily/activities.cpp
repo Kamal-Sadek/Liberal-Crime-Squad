@@ -2244,6 +2244,32 @@ void funds_and_trouble(char &clearformess)
          break;
       }
 
+      //Count potential students for this teacher to get an idea of efficiency
+      for(int p=0;p<pool.size();p++)
+      {
+         //If they're at the location
+         if(pool[p]->location==teachers[t]->location &&
+            pool[p]->align==ALIGN_LIBERAL)
+         {
+            //Step through the array of skills to train
+            for(int i=0;i<11;i++)
+            {
+               //If no more skills to train, stop
+               if(skillarray[i]==-1)break;
+               //Otherwise, if the student has less skill than the teacher, train the student
+               //proportional to the difference in skill between teacher and student times the
+               //teacher's ability at teaching
+               if(pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(skillarray[i])-1&&
+                  pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(SKILL_TEACHING)+2&&
+                  ledger.get_funds()>cost&&
+                  pool[p]->get_skill(skillarray[i])<pool[p]->skill_cap(skillarray[i],true))
+               {
+                  students++;
+               }
+            }
+         }
+      }
+
       //Walk through and train people
       for(int p=0;p<pool.size();p++)
       {
@@ -2269,23 +2295,33 @@ void funds_and_trouble(char &clearformess)
                   int teach=teachers[t]->get_skill(skillarray[i])+
                             teachers[t]->get_skill(SKILL_TEACHING)-
                             pool[p]->get_skill(skillarray[i]);
+//at ten students, cost no longer goes up, but effectiveness goes down.
+                  if (students > 10)
+                  {
+                     //teach = (teach * 10) / students; //teach at 50% speed with twice as many students.
+                     teach = ((teach * 30 / students) + teach)/4; //62.5% speed with twice as many students.
+                  }
+                  if(teach<1)
+                     teach=1;
                   // Cap at 10 points per day
-                  if(teach>10)teach=10;
+                  if(teach>10)
+                     teach=10;
 
                   pool[p]->train(skillarray[i],teach);
 
-                  if(students<10)
+                  /*if(students<10)
                   {
                      students++;
                      ledger.subtract_funds(cost,EXPENSE_TRAINING);
                      if(students==10)cost=0;
-                  }
+                  }*/
                }
             }
          }
       }
 
-      teachers[t]->train(SKILL_TEACHING,students);
+      ledger.subtract_funds( cost*min(students, 10), EXPENSE_TRAINING );
+      teachers[t]->train(SKILL_TEACHING,min(students, 10));
    }
 
    //BURY THE DEAD
