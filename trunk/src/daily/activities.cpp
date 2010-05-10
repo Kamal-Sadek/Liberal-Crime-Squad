@@ -2350,8 +2350,18 @@ void funds_and_trouble(char &clearformess)
 
                criminalize(*bury[b],LAWFLAG_BURIAL);
                attemptarrest(*bury[b],"disposing of bodies",clearformess);
+               
+               //If a liberal has been killed or arrested they should not do more burials.
+               if (!(bury[b]->alive)
+                   || location[bury[b]->location]->type == SITE_GOVERNMENT_POLICESTATION)
+               {
+                  bury.erase(bury.begin() + b);
+                  --b;
+               }
             }
          }
+         if (bury.size() == 0) //Stop burials if none are left doing them.
+            break;
       }
    }
 }

@@ -428,7 +428,7 @@ void removesquadinfo(Creature &cr)
    if(cr.squadid!=-1)
    {
       long sq=getsquad(cr.squadid);
-      if(sq!=-1 && squad[sq]!=activesquad)
+      if(sq!=-1)
       {
          char flipstart=0;
          for(int pt=0;pt<6;pt++)
