@@ -51,6 +51,9 @@ void noticecheck(int exclude,int difficulty)
 
    for(int e=0;e<ENCMAX;e++)
    {
+      //Prisoners shouldn't shout for help.
+      if(!strcmp(encounter[e].name,"Prisoner"))continue;
+      
       if(e==exclude || encounter[e].exists==false)
          continue;
       else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty))
