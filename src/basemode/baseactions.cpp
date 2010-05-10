@@ -751,7 +751,7 @@ void investlocation(void)
       {
          if(location[loc]->front_business==-1&&ledger.get_funds()>=3000)
          {
-            ledger.subtract_funds(150,EXPENSE_COMPOUND);
+            ledger.subtract_funds(3000,EXPENSE_COMPOUND);
             do
             {
                location[loc]->front_business=LCSrandom(BUSINESSFRONTNUM);
