@@ -1055,11 +1055,11 @@ void advanceday(char &clearformess,char canseethings)
 
       int p=getpoolcreature(date[d]->mac_id);
       // Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
-      if(p!=-1&&pool[p]->location!=-1&&
-	 ((location[pool[p]->location]->renting!=RENTING_NOCONTROL||
+      if(p!=-1&&((pool[p]->location!=-1&&
+	     (location[pool[p]->location]->renting!=RENTING_NOCONTROL||
          location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
-         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY)||
-	  date[d]->timeleft))
+         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))||
+	     date[d]->timeleft))
       {
          //VACATION
          if(date[d]->timeleft>0)
