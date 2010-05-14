@@ -439,8 +439,8 @@ void review_mode(short mode)
                addstr("Out in ");
                addstr(num);
                addstr(" ");
-               if(temppool[p]->clinic>1)addstr("Weeks");
-               else addstr("Week");
+               if(temppool[p]->clinic>1)addstr("Months");
+               else addstr("Month");
                break;
             }
          case REVIEWMODE_SLEEPERS:

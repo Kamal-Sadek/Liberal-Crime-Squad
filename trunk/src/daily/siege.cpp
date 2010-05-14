@@ -2106,11 +2106,11 @@ void conquertextccs(void)
       addstr("revolution to attend to?");
 
       move(12,5);
-      addstr("+100 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD");
+      addstr("+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD");
 
       for(int p=0;p<pool.size();p++)
       {
-         addjuice(*pool[p],100);
+         addjuice(*pool[p],100); //addjuice doubles the amount, so it adds 200
       }
    }
 
