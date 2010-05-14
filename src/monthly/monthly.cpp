@@ -509,6 +509,8 @@ void passmonth(char &clearformess,char canseethings)
                }
             }
             pool[p]->armor.type=ARMOR_PRISONER;
+            pool[p]->armor.quality='1';
+            pool[p]->armor.flag=0;
          }
       }
       else if(location[pool[p]->location]->type==SITE_GOVERNMENT_COURTHOUSE)
