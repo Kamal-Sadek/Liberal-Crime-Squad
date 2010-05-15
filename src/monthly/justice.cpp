@@ -1288,6 +1288,10 @@ void imprison(Creature &g)
 char prison(Creature &g)
 {
    char showed=0;
+   
+   if(law[LAW_DEATHPENALTY]==-2 && law[LAW_POLICEBEHAVIOR]==-2 //Laws required for reeducation camp.
+      && !g.deathpenalty && g.sentence!=1) //No re-ed for people on death row or about to be released.
+      reeducation(g);
 
    if(g.sentence>0)
    {
@@ -1447,4 +1451,63 @@ char prison(Creature &g)
    }
 
    return showed;
+}
+
+void reeducation(Creature &g)
+{
+   //int resist=0;
+
+   //clearmessagearea();
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name);
+   addstr(" is subjected to Conservative re-education!");
+   getch();
+   
+   move(10,1);
+   if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
+   {
+      if(g.juice>=100)
+      {
+         addstr(g.name);
+         addstr(" loses juice!");
+         addjuice(g,-50);
+      }
+      else if(LCSrandom(15)>g.get_attribute(ATTRIBUTE_WISDOM,true)
+           || g.get_attribute(ATTRIBUTE_WISDOM,true) < g.get_attribute(ATTRIBUTE_HEART,true))
+      {
+         addstr(g.name);
+         addstr(" becomes Wiser!");
+         g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
+      }
+      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE
+              && !LCSrandom(4))
+      {
+         addstr(g.name);
+         addstr(" thinks of ");
+         addstr(pool[g.hireid]->name);
+         addstr(".");
+      }
+      else
+      {
+         addstr(g.name);
+         addstr(" is turned Conservative!");
+         //conservatise(g);      
+         //Rat out contact?
+         g.die();
+         g.location=-1;
+      }
+   }
+   else
+   {
+      addstr(g.name);
+      addstr(" remains strong.");
+   }
+
+   refresh();
+   getch();
+   erase();
+
+   return;
 }

@@ -409,10 +409,18 @@ void review_mode(short mode)
                   if(temppool[p]->sentence>1)addstr("Months");
                   else addstr("Month");
                }
-               else if(temppool[p]->sentence==-1)
+               else if(temppool[p]->sentence<=-1)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Life Sentence");
+                  if(temppool[p]->sentence<-1)
+                  {
+                     char num[20];
+                     itoa(-(temppool[p]->sentence),num,10);
+                     addstr(num);
+                     addstr(" Life Sentences");
+                  }
+                  else
+                     addstr("Life Sentence");
                }
                else if(temppool[p]->sentence!=0)
                {
