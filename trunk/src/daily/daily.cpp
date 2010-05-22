@@ -1479,7 +1479,8 @@ void dispersalcheck(char &clearformess)
                   }
                }
                pool[p]->location=-1;
-               pool[p]->base=hs;
+               if(!(pool[p]->flag & CREATUREFLAG_SLEEPER)) //Sleepers end up in shelter otherwise.
+                  pool[p]->base=hs;
                pool[p]->activity.type=ACTIVITY_NONE;
                pool[p]->hiding=-1; // Hide indefinitely
             }
