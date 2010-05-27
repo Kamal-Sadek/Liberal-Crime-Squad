@@ -140,7 +140,7 @@ const int lowestloadscoreversion=31203;
       */
       #include <xcurses.h> //This is the X11 Port of PDCurses
    //undo PDCurses macros that break vector class
-      #undef erase // XXX: Umm... Now erase() and clear() don't work in
+      #undef erase // FIXME: Umm... Now erase() and clear() don't work in
       #undef clear //       dumpcaps.cpp
    #else
       #if defined(USE_NCURSES)
