@@ -70,7 +70,7 @@ void advanceday(char &clearformess,char canseethings)
 
       if(!pool[p]->alive||pool[p]->animalgloss)continue;
       // animals, tanks don't have age effects at the moment
-      
+//TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
       if(pool[p]->age>60)
       {
          int decrement=0;

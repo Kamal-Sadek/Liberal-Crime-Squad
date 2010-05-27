@@ -705,7 +705,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
         a.weapon.ammo==0) || force_melee))
    {
       wsk=SKILL_CLUB; // Club people with out-of-ammo guns
-   }
+   }// TODO: Bigger gun should mean more melee damage.
 
    // Basic roll
    int aroll = a.skill_roll(wsk);
@@ -893,7 +893,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             case BODYPART_LEG_LEFT:strcat(str,"left tread");break;
          }
       }
-      else if(t.animalgloss==ANIMALGLOSS_ANIMAL) // XXX What about Six-legged Pigs?
+      else if(t.animalgloss==ANIMALGLOSS_ANIMAL) // FIXME: What about Six-legged Pigs?
       {
          switch(w)
          {
