@@ -144,7 +144,8 @@ void siegecheck(char canseethings)
             location[l]->heat = static_cast<int>(crimes * (1.0 - location[l]->heat_protection));
 
             // Begin planning siege if high heat on location
-            if(LCSrandom(3000) < location[l]->heat)
+            if(LCSrandom(3000) < location[l]->heat
+               && !(location[l]->siege.timeuntillocated>=0)) //Do not re-plan siege.
             {
                // Set force deployment (military, bombers, etc.)
                if(LCSrandom(crimes) > 25)location[l]->siege.escalationstate++;
@@ -476,25 +477,35 @@ void siegecheck(char canseethings)
                            pool[i]->blood-=LCSrandom(101-pool[i]->juice/10)+10;
                            if(pool[i]->blood<0)
                            {
-                              if(killed_x+namelength>79)
+                              if(killed_x+namelength>78)
                               {
                                  killed_y++;
                                  killed_x=1;
+                                 //Add limit for killed_y.
                               }
                               move(killed_y,killed_x);
                               pool[i]->die();
+                              set_alignment_color(pool[i]->align,false);
+                              addstr(pool[i]->name);
+                              addstr(", ");
+                              killed_x+=namelength+2;
                            }
                            else
                            {
-                              if(injured_x+namelength>79)
+                              if(injured_x+namelength>78)
                               {
                                  injured_y++;
                                  injured_x=1;
+                                 //Add limit for injured_y.
                               }
                               move(injured_y,injured_x);
+                              set_alignment_color(pool[i]->align,false);
+                              addstr(pool[i]->name);
+                              addstr(", ");
+                              injured_x+=namelength+2;
                            }
-                           set_alignment_color(pool[i]->align,false);
-                           addstr(pool[i]->name);
+                           //set_alignment_color(pool[i]->align,false);
+                           //addstr(pool[i]->name);
                         }
                      }
                   }
