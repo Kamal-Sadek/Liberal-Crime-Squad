@@ -1510,6 +1510,31 @@ enum ReviewModes
    REVIEWMODENUM
 };
 
+enum SortingChoices
+{
+   SORTING_DEFAULT, //IDNUMBER
+   SORTING_NAME,
+   SORTING_LOCATION_AND_NAME,
+   SORTING_SQUAD_OR_NAME,
+   SORTINGNUM
+};
+
+enum ActiveSortingChoices
+{
+   SORTINGCHOICE_LIBERALS, //They're prefixed SORTINGCHOICE because they're used as
+   SORTINGCHOICE_HOSTAGES, //array indices for the array activesortingchoice.
+   SORTINGCHOICE_CLINIC,   //activesortingchoice holds the chosen way to sort the lists.
+   SORTINGCHOICE_JUSTICE,
+   SORTINGCHOICE_SLEEPERS,
+   SORTINGCHOICE_DEAD,
+   SORTINGCHOICE_AWAY,
+   SORTINGCHOICE_ACTIVATE,
+   SORTINGCHOICE_ACTIVATESLEEPERS,
+   SORTINGCHOICE_ASSEMBLESQUAD,
+   SORTINGCHOICE_BASEASSIGN,
+   SORTINGCHOICENUM
+};
+
 /*
    Declarations for every function grouped by folder and file.
    Created by jonathansfox.
@@ -1625,7 +1650,13 @@ int choose_one(const int * weight_list, int number_of_options, int default_value
 char duplicatelocation(locationst &loc);
 // Prompt to convert a new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
-
+/* common - Sort a list of creatures.*/
+void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool sortdefault=false);
+/* common - Prompt to decide how to sort liberals.*/
+void sorting_prompt(short listforsorting);
+/* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
+            Is currently unnecessary unless the enums are changed.*/
+short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
 
 /*
  consolesupport.cpp

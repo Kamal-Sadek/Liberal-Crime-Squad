@@ -126,6 +126,8 @@ extern char disbanding;
 extern int disbandtime;
 extern char cantseereason;
 
+extern short activesortingchoice[SORTINGCHOICENUM];
+
 extern vector<vehiclest *> vehicle;
 extern long curcarid;
 extern char showcarprefs;
