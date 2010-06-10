@@ -257,6 +257,8 @@ void review_mode(short mode)
 
    if(temppool.size()==0)return;
 
+   sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)]);
+
    int page=0;
 
    char num[20];
@@ -506,6 +508,7 @@ void review_mode(short mode)
       }
       move(23,0);
       addpagestr();
+      addstr(" T to sort people.");
 
       refresh();
 
@@ -814,21 +817,27 @@ void review_mode(short mode)
          }
       }
 
+      if(c=='t')
+      {
+         sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));
+         sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)],true);
+      }      
+
       // Reorder squad
       if(c=='z')
       {
-	 if(temppool.size()<=1)break;
+         if(temppool.size()<=1)break;
 
-	 move(22,0);
-	 addstr("                                                                               ");
-	 move(23,0);
-	 addstr("                                                                               ");
+         move(22,0);
+         addstr("                                                                               ");
+         move(23,0);
+         addstr("                                                                               ");
 	 
-	 move(22,8);
-	 set_color(COLOR_WHITE,COLOR_BLACK,1);
-	 addstr("Choose squad member to replace ");
+         move(22,8);
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr("Choose squad member to replace ");
 
-	 if (swap == NULL) {
+         if (swap == NULL) {
             refresh();
 
             int c=getch();
@@ -843,15 +852,15 @@ void review_mode(short mode)
             }
 
             // Get first member to swap
-	    int p=page*19+(int)(c-'a');
+            int p=page*19+(int)(c-'a');
 
             if(p<temppool.size())
             {
                swap=temppool[p];
-	       swapPos = p;
+               swapPos = p;
             }
-	 }
-	 else { // non-null swap
+         }
+         else { // non-null swap
             addstr(swap->name);     
             addstr(" with");
 
@@ -866,34 +875,34 @@ void review_mode(short mode)
                break;
             }
 
-	    Creature *swap2 = NULL;
+            Creature *swap2 = NULL;
 
-	    int p=page*19+(int)(c-'a');
+            int p=page*19+(int)(c-'a');
 
             if(p<temppool.size() && temppool[p] != swap)
             {
                swap2=temppool[p];
 
-	       for (int i = 0; i < pool.size(); i++) {
-		  if (pool[i]->id == swap->id) {
-		     pool.erase(pool.begin() + i);
-		     break;
-		  }
-	       }
+               for (int i = 0; i < pool.size(); i++) {
+                  if (pool[i]->id == swap->id) {
+                     pool.erase(pool.begin() + i);
+                     break;
+                  }
+               }
 
-	       for (int i = 0; i < pool.size(); i++) {
-		  if (pool[i]->id == swap2->id) {
-		     pool.insert (pool.begin() + i + (swapPos < p ? 1 : 0), swap);
-		     break;
-		  }
-	       }
+               for (int i = 0; i < pool.size(); i++) {
+                  if (pool[i]->id == swap2->id) {
+                     pool.insert (pool.begin() + i + (swapPos < p ? 1 : 0), swap);
+                     break;
+                  }
+               }
 
-	       temppool.erase (temppool.begin() + swapPos);
-	       temppool.insert (temppool.begin() + p, swap);
+            temppool.erase (temppool.begin() + swapPos);
+            temppool.insert (temppool.begin() + p, swap);
 
-	       swap = NULL;
-	    }
-	 }
+            swap = NULL;
+            }
+         }
       }
 
       if(c==10)break;
@@ -937,6 +946,8 @@ void assemblesquad(squadst *cursquad)
             (pool[p]->location==culloc||culloc==-1))temppool.push_back(pool[p]);
       }
    }
+   
+   sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ASSEMBLESQUAD]);
 
    //BUILD LIST OF BASES FOR EACH SQUAD IN CASE IT ENDS UP EMPTY
    //THEN WILL DROP ITS LOOT THERE
@@ -1049,7 +1060,8 @@ void assemblesquad(squadst *cursquad)
       addstr("Press a Letter to add or remove a Liberal from the squad.");
       move(23,0);
       addpagestr();
-		move(23,40);
+      addstr(" T to sort people.");
+		move(23,50);
       addstr("V - View a Liberal");
       move(24,0);
       if(squadsize>0)addstr("Enter - The squad is ready.");
@@ -1137,6 +1149,11 @@ void assemblesquad(squadst *cursquad)
                }
             }
          }
+      }
+      if(c=='t')
+      {
+         sorting_prompt(SORTINGCHOICE_ASSEMBLESQUAD);
+         sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ASSEMBLESQUAD],true);
       }
 		if(c=='v')
 		{
@@ -1317,6 +1334,7 @@ void squadlessbaseassign(void)
    }
 
    if(temppool.size()==0)return;
+   sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN]);
 
    vector<int> temploc;
    for(l=0;l<location.size();l++)
@@ -1384,6 +1402,8 @@ void squadlessbaseassign(void)
          move(24,0);
          addstr(",. to view other Base pages.");
       }
+      move(23,35);
+      addstr("T to sort people.");
 
       refresh();
 
@@ -1415,6 +1435,11 @@ void squadlessbaseassign(void)
          {
             selectedbase=p;
          }
+      }
+      if(c=='t')
+      {
+         sorting_prompt(SORTINGCHOICE_BASEASSIGN);
+         sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN],true);
       }
 
       if(c==10)break;

@@ -39,6 +39,8 @@ void activate_sleepers(void)
    }
 
    if(temppool.size()==0)return;
+   
+   sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS]);
 
    int page=0;
 
@@ -152,6 +154,7 @@ void activate_sleepers(void)
       addstr("Press a Letter to Assign an Activity.");
       move(23,0);
       addpagestr();
+      addstr(" T to sort people.");
       
       set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -172,6 +175,12 @@ void activate_sleepers(void)
          {
             activate_sleeper(temppool[p]);
          }
+      }
+      
+      if(c=='t')
+      {
+         sorting_prompt(SORTINGCHOICE_ACTIVATESLEEPERS);
+         sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS],true);
       }
 
       if(c==10)break;

@@ -215,7 +215,7 @@ char bash(short type,char &actual)
             if(activesquad->squad[p]->alive)
             {
                if(activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH,true)*
-                  bashstrengthmod(activesquad->squad[p]->weapon.type>maxattack))
+                  bashstrengthmod(activesquad->squad[p]->weapon.type)>maxattack)
                {
                   maxattack=static_cast<int>(activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH,true)*
                                              bashstrengthmod(activesquad->squad[p]->weapon.type));

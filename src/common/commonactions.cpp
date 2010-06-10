@@ -885,3 +885,129 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
    }
 }
 
+/* common - Sort a list of creatures.*/
+void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool sortdefault)
+{
+   if(!sortdefault && sortingchoice==SORTING_DEFAULT)return;
+   bool nochange = false;
+   bool swap = false;
+   unsigned loopnr = 0;
+   while (!nochange)
+   {
+      ++loopnr;
+      nochange = true;
+      for (unsigned i = 0; i < liberals.size()-loopnr; ++i)
+      {
+         swap = false;
+         switch (sortingchoice)
+         {
+            case SORTING_DEFAULT:
+               swap = liberals[i]->id > liberals[i+1]->id; //I guess this is equivalent to the default. -blomkvist
+               break;
+            case SORTING_NAME:
+               swap = strcmp(liberals[i]->name,liberals[i+1]->name)>0;
+               break;
+            case SORTING_LOCATION_AND_NAME:
+               swap = (liberals[i]->location > liberals[i+1]->location
+                       || (liberals[i]->location == liberals[i+1]->location
+                           && strcmp(liberals[i]->name,liberals[i+1]->name)>0));
+               break;
+            case SORTING_SQUAD_OR_NAME:
+               swap = ((liberals[i]->squadid == -1 && liberals[i+1]->squadid != -1)
+                        || (liberals[i+1]->squadid != -1
+                            && liberals[i]->squadid > liberals[i+1]->squadid)
+                        || (liberals[i]->squadid == -1
+                            && liberals[i+1]->squadid == -1
+                            && strcmp(liberals[i]->name,liberals[i+1]->name)>0)
+                        || (liberals[i]->squadid == liberals[i+1]->squadid 
+                            && strcmp(liberals[i]->name,liberals[i+1]->name)>0)); //This last one should rather compare their order in the squad. -blomkvist
+               break;
+            default: break;
+         }
+         
+         if(swap)
+         {
+            Creature* tmp = liberals[i];
+            liberals[i] = liberals[i+1];
+            liberals[i+1] = tmp;
+            nochange = false;
+         }
+      }
+   }
+}
+
+/* common - Prompt to decide how to sort liberals.*/
+void sorting_prompt(short listforsorting)
+{
+   erase();
+   move(1,1);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr("Choose how to sort list of ");
+   switch(listforsorting)
+   {
+      case SORTINGCHOICE_LIBERALS: addstr("active Liberals.");break;
+      case SORTINGCHOICE_HOSTAGES: addstr("hostages.");break;
+      case SORTINGCHOICE_CLINIC: addstr("Liberals in hospital.");break;
+      case SORTINGCHOICE_JUSTICE: addstr("oppressed Liberals.");break;
+      case SORTINGCHOICE_SLEEPERS: addstr("sleepers.");break;
+      case SORTINGCHOICE_DEAD: addstr("dead people.");break;
+      case SORTINGCHOICE_AWAY: addstr("people away.");break;
+      case SORTINGCHOICE_ACTIVATE: addstr("Liberal activity.");break;
+      case SORTINGCHOICE_ACTIVATESLEEPERS: addstr("sleeper activity.");break;
+      case SORTINGCHOICE_ASSEMBLESQUAD: addstr("available Liberals.");break;
+      default: addstr("ERROR: INVALID VALUE FOR SORTINGCHOICE!");break;
+   }   
+   move(3,2);
+   addstr("A - No sorting.");
+   move(4,2);
+   addstr("B - Sort by name.");
+   move(5,2);
+   addstr("C - Sort by location and name.");
+   move(6,2);
+   addstr("D - Sort by squad or name.");
+
+   while(1)
+   {
+      int c = getch();
+      translategetch(c);
+      
+      if(c=='a')
+      {
+         activesortingchoice[listforsorting]=SORTING_DEFAULT;
+         break;
+      }
+      else if(c=='b')
+      {
+         activesortingchoice[listforsorting]=SORTING_NAME;
+         break;
+      }
+      else if(c=='c')
+      {
+         activesortingchoice[listforsorting]=SORTING_LOCATION_AND_NAME;
+         break;
+      }
+      else if(c=='d')
+      {
+         activesortingchoice[listforsorting]=SORTING_SQUAD_OR_NAME;
+         break;
+      }
+   }
+}
+
+/* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
+            Is currently unnecessary unless the enums are changed.*/
+short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
+{
+   switch (reviewmode)
+   {
+      case REVIEWMODE_LIBERALS: return SORTINGCHOICE_LIBERALS;
+      case REVIEWMODE_HOSTAGES: return SORTINGCHOICE_HOSTAGES;
+      case REVIEWMODE_CLINIC: return SORTINGCHOICE_CLINIC;
+      case REVIEWMODE_JUSTICE: return SORTINGCHOICE_JUSTICE;
+      case REVIEWMODE_SLEEPERS: return SORTINGCHOICE_SLEEPERS;
+      case REVIEWMODE_DEAD: return SORTINGCHOICE_DEAD;
+      case REVIEWMODE_AWAY: return SORTINGCHOICE_AWAY;
+   }
+   return 0;//-1; 
+}
+

@@ -111,6 +111,7 @@ char disbanding=0;
 int disbandtime=0;
 char cantseereason;
 
+short activesortingchoice[SORTINGCHOICENUM];
 
 Creature encounter[ENCMAX];
 
@@ -301,6 +302,10 @@ int main(int argc, char* argv[])
       case 4:strcpy(slogan,"If you're not affected, you're not paying attention!");break;
       }
    }
+   
+   //Initialize sorting choices.
+   for(int s=0;s<SORTINGCHOICENUM;s++)
+      activesortingchoice[s]=SORTING_DEFAULT;
 
    for(int v=0;v<VIEWNUM;v++)
    {
