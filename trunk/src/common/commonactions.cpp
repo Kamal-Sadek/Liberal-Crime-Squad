@@ -955,6 +955,7 @@ void sorting_prompt(short listforsorting)
       case SORTINGCHOICE_ACTIVATE: addstr("Liberal activity.");break;
       case SORTINGCHOICE_ACTIVATESLEEPERS: addstr("sleeper activity.");break;
       case SORTINGCHOICE_ASSEMBLESQUAD: addstr("available Liberals.");break;
+      case SORTINGCHOICE_BASEASSIGN: addstr("squadless members.");break;
       default: addstr("ERROR: INVALID VALUE FOR SORTINGCHOICE!");break;
    }   
    move(3,2);
