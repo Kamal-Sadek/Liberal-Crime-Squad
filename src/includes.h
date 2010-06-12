@@ -1512,7 +1512,7 @@ enum ReviewModes
 
 enum SortingChoices
 {
-   SORTING_DEFAULT, //IDNUMBER
+   SORTING_NONE,
    SORTING_NAME,
    SORTING_LOCATION_AND_NAME,
    SORTING_SQUAD_OR_NAME,
@@ -1651,7 +1651,7 @@ char duplicatelocation(locationst &loc);
 // Prompt to convert a new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
 /* common - Sort a list of creatures.*/
-void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool sortdefault=false);
+void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone=false);
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting);
 /* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
