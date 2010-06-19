@@ -1652,11 +1652,17 @@ char duplicatelocation(locationst &loc);
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
 /* common - Sort a list of creatures.*/
 void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone=false);
+/* common - Functions used when sorting vectors of creatures. */
+bool sort_none(Creature* first, Creature* second);
+bool sort_name(Creature* first, Creature* second);
+bool sort_locationandname(Creature* first, Creature* second);
+bool sort_squadorname(Creature* first, Creature* second);
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting);
 /* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
-            Is currently unnecessary unless the enums are changed.*/
+            (Is currently unnecessary unless the enums are changed.)*/
 short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
+
 
 /*
  consolesupport.cpp
