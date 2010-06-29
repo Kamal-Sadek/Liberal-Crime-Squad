@@ -128,7 +128,8 @@ extern char cantseereason;
 
 extern short activesortingchoice[SORTINGCHOICENUM];
 
-extern vector<vehiclest *> vehicle;
+extern vector<VehicleType *> vehicletype;
+extern vector<Vehicle *> vehicle;
 extern long curcarid;
 extern char showcarprefs;
 

@@ -2378,9 +2378,9 @@ char stealcar(Creature &cr,char &clearformess)
 
    if(carselect(cr,cartype))
    {
-      int diff=difficulty_carfind(cartype)*2;
+      int diff=vehicletype[cartype]->steal_difficultytofind()*2;
 
-      vehiclest *v=new vehiclest;
+      Vehicle *v=NULL;
 
       int old=cartype;
 
@@ -2407,23 +2407,21 @@ char stealcar(Creature &cr,char &clearformess)
       {
          do
          {
-            cartype=LCSrandom(VEHICLENUM);
-            if(LCSrandom(10)<difficulty_carfind(cartype))cartype=old;
+            cartype=LCSrandom(vehicletype.size());
+            if(LCSrandom(10)<vehicletype[cartype]->steal_difficultytofind())cartype=old;
          }while(cartype==old);
       }
 
-      v->init(cartype);
+      v = new Vehicle(*vehicletype[cartype]);
 
       if(old!=cartype)
       {
          move(11,0);
          addstr(cr.name);
          addstr(" was unable to find a ");
-         getcarfull(str,old);
-         addstr(str);
+         addstr(vehicletype[old]->longname().c_str());
          addstr(" but did find a ");
-         getcarfull(str,cartype);
-         addstr(str);
+         addstr(v->longname().c_str());
          addstr(".");
 
          refresh();
@@ -2434,8 +2432,7 @@ char stealcar(Creature &cr,char &clearformess)
          move(11,0);
          addstr(cr.name);
          addstr(" found a ");
-         getcarfull(str,cartype);
-         addstr(str);
+         addstr(v->longname().c_str());
          addstr(".");
 
          refresh();
@@ -2479,9 +2476,9 @@ char stealcar(Creature &cr,char &clearformess)
       char alarmon=0;
 
       char sensealarm=0;
-      if(LCSrandom(100)<sensealarmchance(cartype))sensealarm=1;
+      if(LCSrandom(100)<v->sensealarmchance()) sensealarm=1;
       char touchalarm=0;
-      if(LCSrandom(100)<touchalarmchance(cartype))touchalarm=1;
+      if(LCSrandom(100)<v->touchalarmchance()) touchalarm=1;
       char windowdamage=0;
 
       do
@@ -2936,21 +2933,16 @@ char stealcar(Creature &cr,char &clearformess)
 
       //CHASE SEQUENCE
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
-      if(v->type==VEHICLE_SUV||
-         v->type==VEHICLE_POLICECAR)addjuice(cr,2,50);
+      addjuice(cr,v->steal_juice(),50);
 
-      v->heat = 14;
-      if(v->type==VEHICLE_SPORTSCAR)
-         v->heat += 5;
-      if(v->type==VEHICLE_POLICECAR)
-         v->heat += 16;
+      v->heat() = 14+v->steal_extraheat();
 
       chaseseq.clean();
       chaseseq.location=0;
       int chaselev=!LCSrandom(13-windowdamage);
-      if(chaselev>0||(v->type==VEHICLE_POLICECAR&&LCSrandom(2)))
+      if(chaselev>0||(v->vtypeidname()=="POLICECAR"&&LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
       {
-         v->heat += 10;
+         v->heat() += 10;
          chaselev=1;
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_CARTHEFT;
@@ -2962,11 +2954,11 @@ char stealcar(Creature &cr,char &clearformess)
       vehicle.push_back(v);
       if(chasesequence(cr,*v))
       {
-         v->location=cr.base;
+         v->location()=cr.base;
          // Automatically assign this car to this driver, if no other one is present
          if(cr.pref_carid==-1)
          {
-            cr.pref_carid = v->id;
+            cr.pref_carid = v->id();
             cr.pref_is_driver = true;
          }
          return 1;
@@ -2981,36 +2973,14 @@ char stealcar(Creature &cr,char &clearformess)
    return 0;
 }
 
-
-
-int difficulty_carfind(int type)
-{
-   switch(type)
-   {
-      case VEHICLE_VAN:return 2;
-      case VEHICLE_STATIONWAGON:return 1;
-      case VEHICLE_SPORTSCAR:return 3;
-      case VEHICLE_BUG:return 2;
-      case VEHICLE_PICKUP:return 1;
-      case VEHICLE_POLICECAR:return 7;
-      case VEHICLE_TAXICAB:return 8;
-      case VEHICLE_SUV:return 1;
-      case VEHICLE_JEEP:return 6;
-   }
-
-   return 10;
-}
-
-
-
 char carselect(Creature &cr,short &cartype)
 {
    cartype=-1;
 
    vector<int> cart;
-   for(int a=0;a<VEHICLENUM;a++)
+   for(unsigned a=0;a<vehicletype.size();a++)
    {
-      if(difficulty_carfind(a)<10)cart.push_back(a);
+      if(vehicletype[a]->steal_difficultytofind()<10) cart.push_back(a);
    }
 
    int page=0;
@@ -3036,11 +3006,10 @@ char carselect(Creature &cr,short &cartype)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
          addch(y+'A'-2);addstr(" - ");
-         getcarfull(str,cart[p]);
-         addstr(str);
+         addstr(vehicletype[cart[p]]->longname().c_str());
 
          move(y,49);
-         difficulty=difficulty_carfind(cart[p]);
+         difficulty=vehicletype[cart[p]]->steal_difficultytofind();
          switch(difficulty)
          {
             case 0:
@@ -3127,49 +3096,6 @@ char carselect(Creature &cr,short &cartype)
 
    return 0;
 }
-
-
-
-int sensealarmchance(int cartype)
-{
-   switch(cartype)
-   {
-      case VEHICLE_SPORTSCAR:
-         return 15;
-      case VEHICLE_SUV:
-         return 4;
-      case VEHICLE_JEEP:
-      case VEHICLE_VAN:
-      case VEHICLE_STATIONWAGON:
-      case VEHICLE_BUG:
-      case VEHICLE_PICKUP:
-         return 1;
-      default:
-         return 0;
-   }
-}
-
-
-int touchalarmchance(int cartype)
-{
-   switch(cartype)
-   {
-      case VEHICLE_SPORTSCAR:
-         return 95;
-      case VEHICLE_SUV:
-         return 85;
-      case VEHICLE_JEEP:
-      case VEHICLE_VAN:
-      case VEHICLE_STATIONWAGON:
-      case VEHICLE_BUG:
-      case VEHICLE_PICKUP:
-         return 10;
-      default:
-         return 0;
-   }
-}
-
-
 
 /* get a wheelchair */
 void getwheelchair(Creature &cr,char &clearformess)

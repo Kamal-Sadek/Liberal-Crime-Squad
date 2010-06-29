@@ -163,7 +163,7 @@ void savegame(char *str)
       numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(l=0;l<vehicle.size();l++)
       {
-         numbytes=fwrite(vehicle[l],sizeof(vehiclest),1,h);
+         numbytes=fwrite(vehicle[l],sizeof(Vehicle),1,h);
       }
 
       //POOL
@@ -430,8 +430,8 @@ char load(void)
       vehicle.resize(dummy);
       for(l=0;l<vehicle.size();l++)
       {
-         vehicle[l]=new vehiclest;
-         fread(vehicle[l],sizeof(vehiclest),1,h);
+         vehicle[l]=new Vehicle;
+         fread(vehicle[l],sizeof(Vehicle),1,h);
       }
 
       //POOL
@@ -598,6 +598,19 @@ char load(void)
       fread(public_interest,sizeof(public_interest),1,h);
       fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
       LCSCloseFile(h);
+      
+      // Check that vehicles are of existing types.
+      for(int v=0; v<vehicle.size();++v)
+      {
+         if(getvehicletype(vehicle[v]->vtypeidname())==-1)
+         { //Remove vehicle of non-existing type. Maybe treat this some other way? -XML
+            addstr(("Vehicle type "+vehicle[v]->vtypeidname()+" does not exist. Deleting vehicle.").c_str());
+            removecarprefs_pool(vehicle[v]->id());
+            delete vehicle[v];
+            vehicle.erase(vehicle.begin()+v);
+            --v;
+         }
+      }
 
       return 1;
    }

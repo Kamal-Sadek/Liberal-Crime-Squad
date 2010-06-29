@@ -302,10 +302,10 @@ void advanceday(char &clearformess,char canseethings)
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
                         if(v >= 0) 
                         {
-                           if(driveskill(*squad[sq]->squad[passenger[p]],vehicle[v])>max&&
+                           if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])>max&&
                               squad[sq]->squad[passenger[p]]->canwalk())
                            {
-                                 max=driveskill(*squad[sq]->squad[passenger[p]],vehicle[v]);
+                                 max=driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v]);
                            }
                         }
                      }
@@ -315,7 +315,7 @@ void advanceday(char &clearformess,char canseethings)
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
                         if(v >= 0) 
                         {
-                              if(driveskill(*squad[sq]->squad[passenger[p]],vehicle[v])==max&&
+                              if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])==max&&
                               squad[sq]->squad[passenger[p]]->canwalk())
                            {
                               goodp.push_back(passenger[p]);
@@ -340,9 +340,9 @@ void advanceday(char &clearformess,char canseethings)
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
                      if (v >= 0)
                      {
-                        if(driveskill(*squad[sq]->squad[driver[p]],vehicle[v])>max)
+                        if(driveskill(*squad[sq]->squad[driver[p]],*vehicle[v])>max)
                         {
-                              max=driveskill(*squad[sq]->squad[driver[p]],vehicle[v]);
+                              max=driveskill(*squad[sq]->squad[driver[p]],*vehicle[v]);
                         }
                      }
                   }
@@ -352,7 +352,7 @@ void advanceday(char &clearformess,char canseethings)
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
                      if (v >= 0)
                      {
-                        if(driveskill(*squad[sq]->squad[driver[p]],vehicle[v])==max)
+                        if(driveskill(*squad[sq]->squad[driver[p]],*vehicle[v])==max)
                         {
                            goodp.push_back(p);
                         }
