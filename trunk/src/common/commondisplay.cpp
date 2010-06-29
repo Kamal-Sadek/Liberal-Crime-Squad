@@ -409,7 +409,7 @@ void printparty(void)
             else v=id_getcar(party[p]->carid);
             if(v!=-1&&showcarprefs!=-1)
             {
-               getcar(str,vehicle[v]->type);
+               strcpy(str,vehicle[v]->shortname().c_str());
                char d;
                if(showcarprefs==1)d=party[p]->pref_is_driver;
                else d=party[p]->is_driver;
@@ -687,7 +687,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    else v=id_getcar(cr->carid);
    if(v!=-1&&showcarprefs!=-1)
    {
-      getcar(str,vehicle[v]->type);
+      strcpy(str,vehicle[v]->shortname().c_str());
       char d;
       if(showcarprefs==1)d=cr->pref_is_driver;
       else d=cr->is_driver;
@@ -1274,7 +1274,7 @@ void printliberalstats(Creature &cr)
    else v=id_getcar(cr.carid);
    if(v!=-1&&showcarprefs!=-1)
    {
-      getcar(str,vehicle[v]->type);
+      strcpy(str,vehicle[v]->shortname().c_str());
       char d;
       if(showcarprefs==1)d=cr.pref_is_driver;
       else d=cr.is_driver;

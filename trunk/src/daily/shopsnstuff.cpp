@@ -1395,12 +1395,12 @@ void dealership(int loc)
       locheader();
       printparty();
 
-      vehiclest* car_to_sell=0;
+      Vehicle* car_to_sell=0;
       int price=0;
 
       for(int v=(int)vehicle.size()-1;v>=0;v--)
       {
-         if(vehicle[v]->id==activesquad->squad[buyer]->carid)
+         if(vehicle[v]->id()==activesquad->squad[buyer]->carid)
          {
             car_to_sell = vehicle[v];
          }
@@ -1414,40 +1414,9 @@ void dealership(int loc)
       move(11,1);
       if(car_to_sell)
       {
-         switch(car_to_sell->type)
-         {
-         case VEHICLE_VAN:
-            price=8000;
-            break;
-         case VEHICLE_STATIONWAGON:
-            price=6000;
-            break;
-         case VEHICLE_SPORTSCAR:
-            price=8000;
-            break;
-         case VEHICLE_BUG:
-            price=4000;
-            break;
-         case VEHICLE_PICKUP:
-            price=4000;
-            break;
-         case VEHICLE_POLICECAR:
-            price=4000;
-            break;
-         case VEHICLE_TAXICAB:
-            price=4000;
-            break;
-         case VEHICLE_SUV:
-            price=8000;
-            break;
-         case VEHICLE_AGENTCAR:
-            price=8000;
-            break;
-         case VEHICLE_JEEP:
-            price=6000;
-            break;
-         }
-         if(car_to_sell->heat)
+         price = static_cast<int>(0.8*car_to_sell->price());
+
+         if(car_to_sell->heat())
             price/=10;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("S - Sell the ");
@@ -1500,7 +1469,7 @@ void dealership(int loc)
       if(c=='s' && car_to_sell)
       {
          ledger.add_funds(price,INCOME_CARS);
-         removecarprefs_pool(car_to_sell->id);
+         removecarprefs_pool(car_to_sell->id());
          delete car_to_sell;
          for(int v=(int)vehicle.size()-1;v>=0;v--)
          {
@@ -1515,167 +1484,55 @@ void dealership(int loc)
       // Get a car
       if(c=='g' && !car_to_sell)
       {
+         int carchoice;
+
+         vector<int> availablevehicle;
+         vector<string> vehicleoption;
+         for (int i=0; i<vehicletype.size(); ++i)
+         {
+            if (vehicletype[i]->availableatshop())
+            {
+               availablevehicle.push_back(i);
+               vehicleoption.push_back(vehicletype[i]->longname()+" ($"+tostring(vehicletype[i]->price())+")");
+            }
+         }
+
          do
          {
-            erase();
-
-            locheader();
-            printparty();
-
-            if(ledger.get_funds()>=5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(10,1);
-            addstr("A - Bug ($5000)");
-            move(10,40);
-            addstr("B - Pickup Truck ($5000)");
-            
-            if(ledger.get_funds()>=10000)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(11,1);
-            addstr("C - Sports Car ($10000)");
-            move(11,40);
-            addstr("D - SUV ($10000)");
-            
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(16,1);
-            addstr("Enter - We don't need a Conservative car");
-
-            if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(15,1);
-            addstr("0 - Show the squad's Liberal status");
-            if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
-            else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(15,40);
-            addstr("# - Check the status of a squad Liberal");
-
-            int c=getch();
-            translategetch(c);
-            
-            // Back out
-            if(c==10)break;
-
-            //Picked a car
-            if(c>='a' && c<='d')
+            carchoice = choiceprompt("Choose a vehicle","",vehicleoption,"Vehicle",
+                                  true,"We don't need a Conservative car");
+            if (carchoice!=-1
+                && vehicletype[availablevehicle[carchoice]]->price() > ledger.get_funds())
             {
-               if(ledger.get_funds()<5000 || (ledger.get_funds()<10000 && c>='c'))continue;
-               int cartype=-1;
-               int carcolor=-1;
-               switch(c)
-               {
-               case 'a':cartype=VEHICLE_BUG;break;
-               case 'b':cartype=VEHICLE_PICKUP;break;
-               case 'c':cartype=VEHICLE_SPORTSCAR;break;
-               case 'd':cartype=VEHICLE_SUV;break;
-               default:continue;
-               }
-
-               do
-               {
-                  erase();
-
-                  locheader();
-                  printparty();
-
-                  move(10,1);
-                  addstr("A - Red");
-                  move(10,40);
-                  addstr("B - White");
-                  move(11,1);
-                  addstr("C - Blue");
-                  move(11,40);
-                  addstr("D - Beige");
-                  
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  move(16,1);
-                  addstr("Enter - These colors are Conservative");
-
-                  if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  else set_color(COLOR_BLACK,COLOR_BLACK,1);
-                  move(15,1);
-                  addstr("0 - Show the squad's Liberal status");
-                  if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  else set_color(COLOR_BLACK,COLOR_BLACK,1);
-                  move(15,40);
-                  addstr("# - Check the status of a squad Liberal");
-
-                  int c=getch();
-                  translategetch(c);
-                  
-                  // Back out
-                  if(c==10)break;
-
-                  //Picked a color
-                  if(c=='a')
-                  {
-                     carcolor=VEHICLECOLOR_RED;
-                     break;
-                  }
-                  if(c=='b')
-                  {
-                     carcolor=VEHICLECOLOR_WHITE;
-                     break;
-                  }
-                  if(c=='c')
-                  {
-                     carcolor=VEHICLECOLOR_BLUE;
-                     break;
-                  }
-                  if(c=='d')
-                  {
-                     carcolor=VEHICLECOLOR_BEIGE;
-                     break;
-                  }
-
-                  if(c=='0')party_status=-1;
-
-                  if(c>='1'&&c<='6'&&activesquad!=NULL)
-                  {
-                     if(activesquad->squad[c-'1']!=NULL)
-                     {
-                        if(party_status==c-'1')fullstatus(party_status);
-                        else party_status=c-'1';
-                     }
-                  }
-               }while(1);
-
-               if(carcolor!=-1)
-               {
-                  vehiclest *v=new vehiclest;
-                  v->init(cartype);
-                  v->color = carcolor;
-                  v->myear = year;
-                  v->heat  = 0;
-                  activesquad->squad[buyer]->carid = v->id;
-                  vehicle.push_back(v);
-
-                  switch(cartype)
-                  {
-                  case VEHICLE_BUG:
-                  case VEHICLE_PICKUP:
-                     ledger.subtract_funds(5000,EXPENSE_CARS);
-                     break;
-                  case VEHICLE_SPORTSCAR:
-                  case VEHICLE_SUV:
-                     ledger.subtract_funds(10000,EXPENSE_CARS);
-                  default:continue;
-                  }
-                  break;
-               }
+               set_color(COLOR_RED,COLOR_BLACK,0);
+               move(1,1);
+               addstr("You don't have enough money!");
+               getch();
             }
+            else
+               break;
+         }
+         while (1);
+         
+         if(carchoice==-1) continue;
 
-            if(c=='0')party_status=-1;
+         //Picked a car, pick color
+         int colorchoice;
+         //if (vehicletype[availablevehicle[choice]]->color().size()>1) //Allow to back out if you don't like single colour? -XML
+         //{
+            colorchoice = choiceprompt("Choose a color","",vehicletype[availablevehicle[carchoice]]->color(),
+                                       "Color",true,"These colors are Conservative");
+         //}
+         //else
+         //   colorchoice = 0;
+         if(colorchoice==-1) continue;
 
-            if(c>='1'&&c<='6'&&activesquad!=NULL)
-            {
-               if(activesquad->squad[c-'1']!=NULL)
-               {
-                  if(party_status==c-'1')fullstatus(party_status);
-                  else party_status=c-'1';
-               }
-            }
+         Vehicle *v=new Vehicle(*vehicletype[availablevehicle[carchoice]],
+                     vehicletype[availablevehicle[carchoice]]->color()[colorchoice],year);
+         activesquad->squad[buyer]->pref_carid = v->id();
+         vehicle.push_back(v);
 
-         }while(1);
+         ledger.subtract_funds(v->price(),EXPENSE_CARS);
       }
 
       // Reduce heat

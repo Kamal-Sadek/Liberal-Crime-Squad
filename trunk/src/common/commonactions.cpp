@@ -78,7 +78,7 @@ char endcheck(char cause)
 
 /* common - detatches all liberals from a specified car */
 //GETS RID OF CAR PREFERENCES FROM pool LIBERALS, BY CAR ID NUMBER
-void removecarprefs_pool(long carid)
+void removecarprefs_pool(long carid) //Turn into vehicle method? Like Vehicle::stop_riding_me(). -XML
 {
    for(int p=0;p<pool.size();p++)
    {
@@ -229,7 +229,7 @@ int testsquadclear(squadst &thissquad, int obase)
             long v=id_getcar(thissquad.squad[p]->carid);
             if(v!=-1)
             {
-               removecarprefs_pool(vehicle[v]->id);
+               removecarprefs_pool(vehicle[v]->id());
                delete vehicle[v];
                vehicle.erase(vehicle.begin() + v);
             }
@@ -513,7 +513,7 @@ void locatesquad(squadst *st,long loc)
             long v=id_getcar(st->squad[p]->carid);
             if(v!=-1)
             {
-               vehicle[v]->location=loc;
+               vehicle[v]->location()=loc;
             }
          }
       }
@@ -1040,3 +1040,60 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
    return 0;//-1; 
 }
 
+/* common - Displays options to choose from and returns an int corresponding
+            to the index of the option in the vector. */
+int choiceprompt(const string &firstline, const string &secondline,
+                  const vector<string> &option, const string &optiontypename,
+                  bool allowexitwochoice, const string &exitstring)
+{
+   int page = 0;
+
+   do
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(0,0);
+      addstr(firstline.c_str());
+      move(1,0);
+      addstr(secondline.c_str());
+      int yline = 2;
+
+      //Write options
+      for(int p=page*19; p<option.size()&&p<page*19+19; p++)
+      {
+         move(yline,0);
+         addch('A'+yline-2);addstr(" - ");
+         addstr(option[p].c_str());
+         ++yline;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr(("Press a Letter to select a "+optiontypename).c_str());//a/an error
+      move(23,0);
+      addpagestr();
+      move(24,0);
+      if (allowexitwochoice)
+         addstr(("Enter - "+exitstring).c_str());
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<option.size())page++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page*19+(int)(c-'a');
+         if(p<option.size())
+            return p;
+      }
+
+      if(allowexitwochoice&&c==10)break;
+   }while(1);
+   return -1;
+}

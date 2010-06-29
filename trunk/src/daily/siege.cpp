@@ -322,9 +322,9 @@ void siegecheck(char canseethings)
 
                for(int v=(int)vehicle.size()-1;v>=0;v--)
                {
-                  if(vehicle[v]->location==l)
+                  if(vehicle[v]->location()==l)
                   {
-                     removecarprefs_pool(vehicle[v]->id);
+                     removecarprefs_pool(vehicle[v]->id());
                      delete vehicle[v];
                      vehicle.erase(vehicle.begin() + v);
                   }
@@ -966,9 +966,9 @@ void siegeturn(char clearformess)
 
             for(int v=(int)vehicle.size()-1;v>=0;v--)
             {
-               if(vehicle[v]->location==l)
+               if(vehicle[v]->location()==l)
                {
-                  removecarprefs_pool(vehicle[v]->id);
+                  removecarprefs_pool(vehicle[v]->id());
                   delete vehicle[v];
                   vehicle.erase(vehicle.begin() + v);
                }
@@ -1711,9 +1711,9 @@ void giveup(void)
    location[loc]->loot.clear();
    for(int v=(int)vehicle.size()-1;v>=0;v--)
    {
-      if(vehicle[v]->location==loc)
+      if(vehicle[v]->location()==loc)
       {
-         removecarprefs_pool(vehicle[v]->id);
+         removecarprefs_pool(vehicle[v]->id());
          delete vehicle[v];
          vehicle.erase(vehicle.begin() + v);
       }
@@ -2006,9 +2006,9 @@ void escapesiege(char won)
 
       for(int v=(int)vehicle.size()-1;v>=0;v--)
       {
-         if(vehicle[v]->location==cursite)
+         if(vehicle[v]->location()==cursite)
          {
-            removecarprefs_pool(vehicle[v]->id);
+            removecarprefs_pool(vehicle[v]->id());
             delete vehicle[v];
             vehicle.erase(vehicle.begin() + v);
          }

@@ -88,10 +88,11 @@ long curcreatureid=0;
 vector<itemst *> groundloot;
 vector<locationst *> location;
 
-
-vector<vehiclest *> vehicle;
-long curcarid=0;
+vector<VehicleType *> vehicletype;
+vector<Vehicle *> vehicle;
+long curcarid=0; //Turn into static Vehicle class variable? -XML
 char showcarprefs=1;
+void initialize_vehicletypes();
 
 int oldMapMode=0; // -1 if we're using the old map generation functions.
 
@@ -392,6 +393,8 @@ int main(int argc, char* argv[])
    attorneyseed=getSeed();
    cityname(lcityname);
    
+   initialize_vehicletypes();
+   
    //addstr("Attempting to load saved game... ");
    //refresh();
    //getch();
@@ -434,85 +437,11 @@ int r_num(void)
    return seed;
 }
 
-void vehiclest::stop_riding_me()
+string tostring(long i)
 {
-   for(int p=0;p<pool.size();p++)
-   {
-      if(pool[p]->carid==id)
-      {
-         pool[p]->carid=-1;
-      }
-   }
-}
-
-void vehiclest::init(int t)
-{
-   id=curcarid;curcarid++;
-
-   heat=0;
-   location=-1;
-   type=t;
-   switch(t)
-   {
-      case VEHICLE_JEEP:
-         myear=year+1-LCSrandom(41);
-         break;
-      case VEHICLE_VAN:
-         myear=1969+LCSrandom(6);
-         break;
-      case VEHICLE_AGENTCAR:
-         myear=year+1-LCSrandom(11);
-         break;
-      case VEHICLE_STATIONWAGON:
-         myear=year+1-LCSrandom(41);
-         break;
-      case VEHICLE_SPORTSCAR:
-         myear=year+1-LCSrandom(21);
-         break;
-      case VEHICLE_BUG:
-         myear=1969+LCSrandom(6);
-         break;
-      case VEHICLE_PICKUP:
-         myear=year+1-LCSrandom(41);
-         break;
-      case VEHICLE_POLICECAR:
-         myear=year+1-LCSrandom(21);
-         break;
-      case VEHICLE_TAXICAB:
-         myear=year+1-LCSrandom(41);
-         break;
-      case VEHICLE_SUV:
-         myear=1995+LCSrandom(year-1995+1);
-         break;
-   }
-   switch(t)
-   {
-      case VEHICLE_POLICECAR:
-         color=VEHICLECOLOR_POLICE;
-         break;
-      case VEHICLE_AGENTCAR:
-         color=VEHICLECOLOR_BLACK;
-         break;
-      case VEHICLE_TAXICAB:
-         color=VEHICLECOLOR_TAXI;
-         break;
-      case VEHICLE_JEEP:
-      case VEHICLE_VAN:
-      case VEHICLE_STATIONWAGON:
-      case VEHICLE_SPORTSCAR:
-      case VEHICLE_BUG:
-      case VEHICLE_PICKUP:
-      case VEHICLE_SUV:
-         switch(LCSrandom(5))
-         {
-            case 0:color=VEHICLECOLOR_RED;break;
-            case 1:color=VEHICLECOLOR_WHITE;break;
-            case 2:color=VEHICLECOLOR_BLUE;break;
-            case 3:color=VEHICLECOLOR_BEIGE;break;
-            case 4:color=VEHICLECOLOR_BLACK;break;
-         }
-         break;
-   }
+   ostringstream os;
+   os << i;
+   return os.str(); //return (ostringstream()<<i).str();//?
 }
 
 void locationst::init(void)
@@ -627,3 +556,24 @@ void end_game(int err)
    exit(err);
 }
 
+void initialize_vehicletypes()
+{
+   CMarkup vtfile;
+   if(!vtfile.Load("art/vehicles.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load vehicles.xml!");
+      getch();
+      //Should cause abort here or else if file is missing all vehicles loaded
+      //from a saved game will be deleted. Also, you probably don't won't to
+      //play without any vehicles anyway. If the file does not have valid xml,
+      //behaviour is kind of undefined so it'd be best to abort then too. -XML
+   }
+
+   vtfile.FindElem();
+   vtfile.IntoElem();
+
+   while (vtfile.FindElem("vehicletype"))
+   {
+      vehicletype.push_back(new VehicleType(vtfile.GetSubDoc()));
+   }   
+}

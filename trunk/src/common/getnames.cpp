@@ -1076,106 +1076,32 @@ void getlaw(char *str,int l)
    }
 }
 
-
-
-void getcarfull(char *str,int type)
+void getcarfull(char *str,Vehicle &car,char halffull) //Replace all use with Vehicle::fullname -XML
 {
-   strcpy(str,"");
-
-   switch(type)
-   {
-      case VEHICLE_VAN:strcat(str,"Van");break;
-      case VEHICLE_STATIONWAGON:strcat(str,"Station Wagon");break;
-      case VEHICLE_SPORTSCAR:strcat(str,"Sportscar");break;
-      case VEHICLE_BUG:strcat(str,"Bug");break;
-      case VEHICLE_PICKUP:strcat(str,"Pickup Truck");break;
-      case VEHICLE_POLICECAR:strcat(str,"Police Cruiser");break;
-      case VEHICLE_TAXICAB:strcat(str,"Taxicab");break;
-      case VEHICLE_SUV:strcat(str,"SUV");break;
-      case VEHICLE_AGENTCAR:strcat(str,"Sportscar");break;
-      case VEHICLE_JEEP:strcat(str,"Jeep");break;
-   }
-}
-
-
-void getcarfull(char *str,vehiclest &car,char halffull)
-{
-   char str2[80],num[20];
+   char num[20];
    int words = 0;
-   if(car.heat)
+   if(car.heat())
    {
 	   strcpy(str,"Stolen ");
 	   words++;
    }
    else
 	   strcpy(str,"");
-   if(car.color!=naturalcarcolor(car.type))
+   if(car.displayscolor())
    {
-      getcarcolor(str2,car.color);
-      strcat(str,str2);
+      strcat(str,car.color().c_str());
       strcat(str," ");
-	  words++;
+	   words++;
    }
-   if(car.myear!=-1 && words<2)//don't print year if that will make the name too long.
+   if(car.myear()!=-1 && words<2)//don't print year if that will make the name too long.
    {
-      itoa(car.myear,num,10);
+      itoa(car.myear(),num,10);
       strcat(str,num);
       strcat(str," ");
    }
-   if(halffull)getcar(str2,car.type);
-   else getcarfull(str2,car.type);
-   strcat(str,str2);
+   if(halffull)strcat(str,car.shortname().c_str());
+   else strcat(str,car.longname().c_str());
 }
-
-
-void getcar(char *str,int type)
-{
-   strcpy(str,"");
-   switch(type)
-   {
-      //LIMIT-------------------------------------:-----:
-      case VEHICLE_VAN:            strcat(str,"Van");break;
-      case VEHICLE_STATIONWAGON:      strcat(str,"Wagon");break;
-      case VEHICLE_SPORTSCAR:         strcat(str,"Sport");break;
-      case VEHICLE_BUG:            strcat(str,"Bug");break;
-      case VEHICLE_PICKUP:         strcat(str,"Pickup");break;
-      case VEHICLE_POLICECAR:         strcat(str,"Cruiser");break;
-      case VEHICLE_TAXICAB:         strcat(str,"Taxicab");break;
-      case VEHICLE_SUV:            strcat(str,"SUV");break;
-      case VEHICLE_AGENTCAR:         strcat(str,"Sport");break;
-      case VEHICLE_JEEP:            strcat(str,"Jeep");break;
-   }
-}
-
-
-
-void getcarcolor(char *str,int type)
-{
-   strcpy(str,"");
-   switch(type)
-   {
-      case VEHICLECOLOR_RED:strcat(str,"Red");break;
-      case VEHICLECOLOR_WHITE:strcat(str,"White");break;
-      case VEHICLECOLOR_BLUE:strcat(str,"Blue");break;
-      case VEHICLECOLOR_BEIGE:strcat(str,"Beige");break;
-      case VEHICLECOLOR_POLICE:strcat(str,"Police-Marked");break;
-      case VEHICLECOLOR_TAXI:strcat(str,"Taxi-Striped");break;
-      case VEHICLECOLOR_BLACK:strcat(str,"Black");break;
-      default:strcat(str,"Translucent");break;
-   }
-}
-
-short naturalcarcolor(int type)
-{
-   switch(type)
-   {
-      case VEHICLE_POLICECAR:return VEHICLECOLOR_POLICE;
-      case VEHICLE_TAXICAB:return VEHICLECOLOR_TAXI;
-   }
-
-   return -1;
-}
-
 
 void cityname(char *story)
 {
