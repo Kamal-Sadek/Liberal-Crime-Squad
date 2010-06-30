@@ -19,7 +19,9 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  sitemode/sitemap.cpp news/news.h location.cpp location.h locationdef.cpp\
  locationdef.h basemode/activate_sleepers.cpp monthly/sleeper_update.cpp\
  items/armor.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
- common/misc.cpp common/help.cpp creature/creature.h creature/creaturenames.cpp
+ common/misc.cpp common/help.cpp creature/creature.h creature/creaturenames.cpp\
+ cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\
+ vehicle/vehicletype.cpp vehicle/vehicletype.h
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src
