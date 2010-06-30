@@ -163,7 +163,11 @@ void savegame(char *str)
       numbytes=fwrite(&dummy,sizeof(int),1,h);
       for(l=0;l<vehicle.size();l++)
       {
-         numbytes=fwrite(vehicle[l],sizeof(Vehicle),1,h);
+	 std::string vehicleStr = vehicle[l]->showXml();
+	 size_t vehicleSize = vehicleStr.size();
+
+	 numbytes=fwrite(&vehicleSize,sizeof (vehicleSize),1,h);
+         numbytes=fwrite(vehicleStr.c_str(),vehicleSize,1,h);
       }
 
       //POOL
@@ -430,8 +434,12 @@ char load(void)
       vehicle.resize(dummy);
       for(l=0;l<vehicle.size();l++)
       {
-         vehicle[l]=new Vehicle;
-         fread(vehicle[l],sizeof(Vehicle),1,h);
+	 size_t vehicleLen;
+	 fread (&vehicleLen, sizeof(vehicleLen), 1, h);
+	 vector<char> vec = vector<char> (vehicleLen + 1);
+	 fread (&vec[0], vehicleLen, 1, h);
+	 vec[vehicleLen] = '\0';
+	 vehicle[l] = new Vehicle (&vec[0]);
       }
 
       //POOL

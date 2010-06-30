@@ -1,6 +1,70 @@
 #include "includes.h"
 #include "externs.h"
 
+string Vehicle::showXml () const
+{
+   char buf[256];
+
+   CMarkup xml;
+   xml.AddElem ("vehicle");
+   xml.IntoElem ();
+   xml.AddElem ("vtypeidname", vtypeidname_);
+
+   snprintf (buf, 256, "%i", vtypeid_);
+   xml.AddElem ("vtypeid", buf);
+
+   xml.AddElem ("color", color_);
+
+   snprintf (buf, 256, "%i", heat_);
+   xml.AddElem ("heat", buf);
+
+   snprintf (buf, 256, "%i", location_);
+   xml.AddElem ("location", buf);
+
+   snprintf (buf, 256, "%i", myear_);
+   xml.AddElem ("myear", buf);
+
+   snprintf (buf, 256, "%i", id_);
+   xml.AddElem ("id", buf);
+
+   return xml.GetDoc();
+}
+
+Vehicle::Vehicle(const char * inputXml)
+{
+   CMarkup xml;
+   xml.SetDoc (inputXml);
+   xml.FindElem ();
+   xml.IntoElem ();
+   
+   while (xml.FindElem ()) {
+      std::string tag = xml.GetTagName ();
+      if (tag == "vtypeidname") {
+	 vtypeidname_ = xml.GetData();
+      }
+      else if (tag == "vtypeid") {
+	 vtypeid_ = atoi (xml.GetData().c_str());
+      }
+      else if (tag == "color") {
+	 color_ = xml.GetData();
+      }
+      else if (tag == "heat") {
+	 heat_ = atoi (xml.GetData().c_str());
+      }
+      else if (tag == "location") {
+	 location_ = atoi (xml.GetData().c_str());
+      }
+      else if (tag == "myear") {
+	 myear_ = atoi (xml.GetData().c_str());
+      }
+      else if (tag == "id") {
+	 id_ = atoi (xml.GetData().c_str());
+      }
+
+   }
+}
+
+
 Vehicle::Vehicle(const VehicleType& seed)
 {
    init(seed,seed.color()[LCSrandom(seed.color().size())],seed.makeyear());

@@ -14,8 +14,11 @@ class Vehicle
          stop_riding_me();
       }
 
+      string showXml () const;
+      Vehicle (const char * input);
+
       void stop_riding_me() const;
-      
+
       string fullname(bool halffull=false) const;
 
       short& heat() { return heat_; }
