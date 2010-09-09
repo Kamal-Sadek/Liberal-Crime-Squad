@@ -250,9 +250,7 @@ void advanceday(char &clearformess,char canseethings)
                         move(8,1);
                         addstr(squad[sq]->name);
                         addstr(" couldn't use the ");
-                        char str[80];
-                        getcarfull(str,*vehicle[v]);
-                        addstr(str);
+                        addstr(vehicle[v]->fullname().c_str());
                         addstr(".");
 
                         refresh();
@@ -660,13 +658,13 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
          case ACTIVITY_NONE:
-                 if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                                      location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
+            if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION
+                                   && location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
             {
-               if(pool[p]->armor.type!=ARMOR_NONE && pool[p]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
-                    {
-                            repairarmor(*pool[p],clearformess);
-                    }
+               if(/*!pool[p]->is_naked() &&*/ (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
+               {
+                  repairarmor(*pool[p],clearformess);
+               }
             }
                  break;
       }
@@ -1005,7 +1003,8 @@ void advanceday(char &clearformess,char canseethings)
             //chance of being arrested
             if(recruit[r]->task==TASK_CRIMES &&
                !LCSrandom(8*(recruit[r]->recruit->get_skill(SKILL_SECURITY)+recruit[r]->recruit->get_skill(SKILL_DISGUISE)+
-                             weaponskill(recruit[r]->recruit->weapon.type)+recruit[r]->recruit->get_skill(SKILL_STREETSENSE)+
+                             recruit[r]->recruit->get_skill(recruit[r]->recruit->get_weapon().get_attack(false,false,false)->skill)+
+                             recruit[r]->recruit->get_skill(SKILL_STREETSENSE)+
                              recruit[r]->recruit->get_attribute(ATTRIBUTE_AGILITY,true))))
             {
                recruit[r]->task=TASK_ARRESTED;

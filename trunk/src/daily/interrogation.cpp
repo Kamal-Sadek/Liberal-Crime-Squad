@@ -104,9 +104,8 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
    move(++y,40);
    itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
    addstr("Outfit: ");
-   char str[40];
-   getarmorfull(str,a->armor.type);
-   addstr(str);
+   //char str[40];
+   addstr(a->get_armor().get_name().c_str());
    move(y+=2,40);
    
    // What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
@@ -300,7 +299,7 @@ void tendhostage(Creature *cr,char &clearformess)
                             temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+
                             temppool[p]->get_skill(SKILL_PSYCHOLOGY)*2);
 
-               _attack[p] += temppool[p]->armor.interrogation_basepower();
+               _attack[p] += temppool[p]->get_armor().get_interrogation_basepower();
 
                if(_attack[p] < 0)
                   _attack[p] = 0;
@@ -574,7 +573,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
          addstr("It is subjected to dangerous hallucinogens.");
 
-         attack+=10+a->armor.interrogation_drugbonus();
+         attack+=10+a->get_armor().get_interrogation_drugbonus();
 
          //Possible permanent health damage
          if(LCSrandom(50)<++druguse)cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);

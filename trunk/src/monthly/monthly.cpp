@@ -91,15 +91,15 @@ void passmonth(char &clearformess,char canseethings)
    if(nploc.size()>0&&!disbanding)
    {
       //DO SPECIAL EDITIONS
-      int loottype=choosespecialedition(clearformess);
+      int loottypeindex=choosespecialedition(clearformess);
 
-      if(loottype!=-1)
+      if(loottypeindex!=-1)
       {
          guardianpower+=10*nploc.size();
-         printnews(loottype,nploc.size());
+         printnews(loottypeindex,nploc.size());
 
-         if(loottype==LOOT_INTHQDISK||
-            loottype==LOOT_SECRETDOCUMENTS)
+         if(loottype[loottypeindex]->get_idname()=="LOOT_INTHQDISK"|| //For special edition xml file? -XML
+            loottype[loottypeindex]->get_idname()=="LOOT_SECRETDOCUMENTS")
          {
             for(int l=0;l<nploc.size();l++)
             {
@@ -508,9 +508,8 @@ void passmonth(char &clearformess,char canseethings)
                   pool[p]->location=l;
                }
             }
-            pool[p]->armor.type=ARMOR_PRISONER;
-            pool[p]->armor.quality='1';
-            pool[p]->armor.flag=0;
+            Armor prisoner(*armortype[getarmortype("ARMOR_PRISONER")]);
+            pool[p]->give_armor(prisoner,NULL);
          }
       }
       else if(location[pool[p]->location]->type==SITE_GOVERNMENT_COURTHOUSE)

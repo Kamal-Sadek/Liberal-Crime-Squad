@@ -237,8 +237,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             removesquadinfo(*pool[p]);
             pool[p]->carid=-1;
             pool[p]->location=ps;
-            pool[p]->weapon.type=WEAPON_NONE;
-            pool[p]->weapon.ammo=0;
+            pool[p]->drop_weapons_and_clips(NULL);
             pool[p]->activity.type=ACTIVITY_NONE;
 
             refresh();
@@ -470,16 +469,33 @@ char completedate(datest &d,int p,char &clearformess)
 
       //Others come to dates unarmed and wearing normal
       //clothing
-      weaponst weapon = weapon = d.date[e]->weapon;
-      d.date[e]->weapon.type = WEAPON_NONE;
-      armorst armor = d.date[e]->armor;
-      d.date[e]->armor.type = ARMOR_CLOTHES;
+      vector<Item*> temp;
+      d.date[e]->drop_weapons_and_clips(&temp);
+      Armor atmp(*armortype[getarmortype("ARMOR_CLOTHES")]);
+      d.date[e]->give_armor(atmp,&temp);
+      //Weapon* wtemp = &d.date[e]->get_weapon();
+      //d.date[e]->weapon = NULL;
+      //Armor* atemp = d.date[e]->armor;
+      //d.date[e]->armor = new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
 
       printcreatureinfo(d.date[e]);
       makedelimiter(8,0);
 
-      d.date[e]->weapon = weapon;
-      d.date[e]->armor = armor;
+      while (!temp.empty())
+      {
+         if (temp.back()->is_weapon())
+            d.date[e]->give_weapon(*(static_cast<Weapon*>(temp.back())),NULL); //casts -XML
+         else if (temp.back()->is_armor())
+            d.date[e]->give_armor(*(static_cast<Armor*>(temp.back())),NULL);
+         else if (temp.back()->is_clip())
+            d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())),temp.back()->get_number());
+         delete temp.back();
+         temp.pop_back();
+      }
+      //d.date[e]->weapon = wtemp;
+      //delete d.date[e]->armor;
+      //d.date[e]->armor = atemp;
+
 
       move(10,0);
       addstr("How should ");
@@ -613,21 +629,19 @@ char completedate(datest &d,int p,char &clearformess)
             int bonus=0;
             move(17,0);
             addstr(pool[p]->name);
-            char str[30];
-            getweaponfull(str,pool[p]->weapon.type,1);
 
-            if(pool[p]->weapon.ranged())
+            if(pool[p]->get_weapon().is_ranged())
             {
                addstr(" comes back from the bathroom toting the ");
-               addstr(str);
+               addstr(pool[p]->get_weapon().get_name(1).c_str());
                move(18,0);
                addstr("and threatens to blow the Conservative's brains out!");
                bonus=5;
             }
-            else if(pool[p]->weapon.type!=WEAPON_NONE)
+            else if(pool[p]->is_armed())
             {
                addstr(" grabs the Conservative from behind, holding the ");
-               addstr(str);
+               addstr(pool[p]->get_weapon().get_name(1).c_str());
                move(18,0);
                addstr("to the corporate slave's throat!");
                bonus=2;
@@ -691,9 +705,9 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->flag|=CREATUREFLAG_MISSING;
 
                //Kidnapped wearing normal clothes and no weapon
-               d.date[e]->weapon.ammo = 0;
-               d.date[e]->weapon.type = WEAPON_NONE;
-               d.date[e]->armor.type = ARMOR_CLOTHES;
+               d.date[e]->drop_weapons_and_clips(NULL);
+               Armor clothes(*armortype[getarmortype("ARMOR_CLOTHES")]);
+               d.date[e]->give_armor(clothes,NULL);
 
                //Create interrogation data
                d.date[e]->activity.arg=reinterpret_cast<long>(new interrogation);
@@ -776,8 +790,7 @@ char completedate(datest &d,int p,char &clearformess)
                   removesquadinfo(*pool[p]);
                   pool[p]->carid=-1;
                   pool[p]->location=ps;
-                  pool[p]->weapon.type=WEAPON_NONE;
-                  pool[p]->weapon.ammo=0;
+                  pool[p]->drop_weapons_and_clips(NULL);
                   pool[p]->activity.type=ACTIVITY_NONE;
 
                   // Charge with kidnapping

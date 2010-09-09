@@ -84,15 +84,23 @@ vector<configSiteMap *> sitemaps; // stores site map info read in from config fi
 
 unsigned int seed;
 
+vector<ClipType *> cliptype;
+vector<WeaponType *> weapontype;
+vector<ArmorType *> armortype;
+vector<LootType *> loottype;
+bool initialize_cliptypes();
+bool initialize_weapontypes();
+bool initialize_armortypes();
+bool initialize_loottypes();
+
 long curcreatureid=0;
-vector<itemst *> groundloot;
+vector<Item *> groundloot;
 vector<locationst *> location;
 
 vector<VehicleType *> vehicletype;
 vector<Vehicle *> vehicle;
-long curcarid=0; //Turn into static Vehicle class variable? -XML
 char showcarprefs=1;
-void initialize_vehicletypes();
+bool initialize_vehicletypes();
 
 int oldMapMode=0; // -1 if we're using the old map generation functions.
 
@@ -238,7 +246,7 @@ int main(int argc, char* argv[])
    start_color();
 
    seed=getSeed();
-   
+
    //initialize the array of color pairs
    for(int i=0;i<8;i++)
    {
@@ -259,7 +267,7 @@ int main(int argc, char* argv[])
 
    //begin the game loop
    keypad(stdscr,TRUE);
-   
+
    raw_output(TRUE);
    
    //addstr("Loading Graphics... ");
@@ -285,7 +293,7 @@ int main(int argc, char* argv[])
       refresh();
       getch();
    }
-   
+
    //move(1,0);
    //addstr("Setting initial game data... ");
    //refresh();
@@ -393,8 +401,15 @@ int main(int argc, char* argv[])
    attorneyseed=getSeed();
    cityname(lcityname);
    
-   initialize_vehicletypes();
-   
+   bool xml_loaded_ok = true;
+   xml_loaded_ok &= initialize_vehicletypes();
+   xml_loaded_ok &= initialize_cliptypes();
+   xml_loaded_ok &= initialize_weapontypes();
+   xml_loaded_ok &= initialize_armortypes();
+   xml_loaded_ok &= initialize_loottypes();
+   if(!xml_loaded_ok)
+      return 0;
+
    //addstr("Attempting to load saved game... ");
    //refresh();
    //getch();
@@ -441,7 +456,17 @@ string tostring(long i)
 {
    ostringstream os;
    os << i;
-   return os.str(); //return (ostringstream()<<i).str();//?
+   return os.str();
+}
+
+int stringtobool(const string& boolstr) //Should find better way to do this. -XML
+{
+   if (boolstr == "true" || boolstr == "True" || boolstr == "TRUE")
+      return 1;
+   else if (boolstr == "false" || boolstr == "False" || boolstr == "FALSE")
+      return 0;
+   else
+      return -1;
 }
 
 void locationst::init(void)
@@ -556,17 +581,18 @@ void end_game(int err)
    exit(err);
 }
 
-void initialize_vehicletypes()
+bool initialize_vehicletypes()
 {
    CMarkup vtfile;
    if(!vtfile.Load("art/vehicles.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load vehicles.xml!");
       getch();
-      //Should cause abort here or else if file is missing all vehicles loaded
-      //from a saved game will be deleted. Also, you probably don't won't to
+      //Will cause abort here or else if file is missing all vehicles loaded
+      //from a saved game would be deleted. Also, you probably don't want to
       //play without any vehicles anyway. If the file does not have valid xml,
-      //behaviour is kind of undefined so it'd be best to abort then too. -XML
+      //behaviour is kind of undefined so it's best to abort then too.
+      return false;
    }
 
    vtfile.FindElem();
@@ -575,5 +601,123 @@ void initialize_vehicletypes()
    while (vtfile.FindElem("vehicletype"))
    {
       vehicletype.push_back(new VehicleType(vtfile.GetSubDoc()));
-   }   
+   }
+   return true; 
+}
+
+bool initialize_cliptypes()
+{
+   CMarkup ctfile;
+   if(!ctfile.Load("art/clips.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load clips.xml!");
+      getch();
+      return false; //Abort.
+   }
+
+   ctfile.FindElem();
+   ctfile.IntoElem();
+
+   while (ctfile.FindElem("cliptype"))
+   {
+      cliptype.push_back(new ClipType(ctfile.GetSubDoc()));
+   }
+   return true; 
+}
+
+bool initialize_weapontypes()
+{
+   CMarkup wtfile;
+   if(!wtfile.Load("art/weapons.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load weapons.xml!");
+      getch();
+      return false; //Abort.
+   }
+
+   wtfile.FindElem();
+   wtfile.IntoElem();
+
+   while (wtfile.FindElem("weapontype"))
+   {
+      weapontype.push_back(new WeaponType(wtfile.GetSubDoc()));
+   }
+   return true; 
+}
+
+bool initialize_armortypes()
+{
+   //Armors
+   CMarkup atfile;
+   if(!atfile.Load("art/armors.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load armors.xml!");
+      getch();
+      return false; //Abort.
+   }
+
+   atfile.FindElem();
+   atfile.IntoElem();
+
+   while (atfile.FindElem("armortype"))
+   {
+      armortype.push_back(new ArmorType(atfile.GetSubDoc()));
+   }
+   
+   //Masks
+   if(!atfile.Load("art/masks.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load masks.xml!");
+      getch();
+      return false; //Abort.
+   }
+
+   atfile.FindElem();
+   atfile.IntoElem();
+
+   int defaultindex;
+   if (atfile.FindElem("default"))
+   {
+      defaultindex = getarmortype(atfile.GetData());
+   }
+   else
+   {
+      addstr("Default missing for masks!");
+      getch();
+      return false; //Abort.
+   }
+   if (defaultindex == -1)
+   {
+      addstr("Default for masks is not a known armor type!");
+      getch();
+      return false; //Abort.
+   }
+
+   atfile.ResetMainPos();
+   while (atfile.FindElem("masktype"))
+   {
+      armortype.push_back(new ArmorType(*armortype[defaultindex], atfile.GetSubDoc()));
+   }
+
+   return true; 
+}
+
+bool initialize_loottypes()
+{
+   CMarkup ltfile;
+   if(!ltfile.Load("art/loot.xml"))
+   { //File is missing or not valid XML.
+      addstr("FAILED to load loot.xml!");
+      getch();
+      return false; //Abort.
+   }
+
+   ltfile.FindElem();
+   ltfile.IntoElem();
+
+   while (ltfile.FindElem("loottype"))
+   {
+      loottype.push_back(new LootType(ltfile.GetSubDoc()));
+   }
+   return true; 
 }

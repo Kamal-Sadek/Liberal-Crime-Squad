@@ -322,9 +322,8 @@ void siegecheck(char canseethings)
 
                for(int v=(int)vehicle.size()-1;v>=0;v--)
                {
-                  if(vehicle[v]->location()==l)
+                  if(vehicle[v]->get_location()==l)
                   {
-                     removecarprefs_pool(vehicle[v]->id());
                      delete vehicle[v];
                      vehicle.erase(vehicle.begin() + v);
                   }
@@ -966,9 +965,8 @@ void siegeturn(char clearformess)
 
             for(int v=(int)vehicle.size()-1;v>=0;v--)
             {
-               if(vehicle[v]->location()==l)
+               if(vehicle[v]->get_location()==l)
                {
-                  removecarprefs_pool(vehicle[v]->id());
                   delete vehicle[v];
                   vehicle.erase(vehicle.begin() + v);
                }
@@ -1638,14 +1636,7 @@ void giveup(void)
             }
          }
 
-         pool[p]->weapon.type=WEAPON_NONE;
-         pool[p]->weapon.ammo=0;
-         
-         // CLEAR CLIPS
-         for(int cl=0;cl<CLIPNUM;cl++)
-         {
-            pool[p]->clip[cl] = 0;
-         }
+         pool[p]->drop_weapons_and_clips(NULL);
 
          if(iscriminal(*pool[p]))
          {
@@ -1711,9 +1702,8 @@ void giveup(void)
    location[loc]->loot.clear();
    for(int v=(int)vehicle.size()-1;v>=0;v--)
    {
-      if(vehicle[v]->location()==loc)
+      if(vehicle[v]->get_location()==loc)
       {
-         removecarprefs_pool(vehicle[v]->id());
          delete vehicle[v];
          vehicle.erase(vehicle.begin() + v);
       }
@@ -2006,9 +1996,8 @@ void escapesiege(char won)
 
       for(int v=(int)vehicle.size()-1;v>=0;v--)
       {
-         if(vehicle[v]->location()==cursite)
+         if(vehicle[v]->get_location()==cursite)
          {
-            removecarprefs_pool(vehicle[v]->id());
             delete vehicle[v];
             vehicle.erase(vehicle.begin() + v);
          }

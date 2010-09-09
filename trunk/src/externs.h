@@ -110,7 +110,7 @@ extern vector<locationst *> location;
 extern vector<newsstoryst *> newsstory;
 extern newsstoryst *sitestory;
 
-extern vector<itemst *> groundloot;
+extern vector<Item *> groundloot;
 extern long curcreatureid;
 extern chaseseqst chaseseq;
 
@@ -128,9 +128,13 @@ extern char cantseereason;
 
 extern short activesortingchoice[SORTINGCHOICENUM];
 
+extern vector<ClipType *> cliptype;
+extern vector<WeaponType *> weapontype;
+extern vector<ArmorType *> armortype;
+extern vector<LootType *> loottype;
+
 extern vector<VehicleType *> vehicletype;
 extern vector<Vehicle *> vehicle;
-extern long curcarid;
 extern char showcarprefs;
 
 extern siteblockst levelmap[MAPX][MAPY][MAPZ];

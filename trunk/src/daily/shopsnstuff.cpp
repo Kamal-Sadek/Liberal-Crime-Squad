@@ -32,96 +32,57 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* supporting function -- gives "standard" prices on guns */
-long gun_price(enum Weapons type)
+long gun_price(const string& type) //Temporary solution until shops are fixed. -XML
 {
    double price=0;
 
-   switch(type)
-   {
-      case WEAPON_NONE:
-      case WEAPON_SHANK:
-      /*case WEAPON_CHAIN:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_CROWBAR:
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_GAVEL:
-      case WEAPON_CROSS:
-      case WEAPON_STAFF:
-      case WEAPON_TORCH:
-      case WEAPON_SPRAYCAN:
-      case WEAPON_PITCHFORK:*/ // not priced yet
-         price=1;
-         break;
-      case WEAPON_KNIFE:
-      case WEAPON_SYRINGE:
-      case WEAPON_MOLOTOV:
-         price=10;
-         break;
-      case WEAPON_SWORD:
-      case WEAPON_DAISHO:
-      case WEAPON_HAMMER:
-      case WEAPON_MAUL:
-      case WEAPON_AXE:
-         price=100;
-         break;
-      case WEAPON_REVOLVER_38:
-         price=200;
-         break;
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-         price=300;
-         break;
-      case WEAPON_SHOTGUN_PUMP:
-         price=400;
-         break;
-      case WEAPON_REVOLVER_44:
-         price=500;
-         break;
-      case WEAPON_DESERT_EAGLE:
-      case WEAPON_SEMIRIFLE_AR15:
-         price=800;
-         break;
-      case WEAPON_SMG_MP5:
-      case WEAPON_FLAMETHROWER:
+   if (type == "WEAPON_SHANK")
+      price = 1;
+   else if (type == "WEAPON_KNIFE"
+            || type == "WEAPON_SYRINGE"
+            || type == "WEAPON_MOLOTOV")
+      price=10;
+   else if (type == "WEAPON_SWORD"
+            || type == "WEAPON_DAISHO"
+            || type == "WEAPON_HAMMER"
+            || type == "WEAPON_MAUL"
+            || type == "WEAPON_AXE")
+      price=100;
+   else if (type == "WEAPON_REVOLVER_38")
+      price=200;
+   else if (type == "WEAPON_SEMIPISTOL_9MM"
+            || type == "WEAPON_SEMIPISTOL_45")
+      price=300;
+   else if (type == "WEAPON_SHOTGUN_PUMP")
+      price=400;
+   else if (type == "WEAPON_REVOLVER_44")
+      price=500;
+   else if (type == "WEAPON_DESERT_EAGLE"
+            || type == "WEAPON_SEMIRIFLE_AR15")
+      price=800;
+   else if (type == "WEAPON_SMG_MP5"
+            || type == "WEAPON_FLAMETHROWER")
          price=1100;
-         break;
-      case WEAPON_AUTORIFLE_AK47:
+   else if (type == "WEAPON_AUTORIFLE_AK47")
          price=1400;
-         break;
-      case WEAPON_AUTORIFLE_M16:
+   else if (type == "WEAPON_AUTORIFLE_M16")
          price=1500;
-         break;
-      case WEAPON_CARBINE_M4:
+   else if (type == "WEAPON_CARBINE_M4")
          price=1500;
-         break;
-   }
 
    // Handle illegal weapons by making them more expensive
 
-   // Note no break statements: the more illegal guns are,
+   // Note no else: the more illegal guns are,
    // the more the price of the most dangerous ones spirals
-   // upward
-   switch(type)
-   {
-      case WEAPON_SMG_MP5:
-      case WEAPON_CARBINE_M4:
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-         if(law[LAW_GUNCONTROL]!=-2)
-            price*=2.0;
-      case WEAPON_SEMIRIFLE_AR15:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_DESERT_EAGLE:
-         if(law[LAW_GUNCONTROL]>-1)
-            price*=2.0;
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-         if(law[LAW_GUNCONTROL]>0)
-            price*=2.0;
-      case WEAPON_REVOLVER_38:
-         if(law[LAW_GUNCONTROL]>1)
-            price*=2.0;
-   }
+   // upward   
+   if (weapontype[getweapontype(type)]->get_legality() < law[LAW_GUNCONTROL])
+      price*=2.0;
+   if (weapontype[getweapontype(type)]->get_legality()+1 < law[LAW_GUNCONTROL])
+      price*=2.0;
+   if (weapontype[getweapontype(type)]->get_legality()+2 < law[LAW_GUNCONTROL])
+      price*=2.0;
+   if (weapontype[getweapontype(type)]->get_legality()+3 < law[LAW_GUNCONTROL])
+      price*=2.0;
 
    return static_cast<int>(price);
 }
@@ -194,132 +155,55 @@ void hospital(int loc)
 }
 
 /* select a gun for arms dealership */
-char gunselect(Creature *cr,short &gun,bool legal=1)
+char gunselect(Creature &cr,int &gunindex,bool legal=1)
 {
-   gun=-1;
+   gunindex=-1;
 
-   vector<enum Weapons> guntype;
-   for(int a=0;a<WEAPONNUM;a++)
+   vector<int> guntypei;
+   guntypei.push_back(getweapontype("WEAPON_SMG_MP5"));
+   if(legal)
    {
-      switch(a)
-      {
-         /* list here any guns to be sold at gunshop */
-         case WEAPON_SMG_MP5:
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_CARBINE_M4:
-            if(!legal)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_AUTORIFLE_M16:
-            if(!legal)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_AUTORIFLE_AK47:
-            if(legal && law[LAW_GUNCONTROL]!=-2)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_SEMIRIFLE_AR15:
-            if(legal && law[LAW_GUNCONTROL]>-1)break;
-            if(!legal)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_REVOLVER_44:
-            if(legal && law[LAW_GUNCONTROL]>-1)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_SEMIPISTOL_9MM:
-         case WEAPON_SEMIPISTOL_45:
-            if(legal && law[LAW_GUNCONTROL]>0)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_REVOLVER_38:
-            if(legal && law[LAW_GUNCONTROL]>1)break;
-            if(!legal)break;
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         case WEAPON_SHOTGUN_PUMP:
-            guntype.push_back(static_cast<enum Weapons>(a));
-            break;
-         default:
-            break;
-      }
+      guntypei.push_back(getweapontype("WEAPON_CARBINE_M4"));
+      guntypei.push_back(getweapontype("WEAPON_AUTORIFLE_M16"));
    }
-
-   int page=0;
-
-   char str[200];
-
-   do
+   if(!(legal && law[LAW_GUNCONTROL]!=-2))
    {
-      erase();
+      guntypei.push_back(getweapontype("WEAPON_AUTORIFLE_AK47"));
+   }
+   if(!((legal && law[LAW_GUNCONTROL]>-1) || !legal))   
+      guntypei.push_back(getweapontype("WEAPON_SEMIRIFLE_AR15"));
+   if(!(legal && law[LAW_GUNCONTROL]>-1))
+      guntypei.push_back(getweapontype("WEAPON_REVOLVER_44"));
+   if(!(legal && law[LAW_GUNCONTROL]>0))
+   {
+      guntypei.push_back(getweapontype("WEAPON_SEMIPISTOL_9MM"));
+      guntypei.push_back(getweapontype("WEAPON_SEMIPISTOL_45"));
+   }
+   if(!((legal && law[LAW_GUNCONTROL]>1) || !legal))
+      guntypei.push_back(getweapontype("WEAPON_REVOLVER_38"));
+   guntypei.push_back(getweapontype("WEAPON_SHOTGUN_PUMP"));
 
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("Which weapon will ");
-      addstr(cr->name);
-      addstr(" buy?");
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(1,0);
-      addstr("----PRODUCT NAME-----------------------PRICE------------------------------------");
+   erase();
+      
+   string firstline = "Which weapon will " + string(cr.name) + " buy?";
+   const string secondline = "----PRODUCT NAME-----------------------PRICE------------------------------------";
+   vector< pair<string,int> > option;
+   for (int i = 0; i < guntypei.size(); ++i)
+   {
+      int price = gun_price(weapontype[guntypei[i]]->get_idname());
+      const string& name = weapontype[guntypei[i]]->get_name();
+      option.push_back(make_pair(name,price));
+   }
+   
+   int bought = buyprompt(firstline, secondline, option, 35,
+                          "Weapon", (string(cr.name) + "needs no weapon"));
 
-      int y=2;
-      for(int p=page*19;p<guntype.size()&&p<page*19+19;p++)
-      {
-         int price = gun_price(guntype[p]);
-         if(ledger.get_funds()<price)set_color(COLOR_BLACK,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y+'A'-2);addstr(" - ");
-         getweaponfull(str,guntype[p]);
-         addstr(str);
-
-         move(y,39);
-         itoa(price,str,10);
-         addch('$');
-         addstr(str);
-
-         y++;
-      }
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(22,0);
-      addstr("Press a Letter to select a Weapon");
-      move(23,0);
-      addpagestr();
-      move(24,0);
-      addstr("Enter - ");
-      addstr(cr->name);
-      addstr(" needs no weapon");
-
-      refresh();
-
-      int c=getch();
-      translategetch(c);
-
-      //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
-      //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<guntype.size())page++;
-
-      if(c>='a'&&c<='s')
-      {
-         int p=page*19+(int)(c-'a');
-         if(p<guntype.size())
-         {
-            int price = gun_price(guntype[p]);
-            if(price < ledger.get_funds())
-            {
-               gun=guntype[p];
-               ledger.subtract_funds(price,EXPENSE_SHOPPING);
-               return 1;
-            }
-         }
-      }
-
-      if(c==10)break;
-   }while(1);
-
+   if (bought != -1)
+   {
+      gunindex=guntypei[bought];
+      ledger.subtract_funds(option[bought].second,EXPENSE_SHOPPING);
+      return 1;
+   }
    return 0;
 }
 
@@ -423,42 +307,15 @@ void armsdealer(int loc)
       }
       else if(in_gunshop==1)
       {
-         short gunbought;
-         if(gunselect(activesquad->squad[buyer],gunbought,0))
+         int gunbought;
+         if(gunselect(*activesquad->squad[buyer],gunbought,0))
          {
-            weaponst swap=activesquad->squad[buyer]->weapon;
-            activesquad->squad[buyer]->weapon.type=gunbought;
-            activesquad->squad[buyer]->weapon.ammo=0;
-
-            if(swap.type!=WEAPON_NONE)
-            {
-               itemst *newi=new itemst;
-                  newi->type=ITEM_WEAPON;
-                  newi->weapon=swap;
-                  if(swap.type==WEAPON_MOLOTOV &&
-                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
-                  {
-                     newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
-                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
-                  }
-               location[activesquad->squad[0]->base]->loot.push_back(newi);
-            }
-
-            //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
-            {
-               if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
-
-               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_CLIP;
-                     newi->cliptype=cl;
-                  location[activesquad->squad[0]->base]->loot.push_back(newi);
-               }
-
-               activesquad->squad[buyer]->clip[cl]=0;
-            }
+            Weapon* w=new Weapon(*weapontype[gunbought]);
+            activesquad->squad[buyer]->give_weapon(*w,&location[activesquad->squad[0]->base]->loot);
+            if (w->empty())
+               delete w;
+            else
+               location[activesquad->squad[0]->base]->loot.push_back(w);
          }
          in_gunshop=0;
          continue;
@@ -504,57 +361,49 @@ void armsdealer(int loc)
 
          if(ledger.get_funds()>=25&&c=='t')
          {
-            clipbought=CLIP_38;
+            clipbought=getcliptype("CLIP_38");
             ledger.subtract_funds(25,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=40&&c=='m')
          {
-            clipbought=CLIP_44;
+            clipbought=getcliptype("CLIP_44");
             ledger.subtract_funds(40,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=40&&c=='n')
          {
-            clipbought=CLIP_9;
+            clipbought=getcliptype("CLIP_9");
             ledger.subtract_funds(40,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=40&&c=='f')
          {
-            clipbought=CLIP_45;
+            clipbought=getcliptype("CLIP_45");
             ledger.subtract_funds(40,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=25&&c=='p')
          {
-            clipbought=CLIP_BUCKSHOT;
+            clipbought=getcliptype("CLIP_BUCKSHOT");
             ledger.subtract_funds(25,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=50&&c=='r')
          {
-            clipbought=CLIP_ASSAULT;
+            clipbought=getcliptype("CLIP_ASSAULT");
             ledger.subtract_funds(50,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=50&&c=='s')
          {
-            clipbought=CLIP_SMG;
+            clipbought=getcliptype("CLIP_SMG");
             ledger.subtract_funds(50,EXPENSE_SHOPPING);
          }
-
-         char conf=1;
-
-         if(ammotype(activesquad->squad[buyer]->weapon.type)==clipbought&&clipbought!=-1)
+         
+         if (clipbought != -1)
          {
-            if(activesquad->squad[buyer]->clip[clipbought]<9)
-            {
-               activesquad->squad[buyer]->clip[clipbought]++;
-               conf=0;
-            }
-         }
-
-         if(conf&&clipbought!=-1)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_CLIP;
-               newi->cliptype=clipbought;
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
+            Clip* boughtclip = new Clip(*cliptype[clipbought]);
+            bool done;
+            done = activesquad->squad[buyer]->take_clips(*boughtclip,1);
+            if (done)
+               delete boughtclip;
+            else
+               location[activesquad->squad[0]->base]->loot.push_back(boughtclip);
          }
 
          if(c==10)in_gunshop=0;
@@ -929,31 +778,32 @@ void pawnshop(int loc)
       {
          if(c==10)in_fence=0;
 
-         if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
+         if(c=='e' && activesquad->squad[0]->location!=-1)
+            equip(location[activesquad->squad[0]->location]->loot,-1);
 
          if(c=='w'||c=='a'||c=='c')
-		 {
-		   move(18,1);
-           set_color(COLOR_WHITE,COLOR_BLACK,1);
-		   switch (c)
-		   {
-		    case 'w':
-				addstr("Really sell all weapons? (Y)es to confirm.           ");
-				break;
-			case 'a':
-				addstr("Really sell all ammo? (Y)es to confirm.              ");
-				break;
-			case 'c':
-				addstr("Really sell all clothes? (Y)es to confirm.           ");
-				break;
-		   }
-		   int c2=getch();
-	       translategetch(c2);
-		   if (c2!='y')
-		   {
-			   c = 0;//no sale
-		   }
-		 }
+         {
+            move(18,1);
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            switch (c)
+            {
+               case 'w':
+                  addstr("Really sell all weapons? (Y)es to confirm.           ");
+                  break;
+               case 'a':
+                  addstr("Really sell all ammo? (Y)es to confirm.              ");
+                  break;
+               case 'c':
+                  addstr("Really sell all clothes? (Y)es to confirm.           ");
+                  break;
+            }
+            int c2=getch();
+            translategetch(c2);
+            if (c2!='y')
+            {
+               c = 0;//no sale
+            }
+          }
 
          if((c=='w'||c=='c'||c=='l'||c=='a'||c=='f')&&
             location[activesquad->squad[0]->base]->loot.size()>0)
@@ -963,123 +813,43 @@ void pawnshop(int loc)
             if(c=='f')fenceamount=fenceselect();
             else
             {
-               int fenceweapon[WEAPONNUM];
-               int fencearmor[ARMORNUM];
-               int fenceclip[CLIPNUM];
-               int fenceloot[LOOTNUM];
-
-               memset(fenceweapon,0,WEAPONNUM*sizeof(int));
-               memset(fencearmor,0,ARMORNUM*sizeof(int));
-               memset(fenceclip,0,CLIPNUM*sizeof(int));
-               memset(fenceloot,0,LOOTNUM*sizeof(int));
-
-               for(l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
+               for(int l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
                {
-                  switch(location[activesquad->squad[0]->base]->loot[l]->type)
+                  if (c=='w' && location[activesquad->squad[0]->base]->loot[l]->is_weapon()
+                      && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
                   {
-                     case ITEM_WEAPON:fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
-                     case ITEM_ARMOR:
-                        if(location[activesquad->squad[0]->base]->loot[l]->armor.flag!=0)break;
-                        fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]+=location[activesquad->squad[0]->base]->loot[l]->number;
-                        break;
-                     case ITEM_CLIP:fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
-                     case ITEM_LOOT:fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]+=location[activesquad->squad[0]->base]->loot[l]->number;break;
+                     fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()
+                                    * location[activesquad->squad[0]->base]->loot[l]->get_number();
+                     delete location[activesquad->squad[0]->base]->loot[l];
+                     location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                   }
-               }
-
-               if(c!='w')memset(fenceweapon,0,WEAPONNUM*sizeof(int));
-
-               if(c!='c')memset(fencearmor,0,ARMORNUM*sizeof(int));
-
-               if(c!='a')memset(fenceclip,0,CLIPNUM*sizeof(int));
-
-               if(c!='l')memset(fenceloot,0,LOOTNUM*sizeof(int));
-               else
-               {
-                  fenceloot[LOOT_CEOPHOTOS]=0;
-                  fenceloot[LOOT_CEOLOVELETTERS]=0;
-                  fenceloot[LOOT_CEOTAXPAPERS]=0;
-                  fenceloot[LOOT_INTHQDISK]=0;
-                  fenceloot[LOOT_CORPFILES]=0;
-                  fenceloot[LOOT_JUDGEFILES]=0;
-                  fenceloot[LOOT_RESEARCHFILES]=0;
-                  fenceloot[LOOT_PRISONFILES]=0;
-                  fenceloot[LOOT_CABLENEWSFILES]=0;
-                  fenceloot[LOOT_AMRADIOFILES]=0;
-                  fenceloot[LOOT_SECRETDOCUMENTS]=0;
-                  fenceloot[LOOT_POLICERECORDS]=0;
-               }
-
-               for(l=location[activesquad->squad[0]->base]->loot.size()-1;l>=0;l--)
-               {
-                  switch(location[activesquad->squad[0]->base]->loot[l]->type)
+                  else if (c=='a' && location[activesquad->squad[0]->base]->loot[l]->is_armor()
+                           && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
                   {
-                     case ITEM_WEAPON:
-                        if(fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]>0)
-                        {
-                           long numbersold=fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type];
-                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
-                           fenceweapon[location[activesquad->squad[0]->base]->loot[l]->weapon.type]-=numbersold;
-                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
-
-                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
-                           {
-                              delete location[activesquad->squad[0]->base]->loot[l];
-                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
-                           }
-                        }
-                        break;
-                     case ITEM_ARMOR:
-                        if(location[activesquad->squad[0]->base]->loot[l]->armor.quality!='1')break;
-                        if(location[activesquad->squad[0]->base]->loot[l]->armor.flag!=0)break;
-                        if(fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]>0)
-                        {
-                           long numbersold=fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type];
-                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
-                           fencearmor[location[activesquad->squad[0]->base]->loot[l]->armor.type]-=numbersold;
-                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
-
-                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
-                           {
-                              delete location[activesquad->squad[0]->base]->loot[l];
-                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
-                           }
-                        }
-                        break;
-                     case ITEM_CLIP:
-                        if(fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]>0)
-                        {
-                           long numbersold=fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype];
-                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
-                           fenceclip[location[activesquad->squad[0]->base]->loot[l]->cliptype]-=numbersold;
-                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
-
-                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
-                           {
-                              delete location[activesquad->squad[0]->base]->loot[l];
-                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
-                           }
-                        }
-                        break;
-                     case ITEM_LOOT:
-                        if(fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]>0)
-                        {
-                           long numbersold=fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype];
-                           if(numbersold>location[activesquad->squad[0]->base]->loot[l]->number)numbersold=location[activesquad->squad[0]->base]->loot[l]->number;
-                           fenceloot[location[activesquad->squad[0]->base]->loot[l]->loottype]-=numbersold;
-                           location[activesquad->squad[0]->base]->loot[l]->number-=numbersold;
-                           fenceamount+=fencevalue(*location[activesquad->squad[0]->base]->loot[l])*numbersold;
-
-                           if(location[activesquad->squad[0]->base]->loot[l]->number==0)
-                           {
-                              delete location[activesquad->squad[0]->base]->loot[l];
-                              location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
-                           }
-                        }
-                        break;
+                     fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()
+                                    * location[activesquad->squad[0]->base]->loot[l]->get_number();
+                     delete location[activesquad->squad[0]->base]->loot[l];
+                     location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
+                  }
+                  else if (c=='c' && location[activesquad->squad[0]->base]->loot[l]->is_clip()
+                           && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
+                  {
+                     fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()
+                                    * location[activesquad->squad[0]->base]->loot[l]->get_number();
+                     delete location[activesquad->squad[0]->base]->loot[l];
+                     location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
+                  }
+                  else if (c=='l' && location[activesquad->squad[0]->base]->loot[l]->is_loot()
+                           && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
+                  {
+                     Loot* a = static_cast<Loot*>(location[activesquad->squad[0]->base]->loot[l]); //cast -XML
+                     if(!a->no_quick_fencing())
+                     {
+                        fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()
+                                       * location[activesquad->squad[0]->base]->loot[l]->get_number();
+                        delete location[activesquad->squad[0]->base]->loot[l];
+                        location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
+                     }
                   }
                }
             }
@@ -1108,92 +878,64 @@ void pawnshop(int loc)
 
          if(ledger.get_funds()>=150&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
-            gunbought=WEAPON_REVOLVER_38;
+            gunbought=getweapontype("WEAPON_REVOLVER_38");
             ledger.subtract_funds(150,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=300&&c=='m'&&law[LAW_GUNCONTROL]<1)
          {
-            gunbought=WEAPON_REVOLVER_44;
+            gunbought=getweapontype("WEAPON_REVOLVER_44");
             ledger.subtract_funds(300,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=300&&c=='n'&&law[LAW_GUNCONTROL]<2)
          {
-            gunbought=WEAPON_SEMIPISTOL_9MM;
+            gunbought=getweapontype("WEAPON_SEMIPISTOL_9MM");
             ledger.subtract_funds(300,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=300&&c=='f'&&law[LAW_GUNCONTROL]<2)
          {
-            gunbought=WEAPON_SEMIPISTOL_45;
+            gunbought=getweapontype("WEAPON_SEMIPISTOL_45;");
             ledger.subtract_funds(300,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=400&&c=='g' && law[LAW_GUNCONTROL]<2)
          {
-            gunbought=WEAPON_SHOTGUN_PUMP;
+            gunbought=getweapontype("WEAPON_SHOTGUN_PUMP");
             ledger.subtract_funds(400,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=350&&c=='r'&&law[LAW_GUNCONTROL]<0)
          {
-            gunbought=WEAPON_SEMIRIFLE_AR15;
+            gunbought=getweapontype("WEAPON_SEMIRIFLE_AR15");
             ledger.subtract_funds(350,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=1200&&c=='s'&&law[LAW_GUNCONTROL]==-2)
          {
-            gunbought=WEAPON_SMG_MP5;
+            gunbought=getweapontype("WEAPON_SMG_MP5");
             ledger.subtract_funds(1200,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=1400&&c=='c'&&law[LAW_GUNCONTROL]==-2)
          {
-            gunbought=WEAPON_CARBINE_M4;
+            gunbought=getweapontype("WEAPON_CARBINE_M4");
             ledger.subtract_funds(1400,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=1500&&c=='a'&&law[LAW_GUNCONTROL]==-2)
          {
-            gunbought=WEAPON_AUTORIFLE_M16;
+            gunbought=getweapontype("WEAPON_AUTORIFLE_M16");
             ledger.subtract_funds(1500,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=1500&&c=='k'&&law[LAW_GUNCONTROL]==-2)
          {
-            gunbought=WEAPON_AUTORIFLE_AK47;
+            gunbought=getweapontype("WEAPON_AUTORIFLE_AK47");
             ledger.subtract_funds(1500,EXPENSE_SHOPPING);
          }
 
 
          if(gunbought!=-1)
          {
-            weaponst swap=activesquad->squad[buyer]->weapon;
-            activesquad->squad[buyer]->weapon.type=gunbought;
-            activesquad->squad[buyer]->weapon.ammo=0;
-
-            if(swap.type!=WEAPON_NONE)
-            {
-               itemst *newi=new itemst;
-                  newi->type=ITEM_WEAPON;
-                  newi->weapon=swap;
-                  
-                  if(swap.type==WEAPON_MOLOTOV &&
-                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
-                  {
-                     newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
-                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
-                  }
-               location[activesquad->squad[0]->base]->loot.push_back(newi);
-            }
-
-            //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
-            {
-               if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
-
-               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_CLIP;
-                     newi->cliptype=cl;
-                  location[activesquad->squad[0]->base]->loot.push_back(newi);
-               }
-
-               activesquad->squad[buyer]->clip[cl]=0;
-            }
+            Weapon* w=new Weapon(*weapontype[gunbought]);
+            activesquad->squad[buyer]->give_weapon(*w,&location[activesquad->squad[0]->base]->loot);
+            if (w->empty())
+               delete w;
+            else
+               location[activesquad->squad[0]->base]->loot.push_back(w);
          }
 
          if(c==10)in_gunshop=0;
@@ -1204,57 +946,49 @@ void pawnshop(int loc)
 
          if(ledger.get_funds()>=15&&c=='t'&&law[LAW_GUNCONTROL]<2)
          {
-            clipbought=CLIP_38;
+            clipbought=getcliptype("CLIP_38");
             ledger.subtract_funds(15,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=20&&c=='m'&&law[LAW_GUNCONTROL]<1)
          {
-            clipbought=CLIP_44;
+            clipbought=getcliptype("CLIP_44");
             ledger.subtract_funds(20,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=30&&c=='n'&&law[LAW_GUNCONTROL]<2)
          {
-            clipbought=CLIP_9;
+            clipbought=getcliptype("CLIP_9");
             ledger.subtract_funds(30,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=30&&c=='f'&&law[LAW_GUNCONTROL]<2)
          {
-            clipbought=CLIP_45;
+            clipbought=getcliptype("CLIP_45");
             ledger.subtract_funds(30,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=20&&c=='p' && law[LAW_GUNCONTROL]<2)
          {
-            clipbought=CLIP_BUCKSHOT;
+            clipbought=getcliptype("CLIP_BUCKSHOT");
             ledger.subtract_funds(20,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=35&&c=='r'&&law[LAW_GUNCONTROL]<0)
          {
-            clipbought=CLIP_ASSAULT;
+            clipbought=getcliptype("CLIP_ASSAULT");
             ledger.subtract_funds(35,EXPENSE_SHOPPING);
          }
          if(ledger.get_funds()>=35&&c=='s'&&law[LAW_GUNCONTROL]==-2)
          {
-            clipbought=CLIP_SMG;
+            clipbought=getcliptype("CLIP_SMG");
             ledger.subtract_funds(35,EXPENSE_SHOPPING);
          }
-
-         char conf=1;
-
-         if(ammotype(activesquad->squad[buyer]->weapon.type)==clipbought&&clipbought!=-1)
+         
+         if (clipbought != -1)
          {
-            if(activesquad->squad[buyer]->clip[clipbought]<9)
-            {
-               activesquad->squad[buyer]->clip[clipbought]++;
-               conf=0;
-            }
-         }
-
-         if(conf&&clipbought!=-1)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_CLIP;
-               newi->cliptype=clipbought;
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
+            Clip* boughtclip = new Clip(*cliptype[clipbought]);
+            bool done;
+            done = activesquad->squad[buyer]->take_clips(*boughtclip,1);
+            if (done)
+               delete boughtclip;
+            else
+               location[activesquad->squad[0]->base]->loot.push_back(boughtclip);
          }
 
          if(c==10)in_gunshop=0;
@@ -1265,80 +999,32 @@ void pawnshop(int loc)
          if(c=='c'&&ledger.get_funds()>=20)
          {
             ledger.subtract_funds(20,EXPENSE_SHOPPING);
-            toolbought=WEAPON_CROWBAR;
+            toolbought=getweapontype("WEAPON_CROWBAR");
          }
          if(c=='s'&&ledger.get_funds()>=20)
          {
             ledger.subtract_funds(20,EXPENSE_SHOPPING);
-            toolbought=WEAPON_SPRAYCAN;
+            toolbought=getweapontype("WEAPON_SPRAYCAN");
          }
          if(c=='g'&&ledger.get_funds()>=200)
          {
             ledger.subtract_funds(200,EXPENSE_SHOPPING);
-            toolbought=WEAPON_GUITAR;
+            toolbought=getweapontype("WEAPON_GUITAR");
          }
          if(c=='m'&&ledger.get_funds()>=40)
          {
             ledger.subtract_funds(40,EXPENSE_SHOPPING);
-            toolbought=WEAPON_MOLOTOV;
+            toolbought=getweapontype("WEAPON_MOLOTOV");
          }
 
          if(toolbought!=-1)
          {
-            weaponst swap=activesquad->squad[buyer]->weapon;
-            activesquad->squad[buyer]->weapon.type=toolbought;
-            activesquad->squad[buyer]->weapon.ammo=0;
-
-            if(toolbought==WEAPON_MOLOTOV)
-               activesquad->squad[buyer]->weapon.ammo=1;
-
-            if(swap.type!=WEAPON_NONE)
-            {
-               if(toolbought == WEAPON_MOLOTOV && swap.type==WEAPON_MOLOTOV)
-               {
-                  if(activesquad->squad[buyer]->clip[CLIP_MOLOTOV]<9)
-                     activesquad->squad[buyer]->clip[CLIP_MOLOTOV]++;
-                  else
-                  {
-                     itemst *newi=new itemst;
-                        newi->type=ITEM_WEAPON;
-                        newi->number=1;
-                        newi->weapon=swap;
-                     location[activesquad->squad[0]->base]->loot.push_back(newi);
-                  }
-               }
-               else
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_WEAPON;
-                     newi->weapon=swap;
-                     
-                     if(swap.type==WEAPON_MOLOTOV &&
-                        activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
-                     {
-                        newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
-                        activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
-                     }
-                  location[activesquad->squad[0]->base]->loot.push_back(newi);
-               }
-            }
-
-
-            //DROP ALL CLIPS THAT DON'T WORK
-            for(int cl=0;cl<CLIPNUM;cl++)
-            {
-               if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
-
-               for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_CLIP;
-                     newi->cliptype=cl;
-                  location[activesquad->squad[0]->base]->loot.push_back(newi);
-               }
-
-               activesquad->squad[buyer]->clip[cl]=0;
-            }
+            Weapon* w=new Weapon(*weapontype[toolbought]);
+            activesquad->squad[buyer]->give_weapon(*w,&location[activesquad->squad[0]->base]->loot);
+            if (w->empty())
+               delete w;
+            else
+               location[activesquad->squad[0]->base]->loot.push_back(w);
          }
          if(c==10)in_tools=0;
       }
@@ -1347,7 +1033,8 @@ void pawnshop(int loc)
          if(c==10)break;
          if(c=='c' && law[LAW_GUNCONTROL]<2)in_gunshop=2;
          if(c=='g' && law[LAW_GUNCONTROL]<2)in_gunshop=1;
-         if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
+         if(c=='e' && activesquad->squad[0]->location!=-1)
+            equip(location[activesquad->squad[0]->location]->loot,-1);
          if(c=='s')in_fence=1;
          if(c=='t')in_tools=1;
       }
@@ -1416,16 +1103,10 @@ void dealership(int loc)
       {
          price = static_cast<int>(0.8*car_to_sell->price());
 
-         if(car_to_sell->heat())
+         if(car_to_sell->get_heat())
             price/=10;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("S - Sell the ");
-         getcarfull(str,*car_to_sell);
-         addstr(str);
-         addstr(" ($");
-         itoa(price,str,10);
-         addstr(str);
-         addstr(")");
+         addstr(("S - Sell the "+car_to_sell->fullname()+" ($"+tostring(price)+")").c_str());
       }
       else
       {
@@ -1469,7 +1150,6 @@ void dealership(int loc)
       if(c=='s' && car_to_sell)
       {
          ledger.add_funds(price,INCOME_CARS);
-         removecarprefs_pool(car_to_sell->id());
          delete car_to_sell;
          for(int v=(int)vehicle.size()-1;v>=0;v--)
          {
@@ -1579,7 +1259,6 @@ void deptstore(int loc)
 
    do
    {
-      int weaponbought=-1;
       int armorbought=-1;
 
       erase();
@@ -1647,86 +1326,39 @@ void deptstore(int loc)
 
       if(ledger.get_funds()>=400&&c=='c')
       {
-         armorbought=ARMOR_CHEAPSUIT;
+         armorbought=getarmortype("ARMOR_CHEAPSUIT");
          ledger.subtract_funds(400,EXPENSE_SHOPPING);
       }
       if(ledger.get_funds()>=5000&&c=='v')
       {
-         armorbought=ARMOR_EXPENSIVESUIT;
+         armorbought=getarmortype("ARMOR_EXPENSIVESUIT");
          ledger.subtract_funds(5000,EXPENSE_SHOPPING);
       }
       if(ledger.get_funds()>=500&&c=='s')
       {
-         armorbought=ARMOR_BLACKSUIT;
+         armorbought=getarmortype("ARMOR_BLACKSUIT");
          ledger.subtract_funds(500,EXPENSE_SHOPPING);
       }
       if(ledger.get_funds()>=400&&c=='h')
       {
-         armorbought=ARMOR_CHEAPDRESS;
+         armorbought=getarmortype("ARMOR_CHEAPDRESS");
          ledger.subtract_funds(400,EXPENSE_SHOPPING);
       }
       if(ledger.get_funds()>=5000&&c=='d')
       {
-         armorbought=ARMOR_EXPENSIVEDRESS;
+         armorbought=getarmortype("ARMOR_EXPENSIVEDRESS");
          ledger.subtract_funds(5000,EXPENSE_SHOPPING);
       }
       if(ledger.get_funds()>=500&&c=='r')
       {
-         armorbought=ARMOR_BLACKDRESS;
+         armorbought=getarmortype("ARMOR_BLACKDRESS");
          ledger.subtract_funds(500,EXPENSE_SHOPPING);
       }
 
       if(armorbought!=-1)
       {
-         armorst swap=activesquad->squad[buyer]->armor;
-         activesquad->squad[buyer]->armor.type=armorbought;
-         activesquad->squad[buyer]->armor.flag=0;
-         activesquad->squad[buyer]->armor.quality='1';
-
-         if(swap.type!=ARMOR_NONE)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_ARMOR;
-               newi->armor=swap;
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
-         }
-      }
-      if(weaponbought!=-1)
-      {
-         weaponst swap=activesquad->squad[buyer]->weapon;
-         activesquad->squad[buyer]->weapon.type=weaponbought;
-         activesquad->squad[buyer]->weapon.ammo=0;
-
-         if(swap.type!=WEAPON_NONE)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon=swap;
-               
-               if(swap.type==WEAPON_MOLOTOV &&
-                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
-               {
-                  newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
-                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
-               }
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
-         }
-
-         //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
-         {
-            if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
-
-            for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
-            {
-               itemst *newi=new itemst;
-                  newi->type=ITEM_CLIP;
-                  newi->cliptype=cl;
-               location[activesquad->squad[0]->base]->loot.push_back(newi);
-            }
-
-            activesquad->squad[buyer]->clip[cl]=0;
-         }
+         Armor a=Armor(*armortype[armorbought]);
+         activesquad->squad[buyer]->give_armor(a,&location[activesquad->squad[0]->base]->loot);
       }
 
       if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
@@ -1937,49 +1569,49 @@ void halloweenstore(int loc)
 
          if(c=='t'&&ledger.get_funds()>=70)
          {
-            armorbought=ARMOR_TRENCHCOAT;
+            armorbought=getarmortype("ARMOR_TRENCHCOAT");
             ledger.subtract_funds(70,EXPENSE_SHOPPING);
          }
 
          if(c=='w'&&ledger.get_funds()>=50)
          {
-            armorbought=ARMOR_WORKCLOTHES;
+            armorbought=getarmortype("ARMOR_WORKCLOTHES");
             ledger.subtract_funds(50,EXPENSE_SHOPPING);
          }
 
          if(c=='l'&&ledger.get_funds()>=200)
          {
-            armorbought=ARMOR_LABCOAT;
+            armorbought=getarmortype("ARMOR_LABCOAT");
             ledger.subtract_funds(200,EXPENSE_SHOPPING);
          }
 
          if(c=='r'&&ledger.get_funds()>=200)
          {
-            armorbought=ARMOR_BLACKROBE;
+            armorbought=getarmortype("ARMOR_BLACKROBE");
             ledger.subtract_funds(200,EXPENSE_SHOPPING);
          }
 
          if(c=='c'&&ledger.get_funds()>=200)
          {
-            armorbought=ARMOR_CLOWNSUIT;
+            armorbought=getarmortype("ARMOR_CLOWNSUIT");
             ledger.subtract_funds(200,EXPENSE_SHOPPING);
          }
 
          if(c=='g'&&ledger.get_funds()>=350)
          {
-            armorbought=ARMOR_BONDAGEGEAR;
+            armorbought=getarmortype("ARMOR_BONDAGEGEAR");
             ledger.subtract_funds(350,EXPENSE_SHOPPING);
          }
 
          if(c=='e'&&ledger.get_funds()>=1000)
          {
-            armorbought=ARMOR_ELEPHANTSUIT;
+            armorbought=getarmortype("ARMOR_ELEPHANTSUIT");
             ledger.subtract_funds(1000,EXPENSE_SHOPPING);
          }
 
          if(c=='d'&&ledger.get_funds()>=1000)
          {
-            armorbought=ARMOR_DONKEYSUIT;
+            armorbought=getarmortype("ARMOR_DONKEYSUIT");
             ledger.subtract_funds(1000,EXPENSE_SHOPPING);
          }
 
@@ -1988,15 +1620,14 @@ void halloweenstore(int loc)
             short mask;
             if(maskselect(activesquad->squad[buyer],mask))
             {
-               armorbought=ARMOR_MASK;
-               armorbought2=mask;
+               armorbought=mask;
                ledger.subtract_funds(15,EXPENSE_SHOPPING);
             }
          }
 
          if(c=='o'&&ledger.get_funds()>=90)
          {
-            armorbought=ARMOR_TOGA;
+            armorbought=getarmortype("ARMOR_TOGA");
             ledger.subtract_funds(90,EXPENSE_SHOPPING);
          }
       }
@@ -2006,49 +1637,49 @@ void halloweenstore(int loc)
 
          if(c=='k'&&ledger.get_funds()>=20)
          {
-            weaponbought=WEAPON_KNIFE;
+            weaponbought=getweapontype("WEAPON_KNIFE");
             ledger.subtract_funds(20,EXPENSE_SHOPPING);
          }
 
          if(c=='s'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_SWORD;
+            weaponbought=getweapontype("WEAPON_SWORD");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='a'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_DAISHO;
+            weaponbought=getweapontype("WEAPON_DAISHO");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='h'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_HAMMER;
+            weaponbought=getweapontype("WEAPON_HAMMER");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='m'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_MAUL;
+            weaponbought=getweapontype("WEAPON_MAUL");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='c'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_CROSS;
+            weaponbought=getweapontype("WEAPON_CROSS");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='w'&&ledger.get_funds()>=250)
          {
-            weaponbought=WEAPON_STAFF;
+            weaponbought=getweapontype("WEAPON_STAFF");
             ledger.subtract_funds(250,EXPENSE_SHOPPING);
          }
 
          if(c=='!'&&ledger.get_funds()>=1000)
          {
-            armorbought=ARMOR_MITHRIL;
+            armorbought=getarmortype("ARMOR_MITHRIL");
             ledger.subtract_funds(1000,EXPENSE_SHOPPING);
          }
       }
@@ -2061,56 +1692,17 @@ void halloweenstore(int loc)
 
       if(armorbought!=-1)
       {
-         armorst swap=activesquad->squad[buyer]->armor;
-         activesquad->squad[buyer]->armor.type=armorbought;
-         activesquad->squad[buyer]->armor.subtype=armorbought2;
-         activesquad->squad[buyer]->armor.flag=0;
-         activesquad->squad[buyer]->armor.quality='1';
-
-         if(swap.type!=ARMOR_NONE)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_ARMOR;
-               newi->armor=swap;
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
-         }
+         Armor a=Armor(*armortype[armorbought]);
+         activesquad->squad[buyer]->give_armor(a,&location[activesquad->squad[0]->base]->loot);
       }
       if(weaponbought!=-1)
       {
-         weaponst swap=activesquad->squad[buyer]->weapon;
-         activesquad->squad[buyer]->weapon.type=weaponbought;
-         activesquad->squad[buyer]->weapon.ammo=0;
-
-         if(swap.type!=WEAPON_NONE)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon=swap;
-               
-               if(swap.type==WEAPON_MOLOTOV &&
-                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV])
-               {
-                  newi->number = 1 + activesquad->squad[buyer]->clip[CLIP_MOLOTOV];
-                  activesquad->squad[buyer]->clip[CLIP_MOLOTOV]=0;
-               }
-            location[activesquad->squad[0]->base]->loot.push_back(newi);
-         }
-
-         //DROP ALL CLIPS THAT DON'T WORK
-         for(int cl=0;cl<CLIPNUM;cl++)
-         {
-            if(cl==ammotype(activesquad->squad[buyer]->weapon.type))continue;
-
-            for(int p2=0;p2<activesquad->squad[buyer]->clip[cl];p2++)
-            {
-               itemst *newi=new itemst;
-                  newi->type=ITEM_CLIP;
-                  newi->cliptype=cl;
-               location[activesquad->squad[0]->base]->loot.push_back(newi);
-            }
-
-            activesquad->squad[buyer]->clip[cl]=0;
-         }
+         Weapon* w=new Weapon(*weapontype[weaponbought]);
+         activesquad->squad[buyer]->give_weapon(*w,&location[activesquad->squad[0]->base]->loot);
+         if (w->empty())
+            delete w;
+         else
+            location[activesquad->squad[0]->base]->loot.push_back(w);
       }
 
       if(c=='e' && activesquad->squad[0]->location!=-1)equip(location[activesquad->squad[0]->location]->loot,-1);
@@ -2131,37 +1723,18 @@ void halloweenstore(int loc)
 
 
 /* oubliette - buy a mask */
-char maskselect(Creature *cr,short &mask)
+char maskselect(Creature *cr,short &maskindex)
 {
-   mask=-1;
+   maskindex=-1;
 
-   vector<int> masktype;
-   for(int a=0;a<MASKNUM;a++)
+   vector<unsigned> masktype;
+   for(unsigned a=0;a<armortype.size();a++)
    {
-      switch(a)
-      {
-         case MASK_JESUS:
-         case MASK_COLEMAN_GARY:
-         case MASK_MADONNA:
-         case MASK_SPEARS:
-         case MASK_EMINEM:
-         case MASK_AGUILERA:
-         case MASK_WAHLBERG:
-         case MASK_IGGYPOP:
-         case MASK_CASH:
-         case MASK_BINLADEN:
-         case MASK_LORDS:
-         case MASK_SHIELDS:
-         case MASK_JACKSON_MICHAEL:
-         case MASK_CRUTHERS:
-         case MASK_KING_DON:
-            break; /* comment this break to allow all masks, leave it in to hide some for surprises */
-         default:
-            masktype.push_back(a);
-      }
+      if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
+         masktype.push_back(a);
    }
 
-   int page=0;
+   unsigned page=0;
 
    char str[200];
 
@@ -2179,18 +1752,16 @@ char maskselect(Creature *cr,short &mask)
       addstr("----PRODUCT NAME-----------------------DESCRIPTION------------------------------");
 
       int y=2;
-      for(int p=page*19;p<masktype.size()&&p<page*19+19;p++)
+      for(unsigned p=page*19;p<masktype.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
          addch(y+'A'-2);addstr(" - ");
-         getarmorfull(str,ARMOR_MASK,masktype[p]);
-         addstr(str);
+         addstr(armortype[masktype[p]]->get_name().c_str());
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,39);
-         getmaskdesc(str,masktype[p]);
-         addstr(str);
+         addstr(armortype[masktype[p]]->get_description().c_str());
 
          y++;
       }
@@ -2220,13 +1791,19 @@ char maskselect(Creature *cr,short &mask)
          int p=page*19+(int)(c-'a');
          if(p<masktype.size())
          {
-            mask=masktype[p];
+            maskindex=masktype[p];
             return 1;
          }
       }
       if(c=='z')
       {
-         mask=LCSrandom(MASKNUM);
+         for (int i = 0; i < armortype.size(); ++i)
+         {
+            if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
+               masktype.push_back(i);
+         }
+         maskindex=masktype[LCSrandom(masktype.size())];
+         
          return 1;
       }
 
@@ -2247,9 +1824,7 @@ int fenceselect(void)
 
    int page=0;
 
-   vector<int> selected;
-   selected.resize(location[activesquad->squad[0]->base]->loot.size());
-   for(int s=0;s<selected.size();s++)selected[s]=0;
+   vector<int> selected(location[activesquad->squad[0]->base]->loot.size(),0);
 
    do
    {
@@ -2271,55 +1846,29 @@ int fenceselect(void)
       printparty();
 
       int x=1,y=10;
-      char str[200],str2[200];
+      char str[200];
+      string itemstr;
 
       for(int l=page*18;l<location[activesquad->squad[0]->base]->loot.size()&&l<page*18+18;l++)
       {
          if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_WEAPON)
+         itemstr = location[activesquad->squad[0]->base]->loot[l]->equip_title();
+         if(location[activesquad->squad[0]->base]->loot[l]->get_number()>1)
          {
-            getweaponfull(str2,location[activesquad->squad[0]->base]->loot[l]->weapon.type);
-            if(location[activesquad->squad[0]->base]->loot[l]->weapon.ammo>0)
-            {
-               char num[20];
-               itoa(location[activesquad->squad[0]->base]->loot[l]->weapon.ammo,num,10);
-               strcat(str2," (");
-               strcat(str2,num);
-               strcat(str2,")");
-            }
-         }
-         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_ARMOR)
-         {
-            getarmorfull(str2,location[activesquad->squad[0]->base]->loot[l]->armor,0);
-         }
-         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_CLIP)
-         {
-            getclip(str2,location[activesquad->squad[0]->base]->loot[l]->cliptype);
-         }
-         if(location[activesquad->squad[0]->base]->loot[l]->type==ITEM_LOOT)
-         {
-            getloot(str2,location[activesquad->squad[0]->base]->loot[l]->loottype);
-         }
-         if(location[activesquad->squad[0]->base]->loot[l]->number>1)
-         {
-            char num[20];
-            strcat(str2," ");
             if(selected[l]>0)
             {
-               itoa(selected[l],num,10);
-               strcat(str2,num);
-               strcat(str2,"/");
+               itemstr += tostring(selected[l]) + "/";
             }
-            else strcat(str2,"x");
-            itoa(location[activesquad->squad[0]->base]->loot[l]->number,num,10);
-            strcat(str2,num);
+            else
+               itemstr += "x";
+            itemstr += tostring(location[activesquad->squad[0]->base]->loot[l]->get_number());
          }
 
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,str2);
+         strcat(str,itemstr.c_str());
 
          move(y,x);
          addstr(str);
@@ -2365,19 +1914,12 @@ int fenceselect(void)
          {
             if(selected[slot])
             {
-               ret-=fencevalue(*location[activesquad->squad[0]->base]->loot[slot])*selected[slot];
+               ret-=location[activesquad->squad[0]->base]->loot[slot]->get_fencevalue()*selected[slot];
                selected[slot]=0;
             }
             else
             {
-               char bad=0;
-               if(location[activesquad->squad[0]->base]->loot[slot]->type==ITEM_ARMOR)
-               {
-                  //if(location[activesquad->squad[0]->base]->loot[slot]->armor.quality!='1')bad=1;
-                  if(location[activesquad->squad[0]->base]->loot[slot]->armor.flag!=0)bad=1;
-               }
-
-               if(bad)
+               if(!location[activesquad->squad[0]->base]->loot[slot]->is_good_for_sale())
                {
                   printparty();
 
@@ -2390,7 +1932,7 @@ int fenceselect(void)
                }
                else
                {
-                  if(location[activesquad->squad[0]->base]->loot[slot]->number>1)
+                  if(location[activesquad->squad[0]->base]->loot[slot]->get_number()>1)
                   {
                      selected[slot]=1;
 
@@ -2415,11 +1957,14 @@ int fenceselect(void)
                      keypad(stdscr,TRUE);
 
                      selected[slot]=atoi(str);
-                     if(selected[slot]<0)selected[slot]=0;
-                     else if(selected[slot]>location[activesquad->squad[0]->base]->loot[slot]->number)selected[slot]=location[activesquad->squad[0]->base]->loot[slot]->number;
+                     if(selected[slot]<0)
+                        selected[slot]=0;
+                     else if(selected[slot]>location[activesquad->squad[0]->base]->loot[slot]->get_number())
+                        selected[slot]=location[activesquad->squad[0]->base]->loot[slot]->get_number();
                   }
-                  else selected[slot]=1;
-                  ret+=fencevalue(*location[activesquad->squad[0]->base]->loot[slot])*selected[slot];
+                  else
+                     selected[slot]=1;
+                  ret+=location[activesquad->squad[0]->base]->loot[slot]->get_fencevalue()*selected[slot];
                }
             }
          }
@@ -2438,8 +1983,8 @@ int fenceselect(void)
    {
       if(selected[l]>0)
       {
-         location[activesquad->squad[0]->base]->loot[l]->number-=selected[l];
-         if(location[activesquad->squad[0]->base]->loot[l]->number<=0)
+         location[activesquad->squad[0]->base]->loot[l]->decrease_number(selected[l]);
+         if(location[activesquad->squad[0]->base]->loot[l]->get_number()<=0)
          {
             delete location[activesquad->squad[0]->base]->loot[l];
             location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
@@ -2447,137 +1992,7 @@ int fenceselect(void)
       }
    }
 
-      return ret;
-}
-
-
-
-/* value of stuff to fence */
-int fencevalue(itemst &it)
-{
-   int fenceamount=0;
-
-   switch(it.type)
-   {
-      case ITEM_WEAPON:
-         switch(it.weapon.type)
-         {
-            case WEAPON_CROWBAR:fenceamount=10;break;
-            case WEAPON_BASEBALLBAT:fenceamount=20;break;
-            case WEAPON_KNIFE:fenceamount=10;break;
-            case WEAPON_SHANK:fenceamount=5;break;
-            case WEAPON_SYRINGE:fenceamount=10;break;
-            case WEAPON_REVOLVER_38:fenceamount=50;break;
-            case WEAPON_REVOLVER_44:fenceamount=100;break;
-            case WEAPON_DESERT_EAGLE:fenceamount=250;break;
-            case WEAPON_SEMIPISTOL_9MM:fenceamount=100;break;
-            case WEAPON_SEMIPISTOL_45:fenceamount=100;break;
-            case WEAPON_SMG_MP5:fenceamount=450;break;
-            case WEAPON_SEMIRIFLE_AR15:fenceamount=250;break;
-            case WEAPON_AUTORIFLE_M16:fenceamount=500;break;
-            case WEAPON_AUTORIFLE_AK47:fenceamount=500;break;
-            case WEAPON_CARBINE_M4:fenceamount=400;break;
-            case WEAPON_SHOTGUN_PUMP:fenceamount=150;break;
-            case WEAPON_DAISHO:fenceamount=100;break;
-            case WEAPON_HAMMER:fenceamount=100;break;
-            case WEAPON_MAUL:fenceamount=100;break;
-            case WEAPON_CROSS:fenceamount=100;break;
-            case WEAPON_STAFF:fenceamount=100;break;
-            case WEAPON_SWORD:fenceamount=100;break;
-            case WEAPON_GUITAR:fenceamount=100;break;
-            case WEAPON_CHAIN:fenceamount=10;break;
-            case WEAPON_NIGHTSTICK:fenceamount=20;break;
-            case WEAPON_GAVEL:fenceamount=20;break;
-            case WEAPON_PITCHFORK:fenceamount=20;break;
-            case WEAPON_TORCH:fenceamount=2;break;
-            case WEAPON_SPRAYCAN:fenceamount=2;break;
-         }
-         break;
-      case ITEM_ARMOR:
-         switch(it.armor.type) // *JDS* all armor fence values changed to 2x manufacture cost (without cloth)
-         {                     // OR to manufacture cost +$50, whichever is LESS
-            case ARMOR_CLOTHES:fenceamount=20;break;
-            case ARMOR_OVERALLS:fenceamount=10;break;
-            case ARMOR_WIFEBEATER:fenceamount=4;break;
-            case ARMOR_TRENCHCOAT:fenceamount=40;break;
-            case ARMOR_WORKCLOTHES:fenceamount=20;break;
-            case ARMOR_SERVANTUNIFORM:fenceamount=40;break;
-            case ARMOR_SECURITYUNIFORM:fenceamount=80;break;
-            case ARMOR_POLICEUNIFORM:fenceamount=80;break;
-            case ARMOR_DEATHSQUADUNIFORM:fenceamount=80;break;
-            case ARMOR_CHEAPSUIT:fenceamount=100;break;
-            case ARMOR_EXPENSIVESUIT:fenceamount=350;break;
-            case ARMOR_BLACKSUIT:fenceamount=110;break;
-            case ARMOR_CHEAPDRESS:fenceamount=40;break;
-            case ARMOR_EXPENSIVEDRESS:fenceamount=350;break;
-            case ARMOR_BLACKDRESS:fenceamount=110;break;
-            case ARMOR_LABCOAT:fenceamount=40;break;
-            case ARMOR_BLACKROBE:fenceamount=40;break;
-            case ARMOR_CLOWNSUIT:fenceamount=40;break;
-            case ARMOR_BONDAGEGEAR:fenceamount=60;break;
-            case ARMOR_MASK:fenceamount=10;break;
-            case ARMOR_MILITARY:fenceamount=80;break;
-            case ARMOR_PRISONGUARD:fenceamount=80;break;
-            case ARMOR_PRISONER:fenceamount=40;break;
-            case ARMOR_TOGA:fenceamount=10;break;
-            case ARMOR_MITHRIL:fenceamount=50;break;
-            case ARMOR_CIVILLIANARMOR:fenceamount=75;break;
-            case ARMOR_POLICEARMOR:fenceamount=150;break;
-            case ARMOR_SWATARMOR:fenceamount=200;break;
-            case ARMOR_ARMYARMOR:fenceamount=250;break;
-            case ARMOR_HEAVYARMOR:fenceamount=400;break;
-         }
-         // Sell second-rate clothing for second-rate prices
-         fenceamount>>=it.armor.quality-'1';
-         break;
-      case ITEM_CLIP:
-         switch(it.cliptype)
-         {
-            case CLIP_38:fenceamount=2;break;
-            case CLIP_44:fenceamount=3;break;
-            case CLIP_45:fenceamount=4;break;
-            case CLIP_9:fenceamount=4;break;
-            case CLIP_ASSAULT:fenceamount=8;break;
-            case CLIP_SMG:fenceamount=5;break;
-            case CLIP_BUCKSHOT:fenceamount=3;break;
-            case CLIP_MOLOTOV:fenceamount=2;break;
-         }
-         break;
-      case ITEM_LOOT:
-         switch(it.loottype)
-         {
-            case LOOT_KIDART:fenceamount=1;break;
-            case LOOT_FAMILYPHOTO:fenceamount=1;break;
-            case LOOT_DIRTYSOCK:fenceamount=1;break;
-            case LOOT_LABEQUIPMENT:fenceamount=50;break;
-            case LOOT_COMPUTER:fenceamount=200;break;
-            case LOOT_WATCH:fenceamount=20;break;
-            case LOOT_PDA:fenceamount=50;break;
-            case LOOT_CELLPHONE:fenceamount=20;break;
-            case LOOT_MICROPHONE:fenceamount=20;break;
-            case LOOT_TRINKET:fenceamount=5;break;
-            case LOOT_SILVERWARE:fenceamount=20;break;
-            case LOOT_CHEAPJEWELERY:fenceamount=50;break;
-            case LOOT_EXPENSIVEJEWELERY:fenceamount=500;break;
-            case LOOT_FINECLOTH:fenceamount=20;break;
-            case LOOT_CHEMICAL:fenceamount=20;break;
-            case LOOT_CEOPHOTOS:fenceamount=1000;break;
-            case LOOT_CEOLOVELETTERS:fenceamount=250;break;
-            case LOOT_CEOTAXPAPERS:fenceamount=1000;break;
-            case LOOT_SECRETDOCUMENTS:fenceamount=1500;break;
-            case LOOT_INTHQDISK:fenceamount=1500;break;
-            case LOOT_CORPFILES:fenceamount=1000;break;
-            case LOOT_POLICERECORDS:fenceamount=750;break;
-            case LOOT_JUDGEFILES:fenceamount=1000;break;
-            case LOOT_RESEARCHFILES:fenceamount=750;break;
-            case LOOT_PRISONFILES:fenceamount=750;break;
-            case LOOT_CABLENEWSFILES:fenceamount=250;break;
-            case LOOT_AMRADIOFILES:fenceamount=250;break;
-         }
-         break;
-   }
-
-   return fenceamount;
+   return ret;
 }
 
 
