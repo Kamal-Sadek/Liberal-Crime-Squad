@@ -219,7 +219,7 @@ struct MCD_CSTR_FILENAME
 
 #if defined(__GNUC__)
 #define MCD_FSEEK fseek //Changed fseeko to fseek. MinGW lacks fseeko. -XML
-#define MCD_FTELL ftell //Changed ftello to ftell. MinGW lacks fseeko. -XML
+#define MCD_FTELL ftell //Changed ftello to ftell. MinGW lacks ftello. -XML
 #define MCD_INTFILEOFFSET off_t
 #elif _MSC_VER >= 1000 && defined(MARKUP_HUGEFILE) // VC++ HUGEFILE
 #if _MSC_VER < 1400 // before VC++ 2005

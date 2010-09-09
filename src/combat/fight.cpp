@@ -52,15 +52,15 @@ void youattack(void)
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
 
-      int thisweapon = weaponcheck(*activesquad->squad[p],activesquad->squad[p]->weapon.type);
+      int thisweapon = weaponcheck(*activesquad->squad[p]);
 
-      if((thisweapon==-1||thisweapon==2) &&           // Illegal weapon
-          activesquad->squad[p]->weapon.ranged() &&   // Ranged
-          activesquad->squad[p]->weapon.ammo!=0)      // Not out of ammo
+      // Illegal weapon crimes disabled
+      /*if((thisweapon==-1||thisweapon==2) &&                      // Illegal weapon
+          activesquad->squad[p]->weapon->is_ranged() &&            // Ranged
+          activesquad->squad[p]->weapon->get_ammoamount()!=0)      // Not out of ammo
       {
-         // Illegal weapon crimes disabled
-         //criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
-      }
+         criminalize(*activesquad->squad[p],LAWFLAG_GUNUSE); // Criminalize for firing illegal weapon
+      }*/
 
       vector<int> dangerous_enemies;
       vector<int> enemies;
@@ -72,7 +72,7 @@ void youattack(void)
          {
             if(encounter[e].enemy())
             {
-               if(encounter[e].weapon.type!=WEAPON_NONE &&
+               if(encounter[e].is_armed() &&
                   encounter[e].blood>=40)
                {
                   dangerous_enemies.push_back(e);
@@ -102,7 +102,8 @@ void youattack(void)
       // Less likely to accidentally hit bystanders,
       // and never hit the wrong person if not using a ranged
       // weapon
-      if(non_enemies.size()>0 && !LCSrandom(60) && activesquad->squad[p]->weapon.ranged()) 
+      if(non_enemies.size()>0 && !LCSrandom(60)
+         && activesquad->squad[p]->will_do_ranged_attack(mode==GAMEMODE_CHASECAR,false))
       {
          target=non_enemies[LCSrandom(non_enemies.size())];
          mistake=1;
@@ -133,7 +134,7 @@ void youattack(void)
          // Charge with assault if (a) first strike, or (b) hit enemy
          if(!wasalarm||beforeblood>encounter[target].blood)
          {
-            if(activesquad->squad[p]->weapon.type==WEAPON_NONE)
+            if(!activesquad->squad[p]->is_armed())
                criminalize(*activesquad->squad[p],LAWFLAG_ASSAULT);
             else
                criminalize(*activesquad->squad[p],LAWFLAG_ARMEDASSAULT);
@@ -158,13 +159,13 @@ void youattack(void)
          // chance to fire at 90 juice
          if(LCSrandom(10)-pool[p]->juice/10>0)continue;
 
-         if(rangedweapon(pool[p]->weapon))
+         if(pool[p]->is_armed() && pool[p]->get_weapon().get_attack(true,false,false)!=NULL)
          {
             char conf=0;
-            if(pool[p]->weapon.ammo>0)conf=1;
-            if(ammotype(pool[p]->weapon.type)!=-1)
+            if(pool[p]->get_weapon().get_ammoamount()>0)conf=1;
+            if(pool[p]->get_weapon().get_attack(true,false,false)->uses_ammo)
             {
-               if(pool[p]->clip[ammotype(pool[p]->weapon.type)]>0)conf=1;
+               if(pool[p]->can_reload())conf=1;
             }
 
             if(conf)
@@ -207,7 +208,7 @@ void youattack(void)
                   }
 
                   
-                  if(pool[p]->weapon.type==WEAPON_NONE)
+                  if(!pool[p]->is_armed())
                      criminalize(*pool[p],LAWFLAG_ASSAULT);
                   else
                      criminalize(*pool[p],LAWFLAG_ARMEDASSAULT);
@@ -230,7 +231,7 @@ void enemyattack(void)
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      if(activesquad->squad[i]->weapon.type!=WEAPON_NONE)
+      if(activesquad->squad[i]->is_armed())
          armed=true;
    }
 
@@ -273,7 +274,7 @@ void enemyattack(void)
          }
 
          if(((!encounter[e].enemy()||
-            (encounter[e].juice==0&&encounter[e].weapon.type==WEAPON_NONE&&armed&&encounter[e].blood<signed(70+LCSrandom(61))))
+            (encounter[e].juice==0&&!encounter[e].is_armed()&&armed&&encounter[e].blood<signed(70+LCSrandom(61))))
             &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
             ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
          {
@@ -502,8 +503,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       a.type==CREATURE_CORPORATE_CEO||
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
-      a.weapon.type==WEAPON_GUITAR)&&!mistake&&
-      (a.weapon.type==WEAPON_GUITAR||a.weapon.type==WEAPON_NONE||a.align!=1)))
+      a.get_weapon().has_musical_attack()) && !mistake &&
+      (a.get_weapon().has_musical_attack() || !a.is_armed() || a.align!=1)))
    {
       if(a.align==1||encnum<ENCMAX)
       {
@@ -511,156 +512,102 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          return;
       }
    }
+   
+   //RELOAD
+   if((a.will_reload(mode==GAMEMODE_CHASECAR,force_melee)
+       || (a.has_thrown_weapon && !a.extra_throwing_weapons.empty()))
+      && !force_melee)
+   {
+      if (a.will_reload(mode==GAMEMODE_CHASECAR,force_melee))
+      {
+         a.reload(false);   
+         strcpy(str,a.name);
+            strcat(str," reloads.");
+      }
+      else if (a.has_thrown_weapon && !a.extra_throwing_weapons.empty())
+      {
+         a.ready_another_throwing_weapon();
+         strcpy(str,a.name);
+         strcat(str," readies another ");
+         strcat(str,a.get_weapon().get_name().c_str());
+         strcat(str,".");
+      }
+      move(16,1);
+      addstr(str);
 
-   if(mode==GAMEMODE_CHASECAR&&                                   // If in a car
-      (!a.weapon.ranged()||force_melee||                    // And either using a melee weapon
-       (a.weapon.ammo==0&&                                  // Or, out of ammo and...
-        a.clip[ammotype(a.weapon.type)]==0)))               // ...no clips left
+      printparty();
+      if(mode==GAMEMODE_CHASECAR || mode==GAMEMODE_CHASEFOOT)
+         printchaseencounter();
+      else
+         printencounter();
+
+      refresh();
+      getch();
+
+      return;
+   }
+   else if(a.has_thrown_weapon)
+      a.has_thrown_weapon = false;
+   
+   const attackst* attack_used = NULL;
+   attack_used = a.get_weapon().get_attack(mode==GAMEMODE_CHASECAR,           //Force ranged if in a car.
+                                           force_melee,
+                                           (force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
+
+   if(attack_used == NULL) //No attack possible.
+   /*if(mode==GAMEMODE_CHASECAR&&                             // If in a car
+      (a.weapon!=NULL&&(!a.weapon.ranged()||force_melee||     // And either using a melee weapon
+       (a.weapon->get_ammoamount()==0&&                       // Or, out of ammo and...
+        !a.can_reload()))))*/                                 // ...no clips left
    {
       return;                                               // Then bail, they can't fight
    }
 
    // Grenade type weapons can't be used in melee!
-   if(weaponskill(a.weapon.type)==SKILL_THROWING && force_melee)
-      return;
-
-   //RELOAD
-   if(ammotype(a.weapon.type)!=-1&&a.weapon.ammo==0&&!force_melee)
-   {
-      if(a.clip[ammotype(a.weapon.type)]>0)
-      {
-         switch(ammotype(a.weapon.type))
-         {
-            case CLIP_9:a.weapon.ammo+=15;break;
-            case CLIP_45:a.weapon.ammo+=15;break;
-            case CLIP_ASSAULT:a.weapon.ammo+=30;break;
-            case CLIP_SMG:a.weapon.ammo+=15;break;
-            case CLIP_38:a.weapon.ammo+=6;break;
-            case CLIP_44:a.weapon.ammo+=6;break;
-            case CLIP_50AE:a.weapon.ammo+=7;break;
-            case CLIP_BUCKSHOT:a.weapon.ammo+=6;break;
-            case CLIP_MOLOTOV:a.weapon.ammo+=1;break;
-            case CLIP_GASOLINE:a.weapon.ammo+=2;break;
-         }
-
-         a.clip[ammotype(a.weapon.type)]--;
-
-         strcpy(str,a.name);
-         if(a.weapon.type!=WEAPON_MOLOTOV)
-            strcat(str," reloads.");
-         else
-            strcat(str," readies another molotov.");
-
-         move(16,1);
-         addstr(str);
-
-         printparty();
-         if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
-         else printencounter();
-
-         refresh();
-         getch();
-
-         return;
-      }
-      else if(a.weapon.type==WEAPON_MOLOTOV) a.weapon.type = WEAPON_NONE;
-   }
+   /*if(weaponskill(a.weapon.type)==SKILL_THROWING && force_melee)
+      return;*/
 
    bool melee=true;
+   if (attack_used->ranged)
+      melee = false;
 
    strcpy(str,a.name);
    strcat(str," ");
    if(mistake)strcat(str,"MISTAKENLY ");
-   switch(a.weapon.type)
+   if (!a.is_armed())
    {
-      case WEAPON_NONE:
+      if(!a.animalgloss) //Move into WEAPON_NONE -XML
       {
-         if(!a.animalgloss)
-         {
-            if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)+1))
-               strcat(str,"punches");
-            else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)))
-               strcat(str,"swings at");
-            else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-1))
-               strcat(str,"grapples with");
-            else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-2))
-               strcat(str,"kicks");
-            else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-3))
-               strcat(str,"strikes at");
-            else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-4))
-               strcat(str,"jump kicks");
-            else
-               strcat(str,"gracefully strikes at");
-         }
+         if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)+1))
+            strcat(str,"punches");
+         else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)))
+            strcat(str,"swings at");
+         else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-1))
+            strcat(str,"grapples with");
+         else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-2))
+            strcat(str,"kicks");
+         else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-3))
+            strcat(str,"strikes at");
+         else if(!LCSrandom(a.get_skill(SKILL_HANDTOHAND)-4))
+            strcat(str,"jump kicks");
          else
-         {
-            if(a.specialattack==ATTACK_CANNON)
-            {
-               strcat(str,"shoots at");
-               melee=false;
-            }
-            else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
-            else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs");
-            else strcat(str,"claws at");
-         }
-         break;
+            strcat(str,"gracefully strikes at");
       }
-      case WEAPON_SWORD:
-      case WEAPON_KNIFE:
-      case WEAPON_SHANK:
-         strcat(str,"slashes at");break;
-      case WEAPON_AXE:
-         strcat(str,"chops at");break;
-      case WEAPON_SYRINGE:
-         strcat(str,"pokes at");break;
-      case WEAPON_REVOLVER_38:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_DESERT_EAGLE:
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-      case WEAPON_SEMIRIFLE_AR15:
-      case WEAPON_SMG_MP5:
-      case WEAPON_CARBINE_M4:
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-      case WEAPON_SHOTGUN_PUMP:
-         if(a.weapon.ammo>0&&!force_melee)
+      else
+      {
+         if(a.specialattack==ATTACK_CANNON)
          {
             strcat(str,"shoots at");
             melee=false;
          }
-         else strcat(str,"swings at");
-         break;
-      case WEAPON_MOLOTOV:
-         strcat(str,"hurls a molotov at");
-         melee=false;
-         break;
-      case WEAPON_CHAIN:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_CROWBAR:
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_GAVEL:
-      case WEAPON_DAISHO:
-      case WEAPON_HAMMER:
-      case WEAPON_MAUL:
-      case WEAPON_CROSS:
-      case WEAPON_STAFF:
-      case WEAPON_TORCH:
-      case WEAPON_SPRAYCAN:
-      case WEAPON_GUITAR:
-         strcat(str,"swings at");break;
-      case WEAPON_PITCHFORK:
-         strcat(str,"stabs");break;
-      case WEAPON_FLAMETHROWER:
-         if(a.weapon.ammo>0&&!force_melee)
-         {
-            strcat(str,"streams fire at");
-            melee=false;
-         }
-         else strcat(str,"swings at");break;
-      
+         else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
+         else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs");
+         else strcat(str,"claws at");
+      }
    }
+   else
+      strcat(str,attack_used->attack_description.c_str());
+
    strcat(str," ");
    strcat(str,t.name);
    move(16,1);
@@ -668,12 +615,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    strcpy(str,"");
 
-   if(a.weapon.type!=WEAPON_NONE &&
-      a.weapon.type!=WEAPON_MOLOTOV)
+   if(a.is_armed() && !attack_used->thrown)
    {
       strcat(str," with a ");
-      getweaponfull(str2,a.weapon.type,1);
-      strcat(str,str2);
+      strcat(str,a.get_weapon().get_name(1).c_str());
       //strcat(str," and ");
    }
    else
@@ -699,13 +644,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    int bonus=0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 
    //SKILL EFFECTS
-   int wsk=weaponskill(a.weapon.type);
-   if(rangedweapon(a.weapon) &&
-      ((a.weapon.type!=WEAPON_MOLOTOV &&
-        a.weapon.ammo==0) || force_melee))
-   {
-      wsk=SKILL_CLUB; // Club people with out-of-ammo guns
-   }// TODO: Bigger gun should mean more melee damage.
+   int wsk = attack_used->skill;
 
    // Basic roll
    int aroll = a.skill_roll(wsk);
@@ -733,103 +672,55 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    if(aroll<0)aroll=0;
    if(droll<0)droll=0;
 
-   if(!melee)
-   {
-      // Weapon accuracy bonuses and pentalties
-      if(a.weapon.type==WEAPON_SHOTGUN_PUMP)bonus=2;
-      if(a.weapon.type==WEAPON_SMG_MP5)bonus=2;
-      if(a.weapon.type==WEAPON_CARBINE_M4)bonus=2;
-      //if(a.weapon.type==WEAPON_AUTORIFLE_M16)bonus=1;
-      //if(a.weapon.type==WEAPON_AUTORIFLE_AK47)bonus=1;
-   }
+   // Weapon accuracy bonuses and pentalties
+   bonus += attack_used->accuracy_bonus;
 
    //USE BULLETS
    int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
 
-   int removeweapon=0; // Used by molotov to remove the weapon at the end of the turn if needed
+   int thrownweapons=0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
 
-   if(a.weapon.type==WEAPON_NONE)
+   if(!a.is_armed()) //Move into WEAPON_NONE -XML
    {
       // Martial arts multi-strikes
       bursthits=1+LCSrandom(a.get_skill(SKILL_HANDTOHAND)/3+1);
       if(bursthits>5)bursthits=5;
       if(a.animalgloss)bursthits=1; // Whoops, must be human to use martial arts fanciness
    }
-
-   if(a.weapon.ammo>0 && !force_melee)
+   else
    {
-      switch(a.weapon.type)
+      if (mode==GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance_causes_debris)
       {
-      case WEAPON_MOLOTOV:
-         a.weapon.ammo--;
-         if(a.clip[CLIP_MOLOTOV]==0)
-            removeweapon=1;
-
-         if(mode==GAMEMODE_SITE)
+         sitechangest change(locx,locy,locz,SITEBLOCK_DEBRIS);
+         location[cursite]->changes.push_back(change);
+      }
+      if (mode==GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance)
+      {
+         // Fire!
+         if(!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
+            !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
+            !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
+            !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS))
          {
-            sitechangest change(locx,locy,locz,SITEBLOCK_DEBRIS);
-            location[cursite]->changes.push_back(change);
-
-            // Fire!
-            if(!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
-               !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
-               !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
-               !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS))
-            {
-               levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
-               sitecrime+=3;
-               addjuice(a,3);
-               criminalizeparty(LAWFLAG_ARSON);
-               sitestory->crime.push_back(CRIME_ARSON);
-            }
+            levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
+            sitecrime+=3;
+            addjuice(a,3);
+            criminalizeparty(LAWFLAG_ARSON);
+            sitestory->crime.push_back(CRIME_ARSON);
          }
-         break;
-      case WEAPON_FLAMETHROWER:
-         a.weapon.ammo--;
-         if(mode==GAMEMODE_SITE)
-         {
-            if((!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
-                !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
-                !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START) ||
-                !(levelmap[locx][locy][locz].flag & SITEBLOCK_DEBRIS)) &&!LCSrandom(3))
-            {
-               levelmap[locx][locy][locz].flag|=SITEBLOCK_FIRE_START;
-               sitecrime+=3;
-               addjuice(a,3);
-               criminalizeparty(LAWFLAG_ARSON);
-               sitestory->crime.push_back(CRIME_ARSON);
-            }
-         }
-         break;
-      case WEAPON_SHOTGUN_PUMP:
-      case WEAPON_REVOLVER_38:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_DESERT_EAGLE:
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-      case WEAPON_SEMIRIFLE_AR15:
-         a.weapon.ammo--;
-         break;
-      // *JDS* automatic weapons fire and maybe hit with three shots
-      case WEAPON_SMG_MP5:
-         for(int i=0;i<3&&a.weapon.ammo;i++)
-         {
-            a.weapon.ammo--;
-            // Each shot in a burst is increasingly less likely to hit
-            if(aroll+bonus-i*4>droll)bursthits++;
-         }
-         //if(bursthits==0)bursthits=1; // Not needed with the way MP5 bursts are calculated now
-         break;
-      case WEAPON_CARBINE_M4:
-      case WEAPON_AUTORIFLE_M16: 
-      case WEAPON_AUTORIFLE_AK47:
-         for(int i=0;i<3&&a.weapon.ammo;i++)
-         {
-            a.weapon.ammo--;
-            // Each shot in a burst is increasingly less likely to hit
-            if(aroll+bonus-i*3>droll)bursthits++;
-         }
-         break;
+      }
+      
+      for (int i = 0; i < attack_used->number_attacks; ++i)
+      {
+         if (attack_used->uses_ammo && a.get_weapon().get_ammoamount() > 0)
+            a.get_weapon().decrease_ammo(1);
+         else if (attack_used->thrown && a.count_weapons()-thrownweapons > 0)
+            ++thrownweapons;
+         else
+            break;
+         // Each shot in a burst is increasingly less likely to hit
+         if(aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
+            bursthits++;
       }
    }
 
@@ -940,8 +831,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       // show multiple hits
       if(bursthits>1)
       {
-         if(a.weapon.type==WEAPON_NONE)
-            strcat(str,", striking");
+         strcat(str,", ");
+         if(!a.is_armed()) //Move into WEAPON_NONE? -XML
+            strcat(str,"striking");
+         else
+            strcat(str,attack_used->hit_description.c_str());
 
          switch(bursthits)
          {
@@ -950,13 +844,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 3: strcat(str," three times"); break;
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
+         default: strcat(str,(" "+tostring(bursthits)+" times").c_str());
          }
 
       }
-
-      if(a.weapon.type==WEAPON_MOLOTOV)
+      else if(attack_used->always_describe_hit)
       {
-         strcat(str,", exploding");
+         strcat(str,", ");
+         strcat(str,attack_used->hit_description.c_str());
       }
 
       char damtype=0;
@@ -968,373 +863,64 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       char damagearmor=0;
       char armorpiercing=0;
 
-      switch(a.weapon.type) // *JDS* removed sever types from many weapons (all guns except shotgun, knives...)
-      {
-         case WEAPON_NONE:
-             
-            while(bursthits)
+      if (!a.is_armed())
+      {    
+         while(bursthits) //Put into WEAPON_NONE -XML
+         {
+            damamount+=LCSrandom(5+a.get_skill(SKILL_HANDTOHAND))+1+a.get_skill(SKILL_HANDTOHAND);
+            bursthits--;
+         }
+         if(!a.animalgloss)damtype|=WOUND_BRUISED;
+         else
+         {
+            if(a.specialattack==ATTACK_CANNON)
             {
-               damamount+=LCSrandom(5+a.get_skill(SKILL_HANDTOHAND))+1+a.get_skill(SKILL_HANDTOHAND);
-               bursthits--;
-            }
-            if(!a.animalgloss)damtype|=WOUND_BRUISED;
-            else
-            {
-               if(a.specialattack==ATTACK_CANNON)
-               {
-                  damamount=LCSrandom(500)+500;
-                  damtype|=WOUND_BURNED;
-                  damtype|=WOUND_TORN;
-                  damtype|=WOUND_SHOT;
-               }
-               else if(a.specialattack==ATTACK_FLAME)damtype|=WOUND_BURNED;
-               else if(a.specialattack==ATTACK_SUCK)damtype|=WOUND_CUT;
-               else damtype|=WOUND_TORN;
-               severtype=WOUND_NASTYOFF;
-            }
-            strengthmin=5;
-            strengthmax=10;
-
-            break;
-         case WEAPON_MAUL:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(41)+5;
-            strengthmin=8;
-            strengthmax=18;
-            
-            break;
-         case WEAPON_BASEBALLBAT:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(41)+5;
-            strengthmin=6;
-            strengthmax=12;
-             
-            break;
-         case WEAPON_PITCHFORK:
-            damtype|=WOUND_CUT;
-            damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(61)+10;
-            strengthmin=6;
-            strengthmax=12;
-            damagearmor=1;
-            armorpiercing=1;
-             
-            break;
-         case WEAPON_TORCH:
-            damtype|=WOUND_BURNED;
-            damamount=LCSrandom(11)+5;
-            damagearmor=1;
-             
-            break;
-         case WEAPON_SHANK:
-            damtype|=WOUND_CUT;
-            damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(31)+10;
-            strengthmin=1;
-            strengthmax=4;
-            damagearmor=1;
-            armorpiercing=1;
-             
-            break;
-         case WEAPON_KNIFE:
-            damtype|=WOUND_CUT;
-            damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(61)+10;
-            strengthmin=1;
-            strengthmax=4;
-            damagearmor=1;
-            armorpiercing=2;
-             
-            break;
-         case WEAPON_SYRINGE:
-            damtype|=WOUND_CUT;
-            damamount=LCSrandom(4)+1;
-            strengthmin=1;
-            strengthmax=2;
-            armorpiercing=4;
-            
-            break;
-         case WEAPON_REVOLVER_38:
-            if(a.weapon.ammo>0)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(141)+10;
-               //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
-               damagearmor=1;
-               armorpiercing=3;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(6)+5;
-               strengthmin=2;
-               strengthmax=6;
-                
-            }
-            break;
-         case WEAPON_REVOLVER_44:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(276)+10;
-               //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from revolvers
-               damagearmor=1;
-               armorpiercing=4;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(6)+5;
-               strengthmin=2;
-               strengthmax=6;
-                
-            }
-            break;
-         case WEAPON_DESERT_EAGLE:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(301)+10;
-               severtype=WOUND_NASTYOFF; // We're just going to go ahead and continue
-               damagearmor=1;            // the mythology of the Deagle by letting it
-               armorpiercing=4;          // blow limbs off... --Fox
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(6)+5;
-               strengthmin=3;
-               strengthmax=8;
-                
-            }
-            break;
-         case WEAPON_SEMIPISTOL_9MM:
-         case WEAPON_SEMIPISTOL_45:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               damamount=LCSrandom(181)+10;
-               //severtype=WOUND_NASTYOFF; *JDS* no dismemberment from semi-automatics
-               damagearmor=1;
-               armorpiercing=4;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(6)+5;
-               strengthmin=2;
-               strengthmax=6;
-                
-            }
-            break;
-         case WEAPON_SEMIRIFLE_AR15:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-
-               damamount=LCSrandom(251)+10;
-
-               damagearmor=1;
-               armorpiercing=7;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(21)+5;
-               strengthmin=6;
-               strengthmax=12;
-                
-            }
-            break;
-         case WEAPON_MOLOTOV:
-            damtype|=WOUND_BURNED;
-            damamount=LCSrandom(101)+25;
-            damagearmor=1;
-            armorpiercing=7;
-            break;
-         case WEAPON_FLAMETHROWER:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
+               damamount=LCSrandom(500)+500;
                damtype|=WOUND_BURNED;
-               damamount=LCSrandom(201)+50;
-               damagearmor=1;
-               armorpiercing=9;
-            } else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(21)+5;
-               strengthmin=12;
-               strengthmax=18;
-                
-            }
-            break;
-         case WEAPON_AUTORIFLE_AK47:
-         case WEAPON_AUTORIFLE_M16:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
+               damtype|=WOUND_TORN;
                damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               if(bursthits==3)severtype=WOUND_NASTYOFF; //*JDS* dismemberment from assault rifles requires 3 hits
-
-               damamount=0;
-               while(bursthits)
-               {
-                  damamount+=LCSrandom(251)+10;
-                  bursthits--;
-               }
-               damagearmor=1;
-               armorpiercing=7;
             }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(21)+5;
-               strengthmin=6;
-               strengthmax=12;
-                
-            }
-            break;
-         case WEAPON_CARBINE_M4:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               if(bursthits==3)severtype=WOUND_NASTYOFF; //*JDS* dismemberment from assault rifles requires 3 hits
-
-               damamount=0;
-               while(bursthits)
-               {
-                  damamount+=LCSrandom(221)+10;
-                  bursthits--;
-               }
-               damagearmor=1;
-               armorpiercing=7;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(25)+5;
-               strengthmin=6;
-               strengthmax=12;
-                
-            }
-            break;
-         case WEAPON_SMG_MP5:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               //if(bursthits==3)severtype=WOUND_NASTYOFF; //*JDS* dismemberment from assault rifles requires 3 hits
-
-               damamount=0;
-               while(bursthits)
-               {
-                  damamount+=LCSrandom(181)+10;
-                  bursthits--;
-               }
-               damagearmor=1;
-               armorpiercing=4;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(21)+5;
-               strengthmin=5;
-               strengthmax=10;
-                
-            }
-            break;
-         case WEAPON_SHOTGUN_PUMP:
-            if(a.weapon.ammo>0 && !force_melee)
-            {
-               damtype|=WOUND_SHOT;
-               damtype|=WOUND_BLEEDING;
-               if(!LCSrandom(3))
-               {
-                  damamount=LCSrandom(301)+10;
-                  severtype=WOUND_NASTYOFF; // *JDS* dismemberment OK with shotgun
-               }
-               else
-               {
-                  damamount=LCSrandom(201)+10;
-               }
-               
-               
-               damagearmor=1;
-            }
-            else
-            {
-               damtype|=WOUND_BRUISED;
-               damamount=LCSrandom(21)+5;
-               strengthmin=6;
-               strengthmax=12;
-                
-            }
-            break;
-         case WEAPON_DAISHO:
-         case WEAPON_SWORD:
-         case WEAPON_AXE:
+            else if(a.specialattack==ATTACK_FLAME)damtype|=WOUND_BURNED;
+            else if(a.specialattack==ATTACK_SUCK)damtype|=WOUND_CUT;
+            else damtype|=WOUND_TORN;
+            severtype=WOUND_NASTYOFF;
+         }
+         strengthmin=5;
+         strengthmax=10;
+      }
+      else
+      {
+         if (attack_used->bruises)
+            damtype|=WOUND_BRUISED;
+         if (attack_used->cuts)
             damtype|=WOUND_CUT;
+         if (attack_used->burns)
+            damtype|=WOUND_BURNED;
+         if (attack_used->tears)
+            damtype|=WOUND_TORN;
+         if (attack_used->shoots)
+            damtype|=WOUND_SHOT;
+         if (attack_used->bleeding)
             damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(101)+10;
-            strengthmin=6;
-            strengthmax=12;
-            severtype=WOUND_CLEANOFF;
-            damagearmor=1;
-            armorpiercing=2;
-             
-            break;
-         case WEAPON_HAMMER:
-            damtype|=WOUND_BRUISED;
-            damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(21)+10;
-            strengthmin=8;
-            strengthmax=18;
-            break;
-         case WEAPON_CROWBAR:
-            damtype|=WOUND_BRUISED;
-            damtype|=WOUND_BLEEDING;
-            damamount=LCSrandom(21)+10;
-            strengthmin=4;
-            strengthmax=8;
-            break;
-         case WEAPON_STAFF:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(21)+5;
-            strengthmin=6;
-            strengthmax=12;
-            break;
-         case WEAPON_GUITAR:
-         case WEAPON_NIGHTSTICK:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(21)+5;
-            strengthmin=4;
-            strengthmax=8;
-            break;
-         case WEAPON_GAVEL:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(6)+5;
-            strengthmin=1;
-            strengthmax=4;
-            break;
-         case WEAPON_CHAIN:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(11)+5;
-            strengthmin=1;
-            strengthmax=6;
-            break;
-         case WEAPON_SPRAYCAN:
-         case WEAPON_CROSS:
-            damtype|=WOUND_BRUISED;
-            damamount=LCSrandom(11)+5;
-            strengthmin=1;
-            strengthmax=4;
-            break;
+         
+         strengthmin=attack_used->strength_min;
+         strengthmax=attack_used->strength_max;
+         severtype=attack_used->severtype;
+         int random = attack_used->random_damage;
+         int fixed = attack_used->fixed_damage;
+         if (bursthits >= attack_used->critical.hits_required
+             && LCSrandom(100) < attack_used->critical.chance)
+         {
+            if (attack_used->critical.random_damage_defined)
+               random = attack_used->critical.random_damage;
+            if (attack_used->critical.fixed_damage_defined)
+               fixed = attack_used->critical.fixed_damage;
+            if (attack_used->critical.severtype_defined)
+               severtype = attack_used->critical.severtype;
+         }
+         damamount=LCSrandom(random) + fixed;
+         damagearmor=attack_used->damages_armor;
+         armorpiercing=attack_used->armorpiercing;
       }
 
       // Coarse combat lethality reduction.
@@ -1452,7 +1038,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             do
             {
-               if(a.weapon.type==WEAPON_MOLOTOV && !LCSrandom(3))
+               if(LCSrandom(100) < attack_used->no_damage_reduction_for_limbs_chance)
                   break;
                else
                   damamount>>=1;
@@ -1461,7 +1047,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
 
          
-         if(damagearmor)armordamage(target->armor,w);
+         if(damagearmor)armordamage(target->get_armor(),w);
 
          target->blood-=damamount;
 
@@ -1474,7 +1060,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             target->blood<=0)
          {
             if((target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
-               (target->wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(target->armor);
+               (target->wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(&target->get_armor());
 
             char alreadydead=!target->alive;
             
@@ -1511,8 +1097,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
             else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
             else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
-            else if(a.weapon.type!=WEAPON_MOLOTOV)strcat(str,".");
-            else strcat(str,"!");
+            else strcat(str,attack_used->hit_punctuation.c_str());
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
@@ -1543,13 +1128,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if(target->wound[w] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
             else if(target->wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
-            else strcat(str,".");
+            else strcat(str,attack_used->hit_punctuation.c_str());
             
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str);
 
-            if(target->wound[w] & WOUND_NASTYOFF)bloodblast(target->armor);
+            if(target->wound[w] & WOUND_NASTYOFF)bloodblast(&target->get_armor());
 
             printparty();
             if(mode==GAMEMODE_CHASECAR||
@@ -1975,7 +1560,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-      if(melee && aroll<droll-10 && t.blood>70 && t.animalgloss==ANIMALGLOSS_NONE && weaponskill(t.weapon.type)!=SKILL_THROWING)
+      if(melee && aroll<droll-10 && t.blood>70 && t.animalgloss==ANIMALGLOSS_NONE
+         && t.is_armed() && t.get_weapon().get_attack(false,true,true) != NULL)
       {
 
          strcpy(str,t.name);
@@ -2005,8 +1591,16 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
    }
 
-   if(removeweapon)
-      a.weapon.type=WEAPON_NONE;
+   while (thrownweapons > 0)
+   {
+      if (a.has_thrown_weapon)
+      {
+         a.ready_another_throwing_weapon();
+      }
+      a.drop_weapon(NULL);
+      --thrownweapons;
+   }
+
    actual=1;
    return;
 }
@@ -2042,33 +1636,18 @@ void healthmodroll(int &aroll,Creature &a)
 void damagemod(Creature &t,char &damtype,int &damamount,
                char hitlocation,char armorpenetration,int &mod)
 {
-   int armor=0;
-   int head_armor=0;
-   int limb_armor=0;
-
-   switch(t.armor.type)
-   {
-      default:armor=0;break;
-      case ARMOR_BUNKERGEAR:armor=2;head_armor=2;limb_armor=2;break;
-      case ARMOR_CIVILLIANARMOR:armor=5;break;
-      case ARMOR_POLICEARMOR:armor=7;break;
-      case ARMOR_SWATARMOR:armor=7;head_armor=5;limb_armor=2;break;
-      case ARMOR_ARMYARMOR:armor=8;head_armor=6;break;
-      case ARMOR_HEAVYARMOR:armor=10;head_armor=8;limb_armor=4;break;
-   }
-
+   int armor=t.get_armor().get_armor(hitlocation);
    
    if(t.animalgloss==ANIMALGLOSS_TANK)
    {
       if(damtype!=WOUND_BURNED)damamount=0;
       else armor=10;
    }
-   else if(hitlocation==BODYPART_HEAD)armor=head_armor;
-   else if(hitlocation!=BODYPART_BODY)armor=limb_armor;
 
-   if(t.armor.quality>'1')
-      armor-=t.armor.quality-'1';
-   if(t.armor.flag & ARMORFLAG_DAMAGED)
+
+   //if(t.get_armor().get_quality()>1)
+      armor-=t.get_armor().get_quality()-1;
+   if(t.get_armor().is_damaged())
       armor-=1;
 
    if(armor<0)armor=0; // Possible from second-rate clothes
@@ -2087,10 +1666,10 @@ void damagemod(Creature &t,char &damtype,int &damamount,
    else if(mod>=0)damamount=(int)((float)damamount * (1.0f + 0.2f*mod));
 
    // Firefighter's bunker gear reduces fire damage by 3/4
-   if((damtype & WOUND_BURNED)&&(t.armor.type==ARMOR_BUNKERGEAR))
+   if((damtype & WOUND_BURNED) && t.get_armor().has_fireprotection())
    {
       // Damaged gear isn't as effective as undamaged gear
-      if(t.armor.flag & ARMORFLAG_DAMAGED)
+      if(t.get_armor().is_damaged())
          damamount>>=1; // Only half as much damage reduction
       else
          damamount>>=2; // Full damage reduction
@@ -2262,13 +1841,15 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
          break;
       default:
-         if(a.weapon.type==WEAPON_GUITAR)
+         if(a.get_weapon().has_musical_attack())
          {
             switch(LCSrandom(5))
             {
                case 0:strcat(str,"plays a song for");break;
                case 1:strcat(str,"sings to");break;
-               case 2:strcat(str,"strums the guitar at");break;
+               case 2:strcat(str,"strums the ");
+                      strcat(str,a.get_weapon().get_name().c_str());
+                      strcat(str," at");break;
                case 3:if(a.align==1)strcat(str,"plays protest songs at");
                       else strcat(str,"plays country songs at");
                       break;
@@ -2457,7 +2038,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
 
 
 /* destroys armor, masks, drops weapons based on severe damage */
-void severloot(Creature &cr,vector<itemst *> &loot)
+void severloot(Creature &cr,vector<Item *> &loot)
 {
    int armok=2;
    if((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
@@ -2467,155 +2048,81 @@ void severloot(Creature &cr,vector<itemst *> &loot)
    if(cr.special[SPECIALWOUND_NECK]!=1)armok=0;
    if(cr.special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
 
-   if(cr.weapon.type!=WEAPON_NONE && armok==0)
+   if(cr.is_armed() && armok==0)
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr("The ");
-      char str[200];
-      getweaponfull(str,cr.weapon.type,1);
-      addstr(str);
+      addstr(cr.get_weapon().get_name(1).c_str());
       addstr(" slips from");
       move(17,1);
       addstr(cr.name);
       addstr("'s grasp.");
       refresh();
       getch();
-
-      if(mode==GAMEMODE_SITE)
-      {
-         itemst *newi=new itemst;
-            newi->type=ITEM_WEAPON;
-            newi->weapon=cr.weapon;
-         loot.push_back(newi);
-      }
-
-      cr.weapon.type=WEAPON_NONE;
-      cr.weapon.ammo=0;
-
-      for(int c=0;c<CLIPNUM;c++)
-      {
-         if(mode==GAMEMODE_SITE)
-         {
-            for(int p=0;p<cr.clip[c];p++)
-            {
-               if(c==CLIP_MOLOTOV)
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_WEAPON;
-                     newi->weapon.type=WEAPON_MOLOTOV;
-                     newi->weapon.ammo=1;
-                  loot.push_back(newi);
-               }
-               else
-               {
-                  itemst *newi=new itemst;
-                     newi->type=ITEM_CLIP;
-                     newi->cliptype=c;
-                  loot.push_back(newi);
-               }
-            }
-         }
-
-         cr.clip[c]=0;
-      }
+      
+      if (mode == GAMEMODE_SITE)
+         cr.drop_weapons_and_clips(&loot);
+      else
+         cr.drop_weapons_and_clips(NULL);
    }
 
    if(((cr.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_BODY] & WOUND_NASTYOFF))&&
-      cr.armor.type!=ARMOR_NONE&&
-      cr.armor.type!=ARMOR_MASK)
+      !cr.is_naked()&&
+      cr.get_armor().covers(BODYPART_BODY))
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr(cr.name);
       addstr("'s ");
-      char str[80];
-      getarmorfull(str,cr.armor.type,cr.armor.subtype);
-      addstr(str);
+      addstr(cr.get_armor().get_name().c_str());
       addstr(" has been destroyed.");
       refresh();
       getch();
 
-      cr.armor.type=ARMOR_NONE;
-      cr.armor.quality='1';
-      cr.armor.flag=0;
+      cr.strip(NULL);
    }
 
    if((cr.wound[BODYPART_HEAD] & WOUND_NASTYOFF)&&
-      cr.armor.type==ARMOR_MASK)
+      cr.get_armor().is_mask())
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr(cr.name);
       addstr("'s ");
-      char str[80];
-      getarmorfull(str,cr.armor.type,cr.armor.subtype);
-      addstr(str);
+      addstr(cr.get_armor().get_name().c_str());
       addstr(" has been destroyed.");
       refresh();
       getch();
 
-      cr.armor.type=ARMOR_NONE;
-      cr.armor.quality='1';
-      cr.armor.flag=0;
+      cr.strip(NULL);
    }
 }
 
 
 
 /* damages the selected armor if it covers the body part specified */
-void armordamage(armorst &armor,int bp)
+void armordamage(Armor &armor,int bp)
 {
-   switch(armor.type)
-   {
-      case ARMOR_NONE:
-         return;
-      case ARMOR_HEAVYARMOR:
-      case ARMOR_SWATARMOR:
-      case ARMOR_SECURITYUNIFORM:
-      case ARMOR_POLICEUNIFORM:
-      case ARMOR_DEATHSQUADUNIFORM:
-      case ARMOR_BONDAGEGEAR:
-      case ARMOR_MILITARY:
-      case ARMOR_BUNKERGEAR:
-         armor.flag|=ARMORFLAG_DAMAGED;
-         break;
-      case ARMOR_ARMYARMOR:
-         if(bp==BODYPART_BODY||bp==BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
-      case ARMOR_MASK:
-         if(bp==BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
-         break;
-      case ARMOR_CIVILLIANARMOR:
-      case ARMOR_POLICEARMOR:
-      case ARMOR_TOGA:
-      case ARMOR_MITHRIL:
-      case ARMOR_WIFEBEATER:
-         if(bp==BODYPART_BODY)armor.flag|=ARMORFLAG_DAMAGED;
-         break;
-      case ARMOR_OVERALLS:
-         if(bp==BODYPART_BODY)armor.flag|=ARMORFLAG_DAMAGED;
-         if(bp==BODYPART_LEG_RIGHT)armor.flag|=ARMORFLAG_DAMAGED;
-         if(bp==BODYPART_LEG_LEFT)armor.flag|=ARMORFLAG_DAMAGED;
-         break;
-      default:
-         if(bp!=BODYPART_HEAD)armor.flag|=ARMORFLAG_DAMAGED;
-         break;
-   }
+   if (armor.covers(bp))
+      armor.set_damaged(true);
 }
 
 
 
 /* blood explosions */
-void bloodblast(armorst &armor)
+void bloodblast(Armor* armor)
 {
    //GENERAL
-   if(armor.type!=ARMOR_NONE)armor.flag|=ARMORFLAG_BLOODY;
+   if(armor!=NULL)
+      armor->set_bloody(true);
 
-   if(mode!=GAMEMODE_SITE)return;
+   if(mode!=GAMEMODE_SITE)
+      return;
 
    levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY2;
 
@@ -2623,18 +2130,20 @@ void bloodblast(armorst &armor)
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
-      if(activesquad->squad[p]->armor.type!=ARMOR_NONE)
+      if(!activesquad->squad[p]->is_naked())
       {
-         if(!LCSrandom(2))activesquad->squad[p]->armor.flag|=ARMORFLAG_BLOODY;
+         if(!LCSrandom(2))
+            activesquad->squad[p]->get_armor().set_bloody(true);
       }
    }
 
    for(int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
-      if(encounter[e].armor.type!=ARMOR_NONE)
+      if(!encounter[e].is_naked())
       {
-         if(!LCSrandom(2))encounter[e].armor.flag|=ARMORFLAG_BLOODY;
+         if(!LCSrandom(2))
+            encounter[e].get_armor().set_bloody(true);
       }
    }
 
@@ -2664,63 +2173,16 @@ void delenc(short e,char loot)
 
 
 /* generates the loot dropped by a creature when it dies */
-void makeloot(Creature &cr,vector<itemst *> &loot)
+void makeloot(Creature &cr,vector<Item *> &loot)
 {
-   if(cr.weapon.type!=WEAPON_NONE)
-   {
-      itemst *newi=new itemst;
-         newi->type=ITEM_WEAPON;
-         newi->weapon=cr.weapon;
-      loot.push_back(newi);
+   cr.drop_weapons_and_clips(&loot);
+   cr.strip(&loot);
 
-      cr.weapon.type=WEAPON_NONE;
-      cr.weapon.ammo=0;
-   }
-
-   if(cr.armor.type!=ARMOR_NONE)
-   {
-      itemst *newi=new itemst;
-         newi->type=ITEM_ARMOR;
-         newi->armor=cr.armor;
-      loot.push_back(newi);
-
-      cr.armor.type=ARMOR_NONE;
-      cr.armor.quality='1';
-      cr.armor.flag=0;
-   }
 
    if(cr.money>0 && mode == GAMEMODE_SITE)
    {
-      itemst *newi=new itemst;
-         newi->type=ITEM_MONEY;
-         newi->money=cr.money;
-      loot.push_back(newi);
-
+      loot.push_back(new Money(cr.money));
       cr.money=0;
-   }
-
-   for(int c=0;c<CLIPNUM;c++)
-   {
-      for(int p=0;p<cr.clip[c];p++)
-      {
-         if(c==CLIP_MOLOTOV)
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_WEAPON;
-               newi->weapon.type=WEAPON_MOLOTOV;
-               newi->weapon.ammo=1;
-            loot.push_back(newi);
-         }
-         else
-         {
-            itemst *newi=new itemst;
-               newi->type=ITEM_CLIP;
-               newi->cliptype=c;
-            loot.push_back(newi);
-         }
-      }
-
-      cr.clip[c]=0;
    }
 }
 
@@ -2730,13 +2192,10 @@ void makeloot(Creature &cr,vector<itemst *> &loot)
 void capturecreature(Creature &t)
 {
    t.activity.type=ACTIVITY_NONE;
-
-   t.weapon.ammo=0;
-   t.weapon.type=0;
-   t.armor.type=ARMOR_CLOTHES;
-   t.armor.subtype=0;
-   t.armor.quality='1';
-   t.armor.flag=0;
+   t.drop_weapons_and_clips(NULL);
+   //t.strip(NULL);
+   Armor clothes=Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
+   t.give_armor(clothes,NULL);
 
    freehostage(t,2); // situation 2 = no message; this may want to be changed to 0 or 1
    if(t.prisoner)
@@ -2751,7 +2210,8 @@ void capturecreature(Creature &t)
       if(sitetype==SITE_GOVERNMENT_PRISON||
          sitetype==SITE_GOVERNMENT_COURTHOUSE)
       {
-         t.armor.type=ARMOR_PRISONER;
+         Armor prisoner=Armor(*armortype[getarmortype("ARMOR_PRISONER")]);
+         t.give_armor(prisoner,NULL);
       }
       if(sitetype==SITE_GOVERNMENT_PRISON)
       {

@@ -92,9 +92,10 @@ int choosespecialedition(char &clearformess)
 {
    int page=0;
 
-   char havetype[LOOTNUM];
-   for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-   vector<int> loottype;
+   //char havetype[LOOTNUM];
+   //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
+   vector<bool> havetype(loottype.size(),false);
+   vector<int> loottypeindex;
 
    //FIND ALL LOOT TYPES
    for(int loc=0;loc<location.size();loc++)
@@ -103,25 +104,25 @@ int choosespecialedition(char &clearformess)
 
       for(int l=0;l<location[loc]->loot.size();l++)
       {
-         if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
+         if(!location[loc]->loot[l]->is_loot())continue;
+         //Temporary, maybe put special edition definition into an xml file. -XML
+         if(location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOPHOTOS"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_PRISONFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_CABLENEWSFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_AMRADIOFILES"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_SECRETDOCUMENTS"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_POLICERECORDS")continue;
 
-         if(location[loc]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
-            location[loc]->loot[l]->loottype!=LOOT_CEOLOVELETTERS&&
-            location[loc]->loot[l]->loottype!=LOOT_CEOTAXPAPERS&&
-            location[loc]->loot[l]->loottype!=LOOT_INTHQDISK&&
-            location[loc]->loot[l]->loottype!=LOOT_CORPFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_JUDGEFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_RESEARCHFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_PRISONFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_CABLENEWSFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_AMRADIOFILES&&
-            location[loc]->loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
-            location[loc]->loot[l]->loottype!=LOOT_POLICERECORDS)continue;
-
-         if(!havetype[location[loc]->loot[l]->loottype])
+         if(!havetype[getloottype(location[loc]->loot[l]->get_itemtypename())])
          {
-            loottype.push_back(location[loc]->loot[l]->loottype);
-            havetype[location[loc]->loot[l]->loottype]=1;
+            loottypeindex.push_back(getloottype(location[loc]->loot[l]->get_itemtypename()));
+            havetype[getloottype(location[loc]->loot[l]->get_itemtypename())]=true;
          }
       }
    }
@@ -129,30 +130,30 @@ int choosespecialedition(char &clearformess)
    {
       for(int l=0;l<squad[sq]->loot.size();l++)
       {
-         if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
+         if(!squad[sq]->loot[l]->is_loot())continue;
 
-         if(squad[sq]->loot[l]->loottype!=LOOT_CEOPHOTOS&&
-            squad[sq]->loot[l]->loottype!=LOOT_CEOLOVELETTERS&&
-            squad[sq]->loot[l]->loottype!=LOOT_CEOTAXPAPERS&&
-            squad[sq]->loot[l]->loottype!=LOOT_INTHQDISK&&
-            squad[sq]->loot[l]->loottype!=LOOT_CORPFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_JUDGEFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_RESEARCHFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_PRISONFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_CABLENEWSFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_AMRADIOFILES&&
-            squad[sq]->loot[l]->loottype!=LOOT_SECRETDOCUMENTS&&
-            squad[sq]->loot[l]->loottype!=LOOT_POLICERECORDS)continue;
+         if(squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOPHOTOS"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_PRISONFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CABLENEWSFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_AMRADIOFILES"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_SECRETDOCUMENTS"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_POLICERECORDS")continue;
 
-         if(!havetype[squad[sq]->loot[l]->loottype])
+         if(!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
          {
-            loottype.push_back(squad[sq]->loot[l]->loottype);
-            havetype[squad[sq]->loot[l]->loottype]=1;
+            loottypeindex.push_back(getloottype(squad[sq]->loot[l]->get_itemtypename()));
+            havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())]=true;
          }
       }
    }
 
-   if(loottype.size()==0)return -1;
+   if(loottypeindex.size()==0)return -1;
 
    clearformess=1;
    
@@ -168,13 +169,12 @@ int choosespecialedition(char &clearformess)
       int x=1,y=10;
       char str[200],str2[200];
 
-      for(int l=page*18;l<loottype.size()&&l<page*18+18;l++)
+      for(int l=page*18;l<loottypeindex.size()&&l<page*18+18;l++)
       {
-         getloot(str2,loottype[l]);
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,str2);
+         strcat(str,loottype[loottypeindex[l]]->get_name().c_str());
 
          move(y,x);
          addstr(str);
@@ -212,7 +212,7 @@ int choosespecialedition(char &clearformess)
       {
          int slot=c-'a'+page*18;
 
-         if(slot>=0&&slot<loottype.size())
+         if(slot>=0&&slot<loottypeindex.size())
          {
             //DELETE THE ITEM
             for(int loc=0;loc<location.size();loc++)
@@ -221,13 +221,17 @@ int choosespecialedition(char &clearformess)
 
                for(int l=0;l<location[loc]->loot.size();l++)
                {
-                  if(location[loc]->loot[l]->type!=ITEM_LOOT)continue;
+                  if(!location[loc]->loot[l]->is_loot())continue;
 
-                  if(location[loc]->loot[l]->loottype==loottype[slot])
+                  if(getloottype(location[loc]->loot[l]->get_itemtypename())==loottypeindex[slot])
                   {
-                     delete location[loc]->loot[l];
-                     location[loc]->loot.erase(location[loc]->loot.begin() + l);
-                     return loottype[slot];
+                     location[loc]->loot[l]->decrease_number(1);
+                     if(location[loc]->loot[l]->get_number()==0)
+                     {
+                        delete location[loc]->loot[l];
+                        location[loc]->loot.erase(location[loc]->loot.begin() + l);
+                     }
+                     return loottypeindex[slot];
                   }
                }
             }
@@ -235,19 +239,23 @@ int choosespecialedition(char &clearformess)
             {
                for(int l=0;l<squad[sq]->loot.size();l++)
                {
-                  if(squad[sq]->loot[l]->type!=ITEM_LOOT)continue;
+                  if(!squad[sq]->loot[l]->is_loot())continue;
 
-                  if(squad[sq]->loot[l]->loottype==loottype[slot])
+                  if(getloottype(squad[sq]->loot[l]->get_itemtypename())==loottypeindex[slot])
                   {
-                     delete squad[sq]->loot[l];
-                     squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
-                     return loottype[slot];
+                     squad[sq]->loot[l]->decrease_number(1);
+                     if(squad[sq]->loot[l]->get_number()==0)
+                     {
+                        delete squad[sq]->loot[l];
+                        squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
+                     }
+                     return loottypeindex[slot];
                   }
                }
             }
 
             //WHOOPS!
-            return loottype[slot];
+            return loottypeindex[slot];
          }
       }
 
@@ -269,338 +277,348 @@ int choosespecialedition(char &clearformess)
 
 
 /* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l,short newspaper)
+void printnews(short li,short newspaper)
 {
    if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   switch(l)
+
+   if(loottype[li]->get_idname()=="LOOT_CEOPHOTOS") // Tmp -XML
    {
-      case LOOT_CEOPHOTOS:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring photos of a major CEO");
-         move(7,1);
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(10))
-         {
-            case 0:
-               addstr("engaging in lewd behavior with animals.");
-               change_public_opinion(VIEW_ANIMALRESEARCH,15);
-               break;
-            case 1:addstr("digging up graves and sleeping with the dead.");break;
-            case 2:
-               addstr("participating in a murder.");
-               change_public_opinion(VIEW_POLICEBEHAVIOR,15);
-               change_public_opinion(VIEW_JUSTICES,10);
-               break;
-            case 3:addstr("engaging in heavy bondage.  A cucumber was involved in some way.");break;
-            case 4:addstr("tongue-kissing an infamous dictator.");break;
-            case 5:
-               addstr("making out with an FDA official overseeing the CEO's products.");
-               change_public_opinion(VIEW_GENETICS,10);
-               change_public_opinion(VIEW_POLLUTION,10);
-               break;
-            case 6:addstr("castrating himself.");break;
-            case 7:addstr("waving a Nazi flag at a supremacist rally.");break;
-            case 8:
-               addstr("torturing an employee with a hot iron.");
-               change_public_opinion(VIEW_SWEATSHOPS,10);
-               break;
-            case 9:addstr("playing with feces and urine.");break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Corporations a little riled up.");
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring photos of a major CEO");
+      move(7,1);
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(10))
+      {
+         case 0:
+            addstr("engaging in lewd behavior with animals.");
+            change_public_opinion(VIEW_ANIMALRESEARCH,15);
+            break;
+         case 1:addstr("digging up graves and sleeping with the dead.");break;
+         case 2:
+            addstr("participating in a murder.");
+            change_public_opinion(VIEW_POLICEBEHAVIOR,15);
+            change_public_opinion(VIEW_JUSTICES,10);
+            break;
+         case 3:addstr("engaging in heavy bondage.  A cucumber was involved in some way.");break;
+         case 4:addstr("tongue-kissing an infamous dictator.");break;
+         case 5:
+            addstr("making out with an FDA official overseeing the CEO's products.");
+            change_public_opinion(VIEW_GENETICS,10);
+            change_public_opinion(VIEW_POLLUTION,10);
+            break;
+         case 6:addstr("castrating himself.");break;
+         case 7:addstr("waving a Nazi flag at a supremacist rally.");break;
+         case 8:
+            addstr("torturing an employee with a hot iron.");
+            change_public_opinion(VIEW_SWEATSHOPS,10);
+            break;
+         case 9:addstr("playing with feces and urine.");break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Corporations a little riled up.");
 
-         change_public_opinion(VIEW_CEOSALARY,50);
-         change_public_opinion(VIEW_CORPORATECULTURE,50);
-         offended_corps=1;
-         break;
-      case LOOT_CEOLOVELETTERS:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring love letters from a major CEO");
-         move(7,1);
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(8))
-         {
-            case 0:
-               addstr("addressed to his pet dog.  Yikes.");
-               change_public_opinion(VIEW_ANIMALRESEARCH,15);
-               break;
-            case 1:
-               addstr("to the judge that acquit him in a corruption trial.");
-               change_public_opinion(VIEW_JUSTICES,15);
-               break;
-            case 2:
-               addstr("to an illicit gay lover.");
-               change_public_opinion(VIEW_GAY,15);
-               break;
-            case 3:addstr("to himself.  They're very steamy.");break;
-            case 4:
-               addstr("implying that he has enslaved his houseservants.");
-               change_public_opinion(VIEW_SWEATSHOPS,10);
-               break;
-            case 5:
-               addstr("to the FDA official overseeing the CEO's products.");
-               change_public_opinion(VIEW_GENETICS,10);
-               change_public_opinion(VIEW_POLLUTION,10);
-               break;
-            case 6:addstr("that seem to touch on every fetish known to man.");break;
-            case 7:addstr("promising someone company profits in exchange for sexual favors.");break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Corporations a little riled up.");
-
-         change_public_opinion(VIEW_CEOSALARY,50);
-         change_public_opinion(VIEW_CORPORATECULTURE,50);
-         offended_corps=1;
-         break;
-      case LOOT_CEOTAXPAPERS:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring a major CEO's tax papers");
-         move(7,1);
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(1))
-         {
-            default:
-               addstr("showing that he has engaged in consistent tax evasion.");
-               change_public_opinion(VIEW_TAXES,25);
-               break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Corporations a little riled up.");
-
-         change_public_opinion(VIEW_CEOSALARY,50);
-         change_public_opinion(VIEW_CORPORATECULTURE,50);
-         offended_corps=1;
-         break;
-      case LOOT_CORPFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring Corporate files");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,newspaper*10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,newspaper*10);
-         switch(LCSrandom(5))
-         {
-            case 0:
-               addstr("describing a genetic monster created in a lab.");
-               change_public_opinion(VIEW_GENETICS,50);
-               break;
-            case 1:
-               addstr("with a list of gay employees entitled \"Homo-workers\".");
-               change_public_opinion(VIEW_GAY,50);
-               break;
-            case 2:
-               addstr("containing a memo: \"Terminate the pregnancy, I terminate you.\"");
-               change_public_opinion(VIEW_WOMEN,50);
-               break;
-            case 3:
-               addstr("cheerfully describing foreign corporate sweatshops.");
-               change_public_opinion(VIEW_SWEATSHOPS,50);
-               break;
-            case 4:
-               addstr("describing an intricate tax scheme.");
-               change_public_opinion(VIEW_TAXES,50);
-               break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Corporations a little riled up.");
-
-         change_public_opinion(VIEW_CEOSALARY,50);
-         change_public_opinion(VIEW_CORPORATECULTURE,50);
-         offended_corps=1;
-         break;
-      case LOOT_INTHQDISK:
-      case LOOT_SECRETDOCUMENTS:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring CIA and other intelligence files");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(6))
-         {
-            case 0:addstr("documenting the overthrow of a government.");break;
-            case 1:
-               addstr("documenting the planned assassination of a Liberal federal judge.");
-               change_public_opinion(VIEW_JUSTICES,50);
-               break;
-            case 2:addstr("containing private information on innocent citizens.");break;
-            case 3:
-               addstr("documenting \"harmful speech\" made by innocent citizens.");
-               change_public_opinion(VIEW_FREESPEECH,50);
-               break;
-            case 4:
-               addstr("used to keep tabs on gay citizens.");
-               change_public_opinion(VIEW_GAY,50);
-               break;
-            case 5:
-               addstr("documenting the infiltration of a pro-choice group.");
-               change_public_opinion(VIEW_WOMEN,50);
-               break;
-                 }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Government a little riled up.");
-
-         change_public_opinion(VIEW_INTELLIGENCE,50);
-         offended_cia=1;
-         break;
-      case LOOT_POLICERECORDS:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring police records");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(6))
-         {
-            case 0:
-               addstr("documenting human rights abuses by the force.");
-               change_public_opinion(VIEW_TORTURE,15);
-               break;
-            case 1:
-               addstr("documenting a police torture case.");
-               change_public_opinion(VIEW_TORTURE,50);
-               break;
-            case 2:
-               addstr("documenting a systematic invasion of privacy by the force.");
-               change_public_opinion(VIEW_INTELLIGENCE,15);
-               break;
-            case 3:
-               addstr("documenting a forced confession.");
-               break;
-            case 4:
-               addstr("documenting widespread corruption in the force.");
-               break;
-            case 5:
-               addstr("documenting gladiatorial matches held between prisoners by guards.");
-               change_public_opinion(VIEW_DEATHPENALTY,50);
-               break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-
-         change_public_opinion(VIEW_POLICEBEHAVIOR,50);
-         break;
-      case LOOT_JUDGEFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story with evidence of a Conservative judge");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(2))
-         {
-            case 0:addstr("taking bribes to acquit murderers.");break;
-            case 1:addstr("promising Conservative rulings in exchange for appointments.");break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-
-         change_public_opinion(VIEW_JUSTICES,50);
-         break;
-      case LOOT_RESEARCHFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring research papers");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(4))
-         {
-            case 0:addstr("documenting horrific animal rights abuses.");
-               change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
-            case 1:addstr("studying the effects of torture on cats.");
-               change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
-            case 2:addstr("covering up the accidental creation of a genetic monster.");
-               change_public_opinion(VIEW_GENETICS,50);break;
-            case 3:addstr("showing human test subjects dying under genetic research.");
-               change_public_opinion(VIEW_GENETICS,50);break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         break;
-      case LOOT_PRISONFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring prison documents");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(4))
-         {
-            case 0:addstr("documenting human rights abuses by prison guards.");break;
-            case 1:
-               addstr("documenting a prison torture case.");
-               change_public_opinion(VIEW_TORTURE,50);
-               break;
-            case 2:addstr("documenting widespread corruption among prison employees.");break;
-            case 3:
-               addstr("documenting gladiatorial matches held between prisoners by guards.");
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-
-         change_public_opinion(VIEW_DEATHPENALTY,50);
-         break;
-      case LOOT_CABLENEWSFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring cable news memos");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(4))
-         {
-            case 0:addstr("calling their news 'the vanguard of Conservative thought'.");break;
-            case 1:addstr("mandating negative coverage of Liberal politicians.");break;
-            case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
-            case 3:addstr("instructing a female anchor to 'get sexier or get a new job'.");
-               break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Conservative masses a little riled up.");
-
-         change_public_opinion(VIEW_CABLENEWS,50);
-         offended_cablenews=1;
-         break;
-      case LOOT_AMRADIOFILES:
-         move(6,1);
-         addstr("The Liberal Guardian runs a story featuring AM radio plans");
-         move(7,1);
-         
-         change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
-         switch(LCSrandom(3))
-         {
-            case 0:addstr("calling listeners 'sheep to be told what to think'.");break;
-            case 1:addstr("saying 'it's okay to lie, they don't need the truth'.");break;
-            case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
-         }
-         move(8,1);
-         addstr("The major networks and publications take it up and run it for weeks.");
-         move(9,1);
-         addstr("This is bound to get the Conservative masses a little riled up.");
-
-         change_public_opinion(VIEW_AMRADIO,50);
-         offended_cablenews=1;
-         break;
+      change_public_opinion(VIEW_CEOSALARY,50);
+      change_public_opinion(VIEW_CORPORATECULTURE,50);
+      offended_corps=1;
    }
+   else if(loottype[li]->get_idname()=="LOOT_CEOLOVELETTERS")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring love letters from a major CEO");
+      move(7,1);
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(8))
+      {
+         case 0:
+            addstr("addressed to his pet dog.  Yikes.");
+            change_public_opinion(VIEW_ANIMALRESEARCH,15);
+            break;
+         case 1:
+            addstr("to the judge that acquit him in a corruption trial.");
+            change_public_opinion(VIEW_JUSTICES,15);
+            break;
+         case 2:
+            addstr("to an illicit gay lover.");
+            change_public_opinion(VIEW_GAY,15);
+            break;
+         case 3:addstr("to himself.  They're very steamy.");break;
+         case 4:
+            addstr("implying that he has enslaved his houseservants.");
+            change_public_opinion(VIEW_SWEATSHOPS,10);
+            break;
+         case 5:
+            addstr("to the FDA official overseeing the CEO's products.");
+            change_public_opinion(VIEW_GENETICS,10);
+            change_public_opinion(VIEW_POLLUTION,10);
+            break;
+         case 6:addstr("that seem to touch on every fetish known to man.");break;
+         case 7:addstr("promising someone company profits in exchange for sexual favors.");break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Corporations a little riled up.");
+
+      change_public_opinion(VIEW_CEOSALARY,50);
+      change_public_opinion(VIEW_CORPORATECULTURE,50);
+      offended_corps=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_CEOTAXPAPERS")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring a major CEO's tax papers");
+      move(7,1);
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(1))
+      {
+         default:
+            addstr("showing that he has engaged in consistent tax evasion.");
+            change_public_opinion(VIEW_TAXES,25);
+            break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Corporations a little riled up.");
+
+      change_public_opinion(VIEW_CEOSALARY,50);
+      change_public_opinion(VIEW_CORPORATECULTURE,50);
+      offended_corps=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_CORPFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring Corporate files");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,newspaper*10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,newspaper*10);
+      switch(LCSrandom(5))
+      {
+         case 0:
+            addstr("describing a genetic monster created in a lab.");
+            change_public_opinion(VIEW_GENETICS,50);
+            break;
+         case 1:
+            addstr("with a list of gay employees entitled \"Homo-workers\".");
+            change_public_opinion(VIEW_GAY,50);
+            break;
+         case 2:
+            addstr("containing a memo: \"Terminate the pregnancy, I terminate you.\"");
+            change_public_opinion(VIEW_WOMEN,50);
+            break;
+         case 3:
+            addstr("cheerfully describing foreign corporate sweatshops.");
+            change_public_opinion(VIEW_SWEATSHOPS,50);
+            break;
+         case 4:
+            addstr("describing an intricate tax scheme.");
+            change_public_opinion(VIEW_TAXES,50);
+            break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Corporations a little riled up.");
+
+      change_public_opinion(VIEW_CEOSALARY,50);
+      change_public_opinion(VIEW_CORPORATECULTURE,50);
+      offended_corps=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_INTHQDISK"
+           || loottype[li]->get_idname()=="LOOT_SECRETDOCUMENTS")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring CIA and other intelligence files");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(6))
+      {
+         case 0:addstr("documenting the overthrow of a government.");break;
+         case 1:
+            addstr("documenting the planned assassination of a Liberal federal judge.");
+            change_public_opinion(VIEW_JUSTICES,50);
+            break;
+         case 2:addstr("containing private information on innocent citizens.");break;
+         case 3:
+            addstr("documenting \"harmful speech\" made by innocent citizens.");
+            change_public_opinion(VIEW_FREESPEECH,50);
+            break;
+         case 4:
+            addstr("used to keep tabs on gay citizens.");
+            change_public_opinion(VIEW_GAY,50);
+            break;
+         case 5:
+            addstr("documenting the infiltration of a pro-choice group.");
+            change_public_opinion(VIEW_WOMEN,50);
+            break;
+              }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Government a little riled up.");
+
+      change_public_opinion(VIEW_INTELLIGENCE,50);
+      offended_cia=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_POLICERECORDS")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring police records");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(6))
+      {
+         case 0:
+            addstr("documenting human rights abuses by the force.");
+            change_public_opinion(VIEW_TORTURE,15);
+            break;
+         case 1:
+            addstr("documenting a police torture case.");
+            change_public_opinion(VIEW_TORTURE,50);
+            break;
+         case 2:
+            addstr("documenting a systematic invasion of privacy by the force.");
+            change_public_opinion(VIEW_INTELLIGENCE,15);
+            break;
+         case 3:
+            addstr("documenting a forced confession.");
+            break;
+         case 4:
+            addstr("documenting widespread corruption in the force.");
+            break;
+         case 5:
+            addstr("documenting gladiatorial matches held between prisoners by guards.");
+            change_public_opinion(VIEW_DEATHPENALTY,50);
+            break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+
+      change_public_opinion(VIEW_POLICEBEHAVIOR,50);
+   }
+   else if(loottype[li]->get_idname()=="LOOT_JUDGEFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story with evidence of a Conservative judge");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(2))
+      {
+         case 0:addstr("taking bribes to acquit murderers.");break;
+         case 1:addstr("promising Conservative rulings in exchange for appointments.");break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+
+      change_public_opinion(VIEW_JUSTICES,50);
+   }
+   else if(loottype[li]->get_idname()=="LOOT_RESEARCHFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring research papers");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(4))
+      {
+         case 0:addstr("documenting horrific animal rights abuses.");
+            change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
+         case 1:addstr("studying the effects of torture on cats.");
+            change_public_opinion(VIEW_ANIMALRESEARCH,50);break;
+         case 2:addstr("covering up the accidental creation of a genetic monster.");
+            change_public_opinion(VIEW_GENETICS,50);break;
+         case 3:addstr("showing human test subjects dying under genetic research.");
+            change_public_opinion(VIEW_GENETICS,50);break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+   }
+   else if(loottype[li]->get_idname()=="LOOT_PRISONFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring prison documents");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(4))
+      {
+         case 0:addstr("documenting human rights abuses by prison guards.");break;
+         case 1:
+            addstr("documenting a prison torture case.");
+            change_public_opinion(VIEW_TORTURE,50);
+            break;
+         case 2:addstr("documenting widespread corruption among prison employees.");break;
+         case 3:
+            addstr("documenting gladiatorial matches held between prisoners by guards.");
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+
+      change_public_opinion(VIEW_DEATHPENALTY,50);
+   }
+   else if(loottype[li]->get_idname()=="LOOT_CABLENEWSFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring cable news memos");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(4))
+      {
+         case 0:addstr("calling their news 'the vanguard of Conservative thought'.");break;
+         case 1:addstr("mandating negative coverage of Liberal politicians.");break;
+         case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
+         case 3:addstr("instructing a female anchor to 'get sexier or get a new job'.");
+            break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Conservative masses a little riled up.");
+
+      change_public_opinion(VIEW_CABLENEWS,50);
+      offended_cablenews=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_AMRADIOFILES")
+   {
+      move(6,1);
+      addstr("The Liberal Guardian runs a story featuring AM radio plans");
+      move(7,1);
+      
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
+      change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
+      switch(LCSrandom(3))
+      {
+         case 0:addstr("calling listeners 'sheep to be told what to think'.");break;
+         case 1:addstr("saying 'it's okay to lie, they don't need the truth'.");break;
+         case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
+      }
+      move(8,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(9,1);
+      addstr("This is bound to get the Conservative masses a little riled up.");
+
+      change_public_opinion(VIEW_AMRADIO,50);
+      offended_cablenews=1;
+   }
+
    refresh();
    getch();
 }

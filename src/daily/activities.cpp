@@ -146,27 +146,30 @@ void adjustblogpower(int &power)
 /* armor repair */
 void repairarmor(Creature &cr,char &clearformess)
 {
-   armorst *armor=NULL;
-   itemst *pile=NULL;
-   vector<itemst *> *pilelist=NULL;
+   Armor *armor=NULL;
+   Item *pile=NULL;
+   vector<Item *> *pilelist=NULL;
 
-   if(cr.armor.type!=ARMOR_NONE&&
-      cr.armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
+   if(!cr.is_naked() &&
+      (cr.get_armor().is_bloody() || cr.get_armor().is_damaged()))
    {
-      armor=&cr.armor;
+      armor=&cr.get_armor();
    }
    else if(cr.squadid!=-1)
    {
       int sq=getsquad(cr.squadid);
       for(int l=0;l<squad[sq]->loot.size();l++)
       {
-         if(squad[sq]->loot[l]->type==ITEM_ARMOR&&
-            squad[sq]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
+         if(squad[sq]->loot[l]->is_armor())
          {
-            armor=&squad[sq]->loot[l]->armor;
-            pile=squad[sq]->loot[l];
-            pilelist=&squad[sq]->loot;
-            break;
+            Armor* a = static_cast<Armor*>(squad[sq]->loot[l]); //cast -XML
+            if (a->is_bloody() || a->is_damaged())
+            {
+               armor=a;
+               pile=squad[sq]->loot[l];
+               pilelist=&squad[sq]->loot;
+               break;
+            }
          }
       }
    }
@@ -174,13 +177,16 @@ void repairarmor(Creature &cr,char &clearformess)
    {
       for(int l=0;l<location[cr.location]->loot.size();l++)
       {
-         if(location[cr.location]->loot[l]->type==ITEM_ARMOR&&
-            location[cr.location]->loot[l]->armor.flag & (ARMORFLAG_DAMAGED | ARMORFLAG_BLOODY))
+         if(location[cr.location]->loot[l]->is_armor())
          {
-            armor=&location[cr.location]->loot[l]->armor;
-            pile=location[cr.location]->loot[l];
-            pilelist=&location[cr.location]->loot;
-            break;
+            Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
+            if(a->is_bloody() || a->is_damaged())
+            {
+               armor=a;
+               pile=location[cr.location]->loot[l];
+               pilelist=&location[cr.location]->loot;
+               break;
+            }
          }
       }
    }
@@ -195,9 +201,10 @@ void repairarmor(Creature &cr,char &clearformess)
 
       bool repairfailed=false;
 
-      if(armor->flag & ARMORFLAG_DAMAGED)
+      if(armor->is_damaged())
       {
-         long dif=(armor_makedifficulty(armor->type,&cr)>>1);
+         long dif=armor_makedifficulty(*armor,&cr);
+         dif>>=1;
          cr.train(SKILL_TAILORING,dif+1);
 
          if(LCSrandom(1+dif/2))
@@ -209,7 +216,7 @@ void repairarmor(Creature &cr,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr(cr.name);
-      if(armor->flag & ARMORFLAG_DAMAGED)
+      if(armor->is_damaged())
       {
          if(repairfailed)
          {
@@ -219,25 +226,21 @@ void repairarmor(Creature &cr,char &clearformess)
       }
       else addstr(" cleans ");
       char str[80];
-      getarmorfull(str,armor->type,armor->subtype);
-      addstr(str);
 
-      if(pile!=NULL)
-      {
-         if(pile->number>1)
-         {
-            itemst *newpile=new itemst;
-               *newpile=*pile;
-            pilelist->push_back(newpile);
-            newpile->number=pile->number-1;
-            pile->number=1;
-         }
-      }
-
+      addstr(armor->get_name().c_str());
       addstr(".");
       
-      armor->flag&=~ARMORFLAG_BLOODY;
-      if(!repairfailed)armor->flag&=~ARMORFLAG_DAMAGED;
+      if(pile!=NULL)
+      {
+         if(pile->get_number()>1)
+         {
+            Item *newpile=pile->split(pile->get_number()-1);
+            pilelist->push_back(newpile);
+         }
+      }
+      
+      armor->set_bloody(false);
+      if(!repairfailed)armor->set_damaged(false);
 
       refresh();
       getch();
@@ -251,9 +254,9 @@ void makearmor(Creature &cr,char &clearformess)
 {
    int at=cr.activity.arg;
 
-   int cost=armor_makeprice(at);
-   int hcost=(armor_makeprice(at)>>1)+1;
-   int dif=armor_makedifficulty(at,&cr);
+   int cost=armortype[at]->get_make_price();
+   int hcost=(cost>>1)+1;
+   int dif=armor_makedifficulty(*armortype[at],&cr);
 
    if(ledger.get_funds()<hcost)
    {
@@ -281,15 +284,15 @@ void makearmor(Creature &cr,char &clearformess)
          int sq=getsquad(cr.squadid);
          for(int l=0;l<squad[sq]->loot.size();l++)
          {
-            if(squad[sq]->loot[l]->type==ITEM_LOOT&&
-               squad[sq]->loot[l]->loottype==LOOT_FINECLOTH)
+            if(squad[sq]->loot[l]->is_loot()&&
+               static_cast<Loot*>(squad[sq]->loot[l])->is_cloth()) //cast -XML
             {
-               if(squad[sq]->loot[l]->number==1)
+               if(squad[sq]->loot[l]->get_number()==1)
                {
                   delete squad[sq]->loot[l];
                   squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
                }
-               else squad[sq]->loot[l]->number--;
+               else squad[sq]->loot[l]->decrease_number(1);
                foundcloth=1;
                break;
             }
@@ -299,15 +302,15 @@ void makearmor(Creature &cr,char &clearformess)
       {
          for(int l=0;l<location[cr.location]->loot.size();l++)
          {
-            if(location[cr.location]->loot[l]->type==ITEM_LOOT&&
-               location[cr.location]->loot[l]->loottype==LOOT_FINECLOTH)
+            if(location[cr.location]->loot[l]->is_loot()&&
+               static_cast<Loot*>(location[cr.location]->loot[l])->is_cloth()) //cast -XML
             {
-               if(location[cr.location]->loot[l]->number==1)
+               if(location[cr.location]->loot[l]->get_number()==1)
                {
                   delete location[cr.location]->loot[l];
                   location[cr.location]->loot.erase(location[cr.location]->loot.begin() + l);
                }
-               else location[cr.location]->loot[l]->number--;
+               else location[cr.location]->loot[l]->decrease_number(1);
                foundcloth=1;
                break;
             }
@@ -343,25 +346,23 @@ void makearmor(Creature &cr,char &clearformess)
 
          cr.train(SKILL_TAILORING,dif*2+1);
 
-         itemst *it=new itemst;
-            it->type=ITEM_ARMOR;
-            it->armor.type=at;
-            it->armor.quality='1';
-            it->armor.flag=0;
-         location[cr.location]->loot.push_back(it);
-
+         int quality = 1;
          if(!cr.skill_check(SKILL_TAILORING,dif))
          {
-            it->armor.quality='2';
+            quality=2;
             if(!cr.skill_check(SKILL_TAILORING,dif))
             {
-               it->armor.quality='3';
+               quality=3;
                if(!cr.skill_check(SKILL_TAILORING,dif))
                {
-                  it->armor.quality='4';
+                  quality=4;
                }
             }
          }
+         
+         Item *it=new Armor(*armortype[at],quality);
+         location[cr.location]->loot.push_back(it);
+
 
          if(clearformess)erase();
          else
@@ -373,17 +374,15 @@ void makearmor(Creature &cr,char &clearformess)
          move(8,1);
          addstr(cr.name);
          addstr(" has made a ");
-         switch(it->armor.quality)
+         switch(quality)
          {
-            case '1':addstr("first-rate");break;
-            case '2':addstr("second-rate");break;
-            case '3':addstr("third-rate");break;
-            case '4':addstr("fourth-rate");break;
+            case 1:addstr("first-rate");break;
+            case 2:addstr("second-rate");break;
+            case 3:addstr("third-rate");break;
+            case 4:addstr("fourth-rate");break;
          }
          addstr(" ");
-         char str[80];
-         getarmorfull(str,at);
-         addstr(str);
+         addstr(it->get_name().c_str());
          addstr(".");
 
          refresh();
@@ -836,7 +835,7 @@ int checkforarrest(Creature & liberal,const char* string,int clearformess)
 {
    bool arrest=false;
    
-   if(!liberal.animalgloss && liberal.armor.type==ARMOR_NONE && LCSrandom(2))
+   if(!liberal.animalgloss && liberal.is_naked() && LCSrandom(2))
    {
       criminalize(liberal,LAWFLAG_DISTURBANCE);
       
@@ -1006,7 +1005,7 @@ void funds_and_trouble(char &clearformess)
       if(!checkforarrest(*solicit[s],"soliciting donations",clearformess))
       {
          money+=solicit[s]->skill_roll(SKILL_PERSUASION) *
-                solicit[s]->armor.professionalism()+1;
+                solicit[s]->get_armor().get_professionalism()+1;
          solicit[s]->income=money;
 
          solicit[s]->train(SKILL_PERSUASION,max(5-solicit[s]->get_skill(SKILL_PERSUASION),2));
@@ -1136,7 +1135,11 @@ void funds_and_trouble(char &clearformess)
       if(!checkforarrest(*music[s],"playing music",clearformess))
       {
          money = music[s]->skill_roll(SKILL_MUSIC) / 2;
-         if(music[s]->weapon.type==WEAPON_GUITAR)money *= 4;
+         
+         bool has_instrument = music[s]->get_weapon().is_instrument();
+         
+         if(has_instrument)
+            money *= 4;
 
          // Country's alignment affects effectiveness
          if(publicmood(-1) < 10)
@@ -1147,7 +1150,7 @@ void funds_and_trouble(char &clearformess)
          ledger.add_funds(money,INCOME_BUSKING);
          music[s]->income=money;
 
-         if(music[s]->weapon.type==WEAPON_GUITAR)
+         if(has_instrument)
             music[s]->train(SKILL_MUSIC,max(7-music[s]->get_skill(SKILL_MUSIC),4));
          else
             music[s]->train(SKILL_MUSIC,max(5-music[s]->get_skill(SKILL_MUSIC),2));
@@ -1264,9 +1267,7 @@ void funds_and_trouble(char &clearformess)
                {
                   strcat(msg,"pilfered files from a Corporate server.");
    
-                  itemst *it=new itemst;
-                     it->type=ITEM_LOOT;
-                     it->loottype=LOOT_CORPFILES;
+                  Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
    
                   trackdif=20;
@@ -1294,10 +1295,9 @@ void funds_and_trouble(char &clearformess)
                {
                   strcat(msg,"intercepted internal media emails.");
    
-                  itemst *it=new itemst;
-                     it->type=ITEM_LOOT;
-                     if(LCSrandom(2))it->loottype=LOOT_CABLENEWSFILES;
-                     else it->loottype=LOOT_AMRADIOFILES;
+                  Item *it;
+                     if(LCSrandom(2))it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
+                     else it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
    
                   trackdif=20;
@@ -1317,9 +1317,7 @@ void funds_and_trouble(char &clearformess)
                {
                   strcat(msg,"uncovered information on dangerous research.");
    
-                  itemst *it=new itemst;
-                     it->type=ITEM_LOOT;
-                     it->loottype=LOOT_RESEARCHFILES;
+                  Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
    
                   trackdif=20;
@@ -1331,9 +1329,7 @@ void funds_and_trouble(char &clearformess)
                {
                   strcat(msg,"discovered evidence of judicial corruption.");
    
-                  itemst *it=new itemst;
-                     it->type=ITEM_LOOT;
-                     it->loottype=LOOT_JUDGEFILES;
+                  Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
    
                   trackdif=20;
@@ -1503,7 +1499,7 @@ void funds_and_trouble(char &clearformess)
    {
       for(s=0;s<graffiti.size();++s)
       {
-         if(graffiti[s]->weapon.type!=WEAPON_SPRAYCAN)
+         if(!graffiti[s]->get_weapon().can_graffiti())
          {
             
             if(clearformess)erase();
@@ -1516,54 +1512,45 @@ void funds_and_trouble(char &clearformess)
             move(8,1);
             addstr(graffiti[s]->name);
 
-            //TODO: CHECK BASE INVENTORY FOR A SPRAYCAN BEFORE BUYING ONE
+            //Check base inventory for a spraycan
+            bool foundone = false;
+            for(int i=0; i<location[graffiti[s]->base]->loot.size(); --i)
+            {
+               if(location[graffiti[s]->base]->loot[i]->is_weapon())
+               {
+                  Weapon *w = static_cast<Weapon*>(location[graffiti[s]->base]->loot[i]); //cast -XML
+                  if(w->can_graffiti())
+                  {
+                     addstr(" grabbed a ");
+                     addstr(w->get_name().c_str());
+                     addstr(" from ");
+                     addlocationname(location[graffiti[s]->base]);
+                     addstr(".");
+                     refresh();
+                     getch();
+
+                     graffiti[s]->give_weapon(*w,&(location[graffiti[s]->base]->loot));
+
+                     if(location[graffiti[s]->base]->loot[i]->empty())
+                     {
+                        delete location[graffiti[s]->base]->loot[i];
+                        location[graffiti[s]->base]->loot.erase(location[graffiti[s]->base]->loot.begin()+i);
+                     }
+                     foundone = true;
+                     break;
+                  }
+               }
+            }
             
-            if(ledger.get_funds()>=20)
+            if(!foundone && ledger.get_funds()>=20)
             {
                ledger.subtract_funds(20,EXPENSE_SHOPPING);
                addstr(" bought spraypaint for graffiti.");
                refresh();
                getch();
 
-               // drop your gun
-               if(graffiti[s]->weapon.type!=WEAPON_NONE)
-               {
-                  itemst *i=new itemst;
-                     i->type=ITEM_WEAPON;
-                     i->weapon=graffiti[s]->weapon;
-                  location[graffiti[s]->base]->loot.push_back(i);
-
-                  graffiti[s]->weapon.type=WEAPON_NONE;
-                  graffiti[s]->weapon.ammo=0;
-
-                  //DROP ALL CLIPS
-                  for(int c=0;c<CLIPNUM;c++)
-                  {
-                     for(int p2=0;p2<graffiti[s]->clip[c];p2++)
-                     {
-                        if(c==CLIP_MOLOTOV)
-                        {
-                           itemst *newi=new itemst;
-                              newi->type=ITEM_WEAPON;
-                              newi->weapon.type=WEAPON_MOLOTOV;
-                              newi->weapon.ammo=1;
-                           location[graffiti[s]->base]->loot.push_back(newi);
-                        }
-                        else
-                        {
-                           itemst *newi=new itemst;
-                              newi->type=ITEM_CLIP;
-                              newi->cliptype=c;
-                           location[graffiti[s]->base]->loot.push_back(newi);
-                        }
-                     }
-
-                     graffiti[s]->clip[c]=0;
-                  }
-
-                  consolidateloot(location[graffiti[s]->base]->loot);
-               }
-               graffiti[s]->weapon.type=WEAPON_SPRAYCAN;
+               Weapon spray(*weapontype[getweapontype("WEAPON_SPRAYCAN")]);
+               graffiti[s]->give_weapon(spray,&location[graffiti[s]->base]->loot);
             }
             else
             {
@@ -1748,8 +1735,7 @@ void funds_and_trouble(char &clearformess)
          removesquadinfo(*prostitutes[p]);
          prostitutes[p]->carid=-1;
          prostitutes[p]->location=ps;
-         prostitutes[p]->weapon.type=WEAPON_NONE;
-         prostitutes[p]->weapon.ammo=0;
+         prostitutes[p]->drop_weapons_and_clips(NULL);
          prostitutes[p]->activity.type=ACTIVITY_NONE;
          criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
       }
@@ -2033,12 +2019,11 @@ void funds_and_trouble(char &clearformess)
                   removesquadinfo(*trouble[t]);
                   trouble[t]->carid=-1;
                   trouble[t]->location=ps;
-                  trouble[t]->weapon.type=WEAPON_NONE;
-                  trouble[t]->weapon.ammo=0;
+                  trouble[t]->drop_weapons_and_clips(NULL);
                   trouble[t]->activity.type=ACTIVITY_NONE;
                   criminalize(*trouble[t],crime);
                }
-               else if(trouble[t]->weapon.type==WEAPON_NONE && 
+               else if(!trouble[t]->is_armed() && 
                        trouble[t]->get_skill(SKILL_HANDTOHAND)==0)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2374,7 +2359,6 @@ char stealcar(Creature &cr,char &clearformess)
    clearformess=1;
 
    short cartype;
-   char str[80];
 
    if(carselect(cr,cartype))
    {
@@ -2413,6 +2397,7 @@ char stealcar(Creature &cr,char &clearformess)
       }
 
       v = new Vehicle(*vehicletype[cartype]);
+      string carname = v->fullname();
 
       if(old!=cartype)
       {
@@ -2451,8 +2436,7 @@ char stealcar(Creature &cr,char &clearformess)
       move(10,0);
       addstr(cr.name);
       addstr(" looks from a distance at an empty ");
-      getcarfull(str,*v);
-      addstr(str);
+      addstr(carname.c_str());
       addstr(".");
 
       move(12,0);
@@ -2490,14 +2474,12 @@ char stealcar(Creature &cr,char &clearformess)
          printcreatureinfo(&cr);
          makedelimiter(8,0);
 
-         getcarfull(str,*v);
-
          if(alarmon)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(10,0);
             if(sensealarm)addstr("THE VIPER");
-            else addstr(str);
+            else addstr(carname.c_str());
             addstr(":   ");
             set_color(COLOR_RED,COLOR_BLACK,1);
             if(sensealarm)addstr("STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>");
@@ -2517,7 +2499,7 @@ char stealcar(Creature &cr,char &clearformess)
             move(10,0);
             addstr(cr.name);
             addstr(" stands by the ");
-            addstr(str);
+            addstr(carname.c_str());
             addstr(".");
          }
 
@@ -2586,7 +2568,7 @@ char stealcar(Creature &cr,char &clearformess)
          //BREAK WINDOW
          if(method==1)
          {
-            int difficulty = static_cast<int>(DIFFICULTY_EASY / bashstrengthmod(cr.weapon.type)) - windowdamage;
+            int difficulty = static_cast<int>(DIFFICULTY_EASY / cr.get_weapon().get_bashstrengthmod()) - windowdamage;
 
             if(cr.attribute_check(ATTRIBUTE_STRENGTH,difficulty))
             {
@@ -2594,12 +2576,10 @@ char stealcar(Creature &cr,char &clearformess)
                move(16,0);
                addstr(cr.name);
                addstr(" smashes the window");
-               if(bashstrengthmod(cr.weapon.type)>1)
+               if(cr.get_weapon().get_bashstrengthmod()>1)
                {
                   addstr(" with a ");
-                  char str[80];
-                  getweaponfull(str,cr.weapon.type,2);
-                  addstr(str);
+                  addstr(cr.get_weapon().get_name(2).c_str());
                }
                addstr(".");
                refresh();getch();
@@ -2614,12 +2594,10 @@ char stealcar(Creature &cr,char &clearformess)
                move(16,0);
                addstr(cr.name);
                addstr(" cracks the window");
-               if(bashstrengthmod(cr.weapon.type)>1)
+               if(cr.get_weapon().get_bashstrengthmod()>1)
                {
                   addstr(" with a ");
-                  char str[80];
-                  getweaponfull(str,cr.weapon.type,2);
-                  addstr(str);
+                  addstr(cr.get_weapon().get_name(2).c_str());
                }
                addstr(" but it is still somewhat intact.");
 
@@ -2693,15 +2671,13 @@ char stealcar(Creature &cr,char &clearformess)
          printcreatureinfo(&cr);
          makedelimiter(8,0);
 
-         getcarfull(str,*v);
-
          int y=10;
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y++;
          addstr(cr.name);
          addstr(" is behind the wheel of a ");
-         addstr(str);
+         addstr(carname.c_str());
          addstr(".");
 
          if(alarmon)
@@ -2709,7 +2685,7 @@ char stealcar(Creature &cr,char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(y,0);y++;
             if(sensealarm)addstr("THE VIPER");
-            else addstr(str);
+            else addstr(carname.c_str());
             addstr(":   ");
             set_color(COLOR_RED,COLOR_BLACK,1);
             if(sensealarm)addstr("REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>");
@@ -2935,14 +2911,14 @@ char stealcar(Creature &cr,char &clearformess)
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
       addjuice(cr,v->steal_juice(),50);
 
-      v->heat() = 14+v->steal_extraheat();
+      v->add_heat(14+v->steal_extraheat());
 
       chaseseq.clean();
       chaseseq.location=0;
       int chaselev=!LCSrandom(13-windowdamage);
       if(chaselev>0||(v->vtypeidname()=="POLICECAR"&&LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
       {
-         v->heat() += 10;
+         v->add_heat(10);
          chaselev=1;
          newsstoryst *ns=new newsstoryst;
             ns->type=NEWSSTORY_CARTHEFT;
@@ -2954,7 +2930,7 @@ char stealcar(Creature &cr,char &clearformess)
       vehicle.push_back(v);
       if(chasesequence(cr,*v))
       {
-         v->location()=cr.base;
+         v->set_location(cr.base);
          // Automatically assign this car to this driver, if no other one is present
          if(cr.pref_carid==-1)
          {

@@ -201,7 +201,32 @@ char bash(short type,char &actual)
 
    if(crowable)
    {
-      if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))crowable=0;
+      //if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))
+      //{
+         crowable=0;
+         
+         for(int p=0;p<6;p++)
+         {
+            if(activesquad->squad[p]!=NULL)
+            {
+               if (activesquad->squad[p]->get_weapon().auto_breaks_locks())
+                  crowable = 1;
+            }
+         }
+      
+         if(!crowable) //didn't find in hands of any squad member
+         {
+            for(int l=0;l<activesquad->loot.size();l++)
+            {
+               if(activesquad->loot[l]->is_weapon())
+               {
+                  Weapon *w = static_cast<Weapon*>(activesquad->loot[l]); //cast -XML
+                   if (w->auto_breaks_locks())
+                     crowable = 1;
+               }
+            }
+         }
+      //}
    }
 
    int maxattack=0, maxp=0;
@@ -215,10 +240,10 @@ char bash(short type,char &actual)
             if(activesquad->squad[p]->alive)
             {
                if(activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH,true)*
-                  bashstrengthmod(activesquad->squad[p]->weapon.type)>maxattack)
+                  activesquad->squad[p]->get_weapon().get_bashstrengthmod()>maxattack)
                {
                   maxattack=static_cast<int>(activesquad->squad[p]->get_attribute(ATTRIBUTE_STRENGTH,true)*
-                                             bashstrengthmod(activesquad->squad[p]->weapon.type));
+                                             activesquad->squad[p]->get_weapon().get_bashstrengthmod());
                   maxp = p;
                }
             }
@@ -226,7 +251,7 @@ char bash(short type,char &actual)
       }
    }
 
-   difficulty = static_cast<int>(difficulty/bashstrengthmod(activesquad->squad[maxp]->weapon.type));
+   difficulty = static_cast<int>(difficulty/activesquad->squad[maxp]->get_weapon().get_bashstrengthmod());
 
    if(crowable||activesquad->squad[maxp]->attribute_check(ATTRIBUTE_STRENGTH,difficulty))
    {
@@ -240,7 +265,7 @@ char bash(short type,char &actual)
       case BASH_DOOR:
          if(crowable)
             addstr("uses a crowbar on the door");
-         else if(bashstrengthmod(activesquad->squad[maxp]->weapon.type)>1)
+         else if(activesquad->squad[maxp]->get_weapon().get_bashstrengthmod()>1)
             addstr("smashes in the door");
          else
             addstr("kicks in the door");
@@ -303,38 +328,6 @@ char bash(short type,char &actual)
    actual=0;
    return 0;
 }
-
-
-
-/* returns the bash bonus provided by the specified weapon */
-float bashstrengthmod(int t)
-{
-   switch(t)
-   {
-      case WEAPON_AXE:
-      case WEAPON_CROWBAR: // (crowbar auto-bashes some things)
-         return 2;
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_SWORD:
-      case WEAPON_DAISHO:
-      case WEAPON_MAUL:
-      case WEAPON_HAMMER:
-         return 1.5;
-      case WEAPON_SHOTGUN_PUMP:
-      case WEAPON_STAFF:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_SEMIRIFLE_AR15:
-      case WEAPON_CARBINE_M4:
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-      case WEAPON_PITCHFORK:
-      case WEAPON_FLAMETHROWER:
-         return 1.25;
-      default:
-         return 1;
-   }
-}
-
 
 
 /* computer hack attempt */
@@ -1144,38 +1137,13 @@ void reloadparty(bool wasteful)
       if(activesquad->squad[p]==NULL)continue;
       if(!activesquad->squad[p]->alive)continue;
 
-      if(ammotype(activesquad->squad[p]->weapon.type)!=-1)
+      if(activesquad->squad[p]->has_thrown_weapon)
       {
-         int ammomax=2;
-         switch(ammotype(activesquad->squad[p]->weapon.type))
-         {
-            case CLIP_9:ammomax=15;break;
-            case CLIP_45:ammomax=15;break;
-            case CLIP_ASSAULT:ammomax=30;break;
-            case CLIP_SMG:ammomax=15;break;
-            case CLIP_38:ammomax=6;break;
-            case CLIP_44:ammomax=6;break;
-            case CLIP_50AE:ammomax=7;break;
-            case CLIP_BUCKSHOT:ammomax=6;break;
-            case CLIP_MOLOTOV:ammomax=1;break;
-            case CLIP_GASOLINE:ammomax=2;break;
-         }
-                   if(wasteful)
-                   {
-            if(activesquad->squad[p]->weapon.ammo<ammomax&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
-            {
-               activesquad->squad[p]->weapon.ammo=ammomax;
-               activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
-            }
-         }
-         else
-         {
-            if(activesquad->squad[p]->weapon.ammo==0&&activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]>0)
-            {
-               activesquad->squad[p]->weapon.ammo=ammomax;
-               activesquad->squad[p]->clip[ammotype(activesquad->squad[p]->weapon.type)]--;
-            }        
-         }
+         activesquad->squad[p]->ready_another_throwing_weapon();
+      }
+      else if(activesquad->squad[p]->can_reload())
+      {
+         activesquad->squad[p]->reload(wasteful);
       }
    }
 }

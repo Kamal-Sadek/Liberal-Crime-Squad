@@ -101,8 +101,8 @@ void kidnapattempt(void)
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
             (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
          {
-            if((encounter[e].weapon.type!=WEAPON_NONE&&
-               encounter[e].weapon.type!=WEAPON_GAVEL&&
+            if((encounter[e].is_armed()&&
+               encounter[e].get_weapon().get_itemtypename()!="WEAPON_GAVEL"&& //Gavel is non-dangerous? -XML
                encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
             target.push_back(e);
          }
@@ -228,7 +228,7 @@ void kidnapattempt(void)
 /* roll on the kidnap attempt and show the results */
 char kidnap(Creature &a,Creature &t,char &amateur)
 {
-   if(!a.weapon.can_take_hostages())
+   if(!a.get_weapon().can_take_hostages())
    {
       amateur=1;
 
@@ -294,9 +294,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
       addstr(" shows ");
       addstr(t.name);
       addstr(" the ");
-      char str[30];
-      getweaponfull(str,a.weapon.type,2);
-      addstr(str);
+      addstr(a.get_weapon().get_name(2).c_str());
       move(17,1);
       addstr("and says, ");
       set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -549,14 +547,9 @@ void kidnaptransfer(Creature &cr)
    newcr->flag|=CREATUREFLAG_MISSING;
 
    //disarm them and stash their weapon back at the base
-   if(newcr->weapon.type != WEAPON_NONE)
+   if(newcr->is_armed())
    {
-      itemst *newweapon = new itemst;
-      newweapon->type = ITEM_WEAPON;
-      newweapon->weapon = newcr->weapon;
-      location[newcr->location]->loot.push_back(newweapon);
-      newcr->weapon.ammo = 0;
-      newcr->weapon.type = WEAPON_NONE;
+      newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
    }
 
    //Create interrogation data

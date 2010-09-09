@@ -356,17 +356,17 @@ void advancecreature(Creature &cr)
       }
 
       // Firefighter's bunker gear reduces burn damage
-      if(cr.armor.type==ARMOR_BUNKERGEAR)
+      if(cr.get_armor().has_fireprotection())
       {
          // Base effect is 3/4 damage reduction, the denominator
          // increases with low quality or damaged gear
          int denom=4;
 
          // Damaged gear
-         if(cr.armor.flag & ARMORFLAG_DAMAGED)
+         if(cr.get_armor().is_damaged())
             denom+=2;
          // Shoddy quality gear
-         denom+=cr.armor.quality - '1';
+         denom+=cr.get_armor().get_quality() - 1;
 
          // Apply damage reduction
          burndamage = static_cast<int>(burndamage * (3.0/denom));
@@ -429,7 +429,8 @@ void advancecreature(Creature &cr)
 
       levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
-      if(cr.armor.type!=ARMOR_NONE)cr.armor.flag|=ARMORFLAG_BLOODY;
+      if(!cr.is_naked())
+         cr.get_armor().set_bloody(true);
 
       if(cr.blood<=0)
       {

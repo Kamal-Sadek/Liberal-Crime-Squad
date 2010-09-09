@@ -104,7 +104,8 @@ public:
    void configure(const std::string& command, const std::string& value);
    void build();
 private:
-   char loot;
+   //char loot;
+   std::string loot;
    int weight;
 };
 

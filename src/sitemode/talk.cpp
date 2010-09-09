@@ -60,8 +60,9 @@ char talk(Creature &a,int t)
             activesquad->squad[i]->prisoner->enemy())
          {
             hostages++;
-            if(activesquad->squad[i]->weapon.type!=WEAPON_NONE&&
-               activesquad->squad[i]->weapon.type!=WEAPON_GUITAR)weaponhostage++;
+            if (activesquad->squad[i]->is_armed() &&
+                activesquad->squad[i]->get_weapon().get_itemtypename()!="WEAPON_GUITAR") //Why specifically not a guitar? -XML
+              weaponhostage++;
          }
       }
       if(encounter[t].type==CREATURE_COP||
@@ -365,10 +366,11 @@ char talk(Creature &a,int t)
                   
                   move(16,1);
                   set_color(COLOR_RED,COLOR_BLACK,1);
-                  if(executer->weapon.ranged() && executer->weapon.ammo)
+                  if(executer->get_weapon().is_ranged()
+                     && executer->get_weapon().get_ammoamount()>0)
                   {
                      addstr("BLAM!");
-                     executer->weapon.ammo--;
+                     executer->get_weapon().decrease_ammo(1); //What if it doesn't use ammo? -XML
                   }
                   else
                   {
@@ -682,7 +684,7 @@ char talk(Creature &a,int t)
          // Police assess stolen goods in inventory
          for(int l=0;l<activesquad->loot.size();l++)
          {
-            if(activesquad->loot[l]->type==ITEM_LOOT)
+            if(activesquad->loot[l]->is_loot())
                stolen++;
          }
             
@@ -746,32 +748,32 @@ char talk(Creature &a,int t)
             case TALKMODE_START:
                move(11,1);
                addstr("A - Strike up a conversation about politics");
-               if(a.armor.type==ARMOR_NONE  && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+               if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                move(12,1);
                if(tk->can_date(a))set_color(COLOR_WHITE,COLOR_BLACK,0);
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr("B - Drop a pickup line");
-               if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+               if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(13,1);
                addstr("C - On second thought, don't say anything");
-               if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+               if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                addstr(".");
                if(encounter[t].type==CREATURE_LANDLORD&&
                   location[cursite]->renting==-1)
                {
                   move(14,1);
                   addstr("D - Rent a room");
-                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+                  if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                   addstr(".");
                }
                if((encounter[t].type==CREATURE_GANGMEMBER||encounter[t].type==CREATURE_MERC))
                {
                   move(14,1);
                   addstr("D - Buy weapons");
-                  if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+                  if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                   addstr(".");
                }
                break;
@@ -959,7 +961,7 @@ char talk(Creature &a,int t)
                   difficulty += 3;
                if(issue_too_liberal)
                   difficulty += 3;
-               if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)
+               if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
                   difficulty += 3;
                
                succeeded = a.skill_check(SKILL_PERSUASION,difficulty);
@@ -1183,7 +1185,8 @@ char talk(Creature &a,int t)
                   Creature *armed_liberal=NULL;
                   for(int i=0;i<6;i++)
                   {
-                     if(activesquad->squad[i] && activesquad->squad[i]->weapon.threatening())
+                     if(activesquad->squad[i] &&
+                        activesquad->squad[i]->get_weapon().is_threatening())
                      {
                         armed_liberal=activesquad->squad[i];
                         break;
@@ -1194,9 +1197,7 @@ char talk(Creature &a,int t)
                      move(9,1);
                      addstr(armed_liberal->name);
                      addstr(" brandishes the ");
-                     char weapon[20];
-                     getweapon(weapon,armed_liberal->weapon.type);
-                     addstr(weapon);
+                     addstr(armed_liberal->get_weapon().get_shortname(0).c_str());
                      addstr(".");
                      refresh();
                      getch();
@@ -1471,7 +1472,8 @@ char talk(Creature &a,int t)
 
                      return 1;
                   }
-                  else if((a.armor.type==ARMOR_POLICEUNIFORM || a.armor.type==ARMOR_POLICEARMOR)
+                  else if((a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM" //Police property on armor? -XML
+                           || a.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")
                      && tk->type==CREATURE_PROSTITUTE)
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1665,7 +1667,7 @@ char talk(Creature &a,int t)
                      refresh();
                      getch();
 
-                     if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)
+                     if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(12,1);addstr(tk->name);addstr(" responds,");
@@ -1717,7 +1719,7 @@ char talk(Creature &a,int t)
                      refresh();
                      getch();
 
-                     if(a.armor.type==ARMOR_NONE && a.animalgloss!=ANIMALGLOSS_ANIMAL)
+                     if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(12,1);addstr(tk->name);addstr(" responds,");
@@ -1728,7 +1730,8 @@ char talk(Creature &a,int t)
                         getch();
                         return 1;
                      }
-                     if(a.armor.type==ARMOR_POLICEUNIFORM||a.armor.type==ARMOR_POLICEARMOR)
+                     if(a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM"
+                        ||a.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(12,1);addstr(tk->name);addstr(" responds,");

@@ -326,8 +326,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          removesquadinfo(cr);
          cr.location=hs;
-         cr.weapon.type=WEAPON_NONE;
-         cr.weapon.ammo=0;
+         cr.drop_weapons_and_clips(NULL);
          cr.activity.type=ACTIVITY_NONE;
          cr.flag&=~CREATUREFLAG_SLEEPER;
       }
@@ -357,9 +356,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings) 
       {
          if(LCSrandom(law[LAW_PRIVACY] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_SECRETDOCUMENTS;
+         Item *it=new Loot(*loottype[getloottype("LOOT_SECRETDOCUMENTS")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -380,9 +377,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_POLICERECORDS;
+         Item *it=new Loot(*loottype[getloottype("LOOT_POLICERECORDS")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -401,9 +396,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings) 
       {
          if(LCSrandom(law[LAW_CORPORATE] + 3) && cr.type!=CREATURE_CORPORATE_CEO) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_CORPFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -421,9 +414,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings) 
       {
          if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_PRISONFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_PRISONFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -443,9 +434,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
          if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_CABLENEWSFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -465,9 +454,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
          if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_AMRADIOFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -485,9 +472,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings) 
       {
          if(LCSrandom(law[LAW_ANIMALRESEARCH] + 3)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_RESEARCHFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -504,9 +489,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(!location[homes]->siege.siege&&canseethings) 
       {
          if(LCSrandom(5)) break;
-         itemst *it=new itemst;
-         it->type=ITEM_LOOT;
-         it->loottype=LOOT_JUDGEFILES;
+         Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
          location[homes]->loot.push_back(it);
 
          erase();
@@ -554,8 +537,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
          cr.crimes_suspected[LAWFLAG_COMMERCE]++;
          removesquadinfo(cr);
          cr.location=ps;
-         cr.weapon.type=WEAPON_NONE;
-         cr.weapon.ammo=0;
+         cr.drop_weapons_and_clips(NULL);
          cr.activity.type=ACTIVITY_NONE;
          cr.flag&=~CREATUREFLAG_SLEEPER;
       }
@@ -615,8 +597,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          cr.crimes_suspected[LAWFLAG_THEFT]++;
          removesquadinfo(cr);
          cr.location=ps;
-         cr.weapon.type=WEAPON_NONE;
-         cr.weapon.ammo=0;
+         cr.drop_weapons_and_clips(NULL);
          cr.activity.type=ACTIVITY_NONE;
          cr.flag&=~CREATUREFLAG_SLEEPER;
       }
@@ -630,7 +611,8 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       if(cr.juice>100)cr.juice=100;
    }
    
-   itemst *item;
+   //Item *item;
+   string item;
    locationst *shelter=0;
 
    for(int l=0;l<location.size();l++)
@@ -646,165 +628,148 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
 
    while(number_of_items--)
    {
-      switch(location[cr.location]->type)
+      switch(location[cr.location]->type) //Temporary (transitionally) solution until sites are done. -XML
       {
       case SITE_RESIDENTIAL_TENEMENT:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(3))item->loottype=LOOT_KIDART;
-            else if(!LCSrandom(2))item->loottype=LOOT_DIRTYSOCK;
-            else item->loottype=LOOT_FAMILYPHOTO;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(3))item="LOOT_KIDART";
+            else if(!LCSrandom(2))item="LOOT_DIRTYSOCK";
+            else item="LOOT_FAMILYPHOTO";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_RESIDENTIAL_APARTMENT:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-            else if(!LCSrandom(3))item->loottype=LOOT_TRINKET;
-            else if(!LCSrandom(2))item->loottype=LOOT_CHEAPJEWELERY;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(4))item="LOOT_SILVERWARE";
+            else if(!LCSrandom(3))item="LOOT_TRINKET";
+            else if(!LCSrandom(2))item="LOOT_CHEAPJEWELERY";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(10))item->loottype=LOOT_EXPENSIVEJEWELERY;
-            else if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-            else if(!LCSrandom(3))item->loottype=LOOT_PDA;
-            else if(!LCSrandom(2))item->loottype=LOOT_CHEAPJEWELERY;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(10))item="LOOT_EXPENSIVEJEWELERY";
+            else if(!LCSrandom(5))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(4))item="LOOT_SILVERWARE";
+            else if(!LCSrandom(3))item="LOOT_PDA";
+            else if(!LCSrandom(2))item="LOOT_CHEAPJEWELERY";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_LABORATORY_COSMETICS:
       case SITE_INDUSTRY_NUCLEAR:
       case SITE_LABORATORY_GENETIC:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_RESEARCHFILES;
-            else if(!LCSrandom(2))item->loottype=LOOT_LABEQUIPMENT;
-            else if(!LCSrandom(2))item->loottype=LOOT_COMPUTER;
-            else if(!LCSrandom(5))item->loottype=LOOT_PDA;
-            else if(!LCSrandom(5))item->loottype=LOOT_CHEMICAL;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_RESEARCHFILES";
+            else if(!LCSrandom(2))item="LOOT_LABEQUIPMENT";
+            else if(!LCSrandom(2))item="LOOT_COMPUTER";
+            else if(!LCSrandom(5))item="LOOT_PDA";
+            else if(!LCSrandom(5))item="LOOT_CHEMICAL";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_GOVERNMENT_COURTHOUSE:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_JUDGEFILES;
-            else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(2))item->loottype=LOOT_PDA;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_JUDGEFILES";
+            else if(!LCSrandom(3))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(2))item="LOOT_PDA";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_GOVERNMENT_PRISON:
-         item=new itemst;item->type=ITEM_WEAPON;
-         item->weapon.type=WEAPON_SHANK;
-         item->weapon.ammo=0;
-         activesquad->loot.push_back(item);
+         item="WEAPON_SHANK";
+         activesquad->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
          break;
       case SITE_GOVERNMENT_FIRESTATION:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(LCSrandom(2))item->loottype=LOOT_TRINKET;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(LCSrandom(2))item="LOOT_TRINKET";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_INDUSTRY_SWEATSHOP:
-         item=new itemst;item->type=ITEM_LOOT;
-            item->loottype=LOOT_FINECLOTH;
-         activesquad->loot.push_back(item);
+            item="LOOT_FINECLOTH";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_INDUSTRY_POLLUTER:
-         item=new itemst;item->type=ITEM_LOOT;
-            item->loottype=LOOT_CHEMICAL;
-         activesquad->loot.push_back(item);
+            item="LOOT_CHEMICAL";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_CORPORATE_HEADQUARTERS:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_CORPFILES;
-            else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(2))item->loottype=LOOT_PDA;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_CORPFILES";
+            else if(!LCSrandom(3))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(2))item="LOOT_PDA";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_CORPORATE_HOUSE:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(8))item->loottype=LOOT_TRINKET;
-            else if(!LCSrandom(7))item->loottype=LOOT_WATCH;
-            else if(!LCSrandom(6))item->loottype=LOOT_PDA;
-            else if(!LCSrandom(5))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(4))item->loottype=LOOT_SILVERWARE;
-            else if(!LCSrandom(3))item->loottype=LOOT_CHEAPJEWELERY;
-            else if(!LCSrandom(2))item->loottype=LOOT_FAMILYPHOTO;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(8))item="LOOT_TRINKET";
+            else if(!LCSrandom(7))item="LOOT_WATCH";
+            else if(!LCSrandom(6))item="LOOT_PDA";
+            else if(!LCSrandom(5))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(4))item="LOOT_SILVERWARE";
+            else if(!LCSrandom(3))item="LOOT_CHEAPJEWELERY";
+            else if(!LCSrandom(2))item="LOOT_FAMILYPHOTO";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_MEDIA_AMRADIO:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_AMRADIOFILES;
-            else if(!LCSrandom(4))item->loottype=LOOT_MICROPHONE;
-            else if(!LCSrandom(3))item->loottype=LOOT_PDA;
-            else if(!LCSrandom(2))item->loottype=LOOT_CELLPHONE;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_AMRADIOFILES";
+            else if(!LCSrandom(4))item="LOOT_MICROPHONE";
+            else if(!LCSrandom(3))item="LOOT_PDA";
+            else if(!LCSrandom(2))item="LOOT_CELLPHONE";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
          break;
       case SITE_MEDIA_CABLENEWS:
-         item=new itemst;item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_CABLENEWSFILES;
-            else if(!LCSrandom(4))item->loottype=LOOT_MICROPHONE;
-            else if(!LCSrandom(3))item->loottype=LOOT_PDA;
-            else if(!LCSrandom(2))item->loottype=LOOT_CELLPHONE;
-            else item->loottype=LOOT_COMPUTER;
-         activesquad->loot.push_back(item);
+            if(!LCSrandom(5))item="LOOT_CABLENEWSFILES";
+            else if(!LCSrandom(4))item="LOOT_MICROPHONE";
+            else if(!LCSrandom(3))item="LOOT_PDA";
+            else if(!LCSrandom(2))item="LOOT_CELLPHONE";
+            else item="LOOT_COMPUTER";
+         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)])); //Why activesquad and not shelter? -XML
          break;
       case SITE_GOVERNMENT_POLICESTATION:
-         item=new itemst;
          if(!LCSrandom(3))
          {
-            item->type=ITEM_WEAPON;
-            if(!LCSrandom(4))item->weapon.type=WEAPON_SMG_MP5;
-            else if(!LCSrandom(3))item->weapon.type=WEAPON_SEMIPISTOL_45;
-            else if(!LCSrandom(2))item->weapon.type=WEAPON_SHOTGUN_PUMP;
-            else item->weapon.type=WEAPON_SEMIRIFLE_AR15;
+            if(!LCSrandom(4))item="WEAPON_SMG_MP5";
+            else if(!LCSrandom(3))item="WEAPON_SEMIPISTOL_45";
+            else if(!LCSrandom(2))item="WEAPON_SHOTGUN_PUMP";
+            else item="WEAPON_SEMIRIFLE_AR15";
+            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
          }
          else if(!LCSrandom(2))
          {
-            item->type=ITEM_ARMOR;
-            if(!LCSrandom(3))item->armor.type=ARMOR_POLICEUNIFORM;
-            else if(!LCSrandom(2))item->armor.type=ARMOR_SWATARMOR;
-            else item->armor.type=ARMOR_POLICEARMOR;
+            if(!LCSrandom(3))item="ARMOR_POLICEUNIFORM";
+            else if(!LCSrandom(2))item="ARMOR_SWATARMOR";
+            else item="ARMOR_POLICEARMOR";
+            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
          }
          else
          {
-            item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_POLICERECORDS;
-            else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(2))item->loottype=LOOT_PDA;
-            else item->loottype=LOOT_COMPUTER;
+            if(!LCSrandom(5))item="LOOT_POLICERECORDS";
+            else if(!LCSrandom(3))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(2))item="LOOT_PDA";
+            else item="LOOT_COMPUTER";
+            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
          }
-         shelter->loot.push_back(item);
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         item=new itemst;
          if(!LCSrandom(3))
          {
-            item->type=ITEM_WEAPON;
-            if(!LCSrandom(4))item->weapon.type=WEAPON_SMG_MP5;
-            else if(!LCSrandom(3))item->weapon.type=WEAPON_AUTORIFLE_M16;
-            else if(!LCSrandom(2))item->weapon.type=WEAPON_SHOTGUN_PUMP;
-            else item->weapon.type=WEAPON_CARBINE_M4;
+            if(!LCSrandom(4))item="WEAPON_SMG_MP5";
+            else if(!LCSrandom(3))item="WEAPON_AUTORIFLE_M16";
+            else if(!LCSrandom(2))item="WEAPON_SHOTGUN_PUMP";
+            else item="WEAPON_CARBINE_M4";
+            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
          }
          else if(!LCSrandom(2))
          {
-            item->type=ITEM_ARMOR;
-            item->armor.type=ARMOR_BLACKSUIT;
+            item="ARMOR_BLACKSUIT";
+            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
          }
          else
          {
-            item->type=ITEM_LOOT;
-            if(!LCSrandom(5))item->loottype=LOOT_SECRETDOCUMENTS;
-            else if(!LCSrandom(3))item->loottype=LOOT_CELLPHONE;
-            else if(!LCSrandom(2))item->loottype=LOOT_PDA;
-            else item->loottype=LOOT_COMPUTER;
+            if(!LCSrandom(5))item="LOOT_SECRETDOCUMENTS";
+            else if(!LCSrandom(3))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(2))item="LOOT_PDA";
+            else item="LOOT_COMPUTER";
+            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
          }
-         shelter->loot.push_back(item);
+
          break;
       }
    }

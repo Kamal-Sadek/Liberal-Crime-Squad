@@ -1361,30 +1361,21 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr)
 {
-   vector<int> armortype;
-   for(int a=0;a<ARMORNUM;a++)
+   vector<int> armortypei;
+   for (int a = 0; a < armortype.size(); ++a)
    {
-      int difficulty=0;
-      switch(a)
-      {
-      case ARMOR_NONE:
-      case ARMOR_MITHRIL:
-      case ARMOR_MASK:
-      case ARMOR_SWATARMOR:
-      case ARMOR_POLICEARMOR:
-      case ARMOR_ARMYARMOR:
-      case ARMOR_HEAVYARMOR:
-         break;
-      case ARMOR_DEATHSQUADUNIFORM:
-         if(law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2)
-            break;
-      default:
-         difficulty=armor_makedifficulty(a,cr);
-         if(difficulty>cr->get_skill(SKILL_TAILORING)*2+5)
-            break;
-         armortype.push_back(a);
-         break;
-      }
+      int difficulty = 0;
+      if (armortype[a]->get_make_difficulty() == 0)
+         continue;
+      
+      if (armortype[a]->deathsquad_legality()
+          && (law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2))
+         continue;
+      
+      difficulty = armor_makedifficulty(*armortype[a],cr);
+      if(difficulty>cr->get_skill(SKILL_TAILORING)*2+5)
+         continue;
+      armortypei.push_back(a);
    }
 
    int page=0;
@@ -1406,14 +1397,13 @@ void select_makeclothing(Creature *cr)
       addstr("----NAME-----------------------------DIFFICULTY-------------COST----------------");
 
       int y=2,difficulty;
-      for(int p=page*19;p<armortype.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<armortypei.size()&&p<page*19+19;p++)
       {
-         difficulty=armor_makedifficulty(armortype[p],cr);
+         difficulty=armor_makedifficulty(*armortype[armortypei[p]],cr);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
          addch(y+'A'-2);addstr(" - ");
-         getarmorfull(str,armortype[p]);
-         addstr(str);
+         addstr(armortype[armortypei[p]]->get_name().c_str());
 
          move(y,37);
          int display_difficulty = difficulty-cr->get_skill(SKILL_TAILORING);
@@ -1467,9 +1457,9 @@ void select_makeclothing(Creature *cr)
          }
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         itoa(armor_makeprice(armortype[p]),num,10);
-         move(y,63-strlen(num));
-         addch('$');addstr(num);
+         string price = tostring(armortype[armortypei[p]]->get_make_price());
+         move(y,63-price.length());
+         addch('$');addstr(price.c_str());
 
          y++;
       }
@@ -1493,10 +1483,10 @@ void select_makeclothing(Creature *cr)
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<armortype.size())
+         if(p<armortypei.size())
          {
             cr->activity.type=ACTIVITY_MAKE_ARMOR;
-            cr->activity.arg=armortype[p];
+            cr->activity.arg=armortypei[p]; //Use id name of armor type instead? -XML
             return;
          }
       }
@@ -1507,132 +1497,20 @@ void select_makeclothing(Creature *cr)
 
 
 
-int armor_makedifficulty(int type,Creature *cr)
+int armor_makedifficulty(Armor& type, Creature *cr)
 {
-   long basedif;
+   return armor_makedifficulty(*armortype[getarmortype(type.get_itemtypename())], cr);
+}
 
-   switch(type)
-   {
-   case ARMOR_TOGA:
-   case ARMOR_WIFEBEATER:
-      basedif=2;
-      break;
-   case ARMOR_CLOTHES:
-   case ARMOR_OVERALLS:
-   case ARMOR_WORKCLOTHES:
-      basedif=4;
-      break;
-   case ARMOR_PRISONER:
-   case ARMOR_BLACKROBE:
-      basedif=5;
-      break;
-   case ARMOR_CHEAPDRESS:
-   case ARMOR_TRENCHCOAT:
-   case ARMOR_LABCOAT:
-      basedif=6;
-      break;
-   case ARMOR_BONDAGEGEAR:
-   case ARMOR_CLOWNSUIT:
-   case ARMOR_SERVANTUNIFORM:
-      basedif=7;
-      break;
-   case ARMOR_SECURITYUNIFORM:
-   case ARMOR_PRISONGUARD:
-   case ARMOR_MILITARY:
-   case ARMOR_POLICEUNIFORM:
-      basedif=8;
-      break;
-   case ARMOR_CHEAPSUIT:
-   case ARMOR_DEATHSQUADUNIFORM:
-      basedif=9;
-      break;
-   case ARMOR_DONKEYSUIT:
-   case ARMOR_ELEPHANTSUIT:
-      basedif=10;
-      break;
-   case ARMOR_CIVILLIANARMOR:
-      basedif=11;
-      break;
-   case ARMOR_BLACKSUIT:
-   case ARMOR_BLACKDRESS:
-      basedif=12;
-      break;
-   case ARMOR_BUNKERGEAR:
-      basedif=13;
-      break;
-   case ARMOR_EXPENSIVESUIT:
-   case ARMOR_EXPENSIVEDRESS:
-      basedif=14;
-      break;
-   default:
-      basedif=15;
-      break;
-   }
+int armor_makedifficulty(ArmorType& type,Creature *cr) //Make class method? -XML
+{
+   long basedif = type.get_make_difficulty();
 
    basedif-=cr->get_skill(SKILL_TAILORING)-3;
    if(basedif<0)basedif=0;
 
    return basedif;
 }
-
-
-
-int armor_makeprice(int type)
-{
-   long price=0;
-
-   switch(type)
-   {
-   case ARMOR_TOGA:
-   case ARMOR_WIFEBEATER:
-      price=5;
-      break;
-   case ARMOR_CLOTHES:
-   case ARMOR_OVERALLS:
-   case ARMOR_WORKCLOTHES:
-      price=10;
-      break;
-   case ARMOR_CLOWNSUIT:
-   case ARMOR_PRISONER:
-   case ARMOR_CHEAPDRESS:
-   case ARMOR_TRENCHCOAT:
-   case ARMOR_LABCOAT:
-   case ARMOR_BLACKROBE:
-   case ARMOR_SERVANTUNIFORM:
-      price=20;
-      break;
-   case ARMOR_BONDAGEGEAR:
-      price=30;
-      break;
-   case ARMOR_SECURITYUNIFORM:
-   case ARMOR_PRISONGUARD:
-   case ARMOR_MILITARY:
-   case ARMOR_POLICEUNIFORM:
-   case ARMOR_DEATHSQUADUNIFORM:
-      price=40;
-      break;
-   case ARMOR_CHEAPSUIT:
-      price=50;
-      break;
-   case ARMOR_BLACKSUIT:
-   case ARMOR_BLACKDRESS:
-      price=60;
-      break;
-   case ARMOR_EXPENSIVESUIT:
-   case ARMOR_EXPENSIVEDRESS:
-   case ARMOR_ELEPHANTSUIT:
-   case ARMOR_DONKEYSUIT:
-      price=300;
-      break;
-   case ARMOR_BUNKERGEAR:
-   case ARMOR_CIVILLIANARMOR:
-      price=500;
-      break;
-   }
-
-   return price;
-}
-
 
 
 /* base - activate - trouble */

@@ -173,8 +173,10 @@ const int lowestloadscoreversion=31203;
    #endif
 #endif
 
-#include <sstream> //Hopefully a good place to put it. -XML
-#include "cmarkup/Markup.h" //For XML. -XML
+#include <sstream>
+#include <deque>
+#include <algorithm>
+#include "cmarkup/Markup.h" //For XML.
 
 using namespace std;
 #include "lcsio.h"
@@ -289,6 +291,7 @@ int r_num(void);
 int LCSrandom(int max);
 
 string tostring(long i);
+int stringtobool(const string& boolstr);
 
 enum UnlockTypes
 {
@@ -377,121 +380,6 @@ enum endgame
    ENDGAMENUM
 };
 
-enum Weapons
-{
-   WEAPON_NONE,
-   WEAPON_BASEBALLBAT,
-   WEAPON_CROWBAR,
-   WEAPON_KNIFE,
-   WEAPON_SHANK,
-   WEAPON_SYRINGE,
-   WEAPON_REVOLVER_38,
-   WEAPON_REVOLVER_44,
-   WEAPON_SEMIPISTOL_9MM,
-   WEAPON_SEMIPISTOL_45,
-   WEAPON_AUTORIFLE_M16,
-   WEAPON_AUTORIFLE_AK47,
-   WEAPON_SEMIRIFLE_AR15,
-   WEAPON_CARBINE_M4,
-   WEAPON_SMG_MP5,
-   WEAPON_SHOTGUN_PUMP,
-   WEAPON_SWORD,
-   WEAPON_CHAIN,
-   WEAPON_NIGHTSTICK,
-   WEAPON_GAVEL,
-   WEAPON_DAISHO,
-   WEAPON_HAMMER,
-   WEAPON_MAUL,
-   WEAPON_CROSS,
-   WEAPON_STAFF,
-   WEAPON_PITCHFORK,
-   WEAPON_TORCH,
-   WEAPON_GUITAR,
-   WEAPON_SPRAYCAN,
-   WEAPON_MOLOTOV,
-   WEAPON_AXE,
-   WEAPON_FLAMETHROWER,
-   WEAPON_DESERT_EAGLE,
-   WEAPONNUM
-};
-
-struct weaponst
-{
-   short type;
-   short ammo;
-
-   // Can you hit someone at range with it?
-   bool ranged(void)
-   {
-      switch(type)
-      {
-      case WEAPON_REVOLVER_38:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_DESERT_EAGLE:
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-      case WEAPON_SEMIRIFLE_AR15:
-      case WEAPON_CARBINE_M4:
-      case WEAPON_SMG_MP5:
-      case WEAPON_SHOTGUN_PUMP:
-      case WEAPON_FLAMETHROWER:
-         return true;
-      default:
-         return false;
-      }
-   }
-   
-   // Can you threaten a hostage with it?
-   bool can_take_hostages(void)
-   {
-      switch(type)
-      {
-      case WEAPON_NONE:
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_CROWBAR:
-      case WEAPON_MOLOTOV:
-      case WEAPON_HAMMER:
-      case WEAPON_STAFF:
-      case WEAPON_MAUL:
-      case WEAPON_PITCHFORK:
-      case WEAPON_TORCH:
-      case WEAPON_GAVEL:
-      case WEAPON_CROSS:
-      case WEAPON_GUITAR:
-      case WEAPON_SPRAYCAN:
-         return false;
-      default:
-         return true;
-      }
-   }
-
-   // Does it attract bullets and terrify landlords?
-   bool threatening(void)
-   {
-      switch(type)
-      {
-      case WEAPON_NONE:
-      case WEAPON_SYRINGE:
-      case WEAPON_GAVEL:
-      case WEAPON_CROSS:
-      case WEAPON_CHAIN:
-      case WEAPON_SHANK:
-      case WEAPON_GUITAR:
-      case WEAPON_SPRAYCAN:
-         return false;
-      default:
-         return true;
-      }
-   }
-
-   weaponst()
-   {
-      ammo=0;
-   }
-};
 
 // *JDS* This should be expanded to cover
 // any situation in which you want a bullet
@@ -517,169 +405,10 @@ enum BallisticVestTypes
    BVEST_MILITARY // XXX: SWAT?
 };
 
-enum MaskTypes
-{
-   MASK_ASHCROFT,
-   MASK_BARR,
-   MASK_BLAIR,
-   MASK_BUSH_BARBARA,
-   MASK_BUSH_GEORGE,
-   MASK_BUSH_GEORGE2,
-   MASK_CARTER,
-   MASK_CHENEY,
-   MASK_CLINTON_BILL,
-   MASK_CLINTON_HILLARY,
-   MASK_FALWELL,
-   MASK_FORD,
-   MASK_GORE_AL,
-   MASK_GORE_TIPPER,
-   MASK_GUY_FAWKES,
-   MASK_TED_STEVENS,
-   MASK_HELMS,
-   MASK_JASON,
-   MASK_LINCOLN,
-   MASK_KENNEDY_JOHN,
-   MASK_KENNEDY_ROBERT,
-   MASK_KISSINGER,
-   MASK_NIXON,
-   MASK_POWELL,
-   MASK_REAGAN_NANCY,
-   MASK_REAGAN_RONALD,
-   MASK_RICE,
-   MASK_ROBERTSON,
-   MASK_RUMSFELD,
-   MASK_SATAN,
-   MASK_STARR,
-   MASK_THURMOND,
-   MASK_WASHINGTON,
-   MASK_WAXMAN,
-   //SURPRISE MASKS
-   MASK_JESUS,
-   MASK_COLEMAN_GARY,
-   MASK_MADONNA,
-   MASK_SPEARS,
-   MASK_EMINEM,
-   MASK_AGUILERA,
-   MASK_WAHLBERG,
-   MASK_IGGYPOP,
-   MASK_CASH,
-   MASK_BINLADEN,
-   MASK_LORDS,
-   MASK_SHIELDS,
-   MASK_JACKSON_MICHAEL,
-   MASK_CRUTHERS,
-   MASK_KING_DON,
-   MASKNUM
-};
-
-enum Armors
-{
-   ARMOR_NONE,
-   ARMOR_CLOTHES,
-   ARMOR_TRENCHCOAT,
-   ARMOR_WORKCLOTHES,
-   ARMOR_SERVANTUNIFORM,
-   ARMOR_SECURITYUNIFORM,
-   ARMOR_POLICEUNIFORM,
-   ARMOR_CHEAPSUIT,
-   ARMOR_EXPENSIVESUIT,
-   ARMOR_BLACKSUIT,
-   ARMOR_CHEAPDRESS,
-   ARMOR_EXPENSIVEDRESS,
-   ARMOR_BLACKDRESS,
-   ARMOR_LABCOAT,
-   ARMOR_BLACKROBE,
-   ARMOR_CLOWNSUIT,
-   ARMOR_BONDAGEGEAR,
-   ARMOR_MASK,
-   ARMOR_MILITARY,
-   ARMOR_PRISONGUARD,
-   ARMOR_PRISONER,
-   ARMOR_TOGA,
-   ARMOR_MITHRIL,
-   ARMOR_OVERALLS,
-   ARMOR_WIFEBEATER,
-   ARMOR_CIVILLIANARMOR,
-   ARMOR_POLICEARMOR,
-   ARMOR_SWATARMOR,
-   ARMOR_ARMYARMOR,
-   ARMOR_HEAVYARMOR,
-   ARMOR_BUNKERGEAR,
-   ARMOR_ELEPHANTSUIT,
-   ARMOR_DONKEYSUIT,
-   ARMOR_DEATHSQUADUNIFORM,
-   ARMORNUM
-};
 
 #define ARMORFLAG_DAMAGED BIT1
 #define ARMORFLAG_BLOODY BIT2
 
-struct armorst
-{
-   short type;
-   short subtype;
-   char quality;
-   short flag;
-
-   armorst()
-   {
-      quality='1';
-      flag=0;
-   }
-
-   int interrogation_basepower();
-   int interrogation_assaultbonus();
-   int interrogation_drugbonus();
-   int professionalism();
-   bool faceconcealed();
-};
-
-enum ClipType
-{
-   CLIP_9,
-   CLIP_45,
-   CLIP_ASSAULT,
-   CLIP_SMG,
-   CLIP_38,
-   CLIP_44,
-   CLIP_BUCKSHOT,
-   CLIP_MOLOTOV,
-   CLIP_GASOLINE,
-   CLIP_50AE,
-   CLIPNUM
-};
-
-enum LootType
-{
-   LOOT_LABEQUIPMENT,
-   LOOT_COMPUTER,
-   LOOT_PDA,
-   LOOT_SECRETDOCUMENTS,
-   LOOT_CEOPHOTOS,
-   LOOT_INTHQDISK,
-   LOOT_CORPFILES,
-   LOOT_JUDGEFILES,
-   LOOT_RESEARCHFILES,
-   LOOT_PRISONFILES,
-   LOOT_CABLENEWSFILES,
-   LOOT_AMRADIOFILES,
-   LOOT_POLICERECORDS,
-   LOOT_CHEAPJEWELERY,
-   LOOT_CELLPHONE,
-   LOOT_EXPENSIVEJEWELERY,
-   LOOT_MICROPHONE,
-   LOOT_SILVERWARE,
-   LOOT_TRINKET,
-   LOOT_WATCH,
-   LOOT_FINECLOTH,
-   LOOT_CHEMICAL,
-   LOOT_KIDART,
-   LOOT_FAMILYPHOTO,
-   LOOT_DIRTYSOCK,
-   LOOT_CEOTAXPAPERS,
-   LOOT_CEOLOVELETTERS,
-   LOOTNUM
-};
 
 /* *JDS* I'm making laws an array instead of a bunch
  * of bits which are either on or off. Each charge can be
@@ -895,6 +624,18 @@ public:
    }
 };
 
+#include "items/itemtype.h"
+#include "items/cliptype.h"
+#include "items/weapontype.h"
+#include "items/armortype.h"
+#include "items/loottype.h"
+#include "items/item.h"
+#include "items/clip.h"
+#include "items/weapon.h"
+#include "items/armor.h"
+#include "items/loot.h"
+#include "items/money.h"
+
 #include "creature/creature.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
@@ -973,33 +714,6 @@ struct sitechangest
       x(x_), y(y_), z(z_), flag(flag_) {}
 };
 
-enum ItemTypes
-{
-   ITEM_WEAPON,
-   ITEM_ARMOR,
-   ITEM_MONEY,
-   ITEM_CLIP,
-   ITEM_LOOT,
-   ITEMNUM
-};
-
-struct itemst
-{
-   weaponst weapon;
-   armorst armor;
-   int money;
-   short cliptype;
-   short loottype;
-   short type;
-   long number;
-
-   itemst()
-   {
-      number=1;
-   }
-};
-
-
 
 enum SiegeTypes
 {
@@ -1058,7 +772,7 @@ struct locationst
    char shortname[20];
    short type;
    int parent;
-   vector<itemst *> loot;
+   vector<Item *> loot;
    vector<sitechangest> changes;
    int renting;
    char newrental;
@@ -1130,7 +844,7 @@ struct squadst
    Creature *squad[6];
    activityst activity;
    int id;
-   vector<itemst *> loot;
+   vector<Item *> loot;
 
    char stance; // Squad's site action stance: high profile, low profile, etc.
 
@@ -1557,8 +1271,6 @@ void addpagestr();
 */
 /* common - test for possible game over */
 char endcheck(char cause=-1);
-/* common - detatches all liberals from a specified car */
-void removecarprefs_pool(long carid);
 /* common - tests if the person is a wanted criminal */
 bool iscriminal(Creature &cr);
 /* common - sends somebody to the hospital */
@@ -1567,8 +1279,6 @@ void hospitalize(int loc, Creature &patient);
 int clinictime(Creature &g);
 /* common - purges squad of loot and vehicles if it has no members */
 int testsquadclear(squadst &thissquad, int obase);
-/* common - returns the associated skill for the given weapon type */
-int weaponskill(int weapon);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */
@@ -1625,6 +1335,11 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
 int choiceprompt(const string &firstline, const string &secondline,
                   const vector<string> &option, const string &optiontypename,
                   bool allowexitwochoice, const string &exitstring="");
+/* common - Displays a list of things to buy and returns an int corresponding
+            to the index of the chosen thing in the nameprice vector. */
+int buyprompt(const string &firstline, const string &secondline,
+              const vector< pair<string,int> > &nameprice, int namepaddedlength,
+              const string &producttype, const string &exitstring);
 
 
 /*
@@ -1642,20 +1357,11 @@ void translategetch_cap(int &c);
  getnames.cpp
 */
 void getactivity(char *str,activityst &act);
-void getweapon(char *str,int type);
-void getweaponfull(char *str,int type,int subtype=0);
-void getarmor(char *str,int type,int subtype=-1);
-void getarmorfull(char *str,armorst &armor,char superfull);
-void getarmorfull(char *str,int type,int subtype=-1);
-void getmaskdesc(char *str,short mask);
-void getclip(char *str,int clip);
-void getloot(char *str,int loot);
 void getrecruitcreature(char *str,int type);
 void gettitle(char *str,Creature &cr);
 void getview(char *str,short view);
 void getviewsmall(char *str,short view);
 void getlaw(char *str,int l);
-void getcarfull(char *str,Vehicle &car,char halffull=0);
 void cityname(char *story); /* random city name */
 /* Allow player to enter a name with an optional default name */
 void enter_name(char *name, int len, char *defname=NULL);
@@ -1673,26 +1379,36 @@ int getpoolcreature(long id);
 int getvehicletype(int id);
 /* transforms a vehicle type idname into the index of that vehicle type in the global vector */
 int getvehicletype(const string &idname);
+/* transforms a clip type id into the index of that clip type in the global vector */
+int getcliptype(int id);
+/* transforms a clip type name into the index of that clip type in the global vector */
+int getcliptype(const string &idname);
+/* transforms a weapon type id into the index of that weapon type in the global vector */
+int getweapontype(int id);
+/* transforms a weapon type name into the index of that weapon type in the global vector */
+int getweapontype(const string &idname);
+/* transforms a armor type id into the index of that armor type in the global vector */
+int getarmortype(int id);
+/* transforms a armor type name into the index of that armor type in the global vector */
+int getarmortype(const string &idname);
+/* transforms a loot type id into the index of that loot type in the global vector */
+int getloottype(int id);
+/* transforms a loot type name into the index of that loot type in the global vector */
+int getloottype(const string &idname);
 
 /*
  equipment.cpp
 */
-/* for displaying name of an item*/
-void get_equip_title(char *str2, itemst* item);
 /* review squad equipment */
-void equip(vector<itemst *> &loot,int loc);
+void equip(vector<Item *> &loot,int loc);
 /* lets you pick stuff to stash/retrieve from one location to another */
-void moveloot(vector<itemst *> &dest,vector<itemst *> &source);
+void moveloot(vector<Item *> &dest,vector<Item *> &source);
 /* equipment - assign new bases to the equipment */
 void equipmentbaseassign(void);
 /* combines multiple items of the same type into stacks */
-void consolidateloot(vector<itemst *> &loot);
+void consolidateloot(vector<Item *> &loot);
 /* compares two items, used in sorting gear */
-char itemcompare(itemst *a,itemst *b);
-/* returns the type of ammo used by the given weapon, if any */
-short ammotype(int type);
-/* check if a weapon is ranged */
-char rangedweapon(weaponst &w);
+char itemcompare(Item *a,Item *b);
 /* check if the squad has a certain weapon */
 char squadhasitem(squadst &sq,int type,int subtype);
 
@@ -1845,8 +1561,8 @@ void select_tendhostage(Creature *cr);
 long select_hostagefundinglevel(Creature *cr,Creature *hs);
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr);
-int armor_makedifficulty(int type,Creature *cr);
-int armor_makeprice(int type);
+int armor_makedifficulty(Armor& type,Creature *cr); //Replace? -XML
+int armor_makedifficulty(ArmorType& type,Creature *cr); //Replace? -XML
 /* base - activate - trouble */
 long select_troublefundinglevel(Creature *cr);
 /* base - activate - select a topic to write about */
@@ -1923,8 +1639,6 @@ void clearmaparea(bool lower=true,bool upper=true);
 char unlock(short type,char &actual);
 /* bash attempt */
 char bash(short type,char &actual);
-/* returns the bash bonus provided by the specified weapon */
-float bashstrengthmod(int t);
 /* computer hack attempt */
 char hack(short type,char &actual);
 /* run a radio broadcast */
@@ -1978,7 +1692,7 @@ void disguisepractice(int p,int diff);
 /* practices squads stealth skill */
 void stealthpractice(int p,int diff);
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(Creature &cr,short type);
+char weaponcheck(Creature &cr);
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(Creature &cr);
 /* returns true if the entire site is not open to public */
@@ -2013,15 +1727,15 @@ void healthmodroll(int &aroll,Creature &a);
 /* adjusts attack damage based on armor, other factors */
 void damagemod(Creature &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int &mod);
 /* destroys armor, masks, drops weapons based on severe damage */
-void severloot(Creature &cr,vector<itemst *> &loot);
+void severloot(Creature &cr,vector<Item *> &loot);
 /* damages the selected armor if it covers the body part specified */
-void armordamage(armorst &armor,int bp);
+void armordamage(Armor &armor,int bp);
 /* blood explosions */
-void bloodblast(armorst &armor);
+void bloodblast(Armor* armor);
 /* kills the specified creature from the encounter, dropping loot */
 void delenc(short e,char loot);
 /* generates the loot dropped by a creature when it dies */
-void makeloot(Creature &cr,vector<itemst *> &loot);
+void makeloot(Creature &cr,vector<Item *> &loot);
 /* abandoned liberal is captured by conservatives */
 void capturecreature(Creature &t);
 /* checks if the creature can fight and prints flavor text if they can't */
@@ -2128,8 +1842,6 @@ void halloweenstore(int loc);
 char maskselect(Creature *cr,short &mask);
 /* pick stuff to fence */
 int fenceselect(void);
-/* value of stuff to fence */
-int fencevalue(itemst &it);
 /* choose buyer */
 void choose_buyer(short &buyer);
 

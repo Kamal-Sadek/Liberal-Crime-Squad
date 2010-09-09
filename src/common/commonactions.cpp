@@ -28,7 +28,6 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <includes.h>
 #include <math.h>
-#include <algorithm>
 #include <externs.h>
 
 
@@ -73,20 +72,6 @@ char endcheck(char cause)
    }
 
    return 0;
-}
-
-
-/* common - detatches all liberals from a specified car */
-//GETS RID OF CAR PREFERENCES FROM pool LIBERALS, BY CAR ID NUMBER
-void removecarprefs_pool(long carid) //Turn into vehicle method? Like Vehicle::stop_riding_me(). -XML
-{
-   for(int p=0;p<pool.size();p++)
-   {
-      if(pool[p]->pref_carid==carid)
-      {
-         pool[p]->pref_carid=-1;
-      }
-   }
 }
 
 /* common - tests if the person is a wanted criminal */
@@ -229,7 +214,6 @@ int testsquadclear(squadst &thissquad, int obase)
             long v=id_getcar(thissquad.squad[p]->carid);
             if(v!=-1)
             {
-               removecarprefs_pool(vehicle[v]->id());
                delete vehicle[v];
                vehicle.erase(vehicle.begin() + v);
             }
@@ -246,71 +230,6 @@ int testsquadclear(squadst &thissquad, int obase)
    }
    return 0;
 }
-
-/* common - returns the associated skill for the given weapon type */
-int weaponskill(int weapon)
-{
-   int wsk=SKILL_HANDTOHAND;
-   switch(weapon)
-   {
-      case WEAPON_KNIFE:
-      case WEAPON_SHANK:
-      case WEAPON_SYRINGE:
-         wsk=SKILL_KNIFE;
-         break;
-      case WEAPON_MOLOTOV:
-         wsk=SKILL_THROWING;
-         break;
-      case WEAPON_SPRAYCAN:
-      case WEAPON_CROWBAR:
-      case WEAPON_CHAIN:
-      case WEAPON_GAVEL:
-      case WEAPON_CROSS:
-      case WEAPON_TORCH:
-      case WEAPON_BASEBALLBAT:
-      case WEAPON_NIGHTSTICK:
-      case WEAPON_MAUL:
-      case WEAPON_STAFF:
-      case WEAPON_HAMMER:
-         wsk=SKILL_CLUB;
-         break;
-      case WEAPON_AXE:
-         wsk=SKILL_AXE;
-         break;
-      case WEAPON_PITCHFORK:
-      case WEAPON_SWORD:
-      case WEAPON_DAISHO:
-         wsk=SKILL_SWORD;
-         break;
-      case WEAPON_REVOLVER_38:
-      case WEAPON_REVOLVER_44:
-      case WEAPON_DESERT_EAGLE:
-      case WEAPON_SEMIPISTOL_9MM:
-      case WEAPON_SEMIPISTOL_45:
-         wsk=SKILL_PISTOL;
-         break;
-      case WEAPON_SHOTGUN_PUMP:
-         wsk=SKILL_SHOTGUN;
-         break;
-      case WEAPON_SMG_MP5:
-         wsk=SKILL_SMG;
-         break;
-      case WEAPON_AUTORIFLE_M16:
-      case WEAPON_AUTORIFLE_AK47:
-      case WEAPON_CARBINE_M4:
-      case WEAPON_SEMIRIFLE_AR15:
-         wsk=SKILL_RIFLE;
-         break;
-      case WEAPON_FLAMETHROWER:
-         wsk=SKILL_FLAMETHROWER;
-         break;
-      case WEAPON_GUITAR:
-         wsk=SKILL_MUSIC;
-         break;
-   }
-   return wsk;
-}
-
 
 
 /* common - applies a crime to everyone in the active party */
@@ -480,9 +399,10 @@ void cleangonesquads(void)
       {
          for(int l=squad[sq]->loot.size()-1;l>=0;l--)
          {
-            if(squad[sq]->loot[l]->type==ITEM_MONEY)
+            if(squad[sq]->loot[l]->is_money())
             {
-               ledger.add_funds(squad[sq]->loot[l]->money,INCOME_THIEVERY);
+               Money* m = static_cast<Money*>(squad[sq]->loot[l]); //cast -XML
+               ledger.add_funds(m->get_amount(),INCOME_THIEVERY);
                delete squad[sq]->loot[l];
                squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
             }
@@ -513,7 +433,7 @@ void locatesquad(squadst *st,long loc)
             long v=id_getcar(st->squad[p]->carid);
             if(v!=-1)
             {
-               vehicle[v]->location()=loc;
+               vehicle[v]->set_location(loc);
             }
          }
       }
@@ -1051,9 +971,10 @@ int choiceprompt(const string &firstline, const string &secondline,
    do
    {
       erase();
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(0,0);
       addstr(firstline.c_str());
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(1,0);
       addstr(secondline.c_str());
       int yline = 2;
@@ -1097,3 +1018,141 @@ int choiceprompt(const string &firstline, const string &secondline,
    }while(1);
    return -1;
 }
+
+/* common - Displays a list of things to buy and returns an int corresponding
+            to the index of the chosen thing in the nameprice vector. */
+int buyprompt(const string &firstline, const string &secondline,
+              const vector< pair<string,int> > &nameprice, int namepaddedlength,
+              const string &producttype, const string &exitstring)
+{
+   int page = 0;
+
+   do
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(0,0);
+      addstr(firstline.c_str());
+      move(1,0);
+      addstr(secondline.c_str());
+      int yline = 2;
+
+      //Write wares and prices
+      for(int p=page*19; p<nameprice.size()&&p<page*19+19; p++)
+      {
+         if (nameprice[p].second > ledger.get_funds())
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(yline,0);
+         addch('A'+yline-2);addstr(" - ");
+         addstr(nameprice[p].first.c_str());
+         move(yline, namepaddedlength+4); //Add 4 for start of line, eg "A - ".
+         addstr(("$"+tostring(nameprice[p].second)).c_str());
+         ++yline;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr(("Press a Letter to select a "+producttype).c_str());//a/an error
+      move(23,0);
+      addpagestr();
+      move(24,0);
+      addstr(("Enter - "+exitstring).c_str());
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<nameprice.size())page++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page*19+(int)(c-'a');
+         if(p<nameprice.size() && nameprice[p].second <= ledger.get_funds())
+            return p;
+      }
+
+      if(c==10)break;
+   }while(1);
+   return -1;
+}
+
+/*int buyprompt_halfscreen(const vector< pair<string,int> > &nameprice, //Unfinished! -XML
+                         const string &exitstring)
+{
+   int page = 0;
+   const int max_entries_per_page = 20;
+   
+
+   do
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      int yline = 10;
+      int column = 1;
+      
+      locheader();
+      printparty();
+
+      move(8,45);
+      addstr("Buyer: ");
+      addstr(activesquad->squad[buyer]->name);
+
+      //Write wares and prices
+      for(int p=page*max_entries_per_page-1;
+          p<nameprice.size()&&p<page*(max_entries_per_page-1)+max_entries_per_page;
+          p++)
+      {
+         if (nameprice[p].second > ledger.get_funds())
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if (column==1)
+            move(yline,1);
+         else
+            move(yline,40);
+         addch('A'+yline-10);addstr(" - ");
+         addstr(nameprice[p].first.c_str());
+         if (column==1)
+            move(yline,31);
+         else
+            move(yline,50);
+         addstr(("($"+tostring(nameprice[p].second)+")").c_str());
+         if (column==1)
+            column=2;
+         else
+         {
+            ++yline;
+            column=1;
+         }
+      }
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)
+         page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)
+        &&(page+1)*(max_entries_per_page-1)<nameprice.size())
+         page++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page*(max_entries_per_page-1)+(int)(c-'a');
+         if(p<nameprice.size() && nameprice[p].second <= ledger.get_funds())
+            return p;
+      }
+
+      if(c==10)break;
+   }while(1);
+   return -1;
+}*/

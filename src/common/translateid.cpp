@@ -81,3 +81,91 @@ int getvehicletype(const string &idname)
    }
    return -1;
 }
+
+/* transforms a clip type id into the index of that clip type in the global vector */
+int getcliptype(int id)
+{
+   for (unsigned i=0; i<cliptype.size(); ++i)
+   {
+      if (id == cliptype[i]->get_id())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a clip type name into the index of that clip type in the global vector */
+int getcliptype(const string &idname)
+{
+   for (unsigned i=0; i<cliptype.size(); ++i)
+   {
+      if (idname == cliptype[i]->get_idname())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a weapon type id into the index of that weapon type in the global vector */
+int getweapontype(int id)
+{
+   for (unsigned i=0; i<weapontype.size(); ++i)
+   {
+      if (id == weapontype[i]->get_id())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a weapon type name into the index of that weapon type in the global vector */
+int getweapontype(const string &idname)
+{
+   for (unsigned i=0; i<weapontype.size(); ++i)
+   {
+      if (idname == weapontype[i]->get_idname())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a armor type id into the index of that armor type in the global vector */
+int getarmortype(int id)
+{
+   for (unsigned i=0; i<armortype.size(); ++i)
+   {
+      if (id == armortype[i]->get_id())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a armor type name into the index of that armor type in the global vector */
+int getarmortype(const string &idname)
+{
+   for (unsigned i=0; i<armortype.size(); ++i)
+   {
+      if (idname == armortype[i]->get_idname())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a loot type id into the index of that loot type in the global vector */
+int getloottype(int id)
+{
+   for (unsigned i=0; i<loottype.size(); ++i)
+   {
+      if (id == loottype[i]->get_id())
+         return i;
+   }
+   return -1;
+}
+
+/* transforms a loot type name into the index of that loot type in the global vector */
+int getloottype(const string &idname)
+{
+   for (unsigned i=0; i<loottype.size(); ++i)
+   {
+      if (idname == loottype[i]->get_idname())
+         return i;
+   }
+   return -1;
+}

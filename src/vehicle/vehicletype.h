@@ -6,7 +6,7 @@
 class VehicleType
 {
    public:
-      VehicleType(MCD_STR xmlstring);
+      explicit VehicleType(MCD_STR xmlstring);
    
       const string& idname() const { return idname_; }
       long id() const { return id_; }
@@ -54,8 +54,6 @@ class VehicleType
       
       bool availableatshop_;
       int price_;
-      
-      int stringtobool(const std::string &s); //Should find better way than this. -XML
 };
 
 #endif //VEHICLE_TYPE_H

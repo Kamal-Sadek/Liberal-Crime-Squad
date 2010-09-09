@@ -38,7 +38,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
             if (element == "start_at_current_year")
             {
                int b = stringtobool(xmlfile.GetData());
-               if (b == 1) //Should find a better way than this. -XML
+               if (b == 1)
                   year_startcurrent_ = true;
                else if (b == 0)
                   year_startcurrent_ = false;
@@ -51,7 +51,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
             else if (element == "add_random_up_to_current_year")
             {
                int b = stringtobool(xmlfile.GetData());
-               if (b == 1) //Should find a better way than this. -XML
+               if (b == 1)
                   year_randomuptocurrent_ = true;
                else if (b == 0)
                   year_randomuptocurrent_ = false;
@@ -85,7 +85,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
             else if (element == "display_color")
             {
                int b = stringtobool(xmlfile.GetData());
-               if (b == 1) //Should find a better way than this. -XML
+               if (b == 1)
                   displaycolor_ = true;
                else if (b == 0)
                   displaycolor_ = false;
@@ -135,7 +135,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       else if (element == "available_at_dealership")
       {
          int b = stringtobool(xmlfile.GetData());
-         if (b == 1) //Should find a better way than this. -XML
+         if (b == 1)
             availableatshop_ = true;
          else if (b == 0)
             availableatshop_ = false;
@@ -154,16 +154,6 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       color_.push_back("Translucent"); //Default.
    
    //xmlfile.OutOfElem();
-}
-
-int VehicleType::stringtobool(const std::string &s) //Should find better way than this. -XML
-{
-   if (s == "true" || s == "True" || s == "TRUE")
-      return 1;
-   else if (s == "false" || s == "False" || s == "FALSE")
-      return 0;
-   else
-      return -1;
 }
 
 int VehicleType::makeyear() const

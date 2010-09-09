@@ -241,6 +241,9 @@ private:
    int associated_attribute;
    int skill;
 public:
+   Skill(){}
+   Skill(const char* inputXml);
+   string showXml() const;
    int value;
    void set_type(int skill_type);
    int get_attribute();
@@ -253,6 +256,9 @@ class Attribute
 private:
    int attribute;
 public:
+   Attribute(){}
+   Attribute(const char* inputXml);
+   string showXml() const;
    int value;
    //void set_type(int attribute_type);
    static std::string get_name(int attribute_type);
@@ -261,10 +267,15 @@ public:
 class Creature
 {
 private:
+   void copy(const Creature& org);
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
    int skill_experience[SKILLNUM];
    int roll_check(int skill);
+   static Weapon& weapon_none();
+   static Armor& armor_none();
+   Weapon* weapon;
+   Armor* armor;
 public:
    void set_attribute(int attribute, int amount);
    int get_attribute(int attribute, bool use_juice) const;
@@ -319,9 +330,32 @@ public:
 
    int stunned;
 
-   weaponst weapon;
-   armorst armor;
-   int clip[CLIPNUM];
+   deque<Weapon*> extra_throwing_weapons;
+   deque<Clip*> clips;
+   bool has_thrown_weapon;
+   Weapon& get_weapon();
+   const Weapon& get_weapon() const;
+   Armor& get_armor();
+   const Armor& get_armor() const;
+   bool will_do_ranged_attack(bool force_ranged,bool force_melee) const; //force_melee is likely unnecessary. -XML
+   bool can_reload() const;
+   bool will_reload(bool force_ranged, bool force_melee) const;
+   bool reload(bool wasteful);
+   bool ready_another_throwing_weapon();
+   bool take_clips(Item& clip, int number);
+   bool take_clips(Clip& clip, int number);
+   int count_clips() const;
+   bool is_armed() const { return weapon != NULL; }
+   bool is_naked() const { return armor == NULL; }
+   void give_weapon(Weapon& w, vector<Item*>* lootpile);
+   void drop_weapon(vector<Item*>* lootpile);
+   void drop_weapons_and_clips(vector<Item*>* lootpile);
+   int count_weapons() const;
+   void give_armor(Armor& a, vector<Item*>* lootpile);
+   void strip(vector<Item*>* lootpile);
+   bool weapon_is_concealed() const;
+   string get_weapon_string(int subtype) const;
+   string get_armor_string(bool fullname) const;
 
    int money;
    short juice;
@@ -353,7 +387,12 @@ public:
    void stop_hauling_me();
    
    Creature();
+   Creature(const Creature& org);
+   Creature& operator=(const Creature& rhs);
    ~Creature();
+   Creature(const char* inputXml);
+   string showXml() const;
+   
 
    char canwalk(void)
    {

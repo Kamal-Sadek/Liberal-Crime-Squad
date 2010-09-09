@@ -29,6 +29,38 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
+Skill::Skill(const char* inputXml)
+{
+   CMarkup xml;
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+   
+   while (xml.FindElem())
+   {
+      std::string tag = xml.GetTagName();
+      
+      if (tag == "associated_attribute")
+         associated_attribute = atoi(xml.GetData().c_str());
+      else if (tag == "skill")
+         skill = atoi(xml.GetData().c_str());
+      else if (tag == "value")
+         value = atoi(xml.GetData().c_str());
+   }
+}
+
+string Skill::showXml() const
+{
+   CMarkup xml;
+   xml.AddElem("skill");
+   xml.IntoElem();
+   xml.AddElem("associated_attribute", associated_attribute);
+   xml.AddElem("skill", skill);
+   xml.AddElem("value", value);
+   
+   return xml.GetDoc();
+}
+
 void Skill::set_type(int skill_type)
 {
    skill = skill_type;
@@ -155,6 +187,35 @@ int Skill::get_attribute()
    return associated_attribute;
 }
 
+Attribute::Attribute(const char* inputXml)
+{
+   CMarkup xml;
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+   
+   while (xml.FindElem())
+   {
+      std::string tag = xml.GetTagName();
+      
+      if (tag == "attribute")
+         attribute = atoi(xml.GetData().c_str());
+      else if (tag == "value")
+         value = atoi(xml.GetData().c_str());
+   }
+}
+
+string Attribute::showXml() const
+{
+   CMarkup xml;
+   xml.AddElem("attribute");
+   xml.IntoElem();
+   xml.AddElem("attribute", attribute);
+   xml.AddElem("value", value);
+   
+   return xml.GetDoc();
+}
+
 std::string Attribute::get_name(int attribute_type)
 {
    switch(attribute_type)
@@ -175,8 +236,123 @@ Creature::Creature()
    creatureinit();
 }
 
+Creature::Creature(const Creature& org)
+{
+   copy(org);
+}
+
+Creature& Creature::operator=(const Creature& rhs)
+{
+   if (this != &rhs)
+   {
+      delete weapon;
+      delete armor;
+      for (int i = 0; i < clips.size(); ++i)
+         delete clips[i];
+      clips.clear();
+      for (int i = 0; i < extra_throwing_weapons.size(); ++i)
+         delete extra_throwing_weapons[i];
+      extra_throwing_weapons.clear();
+      
+      copy(rhs);
+   }
+   return *this;
+}
+
+void Creature::copy(const Creature& org)
+{
+   for (int i = 0; i < ATTNUM; ++i)
+      attributes[i] = org.attributes[i];
+   for (int i = 0; i < SKILLNUM; ++i)
+   {
+      skills[i] = org.skills[i];
+      skill_experience[i] = org.skill_experience[i];
+   }
+   for (int i = 0; i < BODYPARTNUM; ++i)
+      wound[i] = org.wound[i];
+   for (int i = 0; i < SPECIALWOUNDNUM; ++i)
+      special[i] = org.special[i];
+   for (int i = 0; i < LAWFLAGNUM; ++i)
+      crimes_suspected[i] = org.crimes_suspected[i];
+
+   if (org.weapon != NULL)
+      weapon = new Weapon(*org.weapon);
+   else
+      weapon = NULL;
+   if (org.armor != NULL)
+      armor = new Armor(*org.armor);
+   else
+      armor = NULL;
+   for (unsigned i = 0; i < org.extra_throwing_weapons.size(); ++i)
+      extra_throwing_weapons.push_back(new Weapon(*org.extra_throwing_weapons[i]));
+   for (unsigned i = 0; i < org.clips.size(); ++i)
+      clips.push_back(new Clip(*org.clips[i]));
+
+   strcpy(name, org.name);
+   strcpy(propername, org.propername);
+      
+   gender_conservative = org.gender_conservative;
+   gender_liberal = org.gender_liberal;
+   squadid = org.squadid;
+   age = org.age;
+   birthday_month = org.birthday_month;
+   birthday_day = org.birthday_day;
+   exists = org.exists;
+   align = org.align;
+   alive = org.alive;
+   type = org.type;
+   infiltration = org.infiltration;
+   animalgloss = org.animalgloss;
+   specialattack = org.specialattack;
+   clinic = org.clinic;
+   dating = org.dating;
+   hiding = org.hiding;
+   trainingtime = org.trainingtime;
+   trainingsubject = org.trainingsubject;
+   sentence = org.sentence;
+   confessions = org.confessions;
+   deathpenalty = org.deathpenalty;
+   joindays = org.joindays;
+   deathdays = org.deathdays;
+   id = org.id;
+   hireid = org.hireid;
+   meetings = org.meetings;
+   forceinc = org.forceinc;
+   stunned = org.stunned;
+   has_thrown_weapon = org.has_thrown_weapon;
+   money = org.money;
+   juice = org.juice;
+   income = org.income;
+   blood = org.blood;
+   heat = org.heat;
+   location = org.location;
+   worklocation = org.worklocation;
+   cantbluff = org.cantbluff;
+   base = org.base;
+   activity = org.activity;
+   carid = org.carid;
+   is_driver = org.is_driver;
+   pref_carid = org.pref_carid;
+   pref_is_driver = org.pref_is_driver;
+   flag = org.flag;
+   dontname = org.dontname;
+   prisoner = NULL; //Not copying prisoner.
+}
+
 Creature::~Creature()
 {
+   delete weapon;
+   delete armor;
+   while (!clips.empty())
+   {
+      delete clips.back();
+      clips.pop_back();
+   }
+   while (!extra_throwing_weapons.empty())
+   {
+      delete extra_throwing_weapons.back();
+      extra_throwing_weapons.pop_back();
+   }
    if(prisoner!=NULL)
    {
       int p;
@@ -244,11 +420,9 @@ void Creature::creatureinit(void)
    blood=100;
    stunned=0;
    for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
-   weapon.type=WEAPON_NONE;
-   weapon.ammo=0;
-   armor.type=ARMOR_CLOTHES;
-   armor.quality='1';
-   armor.flag=0;
+   weapon=NULL;
+   has_thrown_weapon = false;
+   armor=NULL;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
    for(int a=0;a<ATTNUM;a++)
    {
       //attributes[a].set_type(a);
@@ -270,7 +444,7 @@ void Creature::creatureinit(void)
       skills[s].value=0;
       skill_experience[s]=0;
    }
-   for(int c=0;c<CLIPNUM;c++)clip[c]=0;
+
    special[SPECIALWOUND_TEETH]=TOOTHNUM;
    special[SPECIALWOUND_RIGHTEYE]=1;
    special[SPECIALWOUND_LEFTEYE]=1;
@@ -291,6 +465,273 @@ void Creature::creatureinit(void)
    forceinc=0;
    sentence=0;
    deathpenalty=0;
+}
+
+Creature::Creature(const char* inputXml)
+ : armor(NULL), weapon(NULL), prisoner(NULL)
+{
+   CMarkup xml;
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+   
+   int attributesi = 0;
+   int skillsi = 0;
+   int skill_experiencei = 0;
+   int woundi = 0;
+   int speciali = 0;
+   int crimesi = 0;
+   while (xml.FindElem())
+   {
+      std::string tag = xml.GetTagName();
+   
+      if (tag == "attribute" && attributesi < ATTNUM)
+         attributes[attributesi++] = Attribute(xml.GetSubDoc().c_str());
+      else if (tag == "skill" && skillsi < SKILLNUM)
+         skills[skillsi++] = Skill(xml.GetSubDoc().c_str());
+      else if (tag == "skill_experience" && skill_experiencei < SKILLNUM)
+         skill_experience[skill_experiencei++] = atoi(xml.GetData().c_str());
+      else if (tag == "weapon")
+      {
+         Weapon w(xml.GetSubDoc().c_str());
+         if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
+         {
+            give_weapon(w,NULL);
+         }
+      }
+      else if (tag == "armor")
+      {
+         armor = new Armor(xml.GetSubDoc().c_str());
+         if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
+         {
+            delete armor;
+            armor = NULL;
+         }
+      }
+      else if (tag == "name")
+         strcpy(name,xml.GetData().c_str());
+      else if (tag == "propername")
+         strcpy(propername,xml.GetData().c_str());
+      else if (tag == "gender_conservative")
+         gender_conservative = atoi(xml.GetData().c_str());
+      else if (tag == "gender_liberal")
+         gender_liberal = atoi(xml.GetData().c_str());
+      else if (tag == "squadid")
+         squadid = atoi(xml.GetData().c_str());
+      else if (tag == "age")
+         age = atoi(xml.GetData().c_str());
+      else if (tag == "birthday_month")
+         birthday_month = atoi(xml.GetData().c_str());
+      else if (tag == "birthday_day")
+         birthday_day = atoi(xml.GetData().c_str());
+      else if (tag == "exists")
+         exists = atoi(xml.GetData().c_str());
+      else if (tag == "align")
+         align = atoi(xml.GetData().c_str());
+      else if (tag == "alive")
+         alive = atoi(xml.GetData().c_str());
+      else if (tag == "type")
+         type = atoi(xml.GetData().c_str());
+      else if (tag == "infiltration")
+         infiltration = atoi(xml.GetData().c_str());
+      else if (tag == "animalgloss")
+         animalgloss = atoi(xml.GetData().c_str());
+      else if (tag == "specialattack")
+         specialattack = atoi(xml.GetData().c_str());
+      else if (tag == "clinic")
+         clinic = atoi(xml.GetData().c_str());
+      else if (tag == "dating")
+         dating = atoi(xml.GetData().c_str());
+      else if (tag == "hiding")
+         hiding = atoi(xml.GetData().c_str());
+      else if (tag == "trainingtime")
+         trainingtime = atoi(xml.GetData().c_str());
+      else if (tag == "trainingsubject")
+         trainingsubject = atoi(xml.GetData().c_str());
+      else if (tag == "prisoner")
+      {
+         xml.IntoElem();
+         prisoner = new Creature(xml.GetSubDoc().c_str());
+         xml.OutOfElem();
+      }
+      else if (tag == "sentence")
+         sentence = atoi(xml.GetData().c_str());
+      else if (tag == "confessions")
+         confessions = atoi(xml.GetData().c_str());
+      else if (tag == "deathpenalty")
+         deathpenalty = atoi(xml.GetData().c_str());
+      else if (tag == "joindays")
+         joindays = atoi(xml.GetData().c_str());
+      else if (tag == "deathdays")
+         deathdays = atoi(xml.GetData().c_str());
+      else if (tag == "id")
+         id = atoi(xml.GetData().c_str());
+      else if (tag == "hireid")
+         hireid = atoi(xml.GetData().c_str());
+      else if (tag == "meetings")
+         meetings = atoi(xml.GetData().c_str());
+      else if (tag == "forceinc")
+         forceinc = atoi(xml.GetData().c_str());
+      else if (tag == "stunned")
+         stunned = atoi(xml.GetData().c_str());
+      else if (tag == "clip")
+      {
+         Clip* c = new Clip(xml.GetSubDoc().c_str());
+         if (getcliptype(c->get_itemtypename()) != -1)
+            clips.push_back(c);
+         else
+            delete c;
+      }
+      else if (tag == "has_thrown_weapon")
+         has_thrown_weapon = atoi(xml.GetData().c_str());
+      else if (tag == "money")
+         money = atoi(xml.GetData().c_str());
+      else if (tag == "juice")
+         juice = atoi(xml.GetData().c_str());
+      else if (tag == "income")
+         income = atoi(xml.GetData().c_str());
+      else if (tag == "wound" && woundi < BODYPARTNUM)
+         wound[woundi++] = atoi(xml.GetData().c_str());
+      else if (tag == "blood")
+         blood = atoi(xml.GetData().c_str());
+      else if (tag == "special" && speciali < SPECIALWOUNDNUM)
+         special[speciali++] = atoi(xml.GetData().c_str());
+      else if (tag == "crimes_suspected" && crimesi < LAWFLAGNUM)
+         crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
+      else if (tag == "heat")
+         heat = atoi(xml.GetData().c_str());
+      else if (tag == "location")
+         location = atoi(xml.GetData().c_str());
+      else if (tag == "worklocation")
+         worklocation = atoi(xml.GetData().c_str());
+      else if (tag == "cantbluff")
+         cantbluff = atoi(xml.GetData().c_str());
+      else if (tag == "base")
+         base = atoi(xml.GetData().c_str());
+      else if (tag == "activity")
+      {
+         xml.IntoElem();
+         while (xml.FindElem())
+         {
+            tag = xml.GetTagName();
+            if (tag == "type")
+               activity.type = atoi(xml.GetData().c_str());
+            else if (tag == "arg")
+               activity.arg = atoi(xml.GetData().c_str());
+            else if (tag == "arg2")
+               activity.arg2 = atoi(xml.GetData().c_str());
+         }
+         xml.OutOfElem();
+      }
+      else if (tag == "carid")
+         carid = atoi(xml.GetData().c_str());
+      else if (tag == "is_driver")
+         is_driver = atoi(xml.GetData().c_str());
+      else if (tag == "pref_carid")
+         pref_carid = atoi(xml.GetData().c_str());
+      else if (tag == "pref_is_driver")
+         pref_is_driver = atoi(xml.GetData().c_str());
+      else if (tag == "flag")
+         flag = atoi(xml.GetData().c_str());
+      else if (tag == "dontname")
+         dontname = atoi(xml.GetData().c_str());
+   }
+}
+
+string Creature::showXml() const
+{
+   CMarkup xml;
+   xml.AddElem("creature");
+   xml.IntoElem();
+
+   for (int i = 0; i < ATTNUM; ++i)
+      xml.AddSubDoc(attributes[i].showXml());
+   for (int i = 0; i < SKILLNUM; ++i)
+      xml.AddSubDoc(skills[i].showXml());
+   for (int i = 0; i < SKILLNUM; ++i)
+      xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML
+   if (weapon != NULL)
+      xml.AddSubDoc(weapon->showXml());
+   if (armor != NULL)
+      xml.AddSubDoc(armor->showXml());
+   
+   xml.AddElem("name", name);//string(name)?
+   xml.AddElem("propername", propername);//string(propername)?
+   xml.AddElem("gender_conservative", gender_conservative);
+   xml.AddElem("gender_liberal", gender_liberal);
+   xml.AddElem("squadid", squadid);
+   xml.AddElem("age", age);
+   xml.AddElem("birthday_month", birthday_month);
+   xml.AddElem("birthday_day", birthday_day);
+   xml.AddElem("exists", exists);
+   xml.AddElem("align", align);
+   xml.AddElem("alive", alive);
+   xml.AddElem("type", type);
+   xml.AddElem("infiltration", infiltration);
+   xml.AddElem("animalgloss", animalgloss);
+   xml.AddElem("specialattack", specialattack);
+   xml.AddElem("clinic", clinic);
+   xml.AddElem("dating", dating);
+   xml.AddElem("hiding", hiding);
+   xml.AddElem("trainingtime", trainingtime);
+   xml.AddElem("trainingsubject", trainingsubject);
+   if (prisoner != NULL) //Should never be true when saving.
+   {
+      xml.AddElem("prisoner");
+      xml.IntoElem();
+      xml.AddSubDoc(prisoner->showXml());
+      xml.OutOfElem();
+   }
+   xml.AddElem("sentence", sentence);
+   xml.AddElem("confessions", confessions);
+   xml.AddElem("deathpenalty", deathpenalty);
+   xml.AddElem("joindays", joindays);
+   xml.AddElem("deathdays", deathdays);
+   xml.AddElem("id", id);
+   xml.AddElem("hireid", hireid);
+   xml.AddElem("meetings", meetings);
+   xml.AddElem("forceinc", forceinc);
+   xml.AddElem("stunned", stunned);
+   for (int i = 0; i < extra_throwing_weapons.size(); ++i)
+   {
+      xml.AddSubDoc(extra_throwing_weapons[i]->showXml());
+   }
+   for (int i = 0; i < clips.size(); ++i)
+   {
+      xml.AddSubDoc(clips[i]->showXml());
+   }
+   xml.AddElem("has_thrown_weapon", has_thrown_weapon);
+   xml.AddElem("money", money);
+   xml.AddElem("juice", juice);
+   xml.AddElem("income", income);
+   for (int i = 0; i < BODYPARTNUM; ++i) //Bad -XML
+      xml.AddElem("wound",wound[i]);
+   xml.AddElem("blood", blood);
+   for (int i = 0; i < SPECIALWOUNDNUM; ++i) //Bad -XML
+      xml.AddElem("special",special[i]);
+   for (int i = 0; i < LAWFLAGNUM; ++i) //Bad -XML
+      xml.AddElem("crimes_suspected",crimes_suspected[i]);
+   xml.AddElem("heat", heat);
+   xml.AddElem("location", location);
+   xml.AddElem("worklocation", worklocation);
+   xml.AddElem("cantbluff", cantbluff);
+   xml.AddElem("base", base);
+   
+   xml.AddElem("activity");
+   xml.IntoElem();
+   xml.AddElem("type",activity.type);
+   xml.AddElem("arg",activity.arg);
+   xml.AddElem("arg2",activity.arg2);
+   xml.OutOfElem();
+   
+   xml.AddElem("carid", carid);
+   xml.AddElem("is_driver", is_driver);
+   xml.AddElem("pref_carid", pref_carid);
+   xml.AddElem("pref_is_driver", pref_is_driver);
+   xml.AddElem("flag", flag);
+   xml.AddElem("dontname", dontname);
+
+   return xml.GetDoc();
 }
 
 void Creature::set_attribute(int attribute, int amount)
@@ -601,8 +1042,8 @@ int Creature::skill_roll(int skill)
          else { if(uniformed==2) return_value>>=1; }
 
          // Bloody, damaged clothing hurts disguise check
-         if(armor.flag & ARMORFLAG_BLOODY) { return_value>>=1; }
-         if(armor.flag & ARMORFLAG_DAMAGED) { return_value>>=1; }
+         if(armor->is_bloody()) { return_value>>=1; }
+         if(armor->is_damaged()) { return_value>>=1; }
 
          // Carrying corpses or having hostages is very bad for disguise
          if(prisoner!=NULL) { return_value>>=2; break; }
@@ -796,19 +1237,19 @@ void liberalize(Creature &cr,bool rename)
 /* gives a CCS member a cover name */
 void nameCCSMember(Creature &cr)
 {
-   if(cr.armor.type==ARMOR_CIVILLIANARMOR)
+   if(cr.get_armor().get_itemtypename()=="ARMOR_CIVILLIANARMOR")
    {
       strcpy(cr.name,"Mercenary");
    }
-   else if(cr.armor.type==ARMOR_ARMYARMOR)
+   else if(cr.get_armor().get_itemtypename()=="ARMOR_ARMYARMOR")
    {
       strcpy(cr.name,"Soldier");
    }
-   else if(cr.armor.type==ARMOR_HEAVYARMOR)
+   else if(cr.get_armor().get_itemtypename()=="ARMOR_HEAVYARMOR")
    {
       strcpy(cr.name,"Hardened Veteran");
    }
-   else if(cr.weapon.type==WEAPON_SHOTGUN_PUMP||LCSrandom(2))
+   else if(cr.get_weapon().get_itemtypename()=="WEAPON_SHOTGUN_PUMP"||LCSrandom(2))
    {
       switch(LCSrandom(5))
       {
@@ -924,4 +1365,380 @@ const char *Creature::heshe()
 		return "she";
 	}
 	return "they";
+}
+
+Weapon& Creature::weapon_none()
+{
+   static Weapon* unarmed = new Weapon(*weapontype[getweapontype("WEAPON_NONE")]);
+   return *unarmed;
+}
+
+Armor& Creature::armor_none()
+{
+   static Armor* naked = new Armor(*armortype[getarmortype("ARMOR_NONE")]);
+   return *naked;
+}
+
+Weapon& Creature::get_weapon()
+{
+   if (is_armed())
+      return *weapon;
+   else
+      return weapon_none();
+}
+const Weapon& Creature::get_weapon() const
+{
+   if (is_armed())
+      return *weapon;
+   else
+      return weapon_none();
+}
+Armor& Creature::get_armor()
+{
+   if (!is_naked())
+      return *armor;
+   else
+      return armor_none();
+}
+const Armor& Creature::get_armor() const
+{
+   if (!is_naked())
+      return *armor;
+   else
+      return armor_none();
+}
+
+bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
+{
+   bool r;
+
+   if (weapon != NULL) //Is the creature armed?
+   {
+      bool reload_allowed = can_reload();
+      
+      r = weapon->get_attack(force_ranged,force_melee,reload_allowed) != NULL //Any attacks possible under circumstances?
+          && weapon->get_attack(force_ranged,force_melee,reload_allowed)->ranged //Is the attacked ranged?
+          && (!weapon->get_attack(force_ranged,force_melee,reload_allowed)->uses_ammo //Does it not use ammo
+              || weapon->get_ammoamount() != 0);                                      //or does it have ammo?
+
+   }
+   else
+      r = false;
+
+   return r;
+}
+
+bool Creature::can_reload() const
+{
+   //return !clips.empty(); //Can not be sure creature only has appropriate clips.
+   bool can_reload = false;
+   
+   for (unsigned i = 0; i < clips.size() && !can_reload; ++i)
+      can_reload = get_weapon().acceptable_ammo(*clips[i]);
+   
+   return can_reload;
+}
+
+bool Creature::will_reload(bool force_ranged, bool force_melee) const
+{
+   bool r;
+   r = get_weapon().uses_ammo()              //Does it use ammo?
+       && get_weapon().get_ammoamount() == 0 //Is it out of ammo?
+       && can_reload()                       //Is reloading possible?
+       && get_weapon().get_attack(force_ranged, force_melee, false) != NULL //Is there an appropriate attack for the situation?
+       && get_weapon().get_attack(force_ranged, force_melee, false)->uses_ammo; //Does the attack need ammo?
+   /*if (get_weapon().uses_ammo() && get_weapon().get_ammoamount() == 0)
+   {
+      if (can_reload() && get_weapon().get_attack(force_ranged, force_melee, false) != NULL)
+      {
+         if (get_weapon().get_attack(force_ranged, force_melee, false)->uses_ammo)
+            r = true;
+      }
+   }*/
+   return r;
+}
+
+bool Creature::reload(bool wasteful)
+{
+   bool r;
+   if (get_weapon().uses_ammo() && !clips.empty()
+       && (wasteful || get_weapon().get_ammoamount() == 0))
+   {
+      r = weapon->reload(*clips.front());
+      if (clips.front()->empty())
+      {
+         delete clips.front();
+         clips.pop_front();
+      }
+   }
+   else
+      r = false;
+   
+   return r;
+}
+
+bool Creature::ready_another_throwing_weapon()
+{
+   bool r = false;
+   if (!extra_throwing_weapons.empty())
+   {
+      weapon = extra_throwing_weapons.front()->split(1);
+      if (extra_throwing_weapons.front()->empty())
+      {
+         delete extra_throwing_weapons.front();
+         extra_throwing_weapons.pop_front();
+      }
+      r = true;
+   }
+   has_thrown_weapon = false;
+   return r;
+}
+
+int Creature::count_clips() const
+{
+   int sum = 0;
+   for (deque<Clip*>::const_iterator i = clips.begin(); i != clips.end(); ++i)
+      sum += (*i)->get_number();
+   return sum;
+}
+
+bool Creature::take_clips(Item& clip, int number)
+{
+   bool r;
+   if (clip.is_clip())
+      r = take_clips(static_cast<Clip&>(clip),number); //cast -XML
+   else
+      r = false;
+   
+   return r;
+}
+
+bool Creature::take_clips(Clip& clip, int number)
+{
+   bool r;
+   
+   if (number + count_clips() >= 9)
+      number = 9 - count_clips();
+   if (number > clip.get_number())
+      number = clip.get_number();
+   
+   if (number > 0 && get_weapon().acceptable_ammo(clip))
+   {
+      Clip* c = clip.split(number);
+      clips.push_back(c);
+      r = true;
+   }
+   else
+      r = false;
+   
+   return r;
+}
+
+void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
+{
+   if (weapon != NULL && !w.empty())
+   {
+      if (weapon->is_throwable() && weapon->is_same_type(w))
+      {
+         int take_number = 10 - count_weapons();
+         if (take_number > 0)
+            extra_throwing_weapons.push_back(w.split(1));
+         
+         //if (lootpile == NULL || w.empty())
+         //   delete &w;
+         //else
+         //   lootpile.push_back(&w);
+      }
+      else
+      {
+         if (lootpile == NULL)
+         {
+            delete weapon;
+            while (!extra_throwing_weapons.empty())
+            {
+               delete extra_throwing_weapons.back();
+               extra_throwing_weapons.pop_back();
+            }
+         }
+         else
+         {
+            lootpile->push_back(weapon);
+            while (!extra_throwing_weapons.empty())
+            {
+               lootpile->push_back(extra_throwing_weapons.back());
+               extra_throwing_weapons.pop_back();
+            }
+         }
+         
+         weapon = w.split(1);
+         //if (weapon->is_throwable())
+         //   give_weapon(w,lootpile);
+         //else if (lootpile == NULL || w.empty())
+         //   delete &w;
+         //else
+         //   lootpile->push_back(&w);
+
+         if (lootpile == NULL)
+         {
+            for (int i = clips.size()-1; i >= 0; --i)
+            {
+               if (!weapon->acceptable_ammo(*clips[i]))
+               {
+                  delete clips[i];
+                  clips.erase(clips.begin() + i);
+               }
+            }
+         }
+         else
+         {
+            for (int i = clips.size()-1; i >= 0; --i)
+            {
+               if (!weapon->acceptable_ammo(*clips[i]))
+               {
+                  lootpile->push_back(clips[i]);
+                  clips.erase(clips.begin() + i);
+               }
+            }
+         }
+      }
+   }
+   else if (!w.empty())
+   {
+      drop_weapons_and_clips(lootpile);
+      weapon = w.split(1);
+      //if (weapon->is_throwable())
+      //   give_weapon(w,lootpile);
+      //else if (lootpile == NULL || w.empty())
+      //   delete &w;
+      //else
+      //   lootpile->push_back(&w);
+   }
+   //else if (w.empty())
+   //   delete &w;
+}
+
+void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
+{
+   has_thrown_weapon = false;
+   if (weapon != NULL)
+   {
+      if (lootpile != NULL)
+         lootpile->push_back(weapon);
+      else
+         delete weapon;
+      weapon = NULL;
+   }
+   
+   while (!extra_throwing_weapons.empty())
+   {
+      if (lootpile != NULL)
+         lootpile->push_back(extra_throwing_weapons.back());
+      else
+         delete extra_throwing_weapons.back();
+      extra_throwing_weapons.pop_back();
+   }
+  
+   while (!clips.empty())
+   {
+      if (lootpile != NULL)
+         lootpile->push_back(clips.back());
+      else
+         delete clips.back();
+      clips.pop_back();
+   }
+}
+
+void Creature::drop_weapon(vector<Item*>* lootpile)
+{
+   if (!extra_throwing_weapons.empty())
+      has_thrown_weapon = true;
+
+   if (weapon != NULL)
+   {
+      if (lootpile != NULL)
+         lootpile->push_back(weapon);
+      else
+         delete weapon;
+      weapon = NULL;
+   }
+}
+
+int Creature::count_weapons() const
+{
+   int sum = 0;
+   if (weapon !=NULL)
+      ++sum;
+   for (unsigned i = 0; i < extra_throwing_weapons.size(); ++i)
+      sum += extra_throwing_weapons[i]->get_number();
+
+   return sum;
+}
+
+void Creature::give_armor(Armor& a, vector<Item*>* lootpile)
+{
+   if (!a.empty())
+   {
+      strip(lootpile);
+      armor = a.split(1);
+   }
+}
+
+void Creature::strip(vector<Item*>* lootpile)
+{
+   if (armor != NULL)
+   {
+      if (lootpile == NULL)
+         delete armor;
+      else
+         lootpile->push_back(armor);
+      armor = NULL;
+   }
+}
+
+bool Creature::weapon_is_concealed() const
+{
+   bool concealed = false;
+   //if (is_armed() && is_naked())
+   //   concealed = false;
+   if (is_armed() && !is_naked())
+   {
+      concealed = armor->conceals_weapon(*weapon);
+   }
+   return concealed;
+}
+
+string Creature::get_weapon_string(int subtype) const
+{
+   string r;
+   if(is_armed())
+   {
+      r = weapon->get_name(subtype);
+      if(weapon->uses_ammo())
+      {
+         r += " (" + tostring(weapon->get_ammoamount()) + "/" + tostring(count_clips()) + ")";
+      }
+      else if(weapon->is_throwable())
+      {
+         r += " (1/" + tostring(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
+      }
+   }
+   else if(!extra_throwing_weapons.empty())
+   {
+      r = extra_throwing_weapons[0]->get_name(subtype);
+      r += " (0/" + tostring(count_weapons()) + ")";
+   }
+   else
+      r = "None";
+   
+   return r;
+}
+
+string Creature::get_armor_string(bool fullname) const
+{
+   string r;
+   if(is_naked())
+      r = "Naked";
+   else
+      r = armor->equip_title(fullname);
+   return r;
 }

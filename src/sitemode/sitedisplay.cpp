@@ -668,8 +668,7 @@ void printchaseencounter(void)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(19,v*20+1);
-         getcarfull(str,*chaseseq.enemycar[v],1);
-         addstr(str);
+         addstr(chaseseq.enemycar[v]->fullname(true).c_str());
       }
 
       for(int e=0;e<ENCMAX;e++)

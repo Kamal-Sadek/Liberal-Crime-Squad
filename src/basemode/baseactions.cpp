@@ -819,7 +819,7 @@ void setvehicles(void)
       printparty();
 
       int x=1,y=10;
-      char str[200],str2[200];
+      char str[200];
 
       for(l=page*18;l<vehicle.size()&&l<page*18+18;l++)
       {
@@ -844,11 +844,10 @@ void setvehicles(void)
             }
          }
 
-         getcarfull(str2,*vehicle[l],1);
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,str2);
+         strcat(str,vehicle[l]->fullname(true).c_str());
 
          move(y,x);
          addstr(str);
