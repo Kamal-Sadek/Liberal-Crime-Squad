@@ -870,6 +870,7 @@ struct squadst
 
 #define ENCMAX 18
 
+#include "sitemode/shop.h"
 
 enum GameModes
 {

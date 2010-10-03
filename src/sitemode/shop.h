@@ -1,0 +1,121 @@
+#ifndef SHOP_H
+#define SHOP_H
+
+#include "includes.h"
+
+
+class Shop;
+//class Shop::ShopItem;
+
+class ShopOption
+{
+   friend class Shop;
+   //friend class Shop::ShopItem;
+   public:
+      ShopOption();
+      virtual ~ShopOption() {}
+      
+      
+   
+   
+   protected:
+   
+      virtual bool display() const
+      {
+         return true;
+      }
+   
+      virtual bool is_available() const
+      {
+         return true;
+      }
+   
+      virtual const std::string get_description_halfscreen() const
+      {
+         return description_;
+      }
+   
+      virtual const std::string get_description_fullscreen() const
+      {
+         return description_;
+      }
+   
+      std::string description_;
+      char letter_;
+      bool letter_defined_;
+      virtual void choose(squadst& customers, int& buyer) const = 0;
+};
+
+class Shop : public ShopOption
+{
+   public:
+      Shop(MCD_STR xmlstring);
+      ~Shop();
+      void enter(squadst& customers) const;
+   
+   protected:
+      virtual void choose(squadst& customers, int& buyer) const;
+      virtual bool is_available() const;
+
+   private:
+      Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
+           bool increase_prices_with_illegality);
+      void init(const MCD_STR &xmlstring);
+      
+      void browse_fullscreen(squadst& customers, int& buyer) const;
+      void browse_halfscreen(squadst& customers, int& buyer) const;
+      void sell_loot(squadst& customers) const;
+      int fenceselect(squadst& customers) const;
+      void choose_buyer(squadst& customers, int& buyer) const;
+      
+      bool allow_selling_;
+      bool only_sell_legal_;
+      bool increase_prices_with_illegality_;
+      std::vector<ShopOption*> options_;
+      bool fullscreen_;
+      std::string exit_;
+      //std::string selectiontype_;
+      
+      
+      
+      class ShopItem : public ShopOption
+      {
+         public:
+            ShopItem(MCD_STR xmlstring, bool only_sell_legal,
+                     bool increase_prices_with_illegality);
+            
+            virtual bool display() const;
+            
+         protected:
+            virtual void choose(squadst& customers, int& buyer) const;
+            virtual bool is_available() const;
+            virtual const std::string get_description_halfscreen() const;
+            virtual const std::string get_description_fullscreen() const;
+         
+         private:
+            bool can_afford() const;
+            bool legal() const;
+            bool valid_item() const;
+            std::string itemtypename_; //Have pointer to ItemType instead? -XML
+            enum itemclassenum
+            {
+               WEAPON,
+               CLIP,
+               ARMOR,
+               LOOT
+            };
+            itemclassenum itemclass_;
+            
+            int price_;
+            int adjusted_price() const;
+            bool only_sell_legal_;
+            bool increase_prices_with_illegality_;
+            bool description_defined_;
+            const std::string& get_description() const;
+            
+            //Item* make_item() const;
+            
+      };
+};
+
+#endif //SHOP_H

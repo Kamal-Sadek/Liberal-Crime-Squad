@@ -196,7 +196,7 @@ char gunselect(Creature &cr,int &gunindex,bool legal=1)
    }
    
    int bought = buyprompt(firstline, secondline, option, 35,
-                          "Weapon", (string(cr.name) + "needs no weapon"));
+                          "Weapon", (string(cr.name) + " needs no weapon"));
 
    if (bought != -1)
    {
@@ -210,7 +210,11 @@ char gunselect(Creature &cr,int &gunindex,bool legal=1)
 /* active squad visits the arms dealer */
 void armsdealer(int loc)
 {
-   short buyer=0;
+   CMarkup xml; // -XML
+   xml.Load("art/armsdealer.xml");
+   Shop armsdealer(xml.GetDoc());
+   armsdealer.enter(*activesquad);
+   /*short buyer=0;
    short in_gunshop=0;
 
    locatesquad(activesquad,loc);
@@ -429,7 +433,7 @@ void armsdealer(int loc)
          }
       }
 
-   }while(1);
+   }while(1);*/
 }
 
 
@@ -823,7 +827,7 @@ void pawnshop(int loc)
                      delete location[activesquad->squad[0]->base]->loot[l];
                      location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                   }
-                  else if (c=='a' && location[activesquad->squad[0]->base]->loot[l]->is_armor()
+                  else if (c=='c' && location[activesquad->squad[0]->base]->loot[l]->is_armor()
                            && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
                   {
                      fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()
@@ -831,7 +835,7 @@ void pawnshop(int loc)
                      delete location[activesquad->squad[0]->base]->loot[l];
                      location[activesquad->squad[0]->base]->loot.erase(location[activesquad->squad[0]->base]->loot.begin() + l);
                   }
-                  else if (c=='c' && location[activesquad->squad[0]->base]->loot[l]->is_clip()
+                  else if (c=='a' && location[activesquad->squad[0]->base]->loot[l]->is_clip()
                            && location[activesquad->squad[0]->base]->loot[l]->is_good_for_sale())
                   {
                      fenceamount += location[activesquad->squad[0]->base]->loot[l]->get_fencevalue()

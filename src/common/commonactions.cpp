@@ -1083,7 +1083,7 @@ int buyprompt(const string &firstline, const string &secondline,
 }
 
 /*int buyprompt_halfscreen(const vector< pair<string,int> > &nameprice, //Unfinished! -XML
-                         const string &exitstring)
+                         const string &exitstring, int &buyer)
 {
    int page = 0;
    const int max_entries_per_page = 20;
@@ -1131,6 +1131,33 @@ int buyprompt(const string &firstline, const string &secondline,
             column=1;
          }
       }
+      
+      ++yline;
+      
+      if (party_status != -1)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(yline,1);
+      addstr("0 - Show the squad's Liberal status");
+            
+      if (partysize > 0 && (party_status == -1 || partysize > 1))
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(yline,40);
+      addstr("# - Check the status of a squad Liberal");
+
+      if (partysize >= 2)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      move(yline+1,1);
+      addstr("B - Choose a buyer");
+      
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(yline+1,40);
+      addstr("Enter - Leave");
 
       refresh();
 
@@ -1145,11 +1172,27 @@ int buyprompt(const string &firstline, const string &secondline,
         &&(page+1)*(max_entries_per_page-1)<nameprice.size())
          page++;
 
-      if(c>='a'&&c<='s')
+      if (c >= 'a' && c <= 't')
       {
-         int p=page*(max_entries_per_page-1)+(int)(c-'a');
-         if(p<nameprice.size() && nameprice[p].second <= ledger.get_funds())
+         int p = page * (max_entries_per_page-1)+(int)(c-'a');
+         if(p < nameprice.size() && nameprice[p].second <= ledger.get_funds())
             return p;
+      }      
+      else if (c == 'e' && activesquad->squad[0]->location != -1)
+         equip(location[activesquad->squad[0]->location]->loot,-1);
+      else if (c == 'b')
+         choose_buyer(buyer);
+      else if (c == '0')
+         party_status=-1;
+      else if (c >= '1' && c <= '6' && activesquad != NULL)
+      {
+         if(activesquad->squad[c-'1'] != NULL)
+         {
+            if(party_status == c-'1')
+               fullstatus(party_status);
+            else
+               party_status = c-'1';
+         }
       }
 
       if(c==10)break;
