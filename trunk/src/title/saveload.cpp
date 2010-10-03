@@ -254,7 +254,14 @@ void savegame(char *str)
       }
 
       //Unique Creatures
-      numbytes=fwrite(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+      {
+         std::string uniquecreaturesStr = uniqueCreatures.showXml();
+         size_t uniquecreaturesSize = uniquecreaturesStr.size();
+   
+         numbytes=fwrite(&uniquecreaturesSize,sizeof (uniquecreaturesSize),1,h);
+         numbytes=fwrite(uniquecreaturesStr.c_str(),uniquecreaturesSize,1,h);
+         //numbytes=fwrite(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+      }
 
       //SQUADS
       dummy=squad.size();
@@ -655,7 +662,15 @@ char load(void)
       }
 
       //Unique Creatures
-      fread(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+      {
+         size_t uniquecreaturesLen;
+         fread (&uniquecreaturesLen, sizeof(uniquecreaturesLen), 1, h);
+         vector<char> vec = vector<char> (uniquecreaturesLen + 1);
+         fread (&vec[0], uniquecreaturesLen, 1, h);
+         vec[uniquecreaturesLen] = '\0';
+         uniqueCreatures = UniqueCreatures(&vec[0]);
+         //fread(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+      }
 
       //SQUADS
       fread(&dummy,sizeof(int),1,h);

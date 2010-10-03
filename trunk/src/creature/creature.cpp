@@ -1042,8 +1042,8 @@ int Creature::skill_roll(int skill)
          else { if(uniformed==2) return_value>>=1; }
 
          // Bloody, damaged clothing hurts disguise check
-         if(armor->is_bloody()) { return_value>>=1; }
-         if(armor->is_damaged()) { return_value>>=1; }
+         if(get_armor().is_bloody()) { return_value>>=1; }
+         if(get_armor().is_damaged()) { return_value>>=1; }
 
          // Carrying corpses or having hostages is very bad for disguise
          if(prisoner!=NULL) { return_value>>=2; break; }
@@ -1345,6 +1345,54 @@ void UniqueCreatures::initialize()
    makecreature(CEO_,CREATURE_CORPORATE_CEO);
    CEO_ID = CEO_.id;
    CEO_state = UNIQUECREATURE_ALIVE;
+}
+
+UniqueCreatures::UniqueCreatures(const char * inputXml)
+{
+   CMarkup xml;
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+
+   while (xml.FindElem())
+   {
+      std::string tag = xml.GetTagName();
+   
+      if (tag == "CEO")
+      {
+         xml.IntoElem();
+         
+         xml.FindElem();
+         //tag = xml.GetTagName();
+         //if (tag == "creature")
+         //{
+            CEO_ = Creature(xml.GetSubDoc().c_str());
+         //}
+         
+         xml.OutOfElem();
+      }
+      else if (tag == "CEO_ID")
+      {
+         CEO_ID = atoi(xml.GetData().c_str());
+      }
+      else if (tag == "CEO_state")
+         CEO_state = atoi(xml.GetData().c_str());
+   }
+}
+
+string UniqueCreatures::showXml() const
+{
+   CMarkup xml;
+   xml.AddElem("uniquecreatures");
+   xml.IntoElem();
+   
+   xml.AddElem("CEO_ID", CEO_ID);
+   xml.AddElem("CEO_state", CEO_state);
+   xml.AddElem("CEO");
+   xml.IntoElem();
+   xml.AddSubDoc(CEO_.showXml());
+   
+   return xml.GetDoc();
 }
 
 Creature& UniqueCreatures::CEO()
