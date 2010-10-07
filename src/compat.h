@@ -141,3 +141,9 @@ void alarmwait();
 // Ensure buffer is of sufficient size.
 char *itoa(int value, char *buffer, int radix);
 #endif
+
+#ifndef HAS_SNPRINTF
+#if defined(__BORLANDC__) || defined(_MSC_VER)
+#define snprintf _snprintf
+#endif
+#endif 
