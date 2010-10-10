@@ -440,7 +440,11 @@ void armsdealer(int loc)
 /* active squad visits the pawn shop */
 void pawnshop(int loc)
 {
-   short buyer=0;
+   CMarkup xml; // -XML
+   xml.Load("art/pawnshop.xml");
+   Shop pawnshop(xml.GetDoc());
+   pawnshop.enter(*activesquad);
+   /*short buyer=0;
    short in_tools=0;
    short in_gunshop=0;
    short in_fence=0;
@@ -1056,7 +1060,7 @@ void pawnshop(int loc)
          }
       }
 
-   }while(1);
+   }while(1);*/
 }
 
 
@@ -1248,7 +1252,11 @@ void dealership(int loc)
 /* active squad visits the department store */
 void deptstore(int loc)
 {
-   short buyer=0;
+   CMarkup xml; // -XML
+   xml.Load("art/deptstore.xml");
+   Shop deptstore(xml.GetDoc());
+   deptstore.enter(*activesquad);
+   /*short buyer=0;
 
    locatesquad(activesquad,loc);
 
@@ -1377,7 +1385,7 @@ void deptstore(int loc)
          }
       }
 
-   }while(1);
+   }while(1);*/
 }
 
 

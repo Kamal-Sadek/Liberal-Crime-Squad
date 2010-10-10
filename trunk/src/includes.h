@@ -1562,8 +1562,8 @@ void select_tendhostage(Creature *cr);
 long select_hostagefundinglevel(Creature *cr,Creature *hs);
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr);
-int armor_makedifficulty(Armor& type,Creature *cr); //Replace? -XML
-int armor_makedifficulty(ArmorType& type,Creature *cr); //Replace? -XML
+int armor_makedifficulty(Armor& type,Creature *cr); //Replace with Armor class method? -XML
+int armor_makedifficulty(ArmorType& type,Creature *cr); //Replace with Armor class method? -XML
 /* base - activate - trouble */
 long select_troublefundinglevel(Creature *cr);
 /* base - activate - select a topic to write about */

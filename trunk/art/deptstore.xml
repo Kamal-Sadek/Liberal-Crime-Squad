@@ -1,0 +1,55 @@
+﻿<shop name="DEPARTMENT_STORE">
+    <only_sell_legal_items>true</only_sell_legal_items>
+    <fullscreen>false</fullscreen>
+    <allow_selling>false</allow_selling>
+    <exit>Leave</exit>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_CHEAPSUIT</type>
+        <letter>c</letter>
+        <description>Buy a Cheap Suit</description>
+        <price>400</price>
+    </item>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_EXPENSIVESUIT</type>
+        <letter>v</letter>
+        <description>Buy an Expensive Suit</description>
+        <price>5000</price>
+    </item>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_BLACKSUIT</type>
+        <letter>s</letter>
+        <description>Buy a Black Suit</description>
+        <price>500</price>
+    </item>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_CHEAPDRESS</type>
+        <letter>h</letter>
+        <description>Buy a Cheap Dress</description>
+        <price>400</price>
+    </item>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_EXPENSIVEDRESS</type>
+        <letter>d</letter>
+        <description>Buy an Expensive Dress</description>
+        <price>5000</price>
+    </item>
+    
+    <item>
+        <class>ARMOR</class>
+        <type>ARMOR_BLACKDRESS</type>
+        <letter>r</letter>
+        <description>Buy a Black Dress</description>
+        <price>500</price>
+    </item>
+
+</shop>
