@@ -488,7 +488,7 @@
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>7</armorpiercing>
-            <severtype>NASTY</severtype>
+            <severtype>NONE</severtype>
         </attack>
         <attack>
             <priority>2</priority>

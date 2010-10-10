@@ -704,12 +704,12 @@ string Creature::showXml() const
    xml.AddElem("money", money);
    xml.AddElem("juice", juice);
    xml.AddElem("income", income);
-   for (int i = 0; i < BODYPARTNUM; ++i) //Bad -XML
+   for (int i = 0; i < BODYPARTNUM; ++i) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("wound",wound[i]);
    xml.AddElem("blood", blood);
-   for (int i = 0; i < SPECIALWOUNDNUM; ++i) //Bad -XML
+   for (int i = 0; i < SPECIALWOUNDNUM; ++i) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("special",special[i]);
-   for (int i = 0; i < LAWFLAGNUM; ++i) //Bad -XML
+   for (int i = 0; i < LAWFLAGNUM; ++i) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("crimes_suspected",crimes_suspected[i]);
    xml.AddElem("heat", heat);
    xml.AddElem("location", location);
