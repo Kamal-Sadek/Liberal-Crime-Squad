@@ -163,7 +163,13 @@ bool Weapon::can_take_hostages() const
    
 bool Weapon::is_threatening() const
    { return weapontype[getweapontype(itemtypename())]->is_threatening(); }
-   
+
+bool Weapon::can_threaten_hostages() const
+   { return weapontype[getweapontype(itemtypename())]->can_threaten_hostages(); }
+
+bool Weapon::protects_against_kidnapping() const
+   { return weapontype[getweapontype(itemtypename())]->protects_against_kidnapping(); }
+
 bool Weapon::has_musical_attack() const
    { return weapontype[getweapontype(itemtypename())]->has_musical_attack(); }
    

@@ -15,6 +15,10 @@
             Default: false
         <threatening> (boolean) If the weapon appears threatening. (Attracts bullets, threaten landlord)
             Default: false
+        <can_threaten_hostages> (boolean) If the weapon can be used to threaten a held hostage.
+            Default: true
+        <protects_against_kidnapping> (boolean) If the weapon makes someone too dangerous to kidnap.
+            Default: true
         <musical_attack> (boolean) If the weapon uses a special musical attack, eg guitars.
             Default: false
         <instrument> (boolean) The weapon will give a bonus when fund raising with music.
@@ -113,6 +117,8 @@
         <name>None</name>
         <shortname>None</shortname>
         <suspicious>false</suspicious>
+        <can_threaten_hostages>false</can_threaten_hostages>
+        <protects_against_kidnapping>false</protects_against_kidnapping>
         <size>0</size>
         <attack>
             <!-- Need to be fixed in code.
@@ -703,6 +709,7 @@
         <shortname_future>Gavel</shortname_future>
         <fencevalue>20</fencevalue>
         <suspicious>false</suspicious>
+        <protects_against_kidnapping>false</protects_against_kidnapping>
         <size>5</size>
         <attack>
             <priority>1</priority>
@@ -884,6 +891,7 @@
         <instrument>true</instrument>
         <fencevalue>100</fencevalue>
         <suspicious>false</suspicious>
+        <can_threaten_hostages>false</can_threaten_hostages>
         <size>15</size>
         <attack>
             <priority>1</priority>

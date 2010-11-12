@@ -461,9 +461,9 @@ string tostring(long i)
 
 int stringtobool(const string& boolstr) //Should find better way to do this. -XML
 {
-   if (boolstr == "true" || boolstr == "True" || boolstr == "TRUE")
+   if (boolstr == "true" || boolstr == "True" || boolstr == "TRUE" || boolstr == "1")
       return 1;
-   else if (boolstr == "false" || boolstr == "False" || boolstr == "FALSE")
+   else if (boolstr == "false" || boolstr == "False" || boolstr == "FALSE" || boolstr == "0")
       return 0;
    else
       return -1;

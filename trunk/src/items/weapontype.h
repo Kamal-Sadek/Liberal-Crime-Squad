@@ -79,6 +79,10 @@ class WeaponType : public ItemType
       bool can_take_hostages() const { return can_take_hostages_; }
       // Returns if the weapon type can be used to threaten landlords.
       bool is_threatening() const { return threatening_; }
+      
+      bool can_threaten_hostages() const { return can_threaten_hostages_; }
+      
+      bool protects_against_kidnapping() const { return protects_against_kidnapping_; }
       // Returns if the weapon will use a musical attack in combat.
       bool has_musical_attack() const { return musical_attack_; }
       // Returns whether the weapon type is considered an instrument when fund
@@ -138,6 +142,8 @@ class WeaponType : public ItemType
         
       bool can_take_hostages_;
       bool threatening_;
+      bool can_threaten_hostages_;
+      bool protects_against_kidnapping_;
       bool musical_attack_;
       bool instrument_;
       int legality_;

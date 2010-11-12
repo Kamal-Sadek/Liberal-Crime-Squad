@@ -46,9 +46,22 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
          //DATE
          set_color(COLOR_BLACK,COLOR_WHITE,0);
          char num[20];
-         if(day>=10)move(3,66);
+         int pday=day;
+         int pmonth=month;
+         int pyear=year;
+         if(pday>monthday()) // Day counter has increased but end-of-month has not yet
+         {                   // been checked so it has to be accounted for here.
+            pmonth++;
+            pday=1;
+            if(pmonth>12)
+            {
+               pmonth=1;
+               pyear++;
+            }
+         }
+         if(pday>=10)move(3,66);
          else move(3,67);
-         switch(month)
+         switch(pmonth)
          {
             case 1:addstr("Jan");break;
             case 2:addstr("Feb");break;
@@ -64,10 +77,10 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
             case 12:addstr("Dec");break;
          }
          addstr(". ");
-         itoa(day,num,10);
+         itoa(pday,num,10);
          addstr(num);
          addstr(", ");
-         itoa(year,num,10);
+         itoa(pyear,num,10);
          addstr(num);
       }
    }

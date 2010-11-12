@@ -102,7 +102,7 @@ void kidnapattempt(void)
             (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
          {
             if((encounter[e].is_armed()&&
-               encounter[e].get_weapon().get_itemtypename()!="WEAPON_GAVEL"&& //Gavel is non-dangerous? -XML
+               encounter[e].get_weapon().protects_against_kidnapping()&&
                encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
             target.push_back(e);
          }

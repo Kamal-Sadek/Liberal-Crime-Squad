@@ -61,7 +61,7 @@ char talk(Creature &a,int t)
          {
             hostages++;
             if (activesquad->squad[i]->is_armed() &&
-                activesquad->squad[i]->get_weapon().get_itemtypename()!="WEAPON_GUITAR") //Why specifically not a guitar? -XML
+                activesquad->squad[i]->get_weapon().can_threaten_hostages())
               weaponhostage++;
          }
       }
