@@ -23,6 +23,8 @@ class Weapon : public Item
       long get_fencevalue() const;
       bool can_take_hostages() const;
       bool is_threatening() const;
+      bool can_threaten_hostages() const;
+      bool protects_against_kidnapping() const;
       bool has_musical_attack() const;
       bool is_instrument() const;
       int get_legality() const;

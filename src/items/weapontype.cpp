@@ -90,9 +90,10 @@ WeaponType::WeaponType(MCD_STR xmlstring)
    shortname_("UNDEF"), shortname_defined_(false), shortname_future_defined_(false),
    shortname_sub_1_defined_(false), shortname_sub_2_defined_(false),
    shortname_future_sub_1_defined_(false), shortname_future_sub_2_defined_(false),
-   can_take_hostages_(false), threatening_(false), musical_attack_(false),
-   instrument_(false), legality_(2), bashstrengthmod_(1), suspicious_(true),
-   size_(15), can_graffiti_(false), auto_break_lock_(false)
+   can_take_hostages_(false), threatening_(false), can_threaten_hostages_(true),
+   protects_against_kidnapping_(true),
+   musical_attack_(false), instrument_(false), legality_(2), bashstrengthmod_(1),
+   suspicious_(true), size_(15), can_graffiti_(false), auto_break_lock_(false)
 {
    CMarkup xml;
    xml.SetDoc(xmlstring);
@@ -175,6 +176,22 @@ WeaponType::WeaponType(MCD_STR xmlstring)
          /*else
             errorlog << "Invalid boolean value for weapon type " << idname()
                       << "::threatening: " << xml.GetData() << endl;*/
+      }
+      else if (element == "can_threaten_hostages")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            can_threaten_hostages_ = true;
+         else if (b == 0)
+            can_threaten_hostages_ = false;
+      }
+      else if (element == "protects_against_kidnapping")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            protects_against_kidnapping_ = true;
+         else if (b == 0)
+            protects_against_kidnapping_ = false;
       }
       else if (element == "musical_attack")
       {
