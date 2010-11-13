@@ -1,8 +1,7 @@
-﻿#ifndef CLIPTYPE_H
+#ifndef CLIPTYPE_H
 #define CLIPTYPE_H
 
 #include "includes.h"
-//#include "externs.h"
 
 class ClipType : public ItemType
 {
