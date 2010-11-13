@@ -21,7 +21,13 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  items/armor.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
  common/misc.cpp common/help.cpp creature/creature.h creature/creaturenames.cpp\
  cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\
- vehicle/vehicletype.cpp vehicle/vehicletype.h
+ vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\
+ items/armortype.cpp items/armortype.h items/clip.cpp items/clip.h\
+ items/cliptype.cpp items/cliptype.h items/item.cpp items/item.h\
+ items/itemtype.cpp items/itemtype.h items/loot.cpp items/loot.h\
+ items/loottype.cpp items/loottype.h items/money.cpp items/money.h\
+ items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
+ sitemode/shop.h sitemode/shop.cpp
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src
