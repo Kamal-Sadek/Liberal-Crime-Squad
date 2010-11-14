@@ -577,10 +577,10 @@ int Shop::fenceselect(squadst& customers) const
          {
             if(selected[l] > 0)
             {
-               itemstr += tostring(selected[l]) + "/";
+               itemstr += " " + tostring(selected[l]) + "/";
             }
             else
-               itemstr += "x";
+               itemstr += " x";
             itemstr += tostring(location[customers.squad[0]->base]->loot[l]->get_number());
          }
 

@@ -282,7 +282,7 @@
         <professionalism>1</professionalism>
     </armortype>
 
-    <armortype idname="ARMOR_MASK"> <!-- Hur göra masker? -->
+    <armortype idname="ARMOR_MASK">
         <body_covering>
             <head>true</head>
             <body>false</body>

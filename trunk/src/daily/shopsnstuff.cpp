@@ -210,6 +210,7 @@ char gunselect(Creature &cr,int &gunindex,bool legal=1)
 /* active squad visits the arms dealer */
 void armsdealer(int loc)
 {
+   locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load("art/armsdealer.xml");
    Shop armsdealer(xml.GetDoc());
@@ -440,6 +441,7 @@ void armsdealer(int loc)
 /* active squad visits the pawn shop */
 void pawnshop(int loc)
 {
+   locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load("art/pawnshop.xml");
    Shop pawnshop(xml.GetDoc());
@@ -1252,6 +1254,7 @@ void dealership(int loc)
 /* active squad visits the department store */
 void deptstore(int loc)
 {
+   locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load("art/deptstore.xml");
    Shop deptstore(xml.GetDoc());
