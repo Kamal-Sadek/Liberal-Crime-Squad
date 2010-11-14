@@ -1,4 +1,4 @@
-﻿ <weapons>
+﻿<weapons>
  
     <!-- Clarification
     <weapontype idname="(string)"> idname is used internally by the game to identify the weapon type.
@@ -724,12 +724,12 @@
     </weapontype>
 
     <weapontype idname="WEAPON_DAISHO">
-        <name_0>Daisho</name_0>
-        <name_1>Katana</name_1> <!-- Fixed? -->
-        <name_2>Wakizashi</name_2> <!-- Fixed? -->
-        <name_future_0>Twin Swords of Liberalism</name_future_0>
-        <name_future_1>Retribution Sword</name_future_1>
-        <name_future_2>Justice Blade</name_future_2>
+        <name>Daisho</name>
+        <name_sub_1>Katana</name_sub_1> <!-- Fixed? -->
+        <name_sub_2>Wakizashi</name_sub_2> <!-- Fixed? -->
+        <name_future>Twin Swords of Liberalism</name_future>
+        <name_future_sub_1>Retribution Sword</name_future_sub_1>
+        <name_future_sub_2>Justice Blade</name_future_sub_2>
         <shortname>Daisho</shortname>
         <shortname_future>Twin Sword</shortname_future>
         <can_take_hostages>true</can_take_hostages>
