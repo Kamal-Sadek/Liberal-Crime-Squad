@@ -122,7 +122,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 
    available_options.erase (remove_if (available_options.begin(), 
 				       available_options.end(),
-				       (mem_fun (&ShopOption::display))),
+				       not1 (mem_fun (&ShopOption::display))),
 			    available_options.end());
 
    int partysize = 0;
