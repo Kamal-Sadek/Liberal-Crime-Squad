@@ -533,7 +533,7 @@ Creature::Creature(const char* inputXml)
       else if (tag == "type")
          type = atoi(xml.GetData().c_str());
       else if (tag == "infiltration")
-         infiltration = atoi(xml.GetData().c_str());
+         infiltration = atof(xml.GetData().c_str());
       else if (tag == "animalgloss")
          animalgloss = atoi(xml.GetData().c_str());
       else if (tag == "specialattack")
@@ -667,7 +667,11 @@ string Creature::showXml() const
    xml.AddElem("align", align);
    xml.AddElem("alive", alive);
    xml.AddElem("type", type);
-   xml.AddElem("infiltration", infiltration);
+
+   char buf[256];
+   snprintf (buf, 255, "%f", infiltration);
+   xml.AddElem("infiltration", buf);
+
    xml.AddElem("animalgloss", animalgloss);
    xml.AddElem("specialattack", specialattack);
    xml.AddElem("clinic", clinic);
