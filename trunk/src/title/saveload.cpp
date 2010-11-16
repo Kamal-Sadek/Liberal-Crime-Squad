@@ -315,7 +315,12 @@ void savegame(char *str)
          numbytes=fwrite(&dummy,sizeof(int),1,h);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
-            numbytes=fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
+            std::string creatureStr = date[dt]->date[dt2]->showXml();
+            size_t creatureSize = creatureStr.size();
+
+            numbytes=fwrite(&creatureSize,sizeof (creatureSize),1,h);
+            numbytes=fwrite(creatureStr.c_str(),creatureSize,1,h);
+            //numbytes=fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
@@ -329,7 +334,13 @@ void savegame(char *str)
          numbytes=fwrite(&recruit[rt]->level,sizeof(char),1,h);
          numbytes=fwrite(&recruit[rt]->eagerness1,sizeof(char),1,h);
          numbytes=fwrite(&recruit[rt]->task,sizeof(char),1,h);
-         numbytes=fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
+         
+         std::string creatureStr = recruit[rt]->recruit->showXml();
+         size_t creatureSize = creatureStr.size();
+
+         numbytes=fwrite(&creatureSize,sizeof (creatureSize),1,h);
+         numbytes=fwrite(creatureStr.c_str(),creatureSize,1,h);
+         //numbytes=fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES
@@ -784,8 +795,15 @@ char load(void)
          date[dt]->date.resize(dummy);
          for(int dt2=0;dt2<date[dt]->date.size();dt2++)
          {
-            date[dt]->date[dt2]=new Creature;
-            fread(date[dt]->date[dt2],sizeof(Creature),1,h);
+            size_t creatureLen;
+            fread (&creatureLen, sizeof(creatureLen), 1, h);
+            vector<char> vec = vector<char> (creatureLen + 1);
+            fread (&vec[0], creatureLen, 1, h);
+            vec[creatureLen] = '\0';
+            date[dt]->date[dt2] = new Creature(&vec[0]);
+            
+            //date[dt]->date[dt2]=new Creature;
+            //fread(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
@@ -800,8 +818,15 @@ char load(void)
          fread(&recruit[rt]->level,sizeof(char),1,h);
          fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
          fread(&recruit[rt]->task,sizeof(char),1,h);
-         recruit[rt]->recruit = new Creature;
-         fread(recruit[rt]->recruit,sizeof(Creature),1,h);
+         
+         size_t creatureLen;
+         fread (&creatureLen, sizeof(creatureLen), 1, h);
+         vector<char> vec = vector<char> (creatureLen + 1);
+         fread (&vec[0], creatureLen, 1, h);
+         vec[creatureLen] = '\0';
+         recruit[rt]->recruit = new Creature(&vec[0]);
+         //recruit[rt]->recruit = new Creature;
+         //fread(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES
