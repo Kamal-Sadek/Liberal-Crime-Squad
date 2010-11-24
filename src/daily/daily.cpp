@@ -804,10 +804,10 @@ void advanceday(char &clearformess,char canseethings)
                // Non-bleeding wounds
                else
                {
-                  // Erase wound if almost fully healed
+                  // Erase wound if almost fully healed, but preserve loss of limbs.
                   if(pool[p]->blood>=95)
                   {
-                     pool[p]->wound[w]=0;
+                     pool[p]->wound[w]&=WOUND_CLEANOFF;
                   }
                }
             }
