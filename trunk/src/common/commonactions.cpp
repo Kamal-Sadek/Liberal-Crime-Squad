@@ -698,6 +698,35 @@ int loveslavesleft(const Creature& cr)
    else return 0;
 }
 
+// Determines the number of recruitment meetings a creature has scheduled
+int scheduledmeetings(const Creature& cr)
+{
+   int meetings=0;
+   for(int p=recruit.size()-1;p>=0;p--)
+   {
+      // If meeting is with this creature
+      if(recruit[p]->recruiter_id == cr.id)
+         meetings++;
+   }
+   return meetings;
+}
+
+// Determines the number of dates a creature has scheduled
+int scheduleddates(const Creature& cr)
+{
+   int dates=0;
+   for(int p=date.size()-1;p>=0;p--)
+   {
+      // Does this creature have a list of dates scheduled?
+      if(date[p]->mac_id == cr.id)
+      {
+         dates = date[p]->date.size();
+		 break;
+      }
+   }
+   return dates;
+}
+
 /* common - random issue by public interest */
 int randomissue(bool core_only)
 {
