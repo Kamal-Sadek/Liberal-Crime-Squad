@@ -132,7 +132,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/wd4996"
+				AdditionalOptions="/wd4996 /D &quot;MARKUP_STL&quot;"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\src\pdcurses;..\src"
@@ -358,18 +358,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\creature\pool.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\common\translateid.cpp"
 				>
 			</File>
@@ -447,6 +435,14 @@
 			</File>
 			<File
 				RelativePath="..\src\sitemode\newencounter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sitemode\shop.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sitemode\shop.h"
 				>
 			</File>
 			<File
@@ -642,6 +638,90 @@
 				RelativePath="..\src\items\armor.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\src\items\armor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\armortype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\armortype.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\clip.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\clip.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\cliptype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\cliptype.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\item.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\item.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\itemtype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\itemtype.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\loot.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\loot.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\loottype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\loottype.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\money.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\money.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\weapon.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\weapon.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\weapontype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\items\weapontype.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="creature"
@@ -688,6 +768,38 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="vehicle"
+			>
+			<File
+				RelativePath="..\src\vehicle\vehicle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\vehicle\vehicle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\vehicle\vehicletype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\vehicle\vehicletype.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="cmarkup"
+			>
+			<File
+				RelativePath="..\src\cmarkup\Markup.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\cmarkup\Markup.h"
+				>
 			</File>
 		</Filter>
 		<File

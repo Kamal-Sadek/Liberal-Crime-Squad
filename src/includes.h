@@ -1312,6 +1312,10 @@ int loveslaves(const Creature& cr);
 /* Determines the number of loveslaves a creature may recruit,
    based on their max and the number they already command */
 int loveslavesleft(const Creature& cr);
+// Determines the number of recruitment meetings a creature has scheduled
+int scheduledmeetings(const Creature& cr);
+// Determines the number of dates a creature has scheduled
+int scheduleddates(const Creature& cr);
 /* common - random issue by public interest */
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided

@@ -240,6 +240,12 @@ int main(int argc, char* argv[])
 #endif
    initscr();
 
+   // set window title
+   char wtitle[50];
+   strcpy(wtitle,"Liberal Crime Squad ");
+   strcat(wtitle,PACKAGE_VERSION);
+   PDC_set_title(wtitle);
+
    noecho();
 
    //initialize curses color
