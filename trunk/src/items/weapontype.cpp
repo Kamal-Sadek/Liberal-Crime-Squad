@@ -453,42 +453,60 @@ attackst::attackst(MCD_STR xmlstring)
          no_damage_reduction_for_limbs_chance = atoi(xml.GetData().c_str());
       else if (element == "critical")
       {
-         if (element == "chance")
-            critical.chance = atoi(xml.GetData().c_str());
-         else if (element == "hits_required")
-            critical.hits_required = atoi(xml.GetData().c_str());
-         else if (element == "random_damage")
+         xml.IntoElem();
+         
+         while (xml.FindElem())
          {
-            critical.random_damage = atoi(xml.GetData().c_str());
-            critical.random_damage_defined = true;
-         }
-         else if (element == "fixed_damage")
-         {
-            critical.fixed_damage = atoi(xml.GetData().c_str());
-            critical.fixed_damage_defined = true;
-         }
-         else if (element == "severtype")
-         {
-            int s = severtype_string_to_enum(xml.GetData());
-            if (s != -1)
+            element = xml.GetTagName();
+            
+            if (element == "chance")
+               critical.chance = atoi(xml.GetData().c_str());
+            else if (element == "hits_required")
+               critical.hits_required = atoi(xml.GetData().c_str());
+            else if (element == "random_damage")
             {
-               critical.severtype = s;
-               critical.severtype_defined = true;
+               critical.random_damage = atoi(xml.GetData().c_str());
+               critical.random_damage_defined = true;
+            }
+            else if (element == "fixed_damage")
+            {
+               critical.fixed_damage = atoi(xml.GetData().c_str());
+               critical.fixed_damage_defined = true;
+            }
+            else if (element == "severtype")
+            {
+               int s = severtype_string_to_enum(xml.GetData());
+               if (s != -1)
+               {
+                  critical.severtype = s;
+                  critical.severtype_defined = true;
+               }
+               /*else
+                  errorlog << "Invalid severtype for attack::critical::severtype: " << xml.GetData() << endl; */
             }
             /*else
-               errorlog << "Invalid severtype for attack::critical::severtype: " << xml.GetData() << endl; */
+               errorlog << "Unknown element for attack::critical: " << element << endl; */
          }
-         /*else
-            errorlog << "Unknown element for attack::critical: " << element << endl; */
+         
+         xml.OutOfElem();
       }
-      else  if (element == "fire")
+      else if (element == "fire")
       {
-         if (element == "chance")
-            fire.chance = atoi(xml.GetData().c_str());
-         else if (element == "chance_causes_debris")
-            fire.chance_causes_debris = atoi(xml.GetData().c_str());
-         /*else
-            errorlog << "Unknown element for attack::fire: " << element << endl; */
+         xml.IntoElem();
+         
+         while (xml.FindElem())
+         {
+            element = xml.GetTagName();
+            
+            if (element == "chance")
+               fire.chance = atoi(xml.GetData().c_str());
+            else if (element == "chance_causes_debris")
+               fire.chance_causes_debris = atoi(xml.GetData().c_str());
+            /*else
+               errorlog << "Unknown element for attack::fire: " << element << endl; */
+         }
+            
+         xml.OutOfElem();
       }
       /*else
          errorlog << "Unknown element for attack: " << element << endl; */
