@@ -20,7 +20,7 @@ int readConfigFile(char* filename)
    char extendedfilename[100];
    strcpy(extendedfilename,artdir);
    strcat(extendedfilename,filename);
-   file.open(extendedfilename, ios::in);
+   file.open(extendedfilename, ios::in | ios::binary);
    if(!file.is_open()) return -1; // Unable to open; failed read
    // loop through lines
    while(readLine(file, command, value))
