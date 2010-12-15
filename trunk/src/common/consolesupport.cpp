@@ -30,6 +30,9 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
+#if defined(USE_NCURSES) || defined (USE_NCURSES_W)
+#include <term.h>
+#endif
 
 
 //sets current color to desired setting
@@ -189,3 +192,27 @@ int addch_unicode(int c) {
    }
 }
 #endif
+
+
+void set_title (char *s)
+{
+#if defined(USE_NCURSES) || defined (USE_NCURSES_W)
+   if (tgetflag ("hs")) { // terminal has status line support
+      char buf[255] = {0};
+      char *p = buf; // tgetstr modifies its second argument, let buf keep pointing to the beginning
+      char *ok; // tgetstr's return value is apparently undocumented, except that it's NULL on errors
+
+      ok = tgetstr ("tsl", &p); // "to status line"
+      if (ok == NULL) return;
+      strcpy (p - 1, s); // tgetstr leaves us *after* the null, so skip back a bit
+      p += strlen (s) - 1; // same here
+
+      ok = tgetstr ("fsl", &p); // "from status line"
+      if (ok == NULL) return;
+
+      putp (buf);
+   }
+#else // assume pdcurses
+   PDC_set_title(s);
+#endif
+}

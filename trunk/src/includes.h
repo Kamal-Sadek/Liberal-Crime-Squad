@@ -1357,6 +1357,7 @@ void translategetch_cap(int &c);
   char setup_unicode();
   int addch_unicode(int c);
 #endif
+void set_title (char *c);
 
 /*
  getnames.cpp
