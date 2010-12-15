@@ -244,7 +244,7 @@ int main(int argc, char* argv[])
    char wtitle[50];
    strcpy(wtitle,"Liberal Crime Squad ");
    strcat(wtitle,PACKAGE_VERSION);
-   PDC_set_title(wtitle);
+   set_title (wtitle);
 
    noecho();
 
