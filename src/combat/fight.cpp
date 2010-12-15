@@ -676,7 +676,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    bonus += attack_used->accuracy_bonus;
 
    //USE BULLETS
-   int bursthits=0; // *JDS* Used for fully automatic weapons; tracks multiple hits
+   int bursthits=0; // Tracks number of hits.
 
    int thrownweapons=0; // Used by thrown weapons to remove the weapons at the end of the turn if needed
 
@@ -712,12 +712,26 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       
       for (int i = 0; i < attack_used->number_attacks; ++i)
       {
-         if (attack_used->uses_ammo && a.get_weapon().get_ammoamount() > 0)
+         if (attack_used->uses_ammo)
+         {
+            if (a.get_weapon().get_ammoamount() > 0)
+               a.get_weapon().decrease_ammo(1);
+            else
+               break;
+         }
+         else if (attack_used->thrown)
+         {
+            if (a.count_weapons()-thrownweapons > 0)
+               ++thrownweapons;
+            else
+               break;
+         }
+         /*if (attack_used->uses_ammo && a.get_weapon().get_ammoamount() > 0)
             a.get_weapon().decrease_ammo(1);
          else if (attack_used->thrown && a.count_weapons()-thrownweapons > 0)
             ++thrownweapons;
          else
-            break;
+            break;*/
          // Each shot in a burst is increasingly less likely to hit
          if(aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
             bursthits++;
@@ -918,7 +932,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             if (attack_used->critical.severtype_defined)
                severtype = attack_used->critical.severtype;
          }
-         damamount=LCSrandom(random) + fixed;
+         while (bursthits > 0)
+         {
+            damamount+=LCSrandom(random) + fixed;
+            --bursthits;
+         }
          damagearmor=attack_used->damages_armor;
          armorpiercing=attack_used->armorpiercing;
       }
