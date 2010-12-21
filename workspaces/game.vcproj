@@ -827,6 +827,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\lcs_news_icon.res"
+			>
+		</File>
+		<File
 			RelativePath="..\src\lcsio.cpp"
 			>
 		</File>
