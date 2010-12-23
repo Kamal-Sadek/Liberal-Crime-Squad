@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.01.4"
+#define PACKAGE_VERSION "4.02.0"
 #endif
 
-const int version=40104; 
-const int lowestloadversion=40103;
+const int version=40200; 
+const int lowestloadversion=40200;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
