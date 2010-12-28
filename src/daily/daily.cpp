@@ -996,47 +996,21 @@ void advanceday(char &clearformess,char canseethings)
       if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=RENTING_NOCONTROL)||
          recruit[r]->timeleft>0))
       {
-         //RECRUIT TASKS
-         if(recruit[r]->timeleft>0)
-         {
-            recruit[r]->timeleft--;
-            //chance of being arrested
-            if(recruit[r]->task==TASK_CRIMES &&
-               !LCSrandom(8*(recruit[r]->recruit->get_skill(SKILL_SECURITY)+recruit[r]->recruit->get_skill(SKILL_DISGUISE)+
-                             recruit[r]->recruit->get_skill(recruit[r]->recruit->get_weapon().get_attack(false,false,false)->skill)+
-                             recruit[r]->recruit->get_skill(SKILL_STREETSENSE)+
-                             recruit[r]->recruit->get_attribute(ATTRIBUTE_AGILITY,true))))
-            {
-               recruit[r]->task=TASK_ARRESTED;
-            }
-
-            if(recruit[r]->timeleft==0)
-            {
-               if(completerecruittask(*recruit[r],p,clearformess))
-               {
-                  delete recruit[r];
-                  recruit.erase(recruit.begin() + r);
-                  continue;
-               }
-            }
-         }
          //MEET WITH RECRUIT
-         else
+         
+         //TERMINATE NULL RECRUIT MEETINGS
+         if(location[pool[p]->location]->siege.siege)
          {
-            //TERMINATE NULL RECRUIT MEETINGS
-            if(location[pool[p]->location]->siege.siege)
-            {
-               delete recruit[r];
-               recruit.erase(recruit.begin() + r);
-               continue;
-            }
-            //DO MEETING
-            else if(completerecruitmeeting(*recruit[r],p,clearformess))
-            {
-               delete recruit[r];
-               recruit.erase(recruit.begin() + r);
-               continue;
-            }
+            delete recruit[r];
+            recruit.erase(recruit.begin() + r);
+            continue;
+         }
+         //DO MEETING
+         else if(completerecruitmeeting(*recruit[r],p,clearformess))
+         {
+            delete recruit[r];
+            recruit.erase(recruit.begin() + r);
+            continue;
          }
       }
       else

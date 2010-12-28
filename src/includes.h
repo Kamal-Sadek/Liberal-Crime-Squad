@@ -70,10 +70,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.02.0"
+#define PACKAGE_VERSION "4.02.1"
 #endif
 
-const int version=40200; 
+const int version=40201; 
 const int lowestloadversion=40200;
 const int lowestloadscoreversion=31203;
 
@@ -1862,8 +1862,6 @@ char completedate(datest &d,int p,char &clearformess);
 /*
  recruit.cpp
 */
-/* daily - recruit - recruit finishes task */
-char completerecruittask(recruitst &d,int p,char &clearformess);
 /* daily - recruit - recruit meeting*/
 char completerecruitmeeting(recruitst &d,int p,char &clearformess);
 

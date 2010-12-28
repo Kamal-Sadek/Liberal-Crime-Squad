@@ -32,194 +32,24 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
       //Likes the LCS
       if((int)LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUADPOS])
       {
-         eagerness1=1;
+         eagerness1=3;
       }
       //Doesn't like the LCS
-      else eagerness1=-1;
+      else eagerness1=0;
    }
+   else eagerness1=2;
    
 }
 
 char recruitst::eagerness()
 {
-   char eagerness_temp = eagerness1 + pool[getpoolcreature(recruiter_id)]->get_skill(SKILL_LEADERSHIP); 
-   if(recruit->talkreceptive())
-   {
-      eagerness_temp+=2;
-   }
-   if(recruit->get_attribute(ATTRIBUTE_HEART,true)>recruit->get_attribute(ATTRIBUTE_WISDOM,true))
-   {
-      eagerness_temp++;
-   }
-   if(recruit->get_attribute(ATTRIBUTE_HEART,true) > 9)
-   {
-      eagerness_temp++;
-   }
-   if(recruit->get_weapon().is_ranged())
-   {
-      eagerness_temp++;
-   }
+   char eagerness_temp = eagerness1;
    //Moderates are decidedly less interested
    if(recruit->align==0)eagerness_temp-=2;
    //Conservatives are extremely uninterested
    if(recruit->align==-1)eagerness_temp-=4;
    return eagerness_temp;
 }
-
-
-/* daily - recruit - recruit completes task */
-char completerecruittask(recruitst &r,int p,char &clearformess) //Obsolete code? -XML
-{
-   if(clearformess)erase();
-   else
-   {
-      makedelimiter(8,0);
-   }
-
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(8,1);
-   if(r.task==TASK_ARRESTED)
-   {
-      addstr(r.recruit->name);
-      addstr(" was arrested for ");
-      switch(LCSrandom(4))
-      {
-      case 0:addstr("vandalism.");break;
-      case 1:addstr("assault.");break;
-      case 2:addstr("burglary.");break;
-      case 3:addstr("disturbing the peace.");break;
-      }
-      refresh();
-      getch();
-      delete r.recruit;
-      return 1;
-   }
-   addstr(r.recruit->name);
-   addstr(" has ");
-
-   switch(r.task)
-   {
-   case TASK_BUYWEAPON:
-      {
-      addstr("acquired a weapon.");
-
-      string weapon, clip;
-      int clips = 0;
-      //Select a weapon to arm the recruit with
-      if(r.recruit->money>1500 &&
-         r.recruit->get_skill(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->get_skill(SKILL_STREETSENSE)))
-      {
-         switch(LCSrandom(3))
-         {
-         case 0:weapon="WEAPON_CARBINE_M4";break;
-         case 1:weapon="WEAPON_AUTORIFLE_M16";break;
-         case 2:weapon="WEAPON_AUTORIFLE_AK47";break;
-         }
-         clips=5;
-         clip="CLIP_ASSAULT";
-      }
-      else if(r.recruit->money>1200 &&
-         r.recruit->get_skill(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]==-2 || r.recruit->get_skill(SKILL_STREETSENSE)))
-      {
-         weapon="WEAPON_SMG_MP5";
-         clips=5;
-         clip="CLIP_SMG";
-      }
-      else if(r.recruit->money>400 &&
-         r.recruit->get_skill(SKILL_SHOTGUN) &&
-         (law[LAW_GUNCONTROL]<2 || r.recruit->get_skill(SKILL_STREETSENSE)))
-      {
-         weapon="WEAPON_SEMIRIFLE_AR15";
-         clips=5;
-         clip="CLIP_ASSAULT";
-      }
-      else if(r.recruit->money>350 &&
-         r.recruit->get_skill(SKILL_RIFLE) &&
-         (law[LAW_GUNCONTROL]<=-1 || r.recruit->get_skill(SKILL_STREETSENSE)))
-      {
-         weapon="WEAPON_SEMIRIFLE_AR15";
-         clips=5;
-         clip="CLIP_ASSAULT";
-      }
-      else if(r.recruit->money>300 &&
-         r.recruit->get_skill(SKILL_PISTOL) &&
-         (law[LAW_GUNCONTROL]<1 || r.recruit->get_skill(SKILL_STREETSENSE)))
-      {
-         switch(LCSrandom(4))
-         {
-         case 0:weapon="WEAPON_SEMIPISTOL_9MM";
-                clips=5;
-                clip="CLIP_9";
-                break;
-         case 1:weapon="WEAPON_SEMIPISTOL_45";
-                clips=5;
-                clip="CLIP_45";
-                break;
-         case 2:weapon="WEAPON_REVOLVER_44";
-                clips=5;
-                clip="CLIP_44";
-                break;
-         }
-      }
-      else if(r.recruit->get_skill(SKILL_SWORD))
-      {
-         if(LCSrandom(5)) weapon="WEAPON_SWORD";
-         else weapon="WEAPON_DAISHO";
-      }
-      else if(r.recruit->get_skill(SKILL_AXE))
-      {
-         weapon="WEAPON_AXE";
-      }
-      else if(r.recruit->get_skill(SKILL_PISTOL))
-      {
-         weapon="WEAPON_REVOLVER_38";
-         clips=5;
-         clip="CLIP_38";
-      }
-      else if(r.recruit->get_skill(SKILL_CLUB) && !r.recruit->get_skill(SKILL_KNIFE))
-      {
-         if(LCSrandom(2))weapon="WEAPON_BASEBALLBAT";
-         else weapon="WEAPON_CROWBAR";
-      }
-      else if(LCSrandom(2))weapon="WEAPON_KNIFE";
-      else weapon="WEAPON_SHANK";
-      
-      Weapon w(*weapontype[getweapontype(weapon)]);
-      r.recruit->give_weapon(w,NULL);
-      if (clips > 0)
-      {
-         Clip c(*cliptype[getcliptype(clip)],clips);
-         r.recruit->take_clips(c,clips);
-         r.recruit->reload(false);
-      }
-      }
-      break;
-
-   case TASK_COMMUNITYSERVICE:
-      addstr("finished doing community service.");
-      r.level++;
-      break;
-
-   case TASK_ACTIVISM:
-      addstr("finished causing trouble.");
-      r.level++;
-      break;
-   case TASK_CRIMES:
-      addstr("finished committing crimes.");
-      r.level++;
-      break;
-   default:
-      addstr("finished REPORTING THIS BUG TO THE PROGRAMMERS.");
-      break;
-   }
-
-   refresh();
-   getch();
-   return 0;
-}
-
 
 static void getissueeventstring(char* str)
 {
@@ -296,28 +126,21 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr(r.recruit->name);
    switch(r.eagerness())
    {
-   case 0:
    case 1:
+      addstr(" will take a lot of persuading.");
+      break;
    case 2:
+      addstr(" is interested in learning more.");
+      break;
    case 3:
-      addstr(" has someplace better to be, really.");
-      break;
-   case 4:
-   case 5:
-      addstr(" is curious what this is all about.");
-      break;
-   case 6:
-   case 7:
-      addstr(" is determined to do something.");
+      addstr(" feels something needs to be done.");
       break;
    default:
-      if(r.eagerness()>=8)
+      if(r.eagerness()>=4)
          addstr(" is ready to fight for the Liberal Cause.");
       else
       {
-         addstr(" is obviously humoring ");
-         addstr(pool[p]->name);
-         addch('.');
+         addstr(" kind of regrets agreeing to this.");
       }
       break;
    }
@@ -334,13 +157,13 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr("B - Just casually chat with them and discuss politics.");
    
    move(15,0);
-   if(subordinatesleft(*pool[p]))
+   if(subordinatesleft(*pool[p]) && r.eagerness()>=4)
    {
       addstr("C - Offer to let ");
       addstr(r.recruit->name);
       addstr(" to join the LCS as a full member.");
    }
-   else
+   else if(!subordinatesleft(*pool[p]))
    {
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr("C - ");
@@ -348,6 +171,15 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       addstr(" needs more Juice or Leadership to recruit.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
+   else
+   {
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr("C - ");
+      addstr(r.recruit->name);
+      addstr(" isn't ready to join the LCS.");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+   }
+
    move(16,0);
    addstr("D - Break off the meetings.");
 
@@ -360,7 +192,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       int c=getch();
       translategetch(c);
 
-      if(c=='c' && subordinatesleft(*pool[p]))
+      if(c=='c' && subordinatesleft(*pool[p]) && r.eagerness()>=4)
       {
          move(y,0);
          addstr(pool[p]->name);
@@ -371,46 +203,29 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          refresh();
          getch();
 
-         if(r.eagerness()>=8)
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            move(y+=2,0);
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         move(y+=2,0);
             
-            addstr(r.recruit->name);
-            addstr(" accepts, and is eager to get started.");
+         addstr(r.recruit->name);
+         addstr(" accepts, and is eager to get started.");
 
-            liberalize(*r.recruit,false);
+         liberalize(*r.recruit,false);
 
-            refresh();
-            getch();
+         refresh();
+         getch();
 
-            erase();
-            sleeperize_prompt(*r.recruit,*pool[p],6);
+         erase();
+         sleeperize_prompt(*r.recruit,*pool[p],6);
 
-            r.recruit->hireid=pool[p]->id;
+         r.recruit->hireid=pool[p]->id;
 
-            pool[p]->train(SKILL_LEADERSHIP,5);
-            pool[p]->train(SKILL_PERSUASION,5);
+         pool[p]->train(SKILL_LEADERSHIP,5);
+         pool[p]->train(SKILL_PERSUASION,5);
 
-            pool.push_back(r.recruit);
-            stat_recruits++;
+         pool.push_back(r.recruit);
+         stat_recruits++;
 
-            return 1;
-         }
-         else
-         {
-            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
-            move(y+2,0);
-            addstr(r.recruit->name);
-            addstr(" isn't crazy! ");
-            addstr("Thanks, but no thanks.");
-
-            refresh();
-            getch();
-
-            delete r.recruit;
-            return 1;
-         }
+         return 1;
       }
       if(c=='b' || (c=='a' && ledger.get_funds()>=50))
       {
@@ -440,19 +255,20 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                                   pool[p]->get_skill(SKILL_LAW)+
                                   pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
 
-         int recruit_reluctance = r.recruit->get_skill(SKILL_BUSINESS)+
+         int recruit_reluctance = 5 +
+                                  r.recruit->get_skill(SKILL_BUSINESS)+
                                   r.recruit->get_skill(SKILL_SCIENCE)+
                                   r.recruit->get_skill(SKILL_RELIGION)+
                                   r.recruit->get_skill(SKILL_LAW)+
                                   r.recruit->get_attribute(ATTRIBUTE_WISDOM,true)+
                                   r.recruit->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
 
-         if(lib_persuasiveness > recruit_reluctance + 5)
-            recruit_reluctance = -5;
+         if(lib_persuasiveness > recruit_reluctance)
+            recruit_reluctance = 0;
          else
             recruit_reluctance -= lib_persuasiveness;
 
-         int difficulty = DIFFICULTY_AVERAGE + recruit_reluctance;
+         int difficulty = recruit_reluctance;
 
          if(c=='a')
          {
@@ -486,9 +302,12 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             refresh();
             getch();
          }
+         
+         bool success=0;
 
          if(pool[p]->skill_check(SKILL_PERSUASION,difficulty))
          {
+            success=1;
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             r.level++;
             r.eagerness1++;
@@ -503,11 +322,12 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          else if(pool[p]->skill_check(SKILL_PERSUASION,difficulty)) // Second chance to not fail horribly
          {
             r.level++;
+            r.eagerness1--;
             move(y++,0);
             addstr(r.recruit->name);
-            addstr(" enjoyed talking with ");
+            addstr(" is skeptical about some of ");
             addstr(pool[p]->name);
-            addstr(".");
+            addstr("'s arguments.");
             move(y++,0);
             addstr("They'll meet again tomorrow.");
          }
@@ -515,7 +335,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(y++,0);
-            if(pool[p]->talkreceptive())
+            if(r.recruit->talkreceptive() && r.recruit->align==ALIGN_LIBERAL)
             {
                addstr(r.recruit->name);
                addstr(" isn't convinced ");
