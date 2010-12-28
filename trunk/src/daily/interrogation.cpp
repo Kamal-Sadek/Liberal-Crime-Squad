@@ -1314,7 +1314,7 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          //Target is not sold on the LCS arguments and holds firm
          //This is the worst possible outcome if you use props
-         else if(rapport_temp || techniques[TECHNIQUE_PROPS])
+         else if(!(cr->skill_check(SKILL_PERSUASION,a->get_attribute(ATTRIBUTE_HEART, true))) || techniques[TECHNIQUE_PROPS])
          {
             //Not completely unproductive; builds rapport
             rapport[a->id]+=0.2f;

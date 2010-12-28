@@ -68,7 +68,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          sleeper_scandal(cr,clearformess,canseethings,libpower);
          break;
       case ACTIVITY_NONE:
-         cr.infiltration+=0.01f;
+         cr.infiltration+=0.02f;
          if(cr.infiltration>=1)
             cr.infiltration=1;
       case ACTIVITY_SLEEPER_JOINLCS:
@@ -135,16 +135,16 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
    switch(cr.type)
    {
       case CREATURE_CORPORATE_CEO:
+      case CREATURE_SCIENTIST_EMINENT:
          power*=20;
          break;
       case CREATURE_DEATHSQUAD:
       case CREATURE_EDUCATOR:
-         power*=4;
+         power*=6;
          break;
-      case CREATURE_SCIENTIST_EMINENT:
       case CREATURE_ACTOR:
       case CREATURE_GANGUNIT:
-         power*=3;
+         power*=4;
          break;
       default:
          power*=2;
