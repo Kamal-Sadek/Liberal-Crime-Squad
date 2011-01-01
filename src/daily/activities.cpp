@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -229,7 +229,7 @@ void repairarmor(Creature &cr,char &clearformess)
 
       addstr(armor->get_name().c_str());
       addstr(".");
-      
+
       if(pile!=NULL)
       {
          if(pile->get_number()>1)
@@ -238,7 +238,7 @@ void repairarmor(Creature &cr,char &clearformess)
             pilelist->push_back(newpile);
          }
       }
-      
+
       armor->set_bloody(false);
       if(!repairfailed)armor->set_damaged(false);
 
@@ -359,7 +359,7 @@ void makearmor(Creature &cr,char &clearformess)
                }
             }
          }
-         
+
          Item *it=new Armor(*armortype[at],quality);
          location[cr.location]->loot.push_back(it);
 
@@ -569,7 +569,7 @@ void survey(Creature *cr)
          //   else addstr("political terrorism.");
          //   break;
          case VIEW_IMMIGRATION:
-            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights."); 
+            if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
                         else
                         {
                                 if(law[LAW_IMMIGRATION]>=1)
@@ -796,7 +796,7 @@ void survey(Creature *cr)
       }
    }
 
-   
+
 }
 
 // Police accost your liberal!
@@ -834,11 +834,11 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
 int checkforarrest(Creature & liberal,const char* string,int clearformess)
 {
    bool arrest=false;
-   
+
    if(!liberal.animalgloss && liberal.is_naked() && LCSrandom(2))
    {
       criminalize(liberal,LAWFLAG_DISTURBANCE);
-      
+
       newsstoryst *ns=new newsstoryst;
          ns->type=NEWSSTORY_NUDITYARREST;
          ns->loc=-1;
@@ -1025,9 +1025,12 @@ void funds_and_trouble(char &clearformess)
    if(solicit.size() > 2)
       money = (money * (solicit.size()-((solicit.size()-1)/2))) / solicit.size();
    ledger.add_funds(money,INCOME_DONATIONS);
-   for(s=0;s<solicit.size();s++)
+   if(originalmoney!=0)
    {
-      solicit[s]->income=solicit[s]->income*money/originalmoney;
+      for(s=0;s<solicit.size();s++)
+      {
+         solicit[s]->income=solicit[s]->income*money/originalmoney; //Sum of solicit[s]->income may end up not equaling money. Fix?
+      }
    }
 
    //TSHIRTS
@@ -1135,9 +1138,9 @@ void funds_and_trouble(char &clearformess)
       if(!checkforarrest(*music[s],"playing music",clearformess))
       {
          money = music[s]->skill_roll(SKILL_MUSIC) / 2;
-         
+
          bool has_instrument = music[s]->get_weapon().is_instrument();
-         
+
          if(has_instrument)
             money *= 4;
 
@@ -1165,7 +1168,7 @@ void funds_and_trouble(char &clearformess)
               brownies[s]->skill_roll(SKILL_COOKING) +
               brownies[s]->skill_roll(SKILL_BUSINESS) +
               brownies[s]->skill_roll(SKILL_STREETSENSE);
-      
+
       // more money when more illegal
       if(law[LAW_DRUGS]==-2)
          money*=4;
@@ -1175,7 +1178,7 @@ void funds_and_trouble(char &clearformess)
          money/=4;
       if(law[LAW_DRUGS]==2)
          money/=8;
-      
+
       brownies[s]->income=money;
       ledger.add_funds(money,INCOME_BROWNIES);
       // Make the sale
@@ -1255,21 +1258,21 @@ void funds_and_trouble(char &clearformess)
          {
             if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
             else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
-   
+
             int trackdif=0;
             int short crime=0;
-   
+
             int juiceval=0;
-   
+
             switch(LCSrandom(7))
             {
                case 0:
                {
                   strcat(msg,"pilfered files from a Corporate server.");
-   
+
                   Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
-   
+
                   trackdif=20;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
@@ -1277,7 +1280,7 @@ void funds_and_trouble(char &clearformess)
                }
                case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
                   strcat(msg,"caused a scare by breaking into a CIA network.");
-   
+
                   trackdif=30;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=20;
@@ -1285,7 +1288,7 @@ void funds_and_trouble(char &clearformess)
                   break;
                case 2:
                   strcat(msg,"sabotaged a genetics research company's network.");
-   
+
                   trackdif=20;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
@@ -1294,12 +1297,12 @@ void funds_and_trouble(char &clearformess)
                case 3:
                {
                   strcat(msg,"intercepted internal media emails.");
-   
+
                   Item *it;
                      if(LCSrandom(2))it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
                      else it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
-   
+
                   trackdif=20;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
@@ -1307,7 +1310,7 @@ void funds_and_trouble(char &clearformess)
                }
                case 4:
                   strcat(msg,"broke into military networks leaving LCS slogans.");
-   
+
                   trackdif=30;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
@@ -1316,10 +1319,10 @@ void funds_and_trouble(char &clearformess)
                case 5:
                {
                   strcat(msg,"uncovered information on dangerous research.");
-   
+
                   Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
-   
+
                   trackdif=20;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
@@ -1328,17 +1331,17 @@ void funds_and_trouble(char &clearformess)
                case 6:
                {
                   strcat(msg,"discovered evidence of judicial corruption.");
-   
+
                   Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
                   location[hack[0]->location]->loot.push_back(it);
-   
+
                   trackdif=20;
                   crime=LAWFLAG_INFORMATION;
                   juiceval=5;
                   break;
                }
             }
-   
+
             if(trackdif>LCSrandom(hack_skill+1))
             {
                for(int h=0;h<truehack.size();h++)
@@ -1346,11 +1349,11 @@ void funds_and_trouble(char &clearformess)
                   criminalize(*hack[h],crime);
                }
             }
-         
+
             for(int h=0;h<truehack.size();h++)
                addjuice(*truehack[h],juiceval,50);
          }
-   
+
          if(msg[0])
          {
             if(clearformess)erase();
@@ -1358,13 +1361,13 @@ void funds_and_trouble(char &clearformess)
             {
                makedelimiter(8,0);
             }
-   
+
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-   
+
             addstr(msg);
             msg[0]=0;
-   
+
             refresh();
             getch();
          }
@@ -1436,7 +1439,7 @@ void funds_and_trouble(char &clearformess)
       {
          if(LCSrandom(10)<=hack_skill)
          {
-            int issue=LCSrandom(VIEWNUM-5); 
+            int issue=LCSrandom(VIEWNUM-5);
             int crime;
 
             // Maybe do a switch on issue here to specify which website it was, but I don't feel like
@@ -1463,7 +1466,7 @@ void funds_and_trouble(char &clearformess)
             case 4:strcat(msg,"government website");break;
             }
             strcat(msg,".");
-            
+
             change_public_opinion(issue,1);
 
             if(!LCSrandom(hack_skill+1))
@@ -1501,13 +1504,13 @@ void funds_and_trouble(char &clearformess)
       {
          if(!graffiti[s]->get_weapon().can_graffiti())
          {
-            
+
             if(clearformess)erase();
             else
             {
                makedelimiter(8,0);
             }
-            
+
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(graffiti[s]->name);
@@ -1541,7 +1544,7 @@ void funds_and_trouble(char &clearformess)
                   }
                }
             }
-            
+
             if(!foundone && ledger.get_funds()>=20)
             {
                ledger.subtract_funds(20,EXPENSE_SHOPPING);
@@ -1626,7 +1629,7 @@ void funds_and_trouble(char &clearformess)
                addstr(" mural about ");
                addstr(issuestr);
                addstr(".");
-               
+
                graffiti[s]->activity.arg=-1;
                addjuice(*graffiti[s],power,power*20);
                change_public_opinion(issue,power);
@@ -2023,7 +2026,7 @@ void funds_and_trouble(char &clearformess)
                   trouble[t]->activity.type=ACTIVITY_NONE;
                   criminalize(*trouble[t],crime);
                }
-               else if(!trouble[t]->is_armed() && 
+               else if(!trouble[t]->is_armed() &&
                        trouble[t]->get_skill(SKILL_HANDTOHAND)==0)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2335,7 +2338,7 @@ void funds_and_trouble(char &clearformess)
 
                criminalize(*bury[b],LAWFLAG_BURIAL);
                attemptarrest(*bury[b],"disposing of bodies",clearformess);
-               
+
                //If a liberal has been killed or arrested they should not do more burials.
                if (!(bury[b]->alive)
                    || location[bury[b]->location]->type == SITE_GOVERNMENT_POLICESTATION)
@@ -2583,7 +2586,7 @@ char stealcar(Creature &cr,char &clearformess)
                }
                addstr(".");
                refresh();getch();
-               
+
                windowdamage=10;
 
                entered=1;
@@ -2694,7 +2697,7 @@ char stealcar(Creature &cr,char &clearformess)
 
          y++;
 
-         
+
          move(y,0);y++;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("A - Hotwire the car.");
@@ -2939,9 +2942,9 @@ char stealcar(Creature &cr,char &clearformess)
          }
          return 1;
       }
-      else 
+      else
       {
-         
+
          return 0;//do not need to delete vehicle
       }
    }

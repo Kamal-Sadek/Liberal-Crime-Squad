@@ -80,7 +80,7 @@
             <price>1500</price>
         </item>
     </department>
-    
+
     <department>
         <entry>Buy Liberal Clips</entry>
         <letter>c</letter>
@@ -136,7 +136,7 @@
             <price>35</price>
         </item>
     </department>
-    
+
     <department>
         <entry>Buy Liberal tools</entry>
         <letter>t</letter>
@@ -165,7 +165,7 @@
         </item>
         <item>
             <class>WEAPON</class>
-            <description>Buy Bottle, Rag &amp Gasoline</description>
+            <description>Buy Bottle, Rag &amp; Gasoline</description>
             <type>WEAPON_MOLOTOV</type>
             <letter>m</letter>
             <price>40</price>
