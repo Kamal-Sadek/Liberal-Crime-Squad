@@ -101,7 +101,7 @@ void setup_newgame(void)
       }
       for(int s=0;s<100;s++)
       {
-         if(s<45)senate[s]=-2;
+         if(s<55)senate[s]=-2;
          else if(s<70)senate[s]=-1;
          else if(s<80)senate[s]=0;
          else if(s<97)senate[s]=1;
@@ -110,7 +110,7 @@ void setup_newgame(void)
 
       for(int h=0;h<435;h++)
       {
-         if(h<190)house[h]=-2;
+         if(h<220)house[h]=-2;
          else if(h<350)house[h]=-1;
          else if(h<400)house[h]=0;
          else if(h<425)house[h]=1;
@@ -351,6 +351,7 @@ void makecharacter(void)
    bool hasmaps=false;
    bool makelawyer=false;
    bool gaylawyer=false;
+   Vehicle * startcar = NULL;
    char recruits = RECRUITS_NONE;
    char base = SITE_RESIDENTIAL_SHELTER;
 
@@ -658,8 +659,7 @@ void makecharacter(void)
             move(2,0);addstr("Life went on.  On my 18th birthday...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - I stole a security uniform.");//XXX: No theft?
-                                                         // Right; no skills this question -Fox
+               addstr("A - I got my hands on an old Beetle.  It's still in great shape.");
             move(7,0);
             if(choices || selection == 1)
                addstr("B - I bought myself an assault rifle.");
@@ -681,11 +681,10 @@ void makecharacter(void)
                                                                                                      // Not as useful as the ones you do get
             //ATTRIBUTE_INTELLIGENCE 2
             //ATTRIBUTE_AGILITY 2
-            //SKILL_DISGUISE 2
-            //SKILL_SECURITY 1
-            //SKILL_STEALTH 1
+            //SKILL_SECURITY 2
+            //SKILL_STEALTH 2
             // +Downtown apartment
-            // +$1200 (one month rent)
+            // +$500 (one month rent)
             move(7,0);
             if(choices || selection == 1)
                addstr("B - a violent criminal.  Nothing can change me, or stand in my way.");
@@ -706,7 +705,7 @@ void makecharacter(void)
             //SKILL_LAW 1
             //ATTRIBUTE_INTELLIGENCE 4
             // +University apartment
-            // +$500 (one month rent)
+            // +$200 (one month rent)
             move(11,0);
             if(choices || selection == 3)
                addstr("D - surviving alone, just like anyone.  But we can't go on like this.");
@@ -726,7 +725,7 @@ void makecharacter(void)
             //SKILL_LEADERSHIP 1
             //SKILL_WRITING 2
             // +Industrial apartment
-            // +$200 (one month rent)
+            // +$100 (one month rent)
             // +50 juice
             move(17,0);
             addstr("I live in ");
@@ -982,9 +981,9 @@ void makecharacter(void)
          case 8:
             if(c=='a')
             {
-               Armor newa(*armortype[getarmortype("ARMOR_SECURITYUNIFORM")]);
-               newcr->give_armor(newa,NULL);
-
+               startcar = new Vehicle(*vehicletype[getvehicletype("BUG")]);
+               vehicle.push_back(startcar);
+               newcr->pref_carid = startcar->id();
             }
             if(c=='b')
             {
@@ -1011,12 +1010,14 @@ void makecharacter(void)
             {
                newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
                newcr->adjust_attribute(ATTRIBUTE_AGILITY,+2);
-               newcr->set_skill(SKILL_DISGUISE,newcr->get_skill(SKILL_DISGUISE)+(2));
-               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(1));
-               newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(1));
+               newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(2));
+               newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(2));
                newcr->type = CREATURE_THIEF;
                base = SITE_RESIDENTIAL_APARTMENT_UPSCALE;
-               ledger.force_funds(ledger.get_funds()+1200);
+               ledger.force_funds(ledger.get_funds()+500);
+
+               Armor newa(*armortype[getarmortype("ARMOR_BLACKCLOTHES")]);
+               newcr->give_armor(newa,NULL);
             }
             if(c=='b')
             {
@@ -1039,7 +1040,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
                newcr->type = CREATURE_COLLEGESTUDENT;
                base = SITE_RESIDENTIAL_APARTMENT;
-               ledger.force_funds(ledger.get_funds()+500);
+               ledger.force_funds(ledger.get_funds()+200);
             }
             if(c=='d')
             {
@@ -1067,7 +1068,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_LEADERSHIP,newcr->get_skill(SKILL_LEADERSHIP)+(1));
                newcr->type = CREATURE_POLITICALACTIVIST;
                base = SITE_RESIDENTIAL_TENEMENT;
-               ledger.force_funds(ledger.get_funds()+200);
+               ledger.force_funds(ledger.get_funds()+50);
                newcr->juice+=50;
             }
             break;
@@ -1474,14 +1475,15 @@ void makecharacter(void)
          {
             newcr->base=l;
             newcr->location=l;
+            if(startcar)startcar->set_location(l);
             switch(base)
             {
-            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting=1200;break;
-            case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=500;break;
-            case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=200;break;
+            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting=500;break;
+            case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=200;break;
+            case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=100;break;
             case SITE_BUSINESS_CRACKHOUSE:
                location[l]->renting=RENTING_PERMANENT;
-               location[l]->compound_stores+=50;
+               location[l]->compound_stores+=100;
                break;
             }
             location[l]->newrental=1;

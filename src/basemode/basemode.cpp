@@ -707,9 +707,14 @@ void mode_base(void)
          {
             stopevil();
          }
-         else if(sieged)
+         else if(underattack)
          {
             escape_engage();
+            cleangonesquads();
+         }
+         else if(sieged)
+         {
+            sally_forth();
             cleangonesquads();
          }
       }
@@ -789,6 +794,39 @@ void mode_base(void)
          advanceday(clearformess,canseethings);
          if(day>monthday())passmonth(clearformess,canseethings);
          advancelocations();
+         if(forcewait)
+         {
+            erase();
+            char num[10];
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(7,5);
+            addstr("Time passes...");
+            move(9,12);
+            switch(month)
+            {
+            case 1:addstr("Jan");break;
+            case 2:addstr("Feb");break;
+            case 3:addstr("Mar");break;
+            case 4:addstr("Apr");break;
+            case 5:addstr("May");break;
+            case 6:addstr("Jun");break;
+            case 7:addstr("Jul");break;
+            case 8:addstr("Aug");break;
+            case 9:addstr("Sep");break;
+            case 10:addstr("Oct");break;
+            case 11:addstr("Nov");break;
+            case 12:addstr("Dec");break;
+            }
+            addstr(". ");
+            move(9, 17);
+            itoa(day,num,10);
+            addstr(num);
+            addstr(", ");
+            move(9, 21);
+            itoa(year,num,10);
+            addstr(num);
+            refresh();
+         }
       }
 
       if(c=='v'&&vehicle.size()>0&&partysize>0)setvehicles();

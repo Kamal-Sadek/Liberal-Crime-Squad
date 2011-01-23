@@ -115,10 +115,10 @@ char liberalagenda(char won)
          }
          int lsum=housemake[3]+housemake[4]
             -housemake[0]-housemake[1];
-         if(housemake[0]+housemake[1]/2>=290)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<-90)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(lsum<90)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(housemake[4]+housemake[3]/2<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
+         if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          char num[20];
          if(won!=-1&&won!=2)
@@ -144,10 +144,10 @@ char liberalagenda(char won)
          }
          lsum=senatemake[3]+senatemake[4]
             -senatemake[0]-senatemake[1];
-         if(senatemake[0]+senatemake[1]/2>=67)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<-33)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(senatemake[4]+senatemake[3]/2<66)set_color(COLOR_CYAN,COLOR_BLACK,1);
+         else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          if(won!=-1&&won!=-2)
          {

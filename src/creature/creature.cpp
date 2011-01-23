@@ -1006,10 +1006,6 @@ int Creature::skill_roll(int skill)
    default:
       adjusted_attribute_value = min(attribute_value/2, skill_value+3);
       break;
-   // ...but some skills might support full attribute use...
-   case SKILL_DISGUISE:
-      adjusted_attribute_value = attribute_value;
-      break;
    // ...and some may be so specialized that they ignore attributes, instead counting skill double
    case SKILL_SECURITY:
       adjusted_attribute_value = skill_value;
@@ -1044,6 +1040,15 @@ int Creature::skill_roll(int skill)
       break;
    // Skills that should depend on clothing:
    case SKILL_STEALTH:
+      {
+         int stealth = armor->get_stealth_value();
+         if(stealth == 0) return 0;
+
+         return_value *= stealth;
+         return_value /= 2;
+         
+      }
+      break;
    case SKILL_SEDUCTION:
    case SKILL_PERSUASION:
       break;

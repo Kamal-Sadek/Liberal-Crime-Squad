@@ -31,6 +31,8 @@
             <conceals_face> (boolean) If face is concealed by the armor type.
                 Default: false
         </body_covering>
+        <stealth_value> (integer) Stealth bonus given by the armor. No bonus means the armor is unusable for sneaking.
+            Default: 0
         <name> (string) The name of the armor type.
             Default: UNDEFINED
         <shortname> (string) A shorter, max 14 characters, name for the armor type.
@@ -69,6 +71,7 @@
     <armortype idname="ARMOR_CLOTHES">
         <make_difficulty>4</make_difficulty>
         <make_price>10</make_price>
+        <stealth_value>1</stealth_value>
         <name>Clothes</name>
         <shortname>Clothes</shortname>
         <fencevalue>20</fencevalue>
@@ -78,6 +81,7 @@
     <armortype idname="ARMOR_TRENCHCOAT">
         <make_difficulty>6</make_difficulty>
         <make_price>20</make_price>
+        <stealth_value>2</stealth_value>
         <name>Trenchcoat</name>
         <shortname>Trenchcoat</shortname>
         <fencevalue>40</fencevalue>
@@ -95,6 +99,7 @@
         <shortname>Work Clothes</shortname>
         <fencevalue>20</fencevalue>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_SERVANTUNIFORM">
@@ -104,6 +109,7 @@
         <shortname>Servant Unif.</shortname>
         <fencevalue>40</fencevalue>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_SECURITYUNIFORM">
@@ -119,6 +125,7 @@
             <basepower>2</basepower>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_REVOLVER_38</appropriate_weapon>
         <appropriate_weapon>WEAPON_REVOVLER_44</appropriate_weapon>
         <appropriate_weapon>WEAPON_DESERT_EAGLE</appropriate_weapon>
@@ -143,6 +150,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_REVOLVER_38</appropriate_weapon>
         <appropriate_weapon>WEAPON_REVOVLER_44</appropriate_weapon>
         <appropriate_weapon>WEAPON_DESERT_EAGLE</appropriate_weapon>
@@ -162,11 +170,12 @@
             <basepower>4</basepower>
         </interrogation>
         <professionalism>3</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_EXPENSIVESUIT">
         <make_difficulty>14</make_difficulty>
-        <make_price>300</make_price>
+        <make_price>200</make_price>
         <name>Expensive Suit</name>
         <shortname>Expensive Suit</shortname>
         <fencevalue>350</fencevalue>
@@ -174,6 +183,7 @@
             <basepower>6</basepower>
         </interrogation>
         <professionalism>4</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_BLACKSUIT">
@@ -187,6 +197,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>3</professionalism>
+        <stealth_value>2</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_CHEAPDRESS">
@@ -199,11 +210,12 @@
             <basepower>4</basepower>
         </interrogation>
         <professionalism>3</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_EXPENSIVEDRESS">
         <make_difficulty>14</make_difficulty>
-        <make_price>300</make_price>
+        <make_price>200</make_price>
         <name>Expensive Dress</name>
         <shortname>ExpensiveDress</shortname>
         <fencevalue>350</fencevalue>
@@ -211,6 +223,7 @@
             <basepower>6</basepower>
         </interrogation>
         <professionalism>4</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_BLACKDRESS">
@@ -224,6 +237,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>3</professionalism>
+        <stealth_value>2</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_LABCOAT">
@@ -236,6 +250,7 @@
             <basepower>6</basepower>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SYRINGE</appropriate_weapon>
     </armortype>
 
@@ -249,6 +264,7 @@
             <basepower>2</basepower>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>2</stealth_value>
         <appropriate_weapon>WEAPON_GAVEL</appropriate_weapon>
     </armortype>
 
@@ -280,6 +296,7 @@
             <drugbonus>4</drugbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_MASK">
@@ -299,6 +316,7 @@
             <drugbonus>4</drugbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_MILITARY">
@@ -315,6 +333,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
@@ -332,6 +351,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_PRISONER">
@@ -377,6 +397,7 @@
         <shortname>Overalls</shortname>
         <fencevalue>20</fencevalue>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_WIFEBEATER">
@@ -409,6 +430,7 @@
             <basepower>2</basepower>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
     </armortype>
 
     <armortype idname="ARMOR_POLICEARMOR">
@@ -427,6 +449,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_REVOLVER_38</appropriate_weapon>
         <appropriate_weapon>WEAPON_REVOVLER_44</appropriate_weapon>
         <appropriate_weapon>WEAPON_DESERT_EAGLE</appropriate_weapon>
@@ -452,6 +475,7 @@
             <basepower>4</basepower>
         </interrogation>
         <professionalism>1</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
     </armortype>
@@ -474,6 +498,7 @@
             <assaultbonus>4</assaultbonus>
         </interrogation>
         <professionalism>2</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
@@ -568,8 +593,50 @@
             <assaultbonus>6</assaultbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
+    </armortype>
+    
+    <armortype idname="ARMOR_BLACKCLOTHES">
+        <make_difficulty>4</make_difficulty>
+        <make_price>15</make_price>
+        <name>Black Turtleneck</name>
+        <shortname>Bl. Turtleneck</shortname>
+        <fencevalue>20</fencevalue>
+        <professionalism>1</professionalism>
+        <stealth_value>2</stealth_value>
+    </armortype>
+    
+    <armortype idname="ARMOR_CATSUIT">
+        <make_difficulty>7</make_difficulty>
+        <make_price>150</make_price>
+        <interrogation>
+            <basepower>4</basepower>
+            <assault_bonus>2</assault_bonus>
+        </interrogation>
+        <name>Black Catsuit</name>
+        <shortname>Black Catsuit</shortname>
+        <fencevalue>50</fencevalue>
+        <professionalism>1</professionalism>
+        <stealth_value>3</stealth_value>
+    </armortype>
+    
+    <armortype idname="ARMOR_NINJASUIT">
+        <make_difficulty>7</make_difficulty>
+        <make_price>200</make_price>
+        <body_covering>
+            <head>true</head>
+            <conceals_face>true</conceals_face>
+        </body_covering>
+        <interrogation>
+            <drug_bonus>4</drug_bonus>
+        </interrogation>
+        <name>Ninja Costume</name>
+        <shortname>Ninja Costume</shortname>
+        <fencevalue>75</fencevalue>
+        <professionalism>1</professionalism>
+        <stealth_value>3</stealth_value>
     </armortype>
 
 

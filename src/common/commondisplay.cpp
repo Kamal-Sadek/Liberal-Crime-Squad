@@ -122,8 +122,6 @@ void set_activity_color(long activity_type)
    case ACTIVITY_TEACH_COVERT:
    //and studying
    case ACTIVITY_STUDY_DEBATING:
-   case ACTIVITY_STUDY_LEADERSHIP:
-   case ACTIVITY_STUDY_TAILORING:
    case ACTIVITY_STUDY_MARTIAL_ARTS:
    case ACTIVITY_STUDY_DRIVING:
    case ACTIVITY_STUDY_PSYCHOLOGY:
@@ -133,7 +131,11 @@ void set_activity_color(long activity_type)
    case ACTIVITY_STUDY_SCIENCE:
    case ACTIVITY_STUDY_BUSINESS:
    case ACTIVITY_STUDY_COOKING:
-   case ACTIVITY_STUDY_DODGEBALL:
+   case ACTIVITY_STUDY_GYMNASTICS:
+   case ACTIVITY_STUDY_ART:
+   case ACTIVITY_STUDY_MUSIC:
+   case ACTIVITY_STUDY_TEACHING:
+   case ACTIVITY_STUDY_WRITING:
       set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       break;
 

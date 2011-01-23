@@ -176,23 +176,23 @@ void listclasses(Creature *cr)
     {
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
        move(12,40);
-       addstr("1 - Debating");
-
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LEADERSHIP);
+       addstr("1 - Public Policy");
+       
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
        move(13,40);
-       addstr("2 - Leadership");
-
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TAILORING);
+       addstr("2 - Economics");
+       
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
        move(14,40);
-       addstr("3 - Tailoring");
+       addstr("3 - Psychology");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
        move(15,40);
-       addstr("4 - Kung fu");
-
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
+       addstr("4 - Criminal Law");
+       
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
        move(16,40);
-       addstr("5 - Drivers ed.");
+       addstr("5 - Physics");
 
        set_color(COLOR_WHITE,COLOR_BLACK,0);
        move(17,40);
@@ -200,47 +200,53 @@ void listclasses(Creature *cr)
     }
     else if (classlist == 1)
     {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
        move(12,40);
-       addstr("1 - Psychology");
+       addstr("1 - Drivers Ed");
 
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
        move(13,40);
-       addstr("2 - First aid");
-
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
+       addstr("2 - First Aid");
+       
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_COOKING);
        move(14,40);
-       addstr("3 - Law");
+       addstr("3 - Cooking");
 
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
        move(15,40);
-       addstr("4 - Acting");
+       addstr("4 - Theatre");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
        move(16,40);
-       addstr("5 - Nuclear physics");
+       addstr("5 - Kung Fu");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
+       set_color(COLOR_WHITE,COLOR_BLACK,0);
        move(17,40);
        addstr("6 - Other classes");
     }
     else if (classlist == 2)
     {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_GYMNASTICS);
        move(12,40);
-       addstr("1 - Business & finance");
+       addstr("1 - Gymnastics");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_COOKING);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_WRITING);
        move(13,40);
-       addstr("2 - Cooking");
+       addstr("2 - Writing");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DODGEBALL);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TEACHING);
        move(14,40);
-       addstr("3 - Dodgeball");
+       addstr("3 - Education");
 
-//possible additions: music, seduction technique, teacher training, guns (if gun control is conservative), writing
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MUSIC);
+       move(15,40);
+       addstr("4 - Music");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
+       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
+       move(16,40);
+       addstr("5 - Painting");
+
+       set_color(COLOR_WHITE,COLOR_BLACK,0);
        move(17,40);
        addstr("6 - Other classes");
     }
@@ -260,30 +266,32 @@ void updateclasschoice(Creature *cr, char choice)
          switch(choice)
          {
             case '1':cr->activity.type=ACTIVITY_STUDY_DEBATING;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_LEADERSHIP;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_TAILORING;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_DRIVING;break;
+            case '2':cr->activity.type=ACTIVITY_STUDY_BUSINESS;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_PSYCHOLOGY;break;
+            case '4':cr->activity.type=ACTIVITY_STUDY_LAW;break;
+            case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
          }
       }
       else if (classlist == 1)
       {
          switch(choice)
          {
-            case '1':cr->activity.type=ACTIVITY_STUDY_PSYCHOLOGY;break;
+            case '1':cr->activity.type=ACTIVITY_STUDY_DRIVING;break;
             case '2':cr->activity.type=ACTIVITY_STUDY_FIRST_AID;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_LAW;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_COOKING;break;
             case '4':cr->activity.type=ACTIVITY_STUDY_DISGUISE;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
+            case '5':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
          }
       }
       else if (classlist == 2)
       {
          switch(choice)
          {
-            case '1':cr->activity.type=ACTIVITY_STUDY_BUSINESS;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_COOKING;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_DODGEBALL;break;
+            case '1':cr->activity.type=ACTIVITY_STUDY_GYMNASTICS;break;
+            case '2':cr->activity.type=ACTIVITY_STUDY_WRITING;break;
+            case '3':cr->activity.type=ACTIVITY_STUDY_TEACHING;break;
+            case '4':cr->activity.type=ACTIVITY_STUDY_MUSIC;break;
+            case '5':cr->activity.type=ACTIVITY_STUDY_ART;break;
          }
       }
       listclasses(cr);
@@ -699,8 +707,6 @@ void activate(Creature *cr)
          addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
          break;
       case ACTIVITY_STUDY_DEBATING:
-      case ACTIVITY_STUDY_LEADERSHIP:
-      case ACTIVITY_STUDY_TAILORING:
       case ACTIVITY_STUDY_MARTIAL_ARTS:
       case ACTIVITY_STUDY_DRIVING:
       case ACTIVITY_STUDY_PSYCHOLOGY:
@@ -710,7 +716,11 @@ void activate(Creature *cr)
       case ACTIVITY_STUDY_SCIENCE:
       case ACTIVITY_STUDY_BUSINESS:
       case ACTIVITY_STUDY_COOKING:
-      case ACTIVITY_STUDY_DODGEBALL:
+      case ACTIVITY_STUDY_GYMNASTICS:
+      case ACTIVITY_STUDY_WRITING:
+      case ACTIVITY_STUDY_ART:
+      case ACTIVITY_STUDY_MUSIC:
+      case ACTIVITY_STUDY_TEACHING:
          move(22,3);
          addstr(cr->name);
          addstr(" will attend classes in the University District");

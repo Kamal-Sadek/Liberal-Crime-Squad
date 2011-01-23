@@ -50,18 +50,18 @@ void passmonth(char &clearformess,char canseethings)
    switch(endgamestate)
    {
    case ENDGAME_NONE:
-      if((/*attitude[VIEW_POLITICALVIOLENCE]>60||*/publicmood(-1)>60))
+      if(publicmood(-1)>60)
       {
          endgamestate=ENDGAME_CCS_APPEARANCE;
          attitude[VIEW_CONSERVATIVECRIMESQUAD]=0;
       }
       break;
    case ENDGAME_CCS_APPEARANCE:
-      if(!LCSrandom(12))
+      if(publicmood(-1)>80)
          endgamestate=ENDGAME_CCS_ATTACKS;
       break;
    case ENDGAME_CCS_ATTACKS:
-      if(!LCSrandom(12))
+      if(publicmood(-1)>90)
          endgamestate=ENDGAME_CCS_SIEGES;
       break;
    case ENDGAME_CCS_SIEGES:

@@ -286,6 +286,8 @@ void mode_site(void)
 
    char hostcheck=0;
 
+   int encounter_timer=0;
+
    do
    {
       int partysize=0;
@@ -341,6 +343,9 @@ void mode_site(void)
             pool[p]->location==cursite&&
             !(pool[p]->flag & CREATUREFLAG_SLEEPER))libnum++;
       }
+
+      // Let the squad stop stressing out over the encounter if there are no enemies this round
+      if(!enemy) encounter_timer=0;
 
       erase();
 
@@ -986,8 +991,9 @@ void mode_site(void)
                      if(talk(*activesquad->squad[sp],tk))
                      {
                         if(enemy&&sitealarm)enemyattack();
-                        else if(enemy)disguisecheck();
+                        else if(enemy)disguisecheck(encounter_timer);
                         creatureadvance();
+                        encounter_timer++;
                      }
                   }
                }
@@ -1000,6 +1006,7 @@ void mode_site(void)
             printparty();
             refresh();
             creatureadvance();
+            encounter_timer++;
          }
 
          if(c=='o'&&partysize>1)orderparty();
@@ -1113,6 +1120,7 @@ void mode_site(void)
             youattack();
             enemyattack();
             creatureadvance();
+            encounter_timer++;
          }
 
          if(c=='r'&&location[cursite]->siege.siege&&libnum>6)
@@ -1254,9 +1262,10 @@ void mode_site(void)
             equip(activesquad->loot,-1);
 
             if(enemy&&sitealarm)enemyattack();
-            else if(enemy)disguisecheck();
+            else if(enemy)disguisecheck(encounter_timer);
 
             creatureadvance();
+            encounter_timer++;
          }
 
          if(c=='g'&&(groundloot.size()>0||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
@@ -1586,7 +1595,7 @@ void mode_site(void)
             groundloot.clear();
 
             if(enemy&&sitealarm)enemyattack();
-            else if(enemy)disguisecheck();
+            else if(enemy)disguisecheck(encounter_timer);
 
             if(tookground)
             {
@@ -1604,6 +1613,7 @@ void mode_site(void)
             }
 
             creatureadvance();
+            encounter_timer++;
          }
 
          int cbase=-1;
@@ -1612,10 +1622,7 @@ void mode_site(void)
             cbase=activesquad->squad[0]->base;
          }
 
-         // Removed code that forces a turn to pass if you're
-         // looking around your own home base, regardless of
-         // what you do... not sure why that was even there
-         // in the first place
+
          if(locx!=olocx||locy!=olocy||locz!=olocz||c=='s')
          {
             //NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
@@ -1670,10 +1677,10 @@ void mode_site(void)
                // If snuck past everyone
                if(e==ENCMAX)
                {
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
                   clearmessagearea();
+                  set_color(COLOR_CYAN,COLOR_BLACK,1);
                   move(16,1);
-                  addstr("The squad isn't seen!");
+                  addstr("The squad sneaks past the conservatives!");
                   getch();
                }
                else
@@ -1681,9 +1688,10 @@ void mode_site(void)
                   enemyattack();
                }
             }
-            else if(enemy)disguisecheck();
+            else if(enemy)disguisecheck(encounter_timer);
 
             creatureadvance();
+            encounter_timer++;
 
             partyalive=0;
             for(p=0;p<6;p++)
