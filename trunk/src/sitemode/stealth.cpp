@@ -166,15 +166,23 @@ char alienationcheck(char mistake)
 
 
 /* checks if conservatives see through your disguise */
-void disguisecheck(void)
+void disguisecheck(int timer)
 {
    int weapon=0;
+   int squadsize=0;
    bool forcecheck=false;
    int weaponar[6]={0};
+
+   bool spotted = false;
+   int blew_it = -1;
+
+   // Only start to penalize the player's disguise/stealth checks after the first turn.
+   timer--;
 
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
+      squadsize++;
       if(activesquad->squad[i]->is_naked() &&
          activesquad->squad[i]->animalgloss!=ANIMALGLOSS_ANIMAL)forcecheck=true;
       int thisweapon=weaponcheck(*activesquad->squad[i]);
@@ -182,23 +190,7 @@ void disguisecheck(void)
       if(thisweapon==2)weaponar[i]=1;
    }
 
-   if(sitealarm)
-   {
-      for(int i=0;i<6;i++)
-      {
-         if(activesquad->squad[i]==NULL)break;
-         // If carrying an illegal weapon and never been charged with that
-         // crime, apply it here. If they are wanted for carrying an illegal
-         // weapon already, it shouldn't stack on extras here or you'll accrue
-         // dozens of extra charges for only one site incident
-         //if(weaponar[i]&&!activesquad->squad[i]->crimes_suspected[LAWFLAG_GUNCARRY])
-         //{
-            // Illegal weapon crimes disabled
-            //criminalize(*activesquad->squad[i],LAWFLAG_GUNCARRY);
-         //}
-      }
-   }
-
+   // Nothing suspicious going on here
    if(sitealarmtimer==-1 && weapon<1 && !forcecheck)
    {
       if(!disguisesite(location[cursite]->type)&&
@@ -227,34 +219,150 @@ void disguisecheck(void)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         int difficulty = DIFFICULTY_VERYEASY;
+         int difficulty;
 
-         if(sitealarmtimer)
+         // Determine difficulty based on enemy type
+         switch(encounter[n].type)
+         {
+         default:
+            difficulty = DIFFICULTY_VERYEASY;
+            break;
+         case CREATURE_SWAT:
+         case CREATURE_COP:
+         case CREATURE_GANGUNIT:
+         case CREATURE_DEATHSQUAD:
             difficulty = DIFFICULTY_EASY;
-
-         if(encounter[n].get_attribute(ATTRIBUTE_WISDOM,true) > 12)
+            break;
+         case CREATURE_PRISONGUARD:
+         case CREATURE_BOUNCER:
+         case CREATURE_AGENT:
+         case CREATURE_SECURITYGUARD:
+            difficulty = DIFFICULTY_AVERAGE;
+            break;
+         case CREATURE_CORPORATE_CEO:
+         case CREATURE_JUDGE_CONSERVATIVE:
+         case CREATURE_CCS_ARCHCONSERVATIVE:
+         case CREATURE_SCIENTIST_EMINENT:
             difficulty = DIFFICULTY_HARD;
-
-         if(encounter[n].type==CREATURE_GUARDDOG) // The guard dog should SCARE thieves
+            break;
+         case CREATURE_GUARDDOG:
             difficulty = DIFFICULTY_HEROIC;
+            break;
+         }
 
+         // Increase difficulty if Conservatives suspicious...
+         if(sitealarmtimer==1)
+            difficulty += 3;
+
+         // Make the attempt!
          for(int i=0;i<6;i++)
          {
             if(activesquad->squad[i]==NULL)break;
-            if(weaponcheck(*activesquad->squad[i]) == 2 ||
-               !(activesquad->squad[i]->skill_check(SKILL_DISGUISE, difficulty)))
+
+            // Try to sneak.
+            if(!spotted)
             {
-               disguisepractice(i, difficulty);
-               if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH, difficulty+7)))
+               int result = activesquad->squad[i]->skill_roll(SKILL_STEALTH);
+               result -= timer;
+               // Sneaking with a party is hard
+               if(result < (difficulty + squadsize - 1))
+                  spotted = true;
+            }
+
+            // Spotted! Act casual.
+            if(spotted)
+            {
+               // Guns of death and doom are not very casual.
+               if(weaponcheck(*activesquad->squad[i]) == 2)
                {
-                  stealthpractice(i, difficulty-7);
                   noticed = true;
                   break;
+               }
+               else
+               {
+                  int result = activesquad->squad[i]->skill_roll(SKILL_DISGUISE);
+                  result -= timer;
+
+                  if(result<difficulty)
+                  {
+                     // That was not very casual, dude.
+                     if(result<0)blew_it=i;
+                     
+                     noticed = true;
+                     break;
+                  }
                }
             }
          }
          if(noticed)break;
       }while(noticer.size()>0);
+
+      // Give feedback on the Liberal Performance
+      if(!spotted)
+      {
+         for(int i=0;i<6;i++)
+         {
+            if(activesquad->squad[i] == NULL) break;
+            stealthpractice(i, 10);
+         }
+
+         if(timer == 0)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(16,1);
+
+            if(squadsize > 1)
+               addstr("The squad ");
+            else
+               addstr(activesquad->squad[0]->name);
+            addstr(" fades into the shadows.");
+
+            getch();
+         }
+      }
+      else
+      {
+         if(blew_it == -1)
+         {
+            int i;
+            for(i=0;i<6;i++)
+            {
+               if(activesquad->squad[i] == NULL) break;
+               disguisepractice(i, 10);
+            }
+         }
+
+         if(blew_it != -1 && LCSrandom(2))
+         {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(16,1);
+
+            addstr(activesquad->squad[blew_it]->name);
+            switch(LCSrandom(5))
+            {
+            case 0: addstr(" coughs."); break;
+            case 1: addstr(" accidentally mumbles the slogan."); break;
+            case 2: addstr(" paces uneasily."); break;
+            case 3: addstr(" stares at the Conservatives."); break;
+            case 4: addstr(" laughs nervously."); break;
+            }
+            
+            getch();
+         }
+         else if(!noticed)
+         {
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            move(16,1);
+
+            if(squadsize > 1)
+               addstr("The squad ");
+            else
+               addstr(activesquad->squad[0]->name);
+            addstr(" acts natural.");
+
+            getch();
+         }
+      }
 
       if(!noticed)return;
 
@@ -286,6 +394,11 @@ void disguisecheck(void)
             if(time<1)time=1;
 
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+            else
+            {
+               if(sitealarmtimer>5) sitealarmtimer-= 5;
+               if(sitealarmtimer<=5)sitealarmtimer = 0;
+            }
          }
       }
       else
@@ -496,7 +609,6 @@ char weaponcheck(Creature &cr)
    }
    return 0;
 }
-
 
 
 /* checks if a creature's uniform is appropriate to the location */

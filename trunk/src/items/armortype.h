@@ -25,6 +25,8 @@ class ArmorType : public ItemType
       bool covers(int bodypart) const;
       // Returns if the armor type conceals the wearer's face. (Not actually used anywhere.)
       bool conceals_face() const { return conceal_face_; }
+      // Returns the stealth bonus given by the armor
+      int get_stealth_value() const { return stealth_value_; }
 
       const string& get_shortname() const;
 
@@ -59,6 +61,7 @@ class ArmorType : public ItemType
       int make_price_;
       bool deathsquad_legality_;
 
+      int stealth_value_;
       int armor_body_;
       int armor_head_;
       int armor_limbs_;

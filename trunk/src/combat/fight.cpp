@@ -153,11 +153,12 @@ void youattack(void)
          if(pool[p]->align!=1)continue;
          if(pool[p]->squadid!=-1)continue;
          if(pool[p]->location!=cursite)continue;
+
          // Juice check to engage in cover fire
          // 10% chance for every 10 juice, starting at
          // 10% chance for 0 juice -- caps out at 100%
          // chance to fire at 90 juice
-         if(LCSrandom(10)-pool[p]->juice/10>0)continue;
+         //if(LCSrandom(10)-pool[p]->juice/10>0)continue;
 
          if(pool[p]->is_armed() && pool[p]->get_weapon().get_attack(true,false,false)!=NULL)
          {
@@ -942,7 +943,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
 
       // Coarse combat lethality reduction.
-      damamount/=4;
+      damamount/=2;
 
       if(t.squadid!=-1&&t.hireid==-1) // Plot Armor: if the founder is hit, inflict
          damamount/=2;                // 1/4 damage, because founders are cool

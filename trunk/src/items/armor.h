@@ -41,6 +41,7 @@ class Armor : public Item
       bool has_fireprotection() const;
       bool covers(int bodypart) const;
       bool conceals_face() const;
+      int get_stealth_value() const;
       const string& get_shortname() const;
       
       int get_interrogation_basepower() const;

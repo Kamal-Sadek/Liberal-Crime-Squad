@@ -1974,7 +1974,6 @@ void majornewspaper(char &clearformess,char canseethings)
                case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
                   break;
             }
-            displaystory(*newsstory[n],0,-1);
             if(liberalguardian)
             {
                if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
@@ -1983,6 +1982,7 @@ void majornewspaper(char &clearformess,char canseethings)
                displaystory(*newsstory[n],liberalguardian,header);
                if(newsstory[n]->positive)newsstory[n]->positive+=1;
             }
+            else displaystory(*newsstory[n],0,-1);
          }
       }
    }
@@ -1991,19 +1991,16 @@ void majornewspaper(char &clearformess,char canseethings)
    for(int p=0;p<pool.size();p++)
    {
       //Letters to the editor
-      //Yes, crappy letters to the editor may backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_LETTERS)
       {
          if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
             background_liberal_influence[randomissue()]+=5;
-         else
-            background_liberal_influence[randomissue()]-=5;
 
          pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
       }
 
       //Guardian Essays
-      //Basically letters to the editor, but thrice as potent
+      //Basically letters to the editor, but thrice as potent, and can backfire
       if(pool[p]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
          if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
@@ -2049,7 +2046,8 @@ void majornewspaper(char &clearformess,char canseethings)
          else if(newsstory[n]->page<40)maxpower=5;
          else maxpower=1;
 
-         if(newsstory[n]->positive==2)power*=3;
+         // Five times effectiveness with the Liberal Guardian
+         if(newsstory[n]->positive==2)power*=5;
          if(power>maxpower)power=maxpower;
 
          power/=10;

@@ -647,7 +647,6 @@ char footchase(void)
 }
 
 
-//was 10
 #define DRIVING_RANDOMNESS 13
 void evasivedrive(void)
 {
@@ -1008,7 +1007,7 @@ void evasiverun(void)
 
 int driveskill(Creature &cr,Vehicle &v)
 {
-   int driveskill=cr.skill_roll(SKILL_DRIVING)*(3+v.drivebonus());
+   int driveskill=cr.get_skill(SKILL_DRIVING)*(3+v.drivebonus());
    healthmodroll(driveskill,cr);
    if(driveskill<0)driveskill=0;
    driveskill*=static_cast<int>(cr.blood/50.0);

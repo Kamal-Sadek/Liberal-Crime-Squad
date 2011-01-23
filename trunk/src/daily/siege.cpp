@@ -126,7 +126,10 @@ void siegecheck(char canseethings)
          // Let the place cool off if nobody is present
          if(!crimes)
          {
-            location[l]->heat=0;
+            location[l]->heat-=5;
+
+            if(location[l]->heat<0)
+               location[l]->heat = 0;
          }
          else
          {
@@ -141,16 +144,17 @@ void siegecheck(char canseethings)
             }
 
             // Update location heat
-            location[l]->heat = static_cast<int>(crimes * (1.0 - location[l]->heat_protection));
+            int max_heat = static_cast<int>(crimes * (1.0 - location[l]->heat_protection));
+            location[l]->heat += (max_heat - location[l]->heat)/10;
 
             // Begin planning siege if high heat on location
             if(LCSrandom(3000) < location[l]->heat
                && !(location[l]->siege.timeuntillocated>=0)) //Do not re-plan siege.
             {
                // Set force deployment (military, bombers, etc.)
-               if(LCSrandom(crimes) > 25)location[l]->siege.escalationstate++;
-               if(LCSrandom(crimes) > 100)location[l]->siege.escalationstate++;
-               if(LCSrandom(crimes) > 500)location[l]->siege.escalationstate++;
+               if(LCSrandom(location[l]->heat) > 100)location[l]->siege.escalationstate++;
+               if(LCSrandom(location[l]->heat) > 250)location[l]->siege.escalationstate++;
+               if(LCSrandom(location[l]->heat) > 500)location[l]->siege.escalationstate++;
 
                if(location[l]->siege.escalationstate>3)
                   location[l]->siege.escalationstate=3;
@@ -216,22 +220,11 @@ void siegecheck(char canseethings)
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-               if(location[l]->siege.escalationstate>0)
-               {
-                  move(8,1);
-                  addstr("The police have surrounded the ");
-                  addlocationname(location[l]);
-                  addstr(".");
-                  location[l]->siege.underattack=0;
-               }
-               else
-               {
-                  move(8,1);
-                  addstr("A police SWAT team is raiding the ");
-                  addlocationname(location[l]);
-                  addstr("!");
-                  location[l]->siege.underattack=1;
-               }
+               move(8,1);
+               addstr("The police have surrounded the ");
+               addlocationname(location[l]);
+               addstr("!");
+               location[l]->siege.underattack=0;
 
                //MENTION ESCALATION STATE
                if(location[l]->siege.escalationstate==1)
@@ -391,7 +384,9 @@ void siegecheck(char canseethings)
          else if(location[l]->siege.timeuntilcorps==0)location[l]->siege.timeuntilcorps=-1; // Silently call off foiled corp raids
 
             //CONSERVATIVE CRIME SQUAD
-         if(endgamestate>=ENDGAME_CCS_SIEGES&&endgamestate<ENDGAME_CCS_DEFEATED)
+         bool ccs_active = endgamestate>=ENDGAME_CCS_APPEARANCE && endgamestate<=ENDGAME_CCS_DEFEATED;
+         bool target_interesting = endgamestate>=ENDGAME_CCS_SIEGES || location[l]->compound_walls & COMPOUND_PRINTINGPRESS;
+         if(ccs_active && target_interesting)
          {
             if(location[l]->heat&&location[l]->siege.timeuntilccs==-1&&!location[l]->siege.siege&&!LCSrandom(60)&&numpres>0)
             {
@@ -404,7 +399,8 @@ void siegecheck(char canseethings)
                      (pool[pl]->type==CREATURE_CCS_VIGILANTE || pool[pl]->type==CREATURE_CCS_ARCHCONSERVATIVE ||
                       pool[pl]->type==CREATURE_CCS_MOLOTOV || pool[pl]->type==CREATURE_CCS_SNIPER))
                   {
-                     if(pool[pl]->infiltration*100>LCSrandom(50)) { ccssleepercount=1; break; }
+                     ccssleepercount=1;
+                     break;
                   }
                }
                if(ccssleepercount>1)
@@ -516,10 +512,10 @@ void siegecheck(char canseethings)
                {
                   // CCS Raids safehouse
                   erase();
-                  set_color(COLOR_YELLOW,COLOR_BLACK,1);
+                  set_color(COLOR_RED,COLOR_BLACK,1);
 
                   move(8,1);
-                  addstr("The CCS is attacking the safehouse!");
+                  addstr("CCS members pour out of the truck and shoot in the front doors!");
 
                   refresh();
                   getch();
@@ -536,7 +532,7 @@ void siegecheck(char canseethings)
 
 
             //CIA
-         if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(600)&&numpres>0)
+         if(location[l]->heat&&location[l]->siege.timeuntilcia==-1&&!location[l]->siege.siege&&offended_cia&&!LCSrandom(300)&&numpres>0)
          {
             location[l]->siege.timeuntilcia=LCSrandom(3)+1;
             // *JDS* agent sleepers may give a warning before cia raids
@@ -989,6 +985,7 @@ void siegeturn(char clearformess)
             char attack=0;
             int kidnapped=0;
             int criminalcount=0;
+            int fortified=0;
 
             for(int p=0;p<pool.size();p++)
             {
@@ -1005,7 +1002,9 @@ void siegeturn(char clearformess)
                if(iscriminal(*pool[p]))criminalcount++;
             }
 
-            if(!LCSrandom(1+criminalcount+kidnapped*5))attack=1;
+            if(location[l]->compound_walls & COMPOUND_BASIC)fortified=5;
+
+            if(!LCSrandom(1+criminalcount+kidnapped*5+fortified))attack=1;
 
             if(attack)
             {
@@ -1032,7 +1031,7 @@ void siegeturn(char clearformess)
 
                //CUT LIGHTS
                if(!location[l]->siege.lights_off &&
-                  !(location[l]->compound_walls & COMPOUND_GENERATOR) && !LCSrandom(3))
+                  !(location[l]->compound_walls & COMPOUND_GENERATOR) && !LCSrandom(10))
                {
                   no_bad=0;
 
@@ -1214,6 +1213,7 @@ void siegeturn(char clearformess)
                      location[l]->siege.lights_off=1;
                   }
                }
+
                if((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
                   location[l]->siege.escalationstate>=3 && !LCSrandom(50))
                {
@@ -1446,8 +1446,10 @@ void giveup(void)
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(1,1);
-      if(location[loc]->siege.siegetype==SIEGE_POLICE)
+      if(location[loc]->siege.siegetype==SIEGE_POLICE && location[loc]->siege.escalationstate == 0)
          addstr("The police");
+      else if(location[loc]->siege.siegetype==SIEGE_POLICE && location[loc]->siege.escalationstate == 0)
+         addstr("The soldiers");
       else
          addstr("The firemen");
       addstr(" confiscate everything, including Squad weapons.");
@@ -1749,16 +1751,415 @@ int numbereating(int loc)
    return eaters;
 }
 
+// Siege -- Mass combat outside safehouse
+char sally_forth_aux(int loc)
+{
+   int p;
+   reloadparty();
+   siegest siege = location[loc]->siege;
+   cursite = loc;
+
+   switch(siege.siegetype)
+   {
+   case SIEGE_CIA:
+   case SIEGE_HICKS:
+   case SIEGE_CORPORATE:
+   case SIEGE_CCS:
+   case SIEGE_FIREMEN:
+   default:
+
+   case SIEGE_POLICE: // Currently only police sieges should allow this
+
+      // SWAT teams
+      if(siege.escalationstate==0)
+      {
+         for(int e=0;e<ENCMAX-9;e++)
+         {
+            makecreature(encounter[e],CREATURE_SWAT);
+         }
+      }
+      // Military
+      else if(siege.escalationstate==1)
+      {
+         for(int e=0;e<ENCMAX-6;e++)
+         {
+            makecreature(encounter[e],CREATURE_SOLDIER);
+         }
+      }
+      // They brought tanks
+      else if(siege.escalationstate>=2)
+      {
+         makecreature(encounter[0],CREATURE_TANK);
+         makecreature(encounter[1],CREATURE_TANK);
+         makecreature(encounter[2],CREATURE_TANK);
+         for(int e=3;e<ENCMAX-3;e++)
+         {
+            makecreature(encounter[e],CREATURE_SOLDIER);
+         }
+      }
+      break;
+   }
+
+   mode=GAMEMODE_CHASEFOOT;
+   bool ranaway = false;
+
+   do
+   {
+      // Count heroes
+      int partysize=0;
+      int partyalive=0;
+      for(p=0;p<pool.size();p++)
+      {
+         if(pool[p]->align==1&&
+            pool[p]->location==cursite&&
+            !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+         {
+            partysize++;
+            if(pool[p]->alive) partyalive++;
+         }
+      }
+
+      // Count bad guys
+      int encsize=0;
+      for(int e=0;e<ENCMAX;e++)
+      {
+         if(encounter[e].exists)
+         {
+            encsize++;
+         }
+      }
+
+      // Let's roll
+      autopromote(loc);
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(0,0);
+      addlocationname(location[loc]);
+
+      // Player's party
+      if(partyalive==0)party_status=-1;
+      printparty();
+
+      if(partyalive>0)
+      {
+         // Options
+         if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(9,40);
+         addstr("O - Change the squad's Liberal order");
+         if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(10,40);
+         addstr("# - Check the status of a squad Liberal");
+         if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         move(11,40);
+         addstr("0 - Show the squad's Liberal status");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(9,1);
+         addstr("D - Escape");
+         move(10,1);
+         addstr("E - Equip");
+         move(11,1);
+         addstr("F - Fight!");
+         move(12,1);
+         addstr("G - Surrender");
+      }
+      else
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(9,1);
+         addstr("C - Reflect on your poor judgment.");
+      }
+
+      // Enemies
+      printencounter();
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      // Reflecting on your poor judgment
+      if(partyalive==0&&c=='c')
+      {
+         /*for(p=0;p<6;p++)
+         {
+            if(activesquad->squad[p]==NULL)continue;
+
+            for(int pl=pool.size()-1;pl>=0;pl--)
+            {
+               if(pool[pl]==activesquad->squad[p])
+               {
+                  pool[pl]->die();
+                  pool[pl]->location=-1;
+                  break;
+               }
+            }
+
+            activesquad->squad[p]=NULL;
+         }*/
+
+         if(!endcheck())
+         {
+            mode=GAMEMODE_BASE;
+            return 0;
+         }
+      }
+
+      // Providing orders
+      if(partyalive>0)
+      {
+         // Reorder
+         if(c=='o'&&partysize>1)orderparty();
+
+         // View status
+         if(c=='0')party_status=-1;
+
+         // Character info
+         if(c>='1'&&c<='6')
+         {
+            if(activesquad->squad[c-'1']!=NULL)
+            {
+               if(party_status==c-'1')fullstatus(party_status);
+               else party_status=c-'1';
+            }
+         }
+
+         // Surrender
+         if(c=='g')
+         {
+            giveup();
+         }
+
+         // Run away
+         if(c=='d')
+         {
+            if(encounter[0].exists&&
+               encounter[0].type==CREATURE_COP)
+            {
+               sitestory->crime.push_back(CRIME_FOOTCHASE);
+               criminalizeparty(LAWFLAG_RESIST);
+            }
+            // Enemies shoot before your run attempt
+            // when trying to break out of a siege cordon
+            enemyattack();
+            evasiverun();
+            creatureadvance();
+
+            ranaway = true;
+         }
 
 
-/* siege - prepares for entering site mode to fight the siege */
-void escape_engage(void) // FIXME: Wait... LCC? //Liberal Command Center. Probably a pre-3.0 term. Fixed. -Fox
+         if(c=='f')
+         {
+            youattack();
+            enemyattack();
+            creatureadvance();
+         }
+
+         if(c=='e')
+         {
+            equip(location[loc]->loot,-1);
+         }
+
+         // Check for victory
+         partysize=0;
+         partyalive=0;
+         for(p=0;p<pool.size();p++)
+         {
+            if(pool[p]->align==1&&
+               pool[p]->location==cursite&&
+               !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               partysize++;
+               if(pool[p]->alive) partyalive++;
+            }
+         }
+
+         int baddiecount=0;
+         for(int e=0;e<ENCMAX;e++)
+         {
+            if(encounter[e].enemy()&&
+               encounter[e].alive&&
+               encounter[e].exists)baddiecount++;
+         }
+
+         if(partyalive>0&&baddiecount==0)
+         {
+            for(int p=0;p<pool.size();p++)
+            {
+               for(int w=0;w<BODYPARTNUM;w++)
+               {
+                  pool[p]->wound[w]&=~WOUND_BLEEDING;
+               }
+            }
+            mode=GAMEMODE_BASE;
+
+            if(ranaway == true)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               clearmessagearea();
+               move(16,1);
+               addstr("You're free!");
+               refresh();
+               getch();
+
+               escapesiege(false);
+               return 1;
+            }
+            else
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               clearmessagearea();
+               move(16,1);
+               addstr("The siege is broken!");
+               refresh();
+               getch();
+
+               conquertext();
+               escapesiege(true);
+               return 2;
+            }
+         }
+      }
+      
+   }while(1);
+
+   mode=GAMEMODE_BASE;
+   return 1;
+}
+
+/* siege - prepares for exiting the siege to fight the attackers head on */
+void sally_forth(void)
 {
    //GIVE INFO SCREEN
    erase();
    set_color(COLOR_RED,COLOR_BLACK,1);
    move(1,26);
    addstr("UNDER SIEGE: ESCAPE OR ENGAGE");
+
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(3,16);
+   addstr("You are about to sally forth to lift the Conservative");
+   move(4,11);
+   addstr("siege on your safehouse.  Enemy numbers are massive, and");
+   move(5,11);
+   addstr("you will have to defeat them all or run away to survive this");
+   move(6,11);
+   addstr("encounter.");
+   move(8,11);
+   addstr("Your Squad has filled out to six members if any were ");
+   move(9,11);
+   addstr("available.  If you have a larger pool of Liberals, they");
+   move(10,11);
+   addstr("will reinforce the squad as you take casualties.");
+   move(11,11);
+   addstr("Squad members in the back with firearms can provide cover");
+   move(12,11);
+   addstr("fire.  If you have at least six people total, then six must");
+   move(13,11);
+   addstr("be in the Squad.  If less than six, then they all must.");
+   
+   int loc=-1;
+   if(selectedsiege!=-1)loc=selectedsiege;
+   if(activesquad!=NULL)loc=activesquad->squad[0]->location;
+   if(loc==-1)return;
+
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   move(23,11);
+   addstr("Press any key to Confront the Conservative Aggressors");
+
+   refresh();
+   getch();
+
+   if(location[loc]->siege.siegetype==SIEGE_CCS)
+   {
+      if(location[loc]->type==SITE_INDUSTRY_WAREHOUSE)
+         location[loc]->renting=RENTING_CCS; // CCS Captures warehouse -- this will be reversed if you fight them off
+   }
+
+   //CRIMINALIZE
+   if(location[loc]->siege.siegetype==SIEGE_POLICE)criminalizepool(LAWFLAG_RESIST,-1,loc);
+
+   //DELETE ALL SQUADS IN THIS AREA UNLESS THEY ARE THE activesquad
+   for(int sq=squad.size()-1;sq>=0;sq--)
+   {
+      if(squad[sq]==activesquad)continue;
+      if(squad[sq]->squad[0]!=NULL)
+      {
+         if(squad[sq]->squad[0]->location==loc)
+         {
+            if(activesquad)
+            {
+               for(int p=0;p<6;p++)
+               {
+                  if(squad[sq]->squad[p]==NULL)continue;
+                  squad[sq]->squad[p]->squadid=-1;
+               }
+               delete squad[sq];
+               squad.erase(squad.begin() + sq);
+            }
+            else
+            {
+               activesquad = squad[sq];
+            }
+         }
+      }
+   }
+
+   // No squads at the location? Form a new one.
+   if(activesquad==NULL)
+   {
+      squad.push_back(new squadst);
+      squad.back()->id=cursquadid++;
+      if (location[selectedsiege]->front_business==-1)
+      strcpy(squad.back()->name,location[selectedsiege]->shortname);
+      else
+      strcpy(squad.back()->name,location[selectedsiege]->front_shortname);
+
+      strcat(squad.back()->name," Defense");
+      int i=0;
+      for(int p=0;p<pool.size();p++)
+      {
+         if(pool[p]->location == selectedsiege &&
+            pool[p]->alive && pool[p]->align == 1)
+         {
+            squad.back()->squad[i]=pool[p];
+            pool[p]->squadid=squad.back()->id;
+            i++;
+            if(i>=6)break;
+         }
+      }
+      activesquad = squad.back();
+   }
+
+   //MAKE SURE PARTY IS ORGANIZED
+   autopromote(loc);
+
+   //START FIGHTING
+   newsstoryst *ns=new newsstoryst;
+      ns->type=NEWSSTORY_SQUAD_ESCAPED;
+      ns->positive=1;
+      ns->loc=loc;
+      ns->siegetype=location[loc]->siege.siegetype;
+   newsstory.push_back(ns);
+   sitestory = ns;
+   char result = sally_forth_aux(loc);
+   if(result==2)ns->type=NEWSSTORY_SQUAD_BROKESIEGE;
+}
+
+
+/* siege - prepares for entering site mode to fight the siege */
+void escape_engage(void)
+{
+   //GIVE INFO SCREEN
+   erase();
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   move(1,26);
+   addstr("UNDER ATTACK: ESCAPE OR ENGAGE");
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(3,16);
@@ -1774,7 +2175,7 @@ void escape_engage(void) // FIXME: Wait... LCC? //Liberal Command Center. Probab
    move(8,11);
    addstr("off the Conservatives within the perimeter.  Either way you");
    move(9,11);
-   addstr("choose, any equipment from the LCC which isn't held by a");
+   addstr("choose, any equipment from the safehouse which isn't held by a");
    move(10,11);
    addstr("Liberal will be scattered about the compound.  Save what");
    move(11,11);
@@ -1889,8 +2290,6 @@ void escape_engage(void) // FIXME: Wait... LCC? //Liberal Command Center. Probab
    newsstory.push_back(ns);
    mode_site(loc);
 }
-
-
 
 /* siege - what happens when you escaped the siege */
 void escapesiege(char won)

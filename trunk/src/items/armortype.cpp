@@ -5,7 +5,7 @@ ArmorType::ArmorType(MCD_STR xmlstring)
    make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
    armor_body_(0), armor_head_(0), armor_limbs_(0), fireprotection_(false),
    cover_head_(false), cover_body_(true), cover_arms_(true), cover_legs_(true),
-   conceal_face_(false),
+   conceal_face_(false), stealth_value_(0),
    shortname_("UNDEF"), shortname_defined_(false), shortname_future_defined_(false),
    interrogation_basepower_(0), interrogation_assaultbonus_(0), interrogation_drugbonus_(0),
    professionalism_(2), conceal_weaponsize_(5),
@@ -37,7 +37,8 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
    interrogation_assaultbonus_ = base.interrogation_assaultbonus_;
    interrogation_drugbonus_ = base.interrogation_drugbonus_;
    professionalism_ = base.professionalism_;
-   conceal_weaponsize_ = base.conceal_weaponsize_;   
+   conceal_weaponsize_ = base.conceal_weaponsize_;
+   stealth_value_ = base.stealth_value_;
    mask_ = base.mask_;
    surprise_mask_ = base.surprise_mask_;
    description_ = base.description_;
@@ -202,6 +203,8 @@ void ArmorType::init(const MCD_STR& xmlstring)
          professionalism_ = atoi(xml.GetData().c_str());
       else if (element == "conceal_weapon_size")
          conceal_weaponsize_ = atoi(xml.GetData().c_str());
+      else if (element == "stealth_value")
+         stealth_value_ = atoi(xml.GetData().c_str());
       else if (element == "mask")
       {
          int b = stringtobool(xml.GetData());
@@ -230,15 +233,24 @@ void ArmorType::init(const MCD_STR& xmlstring)
 
 int ArmorType::get_armor(int bodypart) const
 {
-   switch(bodypart)
+   if(covers(bodypart))
    {
-      case BODYPART_HEAD: return armor_head_; //Check for covering? -XML
-      case BODYPART_BODY: return armor_body_;
-      case BODYPART_ARM_RIGHT:
-      case BODYPART_ARM_LEFT: if(covers(bodypart)) return armor_limbs_;
-                              break;
-      case BODYPART_LEG_RIGHT:
-      case BODYPART_LEG_LEFT: if(covers(bodypart)) return armor_limbs_;
+      switch(bodypart)
+      {
+         case BODYPART_HEAD:
+            return armor_head_;
+
+         case BODYPART_BODY:
+            return armor_body_;
+
+         case BODYPART_ARM_RIGHT:
+         case BODYPART_ARM_LEFT:
+            return armor_limbs_;
+
+         case BODYPART_LEG_RIGHT:
+         case BODYPART_LEG_LEFT:
+            return armor_limbs_;
+      }
    }
    
    return 0;

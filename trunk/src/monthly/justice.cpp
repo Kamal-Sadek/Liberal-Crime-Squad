@@ -657,7 +657,7 @@ void trial(Creature &g)
             addstr(attorneyname);
             addstr("'s CONSERVATIVE ARCH-NEMESIS will represent the prosecution!!!");
             jury=0;
-            prosecution+=40; // DUN DUN DUN!!
+            prosecution+=100; // DUN DUN DUN!!
          }
       }
       else if(jury<=-29)
@@ -708,6 +708,7 @@ void trial(Creature &g)
       prosecution+=scarefactor;
       prosecution+=20*g.confessions;
       if(sleeperjudge)prosecution>>=1;
+      if(defense==3)prosecution-=60;
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(7,1);
@@ -722,12 +723,11 @@ void trial(Creature &g)
       {
          if(prosecution<=50)addstr("The prosecution's presentation is terrible.");
          else if(prosecution<=75)addstr("The prosecution gives a standard presentation.");
-         else if(prosecution<=100)addstr("The prosecution's case is solid.");
-         else if(prosecution<=150)addstr("The prosecution makes an airtight case.");
+         else if(prosecution<=125)addstr("The prosecution's case is solid.");
+         else if(prosecution<=175)addstr("The prosecution makes an airtight case.");
          else
          {
-            addstr(g.name);
-            addstr("'s chances are bleak.");
+            addstr("The prosecution is incredibly strong.");
          }
       }
 
@@ -1482,16 +1482,24 @@ void reeducation(Creature &g)
               && !LCSrandom(4))
       {
          addstr(g.name);
-         addstr(" thinks of ");
+         addstr(" dosen't want to leave ");
          addstr(pool[g.hireid]->name);
-         addstr(".");
+         addstr("!");
       }
       else
       {
          addstr(g.name);
          addstr(" is turned Conservative!");
          //conservatise(g);      
-         //Rat out contact?
+         
+         //Rat out contact
+         int contact = getpoolcreature(g.hireid);
+         if(contact >= 0)
+         {
+            criminalize(*pool[contact],LAWFLAG_RACKETEERING);
+            pool[contact]->confessions++;
+         }
+
          g.die();
          g.location=-1;
       }

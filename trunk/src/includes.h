@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.02.1"
+#define PACKAGE_VERSION "4.02.2"
 #endif
 
-const int version=40201; 
-const int lowestloadversion=40200;
+const int version=40202; 
+const int lowestloadversion=40202;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -510,8 +510,6 @@ enum Activity
    ACTIVITY_TEACH_FIGHTING,
    ACTIVITY_TEACH_COVERT,
    ACTIVITY_STUDY_DEBATING,
-   ACTIVITY_STUDY_LEADERSHIP,
-   ACTIVITY_STUDY_TAILORING,
    ACTIVITY_STUDY_MARTIAL_ARTS,
    ACTIVITY_STUDY_DRIVING,
    ACTIVITY_STUDY_PSYCHOLOGY,
@@ -521,7 +519,11 @@ enum Activity
    ACTIVITY_STUDY_SCIENCE,
    ACTIVITY_STUDY_BUSINESS,
    ACTIVITY_STUDY_COOKING,
-   ACTIVITY_STUDY_DODGEBALL,
+   ACTIVITY_STUDY_GYMNASTICS,
+   ACTIVITY_STUDY_MUSIC,
+   ACTIVITY_STUDY_ART,
+   ACTIVITY_STUDY_TEACHING,
+   ACTIVITY_STUDY_WRITING,
    ACTIVITY_CLINIC,
    ACTIVITY_HEAL,
    ACTIVITY_SLEEPER_LIBERAL,
@@ -1692,7 +1694,7 @@ void noticecheck(int exclude,int difficulty=DIFFICULTY_EASY);
 /* checks if your liberal behavior/attack alienates anyone */
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
-void disguisecheck(void);
+void disguisecheck(int encounter_timer);
 /* practices squads disguise skill */
 void disguisepractice(int p,int diff);
 /* practices squads stealth skill */
@@ -1878,6 +1880,8 @@ void giveup(void);
 int fooddaysleft(int loc);
 /* siege - checks how many people are eating at the site */
 int numbereating(int loc);
+/* siege - prepares for massed combat outside the safehouse */
+void sally_forth(void);
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage(void);
 /* siege - what happens when you escaped the siege */
