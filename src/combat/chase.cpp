@@ -1157,6 +1157,16 @@ void makechasers(long sitetype,long sitecrime)
    {
       switch(sitetype)
       {
+         case SITE_GOVERNMENT_ARMYBASE:
+            cartype="HMMWV"; //Site property? Temporary solution. -XML
+            pnum=LCSrandom(sitecrime/5 + 1)+3;
+            if(pnum>6)pnum=6;
+            for(n=0;n<pnum;n++)
+            {
+               makecreature(encounter[encslot],CREATURE_SOLDIER);
+               encslot++;
+            }
+            break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             cartype="AGENTCAR"; //Site property? Temporary solution. -XML
             pnum=LCSrandom(sitecrime/5 + 1)+1;

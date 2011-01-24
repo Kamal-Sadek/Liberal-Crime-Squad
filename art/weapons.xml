@@ -576,7 +576,7 @@
             <armorpiercing>4</armorpiercing>
             <accuracy_bonus>2</accuracy_bonus>
             <number_attacks>3</number_attacks>
-            <successive_attacks_difficulty>4</successive_attacks_difficulty>
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
         </attack>
         <attack>
             <priority>2</priority>
@@ -592,12 +592,12 @@
 
     <weapontype idname="WEAPON_SHOTGUN_PUMP">
         <name>Shotgun</name>
-        <name_future>Plasma Shotgun</name_future>
+        <name_future>Plasma Burstgun</name_future>
         <shortname>Shotgun</shortname>
         <shortname_future>Burstgun</shortname_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <legality>-1</legality> <!-- Used to always be legal. -->
+        <legality>2</legality> <!-- Should always be legal. -->
         <fencevalue>150</fencevalue>
         <bashstrengthmod>125</bashstrengthmod>
         <size>10</size>
@@ -1054,6 +1054,51 @@
             <strength_min>3</strength_min>
             <strength_max>8</strength_max>
             <random_damage>6</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_M249_MACHINEGUN">
+        <name>M249 Machine Gun</name>
+        <name_future>C249 Chaingun</name_future>
+        <shortname>M249</shortname>
+        <shortname_future>Chaingun</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-2</legality>
+        <fencevalue>1500</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>RIFLE</skill>
+            <ammotype>CLIP_DRUM</ammotype>
+            <random_damage>301</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <tears>true</tears>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+            <number_attacks>5</number_attacks>
+            <accuracy_bonus>5</accuracy_bonus> <!-- spray and pray -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty>
+            <critical>
+                <chance>100</chance>
+                <hits_required>3</hits_required>
+                <severtype>NASTY</severtype>
+            </critical>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>8</strength_min>
+            <strength_max>14</strength_max>
+            <random_damage>21</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
         </attack>

@@ -41,6 +41,10 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
          strcat(story,"Public Radio Station.  ");break;
       case SITE_MEDIA_CABLENEWS:
          strcat(story,"Network News Station.  ");break;
+      case SITE_GOVERNMENT_ARMYBASE:
+         strcat(story,"Greenpeace Offices.  ");break;
+      case SITE_GOVERNMENT_FIRESTATION:
+         strcat(story,"ACLU Branch Office.  ");break;
       default:
          strcat(story,location[ns.loc]->name);
          strcat(story,".  ");break;
@@ -67,6 +71,8 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
          strcat(story,", where innocent people are regularly beaten by Conservative guards.  ");break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          strcat(story,", the Conservative headquarters of one of the biggest privacy violators in the world.  ");break;
+      case SITE_GOVERNMENT_ARMYBASE:
+         strcat(story,", pride of Conservative torturers and warmongers everywhere.  ");break;
       case SITE_INDUSTRY_SWEATSHOP:
          strcat(story,", a Conservative sweatshop and human rights abuser.  ");break;
       case SITE_INDUSTRY_POLLUTER:

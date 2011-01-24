@@ -48,6 +48,7 @@ char unlock(short type,char &actual)
       case UNLOCK_CAGE:       difficulty=DIFFICULTY_VERYEASY;break;
       case UNLOCK_CAGE_HARD:  difficulty=DIFFICULTY_AVERAGE;break;
       case UNLOCK_CELL:       difficulty=DIFFICULTY_FORMIDABLE;break;
+      case UNLOCK_ARMORY:     difficulty=DIFFICULTY_HEROIC;break;
       case UNLOCK_SAFE:       difficulty=DIFFICULTY_HEROIC;break;
    }
 
@@ -106,6 +107,7 @@ char unlock(short type,char &actual)
             case UNLOCK_CAGE_HARD:
             case UNLOCK_CAGE:addstr("unlocks the cage");break;
             case UNLOCK_SAFE:addstr("cracks the safe");break;
+            case UNLOCK_ARMORY:addstr("opens the armory");break;
             case UNLOCK_CELL:addstr("unlocks the cell");break;
          }
          addstr("!");
@@ -200,7 +202,7 @@ char bash(short type,char &actual)
       }
       else
       {
-         difficulty=DIFFICULTY_FORMIDABLE; // High security
+         difficulty=DIFFICULTY_FORMIDABLE; // Very high security
          crowable=0;
       }
       break;

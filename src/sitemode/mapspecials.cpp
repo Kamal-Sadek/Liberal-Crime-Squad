@@ -1342,6 +1342,211 @@ void special_house_photos(void)
 }
 
 
+void special_armybase_armory(void)
+{
+   do
+   {
+      clearmessagearea();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("You've found the armory.");
+      move(17,1);
+      addstr("Break in? (Yes or No)");
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      if(c=='y')
+      {
+         clearmessagearea();
+
+         sitealarm=1;
+         move(16,1);
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         addstr("Alarms go off!");
+         refresh();
+         getch();
+
+         bool empty=true;
+         Item *it;
+         
+         if(m249==false)
+         {
+            clearmessagearea();
+            
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("Jackpot! The squad found a M249 Machine Gun!");
+
+            refresh();
+            getch();
+
+            Weapon* de=new Weapon(*weapontype[getweapontype("WEAPON_M249_MACHINEGUN")]);
+            Clip r(*cliptype[getcliptype("CLIP_DRUM")]);
+            de->reload(r);
+            activesquad->loot.push_back(de);
+
+            it=new Clip(*cliptype[getcliptype("CLIP_DRUM")],9);
+            activesquad->loot.push_back(it);
+
+            m249=true;
+            empty=false;
+         }
+            
+         if(LCSrandom(2))
+         {
+            clearmessagearea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("The squad finds some M16 Assault Rifles.");
+
+            refresh();
+            getch();
+
+            int num = 0;
+
+            do
+            {
+               Weapon* de=new Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
+               Clip r(*cliptype[getcliptype("CLIP_ASSAULT")]);
+               de->reload(r);
+               activesquad->loot.push_back(de);
+
+               it=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],5);
+               activesquad->loot.push_back(it);
+               num++;
+            }
+            while(num<2 || (LCSrandom(2) && num<5));
+            
+            empty=false;
+         }
+
+         if(LCSrandom(2))
+         {
+            clearmessagearea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("The squad finds some M4 Carbines.");
+
+            refresh();
+            getch();
+
+            int num = 0;
+
+            do
+            {
+               Weapon* de=new Weapon(*weapontype[getweapontype("WEAPON_CARBINE_M4")]);
+               Clip r(*cliptype[getcliptype("CLIP_ASSAULT")]);
+               de->reload(r);
+               activesquad->loot.push_back(de);
+
+               it=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],5);
+               activesquad->loot.push_back(it);
+               num++;
+            }
+            while(num<2 || (LCSrandom(2) && num<5));
+            
+            empty=false;
+         }
+
+         if(LCSrandom(2))
+         {
+            clearmessagearea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("The squad finds some body armor.");
+
+            refresh();
+            getch();
+
+            int num = 0;
+
+            do
+            {
+               Armor* de=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
+               activesquad->loot.push_back(de);
+               num++;
+            }
+            while(num<2 || (LCSrandom(2) && num<5));
+            
+            empty=false;
+         }
+
+         if(empty)
+         {
+            criminalizeparty(LAWFLAG_TREASON);
+
+            clearmessagearea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("It's a trap!  The armory is empty.");
+
+            refresh();
+            getch();
+
+            int numleft=LCSrandom(8)+2;
+            for(int e=0;e<ENCMAX;e++)
+            {
+               if(!encounter[e].exists)
+               {
+                  makecreature(encounter[e],CREATURE_SOLDIER);
+                  numleft--;
+               }
+               if(numleft==0)break;
+            }
+         }
+         else
+         {
+            juiceparty(10);
+            sitecrime+=40;
+            sitestory->crime.push_back(CRIME_ARMY_ARMORY);
+            criminalizeparty(LAWFLAG_THEFT);
+            criminalizeparty(LAWFLAG_TREASON);
+
+            int time=20+LCSrandom(10);
+            if(time<1)time=1;
+            if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+
+            clearmessagearea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("Time to put this gear to use!");
+
+            refresh();
+            getch();
+
+            int numleft=LCSrandom(4)+2;
+            for(int e=0;e<ENCMAX;e++)
+            {
+               if(!encounter[e].exists)
+               {
+                  makecreature(encounter[e],CREATURE_SOLDIER);
+                  numleft--;
+               }
+               if(numleft==0)break;
+            }
+         }
+
+         alienationcheck(0);
+         noticecheck(-1);
+         levelmap[locx][locy][locz].special=-1;
+
+         return;
+      }
+      else if(c=='n')return;
+
+   }while(1);
+}
+
+
 
 void special_corporate_files(void)
 {

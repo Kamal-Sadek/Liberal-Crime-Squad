@@ -747,6 +747,28 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
          }
          break;
+      case SITE_GOVERNMENT_ARMYBASE:
+         if(!LCSrandom(3))
+         {
+            if(LCSrandom(3))item="WEAPON_AUTORIFLE_M16";
+            else item="WEAPON_CARBINE_M4";
+            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
+         }
+         else if(!LCSrandom(2))
+         {
+            item="ARMOR_ARMYARMOR";
+            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
+         }
+         else
+         {
+            if(!LCSrandom(5))item="LOOT_SECRETDOCUMENTS";
+            else if(!LCSrandom(3))item="LOOT_CELLPHONE";
+            else if(!LCSrandom(2))item="LOOT_CHEMICAL";
+            else item="LOOT_SILVERWEAR";
+            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         }
+
+         break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          if(!LCSrandom(3))
          {
