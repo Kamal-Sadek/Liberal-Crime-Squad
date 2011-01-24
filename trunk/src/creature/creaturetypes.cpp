@@ -2004,7 +2004,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          //cr.set_skill(SKILL_THEFT,LCSrandom(5)+3);
          cr.age=AGE_MATURE;
 
-         cr.give_armor(Armor(*armortype[getarmortype("ARMOR_BLACKCLOTHES")]),NULL);
+	 {
+	    Armor to_give = Armor(*armortype[getarmortype("ARMOR_BLACKCLOTHES")]);
+	    cr.give_armor(to_give,NULL);
+	 }
 
          //cr.crimes_committed[LAWFLAG_BREAKING]++;
          //cr.crimes_committed[LAWFLAG_THEFT]++;
