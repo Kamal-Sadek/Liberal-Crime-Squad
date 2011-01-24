@@ -151,6 +151,7 @@ int amendnum=28;
 
 bool termlimits=false;
 bool deagle=false;
+bool m249=false;
 
 UniqueCreatures uniqueCreatures;
 

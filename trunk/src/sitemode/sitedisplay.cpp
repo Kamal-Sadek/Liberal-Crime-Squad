@@ -111,6 +111,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_SWEATSHOP_EQUIPMENT:strcpy(str,"Textile Equipment");break;
       case SPECIAL_POLLUTER_EQUIPMENT:strcpy(str,"Factory Equipment");break;
       case SPECIAL_HOUSE_PHOTOS:strcpy(str,"Safe");break;
+      case SPECIAL_ARMYBASE_ARMORY:strcpy(str,"Armory");break;
       case SPECIAL_HOUSE_CEO:strcpy(str,"CEO's Study");break;
       case SPECIAL_CORPORATE_FILES:strcpy(str,"Safe");break;
       case SPECIAL_RADIO_BROADCASTSTUDIO:strcpy(str,"Radio Broadcast Room");break;
@@ -584,6 +585,7 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_SWEATSHOP_EQUIPMENT:addstr("EQUIP");break;
          case SPECIAL_POLLUTER_EQUIPMENT:addstr("EQUIP");break;
          case SPECIAL_HOUSE_PHOTOS:addstr("SAFE!");break;
+         case SPECIAL_ARMYBASE_ARMORY:addstr("ARMRY");break;
          case SPECIAL_HOUSE_CEO:move(py,px+1);addstr("CEO");break;
          case SPECIAL_CORPORATE_FILES:addstr("SAFE!");break;
          case SPECIAL_RADIO_BROADCASTSTUDIO:move(py,px+1);addstr("MIC");break;

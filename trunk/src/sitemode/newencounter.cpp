@@ -43,8 +43,14 @@ void prepareencounter(short type,char sec)
    {
       switch(sitetype)
       {
+         case SITE_GOVERNMENT_ARMYBASE:
+            creaturearray[CREATURE_SOLDIER]=1000;
+            creaturearray[CREATURE_GUARDDOG]=100;
+            creaturearray[CREATURE_HARDENED_VETERAN]=100;
+            break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             creaturearray[CREATURE_AGENT]=1000;
+            creaturearray[CREATURE_GUARDDOG]=50;
             break;
          case SITE_CORPORATE_HEADQUARTERS:
          case SITE_CORPORATE_HOUSE:
@@ -893,6 +899,19 @@ void prepareencounter(short type,char sec)
             }
             break;
          }
+         case SITE_GOVERNMENT_ARMYBASE:
+         {
+            creaturearray[CREATURE_SOLDIER]+=750;
+            if(sec)creaturearray[CREATURE_GUARDDOG]+=230;
+            creaturearray[CREATURE_GUARDDOG]+=20;
+
+            for(int n=0;n<LCSrandom(6)+1;n++)
+            {
+               makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+               encslot++;
+            }
+            break;
+         }
          case SITE_INDUSTRY_SWEATSHOP:
          {
             if(sec)creaturearray[CREATURE_SECURITYGUARD]+=1000;
@@ -1097,6 +1116,12 @@ char addsiegeencounter(char type)
             {
                switch(sitetype)
                {
+               case SITE_GOVERNMENT_ARMYBASE:
+                  if(e==0 && !LCSrandom(2))
+                     makecreature(encounter[e],CREATURE_TANK);
+                  else
+                     makecreature(encounter[e],CREATURE_SOLDIER);
+                  break;
                case SITE_GOVERNMENT_INTELLIGENCEHQ:
                   makecreature(encounter[e],CREATURE_AGENT);
                   break;

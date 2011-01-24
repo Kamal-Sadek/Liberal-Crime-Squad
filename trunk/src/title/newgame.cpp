@@ -1239,6 +1239,13 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
+      newl->type=SITE_GOVERNMENT_ARMYBASE;
+      newl->parent=4;
+      newl->needcar=1;
+      initlocation(*newl);
+   location.push_back(newl);
+
+   newl=new locationst;
       newl->type=SITE_BUSINESS_PAWNSHOP;
       newl->parent=1;
       initlocation(*newl);

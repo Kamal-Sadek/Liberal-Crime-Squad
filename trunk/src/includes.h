@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.02.2"
+#define PACKAGE_VERSION "4.02.3"
 #endif
 
-const int version=40202; 
-const int lowestloadversion=40202;
+const int version=40203; 
+const int lowestloadversion=40203;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -300,6 +300,7 @@ enum UnlockTypes
    UNLOCK_CAGE_HARD,
    UNLOCK_CELL,
    UNLOCK_SAFE,
+   UNLOCK_ARMORY,
    UNLOCKNUM
 };
 
@@ -366,6 +367,7 @@ enum SiteTypes
    SITE_BUSINESS_CARDEALERSHIP,
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
+   SITE_GOVERNMENT_ARMYBASE,
    SITENUM
 };
 
@@ -689,6 +691,7 @@ enum SpecialBlocks
    SPECIAL_STAIRS_DOWN,
    SPECIAL_CLUB_BOUNCER,
    SPECIAL_CLUB_BOUNCER_SECONDVISIT,
+   SPECIAL_ARMYBASE_ARMORY,
    SPECIALNUM,
    SPECIAL_NONE = -1
 };
@@ -1018,6 +1021,7 @@ enum Crimes
    CRIME_FREE_BEASTS,
    CRIME_ARSON,
    CRIME_TAGGING,
+   CRIME_ARMY_ARMORY,
    CRIMENUM
 };
 
@@ -1679,6 +1683,7 @@ void special_corporate_files(void);
 void special_radio_broadcaststudio(void);
 void special_news_broadcaststudio(void);
 void special_graffiti(void);
+void special_armybase_armory(void);
 
 /*
  talk.cpp

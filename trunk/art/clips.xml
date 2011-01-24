@@ -85,6 +85,13 @@
         <ammo>2</ammo>
         <fencevalue>2</fencevalue>
     </cliptype>
+    
+    <cliptype idname="CLIP_DRUM">
+        <name>MachinGun Drum</name>
+        <name_future>Chaingun Belt</name_future>
+        <ammo>100</ammo>
+        <fencevalue>25</fencevalue>
+    </cliptype>
 
     
 </clips>

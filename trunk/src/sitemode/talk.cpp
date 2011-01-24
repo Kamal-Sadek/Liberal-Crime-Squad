@@ -619,9 +619,9 @@ char talk(Creature &a,int t)
                encounter[e].enemy())
             {
                if(encounter[e].get_attribute(ATTRIBUTE_WISDOM,true)>10)
-                  fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_HARD);
-               else
                   fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING);
+               else
+                  fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_AVERAGE);
 
                if(fooled == false)break;
             }
@@ -1441,12 +1441,6 @@ char talk(Creature &a,int t)
                   if(a.skill_check(SKILL_SEDUCTION,DIFFICULTY_HARD))
                      succeeded = true;
 
-                  if(!(tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
-                     tk->animalgloss==ANIMALGLOSS_TANK)
-                  {
-                     a.train(SKILL_SEDUCTION,LCSrandom(5)+2);
-                  }
-
                   if((tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
                      tk->animalgloss==ANIMALGLOSS_TANK)
                   {
@@ -1459,9 +1453,7 @@ char talk(Creature &a,int t)
                         addstr(" shakes its turret a firm 'no'.");
                         break;
                      case CREATURE_GUARDDOG:
-                        addstr(" sniffs ");
-                        addstr(a.name);
-                        addstr(".");
+                        addstr(" whines and backs away.");
                         break;
                      default:
                         addstr(" doesn't quite pick up on the subtext.");
@@ -1472,7 +1464,10 @@ char talk(Creature &a,int t)
 
                      return 1;
                   }
-                  else if((a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM" //Police property on armor? -XML
+
+                  a.train(SKILL_SEDUCTION,LCSrandom(5)+2);
+
+                  if((a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM" //Police property on armor? -XML
                            || a.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")
                      && tk->type==CREATURE_PROSTITUTE)
                   {

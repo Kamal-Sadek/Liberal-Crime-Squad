@@ -1041,7 +1041,7 @@ int Creature::skill_roll(int skill)
    // Skills that should depend on clothing:
    case SKILL_STEALTH:
       {
-         int stealth = armor->get_stealth_value();
+         int stealth = get_armor().get_stealth_value();
          if(stealth == 0) return 0;
 
          return_value *= stealth;

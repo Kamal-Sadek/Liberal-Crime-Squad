@@ -86,6 +86,7 @@ void setpriority(newsstoryst &ns)
          // Unique site crimes
          ns.priority+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
          ns.priority+=crime[CRIME_HACK_INTEL       ] * 100;
+         ns.priority+=crime[CRIME_ARMY_ARMORY      ] * 100;
          ns.priority+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
          ns.priority+=crime[CRIME_CORP_FILES       ] * 100;
          ns.priority+=crime[CRIME_PRISON_RELEASE   ] *  50;
@@ -125,6 +126,7 @@ void setpriority(newsstoryst &ns)
 
          ns.violence_level=0;
 
+         ns.violence_level+=crime[CRIME_ARMY_ARMORY      ] * 100;
          ns.violence_level+=crime[CRIME_KILLEDSOMEBODY   ] *  20;
          ns.violence_level+=crime[CRIME_ATTACKED_MISTAKE ] *  12;
          ns.violence_level+=crime[CRIME_ATTACKED         ] *   4;
@@ -243,6 +245,7 @@ void setpriority(newsstoryst &ns)
             case SITE_GOVERNMENT_COURTHOUSE:
             case SITE_GOVERNMENT_PRISON:
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
+            case SITE_GOVERNMENT_ARMYBASE:
             case SITE_GOVERNMENT_FIRESTATION:
             case SITE_CORPORATE_HEADQUARTERS:
             case SITE_CORPORATE_HOUSE:
@@ -517,8 +520,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                int typesum=0;
                for(int c=0;c<ns.crime.size();c++)
                {
+                  // Count crimes of each type
                   crime[ns.crime[c]]++;
 
+                  // Special crimes are described at the start or end of the article;
+                  // others should be recorded in the body
                   if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
                   if(ns.crime[c]==CRIME_CORP_FILES)continue;
                   if(ns.crime[c]==CRIME_SHUTDOWNREACTOR)continue;
@@ -527,6 +533,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[c]==CRIME_PRISON_RELEASE)continue;
                   if(ns.crime[c]==CRIME_JURYTAMPERING)continue;
                   if(ns.crime[c]==CRIME_HACK_INTEL)continue;
+                  if(ns.crime[c]==CRIME_ARMY_ARMORY)continue;
                   if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
                   if(ns.crime[c]==CRIME_CORP_FILES)continue;
                   if(ns.crime[c]==CRIME_CARCHASE)continue;
@@ -643,6 +650,20 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   else
                   {
                      strcat(story,"  Liberal Crime Squad computer specialists worked to liberate information from CIA computers.");
+                     strcat(story,"&r");
+                  }
+               }
+               if(crime[CRIME_ARMY_ARMORY])
+               {
+                  if(!liberalguardian)
+                  {
+                     strcat(story,"  According to a military spokesperson, ");
+                     strcat(story,"the Liberal Crime Squad attempted to break into the armory.");
+                     strcat(story,"&r");
+                  }
+                  else
+                  {
+                     strcat(story,"  Liberal Crime Squad infiltration specialists worked to liberate weapons from the oppressors.");
                      strcat(story,"&r");
                   }
                }
@@ -2109,11 +2130,13 @@ void majornewspaper(char &clearformess,char canseethings)
                change_public_opinion(VIEW_DRUGS,power,colored,power*10);
                change_public_opinion(VIEW_TORTURE,power,colored,power*10);
                break;
+            case SITE_GOVERNMENT_ARMYBASE:
+               change_public_opinion(VIEW_TORTURE,power,colored,power*10);
+               change_public_opinion(VIEW_MILITARY,power,colored,power*10);
+               break;
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
                change_public_opinion(VIEW_INTELLIGENCE,power,colored,power*10);
                change_public_opinion(VIEW_TORTURE,power,colored,power*10);
-               change_public_opinion(VIEW_MILITARY,power,colored,power*10); // Doesn't fit, but we need at least one place
-                                                                            // that can affect this issue! - Jonathan S. Fox
                break;
             case SITE_INDUSTRY_SWEATSHOP:
                change_public_opinion(VIEW_SWEATSHOPS,power,colored,power*10);

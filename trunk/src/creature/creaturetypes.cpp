@@ -2327,6 +2327,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_GOVERNMENT_PRISON]=1;
          okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
          okaysite[SITE_CORPORATE_HOUSE]=1;
+         okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       case CREATURE_PRISONER:
          okaysite[SITE_RESIDENTIAL_TENEMENT]=1;
@@ -2468,9 +2469,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_INDUSTRIAL]=1;
          break;
       case CREATURE_TANK:
-         okaysite[SITE_DOWNTOWN]=1;
-         okaysite[SITE_UDISTRICT]=1;
-         okaysite[SITE_INDUSTRIAL]=1;
+         okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       case CREATURE_MERC:
          okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
@@ -2481,11 +2480,13 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_OUTOFTOWN]=1;
          break;
       case CREATURE_VETERAN:
-      case CREATURE_HARDENED_VETERAN:
-      case CREATURE_SOLDIER:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_HARDENED_VETERAN:
+      case CREATURE_SOLDIER:
+         okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       case CREATURE_EDUCATOR:
       case CREATURE_PRISONGUARD:
@@ -2588,6 +2589,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         break;
       case CREATURE_ATHLETE:
          okaysite[SITE_UDISTRICT]=1;
          break;
@@ -2611,6 +2613,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
       default:
          okaysite[SITE_RESIDENTIAL_SHELTER]=1;
+         break;
    }
 
    // Quick exit if only checking if a certain type works

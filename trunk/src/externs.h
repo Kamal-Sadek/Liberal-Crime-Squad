@@ -97,6 +97,7 @@ extern int amendnum;
 
 extern bool termlimits;
 extern bool deagle;
+extern bool m249;
 
 extern UniqueCreatures uniqueCreatures;
 
