@@ -572,7 +572,7 @@ char radio_broadcast(void)
    {
       if(activesquad->squad[p]!=NULL)
       {
-         if(activesquad->squad[p]->prisoner!=NULL)
+         if(activesquad->squad[p]->prisoner!=NULL && activesquad->squad[p]->prisoner->alive)
          {
             if(activesquad->squad[p]->prisoner->type==CREATURE_RADIOPERSONALITY)
             {
@@ -836,7 +836,7 @@ char news_broadcast(void)
    {
       if(activesquad->squad[p]!=NULL)
       {
-         if(activesquad->squad[p]->prisoner!=NULL)
+         if(activesquad->squad[p]->prisoner!=NULL && activesquad->squad[p]->prisoner->alive)
          {
             if(activesquad->squad[p]->prisoner->type==CREATURE_NEWSANCHOR)
             {
