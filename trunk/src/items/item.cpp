@@ -54,8 +54,8 @@ void Item::addBaseValues(CMarkup& xml) const
    return newi;
 }*/
 
-/* compares two items, used in sorting gear */
-bool Item::sort_compare(Item *a,Item *b)
+/* compares two items (in descending order, hence the flipped arguments), used in sorting gear */
+bool Item::sort_compare(Item *b,Item *a)
 {
    bool reorder;
 
@@ -78,7 +78,7 @@ bool Item::sort_compare(Item *a,Item *b)
    else
       reorder = a->sort_compare_special(b);
    
-   return !reorder;
+   return reorder;
 }
 
 bool Item::is_same_type(const Item& i)
