@@ -1303,8 +1303,8 @@ void funds_and_trouble(char &clearformess)
          // Maybe do a switch on issue here to specify which website it was, but I don't feel like
          // doing that right now
 
-         if(web.size()>1)strcpy(msg,"Your hackers have ");
-         else {strcpy(msg,web[0]->name);strcat(msg," has ");}
+         if(truehack.size()>1)strcpy(msg,"Your hackers have ");
+         else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
 
          switch(LCSrandom(5))
          {
