@@ -153,7 +153,7 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_STUDY_DISGUISE:
       case ACTIVITY_STUDY_SCIENCE:
       case ACTIVITY_STUDY_BUSINESS:
-      case ACTIVITY_STUDY_COOKING:
+      //case ACTIVITY_STUDY_COOKING:
       case ACTIVITY_STUDY_GYMNASTICS:
       case ACTIVITY_STUDY_ART:
       case ACTIVITY_STUDY_MUSIC:

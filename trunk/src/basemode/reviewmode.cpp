@@ -676,17 +676,17 @@ void review_mode(short mode)
                      if(temppool[p]->get_attribute(ATTRIBUTE_HEART,true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+ LCSrandom(5)
                         && iscriminal(*pool[boss]))
                      {
-                        if(!LCSrandom(5)) // Chance of tip off
-                        {
-                           set_color(COLOR_CYAN,COLOR_BLACK,1);
-                           move(22,0);
-                           addstr("A Liberal friend tips you off on ");
-                           addstr(temppool[p]->name);
-                           addstr("'s whereabouts.");
-                           move(23,0);
-                           addstr("The Conservative traitor has ratted you out to the police.");
-                           getch();
-                        }
+                        set_color(COLOR_CYAN,COLOR_BLACK,1);
+                        move(22,0);
+                        addstr("A Liberal friend tips you off on ");
+                        addstr(temppool[p]->name);
+                        addstr("'s whereabouts.");
+                        move(24,0);
+                        addstr("The Conservative traitor has ratted you out to the police, and sworn");
+                        move(25,0);
+                        addstr("to testify against ");
+                        addstr(pool[boss]->name);
+                        addstr(" in court.");
 
                         criminalize(*pool[boss],LAWFLAG_RACKETEERING);
                         pool[boss]->confessions++;
@@ -701,15 +701,6 @@ void review_mode(short mode)
 
                      // Remove squad member
                      removesquadinfo(*temppool[p]);
-                     if(temppool[p]->align==1)
-                     {
-                        if(boss!=-1&&pool[boss]->juice>50)
-                        {
-                           int juice=pool[boss]->juice-50;
-                           if(juice>5)juice=5;
-                           addjuice(*pool[boss],-juice);
-                        }
-                     }
 
                      int thisPersonIndex = getpoolcreature(temppool[p]->id);
                      delete temppool[p];
@@ -770,14 +761,6 @@ void review_mode(short mode)
 
                      if(boss!=-1)
                      {
-                        // Dejuice boss
-                        int juice=temppool[p]->juice/10;
-                        if(juice<5)
-                        {
-                           juice=5;
-                        }
-                        addjuice(*pool[boss],-juice);
-
                         if(LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
                         {
                            set_color(COLOR_GREEN,COLOR_BLACK,1);

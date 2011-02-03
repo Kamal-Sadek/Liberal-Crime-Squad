@@ -722,8 +722,8 @@ void makecharacter(void)
             //ATTRIBUTE_CHARISMA 2
             //ATTRIBUTE_INTELLIGENCE 2
             //SKILL_LAW 1
-            //SKILL_LEADERSHIP 1
-            //SKILL_WRITING 2
+            //SKILL_PERSUASION 2
+            //SKILL_WRITING 1
             // +Industrial apartment
             // +$100 (one month rent)
             // +50 juice
@@ -1064,8 +1064,8 @@ void makecharacter(void)
                newcr->adjust_attribute(ATTRIBUTE_CHARISMA,+2);
                newcr->adjust_attribute(ATTRIBUTE_INTELLIGENCE,+2);
                newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
-               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(2));
-               newcr->set_skill(SKILL_LEADERSHIP,newcr->get_skill(SKILL_LEADERSHIP)+(1));
+               newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(1));
+               newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(2));
                newcr->type = CREATURE_POLITICALACTIVIST;
                base = SITE_RESIDENTIAL_TENEMENT;
                ledger.force_funds(ledger.get_funds()+50);
@@ -1331,18 +1331,6 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_APARTMENT;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_TENEMENT;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
       newl->type=SITE_RESIDENTIAL_TENEMENT;
       newl->parent=3;
       initlocation(*newl);
@@ -1380,18 +1368,6 @@ void makecharacter(void)
 
    newl=new locationst;
       newl->type=SITE_INDUSTRY_SWEATSHOP;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_CRACKHOUSE;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_CRACKHOUSE;
       newl->parent=3;
       initlocation(*newl);
    location.push_back(newl);

@@ -797,7 +797,7 @@ void trial(Creature &g)
                   addstr("'s arguments made several of the jurors stand up");
                   move(10,1);
                   addstr("and shout \"NOT GUILTY!\" before deliberations even began.");
-                  if(defense==4)addjuice(*sleeperlawyer,10); // Bow please
+                  if(defense==4)addjuice(*sleeperlawyer,10,500); // Bow please
                }
                else
                {
@@ -809,74 +809,35 @@ void trial(Creature &g)
       }
       if(defense==1)
       {
-         // *JDS* LEGAL SELF-REPRESENTATION: Your intelligence, heart, and twice your charisma
-         // form the baseline the jury will evaluate your arguments from, and after that it's
-         // up to your roll. To succeed here, you really need to have two skills be
+         // *JDS* LEGAL SELF-REPRESENTATION: To succeed here, you really need to have two skills be
          // high: persuasion and law, with law being 1.5 times as influential. You can't have
-         // just one or just the other, and that's a change I've made which will make this
-         // much harder. Even if you're a very persuasive person, the court will eat you alive
-         // if you can't sound intelligent when talking about the relevant charges, and you
+         // just one or just the other. Even if you're a very persuasive person, the court will eat
+         // you alive  if you can't sound intelligent when talking about the relevant charges, and you
          // won't be able to fool the jury into letting you go if you aren't persuasive, as no
-         // matter how encyclopedic your legal knowledge is, it's all in the pitch. After these
-         // skills are multiplied together, you make a roll on this "defense skill" value; this curves your
-         // results toward a central value, and away from extreme good and bad performances.
-         // All in all, it is significantly *harder* to defend yourself after these changes,
-         // and a very powerful case will require someone have lawyerly skills to begin with.
-         // Major note: Defense skill is capped at 100. Once you're rolling d200, adding more
-         // would be really unrealistic. You can only be so persuasive.
+         // matter how encyclopedic your legal knowledge is, it's all in the pitch.
          //
-         // EXAMPLE: Suppose your Liberal has 4 persuasion and 6 law -- the average starting
-         // skills for a seduced lawyer. This results in a defenseskill of 51. If their intelligence,
-         // heart, and charisma are each four, that makes their roll 16+LCSrandom(102).
-         // This is significantly weaker than a paid or Sleeper attorney, but much stronger
-         // than the public defender, and about on par with the prosecutor so long as it isn't
-         // a high-profile case.
+         // If either your persuasion or your law roll is too low, you'll end up getting a negative
+         // result that will drag down your defense. So try not to suck in either area.
+         int defenseskill=5*(g.skill_roll(SKILL_PERSUASION)-3)+
+                          10*(g.skill_roll(SKILL_LAW)-3);
+         g.train(SKILL_PERSUASION,50);
+         g.train(SKILL_LAW,50);
 
-         // A character build specifically to be strong in this area *will* still start out
-         // slightly stronger than the public defender (and will be notably better once they
-         // hit activist level).
-
-         // <3 Documentation. -- LK
-         int defenseskill=3*g.get_skill(SKILL_PERSUASION)+6*g.get_skill(SKILL_LAW);
-         defensepower+=g.get_attribute(ATTRIBUTE_INTELLIGENCE,true);
-         defensepower+=g.get_attribute(ATTRIBUTE_HEART,true);
-         defensepower+=g.get_attribute(ATTRIBUTE_CHARISMA,true)*2;
-         defensepower+=LCSrandom(min(defenseskill*2,MAX(200,prosecution+100)));
-         g.train(SKILL_PERSUASION,MAX(50-g.get_skill(SKILL_PERSUASION)*2,0));
-         g.train(SKILL_LAW,MAX(50-g.get_skill(SKILL_LAW)*2,0));
-
-         if(autoconvict)
+         addstr(g.name);
+         if(defensepower<=0)
          {
-            if(defensepower<=50)
-            {
-               addstr(g.name);
-               addstr("'s defense is humiliating.");
-            }
-            else
-            {
-               addstr("The jury is completely impassive as ");
-               addstr(g.name);
-               addstr(" argues the defense.");
-            }
+            addstr(" makes one horrible mistake after another.");
+            addjuice(g,-10,-50); // You should be ashamed
          }
+         else if(defensepower<=25)addstr("'s case really sucked.");
+         else if(defensepower<=50)addstr(" did all right, but made some mistakes.");
+         else if(defensepower<=75)addstr("'s arguments were pretty good.");
+         else if(defensepower<=100)addstr(" worked the jury very well.");
+         else if(defensepower<=150)addstr(" made a very powerful case.");
          else
          {
-            addstr(g.name);
-            if(defensepower<=15)
-            {
-               addstr("'s defense looks like Colin Ferguson's.");
-               addjuice(g,-10); // You should be ashamed
-            }
-            else if(defensepower<=25)addstr("'s case really sucked.");
-            else if(defensepower<=50)addstr(" did all right, but made some mistakes.");
-            else if(defensepower<=75)addstr("'s arguments were pretty good.");
-            else if(defensepower<=100)addstr(" worked the jury very well.");
-            else if(defensepower<=150)addstr(" made a very powerful case.");
-            else
-            {
-               addstr(" had the jury, judge, and prosecution crying for freedom.");
-               addjuice(g,10); // That shit is legend
-            }
+            addstr(" had the jury, judge, and prosecution crying for freedom.");
+            addjuice(g,50,1000); // That shit is legend
          }
       }
 
@@ -990,13 +951,17 @@ void trial(Creature &g)
          if(defense==4)
          {
             // De-Juice sleeper
-            addjuice(*sleeperlawyer,-5);
+            addjuice(*sleeperlawyer,-5,0);
          }
-         // Juice for getting convicted of something :)
-         addjuice(g,10,100);
+
+         if(defense!=2)
+         {
+            // Juice for getting convicted of something :)
+            addjuice(g,25,200);
+         }
 
          // Check for lenience; sleeper judge will always be merciful
-         if(defensepower/3>=jury/4 || sleeperjudge)
+         if(defensepower/3>=jury/4 || sleeperjudge || defense==2)
          {
             penalize(g,1);
          }
@@ -1255,7 +1220,7 @@ void penalize(Creature &g,char lenient)
       {
          int juice=g.juice/10;
          if(juice<5)juice=5;
-         addjuice(*pool[boss],-juice);
+         addjuice(*pool[boss],-juice,0);
       }
 
       refresh();
@@ -1378,7 +1343,16 @@ char prison(Creature &g)
             int boss=getpoolcreature(g.hireid);
             if(boss!=-1)
             {
-               addjuice(*pool[boss],-15);
+               set_color(COLOR_RED,COLOR_BLACK,1);
+               move(12,1);
+               addstr(pool[boss]->name);
+               addstr(" has failed the Liberal Crime Squad.");
+               move(14,1);
+               addstr("If you can't protect your own people, who can you protect?");
+               refresh();
+               getch();
+
+               addjuice(*pool[boss],-50,-50);
             }
 
             g.die();
@@ -1469,7 +1443,7 @@ void reeducation(Creature &g)
       {
          addstr(g.name);
          addstr(" loses juice!");
-         addjuice(g,-50);
+         addjuice(g,-50,100);
       }
       else if(LCSrandom(15)>g.get_attribute(ATTRIBUTE_WISDOM,true)
            || g.get_attribute(ATTRIBUTE_WISDOM,true) < g.get_attribute(ATTRIBUTE_HEART,true))
@@ -1479,10 +1453,10 @@ void reeducation(Creature &g)
          g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
       }
       else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE
-              && !LCSrandom(4))
+              && LCSrandom(4))
       {
          addstr(g.name);
-         addstr(" dosen't want to leave ");
+         addstr(" only resists by thinking of ");
          addstr(pool[g.hireid]->name);
          addstr("!");
       }

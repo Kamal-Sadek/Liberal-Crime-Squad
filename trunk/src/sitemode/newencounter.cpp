@@ -39,14 +39,14 @@ void prepareencounter(short type,char sec)
    int creaturearray[CREATURENUM];
    memset(creaturearray,0,CREATURENUM*sizeof(int));
    
-   if(postalarmtimer>100)
+   if(postalarmtimer>80)
    {
       switch(sitetype)
       {
          case SITE_GOVERNMENT_ARMYBASE:
             creaturearray[CREATURE_SOLDIER]=1000;
             creaturearray[CREATURE_GUARDDOG]=100;
-            creaturearray[CREATURE_HARDENED_VETERAN]=100;
+            creaturearray[CREATURE_TANK]=100;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             creaturearray[CREATURE_AGENT]=1000;
@@ -382,9 +382,9 @@ void prepareencounter(short type,char sec)
             if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
             if(law[LAW_POLLUTION]==-2&&
                law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
-            creaturearray[CREATURE_GANGMEMBER]+=20;
+            creaturearray[CREATURE_GANGMEMBER]+=5;
             creaturearray[CREATURE_CRACKHEAD]+=50;
-            creaturearray[CREATURE_PROSTITUTE]+=20;
+            creaturearray[CREATURE_PROSTITUTE]+=10;
             creaturearray[CREATURE_AMATEURMAGICIAN]+=1;
             creaturearray[CREATURE_HIPPIE]+=1;
             creaturearray[CREATURE_NURSE]+=5;

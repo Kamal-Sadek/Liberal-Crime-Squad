@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.02.3"
+#define PACKAGE_VERSION "4.03.0"
 #endif
 
-const int version=40203; 
-const int lowestloadversion=40203;
+const int version=40300; 
+const int lowestloadversion=40300;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -520,7 +520,7 @@ enum Activity
    ACTIVITY_STUDY_DISGUISE,
    ACTIVITY_STUDY_SCIENCE,
    ACTIVITY_STUDY_BUSINESS,
-   ACTIVITY_STUDY_COOKING,
+   //ACTIVITY_STUDY_COOKING,
    ACTIVITY_STUDY_GYMNASTICS,
    ACTIVITY_STUDY_MUSIC,
    ACTIVITY_STUDY_ART,
@@ -1293,9 +1293,9 @@ void criminalizepool(short crime,long exclude=-1,short loc=-1);
 /* common - applies a crime to a person */
 void criminalize(Creature &cr,short crime);
 /* common - gives juice to everyone in the active party */
-void juiceparty(long juice);
+void juiceparty(long juice,long cap);
 /* common - gives juice to a given creature */
-void addjuice(Creature &cr,long juice,long cap=1000);
+void addjuice(Creature &cr,long juice,long cap);
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr);
 /* common - purges empty squads from existance */
@@ -1700,10 +1700,6 @@ void noticecheck(int exclude,int difficulty=DIFFICULTY_EASY);
 char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
 void disguisecheck(int encounter_timer);
-/* practices squads disguise skill */
-void disguisepractice(int p,int diff);
-/* practices squads stealth skill */
-void stealthpractice(int p,int diff);
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(Creature &cr);
 /* checks if a creature's uniform is appropriate to the location */

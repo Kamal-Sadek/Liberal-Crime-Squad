@@ -980,7 +980,7 @@ void funds_and_trouble(char &clearformess)
          case ACTIVITY_STUDY_DISGUISE:
          case ACTIVITY_STUDY_SCIENCE:
          case ACTIVITY_STUDY_BUSINESS:
-         case ACTIVITY_STUDY_COOKING:
+         //case ACTIVITY_STUDY_COOKING:
          case ACTIVITY_STUDY_GYMNASTICS:
          case ACTIVITY_STUDY_ART:
          case ACTIVITY_STUDY_TEACHING:
@@ -1001,39 +1001,33 @@ void funds_and_trouble(char &clearformess)
    long money;
 
    //SOLICITORS
-   money=0;
+   int total_income=0;
    for(s=0;s<solicit.size();s++)
    {
       if(!checkforarrest(*solicit[s],"soliciting donations",clearformess))
       {
-         money+=solicit[s]->skill_roll(SKILL_PERSUASION) *
-                solicit[s]->get_armor().get_professionalism()+1;
-         solicit[s]->income=money;
+         int income=solicit[s]->skill_roll(SKILL_PERSUASION) *
+                    solicit[s]->get_armor().get_professionalism()+1;
+         
+         // Country's alignment dramatically affects effectiveness
+         // The more conservative the country, the more effective
+         if(publicmood(-1) > 90)
+            income /= 2;
+         if(publicmood(-1) > 65)
+            income /= 2;
+         if(publicmood(-1) > 35)
+            income /= 2;
+         if(publicmood(-1) > 10)
+            income /= 2;
+
+         solicit[s]->income=income;
+
+         total_income += income;
 
          solicit[s]->train(SKILL_PERSUASION,max(5-solicit[s]->get_skill(SKILL_PERSUASION),2));
       }
    }
-   int originalmoney = money;
-   // Country's alignment dramatically affects effectiveness
-   if(publicmood(-1) < 90)
-      money /= 2;
-   if(publicmood(-1) < 60)
-      money /= 2;
-   if(publicmood(-1) < 40)
-      money /= 2;
-   if(publicmood(-1) < 10)
-      money /= 2;
-   // Scale down
-   if(solicit.size() > 2)
-      money = (money * (solicit.size()-((solicit.size()-1)/2))) / solicit.size();
-   ledger.add_funds(money,INCOME_DONATIONS);
-   if(originalmoney!=0)
-   {
-      for(s=0;s<solicit.size();s++)
-      {
-         solicit[s]->income=solicit[s]->income*money/originalmoney; //Sum of solicit[s]->income may end up not equaling money. Fix?
-      }
-   }
+   ledger.add_funds(total_income,INCOME_DONATIONS);
 
    //TSHIRTS
    int mood=publicmood(-1);
@@ -1041,44 +1035,18 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*tshirts[s],"selling shirts",clearformess))
       {
-         int costofsupplies = 4;
-
-         if(ledger.get_funds() <= 0)
-         {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(tshirts[s]->name);
-            addstr(" can't afford to buy ");
-            if(tshirts[s]->get_skill(SKILL_TAILORING)>4)
-               addstr("shirts and embrodery supplies.");
-            else
-               addstr("blank shirts and dyes.");
-            tshirts[s]->activity.type=ACTIVITY_NONE;
-            refresh();
-            getch();
-            continue;
-         }
-
-         money = tshirts[s]->skill_roll(SKILL_TAILORING) + tshirts[s]->skill_roll(SKILL_BUSINESS);
+         money = (tshirts[s]->skill_roll(SKILL_TAILORING) +
+                  tshirts[s]->skill_roll(SKILL_BUSINESS))/2;
 
          // Country's alignment affects effectiveness
-         if(publicmood(-1) < 10)
+         // In a Liberal country, there are many competing vendors
+         if(publicmood(-1) > 65)
             money /= 2;
-         if(publicmood(-1) < 5)
+         if(publicmood(-1) > 35)
             money /= 2;
-
-         if(costofsupplies > money)
-            costofsupplies = money;
 
          tshirts[s]->income=money;
          ledger.add_funds(money,INCOME_TSHIRTS);
-         ledger.subtract_funds(costofsupplies,EXPENSE_TSHIRTS);
 
          tshirts[s]->train(SKILL_TAILORING,max(7-tshirts[s]->get_skill(SKILL_TAILORING),2));
          tshirts[s]->train(SKILL_BUSINESS,max(7-tshirts[s]->get_skill(SKILL_BUSINESS),2));
@@ -1090,45 +1058,17 @@ void funds_and_trouble(char &clearformess)
    {
       if(!checkforarrest(*art[s],"sketching portraits",clearformess))
       {
-         int competitionpenalty=art.size();
-         competitionpenalty-=art[s]->get_skill(SKILL_BUSINESS);
-         if(competitionpenalty<0)competitionpenalty=0;
-         if(competitionpenalty>6)competitionpenalty=6;
-
-         int costofsupplies = 1;
-
-         if(ledger.get_funds() <= 0)
-         {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(art[s]->name);
-            addstr(" can't afford to buy art supplies.");
-            art[s]->activity.type=ACTIVITY_NONE;
-            refresh();
-            getch();
-            continue;
-         }
-
-         money = art[s]->skill_roll(SKILL_ART) / 2;
+         money = art[s]->skill_roll(SKILL_ART);
 
          // Country's alignment affects effectiveness
-         if(publicmood(-1) < 10)
+         // In a Liberal country, there are many competing vendors
+         if(publicmood(-1) > 65)
             money /= 2;
-         if(publicmood(-1) < 5)
+         if(publicmood(-1) > 35)
             money /= 2;
-
-         if(costofsupplies > money)
-            costofsupplies = money;
 
          art[s]->income=money;
          ledger.add_funds(money,INCOME_SKETCHES);
-         ledger.subtract_funds(costofsupplies,EXPENSE_SKETCHES);
 
          art[s]->train(SKILL_ART,max(7-art[s]->get_skill(SKILL_ART),4));
       }
@@ -1147,9 +1087,10 @@ void funds_and_trouble(char &clearformess)
             money *= 4;
 
          // Country's alignment affects effectiveness
-         if(publicmood(-1) < 10)
+         // In a Liberal country, there are many competing vendors
+         if(publicmood(-1) > 65)
             money /= 2;
-         if(publicmood(-1) < 5)
+         if(publicmood(-1) > 35)
             money /= 2;
 
          ledger.add_funds(money,INCOME_BUSKING);
@@ -1166,32 +1107,6 @@ void funds_and_trouble(char &clearformess)
    int dodgelawroll;
    for(s=0;s<brownies.size();s++)
    {
-      money = brownies[s]->skill_roll(SKILL_PERSUASION) +
-              brownies[s]->skill_roll(SKILL_COOKING) +
-              brownies[s]->skill_roll(SKILL_BUSINESS) +
-              brownies[s]->skill_roll(SKILL_STREETSENSE);
-
-      // more money when more illegal
-      if(law[LAW_DRUGS]==-2)
-         money*=4;
-      if(law[LAW_DRUGS]==-1)
-         money*=2;
-      if(law[LAW_DRUGS]==1)
-         money/=4;
-      if(law[LAW_DRUGS]==2)
-         money/=8;
-
-      brownies[s]->income=money;
-      ledger.add_funds(money,INCOME_BROWNIES);
-      // Make the sale
-      brownies[s]->train(SKILL_PERSUASION,max(4-brownies[s]->get_skill(SKILL_PERSUASION),1));
-      // Know the streets
-      brownies[s]->train(SKILL_STREETSENSE,max(7-brownies[s]->get_skill(SKILL_STREETSENSE),3));
-      // Manage your money
-      brownies[s]->train(SKILL_BUSINESS,max(10-brownies[s]->get_skill(SKILL_BUSINESS),3));
-      // Baking brownies :)
-      brownies[s]->train(SKILL_COOKING,max(5-brownies[s]->get_skill(SKILL_COOKING),1));
-
       //Check for police search
       dodgelawroll=LCSrandom(1+30*law[LAW_DRUGS]+3);
 
@@ -1210,6 +1125,30 @@ void funds_and_trouble(char &clearformess)
          criminalize(*brownies[s],LAWFLAG_BROWNIES);
          attemptarrest(*brownies[s],"selling brownies",clearformess);
       }
+
+      money = brownies[s]->skill_roll(SKILL_PERSUASION) +
+              brownies[s]->skill_roll(SKILL_BUSINESS) +
+              brownies[s]->skill_roll(SKILL_STREETSENSE);
+
+      // more money when more illegal
+      if(law[LAW_DRUGS]==-2)
+         money*=4;
+      if(law[LAW_DRUGS]==-1)
+         money*=2;
+      if(law[LAW_DRUGS]==1)
+         money/=4;
+      if(law[LAW_DRUGS]==2)
+         money/=8;
+
+      brownies[s]->income=money;
+      ledger.add_funds(money,INCOME_BROWNIES);
+
+      // Make the sale
+      brownies[s]->train(SKILL_PERSUASION,max(4-brownies[s]->get_skill(SKILL_PERSUASION),1));
+      // Know the streets
+      brownies[s]->train(SKILL_STREETSENSE,max(7-brownies[s]->get_skill(SKILL_STREETSENSE),3));
+      // Manage your money
+      brownies[s]->train(SKILL_BUSINESS,max(10-brownies[s]->get_skill(SKILL_BUSINESS),3));
    }
 
    //HACKING
@@ -1251,141 +1190,180 @@ void funds_and_trouble(char &clearformess)
       int hack_skill=0;
       for(int h=0;h<truehack.size();h++)
       {
-         hack_skill += truehack[h]->get_skill(SKILL_COMPUTERS);
-         hack_skill -= h;
+         hack_skill = MAX(hack_skill,truehack[h]->skill_roll(SKILL_COMPUTERS));
       }
 
-      if(truehack.size()) {
-         if(LCSrandom(150)<=hack_skill)
+      int difficulty = DIFFICULTY_HEROIC;
+         
+      if(DIFFICULTY_HEROIC<=hack_skill+truehack.size()-1)
+      {
+         if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
+         else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
+
+         int trackdif=0;
+         int short crime=0;
+
+         int juiceval=0;
+
+         switch(LCSrandom(7))
          {
-            if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
-            else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
-
-            int trackdif=0;
-            int short crime=0;
-
-            int juiceval=0;
-
-            switch(LCSrandom(7))
+            case 0:
             {
-               case 0:
-               {
-                  strcat(msg,"pilfered files from a Corporate server.");
+               strcat(msg,"pilfered files from a Corporate server.");
 
-                  Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
-                  location[hack[0]->location]->loot.push_back(it);
+               Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
+               location[hack[0]->location]->loot.push_back(it);
 
-                  trackdif=20;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  break;
-               }
-               case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
-                  strcat(msg,"caused a scare by breaking into a CIA network.");
-
-                  trackdif=30;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=20;
-                  change_public_opinion(VIEW_INTELLIGENCE,10,0,75);
-                  break;
-               case 2:
-                  strcat(msg,"sabotaged a genetics research company's network.");
-
-                  trackdif=20;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  change_public_opinion(VIEW_GENETICS,2,0,75);
-                  break;
-               case 3:
-               {
-                  strcat(msg,"intercepted internal media emails.");
-
-                  Item *it;
-                     if(LCSrandom(2))it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
-                     else it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
-                  location[hack[0]->location]->loot.push_back(it);
-
-                  trackdif=20;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  break;
-               }
-               case 4:
-                  strcat(msg,"broke into military networks leaving LCS slogans.");
-
-                  trackdif=30;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  change_public_opinion(VIEW_LIBERALCRIMESQUAD,5,0,75);
-                  break;
-               case 5:
-               {
-                  strcat(msg,"uncovered information on dangerous research.");
-
-                  Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
-                  location[hack[0]->location]->loot.push_back(it);
-
-                  trackdif=20;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  break;
-               }
-               case 6:
-               {
-                  strcat(msg,"discovered evidence of judicial corruption.");
-
-                  Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
-                  location[hack[0]->location]->loot.push_back(it);
-
-                  trackdif=20;
-                  crime=LAWFLAG_INFORMATION;
-                  juiceval=5;
-                  break;
-               }
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               break;
             }
+            case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
+               strcat(msg,"caused a scare by breaking into a CIA network.");
 
-            if(trackdif>LCSrandom(hack_skill+1))
+               trackdif=DIFFICULTY_SUPERHEROIC;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=25;
+               change_public_opinion(VIEW_INTELLIGENCE,10,0,75);
+               break;
+            case 2:
+               strcat(msg,"sabotaged a genetics research company's network.");
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               change_public_opinion(VIEW_GENETICS,2,0,75);
+               break;
+            case 3:
             {
-               for(int h=0;h<truehack.size();h++)
-               {
-                  criminalize(*hack[h],crime);
-               }
-            }
+               strcat(msg,"intercepted internal media emails.");
 
+               Item *it;
+                  if(LCSrandom(2))it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
+                  else it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
+               location[hack[0]->location]->loot.push_back(it);
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               break;
+            }
+            case 4:
+               strcat(msg,"broke into military networks leaving LCS slogans.");
+
+               trackdif=DIFFICULTY_SUPERHEROIC;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,5,0,75);
+               break;
+            case 5:
+            {
+               strcat(msg,"uncovered information on dangerous research.");
+
+               Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
+               location[hack[0]->location]->loot.push_back(it);
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               break;
+            }
+            case 6:
+            {
+               strcat(msg,"discovered evidence of judicial corruption.");
+
+               Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
+               location[hack[0]->location]->loot.push_back(it);
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               break;
+            }
+         }
+
+         if(trackdif>hack_skill + LCSrandom(5)-2)
+         {
             for(int h=0;h<truehack.size();h++)
-               addjuice(*truehack[h],juiceval,50);
-         }
-
-         if(msg[0])
-         {
-            if(clearformess)erase();
-            else
             {
-               makedelimiter(8,0);
+               criminalize(*hack[h],crime);
             }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-
-            addstr(msg);
-            msg[0]=0;
-
-            refresh();
-            getch();
          }
+
+         // Award juice to the hacking team for a job well done
+         for(int h=0;h<truehack.size();h++)
+            addjuice(*truehack[h],juiceval,200);
+      }
+      else if(DIFFICULTY_FORMIDABLE<=hack_skill+truehack.size()-1)
+      {
+         int issue=LCSrandom(VIEWNUM-5);
+         int crime;
+
+         // Maybe do a switch on issue here to specify which website it was, but I don't feel like
+         // doing that right now
+
+         if(web.size()>1)strcpy(msg,"Your hackers have ");
+         else {strcpy(msg,web[0]->name);strcat(msg," has ");}
+
+         switch(LCSrandom(5))
+         {
+         case 0:strcat(msg,"defaced");crime=LAWFLAG_INFORMATION;break;
+         case 1:strcat(msg,"knocked out");crime=LAWFLAG_COMMERCE;break;
+         case 2:strcat(msg,"threatened");crime=LAWFLAG_SPEECH;break;
+         case 3:strcat(msg,"hacked");crime=LAWFLAG_INFORMATION;break;
+         }
+         strcat(msg," a ");
+         switch(LCSrandom(5))
+         {
+         case 0:strcat(msg,"corporate website");break;
+         case 1:strcat(msg,"Conservative forum");break;
+         case 2:strcat(msg,"Conservative blog");break;
+         case 3:strcat(msg,"news website");break;
+         case 4:strcat(msg,"government website");break;
+         }
+         strcat(msg,".");
+
+         change_public_opinion(issue,1);
+
+         if(DIFFICULTY_FORMIDABLE<hack_skill+LCSrandom(5)-2)
+         {
+            for(int h=0;h<truehack.size();h++)
+            {
+               criminalize(*truehack[h],crime);
+            }
+         }
+
+         // Award juice to the hacking team for a job well done
+         for(int h=0;h<truehack.size();h++)
+            addjuice(*truehack[h],5,100);
+      }
+
+      if(msg[0])
+      {
+         if(clearformess)erase();
+         else
+         {
+            makedelimiter(8,0);
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+
+         addstr(msg);
+         msg[0]=0;
+
+         refresh();
+         getch();
       }
 
       //CREDIT CARD FRAUD
-      hack_skill = 0;
       for(int h=0;h<cc.size();h++)
       {
-         hack_skill += cc[h]->get_skill(SKILL_COMPUTERS);
-         hack_skill -= h;
-      }
+         hack_skill = cc[h]->skill_roll(SKILL_COMPUTERS);
+         int difficulty = DIFFICULTY_CHALLENGING;
 
-      if(cc.size())
-      {
-         if(LCSrandom(15)<=hack_skill)
+         if(difficulty<=hack_skill)
          {
             // *JDS* You get between $1 and $100, plus an extra $1-50 every
             // time you pass a check against your hacking skill, where chance of
@@ -1394,91 +1372,21 @@ void funds_and_trouble(char &clearformess)
             // up to 20 times, at which point the loop breaks. The skill check
             // here doesn't take into account funding.
             int fundgain=LCSrandom(101);
-            for(int i=0;i<20 && LCSrandom(hack_skill/4);i++)
+            while(difficulty<hack_skill)
             {
                fundgain+=LCSrandom(51);
+               difficulty+=2;
             }
             ledger.add_funds(fundgain,INCOME_CCFRAUD);
-            for(int h=0;h<cc.size();h++)
-            {//doesn't really indicate relative contributions, unfortunately
-			      cc[h]->income = fundgain / cc.size();
-			   }
 
-            if(fundgain/100>LCSrandom(hack_skill+1))
+			   cc[h]->income = fundgain / cc.size();
+
+            if(fundgain/25>LCSrandom(hack_skill+1))
             {
-               for(int h=0;h<cc.size();h++)
-               {
-                  criminalize(*cc[h],LAWFLAG_CCFRAUD);
-               }
+               criminalize(*cc[h],LAWFLAG_CCFRAUD);
             }
          }
-         if(msg[0])
-         {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
 
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-
-            addstr(msg);
-            msg[0]=0;
-
-            refresh();
-            getch();
-         }
-      }
-
-      //HARASS WEBSITES
-      hack_skill = 0;
-      for(int h=0;h<web.size();h++)
-      {
-         hack_skill += web[h]->get_skill(SKILL_COMPUTERS);
-      }
-      if(web.size())
-      {
-         if(LCSrandom(10)<=hack_skill)
-         {
-            int issue=LCSrandom(VIEWNUM-5);
-            int crime;
-
-            // Maybe do a switch on issue here to specify which website it was, but I don't feel like
-            // doing that right now
-
-            if(web.size()>1)strcpy(msg,"Your website harassment team has ");
-            else {strcpy(msg,web[0]->name);strcat(msg," has ");}
-
-            switch(LCSrandom(5))
-            {
-            case 0:strcat(msg,"defaced");crime=LAWFLAG_INFORMATION;break;
-            case 1:strcat(msg,"knocked out");crime=LAWFLAG_COMMERCE;break;
-            case 2:strcat(msg,"slandered");crime=LAWFLAG_SPEECH;break;
-            case 3:strcat(msg,"threatened");crime=LAWFLAG_SPEECH;break;
-            case 4:strcat(msg,"hacked");crime=LAWFLAG_INFORMATION;break;
-            }
-            strcat(msg," a ");
-            switch(LCSrandom(5))
-            {
-            case 0:strcat(msg,"corporate website");break;
-            case 1:strcat(msg,"Conservative forum");break;
-            case 2:strcat(msg,"Conservative blog");break;
-            case 3:strcat(msg,"news website");break;
-            case 4:strcat(msg,"government website");break;
-            }
-            strcat(msg,".");
-
-            change_public_opinion(issue,1);
-
-            if(!LCSrandom(hack_skill+1))
-            {
-               for(int h=0;h<web.size();h++)
-               {
-                  criminalize(*web[h],crime);
-               }
-            }
-         }
          if(msg[0])
          {
             if(clearformess)erase();
@@ -1708,7 +1616,7 @@ void funds_and_trouble(char &clearformess)
       if(!LCSrandom(3) &&
          !(prostitutes[p]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
       {
-         addjuice(*prostitutes[p],-!LCSrandom(3));
+         addjuice(*prostitutes[p],-!LCSrandom(3), -20);
       }
 
       // Gain seduction and street sense
@@ -1716,38 +1624,58 @@ void funds_and_trouble(char &clearformess)
       prostitutes[p]->train(SKILL_STREETSENSE,MAX(10-prostitutes[p]->get_skill(SKILL_STREETSENSE),0));
 
 
-      if(!LCSrandom(50) &&                                                    // Police sting?
-         !(prostitutes[p]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE))) // Street sense to avoid
+      if(!LCSrandom(50)) // Police sting?
       {
-         if(clearformess)erase();
+         if(!(prostitutes[p]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE))) // Street sense to avoid
+         {
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(prostitutes[p]->name);
+            addstr(" has been arrested in a prostitution sting.");
+
+            addjuice(*prostitutes[p],-7,-30);
+
+            refresh();
+            getch();
+
+            caught=1;
+
+            removesquadinfo(*prostitutes[p]);
+            prostitutes[p]->carid=-1;
+            prostitutes[p]->location=ps;
+            prostitutes[p]->drop_weapons_and_clips(NULL);
+            prostitutes[p]->activity.type=ACTIVITY_NONE;
+            criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
+         }
          else
          {
-            makedelimiter(8,0);
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(prostitutes[p]->name);
+            addstr(" was nearly caught in a prostitution sting.");
+
+            addjuice(*prostitutes[p],5,0);
+
+            refresh();
+            getch();
          }
-
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(8,1);
-         addstr(prostitutes[p]->name);
-         addstr(" has been arrested in a prostitution sting.");
-
-         addjuice(*prostitutes[p],-7);
-
-         refresh();
-         getch();
-
-         caught=1;
-
-         removesquadinfo(*prostitutes[p]);
-         prostitutes[p]->carid=-1;
-         prostitutes[p]->location=ps;
-         prostitutes[p]->drop_weapons_and_clips(NULL);
-         prostitutes[p]->activity.type=ACTIVITY_NONE;
-         criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
       }
-      else prostitutes[p]->train(SKILL_STREETSENSE,MAX(5-prostitutes[p]->get_skill(SKILL_STREETSENSE),0));
 
       if(!caught)
       {
+         prostitutes[p]->train(SKILL_STREETSENSE,MAX(5-prostitutes[p]->get_skill(SKILL_STREETSENSE),0));
          ledger.add_funds(fundgain,INCOME_PROSTITUTION);
          prostitutes[p]->income = fundgain;
       }
@@ -1791,9 +1719,9 @@ void funds_and_trouble(char &clearformess)
 		  case ACTIVITY_STUDY_BUSINESS:
            skill[0] = SKILL_BUSINESS;
 			  break;
-		  case ACTIVITY_STUDY_COOKING:
-           skill[0] = SKILL_COOKING;
-			  break;
+		  //case ACTIVITY_STUDY_COOKING:
+        //   skill[0] = SKILL_COOKING;
+        //   break;
 		  case ACTIVITY_STUDY_GYMNASTICS:
            skill[0] = SKILL_DODGE;
 			  break;
@@ -1868,12 +1796,12 @@ void funds_and_trouble(char &clearformess)
       }
 
       int mod=1;
+      if(LCSrandom(10)<power)mod++;
+      if(LCSrandom(20)<power)mod++;
+      if(LCSrandom(40)<power)mod++;
+      if(LCSrandom(60)<power)mod++;
+      if(LCSrandom(80)<power)mod++;
       if(LCSrandom(100)<power)mod++;
-      if(LCSrandom(100)<power)mod++;
-      if(LCSrandom(1000)<power)mod++;
-      if(LCSrandom(1000)<power)mod++;
-      if(LCSrandom(10000)<power)mod++;
-      if(LCSrandom(10000)<power)mod++;
 
       do
       {
@@ -1999,8 +1927,8 @@ void funds_and_trouble(char &clearformess)
       {
          for(int t=0;t<trouble.size();t++)
          {
-            if(!LCSrandom(10) &&                                         // Police called?
-               !(trouble[t]->skill_check(SKILL_STREETSENSE,DIFFICULTY_EASY)))
+            if(!LCSrandom(30) && 
+               !(trouble[t]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
             {
                if(clearformess)erase();
                else
@@ -2008,12 +1936,12 @@ void funds_and_trouble(char &clearformess)
                   makedelimiter(8,0);
                }
 
-               if(LCSrandom(2))
+               if(!LCSrandom(4))
                {
                   attemptarrest(*trouble[t],"causing trouble",clearformess);
                }
                else if(!trouble[t]->is_armed() &&
-                       trouble[t]->get_skill(SKILL_HANDTOHAND)==0)
+                       trouble[t]->get_skill(SKILL_HANDTOHAND)<4)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -2023,40 +1951,151 @@ void funds_and_trouble(char &clearformess)
                   refresh();
                   getch();
 
-                  trouble[t]->activity.type=ACTIVITY_CLINIC;
+                  bool wonfight = false;
 
-                  if(clearformess)erase();
+                  if(trouble[t]->is_armed()&&trouble[t]->get_weapon().is_threatening())
+                  {
+                     if(clearformess)erase();
+                     else makedelimiter(8,0);
+
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(8,1);
+                     addstr(trouble[t]->name);
+                     addstr(" brandishes the ");
+                     addstr(trouble[t]->get_weapon().get_name().c_str());
+                     addstr("!");
+                     
+                     refresh();
+                     getch();
+                     
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(8,1);
+                     addstr("The mob scatters!");
+
+                     refresh();
+                     getch();
+
+                     addjuice(*trouble[t],5,50);
+
+                     wonfight = true;
+                  }
                   else
                   {
-                     makedelimiter(8,0);
+                     int count = 0;
+
+                     while(count <= LCSrandom(5)+2)
+                     {
+                        if(clearformess)erase();
+                        else
+                        {
+                           makedelimiter(8,0);
+                        }
+                        if(trouble[t]->skill_roll(SKILL_HANDTOHAND)>LCSrandom(6)+count)
+                        {
+                           set_color(COLOR_CYAN,COLOR_BLACK,1);
+                           move(8,1);
+                           addstr(trouble[t]->name);
+                           switch(LCSrandom(8))
+                           {
+                           case 0:addstr(" breaks the arm of the nearest person!");break;
+                           case 1:addstr(" knees a guy in the balls!");break;
+                           case 2:addstr(" knocks one out with a fist to the face!");break;
+                           case 3:addstr(" bites some hick's ear off!");break;
+                           case 4:addstr(" smashes one of them in the jaw!");break;
+                           case 5:addstr(" shakes off a grab from behind!");break;
+                           case 6:addstr(" yells the slogan!");break;
+                           case 7:addstr(" knocks two of their heads together!");break;
+                           }
+
+                           refresh();
+                           getch();
+
+                           wonfight=true;
+                        }
+                        else
+                        {
+                           set_color(COLOR_YELLOW,COLOR_BLACK,1);
+                           move(8,1);
+                           addstr(trouble[t]->name);
+                           switch(LCSrandom(8))
+                           {
+                           case 0:addstr(" is held down and kicked by three guys!");break;
+                           case 1:addstr(" gets pummelled!");break;
+                           case 2:addstr(" gets hit by a sharp rock!");break;
+                           case 3:addstr(" is thrown against the sidewalk!");break;
+                           case 4:addstr(" is bashed in the face with a shovel!");break;
+                           case 5:addstr(" is forced into a headlock!");break;
+                           case 6:addstr(" crumples under a flurry of blows!");break;
+                           case 7:addstr(" is hit in the chest with a pipe!");break;
+                           }
+
+                           refresh();
+                           getch();
+
+                           count++; // fight goes faster when you're losing
+
+                           wonfight=false;
+                        }
+                        count++;
+                     }
+
+                     if(wonfight)
+                     {
+                        if(clearformess)erase();
+                        else
+                        {
+                           makedelimiter(8,0);
+                        }
+                        set_color(COLOR_GREEN,COLOR_BLACK,1);
+                        move(8,1);
+                        addstr(trouble[t]->name);
+                        addstr(" beat the ");
+                        if(law[LAW_FREESPEECH]==-2)
+                           addstr("[tar]");
+                        else
+                           addstr("shit");
+                        addstr(" out of everyone who got close!");
+
+                        refresh();
+                        getch();
+                        
+                        addjuice(*trouble[t],30,300);
+                        if(trouble[t]->blood>70)trouble[t]->blood=70;
+                     }
                   }
 
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(8,1);
-                  addstr(trouble[t]->name);
-                  addstr(" is severely beaten before the mob is broken up.");
-
-                  refresh();
-                  getch();
-
-                  if(trouble[t]->juice>=100||signed(LCSrandom(100))<trouble[t]->juice)
+                  if(!wonfight)
                   {
-                     addjuice(*trouble[t],-5);
-                     if(trouble[t]->blood>50)trouble[t]->blood=50;
-                  }
-                  else
-                  {
-                     addjuice(*trouble[t],-10);
+                     if(clearformess)erase();
+                     else
+                     {
+                        makedelimiter(8,0);
+                     }
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                     move(8,1);
+                     addstr(trouble[t]->name);
+                     addstr(" is severely beaten before the mob is broken up.");
+
+                     trouble[t]->activity.type=ACTIVITY_CLINIC;
+
+                     refresh();
+                     getch();
+
+                     addjuice(*trouble[t],-10,-50);
                      if(trouble[t]->blood>10)trouble[t]->blood=10;
 
                      if(!LCSrandom(5))
                      {
-                        switch(LCSrandom(15))
+                        if(clearformess)erase();
+                        else
+                        {
+                           makedelimiter(8,0);
+                        }
+                        switch(LCSrandom(10))
                         {
                            case 0:
                               if(trouble[t]->special[SPECIALWOUND_LOWERSPINE]==1)
                               {
-                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(8,1);
                                  addstr(trouble[t]->name);
                                  addstr("'s lower spine has been broken!");
@@ -2068,7 +2107,6 @@ void funds_and_trouble(char &clearformess)
                            case 1:
                               if(trouble[t]->special[SPECIALWOUND_UPPERSPINE]==1)
                               {
-                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(8,1);
                                  addstr(trouble[t]->name);
                                  addstr("'s upper spine has been broken!");
@@ -2080,7 +2118,6 @@ void funds_and_trouble(char &clearformess)
                            case 2:
                               if(trouble[t]->special[SPECIALWOUND_NECK]==1)
                               {
-                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(8,1);
                                  addstr(trouble[t]->name);
                                  addstr("'s neck has been broken!");
@@ -2092,7 +2129,6 @@ void funds_and_trouble(char &clearformess)
                            case 3:
                               if(trouble[t]->special[SPECIALWOUND_TEETH]>0)
                               {
-                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(8,1);
                                  addstr(trouble[t]->name);
                                  if(trouble[t]->special[SPECIALWOUND_TEETH]>1)addstr("'s teeth have been smashed out on the curb.");
@@ -2149,7 +2185,7 @@ void funds_and_trouble(char &clearformess)
 
       for(int h=0;h<trouble.size();h++)
       {
-         addjuice(*trouble[h],juiceval,20);
+         addjuice(*trouble[h],juiceval,40);
       }
    }
 
@@ -2178,8 +2214,7 @@ void funds_and_trouble(char &clearformess)
          cost=4;
          skillarray[0]=SKILL_LAW;
          skillarray[1]=SKILL_PERSUASION;
-         skillarray[2]=SKILL_LEADERSHIP;
-         skillarray[3]=-1;
+         skillarray[2]=-1;
          break;
       case ACTIVITY_TEACH_SURVIVAL:
          cost=6;
@@ -2188,8 +2223,8 @@ void funds_and_trouble(char &clearformess)
          skillarray[2]=SKILL_STREETSENSE;
          skillarray[3]=SKILL_TAILORING;
          skillarray[4]=SKILL_HANDTOHAND;
-         skillarray[5]=SKILL_COOKING;
-         skillarray[6]=-1;
+         skillarray[5]=-1;
+         //skillarray[5]=SKILL_COOKING;
          //skillarray[6]=SKILL_THEFT;
          break;
       case ACTIVITY_TEACH_FIGHTING:
@@ -2200,7 +2235,7 @@ void funds_and_trouble(char &clearformess)
          skillarray[3]=SKILL_PISTOL;
          skillarray[4]=SKILL_RIFLE;
          skillarray[5]=SKILL_SHOTGUN;
-         skillarray[6]=SKILL_FLAMETHROWER;
+         skillarray[6]=SKILL_HEAVYWEAPONS;
          skillarray[7]=SKILL_AXE;
          skillarray[8]=SKILL_SMG;
          skillarray[9]=SKILL_THROWING;
@@ -2895,7 +2930,7 @@ char stealcar(Creature &cr,char &clearformess)
 
       //CHASE SEQUENCE
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
-      addjuice(cr,v->steal_juice(),50);
+      addjuice(cr,v->steal_juice(),100);
 
       v->add_heat(14+v->steal_extraheat());
 

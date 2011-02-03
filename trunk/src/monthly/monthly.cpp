@@ -382,16 +382,6 @@ void passmonth(char &clearformess,char canseethings)
             getch();
 
             removesquadinfo(*pool[p]);
-            if(pool[p]->align==1)
-            {
-               int boss=getpoolcreature(pool[p]->hireid);
-               if(boss!=-1&&pool[boss]->juice>50)
-               {
-                  int juice=pool[boss]->juice-50;
-                  if(juice>10)juice=10;
-                  addjuice(*pool[boss],-juice);
-               }
-            }
             delete pool[p];
             pool.erase(pool.begin() + p);
             continue;
@@ -411,16 +401,6 @@ void passmonth(char &clearformess,char canseethings)
             getch();
 
             removesquadinfo(*pool[p]);
-            if(pool[p]->align==1)
-            {
-               int boss=getpoolcreature(pool[p]->hireid);
-               if(boss!=-1&&pool[boss]->juice>50)
-               {
-                  int juice=pool[boss]->juice-50;
-                  if(juice>10)juice=10;
-                  addjuice(*pool[boss],-juice);
-               }
-            }
             delete pool[p];
             pool.erase(pool.begin() + p);
             continue;
@@ -453,15 +433,10 @@ void passmonth(char &clearformess,char canseethings)
 
                if(pool[p2]->alive && (pool[p2]->location==-1 || location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON))
                {
-                  //Leadership check to nullify subordinate's confession
-                  if(LCSrandom(pool[p2]->get_skill(SKILL_LEADERSHIP)+1))nullify=1;
-                  else
-                  {
-                     //Charge the boss with racketeering!
-                     criminalize(*pool[p2],LAWFLAG_RACKETEERING);
-                     //Rack up testimonies against the boss in court!
-                     pool[p2]->confessions++;
-                  }
+                  //Charge the boss with racketeering!
+                  criminalize(*pool[p2],LAWFLAG_RACKETEERING);
+                  //Rack up testimonies against the boss in court!
+                  pool[p2]->confessions++;
                }
                if(!nullify)
                {
@@ -476,15 +451,14 @@ void passmonth(char &clearformess,char canseethings)
                   refresh();
                   getch();
 
-                  removesquadinfo(*pool[p]);
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(9,1);
+                  addstr("The traitor will testify in court, and safehouses may be compromised.");
 
-                  int boss=getpoolcreature(pool[p]->hireid);
-                  if(boss!=-1&&pool[boss]->juice>50)
-                  {
-                     int juice=pool[boss]->juice-50;
-                     if(juice>5)juice=5;
-                     addjuice(*pool[boss],-juice);
-                  }
+                  refresh();
+                  getch();
+
+                  removesquadinfo(*pool[p]);
 
                   delete pool[p];
                   pool.erase(pool.begin() + p);

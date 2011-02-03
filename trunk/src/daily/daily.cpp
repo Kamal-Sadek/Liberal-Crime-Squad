@@ -1502,10 +1502,11 @@ bool promotesubordinates(Creature &cr, char &clearformess)
             else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
          }
 
-         if(pool[p]->juice+pool[p]->get_skill(SKILL_LEADERSHIP)*50>maxjuice&&
+         // Highest juice liberal not subject to a life sentence gets promoted
+         if(pool[p]->juice>maxjuice&&
             (location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON||pool[p]->sentence>=0))
          {
-            maxjuice=pool[p]->juice+pool[p]->get_skill(SKILL_LEADERSHIP)*50;
+            maxjuice=pool[p]->juice;
             newboss=p;
          }
       }
@@ -1925,14 +1926,23 @@ void initlocation(locationst &loc)
          break;
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
       case SITE_RESIDENTIAL_APARTMENT:
+         do {
+            lastname(str);
+            strcpy(loc.name,str);
+            strcat(loc.name," Apartments");
+            strcpy(loc.shortname,str);
+            strcat(loc.shortname," Apts");
+         } while (duplicatelocation(loc));
+         break;
       case SITE_RESIDENTIAL_TENEMENT:
-               do {
-                  lastname(str);
-                  strcpy(loc.name,str);
-                  strcat(loc.name," Apartments");
-                  strcpy(loc.shortname,str);
-                  strcat(loc.shortname," Apts");
-               } while (duplicatelocation(loc));
+         do {
+            char str[50];
+            lastname(str);
+            strcpy(loc.name,str);
+            strcat(loc.name," St. ");
+            strcat (loc.name, "Housing Projects");
+            strcpy (loc.shortname, "Projects");
+         } while (duplicatelocation (loc));
          break;
       case SITE_HOSPITAL_UNIVERSITY:
          strcpy(loc.name,"The University Hospital");
@@ -1989,7 +1999,7 @@ void initlocation(locationst &loc)
 
          if (law[LAW_DRUGS]==2)
          {
-            switch (LCSrandom (5))
+            switch (LCSrandom (4))
             {
             case 0:
                strcat (loc.name, "Recreational Drugs Center");
@@ -2003,11 +2013,7 @@ void initlocation(locationst &loc)
                strcat (loc.name, "Cannabis Lounge");
                strcpy (loc.shortname, "Cannabis Lounge");
                break;
-	    case 3:
-               strcat (loc.name, "Opium Lounge");
-               strcpy (loc.shortname, "Opium Lounge");
-               break;
-	    case 4:
+            case 3:
                strcat (loc.name, "Marijuana Dispensary");
                strcpy (loc.shortname, "Dispensary");
                break;
@@ -2015,29 +2021,8 @@ void initlocation(locationst &loc)
          }
          else
          {
-            switch (LCSrandom (5))
-            {
-            case 0: 
-               strcat (loc.name, "Crack House");
-               strcpy (loc.shortname, "Crack House");
-               break;
-            case 1:
-               strcat (loc.name, "Slum Block");
-               strcpy (loc.shortname, "Slum Block");
-               break;
-            case 2:
-               strcat (loc.name, "Ghetto Block");
-               strcpy (loc.shortname, "Ghetto Block");
-               break;
-	    case 3:
-	       strcat (loc.name, "Housing Project");
-               strcpy (loc.shortname, "Housing Project");
-	       break;
-	    case 4:
-	       strcat (loc.name, "Squatter House");
-	       strcpy (loc.shortname, "Squatter House");
-	       break;
-            }
+            strcat (loc.name, "Crack House");
+            strcpy (loc.shortname, "Crack House");
          }
       } while (duplicatelocation (loc));
       break;

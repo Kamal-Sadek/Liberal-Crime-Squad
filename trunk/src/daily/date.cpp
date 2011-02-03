@@ -442,7 +442,7 @@ char completedate(datest &d,int p,char &clearformess)
 	     addstr(" escapes through the bathroom window.");
 		 break;
 	  }
-      addjuice(*pool[p],-5);
+      addjuice(*pool[p],-5,-50);
       refresh();
       getch();
 
@@ -605,6 +605,7 @@ char completedate(datest &d,int p,char &clearformess)
                if(e2==e)continue;
                delete d.date[e2];
                d.date.erase(d.date.begin() + e2);
+               e=0;
             }
             d.timeleft=7;
             pool[p]->train(SKILL_SEDUCTION,LCSrandom(40)+15);

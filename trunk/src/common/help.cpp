@@ -254,11 +254,11 @@ void HelpActivities(int activityType)
       move(2,0);
       addstr("===Soliciting Donations===");
       move(4,0);
-      addstr(" Income depends on persuasion and how sharply the activist is dressed. ");
+      addstr(" Income depends on persuasion. ");
       move(5,0);
-      addstr(" This activity only generates significant income if the country is ");
+      addstr(" This activity generates very little income when the country is very ");
       move(6,0);
-      addstr(" relatively liberal. ");
+      addstr(" Liberal, as people will have little reason to turn to the LCS. ");
       move(8,0);
       addstr(" This activity trains persuasion.");
       break;

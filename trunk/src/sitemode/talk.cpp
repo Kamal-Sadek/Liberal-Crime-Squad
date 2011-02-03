@@ -175,7 +175,7 @@ char talk(Creature &a,int t)
                   case 5:addstr(" is too young to die!");break;
                   }
                   delenc(e,0);
-                  addjuice(a,1); // Instant juice!
+                  addjuice(a,2,200); // Instant juice!
                   refresh();
                   getch();
                }
@@ -207,7 +207,7 @@ char talk(Creature &a,int t)
          sitecrime+=5;
          criminalizeparty(LAWFLAG_KIDNAPPING);
 
-         addjuice(a,-2); // DE-juice for this shit
+         addjuice(a,-2,-10); // DE-juice for this shit
 
          
          refresh();
@@ -385,7 +385,7 @@ char talk(Creature &a,int t)
                   addstr(executer->prisoner->name);
                   addstr("'s body.");
 
-                  addjuice(*executer,-5); // DE-juice for this shit
+                  addjuice(*executer,-5,-50); // DE-juice for this shit
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
                   criminalize(*executer,LAWFLAG_MURDER);
@@ -518,7 +518,7 @@ char talk(Creature &a,int t)
                      clearmessagearea();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
-                     juiceparty(5); // Instant juice for successful hostage negotiation
+                     juiceparty(15,200); // Instant juice for successful hostage negotiation
                      if(hostages>1)addstr("The squad releases all hostages in the trade.");
                      else addstr("The squad releases the hostage in the trade.");
                      for(int i=0;i<6;i++)

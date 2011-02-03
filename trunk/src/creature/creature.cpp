@@ -75,7 +75,7 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
    {
    case SKILL_CLUB:
    case SKILL_AXE:
-   case SKILL_FLAMETHROWER:
+   case SKILL_HEAVYWEAPONS:
       return ATTRIBUTE_STRENGTH;
    case SKILL_HANDTOHAND:
    case SKILL_KNIFE:
@@ -85,7 +85,6 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
    case SKILL_SMG:
    case SKILL_SHOTGUN:
    case SKILL_DRIVING:
-   //case SKILL_THEFT:
    case SKILL_STEALTH:
    case SKILL_THROWING:
    case SKILL_DODGE:
@@ -96,14 +95,9 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
       return ATTRIBUTE_CHARISMA;
    case SKILL_ART:
    case SKILL_MUSIC:
-   case SKILL_COOKING:
-   case SKILL_LEADERSHIP:
       return ATTRIBUTE_HEART;
    case SKILL_RELIGION:
    case SKILL_BUSINESS:
-      return ATTRIBUTE_WISDOM;
-   //case SKILL_SURVIVAL:
-   //   return ATTRIBUTE_HEALTH;
    case SKILL_WRITING:
    case SKILL_PSYCHOLOGY:
    case SKILL_SECURITY:
@@ -122,20 +116,7 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
 /* returns the creature's maximum level in the given skill */
 int Creature::skill_cap(int skill,bool use_juice)
 {
-   if(skill==SKILL_LEADERSHIP) // Special leadership skill cap
-   {
-      if(juice<10)return 0;
-      if(juice<50)return 1;
-      if(juice<100)return 2;
-      if(juice<200)return 4;
-      if(juice<500)return 7;
-      if(juice<1000)return 10;
-      return 14;
-   }
-   else
-   {
-      return get_attribute(Skill::get_associated_attribute(skill),use_juice);
-   }
+   return get_attribute(Skill::get_associated_attribute(skill),use_juice);
 }
 
 std::string Skill::get_name(int skill_type)
@@ -151,7 +132,7 @@ std::string Skill::get_name(int skill_type)
    case SKILL_AXE:            return "Axe";
    case SKILL_PISTOL:         return "Pistol";
    case SKILL_RIFLE:          return "Rifle";
-   case SKILL_FLAMETHROWER:   return "Flamethrower";
+   case SKILL_HEAVYWEAPONS:   return "Heavy Weapons";
    case SKILL_SHOTGUN:        return "Shotgun";
    case SKILL_SMG:            return "SMG";
    case SKILL_PERSUASION:     return "Persuasion";
@@ -163,19 +144,15 @@ std::string Skill::get_name(int skill_type)
    case SKILL_TAILORING:      return "Tailoring";
    case SKILL_DRIVING:        return "Driving";
    case SKILL_WRITING:        return "Writing";
-   case SKILL_COOKING:        return "Cooking";
    case SKILL_MUSIC:          return "Music";
    case SKILL_ART:            return "Art";
    case SKILL_RELIGION:       return "Religion";
    case SKILL_SCIENCE:        return "Science";
    case SKILL_BUSINESS:       return "Business";
-   //case SKILL_SURVIVAL:       return "Survival";
    case SKILL_STEALTH:        return "Stealth";
-   //case SKILL_THEFT:          return "Theft";
    case SKILL_TEACHING:       return "Teaching";
    case SKILL_STREETSENSE:    return "Street Sense";
    case SKILL_SEDUCTION:      return "Seduction";
-   case SKILL_LEADERSHIP:     return "Leadership";
    case SKILL_FIRSTAID:       return "First Aid";
    case SKILL_DODGE:          return "Dodge";
    }
@@ -753,61 +730,11 @@ void Creature::adjust_attribute(int attribute, int amount)
 int Creature::get_attribute(int attribute, bool usejuice) const
 {
    int ret=attributes[attribute].value;
-   
-   if(attribute==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
-   if(attribute==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
 
-   if(!usejuice) return ret;
-
-   // Effects of juice on the character's attributes
-   if(usejuice)
-   {
-      if(juice<=-50)ret=1; // Damn worthless
-      else if(juice<=-10)ret=static_cast<int>(ret*0.6); // Society's dregs
-      else if(juice<0)ret=static_cast<int>(ret*0.8);    // Punk
-      else if(juice>=10)
-      {
-         if(juice<50)ret=static_cast<int>(ret+=1); // Activist
-         else if(juice<100)ret=static_cast<int>(ret*1.1+2); // Socialist Threat
-         else if(juice<200)ret=static_cast<int>(ret*1.2+3); // Revolutionary
-         else if(juice<500)ret=static_cast<int>(ret*1.3+4); // Urban Guerrilla
-         else if(juice<1000)ret=static_cast<int>(ret*1.4+5); // Liberal Guardian
-         else ret=static_cast<int>(ret*1.5+6); // Elite Liberal
-      }
-   }
-
-   // How disfigured does the character's face look?
-   // This is important for Charisma
-   long disfigs=0;
-   if(special[SPECIALWOUND_TEETH]<TOOTHNUM)disfigs++;
-   if(special[SPECIALWOUND_TEETH]<TOOTHNUM/2)disfigs++;
-   if(special[SPECIALWOUND_TEETH]==0)disfigs++;
-   if(special[SPECIALWOUND_RIGHTEYE]==0)disfigs+=2;
-   if(special[SPECIALWOUND_LEFTEYE]==0)disfigs+=2;
-   if(special[SPECIALWOUND_TONGUE]==0)disfigs+=3;
-   if(special[SPECIALWOUND_NOSE]==0)disfigs+=3;
-
-   // Does the character have both legs intact?
-   // Even one leg?
-   // Important for Agility
-   int legok=2;
-   if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-       (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-   if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-       (wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-
-   // Special modifications to attributes based on circumstances,
-   // especially aging effects and unusual injuries like paralysis
+   // Special modifications to attributes based on age
    switch(attribute)
    {
    case ATTRIBUTE_STRENGTH:
-      if(special[SPECIALWOUND_NECK]!=1||
-         special[SPECIALWOUND_UPPERSPINE]!=1)
-      {
-         ret=1;
-      }
-      else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-
       if(age<11)ret>>=1;     // Strength is lowest at the beginning and end of life
       else if(age<16)ret-=1;
       else if(age>70)ret-=6;
@@ -815,34 +742,16 @@ int Creature::get_attribute(int attribute, bool usejuice) const
       else if(age>35)ret-=1;
       break;
    case ATTRIBUTE_AGILITY:
-      if(special[SPECIALWOUND_NECK]!=1||
-         special[SPECIALWOUND_UPPERSPINE]!=1)
-      {
-         ret=1;
-      }
-      else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-      else if(legok==0)ret>>=2;
-      else if(legok==1)ret>>=1;
-
       if(age>70)ret-=6;      // Agility is weakened with age
       else if(age>52)ret-=3;
       else if(age>35)ret-=1;
       break;
    case ATTRIBUTE_HEALTH:
-      if(special[SPECIALWOUND_NECK]!=1||
-         special[SPECIALWOUND_UPPERSPINE]!=1)
-      {
-         ret=1;
-      }
-      else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
-
       if(age<11)ret-=2;
       else if(age<16)ret-=1; // Physical immaturity weakens health
                              // Aging actually damages base health and eventually kills, so no aging effects here
       break;
    case ATTRIBUTE_CHARISMA:
-      ret-=disfigs;
-
       if(age<11)ret+=2;      // Lots of folks like kids
       else if(age<16)ret-=1; // Teenagers have communication difficulties and image issues
       else if(age>70)ret+=3; // Authority and experience in life then enhance Charisma with age
@@ -870,21 +779,83 @@ int Creature::get_attribute(int attribute, bool usejuice) const
       break;
    }
 
-   // Debilitations for temporary injuries in attributes based
-   // on physical appearance or performance, because people who
-   // are bleeding all over are less strong, agile, and charismatic
+   // Physical stats want to know: Are you paralyzed?
    if(attribute==ATTRIBUTE_STRENGTH||
       attribute==ATTRIBUTE_AGILITY||
-      attribute==ATTRIBUTE_CHARISMA)
+      attribute==ATTRIBUTE_HEALTH)
    {
-      if(blood<=20)ret>>=2;
-      else if(blood<=50){ret>>=1;}
-      else if(blood<=75){ret*=3;ret>>=2;}
+      if(special[SPECIALWOUND_NECK]!=1||
+         special[SPECIALWOUND_UPPERSPINE]!=1)
+      {
+         ret=1;
+      }
+      else if(special[SPECIALWOUND_LOWERSPINE]!=1)ret>>=2;
+   }
+
+   // Agility wants to know: Do you have legs?
+   if(attribute==ATTRIBUTE_AGILITY)
+   {
+      int legok=2;
+      if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
+          (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
+      if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
+          (wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
+
+      if(legok==0)ret>>=2;
+      else if(legok==1)ret>>=1;
+   }
+
+   // Charisma wants to know: How fucked up does your face look?
+   if(attribute==ATTRIBUTE_CHARISMA)
+   {
+      long disfigs=0;
+      if(special[SPECIALWOUND_TEETH]<TOOTHNUM)disfigs++;
+      if(special[SPECIALWOUND_TEETH]<TOOTHNUM/2)disfigs++;
+      if(special[SPECIALWOUND_TEETH]==0)disfigs++;
+      if(special[SPECIALWOUND_RIGHTEYE]==0)disfigs+=2;
+      if(special[SPECIALWOUND_LEFTEYE]==0)disfigs+=2;
+      if(special[SPECIALWOUND_TONGUE]==0)disfigs+=3;
+      if(special[SPECIALWOUND_NOSE]==0)disfigs+=3;
+
+      ret-=disfigs;
+   }
+
+   // Never use juice to increase stats for the opposite ideology!
+   if(attribute==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
+   if(attribute==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
+
+   // Effects of juice on the character's attributes
+   if(usejuice)
+   {
+      if(juice<=-50)ret=1; // Damn worthless
+      else if(juice<=-10)ret=static_cast<int>(ret*0.6); // Society's dregs
+      else if(juice<0)ret=static_cast<int>(ret*0.8);    // Punk
+      else if(juice>=10)
+      {
+         if(juice<50)ret=static_cast<int>(ret+=1); // Activist
+         else if(juice<100)ret=static_cast<int>(ret*1.1+2); // Socialist Threat
+         else if(juice<200)ret=static_cast<int>(ret*1.2+3); // Revolutionary
+         else if(juice<500)ret=static_cast<int>(ret*1.3+4); // Urban Guerrilla
+         else if(juice<1000)ret=static_cast<int>(ret*1.4+5); // Liberal Guardian
+         else ret=static_cast<int>(ret*1.5+6); // Elite Liberal
+      }
+      
+      // Debilitations for temporary injuries in attributes based
+      // on physical appearance or performance, because people who
+      // are bleeding all over are less strong, agile, and charismatic
+      if(attribute==ATTRIBUTE_STRENGTH||
+         attribute==ATTRIBUTE_AGILITY||
+         attribute==ATTRIBUTE_CHARISMA)
+      {
+         if(blood<=20)ret>>=2;
+         else if(blood<=50){ret>>=1;}
+         else if(blood<=75){ret*=3;ret>>=2;}
+      }
    }
 
    // Bounds check attributes
    if(ret<1)ret=1;
-   if(ret>20)ret=20;
+   //if(ret>20)ret=20;
 
    return ret;
 }
@@ -1030,7 +1001,6 @@ int Creature::skill_roll(int skill)
    case SKILL_SCIENCE:
    case SKILL_BUSINESS:
    case SKILL_TEACHING:
-   case SKILL_LEADERSHIP:
    case SKILL_FIRSTAID:
       if(skills[skill].value == 0)
       {

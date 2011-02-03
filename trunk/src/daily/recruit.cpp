@@ -219,8 +219,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
          r.recruit->hireid=pool[p]->id;
 
-         pool[p]->train(SKILL_LEADERSHIP,5);
-         pool[p]->train(SKILL_PERSUASION,5);
+         pool[p]->train(SKILL_PERSUASION,25);
 
          pool.push_back(r.recruit);
          stat_recruits++;

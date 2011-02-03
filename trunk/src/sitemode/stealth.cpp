@@ -303,7 +303,7 @@ void disguisecheck(int timer)
          for(int i=0;i<6;i++)
          {
             if(activesquad->squad[i] == NULL) break;
-            stealthpractice(i, 10);
+            activesquad->squad[i]->train(SKILL_STEALTH, 10);
          }
 
          if(timer == 0)
@@ -328,7 +328,8 @@ void disguisecheck(int timer)
             for(i=0;i<6;i++)
             {
                if(activesquad->squad[i] == NULL) break;
-               disguisepractice(i, 10);
+               if(hasdisguise(*(activesquad->squad[i])))
+                  activesquad->squad[i]->train(SKILL_DISGUISE, 10);
             }
          }
 
@@ -446,53 +447,6 @@ void disguisecheck(int timer)
    }
 }
 
-/* practices p's stealth skill */
-void disguisepractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
-{
-   if(activesquad->squad[p]!=NULL)
-   {
-      if(!activesquad->squad[p]->alive)return;
-
-      if(activesquad->squad[p]->prisoner!=NULL)return;
-                
-      //spread is how overwhelmed your disguise ability is by the Conservative
-      int spread = diff-activesquad->squad[p]->get_skill(SKILL_DISGUISE);
-
-      if(hasdisguise(*activesquad->squad[p]))
-      {
-         if(spread>5)
-         {
-            activesquad->squad[p]->train(SKILL_DISGUISE,5);  // Cap skill gain
-         }
-         else if(spread>0)
-         {
-            activesquad->squad[p]->train(SKILL_DISGUISE,spread);
-         }
-      }
-   }
-}
-
-/* practices p's stealth skill */
-void stealthpractice(int p, int diff)  //diff is the difficulty that the Conservative sets for the disguise roll
-{
-   if(activesquad->squad[p]!=NULL)
-   {
-      if(!activesquad->squad[p]->alive)return;
-      
-      //spread is how overwhelmed your stealth ability is by the Conservative
-      int spread = diff-activesquad->squad[p]->get_skill(SKILL_STEALTH);
-      
-      if(spread>5)
-      {
-         activesquad->squad[p]->train(SKILL_STEALTH,5);    //cap skill gain
-      }
-      else if (spread>0)
-      {
-         activesquad->squad[p]->train(SKILL_STEALTH,spread);
-      }
-   }
-}
-
 /* checks if a creature's weapon is suspicious or illegal */
 char weaponcheck(Creature &cr)
 {
@@ -514,7 +468,8 @@ char weaponcheck(Creature &cr)
             || cr.get_weapon().get_itemtypename() == "WEAPON_DESERT_EAGLE"
             || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_9MM"
             || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_45"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_NIGHTSTICK")
+            || cr.get_weapon().get_itemtypename() == "WEAPON_NIGHTSTICK"
+            || cr.get_weapon().get_itemtypename() == "WEAPON_MP5_SMG")
             && (cr.get_armor().get_itemtypename() == "ARMOR_SECURITYUNIFORM"))
       incharacter=CREATURE_SECURITYGUARD;
    else if(cr.get_weapon().get_itemtypename() == "WEAPON_REVOLVER_38"
@@ -584,14 +539,6 @@ char weaponcheck(Creature &cr)
    // If your disguise is inappropriate to the current location,
    // then being in character isn't sufficient
    if(hasdisguise(cr)==false)
-   {
-      incharacter=-1;
-   }
-
-   // For now, you can only bluff your way out of toting weapons
-   // if you're in the middle of a siege where the place is getting
-   // stormed by people carrying such weapons
-   if(location[cursite]->siege.siege==false)
    {
       incharacter=-1;
    }
