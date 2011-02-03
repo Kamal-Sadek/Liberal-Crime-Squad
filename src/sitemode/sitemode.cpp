@@ -1693,7 +1693,10 @@ void mode_site(void)
                {
                   for(int i=0;i<6;i++)
                   {
-                     activesquad->squad[i]->train(SKILL_STEALTH,10);
+                     if(activesquad->squad[i]!=NULL)
+                     {
+                        activesquad->squad[i]->train(SKILL_STEALTH,10);
+                     }
                   }
                   clearmessagearea();
                   set_color(COLOR_CYAN,COLOR_BLACK,1);

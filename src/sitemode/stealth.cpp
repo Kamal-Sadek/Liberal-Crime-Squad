@@ -356,7 +356,7 @@ void disguisecheck(int timer)
             move(16,1);
 
             if(squadsize > 1)
-               addstr("The squad ");
+               addstr("The squad");
             else
                addstr(activesquad->squad[0]->name);
             addstr(" acts natural.");
