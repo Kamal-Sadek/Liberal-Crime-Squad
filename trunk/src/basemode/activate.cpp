@@ -210,11 +210,11 @@ void listclasses(Creature *cr)
        
  
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
-       move(13,40);
+       move(14,40);
        addstr("3 - Painting");
 
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
-       move(14,40);
+       move(15,40);
        addstr("4 - Theatre");
 
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
