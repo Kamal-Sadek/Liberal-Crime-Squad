@@ -1550,21 +1550,6 @@ void crashfriendlycar(int v)
             // Account for deaths for high score
             if(activesquad->squad[p]->align == ALIGN_LIBERAL)stat_dead++;
 
-            // Find boss
-            int boss=getpoolcreature(activesquad->squad[p]->hireid);
-
-            // Penalize boss in juice
-            if(boss!=-1&&pool[boss]->juice>50)
-            {
-               // Bring boss no lower than 50 juice
-               int juice=pool[boss]->juice-50;
-               // Inflict no more than 10 juice damage
-               if(juice>10)juice=10;
-               if(juice<0)juice=0;
-
-               addjuice(*pool[boss],-juice);
-            }
-
             // Remove dead Liberal from squad
             activesquad->squad[p]=NULL;
          }

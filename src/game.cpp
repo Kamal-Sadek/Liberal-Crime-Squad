@@ -309,13 +309,15 @@ int main(int argc, char* argv[])
    strcpy(slogan,"We need a slogan!");
    if(!LCSrandom(20))
    {
-      switch(LCSrandom(5))
+      switch(LCSrandom(7))
       {
       case 0:strcpy(slogan,"To Rogues and Revolution!");break;
-      case 1:strcpy(slogan,"Lob the light grenades that burst and blind with truth!");break;
-      case 2:strcpy(slogan,"No serenade, no fire brigade, just pyromania!");break;
+      case 1:strcpy(slogan,"Hell yes, LCS!");break;
+      case 2:strcpy(slogan,"Striking high, standing tall!");break;
       case 3:strcpy(slogan,"Revolution never comes with a warning!");break;
-      case 4:strcpy(slogan,"If you're not affected, you're not paying attention!");break;
+      case 4:strcpy(slogan,"True Liberal Justice!");break;
+      case 5:strcpy(slogan,"Laissez ain't fair!");break;
+      case 6:strcpy(slogan,"This is a slogan!");break;
       }
    }
    

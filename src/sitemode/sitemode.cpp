@@ -362,8 +362,8 @@ void mode_site(void)
       }
       else
       {
-         if (postalarmtimer>100)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(postalarmtimer>80)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         if (postalarmtimer>80)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(postalarmtimer>60)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(0,0);
          addlocationname(location[cursite]);
@@ -372,7 +372,7 @@ void mode_site(void)
          itoa(locz+1,num,10);
          addstr(num);
 
-         if(postalarmtimer>100)
+         if(postalarmtimer>80)
          {
             switch(location[cursite]->type)
             {
@@ -405,7 +405,7 @@ void mode_site(void)
                break;
             }
          }
-         else if(postalarmtimer>80)addstr(": EVACUATING AREA");
+         else if(postalarmtimer>60)addstr(": CONSERVATIVE REINFORCEMENTS INCOMING");
          else if(sitealienate==1)addstr(": ALIENATED MASSES");
          else if(sitealienate==2)addstr(": ALIENATED EVERYONE");
          else if(sitealarm)addstr(": CONSERVATIVES ALARMED");
@@ -1616,7 +1616,7 @@ void mode_site(void)
             {
                int maxsleightofhand=0;
                int beststealer=0;
-               juiceparty(1);
+               juiceparty(1,200);
                alienationcheck(0);
                noticecheck(-1);
                sitecrime++;
@@ -1677,7 +1677,6 @@ void mode_site(void)
                      {
                         if(activesquad->squad[i])
                         {
-                           stealthpractice(i, DIFFICULTY_HARD);
                            if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH,DIFFICULTY_HARD)))
                            {
                               breakout=true;
@@ -1692,6 +1691,10 @@ void mode_site(void)
                // If snuck past everyone
                if(e==ENCMAX)
                {
+                  for(int i=0;i<6;i++)
+                  {
+                     activesquad->squad[i]->train(SKILL_STEALTH,10);
+                  }
                   clearmessagearea();
                   set_color(COLOR_CYAN,COLOR_BLACK,1);
                   move(16,1);
@@ -1855,9 +1858,18 @@ void mode_site(void)
             //SEE IF THERE IS AN ENCOUNTER
             char newenc=0;
 
-            if(!location[cursite]->siege.siege&&postalarmtimer<100&&!LCSrandom(10))
+            // 10% chance of encounter normally
+            // 20% chance of encounter after massive response
+            // 0% chance of encounter during sieges
+            if(!LCSrandom(5))
             {
-               newenc=1;
+               if(postalarmtimer>80||!LCSrandom(2))
+               {
+                  if(!location[cursite]->siege.siege)
+                  {
+                     newenc=1;
+                  }
+               }
             }
 
             for(int e=0;e<ENCMAX;e++)
@@ -1884,8 +1896,20 @@ void mode_site(void)
             //DO DOORS
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
             {
+               bool has_security=false;
+               for(int i=0;i<6;i++)
+               {
+                  if(activesquad->squad[i] &&
+                     activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
+                  {
+                     has_security=true;
+                     break;
+                  }
+               }
+
                if((levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED) &&
-                  !(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK))
+                  !(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK) &&
+                  has_security==true)
                {
                   levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
 
@@ -1932,7 +1956,7 @@ void mode_site(void)
 
                   }while(1);
                }
-               else if(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK)
+               else if(levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED)
                {
                   do
                   {
@@ -1940,7 +1964,9 @@ void mode_site(void)
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
-                     addstr("You shake the handle but it is still locked.");
+                     addstr("You shake the handle but it is ");
+                     if(has_security==true)addstr("still ");
+                     addstr("locked.");
                      move(17,1);
                      addstr("Force it open? (Yes or No)");
 
@@ -2055,7 +2081,7 @@ void mode_site(void)
                return;
             }
 
-            if(location[cursite]->siege.siege||postalarmtimer>=100) // *JDS* police response added
+            if(location[cursite]->siege.siege) // *JDS* police response added
             {
                if(locx!=olocx||locy!=olocy||locz!=olocz)
                {
@@ -2318,7 +2344,7 @@ void mode_site(void)
                      //but not as bad as it used to get,
                      //since the extra waves are small
                location[cursite]->siege.attacktime++;
-               if((postalarmtimer % 100) == 0 || (location[cursite]->siege.attacktime>=100+LCSrandom(10)&&
+               if((location[cursite]->siege.attacktime>=100+LCSrandom(10)&&
                   (locz!=0||locx<(MAPX/2-3)||locx>(MAPX/2+3)||
                   locy>5)))
                {
@@ -2655,7 +2681,7 @@ void mode_site(void)
                hostcheck=1;
             }
 
-            if(!location[cursite]->siege.siege&&postalarmtimer<100)
+            if(!location[cursite]->siege.siege)
             {
                if((locx!=olocx||locy!=olocy||locz!=olocz)&&!newenc)
                {

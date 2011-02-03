@@ -62,7 +62,6 @@ void creatureadvance(void)
                getch();
 
                sitecrime+=10;
-               addjuice(*(activesquad->squad[p]),-5);
                sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
                //criminalizeparty(LAWFLAG_MURDER);
                //<-- might not die from squad's attacks
@@ -129,21 +128,21 @@ void creatureadvance(void)
          
          //Police Station -- SWAT teams are on site already and
          //only need to suit up to respond almost instantly
-         if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
-            postalarmtimer<65 && sitealarm)postalarmtimer=65;
+         //if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION && 
+         //   postalarmtimer<65 && sitealarm)postalarmtimer=65;
          //Army Base -- They're drilled and ready to kick your ass
-         if(location[cursite]->type==SITE_GOVERNMENT_ARMYBASE && 
-            postalarmtimer<65 && sitealarm)postalarmtimer=65;
+         //if(location[cursite]->type==SITE_GOVERNMENT_ARMYBASE && 
+         //   postalarmtimer<65 && sitealarm)postalarmtimer=65;
          //Courthouse -- Big police response, not far to come
-         if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
-            postalarmtimer<50 && sitealarm)postalarmtimer=50;
+         //if(location[cursite]->type==SITE_GOVERNMENT_COURTHOUSE &&
+         //   postalarmtimer<50 && sitealarm)postalarmtimer=50;
          //Prison -- Big police response but has to get from downtown
-         if(location[cursite]->type==SITE_GOVERNMENT_PRISON &&
-            postalarmtimer<30 && sitealarm)postalarmtimer=30;
+         //if(location[cursite]->type==SITE_GOVERNMENT_PRISON &&
+         //   postalarmtimer<30 && sitealarm)postalarmtimer=30;
          //Intelligence HQ -- Agents are deadly, but the site is not
          //is not designed to be called to action that quickly
-         if(location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ &&
-            postalarmtimer<50 && sitealarm)postalarmtimer=50;
+         //if(location[cursite]->type==SITE_GOVERNMENT_INTELLIGENCEHQ &&
+         //   postalarmtimer<50 && sitealarm)postalarmtimer=50;
       }
 
       if(sitealarmtimer>0 && !sitealarm && sitecrime > 5)

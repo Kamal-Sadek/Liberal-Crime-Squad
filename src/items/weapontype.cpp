@@ -40,8 +40,6 @@ int skill_string_to_enum(string skillname)
       return SKILL_DRIVING;
    else if (skillname == "WRITING")
       return SKILL_WRITING;
-   else if (skillname == "COOKING")
-      return SKILL_COOKING;
    else if (skillname == "MUSIC")
       return SKILL_MUSIC;
    else if (skillname == "ART")
@@ -60,14 +58,12 @@ int skill_string_to_enum(string skillname)
       return SKILL_STREETSENSE;
    else if (skillname == "SEDUCTION")
       return SKILL_SEDUCTION;
-   else if (skillname == "LEADERSHIP")
-      return SKILL_LEADERSHIP;
    else if (skillname == "FIRSTAID")
       return SKILL_FIRSTAID;
    else if (skillname == "DODGE")
       return SKILL_DODGE;
-   else if (skillname == "FLAMETHROWER")
-      return SKILL_FLAMETHROWER;
+   else if (skillname == "HEAVYWEAPONS")
+      return SKILL_HEAVYWEAPONS;
    else
       return -1;
 }

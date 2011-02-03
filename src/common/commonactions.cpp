@@ -278,11 +278,6 @@ void criminalize(Creature &cr,short crime)
          // Do not criminalize the LCS for crimes against the CCS
          return;
       }
-      else if(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)
-      {
-         // Do not criminalize the LCS for crimes against the gangs
-         return;
-      }
    }
    cr.crimes_suspected[crime]++;
    cr.heat+=lawflagheat(crime);
@@ -291,7 +286,7 @@ void criminalize(Creature &cr,short crime)
 
 
 /* common - gives juice to everyone in the active party */
-void juiceparty(long juice)
+void juiceparty(long juice, long cap)
 {
    if(activesquad!=NULL)
    {
@@ -301,7 +296,7 @@ void juiceparty(long juice)
          {
             if(activesquad->squad[p]->alive)
             {
-               addjuice(*activesquad->squad[p],juice);
+               addjuice(*activesquad->squad[p],juice, cap);
             }
          }
       }
@@ -313,29 +308,33 @@ void juiceparty(long juice)
 /* common - gives juice to a given creature */
 void addjuice(Creature &cr,long juice,long cap)
 {
-   juice *= 2; // Less grinding mode, engaged!
+   // Ignore zero changes
+   if(juice==0) return;
 
-   if(juice>0 && cr.juice>=cap)
+   // Check against cap
+   if((juice>0 && cr.juice>=cap) ||
+      (juice<0 && cr.juice<=cap))
    {
-      juice/=10;
-      if(juice==0)return;
+      return;
    }
    
+   // Apply juice gain
    cr.juice+=juice;
    
-   //For juice gains over 20, leader gets
-   //half of that in leadership skill
-   if(cr.juice>20 && juice>=2 && cr.hireid!=-1)
+   // Pyramid scheme of juice trickling up the chain
+   if(cr.hireid!=-1)
    {
       for(int i=0;i<pool.size();i++)
       {
          if(pool[i]->id==cr.hireid)
          {
-            pool[i]->train(SKILL_LEADERSHIP,juice>>1);
+            addjuice(*pool[i],juice/5,cr.juice);
             break;
          }
       }
    }
+
+   // Bounds check
    if(cr.juice>1000)cr.juice=1000;
    if(cr.juice<-50)cr.juice=-50;
 }
@@ -644,8 +643,6 @@ int maxsubordinates(const Creature& cr)
    else if(cr.juice >= 200) recruitcap += 5;
    else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
-   //Cap based on leadership
-   recruitcap += cr.get_skill(SKILL_LEADERSHIP); 
    //Cap for founder
    if(cr.hireid == -1 && cr.align == 1) recruitcap += 6;
    return recruitcap;

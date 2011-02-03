@@ -998,7 +998,7 @@
             <priority>1</priority>
             <ranged>true</ranged>
             <attack_description>streams fire at</attack_description>
-            <skill>FLAMETHROWER</skill>
+            <skill>HEAVYWEAPONS</skill>
             <ammotype>CLIP_GASOLINE</ammotype>
             <random_damage>201</random_damage>
             <fixed_damage>50</fixed_damage>
@@ -1074,7 +1074,7 @@
             <priority>1</priority>
             <ranged>true</ranged>
             <attack_description>shoots at</attack_description>
-            <skill>RIFLE</skill>
+            <skill>HEAVYWEAPONS</skill>
             <ammotype>CLIP_DRUM</ammotype>
             <random_damage>301</random_damage>
             <fixed_damage>10</fixed_damage>
@@ -1085,7 +1085,7 @@
             <armorpiercing>7</armorpiercing>
             <number_attacks>5</number_attacks>
             <accuracy_bonus>5</accuracy_bonus> <!-- spray and pray -->
-            <successive_attacks_difficulty>5</successive_attacks_difficulty>
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
             <critical>
                 <chance>100</chance>
                 <hits_required>3</hits_required>

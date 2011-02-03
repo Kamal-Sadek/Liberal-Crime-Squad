@@ -343,7 +343,7 @@ void special_lab_cosmetics_cagedanimals(void)
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
             sitecrime++;
-            juiceparty(3);
+            juiceparty(3,100);
             sitestory->crime.push_back(CRIME_FREE_RABBITS);
             criminalizeparty(LAWFLAG_VANDALISM);
          }
@@ -446,10 +446,11 @@ void special_nuclear_onoff(void)
                move(17,1);
                addstr("The nuclear waste gets released into the state's water supply!");
                change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,-100,0,0);
                refresh();
                getch();
 
-               juiceparty(20); // Instant juice!
+               juiceparty(40,1000); // Instant juice!
                
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
 
@@ -462,7 +463,7 @@ void special_nuclear_onoff(void)
                refresh();
                getch();
 
-               juiceparty(20); // Instant juice!
+               juiceparty(100,1000); // Instant juice!
                
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
             }
@@ -478,7 +479,7 @@ void special_nuclear_onoff(void)
             refresh();
             getch();
 
-            juiceparty(5);
+            juiceparty(15,500);
          }
          sitealarm=1;
          alienationcheck(1);
@@ -523,7 +524,7 @@ void special_lab_genetic_cagedanimals(void)
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
             sitecrime++;
-            juiceparty(4);
+            juiceparty(5,200);
             sitestory->crime.push_back(CRIME_FREE_BEASTS);
             criminalizeparty(LAWFLAG_VANDALISM);
 
@@ -614,7 +615,7 @@ void special_policestation_lockup(void)
                if(numleft==0)break;
             }
 
-            juiceparty(10);
+            juiceparty(50,1000);
             sitecrime+=20;
 
             int time=20+LCSrandom(10);
@@ -682,7 +683,7 @@ void special_courthouse_lockup(void)
                if(numleft==0)break;
             }
 
-            juiceparty(10);
+            juiceparty(50,1000);
             sitecrime+=20;
 
             int time=20+LCSrandom(10);
@@ -827,7 +828,7 @@ void special_courthouse_jury(void)
                noticecheck(-1);
 
                //INSTANT JUICE BONUS
-               addjuice(*(activesquad->squad[p]),25);
+               addjuice(*(activesquad->squad[p]),25,200);
             }
             else
             {
@@ -921,7 +922,7 @@ void special_prison_control(void)
          noticecheck(-1);
          levelmap[locx][locy][locz].special=-1;
          sitecrime+=30;
-         juiceparty(10);
+         juiceparty(50,1000);
          sitestory->crime.push_back(CRIME_PRISON_RELEASE);
          criminalizeparty(LAWFLAG_HELPESCAPE);
 
@@ -978,7 +979,7 @@ void special_intel_supercomputer(void)
             move(16,1);
             addstr("The Squad obtains sensitive information.");
             
-            juiceparty(10);
+            juiceparty(50,1000);
 
             Item *it=new Loot(*loottype[getloottype("LOOT_INTHQDISK")]);
             activesquad->loot.push_back(it);
@@ -1094,7 +1095,7 @@ void special_sweatshop_equipment(void)
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
          sitecrime++;
-         juiceparty(2);
+         juiceparty(5,100);
          sitestory->crime.push_back(CRIME_BREAK_SWEATSHOP);
 
          criminalizeparty(LAWFLAG_VANDALISM);
@@ -1137,7 +1138,7 @@ void special_polluter_equipment(void)
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
          sitecrime+=2;
-         juiceparty(2);
+         juiceparty(5,100);
          sitestory->crime.push_back(CRIME_BREAK_FACTORY);
 
          criminalizeparty(LAWFLAG_VANDALISM);
@@ -1316,7 +1317,7 @@ void special_house_photos(void)
             }
             else
             {
-               juiceparty(10);
+               juiceparty(50,1000);
                sitecrime+=40;
                sitestory->crime.push_back(CRIME_HOUSE_PHOTOS);
                criminalizeparty(LAWFLAG_THEFT);
@@ -1504,7 +1505,7 @@ void special_armybase_armory(void)
          }
          else
          {
-            juiceparty(10);
+            juiceparty(50,1000);
             sitecrime+=40;
             sitestory->crime.push_back(CRIME_ARMY_ARMORY);
             criminalizeparty(LAWFLAG_THEFT);
@@ -1582,7 +1583,7 @@ void special_corporate_files(void)
             it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
             activesquad->loot.push_back(it);
             
-            juiceparty(10);
+            juiceparty(50,1000);
             sitecrime+=40;
 
             int time=20+LCSrandom(10);
