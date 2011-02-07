@@ -1195,7 +1195,7 @@ void funds_and_trouble(char &clearformess)
 
       int difficulty = DIFFICULTY_HEROIC;
          
-      if(DIFFICULTY_HEROIC<=hack_skill+truehack.size()-1)
+      if(DIFFICULTY_HEROIC<=hack_skill+static_cast<int>(truehack.size())-1)
       {
          if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
          else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
@@ -1295,7 +1295,7 @@ void funds_and_trouble(char &clearformess)
          for(int h=0;h<truehack.size();h++)
             addjuice(*truehack[h],juiceval,200);
       }
-      else if(DIFFICULTY_FORMIDABLE<=hack_skill+truehack.size()-1)
+      else if(DIFFICULTY_FORMIDABLE<=hack_skill+static_cast<int>(truehack.size())-1)
       {
          int issue=LCSrandom(VIEWNUM-5);
          int crime;
