@@ -768,7 +768,15 @@ char talk(Creature &a,int t)
                   addstr("D - Rent a room");
                   if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
                   addstr(".");
-               }
+               } else if(encounter[t].type==CREATURE_LANDLORD&&
+                       location[cursite]->renting>0)
+                    {
+                       move(14,1);
+                       addstr("D - Stop renting a room");
+                       if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
+                       addstr(".");
+                    }
+
                if((encounter[t].type==CREATURE_GANGMEMBER||encounter[t].type==CREATURE_MERC))
                {
                   move(14,1);
@@ -1699,6 +1707,83 @@ char talk(Creature &a,int t)
                      getch();
                      
                      talkmode=TALKMODE_RENTING;
+                  }
+               }
+               else if (encounter[t].type == CREATURE_LANDLORD && location[cursite]->renting > 0)
+               {
+                  if (c == 'd')
+                  {
+                     clearcommandarea();
+                     clearmessagearea();
+                     clearmaparea();
+                     set_color(COLOR_WHITE, COLOR_BLACK, 1);
+                     move(9, 1);
+                     addstr(a.name);
+                     addstr(" says,");
+                     set_color(COLOR_GREEN, COLOR_BLACK, 1);
+                     move(10, 1);
+                     addstr("\"I'd like cancel my room.\"");
+                     refresh();
+                     getch();
+
+                     if (a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL)
+                     {
+                        set_color(COLOR_WHITE, COLOR_BLACK, 1);
+                        move(12, 1);
+                        addstr(tk->name);
+                        addstr(" responds,");
+                        set_color(COLOR_BLUE, COLOR_BLACK, 1);
+                        move(13, 1);
+                        addstr("\"Put some clothes on before I call the cops.\"");
+                        refresh();
+                        getch();
+                        return 1;
+                     }
+
+                     set_color(COLOR_WHITE, COLOR_BLACK, 1);
+                     move(12, 1);
+                     addstr(tk->name);
+                     addstr(" responds,");
+                     set_color(COLOR_BLUE, COLOR_BLACK, 1);
+                     move(13, 1);
+                     addstr("\"Alright. Please clear out your room.\"");
+                     refresh();
+                     getch();
+
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(15,1);
+                     addstr("<Your possessions at this location have been moved to the shelter.>");
+                     refresh();
+                     getch();
+
+                     location[cursite]->renting=RENTING_NOCONTROL;
+
+                     //MOVE ALL ITEMS AND SQUAD MEMBERS
+                     int hs=0;
+                     for(int l2=0;l2<location.size();l2++)
+                     {
+                        if(location[l2]->type==SITE_RESIDENTIAL_SHELTER)
+                        {
+                           hs=l2;
+                           break;
+                        }
+                     }
+                     for(int p=0;p<pool.size();p++)
+                     {
+                        if(pool[p]->location==cursite)pool[p]->location=hs;
+                        if(pool[p]->base==cursite)pool[p]->base=hs;
+                     }
+                     for(int l2=0;l2<location[cursite]->loot.size();l2++)
+                     {
+                        location[hs]->loot.push_back(location[cursite]->loot[l2]);
+                     }
+                     location[cursite]->loot.clear();
+
+                     location[cursite]->compound_walls=0;
+                     location[cursite]->compound_stores=0;
+                     location[cursite]->front_business=-1;
+
+                     return 1;
                   }
                }
                if((encounter[t].type==CREATURE_GANGMEMBER||encounter[t].type==CREATURE_MERC))
