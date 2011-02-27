@@ -818,8 +818,8 @@ void trial(Creature &g)
          //
          // If either your persuasion or your law roll is too low, you'll end up getting a negative
          // result that will drag down your defense. So try not to suck in either area.
-         int defenseskill=5*(g.skill_roll(SKILL_PERSUASION)-3)+
-                          10*(g.skill_roll(SKILL_LAW)-3);
+         defensepower=5*(g.skill_roll(SKILL_PERSUASION)-3)+
+                      10*(g.skill_roll(SKILL_LAW)-3);
          g.train(SKILL_PERSUASION,50);
          g.train(SKILL_LAW,50);
 
