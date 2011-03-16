@@ -137,10 +137,17 @@ bool Armor::sort_compare_special(Item* other) const
       else if (other->is_armor())
       {
          Armor* a = static_cast<Armor*>(other); //cast... -XML
-         reorder = (this->quality_ > a->quality_)
-                   || (this->damaged_ && !a->damaged_)
-                   || ((this->bloody_ || this->damaged_) && !a->bloody_ && !a->damaged_)
-                   || (this->bloody_ && this->damaged_ && !a->bloody_ && a->damaged_);
+            
+         if(this->quality_ < a->quality_)
+            reorder = false;
+         else if(this->quality_ > a->quality_)
+            reorder = true;
+         else if(this->damaged_ != a->damaged_) //i.e. if damaged is different
+            reorder = this->damaged_;
+         else if(this->bloody_ != a->bloody_ ) //i.e. if bloody is different
+            reorder = this->bloody_;
+         else
+            reorder = false;
       }
    }
    return reorder;
