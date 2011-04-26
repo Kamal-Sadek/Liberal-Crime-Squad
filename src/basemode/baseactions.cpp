@@ -652,7 +652,7 @@ void investlocation(void)
          if(ledger.get_funds()>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(12,1);
-         addstr("G - Buy a Generator for Electricity ($3000)");
+         addstr("G - Buy a Generator for emergency electricity ($3000)");
       }
 
       if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
@@ -660,7 +660,7 @@ void investlocation(void)
          if(ledger.get_funds()>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,1);
-         addstr("P - Buy a Printing Press ($3000)");
+         addstr("P - Buy a Printing Press to start your own newspaper ($3000)");
       }
 
       if(location[loc]->front_business==-1)
@@ -668,13 +668,13 @@ void investlocation(void)
          if(ledger.get_funds()>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(14,1);
-         addstr("F - Setup a Business Front ($3000)");
+         addstr("F - Setup a Business Front to ward off suspicion ($3000)");
       }
 
       if(ledger.get_funds()>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(15,1);
-      addstr("R - Buy 20 more daily rations ($150)");
+      addstr("R - Stockpile 20 daily rations of food ($150)");
 
       move(16,1);
       addstr("Enter - Done");

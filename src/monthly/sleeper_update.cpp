@@ -51,6 +51,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
    {
       case ACTIVITY_SLEEPER_LIBERAL:
          sleeper_influence(cr,clearformess,canseethings,libpower);
+         cr.infiltration-=0.02f;
          break;
       case ACTIVITY_SLEEPER_EMBEZZLE:
          sleeper_embezzle(cr,clearformess,canseethings,libpower);
@@ -68,13 +69,16 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          sleeper_scandal(cr,clearformess,canseethings,libpower);
          break;
       case ACTIVITY_NONE:
-         cr.infiltration+=0.02f;
-         if(cr.infiltration>=1)
-            cr.infiltration=1;
       case ACTIVITY_SLEEPER_JOINLCS:
       default:
          break;
    }
+   
+   cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
+   if(cr.infiltration>=1)
+      cr.infiltration=1;
+   if(cr.infiltration<=0)
+      cr.infiltration=0;
 }
 
 
@@ -336,7 +340,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
-      cr.juice += 3;
+      cr.juice += 10;
       if(cr.juice>100)cr.juice=100;
    }
 
@@ -547,7 +551,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
-      cr.juice += 3;
+      cr.juice += 10;
       if(cr.juice>100)cr.juice=100;
    }
 
@@ -564,7 +568,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
          income=static_cast<int>(5000*cr.infiltration);
          break;
       default:
-         income=static_cast<int>(1000*cr.infiltration);
+         income=static_cast<int>(500*cr.infiltration);
          break;
    }
    ledger.add_funds(income,INCOME_EMBEZZLEMENT);
@@ -607,7 +611,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
-      cr.juice += 3;
+      cr.juice += 10;
       if(cr.juice>100)cr.juice=100;
    }
    

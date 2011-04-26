@@ -59,7 +59,11 @@ void siegecheck(char canseethings)
    int numpres;
    for(int l=0;l<location.size();l++)
    {
-      if(policestation_closed)continue;
+      if(policestation_closed)
+      {
+         location[l]->heat = location[l]->heat * 0.95;
+         continue;
+      }
       if(location[l]->siege.siege)continue;
       if(location[l]->renting==RENTING_NOCONTROL)continue;
       numpres=0;
@@ -97,8 +101,9 @@ void siegecheck(char canseethings)
          int heatprotection=0;
          for(int p=0;p<pool.size();p++)
          {
+            // Sleepers and people not at this base don't count
+            if(pool[p]->location!=l || pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
             
-            if(pool[p]->location!=l)continue; // People not at this base don't count
             if(!pool[p]->alive) // Corpses attract attention
             {
                crimes += 10;
@@ -160,7 +165,7 @@ void siegecheck(char canseethings)
                   location[l]->siege.escalationstate=3;
 
                // Set time until siege is carried out
-               location[l]->siege.timeuntillocated += 5 + LCSrandom(20);
+               location[l]->siege.timeuntillocated += 14 + LCSrandom(15);
             }
          }
 
@@ -174,7 +179,11 @@ void siegecheck(char canseethings)
                   pool[pl]->location!=-1&& // <- this must be executed before the line below it
                   location[pool[pl]->location]->type==SITE_GOVERNMENT_POLICESTATION)
                {
-                  if(pool[pl]->infiltration*100>LCSrandom(50)) { policesleeperwarning=1; break; }
+                  //if(pool[pl]->infiltration*100>LCSrandom(50))
+                  {
+                     policesleeperwarning=1;
+                     break;
+                  }
                }
             }
             if(policesleeperwarning)
@@ -188,20 +197,20 @@ void siegecheck(char canseethings)
                addlocationname(location[l]);
                addstr(".");
                
-               if(location[l]->siege.escalationstate==1)
+               if(location[l]->siege.escalationstate>=2)
                {
                   move(11,1);
-                  addstr("The police are requesting the aid of National Guard troops.");
+                  addstr("The fighting force will be composed of national guard troops.");
                }
-               if(location[l]->siege.escalationstate==2)
+               if(location[l]->siege.escalationstate>=2)
                {
-                  move(11,1);
-                  addstr("Plans are in motion for the National Guard to bring in armored tanks.");
+                  move(12,1);
+                  addstr("A tank will cover the entrance to the compound.");
                }
                if(location[l]->siege.escalationstate>=3)
                {
-                  move(11,1);
-                  addstr("The Air Force and National Guard are working closely on this.");
+                  move(13,1);
+                  addstr("Planes will bomb the compound during the siege.");
                }
                refresh();
                getch();
@@ -225,26 +234,35 @@ void siegecheck(char canseethings)
                addlocationname(location[l]);
                addstr("!");
                location[l]->siege.underattack=0;
+               refresh();
+               getch();
 
                //MENTION ESCALATION STATE
-               if(location[l]->siege.escalationstate==1)
+               if(location[l]->siege.escalationstate>=1)
                {
                   move(9,1);
-                  addstr("Some national guard troops have joined them.");
+                  addstr("National Guard troops are replacing normal SWAT units.");
+                  refresh();
+                  getch();
                }
-               if(location[l]->siege.escalationstate==2)
+               if(location[l]->siege.escalationstate>=2)
                {
-                  move(9,1);
-                  addstr("You hear tanks rolling around outside.");
+                  move(10,1);
+                  if(location[l]->compound_walls & COMPOUND_TANKTRAPS)
+                     addstr("An M1 Abrams Tank is stopped by the tank traps.");
+                  else
+                     addstr("An M1 Abrams Tank takes up position outside the compound.");
+                  refresh();
+                  getch();
                }
                if(location[l]->siege.escalationstate>=3)
                {
-                  move(9,1);
+                  move(11,1);
                   addstr("You hear jet bombers streak overhead.");
+                  refresh();
+                  getch();
                }
 
-               refresh();
-               getch();
 
                statebrokenlaws(l);
 
@@ -326,8 +344,7 @@ void siegecheck(char canseethings)
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
                   pool[pl]->type==CREATURE_CORPORATE_CEO)
                {
-                  if(pool[pl]->infiltration*100>LCSrandom(50)) { ceosleepercount=1; break; }
-                  
+                  ceosleepercount=1;
                }
             }
             if(ceosleepercount||!LCSrandom(5))
@@ -336,7 +353,7 @@ void siegecheck(char canseethings)
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
                addstr("You have received ");
-               if(ceosleepercount)addstr("a sleeper CEO's warning");
+               if(ceosleepercount)addstr("your sleeper CEO's warning");
                else addstr("an anonymous tip");
                addstr(" that the Corporations");
                move(9,1);
@@ -431,7 +448,7 @@ void siegecheck(char canseethings)
                   set_color(COLOR_RED,COLOR_BLACK,1);
 
                   move(8,1);
-                  addstr("The truck barrels into the building and explodes massively!");
+                  addstr("The truck plows into the building and explodes!");
 
                   refresh();
                   getch();
@@ -447,9 +464,9 @@ void siegecheck(char canseethings)
                   int killed_y = 2;
                   int killed_x = 9;
 
-                  move(12,1);
+                  move(6,1);
                   addstr("INJURED: ");
-                  int injured_y = 12;
+                  int injured_y = 6;
                   int injured_x = 10;
 
                   for(int i=0;i<pool.size();i++)
@@ -532,7 +549,11 @@ void siegecheck(char canseethings)
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
                   pool[pl]->type==CREATURE_AGENT)
                {
-                  if(pool[pl]->infiltration*100>LCSrandom(100)) { agentsleepercount=1; break; }
+                  //if(pool[pl]->infiltration*100>LCSrandom(100))
+                  {
+                     agentsleepercount=1;
+                     break;
+                  }
                }
             }
             if(agentsleepercount)
@@ -975,7 +996,7 @@ void siegeturn(char clearformess)
 
             if(location[l]->compound_walls & COMPOUND_BASIC)fortified=5;
 
-            if(!LCSrandom(1+criminalcount+kidnapped*5+fortified))attack=1;
+            if(!LCSrandom(5))attack=1;
 
             if(attack)
             {
@@ -1186,7 +1207,7 @@ void siegeturn(char clearformess)
                }
 
                if((location[l]->compound_walls & COMPOUND_TANKTRAPS) &&
-                  location[l]->siege.escalationstate>=3 && !LCSrandom(50))
+                  location[l]->siege.escalationstate>=3 && !LCSrandom(15))
                {
                   no_bad=0;
 
@@ -1201,7 +1222,22 @@ void siegeturn(char clearformess)
                   }
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr("Engineers have removed your tank traps.");
+                  addstr("Army engineers have removed your tank traps.");
+
+                  refresh();
+                  getch();
+                  
+                  if(clearformess)
+                  {
+                     move(9,1);
+                  }
+                  else
+                  {
+                     makedelimiter(8,0);
+                     move(8,1);
+                  }
+                  addstr("The tank moves forward to your compound entrance.");
+
                   refresh();
                   getch();
 
@@ -1763,23 +1799,18 @@ char sally_forth_aux(int loc)
          }
       }
       // Military
-      else if(siege.escalationstate==1)
+      else if(siege.escalationstate>=1)
       {
-         for(int e=0;e<ENCMAX-6;e++)
+         for(int e=0;e<ENCMAX-9;e++)
          {
             makecreature(encounter[e],CREATURE_SOLDIER);
          }
       }
-      // They brought tanks
-      else if(siege.escalationstate>=2)
+
+      // M1 Tank
+      if(siege.escalationstate>=2 && !(location[loc]->compound_walls & COMPOUND_TANKTRAPS))
       {
-         makecreature(encounter[0],CREATURE_TANK);
-         makecreature(encounter[1],CREATURE_TANK);
-         makecreature(encounter[2],CREATURE_TANK);
-         for(int e=3;e<ENCMAX-3;e++)
-         {
-            makecreature(encounter[e],CREATURE_SOLDIER);
-         }
+         makecreature(encounter[ENCMAX-9],CREATURE_TANK);
       }
       break;
    }
@@ -1855,7 +1886,7 @@ char sally_forth_aux(int loc)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
-         addstr("C - Reflect on your poor judgment.");
+         addstr("C - Reflect on your Conservative judgment.");
       }
 
       // Enemies
@@ -1927,10 +1958,9 @@ char sally_forth_aux(int loc)
                sitestory->crime.push_back(CRIME_FOOTCHASE);
                criminalizeparty(LAWFLAG_RESIST);
             }
-            // Enemies shoot before your run attempt
-            // when trying to break out of a siege cordon
-            enemyattack();
+
             evasiverun();
+            enemyattack();
             creatureadvance();
 
             ranaway = true;
@@ -2027,9 +2057,9 @@ void sally_forth(void)
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(3,16);
-   addstr("You are about to sally forth to lift the Conservative");
+   addstr("You are about to exit the compound to lift the Conservative");
    move(4,11);
-   addstr("siege on your safehouse.  Enemy numbers are massive, and");
+   addstr("siege on your safehouse.  The enemy is ready for you, and");
    move(5,11);
    addstr("you will have to defeat them all or run away to survive this");
    move(6,11);
@@ -2039,13 +2069,7 @@ void sally_forth(void)
    move(9,11);
    addstr("available.  If you have a larger pool of Liberals, they");
    move(10,11);
-   addstr("will reinforce the squad as you take casualties.");
-   move(11,11);
-   addstr("Squad members in the back with firearms can provide cover");
-   move(12,11);
-   addstr("fire.  If you have at least six people total, then six must");
-   move(13,11);
-   addstr("be in the Squad.  If less than six, then they all must.");
+   addstr("will provide cover fire from the compound until needed.");
    
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
@@ -2470,10 +2494,12 @@ void conquertextccs(void)
       addstr("Gunfire still ringing in their ears, the squad revels in");
       move(4,11);
       addstr("their final victory.");
+
       move(6,16);
       addstr("As your Liberals pick through the remains of the safehouse,");
       move(7,11);
-      addstr("it is increasingly clear that this was their final safe house.");
+      addstr("it is increasingly clear that this was the CCS's last safe house.");
+
       move(9,16);
       addstr("The CCS has been completely destroyed.  Now wasn't there a");
       move(10,16);

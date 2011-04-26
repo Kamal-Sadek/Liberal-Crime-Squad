@@ -525,25 +525,17 @@ void activate(Creature *cr)
          move(10,40);
          addstr("Teach Liberals About What?");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_GENERALED);
-         move(12,40);
-         addstr("1 - General Education");
-
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_POLITICS);
-         move(13,40);
-         addstr("2 - Political Leadership");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_SURVIVAL);
-         move(14,40);
-         addstr("3 - Street Survival");
-
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_FIGHTING);
-         move(15,40);
-         addstr("4 - Fighting and Killing");
+         move(12,40);
+         addstr("1 - Political Activism");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_COVERT);
-         move(16,40);
-         addstr("5 - Covert Actions");
+         move(13,40);
+         addstr("2 - Infiltration");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_FIGHTING);
+         move(14,40);
+         addstr("3 - Urban Warfare");
        break;
      case 'l':
        listclasses(cr);
@@ -660,49 +652,27 @@ void activate(Creature *cr)
          move(23,1);
          addstr("major websites.");
          break;
-      case ACTIVITY_TEACH_GENERALED:
-         move(22,1);
-         addstr("  Skills Trained: Computers, Writing, Music, Art, Science, Religion,");
-         move(23,1);
-         addstr("  Business, Psychology");
-         move(24,1);
-         addstr("  Classes cost up to $40/day to conduct. All Liberals able will attend.");
-         break;
       case ACTIVITY_TEACH_POLITICS:
-         //move(22,1);
-         //addstr("  Attributes Trained: Intelligence, Charisma, Heart, Wisdom");
          move(22,1);
-         addstr("  Skills Trained: Law, Persuasion, Leadership");
-         move(24,1);
-         addstr("  Classes cost up to $40/day to conduct. All Liberals able will attend.");
-         break;
-      case ACTIVITY_TEACH_SURVIVAL:
-         //move(22,1);
-         //addstr("  Attributes Trained: Intelligence, Health, Agility");
-         move(22,1);
-         addstr("  Skills Trained: Driving, First Aid, Cooking, Street Sense,");
+         addstr("  Skills Trained: Writing, Persuasion, Law, Street Sense, Science,");
          move(23,1);
-         addstr("  Tailoring, Martial Arts");
+         addstr("    Religion, Business, Music, Art");
+         move(24,1);
+         addstr("  Classes cost up to $20/day to conduct. All Liberals able will attend.");
+         break;
+      case ACTIVITY_TEACH_COVERT:
+         move(22,1);
+         addstr("  Skills Trained: Computers, Security, Stealth, Disguise, Tailoring,");
+         move(23,1);
+         addstr("    Seduction, Psychology, Driving");
          move(24,1);
          addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
          break;
       case ACTIVITY_TEACH_FIGHTING:
-         //move(22,1);
-         //addstr("  Attributes Trained: Health, Agility, Strength");
          move(22,1);
-         addstr("  Skills Trained: All Weapon Skills");
+         addstr("  Skills Trained: All Weapon Skills, Martial Arts, Dodge, First Aid");
          move(24,1);
          addstr("  Classes cost up to $100/day to conduct. All Liberals able will attend.");
-         break;
-      case ACTIVITY_TEACH_COVERT:
-         //move(22,1);
-         //addstr("  Attributes Trained: Intelligence, Agility, Charisma");
-         move(22,1);
-         addstr("  Skills Trained: Persuasion, Security, Disguise, Stealth, Seduction,");
-         move(23,1);
-         addstr("  Psychology");
-         move(24,1);
-         addstr("  Classes cost up to $60/day to conduct. All Liberals able will attend.");
          break;
       case ACTIVITY_STUDY_DEBATING:
       case ACTIVITY_STUDY_MARTIAL_ARTS:
@@ -858,11 +828,9 @@ void activate(Creature *cr)
          case 't':
             switch(choice)
             {
-            case '1':cr->activity.type=ACTIVITY_TEACH_GENERALED;break;
-            case '2':cr->activity.type=ACTIVITY_TEACH_POLITICS;break;
-            case '3':cr->activity.type=ACTIVITY_TEACH_SURVIVAL;break;
-            case '4':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
-            case '5':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
+            case '1':cr->activity.type=ACTIVITY_TEACH_POLITICS;break;
+            case '2':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
+            case '3':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
             default:
                switch(cr->type)
                {
@@ -874,37 +842,22 @@ void activate(Creature *cr)
                case CREATURE_VETERAN:
                case CREATURE_HARDENED_VETERAN:
                case CREATURE_GANGMEMBER:
-                  cr->activity.type=ACTIVITY_TEACH_FIGHTING;
-                  choice='4';
-                  break;
-               case CREATURE_PRISONER:
-               case CREATURE_HSDROPOUT:
-               case CREATURE_BUM:
-               case CREATURE_CRACKHEAD:
                case CREATURE_MUTANT:
-               case CREATURE_PROSTITUTE:
-                  cr->activity.type=ACTIVITY_TEACH_SURVIVAL;
-                  choice='3';
-                  break;
-               case CREATURE_JUDGE_LIBERAL:
-               case CREATURE_JUDGE_CONSERVATIVE:
-               case CREATURE_RADIOPERSONALITY:
-               case CREATURE_NEWSANCHOR:
-               case CREATURE_CRITIC_ART:
-               case CREATURE_CRITIC_MUSIC:
-               case CREATURE_SOCIALITE:
-               case CREATURE_JOURNALIST:
-                  cr->activity.type=ACTIVITY_TEACH_POLITICS;
+               case CREATURE_CRACKHEAD:
+                  cr->activity.type=ACTIVITY_TEACH_FIGHTING;
                   choice='2';
                   break;
                case CREATURE_AGENT:
                case CREATURE_AMATEURMAGICIAN:
                case CREATURE_THIEF:
+               case CREATURE_PROSTITUTE:
+               case CREATURE_PRISONER:
                   cr->activity.type=ACTIVITY_TEACH_COVERT;
-                  choice='4';
+                  choice='3';
                   break;
                default:
-                  cr->activity.type=ACTIVITY_TEACH_GENERALED;
+                  cr->activity.type=ACTIVITY_TEACH_POLITICS;
+                  choice='1';
                   break;
                }
                break;

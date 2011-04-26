@@ -307,9 +307,9 @@ void HelpActivities(int activityType)
       move(4,0);
       addstr(" Selling brownies on the street is an illegal way to make money. Money earned is ");
       move(5,0);
-      addstr(" based upon the activists persuasion, cooking, street sense and charisma.");
+      addstr(" based upon the activists persuasion, street sense and business skill.");
       move(7,0);
-      addstr(" It raises persuasion, street sense, business and cooking. Street sense is used ");
+      addstr(" It raises persuasion, street sense, and business. Street sense is used ");
       move(8,0);
       addstr(" to avoid being caught. If caught and tried, the severity of the crime can vary ");
       move(9,0);

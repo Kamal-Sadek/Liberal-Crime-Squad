@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.03.1"
+#define PACKAGE_VERSION "4.04.0"
 #endif
 
-const int version=40301; 
-const int lowestloadversion=40300;
+const int version=40400; 
+const int lowestloadversion=40400;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -110,6 +110,7 @@ const int lowestloadscoreversion=31203;
    #undef clear
 
    #define CH_USE_CP437
+   //#define CH_USE_ASCII_HACK
 #else
    #include <vector>
    #include <map>
@@ -506,9 +507,7 @@ enum Activity
    ACTIVITY_WRITE_BLOG,
    ACTIVITY_WRITE_LETTERS,
    ACTIVITY_WRITE_GUARDIAN,
-   ACTIVITY_TEACH_GENERALED,
    ACTIVITY_TEACH_POLITICS,
-   ACTIVITY_TEACH_SURVIVAL,
    ACTIVITY_TEACH_FIGHTING,
    ACTIVITY_TEACH_COVERT,
    ACTIVITY_STUDY_DEBATING,
@@ -741,6 +740,7 @@ struct siegest
    char underattack;
    int attacktime;
    short kills;
+   short tanks;
    short escalationstate;
    char lights_off;
    char cameras_off;

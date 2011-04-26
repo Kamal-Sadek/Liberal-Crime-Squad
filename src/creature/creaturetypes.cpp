@@ -286,17 +286,17 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_CORPORATE_CEO:
          GIVE_GENDER_MALE;
-         if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
+         //if(law[LAW_GUNCONTROL]==-2 && !LCSrandom(3))
          {
-            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_REVOLVER_44")]);
+            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_DESERT_EAGLE")]);
             cr.give_weapon(w,NULL);
-            Clip c=Clip(*cliptype[getcliptype("CLIP_44")],4);
+            Clip c=Clip(*cliptype[getcliptype("CLIP_50AE")],4);
             cr.take_clips(c,4);
             cr.reload(false);
          }
          armor=new Armor(*armortype[getarmortype("ARMOR_EXPENSIVESUIT")]);
          cr.give_armor(*armor,NULL);
-         cr.money=LCSrandom(121)+120;
+         cr.money=LCSrandom(1001)+1000;
          cr.align=-1;
          cr.infiltration=1.0f;
          cr.juice=1000;
@@ -306,11 +306,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          strcat(cr.name,cr.propername);
          cr.dontname = true;
 
-         cr.gender_liberal=GENDER_MALE;
-         if(LCSrandom(10))cr.gender_conservative=GENDER_MALE;
-         else if(cr.gender_conservative==GENDER_FEMALE)cr.set_skill(SKILL_DISGUISE,LCSrandom(3)+4);
-
-         cr.set_skill(SKILL_BUSINESS,LCSrandom(6)+6);
+         cr.set_skill(SKILL_BUSINESS,LCSrandom(6)+10);
+         cr.set_skill(SKILL_DODGE,LCSrandom(6)+10);
+         cr.set_skill(SKILL_PISTOL,LCSrandom(6)+10);
          
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,7);
          cr.set_attribute(ATTRIBUTE_CHARISMA,7);
@@ -476,7 +474,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_STRENGTH,5);
          break;
       case CREATURE_TANK:
-         strcpy(cr.name,"Tank");
+         strcpy(cr.name,"M1 Abrams Tank");
          cr.animalgloss=ANIMALGLOSS_TANK;
          cr.strip(NULL);
          cr.specialattack=ATTACK_CANNON;

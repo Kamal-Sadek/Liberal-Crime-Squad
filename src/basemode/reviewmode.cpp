@@ -701,6 +701,7 @@ void review_mode(short mode)
 
                      // Remove squad member
                      removesquadinfo(*temppool[p]);
+                     cleangonesquads();
 
                      int thisPersonIndex = getpoolcreature(temppool[p]->id);
                      delete temppool[p];
@@ -738,6 +739,7 @@ void review_mode(short mode)
                   if(c=='c')
                   {
                      temppool[p]->die();
+                     cleangonesquads();
                      stat_kills++;
 
                      move(22,0);

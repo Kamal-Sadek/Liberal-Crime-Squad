@@ -87,8 +87,6 @@ void initsite(locationst &loc)
         build_site("GENERIC_UNSECURE");
         break;
      case SITE_BUSINESS_BARANDGRILL:
-        build_site("BUSINESS_RESTRICTEDCAFE");
-        break;
      case SITE_RESIDENTIAL_BOMBSHELTER:
      case SITE_OUTDOOR_BUNKER:
         build_site("GENERIC_LOBBY");
