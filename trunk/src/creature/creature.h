@@ -442,6 +442,7 @@ public:
    Creature& CEO();
 
    void initialize();
+   void newCEO();
 };
 
 #endif //CREATURE_H_INCLUDED

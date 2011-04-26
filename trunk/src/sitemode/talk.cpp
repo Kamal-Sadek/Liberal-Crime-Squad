@@ -707,6 +707,128 @@ char talk(Creature &a,int t)
 
    Creature *tk=&encounter[t];
 
+   // TALKING TO DOGS
+   if(tk->type == CREATURE_GUARDDOG && tk->align != ALIGN_LIBERAL)
+   {
+      // Find most Heartful Liberal
+      int bestp=0;
+      for(int p=0; p<6; p++)
+      {
+         if(activesquad->squad[p] &&
+            activesquad->squad[p]->get_attribute(ATTRIBUTE_HEART, true) >
+            activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true))
+         {
+            bestp = p;
+         }
+      }
+      
+      clearcommandarea();
+      clearmessagearea();
+      clearmaparea();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(10,1);
+      addstr(pool[bestp]->name);
+      addstr(" says, ");
+      move(11,1);
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      
+      // Say something unbelievably hippie
+      int statement = LCSrandom(10);
+      if(activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true) >= 20)
+      {
+         switch(statement)
+         {
+         case 0: addstr("\"I love dogs more than people.\""); break;
+         case 1: addstr("\"Dogs are the future of humanity.\""); break;
+         case 2: addstr("\"Power to the canines!\""); break;
+         case 3: addstr("\"We need to recruit more dogs.\""); break;
+         case 4: addstr("\"Wanna join the LCS?\""); break;
+         case 5: addstr("\"Want me to untie you?\""); break;
+         case 6: addstr("\"You deserve better than this.\""); break;
+         case 7: addstr("\"Dogs are the best anything ever.\""); break;
+         case 8: addstr("\"We should bark together!\""); break;
+         case 9: addstr("\"All we are saying is give fleas a chance.\""); break;
+         case 10: addstr("\"Dogs are better than humans.\""); break;
+         }
+      }
+      else // or not
+      {
+         switch(statement)
+         {
+         case 0: addstr("\"Hi Mister Dog!\""); break;
+         case 1: addstr("\"Good dog!\""); break;
+         case 2: addstr("\"Hey there, boy.\""); break;
+         case 3: addstr("\"Woof...?\""); break;
+         case 4: addstr("\"Bark at the man for me!\""); break;
+         case 5: addstr("\"Down, boy!\""); break;
+         case 6: addstr("\"Don't bite me!\""); break;
+         case 7: addstr("\"Hi doggy!\""); break;
+         case 8: addstr("\"Hi, puppy.\""); break;
+         case 9: addstr("\"OH MAN I LOVE DOGS!\""); break;
+         case 10: addstr("\"Bark! Bark!\""); break;
+         }
+      }
+      
+      refresh();
+      getch();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(13,1);addstr(tk->name);
+
+      if(activesquad->squad[bestp]->get_attribute(ATTRIBUTE_HEART, true) >= 20)
+      {
+         addstr(" says, ");
+         move(14,1);
+         
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         switch(statement)
+         {
+         case 0: addstr("\"A human after my own heart, in more ways than one.\""); break;
+         case 1: addstr("\"I don't see it, but I'll hear you out.\""); break;
+         case 2: addstr("\"Down with the feline establishment!\""); break;
+         case 3: addstr("\"Oh yeah? I'm a dog. What do you represent?\""); break;
+         case 4: addstr("\"Maybe. Is there a dental plan?\""); break;
+         case 5: addstr("\"Yes, please! This collar is painful!\""); break;
+         case 6: addstr("\"Finally, a human that understands.\""); break;
+         case 7: addstr("\"Heheheh, you're funny. Okay, I won't rat you out.\""); break;
+         case 8: addstr("\"Barkety bark, baby. Tell me more.\""); break;
+         case 9: addstr("\"We'll fight the fleas until our dying itch.\""); break;
+         case 10: addstr("\"You're pandering, but I love it.\""); break;
+         }
+
+         tk->align = ALIGN_LIBERAL;
+      }
+      else
+      {
+         addstr(" says, ");
+         move(14,1);
+         
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         switch(statement)
+         {
+         case 0: addstr("\"Woof?\""); break;
+         case 1: addstr("\"Bark!\""); break;
+         case 2: addstr("\"Woof!\""); break;
+         case 3: addstr("\"Woof!\""); break;
+         case 4: addstr("\"Bark! Grr...\""); break;
+         case 5: addstr("\"Rr...?\""); break;
+         case 6: addstr("\"Grrr...!\""); break;
+         case 7: addstr("\"Bark!\""); break;
+         case 8: addstr("\"Bark!\""); break;
+         case 9: addstr("\"Bark!\""); break;
+         case 10: addstr("\"Your accent is atrocious.\""); break;
+         }
+
+         tk->cantbluff=1;
+      }
+
+      refresh();
+      getch();
+
+      return 1;
+   }
+
    do
    {
       clearcommandarea();
@@ -1057,13 +1179,9 @@ char talk(Creature &a,int t)
                      {
                         move(y,1);y++;
                         if(tk->type==CREATURE_GANGUNIT)
-                           addstr("\"Go away before I arrest you.\"");
+                           addstr("\"Do you want me to arrest you?\"");
                         else if(tk->type==CREATURE_DEATHSQUAD)
-                           addstr("\"Go away before I shoot you.\"");
-                        else if(tk->get_skill(SKILL_RELIGION))
-                           addstr("\"Jesus loves even idiots like you.\"");
-                        else if(tk->get_skill(SKILL_BUSINESS))
-                           addstr("\"If I was your boss, I'd fire you.\"");
+                           addstr("\"If you don't shut up, I'm going to shoot you.\"");
                         else
                         {
                            switch(LCSrandom(10))
@@ -1263,7 +1381,7 @@ char talk(Creature &a,int t)
                               criminalize(*(activesquad->squad[i]),LAWFLAG_EXTORTION);
                         }
                         location[cursite]->siege.timeuntillocated = 2;
-                        rent = 9999999; // Yeah he's kicking you out next month
+                        rent = 10000000; // Yeah he's kicking you out next month
                      }
                      // ...or it's yours for free
                      else
@@ -1287,6 +1405,7 @@ char talk(Creature &a,int t)
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(9,1);addstr(a.name);addstr(" says,");
+
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(10,1);
                   addstr("\"Do you want to hear something disturbing?\"");
@@ -1298,7 +1417,7 @@ char talk(Creature &a,int t)
                   if(!interested && a.skill_check(SKILL_PERSUASION,DIFFICULTY_AVERAGE))
                      interested = true;
 
-                  if((tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
+                  if((tk->animalgloss==ANIMALGLOSS_ANIMAL&&tk->align!=ALIGN_LIBERAL)||
                      tk->animalgloss==ANIMALGLOSS_TANK)
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1446,7 +1565,12 @@ char talk(Creature &a,int t)
 
                   bool succeeded = false;
 
-                  if(a.skill_check(SKILL_SEDUCTION,DIFFICULTY_HARD))
+                  int difficulty = DIFFICULTY_HARD;
+
+                  if(tk->type == CREATURE_CORPORATE_CEO)
+                     difficulty = DIFFICULTY_HEROIC;
+
+                  if(a.skill_check(SKILL_SEDUCTION,difficulty))
                      succeeded = true;
 
                   if((tk->animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2)||
@@ -1461,7 +1585,17 @@ char talk(Creature &a,int t)
                         addstr(" shakes its turret a firm 'no'.");
                         break;
                      case CREATURE_GUARDDOG:
-                        addstr(" whines and backs away.");
+                        addstr(" says, ");
+                        move(13,1);
+                        set_color(COLOR_RED,COLOR_BLACK,1);
+                        switch(LCSrandom(3))
+                        {
+                        case 0:addstr("\"No! Wrong! I'm a dog!! Jesus.\"");break;
+                        case 1:addstr("\"What?! Ugh, I'm going to toss my kibble.\"");break;
+                        case 2:addstr("\"Okay, you need to stop petting me now.\"");break;
+                        }
+                        tk->align=ALIGN_CONSERVATIVE;
+                        tk->cantbluff=1;
                         break;
                      default:
                         addstr(" doesn't quite pick up on the subtext.");
@@ -1484,7 +1618,7 @@ char talk(Creature &a,int t)
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(y,1);y++;
 
-                     addstr("I'm not like that, officer.");
+                     addstr("Dirty. You know that's illegal, officer.");
 
                      refresh();
                      getch();
@@ -1614,37 +1748,51 @@ char talk(Creature &a,int t)
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(y,1);y++;addstr(tk->name);addstr(" responds,");
-                     set_color(COLOR_BLUE,COLOR_BLACK,1);
+                     set_color(COLOR_RED,COLOR_BLACK,1);
                      move(y,1);y++;
-                     switch(LCSrandom(9))
+                     if(tk->type == CREATURE_CORPORATE_CEO)
                      {
-                     case 0: addstr("\"Jesus...\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
-                     case 1: addstr("\"Touch me and you'll regret it.\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <crosses arms>");break;
-                     case 2: addstr("\"I'm.. uh.. waiting for someone.\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
-                     case 3: addstr("\"Hey, look, a UFO!\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <ducks away>");break;
-                     case 4: addstr("\"You're not my type. I like the sane.\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
-                     case 5: addstr("\"Hahahahaha!\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <shakes head>");break;
-                     case 6: addstr("\"You're disgusting.\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
-                     case 7: addstr("\"Are you serious?\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
-                     case 8: addstr("\"You're a pig.\"");
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        addstr(" <turns away>");break;
+                        if(a.gender_liberal != GENDER_MALE)
+                        {
+                           addstr("\"I'm a happily married man, sweetie.\"");
+                        }
+                        else
+                        {
+                           addstr("\"This ain't Brokeback Mountain, son.\"");
+                        }
+                     }
+                     else
+                     {
+                        switch(LCSrandom(9))
+                        {
+                        case 0: addstr("\"Jesus...\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 1: addstr("\"Touch me and you'll regret it.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <crosses arms>");break;
+                        case 2: addstr("\"I'm.. uh.. waiting for someone.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 3: addstr("\"Hey, look, a UFO!\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <ducks away>");break;
+                        case 4: addstr("\"You're not my type. I like sane people.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 5: addstr("\"Hahahahaha!\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <shakes head>");break;
+                        case 6: addstr("\"You're disgusting.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 7: addstr("\"Are you serious?\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        case 8: addstr("\"You're a pig.\"");
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           addstr(" <turns away>");break;
+                        }
                      }
                      
                      refresh();

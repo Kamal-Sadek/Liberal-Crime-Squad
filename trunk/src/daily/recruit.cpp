@@ -168,7 +168,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr("C - ");
       addstr(pool[p]->name);
-      addstr(" needs more Juice or Leadership to recruit.");
+      addstr(" needs more Juice to recruit.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
    else

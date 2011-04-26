@@ -149,6 +149,7 @@ void mode_site(short loc)
 
       location[loc]->siege.attacktime=0;
       location[loc]->siege.kills=0;
+      location[loc]->siege.tanks=0;
 
       //PLACE YOU
       int maxy=0;
@@ -159,7 +160,7 @@ void mode_site(short loc)
          {
             for(int z=0;z<MAPZ;z++)
             {
-               if(!location[loc]->siege.lights_off)levelmap[x][y][z].flag|=SITEBLOCK_KNOWN;
+               if(!(location[loc]->siege.lights_off))levelmap[x][y][z].flag|=SITEBLOCK_KNOWN;
                levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
                levelmap[x][y][z].flag&=~SITEBLOCK_LOOT;
             }
@@ -186,9 +187,13 @@ void mode_site(short loc)
 
       do
       {
-         locx=LCSrandom(MAPX);
-         locy=maxy-LCSrandom(3);
-         if(locy<3)locy=3;
+         // Some bugs with degenarate spawn outside the map are occurring
+         // Unknown why, but hard-coding limits to spawn location should help
+         //locx=LCSrandom(MAPX);
+         //locy=maxy-LCSrandom(3);
+         locx = MAPX/2+LCSrandom(25)-12;
+         locy = 15-LCSrandom(3);
+         //if(locy<3)locy=3;
          locz=0;
       }while(levelmap[locx][locy][locz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|
          SITEBLOCK_FIRE_START|SITEBLOCK_FIRE_PEAK|SITEBLOCK_FIRE_END));
@@ -226,7 +231,7 @@ void mode_site(short loc)
       }
 
       //PLACE UNITS
-      int unitnum=10;
+      int unitnum=6;
       int count=50000;
       for(int t=0;t<unitnum;t++)
       {
@@ -239,6 +244,7 @@ void mode_site(short loc)
             if(count==0)break;
          }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
                (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
+
          levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_UNIT;
       }
 
@@ -246,21 +252,8 @@ void mode_site(short loc)
          location[loc]->siege.siegetype==SIEGE_POLICE&&
          location[loc]->siege.escalationstate>=2)
       {
-         count=50000;
-         int hunitnum=3;
-         for(int t=0;t<hunitnum;t++)
-         {
-            do
-            {
-               lx=LCSrandom(11)+(MAPX/2)-5;
-               ly=LCSrandom(8);
-               lz=0;
-               count--;
-               if(count==0)break;
-            }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
-                  (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
-            levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
-         }
+         levelmap[MAPX/2][1][0].siegeflag|=SIEGEFLAG_HEAVYUNIT;
+         location[loc]->siege.tanks=1;
       }
    }
 
@@ -2209,6 +2202,7 @@ void mode_site(void)
                unity.clear();
                unitz.clear();
 
+               /*
                   //MOVE HEAVY UNITS
                for(x=0;x<MAPX;x++)
                {
@@ -2293,6 +2287,8 @@ void mode_site(void)
                unitx.clear();
                unity.clear();
                unitz.clear();
+               // End Heavy Units
+               */
 
                for(u=0;u<unitx.size();u++)
                {
@@ -2436,7 +2432,9 @@ void mode_site(void)
                }
 
                //BAIL UPON VICTORY
-               if(location[cursite]->siege.kills>=10&&location[cursite]->siege.siege)
+               if(location[cursite]->siege.kills>=10&&
+                  location[cursite]->siege.tanks==0&&
+                  location[cursite]->siege.siege)
                {
                   if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_DEFENDED;
                   else sitestory->type=NEWSSTORY_SQUAD_BROKESIEGE;

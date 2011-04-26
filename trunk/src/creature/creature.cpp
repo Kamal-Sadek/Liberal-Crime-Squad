@@ -1210,7 +1210,7 @@ void liberalize(Creature &cr,bool rename)
    cr.align=ALIGN_LIBERAL;
 
    if(cr.type == CREATURE_CORPORATE_CEO)
-      uniqueCreatures.CEO_state = UNIQUECREATURE_LIBERAL;
+      uniqueCreatures.newCEO();
 
    if(rename)
    {
@@ -1313,6 +1313,10 @@ bool Creature::talkreceptive()
 /* are the characters close enough in age to date? */
 bool Creature::can_date(Creature &a)
 {
+   // Assume age appropriate for animals, tanks, etc.
+   // (use other restrictions for these, like humorous rejections)
+   if(animalgloss || a.animalgloss) return true;
+
    if(age<11 || a.age<11) return false;
    if(age<16 || a.age<16)
    {
@@ -1329,10 +1333,15 @@ void Creature::die()
    alive = 0;
    blood = 0;
    if(type==CREATURE_CORPORATE_CEO)
-      uniqueCreatures.CEO_state = UNIQUECREATURE_DEAD;
+      uniqueCreatures.newCEO();
 }
 
 void UniqueCreatures::initialize()
+{
+   newCEO();
+}
+
+void UniqueCreatures::newCEO()
 {
    makecreature(CEO_,CREATURE_CORPORATE_CEO);
    CEO_ID = CEO_.id;

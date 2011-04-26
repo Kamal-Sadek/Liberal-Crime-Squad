@@ -921,9 +921,7 @@ void funds_and_trouble(char &clearformess)
       }
       switch(pool[p]->activity.type)
       {
-         case ACTIVITY_TEACH_GENERALED:
          case ACTIVITY_TEACH_FIGHTING:
-         case ACTIVITY_TEACH_SURVIVAL:
          case ACTIVITY_TEACH_POLITICS:
          case ACTIVITY_TEACH_COVERT:
             teachers.push_back(pool[p]);
@@ -2192,40 +2190,36 @@ void funds_and_trouble(char &clearformess)
    //Teaching
    for(int t=0;t<teachers.size();t++)
    {
-      int skillarray[12];
+      int skillarray[14];
       int cost, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
       switch(teachers[t]->activity.type)
       {
-      case ACTIVITY_TEACH_GENERALED:
-         cost=4;
-         skillarray[0]=SKILL_COMPUTERS;
-         skillarray[1]=SKILL_WRITING;
-         skillarray[2]=SKILL_MUSIC;
-         skillarray[3]=SKILL_ART;
-         skillarray[4]=SKILL_RELIGION;
-         skillarray[5]=SKILL_BUSINESS;
-         skillarray[6]=SKILL_SCIENCE;
-         skillarray[7]=SKILL_PSYCHOLOGY;
-         skillarray[8]=-1;
-         break;
       case ACTIVITY_TEACH_POLITICS:
-         cost=4;
+         cost=2;
          skillarray[0]=SKILL_LAW;
          skillarray[1]=SKILL_PERSUASION;
-         skillarray[2]=-1;
+         skillarray[2]=SKILL_WRITING;
+         skillarray[3]=SKILL_RELIGION;
+         skillarray[4]=SKILL_BUSINESS;
+         skillarray[5]=SKILL_SCIENCE;
+         skillarray[6]=SKILL_STREETSENSE;
+         skillarray[7]=SKILL_MUSIC;
+         skillarray[8]=SKILL_ART;
+         skillarray[9]=-1;
          break;
-      case ACTIVITY_TEACH_SURVIVAL:
+      case ACTIVITY_TEACH_COVERT:
          cost=6;
-         skillarray[0]=SKILL_DRIVING;
-         skillarray[1]=SKILL_FIRSTAID;
-         skillarray[2]=SKILL_STREETSENSE;
+         skillarray[0]=SKILL_SECURITY;
+         skillarray[1]=SKILL_COMPUTERS;
+         skillarray[2]=SKILL_DISGUISE;
          skillarray[3]=SKILL_TAILORING;
-         skillarray[4]=SKILL_HANDTOHAND;
-         skillarray[5]=-1;
-         //skillarray[5]=SKILL_COOKING;
-         //skillarray[6]=SKILL_THEFT;
+         skillarray[4]=SKILL_STEALTH;
+         skillarray[5]=SKILL_SEDUCTION;
+         skillarray[6]=SKILL_PSYCHOLOGY;
+         skillarray[7]=SKILL_DRIVING;
+         skillarray[8]=-1;
          break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=10;
@@ -2239,17 +2233,10 @@ void funds_and_trouble(char &clearformess)
          skillarray[7]=SKILL_AXE;
          skillarray[8]=SKILL_SMG;
          skillarray[9]=SKILL_THROWING;
-         skillarray[10]=-1;
-         break;
-      case ACTIVITY_TEACH_COVERT:
-         cost=8;
-         skillarray[0]=SKILL_PERSUASION;
-         skillarray[1]=SKILL_SECURITY;
-         skillarray[2]=SKILL_DISGUISE;
-         skillarray[3]=SKILL_STEALTH;
-         skillarray[4]=SKILL_SEDUCTION;
-         skillarray[5]=SKILL_PSYCHOLOGY;
-         skillarray[6]=-1;
+         skillarray[10]=SKILL_HANDTOHAND;
+         skillarray[11]=SKILL_DODGE;
+         skillarray[12]=SKILL_FIRSTAID;
+         skillarray[13]=-1;
          break;
       }
 

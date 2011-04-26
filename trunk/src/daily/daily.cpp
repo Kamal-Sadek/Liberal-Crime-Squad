@@ -1481,7 +1481,6 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    int subordinates=0;
 
    //Need REVOLUTIONARY (100+) juice to take over founder role
-   //-or- SOCIALIST THREAT (50+) and a level of leadership skill
    if(cr.hireid==-1)maxjuice=99;
 
    //Identify big boss and top subordinate

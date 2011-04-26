@@ -289,68 +289,72 @@ void enemyattack(void)
             &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
             ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
          {
-            if(!incapacitated(encounter[e],0,printed)&&encounter[e].animalgloss==ANIMALGLOSS_NONE)
+            if(encounter[e].animalgloss==ANIMALGLOSS_NONE)
             {
-               if(printed)
+               if(!incapacitated(encounter[e],0,printed))
                {
+                  if(printed)
+                  {
+                     printparty();
+                     if(mode==GAMEMODE_CHASECAR||
+                        mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+                     else printencounter();
+
+                     refresh();
+                     getch();
+                  }
+
+                  clearmessagearea();
+
+                  move(16,1);
+                  addstr(encounter[e].name);
+                  if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
+                     (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
+                     (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
+                     (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
+                     (encounter[e].blood<45))
+                  {
+                     switch(LCSrandom(9))
+                     {
+                        case 0:addstr(" crawls off moaning...");break;
+                        case 1:addstr(" crawls off whimpering...");break;
+                        case 2:addstr(" crawls off trailing blood...");break;
+                        case 3:addstr(" crawls off screaming...");break;
+                        case 4:addstr(" crawls off crying...");break;
+                        case 5:addstr(" crawls off sobbing...");break;
+                        case 6:addstr(" crawls off whispering...");break;
+                        case 7:addstr(" crawls off praying...");break;
+                        case 8:addstr(" crawls off cursing...");break;
+                     }
+                  }
+                  else
+                  {
+                     switch(LCSrandom(7))
+                     {
+                        case 0:addstr(" makes a break for it!");break;
+                        case 1:addstr(" escapes crying!");break;
+                        case 2:addstr(" runs away!");break;
+                        case 3:addstr(" gets out of there!");break;
+                        case 4:addstr(" runs hollering!");break;
+                        case 5:addstr(" bolts out of there!");break;
+                        case 6:addstr(" runs away screaming!");break;
+                     }
+                  }
+
+                  delenc(e,0);
+                  e--;
+
                   printparty();
                   if(mode==GAMEMODE_CHASECAR||
-                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+                        mode==GAMEMODE_CHASEFOOT)printchaseencounter();
                   else printencounter();
 
                   refresh();
                   getch();
                }
 
-               clearmessagearea();
-
-               move(16,1);
-               addstr(encounter[e].name);
-               if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-                  (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
-                  (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-                  (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
-                  (encounter[e].blood<45))
-               {
-                  switch(LCSrandom(9))
-                  {
-                     case 0:addstr(" crawls off moaning...");break;
-                     case 1:addstr(" crawls off whimpering...");break;
-                     case 2:addstr(" crawls off trailing blood...");break;
-                     case 3:addstr(" crawls off screaming...");break;
-                     case 4:addstr(" crawls off crying...");break;
-                     case 5:addstr(" crawls off sobbing...");break;
-                     case 6:addstr(" crawls off whispering...");break;
-                     case 7:addstr(" crawls off praying...");break;
-                     case 8:addstr(" crawls off cursing...");break;
-                  }
-               }
-               else
-               {
-                  switch(LCSrandom(7))
-                  {
-                     case 0:addstr(" makes a break for it!");break;
-                     case 1:addstr(" escapes crying!");break;
-                     case 2:addstr(" runs away!");break;
-                     case 3:addstr(" gets out of there!");break;
-                     case 4:addstr(" runs hollering!");break;
-                     case 5:addstr(" bolts out of there!");break;
-                     case 6:addstr(" runs away screaming!");break;
-                  }
-               }
-
-               delenc(e,0);
-               e--;
-
-               printparty();
-               if(mode==GAMEMODE_CHASECAR||
-                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
-               else printencounter();
-
-               refresh();
-               getch();
+               continue;
             }
-            continue;
          }
       }
 
@@ -511,7 +515,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       a.type==CREATURE_SCIENTIST_EMINENT||
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
-      a.type==CREATURE_CORPORATE_CEO||
+      (a.type==CREATURE_CORPORATE_CEO&&LCSrandom(2))||
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
       a.get_weapon().has_musical_attack()) && !mistake &&
@@ -608,12 +612,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       {
          if(a.specialattack==ATTACK_CANNON)
          {
-            strcat(str,"shoots at");
+            strcat(str,"fires a 120mm shell at");
             melee=false;
          }
          else if(a.specialattack==ATTACK_FLAME)strcat(str,"breathes fire at");
          else if(a.specialattack==ATTACK_SUCK)strcat(str,"stabs");
-         else strcat(str,"claws at");
+         else strcat(str,"bites");
       }
    }
    else
@@ -889,7 +893,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       char armorpiercing=0;
 
       if (!a.is_armed())
-      {    
+      {
+         strengthmin=5;
+         strengthmax=10;
          while(bursthits) //Put into WEAPON_NONE -XML
          {
             damamount+=LCSrandom(5+a.get_skill(SKILL_HANDTOHAND))+1+a.get_skill(SKILL_HANDTOHAND);
@@ -900,18 +906,20 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if(a.specialattack==ATTACK_CANNON)
             {
-               damamount=LCSrandom(500)+500;
+               damamount=LCSrandom(5000)+5000;
+               armorpiercing=20;
                damtype|=WOUND_BURNED;
                damtype|=WOUND_TORN;
                damtype|=WOUND_SHOT;
+               damtype|=WOUND_BLEEDING;
+               strengthmin=0;
+               strengthmax=0;
             }
             else if(a.specialattack==ATTACK_FLAME)damtype|=WOUND_BURNED;
             else if(a.specialattack==ATTACK_SUCK)damtype|=WOUND_CUT;
             else damtype|=WOUND_TORN;
             severtype=WOUND_NASTYOFF;
          }
-         strengthmin=5;
-         strengthmax=10;
       }
       else
       {
@@ -953,7 +961,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
 
       // Coarse combat lethality reduction.
-      damamount/=2;
+      //damamount/=2;
 
       if(t.squadid!=-1&&t.hireid==-1) // Plot Armor: if the founder is hit, inflict
          damamount/=2;                // 1/4 damage, because founders are cool
@@ -965,8 +973,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          // Melee attacks: Maximum strength bonus, minimum
          // strength to deliver full damage
          int strength = a.attribute_roll(ATTRIBUTE_STRENGTH);
-         if(strength>strengthmax)strength = strengthmax;
+         if(strength>strengthmax)strength = (strengthmax + strength)/2;
          mod+=strength-strengthmin;
+         armorpiercing+=(strength-strengthmin)/4;
       }
 
       //SKILL BONUS FOR GOOD ROLL
@@ -1110,6 +1119,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege)location[cursite]->siege.kills++;
+                  if(location[cursite]->siege.siege && t.animalgloss==ANIMALGLOSS_TANK)location[cursite]->siege.tanks--;
                   if(location[cursite]->renting==RENTING_CCS)ccs_siege_kills++;
                }
                if(target->squadid==-1 &&
@@ -1669,7 +1679,7 @@ void damagemod(Creature &t,char &damtype,int &damamount,
    
    if(t.animalgloss==ANIMALGLOSS_TANK)
    {
-      if(damtype!=WOUND_BURNED)damamount=0;
+      if(damtype!=WOUND_BURNED) armor=15;
       else armor=10;
    }
 

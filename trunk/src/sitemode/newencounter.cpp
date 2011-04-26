@@ -1171,7 +1171,7 @@ char addsiegeencounter(char type)
 
             if(type==SIEGEFLAG_UNIT_DAMAGED)
             {
-               encounter[e].blood=LCSrandom(50)+1;
+               encounter[e].blood=LCSrandom(75)+1;
             }
 
             encounter[e].exists=true;

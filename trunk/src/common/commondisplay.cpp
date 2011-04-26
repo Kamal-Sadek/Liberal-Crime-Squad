@@ -115,9 +115,7 @@ void set_activity_color(long activity_type)
       break;
 
       // Teaching
-   case ACTIVITY_TEACH_GENERALED:
    case ACTIVITY_TEACH_POLITICS:
-   case ACTIVITY_TEACH_SURVIVAL:
    case ACTIVITY_TEACH_FIGHTING:
    case ACTIVITY_TEACH_COVERT:
    //and studying
