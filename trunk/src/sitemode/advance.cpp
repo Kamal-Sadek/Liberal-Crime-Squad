@@ -455,7 +455,7 @@ void advancecreature(Creature &cr)
             sitecrime+=10;
             sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
             //criminalizeparty(LAWFLAG_MURDER);
-            //<-- might not die from squad attacking
+            //^-- might not die from squad attacking
          }
          adddeathmessage(cr);
 

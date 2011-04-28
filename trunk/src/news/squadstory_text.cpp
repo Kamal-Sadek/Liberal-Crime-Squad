@@ -184,11 +184,12 @@ void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char*
             case 2:strcat(story,"disheveled, ");break;
             case 3:strcat(story,"inbred, ");break;
             }
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
             case 0:strcat(story,"violent, ");break;
             case 1:strcat(story,"bloodthirsty, ");break;
-            case 2:strcat(story,"");break;
+            case 2:strcat(story,"savage, ");break;
+            case 3:strcat(story,"");break;
             }
             strcat(story,"M16-toting ");
             switch(LCSrandom(3))

@@ -77,7 +77,6 @@
         <name>Bill Clinton Mask</name>
         <shortname>B Clinton Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_CLINTON_HILLARY">
@@ -85,7 +84,6 @@
         <name>Hillary Clinton Msk</name>
         <shortname>H Clinton Mask</shortname>
         <description>U.S. Senator, First Lady</description>
-
     </masktype>
 
     <masktype idname="MASK_FALWELL">
@@ -93,7 +91,6 @@
         <name>Jerry Falwell Mask</name>
         <shortname>Falwell Mask</shortname>
         <description>Reverend</description>
-
     </masktype>
 
     <masktype idname="MASK_FORD">
@@ -101,7 +98,6 @@
         <name>Gerald Ford Mask</name>
         <shortname>Gld. Ford Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_GORE_AL">
@@ -109,7 +105,6 @@
         <name>Al Gore Mask</name>
         <shortname>Al Gore Mask</shortname>
         <description>U.S. Vice President</description>
-
     </masktype>
 
     <masktype idname="MASK_GORE_TIPPER">
@@ -117,7 +112,6 @@
         <name>Tipper Gore Mask</name>
         <shortname>Tpr. Gore Mask</shortname>
         <description>U.S. Second Lady</description>
-
     </masktype>
 
     <masktype idname="MASK_GUY_FAWKES">
@@ -135,7 +129,6 @@
         <name>Ted Stevens Mask</name>
         <shortname>T Stevens Mask</shortname>
         <description>U.S. Senator</description>
-
     </masktype>
 
     <masktype idname="MASK_HELMS">
@@ -143,7 +136,6 @@
         <name>Jesse Helms Mask</name>
         <shortname>Helms Mask</shortname>
         <description>U.S. Senator</description>
-
     </masktype>
 
     <masktype idname="MASK_JASON">
@@ -161,7 +153,6 @@
         <name>Abraham Lincoln Msk</name>
         <shortname>Lincoln Mask</shortname>
         <description>U.S. President, Assassinated</description>
-
     </masktype>
 
     <masktype idname="MASK_KENNEDY_JOHN">
@@ -169,7 +160,6 @@
         <name>John F Kennedy Mask</name>
         <shortname>JFK Mask</shortname>
         <description>U.S. President, Assassinated</description>
-
     </masktype>
 
     <masktype idname="MASK_KENNEDY_ROBERT">
@@ -177,7 +167,6 @@
         <name>Robert Kennedy Mask</name>
         <shortname>RFK Mask</shortname>
         <description>U.S. Senator, Assassinated</description>
-
     </masktype>
 
     <masktype idname="MASK_KISSINGER">
@@ -185,7 +174,6 @@
         <name>Henry Kissinger Msk</name>
         <shortname>Kissinger Mask</shortname>
         <description>U.S. Secretary of State</description>
-
     </masktype>
 
     <masktype idname="MASK_NIXON">
@@ -193,7 +181,13 @@
         <name>Richard Nixon Mask</name>
         <shortname>Nixon Mask</shortname>
         <description>U.S. President, Resigned</description>
-
+    </masktype>
+    
+    <masktype idname="MASK_OBAMA">
+        <mask>true</mask>
+        <name>Barack Obama Mask</name>
+        <shortname>Obama  Mask</shortname>
+        <description>U.S. President</description>
     </masktype>
 
     <masktype idname="MASK_POWELL">

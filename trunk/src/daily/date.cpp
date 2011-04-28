@@ -410,7 +410,7 @@ char completedate(datest &d,int p,char &clearformess)
 		  addstr(pool[p]->name);
 		  if (d.date.size()>2)
 		  {
-			 sprintf(datestr, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size());
+			 sprintf(datestr, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size()); // what
 			 addstr(datestr);
 		  }
 		  else
@@ -432,15 +432,9 @@ char completedate(datest &d,int p,char &clearformess)
       //addstr(" has failed the Liberal Crime Squad."); //in combination with the word 'ambush', this made it sound like getting beaten to death.
 	  switch (LCSrandom(3))
 	  {
-	  case 0:
-	     addstr(" is publically humiliated.");
-		 break;
-	  case 1:
-	     addstr(" runs away.");
-		 break;
-	  default:
-	     addstr(" escapes through the bathroom window.");
-		 break;
+	  case 0:addstr(" is publically humiliated.");break;
+	  case 1:addstr(" runs away.");break;
+	  default:addstr(" escapes through the bathroom window.");break;
 	  }
       addjuice(*pool[p],-5,-50);
       refresh();
@@ -651,8 +645,9 @@ char completedate(datest &d,int p,char &clearformess)
             {
                addstr(" seizes the Conservative swine from behind and warns it");
                move(18,0);
-               if(law[LAW_FREESPEECH]!=-2)addstr("not to fuck around!");
-               else addstr("not to [resist]!");
+               //if(law[LAW_FREESPEECH]!=-2)
+               addstr("not to fuck around!");
+               //else addstr("not to [resist]!");
             }
 
             refresh();
