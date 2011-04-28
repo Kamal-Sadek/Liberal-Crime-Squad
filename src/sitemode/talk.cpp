@@ -942,7 +942,12 @@ char talk(Creature &a,int t)
                   {
                   case LAW_ABORTION:      addstr("\"Conservatives make women turn to coat hangers.\"");break;
                   case LAW_ANIMALRESEARCH:addstr("\"Richard Gere put a gerbil in his butt!\"");break;
-                  case LAW_POLICEBEHAVIOR:addstr("\"The cops suck!\"");break;
+                  case LAW_POLICEBEHAVIOR:
+                                          if(law[LAW_FREESPEECH]==ALIGN_ARCHCONSERVATIVE)
+                                              addstr("\"[The police are not doing their job very well!]\"");
+                                          else
+                                              addstr("\"The cops suck!\"");
+                                          break;
                   case LAW_PRIVACY:       addstr("\"The government, like, knows things about you.\"");break;
                   case LAW_DEATHPENALTY:  addstr("\"They executed this one dude, and like, his head caught on fire.\"");break;
                   case LAW_NUCLEARPOWER:  addstr("\"Have you seen Godzilla?  Nuclear power is bad, yo.\"");break;
@@ -1212,7 +1217,7 @@ char talk(Creature &a,int t)
                         case LAW_NUCLEARPOWER:  addstr("\"Nuclear power is clean.\"");break;
                         case LAW_POLLUTION:     addstr("\"It's not that bad.\"");break;
                         case LAW_LABOR:         addstr("\"Trust the free market, it hasn't failed us yet.\"");break;
-                        case LAW_GAY:           addstr("\"Homosexuality is disgusting.\"");break;
+                        case LAW_GAY:           addstr("\"Homosexuality is a sin.\"");break;
                         case LAW_CORPORATE:     addstr("\"Corporations are part of capitalism.\"");break;
                         case LAW_FREESPEECH:    addstr("\"Don't be offensive and you'll be fine.\"");break;
                         case LAW_FLAGBURNING:   addstr("\"That flag is the sacred symbol of our country.\"");break;
@@ -1609,7 +1614,7 @@ char talk(Creature &a,int t)
 
                   a.train(SKILL_SEDUCTION,LCSrandom(5)+2);
 
-                  if((a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM" //Police property on armor? -XML
+                  if((a.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM" // Police property on armor? -XML
                            || a.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")
                      && tk->type==CREATURE_PROSTITUTE)
                   {

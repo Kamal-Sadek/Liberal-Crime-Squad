@@ -2311,7 +2311,7 @@ int publicmood(int l)
       // one of the other issues besides nuclear power is conservative, even when
       // the nuclear power issue is 100% Liberal. - Jonathan S. Fox
       case LAW_ABORTION:
-         return attitude[VIEW_WOMEN];//XXX: No VIEW_ABORTION! Do not forget this!
+         return attitude[VIEW_WOMEN];//XXX: There is no ``VIEW_ABORTION''!
       case LAW_ANIMALRESEARCH:
          return attitude[VIEW_ANIMALRESEARCH];
       case LAW_POLICEBEHAVIOR:

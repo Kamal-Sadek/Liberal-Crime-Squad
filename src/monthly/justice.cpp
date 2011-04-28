@@ -667,7 +667,7 @@ void trial(Creature &g)
          {
             case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.");break;
             case 1:addstr("The jury is Flaming Liberal.");break;
-            case 2:addstr("Four of the jurors are closet Socialists.");break;//XXX: A Few?
+            case 2:addstr("A few of the jurors are closet Socialists.");break;
             case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.");break;
          }
       }
@@ -681,7 +681,7 @@ void trial(Creature &g)
          {
             case 0:addstr("Such a collection of Conservative jurors has never before been assembled.");break;
             case 1:addstr("One of the accepted jurors is a Conservative activist.");break;
-            case 2:addstr("Three of the jurors are members of the KKK.");break;//XXX: A Few?
+            case 2:addstr("A few of the jurors are members of the KKK.");break;
             case 3:addstr("The jury is frighteningly Conservative.");break;
          }
       }
@@ -776,7 +776,8 @@ void trial(Creature &g)
                sleeperlawyer->train(SKILL_PERSUASION,prosecution/4);
             }
 
-            if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
+            if(defensepower<=5)addstr("The defense attorney rarely showed up.");
+            else if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.");
             else if(defensepower<=25)addstr("The defense is totally lame.");
             else if(defensepower<=50)addstr("The defense was lackluster.");
             else if(defensepower<=75)addstr("Defense arguments were pretty good.");
@@ -993,7 +994,8 @@ void trial(Creature &g)
       }
    }
    //GUILTY PLEA
-   // XXX: How about "nolo" (Nolo contendere) -- LK
+   // How about "nolo" (Nolo contendere) -- LK
+   //  I would imagine this would disregard the strength of the defense. -- LK
    else
    {
       erase();
@@ -1452,8 +1454,7 @@ void reeducation(Creature &g)
          addstr(" becomes Wiser!");
          g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
       }
-      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE
-              && LCSrandom(4))
+      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
       {
          addstr(g.name);
          addstr(" only resists by thinking of ");

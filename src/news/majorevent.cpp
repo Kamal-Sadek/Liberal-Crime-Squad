@@ -402,7 +402,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            if(law[LAW_FREESPEECH]==-2)strcat(story," has resigned in disgrace after being caught with a [civil servant.]");
+            if(law[LAW_FREESPEECH]==-2)strcat(story," has resigned in disgrace after being caught with a [civil servant].");
             else strcat(story," has resigned in disgrace after being caught with a prostitute.");
             strcat(story,"&r");
             strcat(story,"  ");
@@ -426,7 +426,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:strcat(story,"\"the most perverse and spine-tingling debauchery imaginable, at least with only two people.\"");break;
                case 1:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"the judge [going to the bathroom near] the [civil servant.]");
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"the judge [going to the bathroom in the vicinity of] the [civil servant].");
                       else if(law[LAW_FREESPEECH]==2)strcat(story,"the judge pissing on the prostitute.");
                       else strcat(story,"the judge relieving himself on the prostitute.");break; // Himself? Maybe themselves would work better? -- LK
                case 2:
@@ -532,7 +532,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," issued an apology later in the program, but ");
             strcat(story,"the damage might already be done.  ");
             strcat(story,"According to a poll completed yesterday, ");
-             strcat(story,"fully half of the host's most loyal supporters ");                    // XXX How many of them switch should
+            strcat(story,"fully half of the host's most loyal supporters ");                    // XXX How many of them switch should
             strcat(story,"have decided to leave the program for saner ");                        //     depend on [LAW_FREESPEECH]
             strcat(story,"pastures.  Of these, many said that they would be switching over ");
             strcat(story,"to the FM band.");
@@ -807,7 +807,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             else switch(LCSrandom(3))
             {
-               case 0:strcat(story,"horseshit");break; // Mccain
+               case 0:strcat(story,"horseshit");break; // McCain
                case 1:strcat(story,"bullshit");break;
                case 2:strcat(story,"shit");break;
             }

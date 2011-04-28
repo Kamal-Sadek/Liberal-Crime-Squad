@@ -1717,7 +1717,7 @@ void funds_and_trouble(char &clearformess)
 		  case ACTIVITY_STUDY_BUSINESS:
            skill[0] = SKILL_BUSINESS;
 			  break;
-		  //case ACTIVITY_STUDY_COOKING:
+	//case ACTIVITY_STUDY_COOKING:
         //   skill[0] = SKILL_COOKING;
         //   break;
 		  case ACTIVITY_STUDY_GYMNASTICS:
@@ -2469,12 +2469,11 @@ char stealcar(Creature &cr,char &clearformess)
 
       //SECURITY?
       char alarmon=0;
-
       char sensealarm=0;
       if(LCSrandom(100)<v->sensealarmchance()) sensealarm=1;
       char touchalarm=0;
       if(LCSrandom(100)<v->touchalarmchance()) touchalarm=1;
-      char windowdamage=0;
+      char windowdamage=08;
 
       do
       {

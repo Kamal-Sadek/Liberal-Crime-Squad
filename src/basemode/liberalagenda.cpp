@@ -246,48 +246,20 @@ char liberalagenda(char won)
                case LAW_ELECTIONS:addstr("Election Reform");break;
                case LAW_MILITARY:addstr("Military Spending");break;
                case LAW_TORTURE:addstr("Human Rights");break;
-               case LAW_TAX:
-                  addstr("Tax Structure");
-                  break;
-               case LAW_ABORTION:
-                  addstr("Abortion Rights");
-                  break;
-               case LAW_ANIMALRESEARCH:
-                  addstr("Animal Rights");
-                  break;
-               case LAW_POLICEBEHAVIOR:
-                  addstr("Police Regulation");
-                  break;
-               case LAW_PRIVACY:
-                  addstr("Privacy Rights");
-                  break;
-               case LAW_DEATHPENALTY:
-                  addstr("Death Penalty");
-                  break;
-               case LAW_NUCLEARPOWER:
-                  addstr("Nuclear Power");
-                  break;
-               case LAW_POLLUTION:
-                  addstr("Pollution");
-                  break;
-               case LAW_LABOR:
-                  addstr("Labor Laws");
-                  break;
-               case LAW_GAY:
-                  addstr("Gay Rights");
-                  break;
-               case LAW_CORPORATE:
-                  addstr("Corporate Law");
-                  break;
-               case LAW_FREESPEECH:
-                  addstr("Free Speech");
-                  break;
-               case LAW_FLAGBURNING:
-                  addstr("Flag Burning");
-                  break;
-               case LAW_GUNCONTROL:
-                  addstr("Gun Control");
-                  break;
+               case LAW_TAX:addstr("Tax Structure");break;
+               case LAW_ABORTION:addstr("Abortion Rights");break;
+               case LAW_ANIMALRESEARCH:addstr("Animal Rights");break;
+               case LAW_POLICEBEHAVIOR:addstr("Police Regulation");break;
+               case LAW_PRIVACY:addstr("Privacy Rights");break;
+               case LAW_DEATHPENALTY:addstr("Death Penalty");break;
+               case LAW_NUCLEARPOWER:addstr("Nuclear Power");break;
+               case LAW_POLLUTION:addstr("Pollution");break;
+               case LAW_LABOR:addstr("Labor Laws");break;
+               case LAW_GAY:addstr("Gay Rights");break;
+               case LAW_CORPORATE:addstr("Corporate Law");break;
+               case LAW_FREESPEECH:addstr("Free Speech");break;
+               case LAW_FLAGBURNING:addstr("Flag Burning");break;
+               case LAW_GUNCONTROL:addstr("Gun Control");break;
             }
 
             move(14+l/3,l%3*26 + 3 + law[l]);//FIXME: Pretty sure this needs to be changed as well. -- LK
@@ -482,7 +454,7 @@ char liberalagenda(char won)
                   else addstr("There are universal workers' rights and a high guaranteed minimum income.");
                   break;
                case LAW_GAY:
-                  if(won==-1)addstr("Homosexuals are executed regularly.");
+                  if(won==-1)addstr("Homosexuals are executed regularly for \"promoting the Gay Agenda\".");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Homosexuals are routinely persecuted with no recourse.");
                   else if(law[l]==-1)addstr("Homosexuals are not tolerated.");
@@ -627,11 +599,10 @@ char liberalagenda(char won)
 
 
 /* base - liberal agenda - disband */
-char confirmdisband(void) // XXX The (current) issue that the masses are most
-{                          // XXX        concerned should be (slightly) more
-   char word[80];         // XXX        likely to be the phrase.
-                          // XXX        (Issue, not the CCS, etc.)
-   int pos=0;                  // XXX                        -- LK
+char confirmdisband(void) // The (current) issue that the masses are most
+{                         //        concerned should be (slightly) more likely
+   char word[80];         //        to be the phrase. (Issue, not the CCS, etc.)
+   int pos=0;             //                        -- LK
 
    switch(LCSrandom(22)) // or more... (preferably 44)
    {    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

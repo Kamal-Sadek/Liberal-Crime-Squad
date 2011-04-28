@@ -1623,9 +1623,9 @@ void promoteliberals(void)
       addstr("]");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a Letter to Promote a Liberal. You can not Promote Liberals in Hiding.");
+      addstr("Press a letter to promote a Liberal. You cannot promote Liberals in hiding.");
       move(23,0);
-      addstr("Enlightened liberals follow anyone. Seduced liberals follow only their lover.");
+      addstr("Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.");
       if(temppool.size()>PAGELENGTH)
       {
          move(24,0);

@@ -5,7 +5,6 @@ ACTIVITY_VISIT, TODO
 ACTIVITY_HOSTAGETENDING, TODO
 ACTIVITY_DOS_RACKET, TODO
 ACTIVITY_MAKE_ARMOR, TODO
-ACTIVITY_STEALCARS, TODO
 ACTIVITY_WHEELCHAIR, TODO
 ACTIVITY_BURY, TODO
 ACTIVITY_WRITE_BLOG, TODO
@@ -315,7 +314,7 @@ void HelpActivities(int activityType)
       move(9,0);
       addstr(" greatly based upon circumstances. ");
       move(11,0);
-      addstr(" The more illegal drugs are in the country, the more money you will make. However, ");
+      addstr(" The more Conservative that the drug laws are, the more money you will make. However, ");
       move(12,0);
       addstr(" the consequences of being convicted will increase as well. ");
       break;
@@ -353,7 +352,7 @@ void HelpActivities(int activityType)
       move(2,0);
       addstr("===Repair Clothing===");
       move(4,0);
-      addstr(" Repairing clothing will repair damaged armour and remove blood stains if there ");
+      addstr(" Repairing clothing will repair damaged armor and remove blood stains if there ");
       move(5,0);
       addstr(" are any. ");
       move(7,0);
@@ -363,12 +362,33 @@ void HelpActivities(int activityType)
       break;
 // }}}
 // }}}
+// {{{ Stealing {cars,wheelchairs}
+   case ACTIVITY_STEALCARS:
+      move(2,0);
+      addstr("===Stealing a Car===");
+      move(4,0);
+      addstr(" Stealing a car will have the Liberal attempt to steal a car from the street. ");
+      move(5,0);
+      addstr(" if successful, the car will be added to your garage. ");
+      move(7,0);
+      addstr(" Street sense determines the chances of finding a specific type of car, ";
+      move(8,0);
+      addstr(" security determines the successfulness of any attempt to break into or hotwire ");
+      move(9,0);
+      addstr(" the car. ");
+      move(11,0);
+      addstr(" Strength determines the chances of effectively breaking a car window, intelligence ");
+      move(12,0);
+      addstr(" determines the ease of which the car keys are found. ");
+      break;
+// }}}
 // {{{ default
    default:
+      move(2,0);
       addstr("===THE GREAT UNKNOWN===");
-      move(2,1);
+      move(4,0);
       addstr("There is no help on this topic yet, as the help system is quite new.");
-      move(3,1);
+      move(5,0);
       addstr("However, if you want to help us, you could write one, and send it to us!");
       break;
 // }}}

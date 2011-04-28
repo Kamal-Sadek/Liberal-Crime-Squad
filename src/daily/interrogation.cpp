@@ -713,7 +713,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 1:addstr("Microsoft");break;
                case 2:addstr("Bill Gates");break;
                case 3:addstr("Wal-Mart");break;
-               case 4:addstr("George W. Bush");break;// Dubya? //Disambiguated. -Fox
+               case 4:addstr("George W. Bush");break;
                case 5:addstr("ExxonMobil");break;
                case 6:addstr("Trickle-down economics");break;
                case 7:addstr("Family values");break;
