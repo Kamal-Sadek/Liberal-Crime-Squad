@@ -371,7 +371,7 @@ void HelpActivities(int activityType)
       move(5,0);
       addstr(" if successful, the car will be added to your garage. ");
       move(7,0);
-      addstr(" Street sense determines the chances of finding a specific type of car, ";
+      addstr(" Street sense determines the chances of finding a specific type of car, ");
       move(8,0);
       addstr(" security determines the successfulness of any attempt to break into or hotwire ");
       move(9,0);
