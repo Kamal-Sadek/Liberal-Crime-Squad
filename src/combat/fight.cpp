@@ -1617,7 +1617,21 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
       else
       {
-         strcat(str," misses.");
+         if(t.skill_check(SKILL_DODGE, DIFFICULTY_AVERAGE))         //Awesome dodge or regular one?
+         {
+             strcpy(str, t.name);
+             switch(LCSrandom(4))
+             {
+                 case 0 : strcat(str," gracefully dives to avoid the attack!"); break;
+                 case 1 : strcat(str," does the Matrix-dodge!"); break;
+                 case 2 : strcat(str," leaps for cover!"); break;
+                 default : strcat(str," avoids the attack with no difficulty at all!");
+             }
+         }
+         else
+         {
+             strcat(str," misses.");
+         }
          move(17,1);
          addstr(str);
          printparty();
