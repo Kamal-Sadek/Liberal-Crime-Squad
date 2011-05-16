@@ -2473,7 +2473,7 @@ char stealcar(Creature &cr,char &clearformess)
       if(LCSrandom(100)<v->sensealarmchance()) sensealarm=1;
       char touchalarm=0;
       if(LCSrandom(100)<v->touchalarmchance()) touchalarm=1;
-      char windowdamage=08;
+      char windowdamage=0;
 
       do
       {
