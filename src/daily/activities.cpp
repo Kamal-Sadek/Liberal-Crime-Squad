@@ -2248,7 +2248,7 @@ void funds_and_trouble(char &clearformess)
             pool[p]->align==ALIGN_LIBERAL)
          {
             //Step through the array of skills to train
-            for(int i=0;i<11;i++)
+            for(int i=0;i<13;i++)           //Any reason why we aren't using a while(true) loop or something even more dynamic? --kviiri
             {
                //If no more skills to train, stop
                if(skillarray[i]==-1)break;
@@ -2274,7 +2274,7 @@ void funds_and_trouble(char &clearformess)
             pool[p]->align==ALIGN_LIBERAL)
          {
             //Step through the array of skills to train
-            for(int i=0;i<11;i++)
+            for(int i=0;i<13;i++)
             {
                //If no more skills to train, stop
                if(skillarray[i]==-1)break;
