@@ -4,6 +4,17 @@
 2004-08-17 - Kevin Sadler (sadler@geodude.eclipse.co.uk)
 2009-02-22 - Jonathan Stickles (floppysocks@hevanet.com)
 
+Update as of version 4.x
+===================================
+
+After compiling, you may get messages about missing files. The game needs to
+be able to access the art directory, so if you get these messages, try to
+run the game from the trunk folder (where this file is by default).
+Sitemaps.txt may have to be converted to UNIX line endings - this is usually
+done with either "dos2unix" or "fromdos" command. If the file still appears
+to be missing, copy it to the location
+/usr/local/share/lcs/art/sitemaps.art .
+
 Important Update as of Version 3.18
 ===================================
 

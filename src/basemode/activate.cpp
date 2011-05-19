@@ -829,8 +829,8 @@ void activate(Creature *cr)
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_TEACH_POLITICS;break;
-            case '2':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
-            case '3':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
+            case '2':cr->activity.type=ACTIVITY_TEACH_COVERT;break;
+            case '3':cr->activity.type=ACTIVITY_TEACH_FIGHTING;break;
             default:
                switch(cr->type)
                {
