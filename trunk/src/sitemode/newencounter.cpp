@@ -161,7 +161,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_YOGAINSTRUCTOR]+=1;
             creaturearray[CREATURE_MARTIALARTIST]+=1;
             creaturearray[CREATURE_ATHLETE]+=1;
-
+            creaturearray[CREATURE_LOCKSMITH]+=1;
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -204,6 +204,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_ACTOR]+=1;
             creaturearray[CREATURE_ATHLETE]+=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=1;
             if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
                creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
@@ -298,7 +299,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MARTIALARTIST]+=1;
             creaturearray[CREATURE_ATHLETE]+=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
-
+            creaturearray[CREATURE_LOCKSMITH]+=1;
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -362,6 +363,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_PHOTOGRAPHER]+=1;
             creaturearray[CREATURE_CAMERAMAN]+=1;
             creaturearray[CREATURE_CLERK]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=1;
 
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
@@ -452,6 +454,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_THIEF]+=1;
             creaturearray[CREATURE_ACTOR]+=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=1;
 
             int encnum=1;
             if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
@@ -526,6 +529,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MARTIALARTIST]+=1;
             creaturearray[CREATURE_ATHLETE]=1;
             creaturearray[CREATURE_FIREFIGHTER]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=1;
 
             int encnum=1;
             if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
@@ -586,6 +590,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_THIEF]=1;
             creaturearray[CREATURE_ACTOR]=1;
             creaturearray[CREATURE_ATHLETE]=1;
+            creaturearray[CREATURE_LOCKSMITH]+=1;
 
             int encnum=1;
             if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
@@ -735,6 +740,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MARTIALARTIST]=1;
             creaturearray[CREATURE_ATHLETE]=1;
             //creaturearray[CREATURE_FIREFIGHTER]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=5;       //Forensic locksmiths
 
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
@@ -823,6 +829,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MARTIALARTIST]=1;
             creaturearray[CREATURE_ATHLETE]=1;
             //creaturearray[CREATURE_FIREFIGHTER]+=1;
+            creaturearray[CREATURE_LOCKSMITH]+=5;
 
             for(int n=0;n<LCSrandom(6)+1;n++)
             {

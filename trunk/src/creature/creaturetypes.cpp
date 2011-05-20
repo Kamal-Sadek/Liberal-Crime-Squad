@@ -2058,6 +2058,12 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_HEALTH,8);
          cr.age=AGE_YOUNGADULT;
          break;
+      case CREATURE_LOCKSMITH:
+          GIVE_WEAPON_CIVILIAN;
+          cr.set_skill(SKILL_SECURITY, LCSrandom(5) + 3);
+          cr.age=AGE_MATURE;
+          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
+          break;
    }
    
    delete weapon;
@@ -2613,6 +2619,11 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_INDUSTRIAL]=1;
          break;
       case CREATURE_NUN:
+         okaysite[SITE_DOWNTOWN]=1;
+         okaysite[SITE_UDISTRICT]=1;
+         okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_LOCKSMITH:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
