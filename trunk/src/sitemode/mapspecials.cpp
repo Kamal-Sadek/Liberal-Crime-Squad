@@ -627,7 +627,7 @@ void special_policestation_lockup(void)
             else printencounter();
             refresh();
 
-            partyrescue();
+            partyrescue(SPECIAL_POLICESTATION_LOCKUP);
          }
 
          if(actual)
@@ -695,7 +695,7 @@ void special_courthouse_lockup(void)
             else printencounter();
             refresh();
 
-            partyrescue();
+            partyrescue(SPECIAL_COURTHOUSE_LOCKUP);
          }
 
          if(actual)
@@ -877,7 +877,7 @@ void special_courthouse_jury(void)
 
 
 
-void special_prison_control(void)
+void special_prison_control(short prison_control_type)
 {
    do
    {
@@ -885,7 +885,14 @@ void special_prison_control(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr("You've found the prison control room.");
+      addstr("You've found the ");
+      if(prison_control_type==SPECIAL_PRISON_CONTROL_LOW)
+         addstr("low security ");
+      else if(prison_control_type==SPECIAL_PRISON_CONTROL_MEDIUM)
+         addstr("medium security ");
+      else if(prison_control_type==SPECIAL_PRISON_CONTROL_HIGH)
+         addstr("high security ");
+      addstr("prison control room.");
       move(17,1);
       addstr("Free the prisoners? (Yes or No)");
 
@@ -897,6 +904,33 @@ void special_prison_control(void)
       if(c=='y')
       {
          int numleft=LCSrandom(8)+2;
+         if(prison_control_type==SPECIAL_PRISON_CONTROL_LOW)
+         {
+            switch(law[LAW_DEATHPENALTY])
+            {
+               case -1: numleft=LCSrandom(6)+2;break;
+               case -2: numleft=LCSrandom(3)+1;break;
+            }
+         }
+         else if(prison_control_type==SPECIAL_PRISON_CONTROL_MEDIUM)
+         {
+            switch(law[LAW_DEATHPENALTY])
+            {
+               case 2: numleft=LCSrandom(4)+1;
+               case 1: numleft=LCSrandom(6)+1;
+            }
+         }
+         else if(prison_control_type==SPECIAL_PRISON_CONTROL_HIGH)
+         {
+            switch(law[LAW_DEATHPENALTY])
+            {
+               case  2: numleft=0;break;
+               case  1: numleft=LCSrandom(4);break;
+               case -1: numleft+=LCSrandom(4);break;
+               case -2: numleft+=LCSrandom(4)+2;break;
+            }
+         }
+         
          for(int e=0;e<ENCMAX;e++)
          {
             if(!encounter[e].exists)
@@ -916,7 +950,7 @@ void special_prison_control(void)
          else printencounter();
          refresh();
 
-         partyrescue();
+         partyrescue(prison_control_type);
 
          alienationcheck(1);
          noticecheck(-1);

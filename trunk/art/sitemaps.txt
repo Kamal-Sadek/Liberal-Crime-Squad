@@ -73,9 +73,8 @@
 # along the X or Y axis for at least two tiles, and the script will automatically create stairs up and down on
 # each level. This is what is used to create the apartment stairwells in the game.
 #
-# - There isn't currently a good way to make roguelike-style stairs that are randomly placed in the
-# level. Specifying a range with SPECIAL won't have the desired effect, since SPECIAL just randomly spams stuff
-# down like tables in a restaurant.
+# - SCRIPT STAIRS_RANDOM will randomly place stairs to connect z-levels. It will place on upwards stairs
+# on every designated level except the top one and a corresponding downward stairs for each one up.
 #
 #
 #
@@ -84,6 +83,7 @@
 # ROOM          - Random room generator, will generate either a room, or a maze of rooms, depending on the size of the area.
 # HALLWAY_YAXIS - Carves out a single tile wide hallway vertically down the map, then plots rooms on either side of the hallway.
 # STAIRS        - Creates a nice stairwell with alternating up and down stairs.
+# STAIRS_RANDOM - Connect z-levels with randomly placed stairs.
 #
 #
 # NOTE: Loot is currently not using this system.
@@ -527,7 +527,33 @@ OBJECT	SITEMAP
 OBJECT	SITEMAP
 	NAME	GOVERNMENT_PRISON
 	USE	GENERIC_LOBBY
-	UNIQUE	PRISON_CONTROL
+	UNIQUE	PRISON_CONTROL_LOW
+	SCRIPT	ROOM
+		XSTART	-12
+		XEND	12
+		YSTART	3
+		YEND	15
+		ZSTART	1
+		ZEND	2
+	TILE	RESTRICTED
+		XSTART	-28
+		XEND	28
+		YSTART	3
+		YEND	19
+		ZSTART   1
+		ZEND  2
+		NOTE	ADD
+	UNIQUE	PRISON_CONTROL_MEDIUM
+	   Z  1
+	UNIQUE	PRISON_CONTROL_HIGH
+	   Z  2
+	SCRIPT STAIRS_RANDOM
+	   XSTART	-28
+		XEND	28
+		YSTART	3
+		YEND	19
+		ZSTART   0
+		ZEND  2
 
 OBJECT	SITEMAP
 	NAME	MEDIA_AMRADIO

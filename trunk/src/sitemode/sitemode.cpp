@@ -739,7 +739,11 @@ void mode_site(void)
                   case SPECIAL_POLICESTATION_LOCKUP:special_policestation_lockup();break;
                   case SPECIAL_COURTHOUSE_LOCKUP:special_courthouse_lockup();break;
                   case SPECIAL_COURTHOUSE_JURYROOM:special_courthouse_jury();break;
-                  case SPECIAL_PRISON_CONTROL:special_prison_control();break;
+                  case SPECIAL_PRISON_CONTROL:
+                  case SPECIAL_PRISON_CONTROL_LOW:
+                  case SPECIAL_PRISON_CONTROL_MEDIUM:
+                  case SPECIAL_PRISON_CONTROL_HIGH:
+                     special_prison_control(levelmap[locx][locy][locz].special);break;
                   case SPECIAL_INTEL_SUPERCOMPUTER:special_intel_supercomputer();break;
                   case SPECIAL_SWEATSHOP_EQUIPMENT:special_sweatshop_equipment();break;
                   case SPECIAL_POLLUTER_EQUIPMENT:special_polluter_equipment();break;

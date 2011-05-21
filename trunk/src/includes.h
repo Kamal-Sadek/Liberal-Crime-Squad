@@ -672,6 +672,9 @@ enum SpecialBlocks
    SPECIAL_COURTHOUSE_LOCKUP,
    SPECIAL_COURTHOUSE_JURYROOM,
    SPECIAL_PRISON_CONTROL,
+   SPECIAL_PRISON_CONTROL_LOW,
+   SPECIAL_PRISON_CONTROL_MEDIUM,
+   SPECIAL_PRISON_CONTROL_HIGH,
    SPECIAL_INTEL_SUPERCOMPUTER,
    SPECIAL_SWEATSHOP_EQUIPMENT,
    SPECIAL_POLLUTER_EQUIPMENT,
@@ -1658,7 +1661,7 @@ char radio_broadcast(void);
 /* run a tv broadcast */
 char news_broadcast(void);
 /* rescues people held at the activeparty's current location */
-void partyrescue(void);
+void partyrescue(short special);
 /* everybody reload! */
 void reloadparty(bool wasteful=false);
 
@@ -1674,7 +1677,7 @@ void special_lab_genetic_cagedanimals(void);
 void special_policestation_lockup(void);
 void special_courthouse_lockup(void);
 void special_courthouse_jury(void);
-void special_prison_control(void);
+void special_prison_control(short prison_control_type);
 void special_intel_supercomputer(void);
 void special_sweatshop_equipment(void);
 void special_polluter_equipment(void);
