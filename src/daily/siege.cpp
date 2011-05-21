@@ -1478,7 +1478,7 @@ void giveup(void)
       move(1,1);
       if(location[loc]->siege.siegetype==SIEGE_POLICE && location[loc]->siege.escalationstate == 0)
          addstr("The police");
-      else if(location[loc]->siege.siegetype==SIEGE_POLICE && location[loc]->siege.escalationstate == 0)
+      else if(location[loc]->siege.siegetype==SIEGE_POLICE && location[loc]->siege.escalationstate >= 1)
          addstr("The soldiers");
       else
          addstr("The firemen");

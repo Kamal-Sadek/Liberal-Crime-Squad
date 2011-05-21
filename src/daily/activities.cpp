@@ -1304,7 +1304,7 @@ void funds_and_trouble(char &clearformess)
          if(truehack.size()>1)strcpy(msg,"Your hackers have ");
          else {strcpy(msg,truehack[0]->name);strcat(msg," has ");}
 
-         switch(LCSrandom(5))
+         switch(LCSrandom(4))
          {
          case 0:strcat(msg,"defaced");crime=LAWFLAG_INFORMATION;break;
          case 1:strcat(msg,"knocked out");crime=LAWFLAG_COMMERCE;break;
