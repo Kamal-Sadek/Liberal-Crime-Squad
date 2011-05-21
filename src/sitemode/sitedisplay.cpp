@@ -106,7 +106,10 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_POLICESTATION_LOCKUP:strcpy(str,"Police Detention Room");break;
       case SPECIAL_COURTHOUSE_LOCKUP:strcpy(str,"Court House Jail");break;
       case SPECIAL_COURTHOUSE_JURYROOM:strcpy(str,"Jury Room");break;
-      case SPECIAL_PRISON_CONTROL:strcpy(str,"Prison Control Room");break;
+      case SPECIAL_PRISON_CONTROL:
+      case SPECIAL_PRISON_CONTROL_LOW:
+      case SPECIAL_PRISON_CONTROL_MEDIUM:
+      case SPECIAL_PRISON_CONTROL_HIGH:strcpy(str,"Prison Control Room");break;
       case SPECIAL_INTEL_SUPERCOMPUTER:strcpy(str,"Super-computer");break;
       case SPECIAL_SWEATSHOP_EQUIPMENT:strcpy(str,"Textile Equipment");break;
       case SPECIAL_POLLUTER_EQUIPMENT:strcpy(str,"Factory Equipment");break;
@@ -446,6 +449,7 @@ void printblock(int x,int y,int z,int px, int py)
       set_color(COLOR_RED,backcolor,1,blink);
       move(py+0,px+1);
       addch(':');
+
       set_color(COLOR_YELLOW,backcolor,1,blink);
       move(py+0,px+4);
       addch('$');
@@ -580,7 +584,10 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_POLICESTATION_LOCKUP:addstr("CELLS");break;
          case SPECIAL_COURTHOUSE_LOCKUP:addstr("CELLS");break;
          case SPECIAL_COURTHOUSE_JURYROOM:addstr("JURY!");break;
-         case SPECIAL_PRISON_CONTROL:addstr("CTROL");break;
+         case SPECIAL_PRISON_CONTROL:
+         case SPECIAL_PRISON_CONTROL_LOW:
+         case SPECIAL_PRISON_CONTROL_MEDIUM:
+         case SPECIAL_PRISON_CONTROL_HIGH:addstr("CTROL");break;
          case SPECIAL_INTEL_SUPERCOMPUTER:addstr("INTEL");break;
          case SPECIAL_SWEATSHOP_EQUIPMENT:addstr("EQUIP");break;
          case SPECIAL_POLLUTER_EQUIPMENT:addstr("EQUIP");break;

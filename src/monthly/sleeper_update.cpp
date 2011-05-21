@@ -768,7 +768,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             if(!LCSrandom(5))item="LOOT_SECRETDOCUMENTS";
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_CHEMICAL";
-            else item="LOOT_SILVERWEAR";
+            else item="LOOT_SILVERWARE";
             shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
          }
 

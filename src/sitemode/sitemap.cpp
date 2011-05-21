@@ -1022,6 +1022,8 @@ configSiteScript::configSiteScript(const std::string& value)
       script = SITEMAPSCRIPT_HALLWAY_YAXIS;
    else if(value == "STAIRS")
       script = SITEMAPSCRIPT_STAIRS;
+   else if(value == "STAIRS_RANDOM")
+      script = SITEMAPSCRIPT_STAIRS_RANDOM;
 }
 
 void configSiteScript::configure(const std::string& command, const std::string& value)
@@ -1059,6 +1061,10 @@ void configSiteScript::build()
    else if(script==SITEMAPSCRIPT_STAIRS)
    {
       generatestairs(xstart, ystart, zstart, xend-xstart, yend-ystart, zend-zstart);
+   }
+   else if(script==SITEMAPSCRIPT_STAIRS_RANDOM)
+   {
+      generatestairsrandom(xstart, ystart, zstart, xend-xstart, yend-ystart, zend-zstart);
    }
 }
 
@@ -1185,6 +1191,151 @@ void configSiteScript::generatestairs(int rx, int ry, int rz, int dx, int dy, in
    }
 }
 
+void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int dy, int dz)
+{
+   int x, y, z;
+   vector< std::pair<int,int> > secure, secure_above, unsecure, unsecure_above;
+
+   // Look through bottom level for secure and unsecure tiles.
+   for(int xi=xstart;xi<=xend;xi++)
+   {
+      for(int yi=ystart;yi<=yend;yi++)
+      {
+
+            if(!(levelmap[xi][yi][0].flag & (SITEBLOCK_DOOR|SITEBLOCK_BLOCK|SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR))&&
+               levelmap[xi][yi][0].special == SPECIAL_NONE)
+            {
+               if(levelmap[xi][yi][0].flag & SITEBLOCK_RESTRICTED)
+                  secure.push_back(std::make_pair(xi,yi));
+               else
+                  unsecure.push_back(std::make_pair(xi,yi));
+            }
+
+      }
+   }
+   
+   for(int zi=zstart+1;zi<=zend;zi++)
+   {
+      // Look through level above for secure and unsecure tiles.
+      for(int xi=xstart;xi<=xend;xi++)
+      {
+         for(int yi=ystart;yi<=yend;yi++)
+         {
+
+               if(!(levelmap[xi][yi][zi].flag & (SITEBLOCK_DOOR|SITEBLOCK_BLOCK|SITEBLOCK_EXIT|SITEBLOCK_OUTDOOR))&&
+                  levelmap[xi][yi][zi].special == SPECIAL_NONE)
+               {
+                  if(levelmap[xi][yi][zi].flag & SITEBLOCK_RESTRICTED)
+                     secure_above.push_back(std::make_pair(xi,yi));
+                  else
+                     unsecure_above.push_back(std::make_pair(xi,yi));
+               }
+
+         }
+      }
+      
+      // Stairs in secure areas should only lead into secure areas.
+      // Removing secure tiles without secure tiles above them.
+      std::vector< std::pair<int,int> >::iterator i = secure.begin();
+      std::vector< std::pair<int,int> >::iterator j;
+      while(i != secure.end())
+      {
+         j = secure_above.begin();
+         while(j != secure_above.end())
+         {
+            if(*j == *i)
+            {
+               ++i;
+               break;
+            }
+            else if((j->first == i->first && j->second > i->second)
+                    || (j->first > i->first))
+            {
+               i = secure.erase(i);
+               break;
+            }
+            ++j;
+         }
+         if(j == secure_above.end())
+            i = secure.erase(i);
+      }
+      
+      // Stairs in unsecure areas should only lead into unsecure areas.
+      // Removing unsecure tiles without unsecure tiles above them.
+      i = unsecure.begin();
+      while(i != unsecure.end())
+      {
+         j = unsecure_above.begin();
+         while(j != unsecure_above.end())
+         {
+            if(*j == *i)
+            {
+               ++i;
+               break;
+            }
+            else if((j->first == i->first && j->second > i->second)
+                    || (j->first > i->first))
+            {
+               i = unsecure.erase(i);
+               break;
+            }
+            ++j;
+         }
+         if(j == unsecure_above.end())
+            i = unsecure.erase(i);
+      }
+      
+      // Place stairs in secure area if possible, otherwise unsecure area.
+      if(secure.size() > 0)
+      {
+         int choice=LCSrandom(secure.size());
+         x = secure[choice].first;
+         y = secure[choice].second;
+         z = zi-1;
+         
+         // The tile receiving the stairs down will not eligible for stairs
+         // up later.
+         for(j = secure_above.begin(); j != secure_above.end(); ++j)
+         {
+            if (j->first == x && j->second == y)
+            {
+               secure_above.erase(j);
+               break;
+            }
+         }
+      }
+      else if(unsecure.size() > 0)
+      {
+         int choice=LCSrandom(unsecure.size());
+         x = unsecure[choice].first;
+         y = unsecure[choice].second;
+         z = zi-1;
+         
+         // The tile receiving the stairs down will not eligible for stairs
+         // up later.
+         for(j = unsecure_above.begin(); j != unsecure_above.end(); ++j)
+         {
+            if (j->first == x && j->second == y)
+            {
+               unsecure_above.erase(j);
+               break;
+            }
+         }
+      }
+      else
+         continue; //Nowhere to place stairs.
+      
+      levelmap[x][y][z].special=SPECIAL_STAIRS_UP;
+      levelmap[x][y][z+1].special=SPECIAL_STAIRS_DOWN;
+      
+      // Move up on level for next iteration.
+      secure = secure_above;
+      secure_above.clear();
+      unsecure = unsecure_above;
+      unsecure_above.clear();
+   }
+}
+
 configSiteSpecial::configSiteSpecial(const std::string& value)
    : xstart(0), xend(0), ystart(0), yend(0), zstart(0), zend(0), freq(1)
 {
@@ -1194,6 +1345,9 @@ configSiteSpecial::configSiteSpecial(const std::string& value)
    else if(value == "COURTHOUSE_LOCKUP")special = SPECIAL_COURTHOUSE_LOCKUP;
    else if(value == "COURTHOUSE_JURYROOM")special = SPECIAL_COURTHOUSE_JURYROOM;
    else if(value == "PRISON_CONTROL")special = SPECIAL_PRISON_CONTROL;
+   else if(value == "PRISON_CONTROL_LOW")special = SPECIAL_PRISON_CONTROL_LOW;
+   else if(value == "PRISON_CONTROL_MEDIUM")special = SPECIAL_PRISON_CONTROL_MEDIUM;
+   else if(value == "PRISON_CONTROL_HIGH")special = SPECIAL_PRISON_CONTROL_HIGH;
    else if(value == "INTEL_SUPERCOMPUTER")special = SPECIAL_INTEL_SUPERCOMPUTER;
    else if(value == "SWEATSHOP_EQUIPMENT")special = SPECIAL_SWEATSHOP_EQUIPMENT;
    else if(value == "POLLUTER_EQUIPMENT")special = SPECIAL_POLLUTER_EQUIPMENT;
@@ -1263,6 +1417,9 @@ configSiteUnique::configSiteUnique(const std::string& value)
    else if(value == "COURTHOUSE_LOCKUP")unique = SPECIAL_COURTHOUSE_LOCKUP;
    else if(value == "COURTHOUSE_JURYROOM")unique = SPECIAL_COURTHOUSE_JURYROOM;
    else if(value == "PRISON_CONTROL")unique = SPECIAL_PRISON_CONTROL;
+   else if(value == "PRISON_CONTROL_LOW")unique = SPECIAL_PRISON_CONTROL_LOW;
+   else if(value == "PRISON_CONTROL_MEDIUM")unique = SPECIAL_PRISON_CONTROL_MEDIUM;
+   else if(value == "PRISON_CONTROL_HIGH")unique = SPECIAL_PRISON_CONTROL_HIGH;
    else if(value == "INTEL_SUPERCOMPUTER")unique = SPECIAL_INTEL_SUPERCOMPUTER;
    else if(value == "SWEATSHOP_EQUIPMENT")unique = SPECIAL_SWEATSHOP_EQUIPMENT;
    else if(value == "POLLUTER_EQUIPMENT")unique = SPECIAL_POLLUTER_EQUIPMENT;
@@ -1286,7 +1443,8 @@ configSiteUnique::configSiteUnique(const std::string& value)
 
 void configSiteUnique::configure(const std::string& command, const std::string& value)
 {
-   // no commands
+   if(command == "Z")
+      zstart = zend = atoi(value.c_str());
 }
 
 struct coordinates

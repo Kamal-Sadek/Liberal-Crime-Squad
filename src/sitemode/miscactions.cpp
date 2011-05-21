@@ -977,7 +977,7 @@ char news_broadcast(void)
 
 
 /* rescues people held at the activeparty's current location */
-void partyrescue(void)
+void partyrescue(short special)
 {
    int freeslots=0;
    int p, pl;
@@ -996,125 +996,122 @@ void partyrescue(void)
          }
       }
    }
-
+   
+   vector<Creature*> waiting_for_rescue;
    for(pl=0;pl<pool.size();pl++)
    {
       if(pool[pl]->location==cursite&&
-         !(pool[pl]->flag & CREATUREFLAG_SLEEPER))
+         !(pool[pl]->flag & CREATUREFLAG_SLEEPER)&&
+         !(special==SPECIAL_PRISON_CONTROL_LOW&&!(pool[pl]->sentence>0&&!pool[pl]->deathpenalty))&& //Low is for normal time-limited sentences.
+         !(special==SPECIAL_PRISON_CONTROL_MEDIUM&&!(pool[pl]->sentence<0&&!pool[pl]->deathpenalty))&& //Medium is for life sentences.
+         !(special==SPECIAL_PRISON_CONTROL_HIGH&&!pool[pl]->deathpenalty)) //High is for death sentences.
+            waiting_for_rescue.push_back(pool[pl]);
+   }
+
+   for(pl=0;pl<waiting_for_rescue.size();pl++)
+   {
+      if(LCSrandom(2)&&freeslots)
       {
-         if(LCSrandom(2)&&freeslots)
+         for(int p=0;p<6;p++)
          {
-            for(int p=0;p<6;p++)
+            if(activesquad->squad[p]==NULL)
             {
-               if(activesquad->squad[p]==NULL)
+               activesquad->squad[p]=waiting_for_rescue[pl];
+               activesquad->squad[p]->squadid=activesquad->id;
+               criminalize(*activesquad->squad[p],LAWFLAG_ESCAPED);
+               activesquad->squad[p]->flag|=CREATUREFLAG_JUSTESCAPED;
+               break;
+            }
+         }
+         hostslots++;
+         freeslots--;
+
+         clearmessagearea();
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr("You've rescued ");
+         addstr(waiting_for_rescue[pl]->name);
+         addstr(" from the Conservatives.");
+
+         printparty();
+         refresh();
+         getch();
+
+         waiting_for_rescue[pl]->location=-1;
+         waiting_for_rescue[pl]->base=activesquad->squad[0]->base;
+         
+         waiting_for_rescue.erase(waiting_for_rescue.begin()+pl);
+         --pl;
+      }
+   }
+   for(pl=0;pl<waiting_for_rescue.size();pl++)
+   {
+      if(hostslots)
+      {
+         for(int p=0;p<6;p++)
+         {
+            if(activesquad->squad[p]!=NULL)
+            {
+               if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner==NULL)
                {
-                  activesquad->squad[p]=pool[pl];
-                  activesquad->squad[p]->squadid=activesquad->id;
-                  criminalize(*activesquad->squad[p],LAWFLAG_ESCAPED);
-                  activesquad->squad[p]->flag|=CREATUREFLAG_JUSTESCAPED;
+                  activesquad->squad[p]->prisoner=waiting_for_rescue[pl];
+                  waiting_for_rescue[pl]->squadid=activesquad->id;
+                  criminalize(*waiting_for_rescue[pl],LAWFLAG_ESCAPED);
+                  waiting_for_rescue[pl]->flag|=CREATUREFLAG_JUSTESCAPED;
+
+                  clearmessagearea();
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(16,1);
+                  addstr("You've rescued ");
+                  addstr(waiting_for_rescue[pl]->name);
+                  addstr(" from the Conservatives.");
+
+                  refresh();
+                  getch();
+
+                  clearmessagearea();
+                  move(16,1);
+                  addstr(waiting_for_rescue[pl]->name);
+                  addstr(" ");
+                  switch(LCSrandom(3))
+                  {
+                     case 0:addstr("was tortured recently");break;
+                     case 1:addstr("was beaten severely yesterday");break;
+                     case 2:addstr("was on a hunger strike");break;
+                  }
+                  move(17,1);
+                  addstr("so ");
+                  addstr(activesquad->squad[p]->name);
+                  addstr(" will have to haul a Liberal.");
+
+                  waiting_for_rescue[pl]->location=-1;
+                  waiting_for_rescue[pl]->base=activesquad->squad[p]->base;
+
+                  printparty();
+                  refresh();
+                  getch();
+                  
+                  waiting_for_rescue.erase(waiting_for_rescue.begin()+pl);
+                  --pl;
                   break;
                }
             }
-            hostslots++;
-            freeslots--;
-
-            clearmessagearea();
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(16,1);
-            addstr("You've rescued ");
-            addstr(pool[pl]->name);
-            addstr(" from the Conservatives.");
-
-            printparty();
-            refresh();
-            getch();
-
-            pool[pl]->location=-1;
-            pool[pl]->base=activesquad->squad[0]->base;
          }
+
+         hostslots--;
       }
-   }
-   for(pl=0;pl<pool.size();pl++)
-   {
-      if(pool[pl]->location==cursite&&
-         !(pool[pl]->flag & CREATUREFLAG_SLEEPER))
-      {
-         if(hostslots)
-         {
-            for(int p=0;p<6;p++)
-            {
-               if(activesquad->squad[p]!=NULL)
-               {
-                  if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner==NULL)
-                  {
-                     activesquad->squad[p]->prisoner=pool[pl];
-                     pool[pl]->squadid=activesquad->id;
-                     criminalize(*pool[pl],LAWFLAG_ESCAPED);
-                     pool[pl]->flag|=CREATUREFLAG_JUSTESCAPED;
-
-                     clearmessagearea();
-
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     move(16,1);
-                     addstr("You've rescued ");
-                     addstr(pool[pl]->name);
-                     addstr(" from the Conservatives.");
-
-                     refresh();
-                     getch();
-
-                     clearmessagearea();
-                     move(16,1);
-                     addstr(pool[pl]->name);
-                     addstr(" ");
-                     switch(LCSrandom(3))
-                     {
-                        case 0:addstr("was tortured recently");break;
-                        case 1:addstr("was beaten severely yesterday");break;
-                        case 2:addstr("was on a hunger strike");break;
-                     }
-                     move(17,1);
-                     addstr("so ");
-                     addstr(activesquad->squad[p]->name);
-                     addstr(" will have to haul a Liberal.");
-
-                     pool[pl]->location=-1;
-                     pool[pl]->base=activesquad->squad[p]->base;
-
-                     printparty();
-                     refresh();
-                     getch();
-                     break;
-                  }
-               }
-            }
-
-            hostslots--;
-         }
-         if(!hostslots)break;
-      }
+      if(!hostslots)break;
    }
 
-   int stillpcount=0;
-   char stillpname[200];
-   for(pl=0;pl<pool.size();pl++)
-   {
-      if(pool[pl]->location==cursite&&
-         !(pool[pl]->flag & CREATUREFLAG_SLEEPER))
-      {
-         stillpcount++;
-         if(stillpcount==1)strcpy(stillpname,pool[pl]->name);
-      }
-   }
-
-   if(stillpcount==1)
+   if(waiting_for_rescue.size()==1)
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr("There's nobody left to carry ");
-      addstr(stillpname);
+      addstr(waiting_for_rescue[0]->name);
       addstr(".");
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(17,1);
@@ -1122,7 +1119,7 @@ void partyrescue(void)
       refresh();
       getch();
    }
-   else if(stillpcount>1)
+   else if(waiting_for_rescue.size()>1)
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);

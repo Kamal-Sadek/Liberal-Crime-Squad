@@ -11,7 +11,8 @@ enum sitemapscripts
 {
    SITEMAPSCRIPT_ROOM,
    SITEMAPSCRIPT_HALLWAY_YAXIS,
-   SITEMAPSCRIPT_STAIRS
+   SITEMAPSCRIPT_STAIRS,
+   SITEMAPSCRIPT_STAIRS_RANDOM
 };
 
 void build_site(std::string name);
@@ -69,6 +70,9 @@ private:
    void generatehallway_y(int rx, int ry, int dx, int dy, int z);
    /* generates a stairwell */
    void generatestairs(int rx, int ry, int rz, int dx, int dy, int dz);
+   /* generates randomly placed stairs, one up and one down per z-level except
+      for top and bottom where there only be one down respectively one up. */
+   void generatestairsrandom(int rx, int ry, int rz, int dx, int dy, int dz);
 };
 
 // Drops specials down during map creation

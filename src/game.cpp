@@ -80,6 +80,9 @@ unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
 
+#define MAX_PATH_SIZE 2048
+extern char artdir[MAX_PATH_SIZE];
+
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 unsigned int seed;
@@ -417,7 +420,7 @@ int main(int argc, char* argv[])
    xml_loaded_ok &= initialize_armortypes();
    xml_loaded_ok &= initialize_loottypes();
    if(!xml_loaded_ok)
-      return 0;
+      end_game();
 
    //addstr("Attempting to load saved game... ");
    //refresh();
@@ -593,7 +596,7 @@ void end_game(int err)
 bool initialize_vehicletypes()
 {
    CMarkup vtfile;
-   if(!vtfile.Load("art/vehicles.xml"))
+   if(!vtfile.Load(string(artdir) + "vehicles.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load vehicles.xml!");
       getch();
@@ -617,7 +620,7 @@ bool initialize_vehicletypes()
 bool initialize_cliptypes()
 {
    CMarkup ctfile;
-   if(!ctfile.Load("art/clips.xml"))
+   if(!ctfile.Load(string(artdir) + "clips.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load clips.xml!");
       getch();
@@ -637,7 +640,7 @@ bool initialize_cliptypes()
 bool initialize_weapontypes()
 {
    CMarkup wtfile;
-   if(!wtfile.Load("art/weapons.xml"))
+   if(!wtfile.Load(string(artdir) + "weapons.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load weapons.xml!");
       getch();
@@ -658,7 +661,7 @@ bool initialize_armortypes()
 {
    //Armors
    CMarkup atfile;
-   if(!atfile.Load("art/armors.xml"))
+   if(!atfile.Load(string(artdir) + "armors.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load armors.xml!");
       getch();
@@ -674,7 +677,7 @@ bool initialize_armortypes()
    }
    
    //Masks
-   if(!atfile.Load("art/masks.xml"))
+   if(!atfile.Load(string(artdir) + "masks.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load masks.xml!");
       getch();
@@ -714,7 +717,7 @@ bool initialize_armortypes()
 bool initialize_loottypes()
 {
    CMarkup ltfile;
-   if(!ltfile.Load("art/loot.xml"))
+   if(!ltfile.Load(string(artdir) + "loot.xml"))
    { //File is missing or not valid XML.
       addstr("FAILED to load loot.xml!");
       getch();
@@ -730,3 +733,4 @@ bool initialize_loottypes()
    }
    return true; 
 }
+
