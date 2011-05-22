@@ -1803,7 +1803,7 @@ void funds_and_trouble(char &clearformess)
 
       do
       {
-         switch(LCSrandom(7))
+         switch(LCSrandom(10))
          {
             case 0:
                addstr("run around uptown splashing paint on fur coats!");
@@ -1912,6 +1912,29 @@ void funds_and_trouble(char &clearformess)
                public_interest[VIEW_TORTURE]+=mod;
                background_liberal_influence[VIEW_TORTURE]+=mod;
                juiceval=1;
+               done=1;
+               break;
+            }
+            case 8:
+            {
+               //In extreme corporate culture cases this should give a flag burning charge! -- kviiri
+               addstr("burned a corporate symbol and denounced capitalism!");
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
+               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
+               public_interest[VIEW_CORPORATECULTURE]+=mod;
+               background_liberal_influence[VIEW_CORPORATECULTURE]+=mod;
+               juiceval=1;
+               done=1;
+               break;
+            }
+            case 9:
+            {
+               addstr("set up a mock sweatshop in the middle of the mall!");
+               change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
+               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
+               public_interest[VIEW_SWEATSHOPS]+=mod;
+               background_liberal_influence[VIEW_SWEATSHOPS]+=mod;
+               juiceval+=1;
                done=1;
                break;
             }
