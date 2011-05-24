@@ -222,6 +222,9 @@ short party_status=-1;
 
 short wincondition=WINCONDITION_ELITE;
 
+bool notermlimit;           //These determine if ELAs can take place --kviiri
+bool nocourtpurge;
+
 char endgamestate=ENDGAME_NONE;
 char ccs_kills=0;
 int ccs_siege_kills=0;

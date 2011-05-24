@@ -37,6 +37,7 @@ void setup_newgame(void)
    bool classicmode   = false;
    bool strongccs     = false;
    bool nightmarelaws = false;
+
    clear();
    while(1)
    {
@@ -67,8 +68,21 @@ void setup_newgame(void)
       else
          addstr("[ ]");
       addstr(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
-      move(15,4);
+      move(12,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(notermlimit)
+         addstr("[X]");
+      else
+         addstr("[ ]");
+      addstr(" D - Extend endgame: Prevent term limits from taking place.");
+      move(14,0);
+      if(nocourtpurge)
+         addstr("[X]");
+      else
+          addstr("[ ]");
+      addstr(" E - Marathon mode: Supreme Court cannot be purged of non-Liberals.");
+
+      move(20,4);
       addstr("Press any other key to continue...");
       int c=getch();
       translategetch(c);
@@ -86,6 +100,16 @@ void setup_newgame(void)
       {
          nightmarelaws=!nightmarelaws;
          continue;
+      }
+      if(c=='d')
+      {
+          notermlimit=!notermlimit;
+          continue;
+      }
+      if(c=='e')
+      {
+          nocourtpurge=!nocourtpurge;
+          continue;
       }
       break;
    }
@@ -136,7 +160,6 @@ void setup_newgame(void)
       endgamestate=ENDGAME_CCS_ATTACKS;
       //attitude[VIEW_POLITICALVIOLENCE]=90;
    }
-
 
 
    clear();

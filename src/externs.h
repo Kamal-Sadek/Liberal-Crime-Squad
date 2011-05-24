@@ -70,6 +70,7 @@ extern char amradio_closed;
 extern char cablenews_closed;
 
 extern char endgamestate;
+
 extern char ccs_kills;
 extern int ccs_siege_kills;
 
@@ -79,6 +80,9 @@ extern char loaded;
 
 extern short mode;
 extern short wincondition;
+
+extern bool notermlimit;
+extern bool nocourtpurge;
 
 extern short offended_corps;
 extern short offended_cia;
