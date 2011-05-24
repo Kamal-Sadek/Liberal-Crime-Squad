@@ -341,7 +341,6 @@ char completedate(datest &d,int p,char &clearformess)
    move(0,0);
    addstr(pool[p]->name);
    addstr(" has ");
-//if(!pool[p]->alive) { die } or something
    if(d.date.size()==1)
    {
       if(pool[p]->clinic)addstr("a \"hot\" date with ");
@@ -372,70 +371,76 @@ char completedate(datest &d,int p,char &clearformess)
    if(d.date.size()>1&&
 	   !LCSrandom( (d.date.size() > 2) ? 4 : 6))
    {
-	  switch (LCSrandom(3))
-	  {
-	  case 0:
-		  move(2,0);
-		  if (d.date.size()>2)
-		  {
-			 addstr("Unfortunately, they all know each other and had been discussing");
-		  }
-		  else
-		  {
-		     addstr("Unfortunately, they know each other and had been discussing");
-		  }
-		  move(3,0);
-		  addstr(pool[p]->name);
-		  addstr(".  An ambush was set for the lying dog...");
-		  refresh();
-		  getch();
-		  break;
-	  case 1:
-		  move(2,0);
-		  if (d.date.size()>2)
-		  {
-		     addstr("Unfortunately, they all turn up at the same time.");
-		  }
-		  else
-		  {
-		     addstr("Unfortunately, they turn up at the same time.");
-		  }
-		  move(3,0);
-		  addstr("Uh oh...");
-		  refresh();
-		  getch();
-		  break;
-	  default:
-		  move(2,0);
-		  addstr(pool[p]->name);
-		  if (d.date.size()>2)
-		  {
-			 sprintf(datestr, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size()); // what
-			 addstr(datestr);
-		  }
-		  else
-		  {
-		     addstr(" mixes up the names of ");
-			 addstr(d.date[0]->name);
-			 addstr(" and ");
-			 addstr(d.date[1]->name);
-		  }
-		  move(3,0);
-		  addstr("Things go downhill fast.");
-		  refresh();
-		  getch();
-		  break;
-	  }
+      switch (LCSrandom(3))
+      {
+         case 0:
+            move(2,0);
+            if (d.date.size()>2)
+            {
+               addstr("Unfortunately, they all know each other and had been discussing");
+            }
+            else
+            {
+               addstr("Unfortunately, they know each other and had been discussing");
+            }
+            move(3,0);
+            addstr(pool[p]->name);
+            addstr(".  An ambush was set for the lying dog...");
+            refresh();
+            getch();
+            break;
+         case 1:
+            move(2,0);
+            if (d.date.size()>2)
+            {
+               addstr("Unfortunately, they all turn up at the same time.");
+            }
+            else
+            {
+               addstr("Unfortunately, they turn up at the same time.");
+            }
+            move(3,0);
+            addstr("Uh oh...");
+            refresh();
+            getch();
+            break;
+         default:
+            move(2,0);
+            addstr(pool[p]->name);
+            if (d.date.size()>2)
+            {
+               sprintf(datestr, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size());
+               addstr(datestr);
+            }
+            else
+            {
+               addstr(" mixes up the names of ");
+               addstr(d.date[0]->name);
+               addstr(" and ");
+               addstr(d.date[1]->name);
+            }
+            move(3,0);
+            addstr("Things go downhill fast.");
+            refresh();
+            getch();
+            break;
+      }
 
       move(5,0);
       addstr(pool[p]->name);
-      //addstr(" has failed the Liberal Crime Squad."); //in combination with the word 'ambush', this made it sound like getting beaten to death.
-	  switch (LCSrandom(3))
-	  {
-	  case 0:addstr(" is publically humiliated.");break;
-	  case 1:addstr(" runs away.");break;
-	  default:addstr(" escapes through the bathroom window.");break;
-	  }
+      switch (LCSrandom(3))
+      {
+         case 0:
+            addstr(" is publicly humiliated.");
+            break;
+         case 1:
+            addstr(" runs away.");
+            break;
+         case 2:
+         default:
+            addstr(" escapes through the bathroom window.");
+            break;
+      }
       addjuice(*pool[p],-5,-50);
       refresh();
       getch();
@@ -518,16 +523,16 @@ char completedate(datest &d,int p,char &clearformess)
          addstr("E - Just kidnap the Conservative bitch.");
       }
 
-  	  int thingsincommon = 0;
-	  for(int s=0;s<SKILLNUM;s++)
+      int thingsincommon = 0;
+      for(int s=0;s<SKILLNUM;s++)
       {
          if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
          {
-//Has a skill that is between double and half the same skill of the other person on the date.
-			 if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2 && d.date[e]->get_skill(s)*2>=pool[p]->get_skill(s))
-			 {
-				 thingsincommon++;
-			 }
+            //Has a skill that is between double and half the same skill of the other person on the date.
+            if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2 && d.date[e]->get_skill(s)*2>=pool[p]->get_skill(s))
+            {
+               thingsincommon++;
+            }
          }
       }
       do
@@ -547,45 +552,39 @@ char completedate(datest &d,int p,char &clearformess)
          {
             ledger.subtract_funds(100,EXPENSE_DATING);
             aroll+=LCSrandom(10);
-            test=1;
-            pool[p]->train(SKILL_SEDUCTION,LCSrandom(4)+5);
-            pool[p]->train(SKILL_SCIENCE,
-               max(d.date[e]->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
-            pool[p]->train(SKILL_RELIGION,
-               max(d.date[e]->get_skill(SKILL_RELIGION)-pool[p]->get_skill(SKILL_RELIGION),0));
-            pool[p]->train(SKILL_BUSINESS,
-               max(d.date[e]->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS),0));
+            test=true;
          }
-         if(c=='b')
+         else if(c=='b')
          {
-            test=1;
-            pool[p]->train(SKILL_SEDUCTION,LCSrandom(4)+5);
-            pool[p]->train(SKILL_SCIENCE,
-               max(d.date[e]->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
-            pool[p]->train(SKILL_RELIGION,
-               max(d.date[e]->get_skill(SKILL_RELIGION)-pool[p]->get_skill(SKILL_RELIGION),0));
-            pool[p]->train(SKILL_BUSINESS,
-               max(d.date[e]->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS),0));
-         }
-
-         if(d.date[e]->get_skill(SKILL_BUSINESS))
-         {
-            troll+=d.date[e]->skill_roll(SKILL_BUSINESS);
-            aroll+=pool[p]->skill_roll(SKILL_BUSINESS);
-         }
-         if(d.date[e]->get_skill(SKILL_RELIGION))
-         {
-            troll+=d.date[e]->skill_roll(SKILL_RELIGION);
-            aroll+=pool[p]->skill_roll(SKILL_RELIGION);
-         }
-         if(d.date[e]->get_skill(SKILL_SCIENCE))
-         {
-            troll+=d.date[e]->skill_roll(SKILL_SCIENCE);
-            aroll+=pool[p]->skill_roll(SKILL_SCIENCE);
+            test=true;
          }
 
          if(test)
          {
+            pool[p]->train(SKILL_SEDUCTION,LCSrandom(4)+5);
+            pool[p]->train(SKILL_SCIENCE,
+               max(d.date[e]->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
+            pool[p]->train(SKILL_RELIGION,
+               max(d.date[e]->get_skill(SKILL_RELIGION)-pool[p]->get_skill(SKILL_RELIGION),0));
+            pool[p]->train(SKILL_BUSINESS,
+               max(d.date[e]->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS),0));
+
+            if(d.date[e]->get_skill(SKILL_BUSINESS))
+            {
+               troll+=d.date[e]->skill_roll(SKILL_BUSINESS);
+               aroll+=pool[p]->skill_roll(SKILL_BUSINESS);
+            }
+            if(d.date[e]->get_skill(SKILL_RELIGION))
+            {
+               troll+=d.date[e]->skill_roll(SKILL_RELIGION);
+               aroll+=pool[p]->skill_roll(SKILL_RELIGION);
+            }
+            if(d.date[e]->get_skill(SKILL_SCIENCE))
+            {
+               troll+=d.date[e]->skill_roll(SKILL_SCIENCE);
+               aroll+=pool[p]->skill_roll(SKILL_SCIENCE);
+            }
+
             int y=17;
             int result = dateresult(aroll,troll,d,e,p,y);
             if(result == DATERESULT_ARRESTED)return 1;
@@ -645,9 +644,10 @@ char completedate(datest &d,int p,char &clearformess)
             {
                addstr(" seizes the Conservative swine from behind and warns it");
                move(18,0);
-               //if(law[LAW_FREESPEECH]!=-2)
-               addstr("not to fuck around!");
-               //else addstr("not to [resist]!");
+               if(law[LAW_FREESPEECH]!=-2)
+                  addstr("not to fuck around!");
+               else
+                  addstr("not to [resist]!");
             }
 
             refresh();
