@@ -1518,6 +1518,8 @@ void supremecourt(char clearformess,char canseethings)
       int vote;
       //Constitutional bias -- free speech, flag burning issues, supreme court
       //is extra liberal, gun control, supreme court is extra conservative
+	  //"All court justices will vote according to alignment and biasand do not consult
+	  //popular opinion...---Servant Corps"
       if(scase[c]==LAW_FREESPEECH || scase[c]==LAW_FLAGBURNING)bias=1;
       else if(scase[c]==LAW_GUNCONTROL)bias=-1;
       else bias=0;
@@ -1525,7 +1527,7 @@ void supremecourt(char clearformess,char canseethings)
       for(int l=0;l<9;l++)
       {
          vote=court[l];
-         if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1+bias;
+         if(vote>=-1&&vote<=1)vote+=bias;
 
          if(law[scase[c]]>vote && scasedir[c]==-1)yesvotes++;
          if(law[scase[c]]<vote && scasedir[c]==1)yesvotes++;
@@ -1915,7 +1917,10 @@ void congress(char clearformess,char canseethings)
       nodelay(stdscr,TRUE);
    }
 
-
+   //Liberals and Conservatives are 50% likely to consult popular opinion, otherwise they vote
+   //according to alignment. Moderates are 80% likely to consult popular opinion. I am using
+   //the old prop. voting code at present because I do not know how best to use the new prop. voting code.
+   //Feel free to replace the code I'm using with the new prop. voting code when you get the chance. ---Servant Corps
    for(c=0;c<cnum;c++)
    {
       char yeswin_h=0;
@@ -1929,8 +1934,42 @@ void congress(char clearformess,char canseethings)
       for(int l=0;l<435;l++)
       {
          vote=house[l];
-         if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
-
+         if(vote=-1)
+		 {
+			 if lcsrandom(10)>=5
+			 {
+		 vote=0;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         vote-=2;
+			 }
+		 }
+		 if(vote=1)
+		 {
+			 if lcsrandom(10)>=5
+			 {
+		 vote=0;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         vote-=2;
+			 }
+		 }
+		 if(vote=0)
+		 {
+			 if lcsrandom(10)>=8
+			 {
+		 vote=0;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         if(LCSrandom(100)<mood)vote++;
+         vote-=2;
+			 }
+		 }
          if(law[bill[c]]>vote && billdir[c]==-1)yesvotes_h++;
          if(law[bill[c]]<vote && billdir[c]==1)yesvotes_h++;
 
