@@ -1947,32 +1947,33 @@ void congress(char clearformess,char canseethings)
                vote -= 2;
             }
          }
-		 if(vote=1)
-		 {
-			 if (LCSrandom(10)>=5)
-			 {
-		 vote=0;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         vote-=2;
-			 }
-		 }
-		 if(vote=0)
-		 {
-			 if (LCSrandom(10)>=8)
-			 {
-		 vote=0;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         if(LCSrandom(100)<mood)vote++;
-         vote-=2;
-			 }
-		 }
-         if(law[bill[c]]>vote && billdir[c]==-1)yesvotes_h++;
-         if(law[bill[c]]<vote && billdir[c]==1)yesvotes_h++;
+         else if(vote=1)
+         {
+            if (LCSrandom(10)>=5)
+            {
+               vote=0;
+               if(LCSrandom(100)<mood)vote++;
+               if(LCSrandom(100)<mood)vote++;
+               if(LCSrandom(100)<mood)vote++;
+               if(LCSrandom(100)<mood)vote++;
+               vote-=2;
+            }
+         }
+         else if(vote=0)
+         {
+            if (LCSrandom(10) >= 8)
+            {
+               vote = 0;
+               if (LCSrandom(100) < mood)vote++;
+               if (LCSrandom(100) < mood)vote++;
+               if (LCSrandom(100) < mood)vote++;
+               if (LCSrandom(100) < mood)vote++;
+               vote -= 2;
+            }
+         }
+
+         if (law[bill[c]] > vote && billdir[c] == -1)yesvotes_h++;
+         if (law[bill[c]] < vote && billdir[c] == 1)yesvotes_h++;
 
          if(l==434)
          {
