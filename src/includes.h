@@ -1850,10 +1850,6 @@ void armsdealer(int loc);
 void deptstore(int loc);
 /* active squad visits the oubliette */
 void halloweenstore(int loc);
-/* oubliette - buy a mask */
-char maskselect(Creature *cr,short &mask);
-/* pick stuff to fence */
-int fenceselect(void);
 /* choose buyer */
 void choose_buyer(short &buyer);
 

@@ -41,6 +41,13 @@ class ShopOption
       std::string description_;
       char letter_;
       bool letter_defined_;
+      char showletter()
+      {
+         if (letter_ == '!')
+            return letter_;
+         else
+            return letter_-32;
+      }
       virtual void choose(squadst& customers, int& buyer) const = 0;
 };
 
@@ -67,6 +74,7 @@ class Shop : public ShopOption
       void sell_loot(squadst& customers) const;
       int fenceselect(squadst& customers) const;
       void choose_buyer(squadst& customers, int& buyer) const;
+      void maskselect(Creature &buyer) const;
       
       bool allow_selling_;
       bool only_sell_legal_;
@@ -74,6 +82,7 @@ class Shop : public ShopOption
       std::vector<ShopOption*> options_;
       bool fullscreen_;
       std::string exit_;
+      bool sell_masks_;
       
       class ShopItem : public ShopOption
       {

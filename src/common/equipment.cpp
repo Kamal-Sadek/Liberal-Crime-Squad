@@ -270,7 +270,7 @@ void equip(vector<Item *> &loot,int loc)
                }
                if (increaseammo)
                {
-                  if (!squaddie->is_armed() || !squaddie->get_weapon().uses_ammo())
+                  if (!squaddie->get_weapon().uses_ammo())
                   {
                      errmsg = "No ammo required!";
                      continue;
@@ -337,7 +337,7 @@ void equip(vector<Item *> &loot,int loc)
                {
                   int space = 9 - squaddie->count_clips();
 
-                  if (!squaddie->is_armed())
+                  if (!squaddie->get_weapon().uses_ammo())
                   {
                      errmsg = "Can't carry ammo without a gun.";
                      continue;
@@ -415,11 +415,8 @@ void equip(vector<Item *> &loot,int loc)
          {
             if(activesquad->squad[c-'1']!=NULL)
             {
-               if(!activesquad->squad[c-'1']->is_naked())
-               {
-                  activesquad->squad[c-'1']->strip(&loot);
-                  consolidateloot(loot);
-               }
+               activesquad->squad[c-'1']->strip(&loot);
+               consolidateloot(loot);
             }
          }
       }
@@ -437,11 +434,8 @@ void equip(vector<Item *> &loot,int loc)
          int p=c-'1';
          if(activesquad->squad[p]!=NULL)
          {
-            if(activesquad->squad[p]->is_armed())
-            {
-               activesquad->squad[p]->drop_weapons_and_clips(&loot);
-               consolidateloot(loot);
-            }
+            activesquad->squad[p]->drop_weapons_and_clips(&loot);
+            consolidateloot(loot);
          }
       }
 
@@ -762,8 +756,7 @@ char squadhasitem(squadst &sq, const string& type)
          index = getweapontype(type);
          if (index != -1)
          {
-            if (sq.squad[p]->is_armed()
-                && sq.squad[p]->get_weapon().get_itemtypename() == type)
+            if (sq.squad[p]->get_weapon().get_itemtypename() == type)
                return 1;
          }
       }

@@ -101,8 +101,7 @@ void kidnapattempt(void)
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
             (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
          {
-            if((encounter[e].is_armed()&&
-               encounter[e].get_weapon().protects_against_kidnapping()&&
+            if((encounter[e].get_weapon().protects_against_kidnapping()&&
                encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
             target.push_back(e);
          }
@@ -547,10 +546,7 @@ void kidnaptransfer(Creature &cr)
    newcr->flag|=CREATUREFLAG_MISSING;
 
    //disarm them and stash their weapon back at the base
-   if(newcr->is_armed())
-   {
-      newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
-   }
+   newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
 
    //Create interrogation data
    newcr->activity.arg=reinterpret_cast<long>(new interrogation);

@@ -171,7 +171,7 @@ void youattack(void)
          // chance to fire at 90 juice
          //if(LCSrandom(10)-pool[p]->juice/10>0)continue;
 
-         if(pool[p]->is_armed() && pool[p]->get_weapon().get_attack(true,false,false)!=NULL)
+         if(pool[p]->get_weapon().get_attack(true,false,false)!=NULL)
          {
             char conf=0;
             if(pool[p]->get_weapon().get_ammoamount()>0)conf=1;
@@ -537,7 +537,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       {
          a.reload(false);   
          strcpy(str,a.name);
-            strcat(str," reloads.");
+         strcat(str," reloads.");
       }
       else if (a.has_thrown_weapon && !a.extra_throwing_weapons.empty())
       {
@@ -570,17 +570,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                                            (force_melee || !a.can_reload())); //No reload if force melee or unable to reload.
 
    if(attack_used == NULL) //No attack possible.
-   /*if(mode==GAMEMODE_CHASECAR&&                             // If in a car
-      (a.weapon!=NULL&&(!a.weapon.ranged()||force_melee||     // And either using a melee weapon
-       (a.weapon->get_ammoamount()==0&&                       // Or, out of ammo and...
-        !a.can_reload()))))*/                                 // ...no clips left
    {
-      return;                                               // Then bail, they can't fight
+      return;              // Then bail, they can't fight
    }
-
-   // Grenade type weapons can't be used in melee!
-   /*if(weaponskill(a.weapon.type)==SKILL_THROWING && force_melee)
-      return;*/
 
    bool melee=true;
    if (attack_used->ranged)
@@ -741,12 +733,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else
                break;
          }
-         /*if (attack_used->uses_ammo && a.get_weapon().get_ammoamount() > 0)
-            a.get_weapon().decrease_ammo(1);
-         else if (attack_used->thrown && a.count_weapons()-thrownweapons > 0)
-            ++thrownweapons;
-         else
-            break;*/
+
          // Each shot in a burst is increasingly less likely to hit
          if(aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
             bursthits++;
@@ -1214,7 +1201,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                {
                   clearmessagearea();
                   if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
-				  else set_color(COLOR_RED,COLOR_BLACK,1);
+                  else set_color(COLOR_RED,COLOR_BLACK,1);
 
                   switch(LCSrandom(7))
                   {
@@ -1370,8 +1357,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                {
                   clearmessagearea();
                   //set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-		          if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
-				  else set_color(COLOR_RED,COLOR_BLACK,1);
+                  if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+                  else set_color(COLOR_RED,COLOR_BLACK,1);
 
 
                   switch(LCSrandom(11))
@@ -2123,7 +2110,6 @@ void severloot(Creature &cr,vector<Item *> &loot)
 
    if(((cr.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_BODY] & WOUND_NASTYOFF))&&
-      !cr.is_naked()&&
       cr.get_armor().covers(BODYPART_BODY))
    {
       clearmessagearea();
