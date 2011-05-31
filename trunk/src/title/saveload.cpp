@@ -206,54 +206,6 @@ void savegame(char *str)
                numbytes=fwrite(&((*i).second),sizeof(float_zero),1,h);
             }
          }
-         /*
-         //write equipment
-         if(pool[pl]->is_armed())
-         {
-            std::string itemStr = pool[pl]->get_weapon().showXml();
-            size_t itemSize = itemStr.size();
-
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
-         }
-         else
-         {
-            dummy = 0;
-            numbytes=fwrite(&dummy,sizeof(int),1,h);
-         }
-         dummy=pool[pl]->clips.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int ci=0; ci<pool[pl]->clips.size(); ci++)
-         {
-            std::string itemStr = pool[pl]->clips[ci]->showXml();
-            size_t itemSize = itemStr.size();
-
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
-         }
-         dummy=pool[pl]->extra_throwing_weapons.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int ei=0; ei<pool[pl]->extra_throwing_weapons.size(); ei++)
-         {
-            std::string itemStr = pool[pl]->extra_throwing_weapons[ei]->showXml();
-            size_t itemSize = itemStr.size();
-
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
-         }
-         if(!pool[pl]->is_naked())
-         {
-            std::string itemStr = pool[pl]->get_armor().showXml();
-            size_t itemSize = itemStr.size();
-
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
-         }
-         else
-         {
-            dummy = 0;
-            numbytes=fwrite(&dummy,sizeof(int),1,h);
-         }*/
       }
 
       //Unique Creatures

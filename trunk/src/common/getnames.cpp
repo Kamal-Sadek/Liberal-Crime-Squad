@@ -288,6 +288,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_DOCTOR:strcat(str,"Doctor");break;
       case CREATURE_PSYCHOLOGIST:strcat(str,"Psychologist");break;
       case CREATURE_NURSE:strcat(str,"Nurse");break;
+      case CREATURE_LOCKSMITH:strcat(str,"Locksmith");break;
       case CREATURE_GUARDDOG:strcat(str,"Canine Hero");break;
       case CREATURE_GENETIC:strcat(str,"Genetic Monster");break;
       case CREATURE_TANK:strcat(str,"M1 Abrams Tank");break;

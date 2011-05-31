@@ -98,7 +98,7 @@
                 <random_damage> (integer) Random damage if hit is critical per hit.
                     Defaults to normal random damage.
                 <fixed_damage> (integer) Fixed damage if hit is critical per hit.
-                    Defaults to normal random damage.
+                    Defaults to normal fixed damage.
                 <severtype> (CLEAN, NASTY, NONE) Sever type if hit is critical.
                     Defaults to normal sever type.
             </critical>
@@ -725,8 +725,8 @@
 
     <weapontype idname="WEAPON_DAISHO">
         <name>Daisho</name>
-        <name_sub_1>Katana</name_sub_1> <!-- Fixed? -->
-        <name_sub_2>Wakizashi</name_sub_2> <!-- Fixed? -->
+        <name_sub_1>Katana</name_sub_1>
+        <name_sub_2>Wakizashi</name_sub_2>
         <name_future>Twin Swords of Liberalism</name_future>
         <name_future_sub_1>Retribution Sword</name_future_sub_1>
         <name_future_sub_2>Justice Blade</name_future_sub_2>
@@ -926,7 +926,7 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_MOLOTOV"> <!-- Grenade type weapons cannot be used in melee? -->
+    <weapontype idname="WEAPON_MOLOTOV">
         <name>Molotov Bomb</name>
         <name_future>Molotov Bomb</name_future>
         <shortname>Molotov</shortname>
@@ -943,7 +943,6 @@
             <always_describe_hit>true</always_describe_hit>
             <hit_punctuation>!</hit_punctuation>
             <skill>THROWING</skill>
-            <!-- <ammotype>CLIP_MOLOTOV</ammotype> Should not be needed! -->
             <random_damage>101</random_damage>
             <fixed_damage>25</fixed_damage>
             <burns>true</burns>

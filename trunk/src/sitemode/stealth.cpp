@@ -688,7 +688,7 @@ char hasdisguise(Creature &cr)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                uniformed=0;
-               if(cr.get_armor().get_itemtypename()=="ARMOR_ARMYUNIFORM")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_MILITARY")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_ARMYARMOR")uniformed=1;
             }
             break;

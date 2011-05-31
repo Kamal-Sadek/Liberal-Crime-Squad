@@ -60,8 +60,7 @@ char talk(Creature &a,int t)
             activesquad->squad[i]->prisoner->enemy())
          {
             hostages++;
-            if (activesquad->squad[i]->is_armed() &&
-                activesquad->squad[i]->get_weapon().can_threaten_hostages())
+            if (activesquad->squad[i]->get_weapon().can_threaten_hostages())
               weaponhostage++;
          }
       }

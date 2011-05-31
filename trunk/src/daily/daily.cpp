@@ -661,7 +661,7 @@ void advanceday(char &clearformess,char canseethings)
             if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION
                                    && location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
             {
-               if(/*!pool[p]->is_naked() &&*/ (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
+               if(pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged())
                {
                   repairarmor(*pool[p],clearformess);
                }

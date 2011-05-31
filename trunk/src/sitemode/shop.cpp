@@ -8,7 +8,7 @@ ShopOption::ShopOption()
 
 Shop::Shop(MCD_STR xmlstring)
  : allow_selling_(false), only_sell_legal_(true), increase_prices_with_illegality_(false),
-   fullscreen_(false)
+   fullscreen_(false), sell_masks_(false)
 {
    init(xmlstring);
 }
@@ -17,7 +17,7 @@ Shop::Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
            bool increase_prices_with_illegality)
  : allow_selling_(false), only_sell_legal_(only_sell_legal),
    increase_prices_with_illegality_(increase_prices_with_illegality),
-   fullscreen_(fullscreen)
+   fullscreen_(fullscreen), sell_masks_(false)
 {
    init(xmlstring);
 }
@@ -74,6 +74,14 @@ void Shop::init(const MCD_STR &xmlstring)
          description_ = xml.GetData();
       else if (tag == "exit")
          exit_ = xml.GetData();
+      else if (tag == "sell_masks")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            sell_masks_ = true;
+         else if (b == 0)
+            sell_masks_ = false;
+      }
       else if (tag == "letter")
       {
          letter_ = xml.GetData()[0];
@@ -84,6 +92,8 @@ void Shop::init(const MCD_STR &xmlstring)
             letter_ += 32;
             letter_defined_ = true;
          }
+         else if (letter_ == '!') //Allow special character.
+            letter_defined_ = true;
       }
       else if (tag == "item")
          options_.push_back(new ShopItem(xml.GetSubDoc(), only_sell_legal_,
@@ -164,7 +174,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
             move(yline,40);
          
          if (available_options[p]->letter_defined_)
-            addch(available_options[p]->letter_-32);
+            addch(available_options[p]->showletter());
          else
          {
             bool done = false;
@@ -197,6 +207,15 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
             column = 1;
          }
       }
+      if (sell_masks_)
+      {
+         move(yline,1+(column-1)*39);
+         if (ledger.get_funds() >= 15)
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr("M - Buy a Mask                ($15)");
+      }
       if (column == 2)
          ++yline;
       
@@ -208,7 +227,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
       if (allow_selling_)
       {
          move(yline,1);
-         if (location[activesquad->squad[0]->base]->loot.size() > 0)
+         if (location[customers.squad[0]->base]->loot.size() > 0)
             set_color(COLOR_WHITE,COLOR_BLACK,0);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -263,11 +282,15 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
       else if (c == 's' && allow_selling_
                && location[customers.squad[0]->base]->loot.size() > 0)
          sell_loot(customers);
+      else if (c == 'm' && sell_masks_ && ledger.get_funds() >= 15)
+      {
+         maskselect(*customers.squad[buyer]);
+      }
       else if (c == 'b')
          choose_buyer(customers, buyer);
       else if (c == '0')
          party_status=-1;
-      else if ( c >= '1' && c <= '6' && activesquad != NULL)
+      else if ( c >= '1' && c <= '6')
       {
          if (customers.squad[c-'1'] != NULL)
          {
@@ -376,35 +399,35 @@ void Shop::sell_loot(squadst& customers) const
       move(10,1);
       addstr("E - Look over Equipment");
    
-      if (location[activesquad->squad[0]->base]->loot.size() > 0)
+      if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(10,40);
       addstr("F - Pawn Selectively");
    
-      if (location[activesquad->squad[0]->base]->loot.size() > 0)
+      if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(11,1);
       addstr("W - Pawn all Weapons");
    
-      if (location[activesquad->squad[0]->base]->loot.size() > 0)
+      if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(11,40);
       addstr("A - Pawn all Ammunition");
    
-      if (location[activesquad->squad[0]->base]->loot.size() > 0)
+      if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,1);
       addstr("C - Pawn all Clothes");
    
-      if (location[activesquad->squad[0]->base]->loot.size() > 0)
+      if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -750,6 +773,100 @@ void Shop::choose_buyer(squadst& customers, int& buyer) const
    } while (true);
 }
 
+void Shop::maskselect(Creature &buyer) const
+{
+   short maskindex=-1;
+
+   std::vector<unsigned> masktype;
+   for(unsigned a=0;a<armortype.size();a++)
+   {
+      if (armortype[a]->is_mask() && !armortype[a]->is_surprise_mask())
+         masktype.push_back(a);
+   }
+
+   unsigned page=0;
+
+   do
+   {
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(0,0);
+      addstr("Which mask will ");
+      addstr(buyer.name);
+      addstr(" buy?");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(1,0);
+      addstr("----PRODUCT NAME-----------------------DESCRIPTION------------------------------");
+
+      int y=2;
+      for(unsigned p=page*19 ; p < masktype.size() && p < page*19+19; p++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addch(y+'A'-2);addstr(" - ");
+         addstr(armortype[masktype[p]]->get_name().c_str());
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,39);
+         addstr(armortype[masktype[p]]->get_description().c_str());
+
+         y++;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr("Press a Letter to select a Mask");
+      move(23,0);
+      addpagestr();
+      move(24,0);
+      addstr("Z - Surprise ");
+      addstr(buyer.name);
+      addstr(" With a Random Mask");
+
+      refresh();
+
+      int c = getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c == interface_pgup || c == KEY_UP || c == KEY_LEFT) && page > 0)
+         page--;
+      //PAGE DOWN
+      if((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT) && (page+1)*19 < masktype.size())
+         page++;
+
+      if(c >= 'a' && c <= 's')
+      {
+         int p = page*19+(int)(c-'a');
+         if(p < masktype.size())
+         {
+            maskindex = masktype[p];
+            break;
+         }
+      }
+      if(c == 'z')
+      {
+         for (int i = 0; i < armortype.size(); ++i)
+         {
+            if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
+               masktype.push_back(i);
+         }
+         maskindex = masktype[LCSrandom(masktype.size())];
+         break;
+      }
+
+      if (c == 10)
+         break;
+   }while(1);
+   
+   if (maskindex != -1 && ledger.get_funds() >= 15)
+   {
+      Armor a = Armor(*armortype[maskindex]);
+      buyer.give_armor(a, &location[buyer.base]->loot);
+      ledger.subtract_funds(15,EXPENSE_SHOPPING);
+   }
+}
+
 bool Shop::is_available() const
 {
    //Disable shop (department) if it has nothing to sell.
@@ -804,6 +921,8 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
             letter_ += 32;
             letter_defined_ = true;
          }
+         else if (letter_ == '!') //Allow special character.
+            letter_defined_ = true;
       }
    }
 }
