@@ -148,6 +148,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          break;
       case CREATURE_ACTOR:
       case CREATURE_GANGUNIT:
+      case CREATURE_MILITARYPOLICE:
          power*=4;
          break;
       default:
@@ -265,6 +266,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          break;
       case CREATURE_SOLDIER:
       case CREATURE_VETERAN:
+      case CREATYRE_MILITARYPOLICE:
          libpower[VIEW_MILITARY]+=power;
          libpower[VIEW_TORTURE]+=power;
          libpower[VIEW_GAY]+=power;
