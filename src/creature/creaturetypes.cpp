@@ -2059,11 +2059,51 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.age=AGE_YOUNGADULT;
          break;
       case CREATURE_LOCKSMITH:
-          GIVE_WEAPON_CIVILIAN;
-          cr.set_skill(SKILL_SECURITY, LCSrandom(5) + 3);
-          cr.age=AGE_MATURE;
-          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
-          break;
+         GIVE_WEAPON_CIVILIAN;
+         cr.set_skill(SKILL_SECURITY, LCSrandom(5) + 3);
+         cr.age=AGE_MATURE;
+         armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
+         break;
+      case CREATURE_MILITARYPOLICE:
+         GIVE_GENDER_MALE;
+         switch (LCSrandom(3)) {
+            case 0:
+               weapon = new Weapon(*weapontype[getweapontype("WEAPON_CARBINE_M4")]);
+               clips = new Clip(*cliptype[getcliptype("CLIP_ASSAULT")]);
+               break;
+            case 1:
+               weapon=new Weapon(*weapontype[getweapontype("WEAPON_SHOTGUN_PUMP")]);
+               clips=new Clip(*cliptype[getcliptype("CLIP_BUCKSHOT")]);
+               break;
+            default :
+               Weapon w=Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
+               Clip c=Clip(*cliptype[getcliptype("CLIP_9")],6);
+         }
+
+         cr.give_weapon(*weapon,NULL);
+         cr.take_clips(*clips,7);
+         cr.reload(false);
+         armor=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
+         cr.give_armor(*armor,NULL);
+         cr.money=0;
+         cr.align=-1;
+         cr.infiltration=0.1f*LCSrandom(6);     //Authority over the regular soldiers!
+         cr.juice=LCSrandom(100);
+         cr.age=AGE_YOUNGADULT;
+
+         cr.set_skill(SKILL_RIFLE,LCSrandom(3)+1);
+         cr.set_skill(SKILL_HANDTOHAND,LCSrandom(5)+1);
+         cr.set_skill(SKILL_PISTOL,LCSrandom(5)+1);
+         cr.set_skill(SKILL_DRIVING,LCSrandom(4)+1);
+         cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(5)+1);
+         cr.set_skill(SKILL_SMG, LCSrandom(5)+1);
+         cr.set_skill(SKILL_SHOTGUN, LCSrandom(5)+1);
+
+         cr.set_attribute(ATTRIBUTE_STRENGTH,5);
+         cr.set_attribute(ATTRIBUTE_AGILITY,5);
+         cr.set_attribute(ATTRIBUTE_HEALTH,5);
+         cr.set_attribute(ATTRIBUTE_WISDOM,5);
+         break;
    }
    
    delete weapon;
@@ -2627,6 +2667,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
+         break;
+      case CREATURE_MILITARYPOLICE:
+         okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       default:
          okaysite[SITE_RESIDENTIAL_SHELTER]=1;
