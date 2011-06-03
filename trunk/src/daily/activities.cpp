@@ -635,7 +635,31 @@ void survey(Creature *cr)
       move(4,0);
       addstr("The public is not concerned with politics right now.");
    }
+   move(5,0);;
+      {
+         int sum=0;
 
+         for(int v=0;v<VIEWNUM;v++)
+         {
+            if(v==VIEW_LIBERALCRIMESQUAD)continue;
+            if(v==VIEW_LIBERALCRIMESQUADPOS)continue;
+            if(v==VIEW_CONSERVATIVECRIMESQUAD)continue;
+            sum+=attitude[v];
+         }
+
+         sum/=(VIEWNUM-3);
+
+         return sum;
+      }
+	     if(sum<10)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(sum<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(sum<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(sum<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else if(sum<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
+         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+	  addstr(sum);
+	  addstr(% of the country are Elite Liberals);
+	  break;
    //Header for issue box
    move(6,0);
    addstr("Additional notable findings:");

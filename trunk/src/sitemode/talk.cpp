@@ -989,7 +989,7 @@ char talk(Creature &a,int t)
                   case LAW_CIVILRIGHTS:   addstr("\"I knew some people that were pretty racist.\"");break;
                   case LAW_DRUGS:         addstr("\"Drugs are expensive.\"");break;
                   case LAW_IMMIGRATION:   addstr("\"All the immigrants, not everybody likes them.\"");break;
-                  case LAW_ELECTIONS:     addstr("\"Some of these politicians rub me the wrong way.\"");break;
+                  case LAW_ELECTIONS:     addstr("\"Politicians sometimes lie about their political views in hopes of winning elections.\"");break;
                   case LAW_MILITARY:      addstr("\"We still have a military.\"");break;
                   case LAW_TORTURE:       addstr("\"Some conservatives support torture.\"");break;
                   }
@@ -1214,7 +1214,7 @@ char talk(Creature &a,int t)
                         case LAW_PRIVACY:       addstr("\"National security is important.\"");break;
                         case LAW_DEATHPENALTY:  addstr("\"Some people deserve to die.\"");break;
                         case LAW_NUCLEARPOWER:  addstr("\"Nuclear power is clean.\"");break;
-                        case LAW_POLLUTION:     addstr("\"It's not that bad.\"");break;
+                        case LAW_POLLUTION:     addstr("\"Pollution regulations cost American jobs.\"");break;
                         case LAW_LABOR:         addstr("\"Trust the free market, it hasn't failed us yet.\"");break;
                         case LAW_GAY:           addstr("\"Homosexuality is a sin.\"");break;
                         case LAW_CORPORATE:     addstr("\"Corporations are part of capitalism.\"");break;
@@ -1234,7 +1234,11 @@ char talk(Creature &a,int t)
                      else
                      {
                         move(y,1);y++;
-                        addstr("\"Whatever.\"");
+					switch(LCSrandom(3))
+					{
+                       case 0:addstr("\"Whatever.\"");break;
+					   case 1:addstr("\"I don't care about politics.\"");break;
+					   case 2:addstr("\"It's not that bad.\"");break;
                      }
                   }
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
