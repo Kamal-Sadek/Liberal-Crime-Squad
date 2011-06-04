@@ -1954,7 +1954,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          {
             move(17,1);
             addstr(t.name);
-            addstr(" becomes Wiser!");
+            addstr(" is tainted with Wisdom!");
             t.adjust_attribute(ATTRIBUTE_WISDOM,+1);
          }
          else if(t.align==ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
