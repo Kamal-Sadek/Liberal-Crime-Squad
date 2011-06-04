@@ -651,14 +651,14 @@ void survey(Creature *cr)
 
          return sum;
       }
-	     if(sum<10)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(sum<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(sum<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(sum<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else if(sum<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
+	     if(sum[v]<10)set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(sum[v]<30)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         else if(sum[v]<50)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(sum[v]<70)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else if(sum[v]<90)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
 	  addstr(sum);
-	  addstr(% of the country are Elite Liberals);
+	  addstr(% of the country are card-carrying members of the Liberal Party);
 	  break;
    //Header for issue box
    move(6,0);
