@@ -175,9 +175,9 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          
          addstr("Talking with ");
          addstr(d.date[e]->name);
-         addstr(" actually increases ");
+         addstr(" actually curses ");
          addstr(pool[p]->name);
-         addstr("'s wisdom!!!");
+         addstr("'s mind with wisdom!!!");
          pool[p]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
 
          if(d.date[e]->get_skill(SKILL_RELIGION)>pool[p]->get_skill(SKILL_RELIGION))
