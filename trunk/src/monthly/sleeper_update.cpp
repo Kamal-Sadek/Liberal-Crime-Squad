@@ -266,7 +266,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          break;
       case CREATURE_SOLDIER:
       case CREATURE_VETERAN:
-      case CREATYRE_MILITARYPOLICE:
+      case CREATURE_MILITARYPOLICE:
          libpower[VIEW_MILITARY]+=power;
          libpower[VIEW_TORTURE]+=power;
          libpower[VIEW_GAY]+=power;
