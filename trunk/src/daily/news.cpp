@@ -791,7 +791,14 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         if(!liberalguardian)
                         {
-                           strcat(story,"tampering with lab animals");
+							{
+								if((law[LAW_ANIMALRESEARCH]==-2)
+								{
+									strcat(story,"tampering with lab animals");
+								}
+								else
+								{
+									strcat(story,"liberating abused animals");
                         }
                         else
                         {
