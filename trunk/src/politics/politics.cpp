@@ -789,7 +789,323 @@ void elections(char clearformess,char canseethings)
       refresh();
       getch();
    }
+   //Police Elections!
+   if(law(LAW_POLICEBEHAVIOR)==2))
+   {
+	 char num[10];
+   int mood = publicmood(-1);
+   if(canseethings)
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(0,0);
+	  addstr("National Police Elections ");
+      itoa(year,num,10);
+      addstr(num);
+	  move(2,0);
+	  set_color(COLOR_GREEN,COLOR_BLACK,1);
+	  addstr("Police Reform");
+	  move(3,0);
+	  set_color(COLOR_RED,COLOR_BLACK,1);
+	  addstr("Law-and-Order");
+	   {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(8,0);
+            addstr("Press any key to watch the election unfold.");
+
+            refresh();
+            getch();
+
+            nodelay(stdscr,TRUE);
+         }
+	  {
+         int sum=0;
+
+         for(int v=0;v<VIEWNUM;v++)
+         {
+            if(v==VIEW_PRIVACY)continue;
+            if(v==VIEW_DEATHPENALTY)continue;
+            if(v==VIEW_TORTURE)continue;
+            sum+=attitude[v];
+         }
+
+         sum/=(VIEWNUM-3);
+
+         return sum;
+	  }
+      char yeswin=0;
+      int yesvotes=0;
+      char recount=0;
+      for(int l=0;l<1000;l++)
+      {
+         if(LCSrandom(100)<sum)
+               yesvotes++;
+	  }
+	      if(l==999)
+         {
+            if(yesvotes>500)yeswin=1;
+            else if(yesvotes==500)
+            {
+               if(!LCSrandom(2))yeswin=1;
+               recount=1;
+            }
+         }
+		    if(yesvotes>l/2 || yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes<l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            else set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(2,70);
+            itoa(yesvotes/10,num,10);
+            addstr(num);
+            addch('.');
+            itoa(yesvotes%10,num,10);
+            addstr(num);
+            addstr("%);
+
 }
+            if(yesvotes<l/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes>l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            else set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(3,70);
+            itoa((l+1-yesvotes)/10,num,10);
+            addstr(num);
+            addch('.');
+            itoa((l+1-yesvotes)%10,num,10);
+            addstr(num);
+            addstr("%");
+
+            refresh();
+            pause_ms(10);
+            getch();
+            if(recount)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(4,0);
+            addstr("A Recount was Necessary");
+         }
+	  if(yesvotes>l/2 || yeswin)
+	  {
+		  addstr("The newly-elected police officers now possess a popular mandate to ");
+			  LCSrandom(3)
+			  {
+				  case 0:
+					  {
+						  if(!law[LAW_TORTURE]==2)
+						  {
+							  set_color(COLOR_GREEN,COLOR_BLACK,1);
+							  addstr("Protect Human Rights");
+							  law[LAW_TORTURE]+=1;
+						  }
+						  else
+						  {
+							if(!law[LAW_DEATHPENALTY]==2)
+							{
+								set_color(COLOR_GREEN,COLOR_BLACK,1);
+								addstr("Limit the Death Penalty");
+								law[LAW_DEATHPENALTY]+=1;
+							}
+							else
+							{
+								if(!law[LAW_PRIVACY]==2)
+								{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr("Enhance Privacy Protection");
+									law[LAW_DEATHPENALTY]+=1;
+								}
+								else
+								{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+								}
+							}
+						  }
+					  }
+				  case 1:
+					  {
+					  		if(!law[LAW_DEATHPENALTY]==2)
+							{
+								set_color(COLOR_GREEN,COLOR_BLACK,1);
+								addstr("Limit the Death Penalty");
+								law[LAW_DEATHPENALTY]+=1;
+							}
+							else
+							{
+								if(!law[LAW_TORTURE]==2)
+								{
+							  set_color(COLOR_GREEN,COLOR_BLACK,1);
+							  addstr("Protect Human Rights");
+							  law[LAW_TORTURE]+=1;
+								}
+								else
+								{
+								if(!law[LAW_PRIVACY]==2)
+								{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr("Enhance Privacy Protection");
+									law[LAW_DEATHPENALTY]+=1;
+								}
+								else
+								{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+								}
+								}
+							}
+					  }
+				  case 2:
+					  {
+					if(!law[LAW_PRIVACY]==2)
+						{
+						set_color(COLOR_GREEN,COLOR_BLACK,1);
+						addstr("Enhance Privacy Protection");
+						law[LAW_DEATHPENALTY]+=1;
+						}
+					else
+					{
+						  if(!law[LAW_TORTURE]==2)
+						  {
+							  set_color(COLOR_GREEN,COLOR_BLACK,1);
+							  addstr("Protect Human Rights");
+							  law[LAW_TORTURE]+=1;
+						  }
+						  else
+						  {
+							if(!law[LAW_DEATHPENALTY]==2)
+							{
+								set_color(COLOR_GREEN,COLOR_BLACK,1);
+								addstr("Limit the Death Penalty");
+								law[LAW_DEATHPENALTY]+=1;
+							}
+							else
+							{
+									set_color(COLOR_GREEN,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+							}
+						  }
+					}
+					  }
+			  }
+			  set_color(COLOR_WHITE,COLOR_BLACK,0);
+			  addstr(".");
+			  }
+		else
+		{
+			addstr("The newly-elected police officers now has a popular mandate to ");
+			  LCSrandom(3)
+			  {
+				  case 0:
+					  {
+						  if(!law[LAW_TORTURE]==-2)
+  						  {
+							  set_color(COLOR_RED,COLOR_BLACK,1);
+							  addstr("Permit Strong Tactics in Interrogations");
+							  law[LAW_TORTURE]+=-1;
+						  }
+						  else
+						  {
+							 if(!law[LAW_DEATHPENALTY]==-2)
+							{
+								set_color(COLOR_RED,COLOR_BLACK,1);
+								addstr("Expand Capital Punishment");
+								law[LAW_DEATHPENALTY]+=-1;
+							}
+							 else
+							 {
+								 if(!law[LAW_PRIVACY]==-2)
+								 {
+									 set_color(COLOR_RED,COLOR_BLACK,1);
+									 addstr("Allow Corporations Access to Information");
+									 law[LAW_PRIVACY]+=-1;
+								 }
+								 else
+								 {
+									set_color(COLOR_RED,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+								 }
+							 }
+						  }
+					  }
+				  case 1:
+					  {
+							 if(!law[LAW_DEATHPENALTY]==-2)
+							{
+								set_color(COLOR_RED,COLOR_BLACK,1);
+								addstr("Expand Capital Punishment");
+								law[LAW_DEATHPENALTY]+=-1;
+							}
+							 else
+							 {
+								 if(!law[LAW_PRIVACY]==-2)
+								 {
+									 set_color(COLOR_RED,COLOR_BLACK,1);
+									 addstr("Allow Corporations Access to Information");
+									 law[LAW_PRIVACY]+=-1;
+								 }
+								 else
+								 {
+									 if(!law[LAW_TORTURE]==-2)
+									 {
+										 set_color(COLOR_RED,COLOR_BLACK,1);
+										 addstr("Permit Strong Tactics in Interrogations");
+										 law[LAW_TORTURE]+=-1;
+									 }
+									 else
+									 {
+									set_color(COLOR_RED,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+									 }
+								 }
+							 }
+							 
+					  }
+				  case 2:
+					  {
+								 if(!law[LAW_PRIVACY]==-2)
+								 {
+									 set_color(COLOR_RED,COLOR_BLACK,1);
+									 addstr("Allow Corporations Access to Information");
+									 law[LAW_PRIVACY]+=-1;
+								 }
+								 else
+								 {
+								 if(!law[LAW_DEATHPENALTY]==-2)
+								 {
+								set_color(COLOR_RED,COLOR_BLACK,1);
+								addstr("Expand Capital Punishment");
+								law[LAW_DEATHPENALTY]+=-1;
+								 }
+								 else
+								 {	
+									 if(!law[LAW_TORTURE]==-2)
+									 {
+										 set_color(COLOR_RED,COLOR_BLACK,1);
+										 addstr("Permit Strong Tactics in Interrogations");
+										 law[LAW_TORTURE]+=-1;
+									 }
+									 else
+									 {
+									set_color(COLOR_RED,COLOR_BLACK,1);
+									addstr("Protect the Status Quo");
+									 }
+								 }
+								 }
+					  }
+			  }
+			  set_color(COLOR_WHITE,COLOR_BLACK,0);
+			  addstr(".");
+			  }
+  if(canseethings)
+   {
+      nodelay(stdscr,FALSE);
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(23,0);
+      addstr("Press any key to reflect on what has happened.");
+
+      refresh();
+      getch();
+   }
+  }
+
 
 void elections_senate(int senmod,char canseethings)
 {
