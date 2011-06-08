@@ -800,10 +800,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 								{
 									strcat(story,"liberating abused animals");
                         }
-                        else
-                        {
-                           strcat(story,"liberated abused animals");
-                        }
+                        
 
                         if(typesum>=3)strcat(story,", ");
                         else if(typesum==2)strcat(story," and ");
