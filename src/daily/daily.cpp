@@ -2123,7 +2123,7 @@ void initlocation(locationst &loc)
          strcat(loc.name,str);
 		 if (law[LAW_DRUGS]==-2)
 		 {
-		strcat(loc.name," Tobbaco-Free Gentlemen's Club");
+         strcpy(loc.name," Tobbaco-Free Gentlemen's Club");
          strcpy(loc.shortname,"Drug-Free Bar");
 		 }
 		 else
