@@ -911,6 +911,7 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" grows colder.");
                a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
             }
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
          }
       }
 
