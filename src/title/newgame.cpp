@@ -74,13 +74,13 @@ void setup_newgame(void)
          addstr("[X]");
       else
          addstr("[ ]");
-      addstr(" D - Extend endgame: Prevent term limits from taking place.");
+      addstr(" D - Extended Endgame: Prevent Liberals from passing term limits.");
       move(14,0);
       if(nocourtpurge)
          addstr("[X]");
       else
-          addstr("[ ]");
-      addstr(" E - Marathon mode: Supreme Court cannot be purged of non-Liberals.");
+         addstr("[ ]");
+      addstr(" E - Marathon Mode: Prevent Liberals from purging the Supreme Court.");
 
       move(20,4);
       addstr("Press any other key to continue...");
