@@ -57,6 +57,9 @@
 /* rolls up a creature's stats and equipment */
 void makecreature(Creature &cr,short type) //Lots of temporary solution in this function. -XML
 {
+   cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
+   cr.strip(NULL);                  //
+
    Weapon* weapon = NULL;
    Armor* armor = NULL;
    Clip* clips = NULL;
@@ -2076,8 +2079,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
                clips=new Clip(*cliptype[getcliptype("CLIP_BUCKSHOT")]);
                break;
             default :
-               Weapon w=Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
-               Clip c=Clip(*cliptype[getcliptype("CLIP_9")],6);
+               weapon=new Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
+               clips=new Clip(*cliptype[getcliptype("CLIP_9")],6);
          }
 
          cr.give_weapon(*weapon,NULL);
