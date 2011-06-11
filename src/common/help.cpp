@@ -267,21 +267,27 @@ void HelpActivities(int activityType)
       move(2,0);
       addstr("===Sell Shirts===");
       move(4,0);
-      addstr(" Income depends on tailoring and ");
+      addstr(" Income depends on tailoring and business skills.");
       move(5,0);
-      addstr(" business skills. Income is lower if the country is very conservative.");
+      addstr("  The income is lower if the public mood is Liberal.");
       move(7,0);
-      addstr(" This activity trains tailoring and business.");
+      addstr(" This activity trains tailoring and business and may.");
+      move(8,0);
+      addstr(" have a positive political effect if done well enough.");
       break;
 // }}}
 // {{{ ACTIVITY_SELL_ART
    case ACTIVITY_SELL_ART:
       move(2,0);
-      addstr("===Sell Portrait Sketches===");
+      addstr("===Sell Art===");
       move(4,0);
-      addstr(" Income depends on art skill. ");
-      move(6,0);
-      addstr(" This activity trains art. Income is lower if the country is very conservative.");
+      addstr(" Income depends on art skill and is lower if the country");
+      move(5,0);
+      addstr(" is very Liberal.");
+      move(7,0);
+      addstr(" This activity trains art, and may have a positive political");
+      move(8,0);
+      addstr(" effect if done well enough.");
       break;
 // }}}
 // {{{ ACTIVITY_SELL_MUSIC
@@ -289,13 +295,15 @@ void HelpActivities(int activityType)
       move(2,0);
       addstr("===Play Street Music===");
       move(4,0);
-      addstr(" There is no overhead for this activity. Income depends on music skill. ");
+      addstr(" Income depends on music skill. ");
       move(6,0);
       addstr(" An equipped guitar will increase income substantially and speed skill gains.");
       move(7,0);
-      addstr(" Income is lower if the country is very conservative.");
+      addstr(" Income is lower if the public mood is Liberal.");
       move(9,0);
-      addstr(" This activity trains music.");
+      addstr(" This activity trains music, and may have a positive political");
+      move(10,0);
+      addstr(" effect if done well enough.");
       break;
 // }}}
 // }}}

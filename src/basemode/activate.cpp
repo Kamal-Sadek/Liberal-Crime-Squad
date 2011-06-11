@@ -481,18 +481,28 @@ void activate(Creature *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
          move(11,40);
-         if(cr->get_skill(SKILL_TAILORING)>4)
+         if(cr->get_skill(SKILL_TAILORING)>=8)
+            addstr("2 - Sell Liberal T-Shirts");
+         else if(cr->get_skill(SKILL_TAILORING)>=4)
             addstr("2 - Sell Embroidered Shirts");
          else
             addstr("2 - Sell Tie-Dyed T-Shirts");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_ART);
          move(12,40);
-         addstr("3 - Sell Portrait Sketches");
+         if(cr->get_skill(SKILL_ART)>=8)
+            addstr("3 - Sell Liberal Art");
+         else if(cr->get_skill(SKILL_ART)>=4)
+            addstr("3 - Sell Paintings");
+         else
+            addstr("3 - Sell Portrait Sketches");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_MUSIC);
          move(13,40);
-         addstr("4 - Play Street Music");
+         if(cr->get_skill(SKILL_MUSIC)>8)
+            addstr("4 - Play Liberal Music");
+         else
+            addstr("4 - Play Street Music");
          break;
       case 'c':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
@@ -611,7 +621,9 @@ void activate(Creature *cr)
       case ACTIVITY_SELL_TSHIRTS:
          move(22,3);
          addstr(cr->name);
-         if(cr->get_skill(SKILL_TAILORING)>4)
+         if(cr->get_skill(SKILL_TAILORING)>=8)
+            addstr(" will print and distribute shirts with Liberal slogans.");
+         else if(cr->get_skill(SKILL_TAILORING)>=4)
             addstr(" will embroider shirts and sell them on the street.");
          else
             addstr(" will tie-dye T-shirts and sell them on the street.");
@@ -619,7 +631,12 @@ void activate(Creature *cr)
       case ACTIVITY_SELL_ART:
          move(22,3);
          addstr(cr->name);
-         addstr(" will sketch people and sell portraits back to them.");
+         if(cr->get_skill(SKILL_ART)>=8)
+            addstr(" will create and sell paintings embracing the Liberal agenda.");
+         else if(cr->get_skill(SKILL_ART)>=4)
+            addstr(" will make pretty paintings and sell them on the streets.");
+         else
+            addstr(" will sketch people and sell portraits back to them.");
          break;
       case ACTIVITY_SELL_MUSIC:
          move(22,3);
