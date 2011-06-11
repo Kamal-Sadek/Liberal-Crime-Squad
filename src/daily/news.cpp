@@ -421,7 +421,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                strcat(story,"A routine arrest went horribly wrong yesterday, ");
                strcat(story,"according to a spokesperson from the police department.");
                strcat(story,"&r");
-               strcat(story,"  A suspect, whose identify is unclear, ");
+               strcat(story,"  A suspect, whose identity is unclear, ");
                strcat(story,"killed ");
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
