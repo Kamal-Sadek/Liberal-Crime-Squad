@@ -1042,6 +1042,13 @@ void funds_and_trouble(char &clearformess)
          if(publicmood(-1) > 35)
             money /= 2;
 
+         //If you're selling epic shirts enough they'll have some political impact
+
+         if(tshirts[s]->skill_check(SKILL_TAILORING,DIFFICULTY_FORMIDABLE))
+            background_liberal_influence[randomissue()]+=5;
+
+
+
          tshirts[s]->income=money;
          ledger.add_funds(money,INCOME_TSHIRTS);
 
@@ -1063,6 +1070,10 @@ void funds_and_trouble(char &clearformess)
             money /= 2;
          if(publicmood(-1) > 35)
             money /= 2;
+
+         //Epic Liberal art may have positive political effect
+         if(art[s]->skill_check(SKILL_ART,DIFFICULTY_FORMIDABLE))
+            background_liberal_influence[randomissue()]+=5;
 
          art[s]->income=money;
          ledger.add_funds(money,INCOME_SKETCHES);
@@ -1089,6 +1100,10 @@ void funds_and_trouble(char &clearformess)
             money /= 2;
          if(publicmood(-1) > 35)
             money /= 2;
+
+         //Epic Liberal protest songs
+         if(music[s]->skill_check(SKILL_MUSIC,DIFFICULTY_FORMIDABLE))
+            background_liberal_influence[randomissue()]+=has_instrument ? 10 : 5;
 
          ledger.add_funds(money,INCOME_BUSKING);
          music[s]->income=money;
