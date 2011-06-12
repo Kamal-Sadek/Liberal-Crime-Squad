@@ -992,8 +992,9 @@ void advanceday(char &clearformess,char canseethings)
       if(disbanding)break;
 
       int p=getpoolcreature(recruit[r]->recruiter_id);
-      // Stand up recruits if 1) recruiter does not exist, or 2) recruiter was not able to return to a safehouse today
-      if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=RENTING_NOCONTROL)||
+      // Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
+      // or 3) recruiter is dead.
+      if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=RENTING_NOCONTROL&&pool[p]->alive)||
          recruit[r]->timeleft>0))
       {
          //MEET WITH RECRUIT
@@ -1555,7 +1556,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       {
          if(pool[p]->hireid==cr.id && // recruited by old boss that died
             p!=newboss &&             // not the new boss
-            pool[p]->flag & CREATUREFLAG_LOVESLAVE) // is not a love slave
+            !(pool[p]->flag & CREATUREFLAG_LOVESLAVE)) // is not a love slave
          {
             pool[p]->hireid=pool[newboss]->id; // promote
          }
@@ -1607,6 +1608,8 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       addstr(" is the new leader of the Liberal Crime Squad!");
       refresh();
       getch();
+      
+      cr.hireid=-2; // Make dead founder not founder.
    }
    return 1;
 }
