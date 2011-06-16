@@ -1,0 +1,174 @@
+﻿<shop name="OUBLIETTE">
+    <!-- Clarification
+    
+    <only_sell_legal_items> (boolean) The shop will only sell legal items.
+        Default: true
+    <fullscreen> (boolean) The shop will use the full screen. Otherwise half
+                           the screen with squad above.
+        Default: false
+    <allow_selling> (boolean) The shop will allow fencing items.
+        Default: false
+    <increase_prices_with_illegality> (boolean) The price of illegal items will
+                                                increase the more illegal they 
+                                                are.
+        Default: false
+    <exit> (string) What it says at the the exit. In fullscreen the buyer's
+                    name is printed first.
+        Default:
+    <entry> (string) What it says at the entrance. Only visible for departments.
+        Default:
+    <letter> (character) Letter to press to select the department or item sold.
+        Default:
+    
+    <department> Items for sale can be categorised into departments. They are
+                 essentially subshops or shops inside the shop. They have the
+                 same tags as above but inherit their defaults for
+                 only_sell_legal_items, fullscreen and
+                 increase_prices_with_illegality from their "parent" shop.
+                 
+    <item> An item being sold in the shop.
+        <class> (WEAPON, ARMOR, CLIP, LOOT) What class of item the item is.
+        <type> (item idname) The idname of the item type being sold.
+        <price> (integer) The price of the item being sold.
+    
+    -->
+    <only_sell_legal_items>true</only_sell_legal_items>
+    <fullscreen>false</fullscreen>
+    <allow_selling>false</allow_selling>
+    <exit>Leave</exit>
+    
+    <department>
+        <entry>Purchase Halloween Costumes</entry>
+        <letter>c</letter>
+        <fullscreen>false</fullscreen>
+        <sell_masks>true</sell_masks>
+        <exit>Done</exit>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_TRENCHCOAT</type>
+            <letter>t</letter>
+            <description>Buy a Trench Coat</description>
+            <price>70</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_WORKCLOTHES</type>
+            <letter>w</letter>
+            <description>Buy Work Clothes</description>
+            <price>50</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_LABCOAT</type>
+            <letter>l</letter>
+            <description>Buy a Lab Coat</description>
+            <price>200</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_BLACKROBE</type>
+            <letter>r</letter>
+            <description>Buy a Black Judge's Robe</description>
+            <price>200</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_CLOWNSUIT</type>
+            <letter>c</letter>
+            <description>Buy a Clown Suit</description>
+            <price>200</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_BONDAGEGEAR</type>
+            <letter>g</letter>
+            <description>Buy Bondage Gear</description>
+            <price>350</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_TOGA</type>
+            <letter>o</letter>
+            <description>Buy a Toga</description>
+            <price>90</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_ELEPHANTSUIT</type>
+            <letter>p</letter>
+            <description>Buy an Elephant Suit</description>
+            <price>1000</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_DONKEYSUIT</type>
+            <letter>d</letter>
+            <description>Buy a Donkey Suit</description>
+            <price>1000</price>
+        </item>
+        <!-- +Masks! -->
+    </department>
+    
+    <department>
+        <entry>Purchase Medieval Gear</entry>
+        <letter>m</letter>
+        <fullscreen>false</fullscreen>
+        <exit>Done</exit>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_KNIFE</type>
+            <letter>k</letter>
+            <description>Buy a Knife</description>
+            <price>20</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_SWORD</type>
+            <letter>s</letter>
+            <description>Buy the Sword of Morfiegor</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_DAISHO</type>
+            <letter>a</letter>
+            <description>Buy a Katana and Wakizashi</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_HAMMER</type>
+            <letter>h</letter>
+            <description>Buy a Dwarven Hammer</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_MAUL</type>
+            <letter>m</letter>
+            <description>Buy the Maul of Anrin</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_CROSS</type>
+            <letter>c</letter>
+            <description>Buy a Silver Cross</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <type>WEAPON_STAFF</type>
+            <letter>w</letter>
+            <description>Buy a Wizard's Staff</description>
+            <price>250</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_MITHRIL</type>
+            <letter>!</letter> <!-- Not a letter! -->
+            <description>Buy Mithril Mail</description>
+            <price>1000</price>
+        </item>
+    </department>
+</shop>
