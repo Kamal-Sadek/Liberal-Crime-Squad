@@ -1217,7 +1217,7 @@ void funds_and_trouble(char &clearformess)
 
          int juiceval=0;
 
-         switch(LCSrandom(7))
+         switch(LCSrandom(11))
          {
             case 0:
             {
@@ -1293,6 +1293,50 @@ void funds_and_trouble(char &clearformess)
                juiceval=10;
                break;
             }
+            case 7:
+            {
+               strcat(msg,"subverted a Conservative family forum.");
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               change_public_opinion(VIEW_GAY,2,0,75);
+               change_public_opinion(VIEW_WOMEN,2,0,75);
+               break;
+            }
+            case 8:
+            {
+               strcat(msg,"spread videos of racist police brutality.");
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               juiceval=10;
+               change_public_opinion(VIEW_POLICEBEHAVIOR,2,0,75);
+               change_public_opinion(VIEW_CIVILRIGHTS,2,0,75);
+               break;
+            }
+            case 9:
+            {
+               strcat(msg,"published emails revealing CEO tax evasion.");
+               //Scambaiting, except you're baiting a CEO
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               juiceval=10;
+               change_public_opinion(VIEW_CEOSALARY,2,0,75);
+               change_public_opinion(VIEW_TAXES,2,0,75);
+               break;
+            }
+            case 10:
+            {
+               strcat(msg,"revealed huge political bias in INS processes.");
+
+               trackdif=DIFFICULTY_FORMIDABLE;
+               crime=LAWFLAG_INFORMATION;
+               juiceval=10;
+               change_public_opinion(VIEW_IMMIGRATION,2,0,75);
+               change_public_opinion(VIEW_FREESPEECH,2,0,75);
+               break;
+            }
+
          }
 
          if(trackdif>hack_skill + LCSrandom(5)-2)
