@@ -2,18 +2,93 @@
                       Liberal Crime Squad Linux Notes
 ================================================================================
 2004-08-17 - Kevin Sadler (sadler@geodude.eclipse.co.uk)
-2009-02-22 - Jonathan Stickles (floppysocks@hevanet.com)
+2009-02-22 - Jonathan Stickles (jonathansfox@gmail.com)
+2011-07-26 - Christian Sergelius (cribozai@member.fsf.org)
 
-Update as of version 4.x
-===================================
+Updated notes for compiling and playing under Linux for 4.xx.x versions
+=======================================================================
 
-After compiling, you may get messages about missing files. The game needs to
-be able to access the art directory, so if you get these messages, try to
-run the game from the trunk folder (where this file is by default).
-Sitemaps.txt may have to be converted to UNIX line endings - this is usually
-done with either "dos2unix" or "fromdos" command. If the file still appears
-to be missing, copy it to the location
-/usr/local/share/lcs/art/sitemaps.art .
+Thanks to the Bay12Games forums user named xczxc who rightly pointed out the
+need to update this document.
+
+To compile LCS under Linux you will need to obtain the tools for building
+under your specific distribution. You will also need to development libraries
+for ncurses. The ncursesw version with wide character support should also
+work.
+
+To do this under Ubuntu (and most likely Debian too) issue the following
+commands:
+
+sudo apt-get install build-essential libncurses-dev
+
+The actual compilation will be done by changing your working directory to the
+lcs folder and issuing:
+
+chmod 744 bootstrap
+./bootstrap
+./configure
+make
+
+If the compilation was successful no errors should be issued but you will
+see a myriad of warnings displayed all of which are safe to ignore.
+
+At the moment due to continuous development of the game it is probaby
+safer to not install the game systemwide and thus the best option is to
+play it from the games own directory that resides in your home folder.
+
+To do this with little trouble issue the following command while in
+the LCS game folder:
+
+cp src/crimesquad .
+
+To run the game just type:
+
+./crimesquad
+
+To make everything display properly you should resize your terminal to 80x25
+because the default of 80x24 sometimes makes the last lines information
+appear in the wrong place.
+
+Other good to know information
+==============================
+
+The savefile and highscores are independent of the game folder and reside
+in a hidden folder on your home are with the name .lcs and you can navigate
+there using your newly aquired terminal skills with the cd command as follows:
+
+cd ~/.lcs
+
+Troubleshooting
+===============
+
+My game does not compile properly, what is wrong?!
+
+The problem can be one of many and depends on too many things to give
+a simple answer. You can get help by contacting me (email address in
+the beginning of this document). Just copy the last screen of output
+that you were given and I will see what I can figure out.
+
+---------------------------------------------------------------
+
+My games runs smoothly and everything worked out fine untill I wanted to
+load a saved game. All I got was a screen with errors and my terminal
+seems messed up somehow. What gives?
+
+This is a problem that is distribution and compiler version dependant.
+The reason is quite complicated and as of yet I have had no time nor
+want to figure out exactly what the problem is. But luckily there is
+an easy fix that does not make you lose the saved game!
+
+While in the game folder issue the following:
+
+make clean
+./configure CFLAGS=-g CXXFLAGS=-g
+make
+# Wait for it to compile, check your email and take a sip of your beverage
+cp src/crimesquad .
+
+Then run the game again. Hope it worked for you. 
+
 
 Important Update as of Version 3.18
 ===================================
