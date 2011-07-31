@@ -313,6 +313,14 @@ void makecharacter(void)
       addstr(" (Press C to be born as the other sex)");
 
       move(12,2);
+	  set_color(COLOR_WHITE,COLOR_BLACK,1);
+	  addstr("CITY: ");
+	  addstr(lcityname);
+	  move(12,30);
+	  set_color(COLOR_BLACK,COLOR_BLACK,1);
+	  addstr(" (Press D to relocate)");
+
+	  move(14,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("HISTORY: ");
       if(choices)
@@ -325,11 +333,11 @@ void makecharacter(void)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Let Fate Decide");
       }
-      move(12,30);
+      move(14,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr(" (Press D to toggle childhood)");
+      addstr(" (Press E to toggle childhood)");
 
-      move(15,4);
+      move(17,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key when ready to begin...");
 
@@ -359,6 +367,11 @@ void makecharacter(void)
          continue;
       }
       if(c=='d')
+	  {
+		  cityname(lcityname);
+		  continue;
+	  }
+	  if(c=='e')
       {
          choices = !choices;
          continue;
