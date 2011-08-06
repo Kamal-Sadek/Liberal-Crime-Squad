@@ -249,7 +249,11 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_ENGINEER:strcat(str,"Engineer");break;
       case CREATURE_FASTFOODWORKER:strcat(str,"Fast Food Worker");break;
       case CREATURE_TELEMARKETER:strcat(str,"Telemarketer");break;
-      case CREATURE_OFFICEWORKER:strcat(str,"Office Worker");break;
+	  case CREATURE_CARSALESMAN:
+			 if(law[LAW_WOMEN]==-2)strcpy(str,"Car Salesman");
+         else strcat(str,"Car Salesperson");
+         break;
+	  case CREATURE_OFFICEWORKER:strcat(str,"Office Worker");break;
       case CREATURE_FOOTBALLCOACH:strcat(str,"Football Coach");break;
       case CREATURE_PROSTITUTE:strcat(str,"Prostitute");break;
       case CREATURE_MAILMAN:strcat(str,"Mail Carrier");break;
