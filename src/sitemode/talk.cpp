@@ -66,7 +66,8 @@ char talk(Creature &a,int t)
       }
       if(encounter[t].type==CREATURE_COP||
          encounter[t].type==CREATURE_GANGUNIT||
-         encounter[t].type==CREATURE_SWAT)
+         encounter[t].type==CREATURE_SWAT ||
+         encounter[t].type==CREATURE_SECURITYGUARD)
       {
          cop=1;
       }
@@ -84,7 +85,7 @@ char talk(Creature &a,int t)
       if(cop)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(14,1);
-      addstr("D - Surrender to police");
+      addstr("D - Surrender to authorities");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       refresh();
       while(1)
@@ -598,12 +599,42 @@ char talk(Creature &a,int t)
                   break;
             }
          }
-         else
+         else        //Special bluff messages for various uniforms
          {
-            addstr(a.name);
-            addstr(" talks like a Conservative");
-            move(17,1);
-            addstr("and pretends to belong here.");
+            set_color(COLOR_GREEN, COLOR_BLACK, 1);
+            if(a.get_armor().get_itemtypename() == "ARMOR_POLICEUNIFORM" ||
+               a.get_armor().get_itemtypename() == "ARMOR_POLICEARMOR" ||
+               a.get_armor().get_itemtypename() == "SWATARMOR")
+            {
+               addstr("\"The situation is under control.\"");
+            }
+            else if (a.get_armor().get_itemtypename() == "ARMOR_BUNKERGEAR")
+            {
+               if(siteonfire) addstr("\"Fire! Evacuate immediately!\"");
+               else addstr("\"Everything's in check.\"");
+            }
+               
+            else if(a.get_armor().get_itemtypename() == "ARMOR_LABCOAT")
+               addstr("\"Make way, I'm a doctor!\"");
+
+            else if(a.get_armor().get_itemtypename() == "ARMOR_DEATHSQUADUNIFORM")
+               addstr("\"Non-targets please leave the site.\"");
+
+            else if(a.get_armor().get_itemtypename() == "ARMOR_MITHRIL")
+            {
+               addstr(a.name);
+               addstr(" engraves ");
+               set_color(COLOR_CYAN, COLOR_BLACK, 1);
+               addstr("Elbereth");     //Fanciful multicolor message
+               set_color(COLOR_GREEN, COLOR_BLACK, 1);
+               addstr(" on the floor.");
+            }
+            else
+            {
+               addstr(" talks like a Conservative");
+               move(17,1);
+               addstr("and pretends to belong here.");
+            }
          }
 
          refresh();
@@ -676,7 +707,7 @@ char talk(Creature &a,int t)
       {
          move(14,1);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr("The police arrest the Squad.");
+         addstr("The Squad is arrested.");
          getch();
 
          int stolen=0;
@@ -700,7 +731,6 @@ char talk(Creature &a,int t)
       }
       return 1;
    }
-
    //TALKING
    short talkmode=TALKMODE_START;
 
