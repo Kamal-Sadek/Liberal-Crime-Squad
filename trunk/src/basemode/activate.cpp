@@ -511,6 +511,8 @@ void activate(Creature *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_PROSTITUTION);
          move(11,40);
+         if(cr->age < 18)
+            set_color(COLOR_BLACK, COLOR_BLACK, 1);    //Grayed out for minors
          addstr("2 - Prostitution");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CCFRAUD);
@@ -810,7 +812,8 @@ void activate(Creature *cr)
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
-            case '2':cr->activity.type=ACTIVITY_PROSTITUTION;break;
+            case '2':
+               if(cr->age >= 18) cr->activity.type=ACTIVITY_PROSTITUTION;break;
             case '3':cr->activity.type=ACTIVITY_CCFRAUD;break;
                //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             default:
@@ -819,7 +822,7 @@ void activate(Creature *cr)
                   cr->activity.type=ACTIVITY_CCFRAUD;
                   choice='3';
                }
-               else if(cr->get_skill(SKILL_SEDUCTION)>1)
+               else if(cr->get_skill(SKILL_SEDUCTION)>1 && cr->age >= 18)
                {
                   cr->activity.type=ACTIVITY_PROSTITUTION;
                   choice='2';
