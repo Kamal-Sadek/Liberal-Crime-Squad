@@ -1,4 +1,4 @@
-﻿<armors>
+<armors>
 
     <!-- Clarification
     <armortype idname="(string)"> idname is used internally by the game to identify the armor type.
@@ -641,6 +641,10 @@
 
     <armortype idname="ARMOR_SEALSUIT">
         <make_difficulty>10</make_difficulty>
+        <armor>
+            <body>6</body>
+            <head>4</head>
+        </armor>
         <name>SEAL suit</name>
         <shortname>SEAL suit</shortname>
         <fencevalue>300</fencevalue>
