@@ -2117,6 +2117,68 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_HEALTH,5);
          cr.set_attribute(ATTRIBUTE_WISDOM,5);
          break;
+
+
+         case CREATURE_MILITARYOFFICER:
+         GIVE_GENDER_MALE;
+         if(LCSrandom(4)) {
+            weapon = new Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
+            clips=new Clip(*cliptype[getcliptype("CLIP_9")],6);
+            cr.give_weapon(*weapon,NULL);
+            cr.take_clips(*clips,3);
+            cr.reload(false);
+         }
+         
+         armor=new Armor(*armortype[getarmortype("ARMOR_MILITARY")]);
+         cr.give_armor(*armor,NULL);
+         cr.money=0;
+         cr.align=-1;
+         cr.infiltration=0.5f + 0.1f*LCSrandom(4);
+         cr.juice=100 + LCSrandom(50);
+         cr.age=AGE_MIDDLEAGED;
+
+         cr.set_skill(SKILL_RIFLE,LCSrandom(2)+1);
+         cr.set_skill(SKILL_HANDTOHAND,LCSrandom(6)+1);
+         cr.set_skill(SKILL_PISTOL,LCSrandom(6)+1);
+         cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6)+1);
+         cr.set_skill(SKILL_PERSUASION, LCSrandom(5)+3);
+         
+         cr.set_attribute(ATTRIBUTE_CHARISMA, 7);
+         cr.set_attribute(ATTRIBUTE_INTELLIGENCE, 7);
+         cr.set_attribute(ATTRIBUTE_WISDOM,10);
+         break;
+
+         case CREATURE_SEAL:
+         GIVE_GENDER_MALE;
+         if(!LCSrandom(3))
+            weapon = new Weapon(*weapontype[getweapontype("WEAPON_CARBINE_M4")]);      //Not sure if SEALs actually use M4s, though
+         else
+            weapon = new Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
+
+         clips=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],6);
+         cr.give_weapon(*weapon,NULL);
+         cr.take_clips(*clips,3);
+         cr.reload(false);
+
+         armor=new Armor(*armortype[getarmortype("ARMOR_SEALSUIT")]);
+         cr.give_armor(*armor,NULL);
+         cr.money=0;
+         cr.align=-1;
+         cr.infiltration=0.1f + 0.1f*LCSrandom(4);
+         cr.juice=100 + LCSrandom(50);
+         cr.age=AGE_MATURE;
+
+         cr.set_skill(SKILL_RIFLE,LCSrandom(4)+4);
+         cr.set_skill(SKILL_HANDTOHAND,LCSrandom(3)+3);
+         cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(3)+3);
+         cr.set_skill(SKILL_DODGE, LCSrandom(4)+2);
+
+         cr.set_attribute(ATTRIBUTE_AGILITY, 7);
+         cr.set_attribute(ATTRIBUTE_STRENGTH, 7);
+         cr.set_attribute(ATTRIBUTE_HEALTH, 7);
+         cr.set_attribute(ATTRIBUTE_WISDOM, 7);
+         
+         break;
    }
    
    delete weapon;
@@ -2554,6 +2616,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
       case CREATURE_HARDENED_VETERAN:
       case CREATURE_SOLDIER:
+      case CREATURE_MILITARYPOLICE:
+      case CREATURE_MILITARYOFFICER:
+      case CREATURE_SEAL:
          okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       case CREATURE_EDUCATOR:
@@ -2683,9 +2748,6 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
-         break;
-      case CREATURE_MILITARYPOLICE:
-         okaysite[SITE_GOVERNMENT_ARMYBASE]=1;
          break;
       default:
          okaysite[SITE_RESIDENTIAL_SHELTER]=1;

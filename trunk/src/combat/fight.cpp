@@ -406,7 +406,8 @@ void enemyattack(void)
          encounter[e].type==CREATURE_JUDGE_CONSERVATIVE||
          encounter[e].type==CREATURE_CORPORATE_CEO||
          encounter[e].type==CREATURE_RADIOPERSONALITY||
-         encounter[e].type==CREATURE_NEWSANCHOR)&&encnum<ENCMAX)canmistake=0;
+         encounter[e].type==CREATURE_NEWSANCHOR||
+         encounter[e].type==CREATURE_MILITARYOFFICER)&&encnum<ENCMAX)canmistake=0;
 
       char actual;
       if(canmistake)
@@ -432,7 +433,8 @@ void enemyattack(void)
                         activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
                         activesquad->squad[target]->prisoner->type==CREATURE_NEWSANCHOR||
                         activesquad->squad[target]->prisoner->type==CREATURE_SCIENTIST_EMINENT||
-                        activesquad->squad[target]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE)sitecrime+=30;
+                        activesquad->squad[target]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE||
+                        activesquad->squad[target]->prisoner->type==CREATURE_MILITARYOFFICER)sitecrime+=30;
 
                      makeloot(*activesquad->squad[target]->prisoner,groundloot);
 
@@ -518,6 +520,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       (a.type==CREATURE_CORPORATE_CEO&&LCSrandom(2))||
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
+      a.type==CREATURE_MILITARYOFFICER||
       a.get_weapon().has_musical_attack()) && !mistake &&
       (a.get_weapon().has_musical_attack() || !a.is_armed() || a.align!=1)))
    {
@@ -1880,6 +1883,28 @@ void specialattack(Creature &a, Creature &t, char &actual)
          }
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
          break;
+      case CREATURE_MILITARYOFFICER:
+         switch(LCSrandom(5))
+         {
+            case 0:strcat(str,"recites the Pledge of Allegiance to");break;
+            case 1:strcat(str,"debates national security with");break;
+            case 2:strcat(str,"debates terrorism with");break;
+            case 3:strcat(str,"preaches about veterans to");break;
+            case 4:strcat(str,"explains military spending to");break;
+
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.attribute_roll(ATTRIBUTE_HEART);
+         }
+         else
+         {
+            resist=t.attribute_roll(ATTRIBUTE_WISDOM);
+         }
+         attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
       default:
          if(a.get_weapon().has_musical_attack())
          {
