@@ -639,5 +639,26 @@
         <stealth_value>3</stealth_value>
     </armortype>
 
+    <armortype idname="ARMOR_SEALSUIT">
+        <make_difficulty>10</make_difficulty>
+        <name>SEAL suit</name>
+        <shortname>SEAL suit</shortname>
+        <fencevalue>300</fencevalue>
+        <body_covering>
+            <head>true</head>
+            <arms>true</arms>
+            <legs>true</legs>
+            <conceals_face>true</conceals_face>
+        </body_covering>
+        <interrogation>
+            <basepower>6</basepower>
+            <assaultbonus>6</assaultbonus>
+        </interrogation>
+        <professionalism>1</professionalism>
+        <stealth_value>3</stealth_value>
+        <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
+        <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
+    </armortype>
+
 
 </armors>

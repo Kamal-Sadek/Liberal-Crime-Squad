@@ -45,12 +45,15 @@ void prepareencounter(short type,char sec)
       {
          case SITE_GOVERNMENT_ARMYBASE:
             creaturearray[CREATURE_SOLDIER]=1000;
-            creaturearray[CREATURE_MILITARYPOLICE]=200;
+            creaturearray[CREATURE_MILITARYPOLICE]=300;
+            creaturearray[CREATURE_MILITARYOFFICER]=150;
+            creaturearray[CREATURE_SEAL]=150;
             creaturearray[CREATURE_GUARDDOG]=100;
             creaturearray[CREATURE_TANK]=100;
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             creaturearray[CREATURE_AGENT]=1000;
+            creaturearray[CREATURE_MILITARYOFFICER]=100;
             creaturearray[CREATURE_GUARDDOG]=50;
             break;
          case SITE_CORPORATE_HEADQUARTERS:
@@ -185,6 +188,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
             creaturearray[CREATURE_RADIOPERSONALITY]+=1;
             creaturearray[CREATURE_NEWSANCHOR]+=1;
+            creaturearray[CREATURE_MILITARYOFFICER]+=1;
             creaturearray[CREATURE_LAWYER]+=15;
             creaturearray[CREATURE_DOCTOR]+=10;
             creaturearray[CREATURE_PSYCHOLOGIST]+=1;
@@ -240,6 +244,7 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_CCS_VIGILANTE]+=endgamestate*4;
             creaturearray[CREATURE_RADIOPERSONALITY]+=1;
             creaturearray[CREATURE_NEWSANCHOR]+=1;
+            creaturearray[CREATURE_MILITARYOFFICER]+=1;
             creaturearray[CREATURE_LAWYER]+=5;
             creaturearray[CREATURE_DOCTOR]+=5;
             creaturearray[CREATURE_PSYCHOLOGIST]+=1;
@@ -684,6 +689,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_AGENT]=1;
             creaturearray[CREATURE_RADIOPERSONALITY]=1;
             creaturearray[CREATURE_NEWSANCHOR]=1;
+            creaturearray[CREATURE_MILITARYOFFICER]=1;
             creaturearray[CREATURE_LAWYER]=1;
             creaturearray[CREATURE_DOCTOR]=1;
             creaturearray[CREATURE_PSYCHOLOGIST]+=1;
@@ -776,6 +782,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_AGENT]=1;
             creaturearray[CREATURE_RADIOPERSONALITY]=1;
             creaturearray[CREATURE_NEWSANCHOR]=1;
+            creaturearray[CREATURE_MILITARYOFFICER]=1;
             creaturearray[CREATURE_LAWYER]=200;
             creaturearray[CREATURE_PSYCHOLOGIST]+=20;
             creaturearray[CREATURE_SEWERWORKER]=1;
@@ -906,6 +913,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_GUARDDOG]+=50;
             creaturearray[CREATURE_MATHEMATICIAN]+=5;
             creaturearray[CREATURE_PROGRAMMER]+=5;
+            creaturearray[CREATURE_MILITARYOFFICER]+=5;
 
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
@@ -921,6 +929,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_GUARDDOG]+=20;
             creaturearray[CREATURE_MILITARYPOLICE]+=100;
             if(sec)creaturearray[CREATURE_MILITARYPOLICE]+=100;
+            creaturearray[CREATURE_MILITARYOFFICER]+=20;
+            creaturearray[CREATURE_SEAL]+=20;
 
 
             for(int n=0;n<LCSrandom(6)+1;n++)
@@ -1098,11 +1108,9 @@ char addsiegeencounter(char type)
                      }
                      else
                      {
-                        if(LCSrandom(5))        //About 1 unit in 5 should be MPs
-                        {
-                           makecreature(encounter[e],CREATURE_SOLDIER);
-                        }
-                        else makecreature(encounter[e], CREATURE_MILITARYPOLICE);
+                        if(LCSrandom(5)) makecreature(encounter[e],CREATURE_SOLDIER);
+                        else if (LCSrandom(5)) makecreature(encounter[e], CREATURE_MILITARYPOLICE);
+                        else makecreature(encounter[e], CREATURE_SEAL);
                      }
                      break;
                   case SIEGE_CIA:
