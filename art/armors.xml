@@ -640,7 +640,7 @@
     </armortype>
 
     <armortype idname="ARMOR_SEALSUIT">
-        <make_difficulty>10</make_difficulty>
+        <make_difficulty>0</make_difficulty>
         <armor>
             <body>6</body>
             <head>4</head>
