@@ -553,6 +553,8 @@ void review_mode(short mode)
                // Add removal of squad members member
                move(22,0);
 
+			   addstr("A - change activity    ");
+
                if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
                   temppool[p]->hireid !=-1 &&
                   temppool[p]->clinic==0&&
@@ -563,7 +565,7 @@ void review_mode(short mode)
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
                {
-                  addstr("R - Remove member         K - Kill member");
+                  addstr("R - Remove member    K - Kill member");
                }
 
                move(23,0);      
@@ -606,6 +608,8 @@ void review_mode(short mode)
                   if(page<0)page=2;
                   continue;
                }
+
+               if (c == 'a') { activate(temppool[p]);  }
 
                if(c=='n')
                {
