@@ -498,23 +498,38 @@ void review_mode(short mode)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a Letter to View Status.        Z - ");
-      if (swap) {
+      addstr("Press a Letter to View Status (uppercase for  activity screen).");
+
+      move(23,0);
+      addpagestr();
+      addstr("T - sort people.   ");
+      addstr("Z - ");
+
+      if (swap)
+      {
 	      addstr ("Place ");
 	      addstr (swap->name);
       }
-      else {
+      else
+      {
 	      addstr ("Reorder Liberals");
       }
-      move(23,0);
-      addpagestr();
-      addstr(" T to sort people.");
 
       refresh();
 
       int c=getch();
+      if (c >='A' && c <='S') // Activity diversion
+      {
+          int p=page*19+(int)(c-'A');
+         if(p<temppool.size())
+         {
+              activate(temppool[p]);
+         }
+      }
+      else
+      {
       translategetch(c);
-
+      
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
@@ -553,7 +568,7 @@ void review_mode(short mode)
                // Add removal of squad members member
                move(22,0);
 
-			   addstr("A - change activity    ");
+			   addstr("A - change activity       ");
 
                if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
                   temppool[p]->hireid !=-1 &&
@@ -565,7 +580,7 @@ void review_mode(short mode)
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
                {
-                  addstr("R - Remove member    K - Kill member");
+                  addstr("R - Remove member       K - Kill member");
                }
 
                move(23,0);      
@@ -805,7 +820,7 @@ void review_mode(short mode)
             }while(1);
          }
       }
-
+     } // end activity divert
       if(c=='t')
       {
          sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));
