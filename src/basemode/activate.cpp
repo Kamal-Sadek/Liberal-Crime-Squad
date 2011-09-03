@@ -1132,7 +1132,11 @@ void activatebulk(void)
             case 2: //Illegal Fundraising
                if(temppool[p]->get_skill(SKILL_COMPUTERS)>1)
                   temppool[p]->activity.type=ACTIVITY_CCFRAUD;
+#ifndef ZEROMORAL
+                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1 && temppool[p]->age >=18)
+#else
                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1)
+#endif
                   temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
                else
                   temppool[p]->activity.type=ACTIVITY_SELL_DRUGS;
