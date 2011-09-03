@@ -498,11 +498,11 @@ void review_mode(short mode)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a Letter to View Status (uppercase for  activity screen).");
+      addstr("Press a Letter to View Status (uppercase for activity screen).");
 
       move(23,0);
       addpagestr();
-      addstr("T - sort people.   ");
+      addstr("   T - sort people.   ");
       addstr("Z - ");
 
       if (swap)
