@@ -1139,11 +1139,10 @@ void activatebulk(void)
                   temppool[p]->activity.type=ACTIVITY_CCFRAUD;
 #ifndef ZEROMORAL
                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1 && temppool[p]->age >=18)
-                  temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
 #else
                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1)
-               temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
 #endif
+               temppool[p]->activity.type=ACTIVITY_PROSTITUTION;
                else
                   temppool[p]->activity.type=ACTIVITY_SELL_DRUGS;
                break;

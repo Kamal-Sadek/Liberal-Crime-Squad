@@ -518,7 +518,7 @@ void review_mode(short mode)
       refresh();
 
       int c=getch();
-      if (c >='A' && c <='S') // Activity diversion
+      if (c >='A' && c <='S') // Activity diversion - needs to be here to intercept uppercase info.
       {
           int p=page*19+(int)(c-'A');
          if(p<temppool.size())
@@ -627,6 +627,47 @@ void review_mode(short mode)
                }
 
                if (c == 'a') { activate(temppool[p]);  }
+
+               if (c =='e' && temppool[p]->location != -1) { 
+                   //create a temp squad containing just this liberal
+                     //backup current squad if any
+                     int oldsquadid = temppool[p]->squadid;
+                     squadst *oldactivesquad = activesquad;
+                     //create new squad for temp vehicle
+                     activesquad=new squadst;
+                     strcpy(activesquad->name, "Temp. Vehicle Squad");
+                     activesquad->id=cursquadid;
+                     //assign liberal
+                     activesquad->squad[0]=temppool[p];
+                     temppool[p]->squadid = activesquad->id;
+                     //go to equipment screen
+                     equip(location[activesquad->squad[0]->location]->loot,-1);
+                     //once done, restore original squad status.
+                     delete activesquad;
+                     activesquad = oldactivesquad;
+                     temppool[p]->squadid = oldsquadid;
+
+                }
+
+               if (c == 'v') { 
+ //create a temp squad containing just this liberal
+                     //backup current squad if any
+                     int oldsquadid = temppool[p]->squadid;
+                     squadst *oldactivesquad = activesquad;
+                     //create new squad for temp equip
+                     activesquad=new squadst;
+                     strcpy(activesquad->name, "Temp. Equip Squad");
+                     activesquad->id=cursquadid;
+                     //assign liberal
+                     activesquad->squad[0]=temppool[p];
+                     temppool[p]->squadid = activesquad->id;
+                     //go to vehicle screen
+                     setvehicles();
+                     //once done, restore original squad status.
+                     delete activesquad;
+                     activesquad = oldactivesquad;
+                     temppool[p]->squadid = oldsquadid;
+				}
 
                if(c=='n')
                {
@@ -822,7 +863,7 @@ void review_mode(short mode)
             }while(1);
          }
       }
-     } // end activity divert
+     } // end else from activity divert
       if(c=='t')
       {
          sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));

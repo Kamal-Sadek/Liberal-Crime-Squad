@@ -1081,7 +1081,6 @@ void printliberalstats(Creature &cr)
    move(3,0);
 
 
-
    // Add birthdate
    addstr("Born ");
    switch(cr.birthday_month)
@@ -1130,8 +1129,17 @@ void printliberalstats(Creature &cr)
    //   addstr("*");
    addstr(")");
 
+   // Wanted for?
    move(3,46);
    statebrokenlaws(cr);
+
+   // Current activity
+   move(4,46);
+   char str_activity[80];
+   set_activity_color(cr.activity.type);
+   getactivity(str_activity,cr.activity);
+   addstr(str_activity);
+
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    // Add juice
@@ -1259,7 +1267,6 @@ void printliberalstats(Creature &cr)
    addstr("Clothes: ");
    addstr(cr.get_armor_string(true).c_str());
 
-
    // Add vehicle
    move(15,0);
    addstr("Car: ");
@@ -1287,10 +1294,14 @@ void printliberalstats(Creature &cr)
    }
    addstr(str);
 
+   //Add Equip
+   move(16,0);
+   addstr("E - Equip   V - Vehicule");
+
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(18,0);
+      move(19,0);
       itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
       addstr(num);
       addstr(" Recruits / ");
