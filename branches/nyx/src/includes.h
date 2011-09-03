@@ -1266,6 +1266,8 @@ void printliberalskills(Creature &cr);
 void printliberalstats(Creature &cr);
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(Creature &cr);
+/* Full screen character sheet, relations sheet */
+void printliberalrelations(Creature &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y,int x);
 /* print location name (is aware of business fronts) */

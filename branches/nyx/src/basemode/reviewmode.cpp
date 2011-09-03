@@ -498,7 +498,7 @@ void review_mode(short mode)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a Letter to View Status (uppercase for activity screen).");
+      addstr("Press a Letter to View Status (Uppercase for Activity screen).");
 
       move(23,0);
       addpagestr();
@@ -564,11 +564,13 @@ void review_mode(short mode)
                   printliberalskills(*temppool[p]);
                else if(page==2)               
                   printliberalcrimes(*temppool[p]);
+               else if(page==3)               
+                  printliberalrelations(*temppool[p]);
                
                // Add removal of squad members member
                move(22,0);
 
-			   addstr("A - change activity       ");
+			   addstr("A - Change Activity       ");
 
                if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
                   temppool[p]->hireid !=-1 &&
@@ -613,14 +615,14 @@ void review_mode(short mode)
                if(c==KEY_DOWN)
                {
                   page++;
-                  if(page>2)page=0;
+                  if(page>3)page=0;
                   continue;
                }
 
                if(c==KEY_UP)
                {
                   page--;
-                  if(page<0)page=2;
+                  if(page<0)page=3;
                   continue;
                }
 

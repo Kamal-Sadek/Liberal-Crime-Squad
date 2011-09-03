@@ -1688,7 +1688,7 @@ void funds_and_trouble(char &clearformess)
           }
           // Factor this in from start? - see usage when caught too
           int pimp = getpoolcreature(prostitutes[p]->hireid);
-          addjuice(*pool[pimp],!LCSrandom(5),-200);
+          addjuice(*pool[pimp],-!LCSrandom(5),-200);
       }
 
       // Gain seduction and street sense
@@ -1723,7 +1723,7 @@ void funds_and_trouble(char &clearformess)
                 addstr(prostitutes[p]->name);
 	            addstr(" has been arrested in a prostitution sting!");
                 // Next in command takes juice and criminal record
-                addjuice(*pool[pimp],-15,-100); 
+                addjuice(*pool[pimp],-20,-300); 
 				criminalize(*pool[pimp],LAWFLAG_PROSTITUTION);
 				//criminalize(*pool[pimp],LAWFLAG_ASSAULT);
 				criminalize(*pool[pimp],LAWFLAG_ARMEDASSAULT);

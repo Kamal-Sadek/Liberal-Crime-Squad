@@ -1543,6 +1543,57 @@ void printliberalcrimes(Creature &cr)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 }
 
+/* Full screen character sheet, relations sheet */
+void printliberalrelations(Creature &cr)
+{
+  set_color(COLOR_WHITE,COLOR_BLACK,0);
+     set_color(COLOR_WHITE,COLOR_BLACK,0);
+   char str[200];
+   char num[5];
+
+   // Add name
+   move(2,0);
+   if(strcmp(cr.propername,cr.name)!=0)
+   {
+      addstr("Code name: ");
+   }
+   else
+   {
+      addstr("Name: ");
+   }
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   addstr(cr.name);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   addstr(", ");
+   gettitle(str,cr);
+   addstr(str);
+   addstr(" (");
+   getrecruitcreature(str,cr.type);
+   addstr(str);
+   addstr(")");
+
+   // Add superior
+   set_color(COLOR_BLUE,COLOR_BLACK,1);
+   move(4,0);
+   if(cr.hireid == -1)
+   {
+       addstr("  <LCS Leader>");
+   }
+   else
+   {
+       int boss = getpoolcreature(cr.hireid);
+       addstr("Recruiter: ");
+       addstr(pool[boss]->name);
+   }
+
+   // Add all subordinates
+
+
+//restore default color
+     set_color(COLOR_WHITE,COLOR_BLACK,0);
+}
+
+
 /* draws a horizontal line across the screen */
 void makedelimiter(int y,int x)
 {
