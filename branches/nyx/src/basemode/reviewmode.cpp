@@ -530,7 +530,7 @@ void review_mode(short mode)
               activate(temppool[p]);
          }
       }
-      else
+      else // is lowercase or general command
       {
         translategetch(c);
       
@@ -542,332 +542,9 @@ void review_mode(short mode)
         if(c>='a'&&c<='s')
         {
          int p=page*19+(int)(c-'a');
-         if(p<temppool.size())
-         {
-            int page=0;
-            const int pagenum=2;
-            do
-            {
-               erase();
+         if(p<temppool.size()) displaystatus(temppool,p);
+        }
 
-               move(0,0);
-               if(temppool[p]->align!=1)
-               {
-                  set_color(COLOR_RED,COLOR_BLACK,1);
-                  addstr("Profile of an Automaton");
-               }
-               else
-               {
-                  set_color(COLOR_GREEN,COLOR_BLACK,1);
-                  addstr("Profile of a Liberal");
-               }
-
-               if(page==0)
-                  printliberalstats(*temppool[p]);
-               else if(page==1)
-                  printliberalskills(*temppool[p]);
-               else if(page==2)               
-                  printliberalcrimes(*temppool[p]);
-               else if(page==3)               
-                  printliberalrelations(*temppool[p]);
-               
-               // Add removal of squad members member
-               move(22,0);
-
-			   addstr("A - Change Activity       ");
-
-               if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
-               {
-                  addstr("R - Remove member       K - Kill member");
-               }
-
-               move(23,0);      
-
-               if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
-               else
-               {
-                  addstr("N - Change Code Name      G - Fix Gender Label");
-               }
-               if(temppool.size()>1)
-               {
-                  addstr("    LEFT/RIGHT - View Others");
-               }
-               move(24,0);
-               addstr("Press any other key to continue the Struggle");
-               addstr("    UP/DOWN  - More Info");
-
-               refresh();
-               int c=getch();
-               translategetch(c);
-
-               if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
-               {
-                  int sx=1;
-                  if((c==KEY_LEFT))sx=-1;
-                  p=(p+(int)temppool.size()+sx)%((int)temppool.size());
-                  continue;
-               }
-
-               if(c==KEY_DOWN)
-               {
-                  page++;
-                  if(page>3)page=0;
-                  continue;
-               }
-
-               if(c==KEY_UP)
-               {
-                  page--;
-                  if(page<0)page=3;
-                  continue;
-               }
-
-               if (c == 'a') { activate(temppool[p]);  }
-
-               if (c =='e' && temppool[p]->location != -1) { 
-                   //create a temp squad containing just this liberal
-                     //backup current squad if any
-                     int oldsquadid = temppool[p]->squadid;
-                     squadst *oldactivesquad = activesquad;
-                     //create new squad for temp vehicle
-                     activesquad=new squadst;
-                     strcpy(activesquad->name, "Temp. Vehicle Squad");
-                     activesquad->id=cursquadid;
-                     //assign liberal
-                     activesquad->squad[0]=temppool[p];
-                     temppool[p]->squadid = activesquad->id;
-                     //go to equipment screen
-                     equip(location[activesquad->squad[0]->location]->loot,-1);
-                     //once done, restore original squad status.
-                     delete activesquad;
-                     activesquad = oldactivesquad;
-                     temppool[p]->squadid = oldsquadid;
-
-                }
-
-               if (c == 'v') { 
- //create a temp squad containing just this liberal
-                     //backup current squad if any
-                     int oldsquadid = temppool[p]->squadid;
-                     squadst *oldactivesquad = activesquad;
-                     //create new squad for temp equip
-                     activesquad=new squadst;
-                     strcpy(activesquad->name, "Temp. Equip Squad");
-                     activesquad->id=cursquadid;
-                     //assign liberal
-                     activesquad->squad[0]=temppool[p];
-                     temppool[p]->squadid = activesquad->id;
-                     //go to vehicle screen
-                     setvehicles();
-                     //once done, restore original squad status.
-                     delete activesquad;
-                     activesquad = oldactivesquad;
-                     temppool[p]->squadid = oldsquadid;
-				}
-
-               if(c=='n')
-               {
-                  move(23,0);
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("What is the new code name?                                       ");
-                  move(24,0);
-                  addstr("                                                                 ");
-
-                  keypad(stdscr,FALSE);
-                  raw_output(FALSE);
-                  echo();
-                  curs_set(1);
-                  move(24,0);
-                  enter_name(temppool[p]->name,CREATURE_NAMELEN,
-                     temppool[p]->propername);
-
-                  curs_set(0);
-                  noecho();
-                  raw_output(TRUE);
-                  keypad(stdscr,TRUE);
-               }
-               else if(c=='g' && temppool[p]->align==1)
-               {
-                  temppool[p]->gender_liberal++;
-                  if(temppool[p]->gender_liberal > 2)
-                     temppool[p]->gender_liberal = 0;
-               }      
-               else if(c=='r' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
-               {
-                  int boss = getpoolcreature(temppool[p]->hireid);
-
-                  move(22,0);
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Do you want to permanently release this squad member from the LCS?          ");
-
-                  move(23,0);
-                  addstr("If the member has low heart they may go to the police.                         ");
-
-                  move(24,0);
-                  addstr("  C - Confirm       Any other key to continue                                                ");
-
-                  c=getch();
-                  translategetch(c);
-
-                  if(c=='c')
-                  {
-                     // Release squad member
-                     move(22,0);
-                     addstr(temppool[p]->name);
-                     addstr(" has been released.                                                                      ");
-                     move(23,0);
-                     addstr("                                                                                         ");
-                     move(24,0);
-                     addstr("                                                                                         ");
-                     getch();
-                     // Chance of member going to police if boss has criminal record and
-                     // if they have low heart
-                     // TODO: Do law check against other members?
-                     if(temppool[p]->get_attribute(ATTRIBUTE_HEART,true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+ LCSrandom(5)
-                        && iscriminal(*pool[boss]))
-                     {
-                        set_color(COLOR_CYAN,COLOR_BLACK,1);
-                        move(22,0);
-                        addstr("A Liberal friend tips you off on ");
-                        addstr(temppool[p]->name);
-                        addstr("'s whereabouts.");
-                        move(24,0);
-                        addstr("The Conservative traitor has ratted you out to the police, and sworn");
-                        move(25,0);
-                        addstr("to testify against ");
-                        addstr(pool[boss]->name);
-                        addstr(" in court.");
-
-                        criminalize(*pool[boss],LAWFLAG_RACKETEERING);
-                        pool[boss]->confessions++;
-
-                        // TODO: Depending on the crime increase heat or make seige
-
-                        if(location[pool[boss]->location]->heat > 20)
-                           location[pool[boss]->location]->siege.timeuntillocated=3;
-                        else
-                           location[pool[boss]->location]->heat += 20;
-                     }
-
-                     // Remove squad member
-                     removesquadinfo(*temppool[p]);
-                     cleangonesquads();
-
-                     int thisPersonIndex = getpoolcreature(temppool[p]->id);
-                     delete temppool[p];
-                     temppool.erase(temppool.begin() + p);
-                     pool.erase(pool.begin() + thisPersonIndex);
-                     break;
-                  }
-               }               
-               else if(c=='k' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
-               {
-                  // Kill squad member
-                  int boss = getpoolcreature(temppool[p]->hireid);
-
-                  move(22,0);
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Confirm you want to have ");
-                  addstr(pool[boss]->name);
-                  addstr(" kill this squad member?");
-                  move(23,0);
-                  addstr("Killing your squad members is Not a Liberal Act.                              ");
-                  move(24,0);
-                  addstr("  C - Confirm       Any other key to continue                                                ");
-
-                  c=getch();
-                  translategetch(c);
-
-                  if(c=='c')
-                  {
-                     temppool[p]->die();
-                     cleangonesquads();
-                     stat_kills++;
-
-                     move(22,0);
-                     addstr(pool[boss]->name);
-                     addstr(" executes ");
-                     addstr(temppool[p]->name);
-                     addstr(" by ");
-                     switch(LCSrandom(3))
-                     {
-                     case 0:addstr("strangling to death.                             ");break;
-                     case 1:addstr("beating to death.                                ");break;
-                     case 2:addstr("cold execution.                                  ");break;
-                     }
-                     move(23,0);
-                     addstr("                                                                            ");
-                     move(24,0);
-                     addstr("                                                                            ");
-
-                     getch();
-                     move(22,0);
-
-                     if(boss!=-1)
-                     {
-                        if(LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
-                        {
-                           set_color(COLOR_GREEN,COLOR_BLACK,1);
-                           addstr(pool[boss]->name);
-                           addstr(" feels sick to the stomach afterward and ");
-                           pool[boss]->adjust_attribute(ATTRIBUTE_HEART,-1);
-                           switch(LCSrandom(4))
-                           {
-                           case 0:addstr("throws up in a trash can.                                          ");break;
-                           case 1:addstr("gets drunk, eventually falling asleep.                             ");break;
-                           case 2:addstr("curls up in a ball, crying softly.                                 ");break;
-                           case 3:addstr("shoots up and collapses in a heap on the floor.                    ");break;
-                           }
-                           move(23,0);
-                           addstr(pool[boss]->name);
-                           addstr(" has lost heart.");
-                           getch();
-                        }
-                        else if(!LCSrandom(3))
-                        {
-                           set_color(COLOR_CYAN,COLOR_BLACK,1);
-                           addstr(pool[boss]->name);
-                           addstr(" grows colder.                                                            ");
-                           pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
-                           move(23,0);
-                           addstr(pool[boss]->name);
-                           addstr(" has gained wisdom.                                                           ");
-                           getch();
-                        }
-                     }
-
-                     break;
-                  }      
-               }
-               else break;
-            }while(1);
-         }
-      }
-     } // end else from activity divert
       if(c=='t')
       {
          sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));
@@ -955,8 +632,8 @@ void review_mode(short mode)
             }
          }
       }
-
-      if(c==10)break;
+     if(c==10)break;
+     }
    }while(1);
 }
 
@@ -1776,7 +1453,7 @@ void inspectliberalhierarchy(void)
       move(1,0);
       addstr("----CODE NAME--------------CURRENT CONTACT--------------------------------------");
       move(1,54);
-      addstr("N+2 CONTACT");
+      addstr("----N+2");
 
       int y=2;
 
@@ -1852,7 +1529,7 @@ void inspectliberalhierarchy(void)
       addstr("]");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a letter to review a Liberal.");
+      addstr("Press a Letter to View Status (Uppercase for Activity screen).");
       move(23,0);
       addstr("");
       if(temppool.size()>PAGELENGTH)
@@ -1861,9 +1538,19 @@ void inspectliberalhierarchy(void)
          addpagestr();
       }
 
-      refresh();
+     refresh();
 
-      int c=getch();
+     int c=getch();
+     if (c >='A' && c <='S') // Activity diversion - needs to be here to intercept uppercase info.
+     {
+          int p=page*19+(int)(c-'A');
+         if(p<temppool.size())
+         {
+              activate(temppool[p]);
+         }
+     }
+     else // is lowercase or general option
+     {
       translategetch(c);
 
       //PAGE UP
@@ -1874,12 +1561,341 @@ void inspectliberalhierarchy(void)
       if(c>='a'&&c<='a'+PAGELENGTH)
       {
          int p=page*PAGELENGTH+(int)(c-'a');
-         
+         displaystatus(temppool, p);
       }
 
       if(c==10)break;
+     }
    }while(1);
 }
+
+
+/* Should go in common/commondisplay.cpp? */
+void displaystatus(vector<Creature *> &temppool,int p) {
+
+            int page=0;
+            const int pagenum=2;
+            do
+            {
+               erase();
+
+               move(0,0);
+               if(temppool[p]->align!=1)
+               {
+                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  addstr("Profile of an Automaton");
+               }
+               else
+               {
+                  set_color(COLOR_GREEN,COLOR_BLACK,1);
+                  addstr("Profile of a Liberal");
+               }
+
+               if(page==0)
+                  printliberalstats(*temppool[p]);
+               else if(page==1)
+                  printliberalskills(*temppool[p]);
+               else if(page==2)               
+                  printliberalcrimes(*temppool[p]);
+               else if(page==3)               
+                  printliberalrelations(*temppool[p]);
+               
+               // Add removal of squad members member
+               move(22,0);
+
+			   addstr("A - Change Activity       ");
+
+               if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
+                  temppool[p]->hireid !=-1 &&
+                  temppool[p]->clinic==0&&
+                  temppool[p]->dating==0&&
+                  temppool[p]->hiding==0&&
+                  temppool[p]->alive==1&&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               {
+                  addstr("R - Remove member       K - Kill member");
+               }
+
+               move(23,0);      
+
+               if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
+               else
+               {
+                  addstr("N - Change Code Name      G - Fix Gender Label");
+               }
+               if(temppool.size()>1)
+               {
+                  addstr("    LEFT/RIGHT - View Others");
+               }
+               move(24,0);
+               addstr("Press any other key to continue the Struggle");
+               addstr("    UP/DOWN  - More Info");
+
+               refresh();
+               int c=getch();
+               translategetch(c);
+
+               if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
+               {
+                  int sx=1;
+                  if((c==KEY_LEFT))sx=-1;
+                  p=(p+(int)temppool.size()+sx)%((int)temppool.size());
+                  continue;
+               }
+
+               if(c==KEY_DOWN)
+               {
+                  page++;
+                  if(page>3)page=0;
+                  continue;
+               }
+
+               if(c==KEY_UP)
+               {
+                  page--;
+                  if(page<0)page=3;
+                  continue;
+               }
+
+               if (c == 'a') { activate(temppool[p]);  }
+
+               if (c =='e' && temppool[p]->location != -1) { 
+                   //create a temp squad containing just this liberal
+                     //backup current squad if any
+                     int oldsquadid = temppool[p]->squadid;
+                     squadst *oldactivesquad = activesquad;
+                     //create new squad for temp vehicle
+                     activesquad=new squadst;
+                     strcpy(activesquad->name, "Temp. Vehicle Squad");
+                     activesquad->id=cursquadid;
+                     //assign liberal
+                     activesquad->squad[0]=temppool[p];
+                     temppool[p]->squadid = activesquad->id;
+                     //go to equipment screen
+                     equip(location[activesquad->squad[0]->location]->loot,-1);
+                     //once done, restore original squad status.
+                     delete activesquad;
+                     activesquad = oldactivesquad;
+                     temppool[p]->squadid = oldsquadid;
+
+                }
+
+               if (c == 'v') { 
+ //create a temp squad containing just this liberal
+                     //backup current squad if any
+                     int oldsquadid = temppool[p]->squadid;
+                     squadst *oldactivesquad = activesquad;
+                     //create new squad for temp equip
+                     activesquad=new squadst;
+                     strcpy(activesquad->name, "Temp. Equip Squad");
+                     activesquad->id=cursquadid;
+                     //assign liberal
+                     activesquad->squad[0]=temppool[p];
+                     temppool[p]->squadid = activesquad->id;
+                     //go to vehicle screen
+                     setvehicles();
+                     //once done, restore original squad status.
+                     delete activesquad;
+                     activesquad = oldactivesquad;
+                     temppool[p]->squadid = oldsquadid;
+				}
+
+               if(c=='n')
+               {
+                  move(23,0);
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  addstr("What is the new code name?                                       ");
+                  move(24,0);
+                  addstr("                                                                 ");
+
+                  keypad(stdscr,FALSE);
+                  raw_output(FALSE);
+                  echo();
+                  curs_set(1);
+                  move(24,0);
+                  enter_name(temppool[p]->name,CREATURE_NAMELEN,
+                     temppool[p]->propername);
+
+                  curs_set(0);
+                  noecho();
+                  raw_output(TRUE);
+                  keypad(stdscr,TRUE);
+               }
+               else if(c=='g' && temppool[p]->align==1)
+               {
+                  temppool[p]->gender_liberal++;
+                  if(temppool[p]->gender_liberal > 2)
+                     temppool[p]->gender_liberal = 0;
+               }      
+               else if(c=='r' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
+                  temppool[p]->hireid !=-1 &&
+                  temppool[p]->clinic==0&&
+                  temppool[p]->dating==0&&
+                  temppool[p]->hiding==0&&
+                  temppool[p]->alive==1&&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               {
+                  int boss = getpoolcreature(temppool[p]->hireid);
+
+                  move(22,0);
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  addstr("Do you want to permanently release this squad member from the LCS?          ");
+
+                  move(23,0);
+                  addstr("If the member has low heart they may go to the police.                         ");
+
+                  move(24,0);
+                  addstr("  C - Confirm       Any other key to continue                                                ");
+
+                  c=getch();
+                  translategetch(c);
+
+                  if(c=='c')
+                  {
+                     // Release squad member
+                     move(22,0);
+                     addstr(temppool[p]->name);
+                     addstr(" has been released.                                                                      ");
+                     move(23,0);
+                     addstr("                                                                                         ");
+                     move(24,0);
+                     addstr("                                                                                         ");
+                     getch();
+                     // Chance of member going to police if boss has criminal record and
+                     // if they have low heart
+                     // TODO: Do law check against other members?
+                     if(temppool[p]->get_attribute(ATTRIBUTE_HEART,true) < temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+ LCSrandom(5)
+                        && iscriminal(*pool[boss]))
+                     {
+                        set_color(COLOR_CYAN,COLOR_BLACK,1);
+                        move(22,0);
+                        addstr("A Liberal friend tips you off on ");
+                        addstr(temppool[p]->name);
+                        addstr("'s whereabouts.");
+                        move(24,0);
+                        addstr("The Conservative traitor has ratted you out to the police, and sworn");
+                        move(25,0);
+                        addstr("to testify against ");
+                        addstr(pool[boss]->name);
+                        addstr(" in court.");
+
+                        criminalize(*pool[boss],LAWFLAG_RACKETEERING);
+                        pool[boss]->confessions++;
+
+                        // TODO: Depending on the crime increase heat or make seige
+
+                        if(location[pool[boss]->location]->heat > 20)
+                           location[pool[boss]->location]->siege.timeuntillocated=3;
+                        else
+                           location[pool[boss]->location]->heat += 20;
+                     }
+
+                     // Remove squad member
+                     removesquadinfo(*temppool[p]);
+                     cleangonesquads();
+
+                     int thisPersonIndex = getpoolcreature(temppool[p]->id);
+                     delete temppool[p];
+                     temppool.erase(temppool.begin() + p);
+                     pool.erase(pool.begin() + thisPersonIndex);
+                     break;
+                  }
+               }               
+               else if(c=='k' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
+                  temppool[p]->hireid !=-1 &&
+                  temppool[p]->clinic==0&&
+                  temppool[p]->dating==0&&
+                  temppool[p]->hiding==0&&
+                  temppool[p]->alive==1&&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               {
+                  // Kill squad member
+                  int boss = getpoolcreature(temppool[p]->hireid);
+
+                  move(22,0);
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  addstr("Confirm you want to have ");
+                  addstr(pool[boss]->name);
+                  addstr(" kill this squad member?");
+                  move(23,0);
+                  addstr("Killing your squad members is Not a Liberal Act.                              ");
+                  move(24,0);
+                  addstr("  C - Confirm       Any other key to continue                                                ");
+
+                  c=getch();
+                  translategetch(c);
+
+                  if(c=='c')
+                  {
+                     temppool[p]->die();
+                     cleangonesquads();
+                     stat_kills++;
+
+                     move(22,0);
+                     addstr(pool[boss]->name);
+                     addstr(" executes ");
+                     addstr(temppool[p]->name);
+                     addstr(" by ");
+                     switch(LCSrandom(3))
+                     {
+                     case 0:addstr("strangling to death.                             ");break;
+                     case 1:addstr("beating to death.                                ");break;
+                     case 2:addstr("cold execution.                                  ");break;
+                     }
+                     move(23,0);
+                     addstr("                                                                            ");
+                     move(24,0);
+                     addstr("                                                                            ");
+
+                     getch();
+                     move(22,0);
+
+                     if(boss!=-1)
+                     {
+                        if(LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
+                        {
+                           set_color(COLOR_GREEN,COLOR_BLACK,1);
+                           addstr(pool[boss]->name);
+                           addstr(" feels sick to the stomach afterward and ");
+                           pool[boss]->adjust_attribute(ATTRIBUTE_HEART,-1);
+                           switch(LCSrandom(4))
+                           {
+                           case 0:addstr("throws up in a trash can.                                          ");break;
+                           case 1:addstr("gets drunk, eventually falling asleep.                             ");break;
+                           case 2:addstr("curls up in a ball, crying softly.                                 ");break;
+                           case 3:addstr("shoots up and collapses in a heap on the floor.                    ");break;
+                           }
+                           move(23,0);
+                           addstr(pool[boss]->name);
+                           addstr(" has lost heart.");
+                           getch();
+                        }
+                        else if(!LCSrandom(3))
+                        {
+                           set_color(COLOR_CYAN,COLOR_BLACK,1);
+                           addstr(pool[boss]->name);
+                           addstr(" grows colder.                                                            ");
+                           pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
+                           move(23,0);
+                           addstr(pool[boss]->name);
+                           addstr(" has gained wisdom.                                                           ");
+                           getch();
+                        }
+                     }
+
+                     break;
+                  }      
+               }
+               else break;
+            }while(1);
+}
+
 
 void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
 {

@@ -1607,6 +1607,8 @@ void promoteliberals(void);
 void sortbyhire(vector<Creature *> &temppool,vector<int> &level);
 /* base - review - inspect hierarchy chain */
 void inspectliberalhierarchy(void);
+/* display individual status */
+void displaystatus(vector<Creature *> &temppool,int index);
 
 /*******************************************************************************
 *
