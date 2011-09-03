@@ -149,12 +149,15 @@ void review(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("Press a Letter to select a squad.  1-7 to view Liberal groups.");
+      addstr("A-S: squad select.");
+      addstr("  1-7 to view Liberal groups. ");
+      addstr("  Z - Assemble a New Squad.");
       move(23,0);
-      addpagestr();
-      addstr("  Press U to Promote Liberals.");
+      addstr("U - Promote Liberals.");
+      addstr("  Y - Review hierarchy.");
       move(24,0);
-      addstr("Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
+      addpagestr();
+      addstr("  T - Assign New Bases to the Squadless.");
 
       refresh();
 
@@ -187,6 +190,7 @@ void review(void)
       }
       if(c=='t')squadlessbaseassign();
       if(c=='u')promoteliberals();
+      if(c=='y')inspectliberalhierarchy();
    }while(1);
 }
 
@@ -528,15 +532,15 @@ void review_mode(short mode)
       }
       else
       {
-      translategetch(c);
+        translategetch(c);
       
-      //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
-      //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+        //PAGE UP
+        if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+        //PAGE DOWN
+        if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
-      if(c>='a'&&c<='s')
-      {
+        if(c>='a'&&c<='s')
+        {
          int p=page*19+(int)(c-'a');
          if(p<temppool.size())
          {
@@ -1738,6 +1742,144 @@ void promoteliberals(void)
 }
 
 
+/* base - review - inspect liberal chain of command */
+void inspectliberalhierarchy(void)
+{
+   const static int PAGELENGTH=19;
+   vector<Creature *> temppool;
+   vector<int> level;
+   for(int p=0;p<pool.size();p++)
+   {
+      if(pool[p]->alive&&
+         pool[p]->align==1)
+      {
+         temppool.push_back(pool[p]);
+      }
+   }
+
+   if(temppool.size()==0)return;
+
+   //SORT
+   sortbyhire(temppool,level);
+
+   int page=0;
+
+   do
+   {
+      erase();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      printfunds(0,1,"Money: ");
+
+      move(0,0);
+      addstr("Status of Liberals hierarchy");
+      move(1,0);
+      addstr("----CODE NAME--------------CURRENT CONTACT--------------------------------------");
+      move(1,54);
+      addstr("N+2 CONTACT");
+
+      int y=2;
+
+      for(int p=page*PAGELENGTH;p<temppool.size()&&p<page*PAGELENGTH+PAGELENGTH;p++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addch(y+'A'-2);addstr(" - ");
+
+         move(y,27);
+         int p2 = 0;
+
+
+         for(p2=0;p2<pool.size();p2++)
+         {
+            int p3 = 0;
+            if(pool[p2]->alive==1&&pool[p2]->id==temppool[p]->hireid)
+            {
+               printname(*pool[p2]);
+
+               move(y,54);
+               for(p3=0;p3<pool.size();p3++)
+               {
+                  if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid)
+                  {
+                     printname(*pool[p3]);
+                     break;
+                  }
+               }
+               break;
+            }
+         }
+         if(p2==pool.size())addstr("<LCS Leader>");
+
+         move(y,4+level[p]);
+         printname(*temppool[p]);
+
+         y++;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(21,0);
+      addstr("Recruited/");
+      set_color(COLOR_MAGENTA,COLOR_BLACK,0);
+      addstr("Seduced");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("/");
+      set_color(COLOR_YELLOW,COLOR_BLACK,0);
+      addstr("Enlightened");
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      addstr("   [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Arrested");
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      addstr("]");
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      addstr(" [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("In Jail");
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      addstr("]");
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("In Hiding");
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr("]");
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      addstr(" [");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Sleeper");
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      addstr("]");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr("Press a letter to review a Liberal.");
+      move(23,0);
+      addstr("");
+      if(temppool.size()>PAGELENGTH)
+      {
+         move(24,0);
+         addpagestr();
+      }
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*PAGELENGTH<temppool.size())page++;
+
+      if(c>='a'&&c<='a'+PAGELENGTH)
+      {
+         int p=page*PAGELENGTH+(int)(c-'a');
+         
+      }
+
+      if(c==10)break;
+   }while(1);
+}
 
 void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
 {

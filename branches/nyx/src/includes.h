@@ -1605,6 +1605,8 @@ void squadlessbaseassign(void);
 /* base - review - promote liberals */
 void promoteliberals(void);
 void sortbyhire(vector<Creature *> &temppool,vector<int> &level);
+/* base - review - inspect hierarchy chain */
+void inspectliberalhierarchy(void);
 
 /*******************************************************************************
 *
