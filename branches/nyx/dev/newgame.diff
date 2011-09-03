@@ -1,0 +1,241 @@
+38c38,46
+< 
+---
+> #ifdef HIGHSTATS
+>    newcr->att[ATTRIBUTE_HEART]=8;
+>    newcr->att[ATTRIBUTE_WISDOM]=1;
+>    newcr->att[ATTRIBUTE_INTELLIGENCE]=13;
+>    newcr->att[ATTRIBUTE_AGILITY]=15;
+>    newcr->att[ATTRIBUTE_STRENGTH]=14;
+>    newcr->att[ATTRIBUTE_HEALTH]=16;
+> 	newcr->att[ATTRIBUTE_CHARISMA]=14;
+> #else
+45c53,54
+< 	newcr->att[ATTRIBUTE_CHARISMA]=4;
+---
+> 	newcr->att[ATTRIBUTE_CHARISMA]=4;
+> #endif
+155,158c164,179
+<    int c;
+<    bool hasmaps=false;
+<    bool makelawyer=false;
+<    bool gaylawyer=false;
+---
+>    int c;
+> #ifdef HAVEMAPS
+>    bool hasmaps=true;
+> #else
+>    bool hasmaps=false;
+> #endif
+> #ifdef HAVELAWYER
+>    bool makelawyer=true;
+> #else
+>    bool makelawyer=false;
+> #endif
+> #ifdef ISGAY
+>    bool gaylawyer=true;
+> #else
+>    bool gaylawyer=false;
+> #endif
+172c193,194
+<       //E - Recruiter
+---
+>       //E - Recruiter
+>       //F - XXX
+179c201,205
+<             move(2,0);addstr("The day I was born in 1984...");
+---
+>             move(2,0);addstr("The day I was born in 1984...");
+> /*
+> 	- The anniversary of Hitler's suicide. - SKILL_PISTOL 1 (lol)
+> 	- Indira Gandhi Killed
+> */
+183c209
+<                addstr("A - the Polish priest Popieluszko was kidnapped by government agents.");
+---
+>                addstr("A - the Polish priest Popieluszko was kidnapped by government agents."); // ...who? -- LK
+210c236,239
+<             set_color(COLOR_WHITE,COLOR_BLACK,1);
+---
+>             set_color(COLOR_WHITE,COLOR_BLACK,1);
+> #ifdef TRANNY
+>             addstr("intersex baby");
+> #else
+216c245,246
+<                addstr("intersex baby"); // this is a bug if it happens, but hey, whatever :P
+---
+>                addstr("intersex baby"); // this is a bug if it happens, but hey, whatever :P
+> #endif
+227c257,264
+<             break;
+---
+>             break;
+> 
+> 		// My first memory was...
+> 			// my father burning my back with a cigarette
+> 		// When he was really into the sauce...
+> 			// 
+> 		// XXX: Needs an option to have the founder have been in the Army -- LK
+> 
+232c269
+<                addstr("A - my parents grounded me and hid my toys, but I knew where they put them.");
+---
+>                addstr("A - my parents grounded me and hid my toys, but I knew where they put them."); // Toybox
+252c289
+<                addstr("E - my father lectured me endlessly, trying to make me think like him.");
+---
+>                addstr("E - my father lectured me endlessly, trying to make me think like him."); // Wisdom?
+280c317,319
+<             //ATTRIBUTE_AGILITY 1
+---
+>             //ATTRIBUTE_AGILITY 1
+>             //SKILL_STEALTH 1 XXX
+>             //SKILL_SECURITY 1 XXX
+297c336,337
+<             //ATTRIBUTE_STRENGTH 1
+---
+>             //ATTRIBUTE_STRENGTH 1
+> 	    //ATTRIBUTE_AGILITY 1 XXX
+305c345
+<             move(2,0);addstr("When I turned 10...");
+---
+>             move(2,0);addstr("When I turned 10..."); // Happy birthday!
+309c349
+<             //SKILL_STEALTH 1
+---
+>             //SKILL_STEALTH 1 -- lol
+320c360
+<                addstr("D - my parents divorced.  Mom slept with the divorce lawyer.");
+---
+>                addstr("D - my parents divorced.  Mom slept with the divorce lawyer."); // *Oh* mom...
+324c364
+<                addstr("E - my parents divorced.  It still hurts to read my old diary.");
+---
+>                addstr("E - my parents divorced.  It still hurts to read my old diary."); // Dear Diary...
+336c376
+<                addstr("B - I played guitar in a grunge band.  We sucked, but so did life.");
+---
+>                addstr("B - I played guitar in a grunge band.  We sucked, but so did life."); // ♩ Life Sucks ♩ Then You Die ♩ Fuck The World ♩ Let's Get High ♩
+341c381
+<                addstr("C - I drew things, a lot.  I was drawing a world better than this.");
+---
+>                addstr("C - I drew things, a lot.  I was drawing a world better than this."); // A world without Conservatives...
+346c386
+<                addstr("D - I played violent video games at home.  I was a total outcast.");
+---
+>                addstr("D - I played violent video games at home.  I was a total outcast."); // What? No acne or weight gain?
+348c388,389
+<             //ATTRIBUTE_AGILITY 2
+---
+>             //ATTRIBUTE_AGILITY 2
+> 	    //ATTRIBUTE_HEALTH -1 XXX
+353c394,395
+<             //ATTRIBUTE_STRENGTH 2
+---
+>             //ATTRIBUTE_STRENGTH 2
+> 	    //ATTRIBUTE_HEALTH 1 XXX
+366c408,409
+<             //SKILL_RIFLE 1
+---
+>             //SKILL_RIFLE 1
+> 	    //SKILL_PSYCHOLOGY 1 XXX How could we forget?
+370c413,414
+<             //SKILL_TAILORING 2
+---
+>             //SKILL_TAILORING 2
+> 	    //SKILL_WRITING -1 XXX Emo poetry
+391c435
+<                addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off.");
+---
+>                addstr("B - my stepmom shot her ex-husband, my dad, with a shotgun.  She got off."); // FIXME Sounds... sexual... -- LK
+398c442,444
+<             //SKILL_HANDTOHAND 2
+---
+>             //SKILL_HANDTOHAND 2
+> 	    //ATTRIBUTE_AGILITY 1 XXX As an ex-wrestler, I can vouch for this -- LK
+> 	    //SKILL_DODGE 1 	  XXX				     And this -- LK
+409c455,456
+<             //ATTRIBUTE_CHARISMA 1
+---
+>             //ATTRIBUTE_CHARISMA 1
+> 	    //SKILL_LEADERSHIP 1 XXX
+411c458
+<          case 7:
+---
+>          case 7:					
+418c465,466
+<             //ATTRIBUTE_AGILITY 1
+---
+>             //ATTRIBUTE_AGILITY 1
+> 	    //SKILL_THEFT 1 XXX
+428c476,477
+<             //SKILL_BUSINESS 2
+---
+>             //SKILL_BUSINESS 2
+> 	    //SKILL_COOKING 1 XXX For the occasional day as the fry cook
+431c480
+<                addstr("D - I let people pay me for sex.  I needed the money to survive.");
+---
+>                addstr("D - I let people pay me for sex.  I needed the money to survive."); // What? No heart loss?
+433c482,483
+<             //SKILL_SEDUCTION 2
+---
+>             //SKILL_SEDUCTION 2
+> 	    //SKILL_STREETSENSE 1 XXX
+445c495,498
+<                addstr("A - I stole a security uniform.");
+---
+>                addstr("A - I stole a security uniform.");
+> 	    //Security Uniform
+> 	    //SKILL_THEFT 1 XXX
+> 	    //SKILL_STEALTH 1 XXX
+448c501,502
+<                addstr("B - I bought myself an assault rifle.");
+---
+>                addstr("B - I bought myself an assault rifle.");
+> 	    //AK47
+451c505,507
+<                addstr("C - I celebrated.  I'd saved a thousand bucks!");
+---
+>                addstr("C - I celebrated.  I'd saved a thousand bucks!"); // Not $1000 + $7?
+> 	    //$1000
+> 	    //SKILL_BUSINESS 2 XXX
+454c510,513
+<                addstr("D - I went to a party and met a cool law student.  We've been dating since.");
+---
+>                addstr("D - I went to a party and met a cool law student.  We've been dating since.");
+> 	    //Sleeper Lawyer
+> 	    //SKILL_SEDUCTION 1 XXX
+> 	    //SKILL_CHARISMA 1 XXX
+457c516,518
+<                addstr("E - I managed to acquire secret maps of several major buildings downtown.");
+---
+>                addstr("E - I managed to acquire secret maps of several major buildings downtown.");
+> 	    //Maps
+> 	    //SKILL_STREETSENSE 1 XXX
+460c521
+<             move(2,0);addstr("For the past few years, I've been...");
+---
+>             move(2,0);addstr("For the past few years, I've been..."); // XXX: Should `few' be a number instead? -- LK
+550,551c611,616
+<             }
+<             newcr->age = year - 1984;
+---
+>             }
+> #ifdef OLDFOUND
+>             newcr->age = year - 1924;
+> #else
+>             newcr->age = year - 1984;
+> #endif
+554c619
+<                (month==newcr->birthday_month && day<newcr->birthday_day))
+---
+>                (month==newcr->birthday_month && day<newcr->birthday_day))SKILL_BUSINESS
+763c828
+<                funds=1000;
+---
+>                funds=1007;
+1276c1341
+< void initliberal(Creature &cr)
+---
+> void initliberal(Creature &cr) // XXX: Define `mostly' -- LK
