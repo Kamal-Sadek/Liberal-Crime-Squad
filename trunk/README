@@ -1,1 +1,10 @@
-See LINUX_README.txt for now.
+See LINUX_README.txt. Contains useful information for build on all platforms.
+
+Windows easy mode compilation
+-----------------------------
+
+Easiest way is using the workspaces provided in the 'workspaces' folder. Those project files are provided for:
+
+ * Codeblocks (liberal alternative)
+ * VisualStudio (evil but could get the job done well/better ^^)
+
