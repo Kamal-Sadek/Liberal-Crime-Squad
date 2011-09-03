@@ -812,7 +812,13 @@ void activate(Creature *cr)
             switch(choice)
             {
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
+
+// WIP AND HAVE TO CHECK
+#ifndef ZEROMORAL
+            case '2': if(cr->age >= 18) cr->activity.type=ACTIVITY_PROSTITUTION;break;
+#else
             case '2':cr->activity.type=ACTIVITY_PROSTITUTION;break;
+#endif
             case '3':cr->activity.type=ACTIVITY_CCFRAUD;break;
                //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             default:

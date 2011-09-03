@@ -10,9 +10,9 @@
 #define INCLUDES_H_INCLUDED
 
 
-/*
-   DEBUG DEFINES
-*/
+/******************************************************************************
+*                              DEBUG DEFINES                                  *
+******************************************************************************/
 // Enemies don't attack
 //#define NOENEMYATTACK
 
@@ -60,6 +60,13 @@
 
 // Make the founder have severe internal damage
 //#define INTERNAL
+
+/******************************************************************************
+*                              GAMEPLAY DEFINES                               *
+******************************************************************************/
+// Make underaged prostitution possible (and a worse idea than original)
+//WIP and not even presented or approved
+//#define ZEROMORAL
 
 
 #ifdef HAVE_CONFIG_H
