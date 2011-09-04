@@ -229,30 +229,30 @@ void activate(void)
 }
 
 int classlist = 0;
-void listclasses(Creature *cr)
+void listclasses(Creature *cr,bool defaultmode)
 {
      set_color(COLOR_WHITE,COLOR_BLACK,0);
      move(10,40);
      addstr("Classes cost $60 a day. Study what?");
     if (classlist == 0)
     {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_DEBATING);
        move(12,40);
        addstr("1 - Public Policy");
        
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_BUSINESS);
        move(13,40);
        addstr("2 - Economics");
        
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_PSYCHOLOGY);
        move(14,40);
        addstr("3 - Psychology");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_LAW);
        move(15,40);
        addstr("4 - Criminal Law");
        
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_SCIENCE);
        move(16,40);
        addstr("5 - Physics");
 
@@ -262,24 +262,24 @@ void listclasses(Creature *cr)
     }
     else if (classlist == 1)
     {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_DRIVING);
        move(12,40);
        addstr("1 - Drivers Ed");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_FIRST_AID);
        move(13,40);
        addstr("2 - First Aid");
        
  
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_ART);
        move(14,40);
        addstr("3 - Painting");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_DISGUISE);
        move(15,40);
        addstr("4 - Theatre");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_MARTIAL_ARTS);
        move(16,40);
        addstr("5 - Kung Fu");
 
@@ -289,19 +289,19 @@ void listclasses(Creature *cr)
     }
     else if (classlist == 2)
     {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_GYMNASTICS);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_GYMNASTICS);
        move(12,40);
        addstr("1 - Gymnastics");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_WRITING);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_WRITING);
        move(13,40);
        addstr("2 - Writing");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TEACHING);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_TEACHING);
        move(14,40);
        addstr("3 - Education");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MUSIC);
+       set_color(COLOR_WHITE,COLOR_BLACK,(defaultmode?cr->defaultactivity.type:cr->activity.type)==ACTIVITY_STUDY_MUSIC);
        move(15,40);
        addstr("4 - Music");
 
@@ -311,12 +311,12 @@ void listclasses(Creature *cr)
     }
 }
 
-void updateclasschoice(Creature *cr, char choice)
+void updateclasschoice(Creature *cr, char choice,bool defaultmode)
 {
    if (choice == '6')
    {
       classlist = (classlist + 1) % 3;
-      listclasses(cr);
+      listclasses(cr,defaultmode);
    }
    else
    {
@@ -324,35 +324,35 @@ void updateclasschoice(Creature *cr, char choice)
       {
          switch(choice)
          {
-            case '1':cr->activity.type=ACTIVITY_STUDY_DEBATING;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_BUSINESS;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_PSYCHOLOGY;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_LAW;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
+            case '1':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_DEBATING;break;
+            case '2':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_BUSINESS;break;
+            case '3':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_PSYCHOLOGY;break;
+            case '4':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_LAW;break;
+            case '5':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_SCIENCE;break;
          }
       }
       else if (classlist == 1)
       {
          switch(choice)
          {
-            case '1':cr->activity.type=ACTIVITY_STUDY_DRIVING;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_FIRST_AID;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_ART;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_DISGUISE;break;
-            case '5':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
+            case '1':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_DRIVING;break;
+            case '2':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_FIRST_AID;break;
+            case '3':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_ART;break;
+            case '4':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_DISGUISE;break;
+            case '5':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_MARTIAL_ARTS;break;
          }
       }
       else if (classlist == 2)
       {
          switch(choice)
          {
-            case '1':cr->activity.type=ACTIVITY_STUDY_GYMNASTICS;break;
-            case '2':cr->activity.type=ACTIVITY_STUDY_WRITING;break;
-            case '3':cr->activity.type=ACTIVITY_STUDY_TEACHING;break;
-            case '4':cr->activity.type=ACTIVITY_STUDY_MUSIC;break;
+            case '1':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_GYMNASTICS;break;
+            case '2':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_WRITING;break;
+            case '3':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_TEACHING;break;
+            case '4':(defaultmode?cr->defaultactivity.type:cr->activity.type)=ACTIVITY_STUDY_MUSIC;break;
          }
       }
-      listclasses(cr);
+      listclasses(cr,defaultmode);
    }
 }
 
@@ -612,7 +612,7 @@ void activate(Creature *cr, bool defaultmode)
          addstr("3 - Urban Warfare");
        break;
      case 'l':
-       listclasses(cr);
+       listclasses(cr,defaultmode);
        break;
       }
 
@@ -910,7 +910,7 @@ void activate(Creature *cr, bool defaultmode)
             }
             break;
        case 'l':
-          updateclasschoice(cr, choice);
+          updateclasschoice(cr, choice, defaultmode);
           break;
          case 't':
             switch(choice)

@@ -1603,7 +1603,6 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                // Add removal of squad members member
                move(22,0);
 
-			   addstr("A - Change Activity       ");
 
                if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
                   temppool[p]->hireid !=-1 &&
@@ -1615,7 +1614,7 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
                {
-                  addstr("R - Remove member       K - Kill member");
+			   addstr("A - Change Activity       R - Remove member       K - Kill member");
                }
 
                move(23,0);      
@@ -1659,7 +1658,16 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   continue;
                }
 
-               if (c == 'a') { activate(temppool[p]);  }
+               if (c == 'a' && temppool[p]->flag != CREATUREFLAG_SLEEPER &&
+                  temppool[p]->hireid !=-1 && temppool[p]->clinic==0&&
+                  temppool[p]->dating==0&& temppool[p]->hiding==0&&
+                  temppool[p]->alive==1&&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+               {
+                  activate(temppool[p]);
+               }
 
                if (c =='e' && temppool[p]->location != -1) { 
                    //create a temp squad containing just this liberal
