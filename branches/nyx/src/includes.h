@@ -1578,7 +1578,7 @@ void activate_sleeper(Creature *cr);
 */
 /* base - activate the uninvolved */
 void activate(void);
-void activate(Creature *cr);
+void activate(Creature *cr,bool defaultmode=false);
 void activatebulk(void);
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr);
