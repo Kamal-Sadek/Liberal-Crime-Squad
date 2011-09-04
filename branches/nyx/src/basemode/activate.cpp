@@ -130,9 +130,9 @@ void activate(void)
       addstr(" T - sort people.");
       addstr("      Z - Bulk Activity Assign.");
       move(23,53);
-      addstr("X - Multireset to default.");
+      addstr("X - Multireset to Default.");
       move(24,0);
-      addstr(" Y - Reset all to Default                      ");
+      addstr(" Y - Reset all to Default  W - Massassign     ");
       addpagestr();
 
 
@@ -181,7 +181,7 @@ void activate(void)
       {
         move(23,53);
         set_color(COLOR_WHITE,COLOR_BLACK,1);
-        addstr("X - Multireset to default.");
+        addstr("X - Multireset to Default.");
         refresh();
         do {
          int b=getch(); translategetch(b);
@@ -207,7 +207,7 @@ void activate(void)
         }while(1);
         move(23,53);
         set_color(COLOR_WHITE,COLOR_BLACK,0);
-        addstr("X - Multireset to default.");
+        addstr("X - Multireset to Default.");
       }
       if(c=='y')
       {
@@ -223,6 +223,12 @@ void activate(void)
         }
         refresh();
       }
+
+      if(c=='w')
+       {
+         
+       }
+
       if(c==10)break;
     }
    }while(1);
@@ -376,7 +382,7 @@ void activate(Creature *cr, bool defaultmode)
       printfunds(0,1,"Money: ");
 
       move(0,0);
-     if (cr->income)
+     if (cr->income && !defaultmode)
      {
         addstr(cr->name);
         addstr(" made $");
