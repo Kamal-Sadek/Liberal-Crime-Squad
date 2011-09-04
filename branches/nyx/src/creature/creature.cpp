@@ -307,6 +307,7 @@ void Creature::copy(const Creature& org)
    cantbluff = org.cantbluff;
    base = org.base;
    activity = org.activity;
+   defaultactivity = org.defaultactivity;
    carid = org.carid;
    is_driver = org.is_driver;
    pref_carid = org.pref_carid;
@@ -381,6 +382,7 @@ void Creature::creatureinit(void)
    location=0;
    base=0;
    activity.type=ACTIVITY_NONE;
+   defaultactivity.type=ACTIVITY_NONE;
    for(int i=0;i<LAWFLAGNUM;i++)
       crimes_suspected[i]=0;
    heat=0;
@@ -600,6 +602,21 @@ Creature::Creature(const char* inputXml)
          }
          xml.OutOfElem();
       }
+      else if (tag=="defaultactivity")
+      {
+         xml.IntoElem();
+         while (xml.FindElem())
+         {
+            tag = xml.GetTagName();
+            if (tag == "type")
+               defaultactivity.type = atoi(xml.GetData().c_str());
+            else if (tag == "arg")
+               defaultactivity.arg = atoi(xml.GetData().c_str());
+            else if (tag == "arg2")
+               defaultactivity.arg2 = atoi(xml.GetData().c_str());
+         }
+         xml.OutOfElem();
+      }
       else if (tag == "carid")
          carid = atoi(xml.GetData().c_str());
       else if (tag == "is_driver")
@@ -705,6 +722,13 @@ string Creature::showXml() const
    xml.AddElem("arg2",activity.arg2);
    xml.OutOfElem();
    
+   xml.AddElem("defaultactivity");
+   xml.IntoElem();
+   xml.AddElem("type",defaultactivity.type);
+   xml.AddElem("arg",defaultactivity.arg);
+   xml.AddElem("arg2",defaultactivity.arg2);
+   xml.OutOfElem();
+
    xml.AddElem("carid", carid);
    xml.AddElem("is_driver", is_driver);
    xml.AddElem("pref_carid", pref_carid);

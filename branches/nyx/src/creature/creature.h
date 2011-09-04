@@ -378,6 +378,7 @@ public:
 
    int base;
    activityst activity;
+   activityst defaultactivity;
 
    int carid;
    char is_driver;
