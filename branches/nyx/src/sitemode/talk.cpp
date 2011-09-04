@@ -907,7 +907,14 @@ char talk(Creature &a,int t)
                else set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr("B - Drop a pickup line");
                if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)addstr(" while naked");
-               addstr(".");
+               int nbdates = scheduleddates(a);
+               if (nbdates > 0) {
+                   char datesstr[20];itoa(nbdates,datesstr,10);
+                   set_color(COLOR_YELLOW,COLOR_BLACK,0);
+                   addstr(" (already "); addstr(datesstr);
+                   addstr(" date"); if(nbdates>1){addch('s');}
+                   addstr(" taken).");
+               }else{ addstr(".");}
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(13,1);
                addstr("C - On second thought, don't say anything");
