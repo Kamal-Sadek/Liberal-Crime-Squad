@@ -665,6 +665,10 @@ void advanceday(char &clearformess,char canseethings)
                {
                   repairarmor(*pool[p],clearformess);
                }
+               else // Hearted liberals will serve community on their own
+               {
+                 if (pool[p]->get_attribute(ATTRIBUTE_HEART,true) >= 7) servecommunity(*pool[p]);
+               }
             }
                  break;
       }

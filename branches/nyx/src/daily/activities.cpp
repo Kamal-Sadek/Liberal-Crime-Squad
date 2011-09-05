@@ -142,6 +142,13 @@ void adjustblogpower(int &power)
    }
 }
 
+/* Community service centralized function */
+
+void servecommunity(Creature &cr) {
+    addjuice(cr,1,0);
+    if(cr.heat && !LCSrandom(3))cr.heat--;
+    change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,80);
+}
 
 /* armor repair */
 void repairarmor(Creature &cr,char &clearformess)
@@ -938,9 +945,7 @@ void funds_and_trouble(char &clearformess)
             trouble.push_back(pool[p]);
             break;
          case ACTIVITY_COMMUNITYSERVICE:
-            addjuice(*pool[p],1,0);
-            if(pool[p]->heat && !LCSrandom(3))pool[p]->heat--;
-            change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,80);
+            servecommunity(*pool[p]);
             break;
          case ACTIVITY_SELL_TSHIRTS:
             tshirts.push_back(pool[p]);
