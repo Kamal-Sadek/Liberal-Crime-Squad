@@ -114,6 +114,9 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_SELL_DRUGS:
          strcat(str,"Selling Brownies");
          break;
+      case ACTIVITY_PETTYTHEFT:
+         strcat(str,"Petty Thievery");
+         break;
       case ACTIVITY_VISIT:
       {
          strcat(str,"Going to ");

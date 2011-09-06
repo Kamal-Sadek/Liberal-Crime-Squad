@@ -328,6 +328,22 @@ void HelpActivities(int activityType)
       addstr(" the consequences of being convicted will increase as well. ");
       break;
 // }}}
+// {{{ ACTIVITY_Pettytheft
+   case ACTIVITY_PETTYTHEFT:
+      move(2,0);
+      addstr("===Petty Thievery==");
+      move(4,0);
+      addstr("Petty thievery is an illegal way of making money through stealing and fencing, ");
+      move(5,0);
+      addstr("thugishly looking opportunities for simple unlawful entries are snatching private ");
+      move(7,0);
+      addstr("properties. Amount of money made is determined by street sense, stealth and security");
+      move(9,0);
+      addstr("This activity trains street sense, stealth and very marginally security");
+      move(10,0);
+      addstr(" Street sense will help you evade being criminalized and caught.");
+      break;
+      
 // {{{ ACTIVITY_PROSTITUTION
    case ACTIVITY_PROSTITUTION:
       move(2,0);

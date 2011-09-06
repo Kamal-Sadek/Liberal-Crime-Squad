@@ -634,8 +634,10 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       }
    }
 
+  
    int number_of_items = LCSrandom(10)+1;
-
+   int itemindex = -1; // have to check case item not found to avoid brave modders segfaults.
+   int numberofxmlfails = 0; // Tell them how many fails
    while(number_of_items--)
    {
       switch(location[cr.location]->type) //Temporary (transitionally) solution until sites are done. -XML
@@ -644,7 +646,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             if(!LCSrandom(3))item="LOOT_KIDART";
             else if(!LCSrandom(2))item="LOOT_DIRTYSOCK";
             else item="LOOT_FAMILYPHOTO";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_RESIDENTIAL_APARTMENT:
             if(!LCSrandom(5))item="LOOT_CELLPHONE";
@@ -652,7 +656,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_TRINKET";
             else if(!LCSrandom(2))item="LOOT_CHEAPJEWELERY";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
             if(!LCSrandom(10))item="LOOT_EXPENSIVEJEWELERY";
@@ -661,7 +667,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_PDA";
             else if(!LCSrandom(2))item="LOOT_CHEAPJEWELERY";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_LABORATORY_COSMETICS:
       case SITE_INDUSTRY_NUCLEAR:
@@ -672,38 +680,52 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(5))item="LOOT_PDA";
             else if(!LCSrandom(5))item="LOOT_CHEMICAL";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_GOVERNMENT_COURTHOUSE:
             if(!LCSrandom(5))item="LOOT_JUDGEFILES";
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_PDA";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_GOVERNMENT_PRISON:
          item="WEAPON_SHANK";
-         activesquad->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
+         itemindex = getweapontype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Weapon(*weapontype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_GOVERNMENT_FIRESTATION:
             if(LCSrandom(2))item="LOOT_TRINKET";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_INDUSTRY_SWEATSHOP:
             item="LOOT_FINECLOTH";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_INDUSTRY_POLLUTER:
             item="LOOT_CHEMICAL";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex=getloottype(item) > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_CORPORATE_HEADQUARTERS:
             if(!LCSrandom(5))item="LOOT_CORPFILES";
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_PDA";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_CORPORATE_HOUSE:
             if(!LCSrandom(8))item="LOOT_TRINKET";
@@ -714,7 +736,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_CHEAPJEWELERY";
             else if(!LCSrandom(2))item="LOOT_FAMILYPHOTO";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_MEDIA_AMRADIO:
             if(!LCSrandom(5))item="LOOT_AMRADIOFILES";
@@ -722,7 +746,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_PDA";
             else if(!LCSrandom(2))item="LOOT_CELLPHONE";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)]));
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_MEDIA_CABLENEWS:
             if(!LCSrandom(5))item="LOOT_CABLENEWSFILES";
@@ -730,7 +756,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_PDA";
             else if(!LCSrandom(2))item="LOOT_CELLPHONE";
             else item="LOOT_COMPUTER";
-         activesquad->loot.push_back(new Loot(*loottype[getloottype(item)])); //Why activesquad and not shelter? -XML
+         itemindex = getloottype(item);
+         if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+         else {numberofxmlfails++;}
          break;
       case SITE_GOVERNMENT_POLICESTATION:
          if(!LCSrandom(3))
@@ -739,14 +767,18 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="WEAPON_SEMIPISTOL_45";
             else if(!LCSrandom(2))item="WEAPON_SHOTGUN_PUMP";
             else item="WEAPON_SEMIRIFLE_AR15";
-            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
+            itemindex = getweapontype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Weapon(*weapontype[itemindex]));}
+            else {numberofxmlfails++;}
          }
          else if(!LCSrandom(2))
          {
             if(!LCSrandom(3))item="ARMOR_POLICEUNIFORM";
             else if(!LCSrandom(2))item="ARMOR_SWATARMOR";
             else item="ARMOR_POLICEARMOR";
-            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
+            itemindex = getarmortype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Armor(*armortype[itemindex]));}
+            else {numberofxmlfails++;}
          }
          else
          {
@@ -754,7 +786,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_PDA";
             else item="LOOT_COMPUTER";
-            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
+            itemindex = getloottype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+            else {numberofxmlfails++;}
          }
          break;
       case SITE_GOVERNMENT_ARMYBASE:
@@ -762,12 +796,17 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          {
             if(LCSrandom(3))item="WEAPON_AUTORIFLE_M16";
             else item="WEAPON_CARBINE_M4";
-            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
+            itemindex = getweapontype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Weapon(*weapontype[itemindex]));}
+            else {numberofxmlfails++;}
          }
          else if(!LCSrandom(2))
          {
             item="ARMOR_ARMYARMOR";
-            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
+            itemindex = getarmortype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Armor(*armortype[itemindex]));}
+            else {numberofxmlfails++;}
+
          }
          else
          {
@@ -775,7 +814,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_CHEMICAL";
             else item="LOOT_SILVERWARE";
-            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
+            itemindex = getloottype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+            else {numberofxmlfails++;}
          }
 
          break;
@@ -786,12 +827,17 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="WEAPON_AUTORIFLE_M16";
             else if(!LCSrandom(2))item="WEAPON_SHOTGUN_PUMP";
             else item="WEAPON_CARBINE_M4";
-            shelter->loot.push_back(new Weapon(*weapontype[getweapontype(item)]));
+            itemindex = getweapontype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Weapon(*weapontype[itemindex]));}
+            else {numberofxmlfails++;}
+
          }
          else if(!LCSrandom(2))
          {
             item="ARMOR_BLACKSUIT";
-            shelter->loot.push_back(new Armor(*armortype[getarmortype(item)]));
+            itemindex = getarmortype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Armor(*armortype[itemindex]));}
+            else {numberofxmlfails++;}
          }
          else
          {
@@ -799,7 +845,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
             else if(!LCSrandom(3))item="LOOT_CELLPHONE";
             else if(!LCSrandom(2))item="LOOT_PDA";
             else item="LOOT_COMPUTER";
-            shelter->loot.push_back(new Loot(*loottype[getloottype(item)]));
+            itemindex = getloottype(item);
+            if(itemindex > -1) {shelter->loot.push_back(new Loot(*loottype[itemindex]));}
+            else {numberofxmlfails++;}
          }
 
          break;
@@ -810,6 +858,18 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    addstr("Sleeper ");
    addstr(cr.name);
    addstr(" has dropped a package off at the homeless shelter.");
+   if(numberofxmlfails > 0) {
+     char buf[30]; itoa(numberofxmlfails,buf,10);
+     move(8,1);
+     set_color(COLOR_RED,COLOR_BLUE,1);
+     addstr("Conservative hacktivity around XML bases lead to");
+     move(9,1);
+     addstr(buf);
+     addstr(" lost stolen items!");
+     move(11,1);
+     set_color(COLOR_RED,COLOR_GREEN,1);
+     addstr("Contact the LERT at once!");
+   }
    refresh();
    getch();
 }

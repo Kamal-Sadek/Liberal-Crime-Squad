@@ -96,6 +96,7 @@ void set_activity_color(long activity_type)
    case ACTIVITY_SELL_DRUGS:
    case ACTIVITY_PROSTITUTION:
    case ACTIVITY_CCFRAUD:
+   case ACTIVITY_PETTYTHEFT:
    case ACTIVITY_DOS_RACKET:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
