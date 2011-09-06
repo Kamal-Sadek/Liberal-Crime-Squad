@@ -838,12 +838,16 @@ void mode_base(void)
          if(selectedsiege!=-1)
          {
             location[selectedsiege]->haveflag=0;
-            criminalizepool(LAWFLAG_BURNFLAG,-1,selectedsiege);
+            if (law[LAW_FLAGBURNING] < 1) {
+              criminalizepool(LAWFLAG_BURNFLAG,-1,selectedsiege);
+            }
          }
          if(activesquad!=NULL)
          {
             location[activesquad->squad[0]->base]->haveflag=0;
-            criminalizepool(LAWFLAG_BURNFLAG,-1,activesquad->squad[0]->base);
+            if (law[LAW_FLAGBURNING] < 1) {
+               criminalizepool(LAWFLAG_BURNFLAG,-1,activesquad->squad[0]->base);
+            }
          }
 
          //PUBLICITY IF BURN FLAG DURING SIEGE

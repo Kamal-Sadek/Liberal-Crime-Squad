@@ -149,7 +149,7 @@ void review(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr("A-S: squad select.");
+      addstr("Letter: squad select.");
       addstr("  1-7 to view Liberal groups. ");
       addstr("  Z - Assemble a New Squad.");
       move(23,0);
@@ -539,7 +539,7 @@ void review_mode(short mode)
         //PAGE DOWN
         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
 
-        if(c>='a'&&c<='s')
+        if(c>='a'&&c<='s') // Print individual status?
         {
          int p=page*19+(int)(c-'a');
          if(p<temppool.size()) displaystatus(temppool,p);
@@ -1546,7 +1546,17 @@ void inspectliberalhierarchy(void)
           int p=page*19+(int)(c-'A');
          if(p<temppool.size())
          {
-              activate(temppool[p]);
+              if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
+                  temppool[p]->clinic==0&&
+                  temppool[p]->dating==0&&
+                  temppool[p]->hiding==0&&
+                  temppool[p]->alive==1&&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
+                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+              {
+                  activate(temppool[p]);
+              }
          }
      }
      else // is lowercase or general option
@@ -1605,7 +1615,6 @@ void displaystatus(vector<Creature *> &temppool,int p) {
 
 
                if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
                   temppool[p]->clinic==0&&
                   temppool[p]->dating==0&&
                   temppool[p]->hiding==0&&
@@ -1614,7 +1623,8 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
                {
-			   addstr("A - Change Activity       R - Remove member       K - Kill member");
+			   addstr("A - Change Activity");
+               if(temppool[p]->hireid != -1) addstr("       R - Remove member       K - Kill member");
                }
 
                move(23,0);      
@@ -1659,9 +1669,8 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                }
 
                if (c == 'a' && temppool[p]->flag != CREATUREFLAG_SLEEPER &&
-                  temppool[p]->hireid !=-1 && temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&& temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
+                  temppool[p]->clinic==0&& temppool[p]->dating==0&&
+                  temppool[p]->hiding==0&& temppool[p]->alive==1&&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)

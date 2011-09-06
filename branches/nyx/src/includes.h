@@ -501,6 +501,7 @@ enum Activity
    ACTIVITY_DONATIONS,
    ACTIVITY_SELL_DRUGS,
    ACTIVITY_PROSTITUTION,
+   ACTIVITY_PETTYTHEFT,
    ACTIVITY_POLLS,
    ACTIVITY_CCFRAUD,
    ACTIVITY_DOS_RACKET,
@@ -1578,8 +1579,10 @@ void activate_sleeper(Creature *cr);
 */
 /* base - activate the uninvolved */
 void activate(void);
+/* base - activate someone, possibly set his default activity (default: no) */
 void activate(Creature *cr,bool defaultmode=false);
 void activatebulk(void);
+void askactivity(activityst *activity,bool defaultmode=false,Creature *cr=NULL);
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr);
 long select_hostagefundinglevel(Creature *cr,Creature *hs);
@@ -1838,6 +1841,8 @@ void tendhostage(Creature *cr,char &clearformess);
 void repairarmor(Creature &cr,char &clearformess);
 /* armor manufacture */
 void makearmor(Creature &cr,char &clearformess);
+/* serve community */
+void servecommunity(Creature &cr);
 /* search for polls */
 void survey(Creature *cr);
 /* misc activation related things */

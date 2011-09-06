@@ -54,6 +54,19 @@ void siegecheck(char canseethings)
    if(disbanding)return;
 
 
+// Upkeep: cleanse offenses that are no offenses anymore (was inside weird loop with buggy effect)
+
+  
+
+   // Cleanse record on things that aren't illegal right now
+   //XXX make nice lawcheckandreset function maybe =)
+   for(int p=0;p<pool.size();p++)
+   {
+    if(law[LAW_FLAGBURNING]>0)pool[p]->crimes_suspected[LAWFLAG_BURNFLAG]=0;
+    if(law[LAW_DRUGS]>0)pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
+    if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
+    if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
+   }
 
    //FIRST, THE COPS
    int numpres;
@@ -118,12 +131,6 @@ void siegecheck(char canseethings)
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
             
-            // Cleanse record on things that aren't illegal right now
-            if(law[LAW_FLAGBURNING]>0)pool[p]->crimes_suspected[LAWFLAG_BURNFLAG]=0;
-            if(law[LAW_DRUGS]>0)pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
-            if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
-            if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
-
             //Heat doesn't matter for sieges until it gets high
             crimes += max(0,pool[p]->heat-10);
          }
