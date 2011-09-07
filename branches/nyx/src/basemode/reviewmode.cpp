@@ -524,11 +524,24 @@ void review_mode(short mode)
       int c=getch();
       if (c >='A' && c <='S') // Activity diversion - needs to be here to intercept uppercase info.
       {
-          int p=page*19+(int)(c-'A');
-         if(p<temppool.size())
+       int p=page*19+(int)(c-'A');
+       if(p<temppool.size())
+       {
+         if(temppool[p]->alive==1&&
+         temppool[p]->align==1&&
+         temppool[p]->clinic==0&&
+         temppool[p]->dating==0&&
+         temppool[p]->hiding==0)
          {
-              activate(temppool[p]);
+           if(location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
+             location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
+             location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON&&
+             !(temppool[p]->flag & CREATUREFLAG_SLEEPER))
+                activate(temppool[p]);
+           else if (temppool[p]->flag & CREATUREFLAG_SLEEPER)
+                activate_sleeper(temppool[p]);
          }
+        }
       }
       else // is lowercase or general command
       {
@@ -1093,7 +1106,11 @@ void squadlessbaseassign(void)
       int y=2;
       for(p=page_lib*19;p<temppool.size()&&p<page_lib*19+19;p++)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if (location[temppool[p]->location]->siege.siege)
+           set_color(COLOR_RED,COLOR_BLACK,0);
+         else
+           set_color(COLOR_WHITE,COLOR_BLACK,0);
+  
          move(y,0);
          addch(y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
@@ -1107,8 +1124,16 @@ void squadlessbaseassign(void)
       y=2;
       for(p=page_loc*9;p<temploc.size()&&p<page_loc*9+9;p++)
       {
-         if(p==selectedbase)set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(p==selectedbase)
+           if (location[p]->siege.siege)
+             set_color(COLOR_RED,COLOR_BLACK,1);
+           else
+             set_color(COLOR_WHITE,COLOR_BLACK,1);
+         else
+           if (location[p]->siege.siege)
+              set_color(COLOR_RED,COLOR_BLACK,0);
+           else
+              set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
          addshortname(location[temploc[p]]);
@@ -1151,7 +1176,7 @@ void squadlessbaseassign(void)
       if(c>='a'&&c<='s')
       {
          int p=page_lib*19+(int)(c-'a');
-         if(p<temppool.size())
+         if(p<temppool.size() && (!location[temppool[p]->location]->siege.siege))
          {
             temppool[p]->base=temploc[selectedbase];
          }
@@ -1159,7 +1184,7 @@ void squadlessbaseassign(void)
       if(c>='1'&&c<='9')
       {
          int p=page_loc*9+(int)(c-'1');
-         if(p<temploc.size())
+         if(p<temploc.size() && !(location[temploc[selectedbase]]->siege.siege))
          {
             selectedbase=p;
          }
@@ -1546,17 +1571,20 @@ void inspectliberalhierarchy(void)
           int p=page*19+(int)(c-'A');
          if(p<temppool.size())
          {
-              if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
-              {
-                  activate(temppool[p]);
-              }
+          if(pool[p]->alive==1&&
+             pool[p]->clinic==0&&
+             pool[p]->dating==0&&
+             pool[p]->hiding==0)
+           {
+             if (!(pool[p]->flag & CREATUREFLAG_SLEEPER))
+             {
+             if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
+                location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
+                location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+                   activate(temppool[p]);
+             } else activate_sleeper(temppool[p]);
+           }
+
          }
      }
      else // is lowercase or general option
@@ -1614,8 +1642,7 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                move(22,0);
 
 
-               if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->clinic==0&&
+               if( temppool[p]->clinic==0&&
                   temppool[p]->dating==0&&
                   temppool[p]->hiding==0&&
                   temppool[p]->alive==1&&
@@ -1668,7 +1695,7 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   continue;
                }
 
-               if (c == 'a' && temppool[p]->flag != CREATUREFLAG_SLEEPER &&
+               if (c == 'a' && !(temppool[p]->flag & CREATUREFLAG_SLEEPER) &&
                   temppool[p]->clinic==0&& temppool[p]->dating==0&&
                   temppool[p]->hiding==0&& temppool[p]->alive==1&&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
@@ -1676,7 +1703,8 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
                {
                   activate(temppool[p]);
-               }
+               } else if (temppool[p]->flag & CREATUREFLAG_SLEEPER)
+                  activate_sleeper(temppool[p]);
 
                if (c =='e' && temppool[p]->location != -1) { 
                    //create a temp squad containing just this liberal
