@@ -1302,7 +1302,7 @@ void printliberalstats(Creature &cr)
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(19,0);
+      move(18,0);
       itoa(maxsubordinates(cr)-subordinatesleft(cr),num,10);
       addstr(num);
       addstr(" Recruits / ");

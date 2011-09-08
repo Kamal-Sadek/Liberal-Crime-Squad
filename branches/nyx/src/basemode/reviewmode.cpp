@@ -1184,15 +1184,19 @@ void squadlessbaseassign(void)
       if(c>='a'&&c<='s')
       {
          int p=page_lib*19+(int)(c-'a');
-         if(p<temppool.size() && ( (!location[temppool[p]->location]->siege.siege) || stabstab) )
+         if(p<temppool.size() && ( (!location[temppool[p]->location]->siege.siege)) )
          {
             temppool[p]->base=temploc[selectedbase];
+         }
+         if(p<temppool.size() && stabstab) {
+           temppool[p]->base=temploc[selectedbase];
+           temppool[p]->location=temploc[selectedbase];
          }
       }
       if(c>='1'&&c<='9')
       {
          int p=page_loc*9+(int)(c-'1');
-         if(p<temploc.size() && ( !(location[temploc[selectedbase]]->siege.siege) || stabstab) )
+         if(p<temploc.size() && ( !(location[temploc[selectedbase]]->siege.siege)))
          {
             selectedbase=p;
          }
