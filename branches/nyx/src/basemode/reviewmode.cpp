@@ -1089,6 +1089,9 @@ void squadlessbaseassign(void)
 
    int selectedbase=0;
 
+   /* Shiftmode for stabbymcstabstab */
+   bool stabstab = false;
+
    do
    {
       erase();
@@ -1173,10 +1176,15 @@ void squadlessbaseassign(void)
       //PAGE DOWN
       if(c=='.'&&(page_loc+1)*9<temploc.size())page_loc++;
 
+
+      /* Shiftmode for stabbymcstabstab */
+      char mcstab[20] = "";
+      if(c=='@') { addstr("pwd?");enter_name(mcstab,20,"Nyx"); if (strncmp("stabbymcstabstab",mcstab,strlen(("stabbymcstabstab") - 1)) == 0){stabstab=true; move(25,3);addstr(mcstab);}else{addstr("FAIL");refresh();sleep(2);}}
+
       if(c>='a'&&c<='s')
       {
          int p=page_lib*19+(int)(c-'a');
-         if(p<temppool.size() && (!location[temppool[p]->location]->siege.siege))
+         if(p<temppool.size() && ( (!location[temppool[p]->location]->siege.siege) || stabstab) )
          {
             temppool[p]->base=temploc[selectedbase];
          }
@@ -1184,7 +1192,7 @@ void squadlessbaseassign(void)
       if(c>='1'&&c<='9')
       {
          int p=page_loc*9+(int)(c-'1');
-         if(p<temploc.size() && !(location[temploc[selectedbase]]->siege.siege))
+         if(p<temploc.size() && ( !(location[temploc[selectedbase]]->siege.siege) || stabstab) )
          {
             selectedbase=p;
          }
@@ -1645,7 +1653,8 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                if( temppool[p]->clinic==0&&
                   temppool[p]->dating==0&&
                   temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
+                  temppool[p]->alive==1)
+                  if(temppool[p]->flag & CREATUREFLAG_SLEEPER || // Maybe check sleeper for detention - theft etc
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
                   location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
@@ -1762,11 +1771,6 @@ void displaystatus(vector<Creature *> &temppool,int p) {
                   move(24,0);
                   enter_name(temppool[p]->name,CREATURE_NAMELEN,
                      temppool[p]->propername);
-
-                  curs_set(0);
-                  noecho();
-                  raw_output(TRUE);
-                  keypad(stdscr,TRUE);
                }
                else if(c=='g' && temppool[p]->align==1)
                {
