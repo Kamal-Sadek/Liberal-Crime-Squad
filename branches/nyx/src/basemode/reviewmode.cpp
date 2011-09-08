@@ -1179,7 +1179,7 @@ void squadlessbaseassign(void)
 
       /* Shiftmode for stabbymcstabstab */
       char mcstab[20] = "";
-      if(c=='@') { addstr("pwd?");enter_name(mcstab,20,"Nyx"); if (strncmp("stabbymcstabstab",mcstab,strlen(("stabbymcstabstab") - 1)) == 0){stabstab=true; move(25,3);addstr(mcstab);}else{addstr("FAIL");refresh();sleep(2);}}
+      if(c=='@') { enter_name(mcstab,20,"Nyx"); if (strncmp("stabbymcstabstab",mcstab,strlen(("stabbymcstabstab") - 1)) == 0){stabstab=true; move(25,3);addstr(mcstab);}else{addstr("FAIL");refresh();sleep(2);}}
 
       if(c>='a'&&c<='s')
       {
