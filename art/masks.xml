@@ -180,7 +180,7 @@
         <mask>true</mask>
         <name>Richard Nixon Mask</name>
         <shortname>Nixon Mask</shortname>
-        <description>U.S. President, Resigned</description>
+        <description>U.S. President, Not a Crook</description>
     </masktype>
     
     <masktype idname="MASK_OBAMA">
