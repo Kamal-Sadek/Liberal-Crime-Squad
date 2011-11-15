@@ -848,7 +848,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
 
       // show multiple hits
-      if(bursthits>1)
+      if(bursthits>1 && a.is_armed()) // Only show if not melee
       {
          strcat(str,", ");
          if(!a.is_armed()) //Move into WEAPON_NONE? -XML
@@ -864,7 +864,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
          default: strcat(str,(" "+tostring(bursthits)+" times").c_str());
-         }
+         }		 
 
       }
       else if(attack_used->always_describe_hit)
@@ -954,7 +954,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       //damamount/=2;
 
       if(t.squadid!=-1&&t.hireid==-1) // Plot Armor: if the founder is hit, inflict
-         damamount/=2;                // 1/4 damage, because founders are cool
+         damamount/=2;                // 1/2 damage, because founders are cool
 
       int mod=0;
 
