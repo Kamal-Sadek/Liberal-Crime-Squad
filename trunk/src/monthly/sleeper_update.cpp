@@ -46,6 +46,7 @@ This file is part of Liberal Crime Squad.                                       
 void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
    if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
+   int infiltrate = 1;
    
    switch(cr.activity.type)
    {
@@ -58,7 +59,8 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          break;
       case ACTIVITY_SLEEPER_STEAL:
          sleeper_steal(cr,clearformess,canseethings,libpower);
-         break;
+		 infiltrate = 0;
+         break;		 
       case ACTIVITY_SLEEPER_RECRUIT:
          sleeper_recruit(cr,clearformess,canseethings,libpower);
          break;
@@ -74,7 +76,8 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
          break;
    }
    
-   cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
+   if (infiltrate)cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
+
    if(cr.infiltration>=1)
       cr.infiltration=1;
    if(cr.infiltration<=0)
@@ -613,13 +616,15 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       }
       return;
    }
-
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
       cr.juice += 10;
       if(cr.juice>100)cr.juice=100;
    }
+
+   cr.infiltration-=LCSrandom(10)*0.01f-0.02f; //No effectiveness drop before? -Niel
+
    
    //Item *item;
    string item;
