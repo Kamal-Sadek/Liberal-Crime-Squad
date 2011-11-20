@@ -928,6 +928,8 @@ enum Views
    //THESE THREE MUST BE LAST FOR VIEWNUM-3 TO WORK IN PLACES
    VIEW_LIBERALCRIMESQUAD,
    VIEW_LIBERALCRIMESQUADPOS,
+   //THIS ONE MUST BE LAST. randomissue RELIES ON IT BEING LAST TO IGNORE IT IF
+   //CCS IS DEAD.
    VIEW_CONSERVATIVECRIMESQUAD,
    VIEWNUM
 };
@@ -996,6 +998,7 @@ struct recruitst
    char eagerness1;
    char task;
    recruitst();
+   ~recruitst();
    char eagerness();
 };
 

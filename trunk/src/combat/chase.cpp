@@ -983,7 +983,7 @@ void evasiverun(void)
                }
                else
                {
-                  if(activesquad->squad[p]->blood<10)
+                  if(activesquad->squad[p]->blood<=10)
                      addstr("thrown to the ground, and tazed to death!");
                   else
                      addstr("thrown to the ground, and tazed repeatedly!");
@@ -1001,7 +1001,7 @@ void evasiverun(void)
                break;
             default:
                addstr(" is seized, ");
-               if(activesquad->squad[p]->blood<60)
+               if(activesquad->squad[p]->blood<=60)
                   addstr("thrown to the ground, and beaten to death!");
                else
                   addstr("thrown to the ground, and beaten senseless!");
@@ -1018,7 +1018,9 @@ void evasiverun(void)
             }
             activesquad->squad[5]=NULL;
             // Death squads don't mess around, and don't fall behind when executing your people
-            if(encounter[0].type!=CREATURE_DEATHSQUAD)delenc(0,0);
+            // Tanks don't stop either.
+            if(encounter[0].type!=CREATURE_DEATHSQUAD&&
+               encounter[0].type!=CREATURE_TANK)delenc(0,0);
 
             printparty();
             printchaseencounter();
