@@ -730,13 +730,16 @@ int randomissue(bool core_only)
    int interest_array[VIEWNUM];
    int i;
    int total_interest=0;
-   for(i=0;i<VIEWNUM-(core_only*5);i++)
+   int CCSisDead = 0;
+   if(!core_only && endgamestate>=ENDGAME_CCS_DEFEATED)
+      CCSisDead = 1;
+   for(i=0;i<VIEWNUM-(core_only*5)-CCSisDead;i++)
    {
       interest_array[i]=public_interest[i]+total_interest+25;
       total_interest+=public_interest[i]+25;
    }
    int roll = LCSrandom(total_interest);
-   for(i=0;i<VIEWNUM-(core_only*5);i++)
+   for(i=0;i<VIEWNUM-(core_only*5)-CCSisDead;i++)
    {
       if(roll<interest_array[i])
          return i;

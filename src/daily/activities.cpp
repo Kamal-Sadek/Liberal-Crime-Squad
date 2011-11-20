@@ -1382,7 +1382,7 @@ void funds_and_trouble(char &clearformess)
 
          change_public_opinion(issue,1);
 
-         if(DIFFICULTY_FORMIDABLE<hack_skill+LCSrandom(5)-2)
+         if(DIFFICULTY_FORMIDABLE>hack_skill+LCSrandom(5)-2)
          {
             for(int h=0;h<truehack.size();h++)
             {
