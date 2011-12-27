@@ -327,7 +327,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          else if(pool[p]->skill_check(SKILL_PERSUASION,difficulty)) // Second chance to not fail horribly
          {
             if(r.level<127) r.level++;
-            if(r.level>-128) r.eagerness1--;
+            if(r.eagerness1>-128) r.eagerness1--;
             move(y++,0);
             addstr(r.recruit->name);
             addstr(" is skeptical about some of ");

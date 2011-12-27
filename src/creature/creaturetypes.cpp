@@ -1320,6 +1320,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          attcap[ATTRIBUTE_STRENGTH]=20;
          attcap[ATTRIBUTE_AGILITY]=20;
          cr.age=AGE_DOGYEARS;
+         if(law[LAW_ANIMALRESEARCH]!=2)
+            cr.money=0;
          break;
       case CREATURE_GUARDDOG:
          strcpy(cr.name,"Guard Dog");
@@ -1334,6 +1336,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_AGILITY,9);
          attcap[ATTRIBUTE_AGILITY]=15;
          cr.age=AGE_DOGYEARS;
+         if(law[LAW_ANIMALRESEARCH]!=2)
+            cr.money=0;
          break;
       case CREATURE_PRISONER:
          GIVE_GENDER_MALE;
