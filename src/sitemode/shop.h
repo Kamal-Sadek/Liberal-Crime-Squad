@@ -114,7 +114,8 @@ class Shop : public ShopOption
             
             int price_;
             int adjusted_price() const;
-            bool only_sell_legal_;
+            int sleeperprice_;
+			bool only_sell_legal_;
             bool increase_price_with_illegality_;
             bool description_defined_;
             const std::string& get_description() const;

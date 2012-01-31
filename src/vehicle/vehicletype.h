@@ -27,7 +27,8 @@ class VehicleType
       
       bool availableatshop() const { return availableatshop_; }
       int price() const { return price_; }
-      
+      int sleeperprice() const { return sleeperprice_; }
+
       static int number_of_vehicletypes;
       
    private:
@@ -54,6 +55,7 @@ class VehicleType
       
       bool availableatshop_;
       int price_;
+	  int sleeperprice_;
 };
 
 #endif //VEHICLE_TYPE_H
