@@ -911,7 +911,9 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
       }
       else if (tag == "price")
          price_ = atoi(xml.GetData().c_str());
-      else if (tag == "letter")
+      else if (tag == "sleeperprice")
+	     sleeperprice_ = atoi(xml.GetData().c_str());
+	  else if (tag == "letter")
       {
          letter_ = xml.GetData()[0];
          if (97 <= letter_ && letter_ <= 122) //Check it is a letter.

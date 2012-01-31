@@ -9,7 +9,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
  year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
  longname_("UNDEFINED"), shortname_("UNDEF"), drivebonus_(0), 
  steal_difficultytofind_(1), steal_juice_(0), steal_extraheat_(0),
- sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234)
+ sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111)
 {
    id_ = number_of_vehicletypes++;
    
@@ -145,6 +145,8 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       }
       else if (element == "price")
          price_ = atoi(xmlfile.GetData().c_str());
+      else if (element == "sleeperprice")
+		 sleeperprice_ = atoi(xmlfile.GetData().c_str());
       /*else
          std::cerr << "Unknown element for vehicle type " << idname << ": " << element
                    << std::endl;*/

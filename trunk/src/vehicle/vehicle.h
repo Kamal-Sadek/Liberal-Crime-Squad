@@ -43,6 +43,7 @@ class Vehicle
       int touchalarmchance() const;
       bool availableatshop() const;
       int price() const;
+	  int sleeperprice() const;
       
       static long curcarid;
       
