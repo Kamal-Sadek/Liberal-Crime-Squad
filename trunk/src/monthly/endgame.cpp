@@ -77,17 +77,28 @@ void tossjustices(char canseethings)
       }
 
       move(y+1,5);
-      addstr("In particular, the aforementioned former citizens may");
+      addstr("In particular, the aforementioned former citizen");
+      if(tossnum!=1)addstr("s");
+      addstr(" may");
       move(y+2,0);
-      addstr("not serve on the Supreme Court.  Said former citizens will");
+      addstr("not serve on the Supreme Court.  Said former citizen");
+      if(tossnum!=1)addstr("s");
+      addstr(" will");
       move(y+3,0);
-      addstr("be deported to Conservative countries of the President's");
+      addstr("be deported to ");
+      if(tossnum!=1)addstr("Conservative countries");
+      else addstr("a Conservative country");
+      addstr(" of the President's");
       move(y+4,0);
-      addstr("choosing to be replaced by Proper Justices, also of");
+      addstr("choosing to be replaced by ");
+      if(tossnum!=1)addstr("Proper Justices");
+      else addstr("a Proper Justice");
+      addstr(", also of");
       move(y+5,0);
       addstr("the President's choosing with the advice and consent of");
       move(y+6,0);
       addstr("the Senate.");
+
 
       move(24,0);
       addstr("Press 'C' to watch the ratification process unfold.");
@@ -205,7 +216,7 @@ void reaganify(char canseethings)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       erase();
-      move(12,6);
+      move(12,3);
       addstr("The Arch Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!");
       refresh();
       getch();

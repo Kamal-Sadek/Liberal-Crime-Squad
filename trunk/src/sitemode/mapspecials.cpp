@@ -447,7 +447,7 @@ void special_nuclear_onoff(void)
                move(17,1);
                addstr("The nuclear waste gets released into the state's water supply!");
                change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
-               change_public_opinion(VIEW_LIBERALCRIMESQUAD,-100,0,0);
+               change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-50,0,0);
                refresh();
                getch();
 

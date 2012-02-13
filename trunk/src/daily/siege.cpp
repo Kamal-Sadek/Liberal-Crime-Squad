@@ -63,6 +63,7 @@ void siegecheck(char canseethings)
     if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
     if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
   }
+  if(law[LAW_FREESPEECH]>-2)offended_firemen=0;
 
    //FIRST, THE COPS
    int numpres;

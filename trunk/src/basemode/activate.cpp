@@ -907,7 +907,7 @@ void activate(Creature *cr)
          if(cr->activity.type==ACTIVITY_HOSTAGETENDING)break;
          else cr->activity=oact;
       }
-      if (!sieged && c == 'e' && activesquad->squad[0]->location!=-1)
+      if (!sieged && c == 'e')
       {
          //create a temp squad containing just this liberal
          int oldsquadid = cr->squadid;

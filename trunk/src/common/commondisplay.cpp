@@ -939,14 +939,14 @@ void fullstatus(int p)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("What is the new code name?                                       ");
          move(24,0);
-         addstr("                                                                 ");
+         addstr("                                                                    ");
 
          keypad(stdscr,FALSE);
          raw_output(FALSE);
          echo();
          curs_set(1);
          move(24,0);
-         enter_name(activesquad->squad[p]->name,CREATURE_NAMELEN);
+         enter_name(activesquad->squad[p]->name,CREATURE_NAMELEN,activesquad->squad[p]->propername);
 
          curs_set(0);
          noecho();

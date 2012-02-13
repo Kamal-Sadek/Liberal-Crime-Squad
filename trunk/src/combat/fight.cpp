@@ -1099,7 +1099,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                if(t.align==-a.align)
                   addjuice(a,5+t.juice/20,1000); // Instant juice
                else
-                  addjuice(a,-(5+t.juice/20),1000);
+                  addjuice(a,-(5+t.juice/20),-50);
 
                if(target->squadid!=-1)
                {
@@ -1745,30 +1745,6 @@ void specialattack(Creature &a, Creature &t, char &actual)
 
    switch(a.type)
    {
-      case CREATURE_COP:
-         switch(LCSrandom(7))
-         {
-            case 0:strcat(str,"reasons with ");
-                   strcat(str,t.name);break;
-            case 1:strcat(str,"promises a fair trial to ");
-                   strcat(str,t.name);break;
-            case 2:strcat(str,"offers a kind ear to ");
-                   strcat(str,t.name);break;
-            case 3:strcat(str,"urges cooperation from ");
-                   strcat(str,t.name);break;
-            case 4:strcat(str,"offers a hug to ");
-                   strcat(str,t.name);break;
-            case 5:strcat(str,"suggests counseling to ");
-                   strcat(str,t.name);break;
-            case 6:strcat(str,"gives a teddy bear to ");
-                   strcat(str,t.name);break;
-         }
-         strcat(str,"!");
-
-         resist=t.attribute_roll(ATTRIBUTE_HEART);
-
-         attack+=a.skill_roll(SKILL_PERSUASION);
-         break;
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
          switch(LCSrandom(4))
@@ -1905,6 +1881,35 @@ void specialattack(Creature &a, Creature &t, char &actual)
             resist=t.attribute_roll(ATTRIBUTE_WISDOM);
          }
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
+         break;
+      case CREATURE_COP:
+         if(a.enemy())
+         {
+            switch(LCSrandom(7))
+            {
+               case 0:strcat(str,"reasons with ");
+                      strcat(str,t.name);break;
+               case 1:strcat(str,"promises a fair trial to ");
+                      strcat(str,t.name);break;
+               case 2:strcat(str,"offers a kind ear to ");
+                      strcat(str,t.name);break;
+               case 3:strcat(str,"urges cooperation from ");
+                      strcat(str,t.name);break;
+               case 4:strcat(str,"offers a hug to ");
+                      strcat(str,t.name);break;
+               case 5:strcat(str,"suggests counseling to ");
+                      strcat(str,t.name);break;
+               case 6:strcat(str,"gives a teddy bear to ");
+                      strcat(str,t.name);break;
+            }
+            strcat(str,"!");
+
+            resist=t.attribute_roll(ATTRIBUTE_HEART);
+
+            attack+=a.skill_roll(SKILL_PERSUASION);
+            break;
+         }
+         //No break. If the cop is a liberal it will do a musical attack instead.
       default:
          if(a.get_weapon().has_musical_attack())
          {
@@ -2060,7 +2065,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
             move(17,1);
             addstr(t.name);
             addstr(" seems less badass!");
-            addjuice(t,-50,100);
+            addjuice(t,-50,99);
          }
          else if(!t.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_AVERAGE) ||
             t.get_attribute(ATTRIBUTE_HEART,true) < t.get_attribute(ATTRIBUTE_WISDOM,true))

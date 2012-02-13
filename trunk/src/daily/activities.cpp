@@ -1205,8 +1205,6 @@ void funds_and_trouble(char &clearformess)
          hack_skill = MAX(hack_skill,truehack[h]->skill_roll(SKILL_COMPUTERS));
       }
 
-      int difficulty = DIFFICULTY_HEROIC;
-         
       if(DIFFICULTY_HEROIC<=hack_skill+static_cast<int>(truehack.size())-1)
       {
          if(truehack.size()>1)strcpy(msg,"Your Hackers have ");
@@ -1483,7 +1481,7 @@ void funds_and_trouble(char &clearformess)
 
             //Check base inventory for a spraycan
             bool foundone = false;
-            for(int i=0; i<location[graffiti[s]->base]->loot.size(); --i)
+            for(int i=0; i<location[graffiti[s]->base]->loot.size(); ++i)
             {
                if(location[graffiti[s]->base]->loot[i]->is_weapon())
                {
@@ -1521,13 +1519,12 @@ void funds_and_trouble(char &clearformess)
                Weapon spray(*weapontype[getweapontype("WEAPON_SPRAYCAN")]);
                graffiti[s]->give_weapon(spray,&location[graffiti[s]->base]->loot);
             }
-            else
+            else if (!foundone)
             {
                addstr(" needs a spraycan equipped to do graffiti.");
                graffiti[s]->activity.type=ACTIVITY_NONE;
                refresh();
                getch();
-               continue;
             }
          }
 
@@ -2019,7 +2016,7 @@ void funds_and_trouble(char &clearformess)
                {
                   attemptarrest(*trouble[t],"causing trouble",clearformess);
                }
-               else if(trouble[t]->get_skill(SKILL_HANDTOHAND)<4)
+               else
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
@@ -2053,7 +2050,7 @@ void funds_and_trouble(char &clearformess)
                      refresh();
                      getch();
 
-                     addjuice(*trouble[t],5,50);
+                     addjuice(*trouble[t],5,20);
 
                      wonfight = true;
                   }

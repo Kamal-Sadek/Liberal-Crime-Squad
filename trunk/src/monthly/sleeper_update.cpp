@@ -181,14 +181,14 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
          change_public_opinion(VIEW_AMRADIO,1);
          for(int i=0;i<VIEWNUM-3;i++)
          {
-            libpower[i]+=power*attitude[VIEW_AMRADIO]/100;
+            libpower[i]+=power*(100-attitude[VIEW_AMRADIO])/100;
          }
          break;
       case CREATURE_NEWSANCHOR:
          change_public_opinion(VIEW_CABLENEWS,1);
          for(int i=0;i<VIEWNUM-3;i++)
          {
-            libpower[i]+=power*attitude[VIEW_CABLENEWS]/100;
+            libpower[i]+=power*(100-attitude[VIEW_CABLENEWS])/100;
          }
          break;
       /* Cultural leaders block - influences cultural issues */
