@@ -613,7 +613,7 @@ void review_mode(short mode)
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   addstr("What is the new code name?                                       ");
                   move(24,0);
-                  addstr("                                                                 ");
+                  addstr("                                                                    ");
 
                   keypad(stdscr,FALSE);
                   raw_output(FALSE);

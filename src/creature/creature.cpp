@@ -1135,7 +1135,7 @@ void Creature::train(int trainedskill, int experience, int upto)
 
 void Creature::train(int trainedskill, int experience)
 {
-   return this->train (trainedskill, experience, 20);
+   return this->train (trainedskill, experience, 40);
 }
 
 void Creature::skill_up()
