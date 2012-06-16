@@ -415,9 +415,9 @@ char talk(Creature &a,int t)
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(17,1);
                      if(law[LAW_FREESPEECH]>ALIGN_ARCHCONSERVATIVE)
-                        addstr("\"Fuck! \"");
+                        addstr("\"Fuck! ");
                      else
-                        addstr("\"[No!] \"");
+                        addstr("\"[No!] ");
                      switch(LCSrandom(5))
                      {
                      case 0:addstr("Okay, okay, you win!\"");break;

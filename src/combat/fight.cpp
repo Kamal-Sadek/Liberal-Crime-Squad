@@ -764,9 +764,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          int offset=0;
          if(aroll>droll+5 || mode==GAMEMODE_CHASECAR)
             offset=4;  // NICE SHOT; MORE LIKELY TO HIT BODY/HEAD or it's a car chase and we don't want to hit the car too much
-         if(aroll>droll+10)
+         if(aroll>droll+10 &&
+            (!(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)) ||
+             !(t.wound[BODYPART_BODY]&(WOUND_CLEANOFF|WOUND_NASTYOFF))))
             offset=8;  // NO LIMB HITS HERE YOU AWESOME PERSON
-         if(aroll>droll+15)
+         if(aroll>droll+15 &&
+            !(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)))
             offset=12; // BOOM AUTOMATIC HEADSHOT MOTHA******
          //Weighted location roll:
          //200% chance to hit body
