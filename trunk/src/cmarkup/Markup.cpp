@@ -38,7 +38,7 @@ static char THIS_FILE[]=__FILE__;
 #endif // VC++ DEBUG
 
 // Customization
-#define x_EOL MCD_T("\r\n") // can be \r\n or \n or empty
+#define x_EOL MCD_T("") // can be \r\n or \n or empty
 #define x_EOLLEN (sizeof(x_EOL)/sizeof(MCD_CHAR)-1) // string length of x_EOL
 #define x_ATTRIBQUOTE '\"' // can be double or single quote
 
