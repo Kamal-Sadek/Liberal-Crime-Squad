@@ -1271,7 +1271,7 @@ void addshortname (locationst *loc);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
-void printfunds(int y, int offset, char* prefix=NULL);
+void printfunds(int y, int offset, const char* prefix=NULL);
 /* prints a short blurb showing how to page forward */
 void addnextpagestr();
 /* prints a short blurb showing how to page back */
@@ -1520,7 +1520,7 @@ void save(void);
 /* saves the game to autosave.dat */
 void autosave(void);
 /* handles saving */
-void savegame(char *str);
+void savegame(const char *str);
 /* loads the game from save.dat */
 char load(void);
 /* deletes save.dat (used on endgame and for invalid save version) */
@@ -1906,8 +1906,8 @@ void setpriority(newsstoryst &ns);
 void displaystory(newsstoryst &ns, bool liberalguardian, int header);
 /* news - graphics */
 void loadgraphics(void);
-void displaycenterednewsfont(char *str,int y);
-void displaycenteredsmallnews(char *str,int y);
+void displaycenterednewsfont(const char *str,int y);
+void displaycenteredsmallnews(const char *str,int y);
 void displaynewspicture(int p,int y);
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive);

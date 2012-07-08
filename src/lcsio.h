@@ -84,7 +84,7 @@ enum LCSIO_FLAGS
     FILE* handle. NULL on error.
 
 */
-FILE* LCSOpenFile(char* filename,char* mode,int flags);
+FILE* LCSOpenFile(const char* filename,const char* mode,int flags);
 
 /**
     LCSIO Close an open file.
@@ -156,7 +156,7 @@ void LCSCloseFile(FILE* handle);
     filename Name of file to delete.
     flags Prefix flags. See enum LCSIO_FLAGS.
 */
-void LCSDeleteFile(char* filename,int flags);
+void LCSDeleteFile(const char* filename,int flags);
 
 
 #endif // LCSIO_H_INCLUDED
