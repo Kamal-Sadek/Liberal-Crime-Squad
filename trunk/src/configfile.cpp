@@ -8,7 +8,7 @@ extern char artdir[MAX_PATH_SIZE];
 
 // Reads in an entire configuration file
 // Returns 0 for read successful, returns -1 if failed read
-int readConfigFile(char* filename)
+int readConfigFile(const char* filename)
 {
    std::fstream file;
    std::string command, value;

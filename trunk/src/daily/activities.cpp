@@ -2848,7 +2848,7 @@ char stealcar(Creature &cr,char &clearformess)
          if(method==1)
          {
             int difficulty;
-            char * location;
+            const char * location;
             
             if(!keys_in_car)
             {

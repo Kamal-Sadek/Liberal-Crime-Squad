@@ -1763,7 +1763,7 @@ well as screen coordinates.
 Please note that offsetx is the offset from the right of the screen, y is 
 the offset from the top as always.
 */
-void printfunds(int y, int offsetx, char* prefix)
+void printfunds(int y, int offsetx, const char* prefix)
 {
    char moneystr[50];
    char prefixbuffer[50];

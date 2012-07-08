@@ -35,9 +35,9 @@ This file is part of Liberal Crime Squad.
 #define MAX_PATH_SIZE 2048
 char homedir[MAX_PATH_SIZE];
 char artdir[MAX_PATH_SIZE];
-char* arttest="newspic.cpc";
+const char* arttest="newspic.cpc";
 bool initialized=false;
-char *art_search_paths[]=
+const char *art_search_paths[]=
 {
     #ifdef INSTALL_DATA_DIR
     INSTALL_DATA_DIR "/lcs/art/",
@@ -112,7 +112,7 @@ bool LCSInitHomeDir()
 //Put the art directory prefix in artdir.
 bool LCSInitArtDir()
 {
-    char* artprefix;
+    const char* artprefix;
     artprefix=art_search_paths[0];
     std::string tester;
     for(int i=1;artprefix!=NULL;++i)
@@ -134,7 +134,7 @@ bool LCSInitArtDir()
 
 
 
-FILE* LCSOpenFile(char* filename,char* mode,int flags)
+FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 {
     if(!initialized)
     {
@@ -157,7 +157,7 @@ FILE* LCSOpenFile(char* filename,char* mode,int flags)
     return fopen(filepath.c_str(),mode);
 }
 
-void LCSDeleteFile(char* filename,int flags)
+void LCSDeleteFile(const char* filename,int flags)
 {
 
     if(!initialized)

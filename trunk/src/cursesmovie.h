@@ -89,8 +89,8 @@ struct CursesMoviest
       clean();
    }
 
-   void savemovie(char *filename, int flags);
-   void loadmovie(char *filename);
+   void savemovie(const char *filename, int flags);
+   void loadmovie(const char *filename);
    void clean(void);
    void convertindices_song(filelistst &master);
    void convertindices_sound(filelistst &master);
