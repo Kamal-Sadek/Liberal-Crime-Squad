@@ -487,8 +487,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_MERC:
          GIVE_GENDER_MALE;
-         strcpy(cr.name,"Mercenary");
-         if(law[LAW_GUNCONTROL]==-2)
+         strcpy(cr.name,"Elite Security");
+         if(law[LAW_GUNCONTROL]<1)
          {
             Weapon w=Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
             cr.give_weapon(w,NULL);
@@ -512,7 +512,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.juice=LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
 
-         cr.set_skill(SKILL_RIFLE,LCSrandom(4)+1);
+         cr.set_skill(SKILL_RIFLE,LCSrandom(4)+2);
          cr.set_skill(SKILL_SECURITY,LCSrandom(3));
          cr.set_skill(SKILL_HANDTOHAND,LCSrandom(3));
          cr.set_skill(SKILL_PISTOL,LCSrandom(3));
@@ -2123,7 +2123,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
 
 
-         case CREATURE_MILITARYOFFICER:
+      case CREATURE_MILITARYOFFICER:
          GIVE_GENDER_MALE;
          if(LCSrandom(4)) {
             weapon = new Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
@@ -2152,12 +2152,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_WISDOM,10);
          break;
 
-         case CREATURE_SEAL:
+      case CREATURE_SEAL:
          GIVE_GENDER_MALE;
-         if(!LCSrandom(3))
-            weapon = new Weapon(*weapontype[getweapontype("WEAPON_CARBINE_M4")]);      //Not sure if SEALs actually use M4s, though
-         else
-            weapon = new Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
+         weapon = new Weapon(*weapontype[getweapontype("WEAPON_CARBINE_M4")]); // SEALs use M4s and MP5s
 
          clips=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],6);
          cr.give_weapon(*weapon,NULL);
@@ -2607,6 +2604,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
       case CREATURE_MERC:
          okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
+         okaysite[SITE_CORPORATE_HOUSE]=1;
+         okaysite[SITE_INDUSTRY_NUCLEAR]=1;
+         okaysite[SITE_LABORATORY_GENETIC]=1;
          break;
       case CREATURE_HICK:
          okaysite[SITE_MEDIA_AMRADIO]=1;

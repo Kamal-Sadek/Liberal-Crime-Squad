@@ -70,15 +70,16 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.04.0"
+#define PACKAGE_VERSION "4.06.0"
 #endif
 
-const int version=40401; 
+const int version=40601;
 const int lowestloadversion=40401;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
-   #include <windows.h>
+   //#include <windows.h>
+   #define GO_PORTABLE
    #include <string.h>
    //Visual C++ .NET (7) includes the STL with vector, so we
    //will use that, otherwise the HP STL Vector.h will be used.
@@ -180,7 +181,7 @@ const int lowestloadscoreversion=31203;
 #include "cmarkup/Markup.h" //For XML.
 
 using namespace std;
-#include "lcsio.h"
+//#include "lcsio.h"
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
@@ -663,6 +664,7 @@ public:
 #define SITEBLOCK_FIRE_START BIT18
 #define SITEBLOCK_FIRE_PEAK BIT19
 #define SITEBLOCK_FIRE_END BIT20
+#define SITEBLOCK_CHAINLINK BIT21
 
 enum SpecialBlocks
 {
@@ -685,7 +687,7 @@ enum SpecialBlocks
    SPECIAL_RADIO_BROADCASTSTUDIO,
    SPECIAL_NEWS_BROADCASTSTUDIO,
    SPECIAL_APARTMENT_LANDLORD,
-   SPECIAL_APARTMENT_SIGN,
+   SPECIAL_SIGN_ONE,
    SPECIAL_RESTAURANT_TABLE,
    SPECIAL_CAFE_COMPUTER,
    SPECIAL_PARK_BENCH,
@@ -693,7 +695,13 @@ enum SpecialBlocks
    SPECIAL_STAIRS_DOWN,
    SPECIAL_CLUB_BOUNCER,
    SPECIAL_CLUB_BOUNCER_SECONDVISIT,
-   SPECIAL_ARMYBASE_ARMORY,
+   SPECIAL_ARMORY,
+   SPECIAL_DISPLAY_CASE,
+   SPECIAL_SIGN_TWO,
+   SPECIAL_SIGN_THREE,
+   SPECIAL_SECURITY_CHECKPOINT,
+   SPECIAL_SECURITY_METALDETECTORS,
+   SPECIAL_SECURITY_SECONDVISIT,
    SPECIALNUM,
    SPECIAL_NONE = -1
 };
@@ -1027,7 +1035,8 @@ enum Crimes
    CRIME_FREE_BEASTS,
    CRIME_ARSON,
    CRIME_TAGGING,
-   CRIME_ARMY_ARMORY,
+   CRIME_ARMORY,
+   CRIME_VANDALISM,
    CRIMENUM
 };
 
@@ -1689,7 +1698,11 @@ void special_corporate_files(void);
 void special_radio_broadcaststudio(void);
 void special_news_broadcaststudio(void);
 void special_graffiti(void);
-void special_armybase_armory(void);
+void special_armory(void);
+void special_display_case(void);
+void special_security_checkpoint(void);
+void special_security_metaldetectors(void);
+void special_security_secondvisit(void);
 
 /*
  talk.cpp
@@ -1707,7 +1720,7 @@ char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
 void disguisecheck(int encounter_timer);
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(Creature &cr);
+char weaponcheck(Creature &cr, bool metaldetect=false);
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(Creature &cr);
 /* returns true if the entire site is not open to public */

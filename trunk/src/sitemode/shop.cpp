@@ -1059,6 +1059,7 @@ const std::string& Shop::ShopItem::get_description() const
    {
       switch (itemclass_)
       {
+         default: return description_; // Will be "UNDEFINED"
          case WEAPON: return weapontype[getweapontype(itemtypename_)]->get_name();
          case CLIP  : return cliptype  [getcliptype  (itemtypename_)]->get_name();
          case ARMOR : return armortype [getarmortype (itemtypename_)]->get_name();

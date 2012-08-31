@@ -26,11 +26,12 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
+//#include <includes.h>
 #include <externs.h>
 #include <cstring>
 #include "news/news.h"
 
+#include "lcsio.h"
 
 
 /* news - determines the priority of a news story */
@@ -86,7 +87,7 @@ void setpriority(newsstoryst &ns)
          // Unique site crimes
          ns.priority+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
          ns.priority+=crime[CRIME_HACK_INTEL       ] * 100;
-         ns.priority+=crime[CRIME_ARMY_ARMORY      ] * 100;
+         ns.priority+=crime[CRIME_ARMORY           ] * 100;
          ns.priority+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
          ns.priority+=crime[CRIME_CORP_FILES       ] * 100;
          ns.priority+=crime[CRIME_PRISON_RELEASE   ] *  50;
@@ -103,6 +104,7 @@ void setpriority(newsstoryst &ns)
          ns.priority+=crime[CRIME_ATTACKED_MISTAKE ] *   7;
          ns.priority+=crime[CRIME_ATTACKED         ] *   4;
          ns.priority+=crime[CRIME_TAGGING          ] *   2;
+         ns.priority+=crime[CRIME_VANDALISM        ] *   2;
          //ns.priority+=crime[CRIME_STOLEGROUND      ];
          //ns.priority+=crime[CRIME_BROKEDOWNDOOR    ];
 
@@ -122,11 +124,12 @@ void setpriority(newsstoryst &ns)
          ns.politics_level+=crime[CRIME_BREAK_SWEATSHOP  ] *  10;
          ns.politics_level+=crime[CRIME_BREAK_FACTORY    ] *  10;
          ns.politics_level+=crime[CRIME_FREE_RABBITS     ] *  10;
+         ns.politics_level+=crime[CRIME_VANDALISM        ] *   5;
          ns.politics_level+=crime[CRIME_TAGGING          ] *   3;
 
          ns.violence_level=0;
 
-         ns.violence_level+=crime[CRIME_ARMY_ARMORY      ] * 100;
+         ns.violence_level+=crime[CRIME_ARMORY           ] * 100;
          ns.violence_level+=crime[CRIME_KILLEDSOMEBODY   ] *  20;
          ns.violence_level+=crime[CRIME_ATTACKED_MISTAKE ] *  12;
          ns.violence_level+=crime[CRIME_ATTACKED         ] *   4;
@@ -533,7 +536,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[c]==CRIME_PRISON_RELEASE)continue;
                   if(ns.crime[c]==CRIME_JURYTAMPERING)continue;
                   if(ns.crime[c]==CRIME_HACK_INTEL)continue;
-                  if(ns.crime[c]==CRIME_ARMY_ARMORY)continue;
+                  if(ns.crime[c]==CRIME_ARMORY)continue;
                   if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
                   if(ns.crime[c]==CRIME_CORP_FILES)continue;
                   if(ns.crime[c]==CRIME_CARCHASE)continue;
@@ -566,13 +569,13 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      if(!liberalguardian)
                      {
                         strcat(story,"  According to sources that were at the scene, ");
-                        strcat(story,"the Liberal Crime Squad caused the power out that struck the state ");
-                        strcat(story,"yesterday by tampering with equipment on the site.");
+                        strcat(story,"the Liberal Crime Squad nearly caused a catastrophic meltdown of the nuclear ");
+                        strcat(story,"reactor.");
                         strcat(story,"&r");
                      }
                      else
                      {
-                        strcat(story,"  The Liberal Crime Squad caused the power outage that struck the state yesterday, ");
+                        strcat(story,"  The Liberal Crime Squad brought the reactor to the verge of a nuclear meltdown, ");
                         strcat(story,"demonstrating the extreme vulnerability and danger of Nuclear Power Plants. ");
                         strcat(story,"&r");
                      }
@@ -653,11 +656,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      strcat(story,"&r");
                   }
                }
-               if(crime[CRIME_ARMY_ARMORY])
+               if(crime[CRIME_ARMORY])
                {
                   if(!liberalguardian)
                   {
-                     strcat(story,"  According to a military spokesperson, ");
+                     strcat(story,"  According to sources, ");
                      strcat(story,"the Liberal Crime Squad attempted to break into the armory.");
                      strcat(story,"&r");
                   }
@@ -821,11 +824,26 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         if(!liberalguardian||ccs)
                         {
-                           strcat(story,"vandalism");
+                           strcat(story,"graffiti");
                         }
                         else
                         {
                            strcat(story,"marked the site for Liberation");
+                        }
+
+                        if(typesum>=3)strcat(story,", ");
+                        else if(typesum==2)strcat(story," and ");
+                        typesum--;
+                     }
+                     if(crime[CRIME_VANDALISM])
+                     {
+                        if(!liberalguardian||ccs)
+                        {
+                           strcat(story,"vandalism");
+                        }
+                        else
+                        {
+                           strcat(story,"defaced symbols of Conservatism");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -840,7 +858,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         }
                         else
                         {
-                           strcat(story,"infiltration of a conservative hot spot");
+                           strcat(story,"broke down doors");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -855,7 +873,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         }
                         else
                         {
-                           strcat(story,"evaded Conservative security measures");
+                           strcat(story,"picked locks");
                         }
 
                         if(typesum>=3)strcat(story,", ");
@@ -1632,6 +1650,7 @@ void majornewspaper(char &clearformess,char canseethings)
    }
 
    //DELETE STORIES THAT HAVE NO CONTENT
+   sitestory = 0;
    for(n=newsstory.size()-1;n>=0;n--)
    {
       if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&

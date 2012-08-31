@@ -224,7 +224,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_FIREFIGHTER:strcat(str,"Fire Fighter");break;
       case CREATURE_PRISONGUARD:strcat(str,"Prison Guard");break;
       case CREATURE_EDUCATOR:strcat(str,"Educator");break;
-      case CREATURE_MERC:strcat(str,"Mercenary");break;
+      case CREATURE_MERC:strcat(str,"Elite Security");break;
       case CREATURE_HICK:strcat(str,"Redneck");break;
       case CREATURE_SOLDIER:strcat(str,"Soldier");break;
       case CREATURE_VETERAN:strcat(str,"Veteran");break;

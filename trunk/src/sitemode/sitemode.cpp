@@ -748,13 +748,19 @@ void mode_site(void)
                   case SPECIAL_SWEATSHOP_EQUIPMENT:special_sweatshop_equipment();break;
                   case SPECIAL_POLLUTER_EQUIPMENT:special_polluter_equipment();break;
                   case SPECIAL_HOUSE_PHOTOS:special_house_photos();break;
-                  case SPECIAL_ARMYBASE_ARMORY:special_armybase_armory();break;
+                  case SPECIAL_ARMORY:special_armory();break;
                   case SPECIAL_CORPORATE_FILES:special_corporate_files();break;
                   case SPECIAL_RADIO_BROADCASTSTUDIO:special_radio_broadcaststudio();break;
                   case SPECIAL_NEWS_BROADCASTSTUDIO:special_news_broadcaststudio();break;
-                  case SPECIAL_APARTMENT_SIGN:special_readsign(SPECIAL_APARTMENT_SIGN);break;
+                  case SPECIAL_SIGN_ONE:special_readsign(SPECIAL_SIGN_ONE);break;
+                  case SPECIAL_SIGN_TWO:special_readsign(SPECIAL_SIGN_TWO);break;
+                  case SPECIAL_SIGN_THREE:special_readsign(SPECIAL_SIGN_THREE);break;
                   case SPECIAL_STAIRS_UP:locz++;break;
                   case SPECIAL_STAIRS_DOWN:locz--;break;
+                  case SPECIAL_DISPLAY_CASE:special_display_case();break;
+                  case SPECIAL_SECURITY_CHECKPOINT:special_security_checkpoint();break;
+                  case SPECIAL_SECURITY_METALDETECTORS:special_security_metaldetectors();break;
+                  case SPECIAL_SECURITY_SECONDVISIT:special_security_secondvisit();break;
                }
             }
             else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2))&&
@@ -1881,6 +1887,9 @@ void mode_site(void)
             long makespecial=-1;
             switch(levelmap[locx][locy][locz].special)
             {
+               case SPECIAL_SECURITY_CHECKPOINT:
+               case SPECIAL_SECURITY_METALDETECTORS:
+               case SPECIAL_SECURITY_SECONDVISIT:
                case SPECIAL_CLUB_BOUNCER:
                case SPECIAL_CLUB_BOUNCER_SECONDVISIT:
                case SPECIAL_APARTMENT_LANDLORD:
@@ -2588,6 +2597,15 @@ void mode_site(void)
 
                         prepareencounter(sitetype,0);
                      }
+                     break;
+                  case SPECIAL_SECURITY_CHECKPOINT:
+                     special_security_checkpoint();
+                     break;
+                  case SPECIAL_SECURITY_METALDETECTORS:
+                     special_security_metaldetectors();
+                     break;
+                  case SPECIAL_SECURITY_SECONDVISIT:
+                     special_security_secondvisit();
                      break;
                   case SPECIAL_CLUB_BOUNCER:
                      special_bouncer_assess_squad();

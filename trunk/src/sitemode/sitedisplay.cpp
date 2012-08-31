@@ -101,7 +101,7 @@ void printsitemap(int x,int y,int z)
    switch(levelmap[locx][locy][locz].special)
    {
       case SPECIAL_LAB_COSMETICS_CAGEDANIMALS:strcpy(str,"Caged Animals");break;
-      case SPECIAL_NUCLEAR_ONOFF:strcpy(str,"The On/Off Switch");break;
+      case SPECIAL_NUCLEAR_ONOFF:strcpy(str,"Reactor Control Room");break;
       case SPECIAL_LAB_GENETIC_CAGEDANIMALS:strcpy(str,"Caged \"Animals\"");break;
       case SPECIAL_POLICESTATION_LOCKUP:strcpy(str,"Police Detention Room");break;
       case SPECIAL_COURTHOUSE_LOCKUP:strcpy(str,"Court House Jail");break;
@@ -114,20 +114,22 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_SWEATSHOP_EQUIPMENT:strcpy(str,"Textile Equipment");break;
       case SPECIAL_POLLUTER_EQUIPMENT:strcpy(str,"Factory Equipment");break;
       case SPECIAL_HOUSE_PHOTOS:strcpy(str,"Safe");break;
-      case SPECIAL_ARMYBASE_ARMORY:strcpy(str,"Armory");break;
+      case SPECIAL_ARMORY:strcpy(str,"Armory");break;
       case SPECIAL_HOUSE_CEO:strcpy(str,"CEO's Study");break;
       case SPECIAL_CORPORATE_FILES:strcpy(str,"Safe");break;
       case SPECIAL_RADIO_BROADCASTSTUDIO:strcpy(str,"Radio Broadcast Room");break;
       case SPECIAL_NEWS_BROADCASTSTUDIO:strcpy(str,"News Broadcast Studio");break;
       case SPECIAL_APARTMENT_LANDLORD:strcpy(str,"Landlord's Office");break;
-      case SPECIAL_APARTMENT_SIGN:strcpy(str,"Sign");break;
+      case SPECIAL_SIGN_ONE:strcpy(str,"Sign");break;
+      case SPECIAL_SIGN_TWO:strcpy(str,"Sign");break;
+      case SPECIAL_SIGN_THREE:strcpy(str,"Sign");break;
+      case SPECIAL_DISPLAY_CASE:strcpy(str,"Display Case");break;
       case SPECIAL_STAIRS_UP:strcpy(str,"Stairs Up");break;
       case SPECIAL_STAIRS_DOWN:strcpy(str,"Stairs Down");break;
       case SPECIAL_RESTAURANT_TABLE:strcpy(str,"Table");break;
       case SPECIAL_CAFE_COMPUTER:strcpy(str,"Computer");break;
       case SPECIAL_PARK_BENCH:strcpy(str,"Bench");break;
-      case SPECIAL_CLUB_BOUNCER:strcpy(str,"");break;
-      case SPECIAL_CLUB_BOUNCER_SECONDVISIT:strcpy(str,"");break;
+      default:strcpy(str,"");break;
    }
    if(levelmap[locx][locy][locz].special!=-1)
    {
@@ -592,13 +594,15 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_SWEATSHOP_EQUIPMENT:addstr("EQUIP");break;
          case SPECIAL_POLLUTER_EQUIPMENT:addstr("EQUIP");break;
          case SPECIAL_HOUSE_PHOTOS:addstr("SAFE!");break;
-         case SPECIAL_ARMYBASE_ARMORY:addstr("ARMRY");break;
+         case SPECIAL_ARMORY:addstr("ARMRY");break;
          case SPECIAL_HOUSE_CEO:move(py,px+1);addstr("CEO");break;
          case SPECIAL_CORPORATE_FILES:addstr("SAFE!");break;
          case SPECIAL_RADIO_BROADCASTSTUDIO:move(py,px+1);addstr("MIC");break;
          case SPECIAL_NEWS_BROADCASTSTUDIO:addstr("STAGE");break;
          case SPECIAL_APARTMENT_LANDLORD:addstr("RENT?");break;
-         case SPECIAL_APARTMENT_SIGN:addstr("SIGN!");break;
+         case SPECIAL_SIGN_ONE:addstr("SIGN!");break;
+         case SPECIAL_SIGN_TWO:addstr("SIGN!");break;
+         case SPECIAL_SIGN_THREE:addstr("SIGN!");break;
          case SPECIAL_STAIRS_UP:move(py,px+1);addstr("UP");
                                 addch(CH_UPWARDS_ARROW);break;
          case SPECIAL_STAIRS_DOWN:move(py,px+1);addstr("DN");
@@ -606,6 +610,9 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_RESTAURANT_TABLE:addstr("TABLE");break;
          case SPECIAL_CAFE_COMPUTER:move(py,px+1);addstr("CPU");break;
          case SPECIAL_PARK_BENCH:addstr("BENCH");break;
+         case SPECIAL_SECURITY_METALDETECTORS:addstr("METAL");break;
+         case SPECIAL_SECURITY_CHECKPOINT:addstr("GUARD");break;
+         case SPECIAL_DISPLAY_CASE:addstr("CASE");break;
       }
    }
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)

@@ -1345,7 +1345,7 @@ char prison(Creature &g)
             int boss=getpoolcreature(g.hireid);
             if(boss!=-1)
             {
-               set_color(COLOR_RED,COLOR_BLACK,1);
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(12,1);
                addstr(pool[boss]->name);
                addstr(" has failed the Liberal Crime Squad.");

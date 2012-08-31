@@ -28,7 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
-
+#include "configfile.h"
 
 
 /* re-create site from seed before squad arrives */
@@ -72,93 +72,101 @@ void initsite(locationst &loc)
          }
       }
    }
-   if (oldMapMode==0) // Check to see if sitemaps got loaded. SAV
+
+   // Try to load from a map file
+   bool loaded = false;
+   switch(loc.type)
    {
-     switch(loc.type)
-     {
-     case SITE_RESIDENTIAL_TENEMENT:
-     case SITE_RESIDENTIAL_APARTMENT: 
-     case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-        build_site("RESIDENTIAL_APARTMENT");
-        break;
-     case SITE_INDUSTRY_WAREHOUSE:
-     case SITE_RESIDENTIAL_SHELTER:
-     case SITE_BUSINESS_CRACKHOUSE:
-        build_site("GENERIC_UNSECURE");
-        break;
-     case SITE_BUSINESS_BARANDGRILL:
-     case SITE_RESIDENTIAL_BOMBSHELTER:
-     case SITE_OUTDOOR_BUNKER:
-        build_site("GENERIC_LOBBY");
-        break;
-     case SITE_LABORATORY_COSMETICS:
-        build_site("LABORATORY_COSMETICS");
-        break;
-     case SITE_LABORATORY_GENETIC:
-        build_site("LABORATORY_GENETICS");
-        break;
-     case SITE_GOVERNMENT_POLICESTATION:
-        build_site("GOVERNMENT_POLICESTATION");
-        break;
-     case SITE_GOVERNMENT_COURTHOUSE:
-        build_site("GOVERNMENT_COURTHOUSE");
-        break;
-     case SITE_GOVERNMENT_PRISON:
-        build_site("GOVERNMENT_PRISON");
-        break;
-     case SITE_GOVERNMENT_INTELLIGENCEHQ:
-        build_site("GOVERNMENT_INTELLIGENCEHQ");
-        break;
-     case SITE_GOVERNMENT_ARMYBASE:
-        build_site("GOVERNMENT_ARMYBASE");
-        break;
-     case SITE_GOVERNMENT_FIRESTATION:
-        build_site("GENERIC_LOBBY");
-        break;
-     case SITE_INDUSTRY_SWEATSHOP:
-        build_site("INDUSTRY_SWEATSHOP");
-        break;
-     case SITE_INDUSTRY_POLLUTER:
-        build_site("INDUSTRY_POLLUTER");
-        break;
-     case SITE_INDUSTRY_NUCLEAR:
-        build_site("INDUSTRY_NUCLEAR");
-        break;
-     case SITE_CORPORATE_HEADQUARTERS:
-        build_site("CORPORATE_HEADQUARTERS");
-        break;
-     case SITE_CORPORATE_HOUSE:
-        build_site("CORPORATE_HOUSE");
-        break;
-     case SITE_MEDIA_AMRADIO:
-        build_site("MEDIA_AMRADIO");
-        break;
-     case SITE_MEDIA_CABLENEWS:
-        build_site("MEDIA_CABLENEWS");
-        break;
-     case SITE_BUSINESS_JUICEBAR:
-        build_site("BUSINESS_CAFE");
-        break;
-     case SITE_BUSINESS_INTERNETCAFE:
-        build_site("BUSINESS_INTERNETCAFE");
-        break;
-     case SITE_BUSINESS_CIGARBAR:
-        build_site("BUSINESS_RESTRICTEDCAFE");
-        break;
-     case SITE_BUSINESS_LATTESTAND:
-        build_site("OUTDOOR_LATTESTAND");
-        break;
-     case SITE_BUSINESS_VEGANCOOP:
-        build_site("GENERIC_ONEROOM");
-        break;
-     case SITE_OUTDOOR_PUBLICPARK:
-        build_site("OUTDOOR_PUBLICPARK");
-        break;
-     }
+   case SITE_INDUSTRY_NUCLEAR: loaded = readMap("NuclearPlant"); break;
+   default: break;
+   }
+
+   if(loaded) { }
+   else if (oldMapMode==false) // Try to load from the sitemaps
+   {
+      switch(loc.type)
+      {
+      case SITE_RESIDENTIAL_TENEMENT:
+      case SITE_RESIDENTIAL_APARTMENT: 
+      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+         build_site("RESIDENTIAL_APARTMENT");
+         break;
+      case SITE_INDUSTRY_WAREHOUSE:
+      case SITE_RESIDENTIAL_SHELTER:
+      case SITE_BUSINESS_CRACKHOUSE:
+         build_site("GENERIC_UNSECURE");
+         break;
+      case SITE_BUSINESS_BARANDGRILL:
+      case SITE_RESIDENTIAL_BOMBSHELTER:
+      case SITE_OUTDOOR_BUNKER:
+         build_site("GENERIC_LOBBY");
+         break;
+      case SITE_LABORATORY_COSMETICS:
+         build_site("LABORATORY_COSMETICS");
+         break;
+      case SITE_LABORATORY_GENETIC:
+         build_site("LABORATORY_GENETICS");
+         break;
+      case SITE_GOVERNMENT_POLICESTATION:
+         build_site("GOVERNMENT_POLICESTATION");
+         break;
+      case SITE_GOVERNMENT_COURTHOUSE:
+         build_site("GOVERNMENT_COURTHOUSE");
+         break;
+      case SITE_GOVERNMENT_PRISON:
+         build_site("GOVERNMENT_PRISON");
+         break;
+      case SITE_GOVERNMENT_INTELLIGENCEHQ:
+         build_site("GOVERNMENT_INTELLIGENCEHQ");
+         break;
+      case SITE_GOVERNMENT_ARMYBASE:
+         build_site("GOVERNMENT_ARMYBASE");
+         break;
+      case SITE_GOVERNMENT_FIRESTATION:
+         build_site("GENERIC_LOBBY");
+         break;
+      case SITE_INDUSTRY_SWEATSHOP:
+         build_site("INDUSTRY_SWEATSHOP");
+         break;
+      case SITE_INDUSTRY_POLLUTER:
+         build_site("INDUSTRY_POLLUTER");
+         break;
+      case SITE_INDUSTRY_NUCLEAR:
+         build_site("INDUSTRY_NUCLEAR");
+         break;
+      case SITE_CORPORATE_HEADQUARTERS:
+         build_site("CORPORATE_HEADQUARTERS");
+         break;
+      case SITE_CORPORATE_HOUSE:
+         build_site("CORPORATE_HOUSE");
+         break;
+      case SITE_MEDIA_AMRADIO:
+         build_site("MEDIA_AMRADIO");
+         break;
+      case SITE_MEDIA_CABLENEWS:
+         build_site("MEDIA_CABLENEWS");
+         break;
+      case SITE_BUSINESS_JUICEBAR:
+         build_site("BUSINESS_CAFE");
+         break;
+      case SITE_BUSINESS_INTERNETCAFE:
+         build_site("BUSINESS_INTERNETCAFE");
+         break;
+      case SITE_BUSINESS_CIGARBAR:
+         build_site("BUSINESS_RESTRICTEDCAFE");
+         break;
+      case SITE_BUSINESS_LATTESTAND:
+         build_site("OUTDOOR_LATTESTAND");
+         break;
+      case SITE_BUSINESS_VEGANCOOP:
+         build_site("GENERIC_ONEROOM");
+         break;
+      case SITE_OUTDOOR_PUBLICPARK:
+         build_site("OUTDOOR_PUBLICPARK");
+         break;
+      }
    } else {
-//No sitemaps? No problem! Revert to old build code. SAV
-//FIXME: For Linux, it can't find sitemaps.txt, and makes it impossible to load
-//        a saved game. -- LK
+      // Last resort -- generate random map
      levelmap[MAPX>>1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][0][0].flag=SITEBLOCK_EXIT;
      levelmap[(MAPX>>1)+1][1][0].flag=SITEBLOCK_EXIT;
@@ -173,7 +181,7 @@ void initsite(locationst &loc)
         loc.type==SITE_RESIDENTIAL_APARTMENT||
         loc.type==SITE_RESIDENTIAL_TENEMENT)
      {
-        levelmap[MAPX>>1][1][0].special=SPECIAL_APARTMENT_SIGN;
+        levelmap[MAPX>>1][1][0].special=SPECIAL_SIGN_ONE;
         short height;
         int floors=LCSrandom(6)+1;
         int swap;
@@ -392,7 +400,7 @@ void initsite(locationst &loc)
       }
    }
 
-   if (oldMapMode!=0) // SAV - Did I mention we have some more things to do?
+   if (oldMapMode) // SAV - Did I mention we have some more things to do?
    {
      //ADD RESTRICTIONS
      bool restricted=0;
@@ -447,9 +455,9 @@ void initsite(locationst &loc)
 //seem to be weird things happening with loot in CCS bases - would the CCS call the policeon you for stealing?
 //and shouldn't you be able to loot everything from there anyway once you've won?
 //removing the loot.
-					case SITE_BUSINESS_BARANDGRILL:
-					case SITE_OUTDOOR_BUNKER:
-					case SITE_RESIDENTIAL_BOMBSHELTER:
+                  case SITE_BUSINESS_BARANDGRILL:
+                  case SITE_OUTDOOR_BUNKER:
+                  case SITE_RESIDENTIAL_BOMBSHELTER:
                        break;
                     default:
                        levelmap[x][y][z].flag|=SITEBLOCK_LOOT;
@@ -542,7 +550,7 @@ void initsite(locationst &loc)
            levelmap[freex][freey][freez].special=SPECIAL_HOUSE_PHOTOS;
            break;
         case SITE_GOVERNMENT_ARMYBASE:
-           levelmap[freex][freey][freez].special=SPECIAL_ARMYBASE_ARMORY;
+           levelmap[freex][freey][freez].special=SPECIAL_ARMORY;
            break;
         case SITE_MEDIA_AMRADIO:
            levelmap[freex][freey][freez].special=SPECIAL_RADIO_BROADCASTSTUDIO;
@@ -618,10 +626,10 @@ void initsite(locationst &loc)
                   (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
                {
                   //Unrestricted on two opposite sides?
-                  if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED))||
-                     (!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED)))
+                  if(((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK)) &&
+                      (!(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))) ||
+                     ((!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))&&
+                      (!(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))))
                   {
                      //Unlock and unrestrict
                      levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
@@ -1353,13 +1361,13 @@ configSiteSpecial::configSiteSpecial(const std::string& value)
    else if(value == "POLLUTER_EQUIPMENT")special = SPECIAL_POLLUTER_EQUIPMENT;
    else if(value == "NUCLEAR_ONOFF")special = SPECIAL_NUCLEAR_ONOFF;
    else if(value == "HOUSE_PHOTOS")special = SPECIAL_HOUSE_PHOTOS;
-   else if(value == "ARMYBASE_ARMORY")special = SPECIAL_ARMYBASE_ARMORY;
+   else if(value == "ARMYBASE_ARMORY")special = SPECIAL_ARMORY;
    else if(value == "HOUSE_CEO")special = SPECIAL_HOUSE_CEO;
    else if(value == "CORPORATE_FILES")special = SPECIAL_CORPORATE_FILES;
    else if(value == "RADIO_BROADCASTSTUDIO")special = SPECIAL_RADIO_BROADCASTSTUDIO;
    else if(value == "NEWS_BROADCASTSTUDIO")special = SPECIAL_NEWS_BROADCASTSTUDIO;
    else if(value == "APARTMENT_LANDLORD")special = SPECIAL_APARTMENT_LANDLORD;
-   else if(value == "APARTMENT_SIGN")special = SPECIAL_APARTMENT_SIGN;
+   else if(value == "APARTMENT_SIGN")special = SPECIAL_SIGN_ONE;
    else if(value == "RESTAURANT_TABLE")special = SPECIAL_RESTAURANT_TABLE;
    else if(value == "CAFE_COMPUTER")special = SPECIAL_CAFE_COMPUTER;
    else if(value == "PARK_BENCH")special = SPECIAL_PARK_BENCH;
@@ -1425,13 +1433,13 @@ configSiteUnique::configSiteUnique(const std::string& value)
    else if(value == "POLLUTER_EQUIPMENT")unique = SPECIAL_POLLUTER_EQUIPMENT;
    else if(value == "NUCLEAR_ONOFF")unique = SPECIAL_NUCLEAR_ONOFF;
    else if(value == "HOUSE_PHOTOS")unique = SPECIAL_HOUSE_PHOTOS;
-   else if(value == "ARMYBASE_ARMORY")unique = SPECIAL_ARMYBASE_ARMORY;
+   else if(value == "ARMYBASE_ARMORY")unique = SPECIAL_ARMORY;
    else if(value == "HOUSE_CEO")unique = SPECIAL_HOUSE_CEO;
    else if(value == "CORPORATE_FILES")unique = SPECIAL_CORPORATE_FILES;
    else if(value == "RADIO_BROADCASTSTUDIO")unique = SPECIAL_RADIO_BROADCASTSTUDIO;
    else if(value == "NEWS_BROADCASTSTUDIO")unique = SPECIAL_NEWS_BROADCASTSTUDIO;
    else if(value == "APARTMENT_LANDLORD")unique = SPECIAL_APARTMENT_LANDLORD;
-   else if(value == "APARTMENT_SIGN")unique = SPECIAL_APARTMENT_SIGN;
+   else if(value == "APARTMENT_SIGN")unique = SPECIAL_SIGN_ONE;
    else if(value == "RESTAURANT_TABLE")unique = SPECIAL_RESTAURANT_TABLE;
    else if(value == "CAFE_COMPUTER")unique = SPECIAL_CAFE_COMPUTER;
    else if(value == "PARK_BENCH")unique = SPECIAL_PARK_BENCH;

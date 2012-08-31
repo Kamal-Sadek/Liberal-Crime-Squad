@@ -414,7 +414,7 @@
     </armortype>
 
     <armortype idname="ARMOR_CIVILLIANARMOR">
-        <make_difficulty>11</make_difficulty>
+        <make_difficulty>8</make_difficulty>
         <make_price>500</make_price>
         <armor>
             <body>5</body>
@@ -434,6 +434,8 @@
     </armortype>
 
     <armortype idname="ARMOR_POLICEARMOR">
+        <make_difficulty>11</make_difficulty>
+        <make_price>1000</make_price>
         <armor>
             <body>7</body>
         </armor>
@@ -460,6 +462,8 @@
     </armortype>
 
     <armortype idname="ARMOR_SWATARMOR">
+        <make_difficulty>14</make_difficulty>
+        <make_price>2000</make_price>
         <armor>
             <body>7</body>
             <head>5</head>
@@ -481,6 +485,8 @@
     </armortype>
 
     <armortype idname="ARMOR_ARMYARMOR">
+        <make_difficulty>14</make_difficulty>
+        <make_price>2000</make_price>
         <armor>
             <body>8</body>
             <head>6</head>
@@ -506,6 +512,8 @@
     </armortype>
 
     <armortype idname="ARMOR_HEAVYARMOR">
+        <make_difficulty>17</make_difficulty>
+        <make_price>5000</make_price>
         <armor>
             <body>10</body>
             <head>8</head>
@@ -514,7 +522,7 @@
         <body_covering>
             <head>true</head>
         </body_covering>
-        <name>Heavy Body Armor</name>
+        <name>Heavy Ceramic Armor</name>
         <shortname>HeavyBodyArmor</shortname>
         <fencevalue>400</fencevalue>
         <interrogation>
@@ -535,7 +543,7 @@
         <body_covering>
             <head>true</head>
         </body_covering>
-        <name>Bunker Gear</name>
+        <name>Anti-Fire Bunker Gear</name>
         <shortname>Bunker Gear</shortname>
         <fencevalue>75</fencevalue>
         <professionalism>2</professionalism>
@@ -594,6 +602,8 @@
         </interrogation>
         <professionalism>1</professionalism>
         <stealth_value>1</stealth_value>
+        <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
+        <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
     </armortype>
@@ -640,13 +650,14 @@
     </armortype>
 
     <armortype idname="ARMOR_SEALSUIT">
-        <make_difficulty>0</make_difficulty>
+        <make_difficulty>16</make_difficulty>
+        <make_price>3000</make_price>
         <armor>
-            <body>6</body>
-            <head>4</head>
+            <body>8</body>
+            <head>6</head>
         </armor>
-        <name>SEAL suit</name>
-        <shortname>SEAL suit</shortname>
+        <name>SEAL Stealth Armor</name>
+        <shortname>SEAL Suit</shortname>
         <fencevalue>300</fencevalue>
         <body_covering>
             <head>true</head>
@@ -660,7 +671,9 @@
         </interrogation>
         <professionalism>1</professionalism>
         <stealth_value>3</stealth_value>
+        <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
+        <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
     </armortype>
 

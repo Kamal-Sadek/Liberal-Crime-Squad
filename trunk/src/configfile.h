@@ -62,10 +62,10 @@
 //
 // Long-Term Roadmap to Configuration File Bliss:
 //
-// [ ] Sitemaps configuration
+// [x] Sitemaps configuration
 // [ ] Site data configuration (prereq for National LCS)
-// [ ] Weapons configuration
-// [ ] Clothing configuration
+// [x] Weapons configuration
+// [x] Clothing configuration
 // [ ] Creature type configuration
 // [ ] Organizations configuration? (are we still doing organizations?)
 // ... and more?
@@ -91,8 +91,11 @@ private:
 // Returns 0 for read successful, returns -1 if failed read
 int readConfigFile(const char* filename);
 // readLine reads a line from the file, parses it
-int readLine(std::fstream& file, std::string& command, std::string& value);
+int readLine(std::ifstream& file, std::string& command, std::string& value);
 // Constructs the new object, returns a pointer to it
 configurable* createObject(const std::string& objectType);
+
+// Reads in an entire map; returns true if and only if the read was successful
+bool readMap(const char* filename);
 
 #endif
