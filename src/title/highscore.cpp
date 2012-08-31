@@ -28,6 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
+#include "lcsio.h"
 
 /* displays the high score board */
 void viewhighscores(void)

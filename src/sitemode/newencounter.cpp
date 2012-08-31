@@ -1108,8 +1108,7 @@ char addsiegeencounter(char type)
                      }
                      else
                      {
-                        if(LCSrandom(5)) makecreature(encounter[e],CREATURE_SOLDIER);
-                        else if (LCSrandom(5)) makecreature(encounter[e], CREATURE_MILITARYPOLICE);
+                        if (location[cursite]->siege.escalationstate<3) makecreature(encounter[e],CREATURE_SOLDIER);
                         else makecreature(encounter[e], CREATURE_SEAL);
                      }
                      break;

@@ -305,12 +305,19 @@ void special_bouncer_assess_squad()
    }
    else encounter[0].exists=0;
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   if(rejected<NOT_REJECTED)
+   for(int dx=-1; dx<=1; dx++)
+   for(int dy=-1; dy<=1; dy++)
    {
-      levelmap[locx][locy+1][locz].flag |= SITEBLOCK_LOCKED;
-      levelmap[locx][locy+1][locz].flag |= SITEBLOCK_CLOCK;
+      if(levelmap[locx+dx][locy+dy][locz].flag & SITEBLOCK_DOOR)
+      {
+         if(rejected<NOT_REJECTED)
+         {
+            levelmap[locx+dx][locy+dy][locz].flag |= SITEBLOCK_LOCKED;
+            levelmap[locx+dx][locy+dy][locz].flag |= SITEBLOCK_CLOCK;
+         }
+         else levelmap[locx+dx][locy+dy][locz].flag &= ~SITEBLOCK_DOOR;
+      }
    }
-   else levelmap[locx][locy+1][locz].flag &= ~SITEBLOCK_DOOR;
    encounter[0].cantbluff=1;
 
    
@@ -369,10 +376,51 @@ void special_readsign(int sign)
 {
    clearmessagearea();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(16,1);
-   addstr("The landlord's office is the first door");
-   move(17,1);
-   addstr("on the left.");
+
+   switch(sign)
+   {
+   case SPECIAL_SIGN_ONE:
+      switch(location[cursite]->type)
+      {
+      default:
+         move(16,1);
+         addstr("\"The best way not to fail is to succeed.\"");
+         break;
+      case SITE_INDUSTRY_NUCLEAR:
+         move(16,1);
+         addstr("Welcome to the NPP Nuclear Plant. Please enjoy");
+         move(17,1);
+         addstr("the museum displays in the gift shop.");
+         break;
+      case SITE_RESIDENTIAL_TENEMENT:
+      case SITE_RESIDENTIAL_APARTMENT:
+      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+         move(16,1);
+         addstr("The landlord's office is the first door");
+         move(17,1);
+         addstr("on the left.");
+         break;
+      }
+      break;
+   case SPECIAL_SIGN_TWO:
+      switch(location[cursite]->type)
+      {
+      default:
+         move(16,1);
+         addstr("\"Great work is done by people who do great work.\"");
+         break;
+      }
+      break;
+   case SPECIAL_SIGN_THREE:
+      switch(location[cursite]->type)
+      {
+      default:
+         move(16,1);
+         addstr("\"Avoid problems by not having them.\"");
+         break;
+      }
+      break;
+   }
    getch();
 }
 
@@ -397,7 +445,7 @@ void special_nuclear_onoff(void)
          move(16,1);
          addstr("You see the nuclear power plant control room.");
          move(17,1);
-         addstr("Attempt to shut down the reactor? (Yes or No)");
+         addstr("Mess with the reactor settings? (Yes or No)");
       }
       refresh();
 
@@ -452,21 +500,23 @@ void special_nuclear_onoff(void)
                getch();
 
                juiceparty(40,1000); // Instant juice!
-			   sitecrime+=25; //Shutdown Site
+			      sitecrime+=25; //Shutdown Site
                
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
 
             }
             else
             {
+               move(16,1);
+               addstr("A deafening alarm sounds!");
                move(17,1);
-               addstr("The lights dim...  power must be out state-wide.");
+               addstr("The reactor is overheating!");
                change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
                refresh();
                getch();
 
                juiceparty(100,1000); // Instant juice!
-			   sitecrime+=25; //Shutdown Site
+			      sitecrime+=50; //Shutdown Site
                
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
             }
@@ -995,7 +1045,7 @@ void special_intel_supercomputer(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr("You've found the Intelligence Super Computer.");
+      addstr("You've found the Intelligence Supercomputer.");
       move(17,1);
       addstr("Hack it? (Yes or No)");
 
@@ -1261,9 +1311,7 @@ void special_house_photos(void)
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,1);
-               addstr("Hmm... there is also some very expensive-looking");
-               move(17,1);
-               addstr("jewelery here.  The squad will take that.");
+               addstr("The squad Liberates some expensive jewelery.");
 
                refresh();
                getch();
@@ -1380,7 +1428,7 @@ void special_house_photos(void)
 }
 
 
-void special_armybase_armory(void)
+void special_armory(void)
 {
    do
    {
@@ -1411,7 +1459,7 @@ void special_armybase_armory(void)
          bool empty=true;
          Item *it;
          
-         if(m249==false)
+         if(m249==false && location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
          {
             clearmessagearea();
             
@@ -1507,7 +1555,11 @@ void special_armybase_armory(void)
 
             do
             {
-               Armor* de=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
+               Armor* de;
+               if(location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
+                  de=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
+               else
+                  de=new Armor(*armortype[getarmortype("ARMOR_CIVILLIANARMOR")]);
                activesquad->loot.push_back(de);
                num++;
             }
@@ -1534,7 +1586,10 @@ void special_armybase_armory(void)
             {
                if(!encounter[e].exists)
                {
-                  makecreature(encounter[e],CREATURE_SOLDIER);
+                  if(location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
+                     makecreature(encounter[e],CREATURE_SOLDIER);
+                  else
+                     makecreature(encounter[e],CREATURE_MERC);
                   numleft--;
                }
                if(numleft==0)break;
@@ -1544,7 +1599,7 @@ void special_armybase_armory(void)
          {
             juiceparty(50,1000);
             sitecrime+=40;
-            sitestory->crime.push_back(CRIME_ARMY_ARMORY);
+            sitestory->crime.push_back(CRIME_ARMORY);
             criminalizeparty(LAWFLAG_THEFT);
             criminalizeparty(LAWFLAG_TREASON);
 
@@ -1556,7 +1611,7 @@ void special_armybase_armory(void)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
-            addstr("Time to put this gear to use!");
+            addstr("Guards are everywhere!");
 
             refresh();
             getch();
@@ -1566,7 +1621,10 @@ void special_armybase_armory(void)
             {
                if(!encounter[e].exists)
                {
-                  makecreature(encounter[e],CREATURE_SOLDIER);
+                  if(location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
+                     makecreature(encounter[e],CREATURE_SOLDIER);
+                  else
+                     makecreature(encounter[e],CREATURE_MERC);
                   numleft--;
                }
                if(numleft==0)break;
@@ -1735,4 +1793,297 @@ void special_news_broadcaststudio(void)
       else if(c=='n')return;
 
    }while(1);
+}
+
+
+void special_display_case(void)
+{
+   do
+   {
+      clearmessagearea();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("You see a display case.");
+      move(17,1);
+      addstr("Smash it? (Yes or No)");
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      if(c=='y')
+      {
+         int time=20+LCSrandom(10);
+         if(time<1)time=1;
+         if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+         
+         alienationcheck(0);
+         noticecheck(-1,DIFFICULTY_HEROIC);
+         levelmap[locx][locy][locz].special=-1;
+         sitecrime++;
+         juiceparty(5,100);
+         sitestory->crime.push_back(CRIME_VANDALISM);
+
+         criminalizeparty(LAWFLAG_VANDALISM);
+
+         return;
+      }
+      else if(c=='n')return;
+
+   }while(1);
+}
+
+void spawn_security(void)
+{
+   // add a bouncer if there isn't one in the first slot
+   if(!sitealarm && !encounter[0].exists)
+   {
+      switch(location[cursite]->type)
+      {
+      default:
+      case SITE_CORPORATE_HEADQUARTERS:
+      case SITE_CORPORATE_HOUSE:
+      case SITE_BUSINESS_ARMSDEALER:
+      case SITE_INDUSTRY_NUCLEAR:
+         makecreature(encounter[0], CREATURE_MERC);
+         makecreature(encounter[1], CREATURE_MERC);
+         break;
+      case SITE_GOVERNMENT_POLICESTATION:
+      case SITE_GOVERNMENT_COURTHOUSE:
+      case SITE_OUTDOOR_PUBLICPARK:
+         makecreature(encounter[0], CREATURE_COP);
+         makecreature(encounter[1], CREATURE_COP);
+         break;
+      case SITE_GOVERNMENT_PRISON:
+         makecreature(encounter[0], CREATURE_PRISONGUARD);
+         makecreature(encounter[1], CREATURE_PRISONGUARD);
+         makecreature(encounter[2], CREATURE_GUARDDOG);
+         break;
+      case SITE_GOVERNMENT_INTELLIGENCEHQ:
+         makecreature(encounter[0], CREATURE_AGENT);
+         makecreature(encounter[1], CREATURE_AGENT);
+         makecreature(encounter[2], CREATURE_GUARDDOG);
+         break;
+      case SITE_GOVERNMENT_ARMYBASE:
+         makecreature(encounter[0], CREATURE_MILITARYPOLICE);
+         makecreature(encounter[1], CREATURE_MILITARYPOLICE);
+         break;
+      case SITE_BUSINESS_BARANDGRILL:
+      case SITE_RESIDENTIAL_BOMBSHELTER:
+      case SITE_OUTDOOR_BUNKER:
+         if(location[cursite]->renting==RENTING_CCS)
+         {
+            makecreature(encounter[0],CREATURE_CCS_VIGILANTE);
+            makecreature(encounter[1],CREATURE_CCS_VIGILANTE);
+         }
+      }
+   }
+}
+
+void special_security(bool metaldetect)
+{
+   bool autoadmit=0;
+   char sleepername[80];
+   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+
+   spawn_security();
+
+   for(int p=0;p<pool.size();p++)
+   {
+      if(pool[p]->base==cursite)
+      {
+         autoadmit=1;
+         strcpy(sleepername,pool[p]->name);
+         strcpy(encounter[0].name,sleepername);
+         encounter[0].align=1;
+         break;
+      }
+   }
+   //clearmessagearea();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(16,1);
+   if(sitealarm)
+   {
+      addstr("Looks like security is in disarray.");
+      levelmap[locx][locy][locz].special=SPECIAL_NONE;
+   }
+   else if(autoadmit)
+   {
+      addstr("The squad flashes ID badges.");
+      levelmap[locx][locy][locz].special=SPECIAL_SECURITY_SECONDVISIT;
+   }
+   else
+   {
+      if(metaldetect) addstr("The squad steps into a metal detector.");
+      else addstr("This door is guarded.");
+      levelmap[locx][locy][locz].special=SPECIAL_SECURITY_SECONDVISIT;
+   }
+   printencounter();
+   refresh();
+   getch();
+
+   if(sitealarm) return;
+
+   char rejected=NOT_REJECTED;
+   
+   // Size up the squad for entry
+   for(int s=0;s<6;s++)
+   {
+      if(activesquad->squad[s])
+      {
+         // Wrong clothes? Gone
+         if(activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss!=ANIMALGLOSS_ANIMAL)
+            if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
+         if(!autoadmit && !hasdisguise(*activesquad->squad[s]))
+            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+         // Busted, cheap, bloody clothes? Gone
+         if(!autoadmit && activesquad->squad[s]->get_armor().is_bloody())
+            if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
+         if(!autoadmit && activesquad->squad[s]->get_armor().is_damaged())
+            if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
+         if(!autoadmit && activesquad->squad[s]->get_armor().get_quality()!=1)
+            if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
+         // Suspicious weapons? Gone
+         if(!autoadmit && weaponcheck(*activesquad->squad[s])>0, metaldetect)
+            if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
+         // Fail a tough disguise check? Gone
+         if(!autoadmit && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
+            if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
+         // Underage? Gone
+         if(!autoadmit && activesquad->squad[s]->age<18)
+            if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
+      }
+   }
+   move(17,1);
+   switch(rejected)
+   {
+   case REJECTED_NUDE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      if(autoadmit) addstr("\"Jesus! Put some clothes on!\"");
+      else switch(LCSrandom(4))
+      {
+      case 0:addstr("\"Get out of here you nudist!!\"");break;
+      case 1:addstr("\"Back off, creep!\"");break;
+      case 2:addstr("\"Jesus!! Somebody call the cops!\"");break;
+	   case 3:addstr("\"Are you sleepwalking?!\"");break;
+      }
+      break;
+   case REJECTED_UNDERAGE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(4))
+      {
+      case 0:addstr("\"No admittance, youngster.\"");break;
+      case 1:addstr("\"You're too young to work here.\"");break;
+      case 2:addstr("\"Go play someplace else.\"");break;
+      case 3:addstr("\"Where's your mother?\"");break;
+      }
+      break;
+   case REJECTED_DRESSCODE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(1))
+      {
+      case 0:addstr("\"Employees only.\"");break;
+      }
+      break;
+   case REJECTED_SMELLFUNNY:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(4))
+      {
+      case 0:addstr("\"You don't work here, do you?\"");break;
+      case 1:addstr("\"Hmm... can I see your badge?\"");break;
+      case 2:addstr("\"There's just something off about you.\"");break;
+      case 3:addstr("\"You must be new. You'll need your badge.\"");break;
+      }
+      break;
+   case REJECTED_BLOODYCLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+      case 1:addstr("\"Are you hurt?! The aid station is the other way!\"");break;
+      case 2:addstr("\"Your clothes, that's blood!\"");break;
+      case 3:addstr("\"Blood?! That's more than a little suspicious...\"");break;
+      case 4:addstr("\"Did you just butcher a cat?!\"");break;
+      case 5:addstr("\"Blood everywhere...?\"");break;
+      }
+      break;
+   case REJECTED_DAMAGEDCLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(2))
+      {
+      case 0:addstr("\"Good God! What is wrong with your clothes?\"");break;
+      case 1:addstr("\"Is that a damaged halloween costume?\"");break;
+      }
+      break;
+   case REJECTED_SECONDRATECLOTHES:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      switch(LCSrandom(2))
+      {
+      case 0:addstr("\"That looks like you sewed it yourself.\"");break;
+      case 1:addstr("\"That's a poor excuse for a uniform. Who are you?\"");break;
+      }
+      break;
+   case REJECTED_WEAPONS:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      if(metaldetect)
+      {
+         addstr("-BEEEP- -BEEEP- -BEEEP-");
+         sitealarm=1;
+      }
+      else switch(LCSrandom(5))
+      {
+      case 0:addstr("\"Put that away!\"");break;
+      case 1:addstr("\"Hey, back off!\"");break;
+      case 2:addstr("\"Don't try anything!\"");break;
+      case 3:addstr("\"Are you here to make trouble?\"");break;
+      case 4:addstr("\"Stay back!\"");break;
+      }
+      break;
+   case NOT_REJECTED:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      
+      switch(LCSrandom(4))
+      {
+      case 0:addstr("\"Move along.\"");break;
+      case 1:addstr("\"Have a nice day.\"");break;
+      case 2:addstr("\"Quiet day, today.\"");break;
+      case 3:addstr("\"Go on in.\"");break;
+      }
+      break;
+   }
+   refresh();
+   getch();
+
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   for(int dx=-1; dx<=1; dx++)
+   for(int dy=-1; dy<=1; dy++)
+   {
+      if(levelmap[locx+dx][locy+dy][locz].flag & SITEBLOCK_DOOR)
+      {
+         if(rejected<NOT_REJECTED)
+         {
+            levelmap[locx+dx][locy+dy][locz].flag |= SITEBLOCK_LOCKED;
+            levelmap[locx+dx][locy+dy][locz].flag |= SITEBLOCK_CLOCK;
+         }
+         else levelmap[locx+dx][locy+dy][locz].flag &= ~SITEBLOCK_DOOR;
+      }
+   }
+   encounter[0].cantbluff=1;
+}
+
+void special_security_checkpoint(void)
+{
+   special_security(false);
+}
+
+void special_security_metaldetectors(void)
+{
+   special_security(true);
+}
+
+void special_security_secondvisit(void)
+{
+   spawn_security();
 }

@@ -1358,8 +1358,8 @@ void select_makeclothing(Creature *cr)
          continue;
       
       difficulty = armor_makedifficulty(*armortype[a],cr);
-      if(difficulty>cr->get_skill(SKILL_TAILORING)*2+5)
-         continue;
+      //if(difficulty>cr->get_skill(SKILL_TAILORING)*2+5)
+      //   continue;
       armortypei.push_back(a);
    }
 

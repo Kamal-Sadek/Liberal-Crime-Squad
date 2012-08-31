@@ -28,7 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
-
+#include "lcsio.h"
 
 /* saves the game to save.dat */
 void save(void)

@@ -28,6 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //#include <includes.h>
 #include <externs.h>
+#include "compat.h"
 
 /* politics - calculate presidential approval */
 int presidentapproval()
