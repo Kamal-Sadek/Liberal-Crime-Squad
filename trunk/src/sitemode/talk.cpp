@@ -758,7 +758,7 @@ char talk(Creature &a,int t)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(10,1);
-      addstr(pool[bestp]->name);
+      addstr(activesquad->squad[bestp]->name);
       addstr(" says, ");
       move(11,1);
       set_color(COLOR_GREEN,COLOR_BLACK,1);

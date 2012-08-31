@@ -971,6 +971,8 @@ void siegeturn(char clearformess)
                   vehicle.erase(vehicle.begin() + v);
                }
             }
+            
+            location[l]->siege.siege=0;
          }
 
          if(!location[l]->siege.underattack)
@@ -1628,7 +1630,6 @@ void giveup(void)
       refresh();
       getch();
 
-      location[loc]->siege.siege=0;
       if(location[loc]->siege.siegetype==SIEGE_FIREMEN)
          offended_firemen=0; // Firemen do not hold grudges
 
