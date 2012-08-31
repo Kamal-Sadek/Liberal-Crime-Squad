@@ -7,7 +7,7 @@
 extern char artdir[MAX_PATH_SIZE];
 
 
-std::ifstream* openFile(const char* filename, int format)
+std::ifstream* openFile(const char* filename, std::ios_base::openmode format)
 {
    std::ifstream *file = new std::ifstream();
    addstr("Attempting to open filename: ");
