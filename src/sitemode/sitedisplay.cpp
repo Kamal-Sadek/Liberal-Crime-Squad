@@ -110,7 +110,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_PRISON_CONTROL_LOW:
       case SPECIAL_PRISON_CONTROL_MEDIUM:
       case SPECIAL_PRISON_CONTROL_HIGH:strcpy(str,"Prison Control Room");break;
-      case SPECIAL_INTEL_SUPERCOMPUTER:strcpy(str,"Super-computer");break;
+      case SPECIAL_INTEL_SUPERCOMPUTER:strcpy(str,"Supercomputer");break;
       case SPECIAL_SWEATSHOP_EQUIPMENT:strcpy(str,"Textile Equipment");break;
       case SPECIAL_POLLUTER_EQUIPMENT:strcpy(str,"Factory Equipment");break;
       case SPECIAL_HOUSE_PHOTOS:strcpy(str,"Safe");break;
@@ -129,6 +129,9 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_RESTAURANT_TABLE:strcpy(str,"Table");break;
       case SPECIAL_CAFE_COMPUTER:strcpy(str,"Computer");break;
       case SPECIAL_PARK_BENCH:strcpy(str,"Bench");break;
+      case SPECIAL_BANK_VAULT:strcpy(str,"Bank Vault");break;
+      case SPECIAL_BANK_TELLER:strcpy(str,"Bank Teller");break;
+      case SPECIAL_BANK_MONEY:strcpy(str,"Oh Wow So Much Money");break;
       default:strcpy(str,"");break;
    }
    if(levelmap[locx][locy][locz].special!=-1)
@@ -202,9 +205,7 @@ void printwall(int x, int y, int z, int px, int py)
    char graffiti[4][4] = {"   ","   ","   ","   "};
    char graffiticolor[4] = {COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK};
 
-   char type = 0; // Are we drawing a wall or a door?
-   if(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)     { type = SITEBLOCK_BLOCK; }
-   else if(levelmap[x][y][z].flag & SITEBLOCK_DOOR) { type = levelmap[x][y][z].flag; } // Retain locked/jammed data
+   int type = type = levelmap[x][y][z].flag; // What are we drawing here? Wall/door? Locked/jammed? Metal/normal?
 
    // Now follows a series of checks to determine the faces of the wall that should be
    // displayed. Note the order of these checks is important:
@@ -251,7 +252,7 @@ void printwall(int x, int y, int z, int px, int py)
       if(levelmap[x+1][y][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_RIGHT] = true; }
       if(levelmap[x][y-1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_UP] = true; }
       if(levelmap[x][y+1][z].flag & SITEBLOCK_BLOODY2) { bloody[WALL_DOWN] = true; }
-//TODO: Add Stalinist Graffiti, SCS
+
       // Check for other graffiti
       if(levelmap[x-1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_LEFT],"GNG"); graffiticolor[WALL_LEFT] = COLOR_BLACK; }
       if(levelmap[x+1][y][z].flag & SITEBLOCK_GRAFFITI_OTHER) { strcpy(graffiti[WALL_RIGHT],"GNG"); graffiticolor[WALL_RIGHT] = COLOR_BLACK; }
@@ -279,8 +280,10 @@ void printwall(int x, int y, int z, int px, int py)
       // Draw the wall/door
       if(visible[dir])
       {
-         if(type == SITEBLOCK_BLOCK)
+         if(type & SITEBLOCK_BLOCK)
          {
+            bool blink = type & SITEBLOCK_METAL;
+
             // Position cursor at the start of where the graffiti tag would go
             if(dir==WALL_UP) { x++; }
             if(dir==WALL_DOWN) { y+=2; x++; }
@@ -291,9 +294,9 @@ void printwall(int x, int y, int z, int px, int py)
             if(bloody[dir])
                set_color(COLOR_RED,COLOR_RED,0);
             else if(graffiti[dir][0]!=' ')
-               set_color(graffiticolor[dir],COLOR_WHITE,0);
+               set_color(graffiticolor[dir],COLOR_WHITE,0,blink);
             else
-               set_color(COLOR_WHITE,COLOR_WHITE,0);
+               set_color(COLOR_WHITE,COLOR_WHITE,0,blink);
             
             // Draw the chunk of wall where the graffiti would/will go
             for(int gchar=0;gchar<3;gchar++)
@@ -338,7 +341,9 @@ void printwall(int x, int y, int z, int px, int py)
             if(dir==WALL_RIGHT) { x+=4; }
 
             // Pick color
-            if(type & SITEBLOCK_CLOCK && type & SITEBLOCK_LOCKED)
+            if(type & SITEBLOCK_METAL)
+               set_color(COLOR_WHITE,COLOR_WHITE,1);
+            else if(type & SITEBLOCK_CLOCK && type & SITEBLOCK_LOCKED)
                set_color(COLOR_RED,COLOR_BLACK,0);
             else if(type & SITEBLOCK_KLOCK && type & SITEBLOCK_LOCKED)
                set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -521,38 +526,31 @@ void printblock(int x,int y,int z,int px, int py)
    }
    else if(levelmap[x][y][z].flag & SITEBLOCK_DOOR)
    {
-      if((levelmap[x][y][z].flag & SITEBLOCK_CLOCK) &&
+      if(levelmap[x][y][z].flag & SITEBLOCK_METAL)
+      {
+         set_color(COLOR_WHITE,backcolor,1,blink);
+      }
+      else if((levelmap[x][y][z].flag & SITEBLOCK_CLOCK) &&
          (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
          set_color(COLOR_RED,backcolor,0,blink);
-         move(py,px);
-         addstr("=====");
-         move(py+1,px);
-         addstr("=====");
-         move(py+2,px);
-         addstr("=====");
       }
       else if((levelmap[x][y][z].flag & SITEBLOCK_KLOCK) &&
          (levelmap[x][y][z].flag & SITEBLOCK_LOCKED))
       {
          set_color(COLOR_BLACK,backcolor,1,blink);
-         move(py,px);
-         addstr("=====");
-         move(py+1,px);
-         addstr("=====");
-         move(py+2,px);
-         addstr("=====");
       }
       else
       {
          set_color(COLOR_YELLOW,backcolor,0,blink);
-         move(py,px);
-         addstr("=====");
-         move(py+1,px);
-         addstr("=====");
-         move(py+2,px);
-         addstr("=====");
       }
+      
+      move(py,px);
+      addstr("=====");
+      move(py+1,px);
+      addstr("=====");
+      move(py+2,px);
+      addstr("=====");
    }
    else if(levelmap[x][y][z].flag & SITEBLOCK_LOOT)
    {
@@ -613,6 +611,9 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_SECURITY_METALDETECTORS:addstr("METAL");break;
          case SPECIAL_SECURITY_CHECKPOINT:addstr("GUARD");break;
          case SPECIAL_DISPLAY_CASE:addstr("CASE");break;
+         case SPECIAL_BANK_VAULT:addstr("VAULT");break;
+         case SPECIAL_BANK_TELLER:addstr("TELER");break;
+         case SPECIAL_BANK_MONEY:addstr("MONEY");break;
       }
    }
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)

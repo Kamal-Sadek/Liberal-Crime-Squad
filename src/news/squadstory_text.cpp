@@ -24,7 +24,7 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_GOVERNMENT_COURTHOUSE:
          strcat(story,"Abortion Clinic.  ");break;
       case SITE_GOVERNMENT_PRISON:
-         strcat(story,"Ace Ghetto Pool Hall.  ");break;
+         strcat(story,"Rehabilitation Center.  ");break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          strcat(story,"ACLU Branch Office.  ");break;
       case SITE_INDUSTRY_SWEATSHOP:
@@ -45,6 +45,8 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
          strcat(story,"Greenpeace Offices.  ");break;
       case SITE_GOVERNMENT_FIRESTATION:
          strcat(story,"ACLU Branch Office.  ");break;
+      case SITE_BUSINESS_BANK:
+         strcat(story,"Richard Dawkins Food Bank.  ");break;
       default:
          strcat(story,location[ns.loc]->name);
          strcat(story,".  ");break;
@@ -86,6 +88,8 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_MEDIA_AMRADIO:
       case SITE_MEDIA_CABLENEWS:
          strcat(story,", known for its Extreme Conservative Bias.  ");break;
+      case SITE_BUSINESS_BANK:
+         strcat(story,", the very symbol of economic inequality.  ");break;
       default:
          strcat(story,".  ");break;
       }

@@ -77,6 +77,7 @@ void initsite(locationst &loc)
    bool loaded = false;
    switch(loc.type)
    {
+   case SITE_BUSINESS_BANK: loaded = readMap("Bank"); break;
    case SITE_INDUSTRY_NUCLEAR: loaded = readMap("NuclearPlant"); break;
    default: break;
    }
@@ -96,6 +97,7 @@ void initsite(locationst &loc)
       case SITE_BUSINESS_CRACKHOUSE:
          build_site("GENERIC_UNSECURE");
          break;
+      case SITE_BUSINESS_BANK:
       case SITE_BUSINESS_BARANDGRILL:
       case SITE_RESIDENTIAL_BOMBSHELTER:
       case SITE_OUTDOOR_BUNKER:
@@ -444,24 +446,25 @@ void initsite(locationst &loc)
               {
                  switch(loc.type)
                  {
-                    case SITE_RESIDENTIAL_SHELTER:
-                    case SITE_BUSINESS_CRACKHOUSE:
-                    case SITE_BUSINESS_JUICEBAR:
-                    case SITE_BUSINESS_CIGARBAR:
-                    case SITE_BUSINESS_LATTESTAND:
-                    case SITE_BUSINESS_VEGANCOOP:
-                    case SITE_BUSINESS_INTERNETCAFE:
-                    case SITE_INDUSTRY_WAREHOUSE:
+                 case SITE_BUSINESS_BANK: // the valuables are in the vault
+                 case SITE_RESIDENTIAL_SHELTER:
+                 case SITE_BUSINESS_CRACKHOUSE:
+                 case SITE_BUSINESS_JUICEBAR:
+                 case SITE_BUSINESS_CIGARBAR:
+                 case SITE_BUSINESS_LATTESTAND:
+                 case SITE_BUSINESS_VEGANCOOP:
+                 case SITE_BUSINESS_INTERNETCAFE:
+                 case SITE_INDUSTRY_WAREHOUSE:
 //seem to be weird things happening with loot in CCS bases - would the CCS call the policeon you for stealing?
 //and shouldn't you be able to loot everything from there anyway once you've won?
 //removing the loot.
-                  case SITE_BUSINESS_BARANDGRILL:
-                  case SITE_OUTDOOR_BUNKER:
-                  case SITE_RESIDENTIAL_BOMBSHELTER:
-                       break;
-                    default:
-                       levelmap[x][y][z].flag|=SITEBLOCK_LOOT;
-                       break;
+                 case SITE_BUSINESS_BARANDGRILL:
+                 case SITE_OUTDOOR_BUNKER:
+                 case SITE_RESIDENTIAL_BOMBSHELTER:
+                    break;
+                 default:
+                    levelmap[x][y][z].flag|=SITEBLOCK_LOOT;
+                    break;
                  }
               }
 
@@ -604,13 +607,13 @@ void initsite(locationst &loc)
                   (levelmap[x][y][z].flag & SITEBLOCK_RESTRICTED))
                {
                   if((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))||
+                      !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))||
                      (!(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))||
+                      !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))||
                      (!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))||
+                      !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))||
                      (!(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED)&&
-                     !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK)))
+                      !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK)))
                   {
                      levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
                      acted=1;
@@ -627,9 +630,9 @@ void initsite(locationst &loc)
                {
                   //Unrestricted on two opposite sides?
                   if(((!(levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK)) &&
-                      (!(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))) ||
-                     ((!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))&&
-                      (!(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x-1][y][z].flag & SITEBLOCK_BLOCK))))
+                      (!(levelmap[x+1][y][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x+1][y][z].flag & SITEBLOCK_BLOCK))) ||
+                     ((!(levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y-1][z].flag & SITEBLOCK_BLOCK))&&
+                      (!(levelmap[x][y+1][z].flag & SITEBLOCK_RESTRICTED) && !(levelmap[x][y+1][z].flag & SITEBLOCK_BLOCK))))
                   {
                      //Unlock and unrestrict
                      levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;

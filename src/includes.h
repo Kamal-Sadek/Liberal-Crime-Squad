@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.06.0"
+#define PACKAGE_VERSION "4.06.1"
 #endif
 
-const int version=40601;
-const int lowestloadversion=40401;
+const int version=40602;
+const int lowestloadversion=40602;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -303,6 +303,7 @@ enum UnlockTypes
    UNLOCK_CELL,
    UNLOCK_SAFE,
    UNLOCK_ARMORY,
+   UNLOCK_VAULT,
    UNLOCKNUM
 };
 
@@ -315,6 +316,7 @@ enum BashTypes
 enum HackTypes
 {
    HACK_SUPERCOMPUTER,
+   HACK_VAULT,
    HACKNUM
 };
 
@@ -370,6 +372,7 @@ enum SiteTypes
    SITE_OUTDOOR_PUBLICPARK,
    SITE_OUTDOOR_BUNKER,
    SITE_GOVERNMENT_ARMYBASE,
+   SITE_BUSINESS_BANK,
    SITENUM
 };
 
@@ -450,6 +453,7 @@ enum Lawflags
    LAWFLAG_ARSON,
    LAWFLAG_PUBLICNUDITY,
    LAWFLAG_EXTORTION,
+   LAWFLAG_BANKROBBERY,
    //LAWFLAG_GUNCARRY,
    //LAWFLAG_GUNUSE,
    LAWFLAGNUM
@@ -665,6 +669,8 @@ public:
 #define SITEBLOCK_FIRE_PEAK BIT19
 #define SITEBLOCK_FIRE_END BIT20
 #define SITEBLOCK_CHAINLINK BIT21
+#define SITEBLOCK_ALARMED BIT22
+#define SITEBLOCK_METAL BIT23
 
 enum SpecialBlocks
 {
@@ -702,6 +708,9 @@ enum SpecialBlocks
    SPECIAL_SECURITY_CHECKPOINT,
    SPECIAL_SECURITY_METALDETECTORS,
    SPECIAL_SECURITY_SECONDVISIT,
+   SPECIAL_BANK_VAULT,
+   SPECIAL_BANK_TELLER,
+   SPECIAL_BANK_MONEY,
    SPECIALNUM,
    SPECIAL_NONE = -1
 };
@@ -825,6 +834,7 @@ enum CarChaseObstacles
    CARCHASE_OBSTACLE_FRUITSTAND,
    CARCHASE_OBSTACLE_TRUCKPULLSOUT,
    CARCHASE_OBSTACLE_CROSSTRAFFIC,
+   CARCHASE_OBSTACLE_CHILD,
    CARCHASE_OBSTACLENUM
 };
 
@@ -1703,6 +1713,9 @@ void special_display_case(void);
 void special_security_checkpoint(void);
 void special_security_metaldetectors(void);
 void special_security_secondvisit(void);
+void special_bank_teller(void);
+void special_bank_money(void);
+void special_bank_vault(void);
 
 /*
  talk.cpp

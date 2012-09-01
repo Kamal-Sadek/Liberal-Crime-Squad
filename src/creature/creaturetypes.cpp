@@ -368,6 +368,21 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,4);
          cr.set_attribute(ATTRIBUTE_WISDOM,4);
          break;
+      case CREATURE_BANK_TELLER:
+         strcpy(cr.name,"Bank Teller");
+         cr.align=0;
+         cr.age=AGE_MATURE;
+         break;
+      case CREATURE_BANK_MANAGER:
+         GIVE_WEAPON_CIVILIAN;
+         strcpy(cr.name,"Bank Manager");
+         cr.money=LCSrandom(121)+120;
+         cr.align=ALIGN_CONSERVATIVE;
+         cr.age=AGE_MATURE;
+         cr.set_skill(SKILL_BUSINESS,LCSrandom(4)+3);
+         cr.set_attribute(ATTRIBUTE_INTELLIGENCE,4);
+         cr.set_attribute(ATTRIBUTE_WISDOM,4);
+         break;
       case CREATURE_TEENAGER:
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_TEENAGER;
@@ -2325,7 +2340,12 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
          okaysite[SITE_BUSINESS_CIGARBAR]=1;
+         okaysite[SITE_BUSINESS_BANK]=1;
          //okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         break;
+      case CREATURE_BANK_MANAGER:
+      case CREATURE_BANK_TELLER:
+         okaysite[SITE_BUSINESS_BANK]=1;
          break;
       case CREATURE_SCIENTIST_LABTECH:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
@@ -2607,6 +2627,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_CORPORATE_HOUSE]=1;
          okaysite[SITE_INDUSTRY_NUCLEAR]=1;
          okaysite[SITE_LABORATORY_GENETIC]=1;
+         okaysite[SITE_BUSINESS_BANK]=1;
          break;
       case CREATURE_HICK:
          okaysite[SITE_MEDIA_AMRADIO]=1;

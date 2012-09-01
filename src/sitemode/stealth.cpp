@@ -728,6 +728,21 @@ char hasdisguise(Creature &cr)
                }
             }
             break;
+         case SITE_BUSINESS_BANK:
+            if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
+            {
+               uniformed=0;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_CHEAPSUIT")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_EXPENSIVESUIT")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_SECURITYUNIFORM")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=1;
+               if(location[cursite]->highsecurity)
+               {
+                  if(cr.get_armor().get_itemtypename()=="ARMOR_CIVILLIANARMOR")uniformed=1;
+               }
+            }
+            break;
          case SITE_BUSINESS_CIGARBAR:
             uniformed=0;
             if(cr.get_armor().get_itemtypename()=="ARMOR_EXPENSIVESUIT")uniformed=1;
@@ -839,7 +854,6 @@ char disguisesite(long type)
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
       case SITE_INDUSTRY_SWEATSHOP:
       case SITE_INDUSTRY_POLLUTER:
-      case SITE_INDUSTRY_NUCLEAR:
       case SITE_CORPORATE_HEADQUARTERS:
       case SITE_CORPORATE_HOUSE:
       case SITE_BUSINESS_CIGARBAR:

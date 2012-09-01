@@ -1584,7 +1584,7 @@ void giveup(void)
       }
       if(ledger.get_funds()>0)
       {
-         if(ledger.get_funds()<=10000 || location[loc]->siege.siegetype==SIEGE_FIREMEN)
+         if(ledger.get_funds()<=2000 || location[loc]->siege.siegetype==SIEGE_FIREMEN)
          {
             move(8,1);
             addstr("Fortunately, your funds remain intact.");
@@ -1592,7 +1592,9 @@ void giveup(void)
          else
          {
             move(8,1);
-            int confiscated = LCSrandom(LCSrandom(ledger.get_funds()-10000)+1)+1000;
+            int confiscated = LCSrandom(LCSrandom(ledger.get_funds()-2000)+1)+1000;
+            if(ledger.get_funds()-confiscated > 50000)
+               confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
             char str[100];
             sprintf(str,"Law enforcement have confiscated $%d in LCS funds.",confiscated);
             addstr(str);
@@ -2631,6 +2633,14 @@ void statebrokenlaws(int loc)
       if(typenum>1)addstr(" and other crimes");
       addstr(".");
    }
+   //BANK ROBBER
+   else if(breakercount[LAWFLAG_BANKROBBERY])
+   {
+      move(4,1);
+      addstr("You are wanted for bank robbery");
+      if(typenum>1)addstr(" and other crimes");
+      addstr(".");
+   }
    //BURN FLAG
    else if(breakercount[LAWFLAG_BURNFLAG])
    {
@@ -2880,6 +2890,11 @@ void statebrokenlaws(Creature & cr)
    else if(breakercount[LAWFLAG_KIDNAPPING])
    {
       addstr("KIDNAPPING");
+   }
+   //BANK ROBBER
+   else if(breakercount[LAWFLAG_BANKROBBERY])
+   {
+      addstr("BANK ROBBERY");
    }
    //BURN FLAG
    else if(breakercount[LAWFLAG_BURNFLAG])

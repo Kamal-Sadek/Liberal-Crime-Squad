@@ -761,6 +761,9 @@ void mode_site(void)
                   case SPECIAL_SECURITY_CHECKPOINT:special_security_checkpoint();break;
                   case SPECIAL_SECURITY_METALDETECTORS:special_security_metaldetectors();break;
                   case SPECIAL_SECURITY_SECONDVISIT:special_security_secondvisit();break;
+                  case SPECIAL_BANK_VAULT:special_bank_vault();break;
+                  case SPECIAL_BANK_TELLER:special_bank_teller();break;
+                  case SPECIAL_BANK_MONEY:special_bank_money();break;
                }
             }
             else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2))&&
@@ -1864,17 +1867,18 @@ void mode_site(void)
             //SEE IF THERE IS AN ENCOUNTER
             char newenc=0;
 
-            // 10% chance of encounter normally
+            // 10% chance of encounter normally (100% if waiting)
             // 20% chance of encounter after massive response
             // 0% chance of encounter during sieges
-            if(!LCSrandom(5))
+            if(!location[cursite]->siege.siege)
             {
-               if(postalarmtimer>80||!LCSrandom(2))
+               if(postalarmtimer>80)
                {
-                  if(!location[cursite]->siege.siege)
-                  {
-                     newenc=1;
-                  }
+                  if(!LCSrandom(5)) newenc=1;
+               }
+               else if(!LCSrandom(10)||c=='s')
+               {
+                  newenc=1;
                }
             }
 
@@ -1897,6 +1901,7 @@ void mode_site(void)
                case SPECIAL_RESTAURANT_TABLE:
                case SPECIAL_CAFE_COMPUTER:
                case SPECIAL_PARK_BENCH:
+               case SPECIAL_BANK_TELLER:
                   makespecial=levelmap[locx][locy][locz].special;
                   newenc=1;
                   break;
@@ -1905,114 +1910,148 @@ void mode_site(void)
             //DO DOORS
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
             {
-               bool has_security=false;
-               for(int i=0;i<6;i++)
+               if(levelmap[locx][locy][locz].flag & SITEBLOCK_METAL)
                {
-                  if(activesquad->squad[i] &&
-                     activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
-                  {
-                     has_security=true;
-                     break;
-                  }
-               }
+                  clearmessagearea(false);
 
-               if((levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED) &&
-                  !(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK) &&
-                  has_security==true)
-               {
-                  levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(16,1);
+                  addstr("The vault door is impenetrable.");
 
-                  do
-                  {
-                     clearmessagearea(false);
-
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     move(16,1);
-                     addstr("You try the door, but it is locked.");
-                     move(17,1);
-                     addstr("Try to pick the lock? (Yes or No)");
-
-                     refresh();
-
-                     int c=getch();
-                     translategetch(c);
-
-                     if(c=='y')
-                     {
-                        char actual; // 1 if an actual attempt was made, 0 otherwise
-                        
-                        // If the unlock was successful
-                        if(unlock(UNLOCK_DOOR,actual))
-                        {
-                           // Unlock the door
-                           levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
-                           sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
-                           //criminalizeparty(LAWFLAG_BREAKING);
-                        }
-                        // Else perma-lock it if an attempt was made
-                        else if(actual)levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
-
-                        // Check for people noticing you fiddling with the lock
-                        if(actual)
-                        {
-                           alienationcheck(0);
-                           noticecheck(-1);
-                        }
-
-                        break;
-                     }
-                     else if(c=='n')break;
-
-                  }while(1);
-               }
-               else if(levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED)
-               {
-                  do
-                  {
-                     clearmessagearea(false);
-
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     move(16,1);
-                     addstr("You shake the handle but it is ");
-                     if(has_security==true)addstr("still ");
-                     addstr("locked.");
-                     move(17,1);
-                     addstr("Force it open? (Yes or No)");
-
-                     refresh();
-                     int c=getch();
-                     translategetch(c);
-
-                     if(c=='y')
-                     {
-                        char actual;
-
-                        if(bash(BASH_DOOR,actual))
-                        {
-                           levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
-                           int time=20+LCSrandom(10);
-                           if(time<1)time=1;
-                           if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-                           sitecrime++;
-                           sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
-                           criminalizeparty(LAWFLAG_BREAKING);
-                        }
-
-                        if(actual)
-                        {
-                           alienationcheck(1);
-                           noticecheck(-1,DIFFICULTY_HEROIC);
-                        }
-
-                        break;
-                     }
-                     else if(c=='n')break;
-
-                  }while(1);
+                  refresh();
+                  getch();
                }
                else
                {
-                  levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
+                  bool has_security=false;
+                  for(int i=0;i<6;i++)
+                  {
+                     if(activesquad->squad[i] &&
+                        activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
+                     {
+                        has_security=true;
+                        break;
+                     }
+                  }
+
+                  if((levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED) &&
+                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK) &&
+                     has_security==true)
+                  {
+                     levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
+
+                     do
+                     {
+                        clearmessagearea(false);
+
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("You try the door, but it is locked.");
+                        move(17,1);
+                        addstr("Try to pick the lock? (Yes or No)");
+
+                        refresh();
+
+                        int c=getch();
+                        translategetch(c);
+
+                        if(c=='y')
+                        {
+                           char actual; // 1 if an actual attempt was made, 0 otherwise
+                           
+                           // If the unlock was successful
+                           if(unlock(UNLOCK_DOOR,actual))
+                           {
+                              // Unlock the door
+                              levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
+                              sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
+                              //criminalizeparty(LAWFLAG_BREAKING);
+                           }
+                           // Else perma-lock it if an attempt was made
+                           else if(actual)levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
+
+                           // Check for people noticing you fiddling with the lock
+                           if(actual)
+                           {
+                              alienationcheck(0);
+                              noticecheck(-1);
+                           }
+
+                           break;
+                        }
+                        else if(c=='n')break;
+
+                     }while(1);
+                  }
+                  else if(levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED)
+                  {
+                     do
+                     {
+                        clearmessagearea(false);
+
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("You shake the handle but it is ");
+                        if(has_security==true)addstr("still ");
+                        addstr("locked.");
+                        move(17,1);
+                        addstr("Force it open? (Yes or No)");
+
+                        refresh();
+                        int c=getch();
+                        translategetch(c);
+
+                        if(c=='y')
+                        {
+                           char actual;
+
+                           if(bash(BASH_DOOR,actual))
+                           {
+                              levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
+                              int time=20+LCSrandom(10);
+                              if(time<1)time=1;
+                              if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+                              if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+                              {
+                                 clearmessagearea(false);
+                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
+                                 move(16,1);
+                                 addstr("An alarm sounds!");
+                                 sitealarm=1;
+                                 refresh();
+                                 getch();
+                              }
+                              sitecrime++;
+                              sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
+                              criminalizeparty(LAWFLAG_BREAKING);
+                           }
+
+                           if(actual)
+                           {
+                              alienationcheck(1);
+                              noticecheck(-1,DIFFICULTY_HEROIC);
+                           }
+
+                           break;
+                        }
+                        else if(c=='n')break;
+
+                     }while(1);
+                  }
+                  else
+                  {
+                     levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
+                     if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+                     {
+                        clearmessagearea(false);
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("An alarm sounds!");
+                        sitealarm=1;
+                        refresh();
+                        getch();
+                     }
+                  }
                }
 
                locx=olocx;
@@ -2686,6 +2725,9 @@ void mode_site(void)
                         makecreature(encounter[0],CREATURE_LANDLORD);
                      }
                      break;
+                  case SPECIAL_BANK_TELLER:
+                     special_bank_teller();
+                     break;
                   default:
                      if(location[cursite]->type==SITE_RESIDENTIAL_APARTMENT||
                         location[cursite]->type==SITE_RESIDENTIAL_TENEMENT ||
@@ -2693,11 +2735,11 @@ void mode_site(void)
                      {
                         if(LCSrandom(3))break; // Rarely encounter someone in apartments. (Was LCSrandom(5), seemed too easy to burgle people all day.)
                      }
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     /*set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
                      addstr("There is someone up ahead.      ");
                      refresh();
-                     getch();
+                     getch();*/
                      prepareencounter(sitetype,location[cursite]->highsecurity);
                      break;
                }
@@ -2802,7 +2844,7 @@ void resolvesite(void)
          }
       }
    }
-   else if(((sitealarm==1&&sitecrime>10)||sitecrime>5+LCSrandom(95))&&
+   else if(sitecrime>10&&
       (location[cursite]->renting==RENTING_NOCONTROL || location[cursite]->renting > 500))
    {
       if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&

@@ -364,6 +364,18 @@ void trial(Creature &g)
          breaker[LAWFLAG_CARTHEFT]=0;// this should be `Grand Theft Auto`
       }                              //                 -- LK
                                           // We'll just make it grand theft auto anyway :) -Fox
+      else if(breaker[LAWFLAG_BANKROBBERY])
+      {
+         if(g.crimes_suspected[LAWFLAG_BANKROBBERY]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_BANKROBBERY],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("bank robbery");
+         breaker[LAWFLAG_BANKROBBERY]=0;
+      }
       else if(breaker[LAWFLAG_CCFRAUD])
       {
          if(g.crimes_suspected[LAWFLAG_CCFRAUD]>1)
@@ -1092,6 +1104,7 @@ void penalize(Creature &g,char lenient)
 
          g.sentence+=1*g.crimes_suspected[LAWFLAG_BREAKING];
          g.sentence+=(60+LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
+         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
          g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
