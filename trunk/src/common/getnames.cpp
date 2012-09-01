@@ -296,6 +296,8 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_MILITARYPOLICE:strcat(str,"Military Police");break;
       case CREATURE_MILITARYOFFICER:strcat(str,"Military Officer");break;
       case CREATURE_SEAL:strcat(str,"Navy SEAL");break;
+      case CREATURE_BANK_TELLER:strcat(str,"Bank Teller");break;
+      case CREATURE_BANK_MANAGER:strcat(str,"Bank Manager");break;
       case CREATURE_GUARDDOG:strcat(str,"Canine Hero");break;
       case CREATURE_GENETIC:strcat(str,"Genetic Monster");break;
       case CREATURE_TANK:strcat(str,"M1 Abrams Tank");break;
@@ -587,6 +589,7 @@ void getlawflag(char *str,int type)
    case LAWFLAG_ARSON:strcat(str,"Arson");break;
    case LAWFLAG_PUBLICNUDITY:strcat(str,"Public nudity");break;
    case LAWFLAG_EXTORTION:strcat(str,"Extortion");break;
+   case LAWFLAG_BANKROBBERY:strcat(str,"Bank robbery");break;
    default:strcpy(str,"ERROR, AR");break;
    }
 }

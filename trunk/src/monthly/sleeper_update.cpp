@@ -704,6 +704,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          if(itemindex > -1) {shelter->loot.push_back(new Weapon(*weapontype[itemindex]));}
          else {numberofxmlfails++;}
          break;
+      case SITE_BUSINESS_BANK:
       case SITE_GOVERNMENT_FIRESTATION:
             if(LCSrandom(2))item="LOOT_TRINKET";
             else item="LOOT_COMPUTER";

@@ -1233,6 +1233,13 @@ void makecharacter(void)
    location.push_back(newl);
 
    newl=new locationst;
+      newl->type=SITE_BUSINESS_BANK;
+      newl->parent=0;
+      initlocation(*newl);
+      if(hasmaps)newl->interrogated=1;
+   location.push_back(newl);
+
+   newl=new locationst;
       newl->type=SITE_GOVERNMENT_FIRESTATION;
       newl->parent=0;
       initlocation(*newl);

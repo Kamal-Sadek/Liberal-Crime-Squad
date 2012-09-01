@@ -554,6 +554,81 @@ void prepareencounter(short type,char sec)
             }
             break;
          }
+         case SITE_BUSINESS_BANK:
+         {
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               if(sec) creaturearray[CREATURE_MERC]=100;
+               else creaturearray[CREATURE_SECURITYGUARD]=50;
+               creaturearray[CREATURE_BANK_MANAGER]=20;
+               creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
+               creaturearray[CREATURE_WORKER_JANITOR]=1;
+               if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
+               creaturearray[CREATURE_WORKER_SECRETARY]=1;
+               if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
+               creaturearray[CREATURE_TEENAGER]=3;
+               creaturearray[CREATURE_COP]+=1;
+               if(law[LAW_DEATHPENALTY]==-2&&
+                   law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=1;
+               if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=1;
+               creaturearray[CREATURE_LAWYER]=1;
+               creaturearray[CREATURE_SEWERWORKER]=1;
+               creaturearray[CREATURE_COLLEGESTUDENT]=1;
+               creaturearray[CREATURE_MUSICIAN]=1;
+               creaturearray[CREATURE_MATHEMATICIAN]=1;
+               creaturearray[CREATURE_TEACHER]=1;
+               creaturearray[CREATURE_PRIEST]=1;
+               creaturearray[CREATURE_ENGINEER]=1;
+               creaturearray[CREATURE_FASTFOODWORKER]=1;
+               creaturearray[CREATURE_TELEMARKETER]=1;
+			      creaturearray[CREATURE_CARSALESMAN]=1;
+			      creaturearray[CREATURE_OFFICEWORKER]=1;
+               creaturearray[CREATURE_FOOTBALLCOACH]=1;
+               creaturearray[CREATURE_MAILMAN]=1;
+               creaturearray[CREATURE_DOCTOR]=1;
+               creaturearray[CREATURE_PSYCHOLOGIST]+=1;
+               creaturearray[CREATURE_NURSE]=1;
+               creaturearray[CREATURE_GARBAGEMAN]=1;
+               creaturearray[CREATURE_PLUMBER]=1;
+               creaturearray[CREATURE_CHEF]=1;
+               creaturearray[CREATURE_CONSTRUCTIONWORKER]=1;
+               creaturearray[CREATURE_AMATEURMAGICIAN]=1;
+               creaturearray[CREATURE_SOLDIER]=1;
+               creaturearray[CREATURE_VETERAN]=2;
+               if(law[LAW_DEATHPENALTY]==-2&&
+                   law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+               else creaturearray[CREATURE_PRISONGUARD]+=1;
+               creaturearray[CREATURE_HIPPIE]=1;
+               creaturearray[CREATURE_CRITIC_ART]=1;
+               creaturearray[CREATURE_CRITIC_MUSIC]=1;
+               creaturearray[CREATURE_AUTHOR]=1;
+               creaturearray[CREATURE_JOURNALIST]=1;
+               creaturearray[CREATURE_TAXIDRIVER]=1;
+               creaturearray[CREATURE_PROGRAMMER]=1;
+               creaturearray[CREATURE_RETIREE]=1;
+               creaturearray[CREATURE_PAINTER]=1;
+               creaturearray[CREATURE_SCULPTOR]=1;
+               creaturearray[CREATURE_DANCER]=1;
+               creaturearray[CREATURE_PHOTOGRAPHER]=1;
+               creaturearray[CREATURE_CAMERAMAN]=1;
+               creaturearray[CREATURE_HAIRSTYLIST]=1;
+               creaturearray[CREATURE_CLERK]=1;
+               creaturearray[CREATURE_THIEF]=1;
+               creaturearray[CREATURE_ACTOR]=1;
+               creaturearray[CREATURE_YOGAINSTRUCTOR]=1;
+               creaturearray[CREATURE_MARTIALARTIST]+=1;
+               creaturearray[CREATURE_ATHLETE]=1;
+               creaturearray[CREATURE_FIREFIGHTER]+=1;
+               creaturearray[CREATURE_LOCKSMITH]+=1;
+            }
+            else
+            {
+               if(sec) creaturearray[CREATURE_MERC]=2000;
+               else creaturearray[CREATURE_SECURITYGUARD]=1000;
+               creaturearray[CREATURE_BANK_MANAGER]=200;
+               creaturearray[CREATURE_THIEF]=1;
+            }
+         }
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
          {
             if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
@@ -562,15 +637,15 @@ void prepareencounter(short type,char sec)
                else creaturearray[CREATURE_SECURITYGUARD]+=10;
                if(sec)creaturearray[CREATURE_GUARDDOG]+=50;
             }
-			else if(mode==GAMEMODE_SITE && sec)
-			{
-				//inside someone's room when security is high. Might meet a policeman.
-				if(law[LAW_DEATHPENALTY]==-2&&law[LAW_POLICEBEHAVIOR]==-2)
-					creaturearray[CREATURE_DEATHSQUAD]+=5;
-				if(law[LAW_POLICEBEHAVIOR]<=-1)
-					creaturearray[CREATURE_GANGUNIT]+=10;
-				creaturearray[CREATURE_COP]+=15;
-			}
+			   else if(mode==GAMEMODE_SITE && sec)
+			   {
+				   //inside someone's room when security is high. Might meet a policeman.
+				   if(law[LAW_DEATHPENALTY]==-2&&law[LAW_POLICEBEHAVIOR]==-2)
+					   creaturearray[CREATURE_DEATHSQUAD]+=5;
+				   if(law[LAW_POLICEBEHAVIOR]<=-1)
+					   creaturearray[CREATURE_GANGUNIT]+=10;
+				   creaturearray[CREATURE_COP]+=15;
+			   }
             creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]+=5;
             creaturearray[CREATURE_WORKER_JANITOR]=5;

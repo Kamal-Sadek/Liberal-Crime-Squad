@@ -226,7 +226,6 @@ void setpriority(newsstoryst &ns)
             case SITE_HOSPITAL_UNIVERSITY:
             case SITE_INDUSTRY_SWEATSHOP:
             case SITE_INDUSTRY_POLLUTER:
-            case SITE_INDUSTRY_NUCLEAR:
             case SITE_BUSINESS_PAWNSHOP:
             case SITE_BUSINESS_JUICEBAR:
             case SITE_BUSINESS_CIGARBAR:
@@ -244,6 +243,7 @@ void setpriority(newsstoryst &ns)
                break;
 
                // WOAH OMG
+            case SITE_INDUSTRY_NUCLEAR:
             case SITE_GOVERNMENT_POLICESTATION:
             case SITE_GOVERNMENT_COURTHOUSE:
             case SITE_GOVERNMENT_PRISON:
@@ -254,6 +254,7 @@ void setpriority(newsstoryst &ns)
             case SITE_CORPORATE_HOUSE:
             case SITE_MEDIA_AMRADIO:
             case SITE_MEDIA_CABLENEWS:
+            case SITE_BUSINESS_BANK:
                ns.priority*=2;
                break;
             }
@@ -2002,6 +2003,7 @@ void majornewspaper(char &clearformess,char canseethings)
                         break;
                      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
                      case SITE_BUSINESS_CIGARBAR:
+                     case SITE_BUSINESS_BANK:
                         header=VIEW_TAXES;
                         break;
                   }
@@ -2200,6 +2202,11 @@ void majornewspaper(char &clearformess,char canseethings)
                change_public_opinion(VIEW_TAXES,power,colored,power*10);
                change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
                change_public_opinion(VIEW_WOMEN,power,colored,power*10);
+               break;
+            case SITE_BUSINESS_BANK:
+               change_public_opinion(VIEW_TAXES,power,colored,power*10);
+               change_public_opinion(VIEW_CEOSALARY,power,colored,power*10);
+               change_public_opinion(VIEW_CORPORATECULTURE,power,colored,power*10);
                break;
             }
          }

@@ -75,7 +75,7 @@ void special_bouncer_assess_squad()
 
    for(int p=0;p<pool.size();p++)
    {
-      if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER && !LCSrandom(3))
+      if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER)
       {
          autoadmit=1;
          strcpy(sleepername,pool[p]->name);
@@ -416,7 +416,7 @@ void special_readsign(int sign)
       {
       default:
          move(16,1);
-         addstr("\"Avoid problems by not having them.\"");
+         addstr("Employees Only");
          break;
       }
       break;
@@ -1846,6 +1846,7 @@ void spawn_security(void)
       case SITE_CORPORATE_HEADQUARTERS:
       case SITE_CORPORATE_HOUSE:
       case SITE_BUSINESS_ARMSDEALER:
+      case SITE_BUSINESS_BANK:
       case SITE_INDUSTRY_NUCLEAR:
          makecreature(encounter[0], CREATURE_MERC);
          makecreature(encounter[1], CREATURE_MERC);
@@ -2086,4 +2087,276 @@ void special_security_metaldetectors(void)
 void special_security_secondvisit(void)
 {
    spawn_security();
+}
+
+void special_bank_vault(void)
+{
+   clearmessagearea();
+   move(16,1);
+   addstr("The vault door has three layers: A combo lock,");
+   move(17,1);
+   addstr("an electronic lock, and a biometric lock.");
+   getch();
+   
+   clearmessagearea();
+   move(16,1);
+   addstr("You will need a security expert, a computer");
+   move(17,1);
+   addstr("expert, and one of the bank managers.");
+   getch();
+
+   for(int p=0;p<pool.size();p++)
+   {
+      if(pool[p]->type==CREATURE_BANK_MANAGER &&
+         pool[p]->flag & CREATUREFLAG_SLEEPER &&
+         pool[p]->base == cursite)
+      {
+         clearmessagearea();
+         move(16,1);
+         addstr("Sleeper ");
+         addstr(pool[p]->name);
+         addstr(" can handle the biometrics,");
+         move(17,1);
+         addstr("but you'll still have to crack the other locks.");
+         getch();
+      }
+   }
+
+   do
+   {
+      clearmessagearea();
+      move(16,1);
+      addstr("Open the bank vault? (Yes or No)");
+
+      int c=getch();
+      translategetch(c);
+
+      if(c=='y')
+      {
+         char actual;
+         bool success = false;
+         
+         clearmessagearea();
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr("First is the combo lock that will have");
+         move(17,1);
+         addstr("be cracked by a security expert.");
+         getch();
+
+         if(!unlock(UNLOCK_VAULT,actual))
+         {
+            clearmessagearea();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("The squad can only dream of the money");
+            move(17,1);
+            addstr("on the other side of this door...");
+            getch();
+            
+            levelmap[locx][locy][locz].special=-1;
+         }
+         else
+         {
+            clearmessagearea();
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(16,1);
+            addstr("Next is the electronic lock that will have");
+            move(17,1);
+            addstr("be bypassed by a computer expert.");
+            getch();
+
+            if(!hack(HACK_VAULT,actual))
+            {
+               clearmessagearea();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(16,1);
+               addstr("The money was so close the squad could taste it!");
+               getch();
+               
+               levelmap[locx][locy][locz].special=-1;
+            }
+            else
+            {
+               clearmessagearea();
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               move(16,1);
+               addstr("Last is the biometric lock that keyed only");
+               move(17,1);
+               addstr("to the bank's managers.");
+               getch();
+               
+               Creature *manager = 0;
+               bool canbreakin = false;
+
+               for(int s=0;s<6;s++)
+               {
+                  Creature *c = activesquad->squad[s];
+
+                  if(c)
+                  {
+                     if(c->type == CREATURE_BANK_MANAGER)
+                     {
+                        manager = c;
+                        if(c->joindays < 30 && !(c->flag & CREATUREFLAG_KIDNAPPED))
+                        {
+                           clearmessagearea();
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           move(16,1);
+                           addstr(c->name);
+                           addstr(" opens the vault.");
+                           getch();
+                           canbreakin = true;
+                           break;
+                        }
+                     }
+
+                     if(c->prisoner && c->prisoner->type == CREATURE_BANK_MANAGER)
+                     {
+                        clearmessagearea();
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("The hostage is forced to open the vault.");
+                        getch();
+                        canbreakin = true;
+                        break;
+                     }
+                  }
+               }
+
+               if(!canbreakin)
+               {
+                  for(int p=0; p<pool.size(); p++)
+                  {
+                     if(pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
+                     {
+                        clearmessagearea();
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        addstr("Sleeper ");
+                        addstr(pool[p]->name);
+                        addstr(" opens the vault,");
+                        move(17,1);
+                        addstr("and will join the active LCS to avoid arrest.");
+                        getch();
+                        canbreakin = true;
+
+                        pool[p]->location = pool[p]->base = activesquad->squad[0]->base;
+                        pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+                        pool[p]->crimes_suspected[LAWFLAG_BANKROBBERY]++;
+
+                        break;
+                     }
+                  }
+               }
+
+               criminalizeparty(LAWFLAG_BANKROBBERY);
+
+               if(canbreakin)
+               {
+                  levelmap[locx+1][locy][locz].flag &= ~SITEBLOCK_DOOR;
+                  levelmap[locx-1][locy][locz].flag &= ~SITEBLOCK_DOOR;
+                  levelmap[locx][locy+1][locz].flag &= ~SITEBLOCK_DOOR;
+                  levelmap[locx][locy-1][locz].flag &= ~SITEBLOCK_DOOR;
+                  levelmap[locx][locy][locz].special=-1;
+               }
+               else
+               {
+                  if(manager)
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr(manager->name);
+                     addstr(" is no longer recognized.");
+                     getch();
+                  }
+                  else
+                  {
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(16,1);
+                     addstr("The squad has nobody that can do the job.");
+                     getch();
+                  }
+               }
+            }
+         }
+
+         if(actual)
+         {
+            alienationcheck(0);
+            noticecheck(-1);
+         }
+
+         return;
+      }
+      else if(c=='n')return;
+
+   }while(1);
+}
+
+void special_bank_teller(void)
+{
+   if(sitealarm||sitealienate||
+      location[cursite]->siege.siege)
+   {
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("The teller window is empty.");
+      levelmap[locx][locy][locz].special=-1;
+      refresh();
+      getch();
+   }
+   else
+   {
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("A bank teller is available.");
+      levelmap[locx][locy][locz].special=-1;
+      refresh();
+      getch();
+
+      for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+      makecreature(encounter[0],CREATURE_BANK_TELLER);
+   }
+}
+
+void special_bank_money(void)
+{
+   clearmessagearea(false);
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   move(16,1);
+   addstr("The squad loads bricks of cash into a duffel bag.");
+   
+   levelmap[locx][locy][locz].special=-1;
+
+   activesquad->loot.push_back(new Money(20000));
+
+   if(!sitealarm && sitealarmtimer!=0) sitealarmtimer=0;
+   else if(!sitealarm && !LCSrandom(3)) sitealarm=1;
+   else if(sitealarm && postalarmtimer <= 60) postalarmtimer += 20;
+   else if(sitealarm && postalarmtimer <= 80 && LCSrandom(2)) postalarmtimer = 81;
+   else if(sitealarm && postalarmtimer > 80 && LCSrandom(2))
+   {
+      refresh();
+      getch();
+      move(17,1);
+      addstr("A SWAT team storms the vault!!");
+
+      int swatnum = 6;
+      for(int e=0;e<ENCMAX;e++)
+      {
+         if(!encounter[e].exists)
+         {
+            makecreature(encounter[e],CREATURE_SWAT);
+            swatnum--;
+            if(swatnum<=0) break;
+         }
+      }
+   }
+   refresh();
+   getch();
 }

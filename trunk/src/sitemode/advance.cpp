@@ -225,7 +225,8 @@ void creatureadvance(void)
                            !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_DEBRIS)&&
                            !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_FIRE_PEAK)&&
                            !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_FIRE_END)&&
-                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_EXIT))
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_EXIT)&&
+                           !(levelmap[x+xmod][y+ymod][z].flag & SITEBLOCK_METAL))
                         {
                            // Spread it
                            levelmap[x+xmod][y+ymod][z].flag |= SITEBLOCK_FIRE_START;
@@ -242,7 +243,8 @@ void creatureadvance(void)
                            !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_START)&&
                            !(levelmap[x][y][z+1].flag & SITEBLOCK_DEBRIS)&&
                            !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_PEAK)&&
-                           !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_END))
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_FIRE_END)&&
+                           !(levelmap[x][y][z+1].flag & SITEBLOCK_METAL))
                         {
                            // Spread it
                            levelmap[x][y][z+1].flag |= SITEBLOCK_FIRE_START;

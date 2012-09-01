@@ -157,6 +157,19 @@ void readMapCBSpecials(int x, int y, int z, int i)
    case 32: levelmap[x][y][z].special = SPECIAL_SECURITY_CHECKPOINT; break;
    case 33: levelmap[x][y][z].special = SPECIAL_SECURITY_METALDETECTORS; break;
    case 34: levelmap[x][y][z].special = SPECIAL_SECURITY_SECONDVISIT; break;
+   case 35: levelmap[x][y][z].special = SPECIAL_BANK_VAULT; break;
+   case 36: levelmap[x][y][z].special = SPECIAL_BANK_TELLER; break;
+   case 37: levelmap[x][y][z].special = SPECIAL_BANK_MONEY; break;
+   }
+}
+
+void makeDoor(int x, int y, int z)
+{
+   levelmap[x][y][z].flag = SITEBLOCK_DOOR;
+   if((x > 0 && (levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)) ||
+      (y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)))
+   {
+      levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
    }
 }
 
@@ -170,20 +183,11 @@ void readMapCBTiles(int x, int y, int z, int i)
    case 3: levelmap[x][y][z].flag = SITEBLOCK_EXIT; break;
    case 4: levelmap[x][y][z].flag = SITEBLOCK_GRASSY; break;
    case 5:
-      levelmap[x][y][z].flag = SITEBLOCK_DOOR;
-      if((x > 0 && (levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)) ||
-         (y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)))
-      {
-         levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
-      }
+      makeDoor(x,y,z);
       break;
    case 6:
-      levelmap[x][y][z].flag = SITEBLOCK_DOOR | SITEBLOCK_LOCKED;
-      if((x > 0 && (levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)) ||
-         (y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)))
-      {
-         levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
-      }
+      makeDoor(x,y,z);
+      levelmap[x][y][z].flag |= SITEBLOCK_LOCKED;
       break;
    case 7:
       levelmap[x][y][z].flag = SITEBLOCK_RESTRICTED;
@@ -191,6 +195,20 @@ void readMapCBTiles(int x, int y, int z, int i)
          levelmap[x-1][y][z].flag |= SITEBLOCK_RESTRICTED;
       if(y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_DOOR))
          levelmap[x][y-1][z].flag |= SITEBLOCK_RESTRICTED;
+      break;
+   case 8:
+      levelmap[x][y][z].flag = SITEBLOCK_CHAINLINK;
+      break;
+   case 9:
+      makeDoor(x,y,z);
+      levelmap[x][y][z].flag |= (SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
+      break;
+   case 10:
+      levelmap[x][y][z].flag = (SITEBLOCK_BLOCK | SITEBLOCK_METAL);
+      break;
+   case 11:
+      makeDoor(x,y,z);
+      levelmap[x][y][z].flag |= (SITEBLOCK_LOCKED | SITEBLOCK_METAL);
       break;
    }
 }
