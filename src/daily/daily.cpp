@@ -1663,7 +1663,11 @@ void advancelocations(void)
       }
       else if(location[l]->highsecurity>0)
       {
-         location[l]->highsecurity--;
+         // Bank will remain on high security much longer
+         if(location[l]->type != SITE_BUSINESS_BANK)
+            location[l]->highsecurity--;
+         else if(!LCSrandom(5))
+            location[l]->highsecurity--;
       }
    }
 }

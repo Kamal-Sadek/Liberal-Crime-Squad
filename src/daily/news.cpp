@@ -85,6 +85,8 @@ void setpriority(newsstoryst &ns)
          // various crimes, scaled by a factor dependant on the crime
 
          // Unique site crimes
+         ns.priority+=crime[CRIME_BANKVAULTROBBERY ] * 100;
+         ns.priority+=crime[CRIME_BANKSTICKUP      ] * 100;
          ns.priority+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
          ns.priority+=crime[CRIME_HACK_INTEL       ] * 100;
          ns.priority+=crime[CRIME_ARMORY           ] * 100;
@@ -94,6 +96,7 @@ void setpriority(newsstoryst &ns)
          ns.priority+=crime[CRIME_JURYTAMPERING    ] *  30;
          ns.priority+=crime[CRIME_POLICE_LOCKUP    ] *  30;
          ns.priority+=crime[CRIME_COURTHOUSE_LOCKUP] *  30;
+         ns.priority+=crime[CRIME_BANKTELLERROBBERY] *  30;
 
          // Common site crimes
          ns.priority+=crime[CRIME_KILLEDSOMEBODY   ] *  30;
@@ -532,6 +535,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
                   if(ns.crime[c]==CRIME_CORP_FILES)continue;
                   if(ns.crime[c]==CRIME_SHUTDOWNREACTOR)continue;
+                  if(ns.crime[c]==CRIME_BANKVAULTROBBERY)continue;
+                  if(ns.crime[c]==CRIME_BANKSTICKUP)continue;
                   if(ns.crime[c]==CRIME_POLICE_LOCKUP)continue;
                   if(ns.crime[c]==CRIME_COURTHOUSE_LOCKUP)continue;
                   if(ns.crime[c]==CRIME_PRISON_RELEASE)continue;
@@ -594,6 +599,36 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   {
                      strcat(story,"  The Liberal Crime Squad attempted to rescue innocent people from the police lockup, ");
                      strcat(story,"saving them from torture and brutality at the hands of Conservative police interrogators.");
+                     strcat(story,"&r");
+                  }
+               }
+               if(crime[CRIME_BANKVAULTROBBERY])
+               {
+                  if(!liberalguardian)
+                  {
+                     strcat(story,"  According to sources that were at the scene, ");
+                     strcat(story,"the Liberal Crime Squad opened the bank vault, which held more than $100,000 at the time.");
+                     strcat(story,"&r");
+                  }
+                  else
+                  {
+                     strcat(story,"  The Liberal Crime Squad opened the bank vault, ");
+                     strcat(story,"showing the triumph of Liberal ideals over Conservative economics.");
+                     strcat(story,"&r");
+                  }
+               }
+               else if(crime[CRIME_BANKSTICKUP])
+               {
+                  if(!liberalguardian)
+                  {
+                     strcat(story,"  According to sources that were at the scene, ");
+                     strcat(story,"the Liberal Crime Squad threatened innocent bystanders in order to rob the bank vault.");
+                     strcat(story,"&r");
+                  }
+                  else
+                  {
+                     strcat(story,"  The Liberal Crime Squad demanded access to the bank vault, ");
+                     strcat(story,"hoping to acquire the resources to overcome evil.");
                      strcat(story,"&r");
                   }
                }
@@ -777,7 +812,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                            typesum--;
                         }
                      }
-                     if(crime[CRIME_STOLEGROUND])
+                     if(crime[CRIME_STOLEGROUND]||crime[CRIME_BANKTELLERROBBERY])
                      {
                         if(!liberalguardian||ccs)
                         {
@@ -806,7 +841,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                         else if(typesum==2)strcat(story," and ");
                         typesum--;
                      }
-                     if(crime[CRIME_BREAK_SWEATSHOP]||crime[CRIME_BREAK_FACTORY])
+                     if(crime[CRIME_BREAK_SWEATSHOP]||crime[CRIME_BREAK_FACTORY]||crime[CRIME_VANDALISM])
                      {
                         if(!liberalguardian||ccs)
                         {
@@ -825,26 +860,11 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                      {
                         if(!liberalguardian||ccs)
                         {
-                           strcat(story,"graffiti");
-                        }
-                        else
-                        {
-                           strcat(story,"marked the site for Liberation");
-                        }
-
-                        if(typesum>=3)strcat(story,", ");
-                        else if(typesum==2)strcat(story," and ");
-                        typesum--;
-                     }
-                     if(crime[CRIME_VANDALISM])
-                     {
-                        if(!liberalguardian||ccs)
-                        {
                            strcat(story,"vandalism");
                         }
                         else
                         {
-                           strcat(story,"defaced symbols of Conservatism");
+                           strcat(story,"marked the site for Liberation");
                         }
 
                         if(typesum>=3)strcat(story,", ");

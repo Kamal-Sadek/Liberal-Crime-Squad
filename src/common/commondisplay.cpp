@@ -134,6 +134,7 @@ void set_activity_color(long activity_type)
    case ACTIVITY_STUDY_MUSIC:
    case ACTIVITY_STUDY_TEACHING:
    case ACTIVITY_STUDY_WRITING:
+   case ACTIVITY_STUDY_LOCKSMITHING:
       set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       break;
 
@@ -559,14 +560,21 @@ void printlocation(long loc)
       if(location[loc]->compound_walls & COMPOUND_TRAPS)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
-         move(5,21);
+         move(5,16);
          addstr("BOOBY TRAPS");
+      }
+
+      if(location[loc]->compound_walls & COMPOUND_AAGUN)
+      {
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         move(5,33);
+         addstr("AA GUN");
       }
 
       if(location[loc]->compound_walls & COMPOUND_TANKTRAPS)
       {
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         move(5,41);
+         move(5,46);
          addstr("TANK TRAPS");
       }
 

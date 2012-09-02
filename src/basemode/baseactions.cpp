@@ -655,11 +655,28 @@ void investlocation(void)
          addstr("G - Buy a Generator for emergency electricity ($3000)");
       }
 
+      if(!(location[loc]->compound_walls & COMPOUND_AAGUN))
+      {
+         if(law[LAW_GUNCONTROL==ALIGN_ARCHCONSERVATIVE])
+         {
+            if(ledger.get_funds()>=35000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(13,1);
+            addstr("A - Install and conceal a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
+         }
+         else
+         {
+            if(ledger.get_funds()>=200000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            move(13,1);
+            addstr("A - Install and conceal a highly illegal Anti-Aircraft gun on the roof ($200,000)");
+         }
+      }
+
       if(!(location[loc]->compound_walls & COMPOUND_PRINTINGPRESS))
       {
          if(ledger.get_funds()>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(13,1);
+         move(14,1);
          addstr("P - Buy a Printing Press to start your own newspaper ($3000)");
       }
 
@@ -667,16 +684,16 @@ void investlocation(void)
       {
          if(ledger.get_funds()>=3000)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(14,1);
+         move(15,1);
          addstr("F - Setup a Business Front to ward off suspicion ($3000)");
       }
 
       if(ledger.get_funds()>=150)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(15,1);
+      move(16,1);
       addstr("R - Stockpile 20 daily rations of food ($150)");
 
-      move(16,1);
+      move(17,1);
       addstr("Enter - Done");
 
       int c=getch();
@@ -726,6 +743,19 @@ void investlocation(void)
          {
             ledger.subtract_funds(3000,EXPENSE_COMPOUND);
             location[loc]->compound_walls|=COMPOUND_GENERATOR;
+         }
+      }
+
+      if(c=='a')
+      {
+         int aagunPrice = 200000;
+         if(law[LAW_GUNCONTROL] == ALIGN_ARCHCONSERVATIVE)
+            aagunPrice = 35000;
+
+         if(!(location[loc]->compound_walls & COMPOUND_AAGUN)&&ledger.get_funds()>=aagunPrice)
+         {
+            ledger.subtract_funds(aagunPrice,EXPENSE_COMPOUND);
+            location[loc]->compound_walls|=COMPOUND_AAGUN;
          }
       }
 

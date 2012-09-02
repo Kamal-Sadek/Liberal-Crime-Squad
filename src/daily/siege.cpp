@@ -129,7 +129,9 @@ void siegecheck(char canseethings)
             numpres++;
             
             //Heat doesn't matter for sieges until it gets high
-            crimes += max(0,pool[p]->heat-10);
+            crimes += max(0,(pool[p]->heat)/10-10);
+            //Heat decay
+            if(pool[p]->heat > 100) pool[p]->heat-=pool[p]->heat/100;
          }
 
          // Let the place cool off if nobody is present
@@ -1115,7 +1117,11 @@ void siegeturn(char clearformess)
 
                   //AIR STRIKE!
                   char hit=!LCSrandom(3);
-                  if(!(location[l]->compound_walls & COMPOUND_GENERATOR))hit=0;
+                  if(!(location[l]->compound_walls & COMPOUND_GENERATOR)&&
+                     !(location[l]->compound_walls & COMPOUND_AAGUN))
+                  {
+                     hit=0;
+                  }
 
                   if(clearformess)
                   {
@@ -1127,7 +1133,7 @@ void siegeturn(char clearformess)
                   }
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr("You hear planes streak over head!");
+                  addstr("You hear planes streak overhead!");
                   refresh();
                   getch();
                   if(clearformess)
@@ -1138,25 +1144,63 @@ void siegeturn(char clearformess)
                   {
                      makedelimiter(8,0);
                   }
-                  move(8,1);
-                  addstr("Explosions rock the compound!");
-                  refresh();
-                  getch();
+
+                  bool hasAAGun = false;
+                  if(location[l]->compound_walls & COMPOUND_AAGUN)
+                     hasAAGun = true;
+
+                  if(hasAAGun && LCSrandom(3))
+                  {
+                     move(8,1);
+                     addstr("The thunder of anti-aircraft fire drives them back!");
+                     refresh();
+                     getch();
+                  }
+                  else
+                  {
+                     move(8,1);
+                     addstr("Explosions rock the compound!");
+                     refresh();
+                     getch();
+                  }
 
                   if(hit)
                   {
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
-                     move(8,1);
-                     addstr("The generator has been destroyed!");
-                     refresh();
-                     getch();
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
-                     move(8,1);
-                     addstr("The lights fade and all is dark. ");
-                     refresh();
-                     getch();
+                     if(hasAAGun)
+                     {
+                        if(clearformess)erase();
+                        else makedelimiter(8,0);
+                        move(8,1);
+                        addstr("The anti-aircraft gun takes a direct hit!");
+                        refresh();
+                        getch();
+                        if(clearformess)erase();
+                        else makedelimiter(8,0);
+                        move(8,1);
+                        addstr("Nothing left but smoking wreckage...");
+                        refresh();
+                        getch();
+                        
+                        location[l]->compound_walls&=~COMPOUND_AAGUN;
+                     }
+                     else
+                     {
+                        if(clearformess)erase();
+                        else makedelimiter(8,0);
+                        move(8,1);
+                        addstr("The generator has been destroyed!");
+                        refresh();
+                        getch();
+                        if(clearformess)erase();
+                        else makedelimiter(8,0);
+                        move(8,1);
+                        addstr("The lights fade and all is dark. ");
+                        refresh();
+                        getch();
+                        
+                        location[l]->compound_walls&=~COMPOUND_GENERATOR;
+                        location[l]->siege.lights_off=1;
+                     }
                   }
 
                   if(!LCSrandom(2))
@@ -1211,12 +1255,6 @@ void siegeturn(char clearformess)
                      addstr("Fortunately, no one is hurt.");
                      refresh();
                      getch();
-                  }
-
-                  if(hit)
-                  {
-                     location[l]->compound_walls&=~COMPOUND_GENERATOR;
-                     location[l]->siege.lights_off=1;
                   }
                }
 

@@ -324,7 +324,7 @@ void mode_site(void)
          {
             if(encounter[e].exists)
             {
-               if(encounter[e].enemy())talkers++;
+               if(encounter[e].enemy()&&(encounter[e].cantbluff==0||encounter[e].animalgloss==ANIMALGLOSS_ANIMAL))talkers++;
             }
          }
       }
@@ -959,7 +959,7 @@ void mode_site(void)
                                     encounter[tk].type==CREATURE_WORKER_SWEATSHOP))
                                  {
                                     if(encounter[tk].cantbluff==1 &&
-                                       !sitealarm)
+                                       (!sitealarm||encounter[tk].animalgloss==ANIMALGLOSS_ANIMAL))
                                     {
                                        clearcommandarea();
                                        clearmessagearea();
