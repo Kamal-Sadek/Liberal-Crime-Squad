@@ -1815,6 +1815,8 @@ char chasesequence(Creature &cr,Vehicle &v);
 */
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt(void);
+/* prompt after you've said you want to release someone */
+void releasehostage(void);
 /* roll on the kidnap attempt and show the results */
 char kidnap(Creature &a,Creature &t,char &amateur);
 /* hostage freed due to host unable to haul */

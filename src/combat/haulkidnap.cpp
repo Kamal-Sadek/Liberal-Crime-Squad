@@ -222,6 +222,84 @@ void kidnapattempt(void)
    }
 }
 
+/* prompt after you've said you want to release someone */
+void releasehostage(void)
+{
+   short kidnapper=-1;
+
+   party_status=-1;
+
+   int available=0;
+   char availslot[6]={0,0,0,0,0,0};
+   for(int p=0;p<6;p++)
+   {
+      if(activesquad->squad[p]!=NULL)
+      {
+         if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner!=NULL&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
+         {
+            available++;
+            availslot[p]=1;
+         }
+      }
+   }
+
+   if(!available)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("No hostages are being held.       ");
+      move(17,1);
+      addstr("                                  ");
+
+      refresh();
+      getch();
+
+      return;
+   }
+
+   do
+   {
+      printparty();
+
+      move(8,20);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("Choose a Liberal squad member to release their hostage.");
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      if(c==10)return;
+
+      if(c>='1'&&c<='6')
+      {
+         if(availslot[c-'1'])
+         {
+            kidnapper=c-'1';
+            break;
+         }
+      }
+
+   }while(1);
+
+   activesquad->squad[kidnapper]->prisoner->cantbluff=2;
+   freehostage(*(activesquad->squad[kidnapper]), 2);
+
+   if(!sitealarm)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("The hostage shouts for help!      ");
+      move(17,1);
+      addstr("                                  ");
+
+      getch();
+      sitealarm=1;
+      alienationcheck(1);
+   }
+}
+
 
 
 /* roll on the kidnap attempt and show the results */
