@@ -153,6 +153,7 @@ void getactivity(char *str,activityst &act)
       case ACTIVITY_STUDY_MUSIC:
       case ACTIVITY_STUDY_TEACHING:
       case ACTIVITY_STUDY_WRITING:
+      case ACTIVITY_STUDY_LOCKSMITHING:
 		  strcat(str,"Attending Classes");
 		  break;
       case ACTIVITY_SLEEPER_LIBERAL:

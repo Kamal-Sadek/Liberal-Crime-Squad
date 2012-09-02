@@ -300,7 +300,7 @@ int main(int argc, char* argv[])
    //getch();
 
    oldMapMode=!readConfigFile("sitemaps.txt"); // load site map data
-   if (oldMapMode==true)
+   if (oldMapMode)
    {
       addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
       refresh();
