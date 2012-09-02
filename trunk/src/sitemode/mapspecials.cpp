@@ -2254,7 +2254,7 @@ void special_bank_vault(void)
                {
                   criminalizeparty(LAWFLAG_BANKROBBERY);
                   sitecrime+=20;
-                  sitestory->crime[CRIME_BANKVAULTROBBERY]++;
+                  sitestory->crime.push_back(CRIME_BANKVAULTROBBERY);
                   levelmap[locx+1][locy][locz].flag &= ~SITEBLOCK_DOOR;
                   levelmap[locx-1][locy][locz].flag &= ~SITEBLOCK_DOOR;
                   levelmap[locx][locy+1][locz].flag &= ~SITEBLOCK_DOOR;
