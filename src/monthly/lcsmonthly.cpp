@@ -110,6 +110,7 @@ int choosespecialedition(char &clearformess)
             location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
             location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
             location[loc]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
+            location[loc]->loot[l]->get_itemtypename()!="LOOT_CCS_BACKERLIST"&&
             location[loc]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
             location[loc]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
             location[loc]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
@@ -136,6 +137,7 @@ int choosespecialedition(char &clearformess)
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
+            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CCS_BACKERLIST"&&
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
             squad[sq]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
@@ -317,9 +319,9 @@ void printnews(short li,short newspaper)
             break;
          case 9:addstr("playing with feces and urine.");break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Corporations a little riled up.");
 
       change_public_opinion(VIEW_CEOSALARY,50);
@@ -360,9 +362,9 @@ void printnews(short li,short newspaper)
          case 6:addstr("that seem to touch on every fetish known to man.");break;
          case 7:addstr("promising someone company profits in exchange for sexual favors.");break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Corporations a little riled up.");
 
       change_public_opinion(VIEW_CEOSALARY,50);
@@ -383,9 +385,9 @@ void printnews(short li,short newspaper)
             change_public_opinion(VIEW_TAXES,25);
             break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Corporations a little riled up.");
 
       change_public_opinion(VIEW_CEOSALARY,50);
@@ -423,14 +425,51 @@ void printnews(short li,short newspaper)
             change_public_opinion(VIEW_TAXES,50);
             break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Corporations a little riled up.");
 
       change_public_opinion(VIEW_CEOSALARY,50);
       change_public_opinion(VIEW_CORPORATECULTURE,50);
       offended_corps=1;
+   }
+   else if(loottype[li]->get_idname()=="LOOT_CCS_BACKERLIST")
+   {
+      move(5,1);
+      addstr("The Liberal Guardian runs more than one thousand pages of documents about");
+      move(6,1);
+      addstr("the CCS organization, also revealing in extreme detail the names and");
+      move(7,1);
+      addstr("responsibilities of Conservative Crime Squad sympathizers and supporters");
+      move(8,1);
+      addstr("in the state and federal governments. Sections precisely document the");
+      move(9,1);
+      addstr("extensive planning to create an extra-judicial death squad that would be");
+      move(10,1);
+      addstr("above prosecution, and could hunt down law-abiding Liberals and act");
+      move(11,1);
+      addstr("as a foil when no other enemies were present to direct public energy");
+      move(12,1);
+      addstr("against.");
+
+      move(14,1);
+      addstr("The scandal reaches into the heart of the Conservative leadership in the");
+      move(15,1);
+      addstr("country, and the full ramifications of this revelation may not be felt");
+      move(16,1);
+      addstr("for months. One thing is clear, however, from the immediate public reaction");
+      move(17,1);
+      addstr("toward the revelations, and the speed with which even AM Radio and Cable");
+      move(18,1);
+      addstr("News denounce the CCS.");
+      
+      move(20,1);
+      addstr("This is the beginning of the end for the Conservative Crime Squad.");
+
+      change_public_opinion(VIEW_INTELLIGENCE,50);
+      change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,100);
+      ccsexposure = CCSEXPOSURE_EXPOSED;
    }
    else if(loottype[li]->get_idname()=="LOOT_INTHQDISK"
            || loottype[li]->get_idname()=="LOOT_SECRETDOCUMENTS")
@@ -462,9 +501,9 @@ void printnews(short li,short newspaper)
             change_public_opinion(VIEW_WOMEN,50);
             break;
               }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Government a little riled up.");
 
       change_public_opinion(VIEW_INTELLIGENCE,50);
@@ -503,7 +542,7 @@ void printnews(short li,short newspaper)
             change_public_opinion(VIEW_DEATHPENALTY,50);
             break;
       }
-      move(8,1);
+      move(9,1);
       addstr("The major networks and publications take it up and run it for weeks.");
 
       change_public_opinion(VIEW_POLICEBEHAVIOR,50);
@@ -545,7 +584,7 @@ void printnews(short li,short newspaper)
          case 3:addstr("showing human test subjects dying under genetic research.");
             change_public_opinion(VIEW_GENETICS,50);break;
       }
-      move(8,1);
+      move(9,1);
       addstr("The major networks and publications take it up and run it for weeks.");
    }
    else if(loottype[li]->get_idname()=="LOOT_PRISONFILES")
@@ -567,7 +606,7 @@ void printnews(short li,short newspaper)
          case 3:
             addstr("documenting gladiatorial matches held between prisoners by guards.");
       }
-      move(8,1);
+      move(9,1);
       addstr("The major networks and publications take it up and run it for weeks.");
 
       change_public_opinion(VIEW_DEATHPENALTY,50);
@@ -588,9 +627,9 @@ void printnews(short li,short newspaper)
          case 3:addstr("instructing a female anchor to 'get sexier or get a new job'.");
             break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Conservative masses a little riled up.");
 
       change_public_opinion(VIEW_CABLENEWS,50);
@@ -610,9 +649,9 @@ void printnews(short li,short newspaper)
          case 1:addstr("saying 'it's okay to lie, they don't need the truth'.");break;
          case 2:addstr("planning to drum up a false scandal about a Liberal figure.");break;
       }
-      move(8,1);
-      addstr("The major networks and publications take it up and run it for weeks.");
       move(9,1);
+      addstr("The major networks and publications take it up and run it for weeks.");
+      move(10,1);
       addstr("This is bound to get the Conservative masses a little riled up.");
 
       change_public_opinion(VIEW_AMRADIO,50);

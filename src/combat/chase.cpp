@@ -347,25 +347,26 @@ char chasesequence(void)
          {
             switch(obstacle)
             {
-               case CARCHASE_OBSTACLE_CROSSTRAFFIC:
-               case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
-               case CARCHASE_OBSTACLE_FRUITSTAND:
-                  if(c=='d')
-                  {
-                     if(obstacledrive(obstacle,0))
-                        return footchase();
-                     creatureadvance();
-                     drivingupdate(obstacle);
-                  }
-                  if(c=='f')
-                  {
-                     if(obstacledrive(obstacle,1))
-                        return footchase();
-                     creatureadvance();
-                     if(drivingupdate(obstacle))
-                        return footchase();
-                  }
-                  break;
+            case CARCHASE_OBSTACLE_CHILD:
+            case CARCHASE_OBSTACLE_CROSSTRAFFIC:
+            case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
+            case CARCHASE_OBSTACLE_FRUITSTAND:
+               if(c=='d')
+               {
+                  if(obstacledrive(obstacle,0))
+                     return footchase();
+                  creatureadvance();
+                  drivingupdate(obstacle);
+               }
+               if(c=='f')
+               {
+                  if(obstacledrive(obstacle,1))
+                     return footchase();
+                  creatureadvance();
+                  if(drivingupdate(obstacle))
+                     return footchase();
+               }
+               break;
             }
          }
 

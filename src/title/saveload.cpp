@@ -91,6 +91,7 @@ void savegame(const char *str)
       numbytes=fwrite(&cablenews_closed,sizeof(char),1,h);
 
       numbytes=fwrite(&endgamestate,sizeof(char),1,h);
+      numbytes=fwrite(&ccsexposure,sizeof(char),1,h);
       numbytes=fwrite(&ccs_kills,sizeof(char),1,h);
 
       numbytes=fwrite(&Vehicle::curcarid,sizeof(long),1,h);
@@ -414,6 +415,7 @@ char load(void)
       fread(&cablenews_closed,sizeof(char),1,h);
 
       fread(&endgamestate,sizeof(char),1,h);
+      fread(&ccsexposure,sizeof(char),1,h);
       fread(&ccs_kills,sizeof(char),1,h);
 
       fread(&Vehicle::curcarid,sizeof(long),1,h);

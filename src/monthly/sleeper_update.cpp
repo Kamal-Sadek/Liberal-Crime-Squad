@@ -515,6 +515,24 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          pause=true;
       }
       break;
+   case CREATURE_CCS_ARCHCONSERVATIVE:
+      if(!location[homes]->siege.siege&&canseethings) 
+      {
+         if(LCSrandom(5)||ccsexposure>=CCSEXPOSURE_LCSGOTDATA) break;
+         Item *it=new Loot(*loottype[getloottype("LOOT_CCS_BACKERLIST")]);
+         location[homes]->loot.push_back(it);
+
+         erase();
+         move(6,1);
+         addstr("Sleeper ");
+         addstr(cr.name);
+         addstr(" has leaked a list of the CCS's government backers.");
+         move(7,1);
+         addstr("The disk is stashed at the homeless shelter.");
+         pause=true;
+      }
+      break;
+      break;
    }
    if(pause)
    {
