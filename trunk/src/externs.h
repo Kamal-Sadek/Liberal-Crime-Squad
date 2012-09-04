@@ -70,6 +70,7 @@ extern char amradio_closed;
 extern char cablenews_closed;
 
 extern char endgamestate;
+extern char ccsexposure;
 
 extern char ccs_kills;
 extern int ccs_siege_kills;

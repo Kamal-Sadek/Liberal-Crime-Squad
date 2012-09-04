@@ -490,6 +490,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
    refresh();
    getch();
    
+   clearcommandarea();clearmessagearea();clearmaparea();
+
    do
    {
       int c='a';

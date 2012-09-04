@@ -70,11 +70,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.06.2"
+#define PACKAGE_VERSION "4.06.3"
 #endif
 
-const int version=40602;
-const int lowestloadversion=40602;
+const int version=40603;
+const int lowestloadversion=40603;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -385,6 +385,15 @@ enum endgame
    ENDGAME_CCS_DEFEATED,
    ENDGAME_MARTIALLAW,
    ENDGAMENUM
+};
+
+enum ccsexposure
+{
+   CCSEXPOSURE_NONE,
+   CCSEXPOSURE_LCSGOTDATA,
+   CCSEXPOSURE_EXPOSED,
+   CCSEXPOSURE_NOBACKERS,
+   CCSEXPOSURENUM
 };
 
 
@@ -1082,6 +1091,8 @@ enum NewsStories
    NEWSSTORY_RAID_GUNSFOUND,
    NEWSSTORY_HOSTAGE_RESCUED,
    NEWSSTORY_HOSTAGE_ESCAPES,
+   NEWSSTORY_CCS_NOBACKERS,
+   NEWSSTORY_CCS_DEFEATED,
    NEWSSTORYNUM
 };
 

@@ -634,7 +634,7 @@ void mode_base(void)
          else
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            if(siege) addstr("W - Wait out the siege");
+            if(sieged) addstr("W - Wait out the siege");
             else addstr("W - Wait a day");
             if(day==monthday())addstr(" (next month)");
          }

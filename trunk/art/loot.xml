@@ -106,6 +106,13 @@
         <no_quick_fencing>true</no_quick_fencing>
         <fencevalue>1500</fencevalue>
     </loottype>
+	
+	<loottype idname="LOOT_CCS_BACKERLIST">
+        <name>CCS Backer List</name>
+        <stackable>false</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>2000</fencevalue>
+    </loottype>
     
     <loottype idname="LOOT_JUDGEFILES">
         <name>Judge Corrupt. Evidence</name>

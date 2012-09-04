@@ -226,6 +226,7 @@ bool notermlimit;           //These determine if ELAs can take place --kviiri
 bool nocourtpurge;
 
 char endgamestate=ENDGAME_NONE;
+char ccsexposure=CCSEXPOSURE_NONE;
 char ccs_kills=0;
 int ccs_siege_kills=0;
 

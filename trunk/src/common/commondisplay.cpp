@@ -271,7 +271,7 @@ void locheader(void)
          if(haveact&&count>1)strcpy(str,"Acting Individually");
       }
 
-      move(0,46);
+      move(0,41);
       addstr(str);
    }
 }

@@ -834,6 +834,15 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
    // Chase sequence! Wee!
    makechasers(-1,5);
 
+   if(!sitestory)
+   {
+      newsstoryst *ns=new newsstoryst;
+         ns->type=NEWSSTORY_WANTEDARREST; // TODO: Make a more generic catch-all arrest story
+         ns->loc=-1;
+      newsstory.push_back(ns);
+      sitestory=ns;
+   }
+
    chaseseq.clean();
    chaseseq.location=0;
    footchase(liberal);

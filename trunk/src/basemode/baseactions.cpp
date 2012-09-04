@@ -657,18 +657,18 @@ void investlocation(void)
 
       if(!(location[loc]->compound_walls & COMPOUND_AAGUN))
       {
-         if(law[LAW_GUNCONTROL==ALIGN_ARCHCONSERVATIVE])
+         if(law[LAW_GUNCONTROL]==ALIGN_ARCHCONSERVATIVE)
          {
             if(ledger.get_funds()>=35000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(13,1);
-            addstr("A - Install and conceal a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
+            addstr("A - Install a perfectly legal Anti-Aircraft gun on the roof ($35,000)");
          }
          else
          {
             if(ledger.get_funds()>=200000)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             move(13,1);
-            addstr("A - Install and conceal a highly illegal Anti-Aircraft gun on the roof ($200,000)");
+            addstr("A - Install and conceal an illegal Anti-Aircraft gun on the roof ($200,000)");
          }
       }
 
