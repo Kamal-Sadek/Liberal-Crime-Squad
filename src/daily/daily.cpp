@@ -260,6 +260,7 @@ void advanceday(char &clearformess,char canseethings)
                         getch();
                      }
                      wantcar.erase(wantcar.begin() + c);
+                     break;
                   }
                }
             }
