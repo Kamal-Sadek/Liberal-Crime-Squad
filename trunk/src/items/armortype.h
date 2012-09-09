@@ -15,6 +15,9 @@ class ArmorType : public ItemType
       // and police behavior laws are arch-conservative, ie when death squads
       // roam.
       bool deathsquad_legality() const { return deathsquad_legality_; }
+      
+      bool can_get_bloody() const { return can_get_bloody_; }
+      bool can_get_damaged() const { return can_get_damaged_; }
 
       // Returns armor (protection) provided by armor type on specified body
       // part. Use the bodyparts enum values for the parameter.
@@ -60,6 +63,9 @@ class ArmorType : public ItemType
       int make_difficulty_;
       int make_price_;
       bool deathsquad_legality_;
+      
+      bool can_get_bloody_;
+      bool can_get_damaged_;
 
       int stealth_value_;
       int armor_body_;

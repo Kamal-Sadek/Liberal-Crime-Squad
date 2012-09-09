@@ -153,6 +153,18 @@ bool Armor::sort_compare_special(Item* other) const
    return reorder;
 }
 
+void Armor::set_damaged(bool d)
+{
+   if ((d && can_get_damaged()) || !d)
+      damaged_ = d;
+}
+
+void Armor::set_bloody(bool b)
+{
+   if ((b && can_get_bloody()) || !b)
+      bloody_ = b;
+}
+
 const string& Armor::get_name() const
    { return armortype[getarmortype(itemtypename())]->get_name(); }
 
@@ -167,6 +179,12 @@ int Armor::get_make_price() const
    
 bool Armor::deathsquad_legality() const
    { return armortype[getarmortype(itemtypename())]->deathsquad_legality(); }
+
+bool Armor::can_get_bloody() const
+   { return armortype[getarmortype(itemtypename())]->can_get_bloody(); }
+
+bool Armor::can_get_damaged() const
+   { return armortype[getarmortype(itemtypename())]->can_get_damaged(); }
 
 int Armor::get_armor(int bodypart) const
    { return armortype[getarmortype(itemtypename())]->get_armor(bodypart); }

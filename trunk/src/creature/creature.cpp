@@ -819,6 +819,9 @@ int Creature::get_attribute(int attribute, bool usejuice) const
 
       ret-=disfigs;
    }
+   
+   // Finish now if not using juice to avoid bounds check.
+   if(!usejuice)return ret;
 
    // Never use juice to increase stats for the opposite ideology!
    if(attribute==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;

@@ -2090,6 +2090,7 @@ char talkInCombat(Creature &a, Creature &tk)
          }
          else
          {
+            addstr(a.name);
             addstr(" talks like a Conservative");
             move(17,1);
             addstr("and pretends to belong here.");

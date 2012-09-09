@@ -9,6 +9,10 @@
             Default: 0
         <deathsquad_legality> (boolean) Armor can only be made if arch-conservative police and death laws.
             Default: false
+        <can_get_bloody> (boolean) Whether or not the armor can get bloody.
+            Default: true
+        <can_get_damaged> (boolean) Whether or not the armor can get damaged.
+            Default: true
         <armor>
             <body> (integer) Protection offered to the body.
                 Default: 0
@@ -62,6 +66,8 @@
             <arms>false</arms>
             <legs>false</legs>
         </body_covering>
+        <can_get_bloody>false</can_get_bloody>
+        <can_get_damaged>false</can_get_damaged>
         <name>Naked</name>
         <shortname>Naked</shortname>
         <professionalism>0</professionalism>
