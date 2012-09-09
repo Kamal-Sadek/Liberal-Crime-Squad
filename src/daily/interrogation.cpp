@@ -409,7 +409,7 @@ void tendhostage(Creature *cr,char &clearformess)
       else { techniques[TECHNIQUE_DRUGS] = 0; }
 
       //remember interrogation choices
-      for(int i=0; i<9; i++)
+      for(int i=0; i<6; i++)
       {
          reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i]=techniques[i];
       }
@@ -1376,7 +1376,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
       //Possibly suicidal when heart is down to 1 and prisoner has already been
       //captive for a week without rescue
-      if(!turned&&cr->alive&&cr->get_attribute(ATTRIBUTE_HEART,false)==1&&LCSrandom(3)&&cr->joindays>6)
+      if(!turned&&cr->alive&&cr->get_attribute(ATTRIBUTE_HEART,false)<=1&&LCSrandom(3)&&cr->joindays>6)
       {
          move(++y,0);
          

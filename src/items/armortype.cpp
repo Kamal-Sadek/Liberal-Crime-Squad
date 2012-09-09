@@ -3,6 +3,7 @@
 ArmorType::ArmorType(MCD_STR xmlstring)
  : ItemType(xmlstring),
    make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
+   can_get_bloody_(true), can_get_damaged_(true),
    armor_body_(0), armor_head_(0), armor_limbs_(0), fireprotection_(false),
    cover_head_(false), cover_body_(true), cover_arms_(true), cover_legs_(true),
    conceal_face_(false), stealth_value_(0),
@@ -72,6 +73,22 @@ void ArmorType::init(const MCD_STR& xmlstring)
          /*else
             errorlog << "Invalid boolean value for armor type " << idname()
                       << "::deathsquad_legality: " << xml.GetData() << std::endl;*/
+      }
+      else if (element == "can_get_bloody")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            can_get_bloody_ = true;
+         else if (b == 0)
+            can_get_bloody_ = false;
+      }
+      else if (element == "can_get_damaged")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            can_get_damaged_ = true;
+         else if (b == 0)
+            can_get_damaged_ = false;
       }
       else if (element == "armor")
       {

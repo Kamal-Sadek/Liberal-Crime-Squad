@@ -23,9 +23,9 @@ class Armor : public Item
       int get_quality() { return quality_; }
       //void decrease_quality(int decrease = 1);
       
-      void set_damaged(bool d) { damaged_ = d; }
+      void set_damaged(bool d);
       bool is_damaged() const { return damaged_; }
-      void set_bloody(bool b) { bloody_ = b; }
+      void set_bloody(bool b);
       bool is_bloody() const { return bloody_; }
       void clean_and_repair() { damaged_ = false; bloody_ = false; }
       
@@ -36,6 +36,9 @@ class Armor : public Item
       int get_make_difficulty() const;
       int get_make_price() const;
       bool deathsquad_legality() const;
+
+      bool can_get_bloody() const;
+      bool can_get_damaged() const;
       
       int get_armor(int bodypart) const;
       bool has_fireprotection() const;

@@ -434,8 +434,7 @@ void advancecreature(Creature &cr)
 
       levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
 
-      if(!cr.is_naked())
-         cr.get_armor().set_bloody(true);
+      cr.get_armor().set_bloody(true);
 
       if(cr.blood<=0)
       {

@@ -1090,8 +1090,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             (target->wound[BODYPART_BODY] & WOUND_NASTYOFF)||
             target->blood<=0)
          {
-            if((target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
-               (target->wound[BODYPART_BODY] & WOUND_NASTYOFF))bloodblast(&target->get_armor());
+            if((w==BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)||
+               (w==BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF))
+               bloodblast(&target->get_armor());
 
             char alreadydead=!target->alive;
             
@@ -1125,10 +1126,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                }
             }
 
-            if(target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
-            else if(target->wound[BODYPART_BODY] & WOUND_CLEANOFF)strcat(str," CUTTING IT IN HALF!");
-            else if(target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)strcat(str," BLOWING IT APART!");
-            else if(target->wound[BODYPART_BODY] & WOUND_NASTYOFF)strcat(str," BLOWING IT IN HALF!");
+            if(w==BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_CLEANOFF)
+               strcat(str," CUTTING IT OFF!");
+            else if(w==BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_CLEANOFF)
+               strcat(str," CUTTING IT IN HALF!");
+            else if(w==BODYPART_HEAD && target->wound[BODYPART_HEAD] & WOUND_NASTYOFF)
+               strcat(str," BLOWING IT APART!");
+            else if(w==BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)
+               strcat(str," BLOWING IT IN HALF!");
             else strcat(str,attack_used->hit_punctuation.c_str());
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2202,21 +2207,15 @@ void bloodblast(Armor* armor)
    for(int p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)continue;
-      if(!activesquad->squad[p]->is_naked())
-      {
-         if(!LCSrandom(2))
-            activesquad->squad[p]->get_armor().set_bloody(true);
-      }
+      if(!LCSrandom(2))
+         activesquad->squad[p]->get_armor().set_bloody(true);
    }
 
    for(int e=0;e<ENCMAX;e++)
    {
       if(!encounter[e].exists)continue;
-      if(!encounter[e].is_naked())
-      {
-         if(!LCSrandom(2))
+      if(!LCSrandom(2))
             encounter[e].get_armor().set_bloody(true);
-      }
    }
 
    //REFRESH THE SCREEN
