@@ -58,6 +58,8 @@ extern short cursite;
 extern short interface_pgup;
 extern short interface_pgdn;
 
+extern char encounterwarnings;
+
 extern int day;
 
 extern short attitude[VIEWNUM];

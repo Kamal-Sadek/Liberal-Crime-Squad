@@ -214,6 +214,8 @@ short cursite;
 short interface_pgup='[';
 short interface_pgdn=']';
 
+char encounterwarnings=0;
+
 int day=1;
 
 class Ledger ledger;

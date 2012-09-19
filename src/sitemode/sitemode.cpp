@@ -440,6 +440,10 @@ void mode_site(void)
          addstr("G - Get Loot");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(10,17);
+         addstr("N - Options");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,32);
          addstr("M - Map");
 
@@ -796,6 +800,10 @@ void mode_site(void)
                if(spray)
                {
                   special_graffiti();
+                  if(enemy&&sitealarm)
+                  {
+                     enemyattack();
+                  }
                }
             }
          }
@@ -1658,6 +1666,49 @@ void mode_site(void)
             encounter_timer++;
          }
 
+         if(c=='n')
+         {
+            erase();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(0,0);
+            addstr("Site mode options");
+
+            printparty();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(10,1);
+            addstr("[ ] A - Encounter warnings");
+
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(24,1);
+            addstr("Enter - Done");
+
+            int c=0;
+            do
+            {
+               if(c=='a')
+               {
+                  if(encounterwarnings)encounterwarnings=0;else encounterwarnings=1;
+               }
+
+               if(c==10)break;
+
+               move(10 , 2);
+               if(encounterwarnings)
+               {
+                  addstr("X");
+               }
+               else
+               {
+                  addstr(" ");
+               }
+
+               c=getch();
+               translategetch(c);
+            }while(1);
+         }
+
          int cbase=-1;
          if(activesquad->squad[0]!=NULL)
          {
@@ -1976,6 +2027,8 @@ void mode_site(void)
                         int c=getch();
                         translategetch(c);
 
+                        clearmessagearea(false);
+
                         if(c=='y')
                         {
                            char actual; // 1 if an actual attempt was made, 0 otherwise
@@ -2000,7 +2053,11 @@ void mode_site(void)
 
                            break;
                         }
-                        else if(c=='n')break;
+                        else if(c=='n')
+                        {
+                           clearmessagearea(false);
+                           break;
+                        }
 
                      }while(1);
                   }
@@ -2750,18 +2807,92 @@ void mode_site(void)
                      special_bank_teller();
                      break;
                   default:
-                     if(location[cursite]->type==SITE_RESIDENTIAL_APARTMENT||
+                     bool squadmoved = false;
+                     if(olocx != locx || olocy != locy || olocz != locz)
+                     {
+                        squadmoved = true;
+                     }
+
+                     if(squadmoved &&
+                        (location[cursite]->type==SITE_RESIDENTIAL_APARTMENT||
                         location[cursite]->type==SITE_RESIDENTIAL_TENEMENT ||
-                        location[cursite]->type==SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+                        location[cursite]->type==SITE_RESIDENTIAL_APARTMENT_UPSCALE))
                      {
                         if(LCSrandom(3))break; // Rarely encounter someone in apartments. (Was LCSrandom(5), seemed too easy to burgle people all day.)
                      }
-                     /*set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     move(16,1);
-                     addstr("There is someone up ahead.      ");
-                     refresh();
-                     getch();*/
+
                      prepareencounter(sitetype,location[cursite]->highsecurity);
+
+                     int numenc = 0;
+                     for(int e=0;e<ENCMAX;e++)
+                     {
+                        if(encounter[e].exists)
+                        {
+                           numenc++;
+                        }
+                        else
+                        {
+                           break;
+                        }
+                     }
+
+                     if(encounterwarnings)
+                     {
+                        // show an encounter warning, based on whether the squad moved or not and the size of the encounter
+
+                        clearmessagearea(false);
+
+                        set_color(COLOR_WHITE,COLOR_BLACK,1);
+                        move(16,1);
+                        if(numenc == 1)
+                        {
+                           if(squadmoved)
+                           {
+                              addstr("There is someone up ahead.");
+                           }
+                           else
+                           {
+                              addstr("There is someone passing by.");
+                           }
+                        }
+                        else if(numenc <= 3)
+                        {
+                           if(squadmoved)
+                           {
+                              addstr("There are a few people up ahead.");
+                           }
+                           else
+                           {
+                              addstr("There are a few people passing by.");
+                           }
+                        }
+                        else if(numenc <= 6)
+                        {
+                           if(squadmoved)
+                           {
+                              addstr("There is a group of people up ahead.");
+                           }
+                           else
+                           {
+                              addstr("There is a group of people passing by.");
+                           }
+                        }
+                        else
+                        {
+                           if(squadmoved)
+                           {
+                              addstr("There is a crowd of people up ahead.");
+                           }
+                           else
+                           {
+                              addstr("There is a crowd of people passing by.");
+                           }
+                        }
+
+                        refresh();
+                        getch();
+                     }
+
                      break;
                }
                hostcheck=1;
