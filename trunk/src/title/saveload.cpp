@@ -332,6 +332,9 @@ void savegame(const char *str)
       numbytes=fwrite(public_interest,sizeof(public_interest),1,h);
       numbytes=fwrite(background_liberal_influence,sizeof(background_liberal_influence),1,h);
 
+      // Site mode options
+      numbytes=fwrite(&encounterwarnings,sizeof(char),1,h);
+
       LCSCloseFile(h);
    }
 }
@@ -828,8 +831,12 @@ char load(void)
       // Liberal Media
       fread(public_interest,sizeof(public_interest),1,h);
       fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
+
+      // Site mode options
+      fread(&encounterwarnings,sizeof(char),1,h);
+
       LCSCloseFile(h);
-      
+
       // Check that vehicles are of existing types.
       for(int v=0; v<vehicle.size();++v)
       {
