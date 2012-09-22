@@ -401,7 +401,8 @@ void review_mode(short mode)
             }
          case REVIEWMODE_JUSTICE:
             {
-               if(temppool[p]->deathpenalty&&temppool[p]->sentence!=0)
+               if(temppool[p]->deathpenalty&&temppool[p]->sentence!=0&&
+                  location[temppool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                {
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   addstr("DEATH ROW: ");
@@ -411,7 +412,8 @@ void review_mode(short mode)
                   if(temppool[p]->sentence>1)addstr("Months");
                   else addstr("Month");
                }
-               else if(temppool[p]->sentence<=-1)
+               else if(temppool[p]->sentence<=-1&&
+                        location[temppool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   if(temppool[p]->sentence<-1)
@@ -424,7 +426,8 @@ void review_mode(short mode)
                   else
                      addstr("Life Sentence");
                }
-               else if(temppool[p]->sentence!=0)
+               else if(temppool[p]->sentence!=0&&
+                        location[temppool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                {
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);
                   char num[20];
