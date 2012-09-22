@@ -373,7 +373,7 @@ void advancecreature(Creature &cr)
          denom+=cr.get_armor().get_quality() - 1;
 
          // Apply damage reduction
-         burndamage = static_cast<int>(burndamage * (3.0/denom));
+         burndamage = static_cast<int>(burndamage * (1-(3.0/denom)));
       }
 
 

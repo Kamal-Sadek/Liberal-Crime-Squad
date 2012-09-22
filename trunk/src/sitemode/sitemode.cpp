@@ -1122,6 +1122,7 @@ void mode_site(void)
 
          if(enemy&&c=='f')
          {
+            bool subdue=false;
             for(int i=0;i<ENCMAX;i++)
             {
                if(encounter[i].exists&&
@@ -1139,17 +1140,21 @@ void mode_site(void)
                   }
                   if(i==6)
                   {
-                     fight_subdued();
-                     return;
+                     subdue=true;
                   }
                   break;
                }
             }
             
-            youattack();
-            enemyattack();
-            creatureadvance();
-            encounter_timer++;
+            if(subdue)
+               fight_subdued();
+            else
+            {
+               youattack();
+               enemyattack();
+               creatureadvance();
+               encounter_timer++;
+            }
          }
 
          if(c=='r'&&location[cursite]->siege.siege&&libnum>6)
