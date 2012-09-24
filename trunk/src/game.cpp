@@ -75,6 +75,8 @@
 #include "sitemode/sitemap.h"
 #include <iostream>
 
+Log gamelog; //The gamelog.
+
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
@@ -249,6 +251,14 @@ int main(int argc, char* argv[])
    setup_unicode();
 #endif
    initscr();
+
+   gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog.
+
+   //For formatting.
+   //To let the user know a new instance of the program was started.
+   //TODO: Make this output the current date and time so that the user knows when they
+   //did the play session that follows.
+   gamelog.log("\n\n\n\n\n------PROGRAM STARTED------\n\n\n\n\n");
 
    // set window title
    char wtitle[50];
