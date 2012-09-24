@@ -150,4 +150,8 @@ extern Creature encounter[ENCMAX];
 extern highscorest score[SCORENUM];
 extern int yourscore;
 
+//The game log. All events and stuff are output here.
+//NO debugging out. Make a debugging log for that.
+extern Log gamelog;
+
 #endif // EXTERNS_H_INCLUDED

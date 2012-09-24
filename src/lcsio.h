@@ -51,6 +51,10 @@ This file is part of Liberal Crime Squad.
 
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#include <string>
+#include <fstream>
+
 /**
     I/O Flags for the LCS I/O System.
 
@@ -86,14 +90,44 @@ enum LCSIO_FLAGS
 */
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags);
 
+/*
+   C++ file i/o version of the above. Exists for code that uses c++ file i/o.
+
+   Returns false on failure, true on success.
+   We're using fstreams since they allow for both file input and output.
+
+   Parameters:
+
+   filename specifies the filename/relevant path.
+
+   mode specifies such things as ios::in, ios::out, ios::app, ios::trunc, etc.
+
+   flags specifies whether it should plop the file into the artdir or the homedir.
+    - LCSIO_PRE_ART specifies to use the art dir.
+    - LCSIO_PRE_HOME specifies to use the home dir.
+
+   file is a reference to the fstream object we're working with.
+*/
+bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file);
+
 /**
     LCSIO Close an open file.
 
     This function closes the given file handle.
     handle File handle to close.
 
+    Deprecated for the c++ version. This kept here until all the code is updated
+    to use the c++ version (LCSCloseFileCPP)..
+
 */
 void LCSCloseFile(FILE* handle);
+/*
+   C++ file i/o version of the above. Exists for code that uses c++ file i/o.
+
+   file is the fstream object we want closed.
+*/
+void LCSCloseFileCPP(std::fstream &file);
+
 
 
 
