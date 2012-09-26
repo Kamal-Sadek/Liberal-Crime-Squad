@@ -169,6 +169,19 @@ const int lowestloadscoreversion=31203;
    #include <time.h>
 
    #ifdef Linux // And BSD and SVr4
+      /*
+      This #undef addstr...It exists only to make the overloaded addstr
+         work in linux (because otherwise it clashes with ncurses).
+         The normal addstr works fine for me, so I have no idea what's going on.
+         I'll just leave this warning here...If addstr breaks or something, it
+         might be related to this undefine. At this point in time though, at least
+         on my machine, everything's working just fine.
+
+      This still strikes me as being odd, though. :/
+      Oh well, I just hope it'll work for everybody.
+
+      Ciprian Ilies, September 26, 2012
+      */
       #undef addstr
       #include <unistd.h>
       #include <sys/time.h>
@@ -2073,7 +2086,7 @@ void amendmentheading(void);
 
 //The filepath of the gamelog.
 //TODO: Make this be set via the cfg.
-#define GAMELOG_FILEPATH "gamelog.log"
+#define GAMELOG_FILEPATH "gamelog.txt"
 
 #include "log/log.h"
 
