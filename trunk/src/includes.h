@@ -2073,7 +2073,7 @@ void amendmentheading(void);
 
 //The filepath of the gamelog.
 //TODO: Make this be set via the cfg.
-#define GAMELOG_FILEPATH "gamelog"
+#define GAMELOG_FILEPATH "gamelog.log"
 
 #include "log/log.h"
 
