@@ -113,16 +113,17 @@ void hospitalize(int loc, Creature &patient)
       makedelimiter(8,0);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(patient.name);
-      addstr(" will be at ");
-      addstr(location[loc]->name);
-      addstr(" for ");
+      addstr(patient.name, gamelog);
+      addstr(" will be at ", gamelog);
+      addstr(location[loc]->name, gamelog);
+      addstr(" for ", gamelog);
       itoa(time,num,10);
-      addstr(num);
-      addstr(" ");
-      if(time>1)addstr("months");
-      else addstr("month");
-      addstr(".");
+      addstr(num, gamelog);
+      addstr(" ", gamelog);
+      if(time>1)addstr("months", gamelog);
+      else addstr("month", gamelog);
+      addstr(".", gamelog);
+      gamelog.nextMessage(); //Time for the next message.
 
       refresh();
       getch();
