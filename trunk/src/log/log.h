@@ -31,6 +31,55 @@ This file is part of Liberal Crime Squad.
 
 #include "includes.h"
 
+/*
+Here's an example of how to use gamelog:
+
+We have:
+------
+
+move(8,1);
+addstr("A sniper takes out ");
+addstr(pool[targ]->name);
+addstr("!");
+
+------
+
+
+Change it to:
+------
+
+move(8,1);
+addstr("A sniper takes out ", gamelog);
+addstr(pool[targ]->name, gamelog);
+addstr("!", gamelog);
+gamelog.nextMessage();
+
+------
+
+
+If there are times where you want to log stuff differently than displayed in the
+game or not to be displayed at all, simply use:
+------
+
+gamelog.log("This is a message we don't want the user to see ingame.");
+
+------
+
+
+Let's say you want to make a newline in a message. Do the following:
+------
+
+addstr("A sniper takes out ", gamelog);
+addstr(pool[targ]->name, gamelog);
+addstr("!", gamelog);
+gamelog.newline();
+addstr("The sniper breaks into a dance!");
+gamelog.nextMessage();
+
+------
+
+*/
+
 class Log
 {
 public:
@@ -56,18 +105,52 @@ public:
    bool initialize(string _filename, bool overwrite_existing, int _newline_mode = NEWLINEMODE_LOGFILES_DEFAULT);
 
    /*
+      The following three functions, begl(), endl(), and record(), are specifically
+      for the gamelog, not general purpose logging.
+   */
+   /*//Tells the print function to route input to this.
+   void begl();
+   //Stops routing input from the print function.
+   void endl();
+   //Used in conjuction with the above two.
+   //When the print function is called, if begl() has been called, the print function
+   //calls this function and passes the text it's supposed to be printing to here
+   //so that we can log it.
+   void record(string text);*/
+
+   //Adds the text given to the buffer.
+   void record(string text);
+
+   //Writes out everything currently in the buffer to the file, so as to split the
+   //log into logical blocks.
+   void nextMessage();
+
+   /*
    Adds the provided text to the file. Logs it, yup.
    parameters:
     - text
        - A string. It's the text that the function is supposed to output.
    Notes:
-    - The function automatically appends a newline to the end of the output, if not already present, if auto_newline == true.
+    - The function automatically appends a newline to the end of the output, if
+         not already present, if auto_newline == true.
+
+   Use the record() function in conjunction with the nextMessage() function to log messages.
+
+   Use this function if you want to log something that should not also be displayed ingame.
    */
    bool log(string text);
 
+   //Sets the newline mode.
+   //Values work the same as with the initialize function for the newline_mode
+   //parameter.
+   void newlmode(int new_newline_mode);
+
+   //Writes out a newline.
+   void newline();
+
 private:
 
-   //False if not initialized. True if initialized. (All of this is via the initialize() function)
+   //False if not initialized. True if initialized (All of this is via the initialize() function).
    //Makes sure that the programmer initialized the function prior to attempted usage.
    bool initialized;
 
@@ -81,8 +164,13 @@ private:
    //0 = no newlines.
    //1 = newline.
    //2 = double newlines.
-   //TODO: And make it support further automatic newlines.
+   //TODO: And make it support further automatic newlines (eg. 3, 4, 5, etc). Not
+   //really a priority due to the fact that the current system works good enough
+   //(when are you going to need more than two doublelines consistently?).
    int newline_mode;
+
+   //What has been recorded so far (used in begl(), endl(), and record()).
+   string buffer;
 };
 
 #endif //LOG_H_INCLUDED

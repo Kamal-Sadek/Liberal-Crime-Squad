@@ -1,5 +1,5 @@
 /*
-    log.h
+    log.cpp
 
     Ciprian Ilies
 
@@ -46,6 +46,8 @@ Log::Log()
 
    //Set this to whatever the default has been defined as.
    newline_mode = NEWLINEMODE_LOGFILES_DEFAULT;
+
+   buffer = ""; //Same situation as with filename.
 }
 
 //Deconstructor.
@@ -67,10 +69,14 @@ bool Log::initialize(string _filename, bool overwrite_existing, int _newline_mod
 
    newline_mode = _newline_mode; //Set the newline mode
 
-   if(!overwrite_existing) //check If it is to append the output to the end of the log file rather than to overwrite the file.
+   //check If it is to append the output to the end of the log file rather than
+   //to overwrite the file.
+   if(!overwrite_existing)
    {
       //Yes, it is to append.
-      if(!LCSOpenFileCPP(filename, ios::out | ios::app, LCSIO_PRE_HOME, file)) //Open the file in append mode. With error checking.
+
+      //Open the file in append mode. With error checking.
+      if(!LCSOpenFileCPP(filename, ios::out | ios::app, LCSIO_PRE_HOME, file))
       {
          return false; //Failed to open file.
       }
@@ -97,14 +103,17 @@ bool Log::log(string text)
    {
       //No text given. No reason to continue.
       //Also, it acts as a guard to the text.size() < 2 function.
-      //At least for vectors, text.size() where there are no elements is...it returns some random huge number.
+      //At least for vectors, text.size() where there are no elements is...
+      //it returns some random huge number.
       //So, let's play it safe.
       //It also acts as a guard to the text.size() - 1 functions, since size should be == 0,
       //which means there is no elemenet 1, and thus SEGFAULT. Which we don't want.
       return true; //Abort.
    }
 
-   if(initialized && file.is_open()) //Guard to make sure that it doesn't try to write text when the logger isn't even initialzied or the file isn't even loaded!
+   //Guard to make sure that it doesn't try to write text when the logger isn't
+   //even initialized or the file isn't even loaded!
+   if(initialized && file.is_open())
    {
       file.clear(); //First, clear the state flags.
 
@@ -116,7 +125,8 @@ bool Log::log(string text)
          if(text[text.size() - 1] != '\n') //Check if the last character is not a newline.
          {
             //It is not. Go ahead and write a newline character to the file.
-            for(int i = 0; i < newline_mode; ++i) //This loop ensures that all the required newlines are written.
+            //This for loop ensures that all the required newlines are written.
+            for(int i = 0; i < newline_mode; ++i)
             {
                file << "\n";
             }
@@ -125,14 +135,16 @@ bool Log::log(string text)
          {
             if(text.size() < 2) //Check if text is only one character long.
             {
-               //Text is too small to have two newlines. That means it has only one element, and it's already newline.
+               //Text is too small to have two newlines. That means it has only
+               //one element, and it's already newline.
                file << "\n"; //It only needs one more newline.
             }
             else if(text[text.size() - 2] != '\n') //One before the last not a newline? Add a newline then.
             {
                file << "\n"; //Add a newline.
             }
-            //There is no else. We don't need to do anything if two newlines are already present.
+            //There is no else. We don't need to do anything if two newlines are
+            //already present.
          }
       }
 
@@ -150,4 +162,26 @@ bool Log::log(string text)
       //The logger is not initialized or the file isn't open. Something done went wrong.
       return false; //Abort!
    }
+}
+
+void Log::record(string text)
+{
+   buffer += text; //Save the text. That's it.
+}
+
+void Log::nextMessage()
+{
+   log(buffer); //Write out the current text.
+
+   buffer = ""; //Clear the buffer.
+}
+
+void Log::newlmode(int new_newline_mode)
+{
+   newline_mode = new_newline_mode; //Set the newline mode.
+}
+
+void Log::newline()
+{
+   record("\n"); //Record it/add to buffer.
 }

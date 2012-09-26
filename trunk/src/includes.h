@@ -1313,6 +1313,10 @@ void addnextpagestr();
 void addprevpagestr();
 /* prints a long blurb showing how to page forward and back */
 void addpagestr();
+/* A wrapper to addstr() which logs the input and then calls addstr to draw it. */
+#undef addstr
+class Log; //Forward declaration.
+int addstr(const char *text, Log &log);
 
 /*
  commonactions.cpp
