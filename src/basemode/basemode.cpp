@@ -341,7 +341,8 @@ void mode_base(void)
             }
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(12,39-((strlen(str)-1)>>1));
-            addstr(str);
+            addstr(str, gamelog);
+            gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 
             refresh();
             getch();
@@ -801,31 +802,32 @@ void mode_base(void)
             char num[10];
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(7,5);
-            addstr("Time passes...");
+            addstr("Time passes...", gamelog);
             move(9,12);
             switch(month)
             {
-            case 1:addstr("Jan");break;
-            case 2:addstr("Feb");break;
-            case 3:addstr("Mar");break;
-            case 4:addstr("Apr");break;
-            case 5:addstr("May");break;
-            case 6:addstr("Jun");break;
-            case 7:addstr("Jul");break;
-            case 8:addstr("Aug");break;
-            case 9:addstr("Sep");break;
-            case 10:addstr("Oct");break;
-            case 11:addstr("Nov");break;
-            case 12:addstr("Dec");break;
+            case 1:addstr("Jan", gamelog);break;
+            case 2:addstr("Feb", gamelog);break;
+            case 3:addstr("Mar", gamelog);break;
+            case 4:addstr("Apr", gamelog);break;
+            case 5:addstr("May", gamelog);break;
+            case 6:addstr("Jun", gamelog);break;
+            case 7:addstr("Jul", gamelog);break;
+            case 8:addstr("Aug", gamelog);break;
+            case 9:addstr("Sep", gamelog);break;
+            case 10:addstr("Oct", gamelog);break;
+            case 11:addstr("Nov", gamelog);break;
+            case 12:addstr("Dec", gamelog);break;
             }
-            addstr(". ");
+            addstr(". ", gamelog);
             move(9, 17);
             itoa(day,num,10);
-            addstr(num);
-            addstr(", ");
+            addstr(num, gamelog);
+            addstr(", ", gamelog);
             move(9, 21);
             itoa(year,num,10);
-            addstr(num);
+            addstr(num, gamelog);
+            gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();
          }
       }
