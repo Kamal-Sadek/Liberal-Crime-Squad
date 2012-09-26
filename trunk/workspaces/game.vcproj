@@ -802,6 +802,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="log"
+			>
+			<File
+				RelativePath="..\src\log\log.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\log\log.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\src\compat.cpp"
 			>
