@@ -1848,3 +1848,12 @@ void addpagestr()
    else
       addstr("PGUP/PGDN to view other Liberal pages.");
 }
+
+
+/* A wrapper to addstr() which logs the input and then calls addstr to draw it. */
+int addstr(const char *text, Log &log)
+{
+   log.record(text); //Log the input.
+
+   return addstr(text); //Call addstr() and returns its return value.
+}

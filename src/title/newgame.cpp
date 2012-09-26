@@ -1114,50 +1114,64 @@ void makecharacter(void)
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(2,2);
-   addstr("A NEW CONSERVATIVE ERA");
+   //Note how addstr is overloaded to also log this message.
+   addstr("A NEW CONSERVATIVE ERA", gamelog);
+   gamelog.newline(); //Output a new line for formatting purposes.
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(4,2);
-   addstr("The Year is ");
+   addstr("The Year is ", gamelog);
    char year_s [80];
    itoa (year, year_s, 10);
-   addstr(year_s);
-   addstr(".");
+   addstr(year_s, gamelog);
+   addstr(".", gamelog);
    move(6,2);
-   addstr("Conservative President ");
+   gamelog.newline(); //Another newline to the game log.
+   addstr("Conservative President ", gamelog);
    char president[80];
    generate_name(president,GENDER_WHITEMALEPATRIARCH);
-   addstr(president);
-   addstr(" ends his second term with approval");
+   addstr(president, gamelog);
+   addstr(" ends his second term with approval", gamelog);
    move(7,2);
-   addstr("ratings in the high 70s, and is succeeded by hardcore Arch-Conservative");
+   gamelog.newline(); //Newline for gamelog.
+   addstr("ratings in the high 70s, and is succeeded by hardcore Arch-Conservative", gamelog);
    move(8,2);
-   addstr(execname[EXEC_PRESIDENT]);
-   addstr(".");
+   gamelog.newline(); //Another newline.
+   addstr(execname[EXEC_PRESIDENT], gamelog);
+   addstr(".", gamelog);
+   gamelog.nextMessage(); //Next block of logging output.
 
    move(10,2);
-   addstr("With Conservatives sweeping into power in the House of Representatives");
+   addstr("With Conservatives sweeping into power in the House of Representatives", gamelog);
    move(11,2);
-   addstr("and Senate, and a Conservative majority in the Supreme Court of the");
+   gamelog.newline(); //New line.
+   addstr("and Senate, and a Conservative majority in the Supreme Court of the", gamelog);
    move(12,2);
-   addstr("United States, commentators are hailing it as the beginning of a new");
+   gamelog.newline(); //New line.
+   addstr("United States, commentators are hailing it as the beginning of a new", gamelog);
    move(13,2);
-   addstr("Conservative era.");
+   gamelog.newline(); //Gosh, so many newlines.
+   addstr("Conservative era.", gamelog);
+   gamelog.nextMessage(); //Next block of logging output.
 
    move(15,2);
    set_color(COLOR_RED,COLOR_BLACK,1);
-   addstr("President ");
-   addstr(execname[EXEC_PRESIDENT]);
-   addstr(" has asked the new Congress to move quickly");
+   addstr("President ", gamelog);
+   addstr(execname[EXEC_PRESIDENT], gamelog);
+   addstr(" has asked the new Congress to move quickly", gamelog);
    move(16,2);
-   addstr("to rubber stamp his radical Arch-Conservative agenda. ");
+   gamelog.newline(); //Another newline.
+   addstr("to rubber stamp his radical Arch-Conservative agenda. ", gamelog);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   addstr("The left seems");
+   addstr("The left seems", gamelog);
+   gamelog.newline(); //Blarg.
    move(17,2);
-   addstr("powerless to stop this imminent trampling of Liberal Sanity and Justice.");
+   addstr("powerless to stop this imminent trampling of Liberal Sanity and Justice.", gamelog);
+   gamelog.nextMessage(); //Next message. The next block of logging output.
 
    move(19,2);
-   addstr("In this dark time, the Liberal Crime Squad is born...");
+   addstr("In this dark time, the Liberal Crime Squad is born...", gamelog);
+   gamelog.nextMessage(); //Whoo! We're done logging here!
    refresh();
    getch();
 
