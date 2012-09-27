@@ -171,6 +171,17 @@ void Log::record(string text)
 
 void Log::nextMessage()
 {
+   //This check makes sure the log is formatted correctly even when there is
+   //nothing in the buffer (a result of using newline());
+   if(buffer == "")
+   {
+      for(int i = 0; i < newline_mode; ++i)
+      {
+         //Add as many newlines as the game calls for.
+         buffer += "\n";
+      }
+   }
+
    log(buffer); //Write out the current text.
 
    buffer = ""; //Clear the buffer.
@@ -184,4 +195,8 @@ void Log::newlmode(int new_newline_mode)
 void Log::newline()
 {
    record("\n"); //Record it/add to buffer.
+   int old = newline_mode; //Save the old newline mode.
+   newlmode(1); //Set the newlines to one.
+   nextMessage(); //Write out the buffer. NOT going for the next message.
+   newlmode(old); //Reset newline_mode to original value (should be 2).
 }
