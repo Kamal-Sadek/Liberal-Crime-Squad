@@ -26,6 +26,11 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+//TODO: This file probably shouldn't have any nextMessage calls in it.
+//That will depend on the chase and fight code, I think...And the code that
+//handles the squad moving around the site. For now, this'll do. I must remember
+//to come back here and finish the job.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -290,7 +295,8 @@ void releasehostage(void)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr("The hostage shouts for help!      ");
+      addstr("The hostage shouts for help!      ", gamelog);
+      gamelog.nextMessage(); //Next message.
       move(17,1);
       addstr("                                  ");
 
@@ -322,10 +328,11 @@ char kidnap(Creature &a,Creature &t,char &amateur)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
-         addstr(a.name);
-         addstr(" snatches ");
-         addstr(t.name);
-         addstr("!");
+         addstr(a.name, gamelog);
+         addstr(" snatches ", gamelog);
+         addstr(t.name, gamelog);
+         addstr("!", gamelog);
+         gamelog.newline(); //New line.
 
          a.prisoner=new Creature;
          *a.prisoner=t;
@@ -335,29 +342,35 @@ char kidnap(Creature &a,Creature &t,char &amateur)
 
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(17,1);
-         addstr(t.name);
-         addstr(" is struggling and screaming!");
+         addstr(t.name, gamelog);
+         addstr(" is struggling and screaming!", gamelog);
+         gamelog.newline(); //New line.
 
          refresh();
          getch();
 
+         gamelog.nextMessage(); //Woo, next message.
          return 1;
       }
       else
       {
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          move(16,1);
-         addstr(a.name);
-         addstr(" grabs at ");
-         addstr(t.name);
+         addstr(a.name, gamelog);
+         addstr(" grabs at ", gamelog);
+         addstr(t.name, gamelog);
+         gamelog.newline(); //New line.
          move(17,1);
-         addstr("but ");
-         addstr(t.name);
-         addstr(" writhes away!");
+         addstr("but ", gamelog);
+         addstr(t.name, gamelog);
+         addstr(" writhes away!", gamelog);
+         gamelog.newline(); //New line.
 
          refresh();
          getch();
 
+
+         gamelog.nextMessage(); //Next message.
          return 0;
       }
    }
@@ -367,16 +380,17 @@ char kidnap(Creature &a,Creature &t,char &amateur)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr(a.name);
-      addstr(" shows ");
-      addstr(t.name);
-      addstr(" the ");
-      addstr(a.get_weapon().get_name(2).c_str());
+      addstr(a.name, gamelog);
+      addstr(" shows ", gamelog);
+      addstr(t.name, gamelog);
+      addstr(" the ", gamelog);
+      addstr(a.get_weapon().get_name(2).c_str(), gamelog);
+      gamelog.newline(); //New line.
       move(17,1);
-      addstr("and says, ");
+      addstr("and says, ", gamelog);
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      if(law[LAW_FREESPEECH]==-2)addstr("\"[Please], be cool.\"");
-      else addstr("\"Bitch, be cool.\"");
+      if(law[LAW_FREESPEECH]==-2)addstr("\"[Please], be cool.\"", gamelog);
+      else addstr("\"Bitch, be cool.\"", gamelog);
 
       a.prisoner=new Creature;
       *a.prisoner=t;
@@ -384,6 +398,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
       refresh();
       getch();
 
+      gamelog.nextMessage(); //Flush out for next message.
       return 1;
    }
 }
@@ -399,27 +414,29 @@ void freehostage(Creature &cr,char situation)
    {
       if(situation==0)
       {
-         if(cr.prisoner->squadid==-1)addstr(" and a hostage is freed");
+         if(cr.prisoner->squadid==-1)addstr(" and a hostage is freed", gamelog);
          else
          {
-            addstr(" and ");
-            addstr(cr.prisoner->name);
-            if(cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstr(" is recaptured");
-            else addstr(" is captured");
+            addstr(" and ", gamelog);
+            addstr(cr.prisoner->name, gamelog);
+            if(cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstr(" is recaptured", gamelog);
+            else addstr(" is captured", gamelog);
          }
+         gamelog.newline(); //New line.
       }
       else if(situation==1)
       {
          clearmessagearea();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
-         if(cr.prisoner->squadid==-1)addstr("A hostage escapes!");
+         if(cr.prisoner->squadid==-1)addstr("A hostage escapes!", gamelog);
          else
          {
-            addstr(cr.prisoner->name);
-            if(cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstr(" is recaptured.");
-            else addstr(" is captured.");
+            addstr(cr.prisoner->name, gamelog);
+            if(cr.prisoner->flag & CREATUREFLAG_JUSTESCAPED)addstr(" is recaptured.", gamelog);
+            else addstr(" is captured.", gamelog);
          }
+         gamelog.newline(); //New line.
       }
       else if(situation==2)
       {
@@ -503,10 +520,11 @@ void squadgrab_immobile(char dead)
             clearmessagearea();
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             move(16,1);
-            addstr(activesquad->squad[p]->name);
-            addstr(" can no longer handle ");
-            addstr(activesquad->squad[p]->prisoner->name);
-            addstr(".");
+            addstr(activesquad->squad[p]->name, gamelog);
+            addstr(" can no longer handle ", gamelog);
+            addstr(activesquad->squad[p]->prisoner->name, gamelog);
+            addstr(".", gamelog);
+            gamelog.newline(); //New line.
             refresh();
             getch();
 
@@ -531,9 +549,10 @@ void squadgrab_immobile(char dead)
                   clearmessagearea();
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);
                   move(16,1);
-                  addstr("Nobody can carry Martyr ");
-                  addstr(activesquad->squad[p]->name);
-                  addstr(".");
+                  addstr("Nobody can carry Martyr ", gamelog);
+                  addstr(activesquad->squad[p]->name, gamelog);
+                  addstr(".", gamelog);
+                  gamelog.newline();
 
                   //DROP LOOT
                   makeloot(*activesquad->squad[p],groundloot);
@@ -551,14 +570,39 @@ void squadgrab_immobile(char dead)
                         break;
                      }
                   }
+
+                  //Check if that was the last living squad member.
+                  bool squad_dead = true;
+                  for(int i = 5; i >= 0; --i)
+                  {
+                     //This check to make sure we don't look at nonexistent
+                     //data, causing segfaults and the like.
+                     if(activesquad->squad[i] != NULL)
+                     {
+                        //Check if alive.
+                        if(activesquad->squad[i]->alive)
+                        {
+                           //IT LIVES! Squad is not dead.
+                           squad_dead = false;
+                           break; //No reason to continue
+                        }
+                     }
+                  }
+
+                  //Check if squad is dead.
+                  if(squad_dead)
+                  {
+                     gamelog.nextMessage(); //Squad is dead. Next message.
+                  }
                }
                else
                {
                   clearmessagearea();
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);
                   move(16,1);
-                  addstr(activesquad->squad[p]->name);
-                  addstr(" is left to be captured.");
+                  addstr(activesquad->squad[p]->name, gamelog);
+                  addstr(" is left to be captured.", gamelog);
+                  gamelog.newline(); //New line.
 
                   capturecreature(*activesquad->squad[p]);
                }
@@ -580,10 +624,11 @@ void squadgrab_immobile(char dead)
                         clearmessagearea();
                         set_color(COLOR_YELLOW,COLOR_BLACK,1);
                         move(16,1);
-                        addstr(activesquad->squad[p2]->name);
-                        addstr(" hauls ");
-                        addstr(activesquad->squad[p]->name);
-                        addstr(".");
+                        addstr(activesquad->squad[p2]->name, gamelog);
+                        addstr(" hauls ", gamelog);
+                        addstr(activesquad->squad[p]->name, gamelog);
+                        addstr(".", gamelog);
+                        gamelog.newline(); //New line.
                         break;
                      }
                   }
