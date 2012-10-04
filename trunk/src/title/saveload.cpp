@@ -26,7 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
+#include <includes.h>
 #include <externs.h>
 #include "lcsio.h"
 
@@ -48,6 +48,10 @@ void autosave(void)
 /* handles saving */
 void savegame(const char *str)
 {
+#ifdef NOSAVE
+   return;
+#endif
+   
    char dummy_c;
    int dummy;
    int numbytes;

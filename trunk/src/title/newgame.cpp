@@ -695,7 +695,7 @@ void makecharacter(void)
             move(2,0);addstr("Life went on.  On my 18th birthday...");
             move(5,0);
             if(choices || selection == 0)
-               addstr("A - I got my hands on an old Beetle.  It's still in great shape.");
+               addstr("A - I got my hands on a sports car. The owner must have been pissed.");
             move(7,0);
             if(choices || selection == 1)
                addstr("B - I bought myself an assault rifle.");
@@ -1017,7 +1017,10 @@ void makecharacter(void)
          case 8:
             if(c=='a')
             {
-               startcar = new Vehicle(*vehicletype[getvehicletype("BUG")]);
+               startcar = new Vehicle(*vehicletype[getvehicletype("SPORTSCAR")]);
+               // Add heat to the starting vehicle because it is stolen.
+               // This is so that you can't immediately sell it at full price.
+               startcar->add_heat(10);
                vehicle.push_back(startcar);
                newcr->pref_carid = startcar->id();
             }
@@ -1574,6 +1577,11 @@ void makecharacter(void)
                newa->set_bloody(true);
             location[l]->loot.push_back(newi);
             #endif
+
+            #ifdef HIGHFUNDS
+            ledger.force_funds(100000);
+            #endif
+
             break;
          }
       }

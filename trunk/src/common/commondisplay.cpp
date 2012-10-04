@@ -1574,6 +1574,19 @@ void addlocationname(locationst *loc)
    }
 }
 
+/* print location name (is aware of business fronts) (uses gamelog) */
+void addlocationname(locationst *loc , Log &log)
+{
+   if(loc->front_business!=-1)
+   {
+      addstr(loc->front_name , log);
+   }
+   else
+   {
+      addstr(loc->name , log);
+   }
+}
+
 /* print location's shortname (is aware of business fronts) */
 void addshortname (locationst *loc)
 {
@@ -1582,6 +1595,17 @@ void addshortname (locationst *loc)
    }
    else {
       addstr (loc->shortname);
+   }
+}
+
+/* print location's shortname (is aware of business fronts) (uses gamelog) */
+void addshortname (locationst *loc , Log &log)
+{
+   if (loc->front_business!=-1) {
+      addstr (loc->front_shortname , log);
+   }
+   else {
+      addstr (loc->shortname , log);
    }
 }
 

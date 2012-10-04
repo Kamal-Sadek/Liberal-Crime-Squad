@@ -13,6 +13,9 @@
 /*
    DEBUG DEFINES
 */
+// Don't save the game
+//#define NOSAVE
+
 // Enemies don't attack
 //#define NOENEMYATTACK
 
@@ -1279,6 +1282,8 @@ enum ActiveSortingChoices
 /* end the game and clean up */
 void end_game(int err=0);
 
+class Log; //Forward declaration.
+
 /*******************************************************************************
 *
 *                                Common Stuff
@@ -1315,8 +1320,12 @@ void printliberalcrimes(Creature &cr);
 void makedelimiter(int y,int x);
 /* print location name (is aware of business fronts) */
 void addlocationname(locationst *loc);
+/* print location name (is aware of business fronts) (uses gamelog) */
+void addlocationname(locationst *loc, Log &log);
 /* print location's shortname (is aware of business fronts) */
 void addshortname (locationst *loc);
+/* print location's shortname (is aware of business fronts) (uses gamelog) */
+void addshortname (locationst *loc , Log &log);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
@@ -1328,7 +1337,6 @@ void addprevpagestr();
 /* prints a long blurb showing how to page forward and back */
 void addpagestr();
 /* A wrapper to addstr() which logs the input and then calls addstr to draw it. */
-class Log; //Forward declaration.
 int addstr(const char *text, Log &log);
 
 /*
@@ -2068,6 +2076,7 @@ void reaganify(char canseethings);
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */
 void amendmentheading(void);
+
 
 /*******************************************************************************
 *

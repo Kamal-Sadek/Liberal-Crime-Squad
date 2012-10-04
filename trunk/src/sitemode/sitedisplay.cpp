@@ -747,17 +747,25 @@ void refreshmaparea(void)
 void clearmessagearea(bool redrawmaparea)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(16,1);
-   addstr("                                                    ");
-   move(17,1);
-   addstr("                                                    ");
-
+   
    if(redrawmaparea)
    {
+      move(16,1);
+      addstr("                                                                              ");
+      move(17,1);
+      addstr("                                                                              ");
+
       refreshmaparea();
       // Must reprint chasers when no map to the right
       if(mode==GAMEMODE_CHASECAR||mode==GAMEMODE_CHASEFOOT)
          printchaseencounter();
+   }
+   else
+   {
+      move(16,1);
+      addstr("                                                    ");
+      move(17,1);
+      addstr("                                                    ");
    }
 }
 

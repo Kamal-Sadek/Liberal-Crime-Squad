@@ -35,6 +35,8 @@ bool goodguyattack = false;
 /* attack handling for each side as a whole */
 void youattack(void)
 {
+   foughtthisround=1;
+
    short wasalarm=sitealarm;
 
    for(int e=0;e<ENCMAX;e++)
@@ -236,6 +238,8 @@ void youattack(void)
 
 void enemyattack(void)
 {
+   foughtthisround=1;
+
    goodguyattack = false;
 
    bool armed=false;
@@ -307,7 +311,7 @@ void enemyattack(void)
                   clearmessagearea();
 
                   move(16,1);
-                  addstr(encounter[e].name);
+                  addstr(encounter[e].name, gamelog);
                   if((encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
                      (encounter[e].wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF)||
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
@@ -316,30 +320,32 @@ void enemyattack(void)
                   {
                      switch(LCSrandom(9))
                      {
-                        case 0:addstr(" crawls off moaning...");break;
-                        case 1:addstr(" crawls off whimpering...");break;
-                        case 2:addstr(" crawls off trailing blood...");break;
-                        case 3:addstr(" crawls off screaming...");break;
-                        case 4:addstr(" crawls off crying...");break;
-                        case 5:addstr(" crawls off sobbing...");break;
-                        case 6:addstr(" crawls off whispering...");break;
-                        case 7:addstr(" crawls off praying...");break;
-                        case 8:addstr(" crawls off cursing...");break;
+                        case 0:addstr(" crawls off moaning...", gamelog);break;
+                        case 1:addstr(" crawls off whimpering...", gamelog);break;
+                        case 2:addstr(" crawls off trailing blood...", gamelog);break;
+                        case 3:addstr(" crawls off screaming...", gamelog);break;
+                        case 4:addstr(" crawls off crying...", gamelog);break;
+                        case 5:addstr(" crawls off sobbing...", gamelog);break;
+                        case 6:addstr(" crawls off whispering...", gamelog);break;
+                        case 7:addstr(" crawls off praying...", gamelog);break;
+                        case 8:addstr(" crawls off cursing...", gamelog);break;
                      }
                   }
                   else
                   {
                      switch(LCSrandom(7))
                      {
-                        case 0:addstr(" makes a break for it!");break;
-                        case 1:addstr(" escapes crying!");break;
-                        case 2:addstr(" runs away!");break;
-                        case 3:addstr(" gets out of there!");break;
-                        case 4:addstr(" runs hollering!");break;
-                        case 5:addstr(" bolts out of there!");break;
-                        case 6:addstr(" runs away screaming!");break;
+                        case 0:addstr(" makes a break for it!", gamelog);break;
+                        case 1:addstr(" escapes crying!", gamelog);break;
+                        case 2:addstr(" runs away!", gamelog);break;
+                        case 3:addstr(" gets out of there!", gamelog);break;
+                        case 4:addstr(" runs hollering!", gamelog);break;
+                        case 5:addstr(" bolts out of there!", gamelog);break;
+                        case 6:addstr(" runs away screaming!", gamelog);break;
                      }
                   }
+
+                  gamelog.newline();
 
                   delenc(e,0);
                   e--;
@@ -424,10 +430,11 @@ void enemyattack(void)
                      clearmessagearea();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(16,1);
-                     addstr(activesquad->squad[target]->name);
-                     addstr(" drops ");
-                     addstr(activesquad->squad[target]->prisoner->name);
-                     addstr("'s body.");
+                     addstr(activesquad->squad[target]->name, gamelog);
+                     addstr(" drops ", gamelog);
+                     addstr(activesquad->squad[target]->prisoner->name, gamelog);
+                     addstr("'s body.", gamelog);
+                     gamelog.newline();
 
                      if(activesquad->squad[target]->prisoner->type==CREATURE_CORPORATE_CEO||
                         activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
@@ -477,7 +484,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    char str[200],str2[200];
 
-   clearmessagearea();
+   clearmessagearea(false);
    if (goodguyattack)
    {
       set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -551,7 +558,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcat(str,".");
       }
       move(16,1);
-      addstr(str);
+      addstr(str, gamelog);
+      gamelog.newline();
 
       printparty();
       if(mode==GAMEMODE_CHASECAR || mode==GAMEMODE_CHASEFOOT)
@@ -621,7 +629,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    strcat(str," ");
    strcat(str,t.name);
    move(16,1);
-   addstr(str);
+   addstr(str, gamelog);
 
    strcpy(str,"");
 
@@ -636,7 +644,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       //strcat(str,"and ");
    }
    strcat(str,"!");
-   addstr(str);
+   addstr(str, gamelog);
+   gamelog.newline();
 
    refresh();
    getch();
@@ -1027,13 +1036,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 				  else set_color(COLOR_RED,COLOR_BLACK,1);
 
                   move(16,1);
-                  addstr(target->name);
-                  if(!t.alive)addstr(" misguidedly ");
-                  else addstr(" heroically ");
-                  addstr(" shields ");
-                  addstr(t.name);
-                  if(!t.alive)addstr("'s corpse");
-                  addstr("!");
+                  addstr(target->name, gamelog);
+                  if(!t.alive)addstr(" misguidedly ", gamelog);
+                  else addstr(" heroically ", gamelog);
+                  addstr(" shields ", gamelog);
+                  addstr(t.name, gamelog);
+                  if(!t.alive)addstr("'s corpse", gamelog);
+                  addstr("!", gamelog);
+                  gamelog.newline();
                   
                   addjuice(*target,10,1000);//Instant juice!! Way to take the bullet!!
                   
@@ -1137,7 +1147,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else strcat(str,attack_used->hit_punctuation.c_str());
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr(str);
+            addstr(str, gamelog);
+            gamelog.newline();
 
             refresh();
             getch();
@@ -1169,7 +1180,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr(str);
+            addstr(str, gamelog);
+            gamelog.newline();
 
             if(target->wound[w] & WOUND_NASTYOFF)bloodblast(&target->get_armor());
 
@@ -1223,12 +1235,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            heavydam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s face is blasted off!");
-                           else if(damtype & WOUND_BURNED)addstr("'s face is burned away!");
-                           else if(damtype & WOUND_TORN)addstr("'s face is torn off!");
-                           else if(damtype & WOUND_CUT)addstr("'s face is cut away!");
-                           else addstr("'s face is removed!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s face is blasted off!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("'s face is burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s face is torn off!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("'s face is cut away!", gamelog);
+                           else addstr("'s face is removed!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
                            target->special[SPECIALWOUND_RIGHTEYE]=0;
@@ -1249,28 +1262,29 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            move(16,1);
                            if(teethminus>1)
                            {
-                              addstr(num);
-                              addstr(" of ");
-                              addstr(target->name);
-                              addstr("'s teeth are ");
+                              addstr(num, gamelog);
+                              addstr(" of ", gamelog);
+                              addstr(target->name, gamelog);
+                              addstr("'s teeth are ", gamelog);
                            }
                            else if(target->special[SPECIALWOUND_TEETH]>1)
                            {
-                              addstr("One of ");
-                              addstr(target->name);
-                              addstr("'s teeth is ");
+                              addstr("One of ", gamelog);
+                              addstr(target->name, gamelog);
+                              addstr("'s teeth is ", gamelog);
                            }
                            else
                            {
-                              addstr(target->name);
-                              addstr("'s last tooth is ");
+                              addstr(target->name, gamelog);
+                              addstr("'s last tooth is ", gamelog);
                            }
 
-                           if(damtype & WOUND_SHOT)addstr("shot out!");
-                           else if(damtype & WOUND_BURNED)addstr("burned away!");
-                           else if(damtype & WOUND_TORN)addstr("gouged out!");
-                           else if(damtype & WOUND_CUT)addstr("cut out!");
-                           else addstr("knocked out!");
+                           if(damtype & WOUND_SHOT)addstr("shot out!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("gouged out!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("cut out!", gamelog);
+                           else addstr("knocked out!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1282,12 +1296,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            heavydam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s right eye is blasted out!");
-                           else if(damtype & WOUND_BURNED)addstr("'s right eye is burned away!");
-                           else if(damtype & WOUND_TORN)addstr("'s right eye is torn out!");
-                           else if(damtype & WOUND_CUT)addstr("'s right eye is poked out!");
-                           else addstr("'s right eye is removed!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s right eye is blasted out!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("'s right eye is burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s right eye is torn out!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("'s right eye is poked out!", gamelog);
+                           else addstr("'s right eye is removed!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1299,12 +1314,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                         if(target->special[SPECIALWOUND_LEFTEYE]&&heavydam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s left eye is blasted out!");
-                           else if(damtype & WOUND_BURNED)addstr("'s left eye is burned away!");
-                           else if(damtype & WOUND_TORN)addstr("'s left eye is torn out!");
-                           else if(damtype & WOUND_CUT)addstr("'s left eye is poked out!");
-                           else addstr("'s left eye is removed!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s left eye is blasted out!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("'s left eye is burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s left eye is torn out!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("'s left eye is poked out!", gamelog);
+                           else addstr("'s left eye is removed!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1316,12 +1332,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                         if(target->special[SPECIALWOUND_TONGUE]&&heavydam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s tongue is blasted off!");
-                           else if(damtype & WOUND_BURNED)addstr("'s tongue is burned away!");
-                           else if(damtype & WOUND_TORN)addstr("'s tongue is torn out!");
-                           else if(damtype & WOUND_CUT)addstr("'s tongue is cut off!");
-                           else addstr("'s tongue is removed!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s tongue is blasted off!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("'s tongue is burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s tongue is torn out!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("'s tongue is cut off!", gamelog);
+                           else addstr("'s tongue is removed!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1334,12 +1351,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            heavydam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s nose is blasted off!");
-                           else if(damtype & WOUND_BURNED)addstr("'s nose is burned away!");
-                           else if(damtype & WOUND_TORN)addstr("'s nose is torn off!");
-                           else if(damtype & WOUND_CUT)addstr("'s nose is cut off!");
-                           else addstr("'s nose is removed!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s nose is blasted off!", gamelog);
+                           else if(damtype & WOUND_BURNED)addstr("'s nose is burned away!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s nose is torn off!", gamelog);
+                           else if(damtype & WOUND_CUT)addstr("'s nose is cut off!", gamelog);
+                           else addstr("'s nose is removed!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1352,9 +1370,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            breakdam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s neck bones are shattered!");
-                           else addstr("'s neck is broken!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s neck bones are shattered!", gamelog);
+                           else addstr("'s neck is broken!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1379,9 +1398,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            breakdam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s upper spine is shattered!");
-                           else addstr("'s upper spine is broken!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s upper spine is shattered!", gamelog);
+                           else addstr("'s upper spine is broken!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1394,9 +1414,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            breakdam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s lower spine is shattered!");
-                           else addstr("'s lower spine is broken!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s lower spine is shattered!", gamelog);
+                           else addstr("'s lower spine is broken!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1409,10 +1430,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s right lung is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s right lung is torn!");
-                           else addstr("'s right lung is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s right lung is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s right lung is torn!", gamelog);
+                           else addstr("'s right lung is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1425,10 +1447,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s left lung is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s left lung is torn!");
-                           else addstr("'s left lung is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s left lung is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s left lung is torn!", gamelog);
+                           else addstr("'s left lung is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1441,10 +1464,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s heart is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s heart is torn!");
-                           else addstr("'s heart is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s heart is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s heart is torn!", gamelog);
+                           else addstr("'s heart is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1457,10 +1481,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s liver is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s liver is torn!");
-                           else addstr("'s liver is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s liver is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s liver is torn!", gamelog);
+                           else addstr("'s liver is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1473,10 +1498,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s stomach is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s stomach is torn!");
-                           else addstr("'s stomach is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s stomach is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s stomach is torn!", gamelog);
+                           else addstr("'s stomach is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1489,10 +1515,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s right kidney is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s right kidney is torn!");
-                           else addstr("'s right kidney is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s right kidney is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s right kidney is torn!", gamelog);
+                           else addstr("'s right kidney is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1505,10 +1532,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s left kidney is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s left kidney is torn!");
-                           else addstr("'s left kidney is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s left kidney is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s left kidney is torn!", gamelog);
+                           else addstr("'s left kidney is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1521,10 +1549,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            pokedam)
                         {
                            move(16,1);
-                           addstr(target->name);
-                           if(damtype & WOUND_SHOT)addstr("'s spleen is blasted!");
-                           else if(damtype & WOUND_TORN)addstr("'s spleen is torn!");
-                           else addstr("'s spleen is punctured!");
+                           addstr(target->name, gamelog);
+                           if(damtype & WOUND_SHOT)addstr("'s spleen is blasted!", gamelog);
+                           else if(damtype & WOUND_TORN)addstr("'s spleen is torn!", gamelog);
+                           else addstr("'s spleen is punctured!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1544,25 +1573,26 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            move(16,1);
                            if(ribminus>1)
                            {
-                              addstr(num);
-                              addstr(" of ");
-                              addstr(target->name);
-                              addstr("'s ribs are ");
+                              addstr(num, gamelog);
+                              addstr(" of ", gamelog);
+                              addstr(target->name, gamelog);
+                              addstr("'s ribs are ", gamelog);
                            }
                            else if(target->special[SPECIALWOUND_RIBS]>1)
                            {
-                              addstr("One of ");
-                              addstr(target->name);
-                              addstr("'s rib is ");
+                              addstr("One of ", gamelog);
+                              addstr(target->name, gamelog);
+                              addstr("'s rib is ", gamelog);
                            }
                            else
                            {
-                              addstr(target->name);
-                              addstr("'s last unbroken rib is ");
+                              addstr(target->name, gamelog);
+                              addstr("'s last unbroken rib is ", gamelog);
                            }
 
-                           if(damtype & WOUND_SHOT)addstr("shot apart!");
-                           else addstr("broken!");
+                           if(damtype & WOUND_SHOT)addstr("shot apart!", gamelog);
+                           else addstr("broken!", gamelog);
+                           gamelog.newline();
                            refresh();
                            getch();
 
@@ -1582,7 +1612,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       {
          strcat(str," to no effect.");
          move(17,1);
-         addstr(str);
+         addstr(str, gamelog);
+         gamelog.newline();
 
          printparty();
          if(mode==GAMEMODE_CHASECAR||
@@ -1604,7 +1635,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcpy(str,t.name);
          strcat(str," knocks the blow aside and counters!");
          move(17,1);
-         addstr(str);
+         addstr(str, gamelog);
+         gamelog.newline();
 
          refresh();
          getch();
@@ -1631,7 +1663,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
              strcat(str," misses.");
          }
          move(17,1);
-         addstr(str);
+         addstr(str, gamelog);
+         gamelog.newline();
          printparty();
          if(mode==GAMEMODE_CHASECAR||
                      mode==GAMEMODE_CHASEFOOT)printchaseencounter();
@@ -1956,7 +1989,8 @@ void specialattack(Creature &a, Creature &t, char &actual)
    }
 
    move(16,1);
-   addstr(str);
+   addstr(str, gamelog);
+   gamelog.newline();
 
    if(t.animalgloss==ANIMALGLOSS_TANK||(t.animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2))
    {
@@ -1966,15 +2000,15 @@ void specialattack(Creature &a, Creature &t, char &actual)
       case ANIMALGLOSS_ANIMAL:
       default:
          move(17,1);
-         addstr(t.name);
-         addstr(" is immune to the attack!");
+         addstr(t.name, gamelog);
+         addstr(" is immune to the attack!", gamelog);
       }
    }
    else if(a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED)
    {
       move(17,1);
-      addstr(t.name);
-      addstr(" is immune to the attack!");
+      addstr(t.name, gamelog);
+      addstr(" is immune to the attack!", gamelog);
    }
    else if(attack>resist)
    {
@@ -1984,48 +2018,48 @@ void specialattack(Creature &a, Creature &t, char &actual)
          if(t.juice>100)
          {
             move(17,1);
-            addstr(t.name);
-            addstr(" loses juice!");
+            addstr(t.name, gamelog);
+            addstr(" loses juice!", gamelog);
             addjuice(t,-50,100);
          }
          else if(LCSrandom(15)>t.get_attribute(ATTRIBUTE_WISDOM,true) || t.get_attribute(ATTRIBUTE_WISDOM,true) < t.get_attribute(ATTRIBUTE_HEART,true))
          {
             move(17,1);
-            addstr(t.name);
-            addstr(" is tainted with Wisdom!");
+            addstr(t.name, gamelog);
+            addstr(" is tainted with Wisdom!", gamelog);
             t.adjust_attribute(ATTRIBUTE_WISDOM,+1);
          }
          else if(t.align==ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
          {
             move(17,1);
-            addstr(t.name);
-            addstr(" can't bear to leave!");
+            addstr(t.name, gamelog);
+            addstr(" can't bear to leave!", gamelog);
          }
          else
          {
             if(a.align==-1)
             {
                move(17,1);
-               addstr(t.name);
-               addstr(" is turned Conservative");
+               addstr(t.name, gamelog);
+               addstr(" is turned Conservative", gamelog);
                t.stunned=0;
                if(t.prisoner!=NULL)
                {
                   freehostage(t,0);
                }
-               addstr("!");
+               addstr("!", gamelog);
             }
             else
             {
                move(17,1);
-               addstr(t.name);
-               addstr(" doesn't want to fight anymore");
+               addstr(t.name, gamelog);
+               addstr(" doesn't want to fight anymore", gamelog);
                t.stunned=0;
                if(t.prisoner!=NULL)
                {
                   freehostage(t,0);
                }
-               addstr("!");
+               addstr("!", gamelog);
             }
 
             for(int e=0;e<ENCMAX;e++)
@@ -2071,23 +2105,23 @@ void specialattack(Creature &a, Creature &t, char &actual)
          if(t.juice>=100)
          {
             move(17,1);
-            addstr(t.name);
-            addstr(" seems less badass!");
+            addstr(t.name, gamelog);
+            addstr(" seems less badass!", gamelog);
             addjuice(t,-50,99);
          }
          else if(!t.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_AVERAGE) ||
             t.get_attribute(ATTRIBUTE_HEART,true) < t.get_attribute(ATTRIBUTE_WISDOM,true))
          {
             move(17,1);
-            addstr(t.name);
-            addstr("'s Heart swells!");
+            addstr(t.name, gamelog);
+            addstr("'s Heart swells!", gamelog);
             t.adjust_attribute(ATTRIBUTE_HEART,+1);
          }
          else
          {
             move(17,1);
-            addstr(t.name);
-            addstr(" has turned Liberal!");
+            addstr(t.name, gamelog);
+            addstr(" has turned Liberal!", gamelog);
             t.stunned=0;
 
             liberalize(t);
@@ -2099,9 +2133,11 @@ void specialattack(Creature &a, Creature &t, char &actual)
    else
    {
       move(17,1);
-      addstr(t.name);
-      addstr(" remains strong.");
+      addstr(t.name, gamelog);
+      addstr(" remains strong.", gamelog);
    }
+
+   gamelog.newline();
 
    printparty();
    if(mode==GAMEMODE_CHASECAR||
@@ -2131,12 +2167,13 @@ void severloot(Creature &cr,vector<Item *> &loot)
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
-      addstr("The ");
-      addstr(cr.get_weapon().get_name(1).c_str());
-      addstr(" slips from");
+      addstr("The ", gamelog);
+      addstr(cr.get_weapon().get_name(1).c_str(), gamelog);
+      addstr(" slips from", gamelog);
       move(17,1);
-      addstr(cr.name);
-      addstr("'s grasp.");
+      addstr(cr.name, gamelog);
+      addstr("'s grasp.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
       
@@ -2153,10 +2190,11 @@ void severloot(Creature &cr,vector<Item *> &loot)
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
-      addstr(cr.name);
-      addstr("'s ");
-      addstr(cr.get_armor().get_name().c_str());
-      addstr(" has been destroyed.");
+      addstr(cr.name, gamelog);
+      addstr("'s ", gamelog);
+      addstr(cr.get_armor().get_name().c_str(), gamelog);
+      addstr(" has been destroyed.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
@@ -2170,9 +2208,10 @@ void severloot(Creature &cr,vector<Item *> &loot)
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr(cr.name);
-      addstr("'s ");
-      addstr(cr.get_armor().get_name().c_str());
-      addstr(" has been destroyed.");
+      addstr("'s ", gamelog);
+      addstr(cr.get_armor().get_name().c_str(), gamelog);
+      addstr(" has been destroyed.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
@@ -2327,17 +2366,19 @@ char incapacitated(Creature &a,char noncombat,char &printed)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(16,1);
-            addstr("The ");
-            addstr(a.name);
+            addstr("The ", gamelog);
+            addstr(a.name, gamelog);
             switch(LCSrandom(3))
             {
-               case 0:addstr(" smokes...");
+               case 0:addstr(" smokes...", gamelog);
                   break;
-               case 1:addstr(" smolders.");
+               case 1:addstr(" smolders.", gamelog);
                   break;
-               case 2:addstr(" burns...");
+               case 2:addstr(" burns...", gamelog);
                   break;
             }
+
+            gamelog.newline();
 
             printed=1;
          }
@@ -2358,19 +2399,21 @@ char incapacitated(Creature &a,char noncombat,char &printed)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(16,1);
-            addstr("The ");
+            addstr("The ", gamelog);
             addstr(a.name);
             switch(LCSrandom(3))
             {
-               case 0:addstr(" yelps in pain...");
+               case 0:addstr(" yelps in pain...", gamelog);
                   break;
                case 1:
-                  if(law[LAW_FREESPEECH]==-2)addstr(" [makes a stinky].");
-                  else addstr(" soils the floor.");
+                  if(law[LAW_FREESPEECH]==-2)addstr(" [makes a stinky].", gamelog);
+                  else addstr(" soils the floor.", gamelog);
                   break;
-               case 2:addstr(" yowls pitifully...");
+               case 2:addstr(" yowls pitifully...", gamelog);
                   break;
             }
+
+            gamelog.newline();
 
             printed=1;
          }
@@ -2595,43 +2638,45 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(16,1);
-         addstr(a.name);
+         addstr(a.name , gamelog);
          switch(LCSrandom(11))
          {
             case 0:
-               addstr(" seems hesitant.");
+               addstr(" seems hesitant.", gamelog);
                break;
             case 1:
-               addstr(" is caught in self-doubt.");
+               addstr(" is caught in self-doubt.", gamelog);
                break;
             case 2:
-               addstr(" looks around uneasily.");
+               addstr(" looks around uneasily.", gamelog);
                break;
             case 3:
-               addstr(" begins to weep.");
+               addstr(" begins to weep.", gamelog);
                break;
             case 4:
-               addstr(" asks \"Is this right?\"");
+               addstr(" asks \"Is this right?\"", gamelog);
                break;
             case 5:
-               addstr(" asks for guidance.");
+               addstr(" asks for guidance.", gamelog);
                break;
             case 6:
-               addstr(" is caught in indecision.");
+               addstr(" is caught in indecision.", gamelog);
                break;
             case 7:
-               addstr(" feels numb.");
+               addstr(" feels numb.", gamelog);
                break;
             case 8:
-               addstr(" prays softly.");
+               addstr(" prays softly.", gamelog);
                break;
             case 9:
-               addstr(" searches for the truth.");
+               addstr(" searches for the truth.", gamelog);
                break;
             case 10:
-               addstr(" tears up.");
+               addstr(" tears up.", gamelog);
                break;
          }
+
+         gamelog.newline();
 
          printed=1;
       }
@@ -2647,25 +2692,27 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(16,1);
-         addstr(a.name);
+         addstr(a.name , gamelog);
          switch(LCSrandom(5))
          {
             case 0:
-               addstr(" looks on with authority.");
+               addstr(" looks on with authority.", gamelog);
                break;
             case 1:
-               addstr(" waits patiently.");
+               addstr(" waits patiently.", gamelog);
                break;
             case 2:
-               addstr(" sits in thought.");
+               addstr(" sits in thought.", gamelog);
                break;
             case 3:
-               addstr(" breathes slowly.");
+               addstr(" breathes slowly.", gamelog);
                break;
             case 4:
-               addstr(" considers the situation.");
+               addstr(" considers the situation.", gamelog);
                break;
          }
+
+         gamelog.newline();
 
          printed=1;
       }
@@ -2693,43 +2740,43 @@ void adddeathmessage(Creature &cr)
       switch(LCSrandom(4))
       {
          case 0:
-            strcat(str," reaches once where there");
-            addstr(str);
+            strcat(str," reaches once where there ");
+            addstr(str, gamelog);
             move(17,1);
             if(mode!=GAMEMODE_CHASECAR)
             {
-               addstr("is no head, and falls.");
+               addstr("is no head, and falls.", gamelog);
             }
-            else addstr("is no head, and slumps over.");
+            else addstr("is no head, and slumps over.", gamelog);
             break;
          case 1:
             if(mode!=GAMEMODE_CHASECAR)
             {
-               strcat(str," stands headless for a");
+               strcat(str," stands headless for a ");
             }
-            else strcat(str," sits headless for a");
-            addstr(str);
+            else strcat(str," sits headless for a ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("moment then crumples over.");
+            addstr("moment then crumples over.", gamelog);
             break;
          case 2:
             strcat(str," squirts ");
             if(law[LAW_FREESPEECH]==-2)strcat(str,"[red water]");
             else strcat(str,"blood");
             strcat(str," out of the ");
-            addstr(str);
+            addstr(str, gamelog);
             move(17,1);
             if(mode!=GAMEMODE_CHASECAR)
             {
-               addstr("neck and runs down the hall.");
+               addstr("neck and runs down the hall.", gamelog);
             }
-            else addstr("neck and falls to the side.");
+            else addstr("neck and falls to the side.", gamelog);
             break;
          case 3:
-            strcat(str," sucks a last breath through");
-            addstr(str);
+            strcat(str," sucks a last breath through ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("the neck hole, then is quiet.");
+            addstr("the neck hole, then is quiet.", gamelog);
             break;
       }
    }
@@ -2742,7 +2789,7 @@ void adddeathmessage(Creature &cr)
          case 0:strcat(str," breaks into pieces.");break;
          case 1:strcat(str," falls apart and is dead.");break;
       }
-      addstr(str);
+      addstr(str, gamelog);
    }
    else
    {
@@ -2750,86 +2797,87 @@ void adddeathmessage(Creature &cr)
       switch(LCSrandom(11))
       {
          case 0:
-            strcat(str," cries out one last time");
-            addstr(str);
+            strcat(str," cries out one last time ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("then is quiet.");
+            addstr("then is quiet.", gamelog);
             break;
          case 1:
-            strcat(str," gasps a last breath and");
-            addstr(str);
+            strcat(str," gasps a last breath and ");
+            addstr(str, gamelog);
             move(17,1);
-            if(law[LAW_FREESPEECH]==-2)addstr("[makes a mess].");
-            else addstr("soils the floor.");
+            if(law[LAW_FREESPEECH]==-2)addstr("[makes a mess].", gamelog);
+            else addstr("soils the floor.", gamelog);
             break;
          case 2:
-            strcat(str," murmur quietly, breathing softly.");
-            addstr(str);
+            strcat(str," murmurs quietly, breathing softly. ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("Then all is silent.");
+            addstr("Then all is silent.", gamelog);
             break;
          case 3:
-            strcat(str," shouts \"FATHER!  Why have you");
-            addstr(str);
+            strcat(str," shouts \"FATHER!  Why have you ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("forsaken me?\" and dies in a heap.");
+            addstr("forsaken me?\" and dies in a heap.", gamelog);
             break;
          case 4:
-            strcat(str," cries silently for mother,");
-            addstr(str);
+            strcat(str," cries silently for mother, ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("breathing slowly, then not at all.");
+            addstr("breathing slowly, then not at all.", gamelog);
             break;
          case 5:
-            strcat(str," breathes heavily, coughing up");
-            addstr(str);
+            strcat(str," breathes heavily, coughing up ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("blood...  then is quiet.");
+            addstr("blood...  then is quiet.", gamelog);
             break;
          case 6:
-            strcat(str," silently drifts away, and");
-            addstr(str);
+            strcat(str," silently drifts away, and ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("is gone.");
+            addstr("is gone.", gamelog);
             break;
          case 7:
-            strcat(str," sweats profusely, murmurs");
-            addstr(str);
+            strcat(str," sweats profusely, murmurs ");
+            addstr(str, gamelog);
             move(17,1);
-            if(law[LAW_FREESPEECH]==-2)addstr("something [good] about Jesus, and dies.");
-            else addstr("something about Jesus, and dies.");
+            if(law[LAW_FREESPEECH]==-2)addstr("something [good] about Jesus, and dies.", gamelog);
+            else addstr("something about Jesus, and dies.", gamelog);
             break;
          case 8:
-            strcat(str," whines loudly, voice crackling,");
-            addstr(str);
+            strcat(str," whines loudly, voice crackling, ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("then curls into a ball, unmoving.");
+            addstr("then curls into a ball, unmoving.", gamelog);
             break;
          case 9:
-            strcat(str," shivers silently, whispering");
-            addstr(str);
+            strcat(str," shivers silently, whispering ");
+            addstr(str, gamelog);
             move(17,1);
-            addstr("a prayer, then all is still.");
+            addstr("a prayer, then all is still.", gamelog);
             break;
 		 case 10:
-			strcat(str," speaks these final words:");
-			addstr(str);
+			strcat(str," speaks these final words: ");
+			addstr(str, gamelog);
             move(17,1);
 			switch (cr.align)
 			{
 			case ALIGN_LIBERAL:
 			case ALIGN_ELITELIBERAL:
-				addstr(slogan);
+				addstr(slogan, gamelog);
 				break;
 			case ALIGN_MODERATE:
-				addstr("\"A plague on both your houses...\"");
+				addstr("\"A plague on both your houses...\"", gamelog);
 				break;
 			default:
-				addstr("\"Better dead than liberal...\"");
+				addstr("\"Better dead than liberal...\"", gamelog);
 				break;
 			}
       }
    }
+   gamelog.newline();
 }
 
 
