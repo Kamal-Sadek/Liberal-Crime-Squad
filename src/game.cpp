@@ -213,10 +213,12 @@ short siteonfire;
 int sitecrime;
 short cursite;
 
+char encounterwarnings=0;
+
+char foughtthisround=0;
+
 short interface_pgup='[';
 short interface_pgdn=']';
-
-char encounterwarnings=0;
 
 int day=1;
 
@@ -258,7 +260,7 @@ int main(int argc, char* argv[])
    //To let the user know a new instance of the program was started.
    //TODO: Make this output the current date and time so that the user knows when they
    //did the play session that follows.
-   gamelog.log("\n\n\n\n\n------PROGRAM STARTED------\n\n\n\n\n");
+   gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n\n\n");
 
    // set window title
    char wtitle[50];

@@ -54,7 +54,7 @@ char chasesequence(void)
    }
    if(chasenum==0)
    {
-      gamelog.nextMessage(); //Next message.
+      gamelog.newline();
       return 1;
    }
 
@@ -82,7 +82,7 @@ char chasesequence(void)
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
-   addstr("As you pull away from the site, you notice that you are", gamelog);
+   addstr("As you pull away from the site, you notice that you are ", gamelog);
    move(1,0);
    gamelog.newline(); //New line. I'd rather it be continuous but whatever.
    addstr("being followed by Conservative swine!", gamelog);
@@ -428,7 +428,7 @@ char chasesequence(void)
    }while(1);
 
    mode=GAMEMODE_BASE;
-   //Make sure all possible exist of the chase have the nextMessage() call
+   //Make sure all possible exits of the chase have the nextMessage() call
    //to ensure that the gamelog is split properly into blocks.
    gamelog.nextMessage();
    return 1;
@@ -460,11 +460,21 @@ char footchase(void)
    }
    if(chasenum==0)
    {
-      gamelog.nextMessage(); //Output this message, preparing for next.
       return 1;
    }
 
    mode=GAMEMODE_CHASEFOOT;
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(0,0);
+   addstr("As you exit the site, you notice that you are ", gamelog);
+   move(1,0);
+   gamelog.newline(); //New line. I'd rather it be continuous but whatever.
+   addstr("being followed by Conservative swine!", gamelog);
+   gamelog.newline(); //New line.
+   refresh();
+   getch();
 
    do
    {
@@ -536,6 +546,10 @@ char footchase(void)
       printchaseencounter();
 
       refresh();
+
+      // check if we fought the previous loop; if so, add a blank gamelog line
+      if(foughtthisround)gamelog.newline();
+      foughtthisround=0;
 
       int c=getch();
       translategetch(c);
@@ -674,7 +688,7 @@ char footchase(void)
                }
             }
             mode=GAMEMODE_BASE;
-            gamelog.nextMessage(); //Output this message, preparing for next.
+            gamelog.newline();
             return 1;
          }
       }
@@ -682,7 +696,7 @@ char footchase(void)
    }while(1);
 
    mode=GAMEMODE_BASE;
-   //All possible exists of the chase should be covered by a nextMessage() call.
+   //All possible exits of the chase should be covered by a nextMessage() call.
    gamelog.nextMessage();
    return 1;
 }

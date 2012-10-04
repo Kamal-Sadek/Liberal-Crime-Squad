@@ -55,10 +55,12 @@ extern short siteonfire;
 extern int sitecrime;
 extern short cursite;
 
+extern char encounterwarnings;
+
+extern char foughtthisround;
+
 extern short interface_pgup;
 extern short interface_pgdn;
-
-extern char encounterwarnings;
 
 extern int day;
 
