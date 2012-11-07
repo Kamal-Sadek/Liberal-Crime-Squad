@@ -5,6 +5,5 @@ Windows easy mode compilation
 
 Easiest way is using the workspaces provided in the 'workspaces' folder. Those project files are provided for:
 
- * Codeblocks (liberal alternative)
- * VisualStudio (evil but could get the job done well/better ^^)
+ * VisualStudio 
 

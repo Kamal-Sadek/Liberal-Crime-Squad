@@ -19,7 +19,7 @@ work.
 To do this under Ubuntu (and most likely Debian too) issue the following
 commands:
 
-sudo apt-get install build-essential libncurses-dev
+sudo apt-get install build-essential autoconf libncurses5-dev
 
 The actual compilation will be done by changing your working directory to the
 lcs folder and issuing:

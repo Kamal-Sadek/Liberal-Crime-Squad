@@ -1216,7 +1216,7 @@ void funds_and_trouble(char &clearformess)
          }
       }
 
-      char msg[80] = {0};
+      char msg[200] = {0};
 
       //MAJOR HACKING
       int hack_skill=0;
