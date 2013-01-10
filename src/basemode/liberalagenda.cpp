@@ -225,7 +225,7 @@ char liberalagenda(char won)
          }
          for(int l=0;l<LAWNUM;l++)
          {
-            move(14+l/3,l%3*26);//FIXME: L+ Should be on the LEFT, not the right, and vice versa. -- LK
+            move(14+l/3,l%3*26);
 
             set_color(COLOR_BLACK,COLOR_BLACK,1);
 
@@ -262,7 +262,7 @@ char liberalagenda(char won)
                case LAW_GUNCONTROL:addstr("Gun Control");break;
             }
 
-            move(14+l/3,l%3*26 + 3 + law[l]);//FIXME: Pretty sure this needs to be changed as well. -- LK
+            move(14+l/3,l%3*26 + 3 - law[l]);
 
             addch('O');
          }
@@ -544,24 +544,24 @@ char liberalagenda(char won)
       else
       {
          move(23,0);
-         set_color(COLOR_RED,COLOR_BLACK,1);
-         addstr("Arch-Conservative  ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
-         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         addstr("Conservative  ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
-         set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         addstr("moderate  ");
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         addstr("Elite Liberal ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("-  ");
          set_color(COLOR_CYAN,COLOR_BLACK,1);
          addstr("Liberal  ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("-  ");
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         addstr("Elite Liberal");
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         addstr("moderate  ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("-  ");
+         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+         addstr("Conservative  ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr("-  ");
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         addstr("Arch-Conservative");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          //move(23,0);
          //addstr("Once these are Green, the country will have achieved Elite Liberal status.");
