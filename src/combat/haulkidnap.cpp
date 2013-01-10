@@ -84,7 +84,7 @@ void kidnapattempt(void)
       int c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>='1'&&c<='6')
       {
@@ -153,7 +153,7 @@ void kidnapattempt(void)
                   if(t>=target.size())t=-1;
                   else {t=target[t];}break;
                }
-               if(c==10||c==27||c==32){t=-1;break;}
+               if(c==10||c==ESC||c==32){t=-1;break;}
             }while(1);
          }
 
@@ -275,7 +275,7 @@ void releasehostage(void)
       int c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>='1'&&c<='6')
       {

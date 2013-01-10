@@ -791,7 +791,7 @@ void survey(Creature *cr)
       {
          refresh();
          char key=getch();
-         if(key==10)return;
+         if(key==10||key==ESC)return;
          else if(key==interface_pgup)
          {
             page--;
@@ -2558,7 +2558,7 @@ char stealcar(Creature &cr,char &clearformess)
       move(12,0);
       addstr("A - Approach the driver's side door.");
       move(13,0);
-      addstr("X - Call it a day.");
+      addstr("Enter - Call it a day.");
 
       refresh();
 
@@ -2569,7 +2569,7 @@ char stealcar(Creature &cr,char &clearformess)
          c=getch();
          translategetch(c);
          if(c=='a')break;
-         if(c=='x'){delete v;return 1;}
+         if(c=='x'||c==ESC||c==10){delete v;return 1;}
       }while(1);
 
       //SECURITY?
@@ -2625,18 +2625,18 @@ char stealcar(Creature &cr,char &clearformess)
          move(13,0);
          addstr("B - Break the window.");
          move(14,0);
-         if(!sensealarm)addstr("X - Call it a day.");
+         if(!sensealarm)addstr("Enter - Call it a day.");
          else
          {
             if(!alarmon)
             {
-               addstr("X - The Viper?   ");
+               addstr("Enter - The Viper?   ");
                addstr(cr.name);
                addstr(" is deterred.");
             }
             else
             {
-               addstr("X - Yes, the Viper has deterred ");
+               addstr("Enter - Yes, the Viper has deterred ");
                addstr(cr.name);
                addstr(".");
             }
@@ -2652,7 +2652,7 @@ char stealcar(Creature &cr,char &clearformess)
             translategetch(c);
             if(c=='a')break;
             if(c=='b'){method=1;break;}
-            if(c=='x'){delete v;return 0;} /* try again tomorrow */
+            if(c=='x'||c==10||c==ESC){delete v;return 0;} /* try again tomorrow */
          }while(1);
 
          char entered=0;
@@ -2817,8 +2817,8 @@ char stealcar(Creature &cr,char &clearformess)
          move(y,0);y++;
          addstr("B - Desperately search for keys.");
          move(y,0);y++;
-         if(!sensealarm)addstr("X - Call it a day.");
-         else {addstr("X - The Viper has finally deterred ");addstr(cr.name);addstr(".");}
+         if(!sensealarm)addstr("Enter - Call it a day.");
+         else {addstr("Enter - The Viper has finally deterred ");addstr(cr.name);addstr(".");}
 
          refresh();
 
@@ -2832,7 +2832,7 @@ char stealcar(Creature &cr,char &clearformess)
             translategetch(c);
             if(c=='a')break;
             if(c=='b'){method=1;break;}
-            if(c=='x'){delete v;return 0;} // Call it a day and try again tomorrow
+            if(c=='x'||c==10||c==ESC){delete v;return 0;} // Call it a day and try again tomorrow
          }while(1);
 
          char started=0;

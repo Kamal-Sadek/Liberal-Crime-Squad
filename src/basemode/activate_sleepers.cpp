@@ -157,7 +157,7 @@ void activate_sleepers(void)
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS],true);
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -324,7 +324,7 @@ void activate_sleeper(Creature *cr)
          cr->activity.type=ACTIVITY_NONE;
          break;
       }
-      if(c==10)
+      if(c==10||c==ESC)
       {
          break;
       }

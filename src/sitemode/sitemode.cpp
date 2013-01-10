@@ -717,7 +717,7 @@ void mode_site(void)
                   break;
                }
 
-               if(c2==10)break;
+               if(c2==10||c2==ESC)break;
             }while(1);
          }
 
@@ -901,7 +901,7 @@ void mode_site(void)
                            if(activesquad->squad[sp]->alive)break;
                         }
                      }
-                     if(c==10||c==27||c==32){sp=-1;break;}
+                     if(c==10||c==ESC||c==32){sp=-1;break;}
                   }while(1);
                }
                else sp=forcesp;
@@ -1011,7 +1011,7 @@ void mode_site(void)
                               }
                            }
                         }
-                        if(c==10||c==27||c==32){tk=-1;break;}
+                        if(c==10||c==ESC||c==32){tk=-1;break;}
                      }while(1);
                   }
                   else tk=forcetk;
@@ -1698,7 +1698,7 @@ void mode_site(void)
                   if(encounterwarnings)encounterwarnings=0;else encounterwarnings=1;
                }
 
-               if(c==10)break;
+               if(c==10||c==ESC)break;
 
                move(10 , 2);
                if(encounterwarnings)

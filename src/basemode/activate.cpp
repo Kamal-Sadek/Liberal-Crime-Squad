@@ -162,7 +162,7 @@ void activate(void)
          activatebulk();
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -968,7 +968,7 @@ void activate(Creature *cr)
          break;
       }
       // Enter pressed
-      if(c==10)
+      if(c==10||c==ESC)
       {
          break;
       }
@@ -1164,7 +1164,7 @@ void activatebulk(void)
          selectedactivity=c-'1';
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -1280,7 +1280,7 @@ void select_tendhostage(Creature *cr)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -1478,7 +1478,7 @@ void select_makeclothing(Creature *cr)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -1637,7 +1637,7 @@ char select_view(Creature *cr,int &v)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 
    return 0;

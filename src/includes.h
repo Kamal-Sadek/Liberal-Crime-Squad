@@ -304,7 +304,7 @@ using namespace std;
 #define BIT31 (1<<30)
 #define BIT32 (1<<31)
 
-
+#define ESC 27
 
 int r_num(void);
 int LCSrandom(int max);

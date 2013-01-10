@@ -241,7 +241,7 @@ void orderparty(void)
       int c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
@@ -280,7 +280,7 @@ void orderpartyV2(void)
       int c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       int oldPos = c;
       Creature *swap = NULL;
@@ -301,7 +301,7 @@ void orderpartyV2(void)
       c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
@@ -579,23 +579,26 @@ void stopevil(void)
       activesquad->stance=0;
       }*/
 
-      if(c==10&&loc!=-1)
+      if(c==10||c==ESC)
       {
-         loc=location[loc]->parent;
-         temploc.clear();
-         for(l=0;l<location.size();l++)
+         if(loc!=-1)
          {
-            if(location[l]->parent==loc&&location[l]->renting>=0)temploc.push_back(l);
+            loc=location[loc]->parent;
+            temploc.clear();
+            for(l=0;l<location.size();l++)
+            {
+               if(location[l]->parent==loc&&location[l]->renting>=0)temploc.push_back(l);
+            }
+            for(l=0;l<location.size();l++)
+            {
+               if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL)temploc.push_back(l);
+            }
          }
-         for(l=0;l<location.size();l++)
+         else
          {
-            if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL)temploc.push_back(l);
+            activesquad->activity.type=ACTIVITY_NONE; // Clear squad activity
+            break;
          }
-      }
-      else if(c==10)
-      {
-         activesquad->activity.type=ACTIVITY_NONE; // Clear squad activity
-         break;
       }
 
    }while(1);
@@ -699,7 +702,7 @@ void investlocation(void)
       int c=getch();
       translategetch(c);
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
 
       if(c=='w')
       {
@@ -917,7 +920,7 @@ void setvehicles(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(24,1);
-      addstr("X - Done");
+      addstr("Enter - Done");
 
       refresh();
 
@@ -1041,7 +1044,7 @@ void setvehicles(void)
 
       //SAV - End add
 
-      if(c=='x'||c=='X')return;
+      if(c=='x'||c=='X'||c==ESC||c==10)return;
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
