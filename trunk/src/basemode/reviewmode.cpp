@@ -164,7 +164,7 @@ void review(void)
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<squad.size()+REVIEWMODENUM)page++;
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>='a'&&c<='s')
       {
@@ -840,7 +840,7 @@ void review_mode(short mode)
             int c=getch();
             translategetch(c);
 
-            if(c==10)break;
+            if(c==10||c==ESC)break;
 
             if(c<'a'||c>'s')
             {
@@ -864,7 +864,7 @@ void review_mode(short mode)
             c=getch();
             translategetch(c);
 
-            if(c==10)break;
+            if(c==10||c==ESC)break;
 
             if(c<'a'||c>'s')
             {
@@ -902,7 +902,7 @@ void review_mode(short mode)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -1182,7 +1182,7 @@ void assemblesquad(squadst *cursquad)
 				activesquad = oldactivesquad;
 			}
 		}
-      if(c==10)
+      if(c==10||c==ESC)
       {
          //CHECK IF GOOD
          char good=1;
@@ -1439,7 +1439,7 @@ void squadlessbaseassign(void)
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN],true);
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 
@@ -1683,7 +1683,7 @@ void promoteliberals(void)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 

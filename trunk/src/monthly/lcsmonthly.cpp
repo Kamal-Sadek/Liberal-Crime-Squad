@@ -203,7 +203,7 @@ int choosespecialedition(char &clearformess)
       }
 
       move(24,1);
-      addstr("X - Not in this month's Liberal Guardian");
+      addstr("Enter - Not in this month's Liberal Guardian");
 
       refresh();
 
@@ -261,7 +261,7 @@ int choosespecialedition(char &clearformess)
          }
       }
 
-      if(c=='x')
+      if(c=='x'||c==10||c==ESC)
       {
          return -1;
       }

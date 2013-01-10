@@ -421,7 +421,7 @@ void equip(vector<Item *> &loot,int loc)
          }
       }
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(loc!=-1)
       {
@@ -548,7 +548,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -713,7 +713,7 @@ void equipmentbaseassign(void)
          }
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
 }
 

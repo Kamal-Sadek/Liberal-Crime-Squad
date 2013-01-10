@@ -398,7 +398,7 @@ void tendhostage(Creature *cr,char &clearformess)
          translategetch(c);
          if(c>='a'&&c<='e')techniques[c-'a']=!techniques[c-'a'];
          if(c=='k')techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
-         if(c==10)break;
+         if(c==10||c==ESC)break;
       }
 
       if(techniques[TECHNIQUE_PROPS] && ledger.get_funds()>=250)

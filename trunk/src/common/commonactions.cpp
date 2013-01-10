@@ -969,7 +969,7 @@ void sorting_prompt(short listforsorting)
          activesortingchoice[listforsorting]=SORTING_SQUAD_OR_NAME;
          break;
       }
-      else if(c==10)
+      else if(c==10||c==ESC)
          break;
    }
 }
@@ -1045,7 +1045,7 @@ int choiceprompt(const string &firstline, const string &secondline,
             return p;
       }
 
-      if(allowexitwochoice&&c==10)break;
+      if(allowexitwochoice&&(c==10||c==ESC))break;
    }while(1);
    return -1;
 }
@@ -1108,7 +1108,7 @@ int buyprompt(const string &firstline, const string &secondline,
             return p;
       }
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
    }while(1);
    return -1;
 }

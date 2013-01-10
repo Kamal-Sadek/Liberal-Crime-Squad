@@ -74,7 +74,7 @@ void hospital(int loc)
       int c=getch();
       translategetch(c);
 
-      if(c==10)break;
+      if(c==10||c==ESC)break;
 
       if(c=='0')party_status=-1;
 
@@ -223,7 +223,7 @@ void dealership(int loc)
 
       
       // Leave
-      if(c==10)break;
+      if(c==10||c==ESC)break;
 
       //Sell the car
       if(c=='s' && car_to_sell)
@@ -397,7 +397,7 @@ void choose_buyer(short &buyer)
       int c=getch();
       translategetch(c);
 
-      if(c==10)return;
+      if(c==10||c==ESC)return;
 
       if(c>='1'&&c<=partysize+'1'-1)
       {
