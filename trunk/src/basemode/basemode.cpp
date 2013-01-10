@@ -765,6 +765,8 @@ void mode_base(void)
          if(selectedsiege==-1)sl=0;
          else sl=selectedsiege+1;
 
+         if(sl >= location.size()) sl = 0;
+
          for(int l=sl;l<location.size();l++)
          {
             if(location[l]->renting>=0)
