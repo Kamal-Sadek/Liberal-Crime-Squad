@@ -34,8 +34,6 @@ This file is part of Liberal Crime Squad.                                       
 /* re-create site from seed before squad arrives */
 void initsite(locationst &loc)
 {
-   int x = 0;
- 
    //PREP
    if(activesquad==NULL)return;
 
@@ -60,28 +58,103 @@ void initsite(locationst &loc)
    int oldseed=seed;
    seed=loc.mapseed;
 
-   for(x=0;x<MAPX;x++)
-   {
-      for(int y=0;y<MAPY;y++)
-      {
-         for(int z=0;z<MAPZ;z++)
-         {
-            levelmap[x][y][z].flag=SITEBLOCK_BLOCK;
-            levelmap[x][y][z].special=-1;
-            levelmap[x][y][z].siegeflag=0;
-         }
-      }
-   }
+   // A short guide to how the new maps work...
+   //
+   //   Edit maps using DAME, the "Deadly Alien Map Editor". You can find a maps.dam file
+   // to open with DAME in the /dev directory. You can find DAME here (try search engine if link
+   // is out of date):
+   //   http://dambots.com/dame-editor/
+   //
+   //   Open up the maps.dam file in DAME. On one side, in the layers listing, you'll see the existing
+   // maps. Use the check boxes to hide and show maps. You can create new maps by copying the old ones;
+   // right click a top-level group (like NuclearPlant) and select Duplicate. Rename the new map based
+   // on the conventions described below.
+   //   Editing using the Paint tool ('B') is easy; click the tile you want in the tiles panel, then click
+   // the map view to paint with that tile. You may need to experiment a bit to figure out what the
+   // specials icons represent, but I've tried to make it pretty self-explanatory. Box-drawing to fill
+   // large areas is possible, but a little clunky -- use the Tile Matrix tool ('M') and fill the entire
+   // matrix with the tile you want to use by dragging tiles from the tiles panel. You can then box-drag
+   // to fill large areas.
+   //   When you're done editing, save maps.dam and use File->Export to create the map source files the
+   // game can run. In the Export Project dialog, use "csvTilemap.lua" for the LUA exporter. CSV dir should
+   // be "../art" and File Extension should be "csv". These are probably the defaults. Press "Export" and
+   // it will automagically build the map source files. You're done -- run the game and visit that
+   // location to view the results in-game. You don't even need to make a new game.
+   //   To remove a map from the game and go back to the old map generation modes, just delete the .csv
+   // files. You may also want to clean up the maps.dam file, removing any old maps you don't want, since
+   // it'll try to generate them again next time you export.
+   //
+   //   Map naming conventions:
+   // "mapCSV_[NAMEHERE]_Tiles.csv" - Tile map
+   // "mapCSV_[NAMEHERE]_Specials.csv" - Special locations (vault, equipment, lockup, etc.)
+   //   [NAMEHERE] is the name in quotes below, and it's what the maps are called in the DAME layer list.
+   // For example, for the industrial apartment, the DAME name is "ApartmentIndustrial", and the
+   // exported file name is "mapCSV_ApartmentIndustrial_Tiles.csv". DAME should add the prefix and suffix
+   // to the exported files automatically.
+   //
+   //   Additional Notes:
+   // 1. All maps MUST have both a tile map and a special map, even if the special map is blank. This
+   // goes for both first floor maps and otherwise.
+   // 2. For multi-floor maps, add up stairs to the special map, then create a new set of maps for
+   // each additional floor, appending "2" to the location name for the second floor, "3" for
+   // third floor, and so on. For example, a second floor to the industrial apartments would have the
+   // name "ApartmentIndustrial2" in DAME, and export as "mapCSV_ApartmentIndustrial2_Tiles.csv".
+   //
+   // With love,
+   //   Fox
 
    // Try to load from a map file
    bool loaded = false;
    switch(loc.type)
    {
+   case SITE_RESIDENTIAL_TENEMENT: loaded = readMap("ApartmentIndustrial"); break;
+   case SITE_RESIDENTIAL_APARTMENT: loaded = readMap("ApartmentUniversity"); break;
+   case SITE_RESIDENTIAL_APARTMENT_UPSCALE: loaded = readMap("ApartmentDowntown"); break;
+   case SITE_INDUSTRY_WAREHOUSE: loaded = readMap("Warehouse"); break;
+   case SITE_RESIDENTIAL_SHELTER: loaded = readMap("HomelessShelter"); break;
+   case SITE_BUSINESS_CRACKHOUSE: loaded = readMap("CrackHouse"); break;
+   case SITE_BUSINESS_BARANDGRILL: loaded = readMap("BarAndGrill"); break;
+   case SITE_RESIDENTIAL_BOMBSHELTER: loaded = readMap("BombShelter"); break;
+   case SITE_OUTDOOR_BUNKER: loaded = readMap("Bunker"); break;
+   case SITE_LABORATORY_COSMETICS: loaded = readMap("CosmeticsLab"); break;
+   case SITE_LABORATORY_GENETIC: loaded = readMap("GeneticsLab"); break;
+   case SITE_GOVERNMENT_POLICESTATION: loaded = readMap("PoliceStation"); break;
+   case SITE_GOVERNMENT_COURTHOUSE: loaded = readMap("Courthouse"); break;
+   case SITE_GOVERNMENT_PRISON: loaded = readMap("Prison"); break;
+   case SITE_GOVERNMENT_INTELLIGENCEHQ: loaded = readMap("IntelligenceHQ"); break;
+   case SITE_GOVERNMENT_ARMYBASE: loaded = readMap("ArmyBase"); break;
+   case SITE_GOVERNMENT_FIRESTATION: loaded = readMap("FireStation"); break;
+   case SITE_INDUSTRY_SWEATSHOP: loaded = readMap("Sweatshop"); break;
+   case SITE_INDUSTRY_POLLUTER: loaded = readMap("Factory"); break;
+   case SITE_CORPORATE_HEADQUARTERS: loaded = readMap("CorporateHQ"); break;
+   case SITE_CORPORATE_HOUSE: loaded = readMap("CEOHouse"); break;
+   case SITE_MEDIA_AMRADIO: loaded = readMap("RadioStation"); break;
+   case SITE_MEDIA_CABLENEWS: loaded = readMap("CableNews"); break;
+   case SITE_BUSINESS_JUICEBAR: loaded = readMap("JuiceBar"); break;
+   case SITE_BUSINESS_INTERNETCAFE: loaded = readMap("InternetCafe"); break;
+   case SITE_BUSINESS_CIGARBAR: loaded = readMap("CigarBar"); break;
+   case SITE_BUSINESS_LATTESTAND: loaded = readMap("LatteStand"); break;
+   case SITE_BUSINESS_VEGANCOOP: loaded = readMap("VeganCoOp"); break;
+   case SITE_OUTDOOR_PUBLICPARK: loaded = readMap("Park"); break;
    case SITE_BUSINESS_BANK: loaded = readMap("Bank"); break;
    case SITE_INDUSTRY_NUCLEAR: loaded = readMap("NuclearPlant"); break;
    default: break;
    }
 
+   int x, y, z;
+
+   if(!loaded)
+   {
+      for(x=0;x<MAPX;x++)
+      for(y=0;y<MAPY;y++)
+      for(z=0;z<MAPZ;z++)
+      {
+         levelmap[x][y][z].flag=SITEBLOCK_BLOCK;
+         levelmap[x][y][z].special=-1;
+         levelmap[x][y][z].siegeflag=0;
+      }
+   }
+   
    if(loaded) { }
    else if (oldMapMode==false) // Try to load from the sitemaps
    {
