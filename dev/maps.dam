@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-  <version>3.0.4</version>
+  <version>3.1.0</version>
   <bgColor>0x777777</bgColor>
-  <viewPos x="-280.40989740382486" y="16.426041666666663"/>
+  <viewPos x="0" y="301"/>
   <firstLayersTop>false</firstLayersTop>
   <spriteEntries currentId="1"/>
   <layers>
@@ -114,6 +114,7 @@
       </maplayer>
     </group>
   </layers>
+  <layerTemplates/>
   <tileMatrix currentMatrix="0" rows="3" cols="3" randomizeMiddle="false" ignoreClear="false" ignoreMapEdges="true" allowSpecialTiles="false" tileset="siteblocks.png">
     <row>
       <tile>4</tile>
@@ -235,7 +236,13 @@
     <colour>0x33a2f1</colour>
     <colour>0xb2dcee</colour>
   </colourGrid>
-  <exporter name="C:\program files (x86)\DAME\lua\Exporters\csvTilemap.lua" spritepos="Top Left" rotatedSpritePos="false" relativePaths="true" useProjectExporterOnly="false">
+  <options>
+    <AllowEditingTemplateLayerList>true</AllowEditingTemplateLayerList>
+    <ForceAddingTemplatedMapsOnly>false</ForceAddingTemplatedMapsOnly>
+    <PreventEditingMapTileset>false</PreventEditingMapTileset>
+    <PreventEditingSprites>false</PreventEditingSprites>
+  </options>
+  <exporter name="c:\program files (x86)\DAME\lua\Exporters\csvTilemap.lua" spritepos="Top Left" rotatedSpritePos="false" relativePaths="true" useProjectExporterOnly="false">
     <setting name="FileExt">csv</setting>
     <setting name="CSVDir">../art</setting>
   </exporter>
