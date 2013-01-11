@@ -295,11 +295,12 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr(pool[p]->name);
             addstr(" explains ");
-            if(pool[p]->gender_liberal==GENDER_MALE||
-               (pool[p]->gender_liberal==GENDER_NEUTRAL&&pool[p]->gender_conservative==GENDER_MALE))
+            if(pool[p]->gender_liberal==GENDER_MALE)
                addstr("his ");
-            else
+            else if(pool[p]->gender_liberal==GENDER_FEMALE)
                addstr("her ");
+            else
+               addstr("their ");
             addstr("views on ");
             getviewsmall(str,LCSrandom(VIEWNUM-3));
             addstr(str);

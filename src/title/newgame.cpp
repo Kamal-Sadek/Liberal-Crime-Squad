@@ -258,11 +258,12 @@ void makecharacter(void)
    newcr->set_attribute(ATTRIBUTE_CHARISMA,4);
    for(int sk=0;sk<SKILLNUM;sk++)newcr->set_skill(sk,0);
 
-   char first[2][80];
+   char first[3][80];
    char last[80];
-   bool gender=(newcr->gender_conservative==GENDER_FEMALE);
-   firstname(first[0], GENDER_MALE);
-   firstname(first[1], GENDER_FEMALE);
+   int gender=(newcr->gender_conservative==GENDER_FEMALE);
+   firstname(first[0], GENDER_NEUTRAL);
+   firstname(first[1], GENDER_MALE);
+   firstname(first[2], GENDER_FEMALE);
    lastname(last);
 
    {
@@ -303,24 +304,29 @@ void makecharacter(void)
          set_color(COLOR_CYAN,COLOR_BLACK,1);
          addstr("Male");
       }
-      else
+      else if(newcr->gender_conservative == GENDER_FEMALE)
       {
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          addstr("Female");
       }
+      else
+      {
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         addstr("It's Complicated");
+      }
       move(10,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr(" (Press C to be born as the other sex)");
+      addstr(" (Press C to change your sex at birth)");
 
       move(12,2);
-	  set_color(COLOR_WHITE,COLOR_BLACK,1);
-	  addstr("CITY: ");
-	  addstr(lcityname);
-	  move(12,30);
-	  set_color(COLOR_BLACK,COLOR_BLACK,1);
-	  addstr(" (Press D to relocate)");
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      addstr("CITY: ");
+      addstr(lcityname);
+      move(12,30);
+      set_color(COLOR_BLACK,COLOR_BLACK,1);
+      addstr(" (Press D to relocate)");
 
-	  move(14,2);
+      move(14,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("HISTORY: ");
       if(choices)
@@ -358,20 +364,20 @@ void makecharacter(void)
       {
          if(newcr->gender_conservative == GENDER_FEMALE)
             newcr->gender_conservative = GENDER_MALE;
+         else if(newcr->gender_conservative == GENDER_MALE)
+            newcr->gender_conservative = GENDER_NEUTRAL;
          else
             newcr->gender_conservative = GENDER_FEMALE;
 
-         newcr->gender_liberal = newcr->gender_conservative;
-
-         gender=newcr->gender_conservative-1;
+         gender = newcr->gender_liberal = newcr->gender_conservative;
          continue;
       }
       if(c=='d')
-	  {
-		  cityname(lcityname);
-		  continue;
-	  }
-	  if(c=='e')
+      {
+         cityname(lcityname);
+         continue;
+      }
+      if(c=='e')
       {
          choices = !choices;
          continue;
@@ -450,19 +456,27 @@ void makecharacter(void)
                         //March 30, 1984
 
             move(17,0);
-            addstr("The doctor said I was a ");
+            addstr("The doctor said I was ");
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             if(newcr->gender_conservative == GENDER_MALE)
-               addstr("boy");
+               addstr("a boy");
             else if(newcr->gender_conservative == GENDER_FEMALE)
-               addstr("girl");
+               addstr("a girl");
             else
-               addstr("intersex baby"); // this is a bug if it happens, but hey, whatever :P
+               addstr("an intersex baby");
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             addstr(".");
 
             move(19,0);
-            addstr("My parents named me ");
+            addstr("My parents ");
+            if(newcr->gender_conservative == GENDER_NEUTRAL);
+            {
+               addstr("insisted otherwise.");
+               move(20,0);
+               addstr("They ");
+            }
+
+            addstr("named me ");
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(newcr->propername);
             set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1599,6 +1613,8 @@ void makecharacter(void)
       if(gaylawyer)
       {
          lawyer->gender_conservative=lawyer->gender_liberal=newcr->gender_conservative;
+
+         // neutral founder gets neutral partner
       }
       else
       {
@@ -1607,6 +1623,8 @@ void makecharacter(void)
 
          if(newcr->gender_conservative==GENDER_FEMALE)
             lawyer->gender_liberal=lawyer->gender_conservative=GENDER_MALE;
+         
+         // neutral founder gets random partner
       }
 
       // Ensure the lawyer has good heart/wisdom stats
