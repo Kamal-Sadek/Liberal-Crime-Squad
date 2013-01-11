@@ -2038,8 +2038,12 @@ void penalize(Creature &g,char lenient);
 void imprison(Creature &g);
 /* monthly - advances a liberal's prison time or executes them */
 char prison(Creature &g);
-/* monthly - subjects a liberal to re-education */
+/* monthly - subjects a liberal to liberal therapy */
 void reeducation(Creature &g);
+/* monthly - subjects a liberal to hard labor */
+void laborcamp(Creature &g);
+/* monthly - subjects a liberal to normal prison */
+void prisonscene(Creature &g);
 
 /*
  politics.cpp

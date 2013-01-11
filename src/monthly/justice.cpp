@@ -1267,9 +1267,25 @@ char prison(Creature &g)
 {
    char showed=0;
    
-   if(law[LAW_DEATHPENALTY]==-2 && law[LAW_POLICEBEHAVIOR]==-2 //Laws required for reeducation camp.
-      && !g.deathpenalty && g.sentence!=1) //No re-ed for people on death row or about to be released.
-      reeducation(g);
+   // People not on death row or about to be released can have a scene in prison
+   if(!g.deathpenalty && g.sentence!=1)
+   {
+      if(law[LAW_POLICEBEHAVIOR]==2)
+      {
+         //Liberal therapy.
+         reeducation(g);
+      }
+      else if(law[LAW_DEATHPENALTY]==-2 && law[LAW_POLICEBEHAVIOR]==-2)
+      {
+         //Labor camp.
+         laborcamp(g);
+      }
+      else
+      {
+         //Normal prison.
+         prisonscene(g);
+      }
+   }
 
    if(g.sentence>0)
    {
@@ -1407,7 +1423,7 @@ char prison(Creature &g)
          }
       }
       //NOTIFY OF IMPENDING THINGS
-      if(g.sentence==1)
+      else if(g.sentence==1)
       {
          if(g.deathpenalty)
          {
@@ -1434,6 +1450,25 @@ char prison(Creature &g)
             showed=1;
          }
       }
+      else
+      {
+         if(g.deathpenalty)
+         {
+            char str[5];
+            erase();
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            move(8,1);
+            addstr(g.name);
+            addstr(" is due to be executed in ");
+            itoa(g.sentence, str, 10);
+            addstr(str);
+            addstr(" months.");
+            refresh();
+            getch();
+
+            showed=1;
+         }
+      }
    }
 
    return showed;
@@ -1448,37 +1483,47 @@ void reeducation(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name);
-   addstr(" is subjected to Conservative re-education!");
+   switch(LCSrandom(8))
+   {
+   case 0:addstr(" is subjected to rehabilitative therapy in prison.");break;
+   case 1:addstr(" works on a prison mural about political diversity.");break;
+   case 2:addstr(" routinely sees a Liberal therapist in prison.");break;
+   case 3:addstr(" participates in a group therapy session in prison.");break;
+   case 4:addstr(" sings songs with prisoners of all political persuasions.");break;
+   case 5:addstr(" is encouraged to befriend Conservatives in prison.");break;
+   case 6:addstr(" puts on an anti-crime performance in prison.");break;
+   case 7:addstr(" sees an video in prison by victims of political crime.");break;
+   }
    getch();
    
    move(10,1);
    if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
    {
-      if(g.juice>=100)
+      if(g.juice>0 && LCSrandom(2))
       {
          addstr(g.name);
-         addstr(" loses juice!");
-         addjuice(g,-50,100);
+         addstr(" feels bad about LCS actions, and loses juice!");
+         addjuice(g,-50,0);
       }
       else if(LCSrandom(15)>g.get_attribute(ATTRIBUTE_WISDOM,true)
            || g.get_attribute(ATTRIBUTE_WISDOM,true) < g.get_attribute(ATTRIBUTE_HEART,true))
       {
          addstr(g.name);
-         addstr(" becomes Wiser!");
+         addstr(" silently grows Wiser...");
          g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
       }
       else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
       {
          addstr(g.name);
-         addstr(" only resists by thinking of ");
+         addstr(" stays loyal to the LCS for ");
          addstr(pool[g.hireid]->name);
-         addstr("!");
+         addstr(".");
       }
       else
       {
          addstr(g.name);
-         addstr(" is turned Conservative!");
-         //conservatise(g);      
+         addstr(" abandons the Liberal Crime Squad!");
+         //conservatise(g);
          
          //Rat out contact
          int contact = getpoolcreature(g.hireid);
@@ -1502,5 +1547,65 @@ void reeducation(Creature &g)
    getch();
    erase();
 
+   return;
+}
+
+void laborcamp(Creature &g)
+{
+   //int resist=0;
+
+   //clearmessagearea();
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name);
+   switch(LCSrandom(8))
+   {
+   case 0:addstr(" is forced to work hard labor in prison.");break;
+   case 1:addstr(" operates dangerous machinery day after day in prison.");break;
+   case 2:addstr(" is beaten by sadistic prison guards.");break;
+   case 3:addstr(" carries heavy burdens back and forth in prison labor camp.");break;
+   case 4:addstr(" does back-breaking work all month in prison.");break;
+   case 5:addstr(" gets in a brutal fight with other distraught prisoners.");break;
+   case 6:addstr(" participates in a quickly-suppressed prison riot.");break;
+   case 7:addstr(" is whipped and kicked by prison guards for refusing to work.");break;
+   }
+   getch();
+   
+   move(10,1);
+   if(!LCSrandom(10))
+   {
+      if(g.get_attribute(ATTRIBUTE_HEALTH, false) > 1)
+      {
+         addstr(g.name);
+         addstr(" is badly hurt in the process.");
+         addjuice(g,-50,0);
+      }
+      else 
+      {
+         addstr(g.name);
+         addstr(" is found dead.");
+         //conservatise(g);
+         
+         g.die();
+         g.location=-1;
+      }
+   }
+   else
+   {
+      addstr(g.name);
+      addstr(" carries on, regardless.");
+   }
+
+   refresh();
+   getch();
+   erase();
+
+   return;
+}
+
+void prisonscene(Creature &g)
+{
+   // Populate this with scenes for normal prison
    return;
 }

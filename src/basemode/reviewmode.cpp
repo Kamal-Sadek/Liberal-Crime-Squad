@@ -1362,13 +1362,21 @@ void squadlessbaseassign(void)
       int y=2;
       for(p=page_lib*19;p<temppool.size()&&p<page_lib*19+19;p++)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         // Red name if location under siege
+         if(temppool[p]->base == temppool[p]->location &&
+            location[temppool[p]->base]->siege.siege)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+         }
+         else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
          addch(y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          move(y,25);
          addshortname(location[temppool[p]->base]);
+         if(location[temppool[p]->base]->siege.siege)
+            addstr(" <Under Siege>");
 
          y++;
       }
@@ -1376,8 +1384,10 @@ void squadlessbaseassign(void)
       y=2;
       for(p=page_loc*9;p<temploc.size()&&p<page_loc*9+9;p++)
       {
-         if(p==selectedbase)set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,0);
+         int color = COLOR_WHITE;
+
+         if(p==selectedbase)set_color(color,COLOR_BLACK,1);
+         else set_color(color,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
          addshortname(location[temploc[p]]);
@@ -1420,7 +1430,10 @@ void squadlessbaseassign(void)
       if(c>='a'&&c<='s')
       {
          int p=page_lib*19+(int)(c-'a');
-         if(p<temppool.size())
+
+         // Assign new base, IF the selected letter is a liberal, AND the Liberal is not stuck in a siege
+         if(p<temppool.size()
+            && !(temppool[p]->base == temppool[p]->location && location[temppool[p]->base]->siege.siege))
          {
             temppool[p]->base=temploc[selectedbase];
          }

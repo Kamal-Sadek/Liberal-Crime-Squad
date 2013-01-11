@@ -1506,8 +1506,9 @@ bool promotesubordinates(Creature &cr, char &clearformess)
             else pool[p]->flag &= ~CREATUREFLAG_LOVESLAVE;
          }
 
-         // Highest juice liberal not subject to a life sentence gets promoted
+         // Highest juice liberal not a sleeper or subject to a life sentence gets promoted
          if(pool[p]->juice>maxjuice&&
+            !(pool[p]->flag & CREATUREFLAG_SLEEPER)&&
             (pool[p]->location==-1||
             (location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON||pool[p]->sentence>=0)))
          {
@@ -1766,8 +1767,8 @@ void initlocation(locationst &loc)
                case 3:strcat(loc.name,"Glade");break;
                case 4:strcat(loc.name,"Forest");break;
             }
-            strcat(loc.name," Re-education Camp");
-            strcpy(loc.shortname,"Re-ed Camp");
+            strcat(loc.name," Forced Labor Camp");
+            strcpy(loc.shortname,"Laber Camp");
          }
          else
          {
