@@ -51,7 +51,7 @@ void add_age(Creature& person)
    else if(person.gender_liberal == GENDER_FEMALE)
       addstr(", Female");
    else
-      addstr(", Unknown");
+      addstr(", Ambiguous");
 
    // Note if there's some conflict with Conservative society's perceptions
    if(person.gender_liberal != person.gender_conservative)
