@@ -4,52 +4,192 @@
     <allow_selling>false</allow_selling>
     <exit>Leave</exit>
     
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_CHEAPSUIT</type>
-        <letter>c</letter>
-        <description>Buy a Cheap Suit</description>
-        <price>400</price>
-    </item>
-    
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_EXPENSIVESUIT</type>
-        <letter>v</letter>
-        <description>Buy an Expensive Suit</description>
-        <price>5000</price>
-    </item>
-    
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_BLACKSUIT</type>
-        <letter>s</letter>
-        <description>Buy a Black Suit</description>
-        <price>500</price>
-    </item>
-    
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_CHEAPDRESS</type>
-        <letter>h</letter>
-        <description>Buy a Cheap Dress</description>
-        <price>400</price>
-    </item>
-    
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_EXPENSIVEDRESS</type>
-        <letter>d</letter>
-        <description>Buy an Expensive Dress</description>
-        <price>5000</price>
-    </item>
-    
-    <item>
-        <class>ARMOR</class>
-        <type>ARMOR_BLACKDRESS</type>
-        <letter>r</letter>
-        <description>Buy a Black Dress</description>
-        <price>500</price>
-    </item>
+	<department>
+		<entry>Clothing</entry>
+		<letter>C</letter>
+		<fullscreen>false</fullscreen>
+		<exit>Done buying Liberal clothing</exit>
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_BLACKCLOTHES</type>
+			<letter>t</letter>
+			<description>Buy a Black Turtleneck</description>
+			<price>50</price>
+		</item>
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_CHEAPSUIT</type>
+			<letter>c</letter>
+			<description>Buy a Cheap Suit</description>
+			<price>400</price>
+		</item>
+		
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_EXPENSIVESUIT</type>
+			<letter>v</letter>
+			<description>Buy an Expensive Suit</description>
+			<price>5000</price>
+		</item>
+		
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_BLACKSUIT</type>
+			<letter>s</letter>
+			<description>Buy a Black Suit</description>
+			<price>500</price>
+		</item>
+		
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_CHEAPDRESS</type>
+			<letter>h</letter>
+			<description>Buy a Cheap Dress</description>
+			<price>400</price>
+		</item>
+		
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_EXPENSIVEDRESS</type>
+			<letter>d</letter>
+			<description>Buy an Expensive Dress</description>
+			<price>5000</price>
+		</item>
+		
+		<item>
+			<class>ARMOR</class>
+			<type>ARMOR_BLACKDRESS</type>
+			<letter>r</letter>
+			<description>Buy a Black Dress</description>
+			<price>500</price>
+		</item>
+	</department>
 
+	<department>
+        <entry>Hardware</entry>
+        <letter>H</letter>
+        <fullscreen>false</fullscreen>
+        <exit>Done buying Liberal hardware</exit>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy some Chain</description>
+			<type>WEAPON_CHAIN</type>
+            <price>15</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <description>Buy a Prybar</description>
+			<type>WEAPON_CROWBAR</type>
+            <price>15</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy a Knife</description>
+			<type>WEAPON_KNIFE</type>
+            <price>25</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy an Axe</description>
+			<type>WEAPON_AXE</type>
+            <price>30</price>
+        </item>
+	</department>
+			
+	<department>
+        <entry>Sporting Goods</entry>
+        <letter>G</letter>
+        <fullscreen>false</fullscreen>
+        <exit>Done buying Sporting Goods</exit>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy a Baseball Bat</description>
+			<type>WEAPON_BASEBALLBAT</type>
+			<letter>L</letter>
+			<price>25</price>
+        </item>
+        <item>
+            <class>WEAPON</class>
+            <description>Buy a MP5 SMG</description>
+			<type>WEAPON_SMG_MP5</type>
+			<letter>P</letter>
+            <price>1100</price>
+        </item>
+	    <item>
+            <class>WEAPON</class>
+			<description>Buy a .44 Magnum</description>
+            <type>WEAPON_REVOLVER_44</type>
+			<letter>F</letter>
+            <price>500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy a Civilian AR-15</description>
+            <type>WEAPON_SEMIRIFLE_AR15</type>
+			<letter>R</letter>
+            <price>450</price>
+        </item>
+		<item>
+			<class>WEAPON</class>
+		    <description>Buy a .50AE Desert Eagle</description>
+			<type>WEAPON_DESERT_EAGLE</type>
+			<letter>D</letter>
+			<price>1200</price>
+		</item>
+		<item>
+            <class>WEAPON</class>
+            <description>Buy an M16 Assault Rifle</description>
+            <type>WEAPON_AUTORIFLE_M16</type>
+			<letter>M</letter>
+            <price>1500</price>
+        </item>
+		<item>
+			<class>WEAPON</class>
+			<description>Buy an M249 Machinegun</description>
+			<type>WEAPON_M249_MACHINEGUN</type>
+			<letter>G</letter>
+			<price>15000</price>
+		</item>
+	</department>
+    <department>
+        <entry>Sporting-Ammo Counter</entry> <!--Renamed from "Ammunition" at Shade's suggestion. -->
+        <letter>A</letter>
+        <fullscreen>false</fullscreen>
+        <exit>Done buying Liberal ammo</exit>
+        <item>
+            <class>CLIP</class>
+            <description>Buy a .44 Speedloader</description>
+            <type>CLIP_44</type>
+            <letter>m</letter>
+            <price>40</price>
+        </item>
+        <item>
+            <class>CLIP</class>
+            <description>Buy a 9mm SMG Magazine</description>
+            <type>CLIP_SMG</type>
+            <letter>s</letter>
+            <price>50</price>
+        </item>
+        <item>
+            <class>CLIP</class>
+            <description>Buy a Rifle/Aslt.Rifle Mag</description>
+            <type>CLIP_ASSAULT</type>
+            <letter>r</letter>
+            <price>50</price>
+        </item>
+		<item>
+			<class>CLIP</class>
+			<description>Buy a .50AE Mag</description>
+			<type>CLIP_50AE</type>
+			<letter>f</letter>
+			<price>100</price>
+		</item>
+		<item>
+			<class>CLIP</class>
+			<description>Buy an M249 Drum</description>
+			<type>CLIP_DRUM</type>
+			<letter>d</letter>
+			<price>500</price>
+		</item>
+    </department>
 </shop>
