@@ -12,7 +12,7 @@ string Vehicle::showXml () const
    xml.IntoElem ();
    xml.AddElem ("vtypeidname", vtypeidname_);
 
-   snprintf (buf, 256, "%i", vtypeid_);
+   snprintf (buf, 256, "%li", vtypeid_);
    xml.AddElem ("vtypeid", buf);
 
    xml.AddElem ("color", color_);
@@ -20,13 +20,13 @@ string Vehicle::showXml () const
    snprintf (buf, 256, "%i", heat_);
    xml.AddElem ("heat", buf);
 
-   snprintf (buf, 256, "%i", location_);
+   snprintf (buf, 256, "%li", location_);
    xml.AddElem ("location", buf);
 
    snprintf (buf, 256, "%i", myear_);
    xml.AddElem ("myear", buf);
 
-   snprintf (buf, 256, "%i", id_);
+   snprintf (buf, 256, "%li", id_);
    xml.AddElem ("id", buf);
 
    return xml.GetDoc();

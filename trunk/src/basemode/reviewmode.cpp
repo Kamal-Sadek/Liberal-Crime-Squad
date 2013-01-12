@@ -591,7 +591,7 @@ void review_mode(short mode)
                if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
                {
                   int sx=1;
-                  if((c==KEY_LEFT))sx=-1;
+                  if(c==KEY_LEFT)sx=-1;
                   p=(p+(int)temppool.size()+sx)%((int)temppool.size());
                   continue;
                }
