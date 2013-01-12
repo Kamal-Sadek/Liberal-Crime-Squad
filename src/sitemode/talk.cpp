@@ -2195,8 +2195,8 @@ char talkInCombat(Creature &a, Creature &tk)
 char heyMisterDog(Creature &a, Creature &tk)
 {
    bool success = false;
-   char *pitch;
-   char *response;
+   const char *pitch;
+   const char *response;
 
    // Find most Heartful Liberal
    int bestp=0;
@@ -2353,8 +2353,8 @@ char heyMisterDog(Creature &a, Creature &tk)
 char heyMisterMonster(Creature &a, Creature &tk)
 {
    bool success = false;
-   char *pitch;
-   char *response;
+   const char *pitch;
+   const char *response;
 
    // Find most Heartful Liberal
    int bestp=0;

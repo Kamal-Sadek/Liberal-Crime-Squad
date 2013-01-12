@@ -2284,9 +2284,9 @@ char wincheck(void)
    }
 
    if (wincondition==WINCONDITION_ELITE)
-		if(elibjudge<5)return 0;
+		{if(elibjudge<5)return 0;}
 	else
-		if (elibjudge<5 && elibjudge+libjudge/2<6)return 0;
+		{if (elibjudge<5 && elibjudge+libjudge/2<6)return 0;}
 
    return 1;
 }

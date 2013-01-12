@@ -141,18 +141,18 @@ void chooseLetterOrNumber(char *str, int type)
     if(type == 1) // Choose a letter.
     {
         char randChar = 'a' + LCSrandom(26);
-        addstr((char *)randChar);
+        addstr(&randChar);
     } else if(type == 2) // Choose a number.
     {
         char randNum = LCSrandom(10);
-        addstr((char *)randNum);
+        addstr(&randNum);
     } else if(type == 3) {// Choose one of either.
         if(LCSrandom(36) > 25) {
             char randNum = LCSrandom(10);
-            addstr((char *)randNum);
+            addstr(&randNum);
         } else {
         char randChar = 'a' + LCSrandom(26);
-        addstr((char *)randChar);
+        addstr(&randChar);
         }
     } else {
         addstr("-ERR-");
