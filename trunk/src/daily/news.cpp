@@ -26,6 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+//TODO: Add logging for this file? --Addictgamer
+
 //#include <includes.h>
 #include <externs.h>
 #include <cstring>

@@ -84,6 +84,10 @@ class Log
 {
 public:
 
+   //This is used to work around all those empty lines output into the log at the
+   //end of an encounter's round.
+   bool logged_since_last_message;
+
    Log();
    ~Log();
 

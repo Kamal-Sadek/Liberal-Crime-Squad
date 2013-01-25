@@ -100,26 +100,29 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    move(0,0);
    if(pool[p]->meetings++>5 && LCSrandom(pool[p]->meetings-5))
    {
-      addstr(pool[p]->name);
-      addstr(" accidentally missed the meeting with ");
-      addstr(r.recruit->name);
+      addstr(pool[p]->name, gamelog);
+      addstr(" accidentally missed the meeting with ", gamelog);
+      addstr(r.recruit->name, gamelog);
       move(1,0);
-      addstr("due to multiple booking of recruitment sessions.");
+      addstr("due to multiple booking of recruitment sessions.", gamelog);
+      gamelog.newline();
 
       move(3,0);
-      addstr("Get it together, ");
-      addstr(pool[p]->name);
-      addstr("!");
+      addstr("Get it together, ", gamelog);
+      addstr(pool[p]->name, gamelog);
+      addstr("!", gamelog);
+      gamelog.nextMessage();
       getch();
 
       return 1;
    }
-   addstr("Meeting with ");
-   addstr(r.recruit->name);
-   addstr(", ");
+   addstr("Meeting with ", gamelog);
+   addstr(r.recruit->name, gamelog);
+   addstr(", ", gamelog);
    char str[75];
    getrecruitcreature(str,r.recruit->type);
-   addstr(str);
+   addstr(str, gamelog);
+   gamelog.newline();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds(0,1,"Money: ");
@@ -200,10 +203,11 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       if(c=='c' && subordinatesleft(*pool[p]) && r.eagerness()>=4)
       {
          move(y,0);
-         addstr(pool[p]->name);
-         addstr(" offers to let ");
-         addstr(r.recruit->name);
-         addstr(" join the Liberal Crime Squad.");
+         addstr(pool[p]->name, gamelog);
+         addstr(" offers to let ", gamelog);
+         addstr(r.recruit->name, gamelog);
+         addstr(" join the Liberal Crime Squad.", gamelog);
+         gamelog.newline();
 
          refresh();
          getch();
@@ -211,8 +215,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y+=2,0);
             
-         addstr(r.recruit->name);
-         addstr(" accepts, and is eager to get started.");
+         addstr(r.recruit->name, gamelog);
+         addstr(" accepts, and is eager to get started.", gamelog);
+         gamelog.nextMessage();
 
          liberalize(*r.recruit,false);
 
@@ -280,12 +285,13 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             difficulty -= 5;
 
             move(y++,0);
-            addstr(pool[p]->name);
-            addstr(" shares ");
+            addstr(pool[p]->name, gamelog);
+            addstr(" shares ", gamelog);
             strcpy(str,"");
             getissueeventstring(str);
-            addstr(str);
-            addstr(".");
+            addstr(str), gamelog;
+            addstr(".", gamelog);
+            gamelog.newline();
             
             refresh();
             getch();
@@ -293,18 +299,19 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          else
          {
             move(y++,0);
-            addstr(pool[p]->name);
-            addstr(" explains ");
+            addstr(pool[p]->name, gamelog);
+            addstr(" explains ", gamelog);
             if(pool[p]->gender_liberal==GENDER_MALE)
-               addstr("his ");
+               addstr("his ", gamelog);
             else if(pool[p]->gender_liberal==GENDER_FEMALE)
-               addstr("her ");
+               addstr("her ", gamelog);
             else
-               addstr("their ");
-            addstr("views on ");
+               addstr("their ", gamelog);
+            addstr("views on ", gamelog);
             getviewsmall(str,LCSrandom(VIEWNUM-3));
-            addstr(str);
-            addstr(".");
+            addstr(str, gamelog);
+            addstr(".", gamelog);
+            gamelog.newline();
             refresh();
             getch();
          }
@@ -318,24 +325,28 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             if(r.level<127) r.level++;
             if(r.eagerness1<127) r.eagerness1++;
             move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" found ");
-            addstr(pool[p]->name);
-            addstr("'s views to be insightful.");
+            addstr(r.recruit->name, gamelog);
+            addstr(" found ", gamelog);
+            addstr(pool[p]->name, gamelog);
+            addstr("'s views to be insightful.", gamelog);
+            gamelog.newline();
             move(y++,0);
-            addstr("They'll definitely meet again tomorrow.");
+            addstr("They'll definitely meet again tomorrow.", gamelog);
+            gamelog.nextMessage();
          }
          else if(pool[p]->skill_check(SKILL_PERSUASION,difficulty)) // Second chance to not fail horribly
          {
             if(r.level<127) r.level++;
             if(r.eagerness1>-128) r.eagerness1--;
             move(y++,0);
-            addstr(r.recruit->name);
-            addstr(" is skeptical about some of ");
-            addstr(pool[p]->name);
-            addstr("'s arguments.");
+            addstr(r.recruit->name, gamelog);
+            addstr(" is skeptical about some of ", gamelog);
+            addstr(pool[p]->name, gamelog);
+            addstr("'s arguments.", gamelog);
+            gamelog.newline();
             move(y++,0);
-            addstr("They'll meet again tomorrow.");
+            addstr("They'll meet again tomorrow.", gamelog);
+            gamelog.nextMessage();
          }
          else
          {
@@ -343,21 +354,25 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             if(r.recruit->talkreceptive() && r.recruit->align==ALIGN_LIBERAL)
             {
-               addstr(r.recruit->name);
-               addstr(" isn't convinced ");
-               addstr(pool[p]->name);
-               addstr(" really understands the problem.");
+               addstr(r.recruit->name, gamelog);
+               addstr(" isn't convinced ", gamelog);
+               addstr(pool[p]->name, gamelog);
+               addstr(" really understands the problem.", gamelog);
+               gamelog.newline();
                move(y++,0);
-               addstr("Maybe ");
-               addstr(pool[p]->name);
-               addstr(" needs more experience.");
+               addstr("Maybe ", gamelog);
+               addstr(pool[p]->name, gamelog);
+               addstr(" needs more experience.", gamelog);
+               gamelog.nextMessage();
             }
             else
             {
-               addstr(pool[p]->name);
-               addstr(" comes off as slightly insane.");
+               addstr(pool[p]->name, gamelog);
+               addstr(" comes off as slightly insane.", gamelog);
+               gamelog.newline();
                move(y++,0);
-               addstr("This whole thing was a mistake. There won't be another meeting.");
+               addstr("This whole thing was a mistake. There won't be another meeting.", gamelog);
+               gamelog.nextMessage();
             }
             refresh();
             getch();

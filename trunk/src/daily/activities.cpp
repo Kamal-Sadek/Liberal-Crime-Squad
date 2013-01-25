@@ -214,20 +214,21 @@ void repairarmor(Creature &cr,char &clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name);
+      addstr(cr.name, gamelog);
       if(armor->is_damaged())
       {
          if(repairfailed)
          {
-            addstr(" is working to repair ");
+            addstr(" is working to repair ", gamelog);
          }
-         else addstr(" repairs ");
+         else addstr(" repairs ", gamelog);
       }
-      else addstr(" cleans ");
+      else addstr(" cleans ", gamelog);
       char str[80];
 
-      addstr(armor->get_name().c_str());
-      addstr(".");
+      addstr(armor->get_name().c_str(), gamelog);
+      addstr(".", gamelog);
+      gamelog.nextMessage();
 
       if(pile!=NULL)
       {
@@ -267,8 +268,9 @@ void makearmor(Creature &cr,char &clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name);
-      addstr(" cannot afford material for clothing.");
+      addstr(cr.name, gamelog);
+      addstr(" cannot afford material for clothing.", gamelog);
+      gamelog.nextMessage();
 
       refresh();
       getch();
@@ -326,8 +328,9 @@ void makearmor(Creature &cr,char &clearformess)
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
-         addstr(cr.name);
-         addstr(" cannot find enough cloth to reduce clothing costs.");
+         addstr(cr.name, gamelog);
+         addstr(" cannot find enough cloth to reduce clothing costs.", gamelog);
+         gamelog.nextMessage();
 
          refresh();
          getch();
@@ -373,26 +376,27 @@ void makearmor(Creature &cr,char &clearformess)
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
-         addstr(cr.name);
+         addstr(cr.name, gamelog);
          if(quality < 5)
          {
-            addstr(" has made a ");
+            addstr(" has made a ", gamelog);
             switch(quality)
             {
-               case 1:addstr("first-rate");break;
-               case 2:addstr("second-rate");break;
-               case 3:addstr("third-rate");break;
-               case 4:addstr("fourth-rate");break;
+               case 1:addstr("first-rate", gamelog);break;
+               case 2:addstr("second-rate", gamelog);break;
+               case 3:addstr("third-rate", gamelog);break;
+               case 4:addstr("fourth-rate", gamelog);break;
             }
             location[cr.location]->loot.push_back(it);
          }
          else
          {
-            addstr(" wasted the materials for a");
+            addstr(" wasted the materials for a", gamelog);
          }
-         addstr(" ");
-         addstr(it->get_name().c_str());
-         addstr(".");
+         addstr(" ", gamelog);
+         addstr(it->get_name().c_str(), gamelog);
+         addstr(".", gamelog);
+         gamelog.nextMessage();
 
          refresh();
          getch();
@@ -453,6 +457,7 @@ void survey(Creature *cr)
 
    erase();
 
+   //TODO: Sort out the gamelog for this.
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
    addstr("Survey of Public Opinion, According to Recent Polls");
@@ -465,7 +470,7 @@ void survey(Creature *cr)
    move(2,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    itoa(approval/10+(LCSrandom(noise*2+1)-noise),num,10);
-   addstr(num);
+   addstr(num, gamelog);
    addstr("% had a favorable opinion of ");
    switch(exec[EXEC_PRESIDENT])
    {
@@ -821,11 +826,12 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr("Police are attempting to arrest ");
-      addstr(liberal.name);
-      addstr(" while ");
-      addstr(string);
-      addstr(".");
+      addstr("Police are attempting to arrest ", gamelog);
+      addstr(liberal.name, gamelog);
+      addstr(" while ", gamelog);
+      addstr(string, gamelog);
+      addstr(".", gamelog);
+      gamelog.nextMessage();
 
       refresh();
       getch();
@@ -1426,7 +1432,8 @@ void funds_and_trouble(char &clearformess)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
 
-         addstr(msg);
+         addstr(msg, gamelog);
+         gamelog.nextMessage();
          msg[0]=0;
 
          refresh();
@@ -1474,7 +1481,8 @@ void funds_and_trouble(char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
 
-            addstr(msg);
+            addstr(msg, gamelog); //TODO: Log this?
+            gamelog.nextMessage();
             msg[0]=0;
 
             refresh();
@@ -1499,7 +1507,7 @@ void funds_and_trouble(char &clearformess)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(graffiti[s]->name);
+            addstr(graffiti[s]->name, gamelog);
 
             //Check base inventory for a spraycan
             bool foundone = false;
@@ -1510,11 +1518,11 @@ void funds_and_trouble(char &clearformess)
                   Weapon *w = static_cast<Weapon*>(location[graffiti[s]->base]->loot[i]); //cast -XML
                   if(w->can_graffiti())
                   {
-                     addstr(" grabbed a ");
-                     addstr(w->get_name().c_str());
-                     addstr(" from ");
-                     addlocationname(location[graffiti[s]->base]);
-                     addstr(".");
+                     addstr(" grabbed a ", gamelog);
+                     addstr(w->get_name().c_str(), gamelog);
+                     addstr(" from ", gamelog);
+                     addlocationname(location[graffiti[s]->base]); //TODO: Explicitly log it, or will the game log it?
+                     addstr(".", gamelog);
                      refresh();
                      getch();
 
@@ -1534,7 +1542,7 @@ void funds_and_trouble(char &clearformess)
             if(!foundone && ledger.get_funds()>=20)
             {
                ledger.subtract_funds(20,EXPENSE_SHOPPING);
-               addstr(" bought spraypaint for graffiti.");
+               addstr(" bought spraypaint for graffiti.", gamelog);
                refresh();
                getch();
 
@@ -1543,11 +1551,12 @@ void funds_and_trouble(char &clearformess)
             }
             else if (!foundone)
             {
-               addstr(" needs a spraycan equipped to do graffiti.");
+               addstr(" needs a spraycan equipped to do graffiti.", gamelog);
                graffiti[s]->activity.type=ACTIVITY_NONE;
                refresh();
                getch();
             }
+            gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
          }
 
          int issue=VIEW_LIBERALCRIMESQUAD;
@@ -1572,17 +1581,18 @@ void funds_and_trouble(char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
 
-            addstr(graffiti[s]->name);
-            addstr(" was spotted by the police");
+            addstr(graffiti[s]->name, gamelog);
+            addstr(" was spotted by the police", gamelog);
             criminalize(*graffiti[s],LAWFLAG_VANDALISM);
             graffiti[s]->train(SKILL_STREETSENSE,20);
 
             if(graffiti[s]->activity.arg!=-1)
             {
-               addstr(" while working on the mural!");
+               addstr(" while working on the mural!", gamelog);
                graffiti[s]->activity.arg=-1;
             }
-            else addstr(" while spraying an LCS tag!");
+            else addstr(" while spraying an LCS tag!", gamelog);
+            gamelog.nextMessage();
 
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_GRAFFITIARREST;
@@ -1608,12 +1618,13 @@ void funds_and_trouble(char &clearformess)
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(graffiti[s]->name);
-               addstr(" has completed a");
-               if(power>3)addstr(" beautiful");
-               addstr(" mural about ");
-               addstr(issuestr);
-               addstr(".");
+               addstr(graffiti[s]->name, gamelog);
+               addstr(" has completed a", gamelog);
+               if(power>3)addstr(" beautiful", gamelog);
+               addstr(" mural about ", gamelog);
+               addstr(issuestr, gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
 
                graffiti[s]->activity.arg=-1;
                addjuice(*graffiti[s],power,power*20);
@@ -1627,8 +1638,9 @@ void funds_and_trouble(char &clearformess)
                power=0;
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(graffiti[s]->name);
-               addstr(" works through the night on a large mural.");
+               addstr(graffiti[s]->name, gamelog);
+               addstr(" works through the night on a large mural.", gamelog);
+               gamelog.nextMessage();
                graffiti[s]->train(SKILL_ART,MAX(10-graffiti[s]->get_skill(SKILL_ART)/2,1));
                refresh();
                getch();
@@ -1641,10 +1653,11 @@ void funds_and_trouble(char &clearformess)
             getview(issuestr,issue);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(graffiti[s]->name);
-            addstr(" has begun work on a large mural about ");
-            addstr(issuestr);
-            addstr(".");
+            addstr(graffiti[s]->name, gamelog);
+            addstr(" has begun work on a large mural about ", gamelog);
+            addstr(issuestr, gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
             graffiti[s]->activity.arg=issue;
             power=0;
             graffiti[s]->train(SKILL_ART,MAX(10-graffiti[s]->get_skill(SKILL_ART)/2,1));
@@ -1711,8 +1724,9 @@ void funds_and_trouble(char &clearformess)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(prostitutes[p]->name);
-            addstr(" has been arrested in a prostitution sting.");
+            addstr(prostitutes[p]->name, gamelog);
+            addstr(" has been arrested in a prostitution sting.", gamelog);
+            gamelog.nextMessage();
 
             addjuice(*prostitutes[p],-7,-30);
 
@@ -1738,8 +1752,9 @@ void funds_and_trouble(char &clearformess)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(prostitutes[p]->name);
-            addstr(" was nearly caught in a prostitution sting.");
+            addstr(prostitutes[p]->name, gamelog);
+            addstr(" was nearly caught in a prostitution sting.", gamelog);
+            gamelog.nextMessage();
 
             addjuice(*prostitutes[p],5,0);
 
@@ -1839,10 +1854,11 @@ void funds_and_trouble(char &clearformess)
 		   students[s]->activity.type=ACTIVITY_NONE;
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
-         addstr(students[s]->name);
-         addstr(" has learned as much as ");
-         addstr(students[s]->heshe());
-         addstr(" can.");
+         addstr(students[s]->name, gamelog);
+         addstr(" has learned as much as ", gamelog);
+         addstr(students[s]->heshe(), gamelog);
+         addstr(" can.", gamelog);
+         gamelog.nextMessage();
          refresh();
          getch();
 	   }
@@ -1863,8 +1879,8 @@ void funds_and_trouble(char &clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      if(trouble.size()>1)addstr("Your Activists have ");
-      else {addstr(trouble[0]->name);addstr(" has ");}
+      if(trouble.size()>1)addstr("Your Activists have ", gamelog);
+      else {addstr(trouble[0]->name, gamelog);addstr(" has ", gamelog);}
 
       int power=0;
       for(int t=0;t<trouble.size();t++)
@@ -1886,7 +1902,7 @@ void funds_and_trouble(char &clearformess)
          switch(LCSrandom(10))
          {
             case 0:
-               addstr("run around uptown splashing paint on fur coats!");
+               addstr("run around uptown splashing paint on fur coats!", gamelog);
                juiceval=2;
                crime=LAWFLAG_ASSAULT;
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1899,7 +1915,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_GAY]<2)
                {
-                  addstr("disrupted a traditional wedding at a church!");
+                  addstr("disrupted a traditional wedding at a church!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_GAY]+=mod;
@@ -1914,7 +1930,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_ABORTION]<2)
                {
-                  addstr("posted horrifying dead abortion doctor pictures downtown!");
+                  addstr("posted horrifying dead abortion doctor pictures downtown!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_WOMEN]+=mod;
@@ -1928,7 +1944,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_POLICEBEHAVIOR]<2)
                {
-                  addstr("gone downtown and reenacted a police beating!");
+                  addstr("gone downtown and reenacted a police beating!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_POLICEBEHAVIOR]+=mod;
@@ -1943,8 +1959,8 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_NUCLEARPOWER]<2)
                {
-                  if(trouble.size()>1)addstr("dressed up and pretended to be radioactive mutants!");
-                  else addstr("dressed up and pretended to be a radioactive mutant!");
+                  if(trouble.size()>1)addstr("dressed up and pretended to be radioactive mutants!", gamelog);
+                  else addstr("dressed up and pretended to be a radioactive mutant!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_NUCLEARPOWER]+=mod;
@@ -1959,7 +1975,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_POLLUTION]<2)
                {
-                  addstr("squirted business people with fake polluted water!");
+                  addstr("squirted business people with fake polluted water!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_POLLUTION]+=mod;
@@ -1974,7 +1990,7 @@ void funds_and_trouble(char &clearformess)
             {
                if(law[LAW_DEATHPENALTY]<2)
                {
-                  addstr("distributed fliers graphically illustrating executions!");
+                  addstr("distributed fliers graphically illustrating executions!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                   change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                   public_interest[VIEW_DEATHPENALTY]+=mod;
@@ -1986,7 +2002,7 @@ void funds_and_trouble(char &clearformess)
             }
             case 7:
             {
-               addstr("distributed fliers graphically illustrating CIA torture!");
+               addstr("distributed fliers graphically illustrating CIA torture!", gamelog);
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                public_interest[VIEW_TORTURE]+=mod;
@@ -1998,7 +2014,7 @@ void funds_and_trouble(char &clearformess)
             case 8:
             {
                //In extreme corporate culture cases this should give a flag burning charge! -- kviiri
-               addstr("burned a corporate symbol and denounced capitalism!");
+               addstr("burned a corporate symbol and denounced capitalism!", gamelog);
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                public_interest[VIEW_CORPORATECULTURE]+=mod;
@@ -2009,7 +2025,7 @@ void funds_and_trouble(char &clearformess)
             }
             case 9:
             {
-               addstr("set up a mock sweatshop in the middle of the mall!");
+               addstr("set up a mock sweatshop in the middle of the mall!", gamelog);
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                public_interest[VIEW_SWEATSHOPS]+=mod;
@@ -2020,6 +2036,8 @@ void funds_and_trouble(char &clearformess)
             }
          }
       }while(!done);
+
+      gamelog.nextMessage(); //Do this now so that it doesn't have to be done in every case up there.
 
       refresh();
       getch();
@@ -2045,8 +2063,9 @@ void funds_and_trouble(char &clearformess)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(trouble[t]->name);
-                  addstr(" is cornered by a mob of angry rednecks.");
+                  addstr(trouble[t]->name, gamelog);
+                  addstr(" is cornered by a mob of angry rednecks.", gamelog);
+                  gamelog.nextMessage();
 
                   refresh();
                   getch();
@@ -2060,10 +2079,11 @@ void funds_and_trouble(char &clearformess)
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
-                     addstr(trouble[t]->name);
-                     addstr(" brandishes the ");
-                     addstr(trouble[t]->get_weapon().get_name().c_str());
-                     addstr("!");
+                     addstr(trouble[t]->name, gamelog);
+                     addstr(" brandishes the ", gamelog);
+                     addstr(trouble[t]->get_weapon().get_name().c_str(), gamelog);
+                     addstr("!", gamelog);
+                     gamelog.nextMessage();
                      
                      refresh();
                      getch();
@@ -2073,7 +2093,8 @@ void funds_and_trouble(char &clearformess)
                      
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
-                     addstr("The mob scatters!");
+                     addstr("The mob scatters!", gamelog);
+                     gamelog.nextMessage();
 
                      refresh();
                      getch();
@@ -2097,18 +2118,20 @@ void funds_and_trouble(char &clearformess)
                         {
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
                            move(8,1);
-                           addstr(trouble[t]->name);
+                           addstr(trouble[t]->name, gamelog);
                            switch(LCSrandom(8))
                            {
-                           case 0:addstr(" breaks the arm of the nearest person!");break;
-                           case 1:addstr(" knees a guy in the balls!");break;
-                           case 2:addstr(" knocks one out with a fist to the face!");break;
-                           case 3:addstr(" bites some hick's ear off!");break;
-                           case 4:addstr(" smashes one of them in the jaw!");break;
-                           case 5:addstr(" shakes off a grab from behind!");break;
-                           case 6:addstr(" yells the slogan!");break;
-                           case 7:addstr(" knocks two of their heads together!");break;
+                           case 0:addstr(" breaks the arm of the nearest person!", gamelog);break;
+                           case 1:addstr(" knees a guy in the balls!", gamelog);break;
+                           case 2:addstr(" knocks one out with a fist to the face!", gamelog);break;
+                           case 3:addstr(" bites some hick's ear off!", gamelog);break;
+                           case 4:addstr(" smashes one of them in the jaw!", gamelog);break;
+                           case 5:addstr(" shakes off a grab from behind!", gamelog);break;
+                           case 6:addstr(" yells the slogan!", gamelog);break;
+                           case 7:addstr(" knocks two of their heads together!", gamelog);break;
                            }
+
+                           gamelog.nextMessage();
 
                            refresh();
                            getch();
@@ -2119,18 +2142,20 @@ void funds_and_trouble(char &clearformess)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
                            move(8,1);
-                           addstr(trouble[t]->name);
+                           addstr(trouble[t]->name, gamelog);
                            switch(LCSrandom(8))
                            {
-                           case 0:addstr(" is held down and kicked by three guys!");break;
-                           case 1:addstr(" gets pummelled!");break;
-                           case 2:addstr(" gets hit by a sharp rock!");break;
-                           case 3:addstr(" is thrown against the sidewalk!");break;
-                           case 4:addstr(" is bashed in the face with a shovel!");break;
-                           case 5:addstr(" is forced into a headlock!");break;
-                           case 6:addstr(" crumples under a flurry of blows!");break;
-                           case 7:addstr(" is hit in the chest with a pipe!");break;
+                           case 0:addstr(" is held down and kicked by three guys!", gamelog);break;
+                           case 1:addstr(" gets pummelled!", gamelog);break;
+                           case 2:addstr(" gets hit by a sharp rock!", gamelog);break;
+                           case 3:addstr(" is thrown against the sidewalk!", gamelog);break;
+                           case 4:addstr(" is bashed in the face with a shovel!", gamelog);break;
+                           case 5:addstr(" is forced into a headlock!", gamelog);break;
+                           case 6:addstr(" crumples under a flurry of blows!", gamelog);break;
+                           case 7:addstr(" is hit in the chest with a pipe!", gamelog);break;
                            }
+
+                           gamelog.nextMessage();
 
                            refresh();
                            getch();
@@ -2151,13 +2176,15 @@ void funds_and_trouble(char &clearformess)
                         }
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
                         move(8,1);
-                        addstr(trouble[t]->name);
-                        addstr(" beat the ");
+                        addstr(trouble[t]->name, gamelog);
+                        addstr(" beat the ", gamelog);
                         if(law[LAW_FREESPEECH]==-2)
-                           addstr("[tar]");
+                           addstr("[tar]", gamelog);
                         else
-                           addstr("shit");
-                        addstr(" out of everyone who got close!");
+                           addstr("shit", gamelog);
+                        addstr(" out of everyone who got close!", gamelog);
+
+                        gamelog.nextMessage();
 
                         refresh();
                         getch();
@@ -2176,8 +2203,9 @@ void funds_and_trouble(char &clearformess)
                      }
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(8,1);
-                     addstr(trouble[t]->name);
-                     addstr(" is severely beaten before the mob is broken up.");
+                     addstr(trouble[t]->name, gamelog);
+                     addstr(" is severely beaten before the mob is broken up.", gamelog);
+                     gamelog.nextMessage();
 
                      trouble[t]->activity.type=ACTIVITY_CLINIC;
 
@@ -2200,8 +2228,9 @@ void funds_and_trouble(char &clearformess)
                               if(trouble[t]->special[SPECIALWOUND_LOWERSPINE]==1)
                               {
                                  move(8,1);
-                                 addstr(trouble[t]->name);
-                                 addstr("'s lower spine has been broken!");
+                                 addstr(trouble[t]->name, gamelog);
+                                 addstr("'s lower spine has been broken!", gamelog);
+                                 gamelog.nextMessage();
                                  trouble[t]->special[SPECIALWOUND_LOWERSPINE]=0;
                                  refresh();
                                  getch();
@@ -2211,8 +2240,9 @@ void funds_and_trouble(char &clearformess)
                               if(trouble[t]->special[SPECIALWOUND_UPPERSPINE]==1)
                               {
                                  move(8,1);
-                                 addstr(trouble[t]->name);
-                                 addstr("'s upper spine has been broken!");
+                                 addstr(trouble[t]->name, gamelog);
+                                 addstr("'s upper spine has been broken!", gamelog);
+                                 gamelog.nextMessage();
                                  trouble[t]->special[SPECIALWOUND_UPPERSPINE]=0;
                                  refresh();
                                  getch();
@@ -2222,8 +2252,9 @@ void funds_and_trouble(char &clearformess)
                               if(trouble[t]->special[SPECIALWOUND_NECK]==1)
                               {
                                  move(8,1);
-                                 addstr(trouble[t]->name);
-                                 addstr("'s neck has been broken!");
+                                 addstr(trouble[t]->name, gamelog);
+                                 addstr("'s neck has been broken!", gamelog);
+                                 gamelog.nextMessage();
                                  trouble[t]->special[SPECIALWOUND_NECK]=0;
                                  refresh();
                                  getch();
@@ -2234,8 +2265,9 @@ void funds_and_trouble(char &clearformess)
                               {
                                  move(8,1);
                                  addstr(trouble[t]->name);
-                                 if(trouble[t]->special[SPECIALWOUND_TEETH]>1)addstr("'s teeth have been smashed out on the curb.");
-                                 else addstr("'s tooth has been pulled out with pliers!");
+                                 if(trouble[t]->special[SPECIALWOUND_TEETH]>1)addstr("'s teeth have been smashed out on the curb.", gamelog);
+                                 else addstr("'s tooth has been pulled out with pliers!", gamelog);
+                                 gamelog.nextMessage();
                                  trouble[t]->special[SPECIALWOUND_TEETH]=0;
                                  refresh();
                                  getch();
@@ -2253,24 +2285,25 @@ void funds_and_trouble(char &clearformess)
                                  move(8,1);
                                  if(ribminus>1)
                                  {
-                                    addstr(num);
-                                    addstr(" of ");
-                                    addstr(trouble[t]->name);
-                                    addstr("'s ribs are ");
+                                    addstr(num, gamelog);
+                                    addstr(" of ", gamelog);
+                                    addstr(trouble[t]->name, gamelog);
+                                    addstr("'s ribs are ", gamelog);
                                  }
                                  else if(trouble[t]->special[SPECIALWOUND_RIBS]>1)
                                  {
-                                    addstr("One of ");
-                                    addstr(trouble[t]->name);
-                                    addstr("'s rib is ");
+                                    addstr("One of ", gamelog);
+                                    addstr(trouble[t]->name, gamelog);
+                                    addstr("'s rib is ", gamelog);
                                  }
                                  else
                                  {
                                     addstr(trouble[t]->name);
-                                    addstr("'s last unbroken rib is ");
+                                    addstr("'s last unbroken rib is ", gamelog);
                                  }
 
-                                 addstr("broken!");
+                                 addstr("broken!", gamelog);
+                                 gamelog.nextMessage();
                                  refresh();
                                  getch();
 
@@ -2490,14 +2523,15 @@ char stealcar(Creature &cr,char &clearformess)
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(0,0);
-      addstr("Adventures in Liberal Car Theft");
+      addstr("Adventures in Liberal Car Theft", gamelog);
+      gamelog.nextMessage();
       printcreatureinfo(&cr);
       makedelimiter(8,0);
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(10,0);
-      addstr(cr.name);
-      addstr(" looks around for an accessible vehicle...");
+      addstr(cr.name, gamelog);
+      addstr(" looks around for an accessible vehicle...", gamelog);
 
       refresh();
       getch();
@@ -2518,12 +2552,12 @@ char stealcar(Creature &cr,char &clearformess)
       if(old!=cartype)
       {
          move(11,0);
-         addstr(cr.name);
-         addstr(" was unable to find a ");
-         addstr(vehicletype[old]->longname().c_str());
-         addstr(" but did find a ");
-         addstr(v->longname().c_str());
-         addstr(".");
+         addstr(cr.name, gamelog);
+         addstr(" was unable to find a ", gamelog);
+         addstr(vehicletype[old]->longname().c_str(), gamelog);
+         addstr(" but did find a ", gamelog);
+         addstr(v->longname().c_str(), gamelog);
+         addstr(".", gamelog);
 
          refresh();
          getch();
@@ -2531,14 +2565,16 @@ char stealcar(Creature &cr,char &clearformess)
       else
       {
          move(11,0);
-         addstr(cr.name);
-         addstr(" found a ");
-         addstr(v->longname().c_str());
-         addstr(".");
+         addstr(cr.name, gamelog);
+         addstr(" found a ", gamelog);
+         addstr(v->longname().c_str(), gamelog);
+         addstr(".", gamelog);
 
          refresh();
          getch();
       }
+
+      gamelog.nextMessage();
 
       //APPROACH?
       erase();
@@ -2550,10 +2586,12 @@ char stealcar(Creature &cr,char &clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(10,0);
-      addstr(cr.name);
-      addstr(" looks from a distance at an empty ");
-      addstr(carname.c_str());
-      addstr(".");
+      addstr(cr.name, gamelog);
+      addstr(" looks from a distance at an empty ", gamelog);
+      addstr(carname.c_str(), gamelog);
+      addstr(".", gamelog);
+
+      gamelog.nextMessage();
 
       move(12,0);
       addstr("A - Approach the driver's side door.");
@@ -2606,16 +2644,18 @@ char stealcar(Creature &cr,char &clearformess)
             move(10,0);
             addstr("THE VIPER:   ");
             set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("THIS IS THE VIPER!   STAND AWAY!");
+            addstr("THIS IS THE VIPER!   STAND AWAY!", gamelog);
+            gamelog.nextMessage();
          }
          else
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(10,0);
-            addstr(cr.name);
-            addstr(" stands by the ");
-            addstr(carname.c_str());
-            addstr(".");
+            addstr(cr.name, gamelog);
+            addstr(" stands by the ", gamelog);
+            addstr(carname.c_str(), gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
          }
 
          move(12,0);
@@ -2665,9 +2705,9 @@ char stealcar(Creature &cr,char &clearformess)
                cr.train(SKILL_SECURITY,MAX(5-cr.get_skill(SKILL_SECURITY),0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
-               addstr(cr.name);
-               addstr(" jimmies the car door open.");
-               refresh();getch();
+               addstr(cr.name, gamelog);
+               addstr(" jimmies the car door open.", gamelog);
+               refresh();getch();gamelog.nextMessage();
 
                entered=1;
             }
@@ -2675,9 +2715,9 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
-               addstr(cr.name);
-               addstr(" fiddles with the lock with no luck.");
-               refresh();getch();
+               addstr(cr.name, gamelog);
+               addstr(" fiddles with the lock with no luck.", gamelog);
+               refresh();getch();gamelog.nextMessage();
             }
          }
          //BREAK WINDOW
@@ -2689,15 +2729,15 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
-               addstr(cr.name);
-               addstr(" smashes the window");
+               addstr(cr.name, gamelog);
+               addstr(" smashes the window", gamelog);
                if(cr.get_weapon().get_bashstrengthmod()>1)
                {
-                  addstr(" with a ");
-                  addstr(cr.get_weapon().get_name(2).c_str());
+                  addstr(" with a ", gamelog);
+                  addstr(cr.get_weapon().get_name(2).c_str(), gamelog);
                }
-               addstr(".");
-               refresh();getch();
+               addstr(".", gamelog);
+               refresh();getch();gamelog.nextMessage();
 
                windowdamage=10;
 
@@ -2707,14 +2747,15 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
-               addstr(cr.name);
-               addstr(" cracks the window");
+               addstr(cr.name, gamelog);
+               addstr(" cracks the window", gamelog);
                if(cr.get_weapon().get_bashstrengthmod()>1)
                {
-                  addstr(" with a ");
-                  addstr(cr.get_weapon().get_name(2).c_str());
+                  addstr(" with a ", gamelog);
+                  addstr(cr.get_weapon().get_name(2).c_str(), gamelog);
                }
-               addstr(" but it is still somewhat intact.");
+               addstr(" but it is still somewhat intact.", gamelog);
+               gamelog.nextMessage();
 
                windowdamage+=1;
 
@@ -2731,7 +2772,8 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
                move(y,0);y++;
-               addstr("An alarm suddenly starts blaring!");
+               addstr("An alarm suddenly starts blaring!", gamelog);
+               gamelog.nextMessage();
                refresh();
                getch();
                alarmon=1;
@@ -2743,8 +2785,9 @@ char stealcar(Creature &cr,char &clearformess)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(y,0);y++;
-            addstr(cr.name);
-            addstr(" has been spotted by a passerby!");
+            addstr(cr.name, gamelog);
+            addstr(" has been spotted by a passerby!", gamelog);
+            gamelog.nextMessage();
             refresh();
             getch();
 
@@ -2790,10 +2833,11 @@ char stealcar(Creature &cr,char &clearformess)
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y++;
-         addstr(cr.name);
-         addstr(" is behind the wheel of a ");
-         addstr(carname.c_str());
-         addstr(".");
+         addstr(cr.name, gamelog);
+         addstr(" is behind the wheel of a ", gamelog);
+         addstr(carname.c_str(), gamelog);
+         addstr(".", gamelog);
+         gamelog.nextMessage();
 
          if(alarmon)
          {
@@ -2845,9 +2889,9 @@ char stealcar(Creature &cr,char &clearformess)
                cr.train(SKILL_SECURITY,MAX(10-cr.get_skill(SKILL_SECURITY),0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
-               addstr(cr.name);
-               addstr(" hotwires the car!");
-               refresh();getch();
+               addstr(cr.name, gamelog);
+               addstr(" hotwires the car!", gamelog);
+               refresh();getch();gamelog.nextMessage();
 
                started=1;
             }
@@ -2855,7 +2899,7 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
-               addstr(cr.name);
+               addstr(cr.name, gamelog);
                int flavor_text;
                if(cr.get_skill(SKILL_SECURITY) < 4)
                   flavor_text = LCSrandom(3);
@@ -2863,13 +2907,13 @@ char stealcar(Creature &cr,char &clearformess)
                   flavor_text = LCSrandom(5);
                switch(flavor_text)
                {
-                  case 0:addstr(" fiddles with the ignition, but the car doesn't start.");break;
-                  case 1:addstr(" digs around in the steering column, but the car doesn't start.");break;
-                  case 2:addstr(" touches some wires together, but the car doesn't start.");break;
-                  case 3:addstr(" makes something in the engine click, but the car doesn't start.");break;
-                  case 4:addstr(" manages to turn on some dash lights, but the car doesn't start.");break;
+                  case 0:addstr(" fiddles with the ignition, but the car doesn't start.", gamelog);break;
+                  case 1:addstr(" digs around in the steering column, but the car doesn't start.", gamelog);break;
+                  case 2:addstr(" touches some wires together, but the car doesn't start.", gamelog);break;
+                  case 3:addstr(" makes something in the engine click, but the car doesn't start.", gamelog);break;
+                  case 4:addstr(" manages to turn on some dash lights, but the car doesn't start.", gamelog);break;
                }
-               refresh();getch();
+               refresh();getch();gamelog.nextMessage();
             }
          }
          //KEYS
@@ -2910,11 +2954,12 @@ char stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y,0);y++;
-               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  "); // Holy car keys Batman!
-               else addstr("Holy shit!  ");
-               addstr(cr.name);
-               addstr(" found the keys ");
-               addstr(location);
+               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  ", gamelog); // Holy car keys Batman!
+               else addstr("Holy shit!  ", gamelog);
+               addstr(cr.name, gamelog);
+               addstr(" found the keys ", gamelog);
+               addstr(location, gamelog);
+               gamelog.nextMessage();
 
                refresh();getch();
 
@@ -2925,50 +2970,50 @@ char stealcar(Creature &cr,char &clearformess)
                key_search_total++;
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y,0);y++;
-               addstr(cr.name);
-               addstr(": <rummaging> ");
+               addstr(cr.name, gamelog);
+               addstr(": <rummaging> ", gamelog);
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                if (key_search_total==5)
                {
-                  addstr("Are they even in here?");
+                  addstr("Are they even in here?", gamelog);
                }
                else if (key_search_total==10)
                {
-                  addstr("I don't think they're in here...");
+                  addstr("I don't think they're in here...", gamelog);
                }
                else if (key_search_total==15)
                {
-                  addstr("If they were here, I'd have found them by now.");
+                  addstr("If they were here, I'd have found them by now.", gamelog);
                }
                else if (key_search_total>15)
                {
                   switch(LCSrandom(5))
                   {
-                  case 0:addstr("This isn't working!");break;
-                  case 1:addstr("Why me?");break;
-                  case 2:addstr("What do I do now?");break;
-                  case 3:addstr("Oh no...");break;
-                  case 4:addstr("I'm going to get arrested, aren't I?");break;
+                  case 0:addstr("This isn't working!", gamelog);break;
+                  case 1:addstr("Why me?", gamelog);break;
+                  case 2:addstr("What do I do now?", gamelog);break;
+                  case 3:addstr("Oh no...", gamelog);break;
+                  case 4:addstr("I'm going to get arrested, aren't I?", gamelog);break;
                   }
                }
                else
                {
                   switch(LCSrandom(5))
                   {
-                     case 0:addstr("Please be in here somewhere...");break;
+                     case 0:addstr("Please be in here somewhere...", gamelog);break;
                      case 1:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!");
-                        else addstr("Fuck!  Where are they?!");
+                        if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!", gamelog);
+                        else addstr("Fuck!  Where are they?!", gamelog);
                         break;
-                     case 2:addstr("Come on, baby, come to me...");break;
+                     case 2:addstr("Come on, baby, come to me...", gamelog);break;
                      case 3:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...");
-                        else addstr("Dammit...");
+                        if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...", gamelog);
+                        else addstr("Dammit...", gamelog);
                         break;
-                     case 4:addstr("I wish I could hotwire this thing...");break;
+                     case 4:addstr("I wish I could hotwire this thing...", gamelog);break;
                   }
                }
-               refresh();getch();
+               refresh();getch();gamelog.nextMessage();
             }
          }
 
@@ -2977,8 +3022,9 @@ char stealcar(Creature &cr,char &clearformess)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(y,0);y++;
-            addstr(cr.name);
-            addstr(" has been spotted by a passerby!");
+            addstr(cr.name, gamelog);
+            addstr(" has been spotted by a passerby!", gamelog);
+            gamelog.nextMessage();
             refresh();
             getch();
 
@@ -3005,13 +3051,14 @@ char stealcar(Creature &cr,char &clearformess)
             nervous_counter=0;
             move(++y,0);y++;
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr(cr.name);
+            addstr(cr.name, gamelog);
             switch(LCSrandom(3))
             {
-               case 0:addstr(" hears someone nearby making a phone call.");break;
-               case 1:addstr(" is getting nervous being out here this long.");break;
-               case 2:addstr(" sees a police car driving around a few blocks away.");break;
+               case 0:addstr(" hears someone nearby making a phone call.", gamelog);break;
+               case 1:addstr(" is getting nervous being out here this long.", gamelog);break;
+               case 2:addstr(" sees a police car driving around a few blocks away.", gamelog);break;
             }
+            gamelog.nextMessage();
             refresh();
             getch();
          }
@@ -3201,8 +3248,8 @@ void getwheelchair(Creature &cr,char &clearformess)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name);
-      addstr(" has procured a wheelchair.");
+      addstr(cr.name, gamelog);
+      addstr(" has procured a wheelchair.", gamelog);
 
       cr.flag|=CREATUREFLAG_WHEELCHAIR;
    }
@@ -3210,9 +3257,10 @@ void getwheelchair(Creature &cr,char &clearformess)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name);
-      addstr(" was unable to get a wheelchair.  Maybe tomorrow...");
+      addstr(cr.name, gamelog);
+      addstr(" was unable to get a wheelchair.  Maybe tomorrow...", gamelog);
    }
+   gamelog.nextMessage();
 
    refresh();
    getch();

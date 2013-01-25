@@ -64,13 +64,14 @@ void noticecheck(int exclude,int difficulty)
 
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(16,1);
-         addstr(encounter[e].name);
-         addstr(" observes your Liberal activity");
+         addstr(encounter[e].name, gamelog);
+         addstr(" observes your Liberal activity ", gamelog);
          move(17,1);
          if(encounter[e].align==ALIGN_CONSERVATIVE)
-            addstr("and lets forth a piercing Conservative alarm cry!");
+            addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
          else
-            addstr("and shouts for help!");
+            addstr("and shouts for help!", gamelog);
+         gamelog.newline();
          
          sitealarm=1;
 
@@ -137,8 +138,9 @@ char alienationcheck(char mistake)
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
 
          move(16,1);
-         if(sitealienate==1)addstr("We've alienated the masses here!              ");
-         else addstr("We've alienated absolutely everyone here!               ");
+         if(sitealienate==1)addstr("We've alienated the masses here!              ", gamelog);
+         else addstr("We've alienated absolutely everyone here!               ", gamelog);
+         gamelog.newline();
          move(17,1);
          addstr("                                                        ");
 
@@ -326,10 +328,11 @@ void disguisecheck(int timer)
             move(16,1);
 
             if(squadsize > 1)
-               addstr("The squad ");
+               addstr("The squad ", gamelog);
             else
-               addstr(activesquad->squad[0]->name);
-            addstr(" fades into the shadows.");
+               addstr(activesquad->squad[0]->name, gamelog);
+            addstr(" fades into the shadows.", gamelog);
+            gamelog.newline();
 
             getch();
          }
@@ -352,15 +355,16 @@ void disguisecheck(int timer)
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             move(16,1);
 
-            addstr(activesquad->squad[blew_it]->name);
+            addstr(activesquad->squad[blew_it]->name, gamelog);
             switch(LCSrandom(5))
             {
-            case 0: addstr(" coughs."); break;
-            case 1: addstr(" accidentally mumbles the slogan."); break;
-            case 2: addstr(" paces uneasily."); break;
-            case 3: addstr(" stares at the Conservatives."); break;
-            case 4: addstr(" laughs nervously."); break;
+            case 0: addstr(" coughs.", gamelog); break;
+            case 1: addstr(" accidentally mumbles the slogan.", gamelog); break;
+            case 2: addstr(" paces uneasily.", gamelog); break;
+            case 3: addstr(" stares at the Conservatives.", gamelog); break;
+            case 4: addstr(" laughs nervously.", gamelog); break;
             }
+            gamelog.newline();
             
             getch();
          }
@@ -370,10 +374,11 @@ void disguisecheck(int timer)
             move(16,1);
 
             if(squadsize > 1)
-               addstr("The squad");
+               addstr("The squad", gamelog);
             else
-               addstr(activesquad->squad[0]->name);
-            addstr(" acts natural.");
+               addstr(activesquad->squad[0]->name, gamelog);
+            addstr(" acts natural.", gamelog);
+            gamelog.newline();
 
             getch();
          }
@@ -385,7 +390,7 @@ void disguisecheck(int timer)
 
       set_color(COLOR_RED,COLOR_BLACK,1);
       move(16,1);
-      addstr(encounter[n].name);
+      addstr(encounter[n].name, gamelog);
       if(sitealarmtimer!=0 && weapon<1 && encounter[n].type!=CREATURE_GUARDDOG)
       {
          if((sitetype==SITE_RESIDENTIAL_TENEMENT||
@@ -395,11 +400,11 @@ void disguisecheck(int timer)
          {
             sitealarm=1;
 
-            addstr(" shouts in alarm at the squad's Liberal Trespassing!");
+            addstr(" shouts in alarm at the squad's Liberal Trespassing!", gamelog);
          }
          else
          {
-            addstr(" looks at the Squad suspiciously.");
+            addstr(" looks at the Squad suspiciously.", gamelog);
 
             int time;
 
@@ -420,12 +425,12 @@ void disguisecheck(int timer)
       {
          if(weapon&&encounter[n].type!=CREATURE_GUARDDOG)
          {
-            addstr(" sees the Squad's Liberal Weapons");
+            addstr(" sees the Squad's Liberal Weapons ", gamelog);
             move(17,1);
             if(encounter[n].align==ALIGN_CONSERVATIVE)
-               addstr("and lets forth a piercing Conservative alarm cry!");
+               addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
             else
-               addstr("and shouts for help!");
+               addstr("and shouts for help!", gamelog);
 
             for(int i=0;i<6;i++)
             {
@@ -439,19 +444,21 @@ void disguisecheck(int timer)
          }
          else
          {
-            addstr(" looks at the Squad with Intolerance");
+            addstr(" looks at the Squad with Intolerance ", gamelog);
             move(17,1);
             if(encounter[n].align==ALIGN_CONSERVATIVE)
             {
                if(encounter[n].type==CREATURE_GUARDDOG)
-                  addstr("and launches into angry Conservative barking!");
+                  addstr("and launches into angry Conservative barking!", gamelog);
                else
-                  addstr("and lets forth a piercing Conservative alarm cry!");
+                  addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
                
             }
             else
-               addstr("and shouts for help!");
+               addstr("and shouts for help!", gamelog);
          }
+
+         gamelog.newline();
 
          sitealarm=1;
       }

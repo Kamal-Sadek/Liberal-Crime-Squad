@@ -48,6 +48,8 @@ Log::Log()
    newline_mode = NEWLINEMODE_LOGFILES_DEFAULT;
 
    buffer = ""; //Same situation as with filename.
+
+   logged_since_last_message = false; //Well, this starts out false for obvious reasons.
 }
 
 //Deconstructor.
@@ -155,6 +157,8 @@ bool Log::log(string text)
          return false; //Ruh Roh! Something went wrong!
       }
 
+      logged_since_last_message = true; //Well, this is now true, since something was just logged.
+
       return true; //Success!
    }
    else
@@ -167,6 +171,7 @@ bool Log::log(string text)
 void Log::record(string text)
 {
    buffer += text; //Save the text. That's it.
+   logged_since_last_message = true; //Ya...something was just logged...
 }
 
 void Log::nextMessage()
@@ -185,6 +190,8 @@ void Log::nextMessage()
    log(buffer); //Write out the current text.
 
    buffer = ""; //Clear the buffer.
+
+   logged_since_last_message = false; //Reset this, since this is the "last message".
 }
 
 void Log::newlmode(int new_newline_mode)
@@ -199,4 +206,5 @@ void Log::newline()
    newlmode(1); //Set the newlines to one.
    nextMessage(); //Write out the buffer. NOT going for the next message.
    newlmode(old); //Reset newline_mode to original value (should be 2).
+   logged_since_last_message = true; //Something was just logged, so...
 }

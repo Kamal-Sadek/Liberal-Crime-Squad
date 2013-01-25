@@ -324,21 +324,25 @@ void passmonth(char &clearformess,char canseethings)
 
       erase();
       move(12,10);
-      addstr("The Liberal Crime Squad is now just a memory.");
+      addstr("The Liberal Crime Squad is now just a memory.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       erase();
       move(12,12);
-      addstr("The last LCS members have all been hunted down.");
+      addstr("The last LCS members have all been hunted down.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       erase();
       move(12,14);
-      addstr("They will never see the utopia they dreamed of...");
+      addstr("They will never see the utopia they dreamed of...", gamelog);
+      gamelog.newline();
+      gamelog.nextMessage();
       refresh();
       getch();
 
@@ -375,8 +379,9 @@ void passmonth(char &clearformess,char canseethings)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);
-            addstr(pool[p]->name);
-            addstr(" has been rehabilitated from LCS brainwashing.");
+            addstr(pool[p]->name, gamelog);
+            addstr(" has been rehabilitated from LCS brainwashing.", gamelog);
+            gamelog.nextMessage();
 
             refresh();
             getch();
@@ -390,12 +395,13 @@ void passmonth(char &clearformess,char canseethings)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);
-            addstr(pool[p]->name);
-            addstr(" has been shipped out to the INS to face ");
+            addstr(pool[p]->name, gamelog);
+            addstr(" has been shipped out to the INS to face ", gamelog);
             if(law[LAW_IMMIGRATION]==-2 && law[LAW_DEATHPENALTY]==-2)
-               addstr("execution.");
+               addstr("execution.", gamelog);
             else
-               addstr("deportation.");
+               addstr("deportation.", gamelog);
+            gamelog.newline();
 
             refresh();
             getch();
@@ -445,15 +451,17 @@ void passmonth(char &clearformess,char canseethings)
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(pool[p]->name);
-                  addstr(" has broken under the pressure and ratted you out!");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" has broken under the pressure and ratted you out!", gamelog);
+                  gamelog.newline();
 
                   refresh();
                   getch();
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(9,1);
-                  addstr("The traitor will testify in court, and safehouses may be compromised.");
+                  addstr("The traitor will testify in court, and safehouses may be compromised.", gamelog);
+                  gamelog.nextMessage();
 
                   refresh();
                   getch();
@@ -469,8 +477,9 @@ void passmonth(char &clearformess,char canseethings)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(pool[p]->name);
-            addstr(" is moved to the courthouse for trial.");
+            addstr(pool[p]->name, gamelog);
+            addstr(" is moved to the courthouse for trial.", gamelog);
+            gamelog.nextMessage();
 
             refresh();
             getch();
@@ -612,10 +621,11 @@ void passmonth(char &clearformess,char canseethings)
                pool[p]->location=hospital;
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(pool[p]->name);
-               addstr(" has been transferred to ");
-               addstr(location[hospital]->name);
-               addstr(".");
+               addstr(pool[p]->name, gamelog);
+               addstr(" has been transferred to ", gamelog);
+               addstr(location[hospital]->name, gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
                refresh();
                getch();
             }
@@ -636,10 +646,11 @@ void passmonth(char &clearformess,char canseethings)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(pool[p]->name);
-            addstr(" has left ");
-            addstr(location[pool[p]->location]->name);
-            addstr(".");
+            addstr(pool[p]->name, gamelog);
+            addstr(" has left ", gamelog);
+            addstr(location[pool[p]->location]->name, gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
 
             int hs=-1;
             for(int l=0;l<location.size();l++)

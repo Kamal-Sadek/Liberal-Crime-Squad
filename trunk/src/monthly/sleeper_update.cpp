@@ -324,12 +324,14 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       {
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has been caught snooping around.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has been caught snooping around.", gamelog);
+         gamelog.newline();
 
          move(8,1);
-         addstr("The Liberal is now homeless and jobless...");
+         addstr("The Liberal is now homeless and jobless...", gamelog);
+         gamelog.nextMessage();
 
          refresh();
          getch();
@@ -375,11 +377,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked secret intelligence files.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked secret intelligence files.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("They are stashed at the homeless shelter.");
+         addstr("They are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -396,11 +400,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked secret police records.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked secret police records.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("They are stashed at the homeless shelter.");
+         addstr("They are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -415,11 +421,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked secret corporate documents.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked secret corporate documents.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("They are stashed at the homeless shelter.");
+         addstr("They are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -433,11 +441,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked internal prison records.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked internal prison records.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("They are stashed at the homeless shelter.");
+         addstr("They are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -453,11 +463,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked proof of systemic Cable News bias.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked proof of systemic Cable News bias.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("The papers are stashed at the homeless shelter.");
+         addstr("The papers are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -473,11 +485,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked proof of systemic AM Radio bias.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked proof of systemic AM Radio bias.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("The papers are stashed at the homeless shelter.");
+         addstr("The papers are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -491,11 +505,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked internal animal research reports.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked internal animal research reports.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("They are stashed at the homeless shelter.");
+         addstr("They are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -508,11 +524,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked proof of corruption in the judiciary.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked proof of corruption in the judiciary.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("The papers are stashed at the homeless shelter.");
+         addstr("The papers are stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -525,11 +543,13 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has leaked a list of the CCS's government backers.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has leaked a list of the CCS's government backers.", gamelog);
+         gamelog.newline();
          move(7,1);
-         addstr("The disk is stashed at the homeless shelter.");
+         addstr("The disk is stashed at the homeless shelter.", gamelog);
+         gamelog.nextMessage();
          pause=true;
       }
       break;
@@ -556,9 +576,10 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
       {
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has been arrested while embezzling funds.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has been arrested while embezzling funds.", gamelog);
+         gamelog.nextMessage();
 
          refresh();
          getch();
@@ -616,9 +637,10 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       {
          erase();
          move(6,1);
-         addstr("Sleeper ");
-         addstr(cr.name);
-         addstr(" has been arrested while stealing things.");
+         addstr("Sleeper ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" has been arrested while stealing things.", gamelog);
+         gamelog.nextMessage();
 
          refresh();
          getch();
@@ -880,13 +902,15 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    }
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,0);   move(6,1);
-   addstr("Sleeper ");
-   addstr(cr.name);
-   addstr(" has dropped a package off at the homeless shelter.");
+   addstr("Sleeper ", gamelog);
+   addstr(cr.name, gamelog);
+   addstr(" has dropped a package off at the homeless shelter.", gamelog);
+   gamelog.nextMessage();
    if(numberofxmlfails > 0) {
      char buf[30]; itoa(numberofxmlfails,buf,10);
      move(8,1);
      set_color(COLOR_RED,COLOR_BLUE,1);
+     //TODO: Not sure if this is something that is meant to be logged.
      addstr("Conservative hacktivity around XML bases lead to");
      move(9,1);
      addstr(buf);
@@ -945,16 +969,18 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libp
 
             erase();
             move(6,1);
-            addstr("Sleeper ");
-            addstr(cr.name);
-            addstr(" has recruited a new ");
+            addstr("Sleeper ", gamelog);
+            addstr(cr.name, gamelog);
+            addstr(" has recruited a new ", gamelog);
             char str[50];
             getrecruitcreature(str,recruit->type);
-            addstr(str);
-            addstr(".");
+            addstr(str, gamelog);
+            addstr(".", gamelog);
+            gamelog.newline();
             move(8,1);
-            addstr(recruit->name);
-            addstr(" looks forward serving the Liberal cause!");
+            addstr(recruit->name, gamelog);
+            addstr(" looks forward serving the Liberal cause!", gamelog);
+            gamelog.nextMessage();
             refresh();
             getch();
             if(!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;

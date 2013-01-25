@@ -28,6 +28,11 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
+/*
+    TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
+       that the country has become arch-conservative... --Addictgamer
+*/
+
 
 
 /* endgame - attempts to pass a constitutional amendment to help win the game */

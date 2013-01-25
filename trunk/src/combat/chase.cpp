@@ -84,7 +84,6 @@ char chasesequence(void)
    move(0,0);
    addstr("As you pull away from the site, you notice that you are ", gamelog);
    move(1,0);
-   gamelog.newline(); //New line. I'd rather it be continuous but whatever.
    addstr("being followed by Conservative swine!", gamelog);
    gamelog.newline(); //New line.
    refresh();
