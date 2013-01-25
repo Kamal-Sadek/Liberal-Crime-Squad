@@ -51,10 +51,11 @@ void creatureadvance(void)
                clearmessagearea();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,1);
-               addstr(activesquad->squad[p]->name);
-               addstr(" drops ");
-               addstr(activesquad->squad[p]->prisoner->name);
-               addstr("'s body.");
+               addstr(activesquad->squad[p]->name, gamelog);
+               addstr(" drops ", gamelog);
+               addstr(activesquad->squad[p]->prisoner->name, gamelog);
+               addstr("'s body.", gamelog);
+               gamelog.newline();
 
                makeloot(*activesquad->squad[p]->prisoner,groundloot);
 
@@ -156,7 +157,8 @@ void creatureadvance(void)
 
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             move(16,1);
-            addstr("The Squad smells Conservative panic.");
+            addstr("The Squad smells Conservative panic.", gamelog);
+            gamelog.newline();
 
             if(mode==GAMEMODE_CHASECAR||
                   mode==GAMEMODE_CHASEFOOT)printchaseencounter();
@@ -275,6 +277,13 @@ void creatureadvance(void)
          if(!stairs)break;
       }
    }
+
+   //I'll do this here so that everything that happened in the round is grouped together.
+   //Note the check is to make sure that no excessive blank lines appear between encounters
+   //in the gamelog due to something not happening for a round or two (like the squad
+   //moving around with no mishaps). In other words, it only does nexMessage if
+   //something was logged this round.
+   if (gamelog.logged_since_last_message) gamelog.nextMessage();
 }
 
 
@@ -329,11 +338,12 @@ void advancecreature(Creature &cr)
             clearmessagearea();
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             move(16,1);
-            addstr(topmedical->name);
-            addstr(" was able to slow the bleeding of");
+            addstr(topmedical->name, gamelog);
+            addstr(" was able to slow the bleeding of", gamelog);
             move(17,1);
-            addstr(cr.name);
-            addstr("'s wounds.");
+            addstr(cr.name, gamelog);
+            addstr("'s wounds.", gamelog);
+            gamelog.newline();
             topmedical->train(SKILL_FIRSTAID,max(int(50-topmedicalskill*2),0));
             cr.wound[w]^=WOUND_BLEEDING;
             refresh();
@@ -419,7 +429,8 @@ void advancecreature(Creature &cr)
          move(16,1);
          strcpy(str,cr.name);
          strcat(str," is burned!");
-         addstr(str);
+         addstr(str, gamelog);
+         gamelog.newline(); //Next message?
 
          refresh();
          getch();

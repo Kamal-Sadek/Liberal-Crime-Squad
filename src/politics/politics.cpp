@@ -30,6 +30,8 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 #include "compat.h"
 
+//TODO: Not sure if anything in here should be logged...Perhaps only a summary of the results? --Addictgamer
+
 /* politics - calculate presidential approval */
 int presidentapproval()
 {

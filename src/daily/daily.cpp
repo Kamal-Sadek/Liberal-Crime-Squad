@@ -92,12 +92,13 @@ void advanceday(char &clearformess,char canseethings)
                      }
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
-                     addstr(pool[p]->name);
-                     addstr(" has passed away at the age of ");
+                     addstr(pool[p]->name, gamelog);
+                     addstr(" has passed away at the age of ", gamelog);
                      char str[5];
                      itoa(pool[p]->age,str,10);
-                     addstr(str);
-                     addstr(". The Liberal will be missed.");
+                     addstr(str, gamelog);
+                     addstr(". The Liberal will be missed.", gamelog);
+                     gamelog.nextMessage();
                      refresh();
                      getch();
                      break;
@@ -171,14 +172,15 @@ void advanceday(char &clearformess,char canseethings)
                   }
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(squad[sq]->squad[p]->name);
-                  addstr(" acted with ");
-                  addstr(squad[sq]->name);
-                  addstr(" instead of ");
+                  addstr(squad[sq]->squad[p]->name, gamelog);
+                  addstr(" acted with ", gamelog);
+                  addstr(squad[sq]->name, gamelog);
+                  addstr(" instead of ", gamelog);
                   char str[200];
                   getactivity(str,squad[sq]->squad[p]->activity);
-                  addstr(str);
-                  addstr(".");
+                  addstr(str, gamelog);
+                  addstr(".", gamelog);
+                  gamelog.newline();
 
                   refresh();
                   getch();
@@ -202,10 +204,11 @@ void advanceday(char &clearformess,char canseethings)
             }
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(squad[sq]->name);
-            addstr(" decided ");
-            addlocationname(location[squad[sq]->activity.arg]);
-            addstr(" was too hot to risk.");
+            addstr(squad[sq]->name, gamelog);
+            addstr(" decided ", gamelog);
+            addlocationname(location[squad[sq]->activity.arg], gamelog);
+            addstr(" was too hot to risk.", gamelog);
+            gamelog.nextMessage();
 
             refresh();
             getch();
@@ -251,10 +254,11 @@ void advanceday(char &clearformess,char canseethings)
                         }
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(8,1);
-                        addstr(squad[sq]->name);
-                        addstr(" couldn't use the ");
-                        addstr(vehicle[v]->fullname().c_str());
-                        addstr(".");
+                        addstr(squad[sq]->name, gamelog);
+                        addstr(" couldn't use the ", gamelog);
+                        addstr(vehicle[v]->fullname().c_str(), gamelog);
+                        addstr(".", gamelog);
+                        gamelog.nextMessage();
 
                         refresh();
                         getch();
@@ -402,10 +406,11 @@ void advanceday(char &clearformess,char canseethings)
                }
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(squad[sq]->name);
-               addstr(" didn't have a car to get to ");
-               addlocationname(location[squad[sq]->activity.arg]);
-               addstr(".");
+               addstr(squad[sq]->name, gamelog);
+               addstr(" didn't have a car to get to ", gamelog);
+               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
 
                refresh();
                getch();
@@ -441,10 +446,11 @@ void advanceday(char &clearformess,char canseethings)
                }
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(squad[sq]->name);
-               addstr(" has arrived at ");
-               addlocationname(location[squad[sq]->activity.arg]);
-               addstr(".");
+               addstr(squad[sq]->name, gamelog);
+               addstr(" has arrived at ", gamelog);
+               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
 
                refresh();
                getch();
@@ -485,10 +491,11 @@ void advanceday(char &clearformess,char canseethings)
                }
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(squad[sq]->name);
-               addstr(" has arrived at ");
-               addlocationname(location[squad[sq]->activity.arg]);
-               addstr(".");
+               addstr(squad[sq]->name, gamelog);
+               addstr(" has arrived at ", gamelog);
+               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
 
                refresh();
                getch();
@@ -513,17 +520,19 @@ void advanceday(char &clearformess,char canseethings)
                move(8,1);
                if(squad[sq]->squad[0]->base==squad[sq]->activity.arg)
                {
-                  addstr(squad[sq]->name);
-                  addstr(" looks around ");
-                  addlocationname(location[squad[sq]->activity.arg]);
-                  addstr(".");
+                  addstr(squad[sq]->name, gamelog);
+                  addstr(" looks around ", gamelog);
+                  addlocationname(location[squad[sq]->activity.arg], gamelog);
+                  addstr(".", gamelog);
+                  gamelog.nextMessage();
                }
                else
                {
-                  addstr(squad[sq]->name);
-                  addstr(" has arrived at ");
-                  addlocationname(location[squad[sq]->activity.arg]);
-                  addstr(".");
+                  addstr(squad[sq]->name, gamelog);
+                  addstr(" has arrived at ", gamelog);
+                  addlocationname(location[squad[sq]->activity.arg], gamelog);
+                  addstr(".", gamelog);
+                  gamelog.nextMessage();
                }
 
                refresh();
@@ -645,8 +654,9 @@ void advanceday(char &clearformess,char canseethings)
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
-            addstr(pool[p]->name);
-            addstr(" surfs the Net for recent opinion polls.");
+            addstr(pool[p]->name, gamelog);
+            addstr(" surfs the Net for recent opinion polls.", gamelog);
+            gamelog.nextMessage();
 
             refresh();
             getch();
@@ -764,8 +774,9 @@ void advanceday(char &clearformess,char canseethings)
                }
                move(8,1);
                pool[p]->die();
-               addstr(pool[p]->name);
-               addstr(" has died of injuries.");
+               addstr(pool[p]->name, gamelog);
+               addstr(" has died of injuries.", gamelog);
+               gamelog.nextMessage();
             }
 
             for(int w=0;w<BODYPARTNUM;w++)
@@ -895,8 +906,9 @@ void advanceday(char &clearformess,char canseethings)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(pool[p]->name);
-               addstr("'s injuries require professional treatment.");
+               addstr(pool[p]->name, gamelog);
+               addstr("'s injuries require professional treatment.", gamelog);
+               gamelog.nextMessage();
                pool[p]->activity.type=ACTIVITY_CLINIC;
                refresh();
                getch();
@@ -948,9 +960,10 @@ void advanceday(char &clearformess,char canseethings)
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr("EVICTION NOTICE: ");
-               addstr(location[l]->name);
-               addstr(".  Possessions go to the shelter.");
+               addstr("EVICTION NOTICE: ", gamelog);
+               addstr(location[l]->name, gamelog);
+               addstr(".  Possessions go to the shelter.", gamelog);
+               gamelog.nextMessage();
 
                refresh();
                getch();
@@ -1157,8 +1170,9 @@ void advanceday(char &clearformess,char canseethings)
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               addstr(pool[p]->name);
-               addstr(" regains contact with the LCS.");
+               addstr(pool[p]->name, gamelog);
+               addstr(" regains contact with the LCS.", gamelog);
+               gamelog.nextMessage();
 
                refresh();
                getch();
@@ -1408,13 +1422,15 @@ void dispersalcheck(char &clearformess)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(pool[p]->name);
-                  addstr(" has lost touch with the Liberal Crime Squad.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" has lost touch with the Liberal Crime Squad.", gamelog);
+                  gamelog.nextMessage();
                   refresh();
                   getch();
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(9,1);
-                  addstr("The Liberal has gone into hiding...");
+                  addstr("The Liberal has gone into hiding...", gamelog);
+                  gamelog.nextMessage();
                   refresh();
                   getch();
                }
@@ -1422,8 +1438,9 @@ void dispersalcheck(char &clearformess)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(pool[p]->name);
-                  addstr(" has abandoned the LCS.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" has abandoned the LCS.", gamelog);
+                  gamelog.nextMessage();
                   refresh();
                   getch();
                }
@@ -1431,8 +1448,9 @@ void dispersalcheck(char &clearformess)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
-                  addstr(pool[p]->name);
-                  addstr(" has lost touch with the Liberal Crime Squad.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" has lost touch with the Liberal Crime Squad.", gamelog);
+                  gamelog.nextMessage();
                   refresh();
                   getch();
                }
@@ -1536,13 +1554,15 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
-         addstr(cr.name);
-         addstr(" has died.");
+         addstr(cr.name, gamelog);
+         addstr(" has died.", gamelog);
+         gamelog.newline();
          refresh();
          getch();
 
          move(10,1);
-         addstr("There are none left with the courage and conviction to lead....");
+         addstr("There are none left with the courage and conviction to lead....", gamelog);
+         gamelog.nextMessage();
          refresh();
          getch();
       }
@@ -1582,21 +1602,23 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(pool[bigboss]->name);
-      addstr(" has promoted ");
-      addstr(pool[newboss]->name);
+      addstr(pool[bigboss]->name, gamelog);
+      addstr(" has promoted ", gamelog);
+      addstr(pool[newboss]->name, gamelog);
       move(9,1);
-      addstr("due to the death of ");
-      addstr(cr.name);
-      addstr(".");
+      addstr("due to the death of ", gamelog);
+      addstr(cr.name, gamelog);
+      addstr(".", gamelog);
       if(subordinates>1)
       {
+         gamelog.newline();
          move(11,1);
-         addstr(pool[newboss]->name);
-         addstr(" will take over for ");
-         addstr(cr.name);
-         addstr(" in the command chain.");
+         addstr(pool[newboss]->name, gamelog);
+         addstr(" will take over for ", gamelog);
+         addstr(cr.name, gamelog);
+         addstr(" in the command chain.", gamelog);
       }
+      gamelog.nextMessage();
       refresh();
       getch();
    }
@@ -1604,14 +1626,16 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name);
-      addstr(" has died.");
+      addstr(cr.name, gamelog);
+      addstr(" has died.", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
       move(10,1);
-      addstr(pool[newboss]->name);
-      addstr(" is the new leader of the Liberal Crime Squad!");
+      addstr(pool[newboss]->name, gamelog);
+      addstr(" is the new leader of the Liberal Crime Squad!", gamelog);
+      gamelog.nextMessage();
       refresh();
       getch();
       

@@ -42,10 +42,11 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
    {
       set_color(COLOR_BLUE,COLOR_BLACK,1);
       move(y,0);y++;
-      addstr(d.date[e]->name);
-      addstr(" is quite taken with ");
-      addstr(pool[p]->name);
-      addstr("'s unique life philosophy...");
+      addstr(d.date[e]->name, gamelog);
+      addstr(" is quite taken with ", gamelog);
+      addstr(pool[p]->name, gamelog);
+      addstr("'s unique life philosophy...", gamelog);
+      gamelog.newline();
       refresh();
       getch();
 
@@ -56,15 +57,17 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             set_color(COLOR_RED,COLOR_BLACK,1);
             
             move(y++,0);
-            addstr("But when ");
-            addstr(pool[p]->name);
-            addstr(" mentions having other lovers, things go downhill fast.");
+            addstr("But when ", gamelog);
+            addstr(pool[p]->name, gamelog);
+            addstr(" mentions having other lovers, things go downhill fast.", gamelog);
+            gamelog.newline();
 
             refresh();
             getch();
 
             move(y++,0);
-            addstr("This relationship is over.");
+            addstr("This relationship is over.", gamelog);
+            gamelog.nextMessage();
 
             refresh();
             getch();
@@ -76,11 +79,12 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          }
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,0);y++;
-         addstr("In fact, ");
-         addstr(d.date[e]->name);
-         addstr(" is ");
-         addstr(pool[p]->name);
-         addstr("'s totally unconditional love-slave!");
+         addstr("In fact, ", gamelog);
+         addstr(d.date[e]->name, gamelog);
+         addstr(" is ", gamelog);
+         addstr(pool[p]->name, gamelog);
+         addstr("'s totally unconditional love-slave!", gamelog);
+         gamelog.nextMessage();
          //Get map of their workplace
          location[d.date[e]->worklocation]->interrogated=1;
          location[d.date[e]->worklocation]->hidden=0;
@@ -134,21 +138,24 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             {
                y++;
                move(y++,0);
-               addstr(d.date[e]->name);
-               addstr(" turns the topic of discussion to the ");
-               addstr(location[d.date[e]->worklocation]->name);
-               addstr(".");
+               addstr(d.date[e]->name, gamelog);
+               addstr(" turns the topic of discussion to the ", gamelog);
+               addstr(location[d.date[e]->worklocation]->name, gamelog);
+               addstr(".", gamelog);
+               gamelog.newline();
                move(y++,0);
                if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
                {
-                  addstr(pool[p]->name);
-                  addstr(" was able to create a map of the site with this information.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" was able to create a map of the site with this information.", gamelog);
+                  gamelog.newline();
                   y++;                           
                }
                else
                {
-                  addstr(pool[p]->name);
-                  addstr(" knows all about that already.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" knows all about that already.", gamelog);
+                  gamelog.newline();
                   y++;
                }
                location[d.date[e]->worklocation]->interrogated=1;
@@ -158,7 +165,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y++;
-         addstr("They'll meet again tomorrow.");
+         addstr("They'll meet again tomorrow.", gamelog);
+         gamelog.nextMessage();
          refresh();
          getch();
          
@@ -173,11 +181,12 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
                         set_color(COLOR_RED,COLOR_BLACK,1);
          move(y,0);y++;
          
-         addstr("Talking with ");
-         addstr(d.date[e]->name);
-         addstr(" actually curses ");
-         addstr(pool[p]->name);
-         addstr("'s mind with wisdom!!!");
+         addstr("Talking with ", gamelog);
+         addstr(d.date[e]->name, gamelog);
+         addstr(" actually curses ", gamelog);
+         addstr(pool[p]->name, gamelog);
+         addstr("'s mind with wisdom!!!", gamelog);
+         gamelog.newline();
          pool[p]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
 
          if(d.date[e]->get_skill(SKILL_RELIGION)>pool[p]->get_skill(SKILL_RELIGION))
@@ -211,8 +220,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       {
          move(y,0);y++;
          set_color(COLOR_RED,COLOR_BLACK,1);
-         addstr(d.date[e]->name);
-         addstr(" was leaking information to the police the whole time!");
+         addstr(d.date[e]->name, gamelog);
+         addstr(" was leaking information to the police the whole time!", gamelog);
          refresh();
          getch();
          move(y,0);y++;
@@ -231,8 +240,9 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             }
 
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr(pool[p]->name);
-            addstr(" has been arrested.");
+            addstr(pool[p]->name, gamelog);
+            addstr(" has been arrested.", gamelog);
+            gamelog.nextMessage();
             
             removesquadinfo(*pool[p]);
             pool[p]->carid=-1;
@@ -251,20 +261,23 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          else
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("But ");
-            addstr(pool[p]->name);
-            addstr(" escapes the police ambush!");
+            addstr("But ", gamelog);
+            addstr(pool[p]->name, gamelog);
+            addstr(" escapes the police ambush!", gamelog);
+            gamelog.nextMessage();
          }
       }
       else
       {
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          move(y,0);y++;
-         addstr(d.date[e]->name);
-         addstr(" can sense that things just aren't working out.");
+         addstr(d.date[e]->name, gamelog);
+         addstr(" can sense that things just aren't working out.", gamelog);
+         gamelog.newline();
          move(y,0);y++;
          
-         addstr("This relationship is over.");
+         addstr("This relationship is over.", gamelog);
+         gamelog.nextMessage();
       }
       refresh();
       getch();
@@ -286,8 +299,9 @@ char completevacation(datest &d,int p,char &clearformess)
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
-   addstr(pool[p]->name);
-   addstr(" is back from vacation.");
+   addstr(pool[p]->name, gamelog);
+   addstr(" is back from vacation.", gamelog);
+   gamelog.nextMessage();
 
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
@@ -339,30 +353,32 @@ char completedate(datest &d,int p,char &clearformess)
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
-   addstr(pool[p]->name);
-   addstr(" has ");
+   addstr(pool[p]->name, gamelog);
+   addstr(" has ", gamelog);
    if(d.date.size()==1)
    {
-      if(pool[p]->clinic)addstr("a \"hot\" date with ");
-      else addstr("a hot date with ");
+      if(pool[p]->clinic)addstr("a \"hot\" date with ", gamelog);
+      else addstr("a hot date with ", gamelog);
    }
-   else addstr("dates to manage with ");
+   else addstr("dates to manage with ", gamelog);
    for(e=0;e<d.date.size();e++)
    {
-      addstr(d.date[e]->name);
+      addstr(d.date[e]->name, gamelog);
 
-      if(e<=d.date.size()-3)addstr(", ");
-      else if(e==d.date.size()-2)addstr(" and ");
+      if(e<=d.date.size()-3)addstr(", ", gamelog);
+      else if(e==d.date.size()-2)addstr(" and ", gamelog);
       else
       {
          if(pool[p]->clinic>0)
          {
-            addstr(" at ");
-            addstr(location[pool[p]->location]->name);
+            addstr(" at ", gamelog);
+            addstr(location[pool[p]->location]->name, gamelog);
          }
-         addstr(".");
+         addstr(".", gamelog);
       }
    }
+
+   gamelog.newline();
 
    refresh();
    getch();
@@ -377,15 +393,16 @@ char completedate(datest &d,int p,char &clearformess)
             move(2,0);
             if (d.date.size()>2)
             {
-               addstr("Unfortunately, they all know each other and had been discussing");
+               addstr("Unfortunately, they all know each other and had been discussing", gamelog);
             }
             else
             {
-               addstr("Unfortunately, they know each other and had been discussing");
+               addstr("Unfortunately, they know each other and had been discussing", gamelog);
             }
             move(3,0);
-            addstr(pool[p]->name);
-            addstr(".  An ambush was set for the lying dog...");
+            addstr(pool[p]->name, gamelog);
+            addstr(".  An ambush was set for the lying dog...", gamelog);
+            gamelog.newline();
             refresh();
             getch();
             break;
@@ -393,57 +410,62 @@ char completedate(datest &d,int p,char &clearformess)
             move(2,0);
             if (d.date.size()>2)
             {
-               addstr("Unfortunately, they all turn up at the same time.");
+               addstr("Unfortunately, they all turn up at the same time.", gamelog);
             }
             else
             {
-               addstr("Unfortunately, they turn up at the same time.");
+               addstr("Unfortunately, they turn up at the same time.", gamelog);
             }
+            gamelog.newline();
             move(3,0);
-            addstr("Uh oh...");
+            addstr("Uh oh...", gamelog);
+            gamelog.newline();
             refresh();
             getch();
             break;
          default:
             move(2,0);
-            addstr(pool[p]->name);
+            addstr(pool[p]->name, gamelog);
             if (d.date.size()>2)
             {
                snprintf(datestr, sizeof(char) * 128, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size());
-               addstr(datestr);
+               addstr(datestr, gamelog);
             }
             else
             {
-               addstr(" mixes up the names of ");
-               addstr(d.date[0]->name);
-               addstr(" and ");
-               addstr(d.date[1]->name);
+               addstr(" mixes up the names of ", gamelog);
+               addstr(d.date[0]->name, gamelog);
+               addstr(" and ", gamelog);
+               addstr(d.date[1]->name, gamelog);
+               gamelog.newline();
             }
             move(3,0);
-            addstr("Things go downhill fast.");
+            addstr("Things go downhill fast.", gamelog);
+            gamelog.newline();
             refresh();
             getch();
             break;
       }
 
       move(5,0);
-      addstr(pool[p]->name);
+      addstr(pool[p]->name, gamelog);
       switch (LCSrandom(3))
       {
          case 0:
-            addstr(" is publicly humiliated.");
+            addstr(" is publicly humiliated.", gamelog);
             break;
          case 1:
-            addstr(" runs away.");
+            addstr(" runs away.", gamelog);
             break;
          case 2:
          default:
-            addstr(" escapes through the bathroom window.");
+            addstr(" escapes through the bathroom window.", gamelog);
             break;
       }
       addjuice(*pool[p],-5,-50);
       refresh();
       getch();
+      gamelog.nextMessage();
 
       return 1;
    }
@@ -622,32 +644,35 @@ char completedate(datest &d,int p,char &clearformess)
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             int bonus=0;
             move(17,0);
-            addstr(pool[p]->name);
+            addstr(pool[p]->name, gamelog);
 
             if(pool[p]->get_weapon().is_ranged())
             {
-               addstr(" comes back from the bathroom toting the ");
-               addstr(pool[p]->get_weapon().get_name(1).c_str());
+               addstr(" comes back from the bathroom toting the ", gamelog);
+               addstr(pool[p]->get_weapon().get_name(1).c_str(), gamelog);
                move(18,0);
-               addstr("and threatens to blow the Conservative's brains out!");
+               addstr("and threatens to blow the Conservative's brains out!", gamelog);
+               gamelog.newline();
                bonus=5;
             }
             else if(pool[p]->is_armed())
             {
-               addstr(" grabs the Conservative from behind, holding the ");
-               addstr(pool[p]->get_weapon().get_name(1).c_str());
+               addstr(" grabs the Conservative from behind, holding the ", gamelog);
+               addstr(pool[p]->get_weapon().get_name(1).c_str(), gamelog);
                move(18,0);
-               addstr("to the corporate slave's throat!");
+               addstr("to the corporate slave's throat!", gamelog);
+               gamelog.newline();
                bonus=2;
             }
             else
             {
-               addstr(" seizes the Conservative swine from behind and warns it");
+               addstr(" seizes the Conservative swine from behind and warns it", gamelog);
                move(18,0);
                if(law[LAW_FREESPEECH]!=-2)
-                  addstr("not to fuck around!");
+                  addstr("not to fuck around!", gamelog);
                else
-                  addstr("not to [resist]!");
+                  addstr("not to [resist]!", gamelog);
+               gamelog.newline();
             }
 
             refresh();
@@ -675,21 +700,24 @@ char completedate(datest &d,int p,char &clearformess)
                
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(20,0);
-               addstr(d.date[e]->name);
+               addstr(d.date[e]->name, gamelog);
                if(bonus)
                {
-                  addstr(" doesn't resist.");
+                  addstr(" doesn't resist.", gamelog);
+                  gamelog.newline();
                }
                else
                {
-                  addstr(" struggles and yells for help, but nobody comes.");
+                  addstr(" struggles and yells for help, but nobody comes.", gamelog);
+                  gamelog.newline();
                }
 
                refresh();
                getch();
                move(22,0);
-               addstr(pool[p]->name);
-               addstr(" kidnaps the Conservative!");
+               addstr(pool[p]->name, gamelog);
+               addstr(" kidnaps the Conservative!", gamelog);
+               gamelog.nextMessage();
                refresh();
                getch();
 
@@ -741,13 +769,15 @@ char completedate(datest &d,int p,char &clearformess)
                {
                   set_color(COLOR_MAGENTA,COLOR_BLACK,1);
                   move(y,0);y++;
-                  addstr(d.date[e]->name);
-                  addstr(" manages to get away on the way back to the safehouse!");
+                  addstr(d.date[e]->name, gamelog);
+                  addstr(" manages to get away on the way back to the safehouse!", gamelog);
+                  gamelog.newline();
                   refresh();
                   getch();
                   move(++y,0);y++;
-                  addstr(pool[p]->name);
-                  addstr(" has failed to kidnap the Conservative.");
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" has failed to kidnap the Conservative.", gamelog);
+                  gamelog.nextMessage();
 
                   // Charge with kidnapping
                   criminalize(*pool[p],LAWFLAG_KIDNAPPING);
@@ -763,14 +793,16 @@ char completedate(datest &d,int p,char &clearformess)
                {
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   move(y,0);y++;
-                  addstr(d.date[e]->name);
-                  addstr("'s fist is the last thing ");
-                  addstr(pool[p]->name);
-                  addstr(" remembers seeing!");
+                  addstr(d.date[e]->name, gamelog);
+                  addstr("'s fist is the last thing ", gamelog);
+                  addstr(pool[p]->name, gamelog);
+                  addstr(" remembers seeing!", gamelog);
+                  gamelog.newline();
                   refresh();
                   getch();
                   move(++y,0);y++;
-                  addstr("The Liberal wakes up in the police station...");
+                  addstr("The Liberal wakes up in the police station...", gamelog);
+                  gamelog.nextMessage();
 
                   // Find the police station
                   int ps=-1;
