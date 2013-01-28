@@ -2016,7 +2016,7 @@ void special_security(bool metaldetect)
          if(!autoadmit && activesquad->squad[s]->get_armor().get_quality()!=1)
             if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
          // Suspicious weapons? Gone
-         if(!autoadmit && weaponcheck(*activesquad->squad[s])>0, metaldetect)
+         if(!autoadmit && weaponcheck(*activesquad->squad[s], metaldetect)>0)
             if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
          // Fail a tough disguise check? Gone
          if(!autoadmit && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
