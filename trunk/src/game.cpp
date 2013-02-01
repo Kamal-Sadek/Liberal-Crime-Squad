@@ -595,18 +595,30 @@ void chaseseqst::clean(void)
    friendcar.clear(); 
 }
 
+/* Deletes and removes all pointers in a container. */
+template<class Container>
+void delete_and_clear(Container& c)
+{
+   while(!c.empty())
+   {
+      delete c.back();
+      c.pop_back();
+   }
+}
 
 /* Free memory and exit the game */
 void end_game(int err)
 {
-   for(vector<locationst*>::iterator it=location.begin();it!=location.end();++it)
-   {
-      delete (*it);
-   }
-   for(int i=0;i<squad.size();++i)
-   {
-      delete squad[i];
-   }
+   delete_and_clear(location);
+   delete_and_clear(squad);
+   delete_and_clear(weapontype);
+   delete_and_clear(cliptype);
+   delete_and_clear(armortype);
+   delete_and_clear(loottype);
+   delete_and_clear(vehicletype);
+   delete_and_clear(vehicle);
+   delete_and_clear(pool);
+   delete_and_clear(sitemaps);
    endwin();
    exit(err);
 }
