@@ -1302,6 +1302,7 @@ void dispersalcheck(char &clearformess)
                {
                   delete pool[p];
                   pool.erase(pool.begin() + p);
+                  --p;
                }
             }
          }
