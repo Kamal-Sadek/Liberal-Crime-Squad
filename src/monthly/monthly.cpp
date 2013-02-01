@@ -134,8 +134,8 @@ void passmonth(char &clearformess,char canseethings)
             location[l]->changes[c].flag==SITEBLOCK_GRAFFITI_CCS||
             location[l]->changes[c].flag==SITEBLOCK_GRAFFITI_OTHER) // Find changes that refer specifically to graffiti
          {
-            int power;
-            int align;
+            int power=0;
+            int align=0;
 
             if(location[l]->changes[c].flag==SITEBLOCK_GRAFFITI)
                align=1;

@@ -309,6 +309,8 @@ using namespace std;
 int r_num(void);
 int LCSrandom(int max);
 
+template <class Container> void delete_and_clear(Container& c);
+
 string tostring(long i);
 int stringtobool(const string& boolstr);
 
@@ -852,6 +854,10 @@ struct locationst
       needcar=0;
       renting=-1;
       hidden=0;
+   }
+   ~locationst()
+   {
+      delete_and_clear(loot);
    }
    void init(void);
    void update_heat_protection(void);

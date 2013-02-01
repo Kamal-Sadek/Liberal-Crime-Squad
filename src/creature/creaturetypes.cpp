@@ -930,8 +930,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_CCS_VIGILANTE:
       {
          GIVE_GENDER_MALE;
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          switch(LCSrandom(5)+endgamestate)
          {
          case 0:
@@ -1423,8 +1421,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_JUROR:
          strcpy(cr.name,"Angry Juror");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=0;
          cr.align=-1;
          cr.age=AGE_MATURE;
@@ -1454,8 +1450,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_COLLEGESTUDENT:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"College Student");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=18+LCSrandom(6); // no macro
@@ -1469,8 +1463,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_MUSICIAN:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Musician");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(11);
          cr.age=AGE_MATURE;
          cr.set_skill(SKILL_MUSIC,LCSrandom(4)+2);
@@ -1480,8 +1472,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_MATHEMATICIAN:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Mathematician");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1495,8 +1485,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_FEMALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Teacher");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.set_skill(SKILL_TEACHING,LCSrandom(4)+3);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1505,8 +1493,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_HSDROPOUT:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Highschool Dropout");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_TEENAGER;
@@ -1519,8 +1505,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
             cr.give_weapon(w,NULL);
          }
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          if(cr.align==-1)
             cr.align=LCSrandom(2);
@@ -1534,8 +1518,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
             cr.give_weapon(w,NULL);
          }
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          cr.align=1;
          //cr.set_skill(SKILL_SURVIVAL,LCSrandom(3)+1);
@@ -1603,8 +1585,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.give_weapon(w,NULL);
          }
 
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          cr.juice=-5;
          // We'll make the crack house a bit dicey
@@ -1637,8 +1617,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
             cr.give_weapon(w,NULL);
          }
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          cr.juice=-20;
          if(cr.align==-1)
@@ -1652,8 +1630,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_PRIEST:
          GIVE_GENDER_MALE;
          strcpy(cr.name,"Priest");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1663,8 +1639,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_MALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Engineer");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1675,8 +1649,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_FASTFOODWORKER:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Fast Food Worker");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          //cr.set_skill(SKILL_COOKING,LCSrandom(3));
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1688,8 +1660,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_TELEMARKETER:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Telemarketer");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_YOUNGADULT;
@@ -1709,8 +1679,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
 	  case CREATURE_OFFICEWORKER:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Office Worker");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.set_skill(SKILL_BUSINESS,LCSrandom(3));
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1720,8 +1688,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_MALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Football Coach");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.set_skill(SKILL_TEACHING,LCSrandom(3)+2);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
@@ -1746,11 +1712,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          if(LCSrandom(2))
          {
             Armor a=Armor(*armortype[getarmortype("ARMOR_CHEAPDRESS")]);
-            cr.give_armor(a,NULL);
-         }
-         else
-         {
-            Armor a=Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
             cr.give_armor(a,NULL);
          }
          cr.money=LCSrandom(31)+20;
@@ -1825,8 +1786,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_AMATEURMAGICIAN:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Amateur Magician");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1834,8 +1793,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_HIPPIE:
          strcpy(cr.name,"Hippie");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          cr.align=1;
          
@@ -1937,8 +1894,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_MALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Truck Driver");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1948,8 +1903,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_MALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Taxi Driver");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -1959,8 +1912,6 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_GENDER_MALE;
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Programmer");
-         armor=new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-         cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
@@ -2095,6 +2046,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_SECURITY, LCSrandom(5) + 3);
          cr.age=AGE_MATURE;
          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
+         cr.give_armor(*armor,NULL);
          break;
       case CREATURE_MILITARYPOLICE:
          GIVE_GENDER_MALE;
