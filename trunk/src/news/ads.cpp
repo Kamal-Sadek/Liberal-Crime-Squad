@@ -134,15 +134,14 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                break;
             case 5:
             {
-               strcat(ad,"&c");
+               strcpy(ad,"&c");
                switch(LCSrandom(5))
                {
-                  case 0:strcpy(ad,"Searching For Love");
-                  case 1:strcpy(ad,"Seeking Love");
-                  case 2:strcpy(ad,"Are You Lonely?");
-                  case 3:strcpy(ad,"Looking For Love");
-                  case 4:strcpy(ad,"Soulmate Wanted");
-                  break;
+                  case 0:strcat(ad,"Searching For Love");break;
+                  case 1:strcat(ad,"Seeking Love");break;
+                  case 2:strcat(ad,"Are You Lonely?");break;
+                  case 3:strcat(ad,"Looking For Love");break;
+                  case 4:strcat(ad,"Soulmate Wanted");break;
                }
                char str[10];
 
@@ -170,7 +169,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
       }
       else
       {
-         switch(4) // Liberal Guardian Ads
+         switch(LCSrandom(4)) // Liberal Guardian Ads
          {
          case 0:
             strcpy(ad,"&cWant Organic?&r&r");
@@ -183,8 +182,8 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
              char numyears_s [10];
              itoa (numyears, numyears_s, 10);
              strcpy(ad,"&cLiberal Defense Lawyer&r");
-             strcpy(ad,"&c");
-             strcpy(ad,numyears_s);
+             strcat(ad,"&c");
+             strcat(ad,numyears_s);
              strcat(ad," Years Experience&r&r");
              strcat(ad,"&cCall Today&r");
              break;
@@ -197,14 +196,13 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             break;
          case 3:
             {
-               strcat(ad,"&c");
+               strcpy(ad,"&c");
                switch(LCSrandom(4))
                {
-                  case 0:strcpy(ad,"Searching For Love");
-                  case 1:strcpy(ad,"Seeking Love");
-                  case 2:strcpy(ad,"Are You Lonely?");
-                  case 3:strcpy(ad,"Looking For Love");
-                  break;
+                  case 0:strcat(ad,"Searching For Love");break;
+                  case 1:strcat(ad,"Seeking Love");break;
+                  case 2:strcat(ad,"Are You Lonely?");break;
+                  case 3:strcat(ad,"Looking For Love");break;
                }
                char str[10];
 

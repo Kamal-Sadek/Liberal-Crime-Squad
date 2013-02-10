@@ -1977,9 +1977,8 @@ char chasesequence(Creature &cr,Vehicle &v)
    long oldsqid=cr.squadid;
    squadst *sq=new squadst;
       sq->squad[0]=&cr;
-      sq->squad[0]->squadid=cursquadid;cursquadid++;
+      sq->squad[0]->squadid=cursquadid;
       sq->id=cursquadid;cursquadid++;
-      cr.squadid=sq->squad[0]->squadid;
       cr.carid=v.id();
       cr.is_driver=1;
 

@@ -619,6 +619,9 @@ void end_game(int err)
    delete_and_clear(vehicle);
    delete_and_clear(pool);
    delete_and_clear(sitemaps);
+   delete_and_clear(recruit);
+   delete_and_clear(date);
+
    endwin();
    exit(err);
 }
