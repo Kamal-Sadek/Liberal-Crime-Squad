@@ -632,8 +632,8 @@ string Creature::showXml() const
    if (armor != NULL)
       xml.AddSubDoc(armor->showXml());
    
-   xml.AddElem("name", name);//string(name)?
-   xml.AddElem("propername", propername);//string(propername)?
+   xml.AddElem("name", name);
+   xml.AddElem("propername", propername);
    xml.AddElem("gender_conservative", gender_conservative);
    xml.AddElem("gender_liberal", gender_liberal);
    xml.AddElem("squadid", squadid);
@@ -1596,11 +1596,6 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
          int take_number = 10 - count_weapons();
          if (take_number > 0)
             extra_throwing_weapons.push_back(w.split(1));
-         
-         //if (lootpile == NULL || w.empty())
-         //   delete &w;
-         //else
-         //   lootpile.push_back(&w);
       }
       else
       {
@@ -1624,12 +1619,6 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
          }
          
          weapon = w.split(1);
-         //if (weapon->is_throwable())
-         //   give_weapon(w,lootpile);
-         //else if (lootpile == NULL || w.empty())
-         //   delete &w;
-         //else
-         //   lootpile->push_back(&w);
 
          if (lootpile == NULL)
          {
@@ -1659,15 +1648,7 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
    {
       drop_weapons_and_clips(lootpile);
       weapon = w.split(1);
-      //if (weapon->is_throwable())
-      //   give_weapon(w,lootpile);
-      //else if (lootpile == NULL || w.empty())
-      //   delete &w;
-      //else
-      //   lootpile->push_back(&w);
    }
-   //else if (w.empty())
-   //   delete &w;
 }
 
 void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)

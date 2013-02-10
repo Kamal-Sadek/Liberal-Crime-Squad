@@ -2383,7 +2383,8 @@ void funds_and_trouble(char &clearformess)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
-            pool[p]->align==ALIGN_LIBERAL)
+            pool[p]->align==ALIGN_LIBERAL &&
+            pool[p]->alive)
          {
             //Step through the array of skills to train
             for(int i=0;i<13;i++)           //Any reason why we aren't using a while(true) loop or something even more dynamic? --kviiri
@@ -2409,7 +2410,8 @@ void funds_and_trouble(char &clearformess)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
-            pool[p]->align==ALIGN_LIBERAL)
+            pool[p]->align==ALIGN_LIBERAL &&
+            pool[p]->alive)
          {
             //Step through the array of skills to train
             for(int i=0;i<13;i++)

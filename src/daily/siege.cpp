@@ -898,8 +898,9 @@ void siegeturn(char clearformess)
    int* liberalcount = new int[location.size()];
    char* food_prep   = new char[location.size()];
 
-   // Clear food_prep list
+   // Clear food_prep and liberalcount lists
    std::memset(food_prep,0,location.size());
+   std::memset(liberalcount,0,sizeof(int)*location.size());
 
    for(int p=0;p<pool.size();p++)
    {

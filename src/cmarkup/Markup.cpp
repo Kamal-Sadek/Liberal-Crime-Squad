@@ -1,7 +1,7 @@
 // Markup.cpp: implementation of the CMarkup class.
 //
-// Markup Release 11.2
-// Copyright (C) 2009 First Objective Software, Inc. All rights reserved
+// Markup Release 11.5
+// Copyright (C) 2011 First Objective Software, Inc. All rights reserved
 // Go to www.firstobject.com for the latest CMarkup and EDOM documentation
 // Use in commercial applications requires written permission
 // This software is provided "as is", with no warranty.
@@ -16,6 +16,8 @@
 #if defined (MARKUP_ICONV)
 #include <iconv.h>
 #endif
+
+#define x_ATTRIBQUOTE '\"' // can be double or single quote
 
 #if defined(MARKUP_STL) && ( defined(MARKUP_WINCONV) || (! defined(MCD_STRERROR)))
 #include <windows.h> // for MultiByteToWideChar, WideCharToMultiByte, FormatMessage
@@ -36,11 +38,6 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif // DEBUG_NEW
 #endif // VC++ DEBUG
-
-// Customization
-#define x_EOL MCD_T("") // can be \r\n or \n or empty
-#define x_EOLLEN (sizeof(x_EOL)/sizeof(MCD_CHAR)-1) // string length of x_EOL
-#define x_ATTRIBQUOTE '\"' // can be double or single quote
 
 
 // Disable "while ( 1 )" warning in VC++ 2002
@@ -92,6 +89,45 @@ MCD_STR x_IntToStr( int n )
 	MCD_SPRINTF(MCD_SSZ(sz),MCD_T("%d"),n);
 	MCD_STR s=sz;
 	return s;
+}
+
+int x_StrNCmp( MCD_PCSZ p1, MCD_PCSZ p2, int n, int bIgnoreCase = 0 )
+{
+	// Fast string compare to determine equality
+	if ( bIgnoreCase )
+	{
+		bool bNonAsciiFound = false;
+		MCD_CHAR c1, c2;
+		while ( n-- )
+		{
+			c1 = *p1++;
+			c2 = *p2++;
+			if ( c1 != c2 )
+			{
+				if ( bNonAsciiFound )
+					return c1 - c2;
+				if ( c1 >= 'a' && c1 <= 'z' )
+					c1 = (MCD_CHAR)( c1 - ('a'-'A') );
+				if ( c2 >= 'a' && c2 <= 'z' )
+					c2 = (MCD_CHAR)( c2 - ('a'-'A') );
+				if ( c1 != c2 )
+					return c1 - c2;
+			}
+			else if ( (unsigned int)c1 > 127 )
+				bNonAsciiFound = true;
+		}
+	}
+	else
+	{
+		while ( n-- )
+		{
+			if ( *p1 != *p2 )
+				return *p1 - *p2;
+			p1++;
+			p2++;
+		}
+	}
+	return 0;
 }
 
 enum MarkupResultCode
@@ -302,7 +338,7 @@ int x_GetEncodingCodePage( MCD_CSTR pszEncoding )
 	int nEncLen = MCD_PSZLEN( pszEncoding );
 	if ( ! nEncLen )
 		nCodePage = MCD_ACP;
-	else if ( MCD_PSZNCMP(pszEncoding,MCD_T("UTF-32"),6) == 0 )
+	else if ( x_StrNCmp(pszEncoding,MCD_T("UTF-32"),6) == 0 )
 		nCodePage = MCD_UTF32;
 	else if ( nEncLen < 100 )
 	{
@@ -323,7 +359,7 @@ int x_GetEncodingCodePage( MCD_CSTR pszEncoding )
 			++pEntry;
 			MCD_PCSZ pCodePage = pEntry;
 			pEntry += 5;
-			if ( nEntryLen == nEncLen && MCD_PSZNCMP(szEncodingLower,pEntry,nEntryLen) == 0 )
+			if ( nEntryLen == nEncLen && x_StrNCmp(szEncodingLower,pEntry,nEntryLen) == 0 )
 			{
 				// Convert digits to integer up to code name which always starts with alpha 
 				nCodePage = MCD_PSZTOL( pCodePage, NULL, 10 );
@@ -382,7 +418,7 @@ const char* TextEncoding::IConvName( char* szEncoding, MCD_CSTR pszEncoding )
 		szEncoding[nEncChar] = (cEncChar>='a' && cEncChar<='z')? (cEncChar-('a'-'A')) : cEncChar;
 		++nEncChar;
 	}
-	if ( nEncChar == 6 && strncmp(szEncoding,"UTF-16",6) == 0 )
+	if ( nEncChar == 6 && x_StrNCmp(szEncoding,"UTF-16",6) == 0 )
 	{
 		szEncoding[nEncChar++] = 'B';
 		szEncoding[nEncChar++] = 'E';
@@ -416,7 +452,7 @@ int TextEncoding::IConv( void* pTo, int nToCharSize, int nFromCharSize )
 		while ( nFromLenRemaining )
 		{
 			nToCountRemainingBefore = nToCountRemaining;
-			nResult = iconv( cd, const_cast<const char**>(&pFromChar), &nFromLenRemaining, &pToChar, &nToCountRemaining ); //Added const_cast<char**>() to second argument. It wouldn't compile otherwise. -XML
+			nResult = iconv( cd, &pFromChar, &nFromLenRemaining, &pToChar, &nToCountRemaining );
 			nToLenBytes += (int)(nToCountRemainingBefore - nToCountRemaining);
 			if ( nResult == (size_t)-1 )
 			{
@@ -434,10 +470,14 @@ int TextEncoding::IConv( void* pTo, int nToCharSize, int nFromCharSize )
 						*((unsigned int*)pToChar) = (unsigned int)'?';
 					pToChar += nToCharSize;
 					nToCountRemaining -= nToCharSize;
+					nToLenBytes += nToCharSize;
+					size_t nInitFromLen = 0, nInitToCount = 0;
+					iconv(cd, NULL, &nInitFromLen ,NULL, &nInitToCount );
 				}
 				else if ( nErrno == EINVAL )
 					break; // incomplete character or shift sequence at end of input
-				// E2BIG : output buffer full should only happen when using a temp buffer
+				else if ( nErrno == E2BIG && !pToTempBuffer )
+					break; // output buffer full should only happen when using a temp buffer
 			}
 			else
 				m_nFailedChars += nResult;
@@ -1033,6 +1073,36 @@ struct NodePos
 };
 
 //////////////////////////////////////////////////////////////////////
+// "Is Char" defines
+// Quickly determine if a character matches a limited set
+//
+#define x_ISONEOF(c,f,l,s) ((c>=f&&c<=l)?(int)(s[c-f]):0)
+// classic whitespace " \t\n\r"
+#define x_ISWHITESPACE(c) x_ISONEOF(c,9,32,"\2\3\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1")
+// end of word in a path " =/[]"
+#define x_ISENDPATHWORD(c) x_ISONEOF(c,32,93,"\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\3\0\0\0\0\0\0\0\0\0\0\0\0\0\2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\4\0\5")
+// end of a name " \t\n\r/>"
+#define x_ISENDNAME(c) x_ISONEOF(c,9,62,"\2\3\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1")
+// a small set of chars cannot be second last in attribute value " \t\n\r\"\'"
+#define x_ISNOTSECONDLASTINVAL(c) x_ISONEOF(c,9,39,"\2\3\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\5\0\0\0\0\1")
+// first char of doc type tag name "EAN"
+#define x_ISDOCTYPESTART(c) x_ISONEOF(c,65,78,"\2\0\0\0\1\0\0\0\0\0\0\0\0\3")
+// attrib special char "<&>\"\'"
+#define x_ISATTRIBSPECIAL(c) x_ISONEOF(c,34,62,"\4\0\0\0\2\5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\3")
+// parsed text special char "<&>"
+#define x_ISSPECIAL(c) x_ISONEOF(c,38,62,"\2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\3")
+// end of any name " \t\n\r<>=\\/?!\"';"
+#define x_ISENDANYNAME(c) x_ISONEOF(c,9,92,"\2\3\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1\0\0\0\0\1\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\0\0\1\5\1\1\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1")
+// end of unquoted attrib value " \t\n\r>"
+#define x_ISENDUNQUOTED(c) x_ISONEOF(c,9,62,"\2\3\0\0\4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\5")
+// end of attrib name "= \t\n\r>/?"
+#define x_ISENDATTRIBNAME(c) x_ISONEOF(c,9,63,"\3\4\0\0\5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\1\1\1")
+// start of entity reference "A-Za-Z#_:"
+#define x_ISSTARTENTREF(c) x_ISONEOF(c,35,122,"\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\1\2\3\4\5\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\1\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1")
+// within entity reference "A-Za-Z0-9_:-."
+#define x_ISINENTREF(c) x_ISONEOF(c,45,122,"\1\1\0\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\0\0\1\2\3\4\5\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\0\0\0\0\1\0\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1\1")
+
+//////////////////////////////////////////////////////////////////////
 // Token struct and tokenizing functions
 // TokenPos handles parsing operations on a constant text pointer 
 //
@@ -1043,13 +1113,14 @@ struct TokenPos
 	int Length() const { return m_nR - m_nL + 1; };
 	MCD_PCSZ GetTokenPtr() const { return &m_pDocText[m_nL]; };
 	MCD_STR GetTokenText() const { return MCD_STR( GetTokenPtr(), Length() ); };
+	MCD_CHAR NextChar() { m_nNext += MCD_CLEN(&m_pDocText[m_nNext]); return m_pDocText[m_nNext]; };
 	int WhitespaceToTag( int n ) { m_nNext = n; if (FindAny()&&m_pDocText[m_nNext]!='<') { m_nNext=n; m_nR=n-1; } return m_nNext; };
-	void ForwardUntil( MCD_PCSZ szStopChars ) { while ( m_pDocText[m_nNext] && ! MCD_PSZCHR(szStopChars,m_pDocText[m_nNext]) ) m_nNext += MCD_CLEN(&m_pDocText[m_nNext]); }
 	bool FindAny()
 	{
 		// Go to non-whitespace or end
-		while ( m_pDocText[m_nNext] && MCD_PSZCHR(MCD_T(" \t\n\r"),m_pDocText[m_nNext]) )
-			++m_nNext;
+		MCD_CHAR cNext = m_pDocText[m_nNext];
+		while ( cNext && x_ISWHITESPACE(cNext) )
+			cNext = m_pDocText[++m_nNext];
 		m_nL = m_nNext;
 		m_nR = m_nNext-1;
 		return m_pDocText[m_nNext]!='\0';
@@ -1058,49 +1129,21 @@ struct TokenPos
 	{
 		if ( ! FindAny() ) // go to first non-whitespace
 			return false;
-		ForwardUntil(MCD_T(" \t\n\r<>=\\/?!\"';"));
+		MCD_CHAR cNext = m_pDocText[m_nNext];
+		while ( cNext && ! x_ISENDANYNAME(cNext) )
+			cNext = NextChar();
 		if ( m_nNext == m_nL )
 			++m_nNext; // it is a special char
 		m_nR = m_nNext - 1;
 		return true;
 	}
-	static int StrNIACmp( MCD_PCSZ p1, MCD_PCSZ p2, int n )
-	{
-		// string compare ignore case
-		bool bNonAsciiFound = false;
-		MCD_CHAR c1, c2;
-		while ( n-- )
-		{
-			c1 = *p1++;
-			c2 = *p2++;
-			if ( c1 != c2 )
-			{
-				if ( bNonAsciiFound )
-					return c1 - c2;
-				if ( c1 >= 'a' && c1 <= 'z' )
-					c1 = (MCD_CHAR)( c1 - ('a'-'A') );
-				if ( c2 >= 'a' && c2 <= 'z' )
-					c2 = (MCD_CHAR)( c2 - ('a'-'A') );
-				if ( c1 != c2 )
-					return c1 - c2;
-			}
-			else if ( (unsigned int)c1 > 127 )
-				bNonAsciiFound = true;
-		}
-		return 0;
-	}
-
 	bool Match( MCD_CSTR szName )
 	{
 		int nLen = Length();
-		if ( m_nTokenFlags & CMarkup::MDF_IGNORECASE )
-			return ( (StrNIACmp( GetTokenPtr(), szName, nLen ) == 0)
-				&& ( szName[nLen] == '\0' || MCD_PSZCHR(MCD_T(" =/[]"),szName[nLen]) ) );
-		else
-			return ( (MCD_PSZNCMP( GetTokenPtr(), szName, nLen ) == 0)
-				&& ( szName[nLen] == '\0' || MCD_PSZCHR(MCD_T(" =/[]"),szName[nLen]) ) );
+		return ( (x_StrNCmp( GetTokenPtr(), szName, nLen, m_nTokenFlags & CMarkup::MDF_IGNORECASE ) == 0)
+			&& ( szName[nLen] == '\0' || x_ISENDPATHWORD(szName[nLen]) ) );
 	};
-	bool FindAttrib( MCD_PCSZ pAttrib, int n = 0 );
+	bool FindAttrib( MCD_PCSZ pAttrib, int n = 0, MCD_STR* pstrAttrib = NULL );
 	int ParseNode( NodePos& node );
 	int m_nL;
 	int m_nR;
@@ -1112,7 +1155,7 @@ struct TokenPos
 	FilePos* m_pReaderFilePos;
 };
 
-bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
+bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/, MCD_STR* pstrAttrib/*=NULL*/ )
 {
 	// Return true if found, otherwise false and token.m_nNext is new insertion point
 	// If pAttrib is NULL find attrib n and leave token at attrib name
@@ -1122,7 +1165,7 @@ bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
 	//
 	int nTempPreSpaceStart;
 	int nTempPreSpaceLength;
-	MCD_CHAR cFirstChar;
+	MCD_CHAR cFirstChar, cNext;
 	int nAttrib = -1; // starts at tag name
 	int nFoundAttribNameR = 0;
 	bool bAfterEqual = false;
@@ -1145,14 +1188,15 @@ bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
 			m_nL = m_nNext;
 
 			// Look for closing quote
-			while ( m_pDocText[m_nNext] && m_pDocText[m_nNext] != cFirstChar )
-				m_nNext += MCD_CLEN( &m_pDocText[m_nNext] );
+			cNext = m_pDocText[m_nNext];
+			while ( cNext && cNext != cFirstChar )
+				cNext = NextChar();
 
 			// Set right to before closing quote
 			m_nR = m_nNext - 1;
 
 			// Set m_nNext past closing quote unless at end of document
-			if ( m_pDocText[m_nNext] )
+			if ( cNext )
 				++m_nNext;
 		}
 		else
@@ -1161,10 +1205,17 @@ bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
 
 			// Go until special char or whitespace
 			m_nL = m_nNext;
+			cNext = m_pDocText[m_nNext];
 			if ( bAfterEqual )
-				ForwardUntil(MCD_T(" \t\n\r>"));
+			{
+				while ( cNext && ! x_ISENDUNQUOTED(cNext) )
+					cNext = NextChar();
+			}
 			else
-				ForwardUntil(MCD_T("= \t\n\r>/?"));
+			{
+				while ( cNext && ! x_ISENDATTRIBNAME(cNext) )
+					cNext = NextChar();
+			}
 
 			// Adjust end position if it is one special char
 			if ( m_nNext == m_nL )
@@ -1182,7 +1233,7 @@ bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
 				continue;
 			}
 
-			// Is it the right angle bracket?
+			// Is it the end of the tag?
 			if ( cChar == '>' || cChar == '/' || cChar == '?' )
 			{
 				m_nNext = nTempPreSpaceStart;
@@ -1198,12 +1249,24 @@ bool TokenPos::FindAttrib( MCD_PCSZ pAttrib, int n/*=0*/ )
 				if ( ! pAttrib )
 				{
 					if ( nAttrib == n )
-						return true; // found by number
+					{
+						// found by number
+						if ( pstrAttrib )
+						{
+							*pstrAttrib = GetTokenText();
+							nFoundAttribNameR = m_nR;
+						}
+						else
+							return true;
+					}
 				}
 				else if ( Match(pAttrib) )
 				{
 					// Matched attrib name, go forward to value
 					nFoundAttribNameR = m_nR;
+				}
+				if ( nFoundAttribNameR ) // either by n or name match
+				{
 					m_nPreSpaceStart = nTempPreSpaceStart;
 					m_nPreSpaceLength = nTempPreSpaceLength;
 				}
@@ -1959,16 +2022,15 @@ bool FilePos::FileReadNextBuffer()
 			m_nReadGatherStart = 0;
 		}
 
-		// Increase capacity if already at the beginning keeping more than half
+		// Increase capacity if keeping more than half of nDocLength
 		int nKeepLength = nDocLength - nRemove;
-		int nEstimatedKeepBytes = m_nBlockSizeBasis * nKeepLength / nDocLength; // block size times fraction of doc kept
-		if ( nRemove == 0 || nKeepLength > nDocLength / 2 )
+		if ( nKeepLength > nDocLength / 2 )
 			m_nBlockSizeBasis *= 2;
 		if ( nRemove )
 			x_StrInsertReplace( str, 0, nRemove, MCD_STR() );
 		MCD_STR strRead;
-		m_nOpFileByteLen = m_nBlockSizeBasis - nEstimatedKeepBytes;
-		m_nOpFileByteLen += 4 - m_nOpFileByteLen % 4;
+		m_nOpFileByteLen = m_nBlockSizeBasis - nKeepLength;
+		m_nOpFileByteLen += 4 - m_nOpFileByteLen % 4; // round up to 4-byte offset
 		FileReadText( strRead );
 		x_StrInsertReplace( str, nKeepLength, 0, strRead );
 		m_nReadBufferStart = 0; // next time just elongate/increase capacity
@@ -2034,7 +2096,7 @@ struct PathPos
 	void RevertOffset() { i=iSave; };
 	void RevertOffsetAsName() { i=iSave; nPathType=1; };
 	MCD_PCSZ GetWordAndInc() { int iWord=i; IncWord(); nLen=i-iWord; return &p[iWord]; };
-	void IncWord() { while (p[i]&&!MCD_PSZCHR(MCD_T(" =/[]"),p[i])) i+=MCD_CLEN(&p[i]); };
+	void IncWord() { while (p[i]&&!x_ISENDPATHWORD(p[i])) i+=MCD_CLEN(&p[i]); };
 	void IncWord( MCD_CHAR c ) { while (p[i]&&p[i]!=c) i+=MCD_CLEN(&p[i]); };
 	void IncChar() { ++i; };
 	void Inc( int n ) { i+=n; };
@@ -2133,7 +2195,7 @@ bool PathPos::AttribPredicateMatch( TokenPos& token )
 		{
 			MCD_PCSZ pszVal = GetValAndInc();
 			MCD_STR strPathValue = CMarkup::UnescapeText( pszVal, GetValOrWordLen() );
-			MCD_STR strAttribValue = CMarkup::UnescapeText( token.GetTokenPtr(), token.Length() );
+			MCD_STR strAttribValue = CMarkup::UnescapeText( token.GetTokenPtr(), token.Length(), token.m_nTokenFlags );
 			if ( strPathValue != strAttribValue )
 				return false;
 		}
@@ -2287,7 +2349,8 @@ int TokenPos::ParseNode( NodePos& node )
 		PD_DOCTYPE = 32,
 		PD_INQUOTE_S = 64,
 		PD_INQUOTE_D = 128,
-		PD_EQUALS = 256
+		PD_EQUALS = 256,
+		PD_NOQUOTEVAL = 512
 	};
 	int nParseFlags = 0;
 
@@ -2314,11 +2377,12 @@ int TokenPos::ParseNode( NodePos& node )
 			m_nNext = (int)(pD - m_pDocText);
 			if ( m_pReaderFilePos ) // read file mode
 			{
+				// Read buffer may only be removed on the first FileReadNextBuffer in this node
 				int nRemovedAlready = m_pReaderFilePos->m_nReadBufferRemoved;
 				if ( m_pReaderFilePos->FileReadNextBuffer() ) // more text in file?
 				{
 					int nNodeLength = m_nNext - node.nStart;
-					int nRemove = m_pReaderFilePos->m_nReadBufferRemoved - nRemovedAlready;
+					int nRemove = m_pReaderFilePos->m_nReadBufferRemoved;
 					if ( nRemove )
 					{
 						node.nStart -= nRemove;
@@ -2337,6 +2401,8 @@ int TokenPos::ParseNode( NodePos& node )
 					pD = &m_pDocText[nNewOffset];
 					cD = (unsigned int)*pD; // loaded char replaces null terminator
 				}
+				if (nRemovedAlready) // preserve m_nReadBufferRemoved for caller of ParseNode
+					m_pReaderFilePos->m_nReadBufferRemoved = nRemovedAlready;
 			}
 			if ( ! cD )
 			{
@@ -2370,7 +2436,7 @@ int TokenPos::ParseNode( NodePos& node )
 
 		if ( nName )
 		{
-			if ( MCD_PSZCHR(MCD_T(" \t\n\r/>"),(MCD_CHAR)cD) )
+			if ( x_ISENDNAME(cD) )
 			{
 				nNameLen = (int)(pD - m_pDocText) - nName;
 				m_nL = nName;
@@ -2396,7 +2462,7 @@ int TokenPos::ParseNode( NodePos& node )
 					pFindEnd = NULL;
 					if ( nNodeType == CMarkup::MNT_ELEMENT && cDminus1 == '/' )
 					{
-						if ( (! cDminus2) || MCD_PSZCHR(MCD_T(" \t\n\r\'\""),(MCD_CHAR)cDminus2) )
+						if ( (! cDminus2) || (!(nParseFlags&PD_NOQUOTEVAL)) || x_ISNOTSECONDLASTINVAL(cDminus2) )
 							node.nNodeFlags |= MNF_EMPTY;
 					}
 				}
@@ -2410,6 +2476,7 @@ int TokenPos::ParseNode( NodePos& node )
 					if ( nLen == 0 )
 						pFindEnd = NULL;
 				}
+				nParseFlags &= ~PD_NOQUOTEVAL; // make sure PD_NOQUOTEVAL is off
 				if ( ! pFindEnd && ! (nParseFlags & PD_DOCTYPE) )
 					break;
 			}
@@ -2420,14 +2487,16 @@ int TokenPos::ParseNode( NodePos& node )
 			}
 			else if ( nNodeType & CMarkup::MNT_ELEMENT )
 			{
-				if ( (nParseFlags & (PD_INQUOTE_S|PD_INQUOTE_D)) )
+				if ( (nParseFlags & (PD_INQUOTE_S|PD_INQUOTE_D|PD_NOQUOTEVAL)) )
 				{
 					if ( cD == '\"' && (nParseFlags&PD_INQUOTE_D) )
 						nParseFlags ^= PD_INQUOTE_D; // off
 					else if ( cD == '\'' && (nParseFlags&PD_INQUOTE_S) )
 						nParseFlags ^= PD_INQUOTE_S; // off
+					else if ( (nParseFlags&PD_NOQUOTEVAL) && x_ISWHITESPACE(cD) )
+						nParseFlags ^= PD_NOQUOTEVAL; // off
 				}
-				else // not in quotes
+				else // not in attrib value
 				{
 					// Only set INQUOTE status when preceeded by equal sign
 					if ( cD == '\"' && (nParseFlags&PD_EQUALS) )
@@ -2436,8 +2505,8 @@ int TokenPos::ParseNode( NodePos& node )
 						nParseFlags ^= PD_INQUOTE_S|PD_EQUALS; // S on, equals off
 					else if ( cD == '=' && cDminus1 != '=' && ! (nParseFlags&PD_EQUALS) )
 						nParseFlags ^= PD_EQUALS; // on
-					else if ( (nParseFlags&PD_EQUALS) && ! MCD_PSZCHR(MCD_T(" \t\n\r"),(MCD_CHAR)cD) )
-						nParseFlags ^= PD_EQUALS; // off
+					else if ( (nParseFlags&PD_EQUALS) && ! x_ISWHITESPACE(cD) )
+						nParseFlags ^= PD_NOQUOTEVAL|PD_EQUALS; // no quote val on, equals off
 				}
 				cDminus2 = cDminus1;
 				cDminus1 = cD;
@@ -2460,7 +2529,7 @@ int TokenPos::ParseNode( NodePos& node )
 					nNodeType = CMarkup::MNT_WHITESPACE;
 					break;
 				}
-				else if ( ! MCD_PSZCHR(MCD_T(" \t\n\r"),(MCD_CHAR)cD) )
+				else if ( ! x_ISWHITESPACE(cD) )
 				{
 					nParseFlags ^= PD_TEXTORWS;
 					FINDNODETYPE( MCD_T("<"), CMarkup::MNT_TEXT )
@@ -2487,7 +2556,7 @@ int TokenPos::ParseNode( NodePos& node )
 					nParseFlags |= PD_DASH;
 				else if ( nParseFlags & PD_DOCTYPE )
 				{
-					if ( MCD_PSZCHR(MCD_T("EAN"),(MCD_CHAR)cD) ) // <!ELEMENT ATTLIST ENTITY NOTATION
+					if ( x_ISDOCTYPESTART(cD) ) // <!ELEMENT ATTLIST ENTITY NOTATION
 						FINDNODETYPE( MCD_T(">"), CMarkup::MNT_DOCUMENT_TYPE )
 					else
 						FINDNODEBAD( MCD_T("doctype_tag_syntax") )
@@ -2537,7 +2606,7 @@ int TokenPos::ParseNode( NodePos& node )
 		else
 		{
 			nNodeType = CMarkup::MNT_WHITESPACE;
-			if ( MCD_PSZCHR(MCD_T(" \t\n\r"),(MCD_CHAR)cD) )
+			if ( x_ISWHITESPACE(cD) )
 				nParseFlags |= PD_TEXTORWS;
 			else
 				FINDNODETYPE( MCD_T("<"), CMarkup::MNT_TEXT )
@@ -2833,31 +2902,30 @@ MCD_STR CMarkup::EscapeText( MCD_CSTR szText, int nFlags )
 	// &apos; apostrophe or single quote
 	// &quot; double quote
 	//
-	static MCD_PCSZ apReplace[] = { MCD_T("&lt;"),MCD_T("&amp;"),MCD_T("&gt;"),MCD_T("&apos;"),MCD_T("&quot;") };
-	MCD_PCSZ pFind = (nFlags&MNF_ESCAPEQUOTES)?MCD_T("<&>\'\""):MCD_T("<&>");
+	static MCD_PCSZ apReplace[] = { NULL,MCD_T("&lt;"),MCD_T("&amp;"),MCD_T("&gt;"),MCD_T("&quot;"),MCD_T("&apos;") };
 	MCD_STR strText;
 	MCD_PCSZ pSource = szText;
 	int nDestSize = MCD_PSZLEN(pSource);
 	nDestSize += nDestSize / 10 + 7;
 	MCD_BLDRESERVE(strText,nDestSize);
 	MCD_CHAR cSource = *pSource;
-	MCD_PCSZ pFound;
+	int nFound;
 	int nCharLen;
 	while ( cSource )
 	{
 		MCD_BLDCHECK(strText,nDestSize,6);
-		if ( (pFound=MCD_PSZCHR(pFind,cSource)) != NULL )
+		nFound = ((nFlags&MNF_ESCAPEQUOTES)?x_ISATTRIBSPECIAL(cSource):x_ISSPECIAL(cSource));
+		if ( nFound )
 		{
 			bool bIgnoreAmpersand = false;
-			if ( (nFlags&MNF_WITHREFS) && *pFound == '&' )
+			if ( (nFlags&MNF_WITHREFS) && cSource == '&' )
 			{
 				// Do not replace ampersand if it is start of any entity reference
 				// &[#_:A-Za-zU][_:-.A-Za-z0-9U]*; where U is > 0x7f
 				MCD_PCSZ pCheckEntity = pSource;
 				++pCheckEntity;
 				MCD_CHAR c = *pCheckEntity;
-				if ( (c>='A'&&c<='Z') || (c>='a'&&c<='z')
-						|| c=='#' || c=='_' || c==':' || ((unsigned int)c)>0x7f )
+				if ( x_ISSTARTENTREF(c) || ((unsigned int)c)>0x7f )
 				{
 					while ( 1 )
 					{
@@ -2870,8 +2938,7 @@ MCD_STR CMarkup::EscapeText( MCD_CSTR szText, int nFlags )
 							pSource = pCheckEntity;
 							bIgnoreAmpersand = true;
 						}
-						else if ( (c>='A'&&c<='Z') || (c>='a'&&c<='z') || (c>='0'&&c<='9')
-								|| c=='_' || c==':' || c=='-' || c=='.' || ((unsigned int)c)>0x7f )
+						else if ( x_ISINENTREF(c) || ((unsigned int)c)>0x7f )
 							continue;
 						break;
 					}
@@ -2879,8 +2946,7 @@ MCD_STR CMarkup::EscapeText( MCD_CSTR szText, int nFlags )
 			}
 			if ( ! bIgnoreAmpersand )
 			{
-				pFound = apReplace[pFound-pFind];
-				MCD_BLDAPPEND(strText,pFound);
+				MCD_BLDAPPEND(strText,apReplace[nFound]);
 			}
 			++pSource; // ASCII, so 1 byte
 		}
@@ -2970,7 +3036,7 @@ MCD_PCSZ PredefEntityTable[130] =
 	MCD_T("68240permil")
 };
 
-MCD_STR CMarkup::UnescapeText( MCD_CSTR szText, int nTextLength /*=-1*/ )
+MCD_STR CMarkup::UnescapeText( MCD_CSTR szText, int nTextLength /*=-1*/, int nFlags /*=0*/ )
 {
 	// Convert XML friendly text to text as seen outside XML document
 	// ampersand escape codes replaced with special characters e.g. convert "6&gt;7" to "6>7"
@@ -2983,12 +3049,18 @@ MCD_STR CMarkup::UnescapeText( MCD_CSTR szText, int nTextLength /*=-1*/ )
 		nTextLength = MCD_PSZLEN(szText);
 	MCD_BLDRESERVE(strText,nTextLength);
 	MCD_CHAR szCodeName[10];
+	bool bAlterWhitespace = (nFlags & (MDF_TRIMWHITESPACE|MDF_COLLAPSEWHITESPACE))?true:false;
+	bool bCollapseWhitespace = (nFlags & MDF_COLLAPSEWHITESPACE)?true:false;
+	int nCharWhitespace = -1; // start of string
 	int nCharLen;
 	int nChar = 0;
 	while ( nChar < nTextLength )
 	{
 		if ( pSource[nChar] == '&' )
 		{
+			if ( bAlterWhitespace )
+				nCharWhitespace = 0;
+
 			// Get corresponding unicode code point
 			int nUnicode = 0;
 
@@ -3030,7 +3102,7 @@ MCD_STR CMarkup::UnescapeText( MCD_CSTR szText, int nTextLength /*=-1*/ )
 						++pEntry;
 						MCD_PCSZ pCodePoint = pEntry;
 						pEntry += 4;
-						if ( nEntryLen == nCodeLen && MCD_PSZNCMP(szCodeName,pEntry,nEntryLen) == 0 )
+						if ( nEntryLen == nCodeLen && x_StrNCmp(szCodeName,pEntry,nEntryLen) == 0 )
 						{
 							// Convert digits to integer up to code name which always starts with alpha 
 							nUnicode = MCD_PSZTOL( pCodePoint, NULL, 10 );
@@ -3084,12 +3156,33 @@ MCD_STR CMarkup::UnescapeText( MCD_CSTR szText, int nTextLength /*=-1*/ )
 				++nChar;
 			}
 		}
+		else if ( bAlterWhitespace && x_ISWHITESPACE(pSource[nChar]) )
+		{
+			if ( nCharWhitespace == 0 && bCollapseWhitespace )
+			{
+				nCharWhitespace = MCD_BLDLEN(strText);
+				MCD_BLDAPPEND1(strText,' ');
+			}
+			else if ( nCharWhitespace != -1 && ! bCollapseWhitespace )
+			{
+				if ( nCharWhitespace == 0 )
+					nCharWhitespace = MCD_BLDLEN(strText);
+				MCD_BLDAPPEND1(strText,pSource[nChar]);
+			}
+			++nChar;
+		}
 		else // not &
 		{
+			if ( bAlterWhitespace )
+				nCharWhitespace = 0;
 			nCharLen = MCD_CLEN(&pSource[nChar]);
 			MCD_BLDAPPENDN(strText,&pSource[nChar],nCharLen);
 			nChar += nCharLen;
 		}
+	}
+	if ( bAlterWhitespace && nCharWhitespace > 0 )
+	{
+		MCD_BLDTRUNC(strText,nCharWhitespace);
 	}
 	MCD_BLDRELEASE(strText);
 	return strText;
@@ -3601,6 +3694,24 @@ bool CMarkup::OutOfElem()
 	if ( m_iPosParent )
 	{
 		x_SetPos( ELEM(m_iPosParent).iElemParent, m_iPosParent, m_iPos );
+		return true;
+	}
+	return false;
+}
+
+bool CMarkup::GetNthAttrib( int n, MCD_STR& strAttrib, MCD_STR& strValue ) const
+{
+	// Return nth attribute name and value from main position
+	TokenPos token( m_strDoc, m_nDocFlags );
+	if ( m_iPos && m_nNodeType == MNT_ELEMENT )
+		token.m_nNext = ELEM(m_iPos).nStart + 1;
+	else if ( m_nNodeLength && m_nNodeType == MNT_PROCESSING_INSTRUCTION )
+		token.m_nNext = m_nNodeOffset + 2;
+	else
+		return false;
+	if ( token.FindAttrib(NULL,n,&strAttrib) )
+	{
+		strValue = UnescapeText( token.GetTokenPtr(), token.Length(), m_nDocFlags );
 		return true;
 	}
 	return false;
@@ -4164,7 +4275,7 @@ MCD_STR CMarkup::x_GetAttrib( int iPos, MCD_PCSZ pAttrib ) const
 		return MCD_T("");
 
 	if ( pAttrib && token.FindAttrib(pAttrib) )
-		return UnescapeText( token.GetTokenPtr(), token.Length() );
+		return UnescapeText( token.GetTokenPtr(), token.Length(), m_nDocFlags );
 	return MCD_T("");
 }
 
@@ -4387,7 +4498,7 @@ MCD_STR CMarkup::x_GetData( int iPos )
 		else if ( m_nNodeType == MNT_CDATA_SECTION )
 			return MCD_STRMID( m_strDoc, m_nNodeOffset+9, m_nNodeLength-12 );
 		else if ( m_nNodeType == MNT_TEXT )
-			return UnescapeText( &(MCD_2PCSZ(m_strDoc))[m_nNodeOffset], m_nNodeLength );
+			return UnescapeText( &(MCD_2PCSZ(m_strDoc))[m_nNodeOffset], m_nNodeLength, m_nDocFlags );
 		else if ( m_nNodeType == MNT_LONE_END_TAG )
 			return MCD_STRMID( m_strDoc, m_nNodeOffset+2, m_nNodeLength-3 );
 		return MCD_STRMID( m_strDoc, m_nNodeOffset, m_nNodeLength );
@@ -4416,7 +4527,7 @@ MCD_STR CMarkup::x_GetData( int iPos )
 					MARKUP_SETDEBUGSTATE;
 				}
 				if ( node.nNodeType == MNT_TEXT )
-					strData += UnescapeText( &token.m_pDocText[node.nStart], node.nLength );
+					strData += UnescapeText( &token.m_pDocText[node.nStart], node.nLength, m_nDocFlags );
 				else if ( node.nNodeType == MNT_CDATA_SECTION )
 					strData += MCD_STRMID( m_strDoc, node.nStart+9, node.nLength-12 );
 				else if ( node.nNodeType == MNT_ELEMENT )
@@ -4456,13 +4567,13 @@ MCD_STR CMarkup::x_GetData( int iPos )
 				{
 					token.ParseNode( node );
 					if ( node.nNodeType == MNT_TEXT )
-						strData += UnescapeText( &token.m_pDocText[node.nStart], node.nLength );
+						strData += UnescapeText( &token.m_pDocText[node.nStart], node.nLength, m_nDocFlags );
 					else if ( node.nNodeType == MNT_CDATA_SECTION )
 						strData += MCD_STRMID( m_strDoc, node.nStart+9, node.nLength-12 );
 				}
 			}
 			else // no tags
-				strData = UnescapeText( &(MCD_2PCSZ(m_strDoc))[nStartContent], nContentLen );
+				strData = UnescapeText( &(MCD_2PCSZ(m_strDoc))[nStartContent], nContentLen, m_nDocFlags );
 		}
 	}
 	return strData;
@@ -4669,9 +4780,9 @@ int CMarkup::x_InsertNew( int iPosParent, int& iPosRel, NodePos& node )
 
 	// Prepare end of lines
 	if ( (! (node.nNodeFlags & MNF_WITHNOLINES)) && (bEmptyParentTag || bNoContentParentTags) )
-		node.nStart += x_EOLLEN;
+		node.nStart += MCD_EOLLEN;
 	if ( ! (node.nNodeFlags & MNF_WITHNOLINES) )
-		node.strMeta += x_EOL;
+		node.strMeta += MCD_EOL;
 
 	// Calculate insert offset and replace length
 	int nReplace = 0;
@@ -4683,7 +4794,7 @@ int CMarkup::x_InsertNew( int iPosParent, int& iPosRel, NodePos& node )
 		if ( node.nNodeFlags & MNF_WITHNOLINES )
 			strFormat = MCD_T(">");
 		else
-			strFormat = MCD_T(">") x_EOL;
+			strFormat = MCD_T(">") MCD_EOL;
 		strFormat += node.strMeta;
 		strFormat += MCD_T("</");
 		strFormat += strTagName;
@@ -4711,7 +4822,7 @@ int CMarkup::x_InsertNew( int iPosParent, int& iPosRel, NodePos& node )
 		}
 		else if ( bNoContentParentTags )
 		{
-			node.strMeta = x_EOL + node.strMeta;
+			node.strMeta = MCD_EOL + node.strMeta;
 			nInsertAt = ELEM(iPosParent).StartContent();
 		}
 	}
