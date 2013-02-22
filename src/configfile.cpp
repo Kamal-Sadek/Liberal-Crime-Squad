@@ -277,6 +277,7 @@ bool readMap(const char* filename)
    {
       levelmap[x][y][z].flag = 0;
       levelmap[x][y][z].special = SPECIAL_NONE;
+      levelmap[x][y][z].siegeflag = 0;
    }
 
    // Try first floor (eg "mapCSV_Bank_Tiles.csv"), abort this method if it doesn't exist
