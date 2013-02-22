@@ -518,6 +518,7 @@ void special_nuclear_onoff(void)
                move(16,1);
                addstr("A deafening alarm sounds!", gamelog);
                gamelog.newline();
+               addstr("                "); // Remove remaining part of previous text.
                move(17,1);
                addstr("The reactor is overheating!", gamelog);
                gamelog.newline();

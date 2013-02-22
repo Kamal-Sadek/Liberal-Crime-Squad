@@ -621,6 +621,7 @@ void end_game(int err)
    delete_and_clear(sitemaps);
    delete_and_clear(recruit);
    delete_and_clear(date);
+   delete_and_clear(groundloot);
 
    endwin();
    exit(err);
