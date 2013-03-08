@@ -1032,13 +1032,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   target=activesquad->squad[i];
                   
                   clearmessagearea();
-			      if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
-				  else set_color(COLOR_RED,COLOR_BLACK,1);
+                  set_color(COLOR_GREEN,COLOR_BLACK,1);
 
                   move(16,1);
                   addstr(target->name, gamelog);
-                  if(!t.alive)addstr(" misguidedly ", gamelog);
-                  else addstr(" heroically ", gamelog);
+                  if(!t.alive)addstr(" misguidedly", gamelog);
+                  else addstr(" heroically", gamelog);
                   addstr(" shields ", gamelog);
                   addstr(t.name, gamelog);
                   if(!t.alive)addstr("'s corpse", gamelog);
@@ -1147,6 +1146,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else strcat(str,attack_used->hit_punctuation.c_str());
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
+            if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(str, gamelog);
             gamelog.newline();
 
@@ -1158,8 +1159,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                severloot(t,groundloot);
 
                clearmessagearea();
-			   if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
-			   else set_color(COLOR_RED,COLOR_BLACK,1);
 
                adddeathmessage(*target);
 
@@ -1178,12 +1177,14 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             else if(target->wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
             else strcat(str,attack_used->hit_punctuation.c_str());
             
+            if(target->wound[w] & WOUND_NASTYOFF)bloodblast(&target->get_armor());
+
+            if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else set_color(COLOR_RED,COLOR_BLACK,1);
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(str, gamelog);
             gamelog.newline();
-
-            if(target->wound[w] & WOUND_NASTYOFF)bloodblast(&target->get_armor());
 
             printparty();
             if(mode==GAMEMODE_CHASECAR||
