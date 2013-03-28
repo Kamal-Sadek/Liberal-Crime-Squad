@@ -199,7 +199,7 @@ char chasesequence(void)
                   move(10,1);
                   addstr("D - Swerve around him!");
                   move(11,1);
-                  addstr("F - Slam the breaks!");
+                  addstr("F - Slam the brakes!");
                   break;
             }
          }

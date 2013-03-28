@@ -2008,160 +2008,8 @@ void mode_site(void)
             //DO DOORS
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
             {
-               if(levelmap[locx][locy][locz].flag & SITEBLOCK_METAL)
-               {
-                  clearmessagearea(false);
-
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(16,1);
-                  addstr("The vault door is impenetrable.", gamelog);
-                  gamelog.newline();
-
-                  refresh();
-                  getch();
-               }
-               else
-               {
-                  bool has_security=false;
-                  for(int i=0;i<6;i++)
-                  {
-                     if(activesquad->squad[i] &&
-                        activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
-                     {
-                        has_security=true;
-                        break;
-                     }
-                  }
-
-                  if((levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED) &&
-                     !(levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK) &&
-                     has_security==true)
-                  {
-                     levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
-
-                     do
-                     {
-                        clearmessagearea(false);
-
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        move(16,1);
-                        addstr("You try the door, but it is locked.", gamelog);
-                        gamelog.newline();
-                        move(17,1);
-                        addstr("Try to pick the lock? (Yes or No)");
-
-                        refresh();
-
-                        int c=getch();
-                        translategetch(c);
-
-                        clearmessagearea(false);
-
-                        if(c=='y')
-                        {
-                           char actual; // 1 if an actual attempt was made, 0 otherwise
-                           
-                           // If the unlock was successful
-                           if(unlock(UNLOCK_DOOR,actual))
-                           {
-                              // Unlock the door
-                              levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
-                              sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
-                              //criminalizeparty(LAWFLAG_BREAKING);
-                           }
-                           // Else perma-lock it if an attempt was made
-                           else if(actual)levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
-
-                           // Check for people noticing you fiddling with the lock
-                           if(actual)
-                           {
-                              alienationcheck(0);
-                              noticecheck(-1);
-                           }
-
-                           break;
-                        }
-                        else if(c=='n')
-                        {
-                           clearmessagearea(false);
-                           break;
-                        }
-
-                     }while(1);
-                  }
-                  else if(levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED)
-                  {
-                     do
-                     {
-                        clearmessagearea(false);
-
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        move(16,1);
-                        addstr("You shake the handle but it is ", gamelog);
-                        if(has_security==true)addstr("still ", gamelog);
-                        addstr("locked.", gamelog);
-                        gamelog.newline();
-                        move(17,1);
-                        addstr("Force it open? (Yes or No)");
-
-                        refresh();
-                        int c=getch();
-                        translategetch(c);
-
-                        if(c=='y')
-                        {
-                           char actual;
-
-                           if(bash(BASH_DOOR,actual))
-                           {
-                              levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
-                              int time=20+LCSrandom(10);
-                              if(time<1)time=1;
-                              if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-                              if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
-                              {
-                                 clearmessagearea(false);
-                                 set_color(COLOR_WHITE,COLOR_BLACK,1);
-                                 move(16,1);
-                                 addstr("An alarm sounds!", gamelog);
-                                 gamelog.newline();
-                                 sitealarm=1;
-                                 refresh();
-                                 getch();
-                              }
-                              sitecrime++;
-                              sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
-                              criminalizeparty(LAWFLAG_BREAKING);
-                           }
-
-                           if(actual)
-                           {
-                              alienationcheck(1);
-                              noticecheck(-1,DIFFICULTY_HEROIC);
-                           }
-
-                           break;
-                        }
-                        else if(c=='n')break;
-
-                     }while(1);
-                  }
-                  else
-                  {
-                     levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
-                     if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
-                     {
-                        clearmessagearea(false);
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
-                        move(16,1);
-                        addstr("An alarm sounds!", gamelog);
-                        gamelog.newline();
-                        sitealarm=1;
-                        refresh();
-                        getch();
-                     }
-                  }
-               }
+               bool restricted = levelmap[olocx][olocy][olocz].flag & SITEBLOCK_RESTRICTED;
+               open_door(restricted);
 
                locx=olocx;
                locy=olocy;
@@ -3079,6 +2927,216 @@ void resolvesite(void)
          //Cable News less influential if brought offline
          change_public_opinion(VIEW_CABLENEWS,10);
          cablenews_closed=1;
+      }
+   }
+}
+
+/* behavior when the player bumps into a door in sitemode */
+void open_door(bool restricted)
+{
+   bool locked = levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED;
+   bool alarmed = levelmap[locx][locy][locz].flag & SITEBLOCK_ALARMED;
+   bool vault_door = levelmap[locx][locy][locz].flag & SITEBLOCK_METAL;
+   bool known_locked = levelmap[locx][locy][locz].flag & SITEBLOCK_KLOCK;
+   bool cant_unlock = levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK;
+
+   if(vault_door)
+   {
+      // Vault door, not usable by bumping
+      clearmessagearea(false);
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("The vault door is impenetrable.", gamelog);
+      gamelog.newline();
+
+      refresh();
+      getch();
+      return;
+   }
+
+   bool has_security=false;
+   for(int i=0;i<6;i++)
+   {
+      if(activesquad->squad[i] &&
+         activesquad->squad[i]->get_skill(SKILL_SECURITY) != 0)
+      {
+         has_security=true;
+         break;
+      }
+   }
+
+   if(alarmed)
+   {
+      // Unlocked but alarmed door, clearly marked as such
+      clearmessagearea(false);
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      if(locked)
+         addstr("This door appears to be wired up to an alarm.", gamelog);
+      else
+         addstr("EMERGENCY EXIT ONLY. ALARM WILL SOUND.", gamelog);
+      gamelog.newline();
+      move(17,1);
+      addstr("Try the door anyway? (Yes or No)");
+
+      refresh();
+
+      while(1)
+      {
+         int c=getch();
+         translategetch(c);
+
+         if(c=='y') break;
+         else if(c=='n') return;
+      }
+   }
+
+   if(locked && !cant_unlock && has_security)
+   {
+      levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
+
+      do
+      {
+         clearmessagearea(false);
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr("You try the door, but it is locked.", gamelog);
+         gamelog.newline();
+         move(17,1);
+         addstr("Try to pick the lock? (Yes or No)");
+
+         refresh();
+
+         int c=getch();
+         translategetch(c);
+
+         clearmessagearea(false);
+
+         if(c=='y')
+         {
+            char actual; // 1 if an actual attempt was made, 0 otherwise
+            
+            // If the unlock was successful
+            if(unlock(UNLOCK_DOOR,actual))
+            {
+               // Unlock the door
+               levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
+               levelmap[locx][locy][locz].flag&=~SITEBLOCK_ALARMED;
+               sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
+               //criminalizeparty(LAWFLAG_BREAKING);
+            } 
+            // Else perma-lock it if an attempt was made
+            else if(actual)
+            {
+               levelmap[locx][locy][locz].flag|=SITEBLOCK_CLOCK;
+               if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(17,1);
+                  addstr("Your tampering sets off the alarm!", gamelog);
+                  gamelog.newline();
+                  sitealarm=1;
+                  refresh();
+                  getch();
+               }
+            }
+
+            // Check for people noticing you fiddling with the lock
+            if(actual)
+            {
+               alienationcheck(0);
+               noticecheck(-1);
+            }
+            return;
+         }
+         else if(c=='n')
+         {
+            return;
+         }
+
+      }while(1);
+   }
+   else if(locked || (!restricted && alarmed))
+   {
+      do
+      {
+         clearmessagearea(false);
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         if(locked)
+         {
+            addstr("You shake the handle but it is ", gamelog);
+            if(has_security==true)addstr("still ", gamelog);
+            addstr("locked.", gamelog);
+         }
+         else
+         {
+            addstr("It's locked from the other side.",gamelog);
+         }
+         gamelog.newline();
+         move(17,1);
+         addstr("Force it open? (Yes or No)");
+
+         refresh();
+         int c=getch();
+         translategetch(c);
+
+         if(c=='y')
+         {
+            char actual;
+
+            if(bash(BASH_DOOR,actual))
+            {
+               levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
+               int time=20+LCSrandom(10);
+               if(time<1)time=1;
+               if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+               if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
+               {
+                  clearmessagearea(false);
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(16,1);
+                  addstr("The alarm goes off!", gamelog);
+                  gamelog.newline();
+                  sitealarm=1;
+                  refresh();
+                  getch();
+               }
+               sitecrime++;
+               sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
+               criminalizeparty(LAWFLAG_BREAKING);
+            }
+
+            if(actual)
+            {
+               alienationcheck(1);
+               noticecheck(-1,DIFFICULTY_HEROIC);
+            }
+
+            break;
+         }
+         else if(c=='n')break;
+
+      }while(1);
+   }
+   else
+   {
+      levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
+      if(alarmed)
+      {
+         // Opened an unlocked but clearly marked emergency exit door
+         clearmessagearea(false);
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(16,1);
+         addstr("It opens easily. The alarm goes off!", gamelog);
+         gamelog.newline();
+         sitealarm=1;
+         refresh();
+         getch();
       }
    }
 }

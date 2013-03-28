@@ -826,11 +826,10 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr("Police are attempting to arrest ", gamelog);
       addstr(liberal.name, gamelog);
-      addstr(" while ", gamelog);
+      addstr(" is accosted by police while ", gamelog);
       addstr(string, gamelog);
-      addstr(".", gamelog);
+      addstr("!", gamelog);
       gamelog.nextMessage();
 
       refresh();
@@ -2466,36 +2465,42 @@ void funds_and_trouble(char &clearformess)
       for(int p=pool.size()-1;p>=0;p--)
       {
          if(pool[p]->alive)continue;
+         
+         bool arrest_attempted = false;
 
          //MAKE BASE LOOT
          makeloot(*pool[p],location[bury[0]->base]->loot);
 
-         //BURY
-         delete pool[p];
-         pool.erase(pool.begin() + p);
-
          for(int b=0;b<bury.size();b++)
          {
-            if(!(bury[b]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
+            if(!arrest_attempted && !(bury[b]->skill_check(SKILL_STREETSENSE,DIFFICULTY_EASY)))
             {
+               arrest_attempted = true; // Only attempt one burial arrest per body
+
                newsstoryst *ns=new newsstoryst;
-                  ns->type=NEWSSTORY_BURIALARREST;
-                  ns->loc=-1;
+               ns->type=NEWSSTORY_BURIALARREST;
+               ns->loc=-1;
                newsstory.push_back(ns);
                sitestory=ns;
 
                criminalize(*bury[b],LAWFLAG_BURIAL);
-               attemptarrest(*bury[b],"disposing of bodies",clearformess);
+               char str[100] = "burying ";
+               strcat(str, pool[p]->name);
+               strcat(str, "'s body");
+               attemptarrest(*bury[b],str,clearformess);
 
-               //If a liberal has been killed or arrested they should not do more burials.
-               if (!(bury[b]->alive)
-                   || location[bury[b]->location]->type == SITE_GOVERNMENT_POLICESTATION)
-               {
-                  bury.erase(bury.begin() + b);
-                  --b;
-               }
+               // If a liberal is spotted they should not do more burials.
+               bury.erase(bury.begin() + b);
+               --b;
+
+               break;
             }
          }
+
+         //BURY (even if interrupted)
+         delete pool[p];
+         pool.erase(pool.begin() + p);
+
          if (bury.size() == 0) //Stop burials if none are left doing them.
             break;
       }

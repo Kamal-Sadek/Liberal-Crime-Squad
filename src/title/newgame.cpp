@@ -260,7 +260,7 @@ void makecharacter(void)
 
    char first[3][80];
    char last[80];
-   int gender=(newcr->gender_conservative==GENDER_FEMALE);
+   char gender = newcr->gender_liberal = newcr->gender_conservative = GENDER_FEMALE;
    firstname(first[0], GENDER_NEUTRAL);
    firstname(first[1], GENDER_MALE);
    firstname(first[2], GENDER_FEMALE);
@@ -469,7 +469,7 @@ void makecharacter(void)
 
             move(19,0);
             addstr("My parents ");
-            if(newcr->gender_conservative == GENDER_NEUTRAL);
+            if(newcr->gender_conservative == GENDER_NEUTRAL)
             {
                addstr("insisted otherwise.");
                move(20,0);

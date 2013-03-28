@@ -73,10 +73,10 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.06.3"
+#define PACKAGE_VERSION "4.06.5"
 #endif
 
-const int version=40603;
+const int version=40605;
 const int lowestloadversion=40603;
 const int lowestloadscoreversion=31203;
 
@@ -1680,6 +1680,8 @@ void mode_site(short loc);
 void mode_site(void);
 /* site - determines spin on site news story, "too hot" timer */
 void resolvesite(void);
+/* behavior when the player bumps into a door in sitemode */
+void open_door(bool restricted);
 
 /*
  map.cpp
