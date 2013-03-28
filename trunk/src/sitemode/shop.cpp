@@ -1022,9 +1022,25 @@ bool Shop::ShopItem::legal() const
    bool r = true;
    switch (itemclass_)
    {
-      case WEAPON: r = weapontype[getweapontype(itemtypename_)]->is_legal(); break;
-      /*case CLIP:   r = getcliptype(itemtypename_); break; //Can't be illegal.
-      case ARMOR:  r = getarmortype(itemtypename_); break;
+      case WEAPON:
+         r = weapontype[getweapontype(itemtypename_)]->is_legal();
+         break;
+      case CLIP:
+         // Decide if clip is legal by looping through all weapons and
+         // testing if there exists a weapon such that it is legal and
+         // it can take this clip. If no legal weapon can take this type
+         // of clip, the clip is implicitly illegal as well.
+         r = false;
+         for(int i=0; i < weapontype.size(); i++)
+         {
+            if(weapontype[i]->acceptable_ammo(itemtypename_) && weapontype[i]->is_legal())
+            {
+               r = true;
+               break;
+            }
+         }
+         break;
+      /*case ARMOR:  r = getarmortype(itemtypename_); break; //Can't be illegal.
       case LOOT:   r = getloottype(itemtypename_); break;*/
    }
    

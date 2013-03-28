@@ -473,11 +473,10 @@ char weaponcheck(Creature &cr, bool metaldetect)
 {
    bool suspicious=cr.get_weapon().is_suspicious();  // Does the weapon look at all suspicious?
    char illegal=0;     // Is the weapon illegal?
-   char incharacter=0; // Is the weapon in character for the clothing the LCS is wearing?
+   char incharacter=-1; // Is the weapon in character for the clothing the LCS is wearing?
    bool concealed=cr.weapon_is_concealed();   // Is the weapon concealed under clothing?
 
    //CHECK UNIFORM
-   incharacter=0;
    if(cr.get_weapon().get_itemtypename() == "WEAPON_SYRINGE"
       && cr.get_armor().get_itemtypename() == "ARMOR_LABCOAT")
       incharacter=CREATURE_SCIENTIST_LABTECH;
