@@ -761,7 +761,7 @@ void siegecheck(char canseethings)
             }
 
          } else if(location[l]->siege.timeuntilfiremen>0)location[l]->siege.timeuntilfiremen--;
-         else if(location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
+         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
          {
             location[l]->siege.timeuntilfiremen=-1;
             // Firemen raid!
@@ -810,7 +810,7 @@ void siegecheck(char canseethings)
             location[l]->siege.cameras_off=0;
             offended_firemen=0;
          } 
-         else if(location[l]->siege.timeuntilfiremen==0)
+         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0)
          {
             location[l]->siege.timeuntilfiremen=-1;
             erase();
@@ -880,6 +880,11 @@ void siegecheck(char canseethings)
                location[l]->front_business=-1;
             }
             gamelog.newline();
+         }
+         else if (law[LAW_FREESPEECH]<=-1 && location[l]->siege.timeuntilfiremen==0)
+         {
+            location[l]->siege.timeuntilfiremen==-1;
+            offended_firemen=0;
          }
       }
    }
