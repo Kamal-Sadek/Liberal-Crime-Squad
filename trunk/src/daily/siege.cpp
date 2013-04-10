@@ -883,7 +883,7 @@ void siegecheck(char canseethings)
          }
          else if (law[LAW_FREESPEECH]<=-1 && location[l]->siege.timeuntilfiremen==0)
          {
-            location[l]->siege.timeuntilfiremen==-1;
+            location[l]->siege.timeuntilfiremen=-1;
             offended_firemen=0;
          }
       }
@@ -1212,12 +1212,7 @@ void siegeturn(char clearformess)
                   no_bad=0;
 
                   //AIR STRIKE!
-                  char hit=!LCSrandom(3);
-                  if(!(location[l]->compound_walls & COMPOUND_GENERATOR)&&
-                     !(location[l]->compound_walls & COMPOUND_AAGUN))
-                  {
-                     hit=0;
-                  }
+                  char hit=true;
 
                   if(clearformess)
                   {
@@ -1233,39 +1228,67 @@ void siegeturn(char clearformess)
                   gamelog.newline();
                   refresh();
                   getch();
-                  if(clearformess)
-                  {
-                     erase();
-                  }
-                  else
-                  {
-                     makedelimiter(8,0);
-                  }
 
-                  bool hasAAGun = false;
-                  if(location[l]->compound_walls & COMPOUND_AAGUN)
-                     hasAAGun = true;
+                  bool hasAAGun = location[l]->compound_walls & COMPOUND_AAGUN;
+                  bool hasGenerator = location[l]->compound_walls & COMPOUND_GENERATOR;
 
-                  if(hasAAGun && LCSrandom(3))
+                  if(hasAAGun)
                   {
+                     if(clearformess) erase();
+                     else makedelimiter(8,0);
                      move(8,1);
-                     addstr("The thunder of anti-aircraft fire drives them back!", gamelog);
+                     addstr("The thunder of the anti-aircraft gun shakes the compound!", gamelog);
                      gamelog.newline();
                      refresh();
                      getch();
+                     if(clearformess)erase();
+                     else makedelimiter(8,0);
+                     move(8,1);
+                     if(LCSrandom(5))
+                     {
+                        hit=false;
+                        if(LCSrandom(2))
+                        {
+                           addstr("You didn't shoot any down, but you've made them think twice!", gamelog);
+                        }
+                        else
+                        {
+                           addstr("Hit! One of the bombers slams into to the ground.", gamelog);
+                           gamelog.newline();
+                           refresh();
+                           getch();
+                           if(clearformess)erase();
+                           else makedelimiter(8,0);
+                           move(8,1);
+                           addstr("It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!", gamelog);
+                           for(int p=0;p<pool.size();p++)
+                           {
+                              addjuice(*pool[p],20,1000);
+                           }
+                        }
+                        gamelog.newline();
+                        refresh();
+                        getch();
+                     }
+                     else
+                     {
+                        addstr("A skilled pilot gets through!", gamelog);
+                        gamelog.newline();
+                        refresh();
+                        getch();
+                     }
                   }
-                  else
+
+                  if(hit)
                   {
+                     if(clearformess) erase();
+                     else makedelimiter(8,0);
                      move(8,1);
                      addstr("Explosions rock the compound!", gamelog);
                      gamelog.newline();
                      refresh();
                      getch();
-                  }
-
-                  if(hit)
-                  {
-                     if(hasAAGun)
+                     if(hasAAGun && !LCSrandom(3))
                      {
                         if(clearformess)erase();
                         else makedelimiter(8,0);
@@ -1277,14 +1300,14 @@ void siegeturn(char clearformess)
                         if(clearformess)erase();
                         else makedelimiter(8,0);
                         move(8,1);
-                        addstr("Nothing left but smoking wreckage...", gamelog);
+                        addstr("There's nothing left but smoking wreckage...", gamelog);
                         gamelog.newline();
                         refresh();
                         getch();
                         
                         location[l]->compound_walls&=~COMPOUND_AAGUN;
                      }
-                     else
+                     else if(hasGenerator && !LCSrandom(3))
                      {
                         if(clearformess)erase();
                         else makedelimiter(8,0);
@@ -1304,63 +1327,62 @@ void siegeturn(char clearformess)
                         location[l]->compound_walls&=~COMPOUND_GENERATOR;
                         location[l]->siege.lights_off=1;
                      }
-                  }
-
-                  if(!LCSrandom(2))
-                  {
-                     vector<int> pol;
-                     for(int p=0;p<pool.size();p++)
+                     if(!LCSrandom(2))
                      {
-                        if(pool[p]->alive&&pool[p]->location==l)
+                        vector<int> pol;
+                        for(int p=0;p<pool.size();p++)
                         {
-                           pol.push_back(p);
+                           if(pool[p]->alive&&pool[p]->location==l)
+                           {
+                              pol.push_back(p);
+                           }
+                        }
+
+                        if(pol.size()>0)
+                        {
+                           if(clearformess)erase();
+                           else makedelimiter(8,0);
+                           set_color(COLOR_WHITE,COLOR_BLACK,1);
+                           move(8,1);
+                           int targ=pol[LCSrandom(pol.size())];
+                           if((int)LCSrandom(100)>pool[targ]->juice)
+                           {
+                              addstr(pool[targ]->name, gamelog);
+                              addstr(" was killed in the bombing!", gamelog);
+                              gamelog.newline();
+
+                              if(pool[targ]->align==1)
+                              {
+                                 stat_dead++;
+                                 liberalcount[l]--;
+                              }
+
+                              removesquadinfo(*pool[targ]);
+
+                              pool[targ]->die();
+                              //delete pool[targ];
+                              //pool.erase(pool.begin() + targ);
+                           }
+                           else
+                           {
+                              addstr(pool[targ]->name, gamelog);
+                              addstr(" narrowly avoided death!", gamelog);
+                              gamelog.newline();
+                           }
+                           refresh();
+                           getch();
                         }
                      }
-
-                     if(pol.size()>0)
+                     else
                      {
                         if(clearformess)erase();
                         else makedelimiter(8,0);
-                        set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(8,1);
-                        int targ=pol[LCSrandom(pol.size())];
-                        if((int)LCSrandom(100)>pool[targ]->juice)
-                        {
-                           addstr(pool[targ]->name, gamelog);
-                           addstr(" was killed in the bombing!", gamelog);
-                           gamelog.newline();
-
-                           if(pool[targ]->align==1)
-                           {
-                              stat_dead++;
-                              liberalcount[l]--;
-                           }
-
-                           removesquadinfo(*pool[targ]);
-
-                           pool[targ]->die();
-                           //delete pool[targ];
-                           //pool.erase(pool.begin() + targ);
-                        }
-                        else
-                        {
-                           addstr(pool[targ]->name, gamelog);
-                           addstr(" narrowly avoided death!", gamelog);
-                           gamelog.newline();
-                        }
+                        addstr("Fortunately, no one is hurt.", gamelog);
+                        gamelog.newline();
                         refresh();
                         getch();
                      }
-                  }
-                  else
-                  {
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
-                     move(8,1);
-                     addstr("Fortunately, no one is hurt.", gamelog);
-                     gamelog.newline();
-                     refresh();
-                     getch();
                   }
                }
 
@@ -1370,14 +1392,8 @@ void siegeturn(char clearformess)
                   no_bad=0;
 
                   //ENGINEERS
-                  if(clearformess)
-                  {
-                     erase();
-                  }
-                  else
-                  {
-                     makedelimiter(8,0);
-                  }
+                  if(clearformess)erase();
+                  else makedelimiter(8,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr("Army engineers have removed your tank traps.", gamelog);
