@@ -658,7 +658,7 @@ void kidnaptransfer(Creature &cr)
       *newcr=cr;
    newcr->namecreature();
 
-   newcr->location=activesquad->squad[0]->location;
+   newcr->location=activesquad->squad[0]->base;
    newcr->base=activesquad->squad[0]->base;
    newcr->flag|=CREATUREFLAG_MISSING;
 
