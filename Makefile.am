@@ -7,7 +7,8 @@ dist_art_DATA = art/abort.cmv  art/glamshow.cmv  art/largecap.cpc  art/newspic.c
  art/anchor.cmv  art/lacops.cmv    art/newscast.cmv  art/newstops.cpc\
  art/clips.xml  art/weapons.xml art/deptstore.xml  art/loot.xml  art/vehicles.xml\
  art/armors.xml  art/masks.xml  art/pawnshop.xml  art/armsdealer.xml  art/sitemaps.txt\
- art/oubliette.xml
+ art/oubliette.xml  art/mapCSV_Bank_Specials.csv  art/mapCSV_Bank_Tiles.csv\
+ art/mapCSV_NuclearPlant_Specials.csv  art/mapCSV_NuclearPlant_Tiles.csv
 
 dist_app_DATA = crimesquad.desktop
 
