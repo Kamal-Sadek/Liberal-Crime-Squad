@@ -52,7 +52,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
       if(signed(LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_HEART,false)+(aroll-troll)/2))>d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false))
       {
-         if(loveslavesleft(*pool[p]) == 0)
+         if(loveslavesleft(*pool[p]) <= 0)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             
@@ -90,9 +90,6 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          location[d.date[e]->worklocation]->hidden=0;
          refresh();
          getch();
-
-         d.date[e]->namecreature();
-         strcpy(d.date[e]->propername,d.date[e]->name);
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->hireid=pool[p]->id;
@@ -208,9 +205,9 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
       //BREAK UP
       
-      // *JDS* If your squad member is wanted by the police, a conservative who breaks up with
+      // If your squad member is wanted by the police, a conservative who breaks up with
       // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
-      // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance.
+      // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance. -Fox
       if((iscriminal(*pool[p])) &&
          (!LCSrandom(50) ||(LCSrandom(2) && (d.date[e]->type==CREATURE_AGENT||
          d.date[e]->type==CREATURE_COP||d.date[e]->type==CREATURE_GANGUNIT||
@@ -476,14 +473,14 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(0,0);
       addstr("Seeing ");
-      addstr(d.date[e]->name);
-      addstr(", ");
-      switch(d.date[e]->align)
-      {
-         case -1:addstr("Conservative");break;
-         case 0:addstr("moderate");break;
-         case 1:addstr("Liberal");break;
-      }
+      addstr(d.date[e]->name, gamelog);
+      addstr(", ", gamelog);
+      char str[75];
+      getrecruitcreature(str,d.date[e]->type);
+      addstr(str, gamelog);
+      addstr(", ", gamelog);
+      addstr(location[d.date[e]->worklocation]->name, gamelog);
+      gamelog.newline();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
@@ -679,7 +676,7 @@ char completedate(datest &d,int p,char &clearformess)
             getch();
 
 
-            // *JDS* Kidnap succeeds if the conservative isn't very dangerous,
+            // Kidnap succeeds if the conservative isn't very dangerous,
             // but might fail if the conservative is tough stuff.
             if((d.date[e]->type!=CREATURE_AGENT&&
                 d.date[e]->type!=CREATURE_COP&&

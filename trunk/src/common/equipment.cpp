@@ -585,6 +585,7 @@ void equipmentbaseassign(void)
 {
    int p = 0;
    int l = 0;
+   bool sortbytype = false;
    vector<Item *> temploot;
    map<Item *,locationst *> temploot2;
    for(l=0;l<location.size();l++)
@@ -659,10 +660,19 @@ void equipmentbaseassign(void)
       move(22,0);
       addstr("Press a Letter to assign a base.  Press a Number to select a base.");
       move(23,0);
-      addstr("Moving equipment takes no time.");
+      if(sortbytype)
+      {
+         addstr("T to sort by location.");
+      }
+      else
+      {
+         addstr("T to sort by type.");
+      }
+      addstr("  Shift and a Number will move ALL items!");
+      
       if(temploot.size()>19)
       {
-         move(23,40);
+         move(23,34);
          addpagestr();
       }
       if(temploc.size()>9)
@@ -685,7 +695,32 @@ void equipmentbaseassign(void)
       if(c==','&&page_loc>0)page_loc--;
       //PAGE DOWN
       if(c=='.'&&(page_loc+1)*9<temploc.size())page_loc++;
-
+      
+      //Toggle sorting method
+      if(c=='t')
+      {
+         sortbytype = !sortbytype;
+         if(sortbytype)
+         {
+            sort(temploot.begin(),temploot.end(),Item::sort_compare);
+         }
+         else
+         {   
+            //Sort by location
+            temploot.clear();
+            for(l=0;l<location.size();l++)
+            {
+               for(int l2=0;l2<location[l]->loot.size();l2++)
+               {
+                  if (!location[l]->siege.siege)
+                  {
+                     temploot.push_back(location[l]->loot[l2]);
+                  }
+               }
+            }
+         }
+      }
+      
       if(c>='a'&&c<='s')
       {
          int p=page_loot*19+(int)(c-'a');
@@ -710,6 +745,36 @@ void equipmentbaseassign(void)
          if(p<temploc.size())
          {
             selectedbase=p;
+         }
+      }
+      // Check if the player wants to move all items to a new location,
+      // using Shift + a number key.
+      const char upnums[] = {'!', '@', '#', '$', '%', '^', '&', '*', '('};
+      for(int upnumi=0; upnumi < sizeof(upnums); upnumi++)
+      {
+         if(c==upnums[upnumi])
+         {
+            // Set base location
+            int basechoice=page_loc*9+upnumi;
+            if(basechoice<temploc.size())
+            {
+               selectedbase=basechoice;
+               // Search through the old base's stuff for this item
+               for(int p=0;p<temploot.size();p++)
+               {
+                  // Search through the old base's stuff for this item
+                  for(int l2=0;l2<temploot2[temploot[p]]->loot.size();l2++)
+                  {
+                     // Remove it from that inventory and move it to the new one
+                     if(temploot2[temploot[p]]->loot[l2]==temploot[p])
+                     {
+                        temploot2[temploot[p]]->loot.erase(temploot2[temploot[p]]->loot.begin()+l2);
+                        location[temploc[selectedbase]]->loot.push_back(temploot[p]);
+                        temploot2[temploot[p]]=location[temploc[selectedbase]];
+                     }
+                  }
+               }
+            }
          }
       }
 

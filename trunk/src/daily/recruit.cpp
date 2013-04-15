@@ -122,12 +122,14 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    char str[75];
    getrecruitcreature(str,r.recruit->type);
    addstr(str, gamelog);
+   addstr(", ", gamelog);
+   addstr(location[r.recruit->location]->name, gamelog);
    gamelog.newline();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds(0,1,"Money: ");
 
-   printcreatureinfo(r.recruit,r.level);
+   printcreatureinfo(r.recruit);
    makedelimiter(8,0);
 
    move(10,0);
@@ -243,11 +245,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          {
             ledger.subtract_funds(50,EXPENSE_RECRUITMENT);
          }
-         //SAV - You can get your skill up to a 3 by chatting. Past that,
-         // you must successfully recruit people. Training is slower the
-         // better you are.
-         //JDS - Increased max skill to get to 12 under this system, gave
-         // minimum of 5 exp for the action.
+
          pool[p]->train(SKILL_PERSUASION,
             max(12-pool[p]->get_skill(SKILL_PERSUASION),5));
          pool[p]->train(SKILL_SCIENCE,
