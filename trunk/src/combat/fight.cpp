@@ -981,10 +981,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
 
       //SKILL BONUS FOR GOOD ROLL
-      mod+=aroll-droll-5;
+      mod += aroll-droll;
 
       //DO THE HEALTH MOD ON THE WOUND
-      mod -= t.attribute_roll(ATTRIBUTE_HEALTH)-5;
+      mod -= t.attribute_roll(ATTRIBUTE_HEALTH);
 
       //Health and poor accuracy will only avoid critical hits, not stop low-damage attacks
       if(mod<0)mod = 0;

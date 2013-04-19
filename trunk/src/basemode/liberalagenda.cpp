@@ -246,6 +246,7 @@ char liberalagenda(char won)
                case LAW_ELECTIONS:addstr("Election Reform");break;
                case LAW_MILITARY:addstr("Military Spending");break;
                case LAW_TORTURE:addstr("Human Rights");break;
+               case LAW_PRISONS:addstr("Prison Regulation");break;
                case LAW_TAX:addstr("Tax Structure");break;
                case LAW_ABORTION:addstr("Abortion Rights");break;
                case LAW_ANIMALRESEARCH:addstr("Animal Rights");break;
@@ -310,77 +311,85 @@ char liberalagenda(char won)
             {
                case LAW_WOMEN:
                   if(won==-1)addstr("Women have been stripped of the right to vote.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-//                     addstr("Women are regularly treated as second-class citizens.");
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Women are second-class citizens.");
-                                      else if(law[l]==-1)addstr("Non-discrimination laws do not apply to gender.");
-                                      else if(law[l]==0)addstr("Women are nominally equal under law.");
-                                      else if(law[l]==1)addstr("Women have substantial recourse against discrimination.");
-                                      else addstr("Gender equality is universally respected.");
-                                      break;
+                  else if(law[l]==-1)addstr("Non-discrimination laws do not apply to gender.");
+                  else if(law[l]==0)addstr("Women are nominally equal under law.");
+                  else if(law[l]==1)addstr("Women have substantial recourse against discrimination.");
+                  else addstr("Gender equality is universally respected.");
+                  break;
                case LAW_CIVILRIGHTS:
                   if(won==-1)addstr("Segregation has been reintroduced.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Racial discrimination is prohibited in name only.");
-                                      else if(law[l]==-1)addstr("Civil rights laws are inconsistently enforced.");
-                                      else if(law[l]==0)addstr("Pervasive racial inequality exists.");
-                                      else if(law[l]==1)addstr("Affirmative action is in place to counteract discrimination.");
-                                      else addstr("Racial equality is guaranteed and vigorously enforced.");
+                  else if(law[l]==-1)addstr("Civil rights laws are inconsistently enforced.");
+                  else if(law[l]==0)addstr("Pervasive racial inequality exists.");
+                  else if(law[l]==1)addstr("Affirmative action is in place to counteract discrimination.");
+                  else addstr("Racial equality is guaranteed and vigorously enforced.");
                   break;
                case LAW_DRUGS:
                   if(won==-1)addstr("Talking about recreational drugs is punishable by death.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Violent criminals are released to make room for drug offenders.");
-                                      else if(law[l]==-1)addstr("Prisons are filled with the targets of a war on drugs.");
-                                      else if(law[l]==0)addstr("Recreational drugs are prohibited unless medically prescribed.");
-                                      else if(law[l]==1)addstr("Marijuana is regulated and taxed.");
-                                      else addstr("Recreational drugs are regulated and taxed.");
+                  else if(law[l]==-1)addstr("Prisons are filled with the targets of a war on drugs.");
+                  else if(law[l]==0)addstr("Recreational drugs are prohibited unless medically prescribed.");
+                  else if(law[l]==1)addstr("Marijuana is regulated and taxed.");
+                  else addstr("Recreational drugs are regulated and taxed.");
                   break;
                case LAW_IMMIGRATION:
                   if(won==-1)addstr("Border guards shoot suspected foreigners on sight.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Immigration is illegal, and noncitizens are shipped to Mexico at gunpoint.");
-                                      else if(law[l]==-1)addstr("The military has been deployed to the borders to slow immigration.");
-                                      else if(law[l]==0)addstr("Great expense is taken to slow immigration, without success.");
-                                      else if(law[l]==1)addstr("The government works to accommodate potential immigrants.");
-                                      else addstr("Immigration is unregulated.");
+                  else if(law[l]==-1)addstr("The military has been deployed to the borders to slow immigration.");
+                  else if(law[l]==0)addstr("Great expense is taken to slow immigration, without success.");
+                  else if(law[l]==1)addstr("The government works to accommodate potential immigrants.");
+                  else addstr("Immigration is unregulated.");
                   break;
                case LAW_ELECTIONS:
                   if(won==-1)addstr("Only independently wealthy candidates have a chance of defeating incumbents.");
-		  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-			  addstr("Virtually no ethics restrictions exist on political officeholders.");
-		  else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
-		  else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
-		  else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
-		  else addstr("Election expenses are publicly funded, and voting is by ranked list.");
-		  break;
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  addstr("Virtually no ethics restrictions exist on political officeholders.");
+                  else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
+                  else if(law[l]==0)addstr("Moderate campaign finance reform is implemented.");
+                  else if(law[l]==1)addstr("Election financing is transparent and well-regulated.");
+                  else addstr("Election expenses are publicly funded, and voting is by ranked list.");
+                  break;
                case LAW_MILITARY:
                   if(won==-1)addstr("The massive military is a tool of political oppression.");
-		  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
-			  addstr("Ballooning military boondoggles are utterly out of control.");
-		  else if(law[l]==-1)addstr("Massive investment is put into the military.");
-		  else if(law[l]==0)addstr("Military spending is growing each year.");
-		  else if(law[l]==1)addstr("Military strength is not a major priority.");
-		  else addstr("The military has been weakened significantly.");
-		  break;
-	       case LAW_TORTURE:
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  addstr("Ballooning military boondoggles are utterly out of control.");
+                  else if(law[l]==-1)addstr("Massive investment is put into the military.");
+                  else if(law[l]==0)addstr("Military spending is growing each year.");
+                  else if(law[l]==1)addstr("Military strength is not a major priority.");
+                  else addstr("The military has been weakened significantly.");
+                  break;
+               case LAW_TORTURE:
                   if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
-                                      else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
-                                      else if(law[l]==0)addstr("Torture allegations still occasionally crop up.");
-                                      else if(law[l]==1)addstr("The government strongly enforces a ban on torture.");
-                                      else addstr("The country is respected as an international leader on Moral Interrogation Practices.");
-                                      break;
-               case LAW_TAX:
-                                      if(won==-1)addstr("There are no taxes, yet most people have no money.");
-                                      else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                  else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
+                  else if(law[l]==0)addstr("Torture allegations still occasionally crop up.");
+                  else if(law[l]==1)addstr("The government strongly enforces a ban on torture.");
+                  else addstr("The country is respected as an international leader on Moral Interrogation Practices.");
+                  break;
+               case LAW_PRISONS:
+                  if(won==-1)addstr("Prisoners aren't even considered people by the law.");
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
+                     addstr("Prisoners are often subject to torture and slave labor.");
+                  else if(law[l]==-1)addstr("Prisoners suffer from horrible conditions and lack of basic rights.");
+                  else if(law[l]==0)addstr("Prisoners receive basic rights and services.");
+                  else if(law[l]==1)addstr("The prisons are regulated to protect prisoners' rights.");
+                  else addstr("The prisons are targeted at rehabilitation, rather than punishment.");
+                  break;
+	           case LAW_TAX:
+                  if(won==-1)addstr("There are no taxes, yet most people have no money.");
+                  else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("The tax code is a nightmare designed to maintain class structure.");
-                                      else if(law[l]==-1)addstr("A flat tax is in effect.");
-                                      else if(law[l]==0)addstr("Taxes are moderate, and the code has loop-holes.");
-                                      else if(law[l]==1)addstr("Taxes are very high and steeply graded.");
-                                      else addstr("Rich people are virtually unheard of, due to taxation.");
-                                      break;
+                  else if(law[l]==-1)addstr("A flat tax is in effect.");
+                  else if(law[l]==0)addstr("Taxes are moderate, and the code has loop-holes.");
+                  else if(law[l]==1)addstr("Taxes are very high and steeply graded.");
+                  else addstr("Rich people are virtually unheard of, due to taxation.");
+                  break;
                case LAW_ABORTION:
                   if(won==-1)addstr("Use of contraception and abortion are capital offenses.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
@@ -510,14 +519,14 @@ char liberalagenda(char won)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(23,0);
-		 if(wincondition==WINCONDITION_EASY)
-		 {
-			addstr("The country has achieved Liberal status!");
-		 }
-		 else
-		 {
-			 addstr("The country has achieved Elite Liberal status!");
-		 }
+         if(wincondition==WINCONDITION_EASY)
+         {
+            addstr("The country has achieved Liberal status!");
+         }
+         else
+         {
+            addstr("The country has achieved Elite Liberal status!");
+         }
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
@@ -688,15 +697,11 @@ char confirmdisband(void) // The (current) issue that the masses are most
                }
             }
             cleangonesquads();
-
             disbandtime=year;
-
             return 1;
          }
       }
       else break;
-
    }while(1);
-
    return 0;
 }
