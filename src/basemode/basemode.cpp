@@ -253,6 +253,9 @@ void mode_base(void)
                case LAW_TORTURE:
                   addstr("Human Rights");
                   break;
+               case LAW_PRISONS:
+                  addstr("Prison Regulation");
+                  break;
                case LAW_TAX:
                   addstr("Tax Structure");
                   break;

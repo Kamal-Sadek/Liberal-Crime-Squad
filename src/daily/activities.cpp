@@ -578,23 +578,27 @@ void survey(Creature *cr)
             if(attitude[VIEW_CEOSALARY]>50)addstr("severe income inequality.");
             else addstr("resisting communist wage limits.");
             break;
+         case VIEW_PRISONS:
+            if(attitude[VIEW_PRISONS]>50)addstr("stopping the prisoners' suffering.");
+            else addstr("putting the prisoners in line.");
+            break;
          //case VIEW_POLITICALVIOLENCE:
          //   if(attitude[VIEW_POLITICALVIOLENCE]>50)addstr("taking strong action.");
          //   else addstr("political terrorism.");
          //   break;
          case VIEW_IMMIGRATION:
             if(attitude[VIEW_IMMIGRATION]>50)addstr("immigrant rights.");
-                        else
-                        {
-                                if(law[LAW_IMMIGRATION]>=1)
-                                {
-                                        addstr("uncontrolled immigration.");
-                                }
-                                else
-                                {
-                                        addstr("illegal immigration.");
-                                }
-                        }
+            else
+            {
+               if(law[LAW_IMMIGRATION]>=1)
+               {
+                  addstr("uncontrolled immigration.");
+               }
+               else
+               {
+                  addstr("illegal immigration.");
+               }
+            }
             break;
          case VIEW_DRUGS:
             if(attitude[VIEW_DRUGS]>50)addstr("drug rights.");
@@ -608,7 +612,7 @@ void survey(Creature *cr)
             if(attitude[VIEW_CIVILRIGHTS]>50)addstr("civil rights.");
             else addstr("troublemaking minorities.");
             break;
-                 case VIEW_GUNCONTROL:
+         case VIEW_GUNCONTROL:
             if(attitude[VIEW_GUNCONTROL]>50)addstr("gun violence.");
             else addstr("protecting the Second Amendment.");
             break;
@@ -784,7 +788,7 @@ void survey(Creature *cr)
             case VIEW_LIBERALCRIMESQUAD:addstr("respected the power of the Liberal Crime Squad");break;
             case VIEW_LIBERALCRIMESQUADPOS:addstr("of these held the Liberal Crime Squad in high regard");break;
             case VIEW_CONSERVATIVECRIMESQUAD:addstr("held the Conservative Crime Squad in contempt");break;
-            //case VIEW_PRISONS:addstr("wanted to end prisoner abuse and torture");break;
+            case VIEW_PRISONS:addstr("wanted to end prisoner abuse and torture");break;
             case VIEW_AMRADIO:addstr("do not like AM radio");break;
             case VIEW_CABLENEWS:addstr("have a negative opinion of cable news programs");break;
             //case VIEW_POLITICALVIOLENCE:addstr("thought political violence was justified");break;

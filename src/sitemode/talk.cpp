@@ -1247,6 +1247,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
       case LAW_ELECTIONS:     addstr("\"The politicians are just tools of the corporations!\"", gamelog);break;
       case LAW_MILITARY:      addstr("\"Patriots are idiots! Give peace a chance!\"", gamelog);break;
       case LAW_TORTURE:       addstr("\"Torture is bad!\"", gamelog);break;
+      case LAW_PRISONS:       addstr("\"Prisoners don't have freedom!\"", gamelog);break;
       }
    }
    else if(issue_too_liberal)
@@ -1274,6 +1275,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
       case LAW_ELECTIONS:     addstr("\"Some of these politicians rub me the wrong way.\"", gamelog);break;
       case LAW_MILITARY:      addstr("\"We still have a military.\"", gamelog);break;
       case LAW_TORTURE:       addstr("\"Some conservatives support torture.\"", gamelog);break;
+      case LAW_PRISONS:       addstr("\"Prisons still exist.\"", gamelog);break;
       }
    }
    else
@@ -1361,6 +1363,10 @@ char talkAboutIssues(Creature &a, Creature &tk)
       case LAW_TORTURE:
          addstr("\"In the name of the war on terror, we've sacrificed our soul by letting ", gamelog);move(y,1);y++;
          addstr("the government torture and abuse human beings on our behalf.\"", gamelog);
+         break;
+      case LAW_PRISONS:
+         addstr("\"The prison system doesn't help criminals by providing rehabilitation, so ", gamelog);move(y,1);y++;
+         addstr("when they get released, they mostly become criminals again.\"", gamelog);
          break;
       }
    }
@@ -1514,6 +1520,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
             case LAW_ELECTIONS:     addstr("\"Unregulated campaigning is a matter of free speech.\"", gamelog);break;
             case LAW_MILITARY:      addstr("\"The military protects us and enables our way of life.\"", gamelog);break;
             case LAW_TORTURE:       addstr("\"The terrorists would do worse to us.\"", gamelog);break;
+            case LAW_PRISONS:       addstr("\"Criminals deserve what they get in prison.\"", gamelog);break;
             }
          }
          else
