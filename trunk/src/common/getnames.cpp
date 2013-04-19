@@ -392,6 +392,7 @@ void getview(char *str,short view)
       case VIEW_ANIMALRESEARCH:strcat(str,"Animal Cruelty");break;
       case VIEW_POLICEBEHAVIOR:strcat(str,"The Police");break;
       case VIEW_TORTURE:strcat(str,"Torture");break;
+      case VIEW_PRISONS:strcat(str,"The Prison System");break;
       case VIEW_INTELLIGENCE:strcat(str,"Privacy");break;
       case VIEW_FREESPEECH:strcat(str,"Free Speech");break;
       case VIEW_GENETICS:strcat(str,"Genetics");break;
@@ -430,6 +431,7 @@ void getviewsmall(char *str,short view)
       case VIEW_ANIMALRESEARCH:strcat(str,"animal cruelty");break;
       case VIEW_POLICEBEHAVIOR:strcat(str,"the cops");break;
       case VIEW_TORTURE:strcat(str,"torture");break;
+      case VIEW_PRISONS:strcat(str, "the prison system");break;
       case VIEW_INTELLIGENCE:strcat(str,"privacy");break;
       case VIEW_FREESPEECH:strcat(str,"free speech");break;
       case VIEW_GENETICS:strcat(str,"genetic research");break;
@@ -480,6 +482,7 @@ void getlaw(char *str,int l)
       case LAW_ELECTIONS:addstr("Election Reform");break;
       case LAW_MILITARY:addstr("Military Spending");break;
       case LAW_TORTURE:addstr("Human Rights");break;
+      case LAW_PRISONS:addstr("Prison Regulation");break;
    }
 }
 

@@ -1299,12 +1299,12 @@ char prison(Creature &g)
    // People not on death row or about to be released can have a scene in prison
    if(!g.deathpenalty && g.sentence!=1)
    {
-      if(law[LAW_POLICEBEHAVIOR]==2)
+      if(law[LAW_PRISONS]==2)
       {
          //Liberal therapy.
          reeducation(g);
       }
-      else if(law[LAW_DEATHPENALTY]==-2 && law[LAW_POLICEBEHAVIOR]==-2)
+      else if(law[LAW_PRISONS]==-2)
       {
          //Labor camp.
          laborcamp(g);
