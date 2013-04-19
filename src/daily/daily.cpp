@@ -772,6 +772,8 @@ void advanceday(char &clearformess,char canseethings)
                if(pool[p]->location>-1)pool[p]->blood+=1+healing[pool[p]->location]/3;
                if(pool[p]->blood>100-(clinictime(*pool[p])-1)*20)
                   pool[p]->blood=100-(clinictime(*pool[p])-1)*20;
+               if(pool[p]->blood>100)
+                  pool[p]->blood=100;
             }
 
             if(pool[p]->alive&&pool[p]->blood<0)
