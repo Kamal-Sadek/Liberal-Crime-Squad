@@ -970,6 +970,7 @@ enum Views
    VIEW_DRUGS,
    VIEW_IMMIGRATION,
    VIEW_MILITARY,
+   VIEW_PRISONS,
    //*JDS* I'm using VIEWNUM-5 in a random generator that rolls a
    //random issue, not including the media/politicalviolence ones, and this will
    //break if these stop being the last 4 issues; do a search
@@ -1010,6 +1011,7 @@ enum Laws
    LAW_IMMIGRATION,
    LAW_ELECTIONS,
    LAW_MILITARY,
+   LAW_PRISONS,
    LAW_TORTURE,
    LAWNUM
 };

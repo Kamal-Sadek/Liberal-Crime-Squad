@@ -1786,8 +1786,7 @@ void initlocation(locationst &loc)
          }
          break;
       case SITE_GOVERNMENT_PRISON:
-         if(law[LAW_DEATHPENALTY]==-2&&
-            law[LAW_POLICEBEHAVIOR]==-2)
+         if(law[LAW_PRISONS]==-2)
          {
             switch(LCSrandom(5))
             {
@@ -1807,7 +1806,7 @@ void initlocation(locationst &loc)
                case 4:strcat(loc.name,"Forest");break;
             }
             strcat(loc.name," Forced Labor Camp");
-            strcpy(loc.shortname,"Laber Camp");
+            strcpy(loc.shortname,"Labor Camp");
          }
          else
          {
