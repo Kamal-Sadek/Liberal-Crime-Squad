@@ -511,6 +511,7 @@ char radio_broadcast(void)
       case VIEW_ANIMALRESEARCH:         addstr("discusses the horrors of animal research.", gamelog);break;
       case VIEW_POLICEBEHAVIOR:         addstr("goes over cases of police brutality.", gamelog);break;
       case VIEW_TORTURE:                addstr("discusses prisoner abuse and torture.", gamelog);break;
+      case VIEW_PRISONS:                addstr("discusses the prison system's flaws.", gamelog);break;
       case VIEW_INTELLIGENCE:           addstr("debates privacy law.", gamelog);break;
       case VIEW_FREESPEECH:             addstr("talks about free speech.", gamelog);break;
       case VIEW_GENETICS:               addstr("discusses the implications of genetic research.", gamelog);break;
@@ -620,6 +621,7 @@ char radio_broadcast(void)
                   case VIEW_ANIMALRESEARCH:         addstr("discuss the horrors of animal research.", gamelog);break;
                   case VIEW_POLICEBEHAVIOR:         addstr("go over cases of police brutality.", gamelog);break;
                   case VIEW_TORTURE:                addstr("discuss prisoner abuse and torture.", gamelog);break;
+                  case VIEW_PRISONS:                addstr("discuss the prison system's flaws.", gamelog);break;
                   case VIEW_INTELLIGENCE:           addstr("debate privacy law.", gamelog);break;
                   case VIEW_FREESPEECH:             addstr("talk about free speech.", gamelog);break;
                   case VIEW_GENETICS:               addstr("discuss the implications of genetic research.", gamelog);break;
@@ -786,6 +788,7 @@ char news_broadcast(void)
       case VIEW_ANIMALRESEARCH:         addstr("discusses the horrors of animal research.", gamelog);break;
       case VIEW_POLICEBEHAVIOR:         addstr("goes over cases of police brutality.", gamelog);break;
       case VIEW_TORTURE:                addstr("discusses prisoner abuse and torture.", gamelog);break;
+      case VIEW_PRISONS:                addstr("discusses the prison system's flaws.", gamelog);break;
       case VIEW_INTELLIGENCE:           addstr("debates privacy law.", gamelog);break;
       case VIEW_FREESPEECH:             addstr("talks about free speech.", gamelog);break;
       case VIEW_GENETICS:               addstr("discusses the implications of genetic research.", gamelog);break;
@@ -893,6 +896,7 @@ char news_broadcast(void)
                   case VIEW_ANIMALRESEARCH:         addstr("discuss the horrors of animal research.", gamelog);break;
                   case VIEW_POLICEBEHAVIOR:         addstr("go over cases of police brutality.", gamelog);break;
                   case VIEW_TORTURE:                addstr("discuss prisoner abuse and torture.", gamelog);break;
+		  case VIEW_PRISONS:                addstr("discusses the prison system's flaws.", gamelog);break;
                   case VIEW_INTELLIGENCE:           addstr("debate privacy law.", gamelog);break;
                   case VIEW_FREESPEECH:             addstr("talk about free speech.", gamelog);break;
                   case VIEW_GENETICS:               addstr("discuss the implications of genetic research.", gamelog);break;
