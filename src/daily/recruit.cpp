@@ -72,6 +72,7 @@ static void getissueeventstring(char* str)
    case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
    case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
    case VIEW_TORTURE:strcat(str,"a government inquiry into military interrogations");break;
+   case VIEW_PRISONS:strcat(str,"a documentary on the prisoners' suffering");break;
    case VIEW_INTELLIGENCE:strcat(str,"a documentary on privacy rights");break;
    case VIEW_FREESPEECH:strcat(str,"a collection of banned books");break;
    case VIEW_GENETICS:strcat(str,"a video about genetic engineering accidents");break;
