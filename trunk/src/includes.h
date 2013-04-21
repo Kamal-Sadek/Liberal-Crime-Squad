@@ -314,6 +314,8 @@ template <class Container> void delete_and_clear(Container& c);
 string tostring(long i);
 int stringtobool(const string& boolstr);
 
+class Log;
+
 enum UnlockTypes
 {
    UNLOCK_DOOR,
@@ -821,47 +823,7 @@ struct siegest
 #define COMPOUND_PRINTINGPRESS BIT6
 #define COMPOUND_AAGUN BIT7
 
-struct locationst
-{
-   char name[40];
-   char shortname[20];
-   short type;
-   int parent;
-   vector<Item *> loot;
-   vector<sitechangest> changes;
-   int renting;
-   char newrental;
-   char needcar;
-   short closed;
-   char interrogated;
-   int highsecurity;
-   siegest siege;
-   int heat;
-   double heat_protection;
-   char compound_walls;
-   int compound_stores;
-   short front_business;
-   char front_name[40];
-   char front_shortname[20];
-   char haveflag;
-   char hidden;
 
-   int mapseed;
-
-   locationst()
-   {
-      init();
-      needcar=0;
-      renting=-1;
-      hidden=0;
-   }
-   ~locationst()
-   {
-      delete_and_clear(loot);
-   }
-   void init(void);
-   void update_heat_protection(void);
-};
 
 enum CarChaseObstacles
 {
@@ -876,7 +838,57 @@ enum CarChaseObstacles
 #define MAPY 23
 #define MAPZ 10
 
+class Location
+{
+public:
+   char name[40];
+   char shortname[20];
+   short type;
+   int parent;
+   int id;
 
+   vector<Item *> loot;
+   vector<sitechangest> changes;
+   int renting;
+   char newrental;
+   char needcar;
+   short closed;
+   char mapped;
+   int highsecurity;
+   siegest siege;
+   int heat;
+   double heat_protection;
+   char compound_walls;
+   int compound_stores;
+   short front_business;
+   char front_name[40];
+   char front_shortname[20];
+   char haveflag;
+   bool hidden;
+
+   int mapseed;
+
+   Location(int type, int parenttype=-1);
+   Location()
+   { 
+      this->needcar=false;
+      this->hidden=false;
+      this->renting=-1;
+      init();
+   }
+   ~Location()
+   {
+      delete_and_clear(loot);
+   }
+   void init(void);
+   int findparent(int parenttype);
+   void update_heat_protection(void);
+   bool duplicatelocation();
+   bool can_be_upgraded();
+   bool part_of_justice_system();
+   char* Location::getname(bool shortname=false);
+   void rename(const char* name, const char* shortname);
+};
 
 //struct chaseseqst
 struct chaseseqst
@@ -1290,8 +1302,6 @@ enum ActiveSortingChoices
 /* end the game and clean up */
 void end_game(int err=0);
 
-class Log; //Forward declaration.
-
 /*******************************************************************************
 *
 *                                Common Stuff
@@ -1326,14 +1336,6 @@ void printliberalstats(Creature &cr);
 void printliberalcrimes(Creature &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y,int x);
-/* print location name (is aware of business fronts) */
-void addlocationname(locationst *loc);
-/* print location name (is aware of business fronts) (uses gamelog) */
-void addlocationname(locationst *loc, Log &log);
-/* print location's shortname (is aware of business fronts) */
-void addshortname (locationst *loc);
-/* print location's shortname (is aware of business fronts) (uses gamelog) */
-void addshortname (locationst *loc , Log &log);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
@@ -1400,8 +1402,6 @@ int scheduleddates(const Creature& cr);
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value);
-/* common - Checks if a site (typically safehouse) has a unique short name, and for business fronts, if the front has a unique shortname. */
-char duplicatelocation(locationst &loc);
 // Prompt to convert a new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
 /* common - Sort a list of creatures.*/
@@ -1684,12 +1684,8 @@ void mode_site(void);
 void resolvesite(void);
 /* behavior when the player bumps into a door in sitemode */
 void open_door(bool restricted);
-
-/*
- map.cpp
-*/
 /* re-create site from seed before squad arrives */
-void initsite(locationst &loc);
+void initsite(Location &loc);
 /* recursive dungeon-generating algorithm */
 void generateroom(int rx,int ry,int dx,int dy,int z=0);
 /* marks the area around the specified tile as explored */
@@ -1892,7 +1888,7 @@ void advancelocations(void);
 /* daily - returns true if the site type supports high security */
 char securityable(int type);
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
-void initlocation(locationst &loc);
+void initlocation(Location &loc);
 /* daily - returns the number of days in the current month */
 int monthday(void);
 

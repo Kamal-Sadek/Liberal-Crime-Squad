@@ -59,7 +59,7 @@ void review(void)
             move(y,31);
             if(squad[p]->squad[0]!=NULL&&squad[p]->squad[0]->location!=-1)
             {
-               addshortname(location[squad[p]->squad[0]->location]);
+               addstr(location[squad[p]->squad[0]->location]->getname(true));
             }
 
             move(y,51);
@@ -203,54 +203,32 @@ void review_mode(short mode)
       switch(mode)
       {
       case REVIEWMODE_LIBERALS:
-         if(pool[p]->alive==1&&
-            pool[p]->align==1&&
-            pool[p]->clinic==0&&
-            pool[p]->dating==0&&
-            pool[p]->hiding==0&&
-            !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-         {
-            if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-               location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-               location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)temppool.push_back(pool[p]);
-         }
+         if(pool[p]->is_active_liberal())
+            temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_HOSTAGES:
-         if(pool[p]->align!=1&&
-            pool[p]->alive==1)
+         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_CLINIC:
-         if(pool[p]->clinic>0&&
-            pool[p]->alive==1)temppool.push_back(pool[p]);
+         if(pool[p]->clinic>0 && pool[p]->alive)
+            temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_JUSTICE:
-         if(!(pool[p]->flag & CREATUREFLAG_SLEEPER)&&
-            pool[p]->clinic==0&&
-            pool[p]->dating==0&&
-            pool[p]->hiding==0&&
-            pool[p]->alive==1)
-         {
-            if(location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION||
-               location[pool[p]->location]->type==SITE_GOVERNMENT_COURTHOUSE||
-               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON)temppool.push_back(pool[p]);
-         }
+         if(pool[p]->is_imprisoned())
+            temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_SLEEPERS:
-         if(pool[p]->alive==1&&
-            pool[p]->align==1&&
-            pool[p]->clinic==0&&
-            pool[p]->dating==0&&
-            pool[p]->hiding==0&&
-            (pool[p]->flag & CREATUREFLAG_SLEEPER))temppool.push_back(pool[p]);
+         if(pool[p]->is_lcs_sleeper())
+            temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_DEAD:
-         if(!pool[p]->alive)temppool.push_back(pool[p]);
+         if(!pool[p]->alive)
+            temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_AWAY:
-         if((pool[p]->dating>0||
-            pool[p]->hiding!=0)&&
-            pool[p]->alive==1)temppool.push_back(pool[p]);
+         if((pool[p]->dating>0 || pool[p]->hiding!=0) && pool[p]->alive==1)
+            temppool.push_back(pool[p]);
          break;
       }
    }
@@ -356,7 +334,7 @@ void review_mode(short mode)
          }
          else
          {
-            addshortname(location[temppool[p]->location]);
+            addstr(location[temppool[p]->location]->getname(true));
          }
 
          move(y,57);
@@ -556,15 +534,8 @@ void review_mode(short mode)
                // Add removal of squad members member
                move(22,0);
 
-               if((temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               if(temppool[p]->is_active_liberal() &&
+                  temppool[p]->hireid !=-1)  // If alive and not own boss? (suicide?)
                {
                   addstr("R - Remove member         K - Kill member");
                }
@@ -637,15 +608,8 @@ void review_mode(short mode)
                   if(temppool[p]->gender_liberal > 2)
                      temppool[p]->gender_liberal = 0;
                }      
-               else if(c=='r' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               else if(c=='r' && temppool[p]->is_active_liberal() &&
+                                 temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
                {
                   int boss = getpoolcreature(temppool[p]->hireid);
 
@@ -717,15 +681,8 @@ void review_mode(short mode)
                      break;
                   }
                }               
-               else if(c=='k' && (temppool[p]->flag != CREATUREFLAG_SLEEPER)&&
-                  temppool[p]->hireid !=-1 &&
-                  temppool[p]->clinic==0&&
-                  temppool[p]->dating==0&&
-                  temppool[p]->hiding==0&&
-                  temppool[p]->alive==1&&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE &&
-                  location[temppool[p]->location]->type!=SITE_GOVERNMENT_PRISON)  // If alive and not own boss? (suicide?)
+               else if(c=='k' && temppool[p]->is_active_liberal() &&
+                                 temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
                {
                   // Kill squad member
                   int boss = getpoolcreature(temppool[p]->hireid);
@@ -930,17 +887,10 @@ void assemblesquad(squadst *cursquad)
    vector<Creature *> temppool;
    for(p=0;p<pool.size();p++)
    {
-      if(pool[p]->alive==1&&
-         pool[p]->align==1&&
-         pool[p]->clinic==0&&
-         pool[p]->dating==0&&
-         pool[p]->hiding==0&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+      if(pool[p]->is_active_liberal() &&
+         pool[p]->location==culloc || culloc==-1)
       {
-         if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON&&
-            (pool[p]->location==culloc||culloc==-1))temppool.push_back(pool[p]);
+         temppool.push_back(pool[p]);
       }
    }
    
@@ -1313,20 +1263,10 @@ void squadlessbaseassign(void)
    vector<Creature *> temppool;
    for(p=0;p<pool.size();p++)
    {
-      if(pool[p]->alive&&
-         pool[p]->align==1&&
-         pool[p]->clinic==0&&
-         pool[p]->dating==0&&
-         pool[p]->hiding==0&&
-         pool[p]->squadid==-1&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+      if(pool[p]->is_active_liberal() &&
+         pool[p]->squadid == -1)
       {
-         if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
-         {
-            temppool.push_back(pool[p]);
-         }
+         temppool.push_back(pool[p]);
       }
    }
 
@@ -1374,7 +1314,7 @@ void squadlessbaseassign(void)
          addstr(temppool[p]->name);
 
          move(y,25);
-         addshortname(location[temppool[p]->base]);
+         addstr(location[temppool[p]->base]->getname(true));
          if(location[temppool[p]->base]->siege.siege)
             addstr(" <Under Siege>");
 
@@ -1390,7 +1330,7 @@ void squadlessbaseassign(void)
          else set_color(color,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
-         addshortname(location[temploc[p]]);
+         addstr(location[temploc[p]]->getname(true));
 
          y++;
       }

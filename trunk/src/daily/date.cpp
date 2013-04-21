@@ -86,7 +86,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr("'s totally unconditional love-slave!", gamelog);
          gamelog.nextMessage();
          //Get map of their workplace
-         location[d.date[e]->worklocation]->interrogated=1;
+         location[d.date[e]->worklocation]->mapped=1;
          location[d.date[e]->worklocation]->hidden=0;
          refresh();
          getch();
@@ -131,7 +131,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          else
          {
             //Posibly date reveals map of location
-            if(location[d.date[e]->worklocation]->interrogated==0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)))
+            if(location[d.date[e]->worklocation]->mapped==0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)))
             {
                y++;
                move(y++,0);
@@ -155,7 +155,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
                   gamelog.newline();
                   y++;
                }
-               location[d.date[e]->worklocation]->interrogated=1;
+               location[d.date[e]->worklocation]->mapped=1;
                location[d.date[e]->worklocation]->hidden=0;
             }
          }

@@ -534,6 +534,18 @@ char liberalagenda(char won)
          int c=getch();
          translategetch(c);
 
+         if(c==KEY_RIGHT || c==KEY_DOWN)
+         {
+            page++;
+            continue;
+         }
+
+         if(c==KEY_LEFT || c==KEY_UP)
+         {
+            page--;
+            continue;
+         }
+
          if(c=='l')break;
       }
       else if(won==-1)
@@ -547,6 +559,18 @@ char liberalagenda(char won)
          refresh();
          int c=getch();
          translategetch(c);
+
+         if(c==KEY_RIGHT || c==KEY_DOWN)
+         {
+            page++;
+            continue;
+         }
+
+         if(c==KEY_LEFT || c==KEY_UP)
+         {
+            page--;
+            continue;
+         }
 
          if(c=='l')break;
       }

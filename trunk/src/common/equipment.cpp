@@ -158,13 +158,13 @@ void equip(vector<Item *> &loot,int loc)
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(23,1);
          addstr("Y - Get things from ");
-         addshortname(location[loc]);
+         addstr(location[loc]->getname(true));
 
          if(loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(23,40);
          addstr("Z - Stash things at ");
-         addshortname(location[loc]);
+         addstr(location[loc]->getname(true));
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -587,7 +587,7 @@ void equipmentbaseassign(void)
    int l = 0;
    bool sortbytype = false;
    vector<Item *> temploot;
-   map<Item *,locationst *> temploot2;
+   map<Item *,Location *> temploot2;
    for(l=0;l<location.size();l++)
    {
       for(int l2=0;l2<location[l]->loot.size();l2++)
@@ -638,7 +638,7 @@ void equipmentbaseassign(void)
          addstr(temploot[p]->equip_title().c_str());
 
          move(y,25);
-         addshortname(temploot2[temploot[p]]);
+         addstr(temploot2[temploot[p]]->getname(true));
 
          y++;
       }
@@ -650,7 +650,7 @@ void equipmentbaseassign(void)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
-         addshortname(location[temploc[p]]);
+         addstr(location[temploc[p]]->getname(true));
 
          y++;
       }

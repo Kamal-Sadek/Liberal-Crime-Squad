@@ -345,6 +345,41 @@ Creature::~Creature()
    stop_hauling_me();
 }
 
+// Alternative name for the location global, used in Creature:: methods
+vector<Location*> loc_proxy() { return location; }
+
+bool Creature::is_lcs_sleeper(void)
+{
+   if(alive && align==ALIGN_LIBERAL && clinic==0 &&
+      dating==0 && hiding==0 && (flag & CREATUREFLAG_SLEEPER))
+   {
+      return true;
+   }
+   else return false;
+}
+
+bool Creature::is_imprisoned(void)
+{
+   if(alive && clinic==0 && dating==0 && hiding==0 &&
+      !(flag & CREATUREFLAG_SLEEPER) &&
+      loc_proxy()[this->location]->part_of_justice_system())
+   {
+      return true;
+   }
+   else return false;
+}
+
+bool Creature::is_active_liberal(void)
+{
+   if(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
+      hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
+      !loc_proxy()[this->location]->part_of_justice_system())
+   {
+      return true;
+   }
+   else return false;
+}
+
 void Creature::creatureinit(void)
 {
    dontname=false;

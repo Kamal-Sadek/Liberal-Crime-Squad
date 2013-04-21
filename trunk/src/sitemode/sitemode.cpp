@@ -123,11 +123,10 @@ void mode_site(short loc)
       locy=1;
       locz=0;
 
-      //check for sleeper infiltration
+      //check for sleeper infiltration or map knowledge
       for(int p=0;p<pool.size();p++)
       {
-         //sleeper infiltration :D
-         if(pool[p]->base==loc || location[loc]->interrogated)
+         if(pool[p]->base==loc || location[loc]->mapped)
          {
             //make entire site known
             for(int x=0;x<MAPX;x++)
@@ -350,7 +349,7 @@ void mode_site(void)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(0,0);
-         addlocationname(location[cursite]);
+         addstr(location[cursite]->getname());
          addstr(", Level ");
          char num[20];
          itoa(locz+1,num,10);
@@ -363,7 +362,7 @@ void mode_site(void)
          else if(postalarmtimer>60)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(0,0);
-         addlocationname(location[cursite]);
+         addstr(location[cursite]->getname());
          addstr(", Level ");
          char num[20];
          itoa(locz+1,num,10);

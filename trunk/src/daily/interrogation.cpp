@@ -823,7 +823,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
                }
                
-               if(location[cr->worklocation]->interrogated==0 && !LCSrandom(5))
+               if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
                {
                   //show_interrogation_sidebar(cr,a);
                   refresh();
@@ -846,7 +846,7 @@ void tendhostage(Creature *cr,char &clearformess)
                      addstr(".", gamelog);
                   }
                   gamelog.newline();
-                  location[cr->worklocation]->interrogated=1;
+                  location[cr->worklocation]->mapped=1;
                   location[cr->worklocation]->hidden=0;
                }
             }
@@ -1338,7 +1338,7 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             gamelog.newline();
             y++;
-            if(location[cr->worklocation]->interrogated==0 && !LCSrandom(5))
+            if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
             {
                y++;
                move(y++,0);
@@ -1358,7 +1358,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(" was able to create a map of the site with this information.", gamelog);
                }
                gamelog.newline();
-               location[cr->worklocation]->interrogated=1;
+               location[cr->worklocation]->mapped=1;
                location[cr->worklocation]->hidden=0;
             }
          }
@@ -1553,7 +1553,7 @@ void tendhostage(Creature *cr,char &clearformess)
       cr->hireid=a->id;
       stat_recruits++;
 
-      if(location[cr->worklocation]->interrogated==0 || location[cr->worklocation]->hidden==1)
+      if(location[cr->worklocation]->mapped==0 || location[cr->worklocation]->hidden==1)
       {
          gamelog.newline();
          move(y,0);
@@ -1572,7 +1572,7 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(a->name, gamelog);
             addstr(" was able to create a map of the site with this information.", gamelog);
          }
-         location[cr->worklocation]->interrogated=1;
+         location[cr->worklocation]->mapped=1;
          location[cr->worklocation]->hidden=0;
          y+=2;
       }

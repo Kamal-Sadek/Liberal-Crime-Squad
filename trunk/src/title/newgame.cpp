@@ -1131,9 +1131,8 @@ void makecharacter(void)
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(2,2);
-   //Note how addstr is overloaded to also log this message.
    addstr("A NEW CONSERVATIVE ERA", gamelog);
-   gamelog.newline(); //Output a new line for formatting purposes.
+   gamelog.newline();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(4,2);
@@ -1143,33 +1142,33 @@ void makecharacter(void)
    addstr(year_s, gamelog);
    addstr(".", gamelog);
    move(6,2);
-   gamelog.newline(); //Another newline to the game log.
+   gamelog.newline();
    addstr("Conservative President ", gamelog);
    char president[80];
    generate_name(president,GENDER_WHITEMALEPATRIARCH);
    addstr(president, gamelog);
    addstr(" ends his second term with approval", gamelog);
    move(7,2);
-   gamelog.newline(); //Newline for gamelog.
+   gamelog.newline();
    addstr("ratings in the high 70s, and is succeeded by hardcore Arch-Conservative", gamelog);
    move(8,2);
-   gamelog.newline(); //Another newline.
+   gamelog.newline();
    addstr(execname[EXEC_PRESIDENT], gamelog);
    addstr(".", gamelog);
-   gamelog.nextMessage(); //Next block of logging output.
+   gamelog.nextMessage();
 
    move(10,2);
    addstr("With Conservatives sweeping into power in the House of Representatives", gamelog);
    move(11,2);
-   gamelog.newline(); //New line.
+   gamelog.newline();
    addstr("and Senate, and a Conservative majority in the Supreme Court of the", gamelog);
    move(12,2);
-   gamelog.newline(); //New line.
+   gamelog.newline();
    addstr("United States, commentators are hailing it as the beginning of a new", gamelog);
    move(13,2);
-   gamelog.newline(); //Gosh, so many newlines.
+   gamelog.newline();
    addstr("Conservative era.", gamelog);
-   gamelog.nextMessage(); //Next block of logging output.
+   gamelog.nextMessage();
 
    move(15,2);
    set_color(COLOR_RED,COLOR_BLACK,1);
@@ -1177,18 +1176,18 @@ void makecharacter(void)
    addstr(execname[EXEC_PRESIDENT], gamelog);
    addstr(" has asked the new Congress to move quickly", gamelog);
    move(16,2);
-   gamelog.newline(); //Another newline.
+   gamelog.newline();
    addstr("to rubber stamp his radical Arch-Conservative agenda. ", gamelog);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    addstr("The left seems", gamelog);
-   gamelog.newline(); //Blarg.
+   gamelog.newline();
    move(17,2);
    addstr("powerless to stop this imminent trampling of Liberal Sanity and Justice.", gamelog);
-   gamelog.nextMessage(); //Next message. The next block of logging output.
+   gamelog.nextMessage();
 
    move(19,2);
    addstr("In this dark time, the Liberal Crime Squad is born...", gamelog);
-   gamelog.nextMessage(); //Whoo! We're done logging here!
+   gamelog.nextMessage();
    refresh();
    getch();
 
@@ -1211,315 +1210,74 @@ void makecharacter(void)
    pool.push_back(newcr);
 
    //MAKE LOCATIONS
-   locationst *newl;
+   Location *loc;
 
-   newl=new locationst;
-      strcpy(newl->name,"Downtown");
-      strcpy(newl->shortname,"Downtown");
-      newl->type=SITE_DOWNTOWN;
-      newl->parent=-1;
-   location.push_back(newl);
+   // Top level districts
+   location.push_back(loc=new Location(SITE_DOWNTOWN));
+      loc->mapped=hasmaps;
+   location.push_back(new Location(SITE_COMMERCIAL));
+   location.push_back(new Location(SITE_UDISTRICT));
+   location.push_back(new Location(SITE_INDUSTRIAL));
+   location.push_back(loc=new Location(SITE_OUTOFTOWN));
+      loc->needcar=true;
 
-   newl=new locationst;
-      strcpy(newl->name,"The Commercial Center");
-      strcpy(newl->shortname,"C-District");
-      newl->type=SITE_COMMERCIAL;
-      newl->parent=-1;
-   location.push_back(newl);
+   // Downtown
+   location.push_back(new Location(SITE_RESIDENTIAL_APARTMENT_UPSCALE,  SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_GOVERNMENT_POLICESTATION,       SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_GOVERNMENT_COURTHOUSE,          SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_BUSINESS_BANK,                  SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_GOVERNMENT_FIRESTATION,         SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_MEDIA_CABLENEWS,                SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_MEDIA_AMRADIO,                  SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_BUSINESS_CIGARBAR,              SITE_DOWNTOWN));
+   location.push_back(new Location(SITE_BUSINESS_LATTESTAND,            SITE_DOWNTOWN));
+   location.push_back(loc=new Location(SITE_BUSINESS_BARANDGRILL,       SITE_DOWNTOWN));
+      loc->renting=RENTING_CCS;
+      loc->hidden=true;
+      loc->mapped=false;
 
-   newl=new locationst;
-      strcpy(newl->name,"The University District");
-      strcpy(newl->shortname,"U-District");
-      newl->type=SITE_UDISTRICT;
-      newl->parent=-1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      strcpy(newl->name,"The Industrial District");
-      strcpy(newl->shortname,"I-District");
-      newl->type=SITE_INDUSTRIAL;
-      newl->parent=-1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      strcpy(newl->name,"On the Outskirts of the City");
-      strcpy(newl->shortname,"Outskirts");
-      newl->type=SITE_OUTOFTOWN;
-      newl->parent=-1;
-      newl->needcar=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_POLICESTATION;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_COURTHOUSE;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_BANK;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_FIRESTATION;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_PRISON;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_NUCLEAR;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_INTELLIGENCEHQ;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_CORPORATE_HEADQUARTERS;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_CORPORATE_HOUSE;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_GOVERNMENT_ARMYBASE;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_PAWNSHOP;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
+   // Commercial district
+   location.push_back(new Location(SITE_BUSINESS_PAWNSHOP,           SITE_COMMERCIAL));
+   location.push_back(new Location(SITE_BUSINESS_HALLOWEEN,          SITE_COMMERCIAL));
+   location.push_back(new Location(SITE_BUSINESS_CARDEALERSHIP,      SITE_COMMERCIAL));
+   location.push_back(new Location(SITE_BUSINESS_DEPTSTORE,          SITE_COMMERCIAL));
    
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_HALLOWEEN;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
+   // University district
+   location.push_back(new Location(SITE_RESIDENTIAL_APARTMENT,       SITE_UDISTRICT));
+   location.push_back(new Location(SITE_HOSPITAL_UNIVERSITY,         SITE_UDISTRICT));
+   location.push_back(new Location(SITE_HOSPITAL_CLINIC,             SITE_UDISTRICT));
+   location.push_back(new Location(SITE_LABORATORY_GENETIC,          SITE_UDISTRICT));
+   location.push_back(new Location(SITE_LABORATORY_COSMETICS,        SITE_UDISTRICT));
+   location.push_back(new Location(SITE_BUSINESS_VEGANCOOP,          SITE_UDISTRICT));
+   location.push_back(new Location(SITE_BUSINESS_JUICEBAR,           SITE_UDISTRICT));
+   location.push_back(new Location(SITE_BUSINESS_INTERNETCAFE,       SITE_UDISTRICT));
+   location.push_back(new Location(SITE_OUTDOOR_PUBLICPARK,          SITE_UDISTRICT));
 
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_CARDEALERSHIP;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
+   // Industrial district
+   location.push_back(loc=new Location(SITE_RESIDENTIAL_SHELTER,     SITE_INDUSTRIAL));
+      loc->renting=RENTING_PERMANENT;
+   location.push_back(loc=new Location(SITE_INDUSTRY_WAREHOUSE,      SITE_INDUSTRIAL));
+      loc->renting=RENTING_PERMANENT;
+   location.push_back(loc=new Location(SITE_INDUSTRY_WAREHOUSE,      SITE_INDUSTRIAL));
+      loc->renting=RENTING_PERMANENT;
+   location.push_back(new Location(SITE_RESIDENTIAL_TENEMENT,        SITE_INDUSTRIAL));
+   location.push_back(new Location(SITE_INDUSTRY_POLLUTER,           SITE_INDUSTRIAL));
+   location.push_back(new Location(SITE_INDUSTRY_SWEATSHOP,          SITE_INDUSTRIAL));
+   location.push_back(new Location(SITE_BUSINESS_CRACKHOUSE,         SITE_INDUSTRIAL));
+   location.push_back(loc=new Location(SITE_RESIDENTIAL_BOMBSHELTER, SITE_INDUSTRIAL));
+      loc->renting=RENTING_CCS;
+      loc->hidden=true;
 
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_SHELTER;
-      newl->parent=3;
-      newl->renting=RENTING_PERMANENT;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_WAREHOUSE;
-      newl->parent=3;
-      newl->renting=RENTING_PERMANENT;
-      newl->hidden=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_WAREHOUSE;
-      newl->parent=3;
-      newl->renting=RENTING_PERMANENT;
-      newl->hidden=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_POLLUTER;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_POLLUTER;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_MEDIA_CABLENEWS;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_MEDIA_AMRADIO;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_APARTMENT_UPSCALE;
-      newl->parent=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_APARTMENT_UPSCALE;
-      newl->parent=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_APARTMENT;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_TENEMENT;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_HOSPITAL_UNIVERSITY;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_HOSPITAL_CLINIC;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_LABORATORY_GENETIC;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_LABORATORY_COSMETICS;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_DEPTSTORE;
-      newl->parent=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_INDUSTRY_SWEATSHOP;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_CRACKHOUSE;
-      newl->parent=3;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_VEGANCOOP;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_JUICEBAR;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_INTERNETCAFE;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_CIGARBAR;
-      newl->parent=0;
-      initlocation(*newl);
-      if(hasmaps)newl->interrogated=1;
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_LATTESTAND;
-      newl->parent=0;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_OUTDOOR_PUBLICPARK;
-      newl->parent=2;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   /*newl=new locationst;
-      newl->type=SITE_BUSINESS_ARMSDEALER;
-      newl->parent=4;
-      newl->needcar=1;
-      initlocation(*newl);
-   location.push_back(newl);*/
-
-   newl=new locationst;
-      newl->type=SITE_RESIDENTIAL_BOMBSHELTER;
-      newl->parent=3;
-      newl->renting=RENTING_CCS;
-      newl->hidden=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_BUSINESS_BARANDGRILL;
-      newl->parent=0;
-      newl->renting=RENTING_CCS;
-      newl->hidden=1;
-      initlocation(*newl);
-   location.push_back(newl);
-
-   newl=new locationst;
-      newl->type=SITE_OUTDOOR_BUNKER;
-      newl->parent=4;
-      newl->renting=RENTING_CCS;
-      newl->needcar=1;
-      newl->hidden=1;
-      initlocation(*newl);
-   location.push_back(newl);
+   // Out of town
+   location.push_back(new Location(SITE_GOVERNMENT_PRISON,           SITE_OUTOFTOWN));
+   location.push_back(new Location(SITE_INDUSTRY_NUCLEAR,            SITE_OUTOFTOWN));
+   location.push_back(new Location(SITE_GOVERNMENT_INTELLIGENCEHQ,   SITE_OUTOFTOWN));
+   location.push_back(new Location(SITE_CORPORATE_HEADQUARTERS,      SITE_OUTOFTOWN));
+   location.push_back(new Location(SITE_CORPORATE_HOUSE,             SITE_OUTOFTOWN));
+   location.push_back(new Location(SITE_GOVERNMENT_ARMYBASE,         SITE_OUTOFTOWN));
+   location.push_back(loc=new Location(SITE_OUTDOOR_BUNKER,          SITE_OUTOFTOWN));
+      loc->renting=RENTING_CCS;
+      loc->hidden=true;
 
    squadst *newsq=new squadst;
       newsq->id=0;cursquadid++;
@@ -1640,7 +1398,7 @@ void makecharacter(void)
       lawyer->infiltration=0.3f;
       lawyer->age=28;
 
-      location[lawyer->worklocation]->interrogated=1;
+      location[lawyer->worklocation]->mapped=1;
       lawyer->hireid=newcr->id;
       pool.push_back(lawyer);
       lawyer->location=lawyer->base=lawyer->worklocation;

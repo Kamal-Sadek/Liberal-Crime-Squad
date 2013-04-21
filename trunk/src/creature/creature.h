@@ -396,7 +396,9 @@ public:
    explicit Creature(const char* inputXml);
    string showXml() const;
    
-
+   bool is_active_liberal(void);
+   bool is_imprisoned(void);
+   bool is_lcs_sleeper(void);
    char canwalk(void)
    {
       if(!alive)return 0;

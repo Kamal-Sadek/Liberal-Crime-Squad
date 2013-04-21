@@ -360,7 +360,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       if(cr.juice>100)cr.juice=100;
    }
 
-   location[cr.base]->interrogated = 1;
+   location[cr.base]->mapped = 1;
 
    int homes;
    for(homes=0;homes<location.size();homes++)
@@ -673,7 +673,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    
    //Item *item;
    string item;
-   locationst *shelter=0;
+   Location *shelter=0;
 
    for(int l=0;l<location.size();l++)
    {
@@ -967,7 +967,7 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libp
                recruit->infiltration = cr.infiltration;
             }
             recruit->flag |= CREATUREFLAG_SLEEPER;
-            location[recruit->worklocation]->interrogated=1;
+            location[recruit->worklocation]->mapped=1;
             location[recruit->worklocation]->hidden=0;
             pool.push_back(recruit);
 

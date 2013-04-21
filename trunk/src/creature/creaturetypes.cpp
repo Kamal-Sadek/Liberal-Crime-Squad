@@ -2519,8 +2519,8 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_INDUSTRIAL]=1;
          break;
 	  case CREATURE_CARSALESMAN:
-		 okaysite[SITE_BUSINESS_CARDEALERSHIP]=1;
-		 break;
+         okaysite[SITE_BUSINESS_CARDEALERSHIP]=1;
+         break;
 	  case CREATURE_OFFICEWORKER:
          okaysite[SITE_LABORATORY_COSMETICS]=1;
          okaysite[SITE_LABORATORY_GENETIC]=1;

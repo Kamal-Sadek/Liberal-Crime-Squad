@@ -29,8 +29,7 @@ the bottom of includes.h in the top src folder.
 //#include <includes.h>
 #include <externs.h>
 
-/* base - activate the uninvolved */
-void activate(void)
+vector<Creature *> activatable_liberals()
 {
    vector<Creature *> temppool;
    int sq;
@@ -43,9 +42,7 @@ void activate(void)
          pool[p]->hiding==0&&
          !(pool[p]->flag & CREATUREFLAG_SLEEPER))
       {
-         if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+         if(!location[pool[p]->location]->part_of_justice_system())
          {
             if(pool[p]->squadid!=-1)
             {
@@ -59,6 +56,13 @@ void activate(void)
          }
       }
    }
+   return temppool;
+}
+
+/* base - activate the uninvolved */
+void activate(void)
+{
+   vector<Creature *> temppool = activatable_liberals();
 
    if(temppool.size()==0)return;
 
@@ -112,7 +116,7 @@ void activate(void)
          if(mode==REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,42);
-         addshortname(location[temppool[p]->location]);
+         addstr(location[temppool[p]->location]->getname(true));
 
          move(y,57);
          // Let's add some color here...
@@ -987,33 +991,7 @@ void activate(Creature *cr)
 
 void activatebulk(void)
 {
-   vector<Creature *> temppool;
-   int sq;
-   for(int p=0;p<pool.size();p++)
-   {
-      if(pool[p]->alive&&
-         pool[p]->align==1&&
-         pool[p]->clinic==0&&
-         pool[p]->dating==0&&
-         pool[p]->hiding==0&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-      {
-         if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-            location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
-         {
-            if(pool[p]->squadid!=-1)
-            {
-               sq=getsquad(pool[p]->squadid);
-               if(sq!=-1)
-               {
-                  if(squad[sq]->activity.type!=ACTIVITY_NONE)continue;
-               }
-            }
-            temppool.push_back(pool[p]);
-         }
-      }
-   }
+   vector<Creature *> temppool = activatable_liberals();
 
    if(temppool.size()==0)return;
 
@@ -1239,7 +1217,7 @@ void select_tendhostage(Creature *cr)
          if(mode==REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,42);
-         addshortname(location[temppool[p]->location]);
+         addstr(location[temppool[p]->location]->getname(true));
 
          move(y,57);
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);

@@ -156,7 +156,7 @@ void savegame(const char *str)
          numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->closed,sizeof(short),1,h);
          numbytes=fwrite(&location[l]->hidden,sizeof(short),1,h);
-         numbytes=fwrite(&location[l]->interrogated,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->mapped,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->highsecurity,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
          numbytes=fwrite(&location[l]->heat,sizeof(int),1,h);
@@ -457,7 +457,7 @@ char load(void)
       location.resize(dummy);
       for(l=0;l<location.size();l++)
       {
-         location[l]=new locationst;
+         location[l]=new Location;
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->loot.resize(dummy);
@@ -520,7 +520,7 @@ char load(void)
          fread(&location[l]->needcar,sizeof(char),1,h);
          fread(&location[l]->closed,sizeof(short),1,h);
          fread(&location[l]->hidden,sizeof(short),1,h);
-         fread(&location[l]->interrogated,sizeof(char),1,h);
+         fread(&location[l]->mapped,sizeof(char),1,h);
          fread(&location[l]->highsecurity,sizeof(char),1,h);
          fread(&location[l]->siege,sizeof(siegest),1,h);
          fread(&location[l]->heat,sizeof(int),1,h);

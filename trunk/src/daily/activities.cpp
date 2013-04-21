@@ -1524,7 +1524,7 @@ void funds_and_trouble(char &clearformess)
                      addstr(" grabbed a ", gamelog);
                      addstr(w->get_name().c_str(), gamelog);
                      addstr(" from ", gamelog);
-                     addlocationname(location[graffiti[s]->base]); //TODO: Explicitly log it, or will the game log it?
+                     addstr(location[graffiti[s]->base]->getname()); //TODO: Explicitly log it, or will the game log it?
                      addstr(".", gamelog);
                      refresh();
                      getch();

@@ -115,7 +115,7 @@ extern short party_status;
 extern vector<datest *> date;
 extern vector<recruitst *> recruit;
 
-extern vector<locationst *> location;
+extern vector<Location *> location;
 
 extern vector<newsstoryst *> newsstory;
 extern newsstoryst *sitestory;

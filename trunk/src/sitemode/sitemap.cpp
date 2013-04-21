@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* re-create site from seed before squad arrives */
-void initsite(locationst &loc)
+void initsite(Location &loc)
 {
    //PREP
    if(activesquad==NULL)return;

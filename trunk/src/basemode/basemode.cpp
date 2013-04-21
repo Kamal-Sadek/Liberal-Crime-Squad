@@ -60,9 +60,7 @@ void mode_base(void)
                pool[p]->hiding==0&&
                !(pool[p]->flag & CREATUREFLAG_SLEEPER))
             {
-               if(location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON&&
-                  location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-                  location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION)
+               if(!location[pool[p]->location]->part_of_justice_system())
                {
                   canseethings=1;
                   if(pool[p]->clinic==0){forcewait=0;break;}
@@ -453,8 +451,7 @@ void mode_base(void)
          {
             printlocation(selectedsiege);
 
-            if((location[selectedsiege]->type==SITE_INDUSTRY_WAREHOUSE||
-		location[selectedsiege]->type==SITE_BUSINESS_CRACKHOUSE)&&
+            if(location[selectedsiege]->can_be_upgraded()&&
                !location[selectedsiege]->siege.siege)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -685,8 +682,7 @@ void mode_base(void)
 
       if(c=='i'&&selectedsiege!=-1)
       {
-         if((location[selectedsiege]->type==SITE_INDUSTRY_WAREHOUSE||
-            location[selectedsiege]->type==SITE_BUSINESS_CRACKHOUSE)&&
+         if(location[selectedsiege]->can_be_upgraded()&&
             !location[selectedsiege]->siege.siege)
          {
             investlocation();
