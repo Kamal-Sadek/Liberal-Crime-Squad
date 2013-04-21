@@ -8,7 +8,14 @@ dist_art_DATA = art/abort.cmv  art/glamshow.cmv  art/largecap.cpc  art/newspic.c
  art/clips.xml  art/weapons.xml art/deptstore.xml  art/loot.xml  art/vehicles.xml\
  art/armors.xml  art/masks.xml  art/pawnshop.xml  art/armsdealer.xml  art/sitemaps.txt\
  art/oubliette.xml  art/mapCSV_Bank_Specials.csv  art/mapCSV_Bank_Tiles.csv\
- art/mapCSV_NuclearPlant_Specials.csv  art/mapCSV_NuclearPlant_Tiles.csv
+ art/mapCSV_NuclearPlant_Specials.csv  art/mapCSV_NuclearPlant_Tiles.csv\
+ art/mapCSV_Courthouse_Specials.csv  art/mapCSV_Courthouse_Tiles.csv\
+ art/mapCSV_Bunker_Specials.csv  art/mapCSV_Bunker_Tiles.csv\
+ art/mapCSV_BombShelter_Specials.csv  art/mapCSV_BombShelter_Tiles.csv\
+ art/mapCSV_BarAndGrill_Specials.csv  art/mapCSV_BarAndGrill_Tiles.csv\
+ art/mapCSV_WhiteHouse_Specials.csv  art/mapCSV_WhiteHouse_Tiles.csv\
+ art/mapCSV_WhiteHouse2_Specials.csv  art/mapCSV_WhiteHouse2_Tiles.csv\
+ art/mapCSV_WhiteHouse3_Specials.csv  art/mapCSV_WhiteHouse3_Tiles.csv
 
 dist_app_DATA = crimesquad.desktop
 
