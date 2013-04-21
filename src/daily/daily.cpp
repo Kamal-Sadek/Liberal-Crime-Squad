@@ -124,28 +124,20 @@ void advanceday(char &clearformess,char canseethings)
          }
       }
 
-      if(disbanding)continue;
+      if(disbanding) continue;
 
-      if(pool[p]->clinic)continue;
-      if(pool[p]->dating)continue;
-      if(pool[p]->hiding)continue;
-      if(pool[p]->squadid!=-1)continue;
-      if(pool[p]->location==-1)continue;
+      if(!pool[p]->is_active_liberal() || pool[p]->squadid != -1)
+         continue;
 
-      if(location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION&&
-         location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE&&
-         location[pool[p]->location]->type!=SITE_GOVERNMENT_PRISON)
+      // Prevent moving people to a sieged location,
+      // but don't evacuate people already under siege. - wisq
+      if(pool[p]->location != pool[p]->base &&
+         location[pool[p]->base]->siege.siege)
       {
-         // Prevent moving people to a sieged location,
-         // but don't evacuate people already under siege. - wisq
-         if(pool[p]->location != pool[p]->base &&
-            location[pool[p]->base]->siege.siege)
-         {
-            pool[p]->base=homes;
-         }
-
-         pool[p]->location=pool[p]->base;
+         pool[p]->base=homes;
       }
+
+      pool[p]->location=pool[p]->base;
    }
 
    //ADVANCE SQUADS
@@ -206,7 +198,7 @@ void advanceday(char &clearformess,char canseethings)
             move(8,1);
             addstr(squad[sq]->name, gamelog);
             addstr(" decided ", gamelog);
-            addlocationname(location[squad[sq]->activity.arg], gamelog);
+            addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
             addstr(" was too hot to risk.", gamelog);
             gamelog.nextMessage();
 
@@ -408,7 +400,7 @@ void advanceday(char &clearformess,char canseethings)
                move(8,1);
                addstr(squad[sq]->name, gamelog);
                addstr(" didn't have a car to get to ", gamelog);
-               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
                addstr(".", gamelog);
                gamelog.nextMessage();
 
@@ -448,7 +440,7 @@ void advanceday(char &clearformess,char canseethings)
                move(8,1);
                addstr(squad[sq]->name, gamelog);
                addstr(" has arrived at ", gamelog);
-               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
                addstr(".", gamelog);
                gamelog.nextMessage();
 
@@ -493,7 +485,7 @@ void advanceday(char &clearformess,char canseethings)
                move(8,1);
                addstr(squad[sq]->name, gamelog);
                addstr(" has arrived at ", gamelog);
-               addlocationname(location[squad[sq]->activity.arg], gamelog);
+               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
                addstr(".", gamelog);
                gamelog.nextMessage();
 
@@ -522,7 +514,7 @@ void advanceday(char &clearformess,char canseethings)
                {
                   addstr(squad[sq]->name, gamelog);
                   addstr(" looks around ", gamelog);
-                  addlocationname(location[squad[sq]->activity.arg], gamelog);
+                  addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
                   addstr(".", gamelog);
                   gamelog.nextMessage();
                }
@@ -530,7 +522,7 @@ void advanceday(char &clearformess,char canseethings)
                {
                   addstr(squad[sq]->name, gamelog);
                   addstr(" has arrived at ", gamelog);
-                  addlocationname(location[squad[sq]->activity.arg], gamelog);
+                  addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
                   addstr(".", gamelog);
                   gamelog.nextMessage();
                }
@@ -684,8 +676,7 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->activity.type=ACTIVITY_NONE;
             break;
          case ACTIVITY_NONE:
-            if(pool[p]->align == 1 && location[pool[p]->location]->type!=SITE_GOVERNMENT_POLICESTATION
-                                   && location[pool[p]->location]->type!=SITE_GOVERNMENT_COURTHOUSE)
+            if(pool[p]->align == 1 && !pool[p]->is_imprisoned())
             {
                if(pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged())
                {
@@ -1336,8 +1327,12 @@ void dispersalcheck(char &clearformess)
          {
             if(!pool[p]->alive)continue;
             if(pool[p]->location!=-1&&
-               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&               !(pool[p]->flag & CREATUREFLAG_SLEEPER))            {               inprison=1;
-            }            else inprison=0;
+               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON &&
+               !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               inprison=1;
+            }
+            else inprison=0;
 
             // If your boss is in hiding
             if(dispersal_status[p]==DISPERSAL_BOSSINHIDING)
@@ -1745,463 +1740,6 @@ char securityable(int type)
 
    return 0;
 }
-
-
-
-/* daily - seeds and names a site (will re-seed and rename if used after start) */
-void initlocation(locationst &loc)
-{
-   loc.init();
-
-   char str[80];
-
-   switch(loc.type)
-   {
-      case SITE_GOVERNMENT_POLICESTATION:
-         strcpy(loc.name,"Police Station");
-         strcpy(loc.shortname,"Police Station");
-         break;
-      case SITE_GOVERNMENT_COURTHOUSE:
-         if(law[LAW_DEATHPENALTY]==-2)
-         {
-            strcpy(loc.name,"Halls of Ultimate Judgment");
-            strcpy(loc.shortname,"Judge Hall");
-         }
-         else
-         {
-            strcpy(loc.name,"Court House");
-            strcpy(loc.shortname,"Court House");
-         }
-         break;
-      case SITE_GOVERNMENT_FIRESTATION:
-         if(law[LAW_FREESPEECH]==-2)
-         {
-            strcpy(loc.name,"Fireman HQ");
-            strcpy(loc.shortname,"Fireman HQ");
-         }
-         else
-         {
-            strcpy(loc.name,"Fire Station");
-            strcpy(loc.shortname,"Fire Station");
-         }
-         break;
-      case SITE_GOVERNMENT_PRISON:
-         if(law[LAW_PRISONS]==-2)
-         {
-            switch(LCSrandom(5))
-            {
-               case 0:strcpy(loc.name,"Happy");break;
-               case 1:strcpy(loc.name,"Cheery");break;
-               case 2:strcpy(loc.name,"Quiet");break;
-               case 3:strcpy(loc.name,"Green");break;
-               case 4:strcpy(loc.name,"Nectar");break;
-            }
-            strcat(loc.name," ");
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(loc.name,"Valley");break;
-               case 1:strcat(loc.name,"Meadow");break;
-               case 2:strcat(loc.name,"Hills");break;
-               case 3:strcat(loc.name,"Glade");break;
-               case 4:strcat(loc.name,"Forest");break;
-            }
-            strcat(loc.name," Forced Labor Camp");
-            strcpy(loc.shortname,"Labor Camp");
-         }
-         else
-         {
-            lastname(str);
-            strcpy(loc.name,str);
-            strcat(loc.name," Prison");
-            strcpy(loc.shortname,"Prison");
-         }
-         break;
-      case SITE_INDUSTRY_NUCLEAR:
-                  if(law[LAW_NUCLEARPOWER]==2)
-                  {
-                        strcpy(loc.name,"Nuclear Waste Center");
-            strcpy(loc.shortname,"NWaste Center");
-                  }
-                  else
-                  {
-         strcpy(loc.name,"Nuclear Power Plant");
-         strcpy(loc.shortname,"NPower Plant");
-                  }
-         break;
-      case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         if(law[LAW_PRIVACY]==-2&&
-            law[LAW_POLICEBEHAVIOR]==-2)
-         {
-            strcpy(loc.name,"Ministry of Love");
-            strcpy(loc.shortname,"Min. Love");
-         }
-         else
-         {
-            strcpy(loc.name,"Intelligence HQ");
-            strcpy(loc.shortname,"Int. HQ");
-         }
-         break;
-      
-      case SITE_GOVERNMENT_ARMYBASE:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Army Base");
-         strcpy(loc.shortname,"Army Base");
-         break;
-      case SITE_CORPORATE_HEADQUARTERS:
-         strcpy(loc.name,"Corporate HQ");
-         strcpy(loc.shortname,"Corp. HQ");
-         break;
-      case SITE_BUSINESS_BANK:
-         strcpy(loc.name,"American Bank Corp");
-         strcpy(loc.shortname,"Bank");
-         break;
-      case SITE_BUSINESS_PAWNSHOP:
-         if(law[LAW_GUNCONTROL]==ALIGN_ELITELIBERAL)
-         {
-            char str[80];
-            lastname(str);
-            strcpy(loc.name,str);
-            strcat(loc.name,"'s Pawnshop");
-            strcpy(loc.shortname,"Pawnshop");
-         }
-         else
-         {
-            char str[80];
-            lastname(str);
-            strcpy(loc.name,str);
-            strcat(loc.name," Pawn & Gun");
-            strcpy(loc.shortname,"Pawnshop");
-         }
-         break;
-      case SITE_CORPORATE_HOUSE:
-         if(law[LAW_CORPORATE]==-2&&
-                                law[LAW_TAX]==-2)
-         {
-            strcpy(loc.name,"CEO Castle");
-            strcpy(loc.shortname,"CEO Castle");
-         }
-         else
-         {
-            strcpy(loc.name,"CEO Residence");
-            strcpy(loc.shortname,"CEO House");
-         }
-         break;
-      case SITE_RESIDENTIAL_SHELTER:
-         strcpy(loc.name,"Homeless Shelter");
-         strcpy(loc.shortname,"Shelter");
-         break;
-      case SITE_INDUSTRY_WAREHOUSE:
-      {
-         do {
-            strcpy(loc.name,"Abandoned ");
-            char str[50];
-            /*lastname(str);
-            strcat(loc.name,str);
-            strcat(loc.name," ");*/
-              
-                 switch(LCSrandom(10))
-                 {
-                    case 0:
-                      strcat(loc.name,"Meat Plant");
-                      strcpy(loc.shortname,"Meat Plant");
-                      break;
-                    case 1:
-                      strcat(loc.name,"Warehouse");
-                      strcpy(loc.shortname,"Warehouse");
-                      break;
-                    case 2:
-                      strcat(loc.name,"Paper Mill");
-                      strcpy(loc.shortname,"Paper Mill");
-                      break;
-                    case 3:
-                      strcat(loc.name,"Cement Factory");
-                      strcpy(loc.shortname,"Cement");
-                      break;
-                    case 4:
-                      strcat(loc.name,"Fertilizer Plant");
-                      strcpy(loc.shortname,"Fertilizer");
-                      break;
-                    case 5:
-                      strcat(loc.name,"Drill Factory");
-                      strcpy(loc.shortname,"Drill");
-                      break;
-                    case 6:
-                      strcat(loc.name,"Steel Plant");
-                      strcpy(loc.shortname,"Steel");
-                      break;
-                    case 7:
-                      strcat(loc.name,"Packing Plant");
-                      strcpy(loc.shortname,"Packing");
-                      break;
-                    case 8:
-                      strcat(loc.name,"Toy Factory");
-                      strcpy(loc.shortname,"Toy");
-                      break;
-                    case 9:
-                      strcat(loc.name,"Building Site");
-                      strcpy(loc.shortname,"Building");
-                      break;
-                 }
-              } while (duplicatelocation(loc));
-         break;
-      }
-      case SITE_INDUSTRY_POLLUTER:
-         switch(LCSrandom(5))
-         {
-            case 0:
-               strcpy(loc.name,"Aluminum Factory");
-               strcpy(loc.shortname,"Alum Fact");
-               break;
-            case 1:
-               strcpy(loc.name,"Plastic Factory");
-               strcpy(loc.shortname,"Plast Fact");
-               break;
-            case 2:
-               strcpy(loc.name,"Oil Refinery");
-               strcpy(loc.shortname,"Refinery");
-               break;
-            case 3:
-               strcpy(loc.name,"Auto Plant");
-               strcpy(loc.shortname,"Auto Plant");
-               break;
-            case 4:
-               strcpy(loc.name,"Chemical Factory");
-               strcpy(loc.shortname,"Chem Fact");
-               break;
-         }
-         break;
-      case SITE_MEDIA_CABLENEWS:
-         strcpy(loc.name,"Cable News Station");
-         strcpy(loc.shortname,"News Station");
-         break;
-      case SITE_MEDIA_AMRADIO:
-         strcpy(loc.name,"AM Radio Station");
-         strcpy(loc.shortname,"Radio Station");
-         break;
-      case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-      case SITE_RESIDENTIAL_APARTMENT:
-         do {
-            lastname(str);
-            strcpy(loc.name,str);
-            strcat(loc.name," Apartments");
-            strcpy(loc.shortname,str);
-            strcat(loc.shortname," Apts");
-         } while (duplicatelocation(loc));
-         break;
-      case SITE_RESIDENTIAL_TENEMENT:
-         do {
-            char str[50] = "";
-            do {
-               lastname(str);
-            } while(strlen(str)>7);
-            strcpy(loc.name,str);
-            strcat(loc.name," St. ");
-            strcat (loc.name, "Housing Projects");
-            strcpy (loc.shortname, "Projects");
-         } while (duplicatelocation (loc));
-         break;
-      case SITE_HOSPITAL_UNIVERSITY:
-         strcpy(loc.name,"The University Hospital");
-         strcpy(loc.shortname,"U Hospital");
-         break;
-      case SITE_HOSPITAL_CLINIC:
-         strcpy(loc.name,"The Free CLINIC");
-         strcpy(loc.shortname,"CLINIC");
-         break;
-      case SITE_LABORATORY_GENETIC:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Genetics");
-         strcpy(loc.shortname,"Genetics Lab");
-         break;
-      case SITE_LABORATORY_COSMETICS:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Cosmetics");
-         strcpy(loc.shortname,"Cosmetics Lab");
-         break;
-      case SITE_BUSINESS_CARDEALERSHIP:
-         firstname(str,GENDER_WHITEMALEPATRIARCH);
-         strcpy(loc.name,str);
-         strcat(loc.name," ");
-         lastname(str);
-         strcat(loc.name,str);
-         strcat(loc.name,"'s Used Cars");
-         strcpy(loc.shortname,"Dealership");
-         break;
-      case SITE_BUSINESS_DEPTSTORE:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name,"'s Department Store");
-         strcpy(loc.shortname,"Dept. Store");
-         break;
-      case SITE_BUSINESS_HALLOWEEN:
-         lastname(str);
-         strcpy(loc.name,"The Oubliette");
-         strcpy(loc.shortname,"Oubliette");
-         break;
-      case SITE_INDUSTRY_SWEATSHOP:
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," Garment Makers");
-         strcpy(loc.shortname,"Sweatshop");
-         break;
-      case SITE_BUSINESS_CRACKHOUSE:
-      do {
-         char str[50];
-         lastname(str);
-         strcpy(loc.name,str);
-         strcat(loc.name," St. ");
-
-         if (law[LAW_DRUGS]==2)
-         {
-            switch (LCSrandom (4))
-            {
-            case 0:
-               strcat (loc.name, "Recreational Drugs Center");
-               strcpy (loc.shortname, "Drugs Center");
-               break;
-            case 1:
-               strcat (loc.name, "Coffee House");
-               strcpy (loc.shortname, "Coffee House");
-               break;
-            case 2:
-               strcat (loc.name, "Cannabis Lounge");
-               strcpy (loc.shortname, "Cannabis Lounge");
-               break;
-            case 3:
-               strcat (loc.name, "Marijuana Dispensary");
-               strcpy (loc.shortname, "Dispensary");
-               break;
-            }
-         }
-         else
-         {
-            strcat (loc.name, "Crack House");
-            strcpy (loc.shortname, "Crack House");
-         }
-      } while (duplicatelocation (loc));
-      break;
-
-      case SITE_BUSINESS_JUICEBAR:
-         strcpy(loc.name,"");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Natural");break;
-            case 1:strcat(loc.name,"Harmonious");break;
-            case 2:strcat(loc.name,"Restful");break;
-            case 3:strcat(loc.name,"Healthy");break;
-            case 4:strcat(loc.name,"New You");break;
-         }
-         strcat(loc.name," ");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Diet");break;
-            case 1:strcat(loc.name,"Methods");break;
-            case 2:strcat(loc.name,"Plan");break;
-            case 3:strcat(loc.name,"Orange");break;
-            case 4:strcat(loc.name,"Carrot");break;
-         }
-         strcat(loc.name," Juice Bar");
-         strcpy(loc.shortname,"Juice Bar");
-         break;
-      case SITE_BUSINESS_VEGANCOOP:
-         strcpy(loc.name,"");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Asparagus");break;
-            case 1:strcat(loc.name,"Tofu");break;
-            case 2:strcat(loc.name,"Broccoli");break;
-            case 3:strcat(loc.name,"Radish");break;
-            case 4:strcat(loc.name,"Eggplant");break;
-         }
-         strcat(loc.name," ");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Forest");break;
-            case 1:strcat(loc.name,"Rainbow");break;
-            case 2:strcat(loc.name,"Garden");break;
-            case 3:strcat(loc.name,"Farm");break;
-            case 4:strcat(loc.name,"Meadow");break;
-         }
-         strcat(loc.name," Vegan Co-op");
-         strcpy(loc.shortname,"Vegan Co-op");
-         break;
-      case SITE_BUSINESS_INTERNETCAFE:
-         strcpy(loc.name,"");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Electric");break;
-            case 1:strcat(loc.name,"Wired");break;
-            case 2:strcat(loc.name,"Nano");break;
-            case 3:strcat(loc.name,"Micro");break;
-            case 4:strcat(loc.name,"Techno");break;
-         }
-         strcat(loc.name," ");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Panda");break;
-            case 1:strcat(loc.name,"Troll");break;
-            case 2:strcat(loc.name,"Latte");break;
-            case 3:strcat(loc.name,"Unicorn");break;
-            case 4:strcat(loc.name,"Pixie");break;
-         }
-         strcat(loc.name," Internet Cafe");
-         strcpy(loc.shortname,"Net Cafe");
-         break;
-      case SITE_BUSINESS_CIGARBAR:
-         lastname(str);
-         strcpy(loc.name,"The ");
-         strcat(loc.name,str);
-         strcat(loc.name," Gentlemen's Club");
-         strcpy(loc.shortname,"Cigar Bar");
-         break;
-      case SITE_BUSINESS_LATTESTAND:
-         strcpy(loc.name,"");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Frothy");break;
-            case 1:strcat(loc.name,"Milky");break;
-            case 2:strcat(loc.name,"Caffeine");break;
-            case 3:strcat(loc.name,"Morning");break;
-            case 4:strcat(loc.name,"Evening");break;
-         }
-         strcat(loc.name," ");
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(loc.name,"Mug");break;
-            case 1:strcat(loc.name,"Cup");break;
-            case 2:strcat(loc.name,"Jolt");break;
-            case 3:strcat(loc.name,"Wonder");break;
-            case 4:strcat(loc.name,"Express");break;
-         }
-         strcat(loc.name," Latte Stand");
-         strcpy(loc.shortname,"Latte Stand");
-         break;
-      case SITE_OUTDOOR_PUBLICPARK:
-         lastname(loc.name);
-         strcat(loc.name," Park");
-         strcpy(loc.shortname,"Park");
-         break;
-      case SITE_RESIDENTIAL_BOMBSHELTER:
-         strcpy(loc.name,"Fallout Shelter");
-         strcpy(loc.shortname,"Bomb Shelter");
-         break;
-      case SITE_BUSINESS_BARANDGRILL:
-         strcpy(loc.name,"Desert Eagle Bar & Grill");
-         strcpy(loc.shortname,"Bar & Grill");
-         break;
-      case SITE_OUTDOOR_BUNKER:
-         strcpy(loc.name,"Robert E. Lee Bunker");
-         strcpy(loc.shortname,"Bunker");
-         break;
-      case SITE_BUSINESS_ARMSDEALER:
-         strcpy(loc.name,"Black Market");
-         strcpy(loc.shortname,"Black Market");
-   }
-}
-
 
 
 /* daily - returns the number of days in the current month */

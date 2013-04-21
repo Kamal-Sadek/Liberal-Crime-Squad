@@ -478,6 +478,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\title\locations.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\title\newgame.cpp"
 				>
 			</File>

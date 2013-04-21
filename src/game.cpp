@@ -100,7 +100,7 @@ bool initialize_loottypes();
 
 long curcreatureid=0;
 vector<Item *> groundloot;
-vector<locationst *> location;
+vector<Location *> location;
 
 vector<VehicleType *> vehicletype;
 vector<Vehicle *> vehicle;
@@ -497,91 +497,6 @@ int stringtobool(const string& boolstr) //Should find better way to do this. -XM
       return 0;
    else
       return -1;
-}
-
-void locationst::init(void)
-{
-   haveflag=0;
-   newrental=0;
-   heat=0;
-   heat_protection=0.0;
-   closed=0;
-   interrogated=0;
-   highsecurity=0;
-   mapseed=seed;r_num();
-   changes.clear();
-   compound_walls=0;
-   compound_stores=0;
-   front_business=-1;
-}
-
-void locationst::update_heat_protection(void)
-{
-   int l;
-   for(l=0;l<location.size();l++)
-   {
-      if(location[l]==this)
-         break;
-   }
-   if(l==location.size())
-   {
-      heat_protection=0.0;
-      return;
-   }
-   int numpres=0;
-   int heatprotection=0;
-   for(int p=0;p<pool.size();p++)
-   {
-      if(pool[p]->location!=l)continue; // People not at this base don't count
-      if(!pool[p]->alive)continue; // Dead people don't count
-      numpres++;
-   }
-
-   // Determine how effective your current safehouse
-   // is at keeping the police confused
-   switch(location[l]->type)
-   {
-   case SITE_INDUSTRY_WAREHOUSE:
-      if(location[l]->front_business!=-1)
-         heatprotection+=12; // Business front -- high protection
-      else
-         heatprotection+=0; // Abandoned warehouse -- no protection
-      break;
-   case SITE_RESIDENTIAL_SHELTER:
-      heatprotection+=0; // Homeless shelter -- no protection
-      break;
-   case SITE_RESIDENTIAL_TENEMENT:
-      heatprotection+=4; // Lower class housing -- low protection
-      break;
-   case SITE_RESIDENTIAL_APARTMENT:
-      heatprotection+=8; // Middle class housing -- medium protection
-      break;
-   case SITE_RESIDENTIAL_BOMBSHELTER:
-   case SITE_OUTDOOR_BUNKER:
-   case SITE_BUSINESS_BARANDGRILL:
-   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-      heatprotection+=12; // Upper class housing -- high protection
-      break;
-   }
-
-   if(law[LAW_FLAGBURNING]==-2&&location[l]->haveflag) {heatprotection+=6;} // More protection if the flag is sacred
-   else if(law[LAW_FLAGBURNING]!=-2&&location[l]->haveflag) {heatprotection+=2;} // Some if the flag isn't
-   else if(law[LAW_FLAGBURNING]==-2&&!(location[l]->haveflag)) {heatprotection-=2;} // Lose some if it is and you have no flag
-   else {heatprotection+=0;} // None if it isn't and you have no flag
-
-   //Protection varies with how many people in the safehouse
-   if(numpres>60)heatprotection-=20;
-   if(numpres>40)heatprotection-=12;
-   if(numpres>20)heatprotection-=6;
-   if(numpres<10)heatprotection+=1;
-   if(numpres<4)heatprotection+=2;
-   if(numpres<2)heatprotection+=3;
-
-   if(heatprotection<0)heatprotection=0;
-
-   heat_protection=heatprotection*0.05;
-   if(heat_protection>=1.0)
-      heat_protection=0.95;
 }
 
 void chaseseqst::clean(void)
