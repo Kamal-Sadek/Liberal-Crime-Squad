@@ -5,10 +5,17 @@
     <exit>Leave</exit>
 
     <department>
-        <entry>Buy a Liberal Gun</entry>
+        <entry>Buy a Liberal Weapon</entry>
         <letter>g</letter>
         <fullscreen>false</fullscreen>
-        <exit>Done buying Liberal guns</exit>
+        <exit>Done buying Liberal weapons</exit>
+        <item>
+            <class>WEAPON</class>
+            <description>Buy a Combat Knife</description>
+            <type>WEAPON_COMBATKNIFE</type>
+            <letter>o</letter>
+            <price>20</price>
+        </item>
         <item>
             <class>WEAPON</class>
             <description>Buy a Shotgun</description>
@@ -138,7 +145,7 @@
     </department>
 
     <department>
-        <entry>Buy Liberal tools</entry>
+        <entry>Buy Liberal Tools</entry>
         <letter>t</letter>
         <fullscreen>false</fullscreen>
         <exit>Leave</exit>

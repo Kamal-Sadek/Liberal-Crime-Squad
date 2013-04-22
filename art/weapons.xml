@@ -202,6 +202,32 @@
         </attack>
     </weapontype>
 
+    <weapontype idname="WEAPON_COMBATKNIFE"> 
+        <name>Combat Knife</name>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>1</legality>
+        <fencevalue>30</fencevalue>
+        <bashstrengthmod>105</bashstrengthmod>
+        <size>4</size>
+        <attack>
+            <attack_description>slices at</attack_description>
+            <hit_description>slicing</hit_description>
+            <skill>KNIFE</skill>
+            <strentgh_min>1</strentgh_min>
+            <strength_max>6</strength_max>
+            <random_damage>75</random_damage>
+            <fixed_damage>15</fixed_damage>
+            <tears>true</tears>
+            <cuts>true</cuts>
+            <bleeding>true</bleeding>
+            <armorpiercing>3</armorpiercing>
+            <critical>
+                <chance>13</chance>
+            </critical>
+        </attack>
+    </weapontype>
+
     <weapontype idname="WEAPON_SHANK">
         <name>Shank</name>
         <name_future>Cyber Shank</name_future>
