@@ -67,6 +67,8 @@ void special_bouncer_greet_squad()
 
 void special_bouncer_assess_squad()
 {
+   if(location[cursite]->renting==RENTING_PERMANENT) return;
+
    bool autoadmit=0;
    char sleepername[80];
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
@@ -159,7 +161,7 @@ void special_bouncer_assess_squad()
             // High security in gentleman's club? Gone
             if(sitetype==SITE_BUSINESS_CIGARBAR && location[cursite]->highsecurity)
                if(rejected>REJECTED_GUESTLIST)rejected=REJECTED_GUESTLIST;
-            if(location[cursite]->renting==RENTING_CCS)
+            if(location[cursite]->renting==RENTING_CCS && location[cursite]->type!=SITE_BUSINESS_BARANDGRILL)
                rejected=REJECTED_CCS;
          }
       }
@@ -1223,6 +1225,7 @@ void special_sweatshop_equipment(void)
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].flag|=SITEBLOCK_DEBRIS;
          sitecrime++;
          juiceparty(5,100);
          sitestory->crime.push_back(CRIME_BREAK_SWEATSHOP);
@@ -1267,6 +1270,7 @@ void special_polluter_equipment(void)
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].flag|=SITEBLOCK_DEBRIS;
          sitecrime+=2;
          juiceparty(5,100);
          sitestory->crime.push_back(CRIME_BREAK_FACTORY);
@@ -1889,6 +1893,7 @@ void special_display_case(void)
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
+         levelmap[locx][locy][locz].flag|=SITEBLOCK_DEBRIS;
          sitecrime++;
          juiceparty(5,100);
          sitestory->crime.push_back(CRIME_VANDALISM);
@@ -1960,7 +1965,7 @@ void special_security(bool metaldetect)
 
    for(int p=0;p<pool.size();p++)
    {
-      if(pool[p]->base==cursite)
+      if(pool[p]->base==cursite && pool[p]->type == encounter[0].type)
       {
          autoadmit=1;
          strcpy(sleepername,pool[p]->name);
@@ -1974,13 +1979,15 @@ void special_security(bool metaldetect)
    move(16,1);
    if(sitealarm)
    {
-      addstr("Looks like security is in disarray.", gamelog);
+      addstr("An abandoned security checkpoint.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=SPECIAL_NONE;
+      return;
    }
    else if(autoadmit)
    {
       addstr("The squad flashes ID badges.", gamelog);
+      metaldetect=false;
       gamelog.newline();
       levelmap[locx][locy][locz].special=SPECIAL_SECURITY_SECONDVISIT;
    }
@@ -1995,8 +2002,6 @@ void special_security(bool metaldetect)
    refresh();
    getch();
 
-   if(sitealarm) return;
-
    char rejected=NOT_REJECTED;
    
    // Size up the squad for entry
@@ -2007,24 +2012,27 @@ void special_security(bool metaldetect)
          // Wrong clothes? Gone
          if(activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss!=ANIMALGLOSS_ANIMAL)
             if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
-         if(!autoadmit && !hasdisguise(*activesquad->squad[s]))
-            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
-         // Busted, cheap, bloody clothes? Gone
-         if(!autoadmit && activesquad->squad[s]->get_armor().is_bloody())
-            if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
-         if(!autoadmit && activesquad->squad[s]->get_armor().is_damaged())
-            if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
-         if(!autoadmit && activesquad->squad[s]->get_armor().get_quality()!=1)
-            if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
-         // Suspicious weapons? Gone
-         if(!autoadmit && weaponcheck(*activesquad->squad[s], metaldetect)>0)
-            if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
-         // Fail a tough disguise check? Gone
-         if(!autoadmit && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
-            if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
-         // Underage? Gone
-         if(!autoadmit && activesquad->squad[s]->age<18)
-            if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
+         if(!autoadmit)
+         {
+            if(!hasdisguise(*activesquad->squad[s]))
+               if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+            // Busted, cheap, bloody clothes? Gone
+            if(activesquad->squad[s]->get_armor().is_bloody())
+               if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
+            if(activesquad->squad[s]->get_armor().is_damaged())
+               if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
+            if(activesquad->squad[s]->get_armor().get_quality()!=1)
+               if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
+            // Suspicious weapons? Gone
+            if(weaponcheck(*activesquad->squad[s], metaldetect)>0)
+               if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
+            // Fail a tough disguise check? Gone
+            if(disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
+               if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
+            // Underage? Gone
+            if(activesquad->squad[s]->age<18)
+               if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
+         }
       }
    }
    move(17,1);
@@ -2468,3 +2476,42 @@ void special_bank_money(void)
    refresh();
    getch();
 }
+
+void special_ccs_boss(void)
+{
+   if(sitealarm||sitealienate||
+      location[cursite]->siege.siege)
+   {
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("The CCS leader is ready for you!", gamelog);
+      gamelog.newline();
+      levelmap[locx][locy][locz].special=-1;
+      refresh();
+      getch();
+
+      for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+      makecreature(encounter[0],CREATURE_CCS_ARCHCONSERVATIVE);
+      makecreature(encounter[1],CREATURE_CCS_VIGILANTE);
+      makecreature(encounter[2],CREATURE_CCS_VIGILANTE);
+      makecreature(encounter[3],CREATURE_CCS_VIGILANTE);
+      makecreature(encounter[4],CREATURE_CCS_VIGILANTE);
+      makecreature(encounter[5],CREATURE_CCS_VIGILANTE);
+   }
+   else
+   {
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(16,1);
+      addstr("The CCS leader is here.", gamelog);
+      gamelog.newline();
+      levelmap[locx][locy][locz].special=-1;
+      refresh();
+      getch();
+
+      for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+      makecreature(encounter[0],CREATURE_CCS_ARCHCONSERVATIVE);
+   }
+}
+

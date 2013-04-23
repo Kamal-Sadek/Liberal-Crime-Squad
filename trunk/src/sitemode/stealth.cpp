@@ -288,7 +288,7 @@ void disguisecheck(int timer)
             // Spotted! Act casual.
             if(spotted)
             {
-               // Guns of death and doom are not very casual.
+               // Scary weapons are not very casual.
                if(weaponcheck(*activesquad->squad[i]) == 2)
                {
                   noticed = true;
@@ -468,113 +468,78 @@ void disguisecheck(int timer)
    }
 }
 
-/* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(Creature &cr, bool metaldetect)
+char weapon_in_character(const string& wtype, const string& atype)
 {
-   bool suspicious=cr.get_weapon().is_suspicious();  // Does the weapon look at all suspicious?
-   char illegal=0;     // Is the weapon illegal?
-   char incharacter=-1; // Is the weapon in character for the clothing the LCS is wearing?
-   bool concealed=cr.weapon_is_concealed();   // Is the weapon concealed under clothing?
+   if(atype == "ARMOR_LABCOAT" && wtype == "WEAPON_SYRINGE")
+      return CREATURE_SCIENTIST_LABTECH;
+   
+   if(atype == "ARMOR_BLACKROBE" && wtype == "WEAPON_GAVEL")
+      return CREATURE_JUDGE_LIBERAL;
+   
+   if(atype == "ARMOR_SECURITYUNIFORM" && (wtype == "WEAPON_REVOLVER_38" ||
+         wtype == "WEAPON_REVOLVER_44"    || wtype == "WEAPON_DESERT_EAGLE" ||
+         wtype == "WEAPON_SEMIPISTOL_9MM" || wtype == "WEAPON_SEMIPISTOL_45" ||
+         wtype == "WEAPON_NIGHTSTICK"     || wtype == "WEAPON_MP5_SMG"))
+      return CREATURE_SECURITYGUARD;
+   
+   if((atype == "ARMOR_POLICEUNIFORM"   || atype == "ARMOR_POLICEARMOR") &&
+         (wtype == "WEAPON_REVOLVER_38"   || wtype == "WEAPON_REVOLVER_44" ||
+         wtype == "WEAPON_DESERT_EAGLE"   || wtype == "WEAPON_SEMIPISTOL_9MM" ||
+         wtype == "WEAPON_SEMIPISTOL_45"  || wtype == "WEAPON_NIGHTSTICK" ||
+         wtype == "WEAPON_SHOTGUN_PUMP"))
+      return CREATURE_COP;
 
-   //CHECK UNIFORM
-   if(cr.get_weapon().get_itemtypename() == "WEAPON_SYRINGE"
-      && cr.get_armor().get_itemtypename() == "ARMOR_LABCOAT")
-      incharacter=CREATURE_SCIENTIST_LABTECH;
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_GAVEL"
-           && cr.get_armor().get_itemtypename() == "ARMOR_BLACKROBE")
-      incharacter=CREATURE_JUDGE_LIBERAL;
-   else if((cr.get_weapon().get_itemtypename() == "WEAPON_REVOLVER_38"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_REVOLVER_44"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_DESERT_EAGLE"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_9MM"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_45"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_NIGHTSTICK"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_MP5_SMG")
-            && (cr.get_armor().get_itemtypename() == "ARMOR_SECURITYUNIFORM"))
-      incharacter=CREATURE_SECURITYGUARD;
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_REVOLVER_38"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_REVOLVER_44"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_DESERT_EAGLE"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_9MM"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIPISTOL_45"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_NIGHTSTICK"
-            || cr.get_weapon().get_itemtypename() == "WEAPON_SHOTGUN_PUMP")
+   if(wtype == "WEAPON_SMG_MP5" && wtype == "WEAPON_CARBINE_M4")
    {
-      if(cr.get_armor().get_itemtypename() == "ARMOR_POLICEUNIFORM"
-         || (cr.get_armor().get_itemtypename() == "ARMOR_POLICEARMOR"))
-         incharacter=CREATURE_COP;
-      else if(cr.get_armor().get_itemtypename() == "MASK_CHENEY")
-         incharacter=CREATURE_HICK;
+      if(atype == "ARMOR_SWATARMOR")
+         return CREATURE_SWAT;
+      else if(atype == "ARMOR_SECURITYUNIFORM" && law[LAW_GUNCONTROL]==-2)
+         return CREATURE_SECURITYGUARD;
+      else if(atype == "ARMOR_MILITARY" || atype == "ARMOR_ARMYARMOR")
+         return CREATURE_SOLDIER;
    }
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_SMG_MP5"
-           || cr.get_weapon().get_itemtypename() == "WEAPON_CARBINE_M4")
-   {
-      // Police, military, or, in extreme times, security
-      if(cr.get_armor().get_itemtypename() == "ARMOR_SWATARMOR")
-      {
-         incharacter=CREATURE_SWAT;
-      }
-      if(cr.get_armor().get_itemtypename() == "ARMOR_SECURITYUNIFORM"&&law[LAW_GUNCONTROL]==-2)
-      {
-         incharacter=CREATURE_SECURITYGUARD;
-      }
-      if(cr.get_armor().get_itemtypename() == "ARMOR_MILITARY"
-         || cr.get_armor().get_itemtypename() == "ARMOR_ARMYARMOR")
-      {
-         incharacter=CREATURE_SOLDIER;
-      }
-   }
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_AUTORIFLE_M16"
-           || cr.get_weapon().get_itemtypename() == "WEAPON_SEMIRIFLE_AR15")
+
+   if(wtype == "WEAPON_AUTORIFLE_M16" || wtype == "WEAPON_SEMIRIFLE_AR15")
    {
       // Military
-      if(cr.get_armor().get_itemtypename() == "ARMOR_MILITARY"
-         ||cr.get_armor().get_itemtypename() == "ARMOR_ARMYARMOR")
-      {
-         incharacter=CREATURE_SOLDIER;
-      }
-      if(cr.get_armor().get_itemtypename() == "ARMOR_DEATHSQUADUNIFORM")
-      {
-         incharacter=CREATURE_DEATHSQUAD;
-      }
-   }
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_AXE"
-           && cr.get_armor().get_itemtypename() == "ARMOR_BUNKERGEAR")
-   {
-      incharacter=CREATURE_FIREFIGHTER;
-   }
-   else if(cr.get_weapon().get_itemtypename() == "WEAPON_FLAMETHROWER"
-           && cr.get_armor().get_itemtypename() == "ARMOR_BUNKERGEAR"&&law[LAW_FREESPEECH]==-2)
-   {
-      incharacter=CREATURE_FIREFIGHTER;
+      if(atype == "ARMOR_MILITARY" || atype == "ARMOR_ARMYARMOR")
+         return CREATURE_SOLDIER;
+      if(atype == "ARMOR_DEATHSQUADUNIFORM")
+         return CREATURE_DEATHSQUAD;
    }
 
-   //CHECK LEGALITY
-   if (cr.get_weapon().get_legality() < law[LAW_GUNCONTROL])
-      illegal = 1;
-   else
-      illegal = 0;
+   if(wtype == "WEAPON_AXE" && atype == "ARMOR_BUNKERGEAR")
+      return CREATURE_FIREFIGHTER;
 
+   if(wtype == "WEAPON_FLAMETHROWER" && atype == "ARMOR_BUNKERGEAR" && law[LAW_FREESPEECH]==-2)
+      return CREATURE_FIREFIGHTER;
+
+   return -1;
+}
+
+/* checks if a creature's weapon is suspicious */
+char weaponcheck(Creature &cr, bool metaldetect)
+{
+   bool suspicious = cr.get_weapon().is_suspicious();
+   bool concealed = cr.weapon_is_concealed();
+   char incharacter = weapon_in_character(cr.get_weapon().get_itemtypename(), cr.get_armor().get_itemtypename());
+   bool illegal = cr.get_weapon().get_legality() < law[LAW_GUNCONTROL];
 
    // If your disguise is inappropriate to the current location,
    // then being in character isn't sufficient
-   if(hasdisguise(cr)==false)
-   {
-      incharacter=-1;
-   }
+   if(hasdisguise(cr) == false)
+      incharacter = -1;
 
    if(suspicious)
    {
-      if(incharacter!=-1||(concealed && !metaldetect))
-      {
-         // if(illegal) return -1; else // OK, but busted if you shoot it
-            return 0;  // OK
-      }
-      else // if(illegal)
-         return 2;
-      //else return 1;
+      if(concealed && !metaldetect)
+         return 0; // Hidden weapon, nothing to see
+      else if(incharacter >= 0)
+         return 1; // You look like you're supposed to have that weapon
+      else
+         return 2; // Looks like trouble
    }
-   return 0;
+   return 0; // Nothing to see here
 }
 
 

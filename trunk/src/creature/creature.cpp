@@ -1270,7 +1270,7 @@ void nameCCSMember(Creature &cr)
 {
    if(cr.get_armor().get_itemtypename()=="ARMOR_CIVILLIANARMOR")
    {
-      strcpy(cr.name,"Mercenary");
+      strcpy(cr.name,"Elite Security");
    }
    else if(cr.get_armor().get_itemtypename()=="ARMOR_ARMYARMOR")
    {
@@ -1278,7 +1278,7 @@ void nameCCSMember(Creature &cr)
    }
    else if(cr.get_armor().get_itemtypename()=="ARMOR_HEAVYARMOR")
    {
-      strcpy(cr.name,"Hardened Veteran");
+      strcpy(cr.name,"CCS Heavy");
    }
    else if(cr.get_weapon().get_itemtypename()=="WEAPON_SHOTGUN_PUMP"||LCSrandom(2))
    {

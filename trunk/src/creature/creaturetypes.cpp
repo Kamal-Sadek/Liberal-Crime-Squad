@@ -1019,11 +1019,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       }
       case CREATURE_CCS_ARCHCONSERVATIVE:
          GIVE_GENDER_MALE;
-         weapon=new Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
-         cr.give_weapon(*weapon,NULL);
-         clips=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],9);
-         cr.take_clips(*clips,9);
-         cr.reload(false);
+         
          armor=new Armor(*armortype[getarmortype("ARMOR_HEAVYARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(51)+150;
@@ -1032,10 +1028,18 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
 
-         if(mode==GAMEMODE_SITE/* && sitealarm>0*/)
-         {
-            nameCCSMember(cr);
+         if(location[cursite]->siege.siege) {
+            strcpy(cr.name,"CCS Team Leader");
+         } else if(ccs_kills < 2) {
+            strcpy(cr.name,"CCS Lieutenant");
+         } else {
+            strcpy(cr.name,"CCS Founder");
          }
+         weapon=new Weapon(*weapontype[getweapontype("WEAPON_SHOTGUN_AA12")]);
+         cr.give_weapon(*weapon,NULL);
+         clips=new Clip(*cliptype[getcliptype("CLIP_BUCKSHOT")],9);
+         cr.take_clips(*clips,9);
+         cr.reload(false);
 
          cr.set_skill(SKILL_RIFLE,LCSrandom(4)+6);
          cr.set_skill(SKILL_PISTOL,LCSrandom(4)+6);
@@ -1045,6 +1049,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6));
          cr.set_skill(SKILL_BUSINESS,LCSrandom(6));
          cr.set_skill(SKILL_RELIGION,LCSrandom(6)+2);
+         cr.set_skill(SKILL_DODGE,LCSrandom(6)+2);
 
          for(a=0;a<ATTNUM;a++)
          {

@@ -204,9 +204,9 @@
 
     <weapontype idname="WEAPON_COMBATKNIFE"> 
         <name>Combat Knife</name>
+        <name_future>Hyper-Knife</name_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <legality>1</legality>
         <fencevalue>30</fencevalue>
         <bashstrengthmod>105</bashstrengthmod>
         <size>4</size>
@@ -217,7 +217,7 @@
             <strentgh_min>1</strentgh_min>
             <strength_max>6</strength_max>
             <random_damage>75</random_damage>
-            <fixed_damage>15</fixed_damage>
+            <fixed_damage>10</fixed_damage>
             <tears>true</tears>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
@@ -633,19 +633,54 @@
             <attack_description>shoots at</attack_description>
             <skill>SHOTGUN</skill>
             <ammotype>CLIP_BUCKSHOT</ammotype>
-            <random_damage>201</random_damage>
+            <random_damage>251</random_damage>
             <fixed_damage>10</fixed_damage>
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>0</armorpiercing>
-            <accuracy_bonus>2</accuracy_bonus>
-            <critical>
-                <chance>33</chance>
-                <random_damage>301</random_damage>
-                <fixed_damage>10</fixed_damage>
-                <severtype>NASTY</severtype>
-            </critical>
+            <accuracy_bonus>4</accuracy_bonus>
+            <severtype>NASTY</severtype>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>6</strength_min>
+            <strength_max>12</strength_max>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+    
+    <weapontype idname="WEAPON_SHOTGUN_AA12">
+        <name>AA-12 Auto Shotgun</name>
+        <name_future>Z-12 Chain Burstgun</name_future>
+        <shortname>AA-12</shortname>
+        <shortname_future>Z-12</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-1</legality>
+        <fencevalue>400</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>10</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>SHOTGUN</skill>
+            <ammotype>CLIP_BUCKSHOT</ammotype>
+            <random_damage>251</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>0</armorpiercing>
+            <accuracy_bonus>4</accuracy_bonus>
+            <number_attacks>2</number_attacks>
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
+            <severtype>NASTY</severtype>
         </attack>
         <attack>
             <priority>2</priority>

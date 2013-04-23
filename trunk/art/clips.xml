@@ -64,9 +64,9 @@
     </cliptype>
 
     <cliptype idname="CLIP_BUCKSHOT">
-        <name>6 Shotgun Shells</name>
+        <name>Shotgun Shells</name>
         <name_future>Shotgun Plasma Pack</name_future>
-        <ammo>6</ammo>
+        <ammo>8</ammo>
         <fencevalue>3</fencevalue>
     </cliptype>
 
