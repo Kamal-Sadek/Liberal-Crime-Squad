@@ -612,12 +612,9 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
    switch(cr.type)
    {
       case CREATURE_SCIENTIST_EMINENT:
-         income=static_cast<int>(5000*cr.infiltration);
-         break;
       case CREATURE_CORPORATE_CEO:
-         income=static_cast<int>(50000*cr.infiltration);
-         break;
       case CREATURE_CORPORATE_MANAGER:
+      case CREATURE_BANK_MANAGER:
          income=static_cast<int>(5000*cr.infiltration);
          break;
       default:
