@@ -1774,6 +1774,7 @@ char talkInCombat(Creature &a, Creature &tk)
                      if(((encounter[e].type==CREATURE_DEATHSQUAD||
                         encounter[e].type==CREATURE_AGENT||
                         encounter[e].type==CREATURE_MERC||
+                        encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                         encounter[e].type==CREATURE_GANGUNIT))
                         &&encounter[e].align==ALIGN_CONSERVATIVE)
                      {
@@ -1988,6 +1989,7 @@ char talkInCombat(Creature &a, Creature &tk)
                if(((encounter[e].type==CREATURE_DEATHSQUAD||
                   encounter[e].type==CREATURE_AGENT||
                   encounter[e].type==CREATURE_MERC||
+                  encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                   encounter[e].type==CREATURE_GANGUNIT)&&
                   LCSrandom(2))&&encounter[e].align==ALIGN_CONSERVATIVE)
                {
@@ -2305,7 +2307,7 @@ char heyMisterDog(Creature &a, Creature &tk)
          break;
       case 4:
          pitch = "\"Wanna join the LCS?\"";
-         response = "\"Maybe. Do you have a good veteranary plan?\"";
+         response = "\"Do you have a good veteranary plan?\"";
          break;
       case 5:
          pitch = "\"Want me to untie you?\"";
@@ -2320,8 +2322,8 @@ char heyMisterDog(Creature &a, Creature &tk)
          response = "\"Heheheh, you're funny. Okay, I won't rat you out.\"";
          break;
       case 8:
-         pitch = "\"We should bark together!\"";
-         response = "\"Barkety bark, baby. Tell me more.\"";
+         pitch = "\"Conservatives kick dogs!\"";
+         response = "\"That IS disturbing. What can I do?\"";
          break;
       case 9:
          pitch = "\"All we are saying is give fleas a chance.\"";

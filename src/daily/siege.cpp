@@ -2708,25 +2708,49 @@ void conquertextccs(void)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,16);
-      addstr("Gunfire still ringing in their ears, the squad revels in");
-      move(4,11);
-      addstr("their victory.  The CCS is bound to have another safe house, but");
+      if(ccs_siege_kills>10)
+      {
+         addstr("Gunfire still ringing in their ears, the squad revels in");
+         move(4,11);
+         addstr("their victory.  ");
+      }
+      else
+      {
+         addstr("The CCS Lieutenant lying dead at their feet, the squad");
+         move(4,11);
+         addstr("slips away.  ");
+      }
+      addstr("The CCS Founder wasn't here, but for now, their");
       move(5,11);
-      addstr("for now, their power has been severely weakened.  This will make");
+      addstr("power has been severely weakened.  Once the safehouse cools off,");
       move(6,11);
-      addstr("a fine base for future Liberal operations.");
+      addstr("this will make a fine base for future Liberal operations.");
    }
    else
    {
       move(3,16);
-      addstr("Gunfire still ringing in their ears, the squad revels in");
-      move(4,11);
-      addstr("their final victory.");
-
-      move(6,16);
-      addstr("As your Liberals pick through the remains of the safehouse,");
-      move(7,11);
-      addstr("it is increasingly clear that this was the CCS's last safe house.");
+      if(ccs_siege_kills>10)
+      {
+         addstr("Gunfire still ringing in their ears, the squad revels in");
+         move(4,11);
+         addstr("their final victory.  ");
+         
+         move(6,16);
+         addstr("As your Liberals pick through the remains of the safehouse,");
+         move(7,11);
+         addstr("it is increasingly clear that this was the CCS's last safe house.");
+      }
+      else
+      {
+         addstr("The CCS Founder lying dead at their feet, the squad");
+         move(4,11);
+         addstr("slips away.  ");
+            
+         move(6,16);
+         addstr("With its Founder killed in the heart of their own base,");
+         move(7,11);
+         addstr("the last of the enemy's morale and confidence is shattered.");
+      }
 
       move(9,16);
       addstr("The CCS has been completely destroyed.  Now wasn't there a");

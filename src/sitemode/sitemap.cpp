@@ -155,7 +155,25 @@ void initsite(Location &loc)
       }
    }
    
-   if(loaded) { }
+   if(loaded)
+   {
+      if(loc.renting==RENTING_PERMANENT && loc.type!=SITE_RESIDENTIAL_APARTMENT &&
+         loc.type!=SITE_RESIDENTIAL_APARTMENT_UPSCALE && loc.type!=SITE_RESIDENTIAL_TENEMENT)
+      {
+         for(x=0;x<MAPX;x++)
+         for(y=0;y<MAPY;y++)
+
+         for(z=0;z<MAPZ;z++)
+         {
+            // Clear high security, locked doors, alarms, and site specials
+            // from LCS non-apartment safehouses
+            levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
+            levelmap[x][y][z].flag&=~SITEBLOCK_RESTRICTED;
+            levelmap[x][y][z].flag&=~SITEBLOCK_ALARMED;
+            levelmap[x][y][z].special=-1;
+         }
+      }
+   }
    else if (oldMapMode==false) // Try to load from the sitemaps
    {
       switch(loc.type)
@@ -475,7 +493,7 @@ void initsite(Location &loc)
       }
    }
 
-   if (oldMapMode) // SAV - Did I mention we have some more things to do?
+   if (oldMapMode)
    {
      //ADD RESTRICTIONS
      bool restricted=0;
@@ -746,6 +764,7 @@ void initsite(Location &loc)
             {
                switch(loc.type)
                {
+                  case SITE_BUSINESS_BANK:
                   case SITE_RESIDENTIAL_SHELTER:
                   case SITE_BUSINESS_CRACKHOUSE:
                   case SITE_BUSINESS_JUICEBAR:
@@ -754,6 +773,9 @@ void initsite(Location &loc)
                   case SITE_BUSINESS_VEGANCOOP:
                   case SITE_BUSINESS_INTERNETCAFE:
                   case SITE_INDUSTRY_WAREHOUSE:
+                  case SITE_BUSINESS_BARANDGRILL:
+                  case SITE_OUTDOOR_BUNKER:
+                  case SITE_RESIDENTIAL_BOMBSHELTER:
                      break;
                   default:
                      levelmap[x][y][z].flag|=SITEBLOCK_LOOT;

@@ -1603,16 +1603,56 @@ void generatefiller(char *story,int amount)
 }
 
 
-
-/* news - major newspaper reporting on lcs and other topics */
-void majornewspaper(char &clearformess,char canseethings)
+newsstoryst* new_major_event()
 {
-   int i;
-   int n=0;
+   newsstoryst *ns=new newsstoryst;
+   ns->type=NEWSSTORY_MAJOREVENT;
+   do
+   {
+      ns->view=LCSrandom(VIEWNUM-3);
+      ns->positive=LCSrandom(2);
 
-   int writers=0;
+      // Skip issues that we have no news stories for
+      if(ns->view==VIEW_IMMIGRATION)continue;
+      if(ns->view==VIEW_DRUGS)continue;
+      if(ns->view==VIEW_MILITARY)continue;
+      if(ns->view==VIEW_CIVILRIGHTS)continue;
+      if(ns->view==VIEW_TORTURE)continue;
+      //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
 
-   for(i=0;i<pool.size();i++)
+      // News stories that don't apply when the law is extreme -- covering
+      // nuclear power when it's banned, police corruption when it doesn't
+      // exist, out of control pollution when it's under control, etc.
+      if(ns->positive) {
+         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]==-2)continue; // Abortion banned
+         if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue; // Death penalty banned
+         if(ns->view==VIEW_NUCLEARPOWER&&law[LAW_NUCLEARPOWER]==2)continue; // Nuclear power banned
+         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
+         if(ns->view==VIEW_POLICEBEHAVIOR&&law[LAW_POLICEBEHAVIOR]==2)continue; // Police corruption eliminated
+         if(ns->view==VIEW_INTELLIGENCE&&law[LAW_PRIVACY]==2)continue; // Privacy rights respected
+         if(ns->view==VIEW_SWEATSHOPS&&law[LAW_LABOR]==2)continue; // Sweatshops nonexistant
+         if(ns->view==VIEW_POLLUTION&&law[LAW_POLLUTION]>=1)continue; // Pollution under control
+         if(ns->view==VIEW_CORPORATECULTURE&&law[LAW_CORPORATE]==2)continue; // Regulation controls corporate corruption
+         if(ns->view==VIEW_CEOSALARY&&law[LAW_CORPORATE]==2)continue; // CEOs aren't rich
+      } else {
+         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]<2)continue; // Partial birth abortion banned
+         if(ns->view==VIEW_AMRADIO&&law[LAW_FREESPEECH]==-2)continue; // AM Radio is censored to oblivion
+         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
+      }
+
+      break;
+   }while(1);
+
+   if(ns->positive)change_public_opinion(ns->view,20,0);
+   else change_public_opinion(ns->view,-20,0);
+   public_interest[ns->view]+=50;
+   return ns;
+}
+
+int liberal_guardian_writing_power()
+{
+   int power = 0;
+   for(int i=0;i<pool.size();i++)
    {
       if(pool[i]->alive&&pool[i]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
@@ -1620,32 +1660,116 @@ void majornewspaper(char &clearformess,char canseethings)
             location[pool[i]->location]->compound_walls & COMPOUND_PRINTINGPRESS)
          {
             pool[i]->train(SKILL_WRITING,LCSrandom(3)); // Experience gain
-            writers+=pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
+            power += pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
             criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
       }
    }
+   return power;
+}
+
+newsstoryst* ccs_strikes_story()
+{
+   newsstoryst *ns=new newsstoryst;
+
+   // Chance of CCS squad wipe
+   if(LCSrandom(10))ns->type=NEWSSTORY_CCS_SITE;
+   else ns->type=NEWSSTORY_CCS_KILLED_SITE;
+
+   // Chance of positive CCS story
+   ns->positive=true;
+
+   do {
+      ns->loc=LCSrandom(location.size());
+   } while(location[ns->loc]->renting!=-1);
+
+   return ns;
+}
+
+newsstoryst* ccs_exposure_story()
+{
+   newsstoryst* ns=new newsstoryst;
+   ns->type=NEWSSTORY_CCS_NOBACKERS;
+   ns->priority = 800;
+   ccsexposure=CCSEXPOSURE_NOBACKERS;
+   // arrest seventeen representatives and eight senators
+   int arrestsleft = 8;
+   for(int i=0; i<100; i++)
+   {
+      if((senate[i]==-2 || senate[i]==-1)&&!LCSrandom(4))
+      {
+         senate[i]=2;
+         arrestsleft--;
+         if(arrestsleft<=0) break;
+      }
+   }
+   arrestsleft = 17;
+   for(int i=0; i<435; i++)
+   {
+      if((house[i]==-2 || house[i]==-1)&&!LCSrandom(4))
+      {
+         house[i]=2;
+         arrestsleft--;
+         if(arrestsleft<=0) break;
+      }
+   }
+   // change police regulation issue to be more liberal
+   law[LAW_POLICEBEHAVIOR] += 2;
+   if(law[LAW_POLICEBEHAVIOR] > ALIGN_ELITELIBERAL)
+      law[LAW_POLICEBEHAVIOR] = ALIGN_ELITELIBERAL;
+   change_public_opinion(VIEW_POLICEBEHAVIOR,50);
+   change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,50);
+
+   return ns;
+}
+
+newsstoryst* ccs_fbi_raid_story()
+{
+   newsstoryst* ns=new newsstoryst;
+   ns->type=NEWSSTORY_CCS_DEFEATED;
+   ns->priority = 800;
+   endgamestate = ENDGAME_CCS_DEFEATED;
+   // arrest or kill ccs sleepers
+   for(int p=0; p<pool.size(); p++)
+   {
+      if(pool[p]->flag & CREATUREFLAG_SLEEPER)
+      {
+         if(pool[p]->type == CREATURE_CCS_VIGILANTE || pool[p]->type == CREATURE_CCS_ARCHCONSERVATIVE ||
+            pool[p]->type == CREATURE_CCS_MOLOTOV || pool[p]->type == CREATURE_CCS_SNIPER)
+         {
+            pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+            criminalize(*pool[p],LAWFLAG_RACKETEERING);
+            capturecreature(*pool[p]);
+         }
+      }
+   }
+   // hide ccs safehouses
+   for(int l=0; l<location.size(); l++)
+   {
+      if(location[l]->renting == RENTING_CCS)
+      {
+         location[l]->renting = RENTING_NOCONTROL;
+         location[l]->hidden = true;
+      }
+   }
+   // go militarized police
+   change_public_opinion(VIEW_POLICEBEHAVIOR,-20);
+   return ns;
+}
+
+/* news - major newspaper reporting on lcs and other topics */
+void majornewspaper(char &clearformess,char canseethings)
+{
+   int i;
+   int n=0;
+
+   int writers = liberal_guardian_writing_power();
 
    //Conservative Crime Squad Strikes!
-   if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate && canseethings)
+   if(endgamestate<ENDGAME_CCS_DEFEATED && LCSrandom(30)<endgamestate)
    {
-      newsstoryst *ns=new newsstoryst;
-
-      // 10% chance of CCS squad wipe
-      if(LCSrandom(10))ns->type=NEWSSTORY_CCS_SITE;
-      else ns->type=NEWSSTORY_CCS_KILLED_SITE;
-
-      // 20% chance of rampage
-      ns->positive=LCSrandom(5);
-      if(ns->positive)ns->positive=1;
-
-      do
-      {
-         ns->loc=LCSrandom(location.size());
-      } while(location[ns->loc]->renting!=-1);
-
-      newsstory.push_back(ns);
+      newsstory.push_back(ccs_strikes_story());
    }
 
    // The slow defeat of the conservative crime squad...
@@ -1653,7 +1777,6 @@ void majornewspaper(char &clearformess,char canseethings)
    {
       if(endgamestate >= ENDGAME_CCS_APPEARANCE && endgamestate < ENDGAME_CCS_DEFEATED)
       {
-         newsstoryst *ns;
          switch(ccsexposure)
          {
          default:
@@ -1661,146 +1784,40 @@ void majornewspaper(char &clearformess,char canseethings)
          case CCSEXPOSURE_LCSGOTDATA:
             break;
          case CCSEXPOSURE_EXPOSED:
-            {
-               ns=new newsstoryst;
-               ns->type=NEWSSTORY_CCS_NOBACKERS;
-               ns->priority = 800;
-               newsstory.push_back(ns);
-               ccsexposure=CCSEXPOSURE_NOBACKERS;
-               // arrest seventeen representatives and eight senators
-               int arrestsleft = 8;
-               for(int i=0; i<100; i++)
-               {
-                  if((senate[i]==-2 || senate[i]==-1)&&!LCSrandom(4))
-                  {
-                     senate[i]=2;
-                     arrestsleft--;
-                     if(arrestsleft<=0) break;
-                  }
-               }
-               arrestsleft = 17;
-               for(int i=0; i<435; i++)
-               {
-                  if((house[i]==-2 || house[i]==-1)&&!LCSrandom(4))
-                  {
-                     house[i]=2;
-                     arrestsleft--;
-                     if(arrestsleft<=0) break;
-                  }
-               }
-               // change police regulation issue to be more liberal
-               law[LAW_POLICEBEHAVIOR] += 2;
-               if(law[LAW_POLICEBEHAVIOR] > ALIGN_ELITELIBERAL)
-                  law[LAW_POLICEBEHAVIOR] = ALIGN_ELITELIBERAL;
-               change_public_opinion(VIEW_POLICEBEHAVIOR,50);
-               change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,50);
-               break;
-            }
+            newsstory.push_back(ccs_exposure_story());
+            break;
          case CCSEXPOSURE_NOBACKERS:
-            ns=new newsstoryst;
-            ns->type=NEWSSTORY_CCS_DEFEATED;
-            ns->priority = 800;
-            newsstory.push_back(ns);
-            endgamestate = ENDGAME_CCS_DEFEATED;
-            // arrest or kill ccs sleepers
-            for(int p=0; p<pool.size(); p++)
-            {
-               if(pool[p]->flag & CREATUREFLAG_SLEEPER)
-               {
-                  if(pool[p]->type == CREATURE_CCS_VIGILANTE || pool[p]->type == CREATURE_CCS_ARCHCONSERVATIVE ||
-                     pool[p]->type == CREATURE_CCS_MOLOTOV || pool[p]->type == CREATURE_CCS_SNIPER)
-                  {
-                     pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-                     criminalize(*pool[p],LAWFLAG_RACKETEERING);
-                     capturecreature(*pool[p]);
-                  }
-               }
-            }
-            // hide ccs safehouses
-            for(int l=0; l<location.size(); l++)
-            {
-               if(location[l]->renting == RENTING_CCS)
-               {
-                  location[l]->renting = RENTING_NOCONTROL;
-                  location[l]->hidden = true;
-               }
-            }
-            // go militarized police
-            change_public_opinion(VIEW_POLICEBEHAVIOR,-20);
+            newsstory.push_back(ccs_fbi_raid_story());
             break;
          }
       }
    }
 
-   //SET UP MAJOR EVENTS
+   // Random major event news stories
    if(!LCSrandom(60))
    {
-      newsstoryst *ns=new newsstoryst;
-      ns->type=NEWSSTORY_MAJOREVENT;
-      do
-      {
-         ns->view=LCSrandom(VIEWNUM-3);
-         ns->positive=LCSrandom(2);
-
-         // Skip issues that we have no news stories for
-         if(ns->view==VIEW_IMMIGRATION)continue;
-         if(ns->view==VIEW_DRUGS)continue;
-         if(ns->view==VIEW_MILITARY)continue;
-         if(ns->view==VIEW_CIVILRIGHTS)continue;
-         if(ns->view==VIEW_TORTURE)continue;
-         //if(ns->view==VIEW_POLITICALVIOLENCE)continue;
-
-         //NO ABORTION
-         if(ns->view==VIEW_WOMEN&&ns->positive&&law[LAW_ABORTION]==-2)continue;
-         //NO PARTIAL BIRTH ABORTION
-         if(ns->view==VIEW_WOMEN&&!ns->positive&&law[LAW_ABORTION]<2)continue;
-         //NO DEATH PENALTY
-         if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue;
-         //NO NUCLEAR POWER
-         if(ns->view==VIEW_NUCLEARPOWER&&ns->positive&&law[LAW_NUCLEARPOWER]==2)continue;
-         //NO ANIMAL RESEARCH
-         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue;
-         //NO BAD COPS
-         if(ns->view==VIEW_POLICEBEHAVIOR&&ns->positive&&law[LAW_POLICEBEHAVIOR]==2)continue;
-         //NO PRIVACY VIOLATIONS
-         if(ns->view==VIEW_INTELLIGENCE&&ns->positive&&law[LAW_PRIVACY]==2)continue;
-         //NO SWEATSHOPS
-         if(ns->view==VIEW_SWEATSHOPS&&ns->positive&&law[LAW_LABOR]==2)continue;
-         //NO POLLUTION
-         if(ns->view==VIEW_POLLUTION&&ns->positive&&law[LAW_POLLUTION]>=1)continue;
-         //NO ENRONS
-         if(ns->view==VIEW_CORPORATECULTURE&&ns->positive&&law[LAW_CORPORATE]==2)continue;
-         //NO CEOS
-         if(ns->view==VIEW_CEOSALARY&&ns->positive&&law[LAW_CORPORATE]==2)continue;
-         //NO FREEDOM OF SPEECH
-         if(ns->view==VIEW_AMRADIO&&!ns->positive&&law[LAW_FREESPEECH]==-2)continue;
-
-         break;
-      }while(1);
-      newsstory.push_back(ns);
-
-      if(ns->positive)change_public_opinion(ns->view,20,0);
-      else change_public_opinion(ns->view,-20,0);
-      public_interest[ns->view]+=50;
+      newsstory.push_back(new_major_event());
    }
 
-   //DELETE STORIES THAT HAVE NO CONTENT
+   // Delete stories that have no content or shouldn't be reported on
    sitestory = 0;
    for(n=newsstory.size()-1;n>=0;n--)
    {
+      // Squad site action stories without crimes
       if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&
-         newsstory[n]->crime.size()==0) // Low content ignored
+         newsstory[n]->crime.size()==0)
       {
          delete newsstory[n];
          newsstory.erase(newsstory.begin() + n);
          continue;
       }
 
+      // Police killed stories without police being killed
       if(newsstory[n]->type==NEWSSTORY_CARTHEFT ||
-         newsstory[n]->type==NEWSSTORY_NUDITYARREST||
-         newsstory[n]->type==NEWSSTORY_WANTEDARREST||
-         newsstory[n]->type==NEWSSTORY_DRUGARREST||
-         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST||
+         newsstory[n]->type==NEWSSTORY_NUDITYARREST ||
+         newsstory[n]->type==NEWSSTORY_WANTEDARREST ||
+         newsstory[n]->type==NEWSSTORY_DRUGARREST ||
+         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST ||
          newsstory[n]->type==NEWSSTORY_BURIALARREST)
       {
          char conf=0;
@@ -1820,7 +1837,7 @@ void majornewspaper(char &clearformess,char canseethings)
          }
       }
 
-      // Suppress news about sieges that aren't police actions
+      // Sieges that aren't police actions
       if((newsstory[n]->type==NEWSSTORY_SQUAD_ESCAPED||
           newsstory[n]->type==NEWSSTORY_SQUAD_FLEDATTACK||
           newsstory[n]->type==NEWSSTORY_SQUAD_DEFENDED||

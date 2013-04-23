@@ -169,7 +169,7 @@ void constructeventstory(char *story,short view,char positive)
          case VIEW_DEATHPENALTY:
          {
             char state[50];
-                 makestate(state);strcat(story,state);
+            strcat(story,statename());
             strcat(story," - An innocent citizen has been put to death in the electric chair.  ");
             char dstr[200],dstr2[200],dstr3[200];
             firstname(dstr);firstname(dstr2);lastname(dstr3);
@@ -489,9 +489,9 @@ void constructeventstory(char *story,short view,char positive)
                case 1:strcat(story,"a liberal chupacabra will suck the blood from us like a goat, a goat!, a goat!");break;
                case 2:strcat(story,"I feel translucent rods passing through my body...  it's like making love to the future");break;
                case 3:
-                      strcat(story,"and the greatest living example of a reverse racist is the ");
-                      if(exec[EXEC_PRESIDENT]==-2)strcat(story,"current president!"); // Limbaugh
-                      else strcat(story,"liberal media establishment!");
+                  strcat(story,"and the greatest living example of a reverse racist is the ");
+                  if(exec[EXEC_PRESIDENT]==-2)strcat(story,"current president!"); // Limbaugh
+                  else strcat(story,"liberal media establishment!");
                break;
             }
             strcat(story,"\", a former fan of the show, ");
@@ -545,21 +545,19 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - ");
             strcat(story,"A student has gone on a ");
-            if(law[LAW_FREESPEECH]==-2)
-               strcat(story,"[violent]");
-            else
-               strcat(story,"shooting");
-            strcat(story," rampage at a local ");
+            if(law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
+            else strcat(story,"shooting rampage");
+            strcat(story, " at a local ");
             switch (schtype)
             {
-               case 0: strcat(story,"elementary school");
-               case 1: strcat(story,"middle school");
-               case 2: strcat(story,"high school");
-               case 3: strcat(story,"university");
+               case 0: strcat(story,"elementary school"); break;
+               case 1: strcat(story,"middle school"); break;
+               case 2: strcat(story,"high school"); break;
+               case 3: strcat(story,"university"); break;
             }
             strcat(story,".  ");
             char dstr[200],dstr2[200],dg;
-            dg = LCSrandom(3) + 1; //male, female or male white patriarch?
+            dg = LCSrandom(2);
             firstname(dstr,dg);lastname(dstr2);
             strcat(story,dstr);
             strcat(story," ");
@@ -570,98 +568,69 @@ void constructeventstory(char *story,short view,char positive)
             char astr[3];
             sprintf(astr,"%d",killerage);
             strcat(story,astr);
-            switch (LCSrandom(3))
+            strcat(story, ", used a variety of guns to ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"[scare]");
+            else strcat(story,"mow down");
+            strcat(story," more than a dozen classmates and two teachers at ");
+            char jstr[200];
+            lastname(jstr);
+            strcat(story,jstr);
+            switch (schtype)
             {
-            case 0:
-               strcat(story, ", used a variety of ");
-               if (law[LAW_GUNCONTROL]=1)strcat(story,"illegal ");
-               else if(law[LAW_GUNCONTROL]==2)strcat(story,"highly illegal ");
-               strcat(story,"weapons to shoot more than a dozen classmates and two teachers at ");
-               char jstr[200];
-               lastname(jstr);
-               strcat(story,jstr);
-               switch (schtype)
-               {
-                  case 0: strcat(story,"Elementary School");
-                  case 1: strcat(story,"Middle School");
-                  case 2: strcat(story,"High School");
-                  case 3: strcat(story,"University");
-               }
-               strcat(story," High School.");
-               strcat(story, ".&r");
-               strcat(story,"  ");
-               strcat(story,dstr);
-               strcat(story," was considered an outcast among his classmates and teachers.");
-               break;
-            case 1:
-               strcat(story, ", entered the ");
-               if (schtype != 3) strcat(story,"school ");
-               else strcat(story,"university ");
-               strcat(story, " with a");
-               if (law[LAW_GUNCONTROL]=1)strcat(story,"n illegal ");
-               else if(law[LAW_GUNCONTROL]==2)strcat(story,"highly illegal "); else strcat(story,"n ");
-               strcat(story, "assault rifle, walked through the front door and started breaking into ");
-               strcat(story, "classrooms, ");
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[violently attacking] ");
-               else strcat(story,"viciously murdering ");
-               strcat(story, "both students and teachers inside.");
-               break;
-            case 2:
-               strcat(story, ", snuck a pistol into a classroom, shooting the teacher in a middle of a");
-               if (schtype != 3) strcat(story,"lesson, ");
-               else strcat(story,"lecture, ");
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[hitting the head]. ");
-               else strcat(story,"blowing ");
-               if (LCSrandom(2)) strcat(story,"her ");
-               else strcat(story,"his ");
-               strcat(story, "brains onto the ");
-               if (LCSrandom(2)) strcat(story,"white");
-               else strcat(story,"black");
-               strcat(story, "board. ");
-               if (LCSrandom(2))
-               {
-                  strcat(story,"When other students tried to wrestle the weapon away from ");
-                  if (dg == 2) strcat(story,"her");
-                  else strcat(story,"him");
-                  strcat(story,", they were shot as well.");
-               }
-               break;
+               case 0: strcat(story," Elementary School"); break;
+               case 1: strcat(story," Middle School"); break;
+               case 2: strcat(story," High School"); break;
+               case 3: strcat(story," University"); break;
             }
+            strcat(story, ".  ");
+            strcat(story,dstr2);
+            strcat(story, " entered the ");
+            if (schtype != 3) strcat(story,"school ");
+            else strcat(story,"university ");
+            strcat(story, " while classes were in session, then systematically started breaking into ");
+            strcat(story, "classrooms, ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"[scaring]");
+            else strcat(story,"spraying bullets at");
+            strcat(story," students and teachers inside.  ");
+            strcat(story,"When other students tried to wrestle the weapons away from ");
+            if (dg == 2) strcat(story,"her");
+            else strcat(story,"him");
+            strcat(story,", they were ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"[unfortunately harmed]");
+            else strcat(story,"shot");
+            strcat(story," as well.&r");
             int bodycnt = 2 + LCSrandom(30);
             char bstr[3];
             sprintf(bstr,"%d",bodycnt);
-            switch (LCSrandom(3))
+            strcat(story, "  When the police arrived, the student has already ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story, "[hurt some people].  ");
+            else
             {
-            case 0:
-               strcat(story, "The student ");
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[left the scene]");
-               else strcat(story,"committed suicide");
-               strcat(story," shortly afterwards.&r ");
-               strcat(story,dstr);
-               strcat(story," was considered an outcast among his classmates and teachers.");
-               break;
-            case 1:
-               strcat(story, "When the police arrived, the student has already ");
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[hurt] ");
-               else strcat(story,"killed ");
+               strcat(story, "killed ");
                strcat(story, bstr);
-               strcat(story, " and wounded dozens more.");
-               break;
-            case 2:
-               strcat(story, "The student managed to leave the crime scene, but was arrested shortly afterwards.");
-               break;
+               strcat(story, " and wounded dozens more.  ");
             }
+            strcat(story,dstr);
+            if(law[LAW_FREESPEECH]==-2)strcat(story, " [feel deeply asleep]");
+            else strcat(story, " committed suicide");
+            strcat(story," shortly afterwards.&r");
+            strcat(story,"  Investigators are currently searching the student's belongings, and initial ");
+            strcat(story,"reports indicate that the student kept a journal that showed ");
+            if (dg == 2) strcat(story,"she");
+            else strcat(story,"he");
+            strcat(story," was disturbingly obsessed with guns and death.&r");
             break;
          }
          case VIEW_PRISONS:
          {
+            cityname(story);
             strcat(story," - A former prisoner has written a book describing in horrifying ");
             strcat(story,"detail what goes on behind bars.  ");
             strcat(story,"Although popular culture has used, or perhaps overused, the ");
             strcat(story,"prison theme lately in its offerings for mass consumption, rarely ");
             strcat(story,"have these works been as poignant as ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            firstname(dstr,GENDER_MALE);lastname(dstr2);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -701,7 +670,7 @@ void constructeventstory(char *story,short view,char positive)
             if(law[LAW_GAY]==-2)strcat(story,"GRIDS");// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for "AIDS".
             else strcat(story,"AIDS");
             strcat(story," the other.  A ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"[heck]uva");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"[difficult]");
             else strcat(story,"helluva");
             strcat(story," choice, and I would only have a few seconds before they made it for me");
             strcat(story,".\"");
@@ -1262,16 +1231,14 @@ void constructeventstory(char *story,short view,char positive)
             jg1 = (char)(LCSrandom(3)+1);
             jg2 = (char)(LCSrandom(3)+1);
             firstname(jstr,jg1);lastname(jstr2);lastname(jstr3),firstname(jstr4,jg2);lastname(jstr5);
-            strcat(story,"- In a surprising turn, a ");
-            if (law[LAW_FREESPEECH]==-2) strcat(story, "[violent rampage]"); else strcat(story,"mass shooting");
-            strcat(story," was prevented by ");
-            switch(LCSrandom(3))
-            {
-            case 0:strcat(story,"an armed citizen.");break;
-            case 1:strcat(story,"an off-duty police officer.");break;
-            case 2:strcat(story,"a concerned parent.");break;
-            }
-            strcat(story,"After opening fire at the ");
+            strcat(story," - In a surprising turn, a ");
+            if (law[LAW_FREESPEECH]==-2) strcat(story, "[hurting spree]"); else strcat(story,"mass shooting");
+            strcat(story," was prevented by a bystander with a gun.");
+            strcat(story," After ");
+            strcat(story,jstr);
+            strcat(story," ");
+            strcat(story,jstr2);
+            strcat(story," opened fire at the ");
             strcat(story,jstr3);
             switch(LCSrandom(4))
             {
@@ -1280,50 +1247,31 @@ void constructeventstory(char *story,short view,char positive)
             case 2:strcat(story," High School");break;
             case 3:strcat(story," University");break;
             }
-            strcat(story,", the would-be ");
-            if (law[LAW_FREESPEECH]==-2) strcat(story,"[attacker]"); else strcat(story,"mass murderer, ");
-            strcat(story,jstr);
-            strcat(story," ");
-            strcat(story,jstr2);
-            strcat(story,", was confronted by an armed citizen, who was later identified as ");
+            strcat(story,", ");
             strcat(story,jstr4);
             strcat(story," ");
             strcat(story,jstr5);
-            strcat(story,". ");
-            switch(LCSrandom(2))
-            {
-            case 0:
-               strcat(story,"The citizen pointed a gun");
-               switch(LCSrandom(3))
-               {
-               case 0:
-                  strcat(story,"at the shooter, after which the shooter ");
-                  if (law[LAW_FREESPEECH]==-2) strcat(story,"[decided to fall asleep].");
-                  else strcat(story,"committed suicide.");
-                  break;
-               case 1:
-                  strcat(story,"at the shooter, who stopped the rampage and fled the scene.");
-                  break;
-               case 2:
-                  strcat(story,"at the shooter, talking down the attacker until the police arrived.");
-                  break;
-               }
-               break;
-            case 1:
-               if (jg2 == 2) strcat(story,"Ms. ");
-               else strcat(story, "Mr. ");
-               strcat(story,jstr4);
-               strcat(story," engaged the shooter in a "); 
-               if (law[LAW_FREESPEECH]==-2) strcat(story, "firefight, [putting the attacker to sleep] ");
-               else strcat(story,"firefight, killing the attacker ");
-               strcat(story,"before ");
-               if (jg1 == 2) strcat(story,"she ");
-               else strcat(story, "he ");
-               strcat(story,"could fire any more shots.");
-               break;
-            }
-            strcat(story,"The spokesperson for the police department said, \"We'd have a yet another ");
-            if (law[LAW_FREESPEECH]==-2) strcat(story,"[violent rampage]"); else strcat(story,"mass shooting");
+            strcat(story," sprung into action. ");
+            strcat(story,"The citizen pulled a concealed hangun and fired once at the shooter, ");
+            strcat(story,"forcing ");
+            strcat(story,jstr2);
+            strcat(story," to take cover while others called the police.&r");
+            strcat(story,"  Initially, ");
+            if (jg2 == 2) strcat(story,"Ms. ");
+            else strcat(story, "Mr. ");
+            strcat(story,jstr5);
+            strcat(story," attempted to talk down the shooter, but as ");
+            strcat(story,jstr2);
+            strcat(story," became more agitated, the heroic citizen was forced to engage the shooter in a "); 
+            if (law[LAW_FREESPEECH]==-2) strcat(story, "firefight, [putting the attacker to sleep] ");
+            else strcat(story,"firefight, killing the attacker ");
+            strcat(story,"before ");
+            if (jg1 == 2) strcat(story,"she ");
+            else strcat(story, "he ");
+            strcat(story,"could hurt anyone else.&r");
+            strcat(story,"  The spokesperson for the police department said, \"We'd have a yet another ");
+            if (law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
+            else strcat(story,"mass shooting");
             strcat(story," if not for ");
             if (jg2 == 2) strcat(story,"Ms. ");
             else strcat(story, "Mr. ");
@@ -1637,9 +1585,10 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             break;
             */
          case VIEW_GUNCONTROL:
-            displaycenterednewsfont("KILLER STOPPED",5);
+            displaycenterednewsfont("ARMED CITIZEN",5);
+            displaycenterednewsfont("SAVES LIVES",13);
             constructeventstory(story,ns.view,ns.positive);
-            displaynewsstory(story,storyx_s,storyx_e,13);
+            displaynewsstory(story,storyx_s,storyx_e,21);
             break;
          case VIEW_TAXES:
          {

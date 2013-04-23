@@ -81,10 +81,8 @@ void printsitemap(int x,int y,int z)
    }
    for(yscreen=9;yscreen<24;yscreen++)
    {
-      move(yscreen,79);
-      addch('|');
       move(yscreen,53);
-      addch('|');
+      addstr("|                         |");
    }
 
    // Display the map
@@ -132,6 +130,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_BANK_VAULT:strcpy(str,"Bank Vault");break;
       case SPECIAL_BANK_TELLER:strcpy(str,"Bank Teller");break;
       case SPECIAL_BANK_MONEY:strcpy(str,"Oh Wow So Much Money");break;
+      case SPECIAL_CCS_BOSS:strcpy(str,"CCS Boss");break;
       default:strcpy(str,"");break;
    }
    if(levelmap[locx][locy][locz].special!=-1)
@@ -614,6 +613,7 @@ void printblock(int x,int y,int z,int px, int py)
          case SPECIAL_BANK_VAULT:addstr("VAULT");break;
          case SPECIAL_BANK_TELLER:addstr("TELER");break;
          case SPECIAL_BANK_MONEY:addstr("MONEY");break;
+         case SPECIAL_CCS_BOSS:addstr("BOSS!");break;
       }
    }
    if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)

@@ -78,6 +78,7 @@ extern char ccsexposure;
 
 extern char ccs_kills;
 extern int ccs_siege_kills;
+extern int ccs_boss_kills;
 
 extern class Ledger ledger;
 

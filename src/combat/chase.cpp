@@ -1511,7 +1511,7 @@ char obstacledrive(short obstacle,char choice)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
                move(17,1);
-               addstr("The kid screams as a hail of gunfire breaks out!", gamelog);
+               addstr("The Conservative bastards unleash a hail of gunfire!", gamelog);
                gamelog.newline(); //New line.
                refresh();
                getch();
@@ -1522,7 +1522,7 @@ char obstacledrive(short obstacle,char choice)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(17,1);
-               addstr("Both sides refrain from exchanging fire...", gamelog);
+               addstr("Both sides refrain from endangering the child...", gamelog);
                gamelog.newline(); //New line.
                refresh();
                getch();
