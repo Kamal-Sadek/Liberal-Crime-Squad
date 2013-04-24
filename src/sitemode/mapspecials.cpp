@@ -1965,13 +1965,18 @@ void special_security(bool metaldetect)
 
    for(int p=0;p<pool.size();p++)
    {
-      if(pool[p]->base==cursite && pool[p]->type == encounter[0].type)
+      if(pool[p]->base==cursite)
       {
          autoadmit=1;
-         strcpy(sleepername,pool[p]->name);
-         strcpy(encounter[0].name,sleepername);
-         encounter[0].align=1;
-         break;
+         if(pool[p]->type == encounter[0].type)
+         {
+            autoadmit=2;
+            strcpy(sleepername,pool[p]->name);
+            strcpy(encounter[0].name,sleepername);
+            encounter[0].align=1;
+            encounter[0].cantbluff=1;
+            break;
+         }
       }
    }
    //clearmessagearea();
@@ -1979,7 +1984,7 @@ void special_security(bool metaldetect)
    move(16,1);
    if(sitealarm)
    {
-      addstr("An abandoned security checkpoint.", gamelog);
+      addstr("The security checkpoint is abandoned.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=SPECIAL_NONE;
       return;
@@ -2012,27 +2017,25 @@ void special_security(bool metaldetect)
          // Wrong clothes? Gone
          if(activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss!=ANIMALGLOSS_ANIMAL)
             if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
-         if(!autoadmit)
-         {
-            if(!hasdisguise(*activesquad->squad[s]))
-               if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
-            // Busted, cheap, bloody clothes? Gone
-            if(activesquad->squad[s]->get_armor().is_bloody())
-               if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
-            if(activesquad->squad[s]->get_armor().is_damaged())
-               if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
-            if(activesquad->squad[s]->get_armor().get_quality()!=1)
-               if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
-            // Suspicious weapons? Gone
-            if(weaponcheck(*activesquad->squad[s], metaldetect)>0)
-               if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
-            // Fail a tough disguise check? Gone
-            if(disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
-               if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
-            // Underage? Gone
-            if(activesquad->squad[s]->age<18)
-               if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
-         }
+         
+         if(autoadmit<1 && !hasdisguise(*activesquad->squad[s]))
+            if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
+         // Busted, cheap, bloody clothes? Gone
+         if(autoadmit<2 && activesquad->squad[s]->get_armor().is_bloody())
+            if(rejected>REJECTED_BLOODYCLOTHES)rejected=REJECTED_BLOODYCLOTHES;
+         if(autoadmit<2 && activesquad->squad[s]->get_armor().is_damaged())
+            if(rejected>REJECTED_DAMAGEDCLOTHES)rejected=REJECTED_DAMAGEDCLOTHES;
+         if(autoadmit<2 && activesquad->squad[s]->get_armor().get_quality()!=1)
+            if(rejected>REJECTED_SECONDRATECLOTHES)rejected=REJECTED_SECONDRATECLOTHES;
+         // Suspicious weapons? Gone
+         if(autoadmit<2 && weaponcheck(*activesquad->squad[s], metaldetect)>0)
+            if(rejected>REJECTED_WEAPONS)rejected=REJECTED_WEAPONS;
+         // Fail a tough disguise check? Gone
+         if(autoadmit<1 && disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING)))
+            if(rejected>REJECTED_SMELLFUNNY)rejected=REJECTED_SMELLFUNNY;
+         // Underage? Gone
+         if(autoadmit<1 && activesquad->squad[s]->age<18)
+            if(rejected>REJECTED_UNDERAGE)rejected=REJECTED_UNDERAGE;
       }
    }
    move(17,1);

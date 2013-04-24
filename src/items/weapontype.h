@@ -15,6 +15,7 @@ struct attackst
    string attack_description;
    string hit_description;
    bool always_describe_hit;
+   bool can_backstab;
    string hit_punctuation;
    int skill;
    int accuracy_bonus;

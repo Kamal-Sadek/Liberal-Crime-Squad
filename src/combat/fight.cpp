@@ -39,14 +39,6 @@ void youattack(void)
 
    short wasalarm=sitealarm;
 
-   for(int e=0;e<ENCMAX;e++)
-   {
-      if(encounter[e].enemy())
-         encounter[e].cantbluff=2;
-   }
-
-   sitealarm=1;
-
    goodguyattack = true;
 
    for(int p=0;p<6;p++)
@@ -144,6 +136,15 @@ void youattack(void)
                addjuice(*(activesquad->squad[p]),5,500);
             }
          }
+      }
+   }
+
+   for(int e=0;e<ENCMAX;e++)
+   {
+      if(encounter[e].enemy())
+      {
+         sitealarm=1;
+         break;
       }
    }
 
@@ -578,6 +579,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    bool melee=true;
    if (attack_used->ranged)
       melee = false;
+   bool sneak_attack=false;
 
    strcpy(str,a.name);
    strcat(str," ");
@@ -614,7 +616,22 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
    }
    else
-      strcat(str,attack_used->attack_description.c_str());
+   {
+      if(attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake)
+      {
+         if(t.cantbluff < 1 || (t.cantbluff < 2 && a.skill_check(SKILL_STEALTH, DIFFICULTY_AVERAGE)))
+         {
+            sneak_attack = true;
+            strcat(str,"ambushes");
+         }
+      }
+      
+      if(!sneak_attack)
+      {
+         strcat(str,attack_used->attack_description.c_str());
+         sitealarm=1;
+      }
+   }
 
    strcat(str," ");
    strcat(str,t.name);
@@ -659,8 +676,16 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    int aroll = a.skill_roll(wsk);
 
    int droll = t.skill_roll(SKILL_DODGE) / 2;
-   t.train(SKILL_DODGE,aroll*2);
-   a.train(wsk,droll*2+5);
+   if(sneak_attack)
+   {
+      droll = 0;
+      a.train(wsk,10);
+   }
+   else
+   {
+      t.train(SKILL_DODGE,aroll*2);
+      a.train(wsk,droll*2+5);
+   }
 
    // Hostages interfere with attack
    if(t.prisoner!=NULL)bonus-=LCSrandom(10);
@@ -736,6 +761,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                break;
          }
 
+         
+         if (sneak_attack)
+         {
+            bursthits = 1;
+            break; // Backstab only hits once
+         }
          // Each shot in a burst is increasingly less likely to hit
          if(aroll + bonus - i * attack_used->successive_attacks_difficulty > droll)
             bursthits++;
@@ -866,8 +897,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
          default: strcat(str,(" "+tostring(bursthits)+" times").c_str());
-         }		 
-
+         }
       }
       else if(attack_used->always_describe_hit)
       {
@@ -933,6 +963,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          severtype=attack_used->severtype;
          int random = attack_used->random_damage;
          int fixed = attack_used->fixed_damage;
+         if(sneak_attack) fixed+=100;
          if (bursthits >= attack_used->critical.hits_required
              && LCSrandom(100) < attack_used->critical.chance)
          {

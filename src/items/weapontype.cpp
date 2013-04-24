@@ -288,7 +288,7 @@ attackst::attackst(MCD_STR xmlstring)
    strength_min(5), strength_max(10), random_damage(1), fixed_damage(1),
    bruises(false), tears(false), cuts(false), burns(false), shoots(false),
    bleeding(false), severtype(0), damages_armor(false), armorpiercing(0),
-   no_damage_reduction_for_limbs_chance(0)
+   no_damage_reduction_for_limbs_chance(0), can_backstab(false)
 {
    CMarkup xml;
    xml.SetDoc(xmlstring);
@@ -321,6 +321,14 @@ attackst::attackst(MCD_STR xmlstring)
             thrown = false;
          /*else
             errorlog << "Invalid boolean value for attack::thrown " << xml.GetData() << endl;*/
+      }
+      else if (element == "can_backstab")
+      {
+         int b = stringtobool(xml.GetData());
+         if (b == 1)
+            can_backstab = true;
+         else if (b == 0)
+            can_backstab = false;
       }
       else if (element == "ammotype")
       {

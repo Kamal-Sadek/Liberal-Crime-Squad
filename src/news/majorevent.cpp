@@ -130,13 +130,17 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(3))
             {
                case 0:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"throwing [juice boxes]");
-                      else strcat(story,"throwing beer bottles");break;
+                  if(law[LAW_FREESPEECH]==-2)strcat(story,"throwing [juice boxes]");
+                  else strcat(story,"throwing beer bottles");
+                  break;
                case 1:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[relieving themselves] out the window");
-                      else if(law[LAW_FREESPEECH]==2)strcat(story,"pissing out the window");
-                      else strcat(story,"urinating out the window");break;
-               case 2:strcat(story,"taking swipes");break;
+                  if(law[LAW_FREESPEECH]==-2)strcat(story,"[relieving themselves] out the window");
+                  else if(law[LAW_FREESPEECH]==2)strcat(story,"pissing out the window");
+                  else strcat(story,"urinating out the window");
+                  break;
+               case 2:
+                  strcat(story,"taking swipes");
+                  break;
             }
             strcat(story," at the pursuing police cruisers.  ");
             strcat(story,"The chase ended when ");
