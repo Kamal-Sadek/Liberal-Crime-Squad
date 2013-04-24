@@ -415,8 +415,16 @@ void printparty(void)
                {
                case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
                case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
-               default:set_color(COLOR_RED,COLOR_BLACK,1);break;
+               default:
+                  if(party[p]->get_armor().get_stealth_value() > 1)
+                     set_color(COLOR_BLACK,COLOR_BLACK,1);
+                  else
+                     set_color(COLOR_RED,COLOR_BLACK,1);
+                  break;
                }
+               if(sitealarmtimer>=0 || sitealarm==1)
+                  if(party[p]->get_armor().get_stealth_value() > 1)
+                     set_color(COLOR_BLACK,COLOR_BLACK,1);
             }
             move(p+2,46);
             addstr(party[p]->get_armor().get_shortname().c_str());
@@ -754,8 +762,15 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       {
       case 1:set_color(COLOR_GREEN,COLOR_BLACK,1);break;
       case 2:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
-      default:set_color(COLOR_RED,COLOR_BLACK,1);break;
+      default:
+         if(cr->get_armor().get_stealth_value() > 1)
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else
+            set_color(COLOR_RED,COLOR_BLACK,1);
       }
+      if(sitealarmtimer>=0 || sitealarm==1)
+         if(cr->get_armor().get_stealth_value() > 1)
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
    }
    move(7,0);
    addstr("Clothes: ");

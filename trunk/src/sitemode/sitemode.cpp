@@ -1372,7 +1372,7 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_TENEMENT:
                      if(!LCSrandom(25))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_CROWBAR", "WEAPON_KNIFE", "WEAPON_SHANK", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_CROWBAR", "WEAPON_SHANK", 
                            "WEAPON_SYRINGE", "WEAPON_CHAIN", "WEAPON_GUITAR","WEAPON_SPRAYCAN"};
                         //make sure the number of types matches the random range...
                         newWeaponType=rndWeps[LCSrandom(8)];
@@ -1397,7 +1397,7 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_APARTMENT:
                      if(!LCSrandom(25))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_KNIFE", "WEAPON_REVOLVER_38", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_REVOLVER_38", 
                            "WEAPON_REVOLVER_44", "WEAPON_NIGHTSTICK", "WEAPON_GUITAR"};
                         newWeaponType=rndWeps[LCSrandom(6)];
                      }
@@ -1417,7 +1417,7 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
                      if(!LCSrandom(30))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_KNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_COMBATKNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP", 
                            "WEAPON_REVOLVER_44", "WEAPON_SEMIPISTOL_45", "WEAPON_SEMIRIFLE_AR15", "WEAPON_AUTORIFLE_M16"};
                         newWeaponType=rndWeps[LCSrandom(6 - law[LAW_GUNCONTROL])];
                      }

@@ -1618,11 +1618,12 @@ void laborcamp(Creature &g)
    move(10,1);
    if(!LCSrandom(10))
    {
-      if(g.get_attribute(ATTRIBUTE_HEALTH, false) > 1)
+      if(g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
       {
          addstr(g.name, gamelog);
          addstr(" is badly hurt in the process.", gamelog);
-         addjuice(g,-50,0);
+         addjuice(g,-40,0);
+         addjuice(g,-10,-50);
       }
       else 
       {
