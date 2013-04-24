@@ -640,8 +640,8 @@
             <attack_description>shoots at</attack_description>
             <skill>SHOTGUN</skill>
             <ammotype>CLIP_BUCKSHOT</ammotype>
-            <random_damage>251</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>201</random_damage>
+            <fixed_damage>30</fixed_damage>
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
@@ -678,8 +678,8 @@
             <attack_description>shoots at</attack_description>
             <skill>SHOTGUN</skill>
             <ammotype>CLIP_BUCKSHOT</ammotype>
-            <random_damage>251</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>201</random_damage>
+            <fixed_damage>30</fixed_damage>
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
