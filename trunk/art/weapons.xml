@@ -57,6 +57,8 @@
                 Default: CLUB
             <accuracy_bonus> (integer) Bonus to accuracy.
                 Default: 0
+            <can_backstab> (boolean) If the weapon can be used to sneak attack enemies silently.
+                Default: false
             <number_attacks> (integer) The number of attacks done with the weapon in one round of combat.
                 Default: 1
             <successive_attacks_difficulty> (integer) Higher number makes it harder to hit more than once.
@@ -189,16 +191,20 @@
         <size>5</size>
         <attack>
             <priority>1</priority>
-            <attack_description>slashes at</attack_description>
+            <attack_description>stabs at</attack_description>
+            <hit_description>slashing</hit_description>
             <strength_min>1</strength_min>
-            <strength_max>4</strength_max>
+            <strength_max>5</strength_max>
             <skill>KNIFE</skill>
             <random_damage>61</random_damage>
             <fixed_damage>10</fixed_damage>
+            <can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>2</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
     </weapontype>
 
@@ -211,20 +217,19 @@
         <bashstrengthmod>105</bashstrengthmod>
         <size>4</size>
         <attack>
-            <attack_description>slices at</attack_description>
-            <hit_description>slicing</hit_description>
+            <attack_description>stabs at</attack_description>
+            <hit_description>slashing</hit_description>
             <skill>KNIFE</skill>
             <strentgh_min>1</strentgh_min>
             <strength_max>6</strength_max>
-            <random_damage>75</random_damage>
+            <random_damage>76</random_damage>
             <fixed_damage>10</fixed_damage>
-            <tears>true</tears>
+            <can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
-            <armorpiercing>3</armorpiercing>
-            <critical>
-                <chance>13</chance>
-            </critical>
+            <armorpiercing>2</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
     </weapontype>
 
@@ -237,16 +242,20 @@
         <size>5</size>
         <attack>
             <priority>1</priority>
-            <attack_description>slashes at</attack_description>
+            <attack_description>lunges at</attack_description>
+            <hit_description>stabbing</hit_description>
             <strength_min>1</strength_min>
             <strength_max>4</strength_max>
             <skill>KNIFE</skill>
-            <random_damage>31</random_damage>
+            <random_damage>51</random_damage>
             <fixed_damage>10</fixed_damage>
+            <can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>1</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
     </weapontype>
 
