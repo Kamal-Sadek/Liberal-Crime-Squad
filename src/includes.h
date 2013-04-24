@@ -1561,6 +1561,13 @@ void HelpActivities(int activity);
  titlescreen.cpp
 */
 void mode_title(void);
+
+/*
+ initfile.cpp
+*/
+/* Handles a init.txt line */
+void setconfigoption(string name, string value);
+/* Loads and parses init.txt */
 void loadinitfile(void);
 
 /*

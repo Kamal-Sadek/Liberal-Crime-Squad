@@ -1,4 +1,4 @@
-bin_PROGRAMS = crimesquad 
+bin_PROGRAMS = crimesquad
 crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
  externs.h common/commondisplay.cpp common/commonactions.cpp\
@@ -27,7 +27,8 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  items/itemtype.cpp items/itemtype.h items/loot.cpp items/loot.h\
  items/loottype.cpp items/loottype.h items/money.cpp items/money.h\
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
- sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp title/locations.cpp
+ sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp title/locations.cpp\
+ title/initfile.cpp
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src
