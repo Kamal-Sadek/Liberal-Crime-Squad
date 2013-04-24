@@ -392,6 +392,24 @@
         <fencevalue>50</fencevalue>
         <professionalism>1</professionalism>
     </armortype>
+    
+    <armortype idname="ARMOR_LEATHER">
+        <make_difficulty>7</make_difficulty>
+        <make_price>300</make_price>
+        <armor>
+            <body>3</body>
+            <limbs>2</limbs>
+        </armor>
+        <body_covering>
+            <arms>false</arms>
+            <legs>false</legs>
+        </body_covering>
+        <name>Dark Leather Armor</name>
+        <shortname>Black Leather</shortname>
+        <fencevalue>100</fencevalue>
+        <professionalism>1</professionalism>
+        <stealth_value>3</stealth_value>
+    </armortype>
 
     <armortype idname="ARMOR_OVERALLS">
         <make_difficulty>4</make_difficulty>

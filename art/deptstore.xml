@@ -84,12 +84,6 @@
         </item>
 		<item>
             <class>WEAPON</class>
-            <description>Buy a Knife</description>
-			<type>WEAPON_KNIFE</type>
-            <price>25</price>
-        </item>
-		<item>
-            <class>WEAPON</class>
             <description>Buy an Axe</description>
 			<type>WEAPON_AXE</type>
             <price>30</price>

@@ -182,17 +182,16 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_KNIFE">
-        <name>Knife</name>
-        <name_future>Vibro-Knife</name_future>
+    <weapontype idname="WEAPON_DAGGER">
+        <name>Dagger</name>
+        <name_future>Beam Dagger</name_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
         <fencevalue>10</fencevalue>
         <size>5</size>
         <attack>
-            <priority>1</priority>
-            <attack_description>stabs at</attack_description>
-            <hit_description>slashing</hit_description>
+            <attack_description>lunges at</attack_description>
+            <hit_description>stabbing</hit_description>
             <strength_min>1</strength_min>
             <strength_max>5</strength_max>
             <skill>KNIFE</skill>
@@ -210,19 +209,19 @@
 
     <weapontype idname="WEAPON_COMBATKNIFE"> 
         <name>Combat Knife</name>
-        <name_future>Hyper-Knife</name_future>
+        <name_future>Vibro-Knife</name_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
         <fencevalue>30</fencevalue>
         <bashstrengthmod>105</bashstrengthmod>
         <size>4</size>
         <attack>
-            <attack_description>stabs at</attack_description>
+            <attack_description>lunges at</attack_description>
             <hit_description>slashing</hit_description>
             <skill>KNIFE</skill>
             <strentgh_min>1</strentgh_min>
             <strength_max>6</strength_max>
-            <random_damage>76</random_damage>
+            <random_damage>61</random_damage>
             <fixed_damage>10</fixed_damage>
             <can_backstab>true</can_backstab>
             <cuts>true</cuts>
@@ -241,7 +240,6 @@
         <fencevalue>5</fencevalue>
         <size>5</size>
         <attack>
-            <priority>1</priority>
             <attack_description>lunges at</attack_description>
             <hit_description>stabbing</hit_description>
             <strength_min>1</strength_min>

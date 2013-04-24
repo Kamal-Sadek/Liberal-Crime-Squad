@@ -619,10 +619,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    {
       if(attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake)
       {
-         if(t.cantbluff < 1 || (t.cantbluff < 2 && a.skill_check(SKILL_STEALTH, DIFFICULTY_AVERAGE)))
+         if(t.cantbluff < 1 && sitealarm < 1)
          {
             sneak_attack = true;
-            strcat(str,"ambushes");
+            strcat(str,"sneaks up on");
+            if(sitealarmtimer>10 || sitealarmtimer<0)
+               sitealarmtimer=10;
+            t.cantbluff = 2;
          }
       }
       
@@ -674,11 +677,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    // Basic roll
    int aroll = a.skill_roll(wsk);
-
    int droll = t.skill_roll(SKILL_DODGE) / 2;
    if(sneak_attack)
    {
-      droll = 0;
+      droll = t.attribute_roll(ATTRIBUTE_WISDOM) / 2;
+      aroll += a.skill_roll(SKILL_STEALTH);
       a.train(wsk,10);
    }
    else
@@ -776,7 +779,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    //HIT!
    if(aroll+bonus>droll)
    {
-      strcat(str," hits the ");
+      if(sneak_attack) strcat(str, " stabs the ");
+      else strcat(str," hits the ");
       int w;
       bool canhit=false;
 
@@ -801,6 +805,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          if(aroll>droll+15 &&
             !(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)))
             offset=12; // BOOM AUTOMATIC HEADSHOT MOTHA******
+         if(sneak_attack)
+            offset=10; // Backstab! 2/3 body, 1/3 head
          //Weighted location roll:
          //200% chance to hit body
          //50% chance to hit head
@@ -1673,7 +1679,19 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
       else
       {
-         if(t.skill_check(SKILL_DODGE, DIFFICULTY_AVERAGE))         //Awesome dodge or regular one?
+         if(sneak_attack)
+         {
+             strcpy(str, t.name);
+             switch(LCSrandom(4))
+             {
+                 case 0 : strcat(str," notices at the last moment!"); break;
+                 case 1 : strcat(str," wasn't born yesterday!"); break;
+                 case 2 : strcat(str," spins and blocks the attack!"); break;
+                 default : strcat(str," jumps back and cries out in alarm!");
+             }
+             sitealarm=1;
+         }
+         else if(t.skill_check(SKILL_DODGE, DIFFICULTY_AVERAGE))         //Awesome dodge or regular one?
          {
              strcpy(str, t.name);
              switch(LCSrandom(4))

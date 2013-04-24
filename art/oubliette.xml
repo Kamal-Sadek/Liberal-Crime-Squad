@@ -116,9 +116,9 @@
         <exit>Done</exit>
         <item>
             <class>WEAPON</class>
-            <type>WEAPON_KNIFE</type>
+            <type>WEAPON_DAGGER</type>
             <letter>k</letter>
-            <description>Buy a Knife</description>
+            <description>Buy a Dagger</description>
             <price>20</price>
         </item>
         <item>
@@ -162,6 +162,13 @@
             <letter>w</letter>
             <description>Buy a Wizard's Staff</description>
             <price>250</price>
+        </item>
+        <item>
+            <class>ARMOR</class>
+            <type>ARMOR_LEATHER</type>
+            <letter>L</letter>
+            <description>Buy Leather Armor</description>
+            <price>800</price>
         </item>
         <item>
             <class>ARMOR</class>

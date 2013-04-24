@@ -1509,7 +1509,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_WEAPON_CIVILIAN;
          if(!cr.is_armed() && !LCSrandom(5))
          {
-            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
+            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_SHANK")]);
             cr.give_weapon(w,NULL);
          }
          cr.money=LCSrandom(31)+20;
@@ -1522,7 +1522,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_WEAPON_CIVILIAN;
          if(!cr.is_armed() && !LCSrandom(5))
          {
-            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
+            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_SHANK")]);
             cr.give_weapon(w,NULL);
          }
          cr.money=LCSrandom(31)+20;
@@ -1621,7 +1621,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_WEAPON_CIVILIAN;
          if(!LCSrandom(5))
          {
-            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_KNIFE")]);
+            Weapon w=Weapon(*weapontype[getweapontype("WEAPON_SHANK")]);
             cr.give_weapon(w,NULL);
          }
          cr.money=LCSrandom(31)+20;
