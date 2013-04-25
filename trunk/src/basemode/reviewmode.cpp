@@ -888,7 +888,7 @@ void assemblesquad(squadst *cursquad)
    for(p=0;p<pool.size();p++)
    {
       if(pool[p]->is_active_liberal() &&
-         pool[p]->location==culloc || culloc==-1)
+         (pool[p]->location==culloc || culloc==-1))
       {
          temppool.push_back(pool[p]);
       }
