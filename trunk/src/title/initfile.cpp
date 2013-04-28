@@ -24,9 +24,11 @@ This file is part of Liberal Crime Squad.
 
 void setconfigoption(string name, string value)
 {
+   transform(name.begin(), name.end(), name.begin(), ::tolower);
+   transform(value.begin(), value.end(), value.begin(), ::tolower);
    if(name == "pagekeys")
    {
-      if(value=="AZERTY")
+      if(value == "azerty")
       {
          interface_pgup='.';
          interface_pgdn='/';
@@ -40,6 +42,13 @@ void setconfigoption(string name, string value)
       {
          interface_pgup=-61;
          interface_pgdn=-55;
+      }
+   }
+   else if(name == "autosave")
+   {
+      if((value == "off") or (value == "0") or (value == "false"))
+      {
+         autosave=false;
       }
    }
 }

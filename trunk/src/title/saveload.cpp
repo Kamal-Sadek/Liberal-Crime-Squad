@@ -30,20 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 #include "lcsio.h"
 
-/* saves the game to save.dat */
-void save(void)
-{
-   savegame("save.dat");
-}
-
 // TODO: It would be really cool to be able to "export" characters.
-
-/* saves the game to autosave.dat */
-void autosave(void)
-{
-   savegame("autosave.dat");
-}
-
 
 /* handles saving */
 void savegame(const char *str)

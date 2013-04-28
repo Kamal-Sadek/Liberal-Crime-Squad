@@ -220,6 +220,8 @@ char foughtthisround=0;
 short interface_pgup='[';
 short interface_pgdn=']';
 
+bool autosave=true;
+
 int day=1;
 
 class Ledger ledger;
