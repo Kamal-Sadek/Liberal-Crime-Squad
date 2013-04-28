@@ -30,7 +30,6 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
-
 void advanceday(char &clearformess,char canseethings)
 {
    int p;
@@ -38,10 +37,8 @@ void advanceday(char &clearformess,char canseethings)
    int w=0;
    int l2;
 
-   //Save the game to autosave.dat each day.
-   //autosave();
    //*JDS* Save the game to save.dat each day. :)
-   if(!disbanding)save();
+   if((!disbanding) and autosave)savegame("save.dat");
 
    //CLEAR CAR STATES
    vector<long> caridused;

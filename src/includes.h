@@ -1591,10 +1591,6 @@ void makecharacter(void);
 /*
  saveload.cpp
 */
-/* saves the game to save.dat */
-void save(void);
-/* saves the game to autosave.dat */
-void autosave(void);
 /* handles saving */
 void savegame(const char *str);
 /* loads the game from save.dat */

@@ -130,5 +130,5 @@ void mode_title(void)
    mode=GAMEMODE_BASE;
    mode_base();
 
-   save();
+   savegame("save.dat");
 }
