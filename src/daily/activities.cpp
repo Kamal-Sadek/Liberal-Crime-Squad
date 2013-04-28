@@ -2618,7 +2618,7 @@ char stealcar(Creature &cr,char &clearformess)
          c=getch();
          translategetch(c);
          if(c=='a')break;
-         if(c=='x'||c==ESC||c==10){delete v;return 1;}
+         if(c=='x'||c==ESC||c==10){delete v;return 0;}
       }while(1);
 
       //SECURITY?
