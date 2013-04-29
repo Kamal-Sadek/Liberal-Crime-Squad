@@ -749,24 +749,6 @@ int randomissue(bool core_only)
    return -1;
 }
 
-/* common - Checks if a site (typically safehouse) has a unique short name, and for business fronts, if the front has a unique shortname. */
-bool Location::duplicatelocation() {
-   for(int l = 0; l < location.size(); l++)
-   {
-      if(location[l] == this)
-         continue;
-
-      if(!strcmp(location[l]->shortname, this->shortname))
-         return true;
-
-      if (location[l]->front_business != -1 &&
-            this->front_business != -1 &&
-            !strcmp (location[l]->front_shortname, this->front_shortname))
-         return true;
-   }
-   return 0;
-}
-
 // Prompt to turn new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 {

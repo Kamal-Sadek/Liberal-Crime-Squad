@@ -1957,7 +1957,7 @@ void spawn_security(void)
 
 void special_security(bool metaldetect)
 {
-   bool autoadmit=0;
+   char autoadmit=0;
    char sleepername[80];
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
 

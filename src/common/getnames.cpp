@@ -115,14 +115,9 @@ void getactivity(char *str,activityst &act)
          strcat(str,"Selling Brownies");
          break;
       case ACTIVITY_VISIT:
-      {
          strcat(str,"Going to ");
-         if (location[act.arg]->front_business==-1)
-            strcat(str,location[act.arg]->shortname);
-         else
-            strcat(str,location[act.arg]->front_shortname);
+         strcat(str,location[act.arg]->getname(!location[act.arg]->is_city()).c_str());
          break;
-      }
       case ACTIVITY_HEAL:
          strcat(str,"Tending to Injuries");
          break;

@@ -423,153 +423,188 @@ void advanceday(char &clearformess,char canseethings)
          //GO PLACES
          switch(location[squad[sq]->activity.arg]->type)
          {
-            case SITE_BUSINESS_DEPTSTORE:
-            case SITE_BUSINESS_HALLOWEEN:
-            case SITE_BUSINESS_PAWNSHOP:
-            case SITE_BUSINESS_CARDEALERSHIP:
-            case SITE_BUSINESS_ARMSDEALER:
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(squad[sq]->name, gamelog);
-               addstr(" has arrived at ", gamelog);
-               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
-               addstr(".", gamelog);
-               gamelog.nextMessage();
+         case SITE_CITY_NEW_YORK:
+         case SITE_CITY_SEATTLE:
+         case SITE_CITY_LOS_ANGELES:
+         case SITE_CITY_CHICAGO:
+         case SITE_CITY_DETROIT:
+         case SITE_CITY_ATLANTA:
+         case SITE_CITY_MIAMI:
+         case SITE_CITY_WASHINGTON_DC:
+            if(clearformess)erase();
+            else makedelimiter(8,0);
+            move(8,1);
+            addstr(squad[sq]->name, gamelog);
+            addstr(" has departed for ", gamelog);
+            addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
 
-               refresh();
-               getch();
+            refresh();
+            getch();
 
-               activesquad=squad[sq];
-               showcarprefs=-1;
-               switch(location[squad[sq]->activity.arg]->type)
-               {
-                  case SITE_BUSINESS_DEPTSTORE:
-                     deptstore(squad[sq]->activity.arg);
-                     break;
-                  case SITE_BUSINESS_HALLOWEEN:
-                     halloweenstore(squad[sq]->activity.arg);
-                     break;
-                  case SITE_BUSINESS_PAWNSHOP:
-                     pawnshop(squad[sq]->activity.arg);
-                     break;
-                  case SITE_BUSINESS_CARDEALERSHIP:
-                     dealership(squad[sq]->activity.arg);
-                     break;
-                  case SITE_BUSINESS_ARMSDEALER:
-                     armsdealer(squad[sq]->activity.arg);
-                     break;
-               }
-               showcarprefs=0;
-               if(activesquad->squad[0]!=NULL)
-               {
-                  locatesquad(activesquad,activesquad->squad[0]->base);
-               }
-               clearformess=1;
-               break;
-            case SITE_HOSPITAL_UNIVERSITY:
-            case SITE_HOSPITAL_CLINIC:
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(8,1);
-               addstr(squad[sq]->name, gamelog);
-               addstr(" has arrived at ", gamelog);
-               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
-               addstr(".", gamelog);
-               gamelog.nextMessage();
-
-               refresh();
-               getch();
-
-               activesquad=squad[sq];
-               hospital(squad[sq]->activity.arg);
-               if(activesquad->squad[0]!=NULL)
-               {
-                  locatesquad(activesquad,activesquad->squad[0]->base);
-               }
-               clearformess=1;
-               break;
-            default:
+            for(int l=0; l<location.size(); l++)
             {
-               if(clearformess)erase();
-               else
+               if(location[l]->city == location[squad[sq]->activity.arg]->type &&
+                  location[l]->type == SITE_RESIDENTIAL_SHELTER)
                {
-                  makedelimiter(8,0);
+                  // Base at new city's homeless shelter
+                  basesquad(squad[sq],l);
+                  locatesquad(squad[sq],l);
                }
+            }
+            /*for(int s=0; s<6; s++)
+            {
+               if(squad[sq]->squad[s])
+                  squad[sq]->squad[s]->travel_time = 5;
+               else
+                  break;
+            }*/
 
+            clearformess=1;
+            break;
+         case SITE_BUSINESS_DEPTSTORE:
+         case SITE_BUSINESS_HALLOWEEN:
+         case SITE_BUSINESS_PAWNSHOP:
+         case SITE_BUSINESS_CARDEALERSHIP:
+         case SITE_BUSINESS_ARMSDEALER:
+            if(clearformess)erase();
+            else makedelimiter(8,0);
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(squad[sq]->name, gamelog);
+            addstr(" has arrived at ", gamelog);
+            addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
+
+            refresh();
+            getch();
+
+            activesquad=squad[sq];
+            showcarprefs=-1;
+            switch(location[squad[sq]->activity.arg]->type)
+            {
+               case SITE_BUSINESS_DEPTSTORE:
+                  deptstore(squad[sq]->activity.arg);
+                  break;
+               case SITE_BUSINESS_HALLOWEEN:
+                  halloweenstore(squad[sq]->activity.arg);
+                  break;
+               case SITE_BUSINESS_PAWNSHOP:
+                  pawnshop(squad[sq]->activity.arg);
+                  break;
+               case SITE_BUSINESS_CARDEALERSHIP:
+                  dealership(squad[sq]->activity.arg);
+                  break;
+               case SITE_BUSINESS_ARMSDEALER:
+                  armsdealer(squad[sq]->activity.arg);
+                  break;
+            }
+            showcarprefs=0;
+            if(activesquad->squad[0]!=NULL)
+            {
+               locatesquad(activesquad,activesquad->squad[0]->base);
+            }
+            clearformess=1;
+            break;
+         case SITE_HOSPITAL_UNIVERSITY:
+         case SITE_HOSPITAL_CLINIC:
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            addstr(squad[sq]->name, gamelog);
+            addstr(" has arrived at ", gamelog);
+            addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
+            addstr(".", gamelog);
+            gamelog.nextMessage();
+
+            refresh();
+            getch();
+
+            activesquad=squad[sq];
+            hospital(squad[sq]->activity.arg);
+            if(activesquad->squad[0]!=NULL)
+            {
+               locatesquad(activesquad,activesquad->squad[0]->base);
+            }
+            clearformess=1;
+            break;
+         default:
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(8,1);
+            if(squad[sq]->squad[0]->base==squad[sq]->activity.arg)
+            {
+               addstr(squad[sq]->name, gamelog);
+               addstr(" looks around ", gamelog);
+               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
+            }
+            else
+            {
+               addstr(squad[sq]->name, gamelog);
+               addstr(" has arrived at ", gamelog);
+               addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
+               addstr(".", gamelog);
+               gamelog.nextMessage();
+            }
+
+            refresh();
+            getch();
+
+            if(clearformess)erase();
+            else
+            {
+               makedelimiter(8,0);
+            }
+
+            int c='t';
+
+            if(location[squad[sq]->activity.arg]->renting>=0&&
+               location[squad[sq]->activity.arg]->type==SITE_INDUSTRY_WAREHOUSE)
+            {
+               c='s';
+            }
+            else if(location[squad[sq]->activity.arg]->renting>=0&&
+               squad[sq]->squad[0]->base!=squad[sq]->activity.arg)
+            {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
-               if(squad[sq]->squad[0]->base==squad[sq]->activity.arg)
-               {
-                  addstr(squad[sq]->name, gamelog);
-                  addstr(" looks around ", gamelog);
-                  addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
-                  addstr(".", gamelog);
-                  gamelog.nextMessage();
-               }
-               else
-               {
-                  addstr(squad[sq]->name, gamelog);
-                  addstr(" has arrived at ", gamelog);
-                  addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
-                  addstr(".", gamelog);
-                  gamelog.nextMessage();
-               }
+               addstr("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
 
-               refresh();
-               getch();
-
-               if(clearformess)erase();
-               else
+               do
                {
-                  makedelimiter(8,0);
-               }
+                  c=getch();                     translategetch(c);                  }while(c!='s'&&c!='b'&&c!='t');               }
 
-               int c='t';
-
-               if(location[squad[sq]->activity.arg]->renting>=0&&
-                  location[squad[sq]->activity.arg]->type==SITE_INDUSTRY_WAREHOUSE)
-               {
-                  c='s';
-               }
-               else if(location[squad[sq]->activity.arg]->renting>=0&&
-                  squad[sq]->squad[0]->base!=squad[sq]->activity.arg)
-               {
-                  set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(8,1);
-                  addstr("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
-
-                  do
-                  {
-                     c=getch();                     translategetch(c);                  }while(c!='s'&&c!='b'&&c!='t');               }
-
-               if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
-               if(c=='t'||c=='b')
-               {
-                  activesquad=squad[sq];
-                  newsstoryst *ns=new newsstoryst;
-                     ns->type=NEWSSTORY_SQUAD_SITE;
-                     ns->positive=1;
-                     ns->loc=squad[sq]->activity.arg;
-                  newsstory.push_back(ns);
-                  mode_site(squad[sq]->activity.arg);
-               }
-               if(squad[sq]->squad[0]!=NULL)
-               {
-                  locatesquad(squad[sq],squad[sq]->squad[0]->base);
-               }
-
-               clearformess=1;
-               break;
+            if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
+            if(c=='t'||c=='b')
+            {
+               activesquad=squad[sq];
+               newsstoryst *ns=new newsstoryst;
+                  ns->type=NEWSSTORY_SQUAD_SITE;
+                  ns->positive=1;
+                  ns->loc=squad[sq]->activity.arg;
+               newsstory.push_back(ns);
+               mode_site(squad[sq]->activity.arg);
             }
+            if(squad[sq]->squad[0]!=NULL)
+            {
+               locatesquad(squad[sq],squad[sq]->squad[0]->base);
+            }
+
+            clearformess=1;
+            break;
          }
          squad[sq]->activity.type=ACTIVITY_NONE;
       }

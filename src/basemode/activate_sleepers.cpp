@@ -110,9 +110,8 @@ void activate_sleepers(void)
          addstr(num);
          addstr("%");
 
-         move(y,42);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(location[temppool[p]->worklocation]->getname(true));
+         mvaddstr(y,42,location[temppool[p]->worklocation]->getname(true, true));
 
          move(y,57);
          // Let's add some color here...

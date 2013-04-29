@@ -319,36 +319,45 @@ void stopevil(void)
 
    if(activesquad==NULL)return;
 
-   char havecar=0;
-   for(p=0;p<6;p++)
+   bool havecar = false;
+   for(p=0; p<6; p++)
    {
-      if(activesquad->squad[p]!=NULL)
+      if(activesquad->squad[p] != NULL)
       {
-         if(activesquad->squad[p]->pref_carid!=-1)
+         if(activesquad->squad[p]->pref_carid != -1)
          {
-            havecar=1;
+            havecar = true;
             break;
          }
       }
    }
 
-   int page=0;
-   int loc=-1;
+   Location* squad_location = location[activesquad->squad[0]->location];
+
+   int page = 0;
+   int loc = -1;
+
+   // Start at the city level, rather than the absolute top
+   for(l=0;l<location.size();l++) {
+      if(location[l]->type == squad_location->city) {
+         loc = l;
+         break;
+      }
+   }
 
    vector<long> temploc;
+   // 1. LCS safe houses
    for(l=0;l<location.size();l++)
-   {
-      if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
-   }
+      if(location[l]->parent==loc && location[l]->renting>=0 && !location[l]->hidden)
+         temploc.push_back(l);
+   // 2. CCS safe houses
    for(l=0;l<location.size();l++)
-   {
-      //Location* loc2 = location[l]; //what was this for?
-      if(location[l]->parent==loc&&location[l]->renting==RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
-   }
+      if(location[l]->parent==loc && location[l]->renting==RENTING_CCS && !location[l]->hidden)
+         temploc.push_back(l);
+   // 3. Other sites
    for(l=0;l<location.size();l++)
-   {
-      if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
-   }
+      if(location[l]->parent==loc && location[l]->renting==RENTING_NOCONTROL && !location[l]->hidden)
+         temploc.push_back(l);
 
    do
    {
@@ -363,133 +372,122 @@ void stopevil(void)
       if(loc!=-1)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(8,0);
-         addstr(location[loc]->getname());
+         mvaddstr(8,0,location[loc]->getname(false, true));
       }
 
-      /*move(12,50);
-      addstr("Z - Toggle Squad Stance");
+      /*mvaddstr(12,50,"Z - Toggle Squad Stance");
       switch(activesquad->stance)
       {
       case SQUADSTANCE_ANONYMOUS:
-      move(13,50);
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      addstr("ANONYMOUS ACTION");
-      move(14,50);
-      set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("Unlikely to make the news");
-      break;
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(13,50,"ANONYMOUS ACTION");
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         mvaddstr(14,50,"+ Less Likely to be identified");
+         mvaddstr(15,50,"- Can't gain Juice");
+         mvaddstr(16,50,"- Unlikely to affect issues");
+         break;
       case SQUADSTANCE_STANDARD:
-      move(13,50);
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      addstr("CLAIMED ACTION");
-      move(14,50);
-      set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("Likely to make the news");
-      break;
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         mvaddstr(13,50,"CLAIMED ACTION");
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         mvaddstr(14,50,"+ Can sneak and bluff");
+         mvaddstr(15,50,"+ Can gain juice");
+         mvaddstr(16,50,"+ Can affect issues");
+         break;
       case SQUADSTANCE_BATTLECOLORS:
-      move(13,50);
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      addstr("GREEN ARMBANDS");
-      move(14,50);
-      set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr("(No Stealth, High Profile)");
-      break;
+         set_color(COLOR_GREEN,COLOR_BLACK,1);
+         mvaddstr(13,50,"GREEN ARMBANDS");
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         mvaddstr(14,50,"- Alarm conservatives on sight");
+         mvaddstr(15,50,"+ Gain extra juice");
+         mvaddstr(16,50,"+ Bonus issue effects");
+         break;
       }*/
 
 
       int y=10;
       for(p=page*11;p<temploc.size()&&p<page*11+11;p++)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y-10+(int)'A');
-         addstr(" - ");
+         Location* this_location = location[temploc[p]];
 
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddch(y,0,y-10+(int)'A');
+         addstr(" - ");
          addstr(location[temploc[p]]->getname());
 
-         if(temploc[p]==activesquad->squad[0]->location)
-         {
+         bool show_safehouse_info = false;
+         if(this_location == squad_location) {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(" (Current Location)");
-
-            char num[10];
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,50);
-            addstr("Heat: ");
-            if(location[temploc[p]]->heat>100)
-               set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(location[temploc[p]]->heat>0)
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-            itoa(location[temploc[p]]->heat,num,10);
-            addstr(num);
-            addstr("%");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,61);
-            addstr("Secrecy: ");
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-            location[temploc[p]]->update_heat_protection();
-            itoa(static_cast<int>(location[temploc[p]]->heat_protection*100),num,10);
-            addstr(num);
-            addstr("%");
-         }
-         else if(location[temploc[p]]->renting>=0)
-         {
+            show_safehouse_info = true;
+         } else if(this_location->renting >= 0) {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr(" (Safe House)");
-
-            char num[10];
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,50);
-            addstr("Heat: ");
-            if(location[temploc[p]]->heat>100)
-               set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(location[temploc[p]]->heat>0)
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-            itoa(location[temploc[p]]->heat,num,10);
-            addstr(num);
-            addstr("%");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,61);
-            addstr("Secrecy: ");
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-            location[temploc[p]]->update_heat_protection();
-            itoa(static_cast<int>(location[temploc[p]]->heat_protection*100),num,10);
-            addstr(num);
-            addstr("%");
-         }
-         if(location[temploc[p]]->renting==RENTING_CCS)
-         {
+            show_safehouse_info = true;
+         } else if(this_location->renting == RENTING_CCS) {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(" (Enemy Safe House)");
-         }
-
-         if(location[temploc[p]]->closed)
-         {
+         } else if(this_location->closed) {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr(" (Closed Down)");
-         }
-         else if(location[temploc[p]]->highsecurity)
-         {
+         } else if(this_location->highsecurity) {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             addstr(" (High Security)");
-         }
-
-         if(location[temploc[p]]->needcar>0&&!havecar)
-         {
+         } else if(this_location->type == squad_location->city) {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            addstr(" (Current Location)");
+         } else if(this_location->area != squad_location->area && !havecar) {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr(" (Need Car)");
          }
-         if(location[temploc[p]]->siege.siege>0)
-         {
+         if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
             addstr(" (Under Siege)");
          }
+
+         if(show_safehouse_info)
+         {
+            char num[10];
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,50);
+            addstr("Heat: ");
+            if(this_location->heat > 100)
+               set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(this_location->heat > 0)
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            itoa(location[temploc[p]]->heat,num,10);
+            addstr(num);
+            addstr("%");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(y,61);
+            addstr("Secrecy: ");
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            location[temploc[p]]->update_heat_protection();
+            itoa(location[temploc[p]]->heat_protection,num,10);
+            addstr(num);
+            addstr("%");
+         }
+
+         if(this_location->city == this_location->type)
+         {
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            mvaddstr(y,50,this_location->city_description());
+         }
+
          y++;
+      }
+      if(loc != -1 && location[loc]->type == location[loc]->city)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddch(y,0,y-10+(int)'A');
+         addstr(" - Travel to a Different City");
+         if(!havecar) {
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr(" (Need Car)");
+         }
+         temploc.push_back(-1);
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -508,8 +506,8 @@ void stopevil(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(24,1);
-      if(loc!=-1)addstr("Enter - Back one step.");
-      else addstr("Enter - The squad is not yet Liberal enough.");
+      if((loc == -1) || (location[loc]->type == squad_location->city)) addstr("Enter - The squad is not yet Liberal enough.");
+      else addstr("Enter - Back one step.");
 
       refresh();
 
@@ -528,6 +526,10 @@ void stopevil(void)
          {
             int oldloc=loc;
             loc=temploc[sq];
+            if((loc==-1 || location[loc]->city != squad_location->city) && !havecar)
+            {
+               loc = oldloc;
+            }
             temploc.clear();
 
             for(l=0;l<location.size();l++)
@@ -543,10 +545,10 @@ void stopevil(void)
                if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
             }
 
-            if(temploc.size()==0)
+            if(temploc.size()==0 || (loc >= 0 && location[loc]->city != squad_location->city))
             {
                if(!location[loc]->closed&&
-                  (location[loc]->needcar==0||havecar))
+                  ((location[loc]->area==squad_location->area&&location[loc]->city==squad_location->city)||havecar))
                {
                   activesquad->activity.type=ACTIVITY_VISIT;
                   activesquad->activity.arg=loc;
@@ -555,6 +557,7 @@ void stopevil(void)
                else
                {
                   loc=oldloc;
+                  temploc.clear();
                   for(l=0;l<location.size();l++)
                   {
                      if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
@@ -581,7 +584,7 @@ void stopevil(void)
 
       if(c==10||c==ESC)
       {
-         if(loc!=-1)
+         if(loc!=-1 && (location[loc]->city != location[loc]->type || location[loc]->city != squad_location->city))
          {
             loc=location[loc]->parent;
             temploc.clear();

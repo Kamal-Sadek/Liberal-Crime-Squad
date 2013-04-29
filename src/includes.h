@@ -73,11 +73,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.07.0"
+#define PACKAGE_VERSION "4.07.1"
 #endif
 
-const int version=40700;
-const int lowestloadversion=40700;
+const int version=40701;
+const int lowestloadversion=40701;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -95,6 +95,8 @@ const int lowestloadscoreversion=31203;
    #else
       #if _MSC_VER > 1200
          #define WIN32_DOTNET
+         #include <ciso646> // alternate keywords included in the ISO C++ standard
+                            // but not directly supported by Microsoft Visual Studio C++
          #include <iostream>
          #include <fstream>
          #include <vector>
@@ -394,6 +396,18 @@ enum SiteTypes
    SITE_OUTDOOR_BUNKER,
    SITE_GOVERNMENT_ARMYBASE,
    SITE_BUSINESS_BANK,
+   SITE_CITY_SEATTLE,
+   SITE_CITY_LOS_ANGELES,
+   SITE_CITY_NEW_YORK,
+   SITE_CITY_CHICAGO,
+   SITE_CITY_DETROIT,
+   SITE_CITY_ATLANTA,
+   SITE_CITY_MIAMI,
+   SITE_CITY_WASHINGTON_DC,
+   SITE_MANHATTAN,
+   SITE_LONG_ISLAND,
+   SITE_BRONX,
+   SITE_MAINLAND,
    SITENUM
 };
 
@@ -844,7 +858,9 @@ class Location
 public:
    char name[40];
    char shortname[20];
-   short type;
+   char type;
+   int city;
+   int area;
    int parent;
    int id;
 
@@ -853,42 +869,39 @@ public:
    int renting;
    char newrental;
    char needcar;
-   short closed;
-   char mapped;
+   int closed;
+   bool hidden;
+   bool mapped;
+   bool upgradable;
    int highsecurity;
    siegest siege;
    int heat;
-   double heat_protection;
-   char compound_walls;
+   int heat_protection;
+   int compound_walls;
    int compound_stores;
-   short front_business;
+   char front_business;
    char front_name[40];
    char front_shortname[20];
-   char haveflag;
-   bool hidden;
+   bool haveflag;
 
    int mapseed;
 
-   Location(int type, int parenttype=-1);
-   Location()
-   { 
-      this->needcar=false;
-      this->hidden=false;
-      this->renting=-1;
-      init();
-   }
+   Location(int type, int parent=-1);
+   Location() { }
+   Location* addchild(int type);
    ~Location()
    {
       delete_and_clear(loot);
    }
    void init(void);
-   int findparent(int parenttype);
    void update_heat_protection(void);
    bool duplicatelocation();
    bool can_be_upgraded();
    bool part_of_justice_system();
-   char* getname(bool shortname=false);
+   bool is_city();
+   std::string getname(bool shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
+   char* city_description();
 };
 
 //struct chaseseqst
@@ -1347,8 +1360,16 @@ void addnextpagestr();
 void addprevpagestr();
 /* prints a long blurb showing how to page forward and back */
 void addpagestr();
-/* A wrapper to addstr() which logs the input and then calls addstr to draw it. */
+/* Various wrappers to addstr() and mvaddstr() which handle permutations of:
+   - Including or not including the gamelog for external message logging
+   - std::string or c-style char arrays */
 int addstr(const char *text, Log &log);
+int mvaddstr(int y, int x, const char *text, Log &log);
+int addstr(std::string text);
+int addstr(std::string text, Log &log);
+int mvaddstr(int y, int x, std::string text);
+int mvaddstr(int y, int x, std::string text, Log &log);
+
 
 /*
  commonactions.cpp
@@ -1587,6 +1608,14 @@ void savehighscore(char endtype);
 void setup_newgame(void);
 /* creates your founder */
 void makecharacter(void);
+
+/*
+ world.cpp
+*/
+Location* find_site_by_id(int id);
+Location* find_site_in_city(int site, int city);
+/* sets up the list of locations */
+void make_world(void);
 
 /*
  saveload.cpp

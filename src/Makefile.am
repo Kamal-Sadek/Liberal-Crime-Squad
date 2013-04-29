@@ -28,7 +28,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  items/loottype.cpp items/loottype.h items/money.cpp items/money.h\
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp title/locations.cpp\
- title/initfile.cpp
+ title/initfile.cpp title/world.cpp
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src

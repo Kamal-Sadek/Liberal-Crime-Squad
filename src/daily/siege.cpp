@@ -176,7 +176,7 @@ void siegecheck(char canseethings)
             }
 
             // Update location heat
-            int max_heat = static_cast<int>(crimes * (1.0 - location[l]->heat_protection));
+            int max_heat = static_cast<int>(crimes * (100 - location[l]->heat_protection) / 100.0);
             location[l]->heat += (max_heat - location[l]->heat)/10;
 
             // Begin planning siege if high heat on location
@@ -2331,11 +2331,7 @@ void sally_forth(void)
    {
       squad.push_back(new squadst);
       squad.back()->id=cursquadid++;
-      if (location[selectedsiege]->front_business==-1)
-      strcpy(squad.back()->name,location[selectedsiege]->shortname);
-      else
-      strcpy(squad.back()->name,location[selectedsiege]->front_shortname);
-
+      strcpy(squad.back()->name,location[selectedsiege]->getname(true).c_str());
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<pool.size();p++)
@@ -2485,11 +2481,7 @@ void escape_engage(void)
    {
       squad.push_back(new squadst);
       squad.back()->id=cursquadid++;
-      if (location[selectedsiege]->front_business==-1)
-      strcpy(squad.back()->name,location[selectedsiege]->shortname);
-      else
-      strcpy(squad.back()->name,location[selectedsiege]->front_shortname);
-
+      strcpy(squad.back()->name,location[selectedsiege]->getname(true).c_str());
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<pool.size();p++)

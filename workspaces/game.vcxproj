@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug2|Win32">
+      <Configuration>debug2</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CA438C67-7A74-4797-BC09-8C866F965240}</ProjectGuid>
+    <RootNamespace>game</RootNamespace>
+    <ProjectName>crimesquad</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/game.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\src\politics;..\src\organization;..\src;..\src\pdcurses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;MARKUP_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/game.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level2</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>Debug/crimesquad.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\src\pdcurses;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/crimesquad.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Release/game.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/wd4996 /D "MARKUP_STL" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\src\pdcurses;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/game.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level2</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>Release/crimesquad.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/crimesquad.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/game.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/game.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level2</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>Debug/crimesquad.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/crimesquad.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\basemode\activate.cpp" />
+    <ClCompile Include="..\src\basemode\activate_sleepers.cpp" />
+    <ClCompile Include="..\src\basemode\baseactions.cpp" />
+    <ClCompile Include="..\src\basemode\basemode.cpp" />
+    <ClCompile Include="..\src\basemode\reviewmode.cpp" />
+    <ClCompile Include="..\src\combat\chase.cpp" />
+    <ClCompile Include="..\src\combat\fight.cpp" />
+    <ClCompile Include="..\src\combat\haulkidnap.cpp" />
+    <ClCompile Include="..\src\common\commonactions.cpp" />
+    <ClCompile Include="..\src\common\commondisplay.cpp" />
+    <ClCompile Include="..\src\common\consolesupport.cpp" />
+    <ClCompile Include="..\src\common\equipment.cpp" />
+    <ClCompile Include="..\src\common\getnames.cpp" />
+    <ClCompile Include="..\src\common\help.cpp" />
+    <ClCompile Include="..\src\basemode\liberalagenda.cpp" />
+    <ClCompile Include="..\src\common\misc.cpp" />
+    <ClCompile Include="..\src\common\translateid.cpp" />
+    <ClCompile Include="..\src\daily\activities.cpp" />
+    <ClCompile Include="..\src\daily\daily.cpp" />
+    <ClCompile Include="..\src\daily\date.cpp" />
+    <ClCompile Include="..\src\daily\interrogation.cpp" />
+    <ClCompile Include="..\src\daily\recruit.cpp" />
+    <ClCompile Include="..\src\daily\shopsnstuff.cpp" />
+    <ClCompile Include="..\src\daily\siege.cpp" />
+    <ClCompile Include="..\src\monthly\endgame.cpp" />
+    <ClCompile Include="..\src\monthly\justice.cpp" />
+    <ClCompile Include="..\src\monthly\lcsmonthly.cpp" />
+    <ClCompile Include="..\src\monthly\monthly.cpp" />
+    <ClCompile Include="..\src\monthly\sleeper_update.cpp" />
+    <ClCompile Include="..\src\sitemode\advance.cpp" />
+    <ClCompile Include="..\src\sitemode\mapspecials.cpp" />
+    <ClCompile Include="..\src\sitemode\miscactions.cpp" />
+    <ClCompile Include="..\src\sitemode\newencounter.cpp" />
+    <ClCompile Include="..\src\sitemode\shop.cpp" />
+    <ClCompile Include="..\src\sitemode\sitedisplay.cpp" />
+    <ClCompile Include="..\src\sitemode\sitemap.cpp" />
+    <ClCompile Include="..\src\sitemode\sitemode.cpp" />
+    <ClCompile Include="..\src\sitemode\stealth.cpp" />
+    <ClCompile Include="..\src\sitemode\talk.cpp" />
+    <ClCompile Include="..\src\title\highscore.cpp" />
+    <ClCompile Include="..\src\title\initfile.cpp" />
+    <ClCompile Include="..\src\title\locations.cpp" />
+    <ClCompile Include="..\src\title\newgame.cpp" />
+    <ClCompile Include="..\src\title\saveload.cpp" />
+    <ClCompile Include="..\src\title\titlescreen.cpp" />
+    <ClCompile Include="..\src\politics\law.cpp" />
+    <ClCompile Include="..\src\politics\politics.cpp" />
+    <ClCompile Include="..\src\news\ads.cpp" />
+    <ClCompile Include="..\src\news\headline.cpp" />
+    <ClCompile Include="..\src\news\layout.cpp" />
+    <ClCompile Include="..\src\news\majorevent.cpp" />
+    <ClCompile Include="..\src\daily\news.cpp" />
+    <ClCompile Include="..\src\news\squadstory_text.cpp" />
+    <ClCompile Include="..\src\items\armor.cpp" />
+    <ClCompile Include="..\src\items\armortype.cpp" />
+    <ClCompile Include="..\src\items\clip.cpp" />
+    <ClCompile Include="..\src\items\cliptype.cpp" />
+    <ClCompile Include="..\src\items\item.cpp" />
+    <ClCompile Include="..\src\items\itemtype.cpp" />
+    <ClCompile Include="..\src\items\loot.cpp" />
+    <ClCompile Include="..\src\items\loottype.cpp" />
+    <ClCompile Include="..\src\items\money.cpp" />
+    <ClCompile Include="..\src\items\weapon.cpp" />
+    <ClCompile Include="..\src\items\weapontype.cpp" />
+    <ClCompile Include="..\src\creature\creature.cpp" />
+    <ClCompile Include="..\src\creature\creaturenames.cpp" />
+    <ClCompile Include="..\src\creature\creaturetypes.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\title\world.cpp" />
+    <ClCompile Include="..\src\vehicle\vehicle.cpp" />
+    <ClCompile Include="..\src\vehicle\vehicletype.cpp" />
+    <ClCompile Include="..\src\cmarkup\Markup.cpp" />
+    <ClCompile Include="..\src\log\log.cpp" />
+    <ClCompile Include="..\src\compat.cpp" />
+    <ClCompile Include="..\src\configfile.cpp" />
+    <ClCompile Include="..\src\cursesgraphics.cpp" />
+    <ClCompile Include="..\src\cursesmovie.cpp" />
+    <ClCompile Include="..\src\game.cpp" />
+    <ClCompile Include="..\src\lcsio.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\sitemode\shop.h" />
+    <ClInclude Include="..\src\sitemode\sitemap.h" />
+    <CustomBuildStep Include="..\src\compat.h" />
+    <ClInclude Include="..\src\pdcurses\curses.h" />
+    <CustomBuildStep Include="..\src\cursesgraphics.h" />
+    <CustomBuildStep Include="..\src\cursesmovie.h" />
+    <ClCompile Include="..\src\externs.h" />
+    <CustomBuildStep Include="..\src\includes.h" />
+    <CustomBuildStep Include="..\src\lcsio.h" />
+    <CustomBuildStep Include="..\src\vector.h" />
+    <ClInclude Include="..\src\politics\alignment.h" />
+    <ClInclude Include="..\src\politics\law.h" />
+    <ClInclude Include="..\src\news\news.h" />
+    <ClInclude Include="..\src\items\armor.h" />
+    <ClInclude Include="..\src\items\armortype.h" />
+    <ClInclude Include="..\src\items\clip.h" />
+    <ClInclude Include="..\src\items\cliptype.h" />
+    <ClInclude Include="..\src\items\item.h" />
+    <ClInclude Include="..\src\items\itemtype.h" />
+    <ClInclude Include="..\src\items\loot.h" />
+    <ClInclude Include="..\src\items\loottype.h" />
+    <ClInclude Include="..\src\items\money.h" />
+    <ClInclude Include="..\src\items\weapon.h" />
+    <ClInclude Include="..\src\items\weapontype.h" />
+    <ClInclude Include="..\src\creature\creature.h" />
+    <ClInclude Include="..\src\vehicle\vehicle.h" />
+    <ClInclude Include="..\src\vehicle\vehicletype.h" />
+    <ClInclude Include="..\src\cmarkup\Markup.h" />
+    <ClInclude Include="..\src\log\log.h" />
+    <ClInclude Include="..\src\configfile.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="lcs_news_icon.res" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\src\pdcurses\pdcurses.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
