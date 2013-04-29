@@ -31,14 +31,174 @@ This file is part of Liberal Crime Squad.                                       
 
 
 
+bool show_disbanding_screen(int& oldforcemonth)
+{
+   if(oldforcemonth == month) return true;
 
+   for(int p=pool.size()-1;p>=0;p--)
+   {
+      int targetjuice=0;
+      for(int i=0;i<(year-disbandtime)+1;i++)
+      {
+         targetjuice+=LCSrandom(100);
+      }
+      if(targetjuice>1000)
+      {
+         targetjuice=1000;
+      }
+      if(pool[p]->juice<targetjuice)
+      {
+         if(pool[p]->hireid!=-1 && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
+      }
+   }
+   oldforcemonth=month;
+   erase();
+   move(0,0);
+   char num[20];
+   itoa(year,num,10);
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   switch(month)
+   {
+      case 1:addstr("January ");break;
+      case 2:addstr("February ");break;
+      case 3:addstr("March ");break;
+      case 4:addstr("April ");break;
+      case 5:addstr("May ");break;
+      case 6:addstr("June ");break;
+      case 7:addstr("July ");break;
+      case 8:addstr("August ");break;
+      case 9:addstr("September ");break;
+      case 10:addstr("October ");break;
+      case 11:addstr("November ");break;
+      case 12:addstr("December ");break;
+   }
+   addstr(num);
+
+
+   int y=2;
+
+   set_alignment_color(exec[EXEC_PRESIDENT], true);
+   mvaddstr(1,0,"President: ");
+   addstr(execname[EXEC_PRESIDENT]);addstr(", ");
+   switch(exec[EXEC_PRESIDENT])
+   {
+      case -2:addstr("Arch-Conservative");break;
+      case -1:addstr("Conservative");break;
+      case 0:addstr("moderate");break;
+      case 1:addstr("Liberal");break;
+      case 2:addstr("Elite Liberal");break;
+   }
+   if(execterm==1)addstr(", 1st Term");
+   else addstr(", 2nd Term");
+
+   int housemake[5]={0,0,0,0,0};
+   for(int h=0;h<435;h++)
+      housemake[house[h]+2]++;
+   int lsum=housemake[3]+housemake[4]-housemake[0]-housemake[1];
+   if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
+   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+   else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
+   else set_color(COLOR_GREEN,COLOR_BLACK,1);
+   move(2,0);
+   addstr("House: ");
+   itoa(housemake[4],num,10);
+   addstr(num);addstr("Lib+, ");
+   itoa(housemake[3],num,10);
+   addstr(num);addstr("Lib, ");
+   itoa(housemake[2],num,10);
+   addstr(num);addstr("Mod, ");
+   itoa(housemake[1],num,10);
+   addstr(num);addstr("Cons, ");
+   itoa(housemake[0],num,10);
+   addstr(num);addstr("Cons+");
+
+   int senatemake[5]={0,0,0,0,0};
+   for(int s=0;s<100;s++)
+      senatemake[senate[s]+2]++;
+   lsum=senatemake[3]+senatemake[4]-senatemake[0]-senatemake[1];
+   if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
+   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+   else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
+   else set_color(COLOR_GREEN,COLOR_BLACK,1);
+   move(3,0);
+   addstr("Senate: ");
+   itoa(senatemake[4],num,10);
+   addstr(num);addstr("Lib+, ");
+   itoa(senatemake[3],num,10);
+   addstr(num);addstr("Lib, ");
+   itoa(senatemake[2],num,10);
+   addstr(num);addstr("Mod, ");
+   itoa(senatemake[1],num,10);
+   addstr(num);addstr("Cons, ");
+   itoa(senatemake[0],num,10);
+   addstr(num);addstr("Cons+");
+
+   int courtmake[5]={0,0,0,0,0};
+   for(int s=0;s<9;s++)
+   {
+      courtmake[court[s]+2]++;
+   }
+   lsum=courtmake[3]+courtmake[4]
+         -courtmake[0]-courtmake[1];
+   if(courtmake[0]>=5)set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
+   else if(courtmake[0]+courtmake[1]>=5)set_alignment_color(ALIGN_CONSERVATIVE, true);
+   else if(courtmake[3]+courtmake[4]<5)set_alignment_color(ALIGN_MODERATE, true);
+   else if(courtmake[4]<5)set_alignment_color(ALIGN_LIBERAL, true);
+   else set_alignment_color(ALIGN_ELITELIBERAL, true);
+   mvaddstr(4,0,"Supreme Court: ");
+   itoa(courtmake[4],num,10);
+   addstr(num);addstr("Lib+, ");
+   itoa(courtmake[3],num,10);
+   addstr(num);addstr("Lib, ");
+   itoa(courtmake[2],num,10);
+   addstr(num);addstr("Mod, ");
+   itoa(courtmake[1],num,10);
+   addstr(num);addstr("Cons, ");
+   itoa(courtmake[0],num,10);
+   addstr(num);addstr("Cons+");
+
+   y=0;
+   for(int l=0;l<LAWNUM;l++)
+   {
+      set_alignment_color(law[l], true);
+      move(6+l/3,l%3*30);
+      char str[40];
+      getlaw(str,l);
+      addstr(str);
+   }
+
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   mvaddstr(19,33,"Public Mood");
+   mvaddstr(21,1,"Conservative");
+   mvaddstr(21,66,"Liberal");
+   mvaddstr(22,0,"<------------------------------------------------------------------------------>");
+   move(22,77*publicmood(-1)/100+1);
+   addstr("|");
+   mvaddstr(23,0,"R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
+   refresh();
+   char c=getch();
+
+   if(c=='r') return false;
+   else return true;
+}
+
+enum CantSeeReason
+{
+   CANTSEE_DATING = 1,
+   CANTSEE_HIDING = 2,
+   CANTSEE_OTHER = 3,
+   CANTSEE_DISBANDING = 4
+};
 
 void mode_base(void)
 {
    short buyer=0;
 
    char forcewait,canseethings;
-   long nonsighttime=0;
+   int nonsighttime=0;
    int oldforcemonth=month;
    
    int length=0;
@@ -49,7 +209,7 @@ void mode_base(void)
    {
       forcewait=1;
       canseethings=0;
-      cantseereason=3;
+      cantseereason=CANTSEE_OTHER;
       if(!disbanding)
       {
          for(int p=0;p<pool.size();p++)
@@ -68,258 +228,19 @@ void mode_base(void)
             }
             else
             {
-               if(pool[p]->dating==1&&cantseereason>1)cantseereason=1;
-               else if(pool[p]->hiding!=0&&cantseereason>2)cantseereason=2;
+               if(pool[p]->dating==1 && cantseereason>CANTSEE_DATING) cantseereason=CANTSEE_DATING;
+               else if(pool[p]->hiding!=0 && cantseereason>CANTSEE_HIDING) cantseereason=CANTSEE_HIDING;
             }
          }
       }
       else
       {
-         cantseereason=4;
+         cantseereason=CANTSEE_DISBANDING;
       }
 
-      if(disbanding&&oldforcemonth!=month)
+      if(disbanding)
       {
-         for(int p=pool.size()-1;p>=0;p--)
-         {
-            int targetjuice=0;
-            for(int i=0;i<(year-disbandtime)+1;i++)
-            {
-               targetjuice+=LCSrandom(100);
-            }
-            if(targetjuice>1000)
-            {
-               targetjuice=1000;
-            }
-            if(pool[p]->juice<targetjuice)
-            {
-               if(pool[p]->hireid!=-1 && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-                  pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
-            }
-         }
-         oldforcemonth=month;
-         erase();
-         move(0,0);
-         char num[20];
-         itoa(year,num,10);
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         switch(month)
-         {
-            case 1:addstr("January ");break;
-            case 2:addstr("February ");break;
-            case 3:addstr("March ");break;
-            case 4:addstr("April ");break;
-            case 5:addstr("May ");break;
-            case 6:addstr("June ");break;
-            case 7:addstr("July ");break;
-            case 8:addstr("August ");break;
-            case 9:addstr("September ");break;
-            case 10:addstr("October ");break;
-            case 11:addstr("November ");break;
-            case 12:addstr("December ");break;
-         }
-         addstr(num);
-
-
-         int y=2;
-
-         if(exec[EXEC_PRESIDENT]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==1)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(1,0);
-         addstr("President: ");
-         addstr(execname[EXEC_PRESIDENT]);addstr(", ");
-         switch(exec[EXEC_PRESIDENT])
-         {
-            case -2:addstr("Arch-Conservative");break;
-            case -1:addstr("Conservative");break;
-            case 0:addstr("moderate");break;
-            case 1:addstr("Liberal");break;
-            case 2:addstr("Elite Liberal");break;
-         }
-         if(execterm==1)addstr(", 1st Term");
-         else addstr(", 2nd Term");
-
-         int housemake[5]={0,0,0,0,0};
-         for(int h=0;h<435;h++)
-         {
-            housemake[house[h]+2]++;
-         }
-         int lsum=housemake[3]+housemake[4]
-            -housemake[0]-housemake[1];
-         if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(2,0);
-         addstr("House: ");
-         itoa(housemake[4],num,10);
-         addstr(num);addstr("Lib+, ");
-         itoa(housemake[3],num,10);
-         addstr(num);addstr("Lib, ");
-         itoa(housemake[2],num,10);
-         addstr(num);addstr("Mod, ");
-         itoa(housemake[1],num,10);
-         addstr(num);addstr("Cons, ");
-         itoa(housemake[0],num,10);
-         addstr(num);addstr("Cons+");
-
-         int senatemake[5]={0,0,0,0,0};
-         for(int s=0;s<100;s++)
-         {
-            senatemake[senate[s]+2]++;
-         }
-         lsum=senatemake[3]+senatemake[4]
-            -senatemake[0]-senatemake[1];
-         if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(3,0);
-         addstr("Senate: ");
-         itoa(senatemake[4],num,10);
-         addstr(num);addstr("Lib+, ");
-         itoa(senatemake[3],num,10);
-         addstr(num);addstr("Lib, ");
-         itoa(senatemake[2],num,10);
-         addstr(num);addstr("Mod, ");
-         itoa(senatemake[1],num,10);
-         addstr(num);addstr("Cons, ");
-         itoa(senatemake[0],num,10);
-         addstr(num);addstr("Cons+");
-
-         int courtmake[5]={0,0,0,0,0};
-         for(int s=0;s<9;s++)
-         {
-            courtmake[court[s]+2]++;
-         }
-         lsum=courtmake[3]+courtmake[4]
-             -courtmake[0]-courtmake[1];
-         if(courtmake[0]>=5)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(courtmake[0]+courtmake[1]>=5)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(courtmake[3]+courtmake[4]<5)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(courtmake[4]<5)set_color(COLOR_BLUE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(4,0);
-         addstr("Supreme Court: ");
-         itoa(courtmake[4],num,10);
-         addstr(num);addstr("Lib+, ");
-         itoa(courtmake[3],num,10);
-         addstr(num);addstr("Lib, ");
-         itoa(courtmake[2],num,10);
-         addstr(num);addstr("Mod, ");
-         itoa(courtmake[1],num,10);
-         addstr(num);addstr("Cons, ");
-         itoa(courtmake[0],num,10);
-         addstr(num);addstr("Cons+");
-
-         y=0;
-         for(int l=0;l<LAWNUM;l++)
-         {
-            if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_BLUE,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
-            move(6+l/3,l%3*30);
-
-            switch(l)
-            {
-               case LAW_WOMEN:
-                  addstr("Women's Rights");
-                  break;
-               case LAW_CIVILRIGHTS:
-                  addstr("Civil Rights");
-                  break;
-               case LAW_DRUGS:
-                  addstr("Drug Law");
-                  break;
-               case LAW_IMMIGRATION:
-                  addstr("Immigration");
-                  break;
-               case LAW_ELECTIONS:
-                  addstr("Election Reform");
-                  break;
-               case LAW_MILITARY:
-                  addstr("Military Spending");
-                  break;
-               case LAW_TORTURE:
-                  addstr("Human Rights");
-                  break;
-               case LAW_PRISONS:
-                  addstr("Prison Regulation");
-                  break;
-               case LAW_TAX:
-                  addstr("Tax Structure");
-                  break;
-               case LAW_ABORTION:
-                  addstr("Abortion Rights");
-                  break;
-               case LAW_ANIMALRESEARCH:
-                  addstr("Animal Rights");
-                  break;
-               case LAW_POLICEBEHAVIOR:
-                  addstr("Police Regulation");
-                  break;
-               case LAW_PRIVACY:
-                  addstr("Privacy Rights");
-                  break;
-               case LAW_DEATHPENALTY:
-                  addstr("Death Penalty");
-                  break;
-               case LAW_NUCLEARPOWER:
-                  addstr("Nuclear Power");
-                  break;
-               case LAW_POLLUTION:
-                  addstr("Pollution");
-                  break;
-               case LAW_LABOR:
-                  addstr("Labor Laws");
-                  break;
-               case LAW_GAY:
-                  addstr("Gay Rights");
-                  break;
-               case LAW_CORPORATE:
-                  addstr("Corporate Regulation");
-                  break;
-               case LAW_FREESPEECH:
-                  addstr("Free Speech");
-                  break;
-               case LAW_FLAGBURNING:
-                  addstr("Flag Burning");
-                  break;
-               case LAW_GUNCONTROL:
-                  addstr("Gun Control");
-                  break;
-            }
-         }
-
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(19,33);
-         addstr("Public Mood");
-         move(21,1);
-         addstr("Conservative");
-         move(21,66);
-         addstr("Liberal");
-         move(22,0);
-         addstr("<------------------------------------------------------------------------------>");
-         move(22,77*publicmood(-1)/100+1);
-         addstr("|");
-
-         move(23,0);
-         addstr("R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
-
-         refresh();
-         char c=getch();
-         if(c=='r')
-         {
-            disbanding=0;
-         }
+         disbanding = show_disbanding_screen(oldforcemonth);
       }
 
       if(!forcewait)
@@ -328,16 +249,11 @@ void mode_base(void)
          {
             erase();
             char str[100];
-            if(nonsighttime>=365*16)
-            {
+            if(nonsighttime>=365*16) {
                strcpy(str,"How long since you've heard these sounds...  times have changed.");
-            }
-            else if(nonsighttime>=365*8)
-            {
+            } else if(nonsighttime>=365*8) {
                strcpy(str,"It has been a long time.  A lot must have changed...");
-            }
-            else
-            {
+            } else {
                strcpy(str,"It sure has been a while.  Things might have changed a bit.");
             }
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -364,7 +280,6 @@ void mode_base(void)
                if(p==buyer)buyer=0;
                continue;
             }
-            // *JDS* This bay be a hack vvv
             if(!partysize)
             {
                delete activesquad;
@@ -401,17 +316,17 @@ void mode_base(void)
          haveflag=location[activesquad->squad[0]->location]->haveflag;
       
       // Count people at each location
-      int* location2 = new int[location.size()];
+      int* num_present = new int[location.size()];
       for(int i=0;i<location.size();i++)
       {
-         location2[i]=0;
+         num_present[i]=0;
       }
       for(int p=0;p<pool.size();p++)
       {
          if(!pool[p]->alive)continue; // Dead people don't count
          if(pool[p]->align!=1)continue; // Non-liberals don't count
          if(pool[p]->location==-1)continue; // Vacationers don't count
-         location2[pool[p]->location]++;
+         num_present[pool[p]->location]++;
       }
 
       char cannotwait=0;
@@ -419,26 +334,14 @@ void mode_base(void)
       {
          if(!location[l]->siege.siege)continue;
 
-         
-
          if(location[l]->siege.underattack)
          {
             // Allow siege if no liberals present
-            if(location2[l])cannotwait=1;
-            break;
-         }
-         //NOTE: returns -1 if no eaters, so is okay
-         if(fooddaysleft(l)==0)
-         {
-            // Allow siege if no liberals present
-
-            // Allow waiting if there's no food...
-            //   we'll handle this by decrementing starving Liberals' health
-            //if(location2[l])cannotwait=1;
+            if(num_present[l])cannotwait=1;
             break;
          }
       }
-      delete[] location2;
+      delete[] num_present;
 
       if(!forcewait)
       {

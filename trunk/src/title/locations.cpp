@@ -21,32 +21,58 @@ This file is part of Liberal Crime Squad.                                       
 
 #include "externs.h"
 
-// Finds a parent location with the corresponding type and returns
+// Finds a location with the corresponding type and returns
 // its index in the location array
-int Location::findparent(int parenttype)
+int findlocation(int type, int city=-1)
 {
    for(int i=0; i<location.size(); i++)
    {
-      if(location[i]->type == parenttype)
+      Location& loc = *location[i];
+      if(loc.type == type && (loc.city == city || city == -1))
+         return i;
+   }
+   return -1;
+}
+
+int findlocation_id(int id)
+{
+   for(int i=0; i<location.size(); i++)
+   {
+      if(location[i]->id == id)
          return i;
    }
    return -1;
 }
 
 // Locations - Construct a new location with the specified parameters
-Location::Location(int type_, int parenttype)
+Location::Location(int type_, int parent_)
 {
    this->type = type_;
    this->needcar=false;
    this->hidden=false;
    this->renting=RENTING_NOCONTROL;
-   this->parent = this->findparent(parenttype);
-   if(this->parent >= 0)
+   if(parent_==-1)
+      this->parent = -1;
+   else
    {
+      this->parent = parent_;
       this->needcar = location[this->parent]->needcar;
       this->mapped = location[this->parent]->mapped;
+      this->area = location[this->parent]->area;
+      this->city = location[this->parent]->city;
+   }
+   if(this->city < 0)
+   {
+      this->city = this->type;
    }
    initlocation(*this);
+}
+
+Location* Location::addchild(int type_)
+{
+   Location *newloc = new Location(type_, findlocation(this->type, this->city));
+   location.push_back(newloc);
+   return newloc;
 }
 
 void Location::init()
@@ -54,7 +80,7 @@ void Location::init()
    haveflag=0;
    newrental=0;
    heat=0;
-   heat_protection=0.0;
+   heat_protection=0;
    closed=0;
    mapped=0;
    highsecurity=0;
@@ -65,25 +91,53 @@ void Location::init()
    front_business=-1;
 }
 
-char* Location::getname(bool shortname)
+bool Location::is_city()
 {
+   if(type == city) return true;
+   else return false;
+}
+
+std::string Location::getname(bool shortname, bool include_city)
+{
+   std::string str;
    if(shortname) {
       if(this->front_business != -1)
-         return this->front_shortname;
+         str = this->front_shortname;
       else
-         return this->shortname;
+         str = this->shortname;
    } else {
       if(this->front_business != -1)
-         return this->front_name;
+         str = this->front_name;
       else
-         return this->name;
+         str = this->name;
+   }
+   
+   if(include_city && type != city) {
+      str += ", ";
+      str += location[findlocation(city, city)]->getname(true);
+   }
+   return str;
+}
+
+char* Location::city_description()
+{
+   switch(type)
+   {
+   case SITE_CITY_SEATTLE: return "Birthplace of the LCS.";
+   case SITE_CITY_LOS_ANGELES: return "Hollywood and Trade.";
+   case SITE_CITY_NEW_YORK: return "Wall Street and Big Media.";
+   case SITE_CITY_CHICAGO:
+   case SITE_CITY_DETROIT:
+   case SITE_CITY_ATLANTA:
+   case SITE_CITY_MIAMI:
+   case SITE_CITY_WASHINGTON_DC:
+   default: return "";
    }
 }
 
 bool Location::can_be_upgraded()
 {
-   if(type==SITE_INDUSTRY_WAREHOUSE ||
-      type==SITE_BUSINESS_CRACKHOUSE)
+   if(upgradable)
    {
       return true;
    }
@@ -101,6 +155,23 @@ bool Location::part_of_justice_system()
    else return false;
 }
 
+bool Location::duplicatelocation() {
+   for(int l = 0; l < location.size(); l++)
+   {
+      if(location[l] == this)
+         continue;
+
+      if(!strcmp(location[l]->name, this->name))
+         return true;
+
+      if (location[l]->front_business != -1 &&
+            this->front_business != -1 &&
+            !strcmp (location[l]->front_shortname, this->front_shortname))
+         return true;
+   }
+   return 0;
+}
+
 void Location::update_heat_protection(void)
 {
    int l;
@@ -111,7 +182,7 @@ void Location::update_heat_protection(void)
    }
    if(l==location.size())
    {
-      heat_protection=0.0;
+      heat_protection=0;
       return;
    }
    int numpres=0;
@@ -165,9 +236,9 @@ void Location::update_heat_protection(void)
 
    if(heatprotection<0)heatprotection=0;
 
-   heat_protection=heatprotection*0.05;
-   if(heat_protection>=1.0)
-      heat_protection=0.95;
+   heat_protection=heatprotection*5;
+   if(heat_protection>=100)
+      heat_protection=95;
 }
 
 void Location::rename(const char* name_, const char* shortname_)
@@ -185,11 +256,23 @@ void initlocation(Location &loc)
 
    switch(loc.type)
    {
+   case SITE_CITY_SEATTLE: loc.rename("Seattle", "SEA"); break;
+   case SITE_CITY_LOS_ANGELES: loc.rename("Los Angeles", "LA"); break;
+   case SITE_CITY_NEW_YORK: loc.rename("New York", "NYC"); break;
+   case SITE_CITY_CHICAGO: loc.rename("Chicago", "CHI"); break;
+   case SITE_CITY_DETROIT: loc.rename("Detroit", "DET"); break;
+   case SITE_CITY_ATLANTA: loc.rename("Atlanta", "ATL"); break;
+   case SITE_CITY_MIAMI: loc.rename("Miami", "MI"); break;
+   case SITE_CITY_WASHINGTON_DC: loc.rename("Washington DC", "DC"); break;
+   case SITE_MANHATTAN: loc.rename("Manhattan", "Manhattan"); break;
+   case SITE_LONG_ISLAND: loc.rename("Long Island", "Long Island"); break;
+   case SITE_BRONX: loc.rename("The Bronx", "Bronx"); break;
+   case SITE_MAINLAND: loc.rename("Mainland Outskirts", "Outskirts"); break;
    case SITE_DOWNTOWN: loc.rename("Downtown", "Downtown"); break;
-   case SITE_UDISTRICT: loc.rename("The University District", "U-District"); break;
-   case SITE_COMMERCIAL: loc.rename("The Commercial District", "C-District"); break;
-   case SITE_INDUSTRIAL: loc.rename("The Industrial District", "I-District"); break;
-   case SITE_OUTOFTOWN: loc.rename("On the Outskirts of the City", "Outskirts"); break;
+   case SITE_UDISTRICT: loc.rename("University District", "U-District"); break;
+   case SITE_COMMERCIAL: loc.rename("Shopping", "Shopping"); break;
+   case SITE_INDUSTRIAL: loc.rename("Industrial District", "I-District"); break;
+   case SITE_OUTOFTOWN: loc.rename("City Outskirts", "Outskirts"); break;
    case SITE_GOVERNMENT_POLICESTATION: loc.rename("Police Station", "Police Station"); break;
    case SITE_GOVERNMENT_COURTHOUSE:
       if(law[LAW_DEATHPENALTY]==-2) {
@@ -200,8 +283,10 @@ void initlocation(Location &loc)
    case SITE_GOVERNMENT_FIRESTATION:
       if(law[LAW_FREESPEECH]==-2) {
          loc.rename("Fireman HQ", "Fireman HQ");
+         loc.hidden = false;
       } else {
          loc.rename("Fire Station", "Fire Station");
+         loc.hidden = true;
       } break;
    case SITE_GOVERNMENT_PRISON:
       if(law[LAW_PRISONS]==-2)
@@ -386,8 +471,7 @@ void initlocation(Location &loc)
             lastname(str);
          } while(strlen(str)>7);
          strcpy(loc.name,str);
-         strcat(loc.name," St. ");
-         strcat (loc.name, "Housing Projects");
+         strcat(loc.name," St. Housing Projects");
          strcpy (loc.shortname, "Projects");
       } while (loc.duplicatelocation());
       break;
@@ -395,7 +479,7 @@ void initlocation(Location &loc)
       loc.rename("The University Hospital", "U Hospital");
       break;
    case SITE_HOSPITAL_CLINIC:
-      loc.rename("The Free CLINIC", "CLINIC");
+      loc.rename("The Free Clinic", "Clinic");
       break;
    case SITE_LABORATORY_GENETIC:
       lastname(str);
@@ -416,7 +500,8 @@ void initlocation(Location &loc)
       lastname(str);
       strcat(loc.name,str);
       strcat(loc.name,"'s Used Cars");
-      strcpy(loc.shortname,"Dealership");
+      strcpy(loc.shortname,str);
+      strcat(loc.shortname," Cars");
       break;
    case SITE_BUSINESS_DEPTSTORE:
       lastname(str);

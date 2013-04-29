@@ -1209,75 +1209,7 @@ void makecharacter(void)
 
    pool.push_back(newcr);
 
-   //MAKE LOCATIONS
-   Location *loc;
-
-   // Top level districts
-   location.push_back(loc=new Location(SITE_DOWNTOWN));
-      loc->mapped=hasmaps;
-   location.push_back(new Location(SITE_COMMERCIAL));
-   location.push_back(new Location(SITE_UDISTRICT));
-   location.push_back(new Location(SITE_INDUSTRIAL));
-   location.push_back(loc=new Location(SITE_OUTOFTOWN));
-      loc->needcar=true;
-
-   // Downtown
-   location.push_back(new Location(SITE_RESIDENTIAL_APARTMENT_UPSCALE,  SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_GOVERNMENT_POLICESTATION,       SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_GOVERNMENT_COURTHOUSE,          SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_BUSINESS_BANK,                  SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_GOVERNMENT_FIRESTATION,         SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_MEDIA_CABLENEWS,                SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_MEDIA_AMRADIO,                  SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_BUSINESS_CIGARBAR,              SITE_DOWNTOWN));
-   location.push_back(new Location(SITE_BUSINESS_LATTESTAND,            SITE_DOWNTOWN));
-   location.push_back(loc=new Location(SITE_BUSINESS_BARANDGRILL,       SITE_DOWNTOWN));
-      loc->renting=RENTING_CCS;
-      loc->hidden=true;
-      loc->mapped=false;
-
-   // Commercial district
-   location.push_back(new Location(SITE_BUSINESS_PAWNSHOP,           SITE_COMMERCIAL));
-   location.push_back(new Location(SITE_BUSINESS_HALLOWEEN,          SITE_COMMERCIAL));
-   location.push_back(new Location(SITE_BUSINESS_CARDEALERSHIP,      SITE_COMMERCIAL));
-   location.push_back(new Location(SITE_BUSINESS_DEPTSTORE,          SITE_COMMERCIAL));
-   
-   // University district
-   location.push_back(new Location(SITE_RESIDENTIAL_APARTMENT,       SITE_UDISTRICT));
-   location.push_back(new Location(SITE_HOSPITAL_UNIVERSITY,         SITE_UDISTRICT));
-   location.push_back(new Location(SITE_HOSPITAL_CLINIC,             SITE_UDISTRICT));
-   location.push_back(new Location(SITE_LABORATORY_GENETIC,          SITE_UDISTRICT));
-   location.push_back(new Location(SITE_LABORATORY_COSMETICS,        SITE_UDISTRICT));
-   location.push_back(new Location(SITE_BUSINESS_VEGANCOOP,          SITE_UDISTRICT));
-   location.push_back(new Location(SITE_BUSINESS_JUICEBAR,           SITE_UDISTRICT));
-   location.push_back(new Location(SITE_BUSINESS_INTERNETCAFE,       SITE_UDISTRICT));
-   location.push_back(new Location(SITE_OUTDOOR_PUBLICPARK,          SITE_UDISTRICT));
-
-   // Industrial district
-   location.push_back(loc=new Location(SITE_RESIDENTIAL_SHELTER,     SITE_INDUSTRIAL));
-      loc->renting=RENTING_PERMANENT;
-   location.push_back(loc=new Location(SITE_INDUSTRY_WAREHOUSE,      SITE_INDUSTRIAL));
-      loc->renting=RENTING_PERMANENT;
-   location.push_back(loc=new Location(SITE_INDUSTRY_WAREHOUSE,      SITE_INDUSTRIAL));
-      loc->renting=RENTING_PERMANENT;
-   location.push_back(new Location(SITE_RESIDENTIAL_TENEMENT,        SITE_INDUSTRIAL));
-   location.push_back(new Location(SITE_INDUSTRY_POLLUTER,           SITE_INDUSTRIAL));
-   location.push_back(new Location(SITE_INDUSTRY_SWEATSHOP,          SITE_INDUSTRIAL));
-   location.push_back(new Location(SITE_BUSINESS_CRACKHOUSE,         SITE_INDUSTRIAL));
-   location.push_back(loc=new Location(SITE_RESIDENTIAL_BOMBSHELTER, SITE_INDUSTRIAL));
-      loc->renting=RENTING_CCS;
-      loc->hidden=true;
-
-   // Out of town
-   location.push_back(new Location(SITE_GOVERNMENT_PRISON,           SITE_OUTOFTOWN));
-   location.push_back(new Location(SITE_INDUSTRY_NUCLEAR,            SITE_OUTOFTOWN));
-   location.push_back(new Location(SITE_GOVERNMENT_INTELLIGENCEHQ,   SITE_OUTOFTOWN));
-   location.push_back(new Location(SITE_CORPORATE_HEADQUARTERS,      SITE_OUTOFTOWN));
-   location.push_back(new Location(SITE_CORPORATE_HOUSE,             SITE_OUTOFTOWN));
-   location.push_back(new Location(SITE_GOVERNMENT_ARMYBASE,         SITE_OUTOFTOWN));
-   location.push_back(loc=new Location(SITE_OUTDOOR_BUNKER,          SITE_OUTOFTOWN));
-      loc->renting=RENTING_CCS;
-      loc->hidden=true;
+   make_world();
 
    squadst *newsq=new squadst;
       newsq->id=0;cursquadid++;

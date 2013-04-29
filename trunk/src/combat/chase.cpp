@@ -119,8 +119,7 @@ char chasesequence(void)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(0,0);
-      addstr(location[chaseseq.location]->getname());
+      mvaddstr(0,0,location[chaseseq.location]->getname());
 
       //PRINT PARTY
       if(partyalive==0)party_status=-1;
@@ -498,8 +497,7 @@ char footchase(void)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(0,0);
-      addstr(location[chaseseq.location]->getname());
+      mvaddstr(0,0,location[chaseseq.location]->getname());
 
       //PRINT PARTY
       if(partyalive==0)party_status=-1;

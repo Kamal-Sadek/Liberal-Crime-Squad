@@ -136,23 +136,30 @@ void savegame(const char *str)
 
          numbytes=fwrite(location[l]->name,sizeof(char),40,h);
          numbytes=fwrite(location[l]->shortname,sizeof(char),20,h);
-         numbytes=fwrite(&location[l]->type,sizeof(short),1,h);
-         numbytes=fwrite(&location[l]->parent,sizeof(long),1,h);
-         numbytes=fwrite(&location[l]->renting,sizeof(long),1,h);
+         numbytes=fwrite(&location[l]->type,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->city,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->area,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->parent,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->id,sizeof(int),1,h);
+         
+         numbytes=fwrite(&location[l]->renting,sizeof(int),1,h);
          numbytes=fwrite(&location[l]->newrental,sizeof(char),1,h);
          numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->closed,sizeof(short),1,h);
-         numbytes=fwrite(&location[l]->hidden,sizeof(short),1,h);
-         numbytes=fwrite(&location[l]->mapped,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->highsecurity,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->closed,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->hidden,sizeof(bool),1,h);
+         numbytes=fwrite(&location[l]->mapped,sizeof(bool),1,h);
+         numbytes=fwrite(&location[l]->upgradable,sizeof(bool),1,h);
+         numbytes=fwrite(&location[l]->highsecurity,sizeof(int),1,h);
          numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
          numbytes=fwrite(&location[l]->heat,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->compound_walls,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->compound_stores,sizeof(long),1,h);
-         numbytes=fwrite(&location[l]->front_business,sizeof(short),1,h);
+         numbytes=fwrite(&location[l]->heat_protection,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->compound_walls,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->compound_stores,sizeof(int),1,h);
+         numbytes=fwrite(&location[l]->front_business,sizeof(char),1,h);
          numbytes=fwrite(location[l]->front_name,sizeof(char),40,h);
          numbytes=fwrite(location[l]->front_shortname,sizeof(char),20,h);
-         numbytes=fwrite(&location[l]->haveflag,sizeof(char),1,h);
+         numbytes=fwrite(&location[l]->haveflag,sizeof(bool),1,h);
+
          numbytes=fwrite(&location[l]->mapseed,sizeof(int),1,h);
       }
 
@@ -500,23 +507,30 @@ char load(void)
 
          fread(location[l]->name,sizeof(char),40,h);
          fread(location[l]->shortname,sizeof(char),20,h);
-         fread(&location[l]->type,sizeof(short),1,h);
-         fread(&location[l]->parent,sizeof(long),1,h);
-         fread(&location[l]->renting,sizeof(long),1,h);
+         fread(&location[l]->type,sizeof(char),1,h);
+         fread(&location[l]->city,sizeof(int),1,h);
+         fread(&location[l]->area,sizeof(int),1,h);
+         fread(&location[l]->parent,sizeof(int),1,h);
+         fread(&location[l]->id,sizeof(int),1,h);
+
+         fread(&location[l]->renting,sizeof(int),1,h);
          fread(&location[l]->newrental,sizeof(char),1,h);
          fread(&location[l]->needcar,sizeof(char),1,h);
-         fread(&location[l]->closed,sizeof(short),1,h);
-         fread(&location[l]->hidden,sizeof(short),1,h);
-         fread(&location[l]->mapped,sizeof(char),1,h);
-         fread(&location[l]->highsecurity,sizeof(char),1,h);
+         fread(&location[l]->closed,sizeof(int),1,h);
+         fread(&location[l]->hidden,sizeof(bool),1,h);
+         fread(&location[l]->mapped,sizeof(bool),1,h);
+         fread(&location[l]->upgradable,sizeof(bool),1,h);
+         fread(&location[l]->highsecurity,sizeof(int),1,h);
          fread(&location[l]->siege,sizeof(siegest),1,h);
          fread(&location[l]->heat,sizeof(int),1,h);
-         fread(&location[l]->compound_walls,sizeof(char),1,h);
-         fread(&location[l]->compound_stores,sizeof(long),1,h);
-         fread(&location[l]->front_business,sizeof(short),1,h);
+         fread(&location[l]->heat_protection,sizeof(int),1,h);
+         fread(&location[l]->compound_walls,sizeof(int),1,h);
+         fread(&location[l]->compound_stores,sizeof(int),1,h);
+         fread(&location[l]->front_business,sizeof(char),1,h);
          fread(location[l]->front_name,sizeof(char),40,h);
          fread(location[l]->front_shortname,sizeof(char),20,h);
-         fread(&location[l]->haveflag,sizeof(char),1,h);
+         fread(&location[l]->haveflag,sizeof(bool),1,h);
+         
          fread(&location[l]->mapseed,sizeof(int),1,h);
       }
 
