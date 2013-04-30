@@ -157,6 +157,11 @@ const int lowestloadscoreversion=31203;
       #else
          #error "You must define either USE_NCURSES or USE_NCURSES_W."
       #endif
+      // Undo mvaddstr macro and re-implement as function to support overloading
+      #ifdef mvaddstr
+         #undef mvaddstr
+         int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
+      #endif
    #endif
 
    #ifdef CH_USE_UNICODE
