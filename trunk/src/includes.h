@@ -160,7 +160,7 @@ const int lowestloadscoreversion=31203;
       // Undo mvaddstr macro and re-implement as function to support overloading
       #ifdef mvaddstr
          #undef mvaddstr
-         int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
+         inline int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
       #endif
    #endif
 
