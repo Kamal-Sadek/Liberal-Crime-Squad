@@ -1868,7 +1868,7 @@ void majornewspaper(char &clearformess,char canseethings)
                switch(newsstory[n]->view)
                {
                   case VIEW_POLICEBEHAVIOR:
-                     movie.loadmovie("art\\lacops.cmv");
+                     movie.loadmovie("lacops.cmv");
                      movie.playmovie(0,0);
                      nodelay(stdscr,FALSE);
 
@@ -1935,7 +1935,7 @@ void majornewspaper(char &clearformess,char canseethings)
                         case 2:addstr("Cambridge, MA");break;
                      }
 
-                     movie.loadmovie("art\\newscast.cmv");
+                     movie.loadmovie("newscast.cmv");
 
                      movie.playmovie(1,1);
                      nodelay(stdscr,FALSE);
@@ -1965,7 +1965,7 @@ void majornewspaper(char &clearformess,char canseethings)
                switch(newsstory[n]->view)
                {
                   case VIEW_CEOSALARY:
-                     movie.loadmovie("art\\glamshow.cmv");
+                     movie.loadmovie("glamshow.cmv");
                      movie.playmovie(0,0);
                      nodelay(stdscr,FALSE);
 
@@ -1987,7 +1987,7 @@ void majornewspaper(char &clearformess,char canseethings)
                      del=1;
                      break;
                   case VIEW_CABLENEWS:
-                     movie.loadmovie("art\\anchor.cmv");
+                     movie.loadmovie("anchor.cmv");
                      movie.playmovie(0,0);
                      nodelay(stdscr,FALSE);
 
@@ -2011,7 +2011,7 @@ void majornewspaper(char &clearformess,char canseethings)
                   case VIEW_WOMEN:
                      erase();
 
-                     movie.loadmovie("art\\abort.cmv");
+                     movie.loadmovie("abort.cmv");
                      movie.playmovie(0,0);
                      nodelay(stdscr,FALSE);
 
