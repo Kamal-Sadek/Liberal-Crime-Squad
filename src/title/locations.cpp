@@ -51,6 +51,7 @@ Location::Location(int type_, int parent_)
    this->needcar=false;
    this->hidden=false;
    this->renting=RENTING_NOCONTROL;
+   this->city = -1;
    if(parent_==-1)
       this->parent = -1;
    else
