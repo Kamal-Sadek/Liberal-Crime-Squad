@@ -64,6 +64,7 @@ void savegame(const char *str)
       numbytes=fwrite(&presparty,sizeof(short),1,h);
       numbytes=fwrite(&amendnum,sizeof(int),1,h);
 
+      numbytes=fwrite(&multipleCityMode,sizeof(bool),1,h);
       numbytes=fwrite(&termlimits,sizeof(bool),1,h);
       numbytes=fwrite(&deagle,sizeof(bool),1,h);
       numbytes=fwrite(&m249,sizeof(bool),1,h);
@@ -76,10 +77,6 @@ void savegame(const char *str)
       numbytes=fwrite(&stat_kidnappings,sizeof(int),1,h);
       numbytes=fwrite(&stat_buys,sizeof(int),1,h);
       numbytes=fwrite(&stat_burns,sizeof(int),1,h);
-
-      numbytes=fwrite(&policestation_closed,sizeof(char),1,h);
-      numbytes=fwrite(&amradio_closed,sizeof(char),1,h);
-      numbytes=fwrite(&cablenews_closed,sizeof(char),1,h);
 
       numbytes=fwrite(&endgamestate,sizeof(char),1,h);
       numbytes=fwrite(&ccsexposure,sizeof(char),1,h);
@@ -397,7 +394,8 @@ char load(void)
       fread(&execterm,sizeof(short),1,h);
       fread(&presparty,sizeof(short),1,h);
       fread(&amendnum,sizeof(int),1,h);
-
+      
+      fread(&multipleCityMode,sizeof(bool),1,h);
       fread(&termlimits,sizeof(bool),1,h);
       fread(&deagle,sizeof(bool),1,h);
       fread(&m249,sizeof(bool),1,h);
@@ -410,10 +408,6 @@ char load(void)
       fread(&stat_kidnappings,sizeof(int),1,h);
       fread(&stat_buys,sizeof(int),1,h);
       fread(&stat_burns,sizeof(int),1,h);
-
-      fread(&policestation_closed,sizeof(char),1,h);
-      fread(&amradio_closed,sizeof(char),1,h);
-      fread(&cablenews_closed,sizeof(char),1,h);
 
       fread(&endgamestate,sizeof(char),1,h);
       fread(&ccsexposure,sizeof(char),1,h);

@@ -25,6 +25,7 @@ This file is part of Liberal Crime Squad.                                       
 // its index in the location array
 int findlocation(int type, int city=-1)
 {
+   if(!multipleCityMode) city = -1;
    for(int i=0; i<location.size(); i++)
    {
       Location& loc = *location[i];
@@ -62,7 +63,7 @@ Location::Location(int type_, int parent_)
       this->area = location[this->parent]->area;
       this->city = location[this->parent]->city;
    }
-   if(this->city < 0)
+   if(this->city < 0 && multipleCityMode)
    {
       this->city = this->type;
    }
@@ -101,6 +102,8 @@ bool Location::is_city()
 std::string Location::getname(bool shortname, bool include_city)
 {
    std::string str;
+   if(!multipleCityMode) include_city = false;
+
    if(shortname) {
       if(this->front_business != -1)
          str = this->front_shortname;
@@ -145,6 +148,103 @@ bool Location::can_be_upgraded()
    else return false;
 }
 
+bool Location::can_be_fortified()
+{
+   if(!upgradable) return false;
+   switch(type)
+   {
+   default:
+      return !fortified();
+   case SITE_OUTDOOR_BUNKER:
+   case SITE_BUSINESS_BARANDGRILL:
+      return false;
+   }
+}
+
+bool Location::fortified()
+{
+   switch(type)
+   {
+   default:
+      return compound_walls & COMPOUND_BASIC;
+   case SITE_OUTDOOR_BUNKER:
+      return true;
+   }
+}
+
+bool Location::can_be_trapped()
+{
+   if(!upgradable) return false;
+   return !trapped();
+}
+
+bool Location::trapped()
+{
+   return compound_walls & COMPOUND_TRAPS;
+}
+
+bool Location::can_install_tanktraps()
+{
+   if(!upgradable) return false;
+   switch(type)
+   {
+   default:
+      return !tank_traps();
+   case SITE_BUSINESS_BARANDGRILL:
+   case SITE_OUTDOOR_BUNKER:
+   case SITE_RESIDENTIAL_BOMBSHELTER:
+      return false;
+   }
+}
+
+bool Location::tank_traps()
+{
+   switch(type)
+   {
+   default:
+      return compound_walls & COMPOUND_TANKTRAPS;
+   case SITE_OUTDOOR_BUNKER:
+   case SITE_RESIDENTIAL_BOMBSHELTER:
+      return true;
+   }
+}
+
+bool Location::can_have_businessfront()
+{
+   if(!upgradable) return false;
+   switch(type)
+   {
+   default:
+      return !has_business_front();
+   case SITE_BUSINESS_BARANDGRILL:
+   case SITE_OUTDOOR_BUNKER:
+   case SITE_RESIDENTIAL_BOMBSHELTER:
+      return false;
+   }
+}
+
+bool Location::has_business_front()
+{
+   switch(type)
+   {
+   default:
+      return front_business;
+   case SITE_BUSINESS_BARANDGRILL:
+      return true;
+   }
+}
+
+bool Location::bomb_resistant()
+{
+   switch(type)
+   {
+   default:
+      return false;
+   case SITE_RESIDENTIAL_BOMBSHELTER:
+      return true;
+   }
+}
+
 bool Location::part_of_justice_system()
 {
    if(type==SITE_GOVERNMENT_POLICESTATION ||
@@ -155,6 +255,9 @@ bool Location::part_of_justice_system()
    }
    else return false;
 }
+
+bool Location::is_lcs_safehouse() { return renting >= 0; }
+bool Location::is_ccs_safehouse() { return renting == RENTING_CCS; }
 
 bool Location::duplicatelocation() {
    for(int l = 0; l < location.size(); l++)
@@ -265,10 +368,6 @@ void initlocation(Location &loc)
    case SITE_CITY_ATLANTA: loc.rename("Atlanta", "ATL"); break;
    case SITE_CITY_MIAMI: loc.rename("Miami", "MI"); break;
    case SITE_CITY_WASHINGTON_DC: loc.rename("Washington DC", "DC"); break;
-   case SITE_MANHATTAN: loc.rename("Manhattan", "Manhattan"); break;
-   case SITE_LONG_ISLAND: loc.rename("Long Island", "Long Island"); break;
-   case SITE_BRONX: loc.rename("The Bronx", "Bronx"); break;
-   case SITE_MAINLAND: loc.rename("Mainland Outskirts", "Outskirts"); break;
    case SITE_DOWNTOWN: loc.rename("Downtown", "Downtown"); break;
    case SITE_UDISTRICT: loc.rename("University District", "U-District"); break;
    case SITE_COMMERCIAL: loc.rename("Shopping", "Shopping"); break;

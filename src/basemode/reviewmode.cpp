@@ -58,7 +58,7 @@ void review(void)
 
             if(squad[p]->squad[0]!=NULL&&squad[p]->squad[0]->location!=-1)
             {
-               mvaddstr(y,31,location[squad[p]->squad[0]->location]->getname(true));
+               mvaddstr(y,31,location[squad[p]->squad[0]->location]->getname(true, true));
             }
 
             move(y,51);
@@ -333,7 +333,7 @@ void review_mode(short mode)
          }
          else
          {
-            addstr(location[temppool[p]->location]->getname(true));
+            addstr(location[temppool[p]->location]->getname(true, true));
          }
 
          move(y,57);
@@ -1307,7 +1307,7 @@ void squadlessbaseassign(void)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
          }
-         else if(location[temppool[p]->base]->city != location[temploc[selectedbase]]->city)
+         else if(multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
          else
             set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1375,7 +1375,7 @@ void squadlessbaseassign(void)
          // Assign new base, IF the selected letter is a liberal, AND the Liberal is not under siege or in a different city
          if(p<temppool.size()
             && !(temppool[p]->base == temppool[p]->location && location[temppool[p]->base]->siege.siege)
-            && !(location[temppool[p]->base]->city != location[temploc[selectedbase]]->city))
+            && !(multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city))
          {
             temppool[p]->base=temploc[selectedbase];
          }

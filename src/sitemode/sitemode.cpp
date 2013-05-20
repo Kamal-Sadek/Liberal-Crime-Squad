@@ -32,14 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 void fight_subdued(void)
 {
    int p;
-   int ps=-1;
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-      {
-         ps=l;
-      }
-   }
+   int ps=find_police_station(chaseseq.location);
 
    for(int v=0;v<chaseseq.friendcar.size();v++)
    {
@@ -2911,29 +2904,6 @@ void resolvesite(void)
             location[cursite]->highsecurity=sitecrime;
          else
             location[cursite]->closed=7;
-      }
-   }
-
-   if(location[cursite]->closed)
-   {
-      if(location[cursite]->type==SITE_MEDIA_AMRADIO)
-      {
-         //AM Radio less effective if brought offline
-         change_public_opinion(VIEW_AMRADIO,10);
-         amradio_closed=1;
-      }
-      if(location[cursite]->type==SITE_GOVERNMENT_POLICESTATION)
-      {
-         //People generally want to give police more power if they
-         //get closed down
-         change_public_opinion(VIEW_POLICEBEHAVIOR,-10);
-         policestation_closed=1;
-      }
-      if(location[cursite]->type==SITE_MEDIA_CABLENEWS)
-      {
-         //Cable News less influential if brought offline
-         change_public_opinion(VIEW_CABLENEWS,10);
-         cablenews_closed=1;
       }
    }
 }

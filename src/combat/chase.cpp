@@ -1852,14 +1852,7 @@ void crashenemycar(int v)
 void chase_giveup(void)
 {
    int p;
-   int ps=-1;
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-      {
-         ps=l;
-      }
-   }
+   int ps=find_police_station(chaseseq.location);
 
    for(int v=0;v<chaseseq.friendcar.size();v++)
    {

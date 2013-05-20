@@ -197,6 +197,8 @@
     <ClCompile Include="..\src\daily\recruit.cpp" />
     <ClCompile Include="..\src\daily\shopsnstuff.cpp" />
     <ClCompile Include="..\src\daily\siege.cpp" />
+    <ClCompile Include="..\src\locations\locations.cpp" />
+    <ClCompile Include="..\src\locations\world.cpp" />
     <ClCompile Include="..\src\monthly\endgame.cpp" />
     <ClCompile Include="..\src\monthly\justice.cpp" />
     <ClCompile Include="..\src\monthly\lcsmonthly.cpp" />
@@ -214,7 +216,6 @@
     <ClCompile Include="..\src\sitemode\talk.cpp" />
     <ClCompile Include="..\src\title\highscore.cpp" />
     <ClCompile Include="..\src\title\initfile.cpp" />
-    <ClCompile Include="..\src\title\locations.cpp" />
     <ClCompile Include="..\src\title\newgame.cpp" />
     <ClCompile Include="..\src\title\saveload.cpp" />
     <ClCompile Include="..\src\title\titlescreen.cpp" />
@@ -247,7 +248,6 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
-    <ClCompile Include="..\src\title\world.cpp" />
     <ClCompile Include="..\src\vehicle\vehicle.cpp" />
     <ClCompile Include="..\src\vehicle\vehicletype.cpp" />
     <ClCompile Include="..\src\cmarkup\Markup.cpp" />

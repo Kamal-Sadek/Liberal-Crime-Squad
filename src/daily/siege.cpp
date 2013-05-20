@@ -90,7 +90,7 @@ void siegecheck(char canseethings)
    int numpres;
    for(int l=0;l<location.size();l++)
    {
-      if(policestation_closed)
+      if(location[find_police_station(l)]->closed)
       {
          location[l]->heat = static_cast<int>(location[l]->heat * 0.95);
          continue;
@@ -914,65 +914,9 @@ void siegeturn(char clearformess)
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
    }
-   for(l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         hs=l;
-         break;
-      }
-   }
 
    for(l=0;l<location.size();l++)
    {
-      // FOOD -- currently free
-      /*if(!location[l]->siege.siege && location[l]->renting>=0 && location[l]->type!=SITE_RESIDENTIAL_SHELTER)
-      {
-         //locations not under siege eat
-         int eat=numbereating(l);
-         int price=(int)(3*eat*((10-food_prep[l])/10.0f)+0.5f);
-         if(price<0)price=0;
-         if(ledger.get_funds()>=price)
-         {
-            ledger.subtract_funds(price,EXPENSE_FOOD);
-         }
-         else
-         {
-            if(location[l]->compound_stores>=eat)location[l]->compound_stores-=eat;
-            else if(liberalcount[l])
-            {
-               int moved=0;
-               for(int p=0;p<pool.size();p++)
-               {
-                  if(!pool[p]->alive)continue; // Dead people don't move
-                  //if(pool[p]->align!=1)continue; // Non-liberals DO move
-                  if(pool[p]->location==l)
-                  {
-                     moved++;
-                     pool[p]->base=hs;
-                     pool[p]->location=hs;
-                  }
-               }
-               
-               erase();
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-               move(8,1);
-               addstr("The LCS has no money for food.");
-               move(10,1);
-               addstr(location[l]->getname());
-               addstr(" has been abandoned.");
-               move(12,1);
-               addstr("The Liberals will return to the homeless shelter for handouts.");
-               move(14,1);
-               addstr("Neither Governments nor Revolutions are free. . .");
-
-               refresh();
-               getch();
-            }
-         }
-      }
-      else*/
       if(location[l]->siege.siege)
       {
          //resolve sieges with no people
@@ -1645,15 +1589,7 @@ void giveup(void)
    if(location[loc]->siege.siegetype==SIEGE_POLICE ||
       location[loc]->siege.siegetype==SIEGE_FIREMEN)
    {
-      int polsta=-1;
-      for(int l=0;l<location.size();l++)
-      {
-         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-         {
-            polsta=l;
-            break;
-         }
-      }
+      int polsta=find_police_station(loc);
       
 
       //END SIEGE

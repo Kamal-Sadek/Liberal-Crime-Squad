@@ -379,8 +379,9 @@ void passmonth(char &clearformess,char canseethings)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);
+            addstr("Cops re-polluted ", gamelog);
             addstr(pool[p]->name, gamelog);
-            addstr(" has been rehabilitated from LCS brainwashing.", gamelog);
+            addstr("'s mind with Conservatism!", gamelog);
             gamelog.nextMessage();
 
             refresh();
