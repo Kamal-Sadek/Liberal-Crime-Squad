@@ -2753,15 +2753,17 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 
    if(swap)
    {
+      int city = location[cr.location]->city;
       //PICK A TYPE OF WORK LOCATION
       cr.worklocation=choose_one(okaysite,SITENUM,0);
 
       //FIND ONE OF THESE
       vector<int> goodlist;
 
+      find_site_index_in_city(cr.worklocation, location[cr.location]->city);
       for(int l=0;l<location.size();l++)
       {
-         if(location[l]->type==cr.worklocation)
+         if(location[l]->type==cr.worklocation && (!multipleCityMode || location[l]->city == cr.location))
          {
             goodlist.push_back(l);
          }

@@ -686,12 +686,12 @@ void elections(char clearformess,char canseethings)
                else addstr("Permit Strong Tactics in Interrogations");
                break;
             case LAW_PRISONS:
-               if(propdir[c]==1)
+               if(propdir[p]==1)
                {
                   if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation");
                   else addstr("Improve Prison Conditions");
                }
-               else addstr("Increase Prison Security");
+               else addstr("Enhance Prison Security");
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);

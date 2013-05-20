@@ -10,6 +10,7 @@ extern unsigned char newspic[20][78][18][4];
 
 extern vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
+extern bool multipleCityMode;
 extern int oldMapMode;
 extern unsigned int seed;
 extern short law[LAWNUM];
@@ -70,10 +71,6 @@ extern short attitude[VIEWNUM];
 
 extern short public_interest[VIEWNUM];
 extern short background_liberal_influence[VIEWNUM];
-
-extern char policestation_closed;
-extern char amradio_closed;
-extern char cablenews_closed;
 
 extern char endgamestate;
 extern char ccsexposure;

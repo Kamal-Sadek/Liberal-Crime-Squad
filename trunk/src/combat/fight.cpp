@@ -2380,13 +2380,7 @@ void capturecreature(Creature &t)
    }
    else
    {
-      for(int l=0;l<location.size();l++)
-      {
-         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-         {
-            t.location=l;
-         }
-      }
+      t.location = find_police_station(cursite);
    }
 
    t.squadid=-1;

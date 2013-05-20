@@ -87,6 +87,7 @@ extern char artdir[MAX_PATH_SIZE];
 
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
+bool multipleCityMode;
 unsigned int seed;
 
 vector<ClipType *> cliptype;
@@ -178,11 +179,6 @@ signed char exec[EXECNUM];
 short execterm=1;
 char execname[EXECNUM][80];
 short presparty=1;
-
-char amradio_closed=0;
-char cablenews_closed=0;
-char policestation_closed=0;
-
 
 int stat_recruits=0;
 int stat_kidnappings=0;

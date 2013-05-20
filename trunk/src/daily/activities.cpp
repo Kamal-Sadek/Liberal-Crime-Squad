@@ -853,7 +853,7 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
    }
 
    chaseseq.clean();
-   chaseseq.location=0;
+   chaseseq.location=location[liberal.location]->parent;
    footchase(liberal);
 }
 
@@ -902,27 +902,6 @@ int checkforarrest(Creature & liberal,const char* string,int clearformess)
 void funds_and_trouble(char &clearformess)
 {
    int s;
-   //FIND A POLICE STATION
-   //and a clinic too
-   //and a homeless shelter three!
-   int ps=-1;
-   int clinic=-1;
-   int shelter=-1;
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-      {
-         ps=l;
-      }
-      if(location[l]->type==SITE_HOSPITAL_CLINIC)
-      {
-         clinic=l;
-      }
-      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         shelter=l;
-      }
-   }
 
    //ACTIVITIES FOR INDIVIDUALS
    vector<Creature *> trouble;
@@ -948,79 +927,79 @@ void funds_and_trouble(char &clearformess)
       }
       switch(pool[p]->activity.type)
       {
-         case ACTIVITY_TEACH_FIGHTING:
-         case ACTIVITY_TEACH_POLITICS:
-         case ACTIVITY_TEACH_COVERT:
-            teachers.push_back(pool[p]);
-            break;
-         case ACTIVITY_CCFRAUD:
-         case ACTIVITY_DOS_RACKET:
-         case ACTIVITY_DOS_ATTACKS:
-         case ACTIVITY_HACKING:
-            hack.push_back(pool[p]);
-            break;
-         case ACTIVITY_GRAFFITI:
-            graffiti.push_back(pool[p]);
-            break;
-         case ACTIVITY_TROUBLE:
-            trouble.push_back(pool[p]);
-            break;
-         case ACTIVITY_COMMUNITYSERVICE:
-            addjuice(*pool[p],1,0);
-            if(pool[p]->heat && !LCSrandom(3))pool[p]->heat--;
-            change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,80);
-            break;
-         case ACTIVITY_SELL_TSHIRTS:
-            tshirts.push_back(pool[p]);
-            break;
-         case ACTIVITY_SELL_ART:
-            art.push_back(pool[p]);
-            break;
-         case ACTIVITY_SELL_MUSIC:
-            music.push_back(pool[p]);
-            break;
-         case ACTIVITY_DONATIONS:
-            solicit.push_back(pool[p]);
-            break;
-         case ACTIVITY_SELL_DRUGS:
-            brownies.push_back(pool[p]);
-            break;
-         case ACTIVITY_PROSTITUTION:
-            prostitutes.push_back(pool[p]);
-            break;
-         case ACTIVITY_BURY:
-            bury.push_back(pool[p]);
+      case ACTIVITY_TEACH_FIGHTING:
+      case ACTIVITY_TEACH_POLITICS:
+      case ACTIVITY_TEACH_COVERT:
+         teachers.push_back(pool[p]);
+         break;
+      case ACTIVITY_CCFRAUD:
+      case ACTIVITY_DOS_RACKET:
+      case ACTIVITY_DOS_ATTACKS:
+      case ACTIVITY_HACKING:
+         hack.push_back(pool[p]);
+         break;
+      case ACTIVITY_GRAFFITI:
+         graffiti.push_back(pool[p]);
+         break;
+      case ACTIVITY_TROUBLE:
+         trouble.push_back(pool[p]);
+         break;
+      case ACTIVITY_COMMUNITYSERVICE:
+         addjuice(*pool[p],1,0);
+         if(pool[p]->heat && !LCSrandom(3))pool[p]->heat--;
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,1,0,80);
+         break;
+      case ACTIVITY_SELL_TSHIRTS:
+         tshirts.push_back(pool[p]);
+         break;
+      case ACTIVITY_SELL_ART:
+         art.push_back(pool[p]);
+         break;
+      case ACTIVITY_SELL_MUSIC:
+         music.push_back(pool[p]);
+         break;
+      case ACTIVITY_DONATIONS:
+         solicit.push_back(pool[p]);
+         break;
+      case ACTIVITY_SELL_DRUGS:
+         brownies.push_back(pool[p]);
+         break;
+      case ACTIVITY_PROSTITUTION:
+         prostitutes.push_back(pool[p]);
+         break;
+      case ACTIVITY_BURY:
+         bury.push_back(pool[p]);
+         pool[p]->activity.type=ACTIVITY_NONE;
+         break;
+      case ACTIVITY_CLINIC:
+         hospitalize(find_clinic(*pool[p]),*pool[p]);
+         pool[p]->activity.type=ACTIVITY_NONE;
+         break;
+      case ACTIVITY_STUDY_DEBATING:
+      case ACTIVITY_STUDY_MARTIAL_ARTS:
+      case ACTIVITY_STUDY_DRIVING:
+      case ACTIVITY_STUDY_PSYCHOLOGY:
+      case ACTIVITY_STUDY_FIRST_AID:
+      case ACTIVITY_STUDY_LAW:
+      case ACTIVITY_STUDY_DISGUISE:
+      case ACTIVITY_STUDY_SCIENCE:
+      case ACTIVITY_STUDY_BUSINESS:
+      //case ACTIVITY_STUDY_COOKING:
+      case ACTIVITY_STUDY_GYMNASTICS:
+      case ACTIVITY_STUDY_ART:
+      case ACTIVITY_STUDY_TEACHING:
+      case ACTIVITY_STUDY_MUSIC:
+      case ACTIVITY_STUDY_WRITING:
+      case ACTIVITY_STUDY_LOCKSMITHING:
+         students.push_back(pool[p]);
+         break;
+      case ACTIVITY_SLEEPER_JOINLCS:
+         if(!location[find_homeless_shelter(*pool[p])]->siege.siege)
+         {
             pool[p]->activity.type=ACTIVITY_NONE;
-            break;
-         case ACTIVITY_CLINIC:
-            hospitalize(clinic,*pool[p]);
-            pool[p]->activity.type=ACTIVITY_NONE;
-            break;
-         case ACTIVITY_STUDY_DEBATING:
-         case ACTIVITY_STUDY_MARTIAL_ARTS:
-         case ACTIVITY_STUDY_DRIVING:
-         case ACTIVITY_STUDY_PSYCHOLOGY:
-         case ACTIVITY_STUDY_FIRST_AID:
-         case ACTIVITY_STUDY_LAW:
-         case ACTIVITY_STUDY_DISGUISE:
-         case ACTIVITY_STUDY_SCIENCE:
-         case ACTIVITY_STUDY_BUSINESS:
-         //case ACTIVITY_STUDY_COOKING:
-         case ACTIVITY_STUDY_GYMNASTICS:
-         case ACTIVITY_STUDY_ART:
-         case ACTIVITY_STUDY_TEACHING:
-         case ACTIVITY_STUDY_MUSIC:
-         case ACTIVITY_STUDY_WRITING:
-         case ACTIVITY_STUDY_LOCKSMITHING:
-            students.push_back(pool[p]);
-            break;
-         case ACTIVITY_SLEEPER_JOINLCS:
-            if(!location[shelter]->siege.siege)
-            {
-               pool[p]->activity.type=ACTIVITY_NONE;
-               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
-               pool[p]->location = pool[p]->base = shelter;
-            }
+            pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+            pool[p]->location = pool[p]->base = find_homeless_shelter(*pool[p]);
+         }
       }
    }
 
@@ -1740,7 +1719,7 @@ void funds_and_trouble(char &clearformess)
 
             removesquadinfo(*prostitutes[p]);
             prostitutes[p]->carid=-1;
-            prostitutes[p]->location=ps;
+            prostitutes[p]->location=find_police_station(*prostitutes[p]);
             prostitutes[p]->drop_weapons_and_clips(NULL);
             prostitutes[p]->activity.type=ACTIVITY_NONE;
             criminalize(*prostitutes[p],LAWFLAG_PROSTITUTION);
@@ -2804,7 +2783,7 @@ char stealcar(Creature &cr,char &clearformess)
 
             //FOOT CHASE
             chaseseq.clean();
-            chaseseq.location=0;
+            chaseseq.location=location[cr.location]->parent;
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_CARTHEFT;
             newsstory.push_back(ns);
@@ -3041,7 +3020,7 @@ char stealcar(Creature &cr,char &clearformess)
 
             //FOOT CHASE
             chaseseq.clean();
-            chaseseq.location=0;
+            chaseseq.location=location[cr.location]->parent;
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_CARTHEFT;
             newsstory.push_back(ns);
@@ -3084,7 +3063,7 @@ char stealcar(Creature &cr,char &clearformess)
       v->add_heat(14+v->steal_extraheat());
 
       chaseseq.clean();
-      chaseseq.location=0;
+      chaseseq.location=location[cr.location]->parent;
       int chaselev=!LCSrandom(13-windowdamage);
       if(chaselev>0||(v->vtypeidname()=="POLICECAR"&&LCSrandom(2))) //Identify police cruiser. Temporary solution? -XML
       {

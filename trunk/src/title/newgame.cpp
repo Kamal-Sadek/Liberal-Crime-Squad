@@ -37,6 +37,7 @@ void setup_newgame(void)
    bool classicmode   = false;
    bool strongccs     = false;
    bool nightmarelaws = false;
+   multipleCityMode = false;
 
    clear();
    while(1)
@@ -70,17 +71,17 @@ void setup_newgame(void)
       addstr(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
       move(12,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      if(notermlimit)
+      if(multipleCityMode)
          addstr("[X]");
       else
          addstr("[ ]");
-      addstr(" D - Extended Endgame: Prevent Liberals from passing term limits.");
+      addstr(" D - National LCS: Advanced play across multiple cities.");
       move(14,0);
       if(nocourtpurge)
          addstr("[X]");
       else
          addstr("[ ]");
-      addstr(" E - Marathon Mode: Prevent Liberals from purging the Supreme Court.");
+      addstr(" E - Marathon Mode: Prevent Liberals from amending the Constitution.");
 
       move(20,4);
       addstr("Press any other key to continue...");
@@ -103,12 +104,13 @@ void setup_newgame(void)
       }
       if(c=='d')
       {
-          notermlimit=!notermlimit;
+          multipleCityMode=!multipleCityMode;
           continue;
       }
       if(c=='e')
       {
           nocourtpurge=!nocourtpurge;
+          notermlimit=!notermlimit;
           continue;
       }
       break;
@@ -320,14 +322,6 @@ void makecharacter(void)
 
       move(12,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      addstr("CITY: ");
-      addstr(lcityname);
-      move(12,30);
-      set_color(COLOR_BLACK,COLOR_BLACK,1);
-      addstr(" (Press D to relocate)");
-
-      move(14,2);
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("HISTORY: ");
       if(choices)
       {
@@ -339,9 +333,20 @@ void makecharacter(void)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Let Fate Decide");
       }
-      move(14,30);
+      move(12,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press E to toggle childhood)");
+
+      if(!multipleCityMode)
+      {
+         move(14,2);
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         addstr("CITY: ");
+         addstr(lcityname);
+         move(14,30);
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         addstr(" (Press D to relocate)");
+      }
 
       move(17,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -374,12 +379,12 @@ void makecharacter(void)
       }
       if(c=='d')
       {
-         cityname(lcityname);
+         choices = !choices;
          continue;
       }
-      if(c=='e')
+      if(c=='e' && !multipleCityMode)
       {
-         choices = !choices;
+         cityname(lcityname);
          continue;
       }
       break;
@@ -779,7 +784,9 @@ void makecharacter(void)
             // +50 juice
             move(17,0);
             addstr("I live in ");
-            addstr(lcityname);addstr(", and it's about to experience real change.");
+            if(!multipleCityMode) addstr(lcityname);
+            else addstr("Seattle, WA");
+            addstr(", and it's about to experience real change.");
             break;
       }
 

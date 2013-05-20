@@ -43,22 +43,6 @@ void advanceday(char &clearformess,char canseethings)
    //CLEAR CAR STATES
    vector<long> caridused;
    for(p=0;p<pool.size();p++)pool[p]->carid=-1;
-
-   //SHUFFLE AROUND THE SQUADLESS
-   int homes=-1;
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         homes=l;
-         break;
-      }
-   }
-   if (homes==-1)
-   {
-      //TODO: Error unable to find location
-      homes=0;
-   }
       
    // Aging
    for(p=0;p<pool.size();p++)
@@ -131,7 +115,7 @@ void advanceday(char &clearformess,char canseethings)
       if(pool[p]->location != pool[p]->base &&
          location[pool[p]->base]->siege.siege)
       {
-         pool[p]->base=homes;
+         pool[p]->base=find_homeless_shelter(*pool[p]);
       }
 
       pool[p]->location=pool[p]->base;
@@ -443,23 +427,12 @@ void advanceday(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            for(int l=0; l<location.size(); l++)
             {
-               if(location[l]->city == location[squad[sq]->activity.arg]->type &&
-                  location[l]->type == SITE_RESIDENTIAL_SHELTER)
-               {
-                  // Base at new city's homeless shelter
-                  basesquad(squad[sq],l);
-                  locatesquad(squad[sq],l);
-               }
+               int l = find_homeless_shelter(squad[sq]->activity.arg);
+               // Base at new city's homeless shelter
+               basesquad(squad[sq],l);
+               locatesquad(squad[sq],l);
             }
-            /*for(int s=0; s<6; s++)
-            {
-               if(squad[sq]->squad[s])
-                  squad[sq]->squad[s]->travel_time = 5;
-               else
-                  break;
-            }*/
 
             clearformess=1;
             break;
@@ -659,63 +632,63 @@ void advanceday(char &clearformess,char canseethings)
       }
       switch(pool[p]->activity.type)
       {
-         case ACTIVITY_REPAIR_ARMOR:
-            repairarmor(*pool[p],clearformess);
-            break;
-         case ACTIVITY_MAKE_ARMOR:
-            makearmor(*pool[p],clearformess);
-            // Uncomment this to have people stop making armor after the first day
-            //pool[p]->activity.type=ACTIVITY_NONE;
-            break;
-         case ACTIVITY_WHEELCHAIR:
-            getwheelchair(*pool[p],clearformess);
-            if(pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->activity.type=ACTIVITY_NONE;
-            break;
-         case ACTIVITY_STEALCARS:
-            if(stealcar(*pool[p],clearformess))
-            {
-               pool[p]->activity.type=ACTIVITY_NONE;
-            }
-            else if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
-            {
-               criminalize(*pool[p],LAWFLAG_CARTHEFT);
-            }
-            break;
-         case ACTIVITY_POLLS:
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(8,1);
-            addstr(pool[p]->name, gamelog);
-            addstr(" surfs the Net for recent opinion polls.", gamelog);
-            gamelog.nextMessage();
-
-            refresh();
-            getch();
-
-            pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->get_skill(SKILL_COMPUTERS),1));
-
-            survey(pool[p]);
-            //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
-
-            clearformess=1;
-            break;
-         case ACTIVITY_VISIT:
+      case ACTIVITY_REPAIR_ARMOR:
+         repairarmor(*pool[p],clearformess);
+         break;
+      case ACTIVITY_MAKE_ARMOR:
+         makearmor(*pool[p],clearformess);
+         // Uncomment this to have people stop making armor after the first day
+         //pool[p]->activity.type=ACTIVITY_NONE;
+         break;
+      case ACTIVITY_WHEELCHAIR:
+         getwheelchair(*pool[p],clearformess);
+         if(pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->activity.type=ACTIVITY_NONE;
+         break;
+      case ACTIVITY_STEALCARS:
+         if(stealcar(*pool[p],clearformess))
+         {
             pool[p]->activity.type=ACTIVITY_NONE;
-            break;
-         case ACTIVITY_NONE:
-            if(pool[p]->align == 1 && !pool[p]->is_imprisoned())
+         }
+         else if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
+         {
+            criminalize(*pool[p],LAWFLAG_CARTHEFT);
+         }
+         break;
+      case ACTIVITY_POLLS:
+         if(clearformess)erase();
+         else
+         {
+            makedelimiter(8,0);
+         }
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(pool[p]->name, gamelog);
+         addstr(" surfs the Net for recent opinion polls.", gamelog);
+         gamelog.nextMessage();
+
+         refresh();
+         getch();
+
+         pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->get_skill(SKILL_COMPUTERS),1));
+
+         survey(pool[p]);
+         //pool[p]->activity.type=ACTIVITY_NONE;  No reason for this not to repeat.  -AM-
+
+         clearformess=1;
+         break;
+      case ACTIVITY_VISIT:
+         pool[p]->activity.type=ACTIVITY_NONE;
+         break;
+      case ACTIVITY_NONE:
+         if(pool[p]->align == 1 && !pool[p]->is_imprisoned())
+         {
+            if(pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged())
             {
-               if(pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged())
-               {
-                  repairarmor(*pool[p],clearformess);
-               }
+               repairarmor(*pool[p],clearformess);
             }
-                 break;
+         }
+         break;
       }
    }
 
@@ -1007,16 +980,8 @@ void advanceday(char &clearformess,char canseethings)
 
                location[l]->renting=RENTING_NOCONTROL;
 
+               int hs=find_homeless_shelter(l);
                //MOVE ALL ITEMS AND SQUAD MEMBERS
-               int hs=0;
-               for(l2=0;l2<location.size();l2++)
-               {
-                  if(location[l2]->type==SITE_RESIDENTIAL_SHELTER)
-                  {
-                     hs=l2;
-                     break;
-                  }
-               }
                for(int p=0;p<pool.size();p++)
                {
                   if(pool[p]->location==l)pool[p]->location=hs;
@@ -1098,20 +1063,7 @@ void advanceday(char &clearformess,char canseethings)
 
             if(date[d]->timeleft==0)
             {
-               int hs=-1;
-               for(int l=0;l<location.size();l++)
-               {
-                  if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-                  {
-                     hs=l;
-                     break;
-                  }
-               }
-               if (hs==-1)
-               {
-                  //TODO: Error unable to find location
-                  hs=0;
-               }
+               int hs=find_homeless_shelter(*pool[p]);
 
                if(location[pool[p]->base]->siege.siege)
                {
@@ -1227,6 +1179,7 @@ void advanceday(char &clearformess,char canseethings)
 
             newsstoryst *ns=new newsstoryst;
                ns->type=NEWSSTORY_KIDNAPREPORT;
+               ns->loc=pool[p]->location;
                ns->cr=pool[p];
             newsstory.push_back(ns);
          }
@@ -1507,18 +1460,9 @@ void dispersalcheck(char &clearformess)
             }
             else
             {
-               int hs=0;
-               for(int l=0;l<location.size();l++)
-               {
-                  if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-                  {
-                     hs=l;
-                     break;
-                  }
-               }
                pool[p]->location=-1;
                if(!(pool[p]->flag & CREATUREFLAG_SLEEPER)) //Sleepers end up in shelter otherwise.
-                  pool[p]->base=hs;
+                  pool[p]->base=find_homeless_shelter(*pool[p]);
                pool[p]->activity.type=ACTIVITY_NONE;
                pool[p]->hiding=-1; // Hide indefinitely
             }
@@ -1700,13 +1644,6 @@ void advancelocations(void)
          location[l]->closed--;
          if(location[l]->closed==0)
          {
-            if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-               policestation_closed=0;
-            if(location[l]->type==SITE_MEDIA_AMRADIO)
-               amradio_closed=0;
-            if(location[l]->type==SITE_MEDIA_CABLENEWS)
-               cablenews_closed=0;
-
             //Clean up graffiti, patch up walls, restore fire damage
             location[l]->changes.clear();
 

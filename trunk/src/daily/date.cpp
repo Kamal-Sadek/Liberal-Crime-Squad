@@ -227,14 +227,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          if((pool[p]->juice<50 && LCSrandom(2)) || LCSrandom(2))
          {
             // Find the police station
-            long ps=-1;
-            for(int l=0;l<location.size();l++)
-            {
-               if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-               {
-                  ps=l;
-               }
-            }
+            long ps=find_police_station(*pool[p]);
 
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             addstr(pool[p]->name, gamelog);
@@ -808,14 +801,7 @@ char completedate(datest &d,int p,char &clearformess)
                   gamelog.nextMessage();
 
                   // Find the police station
-                  int ps=-1;
-                  for(int l=0;l<location.size();l++)
-                  {
-                     if(location[l]->type==SITE_GOVERNMENT_POLICESTATION)
-                     {
-                        ps=l;
-                     }
-                  }
+                  int ps=find_police_station(*pool[p]);
                      
                   // Arrest the Liberal
                   removesquadinfo(*pool[p]);

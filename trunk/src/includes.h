@@ -73,11 +73,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.07.1"
+#define PACKAGE_VERSION "4.07.2"
 #endif
 
-const int version=40701;
-const int lowestloadversion=40701;
+const int version=40702;
+const int lowestloadversion=40702;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -358,6 +358,14 @@ enum SpecialAttacks
 
 enum SiteTypes
 {
+   SITE_CITY_SEATTLE,
+   SITE_CITY_LOS_ANGELES,
+   SITE_CITY_NEW_YORK,
+   SITE_CITY_CHICAGO,
+   SITE_CITY_DETROIT,
+   SITE_CITY_ATLANTA,
+   SITE_CITY_MIAMI,
+   SITE_CITY_WASHINGTON_DC,
    SITE_DOWNTOWN,
    SITE_COMMERCIAL,
    SITE_UDISTRICT,
@@ -401,18 +409,8 @@ enum SiteTypes
    SITE_OUTDOOR_BUNKER,
    SITE_GOVERNMENT_ARMYBASE,
    SITE_BUSINESS_BANK,
-   SITE_CITY_SEATTLE,
-   SITE_CITY_LOS_ANGELES,
-   SITE_CITY_NEW_YORK,
-   SITE_CITY_CHICAGO,
-   SITE_CITY_DETROIT,
-   SITE_CITY_ATLANTA,
-   SITE_CITY_MIAMI,
-   SITE_CITY_WASHINGTON_DC,
-   SITE_MANHATTAN,
-   SITE_LONG_ISLAND,
-   SITE_BRONX,
-   SITE_MAINLAND,
+   SITE_GOVERNMENT_LIBERAL_PARTY_HQ,
+   SITE_GOVERNMENT_WHITE_HOUSE,
    SITENUM
 };
 
@@ -900,13 +898,24 @@ public:
    }
    void init(void);
    void update_heat_protection(void);
-   bool duplicatelocation();
-   bool can_be_upgraded();
-   bool part_of_justice_system();
-   bool is_city();
+   bool duplicatelocation(void);
+   bool can_be_upgraded(void);
+   bool can_be_fortified(void);
+   bool fortified(void);
+   bool can_be_trapped(void);
+   bool trapped(void);
+   bool can_install_tanktraps(void);
+   bool tank_traps(void);
+   bool can_have_businessfront(void);
+   bool has_business_front(void);
+   bool bomb_resistant(void);
+   bool part_of_justice_system(void);
+   bool is_lcs_safehouse(void);
+   bool is_ccs_safehouse(void);
+   bool is_city(void);
    std::string getname(bool shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
-   char* city_description();
+   char* city_description(void);
 };
 
 //struct chaseseqst
@@ -1615,14 +1624,6 @@ void setup_newgame(void);
 void makecharacter(void);
 
 /*
- world.cpp
-*/
-Location* find_site_by_id(int id);
-Location* find_site_in_city(int site, int city);
-/* sets up the list of locations */
-void make_world(void);
-
-/*
  saveload.cpp
 */
 /* handles saving */
@@ -1631,6 +1632,30 @@ void savegame(const char *str);
 char load(void);
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset(void);
+
+
+/*******************************************************************************
+*
+*                        Location Data
+*                        Folder: "locations"
+*
+*******************************************************************************/
+
+/*
+ world.cpp
+*/
+Location* find_site_by_id(int id);
+Location* find_site_in_city(int site, int city);
+int find_site_index_in_city(int site, int city);
+/* find local versions of these locations */
+int find_police_station(const Creature& cr);
+int find_police_station(int site);
+int find_clinic(const Creature& cr);
+int find_clinic(int site);
+int find_homeless_shelter(const Creature& cr);
+int find_homeless_shelter(int site);
+/* sets up the list of locations */
+void make_world(void);
 
 
 /*******************************************************************************
