@@ -51,6 +51,7 @@ Location::Location(int type_, int parent_)
    this->type = type_;
    this->needcar=false;
    this->hidden=false;
+   this->upgradable=false;
    this->renting=RENTING_NOCONTROL;
    this->city = -1;
    if(parent_==-1)
@@ -228,7 +229,8 @@ bool Location::has_business_front()
    switch(type)
    {
    default:
-      return front_business;
+      if(front_business == -1) return false;
+      else return true;
    case SITE_BUSINESS_BARANDGRILL:
       return true;
    }
