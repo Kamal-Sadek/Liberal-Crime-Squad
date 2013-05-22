@@ -63,7 +63,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
    Weapon* weapon = NULL;
    Armor* armor = NULL;
    Clip* clips = NULL;
-   
+
    int a = 0;
    cr.creatureinit();
 
@@ -138,10 +138,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_HANDTOHAND,LCSrandom(3)+1);
          if(disguisesite(sitetype))
          {
-                 cr.align=-1;
+                 cr.align=ALIGN_CONSERVATIVE;
                  cr.infiltration=0.1f*LCSrandom(4);
          }
-         else cr.align=0;
+         else cr.align=ALIGN_MODERATE;
          cr.age=AGE_MATURE;
 
          cr.set_attribute(ATTRIBUTE_HEALTH,3);
@@ -174,7 +174,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_SECURITYUNIFORM")]);
          cr.give_armor(*armor,NULL);
          cr.set_skill(SKILL_PISTOL,LCSrandom(3)+1);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(3);
          cr.age=AGE_MATURE;
          cr.set_attribute(ATTRIBUTE_HEALTH,3);
@@ -191,10 +191,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          armor=new Armor(*armortype[getarmortype("ARMOR_LABCOAT")]);
          cr.give_armor(*armor,NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,5);
          cr.set_skill(SKILL_COMPUTERS,LCSrandom(2)+1);
          cr.set_skill(SKILL_SCIENCE,LCSrandom(4)+3);
@@ -218,14 +218,14 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_BLACKROBE")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(41)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
          cr.set_skill(SKILL_LAW,LCSrandom(6)+5);
          cr.set_skill(SKILL_WRITING,LCSrandom(3)+1);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,5);
          cr.set_attribute(ATTRIBUTE_WISDOM,10);
          attcap[ATTRIBUTE_HEART]=1;
@@ -240,12 +240,12 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_BLACKROBE")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(41)+20;
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          cr.age=AGE_MIDDLEAGED;
 
          cr.set_skill(SKILL_LAW,LCSrandom(6)+5);
          cr.set_skill(SKILL_WRITING,LCSrandom(3)+1);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,5);
          cr.set_attribute(ATTRIBUTE_HEART,10);
          break;
@@ -260,14 +260,14 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_LABCOAT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(41)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
 
          cr.set_skill(SKILL_WRITING,LCSrandom(3)+1);
          cr.set_skill(SKILL_SCIENCE,LCSrandom(6)+6);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,10);
          cr.set_attribute(ATTRIBUTE_WISDOM,6);
          break;
@@ -276,13 +276,13 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_CHEAPSUIT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(41)+40;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(6);
          cr.age=AGE_MATURE;
          GIVE_GENDER_MALE;
          cr.set_skill(SKILL_BUSINESS,LCSrandom(4)+3);
 
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,4);
          cr.set_attribute(ATTRIBUTE_CHARISMA,5);
          cr.set_attribute(ATTRIBUTE_WISDOM,5);
@@ -300,7 +300,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_EXPENSIVESUIT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(1001)+1000;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=1.0f;
          cr.juice=1000;
          cr.age=AGE_MIDDLEAGED;
@@ -312,14 +312,14 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_BUSINESS,LCSrandom(6)+10);
          cr.set_skill(SKILL_DODGE,LCSrandom(6)+10);
          cr.set_skill(SKILL_PISTOL,LCSrandom(6)+10);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,7);
          cr.set_attribute(ATTRIBUTE_CHARISMA,7);
          cr.set_attribute(ATTRIBUTE_WISDOM,12);
          break;
       case CREATURE_WORKER_SERVANT:
          cr.money=0;
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          armor=new Armor(*armortype[getarmortype("ARMOR_SERVANTUNIFORM")]);
          cr.give_armor(*armor,NULL);
          cr.age=AGE_MATURE;
@@ -330,7 +330,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_WORKER_SWEATSHOP:
          cr.strip(NULL);
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          cr.age=AGE_MATURE;
          cr.juice=-20;
          cr.flag|=CREATUREFLAG_ILLEGALALIEN;
@@ -344,10 +344,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.give_weapon(*weapon,NULL);
          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
          cr.give_armor(*armor,NULL);
-         if(cr.align==1)
+         if(cr.align==ALIGN_LIBERAL)
             cr.align=LCSrandom(2)-1;
          cr.age=AGE_MATURE;
-         
+
          cr.set_attribute(ATTRIBUTE_STRENGTH,5);
          break;
       case CREATURE_WORKER_SECRETARY:
@@ -362,7 +362,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Landlord");
          cr.money=LCSrandom(121)+120;
-         cr.align=0;
+         cr.align=ALIGN_MODERATE;
          cr.age=AGE_MATURE;
          cr.set_skill(SKILL_BUSINESS,LCSrandom(4)+3);
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,4);
@@ -370,7 +370,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          break;
       case CREATURE_BANK_TELLER:
          strcpy(cr.name,"Bank Teller");
-         cr.align=0;
+         cr.align=ALIGN_MODERATE;
          cr.age=AGE_MATURE;
          break;
       case CREATURE_BANK_MANAGER:
@@ -427,7 +427,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.age=AGE_GRADUATE;
 
          cr.set_skill(SKILL_FIRSTAID,LCSrandom(4)+4);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,6);
          break;
       case CREATURE_PSYCHOLOGIST:
@@ -456,7 +456,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.age=AGE_GRADUATE;
 
          cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(4)+4);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,6);
          cr.set_attribute(ATTRIBUTE_HEART,6);
          break;
@@ -486,9 +486,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.give_weapon(*weapon,NULL);
          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
          cr.give_armor(*armor,NULL);
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          cr.age=AGE_MATURE;
-         
+
          cr.set_attribute(ATTRIBUTE_STRENGTH,5);
          break;
       case CREATURE_TANK:
@@ -496,7 +496,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.animalgloss=ANIMALGLOSS_TANK;
          cr.strip(NULL);
          cr.specialattack=ATTACK_CANNON;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.set_skill(SKILL_HANDTOHAND,20);
          cr.age=AGE_TEENAGER; // wut?
          break;
@@ -522,7 +522,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_CIVILLIANARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
@@ -574,7 +574,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          cr.gender_conservative=cr.gender_liberal=GENDER_MALE;
          cr.money=LCSrandom(6)+6;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.age=AGE_MATURE;
          break;
       case CREATURE_SOLDIER:
@@ -588,7 +588,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_YOUNGADULT;
@@ -635,7 +635,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.juice=LCSrandom(100);
          cr.age=AGE_MIDDLEAGED;
@@ -667,7 +667,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.set_skill(SKILL_PISTOL,LCSrandom(3)+1);
             cr.set_skill(SKILL_DRIVING,LCSrandom(2)+1);
             cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(3)+1);
-   
+
             cr.set_attribute(ATTRIBUTE_STRENGTH,3);
             cr.set_attribute(ATTRIBUTE_AGILITY,3);
             cr.set_attribute(ATTRIBUTE_HEALTH,3);
@@ -708,7 +708,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             armor=new Armor(*armortype[getarmortype("ARMOR_POLICEARMOR")]);
             cr.give_armor(*armor,NULL);
             cr.money=LCSrandom(21)+20;
-            cr.align=-1;
+            cr.align=ALIGN_CONSERVATIVE;
             cr.infiltration=0.3f + 0.1f*LCSrandom(4);
             cr.juice=10+LCSrandom(50);
             cr.age=AGE_MATURE;
@@ -719,7 +719,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.set_skill(SKILL_HANDTOHAND,LCSrandom(2)+1);
             cr.set_skill(SKILL_DRIVING,LCSrandom(2)+1);
             cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(3)+1);
-   
+
             cr.set_attribute(ATTRIBUTE_STRENGTH,3);
             cr.set_attribute(ATTRIBUTE_AGILITY,3);
             cr.set_attribute(ATTRIBUTE_HEALTH,3);
@@ -754,7 +754,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          armor=new Armor(*armortype[getarmortype("ARMOR_SWATARMOR")]);
          cr.give_armor(*armor,NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.3f + 0.1f*LCSrandom(4);
          cr.juice=40+LCSrandom(50);
          cr.age=AGE_MATURE;
@@ -781,7 +781,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_DEATHSQUADUNIFORM")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
@@ -809,7 +809,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.reload(false);
             cr.set_skill(SKILL_HEAVYWEAPONS,LCSrandom(3)+2);
             strcpy(cr.name,"Fireman");
-            cr.align=-1;
+            cr.align=ALIGN_CONSERVATIVE;
          } else
          {
             Weapon w=Weapon(*weapontype[getweapontype("WEAPON_AXE")]);
@@ -817,7 +817,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.set_skill(SKILL_AXE,LCSrandom(3)+2);
             strcpy(cr.name,"Firefighter");
          }
-         
+
          if(sitealarm)
          {
             // Respond to emergencies in bunker gear
@@ -845,7 +845,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
 
          cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
-         
+
          cr.set_attribute(ATTRIBUTE_HEALTH,3);
          cr.set_attribute(ATTRIBUTE_AGILITY,3);
          cr.set_attribute(ATTRIBUTE_STRENGTH,3);
@@ -859,7 +859,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          while (!weapon->empty())
             cr.give_weapon(*weapon,NULL);
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
@@ -900,7 +900,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.reload(false);
 
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
@@ -991,7 +991,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             nameCCSMember(cr);
          }
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=90+LCSrandom(120);
          cr.age=AGE_MATURE;
@@ -1019,11 +1019,11 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       }
       case CREATURE_CCS_ARCHCONSERVATIVE:
          GIVE_GENDER_MALE;
-         
+
          armor=new Armor(*armortype[getarmortype("ARMOR_HEAVYARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(51)+150;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.9f + 0.01f*LCSrandom(11);
          cr.juice=500+LCSrandom(250);
          cr.age=AGE_MIDDLEAGED;
@@ -1090,7 +1090,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          armor=new Armor(*armortype[getarmortype("ARMOR_POLICEARMOR")]);
          cr.give_armor(*armor,NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.3f + 0.1f*LCSrandom(4);
          cr.juice=40+LCSrandom(50);
          cr.age=AGE_YOUNGADULT;
@@ -1134,7 +1134,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_PRISONGUARD")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
 
@@ -1174,7 +1174,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_LABCOAT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(21)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(4);
          cr.age=AGE_MATURE;
 
@@ -1247,7 +1247,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          armor=new Armor(*armortype[getarmortype("ARMOR_BLACKSUIT")]);
          cr.give_armor(*armor,NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f*LCSrandom(4);
          cr.juice=200+LCSrandom(150);
          cr.age=AGE_MATURE;
@@ -1260,7 +1260,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_DRIVING,LCSrandom(6)+4);
          cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6)+4);
          cr.set_skill(SKILL_DODGE,LCSrandom(4)+4);
-         
+
          cr.set_attribute(ATTRIBUTE_STRENGTH,5);
          cr.set_attribute(ATTRIBUTE_AGILITY,7);
          cr.set_attribute(ATTRIBUTE_HEALTH,5);
@@ -1273,13 +1273,13 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_EXPENSIVESUIT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(51)+50;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.6f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
 
          cr.set_skill(SKILL_PERSUASION,LCSrandom(8)+1);
-         
+
          cr.set_attribute(ATTRIBUTE_CHARISMA,10);
          cr.set_attribute(ATTRIBUTE_WISDOM,8);
          break;
@@ -1289,10 +1289,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_EXPENSIVESUIT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(51)+50;
-         
+
          cr.set_attribute(ATTRIBUTE_CHARISMA,10);
          cr.set_attribute(ATTRIBUTE_WISDOM,8);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.6f + 0.1f*LCSrandom(4);
          cr.juice=100+LCSrandom(50);
          cr.age=AGE_MATURE;
@@ -1329,7 +1329,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.strip(NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          if(location[cursite]->type==SITE_CORPORATE_HOUSE)
             attcap[ATTRIBUTE_CHARISMA]=10;
          else
@@ -1347,7 +1347,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          strcpy(cr.name,"Guard Dog");
          cr.animalgloss=ANIMALGLOSS_ANIMAL;
          cr.strip(NULL);
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          attcap[ATTRIBUTE_INTELLIGENCE]=1;
          attcap[ATTRIBUTE_HEART]=6;
          attcap[ATTRIBUTE_WISDOM]=6;
@@ -1371,7 +1371,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.give_armor(*armor,NULL);
          cr.money=0;
          cr.juice=-5;
-         if(cr.align==-1)
+         if(cr.align==ALIGN_CONSERVATIVE)
             cr.align=LCSrandom(2);
 
          // Prisoners should not be "prisoners" after recruiting them -- they should
@@ -1429,7 +1429,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_JUROR:
          strcpy(cr.name,"Angry Juror");
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.age=AGE_MATURE;
          break;
       case CREATURE_WORKER_FACTORY_CHILD:
@@ -1439,9 +1439,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          cr.age=AGE_CHILD;
-         
+
          cr.set_attribute(ATTRIBUTE_HEART,8);
          break;
       case CREATURE_SEWERWORKER:
@@ -1485,7 +1485,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
 
          cr.set_skill(SKILL_COMPUTERS,LCSrandom(3));
          cr.set_skill(SKILL_SCIENCE,LCSrandom(3)+1);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,7);
          break;
       case CREATURE_TEACHER:
@@ -1513,7 +1513,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.give_weapon(w,NULL);
          }
          cr.money=LCSrandom(31)+20;
-         if(cr.align==-1)
+         if(cr.align==ALIGN_CONSERVATIVE)
             cr.align=LCSrandom(2);
          cr.age=AGE_MATURE;
          break;
@@ -1526,7 +1526,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.give_weapon(w,NULL);
          }
          cr.money=LCSrandom(31)+20;
-         cr.align=1;
+         cr.align=ALIGN_LIBERAL;
          //cr.set_skill(SKILL_SURVIVAL,LCSrandom(3)+1);
          for(a=0;a<ATTNUM;a++)
          {
@@ -1596,7 +1596,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.juice=-5;
          // We'll make the crack house a bit dicey
          if(location[cursite]->type == SITE_BUSINESS_CRACKHOUSE)
-            cr.align=-1;
+            cr.align=ALIGN_CONSERVATIVE;
          cr.age=AGE_YOUNGADULT;
 
          cr.set_skill(SKILL_PISTOL,LCSrandom(2)+1);
@@ -1626,7 +1626,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          cr.money=LCSrandom(31)+20;
          cr.juice=-20;
-         if(cr.align==-1)
+         if(cr.align==ALIGN_CONSERVATIVE)
             cr.align=LCSrandom(2);
          cr.age=AGE_YOUNGADULT;
 
@@ -1702,7 +1702,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
 
          if(LCSrandom(2))
          {
-            
+
             cr.set_attribute(ATTRIBUTE_HEALTH,5);
             cr.set_attribute(ATTRIBUTE_AGILITY,5);
             cr.set_attribute(ATTRIBUTE_STRENGTH,5);
@@ -1723,7 +1723,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          }
          cr.money=LCSrandom(31)+20;
          cr.juice=-5;
-         if(cr.align==-1)
+         if(cr.align==ALIGN_CONSERVATIVE)
             cr.align=LCSrandom(2);
          cr.age=AGE_YOUNGADULT;
          cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+2);
@@ -1785,7 +1785,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.money=LCSrandom(31)+20;
          //cr.align=LCSrandom(3)-1;
          cr.age=AGE_MATURE;
-         
+
          cr.set_attribute(ATTRIBUTE_STRENGTH,7);
          cr.set_attribute(ATTRIBUTE_HEALTH,7);
          cr.set_skill(SKILL_DRIVING,LCSrandom(2)+1);
@@ -1801,8 +1801,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       case CREATURE_HIPPIE:
          strcpy(cr.name,"Hippie");
          cr.money=LCSrandom(31)+20;
-         cr.align=1;
-         
+         cr.align=ALIGN_LIBERAL;
+
          cr.set_attribute(ATTRIBUTE_HEART,6);
          attcap[ATTRIBUTE_HEART]=15;
          attcap[ATTRIBUTE_WISDOM]=1;
@@ -1893,7 +1893,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_TRENCHCOAT")]);
          cr.give_armor(*armor,NULL);
          cr.money=LCSrandom(31)+20;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.age=AGE_MATURE;
          cr.set_skill(SKILL_DRIVING,LCSrandom(3)+3);
          break;
@@ -1924,7 +1924,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.age=AGE_MATURE;
 
          cr.set_skill(SKILL_COMPUTERS,LCSrandom(5)+4);
-         
+
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,3);
          break;
       case CREATURE_NUN:
@@ -2018,7 +2018,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_PERSUASION,LCSrandom(5));
          cr.set_skill(SKILL_SEDUCTION,LCSrandom(5));
          cr.set_skill(SKILL_DISGUISE,LCSrandom(5)+3);
-         
+
          cr.set_attribute(ATTRIBUTE_WISDOM,9);
          cr.set_attribute(ATTRIBUTE_CHARISMA,5);
          cr.age=AGE_MATURE;
@@ -2077,7 +2077,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_ARMYARMOR")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f*LCSrandom(6);     //Authority over the regular soldiers!
          cr.juice=LCSrandom(100);
          cr.age=AGE_YOUNGADULT;
@@ -2106,11 +2106,11 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
             cr.take_clips(*clips,3);
             cr.reload(false);
          }
-         
+
          armor=new Armor(*armortype[getarmortype("ARMOR_MILITARY")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.5f + 0.1f*LCSrandom(4);
          cr.juice=100 + LCSrandom(50);
          cr.age=AGE_MIDDLEAGED;
@@ -2120,7 +2120,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_PISTOL,LCSrandom(6)+1);
          cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6)+1);
          cr.set_skill(SKILL_PERSUASION, LCSrandom(5)+3);
-         
+
          cr.set_attribute(ATTRIBUTE_CHARISMA, 7);
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE, 7);
          cr.set_attribute(ATTRIBUTE_WISDOM,10);
@@ -2138,7 +2138,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          armor=new Armor(*armortype[getarmortype("ARMOR_SEALSUIT")]);
          cr.give_armor(*armor,NULL);
          cr.money=0;
-         cr.align=-1;
+         cr.align=ALIGN_CONSERVATIVE;
          cr.infiltration=0.1f + 0.1f*LCSrandom(4);
          cr.juice=100 + LCSrandom(50);
          cr.age=AGE_MATURE;
@@ -2152,10 +2152,10 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_STRENGTH, 7);
          cr.set_attribute(ATTRIBUTE_HEALTH, 7);
          cr.set_attribute(ATTRIBUTE_WISDOM, 7);
-         
+
          break;
    }
-   
+
    delete weapon;
    delete armor;
    delete clips;
@@ -2168,9 +2168,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
    while(attnum>0)
    {
       int a=LCSrandom(ATTNUM);
-      if(a==ATTRIBUTE_WISDOM && cr.align==1 && LCSrandom(4))
+      if(a==ATTRIBUTE_WISDOM && cr.align==ALIGN_LIBERAL && LCSrandom(4))
          a=ATTRIBUTE_HEART;
-      if(a==ATTRIBUTE_HEART && cr.align==-1 && LCSrandom(4))
+      if(a==ATTRIBUTE_HEART && cr.align==ALIGN_CONSERVATIVE && LCSrandom(4))
          a=ATTRIBUTE_WISDOM;
       if(cr.get_attribute(a,false)<attcap[a])
       {
@@ -2179,11 +2179,11 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
       }
    }
 
-   if(cr.align==1)
+   if(cr.align==ALIGN_LIBERAL)
    {
       cr.infiltration = 0.15f+(LCSrandom(10)-5)*0.01f;
    }
-   else if(cr.align==0)
+   else if(cr.align==ALIGN_MODERATE)
    {
       cr.infiltration = 0.25f+(LCSrandom(10)-5)*0.01f;
    }
@@ -2226,9 +2226,9 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          if(randomskill == SKILL_PSYCHOLOGY)continue;
       }
 
-      // 90% chance of not allowing some skills, other than      
-      //   for conservatives      
-      if(LCSrandom(10) && cr.align!=ALIGN_CONSERVATIVE)      
+      // 90% chance of not allowing some skills, other than
+      //   for conservatives
+      if(LCSrandom(10) && cr.align!=ALIGN_CONSERVATIVE)
       {
          if(randomskill == SKILL_SHOTGUN)continue;
          if(randomskill == SKILL_PISTOL)continue;
@@ -2254,8 +2254,8 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
    }
 
    //ALIENATION
-   if(sitealienate>=1&&cr.align==0)conservatise(cr);
-   if(sitealienate==2&&cr.align==1)conservatise(cr);
+   if(sitealienate>=1&&cr.align==ALIGN_MODERATE)conservatise(cr);
+   if(sitealienate==2&&cr.align==ALIGN_LIBERAL)conservatise(cr);
 }
 
 
@@ -2773,7 +2773,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 //               find any locations of type == to cr.worklocation
 //               My hunch is that some locations, such as the 1st four
 //               are special and cannot be used here..
-//      
+//
 //   TODO There was a bug in the makecharacter() code where th
 //   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
 //   is still occuring, normally at the Latte Bar Downtown ;
