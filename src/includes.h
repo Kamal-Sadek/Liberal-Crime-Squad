@@ -1577,6 +1577,11 @@ void plate(char *str);
 const char* statename(int state=-1);
 /* endgame - converts an integer into a roman numeral for amendments */
 void romannumeral(int amendnum);
+/* Pick a random string from a table of strings. */
+extern const char *selectRandomString(const char **string_table, int table_size);
+/* Determine table_size in selectRandomString */
+#define ARRAY_ELEMENTS(ARRAY_NAME) (sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0]))
+
 
 /*
  help.cpp
