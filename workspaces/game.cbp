@@ -102,6 +102,8 @@
 		<Unit filename="../src/items/weapontype.h" />
 		<Unit filename="../src/lcsio.cpp" />
 		<Unit filename="../src/lcsio.h" />
+		<Unit filename="../src/locations/locations.cpp" />
+		<Unit filename="../src/locations/world.cpp" />
 		<Unit filename="../src/log/log.cpp" />
 		<Unit filename="../src/log/log.h" />
 		<Unit filename="../src/monthly/endgame.cpp" />
@@ -139,6 +141,7 @@
 		<Unit filename="../src/sitemode/stealth.cpp" />
 		<Unit filename="../src/sitemode/talk.cpp" />
 		<Unit filename="../src/title/highscore.cpp" />
+		<Unit filename="../src/title/initfile.cpp" />
 		<Unit filename="../src/title/newgame.cpp" />
 		<Unit filename="../src/title/saveload.cpp" />
 		<Unit filename="../src/title/titlescreen.cpp" />
@@ -153,6 +156,15 @@
 			<debugger />
 			<lib_finder disable_auto="1" />
 			<editor_config active="1" use_tabs="1" tab_indents="0" tab_width="3" indent="3" eol_mode="0" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
