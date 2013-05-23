@@ -29,6 +29,19 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
+void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
+void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);
+void doActivitySellArt(vector<Creature *> &art, char &clearformess);
+void doActivitySellMusic(vector<Creature *> &music, char &clearformess);
+void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess);
+void doActivityHacking(vector<Creature *> &hack, char &clearformess);
+void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess);
+void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess);
+void doActivityLearn(vector<Creature *> &students, char &clearformess);
+void doActivityTrouble(vector<Creature *> &trouble, char &clearformess);
+void doActivityTeach(vector<Creature *> &teachers, char &clearformess);
+void doActivityBury(vector<Creature *> &bury, char &clearformess);
+
 
 void adjustblogpower(int &power)
 {
@@ -1003,6 +1016,23 @@ void funds_and_trouble(char &clearformess)
       }
    }
 
+	doActivitySolicitDonations(solicit, clearformess);
+	doActivitySellTshirts(tshirts, clearformess);
+	doActivitySellArt(art, clearformess);
+	doActivitySellMusic(music, clearformess);
+	doActivitySellBrownies(brownies, clearformess);
+  	doActivityHacking(hack, clearformess);
+	doActivityGraffiti(graffiti, clearformess);
+  	doActivityProstitution(prostitutes, clearformess);
+  	doActivityLearn(students, clearformess);
+  	doActivityTrouble(trouble, clearformess);
+  	doActivityTeach(teachers, clearformess);
+  	doActivityBury(bury, clearformess);
+}
+
+void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess)
+{
+	int s;
    long money;
 
    //SOLICITORS
@@ -1013,7 +1043,7 @@ void funds_and_trouble(char &clearformess)
       {
          int income=solicit[s]->skill_roll(SKILL_PERSUASION) *
                     solicit[s]->get_armor().get_professionalism()+1;
-         
+
          // Country's alignment dramatically affects effectiveness
          // The more conservative the country, the more effective
          if(publicmood(-1) > 90)
@@ -1033,9 +1063,14 @@ void funds_and_trouble(char &clearformess)
       }
    }
    ledger.add_funds(total_income,INCOME_DONATIONS);
+}
 
-   //TSHIRTS
+void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess)
+{
+	int s;
+	long money;
    int mood=publicmood(-1);
+
    for(s=0;s<tshirts.size();s++)
    {
       if(!checkforarrest(*tshirts[s],"selling shirts",clearformess))
@@ -1064,9 +1099,14 @@ void funds_and_trouble(char &clearformess)
          tshirts[s]->train(SKILL_BUSINESS,max(7-tshirts[s]->get_skill(SKILL_BUSINESS),2));
       }
    }
+}
 
-   //ART
-   for(s=0;s<art.size();s++)
+void doActivitySellArt(vector<Creature *> &art, char &clearformess)
+{
+	int s;
+	long money;
+
+	for(s=0;s<art.size();s++)
    {
       if(!checkforarrest(*art[s],"sketching portraits",clearformess))
       {
@@ -1089,8 +1129,12 @@ void funds_and_trouble(char &clearformess)
          art[s]->train(SKILL_ART,max(7-art[s]->get_skill(SKILL_ART),4));
       }
    }
+}
 
-   //MUSIC
+void doActivitySellMusic(vector<Creature *> &music, char &clearformess)
+{
+	int s;
+	long money;
    for(s=0;s<music.size();s++)
    {
       if(!checkforarrest(*music[s],"playing music",clearformess))
@@ -1122,8 +1166,12 @@ void funds_and_trouble(char &clearformess)
             music[s]->train(SKILL_MUSIC,max(5-music[s]->get_skill(SKILL_MUSIC),2));
       }
    }
+}
 
-   //BROWNIES
+void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
+{
+	int s;
+	long money;
    int dodgelawroll;
    for(s=0;s<brownies.size();s++)
    {
@@ -1171,7 +1219,10 @@ void funds_and_trouble(char &clearformess)
       brownies[s]->train(SKILL_BUSINESS,max(10-brownies[s]->get_skill(SKILL_BUSINESS),3));
    }
 
-   //HACKING
+}
+
+void doActivityHacking(vector<Creature *> &hack, char &clearformess)
+{
    if(hack.size()>0)
    {
       int h;
@@ -1473,7 +1524,12 @@ void funds_and_trouble(char &clearformess)
       }
    }
 
-   //GRAFFITI
+}
+
+void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
+{
+	int s;
+
    if(graffiti.size()>=0)
    {
       for(s=0;s<graffiti.size();++s)
@@ -1663,8 +1719,10 @@ void funds_and_trouble(char &clearformess)
          }
       }
    }
+}
 
-   //PROSTITUTION
+void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
+{
    for(int p=prostitutes.size()-1;p>=0;p--)
    {
       // Business once every three days or so
@@ -1752,7 +1810,10 @@ void funds_and_trouble(char &clearformess)
          prostitutes[p]->income = fundgain;
       }
    }
+}
 
+void doActivityLearn(vector<Creature *> &students, char &clearformess)
+{
    for(int s=students.size()-1;s>=0;s--)
    {
 	   if (ledger.get_funds()<60)
@@ -1845,8 +1906,10 @@ void funds_and_trouble(char &clearformess)
          getch();
 	   }
    }
+}
 
-   //TROUBLE
+void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
+{
    if(trouble.size()>0)
    {
       long juiceval=0;
@@ -2028,7 +2091,7 @@ void funds_and_trouble(char &clearformess)
       {
          for(int t=0;t<trouble.size();t++)
          {
-            if(!LCSrandom(30) && 
+            if(!LCSrandom(30) &&
                !(trouble[t]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
             {
                if(clearformess)erase();
@@ -2066,13 +2129,13 @@ void funds_and_trouble(char &clearformess)
                      addstr(trouble[t]->get_weapon().get_name().c_str(), gamelog);
                      addstr("!", gamelog);
                      gamelog.nextMessage();
-                     
+
                      refresh();
                      getch();
 
                      if(clearformess)erase();
                      else makedelimiter(8,0);
-                     
+
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      addstr("The mob scatters!", gamelog);
@@ -2170,7 +2233,7 @@ void funds_and_trouble(char &clearformess)
 
                         refresh();
                         getch();
-                        
+
                         addjuice(*trouble[t],30,300);
                         if(trouble[t]->blood>70)trouble[t]->blood=70;
                      }
@@ -2306,8 +2369,10 @@ void funds_and_trouble(char &clearformess)
          addjuice(*trouble[h],juiceval,40);
       }
    }
+}
 
-   //Teaching
+void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
+{
    for(int t=0;t<teachers.size();t++)
    {
       int skillarray[14];
@@ -2441,14 +2506,16 @@ void funds_and_trouble(char &clearformess)
       ledger.subtract_funds( cost*min(students, 10), EXPENSE_TRAINING );
       teachers[t]->train(SKILL_TEACHING,min(students, 10));
    }
+}
 
-   //BURY THE DEAD
+void doActivityBury(vector<Creature *> &bury, char &clearformess)
+{
    if(bury.size()>0)
    {
       for(int p=pool.size()-1;p>=0;p--)
       {
          if(pool[p]->alive)continue;
-         
+
          bool arrest_attempted = false;
 
          //MAKE BASE LOOT
@@ -2488,9 +2555,8 @@ void funds_and_trouble(char &clearformess)
             break;
       }
    }
+
 }
-
-
 
 /* steal a car */
 char stealcar(Creature &cr,char &clearformess)
@@ -2911,7 +2977,7 @@ char stealcar(Creature &cr,char &clearformess)
          {
             int difficulty;
             const char * location;
-            
+
             if(!keys_in_car)
             {
                difficulty = DIFFICULTY_IMPOSSIBLE;
