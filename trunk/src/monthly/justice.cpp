@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -281,7 +281,7 @@ void trial(Creature &g)
       {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
                                       // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
                                       // Possibly people you accidentally kill when shooting at conservatives. -- LK
-         if(g.crimes_suspected[LAWFLAG_MURDER]>1) 
+         if(g.crimes_suspected[LAWFLAG_MURDER]>1)
          {
             char str[10];
             itoa(g.crimes_suspected[LAWFLAG_MURDER],str,10);
@@ -607,7 +607,7 @@ void trial(Creature &g)
    addstr("Intelligence: ");
    addstr(itoa(g.get_attribute(ATTRIBUTE_INTELLIGENCE,true),temp,10));
    y++;
-   // End SAV's adds   
+   // End SAV's adds
 
    short defense;
    int c;
@@ -967,7 +967,7 @@ void trial(Creature &g)
          addstr(" is free!", gamelog);
          gamelog.nextMessage();
 
-         
+
          if(defense==4)
          {
             // Juice sleeper
@@ -1134,7 +1134,7 @@ void penalize(Creature &g,char lenient)
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
          g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
          g.sentence+=(6+LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
-         
+
          g.sentence+=(4+LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
          g.sentence+=1*g.crimes_suspected[LAWFLAG_VANDALISM];
          g.sentence+=(12+LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
@@ -1148,7 +1148,7 @@ void penalize(Creature &g,char lenient)
       }
       else if(law[LAW_FLAGBURNING]==-1)g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
       else if(law[LAW_FLAGBURNING]==0)g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
-      
+
       if((LCSrandom(4)-g.crimes_suspected[LAWFLAG_MURDER])>0)
       {
          if(!(g.sentence<0))g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
@@ -1219,7 +1219,7 @@ void penalize(Creature &g,char lenient)
       addstr(g.propername, gamelog);
       addstr(", you are sentenced to ", gamelog);
       if(g.sentence>1200) g.sentence/=-1200;
-      
+
       if(g.sentence<=-1)
       {
          if(g.sentence<-1)
@@ -1229,7 +1229,7 @@ void penalize(Creature &g,char lenient)
             addstr(num, gamelog);
             addstr(" consecutive life terms in prison.", gamelog);
             gamelog.newline();
-            
+
             refresh();
             getch();
 
@@ -1294,8 +1294,46 @@ void imprison(Creature &g)
 //RETURNS IF SCREEN WAS ERASED
 char prison(Creature &g)
 {
+	static const char *cruel_and_unusual_execution_methods[] =
+	{
+		"beheading",
+		"drawing and quartering",
+		"disemboweling",
+		"one thousand cuts",
+		"feeding the lions",
+		"repeated gladiatorial death matches",
+		"burning",
+		"crucifixion",
+		"head-squishing",
+		"piranha tank swimming exhibition",
+		"forced sucking of Ronald Reagan's ass",
+		"covering with peanut butter and letting rats eat",
+		"burying up to the neck in a fire ant nest",
+		"running truck over the head",
+		"drowning in a sewage digester vat",
+		"chipper-shredder",
+		"use in lab research",
+		"blood draining",
+		"chemical weapons test",
+		"sale to a furniture maker",
+		"sale to a CEO as a personal pleasure toy",
+		"sale to foreign slave traders",
+		"exposure to degenerate Bay 12 Curses games"
+	};
+
+	static const char *standard_execution_methods[] =
+	{
+		"lethal injection",
+		"hanging",
+		"firing squad",
+		"electrocution"
+	};
+
+	static const char *supposedly_painless_execution_method =
+		"lethal injection";
+
    char showed=0;
-   
+
    // People not on death row or about to be released can have a scene in prison
    if(!g.deathpenalty && g.sentence!=1)
    {
@@ -1357,46 +1395,17 @@ char prison(Creature &g)
             addstr("by ", gamelog);
             if(law[LAW_DEATHPENALTY]==-2)
             {
-               switch(LCSrandom(23))
-               {
-                  case 0:addstr("beheading", gamelog);break;
-                  case 1:addstr("drawing and quartering", gamelog);break;
-                  case 2:addstr("disemboweling", gamelog);break;
-                  case 3:addstr("one thousand cuts", gamelog);break;
-                  case 4:addstr("feeding the lions", gamelog);break;
-                  case 5:addstr("repeated gladiatorial death matches", gamelog);break;
-                  case 6:addstr("burning", gamelog);break;
-                  case 7:addstr("crucifixion", gamelog);break;
-                  case 8:addstr("head-squishing", gamelog);break;
-                  case 9:addstr("piranha tank swimming exhibition", gamelog);break;
-                  case 10:addstr("forced sucking of Ronald Reagan's ass", gamelog);break;
-                  case 11:addstr("covering with peanut butter and letting rats eat", gamelog);break;
-                  case 12:addstr("burying up to the neck in a fire ant nest", gamelog);break;
-                  case 13:addstr("running truck over the head", gamelog);break;
-                  case 14:addstr("drowning in a sewage digester vat", gamelog);break;
-                  case 15:addstr("chipper-shredder", gamelog);break;
-                  case 16:addstr("use in lab research", gamelog);break;
-                  case 17:addstr("blood draining", gamelog);break;
-                  case 18:addstr("chemical weapons test", gamelog);break;
-                  case 19:addstr("sale to a furniture maker", gamelog);break;
-                  case 20:addstr("sale to a CEO as a personal pleasure toy", gamelog);break;
-                  case 21:addstr("sale to foreign slave traders", gamelog);break;
-                  case 22:addstr("exposure to degenerate Bay 12 Curses games", gamelog);break;
-               }
+            	addstr(selectRandomString(	cruel_and_unusual_execution_methods,
+            										ARRAY_ELEMENTS(cruel_and_unusual_execution_methods)), gamelog);
             }
             else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
             {
-               switch(LCSrandom(4))
-               {
-                  case 0:addstr("lethal injection", gamelog);break;
-                  case 1:addstr("hanging", gamelog);break;
-                  case 2:addstr("firing squad", gamelog);break;
-                  case 3:addstr("electrocution", gamelog);break;
-               }
+            	addstr(selectRandomString(	standard_execution_methods,
+            										ARRAY_ELEMENTS(standard_execution_methods)), gamelog);
             }
             else
             {
-               addstr("lethal injection", gamelog);
+               addstr(supposedly_painless_execution_method, gamelog);
             }
             addstr(".", gamelog);
             refresh();
@@ -1516,6 +1525,18 @@ char prison(Creature &g)
 
 void reeducation(Creature &g)
 {
+	static const char *reeducation_experiences[]
+	{
+	   " is subjected to rehabilitative therapy in prison.",
+	   " works on a prison mural about political diversity.",
+	   " routinely sees a Liberal therapist in prison.",
+	   " participates in a group therapy session in prison.",
+	   " sings songs with prisoners of all political persuasions.",
+	   " is encouraged to befriend Conservatives in prison.",
+	   " puts on an anti-crime performance in prison.",
+	   " sees an video in prison by victims of political crime."
+	};
+
    //int resist=0;
 
    //clearmessagearea();
@@ -1523,20 +1544,10 @@ void reeducation(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   switch(LCSrandom(8))
-   {
-   case 0:addstr(" is subjected to rehabilitative therapy in prison.", gamelog);break;
-   case 1:addstr(" works on a prison mural about political diversity.", gamelog);break;
-   case 2:addstr(" routinely sees a Liberal therapist in prison.", gamelog);break;
-   case 3:addstr(" participates in a group therapy session in prison.", gamelog);break;
-   case 4:addstr(" sings songs with prisoners of all political persuasions.", gamelog);break;
-   case 5:addstr(" is encouraged to befriend Conservatives in prison.", gamelog);break;
-   case 6:addstr(" puts on an anti-crime performance in prison.", gamelog);break;
-   case 7:addstr(" sees an video in prison by victims of political crime.", gamelog);break;
-   }
+   addstr(selectRandomString(reeducation_experiences, ARRAY_ELEMENTS(reeducation_experiences)), gamelog);
    gamelog.newline();
    getch();
-   
+
    move(10,1);
    if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
    {
@@ -1565,7 +1576,7 @@ void reeducation(Creature &g)
          addstr(g.name, gamelog);
          addstr(" abandons the Liberal Crime Squad!", gamelog);
          //conservatise(g);
-         
+
          //Rat out contact
          int contact = getpoolcreature(g.hireid);
          if(contact >= 0)
@@ -1594,6 +1605,18 @@ void reeducation(Creature &g)
 
 void laborcamp(Creature &g)
 {
+	static const char *labor_camp_experiences[] =
+	{
+		" is forced to work hard labor in prison.",
+		" operates dangerous machinery day after day in prison.",
+		" is beaten by sadistic prison guards.",
+		" carries heavy burdens back and forth in prison labor camp.",
+		" does back-breaking work all month in prison.",
+		" gets in a brutal fight with other distraught prisoners.",
+		" participates in a quickly-suppressed prison riot.",
+		" participates in a quickly-suppressed prison riot."
+	};
+
    //int resist=0;
 
    //clearmessagearea();
@@ -1601,20 +1624,10 @@ void laborcamp(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   switch(LCSrandom(8))
-   {
-   case 0:addstr(" is forced to work hard labor in prison.", gamelog);break;
-   case 1:addstr(" operates dangerous machinery day after day in prison.", gamelog);break;
-   case 2:addstr(" is beaten by sadistic prison guards.", gamelog);break;
-   case 3:addstr(" carries heavy burdens back and forth in prison labor camp.", gamelog);break;
-   case 4:addstr(" does back-breaking work all month in prison.", gamelog);break;
-   case 5:addstr(" gets in a brutal fight with other distraught prisoners.", gamelog);break;
-   case 6:addstr(" participates in a quickly-suppressed prison riot.", gamelog);break;
-   case 7:addstr(" is whipped and kicked by prison guards for refusing to work.", gamelog);break;
-   }
+   addstr(selectRandomString(labor_camp_experiences, ARRAY_ELEMENTS(labor_camp_experiences)), gamelog);
    gamelog.newline();
    getch();
-   
+
    move(10,1);
    if(!LCSrandom(10))
    {
@@ -1625,12 +1638,12 @@ void laborcamp(Creature &g)
          addjuice(g,-40,0);
          addjuice(g,-10,-50);
       }
-      else 
+      else
       {
          addstr(g.name, gamelog);
          addstr(" is found dead.", gamelog);
          //conservatise(g);
-         
+
          g.die();
          g.location=-1;
       }
