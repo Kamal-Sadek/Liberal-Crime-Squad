@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -422,7 +422,7 @@ char chasesequence(void)
             return 1;
          }
       }
-      
+
    }while(1);
 
    mode=GAMEMODE_BASE;
@@ -689,7 +689,7 @@ char footchase(void)
             return 1;
          }
       }
-      
+
    }while(1);
 
    mode=GAMEMODE_BASE;
@@ -871,14 +871,14 @@ void evasiverun(void)
       if(activesquad->squad[p]==NULL)continue;
       if(activesquad->squad[p]->alive)
       {
-         
+
          if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
          {
             yourspeed[p]=0;
 
             wheelchair++;
          }
-         else 
+         else
          {
             yourspeed[p]=activesquad->squad[p]->attribute_roll(ATTRIBUTE_AGILITY)+
                          activesquad->squad[p]->attribute_roll(ATTRIBUTE_HEALTH);
@@ -895,7 +895,7 @@ void evasiverun(void)
    if(yourworst>14)
    {
       yourworst+=LCSrandom(5);
-      
+
       clearmessagearea();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
@@ -918,7 +918,7 @@ void evasiverun(void)
          addstr("You scale a small building and leap between rooftops!", gamelog);
          gamelog.newline(); //New line.
       }
-      
+
       refresh();
       getch();
    }
@@ -1003,7 +1003,7 @@ void evasiverun(void)
       }
    }
 
-   
+
    //This last loop can be used to have fast people in
    //your squad escape one by one just as the enemy
    //falls behind one by one
@@ -1604,18 +1604,26 @@ char dodgedrive(void)
 
 void crashfriendlycar(int v)
 {
+	static const char *car_crash_modes[] =
+	{
+		" slams into a building!",
+		" skids out and crashes!",
+		" hits a parked car and flips over!"
+	};
+	static const char *car_crash_fatalities[] =
+	{
+   	" is crushed inside the car.",
+		"'s lifeless body smashes through the windshield.",
+		" is thrown from the car and killed instantly.",
+	};
+
    //CRASH CAR
    clearmessagearea();
    set_color(COLOR_MAGENTA,COLOR_BLACK,1);
    move(16,1);
    addstr("Your ", gamelog);
    addstr(chaseseq.friendcar[v]->fullname().c_str(), gamelog);
-   switch(LCSrandom(3))
-   {
-      case 0:addstr(" slams into a building!", gamelog);break;
-      case 1:addstr(" skids out and crashes!", gamelog);break;
-      case 2:addstr(" hits a parked car and flips over!", gamelog);break;
-   }
+   addstr(selectRandomString(car_crash_modes, ARRAY_ELEMENTS(car_crash_modes)), gamelog);
    gamelog.newline(); //New line it.
    printparty();
    refresh();
@@ -1665,20 +1673,15 @@ void crashfriendlycar(int v)
                set_color(COLOR_RED,COLOR_BLACK,1);
                move(16,1);
                addstr(activesquad->squad[p]->prisoner->name, gamelog);
-               switch(LCSrandom(3))
-               {
-                  case 0:addstr(" is crushed inside the car.", gamelog);break;
-                  case 1:addstr("'s lifeless body smashes through the windshield.", gamelog);break;
-                  case 2:addstr(" is thrown from the car and killed instantly.", gamelog);break;
-               }
-               gamelog.newline(); //New line.
+               addstr(selectRandomString(car_crash_fatalities, ARRAY_ELEMENTS(car_crash_fatalities)), gamelog);
+	            gamelog.newline(); //New line.
                printparty();
                refresh();
                getch();
             }
             activesquad->squad[p]->prisoner->die();
             victimsum++;
-            
+
             // Record death if living Liberal is hauled
             if(activesquad->squad[p]->prisoner->squadid!=-1)
             {
