@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -97,7 +97,7 @@ void youattack(void)
       short beforeblood=encounter[target].blood;
       if(encounter[target].align==1)mistake=1;
       attack(*activesquad->squad[p],encounter[target],mistake,actual);
-      
+
 
       if(actual)
       {
@@ -211,7 +211,7 @@ void youattack(void)
                      sitecrime+=10;
                   }
 
-                  
+
                   if(!pool[p]->is_armed())
                      criminalize(*pool[p],LAWFLAG_ASSAULT);
                   else
@@ -229,6 +229,31 @@ void youattack(void)
 
 void enemyattack(void)
 {
+   static const char *escape_crawling[] =
+   {
+      " crawls off moaning...",
+      " crawls off whimpering...",
+      " crawls off trailing blood...",
+      " crawls off screaming...",
+      " crawls off crying...",
+      " crawls off sobbing...",
+      " crawls off whispering...",
+      " crawls off praying...",
+      " crawls off cursing..."
+   };
+
+   static const char *escape_running[] =
+   {
+      " makes a break for it!",
+      " escapes crying!",
+      " runs away!",
+      " gets out of there!",
+      " runs hollering!",
+      " bolts out of there!",
+      " runs away screaming!",
+   };
+
+
    foughtthisround=1;
 
    goodguyattack = false;
@@ -309,31 +334,11 @@ void enemyattack(void)
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
                      (encounter[e].blood<45))
                   {
-                     switch(LCSrandom(9))
-                     {
-                        case 0:addstr(" crawls off moaning...", gamelog);break;
-                        case 1:addstr(" crawls off whimpering...", gamelog);break;
-                        case 2:addstr(" crawls off trailing blood...", gamelog);break;
-                        case 3:addstr(" crawls off screaming...", gamelog);break;
-                        case 4:addstr(" crawls off crying...", gamelog);break;
-                        case 5:addstr(" crawls off sobbing...", gamelog);break;
-                        case 6:addstr(" crawls off whispering...", gamelog);break;
-                        case 7:addstr(" crawls off praying...", gamelog);break;
-                        case 8:addstr(" crawls off cursing...", gamelog);break;
-                     }
+                     addstr(selectRandomString(escape_crawling, ARRAY_ELEMENTS(escape_crawling)), gamelog);
                   }
                   else
                   {
-                     switch(LCSrandom(7))
-                     {
-                        case 0:addstr(" makes a break for it!", gamelog);break;
-                        case 1:addstr(" escapes crying!", gamelog);break;
-                        case 2:addstr(" runs away!", gamelog);break;
-                        case 3:addstr(" gets out of there!", gamelog);break;
-                        case 4:addstr(" runs hollering!", gamelog);break;
-                        case 5:addstr(" bolts out of there!", gamelog);break;
-                        case 6:addstr(" runs away screaming!", gamelog);break;
-                     }
+                     addstr(selectRandomString(escape_running, ARRAY_ELEMENTS(escape_running)), gamelog);
                   }
 
                   gamelog.newline();
@@ -528,7 +533,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          return;
       }
    }
-   
+
    //RELOAD
    if((a.will_reload(mode==GAMEMODE_CHASECAR,force_melee)
        || (a.has_thrown_weapon && !a.extra_throwing_weapons.empty()))
@@ -536,7 +541,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    {
       if (a.will_reload(mode==GAMEMODE_CHASECAR,force_melee))
       {
-         a.reload(false);   
+         a.reload(false);
          strcpy(str,a.name);
          strcat(str," reloads.");
       }
@@ -565,7 +570,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    }
    else if(a.has_thrown_weapon)
       a.has_thrown_weapon = false;
-   
+
    const attackst* attack_used = NULL;
    attack_used = a.get_weapon().get_attack(mode==GAMEMODE_CHASECAR,           //Force ranged if in a car.
                                            force_melee,
@@ -628,7 +633,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             t.cantbluff = 2;
          }
       }
-      
+
       if(!sneak_attack)
       {
          strcat(str,attack_used->attack_description.c_str());
@@ -746,7 +751,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             sitestory->crime.push_back(CRIME_ARSON);
          }
       }
-      
+
       for (int i = 0; i < attack_used->number_attacks; ++i)
       {
          if (attack_used->uses_ammo)
@@ -764,7 +769,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                break;
          }
 
-         
+
          if (sneak_attack)
          {
             bursthits = 1;
@@ -792,7 +797,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             break;
          }
       }
-      
+
       do
       {
          int offset=0;
@@ -963,7 +968,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             damtype|=WOUND_SHOT;
          if (attack_used->bleeding)
             damtype|=WOUND_BLEEDING;
-         
+
          strengthmin=attack_used->strength_min;
          strengthmax=attack_used->strength_max;
          severtype=attack_used->severtype;
@@ -1019,7 +1024,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
 
-      
+
       // Temporary debug output for the damage roll
       #ifdef SHOWMECHANICS
       {
@@ -1036,13 +1041,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       if(mode==GAMEMODE_CHASECAR && (w == BODYPART_LEG_LEFT || w == BODYPART_LEG_RIGHT))
       {
          damamount=0; // no damage to shots to the car body
-      }   
+      }
 
       if(damamount>0)
       {
          Creature *target=0;
 
-         
+
 
          if(t.squadid!=-1&&t.hireid==-1&& //if the founder is hit...
             (damamount>t.blood||damamount>=10)&& //and lethal or potentially crippling damage is done...
@@ -1057,7 +1062,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   activesquad->squad[i]->get_attribute(ATTRIBUTE_AGILITY,true)>4)
                {
                   target=activesquad->squad[i];
-                  
+
                   clearmessagearea();
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
 
@@ -1070,16 +1075,16 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                   if(!t.alive)addstr("'s corpse", gamelog);
                   addstr("!", gamelog);
                   gamelog.newline();
-                  
+
                   addjuice(*target,10,1000);//Instant juice!! Way to take the bullet!!
-                  
+
                   refresh();
                   getch();
                   break;
                }
             }
          }
-         if(!target)target=&t;//If nobody jumps in front of the attack, 
+         if(!target)target=&t;//If nobody jumps in front of the attack,
 
          target->wound[w]|=damtype;
 
@@ -1113,7 +1118,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          }
 
 
-         
+
          if(damagearmor)armordamage(target->get_armor(),w);
 
          target->blood-=damamount;
@@ -1131,7 +1136,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                bloodblast(&target->get_armor());
 
             char alreadydead=!target->alive;
-            
+
             if(!alreadydead)
             {
                target->die();
@@ -1208,7 +1213,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             if(target->wound[w] & WOUND_CLEANOFF)strcat(str," CUTTING IT OFF!");
             else if(target->wound[w] & WOUND_NASTYOFF)strcat(str," BLOWING IT OFF!");
             else strcat(str,attack_used->hit_punctuation.c_str());
-            
+
             if(target->wound[w] & WOUND_NASTYOFF)bloodblast(&target->get_armor());
 
             if (goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -1638,7 +1643,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                severloot(*target,groundloot);
             }
 
-            //set_color(COLOR_WHITE,COLOR_BLACK,1);            
+            //set_color(COLOR_WHITE,COLOR_BLACK,1);
          }
       }
       else
@@ -1674,7 +1679,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          refresh();
          getch();
 
-		 goodguyattack = !goodguyattack;
+         goodguyattack = !goodguyattack;
          char actual_dummy;
          attack(t,a,0,actual_dummy,true);
       }
@@ -1766,7 +1771,7 @@ void damagemod(Creature &t,char &damtype,int &damamount,
                char hitlocation,char armorpenetration,int &mod)
 {
    int armor=t.get_armor().get_armor(hitlocation);
-   
+
    if(t.animalgloss==ANIMALGLOSS_TANK)
    {
       if(damtype!=WOUND_BURNED) armor=15;
@@ -1785,7 +1790,7 @@ void damagemod(Creature &t,char &damtype,int &damamount,
    if(mod2>0)mod-=mod2*2;
 
    if(mod>10)mod=10; // Cap damage multiplier (every 5 points adds 1x damage)
-   
+
    if(mod<=-8)damamount>>=6;
    else if(mod<=-6)damamount>>=5;
    else if(mod<=-4)damamount>>=4;
@@ -1810,6 +1815,66 @@ void damagemod(Creature &t,char &damtype,int &damamount,
 
 void specialattack(Creature &a, Creature &t, char &actual)
 {
+   static const char *judge_debate[]   =
+   {
+      "debates the death penalty with",
+      "debates gay rights with",
+      "debates free speech with",
+      "debates the Second Amendment with"
+   };
+
+   static const char *conservative_ceo_debate[] =
+   {
+      "explains the derivatives market to",
+      "justifies voodoo economics to",
+      "extols the Reagan presidency to",
+      "argues about tax cuts with",
+      "explains Conservative philosophy to",
+      "extends a dinner invitation to",
+      "offers a VP position to",
+      "shows a $1000 bill to",
+      "debates fiscal policy with",
+      "offers stock options to"
+   };
+
+   static const char *other_ceo_debate[] =
+   {
+      "debates fiscal policy with",
+      "derides voodoo economics to",
+      "dismisses the Reagan presidency to",
+      "argues about tax cuts with",
+      "explains Liberal philosophy to"
+   };
+
+   static const char *media_debate[] =
+   {
+      "winks at",
+      "smiles at",
+      "smirks at",
+      "chats warmly with",
+      "yells slogans at"
+   };
+
+   static const char *military_debate[] =
+   {
+      "recites the Pledge of Allegiance to",
+      "debates national security with",
+      "debates terrorism with",
+      "preaches about veterans to",
+      "explains military spending to"
+   };
+
+   static const char *police_debate[] =
+   {
+      "reasons with ",
+      "promises a fair trial to ",
+      "offers a kind ear to ",
+      "urges cooperation from ",
+      "offers a hug to ",
+      "suggests counseling to ",
+      "gives a teddy bear to "
+   };
+
    int resist=0;
    char str[200];
 
@@ -1833,13 +1898,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
    {
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
-         switch(LCSrandom(4))
-         {
-            case 0:strcat(str,"debates the death penalty with");break;
-            case 1:strcat(str,"debates gay rights with");break;
-            case 2:strcat(str,"debates free speech with");break;
-            case 3:strcat(str,"debates the Second Amendment with");break;
-         }
+         strcat(str,selectRandomString(judge_debate, ARRAY_ELEMENTS(judge_debate)));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1882,30 +1941,13 @@ void specialattack(Creature &a, Creature &t, char &actual)
       case CREATURE_CORPORATE_CEO:
          if(a.align==-1)
          {
-            switch(LCSrandom(10))
-            {
-               case 0:strcat(str,"explains the derivatives market to");break;
-               case 1:strcat(str,"justifies voodoo economics to");break;
-               case 2:strcat(str,"extols the Reagan presidency to");break;
-               case 3:strcat(str,"argues about tax cuts with");break;
-               case 4:strcat(str,"explains Conservative philosophy to");break;
-               case 5:strcat(str,"extends a dinner invitation to");break;
-               case 6:strcat(str,"offers a VP position to");break;
-               case 7:strcat(str,"shows a $1000 bill to");break;
-               case 8:strcat(str,"debates fiscal policy with");break;
-               case 9:strcat(str,"offers stock options to");break;
-            }
+            strcat(str,selectRandomString(conservative_ceo_debate,
+                                          ARRAY_ELEMENTS(conservative_ceo_debate)));
          }
          else
          {
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(str,"debates fiscal policy with");break;
-               case 1:strcat(str,"derides voodoo economics to");break;
-               case 2:strcat(str,"dismisses the Reagan presidency to");break;
-               case 3:strcat(str,"argues about tax cuts with");break;
-               case 4:strcat(str,"explains Liberal philosophy to");break;
-            }
+            strcat(str,selectRandomString(other_ceo_debate,
+                                          ARRAY_ELEMENTS(other_ceo_debate)));
          }
          strcat(str," ");
          strcat(str,t.name);
@@ -1924,14 +1966,8 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_RADIOPERSONALITY:
       case CREATURE_NEWSANCHOR:
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(str,"winks at");break;
-            case 1:strcat(str,"smiles at");break;
-            case 2:strcat(str,"smirks at");break;
-            case 3:strcat(str,"chats warmly with");break;
-            case 4:strcat(str,"yells slogans at");break;
-         }
+         strcat(str,selectRandomString(media_debate,
+                                       ARRAY_ELEMENTS(media_debate)));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1946,15 +1982,8 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
          break;
       case CREATURE_MILITARYOFFICER:
-         switch(LCSrandom(5))
-         {
-            case 0:strcat(str,"recites the Pledge of Allegiance to");break;
-            case 1:strcat(str,"debates national security with");break;
-            case 2:strcat(str,"debates terrorism with");break;
-            case 3:strcat(str,"preaches about veterans to");break;
-            case 4:strcat(str,"explains military spending to");break;
-
-         }
+         strcat(str,selectRandomString(military_debate,
+                                       ARRAY_ELEMENTS(military_debate)));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1971,23 +2000,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
       case CREATURE_COP:
          if(a.enemy())
          {
-            switch(LCSrandom(7))
-            {
-               case 0:strcat(str,"reasons with ");
-                      strcat(str,t.name);break;
-               case 1:strcat(str,"promises a fair trial to ");
-                      strcat(str,t.name);break;
-               case 2:strcat(str,"offers a kind ear to ");
-                      strcat(str,t.name);break;
-               case 3:strcat(str,"urges cooperation from ");
-                      strcat(str,t.name);break;
-               case 4:strcat(str,"offers a hug to ");
-                      strcat(str,t.name);break;
-               case 5:strcat(str,"suggests counseling to ");
-                      strcat(str,t.name);break;
-               case 6:strcat(str,"gives a teddy bear to ");
-                      strcat(str,t.name);break;
-            }
+            strcat(str,selectRandomString(police_debate,
+                                          ARRAY_ELEMENTS(police_debate)));
+            strcat(str,t.name);
             strcat(str,"!");
 
             resist=t.attribute_roll(ATTRIBUTE_HEART);
@@ -2221,7 +2236,7 @@ void severloot(Creature &cr,vector<Item *> &loot)
       gamelog.newline();
       refresh();
       getch();
-      
+
       if (mode == GAMEMODE_SITE)
          cr.drop_weapons_and_clips(&loot);
       else
@@ -2401,7 +2416,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          if(noncombat)
          {
             clearmessagearea();
-            
+
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
             move(16,1);
@@ -2897,23 +2912,23 @@ void adddeathmessage(Creature &cr)
             move(17,1);
             addstr("a prayer, then all is still.", gamelog);
             break;
-		 case 10:
-			strcat(str," speaks these final words: ");
-			addstr(str, gamelog);
+       case 10:
+         strcat(str," speaks these final words: ");
+         addstr(str, gamelog);
             move(17,1);
-			switch (cr.align)
-			{
-			case ALIGN_LIBERAL:
-			case ALIGN_ELITELIBERAL:
-				addstr(slogan, gamelog);
-				break;
-			case ALIGN_MODERATE:
-				addstr("\"A plague on both your houses...\"", gamelog);
-				break;
-			default:
-				addstr("\"Better dead than liberal...\"", gamelog);
-				break;
-			}
+         switch (cr.align)
+         {
+         case ALIGN_LIBERAL:
+         case ALIGN_ELITELIBERAL:
+            addstr(slogan, gamelog);
+            break;
+         case ALIGN_MODERATE:
+            addstr("\"A plague on both your houses...\"", gamelog);
+            break;
+         default:
+            addstr("\"Better dead than liberal...\"", gamelog);
+            break;
+         }
       }
    }
    gamelog.newline();
