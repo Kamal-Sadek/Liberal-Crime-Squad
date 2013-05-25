@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -37,7 +37,7 @@ void noticecheck(int exclude,int difficulty)
    if(sitealarm)return;
 
    char sneak=0;
-   
+
    int topi=0;
    for(int i=0;i<6;++i)
    {
@@ -53,7 +53,7 @@ void noticecheck(int exclude,int difficulty)
    {
       //Prisoners shouldn't shout for help.
       if(!strcmp(encounter[e].name,"Prisoner"))continue;
-      
+
       if(e==exclude || encounter[e].exists==false)
          continue;
       else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty))
@@ -72,7 +72,7 @@ void noticecheck(int exclude,int difficulty)
          else
             addstr("and shouts for help!", gamelog);
          gamelog.newline();
-         
+
          sitealarm=1;
 
 
@@ -170,6 +170,15 @@ char alienationcheck(char mistake)
 /* checks if conservatives see through your disguise */
 void disguisecheck(int timer)
 {
+   static const char *blew_stealth_check[] =
+   {
+      " coughs.",
+      " accidentally mumbles the slogan.",
+      " paces uneasily.",
+      " stares at the Conservatives.",
+      " laughs nervously."
+   };
+
    int weapon=0;
    int squadsize=0;
    bool forcecheck=false;
@@ -303,7 +312,7 @@ void disguisecheck(int timer)
                   {
                      // That was not very casual, dude.
                      if(result<0)blew_it=i;
-                     
+
                      noticed = true;
                      break;
                   }
@@ -356,16 +365,9 @@ void disguisecheck(int timer)
             move(16,1);
 
             addstr(activesquad->squad[blew_it]->name, gamelog);
-            switch(LCSrandom(5))
-            {
-            case 0: addstr(" coughs.", gamelog); break;
-            case 1: addstr(" accidentally mumbles the slogan.", gamelog); break;
-            case 2: addstr(" paces uneasily.", gamelog); break;
-            case 3: addstr(" stares at the Conservatives.", gamelog); break;
-            case 4: addstr(" laughs nervously.", gamelog); break;
-            }
+            addstr(selectRandomString(blew_stealth_check, ARRAY_ELEMENTS(blew_stealth_check)), gamelog);
             gamelog.newline();
-            
+
             getch();
          }
          else if(!noticed)
@@ -410,7 +412,7 @@ void disguisecheck(int timer)
 
             time = 20 + LCSrandom(10) - encounter[n].get_attribute(ATTRIBUTE_INTELLIGENCE,true)
                                       - encounter[n].get_attribute(ATTRIBUTE_WISDOM,true);
-            
+
             if(time<1)time=1;
 
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
@@ -452,7 +454,7 @@ void disguisecheck(int timer)
                   addstr("and launches into angry Conservative barking!", gamelog);
                else
                   addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
-               
+
             }
             else
                addstr("and shouts for help!", gamelog);
@@ -472,16 +474,16 @@ char weapon_in_character(const string& wtype, const string& atype)
 {
    if(atype == "ARMOR_LABCOAT" && wtype == "WEAPON_SYRINGE")
       return CREATURE_SCIENTIST_LABTECH;
-   
+
    if(atype == "ARMOR_BLACKROBE" && wtype == "WEAPON_GAVEL")
       return CREATURE_JUDGE_LIBERAL;
-   
+
    if(atype == "ARMOR_SECURITYUNIFORM" && (wtype == "WEAPON_REVOLVER_38" ||
          wtype == "WEAPON_REVOLVER_44"    || wtype == "WEAPON_DESERT_EAGLE" ||
          wtype == "WEAPON_SEMIPISTOL_9MM" || wtype == "WEAPON_SEMIPISTOL_45" ||
          wtype == "WEAPON_NIGHTSTICK"     || wtype == "WEAPON_MP5_SMG"))
       return CREATURE_SECURITYGUARD;
-   
+
    if((atype == "ARMOR_POLICEUNIFORM"   || atype == "ARMOR_POLICEARMOR") &&
          (wtype == "WEAPON_REVOLVER_38"   || wtype == "WEAPON_REVOLVER_44" ||
          wtype == "WEAPON_DESERT_EAGLE"   || wtype == "WEAPON_SEMIPISTOL_9MM" ||
@@ -608,7 +610,7 @@ char hasdisguise(Creature &cr)
 
       switch(type)
       {
-         
+
          case SITE_INDUSTRY_WAREHOUSE:
          case SITE_RESIDENTIAL_SHELTER:
             uniformed=1;
