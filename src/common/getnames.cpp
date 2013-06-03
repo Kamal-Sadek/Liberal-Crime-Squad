@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     
 /*
 This file was created by Chris Johnson (grundee@users.sourceforge.net)
 by copying code from game.cpp.
-To see descriptions of files and functions, see the list at 
+To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
@@ -483,52 +483,53 @@ void getlaw(char *str,int l)
 
 void cityname(char *story)
 {
-   switch(LCSrandom(42))
-   {
-      case 0:strcpy(story,"San Francisco, CA");break;
-      case 1:strcpy(story,"Boston, MA");break;
-      case 2:strcpy(story,"Los Angeles, CA");break;
-      case 3:strcpy(story,"Detroit, MI");break;
-      case 4:strcpy(story,"Cleveland, OH");break;
-      case 5:strcpy(story,"Cincinnati, OH");break;
-      case 6:strcpy(story,"New York, NY");break;
-      case 7:strcpy(story,"Chicago, IL");break;
-      case 8:strcpy(story,"Trenton, NJ");break;
-      case 9:strcpy(story,"Denver, CO");break;
-      case 10:strcpy(story,"Phoenix, AZ");break;
-      case 11:strcpy(story,"Little Rock, AR");break;
-      case 12:strcpy(story,"Houston, TX");break;
-      case 13:strcpy(story,"Dallas, TX");break;
-      case 14:strcpy(story,"Hartford, CT");break;
-      case 15:strcpy(story,"Miami, FL");break;
-      case 16:strcpy(story,"Baton Rouge, LA");break;
-      case 17:strcpy(story,"Seattle, WA");break;
-      case 18:strcpy(story,"Salt Lake City, UT");break;
-      case 19:strcpy(story,"Philadelphia, PA");break;
-      case 20:strcpy(story,"San Antonio, TX");break;
-      case 21:strcpy(story,"Columbus, OH");break;
-      case 22:strcpy(story,"Atlanta, GA");break;
-      case 23:strcpy(story,"Buffalo, NY");break;
-      case 24:strcpy(story,"Orlando, FL");break;
-      case 25:strcpy(story,"Syracuse, NY");break;
-      case 26:strcpy(story,"Baltimore, MD");break;
-      case 27:strcpy(story,"Washington D.C.");break;
-      case 28:strcpy(story,"Memphis, TN");break;
-      case 29:strcpy(story,"Brooklyn, NY");break;
-      case 30:strcpy(story,"New Orleans, LA");break;
-      case 31:strcpy(story,"Albany, NY");break;
-      case 32:strcpy(story,"Jackson, MS");break;
-      case 33:strcpy(story,"Waco, TX");break;
-      case 34:strcpy(story,"Oklahoma, OK");break;
-      case 35:strcpy(story,"Austin, TX");break;
-      case 36:strcpy(story,"Nashville, TN");break;
-      case 37:strcpy(story,"Philadelphia, PA");break;
-      case 38:strcpy(story,"Tampa, FL");break;
-      case 39:strcpy(story,"San Diego, CA");break;
-      case 40:strcpy(story,"El Paso, TX");break;
-      case 41:strcpy(story,"Baton Rouge, LA");break;
-      default:strcpy(story,"ERROR, AR");break;
-   }
+	static const char *city_names[] =
+	{
+		"San Francisco, CA",
+		"Boston, MA",
+		"Los Angeles, CA",
+		"Detroit, MI",
+		"Cleveland, OH",
+		"Cincinnati, OH",
+		"New York, NY",
+		"Chicago, IL",
+		"Trenton, NJ",
+		"Denver, CO",
+		"Phoenix, AZ",
+		"Little Rock, AR",
+		"Houston, TX",
+		"Dallas, TX",
+		"Hartford, CT",
+		"Miami, FL",
+		"Baton Rouge, LA",
+		"Seattle, WA",
+		"Salt Lake City, UT",
+		"Philadelphia, PA",
+		"San Antonio, TX",
+		"Columbus, OH",
+		"Atlanta, GA",
+		"Buffalo, NY",
+		"Orlando, FL",
+		"Syracuse, NY",
+		"Baltimore, MD",
+		"Washington D.C.",
+		"Memphis, TN",
+		"Brooklyn, NY",
+		"New Orleans, LA",
+		"Albany, NY",
+		"Jackson, MS",
+		"Waco, TX",
+		"Oklahoma, OK",
+		"Austin, TX",
+		"Nashville, TN",
+		"Philadelphia, PA",
+		"Tampa, FL",
+		"San Diego, CA",
+		"El Paso, TX",
+		"Baton Rouge, LA"
+	};
+
+	strcpy(story,selectRandomString(city_names, ARRAY_ELEMENTS(city_names)));
 }
 
 /* Allow the player to enter a name with an optional default */
