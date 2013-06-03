@@ -753,7 +753,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    }
    addstr("Weapon: ");
    addstr(cr->get_weapon_string(1).c_str());
-   
+
 
    if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
    else
@@ -1336,7 +1336,7 @@ void printliberalstats(Creature &cr)
       addstr(num);
    }
    // Add seduction stats
-   move(19,0); 
+   move(19,0);
    int lovers = loveslaves(cr);
    if(cr.flag & CREATUREFLAG_LOVESLAVE)
       lovers++;
@@ -1753,10 +1753,10 @@ void printhealthstat(Creature &g,int y,int x,char smll)
 }
 
 /*
-This function prints the cash the player has with optional prefix as 
+This function prints the cash the player has with optional prefix as
 well as screen coordinates.
 
-Please note that offsetx is the offset from the right of the screen, y is 
+Please note that offsetx is the offset from the right of the screen, y is
 the offset from the top as always.
 */
 void printfunds(int y, int offsetx, const char* prefix)
@@ -1871,4 +1871,61 @@ int mvaddstr(int y, int x, std::string text)
 int mvaddstr(int y, int x, std::string text, Log &log)
 {
    return mvaddstr(y, x, text.c_str(), log);
+}
+
+/*	addstr with formatted output	*/
+int addstr_f(const char * format, ...)
+{
+   static char sbuf[81];
+   va_list args;
+
+   va_start (args, format);
+   vsnprintf(sbuf, 81, format, args);
+	va_end (args);
+
+	return(addstr(sbuf));
+}
+
+/*	mvaddstr with formatted output	*/
+int mvaddstr_f(int y, int x, const char * format, ...)
+{
+   static char sbuf[81];
+   va_list args;
+
+   va_start (args, format);
+   vsnprintf(sbuf, 81, format, args);
+	va_end (args);
+
+	return(mvaddstr(y, x, sbuf));
+}
+
+
+/*	addstr with formatted output and logging	*/
+int addstr_fl(Log &log, const char * format, ...)
+{
+   static char sbuf[81];
+   va_list args;
+
+   va_start (args, format);
+   vsnprintf(sbuf, 81, format, args);
+	va_end (args);
+
+	log.record(sbuf);
+
+	return(addstr(sbuf));
+}
+
+/*	mvaddstr with formatted output and logging	*/
+int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
+{
+   static char sbuf[81];
+   va_list args;
+
+   va_start (args, format);
+   vsnprintf(sbuf, 81, format, args);
+	va_end (args);
+
+	log.record(sbuf);
+
+	return(mvaddstr(y, x, sbuf));
 }
