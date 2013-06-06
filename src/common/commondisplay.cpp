@@ -77,6 +77,11 @@ void set_activity_color(long activity_type)
       set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
 
+      // Recruitment
+   case ACTIVITY_RECRUITING:
+      set_color(COLOR_GREEN,COLOR_BLACK,0);
+      break;
+
       // Less exciting liberal activities
    case ACTIVITY_SLEEPER_SPY:
    case ACTIVITY_COMMUNITYSERVICE:
@@ -1881,9 +1886,9 @@ int addstr_f(const char * format, ...)
 
    va_start (args, format);
    vsnprintf(sbuf, 81, format, args);
-	va_end (args);
+   va_end (args);
 
-	return(addstr(sbuf));
+   return(addstr(sbuf));
 }
 
 /*	mvaddstr with formatted output	*/
@@ -1894,9 +1899,9 @@ int mvaddstr_f(int y, int x, const char * format, ...)
 
    va_start (args, format);
    vsnprintf(sbuf, 81, format, args);
-	va_end (args);
+   va_end (args);
 
-	return(mvaddstr(y, x, sbuf));
+   return(mvaddstr(y, x, sbuf));
 }
 
 
@@ -1908,11 +1913,11 @@ int addstr_fl(Log &log, const char * format, ...)
 
    va_start (args, format);
    vsnprintf(sbuf, 81, format, args);
-	va_end (args);
+   va_end (args);
 
-	log.record(sbuf);
+   log.record(sbuf);
 
-	return(addstr(sbuf));
+   return(addstr(sbuf));
 }
 
 /*	mvaddstr with formatted output and logging	*/
@@ -1923,9 +1928,9 @@ int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
 
    va_start (args, format);
    vsnprintf(sbuf, 81, format, args);
-	va_end (args);
-
-	log.record(sbuf);
-
-	return(mvaddstr(y, x, sbuf));
+   va_end (args);
+   
+   log.record(sbuf);
+   
+   return(mvaddstr(y, x, sbuf));
 }

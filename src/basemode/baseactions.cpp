@@ -498,7 +498,7 @@ void stopevil(void)
       if(multipleCityMode && loc != -1 && location[loc]->type == location[loc]->city)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddch(y,0,y-10+(int)'A');
+         mvaddch(y+1,0,y-10+(int)'A');
          addstr(" - Travel to a Different City");
          if(!havecar) {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);

@@ -644,6 +644,9 @@ void advanceday(char &clearformess,char canseethings)
          getwheelchair(*pool[p],clearformess);
          if(pool[p]->flag & CREATUREFLAG_WHEELCHAIR)pool[p]->activity.type=ACTIVITY_NONE;
          break;
+      case ACTIVITY_RECRUITING:
+         recruitment_activity(*pool[p],clearformess);
+         break;
       case ACTIVITY_STEALCARS:
          if(stealcar(*pool[p],clearformess))
          {
@@ -1063,7 +1066,7 @@ void advanceday(char &clearformess,char canseethings)
 
             if(date[d]->timeleft==0)
             {
-               int hs=find_homeless_shelter(*pool[p]);
+               int hs=find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, date[d]->city);
 
                if(location[pool[p]->base]->siege.siege)
                {
