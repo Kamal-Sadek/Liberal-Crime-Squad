@@ -328,6 +328,7 @@ public:
    void train(int trainedskill, int experience, int upto);
    void skill_up();
    int get_skill_ip(int skill);
+   std::string get_type_name();
 
    bool enemy();
 

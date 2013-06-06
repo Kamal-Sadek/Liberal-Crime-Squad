@@ -88,6 +88,217 @@ static void getissueeventstring(char* str)
    }
 }
 
+struct recruitData
+{
+   int type;
+   char* name;
+   int difficulty;
+   recruitData(int type_, char* name_, int difficulty_):type(type_),name(name_),difficulty(difficulty_) {}
+};
+
+recruitData* recruitselect(Creature &cr)
+{
+   // Default list of recruitable creatures
+   static recruitData recruitable_creatures[] = {
+      recruitData(CREATURE_VETERAN, "Army Veteran", 3),
+      recruitData(CREATURE_ATHLETE, "Athlete", 5),
+      recruitData(CREATURE_COLLEGESTUDENT, "College Student", 1),
+      recruitData(CREATURE_PROGRAMMER, "Computer Programmer", 3),
+      recruitData(CREATURE_DANCER, "Dancer", 4),
+      recruitData(CREATURE_DOCTOR, "Doctor", 5),
+      recruitData(CREATURE_FASHIONDESIGNER, "Fashion Designer", 6),
+      recruitData(CREATURE_GANGMEMBER, "Gang Member", 2),
+      recruitData(CREATURE_HIPPIE, "Hippie", 0),
+      recruitData(CREATURE_JOURNALIST, "Journalist", 3),
+      recruitData(CREATURE_JUDGE_LIBERAL, "Judge", 6),
+      recruitData(CREATURE_LAWYER, "Lawyer", 5),
+      recruitData(CREATURE_LOCKSMITH, "Locksmith", 5),
+      recruitData(CREATURE_MARTIALARTIST, "Martial Artist", 6),
+      recruitData(CREATURE_MUSICIAN, "Musician", 3),
+      recruitData(CREATURE_MUTANT, "Mutant", 4),
+      recruitData(CREATURE_PROSTITUTE, "Prostitute", 1),
+      recruitData(CREATURE_PSYCHOLOGIST, "Psychologist", 5),
+      recruitData(CREATURE_TAXIDRIVER, "Taxi Driver", 4),
+      recruitData(CREATURE_TEACHER, "Teacher", 5)
+   };
+   // Number of recruitable creatures
+   static int options = sizeof(recruitable_creatures) / sizeof(recruitData);
+   for(int i=0; i<options; i++)
+   {
+      // Dynamic difficulty for certain creatures, recalculated each time the function is called
+      if(recruitable_creatures[i].type == CREATURE_MUTANT)
+      {
+         if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
+            recruitable_creatures[i].difficulty = 10;
+         else if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
+            recruitable_creatures[i].difficulty = 7;
+         else
+            recruitable_creatures[i].difficulty = 2;
+      }
+   }
+
+   int page=0;
+   char str[200];
+   do
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(0,0);
+      addstr("What type of person will ");
+      addstr(cr.name);
+      addstr(" try to meet and recruit today?");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(1,0);
+      addstr("----TYPE-----------------------------------------DIFFICULTY TO ARRANGE MEETING--");
+
+      int y=2,difficulty;
+      for(int p=page*19;p<options&&p<page*19+19;p++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addch(y+'A'-2);addstr(" - ");
+         addstr(recruitable_creatures[p].name);
+
+         move(y,49);
+         difficulty=recruitable_creatures[p].difficulty;
+         switch(difficulty)
+         {
+         case 0:
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("Simple");
+            break;
+         case 1:
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("Very Easy");
+            break;
+         case 2:
+            set_color(COLOR_CYAN,COLOR_BLACK,0);
+            addstr("Easy");
+            break;
+         case 3:
+            set_color(COLOR_BLUE,COLOR_BLACK,1);
+            addstr("Below Average");
+            break;
+         case 4:
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            addstr("Average");
+            break;
+         case 5:
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("Above Average");
+            break;
+         case 6:
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("Hard");
+            break;
+         case 7:
+            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
+            addstr("Very Hard");
+            break;
+         case 8:
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("Extremely Difficult");
+            break;
+         case 9:
+            set_color(COLOR_RED,COLOR_BLACK,0);
+            addstr("Nearly Impossible");
+            break;
+         default:
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Impossible");
+            break;
+         }
+
+         y++;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr("Press a Letter to select a Profession");
+      move(23,0);
+      addpagestr();
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<options)page++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page*19+(int)(c-'a');
+         if(p<options)
+         {
+            return &recruitable_creatures[p];
+         }
+      }
+   }while(1);
+
+   return 0;
+}
+
+/* recruiting */
+char recruitment_activity(Creature &cr,char &clearformess)
+{
+   clearformess=1;
+
+   recruitData* targetTypeData = recruitselect(cr);
+
+   if(targetTypeData)
+   {
+      int diff=targetTypeData->difficulty*2;
+
+      cr.train(SKILL_STREETSENSE,5);
+
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(0,0);
+      addstr("Adventures in Liberal Recruitment", gamelog);
+      gamelog.nextMessage();
+      printcreatureinfo(&cr);
+      makedelimiter(8,0);
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(10,0);
+      addstr(cr.name, gamelog);
+      addstr(" asks around for a ", gamelog);
+      addstr(targetTypeData->name, gamelog);
+      addstr("...", gamelog);
+
+      refresh();
+      getch();
+
+      //ROUGH DAY
+      if(!cr.skill_check(SKILL_STREETSENSE,diff))
+      {
+         mvaddstr_fl(11, 0, gamelog, "%s was unable to meet with a %s today.", cr.name, targetTypeData->name);
+         gamelog.nextMessage();
+         getch();
+         return 0;
+      }
+      else
+      {
+         mvaddstr_fl(11, 0, gamelog, "%s managed to track down a %s.", cr.name, targetTypeData->name);
+         getch();
+      }
+
+      Creature* r = new Creature();
+      makecreature(*r, targetTypeData->type);
+      r->namecreature();
+      char str[75];
+      getrecruitcreature(str,r->type);
+
+      clear();
+      mvaddstr_fl(0, 0, gamelog, "Talking to a %s.", str);
+      printcreatureinfo(r);
+      getch();
+   }
+   return 1;
+}
 
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(recruitst &r,int p,char &clearformess)

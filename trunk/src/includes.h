@@ -588,6 +588,7 @@ enum Activity
    ACTIVITY_SLEEPER_STEAL,
    ACTIVITY_SLEEPER_JOINLCS,
    ACTIVITY_STUDY_LOCKSMITHING,
+   ACTIVITY_RECRUITING,
    ACTIVITYNUM
 };
 
@@ -1061,6 +1062,7 @@ struct datest
    long mac_id;
    vector<Creature *> date;
    short timeleft;
+   int city;
    datest()
    {
       timeleft=0;
@@ -1383,7 +1385,14 @@ int addstr(std::string text);
 int addstr(std::string text, Log &log);
 int mvaddstr(int y, int x, std::string text);
 int mvaddstr(int y, int x, std::string text, Log &log);
-
+/* addstr with formatted output */
+int addstr_f(const char * format, ...);
+/* mvaddstr with formatted output */
+int mvaddstr_f(int y, int x, const char * format, ...);
+/* addstr with formatted output and logging */
+int addstr_fl(Log &log, const char * format, ...);
+/* mvaddstr with formatted output and logging */
+int mvaddstr_fl(int y, int x, Log &log, const char * format, ...);
 
 /*
  commonactions.cpp
@@ -2011,6 +2020,8 @@ char completedate(datest &d,int p,char &clearformess);
 /*
  recruit.cpp
 */
+/* automatic finding recruits from the activity screen */
+char recruitment_activity(Creature &cr,char &clearformess);
 /* daily - recruit - recruit meeting*/
 char completerecruitmeeting(recruitst &d,int p,char &clearformess);
 

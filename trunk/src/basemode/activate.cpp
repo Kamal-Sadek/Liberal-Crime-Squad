@@ -323,95 +323,63 @@ void activate(Creature *cr)
       printfunds(0,1,"Money: ");
 
       move(0,0);
-     if (cr->income)
-     {
-        addstr(cr->name);
-        addstr(" made $");
-        char num[20];
-        itoa(cr->income,num,10);
-        addstr(num);
-        addstr(" yesterday. What now?");
-     }
-     else
-     {
-        addstr("Taking Action: What will ");
-        addstr(cr->name);
-        addstr(" be doing today?");
-     }
+      if (cr->income)
+      {
+         addstr(cr->name);
+         addstr(" made $");
+         char num[20];
+         itoa(cr->income,num,10);
+         addstr(num);
+         addstr(" yesterday. What now?");
+      }
+      else
+      {
+         addstr("Taking Action: What will ");
+         addstr(cr->name);
+         addstr(" be doing today?");
+      }
 
       printcreatureinfo(cr);
 
       makedelimiter(8,0);
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
-      move(10,1);
-      addstr("A - Engaging in Liberal Activism");
+      mvaddstr(10,1,"A - Engaging in Liberal Activism");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='b');
-      move(11,1);
-      addstr("B - Legal Fundraising");
+      mvaddstr(11,1,"B - Legal Fundraising");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='c');
-      move(12,1);
-      addstr("C - Illegal Fundraising");
-
+      mvaddstr(12,1,"C - Illegal Fundraising");
+      
       set_color(COLOR_WHITE,COLOR_BLACK,state=='d');
-      move(13,1);
-      addstr("D - Make/Repair Clothing");
-
-      if(cr->get_skill(SKILL_FIRSTAID)!=0)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
-      }
-      else
-      {
-         set_color(COLOR_BLACK,COLOR_BLACK,1);
-      }
-      move(14,1);
-      addstr("H - Heal Liberals");
-
-      move(15,1);
-      if(cr->canwalk())
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS&&state==0);
-         addstr("S - Stealing a Car");
-      }
-      else
-      {
-         if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR&&state==0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         addstr("S - Procuring a Wheelchair");
-      }
+      mvaddstr(13,1,"D - Recruitment and Acquisition");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='t');
-      move(16,1);
-      addstr("T - Teaching Other Liberals");
+      mvaddstr(14,1,"T - Teaching Other Liberals");
 
-     if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
+      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(17,1);
-      addstr("I - Tend to a Conservative hostage");
+      mvaddstr(15,1,"I - Tend to a Conservative hostage");
 
-      if(clinictime(*cr))
-     {
-        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
-        move(18,1);
-        addstr("M - Move to the Free CLINIC");
-     }
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='l');
+      mvaddstr(16,1,"L - Learn in the University District");
+
+      if(clinictime(*cr)) set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
+      mvaddstr(17,1,"M - Move to the Free Clinic");
+
+      if(cr->get_skill(SKILL_FIRSTAID)!=0)
+         set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
       else
-     {
-        set_color(COLOR_WHITE,COLOR_BLACK,state=='l');
-        move(18,1);
-        addstr("L - Learn in the University District");
-     }
-      
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      mvaddstr(18,1,"H - Heal Liberals");
 
       if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_BURY&&state==0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
-      move(19,1);
-      addstr("Z - Dispose of bodies");
+      mvaddstr(19,1,"Z - Dispose of bodies");
 
-     siegest *siege=NULL;
+      siegest *siege=NULL;
       if(selectedsiege!=-1)siege=&location[selectedsiege]->siege;
       if(activesquad!=NULL && activesquad->squad[0]->location!=-1)siege=&location[activesquad->squad[0]->location]->siege;
       char sieged=0;
@@ -422,71 +390,58 @@ void activate(Creature *cr)
          if(sieged)underattack=siege->underattack;
       }
 
-     if (!sieged)
-     {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-        move(20,1);
-        addstr("E - Equip this Liberal");
-     }
-
-      if(state == 'a' || state == 'b' || state == 'c' ||state == 'd' )
+      if (!sieged)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(19,40);
-         addstr("? - Help");
+         mvaddstr(20,1,"E - Equip this Liberal");
+      }
+
+      if(state == 'a' || state == 'b' || state == 'c' || state == 'd' )
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(19,40,"? - Help");
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(20,40);
-      addstr("Enter - Confirm Selection");
+      mvaddstr(20,40,"Enter - Confirm Selection");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(21,1);
-      addstr("X - Nothing for Now");
+      mvaddstr(21,1,"X - Nothing for Now");
 
       switch(state)
       {
       case 'a':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_COMMUNITYSERVICE);
-         move(10,40);
-         addstr("1 - Community Service");
+         mvaddstr(10,40,"1 - Community Service");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TROUBLE);
-         move(11,40);
-         addstr("2 - Liberal Disobedience");
+         mvaddstr(11,40,"2 - Liberal Disobedience");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_GRAFFITI);
-         move(12,40);
-         addstr("3 - Graffiti");
+         mvaddstr(12,40,"3 - Graffiti");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_POLLS);
-         move(13,40);
-         addstr("4 - Search Opinion Polls");
+         mvaddstr(13,40,"4 - Search Opinion Polls");
 
          //set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_ATTACKS);
-         //move(14,40);
-         //addstr("5 - Harass Websites");
+         //mvaddstr(14,40,"5 - Harass Websites");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HACKING);
-         move(14,40);
-         addstr("5 - Hacking");
+         mvaddstr(14,40,"5 - Hacking");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_LETTERS);
-         move(15,40);
-         addstr("6 - Write to Newspapers");
+         mvaddstr(15,40,"6 - Write to Newspapers");
 
          if(cr->location!=-1&&
             location[cr->location]->compound_walls & COMPOUND_PRINTINGPRESS)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WRITE_GUARDIAN);
-            move(16,40);
-            addstr("7 - Write for The Liberal Guardian");
+            mvaddstr(16,40,"7 - Write for The Liberal Guardian");
          }
          break;
       case 'b':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DONATIONS);
-         move(10,40);
-         addstr("1 - Solicit Donations");
+         mvaddstr(10,40,"1 - Solicit Donations");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_TSHIRTS);
          move(11,40);
@@ -515,31 +470,37 @@ void activate(Creature *cr)
          break;
       case 'c':
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_SELL_DRUGS);
-         move(10,40);
-         addstr("1 - Sell Brownies");
+         mvaddstr(10,40,"1 - Sell Brownies");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_PROSTITUTION);
-         move(11,40);
          if(cr->age < 18)
             set_color(COLOR_BLACK, COLOR_BLACK, 1);    //Grayed out for minors
-         addstr("2 - Prostitution");
+         mvaddstr(11,40,"2 - Prostitution");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CCFRAUD);
-         move(12,40);
-         addstr("3 - Steal Credit Card Numbers");
+         mvaddstr(12,40,"3 - Steal Credit Card Numbers");
 
          /*set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_DOS_RACKET);
-         move(13,40);
-         addstr("4 - Electronic Protection Racket");*/
+         mvaddstr(13,40,"4 - Electronic Protection Racket");*/
          break;
       case 'd':
+         set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_RECRUITING);
+         mvaddstr(10,40,"1 - Recruiting");
+
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_MAKE_ARMOR);
-         move(10,40);
-         addstr("1 - Make Clothing");
+         mvaddstr(11,40,"2 - Make Clothing");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_REPAIR_ARMOR);
-         move(11,40);
-         addstr("2 - Repair Clothing");
+         mvaddstr(12,40,"3 - Repair Clothing");
+
+         if(cr->canwalk()) {
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS);
+            mvaddstr(13,40,"4 - Steal a Car");
+         } else {
+            if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            mvaddstr(13,40,"4 - Procure a Wheelchair");
+         }
          break;
       case 't':
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -655,6 +616,16 @@ void activate(Creature *cr)
          addstr(" will go out into the streets and drum on buckets,");
          move(23,1);
          addstr("  or play guitar if one is equipped.");
+         break;
+      case ACTIVITY_RECRUITING:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will try to find someone to join the LCS.");
+         break;
+      case ACTIVITY_STEALCARS:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will try to find and steal a car.");
          break;
       case ACTIVITY_SELL_DRUGS:
          move(22,3);
@@ -847,9 +818,16 @@ void activate(Creature *cr)
          case 'd':
             switch(choice)
             {
-            case '1':break;
-            case '2':cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
-            default:cr->activity.type=ACTIVITY_REPAIR_ARMOR;choice='2';break;
+            default:
+            case '1':cr->activity.type=ACTIVITY_RECRUITING;break;
+            case '2':break;
+            case '3':cr->activity.type=ACTIVITY_REPAIR_ARMOR;break;
+            case '4':
+               if(cr->canwalk())
+                  cr->activity.type=ACTIVITY_STEALCARS;
+               else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
+                  cr->activity.type=ACTIVITY_WHEELCHAIR;
+               break;
             }
             break;
        case 'l':
@@ -901,7 +879,7 @@ void activate(Creature *cr)
          cr->activity.type=ACTIVITY_HEAL;
          break;
       }
-      if(state=='d'&&choice=='1')
+      if(state=='d'&&choice=='2')
       {
          activityst oact=cr->activity;
          cr->activity.type=ACTIVITY_NONE;
@@ -933,19 +911,6 @@ void activate(Creature *cr)
          delete activesquad;
          activesquad = oldactivesquad;
          cr->squadid = oldsquadid;
-      }
-      if(c=='s')
-      {
-         if(cr->canwalk())
-         {
-            cr->activity.type=ACTIVITY_STEALCARS;
-            break;
-         }
-         else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
-         {
-            cr->activity.type=ACTIVITY_WHEELCHAIR;
-            break;
-         }
       }
       /*if(c=='w'&&location[cr->location]->compound_walls==COMPOUND_PRINTINGPRESS)
       {

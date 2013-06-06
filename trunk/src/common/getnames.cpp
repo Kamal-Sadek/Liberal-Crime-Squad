@@ -45,6 +45,9 @@ void getactivity(char *str,activityst &act)
          }
          break;
       }
+      case ACTIVITY_RECRUITING:
+         strcat(str,"Recruiting");
+         break;
       case ACTIVITY_REPAIR_ARMOR:
          strcat(str,"Repairing Clothing");
          break;
