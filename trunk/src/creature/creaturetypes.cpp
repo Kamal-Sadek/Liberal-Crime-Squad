@@ -1395,6 +1395,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
                cr.set_skill(SKILL_PISTOL,LCSrandom(2)+1);
                cr.set_skill(SKILL_SHOTGUN,LCSrandom(2)+1);
                cr.set_skill(SKILL_RIFLE,LCSrandom(2)+1);
+               cr.set_skill(SKILL_STREETSENSE,LCSrandom(2)+1);
                cr.type=CREATURE_GANGMEMBER;
                cr.age=AGE_YOUNGADULT;
                break;
@@ -1402,6 +1403,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
                // Prostitute
                cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+2);
                cr.set_skill(SKILL_SEDUCTION,LCSrandom(4)+2);
+               cr.set_skill(SKILL_STREETSENSE,LCSrandom(2)+1);
                cr.type=CREATURE_PROSTITUTE;
                cr.age=AGE_YOUNGADULT;
                break;
@@ -1602,6 +1604,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_PISTOL,LCSrandom(2)+1);
          cr.set_skill(SKILL_SHOTGUN,LCSrandom(2)+1);
          cr.set_skill(SKILL_RIFLE,LCSrandom(2)+1);
+         cr.set_skill(SKILL_STREETSENSE,LCSrandom(2)+2);
 
          if(!LCSrandom(2))
          {
@@ -1728,6 +1731,7 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.age=AGE_YOUNGADULT;
          cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+2);
          cr.set_skill(SKILL_SEDUCTION,LCSrandom(4)+2);
+         cr.set_skill(SKILL_STREETSENSE,LCSrandom(2)+2);
 
          //cr.crimes_committed[LAWFLAG_PROSTITUTION]++;
          if(!LCSrandom(3))
