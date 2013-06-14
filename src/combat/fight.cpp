@@ -73,21 +73,16 @@ void youattack(void)
       if(dangerous_enemies.size()+enemies.size()==0)return;
 
       int target;
-      // Roll 1dX-1, where X is the number of "dangerous enemies", plus one if there are "other enemies"
-      target=LCSrandom(dangerous_enemies.size()+!!enemies.size());
-      // If the result is less than the number of "dangerous enemies", the result indicates which of these to shoot at
-      if(target!=dangerous_enemies.size())
-         target=dangerous_enemies[target];
-      // Else, roll again on the list of "other enemies" to pick one of them to shoot at
+      // If there are "dangerous enemies", shoot at one of them
+      if(dangerous_enemies.size())
+         target=dangerous_enemies[LCSrandom(dangerous_enemies.size())];
+      // Else, shoot at one of the other enemies
       else
          target=enemies[LCSrandom(enemies.size())];
 
       char mistake=0;
-      // Less likely to accidentally hit bystanders,
-      // and never hit the wrong person if not using a ranged
-      // weapon
-      if(non_enemies.size()>0 && !LCSrandom(60)
-         && activesquad->squad[p]->will_do_ranged_attack(mode==GAMEMODE_CHASECAR,false))
+      // 1% chance to accidentally hit bystanders
+      if(non_enemies.size()>0 && !LCSrandom(100))
       {
          target=non_enemies[LCSrandom(non_enemies.size())];
          mistake=1;
