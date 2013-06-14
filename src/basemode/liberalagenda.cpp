@@ -118,7 +118,7 @@ char liberalagenda(char won)
          if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(housemake[4]<290)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else if(housemake[4]<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          char num[20];
          if(won!=-1&&won!=2)
@@ -147,7 +147,7 @@ char liberalagenda(char won)
          if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(senatemake[4]<67)set_color(COLOR_BLUE,COLOR_BLACK,1);
+         else if(senatemake[4]<67)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          if(won!=-1&&won!=-2)
          {

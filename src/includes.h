@@ -311,6 +311,7 @@ using namespace std;
 #define BIT31 (1<<30)
 #define BIT32 (1<<31)
 
+#define ENTER 10
 #define ESC 27
 
 int r_num(void);
@@ -1722,6 +1723,10 @@ void activatebulk(void);
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr);
 long select_hostagefundinglevel(Creature *cr,Creature *hs);
+/* activation-based recruitment */
+int recruitFindDifficulty(int creatureType);
+char* recruitName(int creatureType);
+void recruitSelect(Creature &cr);
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr);
 int armor_makedifficulty(Armor& type,Creature *cr); //Replace with Armor class method? -XML

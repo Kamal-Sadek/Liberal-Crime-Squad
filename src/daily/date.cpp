@@ -40,7 +40,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 {
    if(aroll>troll)
    {
-      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      set_color(COLOR_CYAN,COLOR_BLACK,1);
       move(y,0);y++;
       addstr(d.date[e]->name, gamelog);
       addstr(" is quite taken with ", gamelog);
@@ -717,7 +717,7 @@ char completedate(datest &d,int p,char &clearformess)
                refresh();
                getch();
 
-               generate_name(d.date[e]->name);
+               d.date[e]->namecreature();
                strcpy(d.date[e]->propername,d.date[e]->name);
 
                d.date[e]->location=pool[p]->location;
