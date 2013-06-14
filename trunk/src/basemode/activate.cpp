@@ -819,7 +819,7 @@ void activate(Creature *cr)
             switch(choice)
             {
             default:
-            case '1':cr->activity.type=ACTIVITY_RECRUITING;break;
+            case '1':break;//cr->activity.type=ACTIVITY_RECRUITING;break;
             case '2':break;
             case '3':cr->activity.type=ACTIVITY_REPAIR_ARMOR;break;
             case '4':
@@ -879,6 +879,16 @@ void activate(Creature *cr)
          cr->activity.type=ACTIVITY_HEAL;
          break;
       }
+      // Pick type to recruit
+      if(state=='d'&&choice=='1')
+      {
+         activityst oact=cr->activity;
+         cr->activity.type=ACTIVITY_NONE;
+         recruitSelect(*cr);
+         if(cr->activity.type==ACTIVITY_RECRUITING)break;
+         else cr->activity=oact;
+      }
+      // Pick clothing to make
       if(state=='d'&&choice=='2')
       {
          activityst oact=cr->activity;
@@ -1289,7 +1299,186 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
    return flevel;
 }
 
+struct recruitData
+{
+   int type;
+   char* name;
+   int difficulty;
+   recruitData(int type_, char* name_, int difficulty_):type(type_),name(name_),difficulty(difficulty_) {}
+};
 
+recruitData recruitable_creatures[] = {
+   recruitData(CREATURE_VETERAN, "Army Veteran", 4),
+   recruitData(CREATURE_ATHLETE, "Athlete", 4),
+   recruitData(CREATURE_COLLEGESTUDENT, "College Student", 1),
+   recruitData(CREATURE_PROGRAMMER, "Computer Programmer", 4),
+   recruitData(CREATURE_DANCER, "Dancer", 4),
+   recruitData(CREATURE_DOCTOR, "Doctor", 4),
+   recruitData(CREATURE_FASHIONDESIGNER, "Fashion Designer", 6),
+   recruitData(CREATURE_GANGMEMBER, "Gang Member", 2),
+   recruitData(CREATURE_HIPPIE, "Hippie", 1),
+   recruitData(CREATURE_JOURNALIST, "Journalist", 4),
+   recruitData(CREATURE_JUDGE_LIBERAL, "Judge", 6),
+   recruitData(CREATURE_LAWYER, "Lawyer", 4),
+   recruitData(CREATURE_LOCKSMITH, "Locksmith", 6),
+   recruitData(CREATURE_MARTIALARTIST, "Martial Artist", 4),
+   recruitData(CREATURE_MUSICIAN, "Musician", 4),
+   recruitData(CREATURE_MUTANT, "Mutant", 4),
+   recruitData(CREATURE_PROSTITUTE, "Prostitute", 2),
+   recruitData(CREATURE_PSYCHOLOGIST, "Psychologist", 4),
+   recruitData(CREATURE_TAXIDRIVER, "Taxi Driver", 4),
+   recruitData(CREATURE_TEACHER, "Teacher", 4)
+};
+
+// Return the difficulty of tracking this character type down, for the
+// purpose of the activation menu. 0 is trivial, 10 is impossible.
+int recruitFindDifficulty(int creatureType)
+{
+   for(int i=0; i<sizeof(recruitable_creatures)/sizeof(recruitData); i++)
+   {
+      if(recruitable_creatures[i].type == creatureType)
+      {
+         return recruitable_creatures[i].difficulty;
+      }
+   }
+   return 10; // No recruitData; assume impossible to recruit
+}
+
+char* recruitName(int creatureType)
+{
+   for(int i=0; i<sizeof(recruitable_creatures)/sizeof(recruitData); i++)
+   {
+      if(recruitable_creatures[i].type == creatureType)
+      {
+         return recruitable_creatures[i].name;
+      }
+   }
+   return "missingno";
+}
+
+void recruitSelect(Creature &cr)
+{
+   // Number of recruitable creatures
+   int options = sizeof(recruitable_creatures) / sizeof(recruitData);
+   for(int i=0; i<options; i++)
+   {
+      // Dynamic difficulty for certain creatures, recalculated each time the function is called
+      if(recruitable_creatures[i].type == CREATURE_MUTANT)
+      {
+         if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
+            recruitable_creatures[i].difficulty = 9;
+         else if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
+            recruitable_creatures[i].difficulty = 6;
+         else
+            recruitable_creatures[i].difficulty = 2;
+      }
+   }
+
+   int page=0;
+   char str[200];
+   do
+   {
+      erase();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(0,0);
+      addstr("What type of person will ");
+      addstr(cr.name);
+      addstr(" try to meet and recruit today?");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(1,0);
+      addstr("----TYPE-----------------------------------------DIFFICULTY TO ARRANGE MEETING--");
+
+      int y=2,difficulty;
+      for(int p=page*19;p<options&&p<page*19+19;p++)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(y,0);
+         addch(y+'A'-2);addstr(" - ");
+         addstr(recruitable_creatures[p].name);
+
+         move(y,49);
+         difficulty=recruitable_creatures[p].difficulty;
+         switch(difficulty)
+         {
+         case 0:
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("Simple");
+            break;
+         case 1:
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("Very Easy");
+            break;
+         case 2:
+            set_color(COLOR_CYAN,COLOR_BLACK,0);
+            addstr("Easy");
+            break;
+         case 3:
+            set_color(COLOR_BLUE,COLOR_BLACK,1);
+            addstr("Below Average");
+            break;
+         case 4:
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            addstr("Average");
+            break;
+         case 5:
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("Above Average");
+            break;
+         case 6:
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("Hard");
+            break;
+         case 7:
+            set_color(COLOR_MAGENTA,COLOR_BLACK,0);
+            addstr("Very Hard");
+            break;
+         case 8:
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("Extremely Difficult");
+            break;
+         case 9:
+            set_color(COLOR_RED,COLOR_BLACK,0);
+            addstr("Nearly Impossible");
+            break;
+         default:
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Impossible");
+            break;
+         }
+
+         y++;
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(22,0);
+      addstr("Press a Letter to select a Profession");
+      move(23,0);
+      addpagestr();
+
+      refresh();
+
+      int c=getch();
+      translategetch(c);
+
+      //PAGE UP
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      //PAGE DOWN
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<options)page++;
+
+      if(c>='a'&&c<='s')
+      {
+         int p=page*19+(int)(c-'a');
+         if(p<options)
+         {
+            cr.activity.type = ACTIVITY_RECRUITING;
+            cr.activity.arg = recruitable_creatures[p].type;
+            break;
+         }
+      }
+   }while(1);
+
+   return;
+}
 
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr)
@@ -1423,8 +1612,6 @@ void select_makeclothing(Creature *cr)
       if(c==10||c==ESC)break;
    }while(1);
 }
-
-
 
 int armor_makedifficulty(Armor& type, Creature *cr)
 {

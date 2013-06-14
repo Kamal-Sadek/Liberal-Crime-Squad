@@ -456,7 +456,7 @@ void review_mode(short mode)
             }
          case REVIEWMODE_AWAY:
             {
-               set_color(COLOR_BLUE,COLOR_BLACK,1);
+               set_color(COLOR_CYAN,COLOR_BLACK,1);
                if(temppool[p]->hiding!=-1)
                {
                   char num[20];

@@ -68,6 +68,7 @@ void Creature::namecreature()
    {
       generate_name(name, gender_liberal);
       strcpy(propername,name);
+      dontname = true;
    }
 }
 

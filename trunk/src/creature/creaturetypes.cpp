@@ -1677,15 +1677,15 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_skill(SKILL_PERSUASION,LCSrandom(3)+1);
          break;
 	  case CREATURE_CARSALESMAN:
-		 GIVE_WEAPON_CIVILIAN;
-		 armor=new Armor(*armortype[getarmortype("ARMOR_CHEAPSUIT")]);
-		 cr.give_armor(*armor,NULL);
-		 cr.set_skill(SKILL_BUSINESS,LCSrandom(4)+1);
-		 cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+1);
-		 cr.set_skill(SKILL_DRIVING,LCSrandom(3)+1);
-		 cr.money=LCSrandom(41)+40;
-		 cr.age=AGE_MATURE;
-		 break;
+         GIVE_WEAPON_CIVILIAN;
+         armor=new Armor(*armortype[getarmortype("ARMOR_CHEAPSUIT")]);
+         cr.give_armor(*armor,NULL);
+         cr.set_skill(SKILL_BUSINESS,LCSrandom(4)+1);
+         cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+1);
+         cr.set_skill(SKILL_DRIVING,LCSrandom(3)+1);
+         cr.money=LCSrandom(41)+40;
+         cr.age=AGE_MATURE;
+         break;
 	  case CREATURE_OFFICEWORKER:
          GIVE_WEAPON_CIVILIAN;
          strcpy(cr.name,"Office Worker");
