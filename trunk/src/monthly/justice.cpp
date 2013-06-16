@@ -32,8 +32,6 @@ This file is part of Liberal Crime Squad.                                       
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
 {
-   g.sentence=0;
-   g.deathpenalty=0;
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
    if(location[g.base]->renting<0)
@@ -943,10 +941,26 @@ void trial(Creature &g)
             move(5,1);
             addstr("The prosecution declines to re-try the case.", gamelog);
             gamelog.newline();
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            move(7,1);
-            addstr(g.name, gamelog);
-            addstr(" is free!", gamelog);
+            if(g.sentence==0)
+            {
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               move(7,1);
+               addstr(g.name, gamelog);
+               addstr(" is free!", gamelog);
+            }
+            else
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               move(7,1);
+               addstr(g.name, gamelog);
+               addstr(" will be returned to prison to resume an earlier sentence.", gamelog);
+               if(g.deathpenalty)
+               {
+                  g.sentence=3;
+                  move(9,1);
+                  addstr("The execution is scheduled to occur three months from now.", gamelog);
+               }
+            }
             gamelog.nextMessage();
             refresh();
             getch();
@@ -961,13 +975,29 @@ void trial(Creature &g)
          gamelog.newline();
          refresh();
          getch();
-         set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(5,1);
-         addstr(g.name, gamelog);
-         addstr(" is free!", gamelog);
+
+         if(g.sentence==0)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            move(5,1);
+            addstr(g.name, gamelog);
+            addstr(" is free!", gamelog);
+         }
+         else
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            move(5,1);
+            addstr(g.name, gamelog);
+            addstr(" will be returned to prison to resume an earlier sentence.", gamelog);
+            if(g.deathpenalty)
+            {
+               g.sentence=3;
+               move(7,1);
+               addstr("The execution is scheduled to occur three months from now.", gamelog);
+            }
+         }
          gamelog.nextMessage();
-
-
+         
          if(defense==4)
          {
             // Juice sleeper
@@ -1075,12 +1105,10 @@ void penalize(Creature &g,char lenient)
    refresh();
    getch();
 
-   if(g.crimes_suspected[LAWFLAG_ESCAPED])
-   {
-      lenient=0;
-      if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
-   }
-   else g.deathpenalty=0;
+   short oldsentence=g.sentence;
+   char olddeathpenalty=g.deathpenalty;
+   g.sentence=0;
+   g.deathpenalty=0;
 
    if(!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])||
       ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
@@ -1132,6 +1160,7 @@ void penalize(Creature &g,char lenient)
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
          g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
+         g.sentence+=(3+LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
          g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
          g.sentence+=(6+LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
 
@@ -1159,8 +1188,6 @@ void penalize(Creature &g,char lenient)
          else if(g.crimes_suspected[LAWFLAG_MURDER])
             g.sentence=-1*g.crimes_suspected[LAWFLAG_MURDER];
       }
-      if(g.sentence<0)g.sentence-=1*g.crimes_suspected[LAWFLAG_ESCAPED];
-      else if(g.crimes_suspected[LAWFLAG_ESCAPED]) g.sentence=-1*g.crimes_suspected[LAWFLAG_ESCAPED];
       if(g.sentence<0)g.sentence-=1*g.crimes_suspected[LAWFLAG_TREASON];
       else if(g.crimes_suspected[LAWFLAG_TREASON]) g.sentence=-1*g.crimes_suspected[LAWFLAG_TREASON];
       if(lenient&&g.sentence!=-1)g.sentence/=2;
@@ -1185,7 +1212,24 @@ void penalize(Creature &g,char lenient)
    }
 
    //MENTION SENTENCE
-   if(g.deathpenalty)
+   if(olddeathpenalty)
+   {
+      g.deathpenalty=1;
+      g.sentence=3;
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", you will be returned to prison to carry out your death sentence.", gamelog);
+      gamelog.newline();
+      refresh();
+      getch();
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(9,1);
+      addstr("The execution is scheduled to occur three months from now.", gamelog);
+      refresh();
+      getch();
+   }
+   else if(g.deathpenalty)
    {
       g.sentence=3;
       set_color(COLOR_RED,COLOR_RED,1);
@@ -1198,6 +1242,18 @@ void penalize(Creature &g,char lenient)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(9,1);
       addstr("The execution is scheduled to occur three months from now.", gamelog);
+      refresh();
+      getch();
+   }
+   // Don't give a time-limited sentence if they already have a life sentence.
+   else if ((g.sentence>=0 && oldsentence<0) ||
+            (g.sentence==0 && oldsentence>0))
+   {
+      g.sentence=oldsentence;
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", the court sees no need to add to your existing sentence.", gamelog);
       refresh();
       getch();
    }
@@ -1227,25 +1283,30 @@ void penalize(Creature &g,char lenient)
             char num[20];
             itoa(-(g.sentence),num,10);
             addstr(num, gamelog);
-            addstr(" consecutive life terms in prison.", gamelog);
+            addstr(" consecutive life terms in prison", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
-
-            move(9,1);
-            addstr("Have a nice day, ", gamelog);
-            addstr(g.propername, gamelog);
-            addstr(".", gamelog);
+            // Don't bother saying this if the convicted already has one or
+            // more life sentences. Makes the 'consecutively' and 'concurrently'
+            // statements later easier to tack on.
+            if(oldsentence>=0) 
+            {
+               addstr(".", gamelog);
+               refresh();
+               getch();
+               move(9,1);
+               addstr("Have a nice day, ", gamelog);
+               addstr(g.propername, gamelog);
+            }
          }
-         else addstr("life in prison.", gamelog);
+         else addstr("life in prison", gamelog);
       }
       else if(g.sentence>=36)
       {
          char num[20];
          itoa(g.sentence/12,num,10);
          addstr(num, gamelog);
-         addstr(" years in prison.", gamelog);
+         addstr(" years in prison", gamelog);
       }
       else
       {
@@ -1254,8 +1315,28 @@ void penalize(Creature &g,char lenient)
          addstr(num, gamelog);
          addstr(" month", gamelog);
          if(g.sentence>1)addstr("s", gamelog);
-         addstr(" in prison.", gamelog);
+         addstr(" in prison", gamelog);
       }
+
+      if((g.sentence>0 && oldsentence>0) ||
+         (g.sentence<0 && oldsentence<0))
+      {
+         addstr(",", gamelog);
+         move(8,1);
+         if(lenient)
+         {
+            if(abs(oldsentence)>abs(g.sentence))
+               g.sentence=oldsentence;
+            addstr("to be served concurrently", gamelog);
+         }
+         else
+         {
+            g.sentence+=oldsentence;
+            addstr("to be served consecutively", gamelog);
+         }
+      }
+
+      addstr(".", gamelog);
 
       //dejuice boss
       int boss=getpoolcreature(g.hireid);
