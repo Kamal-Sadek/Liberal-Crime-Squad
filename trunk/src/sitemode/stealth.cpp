@@ -337,7 +337,7 @@ void disguisecheck(int timer)
             move(16,1);
 
             if(squadsize > 1)
-               addstr("The squad ", gamelog);
+               addstr("The squad", gamelog);
             else
                addstr(activesquad->squad[0]->name, gamelog);
             addstr(" fades into the shadows.", gamelog);

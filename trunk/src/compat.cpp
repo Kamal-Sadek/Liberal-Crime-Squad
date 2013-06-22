@@ -219,9 +219,9 @@ void alarmwait()
   getitimer(ITIMER_REAL, &timer_now);
   //If the timer is on we will wait for it to complete...
   if (
-  ((timer_now.it_interval.tv_sec!=0)&&
-   (timer_now.it_interval.tv_usec!=0))&&
-  ((timer_now.it_value.tv_sec!=0)&&
+  ((timer_now.it_interval.tv_sec!=0)||
+   (timer_now.it_interval.tv_usec!=0))||
+  ((timer_now.it_value.tv_sec!=0)||
    (timer_now.it_value.tv_usec!=0)))
   {
    pause();
