@@ -1951,7 +1951,7 @@ void mode_site(void)
                      resolvesite();
                   }
                }
-
+	       sitealarm = 0;
                mode=GAMEMODE_BASE;
                return;
             }
