@@ -661,9 +661,10 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       addstr(", holding ");
       switch(cr->prisoner->type)
       {
+      case CREATURE_POLITICIAN:addstr("a cursing Politician");break;
       case CREATURE_CORPORATE_CEO:addstr("a squirming CEO");break;
       case CREATURE_RADIOPERSONALITY:addstr("a crying Radio Personality");break;
-      case CREATURE_NEWSANCHOR:addstr("smarmy News Anchor");break;
+      case CREATURE_NEWSANCHOR:addstr("a smarmy News Anchor");break;
       case CREATURE_SCIENTIST_EMINENT:addstr("a frightened Eminent Scientist");break;
       case CREATURE_JUDGE_CONSERVATIVE:addstr("an angry Hangin' Judge");break;
       default:

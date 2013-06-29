@@ -1670,7 +1670,8 @@ char talkInCombat(Creature &a, Creature &tk)
                   encounter[e].type==CREATURE_SOLDIER||
                   encounter[e].type==CREATURE_HARDENED_VETERAN||
                   encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
-                  encounter[e].type==CREATURE_AGENT)
+                  encounter[e].type==CREATURE_AGENT||
+                  encounter[e].type==CREATURE_SECRET_SERVICE)
                {
                   if(LCSrandom(3))
                   {
@@ -1747,7 +1748,8 @@ char talkInCombat(Creature &a, Creature &tk)
                   encounter[e].type==CREATURE_MERC||
                   encounter[e].type==CREATURE_COP||
                   encounter[e].type==CREATURE_GANGUNIT||
-                  encounter[e].type==CREATURE_SWAT)&&
+                  encounter[e].type==CREATURE_SWAT||
+                  encounter[e].type==CREATURE_SECRET_SERVICE)&&
                   LCSrandom(5))
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1757,7 +1759,8 @@ char talkInCombat(Creature &a, Creature &tk)
                   addstr(": ", gamelog);
                   move(17,1);
 
-                  if(encounter[e].align!=ALIGN_CONSERVATIVE)
+                  if(encounter[e].align!=ALIGN_CONSERVATIVE||
+                     (encounter[e].type==CREATURE_SECRET_SERVICE&&exec[EXEC_PRESIDENT]>ALIGN_CONSERVATIVE))
                   {
                      set_color(COLOR_GREEN,COLOR_BLACK,1);
                      switch(LCSrandom(5))

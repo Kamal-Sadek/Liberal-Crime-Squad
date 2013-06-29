@@ -345,6 +345,53 @@ Creature::~Creature()
    stop_hauling_me();
 }
 
+bool Creature::kidnap_resistant()
+{
+   switch(type)
+   {
+   case CREATURE_AGENT:
+   case CREATURE_COP:
+   case CREATURE_GANGUNIT:
+   case CREATURE_SWAT:
+   case CREATURE_MERC:
+   case CREATURE_SOLDIER:
+   case CREATURE_VETERAN:
+   case CREATURE_HARDENED_VETERAN:
+   case CREATURE_CCS_VIGILANTE:
+   case CREATURE_CCS_ARCHCONSERVATIVE:
+   case CREATURE_CCS_MOLOTOV:
+   case CREATURE_CCS_SNIPER:
+   case CREATURE_MILITARYPOLICE:
+   case CREATURE_SEAL:
+   case CREATURE_MILITARYOFFICER:
+   case CREATURE_SECRET_SERVICE:
+   case CREATURE_DEATHSQUAD:
+   case CREATURE_PRISONGUARD:
+   case CREATURE_EDUCATOR:
+      return true;
+   default:
+      return false;
+   }
+}
+
+bool Creature::reports_to_police()
+{
+   switch(type)
+   {
+   case CREATURE_AGENT:
+   case CREATURE_COP:
+   case CREATURE_GANGUNIT:
+   case CREATURE_SWAT:
+   case CREATURE_SECRET_SERVICE:
+   case CREATURE_DEATHSQUAD:
+   case CREATURE_PRISONGUARD:
+   case CREATURE_EDUCATOR:
+      return true;
+   default:
+      return false;
+   }
+}
+
 // Alternative name for the location global, used in Creature:: methods
 vector<Location*> loc_proxy() { return location; }
 
@@ -1256,7 +1303,7 @@ void liberalize(Creature &cr,bool rename)
 
    cr.align=ALIGN_LIBERAL;
 
-   if(cr.type == CREATURE_CORPORATE_CEO)
+   if(cr.id == uniqueCreatures.CEO().id)
       uniqueCreatures.newCEO();
 
    if(rename)
@@ -1379,13 +1426,20 @@ void Creature::die()
 {
    alive = 0;
    blood = 0;
-   if(type==CREATURE_CORPORATE_CEO)
+   if(id==uniqueCreatures.CEO().id)
       uniqueCreatures.newCEO();
+   if(id==uniqueCreatures.President().id)
+   {
+      strcpy(oldPresidentName, execname[EXEC_PRESIDENT]);
+      promoteVP();
+      uniqueCreatures.newPresident();
+   }
 }
 
 void UniqueCreatures::initialize()
 {
    newCEO();
+   newPresident();
 }
 
 void UniqueCreatures::newCEO()
@@ -1393,6 +1447,34 @@ void UniqueCreatures::newCEO()
    makecreature(CEO_,CREATURE_CORPORATE_CEO);
    CEO_ID = CEO_.id;
    CEO_state = UNIQUECREATURE_ALIVE;
+}
+
+void UniqueCreatures::newPresident()
+{
+   makecreature(Pres_, CREATURE_POLITICIAN);
+   Pres_ID = Pres_.id;
+   Pres_state = UNIQUECREATURE_ALIVE;
+
+   //Turn into President (not just random pol)
+   strcpy(Pres_.name, execname[EXEC_PRESIDENT]);
+   Pres_.dontname = true;
+   switch(exec[EXEC_PRESIDENT])
+   {
+   case ALIGN_ARCHCONSERVATIVE:
+   case ALIGN_CONSERVATIVE:
+      break;
+   case ALIGN_MODERATE:
+      Pres_.align = ALIGN_MODERATE;
+      Pres_.set_attribute(ATTRIBUTE_WISDOM, Pres_.get_attribute(ATTRIBUTE_WISDOM, false)/2);
+      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM, false));
+      break;
+   case ALIGN_LIBERAL:
+   case ALIGN_ELITELIBERAL:
+      Pres_.align = ALIGN_LIBERAL;
+      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM, false));
+      Pres_.set_attribute(ATTRIBUTE_WISDOM, 1);
+      break;
+   }
 }
 
 UniqueCreatures::UniqueCreatures(const char * inputXml)
@@ -1406,25 +1488,25 @@ UniqueCreatures::UniqueCreatures(const char * inputXml)
    {
       std::string tag = xml.GetTagName();
    
-      if (tag == "CEO")
+      if (tag == "CEO" || tag == "Pres")
       {
          xml.IntoElem();
-         
          xml.FindElem();
-         //tag = xml.GetTagName();
-         //if (tag == "creature")
-         //{
+         if(tag == "CEO")
             CEO_ = Creature(xml.GetSubDoc().c_str());
-         //}
-         
+         else
+            Pres_ = Creature(xml.GetSubDoc().c_str());
          xml.OutOfElem();
       }
       else if (tag == "CEO_ID")
-      {
          CEO_ID = atoi(xml.GetData().c_str());
-      }
       else if (tag == "CEO_state")
          CEO_state = atoi(xml.GetData().c_str());
+      else if (tag == "Pres_ID")
+         Pres_ID = atoi(xml.GetData().c_str());
+      else if (tag == "Pres_state")
+         Pres_state = atoi(xml.GetData().c_str());
+
    }
 }
 
@@ -1437,6 +1519,9 @@ string UniqueCreatures::showXml() const
    xml.AddElem("CEO_ID", CEO_ID);
    xml.AddElem("CEO_state", CEO_state);
    xml.AddElem("CEO");
+   xml.AddElem("Pres_ID", CEO_ID);
+   xml.AddElem("Pres_state", CEO_state);
+   xml.AddElem("Pres");
    xml.IntoElem();
    xml.AddSubDoc(CEO_.showXml());
    
@@ -1446,8 +1531,15 @@ string UniqueCreatures::showXml() const
 Creature& UniqueCreatures::CEO()
 {
    if(CEO_ID==-1)
-      makecreature(CEO_,CREATURE_CORPORATE_CEO);
+      newCEO();
    return CEO_;
+}
+
+Creature& UniqueCreatures::President()
+{
+   if(Pres_ID==-1)
+      newPresident();
+   return Pres_;
 }
 
 const char *Creature::heshe()

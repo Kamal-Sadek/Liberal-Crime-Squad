@@ -138,6 +138,7 @@ void initsite(Location &loc)
    case SITE_OUTDOOR_PUBLICPARK: loaded = readMap("Park"); break;
    case SITE_BUSINESS_BANK: loaded = readMap("Bank"); break;
    case SITE_INDUSTRY_NUCLEAR: loaded = readMap("NuclearPlant"); break;
+   case SITE_GOVERNMENT_WHITE_HOUSE: loaded = readMap("WhiteHouse"); break;
    default: break;
    }
 
@@ -211,6 +212,9 @@ void initsite(Location &loc)
          break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          build_site("GOVERNMENT_INTELLIGENCEHQ");
+         break;
+      case SITE_GOVERNMENT_WHITE_HOUSE:
+         build_site("GOVERNMENT_WHITE_HOUSE");
          break;
       case SITE_GOVERNMENT_ARMYBASE:
          build_site("GOVERNMENT_ARMYBASE");
@@ -506,6 +510,7 @@ void initsite(Location &loc)
       case SITE_GOVERNMENT_PRISON:
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
       case SITE_GOVERNMENT_ARMYBASE:
+      case SITE_GOVERNMENT_WHITE_HOUSE:
       case SITE_MEDIA_AMRADIO:
       case SITE_MEDIA_CABLENEWS:
          restricted=1;

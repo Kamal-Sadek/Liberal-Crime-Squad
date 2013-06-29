@@ -116,6 +116,9 @@ void mode_site(short loc)
       locx=MAPX>>1;
       locy=1;
       locz=0;
+      // Second floor start of White House
+      if(location[loc]->type==SITE_GOVERNMENT_WHITE_HOUSE && levelmap[locx][locy][locz].flag & SITEBLOCK_BLOCK)
+         locz++;
 
       //check for sleeper infiltration or map knowledge
       for(int p=0;p<pool.size();p++)
@@ -368,6 +371,9 @@ void mode_site(void)
             {
             case SITE_GOVERNMENT_ARMYBASE:
                addstr(": SOLDIERS AND TANKS RESPONDING");
+               break;
+            case SITE_GOVERNMENT_WHITE_HOUSE:
+               addstr(": SECRET SERVICE RESPONDING");
                break;
             case SITE_GOVERNMENT_INTELLIGENCEHQ:
                addstr(": AGENTS RESPONDING");
@@ -776,6 +782,10 @@ void mode_site(void)
                   case SPECIAL_BANK_TELLER:special_bank_teller();break;
                   case SPECIAL_BANK_MONEY:special_bank_money();break;
                   case SPECIAL_CCS_BOSS:special_ccs_boss();break;
+                  case SPECIAL_OVAL_OFFICE_NW:
+                  case SPECIAL_OVAL_OFFICE_NE:
+                  case SPECIAL_OVAL_OFFICE_SW:
+                  case SPECIAL_OVAL_OFFICE_SE:special_oval_office();break;
                }
             }
             else if(!(levelmap[locx][locy][locz].flag & (SITEBLOCK_GRAFFITI|SITEBLOCK_BLOODY2))&&
@@ -1472,6 +1482,12 @@ void mode_site(void)
                         newWeaponType="WEAPON_SHANK";
                      }
                      break;
+                  case SITE_GOVERNMENT_WHITE_HOUSE:
+                     if(!LCSrandom(20))newLootType="LOOT_SECRETDOCUMENTS";
+                     else if(!LCSrandom(3))newLootType="LOOT_CELLPHONE";
+                     else if(!LCSrandom(2))newLootType="LOOT_PDA";
+                     else newLootType="LOOT_COMPUTER";
+                     break;
                   case SITE_GOVERNMENT_ARMYBASE:
                      if(!LCSrandom(3))
                      {
@@ -1979,7 +1995,8 @@ void mode_site(void)
                if(encounter[e].exists)newenc=0;
             }
 
-            //LOOK FOR SPECIALS
+            // Handle special tiles that activate when you step on them
+            // (rather than those that must be manually activated)
             long makespecial=-1;
             switch(levelmap[locx][locy][locz].special)
             {
@@ -1995,6 +2012,10 @@ void mode_site(void)
                case SPECIAL_PARK_BENCH:
                case SPECIAL_BANK_TELLER:
                case SPECIAL_CCS_BOSS:
+               case SPECIAL_OVAL_OFFICE_NW:
+               case SPECIAL_OVAL_OFFICE_NE:
+               case SPECIAL_OVAL_OFFICE_SW:
+               case SPECIAL_OVAL_OFFICE_SE:
                   makespecial=levelmap[locx][locy][locz].special;
                   newenc=1;
                   break;
@@ -2697,6 +2718,12 @@ void mode_site(void)
                      break;
                   case SPECIAL_CCS_BOSS:
                      special_ccs_boss();
+                     break;
+                  case SPECIAL_OVAL_OFFICE_NW:
+                  case SPECIAL_OVAL_OFFICE_NE:
+                  case SPECIAL_OVAL_OFFICE_SW:
+                  case SPECIAL_OVAL_OFFICE_SE:
+                     special_oval_office();
                      break;
                   default:
                      bool squadmoved = false;

@@ -375,6 +375,7 @@ void initlocation(Location &loc)
    case SITE_COMMERCIAL: loc.rename("Shopping", "Shopping"); break;
    case SITE_INDUSTRIAL: loc.rename("Industrial District", "I-District"); break;
    case SITE_OUTOFTOWN: loc.rename("City Outskirts", "Outskirts"); break;
+   case SITE_TRAVEL: loc.rename("Travel", "Travel"); break;
    case SITE_GOVERNMENT_POLICESTATION: loc.rename("Police Station", "Police Station"); break;
    case SITE_GOVERNMENT_COURTHOUSE:
       if(law[LAW_DEATHPENALTY]==-2) {
@@ -438,6 +439,9 @@ void initlocation(Location &loc)
       strcpy(loc.name,str);
       strcat(loc.name," Army Base");
       strcpy(loc.shortname,"Army Base");
+      break;
+   case SITE_GOVERNMENT_WHITE_HOUSE:
+      loc.rename("White House", "White House");
       break;
    case SITE_CORPORATE_HEADQUARTERS:
       loc.rename("Corporate HQ","Corp. HQ");

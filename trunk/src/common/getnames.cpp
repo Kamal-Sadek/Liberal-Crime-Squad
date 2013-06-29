@@ -197,6 +197,7 @@ void getrecruitcreature(char *str,int type)
       case CREATURE_SCIENTIST_EMINENT:strcat(str,"Eminent Scientist");break;
       case CREATURE_CORPORATE_MANAGER:strcat(str,"Corporate Manager");break;
       case CREATURE_CORPORATE_CEO:strcat(str,"Corporate CEO");break;
+      case CREATURE_POLITICIAN:strcat(str,"Politician");break;
       case CREATURE_WORKER_SERVANT:
          if(law[LAW_LABOR]==-2&&
              law[LAW_CORPORATE]==-2)strcpy(str,"Slave");
@@ -515,7 +516,7 @@ void cityname(char *story)
 		"Orlando, FL",
 		"Syracuse, NY",
 		"Baltimore, MD",
-		"Washington D.C.",
+		//"Washington D.C.", // Removed because White House is modeled as a "distant location" in game
 		"Memphis, TN",
 		"Brooklyn, NY",
 		"New Orleans, LA",

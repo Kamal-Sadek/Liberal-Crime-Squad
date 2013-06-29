@@ -1686,3 +1686,191 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
       }
    }
 }
+
+void run_television_news_stories()
+{
+   char del;
+   for(int n=newsstory.size()-1;n>=0;n--)
+   {
+      del=0;
+      if(newsstory[n]->type==NEWSSTORY_MAJOREVENT)
+      {
+         if(newsstory[n]->positive)
+         {
+            switch(newsstory[n]->view)
+            {
+               case VIEW_POLICEBEHAVIOR:
+                  movie.loadmovie("lacops.cmv");
+                  movie.playmovie(0,0);
+                  nodelay(stdscr,FALSE);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(19,13);
+                  addstr("/----------------------------------------------------\\");
+                  move(20,13);
+                  addstr("|     The  police  have  beaten  a  black  man  in    |");
+                  move(21,13);
+                  addstr("|   Los Angeles again.  This time, the incident is    |");
+                  move(22,13);
+                  addstr("|   taped by  a passerby  and saturates  the news.    |");
+                  move(23,13);
+                  addstr("\\----------------------------------------------------/");
+
+                  refresh();
+                  getch();
+
+                  del=1;
+                  break;
+               case VIEW_CABLENEWS:
+               {
+                  char str[80];
+                  strcpy(str,"Tonight on a Cable News channel: ");
+                  switch(LCSrandom(5))
+                  {
+                     case 0:strcat(str,"Cross");break;
+                     case 1:strcat(str,"Hard");break;
+                     case 2:strcat(str,"Lightning");break;
+                     case 3:strcat(str,"Washington");break;
+                     case 4:strcat(str,"Capital");break;
+                  }
+                  switch(LCSrandom(5))
+                  {
+                     case 0:strcat(str," Fire");break;
+                     case 1:strcat(str," Ball");break;
+                     case 2:strcat(str," Talk");break;
+                     case 3:strcat(str," Insider");break;
+                     case 4:strcat(str," Gang");break;
+                  }
+                  strcat(str," with ");
+                  char bname[80];
+                  generate_name(bname);
+                  strcat(str,bname);
+
+                  erase();
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(0,39-((strlen(str)-1)>>1));
+                  addstr(str);
+
+                  move(16,20);
+                  addstr(bname);
+                  move(17,20);
+                  addstr("Washington D.C.");
+
+                  move(16,41);
+                  generate_name(bname);
+                  addstr(bname);
+                  move(17,41);
+                  switch(LCSrandom(3))
+                  {
+                     case 0:addstr("Eugene, OR");break;
+                     case 1:addstr("San Francisco, CA");break;
+                     case 2:addstr("Cambridge, MA");break;
+                  }
+
+                  movie.loadmovie("newscast.cmv");
+
+                  movie.playmovie(1,1);
+                  nodelay(stdscr,FALSE);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(19,13);
+                  addstr("/----------------------------------------------------\\");
+                  move(20,13);
+                  addstr("|     A  Cable  News  anchor  accidentally  let  a   |");
+                  move(21,13);
+                  addstr("|   bright Liberal guest  finish a sentence.  Many   |");
+                  move(22,13);
+                  addstr("|   viewers  across  the  nation  were  listening.   |");
+                  move(23,13);
+                  addstr("\\----------------------------------------------------/");
+
+                  refresh();
+                  getch();
+
+                  del=1;
+                  break;
+               }
+            }
+         }
+         else
+         {
+            switch(newsstory[n]->view)
+            {
+               case VIEW_CEOSALARY:
+                  movie.loadmovie("glamshow.cmv");
+                  movie.playmovie(0,0);
+                  nodelay(stdscr,FALSE);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(19,13);
+                  addstr("/----------------------------------------------------\\");
+                  move(20,13);
+                  addstr("|     A new show glamorizing the lives of the rich   |");
+                  move(21,13);
+                  addstr("|   begins airing  this week.  With the nationwide   |");
+                  move(22,13);
+                  addstr("|   advertising  blitz, it's bound  to be popular.   |");
+                  move(23,13);
+                  addstr("\\----------------------------------------------------/");
+
+                  refresh();
+                  getch();
+
+                  del=1;
+                  break;
+               case VIEW_CABLENEWS:
+                  movie.loadmovie("anchor.cmv");
+                  movie.playmovie(0,0);
+                  nodelay(stdscr,FALSE);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(19,13);
+                  addstr("/----------------------------------------------------\\");
+                  move(20,13);
+                  addstr("|     A major Cable News channel has hired a slick   |");
+                  move(21,13);
+                  addstr("|   new anchor for one of  its news shows.  Guided   |");
+                  move(22,13);
+                  addstr("|   by impressive  advertising, America  tunes in.   |");
+                  move(23,13);
+                  addstr("\\----------------------------------------------------/");
+
+                  refresh();
+                  getch();
+
+                  del=1;
+                  break;
+               case VIEW_WOMEN:
+                  erase();
+
+                  movie.loadmovie("abort.cmv");
+                  movie.playmovie(0,0);
+                  nodelay(stdscr,FALSE);
+
+                  set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  move(19,13);
+                  addstr("/----------------------------------------------------\\");
+                  move(20,13);
+                  addstr("|     A  failed partial  birth abortion  goes on a   |");
+                  move(21,13);
+                  addstr("|   popular  afternoon  talk  show.    The  studio   |");
+                  move(22,13);
+                  addstr("|   audience and viewers nationwide feel its pain.   |");
+                  move(23,13);
+                  addstr("\\----------------------------------------------------/");
+
+                  refresh();
+                  getch();
+
+                  del=1;
+                  break;
+            }
+         }
+      }
+      if(del)
+      {
+         delete newsstory[n];
+         newsstory.erase(newsstory.begin() + n);
+      }
+   }
+}

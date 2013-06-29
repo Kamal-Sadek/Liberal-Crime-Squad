@@ -73,11 +73,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.07.2"
+#define PACKAGE_VERSION "4.07.3"
 #endif
 
-const int version=40702;
-const int lowestloadversion=40702;
+const int version=40703;
+const int lowestloadversion=40703;
 const int lowestloadscoreversion=31203;
 
 #ifdef WIN32
@@ -357,64 +357,6 @@ enum SpecialAttacks
    ATTACKNUM
 };
 
-enum SiteTypes
-{
-   SITE_CITY_SEATTLE,
-   SITE_CITY_LOS_ANGELES,
-   SITE_CITY_NEW_YORK,
-   SITE_CITY_CHICAGO,
-   SITE_CITY_DETROIT,
-   SITE_CITY_ATLANTA,
-   SITE_CITY_MIAMI,
-   SITE_CITY_WASHINGTON_DC,
-   SITE_DOWNTOWN,
-   SITE_COMMERCIAL,
-   SITE_UDISTRICT,
-   SITE_OUTOFTOWN,
-   SITE_INDUSTRIAL,
-   SITE_RESIDENTIAL_TENEMENT,
-   SITE_RESIDENTIAL_APARTMENT,
-   SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-   SITE_RESIDENTIAL_SHELTER,
-   SITE_RESIDENTIAL_BOMBSHELTER,
-   SITE_LABORATORY_COSMETICS,
-   SITE_LABORATORY_GENETIC,
-   SITE_HOSPITAL_CLINIC,
-   SITE_HOSPITAL_UNIVERSITY,
-   SITE_GOVERNMENT_POLICESTATION,
-   SITE_GOVERNMENT_COURTHOUSE,
-   SITE_GOVERNMENT_PRISON,
-   SITE_GOVERNMENT_INTELLIGENCEHQ,
-   SITE_GOVERNMENT_FIRESTATION,
-   SITE_INDUSTRY_SWEATSHOP,
-   SITE_INDUSTRY_POLLUTER,
-   SITE_INDUSTRY_NUCLEAR,
-   SITE_INDUSTRY_WAREHOUSE,
-   SITE_CORPORATE_HEADQUARTERS,
-   SITE_CORPORATE_HOUSE,
-   SITE_MEDIA_AMRADIO,
-   SITE_MEDIA_CABLENEWS,
-   SITE_BUSINESS_PAWNSHOP,
-   SITE_BUSINESS_CRACKHOUSE,
-   SITE_BUSINESS_JUICEBAR,
-   SITE_BUSINESS_CIGARBAR,
-   SITE_BUSINESS_LATTESTAND,
-   SITE_BUSINESS_VEGANCOOP,
-   SITE_BUSINESS_INTERNETCAFE,
-   SITE_BUSINESS_DEPTSTORE,
-   SITE_BUSINESS_HALLOWEEN,
-   SITE_BUSINESS_BARANDGRILL,
-   SITE_BUSINESS_ARMSDEALER,
-   SITE_BUSINESS_CARDEALERSHIP,
-   SITE_OUTDOOR_PUBLICPARK,
-   SITE_OUTDOOR_BUNKER,
-   SITE_GOVERNMENT_ARMYBASE,
-   SITE_BUSINESS_BANK,
-   SITE_GOVERNMENT_LIBERAL_PARTY_HQ,
-   SITE_GOVERNMENT_WHITE_HOUSE,
-   SITENUM
-};
-
 enum endgame
 {
    ENDGAME_NONE,
@@ -433,31 +375,6 @@ enum ccsexposure
    CCSEXPOSURE_EXPOSED,
    CCSEXPOSURE_NOBACKERS,
    CCSEXPOSURENUM
-};
-
-
-// *JDS* This should be expanded to cover
-// any situation in which you want a bullet
-// proof vest to act as a proper uniform.
-// eg, security, etc...
-//
-// Yes, it would be in some ways cooler to
-// do it the other way around -- have
-// body armor be a subtype, and use the
-// uniform as your main type, but that
-// would necessitate modifying the names
-// of the armor pieces across many cases.
-//
-// Perhaps I will change this system,
-// so that there is a flag after the
-// armor name (like the bloody and damaged
-// flags) which signals a vest is being
-// worn underneath, but eh... this should
-// work for now.
-enum BallisticVestTypes
-{
-   BVEST_POLICE,
-   BVEST_MILITARY // XXX: SWAT?
 };
 
 
@@ -636,6 +553,7 @@ enum ExpenseType
    EXPENSE_HOSTAGE,
    EXPENSE_CONFISCATED,
    EXPENSE_CARS,
+   EXPENSE_TRAVEL,
    EXPENSETYPENUM
 };
 
@@ -698,142 +616,7 @@ public:
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
-#define SITEBLOCK_EXIT BIT1
-#define SITEBLOCK_BLOCK BIT2
-#define SITEBLOCK_DOOR BIT3
-#define SITEBLOCK_KNOWN BIT4
-#define SITEBLOCK_LOOT BIT5
-#define SITEBLOCK_LOCKED BIT6
-#define SITEBLOCK_KLOCK BIT7
-#define SITEBLOCK_CLOCK BIT8
-#define SITEBLOCK_RESTRICTED BIT9
-#define SITEBLOCK_BLOODY BIT10
-#define SITEBLOCK_BLOODY2 BIT11
-#define SITEBLOCK_GRASSY BIT12
-#define SITEBLOCK_OUTDOOR BIT13
-#define SITEBLOCK_DEBRIS BIT14
-#define SITEBLOCK_GRAFFITI BIT15
-#define SITEBLOCK_GRAFFITI_CCS BIT16
-#define SITEBLOCK_GRAFFITI_OTHER BIT17
-#define SITEBLOCK_FIRE_START BIT18
-#define SITEBLOCK_FIRE_PEAK BIT19
-#define SITEBLOCK_FIRE_END BIT20
-#define SITEBLOCK_CHAINLINK BIT21
-#define SITEBLOCK_ALARMED BIT22
-#define SITEBLOCK_METAL BIT23
-
-enum SpecialBlocks
-{
-   SPECIAL_LAB_COSMETICS_CAGEDANIMALS,
-   SPECIAL_LAB_GENETIC_CAGEDANIMALS,
-   SPECIAL_POLICESTATION_LOCKUP,
-   SPECIAL_COURTHOUSE_LOCKUP,
-   SPECIAL_COURTHOUSE_JURYROOM,
-   SPECIAL_PRISON_CONTROL,
-   SPECIAL_PRISON_CONTROL_LOW,
-   SPECIAL_PRISON_CONTROL_MEDIUM,
-   SPECIAL_PRISON_CONTROL_HIGH,
-   SPECIAL_INTEL_SUPERCOMPUTER,
-   SPECIAL_SWEATSHOP_EQUIPMENT,
-   SPECIAL_POLLUTER_EQUIPMENT,
-   SPECIAL_NUCLEAR_ONOFF,
-   SPECIAL_HOUSE_PHOTOS,
-   SPECIAL_HOUSE_CEO,
-   SPECIAL_CORPORATE_FILES,
-   SPECIAL_RADIO_BROADCASTSTUDIO,
-   SPECIAL_NEWS_BROADCASTSTUDIO,
-   SPECIAL_APARTMENT_LANDLORD,
-   SPECIAL_SIGN_ONE,
-   SPECIAL_RESTAURANT_TABLE,
-   SPECIAL_CAFE_COMPUTER,
-   SPECIAL_PARK_BENCH,
-   SPECIAL_STAIRS_UP,
-   SPECIAL_STAIRS_DOWN,
-   SPECIAL_CLUB_BOUNCER,
-   SPECIAL_CLUB_BOUNCER_SECONDVISIT,
-   SPECIAL_ARMORY,
-   SPECIAL_DISPLAY_CASE,
-   SPECIAL_SIGN_TWO,
-   SPECIAL_SIGN_THREE,
-   SPECIAL_SECURITY_CHECKPOINT,
-   SPECIAL_SECURITY_METALDETECTORS,
-   SPECIAL_SECURITY_SECONDVISIT,
-   SPECIAL_BANK_VAULT,
-   SPECIAL_BANK_TELLER,
-   SPECIAL_BANK_MONEY,
-   SPECIAL_CCS_BOSS,
-   SPECIALNUM,
-   SPECIAL_NONE = -1
-};
-
-#define SIEGEFLAG_UNIT BIT1
-#define SIEGEFLAG_TRAP BIT2
-#define SIEGEFLAG_HEAVYUNIT BIT3
-#define SIEGEFLAG_UNIT_DAMAGED BIT4
-
-struct siteblockst
-{
-   short special;
-   int flag;
-   char siegeflag;
-};
-
-struct sitechangest
-{
-   char x;
-   char y;
-   char z;
-   int flag;
-   sitechangest() {}
-   sitechangest(char x_, char y_, char z_, int flag_) :
-      x(x_), y(y_), z(z_), flag(flag_) {}
-};
-
-
-enum SiegeTypes
-{
-   SIEGE_POLICE,
-   SIEGE_CIA,
-   SIEGE_HICKS,
-   SIEGE_CORPORATE,
-   SIEGE_CCS,
-   SIEGE_FIREMEN,
-   SIEGE_ORG,
-   SIEGENUM
-};
-
-struct siegest
-{
-   char siege;
-   //Puzz:  Temporary siege thing for organizations
-   int orgID;
-   short siegetype;
-   char underattack;
-   int attacktime;
-   short kills;
-   short tanks;
-   short escalationstate;
-   char lights_off;
-   char cameras_off;
-   short timeuntillocated;
-   short timeuntilcorps;
-   short timeuntilcia;
-   short timeuntilccs;
-   short timeuntilfiremen;
-
-   siegest()
-   {
-      siege=0;
-      siegetype=-1;
-      underattack=0;
-      escalationstate=0;
-      timeuntillocated=-1;
-      timeuntilcorps=-1;
-      timeuntilcia=-1;
-      timeuntilfiremen=-1;
-      timeuntilccs=-1;
-   }
-};
+#include "locations/locations.h"
 
 #define COMPOUND_BASIC BIT1
 #define COMPOUND_CAMERAS BIT2
@@ -852,72 +635,6 @@ enum CarChaseObstacles
    CARCHASE_OBSTACLE_CROSSTRAFFIC,
    CARCHASE_OBSTACLE_CHILD,
    CARCHASE_OBSTACLENUM
-};
-
-#define MAPX 70
-#define MAPY 23
-#define MAPZ 10
-
-class Location
-{
-public:
-   char name[40];
-   char shortname[20];
-   char type;
-   int city;
-   int area;
-   int parent;
-   int id;
-
-   vector<Item *> loot;
-   vector<sitechangest> changes;
-   int renting;
-   char newrental;
-   char needcar;
-   int closed;
-   bool hidden;
-   bool mapped;
-   bool upgradable;
-   int highsecurity;
-   siegest siege;
-   int heat;
-   int heat_protection;
-   int compound_walls;
-   int compound_stores;
-   char front_business;
-   char front_name[40];
-   char front_shortname[20];
-   bool haveflag;
-
-   int mapseed;
-
-   Location(int type, int parent=-1);
-   Location() { }
-   Location* addchild(int type);
-   ~Location()
-   {
-      delete_and_clear(loot);
-   }
-   void init(void);
-   void update_heat_protection(void);
-   bool duplicatelocation(void);
-   bool can_be_upgraded(void);
-   bool can_be_fortified(void);
-   bool fortified(void);
-   bool can_be_trapped(void);
-   bool trapped(void);
-   bool can_install_tanktraps(void);
-   bool tank_traps(void);
-   bool can_have_businessfront(void);
-   bool has_business_front(void);
-   bool bomb_resistant(void);
-   bool part_of_justice_system(void);
-   bool is_lcs_safehouse(void);
-   bool is_ccs_safehouse(void);
-   bool is_city(void);
-   std::string getname(bool shortname=false, bool include_city=false);
-   void rename(const char* name, const char* shortname);
-   char* city_description(void);
 };
 
 //struct chaseseqst
@@ -1161,6 +878,13 @@ enum NewsStories
    NEWSSTORY_HOSTAGE_ESCAPES,
    NEWSSTORY_CCS_NOBACKERS,
    NEWSSTORY_CCS_DEFEATED,
+   NEWSSTORY_PRESIDENT_IMPEACHED,
+   NEWSSTORY_PRESIDENT_BELIEVED_DEAD,
+   NEWSSTORY_PRESIDENT_FOUND_DEAD,
+   NEWSSTORY_PRESIDENT_FOUND,
+   NEWSSTORY_PRESIDENT_KIDNAPPED,
+   NEWSSTORY_PRESIDENT_MISSING,
+   NEWSSTORY_PRESIDENT_ASSASSINATED,
    NEWSSTORYNUM
 };
 
@@ -1651,30 +1375,6 @@ void reset(void);
 
 /*******************************************************************************
 *
-*                        Location Data
-*                        Folder: "locations"
-*
-*******************************************************************************/
-
-/*
- world.cpp
-*/
-Location* find_site_by_id(int id);
-Location* find_site_in_city(int site, int city);
-int find_site_index_in_city(int site, int city);
-/* find local versions of these locations */
-int find_police_station(const Creature& cr);
-int find_police_station(int site);
-int find_clinic(const Creature& cr);
-int find_clinic(int site);
-int find_homeless_shelter(const Creature& cr);
-int find_homeless_shelter(int site);
-/* sets up the list of locations */
-void make_world(void);
-
-
-/*******************************************************************************
-*
 *                        The Main Game Screen: Base Mode
 *                        Folder: "basemode"
 *
@@ -1846,6 +1546,7 @@ void special_bank_teller(void);
 void special_bank_money(void);
 void special_bank_vault(void);
 void special_ccs_boss(void);
+void special_oval_office(void);
 
 /*
  talk.cpp
@@ -2057,9 +1758,12 @@ void conquertextccs(void);
 void statebrokenlaws(int loc);
 void statebrokenlaws(Creature & cr);
 
-/*
- news.cpp
-*/
+/*******************************************************************************
+*
+*                             End of Day News Stories
+*                             Folder: "news"
+*
+*******************************************************************************/
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns);
 /* news - show major news story */
@@ -2073,6 +1777,8 @@ void displaynewspicture(int p,int y);
 void constructeventstory(char *story,short view,char positive);
 /* news - draws the specified block of text to the screen */
 void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
+/* news - shows animated news stories */
+void run_television_news_stories();
 /* news - make some filler junk */
 void generatefiller(char *story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
@@ -2143,6 +1849,10 @@ void prisonscene(Creature &g);
 int presidentapproval();
 /* politics -- gets the leaning of an issue voter for an election */
 int getswingvoter();
+/* politics -- promotes the Vice President to President, and replaces VP */
+void promoteVP();
+/* politics -- appoints a figure to an executive office, based on the President's alignment */
+void fillCabinetPost(int position);
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings);
 void elections_senate(int senmod,char canseethings);

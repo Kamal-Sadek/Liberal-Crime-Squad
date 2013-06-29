@@ -204,6 +204,7 @@
     <ClCompile Include="..\src\monthly\lcsmonthly.cpp" />
     <ClCompile Include="..\src\monthly\monthly.cpp" />
     <ClCompile Include="..\src\monthly\sleeper_update.cpp" />
+    <ClCompile Include="..\src\news\news.cpp" />
     <ClCompile Include="..\src\sitemode\advance.cpp" />
     <ClCompile Include="..\src\sitemode\mapspecials.cpp" />
     <ClCompile Include="..\src\sitemode\miscactions.cpp" />
@@ -225,7 +226,6 @@
     <ClCompile Include="..\src\news\headline.cpp" />
     <ClCompile Include="..\src\news\layout.cpp" />
     <ClCompile Include="..\src\news\majorevent.cpp" />
-    <ClCompile Include="..\src\daily\news.cpp" />
     <ClCompile Include="..\src\news\squadstory_text.cpp" />
     <ClCompile Include="..\src\items\armor.cpp" />
     <ClCompile Include="..\src\items\armortype.cpp" />
@@ -260,6 +260,7 @@
     <ClCompile Include="..\src\lcsio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\locations\locations.h" />
     <ClInclude Include="..\src\sitemode\shop.h" />
     <ClInclude Include="..\src\sitemode\sitemap.h" />
     <CustomBuildStep Include="..\src\compat.h" />

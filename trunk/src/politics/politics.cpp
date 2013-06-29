@@ -116,6 +116,33 @@ int getsimplevoter(int leaning)
    return vote;
 }
 
+/* politics -- promotes the Vice President to President, and replaces VP */
+void promoteVP()
+{
+   exec[EXEC_PRESIDENT] = exec[EXEC_VP];
+   strcpy(execname[EXEC_PRESIDENT], execname[EXEC_VP]);
+   fillCabinetPost(EXEC_VP);
+}
+
+/* politics -- appoints a figure to an executive office, based on the President's alignment */
+void fillCabinetPost(int position)
+{
+   // Set alignment
+   if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE)
+      exec[position]=ALIGN_ARCHCONSERVATIVE;
+   else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL)
+      exec[position]=ALIGN_ELITELIBERAL;
+   else
+      exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
+
+   // Set name
+   if(exec[position]==ALIGN_ARCHCONSERVATIVE)
+      generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
+   else if(exec[position]==ALIGN_CONSERVATIVE)
+      generate_name(execname[position],GENDER_MALE);
+   else
+      generate_name(execname[position]);
+}
 
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings)
@@ -461,16 +488,7 @@ void elections(char clearformess,char canseethings)
          for(int e=0;e<EXECNUM;e++)
          {
             if(e==EXEC_PRESIDENT)continue;
-            if(candidate[winner][0]==-2)exec[e]=-2;
-            else if(candidate[winner][0]==2)exec[e]=2;
-            else exec[e]=candidate[winner][0]+LCSrandom(3)-1;
-
-            if(exec[e]==-2)
-               generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
-            else if(exec[e]==-1)
-               generate_name(execname[e],GENDER_MALE);
-            else
-               generate_name(execname[e]);
+            fillCabinetPost(e);
          }
       }
    }

@@ -108,6 +108,7 @@ void savegame(const char *str)
       numbytes=fwrite(courtname,sizeof(char)*80,9,h);
       numbytes=fwrite(exec,sizeof(char),EXECNUM,h);
       numbytes=fwrite(execname,sizeof(char)*80,EXECNUM,h);
+      numbytes=fwrite(oldPresidentName,sizeof(char)*80,1,h);
 
       //LOCATIONS
       dummy=location.size();
@@ -439,6 +440,7 @@ char load(void)
       fread(courtname,sizeof(char)*80,9,h);
       fread(exec,sizeof(char)*EXECNUM,1,h);
       fread(execname,sizeof(char)*80,EXECNUM,h);
+      fread(oldPresidentName,sizeof(char)*80,1,h);
 
       //LOCATIONS
       fread(&dummy,sizeof(int),1,h);

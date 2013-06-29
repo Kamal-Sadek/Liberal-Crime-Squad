@@ -1013,6 +1013,21 @@ void funds_and_trouble(char &clearformess)
             pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
             pool[p]->location = pool[p]->base = find_homeless_shelter(*pool[p]);
          }
+         //Letters to the editor
+      case ACTIVITY_WRITE_LETTERS:
+         if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
+            background_liberal_influence[randomissue()]+=5;
+         pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
+         break;
+      //Guardian Essays
+      //Basically letters to the editor, but thrice as potent, and can backfire
+      case ACTIVITY_WRITE_GUARDIAN:
+         if(pool[p]->skill_check(SKILL_WRITING,DIFFICULTY_EASY))
+            background_liberal_influence[randomissue()]+=15;
+         else
+            background_liberal_influence[randomissue()]-=15;
+         pool[p]->train(SKILL_WRITING,LCSrandom(5)+1);
+         break;
       }
    }
 

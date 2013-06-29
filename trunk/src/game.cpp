@@ -179,6 +179,7 @@ signed char exec[EXECNUM];
 short execterm=1;
 char execname[EXECNUM][80];
 short presparty=1;
+char oldPresidentName[80];
 
 int stat_recruits=0;
 int stat_kidnappings=0;
