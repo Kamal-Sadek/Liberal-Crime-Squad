@@ -209,11 +209,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
       // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance. -Fox
       if((iscriminal(*pool[p])) &&
-         (!LCSrandom(50) ||(LCSrandom(2) && (d.date[e]->type==CREATURE_AGENT||
-         d.date[e]->type==CREATURE_COP||d.date[e]->type==CREATURE_GANGUNIT||
-         d.date[e]->type==CREATURE_SWAT||
-         d.date[e]->type==CREATURE_DEATHSQUAD||d.date[e]->type==CREATURE_PRISONGUARD||
-         d.date[e]->type==CREATURE_EDUCATOR))))
+         (!LCSrandom(50) ||(LCSrandom(2) && (d.date[e]->kidnap_resistant()))))
       {
          move(y,0);y++;
          set_color(COLOR_RED,COLOR_BLACK,1);
@@ -677,19 +673,7 @@ char completedate(datest &d,int p,char &clearformess)
 
             // Kidnap succeeds if the conservative isn't very dangerous,
             // but might fail if the conservative is tough stuff.
-            if((d.date[e]->type!=CREATURE_AGENT&&
-                d.date[e]->type!=CREATURE_COP&&
-                d.date[e]->type!=CREATURE_SWAT&&
-                d.date[e]->type!=CREATURE_GANGUNIT&&
-                d.date[e]->type!=CREATURE_DEATHSQUAD&&
-                d.date[e]->type!=CREATURE_SOLDIER&&
-                d.date[e]->type!=CREATURE_VETERAN&&
-                d.date[e]->type!=CREATURE_HARDENED_VETERAN&&
-                d.date[e]->type!=CREATURE_CCS_VIGILANTE&&
-                d.date[e]->type!=CREATURE_CCS_ARCHCONSERVATIVE&&
-                d.date[e]->type!=CREATURE_CCS_MOLOTOV&&
-                d.date[e]->type!=CREATURE_CCS_SNIPER&&
-                d.date[e]->type!=CREATURE_MERC&&
+            if((d.date[e]->kidnap_resistant()&&
                 LCSrandom(15))||
                 LCSrandom(2+bonus))
             {

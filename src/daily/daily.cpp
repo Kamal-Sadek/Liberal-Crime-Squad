@@ -405,7 +405,44 @@ void advanceday(char &clearformess,char canseethings)
          }
 
          //GO PLACES
-         switch(location[squad[sq]->activity.arg]->type)
+         // Identify the "travel location" -- top level in multi-city play,
+         // a particular district in one-city play
+         int travelLocation = -1;
+         for(int i=0; i < location.size(); i++)
+         {
+            if(location[i]->type == SITE_TRAVEL)
+            {
+               travelLocation = i;
+               break;
+            }
+         }
+
+         // Verify travellers can afford the cost, and charge them
+         bool canDepart = true;
+         if(location[squad[sq]->activity.arg]->parent == travelLocation)
+         {
+            if(clearformess)erase();
+            else makedelimiter(8,0);
+            move(8,1);
+            int squadNum;
+            for(squadNum = 0; squadNum < 6; squadNum++)
+               if(squad[sq]->squad[squadNum] == NULL) break;
+            if(ledger.get_funds() < 100 * squadNum)
+            {
+               addstr_fl(gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
+               canDepart = false;
+            }
+            else
+            {
+               ledger.subtract_funds(100 * squadNum, EXPENSE_TRAVEL);
+               char cost[10];
+               itoa(100*squadNum, cost, 10);
+               addstr_fl(gamelog, "%s spent $%s on tickets to go to %s.", squad[sq]->name, cost, location[squad[sq]->activity.arg]->getname().c_str());
+            }
+            getch();
+         }
+         
+         if(canDepart) switch(location[squad[sq]->activity.arg]->type)
          {
          case SITE_CITY_NEW_YORK:
          case SITE_CITY_SEATTLE:
@@ -419,7 +456,7 @@ void advanceday(char &clearformess,char canseethings)
             else makedelimiter(8,0);
             move(8,1);
             addstr(squad[sq]->name, gamelog);
-            addstr(" has departed for ", gamelog);
+            addstr(" arrives in ", gamelog);
             addstr(location[squad[sq]->activity.arg]->getname(), gamelog);
             addstr(".", gamelog);
             gamelog.nextMessage();
@@ -1707,6 +1744,7 @@ char securityable(int type)
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
       case SITE_GOVERNMENT_ARMYBASE:
       case SITE_CORPORATE_HOUSE:
+      case SITE_GOVERNMENT_WHITE_HOUSE:
 		  return 2;
    }
 

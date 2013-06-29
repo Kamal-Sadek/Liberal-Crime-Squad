@@ -24,6 +24,7 @@ extern signed char exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][80];
 extern short presparty;
+extern char oldPresidentName[80];
 
 extern int stat_recruits;
 extern int stat_kidnappings;

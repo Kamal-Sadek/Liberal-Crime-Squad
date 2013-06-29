@@ -271,6 +271,20 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
          cr.set_attribute(ATTRIBUTE_INTELLIGENCE,10);
          cr.set_attribute(ATTRIBUTE_WISDOM,6);
          break;
+      case CREATURE_POLITICIAN:
+         GIVE_GENDER_MALE;
+         GIVE_WEAPON_CIVILIAN;
+         armor=new Armor(*armortype[getarmortype("ARMOR_EXPENSIVESUIT")]);
+         cr.give_armor(*armor,NULL);
+         cr.money=LCSrandom(41)+40;
+         cr.align=ALIGN_CONSERVATIVE;
+         cr.infiltration=0.8f+0.05f*LCSrandom(4);
+         cr.juice=400+LCSrandom(400);
+         cr.age=AGE_MIDDLEAGED;
+         cr.set_skill(SKILL_LAW,LCSrandom(7)+1);
+         cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+5);
+         cr.set_attribute(ATTRIBUTE_WISDOM,6);
+         break;
       case CREATURE_CORPORATE_MANAGER:
          GIVE_WEAPON_CIVILIAN;
          armor=new Armor(*armortype[getarmortype("ARMOR_CHEAPSUIT")]);
@@ -1254,12 +1268,60 @@ void makecreature(Creature &cr,short type) //Lots of temporary solution in this 
 
          cr.set_skill(SKILL_PISTOL,LCSrandom(8)+2);
          cr.set_skill(SKILL_RIFLE,LCSrandom(8)+2);
+         cr.set_skill(SKILL_SMG,LCSrandom(8)+2);
          cr.set_skill(SKILL_SHOTGUN,LCSrandom(8)+2);
          cr.set_skill(SKILL_HANDTOHAND,LCSrandom(8)+2);
          cr.set_skill(SKILL_CLUB,LCSrandom(8)+2);
          cr.set_skill(SKILL_DRIVING,LCSrandom(6)+4);
          cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6)+4);
          cr.set_skill(SKILL_DODGE,LCSrandom(4)+4);
+
+         cr.set_attribute(ATTRIBUTE_STRENGTH,5);
+         cr.set_attribute(ATTRIBUTE_AGILITY,7);
+         cr.set_attribute(ATTRIBUTE_HEALTH,5);
+         cr.set_attribute(ATTRIBUTE_INTELLIGENCE,4);
+         cr.set_attribute(ATTRIBUTE_WISDOM,5);
+         break;
+      case CREATURE_SECRET_SERVICE:
+         GIVE_GENDER_MALE;
+         strcpy(cr.name,"Secret Service");
+         switch(LCSrandom(3))
+         {
+         case 0:
+            weapon=new Weapon(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
+            cr.give_weapon(*weapon,NULL);
+            clips=new Clip(*cliptype[getcliptype("CLIP_9")],4);
+            cr.take_clips(*clips,4);
+            cr.reload(false);
+            break;
+         case 1:
+            weapon=new Weapon(*weapontype[getweapontype("WEAPON_AUTORIFLE_M16")]);
+            cr.give_weapon(*weapon,NULL);
+            clips=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],4);
+            cr.take_clips(*clips,4);
+            cr.reload(false);
+            break;
+         case 2:
+            weapon=new Weapon(*weapontype[getweapontype("WEAPON_SMG_MP5")]);
+            cr.give_weapon(*weapon,NULL);
+            clips=new Clip(*cliptype[getcliptype("CLIP_SMG")],4);
+            cr.take_clips(*clips,4);
+            cr.reload(false);
+            break;
+         }
+         armor=new Armor(*armortype[getarmortype("ARMOR_BLACKSUIT")]);
+         cr.give_armor(*armor,NULL);
+         cr.align=ALIGN_CONSERVATIVE;
+         cr.infiltration=0.5f*LCSrandom(4);
+         cr.juice=200+LCSrandom(150);
+         cr.age=AGE_MATURE;
+
+         cr.set_skill(SKILL_PISTOL,LCSrandom(6)+4);
+         cr.set_skill(SKILL_SMG,LCSrandom(6)+4);
+         cr.set_skill(SKILL_RIFLE,LCSrandom(6)+4);
+         cr.set_skill(SKILL_DRIVING,LCSrandom(6)+4);
+         cr.set_skill(SKILL_PSYCHOLOGY,LCSrandom(6)+4);
+         cr.set_skill(SKILL_DODGE,LCSrandom(6)+4);
 
          cr.set_attribute(ATTRIBUTE_STRENGTH,5);
          cr.set_attribute(ATTRIBUTE_AGILITY,7);
@@ -2286,6 +2348,8 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       case CREATURE_BOUNCER:
          okaysite[SITE_BUSINESS_CIGARBAR]=1;
          break;
+      case CREATURE_POLITICIAN:
+         okaysite[SITE_GOVERNMENT_WHITE_HOUSE]=1;
       case CREATURE_CORPORATE_CEO:
          okaysite[SITE_CORPORATE_HEADQUARTERS]=1;
          break;
@@ -2385,6 +2449,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
          okaysite[SITE_GOVERNMENT_FIRESTATION]=1;
+         okaysite[SITE_GOVERNMENT_WHITE_HOUSE]=1;
          break;
       case CREATURE_WORKER_FACTORY_UNION:
          okaysite[SITE_INDUSTRY_POLLUTER]=1;
@@ -2422,6 +2487,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       case CREATURE_JUDGE_CONSERVATIVE:
          okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
          break;
+      case CREATURE_SECRET_SERVICE:
+         okaysite[SITE_GOVERNMENT_WHITE_HOUSE]=1;
+         break;
       case CREATURE_AGENT:
          okaysite[SITE_GOVERNMENT_INTELLIGENCEHQ]=1;
          break;
@@ -2451,6 +2519,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
       case CREATURE_LAWYER:
          okaysite[SITE_GOVERNMENT_COURTHOUSE]=1;
+         okaysite[SITE_GOVERNMENT_WHITE_HOUSE]=1;
          break;
       case CREATURE_DOCTOR:
          okaysite[SITE_DOWNTOWN]=1;
@@ -2542,6 +2611,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_MEDIA_AMRADIO]=1;
          okaysite[SITE_MEDIA_CABLENEWS]=1;
          okaysite[SITE_BUSINESS_DEPTSTORE]=1;
+         okaysite[SITE_GOVERNMENT_WHITE_HOUSE]=1;
          break;
       case CREATURE_FOOTBALLCOACH:
          okaysite[SITE_UDISTRICT]=1;

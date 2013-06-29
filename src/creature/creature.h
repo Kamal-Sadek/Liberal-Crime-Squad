@@ -190,6 +190,8 @@ enum CreatureType
    CREATURE_MILITARYOFFICER,
    CREATURE_BANK_TELLER,
    CREATURE_BANK_MANAGER,
+   CREATURE_SECRET_SERVICE,
+   CREATURE_POLITICIAN,
    CREATURENUM
 };
 
@@ -425,6 +427,9 @@ public:
    /* rolls up a proper name for a creature */
    void namecreature();
    bool dontname;
+   /* can turn the tables on datenapping */
+   bool kidnap_resistant();
+   bool reports_to_police();
    /* finds the cap for a particular skill */
    int skill_cap(int skill, bool use_juice);
    const char *heshe();
@@ -442,17 +447,22 @@ class UniqueCreatures
 private:
    Creature CEO_;
    int CEO_ID;
+   Creature Pres_;
+   int Pres_ID;
 
 public:
    int CEO_state;
-   UniqueCreatures() : CEO_ID(-1) {};
+   int Pres_state;
+   UniqueCreatures() : CEO_ID(-1), Pres_ID(-1) {};
    explicit UniqueCreatures(const char * inputXml);
    string showXml() const;
 
    Creature& CEO();
+   Creature& President();
 
    void initialize();
    void newCEO();
+   void newPresident();
 };
 
 #endif //CREATURE_H_INCLUDED

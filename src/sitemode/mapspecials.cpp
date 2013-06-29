@@ -1934,6 +1934,12 @@ void spawn_security(void)
          makecreature(encounter[1], CREATURE_PRISONGUARD);
          makecreature(encounter[2], CREATURE_GUARDDOG);
          break;
+      case SITE_GOVERNMENT_WHITE_HOUSE:
+         makecreature(encounter[0], CREATURE_SECRET_SERVICE);
+         makecreature(encounter[1], CREATURE_SECRET_SERVICE);
+         makecreature(encounter[2], CREATURE_SECRET_SERVICE);
+         makecreature(encounter[3], CREATURE_SECRET_SERVICE);
+         break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
          makecreature(encounter[0], CREATURE_AGENT);
          makecreature(encounter[1], CREATURE_AGENT);
@@ -2478,6 +2484,55 @@ void special_bank_money(void)
    }
    refresh();
    getch();
+}
+
+void special_oval_office(void)
+{
+   // Clear entire Oval Office area
+   for(int dx=-1; dx<=1; dx++)
+   for(int dy=-1; dy<=1; dy++)
+   {
+      if(levelmap[locx+dx][locy+dy][locz].special == SPECIAL_OVAL_OFFICE_NW ||
+         levelmap[locx+dx][locy+dy][locz].special == SPECIAL_OVAL_OFFICE_NE ||
+         levelmap[locx+dx][locy+dy][locz].special == SPECIAL_OVAL_OFFICE_SW ||
+         levelmap[locx+dx][locy+dy][locz].special == SPECIAL_OVAL_OFFICE_SE)
+      {
+         levelmap[locx+dx][locy+dy][locz].special = -1;
+      }
+   }
+
+   if(sitealarm)
+   {
+      for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      mvaddstr(16,1,"The President isn't here... ",gamelog);
+      printsitemap(locx,locy,locz);
+      getch();
+      mvaddstr(17,1,"Secret Service agents ambush the squad!", gamelog);
+      gamelog.newline();
+      for(int e=0;e<6;e++)makecreature(encounter[e],CREATURE_SECRET_SERVICE);
+      printencounter();
+      getch();
+
+      enemyattack();
+      creatureadvance();
+   }
+   else
+   {
+      for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+
+      clearmessagearea(false);
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      mvaddstr(16,1,"The President is in the Oval Office.",gamelog);
+      gamelog.newline();
+      printsitemap(locx,locy,locz);
+      for(int e=0;e<2;e++)makecreature(encounter[e],CREATURE_SECRET_SERVICE);
+      encounter[2] = uniqueCreatures.President();
+      printencounter();
+      getch();
+   }
 }
 
 void special_ccs_boss(void)

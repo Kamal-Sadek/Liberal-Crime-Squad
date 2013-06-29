@@ -402,6 +402,7 @@ void enemyattack(void)
          encounter[e].type==CREATURE_JUDGE_LIBERAL||
          encounter[e].type==CREATURE_JUDGE_CONSERVATIVE||
          encounter[e].type==CREATURE_CORPORATE_CEO||
+         encounter[e].type==CREATURE_POLITICIAN||
          encounter[e].type==CREATURE_RADIOPERSONALITY||
          encounter[e].type==CREATURE_NEWSANCHOR||
          encounter[e].type==CREATURE_MILITARYOFFICER)&&encnum<ENCMAX)canmistake=0;
@@ -427,12 +428,15 @@ void enemyattack(void)
                      addstr("'s body.", gamelog);
                      gamelog.newline();
 
-                     if(activesquad->squad[target]->prisoner->type==CREATURE_CORPORATE_CEO||
-                        activesquad->squad[target]->prisoner->type==CREATURE_RADIOPERSONALITY||
-                        activesquad->squad[target]->prisoner->type==CREATURE_NEWSANCHOR||
-                        activesquad->squad[target]->prisoner->type==CREATURE_SCIENTIST_EMINENT||
-                        activesquad->squad[target]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE||
-                        activesquad->squad[target]->prisoner->type==CREATURE_MILITARYOFFICER)sitecrime+=30;
+                     int prisonerType = activesquad->squad[target]->prisoner->type;
+
+                     if(prisonerType==CREATURE_CORPORATE_CEO||
+                        prisonerType==CREATURE_POLITICIAN||
+                        prisonerType==CREATURE_RADIOPERSONALITY||
+                        prisonerType==CREATURE_NEWSANCHOR||
+                        prisonerType==CREATURE_SCIENTIST_EMINENT||
+                        prisonerType==CREATURE_JUDGE_CONSERVATIVE||
+                        prisonerType==CREATURE_MILITARYOFFICER)sitecrime+=30;
 
                      makeloot(*activesquad->squad[target]->prisoner,groundloot);
 
@@ -516,6 +520,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       a.type==CREATURE_JUDGE_LIBERAL||
       a.type==CREATURE_JUDGE_CONSERVATIVE||
       (a.type==CREATURE_CORPORATE_CEO&&LCSrandom(2))||
+      a.type==CREATURE_POLITICIAN||
       a.type==CREATURE_RADIOPERSONALITY||
       a.type==CREATURE_NEWSANCHOR||
       a.type==CREATURE_MILITARYOFFICER||
@@ -1841,6 +1846,40 @@ void specialattack(Creature &a, Creature &t, char &actual)
       "explains Liberal philosophy to"
    };
 
+   
+
+   static const char *conservative_politician_debate[] =
+   {
+      "debates the death penalty with",
+      "debates gay rights with",
+      "debates free speech with",
+      "debates the Second Amendment with",
+      "justifies voodoo economics to",
+      "extols the Reagan presidency to",
+      "argues about tax cuts with",
+      "explains Conservative philosophy to",
+      "extends a dinner invitation to",
+      "debates fiscal policy with",
+      "chats warmly with",
+      "smiles at"
+   };
+
+   static const char *other_politician_debate[] =
+   {
+      "debates the death penalty with",
+      "debates gay rights with",
+      "debates free speech with",
+      "debates the Second Amendment with",
+      "derides voodoo economics to",
+      "dismisses the Reagan presidency to",
+      "argues about tax cuts with",
+      "explains Liberal philosophy to",
+      "extends a dinner invitation to",
+      "debates fiscal policy with",
+      "chats warmly with",
+      "smiles at"
+   };
+
    static const char *media_debate[] =
    {
       "winks at",
@@ -1932,6 +1971,32 @@ void specialattack(Creature &a, Creature &t, char &actual)
                    t.attribute_roll(ATTRIBUTE_WISDOM);
          }
          attack+=a.skill_roll(SKILL_SCIENCE);
+         break;
+      case CREATURE_POLITICIAN:
+         if(a.align==-1)
+         {
+            strcat(str,selectRandomString(conservative_politician_debate,
+                                          ARRAY_ELEMENTS(conservative_politician_debate)));
+         }
+         else
+         {
+            strcat(str,selectRandomString(other_politician_debate,
+                                          ARRAY_ELEMENTS(other_politician_debate)));
+         }
+         strcat(str," ");
+         strcat(str,t.name);
+         strcat(str,"!");
+         if(t.align==1)
+         {
+            resist=t.skill_roll(SKILL_LAW)+
+                   t.attribute_roll(ATTRIBUTE_HEART);
+         }
+         else
+         {
+            resist=t.skill_roll(SKILL_LAW)+
+                   t.attribute_roll(ATTRIBUTE_WISDOM);
+         }
+         attack+=a.skill_roll(SKILL_LAW);
          break;
       case CREATURE_CORPORATE_CEO:
          if(a.align==-1)

@@ -361,6 +361,17 @@ void stopevil(void)
       if(location[l]->parent==loc && location[l]->renting==RENTING_NOCONTROL && !location[l]->hidden)
          temploc.push_back(l);
 
+   // Determine cost of tickets for travel
+   int squadsize = 0;
+   for(int s=0; s<6; s++)
+   {
+      if(activesquad->squad[s] != NULL)
+         squadsize++;
+   }
+   int ticketprice = 100 * squadsize;
+   char ticketpricestr[10];
+   itoa(100 * squadsize, ticketpricestr, 10);
+
    do
    {
       erase();
@@ -456,6 +467,12 @@ void stopevil(void)
          } else if(this_location->area != squad_location->area && !havecar) {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr(" (Need Car)");
+         } else if(this_location->type == SITE_TRAVEL) {
+            if(ledger.get_funds() < ticketprice)
+               set_color(COLOR_RED,COLOR_BLACK,1);
+            else
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr_f(" ($%s)", ticketpricestr);
          }
          if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
@@ -503,6 +520,12 @@ void stopevil(void)
          if(!havecar) {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr(" (Need Car)");
+         } else {
+            if(ledger.get_funds() < ticketprice)
+               set_color(COLOR_RED,COLOR_BLACK,1);
+            else
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr_f(" ($%s)", ticketpricestr);
          }
          temploc.push_back(-1);
       }

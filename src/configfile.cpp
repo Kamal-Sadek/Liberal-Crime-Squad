@@ -161,6 +161,10 @@ void readMapCBSpecials(int x, int y, int z, int i)
    case 36: levelmap[x][y][z].special = SPECIAL_BANK_TELLER; break;
    case 37: levelmap[x][y][z].special = SPECIAL_BANK_MONEY; break;
    case 38: levelmap[x][y][z].special = SPECIAL_CCS_BOSS; break;
+   case 39: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_NW; break;
+   case 40: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_NE; break;
+   case 41: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_SW; break;
+   case 42: levelmap[x][y][z].special = SPECIAL_OVAL_OFFICE_SE; break;
    }
 }
 

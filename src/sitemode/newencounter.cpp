@@ -51,6 +51,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_GUARDDOG]=100;
             creaturearray[CREATURE_TANK]=100;
             break;
+         case SITE_GOVERNMENT_WHITE_HOUSE:
+            creaturearray[CREATURE_SECRET_SERVICE]=1000;
+            creaturearray[CREATURE_MILITARYOFFICER]=100;
+            break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             creaturearray[CREATURE_AGENT]=1000;
             creaturearray[CREATURE_MILITARYOFFICER]=100;
@@ -214,6 +218,44 @@ void prepareencounter(short type,char sec)
             if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE)
                creaturearray[CREATURE_CCS_VIGILANTE]+=5;
 
+            for(int n=0;n<LCSrandom(6)+1;n++)
+            {
+               makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+               encslot++;
+            }
+            break;
+         }
+         case SITE_GOVERNMENT_WHITE_HOUSE:
+         {
+            creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
+            creaturearray[CREATURE_WORKER_JANITOR]+=2;
+            creaturearray[CREATURE_WORKER_SECRETARY]+=2;
+            creaturearray[CREATURE_TEENAGER]+=1;
+            creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
+            creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
+            creaturearray[CREATURE_AGENT]+=2;
+            if(sec)creaturearray[CREATURE_SECRET_SERVICE]+=100;
+            else creaturearray[CREATURE_SECRET_SERVICE]+=5;
+            if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE && exec[EXEC_PRESIDENT] < ALIGN_CONSERVATIVE)
+               creaturearray[CREATURE_CCS_ARCHCONSERVATIVE]+=1;
+            creaturearray[CREATURE_MILITARYOFFICER]+=3;
+            creaturearray[CREATURE_LAWYER]+=3;
+            creaturearray[CREATURE_DOCTOR]+=1;
+            creaturearray[CREATURE_COLLEGESTUDENT]+=1;
+            creaturearray[CREATURE_TEACHER]+=1;
+            creaturearray[CREATURE_OFFICEWORKER]+=5;
+            creaturearray[CREATURE_FOOTBALLCOACH]+=1;
+            creaturearray[CREATURE_CHEF]+=1;
+            creaturearray[CREATURE_VETERAN]+=1;
+            creaturearray[CREATURE_JOURNALIST]+=2;
+            creaturearray[CREATURE_SOCIALITE]+=1;
+            creaturearray[CREATURE_PHOTOGRAPHER]+=2;
+            creaturearray[CREATURE_CAMERAMAN]+=1;
+            creaturearray[CREATURE_HAIRSTYLIST]+=1;
+            creaturearray[CREATURE_CLERK]+=5;
+            creaturearray[CREATURE_ACTOR]+=1;
+            creaturearray[CREATURE_ATHLETE]+=1;
+            
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -628,6 +670,17 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_BANK_MANAGER]=200;
                creaturearray[CREATURE_THIEF]=1;
             }
+            int encnum=1;
+            if(mode==GAMEMODE_SITE && !(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED))
+            {
+               encnum=4;
+            }
+            for(int n=0;n<LCSrandom(encnum)+1;n++)
+            {
+               makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
+               encslot++;
+            }
+            break;
          }
          case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
          {

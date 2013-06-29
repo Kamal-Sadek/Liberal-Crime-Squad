@@ -1,11 +1,66 @@
 
 //#include "includes.h"
 #include "externs.h"
+#include "news/news.h"
+
+std::string getLastNameForHeadline(char* fullName)
+{
+   int i=0;
+   int j=-1;
+   char lastName[20];
+   // Parse through full name to get the last name
+   for(i=0; fullName[i]!=0; i++)
+   {
+      // Start recording last name at the space between first and last
+      if(fullName[i]==' ')
+      {
+         j=0;
+      }
+      // When recording last name, transcribe in uppercase
+      else if(j >= 0)
+      {
+         lastName[j++] = toupper(fullName[i]);
+      }
+   }
+   lastName[j] = 0; // To finish, NULL terminate the transcribed string
+
+   // Write to std::string
+   std::string ret = lastName;
+   return ret;
+}
 
 void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int header)
 {
    switch(ns.type)
    {
+   case NEWSSTORY_PRESIDENT_IMPEACHED:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("IMPEACHED",13);
+      break;
+   case NEWSSTORY_PRESIDENT_BELIEVED_DEAD:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("BELIEVED DEAD",13);
+      break;
+   case NEWSSTORY_PRESIDENT_FOUND_DEAD:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("FOUND DEAD",13);
+      break;
+   case NEWSSTORY_PRESIDENT_FOUND:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("RESCUED",13);
+      break;
+   case NEWSSTORY_PRESIDENT_KIDNAPPED:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("KIDNAPPED",13);
+      break;
+   case NEWSSTORY_PRESIDENT_MISSING:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("MISSING",13);
+      break;
+   case NEWSSTORY_PRESIDENT_ASSASSINATED:
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont("ASSASSINATED",13);
+      break;
    case NEWSSTORY_CCS_NOBACKERS:
       displaycenterednewsfont("FBI HUNTS CCS",5);
       y=13;

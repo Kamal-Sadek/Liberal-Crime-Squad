@@ -10,7 +10,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  sitemode/sitemode.cpp sitemode/talk.cpp sitemode/miscactions.cpp\
  sitemode/sitedisplay.cpp sitemode/stealth.cpp combat/chase.cpp\
  combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
- daily/date.cpp daily/news.cpp daily/shopsnstuff.cpp daily/siege.cpp\
+ daily/date.cpp news/news.cpp daily/shopsnstuff.cpp daily/siege.cpp\
  monthly/endgame.cpp monthly/justice.cpp monthly/lcsmonthly.cpp\
  monthly/monthly.cpp politics/politics.cpp daily/interrogation.cpp\
  daily/recruit.cpp politics/law.cpp politics/alignment.h politics/law.h\
@@ -28,7 +28,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  items/loottype.cpp items/loottype.h items/money.cpp items/money.h\
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp locations/locations.cpp\
- title/initfile.cpp locations/world.cpp
+ title/initfile.cpp locations/world.cpp locations/locations.h
 
 crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
 crimesquad_CXXFLAGS = -I$(top_srcdir)/src

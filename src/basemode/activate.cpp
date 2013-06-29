@@ -852,6 +852,7 @@ void activate(Creature *cr)
                case CREATURE_GANGMEMBER:
                case CREATURE_MUTANT:
                case CREATURE_CRACKHEAD:
+               case CREATURE_SECRET_SERVICE:
                   cr->activity.type=ACTIVITY_TEACH_FIGHTING;
                   choice='2';
                   break;
