@@ -3141,7 +3141,15 @@ char stealcar(Creature &cr,char &clearformess)
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
       addjuice(cr,v->steal_juice(),100);
 
+      vehicle.push_back(v);
       v->add_heat(14+v->steal_extraheat());
+      v->set_location(cr.base);
+      // Automatically assign this car to this driver, if no other one is present
+      if(cr.pref_carid==-1)
+      {
+         cr.pref_carid = v->id();
+         cr.pref_is_driver = true;
+      }
 
       chaseseq.clean();
       chaseseq.location=location[cr.location]->parent;
@@ -3155,25 +3163,14 @@ char stealcar(Creature &cr,char &clearformess)
          newsstory.push_back(ns);
          sitestory=ns;
          makechasers(-1,chaselev);
-      }
-
-      vehicle.push_back(v);
-      if(chasesequence(cr,*v))
-      {
-         v->set_location(cr.base);
-         // Automatically assign this car to this driver, if no other one is present
-         if(cr.pref_carid==-1)
+         if(!chasesequence(cr,*v))
          {
-            cr.pref_carid = v->id();
-            cr.pref_is_driver = true;
+            // Caught or killed in the chase. Do not need to delete vehicle.
+            return 0;
          }
-         return 1;
       }
-      else
-      {
 
-         return 0;//do not need to delete vehicle
-      }
+      return 1;
    }
 
    return 0;
