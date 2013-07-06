@@ -45,19 +45,25 @@ int find_site_index_in_city(int site, int city)
 int find_police_station(const Creature& cr) { return find_police_station(cr.location); }
 int find_police_station(int site_index)
 {
-   return find_site_index_in_city(SITE_GOVERNMENT_POLICESTATION, location[site_index]->city);
+   int city = -1;
+   if(site_index >= 0) city = location[site_index]->city;
+   return find_site_index_in_city(SITE_GOVERNMENT_POLICESTATION, city);
 }
 
 int find_clinic(const Creature& cr) { return find_clinic(cr.location); }
 int find_clinic(int site_index)
 {
-   return find_site_index_in_city(SITE_HOSPITAL_CLINIC, location[site_index]->city);
+   int city = -1;
+   if(site_index >= 0) city = location[site_index]->city;
+   return find_site_index_in_city(SITE_HOSPITAL_CLINIC, city);
 }
 
 int find_homeless_shelter(const Creature& cr) { return find_homeless_shelter(cr.location); }
 int find_homeless_shelter(int site_index)
 {
-   return find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, location[site_index]->city);
+   int city = -1;
+   if(site_index >= 0) city = location[site_index]->city;
+   return find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, city);
 }
 
 void make_classic_world()
@@ -85,6 +91,7 @@ void make_classic_world()
       Site(SITE_BUSINESS_DEPTSTORE)
       Site(SITE_BUSINESS_PAWNSHOP)
       Site(SITE_BUSINESS_HALLOWEEN)
+      Site(SITE_BUSINESS_CARDEALERSHIP)
    District(SITE_UDISTRICT, 0)
       Site(SITE_RESIDENTIAL_APARTMENT)
       Site(SITE_HOSPITAL_UNIVERSITY)
@@ -106,7 +113,6 @@ void make_classic_world()
       Site(SITE_INDUSTRY_SWEATSHOP)
       Site(SITE_BUSINESS_CRACKHOUSE)
          SiteProperty(upgradable, true)
-      Site(SITE_BUSINESS_CARDEALERSHIP)
    District(SITE_OUTOFTOWN, 1)
       Site(SITE_GOVERNMENT_PRISON)
       Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
