@@ -1535,11 +1535,11 @@ string UniqueCreatures::showXml() const
    xml.AddElem("CEO_ID", CEO_ID);
    xml.AddElem("CEO_state", CEO_state);
    xml.AddElem("CEO");
+   xml.AddChildSubDoc(CEO_.showXml());
    xml.AddElem("Pres_ID", CEO_ID);
    xml.AddElem("Pres_state", CEO_state);
    xml.AddElem("Pres");
-   xml.IntoElem();
-   xml.AddSubDoc(CEO_.showXml());
+   xml.AddChildSubDoc(Pres_.showXml());
    
    return xml.GetDoc();
 }
