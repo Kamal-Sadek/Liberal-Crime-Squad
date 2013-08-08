@@ -53,37 +53,37 @@ enum CreatureAttribute
 
 enum CreatureSkill
 {
-   SKILL_HANDTOHAND,
-   SKILL_KNIFE,
-   SKILL_SWORD,
-   SKILL_CLUB,
-   SKILL_AXE,
-   SKILL_THROWING,
-   SKILL_PISTOL,
-   SKILL_RIFLE,
-   SKILL_SMG,
-   SKILL_SHOTGUN,
-   SKILL_PERSUASION,
-   SKILL_PSYCHOLOGY,
-   SKILL_LAW,
-   SKILL_SECURITY,
-   SKILL_DISGUISE,
-   SKILL_COMPUTERS,
-   SKILL_TAILORING,
-   SKILL_DRIVING,
-   SKILL_WRITING,
-   SKILL_MUSIC,
    SKILL_ART,
-   SKILL_RELIGION,
-   SKILL_SCIENCE,
+   SKILL_AXE,
    SKILL_BUSINESS,
-   SKILL_STEALTH,
-   SKILL_TEACHING,
-   SKILL_STREETSENSE,
-   SKILL_SEDUCTION,
-   SKILL_FIRSTAID,
+   SKILL_CLUB,
+   SKILL_COMPUTERS,
+   SKILL_DISGUISE,
    SKILL_DODGE,
+   SKILL_DRIVING,
+   SKILL_FIRSTAID,
    SKILL_HEAVYWEAPONS,
+   SKILL_KNIFE,
+   SKILL_LAW,
+   SKILL_HANDTOHAND, // actually this is called "Martial Arts"
+   SKILL_MUSIC,
+   SKILL_PERSUASION,
+   SKILL_PISTOL,
+   SKILL_PSYCHOLOGY,
+   SKILL_RELIGION,
+   SKILL_RIFLE,
+   SKILL_SCIENCE,
+   SKILL_SECURITY,
+   SKILL_SEDUCTION,
+   SKILL_SHOTGUN,
+   SKILL_SMG,
+   SKILL_STEALTH,
+   SKILL_STREETSENSE,
+   SKILL_SWORD,
+   SKILL_TAILORING,
+   SKILL_TEACHING,
+   SKILL_THROWING,
+   SKILL_WRITING,
    SKILLNUM
 };
 
@@ -292,7 +292,7 @@ public:
    int get_skill(int skill) const;
    int skill_roll(int skill);
    bool skill_check(int skill, int difficulty);
-   
+
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
    char gender_conservative;
@@ -323,7 +323,7 @@ public:
    int id;
    int hireid;
    int meetings;
-   
+
    char forceinc;
 
    void train(int trainedskill, int experience);
@@ -374,7 +374,7 @@ public:
    //int crimes_committed[LAWFLAGNUM];
    int crimes_suspected[LAWFLAGNUM];
    //int crimes_convicted[LAWFLAGNUM];
-   
+
    int heat;
    int location;
    int worklocation;
@@ -391,14 +391,14 @@ public:
    short flag;
 
    void stop_hauling_me();
-   
+
    Creature();
    Creature(const Creature& org);
    Creature& operator=(const Creature& rhs);
    ~Creature();
    explicit Creature(const char* inputXml);
    string showXml() const;
-   
+
    bool is_active_liberal(void);
    bool is_imprisoned(void);
    bool is_lcs_sleeper(void);
