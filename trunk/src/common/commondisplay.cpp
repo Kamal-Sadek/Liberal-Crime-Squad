@@ -798,9 +798,9 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       long maxs=-1;
       for(int s=0;s<SKILLNUM;s++)
       {
-         if(cr->get_skill(s)>max && !used[s])
+         if((cr->get_skill(s)*10000+cr->get_skill_ip(s))>max && !used[s])
          {
-            max=cr->get_skill(s);
+            max=(cr->get_skill(s)*10000+cr->get_skill_ip(s));
             maxs=s;
          }
       }
@@ -1930,8 +1930,8 @@ int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
    va_start (args, format);
    vsnprintf(sbuf, 81, format, args);
    va_end (args);
-   
+
    log.record(sbuf);
-   
+
    return(mvaddstr(y, x, sbuf));
 }

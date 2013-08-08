@@ -261,7 +261,7 @@ public:
    bool is_lcs_safehouse(void);
    bool is_ccs_safehouse(void);
    bool is_city(void);
-   std::string getname(bool shortname=false, bool include_city=false);
+   std::string getname(int shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
    char* city_description(void);
 };

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -55,7 +55,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          if(loveslavesleft(*pool[p]) <= 0)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            
+
             move(y++,0);
             addstr("But when ", gamelog);
             addstr(pool[p]->name, gamelog);
@@ -110,12 +110,12 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr(" in its presence?");
          move(3,0);
          addstr("If you do not enter anything, their real name will be used.");
-         
+
          move(4,0);
          enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
          sleeperize_prompt(*d.date[e],*pool[p],8);
-         
+
          pool.push_back(d.date[e]);
          stat_recruits++;
          d.date.erase(d.date.begin() + e);
@@ -146,7 +146,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
                   addstr(pool[p]->name, gamelog);
                   addstr(" was able to create a map of the site with this information.", gamelog);
                   gamelog.newline();
-                  y++;                           
+                  y++;
                }
                else
                {
@@ -166,7 +166,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          gamelog.nextMessage();
          refresh();
          getch();
-         
+
          return DATERESULT_MEETTOMORROW;
       }
    }
@@ -177,7 +177,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       {
                         set_color(COLOR_RED,COLOR_BLACK,1);
          move(y,0);y++;
-         
+
          addstr("Talking with ", gamelog);
          addstr(d.date[e]->name, gamelog);
          addstr(" actually curses ", gamelog);
@@ -204,7 +204,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       }
 
       //BREAK UP
-      
+
       // If your squad member is wanted by the police, a conservative who breaks up with
       // them has a 1 in 50 chance of ratting them out, unless the person being dated is law
       // enforcement, prison guard, or agent, in which case there is a 1 in 4 chance. -Fox
@@ -229,7 +229,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             addstr(pool[p]->name, gamelog);
             addstr(" has been arrested.", gamelog);
             gamelog.nextMessage();
-            
+
             removesquadinfo(*pool[p]);
             pool[p]->carid=-1;
             pool[p]->location=ps;
@@ -261,7 +261,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr(" can sense that things just aren't working out.", gamelog);
          gamelog.newline();
          move(y,0);y++;
-         
+
          addstr("This relationship is over.", gamelog);
          gamelog.nextMessage();
       }
@@ -292,7 +292,7 @@ char completevacation(datest &d,int p,char &clearformess)
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
    pool[p]->train(SKILL_SEDUCTION,LCSrandom(11)+15);
-   
+
    pool[p]->train(SKILL_SCIENCE,
       max(d.date[e]->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
    pool[p]->train(SKILL_RELIGION,
@@ -468,7 +468,7 @@ char completedate(datest &d,int p,char &clearformess)
       getrecruitcreature(str,d.date[e]->type);
       addstr(str, gamelog);
       addstr(", ", gamelog);
-      addstr(location[d.date[e]->worklocation]->name, gamelog);
+      addstr(location[d.date[e]->worklocation]->getname(false,true), gamelog);
       gamelog.newline();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -626,7 +626,7 @@ char completedate(datest &d,int p,char &clearformess)
          }
          if(c=='e'&&d.date[e]->align==-1&&!pool[p]->clinic)
          {
-            
+
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             int bonus=0;
             move(17,0);
@@ -677,7 +677,7 @@ char completedate(datest &d,int p,char &clearformess)
                 LCSrandom(15))||
                 LCSrandom(2+bonus))
             {
-               
+
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(20,0);
                addstr(d.date[e]->name, gamelog);
@@ -764,7 +764,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   refresh();
                   getch();
-                  
+
                   delete d.date[e];
                   d.date.erase(d.date.begin() + e);
                   break;
@@ -786,7 +786,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   // Find the police station
                   int ps=find_police_station(*pool[p]);
-                     
+
                   // Arrest the Liberal
                   removesquadinfo(*pool[p]);
                   pool[p]->carid=-1;
@@ -799,7 +799,7 @@ char completedate(datest &d,int p,char &clearformess)
 
                   refresh();
                   getch();
-                  
+
                   delete d.date[e];
                   d.date.erase(d.date.begin() + e);
                   return 1;

@@ -106,6 +106,7 @@
 		<Unit filename="../src/lcsio.cpp" />
 		<Unit filename="../src/lcsio.h" />
 		<Unit filename="../src/locations/locations.cpp" />
+		<Unit filename="../src/locations/locations.h" />
 		<Unit filename="../src/locations/world.cpp" />
 		<Unit filename="../src/log/log.cpp" />
 		<Unit filename="../src/log/log.h" />
