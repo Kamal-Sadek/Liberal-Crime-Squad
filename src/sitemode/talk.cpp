@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -67,7 +67,7 @@ char talk(Creature &a,int t)
    {
       return talkInCombat(a, tk);
    }
-   
+
    return talkToGeneric(a, tk);
 }
 
@@ -220,7 +220,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
 
       int roll       = a.skill_roll(SKILL_PERSUASION);
       int difficulty = DIFFICULTY_VERYEASY;
-      
+
       if(armed_liberal == NULL)
          difficulty += 12;
       if(location[cursite]->highsecurity>0)
@@ -265,7 +265,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
          gamelog.newline();
          refresh();
          getch();
-         
+
          criminalizeparty(LAWFLAG_BANKROBBERY);
          sitestory->crime.push_back(CRIME_BANKSTICKUP);
          sitecrime+=50;
@@ -299,7 +299,20 @@ char talkToGeneric(Creature &a, Creature &tk)
    move(9,1);
    addstr(a.name);
    addstr(" talks to ");
+   switch(tk.align)
+   {
+   case ALIGN_CONSERVATIVE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      break;
+   case ALIGN_LIBERAL:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      break;
+   case ALIGN_MODERATE:
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      break;
+   }
    addstr(tk.name);
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
    add_age(tk);
    addstr(":");
 
@@ -506,7 +519,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
    gamelog.newline();
    refresh();
    getch();
-   
+
    clearcommandarea();clearmessagearea();clearmaparea();
 
    do
@@ -584,7 +597,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          getch();
 
          return 1;
-      
+
       case 'c': // Threaten landlord
          clearcommandarea();clearmessagearea();clearmaparea();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -622,7 +635,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
 
          int roll       = a.skill_roll(SKILL_PERSUASION);
          int difficulty = DIFFICULTY_FORMIDABLE;
-         
+
          if(newscherrybusted == false)
             difficulty += 6;
          if(armed_liberal == NULL)
@@ -657,7 +670,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             int rent;
 
             // Either he calls the cops...
-            if(roll < difficulty) 
+            if(roll < difficulty)
             {
                for(int i=0;i<6;i++)
                {
@@ -778,7 +791,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
    gamelog.newline();
    refresh();
    getch();
-   
+
    bool interested = tk.talkreceptive();
 
    if(!interested && a.skill_check(SKILL_PERSUASION,DIFFICULTY_AVERAGE))
@@ -802,7 +815,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
          addstr(" doesn't understand.", gamelog);
       }
       gamelog.newline();
-      
+
       refresh();
       getch();
 
@@ -990,7 +1003,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          addstr(" doesn't quite pick up on the subtext.", gamelog);
       }
       gamelog.newline();
-      
+
       refresh();
       getch();
 
@@ -1190,7 +1203,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          }
       }
       gamelog.newline();
-      
+
       refresh();
       getch();
 
@@ -1206,7 +1219,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
    bool succeeded         = false;
    bool you_are_stupid    = false;
    bool issue_too_liberal = false;
-   
+
    if(!(a.attribute_check(ATTRIBUTE_INTELLIGENCE,DIFFICULTY_EASY)))
       you_are_stupid = true;
    else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)
@@ -1387,7 +1400,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
       difficulty += 5;
    if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
       difficulty += 5;
-   
+
    succeeded = a.skill_check(SKILL_PERSUASION,difficulty);
 
    // Prisoners never accept to join you, you must liberate them instead
@@ -1429,7 +1442,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
          }
       }
       gamelog.newline();
-      
+
       refresh();
       getch();
 
@@ -1552,7 +1565,20 @@ char talkInCombat(Creature &a, Creature &tk)
    move(9,1);
    addstr(a.name, gamelog);
    addstr(" talks to ", gamelog);
+   switch(tk.align)
+   {
+   case ALIGN_CONSERVATIVE:
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      break;
+   case ALIGN_LIBERAL:
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      break;
+   case ALIGN_MODERATE:
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      break;
+   }
    addstr(tk.name, gamelog);
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
    addstr(":", gamelog);
    gamelog.newline();
 
@@ -1649,11 +1675,11 @@ char talkInCombat(Creature &a, Creature &tk)
          addstr("Praying won't help you now!", gamelog);
          break;
       }
-      
+
       refresh();
       getch();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      
+
       for(int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
@@ -1726,7 +1752,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
       addjuice(a,-2,-10); // DE-juice for this shit
 
-      
+
       refresh();
       getch();
 
@@ -1885,7 +1911,7 @@ char talkInCombat(Creature &a, Creature &tk)
                      break;
                   }
                }
-               
+
                move(16,1);
                set_color(COLOR_RED,COLOR_BLACK,1);
                if(executer->get_weapon().is_ranged()
@@ -2146,7 +2172,7 @@ char talkInCombat(Creature &a, Creature &tk)
             if(siteonfire) addstr("\"Fire! Evacuate immediately!\"", gamelog);
             else addstr("\"Everything's in check.\"", gamelog);
          }
-            
+
          else if(a.get_armor().get_itemtypename() == "ARMOR_LABCOAT")
             addstr("\"Make way, I'm a doctor!\"", gamelog);
 
@@ -2177,7 +2203,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
       bool fooled=true;
       int e;
-      
+
       for(e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists&&encounter[e].alive&&
@@ -2227,7 +2253,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
          refresh();
          getch();
-         
+
          for(int e=ENCMAX-1;e>=0;e--)
          {
             if(encounter[e].exists&&encounter[e].alive&&
@@ -2254,7 +2280,7 @@ char talkInCombat(Creature &a, Creature &tk)
          if(activesquad->loot[l]->is_loot())
             stolen++;
       }
-         
+
       for(int i=0;i<6;++i)
       {
          if(activesquad->squad[i])
@@ -2390,11 +2416,11 @@ char heyMisterDog(Creature &a, Creature &tk)
          break;
       }
    }
-   
+
    clearcommandarea();
    clearmessagearea();
    clearmaparea();
-   
+
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(10,1);
    addstr(activesquad->squad[bestp]->name, gamelog);
@@ -2550,11 +2576,11 @@ char heyMisterMonster(Creature &a, Creature &tk)
          break;
       }
    }
-   
+
    clearcommandarea();
    clearmessagearea();
    clearmaparea();
-   
+
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(10,1);
    addstr(activesquad->squad[bestp]->name, gamelog);

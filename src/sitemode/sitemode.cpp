@@ -346,7 +346,7 @@ void mode_site(void)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(0,0);
-         addstr(location[cursite]->getname());
+         addstr(location[cursite]->getname(-1,true));
          addstr(", Level ");
          char num[20];
          itoa(locz+1,num,10);
@@ -359,7 +359,7 @@ void mode_site(void)
          else if(postalarmtimer>60)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(0,0);
-         addstr(location[cursite]->getname());
+         addstr(location[cursite]->getname(-1,true));
          addstr(", Level ");
          char num[20];
          itoa(locz+1,num,10);
