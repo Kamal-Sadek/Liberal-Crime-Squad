@@ -212,7 +212,7 @@
         <name_future>Vibro-Knife</name_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <fencevalue>30</fencevalue>
+        <fencevalue>20</fencevalue>
         <bashstrengthmod>105</bashstrengthmod>
         <size>4</size>
         <attack>

@@ -14,7 +14,7 @@
             <description>Buy a Combat Knife</description>
             <type>WEAPON_COMBATKNIFE</type>
             <letter>o</letter>
-            <price>20</price>
+            <price>30</price>
         </item>
         <item>
             <class>WEAPON</class>
@@ -148,7 +148,7 @@
         <entry>Buy Liberal Tools</entry>
         <letter>t</letter>
         <fullscreen>false</fullscreen>
-        <exit>Leave</exit>
+        <exit>Done buying Liberal tools</exit>
         <item>
             <class>WEAPON</class>
             <description>Buy a Crowbar</description>
