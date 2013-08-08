@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
     This file was created by Chris Johnson (grundee@users.sourceforge.net)
     by copying code from game.cpp.
-    To see descriptions of files and functions, see the list at 
+    To see descriptions of files and functions, see the list at
     the bottom of includes.h in the top src folder.
 */
 
@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 // Helper function for equip and moveloot.
 // Prompts for how many items to equip / move.
 long prompt_amount(long min, long max)
-{ 
+{
    printparty();
 
    move(8,15);
@@ -68,7 +68,7 @@ long prompt_amount(long min, long max)
    {
       amount = max;
    }
-   
+
 
    return amount;
 }
@@ -620,7 +620,7 @@ void equipmentbaseassign(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
-      
+
       move(0,0);
       addstr("Moving Equipment");
       move(1,0);
@@ -637,7 +637,7 @@ void equipmentbaseassign(void)
          addch(y+'A'-2);addstr(" - ");
          addstr(temploot[p]->equip_title().c_str());
 
-         mvaddstr(y,25,temploot2[temploot[p]]->getname(true));
+         mvaddstr(y,25,temploot2[temploot[p]]->getname(true,true));
 
          y++;
       }
@@ -649,7 +649,7 @@ void equipmentbaseassign(void)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
-         addstr(location[temploc[p]]->getname(true));
+         addstr(location[temploc[p]]->getname(true,true));
 
          y++;
       }
@@ -668,7 +668,7 @@ void equipmentbaseassign(void)
          addstr("T to sort by type.");
       }
       addstr("  Shift and a Number will move ALL items!");
-      
+
       if(temploot.size()>19)
       {
          move(23,34);
@@ -694,7 +694,7 @@ void equipmentbaseassign(void)
       if(c==','&&page_loc>0)page_loc--;
       //PAGE DOWN
       if(c=='.'&&(page_loc+1)*9<temploc.size())page_loc++;
-      
+
       //Toggle sorting method
       if(c=='t')
       {
@@ -704,7 +704,7 @@ void equipmentbaseassign(void)
             sort(temploot.begin(),temploot.end(),Item::sort_compare);
          }
          else
-         {   
+         {
             //Sort by location
             temploot.clear();
             for(l=0;l<location.size();l++)
@@ -719,7 +719,7 @@ void equipmentbaseassign(void)
             }
          }
       }
-      
+
       if(c>='a'&&c<='s')
       {
          int p=page_loot*19+(int)(c-'a');
@@ -804,7 +804,7 @@ void consolidateloot(vector<Item *> &loot)
          }
       }
    }
-   
+
    std::sort(loot.begin(),loot.end(),Item::sort_compare);
 }
 
@@ -829,7 +829,7 @@ char squadhasitem(squadst &sq, const string& type)
    for(int l=0;l<sq.loot.size();l++)
    {
       if(sq.loot[l]->get_itemtypename()!=type)continue;
-      
+
       int index;
       index = getweapontype(type);
       if (index != -1)
