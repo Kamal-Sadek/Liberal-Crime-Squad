@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -43,7 +43,7 @@ void advanceday(char &clearformess,char canseethings)
    //CLEAR CAR STATES
    vector<long> caridused;
    for(p=0;p<pool.size();p++)pool[p]->carid=-1;
-      
+
    // Aging
    for(p=0;p<pool.size();p++)
    {
@@ -279,7 +279,7 @@ void advanceday(char &clearformess,char canseethings)
                      for(p=0;p<passenger.size();p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
-                        if(v >= 0) 
+                        if(v >= 0)
                         {
                            if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])>max&&
                               squad[sq]->squad[passenger[p]]->canwalk())
@@ -292,7 +292,7 @@ void advanceday(char &clearformess,char canseethings)
                      for(p=0;p<passenger.size();p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
-                        if(v >= 0) 
+                        if(v >= 0)
                         {
                               if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])==max&&
                               squad[sq]->squad[passenger[p]]->canwalk())
@@ -393,7 +393,7 @@ void advanceday(char &clearformess,char canseethings)
                continue;
             }
          }
-         
+
          // Give drivers experience if they actually travel
          if(squad[sq]->activity.arg != squad[sq]->squad[0]->base)
          {
@@ -441,7 +441,7 @@ void advanceday(char &clearformess,char canseethings)
             }
             getch();
          }
-         
+
          if(canDepart) switch(location[squad[sq]->activity.arg]->type)
          {
          case SITE_CITY_NEW_YORK:
@@ -748,7 +748,7 @@ void advanceday(char &clearformess,char canseethings)
    }
    for(p=0;p<pool.size();p++)
    {
-      
+
       if(disbanding)break;
 
       if(!pool[p]->alive)continue;
@@ -800,7 +800,7 @@ void advanceday(char &clearformess,char canseethings)
 
             // Give experience to caretakers
             if(pool[p]->location>-1)healing2[pool[p]->location]+=100-pool[p]->blood;
-            
+
             // Cap blood at 100-injurylevel*20
             if(pool[p]->blood<100-(clinictime(*pool[p])-1)*20)
             {
@@ -947,7 +947,7 @@ void advanceday(char &clearformess,char canseethings)
 
             // Apply damage
             pool[p]->blood-=damage;
-            
+
             if(transfer&&pool[p]->location>-1&&
                pool[p]->alive==1&&
                pool[p]->align==1&&
@@ -1053,11 +1053,11 @@ void advanceday(char &clearformess,char canseethings)
       int p=getpoolcreature(recruit[r]->recruiter_id);
       // Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
       // or 3) recruiter is dead.
-      if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=RENTING_NOCONTROL&&pool[p]->alive)||
-         recruit[r]->timeleft>0))
+      if(p!=-1&&((pool[p]->location!=-1&&location[pool[p]->location]->renting!=RENTING_NOCONTROL&&pool[p]->alive&&
+         location[pool[p]->location]->city==location[recruit[r]->recruit->location]->city)||recruit[r]->timeleft>0))
       {
          //MEET WITH RECRUIT
-         
+
          //TERMINATE NULL RECRUIT MEETINGS
          if(location[pool[p]->location]->siege.siege)
          {
@@ -1091,7 +1091,8 @@ void advanceday(char &clearformess,char canseethings)
       if(p!=-1&&((pool[p]->location!=-1&&
 	     (location[pool[p]->location]->renting!=RENTING_NOCONTROL||
          location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC||
-         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY))||
+         location[pool[p]->location]->type==SITE_HOSPITAL_UNIVERSITY)&&
+         location[pool[p]->location]->city==date[d]->city)||
 	     date[d]->timeleft))
       {
          //VACATION
@@ -1143,7 +1144,7 @@ void advanceday(char &clearformess,char canseethings)
                if(pool[p]->dating>0)
                {
                   long sq=-1;
-                  
+
                   //IF YOU ARE THE LAST PERSON IN YOUR SQUAD
                   //YOU HAVE TO DROP OFF THE EQUIPMENT WHEREVER YOUR BASE IS
                   //BECAUSE YOUR SQUAD IS ABOUT TO BE DESTROYED
@@ -1238,7 +1239,7 @@ void advanceday(char &clearformess,char canseethings)
       // Gain skill levels for anything where you have enough experience
       pool[p]->skill_up();
    }
-   
+
    //DO REPORTING BY MAJOR NEWSPAPERS
    majornewspaper(clearformess,canseethings);
 
@@ -1274,7 +1275,7 @@ void dispersalcheck(char &clearformess)
       // took me awhile to figure out what exactly was going on here.
       //
       // dispersal_status tracks whether each person has a secure chain of command.
-      // 
+      //
       // if dispersal_status == NOCONTACT, no confirmation of contact has been made
       // if dispersal_status == BOSSSAFE, confirmation that THEY are safe is given,
       //    but it is still needed to check whether their subordinates
@@ -1391,7 +1392,7 @@ void dispersalcheck(char &clearformess)
                   }
                }
                dispersal_status[p]=dispersalval; // Guaranteed contactable in prison
-               
+
                // Find all subordinates
                for(int p2=pool.size()-1;p2>=0;p2--)
                {
@@ -1594,13 +1595,13 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       }
       return 0;
    }
-   
+
    //Chain of command totally destroyed if dead person's boss also dead
    if(bigboss==-2 || (cr.hireid!=-1 && bigboss!=-1 && !pool[bigboss]->alive))return 0;
-   
+
    //Promote the new boss
    pool[newboss]->hireid=cr.hireid;
-   
+
    //Order secondary subordinates to follow the new boss
    if(subordinates>1)
    {
@@ -1664,7 +1665,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       gamelog.nextMessage();
       refresh();
       getch();
-      
+
       cr.hireid=-2; // Make dead founder not founder.
    }
    return 1;
