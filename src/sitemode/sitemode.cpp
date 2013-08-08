@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -139,7 +139,7 @@ void mode_site(short loc)
             break;
          }
       }
-      
+
    }
    else
    {
@@ -607,7 +607,7 @@ void mode_site(void)
 
          clearmessagearea();
       }
-      
+
       // check if we fought the previous loop; if so, add a blank gamelog line
       if(foughtthisround)gamelog.newline();
       foughtthisround=0;
@@ -672,7 +672,7 @@ void mode_site(void)
                if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEATTACK;
                else sitestory->type=NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE;
             }
-            else 
+            else
 
             if(!location[cursite]->siege.siege)
             {
@@ -1152,7 +1152,7 @@ void mode_site(void)
                   break;
                }
             }
-            
+
             if(subdue)
                fight_subdued();
             else
@@ -1375,14 +1375,14 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_TENEMENT:
                      if(!LCSrandom(25))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_CROWBAR", "WEAPON_SHANK", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_CROWBAR", "WEAPON_SHANK",
                            "WEAPON_SYRINGE", "WEAPON_CHAIN", "WEAPON_GUITAR","WEAPON_SPRAYCAN"};
                         //make sure the number of types matches the random range...
-                        newWeaponType=rndWeps[LCSrandom(8)];
+                        newWeaponType=rndWeps[LCSrandom(7)];
                      }
                      else if(!LCSrandom(20))
                      {
-                        string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", 
+                        string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT",
                            "ARMOR_WORKCLOTHES", "ARMOR_TOGA", "ARMOR_PRISONER"};
                         //make sure the number of types matches the random range...
                         newArmorType=rndArmors[LCSrandom(7)];
@@ -1400,13 +1400,13 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_APARTMENT:
                      if(!LCSrandom(25))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_REVOLVER_38", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_REVOLVER_38",
                            "WEAPON_REVOLVER_44", "WEAPON_NIGHTSTICK", "WEAPON_GUITAR"};
-                        newWeaponType=rndWeps[LCSrandom(6)];
+                        newWeaponType=rndWeps[LCSrandom(5)];
                      }
                      else if(!LCSrandom(20))
                      {
-                        string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", 
+                        string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT",
                            "ARMOR_WORKCLOTHES", "ARMOR_CLOWNSUIT", "ARMOR_ELEPHANTSUIT", "ARMOR_DONKEYSUIT"};
                         //make sure the number of types matches the random range...
                         newArmorType=rndArmors[LCSrandom(8)];
@@ -1420,13 +1420,13 @@ void mode_site(void)
                   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
                      if(!LCSrandom(30))
                      {
-                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_COMBATKNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP", 
+                        string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_COMBATKNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP",
                            "WEAPON_REVOLVER_44", "WEAPON_SEMIPISTOL_45", "WEAPON_SEMIRIFLE_AR15", "WEAPON_AUTORIFLE_M16"};
                         newWeaponType=rndWeps[LCSrandom(6 - law[LAW_GUNCONTROL])];
                      }
                      else if(!LCSrandom(20))
                      {
-                        string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_BLACKDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_BLACKSUIT", 
+                        string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_BLACKDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_BLACKSUIT",
                            "ARMOR_BONDAGEGEAR", "ARMOR_CIVILLIANARMOR", "ARMOR_BLACKROBE", "ARMOR_LABCOAT"};
                         //make sure the number of types matches the random range...
                         newArmorType=rndArmors[LCSrandom(8)];
@@ -1457,7 +1457,7 @@ void mode_site(void)
                      }
                      else if(!LCSrandom(25))
                      {
-                        string rndArmors[] = {"ARMOR_POLICEUNIFORM", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_POLICEUNIFORM", 
+                        string rndArmors[] = {"ARMOR_POLICEUNIFORM", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_POLICEUNIFORM",
                            "ARMOR_SWATARMOR", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_DEATHSQUADUNIFORM"};
                         newArmorType=rndArmors[LCSrandom(4) + 2 - law[LAW_GUNCONTROL]];
                      }
@@ -1541,7 +1541,7 @@ void mode_site(void)
                   case SITE_CORPORATE_HOUSE:
                      if(!LCSrandom(50))
                      {
-                        string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_EXPENSIVESUIT", 
+                        string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_EXPENSIVESUIT",
                            "ARMOR_EXPENSIVESUIT", "ARMOR_BONDAGEGEAR"};
                         //make sure the number of types matches the random range...
                         newArmorType=rndArmors[LCSrandom(5)];
@@ -1575,7 +1575,7 @@ void mode_site(void)
                    //storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
                    string rndWeps[] = {"WEAPON_SEMIPISTOL_9MM", "WEAPON_SEMIPISTOL_45", "WEAPON_REVOLVER_38", "WEAPON_REVOLVER_44",
                                        "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
-                   string rndArmors[] = {"ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", "ARMOR_WORKCLOTHES", 
+                   string rndArmors[] = {"ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", "ARMOR_WORKCLOTHES",
                                          "ARMOR_SECURITYUNIFORM", "ARMOR_CIVILLIANARMOR", "ARMOR_ARMYARMOR", "ARMOR_HEAVYARMOR"};
                    switch (LCSrandom(3))
                    {
@@ -1616,7 +1616,7 @@ void mode_site(void)
                   item = a;
                   activesquad->loot.push_back(item);
                }
-              
+
               if (!newWeaponType.empty())
               {
                Weapon *w=new Weapon(*weapontype[getweapontype(newWeaponType)]);
@@ -1822,12 +1822,12 @@ void mode_site(void)
             }
 
             if(partyalive==0)continue;
-            
+
             //AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
             locx=nlocx;
             locy=nlocy;
             locz=nlocz;
-            
+
             //CHECK FOR EXIT
             if((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT)||
                (cbase==cursite&&!location[cursite]->siege.siege&&
@@ -1950,7 +1950,7 @@ void mode_site(void)
                //You didn't survive -- handle squad death (unless that ended the game)
                else if(!endcheck())
                {
-                  
+
                   if(location[cursite]->siege.siege)
                   {
                      //Report on squad killed during siege
@@ -1959,7 +1959,7 @@ void mode_site(void)
 
                      location[cursite]->siege.siege=0;
                   }
-                  else 
+                  else
                   {
                      //Or report on your failed raid
                      sitestory->type=NEWSSTORY_SQUAD_KILLED_SITE;
@@ -2080,11 +2080,11 @@ void mode_site(void)
 
                refresh();
                getch();
-               
+
                location[cursite]->renting=RENTING_PERMANENT;
                location[cursite]->closed=0;
                location[cursite]->heat=100;
-                  
+
                // CCS Safehouse killed?
                if(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER||
                   location[cursite]->type==SITE_BUSINESS_BARANDGRILL||
@@ -2534,7 +2534,7 @@ void mode_site(void)
                   return;
                }
             }
-            
+
             if(!location[cursite]->siege.siege&&newenc)
             {
                switch(makespecial)
@@ -2660,7 +2660,7 @@ void mode_site(void)
                            clearmessagearea(false);
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            move(16,1);
-                           addstr("The CEO is in his study.", gamelog); 
+                           addstr("The CEO is in his study.", gamelog);
                            gamelog.newline();
                            levelmap[locx][locy][locz].special=-1;
                            refresh();
@@ -2682,7 +2682,7 @@ void mode_site(void)
                            getch();
                            break;
                         }
-                        
+
                      }
                      break;
                   case SPECIAL_APARTMENT_LANDLORD:
@@ -2858,7 +2858,7 @@ void mode_site(void)
             knowmap(locx,locy,locz);
          }
       }
-      
+
    }while(1);
 }
 
@@ -3022,7 +3022,7 @@ void open_door(bool restricted)
          if(c=='y')
          {
             char actual; // 1 if an actual attempt was made, 0 otherwise
-            
+
             // If the unlock was successful
             if(unlock(UNLOCK_DOOR,actual))
             {
@@ -3031,7 +3031,7 @@ void open_door(bool restricted)
                levelmap[locx][locy][locz].flag&=~SITEBLOCK_ALARMED;
                sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
                //criminalizeparty(LAWFLAG_BREAKING);
-            } 
+            }
             // Else perma-lock it if an attempt was made
             else if(actual)
             {

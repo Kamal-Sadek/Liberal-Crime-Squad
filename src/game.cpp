@@ -218,6 +218,7 @@ short interface_pgup='[';
 short interface_pgdn=']';
 
 bool autosave=true;
+bool morerandom=false;
 
 int day=1;
 
@@ -297,19 +298,19 @@ int main(int argc, char* argv[])
    keypad(stdscr,TRUE);
 
    raw_output(TRUE);
-   
+
    //addstr("Loading Graphics... ");
    //refresh();
    //getch();
 
    loadgraphics();
-   
+
    //addstr("Loading Init File Options... ");
    //refresh();
    //getch();
 
    loadinitfile();
-   
+
    //addstr("Loading sitemaps.txt... ");
    //refresh();
    //getch();
@@ -341,7 +342,7 @@ int main(int argc, char* argv[])
       case 6:strcpy(slogan,"This is a slogan!");break;
       }
    }
-   
+
    //Initialize sorting choices.
    for(int s=0;s<SORTINGCHOICENUM;s++)
       activesortingchoice[s]=SORTING_NONE;
@@ -430,7 +431,7 @@ int main(int argc, char* argv[])
 
    attorneyseed=getSeed();
    cityname(lcityname);
-   
+
    bool xml_loaded_ok = true;
    xml_loaded_ok &= initialize_vehicletypes();
    xml_loaded_ok &= initialize_cliptypes();
@@ -445,7 +446,7 @@ int main(int argc, char* argv[])
    //getch();
 
    loaded=load();
-   
+
    //addstr("Setup complete!");
    //refresh();
    //getch();
@@ -478,7 +479,7 @@ int LCSrandom(int max)
 //sets seed to a random number from 0 to 2 billion
 int r_num(void)
 {
-   seed=(seed*907725L+99979777UL)%2147483648UL;
+   seed=((seed+morerandom*getSeed())*907725L+99979777UL)%2147483648UL;
    return seed;
 }
 
@@ -507,7 +508,7 @@ void chaseseqst::clean(void)
    }
    enemycar.clear();
 
-   friendcar.clear(); 
+   friendcar.clear();
 }
 
 /* Deletes and removes all pointers in a container. */
@@ -563,7 +564,7 @@ bool initialize_vehicletypes()
    {
       vehicletype.push_back(new VehicleType(vtfile.GetSubDoc()));
    }
-   return true; 
+   return true;
 }
 
 bool initialize_cliptypes()
@@ -583,7 +584,7 @@ bool initialize_cliptypes()
    {
       cliptype.push_back(new ClipType(ctfile.GetSubDoc()));
    }
-   return true; 
+   return true;
 }
 
 bool initialize_weapontypes()
@@ -603,7 +604,7 @@ bool initialize_weapontypes()
    {
       weapontype.push_back(new WeaponType(wtfile.GetSubDoc()));
    }
-   return true; 
+   return true;
 }
 
 bool initialize_armortypes()
@@ -624,7 +625,7 @@ bool initialize_armortypes()
    {
       armortype.push_back(new ArmorType(atfile.GetSubDoc()));
    }
-   
+
    //Masks
    if(!atfile.Load(string(artdir) + "masks.xml"))
    { //File is missing or not valid XML.
@@ -660,7 +661,7 @@ bool initialize_armortypes()
       armortype.push_back(new ArmorType(*armortype[defaultindex], atfile.GetSubDoc()));
    }
 
-   return true; 
+   return true;
 }
 
 bool initialize_loottypes()
@@ -680,6 +681,6 @@ bool initialize_loottypes()
    {
       loottype.push_back(new LootType(ltfile.GetSubDoc()));
    }
-   return true; 
+   return true;
 }
 

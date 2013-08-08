@@ -21,15 +21,19 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="Release/Liberal Crime Squad" prefix_auto="1" extension_auto="1" />
-				<Option object_output="Release/" />
+				<Option output="Release/crimesquad.exe" prefix_auto="0" extension_auto="0" />
+				<Option object_output="Release/obj" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add directory="../src" />
+					<Add directory="../src/pdcurses" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -71,7 +75,6 @@
 		<Unit filename="../src/daily/daily.cpp" />
 		<Unit filename="../src/daily/date.cpp" />
 		<Unit filename="../src/daily/interrogation.cpp" />
-		<Unit filename="../src/daily/news.cpp" />
 		<Unit filename="../src/daily/recruit.cpp" />
 		<Unit filename="../src/daily/shopsnstuff.cpp" />
 		<Unit filename="../src/daily/siege.cpp" />
@@ -115,6 +118,7 @@
 		<Unit filename="../src/news/headline.cpp" />
 		<Unit filename="../src/news/layout.cpp" />
 		<Unit filename="../src/news/majorevent.cpp" />
+		<Unit filename="../src/news/news.cpp" />
 		<Unit filename="../src/news/news.h" />
 		<Unit filename="../src/news/squadstory_text.cpp" />
 		<Unit filename="../src/pdcurses/curses.h" />
@@ -150,6 +154,9 @@
 		<Unit filename="../src/vehicle/vehicle.h" />
 		<Unit filename="../src/vehicle/vehicletype.cpp" />
 		<Unit filename="../src/vehicle/vehicletype.h" />
+		<Unit filename="lcs_news_icon.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

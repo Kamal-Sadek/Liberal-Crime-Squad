@@ -1,11 +1,26 @@
-#Leave this to use [ and ]
-pagekeys=brackets
+#####################################################################
+#####################################################################
+##                                                                 ##
+##           Configuration File for Liberal Crime Squad            ##
+##                                                                 ##
+#####################################################################
+#####################################################################
 
-#Uncomment to use . and /
-#pagekeys=AZERTY
+#####################################################################
+##                        Interface Options                        ##
+#####################################################################
 
-#Uncomment to use PGUP and PGDOWN
-#pagekeys=page
+#Leave this to use [ and ] to page through menus
+    pagekeys=brackets
+
+#Uncomment to use . and / and add other AZERTY keyboard improvements
+    #pagekeys=AZERTY
+
+#Uncomment to use PGUP and PGDOWN (doesn't work for many people)
+    #pagekeys=page
 
 #Uncomment this to disable saving between days
-#autosave=Off
+    #autosave=Off
+
+#Uncomment this to make the random number generator more random
+    #random=On
