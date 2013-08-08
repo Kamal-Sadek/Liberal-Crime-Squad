@@ -527,19 +527,22 @@ void review_mode(short mode)
                   printliberalstats(*temppool[p]);
                else if(page==1)
                   printliberalskills(*temppool[p]);
-               else if(page==2)               
+               else if(page==2)
                   printliberalcrimes(*temppool[p]);
-               
+
                // Add removal of squad members member
                move(22,0);
 
                if(temppool[p]->is_active_liberal() &&
                   temppool[p]->hireid !=-1)  // If alive and not own boss? (suicide?)
                {
-                  addstr("R - Remove member         K - Kill member");
+                  addstr("R - Remove member");
+                  int boss = getpoolcreature(temppool[p]->hireid);
+                  if(pool[boss]->location==temppool[p]->location)
+                     addstr("         K - Kill member");
                }
 
-               move(23,0);      
+               move(23,0);
 
                if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
                else
@@ -606,7 +609,7 @@ void review_mode(short mode)
                   temppool[p]->gender_liberal++;
                   if(temppool[p]->gender_liberal > 2)
                      temppool[p]->gender_liberal = 0;
-               }      
+               }
                else if(c=='r' && temppool[p]->is_active_liberal() &&
                                  temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
                {
@@ -662,10 +665,10 @@ void review_mode(short mode)
 
                         // TODO: Depending on the crime increase heat or make seige
 
-                        if(location[pool[boss]->location]->heat > 20)
-                           location[pool[boss]->location]->siege.timeuntillocated=3;
+                        if(location[pool[boss]->base]->heat > 20)
+                           location[pool[boss]->base]->siege.timeuntillocated=3;
                         else
-                           location[pool[boss]->location]->heat += 20;
+                           location[pool[boss]->base]->heat += 20;
                      }
                      gamelog.nextMessage(); //Write out buffer to prepare for next message.
 
@@ -679,12 +682,13 @@ void review_mode(short mode)
                      pool.erase(pool.begin() + thisPersonIndex);
                      break;
                   }
-               }               
+               }
                else if(c=='k' && temppool[p]->is_active_liberal() &&
                                  temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)
                {
                   // Kill squad member
                   int boss = getpoolcreature(temppool[p]->hireid);
+                  if(pool[boss]->location!=temppool[p]->location) break;
 
                   move(22,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -763,7 +767,7 @@ void review_mode(short mode)
                      gamelog.nextMessage(); //Write buffer out to prepare for next message.
 
                      break;
-                  }      
+                  }
                }
                else break;
             }while(1);
@@ -774,7 +778,7 @@ void review_mode(short mode)
       {
          sorting_prompt(reviewmodeenum_to_sortingchoiceenum(mode));
          sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)],true);
-      }      
+      }
 
       // Reorder squad
       if(c=='z')
@@ -785,7 +789,7 @@ void review_mode(short mode)
          addstr("                                                                               ");
          move(23,0);
          addstr("                                                                               ");
-	 
+
          move(22,8);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("Choose squad member to replace ");
@@ -814,7 +818,7 @@ void review_mode(short mode)
             }
          }
          else { // non-null swap
-            addstr(swap->name);     
+            addstr(swap->name);
             addstr(" with");
 
             c=getch();
@@ -892,7 +896,7 @@ void assemblesquad(squadst *cursquad)
          temppool.push_back(pool[p]);
       }
    }
-   
+
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ASSEMBLESQUAD]);
 
    //BUILD LIST OF BASES FOR EACH SQUAD IN CASE IT ENDS UP EMPTY
