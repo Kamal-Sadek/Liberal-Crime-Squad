@@ -389,38 +389,38 @@ enum ccsexposure
  */
 enum Lawflags
 {
-   LAWFLAG_KIDNAPPING,
-   LAWFLAG_MURDER,
-   LAWFLAG_THEFT,
-   LAWFLAG_BREAKING,
-   LAWFLAG_TERRORISM,
-   LAWFLAG_JURY,
-   LAWFLAG_TREASON,
-   LAWFLAG_ESCAPED,
-   LAWFLAG_HELPESCAPE,
-   LAWFLAG_RESIST,
-   LAWFLAG_BURNFLAG,
-   LAWFLAG_SPEECH,
-   LAWFLAG_VANDALISM,
-   LAWFLAG_ASSAULT,
-   LAWFLAG_ARMEDASSAULT,
-   LAWFLAG_CARTHEFT,
-   LAWFLAG_INFORMATION,
-   LAWFLAG_COMMERCE,
-   LAWFLAG_CCFRAUD,
-   LAWFLAG_BROWNIES,
-   LAWFLAG_BURIAL,
-   LAWFLAG_PROSTITUTION,
-   LAWFLAG_DISTURBANCE,
-   LAWFLAG_HIREILLEGAL,
-   LAWFLAG_RACKETEERING,
-   LAWFLAG_LOITERING,
-   LAWFLAG_ARSON,
-   LAWFLAG_PUBLICNUDITY,
-   LAWFLAG_EXTORTION,
-   LAWFLAG_BANKROBBERY,
-   //LAWFLAG_GUNCARRY,
-   //LAWFLAG_GUNUSE,
+   LAWFLAG_ARMEDASSAULT, // "Armed assault"
+   LAWFLAG_ARSON,        // "Arson"
+   LAWFLAG_ASSAULT,      // "Assault"
+   LAWFLAG_BANKROBBERY,  // "Bank robbery"
+   LAWFLAG_BREAKING,     // "Breaking and entering"
+   LAWFLAG_CCFRAUD,      // "Credit card fraud"
+   LAWFLAG_DISTURBANCE,  // "Disturbing the peace"
+   LAWFLAG_BROWNIES,     // "Drug dealing"
+   LAWFLAG_COMMERCE,     // "Electronic sabotage"
+   LAWFLAG_ESCAPED,      // "Escaping prison"
+   LAWFLAG_EXTORTION,    // "Extortion"
+   //LAWFLAG_GUNUSE,     // "Firing illegal weapons"
+   LAWFLAG_BURNFLAG,     // "Flag burning"
+   LAWFLAG_CARTHEFT,     // "Grand theft auto"
+   LAWFLAG_INFORMATION,  // "Hacking"
+   LAWFLAG_SPEECH,       // "Harmful speech"
+   LAWFLAG_HIREILLEGAL,  // "Hiring illegal aliens"
+   LAWFLAG_JURY,         // "Jury tampering"
+   LAWFLAG_KIDNAPPING,   // "Kidnapping"
+   LAWFLAG_LOITERING,    // "Loitering"
+   LAWFLAG_MURDER,       // "Murder"
+   LAWFLAG_PROSTITUTION, // "Prostitution"
+   LAWFLAG_PUBLICNUDITY, // "Public nudity"
+   LAWFLAG_RACKETEERING, // "Racketeering"
+   LAWFLAG_HELPESCAPE,   // "Releasing prisoners"
+   LAWFLAG_RESIST,       // "Resisting arrest"
+   LAWFLAG_TERRORISM,    // "Terrorism"
+   LAWFLAG_THEFT,        // "Theft"
+   LAWFLAG_TREASON,      // "Treason"
+   LAWFLAG_BURIAL,       // "Unlawful burial"
+   //LAWFLAG_GUNCARRY,   // "Using illegal weapons"
+   LAWFLAG_VANDALISM,    // "Vandalism"
    LAWFLAGNUM
 };
 
