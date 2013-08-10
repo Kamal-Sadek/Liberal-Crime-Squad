@@ -206,7 +206,7 @@ void make_world()
          Site(SITE_BUSINESS_DEPTSTORE)
          Site(SITE_GOVERNMENT_PRISON)
       District(SITE_UDISTRICT, 0)
-         DistrictName("Brooklyn and Queens")
+         DistrictName("Brooklyn & Queens")
          DistrictShortname("Long Island")
          Site(SITE_INDUSTRY_WAREHOUSE)
             SiteProperty(renting, RENTING_PERMANENT)
@@ -282,7 +282,7 @@ void make_world()
          Site(SITE_BUSINESS_CRACKHOUSE)
             SiteProperty(upgradable, true)
       District(SITE_OUTOFTOWN, 1)
-         DistrictName("Outskirts and Orange County")
+         DistrictName("Outskirts & Orange County")
          Site(SITE_GOVERNMENT_PRISON)
          //Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
          Site(SITE_INDUSTRY_NUCLEAR)
@@ -315,8 +315,8 @@ void make_world()
          Site(SITE_GOVERNMENT_PRISON)
          Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
          Site(SITE_GOVERNMENT_ARMYBASE)
-            
-         
+
+
    //City(SITE_CITY_CHICAGO);
    //City(SITE_CITY_DETROIT);
    //City(SITE_CITY_ATLANTA);
