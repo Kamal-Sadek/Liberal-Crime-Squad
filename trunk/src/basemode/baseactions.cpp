@@ -270,7 +270,7 @@ void orderpartyV2(void)
    int spot=0;
 
    do
-   {      
+   {
       printparty();
       move(8,20);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -295,7 +295,7 @@ void orderpartyV2(void)
       }
       char num[20];
       itoa(oldPos,num,10);
-      addstr(swap->name);     
+      addstr(swap->name);
       addstr(" with");
 
       c=getch();
@@ -385,7 +385,7 @@ void stopevil(void)
       if(loc!=-1)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(8,0,location[loc]->getname(false, true));
+         mvaddstr(8,0,location[loc]->getname(-1, true));
       }
 
       /*mvaddstr(12,50,"Z - Toggle Squad Stance");
@@ -842,7 +842,7 @@ void investlocation(void)
                   break;
                }
             } while (location[loc]->duplicatelocation());
-         } 
+         }
       }
    }while(1);
 }

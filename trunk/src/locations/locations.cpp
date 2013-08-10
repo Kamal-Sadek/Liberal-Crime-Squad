@@ -100,14 +100,17 @@ bool Location::is_city()
    else return false;
 }
 
-// shortname can be set to true (1) or false (0) for making the main part of the name short or long, but the city will be short in either case
-// but there is a third option besides true (1) and false (0): calling it with shortname as -1 makes the entire name long, including the city
+/* Settings for shortname (true is 1 and false is 0, by the way):
+ * -1: entire name is long, no matter what
+ *  0: first part of place name is long, and if there's a city at the end it's short
+ *  1: first part of the name is short unless the place itself is a city in which case it's long, and if there's a city at the end it's short
+ *  2: entire name is short, no matter what */
 std::string Location::getname(int shortname, bool include_city)
 {
    std::string str;
    if(!multipleCityMode) include_city = false;
 
-   if(shortname>=1) {
+   if((shortname >=1 && type != city) || shortname>=2) {
       if(this->front_business != -1)
          str = this->front_shortname;
       else
@@ -120,8 +123,21 @@ std::string Location::getname(int shortname, bool include_city)
    }
 
    if(include_city && type != city) {
-      str += ", ";
-      str += location[findlocation(city, city)]->getname(shortname+1);
+      std::string cityname = location[findlocation(city, city)]->getname(shortname+2);
+      if(str == "Downtown")
+         return str + " " + cityname;
+      if(str == "University District" || str == "U-District" || str == "Industrial District" || str == "I-District" ||
+         str == "Shopping" || str == "Outskirts" || str == "Seaport Area" || str == "Seaport" || str == "Outskirts & Orange County")
+         return cityname + " " + str;
+      if(str == "City Outskirts")
+         return cityname + " Outskirts";
+      if(str == "Arlington")
+         return str + (shortname<0?", Virginia":", VA");
+      if(str == "Hollywood" || str == "Greater Hollywood")
+         return str + (shortname<0?", California":", CA");
+      if(str == "Manhattan" || str == "Manhattan Island" || str == "Brooklyn & Queens" || str == "Long Island" || str == "The Bronx")
+         return str + (shortname<0?", New York":", NY");
+      str += ", " + cityname;
    }
    return str;
 }
@@ -133,11 +149,11 @@ char* Location::city_description()
    case SITE_CITY_SEATTLE: return "Birthplace of the LCS.";
    case SITE_CITY_LOS_ANGELES: return "Hollywood and Trade.";
    case SITE_CITY_NEW_YORK: return "Wall Street and Big Media.";
+   case SITE_CITY_WASHINGTON_DC: return "The Nation's Capital.";
    case SITE_CITY_CHICAGO:
    case SITE_CITY_DETROIT:
    case SITE_CITY_ATLANTA:
    case SITE_CITY_MIAMI:
-   case SITE_CITY_WASHINGTON_DC:
    default: return "";
    }
 }
