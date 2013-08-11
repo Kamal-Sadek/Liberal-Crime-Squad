@@ -21,6 +21,3 @@
 
 #Uncomment this to disable saving between days
     #autosave=Off
-
-#Uncomment this to make the random number generator more random
-    #random=On
