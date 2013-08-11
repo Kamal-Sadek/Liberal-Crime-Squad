@@ -137,7 +137,7 @@
     </loottype>
     
     <loottype idname="LOOT_PDA">
-        <name>PDA</name>
+        <name>Tablet</name>
         <fencevalue>50</fencevalue>
     </loottype>
     

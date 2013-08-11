@@ -287,6 +287,6 @@ int find_clinic(int site);
 int find_homeless_shelter(const Creature& cr);
 int find_homeless_shelter(int site);
 /* sets up the list of locations */
-void make_world(void);
+void make_world(bool hasmaps);
 
 #endif //LOCATIONS_H_INCLUDED
