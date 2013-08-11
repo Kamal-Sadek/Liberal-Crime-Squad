@@ -378,13 +378,13 @@ int main(int argc, char* argv[])
    law[LAW_FLAGBURNING]=1;
    law[LAW_GUNCONTROL]=-1;
    law[LAW_TAX]=0;
-   law[LAW_GUNCONTROL]=-1;
    law[LAW_WOMEN]=1;
    law[LAW_CIVILRIGHTS]=1;
    law[LAW_DRUGS]=-1;
    law[LAW_IMMIGRATION]=0;
    law[LAW_ELECTIONS]=0;
    law[LAW_MILITARY]=-1;
+   law[LAW_PRISONS]=0;
    law[LAW_TORTURE]=-1;
 
 #ifdef SHITLAWS

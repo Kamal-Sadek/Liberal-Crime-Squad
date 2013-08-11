@@ -66,7 +66,7 @@ int find_homeless_shelter(int site_index)
    return find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, city);
 }
 
-void make_classic_world()
+void make_classic_world(bool hasmaps)
 {
    Location* city = 0;
    Location* district = 0;
@@ -74,15 +74,25 @@ void make_classic_world()
    int id = 0;
 
    District(SITE_DOWNTOWN, 0)
+      DistrictProperty(mapped, hasmaps) // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
       Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_GOVERNMENT_POLICESTATION)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_GOVERNMENT_COURTHOUSE)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_BUSINESS_BANK)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_GOVERNMENT_FIRESTATION)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_MEDIA_AMRADIO)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_MEDIA_CABLENEWS)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_BUSINESS_CIGARBAR)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_BUSINESS_LATTESTAND)
+         SiteProperty(mapped, hasmaps)
       Site(SITE_BUSINESS_BARANDGRILL)
          SiteProperty(renting, RENTING_CCS)
          SiteProperty(hidden, true)
@@ -130,11 +140,11 @@ void make_classic_world()
       Site(SITE_GOVERNMENT_WHITE_HOUSE)
 }
 
-void make_world()
+void make_world(bool hasmaps)
 {
    if(!multipleCityMode)
    {
-      make_classic_world();
+      make_classic_world(hasmaps);
       return;
    }
 
@@ -147,16 +157,25 @@ void make_world()
    // Seattle
    City(SITE_CITY_SEATTLE)
       District(SITE_DOWNTOWN, 0)
-         //DistrictProperty(mapped, hasmaps)
+         DistrictProperty(mapped, hasmaps) // for some reason this property isn't inherited by downtown locations so it's manually added for each one, need to debug why this happens
          Site(SITE_RESIDENTIAL_APARTMENT_UPSCALE)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_GOVERNMENT_POLICESTATION)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_GOVERNMENT_COURTHOUSE)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_BUSINESS_BANK)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_GOVERNMENT_FIRESTATION)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_MEDIA_AMRADIO)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_BUSINESS_CIGARBAR)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_BUSINESS_LATTESTAND)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_BUSINESS_DEPTSTORE)
+            SiteProperty(mapped, hasmaps)
          Site(SITE_BUSINESS_BARANDGRILL)
             SiteProperty(renting, RENTING_CCS)
             SiteProperty(hidden, true)

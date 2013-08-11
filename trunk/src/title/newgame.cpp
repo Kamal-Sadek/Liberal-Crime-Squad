@@ -222,7 +222,7 @@ void makecharacter(void)
    newcr->special[SPECIALWOUND_RIGHTEYE]=1;
    newcr->special[SPECIALWOUND_LEFTEYE]=1;
 #endif
-#ifdef SPINE 
+#ifdef SPINE
    newcr->special[SPECIALWOUND_UPPERSPINE]=1;
    newcr->special[SPECIALWOUND_LOWERSPINE]=1;
 #endif
@@ -262,7 +262,8 @@ void makecharacter(void)
 
    char first[3][80];
    char last[80];
-   char gender = newcr->gender_liberal = newcr->gender_conservative = GENDER_FEMALE;
+   bool male = LCSrandom(2); // whether or not starting gender is male
+   char gender = newcr->gender_liberal = newcr->gender_conservative = (male ? GENDER_MALE : GENDER_FEMALE);
    firstname(first[0], GENDER_NEUTRAL);
    firstname(first[1], GENDER_MALE);
    firstname(first[2], GENDER_FEMALE);
@@ -278,7 +279,7 @@ void makecharacter(void)
    while(1)
    {
       erase();
-   
+
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
       addstr("The Founder of the Liberal Crime Squad");
@@ -297,7 +298,7 @@ void makecharacter(void)
       move(8,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press B to be born to a different family)");
-      
+
       move(10,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("SEX: ");
@@ -367,9 +368,11 @@ void makecharacter(void)
       }
       if(c=='c')
       {
-         if(newcr->gender_conservative == GENDER_FEMALE)
+         if((newcr->gender_conservative == GENDER_FEMALE && !male) ||
+				(newcr->gender_conservative == GENDER_NEUTRAL && male))
             newcr->gender_conservative = GENDER_MALE;
-         else if(newcr->gender_conservative == GENDER_MALE)
+         else if((newcr->gender_conservative == GENDER_MALE && !male) ||
+				(newcr->gender_conservative == GENDER_FEMALE && male))
             newcr->gender_conservative = GENDER_NEUTRAL;
          else
             newcr->gender_conservative = GENDER_FEMALE;
@@ -389,11 +392,11 @@ void makecharacter(void)
       }
       break;
    }
-   
+
    strcpy(newcr->propername,first[gender]);
    strcat(newcr->propername," ");
    strcat(newcr->propername,last);
-   
+
    int c;
    bool hasmaps=false;
    bool makelawyer=false;
@@ -428,7 +431,7 @@ void makecharacter(void)
 
          case 0:
             move(2,0);addstr("The day I was born in 1984...");
-            
+
             move(5,0);
             if(choices || selection == 0)
                addstr("A - the Polish priest Popieluszko was kidnapped by government agents.");
@@ -456,7 +459,7 @@ void makecharacter(void)
             // Sept. 4, 1984
                         //move(14,0);
                         //if(choices || selection == 5)
-               //addstr("F - the United Nations condemned Iraq's use of chemical weapons.");      
+               //addstr("F - the United Nations condemned Iraq's use of chemical weapons.");
             //ATTRIBUTE_HEALTH 2
                         //March 30, 1984
 
@@ -492,7 +495,7 @@ void makecharacter(void)
                 // My first memory was...
                         // my father burning my back with a cigarette
                 // When he was really into the sauce...
-                        // 
+                        //
                 // XXX: Needs an option to have the founder have been in the Army -- LK
                 // XXX: Something I forgot.
 
@@ -1210,7 +1213,7 @@ void makecharacter(void)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(1,0);
    addstr("Press enter to be known by your real name instead.");
-  
+
    move(2,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
 
@@ -1221,7 +1224,7 @@ void makecharacter(void)
 
    pool.push_back(newcr);
 
-   make_world();
+   make_world(hasmaps);
 
    squadst *newsq=new squadst;
       newsq->id=0;cursquadid++;
@@ -1271,22 +1274,22 @@ void makecharacter(void)
                            recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
                   recruit->set_attribute(ATTRIBUTE_WISDOM,
                            recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
-                  
+
                   recruit->namecreature();
                   strcpy(recruit->name,recruit->propername);
 
                   recruit->location=l;
                   recruit->base=l;
-                  
+
                   recruit->hireid=newcr->id;
-                  
+
                   newsq->squad[i+1]=recruit;
                   recruit->squadid=newsq->id;
                   pool.push_back(recruit);
                }
                break;
             }
-            
+
 
             #ifdef GIVEBLOODYARMOR
             Armor *newa= new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
@@ -1325,16 +1328,16 @@ void makecharacter(void)
 
          if(newcr->gender_conservative==GENDER_FEMALE)
             lawyer->gender_liberal=lawyer->gender_conservative=GENDER_MALE;
-         
+
          // neutral founder gets random partner
       }
 
       // Ensure the lawyer has good heart/wisdom stats
       if(lawyer->get_attribute(ATTRIBUTE_HEART,false)<newcr->get_attribute(ATTRIBUTE_HEART,false)-2)
          lawyer->adjust_attribute(ATTRIBUTE_HEART,-2);
-      
+
       lawyer->set_attribute(ATTRIBUTE_WISDOM,1);
-      
+
       lawyer->namecreature();
       lawyer->flag|=CREATUREFLAG_SLEEPER;
       lawyer->flag|=CREATUREFLAG_LOVESLAVE;
