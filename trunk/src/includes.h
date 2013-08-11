@@ -64,6 +64,9 @@
 // Make the founder have severe internal damage
 //#define INTERNAL
 
+// Re-seed the Random Number Generator every time it's called
+//#define MORERANDOM
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

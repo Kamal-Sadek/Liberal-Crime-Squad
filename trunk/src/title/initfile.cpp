@@ -49,11 +49,6 @@ void setconfigoption(string name, string value)
       if((value == "off") or (value == "0") or (value == "false") or (value == "no"))
          autosave=false;
    }
-   else if(name == "random")
-   {
-      if((value == "on") or (value == "1") or (value == "true") or (value == "yes"))
-         morerandom=true;
-   }
 }
 
 void loadinitfile(void)

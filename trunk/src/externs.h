@@ -65,7 +65,6 @@ extern short interface_pgup;
 extern short interface_pgdn;
 
 extern bool autosave;
-extern bool morerandom;
 
 extern int day;
 
