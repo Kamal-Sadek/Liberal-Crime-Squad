@@ -1682,6 +1682,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          goodguyattack = !goodguyattack;
          char actual_dummy;
          attack(t,a,0,actual_dummy,true);
+         goodguyattack = !goodguyattack;
       }
       else
       {
@@ -1846,7 +1847,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
       "explains Liberal philosophy to"
    };
 
-   
+
 
    static const char *conservative_politician_debate[] =
    {
