@@ -593,25 +593,70 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          smood=mood;
 
          // State biases.
+         int multiplier = 5+LCSrandom(3);
          switch(s)
          {
-            case 0:smood-=10;break;  // Alabama
-            case 4:smood=100;break;  // California (Always L+)
-            case 9:smood-=10;break;  // Georgia
-            case 11:smood-=10;break; // Idaho
-            case 20:smood=100;break; // Massachusetts (Always L+, even though this is an unfair advantage, SEE: McGovern)
-            case 23:smood-=10;break; // Mississippi
-            case 39:smood-=10;break; // South Carolina
-            case 42:smood-=10;break; // Texas
-            case 43:smood=0;break;   // Utah (Always C+)
+            case 0:smood-=3*multiplier;break;  // Alabama
+            case 1:smood-=4*multiplier;break;  // Alaska
+            case 2:smood-=1*multiplier;break;  // Arkansas
+            case 3:smood-=2*multiplier;break;  // Arizona
+            case 4:smood+=4*multiplier;break;  // California
+            case 5:break;                      // Colorado
+            case 6:smood+=3*multiplier;break;  // Connecticut
+            case 7:smood+=3*multiplier;break;  // Delaware
+            case 8:break;                      // Florida
+            case 9:smood-=2*multiplier;break;  // Georgia
+            case 10:smood+=4*multiplier;break; // Hawaii
+            case 11:smood-=5*multiplier;break; // Idaho
+            case 12:smood+=4*multiplier;break; // Illinois
+            case 13:smood-=1*multiplier;break; // Indiana
+            case 14:smood+=1*multiplier;break; // Iowa
+            case 15:smood-=3*multiplier;break; // Kansas
+            case 16:smood-=3*multiplier;break; // Kentucky
+            case 17:smood-=1*multiplier;break; // Louisiana
+            case 18:smood+=2*multiplier;break; // Maine
+            case 19:smood+=3*multiplier;break; // Maryland
+            case 20:smood+=6*multiplier;break; // Massachusetts
+            case 21:smood+=2*multiplier;break; // Michigan
+            case 22:smood+=2*multiplier;break; // Minnesota
+            case 23:smood-=4*multiplier;break; // Mississippi
+            case 24:smood-=1*multiplier;break; // Missouri
+            case 25:smood-=2*multiplier;break; // Montana
+            case 26:smood-=3*multiplier;break; // Nebraska
+            case 27:break;                     // Nevada
+            case 28:smood+=1*multiplier;break; // New Hampshire
+            case 29:smood+=3*multiplier;break; // New Jersey
+            case 30:smood+=1*multiplier;break; // New Mexico
+            case 31:smood+=5*multiplier;break; // New York
+            case 32:smood-=1*multiplier;break; // North Carolina
+            case 33:smood-=3*multiplier;break; // North Dakota
+            case 34:break;                     // Ohio
+            case 35:smood-=4*multiplier;break; // Oklahoma
+            case 36:smood+=3*multiplier;break; // Oregon
+            case 37:smood+=2*multiplier;break; // Pennsylvania
+            case 38:smood+=4*multiplier;break; // Rhode Island
+            case 39:smood-=5*multiplier;break; // South Carolina
+            case 40:smood-=3*multiplier;break; // South Dakota
+            case 41:smood-=2*multiplier;break; // Tennessee
+            case 42:smood-=4*multiplier;break; // Texas
+            case 43:smood-=6*multiplier;break; // Utah
+            case 44:smood+=5*multiplier;break; // Vermont
+            case 45:break;                     // Virginia
+            case 46:smood+=3*multiplier;break; // Washington
+            case 47:smood-=2*multiplier;break; // West Virginia
+            case 48:smood+=2*multiplier;break; // Wisconsin
+            case 49:smood-=5*multiplier;break; // Wyoming
          }
 
-         vote=0;
+         vote=-2;
          if((short)LCSrandom(100)<smood)vote++;
          if((short)LCSrandom(100)<smood)vote++;
          if((short)LCSrandom(100)<smood)vote++;
          if((short)LCSrandom(100)<smood)vote++;
-         vote-=2;
+         if(vote==1 && !LCSrandom(2))
+            vote=2;
+         if(vote==-1 && !LCSrandom(2))
+            vote=-2;
 
          if(canseethings)
          {
