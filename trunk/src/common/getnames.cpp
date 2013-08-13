@@ -598,3 +598,24 @@ void getlawflag(char *str,int type)
    default:strcpy(str,"ERROR, AR");break;
    }
 }
+
+// shortname defaults to false, Ramadan is returned if there's an error
+std::string getmonth(int month, bool shortname)
+{
+	switch(month)
+	{
+      case  1:return (shortname?"Jan.":"January");
+      case  2:return (shortname?"Feb.":"February");
+      case  3:return (shortname?"Mar.":"March");
+      case  4:return (shortname?"Apr.":"April");
+      case  5:return "May";
+      case  6:return "June";
+      case  7:return "July";
+      case  8:return (shortname?"Aug.":"August");
+      case  9:return (shortname?"Sep.":"September");
+      case 10:return (shortname?"Oct.":"October");
+      case 11:return (shortname?"Nov.":"November");
+      case 12:return (shortname?"Dec.":"December");
+      default:return (shortname?"Ram.":"Ramadan");
+	}
+}

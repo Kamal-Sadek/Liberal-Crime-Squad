@@ -2674,12 +2674,17 @@ char incapacitated(Creature &a,char noncombat,char &printed)
                addstr(" cries \"It can't be like this...\"");
                break;
             case 35:
-               if(a.type==CREATURE_TEENAGER||
-                  a.type==CREATURE_WORKER_FACTORY_CHILD)
-               {
+               if(a.age<20 && !a.animalgloss)
                   addstr(" cries \"Mommy!\"");
+               else switch(a.type)
+               {
+               case CREATURE_GENETIC:
+                  addstr(" murmurs \"What about my offspring?\"");break;
+               case CREATURE_GUARDDOG:
+                  addstr(" murmurs \"What about my puppies?\"");break;
+               default:
+                  addstr(" murmurs \"What about my children?\"");break;
                }
-               else addstr(" murmurs \"What about my children?\"");
                break;
             case 36:
                addstr(" shudders quietly.");

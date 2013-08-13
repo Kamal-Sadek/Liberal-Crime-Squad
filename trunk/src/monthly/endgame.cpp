@@ -21,7 +21,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -620,7 +620,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             else if(s<34)move(5+s-17,49);
             else move(5+s-34,76);
          }
-         if(vote==level&&s!=44)
+         if(vote==level)
          {
             yesstate++;
             if(canseethings)

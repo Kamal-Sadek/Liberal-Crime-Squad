@@ -61,22 +61,8 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
          }
          if(pday>=10)move(3,66);
          else move(3,67);
-         switch(pmonth)
-         {
-            case 1:addstr("Jan");break;
-            case 2:addstr("Feb");break;
-            case 3:addstr("Mar");break;
-            case 4:addstr("Apr");break;
-            case 5:addstr("May");break;
-            case 6:addstr("Jun");break;
-            case 7:addstr("Jul");break;
-            case 8:addstr("Aug");break;
-            case 9:addstr("Sep");break;
-            case 10:addstr("Oct");break;
-            case 11:addstr("Nov");break;
-            case 12:addstr("Dec");break;
-         }
-         addstr(". ");
+         addstr(getmonth(pmonth,true));
+         addstr(" ");
          itoa(pday,num,10);
          addstr(num);
          addstr(", ");
