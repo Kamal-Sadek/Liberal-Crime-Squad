@@ -58,21 +58,8 @@ bool show_disbanding_screen(int& oldforcemonth)
    char num[20];
    itoa(year,num,10);
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   switch(month)
-   {
-      case 1:addstr("January ");break;
-      case 2:addstr("February ");break;
-      case 3:addstr("March ");break;
-      case 4:addstr("April ");break;
-      case 5:addstr("May ");break;
-      case 6:addstr("June ");break;
-      case 7:addstr("July ");break;
-      case 8:addstr("August ");break;
-      case 9:addstr("September ");break;
-      case 10:addstr("October ");break;
-      case 11:addstr("November ");break;
-      case 12:addstr("December ");break;
-   }
+   addstr(getmonth(month));
+   addstr(" ");
    addstr(num);
 
 
