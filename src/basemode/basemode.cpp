@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -200,7 +200,7 @@ void mode_base(void)
    char forcewait,canseethings;
    int nonsighttime=0;
    int oldforcemonth=month;
-   
+
    int length=0;
 
    int l = 0;
@@ -312,10 +312,10 @@ void mode_base(void)
          if(sieged)
             underattack=siege->underattack;
       }
-      
+
       char haveflag=0;
       if(loc) haveflag=loc->haveflag;
-      
+
       // Count people at each location
       int* num_present = new int[location.size()];
       for(int i=0;i<location.size();i++)
@@ -462,7 +462,7 @@ void mode_base(void)
          move(21,1);
          addstr("A - Activate Liberals");
 
-         
+
          set_color(COLOR_BLACK,COLOR_BLACK,1);
          for(int p=0;p < pool.size();p++)
          {
@@ -549,7 +549,7 @@ void mode_base(void)
          move(22,1);
          if(haveflag)
          {
-            
+
             if(sieged)
                set_color(COLOR_GREEN,COLOR_BLACK,1);
             else
@@ -703,22 +703,8 @@ void mode_base(void)
             move(7,5);
             addstr("Time passes...", gamelog);
             move(9,12);
-            switch(month)
-            {
-            case 1:addstr("Jan", gamelog);break;
-            case 2:addstr("Feb", gamelog);break;
-            case 3:addstr("Mar", gamelog);break;
-            case 4:addstr("Apr", gamelog);break;
-            case 5:addstr("May", gamelog);break;
-            case 6:addstr("Jun", gamelog);break;
-            case 7:addstr("Jul", gamelog);break;
-            case 8:addstr("Aug", gamelog);break;
-            case 9:addstr("Sep", gamelog);break;
-            case 10:addstr("Oct", gamelog);break;
-            case 11:addstr("Nov", gamelog);break;
-            case 12:addstr("Dec", gamelog);break;
-            }
-            addstr(". ", gamelog);
+            addstr(getmonth(month,true),gamelog);
+            addstr(" ", gamelog);
             move(9, 17);
             itoa(day,num,10);
             addstr(num, gamelog);

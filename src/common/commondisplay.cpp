@@ -217,22 +217,8 @@ void locheader(void)
       }
    }
 
-   switch(month)
-   {
-   case 1:addstr("Jan");break;
-   case 2:addstr("Feb");break;
-   case 3:addstr("Mar");break;
-   case 4:addstr("Apr");break;
-   case 5:addstr("May");break;
-   case 6:addstr("Jun");break;
-   case 7:addstr("Jul");break;
-   case 8:addstr("Aug");break;
-   case 9:addstr("Sep");break;
-   case 10:addstr("Oct");break;
-   case 11:addstr("Nov");break;
-   case 12:addstr("Dec");break;
-   }
-   addstr(". ");
+   addstr(getmonth(month,true));
+   addstr(" ");
    itoa(day,num,10);
    addstr(num);
    addstr(", ");
@@ -1112,21 +1098,7 @@ void printliberalstats(Creature &cr)
 
    // Add birthdate
    addstr("Born ");
-   switch(cr.birthday_month)
-   {
-   case 1:addstr("January");break;
-   case 2:addstr("February");break;
-   case 3:addstr("March");break;
-   case 4:addstr("April");break;
-   case 5:addstr("May");break;
-   case 6:addstr("June");break;
-   case 7:addstr("July");break;
-   case 8:addstr("August");break;
-   case 9:addstr("September");break;
-   case 10:addstr("October");break;
-   case 11:addstr("November");break;
-   case 12:addstr("December");break;
-   }
+   addstr(getmonth(cr.birthday_month));
    addstr(" ");
    itoa(cr.birthday_day,num,10);
    addstr(num);

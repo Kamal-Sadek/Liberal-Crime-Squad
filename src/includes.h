@@ -1225,6 +1225,8 @@ void cityname(char *story); /* random city name */
 /* Allow player to enter a name with an optional default name */
 void enter_name(char *name, int len, char *defname=NULL);
 void getlawflag(char *str,int type);
+std::string getmonth(int month, bool shortname=false);
+
 /*
  translateid.cpp
 */
