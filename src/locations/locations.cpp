@@ -285,7 +285,7 @@ bool Location::duplicatelocation() {
       if(location[l] == this)
          continue;
 
-      if(!strcmp(location[l]->name, this->name))
+      if(type!=SITE_RESIDENTIAL_SHELTER && !strcmp(location[l]->name, this->name))
          return true;
 
       if (location[l]->front_business != -1 &&
