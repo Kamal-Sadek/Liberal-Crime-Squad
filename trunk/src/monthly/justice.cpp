@@ -35,16 +35,12 @@ void trial(Creature &g)
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
    if(location[g.base]->renting<0)
-   {
-      for(int i=0;i<location.size();++i)
-      {
-         if(location[i]->type==SITE_RESIDENTIAL_SHELTER)
-         {
-            g.base=i;
+      for(int i=0; i < location.size(); i++)
+        if(location[i]->type == SITE_RESIDENTIAL_SHELTER && (!multipleCityMode || location[i]->city == location[g.base]->city))
+        {
+            g.base = i;
             break;
-         }
-      }
-   }
+        }
    g.location=g.base;
    bool breaker[LAWFLAGNUM]={0};
 
@@ -85,7 +81,7 @@ void trial(Creature &g)
    int maxsleeperskill=0;
    for(int p=0;p<pool.size();p++)
    {
-      if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER))
+      if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER)&&location[pool[p]->location]->city==location[g.location]->city)
       {
          if(pool[p]->type==CREATURE_JUDGE_CONSERVATIVE||
             pool[p]->type==CREATURE_JUDGE_LIBERAL)
@@ -114,6 +110,7 @@ void trial(Creature &g)
       addstr("Sleeper ", gamelog);
       addstr(sleeperjudge->name, gamelog);
       addstr(" reads the charges, trying to hide a smile:", gamelog);
+      g.confessions = 0; //Made sleeper judge prevent these lunatics from testifying
    }
    else addstr("The judge reads the charges:", gamelog);
    gamelog.newline();
@@ -531,7 +528,7 @@ void trial(Creature &g)
    }
    gamelog.newline();
 
-   if(g.confessions && !sleeperjudge)       //Made sleeper judge prevent these lunatics from testifying
+   if(g.confessions)
    {
       move(y+=2,1);
 
@@ -997,7 +994,7 @@ void trial(Creature &g)
             }
          }
          gamelog.nextMessage();
-         
+
          if(defense==4)
          {
             // Juice sleeper
@@ -1289,7 +1286,7 @@ void penalize(Creature &g,char lenient)
             // Don't bother saying this if the convicted already has one or
             // more life sentences. Makes the 'consecutively' and 'concurrently'
             // statements later easier to tack on.
-            if(oldsentence>=0) 
+            if(oldsentence>=0)
             {
                addstr(".", gamelog);
                refresh();

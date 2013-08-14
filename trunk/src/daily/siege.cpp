@@ -204,7 +204,8 @@ void siegecheck(char canseethings)
             {
                if(pool[pl]->flag & CREATUREFLAG_SLEEPER &&
                   pool[pl]->location!=-1 &&
-                  location[pool[pl]->location]->type==SITE_GOVERNMENT_POLICESTATION)
+                  location[pool[pl]->location]->type==SITE_GOVERNMENT_POLICESTATION &&
+                  location[pool[pl]->location]->city==location[l]->city)
                {
                   //if(pool[pl]->infiltration*100>LCSrandom(50))
                   {
@@ -732,8 +733,9 @@ void siegecheck(char canseethings)
             int firemensleepercount=0;
             for(int pl=0;pl<pool.size();pl++)
             {
-               if(pool[pl]->flag & CREATUREFLAG_SLEEPER&&
-                  pool[pl]->type==CREATURE_FIREFIGHTER)
+               if(pool[pl]->flag & CREATUREFLAG_SLEEPER &&
+                  pool[pl]->type==CREATURE_FIREFIGHTER &&
+                  location[pool[pl]->location]->city==location[l]->city)
                {
                   firemensleepercount++;
                }

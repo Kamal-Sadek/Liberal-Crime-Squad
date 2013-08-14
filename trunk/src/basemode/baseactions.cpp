@@ -809,7 +809,7 @@ void investlocation(void)
                switch(location[loc]->front_business)
                {
                case BUSINESSFRONT_INSURANCE:
-                  switch(LCSrandom(3))
+                  switch(LCSrandom(7))
                   {
                   case 0:
                      strcat(location[loc]->front_name,"Auto");
@@ -823,12 +823,28 @@ void investlocation(void)
                      strcat(location[loc]->front_name,"Health");
                      strcpy(location[loc]->front_shortname,"Health");
                      break;
+                  case 3:
+                     strcat(location[loc]->front_name,"Home");
+                     strcpy(location[loc]->front_shortname,"Home");
+                     break;
+                  case 4:
+                     strcat(location[loc]->front_name,"Boat");
+                     strcpy(location[loc]->front_shortname,"Boat");
+                     break;
+                  case 5:
+                     strcat(location[loc]->front_name,"Fire");
+                     strcpy(location[loc]->front_shortname,"Fire");
+                     break;
+                  case 6:
+                     strcat(location[loc]->front_name,"Flood");
+                     strcpy(location[loc]->front_shortname,"Flood");
+                     break;
                   }
                   strcat(location[loc]->front_name," Insurance");
                   strcat(location[loc]->front_shortname," Ins.");
                   break;
                case BUSINESSFRONT_TEMPAGENCY:
-                  switch(LCSrandom(2))
+                  switch(LCSrandom(7))
                   {
                   case 0:
                      strcat(location[loc]->front_name,"Temp Agency");
@@ -837,6 +853,92 @@ void investlocation(void)
                   case 1:
                      strcat(location[loc]->front_name,"Manpower, LLC");
                      strcpy(location[loc]->front_shortname,"Manpower");
+                     break;
+                  case 2:
+                     strcat(location[loc]->front_name,"Staffing, Inc");
+                     strcpy(location[loc]->front_shortname,"Staff");
+                     break;
+                  case 3:
+                     strcat(location[loc]->front_name,"Labor Ready");
+                     strcpy(location[loc]->front_shortname,"Labor");
+                     break;
+                  case 4:
+                     strcat(location[loc]->front_name,"Employment");
+                     strcpy(location[loc]->front_shortname,"Employ");
+                     break;
+                  case 5:
+                     strcat(location[loc]->front_name,"Services");
+                     strcpy(location[loc]->front_shortname,"Services");
+                     break;
+                  case 6:
+                     strcat(location[loc]->front_name,"Solutions");
+                     strcpy(location[loc]->front_shortname,"Solutns");
+                     break;
+                  }
+                  break;
+               case BUSINESSFRONT_RESTAURANT:
+                  switch(LCSrandom(7))
+                  {
+                  case 0:
+                     strcat(location[loc]->front_name,"Fried Chicken");
+                     strcpy(location[loc]->front_shortname,"Chicken");
+                     break;
+                  case 1:
+                     strcat(location[loc]->front_name,"Hamburgers");
+                     strcpy(location[loc]->front_shortname,"Burgers");
+                     break;
+                  case 2:
+                     strcat(location[loc]->front_name,"Steakhouse");
+                     strcpy(location[loc]->front_shortname,"Steak");
+                     break;
+                  case 3:
+                     strcat(location[loc]->front_name,"Wok Buffet");
+                     strcpy(location[loc]->front_shortname,"Wok");
+                     break;
+                  case 4:
+                     strcat(location[loc]->front_name,"Thai Cuisine");
+                     strcpy(location[loc]->front_shortname,"Thai");
+                     break;
+                  case 5:
+                     strcat(location[loc]->front_name,"Pizzeria");
+                     strcpy(location[loc]->front_shortname,"Pizza");
+                     break;
+                  case 6:
+                     strcat(location[loc]->front_name,"Fine Dining");
+                     strcpy(location[loc]->front_shortname,"Diner");
+                     break;
+                  }
+                  break;
+               case BUSINESSFRONT_MISCELLANEOUS:
+                  switch(LCSrandom(7))
+                  {
+                  case 0:
+                     strcat(location[loc]->front_name,"Real Estate");
+                     strcpy(location[loc]->front_shortname,"Realty");
+                     break;
+                  case 1:
+                     strcat(location[loc]->front_name,"Imported Goods");
+                     strcpy(location[loc]->front_shortname,"Import");
+                     break;
+                  case 2:
+                     strcat(location[loc]->front_name,"Waste Disposal");
+                     strcpy(location[loc]->front_shortname,"Disposal");
+                     break;
+                  case 3:
+                     strcat(location[loc]->front_name,"Liquor Shop");
+                     strcpy(location[loc]->front_shortname,"Liquor");
+                     break;
+                  case 4:
+                     strcat(location[loc]->front_name,"Antiques");
+                     strcpy(location[loc]->front_shortname,"Antique");
+                     break;
+                  case 5:
+                     strcat(location[loc]->front_name,"Repair, Inc");
+                     strcpy(location[loc]->front_shortname,"Repair");
+                     break;
+                  case 6:
+                     strcat(location[loc]->front_name,"Pet Store");
+                     strcpy(location[loc]->front_shortname,"Pets");
                      break;
                   }
                   break;
