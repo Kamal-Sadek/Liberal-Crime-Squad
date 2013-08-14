@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -134,7 +134,7 @@ void siegecheck(char canseethings)
          {
             // Sleepers and people not at this base don't count
             if(pool[p]->location!=l || pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
-            
+
             if(!pool[p]->alive) // Corpses attract attention
             {
                crimes += 10;
@@ -148,7 +148,7 @@ void siegecheck(char canseethings)
             }
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
-            
+
             //Heat doesn't matter for sieges until it gets high
             crimes += max(0,(pool[p]->heat)/10-10);
             //Heat decay
@@ -224,7 +224,7 @@ void siegecheck(char canseethings)
                addstr(location[l]->getname());
                addstr(".", gamelog);
                gamelog.newline();
-               
+
                if(location[l]->siege.escalationstate>=2)
                {
                   move(11,1);
@@ -361,7 +361,7 @@ void siegecheck(char canseethings)
                }
 
                gamelog.newline();
-                  
+
                for(int l2=0;l2<location[l]->loot.size();l2++)
                {
                   delete location[l]->loot[l2];
@@ -674,7 +674,7 @@ void siegecheck(char canseethings)
             location[l]->siege.cameras_off=1;
          }
          else if(location[l]->siege.timeuntilcia==0)location[l]->siege.timeuntilcia=-1; // Silently call off foiled cia raids
-                   
+
             //HICKS
          if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
          {
@@ -777,7 +777,7 @@ void siegecheck(char canseethings)
             move(9,1);
             addstr("Armored firemen swarm out, pilot lights burning.", gamelog);
             gamelog.newline();
-            
+
             refresh();
             getch();
 
@@ -809,7 +809,7 @@ void siegecheck(char canseethings)
             location[l]->siege.lights_off=0;
             location[l]->siege.cameras_off=0;
             offended_firemen=0;
-         } 
+         }
          else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0)
          {
             location[l]->siege.timeuntilfiremen=-1;
@@ -988,7 +988,7 @@ void siegeturn(char clearformess)
             }
 
             gamelog.newline();
-            
+
             location[l]->siege.siege=0;
          }
 
@@ -1147,7 +1147,7 @@ void siegeturn(char clearformess)
                      getch();
                   }
                }
-            
+
                if(location[l]->siege.escalationstate>=3 && !LCSrandom(3))
                {
                   no_bad=0;
@@ -1245,7 +1245,7 @@ void siegeturn(char clearformess)
                         gamelog.newline();
                         refresh();
                         getch();
-                        
+
                         location[l]->compound_walls&=~COMPOUND_AAGUN;
                      }
                      else if(hasGenerator && !LCSrandom(3))
@@ -1264,7 +1264,7 @@ void siegeturn(char clearformess)
                         gamelog.newline();
                         refresh();
                         getch();
-                        
+
                         location[l]->compound_walls&=~COMPOUND_GENERATOR;
                         location[l]->siege.lights_off=1;
                      }
@@ -1342,7 +1342,7 @@ void siegeturn(char clearformess)
 
                   refresh();
                   getch();
-                  
+
                   if(clearformess)
                   {
                      move(9,1);
@@ -1590,7 +1590,7 @@ void giveup(void)
       location[loc]->siege.siegetype==SIEGE_FIREMEN)
    {
       int polsta=find_police_station(loc);
-      
+
 
       //END SIEGE
       erase();
@@ -2182,7 +2182,7 @@ char sally_forth_aux(int loc)
             }
          }
       }
-      
+
    }while(1);
 
    mode=GAMEMODE_BASE;
@@ -2213,7 +2213,7 @@ void sally_forth(void)
    addstr("available.  If you have a larger pool of Liberals, they");
    move(10,11);
    addstr("will provide cover fire from the compound until needed.");
-   
+
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
    if(activesquad!=NULL)loc=activesquad->squad[0]->location;
@@ -2352,7 +2352,7 @@ void escape_engage(void)
    addstr("fire.  If you have at least six people total, then six must");
    move(17,11);
    addstr("be in the Squad.  If less than six, then they all must.");
-   
+
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
    if(activesquad!=NULL)loc=activesquad->squad[0]->location;
@@ -2505,14 +2505,11 @@ void escapesiege(char won)
 //dump retrieved loot in homeless shelter - is there anywhere better to put it?
       if (activesquad && homes != -1)
       {
-         for(int l=0;l<activesquad->loot.size();l++)
-         {
-            location[homes]->loot.push_back(activesquad->loot[l]);
-         }
+         location[homes]->getloot(activesquad->loot);
          activesquad->loot.clear();
       }
 
-      activesquad=NULL; //active squad cannot be disbanded in removesquadinfo, 
+      activesquad=NULL; //active squad cannot be disbanded in removesquadinfo,
                         //but we need to disband current squad as the people are going to be 'away'.
 
       //GET RID OF DEAD, etc.
@@ -2664,7 +2661,7 @@ void conquertextccs(void)
          addstr("Gunfire still ringing in their ears, the squad revels in");
          move(4,11);
          addstr("their final victory.  ");
-         
+
          move(6,16);
          addstr("As your Liberals pick through the remains of the safehouse,");
          move(7,11);
@@ -2675,7 +2672,7 @@ void conquertextccs(void)
          addstr("The CCS Founder lying dead at their feet, the squad");
          move(4,11);
          addstr("slips away.  ");
-            
+
          move(6,16);
          addstr("With its Founder killed in the heart of their own base,");
          move(7,11);

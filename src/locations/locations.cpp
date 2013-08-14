@@ -794,3 +794,25 @@ void initlocation(Location &loc)
       break;
    }
 }
+
+/* transfer all loot from some source (such as a squad or another location) to a location, and deal with money properly
+ * make sure to call loot.clear() on the source of the loot after calling this function */
+void Location::getloot(vector<Item *> loot)
+{
+   for(int l=loot.size()-1;l>=0;l--)
+   {
+      if(loot[l]->is_money())
+      {
+         Money* m = static_cast<Money*>(loot[l]); //cast -XML
+         ledger.add_funds(m->get_amount(),INCOME_THIEVERY);
+         delete loot[l];
+         loot.erase(loot.begin() + l);
+      }
+      else
+      {
+         // Empty squad inventory into base inventory
+         this->loot.push_back(loot[l]);
+         loot.erase(loot.begin() + l);
+      }
+   }
+}

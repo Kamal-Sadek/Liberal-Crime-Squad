@@ -455,10 +455,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
       if(pool[p]->location==cursite)pool[p]->location=hs;
       if(pool[p]->base==cursite)pool[p]->base=hs;
    }
-   for(int l2=0;l2<location[cursite]->loot.size();l2++)
-   {
-      location[hs]->loot.push_back(location[cursite]->loot[l2]);
-   }
+   location[hs]->getloot(location[cursite]->loot);
    location[cursite]->loot.clear();
 
    location[cursite]->compound_walls=0;
