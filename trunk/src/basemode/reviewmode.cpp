@@ -1242,10 +1242,7 @@ void assemblesquad(squadst *cursquad)
       {
          if(squadloc[sq]!=-1)
          {
-            for(int l=0;l<squad[sq]->loot.size();l++)
-            {
-               location[squadloc[sq]]->loot.push_back(squad[sq]->loot[l]);
-            }
+			   location[squadloc[sq]]->getloot(squad[sq]->loot);
             squad[sq]->loot.clear();
          }
 

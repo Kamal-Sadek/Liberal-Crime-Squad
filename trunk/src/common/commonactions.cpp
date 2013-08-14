@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -61,7 +61,7 @@ char endcheck(char cause)
                case SIEGE_CCS:savehighscore(END_CCS);break;
                case SIEGE_FIREMEN:savehighscore(END_FIREMEN);break;
             }
-         } 
+         }
          else savehighscore(END_DEAD);
       }
       else savehighscore(cause);
@@ -148,8 +148,8 @@ void hospitalize(int loc, Creature &patient)
                }
             }
          }
-         testsquadclear(*patientsquad, patient.base); 
-      }  
+         testsquadclear(*patientsquad, patient.base);
+      }
    }
 }
 
@@ -191,7 +191,7 @@ int clinictime(Creature &g)
 
 /* common - purges squad of loot and vehicles if it has no members */
 /***************************************************
-*JDS* testsquadclear - 
+*JDS* testsquadclear -
 Clears the squad of loot and cars if it has no
 members. Returns 0 if squad is okay, returns 1 if
 squad is cleared.
@@ -222,10 +222,7 @@ int testsquadclear(squadst &thissquad, int obase)
       }
 
       //RETURN ALL LOOT ITEMS TO BASE
-      for(int l=0;l<thissquad.loot.size();l++)
-      {
-         location[obase]->loot.push_back(thissquad.loot[l]);
-      }
+      location[obase]->getloot(thissquad.loot);
       thissquad.loot.clear();
       return 1;
    }
@@ -318,10 +315,10 @@ void addjuice(Creature &cr,long juice,long cap)
    {
       return;
    }
-   
+
    // Apply juice gain
    cr.juice+=juice;
-   
+
    // Pyramid scheme of juice trickling up the chain
    if(cr.hireid!=-1)
    {
@@ -397,22 +394,8 @@ void cleangonesquads(void)
       //OTHERWISE YOU CAN TAKE ITS MONEY (and other gear)
       else
       {
-         for(int l=squad[sq]->loot.size()-1;l>=0;l--)
-         {
-            if(squad[sq]->loot[l]->is_money())
-            {
-               Money* m = static_cast<Money*>(squad[sq]->loot[l]); //cast -XML
-               ledger.add_funds(m->get_amount(),INCOME_THIEVERY);
-               delete squad[sq]->loot[l];
-               squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
-            }
-            else
-            {
-               // Empty squad inventory into base inventory
-               location[squad[sq]->squad[0]->base]->loot.push_back(squad[sq]->loot[l]);
-               squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
-            }
-         }
+         location[squad[sq]->squad[0]->base]->getloot(squad[sq]->loot);
+         squad[sq]->loot.clear();
       }
    }
 }
@@ -451,7 +434,7 @@ int choose_one(const int * weight_list, int number_of_options, int default_value
       weight_total+=weight_list[option];
    }
    if(weight_total<1) return default_value; // No acceptable results; use default
-   
+
    int choose=LCSrandom(weight_total);
    for (option=0;option<number_of_options;option++)
    {
@@ -556,7 +539,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
       if(effpower<-50)effpower=-50;
       if(effpower>5)effpower=5;
    }
-   
+
    //Scale the magnitude of the effect based on how much
    //people are paying attention to the issue
    effpower=(int)(effpower*(1+(float)public_interest[v]/50));
@@ -577,11 +560,11 @@ void change_public_opinion(int v,int power,char affect,char cap)
       }
    }
 
-   
+
 
    //Finally, apply the effect.
    attitude[v]+=effpower;
-   
+
    if(attitude[v]<0)attitude[v]=0;
    if(attitude[v]>100)attitude[v]=100;
 }
@@ -753,7 +736,7 @@ int randomissue(bool core_only)
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 {
    char selection=0;
-       
+
    while(1)
    {
       move(y,0);
@@ -791,8 +774,8 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
       addstr("sleeper agent");
       set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
       addstr(".");
-      
-   
+
+
       int keystroke = getch();
       translategetch(keystroke);
       if(keystroke == 10 && selection==1)
@@ -916,7 +899,7 @@ void sorting_prompt(short listforsorting)
       case SORTINGCHOICE_ASSEMBLESQUAD: addstr("available Liberals.");break;
       case SORTINGCHOICE_BASEASSIGN: addstr("squadless members.");break;
       default: addstr("ERROR: INVALID VALUE FOR SORTINGCHOICE!");break;
-   }   
+   }
    move(3,2);
    addstr("A - No sorting.");
    move(4,2);
@@ -930,7 +913,7 @@ void sorting_prompt(short listforsorting)
    {
       int c = getch();
       translategetch(c);
-      
+
       if(c=='a')
       {
          activesortingchoice[listforsorting]=SORTING_NONE;
@@ -970,7 +953,7 @@ short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
       case REVIEWMODE_DEAD: return SORTINGCHOICE_DEAD;
       case REVIEWMODE_AWAY: return SORTINGCHOICE_AWAY;
    }
-   return 0;//-1; 
+   return 0;//-1;
 }
 
 /* common - Displays options to choose from and returns an int corresponding

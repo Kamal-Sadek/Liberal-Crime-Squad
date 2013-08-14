@@ -1027,10 +1027,7 @@ void advanceday(char &clearformess,char canseethings)
                   if(pool[p]->location==l)pool[p]->location=hs;
                   if(pool[p]->base==l)pool[p]->base=hs;
                }
-               for(l2=0;l2<location[l]->loot.size();l2++)
-               {
-                  location[hs]->loot.push_back(location[l]->loot[l2]);
-               }
+               location[hs]->getloot(location[l]->loot);
                location[l]->loot.clear();
 
                location[l]->compound_walls=0;
