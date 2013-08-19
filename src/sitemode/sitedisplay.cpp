@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -102,7 +102,7 @@ void printsitemap(int x,int y,int z)
       case SPECIAL_NUCLEAR_ONOFF:strcpy(str,"Reactor Control Room");break;
       case SPECIAL_LAB_GENETIC_CAGEDANIMALS:strcpy(str,"Caged \"Animals\"");break;
       case SPECIAL_POLICESTATION_LOCKUP:strcpy(str,"Police Detention Room");break;
-      case SPECIAL_COURTHOUSE_LOCKUP:strcpy(str,"Court House Jail");break;
+      case SPECIAL_COURTHOUSE_LOCKUP:strcpy(str,"Courthouse Jail");break;
       case SPECIAL_COURTHOUSE_JURYROOM:strcpy(str,"Jury Room");break;
       case SPECIAL_PRISON_CONTROL:
       case SPECIAL_PRISON_CONTROL_LOW:
@@ -274,7 +274,7 @@ void printwall(int x, int y, int z, int px, int py)
       if(levelmap[x][y-1][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_UP],"LCS"); graffiticolor[WALL_UP] = COLOR_GREEN; }
       if(levelmap[x][y+1][z].flag & SITEBLOCK_GRAFFITI) { strcpy(graffiti[WALL_DOWN],"LCS"); graffiticolor[WALL_DOWN] = COLOR_GREEN; }
    }
-   
+
    for(int dir=0;dir<4;dir++)
    {
       x=px;
@@ -300,7 +300,7 @@ void printwall(int x, int y, int z, int px, int py)
                set_color(graffiticolor[dir],COLOR_WHITE,0,blink);
             else
                set_color(COLOR_WHITE,COLOR_WHITE,0,blink);
-            
+
             // Draw the chunk of wall where the graffiti would/will go
             for(int gchar=0;gchar<3;gchar++)
             {
@@ -352,7 +352,7 @@ void printwall(int x, int y, int z, int px, int py)
                set_color(COLOR_BLACK,COLOR_BLACK,1);
             else
                set_color(COLOR_YELLOW,COLOR_BLACK,0);
-            
+
             // Draw face
             if(dir==WALL_RIGHT||dir==WALL_LEFT)
             {
@@ -547,7 +547,7 @@ void printblock(int x,int y,int z,int px, int py)
       {
          set_color(COLOR_YELLOW,backcolor,0,blink);
       }
-      
+
       move(py,px);
       addstr("=====");
       move(py+1,px);
@@ -571,7 +571,7 @@ void printblock(int x,int y,int z,int px, int py)
    else if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
    {
       set_color(COLOR_RED,backcolor,0,blink);
-      move(py+2,px); 
+      move(py+2,px);
       addstr("enemy");
    }
    else if(levelmap[x][y][z].special!=-1)
@@ -755,7 +755,7 @@ void refreshmaparea(void)
 void clearmessagearea(bool redrawmaparea)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   
+
    if(redrawmaparea)
    {
       move(16,1);

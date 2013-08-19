@@ -441,15 +441,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
    location[cursite]->renting=RENTING_NOCONTROL;
 
    //MOVE ALL ITEMS AND SQUAD MEMBERS
-   int hs=0;
-   for(int l2=0;l2<location.size();l2++)
-   {
-      if(location[l2]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         hs=l2;
-         break;
-      }
-   }
+   int hs=find_homeless_shelter(cursite);
    for(int p=0;p<pool.size();p++)
    {
       if(pool[p]->location==cursite)pool[p]->location=hs;
@@ -1645,7 +1637,7 @@ char talkInCombat(Creature &a, Creature &tk)
       move(17,1);
       set_color(COLOR_GREEN,COLOR_BLACK,1);
 
-      switch(LCSrandom(3))
+      switch(LCSrandom(4))
       {
       case 0:
          {   // Formatting the slogan so that it always has quotes around it and punctuation
@@ -2502,7 +2494,7 @@ char heyMisterMonster(Creature &a, Creature &tk)
          break;
       case 6:
          pitch = "\"You deserve better than this.\"";
-         response = "\"Nobeast deserves to be an experiment!\"";
+         response = "\"No beast deserves to be an experiment!\"";
          break;
       case 7:
          pitch = "\"You are the best anything ever.\"";
