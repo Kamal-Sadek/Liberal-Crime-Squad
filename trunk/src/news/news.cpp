@@ -48,7 +48,7 @@ void majornewspaper(char &clearformess,char canseethings)
    clean_up_empty_news_stories();
 
    if(canseethings) run_television_news_stories();
-   
+
    assign_page_numbers_to_newspaper_stories();
    if(canseethings) display_newspaper();
 
@@ -316,7 +316,7 @@ void handle_public_opinion_impact(const newsstoryst &ns)
          break;
    }
    if(i == okay_type_num) return; // No impact for this news story type
-   
+
    int impact = ns.priority;
 
    // Magnitude of impact will be affected by which page of the newspaper the story appears on
@@ -462,7 +462,7 @@ void handle_public_opinion_impact(const newsstoryst &ns)
       issues.push_back(VIEW_CEOSALARY);
       issues.push_back(VIEW_CORPORATECULTURE);
       break;
-   } 
+   }
    for(i=0; i<issues.size(); i++)
    {
       change_public_opinion(issues[i],impact,squad_responsible,impact*10);
@@ -550,7 +550,7 @@ void setpriority(newsstoryst &ns)
          // a story becomes positive or negative
          if(ns.claimed)ns.politics_level=5;
          else ns.politics_level=0;
-         
+
          ns.politics_level+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
          ns.politics_level+=crime[CRIME_HACK_INTEL       ] * 100;
          ns.politics_level+=crime[CRIME_HOUSE_PHOTOS     ] * 100;
@@ -776,7 +776,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
    for(it2=0;it2<25;it2++)storyx_s[it2]=1;
    for(it2=0;it2<25;it2++)storyx_e[it2]=78;
    displayads(ns,liberalguardian,storyx_s,storyx_e,it2);
-   
+
    const char *city;
    if(multipleCityMode && ns.loc != -1)
    {
@@ -939,7 +939,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   strcat(story,"The names of the officers have not been released pending notification of their families.");
                }
-               else strcat(story,"The name of the officer has not been released pending notification of the officer's family."); 
+               else strcat(story,"The name of the officer has not been released pending notification of the officer's family.");
                strcat(story,"&r");
                break;
             }
@@ -1121,12 +1121,12 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(!liberalguardian)
                   {
                      strcat(story,"  According to sources that were at the scene, ");
-                     strcat(story,"the Liberal Crime Squad allegedly freed or attempted to free prisoners from the court house lockup.");
+                     strcat(story,"the Liberal Crime Squad allegedly freed or attempted to free prisoners from the courthouse lockup.");
                      strcat(story,"&r");
                   }
                   else
                   {
-                     strcat(story,"  The Liberal Crime Squad attempted to rescue innocent people from the court house lockup, ");
+                     strcat(story,"  The Liberal Crime Squad attempted to rescue innocent people from the courthouse lockup, ");
                      strcat(story,"saving them from the highly corrupt Conservative justice system.");
                      strcat(story,"&r");
                   }

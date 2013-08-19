@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -72,7 +72,7 @@ void special_bouncer_assess_squad()
    bool autoadmit=0;
    char sleepername[80];
    for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
-   
+
    special_bouncer_greet_squad();
 
    for(int p=0;p<pool.size();p++)
@@ -95,7 +95,7 @@ void special_bouncer_assess_squad()
       addstr(sleepername, gamelog);
       addstr(" smirks and lets the squad in.", gamelog);
       gamelog.newline();
-      
+
       levelmap[locx][locy][locz].special=-1;
    }
    else
@@ -111,7 +111,7 @@ void special_bouncer_assess_squad()
    refresh();
    getch();
    char rejected=NOT_REJECTED;
-   
+
    // Size up the squad for entry
    if(!autoadmit)
    {
@@ -294,7 +294,7 @@ void special_bouncer_assess_squad()
          break;
       case NOT_REJECTED:
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         
+
          switch(LCSrandom(4))
          {
          case 0:addstr("\"Keep it civil and don't drink too much.\"", gamelog);break;
@@ -325,7 +325,7 @@ void special_bouncer_assess_squad()
    }
    encounter[0].cantbluff=1;
 
-   
+
 }
 
 void special_lab_cosmetics_cagedanimals(void)
@@ -361,7 +361,7 @@ void special_lab_cosmetics_cagedanimals(void)
             sitestory->crime.push_back(CRIME_FREE_RABBITS);
             criminalizeparty(LAWFLAG_VANDALISM);
          }
-         
+
          if(actual)
          {
             alienationcheck(0);
@@ -511,7 +511,7 @@ void special_nuclear_onoff(void)
 
                juiceparty(40,1000); // Instant juice!
 			      sitecrime+=25; //Shutdown Site
-               
+
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
 
             }
@@ -530,7 +530,7 @@ void special_nuclear_onoff(void)
 
                juiceparty(100,1000); // Instant juice!
 			      sitecrime+=50; //Shutdown Site
-               
+
                sitestory->crime.push_back(CRIME_SHUTDOWNREACTOR);
             }
          }
@@ -727,7 +727,7 @@ void special_courthouse_lockup(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(16,1);
-      addstr("You see prisoners in the Court House jail.", gamelog);
+      addstr("You see prisoners in the Courthouse jail.", gamelog);
       gamelog.newline();
       move(17,1);
       addstr("Free them? (Yes or No)");
@@ -1006,7 +1006,7 @@ void special_prison_control(short prison_control_type)
                case -2: numleft+=LCSrandom(4)+2;break;
             }
          }
-         
+
          for(int e=0;e<ENCMAX;e++)
          {
             if(!encounter[e].exists)
@@ -1107,7 +1107,7 @@ void special_intel_supercomputer(void)
                addstr(".", gamelog);
             }
             gamelog.newline();
-            
+
             juiceparty(50,1000);
 
             Item *it=new Loot(*loottype[getloottype("LOOT_INTHQDISK")]);
@@ -1158,7 +1158,7 @@ void special_graffiti(void)
    int time=20+LCSrandom(10);
    if(time<1)time=1;
    if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-   
+
    alienationcheck(0);
    noticecheck(-1,DIFFICULTY_HARD);
    levelmap[locx][locy][locz].flag|=SITEBLOCK_GRAFFITI;
@@ -1221,7 +1221,7 @@ void special_sweatshop_equipment(void)
          int time=20+LCSrandom(10);
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-         
+
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
@@ -1266,7 +1266,7 @@ void special_polluter_equipment(void)
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
          change_public_opinion(VIEW_POLLUTION,2,1,70);
-         
+
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
@@ -1312,11 +1312,11 @@ void special_house_photos(void)
          {
             bool empty=true;
             Item *it;
-            
+
             if(deagle==false)
             {
                clearmessagearea();
-               
+
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,1);
                addstr("The squad has found a Desert Eagle.", gamelog);
@@ -1336,7 +1336,7 @@ void special_house_photos(void)
                deagle=true;
                empty=false;
             }
-               
+
             if(LCSrandom(2))
             {
                clearmessagearea();
@@ -1351,7 +1351,7 @@ void special_house_photos(void)
 
                it=new Money(1000*(1+LCSrandom(10)));
                activesquad->loot.push_back(it);
-               
+
                empty=false;
             }
 
@@ -1369,7 +1369,7 @@ void special_house_photos(void)
 
                it=new Loot(*loottype[getloottype("LOOT_EXPENSIVEJEWELERY")],3);
                activesquad->loot.push_back(it);
-               
+
                empty=false;
             }
 
@@ -1387,7 +1387,7 @@ void special_house_photos(void)
 
                it=new Loot(*loottype[getloottype("LOOT_CEOPHOTOS")]);
                activesquad->loot.push_back(it);
-               
+
                empty=false;
             }
 
@@ -1402,7 +1402,7 @@ void special_house_photos(void)
 
                refresh();
                getch();
-               
+
                empty=false;
             }
 
@@ -1422,7 +1422,7 @@ void special_house_photos(void)
 
                it=new Loot(*loottype[getloottype("LOOT_CEOLOVELETTERS")]);
                activesquad->loot.push_back(it);
-               
+
                empty=false;
             }
 
@@ -1440,7 +1440,7 @@ void special_house_photos(void)
 
                it=new Loot(*loottype[getloottype("LOOT_CEOTAXPAPERS")]);
                activesquad->loot.push_back(it);
-               
+
                empty=false;
             }
 
@@ -1516,11 +1516,11 @@ void special_armory(void)
 
          bool empty=true;
          Item *it;
-         
+
          if(m249==false && location[cursite]->type == SITE_GOVERNMENT_ARMYBASE)
          {
             clearmessagearea();
-            
+
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
             addstr("Jackpot! The squad found a M249 Machine Gun!", gamelog);
@@ -1540,7 +1540,7 @@ void special_armory(void)
             m249=true;
             empty=false;
          }
-            
+
          if(LCSrandom(2))
          {
             clearmessagearea();
@@ -1567,7 +1567,7 @@ void special_armory(void)
                num++;
             }
             while(num<2 || (LCSrandom(2) && num<5));
-            
+
             empty=false;
          }
 
@@ -1597,7 +1597,7 @@ void special_armory(void)
                num++;
             }
             while(num<2 || (LCSrandom(2) && num<5));
-            
+
             empty=false;
          }
 
@@ -1626,7 +1626,7 @@ void special_armory(void)
                num++;
             }
             while(num<2 || (LCSrandom(2) && num<5));
-            
+
             empty=false;
          }
 
@@ -1743,7 +1743,7 @@ void special_corporate_files(void)
             activesquad->loot.push_back(it);
             it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
             activesquad->loot.push_back(it);
-            
+
             juiceparty(50,1000);
             sitecrime+=40;
 
@@ -1889,7 +1889,7 @@ void special_display_case(void)
          int time=20+LCSrandom(10);
          if(time<1)time=1;
          if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
-         
+
          alienationcheck(0);
          noticecheck(-1,DIFFICULTY_HEROIC);
          levelmap[locx][locy][locz].special=-1;
@@ -2014,7 +2014,7 @@ void special_security(bool metaldetect)
    getch();
 
    char rejected=NOT_REJECTED;
-   
+
    // Size up the squad for entry
    for(int s=0;s<6;s++)
    {
@@ -2023,7 +2023,7 @@ void special_security(bool metaldetect)
          // Wrong clothes? Gone
          if(activesquad->squad[s]->is_naked() && activesquad->squad[s]->animalgloss!=ANIMALGLOSS_ANIMAL)
             if(rejected>REJECTED_NUDE)rejected=REJECTED_NUDE;
-         
+
          if(autoadmit<1 && !hasdisguise(*activesquad->squad[s]))
             if(rejected>REJECTED_DRESSCODE)rejected=REJECTED_DRESSCODE;
          // Busted, cheap, bloody clothes? Gone
@@ -2139,7 +2139,7 @@ void special_security(bool metaldetect)
       break;
    case NOT_REJECTED:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      
+
       switch(LCSrandom(4))
       {
       case 0:addstr("\"Move along.\"", gamelog);break;
@@ -2194,7 +2194,7 @@ void special_bank_vault(void)
    addstr("an electronic lock, and a biometric lock.", gamelog);
    gamelog.newline();
    getch();
-   
+
    clearmessagearea();
    move(16,1);
    addstr("You will need a security expert, a computer ", gamelog);
@@ -2234,7 +2234,7 @@ void special_bank_vault(void)
       {
          char actual;
          bool success = false;
-         
+
          clearmessagearea();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
@@ -2254,7 +2254,7 @@ void special_bank_vault(void)
             addstr("on the other side of this door...", gamelog);
             gamelog.newline();
             getch();
-            
+
             levelmap[locx][locy][locz].special=-1;
          }
          else
@@ -2276,7 +2276,7 @@ void special_bank_vault(void)
                addstr("The money was so close the squad could taste it!", gamelog);
                gamelog.newline();
                getch();
-               
+
                levelmap[locx][locy][locz].special=-1;
             }
             else
@@ -2289,7 +2289,7 @@ void special_bank_vault(void)
                addstr("to the bank's managers.", gamelog);
                gamelog.newline();
                getch();
-               
+
                Creature *manager = 0;
                bool canbreakin = false;
 
@@ -2446,7 +2446,7 @@ void special_bank_money(void)
    move(16,1);
    addstr("The squad loads bricks of cash into a duffel bag.", gamelog);
    gamelog.newline();
-   
+
    levelmap[locx][locy][locz].special=-1;
 
    activesquad->loot.push_back(new Money(20000));

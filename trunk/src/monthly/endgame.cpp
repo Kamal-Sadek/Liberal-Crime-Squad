@@ -244,7 +244,7 @@ void reaganify(char canseethings)
       move(10,5);
       addstr("The following Executive Officers are also chosen in perpetuity:");
       move(11,0);
-      addstr("Vice President Strom Thurmond, Secretary of State Jesse Helms, and");
+      addstr("Chancellor Strom Thurmond, Secretary of State Jesse Helms, and");
       move(12,0);
       addstr("Attorney General Jerry Falwell.");
       move(14,5);

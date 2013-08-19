@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 ** into the "abstracted debate" on that issue.
 ** - After all of the sleepers have contributed to the liberal power
 ** stats, a roll is made on each issue to see whether the liberals
-** make background progress on those issues. 
+** make background progress on those issues.
 ** - Several sleepers have special abilities. Lawyers and Judges, as
 ** always, can aid your people in the legal system. Police officers,
 ** corporate managers, CEOs, and agents can all now leak secret
@@ -47,7 +47,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
 {
    if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
    int infiltrate = 1;
-   
+
    switch(cr.activity.type)
    {
       case ACTIVITY_SLEEPER_LIBERAL:
@@ -60,7 +60,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
       case ACTIVITY_SLEEPER_STEAL:
          sleeper_steal(cr,clearformess,canseethings,libpower);
 		 infiltrate = 0;
-         break;		 
+         break;
       case ACTIVITY_SLEEPER_RECRUIT:
          sleeper_recruit(cr,clearformess,canseethings,libpower);
          break;
@@ -75,7 +75,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpow
       default:
          break;
    }
-   
+
    if (infiltrate)cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
 
    if(cr.infiltration>=1)
@@ -142,6 +142,7 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
    switch(cr.type)
    {
       case CREATURE_CORPORATE_CEO:
+      case CREATURE_POLITICIAN:
       case CREATURE_SCIENTIST_EMINENT:
          power*=20;
          break;
@@ -159,15 +160,6 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       default:
          power*=2;
          break;
-   }
-
-   int homes=-1; // find homeless shelter
-   for(int l=0;l<location.size();l++)
-   {
-      if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-      {
-         homes=l;
-      }
    }
 
    power=static_cast<int>(power*cr.infiltration);
@@ -301,10 +293,21 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
       case CREATURE_HIPPIE: // too liberal to be a proper sleeper
       case CREATURE_WORKER_FACTORY_UNION: // same
       case CREATURE_JUDGE_LIBERAL: // more again
-      case CREATURE_POLITICALACTIVIST: // ??!?!? impressive getting an LCS Member sleeper, but no effect
       case CREATURE_MUTANT:
          return;
       /* Miscellaneous block -- includes everyone else */
+      case CREATURE_POLITICIAN:
+         {
+            int a=LCSrandom(VIEWNUM-5);
+            int b=LCSrandom(VIEWNUM-5);
+            while(b==a)b=LCSrandom(VIEWNUM-5);
+            int c=LCSrandom(VIEWNUM-5);
+            while(c==a||c==b)c=LCSrandom(VIEWNUM-5);
+            libpower[a]+=power;
+            libpower[b]+=power;
+            libpower[c]+=power;
+         }
+         break;
       case CREATURE_FIREFIGHTER:
          if(law[LAW_FREESPEECH]==-2)
          {
@@ -324,6 +327,8 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *li
 **********************************/
 void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower)
 {
+   int homes=find_homeless_shelter(cr);
+
    if(LCSrandom(100) > 100*cr.infiltration)
    {
       cr.juice-=1;
@@ -343,19 +348,16 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          refresh();
          getch();
 
-         int hs;
-         for(hs=0;location[hs]->type!=SITE_RESIDENTIAL_SHELTER;hs++);
-
          removesquadinfo(cr);
-         cr.location=hs;
-         cr.base=hs;
+         cr.location=homes;
+         cr.base=homes;
          cr.drop_weapons_and_clips(NULL);
          cr.activity.type=ACTIVITY_NONE;
          cr.flag&=~CREATUREFLAG_SLEEPER;
       }
       return;
    }
-   
+
    // Improves juice, as confidence improves
    if(cr.juice<100)
    {
@@ -365,19 +367,14 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
 
    location[cr.base]->mapped = 1;
 
-   int homes;
-   for(homes=0;homes<location.size();homes++)
-   {
-      if(location[homes]->type == SITE_RESIDENTIAL_SHELTER)break;
-   }
-
    bool pause=false;
    switch(cr.type)
    {
    case CREATURE_SECRET_SERVICE:
    case CREATURE_AGENT:
+   case CREATURE_POLITICIAN:
       // Agents can leak intelligence files to you
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(law[LAW_PRIVACY] + 3)) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_SECRETDOCUMENTS")]);
@@ -421,7 +418,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
    case CREATURE_CORPORATE_MANAGER:
    case CREATURE_CORPORATE_CEO:
       // Can leak corporate files to you
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(law[LAW_CORPORATE] + 3) && cr.type!=CREATURE_CORPORATE_CEO) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
@@ -441,7 +438,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       break;
    case CREATURE_EDUCATOR:
    case CREATURE_PRISONGUARD:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_PRISONFILES")]);
@@ -460,7 +457,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       }
       break;
    case CREATURE_NEWSANCHOR:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
@@ -482,7 +479,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       }
       break;
    case CREATURE_RADIOPERSONALITY:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
@@ -505,7 +502,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       break;
    case CREATURE_SCIENTIST_LABTECH:
    case CREATURE_SCIENTIST_EMINENT:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(law[LAW_ANIMALRESEARCH] + 3)) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
@@ -524,7 +521,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       }
       break;
    case CREATURE_JUDGE_CONSERVATIVE:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(LCSrandom(5)) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
@@ -543,7 +540,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       }
       break;
    case CREATURE_CCS_ARCHCONSERVATIVE:
-      if(!location[homes]->siege.siege&&canseethings) 
+      if(!location[homes]->siege.siege&&canseethings)
       {
          if(ccsexposure>=CCSEXPOSURE_LCSGOTDATA) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_CCS_BACKERLIST")]);
@@ -618,6 +615,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
       case CREATURE_SCIENTIST_EMINENT:
       case CREATURE_CORPORATE_MANAGER:
       case CREATURE_BANK_MANAGER:
+      case CREATURE_POLITICIAN:
          income=static_cast<int>(5000*cr.infiltration);
          break;
       default:
@@ -667,7 +665,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
 
    cr.infiltration-=LCSrandom(10)*0.01f-0.02f; //No effectiveness drop before? -Niel
 
-   
+
    //Item *item;
    string item;
    Location *shelter=0;
@@ -681,7 +679,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
       }
    }
 
-  
+
    int number_of_items = LCSrandom(10)+1;
    int itemindex = -1; // have to check case item not found to avoid brave modders segfaults.
    int numberofxmlfails = 0; // Tell them how many fails

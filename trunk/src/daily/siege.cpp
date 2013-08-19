@@ -2486,13 +2486,9 @@ void escapesiege(char won)
       addstr("doubtless be preparing another assault.");
 
       int homes=-1;
-      for(int l=0;l<location.size();l++)
-      {
-         if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-         {
-            homes=l;
-         }
-      }
+      if(activesquad)
+         if(activesquad->squad[0]!=NULL)
+            homes=find_homeless_shelter(*activesquad->squad[0]);
 
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(13,11);

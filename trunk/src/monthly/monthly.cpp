@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -83,7 +83,7 @@ void passmonth(char &clearformess,char canseethings)
           location[l]->renting!=RENTING_CCS)nploc.push_back(l);
    }
 
-   // Check for game over 
+   // Check for game over
    endcheck(END_DEAD);
    dispersalcheck(clearformess);
 
@@ -115,7 +115,7 @@ void passmonth(char &clearformess,char canseethings)
    for(v=0;v<VIEWNUM;v++)public_interest[v]/=2;
 
    int conspower=200-attitude[VIEW_AMRADIO]-attitude[VIEW_CABLENEWS];
-   
+
    //HAVING SLEEPERS
    for(int pl=pool.size()-1;pl>0;pl--)
    {
@@ -190,7 +190,7 @@ void passmonth(char &clearformess,char canseethings)
    int stimulus=0;
    double cost=0;
    double tax=0;
-   
+
    //PUBLIC OPINION NATURAL MOVES
    for(v=0;v<VIEWNUM;v++)
    {
@@ -276,7 +276,7 @@ void passmonth(char &clearformess,char canseethings)
          addstr("<------->");
 
          // Calculate location for pip (with a bit of randomness for imprecision!)
-         int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1; 
+         int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1;
 
          // Select color and limit to ends of spectrum
          if(pip<=0)     { pip=0; set_color(COLOR_RED,    COLOR_BLACK,1); }
@@ -485,13 +485,7 @@ void passmonth(char &clearformess,char canseethings)
             refresh();
             getch();
 
-            for(int l=0;l<location.size();l++)
-            {
-               if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE)
-               {
-                  pool[p]->location=l;
-               }
-            }
+            pool[p]->location=find_courthouse(*pool[p]);
             Armor prisoner(*armortype[getarmortype("ARMOR_PRISONER")]);
             pool[p]->give_armor(prisoner,NULL);
          }

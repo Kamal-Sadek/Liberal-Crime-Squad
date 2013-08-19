@@ -796,8 +796,14 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
          used[maxs]=1;
          printed=1;
 
-         if(cr->get_skill_ip(maxs)>=100+(10*cr->get_skill(maxs))&&
+         // Maxed skills are cyan
+         if(cr->skill_cap(maxs,true)!=0 && cr->get_skill(maxs)>=cr->skill_cap(maxs,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
+         // About to level up skills are white
+         else if(cr->get_skill_ip(maxs)>=100+(10*cr->get_skill(maxs))&&
             cr->get_skill(maxs)<cr->skill_cap(maxs,true))set_color(COLOR_WHITE,COLOR_BLACK,1);
+         // <1 skills are dark gray
+         else if(cr->get_skill(maxs)<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+         // >=1 skills are light gray
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(3+5-snum,31);
@@ -1020,7 +1026,7 @@ void printliberalskills(Creature &cr)
          addstr("NOW   MAX");
       }
 
-      // Maxed skills are green
+      // Maxed skills are cyan
       if(cr.skill_cap(s,true)!=0 && cr.get_skill(s)>=cr.skill_cap(s,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
       // About to level up skills are white
       else if(cr.get_skill_ip(s)>=100+(10*cr.get_skill(s))&&
@@ -1204,7 +1210,7 @@ void printliberalstats(Creature &cr)
          used[maxs]=1;
          printed=1;
 
-         // Maxed skills are green
+         // Maxed skills are cyan
          if(cr.skill_cap(maxs,true)!=0 && cr.get_skill(maxs)>=cr.skill_cap(maxs,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
          // About to level up skills are white
          else if(cr.get_skill_ip(maxs)>=100+(10*cr.get_skill(maxs))&&

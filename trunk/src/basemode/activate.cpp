@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     
 /*
 This file was created by Chris Johnson (grundee@users.sourceforge.net)
 by copying code from game.cpp.
-To see descriptions of files and functions, see the list at 
+To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
@@ -77,7 +77,7 @@ void activate(void)
    {
       erase();
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);     
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
 
 
@@ -181,11 +181,11 @@ void listclasses(Creature *cr)
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
        move(12,40);
        addstr("1 - Public Policy");
-       
+
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
        move(13,40);
        addstr("2 - Economics");
-       
+
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
        move(14,40);
        addstr("3 - Psychology");
@@ -193,7 +193,7 @@ void listclasses(Creature *cr)
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
        move(15,40);
        addstr("4 - Criminal Law");
-       
+
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
        move(16,40);
        addstr("5 - Physics");
@@ -211,8 +211,8 @@ void listclasses(Creature *cr)
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
        move(13,40);
        addstr("2 - First Aid");
-       
- 
+
+
        set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
        move(14,40);
        addstr("3 - Painting");
@@ -351,7 +351,7 @@ void activate(Creature *cr)
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='c');
       mvaddstr(12,1,"C - Illegal Fundraising");
-      
+
       set_color(COLOR_WHITE,COLOR_BLACK,state=='d');
       mvaddstr(13,1,"D - Recruitment and Acquisition");
 
@@ -842,28 +842,118 @@ void activate(Creature *cr)
             default:
                switch(cr->type)
                {
-               case CREATURE_MERC:
-               case CREATURE_SWAT:
-               case CREATURE_DEATHSQUAD:
-               case CREATURE_GANGUNIT:
-               case CREATURE_SOLDIER:
-               case CREATURE_VETERAN:
-               case CREATURE_HARDENED_VETERAN:
-               case CREATURE_GANGMEMBER:
+               // this first block are creatures with All Weapon Skills, Martial Arts, Dodge, and First Aid
+               case CREATURE_ATHLETE:
+               case CREATURE_BOUNCER: // for fighting skills
+               case CREATURE_COP: // for fighting skills
+               case CREATURE_CCS_ARCHCONSERVATIVE: // for fighting skills
+               case CREATURE_CCS_MOLOTOV: // for fighting skills
+               case CREATURE_CCS_SNIPER: // for fighting skills
+               case CREATURE_CCS_VIGILANTE: // for fighting skills
+               case CREATURE_DEATHSQUAD: // for fighting skills
+               case CREATURE_DOCTOR: // for First Aid
+               case CREATURE_FIREFIGHTER: // for fighting skills
+               case CREATURE_GANGMEMBER: // for fighting skills
+               case CREATURE_GANGUNIT: // for fighting skills
+               case CREATURE_GUARDDOG:
+               case CREATURE_GENETIC:
+               case CREATURE_HARDENED_VETERAN: // for fighting skills
+               case CREATURE_HICK:
+               case CREATURE_MARTIALARTIST: // for fighting skills
+               case CREATURE_MERC: // for fighting skills
+               case CREATURE_MILITARYOFFICER: // for fighting skills
+               case CREATURE_MILITARYPOLICE: // for fighting skills
                case CREATURE_MUTANT:
-               case CREATURE_CRACKHEAD:
-               case CREATURE_SECRET_SERVICE:
+               case CREATURE_NURSE: // for First Aid
+               case CREATURE_PRISONGUARD: // for fighting skills
+               case CREATURE_SEAL: // for fighting skills
+               case CREATURE_SECURITYGUARD: // for fighting skills
+               case CREATURE_SOLDIER: // for fighting skills
+               case CREATURE_SWAT: // for fighting skills
+               case CREATURE_TANK: // fpr fighting skills
+               case CREATURE_VETERAN: // for fighting skills
                   cr->activity.type=ACTIVITY_TEACH_FIGHTING;
                   choice='2';
                   break;
-               case CREATURE_AGENT:
+               // this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
+               case CREATURE_ACTOR: // for Disguise
+               case CREATURE_AGENT: // for Driving & Psychology
                case CREATURE_AMATEURMAGICIAN:
-               case CREATURE_THIEF:
-               case CREATURE_PROSTITUTE:
+               case CREATURE_BIKER: // for Driving
+               case CREATURE_BUM:
+               case CREATURE_CONSTRUCTIONWORKER: // for Driving
+               case CREATURE_CRACKHEAD:
+               case CREATURE_EDUCATOR: // for Psychology & Driving
+               case CREATURE_FASHIONDESIGNER: // for Tailoring
+               case CREATURE_GARBAGEMAN: // for Driving
+               case CREATURE_HSDROPOUT:
+               case CREATURE_LOCKSMITH: // for Security
+               case CREATURE_MAILMAN:
+               case CREATURE_PLUMBER:
                case CREATURE_PRISONER:
+               case CREATURE_PROGRAMMER: // for Computers
+               case CREATURE_PROSTITUTE: // for Seduction
+               case CREATURE_PSYCHOLOGIST: // for Psychology
+               case CREATURE_SECRET_SERVICE: // for Driving & Psychology
+               case CREATURE_SEWERWORKER:
+               case CREATURE_TAXIDRIVER: // for Driving
+               case CREATURE_THIEF: // for Disguise, Security, & Stealth
+               case CREATURE_TRUCKER: // for Driving
+               case CREATURE_WORKER_FACTORY_CHILD:
+               case CREATURE_WORKER_SERVANT:
+               case CREATURE_WORKER_SWEATSHOP: // for Tailoring
                   cr->activity.type=ACTIVITY_TEACH_COVERT;
                   choice='3';
                   break;
+               // this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
+               case CREATURE_AUTHOR: // for Writing & Persuasion
+               case CREATURE_BANK_MANAGER: // for Business
+               case CREATURE_BANK_TELLER:
+               case CREATURE_CAMERAMAN: // for Art
+               case CREATURE_CARSALESMAN: // for Business & Persuasion
+               case CREATURE_CHEF:
+               case CREATURE_CLERK:
+               case CREATURE_COLLEGESTUDENT: // for Art, Music, Science, & Writing
+               case CREATURE_CORPORATE_CEO: // for Business
+               case CREATURE_CORPORATE_MANAGER: // for Business
+               case CREATURE_CRITIC_ART: // for Writing, Persuasion, & Art
+               case CREATURE_CRITIC_MUSIC: // for Writing, Persuasion, & Music
+               case CREATURE_DANCER: // for Art & Music
+               case CREATURE_ENGINEER: // for Science
+               case CREATURE_FASTFOODWORKER:
+               case CREATURE_FOOTBALLCOACH: // for Persuasion
+               case CREATURE_HAIRSTYLIST: // for Art
+               case CREATURE_HIPPIE: // for Art & Music
+               case CREATURE_JOURNALIST: // for Writing & Persuasion
+               case CREATURE_JUDGE_CONSERVATIVE: // for Law & Writing
+               case CREATURE_JUDGE_LIBERAL: // for Law & Writing
+               case CREATURE_JUROR:
+               case CREATURE_LANDLORD: // for Business
+               case CREATURE_LAWYER: // for Law & Persuasion
+               case CREATURE_MATHEMATICIAN: // for Science
+               case CREATURE_MUSICIAN: // for Music
+               case CREATURE_NEWSANCHOR:
+               case CREATURE_NUN: // for Religion
+               case CREATURE_OFFICEWORKER: // for Business
+               case CREATURE_PAINTER: // for Art
+               case CREATURE_PHOTOGRAPHER: // for Art
+               case CREATURE_POLITICALACTIVIST: // for Persuasion, Law, & Writing
+               case CREATURE_POLITICIAN: // for Law & Persuasion
+               case CREATURE_PRIEST: // for Religion
+               case CREATURE_RADIOPERSONALITY: // for Persuasion
+               case CREATURE_RETIREE:
+               case CREATURE_SCIENTIST_EMINENT: // for Science
+               case CREATURE_SCIENTIST_LABTECH: // for Science
+               case CREATURE_SCULPTOR: // for Art
+               case CREATURE_SOCIALITE: // for Persuasion, Art, & Music
+               case CREATURE_TEACHER:
+               case CREATURE_TEENAGER:
+               case CREATURE_TELEMARKETER: // for Persuasion
+               case CREATURE_WORKER_FACTORY_NONUNION:
+               case CREATURE_WORKER_FACTORY_UNION:
+               case CREATURE_WORKER_JANITOR:
+               case CREATURE_WORKER_SECRETARY: // for Writing
+               case CREATURE_YOGAINSTRUCTOR:
                default:
                   cr->activity.type=ACTIVITY_TEACH_POLITICS;
                   choice='1';
@@ -954,7 +1044,7 @@ void activate(Creature *cr)
       }
       // ? Pressed
       if(c==63)
-      {     
+      {
          if(state == 'a' || state == 'b' || state == 'c' ||state == 'd' )
          {
             // Call activity help pages
@@ -1489,11 +1579,11 @@ void select_makeclothing(Creature *cr)
    {
       if (armortype[a]->get_make_difficulty() == 0)
          continue;
-      
+
       if (armortype[a]->deathsquad_legality()
           && (law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2))
          continue;
-      
+
       armortypei.push_back(a);
    }
 

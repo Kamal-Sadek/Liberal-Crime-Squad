@@ -399,7 +399,7 @@ void initlocation(Location &loc)
       if(law[LAW_DEATHPENALTY]==-2) {
          loc.rename("Halls of Ultimate Judgment", "Judge Hall");
       } else {
-         loc.rename("Court House", "Court House");
+         loc.rename("Courthouse", "Courthouse");
       } break;
    case SITE_GOVERNMENT_FIRESTATION:
       if(law[LAW_FREESPEECH]==-2) {
@@ -624,8 +624,7 @@ void initlocation(Location &loc)
       lastname(str);
       strcat(loc.name,str);
       strcat(loc.name,"'s Used Cars");
-      strcpy(loc.shortname,str);
-      strcat(loc.shortname," Cars");
+      strcpy(loc.shortname,"Used Cars");
       break;
    case SITE_BUSINESS_DEPTSTORE:
       lastname(str);

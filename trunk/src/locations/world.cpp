@@ -66,6 +66,14 @@ int find_homeless_shelter(int site_index)
    return find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, city);
 }
 
+int find_courthouse(const Creature& cr) { return find_courthouse(cr.location); }
+int find_courthouse(int site_index)
+{
+   int city = -1;
+   if(site_index >= 0) city = location[site_index]->city;
+   return find_site_index_in_city(SITE_GOVERNMENT_COURTHOUSE, city);
+}
+
 void make_classic_world(bool hasmaps)
 {
    Location* city = 0;
