@@ -38,7 +38,7 @@ recruitst::recruitst() : task(0), timeleft(0), level(0), eagerness1(0)
       else eagerness1=0;
    }
    else eagerness1=2;
-   
+
 }
 
 recruitst::~recruitst()
@@ -201,7 +201,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 {
    clearformess=1;
 
-   
+
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -273,7 +273,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(14,0);
    addstr("B - Just casually chat with them and discuss politics.");
-   
+
    move(15,0);
    if(subordinatesleft(*pool[p]) && r.eagerness()>=4)
    {
@@ -302,7 +302,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr("D - Break off the meetings.");
 
    int y=18;
-   
+
 
    do
    {
@@ -324,7 +324,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y+=2,0);
-            
+
          addstr(r.recruit->name, gamelog);
          addstr(" accepts, and is eager to get started.", gamelog);
          gamelog.nextMessage();
@@ -364,7 +364,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             max(r.recruit->get_skill(SKILL_LAW)-pool[p]->get_skill(SKILL_LAW),0));
          pool[p]->train(SKILL_BUSINESS,
             max(r.recruit->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS),0));
-         
+
          int lib_persuasiveness = pool[p]->get_skill(SKILL_BUSINESS)+
                                   pool[p]->get_skill(SKILL_SCIENCE)+
                                   pool[p]->get_skill(SKILL_RELIGION)+
@@ -398,7 +398,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(str), gamelog;
             addstr(".", gamelog);
             gamelog.newline();
-            
+
             refresh();
             getch();
          }
@@ -407,13 +407,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr(pool[p]->name, gamelog);
             addstr(" explains ", gamelog);
-            if(pool[p]->gender_liberal==GENDER_MALE)
-               addstr("his ", gamelog);
-            else if(pool[p]->gender_liberal==GENDER_FEMALE)
-               addstr("her ", gamelog);
-            else
-               addstr("their ", gamelog);
-            addstr("views on ", gamelog);
+            addstr(pool[p]->hisher(), gamelog);
+            addstr(" views on ", gamelog);
             getviewsmall(str,LCSrandom(VIEWNUM-3));
             addstr(str, gamelog);
             addstr(".", gamelog);
@@ -421,7 +416,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             refresh();
             getch();
          }
-         
+
          bool success=0;
 
          if(pool[p]->skill_check(SKILL_PERSUASION,difficulty))

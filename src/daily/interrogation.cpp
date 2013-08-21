@@ -107,7 +107,7 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
    //char str[40];
    addstr(a->get_armor().get_name().c_str());
    move(y+=2,40);
-   
+
    // What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK
    // These are greater than and less than comparisons, so they are testing ranges -Fox
    if(rapport[a->id]>3)
@@ -117,7 +117,7 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
       addstr("to ");
       addstr(a->name);
       addstr(" as its only friend.");
-   } 
+   }
    else if(rapport[a->id]>1)
    {
       addstr("The Conservative likes ");
@@ -156,7 +156,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
    Creature *a=NULL;
 
-   
+
 
    //Find all tenders who are set to this hostage
    for(p=0;p<pool.size();p++)
@@ -164,7 +164,7 @@ void tendhostage(Creature *cr,char &clearformess)
       if(!pool[p]->alive)continue;
       if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
       {
-         
+
          if(pool[p]->activity.arg==cr->id)
          {
             //If they're in the same location as the hostage,
@@ -216,7 +216,7 @@ void tendhostage(Creature *cr,char &clearformess)
                location[cr->location]->siege.timeuntillocated=3;
                refresh();
                getch();
-               
+
                //clear activities for tenders
                for(int i=0;i<pool.size();i++)
                {
@@ -255,7 +255,7 @@ void tendhostage(Creature *cr,char &clearformess)
    char num[20];
    itoa(cr->joindays,num,10);
    addstr(num);
-   
+
    refresh();
    getch();
 
@@ -351,7 +351,6 @@ void tendhostage(Creature *cr,char &clearformess)
       while(1)
       {
          y=2;
-         char num2[20];
          if(techniques[TECHNIQUE_KILL])
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
@@ -394,7 +393,7 @@ void tendhostage(Creature *cr,char &clearformess)
          move(y,0);y+=1;addstr("Press Enter to Confirm the Plan");
 
          show_interrogation_sidebar(cr,a);
-         
+
          int c=getch();
          translategetch(c);
          if(c>='a'&&c<='e')techniques[c-'a']=!techniques[c-'a'];
@@ -573,40 +572,124 @@ void tendhostage(Creature *cr,char &clearformess)
       //show_interrogation_sidebar(cr,a);
       refresh();
       getch();
-      
+
       if(techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
       {
-         move(y,0);
-         
-         y++;
+         move(++y,0);
 
          addstr("It is subjected to dangerous hallucinogens.", gamelog);
          gamelog.newline();
 
-         attack+=10+a->get_armor().get_interrogation_drugbonus();
+         int drugbonus=10+a->get_armor().get_interrogation_drugbonus(); // we won't apply this JUST yet
 
          //Possible permanent health damage
-         if(LCSrandom(50)<++druguse)cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
-         
-         if(cr->get_attribute(ATTRIBUTE_HEALTH,false)==0)
+         if(LCSrandom(50)<++druguse)
          {
-            y++;
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
+            move(++y,0);
             refresh();
             getch();
-            move(y++,0);
-            addstr("It is a lethal overdose in ", gamelog);
-            addstr(cr->name, gamelog);
-            addstr("'s weakened state.", gamelog);
-            gamelog.newline();
-            cr->die();
-         }
 
+            addstr(cr->name, gamelog);
+            addstr(" foams at the mouth and its eyes roll back in its skull.", gamelog);
+            gamelog.newline();
+            move(++y,0);
+            refresh();
+            getch();
+
+            Creature* doctor=a; // the lead interrogator is doctor by default
+            int maxskill=doctor->get_skill(SKILL_FIRSTAID);
+            for(int i=0;i<temppool.size();++i) // search for the best doctor
+               if(temppool[i]->get_skill(SKILL_FIRSTAID)>maxskill)
+               {
+                  doctor=temppool[i]; // we found a doctor
+                  maxskill=doctor->get_skill(SKILL_FIRSTAID);
+               }
+
+            if(cr->get_attribute(ATTRIBUTE_HEALTH,false)<=0 || !maxskill) // he's dead, Jim
+            {
+               if(maxskill)
+               { // we have a real doctor but the patient is still dead anyway
+                  addstr(doctor->name, gamelog);
+                  addstr(" uses a defibrillator repeatedly but ", gamelog);
+                  addstr(cr->name, gamelog);
+                  addstr(" flatlines.", gamelog);
+               }
+               else
+               {
+                  addstr(doctor->name, gamelog);
+                  if(law[LAW_FREESPEECH]==-2)
+                     addstr(" has a panic attack and [makes a stinky].", gamelog);
+                  else
+                  {
+                     addstr(" has a panic attack and shits ", gamelog);
+                     addstr(doctor->hisher(), gamelog);
+                     addstr(" pants.", gamelog);
+                  }
+               }
+               gamelog.newline();
+               move(++y,0);
+               refresh();
+               getch();
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               if(maxskill)
+               {
+                  addstr("It is a lethal overdose in ", gamelog);
+                  addstr(cr->name, gamelog);
+                  addstr("'s weakened state.", gamelog);
+               }
+               else
+               {
+                  addstr(cr->name, gamelog);
+                  addstr(" dies due to ", gamelog);
+                  addstr(doctor->name, gamelog);
+                  addstr("'s incompetence at first aid.", gamelog);
+               }
+               gamelog.newline();
+               cr->die();
+            }
+            else
+            {
+               addstr(doctor->name, gamelog);
+               if(doctor->skill_check(SKILL_FIRSTAID,DIFFICULTY_CHALLENGING)) // is the doctor AWESOME?
+               {
+                  doctor->train(SKILL_FIRSTAID,5*max(10-doctor->get_skill(SKILL_FIRSTAID),0),10); // can train up to 10
+                  addstr(" deftly rescues it from cardiac arrest with a defibrillator.", gamelog); // not long enough for near-death experience
+                  gamelog.newline();
+                  move(++y,0);
+                  refresh();
+                  getch();
+                  addstr(doctor->name, gamelog);
+                  addstr(" skillfully saves ", gamelog);
+                  addstr(cr->name, gamelog);
+                  addstr(" from any health damage.", gamelog);
+                  cr->adjust_attribute(ATTRIBUTE_HEALTH,+1); // no permanent health damage from a skilled doctor
+                  techniques[TECHNIQUE_DRUGS]=druguse=drugbonus=0; // drugs eliminated from the system (zeroing out 3 variables with 1 line of code)
+               }
+               else
+               {
+                  doctor->train(SKILL_FIRSTAID,5*max(5-doctor->get_skill(SKILL_FIRSTAID),0),5); // can train up to 5
+                  addstr(" clumsily rescues it from cardiac arrest with a defibrillator.", gamelog);
+                  gamelog.newline();
+                  move(++y,0);
+                  refresh();
+                  getch();
+                  addstr(cr->name, gamelog);
+                  if(cr->get_skill(SKILL_RELIGION)) // the patient was out long enough to have a near-death experience
+                     addstr(" had a near-death experience and met God in heaven.", gamelog);
+                  else addstr(" had a near-death experience and met John Lennon.", gamelog);
+                  drugbonus*=2; // the near-death experience doubles the drug bonus, since the hostage is spaced out afterwards
+               }
+               rapport[doctor->id]+=0.5f; // rapport bonus for having life saved by doctor
+               gamelog.newline();
+            }
+         }
+         attack+=drugbonus; // now we finally apply the drug bonus
+         move(++y,0);
          //show_interrogation_sidebar(cr,a);
          refresh();
          getch();
       }
-      if(cr->get_attribute(ATTRIBUTE_HEALTH,false)<=0)cr->die();
 
       if(techniques[TECHNIQUE_BEAT]&&!turned&&cr->alive) // Beating
       {
@@ -623,7 +706,7 @@ void tendhostage(Creature *cr,char &clearformess)
             //reduce rapport with each interrogator
             rapport[temppool[i]->id]-=0.4f;
          }
-         
+
          //Torture captive if lead interrogator has low heart
          //and you funded using extra supplies
          //
@@ -811,7 +894,7 @@ void tendhostage(Creature *cr,char &clearformess)
                }
                gamelog.newline();
                if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
-               
+
                if(LCSrandom(2) && cr->juice>0)
                {
                   cr->juice-=forceroll;
@@ -822,7 +905,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10));
                   if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
                }
-               
+
                if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
                {
                   //show_interrogation_sidebar(cr,a);
@@ -850,7 +933,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   location[cr->worklocation]->hidden=0;
                }
             }
-            else 
+            else
             {
                move(y,0);
                addstr(cr->name, gamelog);
@@ -863,7 +946,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   cr->juice-=forceroll;
                   if(cr->juice<0)cr->juice=0;
                }
-               
+
                if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10+1));
@@ -1209,11 +1292,11 @@ void tendhostage(Creature *cr,char &clearformess)
                      addstr(".", gamelog);break;
                   }
                   gamelog.newline();
-                  
+
                   if(rapport[a->id]>5)turned=1;
                }
             }
-            
+
             if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
             y++;
          }
@@ -1241,7 +1324,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   break;
             }
             gamelog.newline();
-            
+
             a->train(SKILL_RELIGION,cr->get_skill(SKILL_RELIGION)*4);
             y++;
          }
@@ -1312,7 +1395,7 @@ void tendhostage(Creature *cr,char &clearformess)
                cr->juice-=attack;
                if(cr->juice<0)cr->juice=0;
             }
-            
+
             if(cr->get_attribute(ATTRIBUTE_HEART,false)<10)
             {
                cr->adjust_attribute(ATTRIBUTE_HEART,+1);
@@ -1354,7 +1437,7 @@ void tendhostage(Creature *cr,char &clearformess)
                }
                else
                {
-                  addstr(a->name), gamelog;
+                  addstr(a->name, gamelog);
                   addstr(" was able to create a map of the site with this information.", gamelog);
                }
                gamelog.newline();
@@ -1396,7 +1479,7 @@ void tendhostage(Creature *cr,char &clearformess)
             //show_interrogation_sidebar(cr,a);
             refresh();
             getch();
-      
+
             move(y,0);
             addstr(a->name, gamelog);
             addstr(" has been tainted with wisdom!", gamelog);
@@ -1421,7 +1504,7 @@ void tendhostage(Creature *cr,char &clearformess)
       if(!turned&&cr->alive&&cr->get_attribute(ATTRIBUTE_HEART,false)<=1&&LCSrandom(3)&&cr->joindays>6)
       {
          move(++y,0);
-         
+
          //can't commit suicide if restrained
          if(LCSrandom(6)||techniques[TECHNIQUE_RESTRAIN])
          {
@@ -1547,7 +1630,7 @@ void tendhostage(Creature *cr,char &clearformess)
             pool[p]->activity.type=ACTIVITY_NONE;
          }
       }
-      
+
       y+=2;
       liberalize(*cr,false);
       cr->hireid=a->id;
