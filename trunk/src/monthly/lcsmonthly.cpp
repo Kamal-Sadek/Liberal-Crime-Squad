@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -59,7 +59,7 @@ void guardianupdate(char size, char power)
    }
    else if(power==0)
    {
-      addstr("Unfortunately, nobody seems interested."), gamelog;
+      addstr("Unfortunately, nobody seems interested.", gamelog);
    }
    else if(power<5)
    {
@@ -162,7 +162,7 @@ int choosespecialedition(char &clearformess)
    if(loottypeindex.size()==0)return -1;
 
    clearformess=1;
-   
+
    //PICK ONE
    do
    {
@@ -412,7 +412,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring Corporate files ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,newspaper*10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,newspaper*10);
       switch(LCSrandom(5))
@@ -491,7 +491,7 @@ void printnews(short li,short newspaper)
       move(18,1);
       addstr("News denounce the CCS.", gamelog);
       gamelog.newline();
-      
+
       move(20,1);
       addstr("This is the beginning of the end for the Conservative Crime Squad.", gamelog);
       gamelog.nextMessage();
@@ -506,7 +506,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring CIA and other intelligence files ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(6))
@@ -546,7 +546,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring police records ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(6))
@@ -587,7 +587,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story with evidence of a Conservative judge ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(2))
@@ -607,7 +607,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring research papers ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(4))
@@ -631,7 +631,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring prison documents ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       change_public_opinion(VIEW_PRISONS,50);
@@ -658,7 +658,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring cable news memos ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(4))
@@ -685,7 +685,7 @@ void printnews(short li,short newspaper)
       move(6,1);
       addstr("The Liberal Guardian runs a story featuring AM radio plans ", gamelog);
       move(7,1);
-      
+
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
       change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,10);
       switch(LCSrandom(3))
@@ -716,7 +716,7 @@ void printnews(short li,short newspaper)
 void fundreport(char &clearformess)
 {
    if(disbanding)return;
-   
+
    clearformess=1;
    erase();
 
@@ -734,7 +734,7 @@ void fundreport(char &clearformess)
          move(y,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-         
+
          set_color(COLOR_GREEN,COLOR_BLACK,0);
          itoa(ledger.income[i],num,10);
          addstr("$");
@@ -803,7 +803,7 @@ void fundreport(char &clearformess)
          move(y,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-         
+
          set_color(COLOR_RED,COLOR_BLACK,0);
          itoa(ledger.expense[i],num,10);
          addstr("$");

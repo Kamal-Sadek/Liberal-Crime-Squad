@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -35,11 +35,11 @@ Skill::Skill(const char* inputXml)
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-   
+
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-      
+
       if (tag == "associated_attribute")
          associated_attribute = atoi(xml.GetData().c_str());
       else if (tag == "skill")
@@ -57,7 +57,7 @@ string Skill::showXml() const
    xml.AddElem("associated_attribute", associated_attribute);
    xml.AddElem("skill", skill);
    xml.AddElem("value", value);
-   
+
    return xml.GetDoc();
 }
 
@@ -123,7 +123,7 @@ std::string Skill::get_name(int skill_type)
 {
    switch(skill_type)
    {
-   
+
    case SKILL_HANDTOHAND:     return "Martial Arts";
    case SKILL_KNIFE:          return "Knife";
    case SKILL_SWORD:          return "Sword";
@@ -170,11 +170,11 @@ Attribute::Attribute(const char* inputXml)
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-   
+
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-      
+
       if (tag == "attribute")
          attribute = atoi(xml.GetData().c_str());
       else if (tag == "value")
@@ -189,7 +189,7 @@ string Attribute::showXml() const
    xml.IntoElem();
    xml.AddElem("attribute", attribute);
    xml.AddElem("value", value);
-   
+
    return xml.GetDoc();
 }
 
@@ -230,7 +230,7 @@ Creature& Creature::operator=(const Creature& rhs)
       for (int i = 0; i < extra_throwing_weapons.size(); ++i)
          delete extra_throwing_weapons[i];
       extra_throwing_weapons.clear();
-      
+
       copy(rhs);
    }
    return *this;
@@ -267,7 +267,7 @@ void Creature::copy(const Creature& org)
 
    strcpy(name, org.name);
    strcpy(propername, org.propername);
-      
+
    gender_conservative = org.gender_conservative;
    gender_liberal = org.gender_liberal;
    squadid = org.squadid;
@@ -541,7 +541,7 @@ Creature::Creature(const char* inputXml)
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-   
+
    int attributesi = 0;
    int skillsi = 0;
    int skill_experiencei = 0;
@@ -551,7 +551,7 @@ Creature::Creature(const char* inputXml)
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-   
+
       if (tag == "attribute" && attributesi < ATTNUM)
          attributes[attributesi++] = Attribute(xml.GetSubDoc().c_str());
       else if (tag == "skill" && skillsi < SKILLNUM)
@@ -721,7 +721,7 @@ string Creature::showXml() const
       xml.AddSubDoc(weapon->showXml());
    if (armor != NULL)
       xml.AddSubDoc(armor->showXml());
-   
+
    xml.AddElem("name", name);
    xml.AddElem("propername", propername);
    xml.AddElem("gender_conservative", gender_conservative);
@@ -787,14 +787,14 @@ string Creature::showXml() const
    xml.AddElem("worklocation", worklocation);
    xml.AddElem("cantbluff", cantbluff);
    xml.AddElem("base", base);
-   
+
    xml.AddElem("activity");
    xml.IntoElem();
    xml.AddElem("type",activity.type);
    xml.AddElem("arg",activity.arg);
    xml.AddElem("arg2",activity.arg2);
    xml.OutOfElem();
-   
+
    xml.AddElem("carid", carid);
    xml.AddElem("is_driver", is_driver);
    xml.AddElem("pref_carid", pref_carid);
@@ -909,7 +909,7 @@ int Creature::get_attribute(int attribute, bool usejuice) const
 
       ret-=disfigs;
    }
-   
+
    // Finish now if not using juice to avoid bounds check.
    if(!usejuice)return ret;
 
@@ -932,7 +932,7 @@ int Creature::get_attribute(int attribute, bool usejuice) const
          else if(juice<1000)ret=static_cast<int>(ret*1.4+5); // Liberal Guardian
          else ret=static_cast<int>(ret*1.5+6); // Elite Liberal
       }
-      
+
       // Debilitations for temporary injuries in attributes based
       // on physical appearance or performance, because people who
       // are bleeding all over are less strong, agile, and charismatic
@@ -1062,7 +1062,7 @@ int Creature::skill_roll(int skill)
    int skill_value = skills[skill].value;
    // plus the skill's associate attribute
    int attribute_value = get_attribute(skills[skill].get_attribute(),true);
-   
+
    int adjusted_attribute_value;
    switch(skill)
    {
@@ -1075,7 +1075,7 @@ int Creature::skill_roll(int skill)
       adjusted_attribute_value = skill_value;
       break;
    }
-      
+
    // add the adjusted attribute and skill to get the adjusted skill total
    // that will be rolled on
    int return_value = roll_check(skill_value + adjusted_attribute_value);
@@ -1110,7 +1110,7 @@ int Creature::skill_roll(int skill)
 
          return_value *= stealth;
          return_value /= 2;
-         
+
       }
       break;
    case SKILL_SEDUCTION:
@@ -1217,7 +1217,7 @@ void Creature::train(int trainedskill, int experience, int upto)
 
    int abovenextlevel;
    // only allow gaining experience on the new level if it doesn't put us over a level limit
-   if (skills[trainedskill].value >= (upto - 1) || 
+   if (skills[trainedskill].value >= (upto - 1) ||
        skills[trainedskill].value >= (skill_cap(trainedskill,true) - 1))
      abovenextlevel = 0;
    else
@@ -1280,7 +1280,7 @@ bool Creature::enemy()
 void conservatise(Creature &cr)
 {
    if(cr.align==ALIGN_LIBERAL && cr.juice>0)cr.juice=0;
-   
+
    cr.align=ALIGN_CONSERVATIVE;
 
    switch(cr.type)
@@ -1503,7 +1503,7 @@ UniqueCreatures::UniqueCreatures(const char * inputXml)
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-   
+
       if (tag == "CEO" || tag == "Pres")
       {
          xml.IntoElem();
@@ -1531,7 +1531,7 @@ string UniqueCreatures::showXml() const
    CMarkup xml;
    xml.AddElem("uniquecreatures");
    xml.IntoElem();
-   
+
    xml.AddElem("CEO_ID", CEO_ID);
    xml.AddElem("CEO_state", CEO_state);
    xml.AddElem("CEO");
@@ -1540,7 +1540,7 @@ string UniqueCreatures::showXml() const
    xml.AddElem("Pres_state", CEO_state);
    xml.AddElem("Pres");
    xml.AddChildSubDoc(Pres_.showXml());
-   
+
    return xml.GetDoc();
 }
 
@@ -1558,17 +1558,18 @@ Creature& UniqueCreatures::President()
    return Pres_;
 }
 
-const char *Creature::heshe()
+const char* Creature::heshe()
 {
-	if(gender_liberal == GENDER_MALE)
-	{
-		return "he";
-	}
-	if(gender_liberal == GENDER_FEMALE)
-	{
-		return "she";
-	}
+	if(gender_liberal == GENDER_MALE)return "he";
+	if(gender_liberal == GENDER_FEMALE)return "she";
 	return "they";
+}
+
+const char* Creature::hisher()
+{
+	if(gender_liberal == GENDER_MALE)return "his";
+	if(gender_liberal == GENDER_FEMALE)return "her";
+	return "their";
 }
 
 Weapon& Creature::weapon_none()
@@ -1619,7 +1620,7 @@ bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
    if (weapon != NULL) //Is the creature armed?
    {
       bool reload_allowed = can_reload();
-      
+
       r = weapon->get_attack(force_ranged,force_melee,reload_allowed) != NULL //Any attacks possible under circumstances?
           && weapon->get_attack(force_ranged,force_melee,reload_allowed)->ranged //Is the attacked ranged?
           && (!weapon->get_attack(force_ranged,force_melee,reload_allowed)->uses_ammo //Does it not use ammo
@@ -1636,10 +1637,10 @@ bool Creature::can_reload() const
 {
    //return !clips.empty(); //Can not be sure creature only has appropriate clips.
    bool can_reload = false;
-   
+
    for (unsigned i = 0; i < clips.size() && !can_reload; ++i)
       can_reload = get_weapon().acceptable_ammo(*clips[i]);
-   
+
    return can_reload;
 }
 
@@ -1677,7 +1678,7 @@ bool Creature::reload(bool wasteful)
    }
    else
       r = false;
-   
+
    return r;
 }
 
@@ -1713,19 +1714,19 @@ bool Creature::take_clips(Item& clip, int number)
       r = take_clips(static_cast<Clip&>(clip),number); //cast -XML
    else
       r = false;
-   
+
    return r;
 }
 
 bool Creature::take_clips(Clip& clip, int number)
 {
    bool r;
-   
+
    if (number + count_clips() >= 9)
       number = 9 - count_clips();
    if (number > clip.get_number())
       number = clip.get_number();
-   
+
    if (number > 0 && get_weapon().acceptable_ammo(clip))
    {
       Clip* c = clip.split(number);
@@ -1734,7 +1735,7 @@ bool Creature::take_clips(Clip& clip, int number)
    }
    else
       r = false;
-   
+
    return r;
 }
 
@@ -1768,7 +1769,7 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
                extra_throwing_weapons.pop_back();
             }
          }
-         
+
          weapon = w.split(1);
 
          if (lootpile == NULL)
@@ -1813,7 +1814,7 @@ void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
          delete weapon;
       weapon = NULL;
    }
-   
+
    while (!extra_throwing_weapons.empty())
    {
       if (lootpile != NULL)
@@ -1822,7 +1823,7 @@ void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
          delete extra_throwing_weapons.back();
       extra_throwing_weapons.pop_back();
    }
-  
+
    while (!clips.empty())
    {
       if (lootpile != NULL)
@@ -1912,7 +1913,7 @@ string Creature::get_weapon_string(int subtype) const
    }
    else
       r = "None";
-   
+
    return r;
 }
 

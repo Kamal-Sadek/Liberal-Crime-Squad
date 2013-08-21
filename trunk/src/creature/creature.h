@@ -314,7 +314,7 @@ public:
    short hiding;
    short trainingtime;
    short trainingsubject;
-   Creature *prisoner;
+   Creature* prisoner;
    short sentence;
    char confessions;
    char deathpenalty;
@@ -432,7 +432,8 @@ public:
    bool reports_to_police();
    /* finds the cap for a particular skill */
    int skill_cap(int skill, bool use_juice);
-   const char *heshe();
+   const char* heshe();
+   const char* hisher();
 };
 
 enum uniqueCreatureData

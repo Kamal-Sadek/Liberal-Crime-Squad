@@ -2005,7 +2005,7 @@ void special_security(bool metaldetect)
    else
    {
       if(metaldetect) addstr("The squad steps into a metal detector.", gamelog);
-      else addstr("This door is guarded."), gamelog;
+      else addstr("This door is guarded.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=SPECIAL_SECURITY_SECONDVISIT;
    }

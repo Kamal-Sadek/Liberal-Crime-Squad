@@ -32,7 +32,7 @@
 
     
     <loottype idname="LOOT_CELLPHONE">
-        <name>Cellphone</name>
+        <name>Smartphone</name>
         <fencevalue>20</fencevalue>
     </loottype>
     

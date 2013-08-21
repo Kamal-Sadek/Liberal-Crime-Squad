@@ -1717,12 +1717,7 @@ void crashfriendlycar(int v)
             switch(LCSrandom(3))
             {
                case 0:addstr(" slumps in ", gamelog);
-                  if(activesquad->squad[p]->gender_liberal==GENDER_MALE)
-                     addstr("his", gamelog);
-                  else if(activesquad->squad[p]->gender_liberal==GENDER_FEMALE)
-                     addstr("her", gamelog);
-                  else
-                     addstr("their", gamelog);
+                  addstr(activesquad->squad[p]->hisher(), gamelog);
                   addstr(" seat, out cold, and dies.", gamelog);break;
                case 1:addstr(" is crushed by the impact.", gamelog);break;
                case 2:addstr(" struggles free of the car, then collapses lifelessly.", gamelog);break;
@@ -1760,12 +1755,7 @@ void crashfriendlycar(int v)
                   else
                      addstr("car frame", gamelog);
                   addstr(" and struggles to ", gamelog);
-                  if(activesquad->squad[p]->gender_liberal==GENDER_MALE)
-                     addstr("his", gamelog);
-                  else if(activesquad->squad[p]->gender_liberal==GENDER_FEMALE)
-                     addstr("her", gamelog);
-                  else
-                     addstr("their", gamelog);
+                  addstr(activesquad->squad[p]->hisher(), gamelog);
                   if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
                      addstr(" wheelchair.", gamelog);
                   else
