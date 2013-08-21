@@ -248,10 +248,8 @@ int yourscore=-1;
 
 int main(int argc, char* argv[])
 {
+   init_console(); // do this FIRST
    //start curses
-#ifdef CH_USE_UNICODE
-   setup_unicode();
-#endif
    initscr();
 
    gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog.
