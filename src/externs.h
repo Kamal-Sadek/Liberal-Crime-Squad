@@ -66,6 +66,10 @@ extern short interface_pgdn;
 
 extern bool autosave;
 
+#ifdef WIN32
+extern bool fixcleartype;
+#endif
+
 extern int day;
 
 extern short attitude[VIEWNUM];

@@ -49,6 +49,19 @@ void setconfigoption(string name, string value)
       if((value == "off") or (value == "0") or (value == "false") or (value == "no"))
          autosave=false;
    }
+   #ifdef WIN32
+   else if(name == "fixcleartype")
+   {
+      OSVERSIONINFO osvi;
+      BOOL isWindowsXPorLater;
+      ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+      osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+      GetVersionEx(&osvi);
+      isWindowsXPorLater=((osvi.dwMajorVersion>5)||((osvi.dwMajorVersion==5)&&(osvi.dwMinorVersion>=1)));
+      if((value == "on") or (value == "1") or (value == "true") or (value == "yes"))
+         fixcleartype=(bool)isWindowsXPorLater;
+   }
+   #endif
 }
 
 void loadinitfile(void)
