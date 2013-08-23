@@ -505,38 +505,38 @@ void getlawflag(char *str,int type)
 {
    switch(type)
    {
-   case LAWFLAG_KIDNAPPING:strcpy(str,"Kidnapping");break;
-   case LAWFLAG_MURDER:strcpy(str,"Murder");break;
-   case LAWFLAG_THEFT:strcpy(str,"Theft");break;
-   case LAWFLAG_BREAKING:strcpy(str,"Breaking and entering");break;
-   case LAWFLAG_TERRORISM:strcpy(str,"Terrorism");break;
-   case LAWFLAG_JURY:strcpy(str,"Jury tampering");break;
    case LAWFLAG_TREASON:strcpy(str,"Treason");break;
+   case LAWFLAG_TERRORISM:strcpy(str,"Terrorism");break;
+   case LAWFLAG_MURDER:strcpy(str,"Murder");break;
+   case LAWFLAG_KIDNAPPING:strcpy(str,"Kidnapping");break;
+   case LAWFLAG_BANKROBBERY:strcpy(str,"Bank robbery");break;
+   case LAWFLAG_ARSON:strcpy(str,"Arson");break;
+   case LAWFLAG_BURNFLAG:strcpy(str,(law[LAW_FLAGBURNING]==-2?"Flag Murder":"Flag burning"));break;
+   case LAWFLAG_SPEECH:strcpy(str,"Harmful speech");break;
+   case LAWFLAG_BROWNIES:strcpy(str,"Drug dealing");break;
    case LAWFLAG_ESCAPED:strcpy(str,"Escaping prison");break;
    case LAWFLAG_HELPESCAPE:strcpy(str,"Releasing prisoners");break;
-   case LAWFLAG_RESIST:strcpy(str,"Resisting arrest");break;
-   case LAWFLAG_BURNFLAG:strcpy(str,"Flag burning");break;
-   case LAWFLAG_SPEECH:strcpy(str,"Harmful speech");break;
-   case LAWFLAG_VANDALISM:strcpy(str,"Vandalism");break;
-   case LAWFLAG_ASSAULT:strcpy(str,"Assault");break;
-   case LAWFLAG_ARMEDASSAULT:strcpy(str,"Armed assault");break;
-   case LAWFLAG_CARTHEFT:strcpy(str,"Grand theft auto");break;
-   case LAWFLAG_INFORMATION:strcpy(str,"Hacking");break;
-   case LAWFLAG_COMMERCE:strcpy(str,"Electronic sabotage");break;
-   case LAWFLAG_CCFRAUD:strcpy(str,"Credit card fraud");break;
-   case LAWFLAG_BROWNIES:strcpy(str,"Drug dealing");break;
-   case LAWFLAG_BURIAL:strcpy(str,"Unlawful burial");break;
-   case LAWFLAG_PROSTITUTION:strcpy(str,"Prostitution");break;
-   case LAWFLAG_DISTURBANCE:strcpy(str,"Disturbing the peace");break;
-   case LAWFLAG_HIREILLEGAL:strcpy(str,"Hiring illegal aliens");break;
+   case LAWFLAG_JURY:strcpy(str,"Jury tampering");break;
    case LAWFLAG_RACKETEERING:strcpy(str,"Racketeering");break;
-   case LAWFLAG_LOITERING:strcpy(str,"Loitering");break;
-   //case LAWFLAG_GUNCARRY:strcpy(str,"Using illegal weapons");break;
-   //case LAWFLAG_GUNUSE:strcpy(str,"Firing illegal weapons");break;
-   case LAWFLAG_ARSON:strcpy(str,"Arson");break;
-   case LAWFLAG_PUBLICNUDITY:strcpy(str,"Public nudity");break;
    case LAWFLAG_EXTORTION:strcpy(str,"Extortion");break;
-   case LAWFLAG_BANKROBBERY:strcpy(str,"Bank robbery");break;
+   case LAWFLAG_ARMEDASSAULT:strcpy(str,"Armed assault");break;
+   case LAWFLAG_ASSAULT:strcpy(str,"Assault");break;
+   case LAWFLAG_CARTHEFT:strcpy(str,"Grand theft auto");break;
+   case LAWFLAG_CCFRAUD:strcpy(str,"Credit card fraud");break;
+   case LAWFLAG_THEFT:strcpy(str,"Theft");break;
+   case LAWFLAG_PROSTITUTION:strcpy(str,"Prostitution");break;
+   case LAWFLAG_HIREILLEGAL:strcpy(str,(law[LAW_IMMIGRATION]<1?"Hiring illegal aliens":"Hiring undocumented workers"));break;
+   //case LAWFLAG_GUNUSE:strcpy(str,"Firing illegal weapons");break;
+   //case LAWFLAG_GUNCARRY:strcpy(str,"Carrying illegal weapons");break;
+   case LAWFLAG_COMMERCE:strcpy(str,"Electronic sabotage");break;
+   case LAWFLAG_INFORMATION:strcpy(str,"Hacking");break;
+   case LAWFLAG_BURIAL:strcpy(str,"Unlawful burial");break;
+   case LAWFLAG_BREAKING:strcpy(str,"Breaking and entering");break;
+   case LAWFLAG_VANDALISM:strcpy(str,"Vandalism");break;
+   case LAWFLAG_RESIST:strcpy(str,"Resisting arrest");break;
+   case LAWFLAG_DISTURBANCE:strcpy(str,"Disturbing the peace");break;
+   case LAWFLAG_PUBLICNUDITY:strcpy(str,"Public nudity");break;
+   case LAWFLAG_LOITERING:strcpy(str,"Loitering");break;
    default:strcpy(str,"Finding bugs");break;
    }
 }

@@ -158,6 +158,20 @@ void trial(Creature &g)
          addstr("terrorism", gamelog);
          breaker[LAWFLAG_TERRORISM]=0;
       }
+      else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
+      {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
+                                      // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
+                                      // Possibly people you accidentally kill when shooting at conservatives. -- LK
+         if(g.crimes_suspected[LAWFLAG_MURDER]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_MURDER],str,10);
+            addstr(str, gamelog);
+            addstr(" counts of ", gamelog);
+         }
+         addstr("first degree murder", gamelog);
+         breaker[LAWFLAG_MURDER]=0;
+      }
       else if(breaker[LAWFLAG_KIDNAPPING])
       {
          if(g.crimes_suspected[LAWFLAG_KIDNAPPING]>1)
@@ -169,6 +183,30 @@ void trial(Creature &g)
          }
          addstr("kidnapping", gamelog);
          breaker[LAWFLAG_KIDNAPPING]=0;
+      }
+      else if(breaker[LAWFLAG_BANKROBBERY])
+      {
+         if(g.crimes_suspected[LAWFLAG_BANKROBBERY]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_BANKROBBERY],str,10);
+            addstr(str, gamelog);
+            addstr(" counts of ", gamelog);
+         }
+         addstr("bank robbery", gamelog);
+         breaker[LAWFLAG_BANKROBBERY]=0;
+      }
+      else if(breaker[LAWFLAG_ARSON])
+      {
+         if(g.crimes_suspected[LAWFLAG_ARSON]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_ARSON],str,10);
+            addstr(str, gamelog);
+            addstr(" counts of ", gamelog);
+         }
+         addstr("arson", gamelog);
+         breaker[LAWFLAG_ARSON]=0;
       }
       else if(breaker[LAWFLAG_BURNFLAG] && law[LAW_FLAGBURNING] <= 0)
       {
@@ -196,7 +234,7 @@ void trial(Creature &g)
             addstr(str, gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("harmful speech", gamelog);
+         addstr("sedition", gamelog);
          breaker[LAWFLAG_SPEECH]=0;
       }
       else if(breaker[LAWFLAG_BROWNIES])
@@ -208,7 +246,7 @@ void trial(Creature &g)
             addstr(str, gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("distribution of a controlled substance", gamelog);
+         addstr("sale and distribution of a controlled substance", gamelog);
          breaker[LAWFLAG_BROWNIES]=0;
          x=2;
       }
@@ -255,32 +293,6 @@ void trial(Creature &g)
          addstr("racketeering", gamelog);
          breaker[LAWFLAG_RACKETEERING]=0;
       }
-      else if(breaker[LAWFLAG_ARMEDASSAULT])
-      {
-         if(g.crimes_suspected[LAWFLAG_ARMEDASSAULT]>1)
-         {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ARMEDASSAULT],str,10);
-            addstr(str, gamelog);
-            addstr(" counts of ", gamelog);
-         }
-         addstr("felony assault", gamelog);
-         breaker[LAWFLAG_ARMEDASSAULT]=0;
-      }
-      else if(breaker[LAWFLAG_MURDER])//XXX: How about the addition of a `manslaughter` charge? -- LK
-      {                               //     Manslaughter is murder without forethought or malice, IIRC. -- LK
-                                      // Well, I can't think of an instance of this in LCS besides fruit stand employees. -Fox
-                                      // Possibly people you accidentally kill when shooting at conservatives. -- LK
-         if(g.crimes_suspected[LAWFLAG_MURDER]>1)
-         {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_MURDER],str,10);
-            addstr(str, gamelog);
-            addstr(" counts of ", gamelog);
-         }
-         addstr("murder", gamelog);
-         breaker[LAWFLAG_MURDER]=0;
-      }
       else if(breaker[LAWFLAG_EXTORTION])
       {
          if(g.crimes_suspected[LAWFLAG_EXTORTION]>1)
@@ -293,17 +305,17 @@ void trial(Creature &g)
          addstr("extortion", gamelog);
          breaker[LAWFLAG_EXTORTION]=0;
       }
-      else if(breaker[LAWFLAG_ARSON])
+      else if(breaker[LAWFLAG_ARMEDASSAULT])
       {
-         if(g.crimes_suspected[LAWFLAG_ARSON]>1)
+         if(g.crimes_suspected[LAWFLAG_ARMEDASSAULT]>1)
          {
             char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ARSON],str,10);
+            itoa(g.crimes_suspected[LAWFLAG_ARMEDASSAULT],str,10);
             addstr(str, gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("arson", gamelog);
-         breaker[LAWFLAG_ARSON]=0;
+         addstr("assault with a deadly weapon", gamelog);
+         breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
       else if(breaker[LAWFLAG_ASSAULT])
       {
@@ -317,32 +329,6 @@ void trial(Creature &g)
          addstr("misdemeanor assault", gamelog);
          breaker[LAWFLAG_ASSAULT]=0;
       }
-      /*else if(breaker[LAWFLAG_GUNCARRY])
-      {
-         if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
-         {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_GUNCARRY],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
-         addstr("possession of an illegal weapon");
-         breaker[LAWFLAG_GUNCARRY]=0;
-         x=2;
-      }
-      else if(breaker[LAWFLAG_GUNUSE])
-      {
-         if(g.crimes_suspected[LAWFLAG_GUNUSE]>1)
-         {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_GUNUSE],str,10);
-            addstr(str);
-            addstr(" counts of ");
-         }
-         addstr("firing an illegal weapon");
-         breaker[LAWFLAG_GUNUSE]=0;
-         x=2;
-      }*/
       else if(breaker[LAWFLAG_CARTHEFT])
       {
          if(g.crimes_suspected[LAWFLAG_CARTHEFT]>1)
@@ -356,18 +342,6 @@ void trial(Creature &g)
          breaker[LAWFLAG_CARTHEFT]=0;// this should be `Grand Theft Auto`
       }                              //                 -- LK
                                           // We'll just make it grand theft auto anyway :) -Fox
-      else if(breaker[LAWFLAG_BANKROBBERY])
-      {
-         if(g.crimes_suspected[LAWFLAG_BANKROBBERY]>1)
-         {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BANKROBBERY],str,10);
-            addstr(str, gamelog);
-            addstr(" counts of ", gamelog);
-         }
-         addstr("bank robbery", gamelog);
-         breaker[LAWFLAG_BANKROBBERY]=0;
-      }
       else if(breaker[LAWFLAG_CCFRAUD])
       {
          if(g.crimes_suspected[LAWFLAG_CCFRAUD]>1)
@@ -389,7 +363,7 @@ void trial(Creature &g)
             addstr(str, gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("theft", gamelog);
+         addstr("petty larceny", gamelog);
          breaker[LAWFLAG_THEFT]=0;
       }
       else if(breaker[LAWFLAG_PROSTITUTION])
@@ -413,10 +387,36 @@ void trial(Creature &g)
             addstr(str, gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("hiring an illegal alien", gamelog);
+         addstr((law[LAW_IMMIGRATION]<1?"hiring an illegal alien":"hiring an undocumented worker"), gamelog);
          breaker[LAWFLAG_HIREILLEGAL]=0;
          x=2;
       }
+      /*else if(breaker[LAWFLAG_GUNUSE])
+      {
+         if(g.crimes_suspected[LAWFLAG_GUNUSE]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_GUNUSE],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("firing an illegal weapon");
+         breaker[LAWFLAG_GUNUSE]=0;
+         x=2;
+      }
+      else if(breaker[LAWFLAG_GUNCARRY])
+      {
+         if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
+         {
+            char str[10];
+            itoa(g.crimes_suspected[LAWFLAG_GUNCARRY],str,10);
+            addstr(str);
+            addstr(" counts of ");
+         }
+         addstr("possession of an illegal weapon");
+         breaker[LAWFLAG_GUNCARRY]=0;
+         x=2;
+      }*/
       else if(breaker[LAWFLAG_COMMERCE])
       {
          if(g.crimes_suspected[LAWFLAG_COMMERCE]>1)
