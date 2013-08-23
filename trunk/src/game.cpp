@@ -74,9 +74,6 @@
 #include "configfile.h"
 #include "sitemode/sitemap.h"
 #include <iostream>
-#ifdef WIN32
-#include <windows.h>
-#endif
 
 Log gamelog; //The gamelog.
 
@@ -251,14 +248,6 @@ int yourscore=-1;
 
 #ifdef WIN32
 bool fixcleartype=false;
-#define  FE_FONTSMOOTHINGSTANDARD           1
-#define  FE_FONTSMOOTHINGCLEARTYPE          2
-#define  SPI_GETFONTSMOOTHINGTYPE      0x200A
-#define  SPI_SETFONTSMOOTHINGTYPE      0X200B
-#define  SPI_GETFONTSMOOTHINGCONTRAST  0X200C
-#define  SPI_SETFONTSMOOTHINGCONTRAST  0X200D
-BOOL FontSmoothingEnabled;
-UINT TypeOfFontSmoothing;
 #endif
 
 int main(int argc, char* argv[])
@@ -322,16 +311,6 @@ int main(int argc, char* argv[])
    //getch();
 
    loadinitfile();
-
-   #ifdef WIN32
-   if(fixcleartype)
-	{
-      SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &FontSmoothingEnabled, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-      SystemParametersInfo(SPI_SETFONTSMOOTHING, TRUE, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-      SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &TypeOfFontSmoothing, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-      SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE, 0, (void*)FE_FONTSMOOTHINGSTANDARD, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-	}
-   #endif
 
    //addstr("Loading sitemaps.txt... ");
    //refresh();
@@ -477,14 +456,6 @@ int main(int argc, char* argv[])
 
    mode_title();
 
-   #ifdef WIN32
-   if(fixcleartype)
-   {
-      SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE, 0, (void*)TypeOfFontSmoothing, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-      SystemParametersInfo(SPI_SETFONTSMOOTHING, FontSmoothingEnabled, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
-   }
-   #endif
-
    //deinitialize curses
    end_game();
 
@@ -559,6 +530,10 @@ void delete_and_clear(Container& c)
 /* Free memory and exit the game */
 void end_game(int err)
 {
+   #ifdef WIN32
+   end_cleartype_fix(); // won't do anything unless fixcleartype is true
+   #endif
+
    delete_and_clear(location);
    delete_and_clear(squad);
    delete_and_clear(weapontype);

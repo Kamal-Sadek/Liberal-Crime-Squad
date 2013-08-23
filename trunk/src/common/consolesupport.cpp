@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 #define CONSOLE_SUPPORT
 //#include <includes.h>
 #include <externs.h>
+#include <lcsio.h>
 
 #if defined(USE_NCURSES) || defined (USE_NCURSES_W)
 #include <term.h>
@@ -258,3 +259,61 @@ void init_console()
    setup_unicode();
    #endif
 }
+
+#ifdef WIN32
+#define  FE_FONTSMOOTHINGSTANDARD           1
+#define  FE_FONTSMOOTHINGCLEARTYPE          2
+#define  SPI_GETFONTSMOOTHINGTYPE      0x200A
+#define  SPI_SETFONTSMOOTHINGTYPE      0X200B
+#define  SPI_GETFONTSMOOTHINGCONTRAST  0X200C
+#define  SPI_SETFONTSMOOTHINGCONTRAST  0X200D
+BOOL FontSmoothingEnabled;
+UINT TypeOfFontSmoothing;
+
+void begin_cleartype_fix() // execute this function after loading settings from init.txt, but before the user is actively playing the game
+{
+   if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
+	{
+      // first we get the font smoothing parameters from Windows so that the old settings are backed up
+      SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &FontSmoothingEnabled, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+      SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &TypeOfFontSmoothing, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+      // now we see if the game crashed or exited prematurely the last time, and load the font smoothing parameters from the file if
+      //     that is the case, to ensure that the user's original font smoothing settings will be restored when they exit the game
+      FILE *h;
+      h=LCSOpenFile("cleartype.dat", "rb", LCSIO_PRE_HOME);
+      if(h!=NULL)
+      {
+         fread(&FontSmoothingEnabled,sizeof(BOOL),1,h);
+         fread(&TypeOfFontSmoothing,sizeof(UINT),1,h);
+         LCSCloseFile(h);
+      }
+      // now that we know for sure what the original settings were, and both the variables FontSmoothingEnabled and
+      // TypeOfFontSmoothing are guaranteed to be the original settings prior to any modifications by this game, we can
+      // back the original settings up to disk, in case the game crashes or is exited prematurely
+      h=LCSOpenFile("cleartype.dat", "wb", LCSIO_PRE_HOME);
+      if(h!=NULL)
+      {
+         fwrite(&FontSmoothingEnabled,sizeof(BOOL),1,h);
+         fwrite(&TypeOfFontSmoothing,sizeof(UINT),1,h);
+         LCSCloseFile(h);
+         // now that everything is safely backed up, we set the font smoothing parameters to be optimal for Liberal Crime Squad
+         // ClearType messes things up and causes visual artifacts in Win32 Console Apps like this game so it's going to be off
+         // but we'll have standard font smoothing on because it looks really good with Lucida Console, and doesn't affect raster fonts at all
+         SystemParametersInfo(SPI_SETFONTSMOOTHING, TRUE, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+         SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE, 0, (void*)FE_FONTSMOOTHINGSTANDARD, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+      }
+	}
+}
+
+void end_cleartype_fix() // execute this function after the user is done playing the game, but before the program closes
+{
+   if(fixcleartype) // only do anything if fixcleartype was set in init.txt and we're running Windows XP or later
+   {
+      // restore the original settings the user had for font smoothing
+      SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE, 0, (void*)TypeOfFontSmoothing, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+      SystemParametersInfo(SPI_SETFONTSMOOTHING, FontSmoothingEnabled, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+      // now that the settings are safely restored, it's time to delete the temporary backup of the font smoothing settings
+      LCSDeleteFile("cleartype.dat",LCSIO_PRE_HOME);
+   }
+}
+#endif
