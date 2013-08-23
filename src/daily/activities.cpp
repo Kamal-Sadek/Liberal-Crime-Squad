@@ -2117,6 +2117,12 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                if(!LCSrandom(4))
                {
+                  newsstoryst *ns=new newsstoryst;
+                     ns->type=NEWSSTORY_WANTEDARREST; // should probably create a NEWSSTORY_TROUBLEARREST and implement it fully
+                     ns->loc=-1;                      // but this will have to do for now
+                     ns->positive=0;
+                  newsstory.push_back(ns);
+                  sitestory=ns;
                   attemptarrest(*trouble[t],"causing trouble",clearformess);
                }
                else
