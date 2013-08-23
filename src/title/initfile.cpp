@@ -21,6 +21,9 @@ This file is part of Liberal Crime Squad.
 #include "lcsio.h"
 #include "externs.h"
 #include "includes.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 void setconfigoption(string name, string value)
 {
@@ -50,16 +53,16 @@ void setconfigoption(string name, string value)
          autosave=false;
    }
    #ifdef WIN32
-   else if(name == "fixcleartype")
+   else if(name == "fixcleartype") // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false
    {
-      OSVERSIONINFO osvi;
-      BOOL isWindowsXPorLater;
-      ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-      osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-      GetVersionEx(&osvi);
-      isWindowsXPorLater=((osvi.dwMajorVersion>5)||((osvi.dwMajorVersion==5)&&(osvi.dwMinorVersion>=1)));
       if((value == "on") or (value == "1") or (value == "true") or (value == "yes"))
-         fixcleartype=(bool)isWindowsXPorLater;
+      { // it's set to true in init.txt, so now we check if we're running Windows XP or later, since earlier versions don't have ClearType
+         OSVERSIONINFO osvi;
+         ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+         GetVersionEx(&osvi);
+         fixcleartype=((osvi.dwMajorVersion>5)||((osvi.dwMajorVersion==5)&&(osvi.dwMinorVersion>=1))); // Windows XP is version 5.1
+      }
    }
    #endif
 }
@@ -89,4 +92,8 @@ void loadinitfile(void)
       }
    }
    file.close();
+
+   #ifdef WIN32
+   begin_cleartype_fix(); // won't do anything unless fixcleartype is true
+   #endif
 }
