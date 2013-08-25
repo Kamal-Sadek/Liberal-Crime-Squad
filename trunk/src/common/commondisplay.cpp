@@ -976,9 +976,14 @@ void fullstatus(int p)
       }
       else if(c=='g')
       {
-         activesquad->squad[p]->gender_liberal++;
-         if(activesquad->squad[p]->gender_liberal > 2)
-            activesquad->squad[p]->gender_liberal = 0;
+         if(law[LAW_GAY]==-2) // "fixing" gender label has whole different meaning when Gay Rights is C+
+            activesquad->squad[p]->gender_liberal=activesquad->squad[p]->gender_conservative;
+         else
+         {
+            activesquad->squad[p]->gender_liberal++;
+            if(activesquad->squad[p]->gender_liberal > 2)
+               activesquad->squad[p]->gender_liberal = 0;
+         }
          continue;
       }
       break;
@@ -1123,17 +1128,29 @@ void printliberalstats(Creature &cr)
    addstr(" (Age ");
    itoa(cr.age,num,10);
    addstr(num);
-   addstr(", ");
-   // Add Liberal gender
-   if(cr.gender_liberal == GENDER_FEMALE)
-      addstr("Female");
-   else if(cr.gender_liberal == GENDER_MALE)
-      addstr("Male");
+   // Assess their gender Liberally unless Gay Rights is C+
+   if(cr.gender() == GENDER_MALE)
+      addstr(", Male");
+   else if(cr.gender() == GENDER_FEMALE)
+      addstr(", Female");
    else
-      addstr("Androgynous");
-   // Note if there's some conflict with Conservative society's perceptions
-   //if(cr.gender_liberal != cr.gender_conservative)
-   //   addstr("*");
+      switch(law[LAW_GAY])
+      {
+      case -2:
+         addstr(", Freak of Nature");
+      case -1:
+         addstr(", Ambiguous");
+      case 0:
+      default:
+         addstr(", Androgynous");
+      case 1:
+         addstr(", Transgender");
+      case 2:
+         addstr(", Genderqueer");
+      }
+   // Note if there's some conflict with Conservative society's perceptions if gay rights < 1
+   if(cr.gender_liberal != cr.gender_conservative && cr.gender() != GENDER_NEUTRAL && law[LAW_GAY]<1)
+      addstr("*");
    addstr(")");
 
    move(3,46);

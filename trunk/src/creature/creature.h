@@ -251,7 +251,7 @@ public:
    string showXml() const;
    int value;
    void set_type(int skill_type);
-   int get_attribute();
+   int get_attribute() const;
    static std::string get_name(int skill_type);
    static CreatureAttribute get_associated_attribute(int skill_type);
 };
@@ -276,22 +276,22 @@ private:
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
    int skill_experience[SKILLNUM];
-   int roll_check(int skill);
-   static Weapon& weapon_none();
-   static Armor& armor_none();
+   static int roll_check(int skill);
+   Weapon& weapon_none() const;
+   Armor& armor_none() const;
    Weapon* weapon;
    Armor* armor;
 public:
    void set_attribute(int attribute, int amount);
    int get_attribute(int attribute, bool use_juice) const;
    void adjust_attribute(int attribute, int amount);
-   int attribute_roll(int attribute);
-   bool attribute_check(int attribute, int difficulty);
+   int attribute_roll(int attribute) const;
+   bool attribute_check(int attribute, int difficulty) const;
 
    void set_skill(int skill, int amount);
    int get_skill(int skill) const;
-   int skill_roll(int skill);
-   bool skill_check(int skill, int difficulty);
+   int skill_roll(int skill) const;
+   bool skill_check(int skill, int difficulty) const;
 
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
@@ -329,20 +329,18 @@ public:
    void train(int trainedskill, int experience);
    void train(int trainedskill, int experience, int upto);
    void skill_up();
-   int get_skill_ip(int skill);
-   std::string get_type_name();
+   int get_skill_ip(int skill) const;
+   std::string get_type_name() const;
 
-   bool enemy();
+   bool enemy() const;
 
    int stunned;
 
    deque<Weapon*> extra_throwing_weapons;
    deque<Clip*> clips;
    bool has_thrown_weapon;
-   Weapon& get_weapon();
-   const Weapon& get_weapon() const;
-   Armor& get_armor();
-   const Armor& get_armor() const;
+   Weapon& get_weapon() const;
+   Armor& get_armor() const;
    bool will_do_ranged_attack(bool force_ranged,bool force_melee) const; //force_melee is likely unnecessary. -XML
    bool can_reload() const;
    bool will_reload(bool force_ranged, bool force_melee) const;
@@ -399,10 +397,10 @@ public:
    explicit Creature(const char* inputXml);
    string showXml() const;
 
-   bool is_active_liberal(void);
-   bool is_imprisoned(void);
-   bool is_lcs_sleeper(void);
-   char canwalk(void)
+   bool is_active_liberal(void) const;
+   bool is_imprisoned(void) const;
+   bool is_lcs_sleeper(void) const;
+   char canwalk(void) const
    {
       if(!alive)return 0;
       int legok=2;
@@ -421,19 +419,20 @@ public:
    //int attval(short a,char usejuice=1);
 
    /* are they interested in talking about the issues? */
-   bool talkreceptive();
+   bool talkreceptive() const;
    /* are the characters close enough in age to date? */
-   bool can_date(Creature &a);
+   bool can_date(const Creature &a) const;
    /* rolls up a proper name for a creature */
    void namecreature();
    bool dontname;
    /* can turn the tables on datenapping */
-   bool kidnap_resistant();
-   bool reports_to_police();
+   bool kidnap_resistant() const;
+   bool reports_to_police() const;
    /* finds the cap for a particular skill */
-   int skill_cap(int skill, bool use_juice);
-   const char* heshe();
-   const char* hisher();
+   int skill_cap(int skill, bool use_juice) const;
+   char gender() const;
+   const char* heshe() const;
+   const char* hisher() const;
 };
 
 enum uniqueCreatureData

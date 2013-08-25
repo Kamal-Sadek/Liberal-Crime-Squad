@@ -1149,7 +1149,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       move(y,1);y++;
       if(tk.type == CREATURE_CORPORATE_CEO)
       {
-         if(a.gender_liberal != GENDER_MALE)
+         if(a.gender() != GENDER_MALE)
          {
             addstr("\"I'm a happily married man, sweetie.\"", gamelog);
          }
