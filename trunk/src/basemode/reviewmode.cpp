@@ -606,14 +606,9 @@ void review_mode(short mode)
                }
                else if(c=='g' && temppool[p]->align==1)
                {
-                  if(law[LAW_GAY]==-2) // "fixing" gender label has whole different meaning when Gay Rights is C+
-                     temppool[p]->gender_liberal=temppool[p]->gender_conservative;
-                  else
-                  {
-                     temppool[p]->gender_liberal++;
-                     if(temppool[p]->gender_liberal > 2)
-                        temppool[p]->gender_liberal = 0;
-                  }
+                  temppool[p]->gender_liberal++;
+                  if(temppool[p]->gender_liberal > 2)
+                     temppool[p]->gender_liberal = 0;
                }
                else if(c=='r' && temppool[p]->is_active_liberal() &&
                                  temppool[p]->hireid != -1)  // If alive and not own boss? (suicide?)

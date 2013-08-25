@@ -46,29 +46,16 @@ void add_age(Creature& person)
          addstr("Very Old");
    }
 
-   // Assess their gender Liberally unless Gay Rights is C+
-   if(person.gender() == GENDER_MALE)
+   // Assess their gender Liberally but allow ambiguity since you don't know them well enough yet
+   if(person.gender_liberal == GENDER_MALE)
       addstr(", Male");
-   else if(person.gender() == GENDER_FEMALE)
+   else if(person.gender_liberal == GENDER_FEMALE)
       addstr(", Female");
    else
-      switch(law[LAW_GAY])
-      {
-      case -2:
-         addstr(", Freak of Nature");break;
-      case -1:
-         addstr(", Ambiguous");break;
-      case 0:
-      default:
-         addstr(", Androgynous");break;
-      case 1:
-         addstr(", Transgender");break;
-      case 2:
-         addstr(", Genderqueer");break;
-      }
+      addstr(", Ambiguous");
 
-   // Note if there's some conflict with Conservative society's perceptions if gay rights < 1
-   if(person.gender_liberal != person.gender_conservative && person.gender() != GENDER_NEUTRAL && law[LAW_GAY]<1)
+   // Note if there's some conflict with Conservative society's perceptions
+   if(person.gender_liberal != person.gender_conservative && person.gender_liberal != GENDER_NEUTRAL)
       addstr("?");
 
    addstr(")");
