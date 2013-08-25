@@ -524,7 +524,7 @@ char weapon_in_character(const string& wtype, const string& atype)
 }
 
 /* checks if a creature's weapon is suspicious */
-char weaponcheck(Creature &cr, bool metaldetect)
+char weaponcheck(const Creature &cr, bool metaldetect)
 {
    bool suspicious = cr.get_weapon().is_suspicious();
    bool concealed = cr.weapon_is_concealed();
@@ -550,7 +550,7 @@ char weaponcheck(Creature &cr, bool metaldetect)
 
 
 /* checks if a creature's uniform is appropriate to the location */
-char hasdisguise(Creature &cr)
+char hasdisguise(const Creature &cr)
 {
    short type = -1;
    if(cursite>=0)type = location[cursite]->type;

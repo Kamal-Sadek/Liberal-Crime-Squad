@@ -1,4 +1,5 @@
-#include "includes.h"
+//#include "includes.h"
+#include "externs.h"
 
 // Add an age estimate to a person's name
 void add_age(Creature& person)
@@ -45,16 +46,29 @@ void add_age(Creature& person)
          addstr("Very Old");
    }
 
-   // Assess their gender Liberally
-   if(person.gender_liberal == GENDER_MALE)
+   // Assess their gender Liberally unless Gay Rights is C+
+   if(person.gender() == GENDER_MALE)
       addstr(", Male");
-   else if(person.gender_liberal == GENDER_FEMALE)
+   else if(person.gender() == GENDER_FEMALE)
       addstr(", Female");
    else
-      addstr(", Ambiguous");
+      switch(law[LAW_GAY])
+      {
+      case -2:
+         addstr(", Freak of Nature");
+      case -1:
+         addstr(", Ambiguous");
+      case 0:
+      default:
+         addstr(", Androgynous");
+      case 1:
+         addstr(", Transgender");
+      case 2:
+         addstr(", Genderqueer");
+      }
 
-   // Note if there's some conflict with Conservative society's perceptions
-   if(person.gender_liberal != person.gender_conservative)
+   // Note if there's some conflict with Conservative society's perceptions if gay rights < 1
+   if(person.gender_liberal != person.gender_conservative && person.gender() != GENDER_NEUTRAL && law[LAW_GAY]<1)
       addstr("?");
 
    addstr(")");

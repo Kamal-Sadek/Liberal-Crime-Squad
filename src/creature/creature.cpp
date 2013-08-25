@@ -114,7 +114,7 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
 }
 
 /* returns the creature's maximum level in the given skill */
-int Creature::skill_cap(int skill,bool use_juice)
+int Creature::skill_cap(int skill,bool use_juice) const
 {
    return get_attribute(Skill::get_associated_attribute(skill),use_juice);
 }
@@ -159,7 +159,7 @@ std::string Skill::get_name(int skill_type)
    return "Error Skill Name";
 }
 
-int Skill::get_attribute()
+int Skill::get_attribute() const
 {
    return associated_attribute;
 }
@@ -345,7 +345,7 @@ Creature::~Creature()
    stop_hauling_me();
 }
 
-bool Creature::kidnap_resistant()
+bool Creature::kidnap_resistant() const
 {
    switch(type)
    {
@@ -374,7 +374,7 @@ bool Creature::kidnap_resistant()
    }
 }
 
-bool Creature::reports_to_police()
+bool Creature::reports_to_police() const
 {
    switch(type)
    {
@@ -395,7 +395,7 @@ bool Creature::reports_to_police()
 // Alternative name for the location global, used in Creature:: methods
 vector<Location*> loc_proxy() { return location; }
 
-std::string Creature::get_type_name()
+std::string Creature::get_type_name() const
 {
    char cStr[75];
    getrecruitcreature(cStr, this->type);
@@ -403,7 +403,7 @@ std::string Creature::get_type_name()
    return cppStr;
 }
 
-bool Creature::is_lcs_sleeper(void)
+bool Creature::is_lcs_sleeper(void) const
 {
    if(alive && align==ALIGN_LIBERAL && clinic==0 &&
       dating==0 && hiding==0 && (flag & CREATUREFLAG_SLEEPER))
@@ -413,7 +413,7 @@ bool Creature::is_lcs_sleeper(void)
    else return false;
 }
 
-bool Creature::is_imprisoned(void)
+bool Creature::is_imprisoned(void) const
 {
    if(alive && clinic==0 && dating==0 && hiding==0 &&
       !(flag & CREATUREFLAG_SLEEPER) &&
@@ -424,7 +424,7 @@ bool Creature::is_imprisoned(void)
    else return false;
 }
 
-bool Creature::is_active_liberal(void)
+bool Creature::is_active_liberal(void) const
 {
    if(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
       hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
@@ -1008,7 +1008,7 @@ int Creature::roll_check(int skill)
    return total;
 }
 
-int Creature::attribute_roll(int attribute)
+int Creature::attribute_roll(int attribute) const
 {
    int return_value = roll_check(get_attribute(attribute,true));
    #ifdef SHOWMECHANICS
@@ -1031,7 +1031,7 @@ int Creature::attribute_roll(int attribute)
    return return_value;
 }
 
-bool Creature::attribute_check(int attribute, int difficulty)
+bool Creature::attribute_check(int attribute, int difficulty) const
 {
    #ifdef SHOWMECHANICS
    {
@@ -1050,13 +1050,10 @@ bool Creature::attribute_check(int attribute, int difficulty)
       getch();
    }
    #endif
-   if(attribute_roll(attribute) >= difficulty)
-      return true;
-   else
-      return false;
+   return(attribute_roll(attribute) >= difficulty);
 }
 
-int Creature::skill_roll(int skill)
+int Creature::skill_roll(int skill) const
 {
    // Take skill strength
    int skill_value = skills[skill].value;
@@ -1165,7 +1162,7 @@ int Creature::skill_roll(int skill)
    return return_value;
 }
 
-bool Creature::skill_check(int skill, int difficulty)
+bool Creature::skill_check(int skill, int difficulty) const
 {
    #ifdef SHOWMECHANICS
    {
@@ -1184,10 +1181,7 @@ bool Creature::skill_check(int skill, int difficulty)
       getch();
    }
    #endif
-   if(skill_roll(skill) >= difficulty)
-      return true;
-   else
-      return false;
+   return(skill_roll(skill) >= difficulty);
 }
 
 void Creature::stop_hauling_me()
@@ -1247,12 +1241,12 @@ void Creature::skill_up()
    }
 }
 
-int Creature::get_skill_ip(int skill)
+int Creature::get_skill_ip(int skill) const
 {
    return skill_experience[skill];
 }
 
-bool Creature::enemy()
+bool Creature::enemy() const
 {
    if(align==ALIGN_CONSERVATIVE)
    {
@@ -1364,7 +1358,7 @@ void nameCCSMember(Creature &cr)
 }
 
 /* are they interested in talking about the issues? */
-bool Creature::talkreceptive()
+bool Creature::talkreceptive() const
 {
    if(enemy())return false;
 
@@ -1405,7 +1399,7 @@ bool Creature::talkreceptive()
 #define ABS(x) ((x)<0)?(-x):(x)
 
 /* are the characters close enough in age to date? */
-bool Creature::can_date(Creature &a)
+bool Creature::can_date(const Creature &a) const
 {
    // Assume age appropriate for animals, tanks, etc.
    // (use other restrictions for these, like humorous rejections)
@@ -1558,54 +1552,68 @@ Creature& UniqueCreatures::President()
    return Pres_;
 }
 
-const char* Creature::heshe()
+char Creature::gender() const
 {
-	if(gender_liberal == GENDER_MALE)return "he";
-	if(gender_liberal == GENDER_FEMALE)return "she";
-	return "they";
+   char gender=(law[LAW_GAY]==-2?gender_conservative:gender_liberal); // use biological gender instead of gender label if Gay Rights is C+
+   if(gender==GENDER_WHITEMALEPATRIARCH)gender=GENDER_MALE; // functions calling gender() probably don't expect to see GENDER_WHITEMALEPATRIARCH
+   return gender;
 }
 
-const char* Creature::hisher()
+const char* Creature::heshe() const
 {
-	if(gender_liberal == GENDER_MALE)return "his";
-	if(gender_liberal == GENDER_FEMALE)return "her";
-	return "their";
+   switch(gender())
+   {
+   case GENDER_MALE:
+   case GENDER_WHITEMALEPATRIARCH:
+      return "he";
+   case GENDER_FEMALE:
+      return "she";
+   case GENDER_NEUTRAL:
+   default:
+      if(law[LAW_GAY]==-2)return "it"; // intersex people aren't even considered people if Gay Rights is C+
+      if(law[LAW_GAY]==2)return "xe"; // Elite Liberal gender-neutral pronoun
+      return "they"; // normal gender-neutral pronoun
+   }
 }
 
-Weapon& Creature::weapon_none()
+const char* Creature::hisher() const
+{
+   switch(gender())
+   {
+   case GENDER_MALE:
+   case GENDER_WHITEMALEPATRIARCH:
+      return "his";
+   case GENDER_FEMALE:
+      return "her";
+   case GENDER_NEUTRAL:
+   default:
+      if(law[LAW_GAY]==-2)return "its"; // intersex people aren't even considered people if Gay Rights is C+
+      if(law[LAW_GAY]==2)return "xyr"; // Elite Liberal gender-neutral pronoun
+      return "their"; // normal gender-neutral pronoun
+   }
+}
+
+Weapon& Creature::weapon_none() const
 {
    static Weapon* unarmed = new Weapon(*weapontype[getweapontype("WEAPON_NONE")]);
    return *unarmed;
 }
 
-Armor& Creature::armor_none()
+Armor& Creature::armor_none() const
 {
    static Armor* naked = new Armor(*armortype[getarmortype("ARMOR_NONE")]);
    return *naked;
 }
 
-Weapon& Creature::get_weapon()
+Weapon& Creature::get_weapon() const
 {
    if (is_armed())
       return *weapon;
    else
       return weapon_none();
 }
-const Weapon& Creature::get_weapon() const
-{
-   if (is_armed())
-      return *weapon;
-   else
-      return weapon_none();
-}
-Armor& Creature::get_armor()
-{
-   if (!is_naked())
-      return *armor;
-   else
-      return armor_none();
-}
-const Armor& Creature::get_armor() const
+
+Armor& Creature::get_armor() const
 {
    if (!is_naked())
       return *armor;
