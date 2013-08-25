@@ -1552,44 +1552,29 @@ Creature& UniqueCreatures::President()
    return Pres_;
 }
 
-char Creature::gender() const
-{
-   char gender=(law[LAW_GAY]==-2?gender_conservative:gender_liberal); // use biological gender instead of gender label if Gay Rights is C+
-   if(gender==GENDER_WHITEMALEPATRIARCH)gender=GENDER_MALE; // functions calling gender() probably don't expect to see GENDER_WHITEMALEPATRIARCH
-   return gender;
-}
-
 const char* Creature::heshe() const
 {
-   switch(gender())
+   switch(gender_liberal)
    {
    case GENDER_MALE:
-   case GENDER_WHITEMALEPATRIARCH:
       return "he";
    case GENDER_FEMALE:
       return "she";
-   case GENDER_NEUTRAL:
    default:
-      if(law[LAW_GAY]==-2)return "it"; // intersex people aren't even considered people if Gay Rights is C+
-      if(law[LAW_GAY]==2)return "xe"; // Elite Liberal gender-neutral pronoun
-      return "they"; // normal gender-neutral pronoun
+      return "xe"; // Elite Liberal gender-neutral pronoun
    }
 }
 
 const char* Creature::hisher() const
 {
-   switch(gender())
+   switch(gender_liberal)
    {
    case GENDER_MALE:
-   case GENDER_WHITEMALEPATRIARCH:
       return "his";
    case GENDER_FEMALE:
       return "her";
-   case GENDER_NEUTRAL:
    default:
-      if(law[LAW_GAY]==-2)return "its"; // intersex people aren't even considered people if Gay Rights is C+
-      if(law[LAW_GAY]==2)return "xyr"; // Elite Liberal gender-neutral pronoun
-      return "their"; // normal gender-neutral pronoun
+      return "xyr"; // Elite Liberal gender-neutral pronoun
    }
 }
 
