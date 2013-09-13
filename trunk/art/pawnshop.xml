@@ -1,4 +1,4 @@
-﻿<shop name="PAWNSHOP">
+<shop name="PAWNSHOP">
     <only_sell_legal_items>true</only_sell_legal_items>
     <fullscreen>false</fullscreen>
     <allow_selling>true</allow_selling>

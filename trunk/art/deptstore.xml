@@ -1,4 +1,4 @@
-﻿<shop name="DEPARTMENT_STORE">
+<shop name="DEPARTMENT_STORE">
     <only_sell_legal_items>true</only_sell_legal_items>
     <fullscreen>false</fullscreen>
     <allow_selling>false</allow_selling>
