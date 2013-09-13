@@ -4,6 +4,7 @@
 2004-08-17 - Kevin Sadler (sadler@geodude.eclipse.co.uk)
 2009-02-22 - Jonathan Stickles (jonathansfox@gmail.com)
 2011-07-26 - Christian Sergelius (cribozai@member.fsf.org)
+2013-09-13 - Rich McGrew (mcgrew_rich@yahoo.com)
 
 Updated notes for compiling and playing under Linux for 4.xx.x versions
 =======================================================================
@@ -57,6 +58,33 @@ in a hidden folder on your home are with the name .lcs and you can navigate
 there using your newly aquired terminal skills with the cd command as follows:
 
 cd ~/.lcs
+
+Build notes for Mac OS X
+========================
+(written by shibby1295 at bay12forums.com, Sep. 2013)
+
+I just got the latest version of LCS running on my Macbook Pro. It took just a
+smidgeon of doing, so I thought I'd document what I did. It's mostly the same
+as building on Linux, with just a few changes.
+
+This is on OSX 10.84, 64 bit intel. Your mileage may vary. Also, I haven't
+played very much yet, so there could be bugs hiding in specific gameplay areas.
+
+To get SVN:
+  Install XCode via the App Store
+  Open XCode, then go to the Downloads tab of the preferences menu
+  Click the 'install' button next to "Command Line Tools"
+To get autoconf: (in terminal):
+  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+  brew install automake
+To build LCS:
+  svn co http://svn.code.sf.net/p/lcsgame/code/trunk lcsgame
+  cd lcsgame/
+  ./bootstrap
+  LIBS="/usr/lib/libiconv.2.dylib" ./configure
+  make
+To play:
+  src/crimesquad
 
 Troubleshooting
 ===============
@@ -257,6 +285,10 @@ LCS can be installed in two steps:
    export LCS_ART_DIR=/usr/local/src/lcs_nnn/art
    
    Typically one would set this in .profile or .bashrc files.
+
+3. Install the init.txt configuration file (optional, but lets you set
+   additional configuration options). The game looks for this file in the
+   current directory.
   
 Fonts
 =====
