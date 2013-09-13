@@ -1,4 +1,4 @@
-﻿<loot>
+<loot>
     <!-- Clarification
     <loottype idname="(string)"> idname is use internally by the game to identify the loot type.
                                      No two item types should have the same idname.
