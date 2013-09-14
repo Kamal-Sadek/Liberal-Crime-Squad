@@ -746,16 +746,9 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
       addstr(" best serve the Liberal cause?");
       move(y+2,0);
       set_color(COLOR_WHITE,COLOR_BLACK,selection==0);
-      if(selection==0)
-      {
-         addstr("-> ");
-      }
-      else
-      {
-         addstr("   ");
-      }
+      addstr(selection==0?"-> ":"   ");
       addstr("Come to ");
-      addstr(location[recruiter.location]->name);
+      addstr(location[recruiter.location]->getname(-1,true));
       addstr(" as a ");
       set_color(COLOR_GREEN,COLOR_BLACK,selection==0);
       addstr("regular member");
@@ -763,18 +756,14 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
       addstr(".");
       move(y+3,0);
       set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
-      if(selection==1)
-         addstr("-> ");
-      else
-         addstr("   ");
+      addstr(selection==1?"-> ":"   ");
       addstr("Stay at ");
-      addstr(location[converted.worklocation]->name);
+      addstr(location[converted.worklocation]->getname(-1,true));
       addstr(" as a ");
       set_color(COLOR_CYAN,COLOR_BLACK,selection==1);
       addstr("sleeper agent");
       set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
       addstr(".");
-
 
       int keystroke = getch();
       translategetch(keystroke);

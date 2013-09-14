@@ -819,7 +819,8 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          }
          else if(!LCSrandom(2))
          {
-            if(!LCSrandom(3))item="ARMOR_POLICEUNIFORM";
+            if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 && !LCSrandom(4))item="ARMOR_DEATHSQUADUNIFORM";
+            else if(!LCSrandom(3))item="ARMOR_POLICEUNIFORM";
             else if(!LCSrandom(2))item="ARMOR_SWATARMOR";
             else item="ARMOR_POLICEARMOR";
             itemindex = getarmortype(item);
