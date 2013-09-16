@@ -33,7 +33,7 @@ vector<Creature *> activatable_liberals()
 {
    vector<Creature *> temppool;
    int sq;
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
@@ -89,7 +89,7 @@ void activate(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -144,15 +144,12 @@ void activate(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<temppool.size())
-         {
-            activate(temppool[p]);
-         }
+         if(p<(int)temppool.size())activate(temppool[p]);
       }
 
       if(c=='t')
@@ -309,7 +306,7 @@ void activate(Creature *cr)
    int state=0;
    int choice=0;
    char havedead=0;
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location)hostagecount++;
       if(!pool[p]->alive)havedead=1;
@@ -384,11 +381,8 @@ void activate(Creature *cr)
       if(activesquad!=NULL && activesquad->squad[0]->location!=-1)siege=&location[activesquad->squad[0]->location]->siege;
       char sieged=0;
       if(siege!=NULL)sieged=siege->siege;
-      char underattack=0;
-      if(siege!=NULL)
-      {
-         if(sieged)underattack=siege->underattack;
-      }
+      /*char underattack=0;
+      if(siege!=NULL&&sieged)underattack=siege->underattack;*/
 
       if (!sieged)
       {
@@ -1108,7 +1102,7 @@ void activatebulk(void)
       addstr("6 - Community Service");
 
       int y=2;
-      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1144,12 +1138,12 @@ void activatebulk(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<temppool.size())
+         if(p<(int)temppool.size())
          {
             switch(selectedactivity)
             {
@@ -1218,7 +1212,7 @@ void select_tendhostage(Creature *cr)
 {
    vector<Creature *> temppool;
 
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->align!=1&&
          pool[p]->alive&&
@@ -1256,7 +1250,7 @@ void select_tendhostage(Creature *cr)
       addstr("DAYS IN CAPTIVITY");
 
       int y=2;
-      for(int p=page*19;p<temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1310,12 +1304,12 @@ void select_tendhostage(Creature *cr)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<temppool.size())
+         if(p<(int)temppool.size())
          {
             cr->activity.type=ACTIVITY_HOSTAGETENDING;
             cr->activity.arg=temppool[p]->id;
@@ -1399,52 +1393,44 @@ struct recruitData
 };
 
 recruitData recruitable_creatures[] = {
-   recruitData(CREATURE_VETERAN, "Army Veteran", 4),
-   recruitData(CREATURE_ATHLETE, "Athlete", 4),
-   recruitData(CREATURE_COLLEGESTUDENT, "College Student", 1),
-   recruitData(CREATURE_PROGRAMMER, "Computer Programmer", 4),
-   recruitData(CREATURE_DANCER, "Dancer", 4),
-   recruitData(CREATURE_DOCTOR, "Doctor", 4),
-   recruitData(CREATURE_FASHIONDESIGNER, "Fashion Designer", 6),
-   recruitData(CREATURE_GANGMEMBER, "Gang Member", 2),
-   recruitData(CREATURE_HIPPIE, "Hippie", 1),
-   recruitData(CREATURE_JOURNALIST, "Journalist", 4),
-   recruitData(CREATURE_JUDGE_LIBERAL, "Judge", 6),
-   recruitData(CREATURE_LAWYER, "Lawyer", 4),
-   recruitData(CREATURE_LOCKSMITH, "Locksmith", 6),
-   recruitData(CREATURE_MARTIALARTIST, "Martial Artist", 4),
-   recruitData(CREATURE_MUSICIAN, "Musician", 4),
-   recruitData(CREATURE_MUTANT, "Mutant", 4),
-   recruitData(CREATURE_PROSTITUTE, "Prostitute", 2),
-   recruitData(CREATURE_PSYCHOLOGIST, "Psychologist", 4),
-   recruitData(CREATURE_TAXIDRIVER, "Taxi Driver", 4),
-   recruitData(CREATURE_TEACHER, "Teacher", 4)
+   recruitData(CREATURE_VETERAN, (char*)"Army Veteran", 4),
+   recruitData(CREATURE_ATHLETE, (char*)"Athlete", 4),
+   recruitData(CREATURE_COLLEGESTUDENT, (char*)"College Student", 1),
+   recruitData(CREATURE_PROGRAMMER, (char*)"Computer Programmer", 4),
+   recruitData(CREATURE_DANCER, (char*)"Dancer", 4),
+   recruitData(CREATURE_DOCTOR, (char*)"Doctor", 4),
+   recruitData(CREATURE_FASHIONDESIGNER, (char*)"Fashion Designer", 6),
+   recruitData(CREATURE_GANGMEMBER, (char*)"Gang Member", 2),
+   recruitData(CREATURE_HIPPIE, (char*)"Hippie", 1),
+   recruitData(CREATURE_JOURNALIST, (char*)"Journalist", 4),
+   recruitData(CREATURE_JUDGE_LIBERAL, (char*)"Judge", 6),
+   recruitData(CREATURE_LAWYER, (char*)"Lawyer", 4),
+   recruitData(CREATURE_LOCKSMITH, (char*)"Locksmith", 6),
+   recruitData(CREATURE_MARTIALARTIST, (char*)"Martial Artist", 4),
+   recruitData(CREATURE_MUSICIAN, (char*)"Musician", 4),
+   recruitData(CREATURE_MUTANT, (char*)"Mutant", 4),
+   recruitData(CREATURE_PROSTITUTE, (char*)"Prostitute", 2),
+   recruitData(CREATURE_PSYCHOLOGIST, (char*)"Psychologist", 4),
+   recruitData(CREATURE_TAXIDRIVER, (char*)"Taxi Driver", 4),
+   recruitData(CREATURE_TEACHER, (char*)"Teacher", 4)
 };
 
 // Return the difficulty of tracking this character type down, for the
 // purpose of the activation menu. 0 is trivial, 10 is impossible.
 int recruitFindDifficulty(int creatureType)
 {
-   for(int i=0; i<sizeof(recruitable_creatures)/sizeof(recruitData); i++)
-   {
+   for(int i=0; i<(int)(sizeof(recruitable_creatures)/sizeof(recruitData)); i++)
       if(recruitable_creatures[i].type == creatureType)
-      {
          return recruitable_creatures[i].difficulty;
-      }
-   }
    return 10; // No recruitData; assume impossible to recruit
 }
 
 char* recruitName(int creatureType)
 {
-   for(int i=0; i<sizeof(recruitable_creatures)/sizeof(recruitData); i++)
-   {
+   for(int i=0; i<(int)(sizeof(recruitable_creatures)/sizeof(recruitData)); i++)
       if(recruitable_creatures[i].type == creatureType)
-      {
          return recruitable_creatures[i].name;
-      }
-   }
-   return "missingno";
+   return (char*)"missingno";
 }
 
 void recruitSelect(Creature &cr)
@@ -1466,7 +1452,7 @@ void recruitSelect(Creature &cr)
    }
 
    int page=0;
-   char str[200];
+   //char str[200];
    do
    {
       erase();
@@ -1575,7 +1561,7 @@ void recruitSelect(Creature &cr)
 void select_makeclothing(Creature *cr)
 {
    vector<int> armortypei;
-   for (int a = 0; a < armortype.size(); ++a)
+   for (int a = 0; a < (int)armortype.size(); ++a)
    {
       if (armortype[a]->get_make_difficulty() == 0)
          continue;
@@ -1589,8 +1575,8 @@ void select_makeclothing(Creature *cr)
 
    int page=0;
 
-   char str[200];
-   char num[20];
+   //char str[200];
+   //char num[20];
 
    do
    {
@@ -1606,7 +1592,7 @@ void select_makeclothing(Creature *cr)
       addstr("----NAME-----------------------------DIFFICULTY-------------COST----------------");
 
       int y=2,difficulty;
-      for(int p=page*19;p<armortypei.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)armortypei.size()&&p<page*19+19;p++)
       {
          difficulty=armor_makedifficulty(*armortype[armortypei[p]],cr);
          if(difficulty < 0) difficulty = 0;
@@ -1687,12 +1673,12 @@ void select_makeclothing(Creature *cr)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<armortype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)armortype.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<armortypei.size())
+         if(p<(int)armortypei.size())
          {
             cr->activity.type=ACTIVITY_MAKE_ARMOR;
             cr->activity.arg=armortypei[p]; //Use id name of armor type instead? -XML

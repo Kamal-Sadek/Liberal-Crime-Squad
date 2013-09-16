@@ -24,7 +24,7 @@ void activate_sleepers(void)
 {
    vector<Creature *> temppool;
    // Comb the pool of Liberals for sleeper agents
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       // Select only sleepers that can work
       if(pool[p]->alive==true&&
@@ -39,7 +39,7 @@ void activate_sleepers(void)
    }
 
    if(temppool.size()==0)return;
-   
+
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS]);
 
    int page=0;
@@ -49,11 +49,11 @@ void activate_sleepers(void)
    do
    {
       erase();
-      
-      set_color(COLOR_WHITE,COLOR_BLACK,0);     
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
 
-      
+
       move(0,0);
       addstr("Activate Sleeper Agents");
       makedelimiter(1,0);
@@ -67,7 +67,7 @@ void activate_sleepers(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*9;p<temppool.size()&&p<page*9+9;p++)
+      for(int p=page*9;p<(int)temppool.size()&&p<page*9+9;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -128,7 +128,7 @@ void activate_sleepers(void)
       move(23,0);
       addpagestr();
       addstr(" T to sort people.");
-      
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
 
       refresh();
@@ -139,17 +139,17 @@ void activate_sleepers(void)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*9<temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*9<(int)temppool.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*9+(int)(c-'a');
-         if(p<temppool.size())
+         if(p<(int)temppool.size())
          {
             activate_sleeper(temppool[p]);
          }
       }
-      
+
       if(c=='t')
       {
          sorting_prompt(SORTINGCHOICE_ACTIVATESLEEPERS);
@@ -165,7 +165,7 @@ void activate_sleeper(Creature *cr)
 {
    int state=0;
    int choice=0;
-   char havedead=0;
+   //char havedead=0;
 
    do
    {
@@ -173,7 +173,7 @@ void activate_sleeper(Creature *cr)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       printfunds(0,1,"Money: ");
-      
+
       move(0,0);
       addstr("Taking Undercover Action:   What will ");
       addstr(cr->name);
@@ -281,9 +281,9 @@ void activate_sleeper(Creature *cr)
       refresh();
       int c=getch();
       translategetch(c);
-      
-      
-      
+
+
+
       if(c>='a'&&c<='z'){state=c;}
       if((c>='a'&&c<='z') || (c>='1'&&c<='9'))
       {
@@ -315,7 +315,7 @@ void activate_sleeper(Creature *cr)
 
       if(state=='c')
       {
-         activityst oact=cr->activity;
+         //activityst oact=cr->activity;
          cr->activity.type=ACTIVITY_SLEEPER_JOINLCS;
       }
       if(c=='x')

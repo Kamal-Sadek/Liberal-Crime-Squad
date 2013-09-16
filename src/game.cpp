@@ -507,24 +507,8 @@ int stringtobool(const string& boolstr) //Should find better way to do this. -XM
 
 void chaseseqst::clean(void)
 {
-   for(int v=0;v<enemycar.size();v++)
-   {
-      delete enemycar[v];
-   }
-   enemycar.clear();
-
+	delete_and_clear(enemycar);
    friendcar.clear();
-}
-
-/* Deletes and removes all pointers in a container. */
-template<class Container>
-void delete_and_clear(Container& c)
-{
-   while(!c.empty())
-   {
-      delete c.back();
-      c.pop_back();
-   }
 }
 
 /* Free memory and exit the game */

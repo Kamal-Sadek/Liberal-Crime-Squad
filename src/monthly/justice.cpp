@@ -74,7 +74,7 @@ void trial(Creature &g)
    Creature *sleeperjudge=NULL;
    Creature *sleeperlawyer=NULL;
    int maxsleeperskill=0;
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER)&&location[pool[p]->location]->city==location[g.location]->city)
       {
@@ -1310,7 +1310,7 @@ void penalize(Creature &g,char lenient)
          move(8,1);
          if(lenient)
          {
-            if(abs(oldsentence)>abs(g.sentence))
+            if(ABS(oldsentence)>ABS(g.sentence))
                g.sentence=oldsentence;
             addstr("to be served concurrently", gamelog);
          }

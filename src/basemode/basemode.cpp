@@ -63,7 +63,7 @@ bool show_disbanding_screen(int& oldforcemonth)
    addstr(num);
 
 
-   int y=2;
+   //int y=2;
 
    set_alignment_color(exec[EXEC_PRESIDENT], true);
    mvaddstr(1,0,"President: ");
@@ -147,7 +147,7 @@ bool show_disbanding_screen(int& oldforcemonth)
    itoa(courtmake[0],num,10);
    addstr(num);addstr("Cons+");
 
-   y=0;
+   //y=0;
    for(int l=0;l<LAWNUM;l++)
    {
       set_alignment_color(law[l], true);
@@ -199,7 +199,7 @@ void mode_base(void)
       cantseereason=CANTSEE_OTHER;
       if(!disbanding)
       {
-         for(int p=0;p<pool.size();p++)
+         for(int p=0;p<(int)pool.size();p++)
          {
             if(pool[p]->alive&&
                pool[p]->align==1&&
@@ -278,10 +278,7 @@ void mode_base(void)
       }
 
       int safenumber=0;
-      for(l=0;l<location.size();l++)
-      {
-         if(location[l]->is_lcs_safehouse())safenumber++;
-      }
+      for(l=0;l<(int)location.size();l++)if(location[l]->is_lcs_safehouse())safenumber++;
 
       Location *loc=NULL;
       if(selectedsiege!=-1)loc = location[selectedsiege];
@@ -305,11 +302,8 @@ void mode_base(void)
 
       // Count people at each location
       int* num_present = new int[location.size()];
-      for(int i=0;i<location.size();i++)
-      {
-         num_present[i]=0;
-      }
-      for(int p=0;p<pool.size();p++)
+      for(int i=0;i<(int)location.size();i++)num_present[i]=0;
+      for(int p=0;p<(int)pool.size();p++)
       {
          if(!pool[p]->alive)continue; // Dead people don't count
          if(pool[p]->align!=1)continue; // Non-liberals don't count
@@ -318,7 +312,7 @@ void mode_base(void)
       }
 
       char cannotwait=0;
-      for(l=0;l<location.size();l++)
+      for(l=0;l<(int)location.size();l++)
       {
          if(!location[l]->siege.siege)continue;
 
@@ -451,7 +445,7 @@ void mode_base(void)
 
 
          set_color(COLOR_BLACK,COLOR_BLACK,1);
-         for(int p=0;p < pool.size();p++)
+         for(int p=0;p < (int)pool.size();p++)
          {
             if(pool[p]->alive==true&&
                pool[p]->flag & CREATUREFLAG_SLEEPER&&
@@ -482,7 +476,7 @@ void mode_base(void)
             else
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
-               for(int p=0;p<pool.size();p++)
+               for(int p=0;p<(int)pool.size();p++)
                {
                   if(pool[p]->location==selectedsiege)
                   {
@@ -635,11 +629,11 @@ void mode_base(void)
          if(activesquad==NULL)activesquad=squad[0];
          else
          {
-            for(int sq=0;sq<squad.size();sq++)
+            for(int sq=0;sq<(int)squad.size();sq++)
             {
                if(squad[sq]==activesquad)
                {
-                  if(sq==squad.size()-1)activesquad=squad[0];
+                  if(sq==(int)squad.size()-1)activesquad=squad[0];
                   else activesquad=squad[sq+1];
                   break;
                }
@@ -654,16 +648,16 @@ void mode_base(void)
          if(selectedsiege==-1)sl=0;
          else sl=selectedsiege+1;
 
-         if(sl >= location.size()) sl = 0;
+         if(sl >= (int)location.size()) sl = 0;
 
-         for(int l=sl;l<location.size();l++)
+         for(int l=sl;l<(int)location.size();l++)
          {
             if(location[l]->is_lcs_safehouse())
             {
                selectedsiege=l;
                break;
             }
-            else if(l==location.size()-1)l=-1;
+            else if(l==(int)location.size()-1)l=-1;
          }
       }
 

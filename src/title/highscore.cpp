@@ -222,14 +222,14 @@ void loadhighscores(void)
    //LOAD FILE
    int loadversion;
 
-   int numbytes;
+   //int numbytes;
    FILE *h;
 
    h=LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
-      numbytes=fread(&loadversion,sizeof(int),1,h);
+      /*numbytes=*/fread(&loadversion,sizeof(int),1,h);
 
       if(loadversion<lowestloadscoreversion)
       {
@@ -237,15 +237,15 @@ void loadhighscores(void)
          return;
       }
 
-      numbytes=fread(&ustat_recruits,sizeof(int),1,h);
-      numbytes=fread(&ustat_dead,sizeof(int),1,h);
-      numbytes=fread(&ustat_kills,sizeof(int),1,h);
-      numbytes=fread(&ustat_kidnappings,sizeof(int),1,h);
-      numbytes=fread(&ustat_funds,sizeof(int),1,h);
-      numbytes=fread(&ustat_spent,sizeof(int),1,h);
-      numbytes=fread(&ustat_buys,sizeof(int),1,h);
-      numbytes=fread(&ustat_burns,sizeof(int),1,h);
-      numbytes=fread(score,sizeof(highscorest),SCORENUM,h);
+      /*numbytes=*/fread(&ustat_recruits,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_dead,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_kills,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_kidnappings,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_funds,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_spent,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_buys,sizeof(int),1,h);
+      /*numbytes=*/fread(&ustat_burns,sizeof(int),1,h);
+      /*numbytes=*/fread(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);
    }
@@ -311,23 +311,23 @@ void savehighscore(char endtype)
    }
 
 
-   int numbytes;
+   //int numbytes;
    FILE *h;
    h=LCSOpenFile("score.dat","wb",LCSIO_PRE_HOME);
    if(h!=NULL)
    {
       int lversion=version;
-      numbytes=fwrite(&lversion,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&lversion,sizeof(int),1,h);
 
-      numbytes=fwrite(&ustat_recruits,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_dead,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_kills,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_kidnappings,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_funds,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_spent,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_buys,sizeof(int),1,h);
-      numbytes=fwrite(&ustat_burns,sizeof(int),1,h);
-      numbytes=fwrite(score,sizeof(highscorest),SCORENUM,h);
+      /*numbytes=*/fwrite(&ustat_recruits,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_dead,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_kills,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_kidnappings,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_funds,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_spent,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_buys,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&ustat_burns,sizeof(int),1,h);
+      /*numbytes=*/fwrite(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);
    }

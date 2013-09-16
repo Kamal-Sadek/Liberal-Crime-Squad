@@ -28,11 +28,11 @@ void Shop::init(const MCD_STR &xmlstring)
    xml.SetDoc(xmlstring);
    xml.FindElem();
    xml.IntoElem();
-   
+
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-      
+
       if (tag == "only_sell_legal_items")
       {
          int b = stringtobool(xml.GetData());
@@ -105,8 +105,7 @@ void Shop::init(const MCD_STR &xmlstring)
 
 Shop::~Shop()
 {
-   for (unsigned i = 0; i < options_.size(); ++i)
-      delete options_[i];
+   delete_and_clear(options_);
 }
 
 void Shop::enter(squadst& customers) const
@@ -130,7 +129,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 
    std::vector<ShopOption*> available_options = options_;
 
-   available_options.erase (remove_if (available_options.begin(), 
+   available_options.erase (remove_if (available_options.begin(),
 				       available_options.end(),
 				       not1 (mem_fun (&ShopOption::display))),
 			    available_options.end());
@@ -155,7 +154,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
       move(8,45);
       addstr("Buyer: ");
       addstr(customers.squad[buyer]->name);
-      
+
       //Write wares and prices
       int yline = 10;
       int column = 1;
@@ -172,7 +171,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
             move(yline,1);
          else
             move(yline,40);
-         
+
          if (available_options[p]->letter_defined_)
             addch(available_options[p]->showletter());
          else
@@ -206,7 +205,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
             addch('A' + taken_letters);
             ++taken_letters;
          }
-         
+
          addstr(" - ");
          addstr(available_options[p]->get_description_halfscreen().c_str());
          if (column == 1)
@@ -228,12 +227,12 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
       }
       if (column == 2)
          ++yline;
-      
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(yline,1);
       addstr("E - Look over Equipment");
       ++yline;
-      
+
       if (allow_selling_)
       {
          move(yline,1);
@@ -244,7 +243,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
          addstr("S - Sell something");
          ++yline;
       }
-      
+
       ++yline;
 
       if (party_status != -1)
@@ -253,7 +252,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(yline,1);
       addstr("0 - Show the squad's Liberal status");
-      
+
       if (partysize > 0 && (party_status == -1 || partysize > 1))
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
@@ -267,17 +266,17 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(yline,1);
       addstr("B - Choose a buyer");
-      
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(yline,40);
       addstr("Enter - ");
       addstr(exit_.c_str());
 
-      
+
 
       int c = getch();
       translategetch(c);
-      
+
       for (unsigned i = 0; i < available_options.size(); ++i)
       {
          if (c == available_options[i]->letter_)
@@ -286,7 +285,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
             break;
          }
       }
-      
+
       if(c == 'e' && customers.squad[0]->base != -1)
          equip(location[customers.squad[0]->base]->loot, -1);
       else if (c == 's' && allow_selling_
@@ -319,9 +318,9 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 {
    unsigned page = 0;
-   
+
    std::vector<ShopOption*> available_options = options_;
-   available_options.erase (remove_if (available_options.begin(), 
+   available_options.erase (remove_if (available_options.begin(),
 				       available_options.end(),
 				       not1 (mem_fun (&ShopOption::display))),
 			    available_options.end());
@@ -377,7 +376,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
       if (c >= 'a' && c <= 's')
       {
          int p = page * 19 + static_cast<int>(c-'a');
-         if (p < available_options.size() && available_options[p]->is_available())
+         if (p < (int)available_options.size() && available_options[p]->is_available())
             available_options[p]->choose(customers, buyer);
          break;
       }
@@ -397,80 +396,80 @@ void Shop::sell_loot(squadst& customers) const
          partysize++;
       }
    }
-   
+
    do
    {
       erase();
-   
+
       locheader();
       printparty();
-   
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(10,1);
       addstr("E - Look over Equipment");
-   
+
       if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(10,40);
       addstr("F - Pawn Selectively");
-   
+
       if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(11,1);
       addstr("W - Pawn all Weapons");
-   
+
       if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(11,40);
       addstr("A - Pawn all Ammunition");
-   
+
       if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,1);
       addstr("C - Pawn all Clothes");
-   
+
       if (location[customers.squad[0]->base]->loot.size() > 0)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(12,40);
       addstr("L - Pawn all Loot");
-      
+
       if (party_status != -1)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(15,1);
       addstr("0 - Show the squad's Liberal status");
-      
+
       if (partysize > 0 && (party_status == -1 || partysize > 1))
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(15,40);
       addstr("# - Check the status of a squad Liberal");
-      
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(16,40);
       addstr("Enter - Done pawning");
-      
+
       int c = getch();
       translategetch(c);
-      
+
       if (c == 10)
          break;
-   
+
       if (c == 'e' && customers.squad[0]->base != -1)
          equip(location[customers.squad[0]->base]->loot, -1);
-   
+
       if (c == 'w' || c == 'a' || c == 'c')
       {
          move(18,1);
@@ -494,12 +493,12 @@ void Shop::sell_loot(squadst& customers) const
             c = 0;//no sale
          }
       }
-   
+
       if((c == 'w' || c == 'c' || c == 'l' || c == 'a' || c == 'f') &&
          location[customers.squad[0]->base]->loot.size() > 0)
       {
          int fenceamount=0;
-   
+
          if (c == 'f')
             fenceamount = fenceselect(customers);
          else
@@ -511,24 +510,21 @@ void Shop::sell_loot(squadst& customers) const
                {
                   fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
                                  * location[customers.squad[0]->base]->loot[l]->get_number();
-                  delete location[customers.squad[0]->base]->loot[l];
-                  location[customers.squad[0]->base]->loot.erase(location[customers.squad[0]->base]->loot.begin() + l);
+                  delete_and_remove(location[customers.squad[0]->base]->loot,l);
                }
                else if (c == 'c' && location[customers.squad[0]->base]->loot[l]->is_armor()
                         && location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
                {
                   fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
                                  * location[customers.squad[0]->base]->loot[l]->get_number();
-                  delete location[customers.squad[0]->base]->loot[l];
-                  location[customers.squad[0]->base]->loot.erase(location[customers.squad[0]->base]->loot.begin() + l);
+                  delete_and_remove(location[customers.squad[0]->base]->loot,l);
                }
                else if (c == 'a' && location[customers.squad[0]->base]->loot[l]->is_clip()
                         && location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
                {
                   fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
                                  * location[customers.squad[0]->base]->loot[l]->get_number();
-                  delete location[customers.squad[0]->base]->loot[l];
-                  location[customers.squad[0]->base]->loot.erase(location[customers.squad[0]->base]->loot.begin() + l);
+                  delete_and_remove(location[customers.squad[0]->base]->loot,l);
                }
                else if (c == 'l' && location[customers.squad[0]->base]->loot[l]->is_loot()
                         && location[customers.squad[0]->base]->loot[l]->is_good_for_sale())
@@ -538,13 +534,12 @@ void Shop::sell_loot(squadst& customers) const
                   {
                      fenceamount += location[customers.squad[0]->base]->loot[l]->get_fencevalue()
                                     * location[customers.squad[0]->base]->loot[l]->get_number();
-                     delete location[customers.squad[0]->base]->loot[l];
-                     location[customers.squad[0]->base]->loot.erase(location[customers.squad[0]->base]->loot.begin() + l);
+                     delete_and_remove(location[customers.squad[0]->base]->loot,l);
                   }
                }
             }
          }
-   
+
          if(fenceamount > 0)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -552,10 +547,10 @@ void Shop::sell_loot(squadst& customers) const
             addstr("You add $");
             addstr(tostring(fenceamount).c_str());
             addstr(" to Liberal Funds.");
-   
+
             refresh();
             getch();
-   
+
             ledger.add_funds(fenceamount,INCOME_PAWN);
          }
       }
@@ -594,7 +589,7 @@ int Shop::fenceselect(squadst& customers) const
       std::string itemstr;
 
       for (int l = page * 18;
-           l < location[customers.squad[0]->base]->loot.size() && l < page * 18 + 18;
+           l < (int)location[customers.squad[0]->base]->loot.size() && l < page * 18 + 18;
            l++)
       {
          if (selected[l])
@@ -635,7 +630,7 @@ int Shop::fenceselect(squadst& customers) const
          addprevpagestr();
       }
       //PAGE DOWN
-      if((page + 1) * 18 < location[customers.squad[0]->base]->loot.size())
+      if((page + 1) * 18 < (int)location[customers.squad[0]->base]->loot.size())
       {
          move(17,53);
          addnextpagestr();
@@ -656,7 +651,7 @@ int Shop::fenceselect(squadst& customers) const
       {
          int slot = c - 'a' + page * 18;
 
-         if(slot >= 0 && slot < location[customers.squad[0]->base]->loot.size())
+         if(slot >= 0 && slot < (int)location[customers.squad[0]->base]->loot.size())
          {
             if (selected[slot])
             {
@@ -724,21 +719,18 @@ int Shop::fenceselect(squadst& customers) const
          page--;
       //PAGE DOWN
       if((c == interface_pgdn || c == KEY_DOWN || c == KEY_RIGHT)
-         && (page + 1) * 18 < location[customers.squad[0]->base]->loot.size())
+         && (page + 1) * 18 < (int)location[customers.squad[0]->base]->loot.size())
          page++;
 
    } while (true);
 
-   for (int l = location[customers.squad[0]->base]->loot.size() - 1; l >= 0; l--)
+   for(int l = location[customers.squad[0]->base]->loot.size() - 1; l >= 0; l--)
    {
       if(selected[l] > 0)
       {
          location[customers.squad[0]->base]->loot[l]->decrease_number(selected[l]);
          if(location[customers.squad[0]->base]->loot[l]->get_number() <= 0)
-         {
-            delete location[customers.squad[0]->base]->loot[l];
-            location[customers.squad[0]->base]->loot.erase(location[customers.squad[0]->base]->loot.begin() + l);
-         }
+            delete_and_remove(location[customers.squad[0]->base]->loot,l);
       }
    }
 
@@ -750,14 +742,11 @@ void Shop::choose_buyer(squadst& customers, int& buyer) const
    party_status = -1;
 
    int partysize = 0;
-   for (int p = 0; p < 6; p++)
-   {
-      if (customers.squad[p] != NULL)
+   for(int p = 0; p < 6; p++)
+      if(customers.squad[p] != NULL)
          partysize++;
-   }
 
-   if (partysize <= 1)
-      return;
+   if(partysize <= 1)return;
 
    do
    {
@@ -848,7 +837,7 @@ void Shop::maskselect(Creature &buyer) const
       if(c >= 'a' && c <= 's')
       {
          int p = page*19+(int)(c-'a');
-         if(p < masktype.size())
+         if(p < (int)masktype.size())
          {
             maskindex = masktype[p];
             break;
@@ -856,7 +845,7 @@ void Shop::maskselect(Creature &buyer) const
       }
       if(c == 'z')
       {
-         for (int i = 0; i < armortype.size(); ++i)
+         for (int i = 0; i < (int)armortype.size(); ++i)
          {
             if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
                masktype.push_back(i);
@@ -868,7 +857,7 @@ void Shop::maskselect(Creature &buyer) const
       if (c == 10)
          break;
    }while(1);
-   
+
    if (maskindex != -1 && ledger.get_funds() >= 15)
    {
       Armor a = Armor(*armortype[maskindex]);
@@ -882,7 +871,7 @@ bool Shop::is_available() const
    //Disable shop (department) if it has nothing to sell.
    bool r = false;
    for (unsigned i = 0; i < options_.size() && !(r = options_[i]->display()); ++i);
-   
+
    return r;
 }
 
@@ -896,11 +885,11 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
    xml.SetDoc(xmlstring);
    xml.FindElem();
    xml.IntoElem();
-   
+
    while (xml.FindElem())
    {
       std::string tag = xml.GetTagName();
-      
+
       if (tag == "class")
       {
          if (xml.GetData() == "WEAPON")
@@ -1031,7 +1020,7 @@ bool Shop::ShopItem::legal() const
          // it can take this clip. If no legal weapon can take this type
          // of clip, the clip is implicitly illegal as well.
          r = false;
-         for(int i=0; i < weapontype.size(); i++)
+         for(int i=0; i < (int)weapontype.size(); i++)
          {
             if(weapontype[i]->acceptable_ammo(itemtypename_) && weapontype[i]->is_legal())
             {
@@ -1040,16 +1029,17 @@ bool Shop::ShopItem::legal() const
             }
          }
          break;
-      /*case ARMOR:  r = getarmortype(itemtypename_); break; //Can't be illegal.
-      case LOOT:   r = getloottype(itemtypename_); break;*/
+      case ARMOR:  //r = getarmortype(itemtypename_); break; //Can't be illegal.
+      case LOOT:   //r = getloottype(itemtypename_); break;
+         break;
    }
-   
+
    return r;
 }
 
 bool Shop::ShopItem::valid_item() const
 {
-   int i;
+   int i=-1;
    switch (itemclass_)
    {
       case WEAPON: i = getweapontype(itemtypename_); break;
@@ -1071,7 +1061,7 @@ int Shop::ShopItem::adjusted_price() const
          p *= 2;
       }
    }
-   
+
    return p;
 }
 

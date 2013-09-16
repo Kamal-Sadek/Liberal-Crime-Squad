@@ -75,7 +75,7 @@ void special_bouncer_assess_squad()
 
    special_bouncer_greet_squad();
 
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER)
       {
@@ -1087,7 +1087,7 @@ void special_intel_supercomputer(void)
          {
             clearmessagearea();
 
-            char *loot;
+            //char *loot;
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(16,1);
             addstr("The Squad obtains sensitive information", gamelog);
@@ -1166,7 +1166,7 @@ void special_graffiti(void)
    if(!location[cursite]->highsecurity)
    {
       // Erase any previous semi-permanent graffiti here
-      for(int i=0;i<location[cursite]->changes.size();i++)
+      for(int i=0;i<(int)location[cursite]->changes.size();i++)
       {
          if((location[cursite]->changes[i].x == locx) &&
             (location[cursite]->changes[i].y == locy) &&
@@ -1969,7 +1969,7 @@ void special_security(bool metaldetect)
 
    spawn_security();
 
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->base==cursite)
       {
@@ -2203,7 +2203,7 @@ void special_bank_vault(void)
    gamelog.newline();
    getch();
 
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->type==CREATURE_BANK_MANAGER &&
          pool[p]->flag & CREATUREFLAG_SLEEPER &&
@@ -2233,7 +2233,7 @@ void special_bank_vault(void)
       if(c=='y')
       {
          char actual;
-         bool success = false;
+         //bool success = false;
 
          clearmessagearea();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2332,7 +2332,7 @@ void special_bank_vault(void)
 
                if(!canbreakin)
                {
-                  for(int p=0; p<pool.size(); p++)
+                  for(int p=0; p<(int)pool.size(); p++)
                   {
                      if(pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
                      {

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -129,7 +129,7 @@ void kidnapattempt(void)
                addstr("Kidnap whom?");
 
                int x=1,y=11;
-               for(int t2=0;t2<target.size();t2++)
+               for(int t2=0;t2<(int)target.size();t2++)
                {
                   move(y,x);
                   addch(t2+'A');
@@ -150,7 +150,7 @@ void kidnapattempt(void)
                if(c>='a'&&c<='z')
                {
                   t=c-'a';
-                  if(t>=target.size())t=-1;
+                  if(t>=(int)target.size())t=-1;
                   else {t=target[t];}break;
                }
                if(c==10||c==ESC||c==32){t=-1;break;}
@@ -465,15 +465,14 @@ void freehostage(Creature &cr,char situation)
       {
          //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
          //(That may not be the case any longer -jds)
-         for(int pl=0;pl<pool.size();pl++)
+         for(int pl=0;pl<(int)pool.size();pl++)
          {
             if(pool[pl]==cr.prisoner)
             {
                removesquadinfo(*pool[pl]);
                pool[pl]->die();
                pool[pl]->location=-1;
-               //delete pool[pl];
-               //pool.erase(pool.begin() + pl);
+               //delete_and_remove(pool,pl);
                break;
             }
          }
@@ -559,20 +558,19 @@ void squadgrab_immobile(char dead)
 
                   //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
                   //(that may not be the case any longer -jds)
-                  for(int pl=0;pl<pool.size();pl++)
+                  for(int pl=0;pl<(int)pool.size();pl++)
                   {
                      if(pool[pl]==activesquad->squad[p])
                      {
                         pool[pl]->die();
                         pool[pl]->location=-1;
-                        //delete pool[pl];
-                        //pool.erase(pool.begin() + pl);
+                        //delete_and_remove(pool,pl);
                         break;
                      }
                   }
 
                   //Check if that was the last living squad member.
-                  bool squad_dead = true;
+                  //bool squad_dead = true;
                   for(int i = 5; i >= 0; --i)
                   {
                      //This check to make sure we don't look at nonexistent
@@ -583,7 +581,7 @@ void squadgrab_immobile(char dead)
                         if(activesquad->squad[i]->alive)
                         {
                            //IT LIVES! Squad is not dead.
-                           squad_dead = false;
+                           //squad_dead = false;
                            break; //No reason to continue
                         }
                      }

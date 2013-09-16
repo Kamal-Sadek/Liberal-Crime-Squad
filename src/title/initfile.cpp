@@ -86,7 +86,7 @@ void loadinitfile(void)
          if (str[0] == ';') continue;
 
          posequal=str.find('=');
-         if(posequal==string::npos) continue;
+         if(posequal==(int)string::npos) continue;
 
          setconfigoption(str.substr(0,posequal), str.substr(posequal+1));
       }

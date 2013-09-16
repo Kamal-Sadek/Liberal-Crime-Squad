@@ -245,10 +245,7 @@ public:
    Location(int type, int parent=-1);
    Location() { }
    Location* addchild(int type);
-   ~Location()
-   {
-      delete_and_clear(loot);
-   }
+   ~Location() { delete_and_clear(loot); }
    void init(void);
    void update_heat_protection(void);
    bool duplicatelocation(void);

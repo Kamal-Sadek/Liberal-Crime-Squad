@@ -30,12 +30,11 @@ This file is part of Liberal Crime Squad.                                       
 #include <math.h>
 #include <externs.h>
 
-
 /* common - test for possible game over */
 char endcheck(char cause)
 {
    char dead=1;
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->alive&&
          pool[p]->align==1&&
@@ -83,8 +82,6 @@ bool iscriminal(Creature &cr)
          return 1;
    return 0;
 }
-
-
 
 /* common - sends somebody to the hospital */
 /***************************************************
@@ -153,8 +150,6 @@ void hospitalize(int loc, Creature &patient)
    }
 }
 
-
-
 /* common - determines how long a creature's injuries will take to heal */
 int clinictime(Creature &g)
 {
@@ -187,8 +182,6 @@ int clinictime(Creature &g)
    return time;
 }
 
-
-
 /* common - purges squad of loot and vehicles if it has no members */
 /***************************************************
 *JDS* testsquadclear -
@@ -210,15 +203,7 @@ int testsquadclear(squadst &thissquad, int obase)
       for(int p=0;p<6;p++)
       {
          if(thissquad.squad[p]==NULL)continue;
-         if(thissquad.squad[p]->carid!=-1)
-         {
-            long v=id_getcar(thissquad.squad[p]->carid);
-            if(v!=-1)
-            {
-               delete vehicle[v];
-               vehicle.erase(vehicle.begin() + v);
-            }
-         }
+         delete_and_remove(vehicle,id_getcar(thissquad.squad[p]->carid));
       }
 
       //RETURN ALL LOOT ITEMS TO BASE
@@ -228,7 +213,6 @@ int testsquadclear(squadst &thissquad, int obase)
    }
    return 0;
 }
-
 
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
@@ -245,12 +229,10 @@ void criminalizeparty(short crime)
    }
 }
 
-
-
 /* common - applies a crime to everyone in a location, or the entire LCS */
 void criminalizepool(short crime,long exclude,short loc)
 {
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(p==exclude)continue;
       if(loc!=-1&&pool[p]->location!=loc)continue;
@@ -281,8 +263,6 @@ void criminalize(Creature &cr,short crime)
    cr.heat+=lawflagheat(crime);
 }
 
-
-
 /* common - gives juice to everyone in the active party */
 void juiceparty(long juice, long cap)
 {
@@ -300,8 +280,6 @@ void juiceparty(long juice, long cap)
       }
    }
 }
-
-
 
 /* common - gives juice to a given creature */
 void addjuice(Creature &cr,long juice,long cap)
@@ -322,7 +300,7 @@ void addjuice(Creature &cr,long juice,long cap)
    // Pyramid scheme of juice trickling up the chain
    if(cr.hireid!=-1)
    {
-      for(int i=0;i<pool.size();i++)
+      for(int i=0;i<(int)pool.size();i++)
       {
          if(pool[i]->id==cr.hireid)
          {
@@ -336,8 +314,6 @@ void addjuice(Creature &cr,long juice,long cap)
    if(cr.juice>1000)cr.juice=1000;
    if(cr.juice<-50)cr.juice=-50;
 }
-
-
 
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr)
@@ -358,8 +334,6 @@ void removesquadinfo(Creature &cr)
       cr.squadid=-1;
    }
 }
-
-
 
 /* common - purges empty squads from existance */
 void cleangonesquads(void)
@@ -388,8 +362,7 @@ void cleangonesquads(void)
       {
          //SQUAD LOOT WILL BE DESTROYED
          if(activesquad==squad[sq])activesquad=NULL;
-         delete squad[sq];
-         squad.erase(squad.begin() + sq);
+         delete_and_remove(squad,sq);
       }
       //OTHERWISE YOU CAN TAKE ITS MONEY (and other gear)
       else
@@ -399,8 +372,6 @@ void cleangonesquads(void)
       }
    }
 }
-
-
 
 /* common - moves all squad members and their cars to a new location */
 void locatesquad(squadst *st,long loc)
@@ -423,7 +394,6 @@ void locatesquad(squadst *st,long loc)
    }
 }
 
-
 // Picks a random option, based on the weights provided
 int choose_one(const int * weight_list, int number_of_options, int default_value)
 {
@@ -444,7 +414,6 @@ int choose_one(const int * weight_list, int number_of_options, int default_value
    return option;
 }
 
-
 /* common - assigns a new base to all members of a squad */
 void basesquad(squadst *st,long loc)
 {
@@ -456,8 +425,6 @@ void basesquad(squadst *st,long loc)
       }
    }
 }
-
-
 
 /* common - shifts public opinion on an issue */
 void change_public_opinion(int v,int power,char affect,char cap)
@@ -546,7 +513,7 @@ void change_public_opinion(int v,int power,char affect,char cap)
 
    //Then affect public interest
    if(public_interest[v]<cap || (v==VIEW_LIBERALCRIMESQUADPOS && public_interest[v]<100))
-      public_interest[v]+=abs(effpower);
+      public_interest[v]+=ABS(effpower);
 
    if(effpower>0)
    {
@@ -638,7 +605,7 @@ int maxsubordinates(const Creature& cr)
 int subordinatesleft(const Creature& cr)
 {
    int recruitcap = maxsubordinates(cr);
-   for(int p=0; p<pool.size(); p++)
+   for(int p=0; p<(int)pool.size(); p++)
    {
       // ignore seduced and brainwashed characters
       if(pool[p]->hireid == cr.id && pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
@@ -652,7 +619,7 @@ int subordinatesleft(const Creature& cr)
 int loveslaves(const Creature& cr)
 {
    int loveslaves=0;
-   for(int p=0; p<pool.size(); p++)
+   for(int p=0; p<(int)pool.size(); p++)
    {
       // If subordinate and a love slave
       if(pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
@@ -830,16 +797,19 @@ bool sort_none(Creature* first, Creature* second) //This will sort sorted back t
    }
    return false;
 }
+
 bool sort_name(Creature* first, Creature* second)
 {
    return strcmp(first->name,second->name)<0;
 }
+
 bool sort_locationandname(Creature* first, Creature* second)
 {
    return (first->location < second->location
            || (first->location == second->location
                && strcmp(first->name,second->name)<0));
 }
+
 bool sort_squadorname(Creature* first, Creature* second)
 {
    bool a = ((first->squadid != -1 && second->squadid == -1) //Squad member should come before squadless.
@@ -965,7 +935,7 @@ int choiceprompt(const string &firstline, const string &secondline,
       int yline = 2;
 
       //Write options
-      for(int p=page*19; p<option.size()&&p<page*19+19; p++)
+      for(int p=page*19; p<(int)option.size()&&p<page*19+19; p++)
       {
          move(yline,0);
          addch('A'+yline-2);addstr(" - ");
@@ -990,12 +960,12 @@ int choiceprompt(const string &firstline, const string &secondline,
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<option.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)option.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<option.size())
+         if(p<(int)option.size())
             return p;
       }
 
@@ -1023,7 +993,7 @@ int buyprompt(const string &firstline, const string &secondline,
       int yline = 2;
 
       //Write wares and prices
-      for(int p=page*19; p<nameprice.size()&&p<page*19+19; p++)
+      for(int p=page*19; p<(int)nameprice.size()&&p<page*19+19; p++)
       {
          if (nameprice[p].second > ledger.get_funds())
             set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -1053,12 +1023,12 @@ int buyprompt(const string &firstline, const string &secondline,
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<nameprice.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)nameprice.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<nameprice.size() && nameprice[p].second <= ledger.get_funds())
+         if(p<(int)nameprice.size() && nameprice[p].second <= ledger.get_funds())
             return p;
       }
 

@@ -210,11 +210,10 @@ const int lowestloadscoreversion=31203;
 using namespace std;
 //#include "lcsio.h"
 #include "compat.h"
+#include "common.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
 #include "politics/alignment.h"
-
-
 
 /*--------------------------------------------------------------------------
  * Portability Functions
@@ -233,21 +232,14 @@ using namespace std;
 
  inline unsigned int getSeed(void)
  {
- unsigned int t;
-
- #ifdef GO_PORTABLE
-
- t = (unsigned int)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
-
- #else // WIN32
-
- t = (unsigned int)GetTickCount(); /* ms since system boot */
-
- #endif
-
- return(t);
+    unsigned int t;
+    #ifdef GO_PORTABLE
+    t=(unsigned int)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
+    #else // WIN32
+    t=(unsigned int)GetTickCount(); /* ms since system boot */
+    #endif
+    return(t);
  }
-
 
  /* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
    * This function is for compatibility and is currently a do nothing function.
@@ -256,25 +248,13 @@ using namespace std;
  inline int raw_output(bool bf)
  {
     raw();
- return OK;
+    return OK;
  }
-
  #endif
 
 /*--------------------------------------------------------------------------
  * End of Portability Functions
  *--------------------------------------------------------------------------*/
-
-
-/* Macro definition */
-#ifndef MAX
-   #define MAX(a,b) (((a)<(b))?(b):(a))
-#endif
-
-#ifndef MIN
-   #define MIN(a,b) (((a)>(b))?(b):(a))
-#endif
-
 
 
 #ifndef NDEBUG
@@ -319,8 +299,6 @@ using namespace std;
 
 int r_num(void);
 int LCSrandom(int max);
-
-template <class Container> void delete_and_clear(Container& c);
 
 string tostring(long i);
 int stringtobool(const string& boolstr);
@@ -517,10 +495,9 @@ enum Activity
 
 struct activityst
 {
-   activityst() : type(0), arg(0), arg2(0) { }
+   activityst() : type(0),arg(0),arg2(0) { }
    int type;
-   long arg;
-   long arg2;
+   long arg,arg2;
 };
 
 enum IncomeType
@@ -567,42 +544,18 @@ class Ledger
 private:
    int funds;
 public:
-   int income[INCOMETYPENUM];
-   int expense[EXPENSETYPENUM];
-   int total_income;
-   int total_expense;
+   int income[INCOMETYPENUM],expense[EXPENSETYPENUM],total_income,total_expense;
 
-   Ledger()
+   Ledger() : funds(7),total_income(0),total_expense(0)
    {
-      funds=7;
-      total_income=0;
-      total_expense=0;
-      for(int i=0;i<INCOMETYPENUM;i++)
-         income[i]=0;
-      for(int e=0;e<EXPENSETYPENUM;e++)
-         expense[e]=0;
-   }
+      for(int i=0;i<INCOMETYPENUM;i++)income[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++)expense[e]=0;
+   };
 
-   int get_funds()
-   {
-      return funds;
-   }
-   void force_funds(int amount)
-   {
-      funds = amount;
-   }
-   void add_funds(int amount, int incometype)
-   {
-      funds+=amount;
-      income[incometype]+=amount;
-      total_income+=amount;
-   }
-   void subtract_funds(int amount, int expensetype)
-   {
-      funds-=amount;
-      expense[expensetype]+=amount;
-      total_expense+=amount;
-   }
+   int get_funds() { return funds; }
+   void force_funds(int amount) { funds=amount; }
+   void add_funds(int amount,int incometype) { funds+=amount,income[incometype]+=amount,total_income+=amount; }
+   void subtract_funds(int amount,int expensetype) { funds-=amount,expense[expensetype]+=amount,total_expense+=amount; }
 };
 
 #include "items/itemtype.h"
@@ -646,8 +599,7 @@ enum CarChaseObstacles
 struct chaseseqst
 {
    long location;
-   vector<Vehicle *> friendcar;
-   vector<Vehicle *> enemycar;
+   vector<Vehicle *> friendcar,enemycar;
    char canpullover;
 
    //public:
@@ -676,19 +628,9 @@ struct squadst
    {
       for(int p=0;p<6;p++)squad[p]=NULL;
       strcpy(name,"");
-      activity.type=ACTIVITY_NONE;
-      id=-1;
-      stance=SQUADSTANCE_STANDARD;
+      activity.type=ACTIVITY_NONE,id=-1,stance=SQUADSTANCE_STANDARD;
    }
-   ~squadst()
-   {
-      for(int l=0;l<loot.size();l++)
-      {
-         delete loot[l];
-      }
-
-      loot.clear();
-   }
+   ~squadst() { delete_and_clear(loot); }
 };
 
 
@@ -751,8 +693,6 @@ enum Views
    VIEWNUM
 };
 
-
-
 enum Laws
 {
    LAW_ABORTION,
@@ -786,15 +726,8 @@ struct datest
    vector<Creature *> date;
    short timeleft;
    int city;
-   datest()
-   {
-      timeleft=0;
-   }
-   ~datest()
-   {
-      for(int d=0;d<date.size();d++)delete date[d];
-      date.clear();
-   }
+   datest() : timeleft(0) { };
+   ~datest() { delete_and_clear(date); }
 };
 
 enum RecruitTasks
@@ -813,9 +746,7 @@ struct recruitst
    long recruiter_id;
    Creature* recruit;
    short timeleft;
-   char level;
-   char eagerness1;
-   char task;
+   char level,eagerness1,task;
    recruitst();
    ~recruitst();
    char eagerness();
@@ -895,50 +826,29 @@ enum NewsStories
 
 struct newsstoryst
 {
-   short type;
-   short view;
+   short type,view;
    char claimed;
-   short politics_level;
-   short violence_level;
+   short politics_level,violence_level;
    Creature *cr;
    vector<int> crime;
    long loc,priority,page,guardianpage;
    char positive;
    short siegetype;
-   newsstoryst()
-   {
-      claimed=1;
-      politics_level=0;
-      violence_level=0;
-      loc=-1;
-      cr=NULL;
-   }
+   newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) { };
 };
 
 #define SLOGAN_LEN 79
 
 struct highscorest
 {
-   char valid;
-   char endtype;
-
-   char slogan[SLOGAN_LEN+1];
-   int month;
-   int year;
-   int stat_recruits;
-   int stat_kidnappings;
-   int stat_dead;
-   int stat_kills;
-   int stat_funds;
-   int stat_spent;
-   int stat_buys;
-   int stat_burns;
+   char valid,endtype,slogan[SLOGAN_LEN+1];
+   int month,year,stat_recruits,stat_kidnappings,stat_dead,stat_kills,stat_funds,stat_spent,stat_buys,stat_burns;
 };
 
 //just a float that is initialized to 0
 struct float_zero
 {
-   float_zero() : n(0.0f) {};
+   float_zero() : n(0.0f) { };
    operator float&() { return n; };
    float n;
 };
@@ -948,20 +858,9 @@ struct float_zero
 //of the target's current action.
 struct interrogation
 {
-   interrogation() : druguse(0)
-   {
-      techniques[0]=1;
-      techniques[1]=1;
-      techniques[2]=0;
-      techniques[3]=0;
-      techniques[4]=0;
-      techniques[5]=0;
-   };
-
+   interrogation() : druguse(0) { techniques[0]=1,techniques[1]=1,techniques[2]=0,techniques[3]=0,techniques[4]=0,techniques[5]=0; };
    bool techniques[6]; //yesterday's interrogation plan
-
    int druguse; //total days of drug use
-
    //Maps individual characters to the rapport built with them
    map<long,struct float_zero> rapport;
 };
@@ -987,6 +886,7 @@ enum EndTypes
    END_FIREMEN,
    ENDNUM
 };
+
 enum ReportTypes
 {
    REPORT_NEWS,
@@ -1075,7 +975,7 @@ void end_game(int err=0);
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment, bool extended_range=false);
+void set_alignment_color(signed char alignment,bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */
@@ -1099,7 +999,7 @@ void makedelimiter(int y,int x);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
-void printfunds(int y, int offset, const char* prefix=NULL);
+void printfunds(int y,int offset,const char* prefix=NULL);
 /* prints a short blurb showing how to page forward */
 void addnextpagestr();
 /* prints a short blurb showing how to page back */
@@ -1109,20 +1009,20 @@ void addpagestr();
 /* Various wrappers to addstr() and mvaddstr() which handle permutations of:
    - Including or not including the gamelog for external message logging
    - std::string or c-style char arrays */
-int addstr(const char *text, Log &log);
-int mvaddstr(int y, int x, const char *text, Log &log);
+int addstr(const char *text,Log &log);
+int mvaddstr(int y,int x,const char *text,Log &log);
 int addstr(std::string text);
 int addstr(std::string text, Log &log);
-int mvaddstr(int y, int x, std::string text);
-int mvaddstr(int y, int x, std::string text, Log &log);
+int mvaddstr(int y,int x,std::string text);
+int mvaddstr(int y,int x,std::string text,Log &log);
 /* addstr with formatted output */
-int addstr_f(const char * format, ...);
+int addstr_f(const char * format,...);
 /* mvaddstr with formatted output */
-int mvaddstr_f(int y, int x, const char * format, ...);
+int mvaddstr_f(int y,int x,const char * format,...);
 /* addstr with formatted output and logging */
-int addstr_fl(Log &log, const char * format, ...);
+int addstr_fl(Log &log,const char * format,...);
 /* mvaddstr with formatted output and logging */
-int mvaddstr_fl(int y, int x, Log &log, const char * format, ...);
+int mvaddstr_fl(int y,int x,Log &log,const char * format,...);
 
 /*
  commonactions.cpp
@@ -1132,11 +1032,11 @@ char endcheck(char cause=-1);
 /* common - tests if the person is a wanted criminal */
 bool iscriminal(Creature &cr);
 /* common - sends somebody to the hospital */
-void hospitalize(int loc, Creature &patient);
+void hospitalize(int loc,Creature &patient);
 /* common - determines how long a creature's injuries will take to heal */
 int clinictime(Creature &g);
 /* common - purges squad of loot and vehicles if it has no members */
-int testsquadclear(squadst &thissquad, int obase);
+int testsquadclear(squadst &thissquad,int obase);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */
@@ -1176,30 +1076,30 @@ int scheduleddates(const Creature& cr);
 /* common - random issue by public interest */
 int randomissue(bool core_only=0);
 // Picks a random option, based on the weights provided
-int choose_one(const int * weight_list, int number_of_options, int default_value);
+int choose_one(const int * weight_list,int number_of_options,int default_value);
 // Prompt to convert a new recruit into a sleeper
-void sleeperize_prompt(Creature &converted, Creature &recruiter, int y);
+void sleeperize_prompt(Creature &converted,Creature &recruiter,int y);
 /* common - Sort a list of creatures.*/
-void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool dosortnone=false);
+void sortliberals(std::vector<Creature *>& liberals,short sortingchoice,bool dosortnone=false);
 /* common - Functions used when sorting vectors of creatures. */
-bool sort_none(Creature* first, Creature* second);
-bool sort_name(Creature* first, Creature* second);
-bool sort_locationandname(Creature* first, Creature* second);
-bool sort_squadorname(Creature* first, Creature* second);
+bool sort_none(Creature* first,Creature* second);
+bool sort_name(Creature* first,Creature* second);
+bool sort_locationandname(Creature* first,Creature* second);
+bool sort_squadorname(Creature* first,Creature* second);
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting);
 /* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
             (Is currently unnecessary unless the enums are changed.)*/
 short reviewmodeenum_to_sortingchoiceenum(short reviewmode);
 /* common - Display a list of options and return choice. */
-int choiceprompt(const string &firstline, const string &secondline,
-                  const vector<string> &option, const string &optiontypename,
-                  bool allowexitwochoice, const string &exitstring="");
+int choiceprompt(const string &firstline,const string &secondline,
+                 const vector<string> &option,const string &optiontypename,
+                 bool allowexitwochoice,const string &exitstring="");
 /* common - Displays a list of things to buy and returns an int corresponding
             to the index of the chosen thing in the nameprice vector. */
-int buyprompt(const string &firstline, const string &secondline,
-              const vector< pair<string,int> > &nameprice, int namepaddedlength,
-              const string &producttype, const string &exitstring);
+int buyprompt(const string &firstline,const string &secondline,
+              const vector< pair<string,int> > &nameprice,int namepaddedlength,
+              const string &producttype,const string &exitstring);
 
 
 /*
@@ -1230,7 +1130,7 @@ void getviewsmall(char *str,short view);
 void getlaw(char *str,int l);
 void cityname(char *story); /* random city name */
 /* Allow player to enter a name with an optional default name */
-void enter_name(char *name, int len, char *defname=NULL);
+void enter_name(char *name,int len,char *defname=NULL);
 void getlawflag(char *str,int type);
 std::string getmonth(int month, bool shortname=false);
 
@@ -1238,11 +1138,11 @@ std::string getmonth(int month, bool shortname=false);
  translateid.cpp
 */
 /* transforms a squad id number into the index of that squad in the global vector */
-long getsquad(long id);
+int getsquad(int id);
 /* transforms a car id number into the index of that car in the global vector */
 int id_getcar(int id);
 /* transforms a creature id number into the index of that person in the pool */
-int getpoolcreature(long id);
+int getpoolcreature(int id);
 /* transforms a vehicle type id into the index of that vehicle type in the global vector */
 int getvehicletype(int id);
 /* transforms a vehicle type idname into the index of that vehicle type in the global vector */
@@ -1326,7 +1226,7 @@ void romannumeral(int amendnum);
 /* Pick a random string from a table of strings. */
 extern const char *selectRandomString(const char **string_table, int table_size);
 /* Determine table_size in selectRandomString */
-#define ARRAY_ELEMENTS(ARRAY_NAME) (sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0]))
+#define ARRAY_ELEMENTS(ARRAY_NAME) ((int)(sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0])))
 
 
 /*
@@ -1576,7 +1476,7 @@ char alienationcheck(char mistake);
 /* checks if conservatives see through your disguise */
 void disguisecheck(int encounter_timer);
 /* checks if a creature's weapon is suspicious or illegal */
-char weaponcheck(const Creature &cr, bool metaldetect=false);
+char weaponcheck(const Creature &cr,bool metaldetect=false);
 /* checks if a creature's uniform is appropriate to the location */
 char hasdisguise(const Creature &cr);
 /* returns true if the entire site is not open to public */
@@ -1678,7 +1578,7 @@ void advanceday(char &clearformess,char canseethings);
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess);
 /* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(Creature &cr, char &clearformess);
+bool promotesubordinates(Creature &cr,char &clearformess);
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
 void advancelocations(void);
 /* daily - returns true if the site type supports high security */
@@ -1768,7 +1668,7 @@ void conquertext(void);
 void conquertextccs(void);
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc);
-void statebrokenlaws(Creature & cr);
+void statebrokenlaws(Creature &cr);
 
 /*******************************************************************************
 *
@@ -1779,7 +1679,7 @@ void statebrokenlaws(Creature & cr);
 /* news - determines the priority of a news story */
 void setpriority(newsstoryst &ns);
 /* news - show major news story */
-void displaystory(newsstoryst &ns, bool liberalguardian, int header);
+void displaystory(newsstoryst &ns,bool liberalguardian,int header);
 /* news - graphics */
 void loadgraphics(void);
 void displaycenterednewsfont(const char *str,int y);
@@ -1790,7 +1690,7 @@ void constructeventstory(char *story,short view,char positive);
 /* news - draws the specified block of text to the screen */
 void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
 /* news - shows animated news stories */
-void run_television_news_stories();
+void run_television_news_stories(void);
 /* news - make some filler junk */
 void generatefiller(char *story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
@@ -1858,11 +1758,11 @@ void prisonscene(Creature &g);
  politics.cpp
 */
 /* politics - calculate presidential approval */
-int presidentapproval();
+int presidentapproval(void);
 /* politics -- gets the leaning of an issue voter for an election */
-int getswingvoter();
+int getswingvoter(void);
 /* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP();
+void promoteVP(void);
 /* politics -- appoints a figure to an executive office, based on the President's alignment */
 void fillCabinetPost(int position);
 /* politics - causes the people to vote (presidential, congressional, propositions) */

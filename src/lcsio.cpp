@@ -31,7 +31,6 @@ This file is part of Liberal Crime Squad.
 #include <config.h>
 #endif
 
-
 #define MAX_PATH_SIZE 2048
 char homedir[MAX_PATH_SIZE];
 char artdir[MAX_PATH_SIZE];
@@ -54,23 +53,13 @@ const char *art_search_paths[]=
     NULL
 };
 
-
-
-
 //Check if filename exists on the system.
 //Filename is the full path to the file.
 //This works on directories too, but only in Linux!
 bool LCSFileExists(const char* filename)
 {
-
-
     struct stat st;
-    int ret=stat(filename,&st);
-
-    if(ret==0)
-        return true;
-    else
-        return false;
+    return(stat(filename,&st)==0);
 }
 
 //Put the home directory prefix in homedir.
@@ -80,7 +69,7 @@ bool LCSInitHomeDir()
     #ifndef WIN32
     char* homeenv=getenv("HOME");
     #else
-    char* homeenv="./";
+    char* homeenv=(char*)"./";
     #endif
 
     //Do everything using STL String, it is safer that way.
@@ -132,8 +121,6 @@ bool LCSInitArtDir()
     return true;
 }
 
-
-
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 {
     if(!initialized)
@@ -144,13 +131,9 @@ FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
     }
     std::string filepath;
     if(flags & LCSIO_PRE_ART)
-    {
         filepath=artdir;
-    }
     else if(flags & LCSIO_PRE_HOME)
-    {
         filepath=homedir;
-    }
 
     filepath.append(filename);
 
@@ -171,26 +154,15 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 
    //This ifelse block decides which directory the file gets saved to.
    if(flags & LCSIO_PRE_ART) //Art dir specified.
-   {
       filepath = artdir; //Set the filepath to the artdir.
-   }
    else if(flags & LCSIO_PRE_HOME) //Home dir specified.
-   {
       filepath = homedir; //Set the filepath to the homedir.
-   }
 
    filepath.append(filename); //Append the file's name/relative path to the filepath.
 
    file.open(filepath.c_str(), mode); //Opens the file.
 
-   if(file.is_open()) //Check if file opened successfully.
-   {
-      return true; //Success!
-   }
-   else
-   {
-      return false; //Failure!
-   }
+   return file.is_open(); //Check if file opened successfully.
 }
 
 void LCSDeleteFile(const char* filename,int flags)
@@ -206,22 +178,13 @@ void LCSDeleteFile(const char* filename,int flags)
     std::string str;
 
     if(flags & LCSIO_PRE_ART)
-    {
         str.append(artdir);
-    }
     else if(flags & LCSIO_PRE_HOME)
-    {
         str.append(homedir);
-    }
 
     str.append(filename);
 
     unlink(str.c_str());
-
-
-
-
-
 }
 
 void LCSCloseFile(FILE* handle)
@@ -233,8 +196,5 @@ void LCSCloseFile(FILE* handle)
 void LCSCloseFileCPP(std::fstream &file)
 {
    if(file.is_open()) //Check if the file even is open so that we don't bother closing a file that isn't open.
-   {
-      file.close();
-   }
+       file.close();
 }
-

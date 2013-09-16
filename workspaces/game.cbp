@@ -51,6 +51,7 @@
 		<Unit filename="../src/combat/chase.cpp" />
 		<Unit filename="../src/combat/fight.cpp" />
 		<Unit filename="../src/combat/haulkidnap.cpp" />
+		<Unit filename="../src/common.h" />
 		<Unit filename="../src/common/commonactions.cpp" />
 		<Unit filename="../src/common/commondisplay.cpp" />
 		<Unit filename="../src/common/consolesupport.cpp" />

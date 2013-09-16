@@ -72,8 +72,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             refresh();
             getch();
 
-            delete d.date[e];
-            d.date.erase(d.date.begin() + e);
+            delete_and_remove(d.date,e);
 
             return DATERESULT_BREAKUP;
          }
@@ -239,8 +238,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             refresh();
             getch();
 
-            delete d.date[e];
-            d.date.erase(d.date.begin() + e);
+            delete_and_remove(d.date,e);
 
             return DATERESULT_ARRESTED;
          }
@@ -268,8 +266,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       refresh();
       getch();
 
-      delete d.date[e];
-      d.date.erase(d.date.begin() + e);
+      delete_and_remove(d.date,e);
 
       return DATERESULT_BREAKUP;
    }
@@ -347,12 +344,12 @@ char completedate(datest &d,int p,char &clearformess)
       else addstr("a hot date with ", gamelog);
    }
    else addstr("dates to manage with ", gamelog);
-   for(e=0;e<d.date.size();e++)
+   for(e=0;e<(int)d.date.size();e++)
    {
       addstr(d.date[e]->name, gamelog);
 
-      if(e<=d.date.size()-3)addstr(", ", gamelog);
-      else if(e==d.date.size()-2)addstr(" and ", gamelog);
+      if(e<=(int)d.date.size()-3)addstr(", ", gamelog);
+      else if(e==(int)d.date.size()-2)addstr(" and ", gamelog);
       else
       {
          if(pool[p]->clinic>0)
@@ -496,8 +493,7 @@ char completedate(datest &d,int p,char &clearformess)
             d.date[e]->give_armor(*(static_cast<Armor*>(temp.back())),NULL);
          else if (temp.back()->is_clip())
             d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())),temp.back()->get_number());
-         delete temp.back();
-         temp.pop_back();
+         delete_and_remove(temp,temp.size()-1);
       }
       //d.date[e]->weapon = wtemp;
       //delete d.date[e]->armor;
@@ -604,8 +600,7 @@ char completedate(datest &d,int p,char &clearformess)
             for(int e2=d.date.size()-1;e2>=0;e2--)
             {
                if(e2==e)continue;
-               delete d.date[e2];
-               d.date.erase(d.date.begin() + e2);
+               delete_and_remove(d.date,e2);
                e=0;
             }
             d.timeleft=7;
@@ -620,8 +615,7 @@ char completedate(datest &d,int p,char &clearformess)
          }
          if(c=='d')
          {
-            delete d.date[e];
-            d.date.erase(d.date.begin() + e);
+            delete_and_remove(d.date,e);
             break;
          }
          if(c=='e'&&d.date[e]->align==-1&&!pool[p]->clinic)
@@ -765,8 +759,7 @@ char completedate(datest &d,int p,char &clearformess)
                   refresh();
                   getch();
 
-                  delete d.date[e];
-                  d.date.erase(d.date.begin() + e);
+                  delete_and_remove(d.date,e);
                   break;
                }
                else
@@ -800,8 +793,7 @@ char completedate(datest &d,int p,char &clearformess)
                   refresh();
                   getch();
 
-                  delete d.date[e];
-                  d.date.erase(d.date.begin() + e);
+                  delete_and_remove(d.date,e);
                   return 1;
                }
             }
