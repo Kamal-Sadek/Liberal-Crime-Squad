@@ -301,7 +301,7 @@ void enemyattack(void)
 
          if(((!encounter[e].enemy()||
             (encounter[e].juice==0&&!encounter[e].is_armed()&&armed&&encounter[e].blood<signed(70+LCSrandom(61))))
-            &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||encounter[e].blood<45
+            &&!(encounter[e].flag & CREATUREFLAG_CONVERTED))||(encounter[e].blood<45&&encounter[e].juice<200)
             ||((fire*LCSrandom(5)>=3)&&!(encounter[e].type==CREATURE_FIREFIGHTER)))
          {
             if(encounter[e].animalgloss==ANIMALGLOSS_NONE)
