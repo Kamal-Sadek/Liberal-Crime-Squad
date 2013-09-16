@@ -35,17 +35,17 @@ void advanceday(char &clearformess,char canseethings)
    int p;
    showcarprefs=0;
    int w=0;
-   int l2;
+   //int l2;
 
    //*JDS* Save the game to save.dat each day. :)
    if((!disbanding) and autosave)savegame("save.dat");
 
    //CLEAR CAR STATES
    vector<long> caridused;
-   for(p=0;p<pool.size();p++)pool[p]->carid=-1;
+   for(p=0;p<(int)pool.size();p++)pool[p]->carid=-1;
 
    // Aging
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       pool[p]->stunned = 0; // For lack of a better place, make stunning expire here
 
@@ -123,7 +123,7 @@ void advanceday(char &clearformess,char canseethings)
 
    //ADVANCE SQUADS
    squadst *oactivesquad=activesquad;
-   for(int sq=0;sq<squad.size();sq++)
+   for(int sq=0;sq<(int)squad.size();sq++)
    {
       if(disbanding)break;
 
@@ -200,11 +200,11 @@ void advanceday(char &clearformess,char canseethings)
             {
                long wid=squad[sq]->squad[p]->pref_carid;
                if(wid==-1)continue;
-               for(w=0;w<wantcar.size();w++)
+               for(w=0;w<(int)wantcar.size();w++)
                {
                   if(wantcar[w]==wid)break;
                }
-               if(w==wantcar.size())wantcar.push_back(wid);
+               if(w==(int)wantcar.size())wantcar.push_back(wid);
             }
          }
 
@@ -213,7 +213,7 @@ void advanceday(char &clearformess,char canseethings)
             //CULL UNAVAILABLE CARS
             for(int c=wantcar.size()-1;c>=0;c--)
             {
-               for(int c2=0;c2<caridused.size();c2++)
+               for(int c2=0;c2<(int)caridused.size();c2++)
                {
                   if(wantcar[c]==caridused[c2])
                   {
@@ -248,7 +248,7 @@ void advanceday(char &clearformess,char canseethings)
          {
             vector<int> driver;
             vector<int> passenger;
-            for(w=0;w<wantcar.size();w++)
+            for(w=0;w<(int)wantcar.size();w++)
             {
                driver.clear();
                passenger.clear();
@@ -276,7 +276,7 @@ void advanceday(char &clearformess,char canseethings)
                   if(passenger.size()>0)
                   {
                      int max=0;
-                     for(p=0;p<passenger.size();p++)
+                     for(p=0;p<(int)passenger.size();p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
                         if(v >= 0)
@@ -289,7 +289,7 @@ void advanceday(char &clearformess,char canseethings)
                         }
                      }
                      vector<int> goodp;
-                     for(p=0;p<passenger.size();p++)
+                     for(p=0;p<(int)passenger.size();p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
                         if(v >= 0)
@@ -314,7 +314,7 @@ void advanceday(char &clearformess,char canseethings)
                {
                   //TOSS ALL BUT THE BEST
                   int max=0;
-                  for(p=0;p<driver.size();p++)
+                  for(p=0;p<(int)driver.size();p++)
                   {
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
                      if (v >= 0)
@@ -326,7 +326,7 @@ void advanceday(char &clearformess,char canseethings)
                      }
                   }
                   vector<int> goodp;
-                  for(p=0;p<driver.size();p++)
+                  for(p=0;p<(int)driver.size();p++)
                   {
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
                      if (v >= 0)
@@ -341,7 +341,7 @@ void advanceday(char &clearformess,char canseethings)
                   if(goodp.size()>0)
                   {
                      int p=goodp[LCSrandom(goodp.size())];
-                     for(int p2=0;p2<driver.size();p2++)
+                     for(int p2=0;p2<(int)driver.size();p2++)
                      {
                         if(p2==p)continue;
                         squad[sq]->squad[driver[p2]]->is_driver=0;
@@ -408,7 +408,7 @@ void advanceday(char &clearformess,char canseethings)
          // Identify the "travel location" -- top level in multi-city play,
          // a particular district in one-city play
          int travelLocation = -1;
-         for(int i=0; i < location.size(); i++)
+         for(int i=0; i < (int)location.size(); i++)
          {
             if(location[i]->type == SITE_TRAVEL)
             {
@@ -634,7 +634,7 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //ACTIVITIES FOR INDIVIDUALS
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       pool[p]->income=0;
       if(disbanding)break;
@@ -737,7 +737,7 @@ void advanceday(char &clearformess,char canseethings)
    // Healing - determine medical support at each location
    int *healing=new int[location.size()];
    int *healing2=new int[location.size()];
-   for(p=0;p<location.size();++p)
+   for(p=0;p<(int)location.size();++p)
    {
       // Clinic is equal to a skill 6 liberal
       if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=6;
@@ -746,7 +746,7 @@ void advanceday(char &clearformess,char canseethings)
       else healing[p]=0;
       healing2[p]=0;
    }
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
 
       if(disbanding)break;
@@ -769,7 +769,7 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    // Don't let starving locations heal
-   for(p=0;p<location.size();++p)
+   for(p=0;p<(int)location.size();++p)
    {
       if(location[p]->type!=SITE_HOSPITAL_CLINIC && location[p]->type!=SITE_HOSPITAL_UNIVERSITY)
       {
@@ -784,7 +784,7 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //HEAL NON-CLINIC PEOPLE AND TRAIN
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       if(disbanding)break;
       if(!(pool[p]->alive))continue;
@@ -795,7 +795,7 @@ void advanceday(char &clearformess,char canseethings)
          if(pool[p]->clinic==false)
          {
             int damage=0; // Amount health degrades
-            int release=1;
+            //int release=1;
             int transfer=0;
 
             // Give experience to caretakers
@@ -844,7 +844,7 @@ void advanceday(char &clearformess,char canseethings)
                   else
                   {
                      damage+=4;
-                     release=0;
+                     //release=0;
                      if(pool[p]->location>-1&&healing[pool[p]->location]+9<=12)
                         transfer=1;
                   }
@@ -863,7 +863,7 @@ void advanceday(char &clearformess,char canseethings)
                   else
                   {
                      damage+=1;
-                     release=0;
+                     //release=0;
                   }
                }
                // Non-bleeding wounds
@@ -936,7 +936,7 @@ void advanceday(char &clearformess,char canseethings)
                   else
                   {
                      damage+=bleed;
-                     release=0;
+                     //release=0;
                      if(healing[pool[p]->location]+9<=healdiff)
                      {
                         transfer=1;
@@ -968,7 +968,7 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //Give experience to medics
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       //If present, qualified to heal, and doing so
       if(pool[p]->location>=0 && pool[p]->activity.type == ACTIVITY_HEAL)
@@ -990,7 +990,7 @@ void advanceday(char &clearformess,char canseethings)
    //DO RENT
    if(day==3&&!disbanding)
    {
-      for(int l=0;l<location.size();l++)
+      for(int l=0;l<(int)location.size();l++)
       {
          if(location[l]->renting>0&&
             !location[l]->newrental)
@@ -1022,7 +1022,7 @@ void advanceday(char &clearformess,char canseethings)
 
                int hs=find_homeless_shelter(l);
                //MOVE ALL ITEMS AND SQUAD MEMBERS
-               for(int p=0;p<pool.size();p++)
+               for(int p=0;p<(int)pool.size();p++)
                {
                   if(pool[p]->location==l)pool[p]->location=hs;
                   if(pool[p]->base==l)pool[p]->base=hs;
@@ -1058,22 +1058,19 @@ void advanceday(char &clearformess,char canseethings)
          //TERMINATE NULL RECRUIT MEETINGS
          if(location[pool[p]->location]->siege.siege)
          {
-            delete recruit[r];
-            recruit.erase(recruit.begin() + r);
+            delete_and_remove(recruit,r);
             continue;
          }
          //DO MEETING
          else if(completerecruitmeeting(*recruit[r],p,clearformess))
          {
-            delete recruit[r];
-            recruit.erase(recruit.begin() + r);
+            delete_and_remove(recruit,r);
             continue;
          }
       }
       else
       {
-         delete recruit[r];
-         recruit.erase(recruit.begin() + r);
+         delete_and_remove(recruit,r);
          continue;
       }
    }
@@ -1112,8 +1109,7 @@ void advanceday(char &clearformess,char canseethings)
 
                if(completevacation(*date[d],p,clearformess))
                {
-                  delete date[d];
-                  date.erase(date.begin() + d);
+                  delete_and_remove(date,d);
                   continue;
                }
             }
@@ -1124,15 +1120,13 @@ void advanceday(char &clearformess,char canseethings)
             //TERMINATE NULL DATES
             if(location[pool[p]->location]->siege.siege)
             {
-               delete date[d];
-               date.erase(date.begin() + d);
+               delete_and_remove(date,d);
                continue;
             }
             //DO DATE
             else if(completedate(*date[d],p,clearformess))
             {
-               delete date[d];
-               date.erase(date.begin() + d);
+               delete_and_remove(date,d);
                continue;
             }
             else
@@ -1162,15 +1156,14 @@ void advanceday(char &clearformess,char canseethings)
       }
       else
       {
-         delete date[d];
-         date.erase(date.begin() + d);
+         delete_and_remove(date,d);
          continue;
       }
    }
 
    //AGE THINGS
    day++;
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       // Heal over time
       if(pool[p]->blood<100)pool[p]->blood+=1;
@@ -1296,7 +1289,7 @@ void dispersalcheck(char &clearformess)
       do
       {
          promotion=0;
-         for(p=0;p<pool.size();p++)
+         for(p=0;p<(int)pool.size();p++)
          {
             // Default: members are marked dispersal_status = NOCONTACT
             //(no contact verified)
@@ -1328,8 +1321,7 @@ void dispersalcheck(char &clearformess)
 
                if(pool[p]->location==-1 || location[pool[p]->location]->renting == RENTING_NOCONTROL)
                {
-                  delete pool[p];
-                  pool.erase(pool.begin() + p);
+                  delete_and_remove(pool,p);
                   --p;
                }
             }
@@ -1492,10 +1484,7 @@ void dispersalcheck(char &clearformess)
 
             removesquadinfo(*pool[p]);
             if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_ABANDONLCS)
-            {
-               delete pool[p];
-               pool.erase(pool.begin() + p);
-            }
+               delete_and_remove(pool,p);
             else
             {
                pool[p]->location=-1;
@@ -1531,7 +1520,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    if(cr.hireid==-1)maxjuice=99;
 
    //Identify big boss and top subordinate
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       if(pool[p]->id==cr.id)continue;
       if(pool[p]->id==cr.hireid)bigboss=p;
@@ -1602,7 +1591,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    //Order secondary subordinates to follow the new boss
    if(subordinates>1)
    {
-      for(p=0;p<pool.size();p++)
+      for(p=0;p<(int)pool.size();p++)
       {
          if(pool[p]->hireid==cr.id && // recruited by old boss that died
             p!=newboss &&             // not the new boss
@@ -1675,7 +1664,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 void advancelocations(void)
 {
    //ADVANCE LOCATIONS
-   for(int l=0;l<location.size();l++)
+   for(int l=0;l<(int)location.size();l++)
    {
       if(location[l]->closed>0)
       {

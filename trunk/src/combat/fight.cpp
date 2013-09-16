@@ -146,7 +146,7 @@ void youattack(void)
    //COVER FIRE
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->align!=1)continue;
@@ -477,7 +477,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 {
    actual=0;
 
-   char str[200],str2[200];
+   char str[200];
+   //char str2[200];
 
    clearmessagearea(false);
    if (goodguyattack)
@@ -2207,8 +2208,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
                      {
                         pool[pl]->die();
                         pool[pl]->location=-1;
-                        //delete pool[pl];
-                        //pool.erase(pool.begin() + pl);
+                        //delete_and_remove(pool,pl);
                         break;
                      }
                   }
@@ -3019,7 +3019,7 @@ void autopromote(int loc)
    }
 
    int libnum=0;
-   for(int pl=0;pl<pool.size();pl++)
+   for(int pl=0;pl<(int)pool.size();pl++)
    {
       if(pool[pl]->location!=loc)continue;
       if(pool[pl]->alive&&pool[pl]->align==1)libnum++;
@@ -3037,7 +3037,7 @@ void autopromote(int loc)
 
       if(conf)
       {
-         for(int pl=0;pl<pool.size();pl++)
+         for(int pl=0;pl<(int)pool.size();pl++)
          {
             if(pool[pl]->location!=loc)continue;
             if(pool[pl]->alive&&pool[pl]->squadid==-1&&

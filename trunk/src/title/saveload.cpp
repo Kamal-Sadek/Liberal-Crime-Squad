@@ -38,10 +38,10 @@ void savegame(const char *str)
 #ifdef NOSAVE
    return;
 #endif
-   
+
    char dummy_c;
    int dummy;
-   int numbytes;
+   //int numbytes;
    FILE *h;
    int l;
 
@@ -50,156 +50,156 @@ void savegame(const char *str)
    if(h!=NULL)
    {
       int lversion=version;
-      numbytes=fwrite(&lversion,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&lversion,sizeof(int),1,h);
 
-      numbytes=fwrite(&seed,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&seed,sizeof(int),1,h);
 
-      numbytes=fwrite(&mode,sizeof(short),1,h);
-      numbytes=fwrite(&wincondition,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&mode,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&wincondition,sizeof(short),1,h);
 
-      numbytes=fwrite(&day,sizeof(int),1,h);
-      numbytes=fwrite(&month,sizeof(int),1,h);
-      numbytes=fwrite(&year,sizeof(int),1,h);
-      numbytes=fwrite(&execterm,sizeof(short),1,h);
-      numbytes=fwrite(&presparty,sizeof(short),1,h);
-      numbytes=fwrite(&amendnum,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&day,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&month,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&year,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&execterm,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&presparty,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&amendnum,sizeof(int),1,h);
 
-      numbytes=fwrite(&multipleCityMode,sizeof(bool),1,h);
-      numbytes=fwrite(&termlimits,sizeof(bool),1,h);
-      numbytes=fwrite(&deagle,sizeof(bool),1,h);
-      numbytes=fwrite(&m249,sizeof(bool),1,h);
-      numbytes=fwrite(&notermlimit,sizeof(bool),1,h);
-      numbytes=fwrite(&nocourtpurge,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&multipleCityMode,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&termlimits,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&deagle,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&m249,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&notermlimit,sizeof(bool),1,h);
+      /*numbytes=*/fwrite(&nocourtpurge,sizeof(bool),1,h);
 
-      numbytes=fwrite(&stat_recruits,sizeof(int),1,h);
-      numbytes=fwrite(&stat_dead,sizeof(int),1,h);
-      numbytes=fwrite(&stat_kills,sizeof(int),1,h);
-      numbytes=fwrite(&stat_kidnappings,sizeof(int),1,h);
-      numbytes=fwrite(&stat_buys,sizeof(int),1,h);
-      numbytes=fwrite(&stat_burns,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_recruits,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_dead,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_kills,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_kidnappings,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_buys,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&stat_burns,sizeof(int),1,h);
 
-      numbytes=fwrite(&endgamestate,sizeof(char),1,h);
-      numbytes=fwrite(&ccsexposure,sizeof(char),1,h);
-      numbytes=fwrite(&ccs_kills,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&endgamestate,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&ccsexposure,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&ccs_kills,sizeof(char),1,h);
 
-      numbytes=fwrite(&Vehicle::curcarid,sizeof(long),1,h);
-      numbytes=fwrite(&curcreatureid,sizeof(long),1,h);
-      numbytes=fwrite(&cursquadid,sizeof(long),1,h);
-      numbytes=fwrite(&police_heat,sizeof(int),1,h);
-      numbytes=fwrite(&offended_corps,sizeof(short),1,h);
-      numbytes=fwrite(&offended_cia,sizeof(short),1,h);
-      numbytes=fwrite(&offended_amradio,sizeof(short),1,h);
-      numbytes=fwrite(&offended_cablenews,sizeof(short),1,h);
-      numbytes=fwrite(&offended_firemen,sizeof(short),1,h);
-      numbytes=fwrite(&attorneyseed,sizeof(int),1,h);
-      numbytes=fwrite(&selectedsiege,sizeof(long),1,h);
-      numbytes=fwrite(lcityname,sizeof(char),80,h);
-      numbytes=fwrite(&newscherrybusted,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&Vehicle::curcarid,sizeof(long),1,h);
+      /*numbytes=*/fwrite(&curcreatureid,sizeof(long),1,h);
+      /*numbytes=*/fwrite(&cursquadid,sizeof(long),1,h);
+      /*numbytes=*/fwrite(&police_heat,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&offended_corps,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&offended_cia,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&offended_amradio,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&offended_cablenews,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&offended_firemen,sizeof(short),1,h);
+      /*numbytes=*/fwrite(&attorneyseed,sizeof(int),1,h);
+      /*numbytes=*/fwrite(&selectedsiege,sizeof(long),1,h);
+      /*numbytes=*/fwrite(lcityname,sizeof(char),80,h);
+      /*numbytes=*/fwrite(&newscherrybusted,sizeof(char),1,h);
 
-      numbytes=fwrite(slogan,sizeof(char),80,h);
-      numbytes=fwrite(&ledger,sizeof(class Ledger),1,h);
-      numbytes=fwrite(&party_status,sizeof(short),1,h);
+      /*numbytes=*/fwrite(slogan,sizeof(char),80,h);
+      /*numbytes=*/fwrite(&ledger,sizeof(class Ledger),1,h);
+      /*numbytes=*/fwrite(&party_status,sizeof(short),1,h);
 
-      numbytes=fwrite(attitude,sizeof(short),VIEWNUM,h);
-      numbytes=fwrite(law,sizeof(short),LAWNUM,h);
-      numbytes=fwrite(house,sizeof(short),435,h);
-      numbytes=fwrite(senate,sizeof(short),100,h);
-      numbytes=fwrite(court,sizeof(short),9,h);
-      numbytes=fwrite(courtname,sizeof(char)*80,9,h);
-      numbytes=fwrite(exec,sizeof(char),EXECNUM,h);
-      numbytes=fwrite(execname,sizeof(char)*80,EXECNUM,h);
-      numbytes=fwrite(oldPresidentName,sizeof(char)*80,1,h);
+      /*numbytes=*/fwrite(attitude,sizeof(short),VIEWNUM,h);
+      /*numbytes=*/fwrite(law,sizeof(short),LAWNUM,h);
+      /*numbytes=*/fwrite(house,sizeof(short),435,h);
+      /*numbytes=*/fwrite(senate,sizeof(short),100,h);
+      /*numbytes=*/fwrite(court,sizeof(short),9,h);
+      /*numbytes=*/fwrite(courtname,sizeof(char)*80,9,h);
+      /*numbytes=*/fwrite(exec,sizeof(char),EXECNUM,h);
+      /*numbytes=*/fwrite(execname,sizeof(char)*80,EXECNUM,h);
+      /*numbytes=*/fwrite(oldPresidentName,sizeof(char)*80,1,h);
 
       //LOCATIONS
       dummy=location.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(l=0;l<location.size();l++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(l=0;l<(int)location.size();l++)
       {
          dummy=location[l]->loot.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<location[l]->loot.size();l2++)
+         /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+         for(int l2=0;l2<(int)location[l]->loot.size();l2++)
          {
             std::string itemStr = location[l]->loot[l2]->showXml();
             size_t itemSize = itemStr.size();
 
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
+            /*numbytes=*/fwrite(&itemSize,sizeof(itemSize),1,h);
+            /*numbytes=*/fwrite(itemStr.c_str(),itemSize,1,h);
          }
          dummy=location[l]->changes.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<location[l]->changes.size();l2++)
+         /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+         for(int l2=0;l2<(int)location[l]->changes.size();l2++)
          {
-            numbytes=fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
+            /*numbytes=*/fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
          }
 
-         numbytes=fwrite(location[l]->name,sizeof(char),40,h);
-         numbytes=fwrite(location[l]->shortname,sizeof(char),20,h);
-         numbytes=fwrite(&location[l]->type,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->city,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->area,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->parent,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->id,sizeof(int),1,h);
-         
-         numbytes=fwrite(&location[l]->renting,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->newrental,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->needcar,sizeof(char),1,h);
-         numbytes=fwrite(&location[l]->closed,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->hidden,sizeof(bool),1,h);
-         numbytes=fwrite(&location[l]->mapped,sizeof(bool),1,h);
-         numbytes=fwrite(&location[l]->upgradable,sizeof(bool),1,h);
-         numbytes=fwrite(&location[l]->highsecurity,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->siege,sizeof(siegest),1,h);
-         numbytes=fwrite(&location[l]->heat,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->heat_protection,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->compound_walls,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->compound_stores,sizeof(int),1,h);
-         numbytes=fwrite(&location[l]->front_business,sizeof(char),1,h);
-         numbytes=fwrite(location[l]->front_name,sizeof(char),40,h);
-         numbytes=fwrite(location[l]->front_shortname,sizeof(char),20,h);
-         numbytes=fwrite(&location[l]->haveflag,sizeof(bool),1,h);
+         /*numbytes=*/fwrite(location[l]->name,sizeof(char),40,h);
+         /*numbytes=*/fwrite(location[l]->shortname,sizeof(char),20,h);
+         /*numbytes=*/fwrite(&location[l]->type,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&location[l]->city,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->area,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->parent,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->id,sizeof(int),1,h);
 
-         numbytes=fwrite(&location[l]->mapseed,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->renting,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->newrental,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&location[l]->needcar,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&location[l]->closed,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->hidden,sizeof(bool),1,h);
+         /*numbytes=*/fwrite(&location[l]->mapped,sizeof(bool),1,h);
+         /*numbytes=*/fwrite(&location[l]->upgradable,sizeof(bool),1,h);
+         /*numbytes=*/fwrite(&location[l]->highsecurity,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->siege,sizeof(siegest),1,h);
+         /*numbytes=*/fwrite(&location[l]->heat,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->heat_protection,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->compound_walls,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->compound_stores,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&location[l]->front_business,sizeof(char),1,h);
+         /*numbytes=*/fwrite(location[l]->front_name,sizeof(char),40,h);
+         /*numbytes=*/fwrite(location[l]->front_shortname,sizeof(char),20,h);
+         /*numbytes=*/fwrite(&location[l]->haveflag,sizeof(bool),1,h);
+
+         /*numbytes=*/fwrite(&location[l]->mapseed,sizeof(int),1,h);
       }
 
       //VEHICLES
       dummy=vehicle.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(l=0;l<vehicle.size();l++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(l=0;l<(int)vehicle.size();l++)
       {
          std::string vehicleStr = vehicle[l]->showXml();
          size_t vehicleSize = vehicleStr.size();
 
-         numbytes=fwrite(&vehicleSize,sizeof (vehicleSize),1,h);
-         numbytes=fwrite(vehicleStr.c_str(),vehicleSize,1,h);
+         /*numbytes=*/fwrite(&vehicleSize,sizeof (vehicleSize),1,h);
+         /*numbytes=*/fwrite(vehicleStr.c_str(),vehicleSize,1,h);
       }
 
       //POOL
       dummy=pool.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(int pl=0;pl<pool.size();pl++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(int pl=0;pl<(int)pool.size();pl++)
       {
          std::string creatureStr = pool[pl]->showXml();
          size_t creatureSize = creatureStr.size();
 
-         numbytes=fwrite(&creatureSize,sizeof (creatureSize),1,h);
-         numbytes=fwrite(creatureStr.c_str(),creatureSize,1,h);
-         //numbytes=fwrite(pool[pl],sizeof(Creature),1,h);
+         /*numbytes=*/fwrite(&creatureSize,sizeof (creatureSize),1,h);
+         /*numbytes=*/fwrite(creatureStr.c_str(),creatureSize,1,h);
+         ///*numbytes=*/fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            numbytes=fwrite(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[6]),1,h);
-            numbytes=fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
+            /*numbytes=*/fwrite(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[6]),1,h);
+            /*numbytes=*/fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
 
             //deep write rapport map
             int size = reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.size();
-            numbytes=fwrite(&size,sizeof(int),1,h);
-            
+            /*numbytes=*/fwrite(&size,sizeof(int),1,h);
+
             map<long,float_zero>::iterator i;
             for(i=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.begin();
                 i!=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.end();++i)
             {
-               numbytes=fwrite(&((*i).first),sizeof(long),1,h);
-               numbytes=fwrite(&((*i).second),sizeof(float_zero),1,h);
+               /*numbytes=*/fwrite(&((*i).first),sizeof(long),1,h);
+               /*numbytes=*/fwrite(&((*i).second),sizeof(float_zero),1,h);
             }
          }
       }
@@ -208,128 +208,128 @@ void savegame(const char *str)
       {
          std::string uniquecreaturesStr = uniqueCreatures.showXml();
          size_t uniquecreaturesSize = uniquecreaturesStr.size();
-   
-         numbytes=fwrite(&uniquecreaturesSize,sizeof (uniquecreaturesSize),1,h);
-         numbytes=fwrite(uniquecreaturesStr.c_str(),uniquecreaturesSize,1,h);
-         //numbytes=fwrite(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+
+         /*numbytes=*/fwrite(&uniquecreaturesSize,sizeof (uniquecreaturesSize),1,h);
+         /*numbytes=*/fwrite(uniquecreaturesStr.c_str(),uniquecreaturesSize,1,h);
+         ///*numbytes=*/fwrite(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
       }
 
       //SQUADS
       dummy=squad.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(int sq=0;sq<squad.size();sq++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(int sq=0;sq<(int)squad.size();sq++)
       {
-         numbytes=fwrite(squad[sq]->name,sizeof(char),40,h);
-         numbytes=fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
-         numbytes=fwrite(&squad[sq]->id,sizeof(int),1,h);
+         /*numbytes=*/fwrite(squad[sq]->name,sizeof(char),40,h);
+         /*numbytes=*/fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
+         /*numbytes=*/fwrite(&squad[sq]->id,sizeof(int),1,h);
 
          for(int pos=0;pos<6;pos++)
          {
             if(squad[sq]->squad[pos]==NULL)dummy_c=0;
             else dummy_c=1;
-            numbytes=fwrite(&dummy_c,sizeof(char),1,h);
+            /*numbytes=*/fwrite(&dummy_c,sizeof(char),1,h);
 
             if(squad[sq]->squad[pos]!=NULL)
             {
-               numbytes=fwrite(&squad[sq]->squad[pos]->id,sizeof(int),1,h);
+               /*numbytes=*/fwrite(&squad[sq]->squad[pos]->id,sizeof(int),1,h);
             }
          }
 
          dummy=squad[sq]->loot.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<squad[sq]->loot.size();l2++)
+         /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+         for(int l2=0;l2<(int)squad[sq]->loot.size();l2++)
          {
             std::string itemStr = squad[sq]->loot[l2]->showXml();
             size_t itemSize = itemStr.size();
 
-            numbytes=fwrite(&itemSize,sizeof(itemSize),1,h);
-            numbytes=fwrite(itemStr.c_str(),itemSize,1,h);
+            /*numbytes=*/fwrite(&itemSize,sizeof(itemSize),1,h);
+            /*numbytes=*/fwrite(itemStr.c_str(),itemSize,1,h);
          }
       }
 
       if(activesquad==NULL)dummy_c=0;
       else dummy_c=1;
-      numbytes=fwrite(&dummy_c,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&dummy_c,sizeof(char),1,h);
       if(activesquad!=NULL)
       {
-         numbytes=fwrite(&activesquad->id,sizeof(int),1,h);
+         /*numbytes=*/fwrite(&activesquad->id,sizeof(int),1,h);
       }
 
       //DATES
       dummy=date.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(int dt=0;dt<date.size();dt++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(int dt=0;dt<(int)date.size();dt++)
       {
-         numbytes=fwrite(&date[dt]->mac_id,sizeof(long),1,h);
-         numbytes=fwrite(&date[dt]->timeleft,sizeof(short),1,h);
+         /*numbytes=*/fwrite(&date[dt]->mac_id,sizeof(long),1,h);
+         /*numbytes=*/fwrite(&date[dt]->timeleft,sizeof(short),1,h);
          dummy=date[dt]->date.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int dt2=0;dt2<date[dt]->date.size();dt2++)
+         /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+         for(int dt2=0;dt2<(int)date[dt]->date.size();dt2++)
          {
             std::string creatureStr = date[dt]->date[dt2]->showXml();
             size_t creatureSize = creatureStr.size();
 
-            numbytes=fwrite(&creatureSize,sizeof (creatureSize),1,h);
-            numbytes=fwrite(creatureStr.c_str(),creatureSize,1,h);
-            //numbytes=fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
+            /*numbytes=*/fwrite(&creatureSize,sizeof (creatureSize),1,h);
+            /*numbytes=*/fwrite(creatureStr.c_str(),creatureSize,1,h);
+            ///*numbytes=*/fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
       //RECRUITS
       dummy=recruit.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(int rt=0;rt<recruit.size();rt++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(int rt=0;rt<(int)recruit.size();rt++)
       {
-         numbytes=fwrite(&recruit[rt]->recruiter_id,sizeof(long),1,h);
-         numbytes=fwrite(&recruit[rt]->timeleft,sizeof(short),1,h);
-         numbytes=fwrite(&recruit[rt]->level,sizeof(char),1,h);
-         numbytes=fwrite(&recruit[rt]->eagerness1,sizeof(char),1,h);
-         numbytes=fwrite(&recruit[rt]->task,sizeof(char),1,h);
-         
+         /*numbytes=*/fwrite(&recruit[rt]->recruiter_id,sizeof(long),1,h);
+         /*numbytes=*/fwrite(&recruit[rt]->timeleft,sizeof(short),1,h);
+         /*numbytes=*/fwrite(&recruit[rt]->level,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&recruit[rt]->eagerness1,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&recruit[rt]->task,sizeof(char),1,h);
+
          std::string creatureStr = recruit[rt]->recruit->showXml();
          size_t creatureSize = creatureStr.size();
 
-         numbytes=fwrite(&creatureSize,sizeof (creatureSize),1,h);
-         numbytes=fwrite(creatureStr.c_str(),creatureSize,1,h);
-         //numbytes=fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
+         /*numbytes=*/fwrite(&creatureSize,sizeof (creatureSize),1,h);
+         /*numbytes=*/fwrite(creatureStr.c_str(),creatureSize,1,h);
+         ///*numbytes=*/fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES
       dummy=newsstory.size();
-      numbytes=fwrite(&dummy,sizeof(int),1,h);
-      for(int ns=0;ns<newsstory.size();ns++)
+      /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+      for(int ns=0;ns<(int)newsstory.size();ns++)
       {
-         numbytes=fwrite(&newsstory[ns]->type,sizeof(short),1,h);
-         numbytes=fwrite(&newsstory[ns]->view,sizeof(short),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->type,sizeof(short),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->view,sizeof(short),1,h);
 
-         numbytes=fwrite(&newsstory[ns]->loc,sizeof(long),1,h);
-         numbytes=fwrite(&newsstory[ns]->priority,sizeof(long),1,h);
-         numbytes=fwrite(&newsstory[ns]->page,sizeof(long),1,h);
-         numbytes=fwrite(&newsstory[ns]->positive,sizeof(char),1,h);
-         numbytes=fwrite(&newsstory[ns]->siegetype,sizeof(short),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->loc,sizeof(long),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->priority,sizeof(long),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->page,sizeof(long),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->positive,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&newsstory[ns]->siegetype,sizeof(short),1,h);
 
          if(newsstory[ns]->cr==NULL)dummy_c=0;
          else dummy_c=1;
-         numbytes=fwrite(&dummy_c,sizeof(char),1,h);
+         /*numbytes=*/fwrite(&dummy_c,sizeof(char),1,h);
          if(newsstory[ns]->cr!=NULL)
          {
-            numbytes=fwrite(&newsstory[ns]->cr->id,sizeof(long),1,h);
+            /*numbytes=*/fwrite(&newsstory[ns]->cr->id,sizeof(long),1,h);
          }
 
          dummy=newsstory[ns]->crime.size();
-         numbytes=fwrite(&dummy,sizeof(int),1,h);
-         for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
+         /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+         for(int dt2=0;dt2<(int)newsstory[ns]->crime.size();dt2++)
          {
-            numbytes=fwrite(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
+            /*numbytes=*/fwrite(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }
       }
 
       // Liberal Media
-      numbytes=fwrite(public_interest,sizeof(public_interest),1,h);
-      numbytes=fwrite(background_liberal_influence,sizeof(background_liberal_influence),1,h);
+      /*numbytes=*/fwrite(public_interest,sizeof(public_interest),1,h);
+      /*numbytes=*/fwrite(background_liberal_influence,sizeof(background_liberal_influence),1,h);
 
       // Site mode options
-      numbytes=fwrite(&encounterwarnings,sizeof(char),1,h);
+      /*numbytes=*/fwrite(&encounterwarnings,sizeof(char),1,h);
 
       LCSCloseFile(h);
    }
@@ -395,7 +395,7 @@ char load(void)
       fread(&execterm,sizeof(short),1,h);
       fread(&presparty,sizeof(short),1,h);
       fread(&amendnum,sizeof(int),1,h);
-      
+
       fread(&multipleCityMode,sizeof(bool),1,h);
       fread(&termlimits,sizeof(bool),1,h);
       fread(&deagle,sizeof(bool),1,h);
@@ -445,20 +445,20 @@ char load(void)
       //LOCATIONS
       fread(&dummy,sizeof(int),1,h);
       location.resize(dummy);
-      for(l=0;l<location.size();l++)
+      for(l=0;l<(int)location.size();l++)
       {
          location[l]=new Location;
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->loot.resize(dummy);
-         for(int l2=0;l2<location[l]->loot.size();l2++)
+         for(int l2=0;l2<(int)location[l]->loot.size();l2++)
          {
             size_t itemLen;
             fread(&itemLen, sizeof(itemLen), 1, h);
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
-            
+
             Item* it = create_item(&vec[0]);
             if (it != NULL)
                location[l]->loot[l2] = it;
@@ -483,7 +483,7 @@ char load(void)
             {
                del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
             }
-            
+
             if (del)
             {
                addstr("Item type ");
@@ -496,7 +496,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->changes.resize(dummy);
-         for(int l2=0;l2<location[l]->changes.size();l2++)
+         for(int l2=0;l2<(int)location[l]->changes.size();l2++)
          {
             fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
          }
@@ -526,14 +526,14 @@ char load(void)
          fread(location[l]->front_name,sizeof(char),40,h);
          fread(location[l]->front_shortname,sizeof(char),20,h);
          fread(&location[l]->haveflag,sizeof(bool),1,h);
-         
+
          fread(&location[l]->mapseed,sizeof(int),1,h);
       }
 
       //VEHICLES
       fread(&dummy,sizeof(int),1,h);
       vehicle.resize(dummy);
-      for(l=0;l<vehicle.size();l++)
+      for(l=0;l<(int)vehicle.size();l++)
       {
          size_t vehicleLen;
          fread (&vehicleLen, sizeof(vehicleLen), 1, h);
@@ -546,7 +546,7 @@ char load(void)
       //POOL
       fread(&dummy,sizeof(int),1,h);
       pool.resize(dummy);
-      for(int pl=0;pl<pool.size();pl++)
+      for(int pl=0;pl<(int)pool.size();pl++)
       {
          size_t creatureLen;
          fread (&creatureLen, sizeof(creatureLen), 1, h);
@@ -603,7 +603,7 @@ char load(void)
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
-            
+
             Clip c(&vec[0]);
             if(getcliptype(c.get_itemtypename())!=-1) //Check it is a valid clip type.
                pool[pl]->take_clips(c,c.get_number());
@@ -616,7 +616,7 @@ char load(void)
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
-            
+
             Weapon w(&vec[0]);
             if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
                pool[pl]->give_weapon(w,NULL);
@@ -627,7 +627,7 @@ char load(void)
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
-            
+
             Armor a(&vec[0]);
             if(getarmortype(a.get_itemtypename())!=-1) //Check it is a valid armor type.
                pool[pl]->give_armor(a,&dump);
@@ -648,7 +648,7 @@ char load(void)
       //SQUADS
       fread(&dummy,sizeof(int),1,h);
       squad.resize(dummy);
-      for(int sq=0;sq<squad.size();sq++)
+      for(int sq=0;sq<(int)squad.size();sq++)
       {
          squad[sq]=new squadst;
 
@@ -666,7 +666,7 @@ char load(void)
             {
                int dummy_i;
                fread(&dummy_i,sizeof(int),1,h);
-               for(int pl=0;pl<pool.size();pl++)
+               for(int pl=0;pl<(int)pool.size();pl++)
                {
                   if(pool[pl]->id==dummy_i)
                   {
@@ -678,14 +678,14 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          squad[sq]->loot.resize(dummy);
-         for(int l2=0;l2<squad[sq]->loot.size();l2++)
+         for(int l2=0;l2<(int)squad[sq]->loot.size();l2++)
          {
             size_t itemLen;
             fread(&itemLen, sizeof(itemLen), 1, h);
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
-            
+
             Item* it = create_item(&vec[0]);
             //if (it != NULL) //Assume save file is correct? -XML
                squad[sq]->loot[l2] = it;
@@ -715,7 +715,7 @@ char load(void)
             {
                del = (getarmortype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
             }
-            
+
             if (del)
             {
                addstr("Item type ");
@@ -733,7 +733,7 @@ char load(void)
       {
          int dummy_i;
          fread(&dummy_i,sizeof(int),1,h);
-         for(int sq=0;sq<squad.size();sq++)
+         for(int sq=0;sq<(int)squad.size();sq++)
          {
             if(squad[sq]->id==dummy_i)
             {
@@ -746,7 +746,7 @@ char load(void)
       //DATES
       fread(&dummy,sizeof(int),1,h);
       date.resize(dummy);
-      for(int dt=0;dt<date.size();dt++)
+      for(int dt=0;dt<(int)date.size();dt++)
       {
          date[dt]=new datest;
 
@@ -755,7 +755,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          date[dt]->date.resize(dummy);
-         for(int dt2=0;dt2<date[dt]->date.size();dt2++)
+         for(int dt2=0;dt2<(int)date[dt]->date.size();dt2++)
          {
             size_t creatureLen;
             fread (&creatureLen, sizeof(creatureLen), 1, h);
@@ -763,7 +763,7 @@ char load(void)
             fread (&vec[0], creatureLen, 1, h);
             vec[creatureLen] = '\0';
             date[dt]->date[dt2] = new Creature(&vec[0]);
-            
+
             //date[dt]->date[dt2]=new Creature;
             //fread(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
@@ -772,7 +772,7 @@ char load(void)
       //RECRUITS
       fread(&dummy,sizeof(int),1,h);
       recruit.resize(dummy);
-      for(int rt=0;rt<recruit.size();rt++)
+      for(int rt=0;rt<(int)recruit.size();rt++)
       {
          recruit[rt]=new recruitst;
          fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
@@ -780,7 +780,7 @@ char load(void)
          fread(&recruit[rt]->level,sizeof(char),1,h);
          fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
          fread(&recruit[rt]->task,sizeof(char),1,h);
-         
+
          size_t creatureLen;
          fread (&creatureLen, sizeof(creatureLen), 1, h);
          vector<char> vec = vector<char> (creatureLen + 1);
@@ -794,7 +794,7 @@ char load(void)
       //NEWS STORIES
       fread(&dummy,sizeof(int),1,h);
       newsstory.resize(dummy);
-      for(int ns=0;ns<newsstory.size();ns++)
+      for(int ns=0;ns<(int)newsstory.size();ns++)
       {
          newsstory[ns]=new newsstoryst;
 
@@ -811,7 +811,7 @@ char load(void)
          if(dummy_c)
          {
             fwrite(&dummy_l,sizeof(long),1,h);
-            for(int pl=0;pl<pool.size();pl++)
+            for(int pl=0;pl<(int)pool.size();pl++)
             {
                if(pool[pl]->id==dummy_l)
                {
@@ -823,7 +823,7 @@ char load(void)
 
          fread(&dummy,sizeof(int),1,h);
          newsstory[ns]->crime.resize(dummy);
-         for(int dt2=0;dt2<newsstory[ns]->crime.size();dt2++)
+         for(int dt2=0;dt2<(int)newsstory[ns]->crime.size();dt2++)
          {
             fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
          }
@@ -839,7 +839,7 @@ char load(void)
       LCSCloseFile(h);
 
       // Check that vehicles are of existing types.
-      for(int v=0; v<vehicle.size();++v)
+      for(int v=0; v<(int)vehicle.size();++v)
       {
          if(getvehicletype(vehicle[v]->vtypeidname())==-1)
          { //Remove vehicle of non-existing type.

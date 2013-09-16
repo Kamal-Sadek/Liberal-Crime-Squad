@@ -159,7 +159,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
 
    //Find all tenders who are set to this hostage
-   for(p=0;p<pool.size();p++)
+   for(p=0;p<(int)pool.size();p++)
    {
       if(!pool[p]->alive)continue;
       if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
@@ -192,13 +192,13 @@ void tendhostage(Creature *cr,char &clearformess)
       !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[TECHNIQUE_RESTRAIN])
    {
       //CHECK FOR HOSTAGE ESCAPE
-      if(LCSrandom(200)+25*temppool.size()<
+      if(LCSrandom(200)+25*(int)temppool.size()<
          cr->get_attribute(ATTRIBUTE_INTELLIGENCE,true)+
          cr->get_attribute(ATTRIBUTE_AGILITY,true)+
          cr->get_attribute(ATTRIBUTE_STRENGTH,true)&&
          cr->joindays>=5)
       {
-         for(int p=0;p<pool.size();p++)
+         for(int p=0;p<(int)pool.size();p++)
          {
             if(pool[p]==cr)
             {
@@ -218,7 +218,7 @@ void tendhostage(Creature *cr,char &clearformess)
                getch();
 
                //clear activities for tenders
-               for(int i=0;i<pool.size();i++)
+               for(int i=0;i<(int)pool.size();i++)
                {
                   if(!pool[i]->alive)continue;
                   if(pool[i]->activity.type==ACTIVITY_HOSTAGETENDING)
@@ -232,9 +232,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
                //delete interrogation data
                delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
-               delete pool[p];
-
-               pool.erase(pool.begin() + p);
+               delete_and_remove(pool,p);
                break;
             }
          }
@@ -282,7 +280,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
       int* _attack   = new int[temppool.size()];
 
-      for(p=0;p<temppool.size();p++)
+      for(p=0;p<(int)temppool.size();p++)
       {
          _attack[p] = 0;
          if(temppool[p]!=NULL)
@@ -315,7 +313,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
       vector<int> goodp;
 
-      for(p=0;p<temppool.size();p++)
+      for(p=0;p<(int)temppool.size();p++)
       {
          if(temppool[p]!=NULL)
          {
@@ -429,7 +427,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
          a=NULL;
 
-         for(int i=0;i<temppool.size();++i)
+         for(int i=0;i<(int)temppool.size();++i)
          {
             if((int)LCSrandom(50)<temppool[i]->juice||
                LCSrandom(9)+1>=temppool[i]->get_attribute(ATTRIBUTE_HEART,0))
@@ -521,7 +519,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
          if(cr->alive==0)
          {
-            for(int p=0;p<pool.size();p++)
+            for(int p=0;p<(int)pool.size();p++)
             {
                if(!pool[p]->alive)continue;
                if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
@@ -599,7 +597,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
             Creature* doctor=a; // the lead interrogator is doctor by default
             int maxskill=doctor->get_skill(SKILL_FIRSTAID);
-            for(int i=0;i<temppool.size();++i) // search for the best doctor
+            for(int i=0;i<(int)temppool.size();++i) // search for the best doctor
                if(temppool[i]->get_skill(SKILL_FIRSTAID)>maxskill)
                {
                   doctor=temppool[i]; // we found a doctor
@@ -664,7 +662,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(cr->name, gamelog);
                   addstr(" from any health damage.", gamelog);
                   cr->adjust_attribute(ATTRIBUTE_HEALTH,+1); // no permanent health damage from a skilled doctor
-                  techniques[TECHNIQUE_DRUGS]=druguse=drugbonus=0; // drugs eliminated from the system (zeroing out 3 variables with 1 line of code)
+                  techniques[TECHNIQUE_DRUGS]=(druguse=drugbonus=0); // drugs eliminated from the system (zeroing out 3 variables with 1 line of code)
                }
                else
                {
@@ -699,7 +697,7 @@ void tendhostage(Creature *cr,char &clearformess)
          int forceroll=0;
          bool tortured=0;
 
-         for(int i=0;i<temppool.size();i++)
+         for(int i=0;i<(int)temppool.size();i++)
          {
             //add interrogator's strength to beating strength
             forceroll+=temppool[i]->attribute_roll(ATTRIBUTE_STRENGTH);
@@ -1494,7 +1492,7 @@ void tendhostage(Creature *cr,char &clearformess)
       //Lead interrogator gets bonus experience
       if(!techniques[TECHNIQUE_KILL])a->train(SKILL_PSYCHOLOGY,attack/2+1);
       //Others also get experience
-      for(int i=0;i<temppool.size();i++)
+      for(int i=0;i<(int)temppool.size();i++)
          temppool[i]->train(SKILL_PSYCHOLOGY,(attack/4)+1);
 
 
@@ -1622,7 +1620,7 @@ void tendhostage(Creature *cr,char &clearformess)
       }
       cr->flag|=CREATUREFLAG_BRAINWASHED;
 
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING &&
             pool[p]->activity.arg==cr->id)
@@ -1686,7 +1684,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
    if(cr->align==1||!cr->alive)
    {
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)

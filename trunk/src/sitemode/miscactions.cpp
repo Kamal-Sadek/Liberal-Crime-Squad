@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -139,7 +139,7 @@ char unlock(short type,char &actual)
          clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
-         
+
          int i;
          //gain some experience for failing only if you could have succeeded.
          for (i = 0; i < 3; i++)
@@ -147,14 +147,14 @@ char unlock(short type,char &actual)
             if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
             {
                activesquad->squad[p]->train(SKILL_SECURITY,10);
-               
+
                addstr(activesquad->squad[p]->name, gamelog);
                addstr(" is close, but can't quite get the lock open.", gamelog);
                gamelog.newline();
                break;
             }
          }
-         
+
          if (i == 3)
          {
             addstr(activesquad->squad[p]->name, gamelog);
@@ -219,7 +219,7 @@ char bash(short type,char &actual)
       //if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))
       //{
          crowable=0;
-         
+
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
@@ -228,10 +228,10 @@ char bash(short type,char &actual)
                   crowable = 1;
             }
          }
-      
+
          if(!crowable) //didn't find in hands of any squad member
          {
-            for(int l=0;l<activesquad->loot.size();l++)
+            for(int l=0;l<(int)activesquad->loot.size();l++)
             {
                if(activesquad->loot[l]->is_weapon())
                {
@@ -296,7 +296,7 @@ char bash(short type,char &actual)
       int timer = 5;
       if(crowable)
          timer = 20;
-      
+
       if(sitealarmtimer<0 || sitealarmtimer>timer)
          sitealarmtimer=timer;
       else
@@ -1041,9 +1041,9 @@ void partyrescue(short special)
          }
       }
    }
-   
+
    vector<Creature*> waiting_for_rescue;
-   for(pl=0;pl<pool.size();pl++)
+   for(pl=0;pl<(int)pool.size();pl++)
    {
       if(pool[pl]->location==cursite&&
          !(pool[pl]->flag & CREATUREFLAG_SLEEPER)&&
@@ -1053,7 +1053,7 @@ void partyrescue(short special)
             waiting_for_rescue.push_back(pool[pl]);
    }
 
-   for(pl=0;pl<waiting_for_rescue.size();pl++)
+   for(pl=0;pl<(int)waiting_for_rescue.size();pl++)
    {
       if(LCSrandom(2)&&freeslots)
       {
@@ -1086,12 +1086,12 @@ void partyrescue(short special)
 
          waiting_for_rescue[pl]->location=-1;
          waiting_for_rescue[pl]->base=activesquad->squad[0]->base;
-         
+
          waiting_for_rescue.erase(waiting_for_rescue.begin()+pl);
          --pl;
       }
    }
-   for(pl=0;pl<waiting_for_rescue.size();pl++)
+   for(pl=0;pl<(int)waiting_for_rescue.size();pl++)
    {
       if(hostslots)
       {
@@ -1140,7 +1140,7 @@ void partyrescue(short special)
                   printparty();
                   refresh();
                   getch();
-                  
+
                   waiting_for_rescue.erase(waiting_for_rescue.begin()+pl);
                   --pl;
                   break;

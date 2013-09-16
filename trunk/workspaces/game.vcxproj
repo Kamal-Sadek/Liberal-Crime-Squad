@@ -271,6 +271,7 @@
     <CustomBuildStep Include="..\src\includes.h" />
     <CustomBuildStep Include="..\src\lcsio.h" />
     <CustomBuildStep Include="..\src\vector.h" />
+    <ClInclude Include="..\src\common.h" />
     <ClInclude Include="..\src\politics\alignment.h" />
     <ClInclude Include="..\src\politics\law.h" />
     <ClInclude Include="..\src\news\news.h" />

@@ -286,7 +286,7 @@ void makecharacter(void)
 
       move(6,2);
       addstr("FIRST NAME: ");
-      addstr(first[gender]);
+      addstr(first[(int)gender]);
       move(6,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press A to have your parents reconsider)");
@@ -358,7 +358,7 @@ void makecharacter(void)
 
       if(c=='a')
       {
-         firstname(first[gender],newcr->gender_conservative);
+         firstname(first[(int)gender],newcr->gender_conservative);
          continue;
       }
       if(c=='b')
@@ -393,7 +393,7 @@ void makecharacter(void)
       break;
    }
 
-   strcpy(newcr->propername,first[gender]);
+   strcpy(newcr->propername,first[(int)gender]);
    strcat(newcr->propername," ");
    strcat(newcr->propername,last);
 
@@ -1231,7 +1231,7 @@ void makecharacter(void)
       newsq->squad[0]=newcr;
       newcr->squadid=0;
       strcpy(newsq->name,"The Liberal Crime Squad");
-      for(int l=0;l<location.size();l++)
+      for(int l=0;l<(int)location.size();l++)
       {
          if(location[l]->type==base)
          {

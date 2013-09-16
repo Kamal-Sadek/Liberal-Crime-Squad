@@ -172,7 +172,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_DEATHPENALTY:
          {
-            char state[50];
+            //char state[50];
             strcat(story,statename());
             strcat(story," - An innocent citizen has been put to death in the electric chair.  ");
             char dstr[200],dstr2[200],dstr3[200];
@@ -1266,7 +1266,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,jstr5);
             strcat(story," attempted to talk down the shooter, but as ");
             strcat(story,jstr2);
-            strcat(story," became more agitated, the heroic citizen was forced to engage the shooter in a "); 
+            strcat(story," became more agitated, the heroic citizen was forced to engage the shooter in a ");
             if (law[LAW_FREESPEECH]==-2) strcat(story, "firefight, [putting the attacker to sleep] ");
             else strcat(story,"firefight, killing the attacker ");
             strcat(story,"before ");
@@ -1867,10 +1867,6 @@ void run_television_news_stories()
             }
          }
       }
-      if(del)
-      {
-         delete newsstory[n];
-         newsstory.erase(newsstory.begin() + n);
-      }
+      if(del)delete_and_remove(newsstory,n);
    }
 }

@@ -94,7 +94,7 @@ WeaponType::WeaponType(MCD_STR xmlstring)
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-   
+
    xml.IntoElem();
 
    while (xml.FindElem()) //Loop over all the elements inside the weapontype element.
@@ -263,7 +263,7 @@ WeaponType::WeaponType(MCD_STR xmlstring)
          errorlog << "Unknown element for weapon type " << idname()
                    << ": " << element << endl;*/
    }
-   
+
    if (!shortname_defined_)
    {
       if ((uses_ammo() && name().length() <= 9)
@@ -281,25 +281,25 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 }
 
 attackst::attackst(MCD_STR xmlstring)
- : priority(1), ranged(false), thrown(false), uses_ammo(false),
+ : priority(1), ranged(false), thrown(false), ammotype("UNDEF"), uses_ammo(false),
    attack_description("assaults"), hit_description("striking"),
-   always_describe_hit(false), hit_punctuation("."), skill(SKILL_CLUB),
-   accuracy_bonus(0), number_attacks(1), successive_attacks_difficulty(0),
-   strength_min(5), strength_max(10), random_damage(1), fixed_damage(1),
-   bruises(false), tears(false), cuts(false), burns(false), shoots(false),
-   bleeding(false), severtype(0), damages_armor(false), armorpiercing(0),
-   no_damage_reduction_for_limbs_chance(0), can_backstab(false)
+   always_describe_hit(false), can_backstab(false), hit_punctuation("."),
+   skill(SKILL_CLUB), accuracy_bonus(0), number_attacks(1),
+   successive_attacks_difficulty(0), strength_min(5), strength_max(10),
+	random_damage(1), fixed_damage(1), bruises(false), tears(false), cuts(false),
+	burns(false), shoots(false), bleeding(false), severtype(0), damages_armor(false),
+	armorpiercing(0), no_damage_reduction_for_limbs_chance(0)
 {
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-   
+
    xml.IntoElem();
 
    while (xml.FindElem()) //Loop over all the elements inside the vehicletype element.
    {
       std::string element = xml.GetTagName();
-   
+
       if (element == "priority")
          priority = atoi(xml.GetData().c_str());
       else if (element == "ranged")
@@ -458,11 +458,11 @@ attackst::attackst(MCD_STR xmlstring)
       else if (element == "critical")
       {
          xml.IntoElem();
-         
+
          while (xml.FindElem())
          {
             element = xml.GetTagName();
-            
+
             if (element == "chance")
                critical.chance = atoi(xml.GetData().c_str());
             else if (element == "hits_required")
@@ -491,17 +491,17 @@ attackst::attackst(MCD_STR xmlstring)
             /*else
                errorlog << "Unknown element for attack::critical: " << element << endl; */
          }
-         
+
          xml.OutOfElem();
       }
       else if (element == "fire")
       {
          xml.IntoElem();
-         
+
          while (xml.FindElem())
          {
             element = xml.GetTagName();
-            
+
             if (element == "chance")
                fire.chance = atoi(xml.GetData().c_str());
             else if (element == "chance_causes_debris")
@@ -509,13 +509,13 @@ attackst::attackst(MCD_STR xmlstring)
             /*else
                errorlog << "Unknown element for attack::fire: " << element << endl; */
          }
-            
+
          xml.OutOfElem();
       }
       /*else
          errorlog << "Unknown element for attack: " << element << endl; */
    }
-   
+
    if (!bruises && !tears && !cuts && !burns && !shoots)
       bruises = true; //If no type specified, then bruise.
 }
@@ -524,19 +524,18 @@ attackst::criticalst::criticalst()
  : chance(0), hits_required(1), random_damage(1), random_damage_defined(false),
    fixed_damage(1), fixed_damage_defined(false), severtype(0), severtype_defined(false)
 {
-   
+
 }
 
 attackst::firest::firest()
  : chance(0), chance_causes_debris(0)
 {
-   
+
 }
 
 WeaponType::~WeaponType()
 {
-   for (unsigned i = 0; i < attacks_.size(); ++i)
-      delete attacks_[i];
+   delete_and_clear(attacks_);
 }
 
 const string& WeaponType::get_name(unsigned subtype) const

@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -82,7 +82,7 @@ void creatureadvance(void)
 
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          if(!pool[p]->alive)continue;
          if(pool[p]->squadid!=-1)continue;

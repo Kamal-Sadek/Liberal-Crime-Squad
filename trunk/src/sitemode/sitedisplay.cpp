@@ -41,14 +41,14 @@ bool LineOfSight(int x, int y, int z)
    int x1,x2;
    int y1,y2;
 
-   if(abs(x-locx)==1)
+   if(DIFF(x,locx)==1)
    {
       x1=locx;
       x2=x;
    }
    else x1=x2=(x+locx)/2;
 
-   if(abs(y-locy)==1)
+   if(DIFF(y,locy)==1)
    {
       y1=locy;
       y2=y;
@@ -208,7 +208,7 @@ void printwall(int x, int y, int z, int px, int py)
    char graffiti[4][4] = {"   ","   ","   ","   "};
    char graffiticolor[4] = {COLOR_BLACK,COLOR_BLACK,COLOR_BLACK,COLOR_BLACK};
 
-   int type = type = levelmap[x][y][z].flag; // What are we drawing here? Wall/door? Locked/jammed? Metal/normal?
+   int type = levelmap[x][y][z].flag; // What are we drawing here? Wall/door? Locked/jammed? Metal/normal?
 
    // Now follows a series of checks to determine the faces of the wall that should be
    // displayed. Note the order of these checks is important:
@@ -688,8 +688,8 @@ void printchaseencounter(void)
 
       int carsy[4]={20,20,20,20};
 
-      char str[80];
-      for(int v=0;v<chaseseq.enemycar.size();v++)
+      //char str[80];
+      for(int v=0;v<(int)chaseseq.enemycar.size();v++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(19,v*20+1);
@@ -700,7 +700,7 @@ void printchaseencounter(void)
       {
          if(encounter[e].exists)
          {
-            for(int v=0;v<chaseseq.enemycar.size();v++)
+            for(int v=0;v<(int)chaseseq.enemycar.size();v++)
             {
                if(chaseseq.enemycar[v]->id()==encounter[e].carid)
                {

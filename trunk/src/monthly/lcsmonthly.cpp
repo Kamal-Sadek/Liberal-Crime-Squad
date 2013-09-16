@@ -102,11 +102,11 @@ int choosespecialedition(char &clearformess)
    vector<int> loottypeindex;
 
    //FIND ALL LOOT TYPES
-   for(int loc=0;loc<location.size();loc++)
+   for(int loc=0;loc<(int)location.size();loc++)
    {
       if(location[loc]->renting==RENTING_NOCONTROL)continue;
 
-      for(int l=0;l<location[loc]->loot.size();l++)
+      for(int l=0;l<(int)location[loc]->loot.size();l++)
       {
          if(!location[loc]->loot[l]->is_loot())continue;
          //Temporary, maybe put special edition definition into an xml file. -XML
@@ -131,9 +131,9 @@ int choosespecialedition(char &clearformess)
          }
       }
    }
-   for(int sq=0;sq<squad.size();sq++)
+   for(int sq=0;sq<(int)squad.size();sq++)
    {
-      for(int l=0;l<squad[sq]->loot.size();l++)
+      for(int l=0;l<(int)squad[sq]->loot.size();l++)
       {
          if(!squad[sq]->loot[l]->is_loot())continue;
 
@@ -173,9 +173,10 @@ int choosespecialedition(char &clearformess)
       addstr("Do you want to run a special edition?");
 
       int x=1,y=10;
-      char str[200],str2[200];
+      char str[200];
+      //char str2[200];
 
-      for(int l=page*18;l<loottypeindex.size()&&l<page*18+18;l++)
+      for(int l=page*18;l<(int)loottypeindex.size()&&l<page*18+18;l++)
       {
          str[0]=l-page*18+'A';
          str[1]='\x0';
@@ -200,7 +201,7 @@ int choosespecialedition(char &clearformess)
          addprevpagestr();
       }
       //PAGE DOWN
-      if((page+1)*18<loottype.size())
+      if((page+1)*18<(int)loottype.size())
       {
          move(17,53);
          addnextpagestr();
@@ -218,14 +219,14 @@ int choosespecialedition(char &clearformess)
       {
          int slot=c-'a'+page*18;
 
-         if(slot>=0&&slot<loottypeindex.size())
+         if(slot>=0&&slot<(int)loottypeindex.size())
          {
             //DELETE THE ITEM
-            for(int loc=0;loc<location.size();loc++)
+            for(int loc=0;loc<(int)location.size();loc++)
             {
                if(location[loc]->renting==RENTING_NOCONTROL)continue;
 
-               for(int l=0;l<location[loc]->loot.size();l++)
+               for(int l=0;l<(int)location[loc]->loot.size();l++)
                {
                   if(!location[loc]->loot[l]->is_loot())continue;
 
@@ -233,17 +234,14 @@ int choosespecialedition(char &clearformess)
                   {
                      location[loc]->loot[l]->decrease_number(1);
                      if(location[loc]->loot[l]->get_number()==0)
-                     {
-                        delete location[loc]->loot[l];
-                        location[loc]->loot.erase(location[loc]->loot.begin() + l);
-                     }
+                     	delete_and_remove(location[loc]->loot,l);
                      return loottypeindex[slot];
                   }
                }
             }
-            for(int sq=0;sq<squad.size();sq++)
+            for(int sq=0;sq<(int)squad.size();sq++)
             {
-               for(int l=0;l<squad[sq]->loot.size();l++)
+               for(int l=0;l<(int)squad[sq]->loot.size();l++)
                {
                   if(!squad[sq]->loot[l]->is_loot())continue;
 
@@ -251,10 +249,7 @@ int choosespecialedition(char &clearformess)
                   {
                      squad[sq]->loot[l]->decrease_number(1);
                      if(squad[sq]->loot[l]->get_number()==0)
-                     {
-                        delete squad[sq]->loot[l];
-                        squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
-                     }
+                        delete_and_remove(squad[sq]->loot,l);
                      return loottypeindex[slot];
                   }
                }
@@ -273,7 +268,7 @@ int choosespecialedition(char &clearformess)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<loottype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loottype.size())page++;
 
    }while(1);
 

@@ -170,7 +170,7 @@ void repairarmor(Creature &cr,char &clearformess)
    else if(cr.squadid!=-1)
    {
       int sq=getsquad(cr.squadid);
-      for(int l=0;l<squad[sq]->loot.size();l++)
+      for(int l=0;l<(int)squad[sq]->loot.size();l++)
       {
          if(squad[sq]->loot[l]->is_armor())
          {
@@ -187,7 +187,7 @@ void repairarmor(Creature &cr,char &clearformess)
    }
    if(armor==NULL&&cr.location!=-1)
    {
-      for(int l=0;l<location[cr.location]->loot.size();l++)
+      for(int l=0;l<(int)location[cr.location]->loot.size();l++)
       {
          if(location[cr.location]->loot[l]->is_armor())
          {
@@ -237,7 +237,7 @@ void repairarmor(Creature &cr,char &clearformess)
          else addstr(" repairs ", gamelog);
       }
       else addstr(" cleans ", gamelog);
-      char str[80];
+      //char str[80];
 
       addstr(armor->get_name().c_str(), gamelog);
       addstr(".", gamelog);
@@ -296,16 +296,13 @@ void makearmor(Creature &cr,char &clearformess)
       if(cr.squadid!=-1)
       {
          int sq=getsquad(cr.squadid);
-         for(int l=0;l<squad[sq]->loot.size();l++)
+         for(int l=0;l<(int)squad[sq]->loot.size();l++)
          {
             if(squad[sq]->loot[l]->is_loot()&&
                static_cast<Loot*>(squad[sq]->loot[l])->is_cloth()) //cast -XML
             {
                if(squad[sq]->loot[l]->get_number()==1)
-               {
-                  delete squad[sq]->loot[l];
-                  squad[sq]->loot.erase(squad[sq]->loot.begin() + l);
-               }
+                  delete_and_remove(squad[sq]->loot,l);
                else squad[sq]->loot[l]->decrease_number(1);
                foundcloth=1;
                break;
@@ -314,16 +311,13 @@ void makearmor(Creature &cr,char &clearformess)
       }
       if(!foundcloth)
       {
-         for(int l=0;l<location[cr.location]->loot.size();l++)
+         for(int l=0;l<(int)location[cr.location]->loot.size();l++)
          {
             if(location[cr.location]->loot[l]->is_loot()&&
                static_cast<Loot*>(location[cr.location]->loot[l])->is_cloth()) //cast -XML
             {
                if(location[cr.location]->loot[l]->get_number()==1)
-               {
-                  delete location[cr.location]->loot[l];
-                  location[cr.location]->loot.erase(location[cr.location]->loot.begin() + l);
-               }
+                  delete_and_remove(location[cr.location]->loot,l);
                else location[cr.location]->loot[l]->decrease_number(1);
                foundcloth=1;
                break;
@@ -914,7 +908,7 @@ int checkforarrest(Creature & liberal,const char* string,int clearformess)
 // *JDSRETURN*
 void funds_and_trouble(char &clearformess)
 {
-   int s;
+   //int s;
 
    //ACTIVITIES FOR INDIVIDUALS
    vector<Creature *> trouble;
@@ -930,7 +924,7 @@ void funds_and_trouble(char &clearformess)
    vector<Creature *> teachers;
    vector<Creature *> students;
 
-   for(int p=0;p<pool.size();p++)
+   for(int p=0;p<(int)pool.size();p++)
    {
       if(!pool[p]->alive)continue;
       if(pool[p]->location==-1)
@@ -1048,11 +1042,11 @@ void funds_and_trouble(char &clearformess)
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess)
 {
 	int s;
-   long money;
+   //long money;
 
    //SOLICITORS
    int total_income=0;
-   for(s=0;s<solicit.size();s++)
+   for(s=0;s<(int)solicit.size();s++)
    {
       if(!checkforarrest(*solicit[s],"soliciting donations",clearformess))
       {
@@ -1084,9 +1078,9 @@ void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess)
 {
 	int s;
 	long money;
-   int mood=publicmood(-1);
+   //int mood=publicmood(-1);
 
-   for(s=0;s<tshirts.size();s++)
+   for(s=0;s<(int)tshirts.size();s++)
    {
       if(!checkforarrest(*tshirts[s],"selling shirts",clearformess))
       {
@@ -1121,7 +1115,7 @@ void doActivitySellArt(vector<Creature *> &art, char &clearformess)
 	int s;
 	long money;
 
-	for(s=0;s<art.size();s++)
+	for(s=0;s<(int)art.size();s++)
    {
       if(!checkforarrest(*art[s],"sketching portraits",clearformess))
       {
@@ -1150,7 +1144,7 @@ void doActivitySellMusic(vector<Creature *> &music, char &clearformess)
 {
 	int s;
 	long money;
-   for(s=0;s<music.size();s++)
+   for(s=0;s<(int)music.size();s++)
    {
       if(!checkforarrest(*music[s],"playing music",clearformess))
       {
@@ -1188,7 +1182,7 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
 	int s;
 	long money;
    int dodgelawroll;
-   for(s=0;s<brownies.size();s++)
+   for(s=0;s<(int)brownies.size();s++)
    {
       //Check for police search
       dodgelawroll=LCSrandom(1+30*law[LAW_DRUGS]+3);
@@ -1247,7 +1241,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
       vector<Creature *> truehack;
 
       //First, do accounting to figure out who's doing what
-      for(h=0;h<hack.size();h++)
+      for(h=0;h<(int)hack.size();h++)
       {
          switch(hack[h]->activity.type)
          {
@@ -1274,7 +1268,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 
       //MAJOR HACKING
       int hack_skill=0;
-      for(int h=0;h<truehack.size();h++)
+      for(int h=0;h<(int)truehack.size();h++)
       {
          hack_skill = MAX(hack_skill,truehack[h]->skill_roll(SKILL_COMPUTERS));
       }
@@ -1415,20 +1409,20 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 
          if(trackdif>hack_skill + LCSrandom(5)-2)
          {
-            for(int h=0;h<truehack.size();h++)
+            for(int h=0;h<(int)truehack.size();h++)
             {
                criminalize(*hack[h],crime);
             }
          }
 
          // Award juice to the hacking team for a job well done
-         for(int h=0;h<truehack.size();h++)
+         for(int h=0;h<(int)truehack.size();h++)
             addjuice(*truehack[h],juiceval,200);
       }
       else if(DIFFICULTY_FORMIDABLE<=hack_skill+static_cast<int>(truehack.size())-1)
       {
          int issue=LCSrandom(VIEWNUM-5);
-         int crime;
+         int crime=LAWFLAG_INFORMATION;
 
          // Maybe do a switch on issue here to specify which website it was, but I don't feel like
          // doing that right now
@@ -1458,14 +1452,14 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 
          if(DIFFICULTY_FORMIDABLE>hack_skill+LCSrandom(5)-2)
          {
-            for(int h=0;h<truehack.size();h++)
+            for(int h=0;h<(int)truehack.size();h++)
             {
                criminalize(*truehack[h],crime);
             }
          }
 
          // Award juice to the hacking team for a job well done
-         for(int h=0;h<truehack.size();h++)
+         for(int h=0;h<(int)truehack.size();h++)
             addjuice(*truehack[h],5,100);
       }
 
@@ -1489,7 +1483,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
       }
 
       //CREDIT CARD FRAUD
-      for(int h=0;h<cc.size();h++)
+      for(int h=0;h<(int)cc.size();h++)
       {
          hack_skill = cc[h]->skill_roll(SKILL_COMPUTERS);
          int difficulty = DIFFICULTY_CHALLENGING;
@@ -1547,7 +1541,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 
    if(graffiti.size()>=0)
    {
-      for(s=0;s<graffiti.size();++s)
+      for(s=0;s<(int)graffiti.size();++s)
       {
          if(!graffiti[s]->get_weapon().can_graffiti())
          {
@@ -1564,7 +1558,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 
             //Check base inventory for a spraycan
             bool foundone = false;
-            for(int i=0; i<location[graffiti[s]->base]->loot.size(); ++i)
+            for(int i=0; i<(int)location[graffiti[s]->base]->loot.size(); ++i)
             {
                if(location[graffiti[s]->base]->loot[i]->is_weapon())
                {
@@ -1582,10 +1576,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
                      graffiti[s]->give_weapon(*w,&(location[graffiti[s]->base]->loot));
 
                      if(location[graffiti[s]->base]->loot[i]->empty())
-                     {
-                        delete location[graffiti[s]->base]->loot[i];
-                        location[graffiti[s]->base]->loot.erase(location[graffiti[s]->base]->loot.begin()+i);
-                     }
+                        delete_and_remove(location[graffiti[s]->base]->loot,i);
                      foundone = true;
                      break;
                   }
@@ -1614,7 +1605,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
 
          int issue=VIEW_LIBERALCRIMESQUAD;
          int power=1;
-         int caught=0;
+         //int caught=0;
 
          if(clearformess)erase();
          else
@@ -1743,7 +1734,7 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
       // Business once every three days or so
       if(LCSrandom(3))continue;
 
-      char num[20];
+      //char num[20];
 
       long fundgain=0;
       char caught=0;
@@ -1943,7 +1934,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
       else {addstr(trouble[0]->name, gamelog);addstr(" has ", gamelog);}
 
       int power=0;
-      for(int t=0;t<trouble.size();t++)
+      for(int t=0;t<(int)trouble.size();t++)
       {
          power+=trouble[t]->skill_roll(SKILL_PERSUASION)+
                 trouble[t]->skill_roll(SKILL_STREETSENSE);
@@ -2104,7 +2095,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
       if(crime!=0)
       {
-         for(int t=0;t<trouble.size();t++)
+         for(int t=0;t<(int)trouble.size();t++)
          {
             if(!LCSrandom(30) &&
                !(trouble[t]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
@@ -2385,7 +2376,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
          }
       }
 
-      for(int h=0;h<trouble.size();h++)
+      for(int h=0;h<(int)trouble.size();h++)
       {
          addjuice(*trouble[h],juiceval,40);
       }
@@ -2394,10 +2385,10 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
 void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 {
-   for(int t=0;t<teachers.size();t++)
+   for(int t=0;t<(int)teachers.size();t++)
    {
       int skillarray[14];
-      int cost, students=0;
+      int cost=0, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
       switch(teachers[t]->activity.type)
@@ -2447,7 +2438,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
       }
 
       //Count potential students for this teacher to get an idea of efficiency
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
@@ -2474,7 +2465,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
       }
 
       //Walk through and train people
-      for(int p=0;p<pool.size();p++)
+      for(int p=0;p<(int)pool.size();p++)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
@@ -2542,7 +2533,7 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
          //MAKE BASE LOOT
          makeloot(*pool[p],location[bury[0]->base]->loot);
 
-         for(int b=0;b<bury.size();b++)
+         for(int b=0;b<(int)bury.size();b++)
          {
             if(!arrest_attempted && !(bury[b]->skill_check(SKILL_STREETSENSE,DIFFICULTY_EASY)))
             {
@@ -2569,8 +2560,7 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
          }
 
          //BURY (even if interrupted)
-         delete pool[p];
-         pool.erase(pool.begin() + p);
+         delete_and_remove(pool,p);
 
          if (bury.size() == 0) //Stop burials if none are left doing them.
             break;
@@ -2891,7 +2881,7 @@ char stealcar(Creature &cr,char &clearformess)
       //START CAR
       char keys_in_car=0;
       int key_location = LCSrandom(5);
-      char ignition_progress=0;
+      //char ignition_progress=0;
       char key_search_total=0;
       int nervous_counter=0;
       if(!LCSrandom(5))keys_in_car=1;
@@ -3007,6 +2997,7 @@ char stealcar(Creature &cr,char &clearformess)
             else switch(key_location)
             {
             case 0:
+            default:
                difficulty = DIFFICULTY_AUTOMATIC;
                location   = "in the ignition.  Damn.";
                break;
@@ -3194,7 +3185,7 @@ char carselect(Creature &cr,short &cartype)
 
    int page=0;
 
-   char str[200];
+   //char str[200];
 
    do
    {
@@ -3210,7 +3201,7 @@ char carselect(Creature &cr,short &cartype)
       addstr("----TYPE-----------------------------------------DIFFICULTY TO FIND UNATTENDED--");
 
       int y=2,difficulty;
-      for(int p=page*19;p<cart.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)cart.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -3284,12 +3275,12 @@ char carselect(Creature &cr,short &cartype)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<cart.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)cart.size())page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<cart.size())
+         if(p<(int)cart.size())
          {
             cartype=cart[p];
             return 1;

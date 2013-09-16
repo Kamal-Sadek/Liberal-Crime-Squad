@@ -2465,10 +2465,10 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          break;
    }
    // Quick exit if only checking if a certain type works
-   if(test_type!=-1) return okaysite[test_location];
+   if(test_type!=-1) return okaysite[(int)test_location];
    char swap=0;
    if(cr.worklocation==-1)swap=1;
-   else if(!okaysite[location[cr.worklocation]->type])swap=1;
+   else if(!okaysite[(int)location[(int)cr.worklocation]->type])swap=1;
    if(swap)
    {
       //int city = location[cr.location]->city;
@@ -2477,9 +2477,9 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       //FIND ONE OF THESE
       vector<int> goodlist;
       //find_site_index_in_city(cr.worklocation, location[cr.location]->city);
-      for(int l=0;l<location.size();l++)
+      for(int l=0;l<(int)location.size();l++)
          //if(location[l]->type==cr.worklocation && (!multipleCityMode || location[l]->city == cr.location))
-         if(okaysite[location[l]->type] && (!multipleCityMode || location[l]->city == location[cr.location]->city))
+         if(okaysite[(int)location[l]->type] && (!multipleCityMode || location[l]->city == location[(int)cr.location]->city))
             goodlist.push_back(l);
 // Sadler - This line sometimes causes a memory fault
 //               Only thing I can think of is if loop above didn'
