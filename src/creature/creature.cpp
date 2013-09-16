@@ -1366,7 +1366,7 @@ void UniqueCreatures::newPresident()
    Pres_ID=Pres_.id,Pres_state=UNIQUECREATURE_ALIVE,Pres_.dontname=true;
    //Turn into President (not just random pol)
    std::string pres_name=execname[EXEC_PRESIDENT];
-   strcpy(Pres_.name,("President "+pres_name.substr(pres_name.find(' ')+1)).data());
+   strcpy(Pres_.name,("President "+pres_name.substr(pres_name.find(' ')+1)).c_str());
    strcpy(Pres_.propername,execname[EXEC_PRESIDENT]);
    switch(exec[EXEC_PRESIDENT])
    { // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary

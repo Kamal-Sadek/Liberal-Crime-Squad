@@ -25,7 +25,7 @@ This file is part of Liberal Crime Squad.
 #include <windows.h>
 #endif
 
-void setconfigoption(string name, string value)
+void setconfigoption(std::string name, std::string value)
 {
    transform(name.begin(), name.end(), name.begin(), ::tolower);
    transform(value.begin(), value.end(), value.begin(), ::tolower);
@@ -69,18 +69,20 @@ void setconfigoption(string name, string value)
 
 void loadinitfile(void)
 {
-   ::fstream file;
+   std::fstream file;
    if (LCSOpenFileCPP("init.txt", ios::in, LCSIO_PRE_HOME, file))
    {
-      string str;
+      std::string str;
       int posequal;
 
-      while(getline(file, str))
+      while(getline(file,str))
       {
+         str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
+         str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
          str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
          str.erase(std::remove(str.begin(), str.end(), '\t'), str.end());
 
-         if (! str.length()) continue;
+         if (!str.length()) continue;
 
          if (str[0] == '#') continue;
          if (str[0] == ';') continue;
