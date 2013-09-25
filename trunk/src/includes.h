@@ -300,9 +300,6 @@ using namespace std;
 int r_num(void);
 int LCSrandom(int max);
 
-string tostring(long i);
-int stringtobool(const string& boolstr);
-
 class Log;
 
 enum UnlockTypes
@@ -558,6 +555,63 @@ public:
    void subtract_funds(int amount,int expensetype) { funds-=amount,expense[expensetype]+=amount,total_expense+=amount; }
 };
 
+class Interval
+{
+public:
+   int min;
+   int max;
+   Interval():min(0),max(0) {}
+   Interval(int value):min(value),max(value) {}
+   Interval(int low, int high):min(low),max(high) {}
+
+   void set_interval(int low, int high)
+   {
+      min = low;
+      max = high;
+   }
+   // Sets the interval according to a string that is either a number or two
+   // number separated by a dash. Returns false and does not change the
+   // interval if the given string is not a valid interval.
+   bool set_interval(const string& interval)
+   {
+      if(interval.empty() ||
+         interval.find_first_not_of("1234567890-")!=string::npos)
+         return false;
+
+      size_t dashpos=interval.find('-',1);
+      if(dashpos==string::npos) // Just a constant.
+      {
+         if(!valid(interval))return false;
+         max=min=atoi(interval.c_str());
+      }
+      else
+      {
+         string smin=interval.substr(0,dashpos);
+         string smax=interval.substr(dashpos+1);
+         if (!valid(smin)||!valid(smax))return false;
+         int tmin=atoi(smin.c_str());
+         int tmax=atoi(smax.c_str());
+         if (tmin>tmax)return false;
+         min=tmin;
+         max=tmax;
+      }
+      return true;
+   }
+   int roll() const
+   {
+      return LCSrandom(max - min + 1) + min;
+   }
+private:
+   // Checks if a string is a number. Assumes non-numeric characters  other
+   // than dashes have aleady been checked for.
+   bool valid(const string& v)
+   {
+      return !(v.empty() ||
+               (v.length()==1&&v[0]=='-') ||  // Just a dash.
+               v.find('-', 1)!=string::npos); // A dash after the first char.
+   }
+};
+
 #include "items/itemtype.h"
 #include "items/cliptype.h"
 #include "items/weapontype.h"
@@ -569,8 +623,8 @@ public:
 #include "items/armor.h"
 #include "items/loot.h"
 #include "items/money.h"
-
 #include "creature/creature.h"
+#include "creature/creaturetype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 
@@ -1123,7 +1177,6 @@ void end_cleartype_fix();
  getnames.cpp
 */
 void getactivity(char *str,activityst &act);
-void getrecruitcreature(char *str,int type);
 void gettitle(char *str,Creature &cr);
 void getview(char *str,short view);
 void getviewsmall(char *str,short view);
@@ -1163,6 +1216,10 @@ int getarmortype(const string &idname);
 int getloottype(int id);
 /* transforms a loot type name into the index of that loot type in the global vector */
 int getloottype(const string &idname);
+/* transforms a CreatureTypes value into a pointer to that creature type */
+const CreatureType* getcreaturetype(short crtype);
+/* transforms a creature type name into a pointer to that creature type */
+const CreatureType* getcreaturetype(const std::string& crtype);
 
 /*
  equipment.cpp
@@ -1179,6 +1236,19 @@ void consolidateloot(vector<Item *> &loot);
 char itemcompare(Item *a,Item *b);
 /* check if the squad has a certain weapon */
 char squadhasitem(squadst &sq,int type,int subtype);
+
+/*
+ stringconversion.cpp
+*/
+std::string tostring(long i);
+/* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
+   and -1 if unable to determine. */
+int stringtobool(std::string boolstr);
+short creaturetype_string_to_enum(const std::string& ctname);
+int attribute_string_to_enum(const std::string& attribute);
+int skill_string_to_enum(std::string skillname);
+int gender_string_to_enum(const std::string& gender);
+int severtype_string_to_enum(const std::string& severtype);
 
 /*
  creature.cpp

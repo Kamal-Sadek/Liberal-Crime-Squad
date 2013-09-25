@@ -243,7 +243,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
          criminalizeparty(LAWFLAG_BANKROBBERY);
          sitestory->crime.push_back(CRIME_BANKSTICKUP);
          sitecrime+=50;
-         CreatureType guard = CREATURE_SECURITYGUARD;
+         CreatureTypes guard = CREATURE_SECURITYGUARD;
          if(location[cursite]->highsecurity>0) guard = CREATURE_MERC;
          makecreature(encounter[0],guard);
          makecreature(encounter[1],guard);

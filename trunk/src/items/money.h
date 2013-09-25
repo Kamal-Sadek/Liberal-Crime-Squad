@@ -11,7 +11,7 @@ class Money : public Item
       explicit Money(const char * inputXml);      
       string showXml() const;
       
-      virtual string equip_title() const { return ("$"+tostring(amount_)); }
+      virtual string equip_title() const;
       
       virtual const string& get_name() const { return itemtypename(); }
       virtual long get_fencevalue() const { return amount_ * number_; }

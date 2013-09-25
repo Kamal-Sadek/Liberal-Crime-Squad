@@ -1,0 +1,1815 @@
+<creatures>
+<!-- Clarification
+<creaturetype idname="(string)"> idname is used internally by the game to
+                                 identify the creature type. No two creature
+                                 types should have the same idname.
+    <type_name> (string)
+        Normally the name of the creature's profession.
+        Default: UNDEFINED
+    <encounter_name> (string)
+        The name used by the creature type when encountered in site mode.
+        Default: <type_name>
+    <weapon> (weapon type, CIVILIAN)
+        If more than one weapon are given then one will be randomly chosen on
+        creature creation. This element can either just have the weapon type or
+        be expanded to specify all the following:
+        <type> (weapon type, CIVILIAN)
+            What weapon the creature will have. CIVILIAN is a macro
+            that can give a 9mm, .45 or .38 depending on gun law.
+            Default: WEAPON_NONE
+        <number_weapons> (interval)
+            Number of weapons carried if using throwing weapons.
+            Default: 1
+        <cliptype> (clip type, APPROPRIATE)
+            What clips the creature will be using. APPROPRIATE gives
+            clips of a type fitting the creature's weapon.
+            Default: APPROPRIATE
+        <number_clips> (interval)
+            Number of clips carried, including the one loaded.
+            Default: 4
+    <armor> (armor type)
+        What clothes the creature will wear. If more than one armor is given
+        then one will be chosen randomly on creature creation.
+        Default: ARMOR_NONE
+    <age> (interval, DOGYEARS, CHILD, TEENAGER, YOUNGADULT, 
+           MATURE, GRADUATE, MIDDLEAGED, SENIOR)
+        How old the creature can be. DOGYEARS etc are commonly used intervals.
+            DOGYEARS: 2-6
+            CHILD: 7-10
+            TEENAGER: 14-17
+            YOUNGADULT: 18-35
+            MATURE: 20-59
+            GRADUATE: 26-59
+            MIDDLEAGED: 35-59
+            SENIOR: 65-94
+        Default: 18-57
+    <alignment> (LIBERAL, MODERATE, CONSERVATIVE, PUBLIC MOOD)
+        The creature's alignment. PUBLIC MOOD makes alignment depend on the
+        current public mood.
+        Default: PUBLIC MOOD
+    <attribute_points> (interval)
+        The total number of points to be distributed across the creature's
+        attrbutes.
+        Default: 40
+    <attributes>
+        Upper and lower bounds for attributes. All are intervals and default to 
+        1-10.
+        <agility>
+        <charisma>
+        <health>
+        <heart>
+        <intelligence>
+        <strength>
+        <wisdom>
+    <gender> (MALE, FEMALE, NEUTRAL, RANDOM, MALE BIAS, FEMALE BIAS)
+        The gender or possible genders.
+            MALE: Male.
+            FEMALE: Female.
+            NEUTRAL: Androgynous/ambiguous.
+            RANDOM: Equal chance of either male or female.
+            MALE BIAS: More chance of male over female the less liberal women's
+                       rights law is.
+            FEMALE BIAS: More chance of female over male the less liberal 
+                         women's rights law is.
+        Default: RANDOM
+    <infiltration> (interval)
+        Base infiltration. Only used for conservatives.
+        Default: 0
+    <juice> (interval)
+        Starting juice for the creature.
+        Default: 0
+    <money> (interval)
+        The amount of money a creature of this type can be spawned with.
+        Default: 20-40
+    <skills>
+        Starting skills. All values are intervals and default to 0.
+        <art>
+        <axe>
+        <business>
+        <club>
+        <computers>
+        <disguise>
+        <dodge>
+        <driving>
+        <firstaid>
+        <handtohand>
+        <heavyweapons>
+        <knife>
+        <law>
+        <music>
+        <persuasion>
+        <pistol>
+        <psychology>
+        <religion>
+        <rifle>
+        <science>
+        <security>
+        <seduction>
+        <shotgun>
+        <smg>
+        <stealth>
+        <streetsense>
+        <sword>
+        <tailoring>
+        <teaching>
+        <throwing>
+        <writing>
+</creaturetype>
+
+Intervals can be written either as an interval, eg 20-40, or just a single
+value if it should be constant.
+
+Elements marked as hardcoded may have their values overridden by the game.
+-->
+    <creaturetype idname="CREATURE_BOUNCER">
+        <type_name>Club Security</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <!-- <alignment> Hardcoded -->
+        <age>MATURE</age>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>4-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <!-- <infiltration> Hardcoded -->
+        <skills>
+            <!-- <club>3-5</club> Hardcoded when highsecurity -->
+            <handtohand>1-3</handtohand>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SECURITYGUARD">
+        <type_name>Security Guard</type_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_SECURITYUNIFORM</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>2-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-20</infiltration>
+        <skills>
+            <pistol>1-3</pistol>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SCIENTIST_LABTECH">
+        <type_name>Lab Tech</type_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_LABCOAT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <intelligence>5-10</intelligence>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <skills>
+            <computers>1-2</computers>
+            <science>3-6</science>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SCIENTIST_EMINENT">
+        <type_name>Eminent Scientist</type_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_LABCOAT</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <intelligence>10</intelligence>
+            <wisdom>6-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>100-150</juice>
+        <money>20-60</money>
+        <skills>
+            <science>6-11</science>
+            <writing>1-3</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_POLITICIAN">
+        <type_name>Politician</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_EXPENSIVESUIT</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <wisdom>6-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>80-95</infiltration>
+        <juice>400-800</juice>
+        <money>40-80</money>
+        <skills>
+            <law>1-7</law>
+            <persuasion>5-8</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CORPORATE_MANAGER">
+        <type_name>Corporate Manager</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <charisma>5-10</charisma>
+            <intelligence>4-10</intelligence>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-50</infiltration>
+        <money>40-80</money>
+        <skills>
+            <business>3-6</business>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CORPORATE_CEO">
+        <type_name>Corporate CEO</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <weapon>WEAPON_DESERT_EAGLE</weapon>
+        <armor>ARMOR_EXPENSIVESUIT</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <charisma>7-10</charisma>
+            <intelligence>7-10</intelligence>
+            <wisdom>12</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>100</infiltration>
+        <juice>1000</juice>
+        <money>1000-2000</money>
+        <skills>
+            <business>10-15</business>
+            <dodge>10-15</dodge>
+            <pistol>10-15</pistol>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_SERVANT">
+        <type_name>Servant</type_name><!-- Hardcoded to Slave for C+ labor and corporate laws. -->
+        <armor>ARMOR_SERVANTUNIFORM</armor>
+        <age>MATURE</age>
+        <alignment>LIBERAL</alignment>
+        <money>0</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_JANITOR">
+        <type_name>Janitor</type_name><!-- Hardcoded to Custodian for L+ labor law. -->
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_SWEATSHOP">
+        <type_name>Sweatshop Worker</type_name><!-- Hardcoded to Migrant Worker for L+ labor and immigration laws. -->
+        <armor>ARMOR_NONE</armor>
+        <age>MATURE</age>
+        <alignment>LIBERAL</alignment>
+        <juice>-20</juice>
+        <skills>
+            <tailoring>1-5</tailoring>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_FACTORY_NONUNION">
+        <type_name>Factory Worker</type_name>
+        <encounter_name>Nonunion Worker</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <!-- <alignment> Hardcoded to not be liberal. -->
+        <attributes>
+            <strength>5-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_FACTORY_CHILD">
+        <type_name>Child Worker</type_name>
+        <encounter_name>Child Worker</encounter_name>
+        <weapon>WEAPON_CHAIN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>CHILD</age>
+        <alignment>LIBERAL</alignment>
+        <attributes>
+            <heart>8-10</heart>
+        </attributes>
+        <money>0</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_SECRETARY">
+        <type_name>Secretary</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <intelligence>2-10</intelligence>
+        </attributes>
+        <skills>
+            <writing>1-2</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_WORKER_FACTORY_UNION">
+        <type_name>Factory Worker</type_name>
+        <encounter_name>Union Worker</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>LIBERAL</alignment>
+        <attributes>
+            <strength>5-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_LANDLORD">
+        <type_name>Landlord</type_name>
+        <encounter_name>Landlord</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>MODERATE</alignment>
+        <attributes>
+            <intelligence>4-10</intelligence>
+            <wisdom>4-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <money>120-240</money>
+        <skills>
+            <business>3-6</business>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_BANK_TELLER">
+        <type_name>Bank Teller</type_name>
+        <encounter_name>Bank Teller</encounter_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>MODERATE</alignment>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_BANK_MANAGER">
+        <type_name>Bank Manager</type_name>
+        <encounter_name>Bank Manager</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <intelligence>4-10</intelligence>
+            <wisdom>4-10</wisdom>
+        </attributes>
+        <money>120-240</money>
+        <skills>
+            <business>3-6</business>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TEENAGER">
+        <type_name>Teenager</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>TEENAGER</age>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_COP">
+        <!-- A Police Officer can either be a normal Officer or a Negotiator.
+             They have some hardcoded differences. -->
+        <type_name>Police Officer</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_POLICEARMOR</armor>
+        <age>MATURE</age>
+        <!-- <alignment> Hardcoded -->
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+            <!-- Heart and wisdom hardcoded for negotiator and officer resp. -->
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>30-60</infiltration>
+        <juice>10-60</juice>
+        <skills>
+            <driving>1-2</driving>
+            <psychology>1-3</psychology>
+            <!-- + some hardcoded -->
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SWAT">
+        <type_name>SWAT Officer</type_name>
+        <weapon>
+            <type>WEAPON_SMG_MP5</type>
+            <number_clips>6</number_clips>
+        </weapon>
+        <weapon>WEAPON_SHOTGUN_PUMP</weapon>
+        <weapon>WEAPON_CARBINE_M4</weapon>
+        <armor>ARMOR_SWATARMOR</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+            <wisdom>4-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>30-60</infiltration>
+        <juice>40-90</juice>
+        <skills>
+            <driving>1-2</driving>
+            <handtohand>1-2</handtohand>
+            <pistol>1-4</pistol>
+            <psychology>1-4</psychology>
+            <rifle>1-4</rifle>
+            <shotgun>1-4</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_DEATHSQUAD">
+        <type_name>DethSquad Officer</type_name>
+        <weapon>
+            <type>WEAPON_AUTORIFLE_M16</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <armor>ARMOR_DEATHSQUADUNIFORM</armor>
+        <age>YOUNGADULT</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+            <wisdom>6-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>90-140</juice>
+        <skills>
+            <driving>1-2</driving>
+            <handtohand>1-2</handtohand>
+            <pistol>1-2</pistol>
+            <psychology>2-5</psychology>
+            <rifle>2-5</rifle>
+            <shotgun>1-2</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_FIREFIGHTER">
+        <type_name>Fire Fighter</type_name><!-- Hardcoded to Fireman if free speech law is arch conservative. -->
+        <!-- <encounter_name> Hardcoded -->
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_OVERALLS</armor>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <armor>ARMOR_BUNKERGEAR</armor><!-- Bunker gear is forced if site is alarmed. -->
+        <age>MATURE</age>
+        <!-- <alignment> Hardcoded -->
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <!-- <skills> Hardcoded heavyweapons or axe skill depending on free speech. -->
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_EDUCATOR">
+        <type_name>Educator</type_name>
+        <encounter_name>Educator</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_LABCOAT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+            <wisdom>4-10</wisdom>
+        </attributes>
+        <infiltration>0-30</infiltration>
+        <skills>
+            <club>1-2</club>
+            <driving>0-1</driving>
+            <handtohand>1-2</handtohand>
+            <psychology>3-6</psychology>
+            <rifle>1-3</rifle>
+            <shotgun>1-3</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_GANGUNIT">
+        <type_name>Police Gang Unit</type_name>
+        <weapon>WEAPON_SMG_MP5</weapon>
+        <weapon>WEAPON_SHOTGUN_PUMP</weapon>
+        <weapon>WEAPON_SEMIPISTOL_9MM</weapon>
+        <armor>ARMOR_POLICEARMOR</armor>
+        <age>YOUNGADULT</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>30-60</infiltration>
+        <juice>40-90</juice>
+        <skills>
+            <driving>1-2</driving>
+            <handtohand>1-2</handtohand>
+            <pistol>1-4</pistol>
+            <psychology>2-5</psychology>
+            <rifle>1-3</rifle>
+            <shotgun>1-3</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_JUDGE_LIBERAL">
+        <type_name>Liberal Judge</type_name>
+        <encounter_name>Liberal Judge</encounter_name>
+        <weapon>WEAPON_GAVEL</weapon>
+        <weapon>WEAPON_NONE</weapon>
+        <armor>ARMOR_BLACKROBE</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>LIBERAL</alignment>
+        <attributes>
+            <heart>10</heart>
+            <intelligence>5-10</intelligence>
+        </attributes>
+        <money>20-60</money>
+        <skills>
+            <law>5-10</law>
+            <writing>1-3</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_JUDGE_CONSERVATIVE">
+        <type_name>Hangin' Judge</type_name>
+        <encounter_name>Hangin' Judge</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_BLACKROBE</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <heart>1</heart>
+            <intelligence>5-10</intelligence>
+            <wisdom>10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>100-150</juice>
+        <money>20-60</money>
+        <skills>
+            <law>5-10</law>
+            <writing>1-3</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_AGENT">
+        <type_name>Agent</type_name>
+        <encounter_name>Agent</encounter_name>
+        <weapon>WEAPON_REVOLVER_44</weapon>
+        <weapon>WEAPON_SEMIPISTOL_9MM</weapon>
+        <weapon>WEAPON_AUTORIFLE_M16</weapon>
+        <weapon>WEAPON_AUTORIFLE_AK47</weapon>
+        <weapon>WEAPON_SHOTGUN_PUMP</weapon>
+        <weapon>WEAPON_CARBINE_M4</weapon>
+        <weapon>WEAPON_SMG_MP5</weapon>
+        <armor>ARMOR_BLACKSUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>7-10</agility>
+            <health>5-10</health>
+            <intelligence>4-10</intelligence>
+            <strength>5-10</strength>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-150</infiltration>
+        <juice>200-350</juice>
+        <skills>
+            <club>2-9</club>
+            <dodge>4-7</dodge>
+            <driving>4-9</driving>
+            <handtohand>2-9</handtohand>
+            <pistol>2-9</pistol>
+            <psychology>4-9</psychology>
+            <rifle>2-9</rifle>
+            <shotgun>2-9</shotgun>
+            <smg>2-9</smg>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SECRET_SERVICE">
+        <type_name>Secret Service</type_name>
+        <encounter_name>Secret Service</encounter_name>
+        <weapon>WEAPON_SEMIPISTOL_9MM</weapon>
+        <weapon>WEAPON_AUTORIFLE_M16</weapon>
+        <weapon>WEAPON_SMG_MP5</weapon>
+        <armor>ARMOR_BLACKSUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>7-10</agility>
+            <health>5-10</health>
+            <intelligence>4-10</intelligence>
+            <strength>5-10</strength>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-150</infiltration>
+        <juice>200-350</juice>
+        <skills>
+            <dodge>4-9</dodge>
+            <driving>4-9</driving>
+            <pistol>4-9</pistol>
+            <psychology>4-9</psychology>
+            <rifle>4-9</rifle>
+            <smg>4-9</smg>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_RADIOPERSONALITY">
+        <type_name>Radio Personality</type_name>
+        <encounter_name>Radio Personality</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_EXPENSIVESUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <charisma>10</charisma>
+            <wisdom>8-10</wisdom>
+        </attributes>
+        <infiltration>60-90</infiltration>
+        <juice>100-150</juice>
+        <money>50-100</money>
+        <skills>
+            <persuasion>1-8</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_NEWSANCHOR">
+        <type_name>Cable News Anchor</type_name>
+        <encounter_name>Cable News Anchor</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_EXPENSIVESUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <charisma>10</charisma>
+            <wisdom>8-10</wisdom>
+        </attributes>
+        <infiltration>60-90</infiltration>
+        <juice>100-150</juice>
+        <money>50-100</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_GENETIC">
+        <type_name>Genetic Monster</type_name>
+        <!--<encounter_name> Hardcoded -->
+        <armor>ARMOR_NONE</armor>
+        <age>DOGYEARS</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>1-20</agility>
+            <charisma>1-2</charisma><!-- Max is hardcoded to 10 for pets. -->
+            <heart>1-6</heart>
+            <intelligence>1</intelligence>
+            <strength>1-20</strength>
+            <wisdom>1-6</wisdom>
+        </attributes>
+        <!--<money> Hardcoded to 0 if animal research law is not L+.-->
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_GUARDDOG">
+        <type_name>Canine Hero</type_name>
+        <encounter_name>Guard Dog</encounter_name>
+        <armor>ARMOR_NONE</armor>
+        <age>DOGYEARS</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>9-15</agility>
+            <heart>1-6</heart>
+            <intelligence>1</intelligence>
+            <strength>7-12</strength>
+            <wisdom>1-6</wisdom>
+        </attributes>
+        <!--<money> Hardcoded to 0 if animal research law is not elite liberal.-->
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PRISONER">
+        <!-- The prisoner type is not actually encountered in the game. Instead
+             Prisoners are other creature types dressed up as prisoners. -->
+        <type_name>Prisoner</type_name>
+        <encounter_name>Prisoner</encounter_name>
+        <weapon>WEAPON_SHANK</weapon>
+        <weapon>WEAPON_NONE</weapon>
+        <armor>ARMOR_PRISONER</armor>
+        <!-- <alignment> Hardcoded to not conservative. -->
+        <!-- <age> Depends on actual type. -->
+        <!-- <attribute_points> Depend on actual type. -->
+        <!-- <attributes> Depend on actual type. -->
+        <gender>MALE BIAS</gender>
+        <juice>-5</juice>
+        <money>0</money>
+        <!-- <skills> Depend on actual type. -->
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_JUROR">
+        <type_name>Juror</type_name>
+        <encounter_name>Angry Juror</encounter_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <money>0</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_LAWYER">
+        <type_name>Lawyer</type_name>
+        <encounter_name>Lawyer</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>GRADUATE</age>
+        <attributes>
+            <charisma>4-10</charisma>
+            <intelligence>6-10</intelligence>
+        </attributes>
+        <money>50-100</money>
+        <skills>
+            <law>4-7</law>
+            <persuasion>2-5</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SEWERWORKER">
+        <type_name>Sewer Worker</type_name>
+        <encounter_name>Sewer Worker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_COLLEGESTUDENT">
+        <type_name>College Student</type_name>
+        <encounter_name>College Student</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>18-23</age>
+        <money>20-50</money>
+        <skills>
+            <art>0-2</art>
+            <computers>0-1</computers>
+            <music>0-2</music>
+            <science>0-2</science>
+            <writing>1-2</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MUSICIAN">
+        <type_name>Musician</type_name>
+        <encounter_name>Musician</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <money>0-10</money>
+        <skills>
+            <music>2-5</music>
+            <seduction>0-1</seduction>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MATHEMATICIAN">
+        <type_name>Mathematician</type_name>
+        <encounter_name>Mathematician</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <intelligence>7-10</intelligence>
+        </attributes>
+        <money>20-50</money>
+        <skills>
+            <computers>0-2</computers>
+            <science>1-3</science>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TEACHER">
+        <type_name>Teacher</type_name>
+        <encounter_name>Teacher</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>FEMALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <teaching>3-6</teaching>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_HSDROPOUT">
+        <type_name>Highschool Dropout</type_name>
+        <encounter_name>Highschool Dropout</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>TEENAGER</age>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_BUM">
+        <type_name>Transient</type_name>
+        <encounter_name>Transient</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <!-- <alignment> Hardcoded to not conservative. -->
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_GANGMEMBER">
+        <type_name>Gang Member</type_name>
+        <encounter_name>Gang Member</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <!-- <alignment> Hardcoded -->
+        <gender>MALE BIAS</gender>
+        <juice>-5</juice>
+        <money>20-50</money>
+        <skills>
+            <pistol>1-2</pistol>
+            <rifle>1-2</rifle>
+            <shotgun>1-2</shotgun>
+            <streetsense>2-3</streetsense>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CRACKHEAD">
+        <type_name>Crackhead</type_name>
+        <encounter_name>Crackhead</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <!-- <alignment> Hardcoded to not C. -->
+        <attribute_points>30</attribute_points>
+        <attributes>
+            <intelligence>1</intelligence>
+            <!-- <health> Hardcoded random max. -->
+        </attributes>
+        <juice>-20</juice>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PRIEST">
+        <type_name>Priest</type_name>
+        <encounter_name>Priest</encounter_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <religion>3-7</religion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_ENGINEER">
+        <type_name>Engineer</type_name>
+        <encounter_name>Engineer</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <computers>1-2</computers>
+            <science>1-3</science>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_FASTFOODWORKER">
+        <type_name>Fast Food Worker</type_name>
+        <encounter_name>Fast Food Worker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <!-- <age> Hardcoded -->
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TELEMARKETER">
+        <type_name>Telemarketer</type_name>
+        <encounter_name>Telemarketer</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <money>20-50</money>
+        <skills>
+            <persuasion>1-3</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CARSALESMAN">
+        <type_name>Car Salesperson</type_name><!-- Hardcoded to Car Salesman for C+ women's rights law. -->
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <money>40-80</money>
+        <skills>
+            <business>1-4</business>
+            <driving>1-3</driving>
+            <persuasion>1-4</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_OFFICEWORKER">
+        <type_name>Office Worker</type_name>
+        <encounter_name>Office Worker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <money>20-50</money>
+        <skills>
+            <business>0-2</business>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_FOOTBALLCOACH">
+        <type_name>Football Coach</type_name>
+        <encounter_name>Football Coach</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MIDDLEAGED</age>
+        <!-- <attributes> Hardcoded -->
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <persuasion>2-5</persuasion>
+            <teaching>2-4</teaching>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PROSTITUTE">
+        <type_name>Prostitute</type_name>
+        <encounter_name>Prostitute</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPDRESS</armor>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <!-- <alignment> Hardcoded to not C. -->
+        <!-- <gender> Hardcoded -->
+        <juice>-5</juice>
+        <money>20-50</money>
+        <skills>
+            <persuasion>2-5</persuasion>
+            <seduction>2-5</seduction>
+            <streetsense>2-3</streetsense>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MAILMAN">
+        <type_name>Mail Carrier</type_name>
+        <encounter_name>Mail Carrier</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_GARBAGEMAN">
+        <type_name>Garbage Collector</type_name>
+        <encounter_name>Garbage Collector</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <driving>1-2</driving>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PLUMBER">
+        <type_name>Plumber</type_name>
+        <encounter_name>Plumber</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CHEF">
+        <type_name>Chef</type_name>
+        <encounter_name>Chef</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CONSTRUCTIONWORKER">
+        <type_name>Construction Worker</type_name>
+        <encounter_name>Construction Worker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <health>7-10</health>
+            <strength>7-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <driving>1-2</driving>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_AMATEURMAGICIAN">
+        <type_name>Amateur Magician</type_name>
+        <encounter_name>Amateur Magician</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TANK">
+        <type_name>M1 Abrams Tank</type_name>
+        <encounter_name>M1 Abrams Tank</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <!--<armor>ARMOR_NONE</armor> Hardcoded -->
+        <age>TEENAGER</age>
+        <alignment>CONSERVATIVE</alignment>
+        <gender>NEUTRAL</gender>
+        <skills>
+            <!-- Tanks use handtohand for their gun. -->
+            <handtohand>20</handtohand>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MERC">
+        <type_name>Elite Security</type_name>
+        <encounter_name>Elite Security</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CIVILLIANARMOR</armor>
+        <age>YOUNGADULT</age>
+        <alignment>CONSERVATIVE</alignment>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <juice>0-50</juice>
+        <money>0</money>
+        <skills>
+            <driving>0-1</driving>
+            <handtohand>0-2</handtohand>
+            <pistol>0-2</pistol>
+            <psychology>0-1</psychology>
+            <rifle>2-5</rifle>
+            <security>0-2</security>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_HICK">
+        <type_name>Redneck</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_OVERALLS</armor>
+        <armor>ARMOR_WIFEBEATER</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <gender>MALE</gender>
+        <money>6-11</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SOLDIER">
+        <type_name>Soldier</type_name>
+        <encounter_name>Soldier</encounter_name>
+        <weapon>
+            <type>WEAPON_AUTORIFLE_M16</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <armor>ARMOR_ARMYARMOR</armor>
+        <age>YOUNGADULT</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>5-10</agility>
+            <health>5-10</health>
+            <strength>5-10</strength>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <juice>0-100</juice>
+        <money>0</money>
+        <skills>
+            <driving>1-3</driving>
+            <handtohand>1-3</handtohand>
+            <pistol>1-3</pistol>
+            <psychology>1-3</psychology>
+            <rifle>1-4</rifle>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_VETERAN">
+        <type_name>Veteran</type_name>
+        <encounter_name>Army Veteran</encounter_name>
+        <weapon>WEAPON_COMBATKNIFE</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MIDDLEAGED</age>
+        <attributes>
+            <agility>5-10</agility>
+            <health>5-10</health>
+            <strength>5-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <juice>0-100</juice>
+        <skills>
+            <driving>1-3</driving>
+            <handtohand>1-3</handtohand>
+            <pistol>1-3</pistol>
+            <psychology>1-3</psychology>
+            <rifle>1-4</rifle>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_HARDENED_VETERAN">
+        <type_name>Hardened Veteran</type_name>
+        <encounter_name>Hardened Veteran</encounter_name>
+        <weapon>
+            <type>WEAPON_AUTORIFLE_M16</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <armor>ARMOR_ARMYARMOR</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>7-10</agility>
+            <health>7-10</health>
+            <strength>7-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <juice>0-100</juice>
+        <money>0</money>
+        <skills>
+            <driving>2-4</driving>
+            <handtohand>2-4</handtohand>
+            <pistol>2-4</pistol>
+            <psychology>1-3</psychology>
+            <rifle>4-7</rifle>
+            <security>0-2</security>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PRISONGUARD">
+        <type_name>Prison Guard</type_name>
+        <encounter_name>Prison Guard</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_PRISONGUARD</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>3-10</agility>
+            <health>3-10</health>
+            <strength>3-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-30</infiltration>
+        <skills>
+            <club>2-4</club>
+            <driving>0-1</driving>
+            <handtohand>1-2</handtohand>
+            <pistol>1-2</pistol>
+            <shotgun>1-3</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_HIPPIE">
+        <type_name>Hippie</type_name>
+        <encounter_name>Hippie</encounter_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>18-57</age>
+        <alignment>LIBERAL</alignment>
+        <attribute_points>35</attribute_points>
+        <attributes>
+            <heart>6-15</heart>
+            <wisdom>1</wisdom>
+        </attributes>
+        <money>20-50</money>
+        <skills>
+            <art>0-1</art>
+            <music>0-1</music>
+            <tailoring>0-1</tailoring>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CRITIC_ART">
+        <type_name>Art Critic</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <money>100-230</money>
+        <skills>
+            <art>1-4</art>
+            <persuasion>2-5</persuasion>
+            <writing>2-5</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CRITIC_MUSIC">
+        <type_name>Music Critic</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <money>100-230</money>
+        <skills>
+            <music>1-4</music>
+            <persuasion>2-5</persuasion>
+            <writing>2-5</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SOCIALITE">
+        <type_name>Socialite</type_name>
+        <encounter_name>Socialite</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <!-- <armor> Hardcoded -->
+        <age>MATURE</age>
+        <money>100-230</money>
+        <skills>
+            <art>0-2</art>
+            <music>0-2</music>
+            <persuasion>1-3</persuasion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PROGRAMMER">
+        <type_name>Programmer</type_name>
+        <encounter_name>Programmer</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <intelligence>3-10</intelligence>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <computers>4-8</computers>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_RETIREE">
+        <type_name>Retiree</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>SENIOR</age>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PAINTER">
+        <type_name>Painter</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <art>3-6</art>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SCULPTOR">
+        <type_name>Sculptor</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <art>3-6</art>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_AUTHOR">
+        <type_name>Author</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <money>100-230</money>
+        <skills>
+            <persuasion>0-3</persuasion>
+            <writing>4-7</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_JOURNALIST">
+        <type_name>Journalist</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CHEAPSUIT</armor>
+        <age>MATURE</age>
+        <juice>0-25</juice>
+        <money>100-230</money>
+        <skills>
+            <persuasion>2-5</persuasion>
+            <writing>2-5</writing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_DANCER">
+        <type_name>Dancer</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <attributes>
+            <agility>10</agility>
+            <health>10</health>
+            <strength>4-10</strength>
+        </attributes>
+        <skills>
+            <art>1-2</art>
+            <music>1-2</music>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PHOTOGRAPHER">
+        <type_name>Photographer</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <art>2-3</art>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CAMERAMAN">
+        <type_name>Cameraman</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <art>1-2</art>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_HAIRSTYLIST">
+        <type_name>Hairstylist</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>FEMALE BIAS</gender>
+        <skills>
+            <art>1-2</art>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_FASHIONDESIGNER">
+        <type_name>Fashion Designer</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>FEMALE BIAS</gender>
+        <skills>
+            <art>2-4</art>
+            <tailoring>3-10</tailoring>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CLERK">
+        <type_name>Clerk</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_THIEF">
+        <type_name>Professional Thief</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_BLACKCLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <disguise>3-7</disguise>
+            <security>3-7</security>
+            <stealth>3-7</stealth>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_ACTOR">
+        <type_name>Actor</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <charisma>5-10</charisma>
+            <wisdom>9-10</wisdom>
+        </attributes>
+        <skills>
+            <disguise>3-7</disguise>
+            <persuasion>0-4</persuasion>
+            <seduction>0-4</seduction>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_YOGAINSTRUCTOR">
+        <type_name>Yoga Instructor</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <agility>10</agility>
+            <health>10</health>
+            <strength>4-10</strength>
+        </attributes>
+        <gender>FEMALE BIAS</gender>
+        <skills>
+            <teaching>2-5</teaching>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MARTIALARTIST">
+        <type_name>Black Belt</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <attributes>
+            <agility>8-10</agility>
+            <health>6-10</health>
+            <strength>6-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <skills>
+            <handtohand>4-7</handtohand>
+            <teaching>1-3</teaching>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_ATHLETE">
+        <type_name>Athlete</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <attributes>
+            <agility>8-10</agility>
+            <health>8-10</health>
+            <strength>8-10</strength>
+        </attributes>
+        <gender>MALE BIAS</gender>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_BIKER">
+        <type_name>Biker</type_name>
+        <encounter_name>Biker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <weapon>WEAPON_CHAIN</weapon>
+        <armor>ARMOR_TRENCHCOAT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <driving>3-5</driving>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TRUCKER">
+        <type_name>Trucker</type_name>
+        <encounter_name>Truck Driver</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <driving>3-5</driving>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_TAXIDRIVER">
+        <type_name>Taxi Driver</type_name>
+        <encounter_name>Taxi Driver</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+        <skills>
+            <driving>3-5</driving>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_NUN">
+        <type_name>Nun</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>FEMALE</gender>
+        <skills>
+            <religion>5-7</religion>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MUTANT">
+        <type_name>Mutant</type_name>
+        <encounter_name>Mutant</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <alignment>LIBERAL</alignment>
+        <attribute_points>7-66</attribute_points>
+        <attributes>
+            <agility>1-50</agility>
+            <charisma>1-50</charisma>
+            <health>1-50</health>
+            <heart>1-50</heart>
+            <intelligence>1-50</intelligence>
+            <strength>1-50</strength>
+            <wisdom>1-50</wisdom>
+        </attributes>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_DOCTOR">
+        <type_name>Doctor</type_name>
+        <encounter_name>Doctor</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_LABCOAT</armor>
+        <age>GRADUATE</age>
+        <attributes>
+            <intelligence>6-10</intelligence>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <skills>
+            <firstaid>4-7</firstaid>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_NURSE">
+        <type_name>Nurse</type_name>
+        <encounter_name>Nurse</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_LABCOAT</armor>
+        <age>GRADUATE</age>
+        <gender>FEMALE BIAS</gender>
+        <skills>
+            <firstaid>1-4</firstaid>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CCS_VIGILANTE">
+        <type_name>Vigilante</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <!-- <weapon> Hardcoded -->
+        <!-- <armor> Hardcoded -->
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>4-20</agility>
+            <charisma>1-20</charisma>
+            <health>4-20</health>
+            <heart>1-4</heart>
+            <intelligence>1-20</intelligence>
+            <strength>4-20</strength>
+            <wisdom>8-20</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>90-210</juice>
+        <skills>
+            <business>0-2</business>
+            <driving>2-5</driving>
+            <handtohand>2-5</handtohand>
+            <pistol>3-6</pistol>
+            <psychology>0-2</psychology>
+            <religion>1-3</religion>
+            <rifle>3-6</rifle>
+            <shotgun>3-6</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CCS_ARCHCONSERVATIVE">
+        <type_name>CCS Officer</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <weapon>
+            <type>WEAPON_SHOTGUN_AA12</type>
+            <number_clips>9</number_clips>
+        </weapon>
+        <armor>ARMOR_HEAVYARMOR</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>4-25</agility>
+            <charisma>1-25</charisma>
+            <health>4-25</health>
+            <heart>1</heart>
+            <intelligence>1-25</intelligence>
+            <strength>4-25</strength>
+            <wisdom>10-25</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>90-100</infiltration>
+        <juice>500-750</juice>
+        <money>150-200</money>
+        <skills>
+            <business>0-5</business>
+            <dodge>2-7</dodge>
+            <driving>4-7</driving>
+            <handtohand>4-7</handtohand>
+            <pistol>6-9</pistol>
+            <psychology>0-5</psychology>
+            <religion>2-7</religion>
+            <rifle>6-9</rifle>
+            <shotgun>6-9</shotgun>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_POLITICALACTIVIST">
+        <!-- Can't be encountered. -->
+        <type_name>Political Activist</type_name>
+        <armor>ARMOR_CLOTHES</armor>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CCS_MOLOTOV">
+        <type_name>Arsonist</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <weapon>
+            <type>WEAPON_MOLOTOV</type>
+            <number_weapons>5</number_weapons>
+        </weapon>
+        <armor>ARMOR_TRENCHCOAT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>6-20</agility>
+            <charisma>1-20</charisma>
+            <health>6-20</health>
+            <heart>1-4</heart>
+            <intelligence>1-20</intelligence>
+            <strength>6-20</strength>
+            <wisdom>8-20</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>90-210</juice>
+        <skills>
+            <business>0-2</business>
+            <driving>2-5</driving>
+            <handtohand>2-5</handtohand>
+            <psychology>0-2</psychology>
+            <religion>1-3</religion>
+            <throwing>2-5</throwing>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_CCS_SNIPER">
+        <type_name>Sniper</type_name>
+        <!-- <encounter_name> Hardcoded -->
+        <weapon>
+            <type>WEAPON_SEMIRIFLE_AR15</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <armor>ARMOR_TRENCHCOAT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>6-20</agility>
+            <charisma>1-20</charisma>
+            <health>6-20</health>
+            <heart>1-4</heart>
+            <intelligence>1-20</intelligence>
+            <strength>6-20</strength>
+            <wisdom>8-20</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>90-210</juice>
+        <skills>
+            <business>0-2</business>
+            <driving>2-5</driving>
+            <handtohand>2-5</handtohand>
+            <psychology>0-2</psychology>
+            <religion>1-3</religion>
+            <rifle>6-9</rifle>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_PSYCHOLOGIST">
+        <type_name>Psychologist</type_name>
+        <encounter_name>Psychologist</encounter_name>
+        <!-- <weapon> Hardcoded -->
+        <!-- <armor> Hardcoded -->
+        <age>GRADUATE</age>
+        <attributes>
+            <heart>6-10</heart>
+            <intelligence>6-10</intelligence>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <skills>
+            <psychology>4-7</psychology>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_LOCKSMITH">
+        <type_name>Locksmith</type_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_WORKCLOTHES</armor>
+        <age>MATURE</age>
+        <skills>
+            <security>3-7</security>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MILITARYPOLICE">
+        <type_name>Military Police</type_name>
+        <weapon>
+            <type>WEAPON_CARBINE_M4</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <weapon>
+            <type>WEAPON_SHOTGUN_PUMP</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <weapon>
+            <type>WEAPON_SEMIPISTOL_9MM</type>
+            <number_clips>7</number_clips>
+        </weapon>
+        <armor>ARMOR_ARMYARMOR</armor>
+        <age>YOUNGADULT</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>5-10</agility>
+            <health>5-10</health>
+            <strength>5-10</strength>
+            <wisdom>5-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>0-50</infiltration>
+        <juice>0-100</juice>
+        <money>0</money>
+        <skills>
+            <driving>1-4</driving>
+            <handtohand>1-5</handtohand>
+            <pistol>1-5</pistol>
+            <psychology>1-5</psychology>
+            <rifle>1-3</rifle>
+            <shotgun>1-5</shotgun>
+            <smg>1-5</smg>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_SEAL">
+        <type_name>Navy SEAL</type_name>
+        <weapon>WEAPON_CARBINE_M4</weapon>
+        <armor>ARMOR_SEALSUIT</armor>
+        <age>MATURE</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <agility>7-10</agility>
+            <health>7-10</health>
+            <strength>7-10</strength>
+            <wisdom>7-10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>10-40</infiltration>
+        <juice>100-150</juice>
+        <money>0</money>
+        <skills>
+            <dodge>2-5</dodge>
+            <handtohand>3-5</handtohand>
+            <psychology>3-5</psychology>
+            <rifle>4-7</rifle>
+        </skills>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_MILITARYOFFICER">
+        <type_name>Military Officer</type_name>
+        <!-- <weapon> Hardcoded -->
+        <armor>ARMOR_MILITARY</armor>
+        <age>MIDDLEAGED</age>
+        <alignment>CONSERVATIVE</alignment>
+        <attributes>
+            <charisma>7-10</charisma>
+            <intelligence>7-10</intelligence>
+            <wisdom>10</wisdom>
+        </attributes>
+        <gender>MALE BIAS</gender>
+        <infiltration>50-80</infiltration>
+        <juice>100-150</juice>
+        <money>0</money>
+        <skills>
+            <handtohand>1-6</handtohand>
+            <persuasion>3-7</persuasion>
+            <pistol>1-6</pistol>
+            <psychology>1-6</psychology>
+            <rifle>1-2</rifle>
+        </skills>
+    </creaturetype>
+
+</creatures>

@@ -75,8 +75,7 @@ void activate_sleepers(void)
          addstr(temppool[p]->name);
 
          move(y,25);
-         getrecruitcreature(str,temppool[p]->type);
-         addstr(str);
+         addstr(temppool[p]->get_type_name());
 
          move(y+1,6);
          addstr("Effectiveness: ");

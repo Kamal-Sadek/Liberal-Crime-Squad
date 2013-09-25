@@ -147,6 +147,7 @@ extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
 extern vector<LootType *> loottype;
+extern vector<CreatureType *> creaturetype;
 
 extern vector<VehicleType *> vehicletype;
 extern vector<Vehicle *> vehicle;
@@ -160,5 +161,6 @@ extern int yourscore;
 //The game log. All events and stuff are output here.
 //NO debugging out. Make a debugging log for that.
 extern Log gamelog;
+extern Log xmllog;
 
 #endif // EXTERNS_H_INCLUDED

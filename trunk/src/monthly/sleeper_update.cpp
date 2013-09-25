@@ -973,9 +973,7 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libp
             addstr("Sleeper ", gamelog);
             addstr(cr.name, gamelog);
             addstr(" has recruited a new ", gamelog);
-            char str[50];
-            getrecruitcreature(str,recruit->type);
-            addstr(str, gamelog);
+            addstr(recruit->get_type_name(), gamelog);
             addstr(".", gamelog);
             gamelog.newline();
             move(8,1);

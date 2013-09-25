@@ -227,9 +227,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr("Meeting with ", gamelog);
    addstr(r.recruit->name, gamelog);
    addstr(", ", gamelog);
-   char str[75];
-   getrecruitcreature(str,r.recruit->type);
-   addstr(str, gamelog);
+   addstr(r.recruit->get_type_name(), gamelog);
    addstr(", ", gamelog);
    addstr(location[r.recruit->location]->name, gamelog);
    gamelog.newline();
@@ -393,7 +391,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr(pool[p]->name, gamelog);
             addstr(" shares ", gamelog);
-            strcpy(str,"");
+            char str[75];
             getissueeventstring(str);
             addstr(str, gamelog);
             addstr(".", gamelog);
@@ -409,6 +407,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(" explains ", gamelog);
             addstr(pool[p]->hisher(), gamelog);
             addstr(" views on ", gamelog);
+            char str[75];
             getviewsmall(str,LCSrandom(VIEWNUM-3));
             addstr(str, gamelog);
             addstr(".", gamelog);

@@ -435,12 +435,10 @@ void review_mode(short mode)
             }
          case REVIEWMODE_SLEEPERS:
             {
-               char str[200];
                if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
                else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
                else set_color(COLOR_GREEN,COLOR_BLACK,1);
-               getrecruitcreature(str,temppool[p]->type);
-               addstr(str);
+               addstr(temppool[p]->get_type_name());
                break;
             }
          case REVIEWMODE_DEAD:
@@ -992,13 +990,11 @@ void assemblesquad(squadst *cursquad)
             }
          }
 
-         char str[200];
          if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,50);
-         getrecruitcreature(str,temppool[p]->type);
-         addstr(str);
+         addstr(temppool[p]->get_type_name());
          y++;
       }
 
