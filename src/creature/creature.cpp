@@ -272,6 +272,7 @@ void Creature::copy(const Creature& org)
    align = org.align;
    alive = org.alive;
    type = org.type;
+   type_idname = org.type_idname;
    infiltration = org.infiltration;
    animalgloss = org.animalgloss;
    specialattack = org.specialattack;
@@ -379,10 +380,7 @@ vector<Location*> loc_proxy() { return location; }
 
 std::string Creature::get_type_name() const
 {
-   char cStr[75];
-   getrecruitcreature(cStr, this->type);
-   std::string cppStr = cStr;
-   return cppStr;
+   return getcreaturetype(type_idname)->get_type_name();
 }
 
 bool Creature::is_lcs_sleeper(void) const
@@ -564,6 +562,8 @@ Creature::Creature(const char* inputXml)
          alive = atoi(xml.GetData().c_str());
       else if (tag == "type")
          type = atoi(xml.GetData().c_str());
+      else if (tag == "type_idname")
+         type_idname = xml.GetData();
       else if (tag == "infiltration")
          infiltration = atof(xml.GetData().c_str());
       else if (tag == "animalgloss")
@@ -699,6 +699,7 @@ string Creature::showXml() const
    xml.AddElem("align", align);
    xml.AddElem("alive", alive);
    xml.AddElem("type", type);
+   xml.AddElem("type_idname", type_idname);
 
    char buf[256];
    snprintf (buf, 255, "%f", infiltration);
@@ -1623,6 +1624,12 @@ bool Creature::take_clips(Clip& clip, int number)
    return r;
 }
 
+bool Creature::take_clips(const ClipType& ct, int number)
+{
+   Clip c(ct, number);
+   return take_clips(c, number);
+}
+
 void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
 {
    if (weapon != NULL && !w.empty())
@@ -1678,6 +1685,12 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
       drop_weapons_and_clips(lootpile);
       weapon = w.split(1);
    }
+}
+
+void Creature::give_weapon(const WeaponType& wt, vector<Item*>* lootpile)
+{
+   Weapon w(wt);
+   give_weapon(w, lootpile);
 }
 
 void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
@@ -1744,6 +1757,12 @@ void Creature::give_armor(Armor& a, vector<Item*>* lootpile)
       strip(lootpile);
       armor = a.split(1);
    }
+}
+
+void Creature::give_armor(const ArmorType& at, vector<Item*>* lootpile)
+{
+   Armor a(at);
+   give_armor(a, lootpile);
 }
 
 void Creature::strip(vector<Item*>* lootpile)

@@ -676,9 +676,7 @@ void kidnaptransfer(Creature &cr)
    move(2,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    addstr("What name will you use for this ");
-   char str[80];
-   getrecruitcreature(str,newcr->type);
-   addstr(str);
+   addstr(newcr->get_type_name());
    addstr(" in its presence?");
 
    move(3,0);

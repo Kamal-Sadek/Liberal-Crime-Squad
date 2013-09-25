@@ -1079,6 +1079,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_SECURITY,newcr->get_skill(SKILL_SECURITY)+(2));
                newcr->set_skill(SKILL_STEALTH,newcr->get_skill(SKILL_STEALTH)+(2));
                newcr->type = CREATURE_THIEF;
+               newcr->type_idname = "CREATURE_THIEF";
                base = SITE_RESIDENTIAL_APARTMENT_UPSCALE;
                ledger.force_funds(ledger.get_funds()+500);
 
@@ -1094,6 +1095,7 @@ void makecharacter(void)
                newcr->adjust_attribute(ATTRIBUTE_HEALTH,+2);
                newcr->adjust_attribute(ATTRIBUTE_STRENGTH,+2);
                newcr->type = CREATURE_GANGMEMBER;
+               newcr->type_idname = "CREATURE_GANGMEMBER";
                base = SITE_BUSINESS_CRACKHOUSE;
                recruits = RECRUITS_GANG;
             }
@@ -1107,6 +1109,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_BUSINESS,newcr->get_skill(SKILL_BUSINESS)+(1));
                newcr->set_skill(SKILL_LAW,newcr->get_skill(SKILL_LAW)+(1));
                newcr->type = CREATURE_COLLEGESTUDENT;
+               newcr->type_idname = "CREATURE_COLLEGESTUDENT";
                base = SITE_RESIDENTIAL_APARTMENT;
                ledger.force_funds(ledger.get_funds()+200);
             }
@@ -1118,6 +1121,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_FIRSTAID,newcr->get_skill(SKILL_FIRSTAID)+(2));
                newcr->set_skill(SKILL_STREETSENSE,newcr->get_skill(SKILL_STREETSENSE)+(2));
                newcr->type = CREATURE_HSDROPOUT;
+               newcr->type_idname = "CREATURE_HSDROPOUT";
                base = SITE_RESIDENTIAL_SHELTER;
 
                newcr->adjust_attribute(ATTRIBUTE_HEART,+1);
@@ -1135,6 +1139,7 @@ void makecharacter(void)
                newcr->set_skill(SKILL_WRITING,newcr->get_skill(SKILL_WRITING)+(1));
                newcr->set_skill(SKILL_PERSUASION,newcr->get_skill(SKILL_PERSUASION)+(2));
                newcr->type = CREATURE_POLITICALACTIVIST;
+               newcr->type_idname = "CREATURE_POLITICALACTIVIST";
                base = SITE_RESIDENTIAL_TENEMENT;
                ledger.force_funds(ledger.get_funds()+50);
                newcr->juice+=50;

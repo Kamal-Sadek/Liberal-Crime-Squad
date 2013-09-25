@@ -1010,8 +1010,7 @@ void printliberalskills(Creature &cr)
    gettitle(str,cr);
    addstr(str);
    addstr(" (");
-   getrecruitcreature(str,cr.type);
-   addstr(str);
+   addstr(cr.get_type_name());
    addstr(")");
 
    // Add all skills
@@ -1095,8 +1094,7 @@ void printliberalstats(Creature &cr)
    gettitle(str,cr);
    addstr(str);
    addstr(" (");
-   getrecruitcreature(str,cr.type);
-   addstr(str);
+   addstr(cr.get_type_name());
    addstr(")");
    move(3,0);
 
@@ -1510,8 +1508,7 @@ void printliberalcrimes(Creature &cr)
    gettitle(str,cr);
    addstr(str);
    addstr(" (");
-   getrecruitcreature(str,cr.type);
-   addstr(str);
+   addstr(cr.get_type_name());
    addstr(")");
 
    // Add all crimes

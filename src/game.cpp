@@ -76,6 +76,7 @@
 #include <iostream>
 
 Log gamelog; //The gamelog.
+Log xmllog; // Log for xml errors or bad values.
 
 CursesMoviest movie;
 unsigned char bigletters[27][5][7][4];
@@ -94,19 +95,19 @@ vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;
 vector<ArmorType *> armortype;
 vector<LootType *> loottype;
-bool initialize_cliptypes();
-bool initialize_weapontypes();
-bool initialize_armortypes();
-bool initialize_loottypes();
+vector<CreatureType *> creaturetype;
+vector<VehicleType *> vehicletype;
+
+template<class Type>
+bool populate_from_xml(vector<Type*>& types,string file,Log& log);
+bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
 
 long curcreatureid=0;
 vector<Item *> groundloot;
 vector<Location *> location;
 
-vector<VehicleType *> vehicletype;
 vector<Vehicle *> vehicle;
 char showcarprefs=1;
-bool initialize_vehicletypes();
 
 int oldMapMode=0; // -1 if we're using the old map generation functions.
 
@@ -433,12 +434,15 @@ int main(int argc, char* argv[])
    attorneyseed=getSeed();
    cityname(lcityname);
 
+   xmllog.initialize("xmllog",true,1);
    bool xml_loaded_ok = true;
-   xml_loaded_ok &= initialize_vehicletypes();
-   xml_loaded_ok &= initialize_cliptypes();
-   xml_loaded_ok &= initialize_weapontypes();
-   xml_loaded_ok &= initialize_armortypes();
-   xml_loaded_ok &= initialize_loottypes();
+   xml_loaded_ok&=populate_from_xml(vehicletype,"vehicles.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(cliptype,"clips.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(weapontype,"weapons.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(armortype,"armors.xml",xmllog);
+   xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
    if(!xml_loaded_ok)
       end_game();
 
@@ -488,23 +492,6 @@ int r_num(void)
    return seed;
 }
 
-string tostring(long i)
-{
-   ostringstream os;
-   os << i;
-   return os.str();
-}
-
-int stringtobool(const string& boolstr) //Should find better way to do this. -XML
-{
-   if (boolstr == "true" || boolstr == "True" || boolstr == "TRUE" || boolstr == "1")
-      return 1;
-   else if (boolstr == "false" || boolstr == "False" || boolstr == "FALSE" || boolstr == "0")
-      return 0;
-   else
-      return -1;
-}
-
 void chaseseqst::clean(void)
 {
 	delete_and_clear(enemycar);
@@ -524,6 +511,7 @@ void end_game(int err)
    delete_and_clear(cliptype);
    delete_and_clear(armortype);
    delete_and_clear(loottype);
+   delete_and_clear(creaturetype);
    delete_and_clear(vehicletype);
    delete_and_clear(vehicle);
    delete_and_clear(pool);
@@ -536,144 +524,66 @@ void end_game(int err)
    exit(err);
 }
 
-bool initialize_vehicletypes()
+template<class Type> 
+bool populate_from_xml(vector<Type*>& types,string file,Log& log)
 {
-   CMarkup vtfile;
-   if(!vtfile.Load(string(artdir) + "vehicles.xml"))
-   { //File is missing or not valid XML.
-      addstr("FAILED to load vehicles.xml!");
+   CMarkup xml;
+   if(!xml.Load(string(artdir)+file))
+   { // File is missing or not valid XML.
+      addstr("Failed to load "+file+"!");
+      log.log("Failed to laod"+file+"!");
       getch();
-      //Will cause abort here or else if file is missing all vehicles loaded
-      //from a saved game would be deleted. Also, you probably don't want to
-      //play without any vehicles anyway. If the file does not have valid xml,
-      //behaviour is kind of undefined so it's best to abort then too.
+      // Will cause abort here or else if file is missing all unrecognized types
+      // loaded from a saved game will be deleted. Also, you probably don't want
+      // to play with a whole category of things missing anyway. If the file
+      // does not have valid xml, then behaviour is kind of undefined so it's
+      // best to abort then too.
       return false;
    }
 
-   vtfile.FindElem();
-   vtfile.IntoElem();
-
-   while (vtfile.FindElem("vehicletype"))
+   xml.FindElem();
+   xml.IntoElem();
+   while (xml.FindElem())
    {
-      vehicletype.push_back(new VehicleType(vtfile.GetSubDoc()));
+      types.push_back(new Type(xml.GetSubDoc()));
    }
    return true;
 }
 
-bool initialize_cliptypes()
+bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
 {
-   CMarkup ctfile;
-   if(!ctfile.Load(string(artdir) + "clips.xml"))
+   CMarkup xml;
+   if(!xml.Load(string(artdir)+file))
    { //File is missing or not valid XML.
-      addstr("FAILED to load clips.xml!");
+      addstr("Failed to load "+file+"!",log);
       getch();
       return false; //Abort.
    }
 
-   ctfile.FindElem();
-   ctfile.IntoElem();
-
-   while (ctfile.FindElem("cliptype"))
-   {
-      cliptype.push_back(new ClipType(ctfile.GetSubDoc()));
-   }
-   return true;
-}
-
-bool initialize_weapontypes()
-{
-   CMarkup wtfile;
-   if(!wtfile.Load(string(artdir) + "weapons.xml"))
-   { //File is missing or not valid XML.
-      addstr("FAILED to load weapons.xml!");
-      getch();
-      return false; //Abort.
-   }
-
-   wtfile.FindElem();
-   wtfile.IntoElem();
-
-   while (wtfile.FindElem("weapontype"))
-   {
-      weapontype.push_back(new WeaponType(wtfile.GetSubDoc()));
-   }
-   return true;
-}
-
-bool initialize_armortypes()
-{
-   //Armors
-   CMarkup atfile;
-   if(!atfile.Load(string(artdir) + "armors.xml"))
-   { //File is missing or not valid XML.
-      addstr("FAILED to load armors.xml!");
-      getch();
-      return false; //Abort.
-   }
-
-   atfile.FindElem();
-   atfile.IntoElem();
-
-   while (atfile.FindElem("armortype"))
-   {
-      armortype.push_back(new ArmorType(atfile.GetSubDoc()));
-   }
-
-   //Masks
-   if(!atfile.Load(string(artdir) + "masks.xml"))
-   { //File is missing or not valid XML.
-      addstr("FAILED to load masks.xml!");
-      getch();
-      return false; //Abort.
-   }
-
-   atfile.FindElem();
-   atfile.IntoElem();
-
+   xml.FindElem();
+   xml.IntoElem();
    int defaultindex;
-   if (atfile.FindElem("default"))
+   if (xml.FindElem("default"))
    {
-      defaultindex = getarmortype(atfile.GetData());
+      defaultindex = getarmortype(xml.GetData());
    }
    else
    {
-      addstr("Default missing for masks!");
+      addstr("Default missing for masks!",log);
       getch();
       return false; //Abort.
    }
    if (defaultindex == -1)
    {
-      addstr("Default for masks is not a known armor type!");
+      addstr("Default for masks is not a known armor type!",log);
       getch();
       return false; //Abort.
    }
 
-   atfile.ResetMainPos();
-   while (atfile.FindElem("masktype"))
+   xml.ResetMainPos();
+   while (xml.FindElem("masktype"))
    {
-      armortype.push_back(new ArmorType(*armortype[defaultindex], atfile.GetSubDoc()));
-   }
-
-   return true;
-}
-
-bool initialize_loottypes()
-{
-   CMarkup ltfile;
-   if(!ltfile.Load(string(artdir) + "loot.xml"))
-   { //File is missing or not valid XML.
-      addstr("FAILED to load loot.xml!");
-      getch();
-      return false; //Abort.
-   }
-
-   ltfile.FindElem();
-   ltfile.IntoElem();
-
-   while (ltfile.FindElem("loottype"))
-   {
-      loottype.push_back(new LootType(ltfile.GetSubDoc()));
+      armortype.push_back(new ArmorType(*armortype[defaultindex], xml.GetSubDoc()));
    }
    return true;
 }
-

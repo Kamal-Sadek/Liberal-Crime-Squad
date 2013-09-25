@@ -103,9 +103,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(2,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("What name will you use for this ");
-         char str[80];
-         getrecruitcreature(str,d.date[e]->type);
-         addstr(str);
+         addstr(d.date[e]->get_type_name());
          addstr(" in its presence?");
          move(3,0);
          addstr("If you do not enter anything, their real name will be used.");
@@ -461,9 +459,7 @@ char completedate(datest &d,int p,char &clearformess)
       addstr("Seeing ");
       addstr(d.date[e]->name, gamelog);
       addstr(", ", gamelog);
-      char str[75];
-      getrecruitcreature(str,d.date[e]->type);
-      addstr(str, gamelog);
+      addstr(d.date[e]->get_type_name(),gamelog);
       addstr(", ", gamelog);
       addstr(location[d.date[e]->worklocation]->getname(false,true), gamelog);
       gamelog.newline();
@@ -477,10 +473,6 @@ char completedate(datest &d,int p,char &clearformess)
       d.date[e]->drop_weapons_and_clips(&temp);
       Armor atmp(*armortype[getarmortype("ARMOR_CLOTHES")]);
       d.date[e]->give_armor(atmp,&temp);
-      //Weapon* wtemp = &d.date[e]->get_weapon();
-      //d.date[e]->weapon = NULL;
-      //Armor* atemp = d.date[e]->armor;
-      //d.date[e]->armor = new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
 
       printcreatureinfo(d.date[e]);
       makedelimiter(8,0);
@@ -495,10 +487,6 @@ char completedate(datest &d,int p,char &clearformess)
             d.date[e]->take_clips(*(static_cast<Clip*>(temp.back())),temp.back()->get_number());
          delete_and_remove(temp,temp.size()-1);
       }
-      //d.date[e]->weapon = wtemp;
-      //delete d.date[e]->armor;
-      //d.date[e]->armor = atemp;
-
 
       move(10,0);
       addstr("How should ");
@@ -720,9 +708,7 @@ char completedate(datest &d,int p,char &clearformess)
                move(2,0);
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                addstr("What name will you use for this ");
-               char str[80];
-               getrecruitcreature(str,d.date[e]->type);
-               addstr(str);
+               addstr(d.date[e]->get_type_name());
                addstr(" in its presence?");
 
                move(3,0);
