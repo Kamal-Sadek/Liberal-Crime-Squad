@@ -384,6 +384,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
          int difficulty = recruit_reluctance;
 
+         char str[75];
+         strcpy(str,"");
          if(c=='a')
          {
             difficulty -= 5;
@@ -391,7 +393,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             move(y++,0);
             addstr(pool[p]->name, gamelog);
             addstr(" shares ", gamelog);
-            char str[75];
             getissueeventstring(str);
             addstr(str, gamelog);
             addstr(".", gamelog);
@@ -407,7 +408,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(" explains ", gamelog);
             addstr(pool[p]->hisher(), gamelog);
             addstr(" views on ", gamelog);
-            char str[75];
             getviewsmall(str,LCSrandom(VIEWNUM-3));
             addstr(str, gamelog);
             addstr(".", gamelog);
