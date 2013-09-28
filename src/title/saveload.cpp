@@ -92,7 +92,7 @@ void savegame(const char *str)
       /*numbytes=*/fwrite(&offended_cablenews,sizeof(short),1,h);
       /*numbytes=*/fwrite(&offended_firemen,sizeof(short),1,h);
       /*numbytes=*/fwrite(&attorneyseed,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&selectedsiege,sizeof(long),1,h);
+      // /*numbytes=*/fwrite(&selectedsiege,sizeof(long),1,h);
       /*numbytes=*/fwrite(lcityname,sizeof(char),80,h);
       /*numbytes=*/fwrite(&newscherrybusted,sizeof(char),1,h);
 
@@ -424,7 +424,7 @@ char load(void)
       fread(&offended_cablenews,sizeof(short),1,h);
       fread(&offended_firemen,sizeof(short),1,h);
       fread(&attorneyseed,sizeof(int),1,h);
-      fread(&selectedsiege,sizeof(long),1,h);
+      //fread(&selectedsiege,sizeof(long),1,h);
       fread(lcityname,sizeof(char),80,h);
       fread(&newscherrybusted,sizeof(char),1,h);
 
