@@ -657,7 +657,8 @@ void passmonth(char &clearformess,char canseethings)
                hs=0;
             }
 
-            if(location[pool[p]->base]->siege.siege)
+            if(location[pool[p]->base]->siege.siege||
+               location[pool[p]->base]->renting==RENTING_NOCONTROL)
             {
                pool[p]->base=hs;
             }

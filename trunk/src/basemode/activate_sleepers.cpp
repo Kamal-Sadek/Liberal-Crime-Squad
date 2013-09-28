@@ -190,7 +190,7 @@ void activate_sleeper(Creature *cr)
       move(11,1);
       addstr("B - Espionage");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,state=='d');
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='c');
       move(12,1);
       addstr("C - Join the Active LCS");
 

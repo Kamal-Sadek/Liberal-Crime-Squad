@@ -40,6 +40,7 @@ void makecreature(Creature &cr,short type)
    cr.squadid=-1;
    cr.type=type;
    cr.infiltration=0;
+   cr.location=cursite;
    cr.worklocation=cursite;
    verifyworklocation(cr);
 
