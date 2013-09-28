@@ -318,18 +318,23 @@ std::string CreatureType::get_type_name() const
       case CREATURE_WORKER_SERVANT:
          if (law[LAW_LABOR] == -2 && law[LAW_CORPORATE] == -2)
             return "Slave";
+	 break;
       case CREATURE_WORKER_JANITOR:
          if (law[LAW_LABOR] == 2)
             return "Custodian";
+	 break;
       case CREATURE_WORKER_SWEATSHOP:
          if (law[LAW_LABOR] == 2 && law[LAW_IMMIGRATION] == 2)
             return "Migrant Worker";
+	 break;
       case CREATURE_CARSALESMAN:
          if (law[LAW_WOMEN] == -2)
             return "Car Salesman";
+	 break;
       case CREATURE_FIREFIGHTER:
          if (law[LAW_FREESPEECH] == -2)
             return "Fireman";
+	 break;
    }
    return type_name_;
 }
