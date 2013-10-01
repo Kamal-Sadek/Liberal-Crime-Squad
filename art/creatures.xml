@@ -1069,12 +1069,19 @@ Elements marked as hardcoded may have their values overridden by the game.
         <!-- <weapon> Hardcoded -->
         <armor>ARMOR_CIVILLIANARMOR</armor>
         <age>YOUNGADULT</age>
+	<attributes>
+	    <agility>5-10</agility>
+            <health>5-10</health>
+            <strength>5-10</strength>
+            <wisdom>5-10</wisdom>
+	</attributes>
         <alignment>CONSERVATIVE</alignment>
         <gender>MALE BIAS</gender>
         <infiltration>0-30</infiltration>
-        <juice>0-50</juice>
+        <juice>0-100</juice>
         <money>0</money>
         <skills>
+	    <dodge>0-4</dodge>
             <driving>0-1</driving>
             <handtohand>0-2</handtohand>
             <pistol>0-2</pistol>
