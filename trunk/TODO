@@ -1,9 +1,19 @@
 Look into possible failure to delete save game on Linux when game is over.
 Make a real README.
 Update real manual.
+Make more parts of the game into editable XML files, including having savegame files be pure XML that is easily editable.
+Complete the implementation of National LCS (including minor details that may have been overlooked, as well as adding more cities).
+Make sure the unique creatures (President and Corporate CEO) don't have any more bugs associated with them.
+The White House map has some bugs in it to fix (secret passages, President disappearing, etc.)
+Fix any bugs that can be found in the game, to try and get the game ready for a stable release that isn't beta.
 
 === Minor ===
 Add an option to carbomb locations, including the CCS, if you know where they are.
 Add LCS suicide bombers. (Perfect for those extra sweatshop workers.) Allow use during raids. Make them more effective with more juice.
 Add a strip club.
-Add a Desert Eagle.
+Add a boating feature (with boats that you can buy/steal, boat chases similar to car chases, and locations you can only visit by boat).
+Finish implementation of squad stance feature (covert, normal, or battle colors).
+Add false flag operations (LCS doing operations pretending to be CCS, and CCS doing operations pretending to be LCS).
+Add blogging as a legal form of Liberal activism.
+More activities for Sleepers (many possibilities here).
+Implement the most popular feature requests on the forums (being sure to test them).
