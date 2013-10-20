@@ -12,7 +12,9 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-m32" />
 					<Add option="-g" />
+					<Add option="-Og" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
 				</Compiler>
@@ -26,8 +28,13 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-fexpensive-optimizations" />
-					<Add option="-O3" />
+					<Add option="-m32" />
+					<Add option="-mfpmath=sse" />
+					<Add option="-Ofast" />
+					<Add option="-flto" />
+					<Add option="-march=pentium3" />
+					<Add option="-mtune=k8-sse3" />
+					<Add option="-funroll-loops" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
 				</Compiler>
@@ -59,6 +66,7 @@
 		<Unit filename="../src/common/getnames.cpp" />
 		<Unit filename="../src/common/help.cpp" />
 		<Unit filename="../src/common/misc.cpp" />
+		<Unit filename="../src/common/stringconversion.cpp" />
 		<Unit filename="../src/common/translateid.cpp" />
 		<Unit filename="../src/compat.cpp" />
 		<Unit filename="../src/compat.h" />
@@ -67,6 +75,8 @@
 		<Unit filename="../src/creature/creature.cpp" />
 		<Unit filename="../src/creature/creature.h" />
 		<Unit filename="../src/creature/creaturenames.cpp" />
+		<Unit filename="../src/creature/creaturetype.cpp" />
+		<Unit filename="../src/creature/creaturetype.h" />
 		<Unit filename="../src/creature/creaturetypes.cpp" />
 		<Unit filename="../src/cursesgraphics.cpp" />
 		<Unit filename="../src/cursesgraphics.h" />

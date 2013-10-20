@@ -879,10 +879,7 @@ void advanceday(char &clearformess,char canseethings)
             // Critical hit wounds
             for(int i=SPECIALWOUND_RIGHTLUNG;i<SPECIALWOUNDNUM;++i)
             {
-               int healdiff=14;
-               int permdamage=0;
-               int bleed=0;
-               int healed;
+               int healdiff=14,permdamage=0,bleed=0,healed=0;
                // Specific treatment information on wounds
                switch(i)
                {
