@@ -13,6 +13,9 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-m32" />
+					<Add option="-mfpmath=sse" />
+					<Add option="-march=pentium3" />
+					<Add option="-mtune=k8-sse3" />
 					<Add option="-g" />
 					<Add option="-Og" />
 					<Add directory="../src" />
@@ -30,10 +33,10 @@
 				<Compiler>
 					<Add option="-m32" />
 					<Add option="-mfpmath=sse" />
-					<Add option="-Ofast" />
-					<Add option="-flto" />
 					<Add option="-march=pentium3" />
 					<Add option="-mtune=k8-sse3" />
+					<Add option="-Ofast" />
+					<Add option="-flto" />
 					<Add option="-funroll-loops" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
@@ -174,7 +177,7 @@
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
-			<editor_config active="1" use_tabs="1" tab_indents="0" tab_width="3" indent="3" eol_mode="0" />
+			<editor_config active="1" use_tabs="0" tab_indents="0" tab_width="3" indent="3" eol_mode="0" />
 			<DoxyBlocks>
 				<comment_style block="0" line="0" />
 				<doxyfile_project />
