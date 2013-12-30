@@ -725,30 +725,25 @@ void activate(Creature *cr)
                if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>7)
                {
                   cr->activity.type=ACTIVITY_COMMUNITYSERVICE;
-                  choice='1';
                }
                else if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>4)
                {
                   cr->activity.type=ACTIVITY_TROUBLE;
-                  choice='2';
                }
                else
                {
                   if(cr->get_skill(SKILL_COMPUTERS)>2)
                   {
                      cr->activity.type=ACTIVITY_HACKING;
-                     choice='5';
                   }
                   else if(cr->get_skill(SKILL_ART)>1)
                   {
                      cr->activity.type=ACTIVITY_GRAFFITI;
                      cr->activity.arg=-1;
-                     choice='3';
                   }
                   else
                   {
                      cr->activity.type=ACTIVITY_TROUBLE;
-                     choice='2';
                   }
                }
             }
@@ -764,22 +759,18 @@ void activate(Creature *cr)
                if(cr->get_skill(SKILL_ART)>1)
                {
                   cr->activity.type=ACTIVITY_SELL_ART;
-                  choice='3';
                }
                else if(cr->get_skill(SKILL_TAILORING)>1)
                {
                   cr->activity.type=ACTIVITY_SELL_TSHIRTS;
-                  choice='2';
                }
                else if(cr->get_skill(SKILL_MUSIC)>1)
                {
                   cr->activity.type=ACTIVITY_SELL_MUSIC;
-                  choice='4';
                }
                else
                {
                   cr->activity.type=ACTIVITY_DONATIONS;
-                  choice='1';
                }
             }
             break;
@@ -795,17 +786,14 @@ void activate(Creature *cr)
                if(cr->get_skill(SKILL_COMPUTERS)>1)
                {
                   cr->activity.type=ACTIVITY_CCFRAUD;
-                  choice='3';
                }
                else if(cr->get_skill(SKILL_SEDUCTION)>1 && cr->age >= 18)
                {
                   cr->activity.type=ACTIVITY_PROSTITUTION;
-                  choice='2';
                }
                else
                {
                   cr->activity.type=ACTIVITY_SELL_DRUGS;
-                  choice='1';
                }
             }
             break;
@@ -867,7 +855,6 @@ void activate(Creature *cr)
                case CREATURE_TANK: // fpr fighting skills
                case CREATURE_VETERAN: // for fighting skills
                   cr->activity.type=ACTIVITY_TEACH_FIGHTING;
-                  choice='2';
                   break;
                // this second block are creatures with Computers, Security, Stealth, Disguise, Tailoring, Seduction, Psychology, & Driving
                case CREATURE_ACTOR: // for Disguise
@@ -897,7 +884,6 @@ void activate(Creature *cr)
                case CREATURE_WORKER_SERVANT:
                case CREATURE_WORKER_SWEATSHOP: // for Tailoring
                   cr->activity.type=ACTIVITY_TEACH_COVERT;
-                  choice='3';
                   break;
                // this third block are creatures with Writing, Persuasion, Law, Street Sense, Science, Religion, Business, Music, & Art
                case CREATURE_AUTHOR: // for Writing & Persuasion
@@ -950,7 +936,6 @@ void activate(Creature *cr)
                case CREATURE_YOGAINSTRUCTOR:
                default:
                   cr->activity.type=ACTIVITY_TEACH_POLITICS;
-                  choice='1';
                   break;
                }
                break;
