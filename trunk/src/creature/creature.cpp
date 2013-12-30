@@ -953,8 +953,9 @@ int Creature::roll_check(int skill)
          for(int j=0;j<3;j++)
             if(newroll>roll[j])
             {
+               int temp=roll[j];
                roll[j]=newroll;
-               break;
+               newroll=temp;
             }
    }
 
