@@ -2455,7 +2455,6 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
                //teacher's ability at teaching
                if(pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(skillarray[i])-1&&
                   pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(SKILL_TEACHING)+2&&
-                  ledger.get_funds()>cost&&
                   pool[p]->get_skill(skillarray[i])<pool[p]->skill_cap(skillarray[i],true))
                {
                   students++;
@@ -2463,6 +2462,10 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
             }
          }
       }
+
+      //Check funds.
+      if(ledger.get_funds()<min(students,10)*cost)
+         continue; //Can't afford to teach them. Continue with next teacher.
 
       //Walk through and train people
       for(int p=0;p<(int)pool.size();p++)
@@ -2482,7 +2485,6 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
                //teacher's ability at teaching
                if(pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(skillarray[i])-1&&
                   pool[p]->get_skill(skillarray[i])<teachers[t]->get_skill(SKILL_TEACHING)+2&&
-                  ledger.get_funds()>cost&&
                   pool[p]->get_skill(skillarray[i])<pool[p]->skill_cap(skillarray[i],true))
                {
                   // Teach based on teacher's skill in the topic plus skill in teaching, minus
