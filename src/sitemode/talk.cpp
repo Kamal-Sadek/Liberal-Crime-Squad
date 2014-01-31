@@ -814,7 +814,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 
       return 1;
    }
-   else if(tk.type!=CREATURE_PRISONER && interested)
+   else if(strcmp(tk.name,"Prisoner")!=0 && interested)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(12,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
@@ -833,7 +833,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
       move(12,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_CYAN,COLOR_BLACK,1);
       move(13,1);
-      if(tk.type==CREATURE_PRISONER)
+      if(strcmp(tk.name,"Prisoner")==0)
       {
          if(tk.align==ALIGN_LIBERAL)
             addstr("\"Now's not the time!\"", gamelog);
@@ -1106,7 +1106,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       addstr(" and ", gamelog);
       addstr(tk.name, gamelog);
       addstr(" make plans for tonight", gamelog);
-      if(tk.type==CREATURE_PRISONER)
+      if(strcmp(tk.name,"Prisoner")==0)
       {
          addstr(", and ", gamelog);
          move(y,1);y++;
@@ -1402,7 +1402,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
    succeeded = a.skill_check(SKILL_PERSUASION,difficulty);
 
    // Prisoners never accept to join you, you must liberate them instead
-   if(succeeded && tk.type!=CREATURE_PRISONER)
+   if(succeeded && strcmp(tk.name,"Prisoner")!=0)
    {
       y++;
       set_color(COLOR_WHITE,COLOR_BLACK,1);
