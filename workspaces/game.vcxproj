@@ -73,7 +73,7 @@
       <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\src\politics;..\src\organization;..\src;..\src\pdcurses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;MARKUP_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;MARKUP_STL;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -107,11 +107,11 @@
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/wd4996 /D "MARKUP_STL" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\src\pdcurses;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;MARKUP_STL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -145,7 +145,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NOMINMAX;MARKUP_STL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -189,7 +189,9 @@
     <ClCompile Include="..\src\common\help.cpp" />
     <ClCompile Include="..\src\basemode\liberalagenda.cpp" />
     <ClCompile Include="..\src\common\misc.cpp" />
+    <ClCompile Include="..\src\common\stringconversion.cpp" />
     <ClCompile Include="..\src\common\translateid.cpp" />
+    <ClCompile Include="..\src\creature\creaturetype.cpp" />
     <ClCompile Include="..\src\daily\activities.cpp" />
     <ClCompile Include="..\src\daily\daily.cpp" />
     <ClCompile Include="..\src\daily\date.cpp" />
@@ -260,6 +262,7 @@
     <ClCompile Include="..\src\lcsio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\creature\creaturetype.h" />
     <ClInclude Include="..\src\locations\locations.h" />
     <ClInclude Include="..\src\sitemode\shop.h" />
     <ClInclude Include="..\src\sitemode\sitemap.h" />
