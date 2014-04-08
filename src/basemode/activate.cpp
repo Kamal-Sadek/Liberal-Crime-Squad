@@ -1427,12 +1427,12 @@ void recruitSelect(Creature &cr)
       // Dynamic difficulty for certain creatures, recalculated each time the function is called
       if(recruitable_creatures[i].type == CREATURE_MUTANT)
       {
-         if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
-            recruitable_creatures[i].difficulty = 9;
-         else if(law[LAW_NUCLEARPOWER] != -1 && law[LAW_POLLUTION] != -1)
+         if(law[LAW_NUCLEARPOWER] == -2 && law[LAW_POLLUTION] == -2)
+            recruitable_creatures[i].difficulty = 2;
+         else if(law[LAW_NUCLEARPOWER] == -2 || law[LAW_POLLUTION] == -2)
             recruitable_creatures[i].difficulty = 6;
          else
-            recruitable_creatures[i].difficulty = 2;
+            recruitable_creatures[i].difficulty = 9;
       }
    }
 
