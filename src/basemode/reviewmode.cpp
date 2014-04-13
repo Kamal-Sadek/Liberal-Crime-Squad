@@ -1112,20 +1112,23 @@ void assemblesquad(squadst *cursquad)
 			if(c2>='a'&&c2<='s')
 			{
 				int p=page*19+(int)(c2-'a');
-            //Create a temporary squad from which to view this character - even if they already have a squad.
-				squadst *oldactivesquad = activesquad;
-            int oldSquadID = temppool[p]->squadid;
-            //create a temp squad containing just this liberal
-	  			activesquad=new squadst;
-				strcpy(activesquad->name, "Temporary Squad");
-				activesquad->id=cursquadid;
-				activesquad->squad[0]=temppool[p];
-				temppool[p]->squadid = activesquad->id;
-				fullstatus(0);
-				delete activesquad;
-				activesquad = NULL;
-				temppool[p]->squadid = oldSquadID;
-				activesquad = oldactivesquad;
+            if(p<(int)temppool.size())
+            {
+               //Create a temporary squad from which to view this character - even if they already have a squad.
+               squadst *oldactivesquad = activesquad;
+               int oldSquadID = temppool[p]->squadid;
+               //create a temp squad containing just this liberal
+               activesquad=new squadst;
+               strcpy(activesquad->name, "Temporary Squad");
+               activesquad->id=cursquadid;
+               activesquad->squad[0]=temppool[p];
+               temppool[p]->squadid = activesquad->id;
+               fullstatus(0);
+               delete activesquad;
+               activesquad = NULL;
+               temppool[p]->squadid = oldSquadID;
+               activesquad = oldactivesquad;
+            }
 			}
 		}
       if(c==10||c==ESC)
