@@ -812,12 +812,18 @@ bool sort_locationandname(Creature* first, Creature* second)
 
 bool sort_squadorname(Creature* first, Creature* second)
 {
-   bool a = ((first->squadid != -1 && second->squadid == -1) //Squad member should come before squadless.
-              || (first->squadid != -1
+   // Use getsquad to treat members of a new squad being assembled as if not in a squad.
+   bool first_in_squad = (getsquad(first->squadid) != -1);
+   bool second_in_squad = (getsquad(second->squadid) != -1);
+
+   bool a = ((first_in_squad && !second_in_squad) //Squad member should come before squadless.
+              || (first_in_squad
                   && first->squadid < second->squadid) //Older squads above newer.
-              || (first->squadid == -1 && second->squadid == -1
+              || (!first_in_squad && !second_in_squad
                   && strcmp(first->name,second->name)<0)); //Sort squadless by name.
-   if (first->squadid!=-1 && first->squadid == second->squadid) //Sort members of same squad in the order they are in the squad.
+
+   //Sort members of same squad in the order they are in the squad.
+   if (first_in_squad && first->squadid == second->squadid) 
    {
       for (unsigned j=0; j<6; ++j)
       {
