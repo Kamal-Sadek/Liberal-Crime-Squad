@@ -40,11 +40,12 @@
 template <class Container> void delete_and_remove(Container& c,int i)
 {
    if(i<=-1)return; // check for invalid index, and don't delete anything in this case
-	if(c[i]!=NULL)delete c[i]; // be able to hande null pointers just in case that happens
+	delete c[i];
    c.erase(c.begin()+i);
 }
 
-/* Deletes and removes a specified pointer from 2 containers it's in. */
+/* Deletes and removes a specified pointer from 2 containers it's in. 
+   c1 and c2 must not be the same container! */
 template <class Container> void delete_and_remove(Container& c1,int i1,Container& c2,int i2)
 {
    if(i1<=-1||i2<=-1)return; // check for invalid index, and don't delete anything in this case
@@ -65,7 +66,7 @@ template <class Container> void delete_and_clear(Container& c)
 {
    while(!c.empty())
    {
-      if(c.back()!=NULL)delete c.back(); // be able to hande null pointers just in case that happens
+      delete c.back();
       c.pop_back();
    }
 }
@@ -75,7 +76,7 @@ template <class Container> void delete_and_clear(Container& c1,Container& c2)
 {
    for(int i1=c1.size()-1;i1>=0;i1--)
       for(int i2=c2.size()-1;i2>=0;i2--)
-         if(c1[i1]==c2[i2])delete_and_remove(c1,i2,c2,i2);
+         if(c1[i1]==c2[i2])delete_and_remove(c1,i1,c2,i2);
 }
 
 #endif
