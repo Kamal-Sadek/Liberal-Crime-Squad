@@ -7,3 +7,15 @@ Easiest way is using the workspaces provided in the 'workspaces' folder. Project
 
  * VisualStudio 
  * Code::Blocks
+
+ 
+ Files to include in Windows distributions of Liberal Crime Squad
+ ----------------------------------------------------------------
+ * The LCS executable: on Windows this is "crimesquad.exe" in either
+   "workspaces\Debug" for a debug build or "workspaces\Release" for a release
+   build.  Of course you should compile a new executable from the latest code.
+ * The curses library: on Windows this is "pdcurses.dll" in the "workspaces" directory.
+ * The "art" directory and all the files in it.
+ * The "init.txt" configuration file.
+ * The "CrimeSquadManual.txt" documentation file from the "docs" directory.
+ 
