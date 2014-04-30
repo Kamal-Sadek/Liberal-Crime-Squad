@@ -961,17 +961,8 @@ void fullstatus(int p)
          move(24,0);
          addstr("                                                                    ");
 
-         keypad(stdscr,FALSE);
-         raw_output(FALSE);
-         echo();
-         curs_set(1);
          move(24,0);
          enter_name(activesquad->squad[p]->name,CREATURE_NAMELEN,activesquad->squad[p]->propername);
-
-         curs_set(0);
-         noecho();
-         raw_output(TRUE);
-         keypad(stdscr,TRUE);
          continue;
       }
       else if(c=='g')

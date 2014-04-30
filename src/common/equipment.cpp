@@ -49,7 +49,7 @@ long prompt_amount(long min, long max)
    raw_output(FALSE);
    echo();
    curs_set(1);
-   mvgetstr(8,30,str);
+   mvgetnstr(8,30,str,99);
    curs_set(0);
    noecho();
    raw_output(TRUE);
