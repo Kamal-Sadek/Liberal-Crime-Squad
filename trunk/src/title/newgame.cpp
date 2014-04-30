@@ -1222,11 +1222,6 @@ void makecharacter(void)
    move(2,0);
    enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
 
-   curs_set(0);
-   noecho();
-   raw_output(TRUE);
-   keypad(stdscr,TRUE);
-
    pool.push_back(newcr);
 
    make_world(hasmaps);

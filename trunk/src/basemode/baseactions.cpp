@@ -193,17 +193,8 @@ void getslogan(void)
    move(16,0);
    addstr("                                                                                          ");
 
-   keypad(stdscr,FALSE);
-   raw_output(FALSE);
-   echo();
-   curs_set(1);
    move(16,0);
    enter_name(slogan,SLOGAN_LEN);
-
-   curs_set(0);
-   noecho();
-   raw_output(TRUE);
-   keypad(stdscr,TRUE);
 }
 
 

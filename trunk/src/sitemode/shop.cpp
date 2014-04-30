@@ -691,7 +691,7 @@ int Shop::fenceselect(squadst& customers) const
                      raw_output(FALSE);
                      echo();
                      curs_set(1);
-                     mvgetstr(8,32,str);
+                     mvgetnstr(8,32,str,99);
                      curs_set(0);
                      noecho();
                      raw_output(TRUE);
