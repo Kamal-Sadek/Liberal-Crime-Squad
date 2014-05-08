@@ -13,15 +13,21 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
+					<Add option="-mfpmath=sse,387" />
 					<Add option="-march=pentium3" />
-					<Add option="-mtune=k8-sse3" />
+					<Add option="-mtune=generic" />
 					<Add option="-g" />
 					<Add option="-Og" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
 				</Compiler>
 				<Linker>
+					<Add option="-m32" />
+					<Add option="-mfpmath=sse,387" />
+					<Add option="-march=pentium3" />
+					<Add option="-mtune=generic" />
+					<Add option="-g" />
+					<Add option="-Og" />
 					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>
@@ -32,16 +38,25 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
+					<Add option="-mfpmath=sse,387" />
 					<Add option="-march=pentium3" />
-					<Add option="-mtune=k8-sse3" />
+					<Add option="-mtune=generic" />
 					<Add option="-Ofast" />
 					<Add option="-flto" />
+					<Add option="-fomit-frame-pointer" />
 					<Add option="-funroll-loops" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
 				</Compiler>
 				<Linker>
+					<Add option="-m32" />
+					<Add option="-mfpmath=sse,387" />
+					<Add option="-march=pentium3" />
+					<Add option="-mtune=generic" />
+					<Add option="-Ofast" />
+					<Add option="-flto" />
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-funroll-loops" />
 					<Add option="-s" />
 					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
