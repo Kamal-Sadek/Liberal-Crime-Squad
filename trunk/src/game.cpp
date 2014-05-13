@@ -531,7 +531,7 @@ bool populate_from_xml(vector<Type*>& types,string file,Log& log)
    if(!xml.Load(string(artdir)+file))
    { // File is missing or not valid XML.
       addstr("Failed to load "+file+"!");
-      log.log("Failed to laod"+file+"!");
+      log.log("Failed to load "+file+"!");
       getch();
       // Will cause abort here or else if file is missing all unrecognized types
       // loaded from a saved game will be deleted. Also, you probably don't want

@@ -478,7 +478,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    actual=0;
 
    char str[200];
-   //char str2[200];
 
    clearmessagearea(false);
    if (goodguyattack)
@@ -2202,17 +2201,8 @@ void specialattack(Creature &a, Creature &t, char &actual)
             {
                if(activesquad->squad[p]==&t)
                {
-                  for(int pl=pool.size()-1;pl>=0;pl--)
-                  {
-                     if(pool[pl]==activesquad->squad[p])
-                     {
-                        pool[pl]->die();
-                        pool[pl]->location=-1;
-                        //delete_and_remove(pool,pl);
-                        break;
-                     }
-                  }
-
+                  activesquad->squad[p]->die();
+                  activesquad->squad[p]->location=-1;
                   activesquad->squad[p]=NULL;
                   flipstart=1;
                }

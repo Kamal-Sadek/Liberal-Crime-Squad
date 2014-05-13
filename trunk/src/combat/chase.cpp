@@ -216,17 +216,8 @@ char chasesequence(void)
          {
             if(activesquad->squad[p]==NULL)continue;
 
-            for(int pl=pool.size()-1;pl>=0;pl--)
-            {
-               if(pool[pl]==activesquad->squad[p])
-               {
-                  pool[pl]->die();
-                  pool[pl]->location=-1;
-                  //delete_and_remove(pool,pl);
-                  break;
-               }
-            }
-
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
             activesquad->squad[p]=NULL;
          }
 
@@ -497,17 +488,8 @@ char footchase(void)
          {
             if(activesquad->squad[p]==NULL)continue;
 
-            for(int pl=pool.size()-1;pl>=0;pl--)
-            {
-               if(pool[pl]==activesquad->squad[p])
-               {
-                  pool[pl]->die();
-                  pool[pl]->location=-1;
-                  //delete_and_remove(pool,pl);
-                  break;
-               }
-            }
-
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
             activesquad->squad[p]=NULL;
          }
 
