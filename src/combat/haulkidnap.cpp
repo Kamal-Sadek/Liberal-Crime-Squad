@@ -463,19 +463,9 @@ void freehostage(Creature &cr,char situation)
    {
       if(cr.prisoner->squadid!=-1)
       {
-         //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
-         //(That may not be the case any longer -jds)
-         for(int pl=0;pl<(int)pool.size();pl++)
-         {
-            if(pool[pl]==cr.prisoner)
-            {
-               removesquadinfo(*pool[pl]);
-               pool[pl]->die();
-               pool[pl]->location=-1;
-               //delete_and_remove(pool,pl);
-               break;
-            }
-         }
+         removesquadinfo(*cr.prisoner);
+         cr.prisoner->die();
+         cr.prisoner->location=-1;
       }
    }
 
@@ -556,36 +546,8 @@ void squadgrab_immobile(char dead)
                   //DROP LOOT
                   makeloot(*activesquad->squad[p],groundloot);
 
-                  //MUST DELETE PARTY MEMBER FROM POOL COMPLETELY
-                  //(that may not be the case any longer -jds)
-                  for(int pl=0;pl<(int)pool.size();pl++)
-                  {
-                     if(pool[pl]==activesquad->squad[p])
-                     {
-                        pool[pl]->die();
-                        pool[pl]->location=-1;
-                        //delete_and_remove(pool,pl);
-                        break;
-                     }
-                  }
-
-                  //Check if that was the last living squad member.
-                  //bool squad_dead = true;
-                  for(int i = 5; i >= 0; --i)
-                  {
-                     //This check to make sure we don't look at nonexistent
-                     //data, causing segfaults and the like.
-                     if(activesquad->squad[i] != NULL)
-                     {
-                        //Check if alive.
-                        if(activesquad->squad[i]->alive)
-                        {
-                           //IT LIVES! Squad is not dead.
-                           //squad_dead = false;
-                           break; //No reason to continue
-                        }
-                     }
-                  }
+                  activesquad->squad[p]->die();
+                  activesquad->squad[p]->location=-1;
                }
                else
                {

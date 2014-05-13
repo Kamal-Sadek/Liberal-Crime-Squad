@@ -501,7 +501,6 @@ void passmonth(char &clearformess,char canseethings)
          removesquadinfo(*pool[p]);
          pool[p]->die();
          pool[p]->location=-1;
-         //delete_and_remove(pool.p]);
       }
    }
 

@@ -38,10 +38,6 @@ make it less likely to be raided based on:
         - what action each sleeper is doing (promoting liberalism decreases chance while promoting conservatism increases chance)
         - what the sleeper does for a living (police officers are more influential than janitors, for instance)
 
-There are a few bugs regarding sieges, including:
-        - After coming back after disbanding, ALL sleepers end up in the homeless shelter, and will be killed/arrested during raids, however, they still
-           can only be controlled as sleepers, meaning, no moving them out of the homeless shelter.
-
 make it more likely to be raided:
         - when a liberal hacks or steals credit cards.
         - dead bodies in the base. [DONE]
@@ -55,15 +51,11 @@ void resolvesafehouses(void)
 {
    for(int l=0;l<(int)location.size();l++)
    {
-      //Location* d_loc = location[l];
-      //int d_renting = d_loc->renting;
       if(location[l]->renting>=0&&location[l]->siege.siege)
       {
          cleangonesquads();
          selectedsiege = l; // hack for calling giveup()
          giveup();
-
-         //int bp=0;
       }
    }
 }
@@ -1103,7 +1095,6 @@ void siegeturn(char clearformess)
                         removesquadinfo(*pool[targ]);
 
                         pool[targ]->die();
-                        //delete_and_remove(pool,targ);
                      }
                      else
                      {
@@ -1264,7 +1255,6 @@ void siegeturn(char clearformess)
                               removesquadinfo(*pool[targ]);
 
                               pool[targ]->die();
-                              //delete_and_remove(pool,targ);
                            }
                            else
                            {
@@ -1769,7 +1759,6 @@ void giveup(void)
          removesquadinfo(*pool[p]);
          pool[p]->die();
          pool[p]->location=-1;
-         //delete_and_remove(pool,p);
       }
 
       if(location[loc]->siege.siegetype==SIEGE_CCS)

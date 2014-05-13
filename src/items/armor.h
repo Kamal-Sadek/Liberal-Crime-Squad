@@ -20,7 +20,7 @@ class Armor : public Item
       virtual bool merge(Item& i);
       virtual bool sort_compare_special(Item* other) const;
       
-      int get_quality() { return quality_; }
+      int get_quality() const { return quality_; }
       //void decrease_quality(int decrease = 1);
       
       void set_damaged(bool d);
