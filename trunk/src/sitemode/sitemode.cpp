@@ -610,18 +610,8 @@ void mode_site(void)
          {
             if(activesquad->squad[p]==NULL)continue;
 
-            for(int pl=pool.size()-1;pl>=0;pl--)
-            {
-               if(pool[pl]==activesquad->squad[p])
-               {
-                  pool[pl]->die();
-                  pool[pl]->location=-1;
-                  //delete pool[pl];
-                  //pool.erase(pool.begin() + pl);
-                  break;
-               }
-            }
-
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
             activesquad->squad[p]=NULL;
          }
 
