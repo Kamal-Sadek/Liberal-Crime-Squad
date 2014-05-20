@@ -1089,8 +1089,6 @@ bool iscriminal(Creature &cr);
 void hospitalize(int loc,Creature &patient);
 /* common - determines how long a creature's injuries will take to heal */
 int clinictime(Creature &g);
-/* common - purges squad of loot and vehicles if it has no members */
-int testsquadclear(squadst &thissquad,int obase);
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime);
 /* common - applies a crime to everyone in a location, or the entire LCS */

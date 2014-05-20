@@ -2424,7 +2424,6 @@ void escapesiege(char won)
       if (activesquad && homes != -1)
       {
          location[homes]->getloot(activesquad->loot);
-         activesquad->loot.clear();
       }
 
       activesquad=NULL; //active squad cannot be disbanded in removesquadinfo,

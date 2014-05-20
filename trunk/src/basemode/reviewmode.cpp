@@ -1230,7 +1230,6 @@ void assemblesquad(squadst *cursquad)
          if(squadloc[sq]!=-1)
          {
             location[squadloc[sq]]->getloot(squad[sq]->loot);
-            squad[sq]->loot.clear();
          }
 
          if(activesquad==squad[sq])activesquad=NULL;

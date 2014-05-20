@@ -1025,7 +1025,6 @@ void advanceday(char &clearformess,char canseethings)
                   if(pool[p]->base==l)pool[p]->base=hs;
                }
                location[hs]->getloot(location[l]->loot);
-               location[l]->loot.clear();
 
                location[l]->compound_walls=0;
                location[l]->compound_stores=0;
@@ -1131,22 +1130,9 @@ void advanceday(char &clearformess,char canseethings)
                pool[p]->dating=date[d]->timeleft;
                if(pool[p]->dating>0)
                {
-                  long sq=-1;
-
-                  //IF YOU ARE THE LAST PERSON IN YOUR SQUAD
-                  //YOU HAVE TO DROP OFF THE EQUIPMENT WHEREVER YOUR BASE IS
-                  //BECAUSE YOUR SQUAD IS ABOUT TO BE DESTROYED
-                  if(pool[p]->squadid!=-1)
-                     sq=getsquad(pool[p]->squadid);
-
                   //NOW KICK THE DATER OUT OF THE SQUAD AND LOCATION
                   removesquadinfo(*pool[p]);
                   pool[p]->location=-1;
-
-                  if(sq!=-1)
-                  {
-                     testsquadclear(*squad[sq], pool[p]->base);
-                  }
                }
             }
          }
