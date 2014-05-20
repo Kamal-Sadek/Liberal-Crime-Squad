@@ -1080,6 +1080,7 @@ void mode_site(void)
 
          if(enemy&&c=='f')
          {
+            // Cops can subdue and arrest the squad.
             bool subdue=false;
             for(int i=0;i<ENCMAX;i++)
             {
@@ -1087,18 +1088,17 @@ void mode_site(void)
                   encounter[i].blood>60&&
                   (encounter[i].type==CREATURE_COP))
                {
-                  for(i=0;i<6;i++)
+                  subdue=true;
+                  // Don't subdue squad if someone is still in good condition.
+                  for(int j=0;j<6;j++)
                   {
-                     if(activesquad->squad[i] &&
-                        activesquad->squad[i]->alive &&
-                        activesquad->squad[i]->blood > 40)
+                     if(activesquad->squad[j] &&
+                        activesquad->squad[j]->alive &&
+                        activesquad->squad[j]->blood > 40)
                      {
+                        subdue=false;
                         break;
                      }
-                  }
-                  if(i==6)
-                  {
-                     subdue=true;
                   }
                   break;
                }

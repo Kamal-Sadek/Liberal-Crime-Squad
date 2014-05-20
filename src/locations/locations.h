@@ -266,7 +266,7 @@ public:
    std::string getname(int shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
    char* city_description(void);
-   void getloot(vector<Item *> loot);
+   void getloot(vector<Item *>& loot);
 };
 
 /*******************************************************************************

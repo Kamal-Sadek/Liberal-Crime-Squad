@@ -145,7 +145,6 @@ void hospitalize(int loc, Creature &patient)
                }
             }
          }
-         testsquadclear(*patientsquad, patient.base);
       }
    }
 }
@@ -180,38 +179,6 @@ int clinictime(Creature &g)
    if(!g.special[SPECIALWOUND_LOWERSPINE])time++;
 
    return time;
-}
-
-/* common - purges squad of loot and vehicles if it has no members */
-/***************************************************
-*JDS* testsquadclear -
-Clears the squad of loot and cars if it has no
-members. Returns 0 if squad is okay, returns 1 if
-squad is cleared.
-***************************************************/
-int testsquadclear(squadst &thissquad, int obase)
-{
-   //SPLIT IF SQUAD IS GONE
-   char hasmembers=0;
-   for(int p=0;p<6;p++)
-   {
-      if(thissquad.squad[p]!=NULL)hasmembers=1;
-   }
-   if(!hasmembers)
-   {
-      //LOSE ALL CARS
-      for(int p=0;p<6;p++)
-      {
-         if(thissquad.squad[p]==NULL)continue;
-         delete_and_remove(vehicle,id_getcar(thissquad.squad[p]->carid));
-      }
-
-      //RETURN ALL LOOT ITEMS TO BASE
-      location[obase]->getloot(thissquad.loot);
-      thissquad.loot.clear();
-      return 1;
-   }
-   return 0;
 }
 
 /* common - applies a crime to everyone in the active party */
@@ -368,7 +335,6 @@ void cleangonesquads(void)
       else
       {
          location[squad[sq]->squad[0]->base]->getloot(squad[sq]->loot);
-         squad[sq]->loot.clear();
       }
    }
 }
