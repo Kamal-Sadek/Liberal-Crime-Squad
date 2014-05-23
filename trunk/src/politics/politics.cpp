@@ -1359,7 +1359,6 @@ void supremecourt(char clearformess,char canseethings)
          getch();
       }
 
-      generate_name(courtname[j]);
       float president=exec[EXEC_PRESIDENT];
       float sen=0;
       for(int s=0;s<100;s++)sen+=senate[s];
@@ -1372,6 +1371,11 @@ void supremecourt(char clearformess,char canseethings)
       else if(consensus<.5f)court[j]=0;
       else if(consensus<1.5f)court[j]=1;
       else court[j]=2;
+
+      if(court[j]==-2)
+         generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
+      else
+         generate_name(courtname[j]);
 
       if(canseethings)
       {

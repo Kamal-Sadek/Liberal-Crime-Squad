@@ -1260,7 +1260,7 @@ void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* gets a random first name */
 void firstname(char *str, char gender = GENDER_NEUTRAL);
 /* gets a random last name */
-void lastname(char *str);
+void lastname(char *str, bool archconservative=false);
 /* ensures that the creature's work location is appropriate to its type */
 bool verifyworklocation(Creature &cr, char test_location=-1, char test_type=-1);
 /* turns a creature into a conservative */

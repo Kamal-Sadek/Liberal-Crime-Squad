@@ -422,7 +422,10 @@ int main(int argc, char* argv[])
       else if(c<5)court[c]=0;
       else if(c<8)court[c]=1;
       else court[c]=2;
-      generate_name(courtname[c]);
+      if(court[c]==-2)
+         generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
+      else
+         generate_name(courtname[c]);
    }
 
    for(int e=0;e<EXECNUM;e++)
@@ -524,7 +527,7 @@ void end_game(int err)
    exit(err);
 }
 
-template<class Type> 
+template<class Type>
 bool populate_from_xml(vector<Type*>& types,string file,Log& log)
 {
    CMarkup xml;
