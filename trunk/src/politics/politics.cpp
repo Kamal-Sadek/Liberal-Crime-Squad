@@ -1123,6 +1123,7 @@ void supremecourt(char clearformess,char canseethings)
             scase[c]==LAW_ANIMALRESEARCH||scase[c]==LAW_POLLUTION)&&
             !LCSrandom(5))
          {
+            lastname(name2,true);
             switch(LCSrandom(5))
             {
             case 0:strcat(name2,", Inc.");break;

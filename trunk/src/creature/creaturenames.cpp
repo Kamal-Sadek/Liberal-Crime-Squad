@@ -112,17 +112,42 @@ void Creature::namecreature()
 /* fills a string with a proper name */
 void generate_name(char *str, char gender)
 {
-   strcpy(str,"");
-
    char first[80];
-   firstname(first, gender);
-   strcat(str,first);
-
-   strcat(str," ");
-
    char last[80];
-   lastname(last, gender == GENDER_WHITEMALEPATRIARCH);
+
+   generate_name(first,last,gender);
+   strcpy(str,first);
+   strcat(str," ");
    strcat(str,last);
+}
+
+
+
+/* get a first and last name for the same person */
+void generate_name(char *first, char *last, char gender)
+{
+   do {
+      firstname(first, gender);
+      lastname(last, gender == GENDER_WHITEMALEPATRIARCH);
+   } while(strcmp(first,last) == 0);
+}
+
+
+
+/* get a first, middle, and last name for the same person */
+void generate_long_name(char *first, char *middle, char *last, char gender)
+{
+   // pick either male or female so we can have 75% chance of first and middle names having matching genders
+   if(gender == GENDER_NEUTRAL)
+      gender = (LCSrandom(2)?GENDER_MALE:GENDER_FEMALE);
+   do {
+      firstname(first, gender);
+      if(LCSrandom(2)) // middle name is a first name
+         firstname(middle,(gender == GENDER_WHITEMALEPATRIARCH || LCSrandom(2)?gender:GENDER_NEUTRAL)); // 25% chance for middle name of other gender unless white male patriarch
+      else // middle name is a last name
+         lastname(middle, gender == GENDER_WHITEMALEPATRIARCH);
+      lastname(last, gender == GENDER_WHITEMALEPATRIARCH);
+   } while(strcmp(first,middle) == 0 && strcmp(first,last) == 0 && strcmp(middle,last) == 0);
 }
 
 
@@ -399,7 +424,7 @@ void firstname(char *str, char gender)
    // If we don't care if the name is male or female, pick one randomly
    // This ensures gender balance in the names chosen
    if(gender == GENDER_NEUTRAL)
-      gender = LCSrandom(2) + 1;
+      gender = (LCSrandom(2)?GENDER_MALE:GENDER_FEMALE);
 
    // For white male Arch-Conservative politicians
    if(gender == GENDER_WHITEMALEPATRIARCH)

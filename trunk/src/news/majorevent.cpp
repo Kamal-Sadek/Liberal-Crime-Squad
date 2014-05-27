@@ -24,20 +24,16 @@ void constructeventstory(char *story,short view,char positive)
             else if(law[LAW_ABORTION]==0)strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
             else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
-            lastname(str);strcat(story,str);
+            lastname(str,true);strcat(story,str);
             strcat(story," CLINIC yesterday.  ");
             strcat(story,"Dr. ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            char gn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            generate_name(dstr,dstr2,gn);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            char gn=LCSrandom(2);
-            switch(gn)
-            {
-               case 0:strcpy(gen,"his");break;
-               case 1:strcpy(gen,"her");break;
-            }
+            strcpy(gen,(gn==GENDER_FEMALE?"her":"his"));
             strcat(story," was walking to ");strcat(story,gen);//TODO: Add more variety, not just in the parking lot.
             strcat(story," car when, according to police reports, ");
             strcat(story,"shots were fired from a nearby vehicle.  ");
@@ -48,9 +44,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,num);
             strcat(story," times and died immediately in the parking lot.  ");
             strcat(story,"The suspected shooter, ");
-            firstname(str);strcat(story,str);
+            generate_name(str,str2);
+            strcat(story,str);
             strcat(story," ");
-            lastname(str2);strcat(story,str2);
+            strcat(story,str2);
             strcat(story,", is in custody.&r");
             strcat(story,"  Witnesses report that ");
             strcat(story,str2);
@@ -75,16 +72,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," is survived by ");
             strcat(story,gen);
             strcat(story," ");
-            char spouse=LCSrandom(2);
+            char spouse=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
             if(law[LAW_GAY]<=1)
-            {
-               spouse=1-gn;
-            }
-            switch(spouse)
-            {
-               case 0:strcat(story,"husband");break;
-               case 1:strcat(story,"wife");break;
-            }
+               spouse=(gn==GENDER_FEMALE?GENDER_MALE:GENDER_FEMALE);
+            strcat(story,(spouse==GENDER_FEMALE?"wife":"husband"));
             strcat(story," and ");
             switch(LCSrandom(4))
             {
@@ -101,7 +92,7 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            generate_name(dstr,dstr2);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -176,7 +167,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,statename());
             strcat(story," - An innocent citizen has been put to death in the electric chair.  ");
             char dstr[200],dstr2[200],dstr3[200];
-            firstname(dstr);firstname(dstr2);lastname(dstr3);
+            generate_long_name(dstr,dstr2,dstr3);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -199,7 +190,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story," yesterday at the ");
             char jstr[200];
-            lastname(jstr);
+            lastname(jstr,true);
             strcat(story,jstr);
             strcat(story," Correctional Facility.&r");
 
@@ -278,10 +269,9 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"   The book, ");
             strcat(story,"_");
             char dstr[200],nstr[200];
-            firstname(nstr);
+            generate_name(nstr,dstr);
             strcat(story,nstr);
             strcat(story,"_");
-            lastname(dstr);
             strcat(story,dstr);
             strcat(story,"_and_the_");
             switch(LCSrandom(7))
@@ -402,7 +392,7 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - Conservative federal judge ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -419,7 +409,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story,", was found with ");
             char pstr[200],pstr2[200];
-            firstname(pstr);lastname(pstr2);
+            generate_name(pstr,pstr2);
             strcat(story,pstr);
             strcat(story," ");
             strcat(story,pstr2);
@@ -461,7 +451,7 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - Well-known AM radio personality ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -500,7 +490,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story,"\", a former fan of the show, ");
             char nstr[200],nstr2[200];
-            firstname(nstr);lastname(nstr2);
+            generate_name(nstr,nstr2);
             strcat(story,nstr);
             strcat(story," ");
             strcat(story,nstr2);
@@ -516,11 +506,7 @@ void constructeventstory(char *story,short view,char positive)
             {
                case 0:
                   strcat(story,"lost ");
-                  switch(LCSrandom(2))
-                  {
-                     case 0:strcat(story,"his");break;
-                     case 1:strcat(story,"her");break;
-                  }
+                  strcat(story,"his"); // the AM personality's a white male patriarch
 
                   if(law[LAW_FREESPEECH]==2)strcat(story," goddamn mind");
                             else if(law[LAW_FREESPEECH]==-2)strcat(story," [gosh darn] mind");
@@ -561,8 +547,8 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story,".  ");
             char dstr[200],dstr2[200],dg;
-            dg = LCSrandom(2);
-            firstname(dstr,dg);lastname(dstr2);
+            dg = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            generate_name(dstr,dstr2,dg);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -577,7 +563,7 @@ void constructeventstory(char *story,short view,char positive)
             else strcat(story,"mow down");
             strcat(story," more than a dozen classmates and two teachers at ");
             char jstr[200];
-            lastname(jstr);
+            lastname(jstr,true);
             strcat(story,jstr);
             switch (schtype)
             {
@@ -597,8 +583,7 @@ void constructeventstory(char *story,short view,char positive)
             else strcat(story,"spraying bullets at");
             strcat(story," students and teachers inside.  ");
             strcat(story,"When other students tried to wrestle the weapons away from ");
-            if (dg == 2) strcat(story,"her");
-            else strcat(story,"him");
+            strcat(story,(dg==GENDER_FEMALE?"her":"him"));
             strcat(story,", they were ");
             if(law[LAW_FREESPEECH]==-2)strcat(story,"[unfortunately harmed]");
             else strcat(story,"shot");
@@ -606,7 +591,7 @@ void constructeventstory(char *story,short view,char positive)
             int bodycnt = 2 + LCSrandom(30);
             char bstr[3];
             sprintf(bstr,"%d",bodycnt);
-            strcat(story, "  When the police arrived, the student has already ");
+            strcat(story, "  When the police arrived, the student had already ");
             if(law[LAW_FREESPEECH]==-2)strcat(story, "[hurt some people].  ");
             else
             {
@@ -620,8 +605,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," shortly afterwards.&r");
             strcat(story,"  Investigators are currently searching the student's belongings, and initial ");
             strcat(story,"reports indicate that the student kept a journal that showed ");
-            if (dg == 2) strcat(story,"she");
-            else strcat(story,"he");
+            strcat(story,(dg==GENDER_FEMALE?"she":"he"));
             strcat(story," was disturbingly obsessed with guns and death.&r");
             break;
          }
@@ -634,7 +618,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"prison theme lately in its offerings for mass consumption, rarely ");
             strcat(story,"have these works been as poignant as ");
             char dstr[200],dstr2[200];
-            firstname(dstr,GENDER_MALE);lastname(dstr2);
+            generate_name(dstr,dstr2); // allow either gender (look up "Orange is the New Black" online to see why)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -695,7 +679,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"string of brutal child killings that has kept everyone in the area on edge, ");
             strcat(story,"according to a spokesperson for the police department here.  ");
             char dstr[200],dstr2[200],dstr3[200];
-            firstname(dstr);firstname(dstr2);lastname(dstr3);
+            generate_long_name(dstr,dstr2,dstr3);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -760,7 +744,7 @@ void constructeventstory(char *story,short view,char positive)
                {
                case 0:strcat(story,"Russia");break;
                case 1:strcat(story,"North Korea");break;
-               case 2:strcat(story,"Taiwan");break;
+               case 2:strcat(story,"Cuba");break;
                case 3:strcat(story,"Iran");break;
                case 4:strcat(story,"China");break;
                }
@@ -839,20 +823,30 @@ void constructeventstory(char *story,short view,char positive)
                case 0:
                       if(law[LAW_FREESPEECH]==-2)strcat(story,"[land] planes [on apartment buildings]");
                       else strcat(story,"fly planes into skyscrapers");break;
-               case 1:strcat(story,"detonate a fertilizer bomb at a federal building");break;
-               case 2:strcat(story,"ram a motorboat loaded with explosives into a warship");break;
+               case 1:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[put] fertilizer [on plants] at a federal building");
+                      else strcat(story,"detonate a fertilizer bomb at a federal building");break;
+               case 2:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[show up uninvited on] a warship");
+                      else strcat(story,"ram a motorboat loaded with explosives into a warship");break;
                case 3:
-                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[harm children]");
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[give children owies and boo-boos]");
                       else strcat(story,"detonate explosives on a school bus");break;
-               case 4:strcat(story,"blow out a section of a major bridge");break;
+               case 4:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[cause a traffic jam on] a major bridge");
+                      else strcat(story,"blow out a section of a major bridge");break;
                case 5:
                       if(law[LAW_FREESPEECH]==-2)strcat(story,"[take] the president [on vacation]");
                       else strcat(story,"kidnap the president");break;
                case 6:
                       if(law[LAW_FREESPEECH]==-2)strcat(story,"[hurt] the president");
                       else strcat(story,"assassinate the president");break;
-               case 7:strcat(story,"destroy the Capitol Building");break;
-               case 8:strcat(story,"detonate a nuclear bomb in New York");break;
+               case 7:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"[vandalize] the Capitol Building");
+                      else strcat(story,"destroy the Capitol Building");break;
+               case 8:
+                      if(law[LAW_FREESPEECH]==-2)strcat(story,"detonate [fireworks] in New York");
+                      else strcat(story,"detonate a nuclear bomb in New York");break;
             }
             strcat(story,".  However, intelligence garnered from deep within the mysterious ");
             strcat(story,"terrorist organization allowed the plot to be foiled just days before it ");
@@ -914,7 +908,7 @@ void constructeventstory(char *story,short view,char positive)
                case 3:strcat(story,"Wheat");break;
                case 4:strcat(story,"Potatoes");break;
             }
-            strcat(story,"\", during an afternoon Power Point presentation.  ");
+            strcat(story,"\", during an afternoon PowerPoint presentation.  ");
             strcat(story,"According to the public relations representative speaking, ");
             strcat(story,"this amazing new product actually ");
             switch(LCSrandom(5))
@@ -965,7 +959,7 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - The conviction of confessed serial killer ");
             char dstr[200],dstr2[200],dstr3[200];
-            firstname(dstr);firstname(dstr2);lastname(dstr3);
+            generate_long_name(dstr,dstr2,dstr3);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -974,21 +968,18 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," was overturned by a federal judge yesterday.  ");
             strcat(story,"Justice ");
             char jstr[200],jstr2[200];
-            firstname(jstr);lastname(jstr2);
+            char gn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            generate_name(jstr,jstr2,gn);
             strcat(story,jstr);
             strcat(story," ");
             strcat(story,jstr2);
             strcat(story," of the notoriously liberal circuit of appeals here ");
             strcat(story,"made the decision based on ");
             char gen[20];
-            switch(LCSrandom(2))
+            strcpy(gen,(gn==GENDER_FEMALE?"her":"his"));
+            switch(LCSrandom(7))
             {
-               case 0:strcpy(gen,"his");break;
-               case 1:strcpy(gen,"her");break;
-            }
-            switch(LCSrandom(5))
-            {
-               case 0:strcat(story,"ten-year-old eye witness testimony");break;
+               case 0:strcat(story,"ten-year-old eyewitness testimony");break;
                case 1:strcat(story,gen);strcat(story," general feeling about police corruption");break;
                case 2:strcat(story,gen);strcat(story," belief that the crimes were a vast right-wing conspiracy");break; // Clinton
                case 3:
@@ -1000,6 +991,13 @@ void constructeventstory(char *story,short view,char positive)
                case 4:
                   strcat(story,gen);
                   strcat(story," personal philosophy of liberty");break;
+               case 5:
+                  strcat(story,gen);
+                  strcat(story," close personal friendship with the ");
+                  strcat(story,dstr3);
+                  strcat(story," family");
+                  break;
+               case 6:strcat(story,gen);strcat(story," consultations with a Magic 8-Ball");break;
             }
             strcat(story,", despite the confession of ");
             strcat(story,dstr3);
@@ -1063,39 +1061,43 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," recently released a wide-ranging report detailing recent trends ");
             strcat(story,"and the latest science on the issue.  ");
             strcat(story,"Among the most startling of the think tank's findings is that ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"a modest intake of radioactive waste");break;
                case 1:strcat(story,"a healthy dose of radiation");break;
                case 2:strcat(story,"a bath in raw sewage");break;
                case 3:strcat(story,"watching animals die in oil slicks");break;
                case 4:strcat(story,"inhaling carbon monoxide");break;
+               case 5:strcat(story,"drinking a cup of fracking fluid a day");break;
             }
             strcat(story," might actually ");
-            switch(LCSrandom(5))
+            switch(LCSrandom(6))
             {
                case 0:strcat(story,"purify the soul");break;
                case 1:strcat(story,"increase test scores");break;
                case 2:strcat(story,"increase a child's attention span");break;
                case 3:strcat(story,"make children behave better");break;
                case 4:strcat(story,"make shy children fit in");break;
+               case 5:strcat(story,"cure everything from abdominal ailments to zygomycosis");break;
             }
             strcat(story,".");
             strcat(story,"&r");
             strcat(story,"   When questioned about the science behind these results, ");
             strcat(story,"a spokesperson stated that, \"");
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
                case 0:strcat(story,"Research is complicated, and there are always two ways to think about things");break;
                case 1:strcat(story,"The jury is still out on pollution.  You really have to keep an open mind");break;
                case 2:strcat(story,"They've got their scientists, and we have ours.  The issue of pollution is wide open as it stands today");break;
+               case 3:strcat(story,"I just tried it myself and I feel like a million bucks!  *Coughs up blood*  I'm OK, that's just ketchup");break;
             }
             strcat(story,".  You have to realize that ");
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
                case 0:strcat(story,"the elitist liberal media often distorts");break;
                case 1:strcat(story,"the vast left-wing education machine often distorts");break;
                case 2:strcat(story,"the fruits, nuts, and flakes of the environmentalist left often distort");break;
+               case 3:strcat(story,"leftists suffering from the mental disorder chemophobia often distort");break;
             }
             strcat(story," these issues to their own advantage.  ");
             strcat(story,"All we've done is introduced a little clarity into the ongoing debate.  ");
@@ -1156,7 +1158,7 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - Infamous FM radio shock jock ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -1231,10 +1233,11 @@ void constructeventstory(char *story,short view,char positive)
          case VIEW_GUNCONTROL:
          {
             cityname(story);
-            char jstr[200],jstr2[200],jstr3[200],jstr4[200],jstr5[200],jg1,jg2;
-            jg1 = (char)(LCSrandom(3)+1);
-            jg2 = (char)(LCSrandom(3)+1);
-            firstname(jstr,jg1);lastname(jstr2);lastname(jstr3),firstname(jstr4,jg2);lastname(jstr5);
+            char jstr[200],jstr2[200],jstr3[200],jstr4[200],jstr5[200],jg1,jg2,tg2[10];
+            jg1 = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            jg2 = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            generate_long_name(jstr,jstr2,jstr3,jg1);
+            generate_name(jstr4,jstr5,jg2);
             strcat(story," - In a surprising turn, a ");
             if (law[LAW_FREESPEECH]==-2) strcat(story, "[hurting spree]"); else strcat(story,"mass shooting");
             strcat(story," was prevented by a bystander with a gun.");
@@ -1256,13 +1259,20 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," ");
             strcat(story,jstr5);
             strcat(story," sprung into action. ");
-            strcat(story,"The citizen pulled a concealed hangun and fired once at the shooter, ");
+            strcat(story,"The citizen pulled a concealed handgun and fired once at the shooter, ");
             strcat(story,"forcing ");
             strcat(story,jstr2);
             strcat(story," to take cover while others called the police.&r");
             strcat(story,"  Initially, ");
-            if (jg2 == 2) strcat(story,"Ms. ");
-            else strcat(story, "Mr. ");
+            if(jg2==GENDER_FEMALE)
+            {
+               if(LCSrandom(4)<law[LAW_WOMEN]+2) // 0% chance at law[LAW_WOMEN]==-2, 100% chance at law[LAW_WOMEN]==2
+                  strcpy(tg2,"Ms. ");
+               else
+                  strcpy(tg2,(LCSrandom(2)?"Mrs. ":"Miss "));
+            }
+            else strcpy(tg2,"Mr. ");
+            strcat(story,tg2);
             strcat(story,jstr5);
             strcat(story," attempted to talk down the shooter, but as ");
             strcat(story,jstr2);
@@ -1270,15 +1280,13 @@ void constructeventstory(char *story,short view,char positive)
             if (law[LAW_FREESPEECH]==-2) strcat(story, "firefight, [putting the attacker to sleep] ");
             else strcat(story,"firefight, killing the attacker ");
             strcat(story,"before ");
-            if (jg1 == 2) strcat(story,"she ");
-            else strcat(story, "he ");
+            strcat(story,(jg1==GENDER_FEMALE?"she ":"he "));
             strcat(story,"could hurt anyone else.&r");
             strcat(story,"  The spokesperson for the police department said, \"We'd have a yet another ");
             if (law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
             else strcat(story,"mass shooting");
             strcat(story," if not for ");
-            if (jg2 == 2) strcat(story,"Ms. ");
-            else strcat(story, "Mr. ");
+            strcat(story,tg2);
             strcat(story,jstr5);
             strcat(story,"'s heroic actions.\"");
             break;
@@ -1288,21 +1296,19 @@ void constructeventstory(char *story,short view,char positive)
             cityname(story);
             strcat(story," - The hostage crisis at the ");
             char jstr[200];
-            lastname(jstr);
+            lastname(jstr,true);
             strcat(story,jstr);
             strcat(story," Correctional Facility ended tragically yesterday with the ");
             strcat(story,"death of both the prison guard being held hostage and ");
-            switch(LCSrandom(2))
-            {
-            case 0:strcat(story,"his");break;
-            case 1:strcat(story,"her");break;
-            }
+            char ggn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            strcat(story,(ggn==GENDER_FEMALE?"her":"his"));
             strcat(story," captor.");
             strcat(story,"&r");
             if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [reproduction fiend] ");
             else strcat(story,"   Two weeks ago, convicted rapist ");
             char dstr[200],dstr2[200];
-            firstname(dstr);lastname(dstr2);
+            char dgn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            generate_name(dstr,dstr2,dgn);
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
@@ -1310,16 +1316,12 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,jstr);
             strcat(story,", overpowered ");
             char gstr[200],gstr2[200];
-            firstname(gstr);lastname(gstr2);
+            generate_name(gstr,gstr2,ggn);
             strcat(story,gstr);
             strcat(story," ");
             strcat(story,gstr2);
             strcat(story," and barricaded ");
-            switch(LCSrandom(2))
-            {
-            case 0:strcat(story,"himself");break;
-            case 1:strcat(story,"herself");break;
-            }
+            strcat(story,(dgn==GENDER_FEMALE?"herself":"himself"));
             strcat(story," with the guard in a prison tower.  ");
             strcat(story,"Authorities locked down the prison and ");
             strcat(story,"attempted to negotiate by phone for ");
@@ -1330,7 +1332,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," days, but talks were cut short when ");
             strcat(story,dstr2);
             strcat(story," reportedly screamed into the receiver \"");
-            switch(LCSrandom(3))
+            switch(LCSrandom(4))
             {
             case 0:
                if(law[LAW_FREESPEECH]==2)strcat(story,"Ah, fuck this shit.  This punk bitch is fuckin' dead!");
@@ -1347,7 +1349,12 @@ void constructeventstory(char *story,short view,char positive)
                else if(law[LAW_FREESPEECH]==-2)strcat(story,"Why [am I] talkin' to you?  I'd rather [harm this police officer.]");
                else strcat(story,"Why the f*ck am I talkin' to you?  I'd rather kill this pig.");
                break;
-            }
+             case 3:
+               if(law[LAW_FREESPEECH]==2)strcat(story,"Imma kill all you bitches, startin' with this mothafucker here.");
+               else if(law[LAW_FREESPEECH]==-2)strcat(story,"[I will harm all police officers], startin' with this [one] here.");
+               else strcat(story,"Imma kill all you b*tches, startin' with this m*th*f*ck*r here.");
+               break;
+           }
             strcat(story,"\"");
             strcat(story,"  The tower was breached in an attempt to reach ");
             strcat(story,"the hostage, but ");
@@ -1355,15 +1362,37 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," had already ");
             if(law[LAW_FREESPEECH]==-2)strcat(story,"[harmed] the guard");
             else if(law[LAW_FREESPEECH]==-1)strcat(story,"killed the guard");
-            else switch(LCSrandom(4)) // TODO: More variety.
+            else switch(LCSrandom(15))
             {
                case 0:strcat(story,"slit the guard's throat with a shank");break;
                case 1:strcat(story,"strangled the guard to death with a knotted bed sheet");break;
                case 2:strcat(story,"chewed out the guard's throat");break;
-               case 3:strcat(story,"smashed the guard's skull with the toilet seat from his cell");break;
+               case 3:strcat(story,"smashed the guard's skull with the toilet seat from ");
+                      strcat(story,(dgn==GENDER_FEMALE?"her":"his"));
+                      strcat(story," cell");break;
+               case 4:strcat(story,"shot the guard with ");
+                      strcat(story,(ggn==GENDER_FEMALE?"her":"his"));
+                      strcat(story," own gun");break;
+               case 5:strcat(story,"poisoned the guard with drugs smuggled into the prison by the ");
+                      strcat(story,(LCSrandom(2)?"Crips":"Bloods"));break;
+               case 6:strcat(story,"hit all 36 pressure points of death on the guard");break;
+               case 7:strcat(story,"electrocuted the guard with high-voltage wires");break;
+               case 8:strcat(story,"thrown the guard out the top-storey window");break;
+               case 9:strcat(story,"taken the guard to the execution chamber and finished ");
+                      strcat(story,(ggn==GENDER_FEMALE?"her":"him"));
+                      strcat(story," off");break;
+               case 10:strcat(story,"tricked another guard into shooting the guard dead");break;
+               case 11:strcat(story,"burnt the guard to a crisp using a lighter and some gasoline");break;
+               case 12:strcat(story,"eaten the guard's liver with some fava beans and a nice chianti");break;
+               case 13:strcat(story,"performed deadly experiments on the guard unheard of since Dr. Mengele");break;
+               case 14:strcat(story,"sacrificed the guard on a makeshift ");
+                       strcat(story,(LCSrandom(2)?"Satanic":"neo-pagan"));
+                       strcat(story," altar");break;
             }
-            strcat(story,".  The prisoner was beaten to death while ");
-            strcat(story,"\"resisting capture\", according to a prison spokesperson.");
+            strcat(story,".  The prisoner was ");
+            if(law[LAW_FREESPEECH]==-2)strcat(story,"[also harmed]");
+            else strcat(story,"beaten to death");
+            strcat(story," while \"resisting capture\", according to a prison spokesperson.");
             strcat(story,"&r");
             break;
          }
@@ -1743,7 +1772,7 @@ void run_television_news_stories()
                   }
                   strcat(str," with ");
                   char bname[80];
-                  generate_name(bname);
+                  generate_name(bname,GENDER_WHITEMALEPATRIARCH);
                   strcat(str,bname);
 
                   erase();

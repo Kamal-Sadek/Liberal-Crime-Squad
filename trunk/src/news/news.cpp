@@ -1647,7 +1647,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
          char dstr[200],dstr2[200];
          strcat(story,"  ");
-         firstname(dstr);lastname(dstr2);
+         generate_name(dstr,dstr2);
          strcat(story,dstr);
          strcat(story," ");
          strcat(story,dstr2);
