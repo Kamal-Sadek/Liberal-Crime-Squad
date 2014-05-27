@@ -267,10 +267,12 @@ void makecharacter(void)
    char last[80];
    bool male = LCSrandom(2); // whether or not starting gender is male
    char gender = newcr->gender_liberal = newcr->gender_conservative = (male ? GENDER_MALE : GENDER_FEMALE);
-   firstname(first[0], GENDER_NEUTRAL);
-   firstname(first[1], GENDER_MALE);
-   firstname(first[2], GENDER_FEMALE);
-   lastname(last);
+   do {
+      firstname(first[0], GENDER_NEUTRAL);
+      firstname(first[1], GENDER_MALE);
+      firstname(first[2], GENDER_FEMALE);
+      lastname(last);
+   } while(strcmp(first[0],last) == 0 && strcmp(first[1],last) == 0 && strcmp(first[2],last) == 0);
 
    {
       Armor a(*armortype[getarmortype("ARMOR_CLOTHES")]);
@@ -361,12 +363,16 @@ void makecharacter(void)
 
       if(c=='a')
       {
-         firstname(first[(int)gender],newcr->gender_conservative);
+         do {
+            firstname(first[(int)gender],newcr->gender_conservative);
+         } while(strcmp(first[(int)gender],last) == 0);
          continue;
       }
       if(c=='b')
       {
-         lastname(last);
+         do {
+            lastname(last);
+         } while(strcmp(first[0],last) == 0 && strcmp(first[1],last) == 0 && strcmp(first[2],last) == 0);
          continue;
       }
       if(c=='c')

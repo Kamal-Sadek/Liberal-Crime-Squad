@@ -795,7 +795,7 @@ void investlocation(void)
             do
             {
                location[loc]->front_business=LCSrandom(BUSINESSFRONTNUM);
-               lastname(location[loc]->front_name);
+               lastname(location[loc]->front_name,true);
                strcat(location[loc]->front_name," ");
                switch(location[loc]->front_business)
                {

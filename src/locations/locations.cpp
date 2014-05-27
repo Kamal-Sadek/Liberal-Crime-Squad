@@ -434,8 +434,7 @@ void initlocation(Location &loc)
       }
       else
       {
-         lastname(str);
-         strcpy(loc.name,str);
+         lastname(loc.name,true);
          strcat(loc.name," Prison");
          strcpy(loc.shortname,"Prison");
       }
@@ -453,8 +452,7 @@ void initlocation(Location &loc)
          loc.rename("Intelligence HQ", "Int. HQ");
       } break;
    case SITE_GOVERNMENT_ARMYBASE:
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name," Army Base");
       strcpy(loc.shortname,"Army Base");
       break;
@@ -468,33 +466,18 @@ void initlocation(Location &loc)
       loc.rename("American Bank Corp", "Bank");
       break;
    case SITE_BUSINESS_PAWNSHOP:
+      lastname(loc.name,true);
       if(law[LAW_GUNCONTROL]==ALIGN_ELITELIBERAL)
-      {
-         char str[80];
-         lastname(str);
-         strcpy(loc.name,str);
          strcat(loc.name,"'s Pawnshop");
-         strcpy(loc.shortname,"Pawnshop");
-      }
       else
-      {
-         char str[80];
-         lastname(str);
-         strcpy(loc.name,str);
          strcat(loc.name," Pawn & Gun");
-         strcpy(loc.shortname,"Pawnshop");
-      }
+      strcpy(loc.shortname,"Pawnshop");
       break;
    case SITE_CORPORATE_HOUSE:
-      if(law[LAW_CORPORATE]==-2&&
-                             law[LAW_TAX]==-2)
-      {
+      if(law[LAW_CORPORATE]==-2&&law[LAW_TAX]==-2)
          loc.rename("CEO Castle", "CEO Castle");
-      }
       else
-      {
          loc.rename("CEO Residence", "CEO House");
-      }
       break;
    case SITE_RESIDENTIAL_SHELTER:
       loc.rename("Homeless Shelter", "Shelter");
@@ -502,9 +485,7 @@ void initlocation(Location &loc)
    case SITE_INDUSTRY_WAREHOUSE:
       do {
          strcpy(loc.name,"Abandoned ");
-         /*char str[50];
-         lastname(str);
-         strcat(loc.name,str);
+         /*lastname(loc.name,true);
          strcat(loc.name," ");*/
 
          switch(LCSrandom(10))
@@ -581,20 +562,17 @@ void initlocation(Location &loc)
    case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
    case SITE_RESIDENTIAL_APARTMENT:
       do {
-         lastname(str);
-         strcpy(loc.name,str);
+         lastname(loc.name,true);
+         strcpy(loc.shortname,loc.name);
          strcat(loc.name," Apartments");
-         strcpy(loc.shortname,str);
          strcat(loc.shortname," Apts");
       } while (loc.duplicatelocation());
       break;
    case SITE_RESIDENTIAL_TENEMENT:
       do {
-         char str[50] = "";
          do {
-            lastname(str);
-         } while(strlen(str)>7);
-         strcpy(loc.name,str);
+            lastname(loc.name,true);
+         } while(strlen(loc.name)>7);
          strcat(loc.name," St. Housing Projects");
          strcpy (loc.shortname, "Projects");
       } while (loc.duplicatelocation());
@@ -606,47 +584,36 @@ void initlocation(Location &loc)
       loc.rename("The Free Clinic", "Clinic");
       break;
    case SITE_LABORATORY_GENETIC:
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name," Genetics");
       strcpy(loc.shortname,"Genetics Lab");
       break;
    case SITE_LABORATORY_COSMETICS:
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name," Cosmetics");
       strcpy(loc.shortname,"Cosmetics Lab");
       break;
    case SITE_BUSINESS_CARDEALERSHIP:
-      firstname(str,GENDER_WHITEMALEPATRIARCH);
-      strcpy(loc.name,str);
-      strcat(loc.name," ");
-      lastname(str);
-      strcat(loc.name,str);
+      generate_name(loc.name,GENDER_WHITEMALEPATRIARCH);
       strcat(loc.name,"'s Used Cars");
       strcpy(loc.shortname,"Used Cars");
       break;
    case SITE_BUSINESS_DEPTSTORE:
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name,"'s Department Store");
       strcpy(loc.shortname,"Dept. Store");
       break;
    case SITE_BUSINESS_HALLOWEEN:
-      lastname(str);
       loc.rename("The Oubliette", "Oubliette");
       break;
    case SITE_INDUSTRY_SWEATSHOP:
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name," Garment Makers");
       strcpy(loc.shortname,"Sweatshop");
       break;
    case SITE_BUSINESS_CRACKHOUSE:
    do {
-      char str[50];
-      lastname(str);
-      strcpy(loc.name,str);
+      lastname(loc.name,true);
       strcat(loc.name," St. ");
 
       if (law[LAW_DRUGS]==2)
@@ -746,7 +713,7 @@ void initlocation(Location &loc)
       strcpy(loc.shortname,"Net Cafe");
       break;
    case SITE_BUSINESS_CIGARBAR:
-      lastname(str);
+      lastname(str,true);
       strcpy(loc.name,"The ");
       strcat(loc.name,str);
       strcat(loc.name," Gentlemen's Club");
@@ -775,7 +742,7 @@ void initlocation(Location &loc)
       strcpy(loc.shortname,"Latte Stand");
       break;
    case SITE_OUTDOOR_PUBLICPARK:
-      lastname(loc.name);
+      lastname(loc.name,true);
       strcat(loc.name," Park");
       strcpy(loc.shortname,"Park");
       break;
