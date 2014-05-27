@@ -5,8 +5,92 @@
 
 void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char* story)
 {
-   strcat(story,"  The events took place at the ");
-   if(liberalguardian&&!ccs)strcat(story,"notorious ");
+   strcat(story,"  The events took place ");
+   std::string placename=location[ns.loc]->getname();
+   if(strncmp(placename.c_str(),"The ",4) == 0)
+      placename=placename.substr(4);
+   int posand=placename.find('&');
+   if(posand!=(int)string::npos)
+      placename=placename.substr(0,posand)+"and"+placename.substr(posand+1);
+   switch(location[ns.loc]->type)
+   {
+   case SITE_CITY_SEATTLE:
+   case SITE_CITY_LOS_ANGELES:
+   case SITE_CITY_NEW_YORK:
+   case SITE_CITY_CHICAGO:
+   case SITE_CITY_DETROIT:
+   case SITE_CITY_ATLANTA:
+   case SITE_CITY_MIAMI:
+   case SITE_CITY_WASHINGTON_DC:
+      strcat(story,"in ");
+      break;
+   case SITE_DOWNTOWN:
+   case SITE_COMMERCIAL:
+   case SITE_UDISTRICT:
+   case SITE_OUTOFTOWN:
+   case SITE_INDUSTRIAL:
+   case SITE_TRAVEL:
+      if(strcmp(placename.c_str(),"Shopping") == 0)
+      {
+         placename="Shopping Mall";
+         strcat(story,"at the ");
+      }
+      else if(strcmp(placename.c_str(),"Travel") == 0)
+      {
+         placename="Travel Agency";
+         strcat(story,"at the ");
+      }
+      else if(strcmp(placename.c_str(),"Outskirts and Orange County") == 0)
+      {
+         placename="Orange County";
+         strcat(story,"in ");
+      }
+      else if(strcmp(placename.c_str(),"Brooklyn and Queens") == 0)
+      {
+         placename="Long Island";
+         strcat(story,"on ");
+      }
+      else if(strcmp(placename.c_str(),"Greater Hollywood") == 0)
+      {
+         placename="Hollywood";
+         strcat(story,"in ");
+      }
+      else if(strcmp(placename.c_str(),"Manhattan Island") == 0)
+      {
+         placename="Manhattan";
+         strcat(story,"in ");
+      }
+      else if(strcmp(placename.c_str(),"Arlington") == 0)
+         strcat(story,"in ");
+      else if(strcmp(placename.c_str(),"National Mall") == 0)
+         strcat(story,"on the ");
+      else if(strcmp(placename.c_str(),"Downtown") != 0)
+         strcat(story,"in the ");
+      break;
+   case SITE_BUSINESS_PAWNSHOP:
+      if(placename.find("'s")!=string::npos)
+      {
+         strcat(story,"at ");
+         if(liberalguardian&&!ccs)strcat(story,"the notorious ");
+      }
+      else
+      {
+         strcat(story,"at the ");
+         if(liberalguardian&&!ccs)strcat(story,"notorious ");
+      }
+      break;
+   case SITE_RESIDENTIAL_APARTMENT:
+   case SITE_BUSINESS_CARDEALERSHIP:
+   case SITE_BUSINESS_DEPTSTORE:
+   case SITE_OUTDOOR_PUBLICPARK:
+      strcat(story,"at ");
+      if(liberalguardian&&!ccs)strcat(story,"the notorious ");
+      break;
+   default:
+      strcat(story,"at the ");
+      if(liberalguardian&&!ccs)strcat(story,"notorious ");
+      break;
+   }
    if(ccs)
    {
       switch(location[ns.loc]->type)
@@ -48,11 +132,11 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_BUSINESS_BANK:
          strcat(story,"Richard Dawkins Food Bank.  ");break;
       default:
-         strcat(story,location[ns.loc]->name);
+         strcat(story,placename.c_str());
          strcat(story,".  ");break;
       }
    }
-   else strcat(story,location[ns.loc]->name);
+   else strcat(story,placename.c_str());
    if(liberalguardian&&!ccs)
    {
       switch(location[ns.loc]->type)
