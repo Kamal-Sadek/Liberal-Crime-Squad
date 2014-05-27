@@ -27,7 +27,7 @@ enum SiteTypes
    SITE_BUSINESS_ARMSDEALER,
    SITE_BUSINESS_CARDEALERSHIP,
 
-   SITE_RESIDENTIAL_SHELTER, // this has to be in this spot - sites before this canot be mapped and sites after this can be mapped
+   SITE_RESIDENTIAL_SHELTER, // this has to be in this spot - sites before this cannot be mapped and sites after this can be mapped
 
    SITE_RESIDENTIAL_TENEMENT, // sites starting at this point CAN be mapped
    SITE_RESIDENTIAL_APARTMENT,

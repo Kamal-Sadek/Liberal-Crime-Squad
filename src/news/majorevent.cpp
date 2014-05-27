@@ -185,8 +185,8 @@ void constructeventstory(char *story,short view,char positive)
             bool tofday=LCSrandom(2);
             switch(tofday)
             {
-               case 0:strcpy(story,"AM");break;
-               case 1:strcpy(story,"PM");break;
+               case 0:strcat(story,"AM");break;
+               case 1:strcat(story,"PM");break;
             }
             strcat(story," yesterday at the ");
             char jstr[200];
