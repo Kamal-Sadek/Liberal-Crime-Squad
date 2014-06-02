@@ -123,7 +123,10 @@ void tossjustices(char canseethings)
       {
          if(court[j]!=2)
          {
-            generate_name(courtname[j]);
+            do
+            {
+               generate_name(courtname[j]);
+            } while(strlen(courtname[j])>20);
             court[j]=2;
          }
       }

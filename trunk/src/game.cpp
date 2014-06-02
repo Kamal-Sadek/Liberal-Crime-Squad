@@ -422,10 +422,13 @@ int main(int argc, char* argv[])
       else if(c<5)court[c]=0;
       else if(c<8)court[c]=1;
       else court[c]=2;
-      if(court[c]==-2)
-         generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
-      else
-         generate_name(courtname[c]);
+      do
+      {
+         if(court[c]==-2)
+            generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
+         else
+            generate_name(courtname[c]);
+      } while(strlen(courtname[c])>20);
    }
 
    for(int e=0;e<EXECNUM;e++)

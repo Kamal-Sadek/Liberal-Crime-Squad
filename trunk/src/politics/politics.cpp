@@ -1373,10 +1373,13 @@ void supremecourt(char clearformess,char canseethings)
       else if(consensus<1.5f)court[j]=1;
       else court[j]=2;
 
-      if(court[j]==-2)
-         generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
-      else
-         generate_name(courtname[j]);
+      do
+      {
+         if(court[j]==-2)
+            generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
+         else
+            generate_name(courtname[j]);
+      } while(strlen(courtname[j])>20);
 
       if(canseethings)
       {
