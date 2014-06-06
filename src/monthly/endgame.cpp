@@ -48,18 +48,14 @@ void tossjustices(char canseethings)
       move(12,6);
       addstr("The Elite Liberal Congress is proposing an ELITE LIBERAL AMENDMENT!");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //STATE THE AMENDMENT
    if(canseethings)
    {
       int tossnum=0;
-      for(j=0;j<9;j++)
-      {
-         if(court[j]<=1)tossnum++;
-      }
+      for(j=0;j<9;j++) if(court[j]<=1) tossnum++;
 
       amendmentheading();
 
@@ -71,14 +67,10 @@ void tossjustices(char canseethings)
 
       int y=4;
 
-      for(j=0;j<9;j++)
+      for(j=0;j<9;j++) if(court[j]!=2)
       {
-         if(court[j]!=2)
-         {
-            move(y,0);
-            addstr(courtname[j]);
-            y++;
-         }
+         move(y++,0);
+         addstr(courtname[j]);
       }
 
       move(y+1,5);
@@ -107,28 +99,17 @@ void tossjustices(char canseethings)
 
       move(24,0);
       addstr("Press 'C' to watch the ratification process unfold.");
-      do
-      {
-         refresh();
-         int c=getch();
-         translategetch(c);
-         if(c=='c')break;
-      }while(1);
+
+      while(getkey()!='c');
    }
 
    if(ratify(2,-1,-1,1,canseethings))
    {
       //BLAST JUSTICES
-      for(int j=0;j<9;j++)
+      for(int j=0;j<9;j++) if(court[j]!=2)
       {
-         if(court[j]!=2)
-         {
-            do
-            {
-               generate_name(courtname[j]);
-            } while(strlen(courtname[j])>20);
-            court[j]=2;
-         }
+         do generate_name(courtname[j]); while(strlen(courtname[j])>20);
+         court[j]=2;
       }
 
       amendnum++;
@@ -138,8 +119,8 @@ void tossjustices(char canseethings)
    {
       move(24,0);
       addstr("Press any key to reflect on what has happened.");
-      refresh();
-      getch();
+
+      getkey();
    }
 }
 
@@ -147,7 +128,6 @@ void tossjustices(char canseethings)
 void amendment_termlimits(char canseethings)
 {
    if(termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
-   //int j;
    if(canseethings)
    {
       erase();
@@ -157,8 +137,7 @@ void amendment_termlimits(char canseethings)
       move(12,6);
       addstr("A National Convention has proposed an ELITE LIBERAL AMENDMENT!");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //STATE THE AMENDMENT
@@ -181,13 +160,8 @@ void amendment_termlimits(char canseethings)
 
       move(24,0);
       addstr("Press 'C' to watch the ratification process unfold.");
-      do
-      {
-         refresh();
-         int c=getch();
-         translategetch(c);
-         if(c=='c')break;
-      }while(1);
+
+      while(getkey()!='c');
    }
 
    if(ratify(2,-1,-1,0,canseethings))
@@ -197,8 +171,8 @@ void amendment_termlimits(char canseethings)
       {
          move(24,0);
          addstr("Press any key to hold new elections!                           ");
-         refresh();
-         getch();
+
+         getkey();
       }
       elections_senate(0,canseethings);
       elections_senate(1,canseethings);
@@ -211,8 +185,8 @@ void amendment_termlimits(char canseethings)
    {
       move(24,0);
       addstr("Press any key to reflect on what has happened.");
-      refresh();
-      getch();
+
+      getkey();
    }
 }
 
@@ -226,8 +200,8 @@ void reaganify(char canseethings)
       erase();
       move(12,3);
       addstr("The Arch Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!");
-      refresh();
-      getch();
+
+      getkey();
 
       //STATE THE AMENDMENT
       amendmentheading();
@@ -247,9 +221,9 @@ void reaganify(char canseethings)
       move(10,5);
       addstr("The following Executive Officers are also chosen in perpetuity:");
       move(11,0);
-      addstr("Chancellor Strom Thurmond, Secretary of State Jesse Helms, and");
+      addstr("Minister of Love Strom Thurmond, Minister of Peace Jesse Helms,");
       move(12,0);
-      addstr("Attorney General Jerry Falwell.");
+      addstr("and Minister of Truth Jerry Falwell.");
       move(14,5);
       addstr("In the event of the deaths of any of the aforementioned");
       move(15,0);
@@ -267,13 +241,8 @@ void reaganify(char canseethings)
 
       move(24,0);
       addstr("Press 'C' to watch the ratification process unfold.");
-      do
-      {
-         refresh();
-         int c=getch();
-         translategetch(c);
-         if(c=='c')break;
-      }while(1);
+
+      while(getkey()!='c');
    }
 
    if(ratify(-2,-1,-1,1,canseethings))
@@ -282,8 +251,8 @@ void reaganify(char canseethings)
       {
          move(24,0);
          addstr("Press any key to reflect on what has happened ONE LAST TIME.");
-         refresh();
-         getch();
+
+         getkey();
       }
 
       amendnum = 1; // Constitution repealed...
@@ -310,22 +279,22 @@ void reaganify(char canseethings)
                erase();
                move(12,10);
                addstr("You went on vacation when the country was on the verge of collapse.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                erase();
                move(12,12);
                addstr("The Conservatives have made the world in their image.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_BLACK,COLOR_BLACK,1);
                erase();
                move(12,14);
                addstr("They'll round up the last of you eventually.  All is lost.");
-               refresh();
-               getch();
+
+               getkey();
 
                savehighscore(END_DATING);
                break;
@@ -336,22 +305,22 @@ void reaganify(char canseethings)
                erase();
                move(12,10);
                addstr("You went into hiding when the country was on the verge of collapse.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                erase();
                move(12,12);
                addstr("The Conservatives have made the world in their image.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_BLACK,COLOR_BLACK,1);
                erase();
                move(12,14);
                addstr("They'll round the last of you up eventually.  All is lost.");
-               refresh();
-               getch();
+
+               getkey();
 
                savehighscore(END_HIDING);
                break;
@@ -362,22 +331,23 @@ void reaganify(char canseethings)
                erase();
                move(12,10);
                addstr("While you were on the inside, the country degenerated...");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                erase();
                move(12,12);
                addstr("Your kind are never released these days.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_BLACK,COLOR_BLACK,1);
                erase();
                move(12,14);
                addstr("Ain't no sunshine...");
-               refresh();
-               getch();
+
+               getkey();
+
                savehighscore(END_PRISON);
                break;
             case 4:
@@ -387,22 +357,22 @@ void reaganify(char canseethings)
                erase();
                move(12,10);
                addstr("You disappeared safely, but you hadn't done enough.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                erase();
                move(12,12);
                addstr("The Conservatives have made the world in their image.");
-               refresh();
-               getch();
+
+               getkey();
 
                set_color(COLOR_BLACK,COLOR_BLACK,1);
                erase();
                move(12,14);
                addstr("They'll round the last of you up eventually.  All is lost.");
-               refresh();
-               getch();
+
+               getkey();
 
                savehighscore(END_DISBANDLOSS);
                break;
@@ -418,8 +388,8 @@ void reaganify(char canseethings)
       {
          move(24,0);
          addstr("Press any key to breathe a sigh of relief.                   ");
-         refresh();
-         getch();
+
+         getkey();
       }
    }
 }
@@ -441,11 +411,10 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
    //THE STATE VOTE WILL BE BASED ON VIEW OF LAW
    int mood=publicmood(lawview);
    //OR OF A PARTICULAR ISSUE
-   if(view!=-1)mood=attitude[view];
+   if(view!=-1) mood=attitude[view];
 
    //CONGRESS
-   char num[20];
-   char ratified=0;
+   char num[20],ratified=0;
 
    int y=0;
 
@@ -463,44 +432,34 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
          move(24,0);
          addstr("Press any key to watch the Congressional votes unfold.     ");
-         refresh();
-         getch();
 
-         nodelay(stdscr,TRUE);
+         getkey();
       }
 
-      char yeswin_h=0;
-      char yeswin_s=0;
-      int yesvotes_h=0;
-      int yesvotes_s=0;
-
-      int vote;
-      int s=-1;
+      char yeswin_h=0,yeswin_s=0;
+      int yesvotes_h=0,yesvotes_s=0,vote,s=-1;
 
       for(int l=0;l<435;l++)
       {
          vote=house[l];
-         if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
+         if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
 
-         if(level==vote)yesvotes_h++;
+         if(level==vote) yesvotes_h++;
 
-         if(l==434)
-         {
-            if(yesvotes_h>=290)yeswin_h=1;
-         }
+         if(l==434) if(yesvotes_h>=290) yeswin_h=1;
 
          if(canseethings)
          {
-            if(l==434&&yeswin_h)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==434&&yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,62);
             itoa(yesvotes_h,num,10);
             addstr(num);
             addstr(" Yea");
 
-            if(l==434&&!yeswin_h)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==434&&!yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,62);
             itoa(l+1-yesvotes_h,num,10);
@@ -510,31 +469,26 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
          if(l%4==0&&s<99)
          {
-            s++;
+            vote=senate[++s];
+            if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
 
-            vote=senate[s];
-            if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
-
-            if(level==vote)yesvotes_s++;
+            if(level==vote) yesvotes_s++;
          }
 
-         if(l==434)
-         {
-            if(yesvotes_s>=67)yeswin_s=1;
-         }
+         if(l==434&&yesvotes_s>=67) yeswin_s=1;
 
          if(canseethings)
          {
-            if(l==434&&yeswin_s)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==434&&yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,70);
             itoa(yesvotes_s,num,10);
             addstr(num);
             addstr(" Yea");
 
-            if(l==434&&!yeswin_s)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==434&&!yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,70);
             itoa(s+1-yesvotes_s,num,10);
@@ -547,16 +501,10 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
                pause_ms(10);
             }
-
-            getch();
          }
       }
 
-      if(!yeswin_h)ratified=0;
-      if(!yeswin_s)ratified=0;
-
-      if(canseethings)
-         nodelay(stdscr,FALSE);
+      if(!yeswin_h||!yeswin_s) ratified=0;
 
       y+=4;
    }
@@ -575,22 +523,19 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
          for(int s=0;s<50;s++)
          {
-            if(s<17)move(5+s,0);
-            else if(s<34)move(5+s-17,27);
+            if(s<17) move(5+s,0);
+            else if(s<34) move(5+s-17,27);
             else move(5+s-34,54);
             addstr(statename(s));
          }
 
          move(24,0);
          addstr("Press any key to watch the State votes unfold.              ");
-         refresh();
-         getch();
 
-         nodelay(stdscr,TRUE);
+         getkey();
       }
 
-      int vote;
-      int smood;
+      int vote,smood;
       for(int s=0;s<50;s++)
       {
          smood=mood;
@@ -656,40 +601,35 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          if((short)LCSrandom(100)<smood)vote++;
          if((short)LCSrandom(100)<smood)vote++;
          if((short)LCSrandom(100)<smood)vote++;
-         if(vote==1 && !LCSrandom(2))
-            vote=2;
-         if(vote==-1 && !LCSrandom(2))
-            vote=-2;
+         if(vote==1&&!LCSrandom(2)) vote=2;
+         if(vote==-1&&!LCSrandom(2)) vote=-2;
 
          if(canseethings)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            if(s<17)move(5+s,22);
-            else if(s<34)move(5+s-17,49);
+            if(s<17) move(5+s,22);
+            else if(s<34) move(5+s-17,49);
             else move(5+s-34,76);
          }
          if(vote==level)
          {
             yesstate++;
-            if(canseethings)
-               addstr("Yea");
+            if(canseethings) addstr("Yea");
          }
-         else
-            if(canseethings)
-               addstr("Nay");
+         else if(canseethings) addstr("Nay");
 
          if(canseethings)
          {
-            if(s==49&&yesstate>=37)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(s==49)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(s==49&&yesstate>=37) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,50);
             itoa(yesstate,num,10);
             addstr(num);
             addstr(" Yea");
 
-            if(s==49&&yesstate<37)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(s==49)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(s==49&&yesstate<37) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,60);
             itoa(s+1-yesstate,num,10);
@@ -701,29 +641,14 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          }
       }
 
+      if(yesstate>=37) ratified=1;
+
       if(canseethings)
+      {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-      if(yesstate>=37)
-      {
-         ratified=1;
-      }
-
-      if(canseethings)
-         nodelay(stdscr,FALSE);
-
-      if(canseethings)
-      {
-         if(!ratified)
-         {
-            move(23,0);
-            addstr("AMENDMENT REJECTED.");
-         }
-         else
-         {
-            move(23,0);
-            addstr("AMENDMENT ADOPTED.");
-         }
+         move(23,0);
+         if(ratified) addstr("AMENDMENT ADOPTED.");
+         else addstr("AMENDMENT REJECTED.");
       }
    }
    else

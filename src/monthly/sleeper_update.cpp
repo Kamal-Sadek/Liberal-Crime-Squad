@@ -345,8 +345,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
          addstr("The Liberal is now homeless and jobless...", gamelog);
          gamelog.nextMessage();
 
-         refresh();
-         getch();
+         getkey();
 
          removesquadinfo(cr);
          cr.location=homes;
@@ -560,11 +559,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower
       }
       break;
    }
-   if(pause)
-   {
-      refresh();
-      getch();
-   }
+   if(pause) getkey();
 }
 
 /*********************************
@@ -586,8 +581,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *lib
          addstr(" has been arrested while embezzling funds.", gamelog);
          gamelog.nextMessage();
 
-         refresh();
-         getch();
+         getkey();
 
          cr.crimes_suspected[LAWFLAG_COMMERCE]++;
          removesquadinfo(cr);
@@ -644,8 +638,7 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
          addstr(" has been arrested while stealing things.", gamelog);
          gamelog.nextMessage();
 
-         refresh();
-         getch();
+         getkey();
 
          cr.crimes_suspected[LAWFLAG_THEFT]++;
          removesquadinfo(cr);
@@ -908,20 +901,20 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    addstr(" has dropped a package off at the homeless shelter.", gamelog);
    gamelog.nextMessage();
    if(numberofxmlfails > 0) {
-     char buf[30]; itoa(numberofxmlfails,buf,10);
-     move(8,1);
-     set_color(COLOR_RED,COLOR_BLUE,1);
-     //TODO: Not sure if this is something that is meant to be logged.
-     addstr("Conservative hacktivity around XML bases lead to");
-     move(9,1);
-     addstr(buf);
-     addstr(" lost stolen items!");
-     move(11,1);
-     set_color(COLOR_RED,COLOR_GREEN,1);
-     addstr("Contact the LERT at once!");
+      char buf[30]; itoa(numberofxmlfails,buf,10);
+      move(8,1);
+      set_color(COLOR_RED,COLOR_BLUE,1);
+      //TODO: Not sure if this is something that is meant to be logged.
+      addstr("Conservative hacktivity around XML bases lead to");
+      move(9,1);
+      addstr(buf);
+      addstr(" lost stolen items!");
+      move(11,1);
+      set_color(COLOR_RED,COLOR_GREEN,1);
+      addstr("Contact the LERT at once!");
    }
-   refresh();
-   getch();
+
+   getkey();
 }
 
 
@@ -980,8 +973,9 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libp
             addstr(recruit->name, gamelog);
             addstr(" looks forward serving the Liberal cause!", gamelog);
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
+
             if(!subordinatesleft(cr))cr.activity.type = ACTIVITY_NONE;
             stat_recruits++;
             break;

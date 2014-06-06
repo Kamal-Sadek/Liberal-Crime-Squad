@@ -56,6 +56,7 @@ extern short postalarmtimer;
 extern short siteonfire;
 extern int sitecrime;
 extern short cursite;
+extern bool mapshowing;
 
 extern char encounterwarnings;
 

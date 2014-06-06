@@ -210,6 +210,7 @@ short postalarmtimer;
 short siteonfire;
 int sitecrime;
 short cursite;
+bool mapshowing=false;
 
 char encounterwarnings=0;
 
@@ -302,33 +303,29 @@ int main(int argc, char* argv[])
    raw_output(TRUE);
 
    //addstr("Loading Graphics... ");
-   //refresh();
-   //getch();
+   //getkey();
 
    loadgraphics();
 
    //addstr("Loading Init File Options... ");
-   //refresh();
-   //getch();
+   //getkey();
 
    loadinitfile();
 
    //addstr("Loading sitemaps.txt... ");
-   //refresh();
-   //getch();
+   //getkey();
 
    oldMapMode=!readConfigFile("sitemaps.txt"); // load site map data
    if (oldMapMode)
    {
       addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
-      refresh();
-      getch();
+
+      getkey();
    }
 
    //move(1,0);
    //addstr("Setting initial game data... ");
-   //refresh();
-   //getch();
+   //getkey();
 
    strcpy(slogan,"We need a slogan!");
    if(!LCSrandom(20))
@@ -424,10 +421,8 @@ int main(int argc, char* argv[])
       else court[c]=2;
       do
       {
-         if(court[c]==-2)
-            generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
-         else
-            generate_name(courtname[c]);
+         if(court[c]==-2) generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
+         else generate_name(courtname[c]);
       } while(strlen(courtname[c])>20);
    }
 
@@ -449,18 +444,15 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
-   if(!xml_loaded_ok)
-      end_game();
+   if(!xml_loaded_ok) end_game();
 
    //addstr("Attempting to load saved game... ");
-   //refresh();
-   //getch();
+   //getkey();
 
    loaded=load();
 
    //addstr("Setup complete!");
-   //refresh();
-   //getch();
+   //getkey();
 
    clear();
 
@@ -538,7 +530,9 @@ bool populate_from_xml(vector<Type*>& types,string file,Log& log)
    { // File is missing or not valid XML.
       addstr("Failed to load "+file+"!");
       log.log("Failed to load "+file+"!");
-      getch();
+
+      getkey();
+
       // Will cause abort here or else if file is missing all unrecognized types
       // loaded from a saved game will be deleted. Also, you probably don't want
       // to play with a whole category of things missing anyway. If the file
@@ -549,10 +543,7 @@ bool populate_from_xml(vector<Type*>& types,string file,Log& log)
 
    xml.FindElem();
    xml.IntoElem();
-   while (xml.FindElem())
-   {
-      types.push_back(new Type(xml.GetSubDoc()));
-   }
+   while (xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
    return true;
 }
 
@@ -562,34 +553,34 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
    if(!xml.Load(string(artdir)+file))
    { //File is missing or not valid XML.
       addstr("Failed to load "+file+"!",log);
-      getch();
+
+      getkey();
+
       return false; //Abort.
    }
 
    xml.FindElem();
    xml.IntoElem();
    int defaultindex;
-   if (xml.FindElem("default"))
-   {
-      defaultindex = getarmortype(xml.GetData());
-   }
+   if (xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
    else
    {
       addstr("Default missing for masks!",log);
-      getch();
+
+      getkey();
+
       return false; //Abort.
    }
    if (defaultindex == -1)
    {
       addstr("Default for masks is not a known armor type!",log);
-      getch();
+
+      getkey();
+
       return false; //Abort.
    }
 
    xml.ResetMainPos();
-   while (xml.FindElem("masktype"))
-   {
-      armortype.push_back(new ArmorType(*armortype[defaultindex], xml.GetSubDoc()));
-   }
+   while(xml.FindElem("masktype")) armortype.push_back(new ArmorType(*armortype[defaultindex],xml.GetSubDoc()));
    return true;
 }

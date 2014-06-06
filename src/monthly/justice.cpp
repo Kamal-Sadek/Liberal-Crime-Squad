@@ -34,8 +34,7 @@ void trial(Creature &g)
 {
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
-   if(location[g.base]->renting<0)
-      g.base=find_homeless_shelter(g);
+   if(location[g.base]->renting<0) g.base=find_homeless_shelter(g);
    g.location=g.base;
    bool breaker[LAWFLAGNUM]={0};
 
@@ -46,27 +45,23 @@ void trial(Creature &g)
    addstr(g.name, gamelog);
    addstr(" is standing trial.", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   if(!iscriminal(g))criminalize(g,LAWFLAG_LOITERING);
+   if(!iscriminal(g)) criminalize(g,LAWFLAG_LOITERING);
 
-   int typenum=0;
-   int scarefactor=0;
-      // *JDS* Scarefactor is the severity of the case against you; if you're a really
-      // nasty person with a wide variety of major charges against you, then scarefactor
-      // can get up there
+   int typenum=0,scarefactor=0;
+   // *JDS* Scarefactor is the severity of the case against you; if you're a really
+   // nasty person with a wide variety of major charges against you, then scarefactor
+   // can get up there
 
-   for(int i=0;i<LAWFLAGNUM;i++)
+   for(int i=0;i<LAWFLAGNUM;i++) if(g.crimes_suspected[i])
    {
-      if(g.crimes_suspected[i])
-      {
-         typenum++;
-         scarefactor+=lawflagheat(i)*g.crimes_suspected[i];
-         breaker[i]=1;
-      }
+      typenum++;
+      scarefactor+=lawflagheat(i)*g.crimes_suspected[i];
+      breaker[i]=1;
    }
 
    //CHECK FOR SLEEPERS
@@ -75,27 +70,17 @@ void trial(Creature &g)
    Creature *sleeperlawyer=NULL;
    int maxsleeperskill=0;
    for(int p=0;p<(int)pool.size();p++)
-   {
-      if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER)&&location[pool[p]->location]->city==location[g.location]->city)
+      if(pool[p]->alive&&(pool[p]->flag&CREATUREFLAG_SLEEPER)&&location[pool[p]->location]->city==location[g.location]->city)
       {
-         if(pool[p]->type==CREATURE_JUDGE_CONSERVATIVE||
-            pool[p]->type==CREATURE_JUDGE_LIBERAL)
-         {
-            if(pool[p]->infiltration*100>=LCSrandom(100))
-               sleeperjudge=pool[p];
-         }
-         if(pool[p]->type==CREATURE_LAWYER)/*&&
-            (pool[p]->infiltration*100>=LCSrandom(100)||
-            (pool[p]->flag & CREATUREFLAG_LOVESLAVE&&pool[p]->hireid==g.id)))*/
-         {
+         if(pool[p]->type==CREATURE_JUDGE_CONSERVATIVE||pool[p]->type==CREATURE_JUDGE_LIBERAL)
+            if(pool[p]->infiltration*100>=LCSrandom(100)) sleeperjudge=pool[p];
+         if(pool[p]->type==CREATURE_LAWYER)
             if(pool[p]->get_skill(SKILL_LAW)+pool[p]->get_skill(SKILL_PERSUASION)>=maxsleeperskill)
             {
                sleeperlawyer=pool[p];
                maxsleeperskill=pool[p]->get_skill(SKILL_LAW)+sleeperlawyer->get_skill(SKILL_PERSUASION);
             }
-         }
       }
-   }
 
    //STATE CHARGES
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -105,7 +90,7 @@ void trial(Creature &g)
       addstr("Sleeper ", gamelog);
       addstr(sleeperjudge->name, gamelog);
       addstr(" reads the charges, trying to hide a smile:", gamelog);
-      g.confessions = 0; //Made sleeper judge prevent these lunatics from testifying
+      g.confessions=0; //Made sleeper judge prevent these lunatics from testifying
    }
    else addstr("The judge reads the charges:", gamelog);
    gamelog.newline();
@@ -115,12 +100,9 @@ void trial(Creature &g)
    addstr(g.propername, gamelog);
    addstr(", is charged with ", gamelog);
    int x=2,y=5;
-   while(typenum>0)
+   while((typenum--)>0)
    {
-      typenum--;
-
-      x++;
-      if(x>=2){x=0;y++;move(y,1);}
+      if((x++)>=2) { x=0; move(++y,1); }
       //////////////////////////////////////////////////////////////////////////
       //                                Treason                               //
       //////////////////////////////////////////////////////////////////////////
@@ -339,9 +321,8 @@ void trial(Creature &g)
             addstr(" counts of ", gamelog);
          }
          addstr("grand theft auto", gamelog);// If chase lasts more than 20 `turns` then
-         breaker[LAWFLAG_CARTHEFT]=0;// this should be `Grand Theft Auto`
-      }                              //                 -- LK
-                                          // We'll just make it grand theft auto anyway :) -Fox
+         breaker[LAWFLAG_CARTHEFT]=0;// this should be `Grand Theft Auto` -- LK
+      }                              // We'll just make it grand theft auto anyway :) -Fox
       else if(breaker[LAWFLAG_CCFRAUD])
       {
          if(g.crimes_suspected[LAWFLAG_CCFRAUD]>1)
@@ -514,12 +495,11 @@ void trial(Creature &g)
          breaker[LAWFLAG_LOITERING]=0;
       }
 
-      if(typenum>1)addstr(", ", gamelog);
-      if(typenum==1)addstr(" and ", gamelog);
-      if(typenum==0)addstr(".", gamelog);
+      if(typenum>1) addstr(", ", gamelog);
+      if(typenum==1) addstr(" and ", gamelog);
+      if(typenum==0) addstr(".", gamelog);
 
-      refresh();
-      getch();
+      getkey();
    }
    gamelog.newline();
 
@@ -538,8 +518,8 @@ void trial(Creature &g)
       addstr(g.name, gamelog);
       addstr(".", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
 
    //CHOOSE DEFENSE
@@ -554,21 +534,21 @@ void trial(Creature &g)
    seed=oldseed;
 
    y+=4;
-   move(y,1);y++;
+   move(y++,1);
    addstr("A - Use a court-appointed attorney.");
-   move(y,1);y++;
+   move(y++,1);
    addstr("B - Defend self!");
-   move(y,1);y++;
+   move(y++,1);
    addstr("C - Plead guilty.");
    if(ledger.get_funds()<5000)set_color(COLOR_BLACK,COLOR_BLACK,1);
-   move(y,1);y++;
+   move(y++,1);
    addstr("D - Pay $5000 to hire ace Liberal attorney ");
    addstr(attorneyname);
    addstr(".");
    if(sleeperlawyer)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(y,1);y++;
+      move(y++,1);
       addstr("E - Accept sleeper ");
       addstr(sleeperlawyer->name);
       addstr("'s offer to assist pro bono.");
@@ -578,37 +558,31 @@ void trial(Creature &g)
    //SAV - added in display of skills and relevant attributes to help
    // decide when to defend self.
    char temp[20];
-   y++;
-   move(y,5);
+   move(++y,5);
    addstr("Heart: ");
    addstr(itoa(g.get_attribute(ATTRIBUTE_HEART,true),temp,10));
    move(y,25);
    addstr("Persuasion: ");
    addstr(itoa(g.get_skill(SKILL_PERSUASION),temp,10));
-   y++;
-   move(y,5);
+   move(++y,5);
    addstr("Charisma: ");
    addstr(itoa(g.get_attribute(ATTRIBUTE_CHARISMA,true),temp,10));
-   move(y,25);
+   move(y++,25);
    addstr("Law: ");
    addstr(itoa(g.get_skill(SKILL_LAW),temp,10));
-   y++;
-   move(y,5);
+   move(y++,5);
    addstr("Intelligence: ");
    addstr(itoa(g.get_attribute(ATTRIBUTE_INTELLIGENCE,true),temp,10));
-   y++;
    // End SAV's adds
 
    short defense;
    int c;
-   do
+   while(true)
    {
-      refresh();
-      c=getch();
-      translategetch(c);
-      if(c=='a'){defense=0;break;}
-      if(c=='b'){defense=1;break;}
-      if(c=='c'){defense=2;break;}
+      c=getkey();
+      if(c=='a') { defense=0; break; }
+      if(c=='b') { defense=1; break; }
+      if(c=='c') { defense=2; break; }
       if(c=='d'&&ledger.get_funds()>=5000)
       {
          ledger.subtract_funds(5000,EXPENSE_LEGAL);
@@ -621,7 +595,7 @@ void trial(Creature &g)
          strcpy(attorneyname,sleeperlawyer->name);
          break;
       }
-   }while(1);
+   }
 
    //TRIAL
    if(defense!=2)
@@ -639,14 +613,14 @@ void trial(Creature &g)
       move(3,1);
       addstr("The trial proceeds.  Jury selection is first.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       //JURY MAKEUP MESSAGE
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(5,1);
       int jury=LCSrandom(61)-(60*publicmood(-1))/100; // Political leanings of the population determine your jury
-      if(sleeperjudge)jury-=20;
+      if(sleeperjudge) jury-=20;
       if(defense==3) // Hired $5000 ace attorney
       {
          if(LCSrandom(10))
@@ -656,7 +630,7 @@ void trial(Creature &g)
             addstr(g.name, gamelog);
             addstr("'s favor!", gamelog);
             gamelog.newline();
-            if(jury>0)jury=0;
+            if(jury>0) jury=0;
             jury-=30;
          }
          else
@@ -710,16 +684,13 @@ void trial(Creature &g)
       }
       #endif
 
-      refresh();
-      getch();
+      getkey();
 
       //PROSECUTION MESSAGE
       // *JDS* The bigger your record, the stronger the evidence
-      prosecution+=40+LCSrandom(101);
-      prosecution+=scarefactor;
-      prosecution+=20*g.confessions;
-      if(sleeperjudge)prosecution>>=1;
-      if(defense==3)prosecution-=60;
+      prosecution+=40+LCSrandom(101)+scarefactor+(20*g.confessions);
+      if(sleeperjudge) prosecution>>=1;
+      if(defense==3) prosecution-=60;
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(7,1);
@@ -733,14 +704,11 @@ void trial(Creature &g)
       }
       else
       {
-         if(prosecution<=50)addstr("The prosecution's presentation is terrible.", gamelog);
-         else if(prosecution<=75)addstr("The prosecution gives a standard presentation.", gamelog);
-         else if(prosecution<=125)addstr("The prosecution's case is solid.", gamelog);
-         else if(prosecution<=175)addstr("The prosecution makes an airtight case.", gamelog);
-         else
-         {
-            addstr("The prosecution is incredibly strong.", gamelog);
-         }
+         if(prosecution<=50) addstr("The prosecution's presentation is terrible.", gamelog);
+         else if(prosecution<=75) addstr("The prosecution gives a standard presentation.", gamelog);
+         else if(prosecution<=125) addstr("The prosecution's case is solid.", gamelog);
+         else if(prosecution<=175) addstr("The prosecution makes an airtight case.", gamelog);
+         else addstr("The prosecution is incredibly strong.", gamelog);
          gamelog.newline();
       }
 
@@ -758,8 +726,7 @@ void trial(Creature &g)
       }
       #endif
 
-      refresh();
-      getch();
+      getkey();
 
       jury+=LCSrandom(prosecution/2+1)+prosecution/2;
 
@@ -777,10 +744,8 @@ void trial(Creature &g)
          }
          else
          {
-            if(defense==0)
-               defensepower=LCSrandom(71);    // Court-appointed attorney
-            else if(defense==3)
-               defensepower=LCSrandom(71)+80; // Ace Liberal attorney
+            if(defense==0) defensepower=LCSrandom(71);    // Court-appointed attorney
+            else if(defense==3) defensepower=LCSrandom(71)+80; // Ace Liberal attorney
             else if(defense==4)
             {
                // Sleeper attorney
@@ -799,10 +764,7 @@ void trial(Creature &g)
             else if(defensepower<=145)
             {
                if(prosecution<100)addstr("The defense makes the prosecution look like amateurs.", gamelog);
-               else
-               {
-                  addstr("The defense is extremely compelling.", gamelog);
-               }
+               else addstr("The defense is extremely compelling.", gamelog);
             }
             else
             {
@@ -812,7 +774,7 @@ void trial(Creature &g)
                   addstr("'s arguments made several of the jurors stand up ", gamelog);
                   move(10,1);
                   addstr("and shout \"NOT GUILTY!\" before deliberations even began.", gamelog);
-                  if(defense==4)addjuice(*sleeperlawyer,10,500); // Bow please
+                  if(defense==4) addjuice(*sleeperlawyer,10,500); // Bow please
                }
                else
                {
@@ -828,7 +790,7 @@ void trial(Creature &g)
          // *JDS* LEGAL SELF-REPRESENTATION: To succeed here, you really need to have two skills be
          // high: persuasion and law, with law being 1.5 times as influential. You can't have
          // just one or just the other. Even if you're a very persuasive person, the court will eat
-         // you alive  if you can't sound intelligent when talking about the relevant charges, and you
+         // you alive if you can't sound intelligent when talking about the relevant charges, and you
          // won't be able to fool the jury into letting you go if you aren't persuasive, as no
          // matter how encyclopedic your legal knowledge is, it's all in the pitch.
          //
@@ -873,16 +835,15 @@ void trial(Creature &g)
       }
       #endif
 
-      refresh();
-      getch();
+      getkey();
 
       //DELIBERATION MESSAGE
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(12,1);
       addstr("The jury leaves to consider the case.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       //JURY RETURN MESSAGE
       erase();
@@ -890,10 +851,10 @@ void trial(Creature &g)
       move(1,1);
       addstr("The jury has returned from deliberations.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
 
-      bool keeplawflags=0;
+      getkey();
+
+      bool keeplawflags=false;
 
       //HUNG JURY
       if(defensepower==jury)
@@ -902,8 +863,8 @@ void trial(Creature &g)
          move(3,1);
          addstr("But they can't reach a verdict!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          //RE-TRY
          if(LCSrandom(2)||scarefactor>=10||g.confessions)
@@ -912,8 +873,8 @@ void trial(Creature &g)
             move(5,1);
             addstr("The case will be re-tried next month.", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
 
             g.location=find_courthouse(g);
             keeplawflags=true;
@@ -946,19 +907,19 @@ void trial(Creature &g)
                }
             }
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
          }
       }
       //ACQUITTAL!
-      else if(!autoconvict && defensepower>jury)
+      else if(!autoconvict&&defensepower>jury)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(3,1);
          addstr("NOT GUILTY!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          if(g.sentence==0)
          {
@@ -982,60 +943,32 @@ void trial(Creature &g)
          }
          gamelog.nextMessage();
 
-         if(defense==4)
-         {
-            // Juice sleeper
-            addjuice(*sleeperlawyer,10,100);
-         }
-         if(defense==1)
-         {
-            // Juice for self-defense
-            addjuice(g,10,100);
-         }
-         refresh();
-         getch();
+         // Juice sleeper
+         if(defense==4) addjuice(*sleeperlawyer,10,100);
+         // Juice for self-defense
+         if(defense==1) addjuice(g,10,100);
+
+         getkey();
       }
       //LENIENCE
       else
       {
-         if(defense==4)
-         {
-            // De-Juice sleeper
-            addjuice(*sleeperlawyer,-5,0);
-         }
+         // De-Juice sleeper
+         if(defense==4) addjuice(*sleeperlawyer,-5,0);
 
-         if(defense!=2)
-         {
-            // Juice for getting convicted of something :)
-            addjuice(g,25,200);
-         }
+         // Juice for getting convicted of something :)
+         addjuice(g,25,200);
 
          // Check for lenience; sleeper judge will always be merciful
-         if(defensepower/3>=jury/4 || sleeperjudge || defense==2)
-         {
-            penalize(g,1);
-         }
-         else
-         {
-            penalize(g,0);
-         }
+         if(defensepower/3>=jury/4||sleeperjudge) penalize(g,1);
+         else penalize(g,0);
       }
       //CLEAN UP LAW FLAGS
-      if(!keeplawflags)
-      {
-         for(int i=0;i<LAWFLAGNUM;i++)
-         {
-            g.crimes_suspected[i]=0;
-         }
-      }
-      g.heat=0;
-      //Clean up confessions
-      g.confessions=0;
+      if(!keeplawflags) for(int i=0;i<LAWFLAGNUM;i++) g.crimes_suspected[i]=0;
+      //Clean up heat, confessions
+      g.heat=0,g.confessions=0;
       //PLACE PRISONER
-      if(g.sentence!=0)
-      {
-         imprison(g);
-      }
+      if(g.sentence!=0) imprison(g);
       else
       {
          Armor clothes(*armortype[getarmortype("ARMOR_CLOTHES")]);
@@ -1044,7 +977,7 @@ void trial(Creature &g)
    }
    //GUILTY PLEA
    // How about "nolo" (Nolo contendere) -- LK
-   //  I would imagine this would disregard the strength of the defense. -- LK
+   // I would imagine this would disregard the strength of the defense. -- LK
    else
    {
       erase();
@@ -1052,23 +985,18 @@ void trial(Creature &g)
       move(1,1);
       addstr("The court accepts the plea.", gamelog);
       gamelog.nextMessage();
-      refresh();
-      getch();
 
-      penalize(g,LCSrandom(2));
+      getkey();
+
+      // Check for lenience; sleeper judge will always be merciful
+      if(sleeperjudge||LCSrandom(2)) penalize(g,1);
+      else penalize(g,0);
       //CLEAN UP LAW FLAGS
-      for(int i=0;i<LAWFLAGNUM;i++)
-      {
-         g.crimes_suspected[i]=0;
-      }
-      g.heat=0;
-      //Clean up confessions
-      g.confessions=0;
+      for(int i=0;i<LAWFLAGNUM;i++) g.crimes_suspected[i]=0;
+      //Clean up heat, confessions
+      g.heat=0,g.confessions=0;
       //PLACE PRISONER
-      if(g.sentence!=0)
-      {
-         imprison(g);
-      }
+      if(g.sentence!=0) imprison(g);
       else
       {
          Armor clothes(*armortype[getarmortype("ARMOR_CLOTHES")]);
@@ -1086,13 +1014,12 @@ void penalize(Creature &g,char lenient)
    move(3,1);
    addstr("GUILTY!", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    short oldsentence=g.sentence;
    char olddeathpenalty=g.deathpenalty;
-   g.sentence=0;
-   g.deathpenalty=0;
+   g.sentence=0,g.deathpenalty=0;
 
    if(!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])||
       ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
@@ -1105,11 +1032,7 @@ void penalize(Creature &g,char lenient)
       if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
    }
 
-   for(int l=0;l<LAWFLAGNUM;l++)
-   {
-      if(g.crimes_suspected[l]>10)
-         g.crimes_suspected[l]=10;
-   }
+   for(int l=0;l<LAWFLAGNUM;l++) if(g.crimes_suspected[l]>10) g.crimes_suspected[l]=10;
 
    //CALC TIME
    if(!g.deathpenalty)
@@ -1178,11 +1101,7 @@ void penalize(Creature &g,char lenient)
       if(lenient&&g.sentence==-1)g.sentence=240+LCSrandom(120);
    }
    //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
-   else if(g.deathpenalty&&lenient)
-   {
-      g.deathpenalty=0;
-      g.sentence=-1;
-   }
+   else if(g.deathpenalty&&lenient) g.deathpenalty=0,g.sentence=-1;
 
    //MENTION LENIENCY
    if(lenient)
@@ -1191,8 +1110,8 @@ void penalize(Creature &g,char lenient)
       move(5,1);
       addstr("During sentencing, the judge grants some leniency.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
 
    //MENTION SENTENCE
@@ -1205,13 +1124,14 @@ void penalize(Creature &g,char lenient)
       addstr(g.propername, gamelog);
       addstr(", you will be returned to prison to carry out your death sentence.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(9,1);
       addstr("The execution is scheduled to occur three months from now.", gamelog);
-      refresh();
-      getch();
+
+      getkey();
    }
    else if(g.deathpenalty)
    {
@@ -1221,13 +1141,14 @@ void penalize(Creature &g,char lenient)
       addstr(g.propername, gamelog);
       addstr(", you are sentenced to DEATH!", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(9,1);
       addstr("The execution is scheduled to occur three months from now.", gamelog);
-      refresh();
-      getch();
+
+      getkey();
    }
    // Don't give a time-limited sentence if they already have a life sentence.
    else if ((g.sentence>=0 && oldsentence<0) ||
@@ -1238,8 +1159,8 @@ void penalize(Creature &g,char lenient)
       move(7,1);
       addstr(g.propername, gamelog);
       addstr(", the court sees no need to add to your existing sentence.", gamelog);
-      refresh();
-      getch();
+
+      getkey();
    }
    else if(g.sentence==0)
    {
@@ -1247,8 +1168,8 @@ void penalize(Creature &g,char lenient)
       move(7,1);
       addstr(g.propername, gamelog);
       addstr(", consider this a warning.  You are free to go.", gamelog);
-      refresh();
-      getch();
+
+      getkey();
    }
    else
    {
@@ -1276,8 +1197,9 @@ void penalize(Creature &g,char lenient)
             if(oldsentence>=0)
             {
                addstr(".", gamelog);
-               refresh();
-               getch();
+
+               getkey();
+
                move(9,1);
                addstr("Have a nice day, ", gamelog);
                addstr(g.propername, gamelog);
@@ -1328,12 +1250,11 @@ void penalize(Creature &g,char lenient)
       if(boss!=-1&&pool[boss]->juice>50)
       {
          int juice=g.juice/10;
-         if(juice<5)juice=5;
+         if(juice<5) juice=5;
          addjuice(*pool[boss],-juice,0);
       }
 
-      refresh();
-      getch();
+      getkey();
    }
    gamelog.nextMessage();
 }
@@ -1396,20 +1317,14 @@ char prison(Creature &g)
    if(!g.deathpenalty && g.sentence!=1)
    {
       if(law[LAW_PRISONS]==2)
-      {
          //Liberal therapy.
          reeducation(g);
-      }
       else if(law[LAW_PRISONS]==-2)
-      {
          //Labor camp.
          laborcamp(g);
-      }
       else
-      {
          //Normal prison.
          prisonscene(g);
-      }
    }
 
    if(g.sentence>0)
@@ -1425,8 +1340,8 @@ char prison(Creature &g)
          move(9,1);
          addstr("due to the abolition of the death penalty.", gamelog);
          gamelog.nextMessage();
-         refresh();
-         getch();
+
+         getkey();
 
          g.sentence=-1;
          g.deathpenalty=0;
@@ -1452,22 +1367,16 @@ char prison(Creature &g)
             move(10,1);
             addstr("by ", gamelog);
             if(law[LAW_DEATHPENALTY]==-2)
-            {
             	addstr(selectRandomString(	cruel_and_unusual_execution_methods,
             										ARRAY_ELEMENTS(cruel_and_unusual_execution_methods)), gamelog);
-            }
             else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
-            {
             	addstr(selectRandomString(	standard_execution_methods,
             										ARRAY_ELEMENTS(standard_execution_methods)), gamelog);
-            }
             else
-            {
                addstr(supposedly_painless_execution_method, gamelog);
-            }
             addstr(".", gamelog);
-            refresh();
-            getch();
+
+            getkey();
 
             //dejuice boss
             int boss=getpoolcreature(g.hireid);
@@ -1481,8 +1390,8 @@ char prison(Creature &g)
                gamelog.newline();
                move(14,1);
                addstr("If you can't protect your own people, who can you protect?", gamelog);
-               refresh();
-               getch();
+
+               getkey();
 
                addjuice(*pool[boss],-50,-50);
             }
@@ -1504,15 +1413,14 @@ char prison(Creature &g)
             move(9,1);
             addstr("No doubt there are some mental scars, but the Liberal is back.", gamelog);
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
 
             Armor clothes(*armortype[getarmortype("ARMOR_CLOTHES")]);
             g.give_armor(clothes,NULL);
             // If their old base is no longer under LCS control, wander back to the
             // homeless shelter instead.
-            if(location[g.base]->renting<0)
-               g.base=find_homeless_shelter(g);
+            if(location[g.base]->renting<0) g.base=find_homeless_shelter(g);
             g.location=g.base;
             showed=1;
          }
@@ -1528,8 +1436,8 @@ char prison(Creature &g)
             addstr(g.name, gamelog);
             addstr(" is due to be executed next month.", gamelog);
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
 
             showed=1;
          }
@@ -1541,8 +1449,8 @@ char prison(Creature &g)
             addstr(g.name, gamelog);
             addstr(" is due to be released next month.", gamelog);
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
 
             showed=1;
          }
@@ -1561,8 +1469,8 @@ char prison(Creature &g)
             addstr(str, gamelog);
             addstr(" months.", gamelog);
             gamelog.nextMessage();
-            refresh();
-            getch();
+
+            getkey();
 
             showed=1;
          }
@@ -1586,16 +1494,14 @@ void reeducation(Creature &g)
 	   " sees an video in prison by victims of political crime."
 	};
 
-   //int resist=0;
-
-   //clearmessagearea();
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
    addstr(selectRandomString(reeducation_experiences, ARRAY_ELEMENTS(reeducation_experiences)), gamelog);
    gamelog.newline();
-   getch();
+
+   getkey();
 
    move(10,1);
    if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
@@ -1624,7 +1530,6 @@ void reeducation(Creature &g)
       {
          addstr(g.name, gamelog);
          addstr(" abandons the Liberal Crime Squad!", gamelog);
-         //conservatise(g);
 
          //Rat out contact
          int contact = getpoolcreature(g.hireid);
@@ -1645,8 +1550,8 @@ void reeducation(Creature &g)
    }
    gamelog.nextMessage();
 
-   refresh();
-   getch();
+   getkey();
+
    erase();
 
    return;
@@ -1666,16 +1571,14 @@ void laborcamp(Creature &g)
 		" participates in a quickly-suppressed prison riot."
 	};
 
-   //int resist=0;
-
-   //clearmessagearea();
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
    addstr(selectRandomString(labor_camp_experiences, ARRAY_ELEMENTS(labor_camp_experiences)), gamelog);
    gamelog.newline();
-   getch();
+
+   getkey();
 
    move(10,1);
    if(!LCSrandom(10))
@@ -1691,7 +1594,6 @@ void laborcamp(Creature &g)
       {
          addstr(g.name, gamelog);
          addstr(" is found dead.", gamelog);
-         //conservatise(g);
 
          g.die();
          g.location=-1;
@@ -1704,15 +1606,62 @@ void laborcamp(Creature &g)
    }
    gamelog.nextMessage();
 
-   refresh();
-   getch();
+   getkey();
+
    erase();
 
    return;
 }
 
 void prisonscene(Creature &g)
-{
-   // Populate this with scenes for normal prison
+{  // this previously empty function is mostly just flavor text for now and hardly does any changes, just some minor modification of juice
+	static const char *prison_experiences[] =
+	{
+	   " mouths off to a prison guard and ends up in solitary.",
+	   " gets high off drugs smuggled into the prison.",
+	   " gets sick for a few days from nasty prison food.",
+	   " spends too much time working out at the prison gym.",
+	   " does nothing but read books at the prison library.",
+	   " gets into a fight and is punished with latrine duty.",
+	   " is raped by another prison inmate, repeatedly.",
+	   " constantly tries thinking how to escape from prison."
+	};
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name, gamelog);
+   addstr(selectRandomString(prison_experiences, ARRAY_ELEMENTS(prison_experiences)), gamelog);
+   gamelog.newline();
+
+   getkey();
+
+   move(10,1);
+   if(!LCSrandom(10))
+   {
+      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD))
+      {
+         addstr(g.name, gamelog);
+         addstr(" has become a more hardened, Juicier criminal.", gamelog);
+         addjuice(g,10,200); // very little change, since this function was empty until recently, not doing anything too radical here
+      }
+      else
+      {
+         addstr(g.name, gamelog);
+         addstr(" is kinda losing it in here. Juice, that is.", gamelog);
+         addjuice(g,-10,0); // very little change, since this function was empty until recently, not doing anything too radical here
+      }
+   }
+   else
+   {
+      addstr(g.name, gamelog);
+      addstr(" seems to be mostly fine, though.", gamelog);
+   }
+   gamelog.nextMessage();
+
+   getkey();
+
+   erase();
+
    return;
 }

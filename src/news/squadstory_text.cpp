@@ -110,7 +110,7 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_GOVERNMENT_PRISON:
          strcat(story,"Rehabilitation Center.  ");break;
       case SITE_GOVERNMENT_INTELLIGENCEHQ:
-         strcat(story,"ACLU Branch Office.  ");break;
+         strcat(story,"WikiLeaks HQ.  ");break;
       case SITE_INDUSTRY_SWEATSHOP:
          strcat(story,"Labor Union HQ.  ");break;
       case SITE_INDUSTRY_POLLUTER:
@@ -120,7 +120,7 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_CORPORATE_HEADQUARTERS:
          strcat(story,"Welfare Assistance Agency.  ");break;
       case SITE_CORPORATE_HOUSE:
-         strcat(story,"Richard Dawkins Food Bank.  ");break;
+         strcat(story,"Tax Collection Agency.  ");break;
       case SITE_MEDIA_AMRADIO:
          strcat(story,"Public Radio Station.  ");break;
       case SITE_MEDIA_CABLENEWS:

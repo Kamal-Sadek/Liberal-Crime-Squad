@@ -40,7 +40,6 @@ void majornewspaper(char &clearformess,char canseethings)
 {
    clearformess = true;
 
-   //int i;
    int n=0;
 
    generate_random_event_news_stories();
@@ -1681,12 +1680,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
    }
 
    int c;
-   do
-   {
-      refresh();
-      c=getch();
-      translategetch(c);
-   }while(c!=27&&c!=10&&c!=32);
+   do c=getkey(); while(c!=ESC&&c!=ENTER&&c!=SPACEBAR);
 }
 
 

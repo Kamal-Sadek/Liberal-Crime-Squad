@@ -116,8 +116,7 @@ void elections(char clearformess,char canseethings)
       move(8,1);
       addstr("The Elections are being held today!");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //PRESIDENTIAL
@@ -240,10 +239,7 @@ void elections(char clearformess,char canseethings)
             move(8,0);
             addstr("Press any key to watch the election unfold.");
 
-            refresh();
-            getch();
-
-            nodelay(stdscr,TRUE);
+            getkey();
          }
          else
          {
@@ -311,13 +307,11 @@ void elections(char clearformess,char canseethings)
 
       if(canseethings)
       {
-         nodelay(stdscr,FALSE);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(8,0);
          addstr("Press any key to continue the elections.   ");
 
-         refresh();
-         getch();
+         getkey();
       }
       /*else if(disbanding)
       {
@@ -335,8 +329,8 @@ void elections(char clearformess,char canseethings)
       }
    }
 
-   if(year%2==0)elections_senate((year%6)/2,canseethings); //SENATE
-   if(year%2==0)elections_house(canseethings); //HOUSE
+   if(year%2==0) elections_senate((year%6)/2,canseethings); //SENATE
+   if(year%2==0) elections_house(canseethings); //HOUSE
 
    //PROPOSITIONS
    if(canseethings)
@@ -518,28 +512,25 @@ void elections(char clearformess,char canseethings)
       move(23,0);
       addstr("Press any key to watch the elections unfold.");
 
-      refresh();
-      getch();
-
-      nodelay(stdscr,TRUE);
+      getkey();
    }
 
    for(p=0;p<pnum;p++)
    {
-      char yeswin=0, recount=0;
+      char yeswin=0,recount=0;
       int yesvotes=0;
       mood=publicmood(prop[p]);
       for(int l=0;l<1000;l++)
       {
-         if(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1)yesvotes++;
+         if(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1) yesvotes++;
          /*vote=-2;
-         for(int i=0;i<4;i++)if(LCSrandom(100)<mood)vote++;
-         if((law[prop[p]]>vote&&propdir[p]==-1)||(law[prop[p]]<vote&&propdir[p]==1))yesvotes++;*/
+         for(int i=0;i<4;i++) if(LCSrandom(100)<mood) vote++;
+         if((law[prop[p]]>vote&&propdir[p]==-1)||(law[prop[p]]<vote&&propdir[p]==1)) yesvotes++;*/
 
          if(l==999)
          {
-            if(yesvotes>500)yeswin=1;
-            else if(yesvotes==500)yeswin=LCSrandom(2), recount=1;
+            if(yesvotes>500) yeswin=1;
+            else if(yesvotes==500) yeswin=LCSrandom(2),recount=1;
          }
 
          if(canseethings && (l%10 == 0 || l==999))
@@ -568,7 +559,6 @@ void elections(char clearformess,char canseethings)
 
             refresh();
             pause_ms(10);
-            getch();
          }
       }
 
@@ -584,14 +574,11 @@ void elections(char clearformess,char canseethings)
 
    if(canseethings)
    {
-      nodelay(stdscr,FALSE);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(23,0);
       addstr("Press any key to reflect on what has happened.");
 
-      refresh();
-      getch();
+      getkey();
    }
 }
 
@@ -658,10 +645,7 @@ void elections_senate(int senmod,char canseethings)
       move(23,0);
       addstr("Press any key to watch the elections unfold.");
 
-      refresh();
-      getch();
-
-      nodelay(stdscr,TRUE);
+      getkey();
    }
 
    int vote;
@@ -723,7 +707,6 @@ void elections_senate(int senmod,char canseethings)
          change[senate[s]+2]++;
       }
 
-
       if(canseethings)
       {
          move(y,x);
@@ -756,7 +739,7 @@ void elections_senate(int senmod,char canseethings)
       }
 
       x+=20;
-      if(x>70)x=0, y++;
+      if(x>70) x=0,y++;
 
       if(canseethings)
       {
@@ -797,8 +780,6 @@ void elections_senate(int senmod,char canseethings)
 
    if(canseethings)
    {
-      nodelay(stdscr,FALSE);
-
       move(21,0);
       if(change[0]+change[1]>change[3]+change[4])
       {
@@ -815,8 +796,7 @@ void elections_senate(int senmod,char canseethings)
       move(22,0);
       addstr("Press any key to continue the elections.    ");
 
-      refresh();
-      getch();
+      getkey();
    }
 }
 
@@ -836,7 +816,7 @@ void elections_house(char canseethings)
       addstr(num);
    }
 
-   int x=0,y=2, h=0;
+   int x=0,y=2,h=0;
 
    for(h=0;h<435;h++)
    {
@@ -872,7 +852,7 @@ void elections_house(char canseethings)
       }
 
       x+=3;
-      if(x>78)x=0, y++;
+      if(x>78) x=0,y++;
    }
 
    if(canseethings)
@@ -881,16 +861,12 @@ void elections_house(char canseethings)
       move(23,0);
       addstr("Press any key to watch the elections unfold.");
 
-      refresh();
-      getch();
-
-      nodelay(stdscr,TRUE);
+      getkey();
    }
 
-   int vote;
-   int change[5]={0,0,0,0,0};
+   int vote,change[5]={0,0,0,0,0};
 
-   x=0, y=2;
+   x=0,y=2;
 
    for(h=0;h<435;h++)
    {
@@ -976,7 +952,7 @@ void elections_house(char canseethings)
       }
 
       x+=3;
-      if(x>78)x=0, y++;
+      if(x>78) x=0,y++;
 
       if(canseethings)
       {
@@ -1011,15 +987,12 @@ void elections_house(char canseethings)
          {
             refresh();
             pause_ms(5);
-            getch();
          }
       }
    }
 
    if(canseethings)
    {
-      nodelay(stdscr,FALSE);
-
       move(21,0);
       if(change[0]+change[1]>change[3]+change[4])
       {
@@ -1037,8 +1010,7 @@ void elections_house(char canseethings)
          move(22,0);
          addstr("Press any key to continue the elections.    ");
 
-         refresh();
-         getch();
+         getkey();
       }
       else
       {
@@ -1060,8 +1032,7 @@ void supremecourt(char clearformess,char canseethings)
       move(8,1);
       addstr("The Supreme court is handing down decisions!");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //CHANGE THINGS AND REPORT
@@ -1092,7 +1063,7 @@ void supremecourt(char clearformess,char canseethings)
       do
       {
          scase[c]=LCSrandom(LAWNUM);
-      }while(lawtaken[scase[c]]);
+      } while(lawtaken[scase[c]]);
 
       lawtaken[scase[c]]=1;
 
@@ -1249,18 +1220,13 @@ void supremecourt(char clearformess,char canseethings)
       move(23,0);
       addstr("Press any key to watch the decisions unfold.");
 
-      refresh();
-      getch();
-
-      nodelay(stdscr,TRUE);
+      getkey();
    }
 
    for(c=0;c<cnum;c++)
    {
       char yeswin=0;
-      int yesvotes=0;
-
-      int vote;
+      int yesvotes=0,vote;
       //Constitutional bias -- free speech, flag burning issues, supreme court
       //is extra liberal, gun control, supreme court is extra conservative
 	  //"All court justices will vote according to alignment and biasand do not consult
@@ -1300,8 +1266,6 @@ void supremecourt(char clearformess,char canseethings)
             refresh();
 
             pause_ms(60);
-
-            getch();
          }
       }
 
@@ -1310,14 +1274,11 @@ void supremecourt(char clearformess,char canseethings)
 
    if(canseethings)
    {
-      nodelay(stdscr,FALSE);
-
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(23,0);
       addstr("Press any key to reflect on what has happened.");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //CHANGE A JUSTICE 40% OF THE TIME
@@ -1356,8 +1317,7 @@ void supremecourt(char clearformess,char canseethings)
          move(7,0);
          addstr("Press any key to see what happens.");
 
-         refresh();
-         getch();
+         getkey();
       }
 
       float president=exec[EXEC_PRESIDENT];
@@ -1377,8 +1337,7 @@ void supremecourt(char clearformess,char canseethings)
       {
          if(court[j]==-2)
             generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
-         else
-            generate_name(courtname[j]);
+         else generate_name(courtname[j]);
       } while(strlen(courtname[j])>20);
 
       if(canseethings)
@@ -1403,8 +1362,7 @@ void supremecourt(char clearformess,char canseethings)
          move(7,0);
          addstr("Press any key to reflect on what has happened.");
 
-         refresh();
-         getch();
+         getkey();
       }
    }
 }
@@ -1423,8 +1381,7 @@ void congress(char clearformess,char canseethings)
       move(8,1);
       addstr("Congress is acting on legislation!");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //CHANGE THINGS AND REPORT
@@ -1645,16 +1602,13 @@ void congress(char clearformess,char canseethings)
       move(23,0);
       addstr("Press any key to watch the votes unfold.");
 
-      refresh();
-      getch();
+      getkey();
 
       move(0,62);
       addstr("House");
 
       move(0,70);
       addstr("Senate");
-
-      nodelay(stdscr,TRUE);
    }
 
    //Liberals and Conservatives are 50% likely to consult popular opinion, otherwise they vote
@@ -1727,9 +1681,7 @@ void congress(char clearformess,char canseethings)
 
          if(l%4==0&&s<99)
          {
-            s++;
-
-            vote=senate[s];
+            vote=senate[s++];
             if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
 
             if(law[bill[c]]>vote && billdir[c]==-1)yesvotes_s++;
@@ -1793,15 +1745,11 @@ void congress(char clearformess,char canseethings)
                refresh();
                pause_ms(5);
             }
-
-            getch();
          }
       }
 
       if(!yeswin_h||!yeswin_s)killbill[c]=1;
    }
-
-   if(canseethings)nodelay(stdscr,FALSE);
 
    int havebill=0;
    for(c=0;c<cnum;c++)if(killbill[c]<=0)havebill++;
@@ -1814,14 +1762,11 @@ void congress(char clearformess,char canseethings)
          move(23,0);
          addstr("Press any key to watch the President.                   ");
 
-         refresh();
-         getch();
+         getkey();
 
          move(0,35);
          addstr("President");
          refresh();
-
-         nodelay(stdscr,TRUE);
 
          pause_ms(500);
       }
@@ -1879,14 +1824,11 @@ void congress(char clearformess,char canseethings)
 
       if(canseethings)
       {
-         nodelay(stdscr,FALSE);
-
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(23,0);
          addstr("Press any key to reflect on what has happened.    ");
 
-         refresh();
-         getch();
+         getkey();
       }
    }
    else if(canseethings)
@@ -1897,8 +1839,7 @@ void congress(char clearformess,char canseethings)
       move(24,0);
       addstr("Press any key to reflect on what has happened.    ");
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //CONGRESS CONSTITUTION CHANGES
@@ -1980,7 +1921,7 @@ char wincheck(void)
 */
 /*
 FIXME, PART1:
-        LAW_HUMANRIGHTS is added as a sort of an indictator, but it relies on
+        LAW_HUMANRIGHTS is added as a sort of an indicator, but it relies on
                 all the other Human Rights issue, rather than affecting the
                 issues to be more "pro-Human Rights". Essentially, if you
                 support Gay Rights but not Abortion Rights, you will not be
@@ -2007,7 +1948,7 @@ int publicmood(int l)
       // as a law should depend only upon police behavior as an issue. This keeps
       // the game logical to the player and ensures that the public opinion polls
       // displayed in-game accurately predict how people will vote in specific
-      // issues. For a handful of laws, we might not have a directly correllating
+      // issues. For a handful of laws, we might not have a directly correlating
       // issue; for example, as of this writing, there is no issue asking people's
       // opinions on torture. In this case, we can use the nearest issue, or we
       // can mix two closely related ones. As a general principle, try to avoid

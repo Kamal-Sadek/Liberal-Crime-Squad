@@ -26,6 +26,40 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -273,7 +307,7 @@ void passmonth(char &clearformess,char canseethings)
          addstr(str);
          move(y,20);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr("<------->");
+         addstr("\x11ÄÄÄÄÄÄÄ\x10");
 
          // Calculate location for pip (with a bit of randomness for imprecision!)
          int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1;
@@ -288,8 +322,8 @@ void passmonth(char &clearformess,char canseethings)
          move(y++,20+pip);
          addch('O');
       }
-      refresh();
-      getch();
+
+      getkey();
    }*/
    /*******************************************************
    *                                                      *
@@ -326,16 +360,16 @@ void passmonth(char &clearformess,char canseethings)
       move(12,10);
       addstr("The Liberal Crime Squad is now just a memory.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       erase();
       move(12,12);
       addstr("The last LCS members have all been hunted down.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       erase();
@@ -343,8 +377,8 @@ void passmonth(char &clearformess,char canseethings)
       addstr("They will never see the utopia they dreamed of...", gamelog);
       gamelog.newline();
       gamelog.nextMessage();
-      refresh();
-      getch();
+
+      getkey();
 
       savehighscore(END_DISBANDLOSS);
       reset();
@@ -366,14 +400,8 @@ void passmonth(char &clearformess,char canseethings)
 
       if(location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
       {
-         if(clearformess)
-         {
-            erase();
-         }
-         else
-         {
-            makedelimiter(8,0);
-         }
+         if(clearformess) erase();
+         else makedelimiter(8,0);
 
          if(pool[p]->flag & CREATUREFLAG_MISSING)
          {
@@ -384,8 +412,7 @@ void passmonth(char &clearformess,char canseethings)
             addstr("'s mind with Conservatism!", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             removesquadinfo(*pool[p]);
             delete_and_remove(pool,p);
@@ -402,8 +429,7 @@ void passmonth(char &clearformess,char canseethings)
             else addstr("deportation.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             removesquadinfo(*pool[p]);
             delete_and_remove(pool,p);
@@ -430,15 +456,13 @@ void passmonth(char &clearformess,char canseethings)
                int p2=getpoolcreature(pool[p]->hireid);
 
                if(pool[p2]->alive && (pool[p2]->location==-1 || location[pool[p2]->location]->type!=SITE_GOVERNMENT_PRISON))
-               {
-                  //Charge the boss with racketeering!
+               {  //Charge the boss with racketeering!
                   criminalize(*pool[p2],LAWFLAG_RACKETEERING);
                   //Rack up testimonies against the boss in court!
                   pool[p2]->confessions++;
                }
                if(!nullify)
-               {
-                  //Issue a raid on this guy's base!
+               {  //Issue a raid on this guy's base!
                   if(pool[p]->base>=0)location[pool[p]->base]->heat+=300;
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -447,16 +471,14 @@ void passmonth(char &clearformess,char canseethings)
                   addstr(" has broken under the pressure and ratted you out!", gamelog);
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(9,1);
                   addstr("The traitor will testify in court, and safehouses may be compromised.", gamelog);
                   gamelog.nextMessage();
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   removesquadinfo(*pool[p]);
 
@@ -472,8 +494,7 @@ void passmonth(char &clearformess,char canseethings)
             addstr(" is moved to the courthouse for trial.", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             pool[p]->location=find_courthouse(*pool[p]);
             Armor prisoner(*armortype[getarmortype("ARMOR_PRISONER")]);
@@ -481,14 +502,9 @@ void passmonth(char &clearformess,char canseethings)
          }
       }
       else if(location[pool[p]->location]->type==SITE_GOVERNMENT_COURTHOUSE)
-      {
-         trial(*pool[p]);
-         clearformess=1;
-      }
+      { trial(*pool[p]); clearformess=1; }
       else if(location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON)
-      {
          if(prison(*pool[p]))clearformess=1;
-      }
    }
 
    //NUKE EXECUTION VICTIMS
@@ -525,11 +541,8 @@ void passmonth(char &clearformess,char canseethings)
 
          for(int w=0;w<BODYPARTNUM;w++)
          {
-            if((pool[p]->wound[w] & WOUND_NASTYOFF)||
-               (pool[p]->wound[w] & WOUND_CLEANOFF))
-            {
+            if((pool[p]->wound[w]&WOUND_NASTYOFF)||(pool[p]->wound[w]&WOUND_CLEANOFF))
                pool[p]->wound[w]=(char)WOUND_CLEANOFF;
-            }
             else pool[p]->wound[w]=0;
          }
 
@@ -538,26 +551,17 @@ void passmonth(char &clearformess,char canseethings)
          if(pool[p]->special[SPECIALWOUND_RIGHTLUNG]!=1)
          {
             pool[p]->special[SPECIALWOUND_RIGHTLUNG]=1;
-            if(LCSrandom(2))
-            {
-               healthdamage++;
-            }
+            if(LCSrandom(2)) healthdamage++;
          }
          if(pool[p]->special[SPECIALWOUND_LEFTLUNG]!=1)
          {
             pool[p]->special[SPECIALWOUND_LEFTLUNG]=1;
-            if(LCSrandom(2))
-            {
-               healthdamage++;
-            }
+            if(LCSrandom(2)) healthdamage++;
          }
          if(pool[p]->special[SPECIALWOUND_HEART]!=1)
          {
             pool[p]->special[SPECIALWOUND_HEART]=1;
-            if(LCSrandom(3))
-            {
-               healthdamage++;
-            }
+            if(LCSrandom(3)) healthdamage++;
          }
          pool[p]->special[SPECIALWOUND_LIVER]=1;
          pool[p]->special[SPECIALWOUND_STOMACH]=1;
@@ -567,24 +571,16 @@ void passmonth(char &clearformess,char canseethings)
          pool[p]->special[SPECIALWOUND_RIBS]=RIBNUM;
 
          if(!pool[p]->special[SPECIALWOUND_NECK])
-         {
             pool[p]->special[SPECIALWOUND_NECK]=2;
-         }
          if(!pool[p]->special[SPECIALWOUND_UPPERSPINE])
-         {
             pool[p]->special[SPECIALWOUND_UPPERSPINE]=2;
-         }
          if(!pool[p]->special[SPECIALWOUND_LOWERSPINE])
-         {
             pool[p]->special[SPECIALWOUND_LOWERSPINE]=2;
-         }
 
          // Inflict permanent health damage
          pool[p]->set_attribute(ATTRIBUTE_HEALTH,pool[p]->get_attribute(ATTRIBUTE_HEALTH,0)-healthdamage);
          if(pool[p]->get_attribute(ATTRIBUTE_HEALTH,0)<=0)
-         {
             pool[p]->set_attribute(ATTRIBUTE_HEALTH,1);
-         }
 
          if(pool[p]->blood<=20&&pool[p]->clinic<=2)pool[p]->blood=50;
          if(pool[p]->blood<=50&&pool[p]->clinic<=1)pool[p]->blood=75;
@@ -595,10 +591,8 @@ void passmonth(char &clearformess,char canseethings)
             location[pool[p]->location]->type==SITE_HOSPITAL_CLINIC)
          {
             int hospital;
-            for(hospital=0;hospital<(int)location.size();++hospital)
-            {
-               if(location[hospital]->type==SITE_HOSPITAL_UNIVERSITY)break;
-            }
+            for(hospital=0;hospital<(int)location.size();hospital++)
+               if(location[hospital]->type==SITE_HOSPITAL_UNIVERSITY) break;
             if(hospital!=(int)location.size())
             {
                pool[p]->location=hospital;
@@ -609,8 +603,8 @@ void passmonth(char &clearformess,char canseethings)
                addstr(location[hospital]->name, gamelog);
                addstr(".", gamelog);
                gamelog.nextMessage();
-               refresh();
-               getch();
+
+               getkey();
             }
          }
 
@@ -618,14 +612,8 @@ void passmonth(char &clearformess,char canseethings)
          if(pool[p]->clinic==0)
          {
             pool[p]->blood=100;
-            if(clearformess)
-            {
-               erase();
-            }
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter(8,0);
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -637,29 +625,17 @@ void passmonth(char &clearformess,char canseethings)
 
             int hs=-1;
             for(int l=0;l<(int)location.size();l++)
-            {
                if(location[l]->type==SITE_RESIDENTIAL_SHELTER)
-               {
-                  hs=l;
-                  break;
-               }
-            }
-            if (hs==-1)
-            {
-               //TODO: Error unable to find location
-               hs=0;
-            }
+               { hs=l; break; }
+            if(hs==-1) hs=0; //TODO: Error unable to find location
 
             if(location[pool[p]->base]->siege.siege||
                location[pool[p]->base]->renting==RENTING_NOCONTROL)
-            {
                pool[p]->base=hs;
-            }
 
             pool[p]->location=pool[p]->base;
 
-            refresh();
-            getch();
+            getkey();
          }
       }
    }
@@ -784,6 +760,3 @@ void updateworld_laws(short *law,short *oldlaw)
       }
    }
 }
-
-
-

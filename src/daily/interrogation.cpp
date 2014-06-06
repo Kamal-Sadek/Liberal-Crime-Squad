@@ -153,31 +153,20 @@ void tendhostage(Creature *cr,char &clearformess)
 {
    vector<Creature *> temppool;
    int p;
-
    Creature *a=NULL;
-
-
 
    //Find all tenders who are set to this hostage
    for(p=0;p<(int)pool.size();p++)
    {
       if(!pool[p]->alive)continue;
-      if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
+      if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
       {
-
-         if(pool[p]->activity.arg==cr->id)
-         {
-            //If they're in the same location as the hostage,
-            //include them in the interrogation
-            if(pool[p]->location==cr->location)
-            {
-               if(pool[p]->location!=-1)
-                  temppool.push_back(pool[p]);
-            }
-            //If they're someplace else, take them off the job
-            else
-               pool[p]->activity.type=ACTIVITY_NONE;
-         }
+         //If they're in the same location as the hostage,
+         //include them in the interrogation
+         if(pool[p]->location==cr->location&&pool[p]->location!=-1)
+            temppool.push_back(pool[p]);
+         //If they're someplace else, take them off the job
+         else pool[p]->activity.type=ACTIVITY_NONE;
       }
    }
 
@@ -202,11 +191,8 @@ void tendhostage(Creature *cr,char &clearformess)
          {
             if(pool[p]==cr)
             {
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter(8,0);
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
@@ -214,20 +200,15 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" has escaped!", gamelog);
                gamelog.nextMessage();
                location[cr->location]->siege.timeuntillocated=3;
-               refresh();
-               getch();
+
+               getkey();
 
                //clear activities for tenders
                for(int i=0;i<(int)pool.size();i++)
                {
                   if(!pool[i]->alive)continue;
-                  if(pool[i]->activity.type==ACTIVITY_HOSTAGETENDING)
-                  {
-                     if(pool[i]->activity.arg==cr->id)
-                     {
-                        pool[i]->activity.type=ACTIVITY_NONE;
-                     }
-                  }
+                  if(pool[i]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[i]->activity.arg==cr->id)
+                     pool[i]->activity.type=ACTIVITY_NONE;
                }
 
                //delete interrogation data
@@ -239,7 +220,7 @@ void tendhostage(Creature *cr,char &clearformess)
          return;
       }
 
-      if(temppool.size()==0)return;
+      if(temppool.size()==0) return;
    }
 
    clearformess=1;
@@ -254,8 +235,7 @@ void tendhostage(Creature *cr,char &clearformess)
    itoa(cr->joindays,num,10);
    addstr(num);
 
-   refresh();
-   getch();
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -264,27 +244,21 @@ void tendhostage(Creature *cr,char &clearformess)
    int y=3;
 
    {
-      int p;
-
-      int business=0;
-      int religion=0;
-      int science=0;
-
       //each day, the attack roll is initialized to the number of days of the stay with
       //the LCS -- they will eventually break, but also eventually become too traumatized
       //to continue
-      int attack = 0;
+      int p,business=0,religion=0,science=0,attack=0;
+
       int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
 
       map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
-      int* _attack   = new int[temppool.size()];
+      int* _attack = new int[temppool.size()];
 
       for(p=0;p<(int)temppool.size();p++)
       {
          _attack[p] = 0;
          if(temppool[p]!=NULL)
-         {
             if(temppool[p]->alive)
             {
                if(temppool[p]->get_skill(SKILL_BUSINESS)>business)
@@ -295,37 +269,22 @@ void tendhostage(Creature *cr,char &clearformess)
                   science=temppool[p]->get_skill(SKILL_SCIENCE);
 
                _attack[p] = (temppool[p]->get_attribute(ATTRIBUTE_HEART,true)-
-                            temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+
-                            temppool[p]->get_skill(SKILL_PSYCHOLOGY)*2);
+                             temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)+
+                             temppool[p]->get_skill(SKILL_PSYCHOLOGY)*2);
 
                _attack[p] += temppool[p]->get_armor().get_interrogation_basepower();
 
-               if(_attack[p] < 0)
-                  _attack[p] = 0;
-
-               if(_attack[p]>attack)
-               {
-                  attack=_attack[p];
-               }
+               if(_attack[p]<0) _attack[p]=0;
+               if(_attack[p]>attack) attack=_attack[p];
             }
-         }
       }
 
       vector<int> goodp;
 
       for(p=0;p<(int)temppool.size();p++)
-      {
          if(temppool[p]!=NULL)
-         {
-            if(temppool[p]->alive)
-            {
-               if(_attack[p]==attack)
-               {
-                  goodp.push_back(p);
-               }
-            }
-         }
-      }
+            if(temppool[p]->alive&&_attack[p]==attack)
+               goodp.push_back(p);
       a=temppool[goodp[LCSrandom(goodp.size())]];
 
       attack+=temppool.size();
@@ -341,12 +300,10 @@ void tendhostage(Creature *cr,char &clearformess)
 
       bool techniques[6];
       //recall interrogation plan
-      for(int i=0; i<6; i++)
-      {
+      for(int i=0;i<6;i++)
          techniques[i]=reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i];
-      }
 
-      while(1)
+      while(true)
       {
          y=2;
          if(techniques[TECHNIQUE_KILL])
@@ -361,22 +318,22 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          if(techniques[TECHNIQUE_KILL])set_color(COLOR_BLACK,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_TALK]);
-         move(y,0);y+=1;addstr("A - ");
+         move(y++,0);addstr("A - ");
          if(!techniques[TECHNIQUE_TALK]) addstr("No Verbal Contact     ");
          else addstr("Attempt to Convert");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_RESTRAIN]);
-         move(y,0);y+=1;addstr("B - ");
+         move(y++,0);addstr("B - ");
          if(!techniques[TECHNIQUE_RESTRAIN]) addstr("No ");
          addstr("Physical Restraints   ");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_BEAT]);
-         move(y,0);y+=1;addstr("C - ");
+         move(y++,0);addstr("C - ");
          if(!techniques[TECHNIQUE_BEAT]) addstr("Not ");
          addstr("Violently Beaten    ");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_PROPS]);
          move(y,0);addstr("D - ");
          if(!techniques[TECHNIQUE_PROPS])addstr("No ");
          addstr("Expensive Props     ");
-         move(y,27);y+=1;
+         move(y++,27);
          addstr("($250)");
          if(!techniques[TECHNIQUE_KILL])set_color(COLOR_WHITE,COLOR_BLACK,techniques[TECHNIQUE_DRUGS]);
          move(y,0);addstr("E - ");
@@ -388,29 +345,26 @@ void tendhostage(Creature *cr,char &clearformess)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);y+=2;addstr("K - Kill the Hostage");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);y+=1;addstr("Press Enter to Confirm the Plan");
+         move(y++,0);addstr("Press Enter to Confirm the Plan");
 
          show_interrogation_sidebar(cr,a);
 
-         int c=getch();
-         translategetch(c);
-         if(c>='a'&&c<='e')techniques[c-'a']=!techniques[c-'a'];
-         if(c=='k')techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
-         if(c==10||c==ESC)break;
+         int c=getkey();
+         if(c>='a'&&c<='e') techniques[c-'a']=!techniques[c-'a'];
+         if(c=='k') techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
+         if(c==10||c==ESC) break;
       }
 
-      if(techniques[TECHNIQUE_PROPS] && ledger.get_funds()>=250)
-      { ledger.subtract_funds(250,EXPENSE_HOSTAGE); }
-      else { techniques[TECHNIQUE_PROPS] = 0; }
-      if(techniques[TECHNIQUE_DRUGS] && ledger.get_funds()>=50)
-      { ledger.subtract_funds(50,EXPENSE_HOSTAGE); }
-      else { techniques[TECHNIQUE_DRUGS] = 0; }
+      if(techniques[TECHNIQUE_PROPS]&&ledger.get_funds()>=250)
+         ledger.subtract_funds(250,EXPENSE_HOSTAGE);
+      else techniques[TECHNIQUE_PROPS]=0;
+      if(techniques[TECHNIQUE_DRUGS]&&ledger.get_funds()>=50)
+         ledger.subtract_funds(50,EXPENSE_HOSTAGE);
+      else techniques[TECHNIQUE_DRUGS]=0;
 
       //remember interrogation choices
-      for(int i=0; i<6; i++)
-      {
+      for(int i=0;i<6;i++)
          reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i]=techniques[i];
-      }
 
       if(techniques[TECHNIQUE_KILL]) // Kill the Hostage
       {
@@ -428,14 +382,9 @@ void tendhostage(Creature *cr,char &clearformess)
          a=NULL;
 
          for(int i=0;i<(int)temppool.size();++i)
-         {
             if((int)LCSrandom(50)<temppool[i]->juice||
                LCSrandom(9)+1>=temppool[i]->get_attribute(ATTRIBUTE_HEART,0))
-            {
-               a=temppool[i];
-               break;
-            }
-         }
+            {  a=temppool[i]; break; }
 
          if(a)
          {
@@ -444,43 +393,45 @@ void tendhostage(Creature *cr,char &clearformess)
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             cr->die();
             stat_kills++;
-            move(y,0);y++;
+            move(y++,0);
             addstr(a->name, gamelog);
             addstr(" executes ", gamelog);
             addstr(cr->name, gamelog);
             addstr(" by ", gamelog);
             switch(LCSrandom(5))
             {
-               case 0:addstr("strangling it to death.", gamelog);break;
-               case 1:addstr("beating it to death.", gamelog);break;
-               case 2:addstr("burning photos of Reagan in front of it.", gamelog);break;
-               case 3:addstr("telling it that taxes have been increased.", gamelog);break;
-               case 4:addstr("telling it its parents wanted to abort it.", gamelog);break;
+            case 0: addstr("strangling it to death.", gamelog); break;
+            case 1: addstr("beating it to death.", gamelog); break;
+            case 2: addstr("burning photos of Reagan in front of it.", gamelog); break;
+            case 3: addstr("telling it that taxes have been increased.", gamelog); break;
+            case 4: addstr("telling it its parents wanted to abort it.", gamelog); break;
             }
             //show_interrogation_sidebar(cr,a);
-            refresh();getch();
+
+            getkey();
+
             if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
             {
                gamelog.newline();
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(a->name, gamelog);
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
-               move(y,0);y++;
+               move(y++,0);
                switch(LCSrandom(4))
                {
-                  case 0:addstr("throws up in a trash can.", gamelog);break;
-                  case 1:addstr("gets drunk, eventually falling asleep.", gamelog);break;
-                  case 2:addstr("curls up in a ball, crying softly.", gamelog);break;
-                  case 3:addstr("shoots up and collapses in a heap on the floor.", gamelog);break;
+               case 0: addstr("throws up in a trash can.", gamelog); break;
+               case 1: addstr("gets drunk, eventually falling asleep.", gamelog); break;
+               case 2: addstr("curls up in a ball, crying softly.", gamelog); break;
+               case 3: addstr("shoots up and collapses in a heap on the floor.", gamelog); break;
                }
             }
             else if(!LCSrandom(3))
             {
                gamelog.newline();
                set_color(COLOR_CYAN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(a->name, gamelog);
                addstr(" grows colder.", gamelog);
                a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
@@ -490,9 +441,9 @@ void tendhostage(Creature *cr,char &clearformess)
          else
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,0);
-            move(y,0);y++;
+            move(y++,0);
             addstr("There is no one able to get up the nerve to ", gamelog);
-            move(y,0);y++;
+            move(y++,0);
             addstr("execute ", gamelog);
             addstr(cr->name, gamelog);
             addstr(" in cold blood.", gamelog);
@@ -507,28 +458,22 @@ void tendhostage(Creature *cr,char &clearformess)
             //Food and restraint settings will be applied as normal
          }
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(24,0);
          addstr("Press any key to reflect on this.");
 
-         refresh();
-         getch();
+         getkey();
 
          if(cr->alive==0)
          {
             for(int p=0;p<(int)pool.size();p++)
             {
-               if(!pool[p]->alive)continue;
-               if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
-               {
-                  if(pool[p]->activity.arg==cr->id)
-                  {
-                     pool[p]->activity.type=ACTIVITY_NONE;
-                  }
-               }
+               if(!pool[p]->alive) continue;
+               if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
+                  pool[p]->activity.type=ACTIVITY_NONE;
             }
             delete[] _attack;
             return;
@@ -545,16 +490,14 @@ void tendhostage(Creature *cr,char &clearformess)
       itoa(cr->joindays,num,10);
       addstr(num, gamelog);
       gamelog.newline();
-      y=2;
 
-      move(y,0);
+      move((y=2)++,0);
       addstr("The Automaton", gamelog);
       if(techniques[TECHNIQUE_RESTRAIN]) // Restraint
       {
          addstr(" is tied hands and feet to a metal chair", gamelog);
-         y++;move(y,0);
+         move(y++,0);
          addstr("in the middle of a back room.", gamelog);
-         y++;
          gamelog.newline();
 
          attack+=5;
@@ -562,14 +505,13 @@ void tendhostage(Creature *cr,char &clearformess)
       else
       {
          addstr(" is locked in a back room ", gamelog);
-         y++;move(y,0);
+         move(y++,0);
          addstr("converted into a makeshift cell.", gamelog);
          gamelog.newline();
-         y++;
       }
       //show_interrogation_sidebar(cr,a);
-      refresh();
-      getch();
+
+      getkey();
 
       if(techniques[TECHNIQUE_DRUGS]) // Hallucinogenic drugs
       {
@@ -585,24 +527,21 @@ void tendhostage(Creature *cr,char &clearformess)
          {
             cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
             move(++y,0);
-            refresh();
-            getch();
+
+            getkey();
 
             addstr(cr->name, gamelog);
             addstr(" foams at the mouth and its eyes roll back in its skull.", gamelog);
             gamelog.newline();
             move(++y,0);
-            refresh();
-            getch();
+
+            getkey();
 
             Creature* doctor=a; // the lead interrogator is doctor by default
             int maxskill=doctor->get_skill(SKILL_FIRSTAID);
-            for(int i=0;i<(int)temppool.size();++i) // search for the best doctor
+            for(int i=0;i<(int)temppool.size();i++) // search for the best doctor
                if(temppool[i]->get_skill(SKILL_FIRSTAID)>maxskill)
-               {
-                  doctor=temppool[i]; // we found a doctor
-                  maxskill=doctor->get_skill(SKILL_FIRSTAID);
-               }
+                  maxskill=(doctor=temppool[i])->get_skill(SKILL_FIRSTAID); // we found a doctor
 
             if(cr->get_attribute(ATTRIBUTE_HEALTH,false)<=0 || !maxskill) // he's dead, Jim
             {
@@ -627,8 +566,9 @@ void tendhostage(Creature *cr,char &clearformess)
                }
                gamelog.newline();
                move(++y,0);
-               refresh();
-               getch();
+
+               getkey();
+
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
                if(maxskill)
                {
@@ -655,8 +595,9 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(" deftly rescues it from cardiac arrest with a defibrillator.", gamelog); // not long enough for near-death experience
                   gamelog.newline();
                   move(++y,0);
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   addstr(doctor->name, gamelog);
                   addstr(" skillfully saves ", gamelog);
                   addstr(cr->name, gamelog);
@@ -670,8 +611,9 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(" clumsily rescues it from cardiac arrest with a defibrillator.", gamelog);
                   gamelog.newline();
                   move(++y,0);
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   addstr(cr->name, gamelog);
                   if(cr->get_skill(SKILL_RELIGION)) // the patient was out long enough to have a near-death experience
                      addstr(" had a near-death experience and met God in heaven.", gamelog);
@@ -685,14 +627,13 @@ void tendhostage(Creature *cr,char &clearformess)
          attack+=drugbonus; // now we finally apply the drug bonus
          move(++y,0);
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
       }
 
       if(techniques[TECHNIQUE_BEAT]&&!turned&&cr->alive) // Beating
       {
-         y+=1;
-         move(y,0);
+         move(++y,0);
 
          int forceroll=0;
          bool tortured=0;
@@ -728,11 +669,9 @@ void tendhostage(Creature *cr,char &clearformess)
             case 5:addstr(" beats the hostage with a belt", gamelog);break;
             }
             addstr(", ", gamelog);
-            y++;
-            move(y,0);
+            move(++y,0);
             addstr("screaming \"", gamelog);
-            int i=0;
-            while(i<2)
+            for(int i=0;i<2;i++)
             {
                switch(LCSrandom(10))
                {
@@ -747,8 +686,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 8:addstr("Do you love me?", gamelog);break;
                case 9:addstr("I am your God", gamelog);break;
                }
-               if(++i<2)
-                  addstr("! ", gamelog);
+               if(i<1) addstr("! ", gamelog);
             }
             addstr("!\" in its face.", gamelog);
             gamelog.newline();
@@ -788,8 +726,7 @@ void tendhostage(Creature *cr,char &clearformess)
                }
             }
             addstr(", ", gamelog);
-            y++;
-            move(y,0);
+            move(++y,0);
             switch(LCSrandom(4))
             {
             case 0:addstr("scream", gamelog);break;
@@ -798,8 +735,7 @@ void tendhostage(Creature *cr,char &clearformess)
             case 3:addstr("holler", gamelog);break;
             }
             addstr("ing \"", gamelog);
-            int i=0;
-            while(i<3)
+            for(int i=0;i<3;i++)
             {
                switch(LCSrandom(20))
                {
@@ -825,8 +761,7 @@ void tendhostage(Creature *cr,char &clearformess)
                case 19:addstr("Wiretapping", gamelog);break;
 
                }
-               if(++i<3)
-                  addstr("! ", gamelog);
+               if(i<2) addstr("! ", gamelog);
             }
             addstr("!\" in its face.", gamelog);
             gamelog.newline();
@@ -836,14 +771,14 @@ void tendhostage(Creature *cr,char &clearformess)
          cr->blood-=(5 + LCSrandom(5)) * (1+techniques[TECHNIQUE_PROPS]);
 
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
 
          if(!(cr->attribute_check(ATTRIBUTE_HEALTH,forceroll)))
          {
             if(cr->skill_check(SKILL_RELIGION,forceroll))
             {
-               move(y,0);
+               move(y++,0);
                addstr(cr->name, gamelog);
                if(!techniques[TECHNIQUE_DRUGS])
                {
@@ -863,12 +798,11 @@ void tendhostage(Creature *cr,char &clearformess)
                   }
                   gamelog.newline();
                }
-               y++;
             }
             else if(forceroll >
-                     cr->get_attribute(ATTRIBUTE_WISDOM,true)*3+
-                     cr->get_attribute(ATTRIBUTE_HEART,true)*3+
-                     cr->get_attribute(ATTRIBUTE_HEALTH,true)*3)
+                    cr->get_attribute(ATTRIBUTE_WISDOM,true)*3+
+                    cr->get_attribute(ATTRIBUTE_HEART,true)*3+
+                    cr->get_attribute(ATTRIBUTE_HEALTH,true)*3)
             {
                move(y++,0);
                addstr(cr->name, gamelog);
@@ -893,11 +827,7 @@ void tendhostage(Creature *cr,char &clearformess)
                gamelog.newline();
                if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
 
-               if(LCSrandom(2) && cr->juice>0)
-               {
-                  cr->juice-=forceroll;
-                  if(cr->juice<0)cr->juice=0;
-               }
+               if(LCSrandom(2)&&cr->juice>0) { if((cr->juice-=forceroll)<0) cr->juice=0; }
                else if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10));
@@ -907,19 +837,19 @@ void tendhostage(Creature *cr,char &clearformess)
                if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
                {
                   //show_interrogation_sidebar(cr,a);
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   move(y++,0);
                   addstr(a->name, gamelog);
                   addstr(" beats information out of the pathetic thing.", gamelog);
                   gamelog.newline();
                   move(y++,0);
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
-                  {
                      addstr("Unfortunately, none of it is useful to the LCS.", gamelog);
-                  }
                   else
                   {
                      addstr("A detailed map has been created of ", gamelog);
@@ -933,17 +863,12 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             else
             {
-               move(y,0);
+               move(y++,0);
                addstr(cr->name, gamelog);
                addstr(" seems to be getting the message.", gamelog);
                gamelog.newline();
-               y++;
 
-               if(cr->juice>0)
-               {
-                  cr->juice-=forceroll;
-                  if(cr->juice<0)cr->juice=0;
-               }
+               if(cr->juice>0) if((cr->juice-=forceroll)<0) cr->juice=0;
 
                if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
@@ -955,10 +880,10 @@ void tendhostage(Creature *cr,char &clearformess)
             if(!(cr->attribute_check(ATTRIBUTE_HEALTH,forceroll/3)))
             {
                //show_interrogation_sidebar(cr,a);
-               refresh();
-               getch();
 
-               move(y,0);
+               getkey();
+
+               move(y++,0);
                if(cr->get_attribute(ATTRIBUTE_HEALTH,false)>1)
                {
                   cr->adjust_attribute(ATTRIBUTE_HEALTH,-1);
@@ -974,30 +899,29 @@ void tendhostage(Creature *cr,char &clearformess)
                   gamelog.newline();
                   cr->die();
                }
-               y++;
             }
          }
          else
          {
-            move(y,0);
+            move(y++,0);
             addstr(cr->name, gamelog);
             addstr(" takes it well.", gamelog);
             gamelog.newline();
-            y++;
          }
          //show_interrogation_sidebar(cr,a);
-         getch();
+
+         getkey();
 
          if(tortured && cr->alive)
          {
             if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(a->name, gamelog);
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
-               move(y,0);y++;
+               move(y++,0);
                switch(LCSrandom(4))
                {
                   case 0:addstr("throws up in a trash can.", gamelog);break;
@@ -1010,7 +934,7 @@ void tendhostage(Creature *cr,char &clearformess)
             else if(!LCSrandom(3))
             {
                set_color(COLOR_CYAN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(a->name, gamelog);
                addstr(" grows colder.", gamelog);
                gamelog.newline();
@@ -1028,8 +952,7 @@ void tendhostage(Creature *cr,char &clearformess)
          if(!techniques[TECHNIQUE_RESTRAIN])attack += 5;
          attack += int(rapport[a->id] * 3);
 
-         y+=1;
-         move(y,0);
+         move((++y)++,0);
          addstr(a->name, gamelog);
 
          if(techniques[TECHNIQUE_PROPS])//props
@@ -1069,15 +992,14 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr(cr->name, gamelog);
          addstr(".", gamelog);
          gamelog.newline();
-         y++;
 
          //Hallucinogenic drugs:
          //Re-interprets lead interrogator
          if(techniques[TECHNIQUE_DRUGS])
          {
             //show_interrogation_sidebar(cr,a);
-            refresh();
-            getch();
+
+            getkey();
 
             move(y++,0);
             if(cr->skill_check(SKILL_PSYCHOLOGY,DIFFICULTY_CHALLENGING))
@@ -1145,7 +1067,7 @@ void tendhostage(Creature *cr,char &clearformess)
                   break;
                case 1:
                   addstr(cr->name, gamelog);
-                  if(!techniques[TECHNIQUE_RESTRAIN])addstr(" curls up and", gamelog);
+                  if(!techniques[TECHNIQUE_RESTRAIN]) addstr(" curls up and", gamelog);
                   addstr(" begs for the nightmare to end.", gamelog);
                   break;
                case 2:
@@ -1203,12 +1125,12 @@ void tendhostage(Creature *cr,char &clearformess)
          }
 
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
 
          if(cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
          {
-            move(y,0);
+            move(y++,0);
             switch(LCSrandom(4))
             {
             case 0:addstr(cr->name, gamelog);
@@ -1226,13 +1148,12 @@ void tendhostage(Creature *cr,char &clearformess)
                   addstr(" seems resistant to this form of interrogation.", gamelog);
                   break;
             }
-            y++;
          }
          //Attempt to convert when the target is brutally treated will
          //just alienate them and make them cynical
          else if(techniques[TECHNIQUE_BEAT] || rapport_temp < -2)
          {
-            move(y,0);
+            move(y++,0);
             addstr(cr->name, gamelog);
             switch(LCSrandom(7))
             {
@@ -1248,8 +1169,10 @@ void tendhostage(Creature *cr,char &clearformess)
             if(a->skill_check(SKILL_SEDUCTION,DIFFICULTY_CHALLENGING))
             {
                //show_interrogation_sidebar(cr,a);
-               getch();
-               move(++y,0);
+
+               getkey();
+
+               move(y++,0);
                addstr(a->name, gamelog);
                switch(LCSrandom(7))
                {
@@ -1266,42 +1189,43 @@ void tendhostage(Creature *cr,char &clearformess)
                if(rapport[a->id]>3)
                {
                   //show_interrogation_sidebar(cr,a);
-                  getch();
-                  move(++y,0);
+
+                  getkey();
+
+                  move(y++,0);
                   addstr(cr->name, gamelog);
                   switch(LCSrandom(7))
                   {
                   case 0:addstr(" emotionally clings to ", gamelog);
-                     addstr(a->name, gamelog);
-                     addstr("'s sympathy.", gamelog);break;
+                         addstr(a->name, gamelog);
+                         addstr("'s sympathy.", gamelog); break;
                   case 1:addstr(" begs ", gamelog);
-                     addstr(a->name, gamelog);
-                     addstr(" for help.", gamelog);break;
-                  case 2:addstr(" promises to be good.", gamelog);break;
-                  case 3:addstr(" reveals childhood pains.", gamelog);break;
+                         addstr(a->name, gamelog);
+                         addstr(" for help.", gamelog); break;
+                  case 2:addstr(" promises to be good.", gamelog); break;
+                  case 3:addstr(" reveals childhood pains.", gamelog); break;
                   case 4:addstr(" thanks ", gamelog);
-                     addstr(a->name, gamelog);
-                     addstr(" for being merciful.", gamelog);break;
+                         addstr(a->name, gamelog);
+                         addstr(" for being merciful.", gamelog); break;
                   case 5:addstr(" cries in ", gamelog);
-                     addstr(a->name, gamelog);
-                     addstr("'s arms.", gamelog);break;
+                         addstr(a->name, gamelog);
+                         addstr("'s arms.", gamelog); break;
                   case 6:addstr(" really likes ", gamelog);
-                     addstr(a->name, gamelog);
-                     addstr(".", gamelog);break;
+                         addstr(a->name, gamelog);
+                         addstr(".", gamelog); break;
                   }
                   gamelog.newline();
 
-                  if(rapport[a->id]>5)turned=1;
+                  if(rapport[a->id]>5) turned=1;
                }
             }
 
-            if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
-            y++;
+            if(cr->get_attribute(ATTRIBUTE_HEART,false)>1) cr->adjust_attribute(ATTRIBUTE_HEART,-1);
          }
          //Failure to break religious convictions
          else if(cr->get_skill(SKILL_RELIGION)>a->get_skill(SKILL_RELIGION)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
-            move(y,0);
+            move(y++,0);
             switch(LCSrandom(4))
             {
             case 0:addstr(a->name);
@@ -1324,12 +1248,11 @@ void tendhostage(Creature *cr,char &clearformess)
             gamelog.newline();
 
             a->train(SKILL_RELIGION,cr->get_skill(SKILL_RELIGION)*4);
-            y++;
          }
          //Failure to persuade entrenched capitalists
          else if(cr->get_skill(SKILL_BUSINESS)>a->get_skill(SKILL_BUSINESS)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
-            move(y,0);
+            move(y++,0);
             switch(LCSrandom(4))
             {
             case 0:addstr(cr->name, gamelog);
@@ -1352,12 +1275,11 @@ void tendhostage(Creature *cr,char &clearformess)
             gamelog.newline();
 
             a->train(SKILL_BUSINESS,cr->get_skill(SKILL_BUSINESS)*4);
-            y++;
          }
          //Failure to persuade scientific minds
          else if(cr->get_skill(SKILL_SCIENCE)>a->get_skill(SKILL_SCIENCE)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
-            move(y,0);
+            move(y++,0);
             switch(LCSrandom(4))
             {
             case 0:addstr(cr->name, gamelog);
@@ -1382,7 +1304,6 @@ void tendhostage(Creature *cr,char &clearformess)
             gamelog.newline();
 
             a->train(SKILL_SCIENCE,cr->get_skill(SKILL_SCIENCE)*4);
-            y++;
          }
          //Target is swayed by Liberal Reason -- skilled interrogators, time held,
          //and rapport contribute to the likelihood of this
@@ -1391,23 +1312,21 @@ void tendhostage(Creature *cr,char &clearformess)
             if(cr->juice>0)
             {
                cr->juice-=attack;
-               if(cr->juice<0)cr->juice=0;
+               if(cr->juice<0) cr->juice=0;
             }
 
             if(cr->get_attribute(ATTRIBUTE_HEART,false)<10)
-            {
                cr->adjust_attribute(ATTRIBUTE_HEART,+1);
-            }
             //Improve rapport with interrogator
             rapport[a->id]+=1.5;
 
             //Join LCS??
             //1) They were liberalized
-            if(cr->get_attribute(ATTRIBUTE_HEART,true)>cr->get_attribute(ATTRIBUTE_WISDOM,true)+4)turned=1;
+            if(cr->get_attribute(ATTRIBUTE_HEART,true)>cr->get_attribute(ATTRIBUTE_WISDOM,true)+4) turned=1;
             //2) They were befriended
-            if(rapport[a->id]>4)turned=1;
+            if(rapport[a->id]>4) turned=1;
 
-            move(y,0);
+            move(y++,0);
             addstr(cr->name, gamelog);
             switch(LCSrandom(5))
             {
@@ -1418,11 +1337,9 @@ void tendhostage(Creature *cr,char &clearformess)
             case 4:addstr(" grudgingly admits sympathy for LCS ideals.", gamelog);break;
             }
             gamelog.newline();
-            y++;
             if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
             {
-               y++;
-               move(y++,0);
+               move((++y)++,0);
                addstr(cr->name, gamelog);
                addstr(" reveals details about the ", gamelog);
                addstr(location[cr->worklocation]->name, gamelog);
@@ -1450,11 +1367,10 @@ void tendhostage(Creature *cr,char &clearformess)
             //Not completely unproductive; builds rapport
             rapport[a->id]+=0.2f;
 
-            move(y,0);
+            move(y++,0);
             addstr(cr->name, gamelog);
             addstr(" holds firm.", gamelog);
             gamelog.newline();
-            y++;
          }
          //Target actually wins the argument so successfully that the Liberal
          //interrogator's convictions are the ones that are shaken
@@ -1466,27 +1382,24 @@ void tendhostage(Creature *cr,char &clearformess)
 
             a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
 
-            move(y,0);
+            move(y++,0);
             addstr(cr->name, gamelog);
             addstr(" turns the tables on ", gamelog);
             addstr(a->name, gamelog);
             addstr("!", gamelog);
             gamelog.newline();
-            y++;
 
             //show_interrogation_sidebar(cr,a);
-            refresh();
-            getch();
+            getkey();
 
-            move(y,0);
+            move(y++,0);
             addstr(a->name, gamelog);
             addstr(" has been tainted with wisdom!", gamelog);
             gamelog.newline();
-            y++;
          }
 
          //show_interrogation_sidebar(cr,a);
-         getch();
+         getkey();
       }
 
       //Lead interrogator gets bonus experience
@@ -1494,8 +1407,6 @@ void tendhostage(Creature *cr,char &clearformess)
       //Others also get experience
       for(int i=0;i<(int)temppool.size();i++)
          temppool[i]->train(SKILL_PSYCHOLOGY,(attack/4)+1);
-
-
 
       //Possibly suicidal when heart is down to 1 and prisoner has already been
       //captive for a week without rescue
@@ -1511,11 +1422,11 @@ void tendhostage(Creature *cr,char &clearformess)
             //can't cut self if restrained
             switch(LCSrandom(5-techniques[TECHNIQUE_RESTRAIN]))
             {
-            case 0:addstr(" mutters about death.", gamelog);break;
-            case 1:addstr(" broods darkly.", gamelog);break;
-            case 2:addstr(" has lost hope of rescue.", gamelog);break;
-            case 3:addstr(" is making peace with God.", gamelog);break;
-            case 4:addstr(" is bleeding from self-inflicted wounds.", gamelog);cr->blood-=LCSrandom(15)+10;break;
+            case 0: addstr(" mutters about death.", gamelog); break;
+            case 1: addstr(" broods darkly.", gamelog); break;
+            case 2: addstr(" has lost hope of rescue.", gamelog); break;
+            case 3: addstr(" is making peace with God.", gamelog); break;
+            case 4: addstr(" is bleeding from self-inflicted wounds.", gamelog); cr->blood-=LCSrandom(15)+10; break;
             }
             gamelog.newline();
          }
@@ -1529,8 +1440,8 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          y++;
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
       }
 
       //Death
@@ -1541,8 +1452,7 @@ void tendhostage(Creature *cr,char &clearformess)
          cr->die();
 
          stat_kills++;
-         y++;
-         move(y,0);
+         move(++y,0);
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr(cr->name, gamelog);
          addstr(" is dead", gamelog);
@@ -1552,26 +1462,24 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(a->name, gamelog);
             addstr("'s interrogation.", gamelog);
          }
-         else
-         {
-            addstr(".", gamelog);
-         }
+         else addstr(".", gamelog);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          y++;
          //show_interrogation_sidebar(cr,a);
-         refresh();
-         getch();
+
+         getkey();
+
          if(a)
          {
             if(LCSrandom(a->get_attribute(ATTRIBUTE_HEART,false)))
             {
                gamelog.newline();
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(++y,0);
                addstr(a->name, gamelog);
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
-               move(y,0);y++;
+               move(++y,0);
                switch(LCSrandom(4))
                {
                   case 0:addstr("throws up in a trash can.", gamelog);break;
@@ -1584,7 +1492,7 @@ void tendhostage(Creature *cr,char &clearformess)
             {
                gamelog.newline();
                set_color(COLOR_CYAN,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(++y,0);
                addstr(a->name, gamelog);
                addstr(" grows colder.", gamelog);
                a->adjust_attribute(ATTRIBUTE_WISDOM,+1);
@@ -1595,7 +1503,7 @@ void tendhostage(Creature *cr,char &clearformess)
       delete[] _attack;
    }
    #ifdef AUTOENLIGHTEN
-      turned=1;// Lucky!
+   turned=1;// Lucky!
    #endif
 
    if(turned&&cr->alive)
@@ -1604,12 +1512,11 @@ void tendhostage(Creature *cr,char &clearformess)
       //delete interrogation information
       delete reinterpret_cast<interrogation*>(cr->activity.arg);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      y++;
-      move(y,0);
+      move(++y,0);
       addstr("The Automaton has been Enlightened!   Your Liberal ranks are swelling!", gamelog);
       if(cr->get_attribute(ATTRIBUTE_HEART,true)>7 &&
          cr->get_attribute(ATTRIBUTE_WISDOM,true)>2 &&
-         !LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
+        !LCSrandom(4) && (cr->flag & CREATUREFLAG_KIDNAPPED))
       {
          move(++y,0);
          gamelog.newline();
@@ -1621,13 +1528,8 @@ void tendhostage(Creature *cr,char &clearformess)
       cr->flag|=CREATUREFLAG_BRAINWASHED;
 
       for(int p=0;p<(int)pool.size();p++)
-      {
-         if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING &&
-            pool[p]->activity.arg==cr->id)
-         {
+         if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
             pool[p]->activity.type=ACTIVITY_NONE;
-         }
-      }
 
       y+=2;
       liberalize(*cr,false);
@@ -1645,9 +1547,7 @@ void tendhostage(Creature *cr,char &clearformess)
          gamelog.newline();
          move(++y,0);
          if(location[cr->worklocation]->type<=SITE_RESIDENTIAL_SHELTER)
-         {
             addstr("Unfortunately, none of it is useful to the LCS.", gamelog);
-         }
          else
          {
             addstr(a->name, gamelog);
@@ -1660,41 +1560,27 @@ void tendhostage(Creature *cr,char &clearformess)
 
       if(cr->flag & CREATUREFLAG_MISSING && !(cr->flag & CREATUREFLAG_KIDNAPPED))
       {
-         refresh();
-         getch();
+         getkey();
 
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         y=1;
-         move(y,0);
+         move(y=1,0);
          gamelog.newline();
          addstr(cr->name, gamelog);
          addstr("'s disappearance has not yet been reported.", gamelog);
-         y+=2;
-
-         sleeperize_prompt(*cr,*a,y);
-
+         sleeperize_prompt(*cr,*a,y+=2);
          cr->flag&=~CREATUREFLAG_MISSING;
-
          gamelog.nextMessage();
 
          return;
       }
    }
 
-   if(cr->align==1||!cr->alive)
+   if(cr->align==1||!cr->alive) for(int p=0;p<(int)pool.size();p++)
    {
-      for(int p=0;p<(int)pool.size();p++)
-      {
-         if(!pool[p]->alive)continue;
-         if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING)
-         {
-            if(pool[p]->activity.arg==cr->id)
-            {
-               pool[p]->activity.type=ACTIVITY_NONE;
-            }
-         }
-      }
+      if(!pool[p]->alive) continue;
+      if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
+         pool[p]->activity.type=ACTIVITY_NONE;
    }
 
    gamelog.nextMessage();
@@ -1703,6 +1589,5 @@ void tendhostage(Creature *cr,char &clearformess)
    move(24,0);
    addstr("Press any key to reflect on this.");
 
-   refresh();
-   getch();
+   getkey();
 }

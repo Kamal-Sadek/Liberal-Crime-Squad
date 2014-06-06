@@ -26,6 +26,40 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -302,7 +336,7 @@ void printparty(void)
       char num[20];
 
       move(1,0);
-      addstr("#-CODE NAME------------SKILL---WEAPON---------ARMOR----------HEALTH---TRANSPORT-");
+      addstr("#ÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄWEAPONÄÄÄÄÄÄÄÄÄARMORÄÄÄÄÄÄÄÄÄÄHEALTHÄÄÄTRANSPORTÄ");
 
       for(int p=0;p<6;p++)
       {
@@ -906,35 +940,28 @@ void fullstatus(int p)
       move(0,0);
       addstr("Profile of a Liberal");
 
-      if(page==0)
-         printliberalstats(*activesquad->squad[p]);
-      else if(page==1)
-         printliberalskills(*activesquad->squad[p]);
-      else if (page == 2)
-         printliberalcrimes(*activesquad->squad[p]);
+      if(page==0) printliberalstats(*activesquad->squad[p]);
+      else if(page==1) printliberalskills(*activesquad->squad[p]);
+      else if(page==2) printliberalcrimes(*activesquad->squad[p]);
 
       move(23,0);
       addstr("N - Change Code Name      G - Fix Gender Label");
       if(activesquad->squad[1]!=NULL)
-      {
          addstr("    LEFT/RIGHT - Other Liberals");
-      }
       move(24,0);
       addstr("Press any other key to continue the Struggle");
       addstr("    UP/DOWN  - More Info");
 
-      refresh();
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(activesquad->squad[1]!=NULL&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
       {
          int sx=1;
-         if(c==KEY_LEFT)sx=-1;
+         if(c==KEY_LEFT) sx=-1;
          do
          {
             p=(p+6+sx)%6;
-         }while(activesquad->squad[p]==NULL);
+         } while(activesquad->squad[p]==NULL);
          continue;
       }
 
@@ -948,7 +975,7 @@ void fullstatus(int p)
       if(c==KEY_UP)
       {
          page--;
-         if(page<0)page=pagenum-1;
+         if(page<0) page=pagenum-1;
          page%=pagenum;
          continue;
       }
@@ -968,8 +995,8 @@ void fullstatus(int p)
       else if(c=='g')
       {
          activesquad->squad[p]->gender_liberal++;
-         if(activesquad->squad[p]->gender_liberal > 2)
-            activesquad->squad[p]->gender_liberal = 0;
+         if(activesquad->squad[p]->gender_liberal>2)
+            activesquad->squad[p]->gender_liberal=0;
          continue;
       }
       break;
@@ -1541,7 +1568,10 @@ void makedelimiter(int y,int x)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(y,x);
-   addstr("--------------------------------------------------------------------------------");
+   if(mode==GAMEMODE_SITE&&y==8&&x==0&&mapshowing) // special case: there is a map on the right in site mode
+      addstr("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ");
+   else // normal delimiter
+      addstr("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 }
 
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */

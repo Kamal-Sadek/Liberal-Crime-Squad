@@ -128,8 +128,7 @@ char unlock(short type,char &actual)
             }
          }
 
-         refresh();
-         getch();
+         getkey();
 
          actual=1;
          return 1;
@@ -161,8 +160,8 @@ char unlock(short type,char &actual)
             addstr(" can't figure the lock out.", gamelog);
             gamelog.newline();
          }
-         refresh();
-         getch();
+
+         getkey();
 
          actual=1;
          return 0;
@@ -175,8 +174,8 @@ char unlock(short type,char &actual)
       move(16,1);
       addstr("You can't find anyone to do the job.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
 
    actual=0;
@@ -188,9 +187,8 @@ char unlock(short type,char &actual)
 /* bash attempt */
 char bash(short type,char &actual)
 {
-   int difficulty=0;
-   char crowable=0;
-   int p = 0;
+   int difficulty=0,p=0;
+   bool crowable=false;
 
    switch(type)
    {
@@ -198,18 +196,18 @@ char bash(short type,char &actual)
       if(!securityable(location[cursite]->type))
       {
          difficulty=DIFFICULTY_EASY; // Run down dump
-         crowable=1;
+         crowable=true;
       }
       else if(location[cursite]->type!=SITE_GOVERNMENT_PRISON&&
               location[cursite]->type!=SITE_GOVERNMENT_INTELLIGENCEHQ)
       {
          difficulty=DIFFICULTY_CHALLENGING; // Respectable place
-         crowable=1;
+         crowable=true;
       }
       else
       {
          difficulty=DIFFICULTY_FORMIDABLE; // Very high security
-         crowable=0;
+         crowable=false;
       }
       break;
    }
@@ -218,14 +216,14 @@ char bash(short type,char &actual)
    {
       //if(!squadhasitem(*activesquad,ITEM_WEAPON,WEAPON_CROWBAR))
       //{
-         crowable=0;
+         crowable=false;
 
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]!=NULL)
             {
                if (activesquad->squad[p]->get_weapon().auto_breaks_locks())
-                  crowable = 1;
+                  crowable = true;
             }
          }
 
@@ -236,8 +234,8 @@ char bash(short type,char &actual)
                if(activesquad->loot[l]->is_weapon())
                {
                   Weapon *w = static_cast<Weapon*>(activesquad->loot[l]); //cast -XML
-                   if (w->auto_breaks_locks())
-                     crowable = 1;
+                  if (w->auto_breaks_locks())
+                     crowable = true;
                }
             }
          }
@@ -278,29 +276,25 @@ char bash(short type,char &actual)
       switch(type)
       {
       case BASH_DOOR:
-         if(crowable)
-            addstr("uses a crowbar on the door", gamelog);
+         if(crowable) addstr("uses a crowbar on the door", gamelog);
          else if(activesquad->squad[maxp]->get_weapon().get_bashstrengthmod()>1)
             addstr("smashes in the door", gamelog);
          else if(activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
             addstr("rams open the door", gamelog);
-         else
-            addstr("kicks in the door", gamelog);
+         else addstr("kicks in the door", gamelog);
          break;
       }
       addstr("!", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       int timer = 5;
-      if(crowable)
-         timer = 20;
+      if(crowable) timer = 20;
 
       if(sitealarmtimer<0 || sitealarmtimer>timer)
          sitealarmtimer=timer;
-      else
-         sitealarmtimer=0;
+      else sitealarmtimer=0;
 
       //Bashing doors in secure areas sets off alarms
       if((location[cursite]->type==SITE_GOVERNMENT_PRISON ||
@@ -312,8 +306,8 @@ char bash(short type,char &actual)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Alarms go off!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
       }
 
       actual=1;
@@ -330,21 +324,17 @@ char bash(short type,char &actual)
          case BASH_DOOR:
             if(activesquad->squad[maxp]->flag&CREATUREFLAG_WHEELCHAIR)
                addstr(" rams into the door", gamelog);
-            else
-               addstr(" kicks the door", gamelog);
+            else addstr(" kicks the door", gamelog);
             break;
       }
       addstr("!", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
 
-      if(sitealarmtimer<0)
-         sitealarmtimer=25;
-      else if(sitealarmtimer>10)
-         sitealarmtimer-=10;
-      else
-         sitealarmtimer=0;
+      getkey();
+
+      if(sitealarmtimer<0) sitealarmtimer=25;
+      else if(sitealarmtimer>10) sitealarmtimer-=10;
+      else sitealarmtimer=0;
 
       actual=1;
       return 0;
@@ -367,33 +357,29 @@ char hack(short type,char &actual)
    case HACK_VAULT:difficulty=DIFFICULTY_CHALLENGING;break;
    }
 
-   int maxattack=0;
-   char blind=0;
-   int hacker = -1;
+   int maxattack=0,maxblindattack=-3,hacker=-1,blind=-1;
 
-   for(p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)
+   for(p=0;p<6;p++) if(activesquad->squad[p]!=NULL)
+      if(activesquad->squad[p]->alive && activesquad->squad[p]->get_skill(SKILL_COMPUTERS))
       {
-         if(activesquad->squad[p]->alive && activesquad->squad[p]->get_skill(SKILL_COMPUTERS))
-         {
-            int roll = activesquad->squad[p]->skill_roll(SKILL_COMPUTERS);
-            if(roll>maxattack)
-            {
-               if(!activesquad->squad[p]->special[SPECIALWOUND_RIGHTEYE]&&
-                  !activesquad->squad[p]->special[SPECIALWOUND_LEFTEYE])
-               {
-                  blind=1;
-               }
-               else
-               {
-                  maxattack = roll;
-                  hacker = p;
-               }
-            }
+         int roll = activesquad->squad[p]->skill_roll(SKILL_COMPUTERS);
+         if(!activesquad->squad[p]->special[SPECIALWOUND_RIGHTEYE]&&
+            !activesquad->squad[p]->special[SPECIALWOUND_LEFTEYE])
+         {  // we got a blind person here
+            roll-=3; // blindness handicaps you by 3, highest roll you can get is 15 instead of 18
+            if(roll>maxblindattack) maxblindattack=roll,blind=p; // best blind hacker so far
+         }
+         else
+         {  // we got someone who can see here
+            if(roll>maxattack) maxattack=roll,hacker=p; // best hacker with eyeballs so far
          }
       }
-   }
+
+   if(blind>-1&&(hacker==-1||(maxblindattack>maxattack&&maxblindattack>0)))
+      hacker=blind,maxattack=maxblindattack,blind=true; // the best hacker is a blind person
+   else if(blind>-1&&hacker==-1&&maxblindattack<=0)
+      blind=true; // we only have a blind hacker, and their roll with the handicap is 0 or less
+   else blind=false; // either our hacker has eyeballs or there is no hacker at all
 
    if(hacker > -1)
    {
@@ -405,14 +391,18 @@ char hack(short type,char &actual)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[hacker]->name, gamelog);
+         if(!blind) addstr(" has", gamelog);
          switch(type)
          {
-         case HACK_SUPERCOMPUTER:addstr(" has burned a disk of top secret files!", gamelog);break;
-         case HACK_VAULT:addstr(" has disabled the second layer of security!", gamelog);break;
+         case HACK_SUPERCOMPUTER:addstr(" burned a disk of top secret files", gamelog);break;
+         case HACK_VAULT:addstr(" disabled the second layer of security", gamelog);break;
          }
+         if(blind)
+            addstr(" despite being blind", gamelog);
+         addstr("!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          actual=1;
          return 1;
@@ -423,14 +413,16 @@ char hack(short type,char &actual)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(16,1);
          addstr(activesquad->squad[hacker]->name, gamelog);
+         addstr(" couldn't", gamelog);
+         if(blind) addstr(" see how to", gamelog);
          switch(type)
          {
-         case HACK_SUPERCOMPUTER:addstr(" couldn't bypass the supercomputer security.", gamelog);break;
-         case HACK_VAULT:addstr(" couldn't bypass the vault's electronic lock.", gamelog);break;
+         case HACK_SUPERCOMPUTER:addstr(" bypass the supercomputer security.", gamelog);break;
+         case HACK_VAULT:addstr(" bypass the vault's electronic lock.", gamelog);break;
          }
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          actual=1;
          return 0;
@@ -444,19 +436,15 @@ char hack(short type,char &actual)
       addstr("You can't find anyone to do the job.", gamelog);
       gamelog.newline();
       if(blind)
-      {
-         // Screen readers FTW. Honestly, it should just be a handicap
-         //        instead of an impossibility, just make the chances
-         //        much, much less.
-         //                        -- LK
-         refresh();
-         getch();
+      {  // your only hacker was blind and had a skill roll, after the handicap, of 0 or less
+         getkey();
+
          move(17,1);
          addstr("Including the BLIND HACKER you brought.", gamelog);
          gamelog.newline();
       }
-      refresh();
-      getch();
+
+      getkey();
    }
 
    actual=0;
@@ -489,8 +477,7 @@ char radio_broadcast(void)
       addstr("the broadcast never happens.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
       return 0;
    }
 
@@ -536,13 +523,9 @@ char radio_broadcast(void)
    }
    gamelog.newline();
 
-   refresh();
-   getch();
+   getkey();
 
-   int segmentpower=0;
-   int usegmentpower;
-   int partysize=0;
-   int p = 0;
+   int segmentpower=0,partysize=0,p=0;
 
    for(p=0;p<6;p++)
    {
@@ -585,8 +568,7 @@ char radio_broadcast(void)
    else addstr("It was the best hour of AM radio EVER.", gamelog);
    gamelog.newline();
 
-   refresh();
-   getch();
+   getkey();
 
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
@@ -646,7 +628,7 @@ char radio_broadcast(void)
                }
                gamelog.newline();
 
-               usegmentpower=10; //FAME BONUS
+               int usegmentpower=10; //FAME BONUS
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_HEART,true);
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_CHARISMA,true);
@@ -657,8 +639,7 @@ char radio_broadcast(void)
 
                segmentpower+=usegmentpower;
 
-               refresh();
-               getch();
+               getkey();
             }
             else
             {
@@ -670,8 +651,7 @@ char radio_broadcast(void)
                addstr(", the hostage, is kept off-air.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
             }
          }
       }
@@ -691,8 +671,7 @@ char radio_broadcast(void)
       addstr("They no longer feel alienated.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //POST-SECURITY BLITZ IF IT SUCKED
@@ -707,8 +686,7 @@ char radio_broadcast(void)
       addstr("after the show!", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       int numleft=LCSrandom(8)+2;
       for(int e=0;e<ENCMAX;e++)
@@ -732,8 +710,7 @@ char radio_broadcast(void)
       addstr("at their desks.  The Squad might yet escape.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
    }
 
    return 1;
@@ -766,8 +743,8 @@ char news_broadcast(void)
       addstr("the broadcast never happens.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
+
       return 0;
    }
 
@@ -813,12 +790,9 @@ char news_broadcast(void)
    }
    gamelog.newline();
 
-   refresh();
-   getch();
+   getkey();
 
-   int segmentpower=0;
-   int usegmentpower;
-   int partysize=0;
+   int segmentpower=0,partysize=0;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
@@ -860,8 +834,7 @@ char news_broadcast(void)
    else addstr("It was the best hour of Cable TV EVER.", gamelog);
    gamelog.newline();
 
-   refresh();
-   getch();
+   getkey();
 
    //CHECK PUBLIC OPINION
    change_public_opinion(VIEW_LIBERALCRIMESQUAD,10);
@@ -896,7 +869,7 @@ char news_broadcast(void)
                   case VIEW_ANIMALRESEARCH:         addstr("discuss the horrors of animal research.", gamelog);break;
                   case VIEW_POLICEBEHAVIOR:         addstr("go over cases of police brutality.", gamelog);break;
                   case VIEW_TORTURE:                addstr("discuss prisoner abuse and torture.", gamelog);break;
-		  case VIEW_PRISONS:                addstr("discusses the prison system's flaws.", gamelog);break;
+		            case VIEW_PRISONS:                addstr("discusses the prison system's flaws.", gamelog);break;
                   case VIEW_INTELLIGENCE:           addstr("debate privacy law.", gamelog);break;
                   case VIEW_FREESPEECH:             addstr("talk about free speech.", gamelog);break;
                   case VIEW_GENETICS:               addstr("discuss the implications of genetic research.", gamelog);break;
@@ -921,7 +894,7 @@ char news_broadcast(void)
                }
                gamelog.newline();
 
-               usegmentpower=10; //FAME BONUS
+               int usegmentpower=10; //FAME BONUS
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_HEART,true);
                usegmentpower+=activesquad->squad[p]->prisoner->get_attribute(ATTRIBUTE_CHARISMA,true);
@@ -932,8 +905,7 @@ char news_broadcast(void)
 
                segmentpower+=usegmentpower;
 
-               refresh();
-               getch();
+               getkey();
             }
             else
             {
@@ -945,8 +917,7 @@ char news_broadcast(void)
                addstr(", the hostage, is kept off-air.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
             }
          }
       }
@@ -966,8 +937,7 @@ char news_broadcast(void)
       addstr("They no longer feel alienated.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
    }
 
    //POST - SECURITY BLITZ IF IT SUCKED
@@ -982,8 +952,7 @@ char news_broadcast(void)
       addstr("after the show!", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       int numleft=LCSrandom(8)+2;
       for(int e=0;e<ENCMAX;e++)
@@ -1012,8 +981,7 @@ char news_broadcast(void)
       addstr("at their desks.  The Squad might yet escape.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
    }
 
    return 1;
@@ -1024,8 +992,7 @@ char news_broadcast(void)
 /* rescues people held at the activeparty's current location */
 void partyrescue(short special)
 {
-   int freeslots=0;
-   int p, pl;
+   int freeslots=0,p,pl;
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]==NULL)freeslots++;
@@ -1081,8 +1048,8 @@ void partyrescue(short special)
          gamelog.newline();
 
          printparty();
-         refresh();
-         getch();
+
+         getkey();
 
          waiting_for_rescue[pl]->location=-1;
          waiting_for_rescue[pl]->base=activesquad->squad[0]->base;
@@ -1115,8 +1082,7 @@ void partyrescue(short special)
                   addstr(" from the Conservatives.", gamelog);
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   clearmessagearea();
                   move(16,1);
@@ -1138,8 +1104,8 @@ void partyrescue(short special)
                   waiting_for_rescue[pl]->base=activesquad->squad[p]->base;
 
                   printparty();
-                  refresh();
-                  getch();
+
+                  getkey();
 
                   waiting_for_rescue.erase(waiting_for_rescue.begin()+pl);
                   --pl;
@@ -1166,8 +1132,8 @@ void partyrescue(short special)
       move(17,1);
       addstr("You'll have to come back later.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
    else if(waiting_for_rescue.size()>1)
    {
@@ -1180,8 +1146,8 @@ void partyrescue(short special)
       move(17,1);
       addstr("You'll have to come back later.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
 }
 

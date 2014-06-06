@@ -26,6 +26,40 @@ This file is part of Liberal Crime Squad.                                       
     the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -56,19 +90,14 @@ long prompt_amount(long min, long max)
    keypad(stdscr,TRUE);
 
    int amount;
-   //If no amount entered, assume the maximum
-   //amount is desired
+   //If no amount entered, assume the maximum amount is desired
    if(str[0])
    {
-      amount = atoi(str);
-      amount = MAX(amount, min);
-      amount = MIN(amount, max);
+      amount=atoi(str);
+      amount=MAX(amount, min);
+      amount=MIN(amount, max);
    }
-   else
-   {
-      amount = max;
-   }
-
+   else amount = max;
 
    return amount;
 }
@@ -76,15 +105,15 @@ long prompt_amount(long min, long max)
 /* review squad equipment */
 void equip(vector<Item *> &loot,int loc)
 {
-   if(activesquad==NULL)return;
+   if(activesquad==NULL) return;
 
    consolidateloot(loot);
-   if(loc!=-1)consolidateloot(location[loc]->loot);
+   if(loc!=-1) consolidateloot(location[loc]->loot);
 
    int page=0;
    const char *errmsg = NULL;
 
-   do
+   while(true)
    {
       erase();
 
@@ -94,7 +123,7 @@ void equip(vector<Item *> &loot,int loc)
 
       printparty();
 
-      if (errmsg != NULL) {
+      if(errmsg!=NULL) {
          move(8,20);
          set_color(COLOR_CYAN,COLOR_BLACK,1);
          addstr(errmsg);
@@ -108,12 +137,10 @@ void equip(vector<Item *> &loot,int loc)
 
       for(int l=page*18;l<(int)loot.size()&&l<page*18+18;l++)
       {
-         string s = loot[l]->equip_title();
+         string s=loot[l]->equip_title();
 
          if(loot[l]->get_number()>1)
-         {
-            s += " x" + tostring(loot[l]->get_number());
-         }
+            s+=" x"+tostring(loot[l]->get_number());
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
@@ -123,11 +150,7 @@ void equip(vector<Item *> &loot,int loc)
          addstr(str);
 
          x+=26;
-         if(x>53)
-         {
-            x=1;
-            y++;
-         }
+         if(x>53) x=1,y++;
       }
 
       //PAGE UP
@@ -155,13 +178,13 @@ void equip(vector<Item *> &loot,int loc)
 
       if(loc!=-1)
       {
-         if(location[loc]->loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(location[loc]->loot.size()>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(23,1);
          addstr("Y - Get things from ");
          addstr(location[loc]->getname(true));
 
-         if(loot.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(loot.size()>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(23,40);
          addstr("Z - Stash things at ");
@@ -172,199 +195,155 @@ void equip(vector<Item *> &loot,int loc)
       move(24,1);
       addstr("Enter - Done");
 
-      refresh();
+      int c=getkey();
 
-      int c=getch();
-      translategetch(c);
-      bool increaseammo = (c==KEY_UP);
-      bool decreaseammo = (c==KEY_DOWN);
+      bool increaseammo=(c==KEY_UP),decreaseammo=(c==KEY_DOWN);
 
       if((c>='a'&&c<='r')||increaseammo||decreaseammo)
       {
          int slot=c-'a'+page*18;
-         if (increaseammo||decreaseammo)
-         {
-            slot=-999;
-         }
+         if(increaseammo||decreaseammo) slot=-999;
          else
          {
-            if(slot < 0 || slot >= (int)loot.size())
+            if(slot<0 || slot>=(int)loot.size()) continue; // Out of range.
+            else if(!loot[slot]->is_weapon()
+                 && !loot[slot]->is_armor()
+                 && !loot[slot]->is_clip())
             {
-               // Out of range.
-               continue;
-            }
-            else if (!loot[slot]->is_weapon()
-                    && !loot[slot]->is_armor()
-                    && !loot[slot]->is_clip())
-            {
-               errmsg = "You can't equip that.";
+               errmsg="You can't equip that.";
                continue;
             }
          }
-         bool choice = true;
-         if (activesquad->squad[0])
+         bool choice=true;
+         if(activesquad->squad[0])
          {
-            choice = false;
-            for (int c=1; c<6; c++)
-            {
+            choice=false;
+            for(int c=1;c<6;c++)
                if (activesquad->squad[c]) //are these slots always filled in order?
                {
                   choice=true;
                   break;
                }
-            }
          }
-         int c;
-         if (choice)
+         int c='1';
+         if(choice)
          {
             move(8,20);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            if (increaseammo)
-            {
+            if(increaseammo)
                addstr("Choose a Liberal squad member to receive a clip.");
-            }
-            else if (decreaseammo)
-            {
+            else if(decreaseammo)
                addstr("Choose a Liberal squad member to drop a clip.");
-            }
-            else
-            {
-               addstr("Choose a Liberal squad member to receive it.");
-            }
+            else addstr("Choose a Liberal squad member to receive it.");
 
-            refresh();
-
-            c=getch();
-            translategetch(c);
-         }
-         else
-         {
-            c='1'; //only one member so no need to choose.
+            c=getkey();
          }
 
          if(c>='1'&&c<='6')
          {
-            Creature *squaddie = activesquad->squad[c - '1'];
+            Creature *squaddie=activesquad->squad[c - '1'];
 
             if(squaddie!=NULL)
             {
-               if (decreaseammo)
+               if(decreaseammo)
                {
-                  if (!squaddie->clips.empty())
+                  if(!squaddie->clips.empty())
                   {
                      loot.push_back(squaddie->clips.back()->split(1));
-                     if (squaddie->clips.back()->empty())
+                     if(squaddie->clips.back()->empty())
                         squaddie->clips.pop_back();
                   }
-                  else if (!squaddie->get_weapon().uses_ammo())
+                  else if(!squaddie->get_weapon().uses_ammo())
                   {
-                     errmsg = "No ammo to drop!";
+                     errmsg="No ammo to drop!";
                      continue;
                   }
                   else
                   {
-                     errmsg = "No spare clips!";
+                     errmsg="No spare clips!";
                      continue;
                   }
                   consolidateloot(loot);
                   continue;
                }
-               if (increaseammo)
+               if(increaseammo)
                {
-                  if (!squaddie->get_weapon().uses_ammo())
+                  if(!squaddie->get_weapon().uses_ammo())
                   {
-                     errmsg = "No ammo required!";
+                     errmsg="No ammo required!";
                      continue;
                   }
-                  slot = -1;
-                  for (int sl = 0; sl < (int)loot.size(); sl++)
+                  slot=-1;
+                  for(int sl=0;sl<(int)loot.size();sl++)
                   {
-                     if ((loot[sl]->is_clip() && squaddie->get_weapon().acceptable_ammo(*loot[sl])))
+                     if(loot[sl]->is_clip() && squaddie->get_weapon().acceptable_ammo(*loot[sl]))
                      {
-                        slot = sl;
+                        slot=sl;
                         break;
                      }
-                     else if (loot[sl]->is_weapon() && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
+                     else if(loot[sl]->is_weapon() && loot[sl]->is_same_type(squaddie->get_weapon())) //For throwing weapons. -XML
                      {
-                        Weapon* w = static_cast<Weapon*>(loot[sl]); //cast -XML
-                        if (w->is_throwable())
+                        Weapon* w=static_cast<Weapon*>(loot[sl]); //cast -XML
+                        if(w->is_throwable())
                         {
-                           slot = sl;
+                           slot=sl;
                            break;
                         }
                      }
                   }
-                  if (slot == -1)
+                  if(slot==-1)
                   {
-                     errmsg = "No ammo available!";
+                     errmsg="No ammo available!";
                      continue;
                   }
                }
                int armok=2;
                if((squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
-                  (squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
+                  (squaddie->wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
                if((squaddie->wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
-                  (squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
-               if(squaddie->special[SPECIALWOUND_NECK]!=1)armok=0;
-               if(squaddie->special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
+                  (squaddie->wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
+               if(squaddie->special[SPECIALWOUND_NECK]!=1) armok=0;
+               if(squaddie->special[SPECIALWOUND_UPPERSPINE]!=1) armok=0;
 
-               if(loot[slot]->is_weapon() && armok)
+               if(loot[slot]->is_weapon()&&armok)
                {
-                  Weapon* w = static_cast<Weapon*>(loot[slot]); //cast -XML
+                  Weapon* w=static_cast<Weapon*>(loot[slot]); //cast -XML
                   squaddie->give_weapon(*w,&loot);
 
-                  if(loot[slot]->empty())
-                     delete_and_remove(loot,slot);
+                  if(loot[slot]->empty()) delete_and_remove(loot,slot);
 
-                  if(page*18>=(int)loot.size()&&page!=0)page--;
+                  if(page*18>=(int)loot.size()&&page!=0) page--;
                }
                else if(loot[slot]->is_armor())
                {
                   Armor* a = static_cast<Armor*>(loot[slot]); //cast -XML
                   squaddie->give_armor(*a,&loot);
 
-                  if(loot[slot]->empty())
-                     delete_and_remove(loot,slot);
+                  if(loot[slot]->empty()) delete_and_remove(loot,slot);
 
-                  if(page*18>=(int)loot.size()&&page!=0)page--;
+                  if(page*18>=(int)loot.size()&&page!=0) page--;
                }
-               else if(loot[slot]->is_clip() && armok)
+               else if(loot[slot]->is_clip()&&armok)
                {
-                  int space = 9 - squaddie->count_clips();
+                  int space=9-squaddie->count_clips();
 
-                  if (!squaddie->get_weapon().uses_ammo())
+                  if(!squaddie->get_weapon().uses_ammo())
+                  {  errmsg="Can't carry ammo without a gun."; continue; }
+                  else if(!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
+                  {  errmsg="That ammo doesn't fit."; continue; }
+                  else if(space<1)
+                  {  errmsg="Can't carry any more ammo."; continue; }
+                  else
                   {
-                     errmsg = "Can't carry ammo without a gun.";
-                     continue;
-                  }
-                  else if (!squaddie->get_weapon().acceptable_ammo(*loot[slot]))
-                  {
-                     errmsg = "That ammo doesn't fit.";
-                     continue;
-                  } else if (space < 1) {
-                     errmsg = "Can't carry any more ammo.";
-                     continue;
-                  } else {
-                     int amount = 1;
-                     if (loot[slot]->get_number() > 1)
-                     {
-                        if (increaseammo)
-                        {
-                           amount = 1;
-                        }
-                        else
-                        {
-                           amount = prompt_amount(0,
-                              MIN(loot[slot]->get_number(), space));
-                        }
-                     }
+                     int amount=1;
+                     if(loot[slot]->get_number()>1&&!increaseammo)
+                        amount=prompt_amount(0,MIN(loot[slot]->get_number(),space));
 
                      squaddie->take_clips(*loot[slot],amount);
 
-                     if(loot[slot]->empty())
-                        delete_and_remove(loot,slot);
+                     if(loot[slot]->empty()) delete_and_remove(loot,slot);
 
-                     if(page*18>=(int)loot.size()&&page!=0)page--;
+                     if(page*18>=(int)loot.size()&&page!=0) page--;
                   }
                }
 
@@ -374,51 +353,37 @@ void equip(vector<Item *> &loot,int loc)
       }
       if(c=='s')
       {
-         bool choice = true;
-         if (activesquad->squad[0])
+         bool choice=true;
+         if(activesquad->squad[0])
          {
-            choice = false;
-            for (int c=1; c<6; c++)
-            {
+            choice=false;
+            for(int c=1;c<6;c++)
                if (activesquad->squad[c])
-               {
-                  choice=true;
-                  break;
-               }
-            }
+               {  choice=true; break; }
          }
-         int c;
-         if (choice)
+         int c='1';
+         if(choice)
          {
             move(8,20);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr("Choose a Liberal squad member to strip down.");
 
-            refresh();
-
-            c=getch();
-            translategetch(c);
-         }
-         else
-         {
-            c='1'; //only one member so no need to choose.
+            c=getkey();
          }
          if(c>='1'&&c<='6')
-         {
             if(activesquad->squad[c-'1']!=NULL)
             {
                activesquad->squad[c-'1']->strip(&loot);
                consolidateloot(loot);
             }
-         }
       }
 
-      if(c==10||c==ESC)return;
+      if(c==10||c==ESC) return;
 
       if(loc!=-1)
       {
-         if(c=='y'&&location[loc]->loot.size()>0)moveloot(loot,location[loc]->loot);
-         if(c=='z'&&loot.size()>0)moveloot(location[loc]->loot,loot);
+         if(c=='y'&&location[loc]->loot.size()>0) moveloot(loot,location[loc]->loot);
+         if(c=='z'&&loot.size()>0) moveloot(location[loc]->loot,loot);
       }
 
       if(c>='1'&&c<='6')
@@ -432,11 +397,11 @@ void equip(vector<Item *> &loot,int loc)
       }
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loot.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loot.size()) page++;
 
-   }while(1);
+   }
 }
 
 
@@ -448,7 +413,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
 
    vector<int> selected(source.size(),0);
 
-   do
+   while(true)
    {
       erase();
 
@@ -464,21 +429,17 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
 
       for(int l=page*18;l<(int)source.size()&&l<page*18+18;l++)
       {
-         if(selected[l])set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if(selected[l]) set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         string s = source[l]->equip_title();
+         string s=source[l]->equip_title();
 
          if(source[l]->get_number()>1)
          {
-            s += " ";
-            if(selected[l]>0)
-            {
-               s += tostring(selected[l]) + "/";
-            }
-            else
-               s += "x";
-            s += tostring(source[l]->get_number());
+            s+=" ";
+            if(selected[l]>0) s+=tostring(selected[l])+"/";
+            else s+="x";
+            s+=tostring(source[l]->get_number());
          }
 
          str[0]=l-page*18+'A';
@@ -490,11 +451,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          addstr(str);
 
          x+=26;
-         if(x>53)
-         {
-            x=1;
-            y++;
-         }
+         if(x>53) x=1,y++;
       }
 
       //PAGE UP
@@ -517,10 +474,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
       move(24,1);
       addstr("Enter - Done");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c>='a'&&c<='r')
       {
@@ -528,42 +482,32 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
 
          if(slot>=0&&slot<(int)source.size())
          {
-            if(selected[slot])
-            {
-               selected[slot]=0;
-            }
-            else
-            {
-               if(source[slot]->get_number()>1)
-                  selected[slot] = prompt_amount(0, source[slot]->get_number());
-               else selected[slot]=1;
-            }
+            if(selected[slot]) selected[slot]=0;
+            else if(source[slot]->get_number()>1)
+               selected[slot]=prompt_amount(0,source[slot]->get_number());
+            else selected[slot]=1;
          }
       }
 
-      if(c==10||c==ESC)break;
+      if(c==10||c==ESC) break;
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)source.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)source.size()) page++;
+   }
 
-   }while(1);
-
-   for(int l=source.size()-1;l>=0;l--)
+   for(int l=source.size()-1;l>=0;l--) if(selected[l]>0)
    {
-      if(selected[l]>0)
+      if(source[l]->get_number() <= selected[l])
       {
-         if(source[l]->get_number() <= selected[l])
-         {
-            dest.push_back(source[l]);
-            source.erase(source.begin() + l);
-         }
-         else
-         {
-            Item* newit=source[l]->split(selected[l]);
-            dest.push_back(newit);
-         }
+         dest.push_back(source[l]);
+         source.erase(source.begin()+l);
+      }
+      else
+      {
+         Item* newit=source[l]->split(selected[l]);
+         dest.push_back(newit);
       }
    }
 
@@ -578,20 +522,17 @@ void equipmentbaseassign(void)
    bool sortbytype = false;
    vector<Item *> temploot;
    map<Item *,Location *> temploot2;
-   for(l=0;l<(int)location.size();l++)
-      for(int l2=0;l2<(int)location[l]->loot.size();l2++)
-         if (!location[l]->siege.siege)
-         {
-            temploot.push_back(location[l]->loot[l2]);
-            temploot2[location[l]->loot[l2]]=location[l];
-         }
+   for(l=0;l<(int)location.size();l++) for(int l2=0;l2<(int)location[l]->loot.size();l2++)
+      if(!location[l]->siege.siege)
+      {
+         temploot.push_back(location[l]->loot[l2]);
+         temploot2[location[l]->loot[l2]]=location[l];
+      }
 
    vector<int> temploc;
-   for(l=0;l<(int)location.size();l++)
-      if(location[l]->renting>=0)
-         if (!location[l]->siege.siege)
-            temploc.push_back(l);
-   if(temploc.size()==0)return;
+   for(l=0;l<(int)location.size();l++) if(location[l]->renting>=0&&!location[l]->siege.siege)
+      temploc.push_back(l);
+   if(temploc.size()==0) return;
 
    do
    {
@@ -603,13 +544,13 @@ void equipmentbaseassign(void)
       move(0,0);
       addstr("Moving Equipment");
       move(1,0);
-      addstr("----ITEM-----------------CURRENT LOCATION---------------------------------------");
+      addstr("ÄÄÄÄITEMÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄCURRENT LOCATIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,51);
       addstr("NEW LOCATION");
 
       int y=2;
       //char str[80];
-      for(p=page_loot*19;p<(int)temploot.size()&&p<page_loot*19+19;p++)
+      for(p=page_loot*19;p<(int)temploot.size()&&p<page_loot*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -617,35 +558,24 @@ void equipmentbaseassign(void)
          addstr(temploot[p]->equip_title().c_str());
 
          mvaddstr(y,25,temploot2[temploot[p]]->getname(true,true));
-
-         y++;
       }
 
       y=2;
-      for(p=page_loc*9;p<(int)temploc.size()&&p<page_loc*9+9;p++)
+      for(p=page_loc*9;p<(int)temploc.size()&&p<page_loc*9+9;p++,y++)
       {
          if(p==selectedbase)set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,51);
          addch(y+'1'-2);addstr(" - ");
          addstr(location[temploc[p]]->getname(true,true));
-
-         y++;
       }
-
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
       addstr("Press a Letter to assign a base.  Press a Number to select a base.");
       move(23,0);
-      if(sortbytype)
-      {
-         addstr("T to sort by location.");
-      }
-      else
-      {
-         addstr("T to sort by type.");
-      }
+      if(sortbytype) addstr("T to sort by location.");
+      else addstr("T to sort by type.");
       addstr("  Shift and a Number will move ALL items!");
 
       if(temploot.size()>19)
@@ -659,43 +589,28 @@ void equipmentbaseassign(void)
          addstr(",. to view other base pages.");
       }
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_loot>0)page_loot--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_loot>0) page_loot--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_loot+1)*19<(int)temploot.size())page_loot++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_loot+1)*19<(int)temploot.size()) page_loot++;
 
       //PAGE UP
-      if(c==','&&page_loc>0)page_loc--;
+      if(c==','&&page_loc>0) page_loc--;
       //PAGE DOWN
-      if(c=='.'&&(page_loc+1)*9<(int)temploc.size())page_loc++;
+      if(c=='.'&&(page_loc+1)*9<(int)temploc.size()) page_loc++;
 
       //Toggle sorting method
       if(c=='t')
       {
-         sortbytype = !sortbytype;
-         if(sortbytype)
-         {
-            sort(temploot.begin(),temploot.end(),Item::sort_compare);
-         }
+         sortbytype=!sortbytype;
+         if(sortbytype) sort(temploot.begin(),temploot.end(),Item::sort_compare);
          else
-         {
-            //Sort by location
+         {  //Sort by location
             temploot.clear();
-            for(l=0;l<(int)location.size();l++)
-            {
-               for(int l2=0;l2<(int)location[l]->loot.size();l2++)
-               {
-                  if (!location[l]->siege.siege)
-                  {
-                     temploot.push_back(location[l]->loot[l2]);
-                  }
-               }
-            }
+            for(l=0;l<(int)location.size();l++) for(int l2=0;l2<(int)location[l]->loot.size();l2++)
+               if(!location[l]->siege.siege) temploot.push_back(location[l]->loot[l2]);
          }
       }
 
@@ -703,10 +618,8 @@ void equipmentbaseassign(void)
       {
          int p=page_loot*19+(int)(c-'a');
          if(p<(int)temploot.size())
-         {
             // Search through the old base's stuff for this item
             for(int l2=0;l2<(int)temploot2[temploot[p]]->loot.size();l2++)
-            {
                // Remove it from that inventory and move it to the new one
                if(temploot2[temploot[p]]->loot[l2]==temploot[p])
                {
@@ -714,21 +627,16 @@ void equipmentbaseassign(void)
                   location[temploc[selectedbase]]->loot.push_back(temploot[p]);
                   temploot2[temploot[p]]=location[temploc[selectedbase]];
                }
-            }
-         }
       }
       if(c>='1'&&c<='9')
       {
          int p=page_loc*9+(int)(c-'1');
-         if(p<(int)temploc.size())
-         {
-            selectedbase=p;
-         }
+         if(p<(int)temploc.size()) selectedbase=p;
       }
       // Check if the player wants to move all items to a new location,
       // using Shift + a number key.
-      const char upnums[] = {'!', '@', '#', '$', '%', '^', '&', '*', '('};
-      for(int upnumi=0; upnumi < (int)sizeof(upnums); upnumi++)
+      const char upnums[]={'!','@','#','$','%','^','&','*','('};
+      for(int upnumi=0;upnumi<(int)sizeof(upnums);upnumi++)
       {
          if(c==upnums[upnumi])
          {
@@ -739,10 +647,8 @@ void equipmentbaseassign(void)
                selectedbase=basechoice;
                // Search through the old base's stuff for this item
                for(int p=0;p<(int)temploot.size();p++)
-               {
                   // Search through the old base's stuff for this item
                   for(int l2=0;l2<(int)temploot2[temploot[p]]->loot.size();l2++)
-                  {
                      // Remove it from that inventory and move it to the new one
                      if(temploot2[temploot[p]]->loot[l2]==temploot[p])
                      {
@@ -750,14 +656,12 @@ void equipmentbaseassign(void)
                         location[temploc[selectedbase]]->loot.push_back(temploot[p]);
                         temploot2[temploot[p]]=location[temploc[selectedbase]];
                      }
-                  }
-               }
             }
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==10||c==ESC) break;
+   } while(true);
 }
 
 
@@ -765,56 +669,32 @@ void equipmentbaseassign(void)
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<Item *> &loot)
 {
-   int l;
-   int l2;
+   int l,l2;
 
    //PUT THINGS TOGETHER
-   for(l=loot.size()-1;l>=1;l--)
+   for(l=loot.size()-1;l>=1;l--) for(l2=l-1;l2>=0;l2--)
    {
-      for(l2=l-1;l2>=0;l2--)
-      {
-         loot[l2]->merge(*loot[l]);
-
-         if (loot[l]->empty())
-         {
-            delete_and_remove(loot,l);
-            break;
-         }
-      }
+      loot[l2]->merge(*loot[l]);
+      if(loot[l]->empty())
+      {  delete_and_remove(loot,l); break; }
    }
 
-   std::sort(loot.begin(),loot.end(),Item::sort_compare);
+   sort(loot.begin(),loot.end(),Item::sort_compare);
 }
 
 
 /* check if the squad has a certain weapon */
 char squadhasitem(squadst &sq, const string& type)
 {
-   for(int p=0;p<6;p++)
-   {
-      if(sq.squad[p]!=NULL)
-      {
-         int index;
-         index = getweapontype(type);
-         if (index != -1)
-         {
-            if (sq.squad[p]->get_weapon().get_itemtypename() == type)
-               return 1;
-         }
-      }
-   }
+   if(getweapontype(type)==-1) return 0;
+
+   for(int p=0;p<6;p++) if(sq.squad[p]!=NULL)
+      if(sq.squad[p]->get_weapon().get_itemtypename()==type) return 1;
 
    for(int l=0;l<(int)sq.loot.size();l++)
    {
-      if(sq.loot[l]->get_itemtypename()!=type)continue;
-
-      int index;
-      index = getweapontype(type);
-      if (index != -1)
-      {
-         if(sq.loot[l]->is_weapon() && sq.loot[l]->get_itemtypename()==type)
-            return 1;
-      }
+      if(sq.loot[l]->get_itemtypename()!=type) continue;
+      if(sq.loot[l]->is_weapon()&&sq.loot[l]->get_itemtypename()==type) return 1;
    }
 
    return 0;

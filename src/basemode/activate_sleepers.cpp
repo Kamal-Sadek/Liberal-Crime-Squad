@@ -130,10 +130,7 @@ void activate_sleepers(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -277,11 +274,7 @@ void activate_sleeper(Creature *cr)
          break;
       }
 
-      refresh();
-      int c=getch();
-      translategetch(c);
-
-
+      int c=getkey();
 
       if(c>='a'&&c<='z'){state=c;}
       if((c>='a'&&c<='z') || (c>='1'&&c<='9'))

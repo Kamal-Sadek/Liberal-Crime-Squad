@@ -407,5 +407,6 @@ void HelpActivities(int activityType)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(23,0);
    addstr("   Press any key - Return to previous screen");
-   getch();
+
+   getkey();
 }

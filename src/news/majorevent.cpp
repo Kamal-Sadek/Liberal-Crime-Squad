@@ -1,4 +1,36 @@
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: 
 
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
 
 //#include "includes.h"
 #include "externs.h"
@@ -25,7 +57,7 @@ void constructeventstory(char *story,short view,char positive)
             else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
             lastname(str,true);strcat(story,str);
-            strcat(story," CLINIC yesterday.  ");
+            strcat(story," Clinic yesterday.  ");
             strcat(story,"Dr. ");
             char dstr[200],dstr2[200];
             char gn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
@@ -220,7 +252,7 @@ void constructeventstory(char *story,short view,char positive)
                case 0:strcat(story,"Let's not forget the convict is colored.  You know how their kind are");break;
                case 1:
                   strcat(story,"The convict is always referred to by three names.  ");
-                  strcat(story,"Assassin, serial killer, either way -- guilty.  ");
+                  strcat(story,"Assassin, serial killer, either way ฤฤ guilty.  ");
                   strcat(story,"End of story");
                   break;
                case 2:strcat(story,"The family wants closure.  We don't have time for another trial");break;
@@ -239,7 +271,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"Washington D.C. - The FBI might be keeping tabs on you.  ");
             strcat(story,"This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations.  ");
             strcat(story,"The files contain information on which people have been attending demonstrations, organizing ");
-            strcat(story,"unions, working for liberal organizations -- even ");
+            strcat(story,"unions, working for liberal organizations ฤฤ even ");
             switch(LCSrandom(2))
             {
                case 0:strcat(story,"buying music with 'Explicit Lyrics' labels.");break;
@@ -650,7 +682,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"_.&r");
             strcat(story,"   Take this excerpt, \"");//TODO: Add more excerpts, more variety.
             strcat(story,"The steel bars grated forward in their rails, ");
-            strcat(story,"coming to a halt with a deafening clang that said it all -- ");
+            strcat(story,"coming to a halt with a deafening clang that said it all ฤฤ ");
             strcat(story,"I was trapped with them now.  There were three, looking me over ");
             strcat(story,"with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager.  ");
             strcat(story,"My shank's under the mattress.  Better to be a man and fight or a punk and let them take it?  ");
@@ -1731,22 +1763,20 @@ void run_television_news_stories()
                case VIEW_POLICEBEHAVIOR:
                   movie.loadmovie("lacops.cmv");
                   movie.playmovie(0,0);
-                  nodelay(stdscr,FALSE);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(19,13);
-                  addstr("/----------------------------------------------------\\");
+                  addstr("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
                   move(20,13);
-                  addstr("|     The  police  have  beaten  a  black  man  in    |");
+                  addstr("บ     The  police  have  beaten  a  black  man  in   บ");
                   move(21,13);
-                  addstr("|   Los Angeles again.  This time, the incident is    |");
+                  addstr("บ   Los Angeles again.  This time, the incident is   บ");
                   move(22,13);
-                  addstr("|   taped by  a passerby  and saturates  the news.    |");
+                  addstr("บ   taped by  a passerby  and saturates  the news.   บ");
                   move(23,13);
-                  addstr("\\----------------------------------------------------/");
+                  addstr("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   del=1;
                   break;
@@ -1797,24 +1827,21 @@ void run_television_news_stories()
                   }
 
                   movie.loadmovie("newscast.cmv");
-
                   movie.playmovie(1,1);
-                  nodelay(stdscr,FALSE);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(19,13);
-                  addstr("/----------------------------------------------------\\");
+                  addstr("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
                   move(20,13);
-                  addstr("|     A  Cable  News  anchor  accidentally  let  a   |");
+                  addstr("บ     A  Cable  News  anchor  accidentally  let  a   บ");
                   move(21,13);
-                  addstr("|   bright Liberal guest  finish a sentence.  Many   |");
+                  addstr("บ   bright Liberal guest  finish a sentence.  Many   บ");
                   move(22,13);
-                  addstr("|   viewers  across  the  nation  were  listening.   |");
+                  addstr("บ   viewers  across  the  nation  were  listening.   บ");
                   move(23,13);
-                  addstr("\\----------------------------------------------------/");
+                  addstr("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   del=1;
                   break;
@@ -1828,44 +1855,40 @@ void run_television_news_stories()
                case VIEW_CEOSALARY:
                   movie.loadmovie("glamshow.cmv");
                   movie.playmovie(0,0);
-                  nodelay(stdscr,FALSE);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(19,13);
-                  addstr("/----------------------------------------------------\\");
+                  addstr("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
                   move(20,13);
-                  addstr("|     A new show glamorizing the lives of the rich   |");
+                  addstr("บ     A new show glamorizing the lives of the rich   บ");
                   move(21,13);
-                  addstr("|   begins airing  this week.  With the nationwide   |");
+                  addstr("บ   begins airing  this week.  With the nationwide   บ");
                   move(22,13);
-                  addstr("|   advertising  blitz, it's bound  to be popular.   |");
+                  addstr("บ   advertising  blitz, it's bound  to be popular.   บ");
                   move(23,13);
-                  addstr("\\----------------------------------------------------/");
+                  addstr("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   del=1;
                   break;
                case VIEW_CABLENEWS:
                   movie.loadmovie("anchor.cmv");
                   movie.playmovie(0,0);
-                  nodelay(stdscr,FALSE);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(19,13);
-                  addstr("/----------------------------------------------------\\");
+                  addstr("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
                   move(20,13);
-                  addstr("|     A major Cable News channel has hired a slick   |");
+                  addstr("บ     A major Cable News channel has hired a slick   บ");
                   move(21,13);
-                  addstr("|   new anchor for one of  its news shows.  Guided   |");
+                  addstr("บ   new anchor for  one of its news shows.  Guided   บ");
                   move(22,13);
-                  addstr("|   by impressive  advertising, America  tunes in.   |");
+                  addstr("บ   by impressive  advertising, America  tunes in.   บ");
                   move(23,13);
-                  addstr("\\----------------------------------------------------/");
+                  addstr("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   del=1;
                   break;
@@ -1874,22 +1897,20 @@ void run_television_news_stories()
 
                   movie.loadmovie("abort.cmv");
                   movie.playmovie(0,0);
-                  nodelay(stdscr,FALSE);
 
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(19,13);
-                  addstr("/----------------------------------------------------\\");
+                  addstr("ษออออออออออออออออออออออออออออออออออออออออออออออออออออป");
                   move(20,13);
-                  addstr("|     A  failed partial  birth abortion  goes on a   |");
+                  addstr("บ     A  failed partial  birth abortion  goes on a   บ");
                   move(21,13);
-                  addstr("|   popular  afternoon  talk  show.    The  studio   |");
+                  addstr("บ   popular  afternoon  talk  show.    The  studio   บ");
                   move(22,13);
-                  addstr("|   audience and viewers nationwide feel its pain.   |");
+                  addstr("บ   audience and viewers nationwide feel its pain.   บ");
                   move(23,13);
-                  addstr("\\----------------------------------------------------/");
+                  addstr("ศออออออออออออออออออออออออออออออออออออออออออออออออออออผ");
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   del=1;
                   break;

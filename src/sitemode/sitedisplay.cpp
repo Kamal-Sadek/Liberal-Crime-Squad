@@ -69,20 +69,20 @@ bool LineOfSight(int x, int y, int z)
 // Prints the map graphics in the bottom right of the screen
 void printsitemap(int x,int y,int z)
 {
+   mapshowing=true;
    int xscreen, xsite;
    int yscreen, ysite;
 
    // Build the frame
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   for(xscreen=53;xscreen<80;xscreen++)
-   {
-      move(24,xscreen);
-      addch('-');
-   }
+   move(8,53);
+   addstr("ÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂ");
+   move(24,53);
+   addstr("ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ");
    for(yscreen=9;yscreen<24;yscreen++)
    {
       move(yscreen,53);
-      addstr("|                         |");
+      addstr("³                         ³");
    }
 
    // Display the map
@@ -781,12 +781,14 @@ void clearmessagearea(bool redrawmaparea)
 
 void clearmaparea(bool lower,bool upper)
 {
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   for(int y=9;y<24;y++)
+   if(upper) mapshowing=false;
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   for(int y=8;y<25;y++)
    {
       if(!upper&&y<15)continue;
       if(!lower&&y>=15)continue;
       move(y,53);
-      addstr("                          ");
+      if(y==8) addstr("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+      else addstr("                           ");
    }
 }

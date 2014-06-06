@@ -59,8 +59,7 @@ void creatureadvance(void)
 
                makeloot(*activesquad->squad[p]->prisoner,groundloot);
 
-               refresh();
-               getch();
+               getkey();
 
                sitecrime+=10;
                sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -139,11 +138,10 @@ void creatureadvance(void)
             gamelog.newline();
 
             if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+               mode==GAMEMODE_CHASEFOOT)printchaseencounter();
             else printencounter();
 
-            refresh();
-            getch();
+            getkey();
          }
       }
 
@@ -281,15 +279,13 @@ void advancecreature(Creature &cr)
             mode==GAMEMODE_CHASEFOOT)printchaseencounter();
          else printencounter();
 
-         refresh();
-         getch();
+         getkey();
       }
    }
 
-   int bleed=0;
-   int topmedicalskill=0;
+   int bleed=0,topmedicalskill=0;
    Creature* topmedical=NULL;
-   for(int i=0;i<6;++i)
+   for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]&&
          activesquad->squad[i]->alive&&
@@ -298,8 +294,7 @@ void advancecreature(Creature &cr)
          activesquad->squad[i]->id!=cr.id&&
          activesquad->squad[i]->get_skill(SKILL_FIRSTAID)>topmedicalskill)
       {
-         topmedical=activesquad->squad[i];
-         topmedicalskill=activesquad->squad[i]->get_skill(SKILL_FIRSTAID);
+         topmedicalskill=(topmedical=activesquad->squad[i])->get_skill(SKILL_FIRSTAID);
       }
    }
 
@@ -324,8 +319,8 @@ void advancecreature(Creature &cr)
             gamelog.newline();
             topmedical->train(SKILL_FIRSTAID,max(int(50-topmedicalskill*2),0));
             cr.wound[w]^=WOUND_BLEEDING;
-            refresh();
-            getch();
+
+            getkey();
          }
          else bleed++;
       }
@@ -397,13 +392,9 @@ void advancecreature(Creature &cr)
          }
          adddeathmessage(cr);
 
-         refresh();
-         getch();
+         getkey();
 
-         if(cr.prisoner!=NULL)
-         {
-            freehostage(cr,1);
-         }
+         if(cr.prisoner!=NULL) freehostage(cr,1);
       }
       else
       {
@@ -414,8 +405,7 @@ void advancecreature(Creature &cr)
          addstr(str, gamelog);
          gamelog.newline(); //Next message?
 
-         refresh();
-         getch();
+         getkey();
       }
    }
 
@@ -457,13 +447,9 @@ void advancecreature(Creature &cr)
          }
          adddeathmessage(cr);
 
-         refresh();
-         getch();
+         getkey();
 
-         if(cr.prisoner!=NULL)
-         {
-            freehostage(cr,1);
-         }
+         if(cr.prisoner!=NULL) freehostage(cr,1);
       }
       else
       {
@@ -473,8 +459,7 @@ void advancecreature(Creature &cr)
          //strcat(str," bleeds.");
          //addstr(str);
 
-         //refresh();
-         //getch();
+         //getkey();
       }
    }
 }
