@@ -39,15 +39,9 @@ void hospital(int loc)
    locatesquad(activesquad,loc);
 
    int partysize=0;
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)
-      {
-         partysize++;
-      }
-   }
+   for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
 
-   do
+   while(true)
    {
       erase();
 
@@ -62,30 +56,27 @@ void hospital(int loc)
       move(12,1);
       addstr("Enter - Leave");
 
-      if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(partysize>0&&(party_status==-1||partysize>1)) set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(13,1);
       addstr("# - Check the status of a squad Liberal");
-      if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(party_status!=-1) set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(14,1);
       addstr("0 - Show the squad's Liberal status");
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
-      if(c==10||c==ESC)break;
+      if(c==10||c==ESC) break;
 
-      if(c=='0')party_status=-1;
+      if(c=='0') party_status=-1;
 
       if(c>='1'&&c<='6'&&activesquad!=NULL)
-      {
          if(activesquad->squad[c-'1']!=NULL)
          {
             if(party_status==c-'1')fullstatus(party_status);
             else party_status=c-'1';
          }
-      }
 
       if(c=='f')
       {
@@ -96,7 +87,7 @@ void hospital(int loc)
          }
          break;
       }
-   }while(1);
+   }
 }
 
 /* active squad visits the arms dealer */
@@ -126,8 +117,6 @@ void pawnshop(int loc)
 void dealership(int loc)
 {
    short buyer=0;
-   //int l;
-   //char str[80];
 
    locatesquad(activesquad,loc);
 
@@ -136,7 +125,7 @@ void dealership(int loc)
       if(activesquad->squad[p]!=NULL)
          partysize++;
 
-   do
+   while(true)
    {
       erase();
 
@@ -156,7 +145,7 @@ void dealership(int loc)
          if(vehicle[v]->id()==activesquad->squad[buyer]->carid)
             car_to_sell = vehicle[v];
 
-      if(!car_to_sell)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(!car_to_sell) set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(10,1);
       addstr("G - Get a Liberal car");
@@ -202,8 +191,7 @@ void dealership(int loc)
       move(15,40);
       addstr("# - Check the status of a squad Liberal");
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       // Leave
       if(c==10||c==ESC)break;
@@ -227,14 +215,14 @@ void dealership(int loc)
 
          vector<int> availablevehicle;
          vector<string> vehicleoption;
-         for (int i=0; i<(int)vehicletype.size(); ++i)
+         for(int i=0;i<(int)vehicletype.size();i++)
             if (vehicletype[i]->availableatshop())
             {
                availablevehicle.push_back(i);
                vehicleoption.push_back(vehicletype[i]->longname()+" ($"+
                   tostring(sleepercarsalesman?vehicletype[i]->sleeperprice():vehicletype[i]->price())+")");
             }
-         do
+         while(true)
          {
             carchoice = choiceprompt("Choose a vehicle","",vehicleoption,"Vehicle",
                                      true,"We don't need a Conservative car");
@@ -244,10 +232,11 @@ void dealership(int loc)
                set_color(COLOR_RED,COLOR_BLACK,0);
                move(1,1);
                addstr("You don't have enough money!");
-               getch();
+
+               getkey();
             }
             else break;
-         } while (1);
+         }
 
          if(carchoice==-1) continue;
 
@@ -290,7 +279,7 @@ void dealership(int loc)
             else party_status=c-'1';
          }
 
-   } while (1);
+   }
 }
 
 
@@ -326,14 +315,11 @@ void choose_buyer(short &buyer)
    party_status=-1;
 
    int partysize=0;
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)partysize++;
-   }
+   for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
 
-   if(partysize<=1)return;
+   if(partysize<=1) return;
 
-   do
+   while(true)
    {
       printparty();
 
@@ -341,17 +327,14 @@ void choose_buyer(short &buyer)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("Choose a Liberal squad member to SPEND.");
 
-      refresh();
+      int c=getkey();
 
-      int c=getch();
-      translategetch(c);
-
-      if(c==10||c==ESC)return;
+      if(c==10||c==ESC) return;
 
       if(c>='1'&&c<=partysize+'1'-1)
       {
          buyer=c-'1';
          return;
       }
-   }while(1);
+   }
 }

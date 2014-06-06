@@ -1,4 +1,38 @@
-#include <includes.h>
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: 
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
+//#include <includes.h>
 #include <externs.h>
 
 enum Pages
@@ -15,7 +49,7 @@ char liberalagenda(char won)
 {
    int page=0, y;
 
-   while(1)
+   while(true)
    {
       erase();
       if(won==1)
@@ -24,7 +58,7 @@ char liberalagenda(char won)
          move(0,0);
          addstr("The Triumph of the Liberal Agenda");
       }
-      else if(won==-1)
+      else if(won==-1||won==-2)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(0,0);
@@ -46,11 +80,11 @@ char liberalagenda(char won)
       {
 
          move(1,0);
-         addstr(" _________________ __________ __________ ");
+         addstr("ษอออออออออออออออออปฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤฟ");
          move(2,0);
-         addstr("/ GENERAL SUMMARY \\ ISSUES A \\ ISSUES B \\");
+         addstr("บ GENERAL SUMMARY บ ISSUES A ณ ISSUES B ณ");
          move(3,0);
-         addstr("                   -------------------------------------------------------------");
+         addstr("ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
 
          if(exec[EXEC_PRESIDENT]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(exec[EXEC_PRESIDENT]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
@@ -58,14 +92,14 @@ char liberalagenda(char won)
          else if(exec[EXEC_PRESIDENT]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(5,0);
-         if(won!=-1)
+         if(won==-1) addstr("King: ");
+         else if(won==-2) addstr("General Secretary: ");
+         else
          {
             addstr("President ");
             if(execterm==1)addstr("(1st Term):");
             else addstr("(2nd Term):");
          }
-         else if(won==-1)
-            addstr("King: ");
          move(5,25);
          addstr(execname[EXEC_PRESIDENT]);
 
@@ -75,8 +109,9 @@ char liberalagenda(char won)
          else if(exec[EXEC_VP]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(6,0);
-         if(won!=-1) addstr("Vice President: ");
-         else addstr("Chancellor: ");
+         if(won==-1) addstr("Minister of Love: ");
+         else if(won==-2) addstr("Premier: ");
+         else addstr("Vice President: ");
          move(6,25);
          addstr(execname[EXEC_VP]);
 
@@ -86,14 +121,9 @@ char liberalagenda(char won)
          else if(exec[EXEC_STATE]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(7,0);
-         if(won!=-2)
-         {
-            addstr("Secretary of State: ");
-         }
-         else
-         {
-            addstr("General Secretary: ");
-         }
+         if(won==-1) addstr("Minister of Peace: ");
+         else if(won==-2) addstr("Foreign Minister: ");
+         else addstr("Secretary of State: ");
          move(7,25);
          addstr(execname[EXEC_STATE]);
 
@@ -103,25 +133,37 @@ char liberalagenda(char won)
          else if(exec[EXEC_ATTORNEY]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(8,0);
-         addstr("Attorney General: ");
+         if(won==-1) addstr("Minister of Truth: ");
+         else if(won==-2) addstr("State Security Minister: ");
+         else addstr("Attorney General: ");
          move(8,25);
          addstr(execname[EXEC_ATTORNEY]);
 
-         int housemake[5]={0,0,0,0,0};
-         for(int h=0;h<435;h++)
+         if(won==-1)
          {
-            housemake[house[h]+2]++;
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            move(10,0);
+            addstr("The Congress consists of CEOs and televangelists.");
          }
-         int lsum=housemake[3]+housemake[4]
-            -housemake[0]-housemake[1];
-         if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(housemake[4]<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         char num[20];
-         if(won!=-1&&won!=2)
+         else if(won==-2)
          {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            move(10,0);
+            addstr("The Congress consists of Stalinist Party loyalists.");
+         }
+         else
+         {
+            int housemake[5]={0,0,0,0,0};
+            for(int h=0;h<435;h++)
+               housemake[house[h]+2]++;
+            int lsum=housemake[3]+housemake[4]
+                    -housemake[0]-housemake[1];
+            if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(housemake[4]<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
+            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+            char num[20];
             move(10,0);
             addstr("House: ");
             itoa(housemake[4],num,10);
@@ -134,22 +176,17 @@ char liberalagenda(char won)
             addstr(num);addstr("Cons, ");
             itoa(housemake[0],num,10);
             addstr(num);addstr("Cons+");
-         }
 
-         int senatemake[5]={0,0,0,0,0};
-         for(int s=0;s<100;s++)
-         {
-            senatemake[senate[s]+2]++;
-         }
-         lsum=senatemake[3]+senatemake[4]
-            -senatemake[0]-senatemake[1];
-         if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(senatemake[4]<67)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
-         if(won!=-1&&won!=-2)
-         {
+            int senatemake[5]={0,0,0,0,0};
+            for(int s=0;s<100;s++)
+               senatemake[senate[s]+2]++;
+            lsum=senatemake[3]+senatemake[4]
+                -senatemake[0]-senatemake[1];
+            if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(senatemake[4]<67)set_color(COLOR_CYAN,COLOR_BLACK,1);
+            else set_color(COLOR_GREEN,COLOR_BLACK,1);
             move(11,0);
             addstr("Senate: ");
             itoa(senatemake[4],num,10);
@@ -163,20 +200,14 @@ char liberalagenda(char won)
             itoa(senatemake[0],num,10);
             addstr(num);addstr("Cons+");
          }
-         else if(won==-1)
-         {
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            move(10,0);
-            addstr("The Congress consists of CEOs and televangelists.");
-         }
-         int elibjudge=0;
+         int elibjudge=0,archconjudge=0;
          for(int c=0;c<9;c++)
          {
             if(court[c]==2)elibjudge++;
+            else if(court[c]==-2)archconjudge++;
          }
 
-         if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(won==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+         if(won==-1||won==-2||archconjudge>=5)set_color(COLOR_RED,COLOR_BLACK,1);
          else if(won==1||elibjudge>=5)set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -194,25 +225,7 @@ char liberalagenda(char won)
          move(7,58);addch('R');
          move(8,58);addch('T');
 
-         if(won!=-1&&won!=-2)
-         {
-            y=4;
-
-            for(int c=0;c<9;c++)
-            {
-               if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-               else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               else if(court[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               else if(court[c]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
-               move(y,60);
-               addstr(courtname[c]);
-
-               y++;
-            }
-         }
-         else if(won==-1)
+         if(won==-1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             move(5,60);
@@ -222,15 +235,49 @@ char liberalagenda(char won)
             move(7,60);
             addstr("Ethics Officers");
          }
+         else if(won==-2)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            move(5,60);
+            addstr(" Replaced By");
+            move(6,60);
+            addstr("Stalinist Show");
+            move(7,60);
+            addstr(" Trial Judges");
+         }
+         else
+         {
+            y=4;
+
+            for(int c=0;c<9;c++,y++)
+            {
+               if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
+               else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+               else if(court[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               else if(court[c]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
+               else set_color(COLOR_GREEN,COLOR_BLACK,1);
+
+               move(y,60);
+               addstr(courtname[c]);
+            }
+         }
          for(int l=0;l<LAWNUM;l++)
          {
             move(14+l/3,l%3*26);
 
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            addstr("\x11ฤ");
+            set_color(COLOR_CYAN,COLOR_BLACK,1);
+            addstr("ฤ");
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            addstr("ฤ");
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            addstr("ฤ");
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("ฤ\x10");
 
-            addstr("<-----> ");
-
-            if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
+            if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
             else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
             else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -272,37 +319,36 @@ char liberalagenda(char won)
       case PAGE_ISSUES_A:
       case PAGE_ISSUES_B:
       {
-         move(1,0);
-         addstr(" _________________ __________ __________ ");
-         move(2,0);
          if(page==PAGE_ISSUES_A)
          {
-            addstr("/ GENERAL SUMMARY / ISSUES A \\ ISSUES B \\");
+            move(1,0);
+            addstr("ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤษออออออออออปฤฤฤฤฤฤฤฤฤฤฟ");
+            move(2,0);
+            addstr("ณ GENERAL SUMMARY บ ISSUES A บ ISSUES B ณ");
             move(3,0);
-            addstr("------------------            --------------------------------------------------");
+            addstr("ฯอออออออออออออออออผ          ศออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
          }
          else
          {
-            addstr("/ GENERAL SUMMARY / ISSUES A / ISSUES B \\");
+            move(1,0);
+            addstr("ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤยฤฤฤฤฤฤฤฤฤฤษออออออออออป");
+            move(2,0);
+            addstr("ณ GENERAL SUMMARY ณ ISSUES A บ ISSUES B บ");
             move(3,0);
-            addstr("-----------------------------            ---------------------------------------");
+            addstr("ฯอออออออออออออออออฯออออออออออผ          ศอออออออออออออออออออออออออออออออออออออออ");
          }
 
          int y=4;
          int startinglaw=0;
-         if(page==PAGE_ISSUES_B)startinglaw=18;
-         for(int l=startinglaw;l<startinglaw+18 && l<LAWNUM;l++)
+         if(page==PAGE_ISSUES_B) startinglaw=18;
+         for(int l=startinglaw;l<startinglaw+18&&l<LAWNUM;l++,y++)
          {
-            if(won==-1)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(won==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-            else
-            {
-               if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
-               else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_CYAN,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
-            }
+            if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_ARCHCONSERVATIVE) set_color(COLOR_RED,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_CONSERVATIVE) set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_MODERATE) set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else if(law[l]==ALIGN_LIBERAL) set_color(COLOR_CYAN,COLOR_BLACK,1);
+            else set_color(COLOR_GREEN,COLOR_BLACK,1);
 
             move(y,0);
 
@@ -310,7 +356,7 @@ char liberalagenda(char won)
             {
                case LAW_WOMEN:
                   if(won==-2)addstr("Women are usually drafted into the armed forces to fight in place of men.");
-                  else if(won==-1)addstr("Women have been stripped of the right to vote.");
+                  else if(won==-1)addstr("Women are considered property, and rape has been legalized.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Women are second-class citizens.");
                   else if(law[l]==-1)addstr("Non-discrimination laws do not apply to gender.");
@@ -321,7 +367,7 @@ char liberalagenda(char won)
                   break;
                case LAW_CIVILRIGHTS:
                   if(won==-2)addstr("Entire ethnic groups are branded \"enemies of the state\".");
-                  else if(won==-1)addstr("Segregation has been reintroduced.");
+                  else if(won==-1)addstr("Slavery has been reintroduced, along with an apartheid system.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Racial discrimination is prohibited in name only.");
                   else if(law[l]==-1)addstr("Civil rights laws are inconsistently enforced.");
@@ -354,7 +400,7 @@ char liberalagenda(char won)
                   break;
                case LAW_ELECTIONS:
                   if(won==-2)addstr("Only Stalinist Party members may run in elections, and they all run unopposed.");
-                  else if(won==-1)addstr("Only independently wealthy candidates have a chance of defeating incumbents.");
+                  else if(won==-1)addstr("Political offices are auctioned off to the highest bidder.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                   addstr("Virtually no ethics restrictions exist on political officeholders.");
                   else if(law[l]==-1)addstr("Elections are mostly unregulated, but basic ethics restrictions are in place.");
@@ -375,7 +421,7 @@ char liberalagenda(char won)
                   else addstr("The military has been abolished, and the entire world is at peace.");
                   break;
                case LAW_TORTURE:
-                  if(won==-2)addstr("The Cheka constantly invents new methods of torture.");
+                  if(won==-2)addstr("The State Security Commission constantly invents new methods of torture.");
                   else if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
@@ -551,8 +597,6 @@ char liberalagenda(char won)
                   else addstr("All gun manufacturers have been shut down and all existing guns destroyed.");
                   break;
             }
-
-            y++;
          }
          break;
       }
@@ -563,19 +607,13 @@ char liberalagenda(char won)
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(23,0);
          if(wincondition==WINCONDITION_EASY)
-         {
             addstr("The country has achieved Liberal status!");
-         }
          else
-         {
             addstr("The country has achieved Elite Liberal status!");
-         }
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          if(c==KEY_RIGHT || c==KEY_DOWN)
          {
@@ -599,9 +637,31 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press 'L' to view the high score list.");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
+
+         if(c==KEY_RIGHT || c==KEY_DOWN)
+         {
+            page++;
+            continue;
+         }
+
+         if(c==KEY_LEFT || c==KEY_UP)
+         {
+            page--;
+            continue;
+         }
+
+         if(c=='l')break;
+      }
+      else if(won==-2)
+      {
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         move(23,0);
+         addstr("The country has been Stalinized.");
+         move(24,0);
+         addstr("Press 'L' to view the high score list.");
+
+         int c=getkey();
 
          if(c==KEY_RIGHT || c==KEY_DOWN)
          {
@@ -644,9 +704,7 @@ char liberalagenda(char won)
          move(24,0);
          addstr("Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          if(c==KEY_RIGHT || c==KEY_DOWN)
          {
@@ -740,8 +798,7 @@ char confirmdisband(void) // The (current) issue that the masses are most
          addch(word[x]);
       }
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if((c==word[pos])||((c+'A'-'a')==word[pos]))
       {

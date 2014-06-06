@@ -154,6 +154,39 @@ void translategetch_cap(int &c)
    */
 }
 
+
+
+/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
+int getkey()
+{
+   refresh();
+   nodelay(stdscr,TRUE);
+   while(getch()!=ERR);
+   nodelay(stdscr,FALSE);
+   int c=getch();
+   translategetch(c);
+   return c;
+}
+
+
+
+/* Empties the keyboard buffer, and returns most recent key pressed, if any */
+int checkkey()
+{
+   int c=ERR,ret=ERR;
+   nodelay(stdscr,TRUE);
+   do
+   {
+      ret=c;
+      c=getch();
+      translategetch(c);
+   } while(c!=ERR);
+   nodelay(stdscr,FALSE);
+   return ret;
+}
+
+
+
 #ifdef CH_USE_UNICODE
 char unicode_mode = 0;
 

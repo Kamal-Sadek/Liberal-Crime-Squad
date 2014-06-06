@@ -35,66 +35,42 @@ This file is part of Liberal Crime Squad.
 //Constructor.
 Log::Log()
 {
-   //This is set in the initialize() function.
-   initialized = false;
-
-   //Yes, seems redundant. However, I've had situations in the past where the compiler
+   initialized = false; //This is set in the initialize() function.
+   //Yes, next line seems redundant. However, I've had situations in the past where the compiler
    //(some compiler in windows) murdered me if I didn't do this. And I want to live.
    //Besides, it's good practice to always explicitly initialize a variable.
    //You never know what a compiler's going to initialize something as :)
    filename = "";
-
-   //Set this to whatever the default has been defined as.
-   newline_mode = NEWLINEMODE_LOGFILES_DEFAULT;
-
+   newline_mode = NEWLINEMODE_LOGFILES_DEFAULT; //Set this to whatever the default has been defined as.
    buffer = ""; //Same situation as with filename.
-
    logged_since_last_message = false; //Well, this starts out false for obvious reasons.
 }
 
 //Deconstructor.
 Log::~Log()
-{
-   //Check if the logger is initialized.
-   if(initialized)
-   {
-      //It is.
-
-      LCSCloseFileCPP(file); //Close the file.
-   }
+{  //If the logger is initialized, close the file.
+   if(initialized) LCSCloseFileCPP(file);
 }
 
 //The initialization function.
 bool Log::initialize(string _filename, bool overwrite_existing, int _newline_mode)
 {
    filename = _filename; //Assign the filepath.
-
    newline_mode = _newline_mode; //Set the newline mode
-
    //check If it is to append the output to the end of the log file rather than
    //to overwrite the file.
    if(!overwrite_existing)
-   {
-      //Yes, it is to append.
-
-      //Open the file in append mode. With error checking.
+   {  //Yes, it is to append, so open the file in append mode, with error checking.
       if(!LCSOpenFileCPP(filename, ios::out | ios::app, LCSIO_PRE_HOME, file))
-      {
          return false; //Failed to open file.
-      }
    }
    else //overwrite_existing = true. Overwrite the file.
-   {
-      //Open the file. Use the trunc parameter to ensure the file is going to be overwritten.
+   {  //Open the file. Use the trunc parameter to ensure the file is going to be overwritten.
       if(!LCSOpenFileCPP(filename, ios::out | ios::trunc, LCSIO_PRE_HOME, file)) //With error checking.
-      {
          return false; //Failed to open file.
-      }
    }
    //File's open and everything. Okay to proceed.
-
    initialized = true; //The logger is now initialized.
-
    return true; //*super smash brothers melee announcer* Success!
 }
 
@@ -112,60 +88,39 @@ bool Log::log(string text)
       //which means there is no elemenet 1, and thus SEGFAULT. Which we don't want.
       return true; //Abort.
    }
-
    //Guard to make sure that it doesn't try to write text when the logger isn't
    //even initialized or the file isn't even loaded!
    if(initialized && file.is_open())
    {
       file.clear(); //First, clear the state flags.
-
       file << text; //Output the text.
-
       if(newline_mode != 0) //If the log is supposed to be adding newlines.
-      {
-         //I could make this support more than double newlines, but that's not needed right now.
+      {  //I could make this support more than double newlines, but that's not needed right now.
          if(text[text.size() - 1] != '\n') //Check if the last character is not a newline.
-         {
-            //It is not. Go ahead and write a newline character to the file.
+         {  //It is not. Go ahead and write a newline character to the file.
             //This for loop ensures that all the required newlines are written.
             for(int i = 0; i < newline_mode; ++i)
-            {
                file << "\n";
-            }
          }
          else if(newline_mode == 2) //If supposed to use double lines.
          {
             if(text.size() < 2) //Check if text is only one character long.
-            {
                //Text is too small to have two newlines. That means it has only
                //one element, and it's already newline.
                file << "\n"; //It only needs one more newline.
-            }
             else if(text[text.size() - 2] != '\n') //One before the last not a newline? Add a newline then.
-            {
                file << "\n"; //Add a newline.
-            }
             //There is no else. We don't need to do anything if two newlines are
             //already present.
          }
       }
-
       file.flush(); //Force it to write out everything now.
-
       if(!file.good()) //Make sure everything's good and there are no problems.
-      {
          return false; //Ruh Roh! Something went wrong!
-      }
-
       logged_since_last_message = true; //Well, this is now true, since something was just logged.
-
       return true; //Success!
    }
-   else
-   {
-      //The logger is not initialized or the file isn't open. Something done went wrong.
-      return false; //Abort!
-   }
+   else return false;  //The logger is not initialized or the file isn't open. Something went wrong. Abort!
 }
 
 void Log::record(string text)
@@ -175,22 +130,12 @@ void Log::record(string text)
 }
 
 void Log::nextMessage()
-{
-   //This check makes sure the log is formatted correctly even when there is
+{  //This check makes sure the log is formatted correctly even when there is
    //nothing in the buffer (a result of using newline());
-   if(buffer == "")
-   {
-      for(int i = 0; i < newline_mode; ++i)
-      {
-         //Add as many newlines as the game calls for.
-         buffer += "\n";
-      }
-   }
-
+   if(buffer=="") for(int i=0;i<newline_mode;i++)
+      buffer+="\n"; //Add as many newlines as the game calls for.
    log(buffer); //Write out the current text.
-
    buffer = ""; //Clear the buffer.
-
    logged_since_last_message = false; //Reset this, since this is the "last message".
 }
 

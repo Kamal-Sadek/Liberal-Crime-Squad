@@ -61,7 +61,7 @@
     #define REGISTERWINDOWS
     */
     #include <xcurses.h> //This is the X11 Port of PDCurses
-  //undo PDCurses macros that break vector class
+    //undo PDCurses macros that break vector class
     #undef erase
     #undef clear
   #else
@@ -79,27 +79,25 @@
 using namespace std;
 
 extern CursesMoviest movie;
-void translategetch(int &c);
 
 void filelistst::open_diskload(FILE* h)
 {
    int dummy;
    short dummy2;
-   //int numbytes;
 
    clean();
 
-   /*numbytes=*/fread(&dummy,sizeof(int),1,h);
+   fread(&dummy,sizeof(int),1,h);
    list.resize(dummy);
 
    for(int l=0;l<(int)list.size();l++)
    {
-      /*numbytes=*/fread(&dummy2,sizeof(short),1,h);
+      fread(&dummy2,sizeof(short),1,h);
 
       if(dummy2>0)
       {
          list[l]=new char[dummy2+1];
-         /*numbytes=*/fread(list[l],1,dummy2,h);
+         fread(list[l],1,dummy2,h);
          list[l][dummy2]='\x0';
       }
       else list[l]=NULL;
@@ -108,23 +106,18 @@ void filelistst::open_diskload(FILE* h)
 
 void filelistst::open_disksave(FILE *h)
 {
-   int dummy;
+   int dummy=list.size();
    short dummy2;
-   //int numbytes;
 
-   dummy=list.size();
-   /*numbytes=*/fwrite(&dummy,sizeof(int),1,h);
+   fwrite(&dummy,sizeof(int),1,h);
 
-   for(int l=0;l<(int)list.size();l++)
-      if(list[l]!=NULL)
-      {
-         dummy2=strlen(list[l]);
-         /*numbytes=*/fwrite(&dummy2,sizeof(short),1,h);
-         if(dummy2>0)
-            /*numbytes=*/fwrite(list[l],dummy2,1,h);
-         else
-            /*numbytes=*/fwrite(&(dummy2=0),sizeof(short),1,h);
-      }
+   for(int l=0;l<(int)list.size();l++) if(list[l]!=NULL)
+   {
+      dummy2=strlen(list[l]);
+      fwrite(&dummy2,sizeof(short),1,h);
+      if(dummy2>0) fwrite(list[l],dummy2,1,h);
+      else fwrite(&(dummy2=0),sizeof(short),1,h);
+   }
 }
 
 void filelistst::smartappend(filelistst &list2)
@@ -133,18 +126,13 @@ void filelistst::smartappend(filelistst &list2)
 
    for(int l2=0;l2<(int)list2.list.size();l2++)
    {
-      if(list2.list[l2]==NULL)continue;
+      if(list2.list[l2]==NULL) continue;
 
       conf=1;
 
       for(int l=0;l<(int)list.size();l++)
-      {
          if(!strcmp(list2.list[l2],list[l]))
-         {
-            conf=0;
-            break;
-         }
-      }
+         {  conf=0; break; }
 
       if(conf&&strlen(list2.list[l2])>0)
       {
@@ -157,7 +145,6 @@ void filelistst::smartappend(filelistst &list2)
 
 void CursesMoviest::savemovie(const char *filename,int flags=0)
 {
-   //int numbytes;
    FILE *h;
    h=LCSOpenFile(filename, "wb", flags);
 
@@ -165,21 +152,21 @@ void CursesMoviest::savemovie(const char *filename,int flags=0)
 
    if(h!=NULL)
    {
-      /*numbytes=*/fwrite(&picnum,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&dimx,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&dimy,sizeof(int),1,h);
-      /*numbytes=*/fwrite(picture,sizeof(char),80*25*4*picnum,h);
+      fwrite(&picnum,sizeof(int),1,h);
+      fwrite(&dimx,sizeof(int),1,h);
+      fwrite(&dimy,sizeof(int),1,h);
+      fwrite(picture,sizeof(char),80*25*4*picnum,h);
       dummy=frame.size();
-      /*numbytes=*/fwrite(&dummy,sizeof(long),1,h);
+      fwrite(&dummy,sizeof(long),1,h);
       for(int f=0;f<dummy;f++)
       {
-         /*numbytes=*/fwrite(&frame[f]->frame,sizeof(short),1,h);
-         /*numbytes=*/fwrite(&frame[f]->start,sizeof(long),1,h);
-         /*numbytes=*/fwrite(&frame[f]->stop,sizeof(long),1,h);
-         /*numbytes=*/fwrite(&frame[f]->sound,sizeof(short),1,h);
-         /*numbytes=*/fwrite(&frame[f]->song,sizeof(short),1,h);
-         /*numbytes=*/fwrite(&frame[f]->effect,sizeof(short),1,h);
-         /*numbytes=*/fwrite(&frame[f]->flag,sizeof(short),1,h);
+         fwrite(&frame[f]->frame,sizeof(short),1,h);
+         fwrite(&frame[f]->start,sizeof(long),1,h);
+         fwrite(&frame[f]->stop,sizeof(long),1,h);
+         fwrite(&frame[f]->sound,sizeof(short),1,h);
+         fwrite(&frame[f]->song,sizeof(short),1,h);
+         fwrite(&frame[f]->effect,sizeof(short),1,h);
+         fwrite(&frame[f]->flag,sizeof(short),1,h);
       }
 
       songlist.open_disksave(h);
@@ -204,7 +191,6 @@ void CursesMoviest::loadmovie(const char *filename)
       fread(&dimx,sizeof(int),1,h);
       fread(&dimy,sizeof(int),1,h);
       fread(picture,sizeof(char)*80*25*4*picnum,1,h);
-
       fread(&dummy,sizeof(long),1,h);
       frame.resize(dummy);
       for(int f=0;f<dummy;f++)
@@ -233,122 +219,101 @@ void CursesMoviest::clean(void)
 
 void CursesMoviest::convertindices_song(filelistst &master)
 {
-   int s2;
-   if(songlist.list.size()==0)return;
+   if(songlist.list.size()==0) return;
 
    vector<int> convert;
    convert.resize(songlist.list.size());
 
+   int s2;
    for(int s=0;s<(int)songlist.list.size();s++)
    {
       for(s2=0;s2<(int)master.list.size();s2++)
          if(!stricmp(master.list[s2],songlist.list[s]))
-         {
-            convert[s]=s2;
-            break;
-         }
+         {  convert[s]=s2; break; }
       if(s2==(int)master.list.size())convert[s]=-1;
    }
 
    for(int f=0;f<(int)frame.size();f++)
-      if(frame[f]->song!=-1)frame[f]->song=convert[frame[f]->song];
+      if(frame[f]->song!=-1) frame[f]->song=convert[frame[f]->song];
 }
 
 void CursesMoviest::convertindices_sound(filelistst &master)
 {
-   int s2;
-   if(soundlist.list.size()==0)return;
+   if(soundlist.list.size()==0) return;
 
    vector<int> convert;
    convert.resize(soundlist.list.size());
 
+   int s2;
    for(int s=0;s<(int)soundlist.list.size();s++)
    {
       for(s2=0;s2<(int)master.list.size();s2++)
-      {
          if(!stricmp(master.list[s2],soundlist.list[s]))
-         {
-            convert[s]=s2;
-            break;
-         }
-      }
-      if(s2==(int)master.list.size())convert[s]=-1;
+         {  convert[s]=s2; break; }
+      if(s2==(int)master.list.size()) convert[s]=-1;
    }
 
    for(int f=0;f<(int)frame.size();f++)
-   {
-      if(frame[f]->sound!=-1)frame[f]->sound=convert[frame[f]->sound];
-   }
+      if(frame[f]->sound!=-1) frame[f]->sound=convert[frame[f]->sound];
 }
 
 void CursesMoviest::playmovie(int x,int y)
 {
-   nodelay(stdscr,TRUE);
-
-   long timer=0;
-
-   char cont,pted;
-
-   long finalframe=0;
+   long timer=0,finalframe=0;
+   bool cont,pted;
 
    do
-      {
+   {
       //int time=GetTickCount();
       alarmset(10);
 
-      cont=0;
-      pted=0;
+      cont=false,pted=false;
 
       //ASSUMES FRAME ORDERED BY STOP TIMER
       for(int f=0;f<(int)frame.size();f++)
-         {
+      {
          if(frame[f]->stop>=finalframe)finalframe=frame[f]->stop;
          if(frame[f]->start<=timer&&frame[f]->stop>=timer)
-            {
+         {
+            /* Sound and songs never got implemented!
             //PLAY SOUND
             if(frame[f]->start==timer&&frame[f]->sound!=-1)
-               {
-               //playsound(frame[f]->sound);
-               }
+               playsound(frame[f]->sound);
             //PLAY SONG
             if(frame[f]->start==timer&&frame[f]->song!=-1)
-               {
-               //startbackgroundmusic(frame[f]->song);
-               }
+               startbackgroundmusic(frame[f]->song);
+            */
             //DRAW FRAME
             if(frame[f]->frame!=-1)
-               {
+            {
                for(int fx=0;fx<movie.dimx&&fx+x<80;fx++)
-                  {
                   for(int fy=0;fy<movie.dimy&&fy+y<25;fy++)
-                     {
+                  {
                      if((movie.picture[frame[f]->frame][fx][fy][0]==' '||
-                        movie.picture[frame[f]->frame][fx][fy][0]==0)&&
-                        frame[f]->flag & CM_FRAMEFLAG_OVERLAY)continue;
+                         movie.picture[frame[f]->frame][fx][fy][0]==0)&&
+                         frame[f]->flag & CM_FRAMEFLAG_OVERLAY) continue;
 
                      move(fy+y,fx+x);
                      set_color(movie.picture[frame[f]->frame][fx][fy][1],
-                        movie.picture[frame[f]->frame][fx][fy][2],
-                        movie.picture[frame[f]->frame][fx][fy][3]);
+                               movie.picture[frame[f]->frame][fx][fy][2],
+                               movie.picture[frame[f]->frame][fx][fy][3]);
                      addch(movie.picture[frame[f]->frame][fx][fy][0]);
-                     }
                   }
-               pted=1;
-               }
+               pted=true;
             }
-         if(frame[f]->stop>=timer)cont=1;
          }
+         if(frame[f]->stop>=timer) cont=true;
+      }
 
-      if(pted)refresh();
+      if(pted) refresh();
 
       timer++;
       //while(time+10>GetTickCount);
       alarmwait();
 
-      int c=getch();
-      translategetch(c);
+      int c=checkkey();
 
-      if(c==10||c==32||c==27)timer=finalframe;
+      if(c==ENTER||c==ESC||c==SPACEBAR) timer=finalframe;
 
-      }while(cont);
+   } while(cont);
 }

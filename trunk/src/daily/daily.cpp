@@ -80,8 +80,9 @@ void advanceday(char &clearformess,char canseethings)
                      addstr(str, gamelog);
                      addstr(". The Liberal will be missed.", gamelog);
                      gamelog.nextMessage();
-                     refresh();
-                     getch();
+
+                     getkey();
+
                      break;
                   }
                }
@@ -155,8 +156,7 @@ void advanceday(char &clearformess,char canseethings)
                   addstr(".", gamelog);
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
                }
                squad[sq]->squad[p]->activity.type=ACTIVITY_VISIT;
                squad[sq]->squad[p]->activity.arg=squad[sq]->activity.arg;
@@ -183,8 +183,7 @@ void advanceday(char &clearformess,char canseethings)
             addstr(" was too hot to risk.", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             //ON TO THE NEXT SQUAD
             squad[sq]->activity.type=ACTIVITY_NONE;
@@ -233,8 +232,7 @@ void advanceday(char &clearformess,char canseethings)
                         addstr(".", gamelog);
                         gamelog.nextMessage();
 
-                        refresh();
-                        getch();
+                        getkey();
                      }
                      wantcar.erase(wantcar.begin() + c);
                      break;
@@ -385,8 +383,7 @@ void advanceday(char &clearformess,char canseethings)
                addstr(".", gamelog);
                gamelog.nextMessage();
 
-               refresh();
-               getch();
+               getkey();
 
                //ON TO THE NEXT SQUAD
                squad[sq]->activity.type=ACTIVITY_NONE;
@@ -421,7 +418,7 @@ void advanceday(char &clearformess,char canseethings)
          bool canDepart = true;
          if(location[squad[sq]->activity.arg]->parent == travelLocation)
          {
-            if(clearformess)erase();
+            if(clearformess) erase();
             else makedelimiter(8,0);
             move(8,1);
             int squadNum;
@@ -439,7 +436,8 @@ void advanceday(char &clearformess,char canseethings)
                itoa(100*squadNum, cost, 10);
                addstr_fl(gamelog, "%s spent $%s on tickets to go to %s.", squad[sq]->name, cost, location[squad[sq]->activity.arg]->getname().c_str());
             }
-            getch();
+
+            getkey();
          }
 
          if(canDepart) switch(location[squad[sq]->activity.arg]->type)
@@ -452,7 +450,7 @@ void advanceday(char &clearformess,char canseethings)
          case SITE_CITY_ATLANTA:
          case SITE_CITY_MIAMI:
          case SITE_CITY_WASHINGTON_DC:
-            if(clearformess)erase();
+            if(clearformess) erase();
             else makedelimiter(8,0);
             move(8,1);
             addstr(squad[sq]->name, gamelog);
@@ -461,8 +459,7 @@ void advanceday(char &clearformess,char canseethings)
             addstr(".", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             {
                int l = find_homeless_shelter(squad[sq]->activity.arg);
@@ -478,7 +475,7 @@ void advanceday(char &clearformess,char canseethings)
          case SITE_BUSINESS_PAWNSHOP:
          case SITE_BUSINESS_CARDEALERSHIP:
          case SITE_BUSINESS_ARMSDEALER:
-            if(clearformess)erase();
+            if(clearformess) erase();
             else makedelimiter(8,0);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -488,8 +485,7 @@ void advanceday(char &clearformess,char canseethings)
             addstr(".", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             activesquad=squad[sq];
             showcarprefs=-1;
@@ -520,7 +516,7 @@ void advanceday(char &clearformess,char canseethings)
             break;
          case SITE_HOSPITAL_UNIVERSITY:
          case SITE_HOSPITAL_CLINIC:
-            if(clearformess)erase();
+            if(clearformess) erase();
             else
             {
                makedelimiter(8,0);
@@ -533,8 +529,7 @@ void advanceday(char &clearformess,char canseethings)
             addstr(".", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             activesquad=squad[sq];
             hospital(squad[sq]->activity.arg);
@@ -545,7 +540,7 @@ void advanceday(char &clearformess,char canseethings)
             clearformess=1;
             break;
          default:
-            if(clearformess)erase();
+            if(clearformess) erase();
             else
             {
                makedelimiter(8,0);
@@ -570,10 +565,9 @@ void advanceday(char &clearformess,char canseethings)
                gamelog.nextMessage();
             }
 
-            refresh();
-            getch();
+            getkey();
 
-            if(clearformess)erase();
+            if(clearformess) erase();
             else
             {
                makedelimiter(8,0);
@@ -593,9 +587,8 @@ void advanceday(char &clearformess,char canseethings)
                move(8,1);
                addstr("Why is the squad here?   (S)afe House, to cause (T)rouble, or (B)oth?");
 
-               do
-               {
-                  c=getch();                     translategetch(c);                  }while(c!='s'&&c!='b'&&c!='t');               }
+               do c=getkey(); while(c!='s'&&c!='b'&&c!='t');
+            }
 
             if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
             if(c=='t'||c=='b')
@@ -695,11 +688,8 @@ void advanceday(char &clearformess,char canseethings)
          }
          break;
       case ACTIVITY_POLLS:
-         if(clearformess)erase();
-         else
-         {
-            makedelimiter(8,0);
-         }
+         if(clearformess) erase();
+         else makedelimiter(8,0);
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
@@ -707,8 +697,7 @@ void advanceday(char &clearformess,char canseethings)
          addstr(" surfs the Net for recent opinion polls.", gamelog);
          gamelog.nextMessage();
 
-         refresh();
-         getch();
+         getkey();
 
          pool[p]->train(SKILL_COMPUTERS,MAX(3-pool[p]->get_skill(SKILL_COMPUTERS),1));
 
@@ -721,13 +710,8 @@ void advanceday(char &clearformess,char canseethings)
          pool[p]->activity.type=ACTIVITY_NONE;
          break;
       case ACTIVITY_NONE:
-         if(pool[p]->align == 1 && !pool[p]->is_imprisoned())
-         {
-            if(pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged())
-            {
-               repairarmor(*pool[p],clearformess);
-            }
-         }
+         if(pool[p]->align == 1&&!pool[p]->is_imprisoned()&&(pool[p]->get_armor().is_bloody()||pool[p]->get_armor().is_damaged()))
+            repairarmor(*pool[p],clearformess);
          break;
       }
    }
@@ -957,8 +941,8 @@ void advanceday(char &clearformess,char canseethings)
                addstr("'s injuries require professional treatment.", gamelog);
                gamelog.nextMessage();
                pool[p]->activity.type=ACTIVITY_CLINIC;
-               refresh();
-               getch();
+
+               getkey();
             }
          }
       }
@@ -991,8 +975,8 @@ void advanceday(char &clearformess,char canseethings)
       {
          if(location[l]->renting>0&&
             !location[l]->newrental)
-         {
-            if(ledger.get_funds()>=location[l]->renting)
+         {  // if rent >= 1000000 this means you get should kicked out automatically
+            if(ledger.get_funds()>=location[l]->renting&&location[l]->renting<1000000)
             {
                ledger.subtract_funds(location[l]->renting,EXPENSE_RENT);
             }
@@ -1012,8 +996,7 @@ void advanceday(char &clearformess,char canseethings)
                addstr(".  Possessions go to the shelter.", gamelog);
                gamelog.nextMessage();
 
-               refresh();
-               getch();
+               getkey();
 
                location[l]->renting=RENTING_NOCONTROL;
 
@@ -1177,8 +1160,7 @@ void advanceday(char &clearformess,char canseethings)
                addstr(" regains contact with the LCS.", gamelog);
                gamelog.nextMessage();
 
-               refresh();
-               getch();
+               getkey();
             }
          }
       }
@@ -1433,14 +1415,15 @@ void dispersalcheck(char &clearformess)
                   addstr(pool[p]->name, gamelog);
                   addstr(" has lost touch with the Liberal Crime Squad.", gamelog);
                   gamelog.nextMessage();
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   set_color(COLOR_GREEN,COLOR_BLACK,1);
                   move(9,1);
                   addstr("The Liberal has gone into hiding...", gamelog);
                   gamelog.nextMessage();
-                  refresh();
-                  getch();
+
+                  getkey();
                }
                else if(dispersal_status[p]==DISPERSAL_ABANDONLCS)
                {
@@ -1449,8 +1432,8 @@ void dispersalcheck(char &clearformess)
                   addstr(pool[p]->name, gamelog);
                   addstr(" has abandoned the LCS.", gamelog);
                   gamelog.nextMessage();
-                  refresh();
-                  getch();
+
+                  getkey();
                }
                else if(dispersal_status[p]==DISPERSAL_NOCONTACT)
                {
@@ -1459,11 +1442,10 @@ void dispersalcheck(char &clearformess)
                   addstr(pool[p]->name, gamelog);
                   addstr(" has lost touch with the Liberal Crime Squad.", gamelog);
                   gamelog.nextMessage();
-                  refresh();
-                  getch();
+
+                  getkey();
                }
             }
-
 
             removesquadinfo(*pool[p]);
             if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_ABANDONLCS)
@@ -1539,28 +1521,22 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 
       if(subordinates>0) // Disintegration of the LCS
       {
-         if(clearformess)
-         {
-            erase();
-         }
-         else
-         {
-            makedelimiter(8,0);
-         }
+         if(clearformess) erase();
+         else makedelimiter(8,0);
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
          addstr(cr.name, gamelog);
          addstr(" has died.", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          move(10,1);
          addstr("There are none left with the courage and conviction to lead....", gamelog);
          gamelog.nextMessage();
-         refresh();
-         getch();
+
+         getkey();
       }
       return 0;
    }
@@ -1615,8 +1591,8 @@ bool promotesubordinates(Creature &cr, char &clearformess)
          addstr(" in the command chain.", gamelog);
       }
       gamelog.nextMessage();
-      refresh();
-      getch();
+
+      getkey();
    }
    else // Founder level promotion
    {
@@ -1625,15 +1601,15 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       addstr(cr.name, gamelog);
       addstr(" has died.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       move(10,1);
       addstr(pool[newboss]->name, gamelog);
       addstr(" is the new leader of the Liberal Crime Squad!", gamelog);
       gamelog.nextMessage();
-      refresh();
-      getch();
+
+      getkey();
 
       cr.hireid=-2; // Make dead founder not founder.
    }

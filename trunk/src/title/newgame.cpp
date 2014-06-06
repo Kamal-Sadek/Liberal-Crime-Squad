@@ -85,8 +85,9 @@ void setup_newgame(void)
 
       move(20,4);
       addstr("Press any other key to continue...");
-      int c=getch();
-      translategetch(c);
+
+      int c=getkey();
+
       if(c=='a')
       {
          classicmode=!classicmode;
@@ -196,8 +197,9 @@ void setup_newgame(void)
       move(15,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key to continue...");
-      int c=getch();
-      translategetch(c);
+
+      int c=getkey();
+
       if(c=='a')
       {
          wincondition=WINCONDITION_ELITE;
@@ -361,8 +363,7 @@ void makecharacter(void)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key when ready to begin...");
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='a')
       {
@@ -811,10 +812,9 @@ void makecharacter(void)
 
       do
       {
-         c=getch();
-         translategetch(c);
-         if(!choices)c='a'+selection;
-      }while(c<'a'||c>'e');
+         c=getkey();
+         if(!choices) c='a'+selection;
+      } while(c<'a'||c>'e');
 
       switch(q)
       {
@@ -1220,8 +1220,8 @@ void makecharacter(void)
    move(19,2);
    addstr("In this dark time, the Liberal Crime Squad is born...", gamelog);
    gamelog.nextMessage();
-   refresh();
-   getch();
+
+   getkey();
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);

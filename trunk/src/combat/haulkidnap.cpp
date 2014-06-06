@@ -65,8 +65,7 @@ void kidnapattempt(void)
       move(17,1);
       addstr("                                  ");
 
-      refresh();
-      getch();
+      getkey();
 
       return;
    }
@@ -79,10 +78,7 @@ void kidnapattempt(void)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("Choose a Liberal squad member to do the job.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c==10||c==ESC)return;
 
@@ -144,9 +140,8 @@ void kidnapattempt(void)
                   }
                }
 
-               refresh();
-               int c=getch();
-               translategetch(c);
+               int c=getkey();
+
                if(c>='a'&&c<='z')
                {
                   t=c-'a';
@@ -154,7 +149,7 @@ void kidnapattempt(void)
                   else {t=target[t];}break;
                }
                if(c==10||c==ESC||c==32){t=-1;break;}
-            }while(1);
+            } while(1);
          }
 
          if(t!=-1)
@@ -166,8 +161,8 @@ void kidnapattempt(void)
                delenc(t,0);
 
                int time=20+LCSrandom(10);
-               if(time<1)time=1;
-               if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
+               if(time<1) time=1;
+               if(sitealarmtimer>time||sitealarmtimer==-1) sitealarmtimer=time;
             }
             else sitealarm=1;
 
@@ -175,9 +170,7 @@ void kidnapattempt(void)
             {
                char present=0;
                for(int e=0;e<ENCMAX;e++)
-               {
-                  if(encounter[e].exists&&encounter[e].alive){present=1;break;}
-               }
+                  if(encounter[e].exists&&encounter[e].alive) {present=1; break;}
 
                if(present)
                {
@@ -187,18 +180,18 @@ void kidnapattempt(void)
                   criminalizeparty(LAWFLAG_KIDNAPPING);
                   if(activesquad->squad[kidnapper]->prisoner!=NULL)
                   {
-                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
-                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_NEWSANCHOR)offended_cablenews=1;
+                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
+                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_NEWSANCHOR) offended_cablenews=1;
                   }
                   else
                   {
-                     if(encounter[t].type==CREATURE_RADIOPERSONALITY)offended_amradio=1;
-                     if(encounter[t].type==CREATURE_NEWSANCHOR)offended_cablenews=1;
+                     if(encounter[t].type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
+                     if(encounter[t].type==CREATURE_NEWSANCHOR) offended_cablenews=1;
                   }
                }
             }
 
-            if(sitealarm)enemyattack();
+            if(sitealarm) enemyattack();
             creatureadvance();
          }
       }
@@ -210,8 +203,7 @@ void kidnapattempt(void)
          move(17,1);
          addstr("                                                     ");
 
-         refresh();
-         getch();
+         getkey();
       }
    }
    else
@@ -222,8 +214,7 @@ void kidnapattempt(void)
       move(17,1);
       addstr("                                                        ");
 
-      refresh();
-      getch();
+      getkey();
    }
 }
 
@@ -237,16 +228,9 @@ void releasehostage(void)
    int available=0;
    char availslot[6]={0,0,0,0,0,0};
    for(int p=0;p<6;p++)
-   {
       if(activesquad->squad[p]!=NULL)
-      {
          if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner!=NULL&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
-         {
-            available++;
-            availslot[p]=1;
-         }
-      }
-   }
+            available++,availslot[p]=1;
 
    if(!available)
    {
@@ -256,8 +240,7 @@ void releasehostage(void)
       move(17,1);
       addstr("                                  ");
 
-      refresh();
-      getch();
+      getkey();
 
       return;
    }
@@ -270,10 +253,7 @@ void releasehostage(void)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("Choose a Liberal squad member to release their hostage.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c==10||c==ESC)return;
 
@@ -286,7 +266,7 @@ void releasehostage(void)
          }
       }
 
-   }while(1);
+   } while(1);
 
    activesquad->squad[kidnapper]->prisoner->cantbluff=2;
    freehostage(*(activesquad->squad[kidnapper]), 2);
@@ -300,7 +280,8 @@ void releasehostage(void)
       move(17,1);
       addstr("                                  ");
 
-      getch();
+      getkey();
+
       sitealarm=1;
       alienationcheck(1);
    }
@@ -337,8 +318,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
          a.prisoner=new Creature;
          *a.prisoner=t;
 
-         refresh();
-         getch();
+         getkey();
 
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(17,1);
@@ -346,8 +326,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
          addstr(" is struggling and screaming!", gamelog);
          gamelog.newline(); //New line.
 
-         refresh();
-         getch();
+         getkey();
 
          gamelog.newline();
          return 1;
@@ -366,9 +345,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
          addstr(" writhes away!", gamelog);
          gamelog.newline(); //New line.
 
-         refresh();
-         getch();
-
+         getkey();
 
          gamelog.newline();
          return 0;
@@ -395,8 +372,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
       a.prisoner=new Creature;
       *a.prisoner=t;
 
-      refresh();
-      getch();
+      getkey();
 
       gamelog.newline();
       return 1;
@@ -475,10 +451,10 @@ void freehostage(Creature &cr,char situation)
    {
       printparty();
       if(mode==GAMEMODE_CHASECAR||
-                  mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+         mode==GAMEMODE_CHASEFOOT) printchaseencounter();
       else printencounter();
-      refresh();
-      getch();
+
+      getkey();
    }
 }
 
@@ -487,24 +463,20 @@ void freehostage(Creature &cr,char situation)
 /* haul dead/paralyzed */
 void squadgrab_immobile(char dead)
 {
-   int p;
-   //DRAGGING PEOPLE OUT IF POSSIBLE
-   int hostslots=0;
+   int p,hostslots=0; //DRAGGING PEOPLE OUT IF POSSIBLE
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
       {
          if(activesquad->squad[p]->alive&&
-            (activesquad->squad[p]->canwalk()||
-            (activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR))&&
+           (activesquad->squad[p]->canwalk()||
+           (activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR))&&
             activesquad->squad[p]->prisoner==NULL)
-         {
             hostslots++;
-         }
          else if((!activesquad->squad[p]->alive||
-            (!activesquad->squad[p]->canwalk()&&
-            !(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)))&&
-            activesquad->squad[p]->prisoner!=NULL)
+                 (!activesquad->squad[p]->canwalk()&&
+                 !(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)))&&
+                   activesquad->squad[p]->prisoner!=NULL)
          {
             clearmessagearea();
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -514,8 +486,8 @@ void squadgrab_immobile(char dead)
             addstr(activesquad->squad[p]->prisoner->name, gamelog);
             addstr(".", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             freehostage(*activesquad->squad[p]->prisoner,1);
          }
@@ -565,7 +537,7 @@ void squadgrab_immobile(char dead)
             {
                for(int p2=0;p2<6;p2++)
                {
-                  if(p2==p)continue;
+                  if(p2==p) continue;
                   if(activesquad->squad[p2]!=NULL)
                   {
                      if(activesquad->squad[p2]->alive&&
@@ -595,15 +567,15 @@ void squadgrab_immobile(char dead)
             char flipstart=0;
             for(int pt=0;pt<6;pt++)
             {
-               if(pt==p-1)continue;
-               if(pt==p){flipstart=1;}
-               if(flipstart&&pt<5)activesquad->squad[pt]=activesquad->squad[pt+1];
+               if(pt==p-1) continue;
+               if(pt==p) flipstart=1;
+               if(flipstart&&pt<5) activesquad->squad[pt]=activesquad->squad[pt+1];
             }
-            if(flipstart)activesquad->squad[5]=NULL;
+            if(flipstart) activesquad->squad[5]=NULL;
 
             printparty();
-            refresh();
-            getch();
+
+            getkey();
          }
       }
    }
@@ -615,7 +587,7 @@ void squadgrab_immobile(char dead)
 void kidnaptransfer(Creature &cr)
 {
    Creature *newcr=new Creature;
-      *newcr=cr;
+   *newcr=cr;
    newcr->namecreature();
 
    newcr->location=activesquad->squad[0]->base;

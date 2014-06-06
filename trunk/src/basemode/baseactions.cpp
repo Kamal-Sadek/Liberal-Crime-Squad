@@ -33,34 +33,39 @@ the bottom of includes.h in the top src folder.
 /* base - burn the flag */
 void burnflag(void)
 {
-   int flagparts=112;
-   long flag[16][7][4];
+   int flagparts=126;
+   long flag[18][7][4];
    int x;
    int y;
 
    for(int p=0;p<7;p++)
    {
-      if(p<3)
+      if(p<4)
       {
-         for(x=0;x<6;x++)
+         for(x=0;x<9;x++)
          {
-            flag[x][p][0]=':';
+            switch(p)
+            {
+            case 0: flag[x][p][0]=(x%2?'.':':'); break;
+            default: flag[x][p][0]=':'; break;
+            case 3: flag[x][p][0]=CH_LOWER_HALF_BLOCK; break;
+            }
             flag[x][p][1]=COLOR_WHITE;
             flag[x][p][2]=COLOR_BLUE;
             flag[x][p][3]=1;
          }
 
-         for(x=6;x<16;x++)
+         for(x=9;x<18;x++)
          {
             flag[x][p][0]=CH_LOWER_HALF_BLOCK;
-            flag[x][p][3]=1;
             flag[x][p][1]=COLOR_WHITE;
             flag[x][p][2]=COLOR_RED;
+            flag[x][p][3]=1;
          }
       }
       else
       {
-         for(x=0;x<16;x++)
+         for(x=0;x<18;x++)
          {
             if(p<6)
             {
@@ -80,7 +85,7 @@ void burnflag(void)
       }
    }
 
-   x=LCSrandom(16);
+   x=LCSrandom(18);
    y=LCSrandom(7);
    flag[x][y][0]=CH_DARK_SHADE;
    flag[x][y][1]=COLOR_YELLOW;
@@ -93,7 +98,7 @@ void burnflag(void)
    {
       if(!first)
       {
-         for(x=0;x<16;x++)
+         for(x=0;x<18;x++)
          {
             for(y=0;y<7;y++)
             {
@@ -125,11 +130,11 @@ void burnflag(void)
       }
       else first=0;
 
-      for(x=0;x<16;x++)
+      for(x=0;x<18;x++)
       {
          for(y=0;y<7;y++)
          {
-            move(y+10,x+32);
+            move(y+10,x+31);
             set_color(short(flag[x][y][1]),short(flag[x][y][2]),char(flag[x][y][3]));
             addch(flag[x][y][0]);
          }
@@ -141,32 +146,36 @@ void burnflag(void)
       char gotnew=0;
       while(!gotnew&&flagparts>3)
       {
-         x=LCSrandom(16);
+         x=LCSrandom(18);
          y=LCSrandom(7);
          char conf=0;
-         if(flag[x][y][0]==':'||flag[x][y][0]==CH_UPPER_HALF_BLOCK||flag[x][y][0]==CH_LOWER_HALF_BLOCK)
+         if(flag[x][y][0]==':'||flag[x][y][0]=='.'||flag[x][y][0]==CH_UPPER_HALF_BLOCK||flag[x][y][0]==CH_LOWER_HALF_BLOCK)
          {
             if(x>0)
             {
                if(flag[x-1][y][0]!=':'&&
+                  flag[x-1][y][0]!='.'&&
                   flag[x-1][y][0]!=CH_UPPER_HALF_BLOCK&&
                   flag[x-1][y][0]!=CH_LOWER_HALF_BLOCK)conf=1;
             }
-            if(x<15)
+            if(x<17)
             {
                if(flag[x+1][y][0]!=':'&&
+                  flag[x+1][y][0]!='.'&&
                   flag[x+1][y][0]!=CH_UPPER_HALF_BLOCK&&
                   flag[x+1][y][0]!=CH_LOWER_HALF_BLOCK)conf=1;
             }
             if(y>0)
             {
                if(flag[x][y-1][0]!=':'&&
+                  flag[x][y-1][0]!='.'&&
                   flag[x][y-1][0]!=CH_UPPER_HALF_BLOCK&&
                   flag[x][y-1][0]!=CH_LOWER_HALF_BLOCK)conf=1;
             }
             if(y<6)
             {
                if(flag[x][y+1][0]!=':'&&
+                  flag[x][y+1][0]!='.'&&
                   flag[x][y+1][0]!=CH_UPPER_HALF_BLOCK&&
                   flag[x][y+1][0]!=CH_LOWER_HALF_BLOCK)conf=1;
             }
@@ -188,12 +197,12 @@ void getslogan(void)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   move(15,0);
-   addstr("What is your new slogan?");
    move(16,0);
+   addstr("What is your new slogan?");
+   move(17,0);
    addstr("                                                                                          ");
 
-   move(16,0);
+   move(17,0);
    enter_name(slogan,SLOGAN_LEN);
 }
 
@@ -227,10 +236,7 @@ void orderparty(void)
       addstr(num);
       addstr(".");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c==10||c==ESC)return;
 
@@ -266,10 +272,8 @@ void orderpartyV2(void)
       move(8,20);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("Choose squad member to replace ");
-      refresh();
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c==10||c==ESC)return;
 
@@ -289,8 +293,7 @@ void orderpartyV2(void)
       addstr(swap->name);
       addstr(" with");
 
-      c=getch();
-      translategetch(c);
+      c=getkey();
 
       if(c==10||c==ESC)return;
 
@@ -540,10 +543,7 @@ void stopevil(void)
       if((loc == -1) || (multipleCityMode && location[loc]->type == squad_location->city)) addstr("Enter - The squad is not yet Liberal enough.");
       else addstr("Enter - Back one step.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -706,8 +706,7 @@ void investlocation(void)
       move(17,1);
       addstr("Enter - Done");
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c==10||c==ESC)break;
 
@@ -1031,10 +1030,7 @@ void setvehicles(void)
       move(24,1);
       addstr("Enter - Done");
 
-      refresh();
-
-      int c=getch();
-      translategetch_cap(c);
+      int c=getkey();
 
       if(c>='A'&&c<='R')
       {
@@ -1055,21 +1051,14 @@ void setvehicles(void)
                   }
                }
             }
-            int c;
+            int c='1';
             if (choice)
             {
                move(8,20);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                addstr("Choose a Liberal squad member to drive it.");
 
-               refresh();
-
-               c=getch();
-               translategetch(c);
-            }
-            else
-            {
-               c='1';
+               c=getkey();
             }
 
             if(c>='1'&&c<='6')
@@ -1106,21 +1095,14 @@ void setvehicles(void)
                   }
                }
             }
-            int c;
+            int c='1';
             if (choice)
             {
                move(8,20);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                addstr("Choose a Liberal squad member to be a passenger.");
 
-               refresh();
-
-               c=getch();
-               translategetch(c);
-            }
-            else
-            {
-               c='1';
+               c=getkey();
             }
 
             if(c>='1'&&c<='6')

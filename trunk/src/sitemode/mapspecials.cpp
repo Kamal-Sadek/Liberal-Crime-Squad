@@ -108,8 +108,9 @@ void special_bouncer_assess_squad()
       levelmap[locx][locy][locz].special=SPECIAL_CLUB_BOUNCER_SECONDVISIT;
    }
    printencounter();
-   refresh();
-   getch();
+
+   getkey();
+
    char rejected=NOT_REJECTED;
 
    // Size up the squad for entry
@@ -305,8 +306,8 @@ void special_bouncer_assess_squad()
          break;
       }
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
    }
    else encounter[0].exists=0;
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -341,10 +342,7 @@ void special_lab_cosmetics_cagedanimals(void)
       move(17,1);
       addstr("Free them? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -427,7 +425,8 @@ void special_readsign(int sign)
       }
       break;
    }
-   getch();
+
+   getkey();
 }
 
 
@@ -455,10 +454,8 @@ void special_nuclear_onoff(void)
          move(17,1);
          addstr("Mess with the reactor settings? (Yes or No)");
       }
-      refresh();
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -487,18 +484,22 @@ void special_nuclear_onoff(void)
             addstr(maxs->name, gamelog);
             addstr(" presses the big red button!", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
+
             move(17,1);
             addstr(".", gamelog);
-            refresh();
-            getch();
+
+            getkey();
+
             addstr(".", gamelog);
-            refresh();
-            getch();
+
+            getkey();
+
             addstr(".", gamelog);
-            refresh();
-            getch();
+
+            getkey();
+
             if(law[LAW_NUCLEARPOWER]==2)
             {
                move(17,1);
@@ -506,8 +507,8 @@ void special_nuclear_onoff(void)
                gamelog.newline();
                change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-50,0,0);
-               refresh();
-               getch();
+
+               getkey();
 
                juiceparty(40,1000); // Instant juice!
 			      sitecrime+=25; //Shutdown Site
@@ -525,8 +526,8 @@ void special_nuclear_onoff(void)
                addstr("The reactor is overheating!", gamelog);
                gamelog.newline();
                change_public_opinion(VIEW_NUCLEARPOWER,15,0,95);
-               refresh();
-               getch();
+
+               getkey();
 
                juiceparty(100,1000); // Instant juice!
 			      sitecrime+=50; //Shutdown Site
@@ -543,8 +544,7 @@ void special_nuclear_onoff(void)
             addstr("the Squad resigns to just leaving a threatening note.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             juiceparty(15,500);
          }
@@ -576,10 +576,7 @@ void special_lab_genetic_cagedanimals(void)
       move(17,1);
       addstr("Free them? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -620,8 +617,7 @@ void special_lab_genetic_cagedanimals(void)
                   mode==GAMEMODE_CHASEFOOT)printchaseencounter();
                else printencounter();
 
-               refresh();
-               getch();
+               getkey();
 
                sitealarm=1;
                alienationcheck(1);
@@ -663,10 +659,7 @@ void special_policestation_lockup(void)
       move(17,1);
       addstr("Free them? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -732,10 +725,7 @@ void special_courthouse_lockup(void)
       move(17,1);
       addstr("Free them? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -802,8 +792,8 @@ void special_courthouse_jury(void)
       addstr("vacated in a hurry.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
+
       return;
    }
 
@@ -818,10 +808,7 @@ void special_courthouse_jury(void)
       move(17,1);
       addstr("Attempt to influence them? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -895,8 +882,7 @@ void special_courthouse_jury(void)
                addstr(" wasn't really wrong here.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                alienationcheck(0);
                noticecheck(-1);
@@ -915,8 +901,7 @@ void special_courthouse_jury(void)
                addstr(" wasn't quite convincing...", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                int numleft=12;
                for(int e=0;e<ENCMAX;e++)
@@ -972,10 +957,7 @@ void special_prison_control(short prison_control_type)
       move(17,1);
       addstr("Free the prisoners? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1058,8 +1040,8 @@ void special_intel_supercomputer(void)
       addstr("computer to shut down.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
+
       return;
    }
 
@@ -1074,10 +1056,7 @@ void special_intel_supercomputer(void)
       move(17,1);
       addstr("Hack it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1113,8 +1092,7 @@ void special_intel_supercomputer(void)
             Item *it=new Loot(*loottype[getloottype("LOOT_INTHQDISK")]);
             activesquad->loot.push_back(it);
 
-            refresh();
-            getch();
+            getkey();
          }
 
          if(actual)
@@ -1152,8 +1130,7 @@ void special_graffiti(void)
    if(!sitestory->claimed)
       sitestory->claimed=1;
 
-   refresh();
-   getch();
+   getkey();
 
    int time=20+LCSrandom(10);
    if(time<1)time=1;
@@ -1211,10 +1188,7 @@ void special_sweatshop_equipment(void)
       move(17,1);
       addstr("Destroy it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1254,10 +1228,7 @@ void special_polluter_equipment(void)
       move(17,1);
       addstr("Destroy it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1299,10 +1270,7 @@ void special_house_photos(void)
       move(17,1);
       addstr("Open it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1322,8 +1290,7 @@ void special_house_photos(void)
                addstr("The squad has found a Desert Eagle.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                Weapon* de=new Weapon(*weapontype[getweapontype("WEAPON_DESERT_EAGLE")]);
                Clip r(*cliptype[getcliptype("CLIP_50AE")]);
@@ -1346,8 +1313,7 @@ void special_house_photos(void)
                addstr("This guy sure had a lot of $100 bills.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                it=new Money(1000*(1+LCSrandom(10)));
                activesquad->loot.push_back(it);
@@ -1364,8 +1330,7 @@ void special_house_photos(void)
                addstr("The squad Liberates some expensive jewelery.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                it=new Loot(*loottype[getloottype("LOOT_EXPENSIVEJEWELERY")],3);
                activesquad->loot.push_back(it);
@@ -1382,8 +1347,7 @@ void special_house_photos(void)
                addstr("There are some... very compromising photos here.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                it=new Loot(*loottype[getloottype("LOOT_CEOPHOTOS")]);
                activesquad->loot.push_back(it);
@@ -1400,8 +1364,7 @@ void special_house_photos(void)
                addstr("There are some drugs here.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                empty=false;
             }
@@ -1417,8 +1380,7 @@ void special_house_photos(void)
                addstr("The squad will take those.");
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                it=new Loot(*loottype[getloottype("LOOT_CEOLOVELETTERS")]);
                activesquad->loot.push_back(it);
@@ -1435,8 +1397,7 @@ void special_house_photos(void)
                addstr("These documents show serious tax evasion.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                it=new Loot(*loottype[getloottype("LOOT_CEOTAXPAPERS")]);
                activesquad->loot.push_back(it);
@@ -1453,8 +1414,7 @@ void special_house_photos(void)
                addstr("Wow, it's empty.  That sucks.", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
             }
             else
             {
@@ -1497,10 +1457,7 @@ void special_armory(void)
       move(17,1);
       addstr("Break in? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1511,8 +1468,8 @@ void special_armory(void)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Alarms go off!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          bool empty=true;
          Item *it;
@@ -1526,8 +1483,7 @@ void special_armory(void)
             addstr("Jackpot! The squad found a M249 Machine Gun!", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             Weapon* de=new Weapon(*weapontype[getweapontype("WEAPON_M249_MACHINEGUN")]);
             Clip r(*cliptype[getcliptype("CLIP_DRUM")]);
@@ -1550,8 +1506,7 @@ void special_armory(void)
             addstr("The squad finds some M16 Assault Rifles.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             int num = 0;
 
@@ -1580,8 +1535,7 @@ void special_armory(void)
             addstr("The squad finds some M4 Carbines.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             int num = 0;
 
@@ -1610,8 +1564,7 @@ void special_armory(void)
             addstr("The squad finds some body armor.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             int num = 0;
 
@@ -1641,8 +1594,7 @@ void special_armory(void)
             addstr("It's a trap!  The armory is empty.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             int numleft=LCSrandom(8)+2;
             for(int e=0;e<ENCMAX;e++)
@@ -1677,8 +1629,7 @@ void special_armory(void)
             addstr("Guards are everywhere!", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             int numleft=LCSrandom(4)+2;
             for(int e=0;e<ENCMAX;e++)
@@ -1721,10 +1672,7 @@ void special_corporate_files(void)
       move(17,1);
       addstr("Open it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1751,8 +1699,7 @@ void special_corporate_files(void)
             if(time<1)time=1;
             if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
 
-            refresh();
-            getch();
+            getkey();
          }
 
          if(actual)
@@ -1800,10 +1747,7 @@ void special_radio_broadcaststudio(void)
          addstr("Interrupt this evening's programming? (Yes or No)");
       }
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1846,10 +1790,7 @@ void special_news_broadcaststudio(void)
          addstr("Start an impromptu news program? (Yes or No)");
       }
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -1879,10 +1820,7 @@ void special_display_case(void)
       move(17,1);
       addstr("Smash it? (Yes or No)");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
@@ -2010,8 +1948,8 @@ void special_security(bool metaldetect)
       levelmap[locx][locy][locz].special=SPECIAL_SECURITY_SECONDVISIT;
    }
    printencounter();
-   refresh();
-   getch();
+
+   getkey();
 
    char rejected=NOT_REJECTED;
 
@@ -2150,8 +2088,8 @@ void special_security(bool metaldetect)
       gamelog.newline();
       break;
    }
-   refresh();
-   getch();
+
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int dx=-1; dx<=1; dx++)
@@ -2193,7 +2131,8 @@ void special_bank_vault(void)
    move(17,1);
    addstr("an electronic lock, and a biometric lock.", gamelog);
    gamelog.newline();
-   getch();
+
+   getkey();
 
    clearmessagearea();
    move(16,1);
@@ -2201,7 +2140,8 @@ void special_bank_vault(void)
    move(17,1);
    addstr("expert, and one of the bank managers.", gamelog);
    gamelog.newline();
-   getch();
+
+   getkey();
 
    for(int p=0;p<(int)pool.size();p++)
    {
@@ -2217,7 +2157,10 @@ void special_bank_vault(void)
          move(17,1);
          addstr("but you'll still have to crack the other locks.", gamelog);
          gamelog.newline();
-         getch();
+
+         getkey();
+
+         break;
       }
    }
 
@@ -2227,13 +2170,11 @@ void special_bank_vault(void)
       move(16,1);
       addstr("Open the bank vault? (Yes or No)");
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='y')
       {
          char actual;
-         //bool success = false;
 
          clearmessagearea();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2242,7 +2183,8 @@ void special_bank_vault(void)
          move(17,1);
          addstr("be cracked by a security expert.", gamelog);
          gamelog.newline();
-         getch();
+
+         getkey();
 
          if(!unlock(UNLOCK_VAULT,actual))
          {
@@ -2253,7 +2195,8 @@ void special_bank_vault(void)
             move(17,1);
             addstr("on the other side of this door...", gamelog);
             gamelog.newline();
-            getch();
+
+            getkey();
 
             levelmap[locx][locy][locz].special=-1;
          }
@@ -2266,7 +2209,8 @@ void special_bank_vault(void)
             move(17,1);
             addstr("be bypassed by a computer expert.", gamelog);
             gamelog.newline();
-            getch();
+
+            getkey();
 
             if(!hack(HACK_VAULT,actual))
             {
@@ -2275,7 +2219,8 @@ void special_bank_vault(void)
                move(16,1);
                addstr("The money was so close the squad could taste it!", gamelog);
                gamelog.newline();
-               getch();
+
+               getkey();
 
                levelmap[locx][locy][locz].special=-1;
             }
@@ -2288,7 +2233,8 @@ void special_bank_vault(void)
                move(17,1);
                addstr("to the bank's managers.", gamelog);
                gamelog.newline();
-               getch();
+
+               getkey();
 
                Creature *manager = 0;
                bool canbreakin = false;
@@ -2310,7 +2256,9 @@ void special_bank_vault(void)
                            addstr(c->name, gamelog);
                            addstr(" opens the vault.", gamelog);
                            gamelog.newline();
-                           getch();
+
+                           getkey();
+
                            canbreakin = true;
                            break;
                         }
@@ -2323,7 +2271,9 @@ void special_bank_vault(void)
                         move(16,1);
                         addstr("The hostage is forced to open the vault.", gamelog);
                         gamelog.newline();
-                        getch();
+
+                        getkey();
+
                         canbreakin = true;
                         break;
                      }
@@ -2345,7 +2295,9 @@ void special_bank_vault(void)
                         move(17,1);
                         addstr("and will join the active LCS to avoid arrest.", gamelog);
                         gamelog.newline();
-                        getch();
+
+                        getkey();
+
                         canbreakin = true;
 
                         pool[p]->location = pool[p]->base = activesquad->squad[0]->base;
@@ -2379,7 +2331,8 @@ void special_bank_vault(void)
                      addstr(manager->name, gamelog);
                      addstr(" is no longer recognized.", gamelog);
                      gamelog.newline();
-                     getch();
+
+                     getkey();
                   }
                   else
                   {
@@ -2388,7 +2341,8 @@ void special_bank_vault(void)
                      move(16,1);
                      addstr("The squad has nobody that can do the job.", gamelog);
                      gamelog.newline();
-                     getch();
+
+                     getkey();
                   }
                }
             }
@@ -2418,8 +2372,8 @@ void special_bank_teller(void)
       addstr("The teller window is empty.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=-1;
-      refresh();
-      getch();
+
+      getkey();
    }
    else
    {
@@ -2429,8 +2383,8 @@ void special_bank_teller(void)
       addstr("A bank teller is available.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=-1;
-      refresh();
-      getch();
+
+      getkey();
 
       for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
       makecreature(encounter[0],CREATURE_BANK_TELLER);
@@ -2460,9 +2414,8 @@ void special_bank_money(void)
    else if(sitealarm && postalarmtimer <= 80 && LCSrandom(2)) postalarmtimer = 81;
    else if(sitealarm && postalarmtimer > 80 && LCSrandom(2) && swat_counter < 2)
    {
+      getkey();
 
-      refresh();
-      getch();
       move(17,1);
       if(swat_counter > 0)
          addstr("Another SWAT team moves in!!", gamelog);
@@ -2482,8 +2435,8 @@ void special_bank_money(void)
          }
       }
    }
-   refresh();
-   getch();
+
+   getkey();
 }
 
 void special_oval_office(void)
@@ -2509,12 +2462,15 @@ void special_oval_office(void)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       mvaddstr(16,1,"The President isn't here... ",gamelog);
       printsitemap(locx,locy,locz);
-      getch();
+
+      getkey();
+
       mvaddstr(17,1,"Secret Service agents ambush the squad!", gamelog);
       gamelog.newline();
       for(int e=0;e<6;e++)makecreature(encounter[e],CREATURE_SECRET_SERVICE);
       printencounter();
-      getch();
+
+      getkey();
 
       enemyattack();
       creatureadvance();
@@ -2531,7 +2487,8 @@ void special_oval_office(void)
       for(int e=0;e<2;e++)makecreature(encounter[e],CREATURE_SECRET_SERVICE);
       encounter[2] = uniqueCreatures.President();
       printencounter();
-      getch();
+
+      getkey();
    }
 }
 
@@ -2546,8 +2503,8 @@ void special_ccs_boss(void)
       addstr("The CCS leader is ready for you!", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=-1;
-      refresh();
-      getch();
+
+      getkey();
 
       for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
       makecreature(encounter[0],CREATURE_CCS_ARCHCONSERVATIVE);
@@ -2565,11 +2522,10 @@ void special_ccs_boss(void)
       addstr("The CCS leader is here.", gamelog);
       gamelog.newline();
       levelmap[locx][locy][locz].special=-1;
-      refresh();
-      getch();
+
+      getkey();
 
       for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
       makecreature(encounter[0],CREATURE_CCS_ARCHCONSERVATIVE);
    }
 }
-

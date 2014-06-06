@@ -296,6 +296,7 @@ using namespace std;
 
 #define ENTER 10
 #define ESC 27
+#define SPACEBAR 32
 
 int r_num(void);
 int LCSrandom(int max);
@@ -1160,6 +1161,10 @@ int buyprompt(const string &firstline,const string &secondline,
 void set_color(short f,short b,char bright,char blink=0);
 void translategetch(int &c);
 void translategetch_cap(int &c);
+/* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
+int getkey();
+/* Empties the keyboard buffer, and returns most recent key pressed, if any */
+int checkkey();
 #ifdef CH_USE_UNICODE
   char setup_unicode();
   int addch_unicode(int c);

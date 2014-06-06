@@ -210,8 +210,7 @@ void viewhighscores(void)
    itoa(ustat_burns,num,10);
    addstr(num);
 
-   refresh();
-   getch();
+   getkey();
 }
 
 /* loads the high scores file */

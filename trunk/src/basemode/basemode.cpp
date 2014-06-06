@@ -26,6 +26,40 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -61,9 +95,6 @@ bool show_disbanding_screen(int& oldforcemonth)
    addstr(getmonth(month));
    addstr(" ");
    addstr(num);
-
-
-   //int y=2;
 
    set_alignment_color(exec[EXEC_PRESIDENT], true);
    mvaddstr(1,0,"President: ");
@@ -147,7 +178,6 @@ bool show_disbanding_screen(int& oldforcemonth)
    itoa(courtmake[0],num,10);
    addstr(num);addstr("Cons+");
 
-   //y=0;
    for(int l=0;l<LAWNUM;l++)
    {
       set_alignment_color(law[l], true);
@@ -157,18 +187,36 @@ bool show_disbanding_screen(int& oldforcemonth)
       addstr(str);
    }
 
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   int moodpos=0,moodcolor;
+   for(int v=0;v<VIEWNUM-3;v++)moodpos+=attitude[v];
+   moodpos=78-(moodpos*77)/((VIEWNUM-3)*100); // very accurate mood positioning!
+   if(moodpos>=64)moodcolor=COLOR_RED;
+   else if(moodpos>=48)moodcolor=COLOR_MAGENTA;
+   else if(moodpos>=32)moodcolor=COLOR_YELLOW;
+   else if(moodpos>=16)moodcolor=COLOR_CYAN;
+   else moodcolor=COLOR_GREEN;
+   set_color(moodcolor,COLOR_BLACK,1);
    mvaddstr(19,33,"Public Mood");
-   mvaddstr(21,1,"Conservative");
-   mvaddstr(21,66,"Liberal");
-   mvaddstr(22,0,"<------------------------------------------------------------------------------>");
-   move(22,77*publicmood(-1)/100+1);
-   addstr("|");
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   mvaddstr(21,1,"Liberal");
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   mvaddstr(21,67,"Conservative");
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
+   mvaddstr(22,0,"\x11ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+   set_color(COLOR_CYAN,COLOR_BLACK,1);
+   mvaddstr(22,16,"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+   set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   mvaddstr(22,32,"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+   set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+   mvaddstr(22,48,"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   mvaddstr(22,64,"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
+   set_color(moodcolor,COLOR_BLACK,1);
+   mvaddstr(22,moodpos,"O");
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
    mvaddstr(23,0,"R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
-   refresh();
-   char c=getch();
 
-   if(c=='r') return false;
+   if(getkey()=='r') return false;
    else return true;
 }
 
@@ -246,8 +294,7 @@ void mode_base(void)
             addstr(str, gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 
-            refresh();
-            getch();
+            getkey();
          }
 
          nonsighttime=0;
@@ -359,21 +406,21 @@ void mode_base(void)
          {
             for(int p=0;p<7;p++)
             {
-               move(p+10,32);
-               if(p<3)
+               move(p+10,31);
+               if(p<4)
                {
                   set_color(COLOR_WHITE,COLOR_BLUE,1);
-                  move(p+10,32);
-                  addstr("::::::");
+                  if(p==0) addstr(":.:.:.:.:");
+                  else if(p<3) addstr(":::::::::");
+                  else for(int i=0;i<9;i++)addch(CH_LOWER_HALF_BLOCK);
                   set_color(COLOR_WHITE,COLOR_RED,1);
-                  move(p+10,38);
-                  for(int i=0;i<10;i++)addch(CH_LOWER_HALF_BLOCK);
+                  for(int i=9;i<18;i++)addch(CH_LOWER_HALF_BLOCK);
                }
                else
                {
                   if(p<6)set_color(COLOR_WHITE,COLOR_RED,1);
                   else set_color(COLOR_RED,COLOR_BLACK,0);
-                  for(int i=0;i<16;i++)
+                  for(int i=0;i<18;i++)
                   {
                      if(p==6)addch(CH_UPPER_HALF_BLOCK);
                      else addch(CH_LOWER_HALF_BLOCK);
@@ -384,9 +431,9 @@ void mode_base(void)
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(18,10);
-         addstr("--- ACTIVISM ---");
+         addstr("ÄÄÄ ACTIVISM ÄÄÄ");
          move(18,51);
-         addstr("--- PLANNING ---");
+         addstr("ÄÄÄ PLANNING ÄÄÄ");
 
          if(partysize>0&&!underattack)set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -413,7 +460,7 @@ void mode_base(void)
             move(8,1);
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             addstr(activesquad->name);
-            addstr("-"); //in case of overlap, at least make it clear where the name ends.
+            addstr("Ä"); //in case of overlap, at least make it clear where the name ends.
          }
          if(squad.size()>1||(activesquad==NULL&&squad.size()>0))set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -541,16 +588,11 @@ void mode_base(void)
          if(haveflag)move(17,40-(length>>1));
          else move(13,40-(length>>1));
          addstr(slogan);
-
-         refresh();
       }
 
       int c='w';
       if(!forcewait)
-      {
-         c=getch();
-         translategetch(c);
-      }
+         c=getkey();
 
       if(c=='x')break;
 

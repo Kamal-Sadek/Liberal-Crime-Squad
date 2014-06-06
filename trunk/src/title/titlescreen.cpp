@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -113,12 +113,7 @@ void mode_title(void)
    move(24,79);
    addstr("+");
 
-   int c=getch();
-   translategetch(c);
-   if(c==27)
-   {
-      end_game();
-   }
+   if(getkey()==ESC) end_game();
 
    viewhighscores();
 

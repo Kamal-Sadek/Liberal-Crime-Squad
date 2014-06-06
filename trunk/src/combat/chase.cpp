@@ -78,8 +78,8 @@ char chasesequence(void)
    move(1,0);
    addstr("being followed by Conservative swine!", gamelog);
    gamelog.newline(); //New line.
-   refresh();
-   getch();
+
+   getkey();
 
    if(location[chaseseq.location]->parent!=-1)
       chaseseq.location=location[chaseseq.location]->parent;
@@ -202,10 +202,7 @@ char chasesequence(void)
       //PRINT ENEMIES
       printchaseencounter();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(partyalive==0&&c=='c')
       {
@@ -354,8 +351,9 @@ char chasesequence(void)
             move(16,1);
             addstr("It looks like you've lost them!", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
+
             for(int p=0;p<(int)pool.size();p++)
                for(int w=0;w<BODYPARTNUM;w++)
                   pool[p]->wound[w]&=~WOUND_BLEEDING;
@@ -406,8 +404,8 @@ char footchase(void)
    gamelog.newline(); //New line. I'd rather it be continuous but whatever.
    addstr("being followed by Conservative swine!", gamelog);
    gamelog.newline(); //New line.
-   refresh();
-   getch();
+
+   getkey();
 
    do
    {
@@ -470,14 +468,11 @@ char footchase(void)
       //PRINT ENEMIES
       printchaseencounter();
 
-      refresh();
-
       // check if we fought the previous loop; if so, add a blank gamelog line
       if(foughtthisround)gamelog.newline();
       foughtthisround=0;
 
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(partyalive==0&&c=='c')
       {
@@ -578,8 +573,9 @@ char footchase(void)
             move(16,1);
             addstr("It looks like you've lost them!", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
+
             for(int p=0;p<(int)pool.size();p++)
                for(int w=0;w<BODYPARTNUM;w++)
                   pool[p]->wound[w]&=~WOUND_BLEEDING;
@@ -664,8 +660,8 @@ void evasivedrive(void)
       gamelog.newline(); //new line.
       break;
    }
-   refresh();
-   getch();
+
+   getkey();
 
    int cnt;
    for(int i=0;i<(int)theirrolls.size();i++)
@@ -725,8 +721,8 @@ void evasivedrive(void)
 
          clearmaparea();
          printchaseencounter();
-         refresh();
-         getch();
+
+         getkey();
       }
       else
       {
@@ -743,8 +739,8 @@ void evasivedrive(void)
          }
          addstr(" is still on your tail!", gamelog);
          gamelog.newline(); //Blarg. Newline.
-         refresh();
-         getch();
+
+         getkey();
       }
    }
 }
@@ -808,8 +804,7 @@ void evasiverun(void)
          gamelog.newline(); //New line.
       }
 
-      refresh();
-      getch();
+      getkey();
    }
 
    for(int e=0;e<ENCMAX;e++)
@@ -850,8 +845,7 @@ void evasiverun(void)
             break;
          }
 
-         refresh();
-         getch();
+         getkey();
       }
       else if(chaser<yourworst)
       {
@@ -874,8 +868,8 @@ void evasiverun(void)
          e--;
 
          printchaseencounter();
-         refresh();
-         getch();
+
+         getkey();
       }
       else
       {
@@ -885,8 +879,8 @@ void evasiverun(void)
          addstr(encounter[e].name, gamelog);
          addstr(" is still on your tail!", gamelog);
          gamelog.newline(); //New line.
-         refresh();
-         getch();
+
+         getkey();
       }
    }
 
@@ -909,8 +903,8 @@ void evasiverun(void)
             addstr(activesquad->squad[p]->name, gamelog);
             addstr(" breaks away!", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             //Unload hauled hostage or body when they get back to the safehouse
             if(activesquad->squad[p]->prisoner!=NULL)
@@ -1007,8 +1001,8 @@ void evasiverun(void)
 
             printparty();
             printchaseencounter();
-            refresh();
-            getch();
+
+            getkey();
          }
          else othersleft++;
       }
@@ -1072,8 +1066,8 @@ char drivingupdate(short &obstacle)
             addstr(" takes over the wheel.", gamelog);
             gamelog.newline(); //New line.
             printparty();
-            refresh();
-            getch();
+
+            getkey();
          }
       }
       if(driver==-1)
@@ -1291,8 +1285,8 @@ char obstacledrive(short obstacle,char choice)
             move(16,1);
             addstr("You slow down, and turn the corner.", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             if(!LCSrandom(3))
             {
@@ -1300,8 +1294,9 @@ char obstacledrive(short obstacle,char choice)
                move(17,1);
                addstr("Here they come!", gamelog);
                gamelog.newline(); //New line.
-               refresh();
-               getch();
+
+               getkey();
+
                enemyattack();
                youattack();
             }
@@ -1319,8 +1314,8 @@ char obstacledrive(short obstacle,char choice)
             move(16,1);
             addstr("You slow down, and carefully evade the truck.", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             if(!LCSrandom(3))
             {
@@ -1328,8 +1323,9 @@ char obstacledrive(short obstacle,char choice)
                move(17,1);
                addstr("Here they come!", gamelog);
                gamelog.newline(); //New line.
-               refresh();
-               getch();
+
+               getkey();
+
                enemyattack();
                youattack();
             }
@@ -1347,8 +1343,8 @@ char obstacledrive(short obstacle,char choice)
             move(16,1);
             addstr("Fruit smashes all over the windshield!", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             if(!LCSrandom(5))
             {
@@ -1356,8 +1352,8 @@ char obstacledrive(short obstacle,char choice)
                move(17,1);
                addstr("The fruit seller is squashed!", gamelog);
                gamelog.newline(); //All this logging and lining...
-               refresh();
-               getch();
+
+               getkey();
 
                criminalizeparty(LAWFLAG_MURDER);
             }
@@ -1375,8 +1371,8 @@ char obstacledrive(short obstacle,char choice)
             move(16,1);
             addstr("You slow down and carefully avoid the kid.", gamelog);
             gamelog.newline(); //New line.
-            refresh();
-            getch();
+
+            getkey();
 
             if(!LCSrandom(3))
             {
@@ -1384,8 +1380,9 @@ char obstacledrive(short obstacle,char choice)
                move(17,1);
                addstr("The Conservative bastards unleash a hail of gunfire!", gamelog);
                gamelog.newline(); //New line.
-               refresh();
-               getch();
+
+               getkey();
+
                enemyattack();
                youattack();
             }
@@ -1395,8 +1392,8 @@ char obstacledrive(short obstacle,char choice)
                move(17,1);
                addstr("Both sides refrain from endangering the child...", gamelog);
                gamelog.newline(); //New line.
-               refresh();
-               getch();
+
+               getkey();
             }
          }
          break;
@@ -1412,8 +1409,8 @@ char dodgedrive(void)
    move(16,1);
    addstr("You swerve to avoid the obstacle!", gamelog);
    gamelog.newline(); //New line.
-   refresh();
-   getch();
+
+   getkey();
 
    int driver;
    for(v=chaseseq.friendcar.size()-1;v>=0;v--)
@@ -1493,8 +1490,8 @@ void crashfriendlycar(int v)
    addstr(selectRandomString(car_crash_modes, ARRAY_ELEMENTS(car_crash_modes)), gamelog);
    gamelog.newline(); //New line it.
    printparty();
-   refresh();
-   getch();
+
+   getkey();
 
    int victimsum=0;
 
@@ -1541,8 +1538,8 @@ void crashfriendlycar(int v)
                addstr(selectRandomString(car_crash_fatalities, ARRAY_ELEMENTS(car_crash_fatalities)), gamelog);
 	            gamelog.newline(); //New line.
                printparty();
-               refresh();
-               getch();
+
+               getkey();
             }
             activesquad->squad[p]->prisoner->die();
             victimsum++;
@@ -1579,8 +1576,8 @@ void crashfriendlycar(int v)
             }
             gamelog.newline(); //New line.
             printparty();
-            refresh();
-            getch();
+
+            getkey();
 
             // Mark as dead
             activesquad->squad[p]->die();
@@ -1623,8 +1620,8 @@ void crashfriendlycar(int v)
             }
             gamelog.newline(); //New line.
             printparty();
-            refresh();
-            getch();
+
+            getkey();
          }
       }
    }
@@ -1687,8 +1684,8 @@ void crashenemycar(int v)
    }
    gamelog.newline(); //New line.
    printchaseencounter();
-   refresh();
-   getch();
+
+   getkey();
 }
 
 void chase_giveup(void)
@@ -1734,8 +1731,8 @@ void chase_giveup(void)
          addstr(" is free.", gamelog);
       gamelog.newline(); //New line.
    }
-   refresh();
-   getch();
+
+   getkey();
 }
 
 /* the next two functions force a chase sequence with a specific liberal */

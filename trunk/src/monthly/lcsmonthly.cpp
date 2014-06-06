@@ -85,7 +85,8 @@ void guardianupdate(char size, char power)
    }
    gamelog.nextMessage();
 
-   getch();
+   getkey();
+
    return;
 }
 
@@ -210,10 +211,7 @@ int choosespecialedition(char &clearformess)
       move(24,1);
       addstr("Enter - Not in this month's Liberal Guardian");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c>='a'&&c<='r')
       {
@@ -701,8 +699,7 @@ void printnews(short li,short newspaper)
       offended_cablenews=1;
    }
 
-   refresh();
-   getch();
+   getkey();
 }
 
 
@@ -893,8 +890,7 @@ void fundreport(char &clearformess)
       move(24,0);
       addstr("Press any key to reflect on the report.");
 
-      refresh();
-      getch();
+      getkey();
    }
 }
 

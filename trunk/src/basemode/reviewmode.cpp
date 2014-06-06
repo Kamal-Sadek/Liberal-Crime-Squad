@@ -26,6 +26,40 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -43,7 +77,7 @@ void review(void)
       addstr("Review your Liberals and Assemble Squads");
 
       move(1,0);
-      addstr("----SQUAD NAME-----------------LOCATION------------ACTIVITY----------------------");
+      addstr("ÄÄÄÄSQUAD NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄACTIVITYÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 
       int y=2;
       for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++)
@@ -155,10 +189,7 @@ void review(void)
       move(24,0);
       addstr("Press Z to Assemble a New Squad.  Press T to Assign New Bases to the Squadless.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM)page++;
@@ -271,7 +302,7 @@ void review_mode(short mode)
          break;
       }
       move(1,0);
-      addstr("----CODE NAME------------SKILL---HEALTH---LOCATION------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 
       move(1,57);
       switch(mode)
@@ -417,7 +448,7 @@ void review_mode(short mode)
                else
                {
                   set_color(COLOR_BLACK,COLOR_BLACK,1);
-                  addstr("-------");
+                  addstr("ÄÄÄÄÄÄÄ");
                }
                break;
             }
@@ -488,10 +519,7 @@ void review_mode(short mode)
       addpagestr();
       addstr(" T to sort people.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -555,9 +583,7 @@ void review_mode(short mode)
                addstr("Press any other key to continue the Struggle");
                addstr("    UP/DOWN  - More Info");
 
-               refresh();
-               int c=getch();
-               translategetch(c);
+               int c=getkey();
 
                if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
                {
@@ -614,8 +640,7 @@ void review_mode(short mode)
                   move(24,0);
                   addstr("  C - Confirm       Any other key to continue                                                ");
 
-                  c=getch();
-                  translategetch(c);
+                  int c=getkey();
 
                   if(c=='c')
                   {
@@ -628,7 +653,9 @@ void review_mode(short mode)
                      addstr("                                                                                         ");
                      move(24,0);
                      addstr("                                                                                         ");
-                     getch();
+
+                     getkey();
+
                      // Chance of member going to police if boss has criminal record and
                      // if they have low heart
                      // TODO: Do law check against other members?
@@ -686,8 +713,7 @@ void review_mode(short mode)
                   move(24,0);
                   addstr("  C - Confirm       Any other key to continue                                                ");
 
-                  c=getch();
-                  translategetch(c);
+                  int c=getkey();
 
                   if(c=='c')
                   {
@@ -711,7 +737,7 @@ void review_mode(short mode)
                      move(24,0);
                      addstr("                                                                            ");
 
-                     getch();
+                     getkey();
                      move(22,0);
 
                      if(boss!=-1)
@@ -734,7 +760,7 @@ void review_mode(short mode)
                            gamelog.newline(); //New line.
                            addstr(pool[boss]->name, gamelog);
                            addstr(" has lost heart.", gamelog);
-                           getch();
+                           getkey();
                         }
                         else if(!LCSrandom(3))
                         {
@@ -747,7 +773,7 @@ void review_mode(short mode)
                            gamelog.newline(); //New line.
                            addstr(pool[boss]->name, gamelog);
                            addstr(" has gained wisdom.                                                           ", gamelog);
-                           getch();
+                           getkey();
                         }
                      }
                      gamelog.nextMessage(); //Write buffer out to prepare for next message.
@@ -781,10 +807,7 @@ void review_mode(short mode)
          addstr("Choose squad member to replace ");
 
          if (swap == NULL) {
-            refresh();
-
-            int c=getch();
-            translategetch(c);
+            int c=getkey();
 
             if(c==10||c==ESC)break;
 
@@ -807,8 +830,7 @@ void review_mode(short mode)
             addstr(swap->name);
             addstr(" with");
 
-            c=getch();
-            translategetch(c);
+            int c=getkey();
 
             if(c==10||c==ESC)break;
 
@@ -840,10 +862,10 @@ void review_mode(short mode)
                   }
                }
 
-            temppool.erase (temppool.begin() + swapPos);
-            temppool.insert (temppool.begin() + p, swap);
+               temppool.erase (temppool.begin() + swapPos);
+               temppool.insert (temppool.begin() + p, swap);
 
-            swap = NULL;
+               swap = NULL;
             }
          }
       }
@@ -932,7 +954,7 @@ void assemblesquad(squadst *cursquad)
       }
 
       move(1,0);
-      addstr("----CODE NAME------------SKILL---HEALTH-----------PROFESSION--------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄÄÄÄÄÄÄÄÄPROFESSIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 
       int y=2;
       for(p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
@@ -1005,10 +1027,7 @@ void assemblesquad(squadst *cursquad)
       move(24,40);
       addstr("9 - Dissolve the squad.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1032,8 +1051,8 @@ void assemblesquad(squadst *cursquad)
                   addstr("           Liberals must be in the same location to form a Squad.              ");
                   move(24,0);
                   addstr("                                                                               ");
-                  refresh();
-                  getch();
+
+                  getkey();
 
                   conf=0;
                }
@@ -1048,8 +1067,9 @@ void assemblesquad(squadst *cursquad)
                addstr("                Squad Liberals must be able to move around.                   ");
                move(24,0);
                addstr("                  Have this Liberal procure a wheelchair.                     ");
-               refresh();
-               getch();
+
+               getkey();
+
                conf=0;
             }
             if(conf)
@@ -1098,8 +1118,7 @@ void assemblesquad(squadst *cursquad)
 			addstr("                                                                 ");
 			move(24,0);
 			addstr("                                                                 ");
-			int c2=getch();
-			translategetch(c2);
+			int c2=getkey();
 			if(c2>='a'&&c2<='s')
 			{
 				int p=page*19+(int)(c2-'a');
@@ -1153,8 +1172,7 @@ void assemblesquad(squadst *cursquad)
             move(24,0);
             addstr("                                                                               ");
 
-            refresh();
-            getch();
+            getkey();
          }
       }
       if(c=='9')
@@ -1264,7 +1282,7 @@ void squadlessbaseassign(void)
       move(0,0);
       addstr("New Bases for Squadless Liberals");
       move(1,0);
-      addstr("----CODE NAME------------CURRENT BASE-------------------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄCURRENT BASEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,51);
       addstr("NEW BASE");
 
@@ -1323,10 +1341,7 @@ void squadlessbaseassign(void)
       move(23,35);
       addstr("T to sort people.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_lib>0)page_lib--;
@@ -1473,7 +1488,7 @@ void promoteliberals(void)
       move(0,0);
       addstr("Promote the Elite Liberals");
       move(1,0);
-      addstr("----CODE NAME--------------CURRENT CONTACT--------------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄCURRENT CONTACTÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,54);
       addstr("CONTACT AFTER PROMOTION");
 
@@ -1566,10 +1581,7 @@ void promoteliberals(void)
          addpagestr();
       }
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;

@@ -981,7 +981,8 @@ int Creature::attribute_roll(int attribute) const
       itoa(return_value,str,10);
       addstr(str);
       addstr(")");
-      getch();
+
+      getkey();
    }
    #endif
    // Roll on the attribute value
@@ -1004,7 +1005,8 @@ bool Creature::attribute_check(int attribute, int difficulty) const
       }
       else addstr(", IMPOSSIBLE");
       addstr(")");
-      getch();
+
+      getkey();
    }
    #endif
    return(attribute_roll(attribute) >= difficulty);
@@ -1099,9 +1101,7 @@ int Creature::skill_roll(int skill) const
    addstr(str);
    addstr(", ");
    if(return_value==0)
-   {
       addstr("automatic failure");
-   }
    else
    {
       addstr("Adjusted Attribute Value ");
@@ -1112,7 +1112,8 @@ int Creature::skill_roll(int skill) const
       addstr(str);
    }
    addstr(")");
-   getch();
+
+   getkey();
    #endif
    return return_value;
 }
@@ -1132,7 +1133,8 @@ bool Creature::skill_check(int skill, int difficulty) const
    }
    else addstr(", IMPOSSIBLE");
    addstr(")");
-   getch();
+
+   getkey();
    #endif
    return(skill_roll(skill)>=difficulty);
 }

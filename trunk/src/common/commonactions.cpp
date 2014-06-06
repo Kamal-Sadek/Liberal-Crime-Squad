@@ -122,8 +122,7 @@ void hospitalize(int loc, Creature &patient)
       addstr(".", gamelog);
       gamelog.nextMessage(); //Time for the next message.
 
-      refresh();
-      getch();
+      getkey();
 
       if(patientsquad)
       {
@@ -698,8 +697,8 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
       set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
       addstr(".");
 
-      int keystroke = getch();
-      translategetch(keystroke);
+      int keystroke = getkey();
+
       if(keystroke == 10 && selection==1)
       {
          converted.flag |= CREATUREFLAG_SLEEPER;
@@ -789,7 +788,7 @@ bool sort_squadorname(Creature* first, Creature* second)
                   && strcmp(first->name,second->name)<0)); //Sort squadless by name.
 
    //Sort members of same squad in the order they are in the squad.
-   if (first_in_squad && first->squadid == second->squadid) 
+   if (first_in_squad && first->squadid == second->squadid)
    {
       for (unsigned j=0; j<6; ++j)
       {
@@ -842,8 +841,7 @@ void sorting_prompt(short listforsorting)
 
    while(1)
    {
-      int c = getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='a')
       {
@@ -874,28 +872,28 @@ void sorting_prompt(short listforsorting)
             Is currently unnecessary unless the enums are changed.*/
 short reviewmodeenum_to_sortingchoiceenum(short reviewmode)
 {
-   switch (reviewmode)
+   switch(reviewmode)
    {
-      case REVIEWMODE_LIBERALS: return SORTINGCHOICE_LIBERALS;
-      case REVIEWMODE_HOSTAGES: return SORTINGCHOICE_HOSTAGES;
-      case REVIEWMODE_CLINIC: return SORTINGCHOICE_CLINIC;
-      case REVIEWMODE_JUSTICE: return SORTINGCHOICE_JUSTICE;
-      case REVIEWMODE_SLEEPERS: return SORTINGCHOICE_SLEEPERS;
-      case REVIEWMODE_DEAD: return SORTINGCHOICE_DEAD;
-      case REVIEWMODE_AWAY: return SORTINGCHOICE_AWAY;
+   case REVIEWMODE_LIBERALS: return SORTINGCHOICE_LIBERALS;
+   case REVIEWMODE_HOSTAGES: return SORTINGCHOICE_HOSTAGES;
+   case REVIEWMODE_CLINIC: return SORTINGCHOICE_CLINIC;
+   case REVIEWMODE_JUSTICE: return SORTINGCHOICE_JUSTICE;
+   case REVIEWMODE_SLEEPERS: return SORTINGCHOICE_SLEEPERS;
+   case REVIEWMODE_DEAD: return SORTINGCHOICE_DEAD;
+   case REVIEWMODE_AWAY: return SORTINGCHOICE_AWAY;
+   default: return 0;//-1;
    }
-   return 0;//-1;
 }
 
 /* common - Displays options to choose from and returns an int corresponding
             to the index of the option in the vector. */
 int choiceprompt(const string &firstline, const string &secondline,
-                  const vector<string> &option, const string &optiontypename,
-                  bool allowexitwochoice, const string &exitstring)
+                 const vector<string> &option, const string &optiontypename,
+                 bool allowexitwochoice, const string &exitstring)
 {
    int page = 0;
 
-   do
+   while(true)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -912,7 +910,7 @@ int choiceprompt(const string &firstline, const string &secondline,
          move(yline,0);
          addch('A'+yline-2);addstr(" - ");
          addstr(option[p].c_str());
-         ++yline;
+         yline++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -921,13 +919,9 @@ int choiceprompt(const string &firstline, const string &secondline,
       move(23,0);
       addpagestr();
       move(24,0);
-      if (allowexitwochoice)
-         addstr(("Enter - "+exitstring).c_str());
+      if(allowexitwochoice) addstr(("Enter - "+exitstring).c_str());
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -942,7 +936,7 @@ int choiceprompt(const string &firstline, const string &secondline,
       }
 
       if(allowexitwochoice&&(c==10||c==ESC))break;
-   }while(1);
+   }
    return -1;
 }
 
@@ -952,9 +946,9 @@ int buyprompt(const string &firstline, const string &secondline,
               const vector< pair<string,int> > &nameprice, int namepaddedlength,
               const string &producttype, const string &exitstring)
 {
-   int page = 0;
+   int page=0;
 
-   do
+   while(true)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -962,21 +956,20 @@ int buyprompt(const string &firstline, const string &secondline,
       addstr(firstline.c_str());
       move(1,0);
       addstr(secondline.c_str());
-      int yline = 2;
+      int yline=2;
 
       //Write wares and prices
       for(int p=page*19; p<(int)nameprice.size()&&p<page*19+19; p++)
       {
          if (nameprice[p].second > ledger.get_funds())
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         else
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(yline,0);
          addch('A'+yline-2);addstr(" - ");
          addstr(nameprice[p].first.c_str());
          move(yline, namepaddedlength+4); //Add 4 for start of line, eg "A - ".
          addstr(("$"+tostring(nameprice[p].second)).c_str());
-         ++yline;
+         yline++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -987,10 +980,7 @@ int buyprompt(const string &firstline, const string &secondline,
       move(24,0);
       addstr(("Enter - "+exitstring).c_str());
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1005,7 +995,6 @@ int buyprompt(const string &firstline, const string &secondline,
       }
 
       if(c==10||c==ESC)break;
-   }while(1);
+   }
    return -1;
 }
-

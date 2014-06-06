@@ -26,6 +26,40 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -84,7 +118,7 @@ void activate(void)
       move(0,0);
       addstr("Activate Uninvolved Liberals");
       move(1,0);
-      addstr("----CODE NAME------------SKILL---HEALTH---LOCATION------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,57);
       addstr("ACTIVITY");
 
@@ -136,10 +170,7 @@ void activate(void)
       move(24,0);
       addstr("Press Z to assign simple tasks in bulk.");
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -691,11 +722,7 @@ void activate(Creature *cr)
          break;
       }
 
-      refresh();
-      int c=getch();
-      translategetch(c);
-
-
+      int c=getkey();
 
       if(c>='a'&&c<='z'){state=c;}
       if((c>='a'&&c<='z') || (c>='1'&&c<='9'))
@@ -1017,7 +1044,7 @@ void activate(Creature *cr)
          break;
       }
       // Enter pressed
-      if(c==10||c==ESC)
+      if(c==ENTER||c==ESC)
       {
          break;
       }
@@ -1057,7 +1084,7 @@ void activatebulk(void)
       move(0,0);
       addstr("Activate Uninvolved Liberals");
       move(1,0);
-      addstr("----CODE NAME------------CURRENT ACTIVITY---------------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄCURRENT ACTIVITYÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,51);
       addstr("BULK ACTIVITY");
 
@@ -1115,10 +1142,7 @@ void activatebulk(void)
       move(23,0);
       addpagestr();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1230,7 +1254,7 @@ void select_tendhostage(Creature *cr)
       addstr(cr->name);
       addstr(" be watching over?");
       move(1,0);
-      addstr("----CODE NAME------------SKILL---HEALTH---LOCATION------------------------------");
+      addstr("ÄÄÄÄCODE NAMEÄÄÄÄÄÄÄÄÄÄÄÄSKILLÄÄÄHEALTHÄÄÄLOCATIONÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
       move(1,57);
       addstr("DAYS IN CAPTIVITY");
 
@@ -1281,10 +1305,7 @@ void select_tendhostage(Creature *cr)
       move(23,0);
       addpagestr();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1312,8 +1333,6 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
    long flevel=-1;
 
    erase();
-
-
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    printfunds(0,1,"Money: ");
@@ -1354,9 +1373,7 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
    addstr(cr->name);
    addstr(".");
 
-   refresh();
-   int c=getch();
-   translategetch(c);
+   int c=getkey();
 
    if(c=='a')flevel=0;
    if(c=='b')flevel=1;
@@ -1448,7 +1465,7 @@ void recruitSelect(Creature &cr)
       addstr(" try to meet and recruit today?");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(1,0);
-      addstr("----TYPE-----------------------------------------DIFFICULTY TO ARRANGE MEETING--");
+      addstr("ÄÄÄÄTYPEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄDIFFICULTY TO ARRANGE MEETINGÄÄ");
 
       int y=2,difficulty;
       for(int p=page*19;p<options&&p<page*19+19;p++)
@@ -1517,10 +1534,7 @@ void recruitSelect(Creature &cr)
       move(23,0);
       addpagestr();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1574,7 +1588,7 @@ void select_makeclothing(Creature *cr)
       addstr(" try to make?   (Note: Half Cost if you have cloth)");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(1,0);
-      addstr("----NAME-----------------------------DIFFICULTY-------------COST----------------");
+      addstr("ÄÄÄÄNAMEÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄDIFFICULTYÄÄÄÄÄÄÄÄÄÄÄÄÄCOSTÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 
       int y=2,difficulty;
       for(int p=page*19;p<(int)armortypei.size()&&p<page*19+19;p++)
@@ -1650,10 +1664,7 @@ void select_makeclothing(Creature *cr)
       move(23,0);
       addpagestr();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
@@ -1729,9 +1740,7 @@ long select_troublefundinglevel(Creature *cr)
    addstr(cr->name);
    addstr(".");
 
-   refresh();
-   int c=getch();
-   translategetch(c);
+   int c=getkey();
 
    if(c=='a')flevel=0;
    if(c=='b')flevel=20;
@@ -1761,7 +1770,7 @@ char select_view(Creature *cr,int &v)
       addstr("write editorials if there is no current news but there is public interest.");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(2,0);
-      addstr("----TOPIC-----------------------------------INTEREST---------------------------");
+      addstr("ÄÄÄÄTOPICÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄINTERESTÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ");
 
       int y=3,x=0;
       for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++)
@@ -1808,10 +1817,7 @@ char select_view(Creature *cr,int &v)
       move(23,0);
       addpagestr();
 
-      refresh();
-
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;

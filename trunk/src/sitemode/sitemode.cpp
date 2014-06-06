@@ -68,8 +68,8 @@ void fight_subdued(void)
          addstr(" is free.", gamelog);
    }
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 }
 
 void mode_site(short loc)
@@ -573,18 +573,18 @@ void mode_site(void)
       if(foughtthisround)gamelog.newline();
       foughtthisround=0;
 
-      refresh();
-
       int c;
       if(levelmap[locx][locy][locz].special == SPECIAL_CLUB_BOUNCER)
       {
          if(location[cursite]->renting==RENTING_PERMANENT)
+         {
             levelmap[locx][locy][locz].special = SPECIAL_NONE;
+            c=getkey();
+         }
          else
             c='s';
       }
-      else c=getch();
-      translategetch(c);
+      else c=getkey();
 
       if(partyalive==0&&c=='c')
       {
@@ -654,12 +654,9 @@ void mode_site(void)
             move(16,1);
             addstr("Which way?  (W,A,D, and X to move, ENTER to abort)");
 
-            refresh();
-
             do
             {
-               int c2=getch();
-               translategetch(c2);
+               int c2=getkey();
 
                if(c2=='w'||c2=='a'||c2=='d'||c2=='x'||
                   c2==KEY_LEFT||c2==KEY_RIGHT||c2==KEY_UP||c2==KEY_DOWN)
@@ -847,9 +844,8 @@ void mode_site(void)
 
                   do
                   {
-                     refresh();
-                     int c=getch();
-                     translategetch(c);
+                     int c=getkey();
+
                      if(c>='1'&&c<='6')
                      {
                         sp=c-'1';
@@ -921,9 +917,8 @@ void mode_site(void)
                            }
                         }
 
-                        refresh();
-                        int c=getch();
-                        translategetch(c);
+                        int c=getkey();
+
                         if(c>='a'&&c<='z')
                         {
                            tk=c-'a';
@@ -947,8 +942,7 @@ void mode_site(void)
                                        addstr(encounter[tk].name);
                                        addstr(" won't talk to you.");
 
-                                       refresh();
-                                       getch();
+                                       getkey();
                                     }
                                     else if(!encounter[tk].enemy()&&sitealarm&&enemy)
                                     {
@@ -960,15 +954,14 @@ void mode_site(void)
                                        move(9,1);
                                        addstr("You have to deal with the enemies first.");
 
-                                       refresh();
-                                       getch();
+                                       getkey();
                                     }
                                     else break;
                                  }
                               }
                            }
                         }
-                        if(c==10||c==ESC||c==32){tk=-1;break;}
+                        if(c==ENTER||c==ESC||c==SPACEBAR){tk=-1;break;}
                      }while(1);
                   }
                   else tk=forcetk;
@@ -1074,8 +1067,7 @@ void mode_site(void)
                }
             }
 
-            refresh();
-            getch();
+            getkey();
          }
 
          if(enemy&&c=='f')
@@ -1221,8 +1213,7 @@ void mode_site(void)
 
                if(actgot<followers)
                {
-                  refresh();
-                  getch();
+                  getkey();
 
                   clearmessagearea();
 
@@ -1236,8 +1227,7 @@ void mode_site(void)
                   gamelog.newline();
                }
 
-               refresh();
-               getch();
+               getkey();
             }
          }
          else if(c=='r'&&hostages)
@@ -1257,6 +1247,7 @@ void mode_site(void)
 
          if(c=='e')
          {
+            mapshowing=false;
             equip(activesquad->loot,-1);
 
             if(enemy&&sitealarm)enemyattack();
@@ -1264,6 +1255,7 @@ void mode_site(void)
 
             creatureadvance();
             encounter_timer++;
+            mapshowing=true;
          }
 
          if(c=='g'&&(groundloot.size()>0||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
@@ -1520,90 +1512,90 @@ void mode_site(void)
                      else if(!LCSrandom(2))newLootType="LOOT_CELLPHONE";
                      else newLootType="LOOT_COMPUTER";
                      break;
-                case SITE_BUSINESS_BARANDGRILL:
-                case SITE_OUTDOOR_BUNKER:
-                case SITE_RESIDENTIAL_BOMBSHELTER:
-                   //storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
-                   string rndWeps[] = {"WEAPON_SEMIPISTOL_9MM", "WEAPON_SEMIPISTOL_45", "WEAPON_REVOLVER_38", "WEAPON_REVOLVER_44",
-                                       "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
-                   string rndArmors[] = {"ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", "ARMOR_WORKCLOTHES",
-                                         "ARMOR_SECURITYUNIFORM", "ARMOR_CIVILLIANARMOR", "ARMOR_ARMYARMOR", "ARMOR_HEAVYARMOR"};
-                   switch (LCSrandom(3))
-                   {
-                   case 0:
-                      newWeaponType=rndWeps[LCSrandom(7)];
-                      break;
-                   case 1:
-                      newArmorType=rndArmors[LCSrandom(8)];
-                      break;
-                   default:
-                      if(!LCSrandom(5))newLootType="LOOT_CELLPHONE";
-                      else if(!LCSrandom(4))newLootType="LOOT_SILVERWARE";
-                      else if(!LCSrandom(3))newLootType="LOOT_TRINKET";
-                      else if(!LCSrandom(2))newLootType="LOOT_CHEAPJEWELERY";
-                      else newLootType="LOOT_COMPUTER";
-                      break;
-                   }
-                   break;
-               }
-               item = NULL;
-               if (!newLootType.empty())
-               {
-                  item=new Loot(*loottype[getloottype(newLootType)]);
-                  activesquad->loot.push_back(item);
-               }
-               if (!newArmorType.empty())
-               {
-                  int quality = 1;
-                  if (!LCSrandom(3))
-                  {
-                     quality=2;
-                  }
-                  Armor *a=new Armor(*armortype[getarmortype(newArmorType)],quality);
-                  if (!LCSrandom(3))
-                  {
-                     a->set_damaged(true);
-                  }
-                  item = a;
-                  activesquad->loot.push_back(item);
-               }
-
-              if (!newWeaponType.empty())
-              {
-               Weapon *w=new Weapon(*weapontype[getweapontype(newWeaponType)]);
-               if (w->uses_ammo())
-               {
-                  if (LCSrandom(2) || //50% chance of being loaded...
-                     //except for the most exotic weapons, which are always loaded.
-                     w->get_itemtypename() == "WEAPON_DESERT_EAGLE" ||
-                     w->get_itemtypename() == "WEAPON_FLAMETHROWER") //Make weapon property? -XML
-                  {
-                     vector<int> cti;
-                     for(int ct=0; ct<(int)cliptype.size(); ++ct)
+                  case SITE_BUSINESS_BARANDGRILL:
+                  case SITE_OUTDOOR_BUNKER:
+                  case SITE_RESIDENTIAL_BOMBSHELTER:
+                     //storming a CCS stronghold. Logically you ought to get all the leftover stuff if you win...
+                     string rndWeps[] = {"WEAPON_SEMIPISTOL_9MM", "WEAPON_SEMIPISTOL_45", "WEAPON_REVOLVER_38", "WEAPON_REVOLVER_44",
+                                         "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
+                     string rndArmors[] = {"ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", "ARMOR_WORKCLOTHES",
+                                           "ARMOR_SECURITYUNIFORM", "ARMOR_CIVILLIANARMOR", "ARMOR_ARMYARMOR", "ARMOR_HEAVYARMOR"};
+                     switch (LCSrandom(3))
                      {
-                        if(w->acceptable_ammo(*cliptype[ct]))
-                           cti.push_back(ct);
+                     case 0:
+                        newWeaponType=rndWeps[LCSrandom(7)];
+                        break;
+                     case 1:
+                        newArmorType=rndArmors[LCSrandom(8)];
+                        break;
+                     default:
+                        if(!LCSrandom(5))newLootType="LOOT_CELLPHONE";
+                        else if(!LCSrandom(4))newLootType="LOOT_SILVERWARE";
+                        else if(!LCSrandom(3))newLootType="LOOT_TRINKET";
+                        else if(!LCSrandom(2))newLootType="LOOT_CHEAPJEWELERY";
+                        else newLootType="LOOT_COMPUTER";
+                        break;
                      }
-                     Clip c(*cliptype[cti[LCSrandom(cti.size())]]);
-                     w->reload(c);
+                     break;
                   }
-               }
-               item = w;
-               activesquad->loot.push_back(item);
-              }
-              //char str[200];
-              if (item)
-              {
-                 string s = item->equip_title();
-                 clearmessagearea();
-                 set_color(COLOR_WHITE,COLOR_BLACK,0);
-                 move(16,1);
-                 addstr("You find: ", gamelog);
-                 move(17,1);
-                 addstr(s.c_str(), gamelog);
-                 gamelog.newline();
-                 getch(); //wait for key press before clearing.
-              }
+                  item = NULL;
+                  if(!newLootType.empty())
+                  {
+                     item=new Loot(*loottype[getloottype(newLootType)]);
+                     activesquad->loot.push_back(item);
+                  }
+                  if(!newArmorType.empty())
+                  {
+                     int quality=1;
+                     if(!LCSrandom(3))
+                     {
+                        quality=2;
+                     }
+                     Armor *a=new Armor(*armortype[getarmortype(newArmorType)],quality);
+                     if (!LCSrandom(3))
+                     {
+                        a->set_damaged(true);
+                     }
+                     item = a;
+                     activesquad->loot.push_back(item);
+                  }
+
+                  if(!newWeaponType.empty())
+                  {
+                     Weapon *w=new Weapon(*weapontype[getweapontype(newWeaponType)]);
+                     if(w->uses_ammo())
+                     {
+                        if(LCSrandom(2) || //50% chance of being loaded...
+                           //except for the most exotic weapons, which are always loaded.
+                           w->get_itemtypename() == "WEAPON_DESERT_EAGLE" ||
+                           w->get_itemtypename() == "WEAPON_FLAMETHROWER") //Make weapon property? -XML
+                        {
+                           vector<int> cti;
+                           for(int ct=0; ct<(int)cliptype.size(); ++ct)
+                           {
+                              if(w->acceptable_ammo(*cliptype[ct]))
+                                 cti.push_back(ct);
+                           }
+                           Clip c(*cliptype[cti[LCSrandom(cti.size())]]);
+                           w->reload(c);
+                        }
+                     }
+                     item = w;
+                     activesquad->loot.push_back(item);
+                  }
+                  if(item)
+                  {
+                     string s = item->equip_title();
+                     clearmessagearea();
+                     set_color(COLOR_WHITE,COLOR_BLACK,0);
+                     move(16,1);
+                     addstr("You find: ", gamelog);
+                     move(17,1);
+                     addstr(s, gamelog);
+                     gamelog.newline();
+
+                     getkey(); //wait for key press before clearing.
+                  }
                }
                tookground=1;
             }
@@ -1640,6 +1632,7 @@ void mode_site(void)
 
          if(c=='n')
          {
+            mapshowing=false;
             erase();
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1676,9 +1669,9 @@ void mode_site(void)
                   addstr(" ");
                }
 
-               c=getch();
-               translategetch(c);
+               c=getkey();
             }while(1);
+            mapshowing=true;
          }
 
          int cbase=-1;
@@ -1753,7 +1746,8 @@ void mode_site(void)
                   move(16,1);
                   addstr("The squad sneaks past the conservatives!", gamelog);
                   gamelog.newline();
-                  getch();
+
+                  getkey();
                }
                else
                {
@@ -2029,8 +2023,7 @@ void mode_site(void)
                addstr("The CCS has been broken!", gamelog);
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                location[cursite]->renting=RENTING_PERMANENT;
                location[cursite]->closed=0;
@@ -2473,8 +2466,7 @@ void mode_site(void)
                   addstr("the power of your Liberal Convictions!", gamelog);
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   conquertext();
                   escapesiege(1);
@@ -2499,8 +2491,8 @@ void mode_site(void)
                         addstr("The computer has been unplugged.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
                      }
                      else
                      {
@@ -2510,8 +2502,8 @@ void mode_site(void)
                         addstr("The computer is occupied.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
 
                         prepareencounter(sitetype,0);
                         for(int e=1;e<ENCMAX;e++)encounter[e].exists=0;
@@ -2526,8 +2518,8 @@ void mode_site(void)
                         addstr("Some people are hiding under the table.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
 
                         prepareencounter(sitetype,0);
                      }
@@ -2539,8 +2531,8 @@ void mode_site(void)
                         addstr("The table is occupied.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
 
                         prepareencounter(sitetype,0);
                      }
@@ -2554,8 +2546,8 @@ void mode_site(void)
                         addstr("The bench is empty.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
                      }
                      else
                      {
@@ -2565,8 +2557,8 @@ void mode_site(void)
                         addstr("There are people sitting here.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
 
                         prepareencounter(sitetype,0);
                      }
@@ -2600,8 +2592,8 @@ void mode_site(void)
                         addstr("The CEO must have fled to a panic room.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
                      }
                      else
                      {
@@ -2614,8 +2606,8 @@ void mode_site(void)
                            addstr("The CEO is in his study.", gamelog);
                            gamelog.newline();
                            levelmap[locx][locy][locz].special=-1;
-                           refresh();
-                           getch();
+
+                           getkey();
 
                            for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
                            encounter[0] = uniqueCreatures.CEO();
@@ -2629,8 +2621,9 @@ void mode_site(void)
                            addstr("The CEO's study lies empty.", gamelog);
                            gamelog.newline();
                            levelmap[locx][locy][locz].special=-1;
-                           refresh();
-                           getch();
+
+                           getkey();
+
                            break;
                         }
 
@@ -2646,8 +2639,8 @@ void mode_site(void)
                         addstr("The landlord is out of the office.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
                      }
                      else
                      {
@@ -2657,8 +2650,8 @@ void mode_site(void)
                         addstr("The landlord is in.", gamelog);
                         gamelog.newline();
                         levelmap[locx][locy][locz].special=-1;
-                        refresh();
-                        getch();
+
+                        getkey();
 
                         for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
                         makecreature(encounter[0],CREATURE_LANDLORD);
@@ -2760,8 +2753,7 @@ void mode_site(void)
                         }
                         gamelog.newline();
 
-                        refresh();
-                        getch();
+                        getkey();
                      }
 
                      break;
@@ -2858,8 +2850,8 @@ void resolvesite(void)
 
                pool[p]->base=activesquad->squad[0]->base;
                pool[p]->location=pool[p]->base;
-               refresh();
-               getch();
+
+               getkey();
             }
          }
       }
@@ -2900,8 +2892,8 @@ void open_door(bool restricted)
       addstr("The vault door is impenetrable.", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
+
       return;
    }
 
@@ -2931,12 +2923,9 @@ void open_door(bool restricted)
       move(17,1);
       addstr("Try the door anyway? (Yes or No)");
 
-      refresh();
-
-      while(1)
+      while(true)
       {
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          if(c=='y') break;
          else if(c=='n') return;
@@ -2958,10 +2947,7 @@ void open_door(bool restricted)
          move(17,1);
          addstr("Try to pick the lock? (Yes or No)");
 
-         refresh();
-
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          clearmessagearea(false);
 
@@ -2989,8 +2975,8 @@ void open_door(bool restricted)
                   addstr("Your tampering sets off the alarm!", gamelog);
                   gamelog.newline();
                   sitealarm=1;
-                  refresh();
-                  getch();
+
+                  getkey();
                }
             }
 
@@ -3002,10 +2988,7 @@ void open_door(bool restricted)
             }
             return;
          }
-         else if(c=='n')
-         {
-            return;
-         }
+         else if(c=='n') return;
 
       }while(1);
    }
@@ -3023,17 +3006,12 @@ void open_door(bool restricted)
             if(has_security==true)addstr("still ", gamelog);
             addstr("locked.", gamelog);
          }
-         else
-         {
-            addstr("It's locked from the other side.",gamelog);
-         }
+         else addstr("It's locked from the other side.",gamelog);
          gamelog.newline();
          move(17,1);
          addstr("Force it open? (Yes or No)");
 
-         refresh();
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          if(c=='y')
          {
@@ -3053,8 +3031,8 @@ void open_door(bool restricted)
                   addstr("The alarm goes off!", gamelog);
                   gamelog.newline();
                   sitealarm=1;
-                  refresh();
-                  getch();
+
+                  getkey();
                }
                sitecrime++;
                sitestory->crime.push_back(CRIME_BROKEDOWNDOOR);
@@ -3085,10 +3063,8 @@ void open_door(bool restricted)
          addstr("It opens easily. The alarm goes off!", gamelog);
          gamelog.newline();
          sitealarm=1;
-         refresh();
-         getch();
+
+         getkey();
       }
    }
 }
-
-

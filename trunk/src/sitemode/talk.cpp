@@ -93,10 +93,7 @@ char talkToBankTeller(Creature &a, Creature &tk)
    addstr(".");
 
    int c;
-   do {
-      c=getch();
-      translategetch(c);
-   } while(c<'a' && c>'c');
+   do c=getkey(); while(c<'a'&&c>'c');
 
    switch(c)
    {
@@ -122,8 +119,8 @@ char talkToBankTeller(Creature &a, Creature &tk)
       case 9:addstr("ROBBERY. GIVE ME CASH. NO FUNNY MONEY.", gamelog);break;
       }
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       if(location[cursite]->highsecurity)
       {
@@ -141,8 +138,9 @@ char talkToBankTeller(Creature &a, Creature &tk)
          move(12, 1);
          addstr("and dives for cover as the guards move in on the squad!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
+
          sitealarm=1;
          criminalize(a, LAWFLAG_BANKROBBERY);
          sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
@@ -168,8 +166,9 @@ char talkToBankTeller(Creature &a, Creature &tk)
          move(12, 1);
          addstr("and slips several bricks of cash into the squad's bag.", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
+
          criminalize(a, LAWFLAG_BANKROBBERY);
          sitestory->crime.push_back(CRIME_BANKTELLERROBBERY);
          sitecrime+=30;
@@ -197,11 +196,12 @@ char talkToBankTeller(Creature &a, Creature &tk)
          move(9,1);
          addstr(armed_liberal->name, gamelog);
          addstr(" brandishes the ", gamelog);
-         addstr(armed_liberal->get_weapon().get_shortname(0).c_str(), gamelog);
+         addstr(armed_liberal->get_weapon().get_shortname(0), gamelog);
          addstr(".", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
+
          clearmessagearea();
       }
       move(10,1);
@@ -215,8 +215,8 @@ char talkToBankTeller(Creature &a, Creature &tk)
       move(12,1);
       addstr("OPEN THE VAULT, NOW!\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       int roll       = a.skill_roll(SKILL_PERSUASION);
       int difficulty = DIFFICULTY_VERYEASY;
@@ -236,8 +236,9 @@ char talkToBankTeller(Creature &a, Creature &tk)
          move(10, 1);
          addstr("guards move in on the squad!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
+
          sitealarm=1;
          sitealienate=2;
          criminalizeparty(LAWFLAG_BANKROBBERY);
@@ -258,13 +259,14 @@ char talkToBankTeller(Creature &a, Creature &tk)
          move(9, 1);
          addstr("The bank employees hesitantly cooperate!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
+
          move(10, 1);
          addstr("The vault is open!", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          criminalizeparty(LAWFLAG_BANKROBBERY);
          sitestory->crime.push_back(CRIME_BANKSTICKUP);
@@ -361,10 +363,9 @@ char talkToGeneric(Creature &a, Creature &tk)
       addstr(".");
    }
 
-   do
+   while(true)
    {
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       switch(c)
       {
@@ -386,7 +387,7 @@ char talkToGeneric(Creature &a, Creature &tk)
             return talkToBankTeller(a, tk);
          break;
       }
-   } while(1);
+   }
 }
 
 char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
@@ -402,8 +403,8 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
    move(10, 1);
    addstr("\"I'd like cancel my room.\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    if (a.is_naked() && a.animalgloss != ANIMALGLOSS_ANIMAL)
    {
@@ -415,8 +416,9 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
       move(13, 1);
       addstr("\"Put some clothes on before I call the cops.\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
 
@@ -428,15 +430,15 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
    move(13, 1);
    addstr("\"Alright. Please clear out your room.\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(15,1);
    addstr("<Your possessions at this location have been moved to the shelter.>", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    location[cursite]->renting=RENTING_NOCONTROL;
 
@@ -465,8 +467,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
    move(10,1);
    addstr("\"I'd like to rent a room.\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
    {
@@ -476,8 +478,9 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"Put some clothes on before I call the cops.\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
 
@@ -505,12 +508,12 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
    addstr(num, gamelog);
    addstr(" now as a security deposit.\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    clearcommandarea();clearmessagearea();clearmaparea();
 
-   do
+   while(true)
    {
       int c='a';
 
@@ -523,8 +526,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
       move(13,1);
       addstr("C - Threaten the landlord.");
 
-      c=getch();
-      translategetch(c);
+      c=getkey();
 
       switch(c)
       {
@@ -538,8 +540,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          move(10,1);
          addstr("\"I'll take it.\"", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(12,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
@@ -552,8 +554,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          gamelog.newline();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr(" <turns away>");
-         refresh();
-         getch();
+
+         getkey();
 
          ledger.subtract_funds(rent,EXPENSE_RENT);
          location[cursite]->renting=rent;
@@ -570,8 +572,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          move(10,1);
          addstr("\"Whoa, I was looking for something cheaper.\"", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(12,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
@@ -581,8 +583,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr(" <turns away>", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          return 1;
 
@@ -607,8 +609,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             addstr(armed_liberal->get_weapon().get_shortname(0).c_str(), gamelog);
             addstr(".", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
             clearmessagearea();
          }
          move(9,1);
@@ -618,8 +620,8 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
          move(10,1);
          addstr("\"What's the price for the Liberal Crime Squad?\"", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
 
          int roll       = a.skill_roll(SKILL_PERSUASION);
          int difficulty = DIFFICULTY_FORMIDABLE;
@@ -639,8 +641,9 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(" <crosses arms>", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
+
             tk.cantbluff = 1;
             return 1;
          }
@@ -652,27 +655,22 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             move(13,1);
             addstr("\"Jesus... it's yours...\"", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
 
             int rent;
 
             // Either he calls the cops...
-            if(roll < difficulty)
+            if(roll<difficulty)
             {
                for(int i=0;i<6;i++)
-               {
                   if(activesquad->squad[i])
                      criminalize(*(activesquad->squad[i]),LAWFLAG_EXTORTION);
-               }
                location[cursite]->siege.timeuntillocated = 2;
-               rent = 10000000; // Yeah he's kicking you out next month
+               rent=10000000; // Yeah he's kicking you out next month
             }
             // ...or it's yours for free
-            else
-            {
-               rent = 0;
-            }
+            else rent=0;
 
             location[cursite]->renting=rent;
             location[cursite]->newrental=true;
@@ -681,7 +679,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             return 1;
          }
       }
-   } while(1);
+   }
 }
 
 char heyINeedAGun(Creature &a, Creature &tk)
@@ -694,8 +692,8 @@ char heyINeedAGun(Creature &a, Creature &tk)
    move(10,1);
    addstr("\"Hey, I need a gun.\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    if(a.is_naked() && a.animalgloss!=ANIMALGLOSS_ANIMAL)
    {
@@ -705,8 +703,9 @@ char heyINeedAGun(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"Jesus...\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
    if(a.get_armor().get_itemtypename() == "ARMOR_POLICEUNIFORM" ||
@@ -721,8 +720,9 @@ char heyINeedAGun(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"I don't sell guns, officer.\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
    if(sitealarm!=0)
@@ -733,8 +733,9 @@ char heyINeedAGun(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"We can talk when things are calm.\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
    switch(location[cursite]->type)
@@ -752,8 +753,8 @@ char heyINeedAGun(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"What exactly do you need?\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       armsdealer(cursite);
       return 1;
@@ -764,8 +765,9 @@ char heyINeedAGun(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"Uhhh... not a good place for this.\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
+
       return 1;
    }
 }
@@ -781,8 +783,8 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
    move(10,1);
    addstr("\"Do you want to hear something disturbing?\"", gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    bool interested = tk.talkreceptive();
 
@@ -797,19 +799,13 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
 
       switch(tk.type)
       {
-      case CREATURE_TANK:
-         addstr(" rumbles disinterestedly.", gamelog);
-         break;
-      case CREATURE_GUARDDOG:
-         addstr(" barks.", gamelog);
-         break;
-      default:
-         addstr(" doesn't understand.", gamelog);
+      case CREATURE_TANK: addstr(" rumbles disinterestedly.", gamelog); break;
+      case CREATURE_GUARDDOG: addstr(" barks.", gamelog); break;
+      default: addstr(" doesn't understand.", gamelog); break;
       }
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       return 1;
    }
@@ -821,8 +817,8 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
       move(13,1);
       addstr("\"What?\"", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       return talkAboutIssues(a, tk);
    }
@@ -836,18 +832,14 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
       {
          if(tk.align==ALIGN_LIBERAL)
             addstr("\"Now's not the time!\"", gamelog);
-         else
-            addstr("\"Leave me alone.\"", gamelog);
+         else addstr("\"Leave me alone.\"", gamelog);
       }
-      else
-      {
-         addstr("\"No.\"", gamelog);
-      }
+      else addstr("\"No.\"", gamelog);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr(" <turns away>", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       return 1;
    }
@@ -874,7 +866,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
    }
    else
    {
-      line=LCSrandom(44);
+      line=LCSrandom(47);
       switch(line)
       {
       case 0:addstr("\"Hey baby, you're kinda ugly.  I like that.\"", gamelog);break;
@@ -933,11 +925,17 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       case 41:addstr("\"Excuse me.  Do you want to fuck or should I apologize?\"", gamelog);break;
       case 42:addstr("\"Say, did we go to different schools together?\"", gamelog);break;
       case 43:addstr("\"You smell...  Let's go take a shower.\"", gamelog);break;
+      case 44:addstr("\"Roses are red, violets are blue,", gamelog);
+            move(11,1);y++;
+            addstr("All my base, are belong to you.\"", gamelog);
+            break;
+      case 45:addstr("\"Did it hurt when you fell from heaven?\"", gamelog);break;
+      case 46:addstr("\"Holy shit you're hot!  I want to have sex with you RIGHT NOW.\"", gamelog);break;
       }
    }
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    bool succeeded = false;
 
@@ -955,7 +953,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       tk.animalgloss==ANIMALGLOSS_TANK)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(12,1);addstr(tk.name, gamelog);
+      move(y++,1);addstr(tk.name, gamelog);
 
       switch(tk.type)
       {
@@ -964,7 +962,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          break;
       case CREATURE_GUARDDOG:
          addstr(" says, ", gamelog);
-         move(13,1);
+         move(y,1);
          set_color(COLOR_RED,COLOR_BLACK,1);
          switch(LCSrandom(3))
          {
@@ -977,7 +975,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          break;
       case CREATURE_GENETIC:
          addstr(" says, ", gamelog);
-         move(13,1);
+         move(y,1);
          set_color(COLOR_RED,COLOR_BLACK,1);
          switch(LCSrandom(8))
          {
@@ -998,8 +996,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       }
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       return 1;
    }
@@ -1014,24 +1011,23 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       && tk.type==CREATURE_PROSTITUTE)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
+      move(y++,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_RED,COLOR_BLACK,1);
-      move(y,1);y++;
+      move(y++,1);
 
-      addstr("Dirty. You know that's illegal, officer.", gamelog);
+      addstr("\"Dirty. You know that's illegal, officer.\"", gamelog);
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       tk.cantbluff=1;
    }
    else if(succeeded)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
+      move(y++,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_CYAN,COLOR_BLACK,1);
-      move(y,1);y++;
+      move(y++,1);
 
       if(law[LAW_FREESPEECH]==-2)
       {
@@ -1046,17 +1042,17 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       {
          switch(line)
          {
-         //LIMIT             :-----------------------------------------------------------------------------:
-         case 0:addstr("\"You're not so cute yourself.  Wanna get a room?\"", gamelog);break;
-         case 1:addstr("\"How sweet!  You can call me tonight...\"", gamelog);break;
-         case 2:addstr("\"You bet, baby.\"", gamelog);break;
-         case 3:addstr("\"He he, I'll let that one slide.  Besides, I like country folk...\"", gamelog);break;
-         case 4:addstr("\"That's sick.  I can do sick tonight.\"", gamelog);break;
-         case 5:addstr("\"Oooo, let me see!\"", gamelog);break;
-         case 6:addstr("\"Wow, looks like I'm going to have to reward creativity tonight!\"", gamelog);break;
-         case 7:addstr("\"Winter's coming.  You'd better bust more than one.\"", gamelog);break;
-         case 8:addstr("\"But you're not, so the pleasure's all mine.\"", gamelog);break;
-         case 9:addstr("\"Just wait until tonight, baby.\"", gamelog);break;
+         //LIMIT          :-----------------------------------------------------------------------------:
+         case 0 :addstr("\"You're not so cute yourself.  Wanna get a room?\"", gamelog);break;
+         case 1 :addstr("\"How sweet!  You can call me tonight...\"", gamelog);break;
+         case 2 :addstr("\"You bet, baby.\"", gamelog);break;
+         case 3 :addstr("\"He he, I'll let that one slide.  Besides, I like country folk...\"", gamelog);break;
+         case 4 :addstr("\"That's sick.  I can do sick tonight.\"", gamelog);break;
+         case 5 :addstr("\"Oooo, let me see!\"", gamelog);break;
+         case 6 :addstr("\"Wow, looks like I'm going to have to reward creativity tonight!\"", gamelog);break;
+         case 7 :addstr("\"Winter's coming.  You'd better bust more than one.\"", gamelog);break;
+         case 8 :addstr("\"But you're not, so the pleasure's all mine.\"", gamelog);break;
+         case 9 :addstr("\"Just wait until tonight, baby.\"", gamelog);break;
          case 10:addstr("\"You're wrong.\"", gamelog);break;
          case 11:addstr("\"I can drool on you if you like it that way.\"", gamelog);break;
          case 12:addstr("\"Oooo, all aboard baby!\"", gamelog);break;
@@ -1091,16 +1087,18 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          case 41:addstr("\"You can apologize later if it isn't any good.\"", gamelog);break;
          case 42:addstr("\"Yeah, and we tonight can try different positions together.\"", gamelog);break;
          case 43:addstr("\"Don't you like it dirty?\"", gamelog);break;
+         case 44:addstr("\"It's you!!  Somebody set up us the bomb.  Move 'Zig'.  For great justice.\"", gamelog);break;
+         case 45:addstr("\"Actually I'm a succubus from hell, and you're my next victim.\"", gamelog);break;
+         case 46:addstr("\"Can you wait a couple hours?  I got 6 other people to fuck first.\"", gamelog);break;
          }
       }
       gamelog.newline();
-      refresh();
-      getch();
 
-      y++;
-      move(y,1);
+      getkey();
+
+      move(++y,1);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;
+      move(y++,1);
       addstr(a.name, gamelog);
       addstr(" and ", gamelog);
       addstr(tk.name, gamelog);
@@ -1108,17 +1106,16 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       if(strcmp(tk.name,"Prisoner")==0)
       {
          addstr(", and ", gamelog);
-         move(y,1);y++;
+         move(y++,1);
          addstr(tk.name, gamelog);
          addstr(" breaks for the exit", gamelog);
          criminalize(tk,LAWFLAG_ESCAPED);
       }
       addstr(".  ", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
 
-      //int olddate=0;
+      getkey();
+
       datest *newd=NULL;
       for(int d=0;d<(int)date.size();d++)
       {
@@ -1152,19 +1149,14 @@ char doYouComeHereOften(Creature &a, Creature &tk)
    else
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
+      move(y++,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_RED,COLOR_BLACK,1);
-      move(y,1);y++;
+      move(y++,1);
       if(tk.type == CREATURE_CORPORATE_CEO)
       {
          if(a.gender_liberal != GENDER_MALE)
-         {
             addstr("\"I'm a happily married man, sweetie.\"", gamelog);
-         }
-         else
-         {
-            addstr("\"This ain't Brokeback Mountain, son.\"", gamelog);
-         }
+         else addstr("\"This ain't Brokeback Mountain, son.\"", gamelog);
       }
       else
       {
@@ -1201,8 +1193,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       }
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       tk.cantbluff=1;
    }
@@ -1227,7 +1218,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
    move(9,1);addstr(a.name, gamelog);addstr(" says, ", gamelog);
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    int y=10;
-   move(y,1);y++;
+   move(y++,1);
    if(you_are_stupid)
    {
       switch(lw)
@@ -1294,96 +1285,96 @@ char talkAboutIssues(Creature &a, Creature &tk)
       switch(lw)
       {
       case LAW_ABORTION:
-         addstr("\"The government is systematically trying to rob women of the right ", gamelog);move(y,1);y++;
+         addstr("\"The government is systematically trying to rob women of the right ", gamelog);move(y++,1);
          addstr("to control their own destinies.\"", gamelog);
          break;
       case LAW_ANIMALRESEARCH:
-         addstr("\"Animals are routinely subjected to inhumane treatment in labs in this", gamelog);move(y,1);y++;
+         addstr("\"Animals are routinely subjected to inhumane treatment in labs in this", gamelog);move(y++,1);
          addstr("country.\"", gamelog);
          break;
       case LAW_POLICEBEHAVIOR:
          addstr("\"The police regularly torture minority suspects during interrogations.\"", gamelog);
          break;
       case LAW_PRIVACY:
-         addstr("\"Files are being kept on innocent citizens whose only crime is to ", gamelog);move(y,1);y++;
+         addstr("\"Files are being kept on innocent citizens whose only crime is to ", gamelog);move(y++,1);
          addstr("speak out against a system that is trying to farm them like beasts.\"", gamelog);
          break;
       case LAW_DEATHPENALTY:
          addstr("\"Over thirty innocent people have been executed over the past decade.\"", gamelog);
          break;
       case LAW_NUCLEARPOWER:
-         addstr("\"Radioactive waste is being stored all over the country, and it poses ", gamelog);move(y,1);y++;
+         addstr("\"Radioactive waste is being stored all over the country, and it poses ", gamelog);move(y++,1);
          addstr("a serious threat to many families, even in this neighborhood.\"", gamelog);
          break;
       case LAW_POLLUTION:
-         addstr("\"Industries that stop at nothing to become more profitable are polluting ", gamelog);move(y,1);y++;
+         addstr("\"Industries that stop at nothing to become more profitable are polluting ", gamelog);move(y++,1);
          addstr("the environment in ways that hurt not only animals, but people too.", gamelog);
          break;
       case LAW_LABOR:
-         addstr("\"Have you noticed how people are working more and more hours for less and ", gamelog);move(y,1);y++;
+         addstr("\"Have you noticed how people are working more and more hours for less and ", gamelog);move(y++,1);
          addstr("less money?  It's all part of a plan to keep you enslaved, man.\"", gamelog);
          break;
       case LAW_GAY:
-         addstr("\"Homosexuals are people like anyone else, and yet they are treated in this ", gamelog);move(y,1);y++;
+         addstr("\"Homosexuals are people like anyone else, and yet they are treated in this ", gamelog);move(y++,1);
          addstr("country as if they are deviants fit only for cheap entertainment.\"", gamelog);
          break;
       case LAW_CORPORATE:
-         addstr("\"Corporate executives use giant corporations as a means to become parasites ", gamelog);move(y,1);y++;
+         addstr("\"Corporate executives use giant corporations as a means to become parasites ", gamelog);move(y++,1);
          addstr("that suck wealth out of this country and put it into their pockets.\"", gamelog);
          break;
       case LAW_FREESPEECH:
-         addstr("\"Protests and demonstrations are regularly and often brutally suppressed in ", gamelog);move(y,1);y++;
+         addstr("\"Protests and demonstrations are regularly and often brutally suppressed in ", gamelog);move(y++,1);
          addstr("this country.  People have to watch what they write -- even what they read.\"", gamelog);
          break;
       case LAW_FLAGBURNING:
-         addstr("\"Burning a piece of cloth is actually stigmatized in this country. ", gamelog);move(y,1);y++;
+         addstr("\"Burning a piece of cloth is actually stigmatized in this country. ", gamelog);move(y++,1);
          addstr("You can love freedom and still hate what our government stands for.\"", gamelog);
          break;
       case LAW_TAX:
-         addstr("\"The tax code has been designed to perpetuate an unjust class ", gamelog);move(y,1);y++;
+         addstr("\"The tax code has been designed to perpetuate an unjust class ", gamelog);move(y++,1);
          addstr("structure that is keeping you oppressed.\"", gamelog);
          break;
       case LAW_GUNCONTROL:
-         addstr("\"We live in such a backwards country right now that people think it's ", gamelog);move(y,1);y++;
+         addstr("\"We live in such a backwards country right now that people think it's ", gamelog);move(y++,1);
          addstr("a right to walk around with the power to murder at any moment.\"", gamelog);
          break;
       case LAW_WOMEN:
-         addstr("\"Sexism is still pervasive, in subtle ways, and women make much less ", gamelog);move(y,1);y++;
+         addstr("\"Sexism is still pervasive, in subtle ways, and women make much less ", gamelog);move(y++,1);
          addstr("than they deserve for their labor.\"", gamelog);
          break;
       case LAW_CIVILRIGHTS:
-         addstr("\"Despite our progress, this society is still strangled by its continuing ", gamelog);move(y,1);y++;
+         addstr("\"Despite our progress, this society is still strangled by its continuing ", gamelog);move(y++,1);
          addstr("legacy of racial discrimination and inequality.\"", gamelog);
          break;
       case LAW_DRUGS:
-         addstr("\"The government's drug policy is a mess.  We need to stop filling ", gamelog);move(y,1);y++;
+         addstr("\"The government's drug policy is a mess.  We need to stop filling ", gamelog);move(y++,1);
          addstr("prisons with drug users, and only intervene when people really need help.\"", gamelog);
          break;
       case LAW_IMMIGRATION:
-         addstr("\"Millions of people are doing jobs most folks don't even want, and ", gamelog);move(y,1);y++;
+         addstr("\"Millions of people are doing jobs most folks don't even want, and ", gamelog);move(y++,1);
          addstr("saving their families from poverty, but we just try to kick them out.\"", gamelog);
          break;
       case LAW_ELECTIONS:
-         addstr("\"Political favors are bought and sold for campaign contributions, ", gamelog);move(y,1);y++;
+         addstr("\"Political favors are bought and sold for campaign contributions, ", gamelog);move(y++,1);
          addstr("and the voting system enforces two party dominance.\"", gamelog);
          break;
       case LAW_MILITARY:
-         addstr("\"Take a breath and think about the world we live in, that we're spending ", gamelog);move(y,1);y++;
+         addstr("\"Take a breath and think about the world we live in, that we're spending ", gamelog);move(y++,1);
          addstr("hundreds of billions on new ways to kill people.  This has to stop!\"", gamelog);
          break;
       case LAW_TORTURE:
-         addstr("\"In the name of the war on terror, we've sacrificed our soul by letting ", gamelog);move(y,1);y++;
+         addstr("\"In the name of the war on terror, we've sacrificed our soul by letting ", gamelog);move(y++,1);
          addstr("the government torture and abuse human beings on our behalf.\"", gamelog);
          break;
       case LAW_PRISONS:
-         addstr("\"The prison system doesn't help criminals by providing rehabilitation, so ", gamelog);move(y,1);y++;
+         addstr("\"The prison system doesn't help criminals by providing rehabilitation, so ", gamelog);move(y++,1);
          addstr("when they get released, they mostly become criminals again.\"", gamelog);
          break;
       }
    }
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    int difficulty = DIFFICULTY_VERYEASY;
 
@@ -1403,16 +1394,12 @@ char talkAboutIssues(Creature &a, Creature &tk)
    // Prisoners never accept to join you, you must liberate them instead
    if(succeeded && strcmp(tk.name,"Prisoner")!=0)
    {
-      y++;
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
+      move((++y)++,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_CYAN,COLOR_BLACK,1);
-      move(y,1);y++;
-      if(tk.type==CREATURE_MUTANT&&
-         tk.get_attribute(ATTRIBUTE_INTELLIGENCE,true)<3)
-      {
+      move(y++,1);
+      if(tk.type==CREATURE_MUTANT&&tk.get_attribute(ATTRIBUTE_INTELLIGENCE,true)<3)
          addstr("\"Aaaahhh...\"", gamelog);
-      }
       else
       {
          switch(LCSrandom(10))
@@ -1422,9 +1409,10 @@ char talkAboutIssues(Creature &a, Creature &tk)
          case 2: addstr("\"Gosh!   Is there anything I can do?\"", gamelog); break;
          case 3: addstr("\"That's frightening!   What can we do?\"", gamelog); break;
          case 4: addstr("\"Oh, really?\" ", gamelog);
-                 refresh();
-                 getch();
-                 move(y,1);y++;
+
+                 getkey();
+
+                 move(y++,1);
                  set_color(COLOR_GREEN,COLOR_BLACK,1);
                  addstr("\"Yeah, really!\"", gamelog);
                  break;
@@ -1440,27 +1428,24 @@ char talkAboutIssues(Creature &a, Creature &tk)
       }
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
-      y++;move(y,1);y++;
+      move(++y,1);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("After more discussion, ", gamelog);
       addstr(tk.name, gamelog);
       addstr(" agrees to come by later tonight.", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       Creature *newcr=new Creature;
-         *newcr=tk;
+      *newcr=tk;
       newcr->namecreature();
 
       recruitst *newrst=new recruitst;
       newrst->recruit=newcr;
       newrst->recruiter_id = a.id;
-
-      //newcr->align=1;
 
       recruit.push_back(newrst);
 
@@ -1469,21 +1454,20 @@ char talkAboutIssues(Creature &a, Creature &tk)
    }
    else
    {
-      y++;
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(y,1);y++;addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
+      move((++y)++,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
       set_color(COLOR_CYAN,COLOR_BLACK,1);
       if(tk.type==CREATURE_MUTANT&&
          tk.get_attribute(ATTRIBUTE_INTELLIGENCE,true)<3)
       {
-         move(y,1);y++;
+         move(y++,1);
          addstr("\"Ugh.  Pfft.\"", gamelog);
       }
       else
       {
          if(tk.align==ALIGN_CONSERVATIVE && you_are_stupid)
          {
-            move(y,1);y++;
+            move(y++,1);
             if(tk.type==CREATURE_GANGUNIT)
                addstr("\"Do you want me to arrest you?\"", gamelog);
             else if(tk.type==CREATURE_DEATHSQUAD)
@@ -1507,7 +1491,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
          }
          else if(tk.align != ALIGN_LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM,DIFFICULTY_AVERAGE))
          {
-            move(y,1);y++;
+            move(y++,1);
             switch(lw)
             {
             case LAW_ABORTION:      addstr("\"Abortion is murder.\"", gamelog);break;
@@ -1536,15 +1520,15 @@ char talkAboutIssues(Creature &a, Creature &tk)
          }
          else
          {
-            move(y,1);y++;
+            move(y++,1);
             addstr("\"Whatever.\"", gamelog);
          }
       }
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr(" <turns away>", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       tk.cantbluff=1;
       return 1;
@@ -1564,24 +1548,16 @@ char talkInCombat(Creature &a, Creature &tk)
    addstr(" talks to ", gamelog);
    switch(tk.align)
    {
-   case ALIGN_CONSERVATIVE:
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      break;
-   case ALIGN_LIBERAL:
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      break;
-   case ALIGN_MODERATE:
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      break;
+   case ALIGN_CONSERVATIVE: set_color(COLOR_RED,COLOR_BLACK,1); break;
+   case ALIGN_LIBERAL: set_color(COLOR_GREEN,COLOR_BLACK,1); break;
+   case ALIGN_MODERATE: set_color(COLOR_WHITE,COLOR_BLACK,1); break;
    }
    addstr(tk.name, gamelog);
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    addstr(":", gamelog);
    gamelog.newline();
 
-   int c=0;
-   int hostages=0;
-   int weaponhostage=0;
+   int c=0,hostages=0,weaponhostage=0;
    bool cop=0;
 
    for(int i=0;i<6;i++)
@@ -1625,11 +1601,10 @@ char talkInCombat(Creature &a, Creature &tk)
    move(14,1);
    addstr("D - Surrender to authorities");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   refresh();
-   while(1)
+   while(true)
    {
-      c=getch();
-      translategetch(c);
+      c=getkey();
+
       if(c=='a')break;
       if(c=='b' && hostages)break;
       if(c=='c' && tk.cantbluff!=2)break;
@@ -1653,28 +1628,20 @@ char talkInCombat(Creature &a, Creature &tk)
             addstr(slogan, gamelog);
             int last=strlen(slogan);
             if(last && slogan[last-1]!='"' && slogan[last-1]!='!' && slogan[last-1]!='.' && slogan[last-1]!='?')
-            {
                addch('!');
-            }
             if(last && slogan[last-1]!='"')addstr("\"", gamelog);
 
             if(!sitestory->claimed)
                sitestory->claimed=1;
             break;
          }
-      case 1:
-         addstr("Die you Conservative dogs!", gamelog);
-         break;
-      case 2:
-         addstr("We're the Liberal Crime Squad!", gamelog);
-         break;
-      case 3:
-         addstr("Praying won't help you now!", gamelog);
-         break;
+      case 1: addstr("Die you Conservative dogs!", gamelog); break;
+      case 2: addstr("We're the Liberal Crime Squad!", gamelog); break;
+      case 3: addstr("Praying won't help you now!", gamelog); break;
       }
 
-      refresh();
-      getch();
+      getkey();
+
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       for(int e=0;e<ENCMAX;e++)
@@ -1696,10 +1663,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   encounter[e].type==CREATURE_AGENT||
                   encounter[e].type==CREATURE_SECRET_SERVICE)
                {
-                  if(LCSrandom(3))
-                  {
-                     continue;
-                  }
+                  if(LCSrandom(3)) continue;
                }
                clearmessagearea();
                move(16,1);
@@ -1715,8 +1679,8 @@ char talkInCombat(Creature &a, Creature &tk)
                }
                delenc(e,0);
                addjuice(a,2,200); // Instant juice!
-               refresh();
-               getch();
+
+               getkey();
             }
          }
       }
@@ -1749,9 +1713,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
       addjuice(a,-2,-10); // DE-juice for this shit
 
-
-      refresh();
-      getch();
+      getkey();
 
       bool noretreat=false;
 
@@ -1821,8 +1783,7 @@ char talkInCombat(Creature &a, Creature &tk)
                         case 0:
                            if(hostages>1)
                               addstr("\"Release your hostages, and nobody gets hurt.\"", gamelog);
-                           else
-                              addstr("\"Let the hostage go, and nobody gets hurt.\"", gamelog);
+                           else addstr("\"Let the hostage go, and nobody gets hurt.\"", gamelog);
                            break;
                         case 1:addstr("\"You got about five seconds to back down.\"", gamelog);break;
                         case 2:addstr("\"You want to do this the hard way?\"", gamelog);break;
@@ -1834,8 +1795,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   }
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   noretreat=true;
                   break;
@@ -1858,8 +1818,8 @@ char talkInCombat(Creature &a, Creature &tk)
                   delenc(i,0);
                }
             }
-            refresh();
-            getch();
+
+            getkey();
          }
          else
          {
@@ -1884,19 +1844,17 @@ char talkInCombat(Creature &a, Creature &tk)
             move(13,1);
             addstr("C - No reply");
 
-            while(1)
+            while(true)
             {
-               c=getch();
-               translategetch(c);
-               if(c=='a'||c=='b'||c=='b')break;
+               c=getkey();
+
+               if(c=='a'||c=='b')break; // TODO: something to happen if you press 'c'
             }
             if(c=='a')
             {
                Creature* executer=0;
                if(a.prisoner)
-               {
                   executer=&a;
-               }
                else for(int i=0;i<6;i++)
                {
                   if(activesquad->squad[i] &&
@@ -1923,8 +1881,9 @@ char talkInCombat(Creature &a, Creature &tk)
                   addstr("CRUNCH!", gamelog);
                   gamelog.newline();
                }
-               refresh();
-               getch();
+
+               getkey();
+
                move(17,1);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                addstr(executer->name, gamelog);
@@ -1946,8 +1905,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
                makeloot(*executer->prisoner,groundloot);
 
-               refresh();
-               getch();
+               getkey();
 
                delete executer->prisoner;
                executer->prisoner=NULL;
@@ -1963,8 +1921,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   move(17,1);
                   if(law[LAW_FREESPEECH]>ALIGN_ARCHCONSERVATIVE)
                      addstr("\"Fuck! ", gamelog);
-                  else
-                     addstr("\"[No!] ", gamelog);
+                  else addstr("\"[No!] ", gamelog);
                   switch(LCSrandom(5))
                   {
                   case 0:addstr("Okay, okay, you win!\"", gamelog);break;
@@ -1976,15 +1933,10 @@ char talkInCombat(Creature &a, Creature &tk)
                   gamelog.newline();
 
                   for(int i=ENCMAX;i>=0;i--)
-                  {
                      if(encounter[i].exists && encounter[i].enemy() && encounter[i].alive)
-                     {
                         delenc(i,0);
-                     }
-                  }
 
-                  refresh();
-                  getch();
+                  getkey();
                }
             }
             else if(c=='b')
@@ -1998,10 +1950,8 @@ char talkInCombat(Creature &a, Creature &tk)
                switch(LCSrandom(5))
                {
                case 0:
-                  if(hostages>1)
-                     addstr("\"Back off and we'll let the hostages go.\"", gamelog);
-                  else
-                     addstr("\"Back off and the hostage goes free.\"", gamelog);
+                  if(hostages>1) addstr("\"Back off and we'll let the hostages go.\"", gamelog);
+                  else addstr("\"Back off and the hostage goes free.\"", gamelog);
                   break;
                case 1:addstr("\"Freedom for freedom, understand?\"", gamelog);break;
                case 2:addstr("\"Let me go in peace, okay?\"", gamelog);break;
@@ -2010,8 +1960,7 @@ char talkInCombat(Creature &a, Creature &tk)
                }
                gamelog.newline();
 
-               refresh();
-               getch();
+               getkey();
 
                if(((encounter[e].type==CREATURE_DEATHSQUAD||
                   encounter[e].type==CREATURE_AGENT||
@@ -2037,8 +1986,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   }
                   gamelog.newline();
 
-                  refresh();
-                  getch();
+                  getkey();
                }
                else
                {
@@ -2057,17 +2005,12 @@ char talkInCombat(Creature &a, Creature &tk)
                   case 3:addstr("\"No tricks, okay?\"", gamelog);break;
                   }
                   gamelog.newline();
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   for(int i=ENCMAX;i>=0;i--)
-                  {
-                     if(encounter[i].exists &&
-                        encounter[i].enemy() &&
-                        encounter[i].alive)
-                     {
+                     if(encounter[i].exists&&encounter[i].enemy()&&encounter[i].alive)
                         delenc(i,0);
-                     }
-                  }
                   clearmessagearea();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(16,1);
@@ -2085,8 +2028,8 @@ char talkInCombat(Creature &a, Creature &tk)
                         activesquad->squad[i]->prisoner=NULL;
                      }
                   }
-                  refresh();
-                  getch();
+
+                  getkey();
                }
             }
          }
@@ -2099,8 +2042,8 @@ char talkInCombat(Creature &a, Creature &tk)
          addstr(tk.name, gamelog);
          addstr(" isn't interested in your pathetic threats.", gamelog);
          gamelog.newline();
-         refresh();
-         getch();
+
+         getkey();
       }
    }
    else if(c=='c')
@@ -2195,8 +2138,7 @@ char talkInCombat(Creature &a, Creature &tk)
       }
       gamelog.newline();
 
-      refresh();
-      getch();
+      getkey();
 
       bool fooled=true;
       int e;
@@ -2208,10 +2150,9 @@ char talkInCombat(Creature &a, Creature &tk)
          {
             if(encounter[e].get_attribute(ATTRIBUTE_WISDOM,true)>10)
                fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING);
-            else
-               fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_AVERAGE);
+            else fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_AVERAGE);
 
-            if(fooled == false)break;
+            if(!fooled) break;
          }
       }
 
@@ -2237,8 +2178,7 @@ char talkInCombat(Creature &a, Creature &tk)
             else addstr(" is not fooled by that crap.", gamelog);
          }
 
-         refresh();
-         getch();
+         getkey();
       }
       else
       {
@@ -2248,17 +2188,11 @@ char talkInCombat(Creature &a, Creature &tk)
          move(16,1);
          addstr("The Enemy is fooled and departs.", gamelog);
 
-         refresh();
-         getch();
+         getkey();
 
          for(int e=ENCMAX-1;e>=0;e--)
-         {
-            if(encounter[e].exists&&encounter[e].alive&&
-               encounter[e].enemy())
-            {
+            if(encounter[e].exists&&encounter[e].alive&&encounter[e].enemy())
                delenc(e,0);
-            }
-         }
       }
       gamelog.newline();
    }
@@ -2268,17 +2202,16 @@ char talkInCombat(Creature &a, Creature &tk)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("The Squad is arrested.", gamelog);
       gamelog.newline();
-      getch();
+
+      getkey();
 
       int stolen=0;
       // Police assess stolen goods in inventory
       for(int l=0;l<(int)activesquad->loot.size();l++)
-      {
          if(activesquad->loot[l]->is_loot())
             stolen++;
-      }
 
-      for(int i=0;i<6;++i)
+      for(int i=0;i<6;i++)
       {
          if(activesquad->squad[i])
          {
@@ -2428,8 +2361,8 @@ char heyMisterDog(Creature &a, Creature &tk)
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    addstr(pitch, gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(13,1);
@@ -2439,17 +2372,13 @@ char heyMisterDog(Creature &a, Creature &tk)
    set_color(COLOR_YELLOW,COLOR_BLACK,1);
    addstr(response, gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    if(success)
-   {
       for(int i=0;i<ENCMAX;i++)
-      {
          if(encounter[i].type == CREATURE_GUARDDOG)
             encounter[i].align = ALIGN_LIBERAL;
-      }
-   }
 
    return 1;
 }
@@ -2590,8 +2519,8 @@ char heyMisterMonster(Creature &a, Creature &tk)
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    addstr(pitch, gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(13,1);
@@ -2601,17 +2530,13 @@ char heyMisterMonster(Creature &a, Creature &tk)
    set_color(COLOR_YELLOW,COLOR_BLACK,1);
    addstr(response, gamelog);
    gamelog.newline();
-   refresh();
-   getch();
+
+   getkey();
 
    if(success)
-   {
       for(int i=0;i<ENCMAX;i++)
-      {
          if(encounter[i].type == CREATURE_GENETIC)
             encounter[i].align = ALIGN_LIBERAL;
-      }
-   }
 
    return 1;
 }

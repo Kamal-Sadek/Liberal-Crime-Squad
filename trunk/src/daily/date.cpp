@@ -47,8 +47,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       addstr(pool[p]->name, gamelog);
       addstr("'s unique life philosophy...", gamelog);
       gamelog.newline();
-      refresh();
-      getch();
+
+      getkey();
 
       if(signed(LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_HEART,false)+(aroll-troll)/2))>d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false))
       {
@@ -62,15 +62,13 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             addstr(" mentions having other lovers, things go downhill fast.", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
 
             move(y++,0);
             addstr("This relationship is over.", gamelog);
             gamelog.nextMessage();
 
-            refresh();
-            getch();
+            getkey();
 
             delete_and_remove(d.date,e);
 
@@ -87,8 +85,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          //Get map of their workplace
          location[d.date[e]->worklocation]->mapped=1;
          location[d.date[e]->worklocation]->hidden=0;
-         refresh();
-         getch();
+
+         getkey();
 
          d.date[e]->flag|=CREATUREFLAG_LOVESLAVE;
          d.date[e]->hireid=pool[p]->id;
@@ -161,8 +159,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(y,0);y++;
          addstr("They'll meet again tomorrow.", gamelog);
          gamelog.nextMessage();
-         refresh();
-         getch();
+
+         getkey();
 
          return DATERESULT_MEETTOMORROW;
       }
@@ -172,7 +170,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       //WISDOM POSSIBLE INCREASE
       if(d.date[e]->align==-1&&aroll<troll/2)
       {
-                        set_color(COLOR_RED,COLOR_BLACK,1);
+         set_color(COLOR_RED,COLOR_BLACK,1);
          move(y,0);y++;
 
          addstr("Talking with ", gamelog);
@@ -196,8 +194,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             pool[p]->train(SKILL_BUSINESS,20*(d.date[e]->get_skill(SKILL_BUSINESS)-pool[p]->get_skill(SKILL_BUSINESS)));
          }
 
-         refresh();
-         getch();
+         getkey();
       }
 
       //BREAK UP
@@ -212,8 +209,9 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr(d.date[e]->name, gamelog);
          addstr(" was leaking information to the police the whole time!", gamelog);
-         refresh();
-         getch();
+
+         getkey();
+
          move(y,0);y++;
          // 3/4 chance of being arrested if less than 50 juice,
          // 1/2 chance of being arrested if more than 50 juice
@@ -233,8 +231,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             pool[p]->drop_weapons_and_clips(NULL);
             pool[p]->activity.type=ACTIVITY_NONE;
 
-            refresh();
-            getch();
+            getkey();
 
             delete_and_remove(d.date,e);
 
@@ -261,8 +258,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr("This relationship is over.", gamelog);
          gamelog.nextMessage();
       }
-      refresh();
-      getch();
+
+      getkey();
 
       delete_and_remove(d.date,e);
 
@@ -361,8 +358,7 @@ char completedate(datest &d,int p,char &clearformess)
 
    gamelog.newline();
 
-   refresh();
-   getch();
+   getkey();
 
    char datestr[128];
    if(d.date.size()>1&&
@@ -384,8 +380,9 @@ char completedate(datest &d,int p,char &clearformess)
             addstr(pool[p]->name, gamelog);
             addstr(".  An ambush was set for the lying dog...", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
+
             break;
          case 1:
             move(2,0);
@@ -401,8 +398,9 @@ char completedate(datest &d,int p,char &clearformess)
             move(3,0);
             addstr("Uh oh...", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
+
             break;
          default:
             move(2,0);
@@ -423,8 +421,9 @@ char completedate(datest &d,int p,char &clearformess)
             move(3,0);
             addstr("Things go downhill fast.", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
+
+            getkey();
+
             break;
       }
 
@@ -444,9 +443,9 @@ char completedate(datest &d,int p,char &clearformess)
             break;
       }
       addjuice(*pool[p],-5,-50);
-      refresh();
-      getch();
       gamelog.nextMessage();
+
+      getkey();
 
       return 1;
    }
@@ -529,9 +528,7 @@ char completedate(datest &d,int p,char &clearformess)
       }
       do
       {
-         refresh();
-         int c=getch();
-         translategetch(c);
+         int c=getkey();
 
          short aroll=pool[p]->skill_roll(SKILL_SEDUCTION);
          short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
@@ -649,9 +646,7 @@ char completedate(datest &d,int p,char &clearformess)
                bonus+=pool[p]->get_skill(SKILL_HANDTOHAND)-1;
             }
 
-            refresh();
-            getch();
-
+            getkey();
 
             // Kidnap succeeds if the conservative isn't very dangerous,
             // but might fail if the conservative is tough stuff.
@@ -674,14 +669,14 @@ char completedate(datest &d,int p,char &clearformess)
                   gamelog.newline();
                }
 
-               refresh();
-               getch();
+               getkey();
+
                move(22,0);
                addstr(pool[p]->name, gamelog);
                addstr(" kidnaps the Conservative!", gamelog);
                gamelog.nextMessage();
-               refresh();
-               getch();
+
+               getkey();
 
                d.date[e]->namecreature();
                strcpy(d.date[e]->propername,d.date[e]->name);
@@ -732,8 +727,9 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(d.date[e]->name, gamelog);
                   addstr(" manages to get away on the way back to the safehouse!", gamelog);
                   gamelog.newline();
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   move(++y,0);y++;
                   addstr(pool[p]->name, gamelog);
                   addstr(" has failed to kidnap the Conservative.", gamelog);
@@ -742,8 +738,7 @@ char completedate(datest &d,int p,char &clearformess)
                   // Charge with kidnapping
                   criminalize(*pool[p],LAWFLAG_KIDNAPPING);
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   delete_and_remove(d.date,e);
                   break;
@@ -757,8 +752,9 @@ char completedate(datest &d,int p,char &clearformess)
                   addstr(pool[p]->name, gamelog);
                   addstr(" remembers seeing!", gamelog);
                   gamelog.newline();
-                  refresh();
-                  getch();
+
+                  getkey();
+
                   move(++y,0);y++;
                   addstr("The Liberal wakes up in the police station...", gamelog);
                   gamelog.nextMessage();
@@ -776,15 +772,14 @@ char completedate(datest &d,int p,char &clearformess)
                   // Charge with kidnapping
                   criminalize(*pool[p],LAWFLAG_KIDNAPPING);
 
-                  refresh();
-                  getch();
+                  getkey();
 
                   delete_and_remove(d.date,e);
                   return 1;
                }
             }
          }
-      }while(1);
+      } while(true);
    }
 
    if(d.date.size()>0)

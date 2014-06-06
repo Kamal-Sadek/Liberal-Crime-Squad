@@ -31,14 +31,11 @@ recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)
    {
       //Likes the LCS
       if((int)LCSrandom(100)<attitude[VIEW_LIBERALCRIMESQUADPOS])
-      {
          eagerness1=3;
-      }
       //Doesn't like the LCS
       else eagerness1=0;
    }
    else eagerness1=2;
-
 }
 
 recruitst::~recruitst()
@@ -48,11 +45,11 @@ recruitst::~recruitst()
 
 char recruitst::eagerness()
 {
-   char eagerness_temp = eagerness1;
+   char eagerness_temp=eagerness1;
    //Moderates are decidedly less interested
-   if(recruit->align==0)eagerness_temp-=2;
+   if(recruit->align==0) eagerness_temp-=2;
    //Conservatives are extremely uninterested
-   if(recruit->align==-1)eagerness_temp-=4;
+   if(recruit->align==-1) eagerness_temp-=4;
    return eagerness_temp;
 }
 
@@ -60,31 +57,31 @@ static void getissueeventstring(char* str)
 {
    switch(LCSrandom(VIEWNUM-3))
    {
-   case VIEW_DRUGS:strcat(str,"a collection of studies on the health effects of marijuana");break;
-   case VIEW_MILITARY:strcat(str,"a book on the history of military atrocities");break;
-   case VIEW_IMMIGRATION:strcat(str,"a reality TV episode on the lives of immigrants");break;
-   case VIEW_CIVILRIGHTS:strcat(str,"a documentary on the civil rights struggle");break;
-   case VIEW_WOMEN:strcat(str,"a documentary on the women's rights struggle");break;
-   case VIEW_GAY:strcat(str,"a documentary on the gay rights struggle");break;
-   case VIEW_DEATHPENALTY:strcat(str,"a research paper on abuses of the death penalty");break;
-   case VIEW_TAXES:strcat(str,"an economic paper on the flaws of trickle-down");break;
-   case VIEW_NUCLEARPOWER:strcat(str,"a video tour of the Chernobyl dead zone");break;
-   case VIEW_ANIMALRESEARCH:strcat(str,"a documentary on animal research");break;
-   case VIEW_POLICEBEHAVIOR:strcat(str,"a hand-recorded video of police brutality");break;
-   case VIEW_TORTURE:strcat(str,"a government inquiry into military interrogations");break;
-   case VIEW_PRISONS:strcat(str,"a documentary on the prisoners' suffering");break;
-   case VIEW_INTELLIGENCE:strcat(str,"a documentary on privacy rights");break;
-   case VIEW_FREESPEECH:strcat(str,"a collection of banned books");break;
-   case VIEW_GENETICS:strcat(str,"a video about genetic engineering accidents");break;
-   case VIEW_JUSTICES:strcat(str,"a Liberal policy paper inquiring into judicial decisions");break;
-   case VIEW_GUNCONTROL:strcat(str,"a book profiling school shootings");break;
-   case VIEW_SWEATSHOPS:strcat(str,"a hand-recorded video of unregulated sweatshops");break;
-   case VIEW_POLLUTION:strcat(str,"a leaked government paper on environmental conditions");break;
-   case VIEW_CORPORATECULTURE:strcat(str,"a documentary on life under corporate culture");break;
-   case VIEW_CEOSALARY:strcat(str,"a Liberal think-tank survey of top CEO salaries");break;
-   case VIEW_AMRADIO:strcat(str,"a collection of Conservative radio host rants");break;
-   case VIEW_CABLENEWS:strcat(str,"a collection of leaked Conservative cable news memos");break;
-   //case VIEW_POLITICALVIOLENCE:strcat(str,"a documentary about progress made by direct action");break;
+   case VIEW_DRUGS: strcat(str,"a collection of studies on the health effects of marijuana"); break;
+   case VIEW_MILITARY: strcat(str,"a book on the history of military atrocities"); break;
+   case VIEW_IMMIGRATION: strcat(str,"a reality TV episode on the lives of immigrants"); break;
+   case VIEW_CIVILRIGHTS: strcat(str,"a documentary on the civil rights struggle"); break;
+   case VIEW_WOMEN: strcat(str,"a documentary on the women's rights struggle"); break;
+   case VIEW_GAY: strcat(str,"a documentary on the gay rights struggle"); break;
+   case VIEW_DEATHPENALTY: strcat(str,"a research paper on abuses of the death penalty"); break;
+   case VIEW_TAXES: strcat(str,"an economic paper on the flaws of trickle-down"); break;
+   case VIEW_NUCLEARPOWER: strcat(str,"a video tour of the Chernobyl dead zone"); break;
+   case VIEW_ANIMALRESEARCH: strcat(str,"a documentary on animal research"); break;
+   case VIEW_POLICEBEHAVIOR: strcat(str,"a hand-recorded video of police brutality"); break;
+   case VIEW_TORTURE: strcat(str,"a government inquiry into military interrogations"); break;
+   case VIEW_PRISONS: strcat(str,"a documentary on the prisoners' suffering"); break;
+   case VIEW_INTELLIGENCE: strcat(str,"a documentary on privacy rights"); break;
+   case VIEW_FREESPEECH: strcat(str,"a collection of banned books"); break;
+   case VIEW_GENETICS: strcat(str,"a video about genetic engineering accidents"); break;
+   case VIEW_JUSTICES: strcat(str,"a Liberal policy paper inquiring into judicial decisions"); break;
+   case VIEW_GUNCONTROL: strcat(str,"a book profiling school shootings"); break;
+   case VIEW_SWEATSHOPS: strcat(str,"a hand-recorded video of unregulated sweatshops"); break;
+   case VIEW_POLLUTION: strcat(str,"a leaked government paper on environmental conditions"); break;
+   case VIEW_CORPORATECULTURE: strcat(str,"a documentary on life under corporate culture"); break;
+   case VIEW_CEOSALARY: strcat(str,"a Liberal think-tank survey of top CEO salaries"); break;
+   case VIEW_AMRADIO: strcat(str,"a collection of Conservative radio host rants"); break;
+   case VIEW_CABLENEWS: strcat(str,"a collection of leaked Conservative cable news memos"); break;
+   //case VIEW_POLITICALVIOLENCE: strcat(str,"a documentary about progress made by direct action"); break;
    }
 }
 
@@ -112,13 +109,11 @@ char recruitment_activity(Creature &cr,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr_f(10,0,"%s asks around for a %s...", cr.name, name);
 
-      refresh();
-      getch();
+      getkey();
 
       int recruitCount = 0;
 
       if(difficulty < 10)
-      {
          // Generate recruitment candidates
          for(recruitCount=0; recruitCount<5; recruitCount++)
          {
@@ -129,11 +124,12 @@ char recruitment_activity(Creature &cr,char &clearformess)
             }
             else break;
          }
-      }
 
       if(recruitCount == 0) {
          mvaddstr_f(11, 0, "%s was unable to track down a %s.", cr.name, name);
-         getch();
+
+         getkey();
+
          cursite = ocursite;
          return 0;
       } else if(recruitCount == 1) {
@@ -143,7 +139,8 @@ char recruitment_activity(Creature &cr,char &clearformess)
          add_age(encounter[0]);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(".");
-         getch();
+
+         getkey();
 
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -152,7 +149,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
          makedelimiter(8,0);
          talk(cr, 0);
       } else {
-         while(1)
+         while(true)
          {
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -171,8 +168,9 @@ char recruitment_activity(Creature &cr,char &clearformess)
             }
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(12+recruitCount+1, 0, "Press enter or escape to call it a day.");
-            int c = getch();
-            translategetch(c);
+
+            int c=getkey();
+
             if(c == ENTER || c == ESC) break;
             c -= 'a';
             if(c >= 0 && c < ENCMAX-1 && encounter[c].exists)
@@ -201,8 +199,6 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 {
    clearformess=1;
 
-
-
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
@@ -220,7 +216,8 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       addstr(pool[p]->name, gamelog);
       addstr("!", gamelog);
       gamelog.nextMessage();
-      getch();
+
+      getkey();
 
       return 1;
    }
@@ -242,23 +239,11 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr(r.recruit->name);
    switch(r.eagerness())
    {
-   case 1:
-      addstr(" will take a lot of persuading.");
-      break;
-   case 2:
-      addstr(" is interested in learning more.");
-      break;
-   case 3:
-      addstr(" feels something needs to be done.");
-      break;
-   default:
-      if(r.eagerness()>=4)
-         addstr(" is ready to fight for the Liberal Cause.");
-      else
-      {
-         addstr(" kind of regrets agreeing to this.");
-      }
-      break;
+   case 1: addstr(" will take a lot of persuading."); break;
+   case 2: addstr(" is interested in learning more."); break;
+   case 3: addstr(" feels something needs to be done."); break;
+   default: if(r.eagerness()>=4) addstr(" is ready to fight for the Liberal Cause.");
+            else addstr(" kind of regrets agreeing to this."); break;
    }
    move(11,0);
    addstr("How should ");
@@ -266,7 +251,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    addstr(" approach the situation?");
 
    move(13,0);
-   if(ledger.get_funds()<50)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   if(ledger.get_funds()<50) set_color(COLOR_BLACK,COLOR_BLACK,1);
    addstr("A - Spend $50 on props and a book for them to keep afterward.");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(14,0);
@@ -301,12 +286,9 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
    int y=18;
 
-
-   do
+   while(true)
    {
-      refresh();
-      int c=getch();
-      translategetch(c);
+      int c=getkey();
 
       if(c=='c' && subordinatesleft(*pool[p]) && r.eagerness()>=4)
       {
@@ -317,8 +299,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          addstr(" join the Liberal Crime Squad.", gamelog);
          gamelog.newline();
 
-         refresh();
-         getch();
+         getkey();
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y+=2,0);
@@ -329,8 +310,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
          liberalize(*r.recruit,false);
 
-         refresh();
-         getch();
+         getkey();
 
          erase();
          sleeperize_prompt(*r.recruit,*pool[p],6);
@@ -348,9 +328,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
       if(c=='b' || (c=='a' && ledger.get_funds()>=50))
       {
          if(c=='a')
-         {
             ledger.subtract_funds(50,EXPENSE_RECRUITMENT);
-         }
 
          pool[p]->train(SKILL_PERSUASION,
             max(12-pool[p]->get_skill(SKILL_PERSUASION),5));
@@ -377,18 +355,16 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                                   r.recruit->get_attribute(ATTRIBUTE_WISDOM,true)+
                                   r.recruit->get_attribute(ATTRIBUTE_INTELLIGENCE,true);
 
-         if(lib_persuasiveness > recruit_reluctance)
-            recruit_reluctance = 0;
-         else
-            recruit_reluctance -= lib_persuasiveness;
+         if(lib_persuasiveness>recruit_reluctance) recruit_reluctance=0;
+         else recruit_reluctance-=lib_persuasiveness;
 
-         int difficulty = recruit_reluctance;
+         int difficulty=recruit_reluctance;
 
          char str[75];
          strcpy(str,"");
          if(c=='a')
          {
-            difficulty -= 5;
+            difficulty-=5;
 
             move(y++,0);
             addstr(pool[p]->name, gamelog);
@@ -398,8 +374,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(".", gamelog);
             gamelog.newline();
 
-            refresh();
-            getch();
+            getkey();
          }
          else
          {
@@ -412,15 +387,12 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(str, gamelog);
             addstr(".", gamelog);
             gamelog.newline();
-            refresh();
-            getch();
-         }
 
-         //bool success=0;
+            getkey();
+         }
 
          if(pool[p]->skill_check(SKILL_PERSUASION,difficulty))
          {
-            //success=1;
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             if(r.level<127) r.level++;
             if(r.eagerness1<127) r.eagerness1++;
@@ -474,17 +446,16 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
                addstr("This whole thing was a mistake. There won't be another meeting.", gamelog);
                gamelog.nextMessage();
             }
-            refresh();
-            getch();
+
+            getkey();
+
             return 1;
          }
-         refresh();
-         getch();
+
+         getkey();
+
          return 0;
       }
-      if(c=='d')
-      {
-         return 1;
-      }
-   }while(1);
+      if(c=='d') return 1;
+   }
 }

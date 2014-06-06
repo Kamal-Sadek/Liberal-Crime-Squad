@@ -34,30 +34,17 @@ This file is part of Liberal Crime Squad.                                       
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude,int difficulty)
 {
-   if(sitealarm)return;
+   if(sitealarm) return;
 
    char sneak=0;
 
    int topi=0;
-   for(int i=0;i<6;++i)
-   {
-      if(activesquad->squad[i]&&
-         activesquad->squad[i]->get_skill(SKILL_STEALTH)>sneak)
-      {
-         sneak=activesquad->squad[i]->get_skill(SKILL_STEALTH);
-         topi=i;
-      }
-   }
+   for(int i=0;i<6;++i) if(activesquad->squad[i]&&activesquad->squad[i]->get_skill(SKILL_STEALTH)>sneak)
+      sneak=activesquad->squad[i]->get_skill(SKILL_STEALTH),topi=i;
 
    for(int e=0;e<ENCMAX;e++)
-   {
-      //Prisoners shouldn't shout for help.
-      if(!strcmp(encounter[e].name,"Prisoner"))continue;
-
-      if(e==exclude || encounter[e].exists==false)
-         continue;
-      else if(activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty))
-         continue;
+   {  //Prisoners shouldn't shout for help.
+      if(!strcmp(encounter[e].name,"Prisoner")||e==exclude||encounter[e].exists==false||activesquad->squad[topi]->skill_check(SKILL_STEALTH,difficulty)) continue;
       else
       {
          clearmessagearea();
@@ -69,15 +56,13 @@ void noticecheck(int exclude,int difficulty)
          move(17,1);
          if(encounter[e].align==ALIGN_CONSERVATIVE)
             addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
-         else
-            addstr("and shouts for help!", gamelog);
+         else addstr("and shouts for help!", gamelog);
          gamelog.newline();
 
          sitealarm=1;
 
+         getkey();
 
-         refresh();
-         getch();
          break;
       }
    }
@@ -90,11 +75,7 @@ char alienationcheck(char mistake)
 {
    if(location[cursite]->siege.siege)return 0;
 
-
-   char alienate=0;
-   char alienatebig=0;
-
-   //char sneak=0;
+   char alienate=0,alienatebig=0;
 
    int oldsitealienate=sitealienate;
 
@@ -107,13 +88,10 @@ char alienationcheck(char mistake)
 
       // ...but Prisoners are now spawned with a variety of creature
       // types, so we'll go by name instead
-      if(!strcmp(encounter[e].name,"Prisoner"))continue;
+      if(!strcmp(encounter[e].name,"Prisoner")) continue;
 
-      if(encounter[e].exists&&encounter[e].alive&&
-         (encounter[e].align==0||(encounter[e].align==1&&mistake)))
-      {
+      if(encounter[e].exists&&encounter[e].alive&&(encounter[e].align==0||(encounter[e].align==1&&mistake)))
          noticer.push_back(e);
-      }
    }
 
    if(noticer.size()>0)
@@ -126,12 +104,12 @@ char alienationcheck(char mistake)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         if(encounter[n].align==1)alienatebig=1;
+         if(encounter[n].align==1) alienatebig=1;
          else alienate=1;
-      }while(noticer.size()>0);
+      } while(noticer.size()>0);
 
-      if(alienatebig)sitealienate=2;
-      if(alienate&&sitealienate!=2)sitealienate=1;
+      if(alienatebig) sitealienate=2;
+      if(alienate&&sitealienate!=2) sitealienate=1;
 
       if(oldsitealienate<sitealienate)
       {
@@ -147,19 +125,15 @@ char alienationcheck(char mistake)
          sitealarm=1;
 
          for(int i=0;i<ENCMAX;i++)
-         {
             if(encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
-            {
                if(encounter[i].align == ALIGN_MODERATE || alienatebig)
                   conservatise(encounter[i]);
-            }
-         }
 
          if(mode==GAMEMODE_CHASECAR||
-                     mode==GAMEMODE_CHASEFOOT)printchaseencounter();
+            mode==GAMEMODE_CHASEFOOT) printchaseencounter();
          else printencounter();
-         refresh();
-         getch();
+
+         getkey();
       }
    }
 
@@ -179,13 +153,9 @@ void disguisecheck(int timer)
       " laughs nervously."
    };
 
-   int weapon=0;
-   int squadsize=0;
-   bool forcecheck=false;
+   int weapon=0,squadsize=0,blew_it=-1;
+   bool forcecheck=false,spotted=false;
    //int weaponar[6]={0};
-
-   bool spotted = false;
-   int blew_it = -1;
 
    // Only start to penalize the player's disguise/stealth checks after the first turn.
    timer--;
@@ -347,7 +317,7 @@ void disguisecheck(int timer)
             addstr(" fades into the shadows.", gamelog);
             gamelog.newline();
 
-            getch();
+            getkey();
          }
       }
       else
@@ -372,7 +342,7 @@ void disguisecheck(int timer)
             addstr(selectRandomString(blew_stealth_check, ARRAY_ELEMENTS(blew_stealth_check)), gamelog);
             gamelog.newline();
 
-            getch();
+            getkey();
          }
          else if(!noticed)
          {
@@ -386,7 +356,7 @@ void disguisecheck(int timer)
             addstr(" acts natural.", gamelog);
             gamelog.newline();
 
-            getch();
+            getkey();
          }
       }
 
@@ -469,8 +439,7 @@ void disguisecheck(int timer)
          sitealarm=1;
       }
 
-      refresh();
-      getch();
+      getkey();
    }
 }
 
