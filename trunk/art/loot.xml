@@ -1,7 +1,7 @@
 <loot>
     <!-- Clarification
     <loottype idname="(string)"> idname is use internally by the game to identify the loot type.
-                                     No two item types should have the same idname.
+                                 No two item types should have the same idname.
         <name> (string) The name of the loot type.
             Default: UNDEFINED
         <stackable> (boolean) If several of them can be merged into one stack.
@@ -14,174 +14,173 @@
             Default: false
     </loottype>
     -->
-    
-
-    <loottype idname="LOOT_AMRADIOFILES">
-        <name>AM Radio Memos</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>250</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_CABLENEWSFILES">
-        <name>Cable News Memos</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>250</fencevalue>
-    </loottype>
-
-    
-    <loottype idname="LOOT_CELLPHONE">
-        <name>Smartphone</name>
-        <fencevalue>20</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_CEOLOVELETTERS">
-        <name>CEO Love Letters</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>250</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_CEOPHOTOS">
-        <name>CEO Photos</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1000</fencevalue>
-    </loottype>
-
-    <loottype idname="LOOT_CEOTAXPAPERS">
-        <name>CEO Tax Papers</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1000</fencevalue>
-    </loottype>
 
     <loottype idname="LOOT_CHEAPJEWELERY">
         <name>Cheap Jewelery</name>
         <fencevalue>50</fencevalue>
     </loottype>
-    
-    <loottype idname="LOOT_CHEMICAL">
-        <name>Weird Chemical</name>
-        <fencevalue>20</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_COMPUTER">
-        <name>Laptop</name>
-        <fencevalue>200</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_CORPFILES">
-        <name>Secret Corporate Files</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1000</fencevalue>
-    </loottype>
-    
+
     <loottype idname="LOOT_DIRTYSOCK">
         <name>Dirty Sock</name>
         <fencevalue>1</fencevalue>
     </loottype>
-    
-    <loottype idname="LOOT_EXPENSIVEJEWELERY">
-        <name>Fine Jewelery</name>
-        <fencevalue>500</fencevalue>
-    </loottype>
-    
+
     <loottype idname="LOOT_FAMILYPHOTO">
         <name>Family Photos</name>
         <fencevalue>1</fencevalue>
     </loottype>
-    
+
     <loottype idname="LOOT_FINECLOTH">
         <name>Fine Cloth</name>
+        <no_quick_fencing>true</no_quick_fencing>
         <fencevalue>20</fencevalue>
         <cloth>true</cloth>
     </loottype>
-    
-    <loottype idname="LOOT_INTHQDISK">
-        <name>Intel. HQ Data Disk</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1500</fencevalue>
+
+    <loottype idname="LOOT_EXPENSIVEJEWELERY">
+        <name>Fine Jewelery</name>
+        <fencevalue>500</fencevalue>
     </loottype>
-	
-	<loottype idname="LOOT_CCS_BACKERLIST">
-        <name>CCS Backer List</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>2000</fencevalue>
+
+    <loottype idname="LOOT_TRINKET">
+        <name>Kitschy Trinket</name>
+        <fencevalue>5</fencevalue>
     </loottype>
-    
-    <loottype idname="LOOT_JUDGEFILES">
-        <name>Judge Corrupt. Evidence</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1000</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_KIDART">
-        <name>Macaroni Art</name>
-        <fencevalue>1</fencevalue>
-    </loottype>
-    
+
     <loottype idname="LOOT_LABEQUIPMENT">
         <name>Lab Equipment</name>
         <fencevalue>50</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_COMPUTER">
+        <name>Laptop</name>
+        <fencevalue>200</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_KIDART">
+        <name>Macaroni Art</name>
+        <fencevalue>1</fencevalue>
     </loottype>
 
     <loottype idname="LOOT_MICROPHONE">
         <name>Microphone</name>
         <fencevalue>20</fencevalue>
     </loottype>
-    
-    <loottype idname="LOOT_PDA">
-        <name>Tablet</name>
-        <fencevalue>50</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_POLICERECORDS">
-        <name>Police Records</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>750</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_PRISONFILES">
-        <name>Prison Records</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>750</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_RESEARCHFILES">
-        <name>Research Papers</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>750</fencevalue>
-    </loottype>
-    
-    <loottype idname="LOOT_SECRETDOCUMENTS">
-        <name>Secret Documents</name>
-        <stackable>false</stackable>
-        <no_quick_fencing>true</no_quick_fencing>
-        <fencevalue>1500</fencevalue>
-    </loottype>
-    
+
     <loottype idname="LOOT_SILVERWARE">
         <name>Silverware</name>
         <fencevalue>20</fencevalue>
     </loottype>
-    
-    <loottype idname="LOOT_TRINKET">
-        <name>Kitschy Trinket</name>
-        <fencevalue>5</fencevalue>
+
+    <loottype idname="LOOT_CELLPHONE">
+        <name>Smartphone</name>
+        <fencevalue>20</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_PDA">
+        <name>Tablet</name>
+        <fencevalue>50</fencevalue>
     </loottype>
 
     <loottype idname="LOOT_WATCH">
         <name>Watch</name>
         <fencevalue>20</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CHEMICAL">
+        <name>Weird Chemical</name>
+        <fencevalue>20</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_AMRADIOFILES">
+        <name>AM Radio Memos</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>250</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CABLENEWSFILES">
+        <name>Cable News Memos</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>250</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CCS_BACKERLIST">
+        <name>CCS Backer List</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>2000</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CEOLOVELETTERS">
+        <name>CEO Love Letters</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>250</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CEOPHOTOS">
+        <name>CEO Photos</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1000</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CEOTAXPAPERS">
+        <name>CEO Tax Papers</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1000</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_INTHQDISK">
+        <name>Intel. HQ Data Disk</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1500</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_JUDGEFILES">
+        <name>Judge Corrupt. Evidence</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1000</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_POLICERECORDS">
+        <name>Police Records</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>750</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_PRISONFILES">
+        <name>Prison Records</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>750</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_RESEARCHFILES">
+        <name>Research Papers</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>750</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_CORPFILES">
+        <name>Secret Corporate Files</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1000</fencevalue>
+    </loottype>
+
+    <loottype idname="LOOT_SECRETDOCUMENTS">
+        <name>Secret Documents</name>
+        <stackable>true</stackable>
+        <no_quick_fencing>true</no_quick_fencing>
+        <fencevalue>1500</fencevalue>
     </loottype>
 
 </loot>

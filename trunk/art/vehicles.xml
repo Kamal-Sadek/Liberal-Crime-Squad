@@ -1,8 +1,7 @@
 <vehicles>
-
     <!-- Clarification
     <vehicletype idname="(string)"> idname is used internally in the game to identify the vehicle type.
-                            No two vehicles should have the same idname.
+                                    No two vehicles should have the same idname.
         <year> The following values are used to determine the car's manufacturing year.
             <start_at_current_year> (boolean) If this is true then it will start with the current year.
                                     Default: true
@@ -49,29 +48,6 @@
     </vehicletype>
     -->
 
-    <vehicletype idname="AGENTCAR">
-        <year>
-            <start_at_current_year>true</start_at_current_year>
-            <add_random>-11</add_random>
-            <add>1</add>
-        </year>
-        <colors>
-            <color>Black</color>
-        </colors>
-        <drivebonus>3</drivebonus>
-        <longname>Sportscar</longname>
-        <shortname>Sport</shortname>
-        <stealing> <!-- Stealing isn't possible for agentcars -->
-            <difficulty_to_find>10</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
-            <sense_alarm_chance>0</sense_alarm_chance>
-            <touch_alarm_chance>0</touch_alarm_chance>
-        </stealing>
-        <available_at_dealership>false</available_at_dealership>
-        <price>10000</price>
-    </vehicletype>
-    
     <vehicletype idname="BUG">
         <year>
             <start_at_current_year>false</start_at_current_year>
@@ -101,7 +77,31 @@
         <price>2500</price>
         <sleeperprice>2000</sleeperprice>
     </vehicletype>
-    
+
+    <vehicletype idname="HMMWV">
+        <year>
+            <start_at_current_year>true</start_at_current_year>
+            <add_random>-10</add_random>
+            <add>1</add>
+        </year>
+        <colors>
+            <color>Beige</color>
+            <color>Green</color>
+        </colors>
+        <drivebonus>0</drivebonus>
+        <longname>HMMWV</longname>
+        <shortname>Humvee</shortname>
+        <stealing>
+            <difficulty_to_find>10</difficulty_to_find>
+            <juice>0</juice>
+            <extra_heat>0</extra_heat>
+            <sense_alarm_chance>0</sense_alarm_chance>
+            <touch_alarm_chance>0</touch_alarm_chance>
+        </stealing>
+        <available_at_dealership>false</available_at_dealership>
+        <price>80000</price>
+    </vehicletype>
+
     <vehicletype idname="JEEP">
         <year>
             <start_at_current_year>true</start_at_current_year>
@@ -128,7 +128,7 @@
         <available_at_dealership>false</available_at_dealership>
         <price>7500</price>
     </vehicletype>
-    
+
     <vehicletype idname="PICKUP">
         <year>
             <start_at_current_year>true</start_at_current_year>
@@ -156,7 +156,7 @@
         <price>5000</price>
         <sleeperprice>4000</sleeperprice>
     </vehicletype>
-    
+
     <vehicletype idname="POLICECAR">
         <year>
             <start_at_current_year>true</start_at_current_year>
@@ -179,6 +179,84 @@
         </stealing>
         <available_at_dealership>false</available_at_dealership>
         <price>5000</price>
+    </vehicletype>
+
+    <vehicletype idname="AGENTCAR">
+        <year>
+            <start_at_current_year>true</start_at_current_year>
+            <add_random>-11</add_random>
+            <add>1</add>
+        </year>
+        <colors>
+            <color>Black</color>
+        </colors>
+        <drivebonus>3</drivebonus>
+        <longname>Sportscar</longname>
+        <shortname>Sport</shortname>
+        <stealing> <!-- Stealing isn't possible for agentcars -->
+            <difficulty_to_find>10</difficulty_to_find>
+            <juice>0</juice>
+            <extra_heat>0</extra_heat>
+            <sense_alarm_chance>0</sense_alarm_chance>
+            <touch_alarm_chance>0</touch_alarm_chance>
+        </stealing>
+        <available_at_dealership>false</available_at_dealership>
+        <price>10000</price>
+    </vehicletype>
+
+    <vehicletype idname="SPORTSCAR">
+        <year>
+            <start_at_current_year>true</start_at_current_year>
+            <add_random>-21</add_random>
+            <add>1</add>
+        </year>
+        <colors>
+            <color>Red</color>
+            <color>White</color>
+            <color>Blue</color>
+            <color>Beige</color>
+            <color>Black</color>
+        </colors>
+        <drivebonus>3</drivebonus>
+        <longname>Sportscar</longname>
+        <shortname>Sport</shortname>
+        <stealing>
+            <difficulty_to_find>3</difficulty_to_find>
+            <juice>0</juice>
+            <extra_heat>5</extra_heat>
+            <sense_alarm_chance>15</sense_alarm_chance>
+            <touch_alarm_chance>95</touch_alarm_chance>
+        </stealing>
+        <available_at_dealership>true</available_at_dealership>
+        <price>10000</price>
+        <sleeperprice>8000</sleeperprice>
+    </vehicletype>
+
+    <vehicletype idname="STATIONWAGON">
+        <year>
+            <start_at_current_year>true</start_at_current_year>
+            <add_random>-41</add_random>
+            <add>1</add>
+        </year>
+        <colors>
+            <color>Red</color>
+            <color>White</color>
+            <color>Blue</color>
+            <color>Beige</color>
+            <color>Black</color>
+        </colors>
+        <drivebonus>0</drivebonus>
+        <longname>Station Wagon</longname>
+        <shortname>Wagon</shortname>
+        <stealing>
+            <difficulty_to_find>1</difficulty_to_find>   
+            <juice>0</juice>
+            <extra_heat>0</extra_heat>
+            <sense_alarm_chance>1</sense_alarm_chance>
+            <touch_alarm_chance>10</touch_alarm_chance>
+        </stealing>
+        <available_at_dealership>false</available_at_dealership>
+        <price>7500</price>
     </vehicletype>
 
     <vehicletype idname="SUV">
@@ -210,62 +288,7 @@
         <price>7500</price>
         <sleeperprice>6000</sleeperprice>
     </vehicletype>
-  
-    <vehicletype idname="SPORTSCAR">
-        <year>
-            <start_at_current_year>true</start_at_current_year>
-            <add_random>-21</add_random>
-            <add>1</add>
-        </year>
-        <colors>
-            <color>Red</color>
-            <color>White</color>
-            <color>Blue</color>
-            <color>Beige</color>
-            <color>Black</color>
-        </colors>
-        <drivebonus>3</drivebonus>
-        <longname>Sportscar</longname>
-        <shortname>Sport</shortname>
-        <stealing>
-            <difficulty_to_find>3</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>5</extra_heat>
-            <sense_alarm_chance>15</sense_alarm_chance>
-            <touch_alarm_chance>95</touch_alarm_chance>
-        </stealing>
-        <available_at_dealership>true</available_at_dealership>
-        <price>10000</price>
-        <sleeperprice>8000</sleeperprice>
-    </vehicletype>
-    
-    <vehicletype idname="STATIONWAGON">
-        <year>
-            <start_at_current_year>true</start_at_current_year>
-            <add_random>-41</add_random>
-            <add>1</add>
-        </year>
-        <colors>
-            <color>Red</color>
-            <color>White</color>
-            <color>Blue</color>
-            <color>Beige</color>
-            <color>Black</color>
-        </colors>
-        <drivebonus>0</drivebonus>
-        <longname>Station Wagon</longname>
-        <shortname>Wagon</shortname>
-        <stealing>
-            <difficulty_to_find>1</difficulty_to_find>   
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
-            <sense_alarm_chance>1</sense_alarm_chance>
-            <touch_alarm_chance>10</touch_alarm_chance>
-        </stealing>
-        <available_at_dealership>false</available_at_dealership>
-        <price>7500</price>
-    </vehicletype>
-    
+
     <vehicletype idname="TAXICAB">
         <year>
             <start_at_current_year>true</start_at_current_year>
@@ -289,7 +312,7 @@
         <available_at_dealership>false</available_at_dealership>
         <price>5000</price>
     </vehicletype>
-    
+
     <vehicletype idname="VAN">
         <year>
             <start_at_current_year>true</start_at_current_year>
@@ -315,30 +338,6 @@
         </stealing>
         <available_at_dealership>false</available_at_dealership>
         <price>10000</price>
-    </vehicletype>
-    
-    <vehicletype idname="HMMWV">
-        <year>
-            <start_at_current_year>true</start_at_current_year>
-            <add_random>-10</add_random>
-            <add>1</add>
-        </year>
-        <colors>
-            <color>Beige</color>
-            <color>Green</color>
-        </colors>
-        <drivebonus>0</drivebonus>
-        <longname>HMMWV</longname>
-        <shortname>Humvee</shortname>
-        <stealing>
-            <difficulty_to_find>10</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
-            <sense_alarm_chance>0</sense_alarm_chance>
-            <touch_alarm_chance>0</touch_alarm_chance>
-        </stealing>
-        <available_at_dealership>false</available_at_dealership>
-        <price>80000</price>
     </vehicletype>
 
 </vehicles>

@@ -86,11 +86,8 @@ char liberalagenda(char won)
          move(3,0);
          addstr("ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
 
-         if(exec[EXEC_PRESIDENT]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_PRESIDENT]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         signed char align=exec[EXEC_PRESIDENT];
+         set_alignment_color(align,true);
          move(5,0);
          if(won==-1) addstr("King: ");
          else if(won==-2) addstr("General Secretary: ");
@@ -103,11 +100,8 @@ char liberalagenda(char won)
          move(5,25);
          addstr(execname[EXEC_PRESIDENT]);
 
-         if(exec[EXEC_VP]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_VP]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         align=exec[EXEC_VP];
+         set_alignment_color(align,true);
          move(6,0);
          if(won==-1) addstr("Minister of Love: ");
          else if(won==-2) addstr("Premier: ");
@@ -115,11 +109,8 @@ char liberalagenda(char won)
          move(6,25);
          addstr(execname[EXEC_VP]);
 
-         if(exec[EXEC_STATE]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_STATE]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         align=exec[EXEC_STATE];
+         set_alignment_color(align,true);
          move(7,0);
          if(won==-1) addstr("Minister of Peace: ");
          else if(won==-2) addstr("Foreign Minister: ");
@@ -127,11 +118,8 @@ char liberalagenda(char won)
          move(7,25);
          addstr(execname[EXEC_STATE]);
 
-         if(exec[EXEC_ATTORNEY]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         else if(exec[EXEC_ATTORNEY]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         align=exec[EXEC_ATTORNEY];
+         set_alignment_color(align,true);
          move(8,0);
          if(won==-1) addstr("Minister of Truth: ");
          else if(won==-2) addstr("State Security Minister: ");
@@ -154,15 +142,13 @@ char liberalagenda(char won)
          else
          {
             int housemake[5]={0,0,0,0,0};
-            for(int h=0;h<435;h++)
-               housemake[house[h]+2]++;
-            int lsum=housemake[3]+housemake[4]
-                    -housemake[0]-housemake[1];
-            if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(housemake[4]<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+            for(int h=0;h<435;h++) housemake[house[h]+2]++;
+            if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE;
+            else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE;
+            else if(housemake[3]+housemake[4]<218) align=ALIGN_MODERATE;
+            else if(housemake[4]<218) align=ALIGN_LIBERAL;
+            else align=ALIGN_ELITELIBERAL;
+            set_alignment_color(align,true);
             char num[20];
             move(10,0);
             addstr("House: ");
@@ -178,15 +164,15 @@ char liberalagenda(char won)
             addstr(num);addstr("Cons+");
 
             int senatemake[5]={0,0,0,0,0};
-            for(int s=0;s<100;s++)
-               senatemake[senate[s]+2]++;
-            lsum=senatemake[3]+senatemake[4]
-                -senatemake[0]-senatemake[1];
-            if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(senatemake[4]<67)set_color(COLOR_CYAN,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+            for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
+            senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
+            if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE;
+            else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE;
+            else if(senatemake[3]+senatemake[4]<51) align=ALIGN_MODERATE;
+            else if(senatemake[4]<51) align=ALIGN_LIBERAL;
+            else align=ALIGN_ELITELIBERAL;
+            set_alignment_color(align,true);
+            senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
             move(11,0);
             addstr("Senate: ");
             itoa(senatemake[4],num,10);
@@ -200,49 +186,51 @@ char liberalagenda(char won)
             itoa(senatemake[0],num,10);
             addstr(num);addstr("Cons+");
          }
-         int elibjudge=0,archconjudge=0;
-         for(int c=0;c<9;c++)
+
+         if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(won==1) set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else
          {
-            if(court[c]==2)elibjudge++;
-            else if(court[c]==-2)archconjudge++;
+            int courtmake[5]={0,0,0,0,0};
+            for(int s=0;s<9;s++) courtmake[court[s]+2]++;
+            if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE;
+            else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE;
+            else if(courtmake[3]+courtmake[4]<5) align=ALIGN_MODERATE;
+            else if(courtmake[4]<5) align=ALIGN_LIBERAL;
+            else align=ALIGN_ELITELIBERAL;
+            set_alignment_color(align,true);
          }
 
-         if(won==-1||won==-2||archconjudge>=5)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(won==1||elibjudge>=5)set_color(COLOR_GREEN,COLOR_BLACK,1);
-         else set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(5,56);addch('S');
+         move(6,56);addch('U');
+         move(7,56);addch('P');
+         move(8,56);addch('R');
+         move(9,56);addch('E');
+         move(10,56);addch('M');
+         move(11,56);addch('E');
 
-         move(4,56);addch('S');
-         move(5,56);addch('U');
-         move(6,56);addch('P');
-         move(7,56);addch('R');
-         move(8,56);addch('E');
-         move(9,56);addch('M');
-         move(10,56);addch('E');
-
-         move(4,58);addch('C');
-         move(5,58);addch('O');
-         move(6,58);addch('U');
-         move(7,58);addch('R');
-         move(8,58);addch('T');
+         move(6,58);addch('C');
+         move(7,58);addch('O');
+         move(8,58);addch('U');
+         move(9,58);addch('R');
+         move(10,58);addch('T');
 
          if(won==-1)
          {
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            move(5,60);
-            addstr("   Replaced");
-            move(6,60);
-            addstr(" By Corporate");
             move(7,60);
+            addstr("   Replaced");
+            move(8,60);
+            addstr(" By Corporate");
+            move(9,60);
             addstr("Ethics Officers");
          }
          else if(won==-2)
          {
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            move(5,60);
-            addstr(" Replaced By");
-            move(6,60);
-            addstr("Stalinist Show");
             move(7,60);
+            addstr(" Replaced By");
+            move(8,60);
+            addstr("Stalinist Show");
+            move(9,60);
             addstr(" Trial Judges");
          }
          else
@@ -251,12 +239,7 @@ char liberalagenda(char won)
 
             for(int c=0;c<9;c++,y++)
             {
-               if(court[c]==-2)set_color(COLOR_RED,COLOR_BLACK,1);
-               else if(court[c]==-1)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               else if(court[c]==0)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               else if(court[c]==1)set_color(COLOR_CYAN,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
-
+               set_alignment_color(court[c],true);
                move(y,60);
                addstr(courtname[c]);
             }
@@ -277,11 +260,7 @@ char liberalagenda(char won)
             addstr("ฤ\x10");
 
             if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_ARCHCONSERVATIVE)set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_CONSERVATIVE)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_MODERATE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_LIBERAL)set_color(COLOR_CYAN,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else set_alignment_color(law[l],true);
 
             switch(l)
             {
@@ -338,17 +317,12 @@ char liberalagenda(char won)
             addstr("ฯอออออออออออออออออฯออออออออออผ          ศอออออออออออออออออออออออออออออออออออออออ");
          }
 
-         int y=4;
-         int startinglaw=0;
+         int y=4,startinglaw=0;
          if(page==PAGE_ISSUES_B) startinglaw=18;
          for(int l=startinglaw;l<startinglaw+18&&l<LAWNUM;l++,y++)
          {
             if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_ARCHCONSERVATIVE) set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_CONSERVATIVE) set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_MODERATE) set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else if(law[l]==ALIGN_LIBERAL) set_color(COLOR_CYAN,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else set_alignment_color(law[l],true);
 
             move(y,0);
 

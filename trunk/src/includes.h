@@ -1163,8 +1163,12 @@ void translategetch(int &c);
 void translategetch_cap(int &c);
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
 int getkey();
+/* Variant of getkey() that doesn't make all letters lowercase */
+int getkey_cap();
 /* Empties the keyboard buffer, and returns most recent key pressed, if any */
 int checkkey();
+/* Variant of checkkey() that doesn't make all letters lowercase */
+int checkkey_cap();
 #ifdef CH_USE_UNICODE
   char setup_unicode();
   int addch_unicode(int c);
