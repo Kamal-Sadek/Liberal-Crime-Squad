@@ -67,24 +67,14 @@ This file is part of Liberal Crime Squad.                                       
 
 bool show_disbanding_screen(int& oldforcemonth)
 {
-   if(oldforcemonth == month) return true;
+   if(oldforcemonth==month) return true;
 
    for(int p=pool.size()-1;p>=0;p--)
    {
-      int targetjuice=0;
-      for(int i=0;i<(year-disbandtime)+1;i++)
-      {
-         targetjuice+=LCSrandom(100);
-      }
-      if(targetjuice>1000)
-      {
-         targetjuice=1000;
-      }
-      if(pool[p]->juice<targetjuice)
-      {
-         if(pool[p]->hireid!=-1 && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-            pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
-      }
+      int targetjuice=LCSrandom(100*(year-disbandtime+1));
+      if(targetjuice>1000||targetjuice<0) targetjuice=1000; // checking for targetjuice<0 checks for int overflow (meaning a REALLY big number)
+      if(pool[p]->juice<targetjuice&&pool[p]->hireid!=-1&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+         pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
    }
    oldforcemonth=month;
    erase();
@@ -96,10 +86,11 @@ bool show_disbanding_screen(int& oldforcemonth)
    addstr(" ");
    addstr(num);
 
-   set_alignment_color(exec[EXEC_PRESIDENT], true);
+   signed char align=exec[EXEC_PRESIDENT];
+   set_alignment_color(align,true);
    mvaddstr(1,0,"President: ");
    addstr(execname[EXEC_PRESIDENT]);addstr(", ");
-   switch(exec[EXEC_PRESIDENT])
+   switch(align)
    {
       case -2:addstr("Arch-Conservative");break;
       case -1:addstr("Conservative");break;
@@ -111,14 +102,13 @@ bool show_disbanding_screen(int& oldforcemonth)
    else addstr(", 2nd Term");
 
    int housemake[5]={0,0,0,0,0};
-   for(int h=0;h<435;h++)
-      housemake[house[h]+2]++;
-   int lsum=housemake[3]+housemake[4]-housemake[0]-housemake[1];
-   if(lsum<=-145)set_color(COLOR_RED,COLOR_BLACK,1);
-   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-   else if(lsum<145)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-   else if(housemake[4]<290)set_color(COLOR_CYAN,COLOR_BLACK,1);
-   else set_color(COLOR_GREEN,COLOR_BLACK,1);
+   for(int h=0;h<435;h++) housemake[house[h]+2]++;
+   if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE;
+   else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE;
+   else if(housemake[3]+housemake[4]<218) align=ALIGN_MODERATE;
+   else if(housemake[4]<218) align=ALIGN_LIBERAL;
+   else align=ALIGN_ELITELIBERAL;
+   set_alignment_color(align,true);
    move(2,0);
    addstr("House: ");
    itoa(housemake[4],num,10);
@@ -133,14 +123,15 @@ bool show_disbanding_screen(int& oldforcemonth)
    addstr(num);addstr("Cons+");
 
    int senatemake[5]={0,0,0,0,0};
-   for(int s=0;s<100;s++)
-      senatemake[senate[s]+2]++;
-   lsum=senatemake[3]+senatemake[4]-senatemake[0]-senatemake[1];
-   if(lsum<=-33)set_color(COLOR_RED,COLOR_BLACK,1);
-   else if(lsum<0)set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-   else if(lsum<33)set_color(COLOR_YELLOW,COLOR_BLACK,1);
-   else if(senatemake[4]<67)set_color(COLOR_CYAN,COLOR_BLACK,1);
-   else set_color(COLOR_GREEN,COLOR_BLACK,1);
+   for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
+   senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
+   if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE;
+   else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE;
+   else if(senatemake[3]+senatemake[4]<51) align=ALIGN_MODERATE;
+   else if(senatemake[4]<51) align=ALIGN_LIBERAL;
+   else align=ALIGN_ELITELIBERAL;
+   set_alignment_color(align,true);
+   senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
    move(3,0);
    addstr("Senate: ");
    itoa(senatemake[4],num,10);
@@ -155,17 +146,13 @@ bool show_disbanding_screen(int& oldforcemonth)
    addstr(num);addstr("Cons+");
 
    int courtmake[5]={0,0,0,0,0};
-   for(int s=0;s<9;s++)
-   {
-      courtmake[court[s]+2]++;
-   }
-   lsum=courtmake[3]+courtmake[4]
-         -courtmake[0]-courtmake[1];
-   if(courtmake[0]>=5)set_alignment_color(ALIGN_ARCHCONSERVATIVE, true);
-   else if(courtmake[0]+courtmake[1]>=5)set_alignment_color(ALIGN_CONSERVATIVE, true);
-   else if(courtmake[3]+courtmake[4]<5)set_alignment_color(ALIGN_MODERATE, true);
-   else if(courtmake[4]<5)set_alignment_color(ALIGN_LIBERAL, true);
-   else set_alignment_color(ALIGN_ELITELIBERAL, true);
+   for(int s=0;s<9;s++) courtmake[court[s]+2]++;
+   if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE;
+   else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE;
+   else if(courtmake[3]+courtmake[4]<5) align=ALIGN_MODERATE;
+   else if(courtmake[4]<5) align=ALIGN_LIBERAL;
+   else align=ALIGN_ELITELIBERAL;
+   set_alignment_color(align,true);
    mvaddstr(4,0,"Supreme Court: ");
    itoa(courtmake[4],num,10);
    addstr(num);addstr("Lib+, ");
@@ -180,22 +167,23 @@ bool show_disbanding_screen(int& oldforcemonth)
 
    for(int l=0;l<LAWNUM;l++)
    {
-      set_alignment_color(law[l], true);
+      align=law[l];
+      set_alignment_color(align,true);
       move(6+l/3,l%3*30);
       char str[40];
       getlaw(str,l);
       addstr(str);
    }
 
-   int moodpos=0,moodcolor;
-   for(int v=0;v<VIEWNUM-3;v++)moodpos+=attitude[v];
-   moodpos=78-(moodpos*77)/((VIEWNUM-3)*100); // very accurate mood positioning!
-   if(moodpos>=64)moodcolor=COLOR_RED;
-   else if(moodpos>=48)moodcolor=COLOR_MAGENTA;
-   else if(moodpos>=32)moodcolor=COLOR_YELLOW;
-   else if(moodpos>=16)moodcolor=COLOR_CYAN;
-   else moodcolor=COLOR_GREEN;
-   set_color(moodcolor,COLOR_BLACK,1);
+   int mood=0; // the mood position from 1 to 78 (left=left-wing, right=right=wing)
+   for(int v=0;v<VIEWNUM-3;v++) mood+=attitude[v];
+   mood=78-(mood*77)/((VIEWNUM-3)*100); // very accurate mood positioning!
+   if(mood>=64) align=ALIGN_ARCHCONSERVATIVE;
+   else if(mood>=48) align=ALIGN_CONSERVATIVE;
+   else if(mood>=32) align=ALIGN_MODERATE;
+   else if(mood>=16) align=ALIGN_LIBERAL;
+   else align=ALIGN_ELITELIBERAL;
+   set_alignment_color(align,true);
    mvaddstr(19,33,"Public Mood");
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    mvaddstr(21,1,"Liberal");
@@ -211,8 +199,8 @@ bool show_disbanding_screen(int& oldforcemonth)
    mvaddstr(22,48,"컴컴컴컴컴컴컴컴");
    set_color(COLOR_RED,COLOR_BLACK,1);
    mvaddstr(22,64,"컴컴컴컴컴컴컴�\x10");
-   set_color(moodcolor,COLOR_BLACK,1);
-   mvaddstr(22,moodpos,"O");
+   set_alignment_color(align,true);
+   mvaddstr(22,mood,"O");
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    mvaddstr(23,0,"R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
 

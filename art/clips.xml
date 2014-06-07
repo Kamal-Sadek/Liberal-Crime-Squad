@@ -1,5 +1,4 @@
 <clips>
-
     <!-- Clarification
     <cliptype idname="(string)"> idname is used internally by the game to identify the clip type.
                                  No two item types should have the same idname.
@@ -20,12 +19,12 @@
         <ammo>6</ammo>
         <fencevalue>2</fencevalue>
     </cliptype>
-    
-    <cliptype idname="CLIP_9">
-        <name>9mm Pistol Mag</name>
-        <name_future>9mm Powerpack</name_future>
-        <ammo>15</ammo>
-        <fencevalue>4</fencevalue>
+
+    <cliptype idname="CLIP_44">
+        <name>.44 Speedloader</name>
+        <name_future>.44 Heavy Slug Mag</name_future>
+        <ammo>6</ammo>
+        <fencevalue>3</fencevalue>
     </cliptype>
 
     <cliptype idname="CLIP_45">
@@ -33,13 +32,6 @@
         <name_future>.45 Powerpack</name_future>
         <ammo>15</ammo>
         <fencevalue>4</fencevalue>
-    </cliptype>
-    
-    <cliptype idname="CLIP_44">
-        <name>.44 Speedloader</name>
-        <name_future>.44 Heavy Slug Mag</name_future>
-        <ammo>6</ammo>
-        <fencevalue>3</fencevalue>
     </cliptype>
 
     <cliptype idname="CLIP_50AE">
@@ -49,11 +41,11 @@
         <fencevalue>3</fencevalue>
     </cliptype>
 
-    <cliptype idname="CLIP_ASSAULT">
-        <name>Aslt/Rifle Mag</name>
-        <name_future>Rifle Powerpack</name_future>
-        <ammo>30</ammo>
-        <fencevalue>8</fencevalue>
+    <cliptype idname="CLIP_9">
+        <name>9mm Pistol Mag</name>
+        <name_future>9mm Powerpack</name_future>
+        <ammo>15</ammo>
+        <fencevalue>4</fencevalue>
     </cliptype>
 
     <cliptype idname="CLIP_SMG">
@@ -63,11 +55,25 @@
         <fencevalue>5</fencevalue>
     </cliptype>
 
-    <cliptype idname="CLIP_BUCKSHOT">
-        <name>Shotgun Shells</name>
-        <name_future>Shotgun Plasma Pack</name_future>
-        <ammo>8</ammo>
-        <fencevalue>3</fencevalue>
+    <cliptype idname="CLIP_ASSAULT">
+        <name>Aslt/Rifle Mag</name>
+        <name_future>Rifle Powerpack</name_future>
+        <ammo>30</ammo>
+        <fencevalue>8</fencevalue>
+    </cliptype>
+
+    <cliptype idname="CLIP_GASOLINE">
+        <name>Gas Tank</name>
+        <name_future>Hydrogen Fuel</name_future>
+        <ammo>2</ammo>
+        <fencevalue>2</fencevalue>
+    </cliptype>
+
+    <cliptype idname="CLIP_DRUM">
+        <name>MachinGun Drum</name>
+        <name_future>Chaingun Belt</name_future>
+        <ammo>100</ammo>
+        <fencevalue>25</fencevalue>
     </cliptype>
 
     <!-- Should not be necessary after changes are complete.
@@ -79,19 +85,11 @@
     </cliptype>
     -->
 
-    <cliptype idname="CLIP_GASOLINE">
-        <name>Gas Tank</name>
-        <name_future>Hydrogen Fuel</name_future>
-        <ammo>2</ammo>
-        <fencevalue>2</fencevalue>
-    </cliptype>
-    
-    <cliptype idname="CLIP_DRUM">
-        <name>MachinGun Drum</name>
-        <name_future>Chaingun Belt</name_future>
-        <ammo>100</ammo>
-        <fencevalue>25</fencevalue>
+    <cliptype idname="CLIP_BUCKSHOT">
+        <name>Shotgun Shells</name>
+        <name_future>Shotgun Plasma Pack</name_future>
+        <ammo>8</ammo>
+        <fencevalue>3</fencevalue>
     </cliptype>
 
-    
 </clips>

@@ -170,6 +170,20 @@ int getkey()
 
 
 
+/* Variant of getkey() that doesn't make all letters lowercase */
+int getkey_cap()
+{
+   refresh();
+   nodelay(stdscr,TRUE);
+   while(getch()!=ERR);
+   nodelay(stdscr,FALSE);
+   int c=getch();
+   translategetch_cap(c);
+   return c;
+}
+
+
+
 /* Empties the keyboard buffer, and returns most recent key pressed, if any */
 int checkkey()
 {
@@ -180,6 +194,23 @@ int checkkey()
       ret=c;
       c=getch();
       translategetch(c);
+   } while(c!=ERR);
+   nodelay(stdscr,FALSE);
+   return ret;
+}
+
+
+
+/* Variant of checkkey() that doesn't make all letters lowercase */
+int checkkey_cap()
+{
+   int c=ERR,ret=ERR;
+   nodelay(stdscr,TRUE);
+   do
+   {
+      ret=c;
+      c=getch();
+      translategetch_cap(c);
    } while(c!=ERR);
    nodelay(stdscr,FALSE);
    return ret;

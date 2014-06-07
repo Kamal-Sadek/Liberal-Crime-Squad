@@ -1,5 +1,4 @@
 <weapons>
- 
     <!-- Clarification
     <weapontype idname="(string)"> idname is used internally by the game to identify the weapon type.
                                    No two item types should have the same idname.
@@ -111,10 +110,9 @@
                     Default: 0
             </fire>
         </attack>
-
     </weapontype>
     -->
-    
+
     <weapontype idname="WEAPON_NONE">
         <name>None</name>
         <shortname>None</shortname>
@@ -137,144 +135,6 @@
             <random_damage>
             <fixed_damage> -->
             <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_BASEBALLBAT">
-        <name>Baseball Bat</name>
-        <name_future>Spaceball Bat</name_future>
-        <threatening>true</threatening>
-        <fencevalue>20</fencevalue>
-        <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>swings at</attack_description>
-            <ranged>false</ranged>
-            <strength_min>6</strength_min>
-            <strength_max>12</strength_max>
-            <skill>CLUB</skill>
-            <random_damage>41</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_CROWBAR">
-        <name>Crowbar</name>
-        <name_future>Forcefield Prybar</name_future>
-        <shortname_future>Prybar</shortname_future>
-        <threatening>true</threatening>
-        <fencevalue>10</fencevalue>
-        <bashstrengthmod>200</bashstrengthmod>
-        <auto_break_locks>true</auto_break_locks>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>swings at</attack_description>
-            <strength_min>4</strength_min>
-            <strength_max>8</strength_max>
-            <skill>CLUB</skill>
-            <random_damage>21</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <bruises>true</bruises>
-            <bleeding>true</bleeding>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_DAGGER">
-        <name>Dagger</name>
-        <name_future>Beam Dagger</name_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <fencevalue>10</fencevalue>
-        <size>5</size>
-        <attack>
-            <attack_description>lunges at</attack_description>
-            <hit_description>stabbing</hit_description>
-            <strength_min>1</strength_min>
-            <strength_max>5</strength_max>
-            <skill>KNIFE</skill>
-            <random_damage>61</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <can_backstab>true</can_backstab>
-            <cuts>true</cuts>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
-            <number_attacks>3</number_attacks>
-            <successive_attacks_difficulty>4</successive_attacks_difficulty>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_COMBATKNIFE"> 
-        <name>Combat Knife</name>
-        <name_future>Vibro-Knife</name_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <fencevalue>20</fencevalue>
-        <bashstrengthmod>105</bashstrengthmod>
-        <size>4</size>
-        <attack>
-            <attack_description>lunges at</attack_description>
-            <hit_description>slashing</hit_description>
-            <skill>KNIFE</skill>
-            <strentgh_min>1</strentgh_min>
-            <strength_max>6</strength_max>
-            <random_damage>61</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <can_backstab>true</can_backstab>
-            <cuts>true</cuts>
-            <bleeding>true</bleeding>
-            <armorpiercing>2</armorpiercing>
-            <number_attacks>3</number_attacks>
-            <successive_attacks_difficulty>4</successive_attacks_difficulty>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_SHANK">
-        <name>Shank</name>
-        <name_future>Cyber Shank</name_future>
-        <shortname_future>Shank</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <fencevalue>5</fencevalue>
-        <size>5</size>
-        <attack>
-            <attack_description>lunges at</attack_description>
-            <hit_description>stabbing</hit_description>
-            <strength_min>1</strength_min>
-            <strength_max>4</strength_max>
-            <skill>KNIFE</skill>
-            <random_damage>51</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <can_backstab>true</can_backstab>
-            <cuts>true</cuts>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>1</armorpiercing>
-            <number_attacks>3</number_attacks>
-            <successive_attacks_difficulty>4</successive_attacks_difficulty>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_SYRINGE">
-        <name>Syringe</name>
-        <name_future>Medical Injector</name_future>
-        <shortname_future>Injector</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <fencevalue>10</fencevalue>
-        <suspicious>false</suspicious>
-        <size>5</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>pokes at</attack_description>
-            <strength_min>1</strength_min>
-            <strength_max>2</strength_max>
-            <skill>KNIFE</skill>
-            <random_damage>4</random_damage>
-            <fixed_damage>1</fixed_damage>
-            <cuts>true</cuts>
-            <armorpiercing>4</armorpiercing>
         </attack>
     </weapontype>
 
@@ -348,41 +208,6 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_SEMIPISTOL_9MM">
-        <name>9mm Semiauto</name>
-        <name_future>9mm Laser Pistol</name_future>
-        <shortname>9mm Semi.</shortname>
-        <shortname_future>9mm Las.</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <legality>0</legality>
-        <fencevalue>100</fencevalue>
-        <size>5</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <attack_description>shoots at</attack_description>
-            <skill>PISTOL</skill>
-            <ammotype>CLIP_9</ammotype>
-            <random_damage>181</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <shoots>true</shoots>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>4</armorpiercing>
-        </attack>
-        <attack>
-            <priority>2</priority>
-            <attack_description>swings at</attack_description>
-            <skill>CLUB</skill>
-            <strength_min>2</strength_min>
-            <strength_max>6</strength_max>
-            <random_damage>6</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
     <weapontype idname="WEAPON_SEMIPISTOL_45">
         <name>.45 Semiauto</name>
         <name_future>.45 Laser Pistol</name_future>
@@ -418,36 +243,68 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_AUTORIFLE_M16">
-        <name>M16</name>
-        <name_future>X15 Military Laser</name_future>
-        <shortname>M16</shortname>
-        <shortname_future>X15 Full</shortname_future>
+    <weapontype idname="WEAPON_SEMIPISTOL_9MM">
+        <name>9mm Semiauto</name>
+        <name_future>9mm Laser Pistol</name_future>
+        <shortname>9mm Semi.</shortname>
+        <shortname_future>9mm Las.</shortname_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <legality>-2</legality>
-        <fencevalue>500</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
-        <size>15</size>
+        <legality>0</legality>
+        <fencevalue>100</fencevalue>
+        <size>5</size>
         <attack>
             <priority>1</priority>
             <ranged>true</ranged>
             <attack_description>shoots at</attack_description>
-            <skill>RIFLE</skill>
-            <ammotype>CLIP_ASSAULT</ammotype>
-            <random_damage>251</random_damage>
+            <skill>PISTOL</skill>
+            <ammotype>CLIP_9</ammotype>
+            <random_damage>181</random_damage>
             <fixed_damage>10</fixed_damage>
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>7</armorpiercing>
-            <number_attacks>3</number_attacks>
+            <armorpiercing>4</armorpiercing>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>2</strength_min>
+            <strength_max>6</strength_max>
+            <random_damage>6</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_SHOTGUN_AA12">
+        <name>AA-12 Auto Shotgun</name>
+        <name_future>Z-12 Chain Burstgun</name_future>
+        <shortname>AA-12</shortname>
+        <shortname_future>Z-12</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-1</legality>
+        <fencevalue>400</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>10</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>SHOTGUN</skill>
+            <ammotype>CLIP_BUCKSHOT</ammotype>
+            <random_damage>201</random_damage>
+            <fixed_damage>30</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>0</armorpiercing>
+            <accuracy_bonus>4</accuracy_bonus>
+            <number_attacks>2</number_attacks>
             <successive_attacks_difficulty>3</successive_attacks_difficulty>
-            <critical>
-                <chance>100</chance>
-                <hits_required>3</hits_required>
-                <severtype>NASTY</severtype>
-            </critical>
+            <severtype>NASTY</severtype>
         </attack>
         <attack>
             <priority>2</priority>
@@ -541,6 +398,82 @@
         </attack>
     </weapontype>
 
+    <weapontype idname="WEAPON_DESERT_EAGLE">
+        <name>Desert Eagle</name>
+        <name_future>Desert Eagle</name_future>
+        <shortname>Deagle</shortname>
+        <shortname_future>Deagle</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-1</legality>
+        <fencevalue>250</fencevalue>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>PISTOL</skill>
+            <ammotype>CLIP_50AE</ammotype>
+            <random_damage>301</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>4</armorpiercing>
+            <severtype>NASTY</severtype>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>3</strength_min>
+            <strength_max>8</strength_max>
+            <random_damage>6</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_FLAMETHROWER">
+        <name>M2 Flamethrower</name>
+        <name_future>Plasma Gun</name_future>
+        <shortname>M2A1-7</shortname>
+        <shortname_future>Plasmagun</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-3</legality>
+        <fencevalue>0</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>streams fire at</attack_description>
+            <skill>HEAVYWEAPONS</skill>
+            <ammotype>CLIP_GASOLINE</ammotype>
+            <random_damage>201</random_damage>
+            <fixed_damage>50</fixed_damage>
+            <burns>true</burns>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>9</armorpiercing>
+            <fire>
+                <starts_fire>true</starts_fire>
+                <causes_debris>false</causes_debris>
+                <chance>33</chance>
+            </fire>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>12</strength_min>
+            <strength_max>18</strength_max>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
     <weapontype idname="WEAPON_CARBINE_M4">
         <name>M4 Carbine</name>
         <name_future>J4 Laser Carbine</name_future>
@@ -582,6 +515,124 @@
             <random_damage>25</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_AUTORIFLE_M16">
+        <name>M16</name>
+        <name_future>X15 Military Laser</name_future>
+        <shortname>M16</shortname>
+        <shortname_future>X15 Full</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-2</legality>
+        <fencevalue>500</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>RIFLE</skill>
+            <ammotype>CLIP_ASSAULT</ammotype>
+            <random_damage>251</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
+            <critical>
+                <chance>100</chance>
+                <hits_required>3</hits_required>
+                <severtype>NASTY</severtype>
+            </critical>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>6</strength_min>
+            <strength_max>12</strength_max>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_M249_MACHINEGUN">
+        <name>M249 Machine Gun</name>
+        <name_future>C249 Chaingun</name_future>
+        <shortname>M249</shortname>
+        <shortname_future>Chaingun</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-2</legality>
+        <fencevalue>1500</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>HEAVYWEAPONS</skill>
+            <ammotype>CLIP_DRUM</ammotype>
+            <random_damage>301</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <tears>true</tears>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+            <number_attacks>5</number_attacks>
+            <accuracy_bonus>5</accuracy_bonus> <!-- spray and pray -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
+            <critical>
+                <chance>100</chance>
+                <hits_required>3</hits_required>
+                <severtype>NASTY</severtype>
+            </critical>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>8</strength_min>
+            <strength_max>14</strength_max>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_MOLOTOV">
+        <name>Molotov Bomb</name>
+        <name_future>Molotov Bomb</name_future>
+        <shortname>Molotov</shortname>
+        <shortname_future>Molotov</shortname_future>
+        <threatening>true</threatening>
+        <fencevalue>0</fencevalue>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <thrown>true</thrown>
+            <attack_description>hurls a molotov at</attack_description>
+            <hit_description>exploding</hit_description>
+            <always_describe_hit>true</always_describe_hit>
+            <hit_punctuation>!</hit_punctuation>
+            <skill>THROWING</skill>
+            <random_damage>101</random_damage>
+            <fixed_damage>25</fixed_damage>
+            <burns>true</burns>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+            <no_damage_reduction_for_limbs_chance>33</no_damage_reduction_for_limbs_chance>
+            <fire>
+                <chance_causes_debris>100</chance_causes_debris>
+                <chance>100</chance>
+            </fire>
         </attack>
     </weapontype>
 
@@ -660,63 +711,23 @@
             <bruises>true</bruises>
         </attack>
     </weapontype>
-    
-    <weapontype idname="WEAPON_SHOTGUN_AA12">
-        <name>AA-12 Auto Shotgun</name>
-        <name_future>Z-12 Chain Burstgun</name_future>
-        <shortname>AA-12</shortname>
-        <shortname_future>Z-12</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <legality>-1</legality>
-        <fencevalue>400</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
-        <size>10</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <attack_description>shoots at</attack_description>
-            <skill>SHOTGUN</skill>
-            <ammotype>CLIP_BUCKSHOT</ammotype>
-            <random_damage>201</random_damage>
-            <fixed_damage>30</fixed_damage>
-            <shoots>true</shoots>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>0</armorpiercing>
-            <accuracy_bonus>4</accuracy_bonus>
-            <number_attacks>2</number_attacks>
-            <successive_attacks_difficulty>3</successive_attacks_difficulty>
-            <severtype>NASTY</severtype>
-        </attack>
-        <attack>
-            <priority>2</priority>
-            <attack_description>swings at</attack_description>
-            <skill>CLUB</skill>
-            <strength_min>6</strength_min>
-            <strength_max>12</strength_max>
-            <random_damage>21</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
 
-    <weapontype idname="WEAPON_SWORD">
-        <name>Sword of Morfiegor</name>
-        <name_future>Light Sword</name_future>
-        <shortname>Sword</shortname>
-        <shortname_future>Light Sword</shortname_future>
+    <weapontype idname="WEAPON_AXE">
+        <name>Axe</name>
+        <name_future>Laser Axe</name_future>
+        <shortname>Axe</shortname>
+        <shortname_future>Laser Axe</shortname_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <fencevalue>100</fencevalue>
-        <bashstrengthmod>150</bashstrengthmod>
+        <fencevalue>0</fencevalue>
+        <bashstrengthmod>200</bashstrengthmod>
         <size>15</size>
         <attack>
             <priority>1</priority>
-            <attack_description>slashes at</attack_description>
+            <attack_description>chops at</attack_description>
             <strength_min>6</strength_min>
             <strength_max>12</strength_max>
-            <skill>SWORD</skill>
+            <skill>AXE</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
             <cuts>true</cuts>
@@ -724,6 +735,26 @@
             <damages_armor>true</damages_armor>
             <armorpiercing>2</armorpiercing>
             <severtype>CLEAN</severtype>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_BASEBALLBAT">
+        <name>Baseball Bat</name>
+        <name_future>Spaceball Bat</name_future>
+        <threatening>true</threatening>
+        <fencevalue>20</fencevalue>
+        <bashstrengthmod>150</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>swings at</attack_description>
+            <ranged>false</ranged>
+            <strength_min>6</strength_min>
+            <strength_max>12</strength_max>
+            <skill>CLUB</skill>
+            <random_damage>41</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
         </attack>
     </weapontype>
 
@@ -748,15 +779,59 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_NIGHTSTICK">
-        <name>Nightstick</name>
-        <name_future>Electro-Shock Stick</name_future>
-        <shortname>Nightstick</shortname>
-        <shortname_future>Shock Stick</shortname_future>
+    <weapontype idname="WEAPON_COMBATKNIFE"> 
+        <name>Combat Knife</name>
+        <name_future>Vibro-Knife</name_future>
+        <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
         <fencevalue>20</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
+        <bashstrengthmod>105</bashstrengthmod>
+        <size>4</size>
+        <attack>
+            <attack_description>lunges at</attack_description>
+            <hit_description>slashing</hit_description>
+            <skill>KNIFE</skill>
+            <strentgh_min>1</strentgh_min>
+            <strength_max>6</strength_max>
+            <random_damage>61</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <can_backstab>true</can_backstab>
+            <cuts>true</cuts>
+            <bleeding>true</bleeding>
+            <armorpiercing>2</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_CROSS">
+        <name>Silver Cross</name>
+        <name_future>Silver Cross</name_future>
+        <shortname>Cross</shortname>
+        <shortname_future>Cross</shortname_future>
+        <fencevalue>100</fencevalue>
         <suspicious>false</suspicious>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>swings at</attack_description>
+            <strength_min>1</strength_min>
+            <strength_max>4</strength_max>
+            <skill>CLUB</skill>
+            <random_damage>11</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_CROWBAR">
+        <name>Crowbar</name>
+        <name_future>Forcefield Prybar</name_future>
+        <shortname_future>Prybar</shortname_future>
+        <threatening>true</threatening>
+        <fencevalue>10</fencevalue>
+        <bashstrengthmod>200</bashstrengthmod>
+        <auto_break_locks>true</auto_break_locks>
         <size>15</size>
         <attack>
             <priority>1</priority>
@@ -765,29 +840,34 @@
             <strength_max>8</strength_max>
             <skill>CLUB</skill>
             <random_damage>21</random_damage>
-            <fixed_damage>5</fixed_damage>
+            <fixed_damage>10</fixed_damage>
             <bruises>true</bruises>
+            <bleeding>true</bleeding>
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_GAVEL">
-        <name>Gavel</name>
-        <name_future>Laser Gavel</name_future>
-        <shortname>Gavel</shortname>
-        <shortname_future>Gavel</shortname_future>
-        <fencevalue>20</fencevalue>
-        <suspicious>false</suspicious>
-        <protects_against_kidnapping>false</protects_against_kidnapping>
+    <weapontype idname="WEAPON_DAGGER">
+        <name>Dagger</name>
+        <name_future>Beam Dagger</name_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <fencevalue>10</fencevalue>
         <size>5</size>
         <attack>
-            <priority>1</priority>
-            <attack_description>swings at</attack_description>
+            <attack_description>lunges at</attack_description>
+            <hit_description>stabbing</hit_description>
             <strength_min>1</strength_min>
-            <strength_max>4</strength_max>
-            <skill>CLUB</skill>
-            <random_damage>6</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
+            <strength_max>5</strength_max>
+            <skill>KNIFE</skill>
+            <random_damage>61</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <can_backstab>true</can_backstab>
+            <cuts>true</cuts>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>2</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
     </weapontype>
 
@@ -818,6 +898,50 @@
             <damages_armor>true</damages_armor>
             <armorpiercing>2</armorpiercing>
             <severtype>CLEAN</severtype>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_GAVEL">
+        <name>Gavel</name>
+        <name_future>Laser Gavel</name_future>
+        <shortname>Gavel</shortname>
+        <shortname_future>Gavel</shortname_future>
+        <fencevalue>20</fencevalue>
+        <suspicious>false</suspicious>
+        <protects_against_kidnapping>false</protects_against_kidnapping>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>swings at</attack_description>
+            <strength_min>1</strength_min>
+            <strength_max>4</strength_max>
+            <skill>CLUB</skill>
+            <random_damage>6</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_GUITAR">
+        <name>Guitar</name>
+        <name_future>Cyber-Keytar</name_future>
+        <shortname>Guitar</shortname>
+        <shortname_future>Keytar</shortname_future>
+        <musical_attack>true</musical_attack>
+        <instrument>true</instrument>
+        <fencevalue>100</fencevalue>
+        <suspicious>false</suspicious>
+        <can_threaten_hostages>false</can_threaten_hostages>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>swings at</attack_description>
+            <strength_min>4</strength_min>
+            <strength_max>8</strength_max>
+            <skill>CLUB</skill>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
         </attack>
     </weapontype>
 
@@ -864,12 +988,84 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_CROSS">
-        <name>Silver Cross</name>
-        <name_future>Silver Cross</name_future>
-        <shortname>Cross</shortname>
-        <shortname_future>Cross</shortname_future>
-        <fencevalue>100</fencevalue>
+    <weapontype idname="WEAPON_NIGHTSTICK">
+        <name>Nightstick</name>
+        <name_future>Electro-Shock Stick</name_future>
+        <shortname>Nightstick</shortname>
+        <shortname_future>Shock Stick</shortname_future>
+        <threatening>true</threatening>
+        <fencevalue>20</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <suspicious>false</suspicious>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>swings at</attack_description>
+            <strength_min>4</strength_min>
+            <strength_max>8</strength_max>
+            <skill>CLUB</skill>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_PITCHFORK">
+        <name>Pitchfork</name>
+        <name_future>Space Pitchfork</name_future>
+        <shortname>Pitchfork</shortname>
+        <shortname_future>Pitchfork</shortname_future>
+        <threatening>true</threatening>
+        <fencevalue>20</fencevalue>
+        <bashstrengthmod>125</bashstrengthmod>
+        <size>15</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>stabs at</attack_description>
+            <strength_min>6</strength_min>
+            <strength_max>12</strength_max>
+            <skill>SWORD</skill>
+            <random_damage>61</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <cuts>true</cuts>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>1</armorpiercing>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_SHANK">
+        <name>Shank</name>
+        <name_future>Cyber Shank</name_future>
+        <shortname_future>Shank</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <fencevalue>5</fencevalue>
+        <size>5</size>
+        <attack>
+            <attack_description>lunges at</attack_description>
+            <hit_description>stabbing</hit_description>
+            <strength_min>1</strength_min>
+            <strength_max>4</strength_max>
+            <skill>KNIFE</skill>
+            <random_damage>51</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <can_backstab>true</can_backstab>
+            <cuts>true</cuts>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>1</armorpiercing>
+            <number_attacks>3</number_attacks>
+            <successive_attacks_difficulty>4</successive_attacks_difficulty>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_SPRAYCAN">
+        <name>Spraypaint</name>
+        <name_future>Holo-Paint</name_future>
+        <shortname>Spraypaint</shortname>
+        <shortname_future>Holopaint</shortname_future>
+        <graffiti>true</graffiti>
+        <fencevalue>2</fencevalue>
         <suspicious>false</suspicious>
         <size>5</size>
         <attack>
@@ -905,27 +1101,50 @@
         </attack>
     </weapontype>
 
-    <weapontype idname="WEAPON_PITCHFORK">
-        <name>Pitchfork</name>
-        <name_future>Space Pitchfork</name_future>
-        <shortname>Pitchfork</shortname>
-        <shortname_future>Pitchfork</shortname_future>
+    <weapontype idname="WEAPON_SWORD">
+        <name>Sword of Morfiegor</name>
+        <name_future>Light Sword</name_future>
+        <shortname>Sword</shortname>
+        <shortname_future>Light Sword</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <fencevalue>20</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
+        <fencevalue>100</fencevalue>
+        <bashstrengthmod>150</bashstrengthmod>
         <size>15</size>
         <attack>
             <priority>1</priority>
-            <attack_description>stabs at</attack_description>
+            <attack_description>slashes at</attack_description>
             <strength_min>6</strength_min>
             <strength_max>12</strength_max>
             <skill>SWORD</skill>
-            <random_damage>61</random_damage>
+            <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>1</armorpiercing>
+            <armorpiercing>2</armorpiercing>
+            <severtype>CLEAN</severtype>
+        </attack>
+    </weapontype>
+
+    <weapontype idname="WEAPON_SYRINGE">
+        <name>Syringe</name>
+        <name_future>Medical Injector</name_future>
+        <shortname_future>Injector</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <fencevalue>10</fencevalue>
+        <suspicious>false</suspicious>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <attack_description>pokes at</attack_description>
+            <strength_min>1</strength_min>
+            <strength_max>2</strength_max>
+            <skill>KNIFE</skill>
+            <random_damage>4</random_damage>
+            <fixed_damage>1</fixed_damage>
+            <cuts>true</cuts>
+            <armorpiercing>4</armorpiercing>
         </attack>
     </weapontype>
 
@@ -947,227 +1166,6 @@
             <fixed_damage>5</fixed_damage>
             <burns>true</burns>
             <damages_armor>true</damages_armor>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_GUITAR">
-        <name>Guitar</name>
-        <name_future>Cyber-Keytar</name_future>
-        <shortname>Guitar</shortname>
-        <shortname_future>Keytar</shortname_future>
-        <musical_attack>true</musical_attack>
-        <instrument>true</instrument>
-        <fencevalue>100</fencevalue>
-        <suspicious>false</suspicious>
-        <can_threaten_hostages>false</can_threaten_hostages>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>swings at</attack_description>
-            <strength_min>4</strength_min>
-            <strength_max>8</strength_max>
-            <skill>CLUB</skill>
-            <random_damage>21</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_SPRAYCAN">
-        <name>Spraypaint</name>
-        <name_future>Holo-Paint</name_future>
-        <shortname>Spraypaint</shortname>
-        <shortname_future>Holopaint</shortname_future>
-        <graffiti>true</graffiti>
-        <fencevalue>2</fencevalue>
-        <suspicious>false</suspicious>
-        <size>5</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>swings at</attack_description>
-            <strength_min>1</strength_min>
-            <strength_max>4</strength_max>
-            <skill>CLUB</skill>
-            <random_damage>11</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_MOLOTOV">
-        <name>Molotov Bomb</name>
-        <name_future>Molotov Bomb</name_future>
-        <shortname>Molotov</shortname>
-        <shortname_future>Molotov</shortname_future>
-        <threatening>true</threatening>
-        <fencevalue>0</fencevalue>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <thrown>true</thrown>
-            <attack_description>hurls a molotov at</attack_description>
-            <hit_description>exploding</hit_description>
-            <always_describe_hit>true</always_describe_hit>
-            <hit_punctuation>!</hit_punctuation>
-            <skill>THROWING</skill>
-            <random_damage>101</random_damage>
-            <fixed_damage>25</fixed_damage>
-            <burns>true</burns>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>7</armorpiercing>
-            <no_damage_reduction_for_limbs_chance>33</no_damage_reduction_for_limbs_chance>
-            <fire>
-                <chance_causes_debris>100</chance_causes_debris>
-                <chance>100</chance>
-            </fire>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_AXE">
-        <name>Axe</name>
-        <name_future>Laser Axe</name_future>
-        <shortname>Axe</shortname>
-        <shortname_future>Laser Axe</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <fencevalue>0</fencevalue>
-        <bashstrengthmod>200</bashstrengthmod>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <attack_description>chops at</attack_description>
-            <strength_min>6</strength_min>
-            <strength_max>12</strength_max>
-            <skill>AXE</skill>
-            <random_damage>101</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <cuts>true</cuts>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
-            <severtype>CLEAN</severtype>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_FLAMETHROWER">
-        <name>M2 Flamethrower</name>
-        <name_future>Plasma Gun</name_future>
-        <shortname>M2A1-7</shortname>
-        <shortname_future>Plasmagun</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <legality>-3</legality>
-        <fencevalue>0</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <attack_description>streams fire at</attack_description>
-            <skill>HEAVYWEAPONS</skill>
-            <ammotype>CLIP_GASOLINE</ammotype>
-            <random_damage>201</random_damage>
-            <fixed_damage>50</fixed_damage>
-            <burns>true</burns>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>9</armorpiercing>
-            <fire>
-                <starts_fire>true</starts_fire>
-                <causes_debris>false</causes_debris>
-                <chance>33</chance>
-            </fire>
-        </attack>
-        <attack>
-            <priority>2</priority>
-            <attack_description>swings at</attack_description>
-            <skill>CLUB</skill>
-            <strength_min>12</strength_min>
-            <strength_max>18</strength_max>
-            <random_damage>21</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_DESERT_EAGLE">
-        <name>Desert Eagle</name>
-        <name_future>Desert Eagle</name_future>
-        <shortname>Deagle</shortname>
-        <shortname_future>Deagle</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <legality>-1</legality>
-        <fencevalue>250</fencevalue>
-        <size>5</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <attack_description>shoots at</attack_description>
-            <skill>PISTOL</skill>
-            <ammotype>CLIP_50AE</ammotype>
-            <random_damage>301</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <shoots>true</shoots>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>4</armorpiercing>
-            <severtype>NASTY</severtype>
-        </attack>
-        <attack>
-            <priority>2</priority>
-            <attack_description>swings at</attack_description>
-            <skill>CLUB</skill>
-            <strength_min>3</strength_min>
-            <strength_max>8</strength_max>
-            <random_damage>6</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
-        </attack>
-    </weapontype>
-
-    <weapontype idname="WEAPON_M249_MACHINEGUN">
-        <name>M249 Machine Gun</name>
-        <name_future>C249 Chaingun</name_future>
-        <shortname>M249</shortname>
-        <shortname_future>Chaingun</shortname_future>
-        <can_take_hostages>true</can_take_hostages>
-        <threatening>true</threatening>
-        <legality>-2</legality>
-        <fencevalue>1500</fencevalue>
-        <bashstrengthmod>125</bashstrengthmod>
-        <size>15</size>
-        <attack>
-            <priority>1</priority>
-            <ranged>true</ranged>
-            <attack_description>shoots at</attack_description>
-            <skill>HEAVYWEAPONS</skill>
-            <ammotype>CLIP_DRUM</ammotype>
-            <random_damage>301</random_damage>
-            <fixed_damage>10</fixed_damage>
-            <shoots>true</shoots>
-            <tears>true</tears>
-            <bleeding>true</bleeding>
-            <damages_armor>true</damages_armor>
-            <armorpiercing>7</armorpiercing>
-            <number_attacks>5</number_attacks>
-            <accuracy_bonus>5</accuracy_bonus> <!-- spray and pray -->
-            <successive_attacks_difficulty>3</successive_attacks_difficulty>
-            <critical>
-                <chance>100</chance>
-                <hits_required>3</hits_required>
-                <severtype>NASTY</severtype>
-            </critical>
-        </attack>
-        <attack>
-            <priority>2</priority>
-            <attack_description>swings at</attack_description>
-            <skill>CLUB</skill>
-            <strength_min>8</strength_min>
-            <strength_max>14</strength_max>
-            <random_damage>21</random_damage>
-            <fixed_damage>5</fixed_damage>
-            <bruises>true</bruises>
         </attack>
     </weapontype>
 

@@ -1,5 +1,4 @@
 <masks>
-
     <!-- Clarification
     <default> (armortype) Masks will use this armor type for default values.
     
@@ -8,6 +7,7 @@
         (See armors.xml for further descriptions of elements.)
     </masktype>
     -->
+
     <default>ARMOR_MASK</default>
     
     <masktype idname="MASK_ASHCROFT">
@@ -43,7 +43,6 @@
         <name>George HW Bush Mask</name>
         <shortname>G HW Bush Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_BUSH_GEORGE2">
@@ -51,7 +50,6 @@
         <name>George W. Bush Mask</name>
         <shortname>G W. Bush Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_CARTER">
@@ -59,7 +57,6 @@
         <name>Jimmy Carter Mask</name>
         <shortname>Carter Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_CHENEY">
@@ -93,6 +90,16 @@
         <description>Reverend</description>
     </masktype>
 
+    <masktype idname="MASK_GUY_FAWKES">
+        <mask>true</mask>
+        <name>Guy Fawkes Mask</name>
+        <shortname>G. Fawkes Mask</shortname>
+        <description>Remember the 5th of November</description>
+        <interrogation>
+            <basepower>6</basepower>
+        </interrogation>
+    </masktype>
+
     <masktype idname="MASK_FORD">
         <mask>true</mask>
         <name>Gerald Ford Mask</name>
@@ -114,23 +121,6 @@
         <description>U.S. Second Lady</description>
     </masktype>
 
-    <masktype idname="MASK_GUY_FAWKES">
-        <mask>true</mask>
-        <name>Guy Fawkes Mask</name>
-        <shortname>G. Fawkes Mask</shortname>
-        <description>Remember the 5th of November</description>
-        <interrogation>
-            <basepower>6</basepower>
-        </interrogation>
-    </masktype>
-
-    <masktype idname="MASK_TED_STEVENS">
-        <mask>true</mask>
-        <name>Ted Stevens Mask</name>
-        <shortname>T Stevens Mask</shortname>
-        <description>U.S. Senator</description>
-    </masktype>
-
     <masktype idname="MASK_HELMS">
         <mask>true</mask>
         <name>Jesse Helms Mask</name>
@@ -146,13 +136,6 @@
         <interrogation>
             <basepower>6</basepower>
         </interrogation>
-    </masktype>
-
-    <masktype idname="MASK_LINCOLN">
-        <mask>true</mask>
-        <name>Abraham Lincoln Msk</name>
-        <shortname>Lincoln Mask</shortname>
-        <description>U.S. President, Assassinated</description>
     </masktype>
 
     <masktype idname="MASK_KENNEDY_JOHN">
@@ -176,6 +159,13 @@
         <description>U.S. Secretary of State</description>
     </masktype>
 
+    <masktype idname="MASK_LINCOLN">
+        <mask>true</mask>
+        <name>Abraham Lincoln Msk</name>
+        <shortname>Lincoln Mask</shortname>
+        <description>U.S. President, Assassinated</description>
+    </masktype>
+
     <masktype idname="MASK_NIXON">
         <mask>true</mask>
         <name>Richard Nixon Mask</name>
@@ -195,7 +185,6 @@
         <name>Colin Powell Mask</name>
         <shortname>Powell Mask</shortname>
         <description>U.S. Secretary of State, General</description>
-
     </masktype>
 
     <masktype idname="MASK_REAGAN_NANCY">
@@ -223,7 +212,6 @@
         <name>Condoleezza Rice Mk</name>
         <shortname>Cn. Rice Mask</shortname>
         <description>U.S. National Security Advisor</description>
-
     </masktype>
 
     <masktype idname="MASK_ROBERTSON">
@@ -231,7 +219,6 @@
         <name>Pat Robertson Mask</name>
         <shortname>Robertson Mask</shortname>
         <description>Televangelist</description>
-
     </masktype>
 
     <masktype idname="MASK_RUMSFELD">
@@ -239,7 +226,6 @@
         <name>Donald Rumsfeld Msk</name>
         <shortname>Rumsfeld Mask</shortname>
         <description>U.S. Secretary of Defense</description>
-
     </masktype>
 
     <masktype idname="MASK_SATAN">
@@ -257,7 +243,13 @@
         <name>Ken Starr Mask</name>
         <shortname>Ken Starr Mask</shortname>
         <description>Independent Counsel</description>
+    </masktype>
 
+    <masktype idname="MASK_TED_STEVENS">
+        <mask>true</mask>
+        <name>Ted Stevens Mask</name>
+        <shortname>T Stevens Mask</shortname>
+        <description>U.S. Senator</description>
     </masktype>
 
     <masktype idname="MASK_THURMOND">
@@ -265,7 +257,6 @@
         <name>Strom Thurmond Mask</name>
         <shortname>Thurmond Mask</shortname>
         <description>U.S. Senator</description>
-
     </masktype>
 
     <masktype idname="MASK_WASHINGTON">
@@ -273,7 +264,6 @@
         <name>George Washngtn Msk</name>
         <shortname>Washngton Mask</shortname>
         <description>U.S. President</description>
-
     </masktype>
 
     <masktype idname="MASK_WAXMAN">
@@ -281,86 +271,14 @@
         <name>Henry Waxman Mask</name>
         <shortname>Waxman Mask</shortname>
         <description>U.S. Representative</description>
-
     </masktype>
 
-       
        <!--SURPRISE MASKS-->
-       
-    <masktype idname="MASK_JESUS">
-        <mask>true</mask>
-        <name>Jesus Christ Mask</name>
-        <shortname>Jesus Mask</shortname>
-        <description>The Son of God, The Lamb, He died 4 U</description>
-        <surprise>true</surprise>
-        <interrogation>
-            <basepower>6</basepower>
-        </interrogation>
-    </masktype>
-
-    <masktype idname="MASK_COLEMAN_GARY">
-        <mask>true</mask>
-        <name>Gary Coleman Mask</name>
-        <shortname>G Coleman Mask</shortname>
-        <description>Actor, Candidate for Governor</description>
-        <surprise>true</surprise>
-        <interrogation>
-            <basepower>1</basepower>
-        </interrogation>
-    </masktype>
-
-    <masktype idname="MASK_MADONNA">
-        <mask>true</mask>
-        <name>Madonna Mask</name>
-        <shortname>Madonna Mask</shortname>
-        <description>Singer, Actor</description>
-        <surprise>true</surprise>
-    </masktype>
-
-    <masktype idname="MASK_SPEARS">
-        <mask>true</mask>
-        <name>Britney Spears Mask</name>
-        <shortname>B Spears Mask</shortname>
-        <description>Singer, Actor</description>
-        <surprise>true</surprise>
-    </masktype>
-
-    <masktype idname="MASK_EMINEM">
-        <mask>true</mask>
-        <name>Eminem Mask</name>
-        <shortname>Eminem Mask</shortname>
-        <description>Rapper, Actor</description>
-        <surprise>true</surprise>
-    </masktype>
 
     <masktype idname="MASK_AGUILERA">
         <mask>true</mask>
         <name>Chrstna Aguilera Mk</name>
         <shortname>C Aguilra Mask</shortname>
-        <description>Singer</description>
-        <surprise>true</surprise>
-    </masktype>
-
-    <masktype idname="MASK_WAHLBERG">
-        <mask>true</mask>
-        <name>Mark Wahlbrg Mask</name>
-        <shortname>M Wahlbrg Mask</shortname>
-        <description>Actor, Rapper</description>
-        <surprise>true</surprise>
-    </masktype>
-
-    <masktype idname="MASK_IGGYPOP">
-        <mask>true</mask>
-        <name>Iggy Pop Mask</name>
-        <shortname>Iggy Pop Mask</shortname>
-        <description>Singer, Actor</description>
-        <surprise>true</surprise>
-    </masktype>
-
-    <masktype idname="MASK_CASH">
-        <mask>true</mask>
-        <name>Johnny Cash Mask</name>
-        <shortname>Jny. Cash Mask</shortname>
         <description>Singer</description>
         <surprise>true</surprise>
     </masktype>
@@ -376,19 +294,38 @@
         </interrogation>
     </masktype>
 
-    <masktype idname="MASK_LORDS">
+    <masktype idname="MASK_CASH">
         <mask>true</mask>
-        <name>Traci Lords Mask</name>
-        <shortname>Tr. Lords Mask</shortname>
-        <description>Actor</description>
+        <name>Johnny Cash Mask</name>
+        <shortname>Jny. Cash Mask</shortname>
+        <description>Singer</description>
         <surprise>true</surprise>
     </masktype>
 
-    <masktype idname="MASK_SHIELDS">
+    <masktype idname="MASK_COLEMAN_GARY">
         <mask>true</mask>
-        <name>Brooke Shields Mask</name>
-        <shortname>Br. Shlds Mask</shortname>
-        <description>Actor</description>
+        <name>Gary Coleman Mask</name>
+        <shortname>G Coleman Mask</shortname>
+        <description>Actor, Candidate for Governor</description>
+        <surprise>true</surprise>
+        <interrogation>
+            <basepower>1</basepower>
+        </interrogation>
+    </masktype>
+
+    <masktype idname="MASK_CRUTHERS">
+        <mask>true</mask>
+        <name>Scatman Cruthers Mk</name>
+        <shortname>Cruthers Mask</shortname>
+        <description>Singer, Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_EMINEM">
+        <mask>true</mask>
+        <name>Eminem Mask</name>
+        <shortname>Eminem Mask</shortname>
+        <description>Rapper, Actor</description>
         <surprise>true</surprise>
     </masktype>
 
@@ -400,12 +337,15 @@
         <surprise>true</surprise>
     </masktype>
 
-    <masktype idname="MASK_CRUTHERS">
+    <masktype idname="MASK_JESUS">
         <mask>true</mask>
-        <name>Scatman Cruthers Mk</name>
-        <shortname>Cruthers Mask</shortname>
-        <description>Singer, Actor</description>
+        <name>Jesus Christ Mask</name>
+        <shortname>Jesus Mask</shortname>
+        <description>The Son of God, The Lamb, He died 4 U</description>
         <surprise>true</surprise>
+        <interrogation>
+            <basepower>6</basepower>
+        </interrogation>
     </masktype>
 
     <masktype idname="MASK_KING_DON">
@@ -413,6 +353,54 @@
         <name>Don King Mask</name>
         <shortname>Don King Mask</shortname>
         <description>Boxing Promoter</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_LORDS">
+        <mask>true</mask>
+        <name>Traci Lords Mask</name>
+        <shortname>Tr. Lords Mask</shortname>
+        <description>Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_MADONNA">
+        <mask>true</mask>
+        <name>Madonna Mask</name>
+        <shortname>Madonna Mask</shortname>
+        <description>Singer, Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_IGGYPOP">
+        <mask>true</mask>
+        <name>Iggy Pop Mask</name>
+        <shortname>Iggy Pop Mask</shortname>
+        <description>Singer, Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_SHIELDS">
+        <mask>true</mask>
+        <name>Brooke Shields Mask</name>
+        <shortname>Br. Shlds Mask</shortname>
+        <description>Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_SPEARS">
+        <mask>true</mask>
+        <name>Britney Spears Mask</name>
+        <shortname>B Spears Mask</shortname>
+        <description>Singer, Actor</description>
+        <surprise>true</surprise>
+    </masktype>
+
+    <masktype idname="MASK_WAHLBERG">
+        <mask>true</mask>
+        <name>Mark Wahlbrg Mask</name>
+        <shortname>M Wahlbrg Mask</shortname>
+        <description>Actor, Rapper</description>
         <surprise>true</surprise>
     </masktype>
 

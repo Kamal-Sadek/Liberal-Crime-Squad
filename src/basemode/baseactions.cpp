@@ -1030,7 +1030,7 @@ void setvehicles(void)
       move(24,1);
       addstr("Enter - Done");
 
-      int c=getkey();
+      int c=getkey_cap();
 
       if(c>='A'&&c<='R')
       {
