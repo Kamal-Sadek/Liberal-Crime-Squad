@@ -278,7 +278,17 @@ char chasesequence(void)
                youattack();
                creatureadvance();
                if(drivingupdate(obstacle))
-                  return footchase();
+               {
+                  partysize=0,partyalive=0;
+                  for(p=0;p<6;p++)
+                  {
+                     if(activesquad->squad[p]!=NULL)partysize++;
+                     else continue;
+
+                     if(activesquad->squad[p]->alive==1)partyalive++;
+                  }
+                  if(partyalive>0) return footchase();
+               }
             }
 
             if(c=='f')
@@ -293,7 +303,17 @@ char chasesequence(void)
                enemyattack();
                creatureadvance();
                if(drivingupdate(obstacle))
-                  return footchase();
+               {
+                  partysize=0,partyalive=0;
+                  for(p=0;p<6;p++)
+                  {
+                     if(activesquad->squad[p]!=NULL)partysize++;
+                     else continue;
+
+                     if(activesquad->squad[p]->alive==1)partyalive++;
+                  }
+                  if(partyalive>0) return footchase();
+               }
             }
 
             if(c=='e')
@@ -310,17 +330,47 @@ char chasesequence(void)
                if(c=='d')
                {
                   if(obstacledrive(obstacle,0))
-                     return footchase();
+                  {
+                     partysize=0,partyalive=0;
+                     for(p=0;p<6;p++)
+                     {
+                        if(activesquad->squad[p]!=NULL)partysize++;
+                        else continue;
+
+                        if(activesquad->squad[p]->alive==1)partyalive++;
+                     }
+                     if(partyalive>0) return footchase();
+                  }
                   creatureadvance();
                   drivingupdate(obstacle);
                }
                if(c=='f')
                {
                   if(obstacledrive(obstacle,1))
-                     return footchase();
+                  {
+                     partysize=0,partyalive=0;
+                     for(p=0;p<6;p++)
+                     {
+                        if(activesquad->squad[p]!=NULL)partysize++;
+                        else continue;
+
+                        if(activesquad->squad[p]->alive==1)partyalive++;
+                     }
+                     if(partyalive>0) return footchase();
+                  }
                   creatureadvance();
                   if(drivingupdate(obstacle))
-                     return footchase();
+                  {
+                     partysize=0,partyalive=0;
+                     for(p=0;p<6;p++)
+                     {
+                        if(activesquad->squad[p]!=NULL)partysize++;
+                        else continue;
+
+                        if(activesquad->squad[p]->alive==1)partyalive++;
+                     }
+                     if(partyalive>0) return footchase();
+                  }
                }
                break;
             }
@@ -1486,7 +1536,7 @@ void crashfriendlycar(int v)
    set_color(COLOR_MAGENTA,COLOR_BLACK,1);
    move(16,1);
    addstr("Your ", gamelog);
-   addstr(chaseseq.friendcar[v]->fullname().c_str(), gamelog);
+   addstr(chaseseq.friendcar[v]->fullname(), gamelog);
    addstr(selectRandomString(car_crash_modes, ARRAY_ELEMENTS(car_crash_modes)), gamelog);
    gamelog.newline(); //New line it.
    printparty();
@@ -1508,14 +1558,12 @@ void crashfriendlycar(int v)
                // Inflict injuries
                if(LCSrandom(2))
                {
-                  activesquad->squad[p]->wound[w] |= WOUND_TORN;
-                  activesquad->squad[p]->wound[w] |= WOUND_BLEEDING;
+                  activesquad->squad[p]->wound[w] |= (WOUND_TORN|WOUND_BLEEDING);
                   activesquad->squad[p]->blood -= 1 + LCSrandom(25);
                }
                if(!LCSrandom(3))
                {
-                  activesquad->squad[p]->wound[w] |= WOUND_CUT;
-                  activesquad->squad[p]->wound[w] |= WOUND_BLEEDING;
+                  activesquad->squad[p]->wound[w] |= (WOUND_CUT|WOUND_BLEEDING);
                   activesquad->squad[p]->blood -= 1 + LCSrandom(25);
                }
                if(LCSrandom(2) || activesquad->squad[p]->wound[w] == 0)

@@ -1912,7 +1912,7 @@ void mode_site(void)
                      resolvesite();
                   }
                }
-	       sitealarm = 0;
+	            sitealarm=0;
                mode=GAMEMODE_BASE;
                return;
             }
@@ -1925,20 +1925,11 @@ void mode_site(void)
             // 0% chance of encounter during sieges
             if(!location[cursite]->siege.siege)
             {
-               if(postalarmtimer>80)
-               {
-                  if(!LCSrandom(5)) newenc=1;
-               }
-               else if(!LCSrandom(10)||c=='s')
-               {
-                  newenc=1;
-               }
+               if(postalarmtimer>80) { if(!LCSrandom(5)) newenc=1; }
+               else if(!LCSrandom(10)||c=='s') newenc=1;
             }
 
-            for(int e=0;e<ENCMAX;e++)
-            {
-               if(encounter[e].exists)newenc=0;
-            }
+            for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) newenc=0;
 
             // Handle special tiles that activate when you step on them
             // (rather than those that must be manually activated)
@@ -1969,13 +1960,9 @@ void mode_site(void)
             //DO DOORS
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_DOOR)
             {
-               bool restricted = levelmap[olocx][olocy][olocz].flag & SITEBLOCK_RESTRICTED;
-               open_door(restricted);
-
-               locx=olocx;
-               locy=olocy;
-               locz=olocz;
-               if(encsize>0)newenc=0;
+               open_door(levelmap[olocx][olocy][olocz].flag&SITEBLOCK_RESTRICTED);
+               locx=olocx,locy=olocy,locz=olocz;
+               if(encsize>0) newenc=0;
             }
 
             //BAIL UPON VICTORY (version 2 -- defeated CCS safehouse)
@@ -2035,10 +2022,8 @@ void mode_site(void)
                   location[cursite]->type==SITE_OUTDOOR_BUNKER)
                {
                   ccs_kills++;
-                  if(ccs_kills<3)
-                     endgamestate--;
-                  else
-                     endgamestate=ENDGAME_CCS_DEFEATED;
+                  if(ccs_kills<3) endgamestate--;
+                  else endgamestate=ENDGAME_CCS_DEFEATED;
                }
 
                conquertextccs();
@@ -2052,42 +2037,21 @@ void mode_site(void)
             if(location[cursite]->siege.siege) // *JDS* police response added
             {
                if(locx!=olocx||locy!=olocy||locz!=olocz)
-               {
                   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
-               }
 
                //MOVE SIEGE UNITS AROUND
                   //MOVE UNITS
-               vector<int> unitx;
-               vector<int> unity;
-               vector<int> unitz;
+               vector<int> unitx,unity,unitz;
 
-               for(x=0;x<MAPX;x++)
-               {
-                  for(int y=0;y<MAPY;y++)
-                  {
-                     for(int z=0;z<MAPZ;z++)
-                     {
-                        if(levelmap[x][y][z].siegeflag & SIEGEFLAG_UNIT)
-                        {
-                           unitx.push_back(x);
-                           unity.push_back(y);
-                           unitz.push_back(z);
-                        }
-                     }
-                  }
-               }
+               for(x=0;x<MAPX;x++) for(int y=0;y<MAPY;y++) for(int z=0;z<MAPZ;z++)
+                  if(levelmap[x][y][z].siegeflag&SIEGEFLAG_UNIT)
+                     unitx.push_back(x),unity.push_back(y),unitz.push_back(z);
 
                int sx=0,sy=0,sz=0;
                for(u=0;u<(int)unitx.size();u++)
                {
                   // don't leave tile if player is here
-                  if(unitx[u]==locx&&
-                     unity[u]==locy&&
-                     unitz[u]==locz)
-                  {
-                     continue;
-                  }
+                  if(unitx[u]==locx&&unity[u]==locy&&unitz[u]==locz) continue;
                   // move into player's tile if possible
                   if((((unitx[u]==locx-1||unitx[u]==locx+1)&&
                         unity[u]==locy)||
@@ -2099,9 +2063,7 @@ void mode_site(void)
 
                      //Get torched
                      if(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK)
-                     {
                         levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
-                     }
 
                      //BLOW TRAPS
                      if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_TRAP)
@@ -2109,156 +2071,91 @@ void mode_site(void)
                         levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_TRAP;
                         levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
                      }
-                     else
-                     {
-                        levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT;
-                     }
+                     else levelmap[locx][locy][locz].siegeflag|=SIEGEFLAG_UNIT;
                      continue;
                   }
                   sz=0;
                   switch(LCSrandom(4))
                   {
-                     case 0:sx=-1;sy=0;
-                        break;
-                     case 1:sx=1;sy=0;
-                        break;
-                     case 2:sx=0;sy=1;
-                        break;
-                     case 3:sx=0;sy=-1;
-                        break;
+                     case 0: sx=-1,sy=0; break;
+                     case 1: sx=1,sy=0; break;
+                     case 2: sx=0,sy=1; break;
+                     case 3: sx=0,sy=-1; break;
                   }
-                  sx=unitx[u]+sx;
-                  sy=unity[u]+sy;
-                  sz=unitz[u]+sz;
+                  sx+=unitx[u],sy+=unity[u],sz+=unitz[u];
 
                   if(sx>=0&&sx<MAPX&&sy>=0&&sy<MAPY&&sz>=0&&sz<MAPZ)
-                  {
-                     if(!(levelmap[sx][sy][sz].flag & SITEBLOCK_BLOCK))
+                     if(!(levelmap[sx][sy][sz].flag&SITEBLOCK_BLOCK))
                      {
-                        if((levelmap[sx][sy][sz].flag & SITEBLOCK_DOOR))
-                        {
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_DOOR;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_LOCKED;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_KLOCK;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_CLOCK;
-                        }
+                        if((levelmap[sx][sy][sz].flag&SITEBLOCK_DOOR))
+                           levelmap[sx][sy][sz].flag&=~(SITEBLOCK_DOOR|SITEBLOCK_LOCKED|SITEBLOCK_KLOCK|SITEBLOCK_CLOCK);
                         else
-                        {
-                           char conf=1;
-
-                           //BLOCK PASSAGE
-                           if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_UNIT)conf=0;
-                           if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_HEAVYUNIT)conf=0;
-
-                           if(conf)
+                        {  //BLOCK PASSAGE
+                           if(!(levelmap[sx][sy][sz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT)))
                            {
                               levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_UNIT;
 
                               //BLOW TRAPS
-                              if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_TRAP)
+                              if(levelmap[sx][sy][sz].siegeflag&SIEGEFLAG_TRAP)
                               {
                                  levelmap[sx][sy][sz].siegeflag&=~SIEGEFLAG_TRAP;
                                  levelmap[sx][sy][sz].siegeflag|=SIEGEFLAG_UNIT_DAMAGED;
                               }
-                              else
-                              {
-                                 levelmap[sx][sy][sz].siegeflag|=SIEGEFLAG_UNIT;
-                              }
+                              else levelmap[sx][sy][sz].siegeflag|=SIEGEFLAG_UNIT;
                            }
                         }
                      }
-                  }
                }
 
-               unitx.clear();
-               unity.clear();
-               unitz.clear();
+               unitx.clear(),unity.clear(),unitz.clear();
 
                /*
                   //MOVE HEAVY UNITS
-               for(x=0;x<MAPX;x++)
-               {
-                  for(int y=0;y<MAPY;y++)
-                  {
-                     for(int z=0;z<MAPZ;z++)
-                     {
-                        if(levelmap[x][y][z].siegeflag & SIEGEFLAG_HEAVYUNIT)
-                        {
-                           unitx.push_back(x);
-                           unity.push_back(y);
-                           unitz.push_back(z);
-                        }
-                     }
-                  }
-               }
+               for(x=0;x<MAPX;x++) for(int y=0;y<MAPY;y++) for(int z=0;z<MAPZ;z++)
+                  if(levelmap[x][y][z].siegeflag&SIEGEFLAG_HEAVYUNIT)
+                     unitx.push_back(x),unity.push_back(y),unitz.push_back(z);
 
                for(u=0;u<unitx.size();u++)
                {
                   sz=0;
                   switch(LCSrandom(4))
                   {
-                     case 0:sx=-1;sy=0;
-                        break;
-                     case 1:sx=1;sy=0;
-                        break;
-                     case 2:sx=0;sy=1;
-                        break;
-                     case 3:sx=0;sy=-1;
-                        break;
+                     case 0: sx=-1,sy=0; break;
+                     case 1: sx=1,sy=0; break;
+                     case 2: sx=0,sy=1; break;
+                     case 3: sx=0,sy=-1; break;
                   }
-                  sx=unitx[u]+sx;
-                  sy=unity[u]+sy;
-                  sz=unitz[u]+sz;
+                  sx+=unitx[u],sy+=unity[u],sz+=unitz[u];
 
                   if(sx>=0&&sx<MAPX&&sy>=0&&sy<MAPY&&sz>=0&&sz<MAPZ)
                   {
-                     if(!(levelmap[sx][sy][sz].flag & SITEBLOCK_BLOCK))
+                     if(!(levelmap[sx][sy][sz].flag&SITEBLOCK_BLOCK))
                      {
-                        if((levelmap[sx][sy][sz].flag & SITEBLOCK_DOOR))
-                        {
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_DOOR;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_LOCKED;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_KLOCK;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_CLOCK;
-                        }
+                        if((levelmap[sx][sy][sz].flag&SITEBLOCK_DOOR))
+                           levelmap[sx][sy][sz].flag&=~(SITEBLOCK_DOOR|SITEBLOCK_LOCKED|SITEBLOCK_KLOCK|SITEBLOCK_CLOCK);
                         else
-                        {
-                           char conf=1;
-
-                           //BLOCK PASSAGE
-                           if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_UNIT)conf=0;
-                           if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_HEAVYUNIT)conf=0;
-
-                           if(conf)
+                        {  //BLOCK PASSAGE
+                           if(!(levelmap[sx][sy][sz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT)))
                            {
                               levelmap[unitx[u]][unity[u]][unitz[u]].siegeflag&=~SIEGEFLAG_HEAVYUNIT;
                               levelmap[sx][sy][sz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
 
                               //BLOW (DIFFUSE) TRAPS
-                              if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_TRAP)
-                              {
-                                 levelmap[sx][sy][sz].siegeflag&=~SIEGEFLAG_TRAP;
-                              }
+                              levelmap[sx][sy][sz].siegeflag&=~SIEGEFLAG_TRAP;
                            }
                         }
                      }
-                     else
+                     else if(sy>=3&&sx>0&&sx<MAPX-1&&sy<MAPY-1) //BREAK WALLS
                      {
-                        //BREAK WALLS
-                        if(sy>=3&&sx>0&&sx<MAPX-1&&sy<MAPY-1)
-                        {
-                           sitechangest change(sx,sy,sz,SITEBLOCK_DEBRIS);
-                           location[cursite]->changes.push_back(change);
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_BLOCK;
-                           levelmap[sx][sy][sz].flag|=SITEBLOCK_DEBRIS;
-                        }
+                        sitechangest change(sx,sy,sz,SITEBLOCK_DEBRIS);
+                        location[cursite]->changes.push_back(change);
+                        levelmap[sx][sy][sz].flag&=~SITEBLOCK_BLOCK;
+                        levelmap[sx][sy][sz].flag|=SITEBLOCK_DEBRIS;
                      }
                   }
                }
 
-               unitx.clear();
-               unity.clear();
-               unitz.clear();
+               unitx.clear(),unity.clear(),unitz.clear();
                // End Heavy Units
                */
 
@@ -2267,45 +2164,19 @@ void mode_site(void)
                   sz=0;
                   switch(LCSrandom(4))
                   {
-                     case 0:sx=-1;sy=0;
-                        break;
-                     case 1:sx=1;sy=0;
-                        break;
-                     case 2:sx=0;sy=1;
-                        break;
-                     case 3:sx=0;sy=-1;
-                        break;
+                     case 0: sx=-1,sy=0; break;
+                     case 1: sx=1,sy=0; break;
+                     case 2: sx=0,sy=1; break;
+                     case 3: sx=0,sy=-1; break;
                   }
-                  sx=unitx[u]+sx;
-                  sy=unity[u]+sy;
-                  sz=unitz[u]+sz;
+                  sx+=unitx[u],sy+=unity[u],sz+=unitz[u];
 
                   if(sx>=0&&sx<MAPX&&sy>=0&&sy<MAPY&&sz>=0&&sz<MAPZ)
-                  {
-                     if(!(levelmap[sx][sy][sz].flag & SITEBLOCK_BLOCK))
-                     {
-                        if((levelmap[sx][sy][sz].flag & SITEBLOCK_DOOR))
-                        {
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_DOOR;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_LOCKED;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_KLOCK;
-                           levelmap[sx][sy][sz].flag&=~SITEBLOCK_CLOCK;
-                        }
-                        else
-                        {
-                           //char conf=1;
-
-                           //BLOCK PASSAGE
-                           //if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_UNIT)conf=0;
-                           //if(levelmap[sx][sy][sz].siegeflag & SIEGEFLAG_HEAVYUNIT)conf=0;
-                        }
-                     }
-                  }
+                     if(!(levelmap[sx][sy][sz].flag&SITEBLOCK_BLOCK)&&(levelmap[sx][sy][sz].flag&SITEBLOCK_DOOR))
+                        levelmap[sx][sy][sz].flag&=~(SITEBLOCK_DOOR|SITEBLOCK_LOCKED|SITEBLOCK_KLOCK|SITEBLOCK_CLOCK);
                }
 
-               unitx.clear();
-               unity.clear();
-               unitz.clear();
+               unitx.clear(),unity.clear(),unitz.clear();
 
                //NEW WAVES
                   //IF THERE AREN'T ENOUGH UNITS AROUND
@@ -2322,42 +2193,27 @@ void mode_site(void)
                   location[cursite]->siege.attacktime=0;
 
                   int existingUnits = 0;
-                  for(int x=0;x<MAPX;x++)
-                  {
-                     for(int y=0;y<MAPY;y++)
-                     {
-                        for(int z=0;z<MAPZ;z++)
-                        {
-                           if(levelmap[x][y][z].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT))
-                           {
-                              existingUnits++;
-                           }
-                        }
-                     }
-                  }
+                  for(int x=0;x<MAPX;x++) for(int y=0;y<MAPY;y++) for(int z=0;z<MAPZ;z++)
+                     if(levelmap[x][y][z].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT))
+                        existingUnits++;
 
                   //PLACE UNITS
-                  int lx,ly,lz;
-                  int unitnum=7-existingUnits;
+                  int lx,ly,lz,unitnum=7-existingUnits,count=10000;
                   if(unitnum<0)unitnum=0;
 
-                  int count=10000;
                   for(int t=0;t<unitnum;t++)
                   {
                      count=10000;
                      do
                      {
-                        lx=LCSrandom(7)+(MAPX/2)-3;
-                        ly=LCSrandom(5);
-                        lz=0;
-                        count--;
-                        if(count==0)break;
+                        lx=LCSrandom(7)+(MAPX/2)-3,ly=LCSrandom(5),lz=0,count--;
+                        if(count==0) break;
                      }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
                            (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
                      levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_UNIT;
                   }
 
-                  if(!(location[cursite]->compound_walls & COMPOUND_TANKTRAPS)&&
+                  if(!(location[cursite]->compound_walls&COMPOUND_TANKTRAPS)&&
                      location[cursite]->siege.siegetype==SIEGE_POLICE&&
                      location[cursite]->siege.escalationstate>=2)
                   {
@@ -2367,13 +2223,10 @@ void mode_site(void)
                      {
                         do
                         {
-                           lx=LCSrandom(7)+(MAPX/2)-3;
-                           ly=LCSrandom(5);
-                           lz=0;
-                           count--;
-                           if(count==0)break;
-                        }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
-                              (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
+                           lx=LCSrandom(7)+(MAPX/2)-3,ly=LCSrandom(5),lz=0,count--;
+                           if(count==0) break;
+                        }while((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
+                              (levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
                         levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
                      }
                   }
@@ -2381,26 +2234,20 @@ void mode_site(void)
 
                //CHECK FOR SIEGE UNITS
                   //INCLUDING DAMAGED ONES
-               if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_UNIT)
+               if(levelmap[locx][locy][locz].siegeflag&SIEGEFLAG_UNIT)
                {
                   if(addsiegeencounter(SIEGEFLAG_UNIT))
-                  {
                      levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_UNIT;
-                  }
                }
-               if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
+               if(levelmap[locx][locy][locz].siegeflag&SIEGEFLAG_HEAVYUNIT)
                {
                   if(addsiegeencounter(SIEGEFLAG_HEAVYUNIT))
-                  {
                      levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_HEAVYUNIT;
-                  }
                }
-               if(levelmap[locx][locy][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)
+               if(levelmap[locx][locy][locz].siegeflag&SIEGEFLAG_UNIT_DAMAGED)
                {
                   if(addsiegeencounter(SIEGEFLAG_UNIT_DAMAGED))
-                  {
                      levelmap[locx][locy][locz].siegeflag&=~SIEGEFLAG_UNIT_DAMAGED;
-                  }
                }
 
                //BAIL UPON VICTORY
@@ -2451,9 +2298,7 @@ void mode_site(void)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
                      for(int w=0;w<BODYPARTNUM;w++)
-                     {
                         pool[p]->wound[w]&=~WOUND_BLEEDING;
-                     }
                   }
 
                   //INFORM
@@ -2506,7 +2351,7 @@ void mode_site(void)
                         getkey();
 
                         prepareencounter(sitetype,0);
-                        for(int e=1;e<ENCMAX;e++)encounter[e].exists=0;
+                        for(int e=1;e<ENCMAX;e++) encounter[e].exists=0;
                      }
                      break;
                   case SPECIAL_RESTAURANT_TABLE:
@@ -2626,7 +2471,6 @@ void mode_site(void)
 
                            break;
                         }
-
                      }
                      break;
                   case SPECIAL_APARTMENT_LANDLORD:
@@ -2670,11 +2514,7 @@ void mode_site(void)
                      special_oval_office();
                      break;
                   default:
-                     bool squadmoved = false;
-                     if(olocx != locx || olocy != locy || olocz != locz)
-                     {
-                        squadmoved = true;
-                     }
+                     bool squadmoved=(olocx!=locx||olocy!=locy||olocz!=locz);
 
                      if(squadmoved &&
                         (location[cursite]->type==SITE_RESIDENTIAL_APARTMENT||
@@ -2686,70 +2526,38 @@ void mode_site(void)
 
                      prepareencounter(sitetype,location[cursite]->highsecurity);
 
-                     int numenc = 0;
+                     int numenc=0;
                      for(int e=0;e<ENCMAX;e++)
                      {
-                        if(encounter[e].exists)
-                        {
-                           numenc++;
-                        }
-                        else
-                        {
-                           break;
-                        }
+                        if(encounter[e].exists) numenc++;
+                        else break;
                      }
 
-                     if(encounterwarnings)
-                     {
-                        // show an encounter warning, based on whether the squad moved or not and the size of the encounter
-
+                     if(encounterwarnings&&numenc>0)
+                     {  // show an encounter warning, based on whether the squad moved or not and the size of the encounter
                         clearmessagearea(false);
 
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(16,1);
-                        if(numenc == 1)
+                        if(numenc==1)
                         {
-                           if(squadmoved)
-                           {
-                              addstr("There is someone up ahead.", gamelog);
-                           }
-                           else
-                           {
-                              addstr("There is someone passing by.", gamelog);
-                           }
+                           if(squadmoved) addstr("There is someone up ahead.", gamelog);
+                           else addstr("There is someone passing by.", gamelog);
                         }
-                        else if(numenc <= 3)
+                        else if(numenc<=3)
                         {
-                           if(squadmoved)
-                           {
-                              addstr("There are a few people up ahead.", gamelog);
-                           }
-                           else
-                           {
-                              addstr("There are a few people passing by.", gamelog);
-                           }
+                           if(squadmoved) addstr("There are a few people up ahead.", gamelog);
+                           else addstr("There are a few people passing by.", gamelog);
                         }
-                        else if(numenc <= 6)
+                        else if(numenc<=6)
                         {
-                           if(squadmoved)
-                           {
-                              addstr("There is a group of people up ahead.", gamelog);
-                           }
-                           else
-                           {
-                              addstr("There is a group of people passing by.", gamelog);
-                           }
+                           if(squadmoved) addstr("There is a group of people up ahead.", gamelog);
+                           else addstr("There is a group of people passing by.", gamelog);
                         }
                         else
                         {
-                           if(squadmoved)
-                           {
-                              addstr("There is a crowd of people up ahead.", gamelog);
-                           }
-                           else
-                           {
-                              addstr("There is a crowd of people passing by.", gamelog);
-                           }
+                           if(squadmoved) addstr("There is a crowd of people up ahead.", gamelog);
+                           else addstr("There is a crowd of people passing by.", gamelog);
                         }
                         gamelog.newline();
 
@@ -2762,24 +2570,15 @@ void mode_site(void)
             }
 
             if(!location[cursite]->siege.siege)
-            {
                if((locx!=olocx||locy!=olocy||locz!=olocz)&&!newenc)
-               {
                   //PUT BACK SPECIALS
                   for(int e=0;e<ENCMAX;e++)
-                  {
                      if(encounter[e].exists)
                      {
-                        if(!encounter[e].cantbluff&&
-                           encounter[e].type==CREATURE_LANDLORD)
-                        {
+                        if(!encounter[e].cantbluff&&encounter[e].type==CREATURE_LANDLORD)
                            levelmap[olocx][olocy][olocz].special=SPECIAL_APARTMENT_LANDLORD;
-                        }
                         encounter[e].exists=0;
                      }
-                  }
-               }
-            }
 
             if(locx!=olocx||locy!=olocy||locz!=olocz)
             {
@@ -2787,16 +2586,13 @@ void mode_site(void)
                delete_and_clear(groundloot);
 
                //MOVE BLOOD
-               if(levelmap[olocx][olocy][olocz].flag & SITEBLOCK_BLOODY2)
-               {
+               if(levelmap[olocx][olocy][olocz].flag&SITEBLOCK_BLOODY2)
                   levelmap[locx][locy][locz].flag|=SITEBLOCK_BLOODY;
-               }
             }
 
             knowmap(locx,locy,locz);
          }
       }
-
    }while(1);
 }
 
@@ -2805,11 +2601,10 @@ void mode_site(void)
 /* site - determines spin on site news story, "too hot" timer */
 void resolvesite(void)
 {
-   if(sitealienate)sitestory->positive=0;
+   if(sitealienate) sitestory->positive=0;
 //removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably
 //notice later on that all their stuff has been stolen or whatever.
-   if(//sitealarm==1&&
-      sitecrime>5+LCSrandom(95))//was 100 but that meant I could still steal everything from a building every day without anyone caring...
+   if(/*sitealarm==1&&*/sitecrime>5+LCSrandom(95))//was 100 but that meant I could still steal everything from a building every day without anyone caring...
    {
       if(location[cursite]->renting==RENTING_NOCONTROL)
       {
@@ -2821,11 +2616,7 @@ void resolvesite(void)
             location[cursite]->closed=0;
             location[cursite]->heat=100;
          }
-         else
-         {
-            // Close down site
-            location[cursite]->closed=sitecrime/10;
-         }
+         else location[cursite]->closed=sitecrime/10; // Close down site
       }
 
       // Out sleepers
@@ -2833,10 +2624,10 @@ void resolvesite(void)
       {
          for(int p=0;p<(int)pool.size();p++)
          {
-            if(pool[p]->flag & CREATUREFLAG_SLEEPER &&
-               pool[p]->location == cursite)
+            if(pool[p]->flag&CREATUREFLAG_SLEEPER &&
+               pool[p]->location==cursite)
             {
-               pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+               pool[p]->flag&=~CREATUREFLAG_SLEEPER;
                erase();
                move(8,1);
                addstr("Sleeper ", gamelog);
@@ -2856,19 +2647,17 @@ void resolvesite(void)
          }
       }
    }
-   else if(sitecrime>10&&
-      (location[cursite]->renting==RENTING_NOCONTROL || location[cursite]->renting > 500))
+   else if(sitecrime>10&&(location[cursite]->renting==RENTING_NOCONTROL||location[cursite]->renting>500))
    {
-      if(!(location[cursite]->type==SITE_RESIDENTIAL_BOMBSHELTER)&&
-         !(location[cursite]->type==SITE_BUSINESS_BARANDGRILL)&&
-         !(location[cursite]->type==SITE_OUTDOOR_BUNKER)&&
-         !(location[cursite]->type==SITE_INDUSTRY_WAREHOUSE)&&
-         !(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE))
+      if(location[cursite]->type!=SITE_RESIDENTIAL_BOMBSHELTER&&
+         location[cursite]->type!=SITE_BUSINESS_BARANDGRILL&&
+         location[cursite]->type!=SITE_OUTDOOR_BUNKER&&
+         location[cursite]->type!=SITE_INDUSTRY_WAREHOUSE&&
+         location[cursite]->type!=SITE_BUSINESS_CRACKHOUSE)
       {
          if(securityable(location[cursite]->type))
             location[cursite]->highsecurity=sitecrime;
-         else
-            location[cursite]->closed=7;
+         else location[cursite]->closed=7;
       }
    }
 }
@@ -2876,11 +2665,11 @@ void resolvesite(void)
 /* behavior when the player bumps into a door in sitemode */
 void open_door(bool restricted)
 {
-   bool locked = levelmap[locx][locy][locz].flag & SITEBLOCK_LOCKED;
-   bool alarmed = levelmap[locx][locy][locz].flag & SITEBLOCK_ALARMED;
-   bool vault_door = levelmap[locx][locy][locz].flag & SITEBLOCK_METAL;
-   //bool known_locked = levelmap[locx][locy][locz].flag & SITEBLOCK_KLOCK;
-   bool cant_unlock = levelmap[locx][locy][locz].flag & SITEBLOCK_CLOCK;
+   bool locked=levelmap[locx][locy][locz].flag&SITEBLOCK_LOCKED,
+        alarmed=levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED,
+        vault_door=levelmap[locx][locy][locz].flag&SITEBLOCK_METAL,
+   //   known_locked=levelmap[locx][locy][locz].flag&SITEBLOCK_KLOCK,
+        cant_unlock=levelmap[locx][locy][locz].flag&SITEBLOCK_CLOCK;
 
    if(vault_door)
    {
@@ -2959,8 +2748,7 @@ void open_door(bool restricted)
             if(unlock(UNLOCK_DOOR,actual))
             {
                // Unlock the door
-               levelmap[locx][locy][locz].flag&=~SITEBLOCK_LOCKED;
-               levelmap[locx][locy][locz].flag&=~SITEBLOCK_ALARMED;
+               levelmap[locx][locy][locz].flag&=~(SITEBLOCK_LOCKED|SITEBLOCK_ALARMED);
                sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
                //criminalizeparty(LAWFLAG_BREAKING);
             }
@@ -3003,7 +2791,7 @@ void open_door(bool restricted)
          if(locked)
          {
             addstr("You shake the handle but it is ", gamelog);
-            if(has_security==true)addstr("still ", gamelog);
+            if(has_security) addstr("still ", gamelog);
             addstr("locked.", gamelog);
          }
          else addstr("It's locked from the other side.",gamelog);
