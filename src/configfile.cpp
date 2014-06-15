@@ -7,24 +7,21 @@
 extern char artdir[MAX_PATH_SIZE];
 
 
-std::ifstream* openFile(const char* filename, std::ios_base::openmode format)
+std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
    std::ifstream *file = new std::ifstream();
    addstr("Attempting to open filename: ");
    addstr(filename);
    addstr(" ");
 
-   char extendedfilename[MAX_PATH_SIZE];
-   strcpy(extendedfilename,artdir);
-   strcat(extendedfilename,filename);
-   file->open(extendedfilename, format);
+   file->open((artdir+filename).c_str(), format);
 
    return file;
 }
 
 // Reads in an entire configuration file
 // Returns true for read successful, returns false if failed read
-int readConfigFile(const char* filename)
+int readConfigFile(const std::string& filename)
 {
    std::string command, value;
    configurable* object = 0;
@@ -220,7 +217,7 @@ void readMapCBTiles(int x, int y, int z, int i)
    }
 }
 
-bool readMapFile(const char* filename, const int zLevel, void (*callback)(int,int,int,int))
+bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,int,int,int))
 {
    int x, y, z, i, j;
 
@@ -268,7 +265,7 @@ bool readMapFile(const char* filename, const int zLevel, void (*callback)(int,in
    return true;
 }
 
-bool readMap(const char* filename)
+bool readMap(const std::string& filename)
 {
    std::string prefix = std::string("mapCSV_");
 
@@ -285,16 +282,16 @@ bool readMap(const char* filename)
    }
 
    // Try first floor (eg "mapCSV_Bank_Tiles.csv"), abort this method if it doesn't exist
-   if(!readMapFile((prefix+filename+"_Tiles.csv").c_str(), 0, readMapCBTiles)) return false;
-   if(!readMapFile((prefix+filename+"_Specials.csv").c_str(), 0, readMapCBSpecials)) return false;
+   if(!readMapFile(prefix+filename+"_Tiles.csv", 0, readMapCBTiles)) return false;
+   if(!readMapFile(prefix+filename+"_Specials.csv", 0, readMapCBSpecials)) return false;
 
    // Try upper levels (eg "mapCSV_Bank2_Tiles.csv"), but don't sweat it if they don't exist
    for(z=1; z<MAPZ; z++)
    {
       char str[3];
       itoa(z+1, str, 10);
-      if(!readMapFile((prefix+filename+str+"_Tiles.csv").c_str(), z, readMapCBTiles)) break;
-      if(!readMapFile((prefix+filename+str+"_Specials.csv").c_str(), z, readMapCBSpecials)) break;
+      if(!readMapFile(prefix+filename+str+"_Tiles.csv", z, readMapCBTiles)) break;
+      if(!readMapFile(prefix+filename+str+"_Specials.csv", z, readMapCBSpecials)) break;
    }
 
    return true;

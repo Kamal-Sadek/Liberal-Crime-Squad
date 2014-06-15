@@ -371,7 +371,7 @@ void special_lab_cosmetics_cagedanimals(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -558,7 +558,7 @@ void special_nuclear_onoff(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -641,7 +641,7 @@ void special_lab_genetic_cagedanimals(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -707,7 +707,7 @@ void special_policestation_lockup(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -773,7 +773,7 @@ void special_courthouse_lockup(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -932,7 +932,7 @@ void special_courthouse_jury(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1022,7 +1022,7 @@ void special_prison_control(short prison_control_type)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1114,7 +1114,7 @@ void special_intel_supercomputer(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1210,7 +1210,7 @@ void special_sweatshop_equipment(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1252,7 +1252,7 @@ void special_polluter_equipment(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1440,7 +1440,7 @@ void special_house_photos(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1654,7 +1654,7 @@ void special_armory(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1717,7 +1717,7 @@ void special_corporate_files(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1761,7 +1761,7 @@ void special_radio_broadcaststudio(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1804,7 +1804,7 @@ void special_news_broadcaststudio(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 
@@ -1842,7 +1842,7 @@ void special_display_case(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 void spawn_security(void)
@@ -2358,7 +2358,7 @@ void special_bank_vault(void)
       }
       else if(c=='n')return;
 
-   }while(1);
+   }while(true);
 }
 
 void special_bank_teller(void)

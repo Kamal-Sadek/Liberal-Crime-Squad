@@ -175,14 +175,13 @@ int choosespecialedition(char &clearformess)
 
       int x=1,y=10;
       char str[200];
-      //char str2[200];
 
       for(int l=page*18;l<(int)loottypeindex.size()&&l<page*18+18;l++)
       {
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,loottype[loottypeindex[l]]->get_name().c_str());
+         strcat(str,loottype[loottypeindex[l]]->get_name());
 
          move(y,x);
          addstr(str);
@@ -268,7 +267,7 @@ int choosespecialedition(char &clearformess)
       //PAGE DOWN
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loottype.size())page++;
 
-   }while(1);
+   }while(true);
 
    return -1;
 }

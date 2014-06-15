@@ -103,7 +103,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
       attributes_[i].set_interval(1, 10);
 
    id_ = number_of_creaturetypes++;
-   
+
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
@@ -115,7 +115,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
       xmllog.log("Creature type " + tostring(id_) + " lacks idname.");
    }
    type_ = creaturetype_string_to_enum(idname_);
-   
+
    xml.IntoElem();
    // Loop over all the elements inside the creaturetype element.
    while (xml.FindElem())
@@ -248,7 +248,7 @@ void CreatureType::make_creature(Creature& cr) const
    cr.gender_liberal = cr.gender_conservative = roll_gender();
    cr.infiltration = roll_infiltration();
    cr.money = money_.roll();
-   strcpy(cr.name, get_encounter_name().c_str());
+   strcpy(cr.name, get_encounter_name());
    for (int i = 0; i < SKILLNUM; i++)
       cr.set_skill(i, skills_[i].roll());
 

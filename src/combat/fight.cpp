@@ -512,7 +512,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          a.ready_another_throwing_weapon();
          strcpy(str,a.name);
          strcat(str," readies another ");
-         strcat(str,a.get_weapon().get_name().c_str());
+         strcat(str,a.get_weapon().get_name());
          strcat(str,".");
       }
       move(16,1);
@@ -590,7 +590,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
       if(!sneak_attack)
       {
-         strcat(str,attack_used->attack_description.c_str());
+         strcat(str,attack_used->attack_description);
          sitealarm=1;
       }
    }
@@ -605,7 +605,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    if(a.is_armed() && !attack_used->thrown)
    {
       strcat(str," with a ");
-      strcat(str,a.get_weapon().get_name(1).c_str());
+      strcat(str,a.get_weapon().get_name(1));
       //strcat(str," and ");
    }
    else
@@ -832,7 +832,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcat(str,", ");
          if(!a.is_armed()) //Move into WEAPON_NONE? -XML
             strcat(str,"striking");
-         else strcat(str,attack_used->hit_description.c_str());
+         else strcat(str,attack_used->hit_description);
 
          switch(bursthits)
          {
@@ -841,13 +841,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 3: strcat(str," three times"); break;
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
-         default: strcat(str,(" "+tostring(bursthits)+" times").c_str()); break;
+         default: strcat(str," "+tostring(bursthits)+" times"); break;
          }
       }
       else if(attack_used->always_describe_hit)
       {
          strcat(str,", ");
-         strcat(str,attack_used->hit_description.c_str());
+         strcat(str,attack_used->hit_description);
       }
 
       char damtype=0;
@@ -1096,7 +1096,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                strcat(str," BLOWING IT APART!");
             else if(w==BODYPART_BODY && target->wound[BODYPART_BODY] & WOUND_NASTYOFF)
                strcat(str," BLOWING IT IN HALF!");
-            else strcat(str,attack_used->hit_punctuation.c_str());
+            else strcat(str,attack_used->hit_punctuation);
             move(17,1);
             //set_color(COLOR_WHITE,COLOR_BLACK,1);
             if(goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -1121,7 +1121,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if(target->wound[w] & WOUND_CLEANOFF) strcat(str," CUTTING IT OFF!");
             else if(target->wound[w] & WOUND_NASTYOFF) strcat(str," BLOWING IT OFF!");
-            else strcat(str,attack_used->hit_punctuation.c_str());
+            else strcat(str,attack_used->hit_punctuation);
 
             if(target->wound[w] & WOUND_NASTYOFF) bloodblast(&target->get_armor());
 
@@ -1926,7 +1926,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
                case 1:strcat(str,"sings to");break;
                case 2:strcat(str,"strums the ");
                       if(a.get_weapon().has_musical_attack())
-                         strcat(str,a.get_weapon().get_name().c_str());
+                         strcat(str,a.get_weapon().get_name());
                       else // let's use a small enough instrument for anyone to carry in their pocket
                          strcat(str,"harmonica");
                       strcat(str," at");break;
@@ -2107,7 +2107,7 @@ void severloot(Creature &cr,vector<Item *> &loot)
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       move(16,1);
       addstr("The ", gamelog);
-      addstr(cr.get_weapon().get_name(1).c_str(), gamelog);
+      addstr(cr.get_weapon().get_name(1), gamelog);
       addstr(" slips from", gamelog);
       move(17,1);
       addstr(cr.name, gamelog);
@@ -2131,7 +2131,7 @@ void severloot(Creature &cr,vector<Item *> &loot)
       move(16,1);
       addstr(cr.name, gamelog);
       addstr("'s ", gamelog);
-      addstr(cr.get_armor().get_name().c_str(), gamelog);
+      addstr(cr.get_armor().get_name(), gamelog);
       addstr(" has been destroyed.", gamelog);
       gamelog.newline();
 

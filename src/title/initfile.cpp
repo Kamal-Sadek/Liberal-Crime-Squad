@@ -19,8 +19,8 @@ This file is part of Liberal Crime Squad.
 
 */
 #include "lcsio.h"
-#include "externs.h"
-#include "includes.h"
+#include "externs.h" /* include this prior to checking if WIN32 is defined */
+//#include "includes.h"
 #ifdef WIN32
 #include <windows.h>
 #endif

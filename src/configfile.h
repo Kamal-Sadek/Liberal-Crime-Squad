@@ -6,7 +6,7 @@
 //   INCLUDING EQUIPMENT, LOCATIONS, MAPS, CREATURES,
 //   AND ANY ADDITIONAL SYSTEMS THAT WOULD BENEFIT FROM
 //   THIS APPROACH
-// 
+//
 // CONFIG FILE FORMAT
 //
 // (newline) (leading whitespace) COMMAND (delimiting whitespace) VALUE
@@ -89,13 +89,13 @@ private:
 
 // Reads in an entire configuration file
 // Returns 0 for read successful, returns -1 if failed read
-int readConfigFile(const char* filename);
+int readConfigFile(const std::string& filename);
 // readLine reads a line from the file, parses it
 int readLine(std::ifstream& file, std::string& command, std::string& value);
 // Constructs the new object, returns a pointer to it
 configurable* createObject(const std::string& objectType);
 
 // Reads in an entire map; returns true if and only if the read was successful
-bool readMap(const char* filename);
+bool readMap(const std::string& filename);
 
 #endif

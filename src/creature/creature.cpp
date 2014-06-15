@@ -539,9 +539,9 @@ Creature::Creature(const char* inputXml)
          }
       }
       else if (tag == "name")
-         strcpy(name,xml.GetData().c_str());
+         strcpy(name,xml.GetData());
       else if (tag == "propername")
-         strcpy(propername,xml.GetData().c_str());
+         strcpy(propername,xml.GetData());
       else if (tag == "gender_conservative")
          gender_conservative = atoi(xml.GetData().c_str());
       else if (tag == "gender_liberal")
@@ -969,21 +969,15 @@ int Creature::attribute_roll(int attribute) const
 {
    int return_value = roll_check(get_attribute(attribute,true));
    #ifdef SHOWMECHANICS
-   {
-      move(8,1);
-      char str[10];
-      addstr(" AttributeRoll(");
-      addstr(Attribute::get_name(attribute).c_str());
-      addstr(", Attribute Level ");
-      itoa(get_attribute(attribute,true),str,10);
-      addstr(str);
-      addstr(", Outcome of ");
-      itoa(return_value,str,10);
-      addstr(str);
-      addstr(")");
+   mvaddstr(8,1," AttributeRoll(");
+   addstr(Attribute::get_name(attribute));
+   addstr(", Attribute Level ");
+   addstr(get_attribute(attribute,true));
+   addstr(", Outcome of ");
+   addstr(return_value);
+   addstr(")");
 
-      getkey();
-   }
+   getkey();
    #endif
    // Roll on the attribute value
    return return_value;
@@ -992,22 +986,17 @@ int Creature::attribute_roll(int attribute) const
 bool Creature::attribute_check(int attribute, int difficulty) const
 {
    #ifdef SHOWMECHANICS
+   mvaddstr(8,1," AttributeCheck(");
+   addstr(Attribute::get_name(attribute));
+   if(difficulty<21)
    {
-      move(8,1);
-      char str[10];
-      addstr(" AttributeCheck(");
-      addstr(Attribute::get_name(attribute).c_str());
-      if(difficulty<21)
-      {
-         addstr(", Difficulty ");
-         itoa(difficulty,str,10);
-         addstr(str);
-      }
-      else addstr(", IMPOSSIBLE");
-      addstr(")");
-
-      getkey();
+      addstr(", Difficulty ");
+      addstr(difficulty);
    }
+   else addstr(", IMPOSSIBLE");
+   addstr(")");
+
+   getkey();
    #endif
    return(attribute_roll(attribute) >= difficulty);
 }
@@ -1092,24 +1081,19 @@ int Creature::skill_roll(int skill) const
       }
    }
    #ifdef SHOWMECHANICS
-   move(8,1);
-   char str[10];
-   addstr(" SkillRoll(");
-   addstr(Skill::get_name(skill).c_str());
+   mvaddstr(8,1," SkillRoll(");
+   addstr(Skill::get_name(skill));
    addstr(", Skill Value ");
-   itoa(skills[skill].value,str,10);
-   addstr(str);
+   addstr(skills[skill].value);
    addstr(", ");
    if(return_value==0)
       addstr("automatic failure");
    else
    {
       addstr("Adjusted Attribute Value ");
-      itoa(adjusted_attribute_value,str,10);
-      addstr(str);
+      addstr(adjusted_attribute_value);
       addstr(", Outcome of ");
-      itoa(return_value,str,10);
-      addstr(str);
+      addstr(return_value);
    }
    addstr(")");
 
@@ -1121,15 +1105,12 @@ int Creature::skill_roll(int skill) const
 bool Creature::skill_check(int skill, int difficulty) const
 {
    #ifdef SHOWMECHANICS
-   move(8,1);
-   char str[10];
-   addstr(" SkillCheck(");
-   addstr(Skill::get_name(skill).c_str());
+   mvaddstr(8,1," SkillCheck(");
+   addstr(Skill::get_name(skill));
    if(difficulty<21)
    {
       addstr(", Difficulty ");
-      itoa(difficulty,str,10);
-      addstr(str);
+      addstr(difficulty);
    }
    else addstr(", IMPOSSIBLE");
    addstr(")");
@@ -1370,7 +1351,7 @@ void UniqueCreatures::newPresident()
    Pres_ID=Pres_.id,Pres_state=UNIQUECREATURE_ALIVE,Pres_.dontname=true;
    //Turn into President (not just random pol)
    std::string pres_name=execname[EXEC_PRESIDENT];
-   strcpy(Pres_.name,("President "+pres_name.substr(pres_name.find(' ')+1)).c_str());
+   strcpy(Pres_.name,"President "+pres_name.substr(pres_name.find(' ')+1));
    strcpy(Pres_.propername,execname[EXEC_PRESIDENT]);
    switch(exec[EXEC_PRESIDENT])
    { // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary

@@ -144,7 +144,7 @@ void equip(vector<Item *> &loot,int loc)
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,s.c_str());
+         strcat(str,s);
 
          move(y,x);
          addstr(str);
@@ -425,7 +425,6 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
 
       int x=1,y=10;
       char str[200];
-      //char str2[200];
 
       for(int l=page*18;l<(int)source.size()&&l<page*18+18;l++)
       {
@@ -445,7 +444,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,s.c_str());
+         strcat(str,s);
 
          move(y,x);
          addstr(str);
@@ -534,7 +533,7 @@ void equipmentbaseassign(void)
       temploc.push_back(l);
    if(temploc.size()==0) return;
 
-   do
+   while(true)
    {
       erase();
 
@@ -549,13 +548,12 @@ void equipmentbaseassign(void)
       addstr("NEW LOCATION");
 
       int y=2;
-      //char str[80];
       for(p=page_loot*19;p<(int)temploot.size()&&p<page_loot*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
-         addstr(temploot[p]->equip_title().c_str());
+         addchar(y+'A'-2);addstr(" - ");
+         addstr(temploot[p]->equip_title());
 
          mvaddstr(y,25,temploot2[temploot[p]]->getname(true,true));
       }
@@ -566,7 +564,7 @@ void equipmentbaseassign(void)
          if(p==selectedbase)set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,51);
-         addch(y+'1'-2);addstr(" - ");
+         addchar(y+'1'-2);addstr(" - ");
          addstr(location[temploc[p]]->getname(true,true));
       }
 
@@ -660,8 +658,8 @@ void equipmentbaseassign(void)
          }
       }
 
-      if(c==10||c==ESC) break;
-   } while(true);
+      if(c==ENTER||c==ESC) break;
+   }
 }
 
 

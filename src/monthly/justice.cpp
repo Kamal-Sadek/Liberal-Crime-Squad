@@ -677,7 +677,7 @@ void trial(Creature &g)
          char str[20];
          itoa(jury,str,10);
          addstr(" (");
-         if(str[0]!='-')addch('+');
+         if(str[0]!='-')addchar('+');
 
          addstr(str);
          addstr(" to convict)");

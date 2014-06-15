@@ -33,12 +33,12 @@ void law::addlawtext(bool gameover)
    if(gameover)
    {
       set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
-      addstr(defeat_lawtext.c_str());
+      addstr(defeat_lawtext);
    }
    else
    {
       set_alignment_color(alignment,true);
-      addstr(lawtext[alignment+2].c_str()); // Alignment starts at -2, array starts at 0
+      addstr(lawtext[alignment+2]); // Alignment starts at -2, array starts at 0
    }
 }
 

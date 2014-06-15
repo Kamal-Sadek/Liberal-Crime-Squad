@@ -1,6 +1,6 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
-#include "includes.h"
+#include "includes.h" /* include this prior to checking if WIN32 is defined */
 #include "sitemode/sitemap.h"
 
 extern CursesMoviest movie;

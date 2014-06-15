@@ -256,7 +256,7 @@ void repairarmor(Creature &cr,char &clearformess)
       else addstr(" cleans ", gamelog);
       //char str[80];
 
-      addstr(armor->get_name().c_str(), gamelog);
+      addstr(armor->get_name(), gamelog);
       addstr(".", gamelog);
       gamelog.nextMessage();
 
@@ -382,7 +382,7 @@ void makearmor(Creature &cr,char &clearformess)
          }
          else addstr(" wasted the materials for a", gamelog);
          addstr(" ", gamelog);
-         addstr(it->get_name().c_str(), gamelog);
+         addstr(it->get_name(), gamelog);
          addstr(".", gamelog);
          gamelog.nextMessage();
 
@@ -1382,7 +1382,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
                   if(w->can_graffiti())
                   {
                      addstr(" grabbed a ", gamelog);
-                     addstr(w->get_name().c_str(), gamelog);
+                     addstr(w->get_name(), gamelog);
                      addstr(" from ", gamelog);
                      addstr(location[graffiti[s]->base]->getname()); //TODO: Explicitly log it, or will the game log it?
                      addstr(".", gamelog);
@@ -1949,7 +1949,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                      move(8,1);
                      addstr(trouble[t]->name, gamelog);
                      addstr(" brandishes the ", gamelog);
-                     addstr(trouble[t]->get_weapon().get_name().c_str(), gamelog);
+                     addstr(trouble[t]->get_weapon().get_name(), gamelog);
                      addstr("!", gamelog);
                      gamelog.nextMessage();
 
@@ -2426,9 +2426,9 @@ char stealcar(Creature &cr,char &clearformess)
          move(11,0);
          addstr(cr.name, gamelog);
          addstr(" was unable to find a ", gamelog);
-         addstr(vehicletype[old]->longname().c_str(), gamelog);
+         addstr(vehicletype[old]->longname(), gamelog);
          addstr(" but did find a ", gamelog);
-         addstr(v->longname().c_str(), gamelog);
+         addstr(v->longname(), gamelog);
          addstr(".", gamelog);
 
          getkey();
@@ -2438,7 +2438,7 @@ char stealcar(Creature &cr,char &clearformess)
          move(11,0);
          addstr(cr.name, gamelog);
          addstr(" found a ", gamelog);
-         addstr(v->longname().c_str(), gamelog);
+         addstr(v->longname(), gamelog);
          addstr(".", gamelog);
 
          getkey();
@@ -2458,7 +2458,7 @@ char stealcar(Creature &cr,char &clearformess)
       move(10,0);
       addstr(cr.name, gamelog);
       addstr(" looks from a distance at an empty ", gamelog);
-      addstr(carname.c_str(), gamelog);
+      addstr(carname, gamelog);
       addstr(".", gamelog);
 
       gamelog.nextMessage();
@@ -2495,7 +2495,7 @@ char stealcar(Creature &cr,char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(10,0);
             if(sensealarm)addstr("THE VIPER");
-            else addstr(carname.c_str());
+            else addstr(carname);
             addstr(":   ");
             set_color(COLOR_RED,COLOR_BLACK,1);
             if(sensealarm)addstr("STAND AWAY FROM THE VEHICLE!   <BEEP!!> <BEEP!!>");
@@ -2516,7 +2516,7 @@ char stealcar(Creature &cr,char &clearformess)
             move(10,0);
             addstr(cr.name, gamelog);
             addstr(" stands by the ", gamelog);
-            addstr(carname.c_str(), gamelog);
+            addstr(carname, gamelog);
             addstr(".", gamelog);
             gamelog.nextMessage();
          }
@@ -2598,7 +2598,7 @@ char stealcar(Creature &cr,char &clearformess)
                if(cr.get_weapon().get_bashstrengthmod()>1)
                {
                   addstr(" with a ", gamelog);
-                  addstr(cr.get_weapon().get_name(2).c_str(), gamelog);
+                  addstr(cr.get_weapon().get_name(2), gamelog);
                }
                addstr(".", gamelog);
                gamelog.nextMessage();
@@ -2617,7 +2617,7 @@ char stealcar(Creature &cr,char &clearformess)
                if(cr.get_weapon().get_bashstrengthmod()>1)
                {
                   addstr(" with a ", gamelog);
-                  addstr(cr.get_weapon().get_name(2).c_str(), gamelog);
+                  addstr(cr.get_weapon().get_name(2), gamelog);
                }
                addstr(" but it is still somewhat intact.", gamelog);
                gamelog.nextMessage();
@@ -2674,7 +2674,7 @@ char stealcar(Creature &cr,char &clearformess)
          }
 
          if(entered)break;
-      }while(1);
+      }while(true);
 
       //START CAR
       char keys_in_car=0;
@@ -2700,7 +2700,7 @@ char stealcar(Creature &cr,char &clearformess)
          move(y,0);y++;
          addstr(cr.name, gamelog);
          addstr(" is behind the wheel of a ", gamelog);
-         addstr(carname.c_str(), gamelog);
+         addstr(carname, gamelog);
          addstr(".", gamelog);
          gamelog.nextMessage();
 
@@ -2709,7 +2709,7 @@ char stealcar(Creature &cr,char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(y,0);y++;
             if(sensealarm)addstr("THE VIPER");
-            else addstr(carname.c_str());
+            else addstr(carname);
             addstr(":   ");
             set_color(COLOR_RED,COLOR_BLACK,1);
             if(sensealarm)addstr("REMOVE YOURSELF FROM THE VEHICLE!   <BEEP!!> <BEEP!!>");
@@ -2739,7 +2739,7 @@ char stealcar(Creature &cr,char &clearformess)
             if(c=='a')break;
             if(c=='b'){method=1;break;}
             if(c=='x'||c==ENTER||c==ESC){delete v;return 0;} // Call it a day and try again tomorrow
-         }while(1);
+         }while(true);
 
          char started=0;
 
@@ -2927,7 +2927,7 @@ char stealcar(Creature &cr,char &clearformess)
          }
 
          if(started)break;
-      }while(1);
+      }while(true);
 
       //CHASE SEQUENCE
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
@@ -3000,8 +3000,8 @@ char carselect(Creature &cr,short &cartype)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
-         addstr(vehicletype[cart[p]]->longname().c_str());
+         addchar(y+'A'-2);addstr(" - ");
+         addstr(vehicletype[cart[p]]->longname());
 
          move(y,49);
          difficulty=vehicletype[cart[p]]->steal_difficultytofind();
@@ -3084,7 +3084,7 @@ char carselect(Creature &cr,short &cartype)
       // (There's no immediate risk in picking a car)
       // - JDS
       //if(c==10)break;
-   }while(1);
+   }while(true);
 
    return 0;
 }

@@ -91,7 +91,7 @@ void kidnapattempt(void)
          }
       }
 
-   }while(1);
+   }while(true);
 
    if(kidnapper>=0)
    {
@@ -114,42 +114,37 @@ void kidnapattempt(void)
 
          if(target.size()>1)
          {
-            do
+            clearcommandarea();
+            clearmessagearea();
+            clearmaparea();
+
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            move(9,1);
+            addstr("Kidnap whom?");
+
+            int x=1,y=11;
+            for(int t2=0;t2<(int)target.size();t2++)
             {
-               clearcommandarea();
-               clearmessagearea();
-               clearmaparea();
+               mvaddchar(y,x,t2+'A');
+               addstr(" - ");
+               addstr(encounter[target[t2]].name);
 
-               set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(9,1);
-               addstr("Kidnap whom?");
+               y++;
+               if(y==17) y=11,x+=30;
+            }
 
-               int x=1,y=11;
-               for(int t2=0;t2<(int)target.size();t2++)
-               {
-                  move(y,x);
-                  addch(t2+'A');
-                  addstr(" - ");
-                  addstr(encounter[target[t2]].name);
-
-                  y++;
-                  if(y==17)
-                  {
-                     y=11;
-                     x+=30;
-                  }
-               }
-
+            while(true)
+            {
                int c=getkey();
 
                if(c>='a'&&c<='z')
                {
                   t=c-'a';
-                  if(t>=(int)target.size())t=-1;
-                  else {t=target[t];}break;
+                  if(t>=(int)target.size()) t=-1;
+                  else { t=target[t]; break; }
                }
-               if(c==10||c==ESC||c==32){t=-1;break;}
-            } while(1);
+               if(c==ENTER||c==ESC||c==SPACEBAR) { t=-1; break; }
+            }
          }
 
          if(t!=-1)
@@ -266,7 +261,7 @@ void releasehostage(void)
          }
       }
 
-   } while(1);
+   } while(true);
 
    activesquad->squad[kidnapper]->prisoner->cantbluff=2;
    freehostage(*(activesquad->squad[kidnapper]), 2);
@@ -361,7 +356,7 @@ char kidnap(Creature &a,Creature &t,char &amateur)
       addstr(" shows ", gamelog);
       addstr(t.name, gamelog);
       addstr(" the ", gamelog);
-      addstr(a.get_weapon().get_name(2).c_str(), gamelog);
+      addstr(a.get_weapon().get_name(2), gamelog);
       addstr(" " , gamelog);
       move(17,1);
       addstr("and says, ", gamelog);

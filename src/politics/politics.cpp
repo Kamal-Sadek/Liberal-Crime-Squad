@@ -293,9 +293,9 @@ void elections(char clearformess,char canseethings)
                itoa(votes[c]/10,num,10);
                addstr(num);
                itoa(votes[c]%10,num,10);
-               addch('.');
+               addchar('.');
                addstr(num);
-               addch('%');
+               addchar('%');
                if(c==winner&&recount)addstr(" (After Recount)");
             }
 
@@ -541,7 +541,7 @@ void elections(char clearformess,char canseethings)
             move(p*3+2,70);
             itoa(yesvotes/10,num,10);
             addstr(num);
-            addch('.');
+            addchar('.');
             itoa(yesvotes%10,num,10);
             addstr(num);
             addstr("% Yes");
@@ -552,7 +552,7 @@ void elections(char clearformess,char canseethings)
             move(p*3+3,70);
             itoa((l+1-yesvotes)/10,num,10);
             addstr(num);
-            addch('.');
+            addchar('.');
             itoa((l+1-yesvotes)%10,num,10);
             addstr(num);
             addstr("% No");

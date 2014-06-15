@@ -63,8 +63,6 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
-
-
 bool show_disbanding_screen(int& oldforcemonth)
 {
    if(oldforcemonth==month) return true;
@@ -72,19 +70,15 @@ bool show_disbanding_screen(int& oldforcemonth)
    for(int p=pool.size()-1;p>=0;p--)
    {
       int targetjuice=LCSrandom(100*(year-disbandtime+1));
-      if(targetjuice>1000||targetjuice<0) targetjuice=1000; // checking for targetjuice<0 checks for int overflow (meaning a REALLY big number)
+      if(targetjuice>1000) targetjuice=1000;
       if(pool[p]->juice<targetjuice&&pool[p]->hireid!=-1&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
          pool[p]->alive=0; // Kill for the purposes of disbanding all contacts below
    }
    oldforcemonth=month;
    erase();
-   move(0,0);
-   char num[20];
-   itoa(year,num,10);
    set_color(COLOR_WHITE,COLOR_BLACK,1);
-   addstr(getmonth(month));
-   addstr(" ");
-   addstr(num);
+   mvaddstr(0,0,getmonth(month)+" ");
+   addstr(year);
 
    signed char align=exec[EXEC_PRESIDENT];
    set_alignment_color(align,true);
@@ -109,18 +103,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else if(housemake[4]<218) align=ALIGN_LIBERAL;
    else align=ALIGN_ELITELIBERAL;
    set_alignment_color(align,true);
-   move(2,0);
-   addstr("House: ");
-   itoa(housemake[4],num,10);
-   addstr(num);addstr("Lib+, ");
-   itoa(housemake[3],num,10);
-   addstr(num);addstr("Lib, ");
-   itoa(housemake[2],num,10);
-   addstr(num);addstr("Mod, ");
-   itoa(housemake[1],num,10);
-   addstr(num);addstr("Cons, ");
-   itoa(housemake[0],num,10);
-   addstr(num);addstr("Cons+");
+   mvaddstr(2,0,"House: ");
+   addstr(tostring(housemake[4])+"Lib+, ");
+   addstr(tostring(housemake[3])+"Lib, ");
+   addstr(tostring(housemake[2])+"Mod, ");
+   addstr(tostring(housemake[1])+"Cons, ");
+   addstr(tostring(housemake[0])+"Cons+");
 
    int senatemake[5]={0,0,0,0,0};
    for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
@@ -132,18 +120,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_ELITELIBERAL;
    set_alignment_color(align,true);
    senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
-   move(3,0);
-   addstr("Senate: ");
-   itoa(senatemake[4],num,10);
-   addstr(num);addstr("Lib+, ");
-   itoa(senatemake[3],num,10);
-   addstr(num);addstr("Lib, ");
-   itoa(senatemake[2],num,10);
-   addstr(num);addstr("Mod, ");
-   itoa(senatemake[1],num,10);
-   addstr(num);addstr("Cons, ");
-   itoa(senatemake[0],num,10);
-   addstr(num);addstr("Cons+");
+   mvaddstr(3,0,"Senate: ");
+   addstr(tostring(senatemake[4])+"Lib+, ");
+   addstr(tostring(senatemake[3])+"Lib, ");
+   addstr(tostring(senatemake[2])+"Mod, ");
+   addstr(tostring(senatemake[1])+"Cons, ");
+   addstr(tostring(senatemake[0])+"Cons+");
 
    int courtmake[5]={0,0,0,0,0};
    for(int s=0;s<9;s++) courtmake[court[s]+2]++;
@@ -154,25 +136,19 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_ELITELIBERAL;
    set_alignment_color(align,true);
    mvaddstr(4,0,"Supreme Court: ");
-   itoa(courtmake[4],num,10);
-   addstr(num);addstr("Lib+, ");
-   itoa(courtmake[3],num,10);
-   addstr(num);addstr("Lib, ");
-   itoa(courtmake[2],num,10);
-   addstr(num);addstr("Mod, ");
-   itoa(courtmake[1],num,10);
-   addstr(num);addstr("Cons, ");
-   itoa(courtmake[0],num,10);
-   addstr(num);addstr("Cons+");
+   addstr(tostring(courtmake[4])+"Lib+, ");
+   addstr(tostring(courtmake[3])+"Lib, ");
+   addstr(tostring(courtmake[2])+"Mod, ");
+   addstr(tostring(courtmake[1])+"Cons, ");
+   addstr(tostring(courtmake[0])+"Cons+");
 
    for(int l=0;l<LAWNUM;l++)
    {
       align=law[l];
       set_alignment_color(align,true);
-      move(6+l/3,l%3*30);
       char str[40];
       getlaw(str,l);
-      addstr(str);
+      mvaddstr(6+l/3,l%3*30,str);
    }
 
    int mood=0; // the mood position from 1 to 78 (left=left-wing, right=right=wing)
@@ -200,12 +176,11 @@ bool show_disbanding_screen(int& oldforcemonth)
    set_color(COLOR_RED,COLOR_BLACK,1);
    mvaddstr(22,64,"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\x10");
    set_alignment_color(align,true);
-   mvaddstr(22,mood,"O");
+   mvaddchar(22,mood,'O');
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    mvaddstr(23,0,"R - Recreate the Liberal Crime Squad                  Any Other Key - Next Month");
 
-   if(getkey()=='r') return false;
-   else return true;
+   return(getkey()!='r');
 }
 
 enum CantSeeReason
@@ -219,19 +194,17 @@ enum CantSeeReason
 void mode_base(void)
 {
    char forcewait,canseethings;
-   int nonsighttime=0;
-   int oldforcemonth=month;
+   int nonsighttime=0,oldforcemonth=month,length=0,l=0;
 
-   int length=0;
-
-   int l = 0;
-
-   do
+   while(true)
    {
-      forcewait=1;
-      canseethings=0;
-      cantseereason=CANTSEE_OTHER;
-      if(!disbanding)
+      forcewait=1,canseethings=0,cantseereason=CANTSEE_OTHER;
+      if(disbanding)
+      {
+         cantseereason=CANTSEE_DISBANDING;
+         disbanding=show_disbanding_screen(oldforcemonth);
+      }
+      else
       {
          for(int p=0;p<(int)pool.size();p++)
          {
@@ -244,7 +217,7 @@ void mode_base(void)
                if(!location[pool[p]->location]->part_of_justice_system())
                {
                   canseethings=1;
-                  if(pool[p]->clinic==0){forcewait=0;break;}
+                  if(pool[p]->clinic==0) { forcewait=0; break; }
                }
             }
             else
@@ -254,15 +227,6 @@ void mode_base(void)
             }
          }
       }
-      else
-      {
-         cantseereason=CANTSEE_DISBANDING;
-      }
-
-      if(disbanding)
-      {
-         disbanding = show_disbanding_screen(oldforcemonth);
-      }
 
       if(!forcewait)
       {
@@ -270,31 +234,24 @@ void mode_base(void)
          {
             erase();
             char str[100];
-            if(nonsighttime>=365*16) {
+            if(nonsighttime>=365*16)
                strcpy(str,"How long since you've heard these sounds...  times have changed.");
-            } else if(nonsighttime>=365*8) {
+            else if(nonsighttime>=365*8)
                strcpy(str,"It has been a long time.  A lot must have changed...");
-            } else {
-               strcpy(str,"It sure has been a while.  Things might have changed a bit.");
-            }
+            else strcpy(str,"It sure has been a while.  Things might have changed a bit.");
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(12,39-((strlen(str)-1)>>1));
-            addstr(str, gamelog);
+            mvaddstr(12,39-((strlen(str)-1)>>1),str,gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 
             getkey();
          }
-
          nonsighttime=0;
       }
 
       int partysize=0;
       if(activesquad!=NULL)
       {
-         for(int p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]!=NULL)partysize++;
-         }
+         for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
          if(!partysize)
          {
             delete_and_remove(squad,getsquad(activesquad->id));
@@ -303,23 +260,21 @@ void mode_base(void)
       }
 
       int safenumber=0;
-      for(l=0;l<(int)location.size();l++)if(location[l]->is_lcs_safehouse())safenumber++;
+      for(l=0;l<(int)location.size();l++) if(location[l]->is_lcs_safehouse()) safenumber++;
 
       Location *loc=NULL;
-      if(selectedsiege!=-1)loc = location[selectedsiege];
+      if(selectedsiege!=-1) loc=location[selectedsiege];
       if(activesquad!=NULL && activesquad->squad[0]->location!=-1)
-         loc = location[activesquad->squad[0]->location];
+         loc=location[activesquad->squad[0]->location];
 
       siegest *siege=NULL;
-      if(loc) siege= &loc->siege;
+      if(loc) siege=&loc->siege;
 
-      char sieged=0;
-      char underattack=0;
+      char sieged=0,underattack=0;
       if(siege!=NULL)
       {
          sieged=siege->siege;
-         if(sieged)
-            underattack=siege->underattack;
+         if(sieged) underattack=siege->underattack;
       }
 
       char haveflag=0;
@@ -327,12 +282,10 @@ void mode_base(void)
 
       // Count people at each location
       int* num_present = new int[location.size()];
-      for(int i=0;i<(int)location.size();i++)num_present[i]=0;
+      for(int i=0;i<(int)location.size();i++) num_present[i]=0;
       for(int p=0;p<(int)pool.size();p++)
-      {
-         if(!pool[p]->alive)continue; // Dead people don't count
-         if(pool[p]->align!=1)continue; // Non-liberals don't count
-         if(pool[p]->location==-1)continue; // Vacationers don't count
+      {  // Dead people, non-liberals, and vacationers don't count
+         if(!pool[p]->alive||pool[p]->align!=1||pool[p]->location==-1) continue;
          num_present[pool[p]->location]++;
       }
 
@@ -354,7 +307,7 @@ void mode_base(void)
       {
          erase();
 
-         if(activesquad!=NULL)selectedsiege=-1;
+         if(activesquad!=NULL) selectedsiege=-1;
 
          locheader();
          if(selectedsiege!=-1)
@@ -365,25 +318,23 @@ void mode_base(void)
                !location[selectedsiege]->siege.siege)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,0);
-               move(8,1);
-               addstr("I - Invest in this location");
+               mvaddstr(8,1,"I - Invest in this location");
             }
          }
-         else if(activesquad!=NULL)printparty();
+         else if(activesquad!=NULL) printparty();
          else makedelimiter(8,0);
 
          if(sieged)
          {
-            move(8,1);
             if(underattack)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
-               addstr("Under Attack");
+               mvaddstr(8,1,"Under Attack");
             }
             else
             {
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
-               addstr("Under Siege");
+               mvaddstr(8,1,"Under Siege");
                int stock=1;
                if(loc)stock=loc->compound_stores;
                if(!stock)addstr(" (No Food)");
@@ -400,73 +351,60 @@ void mode_base(void)
                   set_color(COLOR_WHITE,COLOR_BLUE,1);
                   if(p==0) addstr(":.:.:.:.:");
                   else if(p<3) addstr(":::::::::");
-                  else for(int i=0;i<9;i++)addch(CH_LOWER_HALF_BLOCK);
+                  else for(int i=0;i<9;i++) addchar((char)CH_LOWER_HALF_BLOCK);
                   set_color(COLOR_WHITE,COLOR_RED,1);
-                  for(int i=9;i<18;i++)addch(CH_LOWER_HALF_BLOCK);
+                  for(int i=9;i<18;i++) addchar((char)CH_LOWER_HALF_BLOCK);
                }
                else
                {
-                  if(p<6)set_color(COLOR_WHITE,COLOR_RED,1);
+                  if(p<6) set_color(COLOR_WHITE,COLOR_RED,1);
                   else set_color(COLOR_RED,COLOR_BLACK,0);
                   for(int i=0;i<18;i++)
                   {
-                     if(p==6)addch(CH_UPPER_HALF_BLOCK);
-                     else addch(CH_LOWER_HALF_BLOCK);
+                     if(p==6)addchar((char)CH_UPPER_HALF_BLOCK);
+                     else addchar((char)CH_LOWER_HALF_BLOCK);
                   }
                }
             }
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(18,10);
-         addstr("ÄÄÄ ACTIVISM ÄÄÄ");
-         move(18,51);
-         addstr("ÄÄÄ PLANNING ÄÄÄ");
+         mvaddstr(18,10,"ÄÄÄ ACTIVISM ÄÄÄ");
+         mvaddstr(18,51,"ÄÄÄ PLANNING ÄÄÄ");
 
-         if(partysize>0&&!underattack)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(partysize>0&&!underattack) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(19,40);
-         addstr("E - Equip Squad");
-         if(vehicle.size()>0&&partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(19,40,"E - Equip Squad");
+         if(vehicle.size()>0&&partysize>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(19,60);
-         addstr("V - Vehicles");
-         if(pool.size()>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(19,60,"V - Vehicles");
+         if(pool.size()>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(20,40);
-         addstr("R - Review Assets and Form Squads");
+         mvaddstr(20,40,"R - Review Assets and Form Squads");
 
-
-         if(partysize>1)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(partysize>1) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,30);
-         if(partysize>0 && !sieged)
-            addstr("O - Reorder");
+         if(partysize>0&&!sieged) mvaddstr(8,30,"O - Reorder");
 
-         if (activesquad)
+         if(activesquad)
          {
-            move(8,1);
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr(activesquad->name);
-            addstr("Ä"); //in case of overlap, at least make it clear where the name ends.
+            mvaddstr(8,1,activesquad->name);
+            addchar('Ä'); //in case of overlap, at least make it clear where the name ends.
          }
-         if(squad.size()>1||(activesquad==NULL&&squad.size()>0))set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(squad.size()>1||(activesquad==NULL&&squad.size()>0)) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,43);
-         addstr("TAB - Next Squad");
+         mvaddstr(8,43,"TAB - Next Squad");
 
-         if(safenumber>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(safenumber>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(8,62);
-         addstr("Z - Next Location");
+         mvaddstr(8,62,"Z - Next Location");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(21,40);
-         addstr("L - The Status of the Liberal Agenda");
+         mvaddstr(21,40,"L - The Status of the Liberal Agenda");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(21,1);
-         addstr("A - Activate Liberals");
+         mvaddstr(21,1,"A - Activate Liberals");
 
 
          set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -483,21 +421,19 @@ void mode_base(void)
                break;
             }
          }
-         move(21,25);
-         addstr("B - Sleepers");
+         mvaddstr(21,25,"B - Sleepers");
 
          if(partysize>0)
          {
-            if(activesquad->activity.type!=ACTIVITY_NONE)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(activesquad->activity.type!=ACTIVITY_NONE) set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
          }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         move(20,1);
-         addstr("C - Cancel this Squad's Departure");
+         mvaddstr(20,1,"C - Cancel this Squad's Departure");
 
          if(sieged)
          {
-            if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(partysize>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
             else
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -510,239 +446,128 @@ void mode_base(void)
                   }
                }
             }
-            move(19,1);
-            addstr("F - Escape/Engage");
+            mvaddstr(19,1,"F - Escape/Engage");
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(19,23);
-            addstr("G - Give Up");
+            mvaddstr(19,23,"G - Give Up");
          }
          else
          {
             if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(19,1);
-            addstr("F - Go forth to stop EVIL");
+            mvaddstr(19,1,"F - Go forth to stop EVIL");
          }
+
          //if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
          //else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         //move(19,40);
-         //addstr("# - Check the status of a squad Liberal");
+         //mvaddstr(19,40,"# - Check the status of a squad Liberal");
          //if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
          //else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         //move(18,40);
-         //addstr("0 - Show the squad's Liberal status");
+         //mvaddstr(18,40,"0 - Show the squad's Liberal status");
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(23,40);
-         addstr("X - Live to fight EVIL another day");
-         move(23,1);
-         if(cannotwait)
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            addstr("Cannot Wait until Siege Resolved");
-         }
+         mvaddstr(23,40,"X - Live to fight EVIL another day");
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(cannotwait) mvaddstr(23,1,"Cannot Wait until Siege Resolved");
          else
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            if(sieged) addstr("W - Wait out the siege");
-            else addstr("W - Wait a day");
-            if(day==monthday())addstr(" (next month)");
+            if(sieged) mvaddstr(23,1,"W - Wait out the siege");
+            else mvaddstr(23,1,"W - Wait a day");
+            if(day==monthday()) addstr(" (next month)");
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(22,40);
-         addstr("S - FREE SPEECH: the Liberal Slogan");
-         move(22,1);
+         mvaddstr(22,40,"S - FREE SPEECH: the Liberal Slogan");
          if(haveflag)
          {
-
-            if(sieged)
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
-            else
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-            addstr("P - PROTEST: burn the flag");
+            if(sieged) set_color(COLOR_GREEN,COLOR_BLACK,1);
+            else set_color(COLOR_WHITE,COLOR_BLACK,0);
+            mvaddstr(22,1,"P - PROTEST: burn the flag");
          }
          else
          {
-            if(ledger.get_funds()>=20&&!sieged&&
-               (selectedsiege!=-1||activesquad!=NULL))set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(ledger.get_funds()>=20&&!sieged&&(selectedsiege!=-1||activesquad!=NULL))
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
-            addstr("P - PATRIOTISM: fly a flag here ($20)");
+            mvaddstr(22,1,"P - PATRIOTISM: fly a flag here ($20)");
          }
 
          length=strlen(slogan);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         if(haveflag)move(17,40-(length>>1));
-         else move(13,40-(length>>1));
-         addstr(slogan);
+         if(haveflag) mvaddstr(17,40-(length>>1),slogan);
+         else mvaddstr(13,40-(length>>1),slogan);
       }
 
-      int c='w';
-      if(!forcewait)
-         c=getkey();
-
-      if(c=='x')break;
-
-      if(c=='i'&&selectedsiege!=-1)
+      switch(int c=forcewait?'w':getkey())
       {
-         if(location[selectedsiege]->can_be_upgraded()&&
-            !location[selectedsiege]->siege.siege)
-         {
-            investlocation();
-         }
-      }
-
-      if(c=='l')
-      {
-         disbanding=liberalagenda(0);
-      }
-
-      if(c=='g'&&sieged)
-      {
-         giveup();
-         cleangonesquads();
-      }
-
-      if(c=='f')
-      {
-         //NOTE THAT THERE ARE TWO MORE OF THESE
-            //IDENTICAL LINES BELOW
-         if(!sieged&&partysize>0)
-         {
-            stopevil();
-         }
-         else if(underattack)
-         {
-            escape_engage();
-            cleangonesquads();
-         }
-         else if(sieged)
-         {
-            sally_forth();
-            cleangonesquads();
-         }
-      }
-
-      if(c=='o'&&partysize>1)
-      {
-         orderparty();
-      }
-
-      if(c=='c'&&partysize>0)
-      {
-         activesquad->activity.type=ACTIVITY_NONE;
-      }
-
-      if(c=='a')
-      {
-         activate();
-      }
-
-      if(c=='b')
-      {
-         activate_sleepers();
-      }
-
-      if(c==9&&squad.size()>0)
-      {
-         if(activesquad==NULL)activesquad=squad[0];
-         else
-         {
-            for(int sq=0;sq<(int)squad.size();sq++)
+      case 'x': return;
+      case 'i': if(selectedsiege!=-1)
+         if(location[selectedsiege]->can_be_upgraded()&&!location[selectedsiege]->siege.siege)
+            investlocation(); break;
+      case 'l': disbanding=liberalagenda(0); break;
+      case 'g': if(sieged) { giveup(); cleangonesquads(); } break;
+      case 'f': if(!sieged&&partysize>0) stopevil();
+         else if(underattack) { escape_engage(); cleangonesquads(); }
+         else if(sieged) { sally_forth(); cleangonesquads(); } break;
+      case 'o': if(partysize>1) orderparty(); break;
+      case 'c': if(partysize>0) activesquad->activity.type=ACTIVITY_NONE; break;
+      case 'a': activate(); break;
+      case 'b': activate_sleepers(); break;
+      case TAB: if(squad.size()>0) {
+         if(!activesquad) activesquad=squad[0];
+         else for(int sq=0;sq<(int)squad.size();sq++)
+            if(squad[sq]==activesquad)
             {
-               if(squad[sq]==activesquad)
-               {
-                  if(sq==(int)squad.size()-1)activesquad=squad[0];
-                  else activesquad=squad[sq+1];
-                  break;
-               }
-            }
-         }
-      }
-
-      if(c=='z'&&safenumber>0)
-      {
-         activesquad=NULL;
-         int sl;
-         if(selectedsiege==-1)sl=0;
-         else sl=selectedsiege+1;
-
-         if(sl >= (int)location.size()) sl = 0;
-
-         for(int l=sl;l<(int)location.size();l++)
-         {
-            if(location[l]->is_lcs_safehouse())
-            {
-               selectedsiege=l;
+               if(sq==(int)squad.size()-1) activesquad=squad[0];
+               else activesquad=squad[sq+1];
                break;
-            }
-            else if(l==(int)location.size()-1)l=-1;
-         }
-      }
-
-      if(c=='e'&&partysize>0&&!underattack&&activesquad->squad[0]->location!=-1)
-      {
+            } } break;
+      case 'z': if(safenumber>0) {
+         activesquad=NULL;
+         for(int l=(selectedsiege==-1||selectedsiege+1>=(int)location.size())?0:selectedsiege+1;
+             l<(int)location.size();l++)
+            if(location[l]->is_lcs_safehouse()) { selectedsiege=l; break; }
+            else if(l==(int)location.size()-1) l=-1; } break;
+      case 'e': if(partysize>0&&!underattack&&activesquad->squad[0]->location!=-1) {
 		   party_status=-1;
-         equip(location[activesquad->squad[0]->location]->loot,-1);
-      }
-
-      if(c=='r'&&pool.size()>0)review();
-
-      if(c=='w'&&(forcewait||!cannotwait))
-      {
+         equip(location[activesquad->squad[0]->location]->loot,-1); } break;
+      case 'r': if(pool.size()>0) review(); break;
+      case 'w': if(forcewait||!cannotwait) {
          char clearformess=forcewait;
-         if(!canseethings)nonsighttime++;
+         if(!canseethings) nonsighttime++;
          advanceday(clearformess,canseethings);
-         if(day>monthday())passmonth(clearformess,canseethings);
+         if(day>monthday()) passmonth(clearformess,canseethings);
          advancelocations();
          if(forcewait)
          {
             erase();
-            char num[10];
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(7,5);
-            addstr("Time passes...", gamelog);
-            move(9,12);
-            addstr(getmonth(month,true),gamelog);
-            addstr(" ", gamelog);
-            move(9, 17);
-            itoa(day,num,10);
-            addstr(num, gamelog);
-            addstr(", ", gamelog);
-            move(9, 21);
-            itoa(year,num,10);
-            addstr(num, gamelog);
+            mvaddstr(7,5,"Time passes...",gamelog);
+            mvaddstr(9,12,getmonth(month,true)+" ",gamelog);
+            mvaddstr(9,17,tostring(day)+", ",gamelog);
+            mvaddstr(9,21,year,gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();
-         }
-      }
-
-      if(c=='v'&&vehicle.size()>0&&partysize>0)setvehicles();
-
-      if(c=='p'&&haveflag)
-      {
+         } } break;
+      case 'v': if(vehicle.size()>0&&partysize>0) setvehicles(); break;
+      case 'p': if(haveflag) {
          burnflag();
          stat_burns++;
          if(selectedsiege!=-1)
          {
             location[selectedsiege]->haveflag=0;
-            if (law[LAW_FLAGBURNING] < 1) {
-              criminalizepool(LAWFLAG_BURNFLAG,-1,selectedsiege);
-            }
+            if(law[LAW_FLAGBURNING]<1)
+               criminalizepool(LAWFLAG_BURNFLAG,-1,selectedsiege);
          }
-         if(activesquad!=NULL)
+         if(activesquad)
          {
             location[activesquad->squad[0]->base]->haveflag=0;
-            if (law[LAW_FLAGBURNING] < 1) {
-              criminalizepool(LAWFLAG_BURNFLAG,-1,activesquad->squad[0]->base);
-            }
+            if(law[LAW_FLAGBURNING]<1)
+               criminalizepool(LAWFLAG_BURNFLAG,-1,activesquad->squad[0]->base);
          }
-
-         //PUBLICITY IF BURN FLAG DURING SIEGE
-            //ESPECIALLY IF IT IS REALLY ILLEGAL
          if(sieged)
-         {
+         {  //PUBLICITY IF BURN FLAG DURING SIEGE ESPECIALLY IF IT IS REALLY ILLEGAL
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,1);
             change_public_opinion(VIEW_FREESPEECH,1,1,30);
             if(law[LAW_FLAGBURNING]<=0)
@@ -761,26 +586,16 @@ void mode_base(void)
                change_public_opinion(VIEW_FREESPEECH,5,1,90);
             }
          }
-      }
-      else if(c=='p'&&ledger.get_funds()>=20&&!sieged&&loc)
-      {
+      } else if(ledger.get_funds()>=20&&!sieged&&loc) {
          ledger.subtract_funds(20,EXPENSE_COMPOUND);
-         if(loc)loc->haveflag=1;
-         stat_buys++;
+         if(loc) loc->haveflag=1;
+         stat_buys++; } break;
+      case 's': getslogan(); break;
+      case '0': party_status=-1; break;
+      case '1': case '2': case '3': case '4': case '5': case '6':
+         if(activesquad) if(activesquad->squad[c-'1']) {
+         if(party_status==c-'1') fullstatus(party_status);
+         else party_status=c-'1'; } break;
       }
-
-      if(c=='s')getslogan();
-
-      if(c=='0')party_status=-1;
-
-      if(c>='1'&&c<='6'&&activesquad!=NULL)
-      {
-         if(activesquad->squad[c-'1']!=NULL)
-         {
-            if(party_status==c-'1')fullstatus(party_status);
-            else party_status=c-'1';
-         }
-      }
-
-   }while(1);
+   }
 }

@@ -12,6 +12,9 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++98" />
+					<Add option="-pedantic" />
 					<Add option="-m32" />
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
@@ -22,6 +25,9 @@
 					<Add directory="../src/pdcurses" />
 				</Compiler>
 				<Linker>
+					<Add option="-Wall" />
+					<Add option="-std=c++98" />
+					<Add option="-pedantic" />
 					<Add option="-m32" />
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
@@ -37,6 +43,9 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++98" />
+					<Add option="-pedantic" />
 					<Add option="-m32" />
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
@@ -47,6 +56,9 @@
 					<Add directory="../src/pdcurses" />
 				</Compiler>
 				<Linker>
+					<Add option="-Wall" />
+					<Add option="-std=c++98" />
+					<Add option="-pedantic" />
 					<Add option="-m32" />
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
@@ -58,9 +70,6 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-		</Compiler>
 		<Unit filename="../src/basemode/activate.cpp" />
 		<Unit filename="../src/basemode/activate_sleepers.cpp" />
 		<Unit filename="../src/basemode/baseactions.cpp" />

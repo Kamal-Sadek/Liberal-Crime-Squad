@@ -317,73 +317,73 @@ void romannumeral(int amendnum)
    while(amendnum>=1000)
    {
       amendnum-=1000;
-      addch('M');
+      addchar('M');
    }
    if(amendnum>=900)
    {
       amendnum-=900;
-      addch('C');
-      addch('M');
+      addchar('C');
+      addchar('M');
    }
    if(amendnum>=500)
    {
       amendnum-=500;
-      addch('D');
+      addchar('D');
    }
    if(amendnum>=400)
    {
       amendnum-=400;
-      addch('C');
-      addch('D');
+      addchar('C');
+      addchar('D');
    }
    while(amendnum>=100)
    {
       amendnum-=100;
-      addch('C');
+      addchar('C');
    }
    if(amendnum>=90)
    {
       amendnum-=90;
-      addch('X');
-      addch('C');
+      addchar('X');
+      addchar('C');
    }
    if(amendnum>=50)
    {
       amendnum-=50;
-      addch('L');
+      addchar('L');
    }
    if(amendnum>=40)
    {
       amendnum-=40;
-      addch('X');
-      addch('L');
+      addchar('X');
+      addchar('L');
    }
    while(amendnum>=10)
    {
       amendnum-=10;
-      addch('X');
+      addchar('X');
    }
    if(amendnum>=9)
    {
       amendnum-=9;
-      addch('I');
-      addch('X');
+      addchar('I');
+      addchar('X');
    }
    if(amendnum>=5)
    {
       amendnum-=5;
-      addch('V');
+      addchar('V');
    }
    if(amendnum>=4)
    {
       amendnum-=4;
-      addch('I');
-      addch('V');
+      addchar('I');
+      addchar('V');
    }
    while(amendnum>=1)
    {
       amendnum-=1;
-      addch('I');
+      addchar('I');
    }
 }
 

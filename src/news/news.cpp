@@ -1765,14 +1765,14 @@ void displaycenterednewsfont(const char *str,int y)
 #ifdef NCURSES
                // Clean the square first.
                set_color(COLOR_BLACK, COLOR_BLACK, 0);
-               addch(CH_FULL_BLOCK);
+               addchar(CH_FULL_BLOCK);
                move(y+y2,x+x2);
 #endif
 
                if(x2==5)
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addch(CH_FULL_BLOCK);
+                  addchar((char)CH_FULL_BLOCK);
                }
                else
                {
@@ -1793,7 +1793,7 @@ void displaycenterednewsfont(const char *str,int y)
             for(int y2=0;y2<7;y2++)
             {
                move(y+y2,x+x2);
-               addch(CH_FULL_BLOCK);
+               addchar((char)CH_FULL_BLOCK);
             }
          }
          x+=3;
@@ -2028,7 +2028,7 @@ newsstoryst* new_major_event()
       }
 
       break;
-   }while(1);
+   }while(true);
 
    if(ns->positive)change_public_opinion(ns->view,20,0);
    else change_public_opinion(ns->view,-20,0);

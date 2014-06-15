@@ -667,7 +667,7 @@ void mode_site(void)
                }
 
                if(c2==10||c2==ESC)break;
-            }while(1);
+            }while(true);
          }
 
          if((c=='w'||c==KEY_UP)&&locy>0&&(!enemy||!sitealarm||override))
@@ -822,7 +822,7 @@ void mode_site(void)
                         if(activesquad->squad[p]->alive)
                         {
                            move(y,1);
-                           addch(p+'1');
+                           addchar(p+'1');
                            addstr(" - ");
                            addstr(activesquad->squad[p]->name);
                            move(y,50);
@@ -855,7 +855,7 @@ void mode_site(void)
                         }
                      }
                      if(c==10||c==ESC||c==32){sp=-1;break;}
-                  }while(1);
+                  }while(true);
                }
                else sp=forcesp;
 
@@ -882,7 +882,7 @@ void mode_site(void)
                               {
                                  set_color(COLOR_WHITE,COLOR_BLACK,1);
                                  move(y,x);
-                                 addch(t+'A');
+                                 addchar(t+'A');
                                  addstr(" - ");
                                  switch(encounter[t].align)
                                  {
@@ -962,7 +962,7 @@ void mode_site(void)
                            }
                         }
                         if(c==ENTER||c==ESC||c==SPACEBAR){tk=-1;break;}
-                     }while(1);
+                     }while(true);
                   }
                   else tk=forcetk;
 
@@ -1005,64 +1005,69 @@ void mode_site(void)
                      if(x==locx&&y==locy)
                      {
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
-                        addch(CH_WHITE_SMILING_FACE);
+                        addchar(CH_WHITE_SMILING_FACE);
                      }
                      else
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,0);
-                        if(levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)addch(CH_FULL_BLOCK);
-                        else if(levelmap[x][y][locz].flag & SITEBLOCK_DOOR)addch(CH_LIGHT_SHADE);
+                        if(levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)addchar((char)CH_FULL_BLOCK);
+                        else if(levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
+                        {
+                           if(levelmap[x+1][y][locz].flag & SITEBLOCK_BLOCK)
+                              addchar((char)CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
+                           else addchar((char)CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
+                        }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,1);
-                           addch(CH_YEN_SIGN);
+                           addchar((char)CH_YEN_SIGN);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,1);
-                           addch(CH_BLACK_SMILING_FACE);
+                           addchar(CH_BLACK_SMILING_FACE);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,0);
-                           addch(CH_BLACK_SMILING_FACE);
+                           addchar(CH_BLACK_SMILING_FACE);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_UP)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch(CH_UPWARDS_ARROW);
+                           addchar(CH_UPWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_DOWN)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch(CH_DOWNWARDS_ARROW);
+                           addchar(CH_DOWNWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special!=-1)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch('!');
+                           addchar('!');
                         }
                         else if(levelmap[x][y][locz].siegeflag & SIEGEFLAG_TRAP)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addch('!');
+                           addchar('!');
                         }
                         else if(levelmap[x][y][locz].flag & SITEBLOCK_LOOT)
                         {
                            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-                           addch('$');
+                           addchar('$');
                         }
-                        else addch(' ');
+                        else addchar(' ');
                      }
                   }
                   else
                   {
                      set_color(COLOR_BLACK,COLOR_BLACK,1);
                      move(y+1,x+5);
-                     addch(CH_FULL_BLOCK);
+                     addchar((char)CH_FULL_BLOCK);
                   }
                }
             }
@@ -1670,7 +1675,7 @@ void mode_site(void)
                }
 
                c=getkey();
-            }while(1);
+            }while(true);
             mapshowing=true;
          }
 
@@ -2593,7 +2598,7 @@ void mode_site(void)
             knowmap(locx,locy,locz);
          }
       }
-   }while(1);
+   }while(true);
 }
 
 
@@ -2778,7 +2783,7 @@ void open_door(bool restricted)
          }
          else if(c=='n') return;
 
-      }while(1);
+      }while(true);
    }
    else if(locked || (!restricted && alarmed))
    {
@@ -2837,7 +2842,7 @@ void open_door(bool restricted)
          }
          else if(c=='n')break;
 
-      }while(1);
+      }while(true);
    }
    else
    {
