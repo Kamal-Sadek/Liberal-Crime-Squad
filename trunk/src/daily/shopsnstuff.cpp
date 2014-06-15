@@ -158,7 +158,7 @@ void dealership(int loc)
          if(car_to_sell->get_heat())
             price/=10;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(("S - Sell the "+car_to_sell->fullname()+" ($"+tostring(price)+")").c_str());
+         addstr("S - Sell the "+car_to_sell->fullname()+" ($"+tostring(price)+")");
       }
       else
       {

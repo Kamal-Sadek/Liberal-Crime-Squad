@@ -201,19 +201,19 @@ char liberalagenda(char won)
             set_alignment_color(align,true);
          }
 
-         move(5,56);addch('S');
-         move(6,56);addch('U');
-         move(7,56);addch('P');
-         move(8,56);addch('R');
-         move(9,56);addch('E');
-         move(10,56);addch('M');
-         move(11,56);addch('E');
+         mvaddchar(5,56,'S');
+         mvaddchar(6,56,'U');
+         mvaddchar(7,56,'P');
+         mvaddchar(8,56,'R');
+         mvaddchar(9,56,'E');
+         mvaddchar(10,56,'M');
+         mvaddchar(11,56,'E');
 
-         move(6,58);addch('C');
-         move(7,58);addch('O');
-         move(8,58);addch('U');
-         move(9,58);addch('R');
-         move(10,58);addch('T');
+         mvaddchar(6,58,'C');
+         mvaddchar(7,58,'O');
+         mvaddchar(8,58,'U');
+         mvaddchar(9,58,'R');
+         mvaddchar(10,58,'T');
 
          if(won==-1)
          {
@@ -290,7 +290,7 @@ char liberalagenda(char won)
 
             move(14+l/3,l%3*26 + 3 - law[l]);
 
-            addch('O');
+            addchar('O');
          }
          break;
       }
@@ -741,7 +741,7 @@ char confirmdisband(void) // The (current) issue that the masses are most
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    }
 
-   do
+   while(true)
    {
       erase();
 
@@ -765,11 +765,10 @@ char confirmdisband(void) // The (current) issue that the masses are most
 
       for(int x=0;x<(int)strlen(word);x++)
       {
-         move(15,x);
          if(x==pos)set_color(COLOR_GREEN,COLOR_BLACK,0);
          else if(x<pos)set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addch(word[x]);
+         mvaddchar(15,x,word[x]);
       }
 
       int c=getkey();
@@ -796,6 +795,6 @@ char confirmdisband(void) // The (current) issue that the masses are most
          }
       }
       else break;
-   }while(1);
+   }
    return 0;
 }

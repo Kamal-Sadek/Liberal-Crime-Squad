@@ -105,9 +105,8 @@ void activate(void)
    int page=0;
 
    char str[80];
-   char num[20];
 
-   do
+   while(true)
    {
       erase();
 
@@ -127,7 +126,7 @@ void activate(void)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         addchar(y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          char bright=0;
@@ -142,8 +141,7 @@ void activate(void)
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
          move(y,25);
-         itoa(skill,num,10);
-         addstr(num);
+         addstr(skill);
 
          printhealthstat(*temppool[p],y,33,TRUE);
 
@@ -194,8 +192,8 @@ void activate(void)
          activatebulk();
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }
 
 int classlist = 0;
@@ -343,7 +341,7 @@ void activate(Creature *cr)
       if(!pool[p]->alive)havedead=1;
    }
 
-   do
+   while(true)
    {
       erase();
 
@@ -355,9 +353,7 @@ void activate(Creature *cr)
       {
          addstr(cr->name);
          addstr(" made $");
-         char num[20];
-         itoa(cr->income,num,10);
-         addstr(num);
+         addstr(cr->income);
          addstr(" yesterday. What now?");
       }
       else
@@ -1044,12 +1040,9 @@ void activate(Creature *cr)
          break;
       }
       // Enter pressed
-      if(c==ENTER||c==ESC)
-      {
-         break;
-      }
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
       // ? Pressed
-      if(c==63)
+      if(c=='?')
       {
          if(state == 'a' || state == 'b' || state == 'c' ||state == 'd' )
          {
@@ -1057,7 +1050,7 @@ void activate(Creature *cr)
             HelpActivities(cr->activity.type);
          }
       }
-   }while(1);
+   }
 }
 
 
@@ -1073,7 +1066,7 @@ void activatebulk(void)
 
    int selectedactivity=0;
 
-   do
+   while(true)
    {
       erase();
 
@@ -1118,7 +1111,7 @@ void activatebulk(void)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         addchar(y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          move(y,25);
@@ -1128,8 +1121,7 @@ void activatebulk(void)
          /*if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
          {
          addstr(" ($");
-         itoa(temppool[p]->activity.arg,num,10);
-         addstr(num);
+         addstr(temppool[p]->activity.arg);
          addstr(")");
          }*/
 
@@ -1186,7 +1178,7 @@ void activatebulk(void)
                if(temppool[p]->get_skill(SKILL_COMPUTERS)>1)
                   temppool[p]->activity.type=ACTIVITY_CCFRAUD;
 #ifndef ZEROMORAL
-                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1 && temppool[p]->age >=18)
+               else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1 && temppool[p]->age >=18)
 #else
                else if(temppool[p]->get_skill(SKILL_SEDUCTION)>1)
 #endif
@@ -1207,12 +1199,10 @@ void activatebulk(void)
          }
       }
       if(c>='1'&&c<='6')
-      {
          selectedactivity=c-'1';
-      }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }
 
 
@@ -1242,9 +1232,7 @@ void select_tendhostage(Creature *cr)
 
    int page=0;
 
-   char num[20];
-
-   do
+   while(true)
    {
       erase();
 
@@ -1263,7 +1251,7 @@ void select_tendhostage(Creature *cr)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         addchar(y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          char bright=0;
@@ -1278,8 +1266,7 @@ void select_tendhostage(Creature *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
          move(y,25);
-         itoa(skill,num,10);
-         addstr(num);
+         addstr(skill);
 
          printhealthstat(*temppool[p],y,33,TRUE);
 
@@ -1289,9 +1276,7 @@ void select_tendhostage(Creature *cr)
 
          move(y,57);
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         char num[20];
-         itoa(temppool[p]->joindays,num,10);
-         addstr(num);
+         addstr(temppool[p]->joindays);
          addstr(" ");
          if(temppool[p]->joindays>1)addstr("Days");
          else addstr("Day");
@@ -1323,8 +1308,8 @@ void select_tendhostage(Creature *cr)
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }
 
 
@@ -1373,15 +1358,19 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
    addstr(cr->name);
    addstr(".");
 
-   int c=getkey();
+   do
+   {
+      int c=getkey();
 
-   if(c=='a')flevel=0;
-   if(c=='b')flevel=1;
-   if(c=='c')flevel=20;
-   if(c=='d')flevel=50;
-   if(c=='e')flevel=100;
-   if(c=='f')flevel=500;
-   if(c=='k')flevel=666;
+      if(c=='a')flevel=0;
+      if(c=='b')flevel=1;
+      if(c=='c')flevel=20;
+      if(c=='d')flevel=50;
+      if(c=='e')flevel=100;
+      if(c=='f')flevel=500;
+      if(c=='k')flevel=666;
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   } while(flevel==-1);
 
    return flevel;
 }
@@ -1454,8 +1443,7 @@ void recruitSelect(Creature &cr)
    }
 
    int page=0;
-   //char str[200];
-   do
+   while(true)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1472,7 +1460,7 @@ void recruitSelect(Creature &cr)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         addchar(y+'A'-2);addstr(" - ");
          addstr(recruitable_creatures[p].name);
 
          move(y,49);
@@ -1551,7 +1539,9 @@ void recruitSelect(Creature &cr)
             break;
          }
       }
-   }while(1);
+
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 
    return;
 }
@@ -1574,10 +1564,7 @@ void select_makeclothing(Creature *cr)
 
    int page=0;
 
-   //char str[200];
-   //char num[20];
-
-   do
+   while(true)
    {
       erase();
 
@@ -1598,8 +1585,8 @@ void select_makeclothing(Creature *cr)
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
-         addstr(armortype[armortypei[p]]->get_name().c_str());
+         addchar(y+'A'-2);addstr(" - ");
+         addstr(armortype[armortypei[p]]->get_name());
 
          move(y,37);
          switch(difficulty)
@@ -1651,9 +1638,9 @@ void select_makeclothing(Creature *cr)
          }
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         string price = tostring(armortype[armortypei[p]]->get_make_price());
-         move(y,63-price.length());
-         addch('$');addstr(price.c_str());
+         string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
+         move(y,64-price.length());
+         addstr(price);
 
          y++;
       }
@@ -1682,8 +1669,8 @@ void select_makeclothing(Creature *cr)
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }
 
 int armor_makedifficulty(Armor& type, Creature *cr)
@@ -1740,13 +1727,17 @@ long select_troublefundinglevel(Creature *cr)
    addstr(cr->name);
    addstr(".");
 
-   int c=getkey();
+   do
+   {
+      int c=getkey();
 
-   if(c=='a')flevel=0;
-   if(c=='b')flevel=20;
-   if(c=='c')flevel=50;
-   if(c=='d')flevel=100;
-   if(c=='e')flevel=500;
+      if(c=='a')flevel=0;
+      if(c=='b')flevel=20;
+      if(c=='c')flevel=50;
+      if(c=='d')flevel=100;
+      if(c=='e')flevel=500;
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   } while(flevel==-1);
 
    return flevel;
 }
@@ -1759,7 +1750,7 @@ char select_view(Creature *cr,int &v)
    int page=0;
    char str[80];
 
-   do
+   while(true)
    {
       erase();
 
@@ -1777,7 +1768,7 @@ char select_view(Creature *cr,int &v)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,x);
-         addch((p-page*18)+'A');addstr(" - ");
+         addchar((p-page*18)+'A');addstr(" - ");
          getview(str,p);
          addstr(str);
 
@@ -1834,8 +1825,8 @@ char select_view(Creature *cr,int &v)
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 
    return 0;
 }

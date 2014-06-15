@@ -415,7 +415,7 @@ char chasesequence(void)
          }
       }
 
-   }while(1);
+   }while(true);
 
    mode=GAMEMODE_BASE;
    //Make sure all possible exits of the chase have the nextMessage() call
@@ -635,7 +635,7 @@ char footchase(void)
          }
       }
 
-   }while(1);
+   }while(true);
 
    mode=GAMEMODE_BASE;
    //All possible exits of the chase should be covered by a nextMessage() call.
@@ -769,7 +769,6 @@ void evasivedrive(void)
             }
          }
 
-         clearmaparea();
          printchaseencounter();
 
          getkey();
@@ -914,8 +913,7 @@ void evasiverun(void)
             gamelog.newline(); //Another new line.
          }
 
-         delenc(e,0);
-         e--;
+         delenc(e--,0);
 
          printchaseencounter();
 
@@ -1649,7 +1647,7 @@ void crashfriendlycar(int v)
                case 0:
                   addstr(" grips the ", gamelog);
                   if(activesquad->squad[p]->is_armed())
-                     addstr(activesquad->squad[p]->get_weapon().get_shortname().c_str(), gamelog);
+                     addstr(activesquad->squad[p]->get_weapon().get_shortname(), gamelog);
                   else
                      addstr("car frame", gamelog);
                   addstr(" and struggles to ", gamelog);
@@ -1697,8 +1695,6 @@ void crashfriendlycar(int v)
 
 void crashenemycar(int v)
 {
-   string str = chaseseq.enemycar[v]->fullname();
-
    int victimsum=0;
 
    for(int p=ENCMAX-1;p>=0;p--)
@@ -1718,7 +1714,7 @@ void crashenemycar(int v)
    set_color(COLOR_CYAN,COLOR_BLACK,1);
    move(16,1);
    addstr("The ", gamelog);
-   addstr(str.c_str(), gamelog);
+   addstr(chaseseq.enemycar[v]->fullname(), gamelog);
    switch(LCSrandom(3))
    {
       case 0:addstr(" slams into a building.", gamelog);break;

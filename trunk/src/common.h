@@ -15,6 +15,14 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
+/* some compilers sometimes define _WIN32 but not WIN32 on Windows, but LCS usually
+   just checks if WIN32's defined, so the next couple lines fix that so it works */
+#ifdef _WIN32
+#  ifndef WIN32
+#    define WIN32 _WIN32
+#  endif /* !WIN32 */
+#endif /* _WIN32 */
+
 /* Macro definition */
 #ifndef MAX
    // maximum of 2 numbers
@@ -44,7 +52,7 @@ template <class Container> void delete_and_remove(Container& c,int i)
    c.erase(c.begin()+i);
 }
 
-/* Deletes and removes a specified pointer from 2 containers it's in. 
+/* Deletes and removes a specified pointer from 2 containers it's in.
    c1 and c2 must not be the same container! */
 template <class Container> void delete_and_remove(Container& c1,int i1,Container& c2,int i2)
 {

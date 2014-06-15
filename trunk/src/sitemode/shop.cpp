@@ -168,7 +168,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
          else move(y,40);
 
          if(available_options[p]->letter_defined_)
-            addch(available_options[p]->showletter());
+            addchar(available_options[p]->showletter());
          else
          {
             // Find an available letter to use for this ware.
@@ -197,11 +197,11 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
                }
             }
             available_options[p]->letter_='a'+taken_letters;
-            addch('A'+taken_letters++);
+            addchar('A'+taken_letters++);
          }
 
          addstr(" - ");
-         addstr(available_options[p]->get_description_halfscreen().c_str());
+         addstr(available_options[p]->get_description_halfscreen());
          if(x==1) x=2;
          else y++,x=1;
       }
@@ -246,7 +246,7 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(y,40);
       addstr("Enter - ");
-      addstr(exit_.c_str());
+      addstr(exit_);
 
       int c=getkey();
 
@@ -303,7 +303,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
             set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(y,0);
-         addch('A'+y-2);
+         addchar('A'+y-2);
          addstr(" - ");
          addstr(available_options[p]->get_description_fullscreen());
       }
@@ -502,7 +502,7 @@ int Shop::fenceselect(squadst& customers) const
       {
          move(0,30);
          addstr("Estimated Liberal Amount: $");
-         addstr(tostring(ret).c_str());
+         addstr(ret);
       }
 
       printparty();
@@ -713,7 +713,7 @@ void Shop::maskselect(Creature &buyer) const
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         addchar(y+'A'-2);addstr(" - ");
          addstr(armortype[masktype[p]]->get_name());
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,39);

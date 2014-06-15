@@ -28,7 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 #define CONSOLE_SUPPORT
 //#include <includes.h>
-#include <externs.h>
+#include <externs.h> /* include this prior to checking if WIN32 is defined */
 #include <lcsio.h>
 
 #if defined(USE_NCURSES) || defined (USE_NCURSES_W)
@@ -37,7 +37,15 @@ This file is part of Liberal Crime Squad.                                       
 
 #ifdef WIN32
 #include <windows.h>
+#ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
+#define STRICT_ANSI_TEMP_OFF
+#undef __STRICT_ANSI__
+#endif
 #include <mbctype.h>
+#ifdef STRICT_ANSI_TEMP_OFF
+#define __STRICT_ANSI__
+#undef STRICT_ANSI_TEMP_OFF
+#endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
 #endif
 #include <locale.h>
 
@@ -45,26 +53,14 @@ This file is part of Liberal Crime Squad.                                       
 void set_color(short f,short b,char bright,char blink)
 {
    //color swap required for PDcurses
-   if(f==7&&b==0)
-   {
-      f=0;b=0;
-   }
-   else if(f==0&&b==0)
-   {
-      f=7;b=0;
-   }
+   if(f==7&&b==0) f=0,b=0;
+   else if(f==0&&b==0) f=7,b=0;
 
-   chtype blinky=0, brighty=0;
-
-   if(blink)blinky=A_BLINK;
-   if(bright)brighty=A_BOLD;
+   chtype blinky=(blink?A_BLINK:0), brighty=(bright?A_BOLD:0);
 
    //pick color pair based on foreground and background
-   if(bright)attrset(brighty | blinky | COLOR_PAIR(f*8+b));
-   else
-   {
-      attrset(COLOR_PAIR(f*8+b));
-   }
+   if(bright) attrset(brighty | blinky | COLOR_PAIR(f*8+b));
+   else attrset(COLOR_PAIR(f*8+b));
 }
 
 

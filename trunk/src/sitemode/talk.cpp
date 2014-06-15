@@ -606,7 +606,7 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
             move(9,1);
             addstr(armed_liberal->name, gamelog);
             addstr(" brandishes the ", gamelog);
-            addstr(armed_liberal->get_weapon().get_shortname(0).c_str(), gamelog);
+            addstr(armed_liberal->get_weapon().get_shortname(0), gamelog);
             addstr(".", gamelog);
             gamelog.newline();
 
@@ -1624,12 +1624,12 @@ char talkInCombat(Creature &a, Creature &tk)
       {
       case 0:
          {   // Formatting the slogan so that it always has quotes around it and punctuation
-            if(slogan[0]!='"')addch('"');
-            addstr(slogan, gamelog);
+            if(slogan[0]!='"') addchar('"',gamelog);
+            addstr(slogan,gamelog);
             int last=strlen(slogan);
             if(last && slogan[last-1]!='"' && slogan[last-1]!='!' && slogan[last-1]!='.' && slogan[last-1]!='?')
-               addch('!');
-            if(last && slogan[last-1]!='"')addstr("\"", gamelog);
+               addchar('!',gamelog);
+            if(last && slogan[last-1]!='"') addchar('"',gamelog);
 
             if(!sitestory->claimed)
                sitestory->claimed=1;

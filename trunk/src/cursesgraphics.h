@@ -1,23 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
-//																				
-//Copyright (c) 2004 by Kevin Sadler											
-//																				
+//
+//Copyright (c) 2004 by Kevin Sadler
+//
 ////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.										
-//																				
+//This file is part of Liberal Crime Squad.
+//
 //    Liberal Crime Squad is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by		
-//    the Free Software Foundation; either version 2 of the License, or			
-//    (at your option) any later version.										
-//																				
-//    Liberal Crime Squad is distributed in the hope that it will be useful,	
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of			
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the				
-//    GNU General Public License for more details.								
-//																				
-//    You should have received a copy of the GNU General Public License			
-//    along with Liberal Crime Squad; if not, write to the Free Software		
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA	
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    Liberal Crime Squad is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Liberal Crime Squad; if not, write to the Free Software
+//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -34,40 +34,40 @@
 * <HR>
 * \b Liberal Crime Squad
 *
-* 
+*
 * <HR>
 *
 * \par Abstract
-* 
+*
 * These definitions aim to replace hard coded character values for ascii
 * above 0x7f, which are not portable.
 * CH_USE_CP437 is for use on windows which uses the DOS console characters.
 * These are the original values that have been replaced with MACROs.
 * CH_USE_ASCII_HACK is a dirty hack (well, it started out dirty and improved)
-* to replace the extended characters with some from the normal range which 
+* to replace the extended characters with some from the normal range which
 * might give a similar appearance.
 * This should be portable to anything! It attempts to use the alternative
 * character set (ACS) macros from curses, which, if they don't have the
 * right character, will fall back to an ASCII hack anyway.
-* 
+*
 * CH_USE_UNICODE is for machines with unicode support. Curses will need to
 * support unicode (maybe libncursesw?). But a different call may be needed...
 * (Untested).
-* 
+*
 * The gchar table is provided to convert raw CP437 codes stored in the movie
 * files into ASCII_HACK or UNICODE values.
-* 
-* Note that all 256 codes have a name and a value for the CP437 and Unicode 
-* tables. Not all CP437 codes are used. Only where codes are used have the 
+*
+* Note that all 256 codes have a name and a value for the CP437 and Unicode
+* tables. Not all CP437 codes are used. Only where codes are used have the
 * ASCII_HACK values been calculated.
-* 
+*
 * For any value 0-255 there will be a line on each of the three tables and in the
 * gchar table. If the value is not used then it will be commented out for all the
 * #define lists. In the table unused codes convert to zero (rather than the
 * possibility of an undefined macro for ASCII_HACK) and have a comment "Not Used".
-* 
+*
 * If a character were to be "turned on" do the following:
-* 
+*
 * 	1. Uncomment the macro for the code for CP437
 *   2. Uncomment the macro for ASCII_HACK and provide an alternative character.
 *   3. Uncomment the macro for the code for Unicode
@@ -75,17 +75,17 @@
 * 		a) Remove "0,"
 * 		b) Uncomment the macro
 * 		c) Delete the "Not Used" Comment.
-* 
+*
 * Information for the cp437 to Unicode conversion came from the following
 * Microsoft document:
-* 
-*<PRE> 
+*
+*<PRE>
 * #    Name:     cp437_DOSLatinUS to Unicode table
 * #    Unicode version: 2.0
 * #    Table version: 2.00
 * #    Table format:  Format A
 * #    Date:          04/24/96
-*</PRE> 
+*</PRE>
 *
 * <HR>
 *
@@ -130,14 +130,16 @@
  * Bump CH_MAXIMUM.
  */
 
+#include "common.h" /* include this prior to checking if WIN32 is defined */
+
 #ifdef WIN32
   #include "curses.h"
-#else      
+#else
   #ifdef XCURSES
     #define HAVE_PROTO 1
     #define CPLUSPLUS  1
     /* Try these PDCurses/Xcurses options later...
-    #define FAST_VIDEO 
+    #define FAST_VIDEO
     #define REGISTERWINDOWS
     */
     #include <xcurses.h> //This is the X11 Port of PDCurses
@@ -147,11 +149,11 @@
   #else
     #ifdef NCURSES
       #include <ncurses.h>
-    #else     
-      #include <curses.h>      
-    #endif 
-  #endif 
-#endif  
+    #else
+      #include <curses.h>
+    #endif
+  #endif
+#endif
 
 #ifdef CH_USE_CP437
 
@@ -1929,7 +1931,7 @@ struct graphicschar gchar[] = {
 { 254, /*                                         CH_BLACK_SQUARE, */ 254,}, /* Not Used */
 { 255, /*                                       CH_NO_BREAK_SPACE, */ 255,}, /* Not Used */
 };
-  
+
 #else
 extern struct graphicschar *gchar;
 #endif

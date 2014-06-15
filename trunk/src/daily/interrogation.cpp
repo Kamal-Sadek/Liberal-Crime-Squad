@@ -104,8 +104,7 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
    move(++y,40);
    itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
    addstr("Outfit: ");
-   //char str[40];
-   addstr(a->get_armor().get_name().c_str());
+   addstr(a->get_armor().get_name());
    move(y+=2,40);
 
    // What would 4, 2, 0, -2, -3, and/or -5 mean? (Some of these may not exist) -- LK

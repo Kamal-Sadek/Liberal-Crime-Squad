@@ -26,6 +26,40 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 //#include <includes.h>
 #include <externs.h>
 
@@ -52,9 +86,7 @@ void getactivity(char *str,activityst &act)
    case ACTIVITY_POLLS:
       strcpy(str,"Gathering Opinion Info");break;
    case ACTIVITY_MAKE_ARMOR:
-      strcpy(str,"Making ");
-      strcat(str,armortype[act.arg]->get_shortname().c_str());
-      break;
+      strcpy(str,"Making "+armortype[act.arg]->get_shortname());break;
    case ACTIVITY_TROUBLE:
       strcpy(str,"Causing Trouble");break;
    case ACTIVITY_PROSTITUTION:
@@ -90,9 +122,7 @@ void getactivity(char *str,activityst &act)
    case ACTIVITY_SELL_DRUGS:
       strcpy(str,"Selling Brownies");break;
    case ACTIVITY_VISIT:
-      strcpy(str,"Going to ");
-      strcat(str,location[act.arg]->getname(!location[act.arg]->is_city()).c_str());
-      break;
+      strcpy(str,"Going to "+location[act.arg]->getname(!location[act.arg]->is_city()));break;
    case ACTIVITY_HEAL:
       strcpy(str,"Tending to Injuries");break;
    case ACTIVITY_NONE:
@@ -314,48 +344,400 @@ void cityname(char *story)
 {
    static const char *city_names[] =
    {
-      "San Francisco, CA",
-      "Boston, MA",
-      "Los Angeles, CA",
-      "Detroit, MI",
-      "Cleveland, OH",
-      "Cincinnati, OH",
-      "New York, NY",
-      "Chicago, IL",
-      "Trenton, NJ",
-      "Denver, CO",
-      "Phoenix, AZ",
-      "Little Rock, AR",
-      "Houston, TX",
-      "Dallas, TX",
-      "Hartford, CT",
-      "Miami, FL",
-      "Baton Rouge, LA",
-      "Seattle, WA",
-      "Salt Lake City, UT",
-      "Philadelphia, PA",
-      "San Antonio, TX",
-      "Columbus, OH",
-      "Atlanta, GA",
-      "Buffalo, NY",
-      "Orlando, FL",
-      "Syracuse, NY",
-      "Baltimore, MD",
-      //"Washington, DC", // Removed because White House is modeled as a "distant location" in game
-      "Memphis, TN",
-      "Brooklyn, NY",
-      "New Orleans, LA",
+      /* City population < 100,000 = listed once if the city is somehow important
+         (i.e., biggest city in a U.S. state or territory, or most important city in a
+          metropolitan area with over 200,000 people)
+         100,000 < City population <   200,000 = listed once
+         200,000 < City population <   400,000 = listed twice
+         400,000 < City population <   600,000 = listed 3 times
+         600,000 < City population < 1,000,000 = listed 4 times
+       1,000,000 < City population < 5,000,000 = listed 5 times
+       5,000,000 < City population = city listed 6 times and each of its 5 its boroughs listed 1-2 times
+       Anyway, for states/territories without big cities their biggest city is listed once.  */
+      "Abilene, TX",
+      "Aguadilla, PR", // city in Puerto Rico
+      "Akron, OH",
       "Albany, NY",
+      "Albuquerque, NM", "Albuquerque, NM", "Albuquerque, NM",
+      "Alexandria, VA",
+      "Allentown, PA",
+      "Amarillo, TX",
+      "Anaheim, CA", "Anaheim, CA", "Anaheim, CA",
+      "Anchorage, AK", "Anchorage, AK", "Anchorage, AK",
+      "Ann Arbor, MI",
+      "Antioch, CA",
+      "Appleton, WI",
+      "Arlington, TX", "Arlington, TX", "Arlington, TX",
+      "Arvada, CO",
+      "Asheville, NC",
+      "Atlantic City, NJ",
+      "Athens, GA",
+      "Atlanta, GA", "Atlanta, GA", "Atlanta, GA",
+      "Augusta, GA",
+      "Aurora, CO", "Aurora, CO", "Aurora, CO",
+      "Aurora, IL",
+      "Austin, TX", "Austin, TX", "Austin, TX", "Austin, TX",
+      "Bakersfield, CA", "Bakersfield, CA", "Bakersfield, CA",
+      "Baltimore, MD", "Baltimore, MD", "Baltimore, MD", "Baltimore, MD",
+      "Barnstable, MA",
+      "Baton Rouge, LA", "Baton Rouge, LA",
+      "Bayam¢n, PR", "Bayam¢n, PR", // city in Puerto Rico
+      "Bellevue, WA",
+      "Bellingham, WA",
+      "Beaumont, TX",
+      "Berkeley, CA",
+      "Billings, MT",
+      "Biloxi, MS",
+      "Binghamton, NY",
+      "Birmingham, AL", "Birmingham, AL",
+      "Boise, ID", "Boise, ID",
+      "Boston, MA", "Boston, MA", "Boston, MA", "Boston, MA",
+      "Boulder, CO",
+      "Bremerton, WA",
+      "Bridgeport, CT",
+      "Broken Arrow, OK",
+      "Brooklyn, NY", "Brooklyn, NY",
+      "Brownsville, TX",
+      "Buffalo, NY", "Buffalo, NY",
+      "Burbank, CA",
+      "Burlington, VT",
+      "Cambridge, MA",
+      "Caguas, PR", // city in Puerto Rico
+      "Canton, OH",
+      "Cape Coral, FL",
+      "Carlsbad, CA",
+      "Carolina, PR", // city in Puerto Rico
+      "Carrollton, TX",
+      "Cary, NC",
+      "Cedar Rapids, IA",
+      "Centennial, CO",
+      "Champaign, IL",
+      "Chandler, AZ", "Chandler, AZ",
+      "Charleston, SC",
+      "Charleston, WV",
+      "Charlotte, NC", "Charlotte, NC", "Charlotte, NC", "Charlotte, NC",
+      "Charlotte Amalie, VI", // biggest city in U.S. Virgin Islands
+      "Charlottesville, VA",
+      "Chattanooga, TN",
+      "Chesapeake, VA", "Chesapeake, VA",
+      "Cheyenne, WY",
+      "Chicago, IL", "Chicago, IL", "Chicago, IL", "Chicago, IL", "Chicago, IL",
+      "Chico, CA",
+      "Chula Vista, CA", "Chula Vista, CA",
+      "Cincinnati, OH", "Cincinnati, OH",
+      "Clarksville, TN",
+      "Clearwater, FL",
+      "Cleveland, OH", "Cleveland, OH", "Cleveland, OH",
+      "College Station, TX",
+      "Colorado Springs, CO", "Colorado Springs, CO", "Colorado Springs, CO",
+      "Columbia, MO",
+      "Columbia, SC",
+      "Columbus, GA", "Columbus, GA",
+      "Columbus, OH", "Columbus, OH", "Columbus, OH", "Columbus, OH",
+      "Concord, CA",
+      "Coral Springs, FL",
+      "Corona, CA",
+      "Corpus Christi, TX", "Corpus Christi, TX", "Corpus Christi, TX",
+      "Costa Mesa, CA",
+      "Crestview, FL",
+      "Dallas, TX", "Dallas, TX", "Dallas, TX", "Dallas, TX", "Dallas, TX",
+      "Daly City, CA",
+      "Davenport, IA",
+      "Dayton, OH",
+      "Daytona Beach, FL",
+      "Dededo, GU", // biggest city in Guam
+      "Denton, TX",
+      "Denver, CO", "Denver, CO", "Denver, CO", "Denver, CO",
+      "Des Moines, IA", "Des Moines, IA",
+      "Detroit, MI", "Detroit, MI", "Detroit, MI", "Detroit, MI",
+      "Downey, CA",
+      "Duluth, MN",
+      "Durham, NC", "Durham, NC",
+      "El Cajon, CA",
+      "El Monte, CA",
+      "El Paso, TX", "El Paso, TX", "El Paso, TX", "El Paso, TX",
+      "Elgin, IL",
+      "Elk Grove, CA",
+      "Elkhart, IN",
+      "Elizabeth, NJ",
+      "Erie, PA",
+      "Escondido, CA",
+      "Eugene, OR",
+      "Evansville, IN",
+      "Everett, WA",
+      "Fairfield, CA",
+      "Fargo, ND",
+      "Fayetteville, AR",
+      "Fayetteville, NC", "Fayetteville, NC",
+      "Flint, MI",
+      "Florence, SC",
+      "Fontana, CA", "Fontana, CA",
+      "Fort Collins, CO",
+      "Fort Lauderdale, FL",
+      "Fort Smith, AR",
+      "Fort Wayne, IN", "Fort Wayne, IN",
+      "Fort Worth, TX", "Fort Worth, TX", "Fort Worth, TX", "Fort Worth, TX",
+      "Fremont, CA", "Fremont, CA",
+      "Fresno, CA", "Fresno, CA", "Fresno, CA",
+      "Frisco, TX",
+      "Fullerton, TX",
+      "Gainesville, FL",
+      "Garden Grove, CA",
+      "Garland, TX", "Garland, TX",
+      "Gilbert, AZ", "Gilbert, AZ",
+      "Glendale, AZ", "Glendale, AZ",
+      "Glendale, CA",
+      "Grand Prairie, TX",
+      "Grand Rapids, MI",
+      "Greeley, CO",
+      "Green Bay, WI",
+      "Greensboro, NC", "Greensboro, NC",
+      "Greenville, SC",
+      "Gresham, OR",
+      "Hagerstown, MD",
+      "Hampton, VA",
+      "Harrisburg, PA",
+      "Hartford, CT",
+      "Hayward, CA",
+      "Hempstead, NY",
+      "Henderson, NV", "Henderson, NV",
+      "Hialeah, FL", "Hialeah, FL",
+      "Hickory, NC",
+      "High Point, NC",
+      "Hollywood, CA",
+      "Hollywood, FL",
+      "Honolulu, HI", "Honolulu, HI", "Honolulu, HI",
+      "Houma, LA",
+      "Houston, TX", "Houston, TX", "Houston, TX", "Houston, TX", "Houston, TX",
+      "Huntington, WV",
+      "Huntington Beach, CA",
+      "Huntsville, AL",
+      "Independence, MO",
+      "Indianapolis, IN", "Indianapolis, IN", "Indianapolis, IN", "Indianapolis, IN",
+      "Inglewood, CA",
+      "Irvine, CA", "Irvine, CA",
+      "Irving, TX", "Irving, TX",
       "Jackson, MS",
+      "Jacksonville, FL", "Jacksonville, FL", "Jacksonville, FL", "Jacksonville, FL",
+      "Jersey City, NJ", "Jersey City, NJ",
+      "Johnson City, TN",
+      "Joliet, IL",
+      "Kalamazoo, MI",
+      "Kansas City, KS",
+      "Kansas City, MO", "Kansas City, MO", "Kansas City, MO",
+      "Kent, WA",
+      "Killeen, TX",
+      "Kingsport, TN",
+      "Knoxville, TN",
+      "Lafayette, IN",
+      "Lafayette, LA",
+      "Lake Charles, LA",
+      "Lake Havasu City, AZ",
+      "Lakeland, FL",
+      "Lakewood, CO",
+      "Lancaster, CA",
+      "Lancaster, PA",
+      "Lansing, MI",
+      "Laredo, TX", "Laredo, TX",
+      "Las Cruces, NM",
+      "Las Vegas, NV", "Las Vegas, NV", "Las Vegas, NV", "Las Vegas, NV",
+      "Lewisville, TX",
+      "Lexington, KY", "Lexington, KY", "Lexington, KY",
+      "Lincoln, NE", "Lincoln, NE",
+      "Little Rock, AR",
+      "Long Beach, CA", "Long Beach, CA", "Long Beach, CA",
+      "Long Island, NY", "Long Island, NY", "Long Island, NY", "Long Island, NY",
+      "Longview, TX",
+      "Los Angeles, CA", "Los Angeles, CA", "Los Angeles, CA", "Los Angeles, CA", "Los Angeles, CA",
+      "Louisville, KY", "Louisville, KY", "Louisville, KY", "Louisville, KY",
+      "Lowell, MA",
+      "Lubbock, TX", "Lubbock, TX",
+      "Lynchburg, VA",
+      "Macon, GA",
+      "Madison, WI", "Madison, WI",
+      "Manchester, NH",
+      "Manhattan, NY", "Manhattan, NY",
+      "Mayagez, PR", // city in Puerto Rico
+      "McAllen, TX",
+      "McKinney, TX",
+      "Medford, OR",
+      "Memphis, TN", "Memphis, TN", "Memphis, TN", "Memphis, TN",
+      "Merced, CA",
+      "Mesa, AZ", "Mesa, AZ", "Mesa, AZ",
+      "Mesquite, TX",
+      "Miami, FL", "Miami, FL", "Miami, FL",
+      "Miami Gardens, FL",
+      "Midland, TX",
+      "Milwaukee, WI", "Milwaukee, WI", "Milwaukee, WI",
+      "Minneapolis, MN", "Minneapolis, MN", "Minneapolis, MN",
+      "Miramar, FL",
+      "Mobile, AL",
+      "Modesto, CA", "Modesto, CA",
+      "Montgomery, AL", "Montgomery, AL",
+      "Moreno Valley, CA", "Moreno Valley, CA",
+      "Murfreesboro, TN",
+      "Murrieta, CA",
+      "Myrtle Beach, SC",
+      "Naperville, IL",
+      "Naples, FL",
+      "Nashville, TN", "Nashville, TN", "Nashville, TN", "Nashville, TN",
+      "New Haven, CT",
+      "New London, CT",
+      "New Orleans, LA", "New Orleans, LA", "New Orleans, LA",
+      "New York, NY", "New York, NY", "New York, NY", "New York, NY", "New York, NY", "New York, NY",
+      "Newark, NJ", "Newark, NJ",
+      "Newport, RI",
+      "Newport News, VA",
+      "Norfolk, VA", "Norfolk, VA",
+      "Norman, OK",
+      "North Charleston, SC",
+      "North Las Vegas, NV", "North Las Vegas, NV",
+      "Norwalk, CA",
+      "Oakland, CA", "Oakland, CA", "Oakland, CA",
+      "Ocala, FL",
+      "Oceanside, CA",
+      "Odessa, TX",
+      "Ogden, UT",
+      "Oklahoma City, OK", "Oklahoma City, OK", "Oklahoma City, OK", "Oklahoma City, OK",
+      "Olathe, KS",
+      "Olympia, WA",
+      "Omaha, NE", "Omaha, NE", "Omaha, NE",
+      "Ontario, CA",
+      "Orange, CA",
+      "Orlando, FL", "Orlando, FL",
+      "Overland Park, KS",
+      "Oxnard, CA", "Oxnard, CA",
+      "Palm Bay, FL",
+      "Palmdale, CA",
+      "Pasadena, CA",
+      "Pasadena, TX",
+      "Paterson, NJ",
+      "Pearland, TX",
+      "Pembroke Pines, FL",
+      "Pensacola, FL",
+      "Peoria, IL",
+      "Peoria, AZ",
+      "Philadelphia, PA", "Philadelphia, PA", "Philadelphia, PA", "Philadelphia, PA", "Philadelphia, PA",
+      "Phoenix, AZ", "Phoenix, AZ", "Phoenix, AZ", "Phoenix, AZ", "Phoenix, AZ",
+      "Pittsburgh, PA", "Pittsburgh, PA", "Pittsburgh, PA",
+      "Plano, TX", "Plano, TX",
+      "Pomona, CA",
+      "Pompano Beach, FL",
+      "Ponce, PR", // city in Puerto Rico
+      "Port St. Lucie, FL",
+      "Portland, ME",
+      "Portland, OR", "Portland, OR", "Portland, OR", "Portland, OR",
+      "Poughkeepsie, NY",
+      "Prescott, AZ",
+      "Providence, RI",
+      "Provo, UT",
+      "Pueblo, CO",
+      "Queens, NY", "Queens, NY",
+      "Raleigh, NC", "Raleigh, NC", "Raleigh, NC",
+      "Rancho Cucamonga, CA",
+      "Reading, PA",
+      "Reno, NV", "Reno, NV",
+      "Rialto, CA",
+      "Richardson, TX",
+      "Richland, WA",
+      "Richmond, CA",
+      "Richmond, VA", "Richmond, VA",
+      "Riverside, CA", "Riverside, CA", "Riverside, CA",
+      "Roanoke, VA",
+      "Rochester, MN",
+      "Rochester, NY", "Rochester, NY",
+      "Rockford, IL",
+      "Roseville, CA",
+      "Round Rock, TX",
+      "Sacramento, CA", "Sacramento, CA", "Sacramento, CA",
+      "Saipan, MP", // biggest city in Northern Mariana Islands
+      "Salem, OR",
+      "Salinas, CA",
+      "Salisbury, MD",
+      "Salt Lake City, UT",
+      "San Antonio, TX", "San Antonio, TX", "San Antonio, TX", "San Antonio, TX", "San Antonio, TX",
+      "San Bernadino, CA", "San Bernadino, CA",
+      "San Diego, CA", "San Diego, CA", "San Diego, CA", "San Diego, CA", "San Diego, CA",
+      "San Francisco, CA", "San Francisco, CA", "San Francisco, CA", "San Francisco, CA",
+      "San Jose, CA", "San Jose, CA", "San Jose, CA", "San Jose, CA",
+      "San Juan, PR", "San Juan, PR", // biggest city in Puerto Rico
+      "San Luis Obispo, CA",
+      "San Mateo, CA",
+      "Santa Ana, CA", "Santa Ana, CA", "Santa Ana, CA",
+      "Santa Clara, CA",
+      "Santa Clarita, CA",
+      "Santa Cruz, CA",
+      "Santa Maria, CA",
+      "Santa Rosa, CA",
+      "Sarasota, FL",
+      "Savannah, GA",
+      "Scottsdale, AZ", "Scottsdale, AZ",
+      "Scranton, PA",
+      "Seattle, WA", "Seattle, WA", "Seattle, WA", "Seattle, WA",
+      "Shreveport, LA", "Shreveport, LA",
+      "Sioux Falls, SD",
+      "Simi Valley, CA",
+      "South Bend, IN",
+      "Spartanburg, SC",
+      "Spokane, WA", "Spokane, WA",
+      "Springfield, IL",
+      "Springfield, MA",
+      "Springfield, MO",
+      "St. Louis, MO", "St. Louis, MO", "St. Louis, MO",
+      "St. Paul, MN", "St. Paul, MN",
+      "St. Petersburg, FL", "St. Petersburg, FL",
+      "Stamford, CT",
+      "Staten Island, NY",
+      "Sterling Heights, MI",
+      "Stockton, CA", "Stockton, CA",
+      "Sunnyvale, CA",
+      "Surprise, AZ",
+      "Syracuse, NY",
+      "Tacoma, WA", "Tacoma, WA",
+      "Tafuna, AS", // biggest city in American Samoa
+      "Tallahassee, FL",
+      "Tampa, FL", "Tampa, FL", "Tampa, FL",
+      "Temecula, CA",
+      "Tempe, AZ",
+      "The Bronx, NY", "The Bronx, NY",
+      "Thornton, CO",
+      "Thousand Oaks, CA",
+      "Toledo, OH", "Toledo, OH",
+      "Topeka, KS",
+      "Torrance, CA",
+      "Trenton, NJ",
+      "Tuscaloosa, AL",
+      "Tucson, AZ", "Tucson, AZ", "Tucson, AZ",
+      "Tulsa, OK", "Tulsa, OK", "Tulsa, OK",
+      "Tyler, TX",
+      "Utica, NY",
+      "Vallejo, CA",
+      "Vancouver, WA",
+      "Ventura, CA",
+      "Victorville, CA",
+      "Virginia Beach, VA", "Virginia Beach, VA", "Virginia Beach, VA",
+      "Visalia, CA",
       "Waco, TX",
-      "Oklahoma, OK",
-      "Austin, TX",
-      "Nashville, TN",
-      "Philadelphia, PA",
-      "Tampa, FL",
-      "San Diego, CA",
-      "El Paso, TX",
-      "Baton Rouge, LA"
+      "Warren, MI",
+      "Washington, DC", "Washington, DC", "Washington, DC", "Washington, DC",
+      "Waterbury, CT",
+      "West Covina, CA",
+      "West Jordan, UT",
+      "West Palm Beach, FL",
+      "West Valley City, UT",
+      "Westminster, CO",
+      "White Plains, NY",
+      "Wichita, KS", "Wichita, KS", "Wichita, KS",
+      "Wichita Falls, TX",
+      "Wilmington, DE",
+      "Wilmington, NC",
+      "Winston-Salem, NC", "Winston-Salem, NC",
+      "Worcester, MA",
+      "Yakima, WA",
+      "Yonkers, NY",
+      "York, PA",
+      "Youngstown, OH",
+      "Yuma, AZ"
    };
    strcpy(story,selectRandomString(city_names,ARRAY_ELEMENTS(city_names)));
 }
@@ -367,12 +749,12 @@ void enter_name(char *name, int len, char* defname)
    raw_output(FALSE);
    echo();
    curs_set(1);
-   getnstr(name,len-1);//-1 because 'len' is normally the full space available and we need one for a terminator.
+   getnstr(name,len-1); //-1 because 'len' is normally the full space available and we need one for a terminator.
    curs_set(0);
    noecho();
    raw_output(TRUE);
    keypad(stdscr,TRUE);
-   if((defname!=NULL)&&(strncmp(name,"",len-1)==0))strncpy(name,defname,len-1);
+   if((defname!=NULL)&&(strncmp(name,"",len-1)==0)) strncpy(name,defname,len-1);
    name[len-1]='\0';
 }
 

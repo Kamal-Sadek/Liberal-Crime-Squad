@@ -40,7 +40,7 @@ void setup_newgame(void)
    multipleCityMode = false;
 
    clear();
-   while(1)
+   while(true)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
@@ -172,7 +172,7 @@ void setup_newgame(void)
 
 
    clear();
-   while(1)
+   while(true)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
@@ -286,7 +286,7 @@ void makecharacter(void)
 
    bool choices=true;
 
-   while(1)
+   while(true)
    {
       erase();
 

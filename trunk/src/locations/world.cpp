@@ -354,5 +354,4 @@ void make_world(bool hasmaps)
    //City(SITE_CITY_DETROIT);
    //City(SITE_CITY_ATLANTA);
    //City(SITE_CITY_MIAMI);
-   //City(SITE_CITY_WASHINGTON_DC);
 }

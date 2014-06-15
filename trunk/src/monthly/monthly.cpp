@@ -320,7 +320,7 @@ void passmonth(char &clearformess,char canseethings)
          else           { pip=8; set_color(COLOR_GREEN,  COLOR_BLACK,1); }
 
          move(y++,20+pip);
-         addch('O');
+         addchar('O');
       }
 
       getkey();

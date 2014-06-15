@@ -4,15 +4,10 @@
 
 void preparepage(newsstoryst& ns, bool liberalguardian)
 {
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
    for(int x=0;x<80;x++)
-   {
       for(int y=0;y<25;y++)
-      {
-         move(y,x);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addch(CH_FULL_BLOCK);
-      }
-   }
+         mvaddchar(y,x,(char)CH_FULL_BLOCK);
 
    if(ns.page==1||(liberalguardian&&ns.guardianpage==1))
    {

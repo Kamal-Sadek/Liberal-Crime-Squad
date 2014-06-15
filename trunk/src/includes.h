@@ -9,7 +9,6 @@
 #ifndef INCLUDES_H_INCLUDED
 #define INCLUDES_H_INCLUDED
 
-
 /*
    DEBUG DEFINES
 */
@@ -82,6 +81,8 @@
 const int version=40704;
 const int lowestloadversion=40704;
 const int lowestloadscoreversion=31203;
+
+#include "common.h" /* include this prior to checking if WIN32 is defined */
 
 #ifdef WIN32
    //#include <windows.h>
@@ -210,7 +211,6 @@ const int lowestloadscoreversion=31203;
 using namespace std;
 //#include "lcsio.h"
 #include "compat.h"
-#include "common.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
 #include "politics/alignment.h"
@@ -294,6 +294,7 @@ using namespace std;
 #define BIT31 (1<<30)
 #define BIT32 (1<<31)
 
+#define TAB 9
 #define ENTER 10
 #define ESC 27
 #define SPACEBAR 32
@@ -1066,10 +1067,15 @@ void addpagestr();
    - std::string or c-style char arrays */
 int addstr(const char *text,Log &log);
 int mvaddstr(int y,int x,const char *text,Log &log);
-int addstr(std::string text);
-int addstr(std::string text, Log &log);
-int mvaddstr(int y,int x,std::string text);
-int mvaddstr(int y,int x,std::string text,Log &log);
+int addstr(const std::string& text);
+int addstr(const std::string& text, Log &log);
+int mvaddstr(int y,int x,const std::string& text);
+int mvaddstr(int y,int x,const std::string& text,Log &log);
+/* These wrappers convert numbers to text */
+int addstr(long num);
+int addstr(long num, Log &log);
+int mvaddstr(int y,int x,long num);
+int mvaddstr(int y,int x,long num,Log &log);
 /* addstr with formatted output */
 int addstr_f(const char * format,...);
 /* mvaddstr with formatted output */
@@ -1078,6 +1084,13 @@ int mvaddstr_f(int y,int x,const char * format,...);
 int addstr_fl(Log &log,const char * format,...);
 /* mvaddstr with formatted output and logging */
 int mvaddstr_fl(int y,int x,Log &log,const char * format,...);
+/* Variant of addch that works on char instead of chtype, fixing display of extended characters */
+int addchar(char ch);
+/* Variant of mvaddch that works on char instead of chtype, fixing display of extended characters */
+int mvaddchar(int y,int x,char ch);
+/* addchar and mvaddchar with logging */
+int addchar(char ch,Log &log);
+int mvaddchar(int y,int x,char ch,Log &log);
 
 /*
  commonactions.cpp
@@ -1248,9 +1261,16 @@ char squadhasitem(squadst &sq,int type,int subtype);
  stringconversion.cpp
 */
 std::string tostring(long i);
+const char* toCstring(long i);
 /* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
+/* These strcpy and strcat wrappers handle std:strings */
+char* strcpy(char* dest, const std::string& src);
+char* strcat(char* dest, const std::string& src);
+/* These strcpy and strcat wrappers handle numbers */
+char* strcpy(char* dest, long src);
+char* strcat(char* dest, long src);
 short creaturetype_string_to_enum(const std::string& ctname);
 int attribute_string_to_enum(const std::string& attribute);
 int skill_string_to_enum(std::string skillname);

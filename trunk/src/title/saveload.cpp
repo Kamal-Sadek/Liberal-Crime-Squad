@@ -487,7 +487,7 @@ char load(void)
             if (del)
             {
                addstr("Item type ");
-               addstr(location[l]->loot[l2]->get_itemtypename().c_str());
+               addstr(location[l]->loot[l2]->get_itemtypename());
                addstr(" does not exist. Deleting item.");
                delete location[l]->loot[l2];
                location[l]->loot.erase(location[l]->loot.begin()+l2);
@@ -719,7 +719,7 @@ char load(void)
             if (del)
             {
                addstr("Item type ");
-               addstr(squad[sq]->loot[l2]->get_itemtypename().c_str());
+               addstr(squad[sq]->loot[l2]->get_itemtypename());
                addstr(" does not exist. Deleting item.");
                delete squad[sq]->loot[l2];
                squad[sq]->loot.erase(squad[sq]->loot.begin()+l2);
@@ -843,7 +843,7 @@ char load(void)
       {
          if(getvehicletype(vehicle[v]->vtypeidname())==-1)
          { //Remove vehicle of non-existing type.
-            addstr(("Vehicle type "+vehicle[v]->vtypeidname()+" does not exist. Deleting vehicle.").c_str());
+            addstr("Vehicle type "+vehicle[v]->vtypeidname()+" does not exist. Deleting vehicle.");
             delete vehicle[v];
             vehicle.erase(vehicle.begin()+v);
             --v;

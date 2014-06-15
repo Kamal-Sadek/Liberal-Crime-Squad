@@ -343,8 +343,7 @@ void printparty(void)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(p+2,0);
          addstr("                                                                                          ");
-         move(p+2,0);
-         addch('1'+p);
+         mvaddchar(p+2,0,'1'+p);
 
          if(party[p]!=NULL)
          {
@@ -389,9 +388,9 @@ void printparty(void)
                case 2:set_color(COLOR_RED,COLOR_BLACK,1);break;
             }
             if(party[p]->has_thrown_weapon && !party[p]->extra_throwing_weapons.empty())
-               addstr(party[p]->extra_throwing_weapons[0]->get_shortname(0).c_str());
+               addstr(party[p]->extra_throwing_weapons[0]->get_shortname(0));
             else
-               addstr(party[p]->get_weapon().get_shortname(0).c_str());
+               addstr(party[p]->get_weapon().get_shortname(0));
             //set_color(COLOR_WHITE,COLOR_BLACK,0);
             if(party[p]->get_weapon().get_ammoamount()>0)
             {
@@ -452,7 +451,7 @@ void printparty(void)
                      set_color(COLOR_BLACK,COLOR_BLACK,1);
             }
             move(p+2,46);
-            addstr(party[p]->get_armor().get_shortname().c_str());
+            addstr(party[p]->get_armor().get_shortname());
 
             printhealthstat(*party[p],p+2,61,TRUE);
 
@@ -464,7 +463,7 @@ void printparty(void)
             else v=id_getcar(party[p]->carid);
             if(v!=-1&&showcarprefs!=-1)
             {
-               strcpy(str,vehicle[v]->shortname().c_str());
+               strcpy(str,vehicle[v]->shortname());
                char d;
                if(showcarprefs==1)d=party[p]->pref_is_driver;
                else d=party[p]->is_driver;
@@ -749,7 +748,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    else v=id_getcar(cr->carid);
    if(v!=-1&&showcarprefs!=-1)
    {
-      strcpy(str,vehicle[v]->shortname().c_str());
+      strcpy(str,vehicle[v]->shortname());
       char d;
       if(showcarprefs==1)d=cr->pref_is_driver;
       else d=cr->is_driver;
@@ -778,7 +777,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       case 2:set_color(COLOR_RED,COLOR_BLACK,1);break;
    }
    addstr("Weapon: ");
-   addstr(cr->get_weapon_string(1).c_str());
+   addstr(cr->get_weapon_string(1));
 
 
    if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -800,7 +799,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
    }
    move(7,0);
    addstr("Clothes: ");
-   addstr(cr->get_armor_string(false).c_str());
+   addstr(cr->get_armor_string(false));
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
@@ -842,7 +841,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 
          move(3+5-snum,31);
          if(knowledge>5-snum)
-            strcpy(str,Skill::get_name(maxs).c_str());
+            strcpy(str,Skill::get_name(maxs));
          else
             strcpy(str,"???????");
          strcat(str,": ");
@@ -1000,7 +999,7 @@ void fullstatus(int p)
          continue;
       }
       break;
-   }while(1);
+   }while(true);
 }
 
 
@@ -1054,7 +1053,7 @@ void printliberalskills(Creature &cr)
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
       move(5+s/3,27*(s%3));
-      strcpy(str,Skill::get_name(s).c_str());
+      strcpy(str,Skill::get_name(s));
       strcat(str,": ");
       addstr(str);
       move(5+s/3,14+27*(s%3));
@@ -1236,7 +1235,7 @@ void printliberalstats(Creature &cr)
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          move(6+skills_shown,28);
-         strcpy(str,Skill::get_name(maxs).c_str());
+         strcpy(str,Skill::get_name(maxs));
          strcat(str,": ");
          addstr(str);
          move(6+skills_shown,42);
@@ -1273,12 +1272,12 @@ void printliberalstats(Creature &cr)
    // Add weapon
    move(13,0);
    addstr("Weapon: ");
-   addstr(cr.get_weapon_string(0).c_str());
+   addstr(cr.get_weapon_string(0));
 
    // Add clothing
    move(14,0);
    addstr("Clothes: ");
-   addstr(cr.get_armor_string(true).c_str());
+   addstr(cr.get_armor_string(true));
 
 
    // Add vehicle
@@ -1289,7 +1288,7 @@ void printliberalstats(Creature &cr)
    else v=id_getcar(cr.carid);
    if(v!=-1&&showcarprefs!=-1)
    {
-      strcpy(str,vehicle[v]->shortname().c_str());
+      strcpy(str,vehicle[v]->shortname());
       char d;
       if(showcarprefs==1)d=cr.pref_is_driver;
       else d=cr.is_driver;
@@ -1854,24 +1853,45 @@ int mvaddstr(int y, int x, const char *text, Log &log)
    return mvaddstr(y, x, text);
 }
 
-int addstr(std::string text)
+int addstr(const std::string& text)
 {
    return addstr(text.c_str());
 }
 
-int addstr(std::string text, Log &log)
+int addstr(const std::string& text, Log &log)
 {
    return addstr(text.c_str(), log);
 }
 
-int mvaddstr(int y, int x, std::string text)
+int mvaddstr(int y, int x, const std::string& text)
 {
    return mvaddstr(y, x, text.c_str());
 }
 
-int mvaddstr(int y, int x, std::string text, Log &log)
+int mvaddstr(int y, int x, const std::string& text, Log &log)
 {
    return mvaddstr(y, x, text.c_str(), log);
+}
+
+/* These wrappers convert numbers to text */
+int addstr(long num)
+{
+   return addstr(tostring(num));
+}
+
+int addstr(long num, Log &log)
+{
+   return addstr(tostring(num), log);
+}
+
+int mvaddstr(int y, int x, long num)
+{
+   return mvaddstr(y, x, tostring(num));
+}
+
+int mvaddstr(int y, int x, long num, Log &log)
+{
+   return mvaddstr(y, x, tostring(num), log);
 }
 
 /*	addstr with formatted output	*/
@@ -1929,4 +1949,32 @@ int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
    log.record(sbuf);
 
    return(mvaddstr(y, x, sbuf));
+}
+
+/* Variant of addch that works on char instead of chtype, fixing display of extended characters */
+int addchar(char ch)
+{
+   char str[2]={ch,0};
+   return addstr(str);
+}
+
+/* Variant of mvaddch that works on char instead of chtype, fixing display of extended characters */
+int mvaddchar(int y, int x, char ch)
+{
+   char str[2]={ch,0};
+   return mvaddstr(y,x,str);
+}
+
+/* addchar with logging */
+int addchar(char ch, Log &log)
+{
+   char str[2]={ch,0};
+   return addstr(str,log);
+}
+
+/* mvaddchar with logging */
+int mvaddchar(int y, int x, char ch, Log &log)
+{
+   char str[2]={ch,0};
+   return mvaddstr(y,x,str,log);
 }

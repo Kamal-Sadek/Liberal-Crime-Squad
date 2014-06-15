@@ -68,16 +68,13 @@ void review(void)
 {
    int page=0;
 
-   do
+   while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(0,0);
-      addstr("Review your Liberals and Assemble Squads");
-
-      move(1,0);
-      addstr("컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴컴");
+      mvaddstr(0,0,"Review your Liberals and Assemble Squads");
+      mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴컴");
 
       int y=2;
       for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++)
@@ -86,14 +83,11 @@ void review(void)
          {
             if(activesquad==squad[p])set_color(COLOR_WHITE,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,0);
-            addch(y+'A'-2);addstr(" - ");
+            mvaddchar(y,0,y+'A'-2);addstr(" - ");
             addstr(squad[p]->name);
 
             if(squad[p]->squad[0]!=NULL&&squad[p]->squad[0]->location!=-1)
-            {
                mvaddstr(y,31,location[squad[p]->squad[0]->location]->getname(true, true));
-            }
 
             move(y,51);
             if(squad[p]->squad[0]!=NULL)
@@ -123,58 +117,42 @@ void review(void)
          else if(p==(int)squad.size())
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            move(y,0);
-            addch('1');addstr(" - ");
-            addstr("Active Liberals");
+            mvaddstr(y,0,"1 - Active Liberals");
          }
          else if(p==(int)squad.size()+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            move(y,0);
-            addch('2');addstr(" - ");
-            addstr("Hostages");
+            mvaddstr(y,0,"2 - Hostages");
          }
          else if(p==(int)squad.size()+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(y,0);
-            addch('3');addstr(" - ");
-            addstr("Hospital");
+            mvaddstr(y,0,"3 - Hospital");
          }
          else if(p==(int)squad.size()+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            move(y,0);
-            addch('4');addstr(" - ");
-            addstr("Justice System");
+            mvaddstr(y,0,"4 - Justice System");
          }
          else if(p==(int)squad.size()+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            move(y,0);
-            addch('5');addstr(" - ");
-            addstr("Sleepers");
+            mvaddstr(y,0,"5 - Sleepers");
          }
          else if(p==(int)squad.size()+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            move(y,0);
-            addch('6');addstr(" - ");
-            addstr("The Dead");
+            mvaddstr(y,0,"6 - The Dead");
          }
          else if(p==(int)squad.size()+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
-            move(y,0);
-            addch('7');addstr(" - ");
-            addstr("Away");
+            mvaddstr(y,0,"7 - Away");
          }
          else if(p==(int)squad.size()+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
-            move(y,0);
-            addch('8');addstr(" - ");
-            addstr("Review and Move Equipment");
+            mvaddstr(y,0,"8 - Review and Move Equipment");
          }
 
          y++;
@@ -194,7 +172,7 @@ void review(void)
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM)page++;
 
-      if(c==10||c==ESC)return;
+      if(c==ENTER||c==ESC||c==SPACEBAR)return;
 
       if(c>='a'&&c<='s')
       {
@@ -211,13 +189,11 @@ void review(void)
       {
          assemblesquad(NULL);
          if(activesquad==NULL&&squad.size()>0)
-         {
             activesquad=squad[squad.size()-1];
-         }
       }
       if(c=='t')squadlessbaseassign();
       if(c=='u')promoteliberals();
-   }while(1);
+   }
 }
 
 
@@ -271,7 +247,7 @@ void review_mode(short mode)
 
    char num[20];
 
-   do
+   while(true)
    {
       erase();
 
@@ -334,8 +310,7 @@ void review_mode(short mode)
       for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         mvaddchar(y,0,y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          char bright=0;
@@ -533,7 +508,7 @@ void review_mode(short mode)
          {
             int page=0;
             //const int pagenum=2;
-            do
+            while(true)
             {
                erase();
 
@@ -782,7 +757,7 @@ void review_mode(short mode)
                   }
                }
                else break;
-            }while(1);
+            }
          }
       }
 
@@ -832,7 +807,7 @@ void review_mode(short mode)
 
             int c=getkey();
 
-            if(c==10||c==ESC)break;
+            if(c==ENTER||c==ESC||SPACEBAR)break;
 
             if(c<'a'||c>'s')
             {
@@ -870,8 +845,8 @@ void review_mode(short mode)
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||SPACEBAR)break;
+   }
 }
 
 
@@ -960,8 +935,7 @@ void assemblesquad(squadst *cursquad)
       for(p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         mvaddchar(y,0,y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          char bright=0;
@@ -1186,7 +1160,7 @@ void assemblesquad(squadst *cursquad)
             }
          }
       }
-   }while(1);
+   }while(true);
 
    //FINALIZE NEW SQUADS
    char hasmembers=0;
@@ -1299,8 +1273,7 @@ void squadlessbaseassign(void)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
          else
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         mvaddchar(y,0,y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          mvaddstr(y,25,location[temppool[p]->base]->getname(true, true));
@@ -1317,8 +1290,7 @@ void squadlessbaseassign(void)
 
          if(p==selectedbase)set_color(color,COLOR_BLACK,1);
          else set_color(color,COLOR_BLACK,0);
-         move(y,51);
-         addch(y+'1'-2);addstr(" - ");
+         mvaddchar(y,51,y+'1'-2);addstr(" - ");
          addstr(location[temploc[p]]->getname(true, true));
 
          y++;
@@ -1377,7 +1349,7 @@ void squadlessbaseassign(void)
       }
 
       if(c==10||c==ESC)break;
-   }while(1);
+   }while(true);
 }
 
 // prints a formatted name, used by promoteliberals
@@ -1497,12 +1469,10 @@ void promoteliberals(void)
       for(int p=page*PAGELENGTH;p<(int)temppool.size()&&p<page*PAGELENGTH+PAGELENGTH;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch(y+'A'-2);addstr(" - ");
+         mvaddchar(y,0,y+'A'-2);addstr(" - ");
 
          move(y,27);
          int p2 = 0;
-
 
          for(p2=0;p2<(int)pool.size();p2++)
          {
@@ -1618,7 +1588,7 @@ void promoteliberals(void)
       }
 
       if(c==10||c==ESC)break;
-   }while(1);
+   }while(true);
 }
 
 

@@ -63,6 +63,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "includes.h" /* include this prior to checking if WIN32 is defined */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -70,8 +71,10 @@
 
 #ifdef WIN32
    #include <windows.h>
-   #define HAS_STRICMP
-   #define HAS_ITOA
+   #ifndef __STRICT_ANSI__
+      #define HAS_STRICMP
+      #define HAS_ITOA
+   #endif
    #ifdef __MINGW32__
       #include <iostream>
    #else
@@ -198,20 +201,19 @@ void pause_ms(int t)
 
 #ifndef HAS_ITOA
 // Portable equivalent of Windows itoa() function.
-// Note the radix parameter is expected to be 10.
-// The function is not fully ported and doesn't support
-// other bases, it's just enough for this program to be
-// ported.
-// Ensure buffer is of sufficient size.
-char *itoa(int value,char *buffer,int radix)
+// This function is fully ported and works with any base from 2 to 36.
+// Ensure c-string is of sufficient size.
+// (65 bytes is enough for any int and any base, even on 64-bit architectures.)
+char* itoa(int value,char* str,int base)
 {
-   if(radix!=10)
-   {
-      // Error - base other than 10 not supported.
-      cerr << "Error: itoa() - Ported function does not support bases other than 10." << endl;
-      exit(1);
-   }
-   else if(buffer)sprintf(buffer,"%d",value);
-   return buffer;
+   if(base<2||base>36) { *str='\0'; return str; }
+   char *p=str,*q=str,c; int i;
+   do { i=value; value/=base;
+      *p++="zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz"[i-value*base+35];
+   } while(value);
+   if(i<0) *p++='-';
+   *p--='\0';
+   while(p>q) { c=*p; *p--=*q; *q++=c; }
+   return str;
 }
 #endif

@@ -424,7 +424,7 @@ void makecreature(Creature &cr,short type)
          cr.money=crtype->money_.roll();
          cr.juice=crtype->juice_.roll();
          cr.gender_liberal=cr.gender_conservative=crtype->roll_gender();
-         strcpy(cr.name,crtype->get_encounter_name().c_str());
+         strcpy(cr.name,crtype->get_encounter_name());
          if(cr.align==ALIGN_CONSERVATIVE)
             cr.align=LCSrandom(2);
          break;
@@ -519,11 +519,11 @@ void makecreature(Creature &cr,short type)
       case CREATURE_THIEF:
          switch(LCSrandom(5))
          {
-            case 0:strcpy(cr.name,getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name().c_str());break;
-            case 1:strcpy(cr.name,getcreaturetype(CREATURE_CLERK)->get_encounter_name().c_str());break;
-            case 2:strcpy(cr.name,getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name().c_str());break;
-            case 3:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name().c_str());break;
-            case 4:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name().c_str());break;
+            case 0:strcpy(cr.name,getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name());break;
+            case 1:strcpy(cr.name,getcreaturetype(CREATURE_CLERK)->get_encounter_name());break;
+            case 2:strcpy(cr.name,getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name());break;
+            case 3:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name());break;
+            case 4:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name());break;
          }
 
          if(!LCSrandom(10))cr.crimes_suspected[(LCSrandom(2)?LAWFLAG_BREAKING:LAWFLAG_THEFT)]++;

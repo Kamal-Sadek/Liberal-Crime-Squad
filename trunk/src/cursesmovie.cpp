@@ -20,6 +20,8 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
+#include "common.h" /* include this prior to checking if WIN32 is defined */
+
 #ifdef WIN32
   #include <windows.h>
   #include <string.h>
@@ -43,9 +45,10 @@
   //undo PDCurses macros that break vector class
   #undef erase
   #undef clear
-
-  #define HAS_ITOA
-  #define HAS_STRICMP
+  #ifndef __STRICT_ANSI__
+    #define HAS_STRICMP
+    #define HAS_ITOA
+  #endif
 #else
   #include <vector>
   #include <string.h>

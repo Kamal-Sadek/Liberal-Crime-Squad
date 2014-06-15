@@ -667,9 +667,9 @@ int randomissue(bool core_only)
 // Prompt to turn new recruit into a sleeper
 void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 {
-   char selection=0;
+   bool selection=false;
 
-   while(1)
+   while(true)
    {
       move(y,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -677,29 +677,29 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
       addstr(converted.name);
       addstr(" best serve the Liberal cause?");
       move(y+2,0);
-      set_color(COLOR_WHITE,COLOR_BLACK,selection==0);
-      addstr(selection==0?"-> ":"   ");
+      set_color(COLOR_WHITE,COLOR_BLACK,!selection);
+      addstr(selection?"   ":"-> ");
       addstr("Come to ");
       addstr(location[recruiter.location]->getname(-1,true));
       addstr(" as a ");
-      set_color(COLOR_GREEN,COLOR_BLACK,selection==0);
+      set_color(COLOR_GREEN,COLOR_BLACK,!selection);
       addstr("regular member");
-      set_color(COLOR_WHITE,COLOR_BLACK,selection==0);
+      set_color(COLOR_WHITE,COLOR_BLACK,!selection);
       addstr(".");
       move(y+3,0);
-      set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
-      addstr(selection==1?"-> ":"   ");
+      set_color(COLOR_WHITE,COLOR_BLACK,selection);
+      addstr(selection?"-> ":"   ");
       addstr("Stay at ");
       addstr(location[converted.worklocation]->getname(-1,true));
       addstr(" as a ");
-      set_color(COLOR_CYAN,COLOR_BLACK,selection==1);
+      set_color(COLOR_CYAN,COLOR_BLACK,selection);
       addstr("sleeper agent");
-      set_color(COLOR_WHITE,COLOR_BLACK,selection==1);
+      set_color(COLOR_WHITE,COLOR_BLACK,selection);
       addstr(".");
 
-      int keystroke = getkey();
+      int c=getkey();
 
-      if(keystroke == 10 && selection==1)
+      if(c==ENTER&&selection)
       {
          converted.flag |= CREATUREFLAG_SLEEPER;
          converted.location = converted.worklocation;
@@ -709,17 +709,15 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
          liberalize(converted,false);
          break;
       }
-      else if(keystroke == 10 && selection==0)
+      else if(c==ENTER&&!selection)
       {
          converted.location=recruiter.location;
          converted.base=recruiter.base;
          liberalize(converted,false);
          break;
       }
-      else if(keystroke == KEY_DOWN || keystroke == KEY_UP)
-      {
+      else if(c==KEY_DOWN||c==KEY_UP)
          selection=!selection;
-      }
    }
 }
 
@@ -839,7 +837,7 @@ void sorting_prompt(short listforsorting)
    move(6,2);
    addstr("D - Sort by squad or name.");
 
-   while(1)
+   while(true)
    {
       int c=getkey();
 
@@ -863,7 +861,7 @@ void sorting_prompt(short listforsorting)
          activesortingchoice[listforsorting]=SORTING_SQUAD_OR_NAME;
          break;
       }
-      else if(c==10||c==ESC)
+      else if(c==ENTER||c==ESC)
          break;
    }
 }
@@ -891,35 +889,32 @@ int choiceprompt(const string &firstline, const string &secondline,
                  const vector<string> &option, const string &optiontypename,
                  bool allowexitwochoice, const string &exitstring)
 {
-   int page = 0;
+   int page=0;
 
    while(true)
    {
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(0,0);
-      addstr(firstline.c_str());
+      addstr(firstline);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(1,0);
-      addstr(secondline.c_str());
-      int yline = 2;
+      addstr(secondline);
 
       //Write options
-      for(int p=page*19; p<(int)option.size()&&p<page*19+19; p++)
+      for(int p=page*19,y=2; p<(int)option.size()&&p<page*19+19; p++,y++)
       {
-         move(yline,0);
-         addch('A'+yline-2);addstr(" - ");
-         addstr(option[p].c_str());
-         yline++;
+         mvaddchar(y,0,'A'+y-2);addstr(" - ");
+         addstr(option[p]);
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr(("Press a Letter to select a "+optiontypename).c_str());//a/an error
+      addstr("Press a Letter to select a "+optiontypename);//a/an error
       move(23,0);
       addpagestr();
       move(24,0);
-      if(allowexitwochoice) addstr(("Enter - "+exitstring).c_str());
+      if(allowexitwochoice) addstr("Enter - "+exitstring);
 
       int c=getkey();
 
@@ -935,7 +930,7 @@ int choiceprompt(const string &firstline, const string &secondline,
             return p;
       }
 
-      if(allowexitwochoice&&(c==10||c==ESC))break;
+      if(allowexitwochoice&&(c==ENTER||c==ESC))break;
    }
    return -1;
 }
@@ -953,32 +948,29 @@ int buyprompt(const string &firstline, const string &secondline,
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(0,0);
-      addstr(firstline.c_str());
+      addstr(firstline);
       move(1,0);
-      addstr(secondline.c_str());
-      int yline=2;
+      addstr(secondline);
 
       //Write wares and prices
-      for(int p=page*19; p<(int)nameprice.size()&&p<page*19+19; p++)
+      for(int p=page*19,y=2; p<(int)nameprice.size()&&p<page*19+19; p++)
       {
-         if (nameprice[p].second > ledger.get_funds())
+         if(nameprice[p].second > ledger.get_funds())
             set_color(COLOR_BLACK,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(yline,0);
-         addch('A'+yline-2);addstr(" - ");
-         addstr(nameprice[p].first.c_str());
-         move(yline, namepaddedlength+4); //Add 4 for start of line, eg "A - ".
-         addstr(("$"+tostring(nameprice[p].second)).c_str());
-         yline++;
+         mvaddchar(y,0,'A'+y-2);addstr(" - ");
+         addstr(nameprice[p].first);
+         move(y++, namepaddedlength+4); //Add 4 for start of line, eg "A - ".
+         addstr("$"+tostring(nameprice[p].second));
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
-      addstr(("Press a Letter to select a "+producttype).c_str());//a/an error
+      addstr("Press a Letter to select a "+producttype);//a/an error
       move(23,0);
       addpagestr();
       move(24,0);
-      addstr(("Enter - "+exitstring).c_str());
+      addstr("Enter - "+exitstring);
 
       int c=getkey();
 

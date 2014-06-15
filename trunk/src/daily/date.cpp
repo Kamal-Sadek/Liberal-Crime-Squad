@@ -614,7 +614,7 @@ char completedate(datest &d,int p,char &clearformess)
             if(pool[p]->get_weapon().is_ranged())
             {
                addstr(" comes back from the bathroom toting the ", gamelog);
-               addstr(pool[p]->get_weapon().get_name(1).c_str(), gamelog);
+               addstr(pool[p]->get_weapon().get_name(1), gamelog);
                move(18,0);
                addstr("and threatens to blow the Conservative's brains out!", gamelog);
                gamelog.newline();
@@ -623,7 +623,7 @@ char completedate(datest &d,int p,char &clearformess)
             else if(pool[p]->is_armed())
             {
                addstr(" grabs the Conservative from behind, holding the ", gamelog);
-               addstr(pool[p]->get_weapon().get_name(1).c_str(), gamelog);
+               addstr(pool[p]->get_weapon().get_name(1), gamelog);
                move(18,0);
                addstr("to the corporate slave's throat!", gamelog);
                gamelog.newline();

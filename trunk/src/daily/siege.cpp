@@ -1966,7 +1966,7 @@ void sally_forth(void)
    {
       squad.push_back(new squadst);
       squad.back()->id=cursquadid++;
-      strcpy(squad.back()->name,location[selectedsiege]->getname(true).c_str());
+      strcpy(squad.back()->name,location[selectedsiege]->getname(true));
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<(int)pool.size();p++)
@@ -2096,7 +2096,7 @@ void escape_engage(void)
    {
       squad.push_back(new squadst);
       squad.back()->id=cursquadid++;
-      strcpy(squad.back()->name,location[selectedsiege]->getname(true).c_str());
+      strcpy(squad.back()->name,location[selectedsiege]->getname(true));
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<(int)pool.size();p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align==1)

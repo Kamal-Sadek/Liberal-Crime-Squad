@@ -28,7 +28,7 @@
 * Liberal Crime Squad
 *
 * Abstract
-* 
+*
 * Portability Functions
 *
 * These functions are intended to replace explicit calls to Windows API.
@@ -39,7 +39,7 @@
 * (b) Write portable alternatives for use by Windows and ports.
 * (c) Do (a) and (b) and decide what Windows does (API or portable)
 *     based on the value of a MACRO GO_PORTABLE.
-* 
+*
 * compat.cpp is the place for non-trivial or more global functions,
 *
 * History
@@ -58,6 +58,15 @@
 *
 */
 
+#include "common.h" /* include this prior to checking if WIN32 is defined */
+
+#ifdef WIN32
+   #ifndef __STRICT_ANSI__
+      #define HAS_STRICMP
+      #define HAS_ITOA
+   #endif
+#endif
+
 #ifdef Linux
  // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
  // <http://msdn.microsoft.com/en-us/library/s3f49ktz.aspx>
@@ -72,10 +81,10 @@ typedef signed long long INT64;
 typedef unsigned long ULONG;
 
 #ifdef LCS_WIN64
-    typedef long long LONG_PTR; 
+    typedef long long LONG_PTR;
     typedef unsigned long long ULONG_PTR;
 #else
-    typedef long LONG_PTR; 
+    typedef long LONG_PTR;
     typedef unsigned long ULONG_PTR;
 #endif
 
@@ -105,7 +114,7 @@ typedef PVOID HANDLE;
 
 
 
-#ifndef HAS_SRTICMP
+#ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
 // This is strcmp() on lowercase versions of the string.
 
@@ -135,15 +144,14 @@ void alarmwait();
 
 #ifndef HAS_ITOA
 // Portable equivalent of Windows itoa() function.
-// Note the radix parameter is expected to be 10.
-// The function is not fully ported and doesn't support other bases, it's just
-//  enough for this program to be ported.
-// Ensure buffer is of sufficient size.
-char *itoa(int value, char *buffer, int radix);
+// This function is fully ported and works with any base from 2 to 36.
+// Ensure c-string is of sufficient size.
+// (65 bytes is enough for any int and any base, even on 64-bit architectures.)
+char* itoa(int value,char* str,int base);
 #endif
 
-#ifndef HAS_SNPRINTF
+//#ifndef HAS_SNPRINTF // this was never defined, and the next line does the check for it anyway
 #if defined(__BORLANDC__) || defined(_MSC_VER)
 #define snprintf _snprintf
 #endif
-#endif 
+//#endif

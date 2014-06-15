@@ -33,10 +33,7 @@ the bottom of includes.h in the top src folder.
 /* base - burn the flag */
 void burnflag(void)
 {
-   int flagparts=126;
-   long flag[18][7][4];
-   int x;
-   int y;
+   int flagparts=126,flag[18][7][4],x,y;
 
    for(int p=0;p<7;p++)
    {
@@ -134,9 +131,8 @@ void burnflag(void)
       {
          for(y=0;y<7;y++)
          {
-            move(y+10,x+31);
             set_color(short(flag[x][y][1]),short(flag[x][y][2]),char(flag[x][y][3]));
-            addch(flag[x][y][0]);
+            mvaddchar(y+10,x+31,flag[x][y][0]);
          }
       }
       refresh();
@@ -197,10 +193,8 @@ void getslogan(void)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-   move(16,0);
-   addstr("What is your new slogan?");
-   move(17,0);
-   addstr("                                                                                          ");
+   mvaddstr(16,0,"What is your new slogan?");
+   mvaddstr(17,0,"                                                                                          ");
 
    move(17,0);
    enter_name(slogan,SLOGAN_LEN);
@@ -228,17 +222,14 @@ void orderparty(void)
    {
       printparty();
 
-      move(8,20);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      addstr("Choose a Liberal squad member for Place ");
-      char num[20];
-      itoa(spot+1,num,10);
-      addstr(num);
+      mvaddstr(8,20,"Choose a Liberal squad member for Place ");
+      addstr(spot+1);
       addstr(".");
 
       int c=getkey();
 
-      if(c==10||c==ESC)return;
+      if(c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
@@ -247,7 +238,7 @@ void orderparty(void)
          activesquad->squad[c-'1']=swap;
          spot++;
       }
-   }while(spot<partysize-1);
+   } while(spot<partysize-1);
 }
 
 /* base - reorder party */
@@ -266,16 +257,15 @@ void orderpartyV2(void)
 
    int spot=0;
 
-   do
+   while(true)
    {
       printparty();
-      move(8,20);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      addstr("Choose squad member to replace ");
+      mvaddstr(8,20,"Choose squad member to replace ");
 
       int c=getkey();
 
-      if(c==10||c==ESC)return;
+      if(c==ENTER||c==ESC||c==SPACEBAR) return;
 
       int oldPos = c;
       Creature *swap = NULL;
@@ -289,27 +279,26 @@ void orderpartyV2(void)
          return;
       }
       char num[20];
-      itoa(oldPos,num,10);
+      strcpy(num,oldPos);
       addstr(swap->name);
       addstr(" with");
 
       c=getkey();
 
-      if(c==10||c==ESC)return;
+      if(c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
          activesquad->squad[oldPos-'1']=activesquad->squad[c-'1'];
          activesquad->squad[c-'1']=swap;
       }
-   }while(true);
+   }
 }
 
 /* base - go forth to stop evil */
 void stopevil(void)
 {
-   int l = 0;
-   int p = 0;
+   int l=0,p=0;
 
    if(activesquad==NULL)return;
 
@@ -362,17 +351,14 @@ void stopevil(void)
       if(activesquad->squad[s] != NULL)
          squadsize++;
    }
-   int ticketprice = 100 * squadsize;
-   char ticketpricestr[10];
-   itoa(100 * squadsize, ticketpricestr, 10);
+   int ticketprice=100*squadsize;
 
-   do
+   while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(0,0);
-      addstr("Where will the Squad go?");
+      mvaddstr(0,0,"Where will the Squad go?");
 
       printparty();
 
@@ -413,18 +399,11 @@ void stopevil(void)
 
       temploc.clear();
       for(l=0;l<(int)location.size();l++)
-      {
          if(location[l]->parent==loc&&location[l]->renting>=0&&!location[l]->hidden)temploc.push_back(l);
-      }
       for(l=0;l<(int)location.size();l++)
-      {
          if(location[l]->parent==loc&&location[l]->renting==RENTING_CCS&&!location[l]->hidden)temploc.push_back(l);
-      }
       for(l=0;l<(int)location.size();l++)
-      {
          if(location[l]->parent==loc&&location[l]->renting==RENTING_NOCONTROL&&!location[l]->hidden)temploc.push_back(l);
-      }
-
 
       int y=10;
       for(p=page*11;p<(int)temploc.size()&&p<page*11+11;p++)
@@ -433,7 +412,7 @@ void stopevil(void)
          Location* this_location = location[temploc[p]];
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddch(y,0,y-10+(int)'A');
+         mvaddchar(y,0,y-10+(int)'A');
          addstr(" - ");
          addstr(location[temploc[p]]->getname());
 
@@ -466,7 +445,7 @@ void stopevil(void)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr_f(" ($%s)", ticketpricestr);
+            addstr_f(" ($%s)", toCstring(ticketprice));
          }
          if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
@@ -475,26 +454,22 @@ void stopevil(void)
 
          if(show_safehouse_info)
          {
-            char num[10];
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,50);
-            addstr("Heat: ");
+            mvaddstr(y,50,"Heat: ");
             if(this_location->heat > 100)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else if(this_location->heat > 0)
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            itoa(location[temploc[p]]->heat,num,10);
-            addstr(num);
+            addstr(location[temploc[p]]->heat);
             addstr("%");
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(y,61);
             addstr("Secrecy: ");
             set_color(COLOR_BLACK,COLOR_BLACK,1);
             location[temploc[p]]->update_heat_protection();
-            itoa(location[temploc[p]]->heat_protection,num,10);
-            addstr(num);
+            addstr(location[temploc[p]]->heat_protection);
             addstr("%");
          }
 
@@ -509,7 +484,7 @@ void stopevil(void)
       if(multipleCityMode && loc != -1 && location[loc]->type == location[loc]->city)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddch(y+1,0,y-10+(int)'A');
+         mvaddchar(y+1,0,y-10+(int)'A');
          addstr(" - Travel to a Different City");
          if(!havecar) {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -519,7 +494,7 @@ void stopevil(void)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr_f(" ($%s)", ticketpricestr);
+            addstr_f(" ($%s)", toCstring(ticketprice));
          }
          temploc.push_back(-1);
       }
@@ -591,7 +566,7 @@ void stopevil(void)
       activesquad->stance=0;
       }*/
 
-      if(c==10||c==ESC)
+      if(c==ENTER||c==ESC||c==SPACEBAR)
       {
          if(loc!=-1 && (location[loc]->city != location[loc]->type || location[loc]->city != squad_location->city))
          {
@@ -603,7 +578,7 @@ void stopevil(void)
             break;
          }
       }
-   }while(1);
+   }
 }
 
 
@@ -613,7 +588,7 @@ void investlocation(void)
 {
    int loc=selectedsiege;
 
-   do
+   while(true)
    {
       erase();
 
@@ -936,7 +911,7 @@ void investlocation(void)
             } while (location[loc]->duplicatelocation());
          }
       }
-   }while(1);
+   }
 }
 
 
@@ -949,13 +924,12 @@ void setvehicles(void)
 
    int page=0;
 
-   do
+   while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("Choosing the Right Liberal Vehicle");
+      mvaddstr(0,0,"Choosing the Right Liberal Vehicle");
 
       printparty();
 
@@ -988,17 +962,12 @@ void setvehicles(void)
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
-         strcat(str,vehicle[l]->fullname(true).c_str());
+         strcat(str,vehicle[l]->fullname(true));
 
-         move(y,x);
-         addstr(str);
+         mvaddstr(y,x,str);
 
          x+=26;
-         if(x>53)
-         {
-            x=1;
-            y++;
-         }
+         if(x>53) x=1,y++;
       }
 
       //PAGE UP
@@ -1015,20 +984,12 @@ void setvehicles(void)
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(18,1);
-      addstr("Press a letter to specify passengers for that Liberal vehicle");
-      move(19,1);
-      addstr("Capitalize the letter to designate a driver.");
-      move(20,1);
-      addstr("Press a number to remove that squad member from a vehicle.");
-      move(21,1);
-      addstr("Note:  Vehicles in yellow have already been selected by another squad");
-      move(22,1);
-      addstr("       These cars may be used by both squads but not on the same day.");
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(24,1);
-      addstr("Enter - Done");
+      mvaddstr(18,1,"Press a letter to specify passengers for that Liberal vehicle");
+      mvaddstr(19,1,"Capitalize the letter to designate a driver.");
+      mvaddstr(20,1,"Press a number to remove that squad member from a vehicle.");
+      mvaddstr(21,1,"Note:  Vehicles in yellow have already been selected by another squad");
+      mvaddstr(22,1,"       These cars may be used by both squads but not on the same day.");
+      mvaddstr(24,1,"Enter - Done");
 
       int c=getkey_cap();
 
@@ -1038,13 +999,13 @@ void setvehicles(void)
 
          if(slot>=0&&slot<(int)vehicle.size())
          {
-            bool choice = true;
-            if (activesquad->squad[0])
+            bool choice=true;
+            if(activesquad->squad[0])
             {
-               choice = false;
-               for (int c=1; c<6; c++)
+               choice=false;
+               for(int c=1; c<6; c++)
                {
-                  if (activesquad->squad[c]) //are these slots always filled in order?
+                  if(activesquad->squad[c]) //are these slots always filled in order?
                   {
                      choice=true;
                      break;
@@ -1052,11 +1013,10 @@ void setvehicles(void)
                }
             }
             int c='1';
-            if (choice)
+            if(choice)
             {
-               move(8,20);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               addstr("Choose a Liberal squad member to drive it.");
+               mvaddstr(8,20,"Choose a Liberal squad member to drive it.");
 
                c=getkey();
             }
@@ -1067,9 +1027,7 @@ void setvehicles(void)
                {
                   activesquad->squad[c-'1']->pref_carid=vehicle[slot]->id();
                   if(activesquad->squad[c-'1']->canwalk())
-                  {
                      activesquad->squad[c-'1']->pref_is_driver=1;
-                  }
                   else activesquad->squad[c-'1']->pref_is_driver=0;
                }
             }
@@ -1082,13 +1040,13 @@ void setvehicles(void)
 
          if(slot>=0&&slot<(int)vehicle.size())
          {
-            bool choice = true;
-            if (activesquad->squad[0])
+            bool choice=true;
+            if(activesquad->squad[0])
             {
-               choice = false;
-               for (int c=1; c<6; c++)
+               choice=false;
+               for(int c=1; c<6; c++)
                {
-                  if (activesquad->squad[c]) //are these slots always filled in order?
+                  if(activesquad->squad[c]) //are these slots always filled in order?
                   {
                      choice=true;
                      break;
@@ -1098,9 +1056,8 @@ void setvehicles(void)
             int c='1';
             if (choice)
             {
-               move(8,20);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               addstr("Choose a Liberal squad member to be a passenger.");
+               mvaddstr(8,20,"Choose a Liberal squad member to be a passenger.");
 
                c=getkey();
             }
@@ -1117,7 +1074,6 @@ void setvehicles(void)
       }
 
       //SAV - adding way to remove people from vehicles.
-
       if(c>='1'&&c<='6')
       {
          // 1. Is there someone there?
@@ -1125,22 +1081,20 @@ void setvehicles(void)
          {
             // 2. Are they in a vehicle? Someday we'll want to enforce car capacity
             int vin=activesquad->squad[c-'1']->pref_carid;
-            if ( vin > -1)
+            if(vin>-1)
             {
                activesquad->squad[c-'1']->pref_carid=-1;
                activesquad->squad[c-'1']->pref_is_driver=0;
             }
          }
       }
-
       //SAV - End add
 
-      if(c=='x'||c=='X'||c==ESC||c==10)return;
-
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)vehicle.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)vehicle.size()) page++;
 
-   }while(1);
+      if(c=='x'||c=='X'||c==ENTER||c==ESC||c==SPACEBAR) return;
+   }
 }

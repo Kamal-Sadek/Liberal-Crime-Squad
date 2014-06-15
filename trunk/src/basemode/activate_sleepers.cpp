@@ -46,7 +46,7 @@ void activate_sleepers(void)
 
    char str[80];
 
-   do
+   while(true)
    {
       erase();
 
@@ -70,8 +70,7 @@ void activate_sleepers(void)
       for(int p=page*9;p<(int)temppool.size()&&p<page*9+9;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);
-         addch((y-2)/2+'A');addstr(" - ");
+         mvaddchar(y,0,(y-2)/2+'A');addstr(" - ");
          addstr(temppool[p]->name);
 
          move(y,25);
@@ -104,9 +103,7 @@ void activate_sleepers(void)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,0);
          }
-         char num[10];
-         itoa(static_cast<int>(temppool[p]->infiltration*100),num,10);
-         addstr(num);
+         addstr(temppool[p]->infiltration*100+0.5); // gets rounded to nearest integer
          addstr("%");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -152,18 +149,16 @@ void activate_sleepers(void)
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS],true);
       }
 
-      if(c==10||c==ESC)break;
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }
 
 
 void activate_sleeper(Creature *cr)
 {
-   int state=0;
-   int choice=0;
-   //char havedead=0;
+   int state=0,choice=0;
 
-   do
+   while(true)
    {
       erase();
 
@@ -276,7 +271,7 @@ void activate_sleeper(Creature *cr)
 
       int c=getkey();
 
-      if(c>='a'&&c<='z'){state=c;}
+      if(c>='a'&&c<='z') state=c;
       if((c>='a'&&c<='z') || (c>='1'&&c<='9'))
       {
          choice=c;
@@ -315,9 +310,6 @@ void activate_sleeper(Creature *cr)
          cr->activity.type=ACTIVITY_NONE;
          break;
       }
-      if(c==10||c==ESC)
-      {
-         break;
-      }
-   }while(1);
+      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+   }
 }

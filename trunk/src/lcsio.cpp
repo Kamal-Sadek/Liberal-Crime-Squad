@@ -23,7 +23,7 @@ This file is part of Liberal Crime Squad.
 */
 #include <string>
 #include <queue>
-#include "lcsio.h"
+#include "lcsio.h" /* include this prior to checking if WIN32 is defined */
 #include <stdlib.h>
 #include <string.h>
 
