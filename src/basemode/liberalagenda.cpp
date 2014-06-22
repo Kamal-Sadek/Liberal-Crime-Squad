@@ -97,7 +97,8 @@ char liberalagenda(char won)
             if(execterm==1)addstr("(1st Term):");
             else addstr("(2nd Term):");
          }
-         move(5,25);
+         if(won==-2) move(5,30);
+         else move(5,25);
          addstr(execname[EXEC_PRESIDENT]);
 
          align=exec[EXEC_VP];
@@ -106,25 +107,28 @@ char liberalagenda(char won)
          if(won==-1) addstr("Minister of Love: ");
          else if(won==-2) addstr("Premier: ");
          else addstr("Vice President: ");
-         move(6,25);
+         if(won==-2) move(6,30);
+         else move(6,25);
          addstr(execname[EXEC_VP]);
 
          align=exec[EXEC_STATE];
          set_alignment_color(align,true);
          move(7,0);
          if(won==-1) addstr("Minister of Peace: ");
-         else if(won==-2) addstr("Foreign Minister: ");
+         else if(won==-2) addstr("Foreign Affairs Commissar: ");
          else addstr("Secretary of State: ");
-         move(7,25);
+         if(won==-2) move(7,30);
+         else move(7,25);
          addstr(execname[EXEC_STATE]);
 
          align=exec[EXEC_ATTORNEY];
          set_alignment_color(align,true);
          move(8,0);
          if(won==-1) addstr("Minister of Truth: ");
-         else if(won==-2) addstr("State Security Minister: ");
+         else if(won==-2) addstr("Internal Affairs Commissar: ");
          else addstr("Attorney General: ");
-         move(8,25);
+         if(won==-2) move(8,30);
+         else move(8,25);
          addstr(execname[EXEC_ATTORNEY]);
 
          if(won==-1)
@@ -141,63 +145,55 @@ char liberalagenda(char won)
          }
          else
          {
-            int housemake[5]={0,0,0,0,0};
+            int housemake[6]={0,0,0,0,0,0};
             for(int h=0;h<435;h++) housemake[house[h]+2]++;
-            if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE;
-            else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE;
-            else if(housemake[3]+housemake[4]<218) align=ALIGN_MODERATE;
-            else if(housemake[4]<218) align=ALIGN_LIBERAL;
-            else align=ALIGN_ELITELIBERAL;
+            if(housemake[5]>=218) align=ALIGN_STALINIST; // Stalinists have a majority
+            else if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(housemake[4]>=218) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(housemake[3]+housemake[4]>=218) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
-            char num[20];
-            move(10,0);
-            addstr("House: ");
-            itoa(housemake[4],num,10);
-            addstr(num);addstr("Lib+, ");
-            itoa(housemake[3],num,10);
-            addstr(num);addstr("Lib, ");
-            itoa(housemake[2],num,10);
-            addstr(num);addstr("Mod, ");
-            itoa(housemake[1],num,10);
-            addstr(num);addstr("Cons, ");
-            itoa(housemake[0],num,10);
-            addstr(num);addstr("Cons+");
+            mvaddstr(10,0,"House: ");
+            if(stalinmode) addstr(tostring(housemake[5])+"Sta, ");
+            addstr(tostring(housemake[4])+"Lib+, ");
+            addstr(tostring(housemake[3])+"Lib, ");
+            addstr(tostring(housemake[2])+"Mod, ");
+            addstr(tostring(housemake[1])+"Cons, ");
+            addstr(tostring(housemake[0])+"Cons+");
 
-            int senatemake[5]={0,0,0,0,0};
+            int senatemake[6]={0,0,0,0,0,0};
             for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
             senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
-            if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE;
-            else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE;
-            else if(senatemake[3]+senatemake[4]<51) align=ALIGN_MODERATE;
-            else if(senatemake[4]<51) align=ALIGN_LIBERAL;
-            else align=ALIGN_ELITELIBERAL;
+            if(senatemake[5]>=51) align=ALIGN_STALINIST; // Stalinists have a majority
+            else if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(senatemake[4]>=51) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(senatemake[3]+senatemake[4]>=51) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
             senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
-            move(11,0);
-            addstr("Senate: ");
-            itoa(senatemake[4],num,10);
-            addstr(num);addstr("Lib+, ");
-            itoa(senatemake[3],num,10);
-            addstr(num);addstr("Lib, ");
-            itoa(senatemake[2],num,10);
-            addstr(num);addstr("Mod, ");
-            itoa(senatemake[1],num,10);
-            addstr(num);addstr("Cons, ");
-            itoa(senatemake[0],num,10);
-            addstr(num);addstr("Cons+");
+            mvaddstr(11,0,"Senate: ");
+            if(stalinmode) addstr(tostring(senatemake[5])+"Sta, ");
+            addstr(tostring(senatemake[4])+"Lib+, ");
+            addstr(tostring(senatemake[3])+"Lib, ");
+            addstr(tostring(senatemake[2])+"Mod, ");
+            addstr(tostring(senatemake[1])+"Cons, ");
+            addstr(tostring(senatemake[0])+"Cons+");
          }
 
          if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
          else if(won==1) set_color(COLOR_GREEN,COLOR_BLACK,1);
          else
          {
-            int courtmake[5]={0,0,0,0,0};
+            int courtmake[6]={0,0,0,0,0,0};
             for(int s=0;s<9;s++) courtmake[court[s]+2]++;
-            if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE;
-            else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE;
-            else if(courtmake[3]+courtmake[4]<5) align=ALIGN_MODERATE;
-            else if(courtmake[4]<5) align=ALIGN_LIBERAL;
-            else align=ALIGN_ELITELIBERAL;
+            if(courtmake[5]>=5) align=ALIGN_STALINIST; // Stalinists have a majority
+            else if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(courtmake[4]>=5) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(courtmake[3]+courtmake[4]>=5) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
          }
 
@@ -217,80 +213,43 @@ char liberalagenda(char won)
 
          if(won==-1)
          {
-            move(7,60);
-            addstr("   Replaced");
-            move(8,60);
-            addstr(" By Corporate");
-            move(9,60);
-            addstr("Ethics Officers");
+            mvaddstr(7,65,   "Replaced");
+            mvaddstr(8,63, "By Corporate");
+            mvaddstr(9,62,"Ethics Officers");
          }
          else if(won==-2)
          {
-            move(7,60);
-            addstr(" Replaced By");
-            move(8,60);
-            addstr("Stalinist Show");
-            move(9,60);
-            addstr(" Trial Judges");
+            mvaddstr(7,63, "Replaced By");
+            mvaddstr(8,62,"Stalinist Show");
+            mvaddstr(9,63, "Trial Judges");
          }
          else
          {
             y=4;
-
             for(int c=0;c<9;c++,y++)
             {
                set_alignment_color(court[c],true);
-               move(y,60);
-               addstr(courtname[c]);
+               mvaddstr(y,60,courtname[c]);
             }
          }
          for(int l=0;l<LAWNUM;l++)
          {
-            move(14+l/3,l%3*26);
-
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("\x11Ä");
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            addstr("Ä");
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("Ä");
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr("Ä");
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Ä\x10");
-
-            if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
-            else set_alignment_color(law[l],true);
-
-            switch(l)
+            for(int c=2;c>=-2;c--)
             {
-               case LAW_WOMEN:addstr("Women's Rights");break;
-               case LAW_CIVILRIGHTS:addstr("Civil Rights");break;
-               case LAW_DRUGS:addstr("Drug Law");break;
-               case LAW_IMMIGRATION:addstr("Immigration");break;
-               case LAW_ELECTIONS:addstr("Election Reform");break;
-               case LAW_MILITARY:addstr("Military Spending");break;
-               case LAW_TORTURE:addstr("Human Rights");break;
-               case LAW_PRISONS:addstr("Prison Regulation");break;
-               case LAW_TAX:addstr("Tax Structure");break;
-               case LAW_ABORTION:addstr("Abortion Rights");break;
-               case LAW_ANIMALRESEARCH:addstr("Animal Rights");break;
-               case LAW_POLICEBEHAVIOR:addstr("Police Regulation");break;
-               case LAW_PRIVACY:addstr("Privacy Rights");break;
-               case LAW_DEATHPENALTY:addstr("Death Penalty");break;
-               case LAW_NUCLEARPOWER:addstr("Nuclear Power");break;
-               case LAW_POLLUTION:addstr("Pollution");break;
-               case LAW_LABOR:addstr("Labor Laws");break;
-               case LAW_GAY:addstr("Gay Rights");break;
-               case LAW_CORPORATE:addstr("Corporate Law");break;
-               case LAW_FREESPEECH:addstr("Free Speech");break;
-               case LAW_FLAGBURNING:addstr("Flag Burning");break;
-               case LAW_GUNCONTROL:addstr("Gun Control");break;
+               if(won==-1||won==-2)
+                  set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
+               else if(won==1&&wincondition==WINCONDITION_ELITE)
+                  set_alignment_color(ALIGN_ELITELIBERAL,true);
+               else set_alignment_color(c,true);
+               if(c==2) mvaddchar(14+l/3,l%3*26,'\x11');
+               addchar('Ä');
+               if(c==-2) addchar('\x10');
             }
-
-            move(14+l/3,l%3*26 + 3 - law[l]);
-
-            addchar('O');
+            if(won==-1||won==-2)
+               set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
+            else set_alignment_color(law[l],true);
+            addstr(getlaw(l));
+            mvaddchar(14+l/3,l%3*26 + 3 - law[l],'O');
          }
          break;
       }
@@ -321,7 +280,8 @@ char liberalagenda(char won)
          if(page==PAGE_ISSUES_B) startinglaw=18;
          for(int l=startinglaw;l<startinglaw+18&&l<LAWNUM;l++,y++)
          {
-            if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);
+            if(won==-1||won==-2)
+               set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
             else set_alignment_color(law[l],true);
 
             move(y,0);
@@ -395,14 +355,14 @@ char liberalagenda(char won)
                   else addstr("The military has been abolished, and the entire world is at peace.");
                   break;
                case LAW_TORTURE:
-                  if(won==-2)addstr("The State Security Commission constantly invents new methods of torture.");
+                  if(won==-2)addstr("The Internal Affairs Commissariat constantly invents new methods of torture.");
                   else if(won==-1)addstr("Torture is a prescribed practice in police interrogations.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Military and intelligence interrogators regularly engage in torture.");
                   else if(law[l]==-1)addstr("The line between standard interrogation and torture is severely blurred.");
                   else if(law[l]==0)addstr("Torture allegations still occasionally crop up.");
                   else if(law[l]==1)addstr("The government strongly enforces a ban on torture.");
-                  else if(won!=1||wincondition!=WINCONDITION_ELITE)addstr("The country is respected as an international leader on Moral Interrogation Practices.");
+                  else if(won!=1||wincondition!=WINCONDITION_ELITE)addstr("The nation is a respected international leader on Moral Interrogation Practices.");
                   else addstr("Terrorism ended after the government formally apologized to terrorist leaders.");
                   break;
                case LAW_PRISONS:
@@ -579,83 +539,45 @@ char liberalagenda(char won)
       if(won==1)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         move(23,0);
          if(wincondition==WINCONDITION_EASY)
-            addstr("The country has achieved Liberal status!");
-         else
-            addstr("The country has achieved Elite Liberal status!");
-         move(24,0);
-         addstr("Press 'L' to view the high score list.");
+            mvaddstr(23,0,"The country has achieved Liberal status!");
+         else mvaddstr(23,0,"The country has achieved Elite Liberal status!");
+         mvaddstr(24,0,"Press 'L' to view the high score list.");
 
          int c=getkey();
 
-         if(c==KEY_RIGHT || c==KEY_DOWN)
-         {
-            page++;
-            continue;
-         }
-
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='l')break;
+         if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) page++;
+         else if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) page--;
+         else if(c=='l') break;
       }
       else if(won==-1)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
-         move(23,0);
-         addstr("The country has been Reaganified.");
-         move(24,0);
-         addstr("Press 'L' to view the high score list.");
+         mvaddstr(23,0,"The country has been Reaganified.");
+         mvaddstr(24,0,"Press 'L' to view the high score list.");
 
          int c=getkey();
 
-         if(c==KEY_RIGHT || c==KEY_DOWN)
-         {
-            page++;
-            continue;
-         }
-
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='l')break;
+         if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) page++;
+         else if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) page--;
+         else if(c=='l') break;
       }
       else if(won==-2)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
-         move(23,0);
-         addstr("The country has been Stalinized.");
-         move(24,0);
-         addstr("Press 'L' to view the high score list.");
+         mvaddstr(23,0,"The country has been Stalinized.");
+         mvaddstr(24,0,"Press 'L' to view the high score list.");
 
          int c=getkey();
 
-         if(c==KEY_RIGHT || c==KEY_DOWN)
-         {
-            page++;
-            continue;
-         }
-
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='l')break;
+         if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) page++;
+         else if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) page--;
+         else if(c=='l') break;
       }
       else
       {
-         move(23,0);
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         addstr("Elite Liberal ");
+         mvaddstr(23,0,"Elite Liberal ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("-  ");
          set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -673,34 +595,17 @@ char liberalagenda(char won)
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Arch-Conservative");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         //move(23,0);
-         //addstr("Once these are Green, the country will have achieved Elite Liberal status.");
-         move(24,0);
-         addstr("Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
+         //mvaddstr(23,0,"Once these are Green, the country will have achieved Elite Liberal status.");
+         mvaddstr(24,0,"Press D to disband and wait. Use cursors for other pages. Any other key to exit.");
 
          int c=getkey();
 
-         if(c==KEY_RIGHT || c==KEY_DOWN)
-         {
-            page++;
-            continue;
-         }
-
-         if(c==KEY_LEFT || c==KEY_UP)
-         {
-            page--;
-            continue;
-         }
-
-         if(c=='d')
-         {
-            return confirmdisband();
-         }
-
-         break;
+         if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) page++;
+         else if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) page--;
+         else if(c=='d') return confirmdisband();
+         else break;
       }
    }
-
    return 0;
 }
 

@@ -165,7 +165,7 @@ int choosespecialedition(char &clearformess)
    clearformess=1;
 
    //PICK ONE
-   do
+   while(true)
    {
       erase();
 
@@ -257,7 +257,7 @@ int choosespecialedition(char &clearformess)
          }
       }
 
-      if(c=='x'||c==10||c==ESC)
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
          return -1;
       }
@@ -267,7 +267,7 @@ int choosespecialedition(char &clearformess)
       //PAGE DOWN
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loottype.size())page++;
 
-   }while(true);
+   }
 
    return -1;
 }

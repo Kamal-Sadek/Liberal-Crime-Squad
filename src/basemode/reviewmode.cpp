@@ -77,7 +77,7 @@ void review(void)
       mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴컴");
 
       int y=2;
-      for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++,y++)
       {
          if(p<(int)squad.size())
          {
@@ -92,23 +92,22 @@ void review(void)
             move(y,51);
             if(squad[p]->squad[0]!=NULL)
             {
-               char str[80];
-               getactivity(str,squad[p]->activity);
+               std::string str=getactivity(squad[p]->activity);
 
                if(squad[p]->activity.type==ACTIVITY_NONE)
                {
-                  int count=0;char haveact=0;
+                  int count=0;bool haveact=false;
                   for(int p2=0;p2<6;p2++)
                   {
-                     if(squad[p]->squad[p2]==NULL)continue;
+                     if(squad[p]->squad[p2]==NULL) continue;
                      count++;
                      if(squad[p]->squad[p2]->activity.type!=ACTIVITY_NONE)
                      {
-                        getactivity(str,squad[p]->squad[p2]->activity);
-                        haveact=1;
+                        str=getactivity(squad[p]->squad[p2]->activity);
+                        haveact=true;
                      }
                   }
-                  if(haveact&&count>1)strcpy(str,"Acting Individually");
+                  if(haveact&&count>1) str="Acting Individually";
                }
 
                addstr(str);
@@ -154,8 +153,6 @@ void review(void)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             mvaddstr(y,0,"8 - Review and Move Equipment");
          }
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -172,7 +169,7 @@ void review(void)
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM)page++;
 
-      if(c==ENTER||c==ESC||c==SPACEBAR)return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)return;
 
       if(c>='a'&&c<='s')
       {
@@ -244,8 +241,6 @@ void review_mode(short mode)
    sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)]);
 
    int page=0;
-
-   char num[20];
 
    while(true)
    {
@@ -325,22 +320,15 @@ void review_mode(short mode)
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
          move(y,25);
-         itoa(skill,num,10);
-         addstr(num);
+         addstr(skill);
 
          printhealthstat(*temppool[p],y,33,TRUE);
 
          if(mode==REVIEWMODE_JUSTICE)set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,42);
-         if(temppool[p]->location==-1)
-         {
-            addstr("Away");
-         }
-         else
-         {
-            addstr(location[temppool[p]->location]->getname(true, true));
-         }
+         if(temppool[p]->location==-1) addstr("Away");
+         else addstr(location[temppool[p]->location]->getname(true, true));
 
          move(y,57);
          switch(mode)
@@ -362,21 +350,16 @@ void review_mode(short mode)
                   }
                }
                if(usepers)
-               {
-                  // Let's add some color here...
+               {  // Let's add some color here...
                   set_activity_color(temppool[p]->activity.type);
-                  char str[80];
-                  getactivity(str,temppool[p]->activity);
-                  addstr(str);
+                  addstr(getactivity(temppool[p]->activity));
                }
                break;
             }
          case REVIEWMODE_HOSTAGES:
             {
                set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               char num[20];
-               itoa(temppool[p]->joindays,num,10);
-               addstr(num);
+               addstr(temppool[p]->joindays);
                addstr(" ");
                if(temppool[p]->joindays>1)addstr("Days");
                else addstr("Day");
@@ -389,8 +372,7 @@ void review_mode(short mode)
                {
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   addstr("DEATH ROW: ");
-                  itoa(temppool[p]->sentence,num,10);
-                  addstr(num);
+                  addstr(temppool[p]->sentence);
                   addstr(" ");
                   if(temppool[p]->sentence>1)addstr("Months");
                   else addstr("Month");
@@ -401,9 +383,7 @@ void review_mode(short mode)
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   if(temppool[p]->sentence<-1)
                   {
-                     char num[20];
-                     itoa(-(temppool[p]->sentence),num,10);
-                     addstr(num);
+                     addstr(-(temppool[p]->sentence));
                      addstr(" Life Sentences");
                   }
                   else
@@ -413,9 +393,7 @@ void review_mode(short mode)
                         location[temppool[p]->location]->type==SITE_GOVERNMENT_PRISON)
                {
                   set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                  char num[20];
-                  itoa(temppool[p]->sentence,num,10);
-                  addstr(num);
+                  addstr(temppool[p]->sentence);
                   addstr(" ");
                   if(temppool[p]->sentence>1)addstr("Months");
                   else addstr("Month");
@@ -430,10 +408,8 @@ void review_mode(short mode)
          case REVIEWMODE_CLINIC:
             {
                set_color(COLOR_CYAN,COLOR_BLACK,1);
-               char num[20];
-               itoa(temppool[p]->clinic,num,10);
                addstr("Out in ");
-               addstr(num);
+               addstr(temppool[p]->clinic);
                addstr(" ");
                if(temppool[p]->clinic>1)addstr("Months");
                else addstr("Month");
@@ -450,9 +426,7 @@ void review_mode(short mode)
          case REVIEWMODE_DEAD:
             {
                set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-               char num[20];
-               itoa(temppool[p]->deathdays,num,10);
-               addstr(num);
+               addstr(temppool[p]->deathdays);
                addstr(" ");
                if(temppool[p]->deathdays>1)addstr("Days");
                else addstr("Day");
@@ -463,13 +437,10 @@ void review_mode(short mode)
                set_color(COLOR_CYAN,COLOR_BLACK,1);
                if(temppool[p]->hiding!=-1)
                {
-                  char num[20];
-                  itoa(temppool[p]->dating+
-                     temppool[p]->hiding,num,10);
-                  addstr(num);
+                  addstr(temppool[p]->dating+temppool[p]->hiding);
                   addstr(" ");
-                  if(temppool[p]->dating+
-                     temppool[p]->hiding>1)addstr("Days");
+                  if(temppool[p]->dating+temppool[p]->hiding>1)
+                     addstr("Days");
                   else addstr("Day");
                }
                else addstr("<No Contact>");
@@ -591,8 +562,7 @@ void review_mode(short mode)
                   addstr("                                                                    ");
 
                   move(24,0);
-                  enter_name(temppool[p]->name,CREATURE_NAMELEN,
-                     temppool[p]->propername);
+                  enter_name(temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
                }
                else if(c=='g' && temppool[p]->align==1)
                {
@@ -784,7 +754,7 @@ void review_mode(short mode)
          if (swap == NULL) {
             int c=getkey();
 
-            if(c==10||c==ESC)break;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
             if(c<'a'||c>'s')
             {
@@ -807,7 +777,7 @@ void review_mode(short mode)
 
             int c=getkey();
 
-            if(c==ENTER||c==ESC||SPACEBAR)break;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
             if(c<'a'||c>'s')
             {
@@ -845,7 +815,7 @@ void review_mode(short mode)
          }
       }
 
-      if(c==ENTER||c==ESC||SPACEBAR)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
    }
 }
 
@@ -898,13 +868,9 @@ void assemblesquad(squadst *cursquad)
       }
    }
 
-   int page=0;
+   int page=0,squadsize;
 
-   int squadsize;
-
-   char num[20];
-
-   do
+   while(true)
    {
       squadsize=0;
       for(p=0;p<6;p++)if(cursquad->squad[p]!=NULL)squadsize++;
@@ -950,8 +916,7 @@ void assemblesquad(squadst *cursquad)
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
 
          move(y,25);
-         itoa(skill,num,10);
-         addstr(num);
+         addstr(skill);
 
          printhealthstat(*temppool[p],y,33,FALSE);
 
@@ -1050,7 +1015,7 @@ void assemblesquad(squadst *cursquad)
             {
                if(temppool[p]->squadid==cursquad->id)
                {
-                  char flipstart=0;
+                  bool flipstart=0;
                   for(int pt=0;pt<6;pt++)
                   {
                      if(cursquad->squad[pt]==temppool[p])
@@ -1115,7 +1080,7 @@ void assemblesquad(squadst *cursquad)
             }
 			}
 		}
-      if(c==10||c==ESC)
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
          //CHECK IF GOOD
          char good=1;
@@ -1160,7 +1125,7 @@ void assemblesquad(squadst *cursquad)
             }
          }
       }
-   }while(true);
+   }
 
    //FINALIZE NEW SQUADS
    char hasmembers=0;
@@ -1246,12 +1211,12 @@ void squadlessbaseassign(void)
    for(l=0;l<(int)location.size();l++)if(location[l]->renting>=0&&!location[l]->siege.siege)temploc.push_back(l);
    if(temploc.size()==0)return;
 
-   do
+   while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       move(0,0);
       addstr("New Bases for Squadless Liberals");
@@ -1261,30 +1226,25 @@ void squadlessbaseassign(void)
       addstr("NEW BASE");
 
       int y=2;
-      for(p=page_lib*19;p<(int)temppool.size()&&p<page_lib*19+19;p++)
+      for(p=page_lib*19;p<(int)temppool.size()&&p<page_lib*19+19;p++,y++)
       {
          // Red name if location under siege
          if(temppool[p]->base == temppool[p]->location &&
             location[temppool[p]->base]->siege.siege)
-         {
             set_color(COLOR_RED,COLOR_BLACK,1);
-         }
          else if(multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         else
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,y+'A'-2);addstr(" - ");
          addstr(temppool[p]->name);
 
          mvaddstr(y,25,location[temppool[p]->base]->getname(true, true));
          if(location[temppool[p]->base]->siege.siege)
             addstr(" <Under Siege>");
-
-         y++;
       }
 
       y=2;
-      for(p=page_loc*9;p<(int)temploc.size()&&p<page_loc*9+9;p++)
+      for(p=page_loc*9;p<(int)temploc.size()&&p<page_loc*9+9;p++,y++)
       {
          int color = COLOR_WHITE;
 
@@ -1292,10 +1252,7 @@ void squadlessbaseassign(void)
          else set_color(color,COLOR_BLACK,0);
          mvaddchar(y,51,y+'1'-2);addstr(" - ");
          addstr(location[temploc[p]]->getname(true, true));
-
-         y++;
       }
-
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr(21,0,"Press a Letter to assign a Base.  Press a Number to select a Base.");
@@ -1348,16 +1305,14 @@ void squadlessbaseassign(void)
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN],true);
       }
 
-      if(c==10||c==ESC)break;
-   }while(true);
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+   }
 }
 
 // prints a formatted name, used by promoteliberals
 static void printname(Creature &cr)
 {
-   int bracketcolor=-1;
-   int namecolor;
-   int brightness;
+   int bracketcolor=-1,namecolor,brightness;
 
    if(cr.hiding)
       bracketcolor=COLOR_BLACK;
@@ -1386,8 +1341,7 @@ static void printname(Creature &cr)
       namecolor=COLOR_MAGENTA;
    else if(cr.flag & CREATUREFLAG_BRAINWASHED)
       namecolor=COLOR_YELLOW;
-   else
-      namecolor=COLOR_WHITE;
+   else namecolor=COLOR_WHITE;
 
    // Determine name brightness, based on subordinates left
    /*if(subordinatesleft(cr))
@@ -1434,13 +1388,8 @@ void promoteliberals(void)
    vector<Creature *> temppool;
    vector<int> level;
    for(int p=0;p<(int)pool.size();p++)
-   {
-      if(pool[p]->alive&&
-         pool[p]->align==1)
-      {
+      if(pool[p]->alive&&pool[p]->align==1)
          temppool.push_back(pool[p]);
-      }
-   }
 
    if(temppool.size()==0)return;
 
@@ -1450,12 +1399,12 @@ void promoteliberals(void)
    //PROMOTE
    int page=0;
 
-   do
+   while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       move(0,0);
       addstr("Promote the Elite Liberals");
@@ -1501,10 +1450,8 @@ void promoteliberals(void)
          }
          if(p2==(int)pool.size())addstr("<LCS Leader>");
 
-         move(y,4+level[p]);
+         move(y++,4+level[p]);
          printname(*temppool[p]);
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1587,8 +1534,8 @@ void promoteliberals(void)
          }
       }
 
-      if(c==10||c==ESC)break;
-   }while(true);
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+   }
 }
 
 
@@ -1599,39 +1546,30 @@ void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
    level.clear();
 
    for(int i=temppool.size()-1;i>=0;i--)
-   {
       if(temppool[i]->hireid==-1)
       {
          newpool.insert(newpool.begin(),temppool[i]);
          level.insert(level.begin(),0);
          temppool.erase(temppool.begin() + i);
       }
-   }
 
-   char changed;
-
+   bool changed;
    do
    {
-      changed=0;
+      changed=false;
 
       for(int i=0;i<(int)newpool.size();i++)
-      {
          for(int j=temppool.size()-1;j>=0;j--)
-         {
             if(temppool[j]->hireid==newpool[i]->id)
             {
                newpool.insert(newpool.begin()+i+1,temppool[j]);
                level.insert(level.begin()+i+1,level[i]+1);
                temppool.erase(temppool.begin() + j);
-               changed=1;
+               changed=true;
             }
-         }
-      }
-   }while(changed);
+   } while(changed);
 
    temppool.clear();
    for(int p=0;p<(int)newpool.size();p++)
-   {
       temppool.push_back(newpool[p]);
-   }
 }

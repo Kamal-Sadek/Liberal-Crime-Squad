@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 #define CARCHASE_EVERYONEDEAD    3
 #define CARCHASE_ESCAPED         4
 
-char chasesequence(void)
+bool chasesequence(void)
 {
    int p=0,chasenum=0,v2=0;
 
@@ -86,7 +86,7 @@ char chasesequence(void)
 
    short obstacle=-1;
 
-   do
+   while(true)
    {
       int partysize=0,partyalive=0,encsize=0;
       for(p=0;p<6;p++)
@@ -316,8 +316,7 @@ char chasesequence(void)
                }
             }
 
-            if(c=='e')
-               equip(activesquad->loot,-1);
+            if(c=='e') equip(activesquad->loot,-1);
          }
          else
          {
@@ -414,8 +413,7 @@ char chasesequence(void)
             return 1;
          }
       }
-
-   }while(true);
+   }
 
    mode=GAMEMODE_BASE;
    //Make sure all possible exits of the chase have the nextMessage() call
@@ -424,7 +422,7 @@ char chasesequence(void)
    return 1;
 }
 
-char footchase(void)
+bool footchase(void)
 {
    //NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
    //IT SHOULD NOT DELETE SQUADS OR CREATURES
@@ -457,7 +455,7 @@ char footchase(void)
 
    getkey();
 
-   do
+   while(true)
    {
       int partysize=0,partyalive=0;
       for(p=0;p<6;p++)
@@ -634,8 +632,7 @@ char footchase(void)
             return 1;
          }
       }
-
-   }while(true);
+   }
 
    mode=GAMEMODE_BASE;
    //All possible exits of the chase should be covered by a nextMessage() call.
@@ -1066,7 +1063,7 @@ int driveskill(Creature &cr,Vehicle &v)
    return driveskill;
 }
 
-char drivingupdate(short &obstacle)
+bool drivingupdate(short &obstacle)
 {
    //CHECK TO SEE WHICH CARS ARE BEING DRIVEN
    vector<int> passenger;
@@ -1184,10 +1181,7 @@ void makechasers(long sitetype,long sitecrime)
       pnum=LCSrandom(sitecrime/5 + 1)+1;
       if(pnum>12)pnum=12;
       for(n=0;n<pnum;n++)
-      {
-         makecreature(encounter[encslot],CREATURE_CCS_VIGILANTE);
-         encslot++;
-      }
+         makecreature(encounter[encslot++],CREATURE_CCS_VIGILANTE);
    }
    else
    {
@@ -1198,30 +1192,21 @@ void makechasers(long sitetype,long sitecrime)
             pnum=LCSrandom(sitecrime/5 + 1)+3;
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_SOLDIER);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_SOLDIER);
             break;
          case SITE_GOVERNMENT_WHITE_HOUSE:
             cartype="AGENTCAR"; //Site property? Temporary solution. -XML
             pnum=LCSrandom(sitecrime/5 + 1)+1;
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_SECRET_SERVICE);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_SECRET_SERVICE);
             break;
          case SITE_GOVERNMENT_INTELLIGENCEHQ:
             cartype="AGENTCAR"; //Site property? Temporary solution. -XML
             pnum=LCSrandom(sitecrime/5 + 1)+1;
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_AGENT);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_AGENT);
             break;
          case SITE_CORPORATE_HEADQUARTERS:
          case SITE_CORPORATE_HOUSE:
@@ -1230,10 +1215,7 @@ void makechasers(long sitetype,long sitecrime)
             pnum=LCSrandom(sitecrime/5 + 1)+1;
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_MERC);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_MERC);
             break;
          case SITE_MEDIA_AMRADIO:
          case SITE_MEDIA_CABLENEWS:
@@ -1241,20 +1223,14 @@ void makechasers(long sitetype,long sitecrime)
             pnum=LCSrandom(sitecrime/3 + 1)+1;
             if(pnum>18)pnum=18;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_HICK);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_HICK);
             break;
          case SITE_BUSINESS_CRACKHOUSE:
             cartype="STATIONWAGON"; //Site property? Temporary solution. -XML
             pnum=LCSrandom(sitecrime/3 + 1)+1;
             if(pnum>18)pnum=18;
             for(n=0;n<pnum;n++)
-            {
-               makecreature(encounter[encslot],CREATURE_GANGMEMBER);
-               encslot++;
-            }
+               makecreature(encounter[encslot++],CREATURE_GANGMEMBER);
             break;
          default:
             chaseseq.canpullover=1;
@@ -1264,10 +1240,9 @@ void makechasers(long sitetype,long sitecrime)
             for(n=0;n<pnum;n++)
             {
                if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
-               else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot],CREATURE_GANGUNIT);
-               else makecreature(encounter[encslot],CREATURE_COP);
-               encslot++;
+                  law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot++],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
+               else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot++],CREATURE_GANGUNIT);
+               else makecreature(encounter[encslot++],CREATURE_COP);
             }
             break;
       }
@@ -1289,14 +1264,12 @@ void makechasers(long sitetype,long sitecrime)
       chaseseq.enemycar.push_back(v);
 
       for(n=0;n<pnum;n++)
-      {
          if(encounter[n].carid==-1)
          {
             encounter[n].carid=v->id();
             encounter[n].is_driver=1;
             break;
          }
-      }
    }
 
    long load[4]={0,0,0,0};
@@ -1310,21 +1283,21 @@ void makechasers(long sitetype,long sitecrime)
             v=LCSrandom(chaseseq.enemycar.size());
             encounter[n].carid=chaseseq.enemycar[v]->id();
             encounter[n].is_driver=0;
-         }while(load[v]>=4);
+         } while(load[v]>=4);
          load[v]++;
       }
 }
 
 
 
-char obstacledrive(short obstacle,char choice)
+bool obstacledrive(short obstacle,char choice)
 {
    switch(obstacle)
    {
       case CARCHASE_OBSTACLE_CROSSTRAFFIC:
          if(choice==0)
          {
-            if(dodgedrive())return 1;
+            if(dodgedrive()) return 1;
          }
          else if(choice==1)
          {
@@ -1353,7 +1326,7 @@ char obstacledrive(short obstacle,char choice)
       case CARCHASE_OBSTACLE_TRUCKPULLSOUT:
          if(choice==0)
          {
-            if(dodgedrive())return 1;
+            if(dodgedrive()) return 1;
          }
          else if(choice==1)
          {
@@ -1449,7 +1422,7 @@ char obstacledrive(short obstacle,char choice)
    return 0;
 }
 
-char dodgedrive(void)
+bool dodgedrive(void)
 {
    int v;
    clearmessagearea();
@@ -1648,14 +1621,12 @@ void crashfriendlycar(int v)
                   addstr(" grips the ", gamelog);
                   if(activesquad->squad[p]->is_armed())
                      addstr(activesquad->squad[p]->get_weapon().get_shortname(), gamelog);
-                  else
-                     addstr("car frame", gamelog);
+                  else addstr("car frame", gamelog);
                   addstr(" and struggles to ", gamelog);
                   addstr(activesquad->squad[p]->hisher(), gamelog);
                   if(activesquad->squad[p]->flag & CREATUREFLAG_WHEELCHAIR)
                      addstr(" wheelchair.", gamelog);
-                  else
-                     addstr(" feet.", gamelog);
+                  else addstr(" feet.", gamelog);
                   break;
                case 1:
                   addstr(" gasps in pain, but lives, for now.", gamelog);
@@ -1675,7 +1646,7 @@ void crashfriendlycar(int v)
    //CONSOLIDATE SQUAD
    for(int i=0;i<5;i++)
    {
-      char flipstart=0;
+      bool flipstart=0;
       for(int pt=0;pt<6;pt++)
       {
          if(activesquad->squad[pt]==NULL&&!flipstart)flipstart=1;
@@ -1780,21 +1751,21 @@ void chase_giveup(void)
 }
 
 /* the next two functions force a chase sequence with a specific liberal */
-char footchase(Creature &cr)
+bool footchase(Creature &cr)
 {
    long oldsqid=cr.squadid;
    Creature *crp=&cr;
    squadst *sq=new squadst;
-      sq->squad[0]=&cr;
-      sq->squad[0]->squadid=cursquadid;cursquadid++;
-      cr.squadid=sq->squad[0]->squadid;
-      cr.carid=-1;
+   sq->squad[0]=&cr;
+   sq->squad[0]->squadid=cursquadid;cursquadid++;
+   cr.squadid=sq->squad[0]->squadid;
+   cr.carid=-1;
 
    squadst *oact=activesquad;
    short ops=party_status;
    activesquad=sq;
    party_status=0;
-   char ret=footchase();
+   bool ret=footchase();
 
    party_status=ops;
 
@@ -1818,21 +1789,21 @@ char footchase(Creature &cr)
    return ret;
 }
 
-char chasesequence(Creature &cr,Vehicle &v)
+bool chasesequence(Creature &cr,Vehicle &v)
 {
    long oldsqid=cr.squadid;
    squadst *sq=new squadst;
-      sq->squad[0]=&cr;
-      sq->squad[0]->squadid=cursquadid;
-      sq->id=cursquadid;cursquadid++;
-      cr.carid=v.id();
-      cr.is_driver=1;
+   sq->squad[0]=&cr;
+   sq->squad[0]->squadid=cursquadid;
+   sq->id=cursquadid;cursquadid++;
+   cr.carid=v.id();
+   cr.is_driver=1;
 
    squadst *oact=activesquad;
    short ops=party_status;
    activesquad=sq;
    party_status=0;
-   char ret=chasesequence();
+   bool ret=chasesequence();
    party_status=ops;
 
    delete sq;

@@ -1690,45 +1690,44 @@ void loadgraphics(void)
 {
    int picnum,dimx,dimy;
 
-   //int numbytes;
    FILE *h;
 
    if((h=LCSOpenFile("largecap.cpc", "rb", LCSIO_PRE_ART))!=NULL)
    {
 
-      /*numbytes=*/fread(&picnum,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimx,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimy,sizeof(int),1,h);
+      fread(&picnum,sizeof(int),1,h);
+      fread(&dimx,sizeof(int),1,h);
+      fread(&dimy,sizeof(int),1,h);
       for(int p=0;p<picnum;p++)
          for(int x=0;x<dimx;x++)
             for(int y=0;y<dimy;y++)
-               /*numbytes=*/fread(&bigletters[p][x][y][0],sizeof(char),4,h);
+               fread(&bigletters[p][x][y][0],sizeof(char),4,h);
       LCSCloseFile(h);
    }
 
    if((h=LCSOpenFile("newstops.cpc", "rb", LCSIO_PRE_ART))!=NULL)
    {
 
-      /*numbytes=*/fread(&picnum,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimx,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimy,sizeof(int),1,h);
+      fread(&picnum,sizeof(int),1,h);
+      fread(&dimx,sizeof(int),1,h);
+      fread(&dimy,sizeof(int),1,h);
       for(int p=0;p<picnum;p++)
          for(int x=0;x<dimx;x++)
             for(int y=0;y<dimy;y++)
-               /*numbytes=*/fread(&newstops[p][x][y][0],sizeof(char),4,h);
+               fread(&newstops[p][x][y][0],sizeof(char),4,h);
       LCSCloseFile(h);
    }
 
    if((h=LCSOpenFile("newspic.cpc", "rb", LCSIO_PRE_ART))!=NULL)
    {
 
-      /*numbytes=*/fread(&picnum,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimx,sizeof(int),1,h);
-      /*numbytes=*/fread(&dimy,sizeof(int),1,h);
+      fread(&picnum,sizeof(int),1,h);
+      fread(&dimx,sizeof(int),1,h);
+      fread(&dimy,sizeof(int),1,h);
       for(int p=0;p<picnum;p++)
          for(int x=0;x<dimx;x++)
             for(int y=0;y<dimy;y++)
-               /*numbytes=*/fread(&newspic[p][x][y][0],sizeof(char),4,h);
+               fread(&newspic[p][x][y][0],sizeof(char),4,h);
       LCSCloseFile(h);
    }
 }
@@ -1965,15 +1964,9 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
 
 /* news - make some filler junk */
 void generatefiller(char *story,int amount)
-{
-//TODO: Use text from filler.cpp
-   char str[80];
-   strcat(story,"&r");
-   cityname(str);
-   strcat(story,str);
-   strcat(story," - ");
-   int par=0;
-   while(amount>0)
+{  //TODO: Use text from filler.cpp
+   strcat(story,"&r"+cityname()+" - ");
+   for(int par=0;amount>0;amount--)
    {
       par++;
       for(int i=0;i<LCSrandom(10)+3;i++)strcat(story,"~");
@@ -1981,10 +1974,8 @@ void generatefiller(char *story,int amount)
       if(par>=50&&!LCSrandom(5)&&amount>20)
       {
          par=0;
-         strcat(story,"&r");
-         strcat(story,"  ");
+         strcat(story,"&r  ");
       }
-      amount--;
    }
    strcat(story,"&r");
 }
@@ -1994,7 +1985,7 @@ newsstoryst* new_major_event()
 {
    newsstoryst *ns=new newsstoryst;
    ns->type=NEWSSTORY_MAJOREVENT;
-   do
+   while(true)
    {
       ns->view=LCSrandom(VIEWNUM-3);
       ns->positive=LCSrandom(2);
@@ -2028,7 +2019,7 @@ newsstoryst* new_major_event()
       }
 
       break;
-   }while(true);
+   }
 
    if(ns->positive)change_public_opinion(ns->view,20,0);
    else change_public_opinion(ns->view,-20,0);

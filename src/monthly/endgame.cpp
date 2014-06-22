@@ -199,7 +199,7 @@ void reaganify(char canseethings)
 
       erase();
       move(12,3);
-      addstr("The Arch Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!");
+      addstr("The Arch-Conservative Congress is proposing an ARCH-CONSERVATIVE AMENDMENT!");
 
       getkey();
 
@@ -264,7 +264,8 @@ void reaganify(char canseethings)
          strcpy(execname[EXEC_VP],"Strom Thurmond");
          strcpy(execname[EXEC_STATE],"Jesse Helms");
          strcpy(execname[EXEC_ATTORNEY],"Jerry Falwell");
-         for(int e=0;e<EXECNUM;e++)exec[e]=-2;
+         for(int e=0;e<EXECNUM;e++) exec[e]=ALIGN_ARCHCONSERVATIVE;
+         for(int l=0;l<LAWNUM;l++) law[l]=ALIGN_ARCHCONSERVATIVE;
          liberalagenda(-1);
          savehighscore(END_REAGAN);
       }
@@ -395,6 +396,213 @@ void reaganify(char canseethings)
 }
 
 
+
+/* endgame - attempts to pass a constitutional amendment to lose the game */
+void stalinize(char canseethings)
+{
+   if(canseethings)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+      erase();
+      move(12,11);
+      addstr("The Stalinist Congress is proposing a STALINIST AMENDMENT!");
+
+      getkey();
+
+      //STATE THE AMENDMENT
+      amendmentheading();
+
+      move(2,5);
+      addstr("In recognition of the fact that the proletariat is being exploited");
+      move(3,0);
+      addstr("by bourgeoisie faux-leftist liberal elites, WE THE PEOPLE HEREBY");
+      move(4,0);
+      addstr("REPEAL THE CONSTITUTION.  The former United States are to be");
+      move(5,0);
+      addstr("reorganized into the PEOPLE'S REPUBLIC OF AMERICA, with new");
+      move(6,0);
+      addstr("boundaries to be determined by leading Stalinist philosophers.");
+      move(8,5);
+      addstr("Josef Stalin is General Secretary and Premier, forever, even after death.");
+      move(10,5);
+      addstr("The following Politburo Commissars are also chosen in perpetuity:");
+      move(11,0);
+      addstr("People's Commissar for Foreign Affairs Vyacheslav Molotov");
+      move(12,0);
+      addstr("and People's Commissar for Internal Affairs Lavrentiy Beria.");
+      move(14,5);
+      addstr("In the event of the deaths of any of the aforementioned");
+      move(15,0);
+      addstr("persons, though they shall still nominally hold these posts,");
+      move(16,0);
+      addstr("actual decisions shall be made by Stalinist Party leaders,");
+      move(17,0);
+      addstr("chosen by Stalinist Party loyalists.");
+      move(19,5);
+      addstr("Anyone attempting to petition for redress of grievances will be sent");
+      move(20,0);
+      addstr("to a gulag in newly annexed Canada or, if you're lucky, executed.");
+      move(22,5);
+      addstr("Have a nice day.");
+
+      move(24,0);
+      addstr("Press 'C' to watch the ratification process unfold.");
+
+      while(getkey()!='c');
+   }
+
+   if(ratify(3,-2,-2,1,canseethings))
+   {
+      if(canseethings)
+      {
+         move(24,0);
+         addstr("Press any key to reflect on what has happened ONE LAST TIME.");
+
+         getkey();
+      }
+
+      amendnum = 1; // Constitution repealed...
+
+      //STALINIZE
+      if(canseethings)
+      {
+         strcpy(execname[EXEC_PRESIDENT],"Josef Stalin");
+         strcpy(execname[EXEC_VP],"Josef Stalin");
+         strcpy(execname[EXEC_STATE],"Vyacheslav Molotov");
+         strcpy(execname[EXEC_ATTORNEY],"Lavrentiy Beria");
+         for(int e=0;e<EXECNUM;e++) exec[e]=ALIGN_STALINIST;
+         for(int l=0;l<LAWNUM;l++) law[l]=stalinview(l,true)?ALIGN_ELITELIBERAL:ALIGN_ARCHCONSERVATIVE;
+         liberalagenda(-2);
+         savehighscore(END_STALIN);
+      }
+      else
+      {
+         switch(cantseereason)
+         {
+            case 1:
+               //DATING AND STALINIZED
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               erase();
+               move(12,10);
+               addstr("You went on vacation when the country was on the verge of collapse.");
+
+               getkey();
+
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               erase();
+               move(12,12);
+               addstr("The Stalinists have made the world in their image.");
+
+               getkey();
+
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+               erase();
+               move(12,14);
+               addstr("They'll round up the last of you eventually.  All is lost.");
+
+               getkey();
+
+               savehighscore(END_DATING);
+               break;
+            case 2:
+               //HIDING AND STALINIZED
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               erase();
+               move(12,10);
+               addstr("You went into hiding when the country was on the verge of collapse.");
+
+               getkey();
+
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               erase();
+               move(12,12);
+               addstr("The Stalinists have made the world in their image.");
+
+               getkey();
+
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+               erase();
+               move(12,14);
+               addstr("They'll round the last of you up eventually.  All is lost.");
+
+               getkey();
+
+               savehighscore(END_HIDING);
+               break;
+            case 3:
+               //IF YOU ARE ALL IN PRISON, YOU END UP IN A GULAG, COMRADE
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               erase();
+               move(12,10);
+               addstr("While you were on the inside, the country degenerated...");
+
+               getkey();
+
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               erase();
+               move(12,12);
+               addstr("You've been shipped off to a gulag in newly annexed Canada...");
+
+               getkey();
+
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+               erase();
+               move(12,14);
+               addstr("Ain't no sunshine in this frozen tundra...");
+
+               getkey();
+
+               savehighscore(END_PRISON);
+               break;
+            case 4:
+               //DISBANDED AND STALINIZED
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+
+               erase();
+               move(12,10);
+               addstr("You disappeared safely, but you hadn't done enough.");
+
+               getkey();
+
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               erase();
+               move(12,12);
+               addstr("The Stalinists have made the world in their image.");
+
+               getkey();
+
+               set_color(COLOR_BLACK,COLOR_BLACK,1);
+               erase();
+               move(12,14);
+               addstr("They'll round the last of you up eventually.  All is lost.");
+
+               getkey();
+
+               savehighscore(END_DISBANDLOSS);
+               break;
+         }
+      }
+      reset();
+      viewhighscores();
+      end_game();
+   }
+   else
+   {
+      if(canseethings)
+      {
+         move(24,0);
+         addstr("Press any key to breathe a sigh of relief.                   ");
+
+         getkey();
+      }
+   }
+}
+
+
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int lawview,int view,char congress,char canseethings)
 {
@@ -411,7 +619,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
    //THE STATE VOTE WILL BE BASED ON VIEW OF LAW
    int mood=publicmood(lawview);
    //OR OF A PARTICULAR ISSUE
-   if(view!=-1) mood=attitude[view];
+   if(view>=0) mood=attitude[view];
 
    //CONGRESS
    char num[20],ratified=0;
@@ -509,6 +717,8 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
       y+=4;
    }
    else ratified=1;
+
+   if(level==3) level=-2; // special case for Stalinists: do this after Congress but before the states
 
    //STATES
    if(ratified)

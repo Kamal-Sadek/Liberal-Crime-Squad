@@ -46,24 +46,18 @@ void kidnapattempt(void)
    int available=0;
    char availslot[6]={0,0,0,0,0,0};
    for(int p=0;p<6;p++)
-   {
       if(activesquad->squad[p]!=NULL)
-      {
          if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner==NULL)
          {
             available++;
             availslot[p]=1;
          }
-      }
-   }
 
    if(!available)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(16,1);
-      addstr("No one can do the job.            ");
-      move(17,1);
-      addstr("                                  ");
+      mvaddstr(16,1,"No one can do the job.            ");
+      mvaddstr(17,1,"                                  ");
 
       getkey();
 
@@ -80,134 +74,105 @@ void kidnapattempt(void)
 
       int c=getkey();
 
-      if(c==10||c==ESC)return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>='1'&&c<='6')
-      {
          if(availslot[c-'1'])
-         {
             kidnapper=c-'1';
-            break;
-         }
-      }
+   } while(kidnapper<0);
 
-   }while(true);
+   vector<int> target;
 
-   if(kidnapper>=0)
+   for(int e=0;e<ENCMAX;e++)
+      if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
+        (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2)&&
+       (!encounter[e].get_weapon().protects_against_kidnapping()||
+         encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
+         target.push_back(e);
+
+   if(target.size()>0)
    {
-      vector<int> target;
+      int t=target[0];
 
-      for(int e=0;e<ENCMAX;e++)
+      if(target.size()>1)
       {
-         if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
-            (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2))
-         {
-            if((encounter[e].get_weapon().protects_against_kidnapping()&&
-               encounter[e].blood>20) || encounter[e].animalgloss==ANIMALGLOSS_TANK)continue;
-            target.push_back(e);
-         }
-      }
+         clearcommandarea();
+         clearmessagearea();
+         clearmaparea();
 
-      if(target.size()>0)
-      {
-         int t=target[0];
-
-         if(target.size()>1)
-         {
-            clearcommandarea();
-            clearmessagearea();
-            clearmaparea();
-
-            set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(9,1);
-            addstr("Kidnap whom?");
-
-            int x=1,y=11;
-            for(int t2=0;t2<(int)target.size();t2++)
-            {
-               mvaddchar(y,x,t2+'A');
-               addstr(" - ");
-               addstr(encounter[target[t2]].name);
-
-               y++;
-               if(y==17) y=11,x+=30;
-            }
-
-            while(true)
-            {
-               int c=getkey();
-
-               if(c>='a'&&c<='z')
-               {
-                  t=c-'a';
-                  if(t>=(int)target.size()) t=-1;
-                  else { t=target[t]; break; }
-               }
-               if(c==ENTER||c==ESC||c==SPACEBAR) { t=-1; break; }
-            }
-         }
-
-         if(t!=-1)
-         {
-            char amateur=0;
-
-            if(kidnap(*activesquad->squad[kidnapper],encounter[t],amateur))
-            {
-               delenc(t,0);
-
-               int time=20+LCSrandom(10);
-               if(time<1) time=1;
-               if(sitealarmtimer>time||sitealarmtimer==-1) sitealarmtimer=time;
-            }
-            else sitealarm=1;
-
-            if(amateur)
-            {
-               char present=0;
-               for(int e=0;e<ENCMAX;e++)
-                  if(encounter[e].exists&&encounter[e].alive) {present=1; break;}
-
-               if(present)
-               {
-                  alienationcheck(1);
-                  if(!sitealarm)sitealarm=1;
-                  sitecrime+=5;
-                  criminalizeparty(LAWFLAG_KIDNAPPING);
-                  if(activesquad->squad[kidnapper]->prisoner!=NULL)
-                  {
-                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
-                     if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_NEWSANCHOR) offended_cablenews=1;
-                  }
-                  else
-                  {
-                     if(encounter[t].type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
-                     if(encounter[t].type==CREATURE_NEWSANCHOR) offended_cablenews=1;
-                  }
-               }
-            }
-
-            if(sitealarm) enemyattack();
-            creatureadvance();
-         }
-      }
-      else
-      {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(16,1);
-         addstr("All of the targets are too dangerous.                ");
-         move(17,1);
-         addstr("                                                     ");
+         move(9,1);
+         addstr("Kidnap whom?");
 
-         getkey();
+         int x=1,y=11;
+         for(int t2=0;t2<(int)target.size();t2++)
+         {
+            mvaddchar(y++,x,t2+'A');
+            addstr(" - ");
+            addstr(encounter[target[t2]].name);
+
+            if(y==17) y=11,x+=30;
+         }
+
+         do
+         {
+            int c=getkey();
+
+            if(c>='a'&&c<('a'+ENCMAX))
+            {
+               t=c-'a';
+               if(t>=(int)target.size()) t=-1;
+               else t=target[t];
+            }
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
+         } while(t<0);
       }
+
+      bool amateur=0;
+
+      if(kidnap(*activesquad->squad[kidnapper],encounter[t],amateur))
+      {
+         delenc(t,0);
+
+         int time=20+LCSrandom(10);
+         if(time<1) time=1;
+         if(sitealarmtimer>time||sitealarmtimer==-1) sitealarmtimer=time;
+      }
+      else sitealarm=1;
+
+      if(amateur)
+      {
+         bool present=0;
+         for(int e=0;e<ENCMAX;e++)
+            if(encounter[e].exists&&encounter[e].alive) {present=1; break;}
+
+         if(present)
+         {
+            alienationcheck(1);
+            if(!sitealarm)sitealarm=1;
+            sitecrime+=5;
+            criminalizeparty(LAWFLAG_KIDNAPPING);
+            if(activesquad->squad[kidnapper]->prisoner!=NULL)
+            {
+               if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
+               if(activesquad->squad[kidnapper]->prisoner->type==CREATURE_NEWSANCHOR) offended_cablenews=1;
+            }
+            else
+            {
+               if(encounter[t].type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
+               if(encounter[t].type==CREATURE_NEWSANCHOR) offended_cablenews=1;
+            }
+         }
+      }
+
+      if(sitealarm) enemyattack();
+      creatureadvance();
    }
    else
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(16,1);
-      addstr("No one can do the job.                                  ");
-      move(17,1);
-      addstr("                                                        ");
+      mvaddstr(16,1,"All of the targets are too dangerous.                ");
+      mvaddstr(17,1,"                                                     ");
 
       getkey();
    }
@@ -250,18 +215,12 @@ void releasehostage(void)
 
       int c=getkey();
 
-      if(c==10||c==ESC)return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)return;
 
       if(c>='1'&&c<='6')
-      {
          if(availslot[c-'1'])
-         {
             kidnapper=c-'1';
-            break;
-         }
-      }
-
-   } while(true);
+   } while(kidnapper<0);
 
    activesquad->squad[kidnapper]->prisoner->cantbluff=2;
    freehostage(*(activesquad->squad[kidnapper]), 2);
@@ -285,7 +244,7 @@ void releasehostage(void)
 
 
 /* roll on the kidnap attempt and show the results */
-char kidnap(Creature &a,Creature &t,char &amateur)
+bool kidnap(Creature &a,Creature &t,bool &amateur)
 {
    if(!a.get_weapon().can_take_hostages())
    {
@@ -559,7 +518,7 @@ void squadgrab_immobile(char dead)
             }
 
             //SHUFFLE SQUAD
-            char flipstart=0;
+            bool flipstart=0;
             for(int pt=0;pt<6;pt++)
             {
                if(pt==p-1) continue;

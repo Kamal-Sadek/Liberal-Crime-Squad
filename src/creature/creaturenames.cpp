@@ -51,12 +51,10 @@ void add_age(Creature& person)
    // Almost precise estimates of child and teen ages
    if(person.age<20)
    {
-      char num[5];
       // Inaccuracy in estimating age should be the same every
       // time a character is queried. I'm using the day of the
       // month the character was born on to determine this.
-      itoa(person.age+person.birthday_day%3-1,num,10);
-      addstr(num);
+      addstr(person.age+person.birthday_day%3-1);
       addstr("?");
    }
    // More rough estimates of everyone else
@@ -605,7 +603,7 @@ void lastname(char *str, bool archconservative)
    // or the Arch-Conservative list
    static const char *regular_last_names[] =
    {
-   "Abbey", "Abbott", "Abbzug", "Abramowicz", 
+   "Abbey", "Abbott", "Abbzug", "Abramowicz",
    "Adamson", "Adkins", "Africa", "Aguilera",
    "Ahmed", "Ahn", "Alanson", "Alcott",
    "Alda", "Ali", "Allanshaw", "Alley",

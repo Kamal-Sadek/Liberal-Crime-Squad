@@ -508,8 +508,7 @@ int Shop::fenceselect(squadst& customers) const
       printparty();
 
       int x=1,y=10;
-      std::string outstr;
-      std::string itemstr;
+      std::string outstr,itemstr;
 
       for (int l = page * 18;
            l < (int)location[customers.squad[0]->base]->loot.size() && l < page * 18 + 18;
@@ -626,7 +625,7 @@ int Shop::fenceselect(squadst& customers) const
          }
       }
 
-      if(c == 'x'||c==10||c==ESC)
+      if(c == 'x'||c==ENTER||c==ESC||c==SPACEBAR)
          break;
 
       //PAGE UP

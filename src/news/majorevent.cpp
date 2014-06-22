@@ -49,7 +49,7 @@ void constructeventstory(char *story,short view,char positive)
          {
             char str[200],str2[200];
             char gen[50];
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - ");
             if(law[LAW_ABORTION]==-2)strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
             else if(law[LAW_ABORTION]==-1)strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
@@ -121,7 +121,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_GAY:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - ");
             char dstr[200],dstr2[200];
             generate_name(dstr,dstr2);
@@ -294,7 +294,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_FREESPEECH:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - A children's story has been removed from libraries here after ");
             strcat(story,"the city bowed to pressure from religious groups.");
             strcat(story,"&r");
@@ -421,7 +421,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_JUSTICES:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Conservative federal judge ");
             char dstr[200],dstr2[200];
             generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
@@ -480,7 +480,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_AMRADIO:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Well-known AM radio personality ");
             char dstr[200],dstr2[200];
             generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
@@ -564,7 +564,7 @@ void constructeventstory(char *story,short view,char positive)
          case VIEW_GUNCONTROL:
          {
             int schtype = LCSrandom(4);
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - ");
             strcat(story,"A student has gone on a ");
             if(law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
@@ -643,7 +643,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_PRISONS:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - A former prisoner has written a book describing in horrifying ");
             strcat(story,"detail what goes on behind bars.  ");
             strcat(story,"Although popular culture has used, or perhaps overused, the ");
@@ -705,7 +705,7 @@ void constructeventstory(char *story,short view,char positive)
       {
          case VIEW_DEATHPENALTY:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Perhaps parents can rest easier tonight.  ");
             strcat(story,"The authorities have apprehended their primary suspect in the ");
             strcat(story,"string of brutal child killings that has kept everyone in the area on edge, ");
@@ -767,7 +767,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_ANIMALRESEARCH:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Researchers ");
             if(law[LAW_ANIMALRESEARCH]==2)
             {
@@ -899,7 +899,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_GENETICS:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - The genetic foods industry staged a major event here yesterday ");
             strcat(story,"to showcase its upcoming products.  Over thirty companies set up ");
             strcat(story,"booths and gave talks to wide-eyed onlookers.");
@@ -988,7 +988,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_JUSTICES:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - The conviction of confessed serial killer ");
             char dstr[200],dstr2[200],dstr3[200];
             generate_long_name(dstr,dstr2,dstr3);
@@ -1059,7 +1059,7 @@ void constructeventstory(char *story,short view,char positive)
             break;
          }
          case VIEW_POLLUTION:
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Pollution might not be so bad after all.  The ");
             switch(LCSrandom(6))
             {
@@ -1140,7 +1140,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             break;
          case VIEW_CORPORATECULTURE:
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - Several major companies have announced ");
             strcat(story,"at a joint news conference here that they ");
             strcat(story,"will be expanding their work forces considerably ");
@@ -1185,9 +1185,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"of the tech industry but is also indicative of a full economic recover.&r");
             break;
          case VIEW_AMRADIO:
-         {
-            //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
-            cityname(story);
+         {  //THIS ONE IS SHORTER BECAUSE OF DOUBLE HEADLINE
+            strcpy(story,cityname());
             strcat(story," - Infamous FM radio shock jock ");
             char dstr[200],dstr2[200];
             generate_name(dstr,dstr2,GENDER_WHITEMALEPATRIARCH);
@@ -1264,7 +1263,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_GUNCONTROL:
          {
-            cityname(story);
+            strcpy(story,cityname());
             char jstr[200],jstr2[200],jstr3[200],jstr4[200],jstr5[200],jg1,jg2,tg2[10];
             jg1 = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
             jg2 = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
@@ -1325,7 +1324,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_PRISONS:
          {
-            cityname(story);
+            strcpy(story,cityname());
             strcat(story," - The hostage crisis at the ");
             char jstr[200];
             lastname(jstr,true);

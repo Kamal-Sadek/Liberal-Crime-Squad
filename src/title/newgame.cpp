@@ -37,7 +37,8 @@ void setup_newgame(void)
    bool classicmode   = false;
    bool strongccs     = false;
    bool nightmarelaws = false;
-   multipleCityMode = false;
+   multipleCityMode   = false;
+   stalinmode         = false;
 
    clear();
    while(true)
@@ -49,39 +50,40 @@ void setup_newgame(void)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(classicmode)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" A - Classic Mode: No Conservative Crime Squad.");
       move(8,0);
       if(!classicmode)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-      else
-         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
       if(strongccs)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" B - We Didn't Start The Fire: The CCS starts active and extremely strong.");
       move(10,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(nightmarelaws)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
       move(12,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(multipleCityMode)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" D - National LCS: Advanced play across multiple cities.");
       move(14,0);
       if(nocourtpurge)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" E - Marathon Mode: Prevent Liberals from amending the Constitution.");
+      #ifdef ALLOWSTALIN
+      move(16,0);
+      if(stalinmode)
+         addstr("[X]");
+      else addstr("[ ]");
+      addstr(" F - Stalinist Mode: Enable Stalinist Comrade Squad (not fully implemented).");
+      #endif
 
       move(20,4);
       addstr("Press any other key to continue...");
@@ -114,18 +116,21 @@ void setup_newgame(void)
           notermlimit=!notermlimit;
           continue;
       }
+      #ifdef ALLOWSTALIN
+      if(c=='f')
+      {
+          stalinmode=!stalinmode;
+          continue;
+      }
+      #endif
       break;
    }
    if(nightmarelaws)
    {
       for(int l=0;l<LAWNUM;l++)
-      {
          law[l]=ALIGN_ARCHCONSERVATIVE;
-      }
       for(int a=0;a<VIEWNUM-3;a++)
-      {
          attitude[a]=LCSrandom(20);
-      }
       for(int s=0;s<100;s++)
       {
          if(s<55)senate[s]=-2;
@@ -155,21 +160,17 @@ void setup_newgame(void)
          {
             if(court[c]==-2)
                generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
-            else
-               generate_name(courtname[c]);
+            else generate_name(courtname[c]);
          } while(strlen(courtname[c])>20);
       }
    }
    if(classicmode)
-   {
       endgamestate=ENDGAME_CCS_DEFEATED;
-   }
    else if(strongccs)
    {
       endgamestate=ENDGAME_CCS_ATTACKS;
       //attitude[VIEW_POLITICALVIOLENCE]=90;
    }
-
 
    clear();
    while(true)
@@ -181,18 +182,15 @@ void setup_newgame(void)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(wincondition==WINCONDITION_ELITE)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" A - No Compromise Classic - I will make all our laws Elite Liberal!");
       move(10,0);
       if(!classicmode)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-      else
-         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      else set_color(COLOR_BLACK,COLOR_BLACK,1);
       if(wincondition==WINCONDITION_EASY)
          addstr("[X]");
-      else
-         addstr("[ ]");
+      else addstr("[ ]");
       addstr(" B - Democrat Mode - Most laws must be Elite Liberal, some can be Liberal.");
       move(15,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -257,7 +255,6 @@ void makecharacter(void)
    newcr->special[SPECIALWOUND_RIGHTKIDNEY]=1;
    newcr->special[SPECIALWOUND_SPLEEN]=1;
 #endif
-
 
    newcr->set_attribute(ATTRIBUTE_HEART,8);
    newcr->set_attribute(ATTRIBUTE_WISDOM,1);
@@ -400,7 +397,7 @@ void makecharacter(void)
       }
       if(c=='e' && !multipleCityMode)
       {
-         cityname(lcityname);
+         strcpy(lcityname,cityname());
          continue;
       }
       break;

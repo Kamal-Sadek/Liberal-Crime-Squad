@@ -66,6 +66,9 @@
 // Re-seed the Random Number Generator every time it's called
 //#define MORERANDOM
 
+// Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
+//#define ALLOWSTALIN
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -691,6 +694,7 @@ struct squadst
 
 
 #define ENCMAX 18
+// ENCMAX _HAS_ to be 26 or less, or else there aren't enough letters
 
 #include "sitemode/shop.h"
 
@@ -711,7 +715,9 @@ enum WinConditions
 
 enum Views
 {
-   VIEW_GAY,
+   VIEW_STALIN=-2, // this one is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+   VIEW_MOOD, // this one is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+   VIEW_GAY, // view #0, the first one that is actually in the attitude[] array
    VIEW_DEATHPENALTY,
    VIEW_TAXES,
    VIEW_NUCLEARPOWER,
@@ -751,7 +757,9 @@ enum Views
 
 enum Laws
 {
-   LAW_ABORTION,
+   LAW_STALIN=-2, // not a real law: this is -2 and is actually calculated based on views >=0 and <VIEWNUM-3
+   LAW_MOOD, // not a real law: this is -1 and is likewise calculated based on views >=0 and <VIEWNUM-3
+   LAW_ABORTION, // law #0, the first one that is actually in the law[] array
    LAW_ANIMALRESEARCH,
    LAW_POLICEBEHAVIOR,
    LAW_PRIVACY,
@@ -940,6 +948,7 @@ enum EndTypes
    END_DISPERSED,
    END_CCS,
    END_FIREMEN,
+   END_STALIN,
    ENDNUM
 };
 
@@ -1051,11 +1060,11 @@ void printliberalstats(Creature &cr);
 /* Full screen character sheet, crime sheet */
 void printliberalcrimes(Creature &cr);
 /* draws a horizontal line across the screen */
-void makedelimiter(int y,int x);
+void makedelimiter(int y=8,int x=0);
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
 /* prints amount of money the player has, with optional formatting */
-void printfunds(int y,int offset,const char* prefix=NULL);
+void printfunds(int y=0,int offset=1,const char* prefix="Money: ");
 /* prints a short blurb showing how to page forward */
 void addnextpagestr();
 /* prints a short blurb showing how to page back */
@@ -1171,7 +1180,7 @@ int buyprompt(const string &firstline,const string &secondline,
 /*
  consolesupport.cpp
 */
-void set_color(short f,short b,char bright,char blink=0);
+void set_color(short f,short b,bool bright,bool blink=false);
 void translategetch(int &c);
 void translategetch_cap(int &c);
 /* Refreshes the screen, empties the keyboard buffer, waits for a new key to be pressed, and returns the key pressed */
@@ -1196,16 +1205,16 @@ void end_cleartype_fix();
 /*
  getnames.cpp
 */
-void getactivity(char *str,activityst &act);
-void gettitle(char *str,Creature &cr);
-void getview(char *str,short view);
-void getviewsmall(char *str,short view);
-void getlaw(char *str,int l);
-void cityname(char *story); /* random city name */
+std::string getactivity(activityst &act);
+std::string gettitle(Creature &cr);
+std::string getview(short view,bool shortname);
+std::string getlaw(int l);
+std::string cityname(); /* random city name */
 /* Allow player to enter a name with an optional default name */
 void enter_name(char *name,int len,char *defname=NULL);
-void getlawflag(char *str,int type);
-std::string getmonth(int month, bool shortname=false);
+std::string getlawflag(int type);
+std::string getmonth(int month,bool shortname=false);
+std::string getalign(signed char alignment,bool capitalize=false);
 
 /*
  translateid.cpp
@@ -1633,21 +1642,21 @@ void autopromote(int loc);
 /*
  chase.cpp
 */
-char chasesequence(void);
-char footchase(void);
+bool chasesequence(void);
+bool footchase(void);
 void evasivedrive(void);
 void evasiverun(void);
 int driveskill(Creature &cr,Vehicle &v);
-char drivingupdate(short &obstacle);
+bool drivingupdate(short &obstacle);
 void makechasers(long sitetype,long sitecrime);
-char obstacledrive(short obstacle,char choice);
-char dodgedrive(void);
+bool obstacledrive(short obstacle,char choice);
+bool dodgedrive(void);
 void crashfriendlycar(int v);
 void crashenemycar(int v);
 void chase_giveup(void);
 /* the next two functions force a chase sequence with a specific liberal */
-char footchase(Creature &cr);
-char chasesequence(Creature &cr,Vehicle &v);
+bool footchase(Creature &cr);
+bool chasesequence(Creature &cr,Vehicle &v);
 
 /*
  haulkidnap.cpp
@@ -1657,7 +1666,7 @@ void kidnapattempt(void);
 /* prompt after you've said you want to release someone */
 void releasehostage(void);
 /* roll on the kidnap attempt and show the results */
-char kidnap(Creature &a,Creature &t,char &amateur);
+bool kidnap(Creature &a,Creature &t,bool &amateur);
 /* hostage freed due to host unable to haul */
 void freehostage(Creature &cr,char situation);
 /* haul dead/paralyzed */
@@ -1705,8 +1714,8 @@ void survey(Creature *cr);
 /* misc activation related things */
 void funds_and_trouble(char &clearformess);
 /* steal a car */
-char stealcar(Creature &cr,char &clearformess);
-char carselect(Creature &cr,short &cartype);
+bool stealcar(Creature &cr,char &clearformess);
+bool carselect(Creature &cr,short &cartype);
 /* get a wheelchair */
 void getwheelchair(Creature &cr,char &clearformess);
 
@@ -1880,6 +1889,9 @@ void amnesty(void);
 char wincheck(void);
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l);
+/* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
+ * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
+bool stalinview(short view,bool islaw);
 
 /*
  endgame.cpp
@@ -1890,6 +1902,8 @@ void tossjustices(char canseethings);
 void amendment_termlimits(char canseethings);
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings);
+/* endgame - attempts to pass a constitutional amendment to lose the game */
+void stalinize(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */

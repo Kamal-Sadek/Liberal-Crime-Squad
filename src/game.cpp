@@ -231,6 +231,7 @@ short wincondition=WINCONDITION_ELITE;
 
 bool notermlimit;           //These determine if ELAs can take place --kviiri
 bool nocourtpurge;
+bool stalinmode;
 
 char endgamestate=ENDGAME_NONE;
 char ccsexposure=CCSEXPOSURE_NONE;
@@ -358,9 +359,7 @@ int main(int argc, char* argv[])
 
 #ifdef REVOLUTIONNOW
    for(int v=0;v<VIEWNUM;v++)
-   {
       attitude[v]=100;
-   }
 #endif
 
    law[LAW_ABORTION]=1;
@@ -433,7 +432,7 @@ int main(int argc, char* argv[])
    }
 
    attorneyseed=getSeed();
-   cityname(lcityname);
+   strcpy(lcityname,cityname());
 
    xmllog.initialize("xmllog",true,1);
    bool xml_loaded_ok = true;

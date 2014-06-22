@@ -245,7 +245,7 @@ void mode_site(void)
 
    int encounter_timer=0;
 
-   do
+   while(true)
    {
       int partysize=0,partyalive=0,hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
       for(p=0;p<6;p++)
@@ -641,9 +641,7 @@ void mode_site(void)
 
       if(partyalive>0)
       {
-         int olocx=locx;
-         int olocy=locy;
-         int olocz=locz;
+         int olocx=locx,olocy=locy,olocz=locz;
 
          char override=0;
 
@@ -654,7 +652,7 @@ void mode_site(void)
             move(16,1);
             addstr("Which way?  (W,A,D, and X to move, ENTER to abort)");
 
-            do
+            while(true)
             {
                int c2=getkey();
 
@@ -666,8 +664,8 @@ void mode_site(void)
                   break;
                }
 
-               if(c2==10||c2==ESC)break;
-            }while(true);
+               if(c2==ENTER||c2==ESC||c2==SPACEBAR)break;
+            }
          }
 
          if((c=='w'||c==KEY_UP)&&locy>0&&(!enemy||!sitealarm||override))
@@ -842,7 +840,7 @@ void mode_site(void)
                      }
                   }
 
-                  do
+                  while(true)
                   {
                      int c=getkey();
 
@@ -854,8 +852,8 @@ void mode_site(void)
                            if(activesquad->squad[sp]->alive)break;
                         }
                      }
-                     if(c==10||c==ESC||c==32){sp=-1;break;}
-                  }while(true);
+                     if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){sp=-1;break;}
+                  }
                }
                else sp=forcesp;
 
@@ -863,7 +861,7 @@ void mode_site(void)
                {
                   if(forcetk==-2)
                   {
-                     do
+                     while(true)
                      {
                         clearcommandarea();
                         clearmessagearea();
@@ -961,8 +959,8 @@ void mode_site(void)
                               }
                            }
                         }
-                        if(c==ENTER||c==ESC||c==SPACEBAR){tk=-1;break;}
-                     }while(true);
+                        if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){tk=-1;break;}
+                     }
                   }
                   else tk=forcetk;
 
@@ -1012,7 +1010,17 @@ void mode_site(void)
                         set_color(COLOR_WHITE,COLOR_BLACK,0);
                         if(levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)addchar((char)CH_FULL_BLOCK);
                         else if(levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
-                        {
+                        {  // Pick color
+                           if(levelmap[x][y][locz].flag & SITEBLOCK_METAL)
+                              set_color(COLOR_WHITE,COLOR_WHITE,1);
+                           else if(levelmap[x][y][locz].flag & SITEBLOCK_CLOCK
+                                && levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
+                              set_color(COLOR_RED,COLOR_BLACK,0);
+                           else if(levelmap[x][y][locz].flag & SITEBLOCK_KLOCK
+                                && levelmap[x][y][locz].flag & SITEBLOCK_LOCKED)
+                              set_color(COLOR_BLACK,COLOR_BLACK,1);
+                           else set_color(COLOR_YELLOW,COLOR_BLACK,0);
+
                            if(levelmap[x+1][y][locz].flag & SITEBLOCK_BLOCK)
                               addchar((char)CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
                            else addchar((char)CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
@@ -1119,16 +1127,13 @@ void mode_site(void)
          }
          else if(freeable&&(!enemy||!sitealarm)&&c=='r'&&!location[cursite]->siege.siege)
          {
-            short followers=0;
-            short actgot=0;
+            short followers=0,actgot=0;
 
             if(enemy)sitealarm=1;
-            char freed;
-            char flipstart;
+            bool flipstart,freed;
             do
             {
-               flipstart=0;
-               freed=0;
+               flipstart=0,freed=0;
                for(int e=0;e<ENCMAX;e++)
                {
                   if(!encounter[e].exists)break;
@@ -1142,29 +1147,21 @@ void mode_site(void)
                         sitealarm=1; /* alarm for prisoner escape */
                         criminalize(encounter[e],LAWFLAG_ESCAPED);
                      }
-                     followers++;
-                     flipstart=1;
-                     freed=1;
+                     followers++,flipstart=1,freed=1;
 
                      if(partysize<6)
                      {
                         int i;
                         // Check for people who can recruit followers
                         for(i=0;i<6;i++)
-                        {
                            if(activesquad->squad[i]!=NULL)
-                           {
                               if(subordinatesleft(*activesquad->squad[i]))
-                              {
                                  break;
-                              }
-                           }
-                        }
                         // If someone can, add this person as a newly recruited Liberal!
                         if(i!=6)
                         {
                            Creature *newcr=new Creature;
-                              *newcr=encounter[e];
+                           *newcr=encounter[e];
                            newcr->namecreature();
 
                            newcr->location=activesquad->squad[i]->location;
@@ -1184,15 +1181,12 @@ void mode_site(void)
                               }
                            }
 
-                           actgot++;
-                           partysize++;
+                           actgot++,partysize++;
                         }
                      }
                   }
                   if(flipstart)
-                  {
                      if(e<ENCMAX-1)encounter[e]=encounter[e+1];
-                  }
                }
                if(flipstart)encounter[ENCMAX-1].exists=0;
 
@@ -1202,7 +1196,7 @@ void mode_site(void)
                   if(time<1)time=1;
                   if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
                }
-            }while(freed);
+            } while(freed);
 
             if(followers>0)
             {
@@ -1236,19 +1230,15 @@ void mode_site(void)
             }
          }
          else if(c=='r'&&hostages)
-         {
             releasehostage();
-         }
 
 
          if(c>='1'&&c<='6')
-         {
             if(activesquad->squad[c-'1']!=NULL)
             {
                if(party_status==c-'1')fullstatus(party_status);
                else party_status=c-'1';
             }
-         }
 
          if(c=='e')
          {
@@ -1265,7 +1255,7 @@ void mode_site(void)
 
          if(c=='g'&&(groundloot.size()>0||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
          {
-            char tookground=0;
+            bool tookground=0;
 
             if(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)
             {
@@ -1314,9 +1304,7 @@ void mode_site(void)
 
                   Item *item;
 
-                  string newLootType;
-                  string newWeaponType;
-                  string newArmorType;
+                  string newLootType,newWeaponType,newArmorType;
 
                   switch(sitetype)
                   {
@@ -1422,13 +1410,8 @@ void mode_site(void)
                      break;
                   case SITE_GOVERNMENT_PRISON:
                      if(!LCSrandom(5))
-                     {
                         newArmorType="ARMOR_PRISONER";
-                     }
-                     else
-                     {
-                        newWeaponType="WEAPON_SHANK";
-                     }
+                     else newWeaponType="WEAPON_SHANK";
                      break;
                   case SITE_GOVERNMENT_WHITE_HOUSE:
                      if(!LCSrandom(20))newLootType="LOOT_SECRETDOCUMENTS";
@@ -1553,14 +1536,10 @@ void mode_site(void)
                   {
                      int quality=1;
                      if(!LCSrandom(3))
-                     {
                         quality=2;
-                     }
                      Armor *a=new Armor(*armortype[getarmortype(newArmorType)],quality);
-                     if (!LCSrandom(3))
-                     {
+                     if(!LCSrandom(3))
                         a->set_damaged(true);
-                     }
                      item = a;
                      activesquad->loot.push_back(item);
                   }
@@ -1577,10 +1556,8 @@ void mode_site(void)
                         {
                            vector<int> cti;
                            for(int ct=0; ct<(int)cliptype.size(); ++ct)
-                           {
                               if(w->acceptable_ammo(*cliptype[ct]))
                                  cti.push_back(ct);
-                           }
                            Clip c(*cliptype[cti[LCSrandom(cti.size())]]);
                            w->reload(c);
                         }
@@ -1626,9 +1603,7 @@ void mode_site(void)
                sitecrime++;
                sitestory->crime.push_back(CRIME_STOLEGROUND);
                if(enemy)
-               {
                   criminalize(*(activesquad->squad[beststealer]),LAWFLAG_THEFT);
-               }
             }
 
             creatureadvance();
@@ -1655,47 +1630,32 @@ void mode_site(void)
             addstr("Enter - Done");
 
             int c=0;
-            do
+            while(true)
             {
-               if(c=='a')
-               {
-                  if(encounterwarnings)encounterwarnings=0;else encounterwarnings=1;
-               }
+               if(c=='a') encounterwarnings=!encounterwarnings;
 
-               if(c==10||c==ESC)break;
+               if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
-               move(10 , 2);
+               move(10,2);
                if(encounterwarnings)
-               {
                   addstr("X");
-               }
-               else
-               {
-                  addstr(" ");
-               }
+               else addstr(" ");
 
                c=getkey();
-            }while(true);
+            }
             mapshowing=true;
          }
 
          int cbase=-1;
          if(activesquad->squad[0]!=NULL)
-         {
             cbase=activesquad->squad[0]->base;
-         }
-
 
          if(locx!=olocx||locy!=olocy||locz!=olocz||c=='s')
          {
             //NEED TO GO BACK TO OLD LOCATION IN CASE COMBAT
                //REFRESHES THE SCREEN
-            long nlocx=locx;
-            long nlocy=locy;
-            long nlocz=locz;
-            locx=olocx;
-            locy=olocy;
-            locz=olocz;
+            long nlocx=locx,nlocy=locy,nlocz=locz;
+            locx=olocx,locy=olocy,locz=olocz;
 
             //ENEMIES SHOULD GET FREE SHOTS NOW
             if(enemy&&sitealarm)
@@ -1755,9 +1715,7 @@ void mode_site(void)
                   getkey();
                }
                else
-               {
                   enemyattack();
-               }
             }
             else if(enemy)disguisecheck(encounter_timer);
 
@@ -1774,9 +1732,7 @@ void mode_site(void)
             if(partyalive==0)continue;
 
             //AFTER DEATH CHECK CAN MOVE BACK TO NEW LOCATION
-            locx=nlocx;
-            locy=nlocy;
-            locz=nlocz;
+            locx=nlocx,locy=nlocy,locz=nlocz;
 
             //CHECK FOR EXIT
             if((levelmap[locx][locy][locz].flag & SITEBLOCK_EXIT)||
@@ -1787,13 +1743,9 @@ void mode_site(void)
                gamelog.record(activesquad->name);
                gamelog.record(" has left ");
                if(location[cursite]->front_business!=-1)
-               {
                   gamelog.record(location[cursite]->front_name);
-               }
                else
-               {
                   gamelog.record(location[cursite]->name);
-               }
                gamelog.record(".");
                gamelog.nextMessage();
 
@@ -1813,19 +1765,15 @@ void mode_site(void)
                if(location[cursite]->siege.siege)level=1000;
 
                //MAKE SURE YOU ARE GUILTY OF SOMETHING
-               char guilty=0;
+               bool guilty=0;
                for(p=0;p<6;p++)
-               {
                   if(activesquad->squad[p]!=NULL)
-                  {
                      if(iscriminal(*activesquad->squad[p]))guilty=1;
-                  }
-               }
                if(!guilty)level=0;
 
                makechasers(sitetype,level);
 
-               char havecar=0;
+               bool havecar=0;
                for(p=0;p<6;p++)
                {
                   if(activesquad->squad[p]!=NULL)
@@ -1845,7 +1793,7 @@ void mode_site(void)
                      }
                   }
                }
-               char gotout;
+               bool gotout;
                if(havecar)gotout=chasesequence();
                else gotout=footchase();
 
@@ -2598,7 +2546,7 @@ void mode_site(void)
             knowmap(locx,locy,locz);
          }
       }
-   }while(true);
+   }
 }
 
 
@@ -2730,7 +2678,7 @@ void open_door(bool restricted)
    {
       levelmap[locx][locy][locz].flag|=SITEBLOCK_KLOCK;
 
-      do
+      while(true)
       {
          clearmessagearea(false);
 
@@ -2782,12 +2730,11 @@ void open_door(bool restricted)
             return;
          }
          else if(c=='n') return;
-
-      }while(true);
+      }
    }
    else if(locked || (!restricted && alarmed))
    {
-      do
+      while(true)
       {
          clearmessagearea(false);
 
@@ -2841,8 +2788,7 @@ void open_door(bool restricted)
             break;
          }
          else if(c=='n')break;
-
-      }while(true);
+      }
    }
    else
    {

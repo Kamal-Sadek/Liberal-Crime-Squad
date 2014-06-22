@@ -94,6 +94,7 @@ extern short wincondition;
 
 extern bool notermlimit;
 extern bool nocourtpurge;
+extern bool stalinmode;
 
 extern short offended_corps;
 extern short offended_cia;

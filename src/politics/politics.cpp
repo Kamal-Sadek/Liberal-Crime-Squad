@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 /* politics - calculate presidential approval */
 int presidentapproval()
 {
-   //Calculate Presidental approval rating
+   //Calculate Presidential approval rating
    int approval=0, i;
    for(i=0;i<1000;i++)
    {
@@ -111,7 +111,7 @@ void elections(char clearformess,char canseethings)
    if(canseethings)
    {
       if(clearformess) erase();
-      else makedelimiter(8,0);
+      else makedelimiter();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr("The Elections are being held today!");
@@ -143,7 +143,7 @@ void elections(char clearformess,char canseethings)
 
       //Primaries
       int approvepres=0, approveveep=0;              // presidential & vice-presidential approval within own party
-      int libvotes[3]={0,0,0}, consvotes[3]={0,0,0}; // liberal & conservative parties' candidates votes recieved
+      int libvotes[3]={0,0,0}, consvotes[3]={0,0,0}; // liberal & conservative parties' candidates votes received
 
       // run primaries for 100 voters
       for(int i=0;i<100;i++)
@@ -223,14 +223,7 @@ void elections(char clearformess,char canseethings)
             else addstr("Mrs. ");
 
             addstr(candidate[c]+1);
-            switch(candidate[c][0])
-            {
-            case -2:addstr(", Arch Conservative");break;
-            case -1:addstr(", Conservative");break;
-            case 0:addstr(", moderate");break;
-            case 1:addstr(", Liberal");break;
-            case 2:addstr(", Elite Liberal");break;
-            }
+            addstr(", "+getalign(candidate[c][0],false));
          }
 
          if(!disbanding)
@@ -410,72 +403,72 @@ void elections(char clearformess,char canseethings)
          switch(prop[p])
          {
             case LAW_ABORTION:
-               if(propdir[p]==1)addstr("Strengthen Abortion Rights");
+               if(propdir[p]==1)addstr("Strengthen Reproductive Freedom"); // was "Strengthen Abortion Rights"
                else addstr("Protect the Unborn Child");
                break;
             case LAW_ANIMALRESEARCH:
                if(propdir[p]==1)addstr("Limit Animal Cruelty");
-               else addstr("Expand Animal Research");
+               else addstr("Help Scientists Cure Diseases"); // was "Expand Animal Research"
                break;
             case LAW_POLICEBEHAVIOR:
                if(propdir[p]==1)addstr("Curtail Police Misconduct");
-               else addstr("Stop Harassment of Police Officers");
+               else addstr("Help Police Fight Crime"); // was "Stop Harassment of Police Officers"
                break;
             case LAW_PRIVACY:
                if(propdir[p]==1)addstr("Enhance Privacy Protection");
-               else addstr("Allow Corporations Access to Information");
+               else addstr("Promote Transparency and Accountability"); // was "Allow Corporations Access to Information"
                break;
             case LAW_DEATHPENALTY:
-               if(propdir[p]==1)addstr("Limit the Death Penalty");
-               else addstr("Expand Capital Punishment");
+               if(propdir[p]==1)addstr("Stop Barbaric Executions"); // was "Limit the Death Penalty"
+               else addstr("Deter Criminals via Capital Punishment"); // "Expand Capital Punishment"
                break;
             case LAW_NUCLEARPOWER:
-               if(propdir[p]==1)addstr("Limit Nuclear Power");
-               else addstr("Expand Nuclear Power");
+               if(propdir[p]==1)addstr("Prevent Nuclear Meltdowns"); // was "Limit Nuclear Power"
+               else addstr("Promote Alternative Energy Sources"); // was "Expand Nuclear Power"
                break;
             case LAW_POLLUTION:
-               if(propdir[p]==1)addstr("Punish Polluters");
-               else addstr("Reward Industry");
+               if(propdir[p]==1)addstr("Protect our Environment"); // was "Punish Polluters"
+               else addstr("Support American Manufacturing"); // was "Reward Industry"
                break;
             case LAW_LABOR:
-               if(propdir[p]==1)addstr("Enhance Labor Standards");
-               else addstr("End Undue Union Influence");
+               if(propdir[p]==1)addstr("Protect Workers' Rights"); // was "Enhance Labor Standards"
+               else addstr("Fight Corrupt Union Thugs"); // was "End Undue Union Influence"
                break;
             case LAW_GAY:
-               if(propdir[p]==1)addstr("Expand Homosexual Rights");
+               if(propdir[p]==1)addstr("Fight Homophobic Bigotry in our Laws"); // was "Expand Homosexual Rights"
                else addstr("Support the Sanctity of Marriage");
                break;
             case LAW_CORPORATE:
                if(propdir[p]==1)addstr("Stop Corporate Criminals");
-               else addstr("Reward Small Businesses");
+               else addstr("Help Small Businesses Expand"); // was "Reward Small Businesses"
                break;
             case LAW_FREESPEECH:
                if(propdir[p]==1)addstr("Protect Free Speech");
-               else addstr("Limit Hurtful Speech");
+               else addstr("Limit Hate Speech"); // was "Limit Hurtful Speech"
                break;
             case LAW_TAX:
-               if(propdir[p]==1)addstr("Punish the Wealthy");
-               else addstr("Stimulate Economic Growth");
+               if(propdir[p]==1)addstr("Fight Income Inequality"); // was "Punish the Wealthy"
+               else addstr("Cut Job-Killing Taxes"); // was "Stimulate Economic Growth"
                break;
             case LAW_FLAGBURNING:
                if(propdir[p]==1)addstr("Limit Prohibitions on Flag Burning");
                else addstr("Protect the Symbol of Our Nation");
                break;
             case LAW_GUNCONTROL:
-               if(propdir[p]==1)addstr("Prevent Gun Violence");
-               else addstr("Assert our Second Amendment Rights");
+               if(propdir[p]==1)addstr("Prevent Mass Shootings"); // was "Prevent Gun Violence"
+               else addstr("Protect our Second Amendment Rights"); // was "Assert our Second Amendment Rights"
                break;
             case LAW_WOMEN:
-               if(propdir[p]==1)addstr("Expand Women's Rights");
+               if(propdir[p]==1)addstr("Promote Gender Equality"); // was "Expand Women's Rights"
                else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
-               if(propdir[p]==1)addstr("Expand Civil Rights");
+               if(propdir[p]==1)addstr("Promote Racial Equality"); // was "Expand Civil Rights"
                else addstr("Fight Reverse Discrimination");
                break;
             case LAW_DRUGS:
-               if(propdir[p]==1)addstr("Limit Oppressive Drug Laws");
-               else addstr("Strengthen the War On Drugs");
+               if(propdir[p]==1)addstr("Repeal Oppressive Drug Laws"); // was "Limit Oppressive Drug Laws"
+               else addstr("Fight Drug Trafficking"); // was "Strengthen the War On Drugs"
                break;
             case LAW_IMMIGRATION:
                if(propdir[p]==1)addstr("Protect Immigrant Rights");
@@ -483,23 +476,23 @@ void elections(char clearformess,char canseethings)
                break;
             case LAW_ELECTIONS:
                if(propdir[p]==1)addstr("Fight Political Corruption");
-               else addstr("Limit Campaign Finance Reforms");
+               else addstr("Limit Regulation of Political Speech"); // was "Limit Campaign Finance Reforms"
                break;
             case LAW_MILITARY:
-               if(propdir[p]==1)addstr("Limit Military Spending");
-               else addstr("Strengthen our National Defense");
+               if(propdir[p]==1)addstr("Shrink the Military-Industrial Complex"); // was "Limit Military Spending"
+               else addstr("Support our Troops in Defending America"); // was "Strengthen our National Defense"
                break;
             case LAW_TORTURE:
-               if(propdir[p]==1)addstr("Protect Human Rights");
-               else addstr("Permit Strong Tactics in Interrogations");
+               if(propdir[p]==1)addstr("Protect Human Rights from Torture"); // was "Ban Torture Techniques"
+               else addstr("Enhance Interrogations to Fight Terrorism"); // was "Permit Strong Tactics in Interrogations"
                break;
             case LAW_PRISONS:
                if(propdir[p]==1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation");
-                  else addstr("Improve Prison Conditions");
+                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Enhance Prison Security");
+               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -530,7 +523,7 @@ void elections(char clearformess,char canseethings)
          if(l==999)
          {
             if(yesvotes>500) yeswin=1;
-            else if(yesvotes==500) yeswin=LCSrandom(2),recount=1;
+            else if(yesvotes==500) yeswin=(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1),recount=1;
          }
 
          if(canseethings && (l%10 == 0 || l==999))
@@ -606,33 +599,8 @@ void elections_senate(int senmod,char canseethings)
 
       if(canseethings)
       {
-         move(y,x);
-
-         if(senate[s]==-2)
-         {
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Arch-Conservative");
-         }
-         else if(senate[s]==-1)
-         {
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr("Conservative");
-         }
-         else if(senate[s]==0)
-         {
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("moderate");
-         }
-         else if(senate[s]==1)
-         {
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            addstr("Liberal");
-         }
-         else
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("Elite Liberal");
-         }
+         set_alignment_color(senate[s],true);
+         mvaddstr(y,x,getalign(senate[s],false));
       }
 
       x+=20;
@@ -709,33 +677,9 @@ void elections_senate(int senmod,char canseethings)
 
       if(canseethings)
       {
-         move(y,x);
-
-         if(senate[s]==-2)
-         {
-            set_color(COLOR_RED,COLOR_BLACK,1);
-            addstr("Arch-Conservative    ");
-         }
-         else if(senate[s]==-1)
-         {
-            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            addstr("Conservative         ");
-         }
-         else if(senate[s]==0)
-         {
-            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            addstr("moderate             ");
-         }
-         else if(senate[s]==1)
-         {
-            set_color(COLOR_CYAN,COLOR_BLACK,1);
-            addstr("Liberal              ");
-         }
-         else
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr("Elite Liberal        ");
-         }
+         set_alignment_color(senate[s],true);
+         mvaddstr(y,x,"                    ");
+         mvaddstr(y,x,getalign(senate[s],false));
       }
 
       x+=20;
@@ -844,10 +788,15 @@ void elections_house(char canseethings)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             addstr("L ");
          }
-         else
+         else if(house[h]==2)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr("L+");
+         }
+         else
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("S ");
          }
       }
 
@@ -944,10 +893,15 @@ void elections_house(char canseethings)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             addstr("L ");
          }
-         else
+         else if(house[h]==2)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr("L+");
+         }
+         else
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("S ");
          }
       }
 
@@ -1027,7 +981,7 @@ void supremecourt(char clearformess,char canseethings)
    if(canseethings)
    {
       if(clearformess) erase();
-      else makedelimiter(8,0);
+      else makedelimiter();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr("The Supreme court is handing down decisions!");
@@ -1116,72 +1070,72 @@ void supremecourt(char clearformess,char canseethings)
          switch(scase[c])
          {
             case LAW_ABORTION:
-               if(scasedir[c]==1)addstr("Strengthen Abortion Rights");
+               if(scasedir[c]==1)addstr("Strengthen Reproductive Freedom"); // was "Strengthen Abortion Rights"
                else addstr("Protect the Unborn Child");
                break;
             case LAW_ANIMALRESEARCH:
                if(scasedir[c]==1)addstr("Limit Animal Cruelty");
-               else addstr("Expand Animal Research");
+               else addstr("Help Scientists Cure Diseases"); // was "Expand Animal Research"
                break;
             case LAW_POLICEBEHAVIOR:
                if(scasedir[c]==1)addstr("Curtail Police Misconduct");
-               else addstr("Stop Harassment of Police Officers");
+               else addstr("Help Police Fight Crime"); // was "Stop Harassment of Police Officers"
                break;
             case LAW_PRIVACY:
                if(scasedir[c]==1)addstr("Enhance Privacy Protection");
-               else addstr("Allow Corporations Access to Information");
+               else addstr("Promote Transparency and Accountability"); // was "Allow Corporations Access to Information"
                break;
             case LAW_DEATHPENALTY:
-               if(scasedir[c]==1)addstr("Limit the Death Penalty");
-               else addstr("Expand Capital Punishment");
+               if(scasedir[c]==1)addstr("Stop Barbaric Executions"); // was "Limit the Death Penalty"
+               else addstr("Deter Criminals via Capital Punishment"); // "Expand Capital Punishment"
                break;
             case LAW_NUCLEARPOWER:
-               if(scasedir[c]==1)addstr("Limit Nuclear Power");
-               else addstr("Expand Nuclear Power");
+               if(scasedir[c]==1)addstr("Prevent Nuclear Meltdowns"); // was "Limit Nuclear Power"
+               else addstr("Promote Alternative Energy Sources"); // was "Expand Nuclear Power"
                break;
             case LAW_POLLUTION:
-               if(scasedir[c]==1)addstr("Punish Polluters");
-               else addstr("Reward Industry");
+               if(scasedir[c]==1)addstr("Protect our Environment"); // was "Punish Polluters"
+               else addstr("Support American Manufacturing"); // was "Reward Industry"
                break;
             case LAW_LABOR:
-               if(scasedir[c]==1)addstr("Enhance Labor Standards");
-               else addstr("End Undue Union Influence");
+               if(scasedir[c]==1)addstr("Protect Workers' Rights"); // was "Enhance Labor Standards"
+               else addstr("Fight Corrupt Union Thugs"); // was "End Undue Union Influence"
                break;
             case LAW_GAY:
-               if(scasedir[c]==1)addstr("Expand Homosexual Rights");
+               if(scasedir[c]==1)addstr("Fight Homophobic Bigotry in our Laws"); // was "Expand Homosexual Rights"
                else addstr("Support the Sanctity of Marriage");
                break;
             case LAW_CORPORATE:
                if(scasedir[c]==1)addstr("Stop Corporate Criminals");
-               else addstr("Reward Small Businesses");
+               else addstr("Help Small Businesses Expand"); // was "Reward Small Businesses"
                break;
             case LAW_FREESPEECH:
                if(scasedir[c]==1)addstr("Protect Free Speech");
-               else addstr("Limit Hurtful Speech");
+               else addstr("Limit Hate Speech"); // was "Limit Hurtful Speech"
                break;
             case LAW_TAX:
-               if(scasedir[c]==1)addstr("Punish the Wealthy");
-               else addstr("Stimulate Economic Growth");
+               if(scasedir[c]==1)addstr("Fight Income Inequality"); // was "Punish the Wealthy"
+               else addstr("Cut Job-Killing Taxes"); // was "Stimulate Economic Growth"
                break;
             case LAW_FLAGBURNING:
                if(scasedir[c]==1)addstr("Limit Prohibitions on Flag Burning");
                else addstr("Protect the Symbol of Our Nation");
                break;
             case LAW_GUNCONTROL:
-               if(scasedir[c]==1)addstr("Prevent Gun Violence");
-               else addstr("Protect our Second Amendment Rights");
+               if(scasedir[c]==1)addstr("Prevent Mass Shootings"); // was "Prevent Gun Violence"
+               else addstr("Protect our Second Amendment Rights"); // was "Assert our Second Amendment Rights"
                break;
             case LAW_WOMEN:
-               if(scasedir[c]==1)addstr("Expand Women's Rights");
+               if(scasedir[c]==1)addstr("Promote Gender Equality"); // was "Expand Women's Rights"
                else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
-               if(scasedir[c]==1)addstr("Expand Civil Rights");
+               if(scasedir[c]==1)addstr("Promote Racial Equality"); // was "Expand Civil Rights"
                else addstr("Fight Reverse Discrimination");
                break;
             case LAW_DRUGS:
-               if(scasedir[c]==1)addstr("Limit Oppressive Drug Laws");
-               else addstr("Strengthen the War On Drugs");
+               if(scasedir[c]==1)addstr("Repeal Oppressive Drug Laws"); // was "Limit Oppressive Drug Laws"
+               else addstr("Fight Drug Trafficking"); // was "Strengthen the War On Drugs"
                break;
             case LAW_IMMIGRATION:
                if(scasedir[c]==1)addstr("Protect Immigrant Rights");
@@ -1189,23 +1143,23 @@ void supremecourt(char clearformess,char canseethings)
                break;
             case LAW_ELECTIONS:
                if(scasedir[c]==1)addstr("Fight Political Corruption");
-               else addstr("Limit Regulation of Political Speech");
+               else addstr("Limit Regulation of Political Speech"); // was "Limit Campaign Finance Reforms"
                break;
             case LAW_MILITARY:
-               if(scasedir[c]==1)addstr("Limit Military Spending");
-               else addstr("Strengthen our National Defense");
+               if(scasedir[c]==1)addstr("Shrink the Military-Industrial Complex"); // was "Limit Military Spending"
+               else addstr("Support our Troops in Defending America"); // was "Strengthen our National Defense"
                break;
             case LAW_TORTURE:
-               if(scasedir[c]==1)addstr("Protect Human Rights");
-               else addstr("Permit Strong Tactics in Interrogations");
+               if(scasedir[c]==1)addstr("Protect Human Rights from Torture"); // was "Ban Torture Techniques"
+               else addstr("Enhance Interrogations to Fight Terrorism"); // was "Permit Strong Tactics in Interrogations"
                break;
             case LAW_PRISONS:
                if(scasedir[c]==1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Mandate Prison Rehabilitation");
-                  else addstr("Expand Prisoners' Rights");
+                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Limit Prisoners' Rights");
+               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1238,6 +1192,11 @@ void supremecourt(char clearformess,char canseethings)
       for(int l=0;l<9;l++)
       {
          vote=court[l];
+         if(vote==ALIGN_STALINIST)
+         {
+            if(stalinview(scase[c],true)) vote=ALIGN_ELITELIBERAL;
+            else vote=ALIGN_ARCHCONSERVATIVE;
+         }
          if(vote>=-1&&vote<=1)vote+=bias;
 
          if(law[scase[c]]>vote && scasedir[c]==-1)yesvotes++;
@@ -1303,14 +1262,7 @@ void supremecourt(char clearformess,char canseethings)
          addstr("Justice ");
          addstr(courtname[j]);
          addstr(", ");
-         switch(court[j])
-         {
-            case -2:addstr("Arch-Conservative");break;
-            case -1:addstr("Conservative");break;
-            case 0:addstr("moderate");break;
-            case 1:addstr("Liberal");break;
-            case 2:addstr("Elite Liberal");break;
-         }
+         addstr(getalign(court[j],false));
          addstr(", is stepping down.");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1327,11 +1279,12 @@ void supremecourt(char clearformess,char canseethings)
 
       float consensus=(president+sen)*.5f;
 
-      if(consensus<-1.5f)court[j]=-2;
-      else if(consensus<-.5f)court[j]=-1;
-      else if(consensus<.5f)court[j]=0;
-      else if(consensus<1.5f)court[j]=1;
-      else court[j]=2;
+      if(consensus<-1.5f) court[j]=-2;
+      else if(consensus<-.5f) court[j]=-1;
+      else if(consensus<.5f) court[j]=0;
+      else if(consensus<1.5f) court[j]=1;
+      else if(consensus<2.5f) court[j]=2;
+      else court[j]=3;
 
       do
       {
@@ -1348,14 +1301,7 @@ void supremecourt(char clearformess,char canseethings)
          addstr("the Honorable ");
          addstr(courtname[j]);
          addstr(", ");
-         switch(court[j])
-         {
-            case -2:addstr("Arch-Conservative");break;
-            case -1:addstr("Conservative");break;
-            case 0:addstr("moderate");break;
-            case 1:addstr("Liberal");break;
-            case 2:addstr("Elite Liberal");break;
-         }
+         addstr(getalign(court[j],false));
          addstr(", is appointed to the bench.");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1376,7 +1322,7 @@ void congress(char clearformess,char canseethings)
    if(canseethings)
    {
       if(clearformess) erase();
-      else makedelimiter(8,0);
+      else makedelimiter();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
       addstr("Congress is acting on legislation!");
@@ -1418,33 +1364,57 @@ void congress(char clearformess,char canseethings)
       {
          for(int cl=0;cl<435;cl++)
          {
-            if(law[l]<house[cl])pup=1;
-            else if(law[l]>house[cl])pdown=1;
-            pprior+=DIFF(house[cl],law[l]);
+            short housealign=house[cl];
+            if(housealign==ALIGN_STALINIST)
+            {
+               if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
+               else housealign=ALIGN_ARCHCONSERVATIVE;
+            }
+            if(law[l]<housealign)pup=1;
+            else if(law[l]>housealign)pdown=1;
+            pprior+=DIFF(housealign,law[l]);
          }
       }
       else if(LCSrandom(2))
       {
          for(int sl=0;sl<100;sl++)
          {
-            if(law[l]<senate[sl])pup++;
-            else if(law[l]>senate[sl])pdown++;
-            pprior+=DIFF(senate[sl],law[l]);
+            short senatealign=senate[sl];
+            if(senatealign==ALIGN_STALINIST)
+            {
+               if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
+               else senatealign=ALIGN_ARCHCONSERVATIVE;
+            }
+            if(law[l]<senatealign)pup++;
+            else if(law[l]>senatealign)pdown++;
+            pprior+=DIFF(senatealign,law[l]);
          }
       }
       else
       {
          for(int cl=0;cl<435;cl++)
          {
-            if(law[l]<house[cl])pup++;
-            else if(law[l]>house[cl])pdown++;
-            pprior+=DIFF(house[cl],law[l]);
+            short housealign=house[cl];
+            if(housealign==ALIGN_STALINIST)
+            {
+               if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
+               else housealign=ALIGN_ARCHCONSERVATIVE;
+            }
+            if(law[l]<housealign)pup++;
+            else if(law[l]>housealign)pdown++;
+            pprior+=DIFF(housealign,law[l]);
          }
          for(int sl=0;sl<100;sl++)
          {
-            if(law[l]<senate[sl])pup+=4;
-            else if(law[l]>senate[sl])pdown+=4;
-            pprior+=DIFF(senate[sl],law[l])*4;
+            short senatealign=senate[sl];
+            if(senatealign==ALIGN_STALINIST)
+            {
+               if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
+               else senatealign=ALIGN_ARCHCONSERVATIVE;
+            }
+            if(law[l]<senatealign)pup+=4;
+            else if(law[l]>senatealign)pdown+=4;
+            pprior+=DIFF(senatealign,law[l])*4;
          }
       }
 
@@ -1499,72 +1469,72 @@ void congress(char clearformess,char canseethings)
          switch(bill[c])
          {
             case LAW_ABORTION:
-               if(billdir[c]==1)addstr("Strengthen Abortion Rights");
+               if(billdir[c]==1)addstr("Strengthen Reproductive Freedom"); // was "Strengthen Abortion Rights"
                else addstr("Protect the Unborn Child");
                break;
             case LAW_ANIMALRESEARCH:
                if(billdir[c]==1)addstr("Limit Animal Cruelty");
-               else addstr("Expand Animal Research");
+               else addstr("Help Scientists Cure Diseases"); // was "Expand Animal Research"
                break;
             case LAW_POLICEBEHAVIOR:
                if(billdir[c]==1)addstr("Curtail Police Misconduct");
-               else addstr("Stop Harassment of Police Officers");
+               else addstr("Help Police Fight Crime"); // was "Stop Harassment of Police Officers"
                break;
             case LAW_PRIVACY:
                if(billdir[c]==1)addstr("Enhance Privacy Protection");
-               else addstr("Allow Corporations Information Access");
+               else addstr("Promote Transparency and Accountability"); // was "Allow Corporations Access to Information"
                break;
             case LAW_DEATHPENALTY:
-               if(billdir[c]==1)addstr("Limit the Death Penalty");
-               else addstr("Expand Capital Punishment");
+               if(billdir[c]==1)addstr("Stop Barbaric Executions"); // was "Limit the Death Penalty"
+               else addstr("Deter Criminals via Capital Punishment"); // "Expand Capital Punishment"
                break;
             case LAW_NUCLEARPOWER:
-               if(billdir[c]==1)addstr("Limit Nuclear Power");
-               else addstr("Expand Nuclear Power");
+               if(billdir[c]==1)addstr("Prevent Nuclear Meltdowns"); // was "Limit Nuclear Power"
+               else addstr("Promote Alternative Energy Sources"); // was "Expand Nuclear Power"
                break;
             case LAW_POLLUTION:
-               if(billdir[c]==1)addstr("Punish Polluters");
-               else addstr("Reward Industry");
+               if(billdir[c]==1)addstr("Protect our Environment"); // was "Punish Polluters"
+               else addstr("Support American Manufacturing"); // was "Reward Industry"
                break;
             case LAW_LABOR:
-               if(billdir[c]==1)addstr("Enhance Labor Standards");
-               else addstr("End Undue Union Influence");
+               if(billdir[c]==1)addstr("Protect Workers' Rights"); // was "Enhance Labor Standards"
+               else addstr("Fight Corrupt Union Thugs"); // was "End Undue Union Influence"
                break;
             case LAW_GAY:
-               if(billdir[c]==1)addstr("Expand Homosexual Rights");
+               if(billdir[c]==1)addstr("Fight Homophobic Bigotry in our Laws"); // was "Expand Homosexual Rights"
                else addstr("Support the Sanctity of Marriage");
                break;
             case LAW_CORPORATE:
                if(billdir[c]==1)addstr("Stop Corporate Criminals");
-               else addstr("Reward Small Businesses");
+               else addstr("Help Small Businesses Expand"); // was "Reward Small Businesses"
                break;
             case LAW_FREESPEECH:
                if(billdir[c]==1)addstr("Protect Free Speech");
-               else addstr("Limit Hurtful Speech");
+               else addstr("Limit Hate Speech"); // was "Limit Hurtful Speech"
                break;
             case LAW_TAX:
-               if(billdir[c]==1)addstr("Punish the Wealthy");
-               else addstr("Stimulate Economic Growth");
+               if(billdir[c]==1)addstr("Fight Income Inequality"); // was "Punish the Wealthy"
+               else addstr("Cut Job-Killing Taxes"); // was "Stimulate Economic Growth"
                break;
             case LAW_FLAGBURNING:
                if(billdir[c]==1)addstr("Limit Prohibitions on Flag Burning");
                else addstr("Protect the Symbol of Our Nation");
                break;
             case LAW_GUNCONTROL:
-               if(billdir[c]==1)addstr("Prevent Gun Violence");
-               else addstr("Protect our Second Amendment Rights");
+               if(billdir[c]==1)addstr("Prevent Mass Shootings"); // was "Prevent Gun Violence"
+               else addstr("Protect our Second Amendment Rights"); // was "Assert our Second Amendment Rights"
                break;
             case LAW_WOMEN:
-               if(billdir[c]==1)addstr("Expand Women's Rights");
+               if(billdir[c]==1)addstr("Promote Gender Equality"); // was "Expand Women's Rights"
                else addstr("Preserve Traditional Gender Roles");
                break;
             case LAW_CIVILRIGHTS:
-               if(billdir[c]==1)addstr("Expand Civil Rights");
+               if(billdir[c]==1)addstr("Promote Racial Equality"); // was "Expand Civil Rights"
                else addstr("Fight Reverse Discrimination");
                break;
             case LAW_DRUGS:
-               if(billdir[c]==1)addstr("Limit Oppressive Drug Laws");
-               else addstr("Strengthen the War On Drugs");
+               if(billdir[c]==1)addstr("Repeal Oppressive Drug Laws"); // was "Limit Oppressive Drug Laws"
+               else addstr("Fight Drug Trafficking"); // was "Strengthen the War On Drugs"
                break;
             case LAW_IMMIGRATION:
                if(billdir[c]==1)addstr("Protect Immigrant Rights");
@@ -1572,23 +1542,23 @@ void congress(char clearformess,char canseethings)
                break;
             case LAW_ELECTIONS:
                if(billdir[c]==1)addstr("Fight Political Corruption");
-               else addstr("Limit Regulation of Political Speech");
+               else addstr("Limit Regulation of Political Speech"); // was "Limit Campaign Finance Reforms"
                break;
             case LAW_MILITARY:
-               if(billdir[c]==1)addstr("Limit Military Spending");
-               else addstr("Strengthen our National Defense");
+               if(billdir[c]==1)addstr("Shrink the Military-Industrial Complex"); // was "Limit Military Spending"
+               else addstr("Support our Troops in Defending America"); // was "Strengthen our National Defense"
                break;
             case LAW_TORTURE:
-               if(billdir[c]==1)addstr("Ban Torture Techniques");
-               else addstr("Permit Strong Tactics in Interrogations");
+               if(billdir[c]==1)addstr("Protect Human Rights from Torture"); // was "Ban Torture Techniques"
+               else addstr("Enhance Interrogations to Fight Terrorism"); // was "Permit Strong Tactics in Interrogations"
                break;
             case LAW_PRISONS:
                if(billdir[c]==1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation");
-                  else addstr("Improve Prison Conditions");
+                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Increase Prison Security");
+               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1626,6 +1596,11 @@ void congress(char clearformess,char canseethings)
       for(int l=0;l<435;l++)
       {
          vote=house[l];
+         if(vote==ALIGN_STALINIST)
+         {
+            if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
+            else vote=ALIGN_ARCHCONSERVATIVE;
+         }
          if(vote==-1)
          {
             if(LCSrandom(2))
@@ -1682,6 +1657,11 @@ void congress(char clearformess,char canseethings)
          if(l%4==0&&s<99)
          {
             vote=senate[s++];
+            if(vote==ALIGN_STALINIST)
+            {
+               if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
+               else vote=ALIGN_ARCHCONSERVATIVE;
+            }
             if(vote>=-1&&vote<=1)vote+=LCSrandom(3)-1;
 
             if(law[bill[c]]>vote && billdir[c]==-1)yesvotes_s++;
@@ -1693,12 +1673,23 @@ void congress(char clearformess,char canseethings)
             if(yesvotes_s>=51)yeswin_s=1;
             if(yesvotes_s<67 && killbill[c]==-2)killbill[c]=0;
             if(yesvotes_s==50)
-            {
-               //TIE BREAKER
-               int vote=(exec[EXEC_PRESIDENT]+
-                  exec[EXEC_VP]+
-                  exec[EXEC_STATE]+
-                  exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
+            {  //TIE BREAKER
+               int vote;
+               if((exec[EXEC_VP]>=-1&&exec[EXEC_VP]<=1)||
+                  (exec[EXEC_PRESIDENT]>=-1&&exec[EXEC_PRESIDENT]<=1))
+                  vote=(exec[EXEC_PRESIDENT]+ // only consult Cabinet and random number generator if alignment between -1 and 1
+                        exec[EXEC_VP]+        // for President and/or Vice President
+                        exec[EXEC_STATE]+
+                        exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
+               else
+               {
+                  vote=exec[EXEC_VP];
+                  if(vote==ALIGN_STALINIST)
+                  {
+                     if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
+                     else vote=ALIGN_ARCHCONSERVATIVE;
+                  }
+               }
 
                if(law[bill[c]]>vote && billdir[c]==-1)yeswin_s=1;
                if(law[bill[c]]<vote && billdir[c]==1)yeswin_s=1;
@@ -1777,12 +1768,21 @@ void congress(char clearformess,char canseethings)
          if(killbill[c]==1)sign=-1;
          else
          {
-            int vote=(exec[EXEC_PRESIDENT]+
-               exec[EXEC_VP]+
-               exec[EXEC_STATE]+
-               exec[EXEC_ATTORNEY]+(short)LCSrandom(9)-4)/4;
-            if(exec[EXEC_PRESIDENT]==2)vote=2;
-            if(exec[EXEC_PRESIDENT]==-2)vote=-2;
+            int vote;
+            if(exec[EXEC_PRESIDENT]>=-1&&exec[EXEC_PRESIDENT]<=1)
+               vote=(exec[EXEC_PRESIDENT]+ // only consult Cabinet and random number generator if alignment between -1 and 1
+                     exec[EXEC_VP]+        // for President
+                     exec[EXEC_STATE]+
+                     exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
+            else
+            {
+               vote=exec[EXEC_PRESIDENT];
+               if(vote==ALIGN_STALINIST)
+               {
+                  if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
+                  else vote=ALIGN_ARCHCONSERVATIVE;
+               }
+            }
 
             if((law[bill[c]]>vote&&billdir[c]==-1)||(law[bill[c]]<vote&&billdir[c]==1)||killbill[c]==-1)sign=1;
          }
@@ -1843,22 +1843,29 @@ void congress(char clearformess,char canseethings)
    }
 
    //CONGRESS CONSTITUTION CHANGES
-   int housemake[5]={0,0,0,0,0};
-   for(int h=0;h<435;h++)housemake[house[h]+2]++;
+   int housemake[6]={0,0,0,0,0,0};
+   for(int h=0;h<435;h++) housemake[house[h]+2]++;
 
-   int senatemake[5]={0,0,0,0,0};
-   for(int s=0;s<100;s++)senatemake[senate[s]+2]++;
+   int senatemake[6]={0,0,0,0,0,0};
+   for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
 
    // Throw out non-L+ Justices?
    char tossj=0;
-   for(int j=0;j<9;j++)if(court[j]<=1)tossj=1;
-   if(housemake[4]+housemake[3]/2>=290&&senatemake[4]+senatemake[3]/2>=67&&tossj&&!nocourtpurge)tossjustices(canseethings);
+   for(int j=0;j<9;j++) if(court[j]<=1)tossj=1;
+   if(housemake[4]+housemake[3]/2>=290&&senatemake[4]+senatemake[3]/2>=67&&tossj&&!nocourtpurge)
+      tossjustices(canseethings);
 
    // Purge Congress, implement term limits, and hold new elections?
-   if((housemake[4]+housemake[3]/2<290||senatemake[4]+senatemake[3]/2<67)&&publicmood(-1)>80&&!notermlimit)amendment_termlimits(canseethings);
+   if((housemake[4]+housemake[3]/2<290||senatemake[4]+senatemake[3]/2<67)&&publicmood(-1)>80&&!notermlimit)
+      amendment_termlimits(canseethings);
 
-   // REPEAL THE CONSTITUTION AND LOSE THE GAME?
-   if(housemake[0]>=290&&senatemake[0]>=67)reaganify(canseethings);
+   // LET ARCH-CONSERVATIVES REPEAL THE CONSTITUTION AND LOSE THE GAME?
+   if(housemake[0]>=290&&senatemake[0]>=67)
+      reaganify(canseethings);
+
+   // LET STALINISTS REPEAL THE CONSTITUTION AND LOSE THE GAME?
+   if(housemake[5]>=290&&senatemake[5]>=67)
+      stalinize(canseethings);
 }
 
 /* politics - checks if the game is won */
@@ -1879,13 +1886,13 @@ char wincheck(void)
       if(eliteLaws<liberalLaws)return 0;
    }
 
-   int housemake[5]={0,0,0,0,0};
+   int housemake[6]={0,0,0,0,0,0};
    for(int h=0;h<435;h++)housemake[house[h]+2]++;
-   if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?290:270))return 0;
+   if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?290:261))return 0; // 3/5 for easy, 2/3 for elite
 
-   int senatemake[5]={0,0,0,0,0};
+   int senatemake[6]={0,0,0,0,0,0};
    for(int s=0;s<100;s++)senatemake[senate[s]+2]++;
-   if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?67:60))return 0;
+   if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?67:60))return 0; // 3/5 for easy, 2/3 for elite
 
    int elibjudge=0, libjudge=0;
    for(int c=0;c<9;c++)
@@ -1934,7 +1941,7 @@ FIXME, PART1:
 @Servant:
         As it stands, (revision 316) the only alarming thing is that this may
                 influence LAW_*s that are affected by LAW_HUMANRIGHTS. This is
-                only midly alarming because the LAW_* itself is effected, and
+                only mildly alarming because the LAW_* itself is effected, and
                 not the attitude[VIEW_*].
         -- LiteralKa
 */
@@ -1979,10 +1986,87 @@ int publicmood(int l)
       case LAW_TORTURE: return attitude[VIEW_TORTURE];
       case LAW_GUNCONTROL: return attitude[VIEW_GUNCONTROL];
       case LAW_PRISONS: return attitude[VIEW_PRISONS];
+      case LAW_STALIN:
+         l=0;
+         for(int v=0;v<VIEWNUM-3;v++)
+            if(stalinview(v,false)) l+=100-attitude[v];
+            else l+=attitude[v];
+         return l/(VIEWNUM-3);
       case LAW_ELECTIONS:
+      case LAW_MOOD:
       default: //eg. -1
          l=0;
-         for(int v=0;v<VIEWNUM-3;v++)l+=attitude[v];
+         for(int v=0;v<VIEWNUM-3;v++) l+=attitude[v];
          return l/(VIEWNUM-3);
+   }
+}
+
+/* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
+ * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
+bool stalinview(short view,bool islaw)
+{
+   if(islaw) switch(view)
+   {
+   case LAW_STALIN: return false; // Liberals and Stalinists don't get along
+   case LAW_MOOD: return false; // Liberals and Stalinists don't get along
+   case LAW_ABORTION: return true; // Stalinists agree that abortion is good, although technically they don't let women choose
+   case LAW_ANIMALRESEARCH: return false; // Stalinists are in favor of unethical research
+   case LAW_POLICEBEHAVIOR: return false; // Stalinists use police for brutal repression
+   case LAW_PRIVACY: return false; // Stalinists don't believe in privacy
+   case LAW_DEATHPENALTY: return false; // Stalinists execute lots of people
+   case LAW_NUCLEARPOWER: return false; // Stalinists believe the more nuclear, the better
+   case LAW_POLLUTION: return false; // Stalinists don't care about pollution
+   case LAW_LABOR: return true; // Stalinists say, Workers of the world unite!
+   case LAW_GAY: return false; // Stalinists discriminate against gay people
+   case LAW_CORPORATE: return true; // Stalinists hate rich people and corporations
+   case LAW_FREESPEECH: return false; // Stalinists don't allow any dissent
+   case LAW_FLAGBURNING: return true; // Stalinists regularly burn flags
+   case LAW_GUNCONTROL: return true; // Stalinists don't want any armed resistance
+   case LAW_TAX: return true; // Stalinists support communist income redistribution
+   case LAW_WOMEN: return false; // Stalinists discriminate against women
+   case LAW_CIVILRIGHTS: return false; // Stalinists discriminate against ethnic groups
+   case LAW_DRUGS: return false; // Stalinists only allow vodka
+   case LAW_IMMIGRATION: return false; // Stalinists maintained tight border security at the Iron Curtain
+   case LAW_ELECTIONS: return false; // Stalinists don't even have elections
+   case LAW_MILITARY: return false; // Stalinists use the military for brutal repression
+   case LAW_PRISONS: return false; // Stalinists annex Canada to fill it with gulags
+   case LAW_TORTURE: return false; // Stalinists torture their enemies
+   case LAWNUM: return false; // Liberals and Stalinists don't get along
+   default: return false; // Liberals and Stalinists don't get along
+   }
+   else switch(view)
+   {
+   case VIEW_STALIN: return false; // Liberals and Stalinists don't get along
+   case VIEW_MOOD: return false; // Liberals and Stalinists don't get along
+   case VIEW_GAY: return false; // Stalinists discriminate against gay people
+   case VIEW_DEATHPENALTY: return false; // Stalinists execute lots of people
+   case VIEW_TAXES: return true; // Stalinists support communist income redistribution
+   case VIEW_NUCLEARPOWER: return false; // Stalinists believe the more nuclear, the better
+   case VIEW_ANIMALRESEARCH: return false; // Stalinists are in favor of unethical research
+   case VIEW_POLICEBEHAVIOR: return false; // Stalinists use police for brutal repression
+   case VIEW_TORTURE: return false; // Stalinists torture their enemies
+   case VIEW_INTELLIGENCE: return false; // Stalinists don't believe in privacy
+   case VIEW_FREESPEECH: return false; // Stalinists don't allow any dissent
+   case VIEW_GENETICS: return false; // Stalinists are in favor of unethical research
+   case VIEW_JUSTICES: return true; // Stalinists agree that Conservatives are bad
+   case VIEW_GUNCONTROL: return true; // Stalinists don't want any armed resistance
+   case VIEW_SWEATSHOPS: return true; // Stalinists say, Workers of the world unite!
+   case VIEW_POLLUTION: return false; // Stalinists don't care about pollution
+   case VIEW_CORPORATECULTURE: return true; // Stalinists hate rich people and corporations
+   case VIEW_CEOSALARY: return true; // Stalinists hate rich people and corporations
+   case VIEW_WOMEN: return false; // Stalinists discriminate against women
+   case VIEW_CIVILRIGHTS: return false; // Stalinists discriminate against ethnic groups
+   case VIEW_DRUGS: return false; // Stalinists only allow vodka
+   case VIEW_IMMIGRATION: return false; // Stalinists maintained tight border security at the Iron Curtain
+   case VIEW_MILITARY: return false; // Stalinists use the military for brutal repression
+   case VIEW_PRISONS: return false; // Stalinists annex Canada to fill it with gulags
+   case VIEW_AMRADIO: return true; // Stalinists agree that Conservatives are bad
+   case VIEW_CABLENEWS: return true; // Stalinists agree that Conservatives are bad
+   //case VIEW_POLITICALVIOLENCE: return true; // the LCS and Stalinists both like using political violence
+   case VIEW_LIBERALCRIMESQUAD: return false; // Liberals and Stalinists don't get along
+   case VIEW_LIBERALCRIMESQUADPOS: return false; // Liberals and Stalinists don't get along
+   case VIEW_CONSERVATIVECRIMESQUAD: return true; // Stalinists agree that Conservatives are bad
+   case VIEWNUM: return false; // Liberals and Stalinists don't get along
+   default: return false; // Liberals and Stalinists don't get along
    }
 }

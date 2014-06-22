@@ -53,6 +53,5 @@ void law::setlawtext(signed char align,string text)
 {
    if(align==-3) // Defeat
       defeat_lawtext = text;
-   else
-      lawtext[align+2] = text;
+   else lawtext[align+2] = text;
 }

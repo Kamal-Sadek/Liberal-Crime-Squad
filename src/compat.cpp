@@ -206,14 +206,25 @@ void pause_ms(int t)
 // (65 bytes is enough for any int and any base, even on 64-bit architectures.)
 char* itoa(int value,char* str,int base)
 {
-   if(base<2||base>36) { *str='\0'; return str; }
-   char *p=str,*q=str,c; int i;
-   do { i=value; value/=base;
-      *p++="zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz"[i-value*base+35];
-   } while(value);
-   if(i<0) *p++='-';
-   *p--='\0';
-   while(p>q) { c=*p; *p--=*q; *q++=c; }
-   return str;
+   if(base<2||base>36) { *str=0; return str; } // invalid base, return empty string
+   char *p=str,*q=str,c; // pointers to the string
+   if(base==10)
+   {  // itoa() outputs signed integers for base 10
+      int i;
+      do { i=value; value/=base; // this loop puts the digits in... except backwards, we'll have to reverse the string later
+         *p++="9876543210123456789"[i-value*base+9]; // digit from 0 to 9, either positive or negative
+      } while(value); // we're done once value is zero
+      if(i<0) *p++='-'; // minus sign for negative numbers
+   }
+   else
+   {  // itoa() outputs unsigned integers for bases other than 10
+      unsigned i,v=(unsigned)value,b=(unsigned)base;
+      do { i=v; v/=b; // this loop puts the digits in... except backwards, we'll have to reverse the string later
+         *p++="0123456789abcdefghijklmnopqrstuvwxyz"[i-v*b]; // digit from 0 to 9 or a to z, always positive
+      } while(v); // we're done once v is zero
+   }
+   *p--=0; // C-strings have to be null-terminated
+   while(p>q) { c=*p; *p--=*q; *q++=c; } // reverse the string using fancy pointer magic
+   return str; // the string is both returned and the string input as a parameter set to that same string
 }
 #endif

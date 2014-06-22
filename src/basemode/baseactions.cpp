@@ -229,7 +229,7 @@ void orderparty(void)
 
       int c=getkey();
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
@@ -265,7 +265,7 @@ void orderpartyV2(void)
 
       int c=getkey();
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       int oldPos = c;
       Creature *swap = NULL;
@@ -285,7 +285,7 @@ void orderpartyV2(void)
 
       c=getkey();
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>=spot+'1'&&c<=partysize+'1'-1)
       {
@@ -566,7 +566,7 @@ void stopevil(void)
       activesquad->stance=0;
       }*/
 
-      if(c==ENTER||c==ESC||c==SPACEBAR)
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
          if(loc!=-1 && (location[loc]->city != location[loc]->type || location[loc]->city != squad_location->city))
          {
@@ -683,7 +683,7 @@ void investlocation(void)
 
       int c=getkey();
 
-      if(c==10||c==ESC)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
       if(c=='w')
       {

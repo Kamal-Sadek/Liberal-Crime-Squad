@@ -50,7 +50,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <locale.h>
 
 //sets current color to desired setting
-void set_color(short f,short b,char bright,char blink)
+void set_color(short f,short b,bool bright,bool blink)
 {
    //color swap required for PDcurses
    if(f==7&&b==0) f=0,b=0;
