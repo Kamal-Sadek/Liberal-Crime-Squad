@@ -492,20 +492,17 @@ char heyIWantToRentARoom(Creature &a, Creature &tk)
    case SITE_RESIDENTIAL_APARTMENT_UPSCALE:rent=1500;break;
    }
 
-   char num[20];
-   itoa(rent,num,10);
-
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(12,1);addstr(tk.name, gamelog);addstr(" responds, ", gamelog);
    set_color(COLOR_CYAN,COLOR_BLACK,1);
    move(13,1);
    addstr("\"It'll be $", gamelog);
-   addstr(num, gamelog);
+   addstr(rent, gamelog);
    addstr(" a month.", gamelog);
    gamelog.newline();
    move(14,1);
    addstr("I'll need $", gamelog);
-   addstr(num, gamelog);
+   addstr(rent, gamelog);
    addstr(" now as a security deposit.\"", gamelog);
    gamelog.newline();
 

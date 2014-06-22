@@ -9,7 +9,7 @@ extern char artdir[MAX_PATH_SIZE];
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {
-   std::ifstream *file = new std::ifstream();
+   std::ifstream* file = new std::ifstream();
    addstr("Attempting to open filename: ");
    addstr(filename);
    addstr(" ");
@@ -24,7 +24,7 @@ std::ifstream* openFile(const std::string& filename, std::ios_base::openmode for
 int readConfigFile(const std::string& filename)
 {
    std::string command, value;
-   configurable* object = 0;
+   configurable* object=0;
 
    std::ifstream* file = openFile(filename, ios::in);
    if(!file->is_open())
@@ -35,31 +35,19 @@ int readConfigFile(const std::string& filename)
 
    // loop through lines
    while(readLine(*file, command, value))
-   {
-
-      // if COMMAND is OBJECT
-      if(command == "OBJECT")
-      {
-         // call a object creator factory, passing VALUE
-         // (record pointer to that object)
-         object = createObject(value);
-      }
+      // if COMMAND is OBJECT,
+      // call a object creator factory, passing VALUE
+      // (record pointer to that object)
+      if(command=="OBJECT") object=createObject(value);
+      // if I have an object,
+      // pass COMMAND and VALUE to the object
+      else if(object) object->configure(command, value);
       else
       {
-         // if I have an object
-         if(object)
-         {
-            // pass COMMAND and VALUE to the object
-            object->configure(command, value);
-         }
-         else
-         {
-            file->close();
-            delete file;
-            return false; // Unknown command and no object to give it to; failed read
-         }
+         file->close();
+         delete file;
+         return false; // Unknown command and no object to give it to; failed read
       }
-   }
    file->close();
    delete file;
    return true;
@@ -75,44 +63,37 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
    // Search for a non-comment, non-empty line
    do
    {
-      if(file.eof()) return 0;
+      if(file.eof()) return false;
       getline(file,line);
-      line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
-      line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
-   } while(line.empty() || line[0] == '#');
+      line.erase(std::remove(line.begin(),line.end(),'\r'),line.end());
+      line.erase(std::remove(line.begin(),line.end(),'\n'),line.end());
+   } while(line.empty()||line[0]=='#');
 
    // Parse the line
    command.clear();
    value.clear();
 
    // Leading whitespace
-   while(source<(int)line.length() && (line[source]==' ' || line[source]=='\t'))
-      source++;
+   for(;source<(int)line.length()&&(line[source]==' '||line[source]=='\t');source++);
 
    // Command
-   while(source<(int)line.length() && (line[source]!=' ' && line[source]!='\t'))
-      command.push_back(line[source++]);
+   for(;source<(int)line.length()&&(line[source]!=' '&&line[source]!='\t');command.push_back(line[source++]));
 
    // Delimiting whitespace
-   while(source<(int)line.length() && (line[source]==' ' || line[source]=='\t'))
-      source++;
+   for(;source<(int)line.length()&&(line[source]==' '||line[source]=='\t');source++);
 
    // Value
-   while(source<(int)line.length() && (line[source]!=' ' && line[source]!='\t'))
-      value.push_back(line[source++]);
+   for(;source<(int)line.length()&&(line[source]!=' '&&line[source]!='\t');value.push_back(line[source++]));
 
-   return 1;
+   return true;
 }
 
 // Constructs the new object, returns a pointer to it
 configurable* createObject(const std::string& objectType)
 {
    configurable* object=0;
-   if(objectType == "SITEMAP")
-   {
-      object = new configSiteMap;
-      sitemaps.push_back(static_cast<configSiteMap*>(object));
-   }
+   if(objectType=="SITEMAP")
+      sitemaps.push_back(static_cast<configSiteMap*>(object=new configSiteMap));
    return object;
 }
 
@@ -167,14 +148,12 @@ void readMapCBSpecials(int x, int y, int z, int i)
    }
 }
 
-void makeDoor(int x, int y, int z)
+void makeDoor(int x,int y,int z,int flags=0)
 {
-   levelmap[x][y][z].flag = SITEBLOCK_DOOR;
-   if((x > 0 && (levelmap[x-1][y][z].flag & SITEBLOCK_RESTRICTED)) ||
-      (y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_RESTRICTED)))
-   {
-      levelmap[x][y][z].flag |= SITEBLOCK_RESTRICTED;
-   }
+   levelmap[x][y][z].flag=SITEBLOCK_DOOR|flags;
+   if((x>0&&(levelmap[x-1][y][z].flag&SITEBLOCK_RESTRICTED))||
+      (y>0&&(levelmap[x][y-1][z].flag&SITEBLOCK_RESTRICTED)))
+      levelmap[x][y][z].flag|=SITEBLOCK_RESTRICTED;
 }
 
 void readMapCBTiles(int x, int y, int z, int i)
@@ -182,45 +161,28 @@ void readMapCBTiles(int x, int y, int z, int i)
    switch(i)
    {
    default:
-   case 0: levelmap[x][y][z].flag = 0; break;
-   case 2: levelmap[x][y][z].flag = SITEBLOCK_BLOCK; break;
-   case 3: levelmap[x][y][z].flag = SITEBLOCK_EXIT; break;
-   case 4: levelmap[x][y][z].flag = SITEBLOCK_GRASSY; break;
-   case 5:
-      makeDoor(x,y,z);
-      break;
-   case 6:
-      makeDoor(x,y,z);
-      levelmap[x][y][z].flag |= SITEBLOCK_LOCKED;
-      break;
+   case 0: levelmap[x][y][z].flag=0; break;
+   case 2: levelmap[x][y][z].flag=SITEBLOCK_BLOCK; break;
+   case 3: levelmap[x][y][z].flag=SITEBLOCK_EXIT; break;
+   case 4: levelmap[x][y][z].flag=SITEBLOCK_GRASSY; break;
+   case 5: makeDoor(x,y,z); break;
+   case 6: makeDoor(x,y,z,SITEBLOCK_LOCKED); break;
    case 7:
-      levelmap[x][y][z].flag = SITEBLOCK_RESTRICTED;
-      if(x > 0 && (levelmap[x-1][y][z].flag & SITEBLOCK_DOOR))
-         levelmap[x-1][y][z].flag |= SITEBLOCK_RESTRICTED;
-      if(y > 0 && (levelmap[x][y-1][z].flag & SITEBLOCK_DOOR))
-         levelmap[x][y-1][z].flag |= SITEBLOCK_RESTRICTED;
+      levelmap[x][y][z].flag=SITEBLOCK_RESTRICTED;
+      if(x>0&&(levelmap[x-1][y][z].flag&SITEBLOCK_DOOR))
+         levelmap[x-1][y][z].flag|=SITEBLOCK_RESTRICTED;
+      if(y>0&&(levelmap[x][y-1][z].flag&SITEBLOCK_DOOR))
+         levelmap[x][y-1][z].flag|=SITEBLOCK_RESTRICTED;
       break;
-   case 8:
-      levelmap[x][y][z].flag = SITEBLOCK_CHAINLINK;
-      break;
-   case 9:
-      makeDoor(x,y,z);
-      levelmap[x][y][z].flag |= (SITEBLOCK_LOCKED | SITEBLOCK_ALARMED);
-      break;
-   case 10:
-      levelmap[x][y][z].flag = (SITEBLOCK_BLOCK | SITEBLOCK_METAL);
-      break;
-   case 11:
-      makeDoor(x,y,z);
-      levelmap[x][y][z].flag |= (SITEBLOCK_LOCKED | SITEBLOCK_METAL);
-      break;
+   case 8: levelmap[x][y][z].flag=SITEBLOCK_CHAINLINK; break;
+   case 9: makeDoor(x,y,z,SITEBLOCK_LOCKED|SITEBLOCK_ALARMED); break;
+   case 10: levelmap[x][y][z].flag=SITEBLOCK_BLOCK|SITEBLOCK_METAL; break;
+   case 11: makeDoor(x,y,z,SITEBLOCK_LOCKED|SITEBLOCK_METAL); break;
    }
 }
 
 bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,int,int,int))
 {
-   int x, y, z, i, j;
-
    // open the file in question
    std::ifstream* file = openFile(filename, ios::in);
 
@@ -231,34 +193,23 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
       return false;
    }
 
-   std::string line;
-   y = 0;
-   z = zLevel;
-   do
+   for(int y=0,z=zLevel;!file->eof();y++)
    {
-      if(file->eof()) break;
+      std::string line;
       getline(*file,line);
       line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
       line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
-      x = 0;
-      i = 0;
-      j = 0;
 
-      do
+      for(int x=0,i=0,j=0;j<(int)line.length();x++,i=++j)
       {
-         while(j < (int)line.length() && line[j] != ',') j++;
-
-         if(j < (int)line.length()) line[j] = 0;
-         else break;
-
-         (*callback)(x,y,z,atoi(line.c_str()+i));
-         x++;
-         j++;
-         i = j;
-
-      } while(true);
-      y++;
-   } while(true);
+         for(;j<(int)line.length()&&line[j]!=',';j++);
+         if(j<(int)line.length())
+         {
+            line[j]=0;
+            (*callback)(x,y,z,atoi(line.c_str()+i));
+         }
+      }
+   }
 
    file->close();
    delete file;
@@ -269,16 +220,14 @@ bool readMap(const std::string& filename)
 {
    std::string prefix = std::string("mapCSV_");
 
-   int x,y,z;
-
    // clear any old map data
-   for(x=0; x<MAPX; x++)
-   for(y=0; y<MAPY; y++)
-   for(z=0; z<MAPZ; z++)
+   for(int x=0;x<MAPX;x++)
+   for(int y=0;y<MAPY;y++)
+   for(int z=0;z<MAPZ;z++)
    {
-      levelmap[x][y][z].flag = 0;
-      levelmap[x][y][z].special = SPECIAL_NONE;
-      levelmap[x][y][z].siegeflag = 0;
+      levelmap[x][y][z].flag=0;
+      levelmap[x][y][z].special=SPECIAL_NONE;
+      levelmap[x][y][z].siegeflag=0;
    }
 
    // Try first floor (eg "mapCSV_Bank_Tiles.csv"), abort this method if it doesn't exist
@@ -286,10 +235,9 @@ bool readMap(const std::string& filename)
    if(!readMapFile(prefix+filename+"_Specials.csv", 0, readMapCBSpecials)) return false;
 
    // Try upper levels (eg "mapCSV_Bank2_Tiles.csv"), but don't sweat it if they don't exist
-   for(z=1; z<MAPZ; z++)
+   for(int z=1;z<MAPZ;z++)
    {
-      char str[3];
-      itoa(z+1, str, 10);
+      std::string str=tostring(z+1);
       if(!readMapFile(prefix+filename+str+"_Tiles.csv", z, readMapCBTiles)) break;
       if(!readMapFile(prefix+filename+str+"_Specials.csv", z, readMapCBSpecials)) break;
    }

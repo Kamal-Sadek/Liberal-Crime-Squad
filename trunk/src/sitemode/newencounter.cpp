@@ -22,7 +22,7 @@ This file is part of Liberal Crime Squad.                                       
 /*
         This file was created by Chris Johnson (grundee@users.sourceforge.net)
         by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at 
+        To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
 
@@ -38,7 +38,7 @@ void prepareencounter(short type,char sec)
 
    int creaturearray[CREATURENUM];
    memset(creaturearray,0,CREATURENUM*sizeof(int));
-   
+
    if(postalarmtimer>80)
    {
       switch(sitetype)
@@ -255,7 +255,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_CLERK]+=5;
             creaturearray[CREATURE_ACTOR]+=1;
             creaturearray[CREATURE_ATHLETE]+=1;
-            
+
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));
@@ -1184,11 +1184,6 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_OFFICEWORKER]=40;
             creaturearray[CREATURE_PHOTOGRAPHER]=5;
             creaturearray[CREATURE_CAMERAMAN]=5;
-
-      #ifdef SHOWWAIT
-         creaturearray[CREATURE_NEWSANCHOR]=20000;
-      #endif
-
             for(int n=0;n<LCSrandom(6)+1;n++)
             {
                makecreature(encounter[encslot],getrandomcreaturetype(creaturearray));

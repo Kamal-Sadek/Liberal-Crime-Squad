@@ -1200,13 +1200,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                            int teethminus=LCSrandom(TOOTHNUM)+1;
                            if(teethminus>target->special[SPECIALWOUND_TEETH])
                               teethminus=target->special[SPECIALWOUND_TEETH];
-                           char num[20];
-                           itoa(teethminus,num,10);
 
                            move(16,1);
                            if(teethminus>1)
                            {
-                              addstr(num, gamelog);
+                              if(teethminus==target->special[SPECIALWOUND_TEETH])
+                                 addstr("All ", gamelog);
+                              addstr(teethminus, gamelog);
                               addstr(" of ", gamelog);
                               addstr(target->name, gamelog);
                               addstr("'s teeth are ", gamelog);
@@ -1496,13 +1496,13 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                      {
                         int ribminus=LCSrandom(RIBNUM)+1;
                         if(ribminus>target->special[SPECIALWOUND_RIBS]) ribminus=target->special[SPECIALWOUND_RIBS];
-                        char num[20];
-                        itoa(ribminus,num,10);
 
                         move(16,1);
                         if(ribminus>1)
                         {
-                           addstr(num, gamelog);
+                           if(ribminus==target->special[SPECIALWOUND_RIBS])
+                              addstr("All ", gamelog);
+                           addstr(ribminus, gamelog);
                            addstr(" of ", gamelog);
                            addstr(target->name, gamelog);
                            addstr("'s ribs are ", gamelog);
@@ -2025,7 +2025,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
                }
             }
 
-            char flipstart=0;
+            bool flipstart=0;
             for(int p=0;p<6;p++)
             {
                if(activesquad->squad[p]==&t)

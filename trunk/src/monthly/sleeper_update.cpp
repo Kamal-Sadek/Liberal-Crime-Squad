@@ -901,13 +901,12 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpow
    addstr(" has dropped a package off at the homeless shelter.", gamelog);
    gamelog.nextMessage();
    if(numberofxmlfails > 0) {
-      char buf[30]; itoa(numberofxmlfails,buf,10);
       move(8,1);
       set_color(COLOR_RED,COLOR_BLUE,1);
       //TODO: Not sure if this is something that is meant to be logged.
       addstr("Conservative hacktivity around XML bases lead to");
       move(9,1);
-      addstr(buf);
+      addstr(numberofxmlfails);
       addstr(" lost stolen items!");
       move(11,1);
       set_color(COLOR_RED,COLOR_GREEN,1);

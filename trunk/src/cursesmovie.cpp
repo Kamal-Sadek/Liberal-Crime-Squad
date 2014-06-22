@@ -316,7 +316,7 @@ void CursesMoviest::playmovie(int x,int y)
 
       int c=checkkey();
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) timer=finalframe;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) timer=finalframe;
 
    } while(cont);
 }

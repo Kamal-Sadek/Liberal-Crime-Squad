@@ -50,8 +50,6 @@ void viewhighscores(void)
    move(0,0);
    addstr("The Liberal ELITE");
 
-   char num[20];
-
    int y=2;
    for(s=0;s<SCORENUM;s++)
    {
@@ -113,52 +111,46 @@ void viewhighscores(void)
             case END_FIREMEN:
                addstr("The Liberal Crime Squad was burned in ");
                break;
+            case END_STALIN:
+               addstr("The country was Stalinized in ");
+               break;
          }
          addstr(getmonth(score[s].month));
          addstr(" ");
-         itoa(score[s].year,num,10);
-         addstr(num);
+         addstr(score[s].year);
          addstr(". ");
 
          move(y+2,0);
          addstr("Recruits: ");
-         itoa(score[s].stat_recruits,num,10);
-         addstr(num);
+         addstr(score[s].stat_recruits);
 
          move(y+3,0);
          addstr("Martyrs: ");
-         itoa(score[s].stat_dead,num,10);
-         addstr(num);
+         addstr(score[s].stat_dead);
 
          move(y+2,20);
          addstr("Kills: ");
-         itoa(score[s].stat_kills,num,10);
-         addstr(num);
+         addstr(score[s].stat_kills);
 
          move(y+3,20);
          addstr("Kidnappings: ");
-         itoa(score[s].stat_kidnappings,num,10);
-         addstr(num);
+         addstr(score[s].stat_kidnappings);
 
          move(y+2,40);
          addstr("$ Taxed: ");
-         itoa(score[s].stat_funds,num,10);
-         addstr(num);
+         addstr(score[s].stat_funds);
 
          move(y+3,40);
          addstr("$ Spent: ");
-         itoa(score[s].stat_spent,num,10);
-         addstr(num);
+         addstr(score[s].stat_spent);
 
          move(y+2,60);
          addstr("Flags Bought: ");
-         itoa(score[s].stat_buys,num,10);
-         addstr(num);
+         addstr(score[s].stat_buys);
 
          move(y+3,60);
          addstr("Flags Burned: ");
-         itoa(score[s].stat_burns,num,10);
-         addstr(num);
+         addstr(score[s].stat_burns);
 
          y+=4;
       }
@@ -172,43 +164,35 @@ void viewhighscores(void)
 
    move(23,0);
    addstr("Recruits: ");
-   itoa(ustat_recruits,num,10);
-   addstr(num);
+   addstr(ustat_recruits);
 
    move(24,0);
    addstr("Martyrs: ");
-   itoa(ustat_dead,num,10);
-   addstr(num);
+   addstr(ustat_dead);
 
    move(23,20);
    addstr("Kills: ");
-   itoa(ustat_kills,num,10);
-   addstr(num);
+   addstr(ustat_kills);
 
    move(24,20);
    addstr("Kidnappings: ");
-   itoa(ustat_kidnappings,num,10);
-   addstr(num);
+   addstr(ustat_kidnappings);
 
    move(23,40);
    addstr("$ Taxed: ");
-   itoa(ustat_funds,num,10);
-   addstr(num);
+   addstr(ustat_funds);
 
    move(24,40);
    addstr("$ Spent: ");
-   itoa(ustat_spent,num,10);
-   addstr(num);
+   addstr(ustat_spent);
 
    move(23,60);
    addstr("Flags Bought: ");
-   itoa(ustat_buys,num,10);
-   addstr(num);
+   addstr(ustat_buys);
 
    move(24,60);
    addstr("Flags Burned: ");
-   itoa(ustat_burns,num,10);
-   addstr(num);
+   addstr(ustat_burns);
 
    getkey();
 }
@@ -221,14 +205,10 @@ void loadhighscores(void)
    //LOAD FILE
    int loadversion;
 
-   //int numbytes;
-   FILE *h;
-
-   h=LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
-
+   FILE *h=LCSOpenFile("score.dat", "rb", LCSIO_PRE_HOME);
    if(h!=NULL)
    {
-      /*numbytes=*/fread(&loadversion,sizeof(int),1,h);
+      fread(&loadversion,sizeof(int),1,h);
 
       if(loadversion<lowestloadscoreversion)
       {
@@ -236,15 +216,15 @@ void loadhighscores(void)
          return;
       }
 
-      /*numbytes=*/fread(&ustat_recruits,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_dead,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_kills,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_kidnappings,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_funds,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_spent,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_buys,sizeof(int),1,h);
-      /*numbytes=*/fread(&ustat_burns,sizeof(int),1,h);
-      /*numbytes=*/fread(score,sizeof(highscorest),SCORENUM,h);
+      fread(&ustat_recruits,sizeof(int),1,h);
+      fread(&ustat_dead,sizeof(int),1,h);
+      fread(&ustat_kills,sizeof(int),1,h);
+      fread(&ustat_kidnappings,sizeof(int),1,h);
+      fread(&ustat_funds,sizeof(int),1,h);
+      fread(&ustat_spent,sizeof(int),1,h);
+      fread(&ustat_buys,sizeof(int),1,h);
+      fread(&ustat_burns,sizeof(int),1,h);
+      fread(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);
    }
@@ -309,24 +289,21 @@ void savehighscore(char endtype)
       }
    }
 
-
-   //int numbytes;
-   FILE *h;
-   h=LCSOpenFile("score.dat","wb",LCSIO_PRE_HOME);
+   FILE *h=LCSOpenFile("score.dat","wb",LCSIO_PRE_HOME);
    if(h!=NULL)
    {
       int lversion=version;
-      /*numbytes=*/fwrite(&lversion,sizeof(int),1,h);
+      fwrite(&lversion,sizeof(int),1,h);
 
-      /*numbytes=*/fwrite(&ustat_recruits,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_dead,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_kills,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_kidnappings,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_funds,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_spent,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_buys,sizeof(int),1,h);
-      /*numbytes=*/fwrite(&ustat_burns,sizeof(int),1,h);
-      /*numbytes=*/fwrite(score,sizeof(highscorest),SCORENUM,h);
+      fwrite(&ustat_recruits,sizeof(int),1,h);
+      fwrite(&ustat_dead,sizeof(int),1,h);
+      fwrite(&ustat_kills,sizeof(int),1,h);
+      fwrite(&ustat_kidnappings,sizeof(int),1,h);
+      fwrite(&ustat_funds,sizeof(int),1,h);
+      fwrite(&ustat_spent,sizeof(int),1,h);
+      fwrite(&ustat_buys,sizeof(int),1,h);
+      fwrite(&ustat_burns,sizeof(int),1,h);
+      fwrite(score,sizeof(highscorest),SCORENUM,h);
 
       LCSCloseFile(h);
    }

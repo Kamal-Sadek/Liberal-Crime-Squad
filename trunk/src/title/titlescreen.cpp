@@ -49,8 +49,6 @@ void mode_title(void)
 
    if(loaded)
    {
-      char num[20];
-
       int l=strlen(slogan);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,40-(l>>1));
@@ -59,33 +57,27 @@ void mode_title(void)
       move(9,10);
 
       addstr("Liberals Indoctrinated: ");
-      itoa(stat_recruits,num,10);
-      addstr(num);
+      addstr(stat_recruits);
 
       move(10,10);
       addstr("Liberals Martyred: ");
-      itoa(stat_dead,num,10);
-      addstr(num);
+      addstr(stat_dead);
 
       move(11,10);
       addstr("Conservatives Killed: ");
-      itoa(stat_kills,num,10);
-      addstr(num);
+      addstr(stat_kills);
 
       move(9,47);
       addstr("Funds Taxed: ");
-      itoa(ledger.total_income,num,10);
-      addstr(num);
+      addstr(ledger.total_income);
 
       move(10,47);
       addstr("Funds Spent: ");
-      itoa(ledger.total_expense,num,10);
-      addstr(num);
+      addstr(ledger.total_expense);
 
       move(11,47);
       addstr("Conservatives Kidnapped: ");
-      itoa(stat_kidnappings,num,10);
-      addstr(num);
+      addstr(stat_kidnappings);
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);

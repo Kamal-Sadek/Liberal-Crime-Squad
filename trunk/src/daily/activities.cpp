@@ -232,7 +232,7 @@ void repairarmor(Creature &cr,char &clearformess)
    if(armor!=NULL)
    {
       if(clearformess) erase();
-      else makedelimiter(8,0);
+      else makedelimiter();
 
       bool repairfailed=false;
 
@@ -289,8 +289,8 @@ void makearmor(Creature &cr,char &clearformess)
 
    if(ledger.get_funds()<hcost)
    {
-      if(clearformess)erase();
-      else makedelimiter(8,0);
+      if(clearformess) erase();
+      else makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
@@ -333,7 +333,7 @@ void makearmor(Creature &cr,char &clearformess)
       if(!foundcloth&&ledger.get_funds()<cost)
       {
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
@@ -361,7 +361,7 @@ void makearmor(Creature &cr,char &clearformess)
          else quality=1;
 
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          Item *it=new Armor(*armortype[at],quality);
 
@@ -449,21 +449,12 @@ void survey(Creature *cr)
    move(0,0);
    addstr("Survey of Public Opinion, According to Recent Polls");
 
-   char num[20];
    int y=8,approval=presidentapproval();
    move(2,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   itoa(approval/10+(LCSrandom(noise*2+1)-noise),num,10);
-   addstr(num, gamelog);
+   addstr(approval/10+(LCSrandom(noise*2+1)-noise), gamelog);
    addstr("% had a favorable opinion of ");
-   switch(exec[EXEC_PRESIDENT])
-   {
-   case -2: set_color(COLOR_RED,COLOR_BLACK,1); break;
-   case -1: set_color(COLOR_MAGENTA,COLOR_BLACK,1); break;
-   case 0: set_color(COLOR_YELLOW,COLOR_BLACK,1); break;
-   case 1: set_color(COLOR_CYAN,COLOR_BLACK,1); break;
-   case 2: set_color(COLOR_GREEN,COLOR_BLACK,1); break;
-   }
+   set_alignment_color(exec[EXEC_PRESIDENT],true);
    addstr("President ");
    addstr(execname[EXEC_PRESIDENT]);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -526,7 +517,7 @@ void survey(Creature *cr)
             break;
          case VIEW_SWEATSHOPS:
             if(attitude[VIEW_SWEATSHOPS]>50) addstr("threats to labor rights.");
-            else addstr("excessive regulation of labor practices.");
+            else addstr("corrupt union thugs.");
             break;
          case VIEW_POLLUTION:
             if(attitude[VIEW_POLLUTION]>50) addstr("threats to the environment.");
@@ -616,8 +607,7 @@ void survey(Creature *cr)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(23,0);
    addstr("Results are +/- ");
-   itoa(noise,num,10);
-   addstr(num);
+   addstr(noise);
    addstr(" Liberal percentage points.");
    move(24,0);
    addstr("Enter - Done");
@@ -640,7 +630,7 @@ void survey(Creature *cr)
       {
          if(v>=VIEWNUM || (v==VIEW_CONSERVATIVECRIMESQUAD && (endgamestate>=ENDGAME_CCS_DEFEATED||newscherrybusted<2)))
          {
-            move(y++,0);
+            move(y,0);
             addstr("                                                                                ");
             continue;
          }
@@ -674,9 +664,8 @@ void survey(Creature *cr)
          if(survey[v]==-1) addstr("??");
          else
          {
-            itoa(survey[v],num,10);
-            if(strlen(num)==1)addstr("0");
-            addstr(num);
+            if(survey[v]<10)addchar('0');
+            addstr(survey[v]);
          }
          addstr("% ");
 
@@ -717,11 +706,11 @@ void survey(Creature *cr)
 
       while(true)
       {
-         int key=getkey();
+         int c=getkey();
 
-         if(key==10||key==ESC) return;
-         else if(key==interface_pgup) { page--; break; }
-         else if(key==interface_pgdn) { page++; break; }
+         if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
+         else if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) { page--; break; }
+         else if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) { page++; break; }
       }
    }
 
@@ -734,7 +723,7 @@ void attemptarrest(Creature & liberal,const char* string,int clearformess)
    if(string)
    {
       if(clearformess) erase();
-      else makedelimiter(8,0);
+      else makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
@@ -1295,7 +1284,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
       if(msg[0])
       {
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
@@ -1338,7 +1327,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
          if(msg[0])
          {
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -1366,7 +1355,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
          {
 
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -1419,24 +1408,16 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
             gamelog.nextMessage(); //Next message now so that we don't have to type it for every case.
          }
 
-         int issue=VIEW_LIBERALCRIMESQUAD;
-         int power=1;
-         //int caught=0;
+         int issue=VIEW_LIBERALCRIMESQUAD,power=1;
 
-         if(clearformess)erase();
-         else
-         {
-            makedelimiter(8,0);
-         }
+         if(clearformess) erase();
+         else makedelimiter();
 
          if(!LCSrandom(10) &&
             !(graffiti[s]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
          {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -1455,9 +1436,9 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
             gamelog.nextMessage();
 
             newsstoryst *ns=new newsstoryst;
-               ns->type=NEWSSTORY_GRAFFITIARREST;
-               ns->loc=-1;
-               ns->positive=0;
+            ns->type=NEWSSTORY_GRAFFITIARREST;
+            ns->loc=-1;
+            ns->positive=0;
             newsstory.push_back(ns);
             sitestory=ns;
 
@@ -1470,8 +1451,6 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
             power=0;
             if(!LCSrandom(3))
             {
-               char issuestr[60];
-               getview(issuestr,graffiti[s]->activity.arg);
                issue=graffiti[s]->activity.arg;
                power=graffiti[s]->skill_roll(SKILL_ART)/3;
 
@@ -1481,7 +1460,7 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
                addstr(" has completed a", gamelog);
                if(power>3)addstr(" beautiful", gamelog);
                addstr(" mural about ", gamelog);
-               addstr(issuestr, gamelog);
+               addstr(getview(issue,false), gamelog);
                addstr(".", gamelog);
                gamelog.nextMessage();
 
@@ -1508,13 +1487,11 @@ void doActivityGraffiti(vector<Creature *> &graffiti, char &clearformess)
          else if(!LCSrandom(MAX(30-graffiti[s]->get_skill(SKILL_ART)*2,5)))
          {
             issue=randomissue();
-            char issuestr[60];
-            getview(issuestr,issue);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(graffiti[s]->name, gamelog);
             addstr(" has begun work on a large mural about ", gamelog);
-            addstr(issuestr, gamelog);
+            addstr(getview(issue,false), gamelog);
             addstr(".", gamelog);
             gamelog.nextMessage();
             graffiti[s]->activity.arg=issue;
@@ -1577,11 +1554,8 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
       {
          if(!(prostitutes[p]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE))) // Street sense to avoid
          {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -1604,11 +1578,8 @@ void doActivityProstitution(vector<Creature *> &prostitutes, char &clearformess)
          }
          else
          {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
@@ -1635,10 +1606,7 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
 {
    for(int s=students.size()-1;s>=0;s--)
    {
-	   if (ledger.get_funds()<60)
-	   {
-		   break;
-	   }
+	   if(ledger.get_funds()<60) break;
 	   ledger.subtract_funds(60,EXPENSE_TRAINING);
 	   int skill[2] = {-1, -1};
 	   int effectiveness[2] = {20, 20};
@@ -1693,24 +1661,17 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
            skill[0] = SKILL_WRITING;
 			  break;
 	   }
-	   bool worthcontinuing = false;
-	   for (int i = 0; i < 2; i++)
-	   {
-		   if (skill[i] != -1)
-		   {
-			   // rapid decrease in effectiveness as your skill gets higher.
+	   bool worthcontinuing=false;
+	   for(int i=0; i<2; i++)
+		   if(skill[i]!=-1)
+		   {  // rapid decrease in effectiveness as your skill gets higher.
             effectiveness[i] /= (students[s]->get_skill(skill[i])+1);
-			   if (effectiveness[i]<1)
-			   {
+			   if(effectiveness[i]<1)
                effectiveness[i]=1;
-			   }
 		      students[s]->train(skill[i],effectiveness[i]);
             if(students[s]->get_skill(skill[i]) < students[s]->skill_cap(skill[i],true))
-			   {
 				   worthcontinuing=true;
-			   }
 		   }
-	   }
 	   if (!worthcontinuing)
 	   {
 		   students[s]->activity.type=ACTIVITY_NONE;
@@ -1735,11 +1696,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
       char done=0;
       short crime=0;
 
-      if(clearformess)erase();
-      else
-      {
-         makedelimiter(8,0);
-      }
+      if(clearformess) erase();
+      else makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
@@ -1748,10 +1706,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
       int power=0;
       for(int t=0;t<(int)trouble.size();t++)
-      {
          power+=trouble[t]->skill_roll(SKILL_PERSUASION)+
                 trouble[t]->skill_roll(SKILL_STREETSENSE);
-      }
 
       int mod=1;
       if(LCSrandom(10)<power)mod++;
@@ -1912,18 +1868,15 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             if(!LCSrandom(30) &&
                !(trouble[t]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE)))
             {
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter();
 
                if(!LCSrandom(4))
                {
                   newsstoryst *ns=new newsstoryst;
-                     ns->type=NEWSSTORY_WANTEDARREST; // should probably create a NEWSSTORY_TROUBLEARREST and implement it fully
-                     ns->loc=-1;                      // but this will have to do for now
-                     ns->positive=0;
+                  ns->type=NEWSSTORY_WANTEDARREST; // should probably create a NEWSSTORY_TROUBLEARREST and implement it fully
+                  ns->loc=-1;                      // but this will have to do for now
+                  ns->positive=0;
                   newsstory.push_back(ns);
                   sitestory=ns;
                   attemptarrest(*trouble[t],"causing trouble",clearformess);
@@ -1942,8 +1895,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                   if(trouble[t]->get_weapon().is_threatening())
                   {
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
+                     if(clearformess) erase();
+                     else makedelimiter();
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
@@ -1955,8 +1908,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                      getkey();
 
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
+                     if(clearformess) erase();
+                     else makedelimiter();
 
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
@@ -1971,15 +1924,10 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                   }
                   else
                   {
-                     int count = 0;
-
-                     while(count <= LCSrandom(5)+2)
+                     for(int count=0;count<=LCSrandom(5)+2;count++)
                      {
-                        if(clearformess)erase();
-                        else
-                        {
-                           makedelimiter(8,0);
-                        }
+                        if(clearformess) erase();
+                        else makedelimiter();
                         if(trouble[t]->skill_roll(SKILL_HANDTOHAND)>LCSrandom(6)+count)
                         {
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -2028,24 +1976,19 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                            wonfight=false;
                         }
-                        count++;
                      }
 
                      if(wonfight)
                      {
-                        if(clearformess)erase();
-                        else
-                        {
-                           makedelimiter(8,0);
-                        }
+                        if(clearformess) erase();
+                        else makedelimiter();
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
                         move(8,1);
                         addstr(trouble[t]->name, gamelog);
                         addstr(" beat the ", gamelog);
                         if(law[LAW_FREESPEECH]==-2)
                            addstr("[tar]", gamelog);
-                        else
-                           addstr("shit", gamelog);
+                        else addstr("shit", gamelog);
                         addstr(" out of everyone who got close!", gamelog);
 
                         gamelog.nextMessage();
@@ -2059,11 +2002,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                   if(!wonfight)
                   {
-                     if(clearformess)erase();
-                     else
-                     {
-                        makedelimiter(8,0);
-                     }
+                     if(clearformess) erase();
+                     else makedelimiter();
                      set_color(COLOR_RED,COLOR_BLACK,1);
                      move(8,1);
                      addstr(trouble[t]->name, gamelog);
@@ -2079,11 +2019,8 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
 
                      if(!LCSrandom(5))
                      {
-                        if(clearformess)erase();
-                        else
-                        {
-                           makedelimiter(8,0);
-                        }
+                        if(clearformess) erase();
+                        else makedelimiter();
                         switch(LCSrandom(10))
                         {
                            case 0:
@@ -2141,13 +2078,13 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                               {
                                  int ribminus=LCSrandom(RIBNUM)+1;
                                  if(ribminus>trouble[t]->special[SPECIALWOUND_RIBS])ribminus=trouble[t]->special[SPECIALWOUND_RIBS];
-                                 char num[20];
-                                 itoa(ribminus,num,10);
 
                                  move(8,1);
                                  if(ribminus>1)
                                  {
-                                    addstr(num, gamelog);
+                                    if(ribminus==trouble[t]->special[SPECIALWOUND_RIBS])
+                                       addstr("All ", gamelog);
+                                    addstr(ribminus, gamelog);
                                     addstr(" of ", gamelog);
                                     addstr(trouble[t]->name, gamelog);
                                     addstr("'s ribs are ", gamelog);
@@ -2182,9 +2119,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
       }
 
       for(int h=0;h<(int)trouble.size();h++)
-      {
          addjuice(*trouble[h],juiceval,40);
-      }
    }
 }
 
@@ -2376,7 +2311,7 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 }
 
 /* steal a car */
-char stealcar(Creature &cr,char &clearformess)
+bool stealcar(Creature &cr,char &clearformess)
 {
    clearformess=1;
 
@@ -2399,7 +2334,7 @@ char stealcar(Creature &cr,char &clearformess)
       addstr("Adventures in Liberal Car Theft", gamelog);
       gamelog.nextMessage();
       printcreatureinfo(&cr);
-      makedelimiter(8,0);
+      makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(10,0);
@@ -2410,41 +2345,25 @@ char stealcar(Creature &cr,char &clearformess)
 
       //ROUGH DAY
       if(!cr.skill_check(SKILL_STREETSENSE,diff))
-      {
-         do
-         {
-            cartype=LCSrandom(vehicletype.size());
-            if(LCSrandom(10)<vehicletype[cartype]->steal_difficultytofind()) cartype=old;
-         } while(cartype==old);
-      }
+         do cartype=LCSrandom(vehicletype.size());
+         while(cartype==old||LCSrandom(10)<vehicletype[cartype]->steal_difficultytofind());
 
-      v = new Vehicle(*vehicletype[cartype]);
-      string carname = v->fullname();
+      string carname=(v=new Vehicle(*vehicletype[cartype]))->fullname();
 
+      move(11,0);
+      addstr(cr.name, gamelog);
       if(old!=cartype)
       {
-         move(11,0);
-         addstr(cr.name, gamelog);
          addstr(" was unable to find a ", gamelog);
          addstr(vehicletype[old]->longname(), gamelog);
          addstr(" but did find a ", gamelog);
-         addstr(v->longname(), gamelog);
-         addstr(".", gamelog);
-
-         getkey();
       }
-      else
-      {
-         move(11,0);
-         addstr(cr.name, gamelog);
-         addstr(" found a ", gamelog);
-         addstr(v->longname(), gamelog);
-         addstr(".", gamelog);
-
-         getkey();
-      }
-
+      else addstr(" found a ", gamelog);
+      addstr(v->longname(), gamelog);
+      addstr(".", gamelog);
       gamelog.nextMessage();
+
+      getkey();
 
       //APPROACH?
       erase();
@@ -2452,7 +2371,7 @@ char stealcar(Creature &cr,char &clearformess)
       move(0,0);
       addstr("Adventures in Liberal Car Theft");
       printcreatureinfo(&cr);
-      makedelimiter(8,0);
+      makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(10,0);
@@ -2468,27 +2387,26 @@ char stealcar(Creature &cr,char &clearformess)
       move(13,0);
       addstr("Enter - Call it a day.");
 
-      int c;
-
       while(true)
       {
-         c=getkey();
+         int c=getkey();
          if(c=='a')break;
-         if(c=='x'||c==ESC||c==10){delete v;return 0;}
+         if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){delete v;return false;}
       }
 
       //SECURITY?
-      char alarmon=0,sensealarm=LCSrandom(100)<v->sensealarmchance(),
-           touchalarm=LCSrandom(100)<v->touchalarmchance(),windowdamage=0;
+      bool alarmon=false,sensealarm=LCSrandom(100)<v->sensealarmchance(),
+           touchalarm=LCSrandom(100)<v->touchalarmchance();
+      char windowdamage=0;
 
-      do
+      for(bool entered=false;!entered;)
       {
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(0,0);
          addstr("Adventures in Liberal Car Theft");
          printcreatureinfo(&cr);
-         makedelimiter(8,0);
+         makedelimiter();
 
          if(alarmon)
          {
@@ -2545,17 +2463,14 @@ char stealcar(Creature &cr,char &clearformess)
             }
          }
 
-         char method=0;
-
-         while(true)
+         char method=-1;
+         while(method==-1)
          {
-            c=getkey();
-            if(c=='a')break;
-            if(c=='b'){method=1;break;}
-            if(c=='x'||c==ENTER||c==ESC){delete v;return 0;} /* try again tomorrow */
+            int c=getkey();
+            if(c=='a')method=0;
+            if(c=='b')method=1;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){delete v;return false;} /* try again tomorrow */
          }
-
-         char entered=0;
 
          //PICK LOCK
          if(method==0)
@@ -2571,7 +2486,7 @@ char stealcar(Creature &cr,char &clearformess)
 
                getkey();
 
-               entered=1;
+               entered=true;
             }
             else
             {
@@ -2606,7 +2521,7 @@ char stealcar(Creature &cr,char &clearformess)
 
                getkey();
 
-               entered=1;
+               entered=true;
             }
             else
             {
@@ -2641,7 +2556,7 @@ char stealcar(Creature &cr,char &clearformess)
 
                getkey();
 
-               alarmon=1;
+               alarmon=true;
             }
          }
 
@@ -2649,7 +2564,7 @@ char stealcar(Creature &cr,char &clearformess)
          if(!LCSrandom(50)||(!LCSrandom(5)&&alarmon))
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            move(y,0);y++;
+            move(y++,0);
             addstr(cr.name, gamelog);
             addstr(" has been spotted by a passerby!", gamelog);
             gamelog.nextMessage();
@@ -2667,24 +2582,19 @@ char stealcar(Creature &cr,char &clearformess)
 
             if(footchase(cr)){
                mode=GAMEMODE_BASE;
-               delete v;return 0;} // Switched to return 0; this will cause you to try again tomorrow
+               delete v;return false;} // Switched to return false; this will cause you to try again tomorrow
             else {
                mode=GAMEMODE_BASE;
-               delete v;return 0;}
+               delete v;return false;}
          }
-
-         if(entered)break;
-      }while(true);
+      }
 
       //START CAR
-      char keys_in_car=0;
-      int key_location = LCSrandom(5);
+      char keys_in_car=LCSrandom(5)>0,key_search_total=0;
+      int key_location=LCSrandom(5),nervous_counter=0;
       //char ignition_progress=0;
-      char key_search_total=0;
-      int nervous_counter=0;
-      if(!LCSrandom(5))keys_in_car=1;
 
-      do
+      for(bool started=false;!started;)
       {
          nervous_counter++;
          erase();
@@ -2692,12 +2602,12 @@ char stealcar(Creature &cr,char &clearformess)
          move(0,0);
          addstr("Adventures in Liberal Car Theft");
          printcreatureinfo(&cr);
-         makedelimiter(8,0);
+         makedelimiter();
 
          int y=10;
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,0);y++;
+         move(y++,0);
          addstr(cr.name, gamelog);
          addstr(" is behind the wheel of a ", gamelog);
          addstr(carname, gamelog);
@@ -2707,7 +2617,7 @@ char stealcar(Creature &cr,char &clearformess)
          if(alarmon)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            move(y,0);y++;
+            move(y++,0);
             if(sensealarm)addstr("THE VIPER");
             else addstr(carname);
             addstr(":   ");
@@ -2716,10 +2626,7 @@ char stealcar(Creature &cr,char &clearformess)
             else addstr("<BEEP!!> <BEEP!!> <BEEP!!> <BEEP!!>");
          }
 
-         y++;
-
-
-         move(y++,0);
+         move((++y)++,0);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr("A - Hotwire the car.");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -2728,20 +2635,16 @@ char stealcar(Creature &cr,char &clearformess)
          move(y++,0);
          if(!sensealarm)addstr("Enter - Call it a day.");
          else {addstr("Enter - The Viper has finally deterred ");addstr(cr.name);addstr(".");}
-
          y++;
 
-         char method=0;
-
-         do
+         char method=-1;
+         while(method==-1)
          {
-            c=getkey();
-            if(c=='a')break;
-            if(c=='b'){method=1;break;}
-            if(c=='x'||c==ENTER||c==ESC){delete v;return 0;} // Call it a day and try again tomorrow
-         }while(true);
-
-         char started=0;
+            int c=getkey();
+            if(c=='a') method=0;
+            if(c=='b') method=1;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){delete v;return false;} // Call it a day and try again tomorrow
+         }
 
          //HOTWIRE CAR
          if(method==0)
@@ -2750,25 +2653,24 @@ char stealcar(Creature &cr,char &clearformess)
             {
                cr.train(SKILL_SECURITY,MAX(10-cr.get_skill(SKILL_SECURITY),0));
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(cr.name, gamelog);
                addstr(" hotwires the car!", gamelog);
                gamelog.nextMessage();
 
                getkey();
 
-               started=1;
+               started=true;
             }
             else
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               move(y,0);y++;
+               move(y++,0);
                addstr(cr.name, gamelog);
                int flavor_text;
                if(cr.get_skill(SKILL_SECURITY) < 4)
                   flavor_text = LCSrandom(3);
-               else
-                  flavor_text = LCSrandom(5);
+               else flavor_text = LCSrandom(5);
                switch(flavor_text)
                {
                   case 0:addstr(" fiddles with the ignition, but the car doesn't start.", gamelog);break;
@@ -2830,7 +2732,7 @@ char stealcar(Creature &cr,char &clearformess)
 
                getkey();
 
-               started=1;
+               started=true;
             }
             else
             {
@@ -2884,7 +2786,7 @@ char stealcar(Creature &cr,char &clearformess)
          if(!started&&(!LCSrandom(50)||(!LCSrandom(5)&&alarmon)))
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            move(y,0);y++;
+            move(y++,0);
             addstr(cr.name, gamelog);
             addstr(" has been spotted by a passerby!", gamelog);
             gamelog.nextMessage();
@@ -2925,9 +2827,7 @@ char stealcar(Creature &cr,char &clearformess)
 
             getkey();
          }
-
-         if(started)break;
-      }while(true);
+      }
 
       //CHASE SEQUENCE
          //CAR IS OFFICIAL, THOUGH CAN BE DELETE BY chasesequence()
@@ -2951,15 +2851,12 @@ char stealcar(Creature &cr,char &clearformess)
          v->add_heat(10);
          chaselev=1;
          newsstoryst *ns=new newsstoryst;
-            ns->type=NEWSSTORY_CARTHEFT;
+         ns->type=NEWSSTORY_CARTHEFT;
          newsstory.push_back(ns);
          sitestory=ns;
          makechasers(-1,chaselev);
-         if(!chasesequence(cr,*v))
-         {
-            // Caught or killed in the chase. Do not need to delete vehicle.
+         if(!chasesequence(cr,*v)) // Caught or killed in the chase. Do not need to delete vehicle.
             return 0;
-         }
       }
 
       return 1;
@@ -2968,21 +2865,17 @@ char stealcar(Creature &cr,char &clearformess)
    return 0;
 }
 
-char carselect(Creature &cr,short &cartype)
+bool carselect(Creature &cr,short &cartype)
 {
    cartype=-1;
 
    vector<int> cart;
    for(unsigned a=0;a<vehicletype.size();a++)
-   {
       if(vehicletype[a]->steal_difficultytofind()<10) cart.push_back(a);
-   }
 
    int page=0;
 
-   //char str[200];
-
-   do
+   while(true)
    {
       erase();
 
@@ -3003,7 +2896,7 @@ char carselect(Creature &cr,short &cartype)
          addchar(y+'A'-2);addstr(" - ");
          addstr(vehicletype[cart[p]]->longname());
 
-         move(y,49);
+         move(y++,49);
          difficulty=vehicletype[cart[p]]->steal_difficultytofind();
          switch(difficulty)
          {
@@ -3052,8 +2945,6 @@ char carselect(Creature &cr,short &cartype)
                addstr("Impossible");
                break;
          }
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -3075,7 +2966,7 @@ char carselect(Creature &cr,short &cartype)
          if(p<(int)cart.size())
          {
             cartype=cart[p];
-            return 1;
+            return true;
          }
       }
 
@@ -3083,17 +2974,17 @@ char carselect(Creature &cr,short &cartype)
       // Not a big problem if this page isn't skippable
       // (There's no immediate risk in picking a car)
       // - JDS
-      //if(c==10)break;
-   }while(true);
+      //if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+   }
 
-   return 0;
+   return false;
 }
 
 /* get a wheelchair */
 void getwheelchair(Creature &cr,char &clearformess)
 {
    if(clearformess) erase();
-   else makedelimiter(8,0);
+   else makedelimiter();
 
    if(LCSrandom(2))
    {

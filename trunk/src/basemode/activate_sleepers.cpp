@@ -44,19 +44,16 @@ void activate_sleepers(void)
 
    int page=0;
 
-   char str[80];
-
    while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
-
+      printfunds();
 
       move(0,0);
       addstr("Activate Sleeper Agents");
-      makedelimiter(1,0);
+      makedelimiter(1);
       move(1,4);
       addstr("CODE NAME");
       move(1,25);
@@ -67,7 +64,7 @@ void activate_sleepers(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*9;p<(int)temppool.size()&&p<page*9+9;p++)
+      for(int p=page*9;p<(int)temppool.size()&&p<page*9+9;p++,y+=2)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,(y-2)/2+'A');addstr(" - ");
@@ -80,29 +77,16 @@ void activate_sleepers(void)
          addstr("Effectiveness: ");
 
          if(temppool[p]->infiltration > 0.8f)
-         {
             set_color(COLOR_RED,COLOR_BLACK,1);
-         }
          else if(temppool[p]->infiltration > 0.6f)
-         {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         }
          else if(temppool[p]->infiltration > 0.4f)
-         {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         }
          else if(temppool[p]->infiltration > 0.2f)
-         {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-         }
          else if(temppool[p]->infiltration > 0.1f)
-         {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
-         else
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,0);
-         }
+         else set_color(COLOR_GREEN,COLOR_BLACK,0);
          addstr(temppool[p]->infiltration*100+0.5); // gets rounded to nearest integer
          addstr("%");
 
@@ -112,10 +96,7 @@ void activate_sleepers(void)
          move(y,57);
          // Let's add some color here...
          set_activity_color(temppool[p]->activity.type);
-         getactivity(str,temppool[p]->activity);
-         addstr(str);
-
-         y+=2;
+         addstr(getactivity(temppool[p]->activity));
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -138,9 +119,7 @@ void activate_sleepers(void)
       {
          int p=page*9+(int)(c-'a');
          if(p<(int)temppool.size())
-         {
             activate_sleeper(temppool[p]);
-         }
       }
 
       if(c=='t')
@@ -149,7 +128,7 @@ void activate_sleepers(void)
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS],true);
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -163,7 +142,7 @@ void activate_sleeper(Creature *cr)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       move(0,0);
       addstr("Taking Undercover Action:   What will ");
@@ -172,7 +151,7 @@ void activate_sleeper(Creature *cr)
 
       printcreatureinfo(cr);
 
-      makedelimiter(8,0);
+      makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
       move(10,1);
@@ -212,8 +191,7 @@ void activate_sleeper(Creature *cr)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
             if(cr->flag & CREATUREFLAG_BRAINWASHED)
                addstr("3 - [Enlightened Can't Recruit]");
-            else
-               addstr("3 - [Need More Juice to Recruit]");
+            else addstr("3 - [Need More Juice to Recruit]");
          }
          break;
       case 'b':

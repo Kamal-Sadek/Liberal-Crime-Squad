@@ -331,7 +331,7 @@ void special_bouncer_assess_squad()
 
 void special_lab_cosmetics_cagedanimals(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -370,8 +370,7 @@ void special_lab_cosmetics_cagedanimals(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
@@ -433,7 +432,7 @@ void special_readsign(int sign)
 
 void special_nuclear_onoff(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -557,15 +556,14 @@ void special_nuclear_onoff(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_lab_genetic_cagedanimals(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -640,15 +638,14 @@ void special_lab_genetic_cagedanimals(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_policestation_lockup(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -706,15 +703,14 @@ void special_policestation_lockup(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_courthouse_lockup(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -772,8 +768,7 @@ void special_courthouse_lockup(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
@@ -797,7 +792,7 @@ void special_courthouse_jury(void)
       return;
    }
 
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -931,15 +926,14 @@ void special_courthouse_jury(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_prison_control(short prison_control_type)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1021,8 +1015,7 @@ void special_prison_control(short prison_control_type)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
@@ -1045,7 +1038,7 @@ void special_intel_supercomputer(void)
       return;
    }
 
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1113,8 +1106,7 @@ void special_intel_supercomputer(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
@@ -1177,7 +1169,7 @@ void special_graffiti(void)
 
 void special_sweatshop_equipment(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1209,15 +1201,14 @@ void special_sweatshop_equipment(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_polluter_equipment(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1251,15 +1242,14 @@ void special_polluter_equipment(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_house_photos(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1439,14 +1429,13 @@ void special_house_photos(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 void special_armory(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1520,8 +1509,7 @@ void special_armory(void)
                it=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],5);
                activesquad->loot.push_back(it);
                num++;
-            }
-            while(num<2 || (LCSrandom(2) && num<5));
+            } while(num<2 || (LCSrandom(2) && num<5));
 
             empty=false;
          }
@@ -1549,8 +1537,7 @@ void special_armory(void)
                it=new Clip(*cliptype[getcliptype("CLIP_ASSAULT")],5);
                activesquad->loot.push_back(it);
                num++;
-            }
-            while(num<2 || (LCSrandom(2) && num<5));
+            } while(num<2 || (LCSrandom(2) && num<5));
 
             empty=false;
          }
@@ -1577,8 +1564,7 @@ void special_armory(void)
                   de=new Armor(*armortype[getarmortype("ARMOR_CIVILLIANARMOR")]);
                activesquad->loot.push_back(de);
                num++;
-            }
-            while(num<2 || (LCSrandom(2) && num<5));
+            } while(num<2 || (LCSrandom(2) && num<5));
 
             empty=false;
          }
@@ -1653,15 +1639,14 @@ void special_armory(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_corporate_files(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1716,15 +1701,14 @@ void special_corporate_files(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_radio_broadcaststudio(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1760,15 +1744,14 @@ void special_radio_broadcaststudio(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 
 void special_news_broadcaststudio(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1803,14 +1786,13 @@ void special_news_broadcaststudio(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 
 void special_display_case(void)
 {
-   do
+   while(true)
    {
       clearmessagearea();
 
@@ -1841,8 +1823,7 @@ void special_display_case(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 void spawn_security(void)
@@ -2164,7 +2145,7 @@ void special_bank_vault(void)
       }
    }
 
-   do
+   while(true)
    {
       clearmessagearea();
       move(16,1);
@@ -2357,8 +2338,7 @@ void special_bank_vault(void)
          return;
       }
       else if(c=='n')return;
-
-   }while(true);
+   }
 }
 
 void special_bank_teller(void)

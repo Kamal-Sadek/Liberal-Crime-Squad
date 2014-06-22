@@ -104,15 +104,12 @@ void activate(void)
 
    int page=0;
 
-   char str[80];
-
    while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
-
+      printfunds();
 
       move(0,0);
       addstr("Activate Uninvolved Liberals");
@@ -122,7 +119,7 @@ void activate(void)
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -153,10 +150,7 @@ void activate(void)
          move(y,57);
          // Let's add some color here...
          set_activity_color(temppool[p]->activity.type);
-         getactivity(str,temppool[p]->activity);
-         addstr(str);
-
-         y++;
+         addstr(getactivity(temppool[p]->activity));
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -192,107 +186,106 @@ void activate(void)
          activatebulk();
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
-int classlist = 0;
+int classlist=0;
 void listclasses(Creature *cr)
 {
-     set_color(COLOR_WHITE,COLOR_BLACK,0);
-     move(10,40);
-     addstr("Classes cost $60 a day. Study what?");
-    if (classlist == 0)
-    {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
-       move(12,40);
-       addstr("1 - Public Policy");
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   move(10,40);
+   addstr("Classes cost $60 a day. Study what?");
+   if(classlist==0)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DEBATING);
+      move(12,40);
+      addstr("1 - Public Policy");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
-       move(13,40);
-       addstr("2 - Economics");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_BUSINESS);
+      move(13,40);
+      addstr("2 - Economics");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
-       move(14,40);
-       addstr("3 - Psychology");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_PSYCHOLOGY);
+      move(14,40);
+      addstr("3 - Psychology");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
-       move(15,40);
-       addstr("4 - Criminal Law");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LAW);
+      move(15,40);
+      addstr("4 - Criminal Law");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
-       move(16,40);
-       addstr("5 - Physics");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_SCIENCE);
+      move(16,40);
+      addstr("5 - Physics");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,0);
-       move(17,40);
-       addstr("6 - Other classes");
-    }
-    else if (classlist == 1)
-    {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
-       move(12,40);
-       addstr("1 - Drivers Ed");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(17,40);
+      addstr("6 - Other classes");
+   }
+   else if(classlist==1)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DRIVING);
+      move(12,40);
+      addstr("1 - Drivers Ed");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
-       move(13,40);
-       addstr("2 - First Aid");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_FIRST_AID);
+      move(13,40);
+      addstr("2 - First Aid");
 
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
+      move(14,40);
+      addstr("3 - Painting");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_ART);
-       move(14,40);
-       addstr("3 - Painting");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
+      move(15,40);
+      addstr("4 - Theatre");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_DISGUISE);
-       move(15,40);
-       addstr("4 - Theatre");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
+      move(16,40);
+      addstr("5 - Kung Fu");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MARTIAL_ARTS);
-       move(16,40);
-       addstr("5 - Kung Fu");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(17,40);
+      addstr("6 - Other classes");
+   }
+   else if(classlist==2)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_GYMNASTICS);
+      move(12,40);
+      addstr("1 - Gymnastics");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,0);
-       move(17,40);
-       addstr("6 - Other classes");
-    }
-    else if (classlist == 2)
-    {
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_GYMNASTICS);
-       move(12,40);
-       addstr("1 - Gymnastics");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_WRITING);
+      move(13,40);
+      addstr("2 - Writing");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_WRITING);
-       move(13,40);
-       addstr("2 - Writing");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TEACHING);
+      move(14,40);
+      addstr("3 - Education");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_TEACHING);
-       move(14,40);
-       addstr("3 - Education");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MUSIC);
+      move(15,40);
+      addstr("4 - Music");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_MUSIC);
-       move(15,40);
-       addstr("4 - Music");
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LOCKSMITHING);
+      move(16,40);
+      addstr("5 - Locksmithing");
 
-       set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_LOCKSMITHING);
-       move(16,40);
-       addstr("5 - Locksmithing");
-
-       set_color(COLOR_WHITE,COLOR_BLACK,0);
-       move(17,40);
-       addstr("6 - Other classes");
-    }
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(17,40);
+      addstr("6 - Other classes");
+   }
 }
 
 void updateclasschoice(Creature *cr, char choice)
 {
-   if (choice == '6')
+   if(choice=='6')
    {
-      classlist = (classlist + 1) % 3;
+      classlist=(classlist+1)%3;
       listclasses(cr);
    }
    else
    {
-      if (classlist == 0)
+      if(classlist==0)
       {
          switch(choice)
          {
@@ -303,7 +296,7 @@ void updateclasschoice(Creature *cr, char choice)
             case '5':cr->activity.type=ACTIVITY_STUDY_SCIENCE;break;
          }
       }
-      else if (classlist == 1)
+      else if(classlist==1)
       {
          switch(choice)
          {
@@ -314,7 +307,7 @@ void updateclasschoice(Creature *cr, char choice)
             case '5':cr->activity.type=ACTIVITY_STUDY_MARTIAL_ARTS;break;
          }
       }
-      else if (classlist == 2)
+      else if(classlist==2)
       {
          switch(choice)
          {
@@ -331,9 +324,7 @@ void updateclasschoice(Creature *cr, char choice)
 
 void activate(Creature *cr)
 {
-   int hostagecount=0;
-   int state=0;
-   int choice=0;
+   int hostagecount=0,state=0,choice=0;
    char havedead=0;
    for(int p=0;p<(int)pool.size();p++)
    {
@@ -346,10 +337,10 @@ void activate(Creature *cr)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       move(0,0);
-      if (cr->income)
+      if(cr->income)
       {
          addstr(cr->name);
          addstr(" made $");
@@ -365,7 +356,7 @@ void activate(Creature *cr)
 
       printcreatureinfo(cr);
 
-      makedelimiter(8,0);
+      makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
       mvaddstr(10,1,"A - Engaging in Liberal Activism");
@@ -539,10 +530,10 @@ void activate(Creature *cr)
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_TEACH_FIGHTING);
          move(14,40);
          addstr("3 - Urban Warfare");
-       break;
-     case 'l':
-       listclasses(cr);
-       break;
+         break;
+      case 'l':
+         listclasses(cr);
+         break;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -618,8 +609,7 @@ void activate(Creature *cr)
             addstr(" will print and distribute shirts with Liberal slogans.");
          else if(cr->get_skill(SKILL_TAILORING)>=4)
             addstr(" will embroider shirts and sell them on the street.");
-         else
-            addstr(" will tie-dye T-shirts and sell them on the street.");
+         else addstr(" will tie-dye T-shirts and sell them on the street.");
          break;
       case ACTIVITY_SELL_ART:
          move(22,3);
@@ -628,8 +618,7 @@ void activate(Creature *cr)
             addstr(" will create and sell paintings embracing the Liberal agenda.");
          else if(cr->get_skill(SKILL_ART)>=4)
             addstr(" will make pretty paintings and sell them on the streets.");
-         else
-            addstr(" will sketch people and sell portraits back to them.");
+         else addstr(" will sketch people and sell portraits back to them.");
          break;
       case ACTIVITY_SELL_MUSIC:
          move(22,3);
@@ -807,17 +796,10 @@ void activate(Creature *cr)
                //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             default:
                if(cr->get_skill(SKILL_COMPUTERS)>1)
-               {
                   cr->activity.type=ACTIVITY_CCFRAUD;
-               }
                else if(cr->get_skill(SKILL_SEDUCTION)>1 && cr->age >= 18)
-               {
                   cr->activity.type=ACTIVITY_PROSTITUTION;
-               }
-               else
-               {
-                  cr->activity.type=ACTIVITY_SELL_DRUGS;
-               }
+               else cr->activity.type=ACTIVITY_SELL_DRUGS;
             }
             break;
          case 'd':
@@ -1060,20 +1042,15 @@ void activatebulk(void)
 
    if(temppool.size()==0)return;
 
-   int page=0;
-
-   char str[80];
-
-   int selectedactivity=0;
+   int page=0,selectedactivity=0;
 
    while(true)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(0,0);
       addstr("Activate Uninvolved Liberals");
       move(1,0);
@@ -1107,7 +1084,7 @@ void activatebulk(void)
       addstr("6 - Community Service");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1116,16 +1093,13 @@ void activatebulk(void)
 
          move(y,25);
          set_activity_color(temppool[p]->activity.type);
-         getactivity(str,temppool[p]->activity);
-         addstr(str);
+         addstr(getactivity(temppool[p]->activity));
          /*if(temppool[p]->activity.type==ACTIVITY_TROUBLE)
          {
          addstr(" ($");
          addstr(temppool[p]->activity.arg);
          addstr(")");
          }*/
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1201,7 +1175,7 @@ void activatebulk(void)
       if(c>='1'&&c<='6')
          selectedactivity=c-'1';
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -1247,7 +1221,7 @@ void select_tendhostage(Creature *cr)
       addstr("DAYS IN CAPTIVITY");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1280,8 +1254,6 @@ void select_tendhostage(Creature *cr)
          addstr(" ");
          if(temppool[p]->joindays>1)addstr("Days");
          else addstr("Day");
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1308,7 +1280,7 @@ void select_tendhostage(Creature *cr)
          }
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -1320,7 +1292,7 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   printfunds(0,1,"Money: ");
+   printfunds();
    move(0,0);
    addstr("Select a Funding Level for this Operation:");
 
@@ -1369,7 +1341,7 @@ long select_hostagefundinglevel(Creature *cr,Creature *hs)
       if(c=='e')flevel=100;
       if(c=='f')flevel=500;
       if(c=='k')flevel=666;
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    } while(flevel==-1);
 
    return flevel;
@@ -1540,7 +1512,7 @@ void recruitSelect(Creature &cr)
          }
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 
    return;
@@ -1578,7 +1550,7 @@ void select_makeclothing(Creature *cr)
       addstr("컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
 
       int y=2,difficulty;
-      for(int p=page*19;p<(int)armortypei.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<(int)armortypei.size()&&p<page*19+19;p++,y++)
       {
          difficulty=armor_makedifficulty(*armortype[armortypei[p]],cr);
          if(difficulty < 0) difficulty = 0;
@@ -1641,8 +1613,6 @@ void select_makeclothing(Creature *cr)
          string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
          move(y,64-price.length());
          addstr(price);
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1669,7 +1639,7 @@ void select_makeclothing(Creature *cr)
          }
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -1697,7 +1667,7 @@ long select_troublefundinglevel(Creature *cr)
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   printfunds(0,1,"Money: ");
+   printfunds();
    move(0,0);
    addstr("Select a Funding Level for this Operation:");
 
@@ -1736,7 +1706,7 @@ long select_troublefundinglevel(Creature *cr)
       if(c=='c')flevel=50;
       if(c=='d')flevel=100;
       if(c=='e')flevel=500;
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    } while(flevel==-1);
 
    return flevel;
@@ -1748,7 +1718,6 @@ long select_troublefundinglevel(Creature *cr)
 char select_view(Creature *cr,int &v)
 {
    int page=0;
-   char str[80];
 
    while(true)
    {
@@ -1764,13 +1733,12 @@ char select_view(Creature *cr,int &v)
       addstr("컴컴TOPIC컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴횵NTEREST컴컴컴컴컴컴컴컴컴컴컴컴컴�");
 
       int y=3,x=0;
-      for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++)
+      for(int p=page*18;p<VIEWNUM-3&&p<page*18+18;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,x);
          addchar((p-page*18)+'A');addstr(" - ");
-         getview(str,p);
-         addstr(str);
+         addstr(getview(p,false));
 
          move(y,44);
          if(public_interest[p]>100)
@@ -1798,8 +1766,6 @@ char select_view(Creature *cr,int &v)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
             addstr("Exhausted");
          }
-
-         y++;
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1825,7 +1791,7 @@ char select_view(Creature *cr,int &v)
          }
       }
 
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 
    return 0;

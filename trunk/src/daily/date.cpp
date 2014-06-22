@@ -464,7 +464,7 @@ char completedate(datest &d,int p,char &clearformess)
       gamelog.newline();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       //Others come to dates unarmed and wearing normal
       //clothing
@@ -474,7 +474,7 @@ char completedate(datest &d,int p,char &clearformess)
       d.date[e]->give_armor(atmp,&temp);
 
       printcreatureinfo(d.date[e]);
-      makedelimiter(8,0);
+      makedelimiter();
 
       while (!temp.empty())
       {
@@ -526,7 +526,7 @@ char completedate(datest &d,int p,char &clearformess)
             }
          }
       }
-      do
+      while(true)
       {
          int c=getkey();
 
@@ -779,7 +779,7 @@ char completedate(datest &d,int p,char &clearformess)
                }
             }
          }
-      } while(true);
+      }
    }
 
    if(d.date.size()>0)

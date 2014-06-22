@@ -66,18 +66,13 @@ void advanceday(char &clearformess,char canseethings)
                      pool[p]->get_attribute(ATTRIBUTE_HEALTH,true)<=1)
                   {
                      pool[p]->die();
-                     if(clearformess)erase();
-                     else
-                     {
-                        makedelimiter(8,0);
-                     }
+                     if(clearformess) erase();
+                     else makedelimiter();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      addstr(pool[p]->name, gamelog);
                      addstr(" has passed away at the age of ", gamelog);
-                     char str[5];
-                     itoa(pool[p]->age,str,10);
-                     addstr(str, gamelog);
+                     addstr(pool[p]->age, gamelog);
                      addstr(". The Liberal will be missed.", gamelog);
                      gamelog.nextMessage();
 
@@ -139,20 +134,15 @@ void advanceday(char &clearformess,char canseethings)
                if(squad[sq]->squad[p]->activity.type!=ACTIVITY_NONE&&
                   squad[sq]->squad[p]->activity.type!=ACTIVITY_VISIT)
                {
-                  if(clearformess)erase();
-                  else
-                  {
-                     makedelimiter(8,0);
-                  }
+                  if(clearformess) erase();
+                  else makedelimiter();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr(squad[sq]->squad[p]->name, gamelog);
                   addstr(" acted with ", gamelog);
                   addstr(squad[sq]->name, gamelog);
                   addstr(" instead of ", gamelog);
-                  char str[200];
-                  getactivity(str,squad[sq]->squad[p]->activity);
-                  addstr(str, gamelog);
+                  addstr(getactivity(squad[sq]->squad[p]->activity), gamelog);
                   addstr(".", gamelog);
                   gamelog.newline();
 
@@ -170,11 +160,8 @@ void advanceday(char &clearformess,char canseethings)
          if(location[squad[sq]->activity.arg]->closed||
             location[squad[sq]->activity.arg]->siege.siege)
          {
-            if(clearformess)erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(squad[sq]->name, gamelog);
@@ -220,7 +207,7 @@ void advanceday(char &clearformess,char canseethings)
                      if(v!=-1)
                      {
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(8,1);
                         addstr(squad[sq]->name, gamelog);
@@ -367,11 +354,8 @@ void advanceday(char &clearformess,char canseethings)
          {
             if(squad[sq]->squad[0]->carid==-1)
             {
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
                addstr(squad[sq]->name, gamelog);
@@ -416,7 +400,7 @@ void advanceday(char &clearformess,char canseethings)
          if(location[squad[sq]->activity.arg]->parent == travelLocation)
          {
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
             move(8,1);
             int squadNum;
             for(squadNum = 0; squadNum < 6; squadNum++)
@@ -429,9 +413,7 @@ void advanceday(char &clearformess,char canseethings)
             else
             {
                ledger.subtract_funds(100 * squadNum, EXPENSE_TRAVEL);
-               char cost[10];
-               itoa(100*squadNum, cost, 10);
-               addstr_fl(gamelog, "%s spent $%s on tickets to go to %s.", squad[sq]->name, cost, location[squad[sq]->activity.arg]->getname().c_str());
+               addstr_fl(gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, 100*squadNum, location[squad[sq]->activity.arg]->getname().c_str());
             }
 
             getkey();
@@ -448,7 +430,7 @@ void advanceday(char &clearformess,char canseethings)
          case SITE_CITY_MIAMI:
          case SITE_CITY_WASHINGTON_DC:
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
             move(8,1);
             addstr(squad[sq]->name, gamelog);
             addstr(" arrives in ", gamelog);
@@ -473,7 +455,7 @@ void advanceday(char &clearformess,char canseethings)
          case SITE_BUSINESS_CARDEALERSHIP:
          case SITE_BUSINESS_ARMSDEALER:
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(squad[sq]->name, gamelog);
@@ -506,18 +488,13 @@ void advanceday(char &clearformess,char canseethings)
             }
             showcarprefs=0;
             if(activesquad->squad[0]!=NULL)
-            {
                locatesquad(activesquad,activesquad->squad[0]->base);
-            }
             clearformess=1;
             break;
          case SITE_HOSPITAL_UNIVERSITY:
          case SITE_HOSPITAL_CLINIC:
             if(clearformess) erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            else makedelimiter();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             addstr(squad[sq]->name, gamelog);
@@ -531,18 +508,12 @@ void advanceday(char &clearformess,char canseethings)
             activesquad=squad[sq];
             hospital(squad[sq]->activity.arg);
             if(activesquad->squad[0]!=NULL)
-            {
                locatesquad(activesquad,activesquad->squad[0]->base);
-            }
             clearformess=1;
             break;
          default:
             if(clearformess) erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
-
+            else makedelimiter();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);
             if(squad[sq]->squad[0]->base==squad[sq]->activity.arg)
@@ -565,18 +536,13 @@ void advanceday(char &clearformess,char canseethings)
             getkey();
 
             if(clearformess) erase();
-            else
-            {
-               makedelimiter(8,0);
-            }
+            else makedelimiter();
 
             int c='t';
 
             if(location[squad[sq]->activity.arg]->renting>=0&&
                location[squad[sq]->activity.arg]->type==SITE_INDUSTRY_WAREHOUSE)
-            {
                c='s';
-            }
             else if(location[squad[sq]->activity.arg]->renting>=0&&
                squad[sq]->squad[0]->base!=squad[sq]->activity.arg)
             {
@@ -592,16 +558,14 @@ void advanceday(char &clearformess,char canseethings)
             {
                activesquad=squad[sq];
                newsstoryst *ns=new newsstoryst;
-                  ns->type=NEWSSTORY_SQUAD_SITE;
-                  ns->positive=1;
-                  ns->loc=squad[sq]->activity.arg;
+               ns->type=NEWSSTORY_SQUAD_SITE;
+               ns->positive=1;
+               ns->loc=squad[sq]->activity.arg;
                newsstory.push_back(ns);
                mode_site(squad[sq]->activity.arg);
             }
             if(squad[sq]->squad[0]!=NULL)
-            {
                locatesquad(squad[sq],squad[sq]->squad[0]->base);
-            }
 
             clearformess=1;
             break;
@@ -618,9 +582,7 @@ void advanceday(char &clearformess,char canseethings)
 
       if(!pool[p]->alive)continue;
       if(pool[p]->align!=1)
-      {
          tendhostage(pool[p],clearformess);
-      }
    }
 
    //ACTIVITIES FOR INDIVIDUALS
@@ -634,7 +596,7 @@ void advanceday(char &clearformess,char canseethings)
       if(pool[p]->dating)continue;
       if(pool[p]->hiding)continue;
 
-      if (pool[p]->location == -1)
+      if(pool[p]->location==-1)
       {
          //Had a crash bug on the siege check. Location was -1, probably set by 'partyrescue' and not reset during to messy violent chase.
          //This may prevent crashes.
@@ -676,17 +638,13 @@ void advanceday(char &clearformess,char canseethings)
          break;
       case ACTIVITY_STEALCARS:
          if(stealcar(*pool[p],clearformess))
-         {
             pool[p]->activity.type=ACTIVITY_NONE;
-         }
          else if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
-         {
             criminalize(*pool[p],LAWFLAG_CARTHEFT);
-         }
          break;
       case ACTIVITY_POLLS:
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
@@ -707,7 +665,7 @@ void advanceday(char &clearformess,char canseethings)
          pool[p]->activity.type=ACTIVITY_NONE;
          break;
       case ACTIVITY_NONE:
-         if(pool[p]->align == 1&&!pool[p]->is_imprisoned()&&(pool[p]->get_armor().is_bloody()||pool[p]->get_armor().is_damaged()))
+         if(pool[p]->align==1&&!pool[p]->is_imprisoned()&&(pool[p]->get_armor().is_bloody()||pool[p]->get_armor().is_damaged()))
             repairarmor(*pool[p],clearformess);
          break;
       }
@@ -718,7 +676,7 @@ void advanceday(char &clearformess,char canseethings)
    // Healing - determine medical support at each location
    int *healing=new int[location.size()];
    int *healing2=new int[location.size()];
-   for(p=0;p<(int)location.size();++p)
+   for(p=0;p<(int)location.size();p++)
    {
       // Clinic is equal to a skill 6 liberal
       if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=6;
@@ -739,30 +697,20 @@ void advanceday(char &clearformess,char canseethings)
       // Having a specific healing activity helps bookkeeping for the player, though
       // Only the highest medical skill is considered
       if(pool[p]->activity.type==ACTIVITY_HEAL||pool[p]->activity.type==ACTIVITY_NONE)
-      {
          if(pool[p]->location>-1&&
             healing[pool[p]->location]<pool[p]->get_skill(SKILL_FIRSTAID))
          {
             healing[pool[p]->location]=pool[p]->get_skill(SKILL_FIRSTAID);
             pool[p]->activity.type=ACTIVITY_HEAL;
          }
-      }
    }
 
    // Don't let starving locations heal
    for(p=0;p<(int)location.size();++p)
-   {
       if(location[p]->type!=SITE_HOSPITAL_CLINIC && location[p]->type!=SITE_HOSPITAL_UNIVERSITY)
-      {
          if(!fooddaysleft(p))
-         {
             if(location[p]->siege.siege)
-            {
                healing[p]=0;
-            }
-         }
-      }
-   }
 
    //HEAL NON-CLINIC PEOPLE AND TRAIN
    for(p=0;p<(int)pool.size();p++)
@@ -795,14 +743,8 @@ void advanceday(char &clearformess,char canseethings)
 
             if(pool[p]->alive&&pool[p]->blood<0)
             {
-               if(clearformess)
-               {
-                  erase();
-               }
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter();
                move(8,1);
                pool[p]->die();
                addstr(pool[p]->name, gamelog);
@@ -849,12 +791,9 @@ void advanceday(char &clearformess,char canseethings)
                }
                // Non-bleeding wounds
                else
-               {
-                  // Erase wound if almost fully healed, but preserve loss of limbs.
+               {  // Erase wound if almost fully healed, but preserve loss of limbs.
                   if(pool[p]->blood>=95)
-                  {
                      pool[p]->wound[w]&=WOUND_CLEANOFF;
-                  }
                }
             }
             // Critical hit wounds
@@ -916,9 +855,7 @@ void advanceday(char &clearformess,char canseethings)
                      damage+=bleed;
                      //release=0;
                      if(healing[pool[p]->location]+9<=healdiff)
-                     {
                         transfer=1;
-                     }
                   }
                }
             }
@@ -967,24 +904,17 @@ void advanceday(char &clearformess,char canseethings)
 
    //DO RENT
    if(day==3&&!disbanding)
-   {
       for(int l=0;l<(int)location.size();l++)
-      {
          if(location[l]->renting>0&&
             !location[l]->newrental)
          {  // if rent >= 1000000 this means you get should kicked out automatically
             if(ledger.get_funds()>=location[l]->renting&&location[l]->renting<1000000)
-            {
                ledger.subtract_funds(location[l]->renting,EXPENSE_RENT);
-            }
             //EVICTED!!!!!!!!!
             else
             {
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter();
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
@@ -1011,14 +941,10 @@ void advanceday(char &clearformess,char canseethings)
                location[l]->front_business=-1;
             }
          }
-      }
-   }
 
    //MEET WITH POTENTIAL RECRUITS
    for(int i=pool.size()-1;i>=0;i--)
-   {
       pool[i]->meetings=0;
-   }
    for(int r=recruit.size()-1;r>=0;r--)
    {
       if(disbanding)break;
@@ -1068,18 +994,14 @@ void advanceday(char &clearformess,char canseethings)
          //VACATION
          if(date[d]->timeleft>0)
          {
-            date[d]->timeleft--;
-
-            pool[p]->dating=date[d]->timeleft;
+            pool[p]->dating=--date[d]->timeleft;
 
             if(date[d]->timeleft==0)
             {
                int hs=find_homeless_shelter(date[d]->city);
 
                if(location[pool[p]->base]->siege.siege)
-               {
                   pool[p]->base=hs;
-               }
 
                pool[p]->location=pool[p]->base;
 
@@ -1134,22 +1056,16 @@ void advanceday(char &clearformess,char canseethings)
       // Updating for in hiding
       if(pool[p]->hiding>0)
       {
-         pool[p]->hiding--;
-         if(pool[p]->hiding==0)
+         if((--pool[p]->hiding)==0)
          {
             if(location[pool[p]->base]->siege.siege)
-            {
                pool[p]->hiding=1;
-            }
             else
             {
                pool[p]->location=pool[p]->base;
 
-               if(clearformess)erase();
-               else
-               {
-                  makedelimiter(8,0);
-               }
+               if(clearformess) erase();
+               else makedelimiter();
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
@@ -1171,9 +1087,9 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->flag|=CREATUREFLAG_KIDNAPPED;
 
             newsstoryst *ns=new newsstoryst;
-               ns->type=NEWSSTORY_KIDNAPREPORT;
-               ns->loc=pool[p]->location;
-               ns->cr=pool[p];
+            ns->type=NEWSSTORY_KIDNAPREPORT;
+            ns->loc=pool[p]->location;
+            ns->cr=pool[p];
             newsstory.push_back(ns);
          }
       }
@@ -1265,9 +1181,7 @@ void dispersalcheck(char &clearformess)
                {
                   dispersal_status[p]=DISPERSAL_BOSSSAFE;
                   if(pool[p]->hiding==-1)
-                  {
                      pool[p]->hiding=LCSrandom(10)+5;
-                  }
                }
                else dispersal_status[p]=DISPERSAL_BOSSINHIDING;
             }
@@ -1282,10 +1196,7 @@ void dispersalcheck(char &clearformess)
                if(promotesubordinates(*pool[p], clearformess))promotion=1;
 
                if(pool[p]->location==-1 || location[pool[p]->location]->renting == RENTING_NOCONTROL)
-               {
-                  delete_and_remove(pool,p);
-                  --p;
-               }
+                  delete_and_remove(pool,p--);
             }
          }
       }while(promotion);
@@ -1394,14 +1305,8 @@ void dispersalcheck(char &clearformess)
       {
          if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_HIDING||dispersal_status[p]==DISPERSAL_ABANDONLCS)
          {
-            if(clearformess)
-            {
-               erase();
-            }
-            else
-            {
-               makedelimiter(8,0);
-            }
+            if(clearformess) erase();
+            else makedelimiter();
 
             if(!disbanding)
             {
@@ -1519,7 +1424,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       if(subordinates>0) // Disintegration of the LCS
       {
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
@@ -1558,14 +1463,8 @@ bool promotesubordinates(Creature &cr, char &clearformess)
       }
    }
 
-   if(clearformess)
-   {
-      erase();
-   }
-   else
-   {
-      makedelimiter(8,0);
-   }
+   if(clearformess) erase();
+   else makedelimiter();
 
    if(bigboss!=-1) // Normal promotion
    {
@@ -1626,33 +1525,19 @@ void advancelocations(void)
       {
          location[l]->closed--;
          if(location[l]->closed==0)
-         {
-            //Clean up graffiti, patch up walls, restore fire damage
+         {  //Clean up graffiti, patch up walls, restore fire damage
             location[l]->changes.clear();
 
-            switch(LCSrandom(2))
-            {
-               case 0:
-                  //If high security is supported
-                  if(securityable(location[l]->type))
-                  {
-                     //Throw guards everywhere
-                     location[l]->highsecurity=60;
-                  }
-                  //Else remodel the location, invalidate maps
-                  else initlocation(*location[l]);
-                  break;
-               case 1:
-                  //Remodel, invalidate maps
-                  initlocation(*location[l]);
-                  break;
-            }
+            //If high security is supported, chance to throw guards everywhere
+            if(securityable(location[l]->type)&&LCSrandom(2))
+               location[l]->highsecurity=60;
+            //Else remodel the location, invalidate maps
+            else initlocation(*location[l]);
          }
       }
       else if(location[l]->highsecurity>0)
-      {
-         // Bank will remain on high security much longer
-         if(location[l]->type != SITE_BUSINESS_BANK)
+      {  // Bank will remain on high security much longer
+         if(location[l]->type!=SITE_BUSINESS_BANK)
             location[l]->highsecurity--;
          else if(!LCSrandom(5))
             location[l]->highsecurity--;

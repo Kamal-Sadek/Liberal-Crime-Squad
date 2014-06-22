@@ -104,7 +104,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       mvaddstr(0,0,"Adventures in Liberal Recruitment");
       printcreatureinfo(&cr);
-      makedelimiter(8,0);
+      makedelimiter();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr_f(10,0,"%s asks around for a %s...", cr.name, name);
@@ -146,7 +146,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Adventures in Liberal Recruitment");
          printcreatureinfo(&encounter[0]);
-         makedelimiter(8,0);
+         makedelimiter();
          talk(cr, 0);
       } else {
          while(true)
@@ -155,7 +155,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             mvaddstr(0,0,"Adventures in Liberal Recruitment");
             printcreatureinfo(&cr);
-            makedelimiter(8,0);
+            makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr_f(10, 0, "%s was able to get information on multiple people.", cr.name);
@@ -180,7 +180,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                mvaddstr(0,0,"Adventures in Liberal Recruitment");
                printcreatureinfo(&encounter[c]);
-               makedelimiter(8,0);
+               makedelimiter();
 
                talk(cr, c);
                if(encounter[c].id == id) delenc(c, 0);
@@ -230,10 +230,10 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    gamelog.newline();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   printfunds(0,1,"Money: ");
+   printfunds();
 
    printcreatureinfo(r.recruit);
-   makedelimiter(8,0);
+   makedelimiter();
 
    move(10,0);
    addstr(r.recruit->name);
@@ -383,8 +383,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             addstr(" explains ", gamelog);
             addstr(pool[p]->hisher(), gamelog);
             addstr(" views on ", gamelog);
-            getviewsmall(str,LCSrandom(VIEWNUM-3));
-            addstr(str, gamelog);
+            addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
             addstr(".", gamelog);
             gamelog.newline();
 

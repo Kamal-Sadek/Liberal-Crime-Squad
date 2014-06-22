@@ -67,7 +67,7 @@ void hospital(int loc)
 
       int c=getkey();
 
-      if(c==10||c==ESC) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
       if(c=='0') party_status=-1;
 
@@ -194,7 +194,7 @@ void dealership(int loc)
       int c=getkey();
 
       // Leave
-      if(c==10||c==ESC)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
       //Sell the car
       if(c=='s' && car_to_sell)
@@ -329,7 +329,7 @@ void choose_buyer(short &buyer)
 
       int c=getkey();
 
-      if(c==10||c==ESC) return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>='1'&&c<=partysize+'1'-1)
       {

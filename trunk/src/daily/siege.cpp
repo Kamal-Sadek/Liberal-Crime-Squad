@@ -930,7 +930,7 @@ void siegeturn(char clearformess)
             {
                starving=true;
                if(clearformess) erase();
-               else makedelimiter(8,0);
+               else makedelimiter();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
                addstr("Your Liberals are starving!", gamelog);
@@ -956,7 +956,7 @@ void siegeturn(char clearformess)
                   pool[p]->die();
 
                   if(clearformess) erase();
-                  else makedelimiter(8,0);
+                  else makedelimiter();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr(pool[p]->name , gamelog);
@@ -972,7 +972,7 @@ void siegeturn(char clearformess)
             if(attack)
             {
                if(clearformess) erase();
-               else makedelimiter(8,0);
+               else makedelimiter();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
                addstr("The cops are coming!", gamelog);
@@ -993,7 +993,7 @@ void siegeturn(char clearformess)
                   no_bad=0;
 
                   if(clearformess) erase();
-                     else makedelimiter(8,0);
+                  else makedelimiter();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr("The police have cut the lights!", gamelog);
@@ -1014,8 +1014,8 @@ void siegeturn(char clearformess)
 
                   if(pol.size()>0)
                   {
-                     if(clearformess)erase();
-                     else makedelimiter(8,0);
+                     if(clearformess) erase();
+                     else makedelimiter();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
                      int targ=pol[LCSrandom(pol.size())];
@@ -1052,7 +1052,7 @@ void siegeturn(char clearformess)
                   bool hit=true;
 
                   if(clearformess) erase();
-                  else makedelimiter(8,0);
+                  else makedelimiter();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr("You hear planes streak overhead!", gamelog);
@@ -1066,7 +1066,7 @@ void siegeturn(char clearformess)
                   if(hasAAGun)
                   {
                      if(clearformess) erase();
-                     else makedelimiter(8,0);
+                     else makedelimiter();
                      move(8,1);
                      addstr("The thunder of the anti-aircraft gun shakes the compound!", gamelog);
                      gamelog.newline();
@@ -1074,7 +1074,7 @@ void siegeturn(char clearformess)
                      getkey();
 
                      if(clearformess) erase();
-                     else makedelimiter(8,0);
+                     else makedelimiter();
                      move(8,1);
                      if(LCSrandom(5))
                      {
@@ -1088,7 +1088,7 @@ void siegeturn(char clearformess)
                            getkey();
 
                            if(clearformess) erase();
-                           else makedelimiter(8,0);
+                           else makedelimiter();
                            move(8,1);
                            addstr("It's all over the TV. Everyone in the Liberal Crime Squad gains 20 juice!", gamelog);
                            for(int p=0;p<(int)pool.size();p++) addjuice(*pool[p],20,1000);
@@ -1109,7 +1109,7 @@ void siegeturn(char clearformess)
                   if(hit)
                   {
                      if(clearformess) erase();
-                     else makedelimiter(8,0);
+                     else makedelimiter();
                      move(8,1);
                      addstr("Explosions rock the compound!", gamelog);
                      gamelog.newline();
@@ -1119,7 +1119,7 @@ void siegeturn(char clearformess)
                      if(hasAAGun && !LCSrandom(3))
                      {
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         move(8,1);
                         addstr("The anti-aircraft gun takes a direct hit!", gamelog);
                         gamelog.newline();
@@ -1127,7 +1127,7 @@ void siegeturn(char clearformess)
                         getkey();
 
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         move(8,1);
                         addstr("There's nothing left but smoking wreckage...", gamelog);
                         gamelog.newline();
@@ -1139,7 +1139,7 @@ void siegeturn(char clearformess)
                      else if(hasGenerator && !LCSrandom(3))
                      {
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         move(8,1);
                         addstr("The generator has been destroyed!", gamelog);
                         gamelog.newline();
@@ -1147,7 +1147,7 @@ void siegeturn(char clearformess)
                         getkey();
 
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         move(8,1);
                         addstr("The lights fade and all is dark.", gamelog);
                         gamelog.newline();
@@ -1165,7 +1165,7 @@ void siegeturn(char clearformess)
                         if(pol.size()>0)
                         {
                            if(clearformess) erase();
-                           else makedelimiter(8,0);
+                           else makedelimiter();
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            move(8,1);
                            int targ=pol[LCSrandom(pol.size())];
@@ -1194,7 +1194,7 @@ void siegeturn(char clearformess)
                      else
                      {
                         if(clearformess) erase();
-                        else makedelimiter(8,0);
+                        else makedelimiter();
                         move(8,1);
                         addstr("Fortunately, no one is hurt.", gamelog);
                         gamelog.newline();
@@ -1211,7 +1211,7 @@ void siegeturn(char clearformess)
 
                   //ENGINEERS
                   if(clearformess) erase();
-                  else makedelimiter(8,0);
+                  else makedelimiter();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
                   move(8,1);
                   addstr("Army engineers have removed your tank traps.", gamelog);
@@ -1222,7 +1222,7 @@ void siegeturn(char clearformess)
                   if(clearformess) move(9,1);
                   else
                   {
-                     makedelimiter(8,0);
+                     makedelimiter();
                      move(8,1);
                   }
                   addstr("The tank moves forward to your compound entrance.", gamelog);
@@ -1522,10 +1522,8 @@ void giveup(void)
       }
       if(pcount>1)
       {
-         char num[20];
          move(5,1);
-         itoa(pcount,num,10);
-         addstr(num, gamelog);
+         addstr(pcount, gamelog);
          addstr(" Liberals are taken to the police station.", gamelog);
          gamelog.newline();
       }

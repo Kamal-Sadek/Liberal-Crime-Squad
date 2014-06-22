@@ -284,50 +284,62 @@ void passmonth(char &clearformess,char canseethings)
    }
 
    /*******************************************************
-   *                                                      *
-   *     INTELLIGENCE REPORT - MOVE TO SEPARATE FILE      *
+   *                 INTELLIGENCE REPORT                  *
+   *     ONLY IF SHOWMECHANICS OR SHOWWAIT IS DEFINED     *
    *        EYES ONLY - LCS PROPERTY - TOP SECRET         *
    *******************************************************/
-   /*{
-      int y;
-      char str[20];
+   #if defined(SHOWMECHANICS) || defined(SHOWWAIT)
+   if(canseethings)
+   {
       erase();
-      move(0,0);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      addstr("LCS MONTHLY INTELLIGENCE REPORT");
-
-      move(2,2);
-      addstr("ESTIMATED POLITICAL TRENDS");
-      y=3;
-      for(int i=0;i<VIEWNUM-5;i++)
+      mvaddstr(0,23,"LCS MONTHLY INTELLIGENCE REPORT");
+      mvaddstr(2,27,"CURRENT POLITICAL TRENDS");
+      int numviews=(endgamestate>=ENDGAME_CCS_DEFEATED||newscherrybusted<2)?VIEWNUM-1:VIEWNUM;
+      for(int v=-1-stalinmode,y=4,x=0,pip;v<numviews;v++)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         move(y,1);
-         getview(str,i);
-         addstr(str);
-         move(y,20);
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr("\x11ÄÄÄÄÄÄÄ\x10");
-
-         // Calculate location for pip (with a bit of randomness for imprecision!)
-         int pip=(issuebalance[i]+225)/50+LCSrandom(2)+LCSrandom(2)-1;
-
-         // Select color and limit to ends of spectrum
-         if(pip<=0)     { pip=0; set_color(COLOR_RED,    COLOR_BLACK,1); }
-         else if(pip<4) {        set_color(COLOR_MAGENTA,COLOR_BLACK,1); }
-         else if(pip==4){        set_color(COLOR_YELLOW, COLOR_BLACK,1); }
-         else if(pip<8) {        set_color(COLOR_CYAN,   COLOR_BLACK,1); }
-         else           { pip=8; set_color(COLOR_GREEN,  COLOR_BLACK,1); }
-
-         move(y++,20+pip);
-         addchar('O');
+         if((y-4)*2>=numviews+1+stalinmode) y=4,x=40;
+         for(pip=2;pip>=-2;pip--)
+         {
+            set_alignment_color(pip,true);
+            if(pip==2) mvaddchar(y,x+22,'\x11');
+            addstr("ÄÄÄ");
+            if(pip==-2) addchar('\x10');
+         }
+         if(v>=0) pip=14-(attitude[v]*14)/100;
+         else pip=14-(publicmood(v)*14)/100;
+         set_alignment_color((14-pip)/3-2,true);
+         mvaddstr(y,x,getview(v,false));
+         mvaddchar(y++,x+23+pip,'O');
       }
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      mvaddstr(23,0,"Elite Liberal ");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("-  ");
+      set_color(COLOR_CYAN,COLOR_BLACK,1);
+      addstr("Liberal  ");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("-  ");
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      addstr("moderate  ");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("-  ");
+      set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+      addstr("Conservative  ");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("-  ");
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      addstr("Arch-Conservative");
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      mvaddstr(24,0,"Press any key to reflect on these poll numbers.");
+      clearformess=1;
 
       getkey();
-   }*/
+   }
+   #endif
    /*******************************************************
    *                                                      *
-   *              END INTELLIGENCE REPORT                 *
+   *               END INTELLIGENCE REPORT                *
    *                                                      *
    *******************************************************/
 
@@ -401,7 +413,7 @@ void passmonth(char &clearformess,char canseethings)
       if(location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
       {
          if(clearformess) erase();
-         else makedelimiter(8,0);
+         else makedelimiter();
 
          if(pool[p]->flag & CREATUREFLAG_MISSING)
          {
@@ -613,7 +625,7 @@ void passmonth(char &clearformess,char canseethings)
          {
             pool[p]->blood=100;
             if(clearformess) erase();
-            else makedelimiter(8,0);
+            else makedelimiter();
 
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             move(8,1);

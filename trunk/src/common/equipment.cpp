@@ -378,7 +378,7 @@ void equip(vector<Item *> &loot,int loc)
             }
       }
 
-      if(c==10||c==ESC) return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(loc!=-1)
       {
@@ -488,7 +488,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          }
       }
 
-      if(c==10||c==ESC) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
@@ -538,7 +538,7 @@ void equipmentbaseassign(void)
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      printfunds(0,1,"Money: ");
+      printfunds();
 
       move(0,0);
       addstr("Moving Equipment");
@@ -658,7 +658,7 @@ void equipmentbaseassign(void)
          }
       }
 
-      if(c==ENTER||c==ESC) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 

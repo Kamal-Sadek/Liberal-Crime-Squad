@@ -191,7 +191,7 @@ void tendhostage(Creature *cr,char &clearformess)
             if(pool[p]==cr)
             {
                if(clearformess) erase();
-               else makedelimiter(8,0);
+               else makedelimiter();
 
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(8,1);
@@ -351,7 +351,7 @@ void tendhostage(Creature *cr,char &clearformess)
          int c=getkey();
          if(c>='a'&&c<='e') techniques[c-'a']=!techniques[c-'a'];
          if(c=='k') techniques[TECHNIQUE_KILL]=!techniques[TECHNIQUE_KILL];
-         if(c==10||c==ESC) break;
+         if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
       }
 
       if(techniques[TECHNIQUE_PROPS]&&ledger.get_funds()>=250)
@@ -973,16 +973,13 @@ void tendhostage(Creature *cr,char &clearformess)
          }
          else
          {
-            char str[75];
             switch(LCSrandom(4))
             {
             case 0:addstr(" talks about ", gamelog);
-                   getviewsmall(str,LCSrandom(VIEWNUM-3));
-                   addstr(str, gamelog);
+                   addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
                    addstr(" with ", gamelog);break;
             case 1:addstr(" argues about ", gamelog);
-                   getviewsmall(str,LCSrandom(VIEWNUM-3));
-                   addstr(str, gamelog);
+                   addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
                    addstr(" with ", gamelog);break;
             case 2:addstr(" tries to expose the true Liberal side of ", gamelog);break;
             case 3:addstr(" attempts to recruit ", gamelog);break;
