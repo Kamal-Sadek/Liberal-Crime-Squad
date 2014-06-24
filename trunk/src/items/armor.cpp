@@ -169,7 +169,7 @@ const string& Armor::get_name() const
    { return armortype[getarmortype(itemtypename())]->get_name(); }
 
 long Armor::get_fencevalue() const
-   { return armortype[getarmortype(itemtypename())]->get_fencevalue(); }
+   { return armortype[getarmortype(itemtypename())]->get_fencevalue() / this->quality_; }
 
 int Armor::get_make_difficulty() const
    { return armortype[getarmortype(itemtypename())]->get_make_difficulty(); }
