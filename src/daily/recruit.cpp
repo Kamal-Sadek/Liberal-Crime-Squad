@@ -262,7 +262,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
    {
       addstr("C - Offer to let ");
       addstr(r.recruit->name);
-      addstr(" to join the LCS as a full member.");
+      addstr(" join the LCS as a full member.");
    }
    else if(!subordinatesleft(*pool[p]))
    {
