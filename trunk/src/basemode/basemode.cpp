@@ -625,6 +625,14 @@ void mode_base(void)
          if(activesquad) if(activesquad->squad[c-'1']) {
          if(party_status==c-'1') fullstatus(party_status);
          else party_status=c-'1'; } break;
+      case '$':
+          {  
+              char needsClear;
+              fundreport(needsClear);
+              if (needsClear)
+                erase();
+              break;
+          }
       }
    }
 }

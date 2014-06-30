@@ -713,6 +713,7 @@ void fundreport(char &clearformess)
 
    int y=2;
    int totalmoney=0;
+   int dailymoney=0;
    bool showledger = false;
    char entryname[80];
    char num[20];
@@ -727,10 +728,21 @@ void fundreport(char &clearformess)
          addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
 
          set_color(COLOR_GREEN,COLOR_BLACK,0);
-         itoa(ledger.income[i],num,10);
-         addstr("$");
+         snprintf(num, 19, "$%d", ledger.income[i]);
+         move(y,60-strlen(num));
          addstr(num);
-
+         if (ledger.dailyIncome[i] != 0)
+         {
+            snprintf(num, 19, " (+$%d)", ledger.dailyIncome[i]);
+            move(y,70-strlen(num));
+            addstr(num);
+         }else{
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            snprintf(num, 19, " ( $0)");
+            move(y,70-strlen(num));
+            addstr(num);
+         }
+         
          switch(i)
          {
          case INCOME_DONATIONS:
@@ -781,8 +793,8 @@ void fundreport(char &clearformess)
          addstr(entryname);
          y++;
 
-         totalmoney+=ledger.income[i];
-         ledger.income[i]=0;
+         totalmoney += ledger.income[i];
+         dailymoney += ledger.dailyIncome[i];
       }
    }
 
@@ -796,10 +808,20 @@ void fundreport(char &clearformess)
          addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
 
          set_color(COLOR_RED,COLOR_BLACK,0);
-         itoa(ledger.expense[i],num,10);
-         addstr("$");
+         snprintf(num, 19, "-$%d", ledger.expense[i]);
+         move(y,60-strlen(num));
          addstr(num);
-
+         if (ledger.dailyExpense[i] != 0)
+         {
+            snprintf(num, 19, " (-$%d)", ledger.dailyExpense[i]);
+            move(y,70-strlen(num));
+            addstr(num);
+         }else{
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            snprintf(num, 19, " ( $0)");
+            move(y,70-strlen(num));
+            addstr(num);
+         }
          switch(i)
          {
          case EXPENSE_SHOPPING:
@@ -859,38 +881,145 @@ void fundreport(char &clearformess)
          addstr(entryname);
          y++;
 
-         totalmoney-=ledger.expense[i];
-         ledger.expense[i]=0;
+         totalmoney -= ledger.expense[i];
+         dailymoney -= ledger.dailyExpense[i];
       }
    }
 
-   if(showledger == true)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
+    set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-      move(0,0);
-      addstr("Liberal Crime Squad:   Monthly Action Report");
+    move(0,0);
+    addstr("Liberal Crime Squad: Funding Report");
+    if (showledger)
+    {
+        set_color(COLOR_WHITE,COLOR_BLACK,0);
+        move(y++,0);
+        addstr("----------------------------------------------------------------------");
+        move(y,0);
+        addstr("Net Change This Month (Day):");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(++y,0);
-      addstr("Total:");
+        if(totalmoney>0)set_color(COLOR_GREEN,COLOR_BLACK,1);
+        else if(totalmoney<0)set_color(COLOR_RED,COLOR_BLACK,1);
+        else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-      if(totalmoney>0)set_color(COLOR_GREEN,COLOR_BLACK,1);
-      else if(totalmoney<0)set_color(COLOR_RED,COLOR_BLACK,1);
-      else set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(y,60);
-      char num[20];
-      if(totalmoney<0)itoa(-totalmoney,num,10);
-      else itoa(totalmoney,num,10);
-      addstr("$");
-      addstr(num);
+        char num[20];
+        snprintf(num, 19, "$%d", abs(totalmoney));
+        move(y,60-strlen(num));
+        addstr(num);
+        if(dailymoney>0)
+        {
+        set_color(COLOR_GREEN,COLOR_BLACK,1);
+        snprintf(num, 19, " (+$%d)", abs(dailymoney));
+        }
+        else if(dailymoney<0)
+        {
+        set_color(COLOR_RED,COLOR_BLACK,1);
+        snprintf(num, 19, " (-$%d)", abs(dailymoney));
+        }else
+        {
+        set_color(COLOR_WHITE,COLOR_BLACK,0);
+        snprintf(num, 19, " ( $0)");
+        }
+        move(y,70-strlen(num));
+        addstr(num);
+        y++;
+    }
+    // tally up liquid assets
+    long weaponValue = 0;
+    long armorValue = 0;
+    long clipValue = 0;
+    long lootValue = 0;
+    for (int j=0; j < (int)location.size(); j++)
+    {
+        for (int i=0; i< location[j]->loot.size(); i++)
+        {
+            Item* item = location[j]->loot[i];
+            if (item->is_weapon())
+                weaponValue += item->get_fencevalue() * item->get_number();
+            if (item->is_armor())
+                armorValue += item->get_fencevalue() * item->get_number();
+            if (item->is_clip())
+                clipValue += item->get_fencevalue() * item->get_number();
+            if (item->is_loot())
+                lootValue += item->get_fencevalue() * item->get_number();
+        }
+    }
+    
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+    move(y,0);
+    addstr("Cash");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", ledger.get_funds());
+    move(y,60-strlen(num));
+    addstr(num);
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(24,0);
-      addstr("Press any key to reflect on the report.");
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+    move(y,0);
+    addstr("Clothing and Armor");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", armorValue);
+    move(y,60-strlen(num));
+    addstr(num);
+        
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+    move(y,0);
+    addstr("Tools and Weapons");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", weaponValue);
+    move(y,60-strlen(num));
+    addstr(num);
 
-      getkey();
-   }
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+    move(y,0);
+    addstr("Ammunition");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", clipValue);
+    move(y,60-strlen(num));
+    addstr(num);
+
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+    move(y,0);
+    addstr("Miscellaneous Loot");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", lootValue);
+    move(y,60-strlen(num));
+    addstr(num);
+
+    y++;    
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr("----------------------------------------------------------------------");
+    
+    y++;
+    move(y,0);
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    addstr("Total Liquid Assets");
+    set_color(COLOR_GREEN,COLOR_BLACK,0);
+    snprintf(num, 19, "$%d", armorValue+weaponValue+clipValue+lootValue+ledger.get_funds());
+    move(y,60-strlen(num));
+    addstr(num);
+
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    move(24,0);
+    addstr("Press any key to reflect on the report.");
+
+    getkey();
 }
 
 

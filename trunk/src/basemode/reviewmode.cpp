@@ -156,6 +156,7 @@ void review(void)
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      mvaddstr(21, 0, "$ to Inspect Liberal finances");
       move(22,0);
       addstr("Press a Letter to select a squad.  1-7 to view Liberal groups.");
       move(23,0);
@@ -190,7 +191,14 @@ void review(void)
       }
       if(c=='t')squadlessbaseassign();
       if(c=='u')promoteliberals();
-   }
+      if(c=='$')
+      {  
+          char needsClear;
+          fundreport(needsClear);
+          if (needsClear)
+            erase();
+      }
+    }
 }
 
 

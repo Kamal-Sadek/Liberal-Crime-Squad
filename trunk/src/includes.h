@@ -78,11 +78,11 @@
 #endif
 
 #ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.07.4 beta"
+#define PACKAGE_VERSION "4.07.5 beta"
 #endif
 
-const int version=40704;
-const int lowestloadversion=40704;
+const int version=40705;
+const int lowestloadversion=40705;
 const int lowestloadscoreversion=31203;
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
@@ -547,17 +547,47 @@ private:
    int funds;
 public:
    int income[INCOMETYPENUM],expense[EXPENSETYPENUM],total_income,total_expense;
-
+   int dailyIncome[INCOMETYPENUM],dailyExpense[EXPENSETYPENUM];
    Ledger() : funds(7),total_income(0),total_expense(0)
    {
-      for(int i=0;i<INCOMETYPENUM;i++)income[i]=0;
-      for(int e=0;e<EXPENSETYPENUM;e++)expense[e]=0;
+      for(int i=0;i<INCOMETYPENUM;i++)
+      {
+         income[i]=0; 
+         dailyIncome[i]=0;
+      }
+      for(int e=0;e<EXPENSETYPENUM;e++)
+      {
+         expense[e]=0;
+         dailyExpense[e]=0;
+      }
    };
 
    int get_funds() { return funds; }
    void force_funds(int amount) { funds=amount; }
-   void add_funds(int amount,int incometype) { funds+=amount,income[incometype]+=amount,total_income+=amount; }
-   void subtract_funds(int amount,int expensetype) { funds-=amount,expense[expensetype]+=amount,total_expense+=amount; }
+   void add_funds(int amount,int incometype) 
+   {
+        funds+=amount,
+        income[incometype]+=amount,
+        dailyIncome[incometype]+=amount,
+        total_income+=amount; 
+   }
+   void subtract_funds(int amount,int expensetype) 
+   {
+        funds-=amount,
+        expense[expensetype]+=amount,
+        dailyExpense[expensetype]+=amount,
+        total_expense+=amount; 
+   }
+   void resetMonthlyAmounts() 
+   { 
+      for(int i=0;i<INCOMETYPENUM;i++)income[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++)expense[e]=0;
+   }
+   void resetDailyAmounts() 
+   { 
+      for(int i=0;i<INCOMETYPENUM;i++)dailyIncome[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++)dailyExpense[e]=0;
+   }
 };
 
 class Interval
