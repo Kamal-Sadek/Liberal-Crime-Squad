@@ -560,6 +560,13 @@ void initlocation(Location &loc)
       loc.rename("AM Radio Station", "Radio Station");
       break;
    case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+      do {
+         lastname(loc.name,true);
+         strcpy(loc.shortname,loc.name);
+         strcat(loc.name," Condominiums");
+         strcat(loc.shortname," Condos");
+      } while (loc.duplicatelocation());
+      break;
    case SITE_RESIDENTIAL_APARTMENT:
       do {
          lastname(loc.name,true);
