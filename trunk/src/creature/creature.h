@@ -257,7 +257,7 @@ private:
    int skill;
 public:
    Skill(){}
-   Skill(const char* inputXml);
+   Skill(const std::string& inputXml);
    string showXml() const;
    int value;
    void set_type(int skill_type);
@@ -272,7 +272,7 @@ private:
    int attribute;
 public:
    Attribute(){}
-   Attribute(const char* inputXml);
+   Attribute(const std::string& inputXml);
    string showXml() const;
    int value;
    //void set_type(int attribute_type);
@@ -408,7 +408,7 @@ public:
    Creature(const Creature& org);
    Creature& operator=(const Creature& rhs);
    ~Creature();
-   explicit Creature(const char* inputXml);
+   explicit Creature(const std::string& inputXml);
    string showXml() const;
 
    bool is_active_liberal(void) const;
@@ -467,7 +467,7 @@ public:
    int CEO_state;
    int Pres_state;
    UniqueCreatures() : CEO_ID(-1), Pres_ID(-1) {};
-   explicit UniqueCreatures(const char * inputXml);
+   explicit UniqueCreatures(const std::string& inputXml);
    string showXml() const;
 
    Creature& CEO();

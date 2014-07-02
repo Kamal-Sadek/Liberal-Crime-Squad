@@ -64,9 +64,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 
-
-// Helper function for equip and moveloot.
-// Prompts for how many items to equip / move.
+/* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)
 {
    printparty();
@@ -75,29 +73,12 @@ long prompt_amount(long min, long max)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    addstr("     How many?          ");
 
-   refresh();
-
    char str[100];
+   enter_name(8,30,str,100,toCstring(max));
 
-   keypad(stdscr,FALSE);
-   raw_output(FALSE);
-   echo();
-   curs_set(1);
-   mvgetnstr(8,30,str,99);
-   curs_set(0);
-   noecho();
-   raw_output(TRUE);
-   keypad(stdscr,TRUE);
-
-   int amount;
-   //If no amount entered, assume the maximum amount is desired
-   if(str[0])
-   {
-      amount=atoi(str);
-      amount=MAX(amount, min);
-      amount=MIN(amount, max);
-   }
-   else amount = max;
+   int amount=atoi(str);
+   amount=MAX(amount, min);
+   amount=MIN(amount, max);
 
    return amount;
 }

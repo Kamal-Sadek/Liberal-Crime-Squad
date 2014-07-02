@@ -64,12 +64,9 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
 
    //AD CONTENT
    {
-      short storyx_s[25];
-      short storyx_e[25];
-      for(it2=0;it2<25;it2++)storyx_s[it2]=40;
-      for(it2=0;it2<25;it2++)storyx_e[it2]=40;
-      for(it2=sy+1;it2<=ey-1;it2++)storyx_s[it2]=sx+1;
-      for(it2=sy+1;it2<=ey-1;it2++)storyx_e[it2]=ex-1;
+      short storyx_s[25],storyx_e[25];
+      for(it2=0;it2<25;it2++) storyx_s[it2]=40,storyx_e[it2]=40;
+      for(it2=sy+1;it2<=ey-1;it2++) storyx_s[it2]=sx+1,storyx_e[it2]=ex-1;
 
       char ad[500];
       if(!liberalguardian)
@@ -82,17 +79,12 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                strcat(ad,"&cCall for Details&r");
                break;
             case 1:
-              {
-                int chairprice = LCSrandom(201)+400;
-                strcpy(ad,"&cFine Leather Chairs&r&r");
-                strcat(ad,"&cSpecial Purchase&r");
-                strcat(ad,"&cNow $");
-                char chairprice_s [10];
-                itoa (chairprice, chairprice_s, 10);
-                strcat(ad,chairprice_s);
-                strcat(ad,"&r");
-                break;
-              }
+               strcpy(ad,"&cFine Leather Chairs&r&r");
+               strcat(ad,"&cSpecial Purchase&r");
+               strcat(ad,"&cNow $");
+               strcat(ad,LCSrandom(201)+400);
+               strcat(ad,"&r");
+               break;
             case 2:
                strcpy(ad,"&cParis Flea Market&r&r");
                strcat(ad,"&cSale&r");
@@ -100,24 +92,17 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
                break;
             case 3:
               {
-               int caryear = year-LCSrandom(15);
-               int carprice = LCSrandom(16)+15;
-               //int carprice2 = LCSrandom(1000);
                strcpy(ad,"&cQuality Pre-Owned&r");
                strcat(ad,"&cVehicles&r");
                strcat(ad,"&c");
-               char caryear_s [80];
-               itoa (caryear, caryear_s, 10);
-               strcat(ad,caryear_s);
+               strcat(ad,year-LCSrandom(15));
                strcat(ad," ");
-//               strcat(ad,cartype);
+//             strcat(ad,cartype);
 //TODO: leading zeros, etc.
                strcat(ad,"Lexus GS 300&r");
                strcat(ad,"&cSedan 4D&r");
                strcat(ad,"&cOnly $");
-               char carprice_s[80];
-               itoa (carprice, carprice_s, 10);
-               strcat(ad,carprice_s);
+               strcat(ad,LCSrandom(16)+15);
                strcat(ad,"&r");
                break;
               }
@@ -173,12 +158,9 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
             break;
          case 1:
            {
-             int numyears = LCSrandom(11)+20;
-             char numyears_s [10];
-             itoa (numyears, numyears_s, 10);
              strcpy(ad,"&cLiberal Defense Lawyer&r");
              strcat(ad,"&c");
-             strcat(ad,numyears_s);
+             strcat(ad,LCSrandom(11)+20);
              strcat(ad," Years Experience&r&r");
              strcat(ad,"&cCall Today&r");
              break;

@@ -35,116 +35,85 @@ void burnflag(void)
 {
    int flagparts=126,flag[18][7][4],x,y;
 
-   for(int p=0;p<7;p++)
+   for(y=0;y<7;y++) if(y<6) for(x=0;x<18;x++)
    {
-      if(p<4)
+      if(x<9&&y<4)
       {
-         for(x=0;x<9;x++)
+         switch(y)
          {
-            switch(p)
-            {
-            case 0: flag[x][p][0]=(x%2?'.':':'); break;
-            default: flag[x][p][0]=':'; break;
-            case 3: flag[x][p][0]=CH_LOWER_HALF_BLOCK; break;
-            }
-            flag[x][p][1]=COLOR_WHITE;
-            flag[x][p][2]=COLOR_BLUE;
-            flag[x][p][3]=1;
+         case 0: flag[x][y][0]=(x%2?'.':':'); break;
+         default: flag[x][y][0]=':'; break;
+         case 3: flag[x][y][0]=CH_LOWER_HALF_BLOCK; break;
          }
-
-         for(x=9;x<18;x++)
-         {
-            flag[x][p][0]=CH_LOWER_HALF_BLOCK;
-            flag[x][p][1]=COLOR_WHITE;
-            flag[x][p][2]=COLOR_RED;
-            flag[x][p][3]=1;
-         }
+         flag[x][y][2]=COLOR_BLUE;
       }
       else
       {
-         for(x=0;x<18;x++)
-         {
-            if(p<6)
-            {
-               flag[x][p][0]=CH_LOWER_HALF_BLOCK;
-               flag[x][p][1]=COLOR_WHITE;
-               flag[x][p][2]=COLOR_RED;
-               flag[x][p][3]=1;
-            }
-            else
-            {
-               flag[x][p][0]=CH_UPPER_HALF_BLOCK;
-               flag[x][p][1]=COLOR_RED;
-               flag[x][p][2]=COLOR_BLACK;
-               flag[x][p][3]=0;
-            }
-         }
+         flag[x][y][0]=CH_LOWER_HALF_BLOCK;
+         flag[x][y][2]=COLOR_RED;
       }
+      flag[x][y][1]=COLOR_WHITE;
+      flag[x][y][3]=1;
+   }
+   else for(x=0;x<18;x++)
+   {
+      flag[x][y][0]=CH_UPPER_HALF_BLOCK;
+      flag[x][y][1]=COLOR_RED;
+      flag[x][y][2]=COLOR_BLACK;
+      flag[x][y][3]=0;
    }
 
-   x=LCSrandom(18);
-   y=LCSrandom(7);
+   x=LCSrandom(18),y=LCSrandom(7);
    flag[x][y][0]=CH_DARK_SHADE;
    flag[x][y][1]=COLOR_YELLOW;
    flag[x][y][2]=COLOR_BLACK;
    flag[x][y][3]=1;
 
-   char first=1;
+   bool first=true;
 
    while(flagparts>0)
    {
-      if(!first)
+      if(!first) for(x=0;x<18;x++) for(y=0;y<7;y++)
       {
-         for(x=0;x<18;x++)
+         if(flag[x][y][0]==CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0]=CH_DARK_SHADE;
+         else if(flag[x][y][0]==CH_DARK_SHADE)
          {
-            for(y=0;y<7;y++)
-            {
-               if(flag[x][y][0]==CH_BOX_DRAWINGS_LIGHT_VERTICAL)flag[x][y][0]=CH_DARK_SHADE;
-               else if(flag[x][y][0]==CH_DARK_SHADE)
-               {
-                  flag[x][y][0]=CH_MEDIUM_SHADE;
-                  flag[x][y][1]=COLOR_RED;
-                  flag[x][y][2]=COLOR_BLACK;
-                  flag[x][y][3]=0;
-               }
-               else if(flag[x][y][0]==CH_MEDIUM_SHADE)
-               {
-                  flag[x][y][0]=CH_LIGHT_SHADE;
-                  flag[x][y][1]=COLOR_BLACK;
-                  flag[x][y][2]=COLOR_BLACK;
-                  flag[x][y][3]=1;
-               }
-               else if(flag[x][y][0]==CH_LIGHT_SHADE)
-               {
-                  flagparts--;
-                  flag[x][y][0]=' ';
-                  flag[x][y][1]=COLOR_BLACK;
-                  flag[x][y][2]=COLOR_BLACK;
-                  flag[x][y][3]=0;
-               }
-            }
+            flag[x][y][0]=CH_MEDIUM_SHADE;
+            flag[x][y][1]=COLOR_RED;
+            flag[x][y][2]=COLOR_BLACK;
+            flag[x][y][3]=0;
+         }
+         else if(flag[x][y][0]==CH_MEDIUM_SHADE)
+         {
+            flag[x][y][0]=CH_LIGHT_SHADE;
+            flag[x][y][1]=COLOR_BLACK;
+            flag[x][y][2]=COLOR_BLACK;
+            flag[x][y][3]=1;
+         }
+         else if(flag[x][y][0]==CH_LIGHT_SHADE)
+         {
+            flagparts--;
+            flag[x][y][0]=' ';
+            flag[x][y][1]=COLOR_BLACK;
+            flag[x][y][2]=COLOR_BLACK;
+            flag[x][y][3]=0;
          }
       }
-      else first=0;
+      else first=false;
 
-      for(x=0;x<18;x++)
+      for(x=0;x<18;x++) for(y=0;y<7;y++)
       {
-         for(y=0;y<7;y++)
-         {
-            set_color(short(flag[x][y][1]),short(flag[x][y][2]),char(flag[x][y][3]));
-            mvaddchar(y+10,x+31,flag[x][y][0]);
-         }
+         set_color(short(flag[x][y][1]),short(flag[x][y][2]),bool(flag[x][y][3]));
+         mvaddchar(y+10,x+31,flag[x][y][0]);
       }
-      refresh();
 
       pause_ms(10);
 
-      char gotnew=0;
+      bool gotnew=false;
       while(!gotnew&&flagparts>3)
       {
-         x=LCSrandom(18);
-         y=LCSrandom(7);
-         char conf=0;
+         x=LCSrandom(18),y=LCSrandom(7);
+         bool conf=false;
          if(flag[x][y][0]==':'||flag[x][y][0]=='.'||flag[x][y][0]==CH_UPPER_HALF_BLOCK||flag[x][y][0]==CH_LOWER_HALF_BLOCK)
          {
             if(x>0)
@@ -152,28 +121,28 @@ void burnflag(void)
                if(flag[x-1][y][0]!=':'&&
                   flag[x-1][y][0]!='.'&&
                   flag[x-1][y][0]!=CH_UPPER_HALF_BLOCK&&
-                  flag[x-1][y][0]!=CH_LOWER_HALF_BLOCK)conf=1;
+                  flag[x-1][y][0]!=CH_LOWER_HALF_BLOCK) conf=true;
             }
             if(x<17)
             {
                if(flag[x+1][y][0]!=':'&&
                   flag[x+1][y][0]!='.'&&
                   flag[x+1][y][0]!=CH_UPPER_HALF_BLOCK&&
-                  flag[x+1][y][0]!=CH_LOWER_HALF_BLOCK)conf=1;
+                  flag[x+1][y][0]!=CH_LOWER_HALF_BLOCK) conf=true;
             }
             if(y>0)
             {
                if(flag[x][y-1][0]!=':'&&
                   flag[x][y-1][0]!='.'&&
                   flag[x][y-1][0]!=CH_UPPER_HALF_BLOCK&&
-                  flag[x][y-1][0]!=CH_LOWER_HALF_BLOCK)conf=1;
+                  flag[x][y-1][0]!=CH_LOWER_HALF_BLOCK) conf=true;
             }
             if(y<6)
             {
                if(flag[x][y+1][0]!=':'&&
                   flag[x][y+1][0]!='.'&&
                   flag[x][y+1][0]!=CH_UPPER_HALF_BLOCK&&
-                  flag[x][y+1][0]!=CH_LOWER_HALF_BLOCK)conf=1;
+                  flag[x][y+1][0]!=CH_LOWER_HALF_BLOCK) conf=true;
             }
             if(conf)
             {
@@ -181,7 +150,7 @@ void burnflag(void)
                flag[x][y][1]=COLOR_YELLOW;
                flag[x][y][2]=COLOR_BLACK;
                flag[x][y][3]=1;
-               gotnew=1;
+               gotnew=true;
             }
          }
       }
@@ -194,27 +163,21 @@ void getslogan(void)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    mvaddstr(16,0,"What is your new slogan?");
-   mvaddstr(17,0,"                                                                                          ");
+   mvaddstr(17,0,"                                                                                          "); // 80 spaces
 
-   move(17,0);
-   enter_name(slogan,SLOGAN_LEN);
+   enter_name(17,0,slogan,SLOGAN_LEN,"We need a slogan!");
 }
 
 
 
-/* base - reorder party */
+/* site/chase/siege mode - reorder party */
 void orderparty(void)
 {
    party_status=-1;
-   if(activesquad==NULL)return;
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)partysize++;
-   }
+   int partysize=squadsize(activesquad);
 
-   if(partysize<=1)return;
+   if(partysize<=1) return;
 
    int spot=0;
 
@@ -241,19 +204,14 @@ void orderparty(void)
    } while(spot<partysize-1);
 }
 
-/* base - reorder party */
+/* base mode - reorder party */
 void orderpartyV2(void)
 {
    party_status=-1;
-   if(activesquad==NULL)return;
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL)partysize++;
-   }
+   int partysize=squadsize(activesquad);
 
-   if(partysize<=1)return;
+   if(partysize<=1) return;
 
    int spot=0;
 
@@ -345,13 +303,7 @@ void stopevil(void)
          temploc.push_back(l);
 
    // Determine cost of tickets for travel
-   int squadsize = 0;
-   for(int s=0; s<6; s++)
-   {
-      if(activesquad->squad[s] != NULL)
-         squadsize++;
-   }
-   int ticketprice=100*squadsize;
+   int ticketprice=100*squadsize(activesquad);
 
    while(true)
    {
@@ -445,7 +397,7 @@ void stopevil(void)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr_f(" ($%s)", toCstring(ticketprice));
+            addstr(" ($"+tostring(ticketprice)+")");
          }
          if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
@@ -494,7 +446,7 @@ void stopevil(void)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr_f(" ($%s)", toCstring(ticketprice));
+            addstr(" ($"+tostring(ticketprice)+")");
          }
          temploc.push_back(-1);
       }

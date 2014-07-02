@@ -229,8 +229,7 @@ void advanceday(char &clearformess,char canseethings)
          //ASSIGN AVAILABLE CARS
          if(wantcar.size()>0)
          {
-            vector<int> driver;
-            vector<int> passenger;
+            vector<int> driver,passenger;
             for(w=0;w<(int)wantcar.size();w++)
             {
                driver.clear();
@@ -1586,14 +1585,11 @@ int monthday(void)
 {
    switch(month)
    {
-      case 4:return 30;
-      case 6:return 30;
-      case 9:return 30;
-      case 11:return 30;
-      case 2:
-         if(year%4==0&&(year%100!=0||year%400==0))return 29;
-         else return 28;
-      default:
-         return 31;
+      case 2: return 28+(year%4==0&&(year%100!=0||year%400==0)); // February
+      case 4: // April
+      case 6: // June
+      case 9: // September
+      case 11: return 30; // November
+      default: return 31; // January, March, May, July, August, October, & December
    }
 }

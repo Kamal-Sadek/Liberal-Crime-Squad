@@ -55,7 +55,11 @@
 * Revision 1.3  2004/06/30 22:46:33  sadler
 * Moved itoa() from game into compat.cpp
 *
-*
+* itoa() removed 2014/07/01 yetisyny
+* - it's unnecessary, use tostring() or toCstring() instead
+* - for exact same functionality as itoa(value,str,10) use strcpy(str,value)
+* - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
+* - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
@@ -63,7 +67,6 @@
 #ifdef WIN32
    #ifndef __STRICT_ANSI__
       #define HAS_STRICMP
-      #define HAS_ITOA
    #endif
 #endif
 
@@ -141,14 +144,6 @@ void msToItimerval(int ms, struct  itimerval *value);
 void pause_ms(int t);
 void alarmset(int t);
 void alarmwait();
-
-#ifndef HAS_ITOA
-// Portable equivalent of Windows itoa() function.
-// This function is fully ported and works with any base from 2 to 36.
-// Ensure c-string is of sufficient size.
-// (65 bytes is enough for any int and any base, even on 64-bit architectures.)
-char* itoa(int value,char* str,int base);
-#endif
 
 //#ifndef HAS_SNPRINTF // this was never defined, and the next line does the check for it anyway
 #if defined(__BORLANDC__) || defined(_MSC_VER)

@@ -23,10 +23,15 @@ int stringtobool(std::string boolstr)
       return -1;
 }
 
-/* These strcpy and strcat wrappers handle std:strings */
+/* These strcpy, strncpy, and strcat wrappers handle std:strings */
 char* strcpy(char* dest, const std::string& src)
 {
    return strcpy(dest,src.c_str());
+}
+
+char* strncpy(char* dest, const std::string& src, size_t maxlen)
+{
+   return strncpy(dest,src.c_str(),maxlen);
 }
 
 char* strcat(char* dest, const std::string& src)
@@ -43,6 +48,18 @@ char* strcpy(char* dest, long src)
 char* strcat(char* dest, long src)
 {
    return strcat(dest,tostring(src));
+}
+
+/* This wrapper allows atoi to handle std::strings */
+int atoi(const std::string& str)
+{
+   return atoi(str.c_str());
+}
+
+/* This wrapper allows atof to handle std::strings */
+double atof(const std::string& str)
+{
+   return atof(str.c_str());
 }
 
 short creaturetype_string_to_enum(const std::string& ctname)

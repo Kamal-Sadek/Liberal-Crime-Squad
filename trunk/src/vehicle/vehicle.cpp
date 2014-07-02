@@ -5,34 +5,20 @@ long Vehicle::curcarid = 0;
 
 string Vehicle::showXml () const
 {
-   char buf[256];
-
    CMarkup xml;
-   xml.AddElem ("vehicle");
-   xml.IntoElem ();
-   xml.AddElem ("vtypeidname", vtypeidname_);
-
-   snprintf (buf, 256, "%li", vtypeid_);
-   xml.AddElem ("vtypeid", buf);
-
-   xml.AddElem ("color", color_);
-
-   snprintf (buf, 256, "%i", heat_);
-   xml.AddElem ("heat", buf);
-
-   snprintf (buf, 256, "%li", location_);
-   xml.AddElem ("location", buf);
-
-   snprintf (buf, 256, "%i", myear_);
-   xml.AddElem ("myear", buf);
-
-   snprintf (buf, 256, "%li", id_);
-   xml.AddElem ("id", buf);
-
+   xml.AddElem("vehicle");
+   xml.IntoElem();
+   xml.AddElem("vtypeidname", vtypeidname_);
+   xml.AddElem("vtypeid", tostring(vtypeid_));
+   xml.AddElem("color", color_);
+   xml.AddElem("heat", tostring(heat_));
+   xml.AddElem("location", tostring(location_));
+   xml.AddElem("myear", tostring(myear_));
+   xml.AddElem("id", tostring(id_));
    return xml.GetDoc();
 }
 
-Vehicle::Vehicle(const char * inputXml)
+Vehicle::Vehicle(const std::string& inputXml)
 {
    CMarkup xml;
    xml.SetDoc (inputXml);
@@ -45,22 +31,22 @@ Vehicle::Vehicle(const char * inputXml)
          vtypeidname_ = xml.GetData();
       }
       else if (tag == "vtypeid") {
-         vtypeid_ = atoi (xml.GetData().c_str());
+         vtypeid_ = atoi (xml.GetData());
       }
       else if (tag == "color") {
          color_ = xml.GetData();
       }
       else if (tag == "heat") {
-         heat_ = atoi (xml.GetData().c_str());
+         heat_ = atoi (xml.GetData());
       }
       else if (tag == "location") {
-         location_ = atoi (xml.GetData().c_str());
+         location_ = atoi (xml.GetData());
       }
       else if (tag == "myear") {
-         myear_ = atoi (xml.GetData().c_str());
+         myear_ = atoi (xml.GetData());
       }
       else if (tag == "id") {
-         id_ = atoi (xml.GetData().c_str());
+         id_ = atoi (xml.GetData());
       }
    }
 }

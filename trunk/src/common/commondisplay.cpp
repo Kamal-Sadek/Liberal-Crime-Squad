@@ -899,8 +899,7 @@ void fullstatus(int p)
          mvaddstr(23,0,"What is the new code name?                                       ");
          mvaddstr(24,0,"                                                                    ");
 
-         move(24,0);
-         enter_name(activesquad->squad[p]->name,CREATURE_NAMELEN,activesquad->squad[p]->propername);
+         enter_name(24,0,activesquad->squad[p]->name,CREATURE_NAMELEN,activesquad->squad[p]->propername);
       }
       else if(c=='g')
       {
@@ -1712,9 +1711,9 @@ int addstr_f(const char * format, ...)
    static char sbuf[81];
    va_list args;
 
-   va_start (args, format);
-   vsnprintf(sbuf, 81, format, args);
-   va_end (args);
+   va_start(args,format);
+   vsnprintf(sbuf,81,format,args);
+   va_end(args);
 
    return addstr(sbuf);
 }
@@ -1725,11 +1724,11 @@ int mvaddstr_f(int y, int x, const char * format, ...)
    static char sbuf[81];
    va_list args;
 
-   va_start (args, format);
-   vsnprintf(sbuf, 81, format, args);
-   va_end (args);
+   va_start(args,format);
+   vsnprintf(sbuf,81,format,args);
+   va_end(args);
 
-   return mvaddstr(y, x, sbuf);
+   return mvaddstr(y,x,sbuf);
 }
 
 
@@ -1739,9 +1738,9 @@ int addstr_fl(Log &log, const char * format, ...)
    static char sbuf[81];
    va_list args;
 
-   va_start (args, format);
-   vsnprintf(sbuf, 81, format, args);
-   va_end (args);
+   va_start(args,format);
+   vsnprintf(sbuf,81,format,args);
+   va_end(args);
 
    log.record(sbuf);
 
@@ -1754,13 +1753,13 @@ int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
    static char sbuf[81];
    va_list args;
 
-   va_start (args, format);
-   vsnprintf(sbuf, 81, format, args);
-   va_end (args);
+   va_start(args,format);
+   vsnprintf(sbuf,81,format,args);
+   va_end(args);
 
    log.record(sbuf);
 
-   return mvaddstr(y, x, sbuf);
+   return mvaddstr(y,x,sbuf);
 }
 
 /* Variant of addch that works on char instead of chtype, fixing display of extended characters */

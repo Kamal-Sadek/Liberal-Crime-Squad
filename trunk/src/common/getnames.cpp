@@ -740,13 +740,14 @@ std::string cityname()
 }
 
 /* Allow the player to enter a name with an optional default */
-void enter_name(char *name, int len, char* defname)
+void enter_name(int y,int x,char *name,int len,const char* defname)
 {
+   refresh();
    keypad(stdscr,FALSE);
    raw_output(FALSE);
    echo();
    curs_set(1);
-   getnstr(name,len-1); //-1 because 'len' is normally the full space available and we need one for a terminator.
+   mvgetnstr(y,x,name,len-1); //-1 because 'len' is normally the full space available and we need one for a terminator.
    curs_set(0);
    noecho();
    raw_output(TRUE);

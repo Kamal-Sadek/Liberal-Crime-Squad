@@ -705,96 +705,59 @@ void printnews(short li,short newspaper)
 
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
-{
-   if(disbanding)return;
+{  /***********************************************************************************
+   *  TODO: It is possible this report might use more than 25 lines,                  *
+   *  so we should implement making it multipage and using pagekeys if it's that long *
+   *  or we could use columns to make it all fit on one page                          *
+   ***********************************************************************************/
+   if(disbanding) return;
 
-   clearformess=1;
+   clearformess=true;
    erase();
 
-   int y=2;
-   int totalmoney=0;
-   int dailymoney=0;
-   bool showledger = false;
-   char entryname[80];
-   char num[20];
+   int y=2,totalmoney=0,dailymoney=0;
+   bool showledger=false;
+   std::string num;
+   const char* dotdotdot=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
 
    for(int i=0;i<INCOMETYPENUM;i++)
    {
-      if(ledger.income[i] != 0)
+      if(ledger.income[i])
       {
-         showledger = true;
-         move(y,0);
+         showledger=true;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-
+         mvaddstr(y,0,dotdotdot);
          set_color(COLOR_GREEN,COLOR_BLACK,0);
-         snprintf(num, 19, "$%d", ledger.income[i]);
-         move(y,60-strlen(num));
-         addstr(num);
-         if (ledger.dailyIncome[i] != 0)
+         num="+$"+tostring(ledger.income[i]);
+         mvaddstr(y,60-num.length(),num);
+         if(ledger.dailyIncome[i])
+            num=" (+$"+tostring(ledger.dailyIncome[i])+")";
+         else
          {
-            snprintf(num, 19, " (+$%d)", ledger.dailyIncome[i]);
-            move(y,70-strlen(num));
-            addstr(num);
-         }else{
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            snprintf(num, 19, " ( $0)");
-            move(y,70-strlen(num));
-            addstr(num);
+            num=" ($0)";
          }
-         
+         mvaddstr(y,73-num.length(),num);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(i)
          {
-         case INCOME_DONATIONS:
-            strcpy(entryname,"Donations");
-            break;
-         case INCOME_BROWNIES:
-            strcpy(entryname,"Brownies");
-            break;
-         case INCOME_PAWN:
-            strcpy(entryname,"Pawning Goods");
-            break;
-         case INCOME_SKETCHES:
-            strcpy(entryname,"Drawing Sales");
-            break;
-         case INCOME_TSHIRTS:
-            strcpy(entryname,"T-Shirt Sales");
-            break;
-         case INCOME_BUSKING:
-            strcpy(entryname,"Street Music");
-            break;
-         case INCOME_CARS:
-            strcpy(entryname,"Car Sales");
-            break;
-         case INCOME_CCFRAUD:
-            strcpy(entryname,"Credit Card Fraud");
-            break;
-         case INCOME_PROSTITUTION:
-            strcpy(entryname,"Prostitution");
-            break;
-         case INCOME_HUSTLING:
-            strcpy(entryname,"Hustling");
-            break;
-         case INCOME_EXTORTION:
-            strcpy(entryname,"Extortion");
-            break;
-         case INCOME_THIEVERY:
-            strcpy(entryname,"Thievery");
-            break;
-         case INCOME_EMBEZZLEMENT:
-            strcpy(entryname,"Embezzlement");
-            break;
-         default:
-            strcpy(entryname,"Other Income");
-            break;
+         case INCOME_DONATIONS: mvaddstr(y++,0,"Donations"); break;
+         case INCOME_BROWNIES: mvaddstr(y++,0,"Brownies"); break;
+         case INCOME_PAWN: mvaddstr(y++,0,"Pawning Goods"); break;
+         case INCOME_SKETCHES: mvaddstr(y++,0,"Drawing Sales"); break;
+         case INCOME_TSHIRTS: mvaddstr(y++,0,"T-Shirt Sales"); break;
+         case INCOME_BUSKING: mvaddstr(y++,0,"Street Music"); break;
+         case INCOME_CARS: mvaddstr(y++,0,"Car Sales"); break;
+         case INCOME_CCFRAUD: mvaddstr(y++,0,"Credit Card Fraud"); break;
+         case INCOME_PROSTITUTION: mvaddstr(y++,0,"Prostitution"); break;
+         case INCOME_HUSTLING: mvaddstr(y++,0,"Hustling"); break;
+         case INCOME_EXTORTION: mvaddstr(y++,0,"Extortion"); break;
+         case INCOME_THIEVERY: mvaddstr(y++,0,"Thievery"); break;
+         case INCOME_EMBEZZLEMENT: mvaddstr(y++,0,"Embezzlement"); break;
+         default: mvaddstr(y++,0,"Other Income"); break;
          }
-         move(y,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(entryname);
-         y++;
-
-         totalmoney += ledger.income[i];
-         dailymoney += ledger.dailyIncome[i];
+         totalmoney+=ledger.income[i];
+         dailymoney+=ledger.dailyIncome[i];
       }
    }
 
@@ -802,225 +765,137 @@ void fundreport(char &clearformess)
    {
       if(ledger.expense[i] != 0)
       {
-         showledger = true;
-         move(y,0);
+         showledger=true;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+         mvaddstr(y,0,dotdotdot);
 
          set_color(COLOR_RED,COLOR_BLACK,0);
-         snprintf(num, 19, "-$%d", ledger.expense[i]);
-         move(y,60-strlen(num));
-         addstr(num);
-         if (ledger.dailyExpense[i] != 0)
+         num="-$"+tostring(ledger.expense[i]);
+         mvaddstr(y,60-num.length(),num);
+         if(ledger.dailyExpense[i])
+            num=" (-$"+tostring(ledger.dailyExpense[i])+")";
+         else
          {
-            snprintf(num, 19, " (-$%d)", ledger.dailyExpense[i]);
-            move(y,70-strlen(num));
-            addstr(num);
-         }else{
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            snprintf(num, 19, " ( $0)");
-            move(y,70-strlen(num));
-            addstr(num);
+            num=" ($0)";
          }
+         mvaddstr(y,73-num.length(),num);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          switch(i)
          {
-         case EXPENSE_SHOPPING:
-            strcpy(entryname,"Purchasing Goods");
-            break;
-         case EXPENSE_TROUBLEMAKING:
-            strcpy(entryname,"Activism");
-            break;
-         case EXPENSE_RENT:
-            strcpy(entryname,"Rent");
-            break;
-         case EXPENSE_TRAINING:
-            strcpy(entryname,"Training");
-            break;
-         case EXPENSE_MANUFACTURE:
-            strcpy(entryname,"Manufacturing");
-            break;
-         case EXPENSE_LEGAL:
-            strcpy(entryname,"Legal Fees");
-            break;
-         case EXPENSE_FOOD:
-            strcpy(entryname,"Groceries");
-            break;
-         case EXPENSE_RECRUITMENT:
-            strcpy(entryname,"Recruitment");
-            break;
-         case EXPENSE_DATING:
-            strcpy(entryname,"Dating");
-            break;
-         case EXPENSE_COMPOUND:
-            strcpy(entryname,"Safehouse Investments");
-            break;
-         case EXPENSE_HOSTAGE:
-            strcpy(entryname,"Hostage Tending");
-            break;
-         case EXPENSE_CONFISCATED:
-            strcpy(entryname,"Confiscated");
-            break;
-         case EXPENSE_TSHIRTS:
-            strcpy(entryname,"T-Shirt Materials");
-            break;
-         case EXPENSE_SKETCHES:
-            strcpy(entryname,"Drawing Materials");
-            break;
-         case EXPENSE_CARS:
-            strcpy(entryname,"New Cars");
-            break;
-         case EXPENSE_TRAVEL:
-            strcpy(entryname,"Travel");
-            break;
-         default:
-            strcpy(entryname,"Other Expenses");
-            break;
+         case EXPENSE_SHOPPING: mvaddstr(y++,0,"Purchasing Goods"); break;
+         case EXPENSE_TROUBLEMAKING: mvaddstr(y++,0,"Activism"); break;
+         case EXPENSE_RENT: mvaddstr(y++,0,"Rent"); break;
+         case EXPENSE_TRAINING: mvaddstr(y++,0,"Training"); break;
+         case EXPENSE_MANUFACTURE: mvaddstr(y++,0,"Manufacturing"); break;
+         case EXPENSE_LEGAL: mvaddstr(y++,0,"Legal Fees"); break;
+         case EXPENSE_FOOD: mvaddstr(y++,0,"Groceries"); break;
+         case EXPENSE_RECRUITMENT: mvaddstr(y++,0,"Recruitment"); break;
+         case EXPENSE_DATING: mvaddstr(y++,0,"Dating"); break;
+         case EXPENSE_COMPOUND: mvaddstr(y++,0,"Safehouse Investments"); break;
+         case EXPENSE_HOSTAGE: mvaddstr(y++,0,"Hostage Tending"); break;
+         case EXPENSE_CONFISCATED: mvaddstr(y++,0,"Confiscated"); break;
+         case EXPENSE_TSHIRTS: mvaddstr(y++,0,"T-Shirt Materials"); break;
+         case EXPENSE_SKETCHES: mvaddstr(y++,0,"Drawing Materials"); break;
+         case EXPENSE_CARS: mvaddstr(y++,0,"New Cars"); break;
+         case EXPENSE_TRAVEL: mvaddstr(y++,0,"Travel"); break;
+         default: mvaddstr(y++,0,"Other Expenses"); break;
          }
-         move(y,0);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(entryname);
-         y++;
-
-         totalmoney -= ledger.expense[i];
-         dailymoney -= ledger.dailyExpense[i];
+         totalmoney-=ledger.expense[i];
+         dailymoney-=ledger.dailyExpense[i];
       }
    }
 
     set_color(COLOR_WHITE,COLOR_BLACK,1);
-
-    move(0,0);
-    addstr("Liberal Crime Squad: Funding Report");
-    if (showledger)
+    mvaddstr(0,0,"Liberal Crime Squad: Funding Report");
+    if(showledger)
     {
-        set_color(COLOR_WHITE,COLOR_BLACK,0);
-        move(y++,0);
-        addstr("----------------------------------------------------------------------");
-        move(y,0);
-        addstr("Net Change This Month (Day):");
+        makedelimiter(y++);
 
-        if(totalmoney>0)set_color(COLOR_GREEN,COLOR_BLACK,1);
-        else if(totalmoney<0)set_color(COLOR_RED,COLOR_BLACK,1);
-        else set_color(COLOR_WHITE,COLOR_BLACK,0);
+        set_color(COLOR_WHITE,COLOR_BLACK,1);
+        mvaddstr(y,0,"Net Change This Month (Day):");
 
-        char num[20];
-        snprintf(num, 19, "$%d", abs(totalmoney));
-        move(y,60-strlen(num));
-        addstr(num);
+        if(totalmoney>0) { set_color(COLOR_GREEN,COLOR_BLACK,1); num="+"; }
+        else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
+        else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
+
+        num+="$"+tostring(abs(totalmoney));
+        mvaddstr(y,60-num.length(),num);
         if(dailymoney>0)
         {
-        set_color(COLOR_GREEN,COLOR_BLACK,1);
-        snprintf(num, 19, " (+$%d)", abs(dailymoney));
+           set_color(COLOR_GREEN,COLOR_BLACK,1);
+           num=" (+$"+tostring(abs(dailymoney))+")";
         }
         else if(dailymoney<0)
         {
-        set_color(COLOR_RED,COLOR_BLACK,1);
-        snprintf(num, 19, " (-$%d)", abs(dailymoney));
-        }else
-        {
-        set_color(COLOR_WHITE,COLOR_BLACK,0);
-        snprintf(num, 19, " ( $0)");
+           set_color(COLOR_RED,COLOR_BLACK,1);
+           num=" (-$"+tostring(abs(dailymoney))+")";
         }
-        move(y,70-strlen(num));
-        addstr(num);
-        y++;
+        else
+        {
+           set_color(COLOR_WHITE,COLOR_BLACK,1);
+           num=" ($0)";
+        }
+        mvaddstr(y++,73-num.length(),num);
     }
     // tally up liquid assets
-    long weaponValue = 0;
-    long armorValue = 0;
-    long clipValue = 0;
-    long lootValue = 0;
-    for (int j=0; j < (int)location.size(); j++)
-    {
-        for (int i=0; i< location[j]->loot.size(); i++)
+    long weaponValue=0,armorValue=0,clipValue=0,lootValue=0;
+    for(int j=0;j<(int)location.size();j++)
+        for(int i=0;i<(int)location[j]->loot.size();i++)
         {
-            Item* item = location[j]->loot[i];
-            if (item->is_weapon())
-                weaponValue += item->get_fencevalue() * item->get_number();
-            if (item->is_armor())
-                armorValue += item->get_fencevalue() * item->get_number();
-            if (item->is_clip())
-                clipValue += item->get_fencevalue() * item->get_number();
-            if (item->is_loot())
-                lootValue += item->get_fencevalue() * item->get_number();
+            Item* item=location[j]->loot[i];
+            if(item->is_weapon()) weaponValue+=item->get_fencevalue()*item->get_number();
+            if(item->is_armor()) armorValue+=item->get_fencevalue()*item->get_number();
+            if(item->is_clip()) clipValue+=item->get_fencevalue()*item->get_number();
+            if(item->is_loot()) lootValue+=item->get_fencevalue()*item->get_number();
         }
-    }
-    
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-    move(y,0);
-    addstr("Cash");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", ledger.get_funds());
-    move(y,60-strlen(num));
-    addstr(num);
-
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-    move(y,0);
-    addstr("Clothing and Armor");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", armorValue);
-    move(y,60-strlen(num));
-    addstr(num);
-        
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-    move(y,0);
-    addstr("Tools and Weapons");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", weaponValue);
-    move(y,60-strlen(num));
-    addstr(num);
-
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-    move(y,0);
-    addstr("Ammunition");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", clipValue);
-    move(y,60-strlen(num));
-    addstr(num);
-
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr(". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
-    move(y,0);
-    addstr("Miscellaneous Loot");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", lootValue);
-    move(y,60-strlen(num));
-    addstr(num);
-
-    y++;    
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr("----------------------------------------------------------------------");
-    
-    y++;
-    move(y,0);
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    addstr("Total Liquid Assets");
-    set_color(COLOR_GREEN,COLOR_BLACK,0);
-    snprintf(num, 19, "$%d", armorValue+weaponValue+clipValue+lootValue+ledger.get_funds());
-    move(y,60-strlen(num));
-    addstr(num);
-
 
     set_color(COLOR_WHITE,COLOR_BLACK,0);
-    move(24,0);
-    addstr("Press any key to reflect on the report.");
+    mvaddstr(++y,0,dotdotdot);
+    mvaddstr(y,0,"Cash");
+    set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+    num="$"+tostring(ledger.get_funds());
+    mvaddstr(y,60-num.length(),num);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    mvaddstr(++y,0,dotdotdot);
+    mvaddstr(y,0,"Clothing and Armor");
+    set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+    num="$"+tostring(armorValue);
+    mvaddstr(y,60-num.length(),num);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    mvaddstr(++y,0,dotdotdot);
+    mvaddstr(y,0,"Tools and Weapons");
+    set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+    num="$"+tostring(weaponValue);
+    mvaddstr(y,60-num.length(),num);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    mvaddstr(++y,0,dotdotdot);
+    mvaddstr(y,0,"Ammunition");
+    set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+    num="$"+tostring(clipValue);
+    mvaddstr(y,60-num.length(),num);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    mvaddstr(++y,0,dotdotdot);
+    mvaddstr(y,0,"Miscellaneous Loot");
+    set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+    num="$"+tostring(lootValue);
+    mvaddstr(y,60-num.length(),num);
+
+    makedelimiter(++y);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,1);
+    mvaddstr(++y,0,"Total Liquid Assets:");
+    long netWorth=ledger.get_funds()+armorValue+weaponValue+clipValue+lootValue;
+    set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
+    num="$"+tostring(netWorth);
+    mvaddstr(y,60-num.length(),num);
+
+    set_color(COLOR_WHITE,COLOR_BLACK,0);
+    mvaddstr(24,0,"Press any key to reflect on the report.");
 
     getkey();
 }
-
-
-

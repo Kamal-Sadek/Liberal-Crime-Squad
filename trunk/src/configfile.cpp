@@ -206,7 +206,7 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
          if(j<(int)line.length())
          {
             line[j]=0;
-            (*callback)(x,y,z,atoi(line.c_str()+i));
+            (*callback)(x,y,z,atoi(line.substr(i)));
          }
       }
    }

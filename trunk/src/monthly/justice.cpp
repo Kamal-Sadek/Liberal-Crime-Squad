@@ -120,9 +120,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_TREASON]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_TREASON],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_TREASON], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("treason", gamelog);
@@ -132,9 +130,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_TERRORISM]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_TERRORISM],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_TERRORISM], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("terrorism", gamelog);
@@ -146,9 +142,7 @@ void trial(Creature &g)
                                       // Possibly people you accidentally kill when shooting at conservatives. -- LK
          if(g.crimes_suspected[LAWFLAG_MURDER]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_MURDER],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_MURDER], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("first degree murder", gamelog);
@@ -158,9 +152,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_KIDNAPPING]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_KIDNAPPING],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_KIDNAPPING], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("kidnapping", gamelog);
@@ -170,9 +162,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_BANKROBBERY]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BANKROBBERY],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_BANKROBBERY], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("bank robbery", gamelog);
@@ -182,9 +172,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_ARSON]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ARSON],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_ARSON], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("arson", gamelog);
@@ -194,9 +182,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_BURNFLAG]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BURNFLAG],str,10);
-            addstr(str);
+            addstr(g.crimes_suspected[LAWFLAG_BURNFLAG]);
             addstr(" counts of ", gamelog);
          }
          if(law[LAW_FLAGBURNING]==-2)
@@ -211,9 +197,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_SPEECH]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_SPEECH],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_SPEECH], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("sedition", gamelog);
@@ -223,9 +207,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_BROWNIES]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BROWNIES],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_BROWNIES], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("sale and distribution of a controlled substance", gamelog);
@@ -236,9 +218,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_ESCAPED]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ESCAPED],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_ESCAPED], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("escaping prison", gamelog);
@@ -249,9 +229,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_HELPESCAPE]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_HELPESCAPE],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_HELPESCAPE], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("aiding a prison escape", gamelog);
@@ -262,9 +240,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_JURY]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_JURY],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_JURY], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("jury tampering", gamelog);
@@ -279,9 +255,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_EXTORTION]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_EXTORTION],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_EXTORTION], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("extortion", gamelog);
@@ -291,9 +265,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_ARMEDASSAULT]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ARMEDASSAULT],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_ARMEDASSAULT], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("assault with a deadly weapon", gamelog);
@@ -303,9 +275,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_ASSAULT]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_ASSAULT],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_ASSAULT], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("misdemeanor assault", gamelog);
@@ -315,9 +285,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_CARTHEFT]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_CARTHEFT],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_CARTHEFT], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("grand theft auto", gamelog);// If chase lasts more than 20 `turns` then
@@ -327,9 +295,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_CCFRAUD]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_CCFRAUD],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_CCFRAUD], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("credit card fraud", gamelog);
@@ -339,9 +305,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_THEFT]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_THEFT],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_THEFT], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("petty larceny", gamelog);
@@ -351,9 +315,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_PROSTITUTION]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_PROSTITUTION],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_PROSTITUTION], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("prostitution", gamelog);
@@ -363,12 +325,11 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_HIREILLEGAL]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_HIREILLEGAL],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
             addstr(" counts of ", gamelog);
+            addstr((law[LAW_IMMIGRATION]<1?"hiring illegal aliens":"hiring undocumented workers"), gamelog);
          }
-         addstr((law[LAW_IMMIGRATION]<1?"hiring an illegal alien":"hiring an undocumented worker"), gamelog);
+         else addstr((law[LAW_IMMIGRATION]<1?"hiring an illegal alien":"hiring an undocumented worker"), gamelog);
          breaker[LAWFLAG_HIREILLEGAL]=0;
          x=2;
       }
@@ -376,9 +337,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_GUNUSE]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_GUNUSE],str,10);
-            addstr(str);
+            addstr(g.crimes_suspected[LAWFLAG_GUNUSE]);
             addstr(" counts of ");
          }
          addstr("firing an illegal weapon");
@@ -389,9 +348,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_GUNCARRY]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_GUNCARRY],str,10);
-            addstr(str);
+            addstr(g.crimes_suspected[LAWFLAG_GUNCARRY]);
             addstr(" counts of ");
          }
          addstr("possession of an illegal weapon");
@@ -402,9 +359,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_COMMERCE]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_COMMERCE],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_COMMERCE], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("interference with interstate commerce", gamelog);
@@ -415,9 +370,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_INFORMATION]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_INFORMATION],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_INFORMATION], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("unlawful access of an information system", gamelog);
@@ -428,9 +381,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_BURIAL]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BURIAL],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_BURIAL], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("unlawful burial", gamelog);
@@ -440,9 +391,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_BREAKING]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_BREAKING],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_BREAKING], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("breaking and entering", gamelog);
@@ -452,9 +401,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_VANDALISM]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_VANDALISM],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_VANDALISM], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("vandalism", gamelog);
@@ -469,9 +416,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_DISTURBANCE]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_DISTURBANCE],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_DISTURBANCE], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("disturbing the peace", gamelog);
@@ -481,9 +426,7 @@ void trial(Creature &g)
       {
          if(g.crimes_suspected[LAWFLAG_PUBLICNUDITY]>1)
          {
-            char str[10];
-            itoa(g.crimes_suspected[LAWFLAG_PUBLICNUDITY],str,10);
-            addstr(str, gamelog);
+            addstr(g.crimes_suspected[LAWFLAG_PUBLICNUDITY], gamelog);
             addstr(" counts of ", gamelog);
          }
          addstr("indecent exposure", gamelog);
@@ -509,9 +452,7 @@ void trial(Creature &g)
 
       if(g.confessions>1)
       {
-         char str[10];
-         itoa(g.confessions,str,10);
-         addstr(str, gamelog);
+         addstr(g.confessions, gamelog);
          addstr(" former LCS members will testify against ", gamelog);
       }
       else addstr("A former LCS member will testify against ", gamelog);
@@ -557,22 +498,21 @@ void trial(Creature &g)
 
    //SAV - added in display of skills and relevant attributes to help
    // decide when to defend self.
-   char temp[20];
    move(++y,5);
    addstr("Heart: ");
-   addstr(itoa(g.get_attribute(ATTRIBUTE_HEART,true),temp,10));
+   addstr(g.get_attribute(ATTRIBUTE_HEART,true));
    move(y,25);
    addstr("Persuasion: ");
-   addstr(itoa(g.get_skill(SKILL_PERSUASION),temp,10));
+   addstr(g.get_skill(SKILL_PERSUASION));
    move(++y,5);
    addstr("Charisma: ");
-   addstr(itoa(g.get_attribute(ATTRIBUTE_CHARISMA,true),temp,10));
+   addstr(g.get_attribute(ATTRIBUTE_CHARISMA,true));
    move(y++,25);
    addstr("Law: ");
-   addstr(itoa(g.get_skill(SKILL_LAW),temp,10));
+   addstr(g.get_skill(SKILL_LAW));
    move(y++,5);
    addstr("Intelligence: ");
-   addstr(itoa(g.get_attribute(ATTRIBUTE_INTELLIGENCE,true),temp,10));
+   addstr(g.get_attribute(ATTRIBUTE_INTELLIGENCE,true));
    // End SAV's adds
 
    short defense;
@@ -674,12 +614,9 @@ void trial(Creature &g)
       // Debug jury bias
       #ifdef SHOWMECHANICS
       {
-         char str[20];
-         itoa(jury,str,10);
          addstr(" (");
-         if(str[0]!='-')addchar('+');
-
-         addstr(str);
+         if(jury>=0)addchar('+');
+         addstr(jury);
          addstr(" to convict)");
       }
       #endif
@@ -715,13 +652,10 @@ void trial(Creature &g)
       // Debug prosecution power
       #ifdef SHOWMECHANICS
       {
-         char str[20];
-         itoa(prosecution/2,str,10);
          addstr(" (+");
-         addstr(str);
+         addstr(prosecution/2);
          addstr(" to +");
-         itoa(prosecution,str,10);
-         addstr(str);
+         addstr(prosecution);
          addstr(" to convict)");
       }
       #endif
@@ -824,13 +758,10 @@ void trial(Creature &g)
       // Debug defense power
       #ifdef SHOWMECHANICS
       {
-         char str[20];
-         itoa(defensepower,str,10);
          addstr(" (");
-         addstr(str);
+         addstr(defensepower);
          addstr(", need ");
-         itoa(jury+1,str,10);
-         addstr(str);
+         addstr(jury+1);
          addstr(" to acquit)");
       }
       #endif
@@ -1185,9 +1116,7 @@ void penalize(Creature &g,char lenient)
       {
          if(g.sentence<-1)
          {
-            char num[20];
-            itoa(-(g.sentence),num,10);
-            addstr(num, gamelog);
+            addstr(-(g.sentence), gamelog);
             addstr(" consecutive life terms in prison", gamelog);
             gamelog.newline();
 
@@ -1209,16 +1138,12 @@ void penalize(Creature &g,char lenient)
       }
       else if(g.sentence>=36)
       {
-         char num[20];
-         itoa(g.sentence/12,num,10);
-         addstr(num, gamelog);
+         addstr(g.sentence/12, gamelog);
          addstr(" years in prison", gamelog);
       }
       else
       {
-         char num[20];
-         itoa(g.sentence,num,10);
-         addstr(num, gamelog);
+         addstr(g.sentence, gamelog);
          addstr(" month", gamelog);
          if(g.sentence>1)addstr("s", gamelog);
          addstr(" in prison", gamelog);
@@ -1459,14 +1384,12 @@ char prison(Creature &g)
       {
          if(g.deathpenalty)
          {
-            char str[5];
             erase();
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             move(8,1);
             addstr(g.name, gamelog);
             addstr(" is due to be executed in ", gamelog);
-            itoa(g.sentence, str, 10);
-            addstr(str, gamelog);
+            addstr(g.sentence, gamelog);
             addstr(" months.", gamelog);
             gamelog.nextMessage();
 

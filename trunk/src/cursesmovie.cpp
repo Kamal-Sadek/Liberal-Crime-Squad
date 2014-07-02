@@ -47,7 +47,6 @@
   #undef clear
   #ifndef __STRICT_ANSI__
     #define HAS_STRICMP
-    #define HAS_ITOA
   #endif
 #else
   #include <vector>

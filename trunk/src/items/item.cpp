@@ -8,13 +8,13 @@ Item::Item(const ItemType& seed, int number)
    //number_ = number;
 }
 
-Item::Item(const char * inputXml)
+Item::Item(const std::string& inputXml)
 {
    CMarkup xml;
    xml.SetDoc (inputXml);
    xml.FindElem ();
    xml.IntoElem ();
-   
+
    while (xml.FindElem ())
    {
       std::string tag = xml.GetTagName ();
@@ -24,11 +24,11 @@ Item::Item(const char * inputXml)
       }
       else if (tag == "itemtypeid")
       {
-         itemtypeid_ = atoi(xml.GetData().c_str());
+         itemtypeid_ = atoi(xml.GetData());
       }
       else if (tag == "number")
       {
-         number_ = atoi(xml.GetData().c_str());
+         number_ = atoi(xml.GetData());
       }
    }
 }
@@ -38,7 +38,7 @@ void Item::addBaseValues(CMarkup& xml) const
    xml.AddElem("itemtypename", itemtypename_);
 
    xml.AddElem("itemtypeid", itemtypeid_);
-   
+
    xml.AddElem("number", tostring(number_));
 }
 
@@ -46,11 +46,11 @@ void Item::addBaseValues(CMarkup& xml) const
 {
    if (amount > number_)
       amount = number_;
-   
+
    Item* newi = this->clone();
    newi->number_ = amount;
    this->number_ -= amount;
-   
+
    return newi;
 }*/
 
@@ -77,7 +77,7 @@ bool Item::sort_compare(Item *b,Item *a)
       reorder = true;
    else
       reorder = a->sort_compare_special(b);
-   
+
    return reorder;
 }
 

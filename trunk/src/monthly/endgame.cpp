@@ -622,13 +622,13 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
    if(view>=0) mood=attitude[view];
 
    //CONGRESS
-   char num[20],ratified=0;
+   bool ratified=false;
 
    int y=0;
 
    if(congress)
    {
-      ratified=1;
+      ratified=true;
 
       if(canseethings)
       {
@@ -644,7 +644,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          getkey();
       }
 
-      char yeswin_h=0,yeswin_s=0;
+      bool yeswin_h=false,yeswin_s=false;
       int yesvotes_h=0,yesvotes_s=0,vote,s=-1;
 
       for(int l=0;l<435;l++)
@@ -654,7 +654,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
          if(level==vote) yesvotes_h++;
 
-         if(l==434) if(yesvotes_h>=290) yeswin_h=1;
+         if(l==434) if(yesvotes_h>=290) yeswin_h=true;
 
          if(canseethings)
          {
@@ -662,16 +662,14 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,62);
-            itoa(yesvotes_h,num,10);
-            addstr(num);
+            addstr(yesvotes_h);
             addstr(" Yea");
 
             if(l==434&&!yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,62);
-            itoa(l+1-yesvotes_h,num,10);
-            addstr(num);
+            addstr(l+1-yesvotes_h);
             addstr(" Nay");
          }
 
@@ -683,7 +681,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             if(level==vote) yesvotes_s++;
          }
 
-         if(l==434&&yesvotes_s>=67) yeswin_s=1;
+         if(l==434&&yesvotes_s>=67) yeswin_s=true;
 
          if(canseethings)
          {
@@ -691,39 +689,32 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,70);
-            itoa(yesvotes_s,num,10);
-            addstr(num);
+            addstr(yesvotes_s);
             addstr(" Yea");
 
             if(l==434&&!yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,70);
-            itoa(s+1-yesvotes_s,num,10);
-            addstr(num);
+            addstr(s+1-yesvotes_s);
             addstr(" Nay");
 
-            if(l%5==0)
-            {
-               refresh();
-
-               pause_ms(10);
-            }
+            if(l%5==0) pause_ms(10);
          }
       }
 
-      if(!yeswin_h||!yeswin_s) ratified=0;
+      if(!yeswin_h||!yeswin_s) ratified=false;
 
       y+=4;
    }
-   else ratified=1;
+   else ratified=true;
 
    if(level==3) level=-2; // special case for Stalinists: do this after Congress but before the states
 
    //STATES
    if(ratified)
    {
-      ratified=0;
+      ratified=false;
 
       int yesstate=0;
 
@@ -807,10 +798,10 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          }
 
          vote=-2;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
-         if((short)LCSrandom(100)<smood)vote++;
+         if(LCSrandom(100)<smood)vote++;
+         if(LCSrandom(100)<smood)vote++;
+         if(LCSrandom(100)<smood)vote++;
+         if(LCSrandom(100)<smood)vote++;
          if(vote==1&&!LCSrandom(2)) vote=2;
          if(vote==-1&&!LCSrandom(2)) vote=-2;
 
@@ -834,41 +825,29 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
             else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,50);
-            itoa(yesstate,num,10);
-            addstr(num);
+            addstr(yesstate);
             addstr(" Yea");
 
             if(s==49&&yesstate<37) set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,60);
-            itoa(s+1-yesstate,num,10);
-            addstr(num);
+            addstr(s+1-yesstate);
             addstr(" Nay");
 
-            refresh();
             pause_ms(50);
          }
       }
 
-      if(yesstate>=37) ratified=1;
-
-      if(canseethings)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(23,0);
-         if(ratified) addstr("AMENDMENT ADOPTED.");
-         else addstr("AMENDMENT REJECTED.");
-      }
+      if(yesstate>=37) ratified=true;
    }
-   else
+
+   if(canseethings)
    {
-      if(canseethings)
-      {
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
-         move(23,0);
-         addstr("AMENDMENT REJECTED.");
-      }
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(23,0);
+      if(ratified) addstr("AMENDMENT ADOPTED.");
+      else addstr("AMENDMENT REJECTED.");
    }
 
    return ratified;
@@ -883,8 +862,7 @@ void amendmentheading(void)
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-   move(0,0);
-   addstr("Proposed Amendment ");
+   mvaddstr(0,0,"Proposed Amendment ");
    romannumeral(amendnum);
    addstr(" to the United States Constitution:");
 }

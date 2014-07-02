@@ -256,6 +256,8 @@ void savegame(const char *str)
       {
          fwrite(&date[dt]->mac_id,sizeof(long),1,h);
          fwrite(&date[dt]->timeleft,sizeof(short),1,h);
+         fwrite(&date[dt]->city,sizeof(int),1,h);
+
          dummy=date[dt]->date.size();
          fwrite(&dummy,sizeof(int),1,h);
          for(int dt2=0;dt2<(int)date[dt]->date.size();dt2++)
@@ -327,7 +329,7 @@ void savegame(const char *str)
 
 
 /* Used by load() to create items of the correct class. */
-Item* create_item(const char* inputXml)
+Item* create_item(const std::string& inputXml)
 {
    Item* it = NULL;
    CMarkup xml;
@@ -713,6 +715,7 @@ char load(void)
 
          fread(&date[dt]->mac_id,sizeof(long),1,h);
          fread(&date[dt]->timeleft,sizeof(short),1,h);
+         fread(&date[dt]->city,sizeof(int),1,h);
 
          fread(&dummy,sizeof(int),1,h);
          date[dt]->date.resize(dummy);

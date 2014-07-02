@@ -143,9 +143,9 @@ WeaponType::WeaponType(MCD_STR xmlstring)
                       << "::graffiti: " << xml.GetData() << endl;*/
       }
       else if (element == "legality")
-         legality_ = atoi(xml.GetData().c_str());
+         legality_ = atoi(xml.GetData());
       else if (element == "bashstrengthmod")
-         bashstrengthmod_ = atoi(xml.GetData().c_str()) / 100.0;
+         bashstrengthmod_ = atoi(xml.GetData()) / 100.0;
       else if (element == "auto_break_locks")
       {
          int b = stringtobool(xml.GetData());
@@ -169,7 +169,7 @@ WeaponType::WeaponType(MCD_STR xmlstring)
                       << "::suspicious: " << xml.GetData() << endl;*/
       }
       else if (element == "size")
-         size_ = atoi(xml.GetData().c_str());
+         size_ = atoi(xml.GetData());
       else if (element == "attack")
       {
          attackst* attack = new attackst(xml.GetSubDoc());
@@ -221,7 +221,7 @@ attackst::attackst(MCD_STR xmlstring)
       std::string element = xml.GetTagName();
 
       if (element == "priority")
-         priority = atoi(xml.GetData().c_str());
+         priority = atoi(xml.GetData());
       else if (element == "ranged")
       {
          int b = stringtobool(xml.GetData());
@@ -280,19 +280,19 @@ attackst::attackst(MCD_STR xmlstring)
             errorlog << "Invalid skill name for attack::skill: " << xml.GetData() << endl; */
       }
       else if (element == "accuracy_bonus")
-         accuracy_bonus = atoi(xml.GetData().c_str());
+         accuracy_bonus = atoi(xml.GetData());
       else if (element == "number_attacks")
-         number_attacks = atoi(xml.GetData().c_str());
+         number_attacks = atoi(xml.GetData());
       else if (element == "successive_attacks_difficulty")
-         successive_attacks_difficulty = atoi(xml.GetData().c_str());
+         successive_attacks_difficulty = atoi(xml.GetData());
       else if (element == "strength_min")
-         strength_min = atoi(xml.GetData().c_str());
+         strength_min = atoi(xml.GetData());
       else if (element == "strength_max")
-         strength_max = atoi(xml.GetData().c_str());
+         strength_max = atoi(xml.GetData());
       else if (element == "random_damage")
-         random_damage = atoi(xml.GetData().c_str());
+         random_damage = atoi(xml.GetData());
       else if (element == "fixed_damage")
-         fixed_damage = atoi(xml.GetData().c_str());
+         fixed_damage = atoi(xml.GetData());
       else if (element == "bruises")
       {
          int b = stringtobool(xml.GetData());
@@ -372,9 +372,9 @@ attackst::attackst(MCD_STR xmlstring)
             errorlog << "Invalid boolean value for attack::damages_armor: " << xml.GetData() << endl;*/
       }
       else if (element == "armorpiercing")
-         armorpiercing = atoi(xml.GetData().c_str());
+         armorpiercing = atoi(xml.GetData());
       else if (element == "no_damage_reduction_for_limbs_chance")
-         no_damage_reduction_for_limbs_chance = atoi(xml.GetData().c_str());
+         no_damage_reduction_for_limbs_chance = atoi(xml.GetData());
       else if (element == "critical")
       {
          xml.IntoElem();
@@ -384,17 +384,17 @@ attackst::attackst(MCD_STR xmlstring)
             element = xml.GetTagName();
 
             if (element == "chance")
-               critical.chance = atoi(xml.GetData().c_str());
+               critical.chance = atoi(xml.GetData());
             else if (element == "hits_required")
-               critical.hits_required = atoi(xml.GetData().c_str());
+               critical.hits_required = atoi(xml.GetData());
             else if (element == "random_damage")
             {
-               critical.random_damage = atoi(xml.GetData().c_str());
+               critical.random_damage = atoi(xml.GetData());
                critical.random_damage_defined = true;
             }
             else if (element == "fixed_damage")
             {
-               critical.fixed_damage = atoi(xml.GetData().c_str());
+               critical.fixed_damage = atoi(xml.GetData());
                critical.fixed_damage_defined = true;
             }
             else if (element == "severtype")
@@ -423,9 +423,9 @@ attackst::attackst(MCD_STR xmlstring)
             element = xml.GetTagName();
 
             if (element == "chance")
-               fire.chance = atoi(xml.GetData().c_str());
+               fire.chance = atoi(xml.GetData());
             else if (element == "chance_causes_debris")
-               fire.chance_causes_debris = atoi(xml.GetData().c_str());
+               fire.chance_causes_debris = atoi(xml.GetData());
             /*else
                errorlog << "Unknown element for attack::fire: " << element << endl; */
          }

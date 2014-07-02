@@ -26,6 +26,7 @@ This file is part of Liberal Crime Squad.
 #include "lcsio.h" /* include this prior to checking if WIN32 is defined */
 #include <stdlib.h>
 #include <string.h>
+#include "includes.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -73,17 +74,15 @@ bool LCSInitHomeDir()
     #endif
 
     //Do everything using STL String, it is safer that way.
-    std::string *str=new std::string(homeenv);
-    if(str->at(str->length()-1)!='/')
-        str->append("/");
+    std::string str=homeenv;
+    if(str[str.length()-1]!='/')
+        str+="/";
 
     #ifndef WIN32
-    str->append(".lcs/");
+    str+=".lcs/";
     #endif
 
-
-    strncpy(homedir,str->c_str(),MAX_PATH_SIZE);
-    delete str;
+    strncpy(homedir,str,MAX_PATH_SIZE);
     if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
     {
         #ifdef WIN32

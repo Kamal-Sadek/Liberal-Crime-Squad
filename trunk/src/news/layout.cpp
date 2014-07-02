@@ -40,39 +40,26 @@ void preparepage(newsstoryst& ns, bool liberalguardian)
       {
          //DATE
          set_color(COLOR_BLACK,COLOR_WHITE,0);
-         char num[20];
-         int pday=day;
-         int pmonth=month;
-         int pyear=year;
+         int pday=day, pmonth=month, pyear=year;
          if(pday>monthday()) // Day counter has increased but end-of-month has not yet
          {                   // been checked so it has to be accounted for here.
-            pmonth++;
-            pday=1;
-            if(pmonth>12)
-            {
-               pmonth=1;
-               pyear++;
-            }
+            pday=1,pmonth++;
+            if(pmonth>12) pmonth=1,pyear++;
          }
-         if(pday>=10)move(3,66);
-         else move(3,67);
+         move(3,66+(pday<10));
          addstr(getmonth(pmonth,true));
          addstr(" ");
-         itoa(pday,num,10);
-         addstr(num);
+         addstr(pday);
          addstr(", ");
-         itoa(pyear,num,10);
-         addstr(num);
+         addstr(pyear);
       }
    }
    else
    {
       //PAGE
       set_color(COLOR_BLACK,COLOR_WHITE,0);
-      char num[20];
-      if(!liberalguardian)itoa(ns.page,num,10);
-      else itoa(ns.guardianpage,num,10);
       move(0,76);
-      addstr(num);
+      if(!liberalguardian) addstr(ns.page);
+      else addstr(ns.guardianpage);
    }
 }

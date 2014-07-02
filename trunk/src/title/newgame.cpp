@@ -805,8 +805,6 @@ void makecharacter(void)
             break;
       }
 
-      refresh();
-
       do
       {
          c=getkey();
@@ -1166,9 +1164,7 @@ void makecharacter(void)
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(4,2);
    addstr("The Year is ", gamelog);
-   char year_s [80];
-   itoa (year, year_s, 10);
-   addstr(year_s, gamelog);
+   addstr(year, gamelog);
    addstr(".", gamelog);
    move(6,2);
    gamelog.newline();
@@ -1228,8 +1224,7 @@ void makecharacter(void)
    move(1,0);
    addstr("Press enter to be known by your real name instead.");
 
-   move(2,0);
-   enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
+   enter_name(2,0,newcr->name,CREATURE_NAMELEN,newcr->propername);
 
    pool.push_back(newcr);
 

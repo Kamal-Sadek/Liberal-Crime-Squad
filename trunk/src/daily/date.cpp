@@ -106,8 +106,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          move(3,0);
          addstr("If you do not enter anything, their real name will be used.");
 
-         move(4,0);
-         enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
+         enter_name(4,0,d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
          sleeperize_prompt(*d.date[e],*pool[p],8);
 
@@ -360,7 +359,6 @@ char completedate(datest &d,int p,char &clearformess)
 
    getkey();
 
-   char datestr[128];
    if(d.date.size()>1&&
 	   !LCSrandom( (d.date.size() > 2) ? 4 : 6))
    {
@@ -369,13 +367,9 @@ char completedate(datest &d,int p,char &clearformess)
          case 0:
             move(2,0);
             if (d.date.size()>2)
-            {
                addstr("Unfortunately, they all know each other and had been discussing", gamelog);
-            }
             else
-            {
                addstr("Unfortunately, they know each other and had been discussing", gamelog);
-            }
             move(3,0);
             addstr(pool[p]->name, gamelog);
             addstr(".  An ambush was set for the lying dog...", gamelog);
@@ -387,13 +381,9 @@ char completedate(datest &d,int p,char &clearformess)
          case 1:
             move(2,0);
             if (d.date.size()>2)
-            {
                addstr("Unfortunately, they all turn up at the same time.", gamelog);
-            }
             else
-            {
                addstr("Unfortunately, they turn up at the same time.", gamelog);
-            }
             gamelog.newline();
             move(3,0);
             addstr("Uh oh...", gamelog);
@@ -406,10 +396,7 @@ char completedate(datest &d,int p,char &clearformess)
             move(2,0);
             addstr(pool[p]->name, gamelog);
             if (d.date.size()>2)
-            {
-               snprintf(datestr, sizeof(char) * 128, " realizes %s has commited to eating %d meals at once.", pool[p]->heshe(), d.date.size());
-               addstr(datestr, gamelog);
-            }
+               addstr_fl(gamelog," realizes %s has committed to eating %d meals at once.",pool[p]->heshe(),d.date.size());
             else
             {
                addstr(" mixes up the names of ", gamelog);
@@ -709,8 +696,7 @@ char completedate(datest &d,int p,char &clearformess)
                move(3,0);
                addstr("If you do not enter anything, their real name will be used.");
 
-               move(4,0);
-               enter_name(d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
+               enter_name(4,0,d.date[e]->name,CREATURE_NAMELEN,d.date[e]->propername);
 
                pool.push_back(d.date[e]);
                stat_kidnappings++;

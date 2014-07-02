@@ -7,18 +7,18 @@ Armor::Armor(const ArmorType& seed, int quality, int number)
 
 }
 
-Armor::Armor(const char * inputXml)
+Armor::Armor(const std::string& inputXml)
  : Item(inputXml)
 {
    CMarkup xml;
    xml.SetDoc (inputXml);
    xml.FindElem ();
    xml.IntoElem ();
-   
+
    while (xml.FindElem ())
    {
       std::string tag = xml.GetTagName ();
-      
+
       if (tag == "bloody")
       {
          if (xml.GetData() == "true")
@@ -34,7 +34,7 @@ Armor::Armor(const char * inputXml)
             damaged_ = false;
       }
       else if (tag == "quality")
-         quality_ = atoi(xml.GetData().c_str());   
+         quality_ = atoi(xml.GetData());
    }
 }
 
@@ -45,17 +45,17 @@ string Armor::showXml () const
    xml.IntoElem();
 
    addBaseValues(xml);
-   
+
    if (bloody_)
       xml.AddElem("bloody", "true");
    else
       xml.AddElem("bloody", "false");
-   
+
    if (damaged_)
       xml.AddElem("damaged", "true");
    else
       xml.AddElem("damaged", "false");
-   
+
    xml.AddElem("quality", tostring(quality_));
 
    return xml.GetDoc();
@@ -86,18 +86,18 @@ string Armor::equip_title(bool full) const
       et += "]";
    }
 
-   return et;   
+   return et;
 }
 
 Armor* Armor::split(int number)
 {
    if (number > number_)
       number = number_;
-   
+
    Armor* newi = this->clone();
    newi->number_ = number;
    this->number_ -= number;
-   
+
    return newi;
 }
 
@@ -137,7 +137,7 @@ bool Armor::sort_compare_special(Item* other) const
       else if (other->is_armor())
       {
          Armor* a = static_cast<Armor*>(other); //cast... -XML
-            
+
          if(this->quality_ < a->quality_)
             reorder = false;
          else if(this->quality_ > a->quality_)
@@ -173,10 +173,10 @@ long Armor::get_fencevalue() const
 
 int Armor::get_make_difficulty() const
    { return armortype[getarmortype(itemtypename())]->get_make_difficulty(); }
-   
+
 int Armor::get_make_price() const
    { return armortype[getarmortype(itemtypename())]->get_make_price(); }
-   
+
 bool Armor::deathsquad_legality() const
    { return armortype[getarmortype(itemtypename())]->deathsquad_legality(); }
 
@@ -188,13 +188,13 @@ bool Armor::can_get_damaged() const
 
 int Armor::get_armor(int bodypart) const
    { return armortype[getarmortype(itemtypename())]->get_armor(bodypart); }
-   
+
 bool Armor::has_fireprotection() const
    { return armortype[getarmortype(itemtypename())]->has_fireprotection(); }
 
 bool Armor::covers(int bodypart) const
    { return armortype[getarmortype(itemtypename())]->covers(bodypart); }
-   
+
 bool Armor::conceals_face() const
    { return armortype[getarmortype(itemtypename())]->conceals_face(); }
 
@@ -203,10 +203,10 @@ const string& Armor::get_shortname() const
 
 int Armor::get_interrogation_basepower() const
    { return armortype[getarmortype(itemtypename())]->get_interrogation_basepower(); }
-   
+
 int Armor::get_interrogation_assaultbonus() const
    { return armortype[getarmortype(itemtypename())]->get_interrogation_assaultbonus(); }
-   
+
 int Armor::get_interrogation_drugbonus() const
    { return armortype[getarmortype(itemtypename())]->get_interrogation_drugbonus(); }
 
@@ -218,13 +218,13 @@ int Armor::get_stealth_value() const
 
 int Armor::get_weaponsize_concealment() const
    { return armortype[getarmortype(itemtypename())]->get_weaponsize_concealment(); }
-   
+
 bool Armor::conceals_weapon(const Weapon& weapon) const
    { return armortype[getarmortype(itemtypename())]->conceals_weaponsize(weapon.get_size()); }
-   
+
 bool Armor::conceals_weapon(const WeaponType& weapon) const
    { return armortype[getarmortype(itemtypename())]->conceals_weapon(weapon); }
-   
+
 bool Armor::conceals_weaponsize(int weaponsize) const
    { return armortype[getarmortype(itemtypename())]->conceals_weaponsize(weaponsize); }
 

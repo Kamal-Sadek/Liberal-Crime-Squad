@@ -34,31 +34,31 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
    switch(ns.type)
    {
    case NEWSSTORY_PRESIDENT_IMPEACHED:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("IMPEACHED",13);
       break;
    case NEWSSTORY_PRESIDENT_BELIEVED_DEAD:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("BELIEVED DEAD",13);
       break;
    case NEWSSTORY_PRESIDENT_FOUND_DEAD:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("FOUND DEAD",13);
       break;
    case NEWSSTORY_PRESIDENT_FOUND:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("RESCUED",13);
       break;
    case NEWSSTORY_PRESIDENT_KIDNAPPED:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("KIDNAPPED",13);
       break;
    case NEWSSTORY_PRESIDENT_MISSING:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("MISSING",13);
       break;
    case NEWSSTORY_PRESIDENT_ASSASSINATED:
-      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName).c_str(), 5);
+      displaycenterednewsfont(getLastNameForHeadline(oldPresidentName), 5);
       displaycenterednewsfont("ASSASSINATED",13);
       break;
    case NEWSSTORY_CCS_NOBACKERS:
@@ -122,7 +122,7 @@ void displaystoryheader(newsstoryst& ns, bool liberalguardian, int& y, int heade
       {
          if(newscherrybusted||liberalguardian)
          {
-            
+
             if(!liberalguardian)
             {
                if(ns.priority>250)

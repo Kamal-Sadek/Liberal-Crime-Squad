@@ -256,7 +256,7 @@ void removesquadinfo(Creature &cr)
    }
 }
 
-/* common - purges empty squads from existance */
+/* common - purges empty squads from existence */
 void cleangonesquads(void)
 {
    for(int sq=squad.size()-1;sq>=0;sq--)
@@ -862,4 +862,20 @@ int buyprompt(const string &firstline, const string &secondline,
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
    }
    return -1;
+}
+
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const squadst *st)
+{
+   int partysize=0;
+   if(st!=NULL) for(int p=0;p<6;p++) if(st->squad[p]!=NULL) partysize++;
+   return partysize;
+}
+
+/* tells how many members a squad has who are alive */
+int squadalive(const squadst *st)
+{
+   int partyalive=0;
+   if(st!=NULL) for(int p=0;p<6;p++) if(st->squad[p]!=NULL) if(st->squad[p]->alive) partyalive++;
+   return partyalive;
 }

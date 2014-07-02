@@ -3,21 +3,21 @@
 Loot::Loot(const LootType& seed, int number)
  : Item(seed,number)
 {
-   
+
 }
 
-Loot::Loot(const char * inputXml)
+Loot::Loot(const std::string& inputXml)
  : Item(inputXml)
 {
    /*CMarkup xml;
    xml.SetDoc (inputXml);
    xml.FindElem ();
    xml.IntoElem ();
-   
+
    while (xml.FindElem ())
    {
       std::string tag = xml.GetTagName ();
-   
+
    }*/
 }
 
@@ -36,11 +36,11 @@ Loot* Loot::split(int number)
 {
    if (number > number_)
       number = number_;
-   
+
    Loot* newi = this->clone();
    newi->number_ = number;
    this->number_ -= number;
-   
+
    return newi;
 }
 
@@ -72,7 +72,7 @@ bool Loot::sort_compare_special(Item* other) const
 
 string Loot::equip_title() const
    { return loottype[getloottype(itemtypename())]->get_name(); }
-   
+
 const string& Loot::get_name() const
    { return loottype[getloottype(itemtypename())]->get_name(); }
 

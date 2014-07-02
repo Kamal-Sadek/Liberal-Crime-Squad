@@ -8,15 +8,15 @@ class Weapon : public Item
    public:
       explicit Weapon(const WeaponType& seed, int number = 1);
       virtual Weapon* clone() const { return new Weapon(*this); }
-      explicit Weapon(const char * inputXml);      
+      explicit Weapon(const std::string& inputXml);
       string showXml() const;
-      
+
       virtual string equip_title() const;
-      
+
       virtual Weapon* split(int number);
       virtual bool merge(Item& i);
       virtual bool sort_compare_special(Item* other) const;
-      
+
       const string& get_name() const;
       const string& get_name(unsigned subtype) const;
       const string& get_shortname(unsigned subtype = 0) const;
@@ -40,7 +40,7 @@ class Weapon : public Item
       bool is_throwable() const;
       bool auto_breaks_locks() const;
       bool is_legal() const;
-      
+
       // Tries to reload the weapon with clip. If the weapon is reloaded, clip's
       // number is reduced by one.
       bool reload(Clip& clip);
@@ -49,10 +49,10 @@ class Weapon : public Item
       void decrease_ammo(int d) { ammo_ -= d; }
       const string& get_loaded_cliptypename() const { return loaded_cliptype_; }
       const attackst* get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const;
-      
+
       virtual bool is_weapon() const { return true; }
-      
-   
+
+
    private:
       string loaded_cliptype_;
 
