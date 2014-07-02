@@ -7,7 +7,7 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
 {
    strcat(story,"  The events took place ");
    std::string placename=location[ns.loc]->getname();
-   if(strncmp(placename.c_str(),"The ",4) == 0)
+   if(placename.substr(0,4)=="The ")
       placename=placename.substr(4);
    int posand=placename.find('&');
    if(posand!=(int)string::npos)
@@ -30,41 +30,41 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
    case SITE_OUTOFTOWN:
    case SITE_INDUSTRIAL:
    case SITE_TRAVEL:
-      if(strcmp(placename.c_str(),"Shopping") == 0)
+      if(placename=="Shopping")
       {
          placename="Shopping Mall";
          strcat(story,"at the ");
       }
-      else if(strcmp(placename.c_str(),"Travel") == 0)
+      else if(placename=="Travel")
       {
          placename="Travel Agency";
          strcat(story,"at the ");
       }
-      else if(strcmp(placename.c_str(),"Outskirts and Orange County") == 0)
+      else if(placename=="Outskirts and Orange County")
       {
          placename="Orange County";
          strcat(story,"in ");
       }
-      else if(strcmp(placename.c_str(),"Brooklyn and Queens") == 0)
+      else if(placename=="Brooklyn and Queens")
       {
          placename="Long Island";
          strcat(story,"on ");
       }
-      else if(strcmp(placename.c_str(),"Greater Hollywood") == 0)
+      else if(placename=="Greater Hollywood")
       {
          placename="Hollywood";
          strcat(story,"in ");
       }
-      else if(strcmp(placename.c_str(),"Manhattan Island") == 0)
+      else if(placename=="Manhattan Island")
       {
          placename="Manhattan";
          strcat(story,"in ");
       }
-      else if(strcmp(placename.c_str(),"Arlington") == 0)
+      else if(placename=="Arlington")
          strcat(story,"in ");
-      else if(strcmp(placename.c_str(),"National Mall") == 0)
+      else if(placename=="National Mall")
          strcat(story,"on the ");
-      else if(strcmp(placename.c_str(),"Downtown") != 0)
+      else if(placename!="Downtown")
          strcat(story,"in the ");
       break;
    case SITE_BUSINESS_PAWNSHOP:
@@ -132,11 +132,11 @@ void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char
       case SITE_BUSINESS_BANK:
          strcat(story,"Richard Dawkins Food Bank.  ");break;
       default:
-         strcat(story,placename.c_str());
+         strcat(story,placename);
          strcat(story,".  ");break;
       }
    }
-   else strcat(story,placename.c_str());
+   else strcat(story,placename);
    if(liberalguardian&&!ccs)
    {
       switch(location[ns.loc]->type)

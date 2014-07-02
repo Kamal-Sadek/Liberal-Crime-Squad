@@ -42,9 +42,9 @@ void ArmorType::init(const MCD_STR& xmlstring)
       std::string element = xml.GetTagName();
 
       if (element == "make_difficulty")
-         make_difficulty_ = atoi(xml.GetData().c_str());
+         make_difficulty_ = atoi(xml.GetData());
       else if (element == "make_price")
-         make_price_ = atoi(xml.GetData().c_str());
+         make_price_ = atoi(xml.GetData());
       else if (element == "deathsquad_legality")
       {
          int b = stringtobool(xml.GetData());
@@ -81,11 +81,11 @@ void ArmorType::init(const MCD_STR& xmlstring)
             element = xml.GetTagName();
 
             if (element == "body")
-               armor_body_ = atoi(xml.GetData().c_str());
+               armor_body_ = atoi(xml.GetData());
             else if (element == "head")
-               armor_head_ = atoi(xml.GetData().c_str());
+               armor_head_ = atoi(xml.GetData());
             else if (element == "limbs")
-               armor_limbs_ = atoi(xml.GetData().c_str());
+               armor_limbs_ = atoi(xml.GetData());
             else if (element == "fireprotection")
             {
                int b = stringtobool(xml.GetData());
@@ -186,11 +186,11 @@ void ArmorType::init(const MCD_STR& xmlstring)
          while (xml.FindElem())
          {
             if (element == "basepower")
-               interrogation_basepower_ = atoi(xml.GetData().c_str());
+               interrogation_basepower_ = atoi(xml.GetData());
             else if (element == "assaultbonus")
-               interrogation_assaultbonus_ = atoi(xml.GetData().c_str());
+               interrogation_assaultbonus_ = atoi(xml.GetData());
             else if (element == "drugbonus")
-               interrogation_drugbonus_ = atoi(xml.GetData().c_str());
+               interrogation_drugbonus_ = atoi(xml.GetData());
             /*else
              errorlog << "Unknown element for armor type " << idname()
                          << "::interrogation: " << element << endl;*/
@@ -199,11 +199,11 @@ void ArmorType::init(const MCD_STR& xmlstring)
          xml.OutOfElem();
       }
       else if (element == "professionalism")
-         professionalism_ = atoi(xml.GetData().c_str());
+         professionalism_ = atoi(xml.GetData());
       else if (element == "conceal_weapon_size")
-         conceal_weaponsize_ = atoi(xml.GetData().c_str());
+         conceal_weaponsize_ = atoi(xml.GetData());
       else if (element == "stealth_value")
-         stealth_value_ = atoi(xml.GetData().c_str());
+         stealth_value_ = atoi(xml.GetData());
       else if (element == "mask")
       {
          int b = stringtobool(xml.GetData());

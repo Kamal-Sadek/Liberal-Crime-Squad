@@ -88,15 +88,8 @@ bool chasesequence(void)
 
    while(true)
    {
-      int partysize=0,partyalive=0,encsize=0;
-      for(p=0;p<6;p++)
-      {
-         if(activesquad->squad[p]!=NULL)partysize++;
-         else continue;
-
-         if(activesquad->squad[p]->alive==1)partyalive++;
-      }
-      for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encsize++;
+      int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),encsize=0;
+      for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) encsize++;
 
       erase();
 
@@ -279,14 +272,7 @@ bool chasesequence(void)
                creatureadvance();
                if(drivingupdate(obstacle))
                {
-                  partysize=0,partyalive=0;
-                  for(p=0;p<6;p++)
-                  {
-                     if(activesquad->squad[p]!=NULL)partysize++;
-                     else continue;
-
-                     if(activesquad->squad[p]->alive==1)partyalive++;
-                  }
+                  partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
                   if(partyalive>0) return footchase();
                }
             }
@@ -304,14 +290,7 @@ bool chasesequence(void)
                creatureadvance();
                if(drivingupdate(obstacle))
                {
-                  partysize=0,partyalive=0;
-                  for(p=0;p<6;p++)
-                  {
-                     if(activesquad->squad[p]!=NULL)partysize++;
-                     else continue;
-
-                     if(activesquad->squad[p]->alive==1)partyalive++;
-                  }
+                  partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
                   if(partyalive>0) return footchase();
                }
             }
@@ -330,14 +309,7 @@ bool chasesequence(void)
                {
                   if(obstacledrive(obstacle,0))
                   {
-                     partysize=0,partyalive=0;
-                     for(p=0;p<6;p++)
-                     {
-                        if(activesquad->squad[p]!=NULL)partysize++;
-                        else continue;
-
-                        if(activesquad->squad[p]->alive==1)partyalive++;
-                     }
+                     partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
                      if(partyalive>0) return footchase();
                   }
                   creatureadvance();
@@ -347,27 +319,13 @@ bool chasesequence(void)
                {
                   if(obstacledrive(obstacle,1))
                   {
-                     partysize=0,partyalive=0;
-                     for(p=0;p<6;p++)
-                     {
-                        if(activesquad->squad[p]!=NULL)partysize++;
-                        else continue;
-
-                        if(activesquad->squad[p]->alive==1)partyalive++;
-                     }
+                     partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
                      if(partyalive>0) return footchase();
                   }
                   creatureadvance();
                   if(drivingupdate(obstacle))
                   {
-                     partysize=0,partyalive=0;
-                     for(p=0;p<6;p++)
-                     {
-                        if(activesquad->squad[p]!=NULL)partysize++;
-                        else continue;
-
-                        if(activesquad->squad[p]->alive==1)partyalive++;
-                     }
+                     partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
                      if(partyalive>0) return footchase();
                   }
                }
@@ -377,14 +335,7 @@ bool chasesequence(void)
 
          //HAVE YOU LOST ALL OF THEM?
             //THEN LEAVE
-         partysize=0,partyalive=0;
-         for(int p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]!=NULL)partysize++;
-            else continue;
-
-            if(activesquad->squad[p]->alive==1)partyalive++;
-         }
+         partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
          int baddiecount=0;
          for(int e=0;e<ENCMAX;e++)
          {
@@ -457,16 +408,8 @@ bool footchase(void)
 
    while(true)
    {
-      int partysize=0,partyalive=0;
-      for(p=0;p<6;p++)
-      {
-         if(activesquad->squad[p]!=NULL)partysize++;
-         else continue;
-
-         if(activesquad->squad[p]->alive==1)partyalive++;
-      }
-      int encsize=0;
-      for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)encsize++;
+      int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),encsize=0;
+      for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) encsize++;
 
       erase();
 
@@ -599,14 +542,7 @@ bool footchase(void)
 
          //HAVE YOU LOST ALL OF THEM?
             //THEN LEAVE
-         partysize=0,partyalive=0;
-         for(int p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]!=NULL)partysize++;
-            else continue;
-
-            if(activesquad->squad[p]->alive==1)partyalive++;
-         }
+         partysize=squadsize(activesquad),partyalive=squadalive(activesquad);
          int baddiecount=0;
          for(int e=0;e<ENCMAX;e++)
          {

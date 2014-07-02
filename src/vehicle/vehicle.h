@@ -15,7 +15,7 @@ class Vehicle
       }
 
       string showXml () const;
-      Vehicle (const char * inputXml);
+      Vehicle (const std::string& inputXml);
 
       void stop_riding_me() const;
       void stop_preferring_me() const;//GETS RID OF CAR PREFERENCES FROM pool LIBERALS.
@@ -26,7 +26,7 @@ class Vehicle
       void add_heat(short heat) { heat_ += heat; }
       long get_location() const { return location_; }
       void set_location(long new_location) { location_ = new_location; }
-      
+
       const string& vtypeidname() const { return vtypeidname_; }
       long vtypeid() const { return vtypeid_; }
       const string& color() const { return color_; }
@@ -44,12 +44,12 @@ class Vehicle
       bool availableatshop() const;
       int price() const;
 	  int sleeperprice() const;
-      
+
       static long curcarid;
-      
+
    private:
       void init(const VehicleType& seed, const string& color, int myear);
-      
+
       string vtypeidname_;
       long vtypeid_; //If the xml-file is changed vtypeid_ may not be correct after loading a saved game. So it's not actually used now. -XML
       string color_;

@@ -23,7 +23,7 @@ This file is part of Liberal Crime Squad.                                       
 
 // Macro dumps interrogation data to screen for debug
 #ifdef INTERROGATION_DEBUG
-   #define DEBUG_VARIABLE_DUMP(text,value) { char c[5]; move(20,0); itoa(value,c,10); addstr(text); addstr(c); addstr(" "); }
+   #define DEBUG_VARIABLE_DUMP(text,value) { mvaddstr(20,0,text); addstr(value); addchar(' '); }
 #else
    #define DEBUG_VARIABLE_DUMP(text,value)
 #endif
@@ -42,10 +42,7 @@ enum InterrogationTechnqiues
 void clear_interrogation_sidebar()
 {
    for(int i=4;i<23;i++)
-   {
-      move(i,40);
-      addstr("                                  ");
-   }
+      mvaddstr(i,40,"                                  "); // 34 spaces
 }
 
 // Shows the interrogation data at the right side of the screen
@@ -53,7 +50,6 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
 {
    clear_interrogation_sidebar();
    int y=4;
-   char num2[10];
    map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
    move(y,40);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -66,17 +62,14 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
    printhealthstat(*cr,y,48,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(++y,40);
-   itoa(cr->get_attribute(ATTRIBUTE_HEART,true),num2,10);
    addstr("Heart: ");
-   addstr(num2);
+   addstr(cr->get_attribute(ATTRIBUTE_HEART,true));
    move(++y,40);
-   itoa(cr->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
    addstr("Wisdom: ");
-   addstr(num2);
+   addstr(cr->get_attribute(ATTRIBUTE_WISDOM,true));
    move(++y,40);
-   itoa(cr->get_attribute(ATTRIBUTE_HEALTH,true),num2,10);
    addstr("Health: ");
-   addstr(num2);
+   addstr(cr->get_attribute(ATTRIBUTE_HEALTH,true));
 
    move(y=13,40);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -89,20 +82,16 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
    printhealthstat(*a,y,48,0);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    move(++y,40);
-   itoa(a->get_skill(SKILL_PSYCHOLOGY),num2,10);
    addstr("Psychology Skill: ");
-   addstr(num2);
+   addstr(a->get_skill(SKILL_PSYCHOLOGY));
    move(++y,40);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
-   itoa(a->get_attribute(ATTRIBUTE_HEART,true),num2,10);
    addstr("Heart: ");
-   addstr(num2);
+   addstr(a->get_attribute(ATTRIBUTE_HEART,true));
    move(++y,40);
-   itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
    addstr("Wisdom: ");
-   addstr(num2);
+   addstr(a->get_attribute(ATTRIBUTE_WISDOM,true));
    move(++y,40);
-   itoa(a->get_attribute(ATTRIBUTE_WISDOM,true),num2,10);
    addstr("Outfit: ");
    addstr(a->get_armor().get_name());
    move(y+=2,40);
@@ -230,9 +219,7 @@ void tendhostage(Creature *cr,char &clearformess)
    addstr("The Education of ");
    addstr(cr->name);
    addstr(": Day ");
-   char num[20];
-   itoa(cr->joindays,num,10);
-   addstr(num);
+   addstr(cr->joindays);
 
    getkey();
 
@@ -373,9 +360,7 @@ void tendhostage(Creature *cr,char &clearformess)
          addstr("The Final Education of ", gamelog);
          addstr(cr->name, gamelog);
          addstr(": Day ", gamelog);
-         char num[20];
-         itoa(cr->joindays,num,10);
-         addstr(num, gamelog);
+         addstr(cr->joindays, gamelog);
          gamelog.newline();
 
          a=NULL;
@@ -485,9 +470,7 @@ void tendhostage(Creature *cr,char &clearformess)
       addstr("The Education of ", gamelog);
       addstr(cr->name, gamelog);
       addstr(": Day ", gamelog);
-      char num[20];
-      itoa(cr->joindays,num,10);
-      addstr(num, gamelog);
+      addstr(cr->joindays, gamelog);
       gamelog.newline();
 
       move((y=2)++,0);

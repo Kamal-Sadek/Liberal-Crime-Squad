@@ -569,8 +569,8 @@ void kidnaptransfer(Creature &cr)
 
    move(3,0);
    addstr("If you do not enter anything, their real name will be used.");
-   move(4,0);
-   enter_name(newcr->name,CREATURE_NAMELEN,newcr->propername);
+
+   enter_name(4,0,newcr->name,CREATURE_NAMELEN,newcr->propername);
 
    pool.push_back(newcr);
    stat_kidnappings++;

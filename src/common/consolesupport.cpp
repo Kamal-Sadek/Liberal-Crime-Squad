@@ -59,8 +59,7 @@ void set_color(short f,short b,bool bright,bool blink)
    chtype blinky=(blink?A_BLINK:0), brighty=(bright?A_BOLD:0);
 
    //pick color pair based on foreground and background
-   if(bright) attrset(brighty | blinky | COLOR_PAIR(f*8+b));
-   else attrset(COLOR_PAIR(f*8+b));
+   attrset(brighty | blinky | COLOR_PAIR(f*8+b));
 }
 
 
@@ -290,17 +289,20 @@ void set_title (char *s)
 // Initialize the console, depending on the OS and language/code page settings
 void init_console()
 {
-	#ifdef WIN32
+   #ifdef WIN32
    #ifdef CH_USE_UNICODE
-   SetConsoleOutputCP(65001); // use UTF-8 (Unicode)
+   SetConsoleOutputCP(65001); // use UTF-8 (Unicode) for output
+   SetConsoleCP(65001); // use UTF-8 (Unicode) for input
    setlocale(LC_ALL,"English_United States.437"); // Windows does not support UTF-8/Unicode for setlocale, sorry
    #endif
    #ifdef CH_USE_CP437
-   SetConsoleOutputCP(437); // use Code Page 437 (US English code page made by IBM for DOS)
+   SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output
+   SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input
    setlocale(LC_ALL,"English_United States.437");
    #endif
    #ifdef CH_USE_ASCII_HACK
-   SetConsoleOutputCP(437); // use Code Page 437 (US English code page made by IBM for DOS)
+   SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output
+   SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input
    setlocale(LC_ALL,"English_United States.437");
    #endif
    _setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page

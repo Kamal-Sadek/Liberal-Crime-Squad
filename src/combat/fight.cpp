@@ -958,8 +958,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          char str[200];
          clearmessagearea();
          move(16,1);
-         sprintf(str,"(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)",aroll,droll,mod,damamount,armorpiercing);
-         addstr(str);
+         addstr_f("(ATK %d, DEF %d, DAMMOD %d, DAMAGE %d, AP %d)",aroll,droll,mod,damamount,armorpiercing);
 
          getkey();
       }
@@ -2636,29 +2635,20 @@ void autopromote(int loc)
 {
    if(activesquad==NULL) return;
 
-   int partysize=0;
-   int partydead=0;
-   int p;
-   for(p=0;p<6;p++)
-   {
-      if(activesquad->squad[p]!=NULL) partysize++;
-      else continue;
+   int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),libnum=0;
 
-      if(!activesquad->squad[p]->alive) partydead++;
-   }
+   if(partyalive==6) return;
 
-   int libnum=0;
    for(int pl=0;pl<(int)pool.size();pl++)
    {
       if(pool[pl]->location!=loc) continue;
       if(pool[pl]->alive&&pool[pl]->align==1) libnum++;
    }
 
-   if(partysize==6&&partydead==0) return;
    if(partysize==libnum) return;
 
    char conf;
-   for(p=0;p<6;p++)
+   for(int p=0;p<6;p++)
    {
       conf=0;
       if(activesquad->squad[p]==NULL) conf=1;

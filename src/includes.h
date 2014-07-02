@@ -552,7 +552,7 @@ public:
    {
       for(int i=0;i<INCOMETYPENUM;i++)
       {
-         income[i]=0; 
+         income[i]=0;
          dailyIncome[i]=0;
       }
       for(int e=0;e<EXPENSETYPENUM;e++)
@@ -564,27 +564,27 @@ public:
 
    int get_funds() { return funds; }
    void force_funds(int amount) { funds=amount; }
-   void add_funds(int amount,int incometype) 
+   void add_funds(int amount,int incometype)
    {
         funds+=amount,
         income[incometype]+=amount,
         dailyIncome[incometype]+=amount,
-        total_income+=amount; 
+        total_income+=amount;
    }
-   void subtract_funds(int amount,int expensetype) 
+   void subtract_funds(int amount,int expensetype)
    {
         funds-=amount,
         expense[expensetype]+=amount,
         dailyExpense[expensetype]+=amount,
-        total_expense+=amount; 
+        total_expense+=amount;
    }
-   void resetMonthlyAmounts() 
-   { 
+   void resetMonthlyAmounts()
+   {
       for(int i=0;i<INCOMETYPENUM;i++)income[i]=0;
       for(int e=0;e<EXPENSETYPENUM;e++)expense[e]=0;
    }
-   void resetDailyAmounts() 
-   { 
+   void resetDailyAmounts()
+   {
       for(int i=0;i<INCOMETYPENUM;i++)dailyIncome[i]=0;
       for(int e=0;e<EXPENSETYPENUM;e++)dailyExpense[e]=0;
    }
@@ -607,31 +607,7 @@ public:
    // Sets the interval according to a string that is either a number or two
    // number separated by a dash. Returns false and does not change the
    // interval if the given string is not a valid interval.
-   bool set_interval(const string& interval)
-   {
-      if(interval.empty() ||
-         interval.find_first_not_of("1234567890-")!=string::npos)
-         return false;
-
-      size_t dashpos=interval.find('-',1);
-      if(dashpos==string::npos) // Just a constant.
-      {
-         if(!valid(interval))return false;
-         max=min=atoi(interval.c_str());
-      }
-      else
-      {
-         string smin=interval.substr(0,dashpos);
-         string smax=interval.substr(dashpos+1);
-         if (!valid(smin)||!valid(smax))return false;
-         int tmin=atoi(smin.c_str());
-         int tmax=atoi(smax.c_str());
-         if (tmin>tmax)return false;
-         min=tmin;
-         max=tmax;
-      }
-      return true;
-   }
+   bool set_interval(const string& interval);
    int roll() const
    {
       return LCSrandom(max - min + 1) + min;
@@ -703,9 +679,11 @@ enum SquadStances
    SQUADSTANCE_MAX
 };
 
+#define SQUAD_NAMELEN 40
+
 struct squadst
 {
-   char name[40];
+   char name[SQUAD_NAMELEN];
    Creature *squad[6];
    activityst activity;
    int id;
@@ -715,7 +693,7 @@ struct squadst
 
    squadst()
    {
-      for(int p=0;p<6;p++)squad[p]=NULL;
+      for(int p=0;p<6;p++) squad[p]=NULL;
       strcpy(name,"");
       activity.type=ACTIVITY_NONE,id=-1,stance=SQUADSTANCE_STANDARD;
    }
@@ -1205,6 +1183,10 @@ int choiceprompt(const string &firstline,const string &secondline,
 int buyprompt(const string &firstline,const string &secondline,
               const vector< pair<string,int> > &nameprice,int namepaddedlength,
               const string &producttype,const string &exitstring);
+/* tells how many total members a squad has (including dead members) */
+int squadsize(const squadst *st);
+/* tells how many members a squad has who are alive */
+int squadalive(const squadst *st);
 
 
 /*
@@ -1241,7 +1223,7 @@ std::string getview(short view,bool shortname);
 std::string getlaw(int l);
 std::string cityname(); /* random city name */
 /* Allow player to enter a name with an optional default name */
-void enter_name(char *name,int len,char *defname=NULL);
+void enter_name(int y,int x,char *name,int len,const char *defname=NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month,bool shortname=false);
 std::string getalign(signed char alignment,bool capitalize=false);
@@ -1283,6 +1265,8 @@ const CreatureType* getcreaturetype(const std::string& crtype);
 /*
  equipment.cpp
 */
+/* prompt user to enter an amount of items to equip, move, or sell */
+long prompt_amount(long min, long max);
 /* review squad equipment */
 void equip(vector<Item *> &loot,int loc);
 /* lets you pick stuff to stash/retrieve from one location to another */
@@ -1304,12 +1288,17 @@ const char* toCstring(long i);
 /* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
-/* These strcpy and strcat wrappers handle std:strings */
+/* These strcpy, strncpy, and strcat wrappers handle std:strings */
 char* strcpy(char* dest, const std::string& src);
+char* strncpy(char* dest, const std::string& src, size_t maxlen);
 char* strcat(char* dest, const std::string& src);
 /* These strcpy and strcat wrappers handle numbers */
 char* strcpy(char* dest, long src);
 char* strcat(char* dest, long src);
+/* This wrapper allows atoi to handle std::strings */
+int atoi(const std::string& str);
+/* This wrapper allows atof to handle std::strings */
+double atof(const std::string& str);
 short creaturetype_string_to_enum(const std::string& ctname);
 int attribute_string_to_enum(const std::string& attribute);
 int skill_string_to_enum(std::string skillname);
@@ -1367,6 +1356,7 @@ void romannumeral(int amendnum);
 extern const char *selectRandomString(const char **string_table, int table_size);
 /* Determine table_size in selectRandomString */
 #define ARRAY_ELEMENTS(ARRAY_NAME) ((int)(sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0])))
+/* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 
 
 /*
@@ -1444,8 +1434,9 @@ void mode_base(void);
 void burnflag(void);
 /* base - new slogan */
 void getslogan(void);
-/* base - reorder party */
+/* site/chase/siege mode - reorder party */
 void orderparty(void);
+/* base mode - reorder party */
 void orderpartyV2(void);
 /* base - go forth to stop evil */
 void stopevil(void);
@@ -1822,8 +1813,8 @@ void setpriority(newsstoryst &ns);
 void displaystory(newsstoryst &ns,bool liberalguardian,int header);
 /* news - graphics */
 void loadgraphics(void);
-void displaycenterednewsfont(const char *str,int y);
-void displaycenteredsmallnews(const char *str,int y);
+void displaycenterednewsfont(const std::string& str,int y);
+void displaycenteredsmallnews(const std::string& str,int y);
 void displaynewspicture(int p,int y);
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive);

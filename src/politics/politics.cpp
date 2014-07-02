@@ -105,7 +105,6 @@ void fillCabinetPost(int position)
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings)
 {
-   char num[20];
    int l, p, c, mood=publicmood(-1);
 
    if(canseethings)
@@ -130,8 +129,7 @@ void elections(char clearformess,char canseethings)
 
          move(0,0);
          addstr("Presidential General Election ");
-         itoa(year,num,10);
-         addstr(num);
+         addstr(year);
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(2,0);
@@ -234,22 +232,18 @@ void elections(char clearformess,char canseethings)
 
             getkey();
          }
-         else
-         {
-            refresh();
-            pause_ms(200);
-         }
+         else pause_ms(200);
       }
 
       int winner=-1, vote;
-      char recount=0;
+      bool recount=false;
 
       for(int l=0;l<1000;l++) // 1000 Voters!
       {
          vote=-2;
-         if(l%2==0&&LCSrandom(5))votes[0]++;      // Partyline Liberals (~40%)
-         else if(l%2==1&&LCSrandom(5))votes[1]++; // Partyline Conservatives (~40%)
-         else                                     // Swing Issue Voters (~20%)
+         if(l%2==0&&LCSrandom(5)) votes[0]++;      // Partyline Liberals (~40%)
+         else if(l%2==1&&LCSrandom(5)) votes[1]++; // Partyline Conservatives (~40%)
+         else                                      // Swing Issue Voters (~20%)
          {
             // Get the leanings of an issue voter
             vote=getswingvoter();
@@ -268,10 +262,10 @@ void elections(char clearformess,char canseethings)
          if(l==999)
          {
             int maxvote=0;
-            for(c=0;c<2;c++)if(votes[c]>maxvote)maxvote=votes[c];
+            for(c=0;c<2;c++) if(votes[c]>maxvote) maxvote=votes[c];
             vector<int> eligible;
-            for(c=0;c<2;c++)if(votes[c]==maxvote)eligible.push_back(c);
-            if(eligible.size()>1)winner=eligible[LCSrandom(eligible.size())], recount=1;
+            for(c=0;c<2;c++) if(votes[c]==maxvote) eligible.push_back(c);
+            if(eligible.size()>1) winner=eligible[LCSrandom(eligible.size())], recount=true;
             else winner=eligible[0];
          }
 
@@ -279,21 +273,18 @@ void elections(char clearformess,char canseethings)
          {
             for(int c=0;c<2;c++)
             {
-               if(votes[c]<votes[!c] || (winner>=0&&c!=winner))set_color(COLOR_BLACK,COLOR_BLACK,1);
-               else if(votes[c]>votes[!c] || c==winner)set_color(COLOR_WHITE,COLOR_BLACK,1);
+               if(votes[c]<votes[!c]||(winner>=0&&c!=winner)) set_color(COLOR_BLACK,COLOR_BLACK,1);
+               else if(votes[c]>votes[!c]||c==winner) set_color(COLOR_WHITE,COLOR_BLACK,1);
                else set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(6-c*2,45);
-               itoa(votes[c]/10,num,10);
-               addstr(num);
-               itoa(votes[c]%10,num,10);
+               addstr(votes[c]/10);
                addchar('.');
-               addstr(num);
+               addstr(votes[c]%10);
                addchar('%');
-               if(c==winner&&recount)addstr(" (After Recount)");
+               if(c==winner&&recount) addstr(" (After Recount)");
             }
 
-            refresh();
-            if(!disbanding)pause_ms(40);
+            if(!disbanding) pause_ms(40);
             else pause_ms(20);
          }
       }
@@ -306,24 +297,23 @@ void elections(char clearformess,char canseethings)
 
          getkey();
       }
-      /*else if(disbanding)
-      {
-         refresh();
-         pause_ms(800);
-      }*/
+      //else if(disbanding) pause_ms(800);
 
       //CONSTRUCT EXECUTIVE BRANCH
-      if(winner==presparty&&execterm==1)execterm=2;
+      if(winner==presparty&&execterm==1) execterm=2;
       else
       {
          presparty=winner, execterm=1, exec[EXEC_PRESIDENT]=candidate[winner][0];
          strcpy(execname[EXEC_PRESIDENT],candidate[winner]+1);
-         for(int e=0;e<EXECNUM;e++)if(e!=EXEC_PRESIDENT)fillCabinetPost(e);
+         for(int e=0;e<EXECNUM;e++) if(e!=EXEC_PRESIDENT) fillCabinetPost(e);
       }
    }
 
-   if(year%2==0) elections_senate((year%6)/2,canseethings); //SENATE
-   if(year%2==0) elections_house(canseethings); //HOUSE
+   if(year%2==0)
+   {
+      elections_senate((year%6)/2,canseethings); //SENATE
+      elections_house(canseethings); //HOUSE
+   }
 
    //PROPOSITIONS
    if(canseethings)
@@ -334,8 +324,7 @@ void elections(char clearformess,char canseethings)
 
       move(0,0);
       addstr("Important Propositions ");
-      itoa(year,num,10);
-      addstr(num);
+      addstr(year);
    }
 
    vector<int> prop, propdir, canlaw;
@@ -395,8 +384,7 @@ void elections(char clearformess,char canseethings)
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         itoa(propnum,num,10);
-         addstr("Proposition ");addstr(num);addstr(":");
+         addstr("Proposition ");addstr(propnum);addstr(":");
          move(p*3+2,18);
          addstr("To ");
          set_alignment_color(propdir[p]);
@@ -510,7 +498,7 @@ void elections(char clearformess,char canseethings)
 
    for(p=0;p<pnum;p++)
    {
-      char yeswin=0,recount=0;
+      bool yeswin=false,recount=false;
       int yesvotes=0;
       mood=publicmood(prop[p]);
       for(int l=0;l<1000;l++)
@@ -522,8 +510,8 @@ void elections(char clearformess,char canseethings)
 
          if(l==999)
          {
-            if(yesvotes>500) yeswin=1;
-            else if(yesvotes==500) yeswin=(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1),recount=1;
+            if(yesvotes>500) yeswin=true;
+            else if(yesvotes==500) yeswin=(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1),recount=true;
          }
 
          if(canseethings && (l%10 == 0 || l==999))
@@ -532,25 +520,20 @@ void elections(char clearformess,char canseethings)
             else if(yesvotes<l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(p*3+2,70);
-            itoa(yesvotes/10,num,10);
-            addstr(num);
+            addstr(yesvotes/10);
             addchar('.');
-            itoa(yesvotes%10,num,10);
-            addstr(num);
+            addstr(yesvotes%10);
             addstr("% Yes");
 
             if(yesvotes<l/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(yesvotes>l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(p*3+3,70);
-            itoa((l+1-yesvotes)/10,num,10);
-            addstr(num);
+            addstr((l+1-yesvotes)/10);
             addchar('.');
-            itoa((l+1-yesvotes)%10,num,10);
-            addstr(num);
+            addstr((l+1-yesvotes)%10);
             addstr("% No");
 
-            refresh();
             pause_ms(10);
          }
       }
@@ -577,7 +560,6 @@ void elections(char clearformess,char canseethings)
 
 void elections_senate(int senmod,char canseethings)
 {
-   char num[10];
    int mood=publicmood(-1);
    if(canseethings)
    {
@@ -587,8 +569,7 @@ void elections_senate(int senmod,char canseethings)
 
       move(0,0);
       addstr("Senate Elections ");
-      itoa(year,num,10);
-      addstr(num);
+      addstr(year);
    }
 
    int x=0,y=2, s=0;
@@ -689,36 +670,26 @@ void elections_senate(int senmod,char canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         char buffer[10];
          move(20,0);
          addstr("Net change: ");
          addstr("C+: ");
          if(change[0]>0)addstr("+");
-         itoa(change[0],buffer,10);
-         addstr(buffer);
+         addstr(change[0]);
          addstr("   C: ");
          if(change[1]>0)addstr("+");
-         itoa(change[1],buffer,10);
-         addstr(buffer);
+         addstr(change[1]);
          addstr("   m: ");
          if(change[2]>0)addstr("+");
-         itoa(change[2],buffer,10);
-         addstr(buffer);
+         addstr(change[2]);
          addstr("   L: ");
          if(change[3]>0)addstr("+");
-         itoa(change[3],buffer,10);
-         addstr(buffer);
+         addstr(change[3]);
          addstr("   L+: ");
          if(change[4]>0)addstr("+");
-         itoa(change[4],buffer,10);
-         addstr(buffer);
+         addstr(change[4]);
          addstr("        ");
 
-         if(!disbanding)
-         {
-            refresh();
-            pause_ms(30);
-         }
+         if(!disbanding) pause_ms(30);
       }
    }
 
@@ -746,7 +717,6 @@ void elections_senate(int senmod,char canseethings)
 
 void elections_house(char canseethings)
 {
-   char num[10];
    int mood=publicmood(-1);
    if(canseethings)
    {
@@ -756,8 +726,7 @@ void elections_house(char canseethings)
 
       move(0,0);
       addstr("House Elections ");
-      itoa(year,num,10);
-      addstr(num);
+      addstr(year);
    }
 
    int x=0,y=2,h=0;
@@ -912,36 +881,26 @@ void elections_house(char canseethings)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         char buffer[10];
          move(20,0);
          addstr("Net change: ");
          addstr("C+: ");
          if(change[0]>0)addstr("+");
-         itoa(change[0],buffer,10);
-         addstr(buffer);
+         addstr(change[0]);
          addstr("   C: ");
          if(change[1]>0)addstr("+");
-         itoa(change[1],buffer,10);
-         addstr(buffer);
+         addstr(change[1]);
          addstr("   m: ");
          if(change[2]>0)addstr("+");
-         itoa(change[2],buffer,10);
-         addstr(buffer);
+         addstr(change[2]);
          addstr("   L: ");
          if(change[3]>0)addstr("+");
-         itoa(change[3],buffer,10);
-         addstr(buffer);
+         addstr(change[3]);
          addstr("   L+: ");
          if(change[4]>0)addstr("+");
-         itoa(change[4],buffer,10);
-         addstr(buffer);
+         addstr(change[4]);
          addstr("        ");
 
-         if(!disbanding)
-         {
-            refresh();
-            pause_ms(5);
-         }
+         if(!disbanding) pause_ms(5);
       }
    }
 
@@ -966,11 +925,7 @@ void elections_house(char canseethings)
 
          getkey();
       }
-      else
-      {
-         refresh();
-         pause_ms(800);
-      }
+      else pause_ms(800);
    }
 }
 
@@ -990,7 +945,6 @@ void supremecourt(char clearformess,char canseethings)
    }
 
    //CHANGE THINGS AND REPORT
-   char num[20];
    if(canseethings)
    {
       erase();
@@ -999,8 +953,7 @@ void supremecourt(char clearformess,char canseethings)
 
       move(0,0);
       addstr("Supreme Court Watch ");
-      itoa(year,num,10);
-      addstr(num);
+      addstr(year);
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
    }
@@ -1185,8 +1138,8 @@ void supremecourt(char clearformess,char canseethings)
       //is extra liberal, gun control, supreme court is extra conservative
 	  //"All court justices will vote according to alignment and biasand do not consult
 	  //popular opinion...---Servant Corps"
-      if(scase[c]==LAW_FREESPEECH || scase[c]==LAW_FLAGBURNING)bias=1;
-      else if(scase[c]==LAW_GUNCONTROL)bias=-1;
+      if(scase[c]==LAW_FREESPEECH||scase[c]==LAW_FLAGBURNING) bias=1;
+      else if(scase[c]==LAW_GUNCONTROL) bias=-1;
       else bias=0;
 
       for(int l=0;l<9;l++)
@@ -1197,12 +1150,12 @@ void supremecourt(char clearformess,char canseethings)
             if(stalinview(scase[c],true)) vote=ALIGN_ELITELIBERAL;
             else vote=ALIGN_ARCHCONSERVATIVE;
          }
-         if(vote>=-1&&vote<=1)vote+=bias;
+         if(vote>=-1&&vote<=1) vote+=bias;
 
-         if(law[scase[c]]>vote && scasedir[c]==-1)yesvotes++;
-         if(law[scase[c]]<vote && scasedir[c]==1)yesvotes++;
+         if(law[scase[c]]>vote && scasedir[c]==-1) yesvotes++;
+         if(law[scase[c]]<vote && scasedir[c]==1) yesvotes++;
 
-         if(l==8 && yesvotes>=5)yeswin=1;
+         if(l==8&&yesvotes>=5) yeswin=1;
 
          if(canseethings)
          {
@@ -1210,25 +1163,21 @@ void supremecourt(char clearformess,char canseethings)
             else if(l==8)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+2,63);
-            itoa(yesvotes,num,10);
-            addstr(num);
+            addstr(yesvotes);
             addstr(" for Change");
 
             if(l==8&&!yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(l==8)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+3,63);
-            itoa(l+1-yesvotes,num,10);
-            addstr(num);
+            addstr(l+1-yesvotes);
             addstr(" for Status Quo");
-
-            refresh();
 
             pause_ms(60);
          }
       }
 
-      if(yeswin)law[scase[c]]+=scasedir[c];
+      if(yeswin) law[scase[c]]+=scasedir[c];
    }
 
    if(canseethings)
@@ -1248,7 +1197,6 @@ void supremecourt(char clearformess,char canseethings)
          erase();
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-
          move(0,0);
          addstr("Changing the Guard!");
       }
@@ -1274,7 +1222,7 @@ void supremecourt(char clearformess,char canseethings)
 
       float president=exec[EXEC_PRESIDENT];
       float sen=0;
-      for(int s=0;s<100;s++)sen+=senate[s];
+      for(int s=0;s<100;s++) sen+=senate[s];
       sen/=100.0f;
 
       float consensus=(president+sen)*.5f;
@@ -1331,7 +1279,6 @@ void congress(char clearformess,char canseethings)
    }
 
    //CHANGE THINGS AND REPORT
-   char num[20];
    if(canseethings)
    {
       erase();
@@ -1340,8 +1287,7 @@ void congress(char clearformess,char canseethings)
 
       move(0,0);
       addstr("Legislative Agenda ");
-      itoa(year,num,10);
-      addstr(num);
+      addstr(year);
    }
 
    vector<int> bill,billdir,killbill;
@@ -1456,11 +1402,9 @@ void congress(char clearformess,char canseethings)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(c*3+2,0);
          addstr("Joint Resolution ");
-         itoa(year,num,10);
-         addstr(num);
-         addstr("-");
-         itoa(c+1,num,10);
-         addstr(num);
+         addstr(year);
+         addchar('-');
+         addstr(c+1);
 
          move(c*3+3,0);
          addstr("To ");
@@ -1641,16 +1585,14 @@ void congress(char clearformess,char canseethings)
             else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+2,62);
-            itoa(yesvotes_h,num,10);
-            addstr(num);
+            addstr(yesvotes_h);
             addstr(" Yea");
 
             if(l==434&&!yeswin_h)set_color(COLOR_WHITE,COLOR_BLACK,1);
             else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+3,62);
-            itoa(l+1-yesvotes_h,num,10);
-            addstr(num);
+            addstr(l+1-yesvotes_h);
             addstr(" Nay");
          }
 
@@ -1705,8 +1647,7 @@ void congress(char clearformess,char canseethings)
             else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+2,70);
-            itoa(yesvotes_s,num,10);
-            addstr(num);
+            addstr(yesvotes_s);
             addstr(" Yea");
 
             if(l==434&&yesvotes_s==50&&yeswin_s)
@@ -1720,8 +1661,7 @@ void congress(char clearformess,char canseethings)
             else if(l==434)set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(c*3+3,70);
-            itoa(s+1-yesvotes_s,num,10);
-            addstr(num);
+            addstr(s+1-yesvotes_s);
             addstr(" Nay");
 
             if(l==434&&yesvotes_s==50&&!yeswin_s)
@@ -1731,11 +1671,7 @@ void congress(char clearformess,char canseethings)
                addstr("VP");
             }
 
-            if(l%5==0)
-            {
-               refresh();
-               pause_ms(5);
-            }
+            if(l%5==0) pause_ms(5);
          }
       }
 
@@ -1757,7 +1693,6 @@ void congress(char clearformess,char canseethings)
 
          move(0,35);
          addstr("President");
-         refresh();
 
          pause_ms(500);
       }
@@ -1815,7 +1750,6 @@ void congress(char clearformess,char canseethings)
                }
             }
 
-            refresh();
             pause_ms(500);
          }
 

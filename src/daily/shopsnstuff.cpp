@@ -38,8 +38,7 @@ void hospital(int loc)
 {
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
+   int partysize=squadsize(activesquad);
 
    while(true)
    {
@@ -120,10 +119,7 @@ void dealership(int loc)
 
    locatesquad(activesquad,loc);
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
-      if(activesquad->squad[p]!=NULL)
-         partysize++;
+   int partysize=squadsize(activesquad);
 
    while(true)
    {
@@ -310,12 +306,9 @@ void halloweenstore(int loc)
 /* choose buyer */
 void choose_buyer(short &buyer)
 {
-   if(activesquad==NULL)return;
-
    party_status=-1;
 
-   int partysize=0;
-   for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
+   int partysize=squadsize(activesquad);
 
    if(partysize<=1) return;
 

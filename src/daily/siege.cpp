@@ -1541,9 +1541,7 @@ void giveup(void)
             int confiscated = LCSrandom(LCSrandom(ledger.get_funds()-2000)+1)+1000;
             if(ledger.get_funds()-confiscated > 50000)
                confiscated += ledger.get_funds() - 30000 - LCSrandom(20000) - confiscated;
-            char str[100];
-            sprintf(str,"Law enforcement has confiscated $%d in LCS funds.",confiscated);
-            addstr(str, gamelog);
+            addstr_fl(gamelog,"Law enforcement has confiscated $%d in LCS funds.",confiscated);
             gamelog.newline();
             ledger.subtract_funds(confiscated,EXPENSE_CONFISCATED);
          }

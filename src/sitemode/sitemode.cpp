@@ -247,17 +247,11 @@ void mode_site(void)
 
    while(true)
    {
-      int partysize=0,partyalive=0,hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
+      int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
       for(p=0;p<6;p++)
-      {
-         if(activesquad->squad[p]!=NULL)partysize++;
-         else continue;
-
-         if(activesquad->squad[p]->alive==1)partyalive++;
-
-         if(activesquad->squad[p]->prisoner && activesquad->squad[p]->prisoner->align != ALIGN_LIBERAL)
-            hostages++;
-      }
+         if(activesquad->squad[p]!=NULL)
+            if(activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
+               hostages++;
       for(int e=0;e<ENCMAX;e++)
       {
          if(encounter[e].exists)
@@ -309,22 +303,18 @@ void mode_site(void)
          move(0,0);
          addstr(location[cursite]->getname(-1,true));
          addstr(", Level ");
-         char num[20];
-         itoa(locz+1,num,10);
-         addstr(num);
+         addstr(locz+1);
          addstr(": Escape or Engage");
       }
       else
       {
-         if (postalarmtimer>80)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(postalarmtimer>60)set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         if(postalarmtimer>80) set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(postalarmtimer>60) set_color(COLOR_YELLOW,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(0,0);
          addstr(location[cursite]->getname(-1,true));
          addstr(", Level ");
-         char num[20];
-         itoa(locz+1,num,10);
-         addstr(num);
+         addstr(locz+1);
 
          if(postalarmtimer>80)
          {
@@ -811,7 +801,6 @@ void mode_site(void)
                   move(9,70);
                   addstr("Bluff");
 
-                  char num[20];
                   int y=11;
                   for(int p=0;p<6;p++)
                   {
@@ -824,18 +813,14 @@ void mode_site(void)
                            addstr(" - ");
                            addstr(activesquad->squad[p]->name);
                            move(y,50);
-                           itoa(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
-                                activesquad->squad[p]->get_skill(SKILL_PERSUASION),num,10);
-                           addstr(num);
+                           addstr(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
+                                  activesquad->squad[p]->get_skill(SKILL_PERSUASION));
                            move(y,60);
-                           itoa(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
-                                activesquad->squad[p]->get_skill(SKILL_SEDUCTION),num,10);
-                           addstr(num);
-                           move(y,70);
-                           itoa(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
-                                activesquad->squad[p]->get_skill(SKILL_DISGUISE),num,10);
-                           addstr(num);
-                           y++;
+                           addstr(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
+                                  activesquad->squad[p]->get_skill(SKILL_SEDUCTION));
+                           move(y++,70);
+                           addstr(activesquad->squad[p]->get_attribute(ATTRIBUTE_CHARISMA,true)/2+
+                                  activesquad->squad[p]->get_skill(SKILL_DISGUISE));
                         }
                      }
                   }
@@ -847,12 +832,9 @@ void mode_site(void)
                      if(c>='1'&&c<='6')
                      {
                         sp=c-'1';
-                        if(activesquad->squad[sp]!=NULL)
-                        {
-                           if(activesquad->squad[sp]->alive)break;
-                        }
+                        if(activesquad->squad[sp]!=NULL) if(activesquad->squad[sp]->alive) break;
                      }
-                     if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR){sp=-1;break;}
+                     if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) { sp=-1; break; }
                   }
                }
                else sp=forcesp;

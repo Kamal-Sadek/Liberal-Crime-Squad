@@ -869,9 +869,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                strcat(story,"radical political group known as the Liberal Crime Squad, is believed to have killed ");
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
-                  char num[20];
-                  itoa(crime[CRIME_KILLEDSOMEBODY],num,10);
-                  strcat(story,num);
+                  strcat(story,crime[CRIME_KILLEDSOMEBODY]);
                   strcat(story," officers ");
                }
                else strcat(story,"the police officer ");
@@ -896,9 +894,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                strcat(story,"killed ");
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
-                  char num[20];
-                  itoa(crime[CRIME_KILLEDSOMEBODY],num,10);
-                  strcat(story,num);
+                  strcat(story,crime[CRIME_KILLEDSOMEBODY]);
                   strcat(story," police officers that were");
                }
                else strcat(story,"a police officer that was");
@@ -1385,8 +1381,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   {
                      if(crime[CRIME_CARCRASH]>1)
                      {
-                        char num[20];
-                        itoa(crime[CRIME_CARCRASH],num,10);
+                        strcat(story,crime[CRIME_CARCRASH]);
                         strcat(story," vehicles crashed.  ");
                      }
                      else strcat(story,"One vehicle crashed.  ");
@@ -1403,9 +1398,9 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   }
                   strcat(story,"&r");
                }
-               if (!ccs)
+               if(!ccs)
                {
-                  if (!LCSrandom(8))
+                  if(!LCSrandom(8))
                   {
                       if(crime[CRIME_TAGGING])
                       {
@@ -1483,9 +1478,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          strcat(story," - ");
          if(ns.crime[1]>2)
          {
-            char num[20];
-            itoa(ns.crime[1],num,10);
-            strcat(story,num);
+            strcat(story,ns.crime[1]);
             strcat(story," bodies were "); //Gruesome pile, large pile.
          }
          else if(ns.crime[1]>1)strcat(story," Two bodies were ");
@@ -1654,9 +1647,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
          strcat(story,"\"We now believe that ");
          strcat(story,ns.cr->propername);
          strcat(story," was taken ");
-         char num[20];
-         itoa(ns.cr->joindays-1,num,10);
-         strcat(story,num);
+         strcat(story,ns.cr->joindays-1);
          strcat(story," days ago, by a person or persons as yet undetermined.  ");
          strcat(story,"We have several leads and are confident that we will ");
          strcat(story,"bring ");
@@ -1732,11 +1723,11 @@ void loadgraphics(void)
    }
 }
 
-void displaycenterednewsfont(const char *str,int y)
+void displaycenterednewsfont(const std::string& str,int y)
 {
    int width=-1;
    int s;
-   for(s=0;s<(int)strlen(str);s++)
+   for(s=0;s<(int)str.length();s++)
    {
       if(str[s]>='A'&&str[s]<='Z')width+=6;
       else if(str[s]=='\'')width+=4;
@@ -1745,7 +1736,7 @@ void displaycenterednewsfont(const char *str,int y)
 
    int x=39-width/2;
 
-   for(s=0;s<(int)strlen(str);s++)
+   for(s=0;s<(int)str.length();s++)
    {
       if((str[s]>='A'&&str[s]<='Z')||str[s]=='\'')
       {
@@ -1754,7 +1745,7 @@ void displaycenterednewsfont(const char *str,int y)
          else p=26;
          int lim=6;
          if(str[s]=='\'')lim=4;
-         if(s==(int)strlen(str)-1)lim--;
+         if(s==(int)str.length()-1)lim--;
          for(int x2=0;x2<lim;x2++)
          {
             for(int y2=0;y2<7;y2++)
@@ -1800,9 +1791,9 @@ void displaycenterednewsfont(const char *str,int y)
    }
 }
 
-void displaycenteredsmallnews(const char *str,int y)
+void displaycenteredsmallnews(const std::string& str,int y)
 {
-   int x=39-((strlen(str)-1)>>1);
+   int x=39-((str.length()-1)>>1);
    move(y,x);
    set_color(COLOR_BLACK,COLOR_WHITE,0);
    addstr(str);

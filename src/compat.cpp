@@ -55,7 +55,11 @@
 * Revision 1.3  2004/06/30 22:46:33  sadler
 * Moved itoa() from game into compat.cpp
 *
-*
+* itoa() removed 2014/07/01 yetisyny
+* - it's unnecessary, use tostring() or toCstring() instead
+* - for exact same functionality as itoa(value,str,10) use strcpy(str,value)
+* - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
+* - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
 /* Headers for Portability */
@@ -73,7 +77,6 @@
    #include <windows.h>
    #ifndef __STRICT_ANSI__
       #define HAS_STRICMP
-      #define HAS_ITOA
    #endif
    #ifdef __MINGW32__
       #include <iostream>
@@ -172,7 +175,7 @@ void alarmset(int t)
    ptime=GetTickCount()+t;
    #else
    /* If the signal handler is not set up set it up now */
-   if(!init_alarm)initalarm();
+   if(!init_alarm) initalarm();
    // setitimer() will start a timer, pause() will stop the process until a
    // SGIALRM from the timer is recieved. This will be caught be alarmHandler()
    // which will turn off the timer and the process will resume.
@@ -189,42 +192,13 @@ void alarmwait()
    struct itimerval timer_now;
    getitimer(ITIMER_REAL,&timer_now);
    //If the timer is on we will wait for it to complete...
-   if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec)pause();
+   if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec) pause();
    #endif
 }
 
 void pause_ms(int t)
 {
    alarmset(t);
+   refresh();
    alarmwait();
 }
-
-#ifndef HAS_ITOA
-// Portable equivalent of Windows itoa() function.
-// This function is fully ported and works with any base from 2 to 36.
-// Ensure c-string is of sufficient size.
-// (65 bytes is enough for any int and any base, even on 64-bit architectures.)
-char* itoa(int value,char* str,int base)
-{
-   if(base<2||base>36) { *str=0; return str; } // invalid base, return empty string
-   char *p=str,*q=str,c; // pointers to the string
-   if(base==10)
-   {  // itoa() outputs signed integers for base 10
-      int i;
-      do { i=value; value/=base; // this loop puts the digits in... except backwards, we'll have to reverse the string later
-         *p++="9876543210123456789"[i-value*base+9]; // digit from 0 to 9, either positive or negative
-      } while(value); // we're done once value is zero
-      if(i<0) *p++='-'; // minus sign for negative numbers
-   }
-   else
-   {  // itoa() outputs unsigned integers for bases other than 10
-      unsigned i,v=(unsigned)value,b=(unsigned)base;
-      do { i=v; v/=b; // this loop puts the digits in... except backwards, we'll have to reverse the string later
-         *p++="0123456789abcdefghijklmnopqrstuvwxyz"[i-v*b]; // digit from 0 to 9 or a to z, always positive
-      } while(v); // we're done once v is zero
-   }
-   *p--=0; // C-strings have to be null-terminated
-   while(p>q) { c=*p; *p--=*q; *q++=c; } // reverse the string using fancy pointer magic
-   return str; // the string is both returned and the string input as a parameter set to that same string
-}
-#endif

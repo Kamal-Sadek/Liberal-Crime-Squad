@@ -29,7 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <includes.h>
 #include <externs.h>
 
-Skill::Skill(const char* inputXml)
+Skill::Skill(const std::string& inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
@@ -41,11 +41,11 @@ Skill::Skill(const char* inputXml)
       std::string tag = xml.GetTagName();
 
       if (tag == "associated_attribute")
-         associated_attribute = atoi(xml.GetData().c_str());
+         associated_attribute = atoi(xml.GetData());
       else if (tag == "skill")
-         skill = atoi(xml.GetData().c_str());
+         skill = atoi(xml.GetData());
       else if (tag == "value")
-         value = atoi(xml.GetData().c_str());
+         value = atoi(xml.GetData());
    }
 }
 
@@ -163,7 +163,7 @@ int Skill::get_attribute() const
    return associated_attribute;
 }
 
-Attribute::Attribute(const char* inputXml)
+Attribute::Attribute(const std::string& inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
@@ -175,9 +175,9 @@ Attribute::Attribute(const char* inputXml)
       std::string tag = xml.GetTagName();
 
       if (tag == "attribute")
-         attribute = atoi(xml.GetData().c_str());
+         attribute = atoi(xml.GetData());
       else if (tag == "value")
-         value = atoi(xml.GetData().c_str());
+         value = atoi(xml.GetData());
    }
 }
 
@@ -504,7 +504,7 @@ void Creature::creatureinit(void)
    deathpenalty=0;
 }
 
-Creature::Creature(const char* inputXml)
+Creature::Creature(const std::string& inputXml)
  : weapon(NULL), armor(NULL), prisoner(NULL)
 {
    CMarkup xml;
@@ -518,20 +518,20 @@ Creature::Creature(const char* inputXml)
       std::string tag = xml.GetTagName();
 
       if (tag == "attribute" && attributesi < ATTNUM)
-         attributes[attributesi++] = Attribute(xml.GetSubDoc().c_str());
+         attributes[attributesi++] = Attribute(xml.GetSubDoc());
       else if (tag == "skill" && skillsi < SKILLNUM)
-         skills[skillsi++] = Skill(xml.GetSubDoc().c_str());
+         skills[skillsi++] = Skill(xml.GetSubDoc());
       else if (tag == "skill_experience" && skill_experiencei < SKILLNUM)
-         skill_experience[skill_experiencei++] = atoi(xml.GetData().c_str());
+         skill_experience[skill_experiencei++] = atoi(xml.GetData());
       else if (tag == "weapon")
       {
-         Weapon w(xml.GetSubDoc().c_str());
+         Weapon w(xml.GetSubDoc());
          if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
             give_weapon(w,NULL);
       }
       else if (tag == "armor")
       {
-         armor = new Armor(xml.GetSubDoc().c_str());
+         armor = new Armor(xml.GetSubDoc());
          if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
          {
             delete armor;
@@ -543,103 +543,103 @@ Creature::Creature(const char* inputXml)
       else if (tag == "propername")
          strcpy(propername,xml.GetData());
       else if (tag == "gender_conservative")
-         gender_conservative = atoi(xml.GetData().c_str());
+         gender_conservative = atoi(xml.GetData());
       else if (tag == "gender_liberal")
-         gender_liberal = atoi(xml.GetData().c_str());
+         gender_liberal = atoi(xml.GetData());
       else if (tag == "squadid")
-         squadid = atoi(xml.GetData().c_str());
+         squadid = atoi(xml.GetData());
       else if (tag == "age")
-         age = atoi(xml.GetData().c_str());
+         age = atoi(xml.GetData());
       else if (tag == "birthday_month")
-         birthday_month = atoi(xml.GetData().c_str());
+         birthday_month = atoi(xml.GetData());
       else if (tag == "birthday_day")
-         birthday_day = atoi(xml.GetData().c_str());
+         birthday_day = atoi(xml.GetData());
       else if (tag == "exists")
-         exists = atoi(xml.GetData().c_str());
+         exists = atoi(xml.GetData());
       else if (tag == "align")
-         align = atoi(xml.GetData().c_str());
+         align = atoi(xml.GetData());
       else if (tag == "alive")
-         alive = atoi(xml.GetData().c_str());
+         alive = atoi(xml.GetData());
       else if (tag == "type")
-         type = atoi(xml.GetData().c_str());
+         type = atoi(xml.GetData());
       else if (tag == "type_idname")
          type_idname = xml.GetData();
       else if (tag == "infiltration")
-         infiltration = atof(xml.GetData().c_str());
+         infiltration = atof(xml.GetData());
       else if (tag == "animalgloss")
-         animalgloss = atoi(xml.GetData().c_str());
+         animalgloss = atoi(xml.GetData());
       else if (tag == "specialattack")
-         specialattack = atoi(xml.GetData().c_str());
+         specialattack = atoi(xml.GetData());
       else if (tag == "clinic")
-         clinic = atoi(xml.GetData().c_str());
+         clinic = atoi(xml.GetData());
       else if (tag == "dating")
-         dating = atoi(xml.GetData().c_str());
+         dating = atoi(xml.GetData());
       else if (tag == "hiding")
-         hiding = atoi(xml.GetData().c_str());
+         hiding = atoi(xml.GetData());
       else if (tag == "trainingtime")
-         trainingtime = atoi(xml.GetData().c_str());
+         trainingtime = atoi(xml.GetData());
       else if (tag == "trainingsubject")
-         trainingsubject = atoi(xml.GetData().c_str());
+         trainingsubject = atoi(xml.GetData());
       else if (tag == "prisoner")
       {
          xml.IntoElem();
-         prisoner = new Creature(xml.GetSubDoc().c_str());
+         prisoner = new Creature(xml.GetSubDoc());
          xml.OutOfElem();
       }
       else if (tag == "sentence")
-         sentence = atoi(xml.GetData().c_str());
+         sentence = atoi(xml.GetData());
       else if (tag == "confessions")
-         confessions = atoi(xml.GetData().c_str());
+         confessions = atoi(xml.GetData());
       else if (tag == "deathpenalty")
-         deathpenalty = atoi(xml.GetData().c_str());
+         deathpenalty = atoi(xml.GetData());
       else if (tag == "joindays")
-         joindays = atoi(xml.GetData().c_str());
+         joindays = atoi(xml.GetData());
       else if (tag == "deathdays")
-         deathdays = atoi(xml.GetData().c_str());
+         deathdays = atoi(xml.GetData());
       else if (tag == "id")
-         id = atoi(xml.GetData().c_str());
+         id = atoi(xml.GetData());
       else if (tag == "hireid")
-         hireid = atoi(xml.GetData().c_str());
+         hireid = atoi(xml.GetData());
       else if (tag == "meetings")
-         meetings = atoi(xml.GetData().c_str());
+         meetings = atoi(xml.GetData());
       else if (tag == "forceinc")
-         forceinc = atoi(xml.GetData().c_str());
+         forceinc = atoi(xml.GetData());
       else if (tag == "stunned")
-         stunned = atoi(xml.GetData().c_str());
+         stunned = atoi(xml.GetData());
       else if (tag == "clip")
       {
-         Clip* c = new Clip(xml.GetSubDoc().c_str());
+         Clip* c = new Clip(xml.GetSubDoc());
          if (getcliptype(c->get_itemtypename()) != -1)
             clips.push_back(c);
          else
             delete c;
       }
       else if (tag == "has_thrown_weapon")
-         has_thrown_weapon = atoi(xml.GetData().c_str());
+         has_thrown_weapon = atoi(xml.GetData());
       else if (tag == "money")
-         money = atoi(xml.GetData().c_str());
+         money = atoi(xml.GetData());
       else if (tag == "juice")
-         juice = atoi(xml.GetData().c_str());
+         juice = atoi(xml.GetData());
       else if (tag == "income")
-         income = atoi(xml.GetData().c_str());
+         income = atoi(xml.GetData());
       else if (tag == "wound" && woundi < BODYPARTNUM)
-         wound[woundi++] = atoi(xml.GetData().c_str());
+         wound[woundi++] = atoi(xml.GetData());
       else if (tag == "blood")
-         blood = atoi(xml.GetData().c_str());
+         blood = atoi(xml.GetData());
       else if (tag == "special" && speciali < SPECIALWOUNDNUM)
-         special[speciali++] = atoi(xml.GetData().c_str());
+         special[speciali++] = atoi(xml.GetData());
       else if (tag == "crimes_suspected" && crimesi < LAWFLAGNUM)
-         crimes_suspected[crimesi++] = atoi(xml.GetData().c_str());
+         crimes_suspected[crimesi++] = atoi(xml.GetData());
       else if (tag == "heat")
-         heat = atoi(xml.GetData().c_str());
+         heat = atoi(xml.GetData());
       else if (tag == "location")
-         location = atoi(xml.GetData().c_str());
+         location = atoi(xml.GetData());
       else if (tag == "worklocation")
-         worklocation = atoi(xml.GetData().c_str());
+         worklocation = atoi(xml.GetData());
       else if (tag == "cantbluff")
-         cantbluff = atoi(xml.GetData().c_str());
+         cantbluff = atoi(xml.GetData());
       else if (tag == "base")
-         base = atoi(xml.GetData().c_str());
+         base = atoi(xml.GetData());
       else if (tag == "activity")
       {
          xml.IntoElem();
@@ -647,26 +647,26 @@ Creature::Creature(const char* inputXml)
          {
             tag = xml.GetTagName();
             if (tag == "type")
-               activity.type = atoi(xml.GetData().c_str());
+               activity.type = atoi(xml.GetData());
             else if (tag == "arg")
-               activity.arg = atoi(xml.GetData().c_str());
+               activity.arg = atoi(xml.GetData());
             else if (tag == "arg2")
-               activity.arg2 = atoi(xml.GetData().c_str());
+               activity.arg2 = atoi(xml.GetData());
          }
          xml.OutOfElem();
       }
       else if (tag == "carid")
-         carid = atoi(xml.GetData().c_str());
+         carid = atoi(xml.GetData());
       else if (tag == "is_driver")
-         is_driver = atoi(xml.GetData().c_str());
+         is_driver = atoi(xml.GetData());
       else if (tag == "pref_carid")
-         pref_carid = atoi(xml.GetData().c_str());
+         pref_carid = atoi(xml.GetData());
       else if (tag == "pref_is_driver")
-         pref_is_driver = atoi(xml.GetData().c_str());
+         pref_is_driver = atoi(xml.GetData());
       else if (tag == "flag")
-         flag = atoi(xml.GetData().c_str());
+         flag = atoi(xml.GetData());
       else if (tag == "dontname")
-         dontname = atoi(xml.GetData().c_str());
+         dontname = atoi(xml.GetData());
    }
 }
 
@@ -1369,7 +1369,7 @@ void UniqueCreatures::newPresident()
    }
 }
 
-UniqueCreatures::UniqueCreatures(const char * inputXml)
+UniqueCreatures::UniqueCreatures(const std::string& inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
@@ -1385,19 +1385,19 @@ UniqueCreatures::UniqueCreatures(const char * inputXml)
          xml.IntoElem();
          xml.FindElem();
          if(tag == "CEO")
-            CEO_ = Creature(xml.GetSubDoc().c_str());
+            CEO_ = Creature(xml.GetSubDoc());
          else
-            Pres_ = Creature(xml.GetSubDoc().c_str());
+            Pres_ = Creature(xml.GetSubDoc());
          xml.OutOfElem();
       }
       else if (tag == "CEO_ID")
-         CEO_ID = atoi(xml.GetData().c_str());
+         CEO_ID = atoi(xml.GetData());
       else if (tag == "CEO_state")
-         CEO_state = atoi(xml.GetData().c_str());
+         CEO_state = atoi(xml.GetData());
       else if (tag == "Pres_ID")
-         Pres_ID = atoi(xml.GetData().c_str());
+         Pres_ID = atoi(xml.GetData());
       else if (tag == "Pres_state")
-         Pres_state = atoi(xml.GetData().c_str());
+         Pres_state = atoi(xml.GetData());
 
    }
 }

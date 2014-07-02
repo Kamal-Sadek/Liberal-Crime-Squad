@@ -525,7 +525,7 @@ char radio_broadcast(void)
 
    getkey();
 
-   int segmentpower=0,partysize=0,p=0;
+   int segmentpower=0,partysize=squadalive(activesquad),p=0;
 
    for(p=0;p<6;p++)
    {
@@ -542,7 +542,6 @@ char radio_broadcast(void)
          segmentpower+=activesquad->squad[p]->get_skill(SKILL_BUSINESS);
          segmentpower+=activesquad->squad[p]->get_skill(SKILL_PERSUASION);
          activesquad->squad[p]->train(SKILL_PERSUASION,50);
-         partysize++;
       }
    }
 
@@ -792,7 +791,7 @@ char news_broadcast(void)
 
    getkey();
 
-   int segmentpower=0,partysize=0;
+   int segmentpower=0,partysize=squadalive(activesquad);
    for(p=0;p<6;p++)
    {
       if(activesquad->squad[p]!=NULL)
@@ -808,7 +807,6 @@ char news_broadcast(void)
          segmentpower+=activesquad->squad[p]->get_skill(SKILL_BUSINESS);
          segmentpower+=activesquad->squad[p]->get_skill(SKILL_PERSUASION);
          activesquad->squad[p]->train(SKILL_PERSUASION,50);
-         partysize++;
       }
    }
 

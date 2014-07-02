@@ -74,7 +74,7 @@ void review(void)
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr(0,0,"Review your Liberals and Assemble Squads");
-      mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴컴");
+      mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
 
       int y=2;
       for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++,y++)
@@ -167,10 +167,10 @@ void review(void)
 
       int c=getkey();
 
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM)page++;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM) page++;
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>='a'&&c<='s')
       {
@@ -192,11 +192,10 @@ void review(void)
       if(c=='t')squadlessbaseassign();
       if(c=='u')promoteliberals();
       if(c=='$')
-      {  
-          char needsClear;
-          fundreport(needsClear);
-          if (needsClear)
-            erase();
+      {
+          char clearformess=false;
+          fundreport(clearformess);
+          if(clearformess) erase();
       }
     }
 }
@@ -281,7 +280,7 @@ void review_mode(short mode)
          break;
       }
       move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴횸OCATION컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
 
       move(1,57);
       switch(mode)
@@ -409,7 +408,7 @@ void review_mode(short mode)
                else
                {
                   set_color(COLOR_BLACK,COLOR_BLACK,1);
-                  addstr("컴컴컴�");
+                  addstr("컴컴컴�"); // 7 characters
                }
                break;
             }
@@ -524,15 +523,9 @@ void review_mode(short mode)
 
                move(23,0);
 
-               if(temppool[p]->align!=1)addstr("Press N to change this Automaton's Code Name");
-               else
-               {
-                  addstr("N - Change Code Name      G - Fix Gender Label");
-               }
-               if(temppool.size()>1)
-               {
-                  addstr("    LEFT/RIGHT - View Others");
-               }
+               if(temppool[p]->align!=1) addstr("Press N to change this Automaton's Code Name");
+               else addstr("N - Change Code Name      G - Fix Gender Label");
+               if(temppool.size()>1) addstr("    LEFT/RIGHT - View Others");
                move(24,0);
                addstr("Press any other key to continue the Struggle");
                addstr("    UP/DOWN  - More Info");
@@ -542,7 +535,7 @@ void review_mode(short mode)
                if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
                {
                   int sx=1;
-                  if(c==KEY_LEFT)sx=-1;
+                  if(c==KEY_LEFT) sx=-1;
                   p=(p+(int)temppool.size()+sx)%((int)temppool.size());
                   continue;
                }
@@ -550,14 +543,14 @@ void review_mode(short mode)
                if(c==KEY_DOWN)
                {
                   page++;
-                  if(page>2)page=0;
+                  if(page>2) page=0;
                   continue;
                }
 
                if(c==KEY_UP)
                {
                   page--;
-                  if(page<0)page=2;
+                  if(page<0) page=2;
                   continue;
                }
 
@@ -565,12 +558,11 @@ void review_mode(short mode)
                {
                   move(23,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("What is the new code name?                                       ");
+                  addstr("What is the new code name?                                       "); // 65 characters
                   move(24,0);
-                  addstr("                                                                    ");
+                  addstr("                                                                    "); // 68 spaces
 
-                  move(24,0);
-                  enter_name(temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
+                  enter_name(24,0,temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
                }
                else if(c=='g' && temppool[p]->align==1)
                {
@@ -585,13 +577,13 @@ void review_mode(short mode)
 
                   move(22,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Do you want to permanently release this squad member from the LCS?          ");
+                  addstr("Do you want to permanently release this squad member from the LCS?          "); // 76 characters
 
                   move(23,0);
-                  addstr("If the member has low heart they may go to the police.                         ");
+                  addstr("If the member has low heart they may go to the police.                         "); // 79 characters
 
                   move(24,0);
-                  addstr("  C - Confirm       Any other key to continue                                                ");
+                  addstr("  C - Confirm       Any other key to continue                                                "); // 93 characters (why over 80?)
 
                   int c=getkey();
 
@@ -600,12 +592,12 @@ void review_mode(short mode)
                      // Release squad member
                      move(22,0);
                      addstr(temppool[p]->name, gamelog);
-                     addstr(" has been released.                                                                      ", gamelog);
+                     addstr(" has been released.                                                                      ", gamelog); // 89 characters (why over 80?)
                      move(23,0);
                      gamelog.newline(); //New line.
-                     addstr("                                                                                         ");
+                     addstr("                                                                                         "); // 89 characters (why over 80?)
                      move(24,0);
-                     addstr("                                                                                         ");
+                     addstr("                                                                                         "); // 89 characters (why over 80?)
 
                      getkey();
 
@@ -759,25 +751,17 @@ void review_mode(short mode)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("Choose squad member to replace ");
 
-         if (swap == NULL) {
+         if(swap == NULL) {
             int c=getkey();
 
-            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
-            if(c<'a'||c>'s')
-            {
-               // Not within correct range
-               break;
-            }
+            if(c<'a'||c>'s') break; // Not within correct range
 
             // Get first member to swap
             int p=page*19+(int)(c-'a');
 
-            if(p<(int)temppool.size())
-            {
-               swap=temppool[p];
-               swapPos = p;
-            }
+            if(p<(int)temppool.size()) swap=temppool[swapPos=p];
          }
          else { // non-null swap
             addstr(swap->name);
@@ -785,13 +769,9 @@ void review_mode(short mode)
 
             int c=getkey();
 
-            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
-            if(c<'a'||c>'s')
-            {
-               // Not within correct range
-               break;
-            }
+            if(c<'a'||c>'s') break; // Not within correct range
 
             Creature *swap2 = NULL;
 
@@ -810,7 +790,7 @@ void review_mode(short mode)
 
                for (int i = 0; i < (int)pool.size(); i++) {
                   if (pool[i]->id == swap2->id) {
-                     pool.insert (pool.begin() + i + (swapPos < p ? 1 : 0), swap);
+                     pool.insert (pool.begin() + i + (swapPos < p), swap);
                      break;
                   }
                }
@@ -832,12 +812,8 @@ void review_mode(short mode)
 /* base - review - assemble a squad */
 void assemblesquad(squadst *cursquad)
 {
-   int culloc=-1;
-   int p;
-   if(cursquad!=NULL)
-   {
-      culloc=cursquad->squad[0]->location;
-   }
+   int culloc=-1,p;
+   if(cursquad!=NULL) culloc=cursquad->squad[0]->location;
 
    char newsquad=0;
    if(cursquad==NULL)
@@ -867,27 +843,21 @@ void assemblesquad(squadst *cursquad)
    for(int sl=0;sl<(int)squad.size();sl++)
    {
       squadloc[sl]=squad[sl]->squad[0]->location;
-      if(squadloc[sl]!=-1)
-      {
-         if(location[squadloc[sl]]->renting==RENTING_NOCONTROL)
-         {
-            squadloc[sl]=-1;
-         }
-      }
+      if(squadloc[sl]!=-1) if(location[squadloc[sl]]->renting==RENTING_NOCONTROL)
+         squadloc[sl]=-1;
    }
 
-   int page=0,squadsize;
+   int page=0,partysize;
 
    while(true)
    {
-      squadsize=0;
-      for(p=0;p<6;p++)if(cursquad->squad[p]!=NULL)squadsize++;
+      partysize=squadsize(cursquad);
 
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(0,0);
-      if(squadsize<6)addstr("Assemble the squad!");
+      if(partysize<6)addstr("Assemble the squad!");
       else addstr("The squad is full.");
 
       if(newsquad)
@@ -903,7 +873,7 @@ void assemblesquad(squadst *cursquad)
       }
 
       move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴");
+      addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴"); // 80 characters
 
       int y=2;
       for(p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
@@ -967,9 +937,9 @@ void assemblesquad(squadst *cursquad)
 		move(23,50);
       addstr("V - View a Liberal");
       move(24,0);
-      if(squadsize>0)addstr("Enter - The squad is ready.");
+      if(partysize>0)addstr("Enter - The squad is ready.");
       else addstr("Enter - I need no squad!");
-      if(squadsize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(24,40);
       addstr("9 - Dissolve the squad.");
@@ -1035,7 +1005,7 @@ void assemblesquad(squadst *cursquad)
                   }
                   if(flipstart)cursquad->squad[5]=NULL;
                }
-               else if(squadsize<6)
+               else if(partysize<6)
                {
                   for(int pt=0;pt<6;pt++)
                   {
@@ -1091,8 +1061,7 @@ void assemblesquad(squadst *cursquad)
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
          //CHECK IF GOOD
-         char good=1;
-         char care=0;
+         char good=1,care=0;
 
          for(int p=0;p<6;p++)
          {
@@ -1136,40 +1105,20 @@ void assemblesquad(squadst *cursquad)
    }
 
    //FINALIZE NEW SQUADS
-   char hasmembers=0;
-
-   for(p=0;p<6;p++)
-   {
-      if(cursquad->squad[p]!=NULL)
-      {
-         hasmembers=1;
-         break;
-      }
-   }
+   bool hasmembers=squadsize(cursquad)>0;
 
    if(newsquad)
    {
       if(hasmembers)
       {
          move(22,0);
-         addstr("                                                                               ");
+         addstr("                                                                               "); // 79 characters
          move(23,0);
-         addstr("What shall we designate this Liberal squad?                                    ");
+         addstr("What shall we designate this Liberal squad?                                    "); // 79 characters
          move(24,0);
-         addstr("                                                                               ");
+         addstr("                                                                               "); // 79 characters
 
-         keypad(stdscr,FALSE);
-         raw_output(FALSE);
-         echo();
-         curs_set(1);
-         char tempstr[100];
-         mvgetnstr(24,0,tempstr,99);
-         tempstr[39] = 0;
-         strcpy(cursquad->name, tempstr);
-         curs_set(0);
-         noecho();
-         raw_output(TRUE);
-         keypad(stdscr,TRUE);
+         enter_name(24,0,cursquad->name,SQUAD_NAMELEN,"The Liberal Crime Squad");
 
          squad.push_back(cursquad);
       }
@@ -1179,23 +1128,16 @@ void assemblesquad(squadst *cursquad)
    //NUKE ALL EMPTY SQUADS
    for(int sq=squad.size()-1;sq>=0;sq--)
    {
-      hasmembers=0;
+      hasmembers=false;
 
       for(int p=0;p<6;p++)
-      {
          if(squad[sq]->squad[p]!=NULL)
-         {
-            hasmembers=1;
-            break;
-         }
-      }
+         {  hasmembers=true; break; }
 
       if(!hasmembers && mode==GAMEMODE_BASE)
       {
          if(squadloc[sq]!=-1)
-         {
             location[squadloc[sq]]->getloot(squad[sq]->loot);
-         }
 
          if(activesquad==squad[sq])activesquad=NULL;
          delete_and_remove(squad,sq);
@@ -1229,7 +1171,7 @@ void squadlessbaseassign(void)
       move(0,0);
       addstr("New Bases for Squadless Liberals");
       move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
+      addstr("컴컴CODE NAME컴컴컴컴컴컴CURRENT BASE컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
       move(1,51);
       addstr("NEW BASE");
 
@@ -1417,7 +1359,7 @@ void promoteliberals(void)
       move(0,0);
       addstr("Promote the Elite Liberals");
       move(1,0);
-      addstr("컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+      addstr("컴컴CODE NAME컴컴컴컴컴컴컴CURRENT CONTACT컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
       move(1,54);
       addstr("CONTACT AFTER PROMOTION");
 

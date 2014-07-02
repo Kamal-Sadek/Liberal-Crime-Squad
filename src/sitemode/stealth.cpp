@@ -153,7 +153,7 @@ void disguisecheck(int timer)
       " laughs nervously."
    };
 
-   int weapon=0,squadsize=0,blew_it=-1;
+   int weapon=0,partysize=squadsize(activesquad),blew_it=-1;
    bool forcecheck=false,spotted=false;
    //int weaponar[6]={0};
 
@@ -163,7 +163,6 @@ void disguisecheck(int timer)
    for(int i=0;i<6;i++)
    {
       if(activesquad->squad[i]==NULL)break;
-      squadsize++;
       if(activesquad->squad[i]->is_naked() &&
          activesquad->squad[i]->animalgloss!=ANIMALGLOSS_ANIMAL)forcecheck=true;
       int thisweapon=weaponcheck(*activesquad->squad[i]);
@@ -264,7 +263,7 @@ void disguisecheck(int timer)
                int result = activesquad->squad[i]->skill_roll(SKILL_STEALTH);
                result -= timer;
                // Sneaking with a party is hard
-               if(result < (stealth_difficulty + squadsize - 1))
+               if(result < (stealth_difficulty + partysize - 1))
                   spotted = true;
             }
 
@@ -310,7 +309,7 @@ void disguisecheck(int timer)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             move(16,1);
 
-            if(squadsize > 1)
+            if(partysize > 1)
                addstr("The squad", gamelog);
             else
                addstr(activesquad->squad[0]->name, gamelog);
@@ -349,7 +348,7 @@ void disguisecheck(int timer)
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             move(16,1);
 
-            if(squadsize > 1)
+            if(partysize > 1)
                addstr("The squad", gamelog);
             else
                addstr(activesquad->squad[0]->name, gamelog);

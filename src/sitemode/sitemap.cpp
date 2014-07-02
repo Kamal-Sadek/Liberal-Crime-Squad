@@ -773,15 +773,15 @@ configSiteTile::configSiteTile(const std::string& value)
 
 void configSiteTile::configure(const std::string& command, const std::string& value)
 {
-   if     (command == "XSTART")xstart     =atoi(value.c_str())+(MAPX>>1);
-   else if(command == "XEND"  )xend       =atoi(value.c_str())+(MAPX>>1);
-   else if(command == "X"     )xstart=xend=atoi(value.c_str())+(MAPX>>1);
-   else if(command == "YSTART")ystart     =atoi(value.c_str());
-   else if(command == "YEND"  )yend       =atoi(value.c_str());
-   else if(command == "Y"     )ystart=yend=atoi(value.c_str());
-   else if(command == "ZSTART")zstart     =atoi(value.c_str());
-   else if(command == "ZEND"  )zend       =atoi(value.c_str());
-   else if(command == "Z"     )zstart=zend=atoi(value.c_str());
+   if     (command == "XSTART")xstart     =atoi(value)+(MAPX>>1);
+   else if(command == "XEND"  )xend       =atoi(value)+(MAPX>>1);
+   else if(command == "X"     )xstart=xend=atoi(value)+(MAPX>>1);
+   else if(command == "YSTART")ystart     =atoi(value);
+   else if(command == "YEND"  )yend       =atoi(value);
+   else if(command == "Y"     )ystart=yend=atoi(value);
+   else if(command == "ZSTART")zstart     =atoi(value);
+   else if(command == "ZEND"  )zend       =atoi(value);
+   else if(command == "Z"     )zstart=zend=atoi(value);
    else if(command == "NOTE"  )
    {
       if     (value == "ADD"     )addtype=SITEMAP_ADDTYPE_OR;
@@ -810,12 +810,12 @@ configSiteScript::configSiteScript(const std::string& value)
 
 void configSiteScript::configure(const std::string& command, const std::string& value)
 {
-   if     (command=="XSTART")xstart=atoi(value.c_str())+(MAPX>>1);
-   else if(command=="XEND"  )xend  =atoi(value.c_str())+(MAPX>>1);
-   else if(command=="YSTART")ystart=atoi(value.c_str());
-   else if(command=="YEND"  )yend  =atoi(value.c_str());
-   else if(command=="ZSTART")zstart=atoi(value.c_str());
-   else if(command=="ZEND"  )zend  =atoi(value.c_str());
+   if     (command=="XSTART")xstart=atoi(value)+(MAPX>>1);
+   else if(command=="XEND"  )xend  =atoi(value)+(MAPX>>1);
+   else if(command=="YSTART")ystart=atoi(value);
+   else if(command=="YEND"  )yend  =atoi(value);
+   else if(command=="ZSTART")zstart=atoi(value);
+   else if(command=="ZEND"  )zend  =atoi(value);
 }
 
 void configSiteScript::build()
@@ -1079,16 +1079,16 @@ configSiteSpecial::configSiteSpecial(const std::string& value)
 
 void configSiteSpecial::configure(const std::string& command, const std::string& value)
 {
-   if     (command=="XSTART")xstart     =atoi(value.c_str())+(MAPX>>1);
-   else if(command=="XEND"  )xend       =atoi(value.c_str())+(MAPX>>1);
-   else if(command=="X"     )xstart=xend=atoi(value.c_str())+(MAPX>>1);
-   else if(command=="YSTART")ystart     =atoi(value.c_str());
-   else if(command=="YEND"  )yend       =atoi(value.c_str());
-   else if(command=="Y"     )ystart=yend=atoi(value.c_str());
-   else if(command=="ZSTART")zstart     =atoi(value.c_str());
-   else if(command=="ZEND"  )zend       =atoi(value.c_str());
-   else if(command=="Z"     )zstart=zend=atoi(value.c_str());
-   else if(command=="FREQ"  )freq       =atoi(value.c_str());
+   if     (command=="XSTART")xstart     =atoi(value)+(MAPX>>1);
+   else if(command=="XEND"  )xend       =atoi(value)+(MAPX>>1);
+   else if(command=="X"     )xstart=xend=atoi(value)+(MAPX>>1);
+   else if(command=="YSTART")ystart     =atoi(value);
+   else if(command=="YEND"  )yend       =atoi(value);
+   else if(command=="Y"     )ystart=yend=atoi(value);
+   else if(command=="ZSTART")zstart     =atoi(value);
+   else if(command=="ZEND"  )zend       =atoi(value);
+   else if(command=="Z"     )zstart=zend=atoi(value);
+   else if(command=="FREQ"  )freq       =atoi(value);
 }
 
 void configSiteSpecial::build()
@@ -1134,7 +1134,7 @@ configSiteUnique::configSiteUnique(const std::string& value)
 
 void configSiteUnique::configure(const std::string& command, const std::string& value)
 {
-   if(command == "Z")zstart=zend=atoi(value.c_str());
+   if(command == "Z")zstart=zend=atoi(value);
 }
 
 struct coordinates
@@ -1265,7 +1265,7 @@ configSiteLoot::configSiteLoot(const std::string& value)
 
 void configSiteLoot::configure(const std::string& command, const std::string& value)
 {
-   if(command=="WEIGHT")weight=atoi(value.c_str());
+   if(command=="WEIGHT")weight=atoi(value);
 }
 
 void configSiteLoot::build()

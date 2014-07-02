@@ -277,15 +277,11 @@ void mode_base(void)
          nonsighttime=0;
       }
 
-      int partysize=0;
-      if(activesquad!=NULL)
+      int partysize=squadsize(activesquad);
+      if(activesquad!=NULL&&!partysize)
       {
-         for(int p=0;p<6;p++) if(activesquad->squad[p]!=NULL) partysize++;
-         if(!partysize)
-         {
-            delete_and_remove(squad,getsquad(activesquad->id));
-            activesquad=NULL;
-         }
+         delete_and_remove(squad,getsquad(activesquad->id));
+         activesquad=NULL;
       }
 
       int safenumber=0;
@@ -370,30 +366,22 @@ void mode_base(void)
             }
          }
 
-         if(haveflag)
+         if(haveflag) for(int y=0;y<7;y++)
          {
-            for(int p=0;p<7;p++)
+            move(y+10,31);
+            if(y<6)
             {
-               move(p+10,31);
-               if(p<4)
-               {
-                  set_color(COLOR_WHITE,COLOR_BLUE,1);
-                  if(p==0) addstr(":.:.:.:.:");
-                  else if(p<3) addstr(":::::::::");
-                  else for(int i=0;i<9;i++) addchar((char)CH_LOWER_HALF_BLOCK);
-                  set_color(COLOR_WHITE,COLOR_RED,1);
-                  for(int i=9;i<18;i++) addchar((char)CH_LOWER_HALF_BLOCK);
-               }
-               else
-               {
-                  if(p<6) set_color(COLOR_WHITE,COLOR_RED,1);
-                  else set_color(COLOR_RED,COLOR_BLACK,0);
-                  for(int i=0;i<18;i++)
-                  {
-                     if(p==6)addchar((char)CH_UPPER_HALF_BLOCK);
-                     else addchar((char)CH_LOWER_HALF_BLOCK);
-                  }
-               }
+               set_color(COLOR_WHITE,y<4?COLOR_BLUE:COLOR_RED,1);
+               if(y==0) addstr(":.:.:.:.:");
+               else if(y<3) addstr(":::::::::");
+               else for(int x=0;x<9;x++) addchar((char)CH_LOWER_HALF_BLOCK);
+               set_color(COLOR_WHITE,COLOR_RED,1);
+               for(int x=9;x<18;x++) addchar((char)CH_LOWER_HALF_BLOCK);
+            }
+            else
+            {
+               set_color(COLOR_RED,COLOR_BLACK,0);
+               for(int x=0;x<18;x++) addchar((char)CH_UPPER_HALF_BLOCK);
             }
          }
 
@@ -626,7 +614,7 @@ void mode_base(void)
          if(party_status==c-'1') fullstatus(party_status);
          else party_status=c-'1'; } break;
       case '$':
-          {  
+          {
               char needsClear;
               fundreport(needsClear);
               if (needsClear)

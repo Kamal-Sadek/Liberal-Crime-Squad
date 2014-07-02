@@ -3,25 +3,25 @@
 Weapon::Weapon(const WeaponType& seed, int number)
  : Item(seed, number), ammo_(0)
 {
-   
+
 }
 
-Weapon::Weapon(const char * inputXml)
+Weapon::Weapon(const std::string& inputXml)
  : Item(inputXml)
 {
    CMarkup xml;
-   xml.SetDoc (inputXml);
-   xml.FindElem ();
-   xml.IntoElem ();
-   
-   while (xml.FindElem ())
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+
+   while(xml.FindElem())
    {
-      std::string tag = xml.GetTagName ();
-      
-      if (tag == "loaded_cliptype")
-         loaded_cliptype_ = xml.GetData();
-      else if (tag == "ammo")
-         ammo_ = atoi(xml.GetData().c_str());
+      std::string tag=xml.GetTagName();
+
+      if(tag=="loaded_cliptype")
+         loaded_cliptype_=xml.GetData();
+      else if(tag=="ammo")
+         ammo_=atoi(xml.GetData());
    }
 }
 
@@ -32,9 +32,9 @@ string Weapon::showXml () const
    xml.IntoElem();
 
    addBaseValues(xml);
-   
+
    xml.AddElem("loaded_cliptype", loaded_cliptype_);
-   
+
    xml.AddElem("ammo", tostring(ammo_));
 
    return xml.GetDoc();
@@ -70,11 +70,11 @@ Weapon* Weapon::split(int number)
 {
    if (number > number_)
       number = number_;
-   
+
    Weapon* newi = this->clone();
    newi->number_ = number;
    this->number_ -= number;
-   
+
    return newi;
 }
 
@@ -91,7 +91,7 @@ bool Weapon::merge(Item& i)
          return true;
       }
    }
-   return false;   
+   return false;
 }
 
 bool Weapon::sort_compare_special(Item* other) const
@@ -122,17 +122,17 @@ const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool for
    {
       if (force_ranged && !attacks[i]->ranged)
          continue;
-      
+
       if (force_melee && attacks[i]->ranged)
          continue;
-      
+
       if (force_no_reload && attacks[i]->uses_ammo && ammo_ == 0)
          continue;
-      
+
       if (attacks[i]->uses_ammo && attacks[i]->ammotype != loaded_cliptype_ && ammo_ != 0)
          continue;
 
-      
+
       return attacks[i];
    }
    return NULL;
@@ -151,16 +151,16 @@ const string& Weapon::get_name() const
 
 const string& Weapon::get_name(unsigned subtype) const
    { return weapontype[getweapontype(itemtypename())]->get_name(subtype); }
-   
+
 const string& Weapon::get_shortname(unsigned subtype) const
    { return weapontype[getweapontype(itemtypename())]->get_shortname(subtype); }
 
 long Weapon::get_fencevalue() const
    { return weapontype[getweapontype(itemtypename())]->get_fencevalue(); }
-   
+
 bool Weapon::can_take_hostages() const
    { return weapontype[getweapontype(itemtypename())]->can_take_hostages(); }
-   
+
 bool Weapon::is_threatening() const
    { return weapontype[getweapontype(itemtypename())]->is_threatening(); }
 
@@ -172,40 +172,40 @@ bool Weapon::protects_against_kidnapping() const
 
 bool Weapon::has_musical_attack() const
    { return weapontype[getweapontype(itemtypename())]->has_musical_attack(); }
-   
+
 bool Weapon::is_instrument() const
    { return weapontype[getweapontype(itemtypename())]->is_instrument(); }
-   
+
 int Weapon::get_legality() const
    { return weapontype[getweapontype(itemtypename())]->get_legality(); }
-   
+
 float Weapon::get_bashstrengthmod() const
    { return weapontype[getweapontype(itemtypename())]->get_bashstrengthmod(); }
-   
+
 bool Weapon::is_suspicious() const
    { return weapontype[getweapontype(itemtypename())]->is_suspicious(); }
-   
+
 int Weapon::get_size() const
    { return weapontype[getweapontype(itemtypename())]->get_size(); }
-   
+
 bool Weapon::can_graffiti() const
    { return weapontype[getweapontype(itemtypename())]->can_graffiti(); }
-   
+
 bool Weapon::uses_ammo() const
    { return weapontype[getweapontype(itemtypename())]->uses_ammo(); }
-   
+
 bool Weapon::acceptable_ammo(const Clip& c) const
    { return weapontype[getweapontype(itemtypename())]->acceptable_ammo(c.get_itemtypename()); }
-   
+
 bool Weapon::acceptable_ammo(const ClipType& c) const
    { return weapontype[getweapontype(itemtypename())]->acceptable_ammo(c); }
-   
+
 bool Weapon::is_ranged() const
    { return weapontype[getweapontype(itemtypename())]->is_ranged(); }
-   
+
 bool Weapon::is_throwable() const
    { return weapontype[getweapontype(itemtypename())]->is_throwable(); }
-   
+
 bool Weapon::auto_breaks_locks() const
    { return weapontype[getweapontype(itemtypename())]->auto_breaks_locks(); }
 

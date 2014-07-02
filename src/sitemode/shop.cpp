@@ -134,7 +134,7 @@ void Shop::choose(squadst& customers, int& buyer) const
 
 void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 {
-   int page=0,partysize=0;
+   int page=0,partysize=squadsize(&customers);
 
    std::vector<ShopOption*> available_options=options_;
 
@@ -142,8 +142,6 @@ void Shop::browse_halfscreen(squadst& customers, int& buyer) const
 				               available_options.end(),
 				               not1(mem_fun(&ShopOption::display))),
 			                  available_options.end());
-
-   for(int p=0;p<6;p++) if(customers.squad[p]!=NULL) partysize++;
 
    while(true)
    {
@@ -337,10 +335,7 @@ void Shop::browse_fullscreen(squadst& customers, int& buyer) const
 
 void Shop::sell_loot(squadst& customers) const
 {
-   int partysize=0;
-   for(int p=0;p<6;p++)
-      if(customers.squad[p]!=NULL)
-         partysize++;
+   int partysize=squadsize(&customers);
 
    while(true)
    {
@@ -588,35 +583,7 @@ int Shop::fenceselect(squadst& customers) const
                else
                {
                   if (location[customers.squad[0]->base]->loot[slot]->get_number() > 1)
-                  {
-                     selected[slot] = 1;
-
-                     printparty();
-
-                     move(8,15);
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     addstr("       How many?          ");
-
-                     refresh();
-
-                     char str[100];
-
-                     keypad(stdscr,FALSE);
-                     raw_output(FALSE);
-                     echo();
-                     curs_set(1);
-                     mvgetnstr(8,32,str,99);
-                     curs_set(0);
-                     noecho();
-                     raw_output(TRUE);
-                     keypad(stdscr,TRUE);
-
-                     selected[slot] = atoi(str);
-                     if (selected[slot] < 0)
-                        selected[slot] = 0;
-                     else if (selected[slot] > location[customers.squad[0]->base]->loot[slot]->get_number())
-                        selected[slot]=location[customers.squad[0]->base]->loot[slot]->get_number();
-                  }
+                     selected[slot]=prompt_amount(0,location[customers.squad[0]->base]->loot[slot]->get_number());
                   else
                      selected[slot]=1;
                   ret += location[customers.squad[0]->base]->loot[slot]->get_fencevalue() * selected[slot];
@@ -655,10 +622,7 @@ void Shop::choose_buyer(squadst& customers, int& buyer) const
 {
    party_status=-1;
 
-   int partysize=0;
-   for(int p=0;p<6;p++)
-      if(customers.squad[p] != NULL)
-         partysize++;
+   int partysize=squadsize(&customers);
 
    if(partysize<=1) return;
 
@@ -808,9 +772,9 @@ Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
          description_defined_ = true;
       }
       else if (tag == "price")
-         price_ = atoi(xml.GetData().c_str());
+         price_ = atoi(xml.GetData());
       else if (tag == "sleeperprice")
-	     sleeperprice_ = atoi(xml.GetData().c_str());
+	     sleeperprice_ = atoi(xml.GetData());
 	   else if (tag == "letter")
       {
          letter_ = xml.GetData()[0];
