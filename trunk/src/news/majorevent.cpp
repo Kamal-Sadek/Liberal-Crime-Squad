@@ -247,7 +247,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_INTELLIGENCE:
          {
-            strcat(story,"Washington D.C. - The FBI might be keeping tabs on you.  ");
+            strcat(story,"Washington, DC - The FBI might be keeping tabs on you.  ");
             strcat(story,"This newspaper yesterday received a collection of files from a source in the Federal Bureau of Investigations.  ");
             strcat(story,"The files contain information on which people have been attending demonstrations, organizing ");
             strcat(story,"unions, working for liberal organizations ÄÄ even ");
@@ -804,7 +804,7 @@ void constructeventstory(char *story,short view,char positive)
          }
          case VIEW_INTELLIGENCE:
          {
-            strcat(story,"Washington D.C. - The CIA announced yesterday that it has averted a terror attack that ");
+            strcat(story,"Washington, DC - The CIA announced yesterday that it has averted a terror attack that ");
             strcat(story,"would have occurred on American soil.");
             strcat(story,"&r");
             strcat(story,"   According to a spokesperson for the agency, ");

@@ -776,7 +776,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
       case SITE_CITY_DETROIT: city = "Detroit, MI"; break;
       case SITE_CITY_ATLANTA: city = "Atlanta, GA"; break;
       case SITE_CITY_MIAMI: city = "Miami, FL"; break;
-      case SITE_CITY_WASHINGTON_DC: city = "Washington DC"; break;
+      case SITE_CITY_WASHINGTON_DC: city = "Washington, DC"; break;
       default: city = lcityname;
       }
    }
@@ -1941,8 +1941,10 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
    for(int t=0;t<(int)text.size();t++)
    {
       if(y+t>=25)break;
+      if(text[t][strlen(text[t])-1]==' ') // remove trailing space
+         text[t][strlen(text[t])-1]='\x0'; // (necessary for proper centering and to not overwrite borders around an ad)
       if(centered[t])
-         move(y+t,((storyx_s[y+t]+storyx_e[y+t])>>1)-((strlen(text[t])-1)>>1));
+         move(y+t,((storyx_s[y+t]+storyx_e[y+t]-strlen(text[t])+1)>>1));
       else move(y+t,storyx_s[y+t]);
       addstr(text[t]);
 
