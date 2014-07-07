@@ -107,6 +107,7 @@ int choosespecialedition(char &clearformess)
    {
       if(location[loc]->renting==RENTING_NOCONTROL)continue;
 
+      consolidateloot(location[loc]->loot);
       for(int l=0;l<(int)location[loc]->loot.size();l++)
       {
          if(!location[loc]->loot[l]->is_loot())continue;
@@ -134,6 +135,7 @@ int choosespecialedition(char &clearformess)
    }
    for(int sq=0;sq<(int)squad.size();sq++)
    {
+      consolidateloot(squad[sq]->loot);
       for(int l=0;l<(int)squad[sq]->loot.size();l++)
       {
          if(!squad[sq]->loot[l]->is_loot())continue;

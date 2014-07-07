@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 
 /* politics - calculate presidential approval */
 int presidentapproval()
-{
+{  //TODO: Get this to work with Stalinist Presidents
    //Calculate Presidential approval rating
    int approval=0, i;
    for(i=0;i<1000;i++)
@@ -60,7 +60,7 @@ int presidentapproval()
 
 /* politics -- gets the leaning of an issue voter for an election */
 int getswingvoter()
-{
+{  //TODO: Get this to work with Stalinism
    // Take a random voter, calculate how liberal or conservative they are
    int bias = publicmood(-1)-LCSrandom(100), vote=-2;
    if(bias> 25)bias= 25;
@@ -75,7 +75,7 @@ int getswingvoter()
 
 /* politics -- gets the leaning of a partyline voter for an election */
 int getsimplevoter(int leaning)
-{
+{  //TODO: Get this to work with Stalinism
    int vote=leaning-1;
    for(int i=0;i<2;i++)if((int)LCSrandom(100)<attitude[randomissue(true)])vote++;
    return vote;
@@ -95,6 +95,7 @@ void fillCabinetPost(int position)
    // Set alignment
    if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE)exec[position]=ALIGN_ARCHCONSERVATIVE;
    else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL)exec[position]=ALIGN_ELITELIBERAL;
+   else if(exec[EXEC_PRESIDENT]==ALIGN_STALINIST)exec[position]=ALIGN_STALINIST;
    else exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
    // Set name
    if(exec[position]==ALIGN_ARCHCONSERVATIVE)generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
@@ -104,7 +105,7 @@ void fillCabinetPost(int position)
 
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings)
-{
+{  //TODO: Implement election of Stalinist Presidents
    int l, p, c, mood=publicmood(-1);
 
    if(canseethings)
@@ -559,7 +560,7 @@ void elections(char clearformess,char canseethings)
 }
 
 void elections_senate(int senmod,char canseethings)
-{
+{  //TODO: Finish implementing election of Stalinist Senators
    int mood=publicmood(-1);
    if(canseethings)
    {
@@ -572,7 +573,7 @@ void elections_senate(int senmod,char canseethings)
       addstr(year);
    }
 
-   int x=0,y=2, s=0;
+   int x=0,y=2,s=0;
 
    for(s=0;s<100;s++)
    {
@@ -585,7 +586,7 @@ void elections_senate(int senmod,char canseethings)
       }
 
       x+=20;
-      if(x>70)x=0, y++;
+      if(x>70) x=0,y++;
    }
 
    if(canseethings)
@@ -597,17 +598,16 @@ void elections_senate(int senmod,char canseethings)
       getkey();
    }
 
-   int vote;
-   int change[5]={0,0,0,0,0};
+   int vote,change[6]={0,0,0,0,0,0};
 
-   x=0, y=2;
+   x=0,y=2;
 
    for(s=0;s<100;s++)
    {
-      if(senmod!=-1 && s%3!=senmod)continue;
+      if(senmod!=-1 && s%3!=senmod) continue;
 
       vote=0;
-      for(int i=0;i<4;i++)if(mood>LCSrandom(100))vote++;
+      for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
 
       if(termlimits)
       {
@@ -687,6 +687,12 @@ void elections_senate(int senmod,char canseethings)
          addstr("   L+: ");
          if(change[4]>0)addstr("+");
          addstr(change[4]);
+         if(stalinmode)
+         {
+            addstr("   S: ");
+            if(change[5]>0)addstr("+");
+            addstr(change[5]);
+         }
          addstr("        ");
 
          if(!disbanding) pause_ms(30);
@@ -696,17 +702,41 @@ void elections_senate(int senmod,char canseethings)
    if(canseethings)
    {
       move(21,0);
-      if(change[0]+change[1]>change[3]+change[4])
+      signed char winner;
+      if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
+         winner=ALIGN_STALINIST;
+      else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
       {
-         if(change[1]<0 && mood<25)addstr("The $$ U.S.A. Flag Eagle $$ Conservative Party claims victory!");
-         else addstr("The Conservative Party claims victory!");
+         if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
+         else winner=ALIGN_CONSERVATIVE;
       }
-      else if(change[0]+change[1]<change[3]+change[4])
+      else if(change[3]+change[4]<change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
-         if(change[3]<0 && mood>75)addstr("The Progressive Elite Social Liberal Party claims victory!");
-         else addstr("The Liberal Party claims victory!");
+         if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
+         else winner=ALIGN_LIBERAL;
       }
-      else addstr("The next two years promise to be more of the same.");
+      else if(change[0]>0&&change[4]<=0&&change[5]<=0) // C+ increased and L+ and Stalinist both same or decreased
+      {
+         if(mood<25) winner=ALIGN_ARCHCONSERVATIVE;
+         else winner=ALIGN_CONSERVATIVE;
+      }
+      else if(change[4]>0&&change[0]<=0&&change[5]<=0) // L+ increased and C+ and Stalinist both same or decreased
+      {
+         if(mood>75) winner=ALIGN_ELITELIBERAL;
+         else winner=ALIGN_LIBERAL;
+      }
+      else if(change[5]>0&&change[0]<=0&&change[4]<=0) // Stalinist increased and C+ and L+ both same or decreased
+         winner=ALIGN_STALINIST;
+      else winner=ALIGN_MODERATE; // nobody won
+      switch(winner)
+      {
+      case ALIGN_ARCHCONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
+      case ALIGN_CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
+      case ALIGN_MODERATE: addstr("The next two years promise to be more of the same."); break;
+      case ALIGN_LIBERAL: addstr("The Liberal Party claims victory!"); break;
+      case ALIGN_ELITELIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
+      case ALIGN_STALINIST: addstr("The Stalinist Party claims victory!"); break;
+      }
 
       move(22,0);
       addstr("Press any key to continue the elections.    ");
@@ -716,7 +746,7 @@ void elections_senate(int senmod,char canseethings)
 }
 
 void elections_house(char canseethings)
-{
+{  //TODO: Finish implementing election of Stalinist House Members
    int mood=publicmood(-1);
    if(canseethings)
    {
@@ -782,14 +812,14 @@ void elections_house(char canseethings)
       getkey();
    }
 
-   int vote,change[5]={0,0,0,0,0};
+   int vote,change[6]={0,0,0,0,0,0};
 
    x=0,y=2;
 
    for(h=0;h<435;h++)
    {
       vote=0;
-      for(int i=0;i<4;i++)if(mood>LCSrandom(100))vote++;
+      for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
 
       if(termlimits)
       {
@@ -898,6 +928,12 @@ void elections_house(char canseethings)
          addstr("   L+: ");
          if(change[4]>0)addstr("+");
          addstr(change[4]);
+         if(stalinmode)
+         {
+            addstr("   S: ");
+            if(change[5]>0)addstr("+");
+            addstr(change[5]);
+         }
          addstr("        ");
 
          if(!disbanding) pause_ms(5);
@@ -907,17 +943,41 @@ void elections_house(char canseethings)
    if(canseethings)
    {
       move(21,0);
-      if(change[0]+change[1]>change[3]+change[4])
+      signed char winner;
+      if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
+         winner=ALIGN_STALINIST;
+      else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
       {
-         if(change[1]<0 && mood<25) addstr("The $$ U.S.A. Flag Eagle $$ Conservative Party claims victory!");
-         else addstr("The Conservative Party claims victory!");
+         if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
+         else winner=ALIGN_CONSERVATIVE;
       }
-      else if(change[0]+change[1]<change[3]+change[4])
+      else if(change[3]+change[4]<change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
-         if(change[3]<0 && mood>75)addstr("The Progressive Elite Social Liberal Party claims victory!");
-         else addstr("The Liberal Party claims victory!");
+         if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
+         else winner=ALIGN_LIBERAL;
       }
-      else addstr("The next two years promise to be more of the same.");
+      else if(change[0]>0&&change[4]<=0&&change[5]<=0) // C+ increased and L+ and Stalinist both same or decreased
+      {
+         if(mood<25) winner=ALIGN_ARCHCONSERVATIVE;
+         else winner=ALIGN_CONSERVATIVE;
+      }
+      else if(change[4]>0&&change[0]<=0&&change[5]<=0) // L+ increased and C+ and Stalinist both same or decreased
+      {
+         if(mood>75) winner=ALIGN_ELITELIBERAL;
+         else winner=ALIGN_LIBERAL;
+      }
+      else if(change[5]>0&&change[0]<=0&&change[4]<=0) // Stalinist increased and C+ and L+ both same or decreased
+         winner=ALIGN_STALINIST;
+      else winner=ALIGN_MODERATE; // nobody won
+      switch(winner)
+      {
+      case ALIGN_ARCHCONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
+      case ALIGN_CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
+      case ALIGN_MODERATE: addstr("The next two years promise to be more of the same."); break;
+      case ALIGN_LIBERAL: addstr("The Liberal Party claims victory!"); break;
+      case ALIGN_ELITELIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
+      case ALIGN_STALINIST: addstr("The Stalinist Party claims victory!"); break;
+      }
       if(!disbanding)
       {
          move(22,0);
