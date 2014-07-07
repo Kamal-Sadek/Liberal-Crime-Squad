@@ -387,7 +387,7 @@ void initlocation(Location &loc)
    case SITE_CITY_DETROIT: loc.rename("Detroit", "DET"); break;
    case SITE_CITY_ATLANTA: loc.rename("Atlanta", "ATL"); break;
    case SITE_CITY_MIAMI: loc.rename("Miami", "MI"); break;
-   case SITE_CITY_WASHINGTON_DC: loc.rename("Washington DC", "DC"); break;
+   case SITE_CITY_WASHINGTON_DC: loc.rename("Washington, DC", "DC"); break;
    case SITE_DOWNTOWN: loc.rename("Downtown", "Downtown"); break;
    case SITE_UDISTRICT: loc.rename("University District", "U-District"); break;
    case SITE_COMMERCIAL: loc.rename("Shopping", "Shopping"); break;

@@ -323,7 +323,7 @@ void make_world(bool hasmaps)
          Site(SITE_OUTDOOR_BUNKER)
             SiteProperty(renting, RENTING_CCS)
             SiteProperty(hidden, true)
-   // Washington DC
+   // Washington, DC
    City(SITE_CITY_WASHINGTON_DC)
       District(SITE_DOWNTOWN, 0)
          DistrictName("Downtown")
