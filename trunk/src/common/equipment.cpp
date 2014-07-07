@@ -557,16 +557,14 @@ void equipmentbaseassign(void)
       else addstr("T to sort by type.");
       addstr("  Shift and a Number will move ALL items!");
 
-      if(temploot.size()>19)
-      {
-         move(23,34);
-         addpagestr();
-      }
+      move(24,0); // location for either viewing other base pages or loot pages
       if(temploc.size()>9)
       {
-         move(24,0);
          addstr(",. to view other base pages.");
+         move(24,34); // we have base pages, so different location for viewing other loot pages
       }
+      if(temploot.size()>19)
+         addpagestr();
 
       int c=getkey();
 
