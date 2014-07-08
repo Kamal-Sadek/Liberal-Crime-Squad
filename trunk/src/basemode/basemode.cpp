@@ -547,8 +547,10 @@ void mode_base(void)
             if(location[l]->is_lcs_safehouse()) { selectedsiege=l; break; }
             else if(l==(int)location.size()-1) l=-1; } break;
       case 'e': if(partysize>0&&!underattack&&activesquad->squad[0]->location!=-1) {
+         short ops=party_status;
 		   party_status=-1;
-         equip(location[activesquad->squad[0]->location]->loot,-1); } break;
+         equip(location[activesquad->squad[0]->location]->loot,-1);
+         party_status=ops; } break;
       case 'r': if(pool.size()>0) review(); break;
       case 'w': if(forcewait||!cannotwait) {
          char clearformess=forcewait;
@@ -567,7 +569,11 @@ void mode_base(void)
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();
          } } break;
-      case 'v': if(vehicle.size()>0&&partysize>0) setvehicles(); break;
+      case 'v': if(vehicle.size()>0&&partysize>0) {
+         short ops=party_status;
+		   party_status=-1;
+         setvehicles();
+         party_status=ops; } break;
       case 'p': if(haveflag) {
          burnflag();
          stat_burns++;

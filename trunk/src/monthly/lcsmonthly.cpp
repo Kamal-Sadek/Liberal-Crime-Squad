@@ -707,197 +707,270 @@ void printnews(short li,short newspaper)
 
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
-{  /***********************************************************************************
-   *  TODO: It is possible this report might use more than 25 lines,                  *
-   *  so we should implement making it multipage and using pagekeys if it's that long *
-   *  or we could use columns to make it all fit on one page                          *
-   ***********************************************************************************/
+{
    if(disbanding) return;
 
    clearformess=true;
-   erase();
 
-   int y=2,totalmoney=0,dailymoney=0;
+   int page=0;
    bool showledger=false;
    std::string num;
    const char* dotdotdot=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
 
-   for(int i=0;i<INCOMETYPENUM;i++)
+   while(true)
    {
-      if(ledger.income[i])
+      erase();
+
+      int y=2,totalmoney=0,dailymoney=0,numpages=1;
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      mvaddstr(0,0,"Liberal Crime Squad: Funding Report");
+
+      for(int i=0;i<INCOMETYPENUM;i++)
       {
-         showledger=true;
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(y,0,dotdotdot);
-         set_color(COLOR_GREEN,COLOR_BLACK,0);
-         num="+$"+tostring(ledger.income[i]);
-         mvaddstr(y,60-num.length(),num);
-         if(ledger.dailyIncome[i])
-            num=" (+$"+tostring(ledger.dailyIncome[i])+")";
-         else
+         if(ledger.income[i])
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            num=" ($0)";
-         }
-         mvaddstr(y,73-num.length(),num);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(i)
-         {
-         case INCOME_DONATIONS: mvaddstr(y++,0,"Donations"); break;
-         case INCOME_BROWNIES: mvaddstr(y++,0,"Brownies"); break;
-         case INCOME_PAWN: mvaddstr(y++,0,"Pawning Goods"); break;
-         case INCOME_SKETCHES: mvaddstr(y++,0,"Drawing Sales"); break;
-         case INCOME_TSHIRTS: mvaddstr(y++,0,"T-Shirt Sales"); break;
-         case INCOME_BUSKING: mvaddstr(y++,0,"Street Music"); break;
-         case INCOME_CARS: mvaddstr(y++,0,"Car Sales"); break;
-         case INCOME_CCFRAUD: mvaddstr(y++,0,"Credit Card Fraud"); break;
-         case INCOME_PROSTITUTION: mvaddstr(y++,0,"Prostitution"); break;
-         case INCOME_HUSTLING: mvaddstr(y++,0,"Hustling"); break;
-         case INCOME_EXTORTION: mvaddstr(y++,0,"Extortion"); break;
-         case INCOME_THIEVERY: mvaddstr(y++,0,"Thievery"); break;
-         case INCOME_EMBEZZLEMENT: mvaddstr(y++,0,"Embezzlement"); break;
-         default: mvaddstr(y++,0,"Other Income"); break;
-         }
-         totalmoney+=ledger.income[i];
-         dailymoney+=ledger.dailyIncome[i];
-      }
-   }
+            showledger=true;
+            if(page==numpages-1)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               mvaddstr(y,0,dotdotdot);
+               set_color(COLOR_GREEN,COLOR_BLACK,0);
+               num="+$"+tostring(ledger.income[i]);
+               mvaddstr(y,60-num.length(),num);
+               if(ledger.dailyIncome[i])
+                  num=" (+$"+tostring(ledger.dailyIncome[i])+")";
+               else
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  num=" ($0)";
+               }
+               mvaddstr(y,73-num.length(),num);
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               switch(i)
+               {
+               case INCOME_BROWNIES: mvaddstr(y,0,"Brownies"); break;
+               case INCOME_CARS: mvaddstr(y,0,"Car Sales"); break;
+               case INCOME_CCFRAUD: mvaddstr(y,0,"Credit Card Fraud"); break;
+               case INCOME_DONATIONS: mvaddstr(y,0,"Donations"); break;
+               case INCOME_SKETCHES: mvaddstr(y,0,"Drawing Sales"); break;
+               case INCOME_EMBEZZLEMENT: mvaddstr(y,0,"Embezzlement"); break;
+               case INCOME_EXTORTION: mvaddstr(y,0,"Extortion"); break;
+               case INCOME_HUSTLING: mvaddstr(y,0,"Hustling"); break;
+               case INCOME_PAWN: mvaddstr(y,0,"Pawning Goods"); break;
+               case INCOME_PROSTITUTION: mvaddstr(y,0,"Prostitution"); break;
+               case INCOME_BUSKING: mvaddstr(y,0,"Street Music"); break;
+               case INCOME_THIEVERY: mvaddstr(y,0,"Thievery"); break;
+               case INCOME_TSHIRTS: mvaddstr(y,0,"T-Shirt Sales"); break;
+               default: mvaddstr(y,0,"Other Income"); break;
+               }
+            }
+            totalmoney+=ledger.income[i];
+            dailymoney+=ledger.dailyIncome[i];
 
-   for(int i=0;i<EXPENSETYPENUM;i++)
-   {
-      if(ledger.expense[i] != 0)
+            if(++y>=23) y=2,numpages++;
+         }
+      }
+
+      for(int i=0;i<EXPENSETYPENUM;i++)
       {
-         showledger=true;
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(y,0,dotdotdot);
+         if(ledger.expense[i])
+         {
+            showledger=true;
+            if(page==numpages-1)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               mvaddstr(y,0,dotdotdot);
+               set_color(COLOR_RED,COLOR_BLACK,0);
+               num="-$"+tostring(ledger.expense[i]);
+               mvaddstr(y,60-num.length(),num);
+               if(ledger.dailyExpense[i])
+                  num=" (-$"+tostring(ledger.dailyExpense[i])+")";
+               else
+               {
+                  set_color(COLOR_WHITE,COLOR_BLACK,0);
+                  num=" ($0)";
+               }
+               mvaddstr(y,73-num.length(),num);
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               switch(i)
+               {
+               case EXPENSE_TROUBLEMAKING: mvaddstr(y,0,"Activism"); break;
+               case EXPENSE_CONFISCATED: mvaddstr(y,0,"Confiscated"); break;
+               case EXPENSE_DATING: mvaddstr(y,0,"Dating"); break;
+               case EXPENSE_SKETCHES: mvaddstr(y,0,"Drawing Materials"); break;
+               case EXPENSE_FOOD: mvaddstr(y,0,"Groceries"); break;
+               case EXPENSE_HOSTAGE: mvaddstr(y,0,"Hostage Tending"); break;
+               case EXPENSE_LEGAL: mvaddstr(y,0,"Legal Fees"); break;
+               case EXPENSE_MANUFACTURE: mvaddstr(y,0,"Manufacturing"); break;
+               case EXPENSE_CARS: mvaddstr(y,0,"New Cars"); break;
+               case EXPENSE_SHOPPING: mvaddstr(y,0,"Purchasing Goods"); break;
+               case EXPENSE_RECRUITMENT: mvaddstr(y,0,"Recruitment"); break;
+               case EXPENSE_RENT: mvaddstr(y,0,"Rent"); break;
+               case EXPENSE_COMPOUND: mvaddstr(y,0,"Safehouse Investments"); break;
+               case EXPENSE_TRAINING: mvaddstr(y,0,"Training"); break;
+               case EXPENSE_TRAVEL: mvaddstr(y,0,"Travel"); break;
+               case EXPENSE_TSHIRTS: mvaddstr(y,0,"T-Shirt Materials"); break;
+               default: mvaddstr(y,0,"Other Expenses"); break;
+               }
+            }
+            totalmoney-=ledger.expense[i];
+            dailymoney-=ledger.dailyExpense[i];
 
-         set_color(COLOR_RED,COLOR_BLACK,0);
-         num="-$"+tostring(ledger.expense[i]);
-         mvaddstr(y,60-num.length(),num);
-         if(ledger.dailyExpense[i])
-            num=" (-$"+tostring(ledger.dailyExpense[i])+")";
-         else
-         {
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
-            num=" ($0)";
+            if(++y>=23) y=2,numpages++;
          }
-         mvaddstr(y,73-num.length(),num);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         switch(i)
-         {
-         case EXPENSE_SHOPPING: mvaddstr(y++,0,"Purchasing Goods"); break;
-         case EXPENSE_TROUBLEMAKING: mvaddstr(y++,0,"Activism"); break;
-         case EXPENSE_RENT: mvaddstr(y++,0,"Rent"); break;
-         case EXPENSE_TRAINING: mvaddstr(y++,0,"Training"); break;
-         case EXPENSE_MANUFACTURE: mvaddstr(y++,0,"Manufacturing"); break;
-         case EXPENSE_LEGAL: mvaddstr(y++,0,"Legal Fees"); break;
-         case EXPENSE_FOOD: mvaddstr(y++,0,"Groceries"); break;
-         case EXPENSE_RECRUITMENT: mvaddstr(y++,0,"Recruitment"); break;
-         case EXPENSE_DATING: mvaddstr(y++,0,"Dating"); break;
-         case EXPENSE_COMPOUND: mvaddstr(y++,0,"Safehouse Investments"); break;
-         case EXPENSE_HOSTAGE: mvaddstr(y++,0,"Hostage Tending"); break;
-         case EXPENSE_CONFISCATED: mvaddstr(y++,0,"Confiscated"); break;
-         case EXPENSE_TSHIRTS: mvaddstr(y++,0,"T-Shirt Materials"); break;
-         case EXPENSE_SKETCHES: mvaddstr(y++,0,"Drawing Materials"); break;
-         case EXPENSE_CARS: mvaddstr(y++,0,"New Cars"); break;
-         case EXPENSE_TRAVEL: mvaddstr(y++,0,"Travel"); break;
-         default: mvaddstr(y++,0,"Other Expenses"); break;
-         }
-         totalmoney-=ledger.expense[i];
-         dailymoney-=ledger.dailyExpense[i];
       }
-   }
 
-    set_color(COLOR_WHITE,COLOR_BLACK,1);
-    mvaddstr(0,0,"Liberal Crime Squad: Funding Report");
-    if(showledger)
-    {
-        makedelimiter(y++);
+      if(showledger)
+      {
+         if(page==numpages-1) makedelimiter(y);
 
-        set_color(COLOR_WHITE,COLOR_BLACK,1);
-        mvaddstr(y,0,"Net Change This Month (Day):");
+         if(++y>=23) y=2,numpages++;
 
-        if(totalmoney>0) { set_color(COLOR_GREEN,COLOR_BLACK,1); num="+"; }
-        else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
-        else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
+         if(page==numpages-1)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+            mvaddstr(y,0,"Net Change This Month (Day):");
+            if(totalmoney>0) { set_color(COLOR_GREEN,COLOR_BLACK,1); num="+"; }
+            else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
+            else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
+            num+="$"+tostring(abs(totalmoney));
+            mvaddstr(y,60-num.length(),num);
+            if(dailymoney>0)
+            {
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               num=" (+$"+tostring(abs(dailymoney))+")";
+            }
+            else if(dailymoney<0)
+            {
+               set_color(COLOR_RED,COLOR_BLACK,1);
+               num=" (-$"+tostring(abs(dailymoney))+")";
+            }
+            else
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               num=" ($0)";
+            }
+            mvaddstr(y,73-num.length(),num);
+         }
 
-        num+="$"+tostring(abs(totalmoney));
-        mvaddstr(y,60-num.length(),num);
-        if(dailymoney>0)
-        {
-           set_color(COLOR_GREEN,COLOR_BLACK,1);
-           num=" (+$"+tostring(abs(dailymoney))+")";
-        }
-        else if(dailymoney<0)
-        {
-           set_color(COLOR_RED,COLOR_BLACK,1);
-           num=" (-$"+tostring(abs(dailymoney))+")";
-        }
-        else
-        {
-           set_color(COLOR_WHITE,COLOR_BLACK,1);
-           num=" ($0)";
-        }
-        mvaddstr(y++,73-num.length(),num);
-    }
-    // tally up liquid assets
-    long weaponValue=0,armorValue=0,clipValue=0,lootValue=0;
-    for(int j=0;j<(int)location.size();j++)
-        for(int i=0;i<(int)location[j]->loot.size();i++)
-        {
+         if(++y>=23) y=2,numpages++;
+      }
+      // tally up liquid assets
+      long weaponValue=0,armorValue=0,clipValue=0,lootValue=0;
+      for(int j=0;j<(int)location.size();j++)
+         for(int i=0;i<(int)location[j]->loot.size();i++)
+         {
             Item* item=location[j]->loot[i];
             if(item->is_weapon()) weaponValue+=item->get_fencevalue()*item->get_number();
             if(item->is_armor()) armorValue+=item->get_fencevalue()*item->get_number();
             if(item->is_clip()) clipValue+=item->get_fencevalue()*item->get_number();
             if(item->is_loot()) lootValue+=item->get_fencevalue()*item->get_number();
-        }
+         }
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(++y,0,dotdotdot);
-    mvaddstr(y,0,"Cash");
-    set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-    num="$"+tostring(ledger.get_funds());
-    mvaddstr(y,60-num.length(),num);
+      if(++y>=23) y=2,numpages++;
+      if(y==3) y=2; // last line was blank... we don't want 2 blank lines at top of page
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(++y,0,dotdotdot);
-    mvaddstr(y,0,"Clothing and Armor");
-    set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-    num="$"+tostring(armorValue);
-    mvaddstr(y,60-num.length(),num);
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(y,0,dotdotdot);
+         mvaddstr(y,0,"Cash");
+         set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+         num="$"+tostring(ledger.get_funds());
+         mvaddstr(y,60-num.length(),num);
+      }
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(++y,0,dotdotdot);
-    mvaddstr(y,0,"Tools and Weapons");
-    set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-    num="$"+tostring(weaponValue);
-    mvaddstr(y,60-num.length(),num);
+      if(++y>=23) y=2,numpages++;
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(++y,0,dotdotdot);
-    mvaddstr(y,0,"Ammunition");
-    set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-    num="$"+tostring(clipValue);
-    mvaddstr(y,60-num.length(),num);
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(y,0,dotdotdot);
+         mvaddstr(y,0,"Tools and Weapons");
+         set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+         num="$"+tostring(weaponValue);
+         mvaddstr(y,60-num.length(),num);
+      }
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(++y,0,dotdotdot);
-    mvaddstr(y,0,"Miscellaneous Loot");
-    set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-    num="$"+tostring(lootValue);
-    mvaddstr(y,60-num.length(),num);
+      if(++y>=23) y=2,numpages++;
 
-    makedelimiter(++y);
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(y,0,dotdotdot);
+         mvaddstr(y,0,"Clothing and Armor");
+         set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+         num="$"+tostring(armorValue);
+         mvaddstr(y,60-num.length(),num);
+      }
 
-    set_color(COLOR_WHITE,COLOR_BLACK,1);
-    mvaddstr(++y,0,"Total Liquid Assets:");
-    long netWorth=ledger.get_funds()+armorValue+weaponValue+clipValue+lootValue;
-    set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
-    num="$"+tostring(netWorth);
-    mvaddstr(y,60-num.length(),num);
+      if(++y>=23) y=2,numpages++;
 
-    set_color(COLOR_WHITE,COLOR_BLACK,0);
-    mvaddstr(24,0,"Press any key to reflect on the report.");
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(y,0,dotdotdot);
+         mvaddstr(y,0,"Ammunition");
+         set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+         num="$"+tostring(clipValue);
+         mvaddstr(y,60-num.length(),num);
+      }
 
-    getkey();
+      if(++y>=23) y=2,numpages++;
+
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(y,0,dotdotdot);
+         mvaddstr(y,0,"Miscellaneous Loot");
+         set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
+         num="$"+tostring(lootValue);
+         mvaddstr(y,60-num.length(),num);
+      }
+
+      if(++y>=23) y=2,numpages++;
+
+      if(page==numpages-1) makedelimiter(y);
+
+      if(++y>=23) y=2,numpages++;
+
+      if(page==numpages-1)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(y,0,"Total Liquid Assets:");
+         long netWorth=ledger.get_funds()+weaponValue+armorValue+clipValue+lootValue;
+         set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
+         num="$"+tostring(netWorth);
+         mvaddstr(y,60-num.length(),num);
+      }
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(numpages>1)
+      {
+         mvaddstr(24,0,"Press Enter to reflect on the report.  ");
+         addpagestr();
+
+         while(true)
+         {
+            int c=getkey();
+
+            if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
+               return;
+
+            //PAGE UP
+            if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) { page--; if(page<0) page=numpages-1; break; }
+            //PAGE DOWN
+            if(c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) { page++; if(page>=numpages) page=0; break; }
+         }
+      }
+      else
+      {
+         mvaddstr(24,0,"Press any key to reflect on the report.");
+
+         getkey();
+
+         return;
+      }
+   }
 }

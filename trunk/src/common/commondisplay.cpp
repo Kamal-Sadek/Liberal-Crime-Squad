@@ -286,25 +286,19 @@ void locheader(void)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       std::string str=getactivity(activesquad->activity);
-
       if(activesquad->activity.type==ACTIVITY_NONE)
       {
-         int count=0;bool haveact=false;
+         bool haveact=false,multipleact=false;
          for(int p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL) continue;
-            count++;
-            if(activesquad->squad[p]->activity.type!=ACTIVITY_NONE)
-            {
-               str=getactivity(activesquad->squad[p]->activity);
-               haveact=true;
-            }
+            const std::string str2=getactivity(activesquad->squad[p]->activity);
+            if(haveact&&str!=str2) multipleact=true;
+            str=str2,haveact=true;
          }
-         if(haveact&&count>1) str="Acting Individually";
+         if(multipleact) str="Acting Individually";
       }
-
-      move(0,41);
-      addstr(str);
+      mvaddstr(0,41,str);
    }
 }
 
@@ -320,7 +314,7 @@ void printparty(void)
    for(int i=2;i<8;i++)
    {
       move(i,0);
-      addstr("                                                                                ");
+      addstr("                                                                                "); // 80 spaces
    }
 
    if(party_status!=-1&&party[party_status]==NULL)party_status=-1;
@@ -338,13 +332,13 @@ void printparty(void)
       char str[200];
 
       move(1,0);
-      addstr("#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�");
+      addstr("#횮ODE NAME컴컴컴컴컴컴SKILL컴훇EAPON컴컴컴컴횫RMOR컴컴컴컴컴HEALTH컴훂RANSPORT�"); // 80 characters
 
       for(int p=0;p<6;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(p+2,0);
-         addstr("                                                                                          ");
+         addstr("                                                                                "); // 80 spaces
          mvaddchar(p+2,0,'1'+p);
 
          if(party[p]!=NULL)
@@ -896,8 +890,8 @@ void fullstatus(int p)
       else if(c=='n')
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(23,0,"What is the new code name?                                       ");
-         mvaddstr(24,0,"                                                                    ");
+         mvaddstr(23,0,"What is the new code name?                                                      "); // 80 characters
+         mvaddstr(24,0,"                                                                                "); // 80 spaces
 
          enter_name(24,0,activesquad->squad[p]->name,CREATURE_NAMELEN,activesquad->squad[p]->propername);
       }
@@ -1396,9 +1390,9 @@ void makedelimiter(int y,int x)
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    if(mode==GAMEMODE_SITE&&y==8&&x==0&&mapshowing) // special case: there is a map on the right in site mode
-      mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫");
+      mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫"); // 80 characters
    else // normal delimiter
-      mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+      mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
 }
 
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */
