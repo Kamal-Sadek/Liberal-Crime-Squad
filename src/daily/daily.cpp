@@ -1516,7 +1516,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 
 
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
-void advancelocations(void)
+void advancelocations()
 {
    //ADVANCE LOCATIONS
    for(int l=0;l<(int)location.size();l++)
@@ -1581,7 +1581,7 @@ char securityable(int type)
 
 
 /* daily - returns the number of days in the current month */
-int monthday(void)
+int monthday()
 {
    switch(month)
    {

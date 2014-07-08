@@ -94,7 +94,7 @@ vector<Creature *> activatable_liberals()
 }
 
 /* base - activate the uninvolved */
-void activate(void)
+void activate()
 {
    vector<Creature *> temppool = activatable_liberals();
 
@@ -1036,7 +1036,7 @@ void activate(Creature *cr)
 }
 
 
-void activatebulk(void)
+void activatebulk()
 {
    vector<Creature *> temppool = activatable_liberals();
 

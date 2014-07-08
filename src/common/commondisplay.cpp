@@ -220,7 +220,7 @@ void set_activity_color(long activity_type)
 }
 
 /* location and squad header */
-void locheader(void)
+void locheader()
 {
    if(activesquad!=NULL && activesquad->squad[0]->location!=-1)
    {
@@ -303,7 +303,7 @@ void locheader(void)
 }
 
 /* party info at top of screen */
-void printparty(void)
+void printparty()
 {
    Creature *party[6]={NULL,NULL,NULL,NULL,NULL,NULL};
    if(activesquad!=NULL)

@@ -329,7 +329,7 @@ void special_bouncer_assess_squad()
 
 }
 
-void special_lab_cosmetics_cagedanimals(void)
+void special_lab_cosmetics_cagedanimals()
 {
    while(true)
    {
@@ -430,7 +430,7 @@ void special_readsign(int sign)
 
 
 
-void special_nuclear_onoff(void)
+void special_nuclear_onoff()
 {
    while(true)
    {
@@ -561,7 +561,7 @@ void special_nuclear_onoff(void)
 
 
 
-void special_lab_genetic_cagedanimals(void)
+void special_lab_genetic_cagedanimals()
 {
    while(true)
    {
@@ -643,7 +643,7 @@ void special_lab_genetic_cagedanimals(void)
 
 
 
-void special_policestation_lockup(void)
+void special_policestation_lockup()
 {
    while(true)
    {
@@ -708,7 +708,7 @@ void special_policestation_lockup(void)
 
 
 
-void special_courthouse_lockup(void)
+void special_courthouse_lockup()
 {
    while(true)
    {
@@ -773,7 +773,7 @@ void special_courthouse_lockup(void)
 
 
 
-void special_courthouse_jury(void)
+void special_courthouse_jury()
 {
    int p;
    if(sitealarm||sitealienate)
@@ -1020,7 +1020,7 @@ void special_prison_control(short prison_control_type)
 
 
 
-void special_intel_supercomputer(void)
+void special_intel_supercomputer()
 {
    if(sitealarm||sitealienate)
    {
@@ -1110,7 +1110,7 @@ void special_intel_supercomputer(void)
 }
 
 
-void special_graffiti(void)
+void special_graffiti()
 {
    clearmessagearea();
 
@@ -1167,7 +1167,7 @@ void special_graffiti(void)
 }
 
 
-void special_sweatshop_equipment(void)
+void special_sweatshop_equipment()
 {
    while(true)
    {
@@ -1206,7 +1206,7 @@ void special_sweatshop_equipment(void)
 
 
 
-void special_polluter_equipment(void)
+void special_polluter_equipment()
 {
    while(true)
    {
@@ -1247,7 +1247,7 @@ void special_polluter_equipment(void)
 
 
 
-void special_house_photos(void)
+void special_house_photos()
 {
    while(true)
    {
@@ -1433,7 +1433,7 @@ void special_house_photos(void)
 }
 
 
-void special_armory(void)
+void special_armory()
 {
    while(true)
    {
@@ -1644,7 +1644,7 @@ void special_armory(void)
 
 
 
-void special_corporate_files(void)
+void special_corporate_files()
 {
    while(true)
    {
@@ -1706,7 +1706,7 @@ void special_corporate_files(void)
 
 
 
-void special_radio_broadcaststudio(void)
+void special_radio_broadcaststudio()
 {
    while(true)
    {
@@ -1749,7 +1749,7 @@ void special_radio_broadcaststudio(void)
 
 
 
-void special_news_broadcaststudio(void)
+void special_news_broadcaststudio()
 {
    while(true)
    {
@@ -1790,7 +1790,7 @@ void special_news_broadcaststudio(void)
 }
 
 
-void special_display_case(void)
+void special_display_case()
 {
    while(true)
    {
@@ -1826,7 +1826,7 @@ void special_display_case(void)
    }
 }
 
-void spawn_security(void)
+void spawn_security()
 {
    // add a bouncer if there isn't one in the first slot
    if(!sitealarm && !encounter[0].exists)
@@ -2089,22 +2089,22 @@ void special_security(bool metaldetect)
    encounter[0].cantbluff=1;
 }
 
-void special_security_checkpoint(void)
+void special_security_checkpoint()
 {
    special_security(false);
 }
 
-void special_security_metaldetectors(void)
+void special_security_metaldetectors()
 {
    special_security(true);
 }
 
-void special_security_secondvisit(void)
+void special_security_secondvisit()
 {
    spawn_security();
 }
 
-void special_bank_vault(void)
+void special_bank_vault()
 {
    clearmessagearea();
    move(16,1);
@@ -2341,7 +2341,7 @@ void special_bank_vault(void)
    }
 }
 
-void special_bank_teller(void)
+void special_bank_teller()
 {
    if(sitealarm||sitealienate||
       location[cursite]->siege.siege)
@@ -2371,7 +2371,7 @@ void special_bank_teller(void)
    }
 }
 
-void special_bank_money(void)
+void special_bank_money()
 {
    static int swat_counter = 0;
 
@@ -2419,7 +2419,7 @@ void special_bank_money(void)
    getkey();
 }
 
-void special_oval_office(void)
+void special_oval_office()
 {
    // Clear entire Oval Office area
    for(int dx=-1; dx<=1; dx++)
@@ -2472,7 +2472,7 @@ void special_oval_office(void)
    }
 }
 
-void special_ccs_boss(void)
+void special_ccs_boss()
 {
    if(sitealarm||sitealienate||
       location[cursite]->siege.siege)

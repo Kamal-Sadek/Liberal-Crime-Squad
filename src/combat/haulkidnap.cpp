@@ -37,7 +37,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* prompt after you've said you want to kidnap someone */
-void kidnapattempt(void)
+void kidnapattempt()
 {
    short kidnapper=-1;
 
@@ -179,7 +179,7 @@ void kidnapattempt(void)
 }
 
 /* prompt after you've said you want to release someone */
-void releasehostage(void)
+void releasehostage()
 {
    short kidnapper=-1;
 

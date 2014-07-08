@@ -411,10 +411,10 @@ public:
    explicit Creature(const std::string& inputXml);
    string showXml() const;
 
-   bool is_active_liberal(void) const;
-   bool is_imprisoned(void) const;
-   bool is_lcs_sleeper(void) const;
-   char canwalk(void) const
+   bool is_active_liberal() const;
+   bool is_imprisoned() const;
+   bool is_lcs_sleeper() const;
+   char canwalk() const
    {
       if(!alive)return 0;
       int legok=2;
@@ -429,7 +429,7 @@ public:
 
       return 1;
    }
-   void creatureinit(void);
+   void creatureinit();
    //int attval(short a,char usejuice=1);
 
    /* are they interested in talking about the issues? */

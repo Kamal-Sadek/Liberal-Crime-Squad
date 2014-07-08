@@ -47,7 +47,7 @@ make it more likely to be raided:
 /* siege - gives up on sieges with empty locations */
 /* Work in progress. It works, but needs to be called in more places. */
 /* Currently, it only works when you confront a siege and then fail. */
-void resolvesafehouses(void)
+void resolvesafehouses()
 {
    for(int l=0;l<(int)location.size();l++)
    {
@@ -1427,7 +1427,7 @@ void siegeturn(char clearformess)
 
 
 /* siege - handles giving up */
-void giveup(void)
+void giveup()
 {
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
@@ -1510,7 +1510,7 @@ void giveup(void)
       {
          move(5,1);
          addstr(pname, gamelog);
-         if(stricmp(pname,pcname))
+         if(strcmp(pname,pcname))
          {
             addstr(", aka ", gamelog);
             addstr(pcname, gamelog);
@@ -1897,7 +1897,7 @@ char sally_forth_aux(int loc)
 }
 
 /* siege - prepares for exiting the siege to fight the attackers head on */
-void sally_forth(void)
+void sally_forth()
 {  //GIVE INFO SCREEN
    erase();
    set_color(COLOR_RED,COLOR_BLACK,1);
@@ -1999,7 +1999,7 @@ void sally_forth(void)
 
 
 /* siege - prepares for entering site mode to fight the siege */
-void escape_engage(void)
+void escape_engage()
 {
    //GIVE INFO SCREEN
    erase();
@@ -2217,7 +2217,7 @@ void escapesiege(char won)
 
 
 /* siege - flavor text when you fought off the raid */
-void conquertext(void)
+void conquertext()
 {
    //GIVE INFO SCREEN
    erase();
@@ -2258,7 +2258,7 @@ void conquertext(void)
 
 
 /* siege - flavor text when you crush a CCS safe house */
-void conquertextccs(void)
+void conquertextccs()
 {
    //GIVE INFO SCREEN
    erase();

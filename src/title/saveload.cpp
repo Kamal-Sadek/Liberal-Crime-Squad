@@ -353,7 +353,7 @@ Item* create_item(const std::string& inputXml)
 }
 
 /* loads the game from save.dat */
-char load(void)
+char load()
 {
    //LOAD FILE
    int loadversion;
@@ -820,7 +820,7 @@ char load(void)
 
 
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(void)
+void reset()
 {
     LCSDeleteFile("save.dat",LCSIO_PRE_HOME);
 }

@@ -50,24 +50,22 @@ enum ClipType
 
 class Weapon
 {
-   short type;
-   short ammo;
-
-   bool ranged(void)
+   short type,ammo;
+   bool ranged()
    {
       switch(type)
       {
-         case WEAPON_REVOLVER_22:
-         case WEAPON_REVOLVER_44:
-         case WEAPON_SEMIPISTOL_9MM:
-         case WEAPON_SEMIPISTOL_45:
-         case WEAPON_AUTORIFLE_M16:
-         case WEAPON_AUTORIFLE_AK47:
-         case WEAPON_SEMIRIFLE_AR15:
-         case WEAPON_CARBINE_M4:
-         case WEAPON_SMG_MP5:
-         case WEAPON_SHOTGUN_PUMP:
-            return 1;
+      case WEAPON_REVOLVER_22:
+      case WEAPON_REVOLVER_44:
+      case WEAPON_SEMIPISTOL_9MM:
+      case WEAPON_SEMIPISTOL_45:
+      case WEAPON_AUTORIFLE_M16:
+      case WEAPON_AUTORIFLE_AK47:
+      case WEAPON_SEMIRIFLE_AR15:
+      case WEAPON_CARBINE_M4:
+      case WEAPON_SMG_MP5:
+      case WEAPON_SHOTGUN_PUMP:
+         return 1;
       }
       return 0;
    }

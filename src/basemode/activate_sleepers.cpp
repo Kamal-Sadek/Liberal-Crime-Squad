@@ -20,7 +20,7 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* base - activate sleepers */
-void activate_sleepers(void)
+void activate_sleepers()
 {
    vector<Creature *> temppool;
    // Comb the pool of Liberals for sleeper agents

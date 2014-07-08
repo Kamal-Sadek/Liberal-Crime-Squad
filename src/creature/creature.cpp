@@ -383,27 +383,27 @@ std::string Creature::get_type_name() const
    return getcreaturetype(type_idname)->get_type_name();
 }
 
-bool Creature::is_lcs_sleeper(void) const
+bool Creature::is_lcs_sleeper() const
 {
    return(alive && align==ALIGN_LIBERAL && clinic==0 &&
       dating==0 && hiding==0 && (flag & CREATUREFLAG_SLEEPER));
 }
 
-bool Creature::is_imprisoned(void) const
+bool Creature::is_imprisoned() const
 {
    return(alive && clinic==0 && dating==0 && hiding==0 &&
       !(flag & CREATUREFLAG_SLEEPER) &&
       loc_proxy()[this->location]->part_of_justice_system());
 }
 
-bool Creature::is_active_liberal(void) const
+bool Creature::is_active_liberal() const
 {
    return(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
       hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
       !loc_proxy()[this->location]->part_of_justice_system());
 }
 
-void Creature::creatureinit(void)
+void Creature::creatureinit()
 {
    dontname=false;
    hireid=-1;

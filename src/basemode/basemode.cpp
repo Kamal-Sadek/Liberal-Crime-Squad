@@ -220,10 +220,10 @@ enum CantSeeReason
    CANTSEE_DISBANDING = 4
 };
 
-void mode_base(void)
+void mode_base()
 {
    char forcewait,canseethings;
-   int nonsighttime=0,oldforcemonth=month,length=0,l=0;
+   int nonsighttime=0,oldforcemonth=month,l=0;
 
    while(true)
    {
@@ -510,10 +510,9 @@ void mode_base(void)
             mvaddstr(22,1,"P - PATRIOTISM: fly a flag here ($20)");
          }
 
-         length=strlen(slogan);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         if(haveflag) mvaddstr(17,40-(length>>1),slogan);
-         else mvaddstr(13,40-(length>>1),slogan);
+         if(haveflag) mvaddstr(17,39-((strlen(slogan)-1)>>1),slogan);
+         else mvaddstr(13,39-((strlen(slogan)-1)>>1),slogan);
       }
 
       switch(int c=forcewait?'w':getkey())

@@ -64,7 +64,7 @@ the bottom of includes.h in the top src folder.
 #include <externs.h>
 
 /* base - review and reorganize liberals */
-void review(void)
+void review()
 {
    int page=0;
 
@@ -1134,7 +1134,7 @@ void assemblesquad(squadst *cursquad)
 
 
 /* base - review - assign new bases to the squadless */
-void squadlessbaseassign(void)
+void squadlessbaseassign()
 {
    int p=0,l=0,page_lib=0,page_loc=0,selectedbase=0;
    vector<Creature *> temppool;
@@ -1318,7 +1318,7 @@ static void printname(Creature &cr)
 }
 
 /* base - review - promote liberals */
-void promoteliberals(void)
+void promoteliberals()
 {
    #define PAGELENGTH 19
    vector<Creature *> temppool;

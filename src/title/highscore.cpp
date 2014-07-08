@@ -31,7 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 #include "lcsio.h"
 
 /* displays the high score board */
-void viewhighscores(void)
+void viewhighscores()
 {
    int s;
    loadhighscores();
@@ -198,7 +198,7 @@ void viewhighscores(void)
 }
 
 /* loads the high scores file */
-void loadhighscores(void)
+void loadhighscores()
 {
    for(int s=0;s<SCORENUM;s++)score[s].valid=0;
 

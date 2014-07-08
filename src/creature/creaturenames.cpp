@@ -530,9 +530,7 @@ void firstname(char *str, char gender)
 
    // For white male Arch-Conservative politicians
    if(gender == GENDER_WHITEMALEPATRIARCH)
-   {
       nametable = GENDER_WHITEMALEPATRIARCH;
-   }
 
    // Assign a name from the available names for each gender
    if(gender == GENDER_MALE)
@@ -544,9 +542,9 @@ void firstname(char *str, char gender)
       // Decide whether to use a gender-specific name
       // or a gender-neutral name
       if(roll >= ARRAY_ELEMENTS(gender_neutral_first_names))
-      {  nametable = GENDER_MALE;   }
+         nametable = GENDER_MALE;
       else
-      {  nametable = GENDER_NEUTRAL;   }
+         nametable = GENDER_NEUTRAL;
    }
    else if(gender == GENDER_FEMALE)
    {
@@ -554,46 +552,21 @@ void firstname(char *str, char gender)
       roll = LCSrandom( ARRAY_ELEMENTS(female_first_names) +
                         ARRAY_ELEMENTS(gender_neutral_first_names));
       if(roll >= ARRAY_ELEMENTS(gender_neutral_first_names))
-      {  nametable = GENDER_FEMALE; }
+         nametable = GENDER_FEMALE;
       else
-      {  nametable = GENDER_NEUTRAL;   }
+         nametable = GENDER_NEUTRAL;
    }
 
    if(nametable == GENDER_MALE)
-//{{{ Male
-   {
-      strcat(str, selectRandomString(male_first_names,
-                      ARRAY_ELEMENTS(male_first_names)));
-   }
-//}}}
+      strcat(str, RANDOM_STRING(male_first_names));
    else if(nametable == GENDER_FEMALE)
-//{{{ Female
-   {
-      strcat(str, selectRandomString(female_first_names,
-                      ARRAY_ELEMENTS(female_first_names)));
-//}}}
-   }
-//}}}
-//{{{ Neutral
+      strcat(str, RANDOM_STRING(female_first_names));
    else if(nametable == GENDER_NEUTRAL)
-   {
-      strcat(str, selectRandomString(gender_neutral_first_names,
-                      ARRAY_ELEMENTS(gender_neutral_first_names)));
-   }
-//}}}
+      strcat(str, RANDOM_STRING(gender_neutral_first_names));
    else if(nametable == GENDER_WHITEMALEPATRIARCH)
-//{{{ White Male Patriarchs
-   {
-      strcat(str, selectRandomString(great_white_male_patriarch_first_names,
-                      ARRAY_ELEMENTS(great_white_male_patriarch_first_names)));
-   }
-//}}}
+      strcat(str, RANDOM_STRING(great_white_male_patriarch_first_names));
    else
-//{{{ We have an error, so let's name the person "Errol"
-   {
       strcat(str, "Errol");
-   }
-//}}}
 }
 /* gets a random last name */
 void lastname(char *str, bool archconservative)
@@ -932,7 +905,7 @@ void lastname(char *str, bool archconservative)
       // Roll on the number of non-Arch-Conservative last names,
       // plus the number of regular last names
       int roll = LCSrandom( ARRAY_ELEMENTS(regular_last_names) +
-                        ARRAY_ELEMENTS(archconservative_last_names));
+                            ARRAY_ELEMENTS(archconservative_last_names));
       // Decide whether to use an Arch-Conservative last name
       // or a regular last name
       archconservative = (roll >= ARRAY_ELEMENTS(regular_last_names));
@@ -943,7 +916,7 @@ void lastname(char *str, bool archconservative)
    // last names
 
    if(archconservative)
-      strcat(str, selectRandomString(archconservative_last_names, ARRAY_ELEMENTS(archconservative_last_names)));
+      strcat(str, RANDOM_STRING(archconservative_last_names));
    else
-      strcat(str, selectRandomString(regular_last_names, ARRAY_ELEMENTS(regular_last_names)));
+      strcat(str, RANDOM_STRING(regular_last_names));
 }

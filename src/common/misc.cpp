@@ -387,20 +387,6 @@ void romannumeral(int amendnum)
    }
 }
 
-/*
-   Select one string randomly from a table of strings, e.g.
-   const char *strtbl[] = {"abc", "d", "efgh"};
-   SelectRandomString(strtbl, 3);
-*/
-const char *selectRandomString(const char **string_table, int table_size)
-{
-   int roll;
-
-   roll = LCSrandom(table_size);
-
-   return(string_table[roll]);
-}
-
 // Sets the interval according to a string that is either a number or two
 // number separated by a dash. Returns false and does not change the
 // interval if the given string is not a valid interval.
@@ -418,14 +404,11 @@ bool Interval::set_interval(const string& interval)
    }
    else
    {
-      string smin=interval.substr(0,dashpos);
-      string smax=interval.substr(dashpos+1);
-      if (!valid(smin)||!valid(smax))return false;
-      int tmin=atoi(smin);
-      int tmax=atoi(smax);
-      if (tmin>tmax)return false;
-      min=tmin;
-      max=tmax;
+      string smin=interval.substr(0,dashpos),smax=interval.substr(dashpos+1);
+      if(!valid(smin)||!valid(smax))return false;
+      int tmin=atoi(smin),tmax=atoi(smax);
+      if(tmin>tmax)return false;
+      min=tmin,max=tmax;
    }
    return true;
 }

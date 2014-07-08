@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* select new game options */
-void setup_newgame(void)
+void setup_newgame()
 {
    bool classicmode   = false;
    bool strongccs     = false;
@@ -219,7 +219,7 @@ enum recruits
 };
 
 /* creates your founder */
-void makecharacter(void)
+void makecharacter()
 {
    Creature *newcr=new Creature;
    newcr->align=1;

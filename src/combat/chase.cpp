@@ -35,7 +35,7 @@ This file is part of Liberal Crime Squad.                                       
 #define CARCHASE_EVERYONEDEAD    3
 #define CARCHASE_ESCAPED         4
 
-bool chasesequence(void)
+bool chasesequence()
 {
    int p=0,chasenum=0,v2=0;
 
@@ -373,7 +373,7 @@ bool chasesequence(void)
    return 1;
 }
 
-bool footchase(void)
+bool footchase()
 {
    //NOTE: THIS FUNCTION RETURNS 1 IF ANYBODY ESCAPES
    //IT SHOULD NOT DELETE SQUADS OR CREATURES
@@ -578,7 +578,7 @@ bool footchase(void)
 
 
 #define DRIVING_RANDOMNESS 13
-void evasivedrive(void)
+void evasivedrive()
 {
    int e;
    vector<long> yourrolls,theirrolls,theirrolls_id,theirrolls_drv;
@@ -729,7 +729,7 @@ void evasivedrive(void)
 
 
 
-void evasiverun(void)
+void evasiverun()
 {
    vector<int> yourspeed;
    yourspeed.resize(6);
@@ -1358,7 +1358,7 @@ bool obstacledrive(short obstacle,char choice)
    return 0;
 }
 
-bool dodgedrive(void)
+bool dodgedrive()
 {
    int v;
    clearmessagearea();
@@ -1444,7 +1444,7 @@ void crashfriendlycar(int v)
    move(16,1);
    addstr("Your ", gamelog);
    addstr(chaseseq.friendcar[v]->fullname(), gamelog);
-   addstr(selectRandomString(car_crash_modes, ARRAY_ELEMENTS(car_crash_modes)), gamelog);
+   addstr(RANDOM_STRING(car_crash_modes), gamelog);
    gamelog.newline(); //New line it.
    printparty();
 
@@ -1490,7 +1490,7 @@ void crashfriendlycar(int v)
                set_color(COLOR_RED,COLOR_BLACK,1);
                move(16,1);
                addstr(activesquad->squad[p]->prisoner->name, gamelog);
-               addstr(selectRandomString(car_crash_fatalities, ARRAY_ELEMENTS(car_crash_fatalities)), gamelog);
+               addstr(RANDOM_STRING(car_crash_fatalities), gamelog);
 	            gamelog.newline(); //New line.
                printparty();
 
@@ -1639,7 +1639,7 @@ void crashenemycar(int v)
    getkey();
 }
 
-void chase_giveup(void)
+void chase_giveup()
 {
    int p;
    int ps=find_police_station(chaseseq.location);

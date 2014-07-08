@@ -612,7 +612,7 @@ char liberalagenda(char won)
 
 
 /* base - liberal agenda - disband */
-char confirmdisband(void) // The (current) issue that the masses are most
+char confirmdisband() // The (current) issue that the masses are most
 {                         //        concerned should be (slightly) more likely
    char word[80];         //        to be the phrase. (Issue, not the CCS, etc.)
    int pos=0;             //                        -- LK

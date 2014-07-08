@@ -214,11 +214,6 @@ void CursesMoviest::loadmovie(const char *filename)
    }
 }
 
-void CursesMoviest::clean(void)
-{
-   delete_and_clear(frame);
-}
-
 void CursesMoviest::convertindices_song(filelistst &master)
 {
    if(songlist.list.size()==0) return;

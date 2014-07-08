@@ -1677,7 +1677,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
 
 /* news - graphics */
-void loadgraphics(void)
+void loadgraphics()
 {
    int picnum,dimx,dimy;
 

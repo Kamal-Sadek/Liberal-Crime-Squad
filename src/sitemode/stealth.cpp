@@ -338,7 +338,7 @@ void disguisecheck(int timer)
             move(16,1);
 
             addstr(activesquad->squad[blew_it]->name, gamelog);
-            addstr(selectRandomString(blew_stealth_check, ARRAY_ELEMENTS(blew_stealth_check)), gamelog);
+            addstr(RANDOM_STRING(blew_stealth_check), gamelog);
             gamelog.newline();
 
             getkey();
