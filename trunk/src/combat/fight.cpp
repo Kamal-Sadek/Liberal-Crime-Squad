@@ -33,7 +33,7 @@ This file is part of Liberal Crime Squad.                                       
 bool goodguyattack = false;
 
 /* attack handling for each side as a whole */
-void youattack(void)
+void youattack()
 {
    foughtthisround=1;
 
@@ -210,7 +210,7 @@ void youattack(void)
 
 
 
-void enemyattack(void)
+void enemyattack()
 {
    static const char *escape_crawling[] =
    {
@@ -309,8 +309,8 @@ void enemyattack(void)
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
                      (encounter[e].blood<45))
-                     addstr(selectRandomString(escape_crawling, ARRAY_ELEMENTS(escape_crawling)), gamelog);
-                  else addstr(selectRandomString(escape_running, ARRAY_ELEMENTS(escape_running)), gamelog);
+                     addstr(RANDOM_STRING(escape_crawling), gamelog);
+                  else addstr(RANDOM_STRING(escape_running), gamelog);
 
                   gamelog.newline();
 
@@ -1810,7 +1810,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
    {
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
-         strcat(str,selectRandomString(judge_debate, ARRAY_ELEMENTS(judge_debate)));
+         strcat(str,RANDOM_STRING(judge_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1843,11 +1843,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_POLITICIAN:
          if(a.align==-1)
-            strcat(str,selectRandomString(conservative_politician_debate,
-                                          ARRAY_ELEMENTS(conservative_politician_debate)));
+            strcat(str,RANDOM_STRING(conservative_politician_debate));
          else
-            strcat(str,selectRandomString(other_politician_debate,
-                                          ARRAY_ELEMENTS(other_politician_debate)));
+            strcat(str,RANDOM_STRING(other_politician_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1861,11 +1859,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_CORPORATE_CEO:
          if(a.align==-1)
-            strcat(str,selectRandomString(conservative_ceo_debate,
-                                          ARRAY_ELEMENTS(conservative_ceo_debate)));
+            strcat(str,RANDOM_STRING(conservative_ceo_debate));
          else
-            strcat(str,selectRandomString(other_ceo_debate,
-                                          ARRAY_ELEMENTS(other_ceo_debate)));
+            strcat(str,RANDOM_STRING(other_ceo_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1879,8 +1875,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_RADIOPERSONALITY:
       case CREATURE_NEWSANCHOR:
-         strcat(str,selectRandomString(media_debate,
-                                       ARRAY_ELEMENTS(media_debate)));
+         strcat(str,RANDOM_STRING(media_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1891,8 +1886,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
          break;
       case CREATURE_MILITARYOFFICER:
-         strcat(str,selectRandomString(military_debate,
-                                       ARRAY_ELEMENTS(military_debate)));
+         strcat(str,RANDOM_STRING(military_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1905,8 +1899,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
       case CREATURE_COP:
          if(a.enemy())
          {
-            strcat(str,selectRandomString(police_debate,
-                                          ARRAY_ELEMENTS(police_debate)));
+            strcat(str,RANDOM_STRING(police_debate));
             strcat(str,t.name);
             strcat(str,"!");
 

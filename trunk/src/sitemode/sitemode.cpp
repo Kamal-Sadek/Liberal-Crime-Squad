@@ -29,7 +29,7 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
-void fight_subdued(void)
+void fight_subdued()
 {
    int p;
    //int ps=find_police_station(chaseseq.location);
@@ -227,7 +227,7 @@ void mode_site(short loc)
    mode_site();
 }
 
-void mode_site(void)
+void mode_site()
 {
    int p,u,x;
    if(activesquad==NULL)return;
@@ -2534,7 +2534,7 @@ void mode_site(void)
 
 
 /* site - determines spin on site news story, "too hot" timer */
-void resolvesite(void)
+void resolvesite()
 {
    if(sitealienate) sitestory->positive=0;
 //removed the 'alarmed' requirement for high security buildings, on the principle that even if they didn't see you, they will presumably

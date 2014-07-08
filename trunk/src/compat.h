@@ -120,13 +120,6 @@ typedef PVOID HANDLE;
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
 // This is strcmp() on lowercase versions of the string.
-
-// strToLower() allocates a string and converts it to lower Case using POSIX
-// tolower() function.
-// Free returned string after use.
-
-char *strToLower (const char *str);
-
 int stricmp(const char *str1, const char *str2);
 #endif
 

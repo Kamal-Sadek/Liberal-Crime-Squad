@@ -454,7 +454,7 @@ char hack(short type,char &actual)
 
 
 /* run a radio broadcast */
-char radio_broadcast(void)
+char radio_broadcast()
 {
    sitealarm=1;
 
@@ -718,7 +718,7 @@ char radio_broadcast(void)
 
 
 /* run a tv broadcast */
-char news_broadcast(void)
+char news_broadcast()
 {
    sitealarm=1;
    int p;

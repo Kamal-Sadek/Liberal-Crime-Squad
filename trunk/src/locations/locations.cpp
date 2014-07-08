@@ -296,7 +296,7 @@ bool Location::duplicatelocation() {
    return 0;
 }
 
-void Location::update_heat_protection(void)
+void Location::update_heat_protection()
 {
    int l;
    for(l=0;l<(int)location.size();l++)

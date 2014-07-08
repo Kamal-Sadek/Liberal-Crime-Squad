@@ -30,7 +30,7 @@ This file is part of Liberal Crime Squad.                                       
 #include "news/news.h"
 #include "externs.h"
 
-void mode_title(void)
+void mode_title()
 {
    //title screen
    erase();
@@ -49,9 +49,8 @@ void mode_title(void)
 
    if(loaded)
    {
-      int l=strlen(slogan);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(8,40-(l>>1));
+      move(8,39-((strlen(slogan)-1)>>1));
       addstr(slogan);
 
       move(9,10);

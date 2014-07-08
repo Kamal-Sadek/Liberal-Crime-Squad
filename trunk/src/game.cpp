@@ -467,19 +467,13 @@ int main(int argc, char* argv[])
 int LCSrandom(int max)
 {
    r_num();
-
-   long double rand_y;
-   long double rand_i;
-
-   rand_i = 2147483648UL;
-
-   rand_y = max*((long double)seed/rand_i);
-
-   return((int)rand_y);
+   const long double rand_i = 2147483648UL;
+   const long double rand_y = max*((long double)seed/rand_i);
+   return (int)rand_y;
 }
 
 //sets seed to a random number from 0 to 2 billion
-int r_num(void)
+int r_num()
 {
    seed=((seed
       #ifdef MORERANDOM
@@ -487,12 +481,6 @@ int r_num(void)
       #endif
       )*907725L+99979777UL)%2147483648UL;
    return seed;
-}
-
-void chaseseqst::clean(void)
-{
-	delete_and_clear(enemycar);
-   friendcar.clear();
 }
 
 /* Free memory and exit the game */

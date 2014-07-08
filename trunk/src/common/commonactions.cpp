@@ -257,7 +257,7 @@ void removesquadinfo(Creature &cr)
 }
 
 /* common - purges empty squads from existence */
-void cleangonesquads(void)
+void cleangonesquads()
 {
    for(int sq=squad.size()-1;sq>=0;sq--)
    {  //NUKE SQUAD IF IT IS GONE

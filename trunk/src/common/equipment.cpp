@@ -496,7 +496,7 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
 }
 
 /* equipment - assign new bases to the equipment */
-void equipmentbaseassign(void)
+void equipmentbaseassign()
 {
    int p=0,l=0,page_loot=0,page_loc=0,selectedbase=0;
    bool sortbytype = false;

@@ -31,7 +31,7 @@ the bottom of includes.h in the top src folder.
 
 
 /* base - burn the flag */
-void burnflag(void)
+void burnflag()
 {
    int flagparts=126,flag[18][7][4],x,y;
 
@@ -158,103 +158,55 @@ void burnflag(void)
 }
 
 /* base - new slogan */
-void getslogan(void)
+void getslogan()
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    mvaddstr(16,0,"What is your new slogan?");
    mvaddstr(17,0,"                                                                                          "); // 80 spaces
 
-   enter_name(17,0,slogan,SLOGAN_LEN,"We need a slogan!");
+   enter_name(17,0,slogan,SLOGAN_LEN+1,"We need a slogan!");
 }
 
 
 
-/* site/chase/siege mode - reorder party */
-void orderparty(void)
+/* base - reorder party */
+void orderparty()
 {
    party_status=-1;
 
    int partysize=squadsize(activesquad);
 
    if(partysize<=1) return;
-
-   int spot=0;
-
-   do
-   {
-      printparty();
-
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
-      mvaddstr(8,20,"Choose a Liberal squad member for Place ");
-      addstr(spot+1);
-      addstr(".");
-
-      int c=getkey();
-
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
-
-      if(c>=spot+'1'&&c<=partysize+'1'-1)
-      {
-         Creature *swap=activesquad->squad[spot];
-         activesquad->squad[spot]=activesquad->squad[c-'1'];
-         activesquad->squad[c-'1']=swap;
-         spot++;
-      }
-   } while(spot<partysize-1);
-}
-
-/* base mode - reorder party */
-void orderpartyV2(void)
-{
-   party_status=-1;
-
-   int partysize=squadsize(activesquad);
-
-   if(partysize<=1) return;
-
-   int spot=0;
 
    while(true)
    {
       printparty();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      mvaddstr(8,20,"Choose squad member to replace ");
+      mvaddstr(8,26,"Choose squad member to move");
 
-      int c=getkey();
+      int oldPos=getkey();
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
+      if(oldPos<'1'||oldPos>partysize+'1'-1) return; // User chose index out of range, exit
+      makedelimiter();
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      std::string str="Choose squad member to replace ";
+      str+=activesquad->squad[oldPos-'1']->name;
+      str+=" in Spot ";
+      str+=(char)oldPos;
+      int x=39-((str.length()-1)>>1);
+      if(x<0) x=0;
+      mvaddstr(8,x,str);
 
-      int oldPos = c;
-      Creature *swap = NULL;
-      if(c>=spot+'1'&&c<=partysize+'1'-1)
-      {
-         swap=activesquad->squad[oldPos-'1'];
-      }
-      if(swap == NULL)
-      {
-         // Haven't found a member
-         return;
-      }
-      char num[20];
-      strcpy(num,oldPos);
-      addstr(swap->name);
-      addstr(" with");
+      int newPos=getkey();
 
-      c=getkey();
-
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
-
-      if(c>=spot+'1'&&c<=partysize+'1'-1)
-      {
-         activesquad->squad[oldPos-'1']=activesquad->squad[c-'1'];
-         activesquad->squad[c-'1']=swap;
-      }
+      if(newPos<'1'||newPos>partysize+'1'-1) return; // User chose index out of range, exit
+      swap(activesquad->squad[oldPos-'1'],activesquad->squad[newPos-'1']);
    }
 }
 
 /* base - go forth to stop evil */
-void stopevil(void)
+void stopevil()
 {
    int l=0,p=0;
 
@@ -536,7 +488,7 @@ void stopevil(void)
 
 
 /* base - invest in this location */
-void investlocation(void)
+void investlocation()
 {
    int loc=selectedsiege;
 
@@ -869,7 +821,7 @@ void investlocation(void)
 
 
 /* base - assign a vehicle to this squad */
-void setvehicles(void)
+void setvehicles()
 {
    int p, l;
    if(activesquad==NULL)return;

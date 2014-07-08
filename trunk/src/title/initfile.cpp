@@ -67,7 +67,7 @@ void setconfigoption(std::string name, std::string value)
    #endif
 }
 
-void loadinitfile(void)
+void loadinitfile()
 {
    std::fstream file;
    if (LCSOpenFileCPP("init.txt", ios::in, LCSIO_PRE_HOME, file))

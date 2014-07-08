@@ -1864,7 +1864,7 @@ void congress(char clearformess,char canseethings)
 }
 
 /* politics - checks if the game is won */
-char wincheck(void)
+char wincheck()
 {
    for(int e=0;e<EXECNUM;e++)if(exec[e]<2)return 0;
 

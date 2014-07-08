@@ -67,7 +67,7 @@
 //#define MORERANDOM
 
 // Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
-//#define ALLOWSTALIN
+#define ALLOWSTALIN
 
 
 #ifdef HAVE_CONFIG_H
@@ -233,7 +233,7 @@ using namespace std;
  * compat.cpp is the place for non-trivial or more global functions.
  *--------------------------------------------------------------------------*/
 
- inline unsigned int getSeed(void)
+ inline unsigned int getSeed()
  {
     unsigned int t;
     #ifdef GO_PORTABLE
@@ -302,7 +302,7 @@ using namespace std;
 #define ESC 27
 #define SPACEBAR 32
 
-int r_num(void);
+int r_num();
 int LCSrandom(int max);
 
 class Log;
@@ -497,7 +497,7 @@ enum Activity
 
 struct activityst
 {
-   activityst() : type(0),arg(0),arg2(0) { }
+   activityst() : type(0),arg(0),arg2(0) {}
    int type;
    long arg,arg2;
 };
@@ -546,22 +546,12 @@ class Ledger
 private:
    int funds;
 public:
-   int income[INCOMETYPENUM],expense[EXPENSETYPENUM],total_income,total_expense;
-   int dailyIncome[INCOMETYPENUM],dailyExpense[EXPENSETYPENUM];
+   int income[INCOMETYPENUM],expense[EXPENSETYPENUM],total_income,total_expense,dailyIncome[INCOMETYPENUM],dailyExpense[EXPENSETYPENUM];
    Ledger() : funds(7),total_income(0),total_expense(0)
    {
-      for(int i=0;i<INCOMETYPENUM;i++)
-      {
-         income[i]=0;
-         dailyIncome[i]=0;
-      }
-      for(int e=0;e<EXPENSETYPENUM;e++)
-      {
-         expense[e]=0;
-         dailyExpense[e]=0;
-      }
-   };
-
+      for(int i=0;i<INCOMETYPENUM;i++) income[i]=0,dailyIncome[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++) expense[e]=0,dailyExpense[e]=0;
+   }
    int get_funds() { return funds; }
    void force_funds(int amount) { funds=amount; }
    void add_funds(int amount,int incometype)
@@ -580,47 +570,36 @@ public:
    }
    void resetMonthlyAmounts()
    {
-      for(int i=0;i<INCOMETYPENUM;i++)income[i]=0;
-      for(int e=0;e<EXPENSETYPENUM;e++)expense[e]=0;
+      for(int i=0;i<INCOMETYPENUM;i++) income[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++) expense[e]=0;
    }
    void resetDailyAmounts()
    {
-      for(int i=0;i<INCOMETYPENUM;i++)dailyIncome[i]=0;
-      for(int e=0;e<EXPENSETYPENUM;e++)dailyExpense[e]=0;
+      for(int i=0;i<INCOMETYPENUM;i++) dailyIncome[i]=0;
+      for(int e=0;e<EXPENSETYPENUM;e++) dailyExpense[e]=0;
    }
 };
 
 class Interval
 {
 public:
-   int min;
-   int max;
-   Interval():min(0),max(0) {}
-   Interval(int value):min(value),max(value) {}
-   Interval(int low, int high):min(low),max(high) {}
-
-   void set_interval(int low, int high)
-   {
-      min = low;
-      max = high;
-   }
+   int min,max;
+   Interval() : min(0),max(0) {}
+   Interval(int value) : min(value),max(value) {}
+   Interval(int low, int high) : min(low),max(high) {}
+   void set_interval(int low, int high) { min=low,max=high; }
    // Sets the interval according to a string that is either a number or two
    // number separated by a dash. Returns false and does not change the
    // interval if the given string is not a valid interval.
-   bool set_interval(const string& interval);
-   int roll() const
-   {
-      return LCSrandom(max - min + 1) + min;
-   }
+   bool set_interval(const string& interval); // implemented in misc.cpp
+   int roll() const { return LCSrandom(max-min+1)+min; }
 private:
-   // Checks if a string is a number. Assumes non-numeric characters  other
-   // than dashes have aleady been checked for.
+   // Checks if a string is a number. Assumes non-numeric characters other
+   // than dashes have already been checked for.
    bool valid(const string& v)
-   {
-      return !(v.empty() ||
-               (v.length()==1&&v[0]=='-') ||  // Just a dash.
-               v.find('-', 1)!=string::npos); // A dash after the first char.
-   }
+   { return !(v.empty() ||
+             (v.length()==1&&v[0]=='-') ||     // Just a dash.
+              v.find('-', 1)!=string::npos); } // A dash after the first char.
 };
 
 #include "items/itemtype.h"
@@ -660,15 +639,12 @@ enum CarChaseObstacles
    CARCHASE_OBSTACLENUM
 };
 
-//struct chaseseqst
 struct chaseseqst
 {
    long location;
    vector<Vehicle *> friendcar,enemycar;
    char canpullover;
-
-   //public:
-   void clean(void);
+   void clean() { delete_and_clear(enemycar); friendcar.clear(); }
 };
 
 enum SquadStances
@@ -798,7 +774,7 @@ struct datest
    vector<Creature *> date;
    short timeleft;
    int city;
-   datest() : timeleft(0) { };
+   datest() : timeleft(0) {}
    ~datest() { delete_and_clear(date); }
 };
 
@@ -906,7 +882,7 @@ struct newsstoryst
    long loc,priority,page,guardianpage;
    char positive;
    short siegetype;
-   newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) { };
+   newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) {}
 };
 
 #define SLOGAN_LEN 79
@@ -920,8 +896,8 @@ struct highscorest
 //just a float that is initialized to 0
 struct float_zero
 {
-   float_zero() : n(0.0f) { };
-   operator float&() { return n; };
+   float_zero() : n(0.0f) {}
+   operator float&() { return n; }
    float n;
 };
 //Interrogation information for the interrogation system, to be
@@ -930,12 +906,17 @@ struct float_zero
 //of the target's current action.
 struct interrogation
 {
-   interrogation() : druguse(0) { techniques[0]=1,techniques[1]=1,techniques[2]=0,techniques[3]=0,techniques[4]=0,techniques[5]=0; };
+   interrogation() : druguse(0) { techniques[0]=1,techniques[1]=1,techniques[2]=0,techniques[3]=0,techniques[4]=0,techniques[5]=0; }
    bool techniques[6]; //yesterday's interrogation plan
    int druguse; //total days of drug use
    //Maps individual characters to the rapport built with them
    map<long,struct float_zero> rapport;
 };
+
+/* Determine table size in RANDOM_STRING and various functions in creaturenames.cpp */
+#define ARRAY_ELEMENTS(ARRAY_NAME) ((int)(sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0])))
+/* Pick a random string from a table of strings. */
+#define RANDOM_STRING(STRING_TABLE) (STRING_TABLE[LCSrandom(ARRAY_ELEMENTS(STRING_TABLE))])
 
 #define SCORENUM 5
 
@@ -1052,9 +1033,9 @@ void set_alignment_color(signed char alignment,bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */
-void locheader(void);
+void locheader();
 /* party info at top of screen */
-void printparty(void);
+void printparty();
 /* location info at top of screen */
 void printlocation(long loc);
 /* character info at top of screen */
@@ -1133,7 +1114,7 @@ void addjuice(Creature &cr,long juice,long cap);
 /* common - removes the liberal from all squads */
 void removesquadinfo(Creature &cr);
 /* common - purges empty squads from existance */
-void cleangonesquads(void);
+void cleangonesquads();
 /* common - moves all squad members and their cars to a new location */
 void locatesquad(squadst *st,long loc);
 /* common - assigns a new base to all members of a squad */
@@ -1272,7 +1253,7 @@ void equip(vector<Item *> &loot,int loc);
 /* lets you pick stuff to stash/retrieve from one location to another */
 void moveloot(vector<Item *> &dest,vector<Item *> &source);
 /* equipment - assign new bases to the equipment */
-void equipmentbaseassign(void);
+void equipmentbaseassign();
 /* combines multiple items of the same type into stacks */
 void consolidateloot(vector<Item *> &loot);
 /* compares two items, used in sorting gear */
@@ -1352,10 +1333,6 @@ void plate(char *str);
 const char* statename(int state=-1);
 /* endgame - converts an integer into a roman numeral for amendments */
 void romannumeral(int amendnum);
-/* Pick a random string from a table of strings. */
-extern const char *selectRandomString(const char **string_table, int table_size);
-/* Determine table_size in selectRandomString */
-#define ARRAY_ELEMENTS(ARRAY_NAME) ((int)(sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0])))
 /* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 
 
@@ -1376,7 +1353,7 @@ void HelpActivities(int activity);
 /*
  titlescreen.cpp
 */
-void mode_title(void);
+void mode_title();
 
 /*
  initfile.cpp
@@ -1384,15 +1361,15 @@ void mode_title(void);
 /* Handles a init.txt line */
 void setconfigoption(std::string name, std::string value);
 /* Loads and parses init.txt */
-void loadinitfile(void);
+void loadinitfile();
 
 /*
  highscore.cpp
 */
 /* displays the high score board */
-void viewhighscores(void);
+void viewhighscores();
 /* loads the high scores file */
-void loadhighscores(void);
+void loadhighscores();
 /* saves a new high score */
 void savehighscore(char endtype);
 
@@ -1400,9 +1377,9 @@ void savehighscore(char endtype);
  newgame.cpp
 */
 /* new game options screen */
-void setup_newgame(void);
+void setup_newgame();
 /* creates your founder */
-void makecharacter(void);
+void makecharacter();
 
 /*
  saveload.cpp
@@ -1410,9 +1387,9 @@ void makecharacter(void);
 /* handles saving */
 void savegame(const char *str);
 /* loads the game from save.dat */
-char load(void);
+char load();
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(void);
+void reset();
 
 
 /*******************************************************************************
@@ -1425,44 +1402,46 @@ void reset(void);
 /*
  basemode.cpp
 */
-void mode_base(void);
+void mode_base();
 
 /*
  baseactions.cpp
 */
 /* base - burn the flag */
-void burnflag(void);
+void burnflag();
 /* base - new slogan */
-void getslogan(void);
-/* site/chase/siege mode - reorder party */
-void orderparty(void);
-/* base mode - reorder party */
-void orderpartyV2(void);
+void getslogan();
+/* base - reorder party */
+void orderparty();
 /* base - go forth to stop evil */
-void stopevil(void);
+void stopevil();
+/* base - invest in this location */
+void investlocation();
+/* base - assign a vehicle to this squad */
+void setvehicles();
+
+/*
+ liberalagenda.cpp
+*/
 /* base - liberal agenda */
 char liberalagenda(char won);
 /* base - liberal agenda - disband */
-char confirmdisband(void);
-/* base - invest in this location */
-void investlocation(void);
-/* base - assign a vehicle to this squad */
-void setvehicles(void);
+char confirmdisband();
 
 /*
  activate_sleepers.cpp
 */
 /* base - activate the uninvolved */
-void activate_sleepers(void);
+void activate_sleepers();
 void activate_sleeper(Creature *cr);
 
 /*
  activate.cpp
 */
 /* base - activate the uninvolved */
-void activate(void);
+void activate();
 void activate(Creature *cr);
-void activatebulk(void);
+void activatebulk();
 /* base - activate - hostages */
 void select_tendhostage(Creature *cr);
 long select_hostagefundinglevel(Creature *cr,Creature *hs);
@@ -1483,14 +1462,14 @@ char select_view(Creature *cr,int &v);
  reviewmode.cpp
 */
 /* base - review and reorganize liberals */
-void review(void);
+void review();
 void review_mode(short mode);
 /* base - review - assemble a squad */
 void assemblesquad(squadst *cursquad);
 /* base - review - assign new bases to the squadless */
-void squadlessbaseassign(void);
+void squadlessbaseassign();
 /* base - review - promote liberals */
-void promoteliberals(void);
+void promoteliberals();
 void sortbyhire(vector<Creature *> &temppool,vector<int> &level);
 
 /*******************************************************************************
@@ -1504,9 +1483,9 @@ void sortbyhire(vector<Creature *> &temppool,vector<int> &level);
  sitemode.cpp
 */
 void mode_site(short loc);
-void mode_site(void);
+void mode_site();
 /* site - determines spin on site news story, "too hot" timer */
-void resolvesite(void);
+void resolvesite();
 /* behavior when the player bumps into a door in sitemode */
 void open_door(bool restricted);
 /* re-create site from seed before squad arrives */
@@ -1533,11 +1512,11 @@ int getrandomcreaturetype(int cr[CREATURENUM]);
 void printsitemap(int x,int y,int z);
 void printblock(int x,int y,int z,int px,int py);
 /* prints the names of creatures you see */
-void printencounter(void);
+void printencounter();
 /* prints the names of creatures you see in car chases */
-void printchaseencounter(void);
+void printchaseencounter();
 /* blanks a part of the screen */
-void clearcommandarea(void);
+void clearcommandarea();
 void clearmessagearea(bool redrawmaparea=true);
 void clearmaparea(bool lower=true,bool upper=true);
 
@@ -1551,9 +1530,9 @@ char bash(short type,char &actual);
 /* computer hack attempt */
 char hack(short type,char &actual);
 /* run a radio broadcast */
-char radio_broadcast(void);
+char radio_broadcast();
 /* run a tv broadcast */
-char news_broadcast(void);
+char news_broadcast();
 /* rescues people held at the activeparty's current location */
 void partyrescue(short special);
 /* everybody reload! */
@@ -1562,34 +1541,34 @@ void reloadparty(bool wasteful=false);
 /*
  mapspecials.cpp
 */
-void special_bouncer_assess_squad(void);
-void special_bouncer_greet_squad(void);
-void special_lab_cosmetics_cagedanimals(void);
+void special_bouncer_assess_squad();
+void special_bouncer_greet_squad();
+void special_lab_cosmetics_cagedanimals();
 void special_readsign(int sign);
-void special_nuclear_onoff(void);
-void special_lab_genetic_cagedanimals(void);
-void special_policestation_lockup(void);
-void special_courthouse_lockup(void);
-void special_courthouse_jury(void);
+void special_nuclear_onoff();
+void special_lab_genetic_cagedanimals();
+void special_policestation_lockup();
+void special_courthouse_lockup();
+void special_courthouse_jury();
 void special_prison_control(short prison_control_type);
-void special_intel_supercomputer(void);
-void special_sweatshop_equipment(void);
-void special_polluter_equipment(void);
-void special_house_photos(void);
-void special_corporate_files(void);
-void special_radio_broadcaststudio(void);
-void special_news_broadcaststudio(void);
-void special_graffiti(void);
-void special_armory(void);
-void special_display_case(void);
-void special_security_checkpoint(void);
-void special_security_metaldetectors(void);
-void special_security_secondvisit(void);
-void special_bank_teller(void);
-void special_bank_money(void);
-void special_bank_vault(void);
-void special_ccs_boss(void);
-void special_oval_office(void);
+void special_intel_supercomputer();
+void special_sweatshop_equipment();
+void special_polluter_equipment();
+void special_house_photos();
+void special_corporate_files();
+void special_radio_broadcaststudio();
+void special_news_broadcaststudio();
+void special_graffiti();
+void special_armory();
+void special_display_case();
+void special_security_checkpoint();
+void special_security_metaldetectors();
+void special_security_secondvisit();
+void special_bank_teller();
+void special_bank_money();
+void special_bank_vault();
+void special_ccs_boss();
+void special_oval_office();
 
 /*
  talk.cpp
@@ -1617,7 +1596,7 @@ char disguisesite(long type);
  advance.cpp
 */
 /* handles end of round stuff for everyone */
-void creatureadvance(void);
+void creatureadvance();
 /* handles end of round stuff for one creature */
 void advancecreature(Creature &cr);
 
@@ -1632,8 +1611,8 @@ void advancecreature(Creature &cr);
  fight.cpp
 */
 /* attack handling for each side as a whole */
-void youattack(void);
-void enemyattack(void);
+void youattack();
+void enemyattack();
 /* attack handling for an individual creature and its target */
 void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee=false);
 void specialattack(Creature &a,Creature &t,char &actual);
@@ -1663,18 +1642,18 @@ void autopromote(int loc);
 /*
  chase.cpp
 */
-bool chasesequence(void);
-bool footchase(void);
-void evasivedrive(void);
-void evasiverun(void);
+bool chasesequence();
+bool footchase();
+void evasivedrive();
+void evasiverun();
 int driveskill(Creature &cr,Vehicle &v);
 bool drivingupdate(short &obstacle);
 void makechasers(long sitetype,long sitecrime);
 bool obstacledrive(short obstacle,char choice);
-bool dodgedrive(void);
+bool dodgedrive();
 void crashfriendlycar(int v);
 void crashenemycar(int v);
-void chase_giveup(void);
+void chase_giveup();
 /* the next two functions force a chase sequence with a specific liberal */
 bool footchase(Creature &cr);
 bool chasesequence(Creature &cr,Vehicle &v);
@@ -1683,9 +1662,9 @@ bool chasesequence(Creature &cr,Vehicle &v);
  haulkidnap.cpp
 */
 /* prompt after you've said you want to kidnap someone */
-void kidnapattempt(void);
+void kidnapattempt();
 /* prompt after you've said you want to release someone */
-void releasehostage(void);
+void releasehostage();
 /* roll on the kidnap attempt and show the results */
 bool kidnap(Creature &a,Creature &t,bool &amateur);
 /* hostage freed due to host unable to haul */
@@ -1711,13 +1690,13 @@ void dispersalcheck(char &clearformess);
 /* promote a subordinate to maintain chain of command when boss is lost */
 bool promotesubordinates(Creature &cr,char &clearformess);
 /* daily - manages too hot timer and when a site map should be re-seeded and renamed */
-void advancelocations(void);
+void advancelocations();
 /* daily - returns true if the site type supports high security */
 char securityable(int type);
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(Location &loc);
 /* daily - returns the number of days in the current month */
-int monthday(void);
+int monthday();
 
 /*
  activities.cpp
@@ -1782,21 +1761,21 @@ void siegecheck(char canseethings);
 /* siege - updates sieges in progress */
 void siegeturn(char clearformess);
 /* siege - handles giving up */
-void giveup(void);
+void giveup();
 /* siege - checks how many days of food left at the site */
 int fooddaysleft(int loc);
 /* siege - checks how many people are eating at the site */
 int numbereating(int loc);
 /* siege - prepares for massed combat outside the safehouse */
-void sally_forth(void);
+void sally_forth();
 /* siege - prepares for entering site mode to fight the siege */
-void escape_engage(void);
+void escape_engage();
 /* siege - what happens when you escaped the siege */
 void escapesiege(char won);
 /* siege - flavor text when you fought off the raid */
-void conquertext(void);
+void conquertext();
 /* siege - flavor text when you crush a CCS safe house */
-void conquertextccs(void);
+void conquertextccs();
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc);
 void statebrokenlaws(Creature &cr);
@@ -1812,7 +1791,7 @@ void setpriority(newsstoryst &ns);
 /* news - show major news story */
 void displaystory(newsstoryst &ns,bool liberalguardian,int header);
 /* news - graphics */
-void loadgraphics(void);
+void loadgraphics();
 void displaycenterednewsfont(const std::string& str,int y);
 void displaycenteredsmallnews(const std::string& str,int y);
 void displaynewspicture(int p,int y);
@@ -1821,7 +1800,7 @@ void constructeventstory(char *story,short view,char positive);
 /* news - draws the specified block of text to the screen */
 void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
 /* news - shows animated news stories */
-void run_television_news_stories(void);
+void run_television_news_stories();
 /* news - make some filler junk */
 void generatefiller(char *story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
@@ -1889,11 +1868,11 @@ void prisonscene(Creature &g);
  politics.cpp
 */
 /* politics - calculate presidential approval */
-int presidentapproval(void);
+int presidentapproval();
 /* politics -- gets the leaning of an issue voter for an election */
-int getswingvoter(void);
+int getswingvoter();
 /* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP(void);
+void promoteVP();
 /* politics -- appoints a figure to an executive office, based on the President's alignment */
 void fillCabinetPost(int position);
 /* politics - causes the people to vote (presidential, congressional, propositions) */
@@ -1904,10 +1883,10 @@ void elections_house(char canseethings);
 void supremecourt(char clearformess,char canseethings);
 /* politics - causes congress to act on legislation */
 void congress(char clearformess,char canseethings);
-// letter of amenesty to the LCS from the President (you win)
-void amnesty(void);
+// letter of amnesty to the LCS from the President (you win)
+void amnesty();
 /* politics - checks if the game is won */
-char wincheck(void);
+char wincheck();
 /* politics - checks the prevailing attitude on a specific law, or overall */
 int publicmood(int l);
 /* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
@@ -1928,7 +1907,7 @@ void stalinize(char canseethings);
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */
-void amendmentheading(void);
+void amendmentheading();
 
 
 /*******************************************************************************

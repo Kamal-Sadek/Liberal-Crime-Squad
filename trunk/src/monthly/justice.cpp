@@ -1292,11 +1292,9 @@ char prison(Creature &g)
             move(10,1);
             addstr("by ", gamelog);
             if(law[LAW_DEATHPENALTY]==-2)
-            	addstr(selectRandomString(	cruel_and_unusual_execution_methods,
-            										ARRAY_ELEMENTS(cruel_and_unusual_execution_methods)), gamelog);
+            	addstr(RANDOM_STRING(cruel_and_unusual_execution_methods), gamelog);
             else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
-            	addstr(selectRandomString(	standard_execution_methods,
-            										ARRAY_ELEMENTS(standard_execution_methods)), gamelog);
+            	addstr(RANDOM_STRING(standard_execution_methods), gamelog);
             else
                addstr(supposedly_painless_execution_method, gamelog);
             addstr(".", gamelog);
@@ -1421,7 +1419,7 @@ void reeducation(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   addstr(selectRandomString(reeducation_experiences, ARRAY_ELEMENTS(reeducation_experiences)), gamelog);
+   addstr(RANDOM_STRING(reeducation_experiences), gamelog);
    gamelog.newline();
 
    getkey();
@@ -1498,7 +1496,7 @@ void laborcamp(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   addstr(selectRandomString(labor_camp_experiences, ARRAY_ELEMENTS(labor_camp_experiences)), gamelog);
+   addstr(RANDOM_STRING(labor_camp_experiences), gamelog);
    gamelog.newline();
 
    getkey();
@@ -1554,7 +1552,7 @@ void prisonscene(Creature &g)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   addstr(selectRandomString(prison_experiences, ARRAY_ELEMENTS(prison_experiences)), gamelog);
+   addstr(RANDOM_STRING(prison_experiences), gamelog);
    gamelog.newline();
 
    getkey();

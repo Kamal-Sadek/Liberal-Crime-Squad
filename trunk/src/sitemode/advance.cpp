@@ -32,7 +32,7 @@ This file is part of Liberal Crime Squad.                                       
 
 
 /* handles end of round stuff for everyone */
-void creatureadvance(void)
+void creatureadvance()
 {
    int e;
    for(int p=0;p<6;p++)

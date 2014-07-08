@@ -856,7 +856,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
 
 /* endgame - header for announcing constitutional amendments */
-void amendmentheading(void)
+void amendmentheading()
 {
    erase();
 

@@ -105,28 +105,13 @@ using namespace std;
 
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
-// This is strcmp() on lowercase versions of the
-// string.
-
-// strToLower() allocates a string and converts it to
-// Lower Case using POSIX tolower() function.
-// Free returned string after use.
-
-char *strToLower(const char *str)
-{
-   int len=strlen(str);
-   char *lstr=(char *)malloc((len+1)*sizeof(char));
-   for(int i=0;i<len;i++)lstr[i]=tolower(str[i]);
-   return lstr;
-}
-
+// This is strcmp() on lowercase versions of the string.
 int stricmp(const char *str1,const char *str2)
 {
-   char *lstr1=strToLower(str1),*lstr2=strToLower(str2);
-   int result=strcmp(lstr1,lstr2);
-   free(lstr1);
-   free(lstr2);
-   return result;
+   std::string lstr1=str1,lstr2=str2;
+   std::transform(lstr1.begin(), lstr1.end(), lstr1.begin(), ::tolower);
+   std::transform(lstr2.begin(), lstr2.end(), lstr2.begin(), ::tolower);
+   return lstr1.compare(lstr2);
 }
 #endif
 

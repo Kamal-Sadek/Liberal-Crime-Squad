@@ -593,7 +593,7 @@ void printblock(int x,int y,int z,int px, int py)
 }
 
 /* prints the names of creatures you see */
-void printencounter(void)
+void printencounter()
 {
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    for(int i=19;i<=24;i++)
@@ -619,7 +619,7 @@ void printencounter(void)
 
 
 /* prints the names of creatures you see in car chases */
-void printchaseencounter(void)
+void printchaseencounter()
 {
    for(int i=19;i<=24;i++)
       mvaddstr(i,0,"                                                                                "); // 80 spaces
@@ -650,7 +650,7 @@ void printchaseencounter(void)
 
 
 /* blanks a part of the screen */
-void clearcommandarea(void)
+void clearcommandarea()
 {
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    for(int y=9;y<16;y++)
@@ -659,7 +659,7 @@ void clearcommandarea(void)
 }
 
 
-void refreshmaparea(void)
+void refreshmaparea()
 {
    if(mode==GAMEMODE_SITE) printsitemap(locx,locy,locz);
    else clearmaparea(true,false);

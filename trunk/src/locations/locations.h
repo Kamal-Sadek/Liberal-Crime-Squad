@@ -246,26 +246,26 @@ public:
    Location() { }
    Location* addchild(int type);
    ~Location() { delete_and_clear(loot); }
-   void init(void);
-   void update_heat_protection(void);
-   bool duplicatelocation(void);
-   bool can_be_upgraded(void);
-   bool can_be_fortified(void);
-   bool fortified(void);
-   bool can_be_trapped(void);
-   bool trapped(void);
-   bool can_install_tanktraps(void);
-   bool tank_traps(void);
-   bool can_have_businessfront(void);
-   bool has_business_front(void);
-   bool bomb_resistant(void);
-   bool part_of_justice_system(void);
-   bool is_lcs_safehouse(void);
-   bool is_ccs_safehouse(void);
-   bool is_city(void);
+   void init();
+   void update_heat_protection();
+   bool duplicatelocation();
+   bool can_be_upgraded();
+   bool can_be_fortified();
+   bool fortified();
+   bool can_be_trapped();
+   bool trapped();
+   bool can_install_tanktraps();
+   bool tank_traps();
+   bool can_have_businessfront();
+   bool has_business_front();
+   bool bomb_resistant();
+   bool part_of_justice_system();
+   bool is_lcs_safehouse();
+   bool is_ccs_safehouse();
+   bool is_city();
    std::string getname(int shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
-   char* city_description(void);
+   char* city_description();
    void getloot(vector<Item *>& loot);
 };
 
