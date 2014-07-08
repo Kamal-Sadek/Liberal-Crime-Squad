@@ -382,6 +382,7 @@ void elections(char clearformess,char canseethings)
             case 3:propnum=5*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
             case 4:propnum=11*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
             case 5:propnum=13*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
+            case 6:propnum=17*(17-LCSrandom(2)*6)*(2-LCSrandom(2)*1);break;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -710,7 +711,7 @@ void elections_senate(int senmod,char canseethings)
          if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
          else winner=ALIGN_CONSERVATIVE;
       }
-      else if(change[3]+change[4]<change[0]+change[1]) // L side gain/loss is more than C side gain/loss
+      else if(change[3]+change[4]>change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
          if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
          else winner=ALIGN_LIBERAL;
@@ -951,7 +952,7 @@ void elections_house(char canseethings)
          if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
          else winner=ALIGN_CONSERVATIVE;
       }
-      else if(change[3]+change[4]<change[0]+change[1]) // L side gain/loss is more than C side gain/loss
+      else if(change[3]+change[4]>change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
          if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
          else winner=ALIGN_LIBERAL;

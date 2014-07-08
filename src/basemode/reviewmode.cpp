@@ -89,28 +89,22 @@ void review(void)
             if(squad[p]->squad[0]!=NULL&&squad[p]->squad[0]->location!=-1)
                mvaddstr(y,31,location[squad[p]->squad[0]->location]->getname(true, true));
 
-            move(y,51);
             if(squad[p]->squad[0]!=NULL)
             {
                std::string str=getactivity(squad[p]->activity);
-
                if(squad[p]->activity.type==ACTIVITY_NONE)
                {
-                  int count=0;bool haveact=false;
+                  bool haveact=false,multipleact=false;
                   for(int p2=0;p2<6;p2++)
                   {
                      if(squad[p]->squad[p2]==NULL) continue;
-                     count++;
-                     if(squad[p]->squad[p2]->activity.type!=ACTIVITY_NONE)
-                     {
-                        str=getactivity(squad[p]->squad[p2]->activity);
-                        haveact=true;
-                     }
+                     const std::string str2=getactivity(squad[p]->squad[p2]->activity);
+                     if(haveact&&str!=str2) multipleact=true;
+                     str=str2,haveact=true;
                   }
-                  if(haveact&&count>1) str="Acting Individually";
+                  if(multipleact) str="Acting Individually";
                }
-
-               addstr(str);
+               mvaddstr(y,51,str);
             }
          }
          else if(p==(int)squad.size())
@@ -461,13 +455,8 @@ void review_mode(short mode)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(22,0);
       addstr("Press a Letter to View Status.        Z - ");
-      if (swap) {
-	      addstr ("Place ");
-	      addstr (swap->name);
-      }
-      else {
-	      addstr ("Reorder Liberals");
-      }
+      if(swap) { addstr("Place "); addstr(swap->name); }
+      else addstr("Reorder Liberals");
       move(23,0);
       addpagestr();
       addstr(" T to sort people.");
@@ -502,12 +491,9 @@ void review_mode(short mode)
                   addstr("Profile of a Liberal");
                }
 
-               if(page==0)
-                  printliberalstats(*temppool[p]);
-               else if(page==1)
-                  printliberalskills(*temppool[p]);
-               else if(page==2)
-                  printliberalcrimes(*temppool[p]);
+               if(page==0) printliberalstats(*temppool[p]);
+               else if(page==1) printliberalskills(*temppool[p]);
+               else if(page==2) printliberalcrimes(*temppool[p]);
 
                // Add removal of squad members member
                move(22,0);
@@ -556,11 +542,9 @@ void review_mode(short mode)
 
                if(c=='n')
                {
-                  move(23,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("What is the new code name?                                       "); // 65 characters
-                  move(24,0);
-                  addstr("                                                                    "); // 68 spaces
+                  mvaddstr(23,0,"What is the new code name?                                                      "); // 80 characters
+                  mvaddstr(24,0,"                                                                                "); // 80 spaces
 
                   enter_name(24,0,temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
                }
@@ -577,13 +561,13 @@ void review_mode(short mode)
 
                   move(22,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Do you want to permanently release this squad member from the LCS?          "); // 76 characters
+                  addstr("Do you want to permanently release this squad member from the LCS?              "); // 80 characters
 
                   move(23,0);
-                  addstr("If the member has low heart they may go to the police.                         "); // 79 characters
+                  addstr("If the member has low heart they may go to the police.                          "); // 80 characters
 
                   move(24,0);
-                  addstr("  C - Confirm       Any other key to continue                                                "); // 93 characters (why over 80?)
+                  addstr("  C - Confirm       Any other key to continue                                   "); // 80 characters
 
                   int c=getkey();
 
@@ -592,12 +576,12 @@ void review_mode(short mode)
                      // Release squad member
                      move(22,0);
                      addstr(temppool[p]->name, gamelog);
-                     addstr(" has been released.                                                                      ", gamelog); // 89 characters (why over 80?)
+                     addstr(" has been released.                                                             ", gamelog); // 80 characters
                      move(23,0);
                      gamelog.newline(); //New line.
-                     addstr("                                                                                         "); // 89 characters (why over 80?)
+                     addstr("                                                                                "); // 80 spaces
                      move(24,0);
-                     addstr("                                                                                         "); // 89 characters (why over 80?)
+                     addstr("                                                                                "); // 80 spaces
 
                      getkey();
 
@@ -650,13 +634,13 @@ void review_mode(short mode)
 
                   move(22,0);
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addstr("Confirm you want to have ");
+                  addstr("Confirm you want to have "); // 25 characters (25+55=80)
                   addstr(pool[boss]->name);
-                  addstr(" kill this squad member?");
+                  addstr(" kill this squad member?                               "); // 55 characters (25+55=80)
                   move(23,0);
-                  addstr("Killing your squad members is Not a Liberal Act.                              ");
+                  addstr("Killing your squad members is Not a Liberal Act.                                "); // 80 characters
                   move(24,0);
-                  addstr("  C - Confirm       Any other key to continue                                                ");
+                  addstr("  C - Confirm       Any other key to continue                                   "); // 80 characters
 
                   int c=getkey();
 
@@ -668,23 +652,23 @@ void review_mode(short mode)
 
                      move(22,0);
                      addstr(pool[boss]->name, gamelog);
-                     addstr(" executes ", gamelog);
+                     addstr(" executes ", gamelog); // 10 characters (10+4+66=80)
                      addstr(temppool[p]->name, gamelog);
-                     addstr(" by ", gamelog);
+                     addstr(" by ", gamelog); // 4 characters (10+4+66=80)
                      switch(LCSrandom(3))
                      {
-                     case 0:addstr("strangling to death.                             ", gamelog);break;
-                     case 1:addstr("beating to death.                                ", gamelog);break;
-                     case 2:addstr("cold execution.                                  ", gamelog);break;
+                     case 0:addstr("strangling to death.                                              ", gamelog);break; // 66 characters (10+4+66=80)
+                     case 1:addstr("beating to death.                                                 ", gamelog);break; // 66 characters (10+4+66=80)
+                     case 2:addstr("cold execution.                                                   ", gamelog);break; // 66 characters (10+4+66=80)
                      }
                      move(23,0);
-                     addstr("                                                                            ");
+                     addstr("                                                                                "); // 80 spaces
                      move(24,0);
-                     addstr("                                                                            ");
+                     addstr("                                                                                "); // 80 spaces
 
                      getkey();
-                     move(22,0);
 
+                     move(22,0);
                      if(boss!=-1)
                      {
                         if(LCSrandom(pool[boss]->get_attribute(ATTRIBUTE_HEART,false))>LCSrandom(3))
@@ -692,19 +676,21 @@ void review_mode(short mode)
                            set_color(COLOR_GREEN,COLOR_BLACK,1);
                            gamelog.newline(); //New line.
                            addstr(pool[boss]->name, gamelog);
-                           addstr(" feels sick to the stomach afterward and ", gamelog);
+                           addstr(" feels sick to the stomach afterward and                                        ", gamelog); // 80 characters
                            pool[boss]->adjust_attribute(ATTRIBUTE_HEART,-1);
+                           move(23,0); // this sentence probably takes more than 80 characters so use 2 lines and break it here
+                           gamelog.newline(); //New line.
                            switch(LCSrandom(4))
                            {
-                           case 0:addstr("throws up in a trash can.                                          ", gamelog);break;
-                           case 1:addstr("gets drunk, eventually falling asleep.                             ", gamelog);break;
-                           case 2:addstr("curls up in a ball, crying softly.                                 ", gamelog);break;
-                           case 3:addstr("shoots up and collapses in a heap on the floor.                    ", gamelog);break;
+                           case 0:addstr("throws up in a trash can.                                                       ", gamelog);break; // 80 characters
+                           case 1:addstr("gets drunk, eventually falling asleep.                                          ", gamelog);break; // 80 characters
+                           case 2:addstr("curls up in a ball, crying softly.                                              ", gamelog);break; // 80 characters
+                           case 3:addstr("shoots up and collapses in a heap on the floor.                                 ", gamelog);break; // 80 characters
                            }
-                           move(23,0);
+                           move(24,0);
                            gamelog.newline(); //New line.
                            addstr(pool[boss]->name, gamelog);
-                           addstr(" has lost heart.", gamelog);
+                           addstr(" has lost heart.                                                                ", gamelog); // 80 characters
                            getkey();
                         }
                         else if(!LCSrandom(3))
@@ -712,12 +698,12 @@ void review_mode(short mode)
                            gamelog.newline(); //New line here too.
                            set_color(COLOR_CYAN,COLOR_BLACK,1);
                            addstr(pool[boss]->name, gamelog);
-                           addstr(" grows colder.                                                            ", gamelog);
+                           addstr(" grows colder.                                                                  ", gamelog); // 80 characters
                            pool[boss]->adjust_attribute(ATTRIBUTE_WISDOM,+1);
-                           move(23,0);
+                           move(24,0);
                            gamelog.newline(); //New line.
                            addstr(pool[boss]->name, gamelog);
-                           addstr(" has gained wisdom.                                                           ", gamelog);
+                           addstr(" has gained wisdom.                                                             ", gamelog); // 80 characters
                            getkey();
                         }
                      }
@@ -743,9 +729,9 @@ void review_mode(short mode)
          if(temppool.size()<=1)break;
 
          move(22,0);
-         addstr("                                                                               ");
+         addstr("                                                                                "); // 80 spaces
          move(23,0);
-         addstr("                                                                               ");
+         addstr("                                                                                "); // 80 spaces
 
          move(22,8);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -963,11 +949,11 @@ void assemblesquad(squadst *cursquad)
                {
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   move(22,0);
-                  addstr("                                                                               ");
+                  addstr("                                                                                "); // 80 spaces
                   move(23,0);
-                  addstr("           Liberals must be in the same location to form a Squad.              ");
+                  addstr("           Liberals must be in the same location to form a Squad.               "); // 80 characters
                   move(24,0);
-                  addstr("                                                                               ");
+                  addstr("                                                                                "); // 80 spaces
 
                   getkey();
 
@@ -979,11 +965,11 @@ void assemblesquad(squadst *cursquad)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
                move(22,0);
-               addstr("                                                                              ");
+               addstr("                                                                                "); // 80 spaces
                move(23,0);
-               addstr("                Squad Liberals must be able to move around.                   ");
+               addstr("                Squad Liberals must be able to move around.                     "); // 80 characters
                move(24,0);
-               addstr("                  Have this Liberal procure a wheelchair.                     ");
+               addstr("                                                                                "); // 80 spaces
 
                getkey();
 
@@ -1030,11 +1016,11 @@ void assemblesquad(squadst *cursquad)
 		{
 			move(22,0);
 			set_color(COLOR_WHITE,COLOR_BLACK,1);
-			addstr("Press a Letter to view Liberal details.                          ");
+			addstr("Press a Letter to view Liberal details.                                         "); // 80 characters
 			move(23,0);
-			addstr("                                                                 ");
+			addstr("                                                                                "); // 80 spaces
 			move(24,0);
-			addstr("                                                                 ");
+			addstr("                                                                                "); // 80 spaces
 			int c2=getkey();
 			if(c2>='a'&&c2<='s')
 			{
@@ -1082,11 +1068,11 @@ void assemblesquad(squadst *cursquad)
             set_color(COLOR_RED,COLOR_BLACK,1);
 
             move(22,0);
-            addstr("                                                                               ");
+            addstr("                                                                                "); // 80 spaces
             move(23,0);
-            addstr("You cannot form a Squad with only Conservatives!                               ");
+            addstr("You cannot form a Squad with only Conservatives!                                "); // 80 characters
             move(24,0);
-            addstr("                                                                               ");
+            addstr("                                                                                "); // 80 spaces
 
             getkey();
          }
@@ -1112,11 +1098,11 @@ void assemblesquad(squadst *cursquad)
       if(hasmembers)
       {
          move(22,0);
-         addstr("                                                                               "); // 79 characters
+         addstr("                                                                                "); // 80 spaces
          move(23,0);
-         addstr("What shall we designate this Liberal squad?                                    "); // 79 characters
+         addstr("What shall we designate this Liberal squad?                                     "); // 80 characters
          move(24,0);
-         addstr("                                                                               "); // 79 characters
+         addstr("                                                                                "); // 80 spaces
 
          enter_name(24,0,cursquad->name,SQUAD_NAMELEN,"The Liberal Crime Squad");
 

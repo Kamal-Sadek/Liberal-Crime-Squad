@@ -115,6 +115,7 @@ void savegame(const char *str)
       fwrite(&dummy,sizeof(int),1,h);
       for(l=0;l<(int)location.size();l++)
       {
+         consolidateloot(location[l]->loot); // consolidate loot before saving
          dummy=location[l]->loot.size();
          fwrite(&dummy,sizeof(int),1,h);
          for(int l2=0;l2<(int)location[l]->loot.size();l2++)
@@ -231,6 +232,7 @@ void savegame(const char *str)
                fwrite(&squad[sq]->squad[pos]->id,sizeof(int),1,h);
          }
 
+         consolidateloot(squad[sq]->loot); // consolidate loot before saving
          dummy=squad[sq]->loot.size();
          fwrite(&dummy,sizeof(int),1,h);
          for(int l2=0;l2<(int)squad[sq]->loot.size();l2++)
@@ -477,6 +479,7 @@ char load(void)
                delete_and_remove(location[l]->loot,l2);
             }
          }
+         consolidateloot(location[l]->loot); // consolidate loot after loading
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->changes.resize(dummy);
@@ -690,6 +693,7 @@ char load(void)
                delete_and_remove(squad[sq]->loot,l2);
             }
          }
+         consolidateloot(squad[sq]->loot); // consolidate loot after loading
       }
 
       activesquad=NULL;
