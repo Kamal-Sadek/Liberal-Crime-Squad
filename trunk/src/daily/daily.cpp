@@ -94,9 +94,11 @@ void advanceday(char &clearformess,char canseethings)
             {
             case 13:
                pool[p]->type=CREATURE_TEENAGER; // aww, all grown up
+               pool[p]->type_idname="CREATURE_TEENAGER";
                break;
             case 18:
                pool[p]->type=CREATURE_POLITICALACTIVIST; // ok seriously this time
+               pool[p]->type_idname="CREATURE_POLITICALACTIVIST";
                break;
             }
          }
