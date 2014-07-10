@@ -73,6 +73,8 @@ bool LineOfSight(int x, int y, int z)
 
    if(DIFF(x,locx)>2||DIFF(y,locy)>2) return false; // too far away
 
+   if(DIFF(x,locx)<=1&&DIFF(y,locy)<=1) return true; // right next to us or right where we're standing
+
    int x1,x2,y1,y2;
 
    if(DIFF(x,locx)==1) x1=locx,x2=x;
@@ -270,13 +272,6 @@ void printwall(int x, int y, int z, int px, int py)
    if(levelmap[x+1][y-1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) visible[CORNER_UR] = false;
    if(levelmap[x-1][y+1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) visible[CORNER_DL] = false;
    if(levelmap[x+1][y+1][z].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR)) visible[CORNER_DR] = false;
-
-   // 5) Check for corner being part of already visible wall,
-   //    in which case drawing it twice would be redundant
-   if(visible[WALL_LEFT]) visible[CORNER_UL] = false, visible[CORNER_DL] = false;
-   if(visible[WALL_RIGHT]) visible[CORNER_UR] = false, visible[CORNER_DR] = false;
-   if(visible[WALL_UP]) visible[CORNER_UL] = false, visible[CORNER_UR] = false;
-   if(visible[WALL_DOWN]) visible[CORNER_DL] = false, visible[CORNER_DR] = false;
 
    // Below not used for doors
    if(levelmap[x][y][z].flag & SITEBLOCK_BLOCK)

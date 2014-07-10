@@ -324,7 +324,7 @@ void updateclasschoice(Creature *cr, char choice)
 
 void activate(Creature *cr)
 {
-   int hostagecount=0,state=0,choice=0;
+   int hostagecount=0,state=0,oldstate=0,choice=0;
    char havedead=0;
    for(int p=0;p<(int)pool.size();p++)
    {
@@ -358,6 +358,78 @@ void activate(Creature *cr)
 
       makedelimiter();
 
+      if(!state) switch(cr->activity.type)
+      {
+      case ACTIVITY_COMMUNITYSERVICE:
+      case ACTIVITY_TROUBLE:
+      case ACTIVITY_GRAFFITI:
+      case ACTIVITY_POLLS:
+      case ACTIVITY_DOS_ATTACKS:
+      case ACTIVITY_HACKING:
+      case ACTIVITY_WRITE_LETTERS:
+      case ACTIVITY_WRITE_GUARDIAN:
+         state='a';
+         break;
+      case ACTIVITY_DONATIONS:
+      case ACTIVITY_SELL_TSHIRTS:
+      case ACTIVITY_SELL_ART:
+      case ACTIVITY_SELL_MUSIC:
+         state='b';
+         break;
+      case ACTIVITY_SELL_DRUGS:
+      case ACTIVITY_PROSTITUTION:
+      case ACTIVITY_CCFRAUD:
+      case ACTIVITY_DOS_RACKET:
+         state='c';
+         break;
+      case ACTIVITY_RECRUITING:
+      case ACTIVITY_MAKE_ARMOR:
+      case ACTIVITY_REPAIR_ARMOR:
+      case ACTIVITY_STEALCARS:
+      case ACTIVITY_WHEELCHAIR:
+         state='d';
+         break;
+      case ACTIVITY_TEACH_POLITICS:
+      case ACTIVITY_TEACH_COVERT:
+      case ACTIVITY_TEACH_FIGHTING:
+         state='t';
+         break;
+      case ACTIVITY_HOSTAGETENDING:
+         state='i';
+         break;
+      case ACTIVITY_STUDY_DEBATING:
+      case ACTIVITY_STUDY_MARTIAL_ARTS:
+      case ACTIVITY_STUDY_DRIVING:
+      case ACTIVITY_STUDY_PSYCHOLOGY:
+      case ACTIVITY_STUDY_FIRST_AID:
+      case ACTIVITY_STUDY_LAW:
+      case ACTIVITY_STUDY_DISGUISE:
+      case ACTIVITY_STUDY_SCIENCE:
+      case ACTIVITY_STUDY_BUSINESS:
+      //case ACTIVITY_STUDY_COOKING:
+      case ACTIVITY_STUDY_GYMNASTICS:
+      case ACTIVITY_STUDY_WRITING:
+      case ACTIVITY_STUDY_ART:
+      case ACTIVITY_STUDY_MUSIC:
+      case ACTIVITY_STUDY_TEACHING:
+      case ACTIVITY_STUDY_LOCKSMITHING:
+         state='l';
+         break;
+      case ACTIVITY_CLINIC:
+         state='m';
+         break;
+      case ACTIVITY_HEAL:
+         state='h';
+         break;
+      case ACTIVITY_BURY:
+         state='z';
+         break;
+      case ACTIVITY_NONE:
+         state='x';
+         break;
+      }
+      oldstate=state;
+
       set_color(COLOR_WHITE,COLOR_BLACK,state=='a');
       mvaddstr(10,1,"A - Engaging in Liberal Activism");
 
@@ -373,24 +445,24 @@ void activate(Creature *cr)
       set_color(COLOR_WHITE,COLOR_BLACK,state=='t');
       mvaddstr(14,1,"T - Teaching Other Liberals");
 
-      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_HOSTAGETENDING&&state==0);
+      if(hostagecount>0)set_color(COLOR_WHITE,COLOR_BLACK,state=='i');
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       mvaddstr(15,1,"I - Tend to a Conservative hostage");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='l');
       mvaddstr(16,1,"L - Learn in the University District");
 
-      if(clinictime(*cr)) set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CLINIC&&state==0);
+      if(clinictime(*cr)) set_color(COLOR_WHITE,COLOR_BLACK,state=='m');
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       mvaddstr(17,1,"M - Move to the Free Clinic");
 
       if(cr->get_skill(SKILL_FIRSTAID)!=0)
-         set_color(COLOR_WHITE,COLOR_BLACK,(cr->activity.type==ACTIVITY_HEAL||cr->activity.type==ACTIVITY_NONE)&&state==0);
+         set_color(COLOR_WHITE,COLOR_BLACK,state=='h');
       else
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       mvaddstr(18,1,"H - Heal Liberals");
 
-      if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_BURY&&state==0);
+      if(havedead)set_color(COLOR_WHITE,COLOR_BLACK,state=='z');
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       mvaddstr(19,1,"Z - Dispose of bodies");
 
@@ -402,13 +474,13 @@ void activate(Creature *cr)
       /*char underattack=0;
       if(siege!=NULL&&sieged)underattack=siege->underattack;*/
 
-      if (!sieged)
-      {
+      if(!sieged)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(20,1,"E - Equip this Liberal");
-      }
+      else
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+      mvaddstr(20,1,"E - Equip this Liberal");
 
-      if(state == 'a' || state == 'b' || state == 'c' || state == 'd' )
+      if(state=='a'||state=='b'||state=='c'||state=='d')
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(19,40,"? - Help");
@@ -417,7 +489,7 @@ void activate(Creature *cr)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr(20,40,"Enter - Confirm Selection");
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,state=='x');
       mvaddstr(21,1,"X - Nothing for Now");
 
       switch(state)
@@ -485,8 +557,10 @@ void activate(Creature *cr)
          mvaddstr(10,40,"1 - Sell Brownies");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_PROSTITUTION);
+#ifndef ZEROMORAL
          if(cr->age < 18)
             set_color(COLOR_BLACK, COLOR_BLACK, 1);    //Grayed out for minors
+#endif
          mvaddstr(11,40,"2 - Prostitution");
 
          set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_CCFRAUD);
@@ -709,8 +783,8 @@ void activate(Creature *cr)
 
       int c=getkey();
 
-      if(c>='a'&&c<='z'){state=c;}
-      if((c>='a'&&c<='z') || (c>='1'&&c<='9'))
+      if(c>='a'&&c<='z') state=c;
+      if((c>='a'&&c<='z') || (c>='0'&&c<='9'))
       {
          choice=c;
          switch(state)
@@ -734,29 +808,21 @@ void activate(Creature *cr)
                   cr->activity.type=ACTIVITY_WRITE_GUARDIAN;break;
                }
             default:
-               if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>7)
-               {
+               if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>7||cr->juice<0)
                   cr->activity.type=ACTIVITY_COMMUNITYSERVICE;
-               }
                else if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>4)
-               {
                   cr->activity.type=ACTIVITY_TROUBLE;
-               }
                else
                {
                   if(cr->get_skill(SKILL_COMPUTERS)>2)
-                  {
                      cr->activity.type=ACTIVITY_HACKING;
-                  }
                   else if(cr->get_skill(SKILL_ART)>1)
                   {
                      cr->activity.type=ACTIVITY_GRAFFITI;
                      cr->activity.arg=-1;
                   }
                   else
-                  {
                      cr->activity.type=ACTIVITY_TROUBLE;
-                  }
                }
             }
             break;
@@ -769,21 +835,13 @@ void activate(Creature *cr)
             case '4':cr->activity.type=ACTIVITY_SELL_MUSIC;break;
             default:
                if(cr->get_skill(SKILL_ART)>1)
-               {
                   cr->activity.type=ACTIVITY_SELL_ART;
-               }
                else if(cr->get_skill(SKILL_TAILORING)>1)
-               {
                   cr->activity.type=ACTIVITY_SELL_TSHIRTS;
-               }
                else if(cr->get_skill(SKILL_MUSIC)>1)
-               {
                   cr->activity.type=ACTIVITY_SELL_MUSIC;
-               }
                else
-               {
                   cr->activity.type=ACTIVITY_DONATIONS;
-               }
             }
             break;
          case 'c':
@@ -791,13 +849,20 @@ void activate(Creature *cr)
             {
             case '1':cr->activity.type=ACTIVITY_SELL_DRUGS;break;
             case '2':
-               if(cr->age >= 18) cr->activity.type=ACTIVITY_PROSTITUTION;break;
+#ifndef ZEROMORAL
+               if(cr->age >= 18)
+#endif
+                  cr->activity.type=ACTIVITY_PROSTITUTION;break;
             case '3':cr->activity.type=ACTIVITY_CCFRAUD;break;
-               //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
+            //case '4':cr->activity.type=ACTIVITY_DOS_RACKET;break;
             default:
                if(cr->get_skill(SKILL_COMPUTERS)>1)
                   cr->activity.type=ACTIVITY_CCFRAUD;
+#ifndef ZEROMORAL
                else if(cr->get_skill(SKILL_SEDUCTION)>1 && cr->age >= 18)
+#else
+               else if(cr->get_skill(SKILL_SEDUCTION)>1)
+#endif
                   cr->activity.type=ACTIVITY_PROSTITUTION;
                else cr->activity.type=ACTIVITY_SELL_DRUGS;
             }
@@ -805,9 +870,20 @@ void activate(Creature *cr)
          case 'd':
             switch(choice)
             {
-            default:
-            case '1':break;//cr->activity.type=ACTIVITY_RECRUITING;break;
-            case '2':break;
+            case '1': { // Pick type to recruit
+               activityst oact=cr->activity;
+               cr->activity.type=ACTIVITY_NONE;
+               recruitSelect(*cr);
+               if(cr->activity.type==ACTIVITY_RECRUITING) break;
+               else cr->activity=oact;
+               break; }
+            case '2': { // Pick clothing to make
+               activityst oact=cr->activity;
+               cr->activity.type=ACTIVITY_NONE;
+               select_makeclothing(cr);
+               if(cr->activity.type==ACTIVITY_MAKE_ARMOR) break;
+               else cr->activity=oact;
+               break; }
             case '3':cr->activity.type=ACTIVITY_REPAIR_ARMOR;break;
             case '4':
                if(cr->canwalk())
@@ -815,11 +891,9 @@ void activate(Creature *cr)
                else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
                   cr->activity.type=ACTIVITY_WHEELCHAIR;
                break;
+            default: break;
             }
             break;
-       case 'l':
-          updateclasschoice(cr, choice);
-          break;
          case 't':
             switch(choice)
             {
@@ -946,92 +1020,81 @@ void activate(Creature *cr)
                break;
             }
             break;
+         case 'i':
+            if(hostagecount>0)
+            {
+               activityst oact=cr->activity;
+               cr->activity.type=ACTIVITY_NONE;
+               select_tendhostage(cr);
+               if(cr->activity.type==ACTIVITY_HOSTAGETENDING) break;
+               else cr->activity=oact;
+            }
+            state=oldstate;
+            break;
+         case 'l':
+            updateclasschoice(cr, choice);
+            break;
+         case 'm':
+            if(clinictime(*cr)) cr->activity.type=ACTIVITY_CLINIC;
+            else state=oldstate;
+            break;
+         case 'h':
+            if(cr->get_skill(SKILL_FIRSTAID)) cr->activity.type=ACTIVITY_HEAL;
+            else state=oldstate;
+            break;
+         case 'z':
+            if(havedead) cr->activity.type=ACTIVITY_BURY;
+            else state=oldstate;
+            break;
+         case 'e':
+            if(!sieged)
+            {
+               //create a temp squad containing just this liberal
+               int oldsquadid = cr->squadid;
+               squadst *oldactivesquad = activesquad;
+               activesquad=new squadst;
+               strcpy(activesquad->name, "Temporary Squad");
+               activesquad->id=cursquadid;
+               activesquad->squad[0]=cr;
+               cr->squadid = activesquad->id;
+               //go to equipment screen
+               equip(location[activesquad->squad[0]->location]->loot,-1);
+               //once you're done, restore original squad status.
+               delete activesquad;
+               activesquad = oldactivesquad;
+               cr->squadid = oldsquadid;
+            }
+            state=oldstate;
+            break;
+         /*case 'w':
+            if(location[cr->location]->compound_walls==COMPOUND_PRINTINGPRESS)
+            {
+               activityst oact=cr->activity;
+               cr->activity.type=ACTIVITY_NONE;
+               if(select_view(cr,cr->activity.arg))
+               {
+                  cr->activity.type=ACTIVITY_WRITE_GUARDIAN;
+                  break;
+               }
+               else cr->activity=oact;
+            }
+            state=oldstate;
+            break;*/
+         case 'x':
+            cr->activity.type=ACTIVITY_NONE;
+            break;
+         default:
+            state=oldstate;
+            break;
          }
       }
 
-      if(c=='h'&&cr->get_skill(SKILL_FIRSTAID)!=0)
-      {
-         cr->activity.type=ACTIVITY_HEAL;
-         break;
-      }
-      // Pick type to recruit
-      if(state=='d'&&choice=='1')
-      {
-         activityst oact=cr->activity;
-         cr->activity.type=ACTIVITY_NONE;
-         recruitSelect(*cr);
-         if(cr->activity.type==ACTIVITY_RECRUITING)break;
-         else cr->activity=oact;
-      }
-      // Pick clothing to make
-      if(state=='d'&&choice=='2')
-      {
-         activityst oact=cr->activity;
-         cr->activity.type=ACTIVITY_NONE;
-         select_makeclothing(cr);
-         if(cr->activity.type==ACTIVITY_MAKE_ARMOR)break;
-         else cr->activity=oact;
-      }
-      if(c=='i'&&hostagecount>0)
-      {
-         activityst oact=cr->activity;
-         cr->activity.type=ACTIVITY_NONE;
-         select_tendhostage(cr);
-         if(cr->activity.type==ACTIVITY_HOSTAGETENDING)break;
-         else cr->activity=oact;
-      }
-      if (!sieged && c == 'e')
-      {
-         //create a temp squad containing just this liberal
-         int oldsquadid = cr->squadid;
-         squadst *oldactivesquad = activesquad;
-         activesquad=new squadst;
-         strcpy(activesquad->name, "Temporary Squad");
-         activesquad->id=cursquadid;
-         activesquad->squad[0]=cr;
-         cr->squadid = activesquad->id;
-         //go to equipment screen
-         equip(location[activesquad->squad[0]->location]->loot,-1);
-         //once you're done, restore original squad status.
-         delete activesquad;
-         activesquad = oldactivesquad;
-         cr->squadid = oldsquadid;
-      }
-      /*if(c=='w'&&location[cr->location]->compound_walls==COMPOUND_PRINTINGPRESS)
-      {
-      activityst oact=cr->activity;
-      cr->activity.type=ACTIVITY_NONE;
-      if(select_view(cr,cr->activity.arg))
-      cr->activity.type=ACTIVITY_WRITE_GUARDIAN;
-      else cr->activity=oact;
-      break;
-      }*/
-      if(c=='m'&&clinictime(*cr))
-      {
-         cr->activity.type=ACTIVITY_CLINIC;
-         break;
-      }
-      if(c=='z'&&havedead)
-      {
-         cr->activity.type=ACTIVITY_BURY;
-         break;
-      }
-      if(c=='x')
-      {
-         cr->activity.type=ACTIVITY_NONE;
-         break;
-      }
       // Enter pressed
-      if(c==ENTER||c==ESC||c==SPACEBAR) break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
       // ? Pressed
       if(c=='?')
-      {
-         if(state == 'a' || state == 'b' || state == 'c' ||state == 'd' )
-         {
-            // Call activity help pages
-            HelpActivities(cr->activity.type);
-         }
-      }
+         if(state=='a'||state=='b'||state=='c'||state=='d')
+            HelpActivities(cr->activity.type); // Call activity help pages
    }
 }
 
@@ -1061,7 +1124,7 @@ void activatebulk()
       if(selectedactivity==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(2,51);
-      addstr("1 - Engaging in Liberal Activism");
+      addstr("1 - Liberal Activism");
       if(selectedactivity==1)set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,51);
@@ -1123,7 +1186,7 @@ void activatebulk()
             switch(selectedactivity)
             {
             case 0: //Activism
-               if(temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)>7)
+               if(temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)>7||temppool[p]->juice<0)
                   temppool[p]->activity.type=ACTIVITY_COMMUNITYSERVICE;
                else if(temppool[p]->get_attribute(ATTRIBUTE_WISDOM,true)>4)
                   temppool[p]->activity.type=ACTIVITY_TROUBLE;
