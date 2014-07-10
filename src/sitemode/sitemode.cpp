@@ -2512,6 +2512,8 @@ void mode_site()
                      {
                         if(!encounter[e].cantbluff&&encounter[e].type==CREATURE_LANDLORD)
                            levelmap[olocx][olocy][olocz].special=SPECIAL_APARTMENT_LANDLORD;
+                        if(!encounter[e].cantbluff&&encounter[e].type==CREATURE_BANK_TELLER)
+                           levelmap[olocx][olocy][olocz].special=SPECIAL_BANK_TELLER;
                         encounter[e].exists=0;
                      }
 
