@@ -76,7 +76,24 @@ void review()
       mvaddstr(0,0,"Review your Liberals and Assemble Squads");
       mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
 
-      int y=2;
+      int n[8]={0,0,0,0,0,0,0,0},y=2;
+      for(int p=0;p<(int)pool.size();p++)
+      {
+         if(pool[p]->is_active_liberal()) n[0]++; // Active Liberals
+         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
+         if(pool[p]->clinic && pool[p]->alive) n[2]++; // Hospital
+         if(pool[p]->is_imprisoned()) n[3]++; // Justice System
+         if(pool[p]->is_lcs_sleeper()) n[4]++; // Sleepers
+         if(!pool[p]->alive) n[5]++; // The Dead
+         if((pool[p]->dating || pool[p]->hiding) && pool[p]->alive) n[6]++; // Away
+      }
+      for(int l=0;l<(int)location.size();l++)
+      {
+         consolidateloot(location[l]->loot);
+         if(!location[l]->siege.siege)
+            n[7]+=location[l]->loot.size(); // Review and Move Equipment
+      }
+
       for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++,y++)
       {
          if(p<(int)squad.size())
@@ -110,42 +127,42 @@ void review()
          else if(p==(int)squad.size())
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            mvaddstr(y,0,"1 - Active Liberals");
+            mvaddstr(y,0,"1 - Active Liberals ("+tostring(n[0])+')');
          }
          else if(p==(int)squad.size()+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            mvaddstr(y,0,"2 - Hostages");
+            mvaddstr(y,0,"2 - Hostages ("+tostring(n[1])+')');
          }
          else if(p==(int)squad.size()+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(y,0,"3 - Hospital");
+            mvaddstr(y,0,"3 - Hospital ("+tostring(n[2])+')');
          }
          else if(p==(int)squad.size()+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            mvaddstr(y,0,"4 - Justice System");
+            mvaddstr(y,0,"4 - Justice System ("+tostring(n[3])+')');
          }
          else if(p==(int)squad.size()+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            mvaddstr(y,0,"5 - Sleepers");
+            mvaddstr(y,0,"5 - Sleepers ("+tostring(n[4])+')');
          }
          else if(p==(int)squad.size()+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            mvaddstr(y,0,"6 - The Dead");
+            mvaddstr(y,0,"6 - The Dead ("+tostring(n[5])+')');
          }
          else if(p==(int)squad.size()+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
-            mvaddstr(y,0,"7 - Away");
+            mvaddstr(y,0,"7 - Away ("+tostring(n[6])+')');
          }
          else if(p==(int)squad.size()+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
-            mvaddstr(y,0,"8 - Review and Move Equipment");
+            mvaddstr(y,0,"8 - Review and Move Equipment ("+tostring(n[7])+')');
          }
       }
 
@@ -215,7 +232,7 @@ void review_mode(short mode)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_CLINIC:
-         if(pool[p]->clinic>0 && pool[p]->alive)
+         if(pool[p]->clinic && pool[p]->alive)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_JUSTICE:
@@ -231,13 +248,13 @@ void review_mode(short mode)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_AWAY:
-         if((pool[p]->dating>0 || pool[p]->hiding!=0) && pool[p]->alive==1)
+         if((pool[p]->dating || pool[p]->hiding) && pool[p]->alive)
             temppool.push_back(pool[p]);
          break;
       }
    }
 
-   if(temppool.size()==0)return;
+   if(!temppool.size()) return;
 
    sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)]);
 
