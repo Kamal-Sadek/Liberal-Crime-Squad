@@ -508,11 +508,12 @@ void equipmentbaseassign()
          temploot.push_back(location[l]->loot[l2]);
          temploot2[location[l]->loot[l2]]=location[l];
       }
+   if(!temploot.size()) return;
 
    vector<int> temploc;
    for(l=0;l<(int)location.size();l++) if(location[l]->renting>=0&&!location[l]->siege.siege)
       temploc.push_back(l);
-   if(temploc.size()==0) return;
+   if(!temploc.size()) return;
 
    while(true)
    {
