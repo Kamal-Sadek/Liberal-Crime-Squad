@@ -990,7 +990,11 @@ void mode_site()
                      else
                      {
                         set_color(COLOR_WHITE,COLOR_BLACK,0);
-                        if(levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)addchar((char)CH_FULL_BLOCK);
+                        if(levelmap[x][y][locz].flag & SITEBLOCK_BLOCK)
+                        {
+                           set_color(COLOR_WHITE,COLOR_WHITE,0);
+                           addchar(' ');
+                        }
                         else if(levelmap[x][y][locz].flag & SITEBLOCK_DOOR)
                         {  // Pick color
                            if(levelmap[x][y][locz].flag & SITEBLOCK_METAL)
