@@ -704,7 +704,6 @@ void printnews(short li,short newspaper)
 }
 
 
-
 /* monthly - LCS finances report */
 void fundreport(char &clearformess)
 {
@@ -717,6 +716,11 @@ void fundreport(char &clearformess)
    std::string num;
    const char* dotdotdot=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
 
+   int expenselines = 0;
+   for(int i=0;i<EXPENSETYPENUM;i++)
+      if (ledger.expense[i])
+         expenselines++;
+   
    while(true)
    {
       erase();
@@ -772,6 +776,9 @@ void fundreport(char &clearformess)
          }
       }
 
+      // If expenses are too long to fit on this page, start them on the next page so it isn't broken in half unnecessarily
+      if(y+expenselines>=23 && y>2) y=2,numpages++;
+      
       for(int i=0;i<EXPENSETYPENUM;i++)
       {
          if(ledger.expense[i])
@@ -856,6 +863,9 @@ void fundreport(char &clearformess)
 
          if(++y>=23) y=2,numpages++;
       }
+      
+      if (y>2) y++; // Blank line between income/expenses and assets if not starting a new page
+      if (y+7>=23) y=2, numpages++; //Start a new page if the liquid assets won't fit on the rest of the current page.
       // tally up liquid assets
       long weaponValue=0,armorValue=0,clipValue=0,lootValue=0;
       for(int j=0;j<(int)location.size();j++)
@@ -867,9 +877,6 @@ void fundreport(char &clearformess)
             if(item->is_clip()) clipValue+=item->get_fencevalue()*item->get_number();
             if(item->is_loot()) lootValue+=item->get_fencevalue()*item->get_number();
          }
-
-      if(++y>=23) y=2,numpages++;
-      if(y==3) y=2; // last line was blank... we don't want 2 blank lines at top of page
 
       if(page==numpages-1)
       {
@@ -944,7 +951,7 @@ void fundreport(char &clearformess)
          num="$"+tostring(netWorth);
          mvaddstr(y,60-num.length(),num);
       }
-
+         
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(numpages>1)
       {
