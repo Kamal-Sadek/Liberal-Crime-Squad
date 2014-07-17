@@ -63,6 +63,9 @@
 // Make the founder have severe internal damage
 //#define INTERNAL
 
+// Make age not matter for dating or prostitution
+//#define ZEROMORAL
+
 // Re-seed the Random Number Generator every time it's called
 //#define MORERANDOM
 
@@ -301,9 +304,6 @@ using namespace std;
 #define ENTER 10
 #define ESC 27
 #define SPACEBAR 32
-
-int r_num();
-int LCSrandom(int max);
 
 class Log;
 
@@ -885,11 +885,11 @@ struct newsstoryst
    newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) {}
 };
 
-#define SLOGAN_LEN 79
+#define SLOGAN_LEN 80
 
 struct highscorest
 {
-   char valid,endtype,slogan[SLOGAN_LEN+1];
+   char valid,endtype,slogan[SLOGAN_LEN];
    int month,year,stat_recruits,stat_kidnappings,stat_dead,stat_kills,stat_funds,stat_spent,stat_buys,stat_burns;
 };
 
@@ -912,11 +912,6 @@ struct interrogation
    //Maps individual characters to the rapport built with them
    map<long,struct float_zero> rapport;
 };
-
-/* Determine table size in RANDOM_STRING and various functions in creaturenames.cpp */
-#define ARRAY_ELEMENTS(ARRAY_NAME) ((int)(sizeof(ARRAY_NAME) / sizeof(ARRAY_NAME[0])))
-/* Pick a random string from a table of strings. */
-#define RANDOM_STRING(STRING_TABLE) (STRING_TABLE[LCSrandom(ARRAY_ELEMENTS(STRING_TABLE))])
 
 #define SCORENUM 5
 
@@ -1837,14 +1832,14 @@ void fundreport(char &clearformess);
  sleeper_update.cpp
 */
 /* monthly - sleeper behavior */
-void sleepereffect(Creature &cr,char &clearformess,char canseethings,int *libpower);
+void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
 /* assistant functions for specific sleeper tasks */
-void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int *libpower);
-void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int *libpower);
-void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int *libpower);
-void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int *libpower);
-void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int *libpower);
-void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int *libpower);
+void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
+void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
+void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
+void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
+void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
+void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
 
 /*
  justice.cpp

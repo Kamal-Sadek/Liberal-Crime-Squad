@@ -1018,7 +1018,7 @@ void siegeturn(char clearformess)
                      else makedelimiter();
                      set_color(COLOR_WHITE,COLOR_BLACK,1);
                      move(8,1);
-                     int targ=pol[LCSrandom(pol.size())];
+                     int targ=pickrandom(pol);
                      if((int)LCSrandom(50)>pool[targ]->juice)
                      {
                         addstr("A sniper takes out ", gamelog);
@@ -1168,7 +1168,7 @@ void siegeturn(char clearformess)
                            else makedelimiter();
                            set_color(COLOR_WHITE,COLOR_BLACK,1);
                            move(8,1);
-                           int targ=pol[LCSrandom(pol.size())];
+                           int targ=pickrandom(pol);
                            if((int)LCSrandom(100)>pool[targ]->juice)
                            {
                               addstr(pool[targ]->name, gamelog);

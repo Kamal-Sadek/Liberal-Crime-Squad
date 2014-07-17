@@ -714,13 +714,13 @@ void fundreport(char &clearformess)
    int page=0;
    bool showledger=false;
    std::string num;
-   const char* dotdotdot=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+   static const char dotdotdot[]=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
 
    int expenselines = 0;
    for(int i=0;i<EXPENSETYPENUM;i++)
       if (ledger.expense[i])
          expenselines++;
-   
+
    while(true)
    {
       erase();
@@ -778,7 +778,7 @@ void fundreport(char &clearformess)
 
       // If expenses are too long to fit on this page, start them on the next page so it isn't broken in half unnecessarily
       if(y+expenselines>=23 && y>2) y=2,numpages++;
-      
+
       for(int i=0;i<EXPENSETYPENUM;i++)
       {
          if(ledger.expense[i])
@@ -863,7 +863,7 @@ void fundreport(char &clearformess)
 
          if(++y>=23) y=2,numpages++;
       }
-      
+
       if (y>2) y++; // Blank line between income/expenses and assets if not starting a new page
       if (y+7>=23) y=2, numpages++; //Start a new page if the liquid assets won't fit on the rest of the current page.
       // tally up liquid assets
@@ -951,7 +951,7 @@ void fundreport(char &clearformess)
          num="$"+tostring(netWorth);
          mvaddstr(y,60-num.length(),num);
       }
-         
+
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(numpages>1)
       {

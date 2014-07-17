@@ -257,7 +257,7 @@ void elections(char clearformess,char canseethings)
             // for the conservative candidate.
             else if(vote<=candidate[1][0]&&vote!=candidate[0][0])votes[1]++;
             // If both candidates agree with them, vote randomly.
-            else votes[LCSrandom(2)]++;
+            else pickrandom(votes)++;
          }
 
          if(l==999)
@@ -266,8 +266,8 @@ void elections(char clearformess,char canseethings)
             for(c=0;c<2;c++) if(votes[c]>maxvote) maxvote=votes[c];
             vector<int> eligible;
             for(c=0;c<2;c++) if(votes[c]==maxvote) eligible.push_back(c);
-            if(eligible.size()>1) winner=eligible[LCSrandom(eligible.size())], recount=true;
-            else winner=eligible[0];
+            if(eligible.size()>1) recount=true;
+            winner=pickrandom(eligible);
          }
 
          if(canseethings&&l%5==4)
@@ -364,7 +364,7 @@ void elections(char clearformess,char canseethings)
       canlaw.clear();
       for(l=0;l<LAWNUM;l++)if(lawpriority[l]==maxprior&&!lawtaken[l])canlaw.push_back(l);
 
-      prop[p]=canlaw[LCSrandom(canlaw.size())];
+      prop[p]=pickrandom(canlaw);
 
       lawtaken[prop[p]]=1;
 
@@ -1452,7 +1452,7 @@ void congress(char clearformess,char canseethings)
          if(lawpriority[l]==maxprior&&!lawtaken[l])
             canlaw.push_back(l);
 
-      bill[c]=canlaw[LCSrandom(canlaw.size())];
+      bill[c]=pickrandom(canlaw);
 
       lawtaken[bill[c]]=1;
 

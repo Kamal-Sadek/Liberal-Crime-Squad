@@ -297,7 +297,7 @@ void handle_public_opinion_impact(const newsstoryst &ns)
       NEWSSTORY_SQUAD_DEFENDED, NEWSSTORY_SQUAD_BROKESIEGE, NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
       NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE, NEWSSTORY_SQUAD_KILLED_SITE, NEWSSTORY_WANTEDARREST,
       NEWSSTORY_GRAFFITIARREST, NEWSSTORY_CCS_SITE, NEWSSTORY_CCS_KILLED_SITE };
-   int okay_type_num = sizeof(okay_types) / sizeof(okay_types[0]);
+   int okay_type_num = len(okay_types);
 
    int i;
    for(i=0; i < okay_type_num; i++)
@@ -1908,7 +1908,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
 
          while(!endparagraph&&words>1&&(int)strlen(addstring)<length&&!iscentered)
          {
-            int csp=spacex[LCSrandom(spacex.size())];
+            int csp=pickrandom(spacex);
 
             for(int x=0;x<(int)spacex.size();x++)
             {

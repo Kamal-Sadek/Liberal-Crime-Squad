@@ -537,11 +537,11 @@ void firstname(char *str, char gender)
    {
       // Roll on the number of gender-specific names,
       // plus the number of gender-neutral names
-      roll = LCSrandom( ARRAY_ELEMENTS(male_first_names) +
-                        ARRAY_ELEMENTS(gender_neutral_first_names));
+      roll = LCSrandom(len(male_first_names) +
+                       len(gender_neutral_first_names));
       // Decide whether to use a gender-specific name
       // or a gender-neutral name
-      if(roll >= ARRAY_ELEMENTS(gender_neutral_first_names))
+      if(roll >= len(gender_neutral_first_names))
          nametable = GENDER_MALE;
       else
          nametable = GENDER_NEUTRAL;
@@ -549,22 +549,22 @@ void firstname(char *str, char gender)
    else if(gender == GENDER_FEMALE)
    {
       // (Same here, just use the number of female names instead)
-      roll = LCSrandom( ARRAY_ELEMENTS(female_first_names) +
-                        ARRAY_ELEMENTS(gender_neutral_first_names));
-      if(roll >= ARRAY_ELEMENTS(gender_neutral_first_names))
+      roll = LCSrandom(len(female_first_names) +
+                       len(gender_neutral_first_names));
+      if(roll >= len(gender_neutral_first_names))
          nametable = GENDER_FEMALE;
       else
          nametable = GENDER_NEUTRAL;
    }
 
    if(nametable == GENDER_MALE)
-      strcat(str, RANDOM_STRING(male_first_names));
+      strcat(str, pickrandom(male_first_names));
    else if(nametable == GENDER_FEMALE)
-      strcat(str, RANDOM_STRING(female_first_names));
+      strcat(str, pickrandom(female_first_names));
    else if(nametable == GENDER_NEUTRAL)
-      strcat(str, RANDOM_STRING(gender_neutral_first_names));
+      strcat(str, pickrandom(gender_neutral_first_names));
    else if(nametable == GENDER_WHITEMALEPATRIARCH)
-      strcat(str, RANDOM_STRING(great_white_male_patriarch_first_names));
+      strcat(str, pickrandom(great_white_male_patriarch_first_names));
    else
       strcat(str, "Errol");
 }
@@ -904,11 +904,11 @@ void lastname(char *str, bool archconservative)
    {
       // Roll on the number of non-Arch-Conservative last names,
       // plus the number of regular last names
-      int roll = LCSrandom( ARRAY_ELEMENTS(regular_last_names) +
-                            ARRAY_ELEMENTS(archconservative_last_names));
+      int roll = LCSrandom(len(regular_last_names) +
+                           len(archconservative_last_names));
       // Decide whether to use an Arch-Conservative last name
       // or a regular last name
-      archconservative = (roll >= ARRAY_ELEMENTS(regular_last_names));
+      archconservative = (roll >= len(regular_last_names));
    }
    // Now the archconservative variable might be true even if the function wasn't called that way,
    // but if it WAS called that way it's definitely true... this way non-Arch-Conservatives get
@@ -916,7 +916,7 @@ void lastname(char *str, bool archconservative)
    // last names
 
    if(archconservative)
-      strcat(str, RANDOM_STRING(archconservative_last_names));
+      strcat(str, pickrandom(archconservative_last_names));
    else
-      strcat(str, RANDOM_STRING(regular_last_names));
+      strcat(str, pickrandom(regular_last_names));
 }

@@ -96,7 +96,7 @@ void savegame(const char *str)
       fwrite(lcityname,sizeof(char),80,h);
       fwrite(&newscherrybusted,sizeof(char),1,h);
 
-      fwrite(slogan,sizeof(char),80,h);
+      fwrite(slogan,sizeof(char),SLOGAN_LEN,h);
       fwrite(&ledger,sizeof(class Ledger),1,h);
       fwrite(&party_status,sizeof(short),1,h);
 
@@ -186,19 +186,18 @@ void savegame(const char *str)
          //write extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            fwrite(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[6]),1,h);
-            fwrite(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
+            interrogation* arg = reinterpret_cast<interrogation*>(pool[pl]->activity.arg);
+            fwrite(arg->techniques,sizeof(bool[6]),1,h);
+            fwrite(&arg->druguse,sizeof(int),1,h);
 
             //deep write rapport map
-            int size = reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.size();
+            int size = arg->rapport.size();
             fwrite(&size,sizeof(int),1,h);
 
-            map<long,float_zero>::iterator i;
-            for(i=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.begin();
-                i!=reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.end();++i)
+            for(map<long,float_zero>::iterator i=arg->rapport.begin();i!=arg->rapport.end();i++)
             {
-               fwrite(&((*i).first),sizeof(long),1,h);
-               fwrite(&((*i).second),sizeof(float_zero),1,h);
+               fwrite(&i->first,sizeof(long),1,h);
+               fwrite(&i->second,sizeof(float_zero),1,h);
             }
          }
       }
@@ -423,17 +422,17 @@ char load()
       fread(lcityname,sizeof(char),80,h);
       fread(&newscherrybusted,sizeof(char),1,h);
 
-      fread(slogan,sizeof(char),80,h);
+      fread(slogan,sizeof(char),SLOGAN_LEN,h);
       fread(&ledger,sizeof(class Ledger),1,h);
       fread(&party_status,sizeof(short),1,h);
 
-      fread(attitude,sizeof(short)*VIEWNUM,1,h);
-      fread(law,sizeof(short)*LAWNUM,1,h);
+      fread(attitude,sizeof(short),VIEWNUM,h);
+      fread(law,sizeof(short),LAWNUM,h);
       fread(house,sizeof(short),435,h);
       fread(senate,sizeof(short),100,h);
       fread(court,sizeof(short),9,h);
       fread(courtname,sizeof(char)*80,9,h);
-      fread(exec,sizeof(char)*EXECNUM,1,h);
+      fread(exec,sizeof(char),EXECNUM,h);
       fread(execname,sizeof(char)*80,EXECNUM,h);
       fread(oldPresidentName,sizeof(char)*80,1,h);
 
@@ -544,20 +543,21 @@ char load()
          //read extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            pool[pl]->activity.arg = reinterpret_cast<long>(new interrogation);
-            fread(reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->techniques,sizeof(bool[6]),1,h);
-            fread(&reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->druguse,sizeof(int),1,h);
+            interrogation* arg = new interrogation;
+            pool[pl]->activity.arg = reinterpret_cast<long>(arg);
+            fread(arg->techniques,sizeof(bool[6]),1,h);
+            fread(&arg->druguse,sizeof(int),1,h);
 
-            reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport.clear();
+            arg->rapport.clear();
             int size;
             fread(&size,sizeof(int),1,h);
-            for(int i=0;i<size;++i)
+            for(int i=0;i<size;i++)
             {
                long id;
                float_zero value;
                fread(&id,sizeof(long),1,h);
                fread(&value,sizeof(float_zero),1,h);
-               reinterpret_cast<interrogation*>(pool[pl]->activity.arg)->rapport[id]=value;
+               arg->rapport[id]=value;
             }
          }
          /*
@@ -803,7 +803,7 @@ char load()
       LCSCloseFile(h);
 
       // Check that vehicles are of existing types.
-      for(int v=0; v<(int)vehicle.size();++v)
+      for(int v=0;v<(int)vehicle.size();v++)
       {
          if(getvehicletype(vehicle[v]->vtypeidname())==-1)
          { //Remove vehicle of non-existing type.

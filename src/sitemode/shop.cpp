@@ -716,7 +716,7 @@ void Shop::maskselect(Creature &buyer) const
             if (armortype[i]->is_mask() && armortype[i]->is_surprise_mask())
                masktype.push_back(i);
          }
-         maskindex = masktype[LCSrandom(masktype.size())];
+         maskindex = pickrandom(masktype);
          break;
       }
 

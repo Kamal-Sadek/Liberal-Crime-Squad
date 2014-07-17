@@ -87,7 +87,7 @@ char unlock(short type,char &actual)
 
    if(goodp.size()>0)
    {
-      int p=goodp[LCSrandom(goodp.size())];
+      int p=pickrandom(goodp);
 
 	//lock pick succeeded.
       if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))

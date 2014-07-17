@@ -649,7 +649,7 @@ void evasivedrive()
    int cnt;
    for(int i=0;i<(int)theirrolls.size();i++)
    {
-      cnt=yourrolls[LCSrandom(yourrolls.size())];
+      cnt=pickrandom(yourrolls);
       if(theirrolls[i]<cnt)
       {
          clearmessagearea();
@@ -1036,7 +1036,7 @@ bool drivingupdate(short &obstacle)
 
          if(goodp.size()>0)
          {
-            int p=goodp[LCSrandom(goodp.size())];
+            int p=pickrandom(goodp);
             activesquad->squad[p]->is_driver=1;
             driver=p;
 
@@ -1444,7 +1444,7 @@ void crashfriendlycar(int v)
    move(16,1);
    addstr("Your ", gamelog);
    addstr(chaseseq.friendcar[v]->fullname(), gamelog);
-   addstr(RANDOM_STRING(car_crash_modes), gamelog);
+   addstr(pickrandom(car_crash_modes), gamelog);
    gamelog.newline(); //New line it.
    printparty();
 
@@ -1490,7 +1490,7 @@ void crashfriendlycar(int v)
                set_color(COLOR_RED,COLOR_BLACK,1);
                move(16,1);
                addstr(activesquad->squad[p]->prisoner->name, gamelog);
-               addstr(RANDOM_STRING(car_crash_fatalities), gamelog);
+               addstr(pickrandom(car_crash_fatalities), gamelog);
 	            gamelog.newline(); //New line.
                printparty();
 

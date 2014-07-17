@@ -1699,10 +1699,11 @@ int mvaddstr(int y, int x, long num, Log &log)
    return mvaddstr(y, x, tostring(num), log);
 }
 
+static char sbuf[81]; // used by addstr_f(), mvaddstr_f(), addstr_fl(), and mvaddstr_fl()
+
 /*	addstr with formatted output	*/
 int addstr_f(const char * format, ...)
 {
-   static char sbuf[81];
    va_list args;
 
    va_start(args,format);
@@ -1715,7 +1716,6 @@ int addstr_f(const char * format, ...)
 /*	mvaddstr with formatted output	*/
 int mvaddstr_f(int y, int x, const char * format, ...)
 {
-   static char sbuf[81];
    va_list args;
 
    va_start(args,format);
@@ -1729,7 +1729,6 @@ int mvaddstr_f(int y, int x, const char * format, ...)
 /*	addstr with formatted output and logging	*/
 int addstr_fl(Log &log, const char * format, ...)
 {
-   static char sbuf[81];
    va_list args;
 
    va_start(args,format);
@@ -1744,7 +1743,6 @@ int addstr_fl(Log &log, const char * format, ...)
 /*	mvaddstr with formatted output and logging	*/
 int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
 {
-   static char sbuf[81];
    va_list args;
 
    va_start(args,format);

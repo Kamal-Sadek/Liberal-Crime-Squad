@@ -165,7 +165,7 @@ void getslogan()
    mvaddstr(16,0,"What is your new slogan?");
    mvaddstr(17,0,"                                                                                          "); // 80 spaces
 
-   enter_name(17,0,slogan,SLOGAN_LEN+1,"We need a slogan!");
+   enter_name(17,0,slogan,SLOGAN_LEN,"We need a slogan!");
 }
 
 

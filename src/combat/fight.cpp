@@ -70,15 +70,15 @@ void youattack()
       int target;
       // If there are "dangerous enemies", shoot at one of them
       if(dangerous_enemies.size())
-         target=dangerous_enemies[LCSrandom(dangerous_enemies.size())];
+         target=pickrandom(dangerous_enemies);
       // Else, shoot at one of the other enemies
-      else target=enemies[LCSrandom(enemies.size())];
+      else target=pickrandom(enemies);
 
       char mistake=0;
       // 1% chance to accidentally hit bystanders
       if(non_enemies.size()>0 && !LCSrandom(100))
       {
-         target=non_enemies[LCSrandom(non_enemies.size())];
+         target=pickrandom(non_enemies);
          mistake=1;
       }
 
@@ -174,13 +174,13 @@ void youattack()
 
                if(goodtarg.size()==0)return;
 
-               int target=goodtarg[LCSrandom(goodtarg.size())];
+               int target=pickrandom(goodtarg);
 
                char mistake=0;
 
                if(badtarg.size()>0 && !LCSrandom(10))
                {
-                  target=badtarg[LCSrandom(badtarg.size())];
+                  target=pickrandom(badtarg);
                   mistake=1;
                }
 
@@ -309,8 +309,8 @@ void enemyattack()
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
                      (encounter[e].wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF)||
                      (encounter[e].blood<45))
-                     addstr(RANDOM_STRING(escape_crawling), gamelog);
-                  else addstr(RANDOM_STRING(escape_running), gamelog);
+                     addstr(pickrandom(escape_crawling), gamelog);
+                  else addstr(pickrandom(escape_running), gamelog);
 
                   gamelog.newline();
 
@@ -361,7 +361,7 @@ void enemyattack()
 
       if(goodtarg.size()==0) return;
 
-      int target=goodtarg[LCSrandom(goodtarg.size())];
+      int target=pickrandom(goodtarg);
 
       char canmistake=1;
 
@@ -422,7 +422,7 @@ void enemyattack()
 
          if(!LCSrandom(10)&&badtarg.size()>0)
          {
-            target=badtarg[LCSrandom(badtarg.size())];
+            target=pickrandom(badtarg);
             if(encounter[target].flag & CREATUREFLAG_CONVERTED)
                attack(encounter[e],encounter[target],0,actual);
             else attack(encounter[e],encounter[target],1,actual);
@@ -1810,7 +1810,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
    {
       case CREATURE_JUDGE_CONSERVATIVE:
       case CREATURE_JUDGE_LIBERAL:
-         strcat(str,RANDOM_STRING(judge_debate));
+         strcat(str,pickrandom(judge_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1843,9 +1843,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_POLITICIAN:
          if(a.align==-1)
-            strcat(str,RANDOM_STRING(conservative_politician_debate));
+            strcat(str,pickrandom(conservative_politician_debate));
          else
-            strcat(str,RANDOM_STRING(other_politician_debate));
+            strcat(str,pickrandom(other_politician_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1859,9 +1859,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_CORPORATE_CEO:
          if(a.align==-1)
-            strcat(str,RANDOM_STRING(conservative_ceo_debate));
+            strcat(str,pickrandom(conservative_ceo_debate));
          else
-            strcat(str,RANDOM_STRING(other_ceo_debate));
+            strcat(str,pickrandom(other_ceo_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1875,7 +1875,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          break;
       case CREATURE_RADIOPERSONALITY:
       case CREATURE_NEWSANCHOR:
-         strcat(str,RANDOM_STRING(media_debate));
+         strcat(str,pickrandom(media_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1886,7 +1886,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.attribute_roll(ATTRIBUTE_CHARISMA);
          break;
       case CREATURE_MILITARYOFFICER:
-         strcat(str,RANDOM_STRING(military_debate));
+         strcat(str,pickrandom(military_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
@@ -1899,7 +1899,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
       case CREATURE_COP:
          if(a.enemy())
          {
-            strcat(str,RANDOM_STRING(police_debate));
+            strcat(str,pickrandom(police_debate));
             strcat(str,t.name);
             strcat(str,"!");
 

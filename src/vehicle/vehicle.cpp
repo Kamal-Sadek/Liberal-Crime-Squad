@@ -54,7 +54,7 @@ Vehicle::Vehicle(const std::string& inputXml)
 
 Vehicle::Vehicle(const VehicleType& seed)
 {
-   init(seed,seed.color()[LCSrandom(seed.color().size())],seed.makeyear());
+   init(seed,pickrandom(seed.color()),seed.makeyear());
 }
 
 Vehicle::Vehicle(const VehicleType& seed, const string& color, int myear)
