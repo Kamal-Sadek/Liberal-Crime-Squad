@@ -131,7 +131,7 @@ extern vector<Item *> groundloot;
 extern long curcreatureid;
 extern chaseseqst chaseseq;
 
-extern char slogan[80];
+extern char slogan[SLOGAN_LEN];
 
 extern vector<Creature *> pool;
 

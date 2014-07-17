@@ -736,7 +736,7 @@ std::string cityname()
       "Youngstown, OH",
       "Yuma, AZ"
    };
-   return RANDOM_STRING(city_names);
+   return pickrandom(city_names);
 }
 
 /* Allow the player to enter a name with an optional default */

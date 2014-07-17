@@ -1188,7 +1188,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 //   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
 //   is still occuring, normally at the Latte Bar Downtown ;
       if (goodlist.size()==0) cr.worklocation=0;
-      else cr.worklocation=goodlist[LCSrandom(goodlist.size())];
+      else cr.worklocation=pickrandom(goodlist);
    }
    return false;
 }

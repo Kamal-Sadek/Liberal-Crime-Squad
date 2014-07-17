@@ -260,10 +260,10 @@ public:
    Skill(const std::string& inputXml);
    string showXml() const;
    int value;
-   void set_type(int skill_type);
-   int get_attribute() const;
+   int get_attribute() const { return associated_attribute; }
    static std::string get_name(int skill_type);
    static CreatureAttribute get_associated_attribute(int skill_type);
+   void set_type(int skill_type) { skill=skill_type,associated_attribute=get_associated_attribute(skill); }
 };
 
 class Attribute
@@ -275,7 +275,7 @@ public:
    Attribute(const std::string& inputXml);
    string showXml() const;
    int value;
-   //void set_type(int attribute_type);
+   void set_type(int attribute_type) { attribute=attribute_type; }
    static std::string get_name(int attribute_type);
 };
 
@@ -292,14 +292,14 @@ private:
    Weapon* weapon;
    Armor* armor;
 public:
-   void set_attribute(int attribute, int amount);
+   void set_attribute(int attribute, int amount) { attributes[attribute].value=amount; }
    int get_attribute(int attribute, bool use_juice) const;
-   void adjust_attribute(int attribute, int amount);
+   void adjust_attribute(int attribute, int amount) { attributes[attribute].value += amount; }
    int attribute_roll(int attribute) const;
    bool attribute_check(int attribute, int difficulty) const;
 
-   void set_skill(int skill, int amount);
-   int get_skill(int skill) const;
+   void set_skill(int skill, int amount) { skills[skill].value=amount; }
+   int get_skill(int skill) const { return skills[skill].value; }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
 
@@ -350,8 +350,10 @@ public:
    deque<Weapon*> extra_throwing_weapons;
    deque<Clip*> clips;
    bool has_thrown_weapon;
-   Weapon& get_weapon() const;
-   Armor& get_armor() const;
+   bool is_armed() const { return weapon; }
+   bool is_naked() const { return !armor; }
+   Weapon& get_weapon() const { return is_armed()?*weapon:weapon_none(); }
+   Armor& get_armor() const { return is_naked()?armor_none():*armor; }
    bool will_do_ranged_attack(bool force_ranged,bool force_melee) const; //force_melee is likely unnecessary. -XML
    bool can_reload() const;
    bool will_reload(bool force_ranged, bool force_melee) const;
@@ -361,8 +363,6 @@ public:
    bool take_clips(Clip& clip, int number);
    bool take_clips(const ClipType& ct, int number);
    int count_clips() const;
-   bool is_armed() const { return weapon != NULL; }
-   bool is_naked() const { return armor == NULL; }
    void give_weapon(Weapon& w, vector<Item*>* lootpile);
    void give_weapon(const WeaponType& wt, vector<Item*>* lootpile);
    void drop_weapon(vector<Item*>* lootpile);
@@ -371,9 +371,9 @@ public:
    void give_armor(Armor& a, vector<Item*>* lootpile);
    void give_armor(const ArmorType& at, vector<Item*>* lootpile);
    void strip(vector<Item*>* lootpile);
-   bool weapon_is_concealed() const;
+   bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weapon(*weapon); }
    string get_weapon_string(int subtype) const;
-   string get_armor_string(bool fullname) const;
+   string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
 
    int money;
    short juice;
@@ -404,8 +404,9 @@ public:
 
    void stop_hauling_me();
 
-   Creature();
-   Creature(const Creature& org);
+   void creatureinit();
+   Creature() { creatureinit(); }
+   Creature(const Creature& org) { copy(org); }
    Creature& operator=(const Creature& rhs);
    ~Creature();
    explicit Creature(const std::string& inputXml);
@@ -414,22 +415,7 @@ public:
    bool is_active_liberal() const;
    bool is_imprisoned() const;
    bool is_lcs_sleeper() const;
-   char canwalk() const
-   {
-      if(!alive)return 0;
-      int legok=2;
-      if((wound[BODYPART_LEG_RIGHT] & WOUND_NASTYOFF)||
-          (wound[BODYPART_LEG_RIGHT] & WOUND_CLEANOFF))legok--;
-      if((wound[BODYPART_LEG_LEFT] & WOUND_NASTYOFF)||
-          (wound[BODYPART_LEG_LEFT] & WOUND_CLEANOFF))legok--;
-      if(special[SPECIALWOUND_NECK]!=1||
-         special[SPECIALWOUND_UPPERSPINE]!=1||
-         special[SPECIALWOUND_LOWERSPINE]!=1)return 0;
-      if(legok==0)return 0;
-
-      return 1;
-   }
-   void creatureinit();
+   bool canwalk() const;
    //int attval(short a,char usejuice=1);
 
    /* are they interested in talking about the issues? */
@@ -442,8 +428,8 @@ public:
    /* can turn the tables on datenapping */
    bool kidnap_resistant() const;
    bool reports_to_police() const;
-   /* finds the cap for a particular skill */
-   int skill_cap(int skill, bool use_juice) const;
+   /* returns the creature's maximum level in the given skill */
+   int skill_cap(int skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute(skill),use_juice); }
    const char* heshe() const;
    const char* hisher() const;
 };
@@ -473,9 +459,9 @@ public:
    Creature& CEO();
    Creature& President();
 
-   void initialize();
    void newCEO();
    void newPresident();
+   void initialize() { newCEO(); newPresident(); }
 };
 
 #endif //CREATURE_H_INCLUDED

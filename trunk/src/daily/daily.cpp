@@ -288,7 +288,7 @@ void advanceday(char &clearformess,char canseethings)
 
                      if(goodp.size()>0)
                      {
-                        int p=goodp[LCSrandom(goodp.size())];
+                        int p=pickrandom(goodp);
                         squad[sq]->squad[p]->is_driver=1;
                      }
                   }
@@ -324,7 +324,7 @@ void advanceday(char &clearformess,char canseethings)
 
                   if(goodp.size()>0)
                   {
-                     int p=goodp[LCSrandom(goodp.size())];
+                     int p=pickrandom(goodp);
                      for(int p2=0;p2<(int)driver.size();p2++)
                      {
                         if(p2==p)continue;
@@ -342,7 +342,7 @@ void advanceday(char &clearformess,char canseethings)
                {
                   if(squad[sq]->squad[p]->carid==-1)
                   {
-                     squad[sq]->squad[p]->carid=wantcar[LCSrandom(wantcar.size())];
+                     squad[sq]->squad[p]->carid=pickrandom(wantcar);
                      squad[sq]->squad[p]->is_driver=0;
                   }
                }

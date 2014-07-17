@@ -2402,7 +2402,7 @@ void special_bank_money()
       else
          addstr("A SWAT team storms the vault!!", gamelog);
       gamelog.newline();
-      swat_counter += 1;
+      swat_counter++;
 
       int swatnum = 9;
       for(int e=0;e<ENCMAX;e++)

@@ -1445,7 +1445,7 @@ recruitData recruitable_creatures[] = {
 // purpose of the activation menu. 0 is trivial, 10 is impossible.
 int recruitFindDifficulty(int creatureType)
 {
-   for(int i=0; i<(int)(sizeof(recruitable_creatures)/sizeof(recruitData)); i++)
+   for(int i=0; i<len(recruitable_creatures); i++)
       if(recruitable_creatures[i].type == creatureType)
          return recruitable_creatures[i].difficulty;
    return 10; // No recruitData; assume impossible to recruit
@@ -1453,7 +1453,7 @@ int recruitFindDifficulty(int creatureType)
 
 char* recruitName(int creatureType)
 {
-   for(int i=0; i<(int)(sizeof(recruitable_creatures)/sizeof(recruitData)); i++)
+   for(int i=0; i<len(recruitable_creatures); i++)
       if(recruitable_creatures[i].type == creatureType)
          return recruitable_creatures[i].name;
    return (char*)"missingno";
@@ -1462,7 +1462,7 @@ char* recruitName(int creatureType)
 void recruitSelect(Creature &cr)
 {
    // Number of recruitable creatures
-   int options = sizeof(recruitable_creatures) / sizeof(recruitData);
+   int options = len(recruitable_creatures);
    for(int i=0; i<options; i++)
    {
       // Dynamic difficulty for certain creatures, recalculated each time the function is called

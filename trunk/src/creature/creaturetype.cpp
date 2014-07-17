@@ -388,7 +388,7 @@ void CreatureType::give_weapon_civilian(Creature& cr) const
 
 void CreatureType::give_armor(Creature& cr) const
 {
-   int n = LCSrandom(armortypes_.size());
-   if (armortypes_[n] != "ARMOR_NONE")
-      cr.give_armor(*armortype[getarmortype(armortypes_[n])], NULL);
+   const std::string str = pickrandom(armortypes_);
+   if (str != "ARMOR_NONE")
+      cr.give_armor(*armortype[getarmortype(str)], NULL);
 }

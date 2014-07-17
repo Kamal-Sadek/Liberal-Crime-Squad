@@ -115,7 +115,7 @@ siteblockst levelmap[MAPX][MAPY][MAPZ];
 
 chaseseqst chaseseq;
 
-char slogan[SLOGAN_LEN+1];
+char slogan[SLOGAN_LEN];
 
 vector<Creature *> pool;
 

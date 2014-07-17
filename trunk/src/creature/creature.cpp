@@ -61,13 +61,6 @@ string Skill::showXml() const
    return xml.GetDoc();
 }
 
-void Skill::set_type(int skill_type)
-{
-   skill = skill_type;
-   // Initialize associated attribute
-   associated_attribute = get_associated_attribute(skill);
-}
-
 CreatureAttribute Skill::get_associated_attribute(int skill_type)
 {
    // Initialize associated attribute
@@ -113,12 +106,6 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
    }
 }
 
-/* returns the creature's maximum level in the given skill */
-int Creature::skill_cap(int skill,bool use_juice) const
-{
-   return get_attribute(Skill::get_associated_attribute(skill),use_juice);
-}
-
 std::string Skill::get_name(int skill_type)
 {
    switch(skill_type)
@@ -156,11 +143,6 @@ std::string Skill::get_name(int skill_type)
    case SKILL_DODGE:          return "Dodge";
    }
    return "Error Skill Name";
-}
-
-int Skill::get_attribute() const
-{
-   return associated_attribute;
 }
 
 Attribute::Attribute(const std::string& inputXml)
@@ -205,16 +187,6 @@ std::string Attribute::get_name(int attribute_type)
    case ATTRIBUTE_CHARISMA:      return "CHA";
    }
    return "Error Attribute Name";
-}
-
-Creature::Creature()
-{
-   creatureinit();
-}
-
-Creature::Creature(const Creature& org)
-{
-   copy(org);
 }
 
 Creature& Creature::operator=(const Creature& rhs)
@@ -375,9 +347,6 @@ bool Creature::reports_to_police() const
    return false;
 }
 
-// Alternative name for the location global, used in Creature:: methods
-vector<Location*> loc_proxy() { return location; }
-
 std::string Creature::get_type_name() const
 {
    return getcreaturetype(type_idname)->get_type_name();
@@ -393,14 +362,25 @@ bool Creature::is_imprisoned() const
 {
    return(alive && clinic==0 && dating==0 && hiding==0 &&
       !(flag & CREATUREFLAG_SLEEPER) &&
-      loc_proxy()[this->location]->part_of_justice_system());
+      ::location[this->location]->part_of_justice_system());
 }
 
 bool Creature::is_active_liberal() const
 {
    return(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
       hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
-      !loc_proxy()[this->location]->part_of_justice_system());
+      !::location[this->location]->part_of_justice_system());
+}
+
+bool Creature::canwalk() const
+{
+   if(!alive) return false;
+   if((wound[BODYPART_LEG_RIGHT]&(WOUND_NASTYOFF|WOUND_CLEANOFF))
+    &&(wound[BODYPART_LEG_LEFT]&(WOUND_NASTYOFF|WOUND_CLEANOFF))) return false;
+   if(special[SPECIALWOUND_NECK]!=1||
+      special[SPECIALWOUND_UPPERSPINE]!=1||
+      special[SPECIALWOUND_LOWERSPINE]!=1) return false;
+   return true;
 }
 
 void Creature::creatureinit()
@@ -432,8 +412,7 @@ void Creature::creatureinit()
    is_driver=0;
    pref_carid=-1;
    pref_is_driver=0;
-   id=curcreatureid;
-      curcreatureid++;
+   id=curcreatureid++;
    joindays=0;
    deathdays=0;
    squadid=-1;
@@ -451,9 +430,9 @@ void Creature::creatureinit()
    trainingtime=0;
    trainingsubject=-1;
    specialattack=-1;
-   animalgloss=0;
+   animalgloss=ANIMALGLOSS_NONE;
    prisoner=NULL;
-   alive=1;
+   alive=true;
    blood=100;
    stunned=0;
    for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
@@ -462,7 +441,7 @@ void Creature::creatureinit()
    armor=NULL;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
    for(int a=0;a<ATTNUM;a++)
    {
-      //attributes[a].set_type(a);
+      attributes[a].set_type(a);
       attributes[a].value=1;
    }
    int attnum=32;
@@ -502,6 +481,16 @@ void Creature::creatureinit()
    forceinc=0;
    sentence=0;
    deathpenalty=0;
+   money=0;
+   income=0;
+   exists=true;
+   align=LCSrandom(3)-1;
+   infiltration=0.0f;
+   type=CREATURE_WORKER_JANITOR;
+   type_idname="CREATURE_WORKER_JANITOR";
+   meetings=0;
+   strcpy(name,"Scruffy");
+   strcpy(propername,"Scruffy");
 }
 
 Creature::Creature(const std::string& inputXml)
@@ -765,18 +754,6 @@ string Creature::showXml() const
    xml.AddElem("dontname", dontname);
 
    return xml.GetDoc();
-}
-
-void Creature::set_attribute(int attribute, int amount)
-{
-   attributes[attribute].value=amount;
-}
-void Creature::set_skill(int skill, int amount) { skills[skill].value=amount; }
-int Creature::get_skill(int skill) const { return skills[skill].value; }
-
-void Creature::adjust_attribute(int attribute, int amount)
-{
-   attributes[attribute].value += amount;
 }
 
 int Creature::get_attribute(int attribute, bool usejuice) const
@@ -1150,7 +1127,7 @@ void Creature::train(int trainedskill, int experience, int upto)
 
 void Creature::train(int trainedskill, int experience)
 {
-   return this->train (trainedskill, experience, 40);
+   return this->train(trainedskill, experience, skill_cap(trainedskill,true));
 }
 
 void Creature::skill_up()
@@ -1176,24 +1153,15 @@ int Creature::get_skill_ip(int skill) const
 bool Creature::enemy() const
 {
    if(align==ALIGN_CONSERVATIVE)
+      return true;
+   else if(type==CREATURE_COP && align==ALIGN_MODERATE)
    {
+      for(int i=0;i<(int)pool.size();i++)
+         if(pool[i]==this)
+            return false;
       return true;
    }
-   else
-   {
-      if(type==CREATURE_COP && align==ALIGN_MODERATE)
-      {
-         for(int i=0;i<(int)pool.size();i++)
-         {
-            if(pool[i]==this)
-            {
-               return false;
-            }
-         }
-         return true;
-      }
-   }
-   return false;
+   else return false;
 }
 
 /* turns a creature into a conservative */
@@ -1205,12 +1173,12 @@ void conservatise(Creature &cr)
 
    switch(cr.type)
    {
-      case CREATURE_WORKER_FACTORY_UNION:
-         strcpy(cr.name,"Ex-Union Worker");
-         break;
-      case CREATURE_JUDGE_LIBERAL:
-         strcpy(cr.name,"Jaded Liberal Judge");
-         break;
+   case CREATURE_WORKER_FACTORY_UNION:
+      strcpy(cr.name,"Ex-Union Worker");
+      break;
+   case CREATURE_JUDGE_LIBERAL:
+      strcpy(cr.name,"Jaded Liberal Judge");
+      break;
    }
 }
 
@@ -1227,12 +1195,12 @@ void liberalize(Creature &cr,bool rename)
    if(rename)
       switch(cr.type)
       {
-         case CREATURE_WORKER_FACTORY_NONUNION:
-            strcpy(cr.name,"New Union Worker");
-            break;
-//       case CREATURE_JUDGE_CONSERVATIVE:
-//          strcpy(cr.name,"Enlightened Judge");
-//          break;
+      case CREATURE_WORKER_FACTORY_NONUNION:
+         strcpy(cr.name,"New Union Worker");
+         break;
+//    case CREATURE_JUDGE_CONSERVATIVE:
+//       strcpy(cr.name,"Enlightened Judge");
+//       break;
       }
 }
 
@@ -1274,40 +1242,41 @@ bool Creature::talkreceptive() const
 {
    switch(type)
    {
-      case CREATURE_WORKER_SERVANT:
-      case CREATURE_WORKER_JANITOR:
-      case CREATURE_WORKER_SWEATSHOP:
-      case CREATURE_WORKER_FACTORY_CHILD:
-      case CREATURE_TEENAGER:
-      case CREATURE_SEWERWORKER:
-      case CREATURE_COLLEGESTUDENT:
-      case CREATURE_MUSICIAN:
-      case CREATURE_MATHEMATICIAN:
-      case CREATURE_TEACHER:
-      case CREATURE_HSDROPOUT:
-      case CREATURE_BUM:
-      case CREATURE_POLITICALACTIVIST:
-      case CREATURE_GANGMEMBER:
-      case CREATURE_CRACKHEAD:
-      case CREATURE_FASTFOODWORKER:
-      case CREATURE_TELEMARKETER:
-      case CREATURE_PROSTITUTE:
-      case CREATURE_GARBAGEMAN:
-      case CREATURE_PLUMBER:
-      case CREATURE_AMATEURMAGICIAN:
-      case CREATURE_HIPPIE:
-      case CREATURE_RETIREE:
-      case CREATURE_HAIRSTYLIST:
-      case CREATURE_CLERK:
-      case CREATURE_MUTANT:
-         return !enemy();
+   case CREATURE_WORKER_SERVANT:
+   case CREATURE_WORKER_JANITOR:
+   case CREATURE_WORKER_SWEATSHOP:
+   case CREATURE_WORKER_FACTORY_CHILD:
+   case CREATURE_TEENAGER:
+   case CREATURE_SEWERWORKER:
+   case CREATURE_COLLEGESTUDENT:
+   case CREATURE_MUSICIAN:
+   case CREATURE_MATHEMATICIAN:
+   case CREATURE_TEACHER:
+   case CREATURE_HSDROPOUT:
+   case CREATURE_BUM:
+   case CREATURE_POLITICALACTIVIST:
+   case CREATURE_GANGMEMBER:
+   case CREATURE_CRACKHEAD:
+   case CREATURE_FASTFOODWORKER:
+   case CREATURE_TELEMARKETER:
+   case CREATURE_PROSTITUTE:
+   case CREATURE_GARBAGEMAN:
+   case CREATURE_PLUMBER:
+   case CREATURE_AMATEURMAGICIAN:
+   case CREATURE_HIPPIE:
+   case CREATURE_RETIREE:
+   case CREATURE_HAIRSTYLIST:
+   case CREATURE_CLERK:
+   case CREATURE_MUTANT:
+      return !enemy();
+   default: return false;
    }
-   return false;
 }
 
 /* are the characters close enough in age to date? */
 bool Creature::can_date(const Creature &a) const
 {
+#ifndef ZEROMORAL
    // Assume age appropriate for animals, tanks, etc.
    // (use other restrictions for these, like humorous rejections)
    if(animalgloss || a.animalgloss) return true;
@@ -1316,6 +1285,7 @@ bool Creature::can_date(const Creature &a) const
    // Allow 11-15 year olds only if the other partner is
    // within 4 years age difference
    if(age<16 || a.age<16) return DIFF(age,a.age)<5;
+#endif
    // Allow anyone 16 or older
    return true;
 }
@@ -1331,12 +1301,6 @@ void Creature::die()
       promoteVP();
       uniqueCreatures.newPresident();
    }
-}
-
-void UniqueCreatures::initialize()
-{
-   newCEO();
-   newPresident();
 }
 
 void UniqueCreatures::newCEO()
@@ -1470,22 +1434,6 @@ Armor& Creature::armor_none() const
 {
    static Armor* naked = new Armor(*armortype[getarmortype("ARMOR_NONE")]);
    return *naked;
-}
-
-Weapon& Creature::get_weapon() const
-{
-   if (is_armed())
-      return *weapon;
-   else
-      return weapon_none();
-}
-
-Armor& Creature::get_armor() const
-{
-   if (!is_naked())
-      return *armor;
-   else
-      return armor_none();
 }
 
 bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
@@ -1761,16 +1709,6 @@ void Creature::strip(vector<Item*>* lootpile)
    }
 }
 
-bool Creature::weapon_is_concealed() const
-{
-   bool concealed = false;
-   if (is_armed())
-   {
-      concealed = get_armor().conceals_weapon(*weapon);
-   }
-   return concealed;
-}
-
 string Creature::get_weapon_string(int subtype) const
 {
    string r;
@@ -1795,9 +1733,4 @@ string Creature::get_weapon_string(int subtype) const
       r = "None";
 
    return r;
-}
-
-string Creature::get_armor_string(bool fullname) const
-{
-   return get_armor().equip_title(fullname);
 }

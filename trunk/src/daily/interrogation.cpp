@@ -271,7 +271,7 @@ void tendhostage(Creature *cr,char &clearformess)
          if(temppool[p]!=NULL)
             if(temppool[p]->alive&&_attack[p]==attack)
                goodp.push_back(p);
-      a=temppool[goodp[LCSrandom(goodp.size())]];
+      a=temppool[pickrandom(goodp)];
 
       attack+=temppool.size();
       attack+=cr->joindays;

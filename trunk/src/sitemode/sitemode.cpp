@@ -1299,15 +1299,13 @@ void mode_site()
                      {
                         string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_CROWBAR", "WEAPON_SHANK",
                            "WEAPON_SYRINGE", "WEAPON_CHAIN", "WEAPON_GUITAR","WEAPON_SPRAYCAN"};
-                        //make sure the number of types matches the random range...
-                        newWeaponType=rndWeps[LCSrandom(7)];
+                        newWeaponType=pickrandom(rndWeps);
                      }
                      else if(!LCSrandom(20))
                      {
                         string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT",
                            "ARMOR_WORKCLOTHES", "ARMOR_TOGA", "ARMOR_PRISONER"};
-                        //make sure the number of types matches the random range...
-                        newArmorType=rndArmors[LCSrandom(7)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      else if(!LCSrandom(3))newLootType="LOOT_KIDART";
                      else if(!LCSrandom(2))newLootType="LOOT_DIRTYSOCK";
@@ -1324,14 +1322,13 @@ void mode_site()
                      {
                         string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_REVOLVER_38",
                            "WEAPON_REVOLVER_44", "WEAPON_NIGHTSTICK", "WEAPON_GUITAR"};
-                        newWeaponType=rndWeps[LCSrandom(5)];
+                        newWeaponType=pickrandom(rndWeps);
                      }
                      else if(!LCSrandom(20))
                      {
                         string rndArmors[] = {"ARMOR_CHEAPDRESS", "ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT",
                            "ARMOR_WORKCLOTHES", "ARMOR_CLOWNSUIT", "ARMOR_ELEPHANTSUIT", "ARMOR_DONKEYSUIT"};
-                        //make sure the number of types matches the random range...
-                        newArmorType=rndArmors[LCSrandom(8)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      else if(!LCSrandom(5))newLootType="LOOT_CELLPHONE";
                      else if(!LCSrandom(4))newLootType="LOOT_SILVERWARE";
@@ -1344,14 +1341,14 @@ void mode_site()
                      {
                         string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_COMBATKNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP",
                            "WEAPON_REVOLVER_44", "WEAPON_SEMIPISTOL_45", "WEAPON_SEMIRIFLE_AR15", "WEAPON_AUTORIFLE_M16"};
+                        //make sure the number of types matches the random range...
                         newWeaponType=rndWeps[LCSrandom(6 - law[LAW_GUNCONTROL])];
                      }
                      else if(!LCSrandom(20))
                      {
                         string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_BLACKDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_BLACKSUIT",
                            "ARMOR_BONDAGEGEAR", "ARMOR_CIVILLIANARMOR", "ARMOR_BLACKROBE", "ARMOR_LABCOAT"};
-                        //make sure the number of types matches the random range...
-                        newArmorType=rndArmors[LCSrandom(8)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      else if(!LCSrandom(10))newLootType="LOOT_EXPENSIVEJEWELERY";
                      else if(!LCSrandom(5))newLootType="LOOT_CELLPHONE";
@@ -1375,12 +1372,14 @@ void mode_site()
                      {
                         string rndWeps[] = {"WEAPON_NIGHTSTICK", "WEAPON_NIGHTSTICK", "WEAPON_SHOTGUN_PUMP", "WEAPON_SEMIPISTOL_9MM",
                            "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16", "WEAPON_AUTORIFLE_M16"};
+                        //make sure the number of types matches the random range...
                         newWeaponType=rndWeps[LCSrandom(4) + 2 - law[LAW_GUNCONTROL]];
                      }
                      else if(!LCSrandom(25))
                      {
                         string rndArmors[] = {"ARMOR_POLICEUNIFORM", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_POLICEUNIFORM",
                            "ARMOR_SWATARMOR", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_DEATHSQUADUNIFORM"};
+                        //make sure the number of types matches the random range...
                         newArmorType=rndArmors[LCSrandom(4) + 2 - law[LAW_GUNCONTROL]];
                      }
                      else if(!LCSrandom(20))newLootType="LOOT_POLICERECORDS";
@@ -1409,12 +1408,12 @@ void mode_site()
                      if(!LCSrandom(3))
                      {
                         string rndWeps[] = {"WEAPON_SEMIPISTOL_9MM", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
-                        newWeaponType=rndWeps[LCSrandom(3)];
+                        newWeaponType=pickrandom(rndWeps);
                      }
                      else if(!LCSrandom(2))
                      {
                         string rndArmors[] = {"ARMOR_ARMYARMOR"};
-                        newArmorType=rndArmors[LCSrandom(1)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      else if(!LCSrandom(20))newLootType="LOOT_SECRETDOCUMENTS";
                      else if(!LCSrandom(3))newLootType="LOOT_CELLPHONE";
@@ -1426,12 +1425,12 @@ void mode_site()
                      {
                         string rndWeps[] = {"WEAPON_FLAMETHROWER", "WEAPON_SEMIPISTOL_45",
                            "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
-                        newWeaponType=rndWeps[LCSrandom(5)];
+                        newWeaponType=pickrandom(rndWeps);
                      }
                      else if(!LCSrandom(30))
                      {
                         string rndArmors[] = {"ARMOR_HEAVYARMOR"};
-                        newArmorType=rndArmors[LCSrandom(1)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      else if(!LCSrandom(20))newLootType="LOOT_SECRETDOCUMENTS";
                      else if(!LCSrandom(3))newLootType="LOOT_CELLPHONE";
@@ -1460,8 +1459,7 @@ void mode_site()
                      {
                         string rndArmors[] = {"ARMOR_EXPENSIVEDRESS", "ARMOR_EXPENSIVESUIT", "ARMOR_EXPENSIVESUIT",
                            "ARMOR_EXPENSIVESUIT", "ARMOR_BONDAGEGEAR"};
-                        //make sure the number of types matches the random range...
-                        newArmorType=rndArmors[LCSrandom(5)];
+                        newArmorType=pickrandom(rndArmors);
                      }
                      if(!LCSrandom(8))newLootType="LOOT_TRINKET";
                      else if(!LCSrandom(7))newLootType="LOOT_WATCH";
@@ -1497,10 +1495,10 @@ void mode_site()
                      switch (LCSrandom(3))
                      {
                      case 0:
-                        newWeaponType=rndWeps[LCSrandom(7)];
+                        newWeaponType=pickrandom(rndWeps);
                         break;
                      case 1:
-                        newArmorType=rndArmors[LCSrandom(8)];
+                        newArmorType=pickrandom(rndArmors);
                         break;
                      default:
                         if(!LCSrandom(5))newLootType="LOOT_CELLPHONE";
@@ -1544,7 +1542,7 @@ void mode_site()
                            for(int ct=0; ct<(int)cliptype.size(); ++ct)
                               if(w->acceptable_ammo(*cliptype[ct]))
                                  cti.push_back(ct);
-                           Clip c(*cliptype[cti[LCSrandom(cti.size())]]);
+                           Clip c(*cliptype[pickrandom(cti)]);
                            w->reload(c);
                         }
                      }
