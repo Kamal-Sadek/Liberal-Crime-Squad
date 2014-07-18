@@ -1214,16 +1214,18 @@ void nameCCSMember(Creature &cr)
    else if(cr.get_armor().get_itemtypename()=="ARMOR_HEAVYARMOR")
       strcpy(cr.name,"CCS Heavy");
    else if(cr.get_weapon().get_itemtypename()=="WEAPON_SHOTGUN_PUMP"||LCSrandom(2))
-      switch(LCSrandom(5))
+      switch(LCSrandom(7))
       {
          case 0:strcpy(cr.name,"Country Boy");break;
-         case 1:strcpy(cr.name,"Hick");break;
-         case 2:strcpy(cr.name,"Redneck");break;
-         case 3:strcpy(cr.name,"Rube");break;
-         case 4:strcpy(cr.name,"Yokel");break;
+		 case 1:strcpy(cr.name,"Good ol' Boy");break;
+		 case 2:strcpy(cr.name,"Hick");break;
+		 case 3:strcpy(cr.name,"Hillbilly");break;
+		 case 4:strcpy(cr.name,"Redneck");break;
+         case 5:strcpy(cr.name,"Rube");break;
+         case 6:strcpy(cr.name,"Yokel");break;
       }
    else
-      switch(LCSrandom(9))
+      switch(LCSrandom(10))
       {
       case 0: strcpy(cr.name,"Biker");break;
       case 1: strcpy(cr.name,"Transient");break;
@@ -1234,6 +1236,7 @@ void nameCCSMember(Creature &cr)
       case 6: strcpy(cr.name,"Mailman");break;
       case 7: strcpy(cr.name,"Musician");break;
       case 8: strcpy(cr.name,"Hairstylist");break;
+	  case 9: strcpy(cr.name,"Bartender");break;
       }
 }
 
@@ -1258,6 +1261,8 @@ bool Creature::talkreceptive() const
    case CREATURE_GANGMEMBER:
    case CREATURE_CRACKHEAD:
    case CREATURE_FASTFOODWORKER:
+   case CREATURE_BARISTA:
+   case CREATURE_BARTENDER:
    case CREATURE_TELEMARKETER:
    case CREATURE_PROSTITUTE:
    case CREATURE_GARBAGEMAN:
