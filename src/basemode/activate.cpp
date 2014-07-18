@@ -980,7 +980,10 @@ void activate(Creature *cr)
                case CREATURE_DANCER: // for Art & Music
                case CREATURE_ENGINEER: // for Science
                case CREATURE_FASTFOODWORKER:
-               case CREATURE_FOOTBALLCOACH: // for Persuasion
+			   case CREATURE_BAKER:
+			   case CREATURE_BARISTA:
+			   case CREATURE_BARTENDER:
+			   case CREATURE_FOOTBALLCOACH: // for Persuasion
                case CREATURE_HAIRSTYLIST: // for Art
                case CREATURE_HIPPIE: // for Art & Music
                case CREATURE_JOURNALIST: // for Writing & Persuasion

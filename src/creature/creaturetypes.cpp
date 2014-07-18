@@ -188,13 +188,15 @@ void makecreature(Creature &cr,short type)
          cr.reload(false);
          break;
       case CREATURE_HICK:
-         switch(LCSrandom(5))
+         switch(LCSrandom(7))
          {
             case 0:strcpy(cr.name,"Country Boy");break;
-            case 1:strcpy(cr.name,"Hick");break;
-            case 2:strcpy(cr.name,"Redneck");break;
-            case 3:strcpy(cr.name,"Rube");break;
-            case 4:strcpy(cr.name,"Yokel");break;
+			case 1:strcpy(cr.name,"Good ol' Boy");break;
+			case 2:strcpy(cr.name,"Hick");break;
+			case 3:strcpy(cr.name,"Hillbilly");break;
+			case 4:strcpy(cr.name,"Redneck");break;
+            case 5:strcpy(cr.name,"Rube");break;
+            case 6:strcpy(cr.name,"Yokel");break;
          }
          if((law[LAW_GUNCONTROL]==-2&&!LCSrandom(2))||!LCSrandom(10))
          {
@@ -943,7 +945,22 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;
          break;
-      case CREATURE_TELEMARKETER:
+	  case CREATURE_BAKER:
+		 okaysite[SITE_DOWNTOWN]=1;
+		 okaysite[SITE_UDISTRICT]=1;
+		 okaysite[SITE_INDUSTRIAL]=1;
+	     break;
+	  case CREATURE_BARISTA:
+		 okaysite[SITE_BUSINESS_LATTESTAND]=1;
+		 okaysite[SITE_BUSINESS_INTERNETCAFE]=1;
+	     break;  
+	  case CREATURE_BARTENDER:
+		 okaysite[SITE_BUSINESS_CIGARBAR]=1;
+		 okaysite[SITE_DOWNTOWN]=1;
+		 okaysite[SITE_UDISTRICT]=1;
+		 okaysite[SITE_INDUSTRIAL]=1;
+		 break;
+	  case CREATURE_TELEMARKETER:
          okaysite[SITE_DOWNTOWN]=1;
          okaysite[SITE_UDISTRICT]=1;
          okaysite[SITE_INDUSTRIAL]=1;

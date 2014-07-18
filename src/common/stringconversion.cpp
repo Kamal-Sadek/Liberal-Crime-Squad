@@ -150,6 +150,12 @@ short creaturetype_string_to_enum(const std::string& ctname)
       return CREATURE_ENGINEER;
    else if (ctname == "CREATURE_FASTFOODWORKER")
       return CREATURE_FASTFOODWORKER;
+   else if (ctname == "CREATURE_BAKER")
+      return CREATURE_BAKER;
+   else if (ctname == "CREATURE_BARISTA")
+      return CREATURE_BARISTA;
+   else if (ctname == "CREATURE_BARTENDER")
+	  return CREATURE_BARTENDER;
    else if (ctname == "CREATURE_TELEMARKETER")
       return CREATURE_TELEMARKETER;
    else if (ctname == "CREATURE_OFFICEWORKER")

@@ -911,6 +911,34 @@ Elements marked as hardcoded may have their values overridden by the game.
         <money>20-50</money>
     </creaturetype>
 
+    <creaturetype idname="CREATURE_BAKER">
+        <type_name>Baker</type_name>
+        <encounter_name>Baker</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <money>20-50</money>
+    </creaturetype>
+    
+    <creaturetype idname="CREATURE_BARISTA">
+        <type_name>Barista</type_name>
+        <encounter_name>Barista</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>YOUNGADULT</age>
+        <money>20-50</money>
+    </creaturetype>
+
+    <creaturetype idname="CREATURE_BARTENDER">
+        <type_name>Bartender</type_name>
+        <encounter_name>Bartender</encounter_name>
+        <weapon>CIVILIAN</weapon>
+        <armor>ARMOR_CLOTHES</armor>
+        <age>MATURE</age>
+        <gender>MALE BIAS</gender>
+        <money>20-50</money>
+    </creaturetype>
+  
     <creaturetype idname="CREATURE_TELEMARKETER">
         <type_name>Telemarketer</type_name>
         <encounter_name>Telemarketer</encounter_name>
