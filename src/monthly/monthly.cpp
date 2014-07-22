@@ -541,6 +541,7 @@ void passmonth(char &clearformess,char canseethings)
    //FUND REPORTS
    fundreport(clearformess);
    ledger.resetMonthlyAmounts();
+   erase();
 
    //HEAL CLINIC PEOPLE
    for(p=0;p<(int)pool.size();p++)
