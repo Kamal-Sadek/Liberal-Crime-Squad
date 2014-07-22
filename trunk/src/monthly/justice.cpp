@@ -829,7 +829,14 @@ void trial(Creature &g)
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                move(7,1);
                addstr(g.name, gamelog);
-               addstr(" will be returned to prison to resume an earlier sentence.", gamelog);
+               addstr(" will be returned to prison to resume an earlier sentence", gamelog);
+               if(!g.deathpenalty && g.sentence>1 && (LCSrandom(2)||sleeperjudge))
+               {
+                  g.sentence--;
+                  addstr(", less a month for time already served.", gamelog);
+               }else{
+                  addstr(".", gamelog);
+               }
                if(g.deathpenalty)
                {
                   g.sentence=3;
@@ -864,7 +871,14 @@ void trial(Creature &g)
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(5,1);
             addstr(g.name, gamelog);
-            addstr(" will be returned to prison to resume an earlier sentence.", gamelog);
+            addstr(" will be returned to prison to resume an earlier sentence", gamelog);
+            if(!g.deathpenalty && g.sentence>1 && (LCSrandom(2)||sleeperjudge))
+            {
+               g.sentence--;
+               addstr(", less a month for time already served.", gamelog);
+            }else{
+               addstr(".", gamelog);
+            }
             if(g.deathpenalty)
             {
                g.sentence=3;
@@ -1090,7 +1104,16 @@ void penalize(Creature &g,char lenient)
       move(7,1);
       addstr(g.propername, gamelog);
       addstr(", the court sees no need to add to your existing sentence.", gamelog);
-
+      
+      move(8,1);
+      addstr("You will be returned to prison to resume it", gamelog);
+      if(g.sentence>1 && lenient)
+      {
+         g.sentence--;
+         addstr(", less a month for time already served.", gamelog);
+      }else{
+         addstr(".", gamelog);
+      }
       getkey();
    }
    else if(g.sentence==0)
