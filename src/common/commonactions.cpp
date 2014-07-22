@@ -115,17 +115,24 @@ void hospitalize(int loc, Creature &patient)
       getkey();
 
       if(patientsquad)
+      {
          for(int p=0;p<6;p++)
+         {
+            
             if(patientsquad->squad[p]==&patient)
                patientsquad->squad[p]=NULL;
-
-      // Reorganize patient's squad
-      for(int i=0;i<5;i++) for(int p2=1;p2<6;p2++)
-         if(patientsquad->squad[p2-1]==NULL&&patientsquad->squad[p2]!=NULL)
-         {
-            patientsquad->squad[p2-1]=patientsquad->squad[p2];
-            patientsquad->squad[p2]=NULL;
          }
+
+         // Reorganize patient's squad
+         for(int i=0;i<5;i++) for(int p2=1;p2<6;p2++)
+         {
+            if(patientsquad->squad[p2-1]==NULL&&patientsquad->squad[p2]!=NULL)
+            {
+               patientsquad->squad[p2-1]=patientsquad->squad[p2];
+               patientsquad->squad[p2]=NULL;
+            }
+         }
+      }
    }
 }
 
