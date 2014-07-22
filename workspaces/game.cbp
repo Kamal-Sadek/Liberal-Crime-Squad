@@ -19,8 +19,8 @@
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
 					<Add option="-mtune=generic" />
-					<Add option="-g" />
-					<Add option="-Og" />
+					<Add option="-Os" />
+					<Add option="-fomit-frame-pointer" />
 					<Add directory="../src" />
 					<Add directory="../src/pdcurses" />
 				</Compiler>
@@ -32,8 +32,9 @@
 					<Add option="-mfpmath=sse" />
 					<Add option="-march=pentium3" />
 					<Add option="-mtune=generic" />
-					<Add option="-g" />
-					<Add option="-Og" />
+					<Add option="-Os" />
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-s" />
 					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>

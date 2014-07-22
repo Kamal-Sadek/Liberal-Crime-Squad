@@ -9,7 +9,7 @@ LootType::LootType(MCD_STR xmlstring)
    xml.FindElem();
    xml.IntoElem();
 
-   while (xml.FindElem()) //Loop over all the elements inside the loottype element.
+   while(xml.FindElem()) //Loop over all the elements inside the loottype element.
    {
       std::string element = xml.GetTagName();
 

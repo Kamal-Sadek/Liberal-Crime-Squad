@@ -29,12 +29,12 @@ void ItemType::init(const MCD_STR& xmlstring)
    xml.FindElem();
 
    idname_ = xml.GetAttrib("idname");
-   if (idname_.empty())
+   if (!len(idname_))
       idname_ = "LACKS IDNAME " + tostring(id_);
 
    xml.IntoElem();
 
-   while (xml.FindElem()) //Loop over all the elements inside the element.
+   while(xml.FindElem()) //Loop over all the elements inside the element.
    {
       std::string element = xml.GetTagName();
 

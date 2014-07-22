@@ -9,7 +9,7 @@ class Loot : public Item
       explicit Loot(const LootType& seed, int number = 1);
       virtual Loot* clone() const { return new Loot(*this); }
       explicit Loot(const std::string& inputXml);
-      string showXml () const;
+      string showXml() const;
 
 
       virtual bool is_loot() const { return true; }

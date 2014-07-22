@@ -52,7 +52,7 @@ void majornewspaper(char &clearformess,char canseethings)
    if(canseethings) display_newspaper();
 
    //DELETE STORIES
-   for(n=0;n<(int)newsstory.size();n++)
+   for(n=0;n<len(newsstory);n++)
       handle_public_opinion_impact(*newsstory[n]);
    delete_and_clear(newsstory);
 }
@@ -61,7 +61,7 @@ void display_newspaper()
 {
    int writers = liberal_guardian_writing_power();
 
-   for(int n=0;n<(int)newsstory.size();n++)
+   for(int n=0;n<len(newsstory);n++)
    {
       bool liberalguardian=0;
       int header = -1;
@@ -188,11 +188,11 @@ void advance_ccs_defeat_storyline()
 void clean_up_empty_news_stories()
 {
    // Delete stories that have no content or shouldn't be reported on
-   for(int n=newsstory.size()-1;n>=0;n--)
+   for(int n=len(newsstory)-1;n>=0;n--)
    {
       // Squad site action stories without crimes
       if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&
-         newsstory[n]->crime.size()==0)
+        !len(newsstory[n]->crime))
       {
          delete_and_remove(newsstory,n);
          continue;
@@ -207,7 +207,7 @@ void clean_up_empty_news_stories()
          newsstory[n]->type==NEWSSTORY_BURIALARREST)
       {
          char conf=0;
-         for(int c=0;c<(int)newsstory[n]->crime.size();c++)
+         for(int c=0;c<len(newsstory[n]->crime);c++)
          {
             if(newsstory[n]->crime[c]==CRIME_KILLEDSOMEBODY)
             {
@@ -229,7 +229,7 @@ void clean_up_empty_news_stories()
           newsstory[n]->type==NEWSSTORY_SQUAD_BROKESIEGE||
           newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEATTACK||
           newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE)&&
-         newsstory[n]->siegetype!=SIEGE_POLICE)
+          newsstory[n]->siegetype!=SIEGE_POLICE)
       {
          delete_and_remove(newsstory,n);
          continue;
@@ -239,12 +239,12 @@ void clean_up_empty_news_stories()
 
 void assign_page_numbers_to_newspaper_stories()
 {
-   for(int n=newsstory.size()-1;n>=0;n--)
+   for(int n=len(newsstory)-1;n>=0;n--)
    {
       setpriority(*newsstory[n]);
       // Suppress squad actions that aren't worth a story
       if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
-         ((newsstory[n]->priority<50 &&
+       ((newsstory[n]->priority<50 &&
          newsstory[n]->claimed==0)||
          newsstory[n]->priority<4))
       {
@@ -254,15 +254,13 @@ void assign_page_numbers_to_newspaper_stories()
       newsstory[n]->page=-1;
    }
    char acted;
-   int curpage=1;
-   int curguardianpage=1;
+   int curpage=1,curguardianpage=1;
    do
    {
       acted=0;
       // Sort the major newspapers
-      int maxn=-1;
-      int maxp=-1;
-      for(int n=0;n<(int)newsstory.size();n++)
+      int maxn=-1,maxp=-1;
+      for(int n=0;n<len(newsstory);n++)
       {
          if(newsstory[n]->priority>maxp&&
             newsstory[n]->page==-1)
@@ -273,12 +271,12 @@ void assign_page_numbers_to_newspaper_stories()
       }
       if(maxn!=-1)
       {
-         if(newsstory[maxn]->priority<30&&curpage==1)curpage=2;
-         if(newsstory[maxn]->priority<25&&curpage<3)curpage=3+LCSrandom(2);
-         if(newsstory[maxn]->priority<20&&curpage<5)curpage=5+LCSrandom(5);
-         if(newsstory[maxn]->priority<15&&curpage<10)curpage=10+LCSrandom(10);
-         if(newsstory[maxn]->priority<10&&curpage<20)curpage=20+LCSrandom(10);
-         if(newsstory[maxn]->priority<5&&curpage<30)curpage=30+LCSrandom(20);
+         if(newsstory[maxn]->priority<30&&curpage==1) curpage=2;
+         if(newsstory[maxn]->priority<25&&curpage<3) curpage=3+LCSrandom(2);
+         if(newsstory[maxn]->priority<20&&curpage<5) curpage=5+LCSrandom(5);
+         if(newsstory[maxn]->priority<15&&curpage<10) curpage=10+LCSrandom(10);
+         if(newsstory[maxn]->priority<10&&curpage<20) curpage=20+LCSrandom(10);
+         if(newsstory[maxn]->priority<5&&curpage<30) curpage=30+LCSrandom(20);
 
          newsstory[maxn]->page=curpage;
          newsstory[maxn]->guardianpage=curguardianpage;
@@ -286,7 +284,7 @@ void assign_page_numbers_to_newspaper_stories()
          curguardianpage++;
          acted=1;
       }
-   }while(acted);
+   } while(acted);
 }
 
 void handle_public_opinion_impact(const newsstoryst &ns)
@@ -310,9 +308,9 @@ void handle_public_opinion_impact(const newsstoryst &ns)
    int impact = ns.priority;
 
    // Magnitude of impact will be affected by which page of the newspaper the story appears on
-   if(ns.page==1)impact*=5;
-   else if(ns.page==2)impact*=3;
-   else if(ns.page==3)impact*=2;
+   if(ns.page==1) impact*=5;
+   else if(ns.page==2) impact*=3;
+   else if(ns.page==3) impact*=2;
 
    int maxpower = 1;
    if(ns.page==1) maxpower=100;
@@ -453,7 +451,7 @@ void handle_public_opinion_impact(const newsstoryst &ns)
       issues.push_back(VIEW_CORPORATECULTURE);
       break;
    }
-   for(i=0; i<(int)issues.size(); i++)
+   for(i=0; i<len(issues); i++)
       change_public_opinion(issues[i],impact,squad_responsible,impact*10);
 }
 
@@ -489,18 +487,18 @@ void setpriority(newsstoryst &ns)
          int crime[CRIMENUM];
          memset(crime,0,CRIMENUM*sizeof(int));
          // Record all the crimes in this story
-         for(int c=0;c<(int)ns.crime.size();c++)
+         for(int c=0;c<len(ns.crime);c++)
             crime[ns.crime[c]]++;
          // Cap publicity for more than ten repeats of an action of some type
-         if(crime[CRIME_STOLEGROUND]>10)crime[CRIME_STOLEGROUND]=10;
-         if(crime[CRIME_BROKEDOWNDOOR]>10)crime[CRIME_BROKEDOWNDOOR]=10;
-         if(crime[CRIME_ATTACKED_MISTAKE]>10)crime[CRIME_ATTACKED_MISTAKE]=10;
-         if(crime[CRIME_ATTACKED]>10)crime[CRIME_ATTACKED]=10;
-         if(crime[CRIME_BREAK_SWEATSHOP]>10)crime[CRIME_BREAK_SWEATSHOP]=10;
-         if(crime[CRIME_BREAK_FACTORY]>10)crime[CRIME_BREAK_FACTORY]=10;
-         if(crime[CRIME_FREE_RABBITS]>10)crime[CRIME_FREE_RABBITS]=10;
-         if(crime[CRIME_FREE_BEASTS]>10)crime[CRIME_FREE_BEASTS]=10;
-         if(crime[CRIME_TAGGING]>10)crime[CRIME_TAGGING]=10;
+         if(crime[CRIME_STOLEGROUND]>10) crime[CRIME_STOLEGROUND]=10;
+         if(crime[CRIME_BROKEDOWNDOOR]>10) crime[CRIME_BROKEDOWNDOOR]=10;
+         if(crime[CRIME_ATTACKED_MISTAKE]>10) crime[CRIME_ATTACKED_MISTAKE]=10;
+         if(crime[CRIME_ATTACKED]>10) crime[CRIME_ATTACKED]=10;
+         if(crime[CRIME_BREAK_SWEATSHOP]>10) crime[CRIME_BREAK_SWEATSHOP]=10;
+         if(crime[CRIME_BREAK_FACTORY]>10) crime[CRIME_BREAK_FACTORY]=10;
+         if(crime[CRIME_FREE_RABBITS]>10) crime[CRIME_FREE_RABBITS]=10;
+         if(crime[CRIME_FREE_BEASTS]>10) crime[CRIME_FREE_BEASTS]=10;
+         if(crime[CRIME_TAGGING]>10) crime[CRIME_TAGGING]=10;
 
          // Increase news story priority based on the number of instances of
          // various crimes, scaled by a factor dependant on the crime
@@ -534,7 +532,7 @@ void setpriority(newsstoryst &ns)
 
          // Set story's political and violence levels for determining whether
          // a story becomes positive or negative
-         if(ns.claimed)ns.politics_level=5;
+         if(ns.claimed) ns.politics_level=5;
          else ns.politics_level=0;
 
          ns.politics_level+=crime[CRIME_SHUTDOWNREACTOR  ] * 100;
@@ -603,7 +601,7 @@ void setpriority(newsstoryst &ns)
                ns.priority+=10+attitude[VIEW_LIBERALCRIMESQUAD]/3;
                break;
             default:
-               // Suppress actions at  CCS safehouses
+               // Suppress actions at CCS safehouses
                if(ns.loc!=-1 &&
                   location[ns.loc]->renting==RENTING_CCS)
                {
@@ -613,7 +611,7 @@ void setpriority(newsstoryst &ns)
          }
 
          // Double profile if the squad moved out in full battle colors
-         if(ns.claimed==2)ns.priority*=2;
+         if(ns.claimed==2) ns.priority*=2;
 
          // Modify notability by location
          if(ns.loc!=-1)
@@ -686,7 +684,7 @@ void setpriority(newsstoryst &ns)
          }
 
          // Cap news priority, in part so it can't displace major news stories
-         if(ns.priority>20000)ns.priority=20000;
+         if(ns.priority>20000) ns.priority=20000;
          break;
       }
       case NEWSSTORY_KIDNAPREPORT:
@@ -696,7 +694,7 @@ void setpriority(newsstoryst &ns)
             ns.cr->type==CREATURE_RADIOPERSONALITY||
             ns.cr->type==CREATURE_NEWSANCHOR||
             ns.cr->type==CREATURE_SCIENTIST_EMINENT||
-            ns.cr->type==CREATURE_JUDGE_CONSERVATIVE)ns.priority=40;
+            ns.cr->type==CREATURE_JUDGE_CONSERVATIVE) ns.priority=40;
          break;
       case NEWSSTORY_MASSACRE:
          // More people massacred, higher priority (I think; not verified ns.crime[1] is people present)
@@ -759,8 +757,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
    char story[5000];
    short storyx_s[25];
    short storyx_e[25];
-   for(it2=0;it2<25;it2++)storyx_s[it2]=1;
-   for(it2=0;it2<25;it2++)storyx_e[it2]=78;
+   for(it2=0;it2<25;it2++) storyx_s[it2]=1;
+   for(it2=0;it2<25;it2++) storyx_e[it2]=78;
    displayads(ns,liberalguardian,storyx_s,storyx_e,it2);
 
    const char *city;
@@ -851,7 +849,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             {
                int crime[CRIMENUM];
                std::memset(crime,0,sizeof(int)*CRIMENUM);
-               for(int c=0;c<(int)ns.crime.size();c++)
+               for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
@@ -885,7 +883,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             {
                int crime[CRIMENUM];
                std::memset(crime,0,sizeof(int)*CRIMENUM);
-               for(int c=0;c<(int)ns.crime.size();c++)
+               for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                strcat(story,"A routine arrest went horribly wrong yesterday, ");
                strcat(story,"according to a spokesperson from the police department.");
@@ -983,31 +981,31 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                int crime[CRIMENUM];
                memset(crime,0,sizeof(int)*CRIMENUM);
                int typesum=0;
-               for(int c=0;c<(int)ns.crime.size();c++)
+               for(int c=0;c<len(ns.crime);c++)
                {
                   // Count crimes of each type
                   crime[ns.crime[c]]++;
 
                   // Special crimes are described at the start or end of the article;
                   // others should be recorded in the body
-                  if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
-                  if(ns.crime[c]==CRIME_CORP_FILES)continue;
-                  if(ns.crime[c]==CRIME_SHUTDOWNREACTOR)continue;
-                  if(ns.crime[c]==CRIME_BANKVAULTROBBERY)continue;
-                  if(ns.crime[c]==CRIME_BANKSTICKUP)continue;
-                  if(ns.crime[c]==CRIME_POLICE_LOCKUP)continue;
-                  if(ns.crime[c]==CRIME_COURTHOUSE_LOCKUP)continue;
-                  if(ns.crime[c]==CRIME_PRISON_RELEASE)continue;
-                  if(ns.crime[c]==CRIME_JURYTAMPERING)continue;
-                  if(ns.crime[c]==CRIME_HACK_INTEL)continue;
-                  if(ns.crime[c]==CRIME_ARMORY)continue;
-                  if(ns.crime[c]==CRIME_HOUSE_PHOTOS)continue;
-                  if(ns.crime[c]==CRIME_CORP_FILES)continue;
-                  if(ns.crime[c]==CRIME_CARCHASE)continue;
-                  if(ns.crime[c]==CRIME_CARCRASH)continue;
-                  if(ns.crime[c]==CRIME_FOOTCHASE)continue;
-                  //if(ns.crime[c]==CRIME_TAGGING)continue;
-                  if(crime[ns.crime[c]]==1)typesum++;
+                  if(ns.crime[c]==CRIME_HOUSE_PHOTOS) continue;
+                  if(ns.crime[c]==CRIME_CORP_FILES) continue;
+                  if(ns.crime[c]==CRIME_SHUTDOWNREACTOR) continue;
+                  if(ns.crime[c]==CRIME_BANKVAULTROBBERY) continue;
+                  if(ns.crime[c]==CRIME_BANKSTICKUP) continue;
+                  if(ns.crime[c]==CRIME_POLICE_LOCKUP) continue;
+                  if(ns.crime[c]==CRIME_COURTHOUSE_LOCKUP) continue;
+                  if(ns.crime[c]==CRIME_PRISON_RELEASE) continue;
+                  if(ns.crime[c]==CRIME_JURYTAMPERING) continue;
+                  if(ns.crime[c]==CRIME_HACK_INTEL) continue;
+                  if(ns.crime[c]==CRIME_ARMORY) continue;
+                  if(ns.crime[c]==CRIME_HOUSE_PHOTOS) continue;
+                  if(ns.crime[c]==CRIME_CORP_FILES) continue;
+                  if(ns.crime[c]==CRIME_CARCHASE) continue;
+                  if(ns.crime[c]==CRIME_CARCRASH) continue;
+                  if(ns.crime[c]==CRIME_FOOTCHASE) continue;
+                  //if(ns.crime[c]==CRIME_TAGGING) continue;
+                  if(crime[ns.crime[c]]==1) typesum++;
                }
 
                if(crime[CRIME_SHUTDOWNREACTOR])
@@ -1195,8 +1193,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(liberalguardian&&!ccs)
                {
-                  if(crime[CRIME_ATTACKED_MISTAKE])typesum--;
-                  if(crime[CRIME_KILLEDSOMEBODY])typesum--;
+                  if(crime[CRIME_ATTACKED_MISTAKE]) typesum--;
+                  if(crime[CRIME_KILLEDSOMEBODY]) typesum--;
                }
 
                if(typesum>0)
@@ -1402,42 +1400,42 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                {
                   if(!LCSrandom(8))
                   {
-                      if(crime[CRIME_TAGGING])
-                      {
-                         strcat(story,"  The slogan, \"");
-                         strcat(story,slogan);
-                         strcat(story,"\" was found painted on the walls.");
-                      }
-                      else
-                      {
-                          switch (LCSrandom(3))
-                          {
-                          case 0:
-                             if (ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
-                             {
-                                strcat(story,"  One uttered the words, \"");
-                                   strcat(story,slogan);
-                                strcat(story,"\" before passing out.");
-                             }
-                             else
-                             {
-                                strcat(story,"  As they left, they shouted, \"");
-                                   strcat(story,slogan);
-                                strcat(story,"\"");
-                             }
-                             break;
-                          case 1:
-                             strcat(story,"  One of them was rumored to have cried out, \"");
-                             strcat(story,slogan);
-                             strcat(story,"\"");
-                             break;
-                          case 2:
-                             strcat(story,"  Witnesses reported hearing the phrase, \"");
-                             strcat(story,slogan);
-                             strcat(story,"\"");
-                             break;
-                          }
-                      }
+                     if(crime[CRIME_TAGGING])
+                     {
+                        strcat(story,"  The slogan, \"");
+                        strcat(story,slogan);
+                        strcat(story,"\" was found painted on the walls.");
+                     }
+                     else
+                     {
+                        switch(LCSrandom(3))
+                        {
+                        case 0:
+                           if (ns.type==NEWSSTORY_SQUAD_KILLED_SITE)
+                           {
+                              strcat(story,"  One uttered the words, \"");
+                              strcat(story,slogan);
+                              strcat(story,"\" before passing out.");
+                           }
+                           else
+                           {
+                              strcat(story,"  As they left, they shouted, \"");
+                              strcat(story,slogan);
+                              strcat(story,"\"");
+                           }
+                           break;
+                        case 1:
+                           strcat(story,"  One of them was rumored to have cried out, \"");
+                           strcat(story,slogan);
+                           strcat(story,"\"");
+                           break;
+                        case 2:
+                           strcat(story,"  Witnesses reported hearing the phrase, \"");
+                           strcat(story,slogan);
+                           strcat(story,"\"");
+                           break;
+                        }
+                     }
                   }
                }
                break;
@@ -1727,7 +1725,7 @@ void displaycenterednewsfont(const std::string& str,int y)
 {
    int width=-1;
    int s;
-   for(s=0;s<(int)str.length();s++)
+   for(s=0;s<len(str);s++)
    {
       if(str[s]>='A'&&str[s]<='Z')width+=6;
       else if(str[s]=='\'')width+=4;
@@ -1736,41 +1734,38 @@ void displaycenterednewsfont(const std::string& str,int y)
 
    int x=39-width/2;
 
-   for(s=0;s<(int)str.length();s++)
+   for(s=0;s<len(str);s++)
    {
       if((str[s]>='A'&&str[s]<='Z')||str[s]=='\'')
       {
          int p;
-         if(str[s]>='A'&&str[s]<='Z')p=str[s]-'A';
+         if(str[s]>='A'&&str[s]<='Z') p=str[s]-'A';
          else p=26;
          int lim=6;
-         if(str[s]=='\'')lim=4;
-         if(s==(int)str.length()-1)lim--;
-         for(int x2=0;x2<lim;x2++)
+         if(str[s]=='\'') lim=4;
+         if(s==len(str)-1) lim--;
+         for(int x2=0;x2<lim;x2++) for(int y2=0;y2<7;y2++)
          {
-            for(int y2=0;y2<7;y2++)
-            {
-               move(y+y2,x+x2);
+            move(y+y2,x+x2);
 
 #ifdef NCURSES
-               // Clean the square first.
-               set_color(COLOR_BLACK, COLOR_BLACK, 0);
-               addchar(CH_FULL_BLOCK);
-               move(y+y2,x+x2);
+            // Clean the square first.
+            set_color(COLOR_BLACK, COLOR_BLACK, 0);
+            addchar(CH_FULL_BLOCK);
+            move(y+y2,x+x2);
 #endif
 
-               if(x2==5)
-               {
-                  set_color(COLOR_WHITE,COLOR_BLACK,0);
-                  addchar((char)CH_FULL_BLOCK);
-               }
-               else
-               {
-                  set_color(bigletters[p][x2][y2][1],
-                     bigletters[p][x2][y2][2],
-                     bigletters[p][x2][y2][3]);
-                  addch(translateGraphicsChar(bigletters[p][x2][y2][0]));
-               }
+            if(x2==5)
+            {
+               set_color(COLOR_WHITE,COLOR_BLACK,0);
+               addchar((char)CH_FULL_BLOCK);
+            }
+            else
+            {
+               set_color(bigletters[p][x2][y2][1],
+                         bigletters[p][x2][y2][2],
+                         bigletters[p][x2][y2][3]);
+               addch(translateGraphicsChar(bigletters[p][x2][y2][0]));
             }
          }
          x+=lim;
@@ -1778,13 +1773,10 @@ void displaycenterednewsfont(const std::string& str,int y)
       else
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         for(int x2=0;x2<3;x2++)
+         for(int x2=0;x2<3;x2++) for(int y2=0;y2<7;y2++)
          {
-            for(int y2=0;y2<7;y2++)
-            {
-               move(y+y2,x+x2);
-               addchar((char)CH_FULL_BLOCK);
-            }
+            move(y+y2,x+x2);
+            addchar((char)CH_FULL_BLOCK);
          }
          x+=3;
       }
@@ -1793,7 +1785,7 @@ void displaycenterednewsfont(const std::string& str,int y)
 
 void displaycenteredsmallnews(const std::string& str,int y)
 {
-   int x=39-((str.length()-1)>>1);
+   int x=39-((len(str)-1)>>1);
    move(y,x);
    set_color(COLOR_BLACK,COLOR_WHITE,0);
    addstr(str);
@@ -1802,17 +1794,15 @@ void displaycenteredsmallnews(const std::string& str,int y)
 void displaynewspicture(int p,int y)
 {
    for(int x2=0;x2<78;x2++)
-   {
       for(int y2=0;y2<15;y2++)
       {
-         if(y+y2>24)break;
+         if(y+y2>24) break;
          move(y+y2,1+x2);
          set_color(newspic[p][x2][y2][1],
-            newspic[p][x2][y2][2],
-            newspic[p][x2][y2][3]);
+                   newspic[p][x2][y2][2],
+                   newspic[p][x2][y2][3]);
          addch(translateGraphicsChar(newspic[p][x2][y2][0]));
       }
-   }
 }
 
 /* news - draws the specified block of text to the screen */
@@ -1834,7 +1824,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
    char iscentered=0;
    int i=0;
 
-   while(curpos<(int)strlen(story)&&cury<25)
+   while(curpos<len(story)&&cury<25)
    {
       content=0;
       totalwidth=0;
@@ -1842,7 +1832,7 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
       length=storyx_e[cury]-storyx_s[cury]+1;
       if(length==0){cury++;if(endparagraph>0)endparagraph--;continue;}
 
-      for(i=curpos;i<(int)strlen(story);i++)
+      for(i=curpos;i<len(story);i++)
       {
          if(story[i]=='&'&&story[i+1]!='&')
          {
@@ -1869,8 +1859,8 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
             totalwidth++;
             if(totalwidth>length)
             {
-               while(story[i]!=' '){i--;addstrcur--;}
-               while(story[i]==' ')i++;
+               while(story[i]!=' ') i--,addstrcur--;
+               while(story[i]==' ') i++;
                addstring[addstrcur]='\x0';
                break;
             }
@@ -1878,14 +1868,14 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
          }
       }
 
-      if(i==(int)strlen(story))addstring[addstrcur]='\x0';
+      if(i==len(story)) addstring[addstrcur]='\x0';
 
-      if(strlen(addstring)>0&&content)
+      if(len(addstring)&&content)
       {
          int words=0;
          char silent=1;
          vector<int> spacex;
-         for(int s2=0;s2<(int)strlen(addstring);s2++)
+         for(int s2=0;s2<len(addstring);s2++)
          {
             if(addstring[s2]==' ')
             {
@@ -1906,45 +1896,38 @@ void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y)
             }
          }
 
-         while(!endparagraph&&words>1&&(int)strlen(addstring)<length&&!iscentered)
+         while(!endparagraph&&words>1&&len(addstring)<length&&!iscentered)
          {
             int csp=pickrandom(spacex);
 
-            for(int x=0;x<(int)spacex.size();x++)
-            {
-               if(spacex[x]>csp)spacex[x]++;
-            }
+            for(int x=0;x<len(spacex);x++)
+               if(spacex[x]>csp) spacex[x]++;
 
-            int l=strlen(addstring);
+            int l=len(addstring);
             for(int s=l+1;s>csp;s--)
-            {
                addstring[s]=addstring[s-1];
-            }
          }
 
-         char *news=new char[strlen(addstring)+1];
+         char *news=new char[len(addstring)+1];
          strcpy(news,addstring);
          text.push_back(news);
          centered.push_back(iscentered);
          cury++;
          if(endparagraph>0)
-         {
-            endparagraph--;
-            iscentered=0;
-         }
+            endparagraph--,iscentered=0;
       }
 
       curpos=i;
    }
 
    set_color(COLOR_BLACK,COLOR_WHITE,0);
-   for(int t=0;t<(int)text.size();t++)
+   for(int t=0;t<len(text);t++)
    {
-      if(y+t>=25)break;
-      if(text[t][strlen(text[t])-1]==' ') // remove trailing space
-         text[t][strlen(text[t])-1]='\x0'; // (necessary for proper centering and to not overwrite borders around an ad)
+      if(y+t>=25) break;
+      if(text[t][len(text[t])-1]==' ') // remove trailing space
+         text[t][len(text[t])-1]='\x0'; // (necessary for proper centering and to not overwrite borders around an ad)
       if(centered[t])
-         move(y+t,((storyx_s[y+t]+storyx_e[y+t]-strlen(text[t])+1)>>1));
+         move(y+t,((storyx_s[y+t]+storyx_e[y+t]-len(text[t])+1)>>1));
       else move(y+t,storyx_s[y+t]);
       addstr(text[t]);
 
@@ -2014,7 +1997,7 @@ newsstoryst* new_major_event()
       break;
    }
 
-   if(ns->positive)change_public_opinion(ns->view,20,0);
+   if(ns->positive) change_public_opinion(ns->view,20,0);
    else change_public_opinion(ns->view,-20,0);
    public_interest[ns->view]+=50;
    return ns;
@@ -2022,8 +2005,8 @@ newsstoryst* new_major_event()
 
 int liberal_guardian_writing_power()
 {
-   int power = 0;
-   for(int i=0;i<(int)pool.size();i++)
+   int power=0;
+   for(int i=0;i<len(pool);i++)
    {
       if(pool[i]->alive&&pool[i]->activity.type==ACTIVITY_WRITE_GUARDIAN)
       {
@@ -2031,7 +2014,7 @@ int liberal_guardian_writing_power()
             location[pool[i]->location]->compound_walls & COMPOUND_PRINTINGPRESS)
          {
             pool[i]->train(SKILL_WRITING,LCSrandom(3)); // Experience gain
-            power += pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
+            power+=pool[i]->skill_roll(SKILL_WRITING); // Record the writer on this topic
             criminalize(*pool[i],LAWFLAG_SPEECH); // Record possibly illegal speech activity
          }
          else pool[i]->activity.type=ACTIVITY_NONE;
@@ -2052,7 +2035,7 @@ newsstoryst* ccs_strikes_story()
    ns->positive=true;
 
    do {
-      ns->loc=LCSrandom(location.size());
+      ns->loc=LCSrandom(len(location));
    } while(location[ns->loc]->renting!=-1);
 
    return ns;
@@ -2099,29 +2082,29 @@ newsstoryst* ccs_fbi_raid_story()
 {
    newsstoryst* ns=new newsstoryst;
    ns->type=NEWSSTORY_CCS_DEFEATED;
-   ns->priority = 800;
-   endgamestate = ENDGAME_CCS_DEFEATED;
+   ns->priority=800;
+   endgamestate=ENDGAME_CCS_DEFEATED;
    // arrest or kill ccs sleepers
-   for(int p=0; p<(int)pool.size(); p++)
+   for(int p=0;p<len(pool);p++)
    {
-      if(pool[p]->flag & CREATUREFLAG_SLEEPER)
+      if(pool[p]->flag&CREATUREFLAG_SLEEPER)
       {
-         if(pool[p]->type == CREATURE_CCS_VIGILANTE || pool[p]->type == CREATURE_CCS_ARCHCONSERVATIVE ||
-            pool[p]->type == CREATURE_CCS_MOLOTOV || pool[p]->type == CREATURE_CCS_SNIPER)
+         if(pool[p]->type==CREATURE_CCS_VIGILANTE||pool[p]->type==CREATURE_CCS_ARCHCONSERVATIVE||
+            pool[p]->type==CREATURE_CCS_MOLOTOV||pool[p]->type==CREATURE_CCS_SNIPER)
          {
-            pool[p]->flag &= ~CREATUREFLAG_SLEEPER;
+            pool[p]->flag&=~CREATUREFLAG_SLEEPER;
             criminalize(*pool[p],LAWFLAG_RACKETEERING);
             capturecreature(*pool[p]);
          }
       }
    }
    // hide ccs safehouses
-   for(int l=0; l<(int)location.size(); l++)
+   for(int l=0;l<len(location);l++)
    {
-      if(location[l]->renting == RENTING_CCS)
+      if(location[l]->renting==RENTING_CCS)
       {
-         location[l]->renting = RENTING_NOCONTROL;
-         location[l]->hidden = true;
+         location[l]->renting=RENTING_NOCONTROL;
+         location[l]->hidden=true;
       }
    }
    // go militarized police

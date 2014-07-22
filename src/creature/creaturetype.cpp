@@ -23,22 +23,18 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
    weapontype = xml.GetData();
 
    // Read in values.
-   if (weapontype.empty())
+   if(!len(weapontype))
    {
-      while (xml.FindChildElem())
+      while(xml.FindChildElem())
       {
-         std::string element = xml.GetChildTagName();
-         if (element == "type")
-            weapontype = xml.GetChildData();
-         else if (element == "number_weapons")
-            assign_interval(number_weapons, xml.GetChildData(), owner, element);
-         else if (element == "cliptype")
-            cliptype = xml.GetChildData();
-         else if (element == "number_clips")
-            assign_interval(number_clips, xml.GetChildData(), owner, element);
-         else
-            xmllog.log("Unknown element for weapon in " + owner + ": "
-                       + element);
+         std::string element=xml.GetChildTagName();
+         if(element=="type") weapontype=xml.GetChildData();
+         else if(element=="number_weapons")
+            assign_interval(number_weapons,xml.GetChildData(),owner,element);
+         else if(element=="cliptype") cliptype=xml.GetChildData();
+         else if(element=="number_clips")
+            assign_interval(number_clips,xml.GetChildData(),owner,element);
+         else xmllog.log("Unknown element for weapon in "+owner+": "+element);
       }
    }
 
@@ -59,13 +55,11 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          if (cliptype == "APPROPRIATE")
          {
             cliptype = "NONE";
-            for (vector<attackst*>::const_iterator it = attacks.begin();
-                 it != attacks.end();
-                 ++it)
+            for(vector<attackst*>::const_iterator it=attacks.begin();it!=attacks.end();it++)
             {
-               if ((*it)->uses_ammo)
+               if((*it)->uses_ammo)
                {
-                  cliptype = (*it)->ammotype;
+                  cliptype=(*it)->ammotype;
                   break;
                }
             }
@@ -74,8 +68,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          else if (getcliptype(cliptype) != -1) //Must be a clip type too.
          {
             vector<attackst*>::const_iterator it = attacks.begin();
-            while (it != attacks.end() && cliptype != (*it)->ammotype)
-               ++it;
+            for(;it!=attacks.end()&&cliptype!=(*it)->ammotype;it++);
             if (it == attacks.end())
             {
                xmllog.log("In " + owner + ", " + cliptype +
@@ -99,26 +92,26 @@ CreatureType::CreatureType(const std::string& xmlstring)
    gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
    infiltration_(0), juice_(0), money_(20,40)
 {
-   for (int i = 0; i < ATTNUM; ++i)
-      attributes_[i].set_interval(1, 10);
+   for(int i=0;i<ATTNUM;i++)
+      attributes_[i].set_interval(1,10);
 
-   id_ = number_of_creaturetypes++;
+   id_=number_of_creaturetypes++;
 
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
 
-   idname_ = xml.GetAttrib("idname");
-   if (idname_.empty())
+   idname_=xml.GetAttrib("idname");
+   if(!len(idname_))
    {
-      idname_ = "LACKS IDNAME " + tostring(id_);
-      xmllog.log("Creature type " + tostring(id_) + " lacks idname.");
+      idname_ = "LACKS IDNAME "+tostring(id_);
+      xmllog.log("Creature type "+tostring(id_)+" lacks idname.");
    }
-   type_ = creaturetype_string_to_enum(idname_);
+   type_=creaturetype_string_to_enum(idname_);
 
    xml.IntoElem();
    // Loop over all the elements inside the creaturetype element.
-   while (xml.FindElem())
+   while(xml.FindElem())
    {
       std::string element = xml.GetTagName();
 
@@ -171,7 +164,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
          assign_interval(attribute_points_, xml.GetData(), idname_, element);
       else if (element == "attributes")
       {
-         while (xml.FindChildElem())
+         while(xml.FindChildElem())
          {
             int attribute = attribute_string_to_enum(xml.GetChildTagName());
             if (attribute != -1)
@@ -196,7 +189,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
          assign_interval(money_, xml.GetData(), idname_, element);
       else if (element == "skills")
       {
-         while (xml.FindChildElem())
+         while(xml.FindChildElem())
          {
             int skill = skill_string_to_enum(xml.GetChildTagName());
             if (skill != -1)
@@ -226,74 +219,67 @@ CreatureType::CreatureType(const std::string& xmlstring)
          xmllog.log("Unknown element for " + idname_ + ": " + element);
    }
 
-   if (type_name_.empty())
+   if (!len(type_name_))
    {
       xmllog.log("type_name not defined for " + idname_ + ".");
       type_name_ = "UNDEFINED";
    }
    // If no weapon type has been given then use WEAPON_NONE.
-   if (weapons_and_clips_.empty())
+   if (!len(weapons_and_clips_))
       weapons_and_clips_.push_back(WeaponsAndClips("WEAPON_NONE", 1, "NONE", 0));
    // If no armor type has been given then use ARMOR_NONE.
-   if (armortypes_.empty())
+   if (!len(armortypes_))
       armortypes_.push_back("ARMOR_NONE");
 }
 
 void CreatureType::make_creature(Creature& cr) const
 {
-   cr.type_idname = idname_;
-   cr.align = get_alignment();
-   cr.age = age_.roll();
-   cr.juice = juice_.roll();
-   cr.gender_liberal = cr.gender_conservative = roll_gender();
-   cr.infiltration = roll_infiltration();
-   cr.money = money_.roll();
-   strcpy(cr.name, get_encounter_name());
-   for (int i = 0; i < SKILLNUM; i++)
-      cr.set_skill(i, skills_[i].roll());
-
+   cr.type_idname=idname_;
+   cr.align=get_alignment();
+   cr.age=age_.roll();
+   cr.juice=juice_.roll();
+   cr.gender_liberal=cr.gender_conservative=roll_gender();
+   cr.infiltration=roll_infiltration();
+   cr.money=money_.roll();
+   strcpy(cr.name,get_encounter_name());
+   for(int i=0;i<SKILLNUM;i++) cr.set_skill(i,skills_[i].roll());
    give_armor(cr);
    give_weapon(cr);
 }
 
 int CreatureType::get_alignment() const
 {
-   if (alignment_public_mood_)
+   if(alignment_public_mood_)
    {
-      int mood = publicmood(-1);
-      int a = ALIGN_CONSERVATIVE;
-      if (LCSrandom(100) < mood) ++a;
-      if (LCSrandom(100) < mood) ++a;
+      int mood=publicmood(-1);
+      int a=ALIGN_CONSERVATIVE;
+      if(LCSrandom(100)<mood) a++;
+      if(LCSrandom(100)<mood) a++;
       return a;
    }
-   else
-      return alignment_;
+   else return alignment_;
 }
 
 int CreatureType::roll_gender() const
 {
    int gender = LCSrandom(2)+1; // Male or female.
-   switch (gender_liberal_)
+   switch(gender_liberal_)
    {
-      case GENDER_NEUTRAL: return GENDER_NEUTRAL;
-      case GENDER_MALE:    return GENDER_MALE;
-      case GENDER_FEMALE:  return GENDER_FEMALE;
-      case GENDER_MALE_BIAS:
-      {
-         if ( law[LAW_WOMEN] == -2 ||
-             (law[LAW_WOMEN] == -1 && LCSrandom(25)) ||
-             (law[LAW_WOMEN] == 0  && LCSrandom(10)) ||
-             (law[LAW_WOMEN] == 1  && LCSrandom(4)))
-               return GENDER_MALE;
-      }
-      case GENDER_FEMALE_BIAS:
-      {
-         if ( law[LAW_WOMEN] == -2 ||
-             (law[LAW_WOMEN] == -1 && LCSrandom(25)) ||
-             (law[LAW_WOMEN] == 0  && LCSrandom(10)) ||
-             (law[LAW_WOMEN] == 1  && LCSrandom(4)))
-               return GENDER_FEMALE;
-      }
+   case GENDER_NEUTRAL: return GENDER_NEUTRAL;
+   case GENDER_MALE:    return GENDER_MALE;
+   case GENDER_FEMALE:  return GENDER_FEMALE;
+   case GENDER_MALE_BIAS:
+      if(law[LAW_WOMEN]==-2||
+        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
+        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
+        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+         return GENDER_MALE;
+   case GENDER_FEMALE_BIAS:
+      if(law[LAW_WOMEN]==-2||
+        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
+        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
+        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+         return GENDER_FEMALE;
    }
    return gender;
 }
@@ -305,53 +291,45 @@ float CreatureType::roll_infiltration() const
 
 std::string CreatureType::get_encounter_name() const
 {
-   if (!encounter_name_.empty())
+   if(len(encounter_name_))
       return encounter_name_;
-   else
-      return get_type_name();
+   else return get_type_name();
 }
 
 std::string CreatureType::get_type_name() const
 {
-   switch (type_) // Hardcoded special cases.
+   switch(type_) // Hardcoded special cases.
    {
-      case CREATURE_WORKER_SERVANT:
-         if (law[LAW_LABOR] == -2 && law[LAW_CORPORATE] == -2)
-            return "Slave";
-	 break;
-      case CREATURE_WORKER_JANITOR:
-         if (law[LAW_LABOR] == 2)
-            return "Custodian";
-	 break;
-      case CREATURE_WORKER_SWEATSHOP:
-         if (law[LAW_LABOR] == 2 && law[LAW_IMMIGRATION] == 2)
-            return "Migrant Worker";
-	 break;
-      case CREATURE_CARSALESMAN:
-         if (law[LAW_WOMEN] == -2)
-            return "Car Salesman";
-	 break;
-      case CREATURE_FIREFIGHTER:
-         if (law[LAW_FREESPEECH] == -2)
-            return "Fireman";
-	 break;
+   case CREATURE_WORKER_SERVANT:
+      if(law[LAW_LABOR]==-2&&law[LAW_CORPORATE]==-2) return "Slave";
+      break;
+   case CREATURE_WORKER_JANITOR:
+      if(law[LAW_LABOR]==2) return "Custodian";
+      break;
+   case CREATURE_WORKER_SWEATSHOP:
+      if(law[LAW_LABOR]==2&&law[LAW_IMMIGRATION]==2) return "Migrant Worker";
+	   break;
+   case CREATURE_CARSALESMAN:
+      if(law[LAW_WOMEN]==-2) return "Car Salesman";
+      break;
+   case CREATURE_FIREFIGHTER:
+      if(law[LAW_FREESPEECH]==-2) return "Fireman";
+      break;
    }
    return type_name_;
 }
 
 void CreatureType::give_weapon(Creature& cr) const
 {
-   int i = LCSrandom(weapons_and_clips_.size());
-   const WeaponsAndClips& wc = weapons_and_clips_[i];
+   const WeaponsAndClips& wc = pickrandom(weapons_and_clips_);
 
    if (wc.weapontype == "CIVILIAN")
       give_weapon_civilian(cr);
    else if (wc.weapontype != "WEAPON_NONE")
    {
       Weapon w(*weapontype[getweapontype(wc.weapontype)], wc.number_weapons.roll());
-      w.set_number(min(w.get_number(), 10L));
-      while (!w.empty())
-         cr.give_weapon(w, NULL);
+      w.set_number(min(w.get_number(),10L));
+      while(!w.empty()) cr.give_weapon(w,NULL);
       if (wc.cliptype != "NONE")
       {
          int n = wc.number_clips.roll();

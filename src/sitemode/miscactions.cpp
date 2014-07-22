@@ -85,7 +85,7 @@ char unlock(short type,char &actual)
       }
    }
 
-   if(goodp.size()>0)
+   if(len(goodp))
    {
       int p=pickrandom(goodp);
 
@@ -141,7 +141,7 @@ char unlock(short type,char &actual)
 
          int i;
          //gain some experience for failing only if you could have succeeded.
-         for (i = 0; i < 3; i++)
+         for(i=0;i<3;i++)
          {
             if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
             {
@@ -154,7 +154,7 @@ char unlock(short type,char &actual)
             }
          }
 
-         if (i == 3)
+         if(i==3)
          {
             addstr(activesquad->squad[p]->name, gamelog);
             addstr(" can't figure the lock out.", gamelog);
@@ -229,7 +229,7 @@ char bash(short type,char &actual)
 
          if(!crowable) //didn't find in hands of any squad member
          {
-            for(int l=0;l<(int)activesquad->loot.size();l++)
+            for(int l=0;l<len(activesquad->loot);l++)
             {
                if(activesquad->loot[l]->is_weapon())
                {
@@ -1008,7 +1008,7 @@ void partyrescue(short special)
    }
 
    vector<Creature*> waiting_for_rescue;
-   for(pl=0;pl<(int)pool.size();pl++)
+   for(pl=0;pl<len(pool);pl++)
    {
       if(pool[pl]->location==cursite&&
          !(pool[pl]->flag & CREATUREFLAG_SLEEPER)&&
@@ -1018,7 +1018,7 @@ void partyrescue(short special)
             waiting_for_rescue.push_back(pool[pl]);
    }
 
-   for(pl=0;pl<(int)waiting_for_rescue.size();pl++)
+   for(pl=0;pl<len(waiting_for_rescue);pl++)
    {
       if(LCSrandom(2)&&freeslots)
       {
@@ -1056,7 +1056,7 @@ void partyrescue(short special)
          --pl;
       }
    }
-   for(pl=0;pl<(int)waiting_for_rescue.size();pl++)
+   for(pl=0;pl<len(waiting_for_rescue);pl++)
    {
       if(hostslots)
       {
@@ -1117,7 +1117,7 @@ void partyrescue(short special)
       if(!hostslots)break;
    }
 
-   if(waiting_for_rescue.size()==1)
+   if(len(waiting_for_rescue)==1)
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -1133,7 +1133,7 @@ void partyrescue(short special)
 
       getkey();
    }
-   else if(waiting_for_rescue.size()>1)
+   else if(len(waiting_for_rescue)>1)
    {
       clearmessagearea();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);

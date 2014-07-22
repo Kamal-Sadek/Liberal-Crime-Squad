@@ -267,39 +267,6 @@ using namespace std;
 #define NDEBUG
 #endif
 
-#define BIT1  (1<<0 )
-#define BIT2  (1<<1 )
-#define BIT3  (1<<2 )
-#define BIT4  (1<<3 )
-#define BIT5  (1<<4 )
-#define BIT6  (1<<5 )
-#define BIT7  (1<<6 )
-#define BIT8  (1<<7 )
-#define BIT9  (1<<8 )
-#define BIT10 (1<<9 )
-#define BIT11 (1<<10)
-#define BIT12 (1<<11)
-#define BIT13 (1<<12)
-#define BIT14 (1<<13)
-#define BIT15 (1<<14)
-#define BIT16 (1<<15)
-#define BIT17 (1<<16)
-#define BIT18 (1<<17)
-#define BIT19 (1<<18)
-#define BIT20 (1<<19)
-#define BIT21 (1<<20)
-#define BIT22 (1<<21)
-#define BIT23 (1<<22)
-#define BIT24 (1<<23)
-#define BIT25 (1<<24)
-#define BIT26 (1<<25)
-#define BIT27 (1<<26)
-#define BIT28 (1<<27)
-#define BIT29 (1<<28)
-#define BIT30 (1<<29)
-#define BIT31 (1<<30)
-#define BIT32 (1<<31)
-
 #define TAB 9
 #define ENTER 10
 #define ESC 27
@@ -502,9 +469,8 @@ struct activityst
    long arg,arg2;
 };
 
-enum IncomeType
-{                       // the below names are used in fundreport() in lcsmonthly.cpp
-                        // new types added without updating fundreport will show as "other income"
+enum IncomeType         // the below names are used in fundreport() in lcsmonthly.cpp
+{                       // new types added without updating fundreport() will show as "Other Income"
    INCOME_BROWNIES,     // "Brownies"
    INCOME_CARS,         // "Car Sales"
    INCOME_CCFRAUD,      // "Credit Card Fraud"
@@ -518,12 +484,11 @@ enum IncomeType
    INCOME_BUSKING,      // "Street Music"
    INCOME_THIEVERY,     // "Thievery"
    INCOME_TSHIRTS,      // "T-Shirt Sales"
-   INCOMETYPENUM        // Count of Categories
+   INCOMETYPENUM        // # of types of income
 };
 
-enum ExpenseType
-{                         // the below names are used in fundreport() in lcsmonthly.cpp
-                          // new types added without updating fundreport will show as "other expenses"
+enum ExpenseType          // the below names are used in fundreport() in lcsmonthly.cpp
+{                         // new types added without updating fundreport() will show as "Other Expenses"
    EXPENSE_TROUBLEMAKING, // "Activism"
    EXPENSE_CONFISCATED,   // "Confiscated"
    EXPENSE_DATING,        // "Dating"
@@ -540,7 +505,7 @@ enum ExpenseType
    EXPENSE_TRAINING,      // "Training"
    EXPENSE_TRAVEL,        // "Travel"
    EXPENSE_TSHIRTS,       // "T-Shirt Materials"
-   EXPENSETYPENUM         // Count of Categories
+   EXPENSETYPENUM         // # of types of expenses
 };
 
 class Ledger
@@ -599,9 +564,9 @@ private:
    // Checks if a string is a number. Assumes non-numeric characters other
    // than dashes have already been checked for.
    bool valid(const string& v)
-   { return !(v.empty() ||
-             (v.length()==1&&v[0]=='-') ||     // Just a dash.
-              v.find('-', 1)!=string::npos); } // A dash after the first char.
+   { return len(v) &&                       // Blank string is invalid.
+           (len(v)!=1||v[0]!='-') &&        // Just a dash is invalid.
+            v.find('-', 1)==string::npos; } // A dash after the first char is invalid.
 };
 
 #include "items/itemtype.h"
@@ -621,16 +586,6 @@ private:
 #include "vehicle/vehicle.h"
 
 #include "locations/locations.h"
-
-#define COMPOUND_BASIC BIT1
-#define COMPOUND_CAMERAS BIT2
-#define COMPOUND_TANKTRAPS BIT3
-#define COMPOUND_TRAPS BIT4
-#define COMPOUND_GENERATOR BIT5
-#define COMPOUND_PRINTINGPRESS BIT6
-#define COMPOUND_AAGUN BIT7
-
-
 
 enum CarChaseObstacles
 {
@@ -955,10 +910,6 @@ enum Execs
    EXECNUM
 };
 
-#define RENTING_CCS -2
-#define RENTING_NOCONTROL -1
-#define RENTING_PERMANENT 0
-
 enum TalkModes
 {
    TALKMODE_START,
@@ -1009,9 +960,34 @@ enum ActiveSortingChoices
    Created by jonathansfox.
 */
 
+/* This is declared again lower down, just needed here for this header. */
+std::string tostring(long i);
 
 /* end the game and clean up */
 void end_game(int err=0);
+
+
+/*******************************************************************************
+*
+*                             Logging Stuff
+*                             Folder: "log"
+*
+*******************************************************************************/
+
+//TODO: Make NEWLINEMODE_LOGFILES_DEFAULT, NEWLINEMODE_GAMELOG, and OVERWRITE_GAMELOG set by the cfg.
+//Whether or not it should autonewline logfiles by defualt.
+#define NEWLINEMODE_LOGFILES_DEFAULT 1
+//Whether or not it should autonewline the gamelog.
+#define NEWLINEMODE_GAMELOG 2
+//Whether or not it should overwrite the gamelog every time the game starts.
+#define OVERWRITE_GAMELOG false
+
+//The filepath of the gamelog.
+//TODO: Make this be set via the cfg.
+#define GAMELOG_FILEPATH "gamelog.txt"
+
+#include "log/log.h"
+
 
 /*******************************************************************************
 *
@@ -1060,17 +1036,17 @@ void addpagestr();
 /* Various wrappers to addstr() and mvaddstr() which handle permutations of:
    - Including or not including the gamelog for external message logging
    - std::string or c-style char arrays */
-int addstr(const char *text,Log &log);
-int mvaddstr(int y,int x,const char *text,Log &log);
-int addstr(const std::string& text);
-int addstr(const std::string& text, Log &log);
-int mvaddstr(int y,int x,const std::string& text);
-int mvaddstr(int y,int x,const std::string& text,Log &log);
+inline int addstr(const char *text,Log &log) { log.record(text); return addstr(text); }
+inline int mvaddstr(int y,int x,const char *text,Log &log) { log.record(text); return mvaddstr(y,x,text); }
+inline int addstr(const std::string& text) { return addstr(text.c_str()); }
+inline int addstr(const std::string& text, Log &log) { return addstr(text.c_str(),log); }
+inline int mvaddstr(int y,int x,const std::string& text) { return mvaddstr(y,x,text.c_str()); }
+inline int mvaddstr(int y,int x,const std::string& text,Log &log) { return mvaddstr(y,x,text.c_str(),log); }
 /* These wrappers convert numbers to text */
-int addstr(long num);
-int addstr(long num, Log &log);
-int mvaddstr(int y,int x,long num);
-int mvaddstr(int y,int x,long num,Log &log);
+inline int addstr(long num) { return addstr(tostring(num)); }
+inline int addstr(long num,Log &log) { return addstr(tostring(num),log); }
+inline int mvaddstr(int y,int x,long num) { return mvaddstr(y,x,tostring(num)); }
+inline int mvaddstr(int y,int x,long num,Log &log) { return mvaddstr(y,x,tostring(num),log); }
 /* addstr with formatted output */
 int addstr_f(const char * format,...);
 /* mvaddstr with formatted output */
@@ -1079,13 +1055,11 @@ int mvaddstr_f(int y,int x,const char * format,...);
 int addstr_fl(Log &log,const char * format,...);
 /* mvaddstr with formatted output and logging */
 int mvaddstr_fl(int y,int x,Log &log,const char * format,...);
-/* Variant of addch that works on char instead of chtype, fixing display of extended characters */
-int addchar(char ch);
-/* Variant of mvaddch that works on char instead of chtype, fixing display of extended characters */
-int mvaddchar(int y,int x,char ch);
-/* addchar and mvaddchar with logging */
-int addchar(char ch,Log &log);
-int mvaddchar(int y,int x,char ch,Log &log);
+/* Variants of addch and mvaddch that work on char instead of chtype, fixing display of extended characters */
+inline int addchar(char ch) { const char str[2]={ch,0}; return addstr(str); }
+inline int mvaddchar(int y,int x,char ch) { const char str[2]={ch,0}; return mvaddstr(y,x,str); }
+inline int addchar(char ch,Log &log) { const char str[2]={ch,0}; return addstr(str,log); }
+inline int mvaddchar(int y,int x,char ch,Log &log) { const char str[2]={ch,0}; return mvaddstr(y,x,str,log); }
 
 /*
  commonactions.cpp
@@ -1262,21 +1236,21 @@ char squadhasitem(squadst &sq,int type,int subtype);
  stringconversion.cpp
 */
 std::string tostring(long i);
-const char* toCstring(long i);
+inline const char* toCstring(long i) { return tostring(i).c_str(); }
 /* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
 /* These strcpy, strncpy, and strcat wrappers handle std:strings */
-char* strcpy(char* dest, const std::string& src);
-char* strncpy(char* dest, const std::string& src, size_t maxlen);
-char* strcat(char* dest, const std::string& src);
+inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest,src.c_str()); }
+inline char* strncpy(char* dest, const std::string& src, size_t maxlen) { return strncpy(dest,src.c_str(),maxlen); }
+inline char* strcat(char* dest, const std::string& src) { return strcat(dest,src.c_str()); }
 /* These strcpy and strcat wrappers handle numbers */
-char* strcpy(char* dest, long src);
-char* strcat(char* dest, long src);
+inline char* strcpy(char* dest, long src) { return strcpy(dest,tostring(src)); }
+inline char* strcat(char* dest, long src) { return strcat(dest,tostring(src)); }
 /* This wrapper allows atoi to handle std::strings */
-int atoi(const std::string& str);
+inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 /* This wrapper allows atof to handle std::strings */
-double atof(const std::string& str);
+inline double atof(const std::string& str) { return atof(str.c_str()); }
 short creaturetype_string_to_enum(const std::string& ctname);
 int attribute_string_to_enum(const std::string& attribute);
 int skill_string_to_enum(std::string skillname);
@@ -1905,28 +1879,5 @@ void stalinize(char canseethings);
 char ratify(int level,int view,int lawview,char congress,char canseethings);
 /* endgame - header for announcing constitutional amendments */
 void amendmentheading();
-
-
-/*******************************************************************************
-*
-*                             Logging Stuff
-*                             Folder: "log"
-*
-*******************************************************************************/
-
-//TODO: Make NEWLINEMODE_LOGFILES_DEFAULT, NEWLINEMODE_GAMELOG, and OVERWRITE_GAMELOG set by the cfg.
-//Whether or not it should autonewline logfiles by defualt.
-#define NEWLINEMODE_LOGFILES_DEFAULT 1
-//Whether or not it should autonewline the gamelog.
-#define NEWLINEMODE_GAMELOG 2
-//Whether or not it should overwrite the gamelog every time the game starts.
-#define OVERWRITE_GAMELOG false
-
-//The filepath of the gamelog.
-//TODO: Make this be set via the cfg.
-#define GAMELOG_FILEPATH "gamelog.txt"
-
-#include "log/log.h"
-
 
 #endif // INCLUDES_H_INCLUDED

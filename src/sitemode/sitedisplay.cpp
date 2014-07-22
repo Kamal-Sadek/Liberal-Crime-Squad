@@ -162,7 +162,7 @@ void printsitemap(int x,int y,int z)
    if(levelmap[locx][locy][locz].special!=-1)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      mvaddstr(24,67-(strlen(str)>>1),str);
+      mvaddstr(24,67-(len(str)>>1),str);
    }
 
    //PRINT PARTY
@@ -176,7 +176,7 @@ void printsitemap(int x,int y,int z)
    int encsize=0;
    for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) encsize++;
    //PRINT ANY OPPOSING FORCE INFO
-   if(encsize>0)
+   if(encsize)
    {
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       if(levelmap[locx][locx][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)
@@ -190,7 +190,7 @@ void printsitemap(int x,int y,int z)
       printencounter();
    }
 
-   if(groundloot.size()>0)
+   if(len(groundloot))
    {
       set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       mvaddstr(15,64,"LOOT!");
@@ -619,18 +619,18 @@ void printchaseencounter()
    for(int i=19;i<=24;i++)
       mvaddstr(i,0,"                                                                                "); // 80 spaces
 
-   if(chaseseq.enemycar.size()>0)
+   if(len(chaseseq.enemycar))
    {
       int carsy[4]={20,20,20,20};
 
-      for(int v=0;v<(int)chaseseq.enemycar.size();v++)
+      for(int v=0;v<len(chaseseq.enemycar);v++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(19,v*20+1,chaseseq.enemycar[v]->fullname(true));
       }
 
       for(int e=0;e<ENCMAX;e++) if(encounter[e].exists)
-         for(int v=0;v<(int)chaseseq.enemycar.size();v++)
+         for(int v=0;v<len(chaseseq.enemycar);v++)
             if(chaseseq.enemycar[v]->id()==encounter[e].carid)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);

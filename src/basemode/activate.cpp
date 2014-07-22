@@ -67,28 +67,14 @@ vector<Creature *> activatable_liberals()
 {
    vector<Creature *> temppool;
    int sq;
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++) if(pool[p]->is_active_liberal())
    {
-      if(pool[p]->alive&&
-         pool[p]->align==1&&
-         pool[p]->clinic==0&&
-         pool[p]->dating==0&&
-         pool[p]->hiding==0&&
-         !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+      if(pool[p]->squadid!=-1)
       {
-         if(!location[pool[p]->location]->part_of_justice_system())
-         {
-            if(pool[p]->squadid!=-1)
-            {
-               sq=getsquad(pool[p]->squadid);
-               if(sq!=-1)
-               {
-                  if(squad[sq]->activity.type!=ACTIVITY_NONE)continue;
-               }
-            }
-            temppool.push_back(pool[p]);
-         }
+         sq=getsquad(pool[p]->squadid);
+         if(sq!=-1) if(squad[sq]->activity.type!=ACTIVITY_NONE) continue;
       }
+      temppool.push_back(pool[p]);
    }
    return temppool;
 }
@@ -98,7 +84,7 @@ void activate()
 {
    vector<Creature *> temppool = activatable_liberals();
 
-   if(temppool.size()==0)return;
+   if(!len(temppool)) return;
 
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATE]);
 
@@ -119,7 +105,7 @@ void activate()
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
+      for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -165,14 +151,14 @@ void activate()
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)temppool.size())activate(temppool[p]);
+         int p=page*19+c-'a';
+         if(p<len(temppool)) activate(temppool[p]);
       }
 
       if(c=='t')
@@ -181,10 +167,7 @@ void activate()
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATE],true);
       }
 
-      if(c=='z')
-      {
-         activatebulk();
-      }
+      if(c=='z') activatebulk();
 
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
@@ -326,10 +309,10 @@ void activate(Creature *cr)
 {
    int hostagecount=0,state=0,oldstate=0,choice=0;
    char havedead=0;
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
-      if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location)hostagecount++;
-      if(!pool[p]->alive)havedead=1;
+      if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location) hostagecount++;
+      if(!pool[p]->alive) havedead=1;
    }
 
    while(true)
@@ -467,12 +450,12 @@ void activate(Creature *cr)
       mvaddstr(19,1,"Z - Dispose of bodies");
 
       siegest *siege=NULL;
-      if(selectedsiege!=-1)siege=&location[selectedsiege]->siege;
-      if(activesquad!=NULL && activesquad->squad[0]->location!=-1)siege=&location[activesquad->squad[0]->location]->siege;
+      if(selectedsiege!=-1) siege=&location[selectedsiege]->siege;
+      if(activesquad) if(activesquad->squad[0]->location!=-1) siege=&location[activesquad->squad[0]->location]->siege;
       char sieged=0;
-      if(siege!=NULL)sieged=siege->siege;
+      if(siege) sieged=siege->siege;
       /*char underattack=0;
-      if(siege!=NULL&&sieged)underattack=siege->underattack;*/
+      if(siege&&sieged) underattack=siege->underattack;*/
 
       if(!sieged)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -583,7 +566,7 @@ void activate(Creature *cr)
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STEALCARS);
             mvaddstr(13,40,"4 - Steal a Car");
          } else {
-            if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR);
+            if(!(cr->flag&CREATUREFLAG_WHEELCHAIR)) set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_WHEELCHAIR);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             mvaddstr(13,40,"4 - Procure a Wheelchair");
          }
@@ -834,14 +817,15 @@ void activate(Creature *cr)
             case '3':cr->activity.type=ACTIVITY_SELL_ART;break;
             case '4':cr->activity.type=ACTIVITY_SELL_MUSIC;break;
             default:
-               if(cr->get_skill(SKILL_ART)>1)
+               if(cr->get_weapon().is_instrument())
+                  cr->activity.type=ACTIVITY_SELL_MUSIC;
+               else if(cr->get_skill(SKILL_ART)>1)
                   cr->activity.type=ACTIVITY_SELL_ART;
                else if(cr->get_skill(SKILL_TAILORING)>1)
                   cr->activity.type=ACTIVITY_SELL_TSHIRTS;
                else if(cr->get_skill(SKILL_MUSIC)>1)
                   cr->activity.type=ACTIVITY_SELL_MUSIC;
-               else
-                  cr->activity.type=ACTIVITY_DONATIONS;
+               else cr->activity.type=ACTIVITY_DONATIONS;
             }
             break;
          case 'c':
@@ -1106,7 +1090,7 @@ void activatebulk()
 {
    vector<Creature *> temppool = activatable_liberals();
 
-   if(temppool.size()==0)return;
+   if(!len(temppool)) return;
 
    int page=0,selectedactivity=0;
 
@@ -1124,33 +1108,33 @@ void activatebulk()
       move(1,51);
       addstr("BULK ACTIVITY");
 
-      if(selectedactivity==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(2,51);
       addstr("1 - Liberal Activism");
-      if(selectedactivity==1)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==1) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,51);
       addstr("2 - Legal Fundraising");
-      if(selectedactivity==2)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==2) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(4,51);
       addstr("3 - Illegal Fundraising");
-      if(selectedactivity==3)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==3) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(5,51);
       addstr("4 - Checking Polls");
-      if(selectedactivity==4)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==4) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(6,51);
       addstr("5 - Stealing Cars");
-      if(selectedactivity==5)set_color(COLOR_WHITE,COLOR_BLACK,1);
+      if(selectedactivity==5) set_color(COLOR_WHITE,COLOR_BLACK,1);
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(7,51);
       addstr("6 - Community Service");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
+      for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1177,14 +1161,14 @@ void activatebulk()
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)temppool.size())
+         int p=page*19+c-'a';
+         if(p<len(temppool))
          {
             switch(selectedactivity)
             {
@@ -1206,12 +1190,14 @@ void activatebulk()
                }
                break;
             case 1: //Fundraising
-               if(temppool[p]->get_skill(SKILL_ART)>1)
-                  temppool[p]->activity.type=ACTIVITY_SELL_ART;
-               else if(temppool[p]->get_skill(SKILL_MUSIC)>1)
+               if(temppool[p]->get_weapon().is_instrument())
                   temppool[p]->activity.type=ACTIVITY_SELL_MUSIC;
+               else if(temppool[p]->get_skill(SKILL_ART)>1)
+                  temppool[p]->activity.type=ACTIVITY_SELL_ART;
                else if(temppool[p]->get_skill(SKILL_TAILORING)>1)
                   temppool[p]->activity.type=ACTIVITY_SELL_TSHIRTS;
+               else if(temppool[p]->get_skill(SKILL_MUSIC)>1)
+                  temppool[p]->activity.type=ACTIVITY_SELL_MUSIC;
                else temppool[p]->activity.type=ACTIVITY_DONATIONS;
                break;
             case 2: //Illegal Fundraising
@@ -1251,7 +1237,7 @@ void select_tendhostage(Creature *cr)
 {
    vector<Creature *> temppool;
 
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       if(pool[p]->align!=1&&
          pool[p]->alive&&
@@ -1261,14 +1247,13 @@ void select_tendhostage(Creature *cr)
       }
    }
 
-   if(temppool.size()==0)return;
-   if(temppool.size()==1)
+   if(!len(temppool))return;
+   if(len(temppool)==1)
    {
       cr->activity.type=ACTIVITY_HOSTAGETENDING;
       cr->activity.arg=temppool[0]->id;
       return;
    }
-
 
    int page=0;
 
@@ -1287,7 +1272,7 @@ void select_tendhostage(Creature *cr)
       addstr("DAYS IN CAPTIVITY");
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++,y++)
+      for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1331,14 +1316,14 @@ void select_tendhostage(Creature *cr)
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<(int)temppool.size())
+         if(p<len(temppool))
          {
             cr->activity.type=ACTIVITY_HOSTAGETENDING;
             cr->activity.arg=temppool[p]->id;
@@ -1588,13 +1573,13 @@ void recruitSelect(Creature &cr)
 void select_makeclothing(Creature *cr)
 {
    vector<int> armortypei;
-   for (int a = 0; a < (int)armortype.size(); ++a)
+   for(int a=0;a<len(armortype);a++)
    {
-      if (armortype[a]->get_make_difficulty() == 0)
+      if(armortype[a]->get_make_difficulty() == 0)
          continue;
 
-      if (armortype[a]->deathsquad_legality()
-          && (law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2))
+      if(armortype[a]->deathsquad_legality()
+         && (law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2))
          continue;
 
       armortypei.push_back(a);
@@ -1616,10 +1601,10 @@ void select_makeclothing(Creature *cr)
       addstr("컴컴NAME컴컴컴컴컴컴컴컴컴컴컴컴컴컴횯IFFICULTY컴컴컴컴컴컴횮OST컴컴컴컴컴컴컴컴");
 
       int y=2,difficulty;
-      for(int p=page*19;p<(int)armortypei.size()&&p<page*19+19;p++,y++)
+      for(int p=page*19;p<len(armortypei)&&p<page*19+19;p++,y++)
       {
          difficulty=armor_makedifficulty(*armortype[armortypei[p]],cr);
-         if(difficulty < 0) difficulty = 0;
+         if(difficulty<0) difficulty=0;
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(y,0);
@@ -1677,7 +1662,7 @@ void select_makeclothing(Creature *cr)
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
-         move(y,64-price.length());
+         move(y,64-len(price));
          addstr(price);
       }
 
@@ -1692,12 +1677,12 @@ void select_makeclothing(Creature *cr)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)armortype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(armortypei))page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)armortypei.size())
+         int p=page*19+c-'a';
+         if(p<len(armortypei))
          {
             cr->activity.type=ACTIVITY_MAKE_ARMOR;
             cr->activity.arg=armortypei[p]; //Use id name of armor type instead? -XML
@@ -1716,12 +1701,8 @@ int armor_makedifficulty(Armor& type, Creature *cr)
 
 int armor_makedifficulty(ArmorType& type,Creature *cr) //Make class method? -XML
 {
-   long basedif = type.get_make_difficulty();
-
-   basedif-=cr->get_skill(SKILL_TAILORING)-3;
-   if(basedif<0)basedif=0;
-
-   return basedif;
+   int basedif=type.get_make_difficulty()-cr->get_skill(SKILL_TAILORING)+3;
+   return MAX(basedif,0);
 }
 
 
@@ -1843,13 +1824,13 @@ char select_view(Creature *cr,int &v)
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*16<VIEWNUM-3)page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*16<VIEWNUM-3) page++;
 
       if(c>='a'&&c<='a'+18)
       {
-         int p=page*18+(int)(c-'a');
+         int p=page*18+c-'a';
          if(p<VIEWNUM-3)
          {
             v=p;

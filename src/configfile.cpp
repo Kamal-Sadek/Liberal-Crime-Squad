@@ -67,23 +67,23 @@ int readLine(std::ifstream& file, std::string& command, std::string& value)
       getline(file,line);
       line.erase(std::remove(line.begin(),line.end(),'\r'),line.end());
       line.erase(std::remove(line.begin(),line.end(),'\n'),line.end());
-   } while(line.empty()||line[0]=='#');
+   } while(!len(line)||line[0]=='#');
 
    // Parse the line
    command.clear();
    value.clear();
 
    // Leading whitespace
-   for(;source<(int)line.length()&&(line[source]==' '||line[source]=='\t');source++);
+   for(;source<len(line)&&(line[source]==' '||line[source]=='\t');source++);
 
    // Command
-   for(;source<(int)line.length()&&(line[source]!=' '&&line[source]!='\t');command.push_back(line[source++]));
+   for(;source<len(line)&&(line[source]!=' '&&line[source]!='\t');command.push_back(line[source++]));
 
    // Delimiting whitespace
-   for(;source<(int)line.length()&&(line[source]==' '||line[source]=='\t');source++);
+   for(;source<len(line)&&(line[source]==' '||line[source]=='\t');source++);
 
    // Value
-   for(;source<(int)line.length()&&(line[source]!=' '&&line[source]!='\t');value.push_back(line[source++]));
+   for(;source<len(line)&&(line[source]!=' '&&line[source]!='\t');value.push_back(line[source++]));
 
    return true;
 }
@@ -200,10 +200,10 @@ bool readMapFile(const string &filename, const int zLevel, void (*callback)(int,
       line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
       line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
 
-      for(int x=0,i=0,j=0;j<(int)line.length();x++,i=++j)
+      for(int x=0,i=0,j=0;j<len(line);x++,i=++j)
       {
-         for(;j<(int)line.length()&&line[j]!=',';j++);
-         if(j<(int)line.length())
+         for(;j<len(line)&&line[j]!=',';j++);
+         if(j<len(line))
          {
             line[j]=0;
             (*callback)(x,y,z,atoi(line.substr(i)));

@@ -24,7 +24,7 @@ void activate_sleepers()
 {
    vector<Creature *> temppool;
    // Comb the pool of Liberals for sleeper agents
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       // Select only sleepers that can work
       if(pool[p]->alive==true&&
@@ -38,7 +38,7 @@ void activate_sleepers()
       }
    }
 
-   if(temppool.size()==0)return;
+   if(!len(temppool)) return;
 
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ACTIVATESLEEPERS]);
 
@@ -64,7 +64,7 @@ void activate_sleepers()
       addstr("ACTIVITY");
 
       int y=2;
-      for(int p=page*9;p<(int)temppool.size()&&p<page*9+9;p++,y+=2)
+      for(int p=page*9;p<len(temppool)&&p<page*9+9;p++,y+=2)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,(y-2)/2+'A');addstr(" - ");
@@ -111,14 +111,14 @@ void activate_sleepers()
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*9<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*9<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*9+(int)(c-'a');
-         if(p<(int)temppool.size())
+         if(p<len(temppool))
             activate_sleeper(temppool[p]);
       }
 

@@ -444,7 +444,7 @@ char heyIWantToCancelMyRoom(Creature &a, Creature &tk)
 
    //MOVE ALL ITEMS AND SQUAD MEMBERS
    int hs=find_homeless_shelter(cursite);
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       if(pool[p]->location==cursite)pool[p]->location=hs;
       if(pool[p]->base==cursite)pool[p]->base=hs;
@@ -1114,7 +1114,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       getkey();
 
       datest *newd=NULL;
-      for(int d=0;d<(int)date.size();d++)
+      for(int d=0;d<len(date);d++)
       {
          if(date[d]->mac_id==a.id)
          {
@@ -1738,7 +1738,7 @@ char talkInCombat(Creature &a, Creature &tk)
          {   // Formatting the slogan so that it always has quotes around it and punctuation
             if(slogan[0]!='"') addchar('"',gamelog);
             addstr(slogan,gamelog);
-            int last=strlen(slogan);
+            int last=len(slogan);
             if(last && slogan[last-1]!='"' && slogan[last-1]!='!' && slogan[last-1]!='.' && slogan[last-1]!='?')
                addchar('!',gamelog);
             if(last && slogan[last-1]!='"') addchar('"',gamelog);
@@ -2319,7 +2319,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
       int stolen=0;
       // Police assess stolen goods in inventory
-      for(int l=0;l<(int)activesquad->loot.size();l++)
+      for(int l=0;l<len(activesquad->loot);l++)
          if(activesquad->loot[l]->is_loot())
             stolen++;
 

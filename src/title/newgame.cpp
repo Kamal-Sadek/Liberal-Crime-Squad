@@ -161,7 +161,7 @@ void setup_newgame()
             if(court[c]==-2)
                generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
             else generate_name(courtname[c]);
-         } while(strlen(courtname[c])>20);
+         } while(len(courtname[c])>20);
       }
    }
    if(classicmode)
@@ -1231,84 +1231,83 @@ void makecharacter()
    make_world(hasmaps);
 
    squadst *newsq=new squadst;
-      newsq->id=0;cursquadid++;
-      newsq->squad[0]=newcr;
-      newcr->squadid=0;
-      strcpy(newsq->name,"The Liberal Crime Squad");
-      for(int l=0;l<(int)location.size();l++)
+   newsq->id=0;cursquadid++;
+   newsq->squad[0]=newcr;
+   newcr->squadid=0;
+   strcpy(newsq->name,"The Liberal Crime Squad");
+   for(int l=0;l<len(location);l++)
+   {
+      if(location[l]->type==base)
       {
-         if(location[l]->type==base)
+         newcr->base=l;
+         newcr->location=l;
+         if(startcar) startcar->set_location(l);
+         switch(base)
          {
-            newcr->base=l;
-            newcr->location=l;
-            if(startcar)startcar->set_location(l);
-            switch(base)
-            {
-            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting=500;break;
-            case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=200;break;
-            case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=100;break;
-            case SITE_BUSINESS_CRACKHOUSE:
-               location[l]->renting=RENTING_PERMANENT;
-               location[l]->compound_stores+=100;
-               break;
-            }
-            location[l]->newrental=1;
-
-            switch(recruits)
-            {
-            case RECRUITS_GANG:
-               for(int i=0;i<4;i++)
-               {
-                  Creature* recruit = new Creature;
-                  makecreature(*recruit,CREATURE_GANGMEMBER);
-                  if(recruit->get_weapon().get_itemtypename() == "WEAPON_AUTORIFLE_AK47" ||
-                     recruit->get_weapon().get_itemtypename() == "WEAPON_SMG_MP5" ||
-                     !recruit->is_armed())
-                  {
-                     Weapon w(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
-                     recruit->give_weapon(w,NULL);
-                     Clip c(*cliptype[getcliptype("CLIP_9")],4);
-                     recruit->take_clips(c,4);
-                     recruit->reload(false);
-                  }
-
-                  recruit->align=ALIGN_LIBERAL;
-                  recruit->set_attribute(ATTRIBUTE_HEART,
-                           recruit->get_attribute(ATTRIBUTE_HEART,false)+
-                           recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
-                  recruit->set_attribute(ATTRIBUTE_WISDOM,
-                           recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
-
-                  recruit->namecreature();
-                  strcpy(recruit->name,recruit->propername);
-
-                  recruit->location=l;
-                  recruit->base=l;
-
-                  recruit->hireid=newcr->id;
-
-                  newsq->squad[i+1]=recruit;
-                  recruit->squadid=newsq->id;
-                  pool.push_back(recruit);
-               }
-               break;
-            }
-
-
-            #ifdef GIVEBLOODYARMOR
-            Armor *newa= new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
-               newa->set_bloody(true);
-            location[l]->loot.push_back(newi);
-            #endif
-
-            #ifdef HIGHFUNDS
-            ledger.force_funds(100000);
-            #endif
-
+         case SITE_RESIDENTIAL_APARTMENT_UPSCALE:location[l]->renting=500;break;
+         case SITE_RESIDENTIAL_APARTMENT:location[l]->renting=200;break;
+         case SITE_RESIDENTIAL_TENEMENT:location[l]->renting=100;break;
+         case SITE_BUSINESS_CRACKHOUSE:
+            location[l]->renting=RENTING_PERMANENT;
+            location[l]->compound_stores+=100;
             break;
          }
+         location[l]->newrental=1;
+
+         switch(recruits)
+         {
+         case RECRUITS_GANG:
+            for(int i=0;i<4;i++)
+            {
+               Creature* recruit = new Creature;
+               makecreature(*recruit,CREATURE_GANGMEMBER);
+               if(recruit->get_weapon().get_itemtypename() == "WEAPON_AUTORIFLE_AK47" ||
+                  recruit->get_weapon().get_itemtypename() == "WEAPON_SMG_MP5" ||
+                 !recruit->is_armed())
+               {
+                  Weapon w(*weapontype[getweapontype("WEAPON_SEMIPISTOL_9MM")]);
+                  recruit->give_weapon(w,NULL);
+                  Clip c(*cliptype[getcliptype("CLIP_9")],4);
+                  recruit->take_clips(c,4);
+                  recruit->reload(false);
+               }
+
+               recruit->align=ALIGN_LIBERAL;
+               recruit->set_attribute(ATTRIBUTE_HEART,
+                                      recruit->get_attribute(ATTRIBUTE_HEART,false)+
+                                      recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
+               recruit->set_attribute(ATTRIBUTE_WISDOM,
+                                      recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
+
+               recruit->namecreature();
+               strcpy(recruit->name,recruit->propername);
+
+               recruit->location=l;
+               recruit->base=l;
+
+               recruit->hireid=newcr->id;
+
+               newsq->squad[i+1]=recruit;
+               recruit->squadid=newsq->id;
+               pool.push_back(recruit);
+            }
+            break;
+         }
+
+         #ifdef GIVEBLOODYARMOR
+         Armor *newa= new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]);
+         newa->set_bloody(true);
+         location[l]->loot.push_back(newi);
+         #endif
+
+         #ifdef HIGHFUNDS
+         ledger.force_funds(100000);
+         #endif
+
+         break;
       }
-      //newcr->juice=0;
+   }
+   //newcr->juice=0;
    squad.push_back(newsq);
    activesquad=newsq;
 

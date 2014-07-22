@@ -94,19 +94,19 @@ char alienationcheck(char mistake)
          noticer.push_back(e);
    }
 
-   if(noticer.size()>0)
+   if(len(noticer))
    {
       int n,an;
 
       do
       {
-         an=LCSrandom(noticer.size());
+         an=LCSrandom(len(noticer));
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
          if(encounter[n].align==1) alienatebig=1;
          else alienate=1;
-      } while(noticer.size()>0);
+      } while(len(noticer));
 
       if(alienatebig) sitealienate=2;
       if(alienate&&sitealienate!=2) sitealienate=1;
@@ -189,13 +189,13 @@ void disguisecheck(int timer)
       }
    }
 
-   if(noticer.size()>0)
+   if(len(noticer))
    {
       int n,an;
 
       do
       {
-         an=LCSrandom(noticer.size());
+         an=LCSrandom(len(noticer));
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
@@ -292,8 +292,8 @@ void disguisecheck(int timer)
                }
             }
          }
-         if(noticed)break;
-      }while(noticer.size()>0);
+         if(noticed) break;
+      } while(len(noticer));
 
       // Give feedback on the Liberal Performance
       if(!spotted)

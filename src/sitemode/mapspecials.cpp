@@ -75,7 +75,7 @@ void special_bouncer_assess_squad()
 
    special_bouncer_greet_squad();
 
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       if(pool[p]->base==cursite&&pool[p]->type==CREATURE_BOUNCER)
       {
@@ -1135,7 +1135,7 @@ void special_graffiti()
    if(!location[cursite]->highsecurity)
    {
       // Erase any previous semi-permanent graffiti here
-      for(int i=0;i<(int)location[cursite]->changes.size();i++)
+      for(int i=0;i<len(location[cursite]->changes);i++)
       {
          if((location[cursite]->changes[i].x == locx) &&
             (location[cursite]->changes[i].y == locy) &&
@@ -1888,7 +1888,7 @@ void special_security(bool metaldetect)
 
    spawn_security();
 
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       if(pool[p]->base==cursite)
       {
@@ -2124,7 +2124,7 @@ void special_bank_vault()
 
    getkey();
 
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       if(pool[p]->type==CREATURE_BANK_MANAGER &&
          pool[p]->flag & CREATUREFLAG_SLEEPER &&
@@ -2263,7 +2263,7 @@ void special_bank_vault()
 
                if(!canbreakin)
                {
-                  for(int p=0; p<(int)pool.size(); p++)
+                  for(int p=0;p<len(pool);p++)
                   {
                      if(pool[p]->base == cursite && pool[p]->type == CREATURE_BANK_MANAGER)
                      {

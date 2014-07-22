@@ -81,7 +81,7 @@ void creatureadvance()
 
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<(int)pool.size();p++)
+      for(int p=0;p<len(pool);p++)
       {
          if(!pool[p]->alive) continue;
          if(pool[p]->squadid!=-1) continue;

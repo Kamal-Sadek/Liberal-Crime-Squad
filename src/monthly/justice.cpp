@@ -69,7 +69,7 @@ void trial(Creature &g)
    Creature *sleeperjudge=NULL;
    Creature *sleeperlawyer=NULL;
    int maxsleeperskill=0;
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
       if(pool[p]->alive&&(pool[p]->flag&CREATUREFLAG_SLEEPER)&&location[pool[p]->location]->city==location[g.location]->city)
       {
          if(pool[p]->type==CREATURE_JUDGE_CONSERVATIVE||pool[p]->type==CREATURE_JUDGE_LIBERAL)
@@ -834,9 +834,8 @@ void trial(Creature &g)
                {
                   g.sentence--;
                   addstr(", less a month for time already served.", gamelog);
-               }else{
-                  addstr(".", gamelog);
                }
+               else addstr(".", gamelog);
                if(g.deathpenalty)
                {
                   g.sentence=3;
@@ -876,9 +875,8 @@ void trial(Creature &g)
             {
                g.sentence--;
                addstr(", less a month for time already served.", gamelog);
-            }else{
-               addstr(".", gamelog);
             }
+            else addstr(".", gamelog);
             if(g.deathpenalty)
             {
                g.sentence=3;
@@ -1081,7 +1079,7 @@ void penalize(Creature &g,char lenient)
    else if(g.deathpenalty)
    {
       g.sentence=3;
-      set_color(COLOR_RED,COLOR_RED,1);
+      set_color(COLOR_YELLOW,COLOR_RED,1);
       move(7,1);
       addstr(g.propername, gamelog);
       addstr(", you are sentenced to DEATH!", gamelog);
@@ -1104,16 +1102,15 @@ void penalize(Creature &g,char lenient)
       move(7,1);
       addstr(g.propername, gamelog);
       addstr(", the court sees no need to add to your existing sentence.", gamelog);
-      
       move(8,1);
       addstr("You will be returned to prison to resume it", gamelog);
       if(g.sentence>1 && lenient)
       {
          g.sentence--;
          addstr(", less a month for time already served.", gamelog);
-      }else{
-         addstr(".", gamelog);
       }
+      else addstr(".", gamelog);
+
       getkey();
    }
    else if(g.sentence==0)

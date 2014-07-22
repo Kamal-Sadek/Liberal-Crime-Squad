@@ -658,21 +658,9 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpo
 
    cr.infiltration-=LCSrandom(10)*0.01f-0.02f; //No effectiveness drop before? -Niel
 
-
    //Item *item;
    string item;
-   Location *shelter=0;
-
-   for(int l=0;l<(int)location.size();l++)
-   {
-      if(location[l]->type == SITE_RESIDENTIAL_SHELTER)
-      {
-         shelter = location[l];
-         break;
-      }
-   }
-
-
+   Location *shelter=location[find_homeless_shelter(cr)];
    int number_of_items = LCSrandom(10)+1;
    int itemindex = -1; // have to check case item not found to avoid brave modders segfaults.
    int numberofxmlfails = 0; // Tell them how many fails

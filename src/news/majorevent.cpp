@@ -570,7 +570,7 @@ void constructeventstory(char *story,short view,char positive)
             char jstr[200];
             lastname(jstr,true);
             strcat(story,jstr);
-            switch (schtype)
+            switch(schtype)
             {
             case 0: strcat(story," Elementary School"); break;
             case 1: strcat(story," Middle School"); break;
@@ -1712,7 +1712,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
 void run_television_news_stories()
 {
    char del;
-   for(int n=newsstory.size()-1;n>=0;n--)
+   for(int n=len(newsstory)-1;n>=0;n--)
    {
       del=0;
       if(newsstory[n]->type==NEWSSTORY_MAJOREVENT)
@@ -1768,7 +1768,7 @@ void run_television_news_stories()
 
                   erase();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
-                  move(0,39-((strlen(str)-1)>>1));
+                  move(0,39-((len(str)-1)>>1));
                   addstr(str);
 
                   move(16,20);

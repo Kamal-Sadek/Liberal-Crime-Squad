@@ -36,7 +36,7 @@ Skill::Skill(const std::string& inputXml)
    xml.FindElem();
    xml.IntoElem();
 
-   while (xml.FindElem())
+   while(xml.FindElem())
    {
       std::string tag = xml.GetTagName();
 
@@ -152,7 +152,7 @@ Attribute::Attribute(const std::string& inputXml)
    xml.FindElem();
    xml.IntoElem();
 
-   while (xml.FindElem())
+   while(xml.FindElem())
    {
       std::string tag = xml.GetTagName();
 
@@ -204,83 +204,76 @@ Creature& Creature::operator=(const Creature& rhs)
 
 void Creature::copy(const Creature& org)
 {
-   for (int i = 0; i < ATTNUM; ++i)
-      attributes[i] = org.attributes[i];
-   for (int i = 0; i < SKILLNUM; ++i)
+   for(int i=0;i<ATTNUM;i++)
+      attributes[i]=org.attributes[i];
+   for(int i=0;i<SKILLNUM;i++)
    {
-      skills[i] = org.skills[i];
-      skill_experience[i] = org.skill_experience[i];
+      skills[i]=org.skills[i];
+      skill_experience[i]=org.skill_experience[i];
    }
-   for (int i = 0; i < BODYPARTNUM; ++i)
-      wound[i] = org.wound[i];
-   for (int i = 0; i < SPECIALWOUNDNUM; ++i)
-      special[i] = org.special[i];
-   for (int i = 0; i < LAWFLAGNUM; ++i)
-      crimes_suspected[i] = org.crimes_suspected[i];
-
-   if (org.weapon != NULL)
-      weapon = new Weapon(*org.weapon);
-   else
-      weapon = NULL;
-   if (org.armor != NULL)
-      armor = new Armor(*org.armor);
-   else
-      armor = NULL;
-   for (int i = 0; i < (int)org.extra_throwing_weapons.size(); i++)
+   for(int i=0;i<BODYPARTNUM;i++)
+      wound[i]=org.wound[i];
+   for(int i=0;i<SPECIALWOUNDNUM;i++)
+      special[i]=org.special[i];
+   for(int i=0;i<LAWFLAGNUM;i++)
+      crimes_suspected[i]=org.crimes_suspected[i];
+   if(org.weapon) weapon=new Weapon(*org.weapon);
+   else weapon=NULL;
+   if(org.armor) armor=new Armor(*org.armor);
+   else armor=NULL;
+   for(int i=0;i<len(org.extra_throwing_weapons);i++)
       extra_throwing_weapons.push_back(new Weapon(*org.extra_throwing_weapons[i]));
-   for (int i = 0; i < (int)org.clips.size(); i++)
+   for(int i=0;i<len(org.clips);i++)
       clips.push_back(new Clip(*org.clips[i]));
-
-   strcpy(name, org.name);
-   strcpy(propername, org.propername);
-
-   gender_conservative = org.gender_conservative;
-   gender_liberal = org.gender_liberal;
-   squadid = org.squadid;
-   age = org.age;
-   birthday_month = org.birthday_month;
-   birthday_day = org.birthday_day;
-   exists = org.exists;
-   align = org.align;
-   alive = org.alive;
-   type = org.type;
-   type_idname = org.type_idname;
-   infiltration = org.infiltration;
-   animalgloss = org.animalgloss;
-   specialattack = org.specialattack;
-   clinic = org.clinic;
-   dating = org.dating;
-   hiding = org.hiding;
-   trainingtime = org.trainingtime;
-   trainingsubject = org.trainingsubject;
-   sentence = org.sentence;
-   confessions = org.confessions;
-   deathpenalty = org.deathpenalty;
-   joindays = org.joindays;
-   deathdays = org.deathdays;
-   id = org.id;
-   hireid = org.hireid;
-   meetings = org.meetings;
-   forceinc = org.forceinc;
-   stunned = org.stunned;
-   has_thrown_weapon = org.has_thrown_weapon;
-   money = org.money;
-   juice = org.juice;
-   income = org.income;
-   blood = org.blood;
-   heat = org.heat;
-   location = org.location;
-   worklocation = org.worklocation;
-   cantbluff = org.cantbluff;
-   base = org.base;
-   activity = org.activity;
-   carid = org.carid;
-   is_driver = org.is_driver;
-   pref_carid = org.pref_carid;
-   pref_is_driver = org.pref_is_driver;
-   flag = org.flag;
-   dontname = org.dontname;
-   prisoner = NULL; //Not copying prisoner.
+   strcpy(name,org.name);
+   strcpy(propername,org.propername);
+   gender_conservative=org.gender_conservative;
+   gender_liberal=org.gender_liberal;
+   squadid=org.squadid;
+   age=org.age;
+   birthday_month=org.birthday_month;
+   birthday_day=org.birthday_day;
+   exists=org.exists;
+   align=org.align;
+   alive=org.alive;
+   type=org.type;
+   type_idname=org.type_idname;
+   infiltration=org.infiltration;
+   animalgloss=org.animalgloss;
+   specialattack=org.specialattack;
+   clinic=org.clinic;
+   dating=org.dating;
+   hiding=org.hiding;
+   trainingtime=org.trainingtime;
+   trainingsubject=org.trainingsubject;
+   sentence=org.sentence;
+   confessions=org.confessions;
+   deathpenalty=org.deathpenalty;
+   joindays=org.joindays;
+   deathdays=org.deathdays;
+   id=org.id;
+   hireid=org.hireid;
+   meetings=org.meetings;
+   forceinc=org.forceinc;
+   stunned=org.stunned;
+   has_thrown_weapon=org.has_thrown_weapon;
+   money=org.money;
+   juice=org.juice;
+   income=org.income;
+   blood=org.blood;
+   heat=org.heat;
+   location=org.location;
+   worklocation=org.worklocation;
+   cantbluff=org.cantbluff;
+   base=org.base;
+   activity=org.activity;
+   carid=org.carid;
+   is_driver=org.is_driver;
+   pref_carid=org.pref_carid;
+   pref_is_driver=org.pref_is_driver;
+   flag=org.flag;
+   dontname=org.dontname;
+   prisoner=NULL; //Not copying prisoner.
 }
 
 Creature::~Creature()
@@ -289,14 +282,11 @@ Creature::~Creature()
    delete armor;
    delete_and_clear(clips);
    delete_and_clear(extra_throwing_weapons);
-   if(prisoner!=NULL)
+   if(prisoner)
    {
       int p;
-      for(p=0;p<(int)pool.size();p++)
-         if(prisoner==pool[p])
-            break;
-      if(p != (int)pool.size())
-         delete prisoner;
+      for(p=0;p<len(pool);p++)
+         if(prisoner==pool[p]) { delete_and_remove(pool,p); break; }
    }
    // Clean up hostage situation
    stop_hauling_me();
@@ -632,7 +622,7 @@ Creature::Creature(const std::string& inputXml)
       else if (tag == "activity")
       {
          xml.IntoElem();
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             tag = xml.GetTagName();
             if (tag == "type")
@@ -665,16 +655,14 @@ string Creature::showXml() const
    xml.AddElem("creature");
    xml.IntoElem();
 
-   for (int i = 0; i < ATTNUM; i++)
+   for(int i=0;i<ATTNUM;i++)
       xml.AddSubDoc(attributes[i].showXml());
-   for (int i = 0; i < SKILLNUM; i++)
+   for(int i=0;i<SKILLNUM;i++)
       xml.AddSubDoc(skills[i].showXml());
-   for (int i = 0; i < SKILLNUM; i++)
+   for(int i=0;i<SKILLNUM;i++)
       xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML
-   if (weapon != NULL)
-      xml.AddSubDoc(weapon->showXml());
-   if (armor != NULL)
-      xml.AddSubDoc(armor->showXml());
+   if(weapon) xml.AddSubDoc(weapon->showXml());
+   if(armor) xml.AddSubDoc(armor->showXml());
 
    xml.AddElem("name", name);
    xml.AddElem("propername", propername);
@@ -701,7 +689,7 @@ string Creature::showXml() const
    xml.AddElem("hiding", hiding);
    xml.AddElem("trainingtime", trainingtime);
    xml.AddElem("trainingsubject", trainingsubject);
-   if (prisoner != NULL) //Should never be true when saving.
+   if(prisoner) //Should never be true when saving.
    {
       xml.AddElem("prisoner");
       xml.IntoElem();
@@ -718,20 +706,20 @@ string Creature::showXml() const
    xml.AddElem("meetings", meetings);
    xml.AddElem("forceinc", forceinc);
    xml.AddElem("stunned", stunned);
-   for (int i = 0; i < (int)extra_throwing_weapons.size(); i++)
+   for(int i=0;i<len(extra_throwing_weapons);i++)
       xml.AddSubDoc(extra_throwing_weapons[i]->showXml());
-   for (int i = 0; i < (int)clips.size(); i++)
+   for(int i=0;i<len(clips);i++)
       xml.AddSubDoc(clips[i]->showXml());
    xml.AddElem("has_thrown_weapon", has_thrown_weapon);
    xml.AddElem("money", money);
    xml.AddElem("juice", juice);
    xml.AddElem("income", income);
-   for (int i = 0; i < BODYPARTNUM; i++) //Bad, relies on their order in the xml file. -XML
+   for(int i=0;i<BODYPARTNUM;i++) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("wound",wound[i]);
    xml.AddElem("blood", blood);
-   for (int i = 0; i < SPECIALWOUNDNUM; i++) //Bad, relies on their order in the xml file. -XML
+   for(int i=0;i<SPECIALWOUNDNUM;i++) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("special",special[i]);
-   for (int i = 0; i < LAWFLAGNUM; i++) //Bad, relies on their order in the xml file. -XML
+   for(int i=0;i<LAWFLAGNUM;i++) //Bad, relies on their order in the xml file. -XML
       xml.AddElem("crimes_suspected",crimes_suspected[i]);
    xml.AddElem("heat", heat);
    xml.AddElem("location", location);
@@ -1099,7 +1087,7 @@ bool Creature::skill_check(int skill, int difficulty) const
 
 void Creature::stop_hauling_me()
 {
-   for(int p=0;p<(int)pool.size();p++)if(pool[p]->prisoner==this)pool[p]->prisoner=NULL;
+   for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=NULL;
 }
 
 void Creature::train(int trainedskill, int experience, int upto)
@@ -1156,7 +1144,7 @@ bool Creature::enemy() const
       return true;
    else if(type==CREATURE_COP && align==ALIGN_MODERATE)
    {
-      for(int i=0;i<(int)pool.size();i++)
+      for(int i=0;i<len(pool);i++)
          if(pool[i]==this)
             return false;
       return true;
@@ -1345,7 +1333,7 @@ UniqueCreatures::UniqueCreatures(const std::string& inputXml)
    xml.FindElem();
    xml.IntoElem();
 
-   while (xml.FindElem())
+   while(xml.FindElem())
    {
       std::string tag = xml.GetTagName();
 
@@ -1376,7 +1364,6 @@ string UniqueCreatures::showXml() const
    CMarkup xml;
    xml.AddElem("uniquecreatures");
    xml.IntoElem();
-
    xml.AddElem("CEO_ID", CEO_ID);
    xml.AddElem("CEO_state", CEO_state);
    xml.AddElem("CEO");
@@ -1385,21 +1372,18 @@ string UniqueCreatures::showXml() const
    xml.AddElem("Pres_state", CEO_state);
    xml.AddElem("Pres");
    xml.AddChildSubDoc(Pres_.showXml());
-
    return xml.GetDoc();
 }
 
 Creature& UniqueCreatures::CEO()
 {
-   if(CEO_ID==-1)
-      newCEO();
+   if(CEO_ID==-1) newCEO();
    return CEO_;
 }
 
 Creature& UniqueCreatures::President()
 {
-   if(Pres_ID==-1)
-      newPresident();
+   if(Pres_ID==-1) newPresident();
    return Pres_;
 }
 
@@ -1407,12 +1391,9 @@ const char* Creature::heshe() const
 {
    switch(gender_liberal)
    {
-   case GENDER_MALE:
-      return "he";
-   case GENDER_FEMALE:
-      return "she";
-   default:
-      return "xe"; // Elite Liberal gender-neutral pronoun
+   case GENDER_MALE: return "he";
+   case GENDER_FEMALE: return "she";
+   default: return "xe"; // Elite Liberal gender-neutral pronoun
    }
 }
 
@@ -1420,12 +1401,9 @@ const char* Creature::hisher() const
 {
    switch(gender_liberal)
    {
-   case GENDER_MALE:
-      return "his";
-   case GENDER_FEMALE:
-      return "her";
-   default:
-      return "xyr"; // Elite Liberal gender-neutral pronoun
+   case GENDER_MALE: return "his";
+   case GENDER_FEMALE: return "her";
+   default: return "xyr"; // Elite Liberal gender-neutral pronoun
    }
 }
 
@@ -1443,143 +1421,110 @@ Armor& Creature::armor_none() const
 
 bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
 {
-   bool r;
-
-   if (weapon != NULL) //Is the creature armed?
+   if(weapon) //Is the creature armed?
    {
       bool reload_allowed = can_reload();
-
-      r = weapon->get_attack(force_ranged,force_melee,reload_allowed) != NULL //Any attacks possible under circumstances?
+      return weapon->get_attack(force_ranged,force_melee,reload_allowed) //Any attacks possible under circumstances?
           && weapon->get_attack(force_ranged,force_melee,reload_allowed)->ranged //Is the attacked ranged?
           && (!weapon->get_attack(force_ranged,force_melee,reload_allowed)->uses_ammo //Does it not use ammo
               || weapon->get_ammoamount() != 0);                                      //or does it have ammo?
 
    }
-   else
-      r = false;
-
-   return r;
+   else return false;
 }
 
 bool Creature::can_reload() const
 {
-   //return !clips.empty(); //Can not be sure creature only has appropriate clips.
-   bool can_reload = false;
-
-   for (unsigned i = 0; i < clips.size() && !can_reload; ++i)
-      can_reload = get_weapon().acceptable_ammo(*clips[i]);
-
-   return can_reload;
+   //return len(clips); //Can not be sure creature only has appropriate clips.
+   for(int i=0;i<len(clips);i++)
+      if(get_weapon().acceptable_ammo(*clips[i])) return true;
+   return false;
 }
 
 bool Creature::will_reload(bool force_ranged, bool force_melee) const
 {
-   bool r;
-   r = get_weapon().uses_ammo()              //Does it use ammo?
-       && get_weapon().get_ammoamount() == 0 //Is it out of ammo?
-       && can_reload()                       //Is reloading possible?
-       && get_weapon().get_attack(force_ranged, force_melee, false) != NULL //Is there an appropriate attack for the situation?
-       && get_weapon().get_attack(force_ranged, force_melee, false)->uses_ammo; //Does the attack need ammo?
-   /*if (get_weapon().uses_ammo() && get_weapon().get_ammoamount() == 0)
-   {
-      if (can_reload() && get_weapon().get_attack(force_ranged, force_melee, false) != NULL)
-      {
-         if (get_weapon().get_attack(force_ranged, force_melee, false)->uses_ammo)
-            r = true;
-      }
-   }*/
-   return r;
+   return get_weapon().uses_ammo()      //Does it use ammo?
+       &&!get_weapon().get_ammoamount() //Is it out of ammo?
+        &&can_reload()                  //Is reloading possible?
+        &&get_weapon().get_attack(force_ranged,force_melee,false) //Is there an appropriate attack for the situation?
+        &&get_weapon().get_attack(force_ranged,force_melee,false)->uses_ammo; //Does the attack need ammo?
+
 }
 
 bool Creature::reload(bool wasteful)
 {
-   bool r;
-   if (get_weapon().uses_ammo() && !clips.empty()
-       && (wasteful || get_weapon().get_ammoamount() == 0))
+   if(get_weapon().uses_ammo()&&len(clips)
+      &&(wasteful||get_weapon().get_ammoamount()==0))
    {
-      r = weapon->reload(*clips.front());
-      if (clips.front()->empty())
+      bool r=weapon->reload(*clips.front());
+      if(clips.front()->empty())
          delete_and_remove(clips,0);
+      return r;
    }
-   else
-      r = false;
-
-   return r;
+   else return false;
 }
 
 bool Creature::ready_another_throwing_weapon()
 {
-   bool r = false;
-   if (!extra_throwing_weapons.empty())
+   bool r=false;
+   if(len(extra_throwing_weapons))
    {
-      weapon = extra_throwing_weapons.front()->split(1);
-      if (extra_throwing_weapons.front()->empty())
+      weapon=extra_throwing_weapons.front()->split(1);
+      if(extra_throwing_weapons.front()->empty())
          delete_and_remove(extra_throwing_weapons,0);
-      r = true;
+      r=true;
    }
-   has_thrown_weapon = false;
+   has_thrown_weapon=false;
    return r;
 }
 
 int Creature::count_clips() const
 {
-   int sum = 0;
-   for (deque<Clip*>::const_iterator i = clips.begin(); i != clips.end(); ++i)
-      sum += (*i)->get_number();
+   int sum=0;
+   for(deque<Clip*>::const_iterator i=clips.begin();i!=clips.end();i++)
+      sum+=(*i)->get_number();
    return sum;
 }
 
 bool Creature::take_clips(Item& clip, int number)
 {
-   bool r;
-   if (clip.is_clip())
-      r = take_clips(static_cast<Clip&>(clip),number); //cast -XML
-   else
-      r = false;
-
-   return r;
+   if(clip.is_clip())
+      return take_clips(static_cast<Clip&>(clip),number); //cast -XML
+   else return false;
 }
 
 bool Creature::take_clips(Clip& clip, int number)
 {
-   bool r;
-
-   if (number + count_clips() >= 9)
-      number = 9 - count_clips();
-   if (number > clip.get_number())
-      number = clip.get_number();
-
-   if (number > 0 && get_weapon().acceptable_ammo(clip))
+   if(number+count_clips()>=9) number=9-count_clips();
+   if(number>clip.get_number()) number=clip.get_number();
+   if(number>0&&get_weapon().acceptable_ammo(clip))
    {
-      Clip* c = clip.split(number);
+      Clip* c=clip.split(number);
       clips.push_back(c);
-      r = true;
+      return true;
    }
-   else
-      r = false;
-
-   return r;
+   else return false;
 }
 
 bool Creature::take_clips(const ClipType& ct, int number)
 {
-   Clip c(ct, number);
-   return take_clips(c, number);
+   Clip c(ct,number);
+   return take_clips(c,number);
 }
 
 void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
 {
-   if (weapon != NULL && !w.empty())
+   if(weapon&&!w.empty())
    {
-      if (weapon->is_throwable() && weapon->is_same_type(w))
+      if(weapon->is_throwable()&&weapon->is_same_type(w))
       {
-         int take_number = 10 - count_weapons();
-         if (take_number > 0)
+         int take_number=10-count_weapons();
+         if(take_number>0)
             extra_throwing_weapons.push_back(w.split(1));
       }
       else
       {
-         if (lootpile == NULL)
+         if(!lootpile)
          {
             delete weapon;
             delete_and_clear(extra_throwing_weapons);
@@ -1587,130 +1532,113 @@ void Creature::give_weapon(Weapon& w, vector<Item*>* lootpile)
          else
          {
             lootpile->push_back(weapon);
-            while (!extra_throwing_weapons.empty())
+            while(len(extra_throwing_weapons))
             {
                lootpile->push_back(extra_throwing_weapons.back());
                extra_throwing_weapons.pop_back();
             }
          }
-
-         weapon = w.split(1);
-
-         if (lootpile == NULL)
+         weapon=w.split(1);
+         if(!lootpile)
          {
-            for (int i = clips.size()-1; i >= 0; --i)
+            for(int i=len(clips)-1;i>=0;i--)
             {
-               if (!weapon->acceptable_ammo(*clips[i]))
+               if(!weapon->acceptable_ammo(*clips[i]))
                   delete_and_remove(clips,i);
             }
          }
          else
          {
-            for (int i = clips.size()-1; i >= 0; --i)
+            for(int i=len(clips)-1;i>=0;i--)
             {
-               if (!weapon->acceptable_ammo(*clips[i]))
+               if(!weapon->acceptable_ammo(*clips[i]))
                {
                   lootpile->push_back(clips[i]);
-                  clips.erase(clips.begin() + i);
+                  clips.erase(clips.begin()+i);
                }
             }
          }
       }
    }
-   else if (!w.empty())
+   else if(!w.empty())
    {
       drop_weapons_and_clips(lootpile);
-      weapon = w.split(1);
+      weapon=w.split(1);
    }
 }
 
 void Creature::give_weapon(const WeaponType& wt, vector<Item*>* lootpile)
 {
    Weapon w(wt);
-   give_weapon(w, lootpile);
+   give_weapon(w,lootpile);
 }
 
 void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
 {
-   has_thrown_weapon = false;
-   if (weapon != NULL)
+   has_thrown_weapon=false;
+   if(weapon)
    {
-      if (lootpile != NULL)
-         lootpile->push_back(weapon);
-      else
-         delete weapon;
-      weapon = NULL;
+      if(lootpile) lootpile->push_back(weapon);
+      else delete weapon;
+      weapon=NULL;
    }
-
-   while (!extra_throwing_weapons.empty())
+   while(len(extra_throwing_weapons))
    {
-      if (lootpile != NULL)
-         lootpile->push_back(extra_throwing_weapons.back());
-      else
-         delete extra_throwing_weapons.back();
+      if(lootpile) lootpile->push_back(extra_throwing_weapons.back());
+      else delete extra_throwing_weapons.back();
       extra_throwing_weapons.pop_back();
    }
-
-   while (!clips.empty())
+   while(len(clips))
    {
-      if (lootpile != NULL)
-         lootpile->push_back(clips.back());
-      else
-         delete clips.back();
+      if(lootpile) lootpile->push_back(clips.back());
+      else delete clips.back();
       clips.pop_back();
    }
 }
 
 void Creature::drop_weapon(vector<Item*>* lootpile)
 {
-   if (!extra_throwing_weapons.empty())
-      has_thrown_weapon = true;
-
-   if (weapon != NULL)
+   if(len(extra_throwing_weapons))
+      has_thrown_weapon=true;
+   if(weapon)
    {
-      if (lootpile != NULL)
-         lootpile->push_back(weapon);
-      else
-         delete weapon;
-      weapon = NULL;
+      if(lootpile) lootpile->push_back(weapon);
+      else delete weapon;
+      weapon=NULL;
    }
 }
 
 int Creature::count_weapons() const
 {
-   int sum = 0;
-   if (weapon !=NULL)
-      ++sum;
-   for (unsigned i = 0; i < extra_throwing_weapons.size(); ++i)
-      sum += extra_throwing_weapons[i]->get_number();
-
+   int sum=0;
+   if(weapon) sum++;
+   for(int i=0;i<len(extra_throwing_weapons);i++)
+      sum+=extra_throwing_weapons[i]->get_number();
    return sum;
 }
 
 void Creature::give_armor(Armor& a, vector<Item*>* lootpile)
 {
-   if (!a.empty())
+   if(!a.empty())
    {
       strip(lootpile);
-      armor = a.split(1);
+      armor=a.split(1);
    }
 }
 
 void Creature::give_armor(const ArmorType& at, vector<Item*>* lootpile)
 {
    Armor a(at);
-   give_armor(a, lootpile);
+   give_armor(a,lootpile);
 }
 
 void Creature::strip(vector<Item*>* lootpile)
 {
-   if (armor != NULL)
+   if(armor)
    {
-      if (lootpile == NULL)
-         delete armor;
-      else
-         lootpile->push_back(armor);
-      armor = NULL;
+      if(!lootpile) delete armor;
+      else lootpile->push_back(armor);
+      armor=NULL;
    }
 }
 
@@ -1721,21 +1649,15 @@ string Creature::get_weapon_string(int subtype) const
    {
       r = weapon->get_name(subtype);
       if(weapon->uses_ammo())
-      {
          r += " (" + tostring(weapon->get_ammoamount()) + "/" + tostring(count_clips()) + ")";
-      }
       else if(weapon->is_throwable())
-      {
          r += " (1/" + tostring(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
-      }
    }
-   else if(!extra_throwing_weapons.empty())
+   else if(len(extra_throwing_weapons))
    {
       r = extra_throwing_weapons[0]->get_name(subtype);
       r += " (0/" + tostring(count_weapons()) + ")";
    }
-   else
-      r = "None";
-
+   else r = "None";
    return r;
 }

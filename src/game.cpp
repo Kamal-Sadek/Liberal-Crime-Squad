@@ -282,7 +282,6 @@ int main(int argc, char* argv[])
 
    //initialize the array of color pairs
    for(int i=0;i<8;i++)
-   {
       for(int j=0;j<8;j++)
       {
          if(i==0&&j==0)
@@ -290,10 +289,9 @@ int main(int argc, char* argv[])
             init_pair(7*8,0,0);
             continue;
          }
-         if(i==7&&j==0)continue;
+         if(i==7&&j==0) continue;
          init_pair(i*8+j,i,j);
       }
-   }
 
    //turns off cursor
    curs_set(0);
@@ -333,13 +331,13 @@ int main(int argc, char* argv[])
    {
       switch(LCSrandom(7))
       {
-      case 0:strcpy(slogan,"To Rogues and Revolution!");break;
-      case 1:strcpy(slogan,"Hell yes, LCS!");break;
-      case 2:strcpy(slogan,"Striking high, standing tall!");break;
-      case 3:strcpy(slogan,"Revolution never comes with a warning!");break;
-      case 4:strcpy(slogan,"True Liberal Justice!");break;
-      case 5:strcpy(slogan,"Laissez ain't fair!");break;
-      case 6:strcpy(slogan,"This is a slogan!");break;
+      case 0: strcpy(slogan,"To Rogues and Revolution!"); break;
+      case 1: strcpy(slogan,"Hell yes, LCS!"); break;
+      case 2: strcpy(slogan,"Striking high, standing tall!"); break;
+      case 3: strcpy(slogan,"Revolution never comes with a warning!"); break;
+      case 4: strcpy(slogan,"True Liberal Justice!"); break;
+      case 5: strcpy(slogan,"Laissez ain't fair!"); break;
+      case 6: strcpy(slogan,"This is a slogan!"); break;
       }
    }
 
@@ -386,43 +384,43 @@ int main(int argc, char* argv[])
    law[LAW_TORTURE]=-1;
 
 #ifdef SHITLAWS
-   for(int l=0;l<LAWNUM;l++)law[l]=-2;
+   for(int l=0;l<LAWNUM;l++) law[l]=-2;
 #endif
 
 #ifdef PERFECTLAWS
-   for(int l=0;l<LAWNUM;l++)law[l]=2;
+   for(int l=0;l<LAWNUM;l++) law[l]=2;
 #endif
 
    for(int s=0;s<100;s++)
    {
-      if(s<25)senate[s]=-2;
-      else if(s<60)senate[s]=-1;
-      else if(s<80)senate[s]=0;
-      else if(s<95)senate[s]=1;
+      if(s<25) senate[s]=-2;
+      else if(s<60) senate[s]=-1;
+      else if(s<80) senate[s]=0;
+      else if(s<95) senate[s]=1;
       else senate[s]=2;
    }
 
    for(int h=0;h<435;h++)
    {
-      if(h<50)house[h]=-2;
-      else if(h<250)house[h]=-1;
-      else if(h<350)house[h]=0;
-      else if(h<400)house[h]=1;
+      if(h<50) house[h]=-2;
+      else if(h<250) house[h]=-1;
+      else if(h<350) house[h]=0;
+      else if(h<400) house[h]=1;
       else house[h]=2;
    }
 
    for(int c=0;c<9;c++)
    {
-      if(c<3)court[c]=-2;
-      else if(c<5)court[c]=-1;
-      else if(c<5)court[c]=0;
-      else if(c<8)court[c]=1;
+      if(c<3) court[c]=-2;
+      else if(c<5) court[c]=-1;
+      else if(c<5) court[c]=0;
+      else if(c<8) court[c]=1;
       else court[c]=2;
       do
       {
          if(court[c]==-2) generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
          else generate_name(courtname[c]);
-      } while(strlen(courtname[c])>20);
+      } while(len(courtname[c])>20);
    }
 
    for(int e=0;e<EXECNUM;e++)
@@ -530,7 +528,7 @@ bool populate_from_xml(vector<Type*>& types,string file,Log& log)
 
    xml.FindElem();
    xml.IntoElem();
-   while (xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
+   while(xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
    return true;
 }
 
@@ -549,7 +547,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
    xml.FindElem();
    xml.IntoElem();
    int defaultindex;
-   if (xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
+   if(xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
    else
    {
       addstr("Default missing for masks!",log);
@@ -558,7 +556,7 @@ bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
 
       return false; //Abort.
    }
-   if (defaultindex == -1)
+   if(defaultindex==-1)
    {
       addstr("Default for masks is not a known armor type!",log);
 

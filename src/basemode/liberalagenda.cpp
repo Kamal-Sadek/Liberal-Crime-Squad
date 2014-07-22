@@ -668,10 +668,10 @@ char confirmdisband() // The (current) issue that the masses are most
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(13,0); addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 
-      for(int x=0;x<(int)strlen(word);x++)
+      for(int x=0;x<len(word);x++)
       {
-         if(x==pos)set_color(COLOR_GREEN,COLOR_BLACK,0);
-         else if(x<pos)set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if(x==pos) set_color(COLOR_GREEN,COLOR_BLACK,0);
+         else if(x<pos) set_color(COLOR_GREEN,COLOR_BLACK,1);
          else set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(15,x,word[x]);
       }
@@ -681,11 +681,11 @@ char confirmdisband() // The (current) issue that the masses are most
       if((c==word[pos])||((c+'A'-'a')==word[pos]))
       {
          pos++;
-         if(word[pos]==' ')pos++;
-         if(pos>=(int)strlen(word))
+         if(word[pos]==' ') pos++;
+         if(pos>=len(word))
          {
             //SET UP THE DISBAND
-            for(int p=pool.size()-1;p>=0;p--)
+            for(int p=len(pool)-1;p>=0;p--)
             {
                if(!pool[p]->alive)delete_and_remove(pool,p);
                else if(!(pool[p]->flag & CREATUREFLAG_SLEEPER))

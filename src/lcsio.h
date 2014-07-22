@@ -33,7 +33,6 @@ This file is part of Liberal Crime Squad.
     The entire system is being rewritten
 */
 
-
 #ifndef LCSIO_H_INCLUDED
 #define LCSIO_H_INCLUDED
 
@@ -46,21 +45,16 @@ This file is part of Liberal Crime Squad.
 #include <direct.h>
 #else
 #include <stdio.h>
-
-
 #include <unistd.h>
 #endif
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
 #include <string>
 #include <fstream>
 
 /**
     I/O Flags for the LCS I/O System.
-
-
 */
 enum LCSIO_FLAGS
 {
@@ -68,7 +62,6 @@ enum LCSIO_FLAGS
     LCSIO_PRE_HOME = 2 /// Append the given file name to the home directory path.
     //LCSIO_PRE_CONFIG = 3 /// Append the given file name to the config directory path.
 };
-
 
 /**
     LCSIO File open.
@@ -88,11 +81,10 @@ enum LCSIO_FLAGS
     mode Mode of stream. Same as mode for fopen().
     flags File name prefix flags, see enum LCSIO_FLAGS
     FILE* handle. NULL on error.
-
 */
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags);
 
-/*
+/**
    C++ file i/o version of the above. Exists for code that uses c++ file i/o.
 
    Returns false on failure, true on success.
@@ -123,16 +115,13 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 
 */
 void LCSCloseFile(FILE* handle);
-/*
+
+/**
    C++ file i/o version of the above. Exists for code that uses c++ file i/o.
 
    file is the fstream object we want closed.
 */
 void LCSCloseFileCPP(std::fstream &file);
-
-
-
-
 
 /**
     Write to file.
@@ -150,13 +139,8 @@ void LCSCloseFileCPP(std::fstream &file);
 /*inline bool LCSWrite(void* buffer, size_t size, size_t count, FILE* handle)
 {
     fwrite(buffer,size,count,handle);
-    if(ferror(handle))
-        return false;
-
-    else
-        return true;
+    return !ferror(handle);
 } Deprecated function - SAV */
-
 
 /**
     Read from file to buffer.
@@ -169,22 +153,18 @@ void LCSCloseFileCPP(std::fstream &file);
     size Size of data to read, normally 1 byte.
     count Number of data items to read. This is the length of the data.
     handle FILE* handle that you get from LCSOpenFile.
-     False on error, true if no error.
+    False on error, true if no error.
 */
 /*inline bool LCSRead(void* buffer, size_t size, size_t count, FILE* handle)
 {
     fread(buffer,size,count,handle);
-    if(ferror(handle))
-        return false;
-
-    else
-        return true;
+    return !ferror(handle);
 }Deprecated function - SAV */
 
 /**
     Deletes a file.
 
-    This function unlinks the filename you spefify.
+    This function unlinks the filename you specify.
     You may use prefix flags to delete files in other directories.
 
     Do not try to delete files in the art directory.
@@ -193,6 +173,5 @@ void LCSCloseFileCPP(std::fstream &file);
     flags Prefix flags. See enum LCSIO_FLAGS.
 */
 void LCSDeleteFile(const char* filename,int flags);
-
 
 #endif // LCSIO_H_INCLUDED

@@ -65,18 +65,18 @@ void youattack()
          }
       }
 
-      if(dangerous_enemies.size()+enemies.size()==0) return;
+      if(!(len(dangerous_enemies)+len(enemies))) return;
 
       int target;
       // If there are "dangerous enemies", shoot at one of them
-      if(dangerous_enemies.size())
+      if(len(dangerous_enemies))
          target=pickrandom(dangerous_enemies);
       // Else, shoot at one of the other enemies
       else target=pickrandom(enemies);
 
       char mistake=0;
       // 1% chance to accidentally hit bystanders
-      if(non_enemies.size()>0 && !LCSrandom(100))
+      if(len(non_enemies)&&!LCSrandom(100))
       {
          target=pickrandom(non_enemies);
          mistake=1;
@@ -138,7 +138,7 @@ void youattack()
    //COVER FIRE
    if(location[cursite]->siege.siege)
    {
-      for(int p=0;p<(int)pool.size();p++)
+      for(int p=0;p<len(pool);p++)
       {
          if(!pool[p]->alive) continue;
          if(pool[p]->align!=1) continue;
@@ -151,7 +151,7 @@ void youattack()
          // chance to fire at 90 juice
          //if(LCSrandom(10)-pool[p]->juice/10>0)continue;
 
-         if(pool[p]->get_weapon().get_attack(true,false,false)!=NULL)
+         if(pool[p]->get_weapon().get_attack(true,false,false))
          {
             char conf=0;
             if(pool[p]->get_weapon().get_ammoamount()>0) conf=1;
@@ -160,8 +160,7 @@ void youattack()
 
             if(conf)
             {
-               vector<int> goodtarg;
-               vector<int> badtarg;
+               vector<int> goodtarg,badtarg;
 
                for(int e=0;e<ENCMAX;e++)
                {
@@ -172,13 +171,13 @@ void youattack()
                   }
                }
 
-               if(goodtarg.size()==0)return;
+               if(!len(goodtarg)) return;
 
                int target=pickrandom(goodtarg);
 
                char mistake=0;
 
-               if(badtarg.size()>0 && !LCSrandom(10))
+               if(len(badtarg)&&!LCSrandom(10))
                {
                   target=pickrandom(badtarg);
                   mistake=1;
@@ -330,8 +329,7 @@ void enemyattack()
          }
       }
 
-      vector<int> goodtarg;
-      vector<int> badtarg;
+      vector<int> goodtarg,badtarg;
 
       if(encounter[e].enemy())
       {
@@ -359,7 +357,7 @@ void enemyattack()
          badtarg.push_back(e2);
       }
 
-      if(goodtarg.size()==0) return;
+      if(!len(goodtarg)) return;
 
       int target=pickrandom(goodtarg);
 
@@ -420,7 +418,7 @@ void enemyattack()
             }
          }
 
-         if(!LCSrandom(10)&&badtarg.size()>0)
+         if(!LCSrandom(10)&&len(badtarg))
          {
             target=pickrandom(badtarg);
             if(encounter[target].flag & CREATUREFLAG_CONVERTED)
@@ -498,7 +496,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    //RELOAD
    if((a.will_reload(mode==GAMEMODE_CHASECAR,force_melee)
-    ||(a.has_thrown_weapon && !a.extra_throwing_weapons.empty()))
+    ||(a.has_thrown_weapon && len(a.extra_throwing_weapons)))
     &&!force_melee)
    {
       if(a.will_reload(mode==GAMEMODE_CHASECAR,force_melee))
@@ -507,7 +505,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          strcpy(str,a.name);
          strcat(str," reloads.");
       }
-      else if(a.has_thrown_weapon && !a.extra_throwing_weapons.empty())
+      else if(a.has_thrown_weapon && len(a.extra_throwing_weapons))
       {
          a.ready_another_throwing_weapon();
          strcpy(str,a.name);
@@ -777,7 +775,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 4:
          case 0:w=BODYPART_LEG_LEFT; break;
          }
-      }while(((t.wound[w]&WOUND_CLEANOFF) || (t.wound[w]&WOUND_NASTYOFF)) && canhit==true);
+      } while(((t.wound[w]&WOUND_CLEANOFF) || (t.wound[w]&WOUND_NASTYOFF)) && canhit==true);
 
       if(t.animalgloss==ANIMALGLOSS_TANK)
          switch(w)
@@ -1598,8 +1596,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                  default: strcat(str," avoids the attack with no difficulty at all!"); break;
              }
          }
-         else
-             strcat(str," misses.");
+         else strcat(str," misses.");
          move(17,1);
          addstr(str, gamelog);
          gamelog.newline();
@@ -1612,12 +1609,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
    }
 
-   while (thrownweapons > 0)
+   for(;thrownweapons>0;thrownweapons--)
    {
-      if (a.has_thrown_weapon)
+      if(a.has_thrown_weapon)
          a.ready_another_throwing_weapon();
       a.drop_weapon(NULL);
-      thrownweapons--;
    }
 
    actual=1;
@@ -2606,7 +2602,7 @@ void adddeathmessage(Creature &cr)
          strcat(str," speaks these final words: ");
          addstr(str, gamelog);
          move(17,1);
-         switch (cr.align)
+         switch(cr.align)
          {
          case ALIGN_LIBERAL:
          case ALIGN_ELITELIBERAL:
@@ -2627,13 +2623,13 @@ void adddeathmessage(Creature &cr)
 /* pushes people into the current squad (used in a siege) */
 void autopromote(int loc)
 {
-   if(activesquad==NULL) return;
+   if(!activesquad) return;
 
    int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),libnum=0;
 
    if(partyalive==6) return;
 
-   for(int pl=0;pl<(int)pool.size();pl++)
+   for(int pl=0;pl<len(pool);pl++)
    {
       if(pool[pl]->location!=loc) continue;
       if(pool[pl]->alive&&pool[pl]->align==1) libnum++;
@@ -2650,7 +2646,7 @@ void autopromote(int loc)
 
       if(conf)
       {
-         for(int pl=0;pl<(int)pool.size();pl++)
+         for(int pl=0;pl<len(pool);pl++)
          {
             if(pool[pl]->location!=loc) continue;
             if(pool[pl]->alive&&pool[pl]->squadid==-1&&

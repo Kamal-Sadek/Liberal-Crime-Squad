@@ -1,27 +1,23 @@
 #include "externs.h"
 
-Loot::Loot(const LootType& seed, int number)
- : Item(seed,number)
-{
+Loot::Loot(const LootType& seed, int number) : Item(seed,number)
+{ }
 
-}
-
-Loot::Loot(const std::string& inputXml)
- : Item(inputXml)
+Loot::Loot(const std::string& inputXml) : Item(inputXml)
 {
    /*CMarkup xml;
-   xml.SetDoc (inputXml);
-   xml.FindElem ();
-   xml.IntoElem ();
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
 
-   while (xml.FindElem ())
+   while(xml.FindElem())
    {
-      std::string tag = xml.GetTagName ();
+      std::string tag=xml.GetTagName();
 
    }*/
 }
 
-string Loot::showXml () const
+string Loot::showXml() const
 {
    CMarkup xml;
    xml.AddElem("loot");
@@ -46,9 +42,9 @@ Loot* Loot::split(int number)
 
 bool Loot::merge(Item& i)
 {
-   if (is_stackable() && i.is_loot() && this->is_same_type(i))
+   if(is_stackable() && i.is_loot() && this->is_same_type(i))
    {
-      number_ += i.get_number();
+      this->increase_number(i.get_number());
       i.set_number(0);
       return true;
    }

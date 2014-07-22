@@ -77,7 +77,7 @@ void review()
       mvaddstr(1,0,"컴컴SQUAD NAME컴컴컴컴컴컴컴컴횸OCATION컴컴컴컴컴컴ACTIVITY컴컴컴컴컴컴컴컴컴컴�"); // 80 characters
 
       int n[8]={0,0,0,0,0,0,0,0},y=2;
-      for(int p=0;p<(int)pool.size();p++)
+      for(int p=0;p<len(pool);p++)
       {
          if(pool[p]->is_active_liberal()) n[0]++; // Active Liberals
          if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
@@ -87,16 +87,16 @@ void review()
          if(!pool[p]->alive) n[5]++; // The Dead
          if((pool[p]->dating || pool[p]->hiding) && pool[p]->alive) n[6]++; // Away
       }
-      for(int l=0;l<(int)location.size();l++)
+      for(int l=0;l<len(location);l++)
       {
          consolidateloot(location[l]->loot);
          if(!location[l]->siege.siege)
-            n[7]+=location[l]->loot.size(); // Review and Move Equipment
+            n[7]+=len(location[l]->loot); // Review and Move Equipment
       }
 
-      for(int p=page*19;p<(int)squad.size()+REVIEWMODENUM+1&&p<page*19+19;p++,y++)
+      for(int p=page*19;p<len(squad)+REVIEWMODENUM+1&&p<page*19+19;p++,y++)
       {
-         if(p<(int)squad.size())
+         if(p<len(squad))
          {
             if(activesquad==squad[p])set_color(COLOR_WHITE,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -124,42 +124,42 @@ void review()
                mvaddstr(y,51,str);
             }
          }
-         else if(p==(int)squad.size())
+         else if(p==len(squad))
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             mvaddstr(y,0,"1 - Active Liberals ("+tostring(n[0])+')');
          }
-         else if(p==(int)squad.size()+1)
+         else if(p==len(squad)+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             mvaddstr(y,0,"2 - Hostages ("+tostring(n[1])+')');
          }
-         else if(p==(int)squad.size()+2)
+         else if(p==len(squad)+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             mvaddstr(y,0,"3 - Hospital ("+tostring(n[2])+')');
          }
-         else if(p==(int)squad.size()+3)
+         else if(p==len(squad)+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             mvaddstr(y,0,"4 - Justice System ("+tostring(n[3])+')');
          }
-         else if(p==(int)squad.size()+4)
+         else if(p==len(squad)+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             mvaddstr(y,0,"5 - Sleepers ("+tostring(n[4])+')');
          }
-         else if(p==(int)squad.size()+5)
+         else if(p==len(squad)+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
             mvaddstr(y,0,"6 - The Dead ("+tostring(n[5])+')');
          }
-         else if(p==(int)squad.size()+6)
+         else if(p==len(squad)+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
             mvaddstr(y,0,"7 - Away ("+tostring(n[6])+')');
          }
-         else if(p==(int)squad.size()+7)
+         else if(p==len(squad)+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             mvaddstr(y,0,"8 - Review and Move Equipment ("+tostring(n[7])+')');
@@ -179,29 +179,29 @@ void review()
       int c=getkey();
 
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)squad.size()+REVIEWMODENUM) page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(squad)+REVIEWMODENUM) page++;
 
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>='a'&&c<='s')
       {
-         int sq=page*19+(int)(c-'a');
-         if(sq<(int)squad.size()&&sq>=0)
+         int sq=page*19+c-'a';
+         if(sq<len(squad)&&sq>=0)
          {
             if(squad[sq]==activesquad)assemblesquad(squad[sq]);
             else activesquad=squad[sq];
          }
       }
-      if(c>='1'&&c<='7')review_mode((int)(c-'1'));
-      if(c=='8')equipmentbaseassign();
+      if(c>='1'&&c<='7') review_mode(c-'1');
+      if(c=='8') equipmentbaseassign();
       if(c=='z')
       {
          assemblesquad(NULL);
-         if(activesquad==NULL&&squad.size()>0)
-            activesquad=squad[squad.size()-1];
+         if(!activesquad&&len(squad))
+            activesquad=squad[len(squad)-1];
       }
-      if(c=='t')squadlessbaseassign();
-      if(c=='u')promoteliberals();
+      if(c=='t') squadlessbaseassign();
+      if(c=='u') promoteliberals();
       if(c=='$')
       {
           char clearformess=false;
@@ -219,7 +219,7 @@ void review_mode(short mode)
    Creature *swap = NULL;
    int swapPos = 0;
 
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       switch(mode)
       {
@@ -254,7 +254,7 @@ void review_mode(short mode)
       }
    }
 
-   if(!temppool.size()) return;
+   if(!len(temppool)) return;
 
    sortliberals(temppool,activesortingchoice[reviewmodeenum_to_sortingchoiceenum(mode)]);
 
@@ -320,7 +320,7 @@ void review_mode(short mode)
       }
 
       int y=2;
-      for(int p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
+      for(int p=page*19;p<len(temppool)&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,y+'A'-2);addstr(" - ");
@@ -481,14 +481,14 @@ void review_mode(short mode)
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
          int p=page*19+(int)(c-'a');
-         if(p<(int)temppool.size())
+         if(p<len(temppool))
          {
             int page=0;
             //const int pagenum=2;
@@ -528,18 +528,18 @@ void review_mode(short mode)
 
                if(temppool[p]->align!=1) addstr("Press N to change this Automaton's Code Name");
                else addstr("N - Change Code Name      G - Fix Gender Label");
-               if(temppool.size()>1) addstr("    LEFT/RIGHT - View Others");
+               if(len(temppool)>1) addstr("    LEFT/RIGHT - View Others");
                move(24,0);
                addstr("Press any other key to continue the Struggle");
                addstr("    UP/DOWN  - More Info");
 
                int c=getkey();
 
-               if(temppool.size()>0&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
+               if(len(temppool)>1&&((c==KEY_LEFT)||(c==KEY_RIGHT)))
                {
                   int sx=1;
                   if(c==KEY_LEFT) sx=-1;
-                  p=(p+(int)temppool.size()+sx)%((int)temppool.size());
+                  p=(p+len(temppool)+sx)%len(temppool);
                   continue;
                }
 
@@ -743,7 +743,7 @@ void review_mode(short mode)
       // Reorder squad
       if(c=='z')
       {
-         if(temppool.size()<=1)break;
+         if(len(temppool)<=1) continue;
 
          move(22,0);
          addstr("                                                                                "); // 80 spaces
@@ -754,17 +754,17 @@ void review_mode(short mode)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("Choose squad member to replace ");
 
-         if(swap == NULL) {
+         if(!swap) {
             int c=getkey();
 
             if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
-            if(c<'a'||c>'s') break; // Not within correct range
+            if(c<'a'||c>'s') continue; // Not within correct range
 
             // Get first member to swap
-            int p=page*19+(int)(c-'a');
+            int p=page*19+c-'a';
 
-            if(p<(int)temppool.size()) swap=temppool[swapPos=p];
+            if(p<len(temppool)) swap=temppool[swapPos=p];
          }
          else { // non-null swap
             addstr(swap->name);
@@ -774,39 +774,39 @@ void review_mode(short mode)
 
             if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
 
-            if(c<'a'||c>'s') break; // Not within correct range
+            if(c<'a'||c>'s') continue; // Not within correct range
 
             Creature *swap2 = NULL;
 
-            int p=page*19+(int)(c-'a');
+            int p=page*19+c-'a';
 
-            if(p<(int)temppool.size() && temppool[p] != swap)
+            if(p<len(temppool) && temppool[p] != swap)
             {
                swap2=temppool[p];
 
-               for (int i = 0; i < (int)pool.size(); i++) {
-                  if (pool[i]->id == swap->id) {
+               for(int i = 0; i < len(pool); i++)
+                  if(pool[i]->id == swap->id)
+                  {
                      pool.erase(pool.begin() + i);
                      break;
                   }
-               }
 
-               for (int i = 0; i < (int)pool.size(); i++) {
-                  if (pool[i]->id == swap2->id) {
-                     pool.insert (pool.begin() + i + (swapPos < p), swap);
+               for(int i = 0; i < len(pool); i++)
+                  if(pool[i]->id == swap2->id)
+                  {
+                     pool.insert(pool.begin() + i + (swapPos < p), swap);
                      break;
                   }
-               }
 
-               temppool.erase (temppool.begin() + swapPos);
-               temppool.insert (temppool.begin() + p, swap);
+               temppool.erase(temppool.begin() + swapPos);
+               temppool.insert(temppool.begin() + p, swap);
 
                swap = NULL;
             }
          }
       }
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -828,22 +828,20 @@ void assemblesquad(squadst *cursquad)
    }
 
    vector<Creature *> temppool;
-   for(p=0;p<(int)pool.size();p++)
-   {
+   for(p=0;p<len(pool);p++)
       if(pool[p]->is_active_liberal() &&
-         (pool[p]->location==culloc || culloc==-1))
+        (pool[p]->location==culloc || culloc==-1))
       {
          temppool.push_back(pool[p]);
       }
-   }
 
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_ASSEMBLESQUAD]);
 
    //BUILD LIST OF BASES FOR EACH SQUAD IN CASE IT ENDS UP EMPTY
    //THEN WILL DROP ITS LOOT THERE
    vector<int> squadloc;
-   squadloc.resize(squad.size());
-   for(int sl=0;sl<(int)squad.size();sl++)
+   squadloc.resize(len(squad));
+   for(int sl=0;sl<len(squad);sl++)
    {
       squadloc[sl]=squad[sl]->squad[0]->location;
       if(squadloc[sl]!=-1) if(location[squadloc[sl]]->renting==RENTING_NOCONTROL)
@@ -870,7 +868,7 @@ void assemblesquad(squadst *cursquad)
       }
       else
       {
-         move(0,73-strlen(cursquad->name));
+         move(0,73-len(cursquad->name));
          addstr("Squad: ");
          addstr(cursquad->name);
       }
@@ -879,7 +877,7 @@ void assemblesquad(squadst *cursquad)
       addstr("컴컴CODE NAME컴컴컴컴컴컴SKILL컴횴EALTH컴컴컴컴컴횾ROFESSION컴컴컴컴컴컴컴컴컴컴"); // 80 characters
 
       int y=2;
-      for(p=page*19;p<(int)temppool.size()&&p<page*19+19;p++)
+      for(p=page*19;p<len(temppool)&&p<page*19+19;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,y+'A'-2);addstr(" - ");
@@ -952,12 +950,12 @@ void assemblesquad(squadst *cursquad)
       //PAGE UP
       if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool))page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)temppool.size())
+         int p=page*19+c-'a';
+         if(p<len(temppool))
          {
             char conf=1;
             if(cursquad->squad[0]!=NULL)
@@ -1041,8 +1039,8 @@ void assemblesquad(squadst *cursquad)
 			int c2=getkey();
 			if(c2>='a'&&c2<='s')
 			{
-				int p=page*19+(int)(c2-'a');
-            if(p<(int)temppool.size())
+				int p=page*19+c2-'a';
+            if(p<len(temppool))
             {
                //Create a temporary squad from which to view this character - even if they already have a squad.
                squadst *oldactivesquad = activesquad;
@@ -1129,7 +1127,7 @@ void assemblesquad(squadst *cursquad)
    }
 
    //NUKE ALL EMPTY SQUADS
-   for(int sq=squad.size()-1;sq>=0;sq--)
+   for(int sq=len(squad)-1;sq>=0;sq--)
    {
       hasmembers=false;
 
@@ -1155,14 +1153,14 @@ void squadlessbaseassign()
 {
    int p=0,l=0,page_lib=0,page_loc=0,selectedbase=0;
    vector<Creature *> temppool;
-   for(p=0;p<(int)pool.size();p++)if(pool[p]->is_active_liberal()&&pool[p]->squadid==-1)temppool.push_back(pool[p]);
+   for(p=0;p<len(pool);p++) if(pool[p]->is_active_liberal()&&pool[p]->squadid==-1) temppool.push_back(pool[p]);
 
-   if(temppool.size()==0)return;
+   if(!len(temppool)) return;
    sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN]);
 
    vector<int> temploc;
-   for(l=0;l<(int)location.size();l++)if(location[l]->renting>=0&&!location[l]->siege.siege)temploc.push_back(l);
-   if(temploc.size()==0)return;
+   for(l=0;l<len(location);l++) if(location[l]->renting>=0&&!location[l]->siege.siege) temploc.push_back(l);
+   if(!len(temploc)) return;
 
    while(true)
    {
@@ -1179,7 +1177,7 @@ void squadlessbaseassign()
       addstr("NEW BASE");
 
       int y=2;
-      for(p=page_lib*19;p<(int)temppool.size()&&p<page_lib*19+19;p++,y++)
+      for(p=page_lib*19;p<len(temppool)&&p<page_lib*19+19;p++,y++)
       {
          // Red name if location under siege
          if(temppool[p]->base == temppool[p]->location &&
@@ -1197,7 +1195,7 @@ void squadlessbaseassign()
       }
 
       y=2;
-      for(p=page_loc*9;p<(int)temploc.size()&&p<page_loc*9+9;p++,y++)
+      for(p=page_loc*9;p<len(temploc)&&p<page_loc*9+9;p++,y++)
       {
          int color = COLOR_WHITE;
 
@@ -1210,12 +1208,12 @@ void squadlessbaseassign()
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr(21,0,"Press a Letter to assign a Base.  Press a Number to select a Base.");
       mvaddstr(22,0,"Liberals must be moved in squads to transfer between cities.");
-      if(temppool.size()>19)
+      if(len(temppool)>19)
       {
          move(23,0);
          addpagestr();
       }
-      if(temploc.size()>9)
+      if(len(temploc)>9)
       {
          move(24,0);
          addstr(",. to view other Base pages.");
@@ -1225,22 +1223,22 @@ void squadlessbaseassign()
 
       int c=getkey();
 
-      //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_lib>0)page_lib--;
-      //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_lib+1)*19<(int)temppool.size())page_lib++;
+      //PAGE UP (people)
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page_lib>0) page_lib--;
+      //PAGE DOWN (people)
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page_lib+1)*19<len(temppool)) page_lib++;
 
-      //PAGE UP
-      if(c==','&&page_loc>0)page_loc--;
-      //PAGE DOWN
-      if(c=='.'&&(page_loc+1)*9<(int)temploc.size())page_loc++;
+      //PAGE UP (locations)
+      if(c==','&&page_loc>0) page_loc--;
+      //PAGE DOWN (locations)
+      if(c=='.'&&(page_loc+1)*9<len(temploc)) page_loc++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page_lib*19+(int)(c-'a');
+         int p=page_lib*19+c-'a';
 
          // Assign new base, IF the selected letter is a liberal, AND the Liberal is not under siege or in a different city
-         if(p<(int)temppool.size()
+         if(p<len(temppool)
             && !(temppool[p]->base == temppool[p]->location && location[temppool[p]->base]->siege.siege)
             && !(multipleCityMode && location[temppool[p]->base]->city != location[temploc[selectedbase]]->city))
          {
@@ -1249,8 +1247,8 @@ void squadlessbaseassign()
       }
       if(c>='1'&&c<='9')
       {
-         int p=page_loc*9+(int)(c-'1');
-         if(p<(int)temploc.size())selectedbase=p;
+         int p=page_loc*9+c-'1';
+         if(p<len(temploc)) selectedbase=p;
       }
       if(c=='t')
       {
@@ -1258,7 +1256,7 @@ void squadlessbaseassign()
          sortliberals(temppool,activesortingchoice[SORTINGCHOICE_BASEASSIGN],true);
       }
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -1340,11 +1338,11 @@ void promoteliberals()
    #define PAGELENGTH 19
    vector<Creature *> temppool;
    vector<int> level;
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
       if(pool[p]->alive&&pool[p]->align==1)
          temppool.push_back(pool[p]);
 
-   if(temppool.size()==0)return;
+   if(!len(temppool)) return;
 
    //SORT
    sortbyhire(temppool,level);
@@ -1368,7 +1366,7 @@ void promoteliberals()
 
       int y=2;
 
-      for(int p=page*PAGELENGTH;p<(int)temppool.size()&&p<page*PAGELENGTH+PAGELENGTH;p++)
+      for(int p=page*PAGELENGTH;p<len(temppool)&&p<page*PAGELENGTH+PAGELENGTH;p++)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddchar(y,0,y+'A'-2);addstr(" - ");
@@ -1376,7 +1374,7 @@ void promoteliberals()
          move(y,27);
          int p2 = 0;
 
-         for(p2=0;p2<(int)pool.size();p2++)
+         for(p2=0;p2<len(pool);p2++)
          {
             int p3 = 0;
             if(pool[p2]->alive==1&&pool[p2]->id==temppool[p]->hireid)
@@ -1384,7 +1382,7 @@ void promoteliberals()
                printname(*pool[p2]);
 
                move(y,54);
-               for(p3=0;p3<(int)pool.size();p3++)
+               for(p3=0;p3<len(pool);p3++)
                {
                   if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid)
                   {
@@ -1401,7 +1399,7 @@ void promoteliberals()
                break;
             }
          }
-         if(p2==(int)pool.size())addstr("<LCS Leader>");
+         if(p2==len(pool)) addstr("<LCS Leader>");
 
          move(y++,4+level[p]);
          printname(*temppool[p]);
@@ -1445,7 +1443,7 @@ void promoteliberals()
       addstr("Press a letter to promote a Liberal. You cannot promote Liberals in hiding.");
       move(23,0);
       addstr("Enlightened Liberals follow anyone. Seduced Liberals follow only their lover.");
-      if((int)temppool.size()>PAGELENGTH)
+      if(len(temppool)>PAGELENGTH)
       {
          move(24,0);
          addpagestr();
@@ -1454,23 +1452,23 @@ void promoteliberals()
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*PAGELENGTH<(int)temppool.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*PAGELENGTH<len(temppool)) page++;
 
       if(c>='a'&&c<='a'+PAGELENGTH)
       {
          int p=page*PAGELENGTH+(int)(c-'a');
          // *JDS* can't promote liberals in hiding OR loveslaves
-         if(p<(int)temppool.size()&&!temppool[p]->hiding&&!(temppool[p]->flag&CREATUREFLAG_LOVESLAVE))
+         if(p<len(temppool)&&!temppool[p]->hiding&&!(temppool[p]->flag&CREATUREFLAG_LOVESLAVE))
          {
-            for(int p2=0;p2<(int)pool.size();p2++)
+            for(int p2=0;p2<len(pool);p2++)
             {
                if(pool[p2]->alive==1&&pool[p2]->id==temppool[p]->hireid)
                {
                   addstr(pool[p2]->name);
 
-                  for(int p3=0;p3<(int)pool.size();p3++)
+                  for(int p3=0;p3<len(pool);p3++)
                   {
                      // Can't promote if new boss can't accept more subordinates
                      if(pool[p3]->alive==1&&pool[p3]->id==pool[p2]->hireid&&
@@ -1487,7 +1485,7 @@ void promoteliberals()
          }
       }
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
 
@@ -1498,7 +1496,7 @@ void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
    vector<Creature *> newpool;
    level.clear();
 
-   for(int i=temppool.size()-1;i>=0;i--)
+   for(int i=len(temppool)-1;i>=0;i--)
       if(temppool[i]->hireid==-1)
       {
          newpool.insert(newpool.begin(),temppool[i]);
@@ -1511,8 +1509,8 @@ void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
    {
       changed=false;
 
-      for(int i=0;i<(int)newpool.size();i++)
-         for(int j=temppool.size()-1;j>=0;j--)
+      for(int i=0;i<len(newpool);i++)
+         for(int j=len(temppool)-1;j>=0;j--)
             if(temppool[j]->hireid==newpool[i]->id)
             {
                newpool.insert(newpool.begin()+i+1,temppool[j]);
@@ -1523,6 +1521,6 @@ void sortbyhire(vector<Creature *> &temppool,vector<int> &level)
    } while(changed);
 
    temppool.clear();
-   for(int p=0;p<(int)newpool.size();p++)
+   for(int p=0;p<len(newpool);p++)
       temppool.push_back(newpool[p]);
 }

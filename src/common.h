@@ -46,29 +46,84 @@
    #define DIFF(x,y) ((x)<(y)?((y)-(x)):((x)-(y)))
 #endif
 
+#define BIT1  (1<<0 )
+#define BIT2  (1<<1 )
+#define BIT3  (1<<2 )
+#define BIT4  (1<<3 )
+#define BIT5  (1<<4 )
+#define BIT6  (1<<5 )
+#define BIT7  (1<<6 )
+#define BIT8  (1<<7 )
+#define BIT9  (1<<8 )
+#define BIT10 (1<<9 )
+#define BIT11 (1<<10)
+#define BIT12 (1<<11)
+#define BIT13 (1<<12)
+#define BIT14 (1<<13)
+#define BIT15 (1<<14)
+#define BIT16 (1<<15)
+#define BIT17 (1<<16)
+#define BIT18 (1<<17)
+#define BIT19 (1<<18)
+#define BIT20 (1<<19)
+#define BIT21 (1<<20)
+#define BIT22 (1<<21)
+#define BIT23 (1<<22)
+#define BIT24 (1<<23)
+#define BIT25 (1<<24)
+#define BIT26 (1<<25)
+#define BIT27 (1<<26)
+#define BIT28 (1<<27)
+#define BIT29 (1<<28)
+#define BIT30 (1<<29)
+#define BIT31 (1<<30)
+#define BIT32 (1<<31)
+
 /* r_num() and LCSrandom() are implemented in game.cpp */
 int r_num();
 int LCSrandom(int max);
 
+/* Determine size of vectors and any other container that implements the size() function.
+   This basically includes all types of containers except for the C++11 std::forward_list. */
+template <class Container> inline long len(const Container& x)
+{
+   return x.size();
+}
+
 /* Determine array size in pickrandom() and various functions throughout the code.
    Only works on actual arrays, not on vectors or other containers. */
-template <typename T,size_t N> inline int len(const T (&x)[N])
+template <typename T,size_t N> inline long len(const T (&x)[N])
 {
    return N;
 }
 
-/* Override of the prior function for null-terminated C-strings.
-   This override allows pickrandom() to pick a random character from a C-string. */
-template <size_t N> inline int len(const char (&x)[N])
+/* Override of the prior function for null-terminated C-strings as char arrays.
+   This override allows pickrandom() to pick a random character from a C-string we have as a char array. */
+template <size_t N> inline long len(const char (&x)[N])
 {
    return strlen(x);
 }
 
-/* Determine size of vectors and any other container that implements the size() function.
-   This basically includes all types of containers except for the C++11 std::forward_list. */
-template <class Container> inline int len(const Container& x)
+/* Override of the prior function for null-terminated C-strings as char pointers.
+   This override allows pickrandom() to pick a random character from a C-string we have as a char pointer. */
+inline long len(const char* x)
 {
-   return x.size();
+   return strlen(x);
+}
+
+/* Override for when it doesn't work with const in front of the char*
+   (compilers are weird about template function overrides) */
+inline long len(char* x)
+{
+   return strlen(x);
+}
+
+/* Pick a random element from a vector/deque/map/std::string/C++11 std::array/etc. (e.g. a random string from a vector of strings).
+   It works on any container class that implements the [] operator, size() function, and value_type typename.
+   This doesn't work if the vector/deque/map/std::string/C++11 std::array/etc. has zero elements. */
+template <class Container> inline typename Container::value_type& pickrandom(const Container& x)
+{
+   return const_cast<typename Container::value_type&>(x[LCSrandom(len(x))]);
 }
 
 /* Pick a random element from an array (e.g. a random string from an array of strings).
@@ -78,12 +133,18 @@ template <typename T,size_t N> inline T& pickrandom(const T (&x)[N])
    return const_cast<T&>(x[LCSrandom(len(x))]);
 }
 
-/* Pick a random element from a vector/deque/map/std::string/C++11 std::array/etc. (e.g. a random string from a vector of strings).
-   It works on any container class that implements the [] operator, size() function, and value_type typename.
-   This doesn't work if the vector/deque/map/std::string/C++11 std::array/etc. has zero elements. */
-template <class Container> inline typename Container::value_type& pickrandom(const Container& x)
+/* Pick a random element from a C-string.
+   Returns '\x0' (null character) for empty string. */
+inline char& pickrandom(const char* x)
 {
-   return const_cast<typename Container::value_type&>(x[LCSrandom(len(x))]);
+   return const_cast<char&>(x[LCSrandom(len(x))]);
+}
+
+/* Override for when it doesn't work with const in front of the char*
+   (compilers are weird about template function overrides) */
+inline char& pickrandom(char* x)
+{
+   return x[LCSrandom(len(x))];
 }
 
 /* Deletes and removes a specified pointer from a container. */
@@ -114,7 +175,7 @@ template <class Container> void delete_and_remove(Container& c1,int i1,Container
 /* Deletes and removes all pointers in a container. */
 template <class Container> void delete_and_clear(Container& c)
 {
-   while(!c.empty())
+   while(len(c))
    {
       delete c.back();
       c.pop_back();
@@ -124,8 +185,8 @@ template <class Container> void delete_and_clear(Container& c)
 /* Deletes and removes all pointers that 2 containers have in common. */
 template <class Container> void delete_and_clear(Container& c1,Container& c2)
 {
-   for(int i1=c1.size()-1;i1>=0;i1--)
-      for(int i2=c2.size()-1;i2>=0;i2--)
+   for(int i1=len(c1)-1;i1>=0;i1--)
+      for(int i2=len(c2)-1;i2>=0;i2--)
          if(c1[i1]==c2[i2]) delete_and_remove(c1,i1,c2,i2);
 }
 

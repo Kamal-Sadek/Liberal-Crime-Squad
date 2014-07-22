@@ -38,17 +38,17 @@ void fight_subdued()
    int hostagefreed=0;
    int stolen=0;
    // Police assess stolen goods in inventory
-   for(int l=0;l<(int)activesquad->loot.size();l++)
+   for(int l=0;l<len(activesquad->loot);l++)
       if(activesquad->loot[l]->is_loot())
          stolen++;
    for(p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(!activesquad->squad[p]) continue;
       activesquad->squad[p]->crimes_suspected[LAWFLAG_THEFT]+=stolen;
       capturecreature(*(activesquad->squad[p]));
       activesquad->squad[p]=NULL;
    }
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
       for(int w=0;w<BODYPARTNUM;w++)
          pool[p]->wound[w]&=~WOUND_BLEEDING;
 
@@ -83,7 +83,7 @@ void mode_site(short loc)
    sitealienate=0;
    sitecrime=0;
    initsite(*location[loc]);
-   sitestory=newsstory[newsstory.size()-1];
+   sitestory=newsstory[len(newsstory)-1];
    mode=GAMEMODE_SITE;
 
    if(!location[loc]->siege.siege)
@@ -104,7 +104,7 @@ void mode_site(short loc)
          locz++;
 
       //check for sleeper infiltration or map knowledge
-      for(int p=0;p<(int)pool.size();p++)
+      for(int p=0;p<len(pool);p++)
          if(pool[p]->base==loc || location[loc]->mapped)
          {
             //make entire site known
@@ -146,53 +146,45 @@ void mode_site(short loc)
          {
             firex=LCSrandom(MAPX),firey=LCSrandom(MAPY);
             firesstarted++;
-            levelmap[firex][firey][0].flag |= SITEBLOCK_FIRE_START;
+            levelmap[firex][firey][0].flag|=SITEBLOCK_FIRE_START;
 
-         } while(!(levelmap[firex][firey][0].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT)) &&
+         } while(!(levelmap[firex][firey][0].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT)) &&
             firesstarted<4);
       }
 
       do
       {
-         // Some bugs with degenarate spawn outside the map are occurring
+         // Some bugs with degenerate spawn outside the map are occurring
          // Unknown why, but hard-coding limits to spawn location should help
          //locx=LCSrandom(MAPX);
          //locy=maxy-LCSrandom(3);
          locx = MAPX/2+LCSrandom(25)-12;
          locy = 15-LCSrandom(3);
-         //if(locy<3)locy=3;
+         //if(locy<3) locy=3;
          locz=0;
-      }while(levelmap[locx][locy][locz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|
-         SITEBLOCK_FIRE_START|SITEBLOCK_FIRE_PEAK|SITEBLOCK_FIRE_END));
+      } while(levelmap[locx][locy][locz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|
+              SITEBLOCK_FIRE_START|SITEBLOCK_FIRE_PEAK|SITEBLOCK_FIRE_END));
 
       //PLACE LOOT
-      int lootnum=location[loc]->loot.size();
-      if(lootnum>10)lootnum=10;
+      int lootnum=len(location[loc]->loot);
+      if(lootnum>10) lootnum=10;
 
       int lx,ly,lz;
       for(int l=0;l<lootnum;l++)
       {
-         do
-         {
-            lx=LCSrandom(MAPX);
-            ly=LCSrandom(MAPY);
-            lz=0;
-         }while(levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT));
+         do lx=LCSrandom(MAPX),ly=LCSrandom(MAPY),lz=0;
+         while(levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT));
          levelmap[lx][ly][lz].flag|=SITEBLOCK_LOOT;
       }
 
       //PLACE TRAPS
-      if(location[loc]->compound_walls & COMPOUND_TRAPS)
+      if(location[loc]->compound_walls&COMPOUND_TRAPS)
       {
          int trapnum=30;
          for(int t=0;t<trapnum;t++)
          {
-            do
-            {
-               lx=LCSrandom(MAPX);
-               ly=LCSrandom(MAPY);
-               lz=0;
-            }while(levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT|SITEBLOCK_LOOT));
+            do lx=LCSrandom(MAPX),ly=LCSrandom(MAPY),lz=0;
+            while(levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT|SITEBLOCK_LOOT));
             levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_TRAP;
          }
       }
@@ -208,9 +200,9 @@ void mode_site(short loc)
             ly=LCSrandom(8);
             lz=0;
             count--;
-            if(count==0)break;
-         }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
-               (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
+            if(count==0) break;
+         } while((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
+                 (levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
 
          levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_UNIT;
       }
@@ -276,21 +268,15 @@ void mode_site()
       {
          talkers=0;
          for(int e=0;e<ENCMAX;e++)
-         {
             if(encounter[e].exists)
-            {
-               if(encounter[e].enemy()&&(encounter[e].cantbluff==0||encounter[e].animalgloss==ANIMALGLOSS_ANIMAL))talkers++;
-            }
-         }
+               if(encounter[e].enemy()&&(encounter[e].cantbluff==0||encounter[e].animalgloss==ANIMALGLOSS_ANIMAL)) talkers++;
       }
       int libnum=0;
-      for(p=0;p<(int)pool.size();p++)
-      {
+      for(p=0;p<len(pool);p++)
          if(pool[p]->align==1&&
             pool[p]->alive&&
             pool[p]->location==cursite&&
-            !(pool[p]->flag & CREATUREFLAG_SLEEPER))libnum++;
-      }
+          !(pool[p]->flag&CREATUREFLAG_SLEEPER)) libnum++;
 
       // Let the squad stop stressing out over the encounter if there are no enemies this round
       if(!enemy) encounter_timer=0;
@@ -383,10 +369,8 @@ void mode_site()
          move(13,1);
          addstr("0 - Show the squad's Liberal status");
 
-         if(groundloot.size()>0||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
-         {
+         if(len(groundloot)||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT))
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-         }
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(9,17);
          addstr("G - Get Loot");
@@ -403,17 +387,17 @@ void mode_site()
          move(10,32);
          addstr("S - Wait");
 
-         if(!enemy||!sitealarm)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(!enemy||!sitealarm) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(10,42);
          addstr("L - Reload");
 
-         if(enemy)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(enemy) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(13,42);
          addstr("K - Kidnap");
 
-         if(talkers)set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(talkers) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(14,17);
          addstr("T - Talk");
@@ -431,10 +415,7 @@ void mode_site()
                int i;
                for(i=0;i<6;i++)
                {
-                  if(!activesquad->squad[i])
-                  {
-                     i=6;
-                  }
+                  if(!activesquad->squad[i]) i=6;
                   else if(activesquad->squad[i]->get_weapon().can_graffiti())
                   {
                      set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -442,7 +423,7 @@ void mode_site()
                      break;
                   }
                }
-               if(i==6)set_color(COLOR_BLACK,COLOR_BLACK,1);
+               if(i==6) set_color(COLOR_BLACK,COLOR_BLACK,1);
             }
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
          }
@@ -1239,7 +1220,7 @@ void mode_site()
             mapshowing=true;
          }
 
-         if(c=='g'&&(groundloot.size()>0||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
+         if(c=='g'&&(len(groundloot)||(levelmap[locx][locy][locz].flag&SITEBLOCK_LOOT)))
          {
             bool tookground=0;
 
@@ -1253,33 +1234,23 @@ void mode_site()
                   int lcount=1; //1 FROM THE ONE DELETED ABOVE
 
                   for(int x=0;x<MAPX;x++)
-                  {
                      for(int y=0;y<MAPY;y++)
-                     {
                         for(int z=0;z<MAPZ;z++)
-                        {
                            if(levelmap[x][y][z].flag&SITEBLOCK_LOOT)
-                           {
                               lcount++;
-                           }
-                        }
-                     }
-                  }
 
-                  int lplus=location[cursite]->loot.size()/lcount;
-                  if(lcount==1)lplus=location[cursite]->loot.size();
+                  int lplus=len(location[cursite]->loot)/lcount;
+                  if(lcount==1) lplus=len(location[cursite]->loot);
 
                   Item *it;
                   int b;
 
-                  while(lplus>0)
+                  for(;lplus>0;lplus--)
                   {
-                     b=LCSrandom(location[cursite]->loot.size());
+                     b=LCSrandom(len(location[cursite]->loot));
                      it=location[cursite]->loot[b];
                      activesquad->loot.push_back(it);
-                     location[cursite]->loot.erase(location[cursite]->loot.begin() + b);
-
-                     lplus--;
+                     location[cursite]->loot.erase(location[cursite]->loot.begin()+b);
                   }
                }
                else
@@ -1492,7 +1463,7 @@ void mode_site()
                                          "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16"};
                      string rndArmors[] = {"ARMOR_CHEAPSUIT", "ARMOR_CLOTHES", "ARMOR_TRENCHCOAT", "ARMOR_WORKCLOTHES",
                                            "ARMOR_SECURITYUNIFORM", "ARMOR_CIVILLIANARMOR", "ARMOR_ARMYARMOR", "ARMOR_HEAVYARMOR"};
-                     switch (LCSrandom(3))
+                     switch(LCSrandom(3))
                      {
                      case 0:
                         newWeaponType=pickrandom(rndWeps);
@@ -1510,13 +1481,13 @@ void mode_site()
                      }
                      break;
                   }
-                  item = NULL;
-                  if(!newLootType.empty())
+                  item=NULL;
+                  if(len(newLootType))
                   {
                      item=new Loot(*loottype[getloottype(newLootType)]);
                      activesquad->loot.push_back(item);
                   }
-                  if(!newArmorType.empty())
+                  if(len(newArmorType))
                   {
                      int quality=1;
                      if(!LCSrandom(3))
@@ -1528,7 +1499,7 @@ void mode_site()
                      activesquad->loot.push_back(item);
                   }
 
-                  if(!newWeaponType.empty())
+                  if(len(newWeaponType))
                   {
                      Weapon *w=new Weapon(*weapontype[getweapontype(newWeaponType)]);
                      if(w->uses_ammo())
@@ -1539,7 +1510,7 @@ void mode_site()
                            w->get_itemtypename() == "WEAPON_FLAMETHROWER") //Make weapon property? -XML
                         {
                            vector<int> cti;
-                           for(int ct=0; ct<(int)cliptype.size(); ++ct)
+                           for(int ct=0;ct<len(cliptype);ct++)
                               if(w->acceptable_ammo(*cliptype[ct]))
                                  cti.push_back(ct);
                            Clip c(*cliptype[pickrandom(cti)]);
@@ -1567,10 +1538,8 @@ void mode_site()
             }
 
             //MAKE GROUND LOOT INTO MISSION LOOT
-            for(int l=0;l<(int)groundloot.size();l++)
-            {
+            for(int l=0;l<len(groundloot);l++)
                activesquad->loot.push_back(groundloot[l]);
-            }
 
             groundloot.clear();
 
@@ -1809,7 +1778,7 @@ void mode_site()
                      }
                   }
                   //Clear all bleeding and prison escape flags
-                  for(p=0;p<(int)pool.size();p++)
+                  for(p=0;p<len(pool);p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
                      for(int w=0;w<BODYPARTNUM;w++)
@@ -1930,7 +1899,7 @@ void mode_site()
                      activesquad->squad[p]->prisoner=NULL;
                   }
                }
-               for(p=0;p<(int)pool.size();p++)
+               for(p=0;p<len(pool);p++)
                {
                   pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
                   for(int w=0;w<BODYPARTNUM;w++)
@@ -1985,7 +1954,7 @@ void mode_site()
                      unitx.push_back(x),unity.push_back(y),unitz.push_back(z);
 
                int sx=0,sy=0,sz=0;
-               for(u=0;u<(int)unitx.size();u++)
+               for(u=0;u<len(unitx);u++)
                {
                   // don't leave tile if player is here
                   if(unitx[u]==locx&&unity[u]==locy&&unitz[u]==locz) continue;
@@ -2052,7 +2021,7 @@ void mode_site()
                   if(levelmap[x][y][z].siegeflag&SIEGEFLAG_HEAVYUNIT)
                      unitx.push_back(x),unity.push_back(y),unitz.push_back(z);
 
-               for(u=0;u<unitx.size();u++)
+               for(u=0;u<len(unitx);u++)
                {
                   sz=0;
                   switch(LCSrandom(4))
@@ -2096,7 +2065,7 @@ void mode_site()
                // End Heavy Units
                */
 
-               for(u=0;u<(int)unitx.size();u++)
+               for(u=0;u<len(unitx);u++)
                {
                   sz=0;
                   switch(LCSrandom(4))
@@ -2145,8 +2114,8 @@ void mode_site()
                      {
                         lx=LCSrandom(7)+(MAPX/2)-3,ly=LCSrandom(5),lz=0,count--;
                         if(count==0) break;
-                     }while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
-                           (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
+                     } while((levelmap[lx][ly][lz].flag & (SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
+                             (levelmap[lx][ly][lz].siegeflag & (SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
                      levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_UNIT;
                   }
 
@@ -2162,8 +2131,8 @@ void mode_site()
                         {
                            lx=LCSrandom(7)+(MAPX/2)-3,ly=LCSrandom(5),lz=0,count--;
                            if(count==0) break;
-                        }while((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
-                              (levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
+                        } while((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
+                                (levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
                         levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
                      }
                   }
@@ -2231,7 +2200,7 @@ void mode_site()
                         activesquad->squad[p]->prisoner=NULL;
                      }
                   }
-                  for(p=0;p<(int)pool.size();p++)
+                  for(p=0;p<len(pool);p++)
                   {
                      pool[p]->flag&=~CREATUREFLAG_JUSTESCAPED;
                      for(int w=0;w<BODYPARTNUM;w++)
@@ -2561,7 +2530,7 @@ void resolvesite()
       // Out sleepers
       if(location[cursite]->renting==RENTING_CCS)
       {
-         for(int p=0;p<(int)pool.size();p++)
+         for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->flag&CREATUREFLAG_SLEEPER &&
                pool[p]->location==cursite)

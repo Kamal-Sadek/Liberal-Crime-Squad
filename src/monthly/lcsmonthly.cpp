@@ -95,36 +95,42 @@ void guardianupdate(char size, char power)
 /* monthly - lets the player choose a special edition for the guardian */
 int choosespecialedition(char &clearformess)
 {
+   //Temporary, maybe put special edition definition into an xml file. -XML
+	static const string document_types[] =
+	{  // This list MUST be in alphabetical order for binary_search() to work right
+      "LOOT_AMRADIOFILES",
+      "LOOT_CABLENEWSFILES",
+      "LOOT_CCS_BACKERLIST",
+      "LOOT_CEOLOVELETTERS",
+      "LOOT_CEOPHOTOS",
+      "LOOT_CEOTAXPAPERS",
+      "LOOT_CORPFILES",
+      "LOOT_INTHQDISK",
+      "LOOT_JUDGEFILES",
+      "LOOT_POLICERECORDS",
+      "LOOT_PRISONFILES",
+      "LOOT_RESEARCHFILES",
+      "LOOT_SECRETDOCUMENTS"
+	};
+	static const vector<string> dox(document_types,document_types+len(document_types));
+
    int page=0;
 
    //char havetype[LOOTNUM];
    //for(int l=0;l<LOOTNUM;l++)havetype[l]=0;
-   vector<bool> havetype(loottype.size(),false);
+   vector<bool> havetype(len(loottype),false);
    vector<int> loottypeindex;
 
    //FIND ALL LOOT TYPES
-   for(int loc=0;loc<(int)location.size();loc++)
+   for(int loc=0;loc<len(location);loc++)
    {
-      if(location[loc]->renting==RENTING_NOCONTROL)continue;
+      if(location[loc]->renting==RENTING_NOCONTROL) continue;
 
       consolidateloot(location[loc]->loot);
-      for(int l=0;l<(int)location[loc]->loot.size();l++)
+      for(int l=0;l<len(location[loc]->loot);l++)
       {
-         if(!location[loc]->loot[l]->is_loot())continue;
-         //Temporary, maybe put special edition definition into an xml file. -XML
-         if(location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOPHOTOS"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_CCS_BACKERLIST"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_PRISONFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_CABLENEWSFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_AMRADIOFILES"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_SECRETDOCUMENTS"&&
-            location[loc]->loot[l]->get_itemtypename()!="LOOT_POLICERECORDS")continue;
+         if(!location[loc]->loot[l]->is_loot()) continue;
+         if(!binary_search(dox.begin(),dox.end(),location[loc]->loot[l]->get_itemtypename())) continue;
 
          if(!havetype[getloottype(location[loc]->loot[l]->get_itemtypename())])
          {
@@ -133,26 +139,13 @@ int choosespecialedition(char &clearformess)
          }
       }
    }
-   for(int sq=0;sq<(int)squad.size();sq++)
+   for(int sq=0;sq<len(squad);sq++)
    {
       consolidateloot(squad[sq]->loot);
-      for(int l=0;l<(int)squad[sq]->loot.size();l++)
+      for(int l=0;l<len(squad[sq]->loot);l++)
       {
-         if(!squad[sq]->loot[l]->is_loot())continue;
-
-         if(squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOPHOTOS"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOLOVELETTERS"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CEOTAXPAPERS"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_INTHQDISK"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CCS_BACKERLIST"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CORPFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_JUDGEFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_RESEARCHFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_PRISONFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_CABLENEWSFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_AMRADIOFILES"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_SECRETDOCUMENTS"&&
-            squad[sq]->loot[l]->get_itemtypename()!="LOOT_POLICERECORDS")continue;
+         if(!squad[sq]->loot[l]->is_loot()) continue;
+         if(!binary_search(dox.begin(),dox.end(),squad[sq]->loot[l]->get_itemtypename())) continue;
 
          if(!havetype[getloottype(squad[sq]->loot[l]->get_itemtypename())])
          {
@@ -162,7 +155,7 @@ int choosespecialedition(char &clearformess)
       }
    }
 
-   if(loottypeindex.size()==0)return -1;
+   if(!len(loottypeindex)) return -1;
 
    clearformess=1;
 
@@ -178,7 +171,7 @@ int choosespecialedition(char &clearformess)
       int x=1,y=10;
       char str[200];
 
-      for(int l=page*18;l<(int)loottypeindex.size()&&l<page*18+18;l++)
+      for(int l=page*18;l<len(loottypeindex)&&l<page*18+18;l++)
       {
          str[0]=l-page*18+'A';
          str[1]='\x0';
@@ -189,11 +182,7 @@ int choosespecialedition(char &clearformess)
          addstr(str);
 
          x+=26;
-         if(x>53)
-         {
-            x=1;
-            y++;
-         }
+         if(x>53) x=1,y++;
       }
 
       //PAGE UP
@@ -203,7 +192,7 @@ int choosespecialedition(char &clearformess)
          addprevpagestr();
       }
       //PAGE DOWN
-      if((page+1)*18<(int)loottype.size())
+      if((page+1)*18<len(loottype))
       {
          move(17,53);
          addnextpagestr();
@@ -218,36 +207,36 @@ int choosespecialedition(char &clearformess)
       {
          int slot=c-'a'+page*18;
 
-         if(slot>=0&&slot<(int)loottypeindex.size())
+         if(slot>=0&&slot<len(loottypeindex))
          {
             //DELETE THE ITEM
-            for(int loc=0;loc<(int)location.size();loc++)
+            for(int loc=0;loc<len(location);loc++)
             {
-               if(location[loc]->renting==RENTING_NOCONTROL)continue;
+               if(location[loc]->renting==RENTING_NOCONTROL) continue;
 
-               for(int l=0;l<(int)location[loc]->loot.size();l++)
+               for(int l=0;l<len(location[loc]->loot);l++)
                {
-                  if(!location[loc]->loot[l]->is_loot())continue;
+                  if(!location[loc]->loot[l]->is_loot()) continue;
 
                   if(getloottype(location[loc]->loot[l]->get_itemtypename())==loottypeindex[slot])
                   {
                      location[loc]->loot[l]->decrease_number(1);
-                     if(location[loc]->loot[l]->get_number()==0)
+                     if(location[loc]->loot[l]->empty())
                      	delete_and_remove(location[loc]->loot,l);
                      return loottypeindex[slot];
                   }
                }
             }
-            for(int sq=0;sq<(int)squad.size();sq++)
+            for(int sq=0;sq<len(squad);sq++)
             {
-               for(int l=0;l<(int)squad[sq]->loot.size();l++)
+               for(int l=0;l<len(squad[sq]->loot);l++)
                {
-                  if(!squad[sq]->loot[l]->is_loot())continue;
+                  if(!squad[sq]->loot[l]->is_loot()) continue;
 
                   if(getloottype(squad[sq]->loot[l]->get_itemtypename())==loottypeindex[slot])
                   {
                      squad[sq]->loot[l]->decrease_number(1);
-                     if(squad[sq]->loot[l]->get_number()==0)
+                     if(squad[sq]->loot[l]->empty())
                         delete_and_remove(squad[sq]->loot,l);
                      return loottypeindex[slot];
                   }
@@ -259,15 +248,12 @@ int choosespecialedition(char &clearformess)
          }
       }
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
-      {
-         return -1;
-      }
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return -1;
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<(int)loottype.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*18<len(loottype)) page++;
 
    }
 
@@ -741,7 +727,7 @@ void fundreport(char &clearformess)
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_GREEN,COLOR_BLACK,0);
                num="+$"+tostring(ledger.income[i]);
-               mvaddstr(y,60-num.length(),num);
+               mvaddstr(y,60-len(num),num);
                if(ledger.dailyIncome[i])
                   num=" (+$"+tostring(ledger.dailyIncome[i])+")";
                else
@@ -749,7 +735,7 @@ void fundreport(char &clearformess)
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   num=" ($0)";
                }
-               mvaddstr(y,73-num.length(),num);
+               mvaddstr(y,73-len(num),num);
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                switch(i)
                {
@@ -790,7 +776,7 @@ void fundreport(char &clearformess)
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_RED,COLOR_BLACK,0);
                num="-$"+tostring(ledger.expense[i]);
-               mvaddstr(y,60-num.length(),num);
+               mvaddstr(y,60-len(num),num);
                if(ledger.dailyExpense[i])
                   num=" (-$"+tostring(ledger.dailyExpense[i])+")";
                else
@@ -798,7 +784,7 @@ void fundreport(char &clearformess)
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
                   num=" ($0)";
                }
-               mvaddstr(y,73-num.length(),num);
+               mvaddstr(y,73-len(num),num);
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                switch(i)
                {
@@ -842,7 +828,7 @@ void fundreport(char &clearformess)
             else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
             else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
             num+="$"+tostring(abs(totalmoney));
-            mvaddstr(y,60-num.length(),num);
+            mvaddstr(y,60-len(num),num);
             if(dailymoney>0)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -858,7 +844,7 @@ void fundreport(char &clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                num=" ($0)";
             }
-            mvaddstr(y,73-num.length(),num);
+            mvaddstr(y,73-len(num),num);
          }
 
          if(++y>=23) y=2,numpages++;
@@ -868,8 +854,8 @@ void fundreport(char &clearformess)
       if (y+7>=23) y=2, numpages++; //Start a new page if the liquid assets won't fit on the rest of the current page.
       // tally up liquid assets
       long weaponValue=0,armorValue=0,clipValue=0,lootValue=0;
-      for(int j=0;j<(int)location.size();j++)
-         for(int i=0;i<(int)location[j]->loot.size();i++)
+      for(int j=0;j<len(location);j++)
+         for(int i=0;i<len(location[j]->loot);i++)
          {
             Item* item=location[j]->loot[i];
             if(item->is_weapon()) weaponValue+=item->get_fencevalue()*item->get_number();
@@ -885,7 +871,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Cash");
          set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
          num="$"+tostring(ledger.get_funds());
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       if(++y>=23) y=2,numpages++;
@@ -897,7 +883,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Tools and Weapons");
          set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
          num="$"+tostring(weaponValue);
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       if(++y>=23) y=2,numpages++;
@@ -909,7 +895,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Clothing and Armor");
          set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
          num="$"+tostring(armorValue);
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       if(++y>=23) y=2,numpages++;
@@ -921,7 +907,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Ammunition");
          set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
          num="$"+tostring(clipValue);
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       if(++y>=23) y=2,numpages++;
@@ -933,7 +919,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Miscellaneous Loot");
          set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
          num="$"+tostring(lootValue);
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       if(++y>=23) y=2,numpages++;
@@ -949,7 +935,7 @@ void fundreport(char &clearformess)
          long netWorth=ledger.get_funds()+weaponValue+armorValue+clipValue+lootValue;
          set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
          num="$"+tostring(netWorth);
-         mvaddstr(y,60-num.length(),num);
+         mvaddstr(y,60-len(num),num);
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
