@@ -164,6 +164,59 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          return DATERESULT_MEETTOMORROW;
       }
    }
+   else if (aroll == troll)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(y++,0);
+      addstr(d.date[e]->name, gamelog);
+      addstr(" seemed to have fun, but left early", gamelog);
+      switch (LCSrandom(4))
+      {
+         case 0:
+         addstr(" to wash their hair.", gamelog);
+         break;
+         case 1:
+         addstr(" due to an allergy attack.", gamelog);
+         break;
+         case 2:
+         addstr(" due to an early meeting tomorrow.", gamelog);
+         break;
+         case 3:
+         addstr(" to catch their favourite TV show.", gamelog);
+         break;
+         case 4:
+         addstr(" to take care of their pet", gamelog);
+         switch (LCSrandom(3 + (law[LAW_ANIMALRESEARCH]==-2? 1:0)  ))
+         {
+            case 0:
+            addstr(" cat.", gamelog);
+            break;
+            case 1:
+            addstr(" dog.", gamelog);
+            break;
+            case 2:
+            addstr(" fish.", gamelog);
+            break;
+            case 3:
+            addstr(" six-legged pig.", gamelog);
+            break;
+         }
+         break;
+         case 5:
+         addstr(" to go to a birthday party.", gamelog);
+         break;
+         case 6:
+         addstr(" to recharge their cell phone.", gamelog);
+         break;
+      }
+      move(y++,0);
+      addstr("They'll meet again tomorrow.", gamelog);
+      gamelog.nextMessage();
+
+      getkey();
+
+      return DATERESULT_MEETTOMORROW;
+   }
    else
    {
       //WISDOM POSSIBLE INCREASE
