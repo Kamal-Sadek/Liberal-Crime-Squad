@@ -454,10 +454,10 @@ void initsite(Location &loc)
          freex=LCSrandom(MAPX-4)+2,freey=LCSrandom(MAPY-4)+2;
          if(freex>=(MAPX>>1)-2&&freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
          count--;
-      }while((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
-              levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-              levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
-              levelmap[freex][freey][freez].special!=-1) && count>0);
+      } while((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+               levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+               levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+               levelmap[freex][freey][freez].special!=-1) && count>0);
       switch(loc.type)
       {
          case SITE_INDUSTRY_NUCLEAR:          levelmap[freex][freey][freez].special=SPECIAL_NUCLEAR_ONOFF;         break;
@@ -478,10 +478,10 @@ void initsite(Location &loc)
          freex=LCSrandom(MAPX-4)+2,freey=LCSrandom(MAPY-4)+2;
          if(freex>=(MAPX>>1)-2&&freex<=(MAPX>>1)+2)freey=LCSrandom(MAPY-6)+4;
          count--;
-      }while((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
-              levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
-              levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
-              levelmap[freex][freey][freez].special!=-1) && count>0);
+      } while((levelmap[freex][freey][freez].flag & SITEBLOCK_DOOR  ||
+               levelmap[freex][freey][freez].flag & SITEBLOCK_BLOCK ||
+               levelmap[freex][freey][freez].flag & SITEBLOCK_LOOT  ||
+               levelmap[freex][freey][freez].special!=-1) && count>0);
       switch(loc.type)
       {
       case SITE_GOVERNMENT_COURTHOUSE: levelmap[freex][freey][freez].special=SPECIAL_COURTHOUSE_JURYROOM; break;
@@ -547,7 +547,7 @@ void initsite(Location &loc)
             }
          }
       }
-   }while(acted);
+   } while(acted);
    //ADD LOOT
    seed=oldseed;
    for(x=2;x<MAPX-2;x++)
@@ -581,7 +581,7 @@ void initsite(Location &loc)
    if(loc.type==SITE_OUTDOOR_PUBLICPARK  )graffitiquota=5;
    if(loc.type==SITE_BUSINESS_CRACKHOUSE )graffitiquota=30;
    if(loc.type==SITE_RESIDENTIAL_TENEMENT)graffitiquota=10;
-   for(int i=0;i<(int)loc.changes.size();i++)
+   for(int i=0;i<len(loc.changes);i++)
    {
       int x=loc.changes[i].x,y=loc.changes[i].y,z=loc.changes[i].z;
       switch(loc.changes[i].flag)
@@ -692,7 +692,7 @@ void knowmap(int locx,int locy,int locz)
 // Builds a site based on the name provided
 void build_site(std::string name)
 {
-   for(int i=0;i<(int)sitemaps.size();i++)
+   for(int i=0;i<len(sitemaps);i++)
       if(*sitemaps[i] == name)
       {
          sitemaps[i]->build();
@@ -741,8 +741,8 @@ void configSiteMap::configure(const std::string& command, const std::string& val
 
 void configSiteMap::build()
 {
-   if(parent.length())build_site(parent);
-   for(int step=0;step<(int)commands.size();step++)commands[step]->build();
+   if(len(parent)) build_site(parent);
+   for(int step=0;step<len(commands);step++) commands[step]->build();
 }
 
 configSiteTile::configSiteTile(const std::string& value)
@@ -1008,10 +1008,10 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
             i = unsecure.erase(i);
       }
       // Place stairs in secure area if possible, otherwise unsecure area.
-      if(secure.size() > 0)
+      if(len(secure))
       {
-         int choice=LCSrandom(secure.size());
-         x=secure[choice].first,y=secure[choice].second,z=zi-1;
+         std::pair<int,int> &choice=pickrandom(secure);
+         x=choice.first,y=choice.second,z=zi-1;
          // The tile receiving the stairs down will not eligible for stairs
          // up later.
          for(j = secure_above.begin(); j != secure_above.end(); ++j)
@@ -1021,10 +1021,10 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
                break;
             }
       }
-      else if(unsecure.size() > 0)
+      else if(len(unsecure))
       {
-         int choice=LCSrandom(unsecure.size());
-         x=unsecure[choice].first,y=unsecure[choice].second,z=zi-1;
+         std::pair<int,int> &choice=pickrandom(unsecure);
+         x=choice.first,y=choice.second,z=zi-1;
          // The tile receiving the stairs down will not eligible for stairs
          // up later.
          for(j = unsecure_above.begin(); j != unsecure_above.end(); ++j)
@@ -1209,7 +1209,7 @@ void configSiteUnique::build()
             }
          }
       }
-   }while(acted);
+   } while(acted);
    // Place unique
    for(x=xstart;x<=xend;x++)
    for(y=ystart;y<=yend;y++)
@@ -1221,15 +1221,15 @@ void configSiteUnique::build()
             secure.push_back(coordinates(x,y,z));
          else unsecure.push_back(coordinates(x,y,z));
       }
-   if(secure.size())
+   if(len(secure))
    {
-      int choice=LCSrandom(secure.size());
-      x=secure[choice].x,y=secure[choice].y,z=secure[choice].z;
+      coordinates &choice=pickrandom(secure);
+      x=choice.x,y=choice.y,z=choice.z;
    }
-   else if(unsecure.size())
+   else if(len(unsecure))
    {
-      int choice=LCSrandom(unsecure.size());
-      x=unsecure[choice].x,y=unsecure[choice].y,z=unsecure[choice].z;
+      coordinates &choice=pickrandom(unsecure);
+      x=choice.x,y=choice.y,z=choice.z;
    }
    else return;
    levelmap[x][y][z].special=unique;

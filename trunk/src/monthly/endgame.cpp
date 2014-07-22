@@ -108,7 +108,7 @@ void tossjustices(char canseethings)
       //BLAST JUSTICES
       for(int j=0;j<9;j++) if(court[j]!=2)
       {
-         do generate_name(courtname[j]); while(strlen(courtname[j])>20);
+         do generate_name(courtname[j]); while(len(courtname[j])>20);
          court[j]=2;
       }
 

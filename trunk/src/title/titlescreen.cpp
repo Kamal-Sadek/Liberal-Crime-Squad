@@ -39,18 +39,18 @@ void mode_title()
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"Liberal Crime Squad");
-   move(4,39-((strlen(str)-1)>>1));
+   move(4,39-((len(str)-1)>>1));
    addstr(str);
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"Inspired by the 1983 version of Oubliette");
-   move(6,39-((strlen(str)-1)>>1));
+   move(6,39-((len(str)-1)>>1));
    addstr(str);
 
    if(loaded)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(8,39-((strlen(slogan)-1)>>1));
+      move(8,39-((len(slogan)-1)>>1));
       addstr(slogan);
 
       move(9,10);
@@ -81,25 +81,25 @@ void mode_title()
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"v3.9 Copyright (C) 2002-4, Tarn Adams");
-   move(13,39-((strlen(str)-1)>>1));
+   move(13,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"A Bay 12 Games Production");
-   move(14,39-((strlen(str)-1)>>1));
+   move(14,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"www.bay12games.com");
-   move(15,39-((strlen(str)-1)>>1));
+   move(15,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
-   move(17,39-((strlen(str)-1)>>1));
+   move(17,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"sourceforge.net/projects/lcsgame");
-   move(18,39-((strlen(str)-1)>>1));
+   move(18,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press ESC now to quit.  Quitting later causes your progress to be saved.");
-   move(20,39-((strlen(str)-1)>>1));
+   move(20,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press any other key to pursue your Liberal Agenda!");
-   move(22,39-((strlen(str)-1)>>1));
+   move(22,39-((len(str)-1)>>1));
    addstr(str);
    move(24,79);
    addstr("+");

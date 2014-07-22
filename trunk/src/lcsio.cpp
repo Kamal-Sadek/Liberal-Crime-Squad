@@ -39,19 +39,18 @@ const char* arttest="newspic.cpc";
 bool initialized=false;
 const char *art_search_paths[]=
 {
-    #ifdef INSTALL_DATA_DIR
-    INSTALL_DATA_DIR "/lcs/art/",
-    #endif
-    #ifndef WIN32
-    "/usr/local/share/lcs/art/",
-    "/usr/share/lcs/art/",
-    "/usr/games/share/lcs/art/",
-    "/usr/games/lcs/art/",
-    #endif
-    "./art/",
-    "../art/",
-
-    NULL
+   #ifdef INSTALL_DATA_DIR
+   INSTALL_DATA_DIR "/lcs/art/",
+   #endif
+   #ifndef WIN32
+   "/usr/local/share/lcs/art/",
+   "/usr/share/lcs/art/",
+   "/usr/games/share/lcs/art/",
+   "/usr/games/lcs/art/",
+   #endif
+   "./art/",
+   "../art/",
+   NULL
 };
 
 //Check if filename exists on the system.
@@ -59,84 +58,84 @@ const char *art_search_paths[]=
 //This works on directories too, but only in Linux!
 bool LCSFileExists(const char* filename)
 {
-    struct stat st;
-    return(stat(filename,&st)==0);
+   struct stat st;
+   return(stat(filename,&st)==0);
 }
 
 //Put the home directory prefix in homedir.
 //Create the home directory if it does not exist.
 bool LCSInitHomeDir()
 {
-    #ifndef WIN32
-    char* homeenv=getenv("HOME");
-    #else
-    char* homeenv=(char*)"./";
-    #endif
+   #ifndef WIN32
+   char* homeenv=getenv("HOME");
+   #else
+   char* homeenv=(char*)"./";
+   #endif
 
-    //Do everything using STL String, it is safer that way.
-    std::string str=homeenv;
-    if(str[str.length()-1]!='/')
-        str+="/";
+   //Do everything using STL String, it is safer that way.
+   std::string str=homeenv;
+   if(str[len(str)-1]!='/')
+      str+="/";
 
-    #ifndef WIN32
-    str+=".lcs/";
-    #endif
+   #ifndef WIN32
+   str+=".lcs/";
+   #endif
 
-    strncpy(homedir,str,MAX_PATH_SIZE);
-    if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
-    {
-        #ifdef WIN32
-        if(_mkdir(homedir)!=0)
-            return false;
-        #else
-        if(mkdir(homedir,0750)!=0)
-            return false;
-        #endif
-    }
+   strncpy(homedir,str,MAX_PATH_SIZE);
+   if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
+   {
+      #ifdef WIN32
+      if(_mkdir(homedir)!=0)
+         return false;
+      #else
+      if(mkdir(homedir,0750)!=0)
+         return false;
+      #endif
+   }
 
-    return true;
+   return true;
 }
 
 //Put the art directory prefix in artdir.
 bool LCSInitArtDir()
 {
-    const char* artprefix;
-    artprefix=art_search_paths[0];
-    std::string tester;
-    for(int i=1;artprefix!=NULL;++i)
-    {
-        tester=artprefix;
-        tester.append(arttest);
-        if(LCSFileExists(tester.c_str()))
-            break;
+   const char* artprefix;
+   artprefix=art_search_paths[0];
+   std::string tester;
+   for(int i=1;artprefix!=NULL;++i)
+   {
+      tester=artprefix;
+      tester.append(arttest);
+      if(LCSFileExists(tester.c_str()))
+         break;
 
-        artprefix=art_search_paths[i];
+      artprefix=art_search_paths[i];
 
-    }
-    if(artprefix==NULL)
-        return false;
+   }
+   if(artprefix==NULL)
+      return false;
 
-    strncpy(artdir,artprefix,MAX_PATH_SIZE);
-    return true;
+   strncpy(artdir,artprefix,MAX_PATH_SIZE);
+   return true;
 }
 
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 {
-    if(!initialized)
-    {
-        LCSInitHomeDir();
-        LCSInitArtDir();
-        initialized=true;
-    }
-    std::string filepath;
-    if(flags & LCSIO_PRE_ART)
-        filepath=artdir;
-    else if(flags & LCSIO_PRE_HOME)
-        filepath=homedir;
+   if(!initialized)
+   {
+      LCSInitHomeDir();
+      LCSInitArtDir();
+      initialized=true;
+   }
+   std::string filepath;
+   if(flags & LCSIO_PRE_ART)
+      filepath=artdir;
+   else if(flags & LCSIO_PRE_HOME)
+      filepath=homedir;
 
-    filepath.append(filename);
+   filepath.append(filename);
 
-    return fopen(filepath.c_str(),mode);
+   return fopen(filepath.c_str(),mode);
 }
 
 //C++ file i/o version of the above.
@@ -166,34 +165,33 @@ bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flag
 
 void LCSDeleteFile(const char* filename,int flags)
 {
+   if(!initialized)
+   {
+      LCSInitHomeDir();
+      LCSInitArtDir();
+      initialized=true;
+   }
 
-    if(!initialized)
-    {
-        LCSInitHomeDir();
-        LCSInitArtDir();
-        initialized=true;
-    }
+   std::string str;
 
-    std::string str;
+   if(flags & LCSIO_PRE_ART)
+      str.append(artdir);
+   else if(flags & LCSIO_PRE_HOME)
+      str.append(homedir);
 
-    if(flags & LCSIO_PRE_ART)
-        str.append(artdir);
-    else if(flags & LCSIO_PRE_HOME)
-        str.append(homedir);
+   str.append(filename);
 
-    str.append(filename);
-
-    unlink(str.c_str());
+   unlink(str.c_str());
 }
 
 void LCSCloseFile(FILE* handle)
 {
-    fclose(handle);
+   fclose(handle);
 }
 
 //C++ file i/o version of the above.
 void LCSCloseFileCPP(std::fstream &file)
 {
    if(file.is_open()) //Check if the file even is open so that we don't bother closing a file that isn't open.
-       file.close();
+      file.close();
 }

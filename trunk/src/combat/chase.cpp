@@ -46,8 +46,8 @@ bool chasesequence()
          //AS SQUADS MAY BE FICTITIOUS AND WILL BE DELETED LATER ANYWAY
 
    //BAIL IF NO CHASERS
-   for(int e=0;e<ENCMAX;e++)if(encounter[e].exists)chasenum++;
-   if(chasenum==0)
+   for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) chasenum++;
+   if(!chasenum)
    {
       gamelog.newline();
       return 1;
@@ -56,15 +56,15 @@ bool chasesequence()
    chaseseq.friendcar.clear();
    for(p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(activesquad->squad[p]==NULL) continue;
 
       if(activesquad->squad[p]->carid!=-1)
       {
          int v=id_getcar(activesquad->squad[p]->carid);
          if(v!=-1)
          {
-            for(v2=0;v2<(int)chaseseq.friendcar.size();v2++)if(chaseseq.friendcar[v2]->id()==vehicle[v]->id())break;
-            if(v2==(int)chaseseq.friendcar.size())chaseseq.friendcar.push_back(vehicle[v]);
+            for(v2=0;v2<len(chaseseq.friendcar);v2++) if(chaseseq.friendcar[v2]->id()==vehicle[v]->id()) break;
+            if(v2==len(chaseseq.friendcar)) chaseseq.friendcar.push_back(vehicle[v]);
          }
       }
    }
@@ -354,7 +354,7 @@ bool chasesequence()
 
             getkey();
 
-            for(int p=0;p<(int)pool.size();p++)
+            for(int p=0;p<len(pool);p++)
                for(int w=0;w<BODYPARTNUM;w++)
                   pool[p]->wound[w]&=~WOUND_BLEEDING;
             mode=GAMEMODE_BASE;
@@ -560,7 +560,7 @@ bool footchase()
 
             getkey();
 
-            for(int p=0;p<(int)pool.size();p++)
+            for(int p=0;p<len(pool);p++)
                for(int w=0;w<BODYPARTNUM;w++)
                   pool[p]->wound[w]&=~WOUND_BLEEDING;
             mode=GAMEMODE_BASE;
@@ -585,17 +585,17 @@ void evasivedrive()
    long yourworst=10000;
    for(int p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(activesquad->squad[p]==NULL) continue;
       if(activesquad->squad[p]->alive&&
          activesquad->squad[p]->is_driver)
       {
          int v=id_getcar(activesquad->squad[p]->carid);
          yourrolls.push_back(driveskill(*activesquad->squad[p],*(vehicle[v]))+LCSrandom(DRIVING_RANDOMNESS));
          activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));
-         if(yourworst>yourrolls.back())yourworst=yourrolls.back();
+         if(yourworst>yourrolls.back()) yourworst=yourrolls.back();
       }
    }
-   if(yourrolls.size()==0)yourrolls.push_back(0);//error -- and for this you get a 0
+   if(!len(yourrolls)) yourrolls.push_back(0); //error -- and for this you get a 0
 
    for(e=0;e<ENCMAX;e++)
    {
@@ -605,7 +605,7 @@ void evasivedrive()
          encounter[e].exists&&
          encounter[e].is_driver)
       {
-         for(int v=0;v<(int)chaseseq.enemycar.size();v++)
+         for(int v=0;v<len(chaseseq.enemycar);v++)
          {
             if(chaseseq.enemycar[v]->id()==encounter[e].carid)
             {
@@ -647,7 +647,7 @@ void evasivedrive()
    getkey();
 
    int cnt;
-   for(int i=0;i<(int)theirrolls.size();i++)
+   for(int i=0;i<len(theirrolls);i++)
    {
       cnt=pickrandom(yourrolls);
       if(theirrolls[i]<cnt)
@@ -693,7 +693,7 @@ void evasivedrive()
                e--;
             }
          }
-         for(int v=0;v<(int)chaseseq.enemycar.size();v++)
+         for(int v=0;v<len(chaseseq.enemycar);v++)
          {
             if(chaseseq.enemycar[v]->id()==theirrolls_id[i])
             {
@@ -1004,37 +1004,37 @@ bool drivingupdate(short &obstacle)
    //CHECK TO SEE WHICH CARS ARE BEING DRIVEN
    vector<int> passenger;
    int driver,v,p;
-   for(v=chaseseq.friendcar.size()-1;v>=0;v--)
+   for(v=len(chaseseq.friendcar)-1;v>=0;v--)
    {
       passenger.clear();
       driver=-1;
       for(p=0;p<6;p++)
       {
-         if(activesquad->squad[p]==NULL)continue;
+         if(activesquad->squad[p]==NULL) continue;
          if(activesquad->squad[p]->carid==chaseseq.friendcar[v]->id())
          {
             if(activesquad->squad[p]->is_driver)
             {
-               if(activesquad->squad[p]->canwalk())driver=p;
+               if(activesquad->squad[p]->canwalk()) driver=p;
                else activesquad->squad[p]->is_driver=0;
             }
             passenger.push_back(p);
          }
       }
 
-      if(passenger.size()>0&&driver==-1)
+      if(len(passenger)&&driver==-1)
       {
          //MAKE BEST DRIVING PASSENGER INTO A DRIVER
          vector<int> goodp;
          int max=0;
-         for(p=0;p<(int)passenger.size();p++)
+         for(p=0;p<len(passenger);p++)
             if(driveskill(*activesquad->squad[passenger[p]],*chaseseq.friendcar[v])>max&&activesquad->squad[passenger[p]]->canwalk())
                max=driveskill(*activesquad->squad[passenger[p]],*chaseseq.friendcar[v]);
-         for(p=0;p<(int)passenger.size();p++)
+         for(p=0;p<len(passenger);p++)
             if(driveskill(*activesquad->squad[passenger[p]],*chaseseq.friendcar[v])==max&&activesquad->squad[passenger[p]]->canwalk())
                goodp.push_back(passenger[p]);
 
-         if(goodp.size()>0)
+         if(len(goodp))
          {
             int p=pickrandom(goodp);
             activesquad->squad[p]->is_driver=1;
@@ -1059,18 +1059,18 @@ bool drivingupdate(short &obstacle)
       }
    }
 
-   for(v=chaseseq.enemycar.size()-1;v>=0;v--)
+   for(v=len(chaseseq.enemycar)-1;v>=0;v--)
    {
       passenger.clear();
       driver=-1;
       for(p=0;p<ENCMAX;p++)
       {
-         if(!encounter[p].exists)continue;
+         if(!encounter[p].exists) continue;
          if(encounter[p].carid==chaseseq.enemycar[v]->id())
          {
             if(encounter[p].is_driver)
             {
-               if(encounter[p].canwalk())driver=p;
+               if(encounter[p].canwalk()) driver=p;
                else encounter[p].is_driver=0;
             }
             passenger.push_back(p);
@@ -1085,7 +1085,7 @@ bool drivingupdate(short &obstacle)
    }
 
    //SET UP NEXT OBSTACLE
-   if(!LCSrandom(3))obstacle=LCSrandom(CARCHASE_OBSTACLENUM);
+   if(!LCSrandom(3)) obstacle=LCSrandom(CARCHASE_OBSTACLENUM);
    else obstacle=-1;
 
    return 0;
@@ -1095,9 +1095,9 @@ bool drivingupdate(short &obstacle)
 
 void makechasers(long sitetype,long sitecrime)
 {
-   for(int e=0;e<ENCMAX;e++)encounter[e].exists=0;
+   for(int e=0;e<ENCMAX;e++) encounter[e].exists=0;
 
-   if(sitecrime==0)return;
+   if(!sitecrime) return;
 
    short encslot=0;
    int n;
@@ -1115,7 +1115,7 @@ void makechasers(long sitetype,long sitecrime)
    {
       cartype="SUV"; //A CCS property, not a vehicle property. Temporary solution -XML
       pnum=LCSrandom(sitecrime/5 + 1)+1;
-      if(pnum>12)pnum=12;
+      if(pnum>12) pnum=12;
       for(n=0;n<pnum;n++)
          makecreature(encounter[encslot++],CREATURE_CCS_VIGILANTE);
    }
@@ -1184,14 +1184,14 @@ void makechasers(long sitetype,long sitecrime)
       }
    }
 
-   for(n=0;n<pnum;n++)conservatise(encounter[n]);
+   for(n=0;n<pnum;n++) conservatise(encounter[n]);
 
    //ASSIGN CARS TO CREATURES
    int carnum;
-   if(pnum<=2)carnum=1;
-   else if(pnum<=3)carnum=LCSrandom(2)+1;
-   else if(pnum<=5)carnum=LCSrandom(2)+2;
-   else if(pnum<=7)carnum=LCSrandom(2)+3;
+   if(pnum<=2) carnum=1;
+   else if(pnum<=3) carnum=LCSrandom(2)+1;
+   else if(pnum<=5) carnum=LCSrandom(2)+2;
+   else if(pnum<=7) carnum=LCSrandom(2)+3;
    else carnum=4;
 
    for(int c=0;c<carnum;c++)
@@ -1216,7 +1216,7 @@ void makechasers(long sitetype,long sitecrime)
          int v;
          do
          {
-            v=LCSrandom(chaseseq.enemycar.size());
+            v=LCSrandom(len(chaseseq.enemycar));
             encounter[n].carid=chaseseq.enemycar[v]->id();
             encounter[n].is_driver=0;
          } while(load[v]>=4);
@@ -1370,12 +1370,12 @@ bool dodgedrive()
    getkey();
 
    int driver;
-   for(v=chaseseq.friendcar.size()-1;v>=0;v--)
+   for(v=len(chaseseq.friendcar)-1;v>=0;v--)
    {
       driver=-1;
       for(int p=0;p<6;p++)
       {
-         if(activesquad->squad[p]==NULL)continue;
+         if(!activesquad->squad[p]) continue;
          if(activesquad->squad[p]->carid==chaseseq.friendcar[v]->id())
          {
             if(activesquad->squad[p]->is_driver)
@@ -1397,12 +1397,12 @@ bool dodgedrive()
       }
    }
 
-   for(v=chaseseq.enemycar.size()-1;v>=0;v--)
+   for(v=len(chaseseq.enemycar)-1;v>=0;v--)
    {
       driver=-1;
       for(int p=0;p<ENCMAX;p++)
       {
-         if(!encounter[p].exists)continue;
+         if(!encounter[p].exists) continue;
          if(encounter[p].carid==chaseseq.enemycar[v]->id())
          {
             if(encounter[p].is_driver)
@@ -1454,7 +1454,7 @@ void crashfriendlycar(int v)
 
    for(int p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(!activesquad->squad[p]) continue;
       if(activesquad->squad[p]->carid==chaseseq.friendcar[v]->id())
       {
          // Inflict injuries on Liberals
@@ -1481,7 +1481,7 @@ void crashfriendlycar(int v)
             }
 
          // Kill off hostages
-         if(activesquad->squad[p]->prisoner!=NULL)
+         if(activesquad->squad[p]->prisoner)
          {
             // Instant death
             if(activesquad->squad[p]->prisoner->alive)
@@ -1595,7 +1595,7 @@ void crashfriendlycar(int v)
    delete_and_clear(chaseseq.friendcar,vehicle);
    for(int p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(!activesquad->squad[p]) continue;
       activesquad->squad[p]->carid=-1;
    }
 }
@@ -1606,7 +1606,7 @@ void crashenemycar(int v)
 
    for(int p=ENCMAX-1;p>=0;p--)
    {
-      if(!encounter[p].exists)continue;
+      if(!encounter[p].exists) continue;
       if(encounter[p].carid==chaseseq.enemycar[v]->id())
       {
          victimsum++;
@@ -1648,20 +1648,20 @@ void chase_giveup()
    int hostagefreed=0;
    for(p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(!activesquad->squad[p]) continue;
       activesquad->squad[p]->squadid=-1;
       activesquad->squad[p]->carid=-1;
       activesquad->squad[p]->location=ps;
       activesquad->squad[p]->drop_weapons_and_clips(NULL);
       activesquad->squad[p]->activity.type=ACTIVITY_NONE;
-      if(activesquad->squad[p]->prisoner!=NULL)
+      if(activesquad->squad[p]->prisoner)
       {
-         if(activesquad->squad[p]->prisoner->squadid==-1)hostagefreed++;
+         if(activesquad->squad[p]->prisoner->squadid==-1) hostagefreed++;
          freehostage(*activesquad->squad[p],2);
       }
       activesquad->squad[p]=NULL;
    }
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
       for(int w=0;w<BODYPARTNUM;w++)
          pool[p]->wound[w]&=~WOUND_BLEEDING;
 
@@ -1672,14 +1672,13 @@ void chase_giveup()
    if(mode!=GAMEMODE_CHASECAR)addstr("You stop and are arrested.", gamelog);
    else addstr("You pull over and are arrested.", gamelog);
    gamelog.newline(); //New line.
-   if(hostagefreed>0)
+   if(hostagefreed)
    {
       move(17,1);
       addstr("Your hostage", gamelog);
       if(hostagefreed>1)
          addstr("s are free.", gamelog);
-      else
-         addstr(" is free.", gamelog);
+      else addstr(" is free.", gamelog);
       gamelog.newline(); //New line.
    }
 
@@ -1707,15 +1706,15 @@ bool footchase(Creature &cr)
 
    delete sq;
 
-   if(ret)cr.squadid=oldsqid;
+   if(ret) cr.squadid=oldsqid;
    else if(oldsqid!=-1)
    {
       activesquad=squad[getsquad(oldsqid)];
       for(int i=0;i<6;i++)
       {
-         if(activesquad->squad[i]!=NULL && activesquad->squad[i]==crp)
+         if(activesquad->squad[i]) if(activesquad->squad[i]==crp)
          {
-            for(int j=i+1;j<6;j++,i++)activesquad->squad[i]=activesquad->squad[j];
+            for(int j=i+1;j<6;j++,i++) activesquad->squad[i]=activesquad->squad[j];
             activesquad->squad[5]=NULL;
             break;
          }
@@ -1753,14 +1752,12 @@ bool chasesequence(Creature &cr,Vehicle &v)
    {
       activesquad=squad[getsquad(oldsqid)];
       for(int i=0;i<6;i++)
-      {
-         if(activesquad->squad[i]!=NULL && activesquad->squad[i]==&cr)
+         if(activesquad->squad[i]) if(activesquad->squad[i]==&cr)
          {
-            for(int j=i+1;j<6;j++,i++)activesquad->squad[i]=activesquad->squad[j];
+            for(int j=i+1;j<6;j++,i++) activesquad->squad[i]=activesquad->squad[j];
             activesquad->squad[5]=NULL;
             break;
          }
-      }
    }
    activesquad=oact;
    gamelog.nextMessage(); //Next message.

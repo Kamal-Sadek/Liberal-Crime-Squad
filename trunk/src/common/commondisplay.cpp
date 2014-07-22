@@ -365,7 +365,7 @@ void printparty()
             int wsk = SKILL_HANDTOHAND;
             if(party[p]->get_weapon().has_musical_attack())
                wsk=SKILL_MUSIC;
-            else if (party[p]->has_thrown_weapon && !party[p]->extra_throwing_weapons.empty())
+            else if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
                wsk=party[p]->extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
             else wsk=party[p]->get_weapon().get_attack(false,false,false)->skill;
             addstr(party[p]->get_skill(wsk));
@@ -379,7 +379,7 @@ void printparty()
                case 1:set_color(COLOR_YELLOW,COLOR_BLACK,1);break;
                case 2:set_color(COLOR_RED,COLOR_BLACK,1);break;
             }
-            if(party[p]->has_thrown_weapon && !party[p]->extra_throwing_weapons.empty())
+            if(party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
                addstr(party[p]->extra_throwing_weapons[0]->get_shortname(0));
             else addstr(party[p]->get_weapon().get_shortname(0));
             //set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -393,7 +393,7 @@ void printparty()
             else if(party[p]->get_weapon().uses_ammo())
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
-               if(!party[p]->clips.empty())
+               if(len(party[p]->clips))
                {
                   addstr(" (");
                   addstr(party[p]->count_clips());
@@ -404,7 +404,7 @@ void printparty()
             }
             else if(party[p]->get_weapon().is_throwable() && !party[p]->has_thrown_weapon)
                addstr(" (1)");
-            else if(party[p]->has_thrown_weapon && !party[p]->extra_throwing_weapons.empty())
+            else if(party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
                addstr(" (");
@@ -1363,35 +1363,28 @@ void printliberalcrimes(Creature &cr)
    addstr(cr.get_type_name());
    addstr(")");
    // Show outstanding convictions in addition to untried crimes
-   if (cr.deathpenalty)
+   if(cr.deathpenalty)
    {
       set_color(COLOR_RED,COLOR_BLACK,1);
-      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
-      {
-         mvaddstr(3,0, "On DEATH ROW");
-      }else{
-         mvaddstr(3,0, "Sentenced to DEATH");
-      }
-   }else if (cr.sentence < 0)
+      if(location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+         mvaddstr(3,0,"On DEATH ROW");
+      else mvaddstr(3,0,"Sentenced to DEATH");
+   }
+   else if(cr.sentence<0)
    {
       set_color(COLOR_RED,COLOR_BLACK,1);
-      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
-      {
-         mvaddstr(3,0, "Serving life in prison");
-      }else{
-         mvaddstr(3,0, "Sentenced to life in prison");
-      }
-   }else if (cr.sentence > 0)
+      if(location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+         mvaddstr(3,0,"Serving life in prison");
+      else mvaddstr(3,0,"Sentenced to life in prison");
+   }
+   else if(cr.sentence>0)
    {
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
-      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
-      {
-         mvaddstr(3,0, "Serving ");
-      }else{
-         mvaddstr(3,0, "Sentenced to ");
-      }
+      if(location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+         mvaddstr(3,0,"Serving ");
+      else mvaddstr(3,0,"Sentenced to ");
       addstr(cr.sentence);
-      addstr(" months in prison.");   
+      addstr(" months in prison.");
    }
 
    // Add all crimes
@@ -1633,7 +1626,7 @@ void printfunds(int y, int offsetx, const char* prefix)
    pair_content(colorpair,&front,&back);
 
    //Move, set color, and write.
-   move(y,80-strlen(moneystr)-strlen(prefixbuffer)-offsetx);
+   move(y,80-len(moneystr)-len(prefixbuffer)-offsetx);
    addstr(prefixbuffer);
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    addstr(moneystr);
@@ -1673,86 +1666,23 @@ void addpagestr()
    else addstr("PGUP/PGDN to view other Liberal pages.");
 }
 
-
-/* Various wrappers to addstr() and mvaddstr() which handle permutations of:
-   - Including or not including the gamelog for external message logging
-   - std::string or c-style char arrays */
-int addstr(const char *text, Log &log)
-{
-   log.record(text);
-   return addstr(text);
-}
-
-int mvaddstr(int y, int x, const char *text, Log &log)
-{
-   log.record(text);
-   return mvaddstr(y, x, text);
-}
-
-int addstr(const std::string& text)
-{
-   return addstr(text.c_str());
-}
-
-int addstr(const std::string& text, Log &log)
-{
-   return addstr(text.c_str(), log);
-}
-
-int mvaddstr(int y, int x, const std::string& text)
-{
-   return mvaddstr(y, x, text.c_str());
-}
-
-int mvaddstr(int y, int x, const std::string& text, Log &log)
-{
-   return mvaddstr(y, x, text.c_str(), log);
-}
-
-/* These wrappers convert numbers to text */
-int addstr(long num)
-{
-   return addstr(tostring(num));
-}
-
-int addstr(long num, Log &log)
-{
-   return addstr(tostring(num), log);
-}
-
-int mvaddstr(int y, int x, long num)
-{
-   return mvaddstr(y, x, tostring(num));
-}
-
-int mvaddstr(int y, int x, long num, Log &log)
-{
-   return mvaddstr(y, x, tostring(num), log);
-}
-
 static char sbuf[81]; // used by addstr_f(), mvaddstr_f(), addstr_fl(), and mvaddstr_fl()
+#define FORMAT_OUTPUT  va_list args; \
+                       va_start(args,format); \
+                       vsnprintf(sbuf,81,format,args); \
+                       va_end(args);
 
 /*	addstr with formatted output	*/
 int addstr_f(const char * format, ...)
 {
-   va_list args;
-
-   va_start(args,format);
-   vsnprintf(sbuf,81,format,args);
-   va_end(args);
-
+   FORMAT_OUTPUT
    return addstr(sbuf);
 }
 
 /*	mvaddstr with formatted output	*/
 int mvaddstr_f(int y, int x, const char * format, ...)
 {
-   va_list args;
-
-   va_start(args,format);
-   vsnprintf(sbuf,81,format,args);
-   va_end(args);
-
+   FORMAT_OUTPUT
    return mvaddstr(y,x,sbuf);
 }
 
@@ -1760,55 +1690,13 @@ int mvaddstr_f(int y, int x, const char * format, ...)
 /*	addstr with formatted output and logging	*/
 int addstr_fl(Log &log, const char * format, ...)
 {
-   va_list args;
-
-   va_start(args,format);
-   vsnprintf(sbuf,81,format,args);
-   va_end(args);
-
-   log.record(sbuf);
-
-   return addstr(sbuf);
+   FORMAT_OUTPUT
+   return addstr(sbuf,log);
 }
 
 /*	mvaddstr with formatted output and logging	*/
 int mvaddstr_fl(int y, int x, Log &log, const char * format, ...)
 {
-   va_list args;
-
-   va_start(args,format);
-   vsnprintf(sbuf,81,format,args);
-   va_end(args);
-
-   log.record(sbuf);
-
-   return mvaddstr(y,x,sbuf);
-}
-
-/* Variant of addch that works on char instead of chtype, fixing display of extended characters */
-int addchar(char ch)
-{
-   char str[2]={ch,0};
-   return addstr(str);
-}
-
-/* Variant of mvaddch that works on char instead of chtype, fixing display of extended characters */
-int mvaddchar(int y, int x, char ch)
-{
-   char str[2]={ch,0};
-   return mvaddstr(y,x,str);
-}
-
-/* addchar with logging */
-int addchar(char ch, Log &log)
-{
-   char str[2]={ch,0};
-   return addstr(str,log);
-}
-
-/* mvaddchar with logging */
-int mvaddchar(int y, int x, char ch, Log &log)
-{
-   char str[2]={ch,0};
-   return mvaddstr(y,x,str,log);
+   FORMAT_OUTPUT
+   return mvaddstr(y,x,sbuf,log);
 }

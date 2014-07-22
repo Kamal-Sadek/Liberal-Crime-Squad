@@ -34,7 +34,7 @@ This file is part of Liberal Crime Squad.                                       
 char endcheck(char cause)
 {
    bool dead=true;
-   for(int p=0;p<(int)pool.size()&&dead;p++)
+   for(int p=0;p<len(pool)&&dead;p++)
       if(pool[p]->alive&&pool[p]->align==1&&
        !(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
          dead=false;
@@ -115,23 +115,18 @@ void hospitalize(int loc, Creature &patient)
       getkey();
 
       if(patientsquad)
-      {
+      {  // Reorganize patient's former squad
+         bool flipstart=0;
          for(int p=0;p<6;p++)
          {
-            
             if(patientsquad->squad[p]==&patient)
-               patientsquad->squad[p]=NULL;
-         }
-
-         // Reorganize patient's squad
-         for(int i=0;i<5;i++) for(int p2=1;p2<6;p2++)
-         {
-            if(patientsquad->squad[p2-1]==NULL&&patientsquad->squad[p2]!=NULL)
             {
-               patientsquad->squad[p2-1]=patientsquad->squad[p2];
-               patientsquad->squad[p2]=NULL;
+               patientsquad->squad[p]=NULL;
+               flipstart=1;
             }
+            if(flipstart&&p<5) patientsquad->squad[p]=patientsquad->squad[p+1];
          }
+         if(flipstart) patientsquad->squad[5]=NULL;
       }
    }
 }
@@ -164,11 +159,11 @@ int clinictime(Creature &g)
 /* common - applies a crime to everyone in the active party */
 void criminalizeparty(short crime)
 {
-   if(activesquad==NULL)return;
+   if(!activesquad) return;
    for(int p=0;p<6;p++)
-      if(activesquad->squad[p]!=NULL)
+      if(activesquad->squad[p])
       {
-         if(!activesquad->squad[p]->alive)continue;
+         if(!activesquad->squad[p]->alive) continue;
          criminalize(*(activesquad->squad[p]),crime);
       }
 }
@@ -176,12 +171,11 @@ void criminalizeparty(short crime)
 /* common - applies a crime to everyone in a location, or the entire LCS */
 void criminalizepool(short crime,long exclude,short loc)
 {
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
-      if(p==exclude)continue;
-      if(loc!=-1&&pool[p]->location!=loc)continue;
-
-      criminalize(*pool[p], crime);
+      if(p==exclude) continue;
+      if(loc!=-1&&pool[p]->location!=loc) continue;
+      criminalize(*pool[p],crime);
    }
 }
 
@@ -231,7 +225,7 @@ void addjuice(Creature &cr,long juice,long cap)
 
    // Pyramid scheme of juice trickling up the chain
    if(cr.hireid!=-1)
-      for(int i=0;i<(int)pool.size();i++)
+      for(int i=0;i<len(pool);i++)
          if(pool[i]->id==cr.hireid)
          {
             addjuice(*pool[i],juice/5,cr.juice);
@@ -266,7 +260,7 @@ void removesquadinfo(Creature &cr)
 /* common - purges empty squads from existence */
 void cleangonesquads()
 {
-   for(int sq=squad.size()-1;sq>=0;sq--)
+   for(int sq=len(squad)-1;sq>=0;sq--)
    {  //NUKE SQUAD IF IT IS GONE
       bool hasmembers=false;
       for(int p=0;p<6;p++)
@@ -504,12 +498,12 @@ int maxsubordinates(const Creature& cr)
 // based on their max and the number they already command
 int subordinatesleft(const Creature& cr)
 {
-   int recruitcap = maxsubordinates(cr);
-   for(int p=0; p<(int)pool.size(); p++)
+   int recruitcap=maxsubordinates(cr);
+   for(int p=0;p<len(pool);p++)
       // ignore seduced and brainwashed characters
-      if(pool[p]->hireid == cr.id && pool[p]->alive && !(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
+      if(pool[p]->hireid==cr.id&&pool[p]->alive&&!(pool[p]->flag&(CREATUREFLAG_LOVESLAVE|CREATUREFLAG_BRAINWASHED)))
          recruitcap--;
-   if(recruitcap > 0) return recruitcap;
+   if(recruitcap>0) return recruitcap;
    else return 0;
 }
 
@@ -517,7 +511,7 @@ int subordinatesleft(const Creature& cr)
 int loveslaves(const Creature& cr)
 {
    int loveslaves=0;
-   for(int p=0; p<(int)pool.size(); p++)
+   for(int p=0; p<len(pool); p++)
       // If subordinate and a love slave
       if(pool[p]->hireid == cr.id && pool[p]->alive && pool[p]->flag & CREATUREFLAG_LOVESLAVE)
          loveslaves++;
@@ -547,7 +541,7 @@ int loveslavesleft(const Creature& cr)
 int scheduledmeetings(const Creature& cr)
 {
    int meetings=0;
-   for(int p=recruit.size()-1;p>=0;p--)
+   for(int p=len(recruit)-1;p>=0;p--)
       // If meeting is with this creature
       if(recruit[p]->recruiter_id == cr.id) meetings++;
    return meetings;
@@ -557,10 +551,10 @@ int scheduledmeetings(const Creature& cr)
 int scheduleddates(const Creature& cr)
 {
    int dates=0;
-   for(int p=date.size()-1;p>=0;p--)
+   for(int p=len(date)-1;p>=0;p--)
       // Does this creature have a list of dates scheduled?
       if(date[p]->mac_id==cr.id)
-      {  dates=date[p]->date.size(); break; }
+      {  dates=len(date[p]->date); break; }
    return dates;
 }
 
@@ -651,7 +645,7 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
    before second in the list. */
 bool sort_none(Creature* first, Creature* second) //This will sort sorted back to unsorted.
 {
-   for(int j=0;j<(int)pool.size();j++)
+   for(int j=0;j<len(pool);j++)
       if(pool[j]==first) return true;
       else if(pool[j]==second) return false;
    return false;
@@ -769,7 +763,7 @@ int choiceprompt(const string &firstline, const string &secondline,
       addstr(secondline);
 
       //Write options
-      for(int p=page*19,y=2; p<(int)option.size()&&p<page*19+19; p++,y++)
+      for(int p=page*19,y=2; p<len(option)&&p<page*19+19; p++,y++)
       {
          mvaddchar(y,0,'A'+y-2);addstr(" - ");
          addstr(option[p]);
@@ -793,17 +787,17 @@ int choiceprompt(const string &firstline, const string &secondline,
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)option.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(option)) page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)option.size()) return p;
+         int p=page*19+c-'a';
+         if(p<len(option)) return p;
       }
 
-      if(allowexitwochoice&&(c=='x'||c==ENTER||c==ESC||c==SPACEBAR))break;
+      if(allowexitwochoice&&(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)) break;
    }
    return -1;
 }
@@ -826,7 +820,7 @@ int buyprompt(const string &firstline, const string &secondline,
       addstr(secondline);
 
       //Write wares and prices
-      for(int p=page*19,y=2; p<(int)nameprice.size()&&p<page*19+19; p++)
+      for(int p=page*19,y=2; p<len(nameprice)&&p<page*19+19; p++)
       {
          if(nameprice[p].second > ledger.get_funds())
             set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -855,18 +849,18 @@ int buyprompt(const string &firstline, const string &secondline,
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<(int)nameprice.size())page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(nameprice)) page++;
 
       if(c>='a'&&c<='s')
       {
-         int p=page*19+(int)(c-'a');
-         if(p<(int)nameprice.size() && nameprice[p].second <= ledger.get_funds())
+         int p=page*19+c-'a';
+         if(p<len(nameprice) && nameprice[p].second <= ledger.get_funds())
             return p;
       }
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
    return -1;
 }
@@ -875,7 +869,7 @@ int buyprompt(const string &firstline, const string &secondline,
 int squadsize(const squadst *st)
 {
    int partysize=0;
-   if(st!=NULL) for(int p=0;p<6;p++) if(st->squad[p]!=NULL) partysize++;
+   if(st) for(int p=0;p<6;p++) if(st->squad[p]) partysize++;
    return partysize;
 }
 
@@ -883,6 +877,6 @@ int squadsize(const squadst *st)
 int squadalive(const squadst *st)
 {
    int partyalive=0;
-   if(st!=NULL) for(int p=0;p<6;p++) if(st->squad[p]!=NULL) if(st->squad[p]->alive) partyalive++;
+   if(st) for(int p=0;p<6;p++) if(st->squad[p]) if(st->squad[p]->alive) partyalive++;
    return partyalive;
 }

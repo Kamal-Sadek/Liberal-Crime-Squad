@@ -392,22 +392,22 @@ void romannumeral(int amendnum)
 // interval if the given string is not a valid interval.
 bool Interval::set_interval(const string& interval)
 {
-   if(interval.empty() ||
+   if(!len(interval) ||
       interval.find_first_not_of("1234567890-")!=string::npos)
       return false;
 
    size_t dashpos=interval.find('-',1);
    if(dashpos==string::npos) // Just a constant.
    {
-      if(!valid(interval))return false;
+      if(!valid(interval)) return false;
       max=min=atoi(interval);
    }
    else
    {
       string smin=interval.substr(0,dashpos),smax=interval.substr(dashpos+1);
-      if(!valid(smin)||!valid(smax))return false;
+      if(!valid(smin)||!valid(smax)) return false;
       int tmin=atoi(smin),tmax=atoi(smax);
-      if(tmin>tmax)return false;
+      if(tmin>tmax) return false;
       min=tmin,max=tmax;
    }
    return true;

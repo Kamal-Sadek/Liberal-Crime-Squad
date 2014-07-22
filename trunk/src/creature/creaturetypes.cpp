@@ -48,7 +48,7 @@ void makecreature(Creature &cr,short type)
    crtype->make_creature(cr);
    int attnum=crtype->attribute_points_.roll();
    int attcap[ATTNUM];
-   for (int i=0;i<ATTNUM;i++)
+   for(int i=0;i<ATTNUM;i++)
    {
       cr.set_attribute(i,crtype->attributes_[i].min);
       attcap[i]=crtype->attributes_[i].max;
@@ -611,52 +611,51 @@ void makecreature(Creature &cr,short type)
       attnum-=min(4,cr.get_attribute(a,false));
       possible.push_back(a);
    }
-   while(attnum>0&&!possible.empty())
+   while(attnum>0&&len(possible))
    {
-      int i=LCSrandom(possible.size());
+      int i=LCSrandom(len(possible));
       int a=possible[i];
-      if(a==ATTRIBUTE_WISDOM&&cr.align==ALIGN_LIBERAL&&LCSrandom(4))a=ATTRIBUTE_HEART;
-      if(a==ATTRIBUTE_HEART&&cr.align==ALIGN_CONSERVATIVE&&LCSrandom(4))a=ATTRIBUTE_WISDOM;
+      if(a==ATTRIBUTE_WISDOM&&cr.align==ALIGN_LIBERAL&&LCSrandom(4)) a=ATTRIBUTE_HEART;
+      if(a==ATTRIBUTE_HEART&&cr.align==ALIGN_CONSERVATIVE&&LCSrandom(4)) a=ATTRIBUTE_WISDOM;
       if(cr.get_attribute(a,false)<attcap[a])
       {
          cr.adjust_attribute(a,+1);
          attnum--;
       }
-      else
-         possible.erase(possible.begin()+i);
+      else possible.erase(possible.begin()+i);
    }
-   if(cr.align==ALIGN_LIBERAL)cr.infiltration=0.15f+(LCSrandom(10)-5)*0.01f;
-   else if(cr.align==ALIGN_MODERATE)cr.infiltration=0.25f+(LCSrandom(10)-5)*0.01f;
+   if(cr.align==ALIGN_LIBERAL) cr.infiltration=0.15f+(LCSrandom(10)-5)*0.01f;
+   else if(cr.align==ALIGN_MODERATE) cr.infiltration=0.25f+(LCSrandom(10)-5)*0.01f;
    else cr.infiltration+=0.35f*(1-cr.infiltration)+(LCSrandom(10)-5)*0.01f;
-   if(cr.infiltration<0)cr.infiltration=0;
-   if(cr.infiltration>1)cr.infiltration=1;
+   if(cr.infiltration<0) cr.infiltration=0;
+   if(cr.infiltration>1) cr.infiltration=1;
    int randomskills=LCSrandom(4)+4;
-   if(cr.age>20)randomskills+=static_cast<int>(randomskills*((cr.age-20.0)/20.0));
+   if(cr.age>20) randomskills+=static_cast<int>(randomskills*((cr.age-20.0)/20.0));
    else randomskills-=(20-cr.age)/2;
    possible.clear();
    for(int s=0;s<SKILLNUM;s++)possible.push_back(s);
    //RANDOM STARTING SKILLS
-   while(randomskills>0&&!possible.empty())
+   while(randomskills>0&&len(possible))
    {
-      int i=LCSrandom(possible.size());
+      int i=LCSrandom(len(possible));
       int randomskill=possible[i];
       // 95% chance of not allowing some skills for anybody...
       if(LCSrandom(20))
       {
-         if(randomskill==SKILL_HEAVYWEAPONS)continue;
-         if(randomskill==SKILL_SMG)continue;
-         if(randomskill==SKILL_SWORD)continue;
-         if(randomskill==SKILL_RIFLE)continue;
-         if(randomskill==SKILL_AXE)continue;
-         if(randomskill==SKILL_CLUB)continue;
-         if(randomskill==SKILL_PSYCHOLOGY)continue;
+         if(randomskill==SKILL_HEAVYWEAPONS) continue;
+         if(randomskill==SKILL_SMG) continue;
+         if(randomskill==SKILL_SWORD) continue;
+         if(randomskill==SKILL_RIFLE) continue;
+         if(randomskill==SKILL_AXE) continue;
+         if(randomskill==SKILL_CLUB) continue;
+         if(randomskill==SKILL_PSYCHOLOGY) continue;
       }
       // 90% chance of not allowing some skills, other than
       //   for conservatives
       if(LCSrandom(10)&&cr.align!=ALIGN_CONSERVATIVE)
       {
-         if(randomskill==SKILL_SHOTGUN)continue;
-         if(randomskill==SKILL_PISTOL)continue;
+         if(randomskill==SKILL_SHOTGUN) continue;
+         if(randomskill==SKILL_PISTOL) continue;
       }
       if(cr.skill_cap(randomskill,true)>cr.get_skill(randomskill))
       {
@@ -953,7 +952,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 	  case CREATURE_BARISTA:
 		 okaysite[SITE_BUSINESS_LATTESTAND]=1;
 		 okaysite[SITE_BUSINESS_INTERNETCAFE]=1;
-	     break;  
+	     break;
 	  case CREATURE_BARTENDER:
 		 okaysite[SITE_BUSINESS_CIGARBAR]=1;
 		 okaysite[SITE_DOWNTOWN]=1;
@@ -1191,7 +1190,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
       //FIND ONE OF THESE
       vector<int> goodlist;
       //find_site_index_in_city(cr.worklocation, location[cr.location]->city);
-      for(int l=0;l<(int)location.size();l++)
+      for(int l=0;l<len(location);l++)
          //if(location[l]->type==cr.worklocation && (!multipleCityMode || location[l]->city == cr.location))
          if(okaysite[(int)location[l]->type] && (!multipleCityMode || location[l]->city == location[(int)cr.location]->city))
             goodlist.push_back(l);
@@ -1204,7 +1203,7 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
 //   TODO There was a bug in the makecharacter() code where th
 //   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
 //   is still occuring, normally at the Latte Bar Downtown ;
-      if (goodlist.size()==0) cr.worklocation=0;
+      if(!len(goodlist)) cr.worklocation=0;
       else cr.worklocation=pickrandom(goodlist);
    }
    return false;

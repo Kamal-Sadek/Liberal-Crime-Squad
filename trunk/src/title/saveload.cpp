@@ -39,7 +39,7 @@ void savegame(const char *str)
    return;
 #endif
 
-   char dummy_c;
+   bool dummy_b;
    int dummy;
    FILE *h;
    int l;
@@ -111,24 +111,24 @@ void savegame(const char *str)
       fwrite(oldPresidentName,sizeof(char)*80,1,h);
 
       //LOCATIONS
-      dummy=location.size();
+      dummy=len(location);
       fwrite(&dummy,sizeof(int),1,h);
-      for(l=0;l<(int)location.size();l++)
+      for(l=0;l<len(location);l++)
       {
          consolidateloot(location[l]->loot); // consolidate loot before saving
-         dummy=location[l]->loot.size();
+         dummy=len(location[l]->loot);
          fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<(int)location[l]->loot.size();l2++)
+         for(int l2=0;l2<len(location[l]->loot);l2++)
          {
             std::string itemStr = location[l]->loot[l2]->showXml();
-            size_t itemSize = itemStr.size();
+            int itemSize = len(itemStr);
 
-            fwrite(&itemSize,sizeof(itemSize),1,h);
+            fwrite(&itemSize,sizeof(int),1,h);
             fwrite(itemStr.c_str(),itemSize,1,h);
          }
-         dummy=location[l]->changes.size();
+         dummy=len(location[l]->changes);
          fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<(int)location[l]->changes.size();l2++)
+         for(int l2=0;l2<len(location[l]->changes);l2++)
             fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
 
          fwrite(location[l]->name,sizeof(char),40,h);
@@ -161,26 +161,26 @@ void savegame(const char *str)
       }
 
       //VEHICLES
-      dummy=vehicle.size();
+      dummy=len(vehicle);
       fwrite(&dummy,sizeof(int),1,h);
-      for(l=0;l<(int)vehicle.size();l++)
+      for(l=0;l<len(vehicle);l++)
       {
          std::string vehicleStr = vehicle[l]->showXml();
-         size_t vehicleSize = vehicleStr.size();
+         int vehicleSize = len(vehicleStr);
 
-         fwrite(&vehicleSize,sizeof (vehicleSize),1,h);
+         fwrite(&vehicleSize,sizeof(int),1,h);
          fwrite(vehicleStr.c_str(),vehicleSize,1,h);
       }
 
       //POOL
-      dummy=pool.size();
+      dummy=len(pool);
       fwrite(&dummy,sizeof(int),1,h);
-      for(int pl=0;pl<(int)pool.size();pl++)
+      for(int pl=0;pl<len(pool);pl++)
       {
          std::string creatureStr = pool[pl]->showXml();
-         size_t creatureSize = creatureStr.size();
+         int creatureSize = len(creatureStr);
 
-         fwrite(&creatureSize,sizeof (creatureSize),1,h);
+         fwrite(&creatureSize,sizeof(int),1,h);
          fwrite(creatureStr.c_str(),creatureSize,1,h);
          //fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
@@ -191,7 +191,7 @@ void savegame(const char *str)
             fwrite(&arg->druguse,sizeof(int),1,h);
 
             //deep write rapport map
-            int size = arg->rapport.size();
+            int size = len(arg->rapport);
             fwrite(&size,sizeof(int),1,h);
 
             for(map<long,float_zero>::iterator i=arg->rapport.begin();i!=arg->rapport.end();i++)
@@ -205,17 +205,17 @@ void savegame(const char *str)
       //Unique Creatures
       {
          std::string uniquecreaturesStr = uniqueCreatures.showXml();
-         size_t uniquecreaturesSize = uniquecreaturesStr.size();
+         int uniquecreaturesSize = len(uniquecreaturesStr);
 
-         fwrite(&uniquecreaturesSize,sizeof (uniquecreaturesSize),1,h);
+         fwrite(&uniquecreaturesSize,sizeof(int),1,h);
          fwrite(uniquecreaturesStr.c_str(),uniquecreaturesSize,1,h);
          //fwrite(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
       }
 
       //SQUADS
-      dummy=squad.size();
+      dummy=len(squad);
       fwrite(&dummy,sizeof(int),1,h);
-      for(int sq=0;sq<(int)squad.size();sq++)
+      for(int sq=0;sq<len(squad);sq++)
       {
          fwrite(squad[sq]->name,sizeof(char),40,h);
          fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
@@ -223,59 +223,56 @@ void savegame(const char *str)
 
          for(int pos=0;pos<6;pos++)
          {
-            if(squad[sq]->squad[pos]==NULL)dummy_c=0;
-            else dummy_c=1;
-            fwrite(&dummy_c,sizeof(char),1,h);
-
-            if(squad[sq]->squad[pos]!=NULL)
+            dummy_b=squad[sq]->squad[pos];
+            fwrite(&dummy_b,sizeof(bool),1,h);
+            if(dummy_b)
                fwrite(&squad[sq]->squad[pos]->id,sizeof(int),1,h);
          }
 
          consolidateloot(squad[sq]->loot); // consolidate loot before saving
-         dummy=squad[sq]->loot.size();
+         dummy=len(squad[sq]->loot);
          fwrite(&dummy,sizeof(int),1,h);
-         for(int l2=0;l2<(int)squad[sq]->loot.size();l2++)
+         for(int l2=0;l2<len(squad[sq]->loot);l2++)
          {
             std::string itemStr = squad[sq]->loot[l2]->showXml();
-            size_t itemSize = itemStr.size();
+            int itemSize = len(itemStr);
 
-            fwrite(&itemSize,sizeof(itemSize),1,h);
+            fwrite(&itemSize,sizeof(int),1,h);
             fwrite(itemStr.c_str(),itemSize,1,h);
          }
       }
 
-      if(activesquad==NULL)dummy_c=0;
-      else dummy_c=1;
-      fwrite(&dummy_c,sizeof(char),1,h);
-      if(activesquad!=NULL)
+      dummy_b=activesquad;
+      fwrite(&dummy_b,sizeof(bool),1,h);
+      if(dummy_b)
          fwrite(&activesquad->id,sizeof(int),1,h);
 
       //DATES
-      dummy=date.size();
+      dummy=len(date);
       fwrite(&dummy,sizeof(int),1,h);
-      for(int dt=0;dt<(int)date.size();dt++)
+      for(int dt=0;dt<len(date);dt++)
       {
          fwrite(&date[dt]->mac_id,sizeof(long),1,h);
          fwrite(&date[dt]->timeleft,sizeof(short),1,h);
          fwrite(&date[dt]->city,sizeof(int),1,h);
 
-         dummy=date[dt]->date.size();
+         dummy=len(date[dt]->date);
          fwrite(&dummy,sizeof(int),1,h);
-         for(int dt2=0;dt2<(int)date[dt]->date.size();dt2++)
+         for(int dt2=0;dt2<len(date[dt]->date);dt2++)
          {
             std::string creatureStr = date[dt]->date[dt2]->showXml();
-            size_t creatureSize = creatureStr.size();
+            int creatureSize = len(creatureStr);
 
-            fwrite(&creatureSize,sizeof (creatureSize),1,h);
+            fwrite(&creatureSize,sizeof(int),1,h);
             fwrite(creatureStr.c_str(),creatureSize,1,h);
             //fwrite(date[dt]->date[dt2],sizeof(Creature),1,h);
          }
       }
 
       //RECRUITS
-      dummy=recruit.size();
+      dummy=len(recruit);
       fwrite(&dummy,sizeof(int),1,h);
-      for(int rt=0;rt<(int)recruit.size();rt++)
+      for(int rt=0;rt<len(recruit);rt++)
       {
          fwrite(&recruit[rt]->recruiter_id,sizeof(long),1,h);
          fwrite(&recruit[rt]->timeleft,sizeof(short),1,h);
@@ -284,17 +281,17 @@ void savegame(const char *str)
          fwrite(&recruit[rt]->task,sizeof(char),1,h);
 
          std::string creatureStr = recruit[rt]->recruit->showXml();
-         size_t creatureSize = creatureStr.size();
+         int creatureSize = len(creatureStr);
 
-         fwrite(&creatureSize,sizeof (creatureSize),1,h);
+         fwrite(&creatureSize,sizeof(int),1,h);
          fwrite(creatureStr.c_str(),creatureSize,1,h);
          //fwrite(recruit[rt]->recruit,sizeof(Creature),1,h);
       }
 
       //NEWS STORIES
-      dummy=newsstory.size();
+      dummy=len(newsstory);
       fwrite(&dummy,sizeof(int),1,h);
-      for(int ns=0;ns<(int)newsstory.size();ns++)
+      for(int ns=0;ns<len(newsstory);ns++)
       {
          fwrite(&newsstory[ns]->type,sizeof(short),1,h);
          fwrite(&newsstory[ns]->view,sizeof(short),1,h);
@@ -305,15 +302,14 @@ void savegame(const char *str)
          fwrite(&newsstory[ns]->positive,sizeof(char),1,h);
          fwrite(&newsstory[ns]->siegetype,sizeof(short),1,h);
 
-         if(newsstory[ns]->cr==NULL)dummy_c=0;
-         else dummy_c=1;
-         fwrite(&dummy_c,sizeof(char),1,h);
-         if(newsstory[ns]->cr!=NULL)
+         dummy_b=newsstory[ns]->cr;
+         fwrite(&dummy_b,sizeof(bool),1,h);
+         if(dummy_b)
             fwrite(&newsstory[ns]->cr->id,sizeof(long),1,h);
 
-         dummy=newsstory[ns]->crime.size();
+         dummy=len(newsstory[ns]->crime);
          fwrite(&dummy,sizeof(int),1,h);
-         for(int dt2=0;dt2<(int)newsstory[ns]->crime.size();dt2++)
+         for(int dt2=0;dt2<len(newsstory[ns]->crime);dt2++)
             fwrite(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
       }
 
@@ -357,7 +353,7 @@ char load()
    //LOAD FILE
    int loadversion;
    int l;
-   char dummy_c;
+   bool dummy_b;
    int dummy;
    long dummy_l;
    FILE *h;
@@ -439,16 +435,16 @@ char load()
       //LOCATIONS
       fread(&dummy,sizeof(int),1,h);
       location.resize(dummy);
-      for(l=0;l<(int)location.size();l++)
+      for(l=0;l<len(location);l++)
       {
          location[l]=new Location;
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->loot.resize(dummy);
-         for(int l2=0;l2<(int)location[l]->loot.size();l2++)
+         for(int l2=0;l2<len(location[l]->loot);l2++)
          {
-            size_t itemLen;
-            fread(&itemLen, sizeof(itemLen), 1, h);
+            int itemLen;
+            fread(&itemLen, sizeof(int), 1, h);
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
@@ -458,7 +454,7 @@ char load()
                location[l]->loot[l2] = it;
          }
          //Remove items of unknown type.
-         for(int l2=location[l]->loot.size()-1; l2>=0; l2--)
+         for(int l2=len(location[l]->loot)-1; l2>=0; l2--)
          {
             bool del = false;
             if(location[l]->loot[l2]->is_loot())
@@ -482,7 +478,7 @@ char load()
 
          fread(&dummy,sizeof(int),1,h);
          location[l]->changes.resize(dummy);
-         for(int l2=0;l2<(int)location[l]->changes.size();l2++)
+         for(int l2=0;l2<len(location[l]->changes);l2++)
             fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
 
          fread(location[l]->name,sizeof(char),40,h);
@@ -517,10 +513,10 @@ char load()
       //VEHICLES
       fread(&dummy,sizeof(int),1,h);
       vehicle.resize(dummy);
-      for(l=0;l<(int)vehicle.size();l++)
+      for(l=0;l<len(vehicle);l++)
       {
-         size_t vehicleLen;
-         fread (&vehicleLen, sizeof(vehicleLen), 1, h);
+         int vehicleLen;
+         fread (&vehicleLen, sizeof(int), 1, h);
          vector<char> vec = vector<char> (vehicleLen + 1);
          fread (&vec[0], vehicleLen, 1, h);
          vec[vehicleLen] = '\0';
@@ -530,10 +526,10 @@ char load()
       //POOL
       fread(&dummy,sizeof(int),1,h);
       pool.resize(dummy);
-      for(int pl=0;pl<(int)pool.size();pl++)
+      for(int pl=0;pl<len(pool);pl++)
       {
-         size_t creatureLen;
-         fread (&creatureLen, sizeof(creatureLen), 1, h);
+         int creatureLen;
+         fread (&creatureLen, sizeof(int), 1, h);
          vector<char> vec = vector<char> (creatureLen + 1);
          fread (&vec[0], creatureLen, 1, h);
          vec[creatureLen] = '\0';
@@ -567,8 +563,8 @@ char load()
          pool[pl]->strip(&dump);
          pool[pl]->clips = deque<Clip*>();
          pool[pl]->extra_throwing_weapons = deque<Weapon*>();
-         size_t itemLen;
-         fread(&itemLen, sizeof(itemLen), 1, h);
+         int itemLen;
+         fread(&itemLen, sizeof(int), 1, h);
          if(itemLen != 0)
          {
             vector<char> vec = vector<char>(itemLen + 1);
@@ -590,7 +586,7 @@ char load()
 
             Clip c(&vec[0]);
             if(getcliptype(c.get_itemtypename())!=-1) //Check it is a valid clip type.
-               pool[pl]->take_clips(c,c.get_number());
+               pool[pl]->take_clips(c,len(c));
          }
          //pool[pl]->extra_throwing_weapons.clear();
          fread(&dummy,sizeof(int),1,h);
@@ -620,8 +616,8 @@ char load()
 
       //Unique Creatures
       {
-         size_t uniquecreaturesLen;
-         fread (&uniquecreaturesLen, sizeof(uniquecreaturesLen), 1, h);
+         int uniquecreaturesLen;
+         fread (&uniquecreaturesLen, sizeof(int), 1, h);
          vector<char> vec = vector<char> (uniquecreaturesLen + 1);
          fread (&vec[0], uniquecreaturesLen, 1, h);
          vec[uniquecreaturesLen] = '\0';
@@ -632,7 +628,7 @@ char load()
       //SQUADS
       fread(&dummy,sizeof(int),1,h);
       squad.resize(dummy);
-      for(int sq=0;sq<(int)squad.size();sq++)
+      for(int sq=0;sq<len(squad);sq++)
       {
          squad[sq]=new squadst;
 
@@ -642,15 +638,14 @@ char load()
 
          for(int pos=0;pos<6;pos++)
          {
-            fread(&dummy_c,sizeof(char),1,h);
-
             //REBUILD SQUAD FROM POOL
             squad[sq]->squad[pos]=NULL;
-            if(dummy_c)
+            fread(&dummy_b,sizeof(bool),1,h);
+            if(dummy_b)
             {
                int dummy_i;
                fread(&dummy_i,sizeof(int),1,h);
-               for(int pl=0;pl<(int)pool.size();pl++)
+               for(int pl=0;pl<len(pool);pl++)
                   if(pool[pl]->id==dummy_i)
                      squad[sq]->squad[pos]=pool[pl];
             }
@@ -658,10 +653,10 @@ char load()
 
          fread(&dummy,sizeof(int),1,h);
          squad[sq]->loot.resize(dummy);
-         for(int l2=0;l2<(int)squad[sq]->loot.size();l2++)
+         for(int l2=0;l2<len(squad[sq]->loot);l2++)
          {
-            size_t itemLen;
-            fread(&itemLen, sizeof(itemLen), 1, h);
+            int itemLen;
+            fread(&itemLen, sizeof(int), 1, h);
             vector<char> vec = vector<char>(itemLen + 1);
             fread(&vec[0], itemLen, 1, h);
             vec[itemLen] = '\0';
@@ -673,7 +668,7 @@ char load()
                squad[sq]->loot.erase(loot.begin()+l2--);*/
          }
          //Remove items of unknown type.
-         for(int l2=squad[sq]->loot.size()-1; l2>=0; l2--)
+         for(int l2=len(squad[sq]->loot)-1; l2>=0; l2--)
          {
             bool del = false;
             if(squad[sq]->loot[l2]->is_loot())
@@ -697,12 +692,12 @@ char load()
       }
 
       activesquad=NULL;
-      fread(&dummy_c,sizeof(char),1,h);
-      if(dummy_c)
+      fread(&dummy_b,sizeof(bool),1,h);
+      if(dummy_b)
       {
          int dummy_i;
          fread(&dummy_i,sizeof(int),1,h);
-         for(int sq=0;sq<(int)squad.size();sq++)
+         for(int sq=0;sq<len(squad);sq++)
             if(squad[sq]->id==dummy_i)
             {
                activesquad=squad[sq];
@@ -713,7 +708,7 @@ char load()
       //DATES
       fread(&dummy,sizeof(int),1,h);
       date.resize(dummy);
-      for(int dt=0;dt<(int)date.size();dt++)
+      for(int dt=0;dt<len(date);dt++)
       {
          date[dt]=new datest;
 
@@ -723,10 +718,10 @@ char load()
 
          fread(&dummy,sizeof(int),1,h);
          date[dt]->date.resize(dummy);
-         for(int dt2=0;dt2<(int)date[dt]->date.size();dt2++)
+         for(int dt2=0;dt2<len(date[dt]->date);dt2++)
          {
-            size_t creatureLen;
-            fread (&creatureLen, sizeof(creatureLen), 1, h);
+            int creatureLen;
+            fread (&creatureLen, sizeof(int), 1, h);
             vector<char> vec = vector<char> (creatureLen + 1);
             fread (&vec[0], creatureLen, 1, h);
             vec[creatureLen] = '\0';
@@ -740,7 +735,7 @@ char load()
       //RECRUITS
       fread(&dummy,sizeof(int),1,h);
       recruit.resize(dummy);
-      for(int rt=0;rt<(int)recruit.size();rt++)
+      for(int rt=0;rt<len(recruit);rt++)
       {
          recruit[rt]=new recruitst;
          fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
@@ -749,8 +744,8 @@ char load()
          fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
          fread(&recruit[rt]->task,sizeof(char),1,h);
 
-         size_t creatureLen;
-         fread (&creatureLen, sizeof(creatureLen), 1, h);
+         int creatureLen;
+         fread (&creatureLen, sizeof(int), 1, h);
          vector<char> vec = vector<char> (creatureLen + 1);
          fread (&vec[0], creatureLen, 1, h);
          vec[creatureLen] = '\0';
@@ -762,7 +757,7 @@ char load()
       //NEWS STORIES
       fread(&dummy,sizeof(int),1,h);
       newsstory.resize(dummy);
-      for(int ns=0;ns<(int)newsstory.size();ns++)
+      for(int ns=0;ns<len(newsstory);ns++)
       {
          newsstory[ns]=new newsstoryst;
 
@@ -775,11 +770,12 @@ char load()
          fread(&newsstory[ns]->positive,sizeof(char),1,h);
          fread(&newsstory[ns]->siegetype,sizeof(short),1,h);
 
-         fread(&dummy_c,sizeof(char),1,h);
-         if(dummy_c)
+         newsstory[ns]->cr=NULL;
+         fread(&dummy_b,sizeof(bool),1,h);
+         if(dummy_b)
          {
-            fwrite(&dummy_l,sizeof(long),1,h);
-            for(int pl=0;pl<(int)pool.size();pl++)
+            fread(&dummy_l,sizeof(long),1,h);
+            for(int pl=0;pl<len(pool);pl++)
                if(pool[pl]->id==dummy_l)
                {
                   newsstory[ns]->cr=pool[pl];
@@ -789,7 +785,7 @@ char load()
 
          fread(&dummy,sizeof(int),1,h);
          newsstory[ns]->crime.resize(dummy);
-         for(int dt2=0;dt2<(int)newsstory[ns]->crime.size();dt2++)
+         for(int dt2=0;dt2<len(newsstory[ns]->crime);dt2++)
             fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
       }
 
@@ -803,7 +799,7 @@ char load()
       LCSCloseFile(h);
 
       // Check that vehicles are of existing types.
-      for(int v=0;v<(int)vehicle.size();v++)
+      for(int v=0;v<len(vehicle);v++)
       {
          if(getvehicletype(vehicle[v]->vtypeidname())==-1)
          { //Remove vehicle of non-existing type.

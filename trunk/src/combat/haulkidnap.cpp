@@ -90,11 +90,11 @@ void kidnapattempt()
          encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
          target.push_back(e);
 
-   if(target.size()>0)
+   if(len(target))
    {
       int t=target[0];
 
-      if(target.size()>1)
+      if(len(target)>1)
       {
          clearcommandarea();
          clearmessagearea();
@@ -105,7 +105,7 @@ void kidnapattempt()
          addstr("Kidnap whom?");
 
          int x=1,y=11;
-         for(int t2=0;t2<(int)target.size();t2++)
+         for(int t2=0;t2<len(target);t2++)
          {
             mvaddchar(y++,x,t2+'A');
             addstr(" - ");
@@ -121,7 +121,7 @@ void kidnapattempt()
             if(c>='a'&&c<('a'+ENCMAX))
             {
                t=c-'a';
-               if(t>=(int)target.size()) t=-1;
+               if(t>=len(target)) t=-1;
                else t=target[t];
             }
             if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;

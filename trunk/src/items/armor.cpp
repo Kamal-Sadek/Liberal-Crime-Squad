@@ -1,44 +1,28 @@
 #include "externs.h"
 
 Armor::Armor(const ArmorType& seed, int quality, int number)
- : Item(seed,number),
-   bloody_(false), damaged_(false), quality_(quality)
-{
+ : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
+{ }
 
-}
-
-Armor::Armor(const std::string& inputXml)
- : Item(inputXml)
+Armor::Armor(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;
-   xml.SetDoc (inputXml);
-   xml.FindElem ();
-   xml.IntoElem ();
-
-   while (xml.FindElem ())
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
+   while(xml.FindElem())
    {
-      std::string tag = xml.GetTagName ();
-
-      if (tag == "bloody")
-      {
-         if (xml.GetData() == "true")
-            bloody_ = true;
-         else
-            bloody_ = false;
-      }
-      else if (tag == "damaged")
-      {
-         if (xml.GetData() == "true")
-            damaged_ = true;
-         else
-            damaged_ = false;
-      }
-      else if (tag == "quality")
-         quality_ = atoi(xml.GetData());
+      std::string tag=xml.GetTagName();
+      if(tag=="bloody")
+         bloody_=xml.GetData()=="true";
+      else if(tag == "damaged")
+         damaged_=xml.GetData()=="true";
+      else if(tag=="quality")
+         quality_=atoi(xml.GetData());
    }
 }
 
-string Armor::showXml () const
+string Armor::showXml() const
 {
    CMarkup xml;
    xml.AddElem("armor");
@@ -103,14 +87,14 @@ Armor* Armor::split(int number)
 
 bool Armor::merge(Item& i)
 {
-   if (i.is_armor() && this->itemtypename() == i.get_itemtypename())
+   if(i.is_armor() && this->is_same_type(i))
    {
       Armor& a = static_cast<Armor&>(i); //cast -XML
       if (this->bloody_ == a.bloody_ && this->damaged_ == a.damaged_
           && this->quality_ == a.quality_)
       {
-         number_ += a.number_;
-         a.number_ = 0;
+         this->increase_number(a.get_number());
+         a.set_number(0);
          return true;
       }
    }

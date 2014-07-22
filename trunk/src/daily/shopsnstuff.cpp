@@ -129,7 +129,7 @@ void dealership(int loc)
       printparty();
 
       Creature *sleepercarsalesman=NULL;
-      for(int p=0;p<(int)pool.size();p++)
+      for(int p=0;p<len(pool);p++)
          if(pool[p]->alive&&(pool[p]->flag & CREATUREFLAG_SLEEPER)&&
             pool[p]->type==CREATURE_CARSALESMAN&&location[pool[p]->location]->city==location[loc]->city)
             sleepercarsalesman=pool[p];
@@ -137,7 +137,7 @@ void dealership(int loc)
       Vehicle* car_to_sell=0;
       int price=0;
 
-      for(int v=(int)vehicle.size()-1;v>=0;v--)
+      for(int v=len(vehicle)-1;v>=0;v--)
          if(vehicle[v]->id()==activesquad->squad[buyer]->carid)
             car_to_sell = vehicle[v];
 
@@ -196,7 +196,7 @@ void dealership(int loc)
       if(c=='s' && car_to_sell)
       {
          ledger.add_funds(price,INCOME_CARS);
-         for(int v=(int)vehicle.size()-1;v>=0;v--)
+         for(int v=len(vehicle)-1;v>=0;v--)
             if(vehicle[v]==car_to_sell)
             {
             	delete_and_remove(vehicle,v);
@@ -211,7 +211,7 @@ void dealership(int loc)
 
          vector<int> availablevehicle;
          vector<string> vehicleoption;
-         for(int i=0;i<(int)vehicletype.size();i++)
+         for(int i=0;i<len(vehicletype);i++)
             if (vehicletype[i]->availableatshop())
             {
                availablevehicle.push_back(i);
@@ -238,7 +238,7 @@ void dealership(int loc)
 
          //Picked a car, pick color
          int colorchoice;
-         //if (vehicletype[availablevehicle[choice]]->color().size()>1) //Allow to back out if you don't like single colour? -XML
+         //if(len(vehicletype[availablevehicle[choice]]->color())>1) //Allow to back out if you don't like single colour? -XML
          //{
          colorchoice = choiceprompt("Choose a color","",vehicletype[availablevehicle[carchoice]]->color(),
                                     "Color",true,"These colors are Conservative");

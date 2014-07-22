@@ -67,7 +67,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 {
    if(oldforcemonth==month) return true;
 
-   for(int p=pool.size()-1;p>=0;p--)
+   for(int p=len(pool)-1;p>=0;p--)
    {
       int targetjuice=LCSrandom(100*(year-disbandtime+1));
       if(targetjuice>1000) targetjuice=1000;
@@ -235,7 +235,7 @@ void mode_base()
       }
       else
       {
-         for(int p=0;p<(int)pool.size();p++)
+         for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->alive&&
                pool[p]->align==1&&
@@ -269,7 +269,7 @@ void mode_base()
                strcpy(str,"It has been a long time.  A lot must have changed...");
             else strcpy(str,"It sure has been a while.  Things might have changed a bit.");
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(12,39-((strlen(str)-1)>>1),str,gamelog);
+            mvaddstr(12,39-((len(str)-1)>>1),str,gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
 
             getkey();
@@ -278,25 +278,25 @@ void mode_base()
       }
 
       int partysize=squadsize(activesquad);
-      if(activesquad!=NULL&&!partysize)
+      if(activesquad&&!partysize)
       {
          delete_and_remove(squad,getsquad(activesquad->id));
          activesquad=NULL;
       }
 
       int safenumber=0;
-      for(l=0;l<(int)location.size();l++) if(location[l]->is_lcs_safehouse()) safenumber++;
+      for(l=0;l<len(location);l++) if(location[l]->is_lcs_safehouse()) safenumber++;
 
       Location *loc=NULL;
       if(selectedsiege!=-1) loc=location[selectedsiege];
-      if(activesquad!=NULL && activesquad->squad[0]->location!=-1)
+      if(activesquad) if(activesquad->squad[0]->location!=-1)
          loc=location[activesquad->squad[0]->location];
 
       siegest *siege=NULL;
       if(loc) siege=&loc->siege;
 
       char sieged=0,underattack=0;
-      if(siege!=NULL)
+      if(siege)
       {
          sieged=siege->siege;
          if(sieged) underattack=siege->underattack;
@@ -306,18 +306,18 @@ void mode_base()
       if(loc) haveflag=loc->haveflag;
 
       // Count people at each location
-      int* num_present = new int[location.size()];
-      for(int i=0;i<(int)location.size();i++) num_present[i]=0;
-      for(int p=0;p<(int)pool.size();p++)
+      int* num_present = new int[len(location)];
+      for(int i=0;i<len(location);i++) num_present[i]=0;
+      for(int p=0;p<len(pool);p++)
       {  // Dead people, non-liberals, and vacationers don't count
          if(!pool[p]->alive||pool[p]->align!=1||pool[p]->location==-1) continue;
          num_present[pool[p]->location]++;
       }
 
       char cannotwait=0;
-      for(l=0;l<(int)location.size();l++)
+      for(l=0;l<len(location);l++)
       {
-         if(!location[l]->siege.siege)continue;
+         if(!location[l]->siege.siege) continue;
 
          if(location[l]->siege.underattack)
          {
@@ -389,19 +389,19 @@ void mode_base()
          mvaddstr(18,10,"ÄÄÄ ACTIVISM ÄÄÄ");
          mvaddstr(18,51,"ÄÄÄ PLANNING ÄÄÄ");
 
-         if(partysize>0&&!underattack) set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(partysize&&!underattack) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          mvaddstr(19,40,"E - Equip Squad");
-         if(vehicle.size()>0&&partysize>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(len(vehicle)&&partysize) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          mvaddstr(19,60,"V - Vehicles");
-         if(pool.size()>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(len(pool)) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          mvaddstr(20,40,"R - Review Assets and Form Squads");
 
          if(partysize>1) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
-         if(partysize>0&&!sieged) mvaddstr(8,30,"O - Reorder");
+         if(partysize&&!sieged) mvaddstr(8,30,"O - Reorder");
 
          if(activesquad)
          {
@@ -409,7 +409,7 @@ void mode_base()
             mvaddstr(8,1,activesquad->name);
             addchar('Ä'); //in case of overlap, at least make it clear where the name ends.
          }
-         if(squad.size()>1||(activesquad==NULL&&squad.size()>0)) set_color(COLOR_WHITE,COLOR_BLACK,0);
+         if(len(squad)>1||(!activesquad&&len(squad))) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          mvaddstr(8,43,"TAB - Next Squad");
 
@@ -425,22 +425,15 @@ void mode_base()
 
 
          set_color(COLOR_BLACK,COLOR_BLACK,1);
-         for(int p=0;p < (int)pool.size();p++)
-         {
-            if(pool[p]->alive==true&&
-               pool[p]->flag & CREATUREFLAG_SLEEPER&&
-               pool[p]->align==ALIGN_LIBERAL&&
-               pool[p]->hiding==false&&
-               pool[p]->clinic==false&&
-               pool[p]->dating==false)
+         for(int p=0;p<len(pool);p++)
+            if(pool[p]->is_lcs_sleeper())
             {
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                break;
             }
-         }
          mvaddstr(21,25,"B - Sleepers");
 
-         if(partysize>0)
+         if(partysize)
          {
             if(activesquad->activity.type!=ACTIVITY_NONE) set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -450,11 +443,11 @@ void mode_base()
 
          if(sieged)
          {
-            if(partysize>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(partysize) set_color(COLOR_WHITE,COLOR_BLACK,0);
             else
             {
                set_color(COLOR_BLACK,COLOR_BLACK,1);
-               for(int p=0;p<(int)pool.size();p++)
+               for(int p=0;p<len(pool);p++)
                {
                   if(pool[p]->location==selectedsiege)
                   {
@@ -470,7 +463,7 @@ void mode_base()
          }
          else
          {
-            if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+            if(partysize) set_color(COLOR_WHITE,COLOR_BLACK,0);
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             mvaddstr(19,1,"F - Go forth to stop EVIL");
          }
@@ -511,8 +504,8 @@ void mode_base()
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         if(haveflag) mvaddstr(17,39-((strlen(slogan)-1)>>1),slogan);
-         else mvaddstr(13,39-((strlen(slogan)-1)>>1),slogan);
+         if(haveflag) mvaddstr(17,39-((len(slogan)-1)>>1),slogan);
+         else mvaddstr(13,39-((len(slogan)-1)>>1),slogan);
       }
 
       switch(int c=forcewait?'w':getkey())
@@ -527,30 +520,30 @@ void mode_base()
          else if(underattack) { escape_engage(); cleangonesquads(); }
          else if(sieged) { sally_forth(); cleangonesquads(); } break;
       case 'o': if(partysize>1) orderparty(); break;
-      case 'c': if(partysize>0) activesquad->activity.type=ACTIVITY_NONE; break;
+      case 'c': if(partysize) activesquad->activity.type=ACTIVITY_NONE; break;
       case 'a': activate(); break;
       case 'b': activate_sleepers(); break;
-      case TAB: if(squad.size()>0) {
+      case TAB: if(len(squad)) {
          if(!activesquad) activesquad=squad[0];
-         else for(int sq=0;sq<(int)squad.size();sq++)
+         else for(int sq=0;sq<len(squad);sq++)
             if(squad[sq]==activesquad)
             {
-               if(sq==(int)squad.size()-1) activesquad=squad[0];
+               if(sq==len(squad)-1) activesquad=squad[0];
                else activesquad=squad[sq+1];
                break;
             } } break;
-      case 'z': if(safenumber>0) {
+      case 'z': if(safenumber) {
          activesquad=NULL;
-         for(int l=(selectedsiege==-1||selectedsiege+1>=(int)location.size())?0:selectedsiege+1;
-             l<(int)location.size();l++)
+         for(int l=(selectedsiege==-1||selectedsiege+1>=len(location))?0:selectedsiege+1;
+             l<len(location);l++)
             if(location[l]->is_lcs_safehouse()) { selectedsiege=l; break; }
-            else if(l==(int)location.size()-1) l=-1; } break;
-      case 'e': if(partysize>0&&!underattack&&activesquad->squad[0]->location!=-1) {
+            else if(l==len(location)-1) l=-1; } break;
+      case 'e': if(partysize&&!underattack&&activesquad->squad[0]->location!=-1) {
          short ops=party_status;
 		   party_status=-1;
          equip(location[activesquad->squad[0]->location]->loot,-1);
          party_status=ops; } break;
-      case 'r': if(pool.size()>0) review(); break;
+      case 'r': if(len(pool)) review(); break;
       case 'w': if(forcewait||!cannotwait) {
          char clearformess=forcewait;
          if(!canseethings) nonsighttime++;
@@ -568,7 +561,7 @@ void mode_base()
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();
          } } break;
-      case 'v': if(vehicle.size()>0&&partysize>0) {
+      case 'v': if(len(vehicle)&&partysize) {
          short ops=party_status;
 		   party_status=-1;
          setvehicles();
@@ -618,14 +611,11 @@ void mode_base()
          if(activesquad) if(activesquad->squad[c-'1']) {
          if(party_status==c-'1') fullstatus(party_status);
          else party_status=c-'1'; } break;
-      case '$':
-          {
-              char needsClear;
-              fundreport(needsClear);
-              if (needsClear)
-                erase();
-              break;
-          }
+      case '$': {
+         char clearformess=false;
+         fundreport(clearformess);
+         if(clearformess) erase();
+         break; }
       }
    }
 }

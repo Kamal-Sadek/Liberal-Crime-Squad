@@ -37,7 +37,7 @@ void ArmorType::init(const MCD_STR& xmlstring)
 
    xml.IntoElem();
 
-   while (xml.FindElem()) //Loop over all the elements inside the armortype element.
+   while(xml.FindElem()) //Loop over all the elements inside the armortype element.
    {
       std::string element = xml.GetTagName();
 
@@ -76,7 +76,7 @@ void ArmorType::init(const MCD_STR& xmlstring)
       {
          xml.IntoElem();
 
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             element = xml.GetTagName();
 
@@ -107,7 +107,7 @@ void ArmorType::init(const MCD_STR& xmlstring)
       {
          xml.IntoElem();
 
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             element = xml.GetTagName();
 
@@ -176,14 +176,14 @@ void ArmorType::init(const MCD_STR& xmlstring)
       {
          shortname_ = xml.GetData();
          shortname_defined_ = true;
-         if (shortname_.length() > 14)
+         if (len(shortname_) > 14)
             shortname_.resize(14);
       }
       else if (element == "interrogation")
       {
          xml.IntoElem();
 
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             if (element == "basepower")
                interrogation_basepower_ = atoi(xml.GetData());
@@ -226,7 +226,7 @@ void ArmorType::init(const MCD_STR& xmlstring)
          errorlog << "Unknown element for armor type " << idname() << ": " << element << endl;*/
    }
 
-   if (!shortname_defined_ && name().length() <= 14)
+   if (!shortname_defined_ && len(name()) <= 14)
       shortname_ = name();
 }
 
@@ -274,11 +274,11 @@ const string& ArmorType::get_shortname() const
 {
    if (shortname_future_defined_ && year >= 2100)
       return shortname_future_;
-   else if (year >= 2100 && name_future_defined() && name_future().length() <= 14)
+   else if (year >= 2100 && name_future_defined() && len(name_future()) <= 14)
       return name_future();
    else //if (shortname_defined_)
       return shortname_;
-   /*else if (name().length() <= 14)
+   /*else if (len(name()) <= 14)
       return name();
    else
       return "UNDEF";*/
@@ -291,7 +291,7 @@ bool ArmorType::conceals_weaponsize(int weaponsize) const
 
 /*const string& get_appropriate_weapon(int index) const
 {
-   if (index < appropriate_weapon_.size())
+   if (index < len(appropriate_weapon_))
       return appropriate_weapon_[index];
    else
       return "";

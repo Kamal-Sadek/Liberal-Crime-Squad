@@ -1,54 +1,45 @@
 #include "externs.h"
 
-Clip::Clip(const ClipType& seed, int number)
- : Item(seed,number)
-{
+Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
+{ }
 
-}
-
-Clip::Clip(const std::string& inputXml)
- : Item(inputXml)
+Clip::Clip(const std::string& inputXml) : Item(inputXml)
 {
    /*CMarkup xml;
-   xml.SetDoc (inputXml);
-   xml.FindElem ();
-   xml.IntoElem ();
+   xml.SetDoc(inputXml);
+   xml.FindElem();
+   xml.IntoElem();
 
-   while (xml.FindElem ())
+   while(xml.FindElem())
    {
-      std::string tag = xml.GetTagName ();
+      std::string tag=xml.GetTagName();
 
    }*/
 }
 
-string Clip::showXml () const
+string Clip::showXml() const
 {
    CMarkup xml;
    xml.AddElem("clip");
    xml.IntoElem();
-
    addBaseValues(xml);
-
    return xml.GetDoc();
 }
 
 Clip* Clip::split(int number)
 {
-   if (number > number_)
-      number = number_;
-
-   Clip* newi = this->clone();
-   newi->number_ = number;
-   this->number_ -= number;
-
+   if(number>number_) number=number_;
+   Clip* newi=this->clone();
+   newi->number_=number;
+   this->number_-=number;
    return newi;
 }
 
 bool Clip::merge(Item& i)
 {
-   if (i.is_clip() && this->itemtypename() == i.get_itemtypename())
+   if(i.is_clip() && this->is_same_type(i))
    {
-      number_ += i.get_number();
+      this->increase_number(i.get_number());
       i.set_number(0);
       return true;
    }
@@ -58,13 +49,13 @@ bool Clip::merge(Item& i)
 bool Clip::sort_compare_special(Item* other) const
 {
    bool reorder = false;
-   if (other != NULL)
+   if(other)
    {
       int thisi = getcliptype(itemtypename());
       int otheri = getcliptype(other->get_itemtypename());
-      if (thisi < otheri || otheri == -1)
+      if(thisi < otheri || otheri == -1)
          reorder = false;
-      else if (thisi > otheri && otheri != -1)
+      else if(thisi > otheri && otheri != -1)
          reorder = true;
    }
    return reorder;

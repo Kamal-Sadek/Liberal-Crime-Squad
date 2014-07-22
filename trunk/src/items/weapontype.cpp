@@ -14,10 +14,9 @@ WeaponType::WeaponType(MCD_STR xmlstring)
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-
    xml.IntoElem();
 
-   while (xml.FindElem()) //Loop over all the elements inside the weapontype element.
+   while(xml.FindElem()) //Loop over all the elements inside the weapontype element.
    {
       std::string element = xml.GetTagName();
 
@@ -174,9 +173,8 @@ WeaponType::WeaponType(MCD_STR xmlstring)
       {
          attackst* attack = new attackst(xml.GetSubDoc());
 
-         vector<attackst*>::iterator it = attacks_.begin();
-         while (it != attacks_.end() && attack->priority >= (*it)->priority)
-            ++it;
+         vector<attackst*>::iterator it=attacks_.begin();
+         for(;it!=attacks_.end()&&attack->priority>=(*it)->priority;it++);
          attacks_.insert(it,attack);
       }
       /*else
@@ -186,15 +184,15 @@ WeaponType::WeaponType(MCD_STR xmlstring)
 
    if (!shortname_defined_)
    {
-      if ((uses_ammo() && name().length() <= 9)
-          || name().length() <= 14)
+      if ((uses_ammo() && len(name()) <= 9)
+          || len(name()) <= 14)
          shortname_ = name();
    }
    else
    {
-      if (shortname_.length() > 9 && uses_ammo())
+      if (len(shortname_) > 9 && uses_ammo())
          shortname_.resize(9);
-      else if (shortname_.length() > 14)
+      else if (len(shortname_) > 14)
          shortname_.resize(14);
    }
 
@@ -213,10 +211,9 @@ attackst::attackst(MCD_STR xmlstring)
    CMarkup xml;
    xml.SetDoc(xmlstring);
    xml.FindElem();
-
    xml.IntoElem();
 
-   while (xml.FindElem()) //Loop over all the elements inside the vehicletype element.
+   while(xml.FindElem()) //Loop over all the elements inside the vehicletype element.
    {
       std::string element = xml.GetTagName();
 
@@ -379,7 +376,7 @@ attackst::attackst(MCD_STR xmlstring)
       {
          xml.IntoElem();
 
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             element = xml.GetTagName();
 
@@ -418,7 +415,7 @@ attackst::attackst(MCD_STR xmlstring)
       {
          xml.IntoElem();
 
-         while (xml.FindElem())
+         while(xml.FindElem())
          {
             element = xml.GetTagName();
 
@@ -492,32 +489,32 @@ const string& WeaponType::get_shortname(unsigned subtype) const
    {
       if (shortname_future_sub_1_defined_ && year >= 2100)
          return shortname_future_sub_1_;
-      else if (year >= 2100 && name_future_sub_1_defined_ && name_future_sub_1_.length() <= 14) //Too long for ammo using weapons. -XML
+      else if (year >= 2100 && name_future_sub_1_defined_ && len(name_future_sub_1_) <= 14) //Too long for ammo using weapons. -XML
          return name_future_sub_1_;
       else if (shortname_sub_1_defined_)
          return shortname_sub_1_;
-      else if (name_sub_1_defined_ && name_sub_1_.length() <= 14) //Too long for ammo using weapons. -XML
+      else if (name_sub_1_defined_ && len(name_sub_1_) <= 14) //Too long for ammo using weapons. -XML
          return name_sub_1_;
    }
    else if (subtype == 2)
    {
       if (shortname_future_sub_2_defined_ && year >= 2100)
          return shortname_future_sub_2_;
-      else if (year >= 2100 && name_future_sub_2_defined_ && name_future_sub_2_.length() <= 14) //Too long for ammo using weapons. -XML
+      else if (year >= 2100 && name_future_sub_2_defined_ && len(name_future_sub_2_) <= 14) //Too long for ammo using weapons. -XML
          return name_future_sub_2_;
       else if (shortname_sub_2_defined_)
          return shortname_sub_2_;
-      else if (name_sub_2_defined_ && name_sub_2_.length() <= 14) //Too long for ammo using weapons. -XML
+      else if (name_sub_2_defined_ && len(name_sub_2_) <= 14) //Too long for ammo using weapons. -XML
          return name_sub_2_;
    }
 
    if (shortname_future_defined_ && year >= 2100)
       return shortname_future_;
-   else if (year >= 2100 && name_future_defined() && name_future().length() <= 14) //Too long for ammo using weapons. -XML
+   else if (year >= 2100 && name_future_defined() && len(name_future()) <= 14) //Too long for ammo using weapons. -XML
       return name_future();
    else //if (shortname_defined_)
       return shortname_;
-   /*else if (name().length() <= 14) //Too long for ammo using weapons. -XML
+   /*else if (len(name()) <= 14) //Too long for ammo using weapons. -XML
       return name();
    else
       return "UNDEF";*/
@@ -525,45 +522,37 @@ const string& WeaponType::get_shortname(unsigned subtype) const
 
 bool WeaponType::uses_ammo() const
 {
-   for (unsigned i = 0; i < attacks_.size(); ++i)
-   {
-      if (attacks_[i]->uses_ammo)
+   for(int i=0;i<len(attacks_);i++)
+      if(attacks_[i]->uses_ammo)
         return true;
-   }
    return false;
 }
 
 bool WeaponType::acceptable_ammo(const string& clipname) const
 {
-   for (vector<attackst*>::const_iterator it = attacks_.begin(); it != attacks_.end(); ++it)
-   {
-      if ((*it)->ammotype == clipname)
+   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
+      if ((*it)->ammotype==clipname)
         return true;
-   }
    return false;
 }
 
 bool WeaponType::is_ranged() const
 {
-   for (vector<attackst*>::const_iterator it = attacks_.begin(); it != attacks_.end(); ++it)
-   {
-      if ((*it)->ranged)
+   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
+      if((*it)->ranged)
         return true;
-   }
    return false;
 }
 
 bool WeaponType::is_throwable() const
 {
-   for (vector<attackst*>::const_iterator it = attacks_.begin(); it != attacks_.end(); ++it)
-   {
-      if ((*it)->thrown)
+   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
+      if((*it)->thrown)
         return true;
-   }
    return false;
 }
 
 bool WeaponType::is_legal() const
 {
-   return legality_ >= law[LAW_GUNCONTROL];
+   return legality_>=law[LAW_GUNCONTROL];
 }

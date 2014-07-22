@@ -1,23 +1,17 @@
 #include "externs.h"
 
-Weapon::Weapon(const WeaponType& seed, int number)
- : Item(seed, number), ammo_(0)
-{
+Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
+{ }
 
-}
-
-Weapon::Weapon(const std::string& inputXml)
- : Item(inputXml)
+Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
-
       if(tag=="loaded_cliptype")
          loaded_cliptype_=xml.GetData();
       else if(tag=="ammo")
@@ -25,18 +19,14 @@ Weapon::Weapon(const std::string& inputXml)
    }
 }
 
-string Weapon::showXml () const
+string Weapon::showXml() const
 {
    CMarkup xml;
    xml.AddElem("weapon");
    xml.IntoElem();
-
    addBaseValues(xml);
-
-   xml.AddElem("loaded_cliptype", loaded_cliptype_);
-
-   xml.AddElem("ammo", tostring(ammo_));
-
+   xml.AddElem("loaded_cliptype",loaded_cliptype_);
+   xml.AddElem("ammo",tostring(ammo_));
    return xml.GetDoc();
 }
 
@@ -50,15 +40,14 @@ string Weapon::equip_title() const
 
 bool Weapon::reload(Clip& clip)
 {
-   if (acceptable_ammo(clip) && !clip.empty())
+   if(acceptable_ammo(clip)&&!clip.empty())
    {
-      loaded_cliptype_ = clip.get_itemtypename();
-      ammo_ = clip.get_ammoamount();
+      loaded_cliptype_=clip.get_itemtypename();
+      ammo_=clip.get_ammoamount();
       clip.decrease_number(1);
       return true;
    }
-   else
-      return false;
+   else return false;
 }
 
 /*void Weapon::take_from(Item& i, int amount)
@@ -80,14 +69,14 @@ Weapon* Weapon::split(int number)
 
 bool Weapon::merge(Item& i)
 {
-   if (i.is_weapon() && i.get_itemtypename() == this->itemtypename())
+   if (i.is_weapon() && this->is_same_type(i))
    {
       Weapon& w = static_cast<Weapon&>(i); //cast -XML
       if ((this->loaded_cliptype_ == w.loaded_cliptype_ && this->ammo_ == w.ammo_)
           || (this->ammo_ == 0 && w.ammo_ == 0))
       {
-         number_ += w.number_;
-         w.number_ = 0;
+         this->increase_number(w.get_number());
+         w.set_number(0);
          return true;
       }
    }
@@ -117,22 +106,13 @@ bool Weapon::sort_compare_special(Item* other) const
 
 const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
 {
-   const vector<attackst*>& attacks = weapontype[getweapontype(itemtypename())]->get_attacks();
-   for (unsigned i = 0; i < attacks.size(); ++i)
+   const vector<attackst*>& attacks=weapontype[getweapontype(itemtypename())]->get_attacks();
+   for(int i=0;i<len(attacks);i++)
    {
-      if (force_ranged && !attacks[i]->ranged)
-         continue;
-
-      if (force_melee && attacks[i]->ranged)
-         continue;
-
-      if (force_no_reload && attacks[i]->uses_ammo && ammo_ == 0)
-         continue;
-
-      if (attacks[i]->uses_ammo && attacks[i]->ammotype != loaded_cliptype_ && ammo_ != 0)
-         continue;
-
-
+      if(force_ranged&&!attacks[i]->ranged) continue;
+      if(force_melee&&attacks[i]->ranged) continue;
+      if(force_no_reload&&attacks[i]->uses_ammo&&!ammo_) continue;
+      if(attacks[i]->uses_ammo&&attacks[i]->ammotype!=loaded_cliptype_&&ammo_) continue;
       return attacks[i];
    }
    return NULL;
@@ -140,10 +120,9 @@ const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool for
 
 bool Weapon::acceptable_ammo(const Item& c) const
 {
-   if (c.is_clip())
+   if(c.is_clip())
       return weapontype[getweapontype(itemtypename())]->acceptable_ammo(c.get_itemtypename());
-   else
-      return false;
+   else return false;
 }
 
 const string& Weapon::get_name() const

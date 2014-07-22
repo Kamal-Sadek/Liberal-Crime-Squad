@@ -43,14 +43,14 @@ void advanceday(char &clearformess,char canseethings)
 
    //CLEAR CAR STATES
    vector<long> caridused;
-   for(p=0;p<(int)pool.size();p++)pool[p]->carid=-1;
+   for(p=0;p<len(pool);p++) pool[p]->carid=-1;
 
    // Aging
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
-      pool[p]->stunned = 0; // For lack of a better place, make stunning expire here
+      pool[p]->stunned=0; // For lack of a better place, make stunning expire here
 
-      if(!pool[p]->alive)continue;
+      if(!pool[p]->alive) continue;
       // animals, tanks don't have age effects at the moment
 //TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
       if(!pool[p]->animalgloss)
@@ -58,7 +58,7 @@ void advanceday(char &clearformess,char canseethings)
          if(pool[p]->age>60)
          {
             int decrement=0;
-            while(pool[p]->age - decrement>60)
+            while(pool[p]->age-decrement>60)
             {
                if(LCSrandom(365*10)==0)
                {
@@ -122,9 +122,9 @@ void advanceday(char &clearformess,char canseethings)
 
    //ADVANCE SQUADS
    squadst *oactivesquad=activesquad;
-   for(int sq=0;sq<(int)squad.size();sq++)
+   for(int sq=0;sq<len(squad);sq++)
    {
-      if(disbanding)break;
+      if(disbanding) break;
 
       //MAKE SURE MEMBERS DON'T ACT IF SQUAD DOES
 
@@ -132,7 +132,7 @@ void advanceday(char &clearformess,char canseethings)
       {
          for(int p=0;p<6;p++)
          {
-            if(squad[sq]->squad[p]!=NULL)
+            if(squad[sq]->squad[p])
             {
                if(squad[sq]->squad[p]->activity.type!=ACTIVITY_NONE&&
                   squad[sq]->squad[p]->activity.type!=ACTIVITY_VISIT)
@@ -183,27 +183,19 @@ void advanceday(char &clearformess,char canseethings)
          //CAR UP AS NECESSARY
          vector<long> wantcar;
 
-         for(p=0;p<6;p++)
+         for(p=0;p<6;p++) if(squad[sq]->squad[p])
          {
-            if(squad[sq]->squad[p]!=NULL)
-            {
-               long wid=squad[sq]->squad[p]->pref_carid;
-               if(wid==-1)continue;
-               for(w=0;w<(int)wantcar.size();w++)
-               {
-                  if(wantcar[w]==wid)break;
-               }
-               if(w==(int)wantcar.size())wantcar.push_back(wid);
-            }
+            long wid=squad[sq]->squad[p]->pref_carid;
+            if(wid==-1) continue;
+            for(w=0;w<len(wantcar);w++)
+               if(wantcar[w]==wid) break;
+            if(w==len(wantcar)) wantcar.push_back(wid);
          }
 
-         if(wantcar.size()>0)
-         {
-            //CULL UNAVAILABLE CARS
-            for(int c=wantcar.size()-1;c>=0;c--)
-            {
-               for(int c2=0;c2<(int)caridused.size();c2++)
-               {
+         //CULL UNAVAILABLE CARS
+         if(len(wantcar))
+            for(int c=len(wantcar)-1;c>=0;c--)
+               for(int c2=0;c2<len(caridused);c2++)
                   if(wantcar[c]==caridused[c2])
                   {
                      long v=id_getcar(caridused[c2]);
@@ -221,18 +213,15 @@ void advanceday(char &clearformess,char canseethings)
 
                         getkey();
                      }
-                     wantcar.erase(wantcar.begin() + c);
+                     wantcar.erase(wantcar.begin()+c);
                      break;
                   }
-               }
-            }
-         }
 
          //ASSIGN AVAILABLE CARS
-         if(wantcar.size()>0)
+         if(len(wantcar))
          {
             vector<int> driver,passenger;
-            for(w=0;w<(int)wantcar.size();w++)
+            for(w=0;w<len(wantcar);w++)
             {
                driver.clear();
                passenger.clear();
@@ -240,53 +229,42 @@ void advanceday(char &clearformess,char canseethings)
 
                //FILL CAR WITH DESIGNATED DRIVERS AND PASSENGERS
                for(p=0;p<6;p++)
-               {
-                  if(squad[sq]->squad[p]!=NULL)
-                  {
+                  if(squad[sq]->squad[p])
                      if(squad[sq]->squad[p]->pref_carid==wantcar[w])
                      {
                         squad[sq]->squad[p]->carid=wantcar[w];
-                        squad[sq]->squad[p]->is_driver=squad[sq]->squad[p]->pref_is_driver;
-                        if(squad[sq]->squad[p]->is_driver)driver.push_back(p);
+                        squad[sq]->squad[p]->is_driver=squad[sq]->squad[p]->pref_is_driver&&
+                                                       squad[sq]->squad[p]->canwalk();
+                        if(squad[sq]->squad[p]->is_driver) driver.push_back(p);
                         else passenger.push_back(p);
                      }
-                  }
-               }
 
                //NO DRIVER?
-               if(driver.size()==0)
+               if(!len(driver))
                {
                   //MAKE BEST DRIVING PASSENGER INTO A DRIVER
-                  if(passenger.size()>0)
+                  if(len(passenger))
                   {
                      int max=0;
-                     for(p=0;p<(int)passenger.size();p++)
+                     for(p=0;p<len(passenger);p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
-                        if(v >= 0)
-                        {
+                        if(v>=0)
                            if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])>max&&
-                              squad[sq]->squad[passenger[p]]->canwalk())
-                           {
-                                 max=driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v]);
-                           }
-                        }
+                                          squad[sq]->squad[passenger[p]]->canwalk())
+                              max=driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v]);
                      }
                      vector<int> goodp;
-                     for(p=0;p<(int)passenger.size();p++)
+                     for(p=0;p<len(passenger);p++)
                      {
                         long v=id_getcar(squad[sq]->squad[passenger[p]]->carid);
-                        if(v >= 0)
-                        {
-                              if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])==max&&
-                              squad[sq]->squad[passenger[p]]->canwalk())
-                           {
+                        if(v>=0)
+                           if(driveskill(*squad[sq]->squad[passenger[p]],*vehicle[v])==max&&
+                                          squad[sq]->squad[passenger[p]]->canwalk())
                               goodp.push_back(passenger[p]);
-                           }
-                        }
                      }
 
-                     if(goodp.size()>0)
+                     if(len(goodp))
                      {
                         int p=pickrandom(goodp);
                         squad[sq]->squad[p]->is_driver=1;
@@ -294,40 +272,32 @@ void advanceday(char &clearformess,char canseethings)
                   }
                }
                //TOO MANY DRIVERS?
-               else if(driver.size()>1)
+               else if(len(driver)>1)
                {
                   //TOSS ALL BUT THE BEST
                   int max=0;
-                  for(p=0;p<(int)driver.size();p++)
+                  for(p=0;p<len(driver);p++)
                   {
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
-                     if (v >= 0)
-                     {
+                     if(v>=0)
                         if(driveskill(*squad[sq]->squad[driver[p]],*vehicle[v])>max)
-                        {
-                              max=driveskill(*squad[sq]->squad[driver[p]],*vehicle[v]);
-                        }
-                     }
+                           max=driveskill(*squad[sq]->squad[driver[p]],*vehicle[v]);
                   }
                   vector<int> goodp;
-                  for(p=0;p<(int)driver.size();p++)
+                  for(p=0;p<len(driver);p++)
                   {
                      long v=id_getcar(squad[sq]->squad[driver[p]]->carid);
-                     if (v >= 0)
-                     {
+                     if(v>=0)
                         if(driveskill(*squad[sq]->squad[driver[p]],*vehicle[v])==max)
-                        {
                            goodp.push_back(p);
-                        }
-                     }
                   }
 
-                  if(goodp.size()>0)
+                  if(len(goodp))
                   {
                      int p=pickrandom(goodp);
-                     for(int p2=0;p2<(int)driver.size();p2++)
+                     for(int p2=0;p2<len(driver);p2++)
                      {
-                        if(p2==p)continue;
+                        if(p2==p) continue;
                         squad[sq]->squad[driver[p2]]->is_driver=0;
                      }
                   }
@@ -337,23 +307,17 @@ void advanceday(char &clearformess,char canseethings)
             //PUT PEOPLE WITHOUT CARS INTO RANDOM CARS
                //THESE PEOPLE WILL NOT DRIVE
             for(int p=0;p<6;p++)
-            {
-               if(squad[sq]->squad[p]!=NULL)
-               {
+               if(squad[sq]->squad[p])
                   if(squad[sq]->squad[p]->carid==-1)
                   {
                      squad[sq]->squad[p]->carid=pickrandom(wantcar);
                      squad[sq]->squad[p]->is_driver=0;
                   }
-               }
-            }
          }
 
          //IF NEED CAR AND DON'T HAVE ONE...
             //NOTE: SQUADS DON'T TAKE FREE CARS
-         if(location[squad[sq]->activity.arg]->needcar&&
-            squad[sq]->squad[0]!=NULL)
-         {
+         if(location[squad[sq]->activity.arg]->needcar&&squad[sq]->squad[0])
             if(squad[sq]->squad[0]->carid==-1)
             {
                if(clearformess) erase();
@@ -372,50 +336,43 @@ void advanceday(char &clearformess,char canseethings)
                squad[sq]->activity.type=ACTIVITY_NONE;
                continue;
             }
-         }
 
          // Give drivers experience if they actually travel
-         if(squad[sq]->activity.arg != squad[sq]->squad[0]->base)
-         {
+         if(squad[sq]->activity.arg!=squad[sq]->squad[0]->base)
             for(int i=0;i<6;i++)
-            {
-               if(squad[sq]->squad[i] && squad[sq]->squad[i]->carid != -1 && squad[sq]->squad[i]->is_driver)
+               if(squad[sq]->squad[i]&&squad[sq]->squad[i]->carid!=-1&&squad[sq]->squad[i]->is_driver)
                   squad[sq]->squad[i]->train(SKILL_DRIVING,5);
-            }
-         }
 
          //GO PLACES
          // Identify the "travel location" -- top level in multi-city play,
          // a particular district in one-city play
-         int travelLocation = -1;
-         for(int i=0; i < (int)location.size(); i++)
-         {
-            if(location[i]->type == SITE_TRAVEL)
+         int travelLocation=-1;
+         for(int i=0;i<len(location);i++)
+            if(location[i]->type==SITE_TRAVEL)
             {
-               travelLocation = i;
+               travelLocation=i;
                break;
             }
-         }
 
          // Verify travellers can afford the cost, and charge them
-         bool canDepart = true;
-         if(location[squad[sq]->activity.arg]->parent == travelLocation)
+         bool canDepart=true;
+         if(location[squad[sq]->activity.arg]->parent==travelLocation)
          {
             if(clearformess) erase();
             else makedelimiter();
             move(8,1);
-            int squadNum;
-            for(squadNum = 0; squadNum < 6; squadNum++)
-               if(squad[sq]->squad[squadNum] == NULL) break;
-            if(ledger.get_funds() < 100 * squadNum)
+            int price;
+            for(price=0;price<6;price++) if(!squad[sq]->squad[price]) break;
+            price*=100;
+            if(ledger.get_funds()<price)
             {
-               addstr_fl(gamelog, "%s couldn't afford tickets to go to %s.", squad[sq]->name, location[squad[sq]->activity.arg]->getname().c_str());
-               canDepart = false;
+               addstr_fl(gamelog,"%s couldn't afford tickets to go to %s.",squad[sq]->name,location[squad[sq]->activity.arg]->getname().c_str());
+               canDepart=false;
             }
             else
             {
-               ledger.subtract_funds(100 * squadNum, EXPENSE_TRAVEL);
-               addstr_fl(gamelog, "%s spent $%d on tickets to go to %s.", squad[sq]->name, 100*squadNum, location[squad[sq]->activity.arg]->getname().c_str());
+               ledger.subtract_funds(price,EXPENSE_TRAVEL);
+               addstr_fl(gamelog,"%s spent $%d on tickets to go to %s.",squad[sq]->name,price,location[squad[sq]->activity.arg]->getname().c_str());
             }
 
             getkey();
@@ -448,7 +405,6 @@ void advanceday(char &clearformess,char canseethings)
                basesquad(squad[sq],l);
                locatesquad(squad[sq],l);
             }
-
             clearformess=1;
             break;
          case SITE_BUSINESS_DEPTSTORE:
@@ -555,7 +511,7 @@ void advanceday(char &clearformess,char canseethings)
                do c=getkey(); while(c!='s'&&c!='b'&&c!='t');
             }
 
-            if(c=='s'||c=='b')basesquad(squad[sq],squad[sq]->activity.arg);
+            if(c=='s'||c=='b') basesquad(squad[sq],squad[sq]->activity.arg);
             if(c=='t'||c=='b')
             {
                activesquad=squad[sq];
@@ -566,7 +522,7 @@ void advanceday(char &clearformess,char canseethings)
                newsstory.push_back(ns);
                mode_site(squad[sq]->activity.arg);
             }
-            if(squad[sq]->squad[0]!=NULL)
+            if(squad[sq]->squad[0])
                locatesquad(squad[sq],squad[sq]->squad[0]->base);
 
             clearformess=1;
@@ -578,25 +534,25 @@ void advanceday(char &clearformess,char canseethings)
    activesquad=oactivesquad;
 
    //HOSTAGES
-   for(p=pool.size()-1;p>=0;p--)
+   for(p=len(pool)-1;p>=0;p--)
    {
-      if(disbanding)break;
+      if(disbanding) break;
 
-      if(!pool[p]->alive)continue;
+      if(!pool[p]->alive) continue;
       if(pool[p]->align!=1)
          tendhostage(pool[p],clearformess);
    }
 
    //ACTIVITIES FOR INDIVIDUALS
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
       pool[p]->income=0;
-      if(disbanding)break;
+      if(disbanding) break;
 
-      if(!pool[p]->alive)continue;
-      if(pool[p]->clinic)continue;
-      if(pool[p]->dating)continue;
-      if(pool[p]->hiding)continue;
+      if(!pool[p]->alive) continue;
+      if(pool[p]->clinic) continue;
+      if(pool[p]->dating) continue;
+      if(pool[p]->hiding) continue;
 
       if(pool[p]->location==-1)
       {
@@ -676,25 +632,24 @@ void advanceday(char &clearformess,char canseethings)
    funds_and_trouble(clearformess);
 
    // Healing - determine medical support at each location
-   int *healing=new int[location.size()];
-   int *healing2=new int[location.size()];
-   for(p=0;p<(int)location.size();p++)
+   int *healing=new int[len(location)];
+   int *healing2=new int[len(location)];
+   for(p=0;p<len(location);p++)
    {
       // Clinic is equal to a skill 6 liberal
-      if(location[p]->type==SITE_HOSPITAL_CLINIC)healing[p]=6;
+      if(location[p]->type==SITE_HOSPITAL_CLINIC) healing[p]=6;
       // Hospital is equal to a skill 12 liberal
-      else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY)healing[p]=12;
+      else if(location[p]->type==SITE_HOSPITAL_UNIVERSITY) healing[p]=12;
       else healing[p]=0;
       healing2[p]=0;
    }
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
+      if(disbanding) break;
 
-      if(disbanding)break;
-
-      if(!pool[p]->alive)continue;
-      if(pool[p]->hiding)continue;
-      if(pool[p]->flag & CREATUREFLAG_SLEEPER)continue;
+      if(!pool[p]->alive) continue;
+      if(pool[p]->hiding) continue;
+      if(pool[p]->flag&CREATUREFLAG_SLEEPER) continue;
       // People will help heal even if they aren't specifically assigned to do so
       // Having a specific healing activity helps bookkeeping for the player, though
       // Only the highest medical skill is considered
@@ -708,17 +663,17 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    // Don't let starving locations heal
-   for(p=0;p<(int)location.size();++p)
+   for(p=0;p<len(location);p++)
       if(location[p]->type!=SITE_HOSPITAL_CLINIC && location[p]->type!=SITE_HOSPITAL_UNIVERSITY)
          if(!fooddaysleft(p))
             if(location[p]->siege.siege)
                healing[p]=0;
 
    //HEAL NON-CLINIC PEOPLE AND TRAIN
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
-      if(disbanding)break;
-      if(!(pool[p]->alive))continue;
+      if(disbanding) break;
+      if(!(pool[p]->alive)) continue;
 
       if(clinictime(*pool[p]))
       {
@@ -730,7 +685,7 @@ void advanceday(char &clearformess,char canseethings)
             int transfer=0;
 
             // Give experience to caretakers
-            if(pool[p]->location>-1)healing2[pool[p]->location]+=100-pool[p]->blood;
+            if(pool[p]->location>-1) healing2[pool[p]->location]+=100-pool[p]->blood;
 
             // Cap blood at 100-injurylevel*20
             if(pool[p]->blood<100-(clinictime(*pool[p])-1)*20)
@@ -757,14 +712,12 @@ void advanceday(char &clearformess,char canseethings)
             for(int w=0;w<BODYPARTNUM;w++)
             {
                // Limbs blown off
-               if(pool[p]->wound[w] & WOUND_NASTYOFF)
+               if(pool[p]->wound[w]&WOUND_NASTYOFF)
                {
                   // Chance to stabilize/amputate wound
                   // Difficulty 12 (Will die if not treated)
                   if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>12)
-                  {
                      pool[p]->wound[w]=WOUND_CLEANOFF;
-                  }
                   // Else take bleed damage (4)
                   else
                   {
@@ -775,15 +728,13 @@ void advanceday(char &clearformess,char canseethings)
                   }
                }
                // Bleeding wounds
-               else if(pool[p]->wound[w] & WOUND_BLEEDING)
+               else if(pool[p]->wound[w]&WOUND_BLEEDING)
                {
                   // Chance to stabilize wound
                   // Difficulty 8 (1 in 10 of happening naturally)
                   if(pool[p]->location>-1&&healing[pool[p]->location]+LCSrandom(10)>8)
-                  {
                      // Toggle bleeding off
-                     pool[p]->wound[w] &= ~WOUND_BLEEDING;
-                  }
+                     pool[p]->wound[w]&=~WOUND_BLEEDING;
                   // Else take bleed damage (1)
                   else
                   {
@@ -885,7 +836,7 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //Give experience to medics
-   for(int p=0;p<(int)pool.size();p++)
+   for(int p=0;p<len(pool);p++)
    {
       //If present, qualified to heal, and doing so
       if(pool[p]->location>=0 && pool[p]->activity.type == ACTIVITY_HEAL)
@@ -906,7 +857,7 @@ void advanceday(char &clearformess,char canseethings)
 
    //DO RENT
    if(day==3&&!disbanding)
-      for(int l=0;l<(int)location.size();l++)
+      for(int l=0;l<len(location);l++)
          if(location[l]->renting>0&&
             !location[l]->newrental)
          {  // if rent >= 1000000 this means you get should kicked out automatically
@@ -931,10 +882,10 @@ void advanceday(char &clearformess,char canseethings)
 
                int hs=find_homeless_shelter(l);
                //MOVE ALL ITEMS AND SQUAD MEMBERS
-               for(int p=0;p<(int)pool.size();p++)
+               for(int p=0;p<len(pool);p++)
                {
-                  if(pool[p]->location==l)pool[p]->location=hs;
-                  if(pool[p]->base==l)pool[p]->base=hs;
+                  if(pool[p]->location==l) pool[p]->location=hs;
+                  if(pool[p]->base==l) pool[p]->base=hs;
                }
                location[hs]->getloot(location[l]->loot);
 
@@ -945,11 +896,11 @@ void advanceday(char &clearformess,char canseethings)
          }
 
    //MEET WITH POTENTIAL RECRUITS
-   for(int i=pool.size()-1;i>=0;i--)
+   for(int i=len(pool)-1;i>=0;i--)
       pool[i]->meetings=0;
-   for(int r=recruit.size()-1;r>=0;r--)
+   for(int r=len(recruit)-1;r>=0;r--)
    {
-      if(disbanding)break;
+      if(disbanding) break;
 
       int p=getpoolcreature(recruit[r]->recruiter_id);
       // Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
@@ -980,9 +931,9 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //DO DATES
-   for(int d=date.size()-1;d>=0;d--)
+   for(int d=len(date)-1;d>=0;d--)
    {
-      if(disbanding)break;
+      if(disbanding) break;
 
       int p=getpoolcreature(date[d]->mac_id);
       // Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
@@ -1050,10 +1001,10 @@ void advanceday(char &clearformess,char canseethings)
 
    //AGE THINGS
    day++;
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
       // Heal over time
-      if(pool[p]->blood<100)pool[p]->blood+=1;
+      if(pool[p]->blood<100) pool[p]->blood+=1;
 
       // Updating for in hiding
       if(pool[p]->hiding>0)
@@ -1081,8 +1032,8 @@ void advanceday(char &clearformess,char canseethings)
       }
 
       // Check if news reports kidnapping
-      if((pool[p]->flag & CREATUREFLAG_MISSING)&&
-         !(pool[p]->flag & CREATUREFLAG_KIDNAPPED))
+      if((pool[p]->flag&CREATUREFLAG_MISSING)&&
+        !(pool[p]->flag&CREATUREFLAG_KIDNAPPED))
       {
          if(LCSrandom(14)+4<pool[p]->joindays)
          {
@@ -1139,7 +1090,7 @@ void dispersalcheck(char &clearformess)
 {
    int p = 0;
    //NUKE DISPERSED SQUAD MEMBERS WHOSE MASTERS ARE NOT AVAILABLE
-   if(pool.size()>0)
+   if(len(pool))
    {
       // *JDS* I'm documenting this algorithm carefully because it
       // took me awhile to figure out what exactly was going on here.
@@ -1163,13 +1114,13 @@ void dispersalcheck(char &clearformess)
       // from being marked safe. After everyone reachable has been
       // reached and marked safe, all remaining squad members are nuked.
       vector<int> dispersal_status;
-      dispersal_status.resize(pool.size());
+      dispersal_status.resize(len(pool));
 
       bool promotion;
       do
       {
          promotion=0;
-         for(p=0;p<(int)pool.size();p++)
+         for(p=0;p<len(pool);p++)
          {
             // Default: members are marked dispersal_status = NOCONTACT
             //(no contact verified)
@@ -1191,21 +1142,21 @@ void dispersalcheck(char &clearformess)
             // don't ever have their subordinates checked
             // and aren't lost themselves (they're a corpse,
             // corpses don't lose contact)
-            if(!pool[p]->alive && !disbanding)
+            if(!pool[p]->alive&&!disbanding)
             {
                dispersal_status[p]=DISPERSAL_SAFE;
                //Attempt to promote their subordinates
-               if(promotesubordinates(*pool[p], clearformess))promotion=1;
+               if(promotesubordinates(*pool[p],clearformess)) promotion=1;
 
-               if(pool[p]->location==-1 || location[pool[p]->location]->renting == RENTING_NOCONTROL)
+               if(pool[p]->location==-1||location[pool[p]->location]->renting==RENTING_NOCONTROL)
                   delete_and_remove(pool,p--);
             }
          }
-      }while(promotion);
+      } while(promotion);
 
       char changed;
 
-      do // while(changed!=0)
+      do // while(changed)
       {
          changed=0;
 
@@ -1213,12 +1164,12 @@ void dispersalcheck(char &clearformess)
 
          // Go through the entire pool to locate people at dispersal_status = BOSSSAFE,
          // so we can verify that their subordinates can reach them.
-         for(p=pool.size()-1;p>=0;p--)
+         for(p=len(pool)-1;p>=0;p--)
          {
-            if(!pool[p]->alive)continue;
+            if(!pool[p]->alive) continue;
             if(pool[p]->location!=-1&&
-               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON &&
-               !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+               location[pool[p]->location]->type==SITE_GOVERNMENT_PRISON&&
+             !(pool[p]->flag & CREATUREFLAG_SLEEPER))
             {
                inprison=1;
             }
@@ -1228,7 +1179,7 @@ void dispersalcheck(char &clearformess)
             if(dispersal_status[p]==DISPERSAL_BOSSINHIDING)
             {
                dispersal_status[p]=DISPERSAL_HIDING;
-               for(int p2=pool.size()-1;p2>=0;p2--)
+               for(int p2=len(pool)-1;p2>=0;p2--)
                {
                   if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
                   {
@@ -1243,29 +1194,24 @@ void dispersalcheck(char &clearformess)
             else if((dispersal_status[p]==DISPERSAL_BOSSSAFE&&inprison)||dispersal_status[p]==DISPERSAL_BOSSINPRISON)
             {
                int dispersalval=DISPERSAL_SAFE;
-               if(pool[p]->flag & CREATUREFLAG_LOVESLAVE)
+               if(pool[p]->flag&CREATUREFLAG_LOVESLAVE)
                {
-                  if((dispersal_status[p]==DISPERSAL_BOSSINPRISON && !inprison) ||
-                     (dispersal_status[p]==DISPERSAL_BOSSSAFE     &&  inprison))
+                  if((dispersal_status[p]==DISPERSAL_BOSSINPRISON&&!inprison) ||
+                     (dispersal_status[p]==DISPERSAL_BOSSSAFE    && inprison))
                   {
                      pool[p]->juice--; // Love slaves bleed juice when not in prison with their lover
-                     if(pool[p]->juice < -50)
-                     {
-                        dispersalval=DISPERSAL_ABANDONLCS;
-                     }
+                     if(pool[p]->juice<-50) dispersalval=DISPERSAL_ABANDONLCS;
                   }
                }
                dispersal_status[p]=dispersalval; // Guaranteed contactable in prison
 
                // Find all subordinates
-               for(int p2=pool.size()-1;p2>=0;p2--)
+               for(int p2=len(pool)-1;p2>=0;p2--)
                {
                   if(pool[p2]->hireid==pool[p]->id && pool[p2]->alive)
                   {
-                     if(inprison)
-                        dispersal_status[p2]=DISPERSAL_BOSSINPRISON;
-                     else
-                        dispersal_status[p2]=DISPERSAL_BOSSSAFE;
+                     if(inprison) dispersal_status[p2]=DISPERSAL_BOSSINPRISON;
+                     else dispersal_status[p2]=DISPERSAL_BOSSSAFE;
                      changed=1; // Need another iteration
                   }
                }
@@ -1274,7 +1220,7 @@ void dispersalcheck(char &clearformess)
             else if(dispersal_status[p]==DISPERSAL_BOSSSAFE&&!inprison)
             {
                // Start looking through the pool again.
-               for(int p2=pool.size()-1;p2>=0;p2--)
+               for(int p2=len(pool)-1;p2>=0;p2--)
                {
                   // Locate each of this person's subordinates.
                   if(pool[p2]->hireid==pool[p]->id)
@@ -1287,9 +1233,7 @@ void dispersalcheck(char &clearformess)
                      // hiding at all, then have them discreetly return in a
                      // couple of weeks
                      if(pool[p2]->hiding==-1&&!pool[p]->hiding)
-                     {
                         pool[p2]->hiding=LCSrandom(10)+3;
-                     }
                      changed=1; // Take note that another iteration is needed.
                   }
                }
@@ -1298,12 +1242,12 @@ void dispersalcheck(char &clearformess)
                dispersal_status[p]=DISPERSAL_SAFE;
             }
          }
-      }while(changed); // If another iteration is needed, continue the loop.
+      } while(changed); // If another iteration is needed, continue the loop.
 
       // After checking through the entire command structure, proceed
       // to nuke all squad members who are unable to make contact with
       // the LCS.
-      for(p=pool.size()-1;p>=0;p--)
+      for(p=len(pool)-1;p>=0;p--)
       {
          if(dispersal_status[p]==DISPERSAL_NOCONTACT||dispersal_status[p]==DISPERSAL_HIDING||dispersal_status[p]==DISPERSAL_ABANDONLCS)
          {
@@ -1389,7 +1333,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    if(cr.hireid==-1)maxjuice=99;
 
    //Identify big boss and top subordinate
-   for(p=0;p<(int)pool.size();p++)
+   for(p=0;p<len(pool);p++)
    {
       if(pool[p]->id==cr.id)continue;
       if(pool[p]->id==cr.hireid)bigboss=p;
@@ -1454,7 +1398,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    //Order secondary subordinates to follow the new boss
    if(subordinates>1)
    {
-      for(p=0;p<(int)pool.size();p++)
+      for(p=0;p<len(pool);p++)
       {
          if(pool[p]->hireid==cr.id && // recruited by old boss that died
             p!=newboss &&             // not the new boss
@@ -1521,7 +1465,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
 void advancelocations()
 {
    //ADVANCE LOCATIONS
-   for(int l=0;l<(int)location.size();l++)
+   for(int l=0;l<len(location);l++)
    {
       if(location[l]->closed>0)
       {

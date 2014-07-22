@@ -1,6 +1,8 @@
 #ifndef LOCATIONS_H_INCLUDED
 #define LOCATIONS_H_INCLUDED
 
+#include "common.h"
+
 enum SiteTypes
 {
    SITE_CITY_SEATTLE, // first are the cities
@@ -209,6 +211,18 @@ struct sitechangest
 #define MAPY 23
 #define MAPZ 10
 
+#define COMPOUND_BASIC BIT1
+#define COMPOUND_CAMERAS BIT2
+#define COMPOUND_TANKTRAPS BIT3
+#define COMPOUND_TRAPS BIT4
+#define COMPOUND_GENERATOR BIT5
+#define COMPOUND_PRINTINGPRESS BIT6
+#define COMPOUND_AAGUN BIT7
+
+#define RENTING_CCS -2
+#define RENTING_NOCONTROL -1
+#define RENTING_PERMANENT 0
+
 class Location
 {
 public:
@@ -249,20 +263,20 @@ public:
    void init();
    void update_heat_protection();
    bool duplicatelocation();
-   bool can_be_upgraded();
+   bool can_be_upgraded() { return upgradable; }
    bool can_be_fortified();
    bool fortified();
    bool can_be_trapped();
-   bool trapped();
+   bool trapped() { return compound_walls&COMPOUND_TRAPS; }
    bool can_install_tanktraps();
    bool tank_traps();
    bool can_have_businessfront();
    bool has_business_front();
    bool bomb_resistant();
    bool part_of_justice_system();
-   bool is_lcs_safehouse();
-   bool is_ccs_safehouse();
-   bool is_city();
+   bool is_lcs_safehouse() { return renting>=0; }
+   bool is_ccs_safehouse() { return renting==RENTING_CCS; }
+   bool is_city() { return type==city; }
    std::string getname(int shortname=false, bool include_city=false);
    void rename(const char* name, const char* shortname);
    char* city_description();
@@ -280,17 +294,21 @@ public:
  world.cpp
 */
 Location* find_site_by_id(int id);
-Location* find_site_in_city(int site, int city);
-int find_site_index_in_city(int site, int city);
+Location* find_site_in_city(int site_type, int city);
+int find_site_index_in_city(int site_type, int city);
 /* find local versions of these locations */
-int find_police_station(const Creature& cr);
-int find_police_station(int site);
-int find_clinic(const Creature& cr);
-int find_clinic(int site);
-int find_homeless_shelter(const Creature& cr);
-int find_homeless_shelter(int site);
-int find_courthouse(const Creature& cr);
-int find_courthouse(int site);
+int find_site_index_in_same_city(int site_type, int site_index);
+inline int find_site_index_in_same_city(int site_type, const Creature& cr) { return find_site_index_in_same_city(site_type,cr.location); }
+inline int find_police_station(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION,site_index); }
+inline int find_police_station(const Creature& cr) { return find_police_station(cr.location); }
+inline int find_clinic(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_CLINIC,site_index); }
+inline int find_clinic(const Creature& cr) { return find_clinic(cr.location); }
+inline int find_homeless_shelter(int site_index) { return find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER,site_index); }
+inline int find_homeless_shelter(const Creature& cr) { return find_homeless_shelter(cr.location); }
+inline int find_courthouse(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE,site_index); }
+inline int find_courthouse(const Creature& cr) { return find_courthouse(cr.location); }
+inline int find_hospital(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY,site_index); }
+inline int find_hospital(const Creature& cr) { return find_hospital(cr.location); }
 /* sets up the list of locations */
 void make_world(bool hasmaps);
 

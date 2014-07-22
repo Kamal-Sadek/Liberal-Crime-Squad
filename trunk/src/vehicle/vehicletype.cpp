@@ -23,7 +23,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 
    xmlfile.IntoElem();
 
-   while (xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
+   while(xmlfile.FindElem()) //Loop over all the elements inside the vehicletype element.
    {
       std::string element = xmlfile.GetTagName();
 
@@ -31,7 +31,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       {
          xmlfile.IntoElem();
 
-         while (xmlfile.FindElem())
+         while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
 
@@ -74,7 +74,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       {
          xmlfile.IntoElem();
          //std::string color;
-         while (xmlfile.FindElem())
+         while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
 
@@ -106,13 +106,13 @@ VehicleType::VehicleType(MCD_STR xmlstring)
       else if (element == "shortname")
       {
          shortname_ = xmlfile.GetData();
-         if (shortname_.length() > 7)
+         if (len(shortname_) > 7)
             shortname_.resize(7); //Only seven characters allowed for shortname_.
       }
       else if (element == "stealing")
       {
          xmlfile.IntoElem();
-         while (xmlfile.FindElem())
+         while(xmlfile.FindElem())
          {
             element = xmlfile.GetTagName();
 
@@ -152,7 +152,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
                    << std::endl;*/
    }
 
-   if (color_.size() == 0)
+   if (len(color_) == 0)
       color_.push_back("Translucent"); //Default.
 
    //xmlfile.OutOfElem();

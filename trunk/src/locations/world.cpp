@@ -21,64 +21,39 @@
 
 Location* find_site_by_id(int id)
 {
-   for(int i=0; i < (int)location.size(); i++)
-      if(location[i]->id == id)
+   for(int i=0;i<len(location);i++)
+      if(location[i]->id==id)
          return location[i];
-   return 0;
+   return NULL;
 }
 
-Location* find_site_in_city(int site, int city)
+Location* find_site_in_city(int site_type, int city)
 {
-   int i = find_site_index_in_city(site, city);
-   if(i != -1) return location[i];
+   int i=find_site_index_in_city(site_type,city);
+   if(i!=-1) return location[i];
    else return NULL;
 }
 
-int find_site_index_in_city(int site, int city)
+int find_site_index_in_city(int site_type, int city)
 {
-   for(int i=0; i < (int)location.size(); i++)
-      if(location[i]->type == site && (!multipleCityMode || city == -1 || location[i]->city == city))
+   for(int i=0;i<len(location);i++)
+      if(location[i]->type==site_type&&(!multipleCityMode||city==-1||location[i]->city==city))
          return i;
    return -1;
 }
 
-int find_police_station(const Creature& cr) { return find_police_station(cr.location); }
-int find_police_station(int site_index)
+int find_site_index_in_same_city(int site_type, int site_index)
 {
-   int city = -1;
-   if(site_index >= 0) city = location[site_index]->city;
-   return find_site_index_in_city(SITE_GOVERNMENT_POLICESTATION, city);
-}
-
-int find_clinic(const Creature& cr) { return find_clinic(cr.location); }
-int find_clinic(int site_index)
-{
-   int city = -1;
-   if(site_index >= 0) city = location[site_index]->city;
-   return find_site_index_in_city(SITE_HOSPITAL_CLINIC, city);
-}
-
-int find_homeless_shelter(const Creature& cr) { return find_homeless_shelter(cr.location); }
-int find_homeless_shelter(int site_index)
-{
-   int city = -1;
-   if(site_index >= 0) city = location[site_index]->city;
-   return find_site_index_in_city(SITE_RESIDENTIAL_SHELTER, city);
-}
-
-int find_courthouse(const Creature& cr) { return find_courthouse(cr.location); }
-int find_courthouse(int site_index)
-{
-   int city = -1;
-   if(site_index >= 0) city = location[site_index]->city;
-   return find_site_index_in_city(SITE_GOVERNMENT_COURTHOUSE, city);
+   int city=-1;
+   if(site_index>=0) city=location[site_index]->city;
+   return find_site_index_in_city(site_type,city);
 }
 
 void make_classic_world(bool hasmaps)
 {
-   Location* city = 0;
-   Location* district = 0;
-   Location* site = 0;
+   Location* city = NULL;
+   Location* district = NULL;
+   Location* site = NULL;
    int id = 0;
 
    District(SITE_DOWNTOWN, 0)
@@ -157,9 +132,9 @@ void make_world(bool hasmaps)
    }
 
    //MAKE LOCATIONS
-   Location* city;
-   Location* district;
-   Location* site;
+   Location* city = NULL;
+   Location* district = NULL;
+   Location* site = NULL;
    int id = 0;
 
    // Seattle
@@ -348,7 +323,6 @@ void make_world(bool hasmaps)
          Site(SITE_GOVERNMENT_PRISON)
          Site(SITE_GOVERNMENT_INTELLIGENCEHQ)
          Site(SITE_GOVERNMENT_ARMYBASE)
-
 
    //City(SITE_CITY_CHICAGO);
    //City(SITE_CITY_DETROIT);

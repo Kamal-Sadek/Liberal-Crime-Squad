@@ -7,59 +7,12 @@ std::string tostring(long i)
    return os.str();
 }
 
-const char* toCstring(long i)
-{
-   return tostring(i).c_str();
-}
-
 int stringtobool(std::string boolstr)
 {
    std::transform(boolstr.begin(), boolstr.end(), boolstr.begin(), ::tolower);
-   if (boolstr == "true" || boolstr == "1" || boolstr=="on" || boolstr=="yes")
-      return 1;
-   else if (boolstr == "false" || boolstr == "0" || boolstr=="off" || boolstr=="no")
-      return 0;
-   else
-      return -1;
-}
-
-/* These strcpy, strncpy, and strcat wrappers handle std:strings */
-char* strcpy(char* dest, const std::string& src)
-{
-   return strcpy(dest,src.c_str());
-}
-
-char* strncpy(char* dest, const std::string& src, size_t maxlen)
-{
-   return strncpy(dest,src.c_str(),maxlen);
-}
-
-char* strcat(char* dest, const std::string& src)
-{
-   return strcat(dest,src.c_str());
-}
-
-/* These strcpy and strcat wrappers handle numbers */
-char* strcpy(char* dest, long src)
-{
-   return strcpy(dest,tostring(src));
-}
-
-char* strcat(char* dest, long src)
-{
-   return strcat(dest,tostring(src));
-}
-
-/* This wrapper allows atoi to handle std::strings */
-int atoi(const std::string& str)
-{
-   return atoi(str.c_str());
-}
-
-/* This wrapper allows atof to handle std::strings */
-double atof(const std::string& str)
-{
-   return atof(str.c_str());
+   if(boolstr=="true"||boolstr=="1"||boolstr=="on"||boolstr=="yes") return 1;
+   else if(boolstr=="false"||boolstr=="0"||boolstr=="off"||boolstr=="no") return 0;
+   else return -1;
 }
 
 short creaturetype_string_to_enum(const std::string& ctname)

@@ -31,6 +31,9 @@ This file is part of Liberal Crime Squad.
 
 #include "includes.h"
 
+/* Not in log.cpp, we just need this declared inside this header */
+void LCSCloseFileCPP(std::fstream &file);
+
 /*
 Here's an example of how to use gamelog:
 
@@ -89,7 +92,7 @@ public:
    bool logged_since_last_message;
 
    Log();
-   ~Log();
+   ~Log() { if(initialized) LCSCloseFileCPP(file); }
 
    /*
    Initializes a new logger.
@@ -106,7 +109,7 @@ public:
           - 1 = newline
           - 2 = double newline
    */
-   bool initialize(string _filename, bool overwrite_existing, int _newline_mode = NEWLINEMODE_LOGFILES_DEFAULT);
+   bool initialize(const string& _filename, bool overwrite_existing, int _newline_mode = NEWLINEMODE_LOGFILES_DEFAULT);
 
    /*
       The following three functions, begl(), endl(), and record(), are specifically
@@ -123,7 +126,7 @@ public:
    void record(string text);*/
 
    //Adds the text given to the buffer.
-   void record(string text);
+   void record(const string& text);
 
    //Writes out everything currently in the buffer to the file, so as to split the
    //log into logical blocks.
@@ -142,12 +145,12 @@ public:
 
    Use this function if you want to log something that should not also be displayed ingame.
    */
-   bool log(string text);
+   bool log(const string& text);
 
    //Sets the newline mode.
    //Values work the same as with the initialize function for the newline_mode
    //parameter.
-   void newlmode(int new_newline_mode);
+   void newlmode(int new_newline_mode) { newline_mode = new_newline_mode; }
 
    //Writes out a newline.
    void newline();

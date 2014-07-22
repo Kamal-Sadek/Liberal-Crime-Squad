@@ -266,7 +266,7 @@ void elections(char clearformess,char canseethings)
             for(c=0;c<2;c++) if(votes[c]>maxvote) maxvote=votes[c];
             vector<int> eligible;
             for(c=0;c<2;c++) if(votes[c]==maxvote) eligible.push_back(c);
-            if(eligible.size()>1) recount=true;
+            if(len(eligible)>1) recount=true;
             winner=pickrandom(eligible);
          }
 
@@ -1300,7 +1300,7 @@ void supremecourt(char clearformess,char canseethings)
          if(court[j]==-2)
             generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
          else generate_name(courtname[j]);
-      } while(strlen(courtname[j])>20);
+      } while(len(courtname[j])>20);
 
       if(canseethings)
       {
@@ -1758,7 +1758,7 @@ void congress(char clearformess,char canseethings)
          pause_ms(500);
       }
 
-      for(int c=0;c<(int)bill.size();c++)
+      for(int c=0;c<len(bill);c++)
       {
          char sign=0;
          if(killbill[c]==1)sign=-1;
