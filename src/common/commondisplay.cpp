@@ -1362,6 +1362,37 @@ void printliberalcrimes(Creature &cr)
    addstr(" (");
    addstr(cr.get_type_name());
    addstr(")");
+   // Show outstanding convictions in addition to untried crimes
+   if (cr.deathpenalty)
+   {
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+      {
+         mvaddstr(3,0, "On DEATH ROW");
+      }else{
+         mvaddstr(3,0, "Sentenced to DEATH");
+      }
+   }else if (cr.sentence < 0)
+   {
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+      {
+         mvaddstr(3,0, "Serving life in prison");
+      }else{
+         mvaddstr(3,0, "Sentenced to life in prison");
+      }
+   }else if (cr.sentence > 0)
+   {
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
+      if (location[cr.location]->type==SITE_GOVERNMENT_PRISON)
+      {
+         mvaddstr(3,0, "Serving ");
+      }else{
+         mvaddstr(3,0, "Sentenced to ");
+      }
+      addstr(cr.sentence);
+      addstr(" months in prison.");   
+   }
 
    // Add all crimes
    for(int i = 0;i < LAWFLAGNUM; i++)
