@@ -1538,6 +1538,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       }
       else
       {
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
          strcat(str," to no effect.");
          move(17,1);
          addstr(str, gamelog);
