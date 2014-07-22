@@ -504,6 +504,7 @@ struct activityst
 
 enum IncomeType
 {                       // the below names are used in fundreport() in lcsmonthly.cpp
+                        // new types added without updating fundreport will show as "other income"
    INCOME_BROWNIES,     // "Brownies"
    INCOME_CARS,         // "Car Sales"
    INCOME_CCFRAUD,      // "Credit Card Fraud"
@@ -517,11 +518,12 @@ enum IncomeType
    INCOME_BUSKING,      // "Street Music"
    INCOME_THIEVERY,     // "Thievery"
    INCOME_TSHIRTS,      // "T-Shirt Sales"
-   INCOMETYPENUM        // "Other Income"
+   INCOMETYPENUM        // Count of Categories
 };
 
 enum ExpenseType
 {                         // the below names are used in fundreport() in lcsmonthly.cpp
+                          // new types added without updating fundreport will show as "other expenses"
    EXPENSE_TROUBLEMAKING, // "Activism"
    EXPENSE_CONFISCATED,   // "Confiscated"
    EXPENSE_DATING,        // "Dating"
@@ -538,7 +540,7 @@ enum ExpenseType
    EXPENSE_TRAINING,      // "Training"
    EXPENSE_TRAVEL,        // "Travel"
    EXPENSE_TSHIRTS,       // "T-Shirt Materials"
-   EXPENSETYPENUM         // "Other Expenses"
+   EXPENSETYPENUM         // Count of Categories
 };
 
 class Ledger
