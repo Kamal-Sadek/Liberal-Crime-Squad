@@ -1,0 +1,409 @@
+This file must be viewed in Code Page 437 to display correctly (and also use a
+fixed-width font while you're at it).
+
+Both this file and lcs_block_font.png are part of Liberal Crime Squad's source
+code and licensed under the GNU GPL version 2 or later, and were created by
+Rich McGrew to be incorporated in this game.
+
+Here is a block font for small capital letters in newspapers (variable width
+of 1-4 characters with most letters having a width of 3 characters, and a
+height of 4 characters). It uses Code Page 437 block characters to make big
+letters but not as big as the already existing font for really big newspaper
+headlines. This smaller font is for names of newspapers. It might also be
+useful in other parts of the game, for displaying stuff big but not too big
+(e.g. if there is not much text on the screen and it's an important message to
+grab the user's attention).
+
+You can also find it in a graphical form in lcs_block_font.png.
+
+Anyway, it is better than the current block font used for names of newspapers
+(most notably THE HERALD, where the E in the left part has the middle -
+missing and looks more like a C), but it needs to be implemented in the game.
+I haven't quite figured out exactly how to do that just yet so I am making
+these 2 files for the time being until that is implemented. The current block
+font used for newspaper story titles, on the other hand, looks very nice the
+way it is, I'm not suggesting changing it.
+
+This only implements 26 letters and the single apostrophe, exactly the same
+characters as the other, larger block font. Implementing lowercase letters is
+not very feasible with such a small font (not enough pixels for them to look
+even remotely decent, especially considering lowercase letters that hang down
+below such as g, j, p, q, and y, and lowercase letters that are a bit complex
+in a small area like e, s, and z), but numerical digits could be added along
+with other punctuation marks if necessary (punctuation marks like the period,
+comma, colon, brackets, parentheses, exclamation point, question mark, dollar
+sign, etc.). Well maybe not the comma, it hangs down below most letters, just
+like the lowercase letters g, j, p, q, and y do, and if you raised the comma
+up vertically to make it fit, it would look a little weird. Actually we could
+implement all those characters, even the lowercase ones, if we really wanted
+to, it would just look weird for some of them and their vertical placement
+would look wrong.
+
+It might also be useful to have a slightly smaller version of the really big
+block font used for headlines... same width but shorter vertically. This
+would be for news stories where there are 2 rows of headline. I haven't made
+such a font yet, but that'll be the next one to do after this one's
+implemented and in the game to replace the current one for names of newspapers
+(including the Liberal Guardian, which has the widest name). Stories with 2
+rows of headline leave almost no room on the bottom for story text, so this
+would fix that problem. The big block font for headlines is 5 characters wide
+and 7 characters tall, with an 8th blank row underneath, and it's fixed width
+unlike the font in this file. I'm thinking of making a shorter block font that
+is 5 characters wide, 5 characters tall, with a 6th blank row underneath,
+which would likewise be fixed width and look very similar, just shorter. This
+would add 4 more lines for text underneath 2 rows of the headline (which would
+actually take up 12 rows of the screen, rather than the current 16).
+
+Also, there may be some letters in this font that could have alternate-width
+versions, since it's variable-width after all. So at the bottom I have some
+variant-width versions for most of the letters. Some of those could be used if
+the name of sometihng is really short, since most of the variants are wider.
+The 2 characters where the ones I picked are wider than their variants are
+K and V, because the 4-character-wide versions of them look much better than
+the 3-character-wide versions. But for long text, like "The Liberal Guardian",
+we don't want characters to be too wide or else it won't fit on the screen.
+All characters are available in width 4 although it isn't the default one I
+picked for most of them; this allows for creating a fixed width font, although
+the purpose of this is to make a variable width font, I am just keeping our
+options open. I am a little disappointed that it seems to be impossible to get
+the letter X to look nice using only a height of 4 block characters. Most of
+the characters look nice though, and X looks OK, at least in my opinion.
+
+This font would also allow us to have a wider range of newspaper names. We
+already have "The Times", "The Post", "The Herald", "The Daily", and
+"The Globe". Some others we could add are "The Picayune", "The Gazette",
+"The Journal", "The Press", "The Dispatch", "The Chronicle", "The Courier",
+"The Sentinel", "The Tribune", "The Sun", "The Star", "The Examiner",
+"The Independent", "The Review", "The News", "The Bulletin", "The Reporter",
+"The Record", "The Democrat", "The Register", "The Leader", "The Citizen",
+"The Weekly", "The Enterprise", "The Review", "The Ledger", "The Inquirer",
+"The Republic", "The Courant", "The Mail", "The Bee", "The Blade",
+"The Beacon", "The Intelligencer", "The Telegram", "The World", "The Nation",
+"The Mercury", "The Union", "The Pioneer", "The Express", "The Advertiser",
+"The Republican", "The Patriot", "The Eagle", "The Pilot", "The Messenger",
+"The Monitor", etc., as well as ones that randomly combine 2 of these words
+(e.g. "Daily News", "Sun Times", "Review Journal", "Star Tribune",
+"Post Gazette", "Herald Tribune", "Union Leader", etc. - those combinantions
+are all real newspapers in the United States). My own local newspaper has an
+amalgamated name using 3 of those words: "The Press & Sun Bulletin". But using
+3 words is probably 2 much to fit. Oh, and we won't use "The Guardian" for
+other newspapers, that's reserved for The Liberal Guardian. And it would be
+fairly simple to code in a check to make sure 2-word combinations aren't too
+many letters to fit on the screen.
+
+OK, now that I've come up with all this, the only thing left to do is actually
+implement it in the game itself. I'll just leave this file and the
+corresponding .PNG file that displays this same font graphically (you'll need
+to zoom in on the image to see the details, obviously). That image has a
+checkerboard color pattern so you can tell where one character ends and
+another begins. Remember, each character is sorta like 4 pixels in a 2x2 grid,
+but you're limited in the number of possibilities for those 4 pixels... only
+6 out of the 16 possibilities you'd have in a graphics mode are available.
+Here are those 6 possibilities for each character:
+
+
+Characters used: Space:            " " (0x20)
+  (from CP437)   Full Block:       "л" (0xDB)
+                 Lower Half Block: "м" (0xDC)
+                 Left Half Block:  "н" (0xDD)
+                 Right Half Block: "о" (0xDE)
+                 Upper Half Block: "п" (0xDF)
+
+Character widths:
+A,B,C,D,E,F,H,J,L,N,O,P,R,S,T,U,X,Y,Z = 3
+G,K,M,Q,V,W = 4
+I = 1
+
+Here is the official font (there are variants later on but these are the
+versions I think are best for using in the game).
+
+олн
+л л
+ллл
+л л
+
+ллн
+лмл
+лпл
+ллн
+
+млм
+л п
+л м
+плп
+
+ллм
+л л
+л л
+ллп
+
+ллл
+лмм
+лпп
+ллл
+
+ллл
+лмм
+лпп
+л  
+
+мллм
+л  п
+л пл
+пллп
+
+л л
+лмл
+лпл
+л л
+
+л
+л
+л
+л
+
+  л
+  л
+м л
+плп
+
+л  л
+лмлп
+лплм
+л  л
+
+л  
+л  
+л  
+ллл
+
+лммл
+лонл
+лонл
+лонл
+
+л л
+лнл
+лол
+л л
+
+млм
+л л
+л л
+плп
+
+ллм
+лмл
+лп 
+л  
+
+мллм
+л  л
+л нл
+плпм
+
+ллм
+лмл
+лпн
+л л
+
+млм
+лм 
+ пл
+плп
+
+ллл
+ л 
+ л 
+ л 
+
+л л
+л л
+л л
+плп
+
+л  л
+онон
+ лл 
+ он 
+
+лонл
+лонл
+лонл
+оллн
+
+л л
+олн
+олн
+л л
+
+л л
+омн
+ л 
+ л 
+
+ллл
+ мл
+лп 
+ллл
+
+л
+о
+ 
+ 
+
+Those are the 26 capital letters in order, followed by a single apostrophe
+like this one: '
+
+Now are some variants that are different widths than the ones I chose for the
+main font, just as other possibilities.
+
+Thinner variants of K and V (3 characters wide instead of 4):
+
+л л
+лмн
+лпн
+л л
+
+л л
+л л
+олн
+ л 
+
+Wider variants of I (2, 3, or 4 characters wide instead of 1):
+
+лл
+он
+он
+лл
+
+ллл
+ л 
+ л 
+ллл
+
+лллл
+ он 
+ он 
+лллл
+
+Wider variants of A, B, C, D, E, F, H, J, L, N, O, P, R, S, T, U, X, Y, & Z
+(4 characters wide instead of 3):
+
+ лл 
+онон
+лллл
+л  л
+
+лллм
+лммл
+лппл
+лллп
+
+мллм
+л  п
+л  м
+пллп
+
+лллм
+л  л
+л  л
+лллп
+
+лллл
+лммм
+лппп
+лллл
+
+лллл
+лммм
+лппп
+л   
+
+л  л
+лммл
+лппл
+л  л
+
+ олл
+  он
+м он
+плп 
+
+л   
+л   
+л   
+лллл
+
+лн л
+ллнл
+лолл
+л ол
+
+мллм
+л  л
+л  л
+пллп
+
+лллм
+лммл
+лпп 
+л   
+
+лллм
+лммл
+лплн
+л  л
+
+мллм
+лмм 
+ ппл
+пллп
+
+лллл
+ он 
+ он 
+ он 
+
+л  л
+л  л
+л  л
+пллп
+
+л  л
+пллп
+мллм
+л  л
+
+л  л
+оллн
+ он 
+ он 
+
+лллл
+ ммл
+лпп 
+лллл
+
+Wider variants of M and W (5 characters wide instead of 4):
+
+лм мл
+лплпл
+л л л
+л л л
+
+л л л
+л л л
+л л л
+плплп
+
+G and Q don't have variants, they don't look good at other widths besides 4.
+
+Neither G nor Q can be done with width 3 or less, and width 5 is quite
+excessive for any letters other than M and W, given how short the characters
+are (limited to a height of 4).
+
+All characters are available in width 4, this means it is possible to use this
+to make a fixed width font, although I think variable width is much better,
+because fixed width is a waste of screen space and limits how many letters you
+can fit on the screen.
