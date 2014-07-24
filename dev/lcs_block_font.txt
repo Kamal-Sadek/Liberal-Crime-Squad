@@ -282,10 +282,10 @@ Wider variants of I (2, 3, or 4 characters wide instead of 1):
  л 
 ллл
 
-лллл
+оллн
  он 
  он 
-лллл
+оллн
 
 Wider variants of A, B, C, D, E, F, H, J, L, N, O, P, R, S, T, U, X, Y, & Z
 (4 characters wide instead of 3):
@@ -335,10 +335,10 @@ Wider variants of A, B, C, D, E, F, H, J, L, N, O, P, R, S, T, U, X, Y, & Z
 л   
 лллл
 
-лн л
-ллнл
-лолл
-л ол
+лл л
+лонл
+лонл
+л лл
 
 мллм
 л  л
@@ -390,9 +390,9 @@ Wider variants of M and W (5 characters wide instead of 4):
 лм мл
 лплпл
 л л л
-л л л
+л п л
 
-л л л
+л м л
 л л л
 л л л
 плплп
