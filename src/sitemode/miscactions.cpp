@@ -95,7 +95,7 @@ char unlock(short type,char &actual)
          //skill goes up in proportion to the chance of you failing.
          if(maxattack<=difficulty)
          {
-            activesquad->squad[p]->train(SKILL_SECURITY,1+(difficulty-maxattack));
+            activesquad->squad[p]->train(SKILL_SECURITY,10*difficulty);
          }
          clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -123,7 +123,7 @@ char unlock(short type,char &actual)
             {
                if(activesquad->squad[j]->alive)
                {
-                  activesquad->squad[j]->train(SKILL_SECURITY,difficulty-activesquad->squad[j]->get_skill(SKILL_SECURITY));
+                  activesquad->squad[j]->train(SKILL_SECURITY,5*difficulty);
                }
             }
          }
@@ -145,7 +145,7 @@ char unlock(short type,char &actual)
          {
             if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
             {
-               activesquad->squad[p]->train(SKILL_SECURITY,10);
+               activesquad->squad[p]->train(SKILL_SECURITY,50);
 
                addstr(activesquad->squad[p]->name, gamelog);
                addstr(" is close, but can't quite get the lock open.", gamelog);
@@ -181,7 +181,6 @@ char unlock(short type,char &actual)
    actual=0;
    return 0;
 }
-
 
 
 /* bash attempt */

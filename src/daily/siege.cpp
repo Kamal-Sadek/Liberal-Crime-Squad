@@ -105,10 +105,10 @@ void siegecheck(char canseethings)
             {
                location[l]->siege.timeuntillocated--;
                // Hunt faster if location is extremely hot
-               if(location[l]->heat > 300)
+               if(location[l]->heat > 100)
                {
                   int hunt_speed;
-                  hunt_speed = location[l]->heat / 150;
+                  hunt_speed = location[l]->heat / 50;
                   while(hunt_speed&&location[l]->siege.timeuntillocated>1)
                   {
                      location[l]->siege.timeuntillocated--;
@@ -120,7 +120,6 @@ void siegecheck(char canseethings)
 
          //CHECK FOR CRIMINALS AT THIS BASE
          int crimes=0;
-         int kidnapped=0;
          //int heatprotection=0;
          for(int p=0;p<len(pool);p++)
          {
@@ -129,11 +128,10 @@ void siegecheck(char canseethings)
 
             if(!pool[p]->alive) // Corpses attract attention
             {
-               crimes += 10;
+               crimes += 5;
                continue;
             }
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED &&
-               pool[p]->align!=1)
+            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED && pool[p]->align!=1)
             {
                crimes += 5*pool[p]->joindays; // Kidnapped persons increase heat
                continue;
@@ -141,54 +139,42 @@ void siegecheck(char canseethings)
             if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
             numpres++;
 
-            //Heat doesn't matter for sieges until it gets high
-            crimes += max(0,(pool[p]->heat)/10-10);
-            //Heat decay
-            if(pool[p]->heat > 100) pool[p]->heat-=pool[p]->heat/100;
+            // Accumulate heat from liberals who have it, but let them bleed it off in the process
+            if(pool[p]->heat > 0)
+            {
+               pool[p]->heat -= 1;
+               crimes += pool[p]->heat/10 + 1;
+            }
          }
 
-         // Let the place cool off if nobody is present
-         if(!crimes)
-         {
-            location[l]->heat-=5;
+         // Determine how effective your current safehouse
+         // is at keeping the police confused
+         location[l]->update_heat_protection();
 
-            if(location[l]->heat<0)
+         // Let the place cool off if not accumulating heat
+         if(crimes < location[l]->heat)
+         {
+            location[l]->heat -= 1;
+
+            if(location[l]->heat < 0)
                location[l]->heat = 0;
          }
          else
          {
-            // Determine how effective your current safehouse
-            // is at keeping the police confused
-            location[l]->update_heat_protection();
-
-            // Having hostages increases heat
-            if(kidnapped)
-            {
-               crimes+=kidnapped*20;
-            }
-
             // Update location heat
-            int max_heat = static_cast<int>(crimes * (100 - location[l]->heat_protection) / 100.0);
-            location[l]->heat += (max_heat - location[l]->heat)/10;
+            if(crimes > location[l]->heat) location[l]->heat += (crimes-location[l]->heat)/10 + 1;
 
             // Begin planning siege if high heat on location
-            if(LCSrandom(3000) < location[l]->heat
-               && !(location[l]->siege.timeuntillocated>=0)) //Do not re-plan siege.
+            if(location[l]->heat > location[l]->heat_protection &&
+               LCSrandom(500) < location[l]->heat &&
+               !(location[l]->siege.timeuntillocated>=0)) //Do not re-plan siege.
             {
-               // Set force deployment (military, bombers, etc.)
-               if(LCSrandom(location[l]->heat) > 50)location[l]->siege.escalationstate++;
-               if(LCSrandom(location[l]->heat) > 150)location[l]->siege.escalationstate++;
-               if(LCSrandom(location[l]->heat) > 300)location[l]->siege.escalationstate++;
-
-               if(location[l]->siege.escalationstate>3)
-                  location[l]->siege.escalationstate=3;
-
                // Set time until siege is carried out
-               location[l]->siege.timeuntillocated += 14 + LCSrandom(15);
+               location[l]->siege.timeuntillocated += 2 + LCSrandom(6);
             }
          }
 
-         // *JDS* Sleepers at the police department may give a warning just before police raids
+         // Sleepers at the police department may give a warning just before police raids
          if(location[l]->siege.timeuntillocated==1)
          {
             int policesleeperwarning=0;
