@@ -520,7 +520,7 @@ void passmonth(char &clearformess,char canseethings)
    dispersalcheck(clearformess);
 
    //FUND REPORTS
-   fundreport(clearformess);
+   if(canseethings)fundreport(clearformess);
    ledger.resetMonthlyAmounts();
    if(clearformess) erase();
 

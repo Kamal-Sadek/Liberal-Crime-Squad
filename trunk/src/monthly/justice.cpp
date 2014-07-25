@@ -1269,7 +1269,7 @@ char prison(Creature &g)
          laborcamp(g);
       else
          //Normal prison.
-         prisonscene(g);
+         if(!LCSrandom(5)) prisonscene(g);
    }
 
    if(g.sentence>0)
@@ -1463,7 +1463,7 @@ void reeducation(Creature &g)
       else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
       {
          addstr(g.name, gamelog);
-         addstr(" stays loyal to the LCS for ", gamelog);
+         addstr(" only stays loyal to the LCS for ", gamelog);
          addstr(pool[g.hireid]->name, gamelog);
          addstr(".", gamelog);
       }
@@ -1502,12 +1502,11 @@ void laborcamp(Creature &g)
 {
 	static const char *labor_camp_experiences[] =
 	{
-		" is forced to work hard labor in prison.",
-		" operates dangerous machinery day after day in prison.",
+		" is forced to operate dangerous machinery in prison.",
 		" is beaten by sadistic prison guards.",
 		" carries heavy burdens back and forth in prison labor camp.",
 		" does back-breaking work all month in prison.",
-		" gets in a brutal fight with other distraught prisoners.",
+		" gets in a brutal fight with another prisoner.",
 		" participates in a quickly-suppressed prison riot.",
 		" participates in a quickly-suppressed prison riot."
 	};
@@ -1522,7 +1521,7 @@ void laborcamp(Creature &g)
    getkey();
 
    move(10,1);
-   if(!LCSrandom(10))
+   if(!LCSrandom(4))
    {
       if(g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
       {
@@ -1543,7 +1542,7 @@ void laborcamp(Creature &g)
    else
    {
       addstr(g.name, gamelog);
-      addstr(" carries on, regardless.", gamelog);
+      addstr(" managed to avoid lasting injury.", gamelog);
    }
    gamelog.nextMessage();
 
@@ -1556,42 +1555,67 @@ void laborcamp(Creature &g)
 
 void prisonscene(Creature &g)
 {  // this previously empty function is mostly just flavor text for now and hardly does any changes, just some minor modification of juice
-	static const char *prison_experiences[] =
+   static const char *good_experiences[] =
+   {
+      " advertises the LCS every day to other inmates.",
+      " organizes a group of inmates to beat up on a serial rapist.",
+      " learns lots of little skills from other inmates.",
+      " gets a prison tattoo with the letters L-C-S.",
+      " thinks up new protest songs while in prison."
+   };
+   static const char *bad_experiences[] =
+   {
+	   " gets sick for a few days from nasty prison food.",
+	   " spends too much time working out at the prison gym.",
+	   " is raped by another prison inmate, repeatedly.",
+      " writes a letter to the warden swearing off political activism.",
+      " rats out one of the other inmates in exchange for benefits."
+   };
+	static const char *general_experiences[] =
 	{
 	   " mouths off to a prison guard and ends up in solitary.",
 	   " gets high off drugs smuggled into the prison.",
-	   " gets sick for a few days from nasty prison food.",
-	   " spends too much time working out at the prison gym.",
 	   " does nothing but read books at the prison library.",
 	   " gets into a fight and is punished with latrine duty.",
-	   " is raped by another prison inmate, repeatedly.",
 	   " constantly tries thinking how to escape from prison."
 	};
+
+   int effect;
+   const char *experience;
+   if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
+      effect = 1;
+      if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
+      else experience = pickrandom(general_experiences);
+   } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
+      effect = 0;
+      experience = pickrandom(general_experiences);
+   } else {
+      effect = -1;
+      if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
+      else experience = pickrandom(general_experiences);
+   }
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   addstr(pickrandom(prison_experiences), gamelog);
+   addstr(experience, gamelog);
    gamelog.newline();
 
    getkey();
 
    move(10,1);
-   if(!LCSrandom(10))
+   if(effect > 0)
    {
-      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD))
-      {
-         addstr(g.name, gamelog);
-         addstr(" has become a more hardened, Juicier criminal.", gamelog);
-         addjuice(g,10,200); // very little change, since this function was empty until recently, not doing anything too radical here
-      }
-      else
-      {
-         addstr(g.name, gamelog);
-         addstr(" is kinda losing it in here. Juice, that is.", gamelog);
-         addjuice(g,-10,0); // very little change, since this function was empty until recently, not doing anything too radical here
-      }
+      addstr(g.name, gamelog);
+      addstr(" has become a more hardened, Juicier criminal.", gamelog);
+      addjuice(g,10,200); // very little change, since this function was empty until recently, not doing anything too radical here
+   }
+   else if(effect < 0)
+   {
+      addstr(g.name, gamelog);
+      addstr(" is kinda losing it in here. Juice, that is.", gamelog);
+      addjuice(g,-10,-30); // very little change, since this function was empty until recently, not doing anything too radical here
    }
    else
    {

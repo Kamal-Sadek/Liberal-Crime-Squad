@@ -351,21 +351,22 @@ void stopevil()
 
          if(show_safehouse_info)
          {
+            this_location->update_heat_protection();
+
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            mvaddstr(y,50,"Heat: ");
-            if(this_location->heat > 100)
-               set_color(COLOR_RED,COLOR_BLACK,1);
-            else if(this_location->heat > 0)
+            mvaddstr(y,54,"Heat: ");
+            if(this_location->heat > this_location->heat_protection)
                set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            else set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(location[temploc[p]]->heat);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            addstr(this_location->heat);
             addstr("%");
             set_color(COLOR_WHITE,COLOR_BLACK,0);
-            move(y,61);
+            move(y,66);
             addstr("Secrecy: ");
-            set_color(COLOR_BLACK,COLOR_BLACK,1);
-            location[temploc[p]]->update_heat_protection();
-            addstr(location[temploc[p]]->heat_protection);
+            if(this_location->heat > this_location->heat_protection)
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            addstr(this_location->heat_protection);
             addstr("%");
          }
 

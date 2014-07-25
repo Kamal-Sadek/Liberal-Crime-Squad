@@ -318,14 +318,6 @@ void Location::update_heat_protection()
    else if(law[LAW_FLAGBURNING]==-2&&!(location[l]->haveflag)) heat_protection-=2; // Lose some if it is and you have no flag
    else { } // None if it isn't and you have no flag
 
-   //Protection varies with how many people in the safehouse
-   if(numpres>60) heat_protection-=20;
-   if(numpres>40) heat_protection-=12;
-   if(numpres>20) heat_protection-=6;
-   if(numpres<10) heat_protection+=1;
-   if(numpres<4) heat_protection+=2;
-   if(numpres<2) heat_protection+=3;
-
    if(heat_protection<0) heat_protection=0;
 
    heat_protection*=5;

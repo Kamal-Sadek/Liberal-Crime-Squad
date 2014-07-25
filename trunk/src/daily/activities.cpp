@@ -1117,7 +1117,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
                Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
                location[hack[0]->location]->loot.push_back(it);
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                break;
@@ -1125,7 +1125,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             case 1: // *JDS* Penetrated government networks; don't get any loot, but do scare the info community
                strcat(msg,"caused a scare by breaking into a CIA network.");
 
-               trackdif=DIFFICULTY_SUPERHEROIC;
+               trackdif=DIFFICULTY_IMPOSSIBLE;
                crime=LAWFLAG_INFORMATION;
                juiceval=25;
                change_public_opinion(VIEW_INTELLIGENCE,10,0,75);
@@ -1133,7 +1133,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             case 2:
                strcat(msg,"sabotaged a genetics research company's network.");
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_GENETICS,2,0,75);
@@ -1147,7 +1147,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
                else it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
                location[hack[0]->location]->loot.push_back(it);
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                break;
@@ -1155,7 +1155,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             case 4:
                strcat(msg,"broke into military networks leaving LCS slogans.");
 
-               trackdif=DIFFICULTY_SUPERHEROIC;
+               trackdif=DIFFICULTY_IMPOSSIBLE;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,5,0,75);
@@ -1167,7 +1167,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
                Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
                location[hack[0]->location]->loot.push_back(it);
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                break;
@@ -1179,7 +1179,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
                Item *it=new Loot(*loottype[getloottype("LOOT_JUDGEFILES")]);
                location[hack[0]->location]->loot.push_back(it);
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                break;
@@ -1188,7 +1188,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             {
                strcat(msg,"subverted a Conservative family forum.");
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_GAY,2,0,75);
@@ -1199,7 +1199,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             {
                strcat(msg,"spread videos of racist police brutality.");
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_POLICEBEHAVIOR,2,0,75);
@@ -1211,7 +1211,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
                strcat(msg,"published emails revealing CEO tax evasion.");
                //Scambaiting, except you're baiting a CEO
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_CEOSALARY,2,0,75);
@@ -1222,7 +1222,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
             {
                strcat(msg,"revealed huge political bias in INS processes.");
 
-               trackdif=DIFFICULTY_FORMIDABLE;
+               trackdif=DIFFICULTY_SUPERHEROIC;
                crime=LAWFLAG_INFORMATION;
                juiceval=10;
                change_public_opinion(VIEW_IMMIGRATION,2,0,75);
@@ -1270,7 +1270,7 @@ void doActivityHacking(vector<Creature *> &hack, char &clearformess)
 
          change_public_opinion(issue,1);
 
-         if(DIFFICULTY_FORMIDABLE>hack_skill+LCSrandom(5)-2)
+         if(DIFFICULTY_HEROIC>hack_skill+LCSrandom(5)-2)
             for(int h=0;h<len(truehack);h++)
                criminalize(*truehack[h],crime);
 

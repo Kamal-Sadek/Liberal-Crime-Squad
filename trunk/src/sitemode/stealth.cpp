@@ -248,6 +248,11 @@ void disguisecheck(int timer)
          // Increase difficulty if Conservatives suspicious...
          if(sitealarmtimer==1)
          {
+            stealth_difficulty += 6;
+            disguise_difficulty += 6;
+         }
+         else if(sitealarmtimer>1)
+         {
             stealth_difficulty += 3;
             disguise_difficulty += 3;
          }
@@ -263,7 +268,7 @@ void disguisecheck(int timer)
                int result = activesquad->squad[i]->skill_roll(SKILL_STEALTH);
                result -= timer;
                // Sneaking with a party is hard
-               if(result < (stealth_difficulty + partysize - 1))
+               if(result < (stealth_difficulty + (partysize-1)*3))
                   spotted = true;
             }
 
@@ -301,7 +306,7 @@ void disguisecheck(int timer)
          for(int i=0;i<6;i++)
          {
             if(activesquad->squad[i] == NULL) break;
-            activesquad->squad[i]->train(SKILL_STEALTH, 10);
+            activesquad->squad[i]->train(SKILL_STEALTH, 40);
          }
 
          if(timer == 0)
@@ -328,7 +333,7 @@ void disguisecheck(int timer)
             {
                if(activesquad->squad[i] == NULL) break;
                if(hasdisguise(*(activesquad->squad[i])))
-                  activesquad->squad[i]->train(SKILL_DISGUISE, 10);
+                  activesquad->squad[i]->train(SKILL_DISGUISE, 50);
             }
          }
 
