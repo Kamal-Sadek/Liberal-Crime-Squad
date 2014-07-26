@@ -3,10 +3,9 @@
 
 #include "includes.h"
 
-// These 3 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
+// These 2 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
 // They're just needed by this header and implemented elsewhere.
 extern vector<VehicleType *> vehicletype;
-int getvehicletype(int id);
 int getvehicletype(const string &idname);
 
 class Vehicle

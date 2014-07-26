@@ -686,7 +686,7 @@ char completedate(datest &d,int p,char &clearformess)
                d.date[e]->give_armor(clothes,NULL);
 
                //Create interrogation data
-               d.date[e]->activity.arg=reinterpret_cast<long>(new interrogation);
+               d.date[e]->activity.intr()=new interrogation;
 
                erase();
 

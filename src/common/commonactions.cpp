@@ -607,7 +607,7 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
 
       int c=getkey();
 
-      if(c==ENTER&&selection)
+      if((c=='x'||c==ENTER||c==ESC||c==SPACEBAR)&&selection)
       {
          converted.flag |= CREATUREFLAG_SLEEPER;
          converted.location = converted.worklocation;
@@ -617,14 +617,15 @@ void sleeperize_prompt(Creature &converted, Creature &recruiter, int y)
          liberalize(converted,false);
          break;
       }
-      else if(c==ENTER&&!selection)
+      else if((c=='x'||c==ENTER||c==ESC||c==SPACEBAR)&&!selection)
       {
          converted.location=recruiter.location;
          converted.base=recruiter.base;
          liberalize(converted,false);
          break;
       }
-      else if(c==KEY_DOWN||c==KEY_UP) selection=!selection;
+      else if(c==interface_pgup||c==KEY_UP  ||c==KEY_LEFT||
+              c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT) selection=!selection;
    }
 }
 

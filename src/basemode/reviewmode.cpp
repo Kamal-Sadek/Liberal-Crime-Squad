@@ -889,7 +889,7 @@ void assemblesquad(squadst *cursquad)
          {
             skill+=(int)temppool[p]->get_skill(sk);
             if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(sk))&&
-               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true))bright=1;
+               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true)) bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -921,8 +921,8 @@ void assemblesquad(squadst *cursquad)
             }
          }
 
-         if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
+         if(temppool[p]->align==-1) set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(temppool[p]->align==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
          else set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,50);
          addstr(temppool[p]->get_type_name());
@@ -938,9 +938,9 @@ void assemblesquad(squadst *cursquad)
 		move(23,50);
       addstr("V - View a Liberal");
       move(24,0);
-      if(partysize>0)addstr("Enter - The squad is ready.");
+      if(partysize>0) addstr("Enter - The squad is ready.");
       else addstr("Enter - I need no squad!");
-      if(partysize>0)set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(partysize>0) set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(24,40);
       addstr("9 - Dissolve the squad.");
@@ -948,9 +948,9 @@ void assemblesquad(squadst *cursquad)
       int c=getkey();
 
       //PAGE UP
-      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+      if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0) page--;
       //PAGE DOWN
-      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool))page++;
+      if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool)) page++;
 
       if(c>='a'&&c<='s')
       {
@@ -1052,8 +1052,7 @@ void assemblesquad(squadst *cursquad)
                activesquad->squad[0]=temppool[p];
                temppool[p]->squadid = activesquad->id;
                fullstatus(0);
-               delete activesquad;
-               activesquad = NULL;
+               delete_and_nullify(activesquad);
                temppool[p]->squadid = oldSquadID;
                activesquad = oldactivesquad;
             }
@@ -1062,22 +1061,13 @@ void assemblesquad(squadst *cursquad)
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
          //CHECK IF GOOD
-         char good=1,care=0;
+         bool good=false;
 
          for(int p=0;p<6;p++)
-         {
-            if(cursquad->squad[p]!=NULL)
-            {
-               if(cursquad->squad[p]->align==1)
-               {
-                  care=1;
-                  break;
-               }
-               else good=0;
-            }
-         }
+            if(cursquad->squad[p]) if(cursquad->squad[p]->align==1)
+            {  good=true; break; }
 
-         if(good||care)break;
+         if(good) break;
          else
          {
             set_color(COLOR_RED,COLOR_BLACK,1);

@@ -410,8 +410,7 @@ void enemyattack()
 
                      getkey();
 
-                     delete activesquad->squad[target]->prisoner;
-                     activesquad->squad[target]->prisoner=NULL;
+                     delete_and_nullify(activesquad->squad[target]->prisoner);
                   }
                }
                continue;

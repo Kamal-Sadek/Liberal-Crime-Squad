@@ -147,8 +147,15 @@ inline char& pickrandom(char* x)
    return x[LCSrandom(len(x))];
 }
 
+/* Deletes a specified pointer and sets it to NULL. */
+template <typename T> inline void delete_and_nullify(T* &o)
+{
+   delete o;
+   o=NULL;
+}
+
 /* Deletes and removes a specified pointer from a container. */
-template <class Container> void delete_and_remove(Container& c,int i)
+template <class Container> inline void delete_and_remove(Container& c,int i)
 {
    if(i<=-1) return; // check for invalid index, and don't delete anything in this case
 	delete c[i];
@@ -157,7 +164,7 @@ template <class Container> void delete_and_remove(Container& c,int i)
 
 /* Deletes and removes a specified pointer from 2 containers it's in.
    c1 and c2 must not be the same container! */
-template <class Container> void delete_and_remove(Container& c1,int i1,Container& c2,int i2)
+template <class Container> inline void delete_and_remove(Container& c1,int i1,Container& c2,int i2)
 {
    if(i1<=-1||i2<=-1) return; // check for invalid index, and don't delete anything in this case
    if(c1[i1]==c2[i2])
@@ -173,7 +180,7 @@ template <class Container> void delete_and_remove(Container& c1,int i1,Container
 }
 
 /* Deletes and removes all pointers in a container. */
-template <class Container> void delete_and_clear(Container& c)
+template <class Container> inline void delete_and_clear(Container& c)
 {
    while(len(c))
    {
@@ -183,7 +190,7 @@ template <class Container> void delete_and_clear(Container& c)
 }
 
 /* Deletes and removes all pointers that 2 containers have in common. */
-template <class Container> void delete_and_clear(Container& c1,Container& c2)
+template <class Container> inline void delete_and_clear(Container& c1,Container& c2)
 {
    for(int i1=len(c1)-1;i1>=0;i1--)
       for(int i2=len(c2)-1;i2>=0;i2--)

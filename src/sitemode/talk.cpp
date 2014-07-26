@@ -2019,8 +2019,7 @@ char talkInCombat(Creature &a, Creature &tk)
 
                getkey();
 
-               delete executer->prisoner;
-               executer->prisoner=NULL;
+               delete_and_nullify(executer->prisoner);
 
                if(hostages>1&&LCSrandom(2))
                {
@@ -2136,8 +2135,7 @@ char talkInCombat(Creature &a, Creature &tk)
                         activesquad->squad[i]->prisoner &&
                         activesquad->squad[i]->prisoner->enemy())
                      {
-                        delete activesquad->squad[i]->prisoner;
-                        activesquad->squad[i]->prisoner=NULL;
+                        delete_and_nullify(activesquad->squad[i]->prisoner);
                      }
                   }
 

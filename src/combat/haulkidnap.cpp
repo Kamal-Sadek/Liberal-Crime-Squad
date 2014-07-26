@@ -215,7 +215,7 @@ void releasehostage()
 
       int c=getkey();
 
-      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)return;
+      if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) return;
 
       if(c>='1'&&c<='6')
          if(availslot[c-'1'])
@@ -552,7 +552,7 @@ void kidnaptransfer(Creature &cr)
    newcr->drop_weapons_and_clips(&(location[newcr->location]->loot));
 
    //Create interrogation data
-   newcr->activity.arg=reinterpret_cast<long>(new interrogation);
+   newcr->activity.intr()=new interrogation;
 
    erase();
 

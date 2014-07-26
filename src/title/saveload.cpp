@@ -186,15 +186,15 @@ void savegame(const char *str)
          //write extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            interrogation* arg = reinterpret_cast<interrogation*>(pool[pl]->activity.arg);
-            fwrite(arg->techniques,sizeof(bool[6]),1,h);
-            fwrite(&arg->druguse,sizeof(int),1,h);
+            interrogation* &intr = pool[pl]->activity.intr();
+            fwrite(intr->techniques,sizeof(bool[6]),1,h);
+            fwrite(&intr->druguse,sizeof(int),1,h);
 
             //deep write rapport map
-            int size = len(arg->rapport);
+            int size = len(intr->rapport);
             fwrite(&size,sizeof(int),1,h);
 
-            for(map<long,float_zero>::iterator i=arg->rapport.begin();i!=arg->rapport.end();i++)
+            for(map<long,float_zero>::iterator i=intr->rapport.begin();i!=intr->rapport.end();i++)
             {
                fwrite(&i->first,sizeof(long),1,h);
                fwrite(&i->second,sizeof(float_zero),1,h);
@@ -539,12 +539,12 @@ char load()
          //read extra interrogation data if applicable
          if(pool[pl]->align==-1 && pool[pl]->alive)
          {
-            interrogation* arg = new interrogation;
-            pool[pl]->activity.arg = reinterpret_cast<long>(arg);
-            fread(arg->techniques,sizeof(bool[6]),1,h);
-            fread(&arg->druguse,sizeof(int),1,h);
+            interrogation* &intr = pool[pl]->activity.intr();
+            intr = new interrogation;
+            fread(intr->techniques,sizeof(bool[6]),1,h);
+            fread(&intr->druguse,sizeof(int),1,h);
 
-            arg->rapport.clear();
+            intr->rapport.clear();
             int size;
             fread(&size,sizeof(int),1,h);
             for(int i=0;i<size;i++)
@@ -553,7 +553,7 @@ char load()
                float_zero value;
                fread(&id,sizeof(long),1,h);
                fread(&value,sizeof(float_zero),1,h);
-               arg->rapport[id]=value;
+               intr->rapport[id]=value;
             }
          }
          /*

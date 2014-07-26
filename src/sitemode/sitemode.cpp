@@ -564,22 +564,15 @@ void mode_site()
          {
             for(int p=0;p<6;p++)
             {
-               if(activesquad->squad[p]==NULL)continue;
+               if(!activesquad->squad[p]) continue;
                if(activesquad->squad[p]->carid!=-1)
-               {
-                  long v=id_getcar(activesquad->squad[p]->carid);
-                  if(v!=-1)
-                  {
-                     delete vehicle[v];
-                     vehicle.erase(vehicle.begin() + v);
-                  }
-               }
+                  delete_and_remove(vehicle,id_getcar(activesquad->squad[p]->carid));
             }
          }
 
          for(int p=0;p<6;p++)
          {
-            if(activesquad->squad[p]==NULL)continue;
+            if(!activesquad->squad[p]) continue;
 
             activesquad->squad[p]->die();
             activesquad->squad[p]->location=-1;
