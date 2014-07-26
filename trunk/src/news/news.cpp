@@ -1436,6 +1436,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                            break;
                         }
                      }
+                     strcat(story,"&r");
                   }
                }
                break;
@@ -1669,7 +1670,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
    }
 
    int c;
-   do c=getkey(); while(c!=ESC&&c!=ENTER&&c!=SPACEBAR);
+   do c=getkey(); while(c!='x'&&c!=ESC&&c!=ENTER&&c!=SPACEBAR);
 }
 
 

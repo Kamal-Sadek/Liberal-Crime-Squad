@@ -20,6 +20,9 @@
 
 #define MAXSUBORDINATES 30
 
+// MAXATTRIBUTE is maximum value for both attributes & skills, set to 99 to limit it to 2 digits on screen
+#define MAXATTRIBUTE 99
+
 enum CreatureGender
 {
    GENDER_NEUTRAL,
@@ -290,8 +293,8 @@ private:
    class Skill skills[SKILLNUM];
    int skill_experience[SKILLNUM];
    static int roll_check(int skill);
-   Weapon& weapon_none() const;
-   Armor& armor_none() const;
+   static Weapon& weapon_none();
+   static Armor& armor_none();
    Weapon* weapon;
    Armor* armor;
 public:
@@ -340,11 +343,10 @@ public:
 
    char forceinc;
 
-   void train(int trainedskill, int experience);
-   void train(int trainedskill, int experience, int upto);
+   void train(int trainedskill, int experience, int upto=MAXATTRIBUTE);
    void skill_up();
-   int get_skill_ip(int skill) const;
-   std::string get_type_name() const;
+   int get_skill_ip(int skill) const { return skill_experience[skill]; }
+   std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after Creature)
 
    bool enemy() const;
 
@@ -455,15 +457,14 @@ private:
 public:
    int CEO_state;
    int Pres_state;
-   UniqueCreatures() : CEO_ID(-1), Pres_ID(-1) {};
+   UniqueCreatures() : CEO_ID(-1), Pres_ID(-1) { }
    explicit UniqueCreatures(const std::string& inputXml);
    string showXml() const;
 
-   Creature& CEO();
-   Creature& President();
-
    void newCEO();
    void newPresident();
+   Creature& CEO() { if(CEO_ID==-1) newCEO(); return CEO_; }
+   Creature& President() { if(Pres_ID==-1) newPresident(); return Pres_; }
    void initialize() { newCEO(); newPresident(); }
 };
 

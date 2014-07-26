@@ -337,11 +337,6 @@ bool Creature::reports_to_police() const
    return false;
 }
 
-std::string Creature::get_type_name() const
-{
-   return getcreaturetype(type_idname)->get_type_name();
-}
-
 bool Creature::is_lcs_sleeper() const
 {
    return(alive && align==ALIGN_LIBERAL && clinic==0 &&
@@ -512,10 +507,7 @@ Creature::Creature(const std::string& inputXml)
       {
          armor = new Armor(xml.GetSubDoc());
          if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
-         {
-            delete armor;
-            armor = NULL;
-         }
+            delete_and_nullify(armor);
       }
       else if (tag == "name")
          strcpy(name,xml.GetData());
@@ -872,8 +864,8 @@ int Creature::get_attribute(int attribute, bool usejuice) const
    }
 
    // Bounds check attributes
-   if(ret<1)ret=1;
-   //if(ret>20)ret=20;
+   if(ret<1) ret=1;
+   if(ret>MAXATTRIBUTE) ret=MAXATTRIBUTE;
 
    return ret;
 }
@@ -1113,11 +1105,6 @@ void Creature::train(int trainedskill, int experience, int upto)
 
 }
 
-void Creature::train(int trainedskill, int experience)
-{
-   return this->train(trainedskill, experience, skill_cap(trainedskill,true));
-}
-
 void Creature::skill_up()
 {
    for(int s=0;s<SKILLNUM;s++)
@@ -1131,11 +1118,6 @@ void Creature::skill_up()
       if(skills[s].value==skill_cap(s,true))
          skill_experience[s]=0;
    }
-}
-
-int Creature::get_skill_ip(int skill) const
-{
-   return skill_experience[skill];
 }
 
 bool Creature::enemy() const
@@ -1375,18 +1357,6 @@ string UniqueCreatures::showXml() const
    return xml.GetDoc();
 }
 
-Creature& UniqueCreatures::CEO()
-{
-   if(CEO_ID==-1) newCEO();
-   return CEO_;
-}
-
-Creature& UniqueCreatures::President()
-{
-   if(Pres_ID==-1) newPresident();
-   return Pres_;
-}
-
 const char* Creature::heshe() const
 {
    switch(gender_liberal)
@@ -1407,16 +1377,16 @@ const char* Creature::hisher() const
    }
 }
 
-Weapon& Creature::weapon_none() const
+Weapon& Creature::weapon_none()
 {
-   static Weapon* unarmed = new Weapon(*weapontype[getweapontype("WEAPON_NONE")]);
-   return *unarmed;
+   static Weapon unarmed(*weapontype[getweapontype("WEAPON_NONE")]);
+   return unarmed;
 }
 
-Armor& Creature::armor_none() const
+Armor& Creature::armor_none()
 {
-   static Armor* naked = new Armor(*armortype[getarmortype("ARMOR_NONE")]);
-   return *naked;
+   static Armor naked(*armortype[getarmortype("ARMOR_NONE")]);
+   return naked;
 }
 
 bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const

@@ -1455,13 +1455,13 @@ void giveup()
             if(pool[p]->type==CREATURE_RADIOPERSONALITY) offended_amradio=1;
             if(pool[p]->type==CREATURE_NEWSANCHOR) offended_cablenews=1;
             //clear interrogation data if deleted
-            delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
+            delete pool[p]->activity.intr();
          }
       }
 
       //CRIMINALIZE POOL IF FOUND WITH KIDNAP VICTIM OR ALIEN
-      if(kcount>0)criminalizepool(LAWFLAG_KIDNAPPING,-1,loc);
-      if(icount>0)criminalizepool(LAWFLAG_HIREILLEGAL,-1,loc);
+      if(kcount) criminalizepool(LAWFLAG_KIDNAPPING,-1,loc);
+      if(icount) criminalizepool(LAWFLAG_HIREILLEGAL,-1,loc);
 
       if(location[loc]->siege.siegetype==SIEGE_FIREMEN&&location[loc]->compound_walls&COMPOUND_PRINTINGPRESS)
          criminalizepool(LAWFLAG_SPEECH,-1,loc); // Criminalize pool for unacceptable speech

@@ -9,11 +9,11 @@ class CreatureType
       // Creates a creature type from xml.
       explicit CreatureType(const std::string& xmlstring);
 
-      friend void makecreature(Creature &cr, short type); 
+      friend void makecreature(Creature &cr, short type);
       // Remakes the creature into the creature type. Depends on being called
       // from makecreature currently.
       void make_creature(Creature& cr) const;
- 
+
       const std::string& get_idname() const { return idname_; }
       long get_id() const { return id_; }
       short get_type() const { return type_; }
@@ -63,5 +63,13 @@ class CreatureType
       Interval money_;
       Interval skills_[SKILLNUM];
 };
+
+// This declaration is necessary for the inline function Creature::get_type_name() below it to work.
+// It isn't part of the CreatureType class or creaturetype.cpp file, it's implemented elsewhere.
+const CreatureType* getcreaturetype(const std::string& crtype);
+
+// This would normally be inlined inside the Creature class in creature.h, but the Creature class
+// has to be declared prior to the CreatureType class so we have to inline it here instead.
+inline std::string Creature::get_type_name() const { return getcreaturetype(type_idname)->get_type_name(); }
 
 #endif //CREATURE_TYPE_H

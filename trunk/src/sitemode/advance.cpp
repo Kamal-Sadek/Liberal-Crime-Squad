@@ -72,8 +72,7 @@ void creatureadvance()
                   activesquad->squad[p]->prisoner->type==CREATURE_SCIENTIST_EMINENT||
                   activesquad->squad[p]->prisoner->type==CREATURE_JUDGE_CONSERVATIVE)sitecrime+=30;
 
-               delete activesquad->squad[p]->prisoner;
-               activesquad->squad[p]->prisoner=NULL;
+               delete_and_nullify(activesquad->squad[p]->prisoner);
             }
          }
       }

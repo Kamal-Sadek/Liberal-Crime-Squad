@@ -50,7 +50,7 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
 {
    clear_interrogation_sidebar();
    int y=4;
-   map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
+   map<long,struct float_zero>& rapport = cr->activity.intr()->rapport;
    move(y,40);
    set_color(COLOR_WHITE,COLOR_BLACK,0);
    addstr("Prisoner: ");
@@ -143,6 +143,11 @@ void tendhostage(Creature *cr,char &clearformess)
    int p;
    Creature *a=NULL;
 
+   interrogation* &intr=cr->activity.intr();
+   bool (&techniques)[6]=intr->techniques;
+   int& druguse = intr->druguse;
+   map<long,struct float_zero>& rapport = intr->rapport;
+
    //Find all tenders who are set to this hostage
    for(p=0;p<len(pool);p++)
    {
@@ -165,8 +170,7 @@ void tendhostage(Creature *cr,char &clearformess)
    }
 
    //possible hostage escape attempt if unattended or unrestrained
-   if(!len(temppool)||
-      !reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[TECHNIQUE_RESTRAIN])
+   if(!len(temppool)||!techniques[TECHNIQUE_RESTRAIN])
    {
       //CHECK FOR HOSTAGE ESCAPE
       if(LCSrandom(200)+25*len(temppool)<
@@ -200,7 +204,7 @@ void tendhostage(Creature *cr,char &clearformess)
                }
 
                //delete interrogation data
-               delete reinterpret_cast<interrogation*>(pool[p]->activity.arg);
+               delete intr;
                delete_and_remove(pool,p);
                break;
             }
@@ -234,10 +238,6 @@ void tendhostage(Creature *cr,char &clearformess)
       //the LCS -- they will eventually break, but also eventually become too traumatized
       //to continue
       int p,business=0,religion=0,science=0,attack=0;
-
-      int& druguse = reinterpret_cast<interrogation*>(cr->activity.arg)->druguse;
-
-      map<long,struct float_zero>& rapport = reinterpret_cast<interrogation*>(cr->activity.arg)->rapport;
 
       int* _attack = new int[len(temppool)];
 
@@ -283,11 +283,6 @@ void tendhostage(Creature *cr,char &clearformess)
 
       attack+=cr->attribute_roll(ATTRIBUTE_HEART);
       attack-=cr->attribute_roll(ATTRIBUTE_WISDOM)*2;
-
-      bool techniques[6];
-      //recall interrogation plan
-      for(int i=0;i<6;i++)
-         techniques[i]=reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i];
 
       while(true)
       {
@@ -348,10 +343,6 @@ void tendhostage(Creature *cr,char &clearformess)
          ledger.subtract_funds(50,EXPENSE_HOSTAGE);
       else techniques[TECHNIQUE_DRUGS]=0;
 
-      //remember interrogation choices
-      for(int i=0;i<6;i++)
-         reinterpret_cast<interrogation*>(cr->activity.arg)->techniques[i]=techniques[i];
-
       if(techniques[TECHNIQUE_KILL]) // Kill the Hostage
       {
          erase();
@@ -373,7 +364,7 @@ void tendhostage(Creature *cr,char &clearformess)
          if(a)
          {
             //delete interrogation information
-            delete reinterpret_cast<interrogation*>(cr->activity.arg);
+            delete intr;
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             cr->die();
             stat_kills++;
@@ -1429,7 +1420,7 @@ void tendhostage(Creature *cr,char &clearformess)
       if(cr->alive==0||cr->blood<1)
       {
          //delete interrogation information
-         delete reinterpret_cast<interrogation*>(cr->activity.arg);
+         delete intr;
          cr->die();
 
          stat_kills++;
@@ -1491,7 +1482,7 @@ void tendhostage(Creature *cr,char &clearformess)
    {
       //clear_interrogation_sidebar();
       //delete interrogation information
-      delete reinterpret_cast<interrogation*>(cr->activity.arg);
+      delete intr;
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(++y,0);
       addstr("The Automaton has been Enlightened!   Your Liberal ranks are swelling!", gamelog);

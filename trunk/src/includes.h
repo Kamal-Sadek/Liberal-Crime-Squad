@@ -402,6 +402,26 @@ enum AnimalGlosses
    ANIMALGLOSSNUM
 };
 
+//just a float that is initialized to 0
+struct float_zero
+{
+   float_zero() : n(0.0f) {}
+   operator float&() { return n; }
+   float n;
+};
+//Interrogation information for the interrogation system, to be
+//dynamically created on capture and deleted when interrogation ends,
+//referenced using a pointer typecast into one of the arguments
+//of the target's current action.
+struct interrogation
+{
+   interrogation() : druguse(0) { techniques[0]=1,techniques[1]=1,techniques[2]=0,techniques[3]=0,techniques[4]=0,techniques[5]=0; }
+   bool techniques[6]; //yesterday's interrogation plan
+   int druguse; //total days of drug use
+   //Maps individual characters to the rapport built with them
+   map<long,struct float_zero> rapport;
+};
+
 enum Activity
 {
    ACTIVITY_NONE,
@@ -467,6 +487,9 @@ struct activityst
    activityst() : type(0),arg(0),arg2(0) {}
    int type;
    long arg,arg2;
+   // return a reference to arg, with arg typecast as a pointer to an object of type interrogation,
+   // allowing us to easily access and modify the interrogation data without typecasting outside this function
+   interrogation* &intr() { interrogation** i=reinterpret_cast<interrogation**>(&arg); return *i; }
 };
 
 enum IncomeType         // the below names are used in fundreport() in lcsmonthly.cpp
@@ -848,26 +871,6 @@ struct highscorest
 {
    char valid,endtype,slogan[SLOGAN_LEN];
    int month,year,stat_recruits,stat_kidnappings,stat_dead,stat_kills,stat_funds,stat_spent,stat_buys,stat_burns;
-};
-
-//just a float that is initialized to 0
-struct float_zero
-{
-   float_zero() : n(0.0f) {}
-   operator float&() { return n; }
-   float n;
-};
-//Interrogation information for the interrogation system, to be
-//dynamically created on capture and deleted when interrogation ends,
-//referenced using a pointer typecast into one of the arguments
-//of the target's current action.
-struct interrogation
-{
-   interrogation() : druguse(0) { techniques[0]=1,techniques[1]=1,techniques[2]=0,techniques[3]=0,techniques[4]=0,techniques[5]=0; }
-   bool techniques[6]; //yesterday's interrogation plan
-   int druguse; //total days of drug use
-   //Maps individual characters to the rapport built with them
-   map<long,struct float_zero> rapport;
 };
 
 #define SCORENUM 5
