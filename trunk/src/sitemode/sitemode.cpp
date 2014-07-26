@@ -2658,6 +2658,7 @@ void open_door(bool restricted)
                // Unlock the door
                levelmap[locx][locy][locz].flag&=~(SITEBLOCK_LOCKED|SITEBLOCK_ALARMED);
                sitestory->crime.push_back(CRIME_UNLOCKEDDOOR);
+               if(sitealarmtimer<0||sitealarmtimer>50) sitealarmtimer = 50;
                //criminalizeparty(LAWFLAG_BREAKING);
             }
             // Else perma-lock it if an attempt was made
@@ -2715,8 +2716,7 @@ void open_door(bool restricted)
             if(bash(BASH_DOOR,actual))
             {
                levelmap[locx][locy][locz].flag&=~SITEBLOCK_DOOR;
-               int time=20+LCSrandom(10);
-               if(time<1)time=1;
+               int time=0;
                if(sitealarmtimer>time||sitealarmtimer==-1)sitealarmtimer=time;
                if(levelmap[locx][locy][locz].flag&SITEBLOCK_ALARMED)
                {
