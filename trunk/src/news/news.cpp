@@ -1752,14 +1752,14 @@ void displaycenterednewsfont(const std::string& str,int y)
 #ifdef NCURSES
             // Clean the square first.
             set_color(COLOR_BLACK, COLOR_BLACK, 0);
-            addchar(CH_FULL_BLOCK);
+            addchar(' ');
             move(y+y2,x+x2);
 #endif
 
             if(x2==5)
             {
-               set_color(COLOR_WHITE,COLOR_BLACK,0);
-               addchar((char)CH_FULL_BLOCK);
+               set_color(COLOR_WHITE,COLOR_WHITE,0);
+               addchar(' ');
             }
             else
             {
@@ -1773,11 +1773,11 @@ void displaycenterednewsfont(const std::string& str,int y)
       }
       else
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         set_color(COLOR_WHITE,COLOR_WHITE,0);
          for(int x2=0;x2<3;x2++) for(int y2=0;y2<7;y2++)
          {
             move(y+y2,x+x2);
-            addchar((char)CH_FULL_BLOCK);
+            addchar(' ');
          }
          x+=3;
       }
