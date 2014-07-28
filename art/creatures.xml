@@ -288,6 +288,7 @@ Elements marked as hardcoded may have their values overridden by the game.
         <encounter_name>Nonunion Worker</encounter_name>
         <!-- <weapon> Hardcoded -->
         <armor>ARMOR_WORKCLOTHES</armor>
+        <armor>ARMOR_HARDHAT</armor>
         <age>MATURE</age>
         <!-- <alignment> Hardcoded to not be liberal. -->
         <attributes>
@@ -327,6 +328,8 @@ Elements marked as hardcoded may have their values overridden by the game.
         <encounter_name>Union Worker</encounter_name>
         <!-- <weapon> Hardcoded -->
         <armor>ARMOR_WORKCLOTHES</armor>
+        <armor>ARMOR_HARDHAT</armor>
+        <armor>ARMOR_HARDHAT</armor>
         <age>MATURE</age>
         <alignment>LIBERAL</alignment>
         <attributes>
@@ -760,6 +763,7 @@ Elements marked as hardcoded may have their values overridden by the game.
         <encounter_name>Sewer Worker</encounter_name>
         <weapon>CIVILIAN</weapon>
         <armor>ARMOR_WORKCLOTHES</armor>
+        <armor>ARMOR_HARDHAT</armor>
         <age>MATURE</age>
         <gender>MALE BIAS</gender>
         <money>20-50</money>
@@ -847,6 +851,7 @@ Elements marked as hardcoded may have their values overridden by the game.
         <encounter_name>Gang Member</encounter_name>
         <!-- <weapon> Hardcoded -->
         <armor>ARMOR_CLOTHES</armor>
+        <armor>ARMOR_LEATHER</armor>
         <age>YOUNGADULT</age>
         <!-- <alignment> Hardcoded -->
         <gender>MALE BIAS</gender>
@@ -879,7 +884,7 @@ Elements marked as hardcoded may have their values overridden by the game.
     <creaturetype idname="CREATURE_PRIEST">
         <type_name>Priest</type_name>
         <encounter_name>Priest</encounter_name>
-        <armor>ARMOR_CLOTHES</armor>
+        <armor>ARMOR_BLACKSUIT</armor>
         <age>MATURE</age>
         <gender>MALE BIAS</gender>
         <money>20-50</money>
@@ -1055,7 +1060,7 @@ Elements marked as hardcoded may have their values overridden by the game.
         <type_name>Construction Worker</type_name>
         <encounter_name>Construction Worker</encounter_name>
         <weapon>CIVILIAN</weapon>
-        <armor>ARMOR_WORKCLOTHES</armor>
+        <armor>ARMOR_HARDHAT</armor>
         <age>MATURE</age>
         <attributes>
             <health>7-10</health>
@@ -1505,7 +1510,7 @@ Elements marked as hardcoded may have their values overridden by the game.
         <encounter_name>Biker</encounter_name>
         <weapon>CIVILIAN</weapon>
         <weapon>WEAPON_CHAIN</weapon>
-        <armor>ARMOR_TRENCHCOAT</armor>
+        <armor>ARMOR_LEATHER</armor>
         <age>MATURE</age>
         <alignment>CONSERVATIVE</alignment>
         <gender>MALE BIAS</gender>
