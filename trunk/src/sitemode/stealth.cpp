@@ -505,7 +505,8 @@ char weapon_in_character(const string& wtype, const string& atype)
    if(wtype == "WEAPON_SHANK" && atype == "ARMOR_PRISONER")
       return CREATURE_PRISONER;
 
-   if(wtype == "WEAPON_CHAIN" && atype == "ARMOR_WORKCLOTHES")
+   if(wtype == "WEAPON_CHAIN" && 
+      (atype == "ARMOR_WORKCLOTHES" || atype == "ARMOR_HARDHAT") )
       return CREATURE_WORKER_FACTORY_UNION;
 
    if(wtype == "WEAPON_CARBINE_M4" && atype == "ARMOR_SEALSUIT")
@@ -748,6 +749,7 @@ char hasdisguise(const Creature &cr)
          case SITE_INDUSTRY_POLLUTER:
             uniformed=0;
             if(cr.get_armor().get_itemtypename()=="ARMOR_WORKCLOTHES")uniformed=1;
+            if(cr.get_armor().get_itemtypename()=="ARMOR_HARDHAT")uniformed=1;
             if(location[cursite]->highsecurity)
             {
                if(cr.get_armor().get_itemtypename()=="ARMOR_SECURITYUNIFORM")uniformed=1;
@@ -760,6 +762,7 @@ char hasdisguise(const Creature &cr)
                if(cr.get_armor().get_itemtypename()=="ARMOR_LABCOAT")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_SECURITYUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_CIVILLIANARMOR")uniformed=1;
+               if(cr.get_armor().get_itemtypename()=="ARMOR_HARDHAT")uniformed=1;
             }
             break;
          case SITE_CORPORATE_HEADQUARTERS:
@@ -821,6 +824,8 @@ char hasdisguise(const Creature &cr)
          cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=2;
       if(location[cursite]->highsecurity &&
          cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=2;
+// Loop over adjacent locations to check if fire is anywhere in sight?
+// Or perhaps have a site fire alarm? - Nick
       if((levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_START ||
           levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END ||
           levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) &&
