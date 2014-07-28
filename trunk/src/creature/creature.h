@@ -437,6 +437,7 @@ public:
    int skill_cap(int skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute(skill),use_juice); }
    const char* heshe() const;
    const char* hisher() const;
+   const char* himher() const;
 };
 
 enum uniqueCreatureData
