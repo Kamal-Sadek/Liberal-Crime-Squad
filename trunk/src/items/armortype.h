@@ -11,6 +11,8 @@ class ArmorType : public ItemType
       
       int get_make_difficulty() const { return make_difficulty_; }
       int get_make_price() const { return make_price_; }
+      int get_quality_levels() const { return quality_levels_; }
+      int get_durability() const { return durability_; }
       // Returns if making the armor should only be possible when death penalty
       // and police behavior laws are arch-conservative, ie when death squads
       // roam.
@@ -97,6 +99,9 @@ class ArmorType : public ItemType
       bool mask_;
       bool surprise_mask_;
       string description_;
+      
+      int quality_levels_;
+      int durability_;
 };
 
 #endif //ARMORTYPE_H

@@ -9,7 +9,8 @@ ArmorType::ArmorType(MCD_STR xmlstring)
    shortname_("UNDEF"), shortname_future_("UNDEF"), shortname_defined_(false), shortname_future_defined_(false),
    interrogation_basepower_(0), interrogation_assaultbonus_(0), interrogation_drugbonus_(0),
    professionalism_(2), conceal_weaponsize_(5),
-   mask_(false), surprise_mask_(false), description_("UNDEF")
+   mask_(false), surprise_mask_(false), description_("UNDEF"),
+   quality_levels_(4), durability_(10)
 {
    init(xmlstring);
 }
@@ -23,7 +24,8 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
    shortname_(base.shortname_), shortname_future_(base.shortname_future_), shortname_defined_(base.shortname_defined_), shortname_future_defined_(base.shortname_future_defined_),
    interrogation_basepower_(base.interrogation_basepower_), interrogation_assaultbonus_(base.interrogation_assaultbonus_), interrogation_drugbonus_(base.interrogation_drugbonus_),
    professionalism_(base.professionalism_), conceal_weaponsize_(base.conceal_weaponsize_),
-   mask_(base.mask_), surprise_mask_(base.surprise_mask_), description_(base.description_)
+   mask_(base.mask_), surprise_mask_(base.surprise_mask_), description_(base.description_),
+   quality_levels_(base.quality_levels_), durability_(base.durability_)
 
 {
    init(xmlstring);
@@ -222,6 +224,11 @@ void ArmorType::init(const MCD_STR& xmlstring)
       }
       else if (element == "description")
          description_ = xml.GetData();
+      else if (element == "qualitylevels")
+         quality_levels_ = max(1,atoi(xml.GetData()));
+
+      else if (element == "durability")
+         durability_ = max(0,atoi(xml.GetData()));
       /*else
          errorlog << "Unknown element for armor type " << idname() << ": " << element << endl;*/
    }

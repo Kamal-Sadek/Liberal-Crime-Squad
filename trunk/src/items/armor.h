@@ -21,7 +21,8 @@ class Armor : public Item
       virtual bool sort_compare_special(Item* other) const;
 
       int get_quality() const { return quality_; }
-      //void decrease_quality(int decrease = 1);
+      int get_quality_levels() const;
+      bool decrease_quality(int decrease = 1);
 
       void set_damaged(bool d);
       bool is_damaged() const { return damaged_; }
@@ -57,6 +58,7 @@ class Armor : public Item
       bool conceals_weapon(const Weapon& weapon) const;
       bool conceals_weapon(const WeaponType& weapon) const;
       bool conceals_weaponsize(int weaponsize) const;
+      int get_durability() const;
       /*const vector<string>& get_appropriate_weapons() const
          { return armortype[getarmortype(itemtypename())]->get_appropriate_weapons(); }
       const string& get_appropriate_weapon(int index) const
