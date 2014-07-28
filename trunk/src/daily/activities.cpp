@@ -197,6 +197,7 @@ void repairarmor(Creature &cr,char &clearformess)
    Item *pile=NULL;
    vector<Item *> *pilelist=NULL;
 
+   // Clean yourself up first
    if(cr.get_armor().is_bloody() || cr.get_armor().is_damaged())
       armor=&cr.get_armor();
    else if(cr.squadid!=-1)
@@ -228,47 +229,128 @@ void repairarmor(Creature &cr,char &clearformess)
                break;
             }
          }
+    
+   if(clearformess) erase();
+   else makedelimiter();
 
-   if(armor!=NULL)
+   if(armor==NULL)
    {
-      if(clearformess) erase();
-      else makedelimiter();
-
+      move(8,1);
+      addstr(cr.name, gamelog);
+      switch (LCSrandom(4))
+      {
+         case 0: addstr(" tidies up the safehouse.", gamelog); break;
+         case 1: addstr(" reorganizes the armor closet.", gamelog); break;
+         case 2: addstr(" cleans the kitchen.", gamelog); break;
+         case 3: 
+            addstr(" peruses some sewing magazines.", gamelog); 
+            cr.train(SKILL_TAILORING,1);
+            break;
+      }
+      gamelog.nextMessage();
+      
+      getkey();
+   }
+   else
+   {
       bool repairfailed=false;
+      bool qualityReduction=!LCSrandom(10);
+      bool armorDestroyed=!armor->decrease_quality(0);
 
       if(armor->is_damaged())
       {
          long dif=armor_makedifficulty(*armor,&cr);
-         dif>>=1;
-         cr.train(SKILL_TAILORING,dif+1);
+         dif>>=(armor->get_quality()-1);  // it is easy to patch up rags
+         cr.train(SKILL_TAILORING,dif/2+1);
 
          if(LCSrandom(1+dif/2)) repairfailed=true;
+      }else{
+         repairfailed=true;
       }
+      if (armorDestroyed)
+         repairfailed = false;  // Its dead, Jim; stop trying to fix it
+      if (repairfailed)
+         qualityReduction = false; // Low skill repairers shredding your shirts seem too harsh
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(8,1);
-      addstr(cr.name, gamelog);
-      if(armor->is_damaged())
-      {
-         if(repairfailed) addstr(" is working to repair ", gamelog);
-         else addstr(" repairs ", gamelog);
-      }
-      else addstr(" cleans ", gamelog);
-      //char str[80];
 
-      addstr(armor->get_name(), gamelog);
-      addstr(".", gamelog);
+      std::string result = "";
+      result += cr.name;
+      
+      if (armorDestroyed)
+      {
+         set_color(COLOR_RED,COLOR_BLACK,1);
+         result += " disposes of ";
+      }else if(repairfailed && armor->is_bloody())
+      {
+         set_color(COLOR_CYAN,COLOR_BLACK,1);
+         result += " cleans ";
+      }else if(repairfailed)
+      {
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         result += " is working to repair ";
+      }else
+      {
+         if(!qualityReduction)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            result += " repairs ";
+         }else
+         {
+            armorDestroyed = !armor->decrease_quality(1);
+            if(armorDestroyed)
+            {
+               set_color(COLOR_RED,COLOR_BLACK,1);
+               result += " finds there is no hope of repairing ";
+            }else
+            {
+               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               result += " repairs what little can be fixed of ";
+            }
+         }
+      }
+
+      if (pile)
+      {
+         result += armor->aan();
+      }
+      else
+         result += cr.hisher();
+
+      if (armorDestroyed)
+         result += " ruined";
+
+      result += " " + armor->get_name() + ".";
+
+      addstr(result,gamelog);
       gamelog.nextMessage();
 
       if(pile)
+      {
          if(pile->get_number()>1)
          {
             Item *newpile=pile->split(pile->get_number()-1);
             pilelist->push_back(newpile);
          }
+      }
 
       armor->set_bloody(false);
-      if(!repairfailed) armor->set_damaged(false);
+      if(!repairfailed) 
+      {
+         armor->set_damaged(false);
+      }
+      if (armorDestroyed)
+      {
+         if (!pile) // repairer was wearing it
+         {
+            cr.strip(NULL);
+         }
+         else // scrap from stockpile
+         {
+            pile->decrease_number(1);
+         }
+      }
 
       getkey();
    }
@@ -348,15 +430,9 @@ void makearmor(Creature &cr,char &clearformess)
 
          cr.train(SKILL_TAILORING,dif*2+1);
 
-         int quality;
-         if(LCSrandom(10)<dif)
-            if(LCSrandom(10)<dif)
-               if(LCSrandom(10)<dif)
-                  if(LCSrandom(10)<dif) quality=5;
-                  else quality=4;
-               else quality=3;
-            else quality=2;
-         else quality=1;
+         int quality = 1;
+         while (LCSrandom(10)<dif && quality <= armortype[at]->get_quality_levels())
+            quality++;
 
          if(clearformess) erase();
          else makedelimiter();
@@ -366,7 +442,7 @@ void makearmor(Creature &cr,char &clearformess)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(8,1);
          addstr(cr.name, gamelog);
-         if(quality < 5)
+         if(quality <= ((Armor*)it)->get_quality_levels() )
          {
             addstr(" has made a ", gamelog);
             switch(quality)
