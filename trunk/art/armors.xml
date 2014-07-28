@@ -55,6 +55,10 @@
         <conceal_weapon_size> (integer) Largest weapon size the armor can conceal.
             Default: 5
         <appropriate_weapon> (weapontype) NOT USED! Carry weapon as part of disguise, but only in sieges.
+        <qualitylevels> (integer) The highest "Nth-rate" value allowed before the item is worthless.
+            Default: 4
+        <durability> (integer) Average penetrating damage required to damage or degrade the armor
+            Default: 10
     </armortype>
     -->
 
@@ -98,6 +102,7 @@
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
+        <qualitylevels>6</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_MILITARY">
@@ -119,6 +124,7 @@
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_CATSUIT">
@@ -133,6 +139,7 @@
         <fencevalue>50</fencevalue>
         <professionalism>1</professionalism>
         <stealth_value>3</stealth_value>
+        <qualitylevels>3</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_BLACKDRESS">
@@ -147,6 +154,7 @@
         </interrogation>
         <professionalism>3</professionalism>
         <stealth_value>2</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_LEATHER">
@@ -165,6 +173,8 @@
         <fencevalue>100</fencevalue>
         <professionalism>1</professionalism>
         <stealth_value>3</stealth_value>
+        <qualitylevels>3</qualitylevels>
+        <durability>20</durability>
     </armortype>
 
     <armortype idname="ARMOR_BLACKROBE">
@@ -179,6 +189,7 @@
         <professionalism>2</professionalism>
         <stealth_value>2</stealth_value>
         <appropriate_weapon>WEAPON_GAVEL</appropriate_weapon>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_BLACKSUIT">
@@ -193,6 +204,7 @@
         </interrogation>
         <professionalism>3</professionalism>
         <stealth_value>2</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_BLACKCLOTHES">
@@ -203,6 +215,7 @@
         <fencevalue>20</fencevalue>
         <professionalism>1</professionalism>
         <stealth_value>2</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_CIVILLIANARMOR">
@@ -241,6 +254,7 @@
         </interrogation>
         <professionalism>1</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_BUNKERGEAR">
@@ -261,6 +275,8 @@
         <professionalism>2</professionalism>
         <appropriate_weapon>WEAPON_AXE</appropriate_weapon>
         <appropriate_weapon>WEAPON_FLAMETHROWER</appropriate_weapon> <!-- Only if free speech -2. -->
+        <qualitylevels>2</qualitylevels>
+        <durability>25</durability>
     </armortype>
 
     <armortype idname="ARMOR_CHEAPDRESS">
@@ -274,6 +290,7 @@
         </interrogation>
         <professionalism>3</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_CHEAPSUIT">
@@ -287,6 +304,7 @@
         </interrogation>
         <professionalism>3</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_CLOTHES">
@@ -297,6 +315,7 @@
         <shortname>Clothes</shortname>
         <fencevalue>20</fencevalue>
         <professionalism>1</professionalism>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_CLOWNSUIT">
@@ -310,6 +329,7 @@
             <drugbonus>4</drugbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_DEATHSQUADUNIFORM">
@@ -333,6 +353,7 @@
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_DONKEYSUIT">
@@ -350,6 +371,7 @@
             <drugbonus>4</drugbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_ELEPHANTSUIT">
@@ -367,6 +389,7 @@
             <drugbonus>4</drugbonus>
         </interrogation>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_EXPENSIVEDRESS">
@@ -380,6 +403,7 @@
         </interrogation>
         <professionalism>4</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_EXPENSIVESUIT">
@@ -393,6 +417,7 @@
         </interrogation>
         <professionalism>4</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_PRISONGUARD">
@@ -407,6 +432,7 @@
         </interrogation>
         <professionalism>2</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_HEAVYARMOR">
@@ -427,6 +453,8 @@
             <basepower>2</basepower>
         </interrogation>
         <professionalism>1</professionalism>
+        <qualitylevels>7</qualitylevels>
+        <durability>10</durability>
     </armortype>
 
     <armortype idname="ARMOR_LABCOAT">
@@ -441,6 +469,7 @@
         <professionalism>2</professionalism>
         <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SYRINGE</appropriate_weapon>
+        <qualitylevels>3</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_MASK">
@@ -461,6 +490,7 @@
         </interrogation>
         <professionalism>1</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_MITHRIL">
@@ -468,10 +498,16 @@
             <arms>false</arms>
             <legs>false</legs>
         </body_covering>
+        <armor>
+            <body>1</body>
+            <head>1</head>
+        </armor>
         <name>Mithril Mail</name>
         <shortname>Mithril Mail</shortname>
         <fencevalue>50</fencevalue>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
+        <durability>30</durability>
     </armortype>
 
     <armortype idname="ARMOR_NINJASUIT">
@@ -498,6 +534,7 @@
         <shortname>Orange Jmpsuit</shortname>
         <fencevalue>40</fencevalue>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_OVERALLS">
@@ -511,6 +548,7 @@
         <fencevalue>20</fencevalue>
         <professionalism>2</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_POLICEARMOR">
@@ -539,6 +577,7 @@
         <appropriate_weapon>WEAPON_PISTOL_45</appropriate_weapon>
         <appropriate_weapon>WEAPON_NIGHTSTICK</appropriate_weapon>
         <appropriate_weapon>WEAPON_SHOTGUN_PUMP</appropriate_weapon>
+        <qualitylevels>5</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_POLICEUNIFORM">
@@ -563,6 +602,7 @@
         <appropriate_weapon>WEAPON_PISTOL_45</appropriate_weapon>
         <appropriate_weapon>WEAPON_NIGHTSTICK</appropriate_weapon>
         <appropriate_weapon>WEAPON_SHOTGUN_PUMP</appropriate_weapon>
+        <qualitylevels>1</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_SEALSUIT">
@@ -591,6 +631,7 @@
         <appropriate_weapon>WEAPON_AUTORIFLE_M16</appropriate_weapon>
         <appropriate_weapon>WEAPON_SEMIRIFLE_AR15</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
+        <qualitylevels>6</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_SECURITYUNIFORM">
@@ -615,6 +656,7 @@
         <appropriate_weapon>WEAPON_NIGHTSTICK</appropriate_weapon>
         <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon> <!-- Only if gun law -2. -->
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon> <!-- Only if gun law -2. -->
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_SERVANTUNIFORM">
@@ -624,7 +666,8 @@
         <shortname>Servant Unif.</shortname>
         <fencevalue>40</fencevalue>
         <professionalism>2</professionalism>
-        <stealth_value>1</stealth_value>
+        <stealth_value>2</stealth_value>
+        <qualitylevels>3</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_SWATARMOR">
@@ -648,6 +691,7 @@
         <stealth_value>1</stealth_value>
         <appropriate_weapon>WEAPON_SMG_MP5</appropriate_weapon>
         <appropriate_weapon>WEAPON_CARBINE_M4</appropriate_weapon>
+        <qualitylevels>5</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_TOGA">
@@ -661,6 +705,7 @@
         <shortname>Toga</shortname>
         <fencevalue>10</fencevalue>
         <professionalism>1</professionalism>
+        <qualitylevels>2</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_TRENCHCOAT">
@@ -675,6 +720,7 @@
         </interrogation>
         <professionalism>2</professionalism>
         <conceal_weapon_size>10</conceal_weapon_size>
+        <qualitylevels>3</qualitylevels>
     </armortype>
 
     <armortype idname="ARMOR_WIFEBEATER">
@@ -688,6 +734,8 @@
         <shortname>Wife Beater</shortname>
         <fencevalue>4</fencevalue>
         <professionalism>1</professionalism>
+        <qualitylevels>1</qualitylevels>
+        <durability>30</durability>
     </armortype>
 
     <armortype idname="ARMOR_WORKCLOTHES">
@@ -698,6 +746,25 @@
         <fencevalue>20</fencevalue>
         <professionalism>2</professionalism>
         <stealth_value>1</stealth_value>
+        <qualitylevels>2</qualitylevels>
+    </armortype>
+
+    <armortype idname="ARMOR_HARDHAT">
+        <make_difficulty>6</make_difficulty>
+        <make_price>100</make_price>
+        <armor>
+            <head>2</head>
+        </armor>
+        <body_covering>
+           <head>true</head>
+        </body_covering>
+        <name>Safety-vest &amp; hardhat</name>
+        <shortname>Vest&amp;Hardhat</shortname>
+        <fencevalue>100</fencevalue>
+        <professionalism>2</professionalism>
+        <stealth_value>0</stealth_value>
+        <qualitylevels>1</qualitylevels>
+        <durability>20</durability>
     </armortype>
 
 </armors>
