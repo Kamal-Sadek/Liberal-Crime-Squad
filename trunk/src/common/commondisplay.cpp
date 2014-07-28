@@ -1628,7 +1628,6 @@ void printfunds(int y, int offsetx, const char* prefix)
    //Move, set color, and write.
    move(y,80-len(moneystr)-len(prefixbuffer)-offsetx);
    addstr(prefixbuffer);
-   set_color(COLOR_GREEN,COLOR_BLACK,1);
    addstr(moneystr);
 
    //Recover old settings
