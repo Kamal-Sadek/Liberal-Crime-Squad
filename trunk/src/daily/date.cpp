@@ -127,10 +127,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             {
                y++;
                move(y++,0);
-               addstr(d.date[e]->name, gamelog);
-               addstr(" turns the topic of discussion to the ", gamelog);
-               addstr(location[d.date[e]->worklocation]->name, gamelog);
-               addstr(".", gamelog);
+               addstr(s+d.date[e]->name+" turns the topic of discussion to the "
+                  +location[d.date[e]->worklocation]->name+".", gamelog);
                gamelog.newline();
                move(y++,0);
                if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
@@ -170,12 +168,12 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       addstr(" seemed to have fun, but left early",gamelog);
       switch(LCSrandom(4))
       {
-      case 0: addstr(" to wash their hair.",gamelog); break;
+      case 0: addstr(s+" to wash "+d.date[e]->hisher()+" hair.",gamelog); break;
       case 1: addstr(" due to an allergy attack.",gamelog); break;
       case 2: addstr(" due to an early meeting tomorrow.",gamelog); break;
-      case 3: addstr(" to catch their favourite TV show.", gamelog); break;
+      case 3: addstr(s+" to catch "+d.date[e]->hisher()+" favourite TV show.", gamelog); break;
       case 4:
-         addstr(" to take care of their pet",gamelog);
+         addstr(s+" to take care of "+d.date[e]->hisher()+" pet",gamelog);
          switch(LCSrandom(3+(law[LAW_ANIMALRESEARCH]==-2)))
          {
          case 0: addstr(" cat.",gamelog); break;
@@ -185,7 +183,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          }
          break;
       case 5: addstr(" to go to a birthday party.",gamelog); break;
-      case 6: addstr(" to recharge their cell phone.",gamelog); break;
+      case 6: addstr(s+" to recharge "+d.date[e]->hisher()+" cell phone.",gamelog); break;
       }
       move(y++,0);
       addstr("They'll meet again tomorrow.",gamelog);
