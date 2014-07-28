@@ -853,13 +853,16 @@ int Creature::get_attribute(int attribute, bool usejuice) const
       // Debilitations for temporary injuries in attributes based
       // on physical appearance or performance, because people who
       // are bleeding all over are less strong, agile, and charismatic
+      // it is also hard to think when you are in severe pain
       if(attribute==ATTRIBUTE_STRENGTH||
          attribute==ATTRIBUTE_AGILITY||
-         attribute==ATTRIBUTE_CHARISMA)
+         attribute==ATTRIBUTE_CHARISMA||
+         attribute==ATTRIBUTE_INTELLIGENCE)
       {
-         if(blood<=20)ret>>=2;
-         else if(blood<=50){ret>>=1;}
-         else if(blood<=75){ret*=3;ret>>=2;}
+//         if(blood<=20)ret>>=2;
+//         else if(blood<=50){ret>>=1;}
+//         else if(blood<=75){ret*=3;ret>>=2;}
+         ret = (int)((0.5 + (float)ret)*(float)blood/100.0);
       }
    }
 
@@ -1006,10 +1009,10 @@ int Creature::skill_roll(int skill) const
    // Skills that should depend on clothing:
    case SKILL_STEALTH:
       {
-         int stealth = get_armor().get_stealth_value();
-         if(stealth > 1 && get_armor().get_quality() > 2) stealth--;
-         if(stealth == 0) return 0;
-
+         float stealth = get_armor().get_stealth_value();
+         for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8;
+         if (get_armor().is_damaged()) stealth *= 0.5;
+         
          return_value *= stealth;
          return_value /= 2;
 
@@ -1372,6 +1375,15 @@ const char* Creature::hisher() const
    switch(gender_liberal)
    {
    case GENDER_MALE: return "his";
+   case GENDER_FEMALE: return "her";
+   default: return "xyr"; // Elite Liberal gender-neutral pronoun
+   }
+}
+const char* Creature::himher() const
+{
+   switch(gender_liberal)
+   {
+   case GENDER_MALE: return "him";
    case GENDER_FEMALE: return "her";
    default: return "xyr"; // Elite Liberal gender-neutral pronoun
    }
