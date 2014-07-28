@@ -1060,16 +1060,20 @@ void assemblesquad(squadst *cursquad)
 		}
       if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
       {
-         //CHECK IF GOOD
-         bool good=false;
+         //CHECK IF GOOD (either has at least one Liberal or is empty)
+         bool good=true; // Start off at true for empty squads
 
          for(int p=0;p<6;p++)
-            if(cursquad->squad[p]) if(cursquad->squad[p]->align==1)
-            {  good=true; break; }
+            if(cursquad->squad[p])
+            {  // It is good if either there is at least one Liberal, or if the squad is completely empty
+               if(cursquad->squad[p]->align==1)
+               {  good=true; break; } // We found a Liberal, it's good
+               else good=false; // We found a non-Liberal, this is bad unless we can find a Liberal too
+            }
 
          if(good) break;
          else
-         {
+         {  // At this point we have a non-empty squad, none of whose members are Liberal
             set_color(COLOR_RED,COLOR_BLACK,1);
 
             move(22,0);
