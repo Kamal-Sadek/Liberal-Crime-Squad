@@ -147,7 +147,7 @@ char liberalagenda(char won)
          {
             int housemake[6]={0,0,0,0,0,0};
             for(int h=0;h<435;h++) housemake[house[h]+2]++;
-            if(housemake[5]>=218) align=ALIGN_STALINIST; // Stalinists have a majority
+            if(housemake[5]+MIN(housemake[0],housemake[4])>=218) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
             else if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
             else if(housemake[4]>=218) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
             else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
@@ -165,7 +165,7 @@ char liberalagenda(char won)
             int senatemake[6]={0,0,0,0,0,0};
             for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
             senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
-            if(senatemake[5]>=51) align=ALIGN_STALINIST; // Stalinists have a majority
+            if(senatemake[5]+MIN(senatemake[0],senatemake[4])>=51) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
             else if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
             else if(senatemake[4]>=51) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
             else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
@@ -188,7 +188,7 @@ char liberalagenda(char won)
          {
             int courtmake[6]={0,0,0,0,0,0};
             for(int s=0;s<9;s++) courtmake[court[s]+2]++;
-            if(courtmake[5]>=5) align=ALIGN_STALINIST; // Stalinists have a majority
+            if(courtmake[5]+MIN(courtmake[0],courtmake[4])>=5) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
             else if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
             else if(courtmake[4]>=5) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
             else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
@@ -323,7 +323,7 @@ char liberalagenda(char won)
                   break;
                case LAW_IMMIGRATION:
                   if(won==-2)addstr("All Americans must carry around an internal passport, or be shot on sight.");
-                  else if(won==-1)addstr("Border guards shoot suspected foreigners on sight.");
+                  else if(won==-1)addstr("Private border militiamen shoot suspected foreigners on sight.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Immigration is illegal, and noncitizens are shipped to Mexico at gunpoint.");
                   else if(law[l]==-1)addstr("The military has been deployed to the borders to slow immigration.");
@@ -389,7 +389,7 @@ char liberalagenda(char won)
                   break;
                case LAW_ABORTION:
                   if(won==-2)addstr("Mandatory abortions are carried out for population control.");
-                  else if(won==-1)addstr("Use of contraception and abortion are capital offenses.");
+                  else if(won==-1)addstr("Abortion, contraception, and consensual sex are all capital offenses.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Abortion is a felony equal to murder.");
                   else if(law[l]==-1)addstr("Abortion is prohibited except in extreme circumstances.");
@@ -411,7 +411,7 @@ char liberalagenda(char won)
                   break;
                case LAW_POLICEBEHAVIOR:
                   if(won==-2)addstr("Everyone lives in constant fear of the Stalinist Party's Secret Police.");
-                  else if(won==-1)addstr("Policing is administered by corporations and has a draft.");
+                  else if(won==-1)addstr("Privatized police get bonuses on their paychecks for every person they kill.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Law enforcement is given free reign.");
                   else if(law[l]==-1)addstr("Even the worst police misconduct only earns slap-on-the-wrist punishments.");
@@ -433,7 +433,7 @@ char liberalagenda(char won)
                   break;
                case LAW_DEATHPENALTY:
                   if(won==-2)addstr("Class enemies receive mandatory death sentences.");
-                  else if(won==-1)addstr("Poor criminals receive mandatory death sentences.");
+                  else if(won==-1)addstr("Poor and minority criminals receive mandatory death sentences.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("People can be put to death for minor offenses.");
                   else if(law[l]==-1)addstr("The death penalty is actively enforced in many states.");
@@ -499,7 +499,7 @@ char liberalagenda(char won)
                   break;
                case LAW_FREESPEECH:
                   if(won==-2)addstr("Counterrevolutionary speech is a capital crime.");
-                  else if(won==-1)addstr("Unacceptable speech is a capital crime.");
+                  else if(won==-1)addstr("Even *THINKING* about saying something unacceptable is a capital crime.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Armored squads are tasked with suppressing unacceptable speech.");
                   else if(law[l]==-1)addstr("Some individuals are harassed because of their speech.");
@@ -576,22 +576,40 @@ char liberalagenda(char won)
       }
       else
       {
+         move(23,0);
+         if(stalinmode)
+         {
+            set_color(COLOR_RED,COLOR_BLACK,1);
+            addstr("Stalinist  ");
+         }
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         mvaddstr(23,0,"Elite Liberal ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
+         addstr("Elite Liberal  ");
+         if(!stalinmode)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("-  ");
+         }
          set_color(COLOR_CYAN,COLOR_BLACK,1);
          addstr("Liberal  ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
+         if(!stalinmode)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("-  ");
+         }
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
          addstr("moderate  ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
+         if(!stalinmode)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("-  ");
+         }
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
          addstr("Conservative  ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("-  ");
+         if(!stalinmode)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            addstr("-  ");
+         }
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Arch-Conservative");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
