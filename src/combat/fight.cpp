@@ -483,7 +483,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
        a.type==CREATURE_RADIOPERSONALITY||
        a.type==CREATURE_NEWSANCHOR||
        a.type==CREATURE_MILITARYOFFICER||
-       a.get_weapon().has_musical_attack()) && !mistake &&
+       a.get_weapon().has_musical_attack()) &&
       (a.get_weapon().has_musical_attack() || !a.is_armed() || a.align!=1)))
    {
       if(a.align==1||encnum<ENCMAX)
@@ -1033,7 +1033,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             } while(target->blood-damamount<=0);
          }
 
-         if(damagearmor) armordamage(target->get_armor(),w);
+         if(damagearmor) armordamage(target->get_armor(),w,damamount);
 
          target->blood-=damamount;
 
@@ -1695,6 +1695,7 @@ void damagemod(Creature &t,char &damtype,int &damamount,
 
 void specialattack(Creature &a, Creature &t, char &actual)
 {
+   std::string s = "";
    static const char *judge_debate[]   =
    {
       "debates the death penalty with",
@@ -1912,11 +1913,14 @@ void specialattack(Creature &a, Creature &t, char &actual)
             {
                case 0:strcat(str,"plays a song for");break;
                case 1:strcat(str,"sings to");break;
-               case 2:strcat(str,"strums the ");
+               case 2:
                       if(a.get_weapon().has_musical_attack())
+                      {
+                         strcat(str,"strums the ");
                          strcat(str,a.get_weapon().get_name());
+                      }
                       else // let's use a small enough instrument for anyone to carry in their pocket
-                         strcat(str,"harmonica");
+                         strcat(str,"blows a harmonica");
                       strcat(str," at");break;
                case 3:if(a.align==1)strcat(str,"plays protest songs at");
                       else strcat(str,"plays country songs at");
@@ -1949,8 +1953,12 @@ void specialattack(Creature &a, Creature &t, char &actual)
     ||(a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
    {
       move(17,1);
-      addstr(t.name, gamelog);
-      addstr(" is immune to the attack!", gamelog);
+      addstr(s+t.name+" is immune to the attack!", gamelog);
+   }
+   else if (a.align == t.align)
+   {
+      move (17,1);
+      addstr(s+t.name+" already agrees with "+a.name+".");
    }
    else if(attack>resist)
    {
@@ -1960,30 +1968,26 @@ void specialattack(Creature &a, Creature &t, char &actual)
          if(t.juice>100)
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr(" loses juice!", gamelog);
+            addstr(s+t.name+" loses juice!", gamelog);
             addjuice(t,-50,100);
          }
          else if(LCSrandom(15)>t.get_attribute(ATTRIBUTE_WISDOM,true) || t.get_attribute(ATTRIBUTE_WISDOM,true) < t.get_attribute(ATTRIBUTE_HEART,true))
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr(" is tainted with Wisdom!", gamelog);
+            addstr(s+t.name+" is tainted with Wisdom!", gamelog);
             t.adjust_attribute(ATTRIBUTE_WISDOM,+1);
          }
          else if(t.align==ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr(" can't bear to leave!", gamelog);
+            addstr(s+t.name+" can't bear to leave!", gamelog);
          }
          else
          {
             if(a.align==-1)
             {
                move(17,1);
-               addstr(t.name, gamelog);
-               addstr(" is turned Conservative", gamelog);
+               addstr(s+t.name+" is turned Conservative", gamelog);
                t.stunned=0;
                if(t.prisoner!=NULL)
                   freehostage(t,0);
@@ -1992,8 +1996,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
             else
             {
                move(17,1);
-               addstr(t.name, gamelog);
-               addstr(" doesn't want to fight anymore", gamelog);
+               addstr(s+t.name+" doesn't want to fight anymore", gamelog);
                t.stunned=0;
                if(t.prisoner!=NULL)
                   freehostage(t,0);
@@ -2033,23 +2036,20 @@ void specialattack(Creature &a, Creature &t, char &actual)
          if(t.juice>=100)
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr(" seems less badass!", gamelog);
+            addstr(s+t.name+" seems less badass!", gamelog);
             addjuice(t,-50,99);
          }
          else if(!t.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_AVERAGE) ||
             t.get_attribute(ATTRIBUTE_HEART,true) < t.get_attribute(ATTRIBUTE_WISDOM,true))
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr("'s Heart swells!", gamelog);
+            addstr(s+t.name+"'s Heart swells!", gamelog);
             t.adjust_attribute(ATTRIBUTE_HEART,+1);
          }
          else
          {
             move(17,1);
-            addstr(t.name, gamelog);
-            addstr(" has turned Liberal!", gamelog);
+            addstr(s+t.name+" has turned Liberal!", gamelog);
             t.stunned=0;
 
             liberalize(t);
@@ -2061,8 +2061,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
    else
    {
       move(17,1);
-      addstr(t.name, gamelog);
-      addstr(" remains strong.", gamelog);
+      addstr(s+t.name+" remains strong.", gamelog);
    }
 
    gamelog.newline();
@@ -2132,9 +2131,19 @@ void severloot(Creature &cr,vector<Item *> &loot)
 
 
 /* damages the selected armor if it covers the body part specified */
-void armordamage(Armor &armor,int bp)
+void armordamage(Armor &armor,int bp, int damamount)
 {
-   if(armor.covers(bp)) armor.set_damaged(true);
+   if(armor.covers(bp) && LCSrandom(armor.get_durability()) < damamount) 
+   {
+      if (armor.is_damaged())
+      {
+         armor.decrease_quality(LCSrandom(armor.get_durability()) < LCSrandom(damamount)/armor.get_quality() ? 1:0);
+      }
+      else
+      {
+         armor.set_damaged(true);
+      }
+   }
 }
 
 
