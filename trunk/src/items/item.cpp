@@ -51,3 +51,21 @@ bool Item::sort_compare(Item *b,Item *a)
    else if(!a->is_loot()&&b->is_loot()) return true;
    else return a->sort_compare_special(b);
 }
+
+const char* Item::aan() const
+{
+   string name = get_name();
+   switch (name[0])
+   {
+      case 'a': case 'A':
+      case 'e': case 'E':
+      case 'i': case 'I':
+      case 'o': case 'O':
+      case 'u': case 'U':
+         return "an";
+         break;
+      default:
+         return "a";
+         break;
+   }
+}

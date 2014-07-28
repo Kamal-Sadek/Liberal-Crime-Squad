@@ -39,6 +39,7 @@ class Item
       virtual bool is_money() const { return false; }
 
       virtual const string& get_name() const=0;
+      const char* aan() const;
       virtual long get_fencevalue() const=0;
       virtual bool is_good_for_sale() const { return true; } //Have one that gives an error message when suitable? -XML
 
