@@ -61,7 +61,9 @@ string Armor::equip_title(bool full) const
    if (bloody_ || damaged_ || quality_ > 1)
    {
       et += "[";
-      if (quality_ > 1)
+      if (quality_ > 9)
+         et += "X";
+      else if (quality_ > 1)
          et += tostring(quality_);
       if (bloody_)
          et += "B";
@@ -101,11 +103,17 @@ bool Armor::merge(Item& i)
    return false;
 }
 
-/*void Armor::decrease_quality(int decrease = 1)
+bool Armor::decrease_quality(int decrease)
 {
-   if (quality_ < 4)
-      quality_++;
-}*/
+   quality_+=decrease;
+   if (quality_ < 1)
+      quality_ = 1;
+   if (quality_ > armortype[getarmortype(itemtypename())]->get_quality_levels())
+   {
+      return false;
+   }
+   return true;
+}
 
 bool Armor::sort_compare_special(Item* other) const
 {
@@ -226,4 +234,15 @@ bool Armor::is_surprise_mask() const
 const string& Armor::get_description() const
 {
    return armortype[getarmortype(itemtypename())]->get_description();
+}
+
+
+int Armor::get_durability() const
+{ 
+   return armortype[getarmortype(itemtypename())]->get_durability();
+}
+
+int Armor::get_quality_levels() const
+{
+   return armortype[getarmortype(itemtypename())]->get_quality_levels();
 }
