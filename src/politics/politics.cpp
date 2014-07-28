@@ -561,8 +561,9 @@ void elections(char clearformess,char canseethings)
 }
 
 void elections_senate(int senmod,char canseethings)
-{  //TODO: Finish implementing election of Stalinist Senators
-   int mood=publicmood(-1);
+{
+   int mood=publicmood(LAW_MOOD);
+   int stalinmood=publicmood(LAW_STALIN);
    if(canseethings)
    {
       erase();
@@ -607,55 +608,34 @@ void elections_senate(int senmod,char canseethings)
    {
       if(senmod!=-1 && s%3!=senmod) continue;
 
-      vote=0;
+      vote=-2;
       for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
+      if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
 
-      if(termlimits)
-      {
-         change[senate[s]+2]--;
-         change[vote]++;
-         senate[s]=vote-2;
-      }
+      change[senate[s]+2]--;
+      if(termlimits) senate[s]=vote;
       else
       {
-         change[senate[s]+2]--;
+         int vote2;
+         bool first=true;
+         do {
+            vote2=-2;
+            for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote2++;
+            if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote2=3;
 
-         if(senate[s]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
-         if(senate[s]>1 && vote<4)vote++;
-
-         if(senate[s]<0 && vote>1 && LCSrandom(100-mood+11)>10)vote--;
-         if(senate[s]<-1 && vote>0)vote--;
-
-         switch(senate[s])
-         {
-         case -2:
-            if(mood<60)break;
-            if(vote>=3)senate[s]=vote-1;
-            break;
-         case -1:
-            if(vote==0 && LCSrandom(100-mood+1)>60)senate[s]=-2;
-            if(mood<50 && LCSrandom(7))break;
-            if(vote>=3 && LCSrandom(3))senate[s]=vote-1;
-            break;
-         case 0:
-            if(!LCSrandom(3))senate[s]=vote-2;
-            break;
-         case 1:
-            if(vote==4 && LCSrandom(mood+1)>60)senate[s]=2;
-            if(mood>50 && LCSrandom(7))break;
-            if(vote<=1 && LCSrandom(3))senate[s]=vote-1;
-            break;
-         case 2:
-            if(mood>40)break;
-            if(vote<=1)senate[s]=vote-1;
-            break;
-         }
-
-         if(senate[s]>2)senate[s]=2;
-         if(senate[s]<-2)senate[s]=-2;
-
-         change[senate[s]+2]++;
+            if(first) switch(law[LAW_ELECTIONS])
+            {
+            case -2: if( LCSrandom(3)) vote2=senate[s]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+            case -1: if( LCSrandom(2)) vote2=senate[s]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
+            case  0: if(!LCSrandom(3)) vote2=senate[s]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
+            case  1: if(!LCSrandom(5)) vote2=senate[s]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
+            case  2: if(!LCSrandom(8)) vote2=senate[s]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+            }
+            first=false;
+         } while(vote2!=senate[s]&&vote2!=vote);
+         senate[s]=vote2;
       }
+      change[senate[s]+2]++;
 
       if(canseethings)
       {
@@ -747,8 +727,9 @@ void elections_senate(int senmod,char canseethings)
 }
 
 void elections_house(char canseethings)
-{  //TODO: Finish implementing election of Stalinist House Members
-   int mood=publicmood(-1);
+{
+   int mood=publicmood(LAW_MOOD);
+   int stalinmood=publicmood(LAW_STALIN);
    if(canseethings)
    {
       erase();
@@ -819,55 +800,34 @@ void elections_house(char canseethings)
 
    for(h=0;h<435;h++)
    {
-      vote=0;
+      vote=-2;
       for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
+      if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
 
-      if(termlimits)
-      {
-         change[house[h]+2]--;
-         change[vote]++;
-         house[h]=vote-2;
-      }
+      change[house[h]+2]--;
+      if(termlimits) house[h]=vote;
       else
       {
-         change[house[h]+2]--;
+         int vote2;
+         bool first=true;
+         do {
+            vote2=-2;
+            for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote2++;
+            if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote2=3;
 
-         if(house[h]>0 && vote<3 && LCSrandom(mood+11)>10)vote++;
-         if(house[h]>1 && vote<4)vote++;
-
-         if(house[h]<0 && vote>1 && LCSrandom(100-mood+11)>10)vote--;
-         if(house[h]<-1 && vote>0)vote--;
-
-         switch(house[h])
-         {
-         case -2:
-            if(mood<60)break;
-            if(vote>=3)house[h]=vote-1;
-            break;
-         case -1:
-            if(vote==0 && LCSrandom(100-mood+1)>60)house[h]=-2;
-            if(mood<50 && LCSrandom(7))break;
-            if(vote>=3 && LCSrandom(3))house[h]=vote-1;
-            break;
-         case 0:
-            if(!LCSrandom(3))house[h]=vote-2;
-            break;
-         case 1:
-            if(vote==4 && LCSrandom(mood+1)>60)house[h]=2;
-            if(mood>50 && LCSrandom(7))break;
-            if(vote<=1 && LCSrandom(3))house[h]=vote-1;
-            break;
-         case 2:
-            if(mood>40)break;
-            if(vote<=1)house[h]=vote-1;
-            break;
-         }
-
-         if(house[h]>2)house[h]=2;
-         if(house[h]<-2)house[h]=-2;
-
-         change[house[h]+2]++;
+            if(first) switch(law[LAW_ELECTIONS])
+            {
+            case -2: if( LCSrandom(3)) vote2=house[h]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+            case -1: if( LCSrandom(2)) vote2=house[h]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
+            case  0: if(!LCSrandom(3)) vote2=house[h]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
+            case  1: if(!LCSrandom(5)) vote2=house[h]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
+            case  2: if(!LCSrandom(8)) vote2=house[h]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+            }
+            first=false;
+         } while(vote2!=house[h]&&vote2!=vote);
+         house[h]=vote2;
       }
+      change[house[h]+2]++;
 
       if(canseethings)
       {
@@ -1197,8 +1157,8 @@ void supremecourt(char clearformess,char canseethings)
       int yesvotes=0,vote;
       //Constitutional bias -- free speech, flag burning issues, supreme court
       //is extra liberal, gun control, supreme court is extra conservative
-	  //"All court justices will vote according to alignment and biasand do not consult
-	  //popular opinion...---Servant Corps"
+      //"All court justices will vote according to alignment and bias and do not consult
+      //popular opinion...---Servant Corps"
       if(scase[c]==LAW_FREESPEECH||scase[c]==LAW_FLAGBURNING) bias=1;
       else if(scase[c]==LAW_GUNCONTROL) bias=-1;
       else bias=0;

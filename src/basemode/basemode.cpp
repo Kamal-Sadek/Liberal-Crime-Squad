@@ -90,7 +90,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 
    int housemake[6]={0,0,0,0,0,0};
    for(int h=0;h<435;h++) housemake[house[h]+2]++;
-   if(housemake[5]>=218) align=ALIGN_STALINIST; // Stalinists have a majority
+   if(housemake[5]+MIN(housemake[0],housemake[4])>=218) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
    else if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
    else if(housemake[4]>=218) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
    else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
@@ -108,7 +108,7 @@ bool show_disbanding_screen(int& oldforcemonth)
    int senatemake[6]={0,0,0,0,0,0};
    for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
    senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
-   if(senatemake[5]>=51) align=ALIGN_STALINIST; // Stalinists have a majority
+   if(senatemake[5]+MIN(senatemake[0],senatemake[4])>=51) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
    else if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
    else if(senatemake[4]>=51) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
    else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
@@ -126,7 +126,7 @@ bool show_disbanding_screen(int& oldforcemonth)
 
    int courtmake[6]={0,0,0,0,0,0};
    for(int s=0;s<9;s++) courtmake[court[s]+2]++;
-   if(courtmake[5]>=5) align=ALIGN_STALINIST; // Stalinists have a majority
+   if(courtmake[5]+MIN(courtmake[0],courtmake[4])>=5) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
    else if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
    else if(courtmake[4]>=5) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
    else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
