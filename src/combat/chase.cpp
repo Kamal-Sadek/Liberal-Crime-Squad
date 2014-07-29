@@ -1614,8 +1614,6 @@ void crashenemycar(int v)
       }
    }
 
-   delete_and_remove(chaseseq.enemycar,v);
-
    //CRASH CAR
    clearmessagearea();
    set_color(COLOR_CYAN,COLOR_BLACK,1);
@@ -1634,6 +1632,9 @@ void crashenemycar(int v)
       case 2:addstr(" hits a parked car and flips over.", gamelog);break;
    }
    gamelog.newline(); //New line.
+
+   delete_and_remove(chaseseq.enemycar,v);
+
    printchaseencounter();
 
    getkey();
