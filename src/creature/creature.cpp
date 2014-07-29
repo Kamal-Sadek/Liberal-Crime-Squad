@@ -1012,7 +1012,7 @@ int Creature::skill_roll(int skill) const
          float stealth = get_armor().get_stealth_value();
          for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8;
          if (get_armor().is_damaged()) stealth *= 0.5;
-         
+
          return_value *= stealth;
          return_value /= 2;
 
@@ -1361,31 +1361,59 @@ string UniqueCreatures::showXml() const
 }
 
 const char* Creature::heshe() const
-{
+{  // subject pronoun (nominative case)
    switch(gender_liberal)
    {
    case GENDER_MALE: return "he";
    case GENDER_FEMALE: return "she";
-   default: return "xe"; // Elite Liberal gender-neutral pronoun
+   default: return "xe"; // Elite Liberal gender-neutral pronoun... it is pronounced "zee" rhyming with "he" and "she"
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
+   // or http://en.wiktionary.org/wiki/xe or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
+   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+
+   // full conjugation of "xe"/"xyr"/"xem" (the "x"es are pronounced like "z"s):
+   // subject prononoun (nominative case):          xe      (pronounced "zee" rhyming with "he" and "she")
+   // pronominal adjective (possessive determiner): xyr     (pronounced "zur" rhyming with "her")
+   // object pronoun (oblique case);                xem     (pronounced "zem" rhyming with "them")
+   // possessive pronoun:                           xyrs    (pronounced "zurz" rhyming with "hers")
+   // reflexive pronoun:                            xemself (pronounced "zemself" rhyming with "themself")
+
+   // public schools in Vancouver, British Columbia in Canada officially use these pronouns:
+   // http://news.nationalpost.com/2014/06/17/vancouver-school-boards-genderless-pronouns-not-likely-to-stick-if-history-is-any-indication/
    }
 }
 
 const char* Creature::hisher() const
-{
+{  // pronominal adjective (possessive determiner)
    switch(gender_liberal)
    {
    case GENDER_MALE: return "his";
    case GENDER_FEMALE: return "her";
-   default: return "xyr"; // Elite Liberal gender-neutral pronoun
+   default: return "xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
+   // or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
+   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+
+   // the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so "xyrs" is correct):
+   // his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end if it doesn't already have an "s" at the end
    }
 }
 const char* Creature::himher() const
-{
+{  // object pronoun (oblique case)
    switch(gender_liberal)
    {
    case GENDER_MALE: return "him";
    case GENDER_FEMALE: return "her";
-   default: return "xyr"; // Elite Liberal gender-neutral pronoun
+   default: return "xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
+   // or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
+   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+
+   // the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so "xemself" is correct):
+   // him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add "self" unless plural in which case add "selves"
+
+   // some people mistakenly use xyrself instead of xemself but this is wrong as it doesn't follow the pattern used by ALL standard third-person pronouns,
+   // instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
    }
 }
 
