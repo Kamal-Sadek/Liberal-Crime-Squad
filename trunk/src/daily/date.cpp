@@ -38,6 +38,7 @@ This file is part of Liberal Crime Squad.                                       
 // Handles the result of a date or vacation
 static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 {
+   std::string s = "";
    if(aroll>troll)
    {
       set_color(COLOR_CYAN,COLOR_BLACK,1);

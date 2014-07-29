@@ -1597,7 +1597,7 @@ void damagemod(Creature &t,char &damtype,int &damamount,char hitlocation,char ar
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(Creature &cr,vector<Item *> &loot);
 /* damages the selected armor if it covers the body part specified */
-void armordamage(Armor &armor,int bp);
+void armordamage(Armor &armor,int bp,int damamount);
 /* blood explosions */
 void bloodblast(Armor* armor);
 /* kills the specified creature from the encounter, dropping loot */
