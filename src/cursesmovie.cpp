@@ -291,10 +291,10 @@ void CursesMoviest::playmovie(int x,int y)
                          frame[f]->flag & CM_FRAMEFLAG_OVERLAY) continue;
 
                      move(fy+y,fx+x);
-                     set_color(movie.picture[frame[f]->frame][fx][fy][1],
-                               movie.picture[frame[f]->frame][fx][fy][2],
+                     set_color(translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][1]),
+                               translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][2]),
                                movie.picture[frame[f]->frame][fx][fy][3]);
-                     addch(movie.picture[frame[f]->frame][fx][fy][0]);
+                     addch(translateGraphicsChar(movie.picture[frame[f]->frame][fx][fy][0]));
                   }
                pted=true;
             }

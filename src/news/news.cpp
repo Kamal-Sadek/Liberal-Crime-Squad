@@ -1763,8 +1763,8 @@ void displaycenterednewsfont(const std::string& str,int y)
             }
             else
             {
-               set_color(bigletters[p][x2][y2][1],
-                         bigletters[p][x2][y2][2],
+               set_color(translateGraphicsColor(bigletters[p][x2][y2][1]),
+                         translateGraphicsColor(bigletters[p][x2][y2][2]),
                          bigletters[p][x2][y2][3]);
                addch(translateGraphicsChar(bigletters[p][x2][y2][0]));
             }
@@ -1799,8 +1799,8 @@ void displaynewspicture(int p,int y)
       {
          if(y+y2>24) break;
          move(y+y2,1+x2);
-         set_color(newspic[p][x2][y2][1],
-                   newspic[p][x2][y2][2],
+         set_color(translateGraphicsColor(newspic[p][x2][y2][1]),
+                   translateGraphicsColor(newspic[p][x2][y2][2]),
                    newspic[p][x2][y2][3]);
          addch(translateGraphicsChar(newspic[p][x2][y2][0]));
       }

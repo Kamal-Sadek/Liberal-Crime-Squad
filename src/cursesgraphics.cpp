@@ -66,6 +66,11 @@ int translateGraphicsChar(int c)
 {
     return c;
 }
+
+short translateGraphicsColor(short c)
+{
+    return c;
+}
 #else
 int translateGraphicsChar(int c)
 {
@@ -86,5 +91,26 @@ int translateGraphicsChar(int c)
         }
     }
     return cout;
+}
+
+/* Translates PDCurses' numerical color values to NCurses' corresponding
+   numerical color values.
+   PDCurses can be made to use the same values as NCurses by defining PDC_RGB,
+   but the color values in the graphics and movie files would also have to be
+   changed to make this function obsolete. */
+short translateGraphicsColor(short c)
+{
+    switch (c)
+    {
+        case 0: /*c = 0;*/ break; // Black
+        case 1:   c = 4;   break; // Blue
+        case 2: /*c = 2;*/ break; // Green
+        case 3:   c = 6;   break; // Cyan
+        case 4:   c = 1;   break; // Red
+        case 5: /*c = 5;*/ break; // Magenta
+        case 6:   c = 3;   break; // Yellow
+        case 7: /*c = 7;*/ break; // White
+    }
+    return c;
 }
 #endif

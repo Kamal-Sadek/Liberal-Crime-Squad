@@ -1939,3 +1939,6 @@ extern struct graphicschar *gchar;
 #define CH_MAXIMUM 256
 
 int translateGraphicsChar(int c);
+/* Translate PDCurses' numerical color values to NCurses' corresponding
+   numerical color values. */
+short translateGraphicsColor(short c);
