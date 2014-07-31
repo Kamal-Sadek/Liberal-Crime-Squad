@@ -18,12 +18,8 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 
 */
-#include "lcsio.h"
-#include "externs.h" /* include this prior to checking if WIN32 is defined */
-//#include "includes.h"
-#ifdef WIN32
-#include <windows.h>
-#endif
+
+#include <externs.h>
 
 void setconfigoption(std::string name, std::string value)
 {

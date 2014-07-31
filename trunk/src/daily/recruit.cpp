@@ -22,7 +22,6 @@ This file is part of Liberal Crime Squad.                                       
 //#include <includes.h>
 #include <externs.h>
 
-
 /* recruit struct constructor */
 recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)
 {

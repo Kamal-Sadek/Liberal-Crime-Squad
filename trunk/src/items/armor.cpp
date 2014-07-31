@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 Armor::Armor(const ArmorType& seed, int quality, int number)
  : Item(seed,number), bloody_(false), damaged_(false), quality_(quality)
@@ -238,7 +238,7 @@ const string& Armor::get_description() const
 
 
 int Armor::get_durability() const
-{ 
+{
    return armortype[getarmortype(itemtypename())]->get_durability();
 }
 

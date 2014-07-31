@@ -60,10 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
-
-
 
 /* does end of month actions */
 void passmonth(char &clearformess,char canseethings)
@@ -100,7 +97,7 @@ void passmonth(char &clearformess,char canseethings)
       break;
    case ENDGAME_CCS_SIEGES:
    case ENDGAME_CCS_DEFEATED:
-      //if(publicmood(-1)>85&&presparty==1)
+      //if(publicmood(-1)>85&&presparty!=LIBERAL_PARTY)
       //   endgamestate=ENDGAME_MARTIALLAW;
       break;
    }
@@ -253,6 +250,11 @@ void passmonth(char &clearformess,char canseethings)
          else change_public_opinion(v,1);
       }
    }
+
+   // Temporaty Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
+   if(stalinmode) for(int v=0;v<VIEWNUM-3;v++)
+      change_public_opinion(v,(stalinview(v,false)?1:-1),0);
+   // End Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
 
    // Seduction monthly experience stipends for those liberals
    // who have been getting it on with their love slaves/masters

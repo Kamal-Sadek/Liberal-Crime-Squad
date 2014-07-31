@@ -60,7 +60,6 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
 
 vector<Creature *> activatable_liberals()
@@ -1403,7 +1402,7 @@ struct recruitData
    int type;
    char* name;
    int difficulty;
-   recruitData(int type_, char* name_, int difficulty_):type(type_),name(name_),difficulty(difficulty_) {}
+   recruitData(int type_,char* name_,int difficulty_) : type(type_),name(name_),difficulty(difficulty_) { }
 };
 
 recruitData recruitable_creatures[] = {

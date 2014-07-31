@@ -1,4 +1,4 @@
-#include "includes.h"
+#include <externs.h>
 
 std::string tostring(long i)
 {

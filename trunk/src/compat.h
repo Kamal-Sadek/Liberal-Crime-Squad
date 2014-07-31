@@ -64,12 +64,6 @@
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
 
-#ifdef WIN32
-   #ifndef __STRICT_ANSI__
-      #define HAS_STRICMP
-   #endif
-#endif
-
 #ifdef Linux
  // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
  // <http://msdn.microsoft.com/en-us/library/s3f49ktz.aspx>

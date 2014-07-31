@@ -132,29 +132,6 @@
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
 
-#ifdef WIN32
-  #include "curses.h"
-#else
-  #ifdef XCURSES
-    #define HAVE_PROTO 1
-    #define CPLUSPLUS  1
-    /* Try these PDCurses/Xcurses options later...
-    #define FAST_VIDEO
-    #define REGISTERWINDOWS
-    */
-    #include <xcurses.h> //This is the X11 Port of PDCurses
-  //undo PDCurses macros that break vector class
-    #undef erase
-    #undef clear
-  #else
-    #ifdef NCURSES
-      #include <ncurses.h>
-    #else
-      #include <curses.h>
-    #endif
-  #endif
-#endif
-
 #ifdef CH_USE_CP437
 
 // Range (0 .. 31), ASCII control characters:
@@ -1938,7 +1915,17 @@ extern struct graphicschar *gchar;
 
 #define CH_MAXIMUM 256
 
+#ifndef CH_USE_CP437
+/* Translate CP437 extended characters into the code page used by the console */
 int translateGraphicsChar(int c);
+#else // CH_USE_CP437
+inline int translateGraphicsChar(int c) { return c; }
+#endif // CH_USE_CP437
+
+#ifdef NCURSES
 /* Translate PDCurses' numerical color values to NCurses' corresponding
    numerical color values. */
 short translateGraphicsColor(short c);
+#else // NCURSES
+inline short translateGraphicsColor(short c) { return c; }
+#endif // NCURSES

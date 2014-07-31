@@ -19,7 +19,7 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-#include "externs.h"
+#include <externs.h>
 
 // Finds a location with the corresponding type and returns
 // its index in the location array
@@ -39,19 +39,11 @@ int findlocation_id(int id)
 }
 
 // Locations - Construct a new location with the specified parameters
-Location::Location(int type_, int parent_)
+Location::Location(char type_, int parent_)
+ : type(type_),city(-1),parent(parent_),renting(RENTING_NOCONTROL),needcar(false),hidden(false),upgradable(false)
 {
-   this->type = type_;
-   this->needcar=false;
-   this->hidden=false;
-   this->upgradable=false;
-   this->renting=RENTING_NOCONTROL;
-   this->city = -1;
-   if(parent_==-1)
-      this->parent = -1;
-   else
+   if(this->parent!=-1)
    {
-      this->parent = parent_;
       this->needcar = location[this->parent]->needcar;
       this->mapped = location[this->parent]->mapped;
       this->area = location[this->parent]->area;
@@ -62,7 +54,7 @@ Location::Location(int type_, int parent_)
    initlocation(*this);
 }
 
-Location* Location::addchild(int type_)
+Location* Location::addchild(char type_)
 {
    Location *newloc = new Location(type_, findlocation(this->type, this->city));
    location.push_back(newloc);
@@ -85,17 +77,17 @@ void Location::init()
    front_business=-1;
 }
 
-/* Settings for shortname (true is 1 and false is 0, by the way):
+/* Settings for shortname_ (true is 1 and false is 0, by the way):
  * -1: entire name is long, no matter what
  *  0: first part of place name is long, and if there's a city at the end it's short
  *  1: first part of the name is short unless the place itself is a city in which case it's long, and if there's a city at the end it's short
  *  2: entire name is short, no matter what */
-std::string Location::getname(int shortname, bool include_city)
+string Location::getname(signed char shortname_, bool include_city)
 {
-   std::string str;
+   string str;
    if(!multipleCityMode) include_city=false;
 
-   if((shortname>=1&&type!=city)||shortname>=2) {
+   if((shortname_>=1&&type!=city)||shortname_>=2) {
       if(this->front_business!=-1)
          str=this->front_shortname;
       else
@@ -108,7 +100,7 @@ std::string Location::getname(int shortname, bool include_city)
    }
 
    if(include_city&&type!=city) {
-      std::string cityname=location[findlocation(city, city)]->getname(shortname+2);
+      string cityname=location[findlocation(city, city)]->getname(shortname_+2);
       if(str=="Downtown")
          return str+" "+cityname;
       if(str=="University District"||str=="U-District"||str=="Industrial District"||str=="I-District"||
@@ -117,29 +109,29 @@ std::string Location::getname(int shortname, bool include_city)
       if(str=="City Outskirts")
          return cityname+" Outskirts";
       if(str=="Arlington")
-         return str+(shortname<0?", Virginia":", VA");
+         return str+(shortname_<0?", Virginia":", VA");
       if(str=="Hollywood"||str=="Greater Hollywood")
-         return str+(shortname<0?", California":", CA");
+         return str+(shortname_<0?", California":", CA");
       if(str== "Manhattan"||str=="Manhattan Island"||str=="Brooklyn & Queens"||str=="Long Island"||str=="The Bronx")
-         return str+(shortname<0?", New York":", NY");
+         return str+(shortname_<0?", New York":", NY");
       str+=", "+cityname;
    }
    return str;
 }
 
-char* Location::city_description()
+string Location::city_description()
 {
    switch(type)
    {
-   case SITE_CITY_SEATTLE: return (char*)"Birthplace of the LCS.";
-   case SITE_CITY_LOS_ANGELES: return (char*)"Hollywood and Trade.";
-   case SITE_CITY_NEW_YORK: return (char*)"Wall Street and Big Media.";
-   case SITE_CITY_WASHINGTON_DC: return (char*)"The Nation's Capital.";
+   case SITE_CITY_SEATTLE: return "Birthplace of the LCS.";
+   case SITE_CITY_LOS_ANGELES: return "Hollywood and Trade.";
+   case SITE_CITY_NEW_YORK: return "Wall Street and Big Media.";
+   case SITE_CITY_WASHINGTON_DC: return "The Nation's Capital.";
    case SITE_CITY_CHICAGO:
    case SITE_CITY_DETROIT:
    case SITE_CITY_ATLANTA:
    case SITE_CITY_MIAMI:
-   default: return (char*)"";
+   default: return "";
    }
 }
 
@@ -215,36 +207,20 @@ bool Location::can_have_businessfront()
 
 bool Location::has_business_front()
 {
-   switch(type)
-   {
-   default:
-      if(front_business == -1) return false;
-      else return true;
-   case SITE_BUSINESS_BARANDGRILL:
-      return true;
-   }
+   return front_business!=-1||
+          type==SITE_BUSINESS_BARANDGRILL;
 }
 
 bool Location::bomb_resistant()
 {
-   switch(type)
-   {
-   default:
-      return false;
-   case SITE_RESIDENTIAL_BOMBSHELTER:
-      return true;
-   }
+   return type==SITE_RESIDENTIAL_BOMBSHELTER;
 }
 
 bool Location::part_of_justice_system()
 {
-   if(type==SITE_GOVERNMENT_POLICESTATION ||
-      type==SITE_GOVERNMENT_COURTHOUSE ||
-      type==SITE_GOVERNMENT_PRISON)
-   {
-      return true;
-   }
-   else return false;
+   return type==SITE_GOVERNMENT_POLICESTATION||
+          type==SITE_GOVERNMENT_COURTHOUSE||
+          type==SITE_GOVERNMENT_PRISON;
 }
 
 bool Location::duplicatelocation()

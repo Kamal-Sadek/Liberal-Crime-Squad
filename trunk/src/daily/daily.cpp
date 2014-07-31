@@ -26,9 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-
 
 void advanceday(char &clearformess,char canseethings)
 {
@@ -37,76 +35,19 @@ void advanceday(char &clearformess,char canseethings)
    int w=0;
    //int l2;
 
-   ledger.resetDailyAmounts();
    //*JDS* Save the game to save.dat each day. :)
-   if((!disbanding) and autosave)savegame("save.dat");
+   if(!disbanding&&autosave) savegame("save.dat");
+
+   ledger.resetDailyAmounts();
 
    //CLEAR CAR STATES
    vector<long> caridused;
    for(p=0;p<len(pool);p++) pool[p]->carid=-1;
 
-   // Aging
-   for(p=0;p<len(pool);p++)
+   // Move squadless Liberals to their bases if not under siege
+   if(!disbanding) for(p=0;p<len(pool);p++)
    {
-      pool[p]->stunned=0; // For lack of a better place, make stunning expire here
-
-      if(!pool[p]->alive) continue;
-      // animals, tanks don't have age effects at the moment
-//TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
-      if(!pool[p]->animalgloss)
-      {
-         if(pool[p]->age>60)
-         {
-            int decrement=0;
-            while(pool[p]->age-decrement>60)
-            {
-               if(LCSrandom(365*10)==0)
-               {
-                  pool[p]->adjust_attribute(ATTRIBUTE_HEALTH,-1);
-                  if(pool[p]->get_attribute(ATTRIBUTE_HEALTH,false)<=0 &&
-                     pool[p]->get_attribute(ATTRIBUTE_HEALTH,true)<=1)
-                  {
-                     pool[p]->die();
-                     if(clearformess) erase();
-                     else makedelimiter();
-                     set_color(COLOR_WHITE,COLOR_BLACK,1);
-                     move(8,1);
-                     addstr(pool[p]->name, gamelog);
-                     addstr(" has passed away at the age of ", gamelog);
-                     addstr(pool[p]->age, gamelog);
-                     addstr(". The Liberal will be missed.", gamelog);
-                     gamelog.nextMessage();
-
-                     getkey();
-
-                     break;
-                  }
-               }
-               decrement+=10;
-            }
-            if(!pool[p]->alive)continue;
-         }
-         if(month==pool[p]->birthday_month&&
-            day==pool[p]->birthday_day)
-         {
-            pool[p]->age++;
-            switch(pool[p]->age)
-            {
-            case 13:
-               pool[p]->type=CREATURE_TEENAGER; // aww, all grown up
-               pool[p]->type_idname="CREATURE_TEENAGER";
-               break;
-            case 18:
-               pool[p]->type=CREATURE_POLITICALACTIVIST; // ok seriously this time
-               pool[p]->type_idname="CREATURE_POLITICALACTIVIST";
-               break;
-            }
-         }
-      }
-
-      if(disbanding) continue;
-
-      if(!pool[p]->is_active_liberal() || pool[p]->squadid != -1)
+      if(!pool[p]->alive||!pool[p]->is_active_liberal()||pool[p]->squadid!=-1)
          continue;
 
       // Prevent moving people to a sieged location,
@@ -122,12 +63,9 @@ void advanceday(char &clearformess,char canseethings)
 
    //ADVANCE SQUADS
    squadst *oactivesquad=activesquad;
-   for(int sq=0;sq<len(squad);sq++)
+   if(!disbanding) for(int sq=0;sq<len(squad);sq++)
    {
-      if(disbanding) break;
-
       //MAKE SURE MEMBERS DON'T ACT IF SQUAD DOES
-
       if(squad[sq]->activity.type!=ACTIVITY_NONE)
       {
          for(int p=0;p<6;p++)
@@ -534,20 +472,17 @@ void advanceday(char &clearformess,char canseethings)
    activesquad=oactivesquad;
 
    //HOSTAGES
-   for(p=len(pool)-1;p>=0;p--)
+   if(!disbanding) for(p=len(pool)-1;p>=0;p--)
    {
-      if(disbanding) break;
-
       if(!pool[p]->alive) continue;
       if(pool[p]->align!=1)
          tendhostage(pool[p],clearformess);
    }
 
    //ACTIVITIES FOR INDIVIDUALS
-   for(p=0;p<len(pool);p++)
+   if(!disbanding) for(p=0;p<len(pool);p++)
    {
       pool[p]->income=0;
-      if(disbanding) break;
 
       if(!pool[p]->alive) continue;
       if(pool[p]->clinic) continue;
@@ -643,10 +578,8 @@ void advanceday(char &clearformess,char canseethings)
       else healing[p]=0;
       healing2[p]=0;
    }
-   for(p=0;p<len(pool);p++)
+   if(!disbanding) for(p=0;p<len(pool);p++)
    {
-      if(disbanding) break;
-
       if(!pool[p]->alive) continue;
       if(pool[p]->hiding) continue;
       if(pool[p]->flag&CREATUREFLAG_SLEEPER) continue;
@@ -670,9 +603,8 @@ void advanceday(char &clearformess,char canseethings)
                healing[p]=0;
 
    //HEAL NON-CLINIC PEOPLE AND TRAIN
-   for(p=0;p<len(pool);p++)
+   if(!disbanding) for(p=0;p<len(pool);p++)
    {
-      if(disbanding) break;
       if(!(pool[p]->alive)) continue;
 
       if(clinictime(*pool[p]))
@@ -898,10 +830,8 @@ void advanceday(char &clearformess,char canseethings)
    //MEET WITH POTENTIAL RECRUITS
    for(int i=len(pool)-1;i>=0;i--)
       pool[i]->meetings=0;
-   for(int r=len(recruit)-1;r>=0;r--)
+   if(!disbanding) for(int r=len(recruit)-1;r>=0;r--)
    {
-      if(disbanding) break;
-
       int p=getpoolcreature(recruit[r]->recruiter_id);
       // Stand up recruits if 1) recruiter does not exist, 2) recruiter was not able to return to a safehouse today
       // or 3) recruiter is dead.
@@ -931,10 +861,8 @@ void advanceday(char &clearformess,char canseethings)
    }
 
    //DO DATES
-   for(int d=len(date)-1;d>=0;d--)
+   if(!disbanding) for(int d=len(date)-1;d>=0;d--)
    {
-      if(disbanding) break;
-
       int p=getpoolcreature(date[d]->mac_id);
       // Stand up dates if 1) dater does not exist, or 2) dater was not able to return to a safehouse today (and is not in the hospital)
       if(p!=-1&&((pool[p]->location!=-1&&
@@ -1003,8 +931,73 @@ void advanceday(char &clearformess,char canseethings)
    day++;
    for(p=0;p<len(pool);p++)
    {
+      pool[p]->stunned=0; // For lack of a better place, make stunning expire here
+
+      // Increment number of days since joined/kidnapped
+      pool[p]->joindays++;
+
+      // Increment number of days been dead if dead
+      if(!pool[p]->alive)
+      {
+         pool[p]->deathdays++;
+         continue;
+      }
+
+      // animals, tanks don't have age effects at the moment
+//TODO: Start aging effects for animals at age 12, take into account if they are genetic monsters or not.
+      if(!pool[p]->animalgloss)
+      {
+         if(pool[p]->age>60)
+         {
+            int decrement=0;
+            while(pool[p]->age-decrement>60)
+            {
+               if(LCSrandom(365*10)==0)
+               {
+                  pool[p]->adjust_attribute(ATTRIBUTE_HEALTH,-1);
+                  if(pool[p]->get_attribute(ATTRIBUTE_HEALTH,false)<=0 &&
+                     pool[p]->get_attribute(ATTRIBUTE_HEALTH,true)<=1)
+                  {
+                     pool[p]->die();
+                     if(clearformess) erase();
+                     else makedelimiter();
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                     move(8,1);
+                     addstr(pool[p]->name, gamelog);
+                     addstr(" has passed away at the age of ", gamelog);
+                     addstr(pool[p]->age, gamelog);
+                     addstr(". The Liberal will be missed.", gamelog);
+                     gamelog.nextMessage();
+
+                     getkey();
+
+                     break;
+                  }
+               }
+               decrement+=10;
+            }
+            if(!pool[p]->alive)continue;
+         }
+         if(month==pool[p]->birthday_month&&
+            day==pool[p]->birthday_day)
+         {
+            pool[p]->age++;
+            switch(pool[p]->age)
+            {
+            case 13:
+               pool[p]->type=CREATURE_TEENAGER; // aww, all grown up
+               pool[p]->type_idname="CREATURE_TEENAGER";
+               break;
+            case 18:
+               pool[p]->type=CREATURE_POLITICALACTIVIST; // ok seriously this time
+               pool[p]->type_idname="CREATURE_POLITICALACTIVIST";
+               break;
+            }
+         }
+      }
+
       // Heal over time
-      if(pool[p]->blood<100) pool[p]->blood+=1;
+      if(pool[p]->blood<100) pool[p]->blood++;
 
       // Updating for in hiding
       if(pool[p]->hiding>0)
@@ -1035,7 +1028,7 @@ void advanceday(char &clearformess,char canseethings)
       if((pool[p]->flag&CREATUREFLAG_MISSING)&&
         !(pool[p]->flag&CREATUREFLAG_KIDNAPPED))
       {
-         if(LCSrandom(14)+4<pool[p]->joindays)
+         if(LCSrandom(14)+5<pool[p]->joindays)
          {
             pool[p]->flag|=CREATUREFLAG_KIDNAPPED;
 
@@ -1045,16 +1038,6 @@ void advanceday(char &clearformess,char canseethings)
             ns->cr=pool[p];
             newsstory.push_back(ns);
          }
-      }
-
-      // Increment number of days since joined/kidnapped
-      pool[p]->joindays++;
-
-      // Increment number of days been dead if dead
-      if(!pool[p]->alive)
-      {
-         pool[p]->deathdays++;
-         continue;
       }
 
       // Gain skill levels for anything where you have enough experience
@@ -1077,13 +1060,16 @@ void advanceday(char &clearformess,char canseethings)
    showcarprefs=1;
 }
 
-#define DISPERSAL_ABANDONLCS   5
-#define DISPERSAL_BOSSINHIDING 4
-#define DISPERSAL_HIDING       3
-#define DISPERSAL_BOSSINPRISON 2
-#define DISPERSAL_NOCONTACT    1
-#define DISPERSAL_BOSSSAFE     0
-#define DISPERSAL_SAFE        -1
+enum DispersalTypes
+{
+   DISPERSAL_SAFE=-1,
+   DISPERSAL_BOSSSAFE,
+   DISPERSAL_NOCONTACT,
+   DISPERSAL_BOSSINPRISON,
+   DISPERSAL_HIDING,
+   DISPERSAL_BOSSINHIDING,
+   DISPERSAL_ABANDONLCS
+};
 
 /* squad members with no chain of command lose contact */
 void dispersalcheck(char &clearformess)

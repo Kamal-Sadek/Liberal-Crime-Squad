@@ -26,8 +26,6 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
-#include <math.h>
 #include <externs.h>
 
 /* common - test for possible game over */
@@ -639,12 +637,13 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
    case SORTING_NAME: sort(liberals.begin(),liberals.end(),sort_name); break;
    case SORTING_LOCATION_AND_NAME: sort(liberals.begin(),liberals.end(),sort_locationandname); break;
    case SORTING_SQUAD_OR_NAME: sort(liberals.begin(),liberals.end(),sort_squadorname); break;
+   case SORTING_RANDOM: sort(liberals.begin(),liberals.end(),sort_random<Creature*>); break;
    }
 }
 
 /* The following boolean functions will return true if first is supposed to be
    before second in the list. */
-bool sort_none(Creature* first, Creature* second) //This will sort sorted back to unsorted.
+bool sort_none(const Creature* first, const Creature* second) //This will sort sorted back to unsorted.
 {
    for(int j=0;j<len(pool);j++)
       if(pool[j]==first) return true;
@@ -652,19 +651,14 @@ bool sort_none(Creature* first, Creature* second) //This will sort sorted back t
    return false;
 }
 
-bool sort_name(Creature* first, Creature* second)
-{
-   return strcmp(first->name,second->name)<0;
-}
-
-bool sort_locationandname(Creature* first, Creature* second)
+bool sort_locationandname(const Creature* first, const Creature* second)
 {
    return first->location<second->location
        ||(first->location==second->location
-        &&strcmp(first->name,second->name)<0);
+        &&sort_name(first,second));
 }
 
-bool sort_squadorname(Creature* first, Creature* second)
+bool sort_squadorname(const Creature* first, const Creature* second)
 {  // Use getsquad to treat members of a new squad being assembled as if not in a squad.
    bool first_in_squad = getsquad(first->squadid)!=-1;
    bool second_in_squad = getsquad(second->squadid)!=-1;
@@ -672,7 +666,7 @@ bool sort_squadorname(Creature* first, Creature* second)
           || (first_in_squad
            && first->squadid < second->squadid) //Older squads above newer.
          || (!first_in_squad && !second_in_squad
-           && strcmp(first->name,second->name)<0)); //Sort squadless by name.
+           && sort_name(first,second))); //Sort squadless by name.
    //Sort members of same squad in the order they are in the squad.
    if(first_in_squad && first->squadid == second->squadid)
       for(int j=0;j<6;j++)
@@ -711,6 +705,8 @@ void sorting_prompt(short listforsorting)
    addstr("C - Sort by location and name.");
    move(6,2);
    addstr("D - Sort by squad or name.");
+   move(7,2);
+   addstr("E - Randomize order.");
 
    while(true)
    {
@@ -724,6 +720,8 @@ void sorting_prompt(short listforsorting)
       {  activesortingchoice[listforsorting]=SORTING_LOCATION_AND_NAME; break; }
       else if(c=='d')
       {  activesortingchoice[listforsorting]=SORTING_SQUAD_OR_NAME; break; }
+      else if(c=='e')
+      {  activesortingchoice[listforsorting]=SORTING_RANDOM; break; }
       else if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }

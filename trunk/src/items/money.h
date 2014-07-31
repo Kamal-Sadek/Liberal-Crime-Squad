@@ -6,7 +6,7 @@
 class Money : public Item
 {
    public:
-      explicit Money(long amount) : amount_(amount) {}
+      explicit Money(long amount) : amount_(amount) { }
       virtual Money* clone() const { return new Money(*this); }
       explicit Money(const std::string& inputXml);
       string showXml() const;

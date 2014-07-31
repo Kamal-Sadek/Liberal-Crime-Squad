@@ -32,9 +32,7 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include "includes.h"
-#include "externs.h"
-
+#include <externs.h>
 
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive)
@@ -492,7 +490,7 @@ void constructeventstory(char *story,short view,char positive)
             case 2: strcat(story,"I feel translucent rods passing through my body...  it's like making love to the future"); break;
             case 3:
                strcat(story,"and the greatest living example of a reverse racist is the ");
-               if(presparty!=1)strcat(story,"current president!"); // Limbaugh
+               if(presparty!=CONSERVATIVE_PARTY) strcat(story,"current president!"); // Limbaugh
                else strcat(story,"liberal media establishment!");
                break;
             }

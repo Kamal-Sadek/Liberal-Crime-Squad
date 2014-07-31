@@ -73,8 +73,6 @@
 // ~ Jonathan S. Fox
 
 #include "includes.h"
-#include <string>
-#include <fstream>
 
 // - configurable is a base class object for anything
 //   that is implemented in the config file

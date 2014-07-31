@@ -26,9 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-#include "configfile.h"
 
 /* re-create site from seed before squad arrives */
 void initsite(Location &loc)
@@ -961,51 +959,30 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
          }
       // Stairs in secure areas should only lead into secure areas.
       // Removing secure tiles without secure tiles above them.
-      std::vector< std::pair<int,int> >::iterator i = secure.begin(), j;
-      while(i != secure.end())
+      int i,j;
+      for(i=len(unsecure)-1;i>=0;i--)
       {
-         j = secure_above.begin();
-         while(j != secure_above.end())
+         for(j=0;j<len(secure_above);j++)
          {
-            if(*j == *i)
-            {
-               ++i;
-               break;
-            }
-            else if((j->first == i->first && j->second > i->second)
-                    || (j->first > i->first))
-            {
-               i = secure.erase(i);
-               break;
-            }
-            ++j;
+            if(secure_above[j]==secure[i]) break;
+            else if((secure_above[j].first==secure[i].first&&secure_above[j].second>secure[i].second)
+                  ||(secure_above[j].first>secure[i].first))
+            {  secure.erase(secure.begin()+i); break; }
          }
-         if(j == secure_above.end())
-            i = secure.erase(i);
+         if(j==len(secure_above)) secure.erase(secure.begin()+i);
       }
       // Stairs in unsecure areas should only lead into unsecure areas.
       // Removing unsecure tiles without unsecure tiles above them.
-      i = unsecure.begin();
-      while(i != unsecure.end())
+      for(i=len(unsecure)-1;i>=0;i--)
       {
-         j = unsecure_above.begin();
-         while(j != unsecure_above.end())
+         for(j=0;j<len(unsecure_above);j++)
          {
-            if(*j == *i)
-            {
-               ++i;
-               break;
-            }
-            else if((j->first == i->first && j->second > i->second)
-                    || (j->first > i->first))
-            {
-               i = unsecure.erase(i);
-               break;
-            }
-            ++j;
+            if(unsecure_above[j]==unsecure[i]) break;
+            else if((unsecure_above[j].first==unsecure[i].first&&unsecure_above[j].second>unsecure[i].second)
+                  ||(unsecure_above[j].first>unsecure[i].first))
+            {  unsecure.erase(unsecure.begin()+i); break; }
          }
-         if(j == unsecure_above.end())
-            i = unsecure.erase(i);
+         if(j==len(unsecure_above)) unsecure.erase(unsecure.begin()+i);
       }
       // Place stairs in secure area if possible, otherwise unsecure area.
       if(len(secure))
@@ -1014,12 +991,9 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
          x=choice.first,y=choice.second,z=zi-1;
          // The tile receiving the stairs down will not eligible for stairs
          // up later.
-         for(j = secure_above.begin(); j != secure_above.end(); ++j)
-            if (j->first == x && j->second == y)
-            {
-               secure_above.erase(j);
-               break;
-            }
+         for(j=0;j<len(secure_above);j++)
+            if(secure_above[j].first==x&&secure_above[j].second==y)
+            {  secure_above.erase(secure_above.begin()+j); break; }
       }
       else if(len(unsecure))
       {
@@ -1027,19 +1001,16 @@ void configSiteScript::generatestairsrandom(int rx, int ry, int rz, int dx, int 
          x=choice.first,y=choice.second,z=zi-1;
          // The tile receiving the stairs down will not eligible for stairs
          // up later.
-         for(j = unsecure_above.begin(); j != unsecure_above.end(); ++j)
-            if (j->first == x && j->second == y)
-            {
-               unsecure_above.erase(j);
-               break;
-            }
+         for(j=0;j<len(unsecure_above);j++)
+            if(unsecure_above[j].first==x&&unsecure_above[j].second==y)
+            {  unsecure_above.erase(unsecure_above.begin()+j); break; }
       }
       else continue; //Nowhere to place stairs.
       levelmap[x][y][z].special=SPECIAL_STAIRS_UP,levelmap[x][y][z+1].special=SPECIAL_STAIRS_DOWN;
       // Move up on level for next iteration.
-      secure = secure_above;
+      secure=secure_above;
       secure_above.clear();
-      unsecure = unsecure_above;
+      unsecure=unsecure_above;
       unsecure_above.clear();
    }
 }
@@ -1139,7 +1110,7 @@ void configSiteUnique::configure(const std::string& command, const std::string& 
 
 struct coordinates
 {
-   coordinates(int x1,int y1,int z1) : x(x1),y(y1),z(z1) {};
+   coordinates(int x1,int y1,int z1) : x(x1),y(y1),z(z1) { }
    int x,y,z;
 };
 

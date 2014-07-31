@@ -60,9 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
-
 
 // Imperfect but quick and dirty line of sight check
 // Only works if the target point is at most two spaces

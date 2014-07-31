@@ -25,15 +25,12 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
 
 /*
     TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
        that the country has become arch-conservative... --Addictgamer
 */
-
-
 
 /* endgame - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
@@ -55,7 +52,7 @@ void tossjustices(char canseethings)
    if(canseethings)
    {
       int tossnum=0;
-      for(j=0;j<9;j++) if(court[j]<=1) tossnum++;
+      for(j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL) tossnum++;
 
       amendmentheading();
 
@@ -67,7 +64,7 @@ void tossjustices(char canseethings)
 
       int y=4;
 
-      for(j=0;j<9;j++) if(court[j]!=2)
+      for(j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL)
       {
          move(y++,0);
          addstr(courtname[j]);
@@ -106,10 +103,10 @@ void tossjustices(char canseethings)
    if(ratify(2,-1,-1,1,canseethings))
    {
       //BLAST JUSTICES
-      for(int j=0;j<9;j++) if(court[j]!=2)
+      for(int j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL)
       {
          do generate_name(courtname[j]); while(len(courtname[j])>20);
-         court[j]=2;
+         court[j]=ALIGN_ELITELIBERAL;
       }
 
       amendnum++;
@@ -645,58 +642,58 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
       }
 
       bool yeswin_h=false,yeswin_s=false;
-      int yesvotes_h=0,yesvotes_s=0,vote,s=-1;
+      int yesvotes_h=0,yesvotes_s=0,vote,s=0;
 
-      for(int l=0;l<435;l++)
+      for(int l=0;l<HOUSENUM;l++)
       {
          vote=house[l];
          if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
 
          if(level==vote) yesvotes_h++;
 
-         if(l==434) if(yesvotes_h>=290) yeswin_h=true;
+         if(l==HOUSENUM-1) if(yesvotes_h>=HOUSESUPERMAJORITY) yeswin_h=true;
 
          if(canseethings)
          {
-            if(l==434&&yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==HOUSENUM-1&&yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==HOUSENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,62);
             addstr(yesvotes_h);
             addstr(" Yea");
 
-            if(l==434&&!yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==HOUSENUM-1&&!yeswin_h) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==HOUSENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,62);
             addstr(l+1-yesvotes_h);
             addstr(" Nay");
          }
 
-         if(l%4==0&&s<99)
+         if(l%4==0&&s<SENATENUM)
          {
-            vote=senate[++s];
+            vote=senate[s++];
             if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
 
             if(level==vote) yesvotes_s++;
          }
 
-         if(l==434&&yesvotes_s>=67) yeswin_s=true;
+         if(l==HOUSENUM-1&&yesvotes_s>=SENATESUPERMAJORITY) yeswin_s=true;
 
          if(canseethings)
          {
-            if(l==434&&yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==HOUSENUM-1&&yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==HOUSENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(2,70);
             addstr(yesvotes_s);
             addstr(" Yea");
 
-            if(l==434&&!yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(l==434) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(l==HOUSENUM-1&&!yeswin_s) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(l==HOUSENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(3,70);
-            addstr(s+1-yesvotes_s);
+            addstr(s-yesvotes_s);
             addstr(" Nay");
 
             if(l%5==0) pause_ms(10);
@@ -737,7 +734,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
       }
 
       int vote,smood;
-      for(int s=0;s<50;s++)
+      for(int s=0;s<STATENUM;s++)
       {
          smood=mood;
 
@@ -821,15 +818,15 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
 
          if(canseethings)
          {
-            if(s==49&&yesstate>=37) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(s==STATENUM-1&&yesstate>=STATESUPERMAJORITY) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(s==STATENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,50);
             addstr(yesstate);
             addstr(" Yea");
 
-            if(s==49&&yesstate<37) set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(s==49) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if(s==STATENUM-1&&yesstate<STATESUPERMAJORITY) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(s==STATENUM-1) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(23,60);
             addstr(s+1-yesstate);
@@ -839,7 +836,7 @@ char ratify(int level,int lawview,int view,char congress,char canseethings)
          }
       }
 
-      if(yesstate>=37) ratified=true;
+      if(yesstate>=STATESUPERMAJORITY) ratified=true;
    }
 
    if(canseethings)

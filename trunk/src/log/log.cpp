@@ -26,11 +26,7 @@ This file is part of Liberal Crime Squad.
 
 */
 
-#include "includes.h"
-#include "externs.h"
-#include "lcsio.h"
-
-#include <fstream>
+#include <externs.h>
 
 //Constructor.
 Log::Log()

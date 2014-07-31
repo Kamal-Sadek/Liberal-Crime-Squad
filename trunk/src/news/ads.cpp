@@ -1,6 +1,4 @@
-
-//#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,short* storyx_e,int& it2)
 {

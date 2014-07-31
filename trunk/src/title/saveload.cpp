@@ -26,9 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
 #include <externs.h>
-#include "lcsio.h"
 
 // TODO: It would be really cool to be able to "export" characters.
 
@@ -93,7 +91,7 @@ void savegame(const char *str)
       fwrite(&offended_firemen,sizeof(short),1,h);
       fwrite(&attorneyseed,sizeof(int),1,h);
       //fwrite(&selectedsiege,sizeof(long),1,h);
-      fwrite(lcityname,sizeof(char),80,h);
+      fwrite(lcityname,sizeof(char),CITY_NAMELEN,h);
       fwrite(&newscherrybusted,sizeof(char),1,h);
 
       fwrite(slogan,sizeof(char),SLOGAN_LEN,h);
@@ -102,13 +100,13 @@ void savegame(const char *str)
 
       fwrite(attitude,sizeof(short),VIEWNUM,h);
       fwrite(law,sizeof(short),LAWNUM,h);
-      fwrite(house,sizeof(short),435,h);
-      fwrite(senate,sizeof(short),100,h);
-      fwrite(court,sizeof(short),9,h);
-      fwrite(courtname,sizeof(char)*80,9,h);
+      fwrite(house,sizeof(short),HOUSENUM,h);
+      fwrite(senate,sizeof(short),SENATENUM,h);
+      fwrite(court,sizeof(short),COURTNUM,h);
+      fwrite(courtname,sizeof(char)*POLITICIAN_NAMELEN,9,h);
       fwrite(exec,sizeof(char),EXECNUM,h);
-      fwrite(execname,sizeof(char)*80,EXECNUM,h);
-      fwrite(oldPresidentName,sizeof(char)*80,1,h);
+      fwrite(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
+      fwrite(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
       //LOCATIONS
       dummy=len(location);
@@ -131,8 +129,8 @@ void savegame(const char *str)
          for(int l2=0;l2<len(location[l]->changes);l2++)
             fwrite(&location[l]->changes[l2],sizeof(sitechangest),1,h);
 
-         fwrite(location[l]->name,sizeof(char),40,h);
-         fwrite(location[l]->shortname,sizeof(char),20,h);
+         fwrite(location[l]->name,sizeof(char),LOCATION_NAMELEN,h);
+         fwrite(location[l]->shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fwrite(&location[l]->type,sizeof(char),1,h);
          fwrite(&location[l]->city,sizeof(int),1,h);
          fwrite(&location[l]->area,sizeof(int),1,h);
@@ -153,8 +151,8 @@ void savegame(const char *str)
          fwrite(&location[l]->compound_walls,sizeof(int),1,h);
          fwrite(&location[l]->compound_stores,sizeof(int),1,h);
          fwrite(&location[l]->front_business,sizeof(char),1,h);
-         fwrite(location[l]->front_name,sizeof(char),40,h);
-         fwrite(location[l]->front_shortname,sizeof(char),20,h);
+         fwrite(location[l]->front_name,sizeof(char),LOCATION_NAMELEN,h);
+         fwrite(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fwrite(&location[l]->haveflag,sizeof(bool),1,h);
 
          fwrite(&location[l]->mapseed,sizeof(int),1,h);
@@ -193,7 +191,6 @@ void savegame(const char *str)
             //deep write rapport map
             int size = len(intr->rapport);
             fwrite(&size,sizeof(int),1,h);
-
             for(map<long,float_zero>::iterator i=intr->rapport.begin();i!=intr->rapport.end();i++)
             {
                fwrite(&i->first,sizeof(long),1,h);
@@ -217,7 +214,7 @@ void savegame(const char *str)
       fwrite(&dummy,sizeof(int),1,h);
       for(int sq=0;sq<len(squad);sq++)
       {
-         fwrite(squad[sq]->name,sizeof(char),40,h);
+         fwrite(squad[sq]->name,sizeof(char),SQUAD_NAMELEN,h);
          fwrite(&squad[sq]->activity,sizeof(activityst),1,h);
          fwrite(&squad[sq]->id,sizeof(int),1,h);
 
@@ -415,7 +412,7 @@ char load()
       fread(&offended_firemen,sizeof(short),1,h);
       fread(&attorneyseed,sizeof(int),1,h);
       //fread(&selectedsiege,sizeof(long),1,h);
-      fread(lcityname,sizeof(char),80,h);
+      fread(lcityname,sizeof(char),CITY_NAMELEN,h);
       fread(&newscherrybusted,sizeof(char),1,h);
 
       fread(slogan,sizeof(char),SLOGAN_LEN,h);
@@ -424,13 +421,13 @@ char load()
 
       fread(attitude,sizeof(short),VIEWNUM,h);
       fread(law,sizeof(short),LAWNUM,h);
-      fread(house,sizeof(short),435,h);
-      fread(senate,sizeof(short),100,h);
-      fread(court,sizeof(short),9,h);
-      fread(courtname,sizeof(char)*80,9,h);
+      fread(house,sizeof(short),HOUSENUM,h);
+      fread(senate,sizeof(short),SENATENUM,h);
+      fread(court,sizeof(short),COURTNUM,h);
+      fread(courtname,sizeof(char)*POLITICIAN_NAMELEN,COURTNUM,h);
       fread(exec,sizeof(char),EXECNUM,h);
-      fread(execname,sizeof(char)*80,EXECNUM,h);
-      fread(oldPresidentName,sizeof(char)*80,1,h);
+      fread(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
+      fread(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
       //LOCATIONS
       fread(&dummy,sizeof(int),1,h);
@@ -481,8 +478,8 @@ char load()
          for(int l2=0;l2<len(location[l]->changes);l2++)
             fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
 
-         fread(location[l]->name,sizeof(char),40,h);
-         fread(location[l]->shortname,sizeof(char),20,h);
+         fread(location[l]->name,sizeof(char),LOCATION_NAMELEN,h);
+         fread(location[l]->shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fread(&location[l]->type,sizeof(char),1,h);
          fread(&location[l]->city,sizeof(int),1,h);
          fread(&location[l]->area,sizeof(int),1,h);
@@ -503,8 +500,8 @@ char load()
          fread(&location[l]->compound_walls,sizeof(int),1,h);
          fread(&location[l]->compound_stores,sizeof(int),1,h);
          fread(&location[l]->front_business,sizeof(char),1,h);
-         fread(location[l]->front_name,sizeof(char),40,h);
-         fread(location[l]->front_shortname,sizeof(char),20,h);
+         fread(location[l]->front_name,sizeof(char),LOCATION_NAMELEN,h);
+         fread(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fread(&location[l]->haveflag,sizeof(bool),1,h);
 
          fread(&location[l]->mapseed,sizeof(int),1,h);
@@ -632,7 +629,7 @@ char load()
       {
          squad[sq]=new squadst;
 
-         fread(squad[sq]->name,sizeof(char),40,h);
+         fread(squad[sq]->name,sizeof(char),SQUAD_NAMELEN,h);
          fread(&squad[sq]->activity,sizeof(activityst),1,h);
          fread(&squad[sq]->id,sizeof(int),1,h);
 

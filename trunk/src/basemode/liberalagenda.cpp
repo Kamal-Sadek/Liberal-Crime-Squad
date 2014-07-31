@@ -32,7 +32,6 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
 
 enum Pages
@@ -40,12 +39,13 @@ enum Pages
    PAGE_LEADERS,
    PAGE_ISSUES_A,
    PAGE_ISSUES_B,
-   PAGE_POLLS_A,
-   PAGE_POLLS_B
+   //PAGE_POLLS_A,
+   //PAGE_POLLS_B
+   PAGENUM
 };
 
 /* base - liberal agenda */
-char liberalagenda(char won)
+bool liberalagenda(signed char won)
 {
    int page=0, y;
 
@@ -71,8 +71,8 @@ char liberalagenda(char won)
          addstr("The Status of the Liberal Agenda");
       }
 
-      if(page<0)page+=3;
-      if(page>=3)page-=3;
+      if(page<0) page=PAGENUM-1;
+      if(page>=PAGENUM) page=0;
 
       switch(page)
       {
@@ -146,12 +146,12 @@ char liberalagenda(char won)
          else
          {
             int housemake[6]={0,0,0,0,0,0};
-            for(int h=0;h<435;h++) housemake[house[h]+2]++;
-            if(housemake[5]+MIN(housemake[0],housemake[4])>=218) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-            else if(housemake[0]>=218) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-            else if(housemake[4]>=218) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-            else if(housemake[0]+housemake[1]>=218) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-            else if(housemake[3]+housemake[4]>=218) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
+            if(housemake[5]+MIN(housemake[0],housemake[4])>=HOUSEMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+            else if(housemake[0]>=HOUSEMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(housemake[4]>=HOUSEMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(housemake[0]+housemake[1]>=HOUSEMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(housemake[3]+housemake[4]>=HOUSEMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
             else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
             mvaddstr(10,0,"House: ");
@@ -163,13 +163,13 @@ char liberalagenda(char won)
             addstr(tostring(housemake[0])+"Cons+");
 
             int senatemake[6]={0,0,0,0,0,0};
-            for(int s=0;s<100;s++) senatemake[senate[s]+2]++;
+            for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
             senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
-            if(senatemake[5]+MIN(senatemake[0],senatemake[4])>=51) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-            else if(senatemake[0]>=51) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-            else if(senatemake[4]>=51) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-            else if(senatemake[0]+senatemake[1]>=51) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-            else if(senatemake[3]+senatemake[4]>=51) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            if(senatemake[5]+MIN(senatemake[0],senatemake[4])>=SENATEMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+            else if(senatemake[0]>=SENATEMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(senatemake[4]>=SENATEMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(senatemake[0]+senatemake[1]>=SENATEMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(senatemake[3]+senatemake[4]>=SENATEMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
             else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
             senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
@@ -187,12 +187,12 @@ char liberalagenda(char won)
          else
          {
             int courtmake[6]={0,0,0,0,0,0};
-            for(int s=0;s<9;s++) courtmake[court[s]+2]++;
-            if(courtmake[5]+MIN(courtmake[0],courtmake[4])>=5) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-            else if(courtmake[0]>=5) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-            else if(courtmake[4]>=5) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-            else if(courtmake[0]+courtmake[1]>=5) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-            else if(courtmake[3]+courtmake[4]>=5) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
+            for(int s=0;s<COURTNUM;s++) courtmake[court[s]+2]++;
+            if(courtmake[5]+MIN(courtmake[0],courtmake[4])>=COURTMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+            else if(courtmake[0]>=COURTMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
+            else if(courtmake[4]>=COURTMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
+            else if(courtmake[0]+courtmake[1]>=COURTMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+            else if(courtmake[3]+courtmake[4]>=COURTMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
             else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
          }
@@ -226,7 +226,7 @@ char liberalagenda(char won)
          else
          {
             y=4;
-            for(int c=0;c<9;c++,y++)
+            for(int c=0;c<COURTNUM;c++,y++)
             {
                set_alignment_color(court[c],true);
                mvaddstr(y,60,courtname[c]);
@@ -624,67 +624,64 @@ char liberalagenda(char won)
          else break;
       }
    }
-   return 0;
+   return false;
 }
 
 
 
-/* base - liberal agenda - disband */
-char confirmdisband() // The (current) issue that the masses are most
-{                         //        concerned should be (slightly) more likely
-   char word[80];         //        to be the phrase. (Issue, not the CCS, etc.)
-   int pos=0;             //                        -- LK
+/* base - liberal agenda - disband */      // The (current) issue that the masses are most
+bool confirmdisband()                      // concerned should be (slightly) more likely
+{                                          // to be the phrase. (Issue, not the CCS, etc.)
+   static const char *issue_phrases[] =    //    -- LK
+   {  /////////////////////////////////////////////////////////////////////////////////////////
+      // Liberal Phrase           // Conservative Equivalent  // Stalinist Equivalent        //
+      /////////////////////////////////////////////////////////////////////////////////////////
+      "Corporate Accountability", // Deregulation             // Nationalized Industry       //
+      "Free Speech",              // Child Safety             // Ideological Purity          //
+      "Gay Marriage",             // Sanctity of Marriage     // Bourgeoisie Decadence       //
+      "Abortion Rights",          // Right to Life            // Population Control          //
+      "Separation Clause",        // Under God                // Opiate of the Masses        //
+      "Racial Equality",          // Emmett Till              // Kulaks                      //
+      "Gun Control",              // Second Amendment         // Firing Squad                //
+      "Campaign Finance Reform",  // Freedom to Campaign      // People's Republic           //
+      "Animal Rights",            // Animal Abuse             // Capitalist Pig-Dogs         //
+      "Worker's Rights",          // Right to Work            // Canadian Gulags             //
+      "Police Responsibility",    // Rodney King              // Secret Police               // /* XXX: "Civilian" Police (Note to self) -- LK */
+      "Global Warming",           // Self-Regulation          // Five-Year Plan              //
+      "Immigration Reform",       // Border Control           // Iron Curtain                // /* XXX: "Nicer" Term (Note to self) -- LK */
+      "Human Rights",             // National Security        // Reeducation                 // /* XXX: 2+2 = 5? (Note to self) -- LK */
+      "Woman's Suffrage",         // Traditional Gender Roles // Honey Trap                  //
+      "Right To Privacy",         // Wiretapping              // Stasi                       //
+      "Medical Marijuana",        // War on Drugs             // Vodka                       //
+      "Flag Burning",             // Patriotism               // Hammer and Sickle           // /* XXX: Towards the beginning of 1984, at Winston's job. (Note to self) -- LK */
+      "Life Imprisonment",        // Zero Tolerance           // Mass Grave                  //
+      "Conflict Resolution",      // Preemptive Strike        // Mutual Assured Destruction  //
+      "Radiation Poisoning",      // Nuclear Power            // Chernobyl                   //
+      "Tax Bracket"               // Flat Tax                 // Proletariat                 //
+   }; /////////////////////////////////////////////////////////////////////////////////////////
 
-   switch(LCSrandom(22)) // or more... (preferably 44)
-   {    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Liberal Phrase                                       // Conservative Equivalent      // Stalinist Equivalent  //
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      case 0:strcpy(word,"Corporate Accountability");break;     // Deregulation                 //                       //
-      case 1:strcpy(word,"Free Speech");break;                  // Child Safety                 // Thoughtcrime          //
-      case 2:strcpy(word,"Gay Marriage");break;                 // Sancitity of Marriage        //                       //
-      case 3:strcpy(word,"Abortion Rights");break;              // Right to Life                //                       //
-      case 4:strcpy(word,"Separation Clause");break;            // Under God                    //                       //
-      case 5:strcpy(word,"Racial Equality");break;              // Emmett Till                  //                       //
-      case 6:strcpy(word,"Gun Control");break;                  // Second Amendment             // Firing Squad          //
-      case 7:strcpy(word,"Campaign Finance Reform");break;      // Freedom to Campaign          //                       //
-      case 8:strcpy(word,"Animal Rights");break;                // Animal Abuse                 //                       //
-      case 9:strcpy(word,"Worker's Rights");break;              // Right to Work                // Gulag                 //
-      case 10:strcpy(word,"Police Responsibility");break;       // Rodney King                  // Red Guard FIXME       // /* XXX: "Civilian" Police (Note to self) -- LK */
-      case 11:strcpy(word,"Global Warming");break;              // Self-Regulation              //                       //
-      case 12:strcpy(word,"Immigration Reform");break;          // Border Control FIXME         // Berlin Wall           // /* XXX: "Nicer" Term (Note to self) -- LK */
-      case 13:strcpy(word,"Human Rights");break;                // National Security            // Reeducation FIXME     // /* XXX: 2+2 = 5? (Note to self) -- LK */
-      case 14:strcpy(word,"Woman's Suffrage");break;            // Traditional Gender Roles     //                       //
-      case 15:strcpy(word,"Right To Privacy");break;            // Wiretapping                  // Big Brother           //
-      case 16:strcpy(word,"Medical Marijuana");break;           // War on Drugs                 // Soma                  //
-      case 17:strcpy(word,"Flag Burning");break;                // Patriotism                   // DAILYSPEECHORW/E FIXME// /* XXX: Towards the beginning of 1984, at Winston's job. (Note to self) -- LK */
-      case 18:strcpy(word,"Life Imprisonment");break;           // Zero Tolerance               // Mass Grave            //
-      case 19:strcpy(word,"Conflict Resolution");break;         // Preemptive Strike            // Cuban Missile Crisis  //
-      case 20:strcpy(word,"Radiation Poisoning");break;         // Nuclear Power                // Arms Race             //
-      case 21:strcpy(word,"Tax Bracket");break;                 // Flat Tax                     // Proletariat           //
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   }
+   string word=pickrandom(issue_phrases);
 
-   while(true)
+   for(int pos=0;pos<len(word);)
    {
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(0,0);
-      addstr("Are you sure you want to disband?");
+      mvaddstr(0,0,"Are you sure you want to disband?");
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(2,0);  addstr("Disbanding scatters the Liberal Crime Squad, sending all of its members");
-      move(3,0);  addstr("into hiding, free to pursue their own lives.  You will be able to observe");
-      move(4,0);  addstr("the political situation in brief, and wait until a resolution is reached.");
+      mvaddstr(2,0,"Disbanding scatters the Liberal Crime Squad, sending all of its members");
+      mvaddstr(3,0,"into hiding, free to pursue their own lives.  You will be able to observe");
+      mvaddstr(4,0,"the political situation in brief, and wait until a resolution is reached.");
 
-      move(6,0);  addstr("If at any time you determine that the Liberal Crime Squad will be needed");
-      move(7,0);  addstr("again, you may return to the homeless shelter to restart the campaign.");
+      mvaddstr(6,0,"If at any time you determine that the Liberal Crime Squad will be needed");
+      mvaddstr(7,0,"again, you may return to the homeless shelter to restart the campaign.");
 
-      move(9,0);  addstr("Do not make this decision lightly.  If you do need to return to action,");
-      move(10,0); addstr("only the most devoted of your former members will return.");
+      mvaddstr(9,0,"Do not make this decision lightly.  If you do need to return to action,");
+      mvaddstr(10,0,"only the most devoted of your former members will return.");
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(13,0); addstr("Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
+      mvaddstr(13,0,"Type this Liberal phrase to confirm (press a wrong letter to rethink it):");
 
       for(int x=0;x<len(word);x++)
       {
@@ -694,30 +691,24 @@ char confirmdisband() // The (current) issue that the masses are most
          mvaddchar(15,x,word[x]);
       }
 
-      int c=getkey();
-
-      if((c==word[pos])||((c+'A'-'a')==word[pos]))
+      if(getkey()==::tolower(word[pos]))
       {
          pos++;
-         if(word[pos]==' ') pos++;
-         if(pos>=len(word))
-         {
-            //SET UP THE DISBAND
-            for(int p=len(pool)-1;p>=0;p--)
-            {
-               if(!pool[p]->alive)delete_and_remove(pool,p);
-               else if(!(pool[p]->flag & CREATUREFLAG_SLEEPER))
-               {
-                  removesquadinfo(*pool[p]);
-                  pool[p]->hiding=-1;
-               }
-            }
-            cleangonesquads();
-            disbandtime=year;
-            return 1;
-         }
+         if(word[pos]==' '||word[pos]=='\''||word[pos]=='-') pos++;
       }
-      else break;
+      else return false;
    }
-   return 0;
+   //SET UP THE DISBAND
+   for(int p=len(pool)-1;p>=0;p--)
+   {
+      if(!pool[p]->alive) delete_and_remove(pool,p);
+      else if(!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+      {
+         removesquadinfo(*pool[p]);
+         pool[p]->hiding=-1;
+      }
+   }
+   cleangonesquads();
+   disbandtime=year;
+   return true;
 }

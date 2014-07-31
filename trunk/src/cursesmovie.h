@@ -41,7 +41,7 @@ struct CursesMovie_framest
    long start,stop;
    short sound,song,effect;
    unsigned short flag;
-   CursesMovie_framest() : frame(0),start(0),stop(0),sound(-1),song(-1),effect(-1),flag(0) {}
+   CursesMovie_framest() : frame(0),start(0),stop(0),sound(-1),song(-1),effect(-1),flag(0) { }
 };
 
 struct CursesMoviest
@@ -50,7 +50,7 @@ struct CursesMoviest
    int picnum,dimx,dimy;
    filelistst songlist,soundlist;
    vector<CursesMovie_framest *> frame;
-   CursesMoviest() : picnum(1),dimx(80),dimy(25) {}
+   CursesMoviest() : picnum(1),dimx(80),dimy(25) { }
    ~CursesMoviest() { clean(); }
    void savemovie(const char *filename, int flags);
    void loadmovie(const char *filename);

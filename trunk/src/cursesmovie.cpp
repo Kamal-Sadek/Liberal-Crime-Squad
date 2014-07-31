@@ -20,65 +20,7 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include "common.h" /* include this prior to checking if WIN32 is defined */
-
-#ifdef WIN32
-  #include <windows.h>
-  #include <string.h>
-  #include <iostream>
-  #include <fstream>
-  #ifdef __MINGW32__
-    #include <vector>
-    #include <io.h> //needed for unlink()
-  #else
-  //Visual C++ .NET (7) includes the STL with vector, so we
-  //will use that, otherwise the HP STL Vector.h will be used.
-    #if _MSC_VER > 1200
-      #define WIN32_DOTNET
-      #include <vector>
-    #else
-      #define WIN32_PRE_DOTNET
-      #include "vector.h"
-    #endif
-  #endif
-  #include "curses.h"
-  //undo PDCurses macros that break vector class
-  #undef erase
-  #undef clear
-  #ifndef __STRICT_ANSI__
-    #define HAS_STRICMP
-  #endif
-#else
-  #include <vector>
-  #include <string.h>
-  #include <iostream>
-  #include <fstream>
-  #include <ctype.h>
-  #define GO_PORTABLE
-  #ifdef XCURSES
-    #define HAVE_PROTO 1
-    #define CPLUSPLUS  1
-    /* Try these PDCurses/Xcurses options later...
-    #define FAST_VIDEO
-    #define REGISTERWINDOWS
-    */
-    #include <xcurses.h> //This is the X11 Port of PDCurses
-    //undo PDCurses macros that break vector class
-    #undef erase
-    #undef clear
-  #else
-    #ifdef NCURSES
-      #include <ncurses.h>
-    #else
-      #include <curses.h>
-    #endif
-  #endif
-#endif
-#include <string.h>
-#include "lcsio.h"
-#include "externs.h"
-
-using namespace std;
+#include <externs.h>
 
 extern CursesMoviest movie;
 

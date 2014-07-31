@@ -26,14 +26,15 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
 
-#define DATERESULT_MEETTOMORROW 0
-#define DATERESULT_BREAKUP      1
-#define DATERESULT_JOINED       2
-#define DATERESULT_ARRESTED     3
-
+enum DateResults
+{
+   DATERESULT_MEETTOMORROW,
+   DATERESULT_BREAKUP,
+   DATERESULT_JOINED,
+   DATERESULT_ARRESTED
+};
 
 // Handles the result of a date or vacation
 static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)

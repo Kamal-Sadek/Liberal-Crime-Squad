@@ -4,7 +4,7 @@
 
 #ifndef CREATURE_H_INCLUDED
 #define CREATURE_H_INCLUDED
-#include <string>
+#include "common.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
@@ -262,7 +262,7 @@ private:
    int associated_attribute;
    int skill;
 public:
-   Skill(){}
+   Skill() { }
    Skill(const std::string& inputXml);
    string showXml() const;
    int value;
@@ -277,7 +277,7 @@ class Attribute
 private:
    int attribute;
 public:
-   Attribute(){}
+   Attribute() { }
    Attribute(const std::string& inputXml);
    string showXml() const;
    int value;
@@ -298,14 +298,14 @@ private:
    Weapon* weapon;
    Armor* armor;
 public:
-   void set_attribute(int attribute, int amount) { attributes[attribute].value=amount; }
+   void set_attribute(int attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
    int get_attribute(int attribute, bool use_juice) const;
-   void adjust_attribute(int attribute, int amount) { attributes[attribute].value += amount; }
+   void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
    int attribute_roll(int attribute) const;
    bool attribute_check(int attribute, int difficulty) const;
 
-   void set_skill(int skill, int amount) { skills[skill].value=amount; }
-   int get_skill(int skill) const { return skills[skill].value; }
+   void set_skill(int skill, int amount) { skills[skill].value=MIN(amount,MAXATTRIBUTE); }
+   int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
 

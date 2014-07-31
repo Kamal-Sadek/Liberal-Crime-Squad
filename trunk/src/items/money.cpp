@@ -1,4 +1,4 @@
-#include "includes.h"
+#include <externs.h>
 
 Money::Money(const std::string& inputXml) : Item(inputXml)
 {

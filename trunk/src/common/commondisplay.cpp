@@ -60,7 +60,6 @@ the bottom of includes.h in the top src folder.
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
 
 // Sets the text color to the thematic color for the given alignment

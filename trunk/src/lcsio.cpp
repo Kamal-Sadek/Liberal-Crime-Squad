@@ -21,18 +21,9 @@ This file is part of Liberal Crime Squad.
     along with Liberal Crime Squad; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
-#include <string>
-#include <queue>
-#include "lcsio.h" /* include this prior to checking if WIN32 is defined */
-#include <stdlib.h>
-#include <string.h>
-#include "includes.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <externs.h>
 
-#define MAX_PATH_SIZE 2048
 char homedir[MAX_PATH_SIZE];
 char artdir[MAX_PATH_SIZE];
 const char* arttest="newspic.cpc";

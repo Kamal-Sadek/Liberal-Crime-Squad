@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
 { }

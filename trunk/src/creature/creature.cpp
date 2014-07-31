@@ -26,7 +26,6 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#include <includes.h>
 #include <externs.h>
 
 Skill::Skill(const std::string& inputXml)
@@ -45,7 +44,7 @@ Skill::Skill(const std::string& inputXml)
       else if (tag == "skill")
          skill = atoi(xml.GetData());
       else if (tag == "value")
-         value = atoi(xml.GetData());
+         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
    }
 }
 
@@ -56,7 +55,7 @@ string Skill::showXml() const
    xml.IntoElem();
    xml.AddElem("associated_attribute", associated_attribute);
    xml.AddElem("skill", skill);
-   xml.AddElem("value", value);
+   xml.AddElem("value", min(value,MAXATTRIBUTE));
 
    return xml.GetDoc();
 }
@@ -159,7 +158,7 @@ Attribute::Attribute(const std::string& inputXml)
       if (tag == "attribute")
          attribute = atoi(xml.GetData());
       else if (tag == "value")
-         value = atoi(xml.GetData());
+         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
    }
 }
 
@@ -169,7 +168,7 @@ string Attribute::showXml() const
    xml.AddElem("attribute");
    xml.IntoElem();
    xml.AddElem("attribute", attribute);
-   xml.AddElem("value", value);
+   xml.AddElem("value", min(value,MAXATTRIBUTE));
 
    return xml.GetDoc();
 }
@@ -1491,8 +1490,8 @@ bool Creature::ready_another_throwing_weapon()
 int Creature::count_clips() const
 {
    int sum=0;
-   for(deque<Clip*>::const_iterator i=clips.begin();i!=clips.end();i++)
-      sum+=(*i)->get_number();
+   for(int i=0;i<len(clips);i++)
+      sum+=clips[i]->get_number();
    return sum;
 }
 

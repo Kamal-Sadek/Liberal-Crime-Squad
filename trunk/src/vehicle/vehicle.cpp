@@ -1,5 +1,4 @@
-#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 long Vehicle::curcarid = 0;
 

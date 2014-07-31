@@ -2,7 +2,6 @@
 #ifndef GLOBALS_H_INCLUDED
 #define GLOBALS_H_INCLUDED
 
-#include "law.h"
 #include "includes.h"
 
 class date
@@ -15,9 +14,9 @@ public:
 
 
 
-#define HOUSE_OF_REPRESENTATIVES_SIZE  435
-#define SENATE_SIZE                    100
-#define SUPREME_COURT_SIZE             9
+#define HOUSENUM 435
+#define SENATENUM 100
+#define COURTNUM 9
 
 class executivebranch
 {
@@ -31,20 +30,20 @@ public:
 class house
 {
 public:
-   signed char alignment[HOUSE_OF_REPRESENTATIVES_SIZE];
+   signed char alignment[HOUSENUM];
 };
 
 class senate
 {
 public:
-   signed char alignment[SENATE_SIZE];
+   signed char alignment[SENATENUM];
 };
 
 class supremecourt
 {
 public:
-   signed char alignment[SUPREME_COURT_SIZE];
-   string name[SUPREME_COURT_SIZE];
+   signed char alignment[COURTNUM];
+   string name[COURTNUM];
 };
 
 class constitution
@@ -158,7 +157,7 @@ public:
    string Slogan;
    class statistics Statistics;
    class accounting Accounting;
-   
+
    vector<vehiclest *>     VehiclePool;
    vector<creaturest *>    LiberalPool;
    vector<squadst *>       SquadPool;
@@ -230,7 +229,7 @@ public:
 class sitemode
 {
 public:
-   sitemode() : activesquad(NULL), sitestory(NULL) {}
+   sitemode() : activesquad(NULL),sitestory(NULL) { }
    siteblockst levelmap[MAPX][MAPY][MAPZ];
    squadst *activesquad;
    newsstoryst *sitestory;

@@ -16,9 +16,7 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-#include "politics/law.h"
-#include "politics/alignment.h"
-#include <includes.h>
+#include <externs.h>
 
 // Default constructor
 law::law()

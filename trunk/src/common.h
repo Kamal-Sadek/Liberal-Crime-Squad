@@ -23,7 +23,213 @@
    #endif /* !WIN32 */
 #endif /* _WIN32 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#include <langinfo.h>
+#endif
+
+#ifdef WIN32 // safe to do now that we did that earlier thing defining WIN32 if _WIN32 was defined
+   #include <windows.h>
+   #define GO_PORTABLE
+   #include <io.h> //needed for unlink()
+   #include <direct.h>
+   #ifndef __STRICT_ANSI__
+      #define HAS_STRICMP
+   #endif
+   //Visual C++ .NET (7) includes the STL with vector, so we
+   //will use that, otherwise the HP STL Vector.h will be used.
+   #ifdef __MINGW32__
+      #include <iostream>
+      #include <fstream>
+      #include <vector>
+      #include <map>
+   #else
+      #if _MSC_VER > 1200
+         #define WIN32_DOTNET
+         #include <ciso646> // alternate keywords included in the ISO C++ standard
+                            // but not directly supported by Microsoft Visual Studio C++
+         #include <iostream>
+         #include <fstream>
+         #include <vector>
+         #include <map>
+      #else
+         #define WIN32_PRE_DOTNET
+         #include <iostream.h>
+         #include <fstream.h>
+         #include "vector.h"
+         #include "map.h"
+      #endif
+   #endif
+
+   #include <curses.h>
+   //undo PDCurses macros that break vector class
+   #undef erase
+   #undef clear
+
+   #define CH_USE_CP437
+   //#define CH_USE_ASCII_HACK
+#else
+   #include <vector>
+   #include <map>
+   #include <iostream>
+   #include <fstream>
+   #include <ctype.h>
+   #include <unistd.h>
+   #include <ctype.h>
+   #define GO_PORTABLE
+
+   #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
+     #define CH_USE_UNICODE
+   #else
+     #define CH_USE_ASCII_HACK
+   #endif
+
+   #ifdef HAVE_LIBXCURSES
+      #define XCURSES
+   #endif
+   #ifdef HAVE_LIBNCURSES
+      #define NCURSES
+   #endif
+   #ifdef XCURSES
+      #define HAVE_PROTO 1
+      #define CPLUSPLUS   1
+      /* Try these PDCurses/Xcurses options later...
+      #define FAST_VIDEO
+      #define REGISTERWINDOWS
+      */
+      #include <xcurses.h> //This is the X11 Port of PDCurses
+   //undo PDCurses macros that break vector class
+      #undef erase // FIXME: Umm... Now erase() and clear() don't work in
+      #undef clear //       dumpcaps.cpp
+   #else
+      #if defined(USE_NCURSES)
+         #include <ncurses.h>
+         #define NCURSES
+      #elif defined(USE_NCURSES_W)
+         #include <ncursesw/ncurses.h>
+         #define NCURSES
+      #elif defined(NCURSES)
+         #define USE_NCURSES
+         #include <ncurses.h>
+      #else
+         #include <curses.h>
+      #endif
+      // Undo mvaddstr macro and re-implement as function to support overloading
+      #ifdef mvaddstr
+         #undef mvaddstr
+         inline int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
+      #endif
+   #endif
+
+   #ifdef CH_USE_UNICODE
+     // Make sure we don't override addch for consolesupport.cpp,
+     // because addch_unicode may use addch internally.
+     #ifndef CONSOLE_SUPPORT
+        #undef addch
+        #define addch(a) addch_unicode(a)
+     #endif
+   #endif
+#endif
+
+/* Headers for Portability */
+#ifdef GO_PORTABLE
+   #include <time.h>
+
+   #ifdef Linux // And BSD and SVr4
+      /*
+      This #undef addstr...It exists only to make the overloaded addstr
+         work in linux (because otherwise it clashes with ncurses).
+         The normal addstr works fine for me, so I have no idea what's going on.
+         I'll just leave this warning here...If addstr breaks or something, it
+         might be related to this undefine. At this point in time though, at least
+         on my machine, everything's working just fine.
+
+      This still strikes me as being odd, though. :/
+      Oh well, I just hope it'll work for everybody.
+
+      Ciprian Ilies, September 26, 2012
+      */
+      #undef addstr
+      #include <sys/time.h>
+      #include <signal.h>
+   #endif
+#endif
+
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sstream>
+#include <deque>
+#include <algorithm>
+#include <queue>
+#include <math.h>
+#include <cstring>
+#include "cmarkup/Markup.h" //For XML.
+
+#ifdef NCURSES
+#include <term.h>
+#endif
+
+#include <locale.h>
+#ifdef WIN32
+#ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
+#define STRICT_ANSI_TEMP_OFF
+#undef __STRICT_ANSI__
+#endif
+#include <mbctype.h>
+#ifdef STRICT_ANSI_TEMP_OFF
+#define __STRICT_ANSI__
+#undef STRICT_ANSI_TEMP_OFF
+#endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
+#endif
+
+#ifndef WIN32_PRE_DOTNET
+using namespace std;
+#endif
+
+/*--------------------------------------------------------------------------
+ * Portability Functions
+ *
+ * These functions are intended to replace explicit calls to Windows API.
+ *
+ * We can do the following:
+ *
+ * (a) Write alternative calls for the ports, keep Windows calls.
+ * (b) Write portable alternatives for use by Windows and ports.
+ * (c) Do (a) and (b) and decide what Windows does (API or portable)
+ *       based on the value of a MACRO GO_PORTABLE.
+ *
+ * compat.cpp is the place for non-trivial or more global functions.
+ *--------------------------------------------------------------------------*/
+
+inline unsigned int getSeed()
+{
+   unsigned int t;
+#ifdef GO_PORTABLE
+   t=(unsigned int)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
+#else // WIN32
+   t=(unsigned int)GetTickCount(); /* ms since system boot */
+#endif
+   return(t);
+}
+
+/* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
+  * This function is for compatibility and is currently a do nothing function.
+  */
+#ifdef NCURSES
+inline int raw_output(bool bf)
+{
+   raw();
+   return OK;
+}
+#endif
+
+/*--------------------------------------------------------------------------
+ * End of Portability Functions
+ *--------------------------------------------------------------------------*/
 
 /* Macro definition */
 #ifndef MAX
@@ -78,6 +284,8 @@
 #define BIT30 (1<<29)
 #define BIT31 (1<<30)
 #define BIT32 (1<<31)
+
+#define MAX_PATH_SIZE 2048
 
 /* r_num() and LCSrandom() are implemented in game.cpp */
 int r_num();

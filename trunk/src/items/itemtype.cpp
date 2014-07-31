@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 int ItemType::number_of_itemtypes = 0;
 

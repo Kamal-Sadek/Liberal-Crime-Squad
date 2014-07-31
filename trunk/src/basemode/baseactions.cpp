@@ -26,9 +26,7 @@ To see descriptions of files and functions, see the list at
 the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-
 
 /* base - burn the flag */
 void burnflag()
