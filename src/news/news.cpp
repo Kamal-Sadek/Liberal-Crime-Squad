@@ -28,12 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 //TODO: Add logging for this file? --Addictgamer
 
-//#include <includes.h>
 #include <externs.h>
-#include <cstring>
-#include "news/news.h"
-
-#include "lcsio.h"
 
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings)
@@ -2050,21 +2045,21 @@ newsstoryst* ccs_exposure_story()
    ccsexposure=CCSEXPOSURE_NOBACKERS;
    // arrest seventeen representatives and eight senators
    int arrestsleft = 8;
-   for(int i=0; i<100; i++)
+   for(int i=0; i<SENATENUM; i++)
    {
       if((senate[i]==-2 || senate[i]==-1)&&!LCSrandom(4))
       {
-         senate[i]=2;
+         senate[i]=ALIGN_ELITELIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }
    }
    arrestsleft = 17;
-   for(int i=0; i<435; i++)
+   for(int i=0; i<HOUSENUM; i++)
    {
       if((house[i]==-2 || house[i]==-1)&&!LCSrandom(4))
       {
-         house[i]=2;
+         house[i]=ALIGN_ELITELIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }

@@ -72,14 +72,6 @@
 // Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
 #define ALLOWSTALIN
 
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#include <math.h>
-#include <stdlib.h>
-#include <langinfo.h>
-#endif
-
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION "4.07.5 beta"
 #endif
@@ -90,178 +82,12 @@ const int lowestloadscoreversion=31203;
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
 
-#ifdef WIN32
-   //#include <windows.h>
-   #define GO_PORTABLE
-   #include <string.h>
-   //Visual C++ .NET (7) includes the STL with vector, so we
-   //will use that, otherwise the HP STL Vector.h will be used.
-   #ifdef __MINGW32__
-      #include <iostream>
-      #include <fstream>
-      #include <vector>
-      #include <map>
-      #include <io.h> //needed for unlink()
-   #else
-      #if _MSC_VER > 1200
-         #define WIN32_DOTNET
-         #include <ciso646> // alternate keywords included in the ISO C++ standard
-                            // but not directly supported by Microsoft Visual Studio C++
-         #include <iostream>
-         #include <fstream>
-         #include <vector>
-         #include <map>
-      #else
-         #define WIN32_PRE_DOTNET
-         #include <iostream.h>
-         #include <fstream.h>
-         #include "vector.h"
-         #include "map.h"
-      #endif
-   #endif
-
-   #include <curses.h>
-   //undo PDCurses macros that break vector class
-   #undef erase
-   #undef clear
-
-   #define CH_USE_CP437
-   //#define CH_USE_ASCII_HACK
-#else
-   #include <vector>
-   #include <map>
-   #include <string.h>
-   #include <iostream>
-   #include <fstream>
-   #include <ctype.h>
-   #define GO_PORTABLE
-
-   #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
-     #define CH_USE_UNICODE
-   #else
-     #define CH_USE_ASCII_HACK
-   #endif
-
-   #ifdef HAVE_LIBXCURSES
-      #define XCURSES
-   #endif
-   #ifdef HAVE_LIBNCURSES
-      #define NCURSES
-   #endif
-   #ifdef XCURSES
-      #define HAVE_PROTO 1
-      #define CPLUSPLUS   1
-      /* Try these PDCurses/Xcurses options later...
-      #define FAST_VIDEO
-      #define REGISTERWINDOWS
-      */
-      #include <xcurses.h> //This is the X11 Port of PDCurses
-   //undo PDCurses macros that break vector class
-      #undef erase // FIXME: Umm... Now erase() and clear() don't work in
-      #undef clear //       dumpcaps.cpp
-   #else
-      #if defined(USE_NCURSES)
-         #include <ncurses.h>
-      #elif defined(USE_NCURSES_W)
-         #include <ncursesw/ncurses.h>
-      #else
-         #error "You must define either USE_NCURSES or USE_NCURSES_W."
-      #endif
-      // Undo mvaddstr macro and re-implement as function to support overloading
-      #ifdef mvaddstr
-         #undef mvaddstr
-         inline int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
-      #endif
-   #endif
-
-   #ifdef CH_USE_UNICODE
-     // Make sure we don't override addch for consolesupport.cpp,
-     // because addch_unicode may use addch internally.
-     #ifndef CONSOLE_SUPPORT
-        #undef addch
-        #define addch(a) addch_unicode(a)
-     #endif
-   #endif
-#endif
-
-/* Headers for Portability */
-#ifdef GO_PORTABLE
-   #include <time.h>
-
-   #ifdef Linux // And BSD and SVr4
-      /*
-      This #undef addstr...It exists only to make the overloaded addstr
-         work in linux (because otherwise it clashes with ncurses).
-         The normal addstr works fine for me, so I have no idea what's going on.
-         I'll just leave this warning here...If addstr breaks or something, it
-         might be related to this undefine. At this point in time though, at least
-         on my machine, everything's working just fine.
-
-      This still strikes me as being odd, though. :/
-      Oh well, I just hope it'll work for everybody.
-
-      Ciprian Ilies, September 26, 2012
-      */
-      #undef addstr
-      #include <unistd.h>
-      #include <sys/time.h>
-      #include <signal.h>
-   #endif
-#endif
-
-#include <sstream>
-#include <deque>
-#include <algorithm>
-#include "cmarkup/Markup.h" //For XML.
-
-using namespace std;
-//#include "lcsio.h"
+#include "lcsio.h"
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
+#include "politics/law.h"
 #include "politics/alignment.h"
-
-/*--------------------------------------------------------------------------
- * Portability Functions
- *
- * These functions are intended to replace explicit calls to Windows API.
- *
- * We can do the following:
- *
- * (a) Write alternative calls for the ports, keep Windows calls.
- * (b) Write portable alternatives for use by Windows and ports.
- * (c) Do (a) and (b) and decide what Windows does (API or portable)
- *       based on the value of a MACRO GO_PORTABLE.
- *
- * compat.cpp is the place for non-trivial or more global functions.
- *--------------------------------------------------------------------------*/
-
- inline unsigned int getSeed()
- {
-    unsigned int t;
-    #ifdef GO_PORTABLE
-    t=(unsigned int)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
-    #else // WIN32
-    t=(unsigned int)GetTickCount(); /* ms since system boot */
-    #endif
-    return(t);
- }
-
- /* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
-   * This function is for compatibility and is currently a do nothing function.
-   */
- #ifdef NCURSES
- inline int raw_output(bool bf)
- {
-    raw();
-    return OK;
- }
- #endif
-
-/*--------------------------------------------------------------------------
- * End of Portability Functions
- *--------------------------------------------------------------------------*/
-
 
 #ifndef NDEBUG
 #define NDEBUG
@@ -405,7 +231,7 @@ enum AnimalGlosses
 //just a float that is initialized to 0
 struct float_zero
 {
-   float_zero() : n(0.0f) {}
+   float_zero() : n(0.0f) { }
    operator float&() { return n; }
    float n;
 };
@@ -484,7 +310,7 @@ enum Activity
 
 struct activityst
 {
-   activityst() : type(0),arg(0),arg2(0) {}
+   activityst() : type(0),arg(0),arg2(0) { }
    int type;
    long arg,arg2;
    // return a reference to arg, with arg typecast as a pointer to an object of type interrogation,
@@ -574,9 +400,9 @@ class Interval
 {
 public:
    int min,max;
-   Interval() : min(0),max(0) {}
-   Interval(int value) : min(value),max(value) {}
-   Interval(int low, int high) : min(low),max(high) {}
+   Interval() : min(0),max(0) { }
+   Interval(int value) : min(value),max(value) { }
+   Interval(int low, int high) : min(low),max(high) { }
    void set_interval(int low, int high) { min=low,max=high; }
    // Sets the interval according to a string that is either a number or two
    // number separated by a dash. Returns false and does not change the
@@ -607,8 +433,9 @@ private:
 #include "creature/creaturetype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
-
 #include "locations/locations.h"
+#include "configfile.h"
+#include "sitemode/sitemap.h"
 
 enum CarChaseObstacles
 {
@@ -754,7 +581,7 @@ struct datest
    vector<Creature *> date;
    short timeleft;
    int city;
-   datest() : timeleft(0) {}
+   datest() : timeleft(0) { }
    ~datest() { delete_and_clear(date); }
 };
 
@@ -862,8 +689,10 @@ struct newsstoryst
    long loc,priority,page,guardianpage;
    char positive;
    short siegetype;
-   newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) {}
+   newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) { }
 };
+
+#include "news/news.h"
 
 #define SLOGAN_LEN 80
 
@@ -913,6 +742,43 @@ enum Execs
    EXECNUM
 };
 
+enum PoliticalParties
+{
+   LIBERAL_PARTY,
+   CONSERVATIVE_PARTY,
+   STALINIST_PARTY,
+   PARTYNUM
+};
+
+// full house (100%) - for looping thru full house
+#define HOUSENUM 435
+// just over half of house (50%+1) - to pass bills
+#define HOUSEMAJORITY 218
+// 3/5 of house - has no significance other than in seeing if you won game
+#define HOUSECOMFYMAJORITY 261
+// 2/3 of house - to override veto or pass constitutional amendment
+#define HOUSESUPERMAJORITY 290
+// full senate (100%) - for looping thru full senate
+#define SENATENUM 100
+// just over half of senate(50%+1) - to bass bills
+#define SENATEMAJORITY 51
+// 3/5 of senate - to break filibuster in real world, but in game, has no significance other than seeing if you won
+#define SENATECOMFYMAJORITY 60
+// 2/3 of senate - to override veto or pass constitutional amendment
+#define SENATESUPERMAJORITY 67
+// full court (100%) - for looping thru full court
+#define COURTNUM 9
+// just over half of court (50%+1) - to make majority rulings
+#define COURTMAJORITY 5
+// 2/3 of court - has no significance other than seeing if you won game
+#define COURTSUPERMAJORITY 6
+// all states (100%) - for looping thru all states
+#define STATENUM 50
+// 3/4 of states (75%) - needed to pass constitutional amendments
+#define STATESUPERMAJORITY 37
+
+#define POLITICIAN_NAMELEN 80
+
 enum TalkModes
 {
    TALKMODE_START,
@@ -939,6 +805,7 @@ enum SortingChoices
    SORTING_NAME,
    SORTING_LOCATION_AND_NAME,
    SORTING_SQUAD_OR_NAME,
+   SORTING_RANDOM,
    SORTINGNUM
 };
 
@@ -1120,10 +987,12 @@ void sleeperize_prompt(Creature &converted,Creature &recruiter,int y);
 /* common - Sort a list of creatures.*/
 void sortliberals(std::vector<Creature *>& liberals,short sortingchoice,bool dosortnone=false);
 /* common - Functions used when sorting vectors of creatures. */
-bool sort_none(Creature* first,Creature* second);
-bool sort_name(Creature* first,Creature* second);
-bool sort_locationandname(Creature* first,Creature* second);
-bool sort_squadorname(Creature* first,Creature* second);
+bool sort_none(const Creature* first,const Creature* second);
+inline bool sort_name(const Creature* first,const Creature* second) { return strcmp(first->name,second->name)<0; }
+bool sort_locationandname(const Creature* first,const Creature* second);
+bool sort_squadorname(const Creature* first,const Creature* second);
+/* this last one can be used randomize the order of any type of objects, not just creatures, just remember to specify the type */
+template <typename T> inline bool sort_random(const T& first,const T& second) { return LCSrandom(2); }
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting);
 /* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.
@@ -1398,9 +1267,9 @@ void setvehicles();
  liberalagenda.cpp
 */
 /* base - liberal agenda */
-char liberalagenda(char won);
+bool liberalagenda(signed char won);
 /* base - liberal agenda - disband */
-char confirmdisband();
+bool confirmdisband();
 
 /*
  activate_sleepers.cpp
@@ -1844,7 +1713,9 @@ void prisonscene(Creature &g);
 /* politics - calculate presidential approval */
 int presidentapproval();
 /* politics -- gets the leaning of an issue voter for an election */
-int getswingvoter();
+int getswingvoter(bool stalin);
+/* politics -- gets the leaning of a partyline voter for an election */
+int getsimplevoter(int leaning);
 /* politics -- promotes the Vice President to President, and replaces VP */
 void promoteVP();
 /* politics -- appoints a figure to an executive office, based on the President's alignment */

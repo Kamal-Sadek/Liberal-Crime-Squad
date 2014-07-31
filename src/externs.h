@@ -1,7 +1,7 @@
 #ifndef EXTERNS_H_INCLUDED
 #define EXTERNS_H_INCLUDED
-#include "includes.h" /* include this prior to checking if WIN32 is defined */
-#include "sitemode/sitemap.h"
+
+#include <includes.h>
 
 extern CursesMoviest movie;
 extern unsigned char bigletters[27][5][7][4];
@@ -15,16 +15,16 @@ extern int oldMapMode;
 extern unsigned int seed;
 extern short law[LAWNUM];
 
-extern short house[435];
-extern short senate[100];
-extern short court[9];
-extern char courtname[9][80];
+extern short house[HOUSENUM];
+extern short senate[SENATENUM];
+extern short court[COURTNUM];
+extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
 extern signed char exec[EXECNUM];
 extern short execterm;
-extern char execname[EXECNUM][80];
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern short presparty;
-extern char oldPresidentName[80];
+extern char oldPresidentName[POLITICIAN_NAMELEN];
 
 extern int stat_recruits;
 extern int stat_kidnappings;
@@ -104,7 +104,7 @@ extern short offended_firemen;
 extern int police_heat;
 extern int attorneyseed;
 extern int selectedsiege;
-extern char lcityname[80];
+extern char lcityname[CITY_NAMELEN];
 extern char newscherrybusted;
 
 extern int month;

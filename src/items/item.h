@@ -6,11 +6,11 @@
 class Item
 {
    public:
-      Item(): number_(1) {}
+      Item(): number_(1) { }
       explicit Item(const ItemType& seed, int number = 1);
       // (Sub-?)Constructor to create item from xml.
       explicit Item(const std::string& inputXml);
-      virtual ~Item() {}
+      virtual ~Item() { }
 
       // Returns xml describing the item. Used when saving.
       virtual string showXml() const=0;

@@ -62,46 +62,7 @@
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
-/* Headers for Portability */
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include "includes.h" /* include this prior to checking if WIN32 is defined */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#ifdef WIN32
-   #include <windows.h>
-   #ifndef __STRICT_ANSI__
-      #define HAS_STRICMP
-   #endif
-   #ifdef __MINGW32__
-      #include <iostream>
-   #else
-      #if _MSC_VER > 1200
-         #define WIN32_DOTNET
-         #include <iostream>
-      #else
-         #define WIN32_PRE_DOTNET
-         #include <iostream.h>
-      #endif
-   #endif
-#else
-   #include <iostream>
-   #ifdef Linux // And BSD and SVr4
-      #include <unistd.h>
-      #include <sys/time.h>
-      #include <signal.h>
-      #include <ctype.h>
-   #endif
-#endif
-
-#ifndef WIN32_PRE_DOTNET
-using namespace std;
-#endif
+#include <externs.h>
 
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.

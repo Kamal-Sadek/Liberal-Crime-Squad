@@ -32,12 +32,10 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include "externs.h"
+#include <externs.h>
 
-ShopOption::ShopOption()
- : description_("UNDEFINED"), letter_(0), letter_defined_(false)
-{
-}
+ShopOption::ShopOption() : description_("UNDEFINED"), letter_(0), letter_defined_(false)
+{ }
 
 Shop::Shop(MCD_STR xmlstring)
  : allow_selling_(false), only_sell_legal_(true), increase_prices_with_illegality_(false),

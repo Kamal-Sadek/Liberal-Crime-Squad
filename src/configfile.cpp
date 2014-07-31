@@ -1,11 +1,6 @@
+#include <externs.h>
 
-#include "configfile.h"
-#include "sitemode/sitemap.h"
-#include "externs.h"
-
-#define MAX_PATH_SIZE 2048
 extern char artdir[MAX_PATH_SIZE];
-
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
 {

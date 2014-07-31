@@ -1,7 +1,4 @@
-
-//#include "includes.h"
-#include "externs.h"
-#include "news/news.h"
+#include <externs.h>
 
 std::string getLastNameForHeadline(char* fullName)
 {

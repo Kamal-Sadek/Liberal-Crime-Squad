@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 WeaponType::WeaponType(MCD_STR xmlstring)
  : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
@@ -173,9 +173,9 @@ WeaponType::WeaponType(MCD_STR xmlstring)
       {
          attackst* attack = new attackst(xml.GetSubDoc());
 
-         vector<attackst*>::iterator it=attacks_.begin();
-         for(;it!=attacks_.end()&&attack->priority>=(*it)->priority;it++);
-         attacks_.insert(it,attack);
+         int i;
+         for(i=0;i<len(attacks_)&&attack->priority>=attacks_[i]->priority;i++);
+         attacks_.insert(attacks_.begin()+i,attack);
       }
       /*else
          errorlog << "Unknown element for weapon type " << idname()
@@ -530,24 +530,24 @@ bool WeaponType::uses_ammo() const
 
 bool WeaponType::acceptable_ammo(const string& clipname) const
 {
-   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
-      if ((*it)->ammotype==clipname)
+   for(int i=0;i<len(attacks_);i++)
+      if(attacks_[i]->ammotype==clipname)
         return true;
    return false;
 }
 
 bool WeaponType::is_ranged() const
 {
-   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
-      if((*it)->ranged)
+   for(int i=0;i<len(attacks_);i++)
+      if(attacks_[i]->ranged)
         return true;
    return false;
 }
 
 bool WeaponType::is_throwable() const
 {
-   for(vector<attackst*>::const_iterator it=attacks_.begin();it!=attacks_.end();it++)
-      if((*it)->thrown)
+   for(int i=0;i<len(attacks_);i++)
+      if(attacks_[i]->thrown)
         return true;
    return false;
 }

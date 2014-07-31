@@ -1,8 +1,7 @@
 #ifndef SITEMAP_H_INCLUDED
 #define SITEMAP_H_INCLUDED
 
-
-#include "../configfile.h"
+#include "includes.h"
 
 #define SITEMAP_ADDTYPE_OR     1
 #define SITEMAP_ADDTYPE_ANDNOT 2
@@ -22,7 +21,7 @@ class configSiteCommand : public configurable
 {
 public:
    void virtual build() = 0;
-   virtual ~configSiteCommand(){}
+   virtual ~configSiteCommand() { }
 private:
 };
 

@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 Item::Item(const ItemType& seed, int number) : number_(number)
 {

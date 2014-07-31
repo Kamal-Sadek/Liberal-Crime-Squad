@@ -26,10 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-
-
 
 /* checks if your liberal activity is noticed */
 void noticecheck(int exclude,int difficulty)
@@ -505,7 +502,7 @@ char weapon_in_character(const string& wtype, const string& atype)
    if(wtype == "WEAPON_SHANK" && atype == "ARMOR_PRISONER")
       return CREATURE_PRISONER;
 
-   if(wtype == "WEAPON_CHAIN" && 
+   if(wtype == "WEAPON_CHAIN" &&
       (atype == "ARMOR_WORKCLOTHES" || atype == "ARMOR_HARDHAT") )
       return CREATURE_WORKER_FACTORY_UNION;
 

@@ -1,7 +1,6 @@
-#include "externs.h"
+#include <externs.h>
 
-ClipType::ClipType(MCD_STR xmlstring)
- : ItemType(xmlstring), ammo_(1)
+ClipType::ClipType(MCD_STR xmlstring) : ItemType(xmlstring), ammo_(1)
 {
    CMarkup xml;
    xml.SetDoc(xmlstring);

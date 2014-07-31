@@ -1,7 +1,4 @@
-
-
-//#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char* story)
 {

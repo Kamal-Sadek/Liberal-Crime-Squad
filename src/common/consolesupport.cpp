@@ -26,28 +26,8 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-#define CONSOLE_SUPPORT
-//#include <includes.h>
-#include <externs.h> /* include this prior to checking if WIN32 is defined */
-#include <lcsio.h>
-
-#if defined(USE_NCURSES) || defined (USE_NCURSES_W)
-#include <term.h>
-#endif
-
-#ifdef WIN32
-#include <windows.h>
-#ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
-#define STRICT_ANSI_TEMP_OFF
-#undef __STRICT_ANSI__
-#endif
-#include <mbctype.h>
-#ifdef STRICT_ANSI_TEMP_OFF
-#define __STRICT_ANSI__
-#undef STRICT_ANSI_TEMP_OFF
-#endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
-#endif
-#include <locale.h>
+#define CONSOLE_SUPPORT // define this BEFORE including anything
+#include <externs.h>
 
 //sets current color to desired setting
 void set_color(short f,short b,bool bright,bool blink)
@@ -265,7 +245,7 @@ int addch_unicode(int c) {
 
 void set_title(char *s)
 {
-#if defined(USE_NCURSES) || defined (USE_NCURSES_W)
+#ifdef NCURSES
    if(tgetflag("hs"))
    { // terminal has status line support
       char buf[255]={0};

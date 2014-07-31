@@ -1,5 +1,4 @@
-
-#include "lcscommon.h"
+#include "common.h"
 
 enum bodyparts
 {

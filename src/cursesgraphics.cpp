@@ -36,7 +36,7 @@
 * Abstract
 *
 * Translate character codes, stored in cp437 within files in the arts directory
-* into native alternative characters. 
+* into native alternative characters.
 *
 * History
 *
@@ -58,20 +58,11 @@
 *
 */
 
-#define CURSES_GRAPHICS
-#include "includes.h"
+#define CURSES_GRAPHICS // define this BEFORE including anything
+#include <externs.h>
 
-#ifdef CH_USE_CP437
-int translateGraphicsChar(int c)
-{
-    return c;
-}
-
-short translateGraphicsColor(short c)
-{
-    return c;
-}
-#else
+#ifndef CH_USE_CP437
+/* Translate CP437 extended characters into the code page used by the console */
 int translateGraphicsChar(int c)
 {
     // This will be no good for Unicode...
@@ -92,7 +83,9 @@ int translateGraphicsChar(int c)
     }
     return cout;
 }
+#endif // CH_USE_CP437
 
+#ifdef NCURSES
 /* Translates PDCurses' numerical color values to NCurses' corresponding
    numerical color values.
    PDCurses can be made to use the same values as NCurses by defining PDC_RGB,
@@ -113,4 +106,4 @@ short translateGraphicsColor(short c)
     }
     return c;
 }
-#endif
+#endif // NCURSES

@@ -1,5 +1,4 @@
-//#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 /* pick a descriptor acronym */
 void sexdesc(char *str)

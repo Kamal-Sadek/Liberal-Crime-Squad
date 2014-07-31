@@ -26,10 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-#include <cstring>
-
 
 /* TODO
 make it less likely to be raided based on:

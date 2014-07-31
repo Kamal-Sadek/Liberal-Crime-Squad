@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 ArmorType::ArmorType(MCD_STR xmlstring)
  : ItemType(xmlstring),

@@ -1,7 +1,4 @@
-
-#include <map>
-#include <string>
-#include <vector>
+#include "common.h"
 #include "weapon.h"
 #include "injury_test.h"
 
@@ -299,7 +296,7 @@ public:
    int                     Skills[SKILLNUM];
    int                     SkillExp[SKILLNUM];
    int                     Juice;
-   
+
    bool                    Alive();
 
    int                     Location;

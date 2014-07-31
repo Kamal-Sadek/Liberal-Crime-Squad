@@ -1,6 +1,4 @@
-
-#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 /* Age macros for characters */
 #define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
@@ -1180,8 +1178,8 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
    // Quick exit if only checking if a certain type works
    if(test_type!=-1) return okaysite[(int)test_location];
    char swap=0;
-   if(cr.worklocation==-1)swap=1;
-   else if(!okaysite[(int)location[(int)cr.worklocation]->type])swap=1;
+   if(cr.worklocation==-1) swap=1;
+   else if(!okaysite[(int)location[(int)cr.worklocation]->type]) swap=1;
    if(swap)
    {
       //int city = location[cr.location]->city;
@@ -1195,14 +1193,14 @@ bool verifyworklocation(Creature &cr, char test_location, char test_type)
          if(okaysite[(int)location[l]->type] && (!multipleCityMode || location[l]->city == location[(int)cr.location]->city))
             goodlist.push_back(l);
 // Sadler - This line sometimes causes a memory fault
-//               Only thing I can think of is if loop above didn'
+//               Only thing I can think of is if loop above didn't
 //               find any locations of type == to cr.worklocation
 //               My hunch is that some locations, such as the 1st four
 //               are special and cannot be used here..
 //
-//   TODO There was a bug in the makecharacter() code where th
+//   TODO There was a bug in the makecharacter() code where the
 //   SITE_OUTOFTOWN was not set properly. This was fixed but the bug here
-//   is still occuring, normally at the Latte Bar Downtown ;
+//   is still occurring, normally at the Latte Bar Downtown ;
       if(!len(goodlist)) cr.worklocation=0;
       else cr.worklocation=pickrandom(goodlist);
    }

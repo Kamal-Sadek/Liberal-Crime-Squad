@@ -26,10 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-
-//#include <includes.h>
 #include <externs.h>
-
 
 /* select new game options */
 void setup_newgame()
@@ -131,34 +128,34 @@ void setup_newgame()
          law[l]=ALIGN_ARCHCONSERVATIVE;
       for(int a=0;a<VIEWNUM-3;a++)
          attitude[a]=LCSrandom(20);
-      for(int s=0;s<100;s++)
+      for(int s=0;s<SENATENUM;s++)
       {
-         if(s<55)senate[s]=-2;
-         else if(s<70)senate[s]=-1;
-         else if(s<80)senate[s]=0;
-         else if(s<97)senate[s]=1;
-         else senate[s]=2;
+         if(s<55) senate[s]=ALIGN_ARCHCONSERVATIVE;
+         else if(s<70) senate[s]=ALIGN_CONSERVATIVE;
+         else if(s<80) senate[s]=ALIGN_MODERATE;
+         else if(s<97) senate[s]=ALIGN_LIBERAL;
+         else senate[s]=ALIGN_ELITELIBERAL;
       }
 
-      for(int h=0;h<435;h++)
+      for(int h=0;h<HOUSENUM;h++)
       {
-         if(h<220)house[h]=-2;
-         else if(h<350)house[h]=-1;
-         else if(h<400)house[h]=0;
-         else if(h<425)house[h]=1;
-         else house[h]=2;
+         if(h<220) house[h]=ALIGN_ARCHCONSERVATIVE;
+         else if(h<350) house[h]=ALIGN_CONSERVATIVE;
+         else if(h<400) house[h]=ALIGN_MODERATE;
+         else if(h<425) house[h]=ALIGN_LIBERAL;
+         else house[h]=ALIGN_ELITELIBERAL;
       }
 
-      for(int c=0;c<9;c++)
+      for(int c=0;c<COURTNUM;c++)
       {
-         if(c<5)court[c]=-2;
-         else if(c<7)court[c]=-1;
-         else if(c<8)court[c]=0;
-         else if(c<8)court[c]=1;
-         else court[c]=2;
+         if(c<5) court[c]=ALIGN_ARCHCONSERVATIVE;
+         else if(c<7) court[c]=ALIGN_CONSERVATIVE;
+         else if(c<8) court[c]=ALIGN_MODERATE;
+         else if(c<8) court[c]=ALIGN_LIBERAL;
+         else court[c]=ALIGN_ELITELIBERAL;
          do
          {
-            if(court[c]==-2)
+            if(court[c]==ALIGN_ARCHCONSERVATIVE)
                generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
             else generate_name(courtname[c]);
          } while(len(courtname[c])>20);

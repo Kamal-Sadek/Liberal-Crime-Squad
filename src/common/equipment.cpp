@@ -60,9 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
-
 
 /* prompt user to enter an amount of items to equip, move, or sell */
 long prompt_amount(long min, long max)

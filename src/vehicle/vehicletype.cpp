@@ -1,5 +1,4 @@
-#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 int VehicleType::number_of_vehicletypes = 0;
 

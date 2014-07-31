@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
 { }

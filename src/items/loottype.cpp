@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 LootType::LootType(MCD_STR xmlstring)
  : ItemType(xmlstring), stackable_(true),

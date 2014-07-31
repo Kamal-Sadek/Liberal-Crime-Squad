@@ -20,11 +20,6 @@
 //      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 //////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
 //outstanding issues
    //site trucker-type bug still happens (latte-stand)
       //might have to do with missing location in the verifyworklocation() loop
@@ -70,10 +65,7 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-#include "includes.h" /* include this prior to checking if WIN32 is defined */
-#include "configfile.h"
-#include "sitemode/sitemap.h"
-#include <iostream>
+#include <includes.h>
 
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
@@ -83,7 +75,6 @@ unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
 
-#define MAX_PATH_SIZE 2048
 extern char artdir[MAX_PATH_SIZE];
 
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
@@ -144,7 +135,7 @@ short offended_firemen=0;
 int police_heat=0;
 int attorneyseed;
 int selectedsiege=-1;
-char lcityname[80];
+char lcityname[CITY_NAMELEN];
 char newscherrybusted=0;
 
 int month=1;
@@ -170,17 +161,17 @@ short background_liberal_influence[VIEWNUM];
 
 short law[LAWNUM];
 
-short house[435];
-short senate[100];
-short court[9];
-char courtname[9][80];
+short house[HOUSENUM];
+short senate[SENATENUM];
+short court[COURTNUM];
+char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
 
 signed char exec[EXECNUM];
 short execterm=1;
-char execname[EXECNUM][80];
-short presparty=1;
-char oldPresidentName[80];
+char execname[EXECNUM][POLITICIAN_NAMELEN];
+short presparty=CONSERVATIVE_PARTY;
+char oldPresidentName[POLITICIAN_NAMELEN];
 
 int stat_recruits=0;
 int stat_kidnappings=0;
@@ -391,7 +382,7 @@ int main(int argc, char* argv[])
    for(int l=0;l<LAWNUM;l++) law[l]=2;
 #endif
 
-   for(int s=0;s<100;s++)
+   for(int s=0;s<SENATENUM;s++)
    {
       if(s<25) senate[s]=-2;
       else if(s<60) senate[s]=-1;
@@ -400,7 +391,7 @@ int main(int argc, char* argv[])
       else senate[s]=2;
    }
 
-   for(int h=0;h<435;h++)
+   for(int h=0;h<HOUSENUM;h++)
    {
       if(h<50) house[h]=-2;
       else if(h<250) house[h]=-1;
@@ -409,7 +400,7 @@ int main(int argc, char* argv[])
       else house[h]=2;
    }
 
-   for(int c=0;c<9;c++)
+   for(int c=0;c<COURTNUM;c++)
    {
       if(c<3) court[c]=-2;
       else if(c<5) court[c]=-1;

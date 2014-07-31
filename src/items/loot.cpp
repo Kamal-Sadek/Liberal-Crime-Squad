@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 Loot::Loot(const LootType& seed, int number) : Item(seed,number)
 { }

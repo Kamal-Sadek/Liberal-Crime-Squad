@@ -60,7 +60,6 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include <includes.h>
 #include <externs.h>
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
@@ -229,7 +228,7 @@ void repairarmor(Creature &cr,char &clearformess)
                break;
             }
          }
-    
+
    if(clearformess) erase();
    else makedelimiter();
 
@@ -242,13 +241,13 @@ void repairarmor(Creature &cr,char &clearformess)
          case 0: addstr(" tidies up the safehouse.", gamelog); break;
          case 1: addstr(" reorganizes the armor closet.", gamelog); break;
          case 2: addstr(" cleans the kitchen.", gamelog); break;
-         case 3: 
-            addstr(" peruses some sewing magazines.", gamelog); 
+         case 3:
+            addstr(" peruses some sewing magazines.", gamelog);
             cr.train(SKILL_TAILORING,1);
             break;
       }
       gamelog.nextMessage();
-      
+
       getkey();
    }
    else
@@ -277,7 +276,7 @@ void repairarmor(Creature &cr,char &clearformess)
 
       std::string result = "";
       result += cr.name;
-      
+
       if (armorDestroyed)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
@@ -336,7 +335,7 @@ void repairarmor(Creature &cr,char &clearformess)
       }
 
       armor->set_bloody(false);
-      if(!repairfailed) 
+      if(!repairfailed)
       {
          armor->set_damaged(false);
       }

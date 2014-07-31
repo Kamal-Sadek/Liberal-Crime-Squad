@@ -93,6 +93,7 @@ enum SiteTypes
 
 enum SpecialBlocks
 {
+   SPECIAL_NONE=-1,
    SPECIAL_LAB_COSMETICS_CAGEDANIMALS,
    SPECIAL_LAB_GENETIC_CAGEDANIMALS,
    SPECIAL_POLICESTATION_LOCKUP,
@@ -135,8 +136,7 @@ enum SpecialBlocks
    SPECIAL_OVAL_OFFICE_NE,
    SPECIAL_OVAL_OFFICE_SW,
    SPECIAL_OVAL_OFFICE_SE,
-   SPECIALNUM,
-   SPECIAL_NONE = -1
+   SPECIALNUM
 };
 
 #define SIEGEFLAG_UNIT BIT1
@@ -174,19 +174,7 @@ struct siegest
    short timeuntilcia;
    short timeuntilccs;
    short timeuntilfiremen;
-
-   siegest()
-   {
-      siege=0;
-      siegetype=-1;
-      underattack=0;
-      escalationstate=0;
-      timeuntillocated=-1;
-      timeuntilcorps=-1;
-      timeuntilcia=-1;
-      timeuntilfiremen=-1;
-      timeuntilccs=-1;
-   }
+   siegest() : siege(0),siegetype(-1),underattack(0),escalationstate(0),timeuntillocated(-1),timeuntilcorps(-1),timeuntilcia(-1),timeuntilccs(-1),timeuntilfiremen(-1) { }
 };
 
 struct siteblockst
@@ -198,13 +186,10 @@ struct siteblockst
 
 struct sitechangest
 {
-   char x;
-   char y;
-   char z;
+   char x,y,z;
    int flag;
-   sitechangest() {}
-   sitechangest(char x_, char y_, char z_, int flag_) :
-      x(x_), y(y_), z(z_), flag(flag_) {}
+   sitechangest() { }
+   sitechangest(char x_, char y_, char z_, int flag_) :  x(x_), y(y_), z(z_), flag(flag_) { }
 };
 
 #define MAPX 70
@@ -219,15 +204,23 @@ struct sitechangest
 #define COMPOUND_PRINTINGPRESS BIT6
 #define COMPOUND_AAGUN BIT7
 
-#define RENTING_CCS -2
-#define RENTING_NOCONTROL -1
-#define RENTING_PERMANENT 0
+enum RentingTypes
+{
+   RENTING_CCS=-2,
+   RENTING_NOCONTROL=-1,
+   RENTING_PERMANENT=0
+   // positive values of renting are considered monthly rent prices
+};
+
+#define CITY_NAMELEN 80
+#define LOCATION_NAMELEN 40
+#define LOCATION_SHORTNAMELEN 20
 
 class Location
 {
 public:
-   char name[40];
-   char shortname[20];
+   char name[LOCATION_NAMELEN];
+   char shortname[LOCATION_SHORTNAMELEN];
    char type;
    int city;
    int area;
@@ -250,15 +243,15 @@ public:
    int compound_walls;
    int compound_stores;
    char front_business;
-   char front_name[40];
-   char front_shortname[20];
+   char front_name[LOCATION_NAMELEN];
+   char front_shortname[LOCATION_SHORTNAMELEN];
    bool haveflag;
 
    int mapseed;
 
-   Location(int type, int parent=-1);
+   Location(char type_, int parent_=-1);
    Location() { }
-   Location* addchild(int type);
+   Location* addchild(char type_);
    ~Location() { delete_and_clear(loot); }
    void init();
    void update_heat_protection();
@@ -277,9 +270,9 @@ public:
    bool is_lcs_safehouse() { return renting>=0; }
    bool is_ccs_safehouse() { return renting==RENTING_CCS; }
    bool is_city() { return type==city; }
-   std::string getname(int shortname=false, bool include_city=false);
-   void rename(const char* name, const char* shortname);
-   char* city_description();
+   string getname(signed char shortname_=false, bool include_city=false);
+   void rename(const char* name_, const char* shortname_);
+   string city_description();
    void getloot(vector<Item *>& loot);
 };
 

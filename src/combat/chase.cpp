@@ -26,14 +26,16 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
 
-#define CARCHASE_CONTINUE        0
-#define CARCHASE_GOTOFOOTCHASE   1
-#define CARCHASE_SURRENDER       2
-#define CARCHASE_EVERYONEDEAD    3
-#define CARCHASE_ESCAPED         4
+enum CarChaseStatus
+{
+   CARCHASE_CONTINUE,
+   CARCHASE_GOTOFOOTCHASE,
+   CARCHASE_SURRENDER,
+   CARCHASE_EVERYONEDEAD,
+   CARCHASE_ESCAPED
+};
 
 bool chasesequence()
 {

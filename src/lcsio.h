@@ -38,21 +38,6 @@ This file is part of Liberal Crime Squad.
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
 
-#ifdef WIN32
-#include <windows.h>
-#include <stdio.h>
-#include <io.h>
-#include <direct.h>
-#else
-#include <stdio.h>
-#include <unistd.h>
-#endif
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string>
-#include <fstream>
-
 /**
     I/O Flags for the LCS I/O System.
 */

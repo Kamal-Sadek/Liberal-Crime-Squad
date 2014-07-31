@@ -26,12 +26,9 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
 
 //TODO: Log the monthly report? --Addictgamer
-
-
 
 /* monthly - reports the guardian's power to the player */
 void guardianupdate(char size, char power)

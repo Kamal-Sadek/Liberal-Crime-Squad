@@ -20,7 +20,7 @@ This file is part of Liberal Crime Squad.                                       
 #ifndef LAW_H_INCLUDED
 #define LAW_H_INCLUDED
 
-#include <string>
+#include "common.h"
 
 class law
 {
@@ -31,7 +31,7 @@ private:
    signed char alignment;
 public:
    law();        // Default constructor
-   
+
    void addlawtext(bool gameover=false); // Adds the lawtext to the screen
    void changealignment(signed char align);
 

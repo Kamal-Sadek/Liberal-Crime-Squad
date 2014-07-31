@@ -26,9 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
-//#include <includes.h>
 #include <externs.h>
-
 
 bool goodguyattack = false;
 
@@ -2133,7 +2131,7 @@ void severloot(Creature &cr,vector<Item *> &loot)
 /* damages the selected armor if it covers the body part specified */
 void armordamage(Armor &armor,int bp, int damamount)
 {
-   if(armor.covers(bp) && LCSrandom(armor.get_durability()) < damamount) 
+   if(armor.covers(bp) && LCSrandom(armor.get_durability()) < damamount)
    {
       if (armor.is_damaged())
       {

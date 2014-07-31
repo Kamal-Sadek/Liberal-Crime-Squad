@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 #define City(X)                  location.push_back(city = new Location(X)); \
                                  city->id = id++;

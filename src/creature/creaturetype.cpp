@@ -1,4 +1,4 @@
-#include "externs.h"
+#include <externs.h>
 
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
@@ -55,11 +55,11 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          if (cliptype == "APPROPRIATE")
          {
             cliptype = "NONE";
-            for(vector<attackst*>::const_iterator it=attacks.begin();it!=attacks.end();it++)
+            for(int i=0;i<len(attacks);i++)
             {
-               if((*it)->uses_ammo)
+               if(attacks[i]->uses_ammo)
                {
-                  cliptype=(*it)->ammotype;
+                  cliptype=attacks[i]->ammotype;
                   break;
                }
             }
@@ -67,9 +67,9 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          // Check clip is usable by the weapon.
          else if (getcliptype(cliptype) != -1) //Must be a clip type too.
          {
-            vector<attackst*>::const_iterator it = attacks.begin();
-            for(;it!=attacks.end()&&cliptype!=(*it)->ammotype;it++);
-            if (it == attacks.end())
+            int i;
+            for(i=0;i<len(attacks)&&cliptype!=attacks[i]->ammotype;i++);
+            if(i==len(attacks))
             {
                xmllog.log("In " + owner + ", " + cliptype +
                           "can not be used by " + weapontype + ".");

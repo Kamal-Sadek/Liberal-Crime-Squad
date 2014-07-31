@@ -32,8 +32,7 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-//#include "includes.h"
-#include "externs.h"
+#include <externs.h>
 
 // Add an age estimate to a person's name
 void add_age(Creature& person)
