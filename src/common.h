@@ -169,10 +169,6 @@
 #include <cstring>
 #include "cmarkup/Markup.h" //For XML.
 
-#ifdef NCURSES
-#include <term.h>
-#endif
-
 #include <locale.h>
 #ifdef WIN32
 #ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
