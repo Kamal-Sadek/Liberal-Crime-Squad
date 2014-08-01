@@ -28,7 +28,9 @@ This file is part of Liberal Crime Squad.                                       
 
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 #include <externs.h>
-
+#ifdef NCURSES
+#include <term.h>
+#endif
 //sets current color to desired setting
 void set_color(short f,short b,bool bright,bool blink)
 {
