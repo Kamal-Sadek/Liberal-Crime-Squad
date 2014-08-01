@@ -174,7 +174,11 @@ const string& Armor::get_shortname() const
    } 
 
 long Armor::get_fencevalue() const
-   { return armortype[getarmortype(itemtypename())]->get_fencevalue() / this->quality_; }
+   { 
+      if (this->quality_ <= this->get_quality_levels())
+         return armortype[getarmortype(itemtypename())]->get_fencevalue() / this->quality_;
+      return 0;
+   }
 
 int Armor::get_make_difficulty() const
    { return armortype[getarmortype(itemtypename())]->get_make_difficulty(); }
