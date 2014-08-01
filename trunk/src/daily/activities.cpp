@@ -450,12 +450,16 @@ void makearmor(Creature &cr,char &clearformess)
                case 2:addstr("second-rate", gamelog);break;
                case 3:addstr("third-rate", gamelog);break;
                case 4:addstr("fourth-rate", gamelog);break;
+               default:addstr(quality,gamelog);addstr("th-rate", gamelog); break;
             }
             location[cr.location]->loot.push_back(it);
          }
-         else addstr(" wasted the materials for a", gamelog);
+         else 
+         {
+            addstr(" wasted the materials for a", gamelog);
+         }
          addstr(" ", gamelog);
-         addstr(it->get_name(), gamelog);
+         addstr(armortype[at]->get_name(), gamelog);
          addstr(".", gamelog);
          gamelog.nextMessage();
 
