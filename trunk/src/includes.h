@@ -805,7 +805,6 @@ enum SortingChoices
    SORTING_NAME,
    SORTING_LOCATION_AND_NAME,
    SORTING_SQUAD_OR_NAME,
-   SORTING_RANDOM,
    SORTINGNUM
 };
 
@@ -991,8 +990,6 @@ bool sort_none(const Creature* first,const Creature* second);
 inline bool sort_name(const Creature* first,const Creature* second) { return strcmp(first->name,second->name)<0; }
 bool sort_locationandname(const Creature* first,const Creature* second);
 bool sort_squadorname(const Creature* first,const Creature* second);
-/* this last one can be used randomize the order of any type of objects, not just creatures, just remember to specify the type */
-template <typename T> inline bool sort_random(const T& first,const T& second) { return LCSrandom(2); }
 /* common - Prompt to decide how to sort liberals.*/
 void sorting_prompt(short listforsorting);
 /* common - Returns appropriate sortingchoice enum value for a reviewmode enum value.

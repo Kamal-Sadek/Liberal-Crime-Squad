@@ -426,7 +426,7 @@ void elections(char clearformess,char canseethings)
          } while(find(propnums,propnums+p,propnum)!=propnums+p); // redo loop if we already used this proposition number, end loop if it's unused
          propnums[p]=propnum; // put the proposition number we chose into the array, so we don't choose it again for a later proposition
       }
-      sort(propnums,propnums+pnum,sort_random<int>);
+      sort(propnums,propnums+pnum);
    }
 
    for(p=0;p<pnum;p++)
@@ -575,10 +575,10 @@ void elections(char clearformess,char canseethings)
             else if(yesvotes==500) yeswin=(LCSrandom(100)<mood?propdir[p]==1:propdir[p]==-1),recount=true;
          }
 
-         if(canseethings && (l%10 == 0 || l==999))
+         if(canseethings&&(l%10==9))
          {
-            if(yesvotes>l/2 || yeswin)set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(yesvotes<l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if((l!=999&&yesvotes>l/2)||(l==999&&yeswin)) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes<l/2||l==999) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(p*3+2,70);
             addstr(yesvotes/10);
@@ -586,8 +586,8 @@ void elections(char clearformess,char canseethings)
             addstr(yesvotes%10);
             addstr("% Yes");
 
-            if(yesvotes<l/2 || (l==999 && !yeswin))set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else if(yesvotes>l/2 || l==999)set_color(COLOR_BLACK,COLOR_BLACK,1);
+            if((l!=999&&yesvotes<l/2)||(l==999&&!yeswin)) set_color(COLOR_WHITE,COLOR_BLACK,1);
+            else if(yesvotes>l/2||l==999) set_color(COLOR_BLACK,COLOR_BLACK,1);
             else set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(p*3+3,70);
             addstr((l+1-yesvotes)/10);
@@ -606,7 +606,7 @@ void elections(char clearformess,char canseethings)
          addstr("A Recount was Necessary");
       }
 
-      if(yeswin)law[prop[p]]+=propdir[p];
+      if(yeswin) law[prop[p]]+=propdir[p];
    }
 
    if(canseethings)

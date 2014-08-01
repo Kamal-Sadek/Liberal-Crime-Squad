@@ -308,7 +308,7 @@ void Location::rename(const char* name_, const char* shortname_)
 
 /* daily - seeds and names a site (will re-seed and rename if used after start) */
 void initlocation(Location &loc)
-{
+{  // NOTE: make sure to keep code here matching code in updateworld_laws() in monthly.cpp for when names are changed
    loc.init();
 
    char str[80];
@@ -329,7 +329,12 @@ void initlocation(Location &loc)
    case SITE_INDUSTRIAL: loc.rename("Industrial District", "I-District"); break;
    case SITE_OUTOFTOWN: loc.rename("City Outskirts", "Outskirts"); break;
    case SITE_TRAVEL: loc.rename("Travel", "Travel"); break;
-   case SITE_GOVERNMENT_POLICESTATION: loc.rename("Police Station", "Police Station"); break;
+   case SITE_GOVERNMENT_POLICESTATION:
+      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2) {
+         loc.rename("Death Squad HQ", "Death Squad HQ");
+      } else {
+         loc.rename("Police Station", "Police Station");
+      } break;
    case SITE_GOVERNMENT_COURTHOUSE:
       if(law[LAW_DEATHPENALTY]==-2) {
          loc.rename("Halls of Ultimate Judgment", "Judge Hall");
@@ -365,7 +370,7 @@ void initlocation(Location &loc)
             case 4:strcat(loc.name,"Forest");break;
          }
          strcat(loc.name," Forced Labor Camp");
-         strcpy(loc.shortname,"Labor Camp");
+         strcpy(loc.shortname,"Joycamp");
       }
       else
       {
@@ -382,15 +387,18 @@ void initlocation(Location &loc)
       } break;
    case SITE_GOVERNMENT_INTELLIGENCEHQ:
       if(law[LAW_PRIVACY]==-2 && law[LAW_POLICEBEHAVIOR]==-2) {
-         loc.rename("Ministry of Love", "Min. Love");
+         loc.rename("Ministry of Love", "Miniluv");
       } else {
          loc.rename("Intelligence HQ", "Int. HQ");
       } break;
    case SITE_GOVERNMENT_ARMYBASE:
-      lastname(loc.name,true);
-      strcat(loc.name," Army Base");
-      strcpy(loc.shortname,"Army Base");
-      break;
+      if(law[LAW_MILITARY]==-2) {
+         loc.rename("Ministry of Peace", "Minipax");
+      } else {
+         lastname(loc.name,true);
+         strcat(loc.name," Army Base");
+         strcpy(loc.shortname,"Army Base");
+      } break;
    case SITE_GOVERNMENT_WHITE_HOUSE:
       loc.rename("White House", "White House");
       break;
