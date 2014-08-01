@@ -253,7 +253,7 @@ void passmonth(char &clearformess,char canseethings)
 
    // Temporaty Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
    if(stalinmode) for(int v=0;v<VIEWNUM-3;v++)
-      change_public_opinion(v,(stalinview(v,false)?1:-1),0);
+      if(v%3==month%3) change_public_opinion(v,(stalinview(v,false)?1:-1),0);
    // End Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
 
    // Seduction monthly experience stipends for those liberals
@@ -635,81 +635,71 @@ void passmonth(char &clearformess,char canseethings)
 
 /* rename various buildings according to the new laws */
 void updateworld_laws(short *law,short *oldlaw)
-{
-   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
-       law[LAW_DEATHPENALTY]!=oldlaw[LAW_DEATHPENALTY])
+{  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
+   if(((law[   LAW_POLICEBEHAVIOR]==-2&&law[   LAW_DEATHPENALTY]==-2)||
+       (oldlaw[LAW_POLICEBEHAVIOR]==-2&&oldlaw[LAW_DEATHPENALTY]==-2))&&
+       (law[LAW_POLICEBEHAVIOR]   !=    oldlaw[LAW_POLICEBEHAVIOR]||
+        law[LAW_DEATHPENALTY  ]   !=    oldlaw[LAW_DEATHPENALTY  ]))
       for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
+         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
             initlocation(*location[l]);
+
+   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
+       law[LAW_DEATHPENALTY]  !=  oldlaw[LAW_DEATHPENALTY])
+      for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
             initlocation(*location[l]);
-      }
-
-   if((law[LAW_GUNCONTROL]==2||oldlaw[LAW_GUNCONTROL]==2)&&
-       law[LAW_GUNCONTROL]!=oldlaw[LAW_GUNCONTROL])
-      for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
-            initlocation(*location[l]);
-      }
-
-   if((law[LAW_POLICEBEHAVIOR]==-2||oldlaw[LAW_POLICEBEHAVIOR]==-2)&&
-       law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR])
-      for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
-            initlocation(*location[l]);
-         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
-            initlocation(*location[l]);
-      }
 
    if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
-       law[LAW_FREESPEECH]!=oldlaw[LAW_FREESPEECH])
+       law[LAW_FREESPEECH]  !=  oldlaw[LAW_FREESPEECH])
       for(int l=0;l<len(location);l++)
-      {
          if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
             initlocation(*location[l]);
-      }
 
-   if((law[LAW_PRIVACY]==-2||oldlaw[LAW_PRIVACY]==-2)&&
-       law[LAW_PRIVACY]!=oldlaw[LAW_PRIVACY])
+   if((law[LAW_PRISONS]==-2||oldlaw[LAW_PRISONS]==-2)&&
+       law[LAW_PRISONS]  !=  oldlaw[LAW_PRISONS])
       for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or min. of love?
+         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
             initlocation(*location[l]);
-      }
 
-   if((law[LAW_CORPORATE]==-2||oldlaw[LAW_CORPORATE]==-2)&&
-       law[LAW_CORPORATE]!=oldlaw[LAW_CORPORATE])
+   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
+       law[LAW_NUCLEARPOWER] !=  oldlaw[LAW_NUCLEARPOWER])
       for(int l=0;l<len(location);l++)
-      {
+         if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
+            initlocation(*location[l]);
+
+   if(((law[   LAW_PRIVACY]==-2&&law[   LAW_POLICEBEHAVIOR]==-2)||
+       (oldlaw[LAW_PRIVACY]==-2&&oldlaw[LAW_POLICEBEHAVIOR]==-2))&&
+       (law[LAW_PRIVACY       ]!=oldlaw[LAW_PRIVACY       ]||
+        law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR]))
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
+            initlocation(*location[l]);
+
+   if((law[LAW_MILITARY]==-2||oldlaw[LAW_MILITARY]==-2)&&
+       law[LAW_MILITARY]  !=  oldlaw[LAW_MILITARY])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
+            initlocation(*location[l]);
+
+   if((law[LAW_GUNCONTROL]==2||oldlaw[LAW_GUNCONTROL]==2)&&
+       law[LAW_GUNCONTROL] !=  oldlaw[LAW_GUNCONTROL])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
+            initlocation(*location[l]);
+
+   if(((law[   LAW_CORPORATE]==-2&&law[   LAW_TAX]==-2)||
+       (oldlaw[LAW_CORPORATE]==-2&&oldlaw[LAW_TAX]==-2))&&
+       (law[LAW_CORPORATE]   !=    oldlaw[LAW_CORPORATE]||
+        law[LAW_TAX      ]   !=    oldlaw[LAW_TAX      ]))
+      for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
             initlocation(*location[l]);
-      }
-
-   if((law[LAW_TAX]==-2||oldlaw[LAW_TAX]==-2)&&
-       law[LAW_TAX]!=oldlaw[LAW_TAX])
-      for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
-            initlocation(*location[l]);
-      }
 
    if((law[LAW_DRUGS]==2||oldlaw[LAW_DRUGS]==2)&&
-       law[LAW_DRUGS]!=oldlaw[LAW_DRUGS])
+       law[LAW_DRUGS] !=  oldlaw[LAW_DRUGS])
       for(int l=0;l<len(location);l++)
-      {
          if(location[l]->type==SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
           &&location[l]->renting<0) // Only rename locations not under LCS control, to avoid switching names around under the player
             initlocation(*location[l]);
-      }
-
-   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
-       law[LAW_NUCLEARPOWER]!=oldlaw[LAW_NUCLEARPOWER])
-      for(int l=0;l<len(location);l++)
-      {
-         if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
-            initlocation(*location[l]);
-      }
 }

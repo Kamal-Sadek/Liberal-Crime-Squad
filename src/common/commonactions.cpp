@@ -637,7 +637,6 @@ void sortliberals(std::vector<Creature *>& liberals, short sortingchoice, bool d
    case SORTING_NAME: sort(liberals.begin(),liberals.end(),sort_name); break;
    case SORTING_LOCATION_AND_NAME: sort(liberals.begin(),liberals.end(),sort_locationandname); break;
    case SORTING_SQUAD_OR_NAME: sort(liberals.begin(),liberals.end(),sort_squadorname); break;
-   case SORTING_RANDOM: sort(liberals.begin(),liberals.end(),sort_random<Creature*>); break;
    }
 }
 
@@ -705,8 +704,6 @@ void sorting_prompt(short listforsorting)
    addstr("C - Sort by location and name.");
    move(6,2);
    addstr("D - Sort by squad or name.");
-   move(7,2);
-   addstr("E - Randomize order.");
 
    while(true)
    {
@@ -720,8 +717,6 @@ void sorting_prompt(short listforsorting)
       {  activesortingchoice[listforsorting]=SORTING_LOCATION_AND_NAME; break; }
       else if(c=='d')
       {  activesortingchoice[listforsorting]=SORTING_SQUAD_OR_NAME; break; }
-      else if(c=='e')
-      {  activesortingchoice[listforsorting]=SORTING_RANDOM; break; }
       else if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR) break;
    }
 }
