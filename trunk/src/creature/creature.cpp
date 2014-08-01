@@ -1014,7 +1014,9 @@ int Creature::skill_roll(int skill) const
 
          return_value *= stealth;
          return_value /= 2;
-
+         // Shredded clothes get you no stealth.
+         if (get_armor().get_quality() > get_armor().get_quality_levels())
+            return_value = 0;
       }
       break;
    case SKILL_SEDUCTION:
