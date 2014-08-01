@@ -58,6 +58,7 @@ string Armor::equip_title(bool full) const
    else
       et = get_shortname();
 
+   if (quality_ <= get_quality_levels())
    if (bloody_ || damaged_ || quality_ > 1)
    {
       et += "[";
@@ -157,8 +158,20 @@ void Armor::set_bloody(bool b)
       bloody_ = b;
 }
 
+const string ruinedName = "Tattered Rags";
 const string& Armor::get_name() const
-   { return armortype[getarmortype(itemtypename())]->get_name(); }
+   {
+      if (this->quality_ <= this->get_quality_levels())
+      return armortype[getarmortype(itemtypename())]->get_name();
+      return ruinedName;
+   }
+
+const string& Armor::get_shortname() const
+   {
+      if (this->quality_ <= this->get_quality_levels())
+      return armortype[getarmortype(itemtypename())]->get_shortname();
+      return ruinedName;
+   } 
 
 long Armor::get_fencevalue() const
    { return armortype[getarmortype(itemtypename())]->get_fencevalue() / this->quality_; }
@@ -189,9 +202,6 @@ bool Armor::covers(int bodypart) const
 
 bool Armor::conceals_face() const
    { return armortype[getarmortype(itemtypename())]->conceals_face(); }
-
-const string& Armor::get_shortname() const
-   { return armortype[getarmortype(itemtypename())]->get_shortname(); }
 
 int Armor::get_interrogation_basepower() const
    { return armortype[getarmortype(itemtypename())]->get_interrogation_basepower(); }

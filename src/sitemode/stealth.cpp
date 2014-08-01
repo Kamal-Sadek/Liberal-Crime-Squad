@@ -828,6 +828,21 @@ char hasdisguise(const Creature &cr)
           levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) &&
           cr.get_armor().get_itemtypename()=="ARMOR_BUNKERGEAR")uniformed=1;
    }
+   
+   if(uniformed)
+   {
+      int qlmax = cr.get_armor().get_quality_levels();
+      int ql = cr.get_armor().get_quality() + cr.get_armor().is_damaged();
+      if (ql > qlmax)  // Shredded clothes are obvious
+      {
+         uniformed = 0;
+      }else if ((ql-1) *2 > qlmax) // poor clothes make a poor disguise
+      {
+         uniformed++;
+      }
+      if (uniformed >2)
+         uniformed = 0;
+   }
 
    return uniformed;
 }
