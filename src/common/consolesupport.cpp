@@ -28,12 +28,22 @@ This file is part of Liberal Crime Squad.                                       
 
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 #include <externs.h>
+
 #ifdef NCURSES
 #include <term.h>
 #endif
+
+// These 4 variables to keep track of the current color are for
+// this file only
+short curForeground=COLOR_WHITE,curBackground=COLOR_BLACK;
+bool isBright=false,isBlinking=false;
+
 //sets current color to desired setting
 void set_color(short f,short b,bool bright,bool blink)
 {
+   // keep track of current color
+   curForeground=f,curBackground=b,isBright=bright,isBlinking=blink;
+
    //color swap required for PDcurses
    if(f==7&&b==0) f=0,b=0;
    else if(f==0&&b==0) f=7,b=0;
@@ -59,13 +69,13 @@ void translategetch(int &c)
    //if(c==-56)c='2';
    //if(c==-55)c='3';
 
-   if(c==-6)c='0';
-   if(c==-50)c='.';
-   if(c==-53)c=10;
-   if(c==-47)c='+';
-   if(c==-48)c='-';
-   if(c==-49)c='*';
-   if(c==-54)c='/';
+   if(c== -6||c==0x1FA) c='0';
+   if(c==-50||c==0x1CE) c='.';
+   if(c==-53||c==0x1CB) c=ENTER;
+   if(c==-47||c==0x1D1) c='+';
+   if(c==-48||c==0x1D0) c='-';
+   if(c==-49||c==0x1CF) c='*';
+   if(c==-54||c==0x1CA) c='/';
 
    /*
    if(c==2)c='2';
@@ -91,7 +101,7 @@ void translategetch(int &c)
       if(c==0x85)c='0';
    }
 
-   if(c>='A'&&c<='Z'){c-='A';c+='a';}
+   if(c>='A'&&c<='Z'){c+='a'-'A';}
 
    /* Support Cursor Keys...*/
    //if(c==KEY_LEFT)c='a';
@@ -115,13 +125,13 @@ void translategetch_cap(int &c)
    //if(c==-56)c='2';
    //if(c==-55)c='3';
 
-   if(c==-6)c='0';
-   if(c==-50)c='.';
-   if(c==-53)c=10;
-   if(c==-47)c='+';
-   if(c==-48)c='-';
-   if(c==-49)c='*';
-   if(c==-54)c='/';
+   if(c== -6||c==0x1FA) c='0';
+   if(c==-50||c==0x1CE) c='.';
+   if(c==-53||c==0x1CB) c=ENTER;
+   if(c==-47||c==0x1D1) c='+';
+   if(c==-48||c==0x1D0) c='-';
+   if(c==-49||c==0x1CF) c='*';
+   if(c==-54||c==0x1CA) c='/';
 
    /*
    if(c==2)c='2';
@@ -196,42 +206,39 @@ int checkkey_cap()
 
 
 #ifdef CH_USE_UNICODE
-char unicode_mode = 0;
+bool unicode_enabled = false;
 
-char setup_unicode() {
+bool setup_unicode() {
    #ifdef WIN32
-   unicode_mode = 0; // no support for Unicode locales on WIN32
+   #ifdef PDC_WIDE
+   unicode_enabled = true; // We're using a version of PDCurses with UTF-8 support (e.g. from pdc34dllu.zip)
    #else
-   char *codeset;
-
-   // Get LC_CTYPE from environment.
-   //setlocale(LC_CTYPE, ""; // NO DON'T! We already did setlocale() when running void init_console(). This will mess it up.
-
-   // Is it a UTF-8 locale?
-   codeset = nl_langinfo(CODESET);
-   unicode_mode = !strcmp(codeset, "UTF-8");
-
+   unicode_enabled = false; // We're using a version of PDCurses without UTF-8 support (e.g. from pdc34dllw.zip)
    #endif
-   return unicode_mode;
+   #else
+   // Is it a UTF-8 locale?
+   unicode_enabled = !strcmp(nl_langinfo(CODESET), "UTF-8");
+   #endif
+   return unicode_enabled;
 }
 
 int lookup_unicode_hack(int c) {
-   if (c < 128)
-      return c;
-
-   for(int i=0;true;i++) {
-      int unicode = unicode_hacks[i].unicode_char;
-
-      if (unicode == c || unicode == UNICODE_HACKS_END)
+   for(int i=0;i<len(unicode_hacks);i++)
+      if(unicode_hacks[i].unicode_char==c)
          return unicode_hacks[i].hack_char;
-   }
+   return '?';
 }
+#endif
 
+#ifndef CH_USE_CP437
+// This function's for both UTF-8 and the ASCII hack (only disabled in pure CP437 mode)
 int addch_unicode(int c) {
+#ifdef CH_USE_UNICODE
+// This part here is for Unicode only, not the ASCII hack
    wchar_t wch;
    cchar_t cch;
 
-   if (unicode_mode) {
+   if (unicode_enabled) {
       // We can do this because we've already verified
       // that __STDC_ISO_10646__ is set.
       wch = c;
@@ -239,11 +246,23 @@ int addch_unicode(int c) {
       setcchar(&cch, &wch, 0, 0, NULL);
       return add_wch(&cch);
    } else {
-      return addch(lookup_unicode_hack(c));
+      c=lookup_unicode_hack(c);
+#endif
+// Now this code will run on both Unicode AND the ASCII hack
+      if(c&A_REVERSE)
+      {  // we need to reverse the colors
+         c&=~A_REVERSE; // unset A_REVERSE for the character, curses does it wrong
+         set_color(curBackground,curForeground,isBlinking,isBright); // reverse colors
+         int ret=addch(c); // add the character
+         set_color(curBackground,curForeground,isBlinking,isBright); // reverse them back again
+         return ret; // done
+      } // don't need to reverse colors, just add the character
+      else return addch(c);
+#ifdef CH_USE_UNICODE
    }
+#endif
 }
 #endif
-
 
 void set_title(char *s)
 {
@@ -273,25 +292,14 @@ void set_title(char *s)
 void init_console()
 {
    #ifdef WIN32
-   #ifdef CH_USE_UNICODE
-   SetConsoleOutputCP(65001); // use UTF-8 (Unicode) for output
-   SetConsoleCP(65001); // use UTF-8 (Unicode) for input
-   setlocale(LC_ALL,"English_United States.437"); // Windows does not support UTF-8/Unicode for setlocale, sorry
-   #endif
-   #ifdef CH_USE_CP437
-   SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output
-   SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input
+   // This has to be set to Code Page 437 in Windows regardless of Unicode, that's just how PDCurses works on Windows, even the UTF-8 version of PDCurses
+   SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output, regardless of anything else
+   SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input, regardless of anything else
    setlocale(LC_ALL,"English_United States.437");
-   #endif
-   #ifdef CH_USE_ASCII_HACK
-   SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output
-   SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input
-   setlocale(LC_ALL,"English_United States.437");
-   #endif
    _setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page
    #else // WIN32
    #ifdef CH_USE_UNICODE
-   setlocale(LC_ALL,"en_US.UTF-8"); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale
+   setlocale(LC_ALL,"en_US.UTF-8"); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
    #endif
    #ifdef CH_USE_CP437
    setlocale(LC_ALL,"en_US.CP437");

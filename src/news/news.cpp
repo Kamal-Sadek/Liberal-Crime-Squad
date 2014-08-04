@@ -1761,7 +1761,7 @@ void displaycenterednewsfont(const std::string& str,int y)
                set_color(translateGraphicsColor(bigletters[p][x2][y2][1]),
                          translateGraphicsColor(bigletters[p][x2][y2][2]),
                          bigletters[p][x2][y2][3]);
-               addch(translateGraphicsChar(bigletters[p][x2][y2][0]));
+               addchar(bigletters[p][x2][y2][0]);
             }
          }
          x+=lim;
@@ -1797,7 +1797,7 @@ void displaynewspicture(int p,int y)
          set_color(translateGraphicsColor(newspic[p][x2][y2][1]),
                    translateGraphicsColor(newspic[p][x2][y2][2]),
                    newspic[p][x2][y2][3]);
-         addch(translateGraphicsChar(newspic[p][x2][y2][0]));
+         addchar(newspic[p][x2][y2][0]);
       }
 }
 

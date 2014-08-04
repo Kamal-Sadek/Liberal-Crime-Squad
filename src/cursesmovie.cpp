@@ -236,7 +236,7 @@ void CursesMoviest::playmovie(int x,int y)
                      set_color(translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][1]),
                                translateGraphicsColor(movie.picture[frame[f]->frame][fx][fy][2]),
                                movie.picture[frame[f]->frame][fx][fy][3]);
-                     addch(translateGraphicsChar(movie.picture[frame[f]->frame][fx][fy][0]));
+                     addchar(movie.picture[frame[f]->frame][fx][fy][0]);
                   }
                pted=true;
             }

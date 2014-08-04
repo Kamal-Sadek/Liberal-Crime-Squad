@@ -113,12 +113,6 @@ bool Log::log(const string& text)
    else return false;  //The logger is not initialized or the file isn't open. Something went wrong. Abort!
 }
 
-void Log::record(const string& text)
-{
-   buffer+=text; //Save the text. That's it.
-   logged_since_last_message=true; //Ya...something was just logged...
-}
-
 void Log::nextMessage()
 {  //This check makes sure the log is formatted correctly even when there is
    //nothing in the buffer (a result of using newline());

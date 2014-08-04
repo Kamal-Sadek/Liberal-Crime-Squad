@@ -61,30 +61,6 @@
 #define CURSES_GRAPHICS // define this BEFORE including anything
 #include <externs.h>
 
-#ifndef CH_USE_CP437
-/* Translate CP437 extended characters into the code page used by the console */
-int translateGraphicsChar(int c)
-{
-    // This will be no good for Unicode...
-    int cin = c;
-    int cout = cin;
-
-//    if ((cin >= 0) && (cin <32))
-//    {
-//        cout = (cin | A_ALTCHARSET);
-//    }
-    if ((cin >= 0) && (cin < 256))
-    {
-        cout = gchar[cin].native_code;
-        if (cout == 0)
-        {
-            cout = cin;
-        }
-    }
-    return cout;
-}
-#endif // CH_USE_CP437
-
 #ifdef NCURSES
 /* Translates PDCurses' numerical color values to NCurses' corresponding
    numerical color values.

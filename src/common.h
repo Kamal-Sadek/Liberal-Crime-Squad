@@ -61,13 +61,15 @@
       #endif
    #endif
 
+   //#define PDC_WIDE // uncomment this if and only if you want to use UTF-8 version of PDCurses (from pdc34dllu.zip instead of pdc34dllw.zip)... the "U" version
    #include <curses.h>
    //undo PDCurses macros that break vector class
    #undef erase
    #undef clear
 
-   #define CH_USE_CP437
-   //#define CH_USE_ASCII_HACK
+   #define CH_USE_CP437 // this works best with the "W" version of PDCurses on Windows (from pdc34dllw.zip instead of pdc34dllu.zip)... it's the standard way we do it
+   //#define CH_USE_ASCII_HACK // this works with either the "W" or "U" version of PDCurses just fine either way, as it only uses standard ASCII characters (ugly though)
+   //#define CH_USE_UNICODE // this only works on Windows with the UTF-8 version of PDCurses (the "U" version), and if you have the PDC_WIDE define above uncommented
 #else
    #include <vector>
    #include <map>
@@ -92,7 +94,7 @@
    #endif
    #ifdef XCURSES
       #define HAVE_PROTO 1
-      #define CPLUSPLUS   1
+      #define CPLUSPLUS  1
       /* Try these PDCurses/Xcurses options later...
       #define FAST_VIDEO
       #define REGISTERWINDOWS
@@ -117,17 +119,23 @@
       // Undo mvaddstr macro and re-implement as function to support overloading
       #ifdef mvaddstr
          #undef mvaddstr
-         inline int mvaddstr(int x, int y, const char* text) { move(x, y); return addstr(text); }
+         inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
       #endif
    #endif
+#endif
 
-   #ifdef CH_USE_UNICODE
-     // Make sure we don't override addch for consolesupport.cpp,
-     // because addch_unicode may use addch internally.
-     #ifndef CONSOLE_SUPPORT
-        #undef addch
-        #define addch(a) addch_unicode(a)
-     #endif
+#ifndef CH_USE_CP437
+   // addch_unicode() is implemented in common\consolesupport.cpp
+   // we need it for ALL non-CP437 code pages though, including UTF-8 and the ASCII hack
+   int addch_unicode(int c);
+
+   // Make sure we don't override addch for consolesupport.cpp,
+   // because addch_unicode may use addch internally.
+   #ifndef CONSOLE_SUPPORT
+      #undef addch
+      inline int addch(int c) { return addch_unicode(c); }
+      #undef mvaddch
+      inline int mvaddch(int y,int x,int c) { int ret=move(y,x); if(ret!=ERR) ret=addch_unicode(c); return ret; }
    #endif
 #endif
 

@@ -85,11 +85,35 @@ gamelog.nextMessage();
 
 class Log
 {
-public:
+private:
+
+   //False if not initialized. True if initialized (All of this is via the initialize() function).
+   //Makes sure that the programmer initialized the function prior to attempted usage.
+   bool initialized;
+
+   string filename; //The name/relevant path of the file.
+   //The file itself.
+   //fstream for easier use in case I (or somebody else) wants to add a "read log" feature.
+   //I would like that; so that one could check events and the like ingame.
+   fstream file;
+
+   //Controls the automatic addition of newlines.
+   //0 = no newlines.
+   //1 = newline.
+   //2 = double newlines.
+   //TODO: And make it support further automatic newlines (eg. 3, 4, 5, etc). Not
+   //really a priority due to the fact that the current system works good enough
+   //(when are you going to need more than two doublelines consistently?).
+   int newline_mode;
+
+   //What has been recorded so far (used in begl(), endl(), and record()).
+   string buffer;
 
    //This is used to work around all those empty lines output into the log at the
    //end of an encounter's round.
    bool logged_since_last_message;
+
+public:
 
    Log();
    ~Log() { if(initialized) LCSCloseFileCPP(file); }
@@ -126,7 +150,11 @@ public:
    void record(string text);*/
 
    //Adds the text given to the buffer.
-   void record(const string& text);
+   template<typename T> void record(const T& text)
+   {
+      buffer+=text; //Save the text. That's it.
+      logged_since_last_message=true; //Ya...something was just logged...
+   }
 
    //Writes out everything currently in the buffer to the file, so as to split the
    //log into logical blocks.
@@ -155,29 +183,8 @@ public:
    //Writes out a newline.
    void newline();
 
-private:
-
-   //False if not initialized. True if initialized (All of this is via the initialize() function).
-   //Makes sure that the programmer initialized the function prior to attempted usage.
-   bool initialized;
-
-   string filename; //The name/relevant path of the file.
-   //The file itself.
-   //fstream for easier use in case I (or somebody else) wants to add a "read log" feature.
-   //I would like that; so that one could check events and the like ingame.
-   fstream file;
-
-   //Controls the automatic addition of newlines.
-   //0 = no newlines.
-   //1 = newline.
-   //2 = double newlines.
-   //TODO: And make it support further automatic newlines (eg. 3, 4, 5, etc). Not
-   //really a priority due to the fact that the current system works good enough
-   //(when are you going to need more than two doublelines consistently?).
-   int newline_mode;
-
-   //What has been recorded so far (used in begl(), endl(), and record()).
-   string buffer;
+   // read-only access to private member variable logged_since_last_message
+   bool hasMessage() { return logged_since_last_message; }
 };
 
 #endif //LOG_H_INCLUDED

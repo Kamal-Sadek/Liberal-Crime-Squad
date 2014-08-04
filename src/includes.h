@@ -902,15 +902,25 @@ void addnextpagestr();
 void addprevpagestr();
 /* prints a long blurb showing how to page forward and back */
 void addpagestr();
+/* Variants of addch and mvaddch that work on chars and use translateGraphicsChar(), fixing display of extended characters */
+inline int addchar(char ch) { return addch(translateGraphicsChar(ch)); }
+inline int mvaddchar(int y,int x,char ch) { return mvaddch(y,x,translateGraphicsChar(ch)); }
+inline int addchar(char ch,Log &log) { log.record(ch); return addchar(ch); }
+inline int mvaddchar(int y,int x,char ch,Log &log) { log.record(ch); return mvaddchar(y,x,ch); }
+/* Redefining addstr() and mvaddstr() so they use addchar() and mvaddchar(), fixing display of extended characters */
+#undef addstr
+inline int addstr(const char* text) { int ret=ERR; for(int i=0;i<len(text);i++) ret=addchar(text[i]); return ret; }
+#undef mvaddstr
+inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
 /* Various wrappers to addstr() and mvaddstr() which handle permutations of:
    - Including or not including the gamelog for external message logging
    - std::string or c-style char arrays */
 inline int addstr(const char *text,Log &log) { log.record(text); return addstr(text); }
 inline int mvaddstr(int y,int x,const char *text,Log &log) { log.record(text); return mvaddstr(y,x,text); }
-inline int addstr(const std::string& text) { return addstr(text.c_str()); }
-inline int addstr(const std::string& text, Log &log) { return addstr(text.c_str(),log); }
-inline int mvaddstr(int y,int x,const std::string& text) { return mvaddstr(y,x,text.c_str()); }
-inline int mvaddstr(int y,int x,const std::string& text,Log &log) { return mvaddstr(y,x,text.c_str(),log); }
+inline int addstr(const std::string& text) { int ret=ERR; for(int i=0;i<len(text);i++) ret=addchar(text[i]); return ret; }
+inline int addstr(const std::string& text, Log &log) { log.record(text); return addstr(text); }
+inline int mvaddstr(int y,int x,const std::string& text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
+inline int mvaddstr(int y,int x,const std::string& text,Log &log) { log.record(text); return mvaddstr(y,x,text); }
 /* These wrappers convert numbers to text */
 inline int addstr(long num) { return addstr(tostring(num)); }
 inline int addstr(long num,Log &log) { return addstr(tostring(num),log); }
@@ -924,11 +934,6 @@ int mvaddstr_f(int y,int x,const char * format,...);
 int addstr_fl(Log &log,const char * format,...);
 /* mvaddstr with formatted output and logging */
 int mvaddstr_fl(int y,int x,Log &log,const char * format,...);
-/* Variants of addch and mvaddch that work on char instead of chtype, fixing display of extended characters */
-inline int addchar(char ch) { const char str[2]={ch,0}; return addstr(str); }
-inline int mvaddchar(int y,int x,char ch) { const char str[2]={ch,0}; return mvaddstr(y,x,str); }
-inline int addchar(char ch,Log &log) { const char str[2]={ch,0}; return addstr(str,log); }
-inline int mvaddchar(int y,int x,char ch,Log &log) { const char str[2]={ch,0}; return mvaddstr(y,x,str,log); }
 
 /*
  commonactions.cpp
@@ -1025,8 +1030,7 @@ int checkkey();
 /* Variant of checkkey() that doesn't make all letters lowercase */
 int checkkey_cap();
 #ifdef CH_USE_UNICODE
-  char setup_unicode();
-  int addch_unicode(int c);
+  bool setup_unicode();
 #endif
 void set_title (char *c);
 void init_console();

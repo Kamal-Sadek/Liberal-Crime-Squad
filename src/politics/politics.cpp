@@ -1883,11 +1883,14 @@ char wincheck()
 
    int housemake[6]={0,0,0,0,0,0};
    for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
-   if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?HOUSESUPERMAJORITY:HOUSECOMFYMAJORITY)) return 0; // 3/5 for easy, 2/3 for elite
+   if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?HOUSESUPERMAJORITY:HOUSECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
+   if(housemake[4]<((wincondition==WINCONDITION_ELITE)?HOUSECOMFYMAJORITY:HOUSEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
    int senatemake[6]={0,0,0,0,0,0};
    for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
-   if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?SENATESUPERMAJORITY:SENATECOMFYMAJORITY)) return 0; // 3/5 for easy, 2/3 for elite
+   if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?SENATESUPERMAJORITY:SENATECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
+   if(wincondition!=WINCONDITION_ELITE) senatemake[exec[EXEC_VP]+2]++; // VP counts as Senator only for breaking ties (so counts for 1/2 fraction but not higher fractions)
+   if(senatemake[4]<((wincondition==WINCONDITION_ELITE)?SENATECOMFYMAJORITY:SENATEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
    int elibjudge=0,libjudge=0;
    for(int c=0;c<COURTNUM;c++)
