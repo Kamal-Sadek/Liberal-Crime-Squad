@@ -247,7 +247,7 @@ void creatureadvance()
    //in the gamelog due to something not happening for a round or two (like the squad
    //moving around with no mishaps). In other words, it only does nexMessage if
    //something was logged this round.
-   if(gamelog.logged_since_last_message) gamelog.nextMessage();
+   if(gamelog.hasMessage()) gamelog.nextMessage();
 }
 
 

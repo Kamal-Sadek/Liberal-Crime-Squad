@@ -373,14 +373,14 @@ void mode_base()
                set_color(COLOR_WHITE,y<4?COLOR_BLUE:COLOR_RED,1);
                if(y==0) addstr(":.:.:.:.:");
                else if(y<3) addstr(":::::::::");
-               else for(int x=0;x<9;x++) addchar((char)CH_LOWER_HALF_BLOCK);
+               else for(int x=0;x<9;x++) addch(CH_LOWER_HALF_BLOCK);
                set_color(COLOR_WHITE,COLOR_RED,1);
-               for(int x=9;x<18;x++) addchar((char)CH_LOWER_HALF_BLOCK);
+               for(int x=9;x<18;x++) addch(CH_LOWER_HALF_BLOCK);
             }
             else
             {
                set_color(COLOR_RED,COLOR_BLACK,0);
-               for(int x=0;x<18;x++) addchar((char)CH_UPPER_HALF_BLOCK);
+               for(int x=0;x<18;x++) addch(CH_UPPER_HALF_BLOCK);
             }
          }
 
@@ -406,7 +406,7 @@ void mode_base()
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(8,1,activesquad->name);
-            addchar('Ä'); //in case of overlap, at least make it clear where the name ends.
+            addch(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL); //in case of overlap, at least make it clear where the name ends.
          }
          if(len(squad)>1||(!activesquad&&len(squad))) set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_BLACK,COLOR_BLACK,1);

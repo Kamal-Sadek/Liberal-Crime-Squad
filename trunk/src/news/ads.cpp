@@ -37,7 +37,7 @@ void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,sh
       if(ey==17&&y==17) continue;
       for(x=sx;x<=ex;x++)
          if(y==sy||y==8||y==16||y==24||x==sx||x==ex)
-            mvaddchar(y,x,ch);
+            mvaddch(y,x,ch);
    }
 
    //AD CONTENT

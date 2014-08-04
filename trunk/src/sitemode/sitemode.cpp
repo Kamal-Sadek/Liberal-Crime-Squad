@@ -958,7 +958,7 @@ void mode_site()
                      if(x==locx&&y==locy)
                      {
                         set_color(COLOR_GREEN,COLOR_BLACK,1);
-                        addchar(CH_WHITE_SMILING_FACE);
+                        addch(CH_WHITE_SMILING_FACE);
                      }
                      else
                      {
@@ -981,36 +981,36 @@ void mode_site()
                            else set_color(COLOR_YELLOW,COLOR_BLACK,0);
 
                            if(levelmap[x+1][y][locz].flag & SITEBLOCK_BLOCK)
-                              addchar((char)CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
-                           else addchar((char)CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
+                              addch(CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
+                           else addch(CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_HEAVYUNIT)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,1);
-                           addchar((char)CH_YEN_SIGN);
+                           addch(CH_YEN_SIGN);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,1);
-                           addchar(CH_BLACK_SMILING_FACE);
+                           addch(CH_BLACK_SMILING_FACE);
                         }
                         else if((levelmap[x][y][locz].siegeflag & SIEGEFLAG_UNIT_DAMAGED)&&
                            (location[cursite]->compound_walls & COMPOUND_CAMERAS)&&!location[cursite]->siege.cameras_off)
                         {
                            set_color(COLOR_RED,COLOR_BLACK,0);
-                           addchar(CH_BLACK_SMILING_FACE);
+                           addch(CH_BLACK_SMILING_FACE);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_UP)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addchar(CH_UPWARDS_ARROW);
+                           addch(CH_UPWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special==SPECIAL_STAIRS_DOWN)
                         {
                            set_color(COLOR_YELLOW,COLOR_BLACK,1);
-                           addchar(CH_DOWNWARDS_ARROW);
+                           addch(CH_DOWNWARDS_ARROW);
                         }
                         else if(levelmap[x][y][locz].special!=-1)
                         {
@@ -1034,7 +1034,7 @@ void mode_site()
                   {
                      set_color(COLOR_BLACK,COLOR_BLACK,1);
                      move(y+1,x+5);
-                     addchar((char)CH_FULL_BLOCK);
+                     addch(CH_FULL_BLOCK);
                   }
                }
             }

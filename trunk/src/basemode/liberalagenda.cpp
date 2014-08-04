@@ -242,7 +242,7 @@ bool liberalagenda(signed char won)
                   set_alignment_color(ALIGN_ELITELIBERAL,true);
                else set_alignment_color(c,true);
                if(c==2) mvaddchar(14+l/3,l%3*26,'\x11');
-               addchar('Ä');
+               addch(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL);
                if(c==-2) addchar('\x10');
             }
             if(won==-1||won==-2)

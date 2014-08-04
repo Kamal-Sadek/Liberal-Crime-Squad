@@ -102,7 +102,7 @@ void burnflag()
       for(x=0;x<18;x++) for(y=0;y<7;y++)
       {
          set_color(short(flag[x][y][1]),short(flag[x][y][2]),bool(flag[x][y][3]));
-         mvaddchar(y+10,x+31,flag[x][y][0]);
+         mvaddch(y+10,x+31,flag[x][y][0]);
       }
 
       pause_ms(10);
