@@ -195,6 +195,7 @@ void repairarmor(Creature &cr,char &clearformess)
    Armor *armor=NULL;
    Item *pile=NULL;
    vector<Item *> *pilelist=NULL;
+   int pileindex = 0;
 
    // Clean yourself up first
    if(cr.get_armor().is_bloody() || cr.get_armor().is_damaged())
@@ -210,24 +211,42 @@ void repairarmor(Creature &cr,char &clearformess)
             {
                armor=a;
                pile=squad[sq]->loot[l];
+               pileindex=l;
                pilelist=&squad[sq]->loot;
                break;
             }
          }
    }
-   if(armor==NULL&&cr.location!=-1)
-      for(int l=0;l<len(location[cr.location]->loot);l++)
-         if(location[cr.location]->loot[l]->is_armor())
-         {
-            Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
-            if(a->is_bloody() || a->is_damaged())
+   // Multiple passes, to find the best item to work on
+   bool dothis = false;
+   for (int passnum=0; passnum < 3 && !dothis; passnum++)
+      if(armor==NULL&&cr.location!=-1)
+         for(int l=0;l<len(location[cr.location]->loot);l++)
+            if(location[cr.location]->loot[l]->is_armor())
             {
-               armor=a;
-               pile=location[cr.location]->loot[l];
-               pilelist=&location[cr.location]->loot;
-               break;
+               Armor* a = static_cast<Armor*>(location[cr.location]->loot[l]);//cast -XML
+               switch (passnum)
+               {
+                  case 0: // Guaranteed to accomplish something
+                     dothis = (a->is_bloody() && a->is_damaged());
+                     break;
+                  case 1: // Find something to clean if low skill, repair if high
+                     dothis =  (a->is_bloody() && armor_makedifficulty(*a,&cr)>4)
+                            || (a->is_damaged() && armor_makedifficulty(*a,&cr)<=4);
+                     break;
+                  case 2: // Anything that needs work
+                     dothis = (a->is_bloody() || a->is_damaged());
+                     break;
+               }
+               if(dothis)
+               {
+                  armor=a;
+                  pile=location[cr.location]->loot[l];
+                  pileindex=l;
+                  pilelist=&location[cr.location]->loot;
+                  break;
+               }
             }
-         }
 
    if(clearformess) erase();
    else makedelimiter();
@@ -252,6 +271,7 @@ void repairarmor(Creature &cr,char &clearformess)
    }
    else
    {
+      string armorname = armor->get_name();// Get name before we maybe destroy it
       bool repairfailed=false;
       bool qualityReduction=!LCSrandom(10);
       bool armorDestroyed=!armor->decrease_quality(0);
@@ -320,7 +340,7 @@ void repairarmor(Creature &cr,char &clearformess)
       if (armorDestroyed)
          result += " ruined";
 
-      result += " " + armor->get_name() + ".";
+      result += " " + armorname + ".";
 
       addstr(result,gamelog);
       gamelog.nextMessage();
@@ -347,7 +367,7 @@ void repairarmor(Creature &cr,char &clearformess)
          }
          else // scrap from stockpile
          {
-            pile->decrease_number(1);
+            delete_and_remove(*pilelist, pileindex);
          }
       }
 
