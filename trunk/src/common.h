@@ -117,10 +117,10 @@
          #include <curses.h>
       #endif
       // Undo mvaddstr macro and re-implement as function to support overloading
-      #ifdef mvaddstr
-         #undef mvaddstr
-         inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
-      #endif
+      //#ifdef mvaddstr
+      //   #undef mvaddstr
+      //   inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
+      //#endif
    #endif
 #endif
 
