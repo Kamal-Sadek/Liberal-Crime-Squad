@@ -138,7 +138,10 @@ void alarmwait()
    struct itimerval timer_now;
    getitimer(ITIMER_REAL,&timer_now);
    //If the timer is on we will wait for it to complete...
-   if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec) pause();
+   //Make sure the usecs are at least enough that execution is sure
+   //to reach the pause before the timer expires or we will wait forever
+   //VM on netbook needed this to prevent elections from occasionally locking up.
+   if(timer_now.it_interval.tv_sec||timer_now.it_interval.tv_usec>100||timer_now.it_value.tv_sec||timer_now.it_value.tv_usec>100) pause();
    #endif
 }
 
