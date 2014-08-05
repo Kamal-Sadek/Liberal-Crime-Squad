@@ -1419,7 +1419,8 @@ char talkAboutIssues(Creature &a, Creature &tk)
          break;
       case LAW_POLLUTION:
          addstr("\"Industries that stop at nothing to become more profitable are polluting ", gamelog);move(y++,1);
-         addstr("the environment in ways that hurt not only animals, but people too.", gamelog);
+         if (tk.animalgloss==ANIMALGLOSS_ANIMAL) addstr("the environment in ways that hurt not only humans, but animals too.", gamelog);
+         else addstr("the environment in ways that hurt not only animals, but people too.", gamelog);
          break;
       case LAW_LABOR:
          addstr("\"Have you noticed how people are working more and more hours for less and ", gamelog);move(y++,1);
