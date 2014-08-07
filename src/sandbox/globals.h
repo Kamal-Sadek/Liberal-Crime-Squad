@@ -201,7 +201,7 @@ public:
    vector<locationst *>    Locations;
 
    string CityName;
-   int AttorneySeed;
+   unsigned long AttorneySeed[RNG_SIZE];
 
    template<class Archive>
    void serialize(Archive & ar, const unsigned int /* file_version */)
@@ -266,7 +266,7 @@ struct globals
       interface_pgup='[';
       interface_pgdn=']';
    }
-   int seed;
+   unsigned long seed[RNG_SIZE];
    int mode;
    class date        Date;
    class government  Government;

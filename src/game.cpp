@@ -80,7 +80,7 @@ extern char artdir[MAX_PATH_SIZE];
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 bool multipleCityMode;
-unsigned int seed;
+unsigned long seed[RNG_SIZE];
 
 vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;
@@ -133,7 +133,7 @@ short offended_amradio=0;
 short offended_cablenews=0;
 short offended_firemen=0;
 int police_heat=0;
-int attorneyseed;
+unsigned long attorneyseed[RNG_SIZE];
 int selectedsiege=-1;
 char lcityname[CITY_NAMELEN];
 char newscherrybusted=0;
@@ -269,7 +269,7 @@ int main(int argc, char* argv[])
    //initialize curses color
    start_color();
 
-   seed=getSeed();
+   initMainRNG();
 
    //initialize the array of color pairs
    for(int i=0;i<8;i++)
@@ -420,7 +420,7 @@ int main(int argc, char* argv[])
       generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
    }
 
-   attorneyseed=getSeed();
+   initOtherRNG(attorneyseed);
    strcpy(lcityname,cityname());
 
    xmllog.initialize("xmllog",true,1);
@@ -450,26 +450,6 @@ int main(int argc, char* argv[])
    end_game();
 
    return 0;
-}
-
-//picks a random number from 0 to max-1
-int LCSrandom(int max)
-{
-   r_num();
-   const long double rand_i = 2147483648UL;
-   const long double rand_y = max*((long double)seed/rand_i);
-   return (int)rand_y;
-}
-
-//sets seed to a random number from 0 to 2 billion
-int r_num()
-{
-   seed=((seed
-      #ifdef MORERANDOM
-      +getSeed()
-      #endif
-      )*907725L+99979777UL)%2147483648UL;
-   return seed;
 }
 
 /* Free memory and exit the game */

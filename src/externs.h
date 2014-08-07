@@ -12,7 +12,7 @@ extern vector<configSiteMap *> sitemaps; // stores site map info read in from co
 
 extern bool multipleCityMode;
 extern int oldMapMode;
-extern unsigned int seed;
+extern unsigned long seed[RNG_SIZE];
 extern short law[LAWNUM];
 
 extern short house[HOUSENUM];
@@ -102,7 +102,7 @@ extern short offended_amradio;
 extern short offended_cablenews;
 extern short offended_firemen;
 extern int police_heat;
-extern int attorneyseed;
+extern unsigned long attorneyseed[RNG_SIZE];
 extern int selectedsiege;
 extern char lcityname[CITY_NAMELEN];
 extern char newscherrybusted;
