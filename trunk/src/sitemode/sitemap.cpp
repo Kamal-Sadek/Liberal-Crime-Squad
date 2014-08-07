@@ -38,8 +38,9 @@ void initsite(Location &loc)
          activesquad->squad[p]->forceinc=0;
    delete_and_clear(groundloot);
    //MAKE MAP
-   int oldseed=seed;
-   seed=loc.mapseed;
+   unsigned long oldseed[RNG_SIZE];
+   copyRNG(oldseed,seed);
+   copyRNG(seed,loc.mapseed);
    // A short guide to how the new maps work...
    //
    //   Edit maps using DAME, the "Deadly Alien Map Editor". You can find a maps.dam file
@@ -386,7 +387,7 @@ void initsite(Location &loc)
          break;
       }
       //ADD ACCESSORIES
-      seed=oldseed;
+      copyRNG(seed,oldseed);
       for(    x=2;x<MAPX-2;x++)
       for(int y=2;y<MAPY-2;y++)
       for(int z=0;z<MAPZ  ;z++)
@@ -547,7 +548,7 @@ void initsite(Location &loc)
       }
    } while(acted);
    //ADD LOOT
-   seed=oldseed;
+   copyRNG(seed,oldseed);
    for(x=2;x<MAPX-2;x++)
    for(int y=2;y<MAPY-2;y++)
    for(int z=0;z<MAPZ;z++)

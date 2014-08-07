@@ -70,7 +70,7 @@ void Location::init()
    closed=0;
    mapped=0;
    highsecurity=0;
-   mapseed=seed;r_num();
+   initOtherRNG(mapseed);
    changes.clear();
    compound_walls=0;
    compound_stores=0;

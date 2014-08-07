@@ -209,17 +209,6 @@ using namespace std;
  * compat.cpp is the place for non-trivial or more global functions.
  *--------------------------------------------------------------------------*/
 
-inline unsigned int getSeed()
-{
-   unsigned int t;
-#ifdef GO_PORTABLE
-   t=(unsigned int)time(NULL); /* Seconds since 1970-01-01 00:00:00 */
-#else // WIN32
-   t=(unsigned int)GetTickCount(); /* ms since system boot */
-#endif
-   return(t);
-}
-
 /* raw_output() is provided in PDcurses/Xcurses but is not in ncurses.
   * This function is for compatibility and is currently a do nothing function.
   */
@@ -291,9 +280,15 @@ inline int raw_output(bool bf)
 
 #define MAX_PATH_SIZE 2048
 
-/* r_num() and LCSrandom() are implemented in game.cpp */
-int r_num();
-int LCSrandom(int max);
+#define RNG_SIZE 4
+
+/* These 6 random number generator functions are implemented in compat.cpp */
+unsigned long getSeed();
+unsigned long r_num();
+long LCSrandom(long max);
+void initMainRNG();
+void copyRNG(unsigned long(&dest)[RNG_SIZE],unsigned long(&src)[RNG_SIZE]);
+void initOtherRNG(unsigned long(&rng)[RNG_SIZE]);
 
 /* Determine size of vectors and any other container that implements the size() function.
    This basically includes all types of containers except for the C++11 std::forward_list. */

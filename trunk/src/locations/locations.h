@@ -247,7 +247,7 @@ public:
    char front_shortname[LOCATION_SHORTNAMELEN];
    bool haveflag;
 
-   int mapseed;
+   unsigned long mapseed[RNG_SIZE];
 
    Location(char type_, int parent_=-1);
    Location() { }

@@ -49,7 +49,7 @@ void savegame(const char *str)
       int lversion=version;
       fwrite(&lversion,sizeof(int),1,h);
 
-      fwrite(&seed,sizeof(int),1,h);
+      fwrite(seed,sizeof(unsigned long),RNG_SIZE,h);
 
       fwrite(&mode,sizeof(short),1,h);
       fwrite(&wincondition,sizeof(short),1,h);
@@ -89,7 +89,7 @@ void savegame(const char *str)
       fwrite(&offended_amradio,sizeof(short),1,h);
       fwrite(&offended_cablenews,sizeof(short),1,h);
       fwrite(&offended_firemen,sizeof(short),1,h);
-      fwrite(&attorneyseed,sizeof(int),1,h);
+      fwrite(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
       //fwrite(&selectedsiege,sizeof(long),1,h);
       fwrite(lcityname,sizeof(char),CITY_NAMELEN,h);
       fwrite(&newscherrybusted,sizeof(char),1,h);
@@ -155,7 +155,7 @@ void savegame(const char *str)
          fwrite(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fwrite(&location[l]->haveflag,sizeof(bool),1,h);
 
-         fwrite(&location[l]->mapseed,sizeof(int),1,h);
+         fwrite(location[l]->mapseed,sizeof(unsigned long),RNG_SIZE,h);
       }
 
       //VEHICLES
@@ -370,7 +370,7 @@ char load()
          return 0;
       }
 
-      fread(&seed,sizeof(unsigned int),1,h);
+      fread(seed,sizeof(unsigned long),RNG_SIZE,h);
 
       fread(&mode,sizeof(short),1,h);
       fread(&wincondition,sizeof(short),1,h);
@@ -410,7 +410,7 @@ char load()
       fread(&offended_amradio,sizeof(short),1,h);
       fread(&offended_cablenews,sizeof(short),1,h);
       fread(&offended_firemen,sizeof(short),1,h);
-      fread(&attorneyseed,sizeof(int),1,h);
+      fread(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
       //fread(&selectedsiege,sizeof(long),1,h);
       fread(lcityname,sizeof(char),CITY_NAMELEN,h);
       fread(&newscherrybusted,sizeof(char),1,h);
@@ -504,7 +504,7 @@ char load()
          fread(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
          fread(&location[l]->haveflag,sizeof(bool),1,h);
 
-         fread(&location[l]->mapseed,sizeof(int),1,h);
+         fread(location[l]->mapseed,sizeof(unsigned long),RNG_SIZE,h);
       }
 
       //VEHICLES

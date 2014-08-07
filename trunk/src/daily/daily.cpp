@@ -929,6 +929,11 @@ void advanceday(char &clearformess,char canseethings)
 
    //AGE THINGS
    day++;
+
+   int pday=day,pmonth=month; // Find out if it's next month already.
+   if(pday>monthday()) // Day counter has increased but end-of-month has not yet been
+      pday=1,pmonth=(pmonth%12)+1; // checked so it has to be accounted for here.
+
    for(p=0;p<len(pool);p++)
    {
       pool[p]->stunned=0; // For lack of a better place, make stunning expire here
@@ -978,8 +983,8 @@ void advanceday(char &clearformess,char canseethings)
             }
             if(!pool[p]->alive)continue;
          }
-         if(month==pool[p]->birthday_month&&
-            day==pool[p]->birthday_day)
+         if(pmonth==pool[p]->birthday_month&&
+            pday==pool[p]->birthday_day)
          {
             pool[p]->age++;
             switch(pool[p]->age)
