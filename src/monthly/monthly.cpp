@@ -333,8 +333,7 @@ void passmonth(char &clearformess,char canseethings)
    if(month==6){supremecourt(clearformess,canseethings);clearformess=1;}
 
    //CONGRESS
-   if(month==3){congress(clearformess,canseethings);clearformess=1;}
-   if(month==9){congress(clearformess,canseethings);clearformess=1;}
+   congress(clearformess,canseethings);clearformess=1;
 
    //DID YOU WIN?
    if(wincheck())

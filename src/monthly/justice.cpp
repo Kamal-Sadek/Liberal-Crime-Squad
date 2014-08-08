@@ -144,7 +144,7 @@ void trial(Creature &g)
             addstr(g.crimes_suspected[LAWFLAG_MURDER], gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("first degree murder", gamelog);
+         addstr("murder", gamelog);
          breaker[LAWFLAG_MURDER]=0;
       }
       else if(breaker[LAWFLAG_KIDNAPPING])
@@ -209,9 +209,9 @@ void trial(Creature &g)
             addstr(g.crimes_suspected[LAWFLAG_BROWNIES], gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("sale and distribution of a controlled substance", gamelog);
+         addstr("drug dealing", gamelog);
          breaker[LAWFLAG_BROWNIES]=0;
-         x=2;
+         //x=2;
       }
       else if(breaker[LAWFLAG_ESCAPED])
       {
@@ -267,7 +267,7 @@ void trial(Creature &g)
             addstr(g.crimes_suspected[LAWFLAG_ARMEDASSAULT], gamelog);
             addstr(" counts of ", gamelog);
          }
-         addstr("assault with a deadly weapon", gamelog);
+         addstr("felony assault", gamelog);
          breaker[LAWFLAG_ARMEDASSAULT]=0;
       }
       else if(breaker[LAWFLAG_ASSAULT])
@@ -1099,7 +1099,7 @@ void penalize(Creature &g,char lenient)
    {
       g.sentence=oldsentence;
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,1);
+      move(7,1); 
       addstr(g.propername, gamelog);
       addstr(", the court sees no need to add to your existing sentence.", gamelog);
       move(8,1);
@@ -1262,14 +1262,20 @@ char prison(Creature &g)
    if(!g.deathpenalty && g.sentence!=1)
    {
       if(law[LAW_PRISONS]==2)
+      {
          //Liberal therapy.
-         reeducation(g);
+         if(!LCSrandom(5)) reeducation(g);
+      }
       else if(law[LAW_PRISONS]==-2)
+      {
          //Labor camp.
-         laborcamp(g);
+         if(!LCSrandom(5)) laborcamp(g);
+      }
       else
+      {
          //Normal prison.
          if(!LCSrandom(5)) prisonscene(g);
+      }
    }
 
    if(g.sentence>0)
@@ -1500,6 +1506,32 @@ void reeducation(Creature &g)
 
 void laborcamp(Creature &g)
 {
+   int escaped = 0;
+   int effect = 0;
+   const char *experience;
+   // Escape attempt!
+   if(g.hireid == -1 && !LCSrandom(3))
+   {
+      escaped = 2;
+      experience = " leads the oppressed prisoners and overwhelms the prison guards!";
+   }
+   else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " wears an electrician's outfit and rides away with some contractors.";
+      g.give_armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")],NULL);
+   }
+   else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " picks the lock on their leg chains and then sneaks away!";
+   }
+   else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " consumes drugs that simulate death, and is thrown out with the trash!";
+   }
+
 	static const char *labor_camp_experiences[] =
 	{
 		" is forced to operate dangerous machinery in prison.",
@@ -1511,17 +1543,53 @@ void laborcamp(Creature &g)
 		" participates in a quickly-suppressed prison riot."
 	};
 
+   if(!escaped)experience=pickrandom(labor_camp_experiences);
+
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(8,1);
    addstr(g.name, gamelog);
-   addstr(pickrandom(labor_camp_experiences), gamelog);
+   addstr(experience, gamelog);
    gamelog.newline();
 
    getkey();
 
    move(10,1);
-   if(!LCSrandom(4))
+   if(escaped)
+   {
+      int prison = g.location;
+      addstr(g.name, gamelog);
+      addstr(" escaped from prison!", gamelog);
+      addjuice(g,50,1000);
+      criminalize(g, LAWFLAG_ESCAPED);
+      g.location = find_homeless_shelter(g);
+
+      if(escaped = 2)
+      {
+         int num_escaped = 0;
+         char* message;
+         for(int p=0;p<pool.size();p++)
+         {
+            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               criminalize(*pool[p], LAWFLAG_ESCAPED);
+               pool[p]->location = g.location;
+               num_escaped++;
+            }
+         }
+         if(num_escaped == 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
+         }
+         else if(num_escaped > 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+         }
+      }
+   }
+   else if(!LCSrandom(4))
    {
       if(g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
       {
@@ -1554,7 +1622,41 @@ void laborcamp(Creature &g)
 }
 
 void prisonscene(Creature &g)
-{  // this previously empty function is mostly just flavor text for now and hardly does any changes, just some minor modification of juice
+{
+   int escaped = 0;
+   int effect = 0;
+   const char *experience;
+   if(g.juice + int(g.hireid==-1)*300 > 500)
+   {
+      // Escape attempt!
+      if(g.hireid == -1 && !LCSrandom(10))
+      {
+         escaped = 2;
+         experience = " leads a riot with dozens of prisoners chanting the LCS slogan!";
+      }
+      else if(g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
+      {
+         escaped = 2;
+         experience = " codes a virus on a smuggled phone that opens all the prison doors!";
+      }
+      else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " puts on smuggled street clothes and calmly walks out of prison.";
+         g.give_armor(*armortype[getarmortype("ARMOR_CLOTHES")],NULL);
+      }
+      else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " jimmies the cell door and cuts the outer fence in the dead of night!";
+      }
+      else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
+      }
+   }
+
    static const char *good_experiences[] =
    {
       " advertises the LCS every day to other inmates.",
@@ -1580,19 +1682,20 @@ void prisonscene(Creature &g)
 	   " constantly tries thinking how to escape from prison."
 	};
 
-   int effect;
-   const char *experience;
-   if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
-      effect = 1;
-      if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
-      else experience = pickrandom(general_experiences);
-   } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
-      effect = 0;
-      experience = pickrandom(general_experiences);
-   } else {
-      effect = -1;
-      if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
-      else experience = pickrandom(general_experiences);
+   if(escaped==0)
+   {
+      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
+         effect = 1;
+         if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
+         else experience = pickrandom(general_experiences);
+      } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
+         effect = 0;
+         experience = pickrandom(general_experiences);
+      } else {
+         effect = -1;
+         if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
+         else experience = pickrandom(general_experiences);
+      }
    }
 
    erase();
@@ -1605,17 +1708,51 @@ void prisonscene(Creature &g)
    getkey();
 
    move(10,1);
-   if(effect > 0)
+   if(escaped)
+   {
+      int prison = g.location;
+      addstr(g.name, gamelog);
+      addstr(" escaped from prison!", gamelog);
+      addjuice(g,50,1000);
+      criminalize(g, LAWFLAG_ESCAPED);
+      g.location = find_homeless_shelter(g);
+
+      if(escaped = 2)
+      {
+         int num_escaped = 0;
+         char* message;
+         for(int p=0;p<pool.size();p++)
+         {
+            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               criminalize(*pool[p], LAWFLAG_ESCAPED);
+               pool[p]->location = g.location;
+               num_escaped++;
+            }
+         }
+         if(num_escaped == 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
+         }
+         else if(num_escaped > 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+         }
+      }
+   }
+   else if(effect > 0)
    {
       addstr(g.name, gamelog);
       addstr(" has become a more hardened, Juicier criminal.", gamelog);
-      addjuice(g,10,200); // very little change, since this function was empty until recently, not doing anything too radical here
+      addjuice(g,20,1000);
    }
    else if(effect < 0)
    {
       addstr(g.name, gamelog);
       addstr(" is kinda losing it in here. Juice, that is.", gamelog);
-      addjuice(g,-10,-30); // very little change, since this function was empty until recently, not doing anything too radical here
+      addjuice(g,-20,-30);
    }
    else
    {

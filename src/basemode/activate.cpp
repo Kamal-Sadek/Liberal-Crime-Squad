@@ -600,7 +600,7 @@ void activate(Creature *cr)
          addstr(cr->name);
          addstr(" will help the elderly, local library, anything");
          move(23,1);
-         addstr("  that is liberal.");
+         addstr("  that is Liberal.");
          break;
       case ACTIVITY_TROUBLE:
          move(22,3);
