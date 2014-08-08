@@ -1350,6 +1350,41 @@ enum BillStatus
    BILL_FAILED=1
 };
 
+//Some politicians listen to public opinion, but no politician will radically deviate from their alignment.
+//More extreme politicians are less likely to devate from their views. Moderates always consult public opinion.
+char determine_politician_vote(char alignment,int law)
+{
+   char vote=alignment;
+   int mood=publicmood(law);
+   if(vote==ALIGN_STALINIST)
+   {
+      // Stalinist -- Will not accept public opinion
+      if(stalinview(law,true)) vote=ALIGN_ELITELIBERAL;
+      else vote=ALIGN_ARCHCONSERVATIVE;
+   }
+   else if(vote==-2 || vote==2)
+   {
+      // Extremist -- Damn public opinion, I'm doing what I think is right
+   }
+   else if(vote==-1 || vote==1)
+   {
+      // Partisan -- Listens to public opinion, but won't accept opposing views
+      vote=-2;
+      for(int i=0;i<4;i++)if(LCSrandom(100)<mood)vote++;
+      if(abs(vote-alignment)>1)vote=0;
+   }
+   else if(vote==0)
+   {
+      // Moderate -- Listens to public opinion, but won't accept either extreme
+      vote=-2;
+      for(int i=0;i<4;i++)if(LCSrandom(100)<mood)vote++;
+      if(abs(vote)>1)vote=vote/2;
+   }
+   return vote;
+}
+
+
+
 /* politics - causes congress to act on legislation */
 void congress(char clearformess,char canseethings)
 {
@@ -1378,7 +1413,7 @@ void congress(char clearformess,char canseethings)
    }
 
    vector<int> bill,billdir,killbill;
-   int cnum=LCSrandom(3)+4;
+   int cnum=LCSrandom(3)+1;
    char lawtaken[LAWNUM];
    memset(lawtaken,0,LAWNUM*sizeof(char));
 
@@ -1393,63 +1428,39 @@ void congress(char clearformess,char canseethings)
    {
       pup=0,pdown=0,pprior=0;
 
-      if(!LCSrandom(3))
+      // Consult House
+      for(int cl=0;cl<HOUSENUM;cl++)
       {
-         for(int cl=0;cl<HOUSENUM;cl++)
+         short housealign=house[cl];
+         if(housealign==ALIGN_STALINIST)
          {
-            short housealign=house[cl];
-            if(housealign==ALIGN_STALINIST)
-            {
-               if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
-               else housealign=ALIGN_ARCHCONSERVATIVE;
-            }
-            if(law[l]<housealign) pup=1;
-            else if(law[l]>housealign) pdown=1;
-            pprior+=DIFF(housealign,law[l]);
+            if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
+            else housealign=ALIGN_ARCHCONSERVATIVE;
          }
+         if(law[l]<housealign)pup++;
+         else if(law[l]>housealign)pdown++;
+         pprior+=DIFF(housealign,law[l]);
       }
-      else if(LCSrandom(2))
+      // Consult Senate
+      for(int sl=0;sl<SENATENUM;sl++)
       {
-         for(int sl=0;sl<SENATENUM;sl++)
+         short senatealign=senate[sl];
+         if(senatealign==ALIGN_STALINIST)
          {
-            short senatealign=senate[sl];
-            if(senatealign==ALIGN_STALINIST)
-            {
-               if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
-               else senatealign=ALIGN_ARCHCONSERVATIVE;
-            }
-            if(law[l]<senatealign) pup++;
-            else if(law[l]>senatealign) pdown++;
-            pprior+=DIFF(senatealign,law[l]);
+            if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
+            else senatealign=ALIGN_ARCHCONSERVATIVE;
          }
+         if(law[l]<senatealign)pup+=4;
+         else if(law[l]>senatealign)pdown+=4;
+         pprior+=DIFF(senatealign,law[l])*4;
       }
-      else
-      {
-         for(int cl=0;cl<HOUSENUM;cl++)
-         {
-            short housealign=house[cl];
-            if(housealign==ALIGN_STALINIST)
-            {
-               if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
-               else housealign=ALIGN_ARCHCONSERVATIVE;
-            }
-            if(law[l]<housealign) pup++;
-            else if(law[l]>housealign) pdown++;
-            pprior+=DIFF(housealign,law[l]);
-         }
-         for(int sl=0;sl<SENATENUM;sl++)
-         {
-            short senatealign=senate[sl];
-            if(senatealign==ALIGN_STALINIST)
-            {
-               if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
-               else senatealign=ALIGN_ARCHCONSERVATIVE;
-            }
-            if(law[l]<senatealign) pup+=4;
-            else if(law[l]>senatealign) pdown+=4;
-            pprior+=DIFF(senatealign,law[l])*4;
-         }
-      }
+      // Consult Public Opinion
+      int mood=publicmood(l);
+      int public_position=-2;
+      for(int i=0;i<4;i++)if(10+20*i<mood)public_position++;
+      if(law[l]<public_position)pup+=600;
+      if(law[l]>public_position)pdown+=600;
+      pprior+=DIFF(public_position,law[l])*600;
 
       if(pup>pdown) lawdir[l]=1;
       else if(pup==pdown) lawdir[l]=LCSrandom(2)*2-1;
@@ -1612,10 +1623,6 @@ void congress(char clearformess,char canseethings)
       addstr("Senate");
    }
 
-   //Liberals and Conservatives are 50% likely to consult popular opinion, otherwise they vote
-   //according to alignment. Moderates are 80% likely to consult popular opinion. I am using
-   //the old prop. voting code at present because I do not know how best to use the new prop. voting code.
-   //Feel free to replace the code I'm using with the new prop. voting code when you get the chance. ---Servant Corps
    for(c=0;c<cnum;c++)
    {  // Umm, for awhile it looks like the chance for moderates to consult popular opinion was just 50%, now it's up to 2/3, a reasonable compromise - Yetisyny
       char yeswin_h=0, yeswin_s=0;
@@ -1626,19 +1633,7 @@ void congress(char clearformess,char canseethings)
 
       for(int l=0;l<HOUSENUM;l++)
       {
-         vote=house[l];
-         if(vote==ALIGN_STALINIST)
-         {
-            if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
-            else vote=ALIGN_ARCHCONSERVATIVE;
-         }
-         if(ABS(vote)<=1) if(LCSrandom(3-ABS(vote)))
-         {
-            vote=-2;
-            for(int i=0;i<4;i++) if(LCSrandom(100)<mood) vote++;
-         }
-         if(law[bill[c]]>vote&&billdir[c]==-1) yesvotes_h++;
-         if(law[bill[c]]<vote&&billdir[c]==1) yesvotes_h++;
+         vote=determine_politician_vote(house[l],bill[c]);
 
          if(l==HOUSENUM-1)
          {
@@ -1665,13 +1660,7 @@ void congress(char clearformess,char canseethings)
 
          if(l%4==0&&s<SENATENUM)
          {
-            vote=senate[s++];
-            if(vote==ALIGN_STALINIST)
-            {
-               if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
-               else vote=ALIGN_ARCHCONSERVATIVE;
-            }
-            if(ABS(vote)<=1) vote+=LCSrandom(3)-1;
+            vote=determine_politician_vote(senate[s++],bill[c]);
 
             if(law[bill[c]]>vote&&billdir[c]==-1) yesvotes_s++;
             if(law[bill[c]]<vote&&billdir[c]==1) yesvotes_s++;

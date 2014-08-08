@@ -139,8 +139,8 @@ void siegecheck(char canseethings)
             // Accumulate heat from liberals who have it, but let them bleed it off in the process
             if(pool[p]->heat > 0)
             {
-               pool[p]->heat -= 1;
                crimes += pool[p]->heat/10 + 1;
+               pool[p]->heat -= MIN(4,pool[p]->heat);
             }
          }
 
