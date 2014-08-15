@@ -825,14 +825,14 @@ void setvehicles()
 
       for(l=page*18;l<len(vehicle)&&l<page*18+18;l++)
       {
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         bool this_squad=false,another_squad=false;
          for(p=0;p<6;p++)
          {
             if(activesquad->squad[p]==NULL) continue;
             if(activesquad->squad[p]->alive&&
                activesquad->squad[p]->pref_carid==vehicle[l]->id())
             {
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
+               this_squad=true;
                break;
             }
          }
@@ -841,10 +841,19 @@ void setvehicles()
             if(pool[p]->squadid!=-1&&pool[p]->alive&&
                pool[p]->pref_carid==vehicle[l]->id()&&pool[p]->squadid!=activesquad->id)
             {
-               set_color(COLOR_YELLOW,COLOR_BLACK,1);
+               another_squad=true;
                break;
             }
          }
+
+         if(this_squad&&another_squad)
+            set_color(COLOR_RED,COLOR_BLACK,1);
+         else if(another_squad)
+            set_color(COLOR_YELLOW,COLOR_BLACK,1);
+         else if(this_squad)
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
 
          str[0]=l-page*18+'A';
          str[1]='\x0';
@@ -857,6 +866,7 @@ void setvehicles()
          if(x>53) x=1,y++;
       }
 
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
       //PAGE UP
       if(page>0)
       {
@@ -870,12 +880,12 @@ void setvehicles()
          addnextpagestr();
       }
 
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
       mvaddstr(18,1,"Press a letter to specify passengers for that Liberal vehicle");
       mvaddstr(19,1,"Capitalize the letter to designate a driver.");
       mvaddstr(20,1,"Press a number to remove that squad member from a vehicle.");
       mvaddstr(21,1,"Note:  Vehicles in yellow have already been selected by another squad");
-      mvaddstr(22,1,"       These cars may be used by both squads but not on the same day.");
+      mvaddstr(22,1,"       Vehicles in red have been selected by both this squad and another");
+      mvaddstr(23,1,"       These cars may be used by both squads but not on the same day.");
       mvaddstr(24,1,"Enter - Done");
 
       int c=getkey_cap();
