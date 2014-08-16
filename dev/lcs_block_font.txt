@@ -167,10 +167,10 @@ versions I think are best for using in the game).
 ‹ €
 ﬂ€ﬂ
 
-€  €
-€‹€ﬂ
-€ﬂ€‹
-€  €
+€ ‹€
+€€ﬂ 
+€€‹ 
+€ ﬂ€
 
 €  
 €  
@@ -261,8 +261,8 @@ main font, just as other possibilities.
 Thinner variants of K and V (3 characters wide instead of 4):
 
 € €
-€‹›
-€ﬂ›
+€€ﬂ
+€€‹
 € €
 
 € €
