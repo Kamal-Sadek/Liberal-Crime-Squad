@@ -149,7 +149,11 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
             d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM,-1);
             d.date[e]->adjust_attribute(ATTRIBUTE_HEART,+1);
          }
-         //Posibly date reveals map of location
+         else if(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)>3)
+         {
+            d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM,-1);
+         }
+         //Possibly date reveals map of location
          else if(location[d.date[e]->worklocation]->mapped==0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)))
          {
             y++;
@@ -332,6 +336,13 @@ char completevacation(datest &d,int p,char &clearformess)
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
    pool[p]->train(SKILL_SEDUCTION,LCSrandom(11)+15);
+   
+   for(int s=0;s<SKILLNUM;s++)
+      if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
+         //Has a skill that is at least half the same skill of the other person on the date.
+         if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2)
+            thingsincommon++;
+   aroll += thingsincommon*3;
 
    pool[p]->train(SKILL_SCIENCE,
       max(d.date[e]->get_skill(SKILL_SCIENCE)-pool[p]->get_skill(SKILL_SCIENCE),0));
