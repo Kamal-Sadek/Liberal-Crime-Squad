@@ -52,30 +52,48 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 
       getkey();
 
-      if(LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_HEART,false)+(aroll-troll)/2)>d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false))
+      if(loveslavesleft(*pool[p]) <= 0)
       {
-         if(loveslavesleft(*pool[p]) <= 0)
-         {
-            set_color(COLOR_RED,COLOR_BLACK,1);
+         set_color(COLOR_YELLOW,COLOR_BLACK,1);
 
-            move(y++,0);
-            addstr("But when ", gamelog);
-            addstr(pool[p]->name, gamelog);
-            addstr(" mentions having other lovers, things go downhill fast.", gamelog);
-            gamelog.newline();
-
-            getkey();
-
-            move(y++,0);
-            addstr("This relationship is over.", gamelog);
-            gamelog.nextMessage();
-
-            getkey();
-
-            delete_and_remove(d.date,e);
-
-            return DATERESULT_BREAKUP;
+         move(y++,0);
+         addstr("But ", gamelog);
+         addstr(pool[p]->name, gamelog);
+         addstr(" is already dating ", gamelog);
+         int num_relationships = loveslaves(*pool[p]);
+         if(pool[p]->flag & CREATUREFLAG_LOVESLAVE) num_relationships++;
+         if(num_relationships == 1) addstr("someone!", gamelog);
+         else {
+            char str[5];
+            itoa(num_relationships, str, 10);
+            addstr(str, gamelog);
+            addstr(" people!", gamelog);
          }
+         gamelog.newline();
+         move(y++,0);
+         addstr(pool[p]->name, gamelog);
+         addstr(" isn't seductive enough to juggle ", gamelog);
+         if(num_relationships == 1) addstr("another", gamelog);
+         else addstr("yet another", gamelog);
+         addstr(" relationship.", gamelog);
+         gamelog.newline();
+
+         getkey();
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+         move(y++,0);
+         addstr("It was fun though. They agree to part ways amicably.", gamelog);
+         gamelog.nextMessage();
+
+         getkey();
+
+         delete_and_remove(d.date,e);
+
+         return DATERESULT_BREAKUP;
+      }
+
+      if(LCSrandom((aroll-troll)/2)>d.date[e]->get_attribute(ATTRIBUTE_WISDOM,true))
+      {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(y,0);y++;
          addstr("In fact, ", gamelog);
@@ -120,36 +138,42 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       }
       else
       {
-         if(d.date[e]->get_attribute(ATTRIBUTE_HEART,false)<pool[p]->get_attribute(ATTRIBUTE_HEART,false)-4)
-            d.date[e]->adjust_attribute(ATTRIBUTE_HEART,+1);
-         else
+         if(d.date[e]->align == ALIGN_CONSERVATIVE && d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)>3)
          {
-            //Posibly date reveals map of location
-            if(location[d.date[e]->worklocation]->mapped==0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)))
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            y++;
+            move(y++,0);
+            addstr(s+pool[p]->name+" is slowly warming "+d.date[e]->name+"'s frozen Conservative heart.", gamelog);
+            gamelog.newline();
+            move(y++,0);
+            d.date[e]->adjust_attribute(ATTRIBUTE_WISDOM,-1);
+            d.date[e]->adjust_attribute(ATTRIBUTE_HEART,+1);
+         }
+         //Posibly date reveals map of location
+         else if(location[d.date[e]->worklocation]->mapped==0 && !LCSrandom(d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)))
+         {
+            y++;
+            move(y++,0);
+            addstr(s+d.date[e]->name+" turns the topic of discussion to the "
+               +location[d.date[e]->worklocation]->name+".", gamelog);
+            gamelog.newline();
+            move(y++,0);
+            if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
             {
-               y++;
-               move(y++,0);
-               addstr(s+d.date[e]->name+" turns the topic of discussion to the "
-                  +location[d.date[e]->worklocation]->name+".", gamelog);
+               addstr(pool[p]->name, gamelog);
+               addstr(" was able to create a map of the site with this information.", gamelog);
                gamelog.newline();
-               move(y++,0);
-               if(!(location[d.date[e]->worklocation]->type<=SITE_RESIDENTIAL_SHELTER))
-               {
-                  addstr(pool[p]->name, gamelog);
-                  addstr(" was able to create a map of the site with this information.", gamelog);
-                  gamelog.newline();
-                  y++;
-               }
-               else
-               {
-                  addstr(pool[p]->name, gamelog);
-                  addstr(" knows all about that already.", gamelog);
-                  gamelog.newline();
-                  y++;
-               }
-               location[d.date[e]->worklocation]->mapped=1;
-               location[d.date[e]->worklocation]->hidden=0;
+               y++;
             }
+            else
+            {
+               addstr(pool[p]->name, gamelog);
+               addstr(" knows all about that already.", gamelog);
+               gamelog.newline();
+               y++;
+            }
+            location[d.date[e]->worklocation]->mapped=1;
+            location[d.date[e]->worklocation]->hidden=0;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -523,8 +547,8 @@ char completedate(datest &d,int p,char &clearformess)
       int thingsincommon = 0;
       for(int s=0;s<SKILLNUM;s++)
          if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
-            //Has a skill that is between double and half the same skill of the other person on the date.
-            if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2 && d.date[e]->get_skill(s)*2>=pool[p]->get_skill(s))
+            //Has a skill that is at least half the same skill of the other person on the date.
+            if (d.date[e]->get_skill(s)<=pool[p]->get_skill(s)*2)
                thingsincommon++;
       while(true)
       {

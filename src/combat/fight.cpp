@@ -2051,6 +2051,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
             t.stunned=0;
 
             liberalize(t);
+            t.infiltration/=2;
             t.flag|=CREATUREFLAG_CONVERTED;
             t.cantbluff=0;
          }
