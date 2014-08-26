@@ -474,7 +474,7 @@ void makearmor(Creature &cr,char &clearformess)
             }
             location[cr.location]->loot.push_back(it);
          }
-         else 
+         else
          {
             addstr(" wasted the materials for a", gamelog);
          }
@@ -2408,6 +2408,7 @@ void doActivityBury(vector<Creature *> &bury, char &clearformess)
 /* steal a car */
 bool stealcar(Creature &cr,char &clearformess)
 {
+   music.play(MUSIC_CARTHEFT);
    clearformess=1;
 
    short cartype;

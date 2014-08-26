@@ -31,6 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)
 {
+   music.play(MUSIC_TRIAL);
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
    if(location[g.base]->renting<0) g.base=find_homeless_shelter(g);
@@ -1099,7 +1100,7 @@ void penalize(Creature &g,char lenient)
    {
       g.sentence=oldsentence;
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,1); 
+      move(7,1);
       addstr(g.propername, gamelog);
       addstr(", the court sees no need to add to your existing sentence.", gamelog);
       move(8,1);
@@ -1507,7 +1508,6 @@ void reeducation(Creature &g)
 void laborcamp(Creature &g)
 {
    int escaped = 0;
-   int effect = 0;
    const char *experience;
    // Escape attempt!
    if(g.hireid == -1 && !LCSrandom(3))
@@ -1564,11 +1564,10 @@ void laborcamp(Creature &g)
       criminalize(g, LAWFLAG_ESCAPED);
       g.location = find_homeless_shelter(g);
 
-      if(escaped = 2)
+      if(escaped==2)
       {
          int num_escaped = 0;
-         char* message;
-         for(int p=0;p<pool.size();p++)
+         for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
             {
@@ -1717,11 +1716,10 @@ void prisonscene(Creature &g)
       criminalize(g, LAWFLAG_ESCAPED);
       g.location = find_homeless_shelter(g);
 
-      if(escaped = 2)
+      if(escaped==2)
       {
          int num_escaped = 0;
-         char* message;
-         for(int p=0;p<pool.size();p++)
+         for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
             {

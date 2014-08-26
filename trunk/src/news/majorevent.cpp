@@ -1720,6 +1720,7 @@ void run_television_news_stories()
             switch(newsstory[n]->view)
             {
                case VIEW_POLICEBEHAVIOR:
+                  music.play(MUSIC_LACOPS);
                   movie.loadmovie("lacops.cmv");
                   movie.playmovie(0,0);
 
@@ -1741,6 +1742,7 @@ void run_television_news_stories()
                   break;
                case VIEW_CABLENEWS:
                {
+                  music.play(MUSIC_NEWSCAST);
                   char str[80];
                   strcpy(str,"Tonight on a Cable News channel: ");
                   switch(LCSrandom(5))
@@ -1818,6 +1820,7 @@ void run_television_news_stories()
             switch(newsstory[n]->view)
             {
                case VIEW_CEOSALARY:
+                  music.play(MUSIC_GLAMSHOW);
                   movie.loadmovie("glamshow.cmv");
                   movie.playmovie(0,0);
 
@@ -1838,6 +1841,7 @@ void run_television_news_stories()
                   del=1;
                   break;
                case VIEW_CABLENEWS:
+                  music.play(MUSIC_ANCHOR);
                   movie.loadmovie("anchor.cmv");
                   movie.playmovie(0,0);
 
@@ -1858,6 +1862,7 @@ void run_television_news_stories()
                   del=1;
                   break;
                case VIEW_WOMEN:
+                  music.play(MUSIC_ABORT);
                   erase();
 
                   movie.loadmovie("abort.cmv");

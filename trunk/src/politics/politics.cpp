@@ -133,6 +133,7 @@ void fillCabinetPost(int position)
 /* politics - causes the people to vote (presidential, congressional, propositions) */
 void elections(char clearformess,char canseethings)
 {
+   music.play(MUSIC_ELECTIONS);
    int l,p,c;
 
    if(canseethings)
@@ -621,6 +622,7 @@ void elections(char clearformess,char canseethings)
 
 void elections_senate(int senmod,char canseethings)
 {
+   music.play(MUSIC_ELECTIONS);
    int mood=publicmood(LAW_MOOD);
    int stalinmood=publicmood(LAW_STALIN);
    if(canseethings)
@@ -787,6 +789,7 @@ void elections_senate(int senmod,char canseethings)
 
 void elections_house(char canseethings)
 {
+   music.play(MUSIC_ELECTIONS);
    int mood=publicmood(LAW_MOOD);
    int stalinmood=publicmood(LAW_STALIN);
    if(canseethings)
@@ -1012,6 +1015,7 @@ void elections_house(char canseethings)
 /* politics - causes the supreme court to hand down decisions */
 void supremecourt(char clearformess,char canseethings)
 {
+   music.play(MUSIC_ELECTIONS);
    int c;
    if(canseethings)
    {
@@ -1388,6 +1392,7 @@ char determine_politician_vote(char alignment,int law)
 /* politics - causes congress to act on legislation */
 void congress(char clearformess,char canseethings)
 {
+   music.play(MUSIC_ELECTIONS);
    int l, c;
    if(canseethings)
    {
@@ -1628,7 +1633,7 @@ void congress(char clearformess,char canseethings)
       char yeswin_h=0, yeswin_s=0;
       int yesvotes_h=0, yesvotes_s=0;
 
-      int mood=publicmood(bill[c]);    //A bubblygummy fix that may just work, at least compiles now --KViiri
+      //int mood=publicmood(bill[c]);    //A bubblygummy fix that may just work, at least compiles now --KViiri
       int vote, s=0;
 
       for(int l=0;l<HOUSENUM;l++)

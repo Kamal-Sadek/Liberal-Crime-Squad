@@ -87,6 +87,7 @@ void mode_site(short loc)
 
    if(!location[loc]->siege.siege)
    {
+      music.play(MUSIC_SITEMODE);
       ccs_siege_kills=0;
       ccs_boss_kills=0;
 
@@ -116,6 +117,7 @@ void mode_site(short loc)
    }
    else
    {
+      music.play(MUSIC_SIEGE);
       sitealarm=1;
 
       location[loc]->siege.attacktime=0;
@@ -336,12 +338,14 @@ void mode_site()
                else addstr(": POLICE RESPONDING");
                break;
             }
+            music.play(MUSIC_SIEGE);
          }
-         else if(postalarmtimer>60)addstr(": CONSERVATIVE REINFORCEMENTS INCOMING");
-         else if(sitealienate==1)addstr(": ALIENATED MASSES");
-         else if(sitealienate==2)addstr(": ALIENATED EVERYONE");
-         else if(sitealarm)addstr(": CONSERVATIVES ALARMED");
-         else if(sitealarmtimer==0)addstr(": CONSERVATIVES SUSPICIOUS");
+         else if(postalarmtimer>60) { addstr(": CONSERVATIVE REINFORCEMENTS INCOMING"); music.play(MUSIC_ALARMED); }
+         else if(sitealienate==1) { addstr(": ALIENATED MASSES"); music.play(MUSIC_ALARMED); }
+         else if(sitealienate==2) { addstr(": ALIENATED EVERYONE"); music.play(MUSIC_ALARMED); }
+         else if(sitealarm) { addstr(": CONSERVATIVES ALARMED"); music.play(MUSIC_ALARMED); }
+         else if(sitealarmtimer==0) { addstr(": CONSERVATIVES SUSPICIOUS"); music.play(MUSIC_SUSPICIOUS); }
+         else music.play(MUSIC_SITEMODE);
       }
 
       //PRINT PARTY
@@ -1568,7 +1572,9 @@ void mode_site()
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(10,1);
-            addstr("[ ] A - Encounter warnings");
+            addstr("[ ] E - Encounter warnings");
+            move(11,1);
+            addstr("[ ] M - Music");
 
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(24,1);
@@ -1577,12 +1583,17 @@ void mode_site()
             int c=0;
             while(true)
             {
-               if(c=='a') encounterwarnings=!encounterwarnings;
+               if(c=='e') encounterwarnings=!encounterwarnings;
+               if(c=='m') music.enableIf(!music.isEnabled());
 
                if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)break;
 
                move(10,2);
                if(encounterwarnings)
+                  addstr("X");
+               else addstr(" ");
+               move(11,2);
+               if(music.isEnabled())
                   addstr("X");
                else addstr(" ");
 

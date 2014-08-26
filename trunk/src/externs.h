@@ -3,10 +3,15 @@
 
 #include <includes.h>
 
+extern char homedir[MAX_PATH_SIZE];
+extern char artdir[MAX_PATH_SIZE];
+
 extern CursesMoviest movie;
 extern unsigned char bigletters[27][5][7][4];
 extern unsigned char newstops[6][80][5][4];
 extern unsigned char newspic[20][78][18][4];
+
+extern MusicClass music;
 
 extern vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
@@ -58,7 +63,7 @@ extern int sitecrime;
 extern short cursite;
 extern bool mapshowing;
 
-extern char encounterwarnings;
+extern bool encounterwarnings;
 
 extern char foughtthisround;
 

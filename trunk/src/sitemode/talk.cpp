@@ -1154,6 +1154,15 @@ char doYouComeHereOften(Creature &a, Creature &tk)
             addstr("\"I'm a happily married man, sweetie.\"", gamelog);
          else addstr("\"This ain't Brokeback Mountain, son.\"", gamelog);
       }
+      else if(law[LAW_FREESPEECH]==-2)
+      {
+         switch(line)
+         {  // all 3 of these lines are from Darth Vader (the 3rd one from back when he's a little kid)
+            case 0:addstr("\"I find your lack of faith disturbing.\"", gamelog);break;
+            case 1:addstr("\"No.  I am your father.\"", gamelog);break;
+            case 2:addstr("\"Don't count on it, slimeball!\"", gamelog);break;
+         }
+      }
       else
       {
          switch(line)
@@ -1212,7 +1221,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
             addstr(" <reaches for ray gun>", gamelog);break;
          case 17: addstr("\"Not after I do this.\"", gamelog);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            addstr(" <pisses pants>", gamelog);break;
+            addstr(" <shits pants>", gamelog);break;
          case 18: addstr("\"Yes, I can't stand liars.\"", gamelog);
             set_color(COLOR_WHITE,COLOR_BLACK,1);
             addstr(" <crosses flabby arms>", gamelog);break;

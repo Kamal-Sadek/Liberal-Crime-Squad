@@ -31,6 +31,7 @@ This file is part of Liberal Crime Squad.                                       
 /* select new game options */
 void setup_newgame()
 {
+   music.play(MUSIC_NEWGAME);
    bool classicmode   = false;
    bool strongccs     = false;
    bool nightmarelaws = false;

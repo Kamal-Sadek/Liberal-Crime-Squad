@@ -72,6 +72,7 @@ bool chasesequence()
    }
 
    mode=GAMEMODE_CHASECAR;
+   music.play(MUSIC_CARCHASE);
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -396,6 +397,7 @@ bool footchase()
    if(chasenum==0)return 1;
 
    mode=GAMEMODE_CHASEFOOT;
+   music.play(MUSIC_FOOTCHASE);
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);

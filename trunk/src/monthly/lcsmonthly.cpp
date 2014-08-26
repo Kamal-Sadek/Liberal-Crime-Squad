@@ -691,6 +691,7 @@ void printnews(short li,short newspaper)
 void fundreport(char &clearformess)
 {
    if(disbanding) return;
+   music.play(MUSIC_FINANCES);
 
    clearformess=true;
 
@@ -946,7 +947,10 @@ void fundreport(char &clearformess)
             int c=getkey();
 
             if(c=='x'||c==ENTER||c==ESC||c==SPACEBAR)
+            {
+               music.play(MUSIC_PREVIOUS);
                return;
+            }
 
             //PAGE UP
             if(c==interface_pgup||c==KEY_UP||c==KEY_LEFT) { page--; if(page<0) page=numpages-1; break; }
@@ -960,6 +964,7 @@ void fundreport(char &clearformess)
 
          getkey();
 
+         music.play(MUSIC_PREVIOUS);
          return;
       }
    }

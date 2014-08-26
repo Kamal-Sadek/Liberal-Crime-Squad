@@ -15,6 +15,9 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
+// uncomment this next line if you want to disable SDL (which is for music/sound)
+//#define DONT_INCLUDE_SDL
+
 /* some compilers sometimes define _WIN32 but not WIN32 on Windows, but LCS usually
    just checks if WIN32's defined, so the next couple lines fix that so it works */
 #ifdef _WIN32
@@ -189,6 +192,11 @@
 #undef STRICT_ANSI_TEMP_OFF
 #endif /* this is also the end of the hack, now the compiler is back to the mode it was in before */
 #endif
+
+#ifndef DONT_INCLUDE_SDL
+#include "sdl/SDL.h"
+#include "sdl/SDL_mixer.h"
+#endif // DONT_INCLUDE_SDL
 
 #ifndef WIN32_PRE_DOTNET
 using namespace std;

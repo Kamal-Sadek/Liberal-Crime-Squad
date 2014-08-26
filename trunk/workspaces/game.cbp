@@ -13,63 +13,28 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
-					<Add option="-Og" />
 					<Add option="-g" />
-					<Add directory="../src" />
-					<Add directory="../src/pdcurses" />
+					<Add option="-Og" />
 				</Compiler>
 				<Linker>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
 					<Add option="-Og" />
 					<Add option="-g" />
-					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>
-			<Target title="'Debug' (small size)">
+			<Target title="&apos;Debug&apos; (small size)">
 				<Option output="Debug/crimesquad.exe" prefix_auto="0" extension_auto="0" />
 				<Option working_dir=".." />
 				<Option object_output="Debug/obj" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
-					<Add option="-Os" />
 					<Add option="-fomit-frame-pointer" />
-					<Add directory="../src" />
-					<Add directory="../src/pdcurses" />
+					<Add option="-Os" />
 				</Compiler>
 				<Linker>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
+					<Add option="-s" />
 					<Add option="-Os" />
 					<Add option="-fomit-frame-pointer" />
-					<Add option="-s" />
-					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>
 			<Target title="Release (fast)">
@@ -79,33 +44,50 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
-					<Add option="-Ofast" />
 					<Add option="-fomit-frame-pointer" />
-					<Add directory="../src" />
-					<Add directory="../src/pdcurses" />
+					<Add option="-Ofast" />
 				</Compiler>
 				<Linker>
-					<Add option="-Wall" />
-					<Add option="-std=c++98" />
-					<Add option="-pedantic" />
-					<Add option="-m32" />
-					<Add option="-mfpmath=sse" />
-					<Add option="-march=pentium3" />
-					<Add option="-mtune=generic" />
+					<Add option="-s" />
 					<Add option="-Ofast" />
 					<Add option="-fomit-frame-pointer" />
-					<Add option="-s" />
-					<Add library="..\src\pdcurses\pdcurses.lib" />
 				</Linker>
 			</Target>
 		</Build>
+		<Compiler>
+			<Add option="-march=pentium3" />
+			<Add option="-pedantic" />
+			<Add option="-std=c++98" />
+			<Add option="-Wall" />
+			<Add option="-m32" />
+			<Add option="-mfpmath=sse" />
+			<Add option="-mtune=generic" />
+			<Add directory="../src" />
+			<Add directory="../src/pdcurses" />
+			<Add directory="../src/sdl" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="../src" />
+			<Add directory="../src/pdcurses" />
+			<Add directory="../src/sdl" />
+		</ResourceCompiler>
+		<Linker>
+			<Add option="-Wall" />
+			<Add option="-std=c++98" />
+			<Add option="-pedantic" />
+			<Add option="-m32" />
+			<Add option="-mfpmath=sse" />
+			<Add option="-march=pentium3" />
+			<Add option="-mtune=generic" />
+			<Add option="-lmingw32" />
+			<Add option="-lSDL2main" />
+			<Add option="-lSDL2" />
+			<Add option="-lSDL2_mixer" />
+			<Add library="..\src\pdcurses\pdcurses.lib" />
+			<Add directory="../src" />
+			<Add directory="../src/pdcurses" />
+			<Add directory="../src/sdl" />
+		</Linker>
 		<Unit filename="../src/basemode/activate.cpp" />
 		<Unit filename="../src/basemode/activate_sleepers.cpp" />
 		<Unit filename="../src/basemode/baseactions.cpp" />
@@ -203,6 +185,82 @@
 		<Unit filename="../src/sandbox/lcscommon.h" />
 		<Unit filename="../src/sandbox/location_test.h" />
 		<Unit filename="../src/sandbox/weapon.h" />
+		<Unit filename="../src/sdl/SDL.h" />
+		<Unit filename="../src/sdl/SDL_assert.h" />
+		<Unit filename="../src/sdl/SDL_atomic.h" />
+		<Unit filename="../src/sdl/SDL_audio.h" />
+		<Unit filename="../src/sdl/SDL_bits.h" />
+		<Unit filename="../src/sdl/SDL_blendmode.h" />
+		<Unit filename="../src/sdl/SDL_clipboard.h" />
+		<Unit filename="../src/sdl/SDL_config.h" />
+		<Unit filename="../src/sdl/SDL_config_android.h" />
+		<Unit filename="../src/sdl/SDL_config_iphoneos.h" />
+		<Unit filename="../src/sdl/SDL_config_macosx.h" />
+		<Unit filename="../src/sdl/SDL_config_minimal.h" />
+		<Unit filename="../src/sdl/SDL_config_pandora.h" />
+		<Unit filename="../src/sdl/SDL_config_psp.h" />
+		<Unit filename="../src/sdl/SDL_config_windows.h" />
+		<Unit filename="../src/sdl/SDL_config_winrt.h" />
+		<Unit filename="../src/sdl/SDL_config_wiz.h" />
+		<Unit filename="../src/sdl/SDL_copying.h" />
+		<Unit filename="../src/sdl/SDL_cpuinfo.h" />
+		<Unit filename="../src/sdl/SDL_egl.h" />
+		<Unit filename="../src/sdl/SDL_endian.h" />
+		<Unit filename="../src/sdl/SDL_error.h" />
+		<Unit filename="../src/sdl/SDL_events.h" />
+		<Unit filename="../src/sdl/SDL_filesystem.h" />
+		<Unit filename="../src/sdl/SDL_gamecontroller.h" />
+		<Unit filename="../src/sdl/SDL_gesture.h" />
+		<Unit filename="../src/sdl/SDL_haptic.h" />
+		<Unit filename="../src/sdl/SDL_hints.h" />
+		<Unit filename="../src/sdl/SDL_joystick.h" />
+		<Unit filename="../src/sdl/SDL_keyboard.h" />
+		<Unit filename="../src/sdl/SDL_keycode.h" />
+		<Unit filename="../src/sdl/SDL_loadso.h" />
+		<Unit filename="../src/sdl/SDL_log.h" />
+		<Unit filename="../src/sdl/SDL_main.h" />
+		<Unit filename="../src/sdl/SDL_messagebox.h" />
+		<Unit filename="../src/sdl/SDL_mixer.h" />
+		<Unit filename="../src/sdl/SDL_mouse.h" />
+		<Unit filename="../src/sdl/SDL_mutex.h" />
+		<Unit filename="../src/sdl/SDL_name.h" />
+		<Unit filename="../src/sdl/SDL_opengl.h" />
+		<Unit filename="../src/sdl/SDL_opengles.h" />
+		<Unit filename="../src/sdl/SDL_opengles2.h" />
+		<Unit filename="../src/sdl/SDL_pixels.h" />
+		<Unit filename="../src/sdl/SDL_platform.h" />
+		<Unit filename="../src/sdl/SDL_power.h" />
+		<Unit filename="../src/sdl/SDL_quit.h" />
+		<Unit filename="../src/sdl/SDL_rect.h" />
+		<Unit filename="../src/sdl/SDL_render.h" />
+		<Unit filename="../src/sdl/SDL_revision.h" />
+		<Unit filename="../src/sdl/SDL_rwops.h" />
+		<Unit filename="../src/sdl/SDL_scancode.h" />
+		<Unit filename="../src/sdl/SDL_shape.h" />
+		<Unit filename="../src/sdl/SDL_stdinc.h" />
+		<Unit filename="../src/sdl/SDL_surface.h" />
+		<Unit filename="../src/sdl/SDL_system.h" />
+		<Unit filename="../src/sdl/SDL_syswm.h" />
+		<Unit filename="../src/sdl/SDL_test.h" />
+		<Unit filename="../src/sdl/SDL_test_assert.h" />
+		<Unit filename="../src/sdl/SDL_test_common.h" />
+		<Unit filename="../src/sdl/SDL_test_compare.h" />
+		<Unit filename="../src/sdl/SDL_test_crc32.h" />
+		<Unit filename="../src/sdl/SDL_test_font.h" />
+		<Unit filename="../src/sdl/SDL_test_fuzzer.h" />
+		<Unit filename="../src/sdl/SDL_test_harness.h" />
+		<Unit filename="../src/sdl/SDL_test_images.h" />
+		<Unit filename="../src/sdl/SDL_test_log.h" />
+		<Unit filename="../src/sdl/SDL_test_md5.h" />
+		<Unit filename="../src/sdl/SDL_test_random.h" />
+		<Unit filename="../src/sdl/SDL_thread.h" />
+		<Unit filename="../src/sdl/SDL_timer.h" />
+		<Unit filename="../src/sdl/SDL_touch.h" />
+		<Unit filename="../src/sdl/SDL_types.h" />
+		<Unit filename="../src/sdl/SDL_version.h" />
+		<Unit filename="../src/sdl/SDL_video.h" />
+		<Unit filename="../src/sdl/begin_code.h" />
+		<Unit filename="../src/sdl/close_code.h" />
 		<Unit filename="../src/sitemode/advance.cpp" />
 		<Unit filename="../src/sitemode/mapspecials.cpp" />
 		<Unit filename="../src/sitemode/miscactions.cpp" />
