@@ -35,62 +35,68 @@ void mode_title()
 
    char str[100];
 
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   set_color(COLOR_GREEN,COLOR_BLACK,1);
    strcpy(str,"Liberal Crime Squad");
-   move(4,39-((len(str)-1)>>1));
+   move(2,39-((len(str)-1)>>1));
    addstr(str);
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"Inspired by the 1983 version of Oubliette");
-   move(6,39-((len(str)-1)>>1));
+   move(4,39-((len(str)-1)>>1));
    addstr(str);
 
    if(loaded)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      move(8,39-((len(slogan)-1)>>1));
+      move(6,39-((len(slogan)-1)>>1));
       addstr(slogan);
 
-      move(9,10);
+      move(7,10);
 
       addstr("Liberals Indoctrinated: ");
       addstr(stat_recruits);
 
-      move(10,10);
+      move(8,10);
       addstr("Liberals Martyred: ");
       addstr(stat_dead);
 
-      move(11,10);
+      move(9,10);
       addstr("Conservatives Killed: ");
       addstr(stat_kills);
 
-      move(9,47);
+      move(7,47);
       addstr("Funds Taxed: ");
       addstr(ledger.total_income);
 
-      move(10,47);
+      move(8,47);
       addstr("Funds Spent: ");
       addstr(ledger.total_expense);
 
-      move(11,47);
+      move(9,47);
       addstr("Conservatives Kidnapped: ");
       addstr(stat_kidnappings);
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    strcpy(str,"v3.9 Copyright (C) 2002-4, Tarn Adams");
-   move(13,39-((len(str)-1)>>1));
+   move(11,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"A Bay 12 Games Production");
-   move(14,39-((len(str)-1)>>1));
+   move(12,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"www.bay12games.com");
-   move(15,39-((len(str)-1)>>1));
+   strcpy(str,"http://bay12games.com/lcs/");
+   move(13,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
+   move(15,39-((len(str)-1)>>1));
+   addstr(str);
+   strcpy(str,"http://sourceforge.net/projects/lcsgame/");
+   move(16,39-((len(str)-1)>>1));
+   addstr(str);
+   strcpy(str,"http://www.bay12games.com/forum/index.php?board=3.0");
    move(17,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"sourceforge.net/projects/lcsgame");
+   strcpy(str,"http://lcs.wikidot.com/");
    move(18,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press ESC now to quit.  Quitting later causes your progress to be saved.");
@@ -102,7 +108,18 @@ void mode_title()
    move(24,79);
    addstr("+");
 
-   if(getkey()==ESC) end_game();
+   int c=0;
+   do
+   {
+      if(c=='m') music.enableIf(!music.isEnabled());
+      if(music.isEnabled()) strcpy(str,"Press M to turn off the Music.");
+      else strcpy(str,"Press M to turn on some Music.");
+      move(21,39-((len(str)-1)>>1));
+      addstr(str);
+      if(c==ESC) end_game();
+
+      c=getkey();
+   } while(c=='m');
 
    viewhighscores();
 

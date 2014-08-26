@@ -166,7 +166,10 @@ void review()
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      mvaddstr(21, 0, "$ to Inspect Liberal finances");
+      mvaddstr(21,0,"Press V to Inspect Liberal finances.");
+      if(music.isEnabled())
+         mvaddstr(21,38,"Press Y to turn off the Music.");
+      else mvaddstr(21,38,"Press Y to turn on some Music.");
       move(22,0);
       addstr("Press a Letter to select a squad.  1-7 to view Liberal groups.");
       move(23,0);
@@ -201,13 +204,14 @@ void review()
       }
       if(c=='t') squadlessbaseassign();
       if(c=='u') promoteliberals();
-      if(c=='$')
+      if(c=='v')
       {
           char clearformess=false;
           fundreport(clearformess);
           if(clearformess) erase();
       }
-    }
+      if(c=='y') music.enableIf(!music.isEnabled());
+   }
 }
 
 

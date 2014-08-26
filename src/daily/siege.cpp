@@ -1711,6 +1711,7 @@ char sally_forth_aux(int loc)
    }
 
    mode=GAMEMODE_CHASEFOOT;
+   music.play(MUSIC_FOOTCHASE);
    bool ranaway = false;
 
    while(true)

@@ -376,8 +376,55 @@ the autosave.dat file to save.dat to recover, under UNIX:
 
 	mv -f ~/.lcs/autosave.dat ~/.lcs/save.dat
 
+SDL2 and SDL2_mixer
+===================
+
+Liberal Crime Squad can use SDL 2.0.3 and SDL_mixer 2.0 for audio.
+The headers and libraries for those are included in the /src/sdl
+directory. However the libraries to link against only work with
+Microsoft Visual C++ (32-bit) and MinGW-GCC (32 bit), the 2 main
+compilers used on MS Windows. On other platforms such as Linux and
+Mac OS X you will probably need the SDL2 and SDL2_mixer libraries to
+link against as dependencies, in order for it to compile correctly
+with audio support. Currently this is used for MIDI background music.
+
+So you have a couple alternatives:
+
+1) Compile with SDL2 and SDL2_mixer. You will need a MIDI device.
+Both Windows and Mac OS X have native MIDI that is supported by
+SDL_mixer, along with support for Timidity. On Linux you have several
+options for MIDI support: Timidity, which uses Gravis UltraSound
+Patches (NOT Timidity++, which uses SoundFonts), is built-in, but
+you'll need to put the Gravis UltraSound Patches in the location
+specified by the SDL2_mixer documentation. That location is
+Win32 in C:\timidity, and on UNIX in /usr/local/lib/timidity/.
+There also might be native MIDI support on Linux but only with some
+sound drivers and not others.
+
+2) Use FluidSynth or JACK. Both of them are external programs but if
+you install them, SDL2_mixer can use them for MIDI support.
+FluidSynth is recommended if you want the best sound quality. It uses
+SoundFonts. Personally I am fond of the Arachno SoundFont 1.0 which
+you can find here: http://www.arachnosoft.com/main/soundfont.php. It
+is designed to sound very nice with video games, but it takes up
+148 megabytes. There are plenty of other great SoundFonts, including
+many that take up less disk space, that one's just my personal
+favorite, you might like a different one better.
+
+I am not quite sure about how the MIDI support in JACK works. Maybe
+it is just an alternative for ALSA, for the people on *BSD systems,
+since SDL and SDL_mixer don't support the native OSS on *BSD. Anyway,
+if you are on something like FreeBSD, OpenBSD, or NetBSD, you will
+need JACK along with either the built-in Timidity or an external
+FluidSynth. If you are on Linux rather than some other UNIX you have
+ALSA so you don't need JACK, since SDL and SDL_mixer can use either one.
+And as for Mac OS X/Darwin, it might be BSD-based but it has CoreAudio
+and CoreMIDI, both supported natively by SDL and SDL_mixer. Well actually
+CoreMIDI is just on iOS but SDL and SDL_mixer support both Android and
+iOS.
 
 
-
-
-
+3) If all else fails, uncomment the line that says #define DONT_INCLUDE_SDL
+in common.h. This will disable SDL, SDL_mixer, and audio, and let
+you compile and build Liberal Crime Squad without any SDL dependencies.
+The only downside to this is you don't get any audio.

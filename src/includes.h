@@ -498,6 +498,74 @@ enum GameModes
    GAMEMODE_CHASEFOOT
 };
 
+enum MusicModes
+{
+   MUSIC_TITLEMODE,
+   MUSIC_NEWGAME,
+   MUSIC_BASEMODE,
+   MUSIC_DISBANDED,
+   MUSIC_FINANCES,
+   MUSIC_CARTHEFT,
+   MUSIC_ELECTIONS,
+   MUSIC_SHOPPING,
+   MUSIC_SITEMODE,
+   MUSIC_SUSPICIOUS,
+   MUSIC_ALARMED,
+   MUSIC_SIEGE,
+   MUSIC_CARCHASE,
+   MUSIC_FOOTCHASE,
+   MUSIC_INTERROGATION,
+   MUSIC_TRIAL,
+   MUSIC_RECRUITING,
+   MUSIC_DATING,
+   MUSIC_NEWSPAPER,
+   MUSIC_LACOPS,
+   MUSIC_NEWSCAST,
+   MUSIC_GLAMSHOW,
+   MUSIC_ANCHOR,
+   MUSIC_ABORT,
+   MUSIC_VICTORY,
+   MUSIC_DEFEAT,
+   MUSIC_REAGANIFIED,
+   MUSIC_STALINIZED,
+   MUSIC_OFF, // this one must be second to last (the ones above it correspond to music files while this one corresponds to silence)
+   MUSIC_PREVIOUS // this one must be last (this one is to play the previous song)
+};
+
+class MusicClass
+{
+private:
+   bool enabled;
+#ifndef DONT_INCLUDE_SDL
+   bool songsinitialized;
+   int musicmode,previous;
+   Mix_Music* songs[MUSIC_OFF];
+   /* helper function for initsongs() ... implemented in misc.cpp */
+   void loadmidi(int i,const char* filename);
+#endif // DONT_INCLUDE_SDL
+public:
+#ifndef DONT_INCLUDE_SDL
+   MusicClass() : enabled(true),songsinitialized(false),musicmode(MUSIC_OFF),previous(MUSIC_OFF) { }
+  ~MusicClass() { for(int c=0;c<MUSIC_OFF;c++) if(songs[c]) Mix_FreeMusic(songs[c]); }
+#else
+   MusicClass() : enabled(true) { }
+#endif // DONT_INCLUDE_SDL
+   /* find out if music's enabled or disabled */
+   bool isEnabled() { return enabled; }
+   /* enable or disable music */
+   void enableIf(bool e)
+   {
+      enabled=e;
+#ifndef DONT_INCLUDE_SDL
+      Mix_VolumeMusic(enabled*(MIX_MAX_VOLUME/2)); // half volume if music enabled, muted if music disabled
+#endif // DONT_INCLUDE_SDL
+   }
+   /* initialize songs ... implemented in misc.cpp */
+   void init();
+   /* play music specified by a MusicMode ... implemented in misc.cpp */
+   void play(int _musicmode);
+};
+
 enum WinConditions
 {
 	WINCONDITION_ELITE,

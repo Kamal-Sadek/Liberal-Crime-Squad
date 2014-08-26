@@ -15,6 +15,8 @@ Easiest way is using the workspaces provided in the 'workspaces' folder. Project
    "workspaces\Debug" for a debug build or "workspaces\Release" for a release
    build.  Of course you should compile a new executable from the latest code.
  * The curses library: on Windows this is "pdcurses.dll".
+ * If it was compiled with SDL for music, also include SDL2.dll and SDL2_mixer.dll.
+   You might or might not need these SDL dll files depending on how it was compiled.
  * The "art" directory and all the files in it.
  * The "init.txt" configuration file.
  * The "CrimeSquadManual.txt" documentation file from the "docs" directory.

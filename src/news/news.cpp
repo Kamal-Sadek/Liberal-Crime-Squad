@@ -746,6 +746,7 @@ void setpriority(newsstoryst &ns)
 /* news - show major news story */
 void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 {
+   music.play(MUSIC_NEWSPAPER);
    int it2;
    preparepage(ns,liberalguardian);
 

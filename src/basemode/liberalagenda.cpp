@@ -57,12 +57,15 @@ bool liberalagenda(signed char won)
          set_color(COLOR_GREEN,COLOR_BLACK,1);
          move(0,0);
          addstr("The Triumph of the Liberal Agenda");
+         music.play(MUSIC_VICTORY);
       }
       else if(won==-1||won==-2)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(0,0);
          addstr("The Abject Failure of the Liberal Agenda");
+         if(won==-1) music.play(MUSIC_REAGANIFIED);
+         if(won==-2) music.play(MUSIC_STALINIZED);
       }
       else
       {
@@ -242,9 +245,9 @@ bool liberalagenda(signed char won)
                else if(won==1&&wincondition==WINCONDITION_ELITE)
                   set_alignment_color(ALIGN_ELITELIBERAL,true);
                //else set_alignment_color(c,true);
-               if(c==2) mvaddchar(14+l/3,l%3*26,'Ã');//'\x11');
+               if(c==2) mvaddchar(14+l/3,l%3*26,'\x11');//'Ã');
                addch(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL);
-               if(c==-2) addchar('´');//'\x10');
+               if(c==-2) addchar('\x10');//'´');
             }
             if(won==-1||won==-2)
                set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);

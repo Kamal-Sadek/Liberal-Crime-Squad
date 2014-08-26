@@ -75,7 +75,10 @@ unsigned char bigletters[27][5][7][4];
 unsigned char newstops[6][80][5][4];
 unsigned char newspic[20][78][18][4];
 
-extern char artdir[MAX_PATH_SIZE];
+MusicClass music;
+
+char homedir[MAX_PATH_SIZE];
+char artdir[MAX_PATH_SIZE];
 
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
@@ -122,7 +125,6 @@ short activesortingchoice[SORTINGCHOICENUM];
 
 Creature encounter[ENCMAX];
 
-
 char loaded=0;
 
 short mode=GAMEMODE_TITLE;
@@ -158,14 +160,12 @@ short attitude[VIEWNUM];
 short public_interest[VIEWNUM];
 short background_liberal_influence[VIEWNUM];
 
-
 short law[LAWNUM];
 
 short house[HOUSENUM];
 short senate[SENATENUM];
 short court[COURTNUM];
 char courtname[COURTNUM][POLITICIAN_NAMELEN];
-
 
 signed char exec[EXECNUM];
 short execterm=1;
@@ -203,7 +203,7 @@ int sitecrime;
 short cursite;
 bool mapshowing=false;
 
-char encounterwarnings=0;
+bool encounterwarnings=false;
 
 char foughtthisround=0;
 
@@ -258,6 +258,28 @@ int main(int argc, char* argv[])
    //did the play session that follows.
    gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n\n\n");
 
+#ifndef DONT_INCLUDE_SDL
+   if(SDL_Init(SDL_INIT_AUDIO)!=0) // initialize what we need from SDL for audio
+   {  // SDL failed to initialize, so log it and exit
+      addstr(string("Unable to initialize SDL:  ")+SDL_GetError(),gamelog);
+
+      getkey();
+
+      endwin();
+      return 1;
+   }
+   if(Mix_OpenAudio(48000,AUDIO_S16,2,4096)!=0) // initialize the audio mixer itself
+   {  // SDL_mixer failed to initialize, so log it and exit
+      addstr(string("Unable to initialize SDL_mixer:  ")+Mix_GetError(),gamelog);
+
+      getkey();
+
+      endwin();
+      return 1;
+   }
+#endif // DONT_INCLUDE_SDL
+   music.play(MUSIC_TITLEMODE); // do this before printing any text on the screen (it'll initialize the songs the first time it's called)
+
    // set window title
    char wtitle[50];
    strcpy(wtitle,"Liberal Crime Squad ");
@@ -306,7 +328,7 @@ int main(int argc, char* argv[])
    //getkey();
 
    oldMapMode=!readConfigFile("sitemaps.txt"); // load site map data
-   if (oldMapMode)
+   if(oldMapMode)
    {
       addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
 
@@ -432,7 +454,7 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
-   if(!xml_loaded_ok) end_game();
+   if(!xml_loaded_ok) end_game(1);
 
    //addstr("Attempting to load saved game... ");
    //getkey();
@@ -474,6 +496,12 @@ void end_game(int err)
    delete_and_clear(date);
    delete_and_clear(groundloot);
 
+   music.play(MUSIC_OFF);
+#ifndef DONT_INCLUDE_SDL
+   Mix_CloseAudio();
+   SDL_Quit();
+#endif // DONT_INCLUDE_SDL
+
    endwin();
    exit(err);
 }
@@ -484,8 +512,7 @@ bool populate_from_xml(vector<Type*>& types,string file,Log& log)
    CMarkup xml;
    if(!xml.Load(string(artdir)+file))
    { // File is missing or not valid XML.
-      addstr("Failed to load "+file+"!");
-      log.log("Failed to load "+file+"!");
+      addstr("Failed to load "+file+"!",log);
 
       getkey();
 

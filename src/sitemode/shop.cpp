@@ -120,6 +120,7 @@ Shop::~Shop()
 
 void Shop::enter(squadst& customers) const
 {
+   music.play(MUSIC_SHOPPING);
    int buyer=0;
    choose(customers,buyer);
 }

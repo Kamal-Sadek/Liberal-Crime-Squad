@@ -315,7 +315,9 @@ void savegame(const char *str)
       fwrite(background_liberal_influence,sizeof(background_liberal_influence),1,h);
 
       // Site mode options
-      fwrite(&encounterwarnings,sizeof(char),1,h);
+      fwrite(&encounterwarnings,sizeof(bool),1,h);
+      bool musicenabled=music.isEnabled();
+      fwrite(&musicenabled,sizeof(bool),1,h);
 
       LCSCloseFile(h);
    }
@@ -791,7 +793,10 @@ char load()
       fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
 
       // Site mode options
-      fread(&encounterwarnings,sizeof(char),1,h);
+      fread(&encounterwarnings,sizeof(bool),1,h);
+      bool musicenabled;
+      fread(&musicenabled,sizeof(bool),1,h);
+      music.enableIf(musicenabled);
 
       LCSCloseFile(h);
 

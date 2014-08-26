@@ -28,11 +28,10 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <externs.h>
 
-extern char artdir[MAX_PATH_SIZE];
-
 /* active squad visits the hospital */
 void hospital(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
 
    int partysize=squadsize(activesquad);
@@ -89,6 +88,7 @@ void hospital(int loc)
 /* active squad visits the arms dealer */
 void armsdealer(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load(string(artdir) + "armsdealer.xml");
@@ -100,6 +100,7 @@ void armsdealer(int loc)
 /* active squad visits the pawn shop */
 void pawnshop(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load(string(artdir) + "pawnshop.xml");
@@ -112,6 +113,7 @@ void pawnshop(int loc)
 /* active squad visits the car dealership */
 void dealership(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    short buyer=0;
 
    locatesquad(activesquad,loc);
@@ -280,6 +282,7 @@ void dealership(int loc)
 /* active squad visits the department store */
 void deptstore(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
    CMarkup xml; // -XML
    xml.Load(string(artdir) + "deptstore.xml");
@@ -292,6 +295,7 @@ void deptstore(int loc)
 /* active squad visits the oubliette */
 void halloweenstore(int loc)
 {
+   music.play(MUSIC_SHOPPING);
    locatesquad(activesquad,loc);
    CMarkup xml;
    xml.Load(string(artdir) + "oubliette.xml");

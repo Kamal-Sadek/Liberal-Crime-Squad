@@ -97,6 +97,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
 
    if(type>=0)
    {
+      music.play(MUSIC_RECRUITING);
       cr.train(SKILL_STREETSENSE,5);
 
       erase();
@@ -196,6 +197,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
 /* daily - recruit - recruit meeting */
 char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 {
+   music.play(MUSIC_RECRUITING);
    clearformess=1;
 
    erase();

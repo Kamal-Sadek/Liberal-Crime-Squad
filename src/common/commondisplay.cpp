@@ -722,23 +722,22 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
 
 
    move(7,0);
-   addstr("Clothes: ");
-   if(mode!=GAMEMODE_SITE) 
+   if(mode!=GAMEMODE_SITE)
    {
-               int fg = COLOR_WHITE;
-               int bg = COLOR_BLACK;
-               int in = 1;
-               if(cr->get_armor().is_bloody())
-                  {bg = COLOR_RED;  in = 0;}
-               if(cr->get_armor().get_quality() > cr->get_armor().get_quality_levels())
-                  {fg = COLOR_BLACK;}
-               else if(cr->get_armor().is_damaged())
-                  {fg = COLOR_YELLOW; in = 1;}
-               else if(cr->get_armor().get_quality() >1)
-                  {fg = COLOR_YELLOW; in = (bg==COLOR_RED);}
-               if (fg == COLOR_WHITE && bg == COLOR_BLACK)
-                  in = 0;
-               set_color(fg,bg,in);
+      int fg = COLOR_WHITE;
+      int bg = COLOR_BLACK;
+      int in = 1;
+      if(cr->get_armor().is_bloody())
+         {bg = COLOR_RED;  in = 0;}
+      if(cr->get_armor().get_quality() > cr->get_armor().get_quality_levels())
+         {fg = COLOR_BLACK;}
+      else if(cr->get_armor().is_damaged())
+         {fg = COLOR_YELLOW; in = 1;}
+      else if(cr->get_armor().get_quality() >1)
+         {fg = COLOR_YELLOW; in = (bg==COLOR_RED);}
+      if (fg == COLOR_WHITE && bg == COLOR_BLACK)
+         in = 0;
+      set_color(fg,bg,in);
    }
    else
    {
@@ -755,6 +754,7 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
          if(cr->get_armor().get_stealth_value() > 1)
             set_color(COLOR_BLACK,COLOR_BLACK,1);
    }
+   addstr("Clothes: ");
    addstr(cr->get_armor_string(false));
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);

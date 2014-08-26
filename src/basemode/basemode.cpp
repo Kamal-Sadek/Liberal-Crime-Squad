@@ -65,6 +65,7 @@ This file is part of Liberal Crime Squad.                                       
 bool show_disbanding_screen(int& oldforcemonth)
 {
    if(oldforcemonth==month) return true;
+   music.play(MUSIC_DISBANDED);
 
    for(int p=len(pool)-1;p>=0;p--)
    {
@@ -234,6 +235,7 @@ void mode_base()
       }
       else
       {
+         music.play(MUSIC_BASEMODE);
          for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->alive&&
@@ -610,11 +612,6 @@ void mode_base()
          if(activesquad) if(activesquad->squad[c-'1']) {
          if(party_status==c-'1') fullstatus(party_status);
          else party_status=c-'1'; } break;
-      case '$': {
-         char clearformess=false;
-         fundreport(clearformess);
-         if(clearformess) erase();
-         break; }
       }
    }
 }

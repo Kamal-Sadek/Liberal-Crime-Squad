@@ -39,6 +39,7 @@ enum DateResults
 // Handles the result of a date or vacation
 static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 {
+   music.play(MUSIC_DATING);
    std::string s = "";
    if(aroll>troll)
    {
@@ -60,20 +61,15 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          addstr("But ", gamelog);
          addstr(pool[p]->name, gamelog);
          addstr(" is already dating ", gamelog);
-         int num_relationships = loveslaves(*pool[p]);
-         if(pool[p]->flag & CREATUREFLAG_LOVESLAVE) num_relationships++;
-         if(num_relationships == 1) addstr("someone!", gamelog);
-         else {
-            char str[5];
-            itoa(num_relationships, str, 10);
-            addstr(str, gamelog);
-            addstr(" people!", gamelog);
-         }
+         int num_relationships=loveslaves(*pool[p]);
+         if(pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
+         if(num_relationships==1) addstr("someone!", gamelog);
+         else addstr(tostring(num_relationships)+" people!", gamelog);
          gamelog.newline();
          move(y++,0);
          addstr(pool[p]->name, gamelog);
          addstr(" isn't seductive enough to juggle ", gamelog);
-         if(num_relationships == 1) addstr("another", gamelog);
+         if(num_relationships==1) addstr("another", gamelog);
          else addstr("yet another", gamelog);
          addstr(" relationship.", gamelog);
          gamelog.newline();
@@ -322,6 +318,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 /* daily - date - dater p gets back from vacation */
 char completevacation(datest &d,int p,char &clearformess)
 {
+   music.play(MUSIC_DATING);
    int e=0;
 
    clearformess=1;
@@ -336,7 +333,8 @@ char completevacation(datest &d,int p,char &clearformess)
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
    pool[p]->train(SKILL_SEDUCTION,LCSrandom(11)+15);
-   
+
+   int thingsincommon=0;
    for(int s=0;s<SKILLNUM;s++)
       if(d.date[e]->get_skill(s)>=1 && pool[p]->get_skill(s)>=1)
          //Has a skill that is at least half the same skill of the other person on the date.
@@ -368,8 +366,7 @@ char completevacation(datest &d,int p,char &clearformess)
    }
 
 
-   int y=2;
-   switch(dateresult(aroll,troll,d,e,p,y))
+   switch(dateresult(aroll,troll,d,e,p,2))
    {
    default:
    case DATERESULT_MEETTOMORROW:return 0;
@@ -384,6 +381,7 @@ char completevacation(datest &d,int p,char &clearformess)
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d,int p,char &clearformess)
 {
+   music.play(MUSIC_DATING);
    int e;
    clearformess=1;
 
