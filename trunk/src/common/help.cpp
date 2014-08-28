@@ -64,9 +64,7 @@ void HelpActivities(int activityType)
       move(2,0);
       addstr("===Community Service===");
       move(4,0);
-      addstr(" Has a minor effect on public opinion, increases Juice and has the chance");
-      move(5,0);
-      addstr(" of reducing the activists Heat.");
+      addstr(" Has a minor effect on public opinion and increases Juice.");
       break;
 // }}}
 // {{{ ACTIVITY_TROUBLE

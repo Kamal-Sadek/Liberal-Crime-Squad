@@ -251,9 +251,12 @@ void passmonth(char &clearformess,char canseethings)
       }
    }
 
-   // Temporaty Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
+   // Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
    if(stalinmode) for(int v=0;v<VIEWNUM-3;v++)
-      if(v%3==month%3) change_public_opinion(v,(stalinview(v,false)?1:-1),0);
+   {
+      if(stalinview(v,false)) { if((attitude[v]+=3)>100) attitude[v]=100; }
+      else { if(--attitude[v]<0) attitude[v]=0; }
+   }
    // End Temporary Stalinizing Code (TODO: Implement the Stalinist Comrade Squad for changing public opinion, then remove this)
 
    // Seduction monthly experience stipends for those liberals

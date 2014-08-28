@@ -528,8 +528,10 @@ enum MusicModes
    MUSIC_DEFEAT,
    MUSIC_REAGANIFIED,
    MUSIC_STALINIZED,
-   MUSIC_OFF, // this one must be second to last (the ones above it correspond to music files while this one corresponds to silence)
-   MUSIC_PREVIOUS // this one must be last (this one is to play the previous song)
+   MUSIC_OFF, // this one must come immediately after the ones corresponding to music files (this one is to have silence)
+   MUSIC_PREVIOUS, // this one must come after MUSIC_OFF (this one is to play the previous song)
+   MUSIC_CURRENT, // this one must come after MUSIC_OFF (this one continues playing the current song)
+   MUSIC_RANDOM // this one must come after MUSIC_OFF (this one plays a random song)
 };
 
 class MusicClass
@@ -1279,7 +1281,7 @@ void loadinitfile();
  highscore.cpp
 */
 /* displays the high score board */
-void viewhighscores();
+void viewhighscores(int musicoverride=MUSIC_OFF);
 /* loads the high scores file */
 void loadhighscores();
 /* saves a new high score */

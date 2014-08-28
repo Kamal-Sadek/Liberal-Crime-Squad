@@ -29,8 +29,9 @@ This file is part of Liberal Crime Squad.                                       
 #include <externs.h>
 
 /* displays the high score board */
-void viewhighscores()
+void viewhighscores(int musicoverride)
 {
+   if(musicoverride!=MUSIC_OFF) music.play(musicoverride);
    int s;
    loadhighscores();
 
@@ -66,67 +67,67 @@ void viewhighscores()
          {
             case END_WON:
                addstr("The Liberal Crime Squad liberalized the country in ");
-               if(yourscore==s) music.play(MUSIC_VICTORY);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_VICTORY);
                break;
             case END_POLICE:
                addstr("The Liberal Crime Squad was brought to justice in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_CIA:
                addstr("The Liberal Crime Squad was blotted out in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_HICKS:
                addstr("The Liberal Crime Squad was mobbed in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_CORP:
                addstr("The Liberal Crime Squad was downsized in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_DEAD:
                addstr("The Liberal Crime Squad was KIA in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_REAGAN:
                addstr("The country was Reaganified in ");
-               if(yourscore==s) music.play(MUSIC_REAGANIFIED);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_REAGANIFIED);
                break;
             case END_PRISON:
                addstr("The Liberal Crime Squad died in prison in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_EXECUTED:
                addstr("The Liberal Crime Squad was executed in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_DATING:
                addstr("The Liberal Crime Squad was on vacation in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_HIDING:
                addstr("The Liberal Crime Squad was in permanent hiding in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_DISBANDLOSS:
                addstr("The Liberal Crime Squad was hunted down in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_DISPERSED:
                addstr("The Liberal Crime Squad was scattered in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_CCS:
                addstr("The Liberal Crime Squad was out-Crime Squadded in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_FIREMEN:
                addstr("The Liberal Crime Squad was burned in ");
-               if(yourscore==s) music.play(MUSIC_DEFEAT);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_DEFEAT);
                break;
             case END_STALIN:
                addstr("The country was Stalinized in ");
-               if(yourscore==s) music.play(MUSIC_STALINIZED);
+               if(yourscore==s&&musicoverride==MUSIC_OFF) music.play(MUSIC_STALINIZED);
                break;
          }
          addstr(getmonth(score[s].month));
