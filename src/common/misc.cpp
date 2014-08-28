@@ -498,6 +498,8 @@ void MusicClass::play(int _musicmode)
 #ifndef DONT_INCLUDE_SDL
    if(!songsinitialized) init(); // if it hasn't been initialized already, do it now
 
+   if(_musicmode==MUSIC_CURRENT) return; // keep playing current music if that's what's requested
+   if(_musicmode==MUSIC_RANDOM) _musicmode=LCSrandom(MUSIC_OFF); // play a random song if that's what's requested
    if(_musicmode==MUSIC_PREVIOUS) _musicmode=previous; // restore previous setting if that's what's requested
    if(musicmode==_musicmode) return; // already playing the right music
    previous=musicmode; // store previous setting

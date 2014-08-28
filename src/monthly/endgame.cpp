@@ -35,10 +35,10 @@ This file is part of Liberal Crime Squad.                                       
 /* endgame - attempts to pass a constitutional amendment to help win the game */
 void tossjustices(char canseethings)
 {
-   music.play(MUSIC_ELECTIONS);
    int j;
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -126,9 +126,9 @@ void tossjustices(char canseethings)
 void amendment_termlimits(char canseethings)
 {
    if(termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
-   music.play(MUSIC_ELECTIONS);
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -192,9 +192,9 @@ void amendment_termlimits(char canseethings)
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void reaganify(char canseethings)
 {
-   music.play(MUSIC_ELECTIONS);
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       erase();
@@ -381,7 +381,7 @@ void reaganify(char canseethings)
          }
       }
       reset();
-      viewhighscores();
+      viewhighscores(MUSIC_REAGANIFIED);
       end_game();
    }
    else
@@ -401,9 +401,9 @@ void reaganify(char canseethings)
 /* endgame - attempts to pass a constitutional amendment to lose the game */
 void stalinize(char canseethings)
 {
-   music.play(MUSIC_ELECTIONS);
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       erase();
@@ -590,7 +590,7 @@ void stalinize(char canseethings)
          }
       }
       reset();
-      viewhighscores();
+      viewhighscores(MUSIC_STALINIZED);
       end_game();
    }
    else
@@ -609,9 +609,9 @@ void stalinize(char canseethings)
 /* endgame - checks if a constitutional amendment is ratified */
 char ratify(int level,int lawview,int view,char congress,char canseethings)
 {
-   music.play(MUSIC_ELECTIONS);
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);

@@ -237,18 +237,12 @@ bool liberalagenda(signed char won)
          }
          for(int l=0;l<LAWNUM;l++)
          {
-            for(int c=2;c>=-2;c--)
-            {
-               set_color(COLOR_BLACK,COLOR_BLACK,1);
-               if(won==-1||won==-2)
-                  set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
-               else if(won==1&&wincondition==WINCONDITION_ELITE)
-                  set_alignment_color(ALIGN_ELITELIBERAL,true);
-               //else set_alignment_color(c,true);
-               if(c==2) mvaddchar(14+l/3,l%3*26,'\x11');//'Ã');
-               addch(CH_BOX_DRAWINGS_LIGHT_HORIZONTAL);
-               if(c==-2) addchar('\x10');//'´');
-            }
+            if(won==-1||won==-2)
+               set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
+            else if(won==1&&wincondition==WINCONDITION_ELITE)
+               set_alignment_color(ALIGN_ELITELIBERAL,true);
+            else set_color(COLOR_BLACK,COLOR_BLACK,1);
+            mvaddstr(14+l/3,l%3*26,"\x11ÄÄÄÄÄ\x10");
             if(won==-1||won==-2)
                set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
             else set_alignment_color(law[l],true);
