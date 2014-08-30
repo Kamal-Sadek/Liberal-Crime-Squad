@@ -45,6 +45,7 @@ void activate_sleepers()
 
    while(true)
    {
+      music.play(MUSIC_SLEEPERS);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);

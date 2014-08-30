@@ -250,6 +250,7 @@ void stopevil()
 
    while(true)
    {
+      music.play(MUSIC_STOPEVIL);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
