@@ -65,12 +65,11 @@ the bottom of includes.h in the top src folder.
 vector<Creature *> activatable_liberals()
 {
    vector<Creature *> temppool;
-   int sq;
    for(int p=0;p<len(pool);p++) if(pool[p]->is_active_liberal())
    {
       if(pool[p]->squadid!=-1)
       {
-         sq=getsquad(pool[p]->squadid);
+         int sq=getsquad(pool[p]->squadid);
          if(sq!=-1) if(squad[sq]->activity.type!=ACTIVITY_NONE) continue;
       }
       temppool.push_back(pool[p]);
@@ -91,6 +90,7 @@ void activate()
 
    while(true)
    {
+      music.play(MUSIC_ACTIVATE);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);

@@ -435,7 +435,19 @@ void MusicClass::init()
    // newgame.mid - Also sprach Zarathustra, introduction by Richard Strauss
    loadmidi(MUSIC_NEWGAME,"newgame.mid"); // load new game music
    // basemode.mid - The Stars and Stripes Forever by John Philip Sousa
-   loadmidi(MUSIC_BASEMODE,"basemode.mid"); // load base mode music
+   loadmidi(MUSIC_BASEMODE,"basemode.mid"); // load regular base mode music
+   // siege.mid - The Planets, 1st Movement "Mars" by Gustav Holst
+   loadmidi(MUSIC_SIEGE,"siege.mid"); // load base mode while under siege music
+   // activate.mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
+   loadmidi(MUSIC_ACTIVATE,"activate.mid"); // load activate Liberals music
+   // sleepers.mid - Toccata and Fugue in D Minor by Johann Sebastian Bach
+   loadmidi(MUSIC_SLEEPERS,"sleepers.mid"); // load activate Sleepers music
+   // stopevil.mid - Hungarian Dance #5 by Johannes Brahms (based on the csardas "Bartfai emlek" by Bela Keler)
+   loadmidi(MUSIC_STOPEVIL,"stopevil.mid"); // load go forth to stop evil music
+   // reviewmode.mid - Symphony #94, 2nd Movement "Surprise Symphony" by Joseph Haydn
+   loadmidi(MUSIC_REVIEWMODE,"reviewmode.mid"); // load review mode music
+   // liberalagenda.mid - Beautiful Dreamer by Stephen Foster
+   loadmidi(MUSIC_LIBERALAGENDA,"liberalagenda.mid"); // load status of the Liberal agenda music
    // disbanded.mid - La Cucaracha, a traditional Mexican folk song originally from Spain
    loadmidi(MUSIC_DISBANDED,"disbanded.mid"); // load disbanded music
    // finances.mid - Minuet in G Major by Christian Petzold
@@ -452,8 +464,8 @@ void MusicClass::init()
    loadmidi(MUSIC_SUSPICIOUS,"suspicious.mid"); // load suspicious music
    // alarmed.mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
    loadmidi(MUSIC_ALARMED,"alarmed.mid"); // load alarmed music
-   // siege.mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
-   loadmidi(MUSIC_SIEGE,"siege.mid"); // load siege music
+   // heavycombat.mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
+   loadmidi(MUSIC_HEAVYCOMBAT,"heavycombat.mid"); // load massive Conservative response or escaping/engaging a siege music
    // carchase.mid - The William Tell Overture by Gioacchino Antonio Rossini
    loadmidi(MUSIC_CARCHASE,"carchase.mid"); // load car chase music
    // footchase.mid - The Maple Leaf Rag by Scott Joplin
@@ -480,7 +492,7 @@ void MusicClass::init()
    loadmidi(MUSIC_ABORT,"abort.mid"); // load failed partial birth abortion on trashy daytime talk show music
    // victory.mid - The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith
    loadmidi(MUSIC_VICTORY,"victory.mid"); // load victory music
-   // defeat.mid - Toccata and Fugue in D Minor by Johann Sebastian Bach
+   // defeat.mid - Piano Sonata #2, 3rd Movement "Funeral March" by Frederic Francois Chopin
    loadmidi(MUSIC_DEFEAT,"defeat.mid"); // load defeat music
    // reagainified.mid - Dixie, The Confederate National Anthem by Daniel Decatur Emmett
    loadmidi(MUSIC_REAGANIFIED,"reaganified.mid"); // load Reaganified music

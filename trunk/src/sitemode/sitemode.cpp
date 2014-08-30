@@ -117,7 +117,7 @@ void mode_site(short loc)
    }
    else
    {
-      music.play(MUSIC_SIEGE);
+      music.play(MUSIC_HEAVYCOMBAT);
       sitealarm=1;
 
       location[loc]->siege.attacktime=0;
@@ -338,7 +338,7 @@ void mode_site()
                else addstr(": POLICE RESPONDING");
                break;
             }
-            music.play(MUSIC_SIEGE);
+            music.play(MUSIC_HEAVYCOMBAT);
          }
          else if(postalarmtimer>60) { addstr(": CONSERVATIVE REINFORCEMENTS INCOMING"); music.play(MUSIC_ALARMED); }
          else if(sitealienate==1) { addstr(": ALIENATED MASSES"); music.play(MUSIC_ALARMED); }

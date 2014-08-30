@@ -72,6 +72,7 @@ bool liberalagenda(signed char won)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          move(0,0);
          addstr("The Status of the Liberal Agenda");
+         music.play(MUSIC_LIBERALAGENDA);
       }
 
       if(page<0) page=PAGENUM-1;

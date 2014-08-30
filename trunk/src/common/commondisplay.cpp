@@ -203,8 +203,12 @@ void set_activity_color(long activity_type)
       // Nothing terribly important
    case ACTIVITY_HEAL: // Identical to none in practice
    case ACTIVITY_NONE:
-   case ACTIVITY_VISIT: // Shouldn't show on activate screens at all
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      break;
+
+      // Going somewhere
+   case ACTIVITY_VISIT:
+      set_color(COLOR_YELLOW,COLOR_BLACK,1);
       break;
 
       // Quitting being a sleeper to join the LCS
@@ -213,7 +217,7 @@ void set_activity_color(long activity_type)
       break;
 
    default: // This should not happen! Set a strange color to indicate an error!
-      set_color(COLOR_YELLOW,COLOR_RED,1,1); // blinking yellow on red background
+      set_color(COLOR_YELLOW,COLOR_RED,1); // yellow on red background
       break;
    }
 }
@@ -283,8 +287,8 @@ void locheader()
 
    if(activesquad!=NULL)
    {
-      set_color(COLOR_WHITE,COLOR_BLACK,1);
       std::string str=getactivity(activesquad->activity);
+      set_activity_color(activesquad->activity.type);
       if(activesquad->activity.type==ACTIVITY_NONE)
       {
          bool haveact=false,multipleact=false;
@@ -292,10 +296,15 @@ void locheader()
          {
             if(activesquad->squad[p]==NULL) continue;
             const std::string str2=getactivity(activesquad->squad[p]->activity);
+            set_activity_color(activesquad->squad[p]->activity.type);
             if(haveact&&str!=str2) multipleact=true;
             str=str2,haveact=true;
          }
-         if(multipleact) str="Acting Individually";
+         if(multipleact)
+         {
+            str="Acting Individually";
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
+         }
       }
       mvaddstr(0,41,str);
    }

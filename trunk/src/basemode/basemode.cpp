@@ -235,7 +235,6 @@ void mode_base()
       }
       else
       {
-         music.play(MUSIC_BASEMODE);
          for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->alive&&
@@ -262,6 +261,7 @@ void mode_base()
       {
          if(nonsighttime>=365*4)
          {
+            music.play(MUSIC_BASEMODE);
             erase();
             char str[100];
             if(nonsighttime>=365*16)
@@ -297,11 +297,13 @@ void mode_base()
       if(loc) siege=&loc->siege;
 
       char sieged=0,underattack=0;
-      if(siege)
+      if(siege) sieged=siege->siege;
+      if(sieged)
       {
-         sieged=siege->siege;
-         if(sieged) underattack=siege->underattack;
+         underattack=siege->underattack;
+         music.play(MUSIC_SIEGE);
       }
+      else music.play(MUSIC_BASEMODE);
 
       char haveflag=0;
       if(loc) haveflag=loc->haveflag;
@@ -404,7 +406,7 @@ void mode_base()
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          if(partysize&&!sieged) mvaddstr(8,30,"O - Reorder");
 
-         if(activesquad)
+         if(activesquad&&!sieged) // don't cover up info about siege with irrelevant squad name of a squad that will be disbanded during the siege anyway
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(8,1,activesquad->name);
@@ -421,9 +423,18 @@ void mode_base()
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(21,40,"L - The Status of the Liberal Agenda");
 
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         set_color(COLOR_BLACK,COLOR_BLACK,1);
+         for(int p=0;p<len(pool);p++) if(pool[p]->is_active_liberal())
+         {
+            if(pool[p]->squadid!=-1)
+            {
+               int sq=getsquad(pool[p]->squadid);
+               if(sq!=-1) if(squad[sq]->activity.type!=ACTIVITY_NONE) continue;
+            }
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            break;
+         }
          mvaddstr(21,1,"A - Activate Liberals");
-
 
          set_color(COLOR_BLACK,COLOR_BLACK,1);
          for(int p=0;p<len(pool);p++)

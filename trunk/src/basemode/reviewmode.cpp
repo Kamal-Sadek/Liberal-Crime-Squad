@@ -69,6 +69,7 @@ void review()
 
    while(true)
    {
+      music.play(MUSIC_REVIEWMODE);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -97,17 +98,23 @@ void review()
       {
          if(p<len(squad))
          {
-            if(activesquad==squad[p])set_color(COLOR_WHITE,COLOR_BLACK,1);
-            else set_color(COLOR_WHITE,COLOR_BLACK,0);
+            set_color(COLOR_WHITE,COLOR_BLACK,activesquad==squad[p]);
             mvaddchar(y,0,y+'A'-2);addstr(" - ");
             addstr(squad[p]->name);
 
             if(squad[p]->squad[0]!=NULL&&squad[p]->squad[0]->location!=-1)
-               mvaddstr(y,31,location[squad[p]->squad[0]->location]->getname(true, true));
+            {
+               Location *loc=location[squad[p]->squad[0]->location];
+               siegest *siege=&loc->siege;
+               if(siege?siege->siege:false) set_color(siege->underattack?COLOR_RED:COLOR_YELLOW,COLOR_BLACK,activesquad==squad[p]);
+               mvaddstr(y,31,loc->getname(true, true));
+               set_color(COLOR_WHITE,COLOR_BLACK,activesquad==squad[p]);
+            }
 
             if(squad[p]->squad[0]!=NULL)
             {
                std::string str=getactivity(squad[p]->activity);
+               set_activity_color(squad[p]->activity.type);
                if(squad[p]->activity.type==ACTIVITY_NONE)
                {
                   bool haveact=false,multipleact=false;
@@ -115,10 +122,15 @@ void review()
                   {
                      if(squad[p]->squad[p2]==NULL) continue;
                      const std::string str2=getactivity(squad[p]->squad[p2]->activity);
+                     set_activity_color(squad[p]->squad[p2]->activity.type);
                      if(haveact&&str!=str2) multipleact=true;
                      str=str2,haveact=true;
                   }
-                  if(multipleact) str="Acting Individually";
+                  if(multipleact)
+                  {
+                     str="Acting Individually";
+                     set_color(COLOR_WHITE,COLOR_BLACK,1);
+                  }
                }
                mvaddstr(y,51,str);
             }
