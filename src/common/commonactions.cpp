@@ -524,7 +524,7 @@ int loveslavesleft(const Creature& cr)
    int loveslavecap = cr.get_skill(SKILL_SEDUCTION)/2+1;
 
    // -1 if they're a love slave (their boss is a lover)
-   if(cr.flag & CREATUREFLAG_LOVESLAVE)loveslavecap--;
+   if(cr.flag & CREATUREFLAG_LOVESLAVE) loveslavecap--;
 
    // Subtract number of love slaves they have
    loveslavecap -= loveslaves(cr);

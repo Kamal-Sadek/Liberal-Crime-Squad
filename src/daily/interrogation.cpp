@@ -663,8 +663,8 @@ void tendhostage(Creature *cr,char &clearformess)
             }
             addstr("!\" in its face.", gamelog);
             gamelog.newline();
-            if(cr->get_attribute(ATTRIBUTE_HEART,true)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
-            if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>1)cr->adjust_attribute(ATTRIBUTE_WISDOM,-1);
+            if(cr->get_attribute(ATTRIBUTE_HEART,true)>1) cr->adjust_attribute(ATTRIBUTE_HEART,-1);
+            if(cr->get_attribute(ATTRIBUTE_WISDOM,true)>1) cr->adjust_attribute(ATTRIBUTE_WISDOM,-1);
          }
          else
          {
@@ -787,24 +787,24 @@ void tendhostage(Creature *cr,char &clearformess)
                   else addstr("mommy.", gamelog);
                   break;
                case 1:
-                  if(techniques[TECHNIQUE_RESTRAIN])addstr(" goes limp in the restraints.", gamelog);
+                  if(techniques[TECHNIQUE_RESTRAIN]) addstr(" goes limp in the restraints.", gamelog);
                   else addstr(" curls up in the corner and doesn't move.", gamelog);break;
                case 2:
-                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(5))addstr(" barks helplessly.", gamelog);
+                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(5)) addstr(" barks helplessly.", gamelog);
                   else addstr(" cries helplessly.", gamelog);break;
                case 3:
-                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(3))addstr(" wonders about apples.", gamelog);
+                  if(techniques[TECHNIQUE_DRUGS] && !LCSrandom(3)) addstr(" wonders about apples.", gamelog);
                   else addstr(" wonders about death.", gamelog);
                   break;
                }
                gamelog.newline();
-               if(cr->get_attribute(ATTRIBUTE_HEART,false)>1)cr->adjust_attribute(ATTRIBUTE_HEART,-1);
+               if(cr->get_attribute(ATTRIBUTE_HEART,false)>1) cr->adjust_attribute(ATTRIBUTE_HEART,-1);
 
                if(LCSrandom(2)&&cr->juice>0) { if((cr->juice-=forceroll)<0) cr->juice=0; }
                else if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10));
-                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
+                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1) cr->set_attribute(ATTRIBUTE_WISDOM,1);
                }
 
                if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
@@ -846,7 +846,7 @@ void tendhostage(Creature *cr,char &clearformess)
                if(cr->get_attribute(ATTRIBUTE_WISDOM,false)>1)
                {
                   cr->set_attribute(ATTRIBUTE_WISDOM,cr->get_attribute(ATTRIBUTE_WISDOM,false)-(forceroll/10+1));
-                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1)cr->set_attribute(ATTRIBUTE_WISDOM,1);
+                  if(cr->get_attribute(ATTRIBUTE_WISDOM,false)<1) cr->set_attribute(ATTRIBUTE_WISDOM,1);
                }
             }
 

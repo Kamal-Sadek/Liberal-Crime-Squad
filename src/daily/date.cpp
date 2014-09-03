@@ -634,7 +634,6 @@ char completedate(datest &d,int p,char &clearformess)
          }
          if(c=='e'&&d.date[e]->align==-1&&!pool[p]->clinic)
          {
-
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             int bonus=0;
             move(17,0);
@@ -659,8 +658,7 @@ char completedate(datest &d,int p,char &clearformess)
                if(pool[p]->get_weapon().can_take_hostages())
                   bonus=5;
                else bonus=-1; // Conservative emboldened by the fact that you're trying
-                              // to kidnap them with a gavel or some shit like that
-            }
+            }                 // to kidnap them with a gavel or some shit like that
             else
             {
                addstr(" seizes the Conservative swine from behind and warns it", gamelog);
@@ -676,9 +674,9 @@ char completedate(datest &d,int p,char &clearformess)
 
             getkey();
 
-            // Kidnap succeeds if the conservative isn't very dangerous,
-            // but might fail if the conservative is tough stuff.
-            if((d.date[e]->kidnap_resistant()&&
+            // Kidnap probably succeeds if the conservative isn't very dangerous,
+            // but fails 15 times as often if the conservative is tough stuff.
+            if((!d.date[e]->kidnap_resistant()&&
                 LCSrandom(15))||
                 LCSrandom(2+bonus))
             {

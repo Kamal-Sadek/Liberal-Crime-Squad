@@ -58,7 +58,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpo
          break;
       case ACTIVITY_SLEEPER_STEAL:
          sleeper_steal(cr,clearformess,canseethings,libpower);
-		 infiltrate = 0;
+         infiltrate = 0;
          break;
       case ACTIVITY_SLEEPER_RECRUIT:
          sleeper_recruit(cr,clearformess,canseethings,libpower);
@@ -75,7 +75,7 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpo
          break;
    }
 
-   if (infiltrate)cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
+   if(infiltrate) cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
 
    if(cr.infiltration>=1)
       cr.infiltration=1;
@@ -360,7 +360,7 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpowe
    if(cr.juice<100)
    {
       cr.juice += 10;
-      if(cr.juice>100)cr.juice=100;
+      if(cr.juice>100) cr.juice=100;
    }
 
    location[cr.base]->mapped = 1;
@@ -596,7 +596,7 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&li
    if(cr.juice<100)
    {
       cr.juice += 10;
-      if(cr.juice>100)cr.juice=100;
+      if(cr.juice>100) cr.juice=100;
    }
 
    int income;
@@ -890,14 +890,14 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpo
    if(numberofxmlfails > 0) {
       move(8,1);
       set_color(COLOR_RED,COLOR_BLUE,1);
-      //TODO: Not sure if this is something that is meant to be logged.
-      addstr("Conservative hacktivity around XML bases lead to");
+      addstr("Items not found in XML files led to ",xmllog);
       move(9,1);
-      addstr(numberofxmlfails);
-      addstr(" lost stolen items!");
+      addstr(numberofxmlfails,xmllog);
+      addstr(" lost stolen items! ",xmllog);
       move(11,1);
       set_color(COLOR_RED,COLOR_GREEN,1);
-      addstr("Contact the LERT at once!");
+      addstr("Contact the mod author (or DevTeam if playing the vanilla game) at once!",xmllog);
+      xmllog.nextMessage();
    }
 
    getkey();

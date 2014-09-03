@@ -12,7 +12,6 @@ Item::Item(const std::string& inputXml)
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
@@ -54,18 +53,15 @@ bool Item::sort_compare(Item *b,Item *a)
 
 const char* Item::aan() const
 {
-   string name = get_name();
-   switch (name[0])
+   switch(get_name()[0])
    {
-      case 'a': case 'A':
-      case 'e': case 'E':
-      case 'i': case 'I':
-      case 'o': case 'O':
-      case 'u': case 'U':
-         return "an";
-         break;
-      default:
-         return "a";
-         break;
+   case 'a': case 'A':
+   case 'e': case 'E':
+   case 'i': case 'I':
+   case 'o': case 'O':
+   case 'u': case 'U':
+      return "an";
+   default:
+      return "a";
    }
 }

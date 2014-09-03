@@ -330,7 +330,6 @@ void advancecreature(Creature &cr)
          burndamage = static_cast<int>(burndamage * (1-(3.0/denom)));
       }
 
-
       cr.blood-=burndamage;
 
       if(cr.blood<=0)

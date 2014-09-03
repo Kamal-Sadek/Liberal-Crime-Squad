@@ -471,7 +471,7 @@ Elements marked as hardcoded may have their values overridden by the game.
     </creaturetype>
 
     <creaturetype idname="CREATURE_FIREFIGHTER">
-        <type_name>Fire Fighter</type_name><!-- Hardcoded to Fireman if free speech law is arch conservative. -->
+        <type_name>Firefighter</type_name><!-- Hardcoded to Fireman if free speech law is arch conservative. -->
         <!-- <encounter_name> Hardcoded -->
         <!-- <weapon> Hardcoded -->
         <armor>ARMOR_OVERALLS</armor>
