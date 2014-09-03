@@ -442,10 +442,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    char str[200];
 
    clearmessagearea(false);
-   if (goodguyattack)
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-   else
-      set_color(COLOR_RED,COLOR_BLACK,1);
+   if(goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
+   else set_color(COLOR_RED,COLOR_BLACK,1);
 
    //INCAPACITATED
    char incaprint;
@@ -539,7 +537,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    strcpy(str,a.name);
    strcat(str," ");
-   if(mistake)strcat(str,"MISTAKENLY ");
+   if(mistake) strcat(str,"MISTAKENLY ");
    if(!a.is_armed())
    {
       if(!a.animalgloss) //Move into WEAPON_NONE -XML
@@ -572,9 +570,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    }
    else
    {
-      if(attack_used->can_backstab && a.align == ALIGN_LIBERAL && !mistake)
+      if(attack_used->can_backstab && a.align==ALIGN_LIBERAL && !mistake)
       {
-         if(t.cantbluff < 1 && sitealarm < 1)
+         if(t.cantbluff<1 && sitealarm<1)
          {
             sneak_attack = true;
             strcat(str,"sneaks up on");
@@ -746,11 +744,11 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             (!(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)) ||
              !(t.wound[BODYPART_BODY]&(WOUND_CLEANOFF|WOUND_NASTYOFF))))
             offset=8;  // NO LIMB HITS HERE YOU AWESOME PERSON
+         if(sneak_attack)
+            offset=10; // Backstab! 2/3 body, 1/3 head
          if(aroll>droll+15 &&
             !(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)))
             offset=12; // BOOM AUTOMATIC HEADSHOT MOTHA******
-         if(sneak_attack)
-            offset=10; // Backstab! 2/3 body, 1/3 head
          //Weighted location roll:
          //200% chance to hit body
          //50% chance to hit head
@@ -945,7 +943,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       if(mod<0) mod=0;
 
       damagemod(t,damtype,damamount,w,armorpiercing,mod);
-
 
       // Temporary debug output for the damage roll
       #ifdef SHOWMECHANICS
@@ -1662,20 +1659,20 @@ void damagemod(Creature &t,char &damtype,int &damamount,
    if(t.get_armor().is_damaged())
       armor-=1;
 
-   if(armor<0)armor=0; // Possible from second-rate clothes
+   if(armor<0) armor=0; // Possible from second-rate clothes
 
    int mod2=armor+LCSrandom(armor+1)-armorpenetration;
-   if(mod2>0)mod-=mod2*2;
+   if(mod2>0) mod-=mod2*2;
 
-   if(mod>10)mod=10; // Cap damage multiplier (every 5 points adds 1x damage)
+   if(mod>10) mod=10; // Cap damage multiplier (every 5 points adds 1x damage)
 
-   if(mod<=-8)damamount>>=6;
-   else if(mod<=-6)damamount>>=5;
-   else if(mod<=-4)damamount>>=4;
-   else if(mod<=-3)damamount>>=3;
-   else if(mod<=-2)damamount>>=2;
-   else if(mod<=-1)damamount>>=1;
-   else if(mod>=0)damamount=(int)((float)damamount * (1.0f + 0.2f*mod));
+   if(mod<=-8) damamount>>=6;
+   else if(mod<=-6) damamount>>=5;
+   else if(mod<=-4) damamount>>=4;
+   else if(mod<=-3) damamount>>=3;
+   else if(mod<=-2) damamount>>=2;
+   else if(mod<=-1) damamount>>=1;
+   else if(mod>=0) damamount=(int)((float)damamount * (1.0f + 0.2f*mod));
 
    // Firefighter's bunker gear reduces fire damage by 3/4
    if((damtype & WOUND_BURNED) && t.get_armor().has_fireprotection())
@@ -1911,8 +1908,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
             {
                case 0:strcat(str,"plays a song for");break;
                case 1:strcat(str,"sings to");break;
-               case 2:
-                      if(a.get_weapon().has_musical_attack())
+               case 2:if(a.get_weapon().has_musical_attack())
                       {
                          strcat(str,"strums the ");
                          strcat(str,a.get_weapon().get_name());
@@ -1933,12 +1929,10 @@ void specialattack(Creature &a, Creature &t, char &actual)
 
             if(t.align==1)
                resist=t.attribute_roll(ATTRIBUTE_HEART);
-            else
-               resist=t.attribute_roll(ATTRIBUTE_WISDOM);
+            else resist=t.attribute_roll(ATTRIBUTE_WISDOM);
             if(resist>0)
                a.train(SKILL_MUSIC,LCSrandom(resist)+1);
-            else
-               a.train(SKILL_MUSIC,1);
+            else a.train(SKILL_MUSIC,1);
          }
          break;
    }
@@ -2024,9 +2018,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
                   activesquad->squad[p]=NULL;
                   flipstart=1;
                }
-               if(flipstart&&p<5)activesquad->squad[p]=activesquad->squad[p+1];
+               if(flipstart&&p<5) activesquad->squad[p]=activesquad->squad[p+1];
             }
-            if(flipstart)activesquad->squad[5]=NULL;
+            if(flipstart) activesquad->squad[5]=NULL;
          }
       }
       else
@@ -2081,11 +2075,11 @@ void severloot(Creature &cr,vector<Item *> &loot)
 {
    int armok=2;
    if((cr.wound[BODYPART_ARM_RIGHT] & WOUND_NASTYOFF)||
-      (cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF))armok--;
+      (cr.wound[BODYPART_ARM_RIGHT] & WOUND_CLEANOFF)) armok--;
    if((cr.wound[BODYPART_ARM_LEFT] & WOUND_NASTYOFF)||
-      (cr.wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF))armok--;
-   if(cr.special[SPECIALWOUND_NECK]!=1)armok=0;
-   if(cr.special[SPECIALWOUND_UPPERSPINE]!=1)armok=0;
+      (cr.wound[BODYPART_ARM_LEFT] & WOUND_CLEANOFF)) armok--;
+   if(cr.special[SPECIALWOUND_NECK]!=1) armok=0;
+   if(cr.special[SPECIALWOUND_UPPERSPINE]!=1) armok=0;
 
    if(cr.is_armed() && armok==0)
    {
@@ -2162,14 +2156,14 @@ void bloodblast(Armor* armor)
    //HIT EVERYTHING
    for(int p=0;p<6;p++)
    {
-      if(activesquad->squad[p]==NULL)continue;
+      if(activesquad->squad[p]==NULL) continue;
       if(!LCSrandom(2))
          activesquad->squad[p]->get_armor().set_bloody(true);
    }
 
    for(int e=0;e<ENCMAX;e++)
    {
-      if(!encounter[e].exists)continue;
+      if(!encounter[e].exists) continue;
       if(!LCSrandom(2))
          encounter[e].get_armor().set_bloody(true);
    }
@@ -2185,14 +2179,14 @@ void bloodblast(Armor* armor)
 void delenc(short e,char loot)
 {
    //MAKE GROUND LOOT
-   if(mode!=GAMEMODE_SITE)loot=0;
-   if(loot)makeloot(encounter[e],groundloot);
+   if(mode!=GAMEMODE_SITE) loot=0;
+   if(loot) makeloot(encounter[e],groundloot);
 
    //BURY IT
    for(int en=e;en<ENCMAX;en++)
    {
-      if(!encounter[en].exists)break;
-      if(en<ENCMAX-1)encounter[en]=encounter[en+1];
+      if(!encounter[en].exists) break;
+      if(en<ENCMAX-1) encounter[en]=encounter[en+1];
    }
    encounter[ENCMAX-1].exists=0;
 }

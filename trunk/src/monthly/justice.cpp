@@ -482,7 +482,7 @@ void trial(Creature &g)
    addstr("B - Defend self!");
    move(y++,1);
    addstr("C - Plead guilty.");
-   if(ledger.get_funds()<5000)set_color(COLOR_BLACK,COLOR_BLACK,1);
+   if(ledger.get_funds()<5000) set_color(COLOR_BLACK,COLOR_BLACK,1);
    move(y++,1);
    addstr("D - Pay $5000 to hire ace Liberal attorney ");
    addstr(attorneyname);
@@ -495,7 +495,7 @@ void trial(Creature &g)
       addstr(sleeperlawyer->name);
       addstr("'s offer to assist pro bono.");
    }
-   if(ledger.get_funds()<5000)set_color(COLOR_WHITE,COLOR_BLACK,0);
+   if(ledger.get_funds()<5000) set_color(COLOR_WHITE,COLOR_BLACK,0);
 
    //SAV - added in display of skills and relevant attributes to help
    // decide when to defend self.
@@ -596,9 +596,9 @@ void trial(Creature &g)
          }
          gamelog.newline();
       }
-      else if(jury<=-15)addstr("The jury is fairly Liberal.", gamelog);
-      else if(jury<15)addstr("The jury is quite moderate.", gamelog);
-      else if(jury<29)addstr("The jury is a bit Conservative.", gamelog);
+      else if(jury<=-15) addstr("The jury is fairly Liberal.", gamelog);
+      else if(jury<15) addstr("The jury is quite moderate.", gamelog);
+      else if(jury<29) addstr("The jury is a bit Conservative.", gamelog);
       else
       {
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -616,7 +616,7 @@ void trial(Creature &g)
       #ifdef SHOWMECHANICS
       {
          addstr(" (");
-         if(jury>=0)addchar('+');
+         if(jury>=0) addchar('+');
          addstr(jury);
          addstr(" to convict)");
       }
@@ -690,15 +690,15 @@ void trial(Creature &g)
                sleeperlawyer->train(SKILL_PERSUASION,prosecution/4);
             }
 
-            if(defensepower<=5)addstr("The defense attorney rarely showed up.", gamelog);
-            else if(defensepower<=15)addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.", gamelog);
-            else if(defensepower<=25)addstr("The defense is totally lame.", gamelog);
-            else if(defensepower<=50)addstr("The defense was lackluster.", gamelog);
-            else if(defensepower<=75)addstr("Defense arguments were pretty good.", gamelog);
-            else if(defensepower<=100)addstr("The defense was really slick.", gamelog);
+            if(defensepower<=5) addstr("The defense attorney rarely showed up.", gamelog);
+            else if(defensepower<=15) addstr("The defense attorney accidentally said \"My client is GUILTY!\" during closing.", gamelog);
+            else if(defensepower<=25) addstr("The defense is totally lame.", gamelog);
+            else if(defensepower<=50) addstr("The defense was lackluster.", gamelog);
+            else if(defensepower<=75) addstr("Defense arguments were pretty good.", gamelog);
+            else if(defensepower<=100) addstr("The defense was really slick.", gamelog);
             else if(defensepower<=145)
             {
-               if(prosecution<100)addstr("The defense makes the prosecution look like amateurs.", gamelog);
+               if(prosecution<100) addstr("The defense makes the prosecution look like amateurs.", gamelog);
                else addstr("The defense is extremely compelling.", gamelog);
             }
             else
@@ -743,11 +743,11 @@ void trial(Creature &g)
             gamelog.newline();
             addjuice(g,-10,-50); // You should be ashamed
          }
-         else if(defensepower<=25)addstr("'s case really sucked.", gamelog);
-         else if(defensepower<=50)addstr(" did all right, but made some mistakes.", gamelog);
-         else if(defensepower<=75)addstr("'s arguments were pretty good.", gamelog);
-         else if(defensepower<=100)addstr(" worked the jury very well.", gamelog);
-         else if(defensepower<=150)addstr(" made a very powerful case.", gamelog);
+         else if(defensepower<=25) addstr("'s case really sucked.", gamelog);
+         else if(defensepower<=50) addstr(" did all right, but made some mistakes.", gamelog);
+         else if(defensepower<=75) addstr("'s arguments were pretty good.", gamelog);
+         else if(defensepower<=100) addstr(" worked the jury very well.", gamelog);
+         else if(defensepower<=150) addstr(" made a very powerful case.", gamelog);
          else
          {
             addstr(" had the jury, judge, and prosecution crying for freedom.", gamelog);
@@ -969,11 +969,11 @@ void penalize(Creature &g,char lenient)
       ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
       law[LAW_DEATHPENALTY]==-2))
    {
-      if(law[LAW_DEATHPENALTY]==-2)g.deathpenalty=1;
-      if(law[LAW_DEATHPENALTY]==-1)g.deathpenalty=LCSrandom(3);
-      if(law[LAW_DEATHPENALTY]==0)g.deathpenalty=LCSrandom(2);
-      if(law[LAW_DEATHPENALTY]==1)g.deathpenalty=!LCSrandom(5);
-      if(law[LAW_DEATHPENALTY]==2)g.deathpenalty=0;
+      if(law[LAW_DEATHPENALTY]==-2) g.deathpenalty=1;
+      if(law[LAW_DEATHPENALTY]==-1) g.deathpenalty=LCSrandom(3);
+      if(law[LAW_DEATHPENALTY]==0) g.deathpenalty=LCSrandom(2);
+      if(law[LAW_DEATHPENALTY]==1) g.deathpenalty=!LCSrandom(5);
+      if(law[LAW_DEATHPENALTY]==2) g.deathpenalty=0;
    }
 
    for(int l=0;l<LAWFLAGNUM;l++) if(g.crimes_suspected[l]>10) g.crimes_suspected[l]=10;
@@ -1001,9 +1001,9 @@ void penalize(Creature &g,char lenient)
          g.sentence+=(12+LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
 
          // How illegal is marijuana?
-         if(law[LAW_DRUGS]==-2)g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
-         else if(law[LAW_DRUGS]==-1)g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
-         else if(law[LAW_DRUGS]==0)g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
+         if(law[LAW_DRUGS]==-2) g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
+         else if(law[LAW_DRUGS]==-1) g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
+         else if(law[LAW_DRUGS]==0) g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
          // else not illegal
 
          g.sentence+=1*g.crimes_suspected[LAWFLAG_BREAKING];
@@ -1023,26 +1023,26 @@ void penalize(Creature &g,char lenient)
       }
       if(law[LAW_FLAGBURNING]==-2)
       {
-         if(!LCSrandom(2))g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
+         if(!LCSrandom(2)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
          else if(g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence=-1*g.crimes_suspected[LAWFLAG_BURNFLAG];
       }
-      else if(law[LAW_FLAGBURNING]==-1)g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
-      else if(law[LAW_FLAGBURNING]==0)g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      else if(law[LAW_FLAGBURNING]==-1) g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      else if(law[LAW_FLAGBURNING]==0) g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
 
       if((LCSrandom(4)-g.crimes_suspected[LAWFLAG_MURDER])>0)
       {
-         if(!(g.sentence<0))g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
+         if(!(g.sentence<0)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
       }
       else
       {
-         if(g.sentence<0)g.sentence-=-1*g.crimes_suspected[LAWFLAG_MURDER];
+         if(g.sentence<0) g.sentence-=-1*g.crimes_suspected[LAWFLAG_MURDER];
          else if(g.crimes_suspected[LAWFLAG_MURDER])
             g.sentence=-1*g.crimes_suspected[LAWFLAG_MURDER];
       }
-      if(g.sentence<0)g.sentence-=1*g.crimes_suspected[LAWFLAG_TREASON];
+      if(g.sentence<0) g.sentence-=1*g.crimes_suspected[LAWFLAG_TREASON];
       else if(g.crimes_suspected[LAWFLAG_TREASON]) g.sentence=-1*g.crimes_suspected[LAWFLAG_TREASON];
-      if(lenient&&g.sentence!=-1)g.sentence/=2;
-      if(lenient&&g.sentence==-1)g.sentence=240+LCSrandom(120);
+      if(lenient&&g.sentence!=-1) g.sentence/=2;
+      if(lenient&&g.sentence==-1) g.sentence=240+LCSrandom(120);
    }
    //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
    else if(g.deathpenalty&&lenient) g.deathpenalty=0,g.sentence=-1;

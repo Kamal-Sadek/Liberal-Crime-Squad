@@ -9,11 +9,9 @@ Clip::Clip(const std::string& inputXml) : Item(inputXml)
    xml.SetDoc(inputXml);
    xml.FindElem();
    xml.IntoElem();
-
    while(xml.FindElem())
    {
       std::string tag=xml.GetTagName();
-
    }*/
 }
 
@@ -48,29 +46,25 @@ bool Clip::merge(Item& i)
 
 bool Clip::sort_compare_special(Item* other) const
 {
-   bool reorder = false;
    if(other)
    {
-      int thisi = getcliptype(itemtypename());
-      int otheri = getcliptype(other->get_itemtypename());
-      if(thisi < otheri || otheri == -1)
-         reorder = false;
-      else if(thisi > otheri && otheri != -1)
-         reorder = true;
+      int thisi=getcliptype(itemtypename());
+      int otheri=getcliptype(other->get_itemtypename());
+      if(thisi<otheri||otheri==-1) return false;
+      else if(thisi>otheri&&otheri!=-1) return true;
+      else return false;
    }
-   return reorder;
+   else return false;
 }
 
 string Clip::equip_title() const
-   { return cliptype[getcliptype(itemtypename())]->get_name(); }
+{ return cliptype[getcliptype(itemtypename())]->get_name(); }
 
 const string& Clip::get_name() const
-   { return cliptype[getcliptype(itemtypename())]->get_name(); }
+{ return cliptype[getcliptype(itemtypename())]->get_name(); }
 
 long Clip::get_fencevalue() const
-   { return cliptype[getcliptype(itemtypename())]->get_fencevalue(); }
+{ return cliptype[getcliptype(itemtypename())]->get_fencevalue(); }
 
 int Clip::get_ammoamount() const
-   { return cliptype[getcliptype(itemtypename())]->get_ammoamount(); }
-
-
+{ return cliptype[getcliptype(itemtypename())]->get_ammoamount(); }
