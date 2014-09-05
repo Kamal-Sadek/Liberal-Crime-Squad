@@ -192,6 +192,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       move(y++,0);
       addstr(d.date[e]->name,gamelog);
       addstr(" seemed to have fun, but left early",gamelog);
+      move(y++,0);
       switch(LCSrandom(4))
       {
       case 0: addstr(s+" to wash "+d.date[e]->hisher()+" hair.",gamelog); break;
@@ -296,13 +297,68 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       }
       else
       {
-         set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-         move(y++,0);
-         addstr(d.date[e]->name, gamelog);
-         addstr(" can sense that things just aren't working out.", gamelog);
-         gamelog.newline();
-         move(y++,0);
-
+         int ls = loveslaves(*pool[p]);
+         if (ls > 0 && LCSrandom(2))
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            move(y++,0);
+            addstr(s+"The date starts well, but goes horribly wrong when "+d.date[e]->name, gamelog);
+            move(y++,0);
+            addstr(s+"notices "+pool[p]->name+"'s ", gamelog);
+            switch (ls)
+            {
+               case 5:
+                  addstr("awe-inspiring ", gamelog);
+                  break;
+               case 4:
+                  addstr("intricate ", gamelog);
+                  break;
+               case 3:
+                  addstr("complicated ", gamelog);
+                  break;
+               case 2:
+                  addstr("detailed ", gamelog);
+                  break;
+               case 1:
+                  break;
+               default:
+                  addstr("mind-bending ", gamelog);
+            }
+            addstr(s+"schedule for keeping "+d.date[e]->himher(),gamelog);
+            addstr(s+" from meeting ",gamelog);
+            move(y++,0);
+            int lsfound = 0;
+            for (int q=0; q<(int)pool.size(); q++)
+            {
+               if(pool[q]->hireid == pool[p]->id && pool[q]->alive && pool[q]->flag & CREATUREFLAG_LOVESLAVE)
+               {
+                  lsfound++;
+                  if (lsfound == 1)
+                  {
+                     addstr(pool[q]->name, gamelog);
+                  }
+                  else if (lsfound < ls)
+                  {
+                     addstr(s+", "+pool[q]->name, gamelog);
+                  }else
+                  {
+                     addstr(s+" and "+ pool[q]->name, gamelog);
+                  }
+               }
+            }
+            addstr(".",gamelog);
+            gamelog.newline();
+            move(y++,0);
+         }
+         else
+         {
+            set_color(COLOR_MAGENTA,COLOR_BLACK,1);
+            move(y++,0);
+            addstr(d.date[e]->name, gamelog);
+            addstr(" can sense that things just aren't working out.", gamelog);
+            gamelog.newline();
+            move(y++,0);
+         }
          addstr("This relationship is over.", gamelog);
          gamelog.nextMessage();
       }
