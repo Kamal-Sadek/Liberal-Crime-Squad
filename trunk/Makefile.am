@@ -12,7 +12,7 @@ dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
  art/deptstore.xml art/loot.xml art/masks.xml art/oubliette.xml\
  art/pawnshop.xml art/vehicles.xml art/weapons.xml\
  \
- art/sitemaps.txt\
+ art/licenses.txt art/sitemaps.txt\
  \
  art/mapCSV_Bank_Specials.csv art/mapCSV_Bank_Tiles.csv\
  art/mapCSV_BarAndGrill_Specials.csv art/mapCSV_BarAndGrill_Tiles.csv\
@@ -24,15 +24,25 @@ dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
  art/mapCSV_WhiteHouse2_Specials.csv art/mapCSV_WhiteHouse2_Tiles.csv\
  art/mapCSV_WhiteHouse3_Specials.csv art/mapCSV_WhiteHouse3_Tiles.csv\
  \
- art/abort.mid art/activate.mid art/alarmed.mid art/anchor.mid\
- art/basemode.mid art/carchase.mid art/cartheft.mid art/dating.mid\
- art/defeat.mid art/disbanded.mid art/elections.mid art/finances.mid\
- art/footchase.mid art/glamshow.mid art/heavycombat.mid art/interrogation.mid\
- art/lacops.mid art/liberalagenda.mid art/newgame.mid art/newscast.mid\
- art/newspaper.mid art/reaganified.mid art/recruiting.mid art/reviewmode.mid\
- art/shopping.mid art/siege.mid art/sitemode.mid art/sleepers.mid\
- art/stalinized.mid art/stopevil.mid art/suspicious.mid art/titlemode.mid\
- art/trial.mid art/victory.mid
+ art/midi/abort.mid art/midi/activate.mid art/midi/alarmed.mid art/midi/anchor.mid\
+ art/midi/basemode.mid art/midi/carchase.mid art/midi/cartheft.mid art/midi/dating.mid\
+ art/midi/defeat.mid art/midi/disbanded.mid art/midi/elections.mid art/midi/finances.mid\
+ art/midi/footchase.mid art/midi/glamshow.mid art/midi/heavycombat.mid art/midi/interrogation.mid\
+ art/midi/lacops.mid art/midi/liberalagenda.mid art/midi/newgame.mid art/midi/newscast.mid\
+ art/midi/newspaper.mid art/midi/reaganified.mid art/midi/recruiting.mid art/midi/reviewmode.mid\
+ art/midi/shopping.mid art/midi/siege.mid art/midi/sitemode.mid art/midi/sleepers.mid\
+ art/midi/stalinized.mid art/midi/stopevil.mid art/midi/suspicious.mid art/midi/titlemode.mid\
+ art/midi/trial.mid art/midi/victory.mid\
+ \
+ art/ogg/abort.ogg art/ogg/activate.ogg art/ogg/alarmed.ogg art/ogg/anchor.ogg\
+ art/ogg/basemode.ogg art/ogg/carchase.ogg art/ogg/cartheft.ogg art/ogg/dating.ogg\
+ art/ogg/defeat.ogg art/ogg/disbanded.ogg art/ogg/elections.ogg art/ogg/finances.ogg\
+ art/ogg/footchase.ogg art/ogg/glamshow.ogg art/ogg/heavycombat.ogg art/ogg/interrogation.ogg\
+ art/ogg/lacops.ogg art/ogg/liberalagenda.ogg art/ogg/newgame.ogg art/ogg/newscast.ogg\
+ art/ogg/newspaper.ogg art/ogg/reaganified.ogg art/ogg/recruiting.ogg art/ogg/reviewmode.ogg\
+ art/ogg/shopping.ogg art/ogg/siege.ogg art/ogg/sitemode.ogg art/ogg/sleepers.ogg\
+ art/ogg/stalinized.ogg art/ogg/stopevil.ogg art/ogg/suspicious.ogg art/ogg/titlemode.ogg\
+ art/ogg/trial.ogg art/ogg/victory.ogg
 
 
 dist_app_DATA = crimesquad.desktop

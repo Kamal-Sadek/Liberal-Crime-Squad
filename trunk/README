@@ -6,18 +6,39 @@ Windows easy mode compilation
 Easiest way is using the workspaces provided in the 'workspaces' folder. Project files are provided for:
 
  * VisualStudio 
+
  * Code::Blocks
 
  
  Files to include in Windows distributions of Liberal Crime Squad
  ----------------------------------------------------------------
+
  * The LCS executable: on Windows this is "crimesquad.exe" in either
    "workspaces\Debug" for a debug build or "workspaces\Release" for a release
    build.  Of course you should compile a new executable from the latest code.
+
  * The curses library: on Windows this is "pdcurses.dll".
+
  * If it was compiled with SDL for music, also include SDL2.dll and SDL2_mixer.dll.
    You might or might not need these SDL dll files depending on how it was compiled.
- * The "art" directory and all the files in it.
+
+ * If you are using SDL for music and want to have support for Ogg Vorbis, also add
+   libogg-0.dll, libvorbis-0.dll, and libvorbisfile-3.dll. Otherwise it will fall
+   back to playing MIDI music instead of Ogg Vorbis. You don't need those 3 files if
+   you are using MIDI and not Ogg Vorbis music, though. And you don't need them if
+   you aren't using music at all, either. You just need them if you want to use Ogg
+   Vorbis music with the game.
+
+ * The "art" directory and all the files in it, with an exception regarding music:
+   You can leave out either the "midi" subdirectory or the "ogg" subdirectory, or
+   even leave out both. If you want to listen to Ogg Vorbis music which is higher
+   quality but takes up more disk space, you can leave out the "midi" subdirectory.
+   If you want to listen to MIDI music which is lower quality but takes up much
+   less disk space, you can leave out the "ogg" subdirectory. If you either compiled
+   the game without music support or you don't want music, you can leave out both
+   the "ogg" and "midi" directories.
+
  * The "init.txt" configuration file.
+
  * The "CrimeSquadManual.txt" documentation file from the "docs" directory.
  

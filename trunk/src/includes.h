@@ -546,15 +546,15 @@ private:
    bool enabled;
 #ifndef DONT_INCLUDE_SDL
    bool songsinitialized;
+   bool oggsupport;
    int musicmode,previous;
    Mix_Music* songs[MUSIC_OFF];
    /* helper function for initsongs() ... implemented in misc.cpp */
-   void loadmidi(int i,const char* filename);
+   void loadsong(int i,const char* filename);
 #endif // DONT_INCLUDE_SDL
 public:
 #ifndef DONT_INCLUDE_SDL
-   MusicClass() : enabled(true),songsinitialized(false),musicmode(MUSIC_OFF),previous(MUSIC_OFF) { }
-  ~MusicClass() { for(int c=0;c<MUSIC_OFF;c++) if(songs[c]) Mix_FreeMusic(songs[c]); }
+   MusicClass() : enabled(true),songsinitialized(false),oggsupport(true),musicmode(MUSIC_OFF),previous(MUSIC_OFF) { }
 #else
    MusicClass() : enabled(true) { }
 #endif // DONT_INCLUDE_SDL
@@ -568,8 +568,10 @@ public:
       Mix_VolumeMusic(enabled*(MIX_MAX_VOLUME/2)); // half volume if music enabled, muted if music disabled
 #endif // DONT_INCLUDE_SDL
    }
-   /* initialize songs ... implemented in misc.cpp */
+   /* initialize SDL, SDL_mixer, and songs ... implemented in misc.cpp */
    void init();
+   /* shut down SDL, SDL_mixer, and songs ... implemented in misc.cpp */
+   void quit();
    /* play music specified by a MusicMode ... implemented in misc.cpp */
    void play(int _musicmode);
 };
@@ -909,7 +911,7 @@ enum ActiveSortingChoices
 std::string tostring(long i);
 
 /* end the game and clean up */
-void end_game(int err=0);
+void end_game(int err=EXIT_SUCCESS);
 
 
 /*******************************************************************************

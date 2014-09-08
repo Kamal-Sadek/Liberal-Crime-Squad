@@ -414,93 +414,145 @@ bool Interval::set_interval(const string& interval)
 
 #ifndef DONT_INCLUDE_SDL
 /* helper function for initsongs() */
-void MusicClass::loadmidi(int i,const char* filename)
+void MusicClass::loadsong(int i,const char* filename)
 {  // the reason it prints progress on the screen is because it might be a little slow sometimes so this reassures the user progress is being made
    erase();
-   mvaddstr(12,10,"Loading MIDI music ("+tostring(i+1)+"/"+tostring(MUSIC_OFF)+"): "+filename);
+   if(oggsupport)
+   {
+      mvaddstr(12,0,"Loading Ogg Vorbis music ("+tostring(i+1)+"/"+tostring(MUSIC_OFF)+"): "+artdir+"ogg/"+filename+".ogg");
+      mvaddstr(13,0,string("(with ")+artdir+"midi/"+filename+".mid as MIDI fallback)");
+   }
+   else mvaddstr(12,0,"Loading MIDI music ("+tostring(i+1)+"/"+tostring(MUSIC_OFF)+"): "+artdir+"midi/"+filename+".mid");
    refresh();
-   songs[i]=Mix_LoadMUS((string(artdir)+filename).c_str());
-   if(!songs[i]) // there was an error with Mix_LoadMUS()
-      gamelog.log(string("SDL_mixer function Mix_LoadMUS() failed to load ")+filename+":  "+Mix_GetError()); // Music failed to load
+   if(oggsupport) songs[i]=Mix_LoadMUS((string(artdir)+"ogg/"+filename+".ogg").c_str()); // only attempt loading Ogg if we have Ogg support
+   if(!songs[i]||!oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead
+   {
+      if(oggsupport) gamelog.log(string("SDL_mixer function Mix_LoadMUS() failed to load ")+artdir+"ogg/"+filename+".ogg:  "+Mix_GetError()); // Ogg Vorbis music failed to load
+      songs[i]=Mix_LoadMUS((string(artdir)+"midi/"+filename+".mid").c_str());
+   }
+   if(!songs[i]) // there was an error with Mix_LoadMUS() when called on the MIDI file
+      gamelog.log(string("SDL_mixer function Mix_LoadMUS() failed to load ")+artdir+"midi/"+filename+".mid:  "+Mix_GetError()); // MIDI music failed to load
 }
 #endif // DONT_INCLUDE_SDL
 
-/* initialize songs */
+/* initialize SDL, SDL_mixer, and songs */
 void MusicClass::init()
 {
 #ifndef DONT_INCLUDE_SDL
    if(songsinitialized) return; // only initialize once
-   // titlemode.mid - The Liberty Bell March by John Philip Sousa
-   loadmidi(MUSIC_TITLEMODE,"titlemode.mid"); // load title mode music
-   // newgame.mid - Also sprach Zarathustra, introduction by Richard Strauss
-   loadmidi(MUSIC_NEWGAME,"newgame.mid"); // load new game music
-   // basemode.mid - The Stars and Stripes Forever by John Philip Sousa
-   loadmidi(MUSIC_BASEMODE,"basemode.mid"); // load regular base mode music
-   // siege.mid - The Planets, 1st Movement "Mars" by Gustav Holst
-   loadmidi(MUSIC_SIEGE,"siege.mid"); // load base mode while under siege music
-   // activate.mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
-   loadmidi(MUSIC_ACTIVATE,"activate.mid"); // load activate Liberals music
-   // sleepers.mid - Toccata and Fugue in D Minor by Johann Sebastian Bach
-   loadmidi(MUSIC_SLEEPERS,"sleepers.mid"); // load activate Sleepers music
-   // stopevil.mid - Hungarian Dance #5 by Johannes Brahms (based on the csardas "Bartfai emlek" by Bela Keler)
-   loadmidi(MUSIC_STOPEVIL,"stopevil.mid"); // load go forth to stop evil music
-   // reviewmode.mid - Symphony #94, 2nd Movement "Surprise Symphony" by Joseph Haydn
-   loadmidi(MUSIC_REVIEWMODE,"reviewmode.mid"); // load review mode music
-   // liberalagenda.mid - Beautiful Dreamer by Stephen Foster
-   loadmidi(MUSIC_LIBERALAGENDA,"liberalagenda.mid"); // load status of the Liberal agenda music
-   // disbanded.mid - La Cucaracha, a traditional Mexican folk song originally from Spain
-   loadmidi(MUSIC_DISBANDED,"disbanded.mid"); // load disbanded music
-   // finances.mid - Minuet in G Major by Christian Petzold
-   loadmidi(MUSIC_FINANCES,"finances.mid"); // load finance report music
-   // cartheft.mid - The Ride of the Valkyries by Richard Wanger
-   loadmidi(MUSIC_CARTHEFT,"cartheft.mid"); // load car theft music
-   // elections.mid - Habanera from Carmen by Georges Bizet
-   loadmidi(MUSIC_ELECTIONS,"elections.mid"); // load elections music
-   // shopping.mid - The Entertainer by Scott Joplin
-   loadmidi(MUSIC_SHOPPING,"shopping.mid"); // load shopping music
-   // sitemode.mid - Dance of the Sugar Plum Fairy by Pyotr Ilyich Tchaikovsky
-   loadmidi(MUSIC_SITEMODE,"sitemode.mid"); // load site mode music
-   // suspicious.mid - Hall of the Mountain King by Edvard Grieg
-   loadmidi(MUSIC_SUSPICIOUS,"suspicious.mid"); // load suspicious music
-   // alarmed.mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
-   loadmidi(MUSIC_ALARMED,"alarmed.mid"); // load alarmed music
-   // heavycombat.mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
-   loadmidi(MUSIC_HEAVYCOMBAT,"heavycombat.mid"); // load massive Conservative response or escaping/engaging a siege music
-   // carchase.mid - The William Tell Overture by Gioacchino Antonio Rossini
-   loadmidi(MUSIC_CARCHASE,"carchase.mid"); // load car chase music
-   // footchase.mid - The Maple Leaf Rag by Scott Joplin
-   loadmidi(MUSIC_FOOTCHASE,"footchase.mid"); // load foot chase music
-   // interrogation.mid - Night on Bald Mountain by Modest Mussorgsky
-   loadmidi(MUSIC_INTERROGATION,"interrogation.mid"); // load interrogation music
-   // trial.mid - Hungarian Rhapsody #2 by Franz Liszt
-   loadmidi(MUSIC_TRIAL,"trial.mid"); // load trial music
-   // recruiting.mid - Dance of the Hours by Amilcare Ponchielli
-   loadmidi(MUSIC_RECRUITING,"recruiting.mid"); // load recruiting music
-   // dating.mid - The Blue Danube Waltz by Johann Strauss Jr.
-   loadmidi(MUSIC_DATING,"dating.mid"); // load dating music
-   // newspaper.mid - Eine Kleine Nachtmusik, 1st Movement by Wolfgang Amadeus Mozart
-   loadmidi(MUSIC_NEWSPAPER,"newspaper.mid"); // load newspaper music
-   // lacops.mid - The Flight of the Bumblebee by Nikolai Rimsky-Korsakov
-   loadmidi(MUSIC_LACOPS,"lacops.mid"); // load LA cops beating black man and getting caught on video music
-   // newscast.mid - La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle
-   loadmidi(MUSIC_NEWSCAST,"newscast.mid"); // load newscast where smart liberal guest gets some words in edgewise music
-   // glamshow.mid - Das Deutschlandlied, The German National Anthem by Joseph Haydn
-   loadmidi(MUSIC_GLAMSHOW,"glamshow.mid"); // load glamorous TV show about lifestyles of the rich and famous music
-   // anchor.mid - I Am the Very Model of a Modern Major-General by Sir Arthur Seymour Sullivan
-   loadmidi(MUSIC_ANCHOR,"anchor.mid"); // load handsome charismatic new Conservative cable news anchor music
-   // abort.mid - Tarantella Napoletana, a traditional Italian folk song from Naples
-   loadmidi(MUSIC_ABORT,"abort.mid"); // load failed partial birth abortion on trashy daytime talk show music
-   // victory.mid - The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith
-   loadmidi(MUSIC_VICTORY,"victory.mid"); // load victory music
-   // defeat.mid - Piano Sonata #2, 3rd Movement "Funeral March" by Frederic Francois Chopin
-   loadmidi(MUSIC_DEFEAT,"defeat.mid"); // load defeat music
-   // reagainified.mid - Dixie, The Confederate National Anthem by Daniel Decatur Emmett
-   loadmidi(MUSIC_REAGANIFIED,"reaganified.mid"); // load Reaganified music
-   // stalinized.mid - The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov
-   loadmidi(MUSIC_STALINIZED,"stalinized.mid"); // load Stalinized music
+   if(SDL_Init(SDL_INIT_AUDIO)!=0) // initialize what we need from SDL for audio
+   {  // SDL failed to initialize, so log it and exit
+      addstr(string("Unable to initialize SDL:  ")+SDL_GetError(),gamelog);
+      gamelog.nextMessage();
+
+      getkey();
+
+      endwin();
+      exit(EXIT_FAILURE);
+   }
+   if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,4096)!=0) // initialize the audio mixer at 44.1 kHz with a large buffer size, since we're just playing music not sound effects
+   {  // SDL_mixer failed to initialize, so log it and exit
+      addstr(string("Unable to initialize SDL_mixer:  ")+Mix_GetError(),gamelog);
+      gamelog.nextMessage();
+
+      getkey();
+
+      SDL_Quit();
+      endwin();
+      exit(EXIT_FAILURE);
+   }
+   if((Mix_Init(MIX_INIT_OGG|MIX_INIT_FLUIDSYNTH)&MIX_INIT_OGG)!=MIX_INIT_OGG) // initialize Ogg Vorbis support (and FluidSynth if it's there for better MIDI quality)
+   {  // Ogg Vorbis support failed to load, we'll use MIDI instead
+      gamelog.log("Ogg Vorbis support failed to load. MIDI music will be used instead if possible.");
+      gamelog.nextMessage();
+      oggsupport=false;
+   }
+   else oggsupport=true; // we have Ogg Vorbis support!
+   // titlemode.ogg or .mid - Also sprach Zarathustra, introduction by Richard Strauss
+   loadsong(MUSIC_TITLEMODE,"titlemode"); // load title mode music
+   // newgame.ogg or .mid- The Liberty Bell March by John Philip Sousa
+   loadsong(MUSIC_NEWGAME,"newgame"); // load new game music
+   // basemode.ogg or .mid - The Stars and Stripes Forever by John Philip Sousa
+   loadsong(MUSIC_BASEMODE,"basemode"); // load regular base mode music
+   // siege.ogg or .mid- The Planets, 1st Movement "Mars" by Gustav Holst
+   loadsong(MUSIC_SIEGE,"siege"); // load base mode while under siege music
+   // activate.ogg or .mid - Piano Sonata #11, 3rd Movement "Rondo Alla Turca" by Wolfgang Amadeus Mozart
+   loadsong(MUSIC_ACTIVATE,"activate"); // load activate Liberals music
+   // sleepers.ogg or .mid - Toccata and Fugue in D Minor, BWV 565 by Johann Sebastian Bach
+   loadsong(MUSIC_SLEEPERS,"sleepers"); // load activate Sleepers music
+   // stopevil.ogg or .mid - Hungarian Dance #5 by Johannes Brahms (based on the csardas "Bartfai emlek" by Bela Keler)
+   loadsong(MUSIC_STOPEVIL,"stopevil"); // load go forth to stop evil music
+   // reviewmode.ogg or .mid - Symphony #94, 2nd Movement "Surprise Symphony" by Joseph Haydn
+   loadsong(MUSIC_REVIEWMODE,"reviewmode"); // load review mode music
+   // liberalagenda.ogg or .mid - Beautiful Dreamer by Stephen Foster
+   loadsong(MUSIC_LIBERALAGENDA,"liberalagenda"); // load status of the Liberal agenda music
+   // disbanded.ogg or .mid - La Cucaracha, a traditional Mexican folk song originally from Spain
+   loadsong(MUSIC_DISBANDED,"disbanded"); // load disbanded music
+   // finances.ogg or .mid - Minuet in G Major by Christian Petzold (falsely attributed to Johann Sebastian Bach until 1970)
+   loadsong(MUSIC_FINANCES,"finances"); // load finance report music
+   // cartheft.ogg or .mid - The Ride of the Valkyries by Richard Wanger
+   loadsong(MUSIC_CARTHEFT,"cartheft"); // load car theft music
+   // elections.ogg or .mid - Habanera from Carmen by Georges Bizet
+   loadsong(MUSIC_ELECTIONS,"elections"); // load elections music
+   // shopping.ogg or .mid - The Entertainer by Scott Joplin
+   loadsong(MUSIC_SHOPPING,"shopping"); // load shopping music
+   // sitemode.ogg or .mid - Dance of the Sugar Plum Fairy by Pyotr Ilyich Tchaikovsky
+   loadsong(MUSIC_SITEMODE,"sitemode"); // load site mode music
+   // suspicious.ogg or .mid - Hall of the Mountain King by Edvard Grieg
+   loadsong(MUSIC_SUSPICIOUS,"suspicious"); // load suspicious music
+   // alarmed.ogg or .mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
+   loadsong(MUSIC_ALARMED,"alarmed"); // load alarmed music
+   // heavycombat.ogg or .mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
+   loadsong(MUSIC_HEAVYCOMBAT,"heavycombat"); // load massive Conservative response or escaping/engaging a siege music
+   // carchase.ogg or .mid - The William Tell Overture by Gioacchino Antonio Rossini
+   loadsong(MUSIC_CARCHASE,"carchase"); // load car chase music
+   // footchase.ogg or .mid - The Maple Leaf Rag by Scott Joplin
+   loadsong(MUSIC_FOOTCHASE,"footchase"); // load foot chase music
+   // interrogation.ogg or .mid - Night on Bald Mountain by Modest Mussorgsky
+   loadsong(MUSIC_INTERROGATION,"interrogation"); // load interrogation music
+   // trial.ogg or .mid - Hungarian Rhapsody #2 by Franz Liszt
+   loadsong(MUSIC_TRIAL,"trial"); // load trial music
+   // recruiting.ogg or .mid - Dance of the Hours by Amilcare Ponchielli
+   loadsong(MUSIC_RECRUITING,"recruiting"); // load recruiting music
+   // dating.ogg or .mid - The Blue Danube Waltz by Johann Strauss Jr.
+   loadsong(MUSIC_DATING,"dating"); // load dating music
+   // newspaper.ogg or .mid - Eine Kleine Nachtmusik, 1st Movement by Wolfgang Amadeus Mozart
+   loadsong(MUSIC_NEWSPAPER,"newspaper"); // load newspaper music
+   // lacops.ogg or .mid - The Flight of the Bumblebee by Nikolai Rimsky-Korsakov
+   loadsong(MUSIC_LACOPS,"lacops"); // load LA cops beating black man and getting caught on video music
+   // newscast.ogg or .mid - La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle
+   loadsong(MUSIC_NEWSCAST,"newscast"); // load newscast where smart liberal guest gets some words in edgewise music
+   // glamshow.ogg or .mid - Das Deutschlandlied, The German National Anthem by Joseph Haydn
+   loadsong(MUSIC_GLAMSHOW,"glamshow"); // load glamorous TV show about lifestyles of the rich and famous music
+   // anchor.ogg or .mid - I Am the Very Model of a Modern Major-General by Sir Arthur Seymour Sullivan
+   loadsong(MUSIC_ANCHOR,"anchor"); // load handsome charismatic new Conservative cable news anchor music
+   // abort.ogg or .mid - Tarantella Napoletana, a traditional Italian folk song from Naples
+   loadsong(MUSIC_ABORT,"abort"); // load failed partial birth abortion on trashy daytime talk show music
+   // victory.ogg or .mid - The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith
+   loadsong(MUSIC_VICTORY,"victory"); // load victory music
+   // defeat.ogg or .mid - Piano Sonata #2, 3rd Movement "Funeral March" by Frederic Francois Chopin
+   loadsong(MUSIC_DEFEAT,"defeat"); // load defeat music
+   // reagainified.ogg or .mid - Dixie, The Confederate National Anthem by Daniel Decatur Emmett
+   loadsong(MUSIC_REAGANIFIED,"reaganified"); // load Reaganified music
+   // stalinized.ogg or .mid - The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov
+   loadsong(MUSIC_STALINIZED,"stalinized"); // load Stalinized music
    erase();
    refresh();
    songsinitialized=true;
+#endif // DONT_INCLUDE_SDL
+}
+
+/* shut down SDL, SDL_mixer, and songs */
+void MusicClass::quit()
+{
+#ifndef DONT_INCLUDE_SDL
+   if(!songsinitialized) return; // only shut down once
+   music.play(MUSIC_OFF);
+   for(int c=0;c<MUSIC_OFF;c++) if(songs[c]) Mix_FreeMusic(songs[c]);
+   while(Mix_Init(0)) Mix_Quit();
+   Mix_CloseAudio();
+   SDL_Quit();
+   songsinitialized=false;
 #endif // DONT_INCLUDE_SDL
 }
 

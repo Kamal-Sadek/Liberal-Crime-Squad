@@ -250,7 +250,7 @@ int main(int argc, char* argv[])
    //start curses
    initscr();
 
-   gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog.
+   gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog (and also initialize artdir and homedir)
 
    //For formatting.
    //To let the user know a new instance of the program was started.
@@ -258,33 +258,13 @@ int main(int argc, char* argv[])
    //did the play session that follows.
    gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n\n\n");
 
-#ifndef DONT_INCLUDE_SDL
-   if(SDL_Init(SDL_INIT_AUDIO)!=0) // initialize what we need from SDL for audio
-   {  // SDL failed to initialize, so log it and exit
-      addstr(string("Unable to initialize SDL:  ")+SDL_GetError(),gamelog);
-
-      getkey();
-
-      endwin();
-      return 1;
-   }
-   if(Mix_OpenAudio(48000,AUDIO_S16,2,4096)!=0) // initialize the audio mixer itself
-   {  // SDL_mixer failed to initialize, so log it and exit
-      addstr(string("Unable to initialize SDL_mixer:  ")+Mix_GetError(),gamelog);
-
-      getkey();
-
-      endwin();
-      return 1;
-   }
-#endif // DONT_INCLUDE_SDL
-   music.play(MUSIC_TITLEMODE); // do this before printing any text on the screen (it'll initialize the songs the first time it's called)
+   music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 
    // set window title
    char wtitle[50];
    strcpy(wtitle,"Liberal Crime Squad ");
    strcat(wtitle,PACKAGE_VERSION);
-   set_title (wtitle);
+   set_title(wtitle);
 
    noecho();
 
@@ -330,7 +310,8 @@ int main(int argc, char* argv[])
    oldMapMode=!readConfigFile("sitemaps.txt"); // load site map data
    if(oldMapMode)
    {
-      addstr("Failed to load sitemaps.txt! Reverting to old map mode.");
+      addstr("Failed to load sitemaps.txt! Reverting to old map mode.",gamelog);
+      gamelog.nextMessage();
 
       getkey();
    }
@@ -454,7 +435,7 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
-   if(!xml_loaded_ok) end_game(1);
+   if(!xml_loaded_ok) end_game(EXIT_FAILURE);
 
    //addstr("Attempting to load saved game... ");
    //getkey();
@@ -471,7 +452,7 @@ int main(int argc, char* argv[])
    //deinitialize curses
    end_game();
 
-   return 0;
+   return EXIT_SUCCESS;
 }
 
 /* Free memory and exit the game */
@@ -496,11 +477,7 @@ void end_game(int err)
    delete_and_clear(date);
    delete_and_clear(groundloot);
 
-   music.play(MUSIC_OFF);
-#ifndef DONT_INCLUDE_SDL
-   Mix_CloseAudio();
-   SDL_Quit();
-#endif // DONT_INCLUDE_SDL
+   music.quit(); // shut down music
 
    endwin();
    exit(err);

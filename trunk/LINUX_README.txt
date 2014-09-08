@@ -386,7 +386,8 @@ Microsoft Visual C++ (32-bit) and MinGW-GCC (32 bit), the 2 main
 compilers used on MS Windows. On other platforms such as Linux and
 Mac OS X you will probably need the SDL2 and SDL2_mixer libraries to
 link against as dependencies, in order for it to compile correctly
-with audio support. Currently this is used for MIDI background music.
+with audio support. Currently this is used for MIDI or Ogg Vorbis
+background music.
 
 So you have a couple alternatives:
 
@@ -423,8 +424,12 @@ and CoreMIDI, both supported natively by SDL and SDL_mixer. Well actually
 CoreMIDI is just on iOS but SDL and SDL_mixer support both Android and
 iOS.
 
+3) Use Ogg Vorbis instead of MIDI if you wish. Along with SDL2 and
+SDL2_mixer, you should have libogg, libvorbis, and libvorbisfile installed.
+Ogg Vorbis has better sound quality than MIDI but larger file size.
 
-3) If all else fails, uncomment the line that says #define DONT_INCLUDE_SDL
+
+4) If all else fails, uncomment the line that says #define DONT_INCLUDE_SDL
 in common.h. This will disable SDL, SDL_mixer, and audio, and let
 you compile and build Liberal Crime Squad without any SDL dependencies.
 The only downside to this is you don't get any audio.
