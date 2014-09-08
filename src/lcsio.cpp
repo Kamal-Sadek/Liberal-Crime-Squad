@@ -91,7 +91,7 @@ bool LCSInitArtDir()
    const char* artprefix;
    artprefix=art_search_paths[0];
    std::string tester;
-   for(int i=1;artprefix!=NULL;++i)
+   for(int i=1;artprefix!=NULL;i++)
    {
       tester=artprefix;
       tester.append(arttest);
@@ -99,7 +99,6 @@ bool LCSInitArtDir()
          break;
 
       artprefix=art_search_paths[i];
-
    }
    if(artprefix==NULL)
       return false;

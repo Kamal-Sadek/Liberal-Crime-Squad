@@ -1,0 +1,546 @@
+﻿This license file lists licenses for everything that may be bundled with
+Liberal Crime Squad, most notably music, because we have to list it in a
+license file like this to comply with many of the licenses, which require
+the license to be stated and attribution to be given, so this file is here
+to comply with all the licenses.
+
+The game Liberal Crime Squad itself is licensed under the GNU GPL version 2.0 or later.
+See http://www.gnu.org/licenses/gpl-2.0.html or http://www.gnu.org/copyleft/gpl.html for details.
+
+The PDCurses library is public domain, and therefore GPL-compatible,
+and for the purposes of this project, is relicensed under the GNU GPL version 2.0 or later.
+See http://creativecommons.org/publicdomain/zero/1.0/ for the CC0 public domain license that you can use with it.
+
+The SDL2 and SDL2_mixer libraries are licensed under the zlib license, which is GPL-compatible,
+and for the purposes of this project, are relicensed under the GNU GPL version 2.0 or later.
+See https://www.libsdl.org/license.php or http://www.gzip.org/zlib/zlib_license.html for details.
+
+The libogg, libvorbis, and libvorbisfile libraries are licensed under the following GPL-compatible license:
+      Copyright (c) 2002-2008 Xiph.org Foundation
+      Redistribution and use in source and binary forms, with or without
+      modification, are permitted provided that the following conditions are met:
+      - Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+      - Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+      - Neither the name of the Xiph.org Foundation nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+      “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+      A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION
+      OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+For the purposes of this project, they are relicensed under the GNU GPL version 2.0 or later.
+
+/src/cmarkup/Markup.cpp and /src/cmarkup/Markup.h are licensed under the following GPL-compatible license,
+which makes them free to use in non-commercial applications such as anything under the GNU GPL:
+      Copyright (C) 2011 First Objective Software, Inc. All rights reserved.
+      Go to www.firstobject.com for the latest CMarkup and EDOM documentation.
+      Use in commercial applications requires written permission.
+      This software is provided “as is”, with no warranty.
+For the purposes of this project, they are relicensed under the GNU GPL version 2.0 or later.
+
+/src/vector.h is licensed under the following license, a BSD-style license that is GPL-compatible:
+      Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
+      Consult your license regarding permissions and restrictions.
+      This file is derived from software bearing the following restrictions:
+      Copyright (c) 1994 Hewlett-Packard Company
+      Permission to use, copy, modify, distribute and sell this
+      software and its documentation for any purpose is hereby
+      granted without fee, provided that the above copyright notice
+      appear in all copies and that both that copyright notice and
+      this permission notice appear in supporting documentation.
+      Hewlett-Packard Company makes no representations about the
+      suitability of this software for any purpose. It is provided
+      “as is” without express or implied warranty.
+For the purposes of this project, it is relicensed under the GNU GPL version 2.0 or later.
+
+Here is licensing information on music that may be bundled with the game:
+
+/art/ogg/titlemode.ogg is Also sprach Zarathustra, introduction by Richard Strauss (a public domain composition).
+It was performed by Kevin MacLeod in 2010.
+The copyright holder for this performance is Kevin MacLeod (incompetech.com).
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See https://creativecommons.org/licenses/by/3.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Richard_Strauss_-_Also_Sprach_Zarathustra.ogg
+Wikipedia’s source: http://freemusicarchive.org/music/Kevin_MacLeod/Classical_Sampler/Also_Sprach_Zarathustra
+Also at: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100687
+
+/art/midi/titlemode.mid is Also sprach Zarathustra, introduction by Richard Strauss (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/newgame.ogg is The Liberty Bell March by John Philip Sousa (a public domain composition).
+It was performed by the U.S. Army Field Band and Soldiers’ Chorus.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/LibertyBellMarch_747
+
+/art/midi/newgame.mid is The Liberty Bell March by John Philip Sousa (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/basemode.ogg is The Stars and Stripes Forever by John Philip Sousa (a public domain composition).
+It was performed by the U.S. Marine Corps band.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:USMC_stars_stripes_forever.ogg
+Wikipedia’s source: http://www.marineband.usmc.mil/downloads/audio/Stars_and_Stripes_Forever_pf.mp3
+Also at: https://archive.org/details/StarsAndStripesForever
+
+/art/midi/basemode.mid is The Stars and Stripes Forever by John Philip Sousa (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/siege.ogg is The Planets, 1st Movement “Mars” by Gustav Holst (a public domain composition).
+It was performed by the U.S. Air Force Band.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Holst-_mars.ogg
+Wikipedia’s source: http://www.heritageofamericaband.af.mil/recordings/frontiers.asp
+Also at: http://freepd.com/Classical/The%20Planets%20-%20Mars
+
+/art/midi/siege.mid is The Planets, 1st Movement “Mars” by Gustav Holst (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/activate.ogg is Piano Sonata #11, 3rd Movement “Rondo Alla Turca” by Wolfgang Amadeus Mozart (a public domain composition).
+It was performed by Eduardo Carranza (imslp.org user Edulazlox) in 2011.
+The copyright holder for this performance is Eduardo Carranza (imslp.org user Edulazlox).
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See https://creativecommons.org/licenses/by/3.0/ for details.
+Source: http://imslp.org/wiki/Piano_Sonata_No.11_in_A_major,_K.331/300i_%28Mozart,_Wolfgang_Amadeus%29#IMSLP111573
+
+/art/midi/activate.mid is Piano Sonata #11, 3rd Movement “Rondo Alla Turca” by Wolfgang Amadeus Mozart (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/sleepers.ogg is Toccata and Fugue in D Minor, BWV 565 by Johann Sebastian Bach (a public domain composition).
+It was performed by James Kibbie.
+The copyright holder for this performance is James Kibbie.
+It is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported license.
+See http://creativecommons.org/licenses/by-nc-nd/3.0/ for details.
+Source: http://www.blockmrecords.org/bach/detail.php?ID=BWV0565
+
+/art/midi/sleepers.mid is Toccata and Fugue in D Minor, BWV 565 by Johann Sebastian Bach (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/stopevil.ogg is Hungarian Dance #5 by Johannes Brahms (based on the csárdás “Bártfai emlék” by Béla Kéler) (a public domain composition).
+It was performed by the Fulda Symphonic Orchestra.
+The copyright holder for this performance is the Fulda Symphonic Orchestra.
+It is licensed under the EFF Open Audio License Version 1.0.
+See http://web.archive.org/web/20040818074301/http://www.eff.org/IP/Open_licenses/20010421_eff_oal_1.0.html for details.
+Source: https://en.wikipedia.org/wiki/File:Johannes_Brahms_-_Ungarischer_Tanz_5_g-moll.ogg
+Wikipedia’s source: http://www-plan.cs.colorado.edu/henkel/fso/index-en.html
+
+/art/midi/stopevil.mid is Hungarian Dance #5 by Johannes Brahms (based on the csárdás “Bártfai emlék” by Béla Kéler) (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/reviewmode.ogg is Symphony #94, 2nd Movement “Surprise Symphony” by Joseph Haydn (a public domain composition).
+It was performed by the Boston Symphony Orchestra in 1929.
+It was transfered and restored from the Victor 78 set M-55 by Bob Varney.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/Haydn_Symphony_No_94_Surprise
+
+/art/midi/reviewmode.mid is Symphony #94, 2nd Movement “Surprise Symphony” by Joseph Haydn (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/liberalagenda.ogg is Beautiful Dreamer by Stephen Foster (a public domain composition).
+The words to the song are in English.
+It was performed by Emily Spray in 2013 for the Free Music Archive’s Revitalize Music Contest, in a version she remixed a bit.
+Emily Spray released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: http://freemusicarchive.org/music/Emily_Spray/Revitalize_Music_Contest/Beautiful_Dreamer_Mix_2
+
+/art/midi/liberalagenda.mid is Beautiful Dreamer by Stephen Foster (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/disbanded.ogg is La Cucaracha, a traditional Mexican folk song originally from Spain (a public domain composition).
+The words to the song are in Spanish.
+It was performed by the left-wing mariachi band and comedy group Trío Zapatista, with the revolutionary lyrics from the Mexican Revolution.
+The 3 performers are Ramón Araújo, Rodrigo Melgar, and Jorge Guerra, who are very popular not just in Mexico but also in Cuba and Venezuela.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/DaddyGsLaCucaracha (the 2nd one, with the filename LaCucaracha-InSpanishtranslationcockroach.mp3 or .ogg)
+
+/art/midi/disbanded.mid is La Cucaracha, a traditional Mexican folk song originally from Spain (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/finances.ogg is Minuet in G Major by Christian Petzold (falsely attributed to Johann Sebastian Bach until 1970) (a public domain composition).
+It was performed by Quang Chi Lam in 2013.
+The copyright holder for this performance is Quang Chi Lam.
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See https://creativecommons.org/licenses/by/3.0/ for details.
+Source: https://www.youtube.com/watch?v=JNpxyjYPVUg
+
+/art/midi/finances.mid is Minuet in G Major by Christian Petzold (falsely attributed to Johann Sebastian Bach until 1970) (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/cartheft.ogg is The Ride of the Valkyries by Richard Wanger (a public domain composition).
+It was performed by the American Symphony Orchestra for Edison Records in 1921.
+This recording and all others by Edison Records were donated to the National Park Service and
+placed in the public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Richard_Wagner_-_Ride_of_the_Valkyries.ogg
+Wikipedia’s source: http://www.nps.gov/edis/photosmultimedia/classical-instrumental.htm
+Also at: https://archive.org/details/RideOfTheValkyries
+
+/art/midi/cartheft.mid is The Ride of the Valkyries by Richard Wanger (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/elections.ogg is Habanera from Carmen by Georges Bizet (a public domain composition).
+The words to the song are in French.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Bizet_-_Carmen_-_1_-_Act_1_-_Sene_5_-_L%27amour_est_un_oiseau_rebelle_%28Habanera%29.ogg
+Wikipedia’s source: https://musopen.org/music/1059/georges-bizet/carmen/
+
+/art/midi/elections.mid is Habanera from Carmen by Georges Bizet (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/shopping.ogg is The Entertainer by Scott Joplin (a public domain composition).
+It was performed by I.E. (a Wikipedia user: https://en.wikipedia.org/wiki/User:IE) for the Wikipedia project.
+I.E. released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:The_Entertainer_-_Scott_Joplin.ogg
+Wikipedia’s source: Performed by Wikipedia user https://en.wikipedia.org/wiki/User:IE
+
+/art/midi/shopping.mid is The Entertainer by Scott Joplin (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/sitemode.ogg is Dance of the Sugar Plum Fairy by Pyotr Ilyich Tchaikovsky (a public domain composition).
+It was performed by Kevin MacLeod in 2009.
+The copyright holder for this performance is Kevin MacLeod (incompetech.com).
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See http://creativecommons.org/licenses/by/3.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Dance_Of_The_Sugar_Plum_Fairies.ogg
+Wikipedia’s source: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100625
+
+/art/midi/sitemode.mid is Dance of the Sugar Plum Fairy by Pyotr Ilyich Tchaikovsky (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/suspicious.ogg is Hall of the Mountain King by Edvard Grieg (a public domain composition).
+It was performed by the Czech National Symphony Orchestra for the Musopen Kickstarter Project in 2012.
+Musopen released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: https://en.wikipedia.org/wiki/File:Musopen_-_In_the_Hall_Of_The_Mountain_King.ogg
+Wikipedia’s source: https://musopen.org/music/1568/edvard-grieg/peer-gynt-suite-no-1-op-46/
+
+/art/midi/suspicious.mid is Hall of the Mountain King by Edvard Grieg (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/alarmed.ogg is 5th Symphony, 1st Movement by Ludwig van Beethoven (a public domain composition).
+It was performed by the NBC Symphony Orchestra, conducted by Arturo Toscanini, in 1939.
+It was transfered and restored from the Victor 78 set M-640 by Bob Varney.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/BeethovenSymphonyNo.5
+
+/art/midi/alarmed.mid is 5th Symphony, 1st Movement by Ludwig van Beethoven (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/heavycombat.ogg is 6th Symphony “Pastorale”, 4th Movement by Ludwig van Beethoven (a public domain composition).
+It was performed by the Skidmore College Orchestra for the Musopen project.
+Musopen released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: http://en.wikipedia.org/wiki/File:Ludwig_van_Beethoven_-_symphony_no._6_in_f_major_%27pastoral%27,_op._68_-_iv._allegro.ogg
+Wikipedia’s source: https://musopen.org/music/111/ludwig-van-beethoven/symphony-no-6-in-f-pastoral-op-68/
+
+/art/midi/heavycombat.mid is 6th Symphony “Pastorale”, 4th Movement by Ludwig van Beethoven (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/carchase.ogg is The William Tell Overture by Gioacchino Antonio Rossini (a public domain composition).
+It was performed by the U.S. Marine Corps band on Sunday, Jan. 6, 2013, conducted by Colonel Michael J. Colburn.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://www.youtube.com/watch?v=mZF4xHhPtRc
+
+/art/midi/carchase.mid is The William Tell Overture by Gioacchino Antonio Rossini (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/footchase.ogg is The Maple Leaf Rag by Scott Joplin (a public domain composition).
+It was performed by Stefano Ligoratti in 2014.
+The copyright holder for this performance is Stefano Ligoratti.
+It is licensed under the Creative Commons Attribution 4.0 International license.
+See http://creativecommons.org/licenses/by/4.0/ for details.
+Source: http://imslp.org/wiki/Maple_Leaf_Rag_%28Joplin,_Scott%29#IMSLP319773
+
+/art/midi/footchase.mid is The Maple Leaf Rag by Scott Joplin (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/interrogation.ogg is Night on Bald Mountain by Modest Mussorgsky (a public domain composition).
+It was performed by the Skidmore College Orchestra with conductor Anthony Holland for the Musopen project.
+Musopen released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: http://en.wikipedia.org/wiki/File:Modest_Mussorgsky_-_night_on_bald_mountain.ogg
+Wikipedia’s source: https://musopen.org/music/178/modest-mussorgsky/night-on-bald-mountain-rimsky-korsakov-version/
+Also at: http://imslp.org/wiki/Night_on_Bald_Mountain_%28Mussorgsky,_Modest%29#IMSLP77970
+
+/art/midi/interrogation.mid is Night on Bald Mountain by Modest Mussorgsky (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/trial.ogg is Hungarian Rhapsody #2 by Franz Liszt (a public domain composition).
+It was performed by Simone Renzi in 2013.
+The copyright holder for this performance is Simone Renzi.
+It is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported license.
+See http://creativecommons.org/licenses/by-nc/3.0/ for details.
+Source: http://imslp.org/wiki/Hungarian_Rhapsody_No.2,_S.244/2_%28Liszt,_Franz%29#IMSLP301753
+
+/art/midi/trial.mid is Hungarian Rhapsody #2 by Franz Liszt (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/recruiting.ogg is Dance of the Hours by Amilcare Ponchielli (a public domain composition).
+It was performed by the U.S. Marine Corps band on March 24, 2013, conducted by Colonel Michael J. Colburn.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://www.youtube.com/watch?v=9bgsz7_TQ_w
+
+/art/midi/recruiting.mid is Dance of the Hours by Amilcare Ponchielli (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/dating.ogg is The Blue Danube Waltz by Johann Strauss Jr. (a public domain composition).
+It was performed by the Vienna Philharmonic Orchestra, conducted by George Szell, on June 23, 1934.
+It was transfered and restored from the HMV 78rpm disc C.2686 by F. Reeder.
+It is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported license.
+See http://creativecommons.org/licenses/by-nc-sa/3.0/ for details.
+Source: https://archive.org/details/JOHANNSTRAUSSTheBlueDanube-Waltz-NEWTRANSFERJOHANNSTRAUSSTheBlueDanubeWaltz
+
+/art/midi/dating.mid is The Blue Danube Waltz by Johann Strauss Jr. (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/newspaper.ogg is Eine Kleine Nachtmusik, 1st Movement by Wolfgang Amadeus Mozart (a public domain composition).
+It was performed by the ensemble A Far Cry for the Isabella Stewart Gardner Museum in Boston in 2013.
+The copyright holder for this performance is the Isabella Stewart Gardner Museum.
+It is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International license.
+See http://creativecommons.org/licenses/by-nc-nd/4.0/ for details.
+Source: http://imslp.org/wiki/Eine_kleine_Nachtmusik,_K.525_%28Mozart,_Wolfgang_Amadeus%29#IMSLP324337
+
+/art/midi/newspaper.mid is Eine Kleine Nachtmusik, 1st Movement by Wolfgang Amadeus Mozart (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/lacops.ogg is The Flight of the Bumblebee by Nikolai Rimsky-Korsakov (a public domain composition).
+It was performed by the U.S. Army Strings in 2007.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: http://en.wikipedia.org/wiki/File:Rimsky-Korsakov_-_flight_of_the_bumblebee.oga
+Wikipedia’s source: http://web.archive.org/web/20110605022814/http://www.usarmyband.com/Audio/listen.html
+Also at: https://musopen.org/music/448/nikolai-rimsky-korsakov/flight-of-the-bumblebee-from-tale-of-tsar-saltan/
+
+/art/midi/lacops.mid is The Flight of the Bumblebee by Nikolai Rimsky-Korsakov (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/newscast.ogg is La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle (a public domain composition).
+The words to the song are in French.
+It was performed by Orphée Langevin for Edison Records in 1920.
+This recording and all others by Edison Records were donated to the National Park Service and
+placed in the public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: http://publicdomain.lafauniere.info/index.php?-table=media&-action=browse&pk_media=%3D3824
+Also at: http://amicus.collectionscanada.ca/aaweb-bin/aamain/itemdisp?sessionKey=999999999_142&l=1&d=2&v=0&lvl=1&itm=31400456
+
+/art/midi/newscast.mid is La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/glamshow.ogg is Das Deutschlandlied, The German National Anthem by Joseph Haydn (a public domain composition).
+The words to the song are in German, including all 3 stanzas.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://www.youtube.com/watch?v=_ccfMkZVbkk
+
+/art/midi/glamshow.mid is Das Deutschlandlied, The German National Anthem by Joseph Haydn (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/anchor.ogg is I Am the Very Model of a Modern Major-General by Sir Arthur Seymour Sullivan (a public domain composition).
+The words to this song are in English, but they are Tom Lehrer’s lyrics for The Elements.
+It was performed by Tom Lehrer in 1959 under the title “The Elements”.
+Tom Lehrer released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: https://archive.org/details/TheElements
+
+/art/midi/anchor.mid is I Am the Very Model of a Modern Major-General by Sir Arthur Seymour Sullivan (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/abort.ogg is Tarantella Napoletana, a traditional Italian folk song from Naples (a public domain composition).
+It was performed by the U.S. Air Force Band Strolling Strings.
+As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/Tarantella_738
+
+/art/midi/abort.mid is Tarantella Napoletana, a traditional Italian folk song from Naples (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/victory.ogg is The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith (a public domain composition).
+Although the words to this song are in English, this is an instrumental version with no words.
+It was performed by Zoë Keating in 2013, in a very psychedelic digital arrangement for cello she came up with herself.
+The copyright holder for this Elite Liberal performance is Zoë Keating.
+It is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported license.
+See http://creativecommons.org/licenses/by-nc-sa/3.0/ for details.
+Source: https://soundcloud.com/zoekeating/star-spangled-banner
+
+/art/midi/victory.mid is The Star-Spangled Banner, The U.S. National Anthem by John Stafford Smith (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/defeat.ogg is Piano Sonata #2, 3rd Movement “Funeral March” by Frédéric François Chopin (a public domain composition).
+It was performed by Donald Broils in 2011.
+The copyright holder for this performance is Bernd Krueger.
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See http://creativecommons.org/licenses/by/3.0/ for details.
+Source: http://imslp.org/wiki/Piano_Sonata_No.2,_Op.35_%28Chopin,_Fr%C3%A9d%C3%A9ric%29#IMSLP167001
+
+/art/midi/defeat.mid is Piano Sonata #2, 3rd Movement “Funeral March” by Frédéric François Chopin (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/reagainified.ogg is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
+The words to the song are in English and are the Confederate War Song lyrics for Dixie.
+It was performed by Tennessee Ernie Ford.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/TennesseeErnieFord-01-52
+
+/art/midi/reagainified.mid is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/stalinized.ogg is The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov (a public domain composition).
+The words to the song were translated from Russian to English by Paul Robeson.
+It was performed by Paul Robeson in 1944.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/SovietUnionAnthemEnglish
+
+/art/midi/stalinized.mid is The Soviet (and now Russian) National Anthem by Alexander Vasilyevich Alexandrov (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+All other files in Liberal Crime Squad not mentioned above are directly licensed under the GNU GPL version 2.0 or later.
+
+Here are some notes on adding music to the game, such as where to find free music,
+and how to solve a certain problem (the problem of incompatible sample rates that
+SDL2_mixer can't handle)... basically convert the files into a sample rate that
+SDL2_mixer CAN handle. So if you are a programmer on the main project wanting to
+add more music or replace some music, or a modder looking to add your own music for
+a mod, you should read this next bit of documentation.
+
+Sites with free (as in freedom) music (for future reference if we ever want to add more music):
+https://archive.org/
+http://cylinders.library.ucsb.edu/
+http://freemusicarchive.org/
+http://www.ibiblio.org/pandora/
+http://imslp.org/wiki/
+http://incompetech.com/music/royalty-free/
+http://www.musopen.org/
+http://www.nps.gov/edis/photosmultimedia/the-recording-archives.htm
+http://publicdomain.lafauniere.info/
+http://www.publicdomainsherpa.com/public-domain-recordings.html
+http://en.wikipedia.org/wiki/
+
+Another note about music: for Ogg Vorbis files to work with SDL2_mixer, they can’t be 48 kHz,
+that sampling rate is not supported. They should all have a 44.1 kHz sampling rate. And all
+the ones I included had a target bitrate of about 64 kbps but actually turned out to be on
+average maybe 54 kbps instead, about 10 kbps lower, saving disk space, which is good.
+Anyway, 48 kHz or higher isn’t allowed with SDL2_mixer, use 44.1 kHz files. If you use a
+48 kHz Ogg Vorbis file you will hear the most awful sound from your computer speakers when
+the game tries to play the file. The 48 kHz files tend to be from the Musopen project, most
+other websites use 44.1 kHz, but you can’t be sure until after you download it.
+
+In Audacity (the free software music editing and converting program), you can change the
+sample rate of a 48 kHz file to 44.1 kHz but then after you do that be sure to go to the
+Effect menu and choose Change Speed and then increase the speed by exactly 8.125%. This
+corrects for the change in sample rate so that the music will still play back at the same
+speed and have the same pitch and tempo as before. If you don’t do this it plays back at
+a tempo that’s 8.125% slower, and the frequency of every musical note is 8.125% lower,
+and we don’t want that, it needs to be corrected to sound just like the original. Why
+8.125%? Because 44.1 is exactly 8.125% lower than 48, obviously. Also, you need to change
+both the sample rate of the tracks (on the left side of the screen sorta near the top) as
+well as the sample rate of the project (in the lower left corner) from 48 kHz to 44.1 kHz
+(or from 48000 Hz to 44100 Hz if you are using Hz instead of kHz as a unit). As for if you
+are using a different program than Audacity for this... whatever, Audacity is free software
+and cross-platform and has the best features, so you should use it, and if you’re using
+something else, figure it out yourself.
+
+Why is all of this necessary? Because SDL2_mixer doesn’t have sophisticated sample rate
+conversion implemented, that’s why. So your sound files and SDL2_mixer should use the
+same sample rate, and 44.1 kHz is a value that works cross-platform on pretty much any
+audio driver and 44.1 kHz audio files are way more common than 48 kHz audio files anyway.
+If you set up SDL2_mixer to use the 48 kHz sample rate, then it WOULD be able to playback
+48 kHz audio files but it wouldn’t be able to playback 44.1 kHz audio files anymore. Its
+sample rate conversion is probably good enough to deal with multiples of 2, so if you have
+a 44.1 kHz sample rate for SDL2_mixer, you’ll probably be able to play 22050 Hz sound
+files and 11025 Hz sound files, but I’m not sure. Point is, 48 kHz and SDL2_mixer don't
+go together, they are like oil and water... like oil that’s on fire and water... you
+can’t use water to put out an oil fire, in fact it spreads the flames. That’s just a
+metaphor for why 48 kHz is a bad idea to use with SDL2_mixer and why you need to use
+something like Audacity to convert any 48 kHz files to 44.1 kHz so they’ll work with
+SDL2_mixer. Also 48 kHz might not work on all platforms, we want the game to stay
+cross-platform (some platforms don't support sample rates above 44.1 kHz in their
+sound drivers).
