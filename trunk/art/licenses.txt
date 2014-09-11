@@ -154,11 +154,10 @@ this file is public domain as certified with the Creative Commons Public Domain 
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
 /art/ogg/reviewmode.ogg is Symphony #94, 2nd Movement “Surprise Symphony” by Joseph Haydn (a public domain composition).
-It was performed by the Boston Symphony Orchestra in 1929.
-It was transfered and restored from the Victor 78 set M-55 by Bob Varney.
+It was performed by the Vienna Philharmonic Orchestra, conducted by Pierre Monteux, in April 1959.
 This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
-Source: https://archive.org/details/Haydn_Symphony_No_94_Surprise
+Source: https://archive.org/details/HaydnSurpriseSymphonyjochum
 
 /art/midi/reviewmode.mid is Symphony #94, 2nd Movement “Surprise Symphony” by Joseph Haydn (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
@@ -203,13 +202,12 @@ this file is public domain as certified with the Creative Commons Public Domain 
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
 /art/ogg/cartheft.ogg is The Ride of the Valkyries by Richard Wanger (a public domain composition).
-It was performed by the American Symphony Orchestra for Edison Records in 1921.
-This recording and all others by Edison Records were donated to the National Park Service and
-placed in the public domain as certified with the Creative Commons Public Domain Mark 1.0.
-See https://creativecommons.org/publicdomain/mark/1.0/ for details.
-Source: https://en.wikipedia.org/wiki/File:Richard_Wagner_-_Ride_of_the_Valkyries.ogg
-Wikipedia’s source: http://www.nps.gov/edis/photosmultimedia/classical-instrumental.htm
-Also at: https://archive.org/details/RideOfTheValkyries
+Although the words to this song are in German, this is an instrumental version with no words.
+It was performed by the Daniel Bautista as track 6 of his album Download Ör Die in 2014, as a metal arrangement.
+The copyright holder for this performance is Daniel Bautista.
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See http://creativecommons.org/licenses/by/3.0/ for details.
+Source: https://www.jamendo.com/en/track/1127050/ride-of-the-valkyries-wagner
 
 /art/midi/cartheft.mid is The Ride of the Valkyries by Richard Wanger (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
@@ -266,11 +264,11 @@ this file is public domain as certified with the Creative Commons Public Domain 
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
 /art/ogg/alarmed.ogg is 5th Symphony, 1st Movement by Ludwig van Beethoven (a public domain composition).
-It was performed by the NBC Symphony Orchestra, conducted by Arturo Toscanini, in 1939.
-It was transfered and restored from the Victor 78 set M-640 by Bob Varney.
+It was performed by the Royal Concertgebouw Orchestra, conducted by George Szell, in November 1966.
+It is from Decca & Philips Recordings 1951-1969, disc 1.
 This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
-Source: https://archive.org/details/BeethovenSymphonyNo.5
+Source: https://archive.org/details/BeethovenSymphonyNo.5szell-philips
 
 /art/midi/alarmed.mid is 5th Symphony, 1st Movement by Ludwig van Beethoven (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
@@ -349,11 +347,10 @@ this file is public domain as certified with the Creative Commons Public Domain 
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
 /art/ogg/dating.ogg is The Blue Danube Waltz by Johann Strauss Jr. (a public domain composition).
-It was performed by the Vienna Philharmonic Orchestra, conducted by George Szell, on June 23, 1934.
-It was transfered and restored from the HMV 78rpm disc C.2686 by F. Reeder.
-It is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported license.
-See http://creativecommons.org/licenses/by-nc-sa/3.0/ for details.
-Source: https://archive.org/details/JOHANNSTRAUSSTheBlueDanube-Waltz-NEWTRANSFERJOHANNSTRAUSSTheBlueDanubeWaltz
+It was performed by the Vienna Philharmonic Orchestra.
+This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+Source: https://archive.org/details/BlueDanubeWaltz_481
 
 /art/midi/dating.mid is The Blue Danube Waltz by Johann Strauss Jr. (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
@@ -386,13 +383,12 @@ this file is public domain as certified with the Creative Commons Public Domain 
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
 /art/ogg/newscast.ogg is La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle (a public domain composition).
-The words to the song are in French.
-It was performed by Orphée Langevin for Edison Records in 1920.
-This recording and all others by Edison Records were donated to the National Park Service and
-placed in the public domain as certified with the Creative Commons Public Domain Mark 1.0.
-See https://creativecommons.org/publicdomain/mark/1.0/ for details.
-Source: http://publicdomain.lafauniere.info/index.php?-table=media&-action=browse&pk_media=%3D3824
-Also at: http://amicus.collectionscanada.ca/aaweb-bin/aamain/itemdisp?sessionKey=999999999_142&l=1&d=2&v=0&lvl=1&itm=31400456
+Although the words to this song are in French, this is an instrumental version with no words.
+It was performed by the Birds of fire as “Blues national (marseillaise)”, track 2 of their album Esquisses in 2002, arranged by them as blues.
+The copyright holder for this performance is Birds of fire.
+It is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 2.0 France license.
+See http://creativecommons.org/licenses/by-nc-sa/2.0/fr/deed.en for details.
+Source: https://www.jamendo.com/en/track/21924/blues-national-marseillaise
 
 /art/midi/newscast.mid is La Marseillaise, The French National Anthem by Claude Joseph Rouget de Lisle (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
@@ -498,7 +494,9 @@ http://freemusicarchive.org/
 http://www.ibiblio.org/pandora/
 http://imslp.org/wiki/
 http://incompetech.com/music/royalty-free/
+https://www.jamendo.com/
 http://www.musopen.org/
+http://www.newmediarights.org/guide/how_to/social_media/social_video/find_free_music_images_video_use_remix_creative_works
 http://www.nps.gov/edis/photosmultimedia/the-recording-archives.htm
 http://publicdomain.lafauniere.info/
 http://www.publicdomainsherpa.com/public-domain-recordings.html
