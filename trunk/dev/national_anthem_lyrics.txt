@@ -1,0 +1,45 @@
+Liberal Crime Squad lyrics to the national anthem
+by Rich McGrew
+
+donated to the public domain under the CC0 license
+http://creativecommons.org/publicdomain/zero/1.0/
+
+If you can think of improvements to these lyrics that still fit the rhythm of the U.S.
+national anthem you are welcome to contribute as long as you also keep your contributions
+public domain, that makes things easier.
+
+The purpose of this is to make a recording of the national anthem to these lyrics
+(with good sound recording equipment and someone who has a nice voice), to use as
+the victory song for the game. The original recording should be encoded as a lossless
+FLAC, with 44100 Hz sample rate, while the version we bundle with the game itself
+will be a low-bitrate Ogg Vorbis file (for people who download the Ogg Vorbis music
+to use with the game). It is intended as a replacement for the current victory.ogg
+(which is also the national anthem, but without LCS lyrics).
+
+
+Oh say have you heard how our country was saved
+By the Liberal Crime Squad's heroic endeavors?
+They faced dangers galore, but prevailed in the end
+When the people woke up, and united behind them.
+Their Conservative foes, who had misruled this land,
+Gave up in the end when they saw they were wrong.
+Oh say does that star-spangled banner burn brightly
+Here in the land of the free and the home of the brave?
+
+The people of this land were once badly misled
+And for quite a long time Liberals faced misfortune.
+Racist, sexist bigots oppressed minorities
+As a huge military killed innocent people.
+Pollution fouled nature, animals were abused,
+And the people could not openly air their views.
+But then the Liberal Crime Squad came along and saved the day
+Here in the land of the free and the home of the brave.
+
+Now our country's at peace, and our workers have rights,
+And the moneyed interests no longer rule our nation.
+Our elections are fair, and our laws are more just,
+As we work together for a more perfect union.
+But this cause is unfinished, there's more work to be done,
+Though we know, in our hearts, that we've already won.
+As our nation works together to solve its remaining problems,
+Here in the land of the free and the home of the brave.
