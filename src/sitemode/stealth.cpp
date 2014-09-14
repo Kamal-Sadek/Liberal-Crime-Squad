@@ -253,6 +253,8 @@ void disguisecheck(int timer)
             stealth_difficulty += 3;
             disguise_difficulty += 3;
          }
+         // Sneaking with a party is hard
+         stealth_difficulty += (partysize-1)*3;
 
          // Make the attempt!
          for(int i=0;i<6;i++)
@@ -264,8 +266,11 @@ void disguisecheck(int timer)
             {
                int result = activesquad->squad[i]->skill_roll(SKILL_STEALTH);
                result -= timer;
-               // Sneaking with a party is hard
-               if(result < (stealth_difficulty + (partysize-1)*3))
+               if (fieldskillrate == FIELDSKILLRATE_HARD && result + 1 == stealth_difficulty)
+               {// Hard more = You only learn if you just missed, and realize what you did wrong.
+                  activesquad->squad[i]->train(SKILL_STEALTH, 10);
+               }
+               if(result < stealth_difficulty)
                   spotted = true;
             }
 
@@ -282,7 +287,10 @@ void disguisecheck(int timer)
                {
                   int result = activesquad->squad[i]->skill_roll(SKILL_DISGUISE);
                   result -= timer;
-
+                  if (fieldskillrate == FIELDSKILLRATE_HARD && result + 1 == disguise_difficulty)
+                  {// Hard more = You only learn if you just missed, and realize what you did wrong.
+                     activesquad->squad[i]->train(SKILL_DISGUISE, 10);
+                  }
                   if(result<disguise_difficulty)
                   {
                      // That was not very casual, dude.
@@ -303,7 +311,15 @@ void disguisecheck(int timer)
          for(int i=0;i<6;i++)
          {
             if(activesquad->squad[i] == NULL) break;
-            activesquad->squad[i]->train(SKILL_STEALTH, 40);
+            switch (fieldskillrate)
+            {
+               case FIELDSKILLRATE_FAST:
+                  activesquad->squad[i]->train(SKILL_STEALTH, 40);break;
+               case FIELDSKILLRATE_CLASSIC:
+                  activesquad->squad[i]->train(SKILL_STEALTH, 10);break;
+               case FIELDSKILLRATE_HARD:
+                  activesquad->squad[i]->train(SKILL_STEALTH, 0);break;
+            }
          }
 
          if(timer == 0)
@@ -330,7 +346,17 @@ void disguisecheck(int timer)
             {
                if(activesquad->squad[i] == NULL) break;
                if(hasdisguise(*(activesquad->squad[i])))
-                  activesquad->squad[i]->train(SKILL_DISGUISE, 50);
+               {
+                  switch (fieldskillrate)
+                  {
+                     case FIELDSKILLRATE_FAST:
+                        activesquad->squad[i]->train(SKILL_DISGUISE, 50);break;
+                     case FIELDSKILLRATE_CLASSIC:
+                        activesquad->squad[i]->train(SKILL_DISGUISE, 10);break;
+                     case FIELDSKILLRATE_HARD:
+                        activesquad->squad[i]->train(SKILL_DISGUISE, 0);break;
+                  }
+               }
             }
          }
 

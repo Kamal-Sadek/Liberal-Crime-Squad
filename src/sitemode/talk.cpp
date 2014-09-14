@@ -2267,15 +2267,27 @@ char talkInCombat(Creature &a, Creature &tk)
          if(encounter[e].exists&&encounter[e].alive&&
             encounter[e].enemy())
          {
-            if(encounter[e].get_attribute(ATTRIBUTE_WISDOM,true)>10)
-               fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_CHALLENGING);
-            else fooled = a.skill_check(SKILL_DISGUISE,DIFFICULTY_AVERAGE);
+            int roll = a.skill_roll(SKILL_DISGUISE);
+            int diff = encounter[e].get_attribute(ATTRIBUTE_WISDOM,true)>10 ? DIFFICULTY_CHALLENGING : DIFFICULTY_AVERAGE;
+            fooled = roll >= diff;
+            
+            if (roll+1 == diff && fieldskillrate == FIELDSKILLRATE_HARD)
+               a.train(SKILL_DISGUISE, 20);
+            
 
             if(!fooled) break;
          }
       }
 
-      a.train(SKILL_DISGUISE,20);
+      switch (fieldskillrate)
+      {
+         case FIELDSKILLRATE_FAST:
+            a.train(SKILL_DISGUISE, 50);break;
+         case FIELDSKILLRATE_CLASSIC:
+            a.train(SKILL_DISGUISE, 20);break;
+         case FIELDSKILLRATE_HARD:
+            a.train(SKILL_DISGUISE, 0);break;
+      }
 
       if(!fooled)
       {

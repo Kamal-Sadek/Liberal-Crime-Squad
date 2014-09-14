@@ -53,6 +53,7 @@ void savegame(const char *str)
 
       fwrite(&mode,sizeof(short),1,h);
       fwrite(&wincondition,sizeof(short),1,h);
+      fwrite(&fieldskillrate,sizeof(short),1,h);
 
       fwrite(&day,sizeof(int),1,h);
       fwrite(&month,sizeof(int),1,h);
@@ -376,6 +377,7 @@ char load()
 
       fread(&mode,sizeof(short),1,h);
       fread(&wincondition,sizeof(short),1,h);
+      fread(&fieldskillrate,sizeof(short),1,h);
 
       fread(&day,sizeof(int),1,h);
       fread(&month,sizeof(int),1,h);

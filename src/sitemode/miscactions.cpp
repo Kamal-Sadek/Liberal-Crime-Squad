@@ -94,7 +94,15 @@ char unlock(short type,char &actual)
          //skill goes up in proportion to the chance of you failing.
          if(maxattack<=difficulty)
          {
-            activesquad->squad[p]->train(SKILL_SECURITY,10*difficulty);
+            switch (fieldskillrate)
+            {
+               case FIELDSKILLRATE_FAST:
+                  activesquad->squad[p]->train(SKILL_SECURITY, 10 * difficulty);break;
+               case FIELDSKILLRATE_CLASSIC:
+                  activesquad->squad[p]->train(SKILL_SECURITY, 1 + (difficulty - maxattack));break;
+               case FIELDSKILLRATE_HARD:
+                  activesquad->squad[p]->train(SKILL_SECURITY, 0);break;
+            }
          }
          clearmessagearea(false);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -122,7 +130,15 @@ char unlock(short type,char &actual)
             {
                if(activesquad->squad[j]->alive)
                {
-                  activesquad->squad[j]->train(SKILL_SECURITY,5*difficulty);
+                  switch (fieldskillrate)
+                  {
+                     case FIELDSKILLRATE_FAST:
+                        activesquad->squad[j]->train(SKILL_SECURITY, 5 * difficulty);break;
+                     case FIELDSKILLRATE_CLASSIC:
+                        activesquad->squad[j]->train(SKILL_SECURITY, difficulty - activesquad->squad[j]->get_skill(SKILL_SECURITY));break;
+                     case FIELDSKILLRATE_HARD:
+                        activesquad->squad[j]->train(SKILL_SECURITY, 0);break;
+                  }
                }
             }
          }
@@ -144,7 +160,15 @@ char unlock(short type,char &actual)
          {
             if(activesquad->squad[p]->skill_check(SKILL_SECURITY,difficulty))
             {
-               activesquad->squad[p]->train(SKILL_SECURITY,50);
+               switch (fieldskillrate)
+               {
+                  case FIELDSKILLRATE_FAST:
+                     activesquad->squad[p]->train(SKILL_SECURITY, 50);break;
+                  case FIELDSKILLRATE_CLASSIC:
+                     activesquad->squad[p]->train(SKILL_SECURITY, 10);break;
+                  case FIELDSKILLRATE_HARD:
+                     activesquad->squad[p]->train(SKILL_SECURITY, 10);break;
+               }
 
                addstr(activesquad->squad[p]->name, gamelog);
                addstr(" is close, but can't quite get the lock open.", gamelog);

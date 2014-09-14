@@ -219,6 +219,7 @@ class Ledger ledger;
 short party_status=-1;
 
 short wincondition=WINCONDITION_ELITE;
+short fieldskillrate=FIELDSKILLRATE_FAST;
 
 bool notermlimit;           //These determine if ELAs can take place --kviiri
 bool nocourtpurge;
